@@ -92,17 +92,30 @@ type FMSAPI interface {
 	GetPolicyWithContext(aws.Context, *fms.GetPolicyInput, ...request.Option) (*fms.GetPolicyOutput, error)
 	GetPolicyRequest(*fms.GetPolicyInput) (*request.Request, *fms.GetPolicyOutput)
 
+	GetProtectionStatus(*fms.GetProtectionStatusInput) (*fms.GetProtectionStatusOutput, error)
+	GetProtectionStatusWithContext(aws.Context, *fms.GetProtectionStatusInput, ...request.Option) (*fms.GetProtectionStatusOutput, error)
+	GetProtectionStatusRequest(*fms.GetProtectionStatusInput) (*request.Request, *fms.GetProtectionStatusOutput)
+
 	ListComplianceStatus(*fms.ListComplianceStatusInput) (*fms.ListComplianceStatusOutput, error)
 	ListComplianceStatusWithContext(aws.Context, *fms.ListComplianceStatusInput, ...request.Option) (*fms.ListComplianceStatusOutput, error)
 	ListComplianceStatusRequest(*fms.ListComplianceStatusInput) (*request.Request, *fms.ListComplianceStatusOutput)
+
+	ListComplianceStatusPages(*fms.ListComplianceStatusInput, func(*fms.ListComplianceStatusOutput, bool) bool) error
+	ListComplianceStatusPagesWithContext(aws.Context, *fms.ListComplianceStatusInput, func(*fms.ListComplianceStatusOutput, bool) bool, ...request.Option) error
 
 	ListMemberAccounts(*fms.ListMemberAccountsInput) (*fms.ListMemberAccountsOutput, error)
 	ListMemberAccountsWithContext(aws.Context, *fms.ListMemberAccountsInput, ...request.Option) (*fms.ListMemberAccountsOutput, error)
 	ListMemberAccountsRequest(*fms.ListMemberAccountsInput) (*request.Request, *fms.ListMemberAccountsOutput)
 
+	ListMemberAccountsPages(*fms.ListMemberAccountsInput, func(*fms.ListMemberAccountsOutput, bool) bool) error
+	ListMemberAccountsPagesWithContext(aws.Context, *fms.ListMemberAccountsInput, func(*fms.ListMemberAccountsOutput, bool) bool, ...request.Option) error
+
 	ListPolicies(*fms.ListPoliciesInput) (*fms.ListPoliciesOutput, error)
 	ListPoliciesWithContext(aws.Context, *fms.ListPoliciesInput, ...request.Option) (*fms.ListPoliciesOutput, error)
 	ListPoliciesRequest(*fms.ListPoliciesInput) (*request.Request, *fms.ListPoliciesOutput)
+
+	ListPoliciesPages(*fms.ListPoliciesInput, func(*fms.ListPoliciesOutput, bool) bool) error
+	ListPoliciesPagesWithContext(aws.Context, *fms.ListPoliciesInput, func(*fms.ListPoliciesOutput, bool) bool, ...request.Option) error
 
 	PutNotificationChannel(*fms.PutNotificationChannelInput) (*fms.PutNotificationChannelOutput, error)
 	PutNotificationChannelWithContext(aws.Context, *fms.PutNotificationChannelInput, ...request.Option) (*fms.PutNotificationChannelOutput, error)

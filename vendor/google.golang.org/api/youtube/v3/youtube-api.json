@@ -6,7 +6,7 @@
           "description": "Manage your YouTube account"
         },
         "https://www.googleapis.com/auth/youtube.force-ssl": {
-          "description": "Manage your YouTube account"
+          "description": "See, edit, and permanently delete your YouTube videos, ratings, comments and captions"
         },
         "https://www.googleapis.com/auth/youtube.readonly": {
           "description": "View your YouTube account"
@@ -30,7 +30,7 @@
   "description": "Supports core YouTube features, such as uploading videos, creating and managing playlists, searching for content, and much more.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/youtube/v3",
-  "etag": "\"Zkyw9ACJZUvcYmlFaKGChzhmtnE/NBwQg_eXHjfoSxEvplEGyXUpgA4\"",
+  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/iJCWgcHgub352FxdGhLwKx-bej4\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/youtube-16.png",
     "x32": "https://www.google.com/images/icons/product/youtube-32.png"
@@ -3493,7 +3493,7 @@
       }
     }
   },
-  "revision": "20180430",
+  "revision": "20190513",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "AccessPolicy": {
@@ -4153,9 +4153,11 @@
           "description": "The method or protocol used to transmit the video stream.",
           "enum": [
             "dash",
+            "hls",
             "rtmp"
           ],
           "enumDescriptions": [
+            "",
             "",
             ""
           ],
@@ -4270,10 +4272,6 @@
         },
         "copyrightStrikesGoodStanding": {
           "description": "Whether or not the channel has any copyright strikes.",
-          "type": "boolean"
-        },
-        "overallGoodStanding": {
-          "description": "Describes the general state of the channel. This field will always show if there are any issues whatsoever with the channel. Currently this field represents the result of the logical and operation over the community guidelines good standing, the copyright strikes good standing and the content ID claims good standing, but this may change in the future.",
           "type": "boolean"
         }
       },
@@ -4802,7 +4800,7 @@
         },
         "thumbnails": {
           "$ref": "ThumbnailDetails",
-          "description": "A map of thumbnail images associated with the channel. For each object in the map, the key is the name of the thumbnail image, and the value is an object that contains other information about the thumbnail."
+          "description": "A map of thumbnail images associated with the channel. For each object in the map, the key is the name of the thumbnail image, and the value is an object that contains other information about the thumbnail.\n\nWhen displaying thumbnails in your application, make sure that your code uses the image URLs exactly as they are returned in API responses. For example, your application should not use the http domain instead of the https domain in a URL returned in an API response.\n\nBeginning in July 2018, channel thumbnail URLs will only be available in the https domain, which is how the URLs appear in API responses. After that time, you might see broken images in your application if it tries to load YouTube images from the http domain."
         },
         "title": {
           "description": "The channel's title.",
@@ -5510,10 +5508,12 @@
             "cnc16",
             "cnc18",
             "cncE",
+            "cncInterdiction",
             "cncT",
             "cncUnrated"
           ],
           "enumDescriptions": [
+            "",
             "",
             "",
             "",
@@ -5592,14 +5592,46 @@
           "description": "The video's Departamento de Justiça, Classificação, Qualificação e Títulos (DJCQT - Brazil) rating.",
           "enum": [
             "djctq10",
+            "djctq1012",
+            "djctq1014",
+            "djctq1016",
+            "djctq1018",
             "djctq12",
+            "djctq1214",
+            "djctq1216",
+            "djctq1218",
             "djctq14",
+            "djctq1416",
+            "djctq1418",
             "djctq16",
+            "djctq1618",
             "djctq18",
+            "djctqEr",
             "djctqL",
+            "djctqL10",
+            "djctqL12",
+            "djctqL14",
+            "djctqL16",
+            "djctqL18",
             "djctqUnrated"
           ],
           "enumDescriptions": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
             "",
             "",
             "",
@@ -6312,9 +6344,11 @@
             "mpaaPg",
             "mpaaPg13",
             "mpaaR",
-            "mpaaUnrated"
+            "mpaaUnrated",
+            "mpaaX"
           ],
           "enumDescriptions": [
+            "",
             "",
             "",
             "",
@@ -7494,22 +7528,16 @@
         "lifeCycleStatus": {
           "description": "The broadcast's status. The status can be updated using the API's liveBroadcasts.transition method.",
           "enum": [
-            "abandoned",
             "complete",
-            "completeStarting",
             "created",
             "live",
             "liveStarting",
             "ready",
-            "reclaimed",
             "revoked",
             "testStarting",
             "testing"
           ],
           "enumDescriptions": [
-            "",
-            "",
-            "",
             "",
             "",
             "",
@@ -7834,6 +7862,10 @@
           "$ref": "LiveChatSuperChatDetails",
           "description": "Details about the Super Chat event, this is only set if the type is 'superChatEvent'."
         },
+        "superStickerDetails": {
+          "$ref": "LiveChatSuperStickerDetails",
+          "description": "Details about the Super Sticker event, this is only set if the type is 'superStickerEvent'."
+        },
         "textMessageDetails": {
           "$ref": "LiveChatTextMessageDetails",
           "description": "Details about the text message, this is only set if the type is 'textMessageEvent'."
@@ -7853,11 +7885,13 @@
             "sponsorOnlyModeEndedEvent",
             "sponsorOnlyModeStartedEvent",
             "superChatEvent",
+            "superStickerEvent",
             "textMessageEvent",
             "tombstone",
             "userBannedEvent"
           ],
           "enumDescriptions": [
+            "",
             "",
             "",
             "",
@@ -8054,13 +8088,41 @@
           "type": "string"
         },
         "tier": {
-          "description": "The tier in which the amount belongs to. Lower amounts belong to lower tiers. Starts at 1.",
+          "description": "The tier in which the amount belongs. Lower amounts belong to lower tiers. The lowest tier is 1.",
           "format": "uint32",
           "type": "integer"
         },
         "userComment": {
           "description": "The comment added by the user to this Super Chat event.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "LiveChatSuperStickerDetails": {
+      "id": "LiveChatSuperStickerDetails",
+      "properties": {
+        "amountDisplayString": {
+          "description": "A rendered string that displays the fund amount and currency to the user.",
+          "type": "string"
+        },
+        "amountMicros": {
+          "description": "The amount purchased by the user, in micros (1,750,000 micros = 1.75).",
+          "format": "uint64",
+          "type": "string"
+        },
+        "currency": {
+          "description": "The currency in which the purchase was made.",
+          "type": "string"
+        },
+        "superStickerMetadata": {
+          "$ref": "SuperStickerMetadata",
+          "description": "Information about the Super Sticker."
+        },
+        "tier": {
+          "description": "The tier in which the amount belongs. Lower amounts belong to lower tiers. The lowest tier is 1.",
+          "format": "uint32",
+          "type": "integer"
         }
       },
       "type": "object"
@@ -9447,6 +9509,10 @@
           "description": "True if this event is a Super Chat for Good purchase.",
           "type": "boolean"
         },
+        "isSuperStickerEvent": {
+          "description": "True if this event is a Super Sticker event.",
+          "type": "boolean"
+        },
         "messageType": {
           "description": "The tier for the paid message, which is based on the amount of money spent to purchase the message.",
           "format": "uint32",
@@ -9456,9 +9522,31 @@
           "$ref": "Nonprofit",
           "description": "If this event is a Super Chat for Good purchase, this field will contain information about the charity the purchase is donated to."
         },
+        "superStickerMetadata": {
+          "$ref": "SuperStickerMetadata",
+          "description": "If this event is a Super Sticker event, this field will contain metadata about the Super Sticker."
+        },
         "supporterDetails": {
           "$ref": "ChannelProfileDetails",
           "description": "Details about the supporter."
+        }
+      },
+      "type": "object"
+    },
+    "SuperStickerMetadata": {
+      "id": "SuperStickerMetadata",
+      "properties": {
+        "altText": {
+          "description": "Internationalized alt text that describes the sticker image and any animation associated with it.",
+          "type": "string"
+        },
+        "altTextLanguage": {
+          "description": "Specifies the localization language in which the alt text is returned.",
+          "type": "string"
+        },
+        "stickerId": {
+          "description": "Unique identifier of the Super Sticker. This is a shorter form of the alt_text that includes pack name and a recognizable characteristic of the sticker.",
+          "type": "string"
         }
       },
       "type": "object"

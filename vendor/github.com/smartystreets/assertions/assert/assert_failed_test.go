@@ -5,7 +5,6 @@ import (
 
 	"github.com/smartystreets/assertions/internal/unit"
 	"github.com/smartystreets/assertions/should"
-	"github.com/smartystreets/logging"
 )
 
 func TestFailedResultFixture(t *testing.T) {
@@ -20,8 +19,7 @@ type FailedResultFixture struct {
 
 func (this *FailedResultFixture) Setup() {
 	this.result = So(1, should.Equal, 2)
-	this.result.logger = logging.Capture()
-	this.result.logger.SetPrefix("")
+	this.result.logger = capture()
 	this.result.stdout = this.result.logger.Log
 }
 
@@ -36,8 +34,8 @@ func (this *FailedResultFixture) TestQueryFunctions() {
 	this.So(this.result.Passed(), should.BeFalse)
 	this.So(this.result.logger.Log.Len(), should.Equal, 0)
 
-	this.result.logger.Println(this.result.String())
-	this.result.logger.Println(this.result.Error())
+	this.result.logger.Print(this.result.String())
+	this.result.logger.Print(this.result.Error())
 	this.assertLogMessageContents()
 }
 

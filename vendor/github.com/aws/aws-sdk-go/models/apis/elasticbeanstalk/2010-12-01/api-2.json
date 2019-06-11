@@ -1005,7 +1005,8 @@
       "members":{
         "ApplicationName":{"shape":"ApplicationName"},
         "Description":{"shape":"Description"},
-        "ResourceLifecycleConfig":{"shape":"ApplicationResourceLifecycleConfig"}
+        "ResourceLifecycleConfig":{"shape":"ApplicationResourceLifecycleConfig"},
+        "Tags":{"shape":"Tags"}
       }
     },
     "CreateApplicationVersionMessage":{
@@ -1022,7 +1023,8 @@
         "SourceBundle":{"shape":"S3Location"},
         "BuildConfiguration":{"shape":"BuildConfiguration"},
         "AutoCreateApplication":{"shape":"AutoCreateApplication"},
-        "Process":{"shape":"ApplicationVersionProccess"}
+        "Process":{"shape":"ApplicationVersionProccess"},
+        "Tags":{"shape":"Tags"}
       }
     },
     "CreateConfigurationTemplateMessage":{
@@ -1039,7 +1041,8 @@
         "SourceConfiguration":{"shape":"SourceConfiguration"},
         "EnvironmentId":{"shape":"EnvironmentId"},
         "Description":{"shape":"Description"},
-        "OptionSettings":{"shape":"ConfigurationOptionSettingsList"}
+        "OptionSettings":{"shape":"ConfigurationOptionSettingsList"},
+        "Tags":{"shape":"Tags"}
       }
     },
     "CreateEnvironmentMessage":{
@@ -1073,7 +1076,8 @@
         "PlatformVersion":{"shape":"PlatformVersion"},
         "PlatformDefinitionBundle":{"shape":"S3Location"},
         "EnvironmentName":{"shape":"EnvironmentName"},
-        "OptionSettings":{"shape":"ConfigurationOptionSettingsList"}
+        "OptionSettings":{"shape":"ConfigurationOptionSettingsList"},
+        "Tags":{"shape":"Tags"}
       }
     },
     "CreatePlatformVersionResult":{
@@ -1476,6 +1480,7 @@
         "AutoScalingGroups":{"shape":"AutoScalingGroupList"},
         "Instances":{"shape":"InstanceList"},
         "LaunchConfigurations":{"shape":"LaunchConfigurationList"},
+        "LaunchTemplates":{"shape":"LaunchTemplateList"},
         "LoadBalancers":{"shape":"LoadBalancerList"},
         "Triggers":{"shape":"TriggerList"},
         "Queues":{"shape":"QueueList"}
@@ -1673,6 +1678,16 @@
     "LaunchConfigurationList":{
       "type":"list",
       "member":{"shape":"LaunchConfiguration"}
+    },
+    "LaunchTemplate":{
+      "type":"structure",
+      "members":{
+        "Id":{"shape":"ResourceId"}
+      }
+    },
+    "LaunchTemplateList":{
+      "type":"list",
+      "member":{"shape":"LaunchTemplate"}
     },
     "LaunchedAt":{"type":"timestamp"},
     "ListAvailableSolutionStacksResultMessage":{

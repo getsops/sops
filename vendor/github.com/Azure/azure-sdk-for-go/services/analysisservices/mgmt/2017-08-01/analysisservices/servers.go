@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewServersClientWithBaseURI(baseURI string, subscriptionID string) ServersC
 // location - the region name which the operation will lookup into.
 // serverParameters - contains the information used to provision the Analysis Services server.
 func (client ServersClient) CheckNameAvailability(ctx context.Context, location string, serverParameters CheckServerNameAvailabilityParameters) (result CheckServerNameAvailabilityResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.CheckNameAvailability")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serverParameters,
 			Constraints: []validation.Constraint{{Target: "serverParameters.Name", Name: validation.Null, Rule: false,
@@ -127,6 +138,16 @@ func (client ServersClient) CheckNameAvailabilityResponder(resp *http.Response) 
 // of 63.
 // serverParameters - contains the information used to provision the Analysis Services server.
 func (client ServersClient) Create(ctx context.Context, resourceGroupName string, serverName string, serverParameters Server) (result ServersCreateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -186,10 +207,6 @@ func (client ServersClient) CreateSender(req *http.Request) (future ServersCreat
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -214,6 +231,16 @@ func (client ServersClient) CreateResponder(resp *http.Response) (result Server,
 // serverName - the name of the Analysis Services server. It must be at least 3 characters in length, and no
 // more than 63.
 func (client ServersClient) Delete(ctx context.Context, resourceGroupName string, serverName string) (result ServersDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -271,10 +298,6 @@ func (client ServersClient) DeleteSender(req *http.Request) (future ServersDelet
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -298,6 +321,16 @@ func (client ServersClient) DeleteResponder(resp *http.Response) (result autores
 // serverName - the name of the Analysis Services server. It must be at least 3 characters in length, and no
 // more than 63.
 func (client ServersClient) DissociateGateway(ctx context.Context, resourceGroupName string, serverName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.DissociateGateway")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -378,6 +411,16 @@ func (client ServersClient) DissociateGatewayResponder(resp *http.Response) (res
 // serverName - the name of the Analysis Services server. It must be a minimum of 3 characters, and a maximum
 // of 63.
 func (client ServersClient) GetDetails(ctx context.Context, resourceGroupName string, serverName string) (result Server, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.GetDetails")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -454,6 +497,16 @@ func (client ServersClient) GetDetailsResponder(resp *http.Response) (result Ser
 
 // List lists all the Analysis Services servers for the given subscription.
 func (client ServersClient) List(ctx context.Context) (result Servers, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "analysisservices.ServersClient", "List", nil, "Failure preparing request")
@@ -519,6 +572,16 @@ func (client ServersClient) ListResponder(resp *http.Response) (result Servers, 
 // resourceGroupName - the name of the Azure Resource group of which a given Analysis Services server is part.
 // This name must be at least 1 character in length, and no more than 90.
 func (client ServersClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result Servers, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -594,6 +657,16 @@ func (client ServersClient) ListByResourceGroupResponder(resp *http.Response) (r
 // This name must be at least 1 character in length, and no more than 90.
 // serverName - the name of the Analysis Services server.
 func (client ServersClient) ListGatewayStatus(ctx context.Context, resourceGroupName string, serverName string) (result GatewayListStatusLive, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.ListGatewayStatus")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -673,6 +746,16 @@ func (client ServersClient) ListGatewayStatusResponder(resp *http.Response) (res
 // location - the region name which the operation will lookup into.
 // operationID - the target operation Id.
 func (client ServersClient) ListOperationResults(ctx context.Context, location string, operationID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.ListOperationResults")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListOperationResultsPreparer(ctx, location, operationID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "analysisservices.ServersClient", "ListOperationResults", nil, "Failure preparing request")
@@ -739,6 +822,16 @@ func (client ServersClient) ListOperationResultsResponder(resp *http.Response) (
 // location - the region name which the operation will lookup into.
 // operationID - the target operation Id.
 func (client ServersClient) ListOperationStatuses(ctx context.Context, location string, operationID string) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.ListOperationStatuses")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListOperationStatusesPreparer(ctx, location, operationID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "analysisservices.ServersClient", "ListOperationStatuses", nil, "Failure preparing request")
@@ -808,6 +901,16 @@ func (client ServersClient) ListOperationStatusesResponder(resp *http.Response) 
 // serverName - the name of the Analysis Services server. It must be at least 3 characters in length, and no
 // more than 63.
 func (client ServersClient) ListSkusForExisting(ctx context.Context, resourceGroupName string, serverName string) (result SkuEnumerationForExistingResourceResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.ListSkusForExisting")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -884,6 +987,16 @@ func (client ServersClient) ListSkusForExistingResponder(resp *http.Response) (r
 
 // ListSkusForNew lists eligible SKUs for Analysis Services resource provider.
 func (client ServersClient) ListSkusForNew(ctx context.Context) (result SkuEnumerationForNewResourceResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.ListSkusForNew")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListSkusForNewPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "analysisservices.ServersClient", "ListSkusForNew", nil, "Failure preparing request")
@@ -951,6 +1064,16 @@ func (client ServersClient) ListSkusForNewResponder(resp *http.Response) (result
 // serverName - the name of the Analysis Services server. It must be at least 3 characters in length, and no
 // more than 63.
 func (client ServersClient) Resume(ctx context.Context, resourceGroupName string, serverName string) (result ServersResumeFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.Resume")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1008,10 +1131,6 @@ func (client ServersClient) ResumeSender(req *http.Request) (future ServersResum
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -1028,13 +1147,23 @@ func (client ServersClient) ResumeResponder(resp *http.Response) (result autores
 	return
 }
 
-// Suspend supends operation of the specified Analysis Services server instance.
+// Suspend suspends operation of the specified Analysis Services server instance.
 // Parameters:
 // resourceGroupName - the name of the Azure Resource group of which a given Analysis Services server is part.
 // This name must be at least 1 character in length, and no more than 90.
 // serverName - the name of the Analysis Services server. It must be at least 3 characters in length, and no
 // more than 63.
 func (client ServersClient) Suspend(ctx context.Context, resourceGroupName string, serverName string) (result ServersSuspendFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.Suspend")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1092,10 +1221,6 @@ func (client ServersClient) SuspendSender(req *http.Request) (future ServersSusp
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -1120,6 +1245,16 @@ func (client ServersClient) SuspendResponder(resp *http.Response) (result autore
 // more than 63.
 // serverUpdateParameters - request object that contains the updated information for the server.
 func (client ServersClient) Update(ctx context.Context, resourceGroupName string, serverName string, serverUpdateParameters ServerUpdateParameters) (result ServersUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServersClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -1176,10 +1311,6 @@ func (client ServersClient) UpdateSender(req *http.Request) (future ServersUpdat
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

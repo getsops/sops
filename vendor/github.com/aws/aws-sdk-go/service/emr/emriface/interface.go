@@ -143,6 +143,9 @@ type EMRAPI interface {
 	ListSecurityConfigurationsWithContext(aws.Context, *emr.ListSecurityConfigurationsInput, ...request.Option) (*emr.ListSecurityConfigurationsOutput, error)
 	ListSecurityConfigurationsRequest(*emr.ListSecurityConfigurationsInput) (*request.Request, *emr.ListSecurityConfigurationsOutput)
 
+	ListSecurityConfigurationsPages(*emr.ListSecurityConfigurationsInput, func(*emr.ListSecurityConfigurationsOutput, bool) bool) error
+	ListSecurityConfigurationsPagesWithContext(aws.Context, *emr.ListSecurityConfigurationsInput, func(*emr.ListSecurityConfigurationsOutput, bool) bool, ...request.Option) error
+
 	ListSteps(*emr.ListStepsInput) (*emr.ListStepsOutput, error)
 	ListStepsWithContext(aws.Context, *emr.ListStepsInput, ...request.Option) (*emr.ListStepsOutput, error)
 	ListStepsRequest(*emr.ListStepsInput) (*request.Request, *emr.ListStepsOutput)

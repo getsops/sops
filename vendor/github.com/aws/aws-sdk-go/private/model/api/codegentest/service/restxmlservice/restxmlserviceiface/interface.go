@@ -67,6 +67,10 @@ type RESTXMLServiceAPI interface {
 	GetEventStream(*restxmlservice.GetEventStreamInput) (*restxmlservice.GetEventStreamOutput, error)
 	GetEventStreamWithContext(aws.Context, *restxmlservice.GetEventStreamInput, ...request.Option) (*restxmlservice.GetEventStreamOutput, error)
 	GetEventStreamRequest(*restxmlservice.GetEventStreamInput) (*request.Request, *restxmlservice.GetEventStreamOutput)
+
+	OtherOperation(*restxmlservice.OtherOperationInput) (*restxmlservice.OtherOperationOutput, error)
+	OtherOperationWithContext(aws.Context, *restxmlservice.OtherOperationInput, ...request.Option) (*restxmlservice.OtherOperationOutput, error)
+	OtherOperationRequest(*restxmlservice.OtherOperationInput) (*request.Request, *restxmlservice.OtherOperationOutput)
 }
 
 var _ RESTXMLServiceAPI = (*restxmlservice.RESTXMLService)(nil)

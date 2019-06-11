@@ -8,6 +8,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 )
 
 const opClaimDevicesByClaimCode = "ClaimDevicesByClaimCode"
@@ -15,7 +17,7 @@ const opClaimDevicesByClaimCode = "ClaimDevicesByClaimCode"
 // ClaimDevicesByClaimCodeRequest generates a "aws/request.Request" representing the
 // client's request for the ClaimDevicesByClaimCode operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -98,7 +100,7 @@ const opDescribeDevice = "DescribeDevice"
 // DescribeDeviceRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDevice operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -181,7 +183,7 @@ const opFinalizeDeviceClaim = "FinalizeDeviceClaim"
 // FinalizeDeviceClaimRequest generates a "aws/request.Request" representing the
 // client's request for the FinalizeDeviceClaim operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -271,7 +273,7 @@ const opGetDeviceMethods = "GetDeviceMethods"
 // GetDeviceMethodsRequest generates a "aws/request.Request" representing the
 // client's request for the GetDeviceMethods operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -353,7 +355,7 @@ const opInitiateDeviceClaim = "InitiateDeviceClaim"
 // InitiateDeviceClaimRequest generates a "aws/request.Request" representing the
 // client's request for the InitiateDeviceClaim operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -441,7 +443,7 @@ const opInvokeDeviceMethod = "InvokeDeviceMethod"
 // InvokeDeviceMethodRequest generates a "aws/request.Request" representing the
 // client's request for the InvokeDeviceMethod operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -530,7 +532,7 @@ const opListDeviceEvents = "ListDeviceEvents"
 // ListDeviceEventsRequest generates a "aws/request.Request" representing the
 // client's request for the ListDeviceEvents operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -615,7 +617,7 @@ const opListDevices = "ListDevices"
 // ListDevicesRequest generates a "aws/request.Request" representing the
 // client's request for the ListDevices operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -692,12 +694,177 @@ func (c *IoT1ClickDevicesService) ListDevicesWithContext(ctx aws.Context, input 
 	return out, req.Send()
 }
 
+const opListTagsForResource = "ListTagsForResource"
+
+// ListTagsForResourceRequest generates a "aws/request.Request" representing the
+// client's request for the ListTagsForResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListTagsForResource for more information on using the ListTagsForResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListTagsForResourceRequest method.
+//    req, resp := client.ListTagsForResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/devices-2018-05-14/ListTagsForResource
+func (c *IoT1ClickDevicesService) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
+	op := &request.Operation{
+		Name:       opListTagsForResource,
+		HTTPMethod: "GET",
+		HTTPPath:   "/tags/{resource-arn}",
+	}
+
+	if input == nil {
+		input = &ListTagsForResourceInput{}
+	}
+
+	output = &ListTagsForResourceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListTagsForResource API operation for AWS IoT 1-Click Devices Service.
+//
+// Lists the tags associated with the specified resource ARN.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT 1-Click Devices Service's
+// API operation ListTagsForResource for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//
+//   * ErrCodeInternalFailureException "InternalFailureException"
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/devices-2018-05-14/ListTagsForResource
+func (c *IoT1ClickDevicesService) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	return out, req.Send()
+}
+
+// ListTagsForResourceWithContext is the same as ListTagsForResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListTagsForResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT1ClickDevicesService) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsForResourceInput, opts ...request.Option) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opTagResource = "TagResource"
+
+// TagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the TagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See TagResource for more information on using the TagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the TagResourceRequest method.
+//    req, resp := client.TagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/devices-2018-05-14/TagResource
+func (c *IoT1ClickDevicesService) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
+	op := &request.Operation{
+		Name:       opTagResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/tags/{resource-arn}",
+	}
+
+	if input == nil {
+		input = &TagResourceInput{}
+	}
+
+	output = &TagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// TagResource API operation for AWS IoT 1-Click Devices Service.
+//
+// Adds or updates the tags associated with the resource ARN. See AWS IoT 1-Click
+// Service Limits (https://docs.aws.amazon.com/iot-1-click/latest/developerguide/1click-appendix.html#1click-limits)
+// for the maximum number of tags allowed per resource.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT 1-Click Devices Service's
+// API operation TagResource for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//
+//   * ErrCodeInternalFailureException "InternalFailureException"
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/devices-2018-05-14/TagResource
+func (c *IoT1ClickDevicesService) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	return out, req.Send()
+}
+
+// TagResourceWithContext is the same as TagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See TagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT1ClickDevicesService) TagResourceWithContext(ctx aws.Context, input *TagResourceInput, opts ...request.Option) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUnclaimDevice = "UnclaimDevice"
 
 // UnclaimDeviceRequest generates a "aws/request.Request" representing the
 // client's request for the UnclaimDevice operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -774,12 +941,96 @@ func (c *IoT1ClickDevicesService) UnclaimDeviceWithContext(ctx aws.Context, inpu
 	return out, req.Send()
 }
 
+const opUntagResource = "UntagResource"
+
+// UntagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the UntagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UntagResource for more information on using the UntagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UntagResourceRequest method.
+//    req, resp := client.UntagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/devices-2018-05-14/UntagResource
+func (c *IoT1ClickDevicesService) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
+	op := &request.Operation{
+		Name:       opUntagResource,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/tags/{resource-arn}",
+	}
+
+	if input == nil {
+		input = &UntagResourceInput{}
+	}
+
+	output = &UntagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UntagResource API operation for AWS IoT 1-Click Devices Service.
+//
+// Using tag keys, deletes the tags (key/value pairs) associated with the specified
+// resource ARN.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT 1-Click Devices Service's
+// API operation UntagResource for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//
+//   * ErrCodeInternalFailureException "InternalFailureException"
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/devices-2018-05-14/UntagResource
+func (c *IoT1ClickDevicesService) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	return out, req.Send()
+}
+
+// UntagResourceWithContext is the same as UntagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UntagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT1ClickDevicesService) UntagResourceWithContext(ctx aws.Context, input *UntagResourceInput, opts ...request.Option) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateDeviceState = "UpdateDeviceState"
 
 // UpdateDeviceStateRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateDeviceState operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -813,6 +1064,7 @@ func (c *IoT1ClickDevicesService) UpdateDeviceStateRequest(input *UpdateDeviceSt
 
 	output = &UpdateDeviceStateOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -894,6 +1146,9 @@ func (s *ClaimDevicesByClaimCodeInput) Validate() error {
 	if s.ClaimCode == nil {
 		invalidParams.Add(request.NewErrParamRequired("ClaimCode"))
 	}
+	if s.ClaimCode != nil && len(*s.ClaimCode) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClaimCode", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -962,6 +1217,9 @@ func (s *DescribeDeviceInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DescribeDeviceInput"}
 	if s.DeviceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceId"))
+	}
+	if s.DeviceId != nil && len(*s.DeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1043,6 +1301,9 @@ func (s *Device) SetType(v string) *Device {
 type DeviceDescription struct {
 	_ struct{} `type:"structure"`
 
+	// The ARN of the device.
+	Arn *string `locationName:"arn" type:"string"`
+
 	// An array of zero or more elements of DeviceAttribute objects providing user
 	// specified device attributes.
 	Attributes map[string]*string `locationName:"attributes" type:"map"`
@@ -1057,6 +1318,8 @@ type DeviceDescription struct {
 	// for the device.
 	RemainingLife *float64 `locationName:"remainingLife" type:"double"`
 
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
 	// The type of the device, such as "button".
 	Type *string `locationName:"type" type:"string"`
 }
@@ -1069,6 +1332,12 @@ func (s DeviceDescription) String() string {
 // GoString returns the string representation
 func (s DeviceDescription) GoString() string {
 	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *DeviceDescription) SetArn(v string) *DeviceDescription {
+	s.Arn = &v
+	return s
 }
 
 // SetAttributes sets the Attributes field's value.
@@ -1092,6 +1361,12 @@ func (s *DeviceDescription) SetEnabled(v bool) *DeviceDescription {
 // SetRemainingLife sets the RemainingLife field's value.
 func (s *DeviceDescription) SetRemainingLife(v float64) *DeviceDescription {
 	s.RemainingLife = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *DeviceDescription) SetTags(v map[string]*string) *DeviceDescription {
+	s.Tags = v
 	return s
 }
 
@@ -1170,6 +1445,8 @@ type FinalizeDeviceClaimInput struct {
 
 	// DeviceId is a required field
 	DeviceId *string `location:"uri" locationName:"deviceId" type:"string" required:"true"`
+
+	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
 // String returns the string representation
@@ -1188,6 +1465,9 @@ func (s *FinalizeDeviceClaimInput) Validate() error {
 	if s.DeviceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceId"))
 	}
+	if s.DeviceId != nil && len(*s.DeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -1198,6 +1478,12 @@ func (s *FinalizeDeviceClaimInput) Validate() error {
 // SetDeviceId sets the DeviceId field's value.
 func (s *FinalizeDeviceClaimInput) SetDeviceId(v string) *FinalizeDeviceClaimInput {
 	s.DeviceId = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *FinalizeDeviceClaimInput) SetTags(v map[string]*string) *FinalizeDeviceClaimInput {
+	s.Tags = v
 	return s
 }
 
@@ -1245,6 +1531,9 @@ func (s *GetDeviceMethodsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetDeviceMethodsInput"}
 	if s.DeviceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceId"))
+	}
+	if s.DeviceId != nil && len(*s.DeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1304,6 +1593,9 @@ func (s *InitiateDeviceClaimInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "InitiateDeviceClaimInput"}
 	if s.DeviceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceId"))
+	}
+	if s.DeviceId != nil && len(*s.DeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1368,6 +1660,9 @@ func (s *InvokeDeviceMethodInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "InvokeDeviceMethodInput"}
 	if s.DeviceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceId"))
+	}
+	if s.DeviceId != nil && len(*s.DeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1449,6 +1744,9 @@ func (s *ListDeviceEventsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListDeviceEventsInput"}
 	if s.DeviceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceId"))
+	}
+	if s.DeviceId != nil && len(*s.DeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceId", 1))
 	}
 	if s.FromTimeStamp == nil {
 		invalidParams.Add(request.NewErrParamRequired("FromTimeStamp"))
@@ -1609,6 +1907,132 @@ func (s *ListDevicesOutput) SetNextToken(v string) *ListDevicesOutput {
 	return s
 }
 
+type ListTagsForResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"resource-arn" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ListTagsForResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListTagsForResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListTagsForResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListTagsForResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *ListTagsForResourceInput) SetResourceArn(v string) *ListTagsForResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+type ListTagsForResourceOutput struct {
+	_ struct{} `type:"structure"`
+
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation
+func (s ListTagsForResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListTagsForResourceOutput) GoString() string {
+	return s.String()
+}
+
+// SetTags sets the Tags field's value.
+func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForResourceOutput {
+	s.Tags = v
+	return s
+}
+
+type TagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"resource-arn" type:"string" required:"true"`
+
+	// Tags is a required field
+	Tags map[string]*string `locationName:"tags" type:"map" required:"true"`
+}
+
+// String returns the string representation
+func (s TagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TagResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 1))
+	}
+	if s.Tags == nil {
+		invalidParams.Add(request.NewErrParamRequired("Tags"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *TagResourceInput) SetResourceArn(v string) *TagResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
+	s.Tags = v
+	return s
+}
+
+type TagResourceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s TagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagResourceOutput) GoString() string {
+	return s.String()
+}
+
 type UnclaimDeviceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1631,6 +2055,9 @@ func (s *UnclaimDeviceInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UnclaimDeviceInput"}
 	if s.DeviceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceId"))
+	}
+	if s.DeviceId != nil && len(*s.DeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1667,6 +2094,71 @@ func (s *UnclaimDeviceOutput) SetState(v string) *UnclaimDeviceOutput {
 	return s
 }
 
+type UntagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"resource-arn" type:"string" required:"true"`
+
+	// TagKeys is a required field
+	TagKeys []*string `location:"querystring" locationName:"tagKeys" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s UntagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UntagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UntagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UntagResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 1))
+	}
+	if s.TagKeys == nil {
+		invalidParams.Add(request.NewErrParamRequired("TagKeys"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *UntagResourceInput) SetResourceArn(v string) *UntagResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetTagKeys sets the TagKeys field's value.
+func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
+	s.TagKeys = v
+	return s
+}
+
+type UntagResourceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UntagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UntagResourceOutput) GoString() string {
+	return s.String()
+}
+
 type UpdateDeviceStateInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1692,6 +2184,9 @@ func (s *UpdateDeviceStateInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "UpdateDeviceStateInput"}
 	if s.DeviceId == nil {
 		invalidParams.Add(request.NewErrParamRequired("DeviceId"))
+	}
+	if s.DeviceId != nil && len(*s.DeviceId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DeviceId", 1))
 	}
 
 	if invalidParams.Len() > 0 {

@@ -29,7 +29,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-syntax = "proto3";
+syntax = "proto2";
 
 package goproto.test.import_public.sub;
 
@@ -39,9 +39,39 @@ import "import_public/sub/b.proto";
 
 message M {
   // Field using a type in the same Go package, but a different source file.
-  M2 m2 = 1;
+  optional M2 m2 = 1;
+
+  oneof oneof_field {
+    int32 oneof_int32 = 2;
+    int64 oneof_int64 = 3;
+  }
+
+  optional group Grouping = 4  {
+    optional string group_field = 5;
+  }
+
+  optional string default_field = 6 [default="def"];
+
+  message Submessage {
+    enum Submessage_Subenum {
+      M_SUBMESSAGE_ZERO = 0;
+    }
+
+    oneof submessage_oneof_field {
+      int32 submessage_oneof_int32 = 1;
+      int64 submessage_oneof_int64 = 2;
+    }
+  }
+
+  enum Subenum {
+    M_ZERO = 0;
+  }
 }
 
 enum E {
   ZERO = 0;
+}
+
+extend M2 {
+  optional string extension_field = 1;
 }

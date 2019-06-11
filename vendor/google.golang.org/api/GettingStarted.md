@@ -34,7 +34,7 @@ Once you've installed a library, you import it like this:
 package main
 
 import (
-    "golang.org/x/net/context"
+    "context"
     "golang.org/x/oauth2"
     "golang.org/x/oauth2/google"
     "google.golang.org/api/urlshortener/v1"

@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,16 +19,16 @@
 
 package managedapplications
 
-import original "github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2018-06-01/managedapplications"
+import (
+	"context"
 
-type ApplicationDefinitionsClient = original.ApplicationDefinitionsClient
-type ApplicationsClient = original.ApplicationsClient
+	original "github.com/Azure/azure-sdk-for-go/services/resources/mgmt/2018-06-01/managedapplications"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
 type ApplicationArtifactType = original.ApplicationArtifactType
 
 const (
@@ -73,6 +73,7 @@ type ApplicationDefinitionListResult = original.ApplicationDefinitionListResult
 type ApplicationDefinitionListResultIterator = original.ApplicationDefinitionListResultIterator
 type ApplicationDefinitionListResultPage = original.ApplicationDefinitionListResultPage
 type ApplicationDefinitionProperties = original.ApplicationDefinitionProperties
+type ApplicationDefinitionsClient = original.ApplicationDefinitionsClient
 type ApplicationDefinitionsCreateOrUpdateByIDFuture = original.ApplicationDefinitionsCreateOrUpdateByIDFuture
 type ApplicationDefinitionsCreateOrUpdateFuture = original.ApplicationDefinitionsCreateOrUpdateFuture
 type ApplicationDefinitionsDeleteByIDFuture = original.ApplicationDefinitionsDeleteByIDFuture
@@ -84,10 +85,12 @@ type ApplicationPatchable = original.ApplicationPatchable
 type ApplicationProperties = original.ApplicationProperties
 type ApplicationPropertiesPatchable = original.ApplicationPropertiesPatchable
 type ApplicationProviderAuthorization = original.ApplicationProviderAuthorization
+type ApplicationsClient = original.ApplicationsClient
 type ApplicationsCreateOrUpdateByIDFuture = original.ApplicationsCreateOrUpdateByIDFuture
 type ApplicationsCreateOrUpdateFuture = original.ApplicationsCreateOrUpdateFuture
 type ApplicationsDeleteByIDFuture = original.ApplicationsDeleteByIDFuture
 type ApplicationsDeleteFuture = original.ApplicationsDeleteFuture
+type BaseClient = original.BaseClient
 type ErrorResponse = original.ErrorResponse
 type GenericResource = original.GenericResource
 type Identity = original.Identity
@@ -96,20 +99,32 @@ type PlanPatchable = original.PlanPatchable
 type Resource = original.Resource
 type Sku = original.Sku
 
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
+}
+func NewApplicationDefinitionListResultIterator(page ApplicationDefinitionListResultPage) ApplicationDefinitionListResultIterator {
+	return original.NewApplicationDefinitionListResultIterator(page)
+}
+func NewApplicationDefinitionListResultPage(getNextPage func(context.Context, ApplicationDefinitionListResult) (ApplicationDefinitionListResult, error)) ApplicationDefinitionListResultPage {
+	return original.NewApplicationDefinitionListResultPage(getNextPage)
+}
 func NewApplicationDefinitionsClient(subscriptionID string) ApplicationDefinitionsClient {
 	return original.NewApplicationDefinitionsClient(subscriptionID)
 }
 func NewApplicationDefinitionsClientWithBaseURI(baseURI string, subscriptionID string) ApplicationDefinitionsClient {
 	return original.NewApplicationDefinitionsClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewApplicationListResultIterator(page ApplicationListResultPage) ApplicationListResultIterator {
+	return original.NewApplicationListResultIterator(page)
+}
+func NewApplicationListResultPage(getNextPage func(context.Context, ApplicationListResult) (ApplicationListResult, error)) ApplicationListResultPage {
+	return original.NewApplicationListResultPage(getNextPage)
+}
 func NewApplicationsClient(subscriptionID string) ApplicationsClient {
 	return original.NewApplicationsClient(subscriptionID)
 }
 func NewApplicationsClientWithBaseURI(baseURI string, subscriptionID string) ApplicationsClient {
 	return original.NewApplicationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
 }
 func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
 	return original.NewWithBaseURI(baseURI, subscriptionID)

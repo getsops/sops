@@ -7,7 +7,7 @@
 // retrieve, secrets.
 //
 // This guide provides descriptions of the Secrets Manager API. For more information
-// about using this service, see the AWS Secrets Manager User Guide (http://docs.aws.amazon.com/secretsmanager/latest/userguide/introduction.html).
+// about using this service, see the AWS Secrets Manager User Guide (https://docs.aws.amazon.com/secretsmanager/latest/userguide/introduction.html).
 //
 // API Version
 //
@@ -26,7 +26,7 @@
 // We recommend that you use the AWS SDKs to make programmatic API calls to
 // Secrets Manager. However, you also can use the Secrets Manager HTTP Query
 // API to make direct calls to the Secrets Manager web service. To learn more
-// about the Secrets Manager HTTP Query API, see Making Query Requests (http://docs.aws.amazon.com/secretsmanager/latest/userguide/query-requests.html)
+// about the Secrets Manager HTTP Query API, see Making Query Requests (https://docs.aws.amazon.com/secretsmanager/latest/userguide/query-requests.html)
 // in the AWS Secrets Manager User Guide.
 //
 // Secrets Manager supports GET and POST requests for all actions. That is,
@@ -62,7 +62,7 @@
 // (http://docs.aws.amazon.com/secretsmanager/latest/userguide/monitoring.html#monitoring_cloudtrail)
 // in the AWS Secrets Manager User Guide. To learn more about CloudTrail, including
 // how to turn it on and find your log files, see the AWS CloudTrail User Guide
-// (http://docs.aws.amazon.com/awscloudtrail/latest/userguide/what_is_cloud_trail_top_level.html).
+// (https://docs.aws.amazon.com/awscloudtrail/latest/userguide/what_is_cloud_trail_top_level.html).
 //
 // See https://docs.aws.amazon.com/goto/WebAPI/secretsmanager-2017-10-17 for more information on this service.
 //

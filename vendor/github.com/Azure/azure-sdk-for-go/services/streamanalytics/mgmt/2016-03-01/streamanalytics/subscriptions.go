@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,6 +45,16 @@ func NewSubscriptionsClientWithBaseURI(baseURI string, subscriptionID string) Su
 // location - the region in which to retrieve the subscription's quota information. You can find out which
 // regions Azure Stream Analytics is supported in here: https://azure.microsoft.com/en-us/regions/
 func (client SubscriptionsClient) ListQuotas(ctx context.Context, location string) (result SubscriptionQuotasListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionsClient.ListQuotas")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListQuotasPreparer(ctx, location)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "streamanalytics.SubscriptionsClient", "ListQuotas", nil, "Failure preparing request")

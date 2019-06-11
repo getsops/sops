@@ -24,6 +24,7 @@
 package reflection
 
 import (
+	"context"
 	"fmt"
 	"net"
 	"reflect"
@@ -32,7 +33,6 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	dpb "github.com/golang/protobuf/protoc-gen-go/descriptor"
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	rpb "google.golang.org/grpc/reflection/grpc_reflection_v1alpha"
 	pb "google.golang.org/grpc/reflection/grpc_testing"
@@ -203,7 +203,7 @@ func TestReflectionEnd2end(t *testing.T) {
 	defer conn.Close()
 
 	c := rpb.NewServerReflectionClient(conn)
-	stream, err := c.ServerReflectionInfo(context.Background(), grpc.FailFast(false))
+	stream, err := c.ServerReflectionInfo(context.Background(), grpc.WaitForReady(true))
 	if err != nil {
 		t.Fatalf("cannot get ServerReflectionInfo: %v", err)
 	}

@@ -14,37 +14,34 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package model_test
+package model
 
 import (
 	"path/filepath"
 	"strings"
 	"testing"
-
-	"github.com/Azure/azure-sdk-for-go/tools/profileBuilder/model"
 )
 
 func Test_GetAliasPath(t *testing.T) {
-	const profileName = "profile1"
 	testCases := []struct {
 		original string
 		expected string
 	}{
 		{
 			filepath.Join("services", "cdn", "mgmt", "2015-06-01", "cdn"),
-			filepath.Join(profileName, "cdn", "mgmt", "cdn"),
+			filepath.Join("cdn", "mgmt", "cdn"),
 		},
 		{
 			filepath.Join("services", "keyvault", "2016-10-01", "keyvault"),
-			filepath.Join(profileName, "keyvault", "keyvault"),
+			filepath.Join("keyvault", "keyvault"),
 		},
 		{
 			filepath.Join("services", "keyvault", "mgmt", "2016-10-01", "keyvault"),
-			filepath.Join(profileName, "keyvault", "mgmt", "keyvault"),
+			filepath.Join("keyvault", "mgmt", "keyvault"),
 		},
 		{
 			filepath.Join("services", "datalake", "analytics", "2016-11-01-preview", "catalog"),
-			filepath.Join(profileName, "datalake", "analytics", "catalog"),
+			filepath.Join("datalake", "analytics", "catalog"),
 		},
 	}
 
@@ -73,7 +70,7 @@ func Test_GetAliasPath(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.original, func(t *testing.T) {
-			got, err := model.GetAliasPath(tc.original, profileName)
+			got, err := getAliasPath(tc.original)
 			if err != nil {
 				t.Error(err)
 			}

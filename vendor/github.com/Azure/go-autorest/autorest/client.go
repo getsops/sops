@@ -16,6 +16,7 @@ package autorest
 
 import (
 	"bytes"
+	"crypto/tls"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -26,7 +27,7 @@ import (
 	"time"
 
 	"github.com/Azure/go-autorest/logger"
-	"github.com/Azure/go-autorest/version"
+	"github.com/Azure/go-autorest/tracing"
 )
 
 const (
@@ -147,6 +148,7 @@ type Client struct {
 	PollingDelay time.Duration
 
 	// PollingDuration sets the maximum polling time after which an error is returned.
+	// Setting this to zero will use the provided context to control the duration.
 	PollingDuration time.Duration
 
 	// RetryAttempts sets the default number of retry attempts for client.
@@ -168,14 +170,32 @@ type Client struct {
 // NewClientWithUserAgent returns an instance of a Client with the UserAgent set to the passed
 // string.
 func NewClientWithUserAgent(ua string) Client {
+	return newClient(ua, tls.RenegotiateNever)
+}
+
+// ClientOptions contains various Client configuration options.
+type ClientOptions struct {
+	// UserAgent is an optional user-agent string to append to the default user agent.
+	UserAgent string
+
+	// Renegotiation is an optional setting to control client-side TLS renegotiation.
+	Renegotiation tls.RenegotiationSupport
+}
+
+// NewClientWithOptions returns an instance of a Client with the specified values.
+func NewClientWithOptions(options ClientOptions) Client {
+	return newClient(options.UserAgent, options.Renegotiation)
+}
+
+func newClient(ua string, renegotiation tls.RenegotiationSupport) Client {
 	c := Client{
 		PollingDelay:    DefaultPollingDelay,
 		PollingDuration: DefaultPollingDuration,
 		RetryAttempts:   DefaultRetryAttempts,
 		RetryDuration:   DefaultRetryDuration,
-		UserAgent:       version.UserAgent(),
+		UserAgent:       UserAgent(),
 	}
-	c.Sender = c.sender()
+	c.Sender = c.sender(renegotiation)
 	c.AddToUserAgent(ua)
 	return c
 }
@@ -219,18 +239,39 @@ func (c Client) Do(r *http.Request) (*http.Response, error) {
 			return true, v
 		},
 	})
-	resp, err := SendWithSender(c.sender(), r)
+	resp, err := SendWithSender(c.sender(tls.RenegotiateNever), r)
 	logger.Instance.WriteResponse(resp, logger.Filter{})
 	Respond(resp, c.ByInspecting())
 	return resp, err
 }
 
 // sender returns the Sender to which to send requests.
-func (c Client) sender() Sender {
+func (c Client) sender(renengotiation tls.RenegotiationSupport) Sender {
 	if c.Sender == nil {
+		// Use behaviour compatible with DefaultTransport, but require TLS minimum version.
+		var defaultTransport = http.DefaultTransport.(*http.Transport)
+		transport := tracing.Transport
+		// for non-default values of TLS renegotiation create a new tracing transport.
+		// updating tracing.Transport affects all clients which is not what we want.
+		if renengotiation != tls.RenegotiateNever {
+			transport = tracing.NewTransport()
+		}
+		transport.Base = &http.Transport{
+			Proxy:                 defaultTransport.Proxy,
+			DialContext:           defaultTransport.DialContext,
+			MaxIdleConns:          defaultTransport.MaxIdleConns,
+			IdleConnTimeout:       defaultTransport.IdleConnTimeout,
+			TLSHandshakeTimeout:   defaultTransport.TLSHandshakeTimeout,
+			ExpectContinueTimeout: defaultTransport.ExpectContinueTimeout,
+			TLSClientConfig: &tls.Config{
+				MinVersion:    tls.VersionTLS12,
+				Renegotiation: renengotiation,
+			},
+		}
 		j, _ := cookiejar.New(nil)
-		return &http.Client{Jar: j}
+		return &http.Client{Jar: j, Transport: transport}
 	}
+
 	return c.Sender
 }
 

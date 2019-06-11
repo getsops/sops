@@ -107,7 +107,7 @@
     "photo": {
       "methods": {
         "create": {
-          "description": "After the client finishes uploading the photo with the returned\nUploadRef,\nCreatePhoto\npublishes the uploaded Photo to\nStreet View on Google Maps.\n\nCurrently, the only way to set heading, pitch, and roll in CreatePhoto is\nthrough the [Photo Sphere XMP\nmetadata](https://developers.google.com/streetview/spherical-metadata) in\nthe photo bytes. The `pose.heading`, `pose.pitch`, `pose.roll`,\n`pose.altitude`, and `pose.level` fields in Pose are ignored for\nCreatePhoto.\n\nThis method returns the following error codes:\n\n* google.rpc.Code.INVALID_ARGUMENT if the request is malformed or if\nthe uploaded photo is not a 360 photo.\n* google.rpc.Code.NOT_FOUND if the upload reference does not exist.\n* google.rpc.Code.RESOURCE_EXHAUSTED if the account has reached the\nstorage limit.",
+          "description": "After the client finishes uploading the photo with the returned\nUploadRef,\nCreatePhoto\npublishes the uploaded Photo to\nStreet View on Google Maps.\n\nCurrently, the only way to set heading, pitch, and roll in CreatePhoto is\nthrough the [Photo Sphere XMP\nmetadata](https://developers.google.com/streetview/spherical-metadata) in\nthe photo bytes. CreatePhoto ignores the  `pose.heading`, `pose.pitch`,\n`pose.roll`, `pose.altitude`, and `pose.level` fields in Pose.\n\nThis method returns the following error codes:\n\n* google.rpc.Code.INVALID_ARGUMENT if the request is malformed or if\nthe uploaded photo is not a 360 photo.\n* google.rpc.Code.NOT_FOUND if the upload reference does not exist.\n* google.rpc.Code.RESOURCE_EXHAUSTED if the account has reached the\nstorage limit.",
           "flatPath": "v1/photo",
           "httpMethod": "POST",
           "id": "streetviewpublish.photo.create",
@@ -157,6 +157,11 @@
             "photoId"
           ],
           "parameters": {
+            "languageCode": {
+              "description": "The BCP-47 language code, such as \"en-US\" or \"sr-Latn\". For more\ninformation, see\nhttp://www.unicode.org/reports/tr35/#Unicode_locale_identifier.\nIf language_code is unspecified, the user's language preference for Google\nservices is used.",
+              "location": "query",
+              "type": "string"
+            },
             "photoId": {
               "description": "Required. ID of the Photo.",
               "location": "path",
@@ -182,7 +187,7 @@
           ]
         },
         "startUpload": {
-          "description": "Creates an upload session to start uploading photo bytes. The upload URL of\nthe returned UploadRef is used to\nupload the bytes for the Photo.\n\nIn addition to the photo requirements shown in\nhttps://support.google.com/maps/answer/7012050?hl=en\u0026ref_topic=6275604,\nthe photo must also meet the following requirements:\n\n* Photo Sphere XMP metadata must be included in the photo medadata. See\nhttps://developers.google.com/streetview/spherical-metadata for the\nrequired fields.\n* The pixel size of the photo must meet the size requirements listed in\nhttps://support.google.com/maps/answer/7012050?hl=en\u0026ref_topic=6275604, and\nthe photo must be a full 360 horizontally.\n\nAfter the upload is complete, the\nUploadRef is used with\nCreatePhoto\nto create the Photo object entry.",
+          "description": "Creates an upload session to start uploading photo bytes.  The method uses\nthe upload URL of the returned\nUploadRef to upload the bytes for\nthe Photo.\n\nIn addition to the photo requirements shown in\nhttps://support.google.com/maps/answer/7012050?hl=en\u0026ref_topic=6275604,\nthe photo must meet the following requirements:\n\n* Photo Sphere XMP metadata must be included in the photo medadata. See\nhttps://developers.google.com/streetview/spherical-metadata for the\nrequired fields.\n* The pixel size of the photo must meet the size requirements listed in\nhttps://support.google.com/maps/answer/7012050?hl=en\u0026ref_topic=6275604, and\nthe photo must be a full 360 horizontally.\n\nAfter the upload completes, the method uses\nUploadRef with\nCreatePhoto\nto create the Photo object entry.",
           "flatPath": "v1/photo:startUpload",
           "httpMethod": "POST",
           "id": "streetviewpublish.photo.startUpload",
@@ -200,7 +205,7 @@
           ]
         },
         "update": {
-          "description": "Updates the metadata of a Photo, such\nas pose, place association, connections, etc. Changing the pixels of a\nphoto is not supported.\n\nOnly the fields specified in the\nupdateMask\nfield are used. If `updateMask` is not present, the update applies to all\nfields.\n\n\u003caside class=\"note\"\u003e\u003cb\u003eNote:\u003c/b\u003e To update\nPose.altitude,\nPose.latLngPair has to be\nfilled as well. Otherwise, the request will fail.\u003c/aside\u003e\n\nThis method returns the following error codes:\n\n* google.rpc.Code.PERMISSION_DENIED if the requesting user did not\ncreate the requested photo.\n* google.rpc.Code.INVALID_ARGUMENT if the request is malformed.\n* google.rpc.Code.NOT_FOUND if the requested photo does not exist.\n* google.rpc.Code.UNAVAILABLE if the requested\nPhoto is still being indexed.",
+          "description": "Updates the metadata of a Photo, such\nas pose, place association, connections, etc. Changing the pixels of a\nphoto is not supported.\n\nOnly the fields specified in the\nupdateMask\nfield are used. If `updateMask` is not present, the update applies to all\nfields.\n\nThis method returns the following error codes:\n\n* google.rpc.Code.PERMISSION_DENIED if the requesting user did not\ncreate the requested photo.\n* google.rpc.Code.INVALID_ARGUMENT if the request is malformed.\n* google.rpc.Code.NOT_FOUND if the requested photo does not exist.\n* google.rpc.Code.UNAVAILABLE if the requested\nPhoto is still being indexed.",
           "flatPath": "v1/photo/{id}",
           "httpMethod": "PUT",
           "id": "streetviewpublish.photo.update",
@@ -215,7 +220,7 @@
               "type": "string"
             },
             "updateMask": {
-              "description": "Mask that identifies fields on the photo metadata to update.\nIf not present, the old Photo\nmetadata will be entirely replaced with the\nnew Photo metadata in this request.\nThe update fails if invalid fields are specified. Multiple fields can be\nspecified in a comma-delimited list.\n\nThe following fields are valid:\n\n* `pose.heading`\n* `pose.latLngPair`\n* `pose.pitch`\n* `pose.roll`\n* `pose.level`\n* `pose.altitude`\n* `connections`\n* `places`\n\n\n\u003caside class=\"note\"\u003e\u003cb\u003eNote:\u003c/b\u003e Repeated fields in\nupdateMask\nmean the entire set of repeated values will be replaced with the new\ncontents. For example, if\nupdateMask\ncontains `connections` and `UpdatePhotoRequest.photo.connections` is empty,\nall connections will be removed.\u003c/aside\u003e",
+              "description": "Mask that identifies fields on the photo metadata to update.\nIf not present, the old Photo\nmetadata is entirely replaced with the\nnew Photo metadata in this request.\nThe update fails if invalid fields are specified. Multiple fields can be\nspecified in a comma-delimited list.\n\nThe following fields are valid:\n\n* `pose.heading`\n* `pose.latLngPair`\n* `pose.pitch`\n* `pose.roll`\n* `pose.level`\n* `pose.altitude`\n* `connections`\n* `places`\n\n\n\u003caside class=\"note\"\u003e\u003cb\u003eNote:\u003c/b\u003e When\nupdateMask\ncontains repeated fields, the entire set of repeated values get replaced\nwith the new contents. For example, if\nupdateMask\ncontains `connections` and `UpdatePhotoRequest.photo.connections` is empty,\nall connections are removed.\u003c/aside\u003e",
               "format": "google-fieldmask",
               "location": "query",
               "type": "string"
@@ -237,7 +242,7 @@
     "photos": {
       "methods": {
         "batchDelete": {
-          "description": "Deletes a list of Photos and their\nmetadata.\n\nNote that if\nBatchDeletePhotos\nfails, either critical fields are missing or there was an authentication\nerror. Even if\nBatchDeletePhotos\nsucceeds, there may have been failures for single photos in the batch.\nThese failures will be specified in each\nPhotoResponse.status\nin\nBatchDeletePhotosResponse.results.\nSee\nDeletePhoto\nfor specific failures that can occur per photo.",
+          "description": "Deletes a list of Photos and their\nmetadata.\n\nNote that if\nBatchDeletePhotos\nfails, either critical fields are missing or there is an authentication\nerror. Even if\nBatchDeletePhotos\nsucceeds, individual photos in the batch may have failures.\nThese failures are specified in each\nPhotoResponse.status\nin\nBatchDeletePhotosResponse.results.\nSee\nDeletePhoto\nfor specific failures that can occur per photo.",
           "flatPath": "v1/photos:batchDelete",
           "httpMethod": "POST",
           "id": "streetviewpublish.photos.batchDelete",
@@ -255,12 +260,17 @@
           ]
         },
         "batchGet": {
-          "description": "Gets the metadata of the specified\nPhoto batch.\n\nNote that if\nBatchGetPhotos\nfails, either critical fields are missing or there was an authentication\nerror. Even if\nBatchGetPhotos\nsucceeds, there may have been failures for single photos in the batch.\nThese failures will be specified in each\nPhotoResponse.status\nin\nBatchGetPhotosResponse.results.\nSee\nGetPhoto\nfor specific failures that can occur per photo.",
+          "description": "Gets the metadata of the specified\nPhoto batch.\n\nNote that if\nBatchGetPhotos\nfails, either critical fields are missing or there is an authentication\nerror. Even if\nBatchGetPhotos\nsucceeds, individual photos in the batch may have failures.\nThese failures are specified in each\nPhotoResponse.status\nin\nBatchGetPhotosResponse.results.\nSee\nGetPhoto\nfor specific failures that can occur per photo.",
           "flatPath": "v1/photos:batchGet",
           "httpMethod": "GET",
           "id": "streetviewpublish.photos.batchGet",
           "parameterOrder": [],
           "parameters": {
+            "languageCode": {
+              "description": "The BCP-47 language code, such as \"en-US\" or \"sr-Latn\". For more\ninformation, see\nhttp://www.unicode.org/reports/tr35/#Unicode_locale_identifier.\nIf language_code is unspecified, the user's language preference for Google\nservices is used.",
+              "location": "query",
+              "type": "string"
+            },
             "photoIds": {
               "description": "Required. IDs of the Photos. For HTTP\nGET requests, the URL query parameter should be\n`photoIds=\u003cid1\u003e\u0026photoIds=\u003cid2\u003e\u0026...`.",
               "location": "query",
@@ -286,7 +296,7 @@
           ]
         },
         "batchUpdate": {
-          "description": "Updates the metadata of Photos, such\nas pose, place association, connections, etc. Changing the pixels of photos\nis not supported.\n\nNote that if\nBatchUpdatePhotos\nfails, either critical fields are missing or there was an authentication\nerror. Even if\nBatchUpdatePhotos\nsucceeds, there may have been failures for single photos in the batch.\nThese failures will be specified in each\nPhotoResponse.status\nin\nBatchUpdatePhotosResponse.results.\nSee\nUpdatePhoto\nfor specific failures that can occur per photo.\n\nOnly the fields specified in\nupdateMask\nfield are used. If `updateMask` is not present, the update applies to all\nfields.\n\n\u003caside class=\"note\"\u003e\u003cb\u003eNote:\u003c/b\u003e To update\nPose.altitude,\nPose.latLngPair has to be\nfilled as well. Otherwise, the request will fail.\u003c/aside\u003e",
+          "description": "Updates the metadata of Photos, such\nas pose, place association, connections, etc. Changing the pixels of photos\nis not supported.\n\nNote that if\nBatchUpdatePhotos\nfails, either critical fields are missing or there is an authentication\nerror. Even if\nBatchUpdatePhotos\nsucceeds, individual photos in the batch may have failures.\nThese failures are specified in each\nPhotoResponse.status\nin\nBatchUpdatePhotosResponse.results.\nSee\nUpdatePhoto\nfor specific failures that can occur per photo.\n\nOnly the fields specified in\nupdateMask\nfield are used. If `updateMask` is not present, the update applies to all\nfields.\n\nThe number of\nUpdatePhotoRequest\nmessages in a\nBatchUpdatePhotosRequest\nmust not exceed 20.\n\n\u003caside class=\"note\"\u003e\u003cb\u003eNote:\u003c/b\u003e To update\nPose.altitude,\nPose.latLngPair has to be\nfilled as well. Otherwise, the request will fail.\u003c/aside\u003e",
           "flatPath": "v1/photos:batchUpdate",
           "httpMethod": "POST",
           "id": "streetviewpublish.photos.batchUpdate",
@@ -315,8 +325,13 @@
               "location": "query",
               "type": "string"
             },
+            "languageCode": {
+              "description": "The BCP-47 language code, such as \"en-US\" or \"sr-Latn\". For more\ninformation, see\nhttp://www.unicode.org/reports/tr35/#Unicode_locale_identifier.\nIf language_code is unspecified, the user's language preference for Google\nservices is used.",
+              "location": "query",
+              "type": "string"
+            },
             "pageSize": {
-              "description": "The maximum number of photos to return.\n`pageSize` must be non-negative. If `pageSize` is zero or is not provided,\nthe default page size of 100 will be used.\nThe number of photos returned in the response may be less than `pageSize`\nif the number of photos that belong to the user is less than `pageSize`.",
+              "description": "The maximum number of photos to return.\n`pageSize` must be non-negative. If `pageSize` is zero or is not provided,\nthe default page size of 100 is used.\nThe number of photos returned in the response may be less than `pageSize`\nif the number of photos that belong to the user is less than `pageSize`.",
               "format": "int32",
               "location": "query",
               "type": "integer"
@@ -347,7 +362,7 @@
       }
     }
   },
-  "revision": "20180601",
+  "revision": "20190530",
   "rootUrl": "https://streetviewpublish.googleapis.com/",
   "schemas": {
     "BatchDeletePhotosRequest": {
@@ -355,7 +370,7 @@
       "id": "BatchDeletePhotosRequest",
       "properties": {
         "photoIds": {
-          "description": "Required. IDs of the Photos. For HTTP\nGET requests, the URL query parameter should be\n`photoIds=\u003cid1\u003e\u0026photoIds=\u003cid2\u003e\u0026...`.",
+          "description": "Required. IDs of the Photos. HTTP\nGET requests require the following syntax for the URL query parameter:\n`photoIds=\u003cid1\u003e\u0026photoIds=\u003cid2\u003e\u0026...`.",
           "items": {
             "type": "string"
           },
@@ -479,7 +494,7 @@
           "type": "string"
         },
         "photos": {
-          "description": "List of photos. The maximum number of items returned is based on the\npageSize field\nin the request.",
+          "description": "List of photos. The\npageSize field\nin the request determines the number of items returned.",
           "items": {
             "$ref": "Photo"
           },
@@ -509,7 +524,7 @@
           "type": "object"
         },
         "name": {
-          "description": "The server-assigned name, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping, the\n`name` should have the format of `operations/some/unique/name`.",
+          "description": "The server-assigned name, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping, the\n`name` should be a resource name ending with `operations/{unique_id}`.",
           "type": "string"
         },
         "response": {
@@ -543,6 +558,20 @@
           "description": "Output only. The download URL for the photo bytes. This field is set only\nwhen\nGetPhotoRequest.view\nis set to\nPhotoView.INCLUDE_DOWNLOAD_URL.",
           "type": "string"
         },
+        "mapsPublishStatus": {
+          "description": "Output only. Status in Google Maps, whether this photo was published or\nrejected.",
+          "enum": [
+            "UNSPECIFIED_MAPS_PUBLISH_STATUS",
+            "PUBLISHED",
+            "REJECTED_UNKNOWN"
+          ],
+          "enumDescriptions": [
+            "The status of the photo is unknown.",
+            "The photo is published to the public through Google Maps.",
+            "The photo has been rejected for an unknown reason."
+          ],
+          "type": "string"
+        },
         "photoId": {
           "$ref": "PhotoId",
           "description": "Required when updating a photo. Output only when creating a photo.\nIdentifier for the photo, which is unique among all photos in\nGoogle."
@@ -564,6 +593,30 @@
         },
         "thumbnailUrl": {
           "description": "Output only. The thumbnail URL for showing a preview of the given photo.",
+          "type": "string"
+        },
+        "transferStatus": {
+          "description": "Output only. Status of rights transfer on this photo.",
+          "enum": [
+            "TRANSFER_STATUS_UNKNOWN",
+            "NEVER_TRANSFERRED",
+            "PENDING",
+            "COMPLETED",
+            "REJECTED",
+            "EXPIRED",
+            "CANCELLED",
+            "RECEIVED_VIA_TRANSFER"
+          ],
+          "enumDescriptions": [
+            "The status of this transfer is unspecified.",
+            "This photo has never been in a transfer.",
+            "This photo transfer has been initiated, but the receiver has not yet\nresponded.",
+            "The photo transfer has been completed, and this photo has been\ntransferred to the recipient.",
+            "The recipient rejected this photo transfer.",
+            "The photo transfer expired before the recipient took any action.",
+            "The sender cancelled this photo transfer.",
+            "The recipient owns this photo due to a rights transfer."
+          ],
           "type": "string"
         },
         "uploadReference": {
@@ -608,6 +661,14 @@
       "description": "Place metadata for an entity.",
       "id": "Place",
       "properties": {
+        "languageCode": {
+          "description": "Output-only. The language_code that the name is localized with. This should\nbe the language_code specified in the request, but may be a fallback.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Output-only. The name of the place, localized to the language_code.",
+          "type": "string"
+        },
         "placeId": {
           "description": "Place identifier, as described in\nhttps://developers.google.com/places/place-id.",
           "type": "string"
@@ -619,6 +680,11 @@
       "description": "Raw pose measurement for an entity.",
       "id": "Pose",
       "properties": {
+        "accuracyMeters": {
+          "description": "The estimated horizontal accuracy of this pose in meters with 68%\nconfidence (one standard deviation). For example, on Android, this value is\navailable from this method:\nhttps://developer.android.com/reference/android/location/Location#getAccuracy().\nOther platforms have different methods of obtaining similar accuracy\nestimations.",
+          "format": "float",
+          "type": "number"
+        },
         "altitude": {
           "description": "Altitude of the pose in meters above WGS84 ellipsoid.\nNaN indicates an unmeasured quantity.",
           "format": "double",
@@ -631,7 +697,7 @@
         },
         "latLngPair": {
           "$ref": "LatLng",
-          "description": "Latitude and longitude pair of the pose, as explained here:\nhttps://cloud.google.com/datastore/docs/reference/rest/Shared.Types/LatLng\nWhen creating a Photo, if the\nlatitude and longitude pair are not provided here, the geolocation from the\nexif header will be used. If the latitude and longitude pair is not\nprovided and cannot be found in the exif header, the create photo process\nwill fail."
+          "description": "Latitude and longitude pair of the pose, as explained here:\nhttps://cloud.google.com/datastore/docs/reference/rest/Shared.Types/LatLng\nWhen creating a Photo, if the\nlatitude and longitude pair are not provided, the geolocation from the\nexif header is used. A latitude and longitude pair not provided in the\nphoto or exif header causes the photo process to fail."
         },
         "level": {
           "$ref": "Level",
@@ -651,7 +717,7 @@
       "type": "object"
     },
     "Status": {
-      "description": "The `Status` type defines a logical error model that is suitable for different\nprogramming environments, including REST APIs and RPC APIs. It is used by\n[gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error message,\nand error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
+      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors).",
       "id": "Status",
       "properties": {
         "code": {
@@ -686,7 +752,7 @@
           "description": "Required. Photo object containing the\nnew metadata."
         },
         "updateMask": {
-          "description": "Mask that identifies fields on the photo metadata to update.\nIf not present, the old Photo\nmetadata will be entirely replaced with the\nnew Photo metadata in this request.\nThe update fails if invalid fields are specified. Multiple fields can be\nspecified in a comma-delimited list.\n\nThe following fields are valid:\n\n* `pose.heading`\n* `pose.latLngPair`\n* `pose.pitch`\n* `pose.roll`\n* `pose.level`\n* `pose.altitude`\n* `connections`\n* `places`\n\n\n\u003caside class=\"note\"\u003e\u003cb\u003eNote:\u003c/b\u003e Repeated fields in\nupdateMask\nmean the entire set of repeated values will be replaced with the new\ncontents. For example, if\nupdateMask\ncontains `connections` and `UpdatePhotoRequest.photo.connections` is empty,\nall connections will be removed.\u003c/aside\u003e",
+          "description": "Mask that identifies fields on the photo metadata to update.\nIf not present, the old Photo\nmetadata is entirely replaced with the\nnew Photo metadata in this request.\nThe update fails if invalid fields are specified. Multiple fields can be\nspecified in a comma-delimited list.\n\nThe following fields are valid:\n\n* `pose.heading`\n* `pose.latLngPair`\n* `pose.pitch`\n* `pose.roll`\n* `pose.level`\n* `pose.altitude`\n* `connections`\n* `places`\n\n\n\u003caside class=\"note\"\u003e\u003cb\u003eNote:\u003c/b\u003e When\nupdateMask\ncontains repeated fields, the entire set of repeated values get replaced\nwith the new contents. For example, if\nupdateMask\ncontains `connections` and `UpdatePhotoRequest.photo.connections` is empty,\nall connections are removed.\u003c/aside\u003e",
           "format": "google-fieldmask",
           "type": "string"
         }

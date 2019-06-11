@@ -20,6 +20,7 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
+	"sort"
 	"strings"
 )
 
@@ -61,8 +62,9 @@ func Get(dir string) (wt WorkingTree, err error) {
 }
 
 // Branch calls "git branch" to determine the current branch.
-func (tw WorkingTree) Branch() (string, error) {
+func (wt WorkingTree) Branch() (string, error) {
 	cmd := exec.Command("git", "branch")
+	cmd.Dir = wt.dir
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		return "", errors.New(string(output))
@@ -143,4 +145,30 @@ func (wt WorkingTree) CherryPick(commit string) error {
 		return errors.New(string(output))
 	}
 	return nil
+}
+
+// CreateTag calls "git tag <name>" to create the specified tag.
+func (wt WorkingTree) CreateTag(name string) error {
+	cmd := exec.Command("git", "tag", name)
+	cmd.Dir = wt.dir
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return errors.New(string(output))
+	}
+	return nil
+}
+
+// ListTags calls "git tag -l <pattern>" to obtain the list of tags.
+// If there are no tags the returned slice will have zero length.
+// Tags are sorted in lexographic ascending order.
+func (wt WorkingTree) ListTags(pattern string) ([]string, error) {
+	cmd := exec.Command("git", "tag", "-l", pattern)
+	cmd.Dir = wt.dir
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return nil, errors.New(string(output))
+	}
+	tags := strings.Split(strings.TrimSpace(string(output)), "\n")
+	sort.Strings(tags)
+	return tags, nil
 }

@@ -15,13 +15,12 @@
 package bigquery
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"testing"
 
 	"cloud.google.com/go/internal/testutil"
-
-	"golang.org/x/net/context"
 	"google.golang.org/api/iterator"
 )
 

@@ -21,9 +21,9 @@
   "baseUrl": "https://oslogin.googleapis.com/",
   "batchPath": "batch",
   "canonicalName": "Cloud OS Login",
-  "description": "Manages OS login configuration for Google account users.",
+  "description": "You can use OS Login to manage access to your VM instances using IAM roles. For more information, read [OS Login](/compute/docs/oslogin/).",
   "discoveryVersion": "v1",
-  "documentationLink": "https://cloud.google.com/compute/docs/oslogin/rest/",
+  "documentationLink": "https://cloud.google.com/compute/docs/oslogin/",
   "fullyEncodeReservedExpansion": true,
   "icons": {
     "x16": "http://www.google.com/images/icons/product/search-16.gif",
@@ -129,6 +129,16 @@
               "location": "path",
               "pattern": "^users/[^/]+$",
               "required": true,
+              "type": "string"
+            },
+            "projectId": {
+              "description": "The project ID of the Google Cloud Platform project.",
+              "location": "query",
+              "type": "string"
+            },
+            "systemId": {
+              "description": "A system ID for filtering the results of the request.",
+              "location": "query",
               "type": "string"
             }
           },
@@ -303,7 +313,7 @@
       }
     }
   },
-  "revision": "20180617",
+  "revision": "20190429",
   "rootUrl": "https://oslogin.googleapis.com/",
   "schemas": {
     "Empty": {

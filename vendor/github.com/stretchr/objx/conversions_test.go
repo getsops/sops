@@ -18,6 +18,20 @@ func TestConversionJSON(t *testing.T) {
 	require.NoError(t, err)
 	assert.Equal(t, jsonString, result)
 	assert.Equal(t, jsonString, o.MustJSON())
+
+	i := objx.Map{
+		"a": map[interface{}]interface{}{"b": objx.Map{"c": map[interface{}]interface{}{"d": "e"}},
+			"f": []objx.Map{{"g": map[interface{}]interface{}{"h": "i"}}},
+			"j": []map[string]interface{}{{"k": map[interface{}]interface{}{"l": "m"}}},
+			"n": []interface{}{objx.Map{"o": "p"}},
+		},
+	}
+
+	jsonString = `{"a":{"b":{"c":{"d":"e"}},"f":[{"g":{"h":"i"}}],"j":[{"k":{"l":"m"}}],"n":[{"o":"p"}]}}`
+	result, err = i.JSON()
+	require.NoError(t, err)
+	assert.Equal(t, jsonString, result)
+	assert.Equal(t, jsonString, i.MustJSON())
 }
 
 func TestConversionJSONWithError(t *testing.T) {
@@ -117,7 +131,8 @@ func TestConversionURLQuery(t *testing.T) {
 
 func TestConversionURLQueryNoSliceKeySuffix(t *testing.T) {
 	m := getURLQueryMap()
-	objx.SetURLValuesSliceKeySuffix(objx.URLValuesSliceKeySuffixEmpty)
+	err := objx.SetURLValuesSliceKeySuffix(objx.URLValuesSliceKeySuffixEmpty)
+	require.Nil(t, err)
 	u, err := m.URLQuery()
 
 	assert.Nil(t, err)
@@ -133,7 +148,8 @@ func TestConversionURLQueryNoSliceKeySuffix(t *testing.T) {
 func TestConversionURLQueryIndexSliceKeySuffix(t *testing.T) {
 	m := getURLQueryMap()
 	m.Set("mapSlice", []objx.Map{{"age": 40, "sex": "male"}, {"height": 152}})
-	objx.SetURLValuesSliceKeySuffix(objx.URLValuesSliceKeySuffixIndex)
+	err := objx.SetURLValuesSliceKeySuffix(objx.URLValuesSliceKeySuffixIndex)
+	require.Nil(t, err)
 	u, err := m.URLQuery()
 
 	assert.Nil(t, err)

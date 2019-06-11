@@ -232,3 +232,11 @@ func TestFloat64Ptr(t *testing.T) {
 			v, *Float64Ptr(v))
 	}
 }
+
+func TestByteSlicePtr(t *testing.T) {
+	v := []byte("bytes")
+	if out := ByteSlicePtr(v); !reflect.DeepEqual(*out, v) {
+		t.Fatalf("to: ByteSlicePtr failed to return the correct slice -- expected %v, received %v",
+			v, *out)
+	}
+}

@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,13 +19,16 @@
 
 package recoveryservices
 
-import original "github.com/Azure/azure-sdk-for-go/services/recoveryservices/mgmt/2016-06-01/recoveryservices"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/recoveryservices/mgmt/2016-06-01/recoveryservices"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
 type AuthType = original.AuthType
 
 const (
@@ -78,7 +81,13 @@ const (
 	Upgraded   VaultUpgradeState = original.Upgraded
 )
 
+type BaseClient = original.BaseClient
+type BasicResourceCertificateDetails = original.BasicResourceCertificateDetails
 type CertificateRequest = original.CertificateRequest
+type CheckNameAvailabilityParameters = original.CheckNameAvailabilityParameters
+type CheckNameAvailabilityResult = original.CheckNameAvailabilityResult
+type CheckNameAvailabilityResultResource = original.CheckNameAvailabilityResultResource
+type Client = original.Client
 type ClientDiscoveryDisplay = original.ClientDiscoveryDisplay
 type ClientDiscoveryForLogSpecification = original.ClientDiscoveryForLogSpecification
 type ClientDiscoveryForProperties = original.ClientDiscoveryForProperties
@@ -90,22 +99,27 @@ type ClientDiscoveryValueForSingleAPI = original.ClientDiscoveryValueForSingleAP
 type JobsSummary = original.JobsSummary
 type MonitoringSummary = original.MonitoringSummary
 type NameInfo = original.NameInfo
+type OperationsClient = original.OperationsClient
 type PatchTrackedResource = original.PatchTrackedResource
 type PatchVault = original.PatchVault
 type RawCertificateData = original.RawCertificateData
+type RegisteredIdentitiesClient = original.RegisteredIdentitiesClient
 type ReplicationUsage = original.ReplicationUsage
 type ReplicationUsageList = original.ReplicationUsageList
+type ReplicationUsagesClient = original.ReplicationUsagesClient
 type Resource = original.Resource
 type ResourceCertificateAndAadDetails = original.ResourceCertificateAndAadDetails
 type ResourceCertificateAndAcsDetails = original.ResourceCertificateAndAcsDetails
-type BasicResourceCertificateDetails = original.BasicResourceCertificateDetails
 type ResourceCertificateDetails = original.ResourceCertificateDetails
 type Sku = original.Sku
 type TrackedResource = original.TrackedResource
 type UpgradeDetails = original.UpgradeDetails
+type UsagesClient = original.UsagesClient
 type Vault = original.Vault
 type VaultCertificateResponse = original.VaultCertificateResponse
+type VaultCertificatesClient = original.VaultCertificatesClient
 type VaultExtendedInfo = original.VaultExtendedInfo
+type VaultExtendedInfoClient = original.VaultExtendedInfoClient
 type VaultExtendedInfoResource = original.VaultExtendedInfoResource
 type VaultList = original.VaultList
 type VaultListIterator = original.VaultListIterator
@@ -113,37 +127,22 @@ type VaultListPage = original.VaultListPage
 type VaultProperties = original.VaultProperties
 type VaultUsage = original.VaultUsage
 type VaultUsageList = original.VaultUsageList
-type OperationsClient = original.OperationsClient
-type RegisteredIdentitiesClient = original.RegisteredIdentitiesClient
-type ReplicationUsagesClient = original.ReplicationUsagesClient
-type UsagesClient = original.UsagesClient
-type VaultCertificatesClient = original.VaultCertificatesClient
-type VaultExtendedInfoClient = original.VaultExtendedInfoClient
 type VaultsClient = original.VaultsClient
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
 }
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
+func NewClient(subscriptionID string) Client {
+	return original.NewClient(subscriptionID)
 }
-func PossibleAuthTypeValues() []AuthType {
-	return original.PossibleAuthTypeValues()
+func NewClientDiscoveryResponseIterator(page ClientDiscoveryResponsePage) ClientDiscoveryResponseIterator {
+	return original.NewClientDiscoveryResponseIterator(page)
 }
-func PossibleAuthTypeBasicResourceCertificateDetailsValues() []AuthTypeBasicResourceCertificateDetails {
-	return original.PossibleAuthTypeBasicResourceCertificateDetailsValues()
+func NewClientDiscoveryResponsePage(getNextPage func(context.Context, ClientDiscoveryResponse) (ClientDiscoveryResponse, error)) ClientDiscoveryResponsePage {
+	return original.NewClientDiscoveryResponsePage(getNextPage)
 }
-func PossibleSkuNameValues() []SkuName {
-	return original.PossibleSkuNameValues()
-}
-func PossibleTriggerTypeValues() []TriggerType {
-	return original.PossibleTriggerTypeValues()
-}
-func PossibleUsagesUnitValues() []UsagesUnit {
-	return original.PossibleUsagesUnitValues()
-}
-func PossibleVaultUpgradeStateValues() []VaultUpgradeState {
-	return original.PossibleVaultUpgradeStateValues()
+func NewClientWithBaseURI(baseURI string, subscriptionID string) Client {
+	return original.NewClientWithBaseURI(baseURI, subscriptionID)
 }
 func NewOperationsClient(subscriptionID string) OperationsClient {
 	return original.NewOperationsClient(subscriptionID)
@@ -181,11 +180,38 @@ func NewVaultExtendedInfoClient(subscriptionID string) VaultExtendedInfoClient {
 func NewVaultExtendedInfoClientWithBaseURI(baseURI string, subscriptionID string) VaultExtendedInfoClient {
 	return original.NewVaultExtendedInfoClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewVaultListIterator(page VaultListPage) VaultListIterator {
+	return original.NewVaultListIterator(page)
+}
+func NewVaultListPage(getNextPage func(context.Context, VaultList) (VaultList, error)) VaultListPage {
+	return original.NewVaultListPage(getNextPage)
+}
 func NewVaultsClient(subscriptionID string) VaultsClient {
 	return original.NewVaultsClient(subscriptionID)
 }
 func NewVaultsClientWithBaseURI(baseURI string, subscriptionID string) VaultsClient {
 	return original.NewVaultsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
+}
+func PossibleAuthTypeBasicResourceCertificateDetailsValues() []AuthTypeBasicResourceCertificateDetails {
+	return original.PossibleAuthTypeBasicResourceCertificateDetailsValues()
+}
+func PossibleAuthTypeValues() []AuthType {
+	return original.PossibleAuthTypeValues()
+}
+func PossibleSkuNameValues() []SkuName {
+	return original.PossibleSkuNameValues()
+}
+func PossibleTriggerTypeValues() []TriggerType {
+	return original.PossibleTriggerTypeValues()
+}
+func PossibleUsagesUnitValues() []UsagesUnit {
+	return original.PossibleUsagesUnitValues()
+}
+func PossibleVaultUpgradeStateValues() []VaultUpgradeState {
+	return original.PossibleVaultUpgradeStateValues()
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/latest"

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,6 +45,16 @@ func NewAPIClient() APIClient {
 // ifMatch - eTag of the Api Entity. For Create Api Etag should not be specified. For Update Etag should match
 // the existing Entity or it can be * for unconditional update.
 func (client APIClient) CreateOrUpdate(ctx context.Context, apimBaseURL string, apiid string, parameters APICreateOrUpdateParameter, ifMatch string) (result APIContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: apiid,
 			Constraints: []validation.Constraint{{Target: "apiid", Name: validation.MaxLength, Rule: 256, Chain: nil},
@@ -130,6 +141,16 @@ func (client APIClient) CreateOrUpdateResponder(resp *http.Response) (result API
 // ifMatch - eTag of the API Entity. ETag should match the current entity state from the header response of the
 // GET request or it should be * for unconditional update.
 func (client APIClient) Delete(ctx context.Context, apimBaseURL string, apiid string, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: apiid,
 			Constraints: []validation.Constraint{{Target: "apiid", Name: validation.MaxLength, Rule: 256, Chain: nil},
@@ -208,6 +229,16 @@ func (client APIClient) DeleteResponder(resp *http.Response) (result autorest.Re
 // https://myapimservice.management.azure-api.net.
 // apiid - API identifier. Must be unique in the current API Management service instance.
 func (client APIClient) Get(ctx context.Context, apimBaseURL string, apiid string) (result APIContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: apiid,
 			Constraints: []validation.Constraint{{Target: "apiid", Name: validation.MaxLength, Rule: 256, Chain: nil},
@@ -294,6 +325,16 @@ func (client APIClient) GetResponder(resp *http.Response) (result APIContract, e
 // top - number of records to return.
 // skip - number of records to skip.
 func (client APIClient) List(ctx context.Context, apimBaseURL string, filter string, top *int32, skip *int32) (result APICollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIClient.List")
+		defer func() {
+			sc := -1
+			if result.ac.Response.Response != nil {
+				sc = result.ac.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
@@ -375,8 +416,8 @@ func (client APIClient) ListResponder(resp *http.Response) (result APICollection
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client APIClient) listNextResults(lastResults APICollection) (result APICollection, err error) {
-	req, err := lastResults.aPICollectionPreparer()
+func (client APIClient) listNextResults(ctx context.Context, lastResults APICollection) (result APICollection, err error) {
+	req, err := lastResults.aPICollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.APIClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -397,6 +438,16 @@ func (client APIClient) listNextResults(lastResults APICollection) (result APICo
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client APIClient) ListComplete(ctx context.Context, apimBaseURL string, filter string, top *int32, skip *int32) (result APICollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, apimBaseURL, filter, top, skip)
 	return
 }
@@ -410,6 +461,16 @@ func (client APIClient) ListComplete(ctx context.Context, apimBaseURL string, fi
 // ifMatch - eTag of the API entity. ETag should match the current entity state in the header response of the
 // GET request or it should be * for unconditional update.
 func (client APIClient) Update(ctx context.Context, apimBaseURL string, apiid string, parameters APIUpdateContract, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: apiid,
 			Constraints: []validation.Constraint{{Target: "apiid", Name: validation.MaxLength, Rule: 256, Chain: nil},

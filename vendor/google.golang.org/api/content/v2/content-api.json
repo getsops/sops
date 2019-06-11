@@ -15,7 +15,7 @@
   "description": "Manages product items, inventory, and Merchant Center accounts for Google Shopping.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/shopping-content",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/BHrSU9D3B6OA1Q17-906PS_R18E\"",
+  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/qpuiLdG4oQ2v0d8oUBW_24p9Luc\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -129,7 +129,7 @@
           "id": "content.accounts.custombatch",
           "parameters": {
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             }
@@ -162,7 +162,7 @@
               "type": "string"
             },
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             },
@@ -226,7 +226,7 @@
           ],
           "parameters": {
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             },
@@ -250,7 +250,7 @@
           ]
         },
         "link": {
-          "description": "Performs an action on a link between a Merchant Center account and another account.",
+          "description": "Performs an action on a link between two Merchant Center accounts, namely accountId and linkedAccountId.",
           "httpMethod": "POST",
           "id": "content.accounts.link",
           "parameterOrder": [
@@ -336,7 +336,7 @@
               "type": "string"
             },
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             },
@@ -376,7 +376,7 @@
               "type": "string"
             },
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             },
@@ -404,6 +404,7 @@
     "accountstatuses": {
       "methods": {
         "custombatch": {
+          "description": "Retrieves multiple Merchant Center account statuses in a single request.",
           "httpMethod": "POST",
           "id": "content.accountstatuses.custombatch",
           "path": "accountstatuses/batch",
@@ -418,7 +419,7 @@
           ]
         },
         "get": {
-          "description": "Retrieves the status of a Merchant Center account. Multi-client accounts can only call this method for sub-accounts.",
+          "description": "Retrieves the status of a Merchant Center account. No itemLevelIssues are returned for multi-client accounts.",
           "httpMethod": "GET",
           "id": "content.accountstatuses.get",
           "parameterOrder": [
@@ -506,7 +507,7 @@
           "id": "content.accounttax.custombatch",
           "parameters": {
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             }
@@ -606,7 +607,7 @@
               "type": "string"
             },
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             },
@@ -646,7 +647,7 @@
               "type": "string"
             },
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             },
@@ -674,11 +675,12 @@
     "datafeeds": {
       "methods": {
         "custombatch": {
+          "description": "Deletes, fetches, gets, inserts and updates multiple datafeeds in a single request.",
           "httpMethod": "POST",
           "id": "content.datafeeds.custombatch",
           "parameters": {
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             }
@@ -711,7 +713,7 @@
               "type": "string"
             },
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             },
@@ -745,7 +747,7 @@
               "type": "string"
             },
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             },
@@ -806,7 +808,7 @@
           ],
           "parameters": {
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             },
@@ -881,7 +883,7 @@
               "type": "string"
             },
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             },
@@ -921,7 +923,7 @@
               "type": "string"
             },
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             },
@@ -949,6 +951,7 @@
     "datafeedstatuses": {
       "methods": {
         "custombatch": {
+          "description": "Gets multiple Merchant Center datafeed statuses in a single request.",
           "httpMethod": "POST",
           "id": "content.datafeedstatuses.custombatch",
           "path": "datafeedstatuses/batch",
@@ -1049,7 +1052,7 @@
           "id": "content.inventory.custombatch",
           "parameters": {
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             }
@@ -1076,7 +1079,7 @@
           ],
           "parameters": {
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             },
@@ -1088,7 +1091,7 @@
               "type": "string"
             },
             "productId": {
-              "description": "The REST id of the product for which to update price and availability.",
+              "description": "The REST ID of the product for which to update price and availability.",
               "location": "path",
               "required": true,
               "type": "string"
@@ -1121,7 +1124,7 @@
           "id": "content.liasettings.custombatch",
           "parameters": {
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             }
@@ -1265,7 +1268,7 @@
               "type": "string"
             },
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             },
@@ -1294,7 +1297,8 @@
           "id": "content.liasettings.requestgmbaccess",
           "parameterOrder": [
             "merchantId",
-            "accountId"
+            "accountId",
+            "gmbEmail"
           ],
           "parameters": {
             "accountId": {
@@ -1307,6 +1311,7 @@
             "gmbEmail": {
               "description": "The email of the Google My Business account.",
               "location": "query",
+              "required": true,
               "type": "string"
             },
             "merchantId": {
@@ -1370,7 +1375,11 @@
           "id": "content.liasettings.setinventoryverificationcontact",
           "parameterOrder": [
             "merchantId",
-            "accountId"
+            "accountId",
+            "contactEmail",
+            "contactName",
+            "country",
+            "language"
           ],
           "parameters": {
             "accountId": {
@@ -1383,21 +1392,25 @@
             "contactEmail": {
               "description": "The email of the inventory verification contact.",
               "location": "query",
+              "required": true,
               "type": "string"
             },
             "contactName": {
               "description": "The name of the inventory verification contact.",
               "location": "query",
+              "required": true,
               "type": "string"
             },
             "country": {
               "description": "The country for which inventory verification is requested.",
               "location": "query",
+              "required": true,
               "type": "string"
             },
             "language": {
               "description": "The language for which inventory verification is requested.",
               "location": "query",
+              "required": true,
               "type": "string"
             },
             "merchantId": {
@@ -1422,7 +1435,8 @@
           "id": "content.liasettings.setposdataprovider",
           "parameterOrder": [
             "merchantId",
-            "accountId"
+            "accountId",
+            "country"
           ],
           "parameters": {
             "accountId": {
@@ -1435,6 +1449,7 @@
             "country": {
               "description": "The country for which the POS data provider is selected.",
               "location": "query",
+              "required": true,
               "type": "string"
             },
             "merchantId": {
@@ -1481,7 +1496,7 @@
               "type": "string"
             },
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             },
@@ -1509,7 +1524,7 @@
     "orderinvoices": {
       "methods": {
         "createchargeinvoice": {
-          "description": "Creates a charge invoice for a shipment group, and triggers a charge capture for non-facilitated payment orders.",
+          "description": "Creates a charge invoice for a shipment group, and triggers a charge capture for orderinvoice enabled orders.",
           "httpMethod": "POST",
           "id": "content.orderinvoices.createchargeinvoice",
           "parameterOrder": [
@@ -1543,7 +1558,7 @@
           ]
         },
         "createrefundinvoice": {
-          "description": "Creates a refund invoice for one or more shipment groups, and triggers a refund for non-facilitated payment orders. This can only be used for line items that have previously been charged using createChargeInvoice. All amounts (except for the summary) are incremental with respect to the previous invoice.",
+          "description": "Creates a refund invoice for one or more shipment groups, and triggers a refund for orderinvoice enabled orders. This can only be used for line items that have previously been charged using createChargeInvoice. All amounts (except for the summary) are incremental with respect to the previous invoice.",
           "httpMethod": "POST",
           "id": "content.orderinvoices.createrefundinvoice",
           "parameterOrder": [
@@ -1725,7 +1740,8 @@
           "httpMethod": "GET",
           "id": "content.orderreports.listdisbursements",
           "parameterOrder": [
-            "merchantId"
+            "merchantId",
+            "disbursementStartDate"
           ],
           "parameters": {
             "disbursementEndDate": {
@@ -1736,6 +1752,7 @@
             "disbursementStartDate": {
               "description": "The first date which disbursements occurred. In ISO 8601 format.",
               "location": "query",
+              "required": true,
               "type": "string"
             },
             "maxResults": {
@@ -1766,28 +1783,19 @@
           ]
         },
         "listtransactions": {
-          "description": "Retrieves a list of transactions for an disbursement from your Merchant Center account.",
+          "description": "Retrieves a list of transactions for a disbursement from your Merchant Center account.",
           "httpMethod": "GET",
           "id": "content.orderreports.listtransactions",
           "parameterOrder": [
             "merchantId",
-            "disbursementId"
+            "disbursementId",
+            "transactionStartDate"
           ],
           "parameters": {
-            "disbursementEndDate": {
-              "description": "The last date in which disbursements occurred. In ISO 8601 format. Default: current date.",
-              "location": "query",
-              "type": "string"
-            },
             "disbursementId": {
               "description": "The Google-provided ID of the disbursement (found in Wallet).",
               "location": "path",
               "required": true,
-              "type": "string"
-            },
-            "disbursementStartDate": {
-              "description": "The first date in which disbursements occurred. In ISO 8601 format.",
-              "location": "query",
               "type": "string"
             },
             "maxResults": {
@@ -1807,11 +1815,115 @@
               "description": "The token returned by the previous request.",
               "location": "query",
               "type": "string"
+            },
+            "transactionEndDate": {
+              "description": "The last date in which transaction occurred. In ISO 8601 format. Default: current date.",
+              "location": "query",
+              "type": "string"
+            },
+            "transactionStartDate": {
+              "description": "The first date in which transaction occurred. In ISO 8601 format.",
+              "location": "query",
+              "required": true,
+              "type": "string"
             }
           },
           "path": "{merchantId}/orderreports/disbursements/{disbursementId}/transactions",
           "response": {
             "$ref": "OrderreportsListTransactionsResponse"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/content"
+          ]
+        }
+      }
+    },
+    "orderreturns": {
+      "methods": {
+        "get": {
+          "description": "Retrieves an order return from your Merchant Center account.",
+          "httpMethod": "GET",
+          "id": "content.orderreturns.get",
+          "parameterOrder": [
+            "merchantId",
+            "returnId"
+          ],
+          "parameters": {
+            "merchantId": {
+              "description": "The ID of the account that manages the order. This cannot be a multi-client account.",
+              "format": "uint64",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "returnId": {
+              "description": "Merchant order return ID generated by Google.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "{merchantId}/orderreturns/{returnId}",
+          "response": {
+            "$ref": "MerchantOrderReturn"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/content"
+          ]
+        },
+        "list": {
+          "description": "Lists order returns in your Merchant Center account.",
+          "httpMethod": "GET",
+          "id": "content.orderreturns.list",
+          "parameterOrder": [
+            "merchantId"
+          ],
+          "parameters": {
+            "createdEndDate": {
+              "description": "Obtains order returns created before this date (inclusively), in ISO 8601 format.",
+              "location": "query",
+              "type": "string"
+            },
+            "createdStartDate": {
+              "description": "Obtains order returns created after this date (inclusively), in ISO 8601 format.",
+              "location": "query",
+              "type": "string"
+            },
+            "maxResults": {
+              "description": "The maximum number of order returns to return in the response, used for paging. The default value is 25 returns per page, and the maximum allowed value is 250 returns per page.",
+              "format": "uint32",
+              "location": "query",
+              "type": "integer"
+            },
+            "merchantId": {
+              "description": "The ID of the account that manages the order. This cannot be a multi-client account.",
+              "format": "uint64",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "orderBy": {
+              "description": "Return the results in the specified order.",
+              "enum": [
+                "returnCreationTimeAsc",
+                "returnCreationTimeDesc"
+              ],
+              "enumDescriptions": [
+                "",
+                ""
+              ],
+              "location": "query",
+              "type": "string"
+            },
+            "pageToken": {
+              "description": "The token returned by the previous request.",
+              "location": "query",
+              "type": "string"
+            }
+          },
+          "path": "{merchantId}/orderreturns",
+          "response": {
+            "$ref": "OrderreturnsListResponse"
           },
           "scopes": [
             "https://www.googleapis.com/auth/content"
@@ -2015,6 +2127,40 @@
             "https://www.googleapis.com/auth/content"
           ]
         },
+        "createtestreturn": {
+          "description": "Sandbox only. Creates a test return.",
+          "httpMethod": "POST",
+          "id": "content.orders.createtestreturn",
+          "parameterOrder": [
+            "merchantId",
+            "orderId"
+          ],
+          "parameters": {
+            "merchantId": {
+              "description": "The ID of the account that manages the order. This cannot be a multi-client account.",
+              "format": "uint64",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "orderId": {
+              "description": "The ID of the order.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "{merchantId}/orders/{orderId}/testreturn",
+          "request": {
+            "$ref": "OrdersCreateTestReturnRequest"
+          },
+          "response": {
+            "$ref": "OrdersCreateTestReturnResponse"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/content"
+          ]
+        },
         "custombatch": {
           "description": "Retrieves or modifies multiple orders in a single request.",
           "httpMethod": "POST",
@@ -2062,7 +2208,7 @@
           ]
         },
         "getbymerchantorderid": {
-          "description": "Retrieves an order using merchant order id.",
+          "description": "Retrieves an order using merchant order ID.",
           "httpMethod": "GET",
           "id": "content.orders.getbymerchantorderid",
           "parameterOrder": [
@@ -2078,7 +2224,7 @@
               "type": "string"
             },
             "merchantOrderId": {
-              "description": "The merchant order id to be looked for.",
+              "description": "The merchant order ID to be looked for.",
               "location": "path",
               "required": true,
               "type": "string"
@@ -2141,7 +2287,7 @@
           ]
         },
         "instorerefundlineitem": {
-          "description": "Notifies that item return and refund was handled directly by merchant outside of Google payments processing (e.g. cash refund done in store).",
+          "description": "Notifies that item return and refund was handled directly by merchant outside of Google payments processing (e.g. cash refund done in store).\nNote: We recommend calling the returnrefundlineitem method to refund in-store returns. We will issue the refund directly to the customer. This helps to prevent possible differences arising between merchant and Google transaction records. We also recommend having the point of sale system communicate with Google to ensure that customers do not receive a double refund by first refunding via Google then via an in-store return.",
           "httpMethod": "POST",
           "id": "content.orders.instorerefundlineitem",
           "parameterOrder": [
@@ -2188,7 +2334,7 @@
               "type": "boolean"
             },
             "maxResults": {
-              "description": "The maximum number of orders to return in the response, used for paging. The default value is 25 orders per page, and the maximum allowed value is 250 orders per page.\nKnown issue: All List calls will return all Orders without limit regardless of the value of this field.",
+              "description": "The maximum number of orders to return in the response, used for paging. The default value is 25 orders per page, and the maximum allowed value is 250 orders per page.",
               "format": "uint32",
               "location": "query",
               "type": "integer"
@@ -2201,15 +2347,7 @@
               "type": "string"
             },
             "orderBy": {
-              "description": "The ordering of the returned list. The only supported value are placedDate desc and placedDate asc for now, which returns orders sorted by placement date. \"placedDate desc\" stands for listing orders by placement date, from oldest to most recent. \"placedDate asc\" stands for listing orders by placement date, from most recent to oldest. In future releases we'll support other sorting criteria.",
-              "enum": [
-                "placedDate asc",
-                "placedDate desc"
-              ],
-              "enumDescriptions": [
-                "",
-                ""
-              ],
+              "description": "Order results by placement date in descending or ascending order.\n\nAcceptable values are:\n- placedDateAsc\n- placedDateDesc",
               "location": "query",
               "type": "string"
             },
@@ -2229,7 +2367,7 @@
               "type": "string"
             },
             "statuses": {
-              "description": "Obtains orders that match any of the specified statuses. Multiple values can be specified with comma separation. Additionally, please note that active is a shortcut for pendingShipment and partiallyShipped, and completed is a shortcut for shipped , partiallyDelivered, delivered, partiallyReturned, returned, and canceled.",
+              "description": "Obtains orders that match any of the specified statuses. Multiple values can be specified with comma separation. Additionally, please note that active is a shortcut for pendingShipment and partiallyShipped, and completed is a shortcut for shipped, partiallyDelivered, delivered, partiallyReturned, returned, and canceled.",
               "enum": [
                 "active",
                 "canceled",
@@ -2406,7 +2544,7 @@
           ]
         },
         "setlineitemmetadata": {
-          "description": "Sets (overrides) merchant provided annotations on the line item.",
+          "description": "Sets (or overrides if it already exists) merchant provided annotations in the form of key-value pairs. A common use case would be to supply us with additional structured information about a line item that cannot be provided via other methods. Submitted key-value pairs can be retrieved as part of the orders resource.",
           "httpMethod": "POST",
           "id": "content.orders.setlineitemmetadata",
           "parameterOrder": [
@@ -2585,7 +2723,7 @@
           "id": "content.pos.custombatch",
           "parameters": {
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             }
@@ -2612,7 +2750,7 @@
           ],
           "parameters": {
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             },
@@ -2691,7 +2829,7 @@
           ],
           "parameters": {
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             },
@@ -2731,7 +2869,7 @@
           ],
           "parameters": {
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             },
@@ -2803,7 +2941,7 @@
           ],
           "parameters": {
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             },
@@ -2843,7 +2981,7 @@
           "id": "content.products.custombatch",
           "parameters": {
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             }
@@ -2869,7 +3007,7 @@
           ],
           "parameters": {
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             },
@@ -2881,7 +3019,7 @@
               "type": "string"
             },
             "productId": {
-              "description": "The REST id of the product.",
+              "description": "The REST ID of the product.",
               "location": "path",
               "required": true,
               "type": "string"
@@ -2909,7 +3047,7 @@
               "type": "string"
             },
             "productId": {
-              "description": "The REST id of the product.",
+              "description": "The REST ID of the product.",
               "location": "path",
               "required": true,
               "type": "string"
@@ -2932,7 +3070,7 @@
           ],
           "parameters": {
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             },
@@ -3049,7 +3187,7 @@
               "type": "string"
             },
             "productId": {
-              "description": "The REST id of the product.",
+              "description": "The REST ID of the product.",
               "location": "path",
               "required": true,
               "type": "string"
@@ -3124,7 +3262,7 @@
           "id": "content.shippingsettings.custombatch",
           "parameters": {
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             }
@@ -3272,7 +3410,7 @@
               "type": "string"
             },
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             },
@@ -3312,7 +3450,7 @@
               "type": "string"
             },
             "dryRun": {
-              "description": "Flag to run the request in dry-run mode.",
+              "description": "Flag to simulate a request like in a live environment. If set to true, dry-run mode checks the validity of the request and returns errors (if any).",
               "location": "query",
               "type": "boolean"
             },
@@ -3338,11 +3476,11 @@
       }
     }
   },
-  "revision": "20180829",
+  "revision": "20190524",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Account": {
-      "description": "Account data.",
+      "description": "Account data. After the creation of a new account it may take a few minutes before it is fully operational. The methods delete, insert, patch, and update require the admin role.",
       "id": "Account",
       "properties": {
         "adultContent": {
@@ -3541,7 +3679,7 @@
           "type": "array"
         },
         "dataQualityIssues": {
-          "description": "A list of data quality issues.",
+          "description": "DEPRECATED - never populated.",
           "items": {
             "$ref": "AccountStatusDataQualityIssue"
           },
@@ -3581,6 +3719,10 @@
           "description": "Additional details about the issue.",
           "type": "string"
         },
+        "documentation": {
+          "description": "The URL of a web page to help resolving this issue.",
+          "type": "string"
+        },
         "id": {
           "description": "Issue identifier.",
           "type": "string"
@@ -3600,78 +3742,61 @@
       "id": "AccountStatusDataQualityIssue",
       "properties": {
         "country": {
-          "description": "Country for which this issue is reported.",
           "type": "string"
         },
         "destination": {
-          "description": "The destination the issue applies to.",
           "type": "string"
         },
         "detail": {
-          "description": "A more detailed description of the issue.",
           "type": "string"
         },
         "displayedValue": {
-          "description": "Actual value displayed on the landing page.",
           "type": "string"
         },
         "exampleItems": {
-          "description": "Example items featuring the issue.",
           "items": {
             "$ref": "AccountStatusExampleItem"
           },
           "type": "array"
         },
         "id": {
-          "description": "Issue identifier.",
           "type": "string"
         },
         "lastChecked": {
-          "description": "Last time the account was checked for this issue.",
           "type": "string"
         },
         "location": {
-          "description": "The attribute name that is relevant for the issue.",
           "type": "string"
         },
         "numItems": {
-          "description": "Number of items in the account found to have the said issue.",
           "format": "uint32",
           "type": "integer"
         },
         "severity": {
-          "description": "Severity of the problem.",
           "type": "string"
         },
         "submittedValue": {
-          "description": "Submitted value that causes the issue.",
           "type": "string"
         }
       },
       "type": "object"
     },
     "AccountStatusExampleItem": {
-      "description": "An example of an item that has poor data quality. An item value on the landing page differs from what is submitted, or conflicts with a policy.",
       "id": "AccountStatusExampleItem",
       "properties": {
         "itemId": {
-          "description": "Unique item ID as specified in the uploaded product data.",
           "type": "string"
         },
         "link": {
-          "description": "Landing page of the item.",
           "type": "string"
         },
         "submittedValue": {
-          "description": "The item value that was submitted.",
           "type": "string"
         },
         "title": {
-          "description": "Title of the item.",
           "type": "string"
         },
         "valueOnLandingPage": {
-          "description": "The actual value on the landing page.",
           "type": "string"
         }
       },
@@ -3772,7 +3897,7 @@
       "type": "object"
     },
     "AccountTax": {
-      "description": "The tax settings of a merchant account.",
+      "description": "The tax settings of a merchant account. All methods require the admin role.",
       "id": "AccountTax",
       "properties": {
         "accountId": {
@@ -3814,7 +3939,7 @@
               "content.accounttax.update"
             ]
           },
-          "description": "State (or province) is which the tax is applicable, described by its location id (also called criteria id).",
+          "description": "State (or province) is which the tax is applicable, described by its location ID (also called criteria ID).",
           "format": "uint64",
           "type": "string"
         },
@@ -3843,6 +3968,18 @@
         "emailAddress": {
           "description": "User's email address.",
           "type": "string"
+        },
+        "orderManager": {
+          "description": "Whether user is an order manager.",
+          "type": "boolean"
+        },
+        "paymentsAnalyst": {
+          "description": "Whether user can access payment statements.",
+          "type": "boolean"
+        },
+        "paymentsManager": {
+          "description": "Whether user can manage payment settings.",
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -4004,7 +4141,7 @@
           "type": "string"
         },
         "linkStatus": {
-          "description": "The status of the updated link. Only defined if the method is link.",
+          "description": "Deprecated. This field is never set.",
           "type": "string"
         }
       },
@@ -4332,6 +4469,57 @@
             "type": "string"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "CustomAttribute": {
+      "id": "CustomAttribute",
+      "properties": {
+        "name": {
+          "description": "The name of the attribute. Underscores will be replaced by spaces upon insertion.",
+          "type": "string"
+        },
+        "type": {
+          "description": "The type of the attribute.",
+          "type": "string"
+        },
+        "unit": {
+          "description": "Free-form unit of the attribute. Unit can only be used for values of type int, float, or price.",
+          "type": "string"
+        },
+        "value": {
+          "description": "The value of the attribute.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "CustomGroup": {
+      "id": "CustomGroup",
+      "properties": {
+        "attributes": {
+          "description": "The sub-attributes.",
+          "items": {
+            "$ref": "CustomAttribute"
+          },
+          "type": "array"
+        },
+        "name": {
+          "description": "The name of the group. Underscores will be replaced by spaces upon insertion.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "CustomerReturnReason": {
+      "id": "CustomerReturnReason",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "reasonCode": {
+          "type": "string"
         }
       },
       "type": "object"
@@ -4874,7 +5062,7 @@
           "type": "integer"
         },
         "maxTransitTimeInDays": {
-          "description": "Maximum number of business days that is spent in transit. 0 means same day delivery, 1 means next day delivery. Must be greater than or equal to minTransitTimeInDays. Required.",
+          "description": "Maximum number of business days that is spent in transit. 0 means same day delivery, 1 means next day delivery. Must be greater than or equal to minTransitTimeInDays.",
           "format": "uint32",
           "type": "integer"
         },
@@ -4884,9 +5072,13 @@
           "type": "integer"
         },
         "minTransitTimeInDays": {
-          "description": "Minimum number of business days that is spent in transit. 0 means same day delivery, 1 means next day delivery. Required.",
+          "description": "Minimum number of business days that is spent in transit. 0 means same day delivery, 1 means next day delivery. Either {min,max}transitTimeInDays or transitTimeTable must be set, but not both.",
           "format": "uint32",
           "type": "integer"
+        },
+        "transitTimeTable": {
+          "$ref": "TransitTable",
+          "description": "Transit time table, number of business days spent in transit based on row and column dimensions. Either {min,max}transitTimeInDays or transitTimeTable can be set, but not both."
         }
       },
       "type": "object"
@@ -4975,7 +5167,7 @@
       "type": "object"
     },
     "Headers": {
-      "description": "A non-empty list of row or column headers for a table. Exactly one of prices, weights, numItems, postalCodeGroupNames, or locations must be set.",
+      "description": "A non-empty list of row or column headers for a table. Exactly one of prices, weights, numItems, postalCodeGroupNames, or location must be set.",
       "id": "Headers",
       "properties": {
         "locations": {
@@ -5096,9 +5288,33 @@
           "description": "The availability of the product.",
           "type": "string"
         },
+        "customLabel0": {
+          "description": "Custom label 0 for custom grouping of items in a Shopping campaign. Only supported for online products.",
+          "type": "string"
+        },
+        "customLabel1": {
+          "description": "Custom label 1 for custom grouping of items in a Shopping campaign. Only supported for online products.",
+          "type": "string"
+        },
+        "customLabel2": {
+          "description": "Custom label 2 for custom grouping of items in a Shopping campaign. Only supported for online products.",
+          "type": "string"
+        },
+        "customLabel3": {
+          "description": "Custom label 3 for custom grouping of items in a Shopping campaign. Only supported for online products.",
+          "type": "string"
+        },
+        "customLabel4": {
+          "description": "Custom label 3 for custom grouping of items in a Shopping campaign. Only supported for online products.",
+          "type": "string"
+        },
         "installment": {
           "$ref": "Installment",
           "description": "Number and amount of installments to pay for an item. Brazil only."
+        },
+        "instoreProductLocation": {
+          "description": "The instore product location. Supported only for local products.",
+          "type": "string"
         },
         "kind": {
           "default": "content#inventory",
@@ -5240,9 +5456,33 @@
           "description": "The availability of the product.",
           "type": "string"
         },
+        "customLabel0": {
+          "description": "Custom label 0 for custom grouping of items in a Shopping campaign. Only supported for online products.",
+          "type": "string"
+        },
+        "customLabel1": {
+          "description": "Custom label 1 for custom grouping of items in a Shopping campaign. Only supported for online products.",
+          "type": "string"
+        },
+        "customLabel2": {
+          "description": "Custom label 2 for custom grouping of items in a Shopping campaign. Only supported for online products.",
+          "type": "string"
+        },
+        "customLabel3": {
+          "description": "Custom label 3 for custom grouping of items in a Shopping campaign. Only supported for online products.",
+          "type": "string"
+        },
+        "customLabel4": {
+          "description": "Custom label 3 for custom grouping of items in a Shopping campaign. Only supported for online products.",
+          "type": "string"
+        },
         "installment": {
           "$ref": "Installment",
           "description": "Number and amount of installments to pay for an item. Brazil only."
+        },
+        "instoreProductLocation": {
+          "description": "The instore product location. Supported only for local products.",
+          "type": "string"
         },
         "loyaltyPoints": {
           "$ref": "LoyaltyPoints",
@@ -5300,22 +5540,22 @@
         },
         "customerBalance": {
           "$ref": "Amount",
-          "description": "[required] Customer balance on this invoice. A negative amount means the customer is paying, a positive one means the customer is receiving money. Note: the sum of merchant_balance, customer_balance and google_balance must always be zero.\n\nFurthermore the absolute value of this amount is expected to be equal to the sum of product amount and additional charges, minus promotions."
+          "description": "Deprecated."
         },
         "googleBalance": {
           "$ref": "Amount",
-          "description": "[required] Google balance on this invoice. A negative amount means Google is paying, a positive one means Google is receiving money. Note: the sum of merchant_balance, customer_balance and google_balance must always be zero."
+          "description": "Deprecated."
         },
         "merchantBalance": {
           "$ref": "Amount",
-          "description": "[required] Merchant balance on this invoice. A negative amount means the merchant is paying, a positive one means the merchant is receiving money. Note: the sum of merchant_balance, customer_balance and google_balance must always be zero."
+          "description": "Deprecated."
         },
         "productTotal": {
           "$ref": "Amount",
           "description": "[required] Total price for the product."
         },
         "promotionSummaries": {
-          "description": "Summary for each promotion.",
+          "description": "Deprecated.",
           "items": {
             "$ref": "Promotion"
           },
@@ -5443,6 +5683,7 @@
       "type": "object"
     },
     "LiaSettings": {
+      "description": "Local Inventory ads (LIA) settings. All methods except listposdataproviders require the admin role.",
       "id": "LiaSettings",
       "properties": {
         "accountId": {
@@ -5723,7 +5964,65 @@
       },
       "type": "object"
     },
+    "MerchantOrderReturn": {
+      "id": "MerchantOrderReturn",
+      "properties": {
+        "creationDate": {
+          "type": "string"
+        },
+        "merchantOrderId": {
+          "type": "string"
+        },
+        "orderId": {
+          "type": "string"
+        },
+        "orderReturnId": {
+          "type": "string"
+        },
+        "returnItems": {
+          "items": {
+            "$ref": "MerchantOrderReturnItem"
+          },
+          "type": "array"
+        },
+        "returnShipments": {
+          "items": {
+            "$ref": "ReturnShipment"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "MerchantOrderReturnItem": {
+      "id": "MerchantOrderReturnItem",
+      "properties": {
+        "customerReturnReason": {
+          "$ref": "CustomerReturnReason"
+        },
+        "itemId": {
+          "type": "string"
+        },
+        "merchantReturnReason": {
+          "$ref": "RefundReason"
+        },
+        "product": {
+          "$ref": "OrderLineItemProduct"
+        },
+        "returnShipmentIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "state": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "Order": {
+      "description": "Order. All methods require the order manager role.",
       "id": "Order",
       "properties": {
         "acknowledged": {
@@ -5731,7 +6030,7 @@
           "type": "boolean"
         },
         "channelType": {
-          "description": "The channel type of the order: \"purchaseOnGoogle\" or \"googleExpress\".",
+          "description": "Deprecated.",
           "type": "string"
         },
         "customer": {
@@ -5740,10 +6039,10 @@
         },
         "deliveryDetails": {
           "$ref": "OrderDeliveryDetails",
-          "description": "The details for the delivery."
+          "description": "Delivery details for shipments."
         },
         "id": {
-          "description": "The REST id of the order. Globally unique.",
+          "description": "The REST ID of the order. Globally unique.",
           "type": "string"
         },
         "kind": {
@@ -5763,7 +6062,7 @@
           "type": "string"
         },
         "merchantOrderId": {
-          "description": "Merchant-provided id of the order.",
+          "description": "Merchant-provided ID of the order.",
           "type": "string"
         },
         "netAmount": {
@@ -5785,7 +6084,7 @@
         "promotions": {
           "description": "The details of the merchant provided promotions applied to the order. More details about the program are here.",
           "items": {
-            "$ref": "OrderPromotion"
+            "$ref": "OrderLegacyPromotion"
           },
           "type": "array"
         },
@@ -5812,11 +6111,15 @@
           "description": "The tax for the total shipping cost."
         },
         "shippingOption": {
-          "description": "The requested shipping option.",
+          "description": "Deprecated. Shipping details are provided with line items instead.",
           "type": "string"
         },
         "status": {
           "description": "The status of the order.",
+          "type": "string"
+        },
+        "taxCollector": {
+          "description": "The party responsible for collecting and remitting taxes.",
           "type": "string"
         }
       },
@@ -5897,7 +6200,7 @@
       "id": "OrderCustomer",
       "properties": {
         "email": {
-          "description": "Email address that should be used for order related communications. In certain cases this might not be a real users email, but a proxy email.",
+          "description": "Deprecated.",
           "type": "string"
         },
         "explicitMarketingPreference": {
@@ -5910,7 +6213,7 @@
         },
         "marketingRightsInfo": {
           "$ref": "OrderCustomerMarketingRightsInfo",
-          "description": "Customer's marketing preferences."
+          "description": "Customer's marketing preferences. Contains the marketing opt-in information that is current at the time that the merchant call. User preference selections can change from one order to the next so preferences must be checked with every order."
         }
       },
       "type": "object"
@@ -5919,7 +6222,7 @@
       "id": "OrderCustomerMarketingRightsInfo",
       "properties": {
         "explicitMarketingPreference": {
-          "description": "Last known user selection regarding marketing preferences. In certain cases this selection might not be known, so this field would be empty.",
+          "description": "Last known customer selection regarding marketing preferences. In certain cases this selection might not be known, so this field would be empty. If a customer selected granted in their most recent order, they can be subscribed to marketing emails. Customers who have chosen denied must not be subscribed, or must be unsubscribed if already opted-in.",
           "type": "string"
         },
         "lastUpdatedTimestamp": {
@@ -5927,7 +6230,7 @@
           "type": "string"
         },
         "marketingEmailAddress": {
-          "description": "Email address that can be used for marketing purposes. This field is only filled when explicitMarketingPreference is equal to 'granted'.",
+          "description": "Email address that can be used for marketing purposes. The field may be empty even if explicitMarketingPreference is 'granted'. This happens when retrieving an old order from the customer who deleted their account.",
           "type": "string"
         }
       },
@@ -5942,6 +6245,71 @@
         },
         "phoneNumber": {
           "description": "The phone number of the person receiving the delivery.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "OrderLegacyPromotion": {
+      "id": "OrderLegacyPromotion",
+      "properties": {
+        "benefits": {
+          "items": {
+            "$ref": "OrderLegacyPromotionBenefit"
+          },
+          "type": "array"
+        },
+        "effectiveDates": {
+          "description": "The date and time frame when the promotion is active and ready for validation review. Note that the promotion live time may be delayed for a few hours due to the validation review.\nStart date and end date are separated by a forward slash (/). The start date is specified by the format (YYYY-MM-DD), followed by the letter ?T?, the time of the day when the sale starts (in Greenwich Mean Time, GMT), followed by an expression of the time zone for the sale. The end date is in the same format.",
+          "type": "string"
+        },
+        "genericRedemptionCode": {
+          "description": "Optional. The text code that corresponds to the promotion when applied on the retailer?s website.",
+          "type": "string"
+        },
+        "id": {
+          "description": "The unique ID of the promotion.",
+          "type": "string"
+        },
+        "longTitle": {
+          "description": "The full title of the promotion.",
+          "type": "string"
+        },
+        "productApplicability": {
+          "description": "Whether the promotion is applicable to all products or only specific products.",
+          "type": "string"
+        },
+        "redemptionChannel": {
+          "description": "Indicates that the promotion is valid online.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "OrderLegacyPromotionBenefit": {
+      "id": "OrderLegacyPromotionBenefit",
+      "properties": {
+        "discount": {
+          "$ref": "Price",
+          "description": "The discount in the order price when the promotion is applied."
+        },
+        "offerIds": {
+          "description": "The OfferId(s) that were purchased in this order and map to this specific benefit of the promotion.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "subType": {
+          "description": "Further describes the benefit of the promotion. Note that we will expand on this enumeration as we support new promotion sub-types.",
+          "type": "string"
+        },
+        "taxImpact": {
+          "$ref": "Price",
+          "description": "The impact on tax when the promotion is applied."
+        },
+        "type": {
+          "description": "Describes whether the promotion applies to products (e.g. 20% off) or to shipping (e.g. Free Shipping).",
           "type": "string"
         }
       },
@@ -5965,7 +6333,7 @@
           "type": "array"
         },
         "id": {
-          "description": "The id of the line item.",
+          "description": "The ID of the line item.",
           "type": "string"
         },
         "price": {
@@ -5974,7 +6342,7 @@
         },
         "product": {
           "$ref": "OrderLineItemProduct",
-          "description": "Product data from the time of the order placement."
+          "description": "Product data as seen by customer from the time of the order placement. Note that certain attributes values (e.g. title or gtin) might be reformatted and no longer match values submitted via product feed."
         },
         "quantityCanceled": {
           "description": "Number of items canceled.",
@@ -6047,12 +6415,19 @@
           "description": "The two-letter ISO 639-1 language code for the item.",
           "type": "string"
         },
+        "fees": {
+          "description": "Associated fees at order creation time.",
+          "items": {
+            "$ref": "OrderLineItemProductFee"
+          },
+          "type": "array"
+        },
         "gtin": {
           "description": "Global Trade Item Number (GTIN) of the item.",
           "type": "string"
         },
         "id": {
-          "description": "The REST id of the product.",
+          "description": "The REST ID of the product.",
           "type": "string"
         },
         "imageLink": {
@@ -6093,6 +6468,20 @@
             "$ref": "OrderLineItemProductVariantAttribute"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "OrderLineItemProductFee": {
+      "id": "OrderLineItemProductFee",
+      "properties": {
+        "amount": {
+          "$ref": "Price",
+          "description": "Amount of the fee."
+        },
+        "name": {
+          "description": "Name of the fee.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -6263,71 +6652,6 @@
       },
       "type": "object"
     },
-    "OrderPromotion": {
-      "id": "OrderPromotion",
-      "properties": {
-        "benefits": {
-          "items": {
-            "$ref": "OrderPromotionBenefit"
-          },
-          "type": "array"
-        },
-        "effectiveDates": {
-          "description": "The date and time frame when the promotion is active and ready for validation review. Note that the promotion live time may be delayed for a few hours due to the validation review.\nStart date and end date are separated by a forward slash (/). The start date is specified by the format (YYYY-MM-DD), followed by the letter ?T?, the time of the day when the sale starts (in Greenwich Mean Time, GMT), followed by an expression of the time zone for the sale. The end date is in the same format.",
-          "type": "string"
-        },
-        "genericRedemptionCode": {
-          "description": "Optional. The text code that corresponds to the promotion when applied on the retailer?s website.",
-          "type": "string"
-        },
-        "id": {
-          "description": "The unique ID of the promotion.",
-          "type": "string"
-        },
-        "longTitle": {
-          "description": "The full title of the promotion.",
-          "type": "string"
-        },
-        "productApplicability": {
-          "description": "Whether the promotion is applicable to all products or only specific products.",
-          "type": "string"
-        },
-        "redemptionChannel": {
-          "description": "Indicates that the promotion is valid online.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "OrderPromotionBenefit": {
-      "id": "OrderPromotionBenefit",
-      "properties": {
-        "discount": {
-          "$ref": "Price",
-          "description": "The discount in the order price when the promotion is applied."
-        },
-        "offerIds": {
-          "description": "The OfferId(s) that were purchased in this order and map to this specific benefit of the promotion.",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "subType": {
-          "description": "Further describes the benefit of the promotion. Note that we will expand on this enumeration as we support new promotion sub-types.",
-          "type": "string"
-        },
-        "taxImpact": {
-          "$ref": "Price",
-          "description": "The impact on tax when the promotion is applied."
-        },
-        "type": {
-          "description": "Describes whether the promotion applies to products (e.g. 20% off) or to shipping (e.g. Free Shipping).",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
     "OrderRefund": {
       "id": "OrderRefund",
       "properties": {
@@ -6355,6 +6679,7 @@
       "type": "object"
     },
     "OrderReportDisbursement": {
+      "description": "Order disbursement. All methods require the payment analyst role.",
       "id": "OrderReportDisbursement",
       "properties": {
         "disbursementAmount": {
@@ -6406,16 +6731,20 @@
           "type": "string"
         },
         "merchantOrderId": {
-          "description": "Merchant-provided id of the order.",
+          "description": "Merchant-provided ID of the order.",
           "type": "string"
         },
         "orderId": {
-          "description": "The id of the order.",
+          "description": "The ID of the order.",
           "type": "string"
         },
         "productAmount": {
           "$ref": "Amount",
           "description": "Total amount for the items."
+        },
+        "productAmountWithRemittedTax": {
+          "$ref": "ProductAmount",
+          "description": "Total amount with remitted tax for the items."
         },
         "transactionDate": {
           "description": "The date of the transaction, in ISO 8601 format.",
@@ -6455,7 +6784,7 @@
       "id": "OrderShipment",
       "properties": {
         "carrier": {
-          "description": "The carrier handling the shipment.\n\nAcceptable values are:  \n- \"gsx\" \n- \"ups\" \n- \"usps\" \n- \"fedex\" \n- \"dhl\" \n- \"ecourier\" \n- \"cxt\" \n- \"google\" \n- \"ontrac\" \n- \"emsy\" \n- \"ont\" \n- \"deliv\" \n- \"dynamex\" \n- \"lasership\" \n- \"mpx\" \n- \"uds\"",
+          "description": "The carrier handling the shipment.\n\nAcceptable values for US are:  \n- \"gsx\" \n- \"ups\" \n- \"usps\" \n- \"fedex\" \n- \"dhl\" \n- \"ecourier\" \n- \"cxt\" \n- \"google\" \n- \"ontrac\" \n- \"emsy\" \n- \"ont\" \n- \"deliv\" \n- \"dynamex\" \n- \"lasership\" \n- \"mpx\" \n- \"uds\"  \n\nAcceptable values for FR are:  \n- \"colissimo\" \n- \"chronopost\"",
           "type": "string"
         },
         "creationDate": {
@@ -6467,7 +6796,7 @@
           "type": "string"
         },
         "id": {
-          "description": "The id of the shipment.",
+          "description": "The ID of the shipment.",
           "type": "string"
         },
         "lineItems": {
@@ -6482,7 +6811,7 @@
           "type": "string"
         },
         "trackingId": {
-          "description": "The tracking id for the shipment.",
+          "description": "The tracking ID for the shipment.",
           "type": "string"
         }
       },
@@ -6492,7 +6821,7 @@
       "id": "OrderShipmentLineItemShipment",
       "properties": {
         "lineItemId": {
-          "description": "The id of the line item that is shipped. Either lineItemId or productId is required.",
+          "description": "The ID of the line item that is shipped. Either lineItemId or productId is required.",
           "type": "string"
         },
         "productId": {
@@ -6530,7 +6859,7 @@
           "type": "string"
         },
         "shipmentGroupId": {
-          "description": "[required] ID of the shipment group.",
+          "description": "[required] ID of the shipment group. It is assigned by the merchant in the shipLineItems method and is used to group multiple line items that have the same kind of shipping charges.",
           "type": "string"
         }
       },
@@ -6627,10 +6956,12 @@
       "id": "OrderpaymentsNotifyAuthApprovedRequest",
       "properties": {
         "authAmountPretax": {
-          "$ref": "Price"
+          "$ref": "Price",
+          "description": "Authorized amount for pre-tax charge on user's credit card."
         },
         "authAmountTax": {
-          "$ref": "Price"
+          "$ref": "Price",
+          "description": "Authorized amount for tax charge on user's credit card."
         }
       },
       "type": "object"
@@ -6683,8 +7014,15 @@
           "type": "string"
         },
         "invoiceId": {
-          "description": "Invoice ID from orderInvoice service that corresponds to the charge.",
+          "description": "Deprecated. Please use invoiceIds instead.",
           "type": "string"
+        },
+        "invoiceIds": {
+          "description": "Invoice IDs from the orderinvoices service that correspond to the charge.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -6708,8 +7046,15 @@
       "id": "OrderpaymentsNotifyRefundRequest",
       "properties": {
         "invoiceId": {
-          "description": "Invoice ID from orderInvoice service that corresponds to the charge.",
+          "description": "Deprecated. Please use invoiceIds instead.",
           "type": "string"
+        },
+        "invoiceIds": {
+          "description": "Invoice IDs from the orderinvoices service that correspond to the refund.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "refundState": {
           "description": "Whether refund was successful.",
@@ -6777,6 +7122,27 @@
       },
       "type": "object"
     },
+    "OrderreturnsListResponse": {
+      "id": "OrderreturnsListResponse",
+      "properties": {
+        "kind": {
+          "default": "content#orderreturnsListResponse",
+          "description": "Identifies what kind of resource this is. Value: the fixed string \"content#orderreturnsListResponse\".",
+          "type": "string"
+        },
+        "nextPageToken": {
+          "description": "The token for the retrieval of the next page of returns.",
+          "type": "string"
+        },
+        "resources": {
+          "items": {
+            "$ref": "MerchantOrderReturn"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "OrdersAcknowledgeRequest": {
       "id": "OrdersAcknowledgeRequest",
       "properties": {
@@ -6826,7 +7192,7 @@
         },
         "amountTax": {
           "$ref": "Price",
-          "description": "Tax amount that correspond to cancellation amount in amountPretax."
+          "description": "Tax amount that corresponds to cancellation amount in amountPretax. Optional, but if filled, then amountPretax must be set. Calculated automatically if not provided."
         },
         "lineItemId": {
           "description": "The ID of the line item to cancel. Either lineItemId or productId is required.",
@@ -6958,6 +7324,34 @@
       },
       "type": "object"
     },
+    "OrdersCreateTestReturnRequest": {
+      "id": "OrdersCreateTestReturnRequest",
+      "properties": {
+        "items": {
+          "description": "Returned items.",
+          "items": {
+            "$ref": "OrdersCustomBatchRequestEntryCreateTestReturnReturnItem"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "OrdersCreateTestReturnResponse": {
+      "id": "OrdersCreateTestReturnResponse",
+      "properties": {
+        "kind": {
+          "default": "content#ordersCreateTestReturnResponse",
+          "description": "Identifies what kind of resource this is. Value: the fixed string \"content#ordersCreateTestReturnResponse\".",
+          "type": "string"
+        },
+        "returnId": {
+          "description": "The ID of the newly created test order return.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "OrdersCustomBatchRequest": {
       "id": "OrdersCustomBatchRequest",
       "properties": {
@@ -6997,7 +7391,7 @@
           "type": "string"
         },
         "merchantOrderId": {
-          "description": "The merchant order id. Required for updateMerchantOrderId and getByMerchantOrderId methods.",
+          "description": "The merchant order ID. Required for updateMerchantOrderId and getByMerchantOrderId methods.",
           "type": "string"
         },
         "method": {
@@ -7074,7 +7468,7 @@
         },
         "amountTax": {
           "$ref": "Price",
-          "description": "Tax amount that correspond to cancellation amount in amountPretax."
+          "description": "Tax amount that corresponds to cancellation amount in amountPretax. Optional, but if filled, then amountPretax must be set. Calculated automatically if not provided."
         },
         "lineItemId": {
           "description": "The ID of the line item to cancel. Either lineItemId or productId is required.",
@@ -7096,6 +7490,21 @@
         "reasonText": {
           "description": "The explanation of the reason.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "OrdersCustomBatchRequestEntryCreateTestReturnReturnItem": {
+      "id": "OrdersCustomBatchRequestEntryCreateTestReturnReturnItem",
+      "properties": {
+        "lineItemId": {
+          "description": "The ID of the line item to return.",
+          "type": "string"
+        },
+        "quantity": {
+          "description": "Quantity that is returned.",
+          "format": "uint32",
+          "type": "integer"
         }
       },
       "type": "object"
@@ -7144,11 +7553,11 @@
         },
         "amountPretax": {
           "$ref": "Price",
-          "description": "The amount that is refunded. Either amount or amountPretax and amountTax should be filled."
+          "description": "The amount that is refunded. Either amount or amountPretax should be filled."
         },
         "amountTax": {
           "$ref": "Price",
-          "description": "Tax amount that correspond to refund amount in amountPretax."
+          "description": "Tax amount that corresponds to refund amount in amountPretax. Optional, but if filled, amountPretax must be set. Calculated automatically if not provided."
         },
         "reason": {
           "description": "The reason for the refund.",
@@ -7220,11 +7629,11 @@
       "properties": {
         "amountPretax": {
           "$ref": "Price",
-          "description": "The amount that is refunded. If omitted, refundless return is assumed (same as calling returnLineItem method). Optional, but if filled then both amountPretax and amountTax must be set."
+          "description": "The amount that is refunded. If omitted, refundless return is assumed (same as calling returnLineItem method)."
         },
         "amountTax": {
           "$ref": "Price",
-          "description": "Tax amount that correspond to refund amount in amountPretax."
+          "description": "Tax amount that corresponds to refund amount in amountPretax. Optional, but if filled, then amountPretax must be set. Calculated automatically if not provided."
         },
         "lineItemId": {
           "description": "The ID of the line item to return. Either lineItemId or productId is required.",
@@ -7300,7 +7709,7 @@
           "type": "array"
         },
         "trackingId": {
-          "description": "Deprecated. Please use shipmentInfo instead. The tracking id for the shipment.",
+          "description": "Deprecated. Please use shipmentInfo instead. The tracking ID for the shipment.",
           "type": "string"
         }
       },
@@ -7319,11 +7728,11 @@
               "content.orders.shiplineitems"
             ]
           },
-          "description": "The ID of the shipment.",
+          "description": "The ID of the shipment. This is assigned by the merchant and is unique to each shipment.",
           "type": "string"
         },
         "trackingId": {
-          "description": "The tracking id for the shipment.",
+          "description": "The tracking ID for the shipment.",
           "type": "string"
         }
       },
@@ -7333,7 +7742,7 @@
       "id": "OrdersCustomBatchRequestEntryUpdateLineItemShippingDetails",
       "properties": {
         "deliverByDate": {
-          "description": "Updated delivery by date, in ISO 8601 format. If not specified only ship by date is updated.",
+          "description": "Updated delivery by date, in ISO 8601 format. If not specified only ship by date is updated.\n\nProvided date should be within 1 year timeframe and can not be a date in the past.",
           "type": "string"
         },
         "lineItemId": {
@@ -7345,7 +7754,7 @@
           "type": "string"
         },
         "shipByDate": {
-          "description": "Updated ship by date, in ISO 8601 format. If not specified only deliver by date is updated.",
+          "description": "Updated ship by date, in ISO 8601 format. If not specified only deliver by date is updated.\n\nProvided date should be within 1 year timeframe and can not be a date in the past.",
           "type": "string"
         }
       },
@@ -7371,7 +7780,7 @@
           "type": "string"
         },
         "trackingId": {
-          "description": "The tracking id for the shipment. Not updated if missing.",
+          "description": "The tracking ID for the shipment. Not updated if missing.",
           "type": "string"
         }
       },
@@ -7537,11 +7946,11 @@
         },
         "amountPretax": {
           "$ref": "Price",
-          "description": "The amount that is refunded. Either amount or amountPretax and amountTax should be filled."
+          "description": "The amount that is refunded. Either amount or amountPretax should be filled."
         },
         "amountTax": {
           "$ref": "Price",
-          "description": "Tax amount that correspond to refund amount in amountPretax."
+          "description": "Tax amount that corresponds to refund amount in amountPretax. Optional, but if filled, amountPretax must be set. Calculated automatically if not provided."
         },
         "operationId": {
           "description": "The ID of the operation. Unique across all operations for a given order.",
@@ -7670,11 +8079,11 @@
       "properties": {
         "amountPretax": {
           "$ref": "Price",
-          "description": "The amount that is refunded. If omitted, refundless return is assumed (same as calling returnLineItem method). Optional, but if filled then both amountPretax and amountTax must be set."
+          "description": "The amount that is refunded. If omitted, refundless return is assumed (same as calling returnLineItem method)."
         },
         "amountTax": {
           "$ref": "Price",
-          "description": "Tax amount that correspond to refund amount in amountPretax."
+          "description": "Tax amount that corresponds to refund amount in amountPretax. Optional, but if filled, then amountPretax must be set. Calculated automatically if not provided."
         },
         "lineItemId": {
           "description": "The ID of the line item to return. Either lineItemId or productId is required.",
@@ -7792,7 +8201,7 @@
           "type": "array"
         },
         "trackingId": {
-          "description": "Deprecated. Please use shipmentInfo instead. The tracking id for the shipment.",
+          "description": "Deprecated. Please use shipmentInfo instead. The tracking ID for the shipment.",
           "type": "string"
         }
       },
@@ -7817,7 +8226,7 @@
       "id": "OrdersUpdateLineItemShippingDetailsRequest",
       "properties": {
         "deliverByDate": {
-          "description": "Updated delivery by date, in ISO 8601 format. If not specified only ship by date is updated.",
+          "description": "Updated delivery by date, in ISO 8601 format. If not specified only ship by date is updated.\n\nProvided date should be within 1 year timeframe and can not be a date in the past.",
           "type": "string"
         },
         "lineItemId": {
@@ -7833,7 +8242,7 @@
           "type": "string"
         },
         "shipByDate": {
-          "description": "Updated ship by date, in ISO 8601 format. If not specified only deliver by date is updated.",
+          "description": "Updated ship by date, in ISO 8601 format. If not specified only deliver by date is updated.\n\nProvided date should be within 1 year timeframe and can not be a date in the past.",
           "type": "string"
         }
       },
@@ -7907,7 +8316,7 @@
           "type": "string"
         },
         "trackingId": {
-          "description": "The tracking id for the shipment. Not updated if missing.",
+          "description": "The tracking ID for the shipment. Not updated if missing.",
           "type": "string"
         }
       },
@@ -8642,7 +9051,7 @@
       "type": "object"
     },
     "Product": {
-      "description": "Product data.",
+      "description": "Product data. After inserting, updating, or deleting a product, it may take several minutes before changes take effect.",
       "id": "Product",
       "properties": {
         "additionalImageLinks": {
@@ -8653,7 +9062,7 @@
           "type": "array"
         },
         "additionalProductTypes": {
-          "description": "Additional categories of the item (formatted as in products feed specification).",
+          "description": "Additional categories of the item (formatted as in products data specification).",
           "items": {
             "type": "string"
           },
@@ -8732,16 +9141,16 @@
           "description": "Cost of goods sold. Used for gross profit reporting."
         },
         "customAttributes": {
-          "description": "A list of custom (merchant-provided) attributes. It can also be used for submitting any attribute of the feed specification in its generic form (e.g., { \"name\": \"size type\", \"type\": \"text\", \"value\": \"regular\" }). This is useful for submitting attributes not explicitly exposed by the API.",
+          "description": "A list of custom (merchant-provided) attributes. It can also be used for submitting any attribute of the feed specification in its generic form (e.g., { \"name\": \"size type\", \"value\": \"regular\" }). This is useful for submitting attributes not explicitly exposed by the API.",
           "items": {
-            "$ref": "ProductCustomAttribute"
+            "$ref": "CustomAttribute"
           },
           "type": "array"
         },
         "customGroups": {
           "description": "A list of custom (merchant-provided) custom attribute groups.",
           "items": {
-            "$ref": "ProductCustomGroup"
+            "$ref": "CustomGroup"
           },
           "type": "array"
         },
@@ -8821,7 +9230,7 @@
           "type": "string"
         },
         "id": {
-          "description": "The REST id of the product. Content API methods that operate on products take this as their productId parameter.\nThe REST id for a product is of the form channel:contentLanguage:targetCountry:offerId.",
+          "description": "The REST ID of the product. Content API methods that operate on products take this as their productId parameter.\nThe REST ID for a product is of the form channel:contentLanguage:targetCountry:offerId.",
           "type": "string"
         },
         "identifierExists": {
@@ -8898,11 +9307,11 @@
               "content.products.insert"
             ]
           },
-          "description": "A unique identifier for the item. Leading and trailing whitespaces are stripped and multiple whitespaces are replaced by a single whitespace upon submission. Only valid unicode characters are accepted. See the products feed specification for details.\nNote: Content API methods that operate on products take the REST id of the product, not this identifier.",
+          "description": "A unique identifier for the item. Leading and trailing whitespaces are stripped and multiple whitespaces are replaced by a single whitespace upon submission. Only valid unicode characters are accepted. See the products feed specification for details.\nNote: Content API methods that operate on products take the REST ID of the product, not this identifier.",
           "type": "string"
         },
         "onlineOnly": {
-          "description": "Whether an item is available for purchase only online.",
+          "description": "Deprecated. Whether an item is available for purchase only online.",
           "type": "boolean"
         },
         "pattern": {
@@ -8914,7 +9323,7 @@
           "description": "Price of the item."
         },
         "productType": {
-          "description": "Your category of the item (formatted as in products feed specification).",
+          "description": "Your category of the item (formatted as in products data specification).",
           "type": "string"
         },
         "promotionIds": {
@@ -8929,7 +9338,7 @@
           "description": "Advertised sale price of the item."
         },
         "salePriceEffectiveDate": {
-          "description": "Date range during which the item is on sale (see products feed specification).",
+          "description": "Date range during which the item is on sale (see products data specification).",
           "type": "string"
         },
         "sellOnGoogleQuantity": {
@@ -9012,7 +9421,7 @@
           "description": "The measure and dimension of an item."
         },
         "validatedDestinations": {
-          "description": "The read-only list of intended destinations which passed validation.",
+          "description": "Deprecated. The read-only list of intended destinations which passed validation.",
           "items": {
             "type": "string"
           },
@@ -9024,6 +9433,24 @@
             "$ref": "Error"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "ProductAmount": {
+      "id": "ProductAmount",
+      "properties": {
+        "priceAmount": {
+          "$ref": "Price",
+          "description": "The pre-tax or post-tax price depending on the location of the order."
+        },
+        "remittedTaxAmount": {
+          "$ref": "Price",
+          "description": "Remitted tax value."
+        },
+        "taxAmount": {
+          "$ref": "Price",
+          "description": "Tax value."
         }
       },
       "type": "object"
@@ -9041,45 +9468,6 @@
         },
         "intention": {
           "description": "Whether the aspect is required, excluded or should be validated.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "ProductCustomAttribute": {
-      "id": "ProductCustomAttribute",
-      "properties": {
-        "name": {
-          "description": "The name of the attribute. Underscores will be replaced by spaces upon insertion.",
-          "type": "string"
-        },
-        "type": {
-          "description": "The type of the attribute.",
-          "type": "string"
-        },
-        "unit": {
-          "description": "Free-form unit of the attribute. Unit can only be used for values of type INT or FLOAT.",
-          "type": "string"
-        },
-        "value": {
-          "description": "The value of the attribute.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "ProductCustomGroup": {
-      "id": "ProductCustomGroup",
-      "properties": {
-        "attributes": {
-          "description": "The sub-attributes.",
-          "items": {
-            "$ref": "ProductCustomAttribute"
-          },
-          "type": "array"
-        },
-        "name": {
-          "description": "The name of the group. Underscores will be replaced by spaces upon insertion.",
           "type": "string"
         }
       },
@@ -9111,7 +9499,7 @@
           "type": "string"
         },
         "locationId": {
-          "description": "The numeric id of a location that the shipping rate applies to as defined in the AdWords API.",
+          "description": "The numeric ID of a location that the shipping rate applies to as defined in the AdWords API.",
           "format": "int64",
           "type": "string"
         },
@@ -9138,7 +9526,7 @@
       "id": "ProductShippingDimension",
       "properties": {
         "unit": {
-          "description": "The unit of value.\n\nAcceptable values are:  \n- \"cm\" \n- \"in\"",
+          "description": "The unit of value.",
           "type": "string"
         },
         "value": {
@@ -9165,7 +9553,7 @@
       "type": "object"
     },
     "ProductStatus": {
-      "description": "The status of a product, i.e., information about a product computed asynchronously by the data quality analysis.",
+      "description": "The status of a product, i.e., information about a product computed asynchronously.",
       "id": "ProductStatus",
       "properties": {
         "creationDate": {
@@ -9173,7 +9561,7 @@
           "type": "string"
         },
         "dataQualityIssues": {
-          "description": "A list of data quality issues associated with the product.",
+          "description": "DEPRECATED - never populated",
           "items": {
             "$ref": "ProductStatusDataQualityIssue"
           },
@@ -9215,7 +9603,7 @@
           "description": "Product data after applying all the join inputs."
         },
         "productId": {
-          "description": "The id of the product for which status is reported.",
+          "description": "The ID of the product for which status is reported.",
           "type": "string"
         },
         "title": {
@@ -9229,39 +9617,30 @@
       "id": "ProductStatusDataQualityIssue",
       "properties": {
         "destination": {
-          "description": "The destination the issue applies to.",
           "type": "string"
         },
         "detail": {
-          "description": "A more detailed error string.",
           "type": "string"
         },
         "fetchStatus": {
-          "description": "The fetch status for landing_page_errors.",
           "type": "string"
         },
         "id": {
-          "description": "The id of the data quality issue.",
           "type": "string"
         },
         "location": {
-          "description": "The attribute name that is relevant for the issue.",
           "type": "string"
         },
         "severity": {
-          "description": "The severity of the data quality issue.",
           "type": "string"
         },
         "timestamp": {
-          "description": "The time stamp of the data quality issue.",
           "type": "string"
         },
         "valueOnLandingPage": {
-          "description": "The value of that attribute that was found on the landing page",
           "type": "string"
         },
         "valueProvided": {
-          "description": "The value the attribute had at time of evaluation.",
           "type": "string"
         }
       },
@@ -9335,7 +9714,7 @@
           "type": "string"
         },
         "locationId": {
-          "description": "The numeric id of a location that the tax rate applies to as defined in the AdWords API.",
+          "description": "The numeric ID of a location that the tax rate applies to as defined in the AdWords API.",
           "format": "int64",
           "type": "string"
         },
@@ -9658,6 +10037,48 @@
       },
       "type": "object"
     },
+    "RefundReason": {
+      "id": "RefundReason",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "reasonCode": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ReturnShipment": {
+      "id": "ReturnShipment",
+      "properties": {
+        "creationDate": {
+          "type": "string"
+        },
+        "deliveryDate": {
+          "type": "string"
+        },
+        "returnMethodType": {
+          "type": "string"
+        },
+        "shipmentId": {
+          "type": "string"
+        },
+        "shipmentTrackingInfos": {
+          "items": {
+            "$ref": "ShipmentTrackingInfo"
+          },
+          "type": "array"
+        },
+        "shippingDate": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "Row": {
       "id": "Row",
       "properties": {
@@ -9727,7 +10148,7 @@
           "type": "array"
         },
         "shipmentGroupId": {
-          "description": "[required] ID of the shipment group.",
+          "description": "[required] ID of the shipment group. It is assigned by the merchant in the shipLineItems method and is used to group multiple line items that have the same kind of shipping charges.",
           "type": "string"
         }
       },
@@ -9745,7 +10166,7 @@
           "type": "string"
         },
         "shipmentUnitIds": {
-          "description": "[required] Unit IDs to define specific units within the line item.",
+          "description": "[required] The shipment unit ID is assigned by the merchant and defines individual quantities within a line item. The same ID can be assigned to units that are the same while units that differ must be assigned a different ID (for example: free or promotional units).",
           "items": {
             "type": "string"
           },
@@ -9758,8 +10179,20 @@
       },
       "type": "object"
     },
+    "ShipmentTrackingInfo": {
+      "id": "ShipmentTrackingInfo",
+      "properties": {
+        "carrier": {
+          "type": "string"
+        },
+        "trackingNumber": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "ShippingSettings": {
-      "description": "The merchant account's shipping settings.",
+      "description": "The merchant account's shipping settings. All methods except getsupportedcarriers and getsupportedholidays require the admin role.",
       "id": "ShippingSettings",
       "properties": {
         "accountId": {
@@ -10002,9 +10435,9 @@
           "type": "string"
         },
         "promotions": {
-          "description": "The details of the merchant provided promotions applied to the order. More details about the program are here.",
+          "description": "Deprecated. Ignored if provided.",
           "items": {
-            "$ref": "OrderPromotion"
+            "$ref": "OrderLegacyPromotion"
           },
           "type": "array"
         },
@@ -10015,16 +10448,11 @@
               "content.orders.createtestorder"
             ]
           },
-          "description": "The total cost of shipping for all items."
+          "description": "The price of shipping for all items. Shipping tax is automatically calculated for MFL orders. For non-MFL orders, tax settings from Merchant Center are applied. Note that shipping is not taxed in certain states."
         },
         "shippingCostTax": {
           "$ref": "Price",
-          "annotations": {
-            "required": [
-              "content.orders.createtestorder"
-            ]
-          },
-          "description": "The tax for the total shipping cost."
+          "description": "Deprecated. Ignored if provided."
         },
         "shippingOption": {
           "annotations": {
@@ -10116,12 +10544,7 @@
         },
         "unitTax": {
           "$ref": "Price",
-          "annotations": {
-            "required": [
-              "content.orders.createtestorder"
-            ]
-          },
-          "description": "Unit tax for the line item."
+          "description": "Deprecated. Ignored if provided."
         }
       },
       "type": "object"
@@ -10139,12 +10562,7 @@
           "type": "string"
         },
         "channel": {
-          "annotations": {
-            "required": [
-              "content.orders.createtestorder"
-            ]
-          },
-          "description": "The item's channel.",
+          "description": "Deprecated.",
           "type": "string"
         },
         "condition": {
@@ -10202,7 +10620,7 @@
               "content.orders.createtestorder"
             ]
           },
-          "description": "The price for the product."
+          "description": "The price for the product. Tax is automatically calculated for MFL orders. For non-MFL orders, tax settings from Merchant Center are applied."
         },
         "targetCountry": {
           "annotations": {
@@ -10260,6 +10678,60 @@
       },
       "type": "object"
     },
+    "TransitTable": {
+      "id": "TransitTable",
+      "properties": {
+        "postalCodeGroupNames": {
+          "description": "A list of postal group names. The last value can be \"all other locations\". Example: [\"zone 1\", \"zone 2\", \"all other locations\"]. The referred postal code groups must match the delivery country of the service.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "rows": {
+          "items": {
+            "$ref": "TransitTableTransitTimeRow"
+          },
+          "type": "array"
+        },
+        "transitTimeLabels": {
+          "description": "A list of transit time labels. The last value can be \"all other labels\". Example: [\"food\", \"electronics\", \"all other labels\"].",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "TransitTableTransitTimeRow": {
+      "id": "TransitTableTransitTimeRow",
+      "properties": {
+        "values": {
+          "items": {
+            "$ref": "TransitTableTransitTimeRowTransitTimeValue"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "TransitTableTransitTimeRowTransitTimeValue": {
+      "id": "TransitTableTransitTimeRowTransitTimeValue",
+      "properties": {
+        "maxTransitTimeInDays": {
+          "description": "Must be greater than or equal to minTransitTimeInDays.",
+          "format": "uint32",
+          "type": "integer"
+        },
+        "minTransitTimeInDays": {
+          "description": "Transit time range (min-max) in business days. 0 means same day delivery, 1 means next day delivery.",
+          "format": "uint32",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
     "UnitInvoice": {
       "id": "UnitInvoice",
       "properties": {
@@ -10271,7 +10743,7 @@
           "type": "array"
         },
         "promotions": {
-          "description": "Promotions applied to a unit.",
+          "description": "Deprecated.",
           "items": {
             "$ref": "Promotion"
           },
@@ -10299,7 +10771,7 @@
           "description": "[required] Amount of the additional charge."
         },
         "additionalChargePromotions": {
-          "description": "Promotions applied to the additional charge.",
+          "description": "Deprecated.",
           "items": {
             "$ref": "Promotion"
           },

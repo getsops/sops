@@ -890,11 +890,141 @@
               }
             }
           }
+        },
+        "savedQueries": {
+          "methods": {
+            "create": {
+              "description": "Creates a saved query.",
+              "flatPath": "v1/matters/{matterId}/savedQueries",
+              "httpMethod": "POST",
+              "id": "vault.matters.savedQueries.create",
+              "parameterOrder": [
+                "matterId"
+              ],
+              "parameters": {
+                "matterId": {
+                  "description": "The matter id of the parent matter for which the saved query is to be\ncreated.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v1/matters/{matterId}/savedQueries",
+              "request": {
+                "$ref": "SavedQuery"
+              },
+              "response": {
+                "$ref": "SavedQuery"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/ediscovery"
+              ]
+            },
+            "delete": {
+              "description": "Deletes a saved query by Id.",
+              "flatPath": "v1/matters/{matterId}/savedQueries/{savedQueryId}",
+              "httpMethod": "DELETE",
+              "id": "vault.matters.savedQueries.delete",
+              "parameterOrder": [
+                "matterId",
+                "savedQueryId"
+              ],
+              "parameters": {
+                "matterId": {
+                  "description": "The matter id of the parent matter for which the saved query is to be\ndeleted.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                },
+                "savedQueryId": {
+                  "description": "Id of the saved query to be deleted.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v1/matters/{matterId}/savedQueries/{savedQueryId}",
+              "response": {
+                "$ref": "Empty"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/ediscovery"
+              ]
+            },
+            "get": {
+              "description": "Retrieves a saved query by Id.",
+              "flatPath": "v1/matters/{matterId}/savedQueries/{savedQueryId}",
+              "httpMethod": "GET",
+              "id": "vault.matters.savedQueries.get",
+              "parameterOrder": [
+                "matterId",
+                "savedQueryId"
+              ],
+              "parameters": {
+                "matterId": {
+                  "description": "The matter id of the parent matter for which the saved query is to be\nretrieved.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                },
+                "savedQueryId": {
+                  "description": "Id of the saved query to be retrieved.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v1/matters/{matterId}/savedQueries/{savedQueryId}",
+              "response": {
+                "$ref": "SavedQuery"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/ediscovery",
+                "https://www.googleapis.com/auth/ediscovery.readonly"
+              ]
+            },
+            "list": {
+              "description": "Lists saved queries within a matter. An empty page token in\nListSavedQueriesResponse denotes no more saved queries to list.",
+              "flatPath": "v1/matters/{matterId}/savedQueries",
+              "httpMethod": "GET",
+              "id": "vault.matters.savedQueries.list",
+              "parameterOrder": [
+                "matterId"
+              ],
+              "parameters": {
+                "matterId": {
+                  "description": "The matter id of the parent matter for which the saved queries are to be\nretrieved.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                },
+                "pageSize": {
+                  "description": "The maximum number of saved queries to return.",
+                  "format": "int32",
+                  "location": "query",
+                  "type": "integer"
+                },
+                "pageToken": {
+                  "description": "The pagination token as returned in the previous response.\nAn empty token means start from the beginning.",
+                  "location": "query",
+                  "type": "string"
+                }
+              },
+              "path": "v1/matters/{matterId}/savedQueries",
+              "response": {
+                "$ref": "ListSavedQueriesResponse"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/ediscovery",
+                "https://www.googleapis.com/auth/ediscovery.readonly"
+              ]
+            }
+          }
         }
       }
     }
   },
-  "revision": "20180731",
+  "revision": "20190411",
   "rootUrl": "https://vault.googleapis.com/",
   "schemas": {
     "AccountInfo": {
@@ -1063,7 +1193,7 @@
       "id": "DriveExportOptions",
       "properties": {
         "includeAccessInfo": {
-          "description": "Set to true to include access level information for users\nwith \u003ca href=\"https://support.google.com/vault/answer/6099459#metadata\"\u003eindirect access\u003c/a\u003e\nto files.",
+          "description": "Set to true to include access level information for users\nwith \u003ca\nhref=\"https://support.google.com/vault/answer/6099459#metadata\"\u003eindirect\naccess\u003c/a\u003e to files.",
           "type": "boolean"
         }
       },
@@ -1170,6 +1300,22 @@
         "mailOptions": {
           "$ref": "MailExportOptions",
           "description": "Option available for mail export."
+        },
+        "region": {
+          "description": "The requested export location.",
+          "enum": [
+            "EXPORT_REGION_UNSPECIFIED",
+            "ANY",
+            "US",
+            "EUROPE"
+          ],
+          "enumDescriptions": [
+            "The region is unspecified. Will be treated the same as ANY.",
+            "Any region.",
+            "US region.",
+            "Europe region."
+          ],
+          "type": "string"
         }
       },
       "type": "object"
@@ -1271,9 +1417,21 @@
           "description": "The account's ID as provided by the\n\u003ca href=\"https://developers.google.com/admin-sdk/\"\u003eAdmin SDK\u003c/a\u003e.",
           "type": "string"
         },
+        "email": {
+          "description": "The primary email address of the account. If used as an input, this takes\nprecedence over account ID.",
+          "type": "string"
+        },
+        "firstName": {
+          "description": "Output only. The first name of the account holder.",
+          "type": "string"
+        },
         "holdTime": {
-          "description": "When the account was put on hold.",
+          "description": "Output only. When the account was put on hold.",
           "format": "google-datetime",
+          "type": "string"
+        },
+        "lastName": {
+          "description": "Output only. The last name of the account holder.",
           "type": "string"
         }
       },
@@ -1480,6 +1638,24 @@
       },
       "type": "object"
     },
+    "ListSavedQueriesResponse": {
+      "description": "Definition of the response for method ListSaveQuery.",
+      "id": "ListSavedQueriesResponse",
+      "properties": {
+        "nextPageToken": {
+          "description": "Page token to retrieve the next page of results in the list.\nIf this is empty, then there are no more saved queries to list.",
+          "type": "string"
+        },
+        "savedQueries": {
+          "description": "List of output saved queries.",
+          "items": {
+            "$ref": "SavedQuery"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "MailExportOptions": {
       "description": "The options for mail export.",
       "id": "MailExportOptions",
@@ -1497,6 +1673,10 @@
             "PST as export format"
           ],
           "type": "string"
+        },
+        "showConfidentialModeContent": {
+          "description": "Set to true to export confidential mode content.",
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -1559,7 +1739,7 @@
       "id": "MatterPermission",
       "properties": {
         "accountId": {
-          "description": "The account id, as provided by \u003ca href=\"https://developers.google.com/admin-sdk/\"\u003eAdmin SDK\u003c/a\u003e.",
+          "description": "The account id, as provided by \u003ca\nhref=\"https://developers.google.com/admin-sdk/\"\u003eAdmin SDK\u003c/a\u003e.",
           "type": "string"
         },
         "role": {
@@ -1584,7 +1764,7 @@
       "id": "OrgUnitInfo",
       "properties": {
         "orgUnitId": {
-          "description": "Org unit to search, as provided by the\n\u003ca href=\"https://developers.google.com/admin-sdk/directory/\"\u003eAdmin SDK Directory API\u003c/a\u003e.",
+          "description": "Org unit to search, as provided by the\n\u003ca href=\"https://developers.google.com/admin-sdk/directory/\"\u003eAdmin SDK\nDirectory API\u003c/a\u003e.",
           "type": "string"
         }
       },
@@ -1687,7 +1867,7 @@
           "description": "When 'TEAM_DRIVE' is chosen as search method, team_drive_info needs to be\nspecified."
         },
         "terms": {
-          "description": "The corpus-specific\n\u003ca href=\"https://support.google.com/vault/answer/2474474\"\u003esearch operators\u003c/a\u003e\nused to generate search results.",
+          "description": "The corpus-specific\n\u003ca href=\"https://support.google.com/vault/answer/2474474\"\u003esearch\noperators\u003c/a\u003e used to generate search results.",
           "type": "string"
         },
         "timeZone": {
@@ -1753,8 +1933,36 @@
       },
       "type": "object"
     },
+    "SavedQuery": {
+      "description": "Definition of the saved query.",
+      "id": "SavedQuery",
+      "properties": {
+        "createTime": {
+          "description": "Output only. The server generated timestamp at which saved query was\ncreated.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "displayName": {
+          "description": "Name of the saved query.",
+          "type": "string"
+        },
+        "matterId": {
+          "description": "Output only. The matter id of the associated matter.\nThe server does not look at this field during create and always uses matter\nid in the URL.",
+          "type": "string"
+        },
+        "query": {
+          "$ref": "Query",
+          "description": "The underlying Query object which contains all the information of the saved\nquery."
+        },
+        "savedQueryId": {
+          "description": "A unique identifier for the saved query.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "Status": {
-      "description": "The `Status` type defines a logical error model that is suitable for different\nprogramming environments, including REST APIs and RPC APIs. It is used by\n[gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error message,\nand error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
+      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error\nmessage, and error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
       "id": "Status",
       "properties": {
         "code": {

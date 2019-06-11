@@ -49,10 +49,6 @@
 // You can operate Application Discovery Service offline to inspect collected
 // data before it is shared with the service.
 //
-// Your AWS account must be granted access to Application Discovery Service,
-// a process called whitelisting. This is true for AWS partners and customers
-// alike. To request access, sign up for Application Discovery Service (http://aws.amazon.com/application-discovery/).
-//
 // This API reference provides descriptions, syntax, and usage examples for
 // each of the actions and data types for Application Discovery Service. The
 // topic for each action shows the API request parameters and the response.

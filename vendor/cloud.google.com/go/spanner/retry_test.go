@@ -17,6 +17,7 @@ limitations under the License.
 package spanner
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"testing"
@@ -24,7 +25,6 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
-	"golang.org/x/net/context"
 	edpb "google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
@@ -39,6 +39,7 @@ func TestRetry(t *testing.T) {
 	responses := []error{
 		status.Errorf(codes.Internal, "transport is closing"),
 		status.Errorf(codes.Unknown, "unexpected EOF"),
+		status.Errorf(codes.Internal, "unexpected EOF"),
 		status.Errorf(codes.Internal, "stream terminated by RST_STREAM with error code: 2"),
 		status.Errorf(codes.Unavailable, "service is currently unavailable"),
 		errRetry(fmt.Errorf("just retry it")),
@@ -72,7 +73,7 @@ func TestRetry(t *testing.T) {
 		// Let retryable runner to retry so that timeout will eventually happen.
 		return retryErr
 	})
-	// Check error code and error message
+	// Check error code and error message.
 	if wantErrCode, wantErr := codes.DeadlineExceeded, errContextCanceled(ctx, retryErr); ErrCode(err) != wantErrCode || !testEqual(err, wantErr) {
 		t.Errorf("<err code, err>=\n<%v, %v>, want:\n<%v, %v>", ErrCode(err), err, wantErrCode, wantErr)
 	}
@@ -87,7 +88,7 @@ func TestRetry(t *testing.T) {
 		}
 		return retryErr
 	})
-	// Check error code, error message, retry count
+	// Check error code, error message, retry count.
 	if wantErrCode, wantErr := codes.Canceled, errContextCanceled(ctx, retryErr); ErrCode(err) != wantErrCode || !testEqual(err, wantErr) || retries != 0 {
 		t.Errorf("<err code, err, retries>=\n<%v, %v, %v>, want:\n<%v, %v, %v>", ErrCode(err), err, retries, wantErrCode, wantErr, 0)
 	}

@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,13 +19,16 @@
 
 package reservations
 
-import original "github.com/Azure/azure-sdk-for-go/services/reservations/mgmt/2017-11-01/reservations"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/reservations/mgmt/2017-11-01/reservations"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
 type AppliedScopeType = original.AppliedScopeType
 
 const (
@@ -195,7 +198,9 @@ const (
 type AppliedReservationList = original.AppliedReservationList
 type AppliedReservations = original.AppliedReservations
 type AppliedReservationsProperties = original.AppliedReservationsProperties
+type BaseClient = original.BaseClient
 type Catalog = original.Catalog
+type Client = original.Client
 type Error = original.Error
 type ExtendedErrorInfo = original.ExtendedErrorInfo
 type ExtendedStatusInfo = original.ExtendedStatusInfo
@@ -207,11 +212,13 @@ type ListResponse = original.ListResponse
 type MergeProperties = original.MergeProperties
 type MergePropertiesType = original.MergePropertiesType
 type MergeRequest = original.MergeRequest
+type OperationClient = original.OperationClient
 type OperationDisplay = original.OperationDisplay
 type OperationList = original.OperationList
 type OperationListIterator = original.OperationListIterator
 type OperationListPage = original.OperationListPage
 type OperationResponse = original.OperationResponse
+type OrderClient = original.OrderClient
 type OrderList = original.OrderList
 type OrderListIterator = original.OrderListIterator
 type OrderListPage = original.OrderListPage
@@ -230,21 +237,54 @@ type SplitFuture = original.SplitFuture
 type SplitProperties = original.SplitProperties
 type SplitPropertiesType = original.SplitPropertiesType
 type SplitRequest = original.SplitRequest
-type OperationClient = original.OperationClient
-type OrderClient = original.OrderClient
-type Client = original.Client
 
 func New() BaseClient {
 	return original.New()
 }
+func NewClient() Client {
+	return original.NewClient()
+}
+func NewClientWithBaseURI(baseURI string) Client {
+	return original.NewClientWithBaseURI(baseURI)
+}
+func NewListIterator(page ListPage) ListIterator {
+	return original.NewListIterator(page)
+}
+func NewListPage(getNextPage func(context.Context, List) (List, error)) ListPage {
+	return original.NewListPage(getNextPage)
+}
+func NewOperationClient() OperationClient {
+	return original.NewOperationClient()
+}
+func NewOperationClientWithBaseURI(baseURI string) OperationClient {
+	return original.NewOperationClientWithBaseURI(baseURI)
+}
+func NewOperationListIterator(page OperationListPage) OperationListIterator {
+	return original.NewOperationListIterator(page)
+}
+func NewOperationListPage(getNextPage func(context.Context, OperationList) (OperationList, error)) OperationListPage {
+	return original.NewOperationListPage(getNextPage)
+}
+func NewOrderClient() OrderClient {
+	return original.NewOrderClient()
+}
+func NewOrderClientWithBaseURI(baseURI string) OrderClient {
+	return original.NewOrderClientWithBaseURI(baseURI)
+}
+func NewOrderListIterator(page OrderListPage) OrderListIterator {
+	return original.NewOrderListIterator(page)
+}
+func NewOrderListPage(getNextPage func(context.Context, OrderList) (OrderList, error)) OrderListPage {
+	return original.NewOrderListPage(getNextPage)
+}
 func NewWithBaseURI(baseURI string) BaseClient {
 	return original.NewWithBaseURI(baseURI)
 }
-func PossibleAppliedScopeTypeValues() []AppliedScopeType {
-	return original.PossibleAppliedScopeTypeValues()
-}
 func PossibleAppliedScopeType1Values() []AppliedScopeType1 {
 	return original.PossibleAppliedScopeType1Values()
+}
+func PossibleAppliedScopeTypeValues() []AppliedScopeType {
+	return original.PossibleAppliedScopeTypeValues()
 }
 func PossibleCodeValues() []Code {
 	return original.PossibleCodeValues()
@@ -255,35 +295,17 @@ func PossibleKindValues() []Kind {
 func PossibleLocationValues() []Location {
 	return original.PossibleLocationValues()
 }
-func PossibleProvisioningStateValues() []ProvisioningState {
-	return original.PossibleProvisioningStateValues()
-}
 func PossibleProvisioningState1Values() []ProvisioningState1 {
 	return original.PossibleProvisioningState1Values()
+}
+func PossibleProvisioningStateValues() []ProvisioningState {
+	return original.PossibleProvisioningStateValues()
 }
 func PossibleStatusCodeValues() []StatusCode {
 	return original.PossibleStatusCodeValues()
 }
 func PossibleTermValues() []Term {
 	return original.PossibleTermValues()
-}
-func NewOperationClient() OperationClient {
-	return original.NewOperationClient()
-}
-func NewOperationClientWithBaseURI(baseURI string) OperationClient {
-	return original.NewOperationClientWithBaseURI(baseURI)
-}
-func NewOrderClient() OrderClient {
-	return original.NewOrderClient()
-}
-func NewOrderClientWithBaseURI(baseURI string) OrderClient {
-	return original.NewOrderClientWithBaseURI(baseURI)
-}
-func NewClient() Client {
-	return original.NewClient()
-}
-func NewClientWithBaseURI(baseURI string) Client {
-	return original.NewClientWithBaseURI(baseURI)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/latest"

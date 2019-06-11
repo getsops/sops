@@ -19,7 +19,7 @@ scattered throughout the consumer's code.
 
 ## Installation
 
-> *Note:* These installation notes assume that you have [Go 1.9](https://blog.golang.org/go1.9) or higher, [Dep](https://github.com/golang/dep), and [Git](https://git-scm.com/) installed.
+> *Note:* These installation notes assume that you have [Go 1.9](https://blog.golang.org/go1.9) or higher, and [Git](https://git-scm.com/) installed.
 
 The simplest version of installation is very easy but not stable, just run the following command:
 
@@ -33,7 +33,6 @@ If that causes you trouble, run the following commands:
 # bash
 go get -d github.com/Azure/azure-sdk-for-go/tools/profileBuilder
 cd $GOPATH/src/github.com/Azure/azure-sdk-for-go/tools/profileBuilder
-dep ensure
 go install
 ```
 
@@ -41,7 +40,6 @@ go install
 # PowerShell
 go get -d github.com/Azure/azure-sdk-for-go/tools/profileBuilder
 cd $env:GOPATH\src\github.com\Azure\azure-sdk-for-go\tools\profileBuilder
-dep ensure
 go install
 ```
 

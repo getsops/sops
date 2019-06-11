@@ -20,12 +20,11 @@ import (
 	"reflect"
 	"time"
 
-	pb "google.golang.org/genproto/googleapis/firestore/v1beta1"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-
 	"github.com/golang/protobuf/ptypes"
 	tspb "github.com/golang/protobuf/ptypes/timestamp"
+	pb "google.golang.org/genproto/googleapis/firestore/v1"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 // A DocumentSnapshot contains document data and metadata.
@@ -84,13 +83,13 @@ func (d *DocumentSnapshot) Data() map[string]interface{} {
 //   - Bool converts to bool.
 //   - String converts to string.
 //   - Integer converts int64. When setting a struct field, any signed or unsigned
-//     integer type is permitted except uint64. Overflow is detected and results in
-//     an error.
+//     integer type is permitted except uint, uint64 or uintptr. Overflow is detected
+//     and results in an error.
 //   - Double converts to float64. When setting a struct field, float32 is permitted.
 //     Overflow is detected and results in an error.
 //   - Bytes is converted to []byte.
 //   - Timestamp converts to time.Time.
-//   - GeoPoint converts to latlng.LatLng, where latlng is the package
+//   - GeoPoint converts to *latlng.LatLng, where latlng is the package
 //     "google.golang.org/genproto/googleapis/type/latlng".
 //   - Arrays convert to []interface{}. When setting a struct field, the field
 //     may be a slice or array of any type and is populated recursively.
@@ -100,10 +99,13 @@ func (d *DocumentSnapshot) Data() map[string]interface{} {
 //   - Maps convert to map[string]interface{}. When setting a struct field,
 //     maps of key type string and any value type are permitted, and are populated
 //     recursively.
-//   - References are converted to DocumentRefs.
+//   - References are converted to *firestore.DocumentRefs.
 //
 // Field names given by struct field tags are observed, as described in
 // DocumentRef.Create.
+//
+// Only the fields actually present in the document are used to populate p. Other fields
+// of p are left unchanged.
 //
 // If the document does not exist, DataTo returns a NotFound error.
 func (d *DocumentSnapshot) DataTo(p interface{}) error {
@@ -169,22 +171,20 @@ func valueAtPath(fp FieldPath, m map[string]*pb.Value) (*pb.Value, error) {
 
 // toProtoDocument converts a Go value to a Document proto.
 // Valid values are: map[string]T, struct, or pointer to a valid value.
-// It also returns a list of field paths for DocumentTransform (server timestamp).
-func toProtoDocument(x interface{}) (*pb.Document, []FieldPath, error) {
+// It also returns a list DocumentTransforms.
+func toProtoDocument(x interface{}) (*pb.Document, []*pb.DocumentTransform_FieldTransform, error) {
 	if x == nil {
 		return nil, nil, errors.New("firestore: nil document contents")
 	}
 	v := reflect.ValueOf(x)
-	pv, sawTransform, err := toProtoValue(v)
+	pv, _, err := toProtoValue(v)
 	if err != nil {
 		return nil, nil, err
 	}
-	var fieldPaths []FieldPath
-	if sawTransform {
-		fieldPaths, err = extractTransformPaths(v, nil)
-		if err != nil {
-			return nil, nil, err
-		}
+	var transforms []*pb.DocumentTransform_FieldTransform
+	transforms, err = extractTransforms(v, nil)
+	if err != nil {
+		return nil, nil, err
 	}
 	var fields map[string]*pb.Value
 	if pv != nil {
@@ -194,23 +194,23 @@ func toProtoDocument(x interface{}) (*pb.Document, []FieldPath, error) {
 		}
 		fields = m.Fields
 	}
-	return &pb.Document{Fields: fields}, fieldPaths, nil
+	return &pb.Document{Fields: fields}, transforms, nil
 }
 
-func extractTransformPaths(v reflect.Value, prefix FieldPath) ([]FieldPath, error) {
+func extractTransforms(v reflect.Value, prefix FieldPath) ([]*pb.DocumentTransform_FieldTransform, error) {
 	switch v.Kind() {
 	case reflect.Map:
-		return extractTransformPathsFromMap(v, prefix)
+		return extractTransformsFromMap(v, prefix)
 	case reflect.Struct:
-		return extractTransformPathsFromStruct(v, prefix)
+		return extractTransformsFromStruct(v, prefix)
 	case reflect.Ptr:
 		if v.IsNil() {
 			return nil, nil
 		}
-		return extractTransformPaths(v.Elem(), prefix)
+		return extractTransforms(v.Elem(), prefix)
 	case reflect.Interface:
 		if v.NumMethod() == 0 { // empty interface: recurse on its contents
-			return extractTransformPaths(v.Elem(), prefix)
+			return extractTransforms(v.Elem(), prefix)
 		}
 		return nil, nil
 	default:
@@ -218,27 +218,39 @@ func extractTransformPaths(v reflect.Value, prefix FieldPath) ([]FieldPath, erro
 	}
 }
 
-func extractTransformPathsFromMap(v reflect.Value, prefix FieldPath) ([]FieldPath, error) {
-	var paths []FieldPath
+func extractTransformsFromMap(v reflect.Value, prefix FieldPath) ([]*pb.DocumentTransform_FieldTransform, error) {
+	var transforms []*pb.DocumentTransform_FieldTransform
 	for _, k := range v.MapKeys() {
 		sk := k.Interface().(string) // assume keys are strings; checked in toProtoValue
 		path := prefix.with(sk)
 		mi := v.MapIndex(k)
 		if mi.Interface() == ServerTimestamp {
-			paths = append(paths, path)
-		} else {
-			ps, err := extractTransformPaths(mi, path)
+			transforms = append(transforms, serverTimestamp(path.toServiceFieldPath()))
+		} else if au, ok := mi.Interface().(arrayUnion); ok {
+			t, err := arrayUnionTransform(au, path)
 			if err != nil {
 				return nil, err
 			}
-			paths = append(paths, ps...)
+			transforms = append(transforms, t)
+		} else if ar, ok := mi.Interface().(arrayRemove); ok {
+			t, err := arrayRemoveTransform(ar, path)
+			if err != nil {
+				return nil, err
+			}
+			transforms = append(transforms, t)
+		} else {
+			ps, err := extractTransforms(mi, path)
+			if err != nil {
+				return nil, err
+			}
+			transforms = append(transforms, ps...)
 		}
 	}
-	return paths, nil
+	return transforms, nil
 }
 
-func extractTransformPathsFromStruct(v reflect.Value, prefix FieldPath) ([]FieldPath, error) {
-	var paths []FieldPath
+func extractTransformsFromStruct(v reflect.Value, prefix FieldPath) ([]*pb.DocumentTransform_FieldTransform, error) {
+	var transforms []*pb.DocumentTransform_FieldTransform
 	fields, err := fieldCache.Fields(v.Type())
 	if err != nil {
 		return nil, err
@@ -259,17 +271,17 @@ func extractTransformPathsFromStruct(v reflect.Value, prefix FieldPath) ([]Field
 					f.Name, v.Type())
 			}
 			if isZero {
-				paths = append(paths, path)
+				transforms = append(transforms, serverTimestamp(path.toServiceFieldPath()))
 			}
 		} else {
-			ps, err := extractTransformPaths(fv, path)
+			ps, err := extractTransforms(fv, path)
 			if err != nil {
 				return nil, err
 			}
-			paths = append(paths, ps...)
+			transforms = append(transforms, ps...)
 		}
 	}
-	return paths, nil
+	return transforms, nil
 }
 
 func newDocumentSnapshot(ref *DocumentRef, proto *pb.Document, c *Client, readTime *tspb.Timestamp) (*DocumentSnapshot, error) {
@@ -298,4 +310,13 @@ func newDocumentSnapshot(ref *DocumentRef, proto *pb.Document, c *Client, readTi
 		d.ReadTime = ts
 	}
 	return d, nil
+}
+
+func serverTimestamp(path string) *pb.DocumentTransform_FieldTransform {
+	return &pb.DocumentTransform_FieldTransform{
+		FieldPath: path,
+		TransformType: &pb.DocumentTransform_FieldTransform_SetToServerValue{
+			SetToServerValue: pb.DocumentTransform_FieldTransform_REQUEST_TIME,
+		},
+	}
 }

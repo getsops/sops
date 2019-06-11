@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
 type PolicyStatesResource = original.PolicyStatesResource
 
 const (
@@ -33,14 +32,18 @@ const (
 	Latest  PolicyStatesResource = original.Latest
 )
 
+type BaseClient = original.BaseClient
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
+type OperationsClient = original.OperationsClient
 type OperationsListResults = original.OperationsListResults
 type PolicyAssignmentSummary = original.PolicyAssignmentSummary
 type PolicyDefinitionSummary = original.PolicyDefinitionSummary
 type PolicyEvent = original.PolicyEvent
+type PolicyEventsClient = original.PolicyEventsClient
 type PolicyEventsQueryResults = original.PolicyEventsQueryResults
 type PolicyState = original.PolicyState
+type PolicyStatesClient = original.PolicyStatesClient
 type PolicyStatesQueryResults = original.PolicyStatesQueryResults
 type QueryFailure = original.QueryFailure
 type QueryFailureError = original.QueryFailureError
@@ -48,18 +51,9 @@ type String = original.String
 type SummarizeResults = original.SummarizeResults
 type Summary = original.Summary
 type SummaryResults = original.SummaryResults
-type OperationsClient = original.OperationsClient
-type PolicyEventsClient = original.PolicyEventsClient
-type PolicyStatesClient = original.PolicyStatesClient
 
 func New() BaseClient {
 	return original.New()
-}
-func NewWithBaseURI(baseURI string) BaseClient {
-	return original.NewWithBaseURI(baseURI)
-}
-func PossiblePolicyStatesResourceValues() []PolicyStatesResource {
-	return original.PossiblePolicyStatesResourceValues()
 }
 func NewOperationsClient() OperationsClient {
 	return original.NewOperationsClient()
@@ -78,6 +72,12 @@ func NewPolicyStatesClient() PolicyStatesClient {
 }
 func NewPolicyStatesClientWithBaseURI(baseURI string) PolicyStatesClient {
 	return original.NewPolicyStatesClientWithBaseURI(baseURI)
+}
+func NewWithBaseURI(baseURI string) BaseClient {
+	return original.NewWithBaseURI(baseURI)
+}
+func PossiblePolicyStatesResourceValues() []PolicyStatesResource {
+	return original.PossiblePolicyStatesResourceValues()
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

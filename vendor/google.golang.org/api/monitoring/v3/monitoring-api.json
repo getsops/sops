@@ -369,6 +369,11 @@
                   "pattern": "^projects/[^/]+/groups/[^/]+$",
                   "required": true,
                   "type": "string"
+                },
+                "recursive": {
+                  "description": "If this field is true, then the request means to delete a group with all its descendants. Otherwise, the request means to delete a group only when it has no descendants. The default value is false.",
+                  "location": "query",
+                  "type": "boolean"
                 }
               },
               "path": "v3/{+name}",
@@ -837,7 +842,7 @@
         "notificationChannels": {
           "methods": {
             "create": {
-              "description": "Creates a new notification channel, representing a single notification endpoint such as an email address, SMS number, or pagerduty service.",
+              "description": "Creates a new notification channel, representing a single notification endpoint such as an email address, SMS number, or PagerDuty service.",
               "flatPath": "v3/projects/{projectsId}/notificationChannels",
               "httpMethod": "POST",
               "id": "monitoring.projects.notificationChannels.create",
@@ -1196,7 +1201,7 @@
                   "type": "string"
                 },
                 "filter": {
-                  "description": "A monitoring filter that specifies which time series should be returned. The filter must specify a single metric type, and can additionally specify metric labels and other information. For example:\nmetric.type = \"compute.googleapis.com/instance/cpu/usage_time\" AND\n    metric.label.instance_name = \"my-instance-name\"\n",
+                  "description": "A monitoring filter that specifies which time series should be returned. The filter must specify a single metric type, and can additionally specify metric labels and other information. For example:\nmetric.type = \"compute.googleapis.com/instance/cpu/usage_time\" AND\n    metric.labels.instance_name = \"my-instance-name\"\n",
                   "location": "query",
                   "type": "string"
                 },
@@ -1452,7 +1457,7 @@
       }
     }
   },
-  "revision": "20180729",
+  "revision": "20190526",
   "rootUrl": "https://monitoring.googleapis.com/",
   "schemas": {
     "Aggregation": {
@@ -1801,11 +1806,11 @@
       "type": "object"
     },
     "ContentMatcher": {
-      "description": "Used to perform string matching. Currently, this matches on the exact content. In the future, it can be expanded to allow for regular expressions and more complex matching.",
+      "description": "Used to perform string matching. It allows substring and regular expressions, together with their negations.",
       "id": "ContentMatcher",
       "properties": {
         "content": {
-          "description": "String content to match (max 1024 bytes)",
+          "description": "String or regex content to match (max 1024 bytes)",
           "type": "string"
         }
       },
@@ -1852,7 +1857,7 @@
       "id": "CreateTimeSeriesRequest",
       "properties": {
         "timeSeries": {
-          "description": "The new data to be added to a list of time series. Adds at most one data point to each of several time series. The new data point must be more recent than any other point in its time series. Each TimeSeries value must fully specify a unique time series by supplying all label values for the metric and the monitored resource.",
+          "description": "The new data to be added to a list of time series. Adds at most one data point to each of several time series. The new data point must be more recent than any other point in its time series. Each TimeSeries value must fully specify a unique time series by supplying all label values for the metric and the monitored resource.The maximum number of TimeSeries objects per Create request is 200.",
           "items": {
             "$ref": "TimeSeries"
           },
@@ -1946,7 +1951,7 @@
       "id": "Exemplar",
       "properties": {
         "attachments": {
-          "description": "Contextual information about the example value. Examples are:Trace ID: type.googleapis.com/google.devtools.cloudtrace.v1.TraceLiteral string: type.googleapis.com/google.protobuf.StringValueLabels dropped during aggregation:  type.googleapis.com/google.monitoring.v3.DroppedLabelsThere may be only a single attachment of any given message type in a single exemplar, and this is enforced by the system.",
+          "description": "Contextual information about the example value. Examples are:Trace: type.googleapis.com/google.monitoring.v3.SpanContextLiteral string: type.googleapis.com/google.protobuf.StringValueLabels dropped during aggregation:  type.googleapis.com/google.monitoring.v3.DroppedLabelsThere may be only a single attachment of any given message type in a single exemplar, and this is enforced by the system.",
           "items": {
             "additionalProperties": {
               "description": "Properties of the object. Contains field @type with type URL.",
@@ -2187,7 +2192,7 @@
           "type": "boolean"
         },
         "path": {
-          "description": "The path to the page to run the check against. Will be combined with the host (specified within the MonitoredResource) and port to construct the full URL. Optional (defaults to \"/\").",
+          "description": "The path to the page to run the check against. Will be combined with the host (specified within the MonitoredResource) and port to construct the full URL. Optional (defaults to \"/\"). If the provided path does not begin with \"/\", it will be prepended automatically.",
           "type": "string"
         },
         "port": {
@@ -2203,27 +2208,41 @@
       "type": "object"
     },
     "InternalChecker": {
-      "description": "Nimbus InternalCheckers.",
+      "description": "An internal checker allows uptime checks to run on private/internal GCP resources.",
       "id": "InternalChecker",
       "properties": {
-        "checkerId": {
-          "description": "The checker ID.",
-          "type": "string"
-        },
         "displayName": {
-          "description": "The checker's human-readable name.",
+          "description": "The checker's human-readable name. The display name should be unique within a Stackdriver Workspace in order to make it easier to identify; however, uniqueness is not enforced.",
           "type": "string"
         },
         "gcpZone": {
           "description": "The GCP zone the uptime check should egress from. Only respected for internal uptime checks, where internal_network is specified.",
           "type": "string"
         },
-        "network": {
-          "description": "The internal network to perform this uptime check on.",
+        "name": {
+          "description": "A unique resource name for this InternalChecker. The format is:projects/[PROJECT_ID]/internalCheckers/[INTERNAL_CHECKER_ID].PROJECT_ID is the stackdriver workspace project for the uptime check config associated with the internal checker.",
           "type": "string"
         },
-        "projectId": {
-          "description": "The GCP project ID. Not necessarily the same as the project_id for the config.",
+        "network": {
+          "description": "The GCP VPC network (https://cloud.google.com/vpc/docs/vpc) where the internal resource lives (ex: \"default\").",
+          "type": "string"
+        },
+        "peerProjectId": {
+          "description": "The GCP project_id where the internal checker lives. Not necessary the same as the workspace project.",
+          "type": "string"
+        },
+        "state": {
+          "description": "The current operational state of the internal checker.",
+          "enum": [
+            "UNSPECIFIED",
+            "CREATING",
+            "RUNNING"
+          ],
+          "enumDescriptions": [
+            "An internal checker should never be in the unspecified state.",
+            "The checker is being created, provisioned, and configured. A checker in this state can be returned by ListInternalCheckers or GetInternalChecker, as well as by examining the longrunning.Operation that created it.",
+            "The checker is running and available for use. A checker in this state can be returned by ListInternalCheckers or GetInternalChecker as well as by examining the longrunning.Operation that created it. If a checker is being torn down, it is neither visible nor usable, so there is no \"deleting\" or \"down\" state."
+          ],
           "type": "string"
         }
       },
@@ -2541,6 +2560,26 @@
           },
           "type": "array"
         },
+        "launchStage": {
+          "description": "Optional. The launch stage of the metric definition.",
+          "enum": [
+            "LAUNCH_STAGE_UNSPECIFIED",
+            "EARLY_ACCESS",
+            "ALPHA",
+            "BETA",
+            "GA",
+            "DEPRECATED"
+          ],
+          "enumDescriptions": [
+            "Do not use this default value.",
+            "Early Access features are limited to a closed group of testers. To use these features, you must sign up in advance and sign a Trusted Tester agreement (which includes confidentiality provisions). These features may be unstable, changed in backward-incompatible ways, and are not guaranteed to be released.",
+            "Alpha is a limited availability test for releases before they are cleared for widespread use. By Alpha, all significant design issues are resolved and we are in the process of verifying functionality. Alpha customers need to apply for access, agree to applicable terms, and have their projects whitelisted. Alpha releases don’t have to be feature complete, no SLAs are provided, and there are no technical support obligations, but they will be far enough along that customers can actually use them in test environments or for limited-use tests -- just like they would in normal production cases.",
+            "Beta is the point at which we are ready to open a release for any customer to use. There are no SLA or technical support obligations in a Beta release. Products will be complete from a feature perspective, but may have some open outstanding issues. Beta releases are suitable for limited production use cases.",
+            "GA features are open to all developers and are considered stable and fully qualified for production use.",
+            "Deprecated features are scheduled to be shut down and removed. For more information, see the “Deprecation Policy” section of our Terms of Service (https://cloud.google.com/terms/) and the Google Cloud Platform Subject to the Deprecation Policy (https://cloud.google.com/terms/deprecation) documentation."
+          ],
+          "type": "string"
+        },
         "metadata": {
           "$ref": "MetricDescriptorMetadata",
           "description": "Optional. Metadata which can be used to guide usage of the metric."
@@ -2608,7 +2647,7 @@
           "type": "string"
         },
         "launchStage": {
-          "description": "The launch stage of the metric definition.",
+          "description": "Deprecated. Please use the MetricDescriptor.launch_stage instead. The launch stage of the metric definition.",
           "enum": [
             "LAUNCH_STAGE_UNSPECIFIED",
             "EARLY_ACCESS",
@@ -2712,7 +2751,7 @@
           "type": "object"
         },
         "type": {
-          "description": "Required. The monitored resource type. This field must match the type field of a MonitoredResourceDescriptor object. For example, the type of a Compute Engine VM instance is gce_instance.",
+          "description": "Required. The monitored resource type. This field must match the type field of a MonitoredResourceDescriptor object. For example, the type of a Compute Engine VM instance is gce_instance. For a list of types, see Monitoring resource types and Logging resource types.",
           "type": "string"
         }
       },
@@ -2736,6 +2775,26 @@
             "$ref": "LabelDescriptor"
           },
           "type": "array"
+        },
+        "launchStage": {
+          "description": "Optional. The launch stage of the monitored resource definition.",
+          "enum": [
+            "LAUNCH_STAGE_UNSPECIFIED",
+            "EARLY_ACCESS",
+            "ALPHA",
+            "BETA",
+            "GA",
+            "DEPRECATED"
+          ],
+          "enumDescriptions": [
+            "Do not use this default value.",
+            "Early Access features are limited to a closed group of testers. To use these features, you must sign up in advance and sign a Trusted Tester agreement (which includes confidentiality provisions). These features may be unstable, changed in backward-incompatible ways, and are not guaranteed to be released.",
+            "Alpha is a limited availability test for releases before they are cleared for widespread use. By Alpha, all significant design issues are resolved and we are in the process of verifying functionality. Alpha customers need to apply for access, agree to applicable terms, and have their projects whitelisted. Alpha releases don’t have to be feature complete, no SLAs are provided, and there are no technical support obligations, but they will be far enough along that customers can actually use them in test environments or for limited-use tests -- just like they would in normal production cases.",
+            "Beta is the point at which we are ready to open a release for any customer to use. There are no SLA or technical support obligations in a Beta release. Products will be complete from a feature perspective, but may have some open outstanding issues. Beta releases are suitable for limited production use cases.",
+            "GA features are open to all developers and are considered stable and fully qualified for production use.",
+            "Deprecated features are scheduled to be shut down and removed. For more information, see the “Deprecation Policy” section of our Terms of Service (https://cloud.google.com/terms/) and the Google Cloud Platform Subject to the Deprecation Policy (https://cloud.google.com/terms/deprecation) documentation."
+          ],
+          "type": "string"
         },
         "name": {
           "description": "Optional. The resource name of the monitored resource descriptor: \"projects/{project_id}/monitoredResourceDescriptors/{type}\" where {type} is the value of the type field in this object and {project_id} is a project ID that provides API-specific context for accessing the type. APIs that do not use project information can use the resource name format \"monitoredResourceDescriptors/{type}\".",
@@ -2791,7 +2850,7 @@
       "id": "NotificationChannel",
       "properties": {
         "description": {
-          "description": "An optional human-readable description of this notification channel. This description may provide additional details, beyond the display name, for the channel. This may not exceeed 1024 Unicode characters.",
+          "description": "An optional human-readable description of this notification channel. This description may provide additional details, beyond the display name, for the channel. This may not exceed 1024 Unicode characters.",
           "type": "string"
         },
         "displayName": {
@@ -2868,8 +2927,8 @@
           "description": "The tiers that support this notification channel; the project service tier must be one of the supported_tiers.",
           "enumDescriptions": [
             "An invalid sentinel value, used to indicate that a tier has not been provided explicitly.",
-            "The Stackdriver Basic tier, a free tier of service that provides basic features, a moderate allotment of logs, and access to built-in metrics. A number of features are not available in this tier. For more details, see the service tiers documentation (https://cloud.google.com/monitoring/accounts/tiers).",
-            "The Stackdriver Premium tier, a higher, more expensive tier of service that provides access to all Stackdriver features, lets you use Stackdriver with AWS accounts, and has a larger allotments for logs and metrics. For more details, see the service tiers documentation (https://cloud.google.com/monitoring/accounts/tiers)."
+            "The Stackdriver Basic tier, a free tier of service that provides basic features, a moderate allotment of logs, and access to built-in metrics. A number of features are not available in this tier. For more details, see the service tiers documentation (https://cloud.google.com/monitoring/workspaces/tiers).",
+            "The Stackdriver Premium tier, a higher, more expensive tier of service that provides access to all Stackdriver features, lets you use Stackdriver with AWS accounts, and has a larger allotments for logs and metrics. For more details, see the service tiers documentation (https://cloud.google.com/monitoring/workspaces/tiers)."
           ],
           "items": {
             "enum": [
@@ -3032,7 +3091,7 @@
       "type": "object"
     },
     "TimeInterval": {
-      "description": "A time interval extending just after a start time through an end time. If the start time is the same as the end time, then the interval represents a single point in time.",
+      "description": "A time interval extending just after a start time through an end time. The start time must not be later than the end time. The default start time is the end time, making the startTime value technically optional. Whether this is useful depends on the MetricKind. If the start and end times are the same, the interval represents a point in time. This is appropriate for GAUGE metrics, but not for DELTA and CUMULATIVE metrics, which cover a span of time.",
       "id": "TimeInterval",
       "properties": {
         "endTime": {
@@ -3218,7 +3277,7 @@
           "type": "array"
         },
         "displayName": {
-          "description": "A human-friendly name for the uptime check configuration. The display name should be unique within a Stackdriver Account in order to make it easier to identify; however, uniqueness is not enforced. Required.",
+          "description": "A human-friendly name for the uptime check configuration. The display name should be unique within a Stackdriver Workspace in order to make it easier to identify; however, uniqueness is not enforced. Required.",
           "type": "string"
         },
         "httpCheck": {
@@ -3226,15 +3285,11 @@
           "description": "Contains information needed to make an HTTP or HTTPS check."
         },
         "internalCheckers": {
-          "description": "The internal checkers that this check will egress from. If is_internal is true and this list is empty, the check will egress from all InternalCheckers configured for the project that owns this CheckConfig.",
+          "description": "The internal checkers that this check will egress from. If is_internal is true and this list is empty, the check will egress from all the InternalCheckers configured for the project that owns this CheckConfig.",
           "items": {
             "$ref": "InternalChecker"
           },
           "type": "array"
-        },
-        "isInternal": {
-          "description": "Denotes whether this is a check that egresses from InternalCheckers.",
-          "type": "boolean"
         },
         "monitoredResource": {
           "$ref": "MonitoredResource",
@@ -3245,7 +3300,7 @@
           "type": "string"
         },
         "period": {
-          "description": "How often, in seconds, the uptime check is performed. Currently, the only supported values are 60s (1 minute), 300s (5 minutes), 600s (10 minutes), and 900s (15 minutes). Optional, defaults to 300s.",
+          "description": "How often, in seconds, the uptime check is performed. Currently, the only supported values are 60s (1 minute), 300s (5 minutes), 600s (10 minutes), and 900s (15 minutes). Optional, defaults to 60s.",
           "format": "google-duration",
           "type": "string"
         },
@@ -3254,7 +3309,7 @@
           "description": "The group resource associated with the configuration."
         },
         "selectedRegions": {
-          "description": "The list of regions from which the check will be run. If this field is specified, enough regions to include a minimum of 3 locations must be provided, or an error message is returned. Not specifying this field will result in uptime checks running from all regions.",
+          "description": "The list of regions from which the check will be run. Some regions contain one location, and others contain more than one. If this field is specified, enough regions to include a minimum of 3 locations must be provided, or an error message is returned. Not specifying this field will result in uptime checks running from all regions.",
           "enumDescriptions": [
             "Default value if no region is specified. Will result in uptime checks running from all regions.",
             "Allows checks to run from locations within the United States of America.",

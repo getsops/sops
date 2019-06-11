@@ -7,7 +7,7 @@
 // who need detailed information about the AWS Shield Advanced API actions,
 // data types, and errors. For detailed information about AWS WAF and AWS Shield
 // Advanced features and an overview of how to use the AWS WAF and AWS Shield
-// Advanced APIs, see the AWS WAF and AWS Shield Developer Guide (http://docs.aws.amazon.com/waf/latest/developerguide/).
+// Advanced APIs, see the AWS WAF and AWS Shield Developer Guide (https://docs.aws.amazon.com/waf/latest/developerguide/).
 //
 // See https://docs.aws.amazon.com/goto/WebAPI/shield-2016-06-02 for more information on this service.
 //

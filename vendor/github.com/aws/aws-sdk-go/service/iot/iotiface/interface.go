@@ -64,6 +64,10 @@ type IoTAPI interface {
 	AcceptCertificateTransferWithContext(aws.Context, *iot.AcceptCertificateTransferInput, ...request.Option) (*iot.AcceptCertificateTransferOutput, error)
 	AcceptCertificateTransferRequest(*iot.AcceptCertificateTransferInput) (*request.Request, *iot.AcceptCertificateTransferOutput)
 
+	AddThingToBillingGroup(*iot.AddThingToBillingGroupInput) (*iot.AddThingToBillingGroupOutput, error)
+	AddThingToBillingGroupWithContext(aws.Context, *iot.AddThingToBillingGroupInput, ...request.Option) (*iot.AddThingToBillingGroupOutput, error)
+	AddThingToBillingGroupRequest(*iot.AddThingToBillingGroupInput) (*request.Request, *iot.AddThingToBillingGroupOutput)
+
 	AddThingToThingGroup(*iot.AddThingToThingGroupInput) (*iot.AddThingToThingGroupOutput, error)
 	AddThingToThingGroupWithContext(aws.Context, *iot.AddThingToThingGroupInput, ...request.Option) (*iot.AddThingToThingGroupOutput, error)
 	AddThingToThingGroupRequest(*iot.AddThingToThingGroupInput) (*request.Request, *iot.AddThingToThingGroupOutput)
@@ -112,9 +116,17 @@ type IoTAPI interface {
 	CreateAuthorizerWithContext(aws.Context, *iot.CreateAuthorizerInput, ...request.Option) (*iot.CreateAuthorizerOutput, error)
 	CreateAuthorizerRequest(*iot.CreateAuthorizerInput) (*request.Request, *iot.CreateAuthorizerOutput)
 
+	CreateBillingGroup(*iot.CreateBillingGroupInput) (*iot.CreateBillingGroupOutput, error)
+	CreateBillingGroupWithContext(aws.Context, *iot.CreateBillingGroupInput, ...request.Option) (*iot.CreateBillingGroupOutput, error)
+	CreateBillingGroupRequest(*iot.CreateBillingGroupInput) (*request.Request, *iot.CreateBillingGroupOutput)
+
 	CreateCertificateFromCsr(*iot.CreateCertificateFromCsrInput) (*iot.CreateCertificateFromCsrOutput, error)
 	CreateCertificateFromCsrWithContext(aws.Context, *iot.CreateCertificateFromCsrInput, ...request.Option) (*iot.CreateCertificateFromCsrOutput, error)
 	CreateCertificateFromCsrRequest(*iot.CreateCertificateFromCsrInput) (*request.Request, *iot.CreateCertificateFromCsrOutput)
+
+	CreateDynamicThingGroup(*iot.CreateDynamicThingGroupInput) (*iot.CreateDynamicThingGroupOutput, error)
+	CreateDynamicThingGroupWithContext(aws.Context, *iot.CreateDynamicThingGroupInput, ...request.Option) (*iot.CreateDynamicThingGroupOutput, error)
+	CreateDynamicThingGroupRequest(*iot.CreateDynamicThingGroupInput) (*request.Request, *iot.CreateDynamicThingGroupOutput)
 
 	CreateJob(*iot.CreateJobInput) (*iot.CreateJobOutput, error)
 	CreateJobWithContext(aws.Context, *iot.CreateJobInput, ...request.Option) (*iot.CreateJobOutput, error)
@@ -176,6 +188,10 @@ type IoTAPI interface {
 	DeleteAuthorizerWithContext(aws.Context, *iot.DeleteAuthorizerInput, ...request.Option) (*iot.DeleteAuthorizerOutput, error)
 	DeleteAuthorizerRequest(*iot.DeleteAuthorizerInput) (*request.Request, *iot.DeleteAuthorizerOutput)
 
+	DeleteBillingGroup(*iot.DeleteBillingGroupInput) (*iot.DeleteBillingGroupOutput, error)
+	DeleteBillingGroupWithContext(aws.Context, *iot.DeleteBillingGroupInput, ...request.Option) (*iot.DeleteBillingGroupOutput, error)
+	DeleteBillingGroupRequest(*iot.DeleteBillingGroupInput) (*request.Request, *iot.DeleteBillingGroupOutput)
+
 	DeleteCACertificate(*iot.DeleteCACertificateInput) (*iot.DeleteCACertificateOutput, error)
 	DeleteCACertificateWithContext(aws.Context, *iot.DeleteCACertificateInput, ...request.Option) (*iot.DeleteCACertificateOutput, error)
 	DeleteCACertificateRequest(*iot.DeleteCACertificateInput) (*request.Request, *iot.DeleteCACertificateOutput)
@@ -183,6 +199,10 @@ type IoTAPI interface {
 	DeleteCertificate(*iot.DeleteCertificateInput) (*iot.DeleteCertificateOutput, error)
 	DeleteCertificateWithContext(aws.Context, *iot.DeleteCertificateInput, ...request.Option) (*iot.DeleteCertificateOutput, error)
 	DeleteCertificateRequest(*iot.DeleteCertificateInput) (*request.Request, *iot.DeleteCertificateOutput)
+
+	DeleteDynamicThingGroup(*iot.DeleteDynamicThingGroupInput) (*iot.DeleteDynamicThingGroupOutput, error)
+	DeleteDynamicThingGroupWithContext(aws.Context, *iot.DeleteDynamicThingGroupInput, ...request.Option) (*iot.DeleteDynamicThingGroupOutput, error)
+	DeleteDynamicThingGroupRequest(*iot.DeleteDynamicThingGroupInput) (*request.Request, *iot.DeleteDynamicThingGroupOutput)
 
 	DeleteJob(*iot.DeleteJobInput) (*iot.DeleteJobOutput, error)
 	DeleteJobWithContext(aws.Context, *iot.DeleteJobInput, ...request.Option) (*iot.DeleteJobOutput, error)
@@ -259,6 +279,10 @@ type IoTAPI interface {
 	DescribeAuthorizer(*iot.DescribeAuthorizerInput) (*iot.DescribeAuthorizerOutput, error)
 	DescribeAuthorizerWithContext(aws.Context, *iot.DescribeAuthorizerInput, ...request.Option) (*iot.DescribeAuthorizerOutput, error)
 	DescribeAuthorizerRequest(*iot.DescribeAuthorizerInput) (*request.Request, *iot.DescribeAuthorizerOutput)
+
+	DescribeBillingGroup(*iot.DescribeBillingGroupInput) (*iot.DescribeBillingGroupOutput, error)
+	DescribeBillingGroupWithContext(aws.Context, *iot.DescribeBillingGroupInput, ...request.Option) (*iot.DescribeBillingGroupOutput, error)
+	DescribeBillingGroupRequest(*iot.DescribeBillingGroupInput) (*request.Request, *iot.DescribeBillingGroupOutput)
 
 	DescribeCACertificate(*iot.DescribeCACertificateInput) (*iot.DescribeCACertificateOutput, error)
 	DescribeCACertificateWithContext(aws.Context, *iot.DescribeCACertificateInput, ...request.Option) (*iot.DescribeCACertificateOutput, error)
@@ -380,6 +404,10 @@ type IoTAPI interface {
 	GetRegistrationCodeWithContext(aws.Context, *iot.GetRegistrationCodeInput, ...request.Option) (*iot.GetRegistrationCodeOutput, error)
 	GetRegistrationCodeRequest(*iot.GetRegistrationCodeInput) (*request.Request, *iot.GetRegistrationCodeOutput)
 
+	GetStatistics(*iot.GetStatisticsInput) (*iot.GetStatisticsOutput, error)
+	GetStatisticsWithContext(aws.Context, *iot.GetStatisticsInput, ...request.Option) (*iot.GetStatisticsOutput, error)
+	GetStatisticsRequest(*iot.GetStatisticsInput) (*request.Request, *iot.GetStatisticsOutput)
+
 	GetTopicRule(*iot.GetTopicRuleInput) (*iot.GetTopicRuleOutput, error)
 	GetTopicRuleWithContext(aws.Context, *iot.GetTopicRuleInput, ...request.Option) (*iot.GetTopicRuleOutput, error)
 	GetTopicRuleRequest(*iot.GetTopicRuleInput) (*request.Request, *iot.GetTopicRuleOutput)
@@ -407,6 +435,10 @@ type IoTAPI interface {
 	ListAuthorizers(*iot.ListAuthorizersInput) (*iot.ListAuthorizersOutput, error)
 	ListAuthorizersWithContext(aws.Context, *iot.ListAuthorizersInput, ...request.Option) (*iot.ListAuthorizersOutput, error)
 	ListAuthorizersRequest(*iot.ListAuthorizersInput) (*request.Request, *iot.ListAuthorizersOutput)
+
+	ListBillingGroups(*iot.ListBillingGroupsInput) (*iot.ListBillingGroupsOutput, error)
+	ListBillingGroupsWithContext(aws.Context, *iot.ListBillingGroupsInput, ...request.Option) (*iot.ListBillingGroupsOutput, error)
+	ListBillingGroupsRequest(*iot.ListBillingGroupsInput) (*request.Request, *iot.ListBillingGroupsOutput)
 
 	ListCACertificates(*iot.ListCACertificatesInput) (*iot.ListCACertificatesOutput, error)
 	ListCACertificatesWithContext(aws.Context, *iot.ListCACertificatesInput, ...request.Option) (*iot.ListCACertificatesOutput, error)
@@ -484,6 +516,10 @@ type IoTAPI interface {
 	ListStreamsWithContext(aws.Context, *iot.ListStreamsInput, ...request.Option) (*iot.ListStreamsOutput, error)
 	ListStreamsRequest(*iot.ListStreamsInput) (*request.Request, *iot.ListStreamsOutput)
 
+	ListTagsForResource(*iot.ListTagsForResourceInput) (*iot.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *iot.ListTagsForResourceInput, ...request.Option) (*iot.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*iot.ListTagsForResourceInput) (*request.Request, *iot.ListTagsForResourceOutput)
+
 	ListTargetsForPolicy(*iot.ListTargetsForPolicyInput) (*iot.ListTargetsForPolicyOutput, error)
 	ListTargetsForPolicyWithContext(aws.Context, *iot.ListTargetsForPolicyInput, ...request.Option) (*iot.ListTargetsForPolicyOutput, error)
 	ListTargetsForPolicyRequest(*iot.ListTargetsForPolicyInput) (*request.Request, *iot.ListTargetsForPolicyOutput)
@@ -520,6 +556,10 @@ type IoTAPI interface {
 	ListThingsWithContext(aws.Context, *iot.ListThingsInput, ...request.Option) (*iot.ListThingsOutput, error)
 	ListThingsRequest(*iot.ListThingsInput) (*request.Request, *iot.ListThingsOutput)
 
+	ListThingsInBillingGroup(*iot.ListThingsInBillingGroupInput) (*iot.ListThingsInBillingGroupOutput, error)
+	ListThingsInBillingGroupWithContext(aws.Context, *iot.ListThingsInBillingGroupInput, ...request.Option) (*iot.ListThingsInBillingGroupOutput, error)
+	ListThingsInBillingGroupRequest(*iot.ListThingsInBillingGroupInput) (*request.Request, *iot.ListThingsInBillingGroupOutput)
+
 	ListThingsInThingGroup(*iot.ListThingsInThingGroupInput) (*iot.ListThingsInThingGroupOutput, error)
 	ListThingsInThingGroupWithContext(aws.Context, *iot.ListThingsInThingGroupInput, ...request.Option) (*iot.ListThingsInThingGroupOutput, error)
 	ListThingsInThingGroupRequest(*iot.ListThingsInThingGroupInput) (*request.Request, *iot.ListThingsInThingGroupOutput)
@@ -551,6 +591,10 @@ type IoTAPI interface {
 	RejectCertificateTransfer(*iot.RejectCertificateTransferInput) (*iot.RejectCertificateTransferOutput, error)
 	RejectCertificateTransferWithContext(aws.Context, *iot.RejectCertificateTransferInput, ...request.Option) (*iot.RejectCertificateTransferOutput, error)
 	RejectCertificateTransferRequest(*iot.RejectCertificateTransferInput) (*request.Request, *iot.RejectCertificateTransferOutput)
+
+	RemoveThingFromBillingGroup(*iot.RemoveThingFromBillingGroupInput) (*iot.RemoveThingFromBillingGroupOutput, error)
+	RemoveThingFromBillingGroupWithContext(aws.Context, *iot.RemoveThingFromBillingGroupInput, ...request.Option) (*iot.RemoveThingFromBillingGroupOutput, error)
+	RemoveThingFromBillingGroupRequest(*iot.RemoveThingFromBillingGroupInput) (*request.Request, *iot.RemoveThingFromBillingGroupOutput)
 
 	RemoveThingFromThingGroup(*iot.RemoveThingFromThingGroupInput) (*iot.RemoveThingFromThingGroupOutput, error)
 	RemoveThingFromThingGroupWithContext(aws.Context, *iot.RemoveThingFromThingGroupInput, ...request.Option) (*iot.RemoveThingFromThingGroupOutput, error)
@@ -596,6 +640,10 @@ type IoTAPI interface {
 	StopThingRegistrationTaskWithContext(aws.Context, *iot.StopThingRegistrationTaskInput, ...request.Option) (*iot.StopThingRegistrationTaskOutput, error)
 	StopThingRegistrationTaskRequest(*iot.StopThingRegistrationTaskInput) (*request.Request, *iot.StopThingRegistrationTaskOutput)
 
+	TagResource(*iot.TagResourceInput) (*iot.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *iot.TagResourceInput, ...request.Option) (*iot.TagResourceOutput, error)
+	TagResourceRequest(*iot.TagResourceInput) (*request.Request, *iot.TagResourceOutput)
+
 	TestAuthorization(*iot.TestAuthorizationInput) (*iot.TestAuthorizationOutput, error)
 	TestAuthorizationWithContext(aws.Context, *iot.TestAuthorizationInput, ...request.Option) (*iot.TestAuthorizationOutput, error)
 	TestAuthorizationRequest(*iot.TestAuthorizationInput) (*request.Request, *iot.TestAuthorizationOutput)
@@ -608,6 +656,10 @@ type IoTAPI interface {
 	TransferCertificateWithContext(aws.Context, *iot.TransferCertificateInput, ...request.Option) (*iot.TransferCertificateOutput, error)
 	TransferCertificateRequest(*iot.TransferCertificateInput) (*request.Request, *iot.TransferCertificateOutput)
 
+	UntagResource(*iot.UntagResourceInput) (*iot.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *iot.UntagResourceInput, ...request.Option) (*iot.UntagResourceOutput, error)
+	UntagResourceRequest(*iot.UntagResourceInput) (*request.Request, *iot.UntagResourceOutput)
+
 	UpdateAccountAuditConfiguration(*iot.UpdateAccountAuditConfigurationInput) (*iot.UpdateAccountAuditConfigurationOutput, error)
 	UpdateAccountAuditConfigurationWithContext(aws.Context, *iot.UpdateAccountAuditConfigurationInput, ...request.Option) (*iot.UpdateAccountAuditConfigurationOutput, error)
 	UpdateAccountAuditConfigurationRequest(*iot.UpdateAccountAuditConfigurationInput) (*request.Request, *iot.UpdateAccountAuditConfigurationOutput)
@@ -615,6 +667,10 @@ type IoTAPI interface {
 	UpdateAuthorizer(*iot.UpdateAuthorizerInput) (*iot.UpdateAuthorizerOutput, error)
 	UpdateAuthorizerWithContext(aws.Context, *iot.UpdateAuthorizerInput, ...request.Option) (*iot.UpdateAuthorizerOutput, error)
 	UpdateAuthorizerRequest(*iot.UpdateAuthorizerInput) (*request.Request, *iot.UpdateAuthorizerOutput)
+
+	UpdateBillingGroup(*iot.UpdateBillingGroupInput) (*iot.UpdateBillingGroupOutput, error)
+	UpdateBillingGroupWithContext(aws.Context, *iot.UpdateBillingGroupInput, ...request.Option) (*iot.UpdateBillingGroupOutput, error)
+	UpdateBillingGroupRequest(*iot.UpdateBillingGroupInput) (*request.Request, *iot.UpdateBillingGroupOutput)
 
 	UpdateCACertificate(*iot.UpdateCACertificateInput) (*iot.UpdateCACertificateOutput, error)
 	UpdateCACertificateWithContext(aws.Context, *iot.UpdateCACertificateInput, ...request.Option) (*iot.UpdateCACertificateOutput, error)
@@ -624,6 +680,10 @@ type IoTAPI interface {
 	UpdateCertificateWithContext(aws.Context, *iot.UpdateCertificateInput, ...request.Option) (*iot.UpdateCertificateOutput, error)
 	UpdateCertificateRequest(*iot.UpdateCertificateInput) (*request.Request, *iot.UpdateCertificateOutput)
 
+	UpdateDynamicThingGroup(*iot.UpdateDynamicThingGroupInput) (*iot.UpdateDynamicThingGroupOutput, error)
+	UpdateDynamicThingGroupWithContext(aws.Context, *iot.UpdateDynamicThingGroupInput, ...request.Option) (*iot.UpdateDynamicThingGroupOutput, error)
+	UpdateDynamicThingGroupRequest(*iot.UpdateDynamicThingGroupInput) (*request.Request, *iot.UpdateDynamicThingGroupOutput)
+
 	UpdateEventConfigurations(*iot.UpdateEventConfigurationsInput) (*iot.UpdateEventConfigurationsOutput, error)
 	UpdateEventConfigurationsWithContext(aws.Context, *iot.UpdateEventConfigurationsInput, ...request.Option) (*iot.UpdateEventConfigurationsOutput, error)
 	UpdateEventConfigurationsRequest(*iot.UpdateEventConfigurationsInput) (*request.Request, *iot.UpdateEventConfigurationsOutput)
@@ -631,6 +691,10 @@ type IoTAPI interface {
 	UpdateIndexingConfiguration(*iot.UpdateIndexingConfigurationInput) (*iot.UpdateIndexingConfigurationOutput, error)
 	UpdateIndexingConfigurationWithContext(aws.Context, *iot.UpdateIndexingConfigurationInput, ...request.Option) (*iot.UpdateIndexingConfigurationOutput, error)
 	UpdateIndexingConfigurationRequest(*iot.UpdateIndexingConfigurationInput) (*request.Request, *iot.UpdateIndexingConfigurationOutput)
+
+	UpdateJob(*iot.UpdateJobInput) (*iot.UpdateJobOutput, error)
+	UpdateJobWithContext(aws.Context, *iot.UpdateJobInput, ...request.Option) (*iot.UpdateJobOutput, error)
+	UpdateJobRequest(*iot.UpdateJobInput) (*request.Request, *iot.UpdateJobOutput)
 
 	UpdateRoleAlias(*iot.UpdateRoleAliasInput) (*iot.UpdateRoleAliasOutput, error)
 	UpdateRoleAliasWithContext(aws.Context, *iot.UpdateRoleAliasInput, ...request.Option) (*iot.UpdateRoleAliasOutput, error)

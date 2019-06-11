@@ -25,11 +25,11 @@
 			</dl>
 			<dl>
 			<dd><a href="#pkg-overview" class="overviewLink">Overview</a></dd>
-			{{if .Consts}}
-				<dd><a href="#pkg-constants" class="examplesLink">Constants</a></dd>
-			{{end}}
 			{{if $.Examples}}
 				<dd><a href="#pkg-examples" class="examplesLink">Examples</a></dd>
+			{{end}}
+			{{if .Consts}}
+				<dd><a href="#pkg-constants" class="examplesLink">Constants</a></dd>
 			{{end}}
 			</dl>
 		</div>
@@ -43,7 +43,7 @@
 				{{comment_html .Doc}}
 				<p>
 				{{if ne $.IfaceLink ""}}
-				The stub package, <a href={{$.IfaceLink}}>{{$.PDoc.Name}}iface</a>, can be used to provide alternative implementations of service clients, 
+				The stub package, <a href={{$.IfaceLink}}>{{$.PDoc.Name}}iface</a>, can be used to provide alternative implementations of service clients,
 				such as mocking the client for testing.
 				{{end}}
 				</p?>
@@ -193,7 +193,7 @@
 		</div>
 		</div> <!-- #pkg-callgraph -->
 		{{ with .Consts -}}
-			<div id="pkg-consts" class="toggle">
+			<div id="pkg-constants" class="toggle">
 				<div class="collapsed">
 					<h2 class="toggleButton" title="Click to show Index section">Constants ▹</h2>
 				</div>

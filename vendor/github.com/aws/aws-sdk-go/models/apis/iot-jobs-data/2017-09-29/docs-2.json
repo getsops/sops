@@ -8,6 +8,18 @@
     "UpdateJobExecution": "<p>Updates the status of a job execution.</p>"
   },
   "shapes": {
+    "ApproximateSecondsBeforeTimedOut": {
+      "base": null,
+      "refs": {
+        "JobExecution$approximateSecondsBeforeTimedOut": "<p>The estimated number of seconds that remain before the job execution status will be changed to <code>TIMED_OUT</code>.</p>"
+      }
+    },
+    "BinaryBlob": {
+      "base": null,
+      "refs": {
+        "ThrottlingException$payload": "<p>The payload associated with the exception.</p>"
+      }
+    },
     "CertificateValidationException": {
       "base": "<p>The certificate is invalid.</p>",
       "refs": {
@@ -188,6 +200,13 @@
         "JobExecutionSummary$startedAt": "<p>The time, in milliseconds since the epoch, when the job execution started.</p>"
       }
     },
+    "StepTimeoutInMinutes": {
+      "base": null,
+      "refs": {
+        "StartNextPendingJobExecutionRequest$stepTimeoutInMinutes": "<p>Specifies the amount of time this device has to finish execution of this job. If the job execution status is not set to a terminal state before this timer expires, or before the timer is reset (by calling <code>UpdateJobExecution</code>, setting the status to <code>IN_PROGRESS</code> and specifying a new timeout value in field <code>stepTimeoutInMinutes</code>) the job execution status will be automatically set to <code>TIMED_OUT</code>. Note that setting this timeout has no effect on that job execution timeout which may have been specified when the job was created (<code>CreateJob</code> using field <code>timeoutConfig</code>).</p>",
+        "UpdateJobExecutionRequest$stepTimeoutInMinutes": "<p>Specifies the amount of time this device has to finish execution of this job. If the job execution status is not set to a terminal state before this timer expires, or before the timer is reset (by again calling <code>UpdateJobExecution</code>, setting the status to <code>IN_PROGRESS</code> and specifying a new timeout value in this field) the job execution status will be automatically set to <code>TIMED_OUT</code>. Note that setting or resetting this timeout has no effect on that job execution timeout which may have been specified when the job was created (<code>CreateJob</code> using field <code>timeoutConfig</code>).</p>"
+      }
+    },
     "TerminalStateException": {
       "base": "<p>The job is in a terminal state.</p>",
       "refs": {
@@ -235,7 +254,7 @@
         "ResourceNotFoundException$message": "<p>The message for the exception.</p>",
         "ServiceUnavailableException$message": "<p>The message for the exception.</p>",
         "TerminalStateException$message": null,
-        "ThrottlingException$message": "<p>The message for the exception.</p>"
+        "ThrottlingException$message": "<p>The message associated with the exception.</p>"
       }
     }
   }

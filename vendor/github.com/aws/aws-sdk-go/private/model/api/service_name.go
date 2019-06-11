@@ -3,7 +3,7 @@
 package api
 
 // ServiceName returns the SDK's naming of the service. Has
-// backwards compatability built in for services that were
+// backwards compatibility built in for services that were
 // incorrectly named with the service's endpoint prefix.
 func ServiceName(a *API) string {
 	if oldName, ok := oldServiceNames[a.PackageName()]; ok {

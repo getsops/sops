@@ -3,9 +3,13 @@
 package appsync
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 )
 
 const opCreateApiKey = "CreateApiKey"
@@ -13,7 +17,7 @@ const opCreateApiKey = "CreateApiKey"
 // CreateApiKeyRequest generates a "aws/request.Request" representing the
 // client's request for the CreateApiKey operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -65,11 +69,11 @@ func (c *AppSync) CreateApiKeyRequest(input *CreateApiKeyInput) (req *request.Re
 // Returned Error Codes:
 //   * ErrCodeBadRequestException "BadRequestException"
 //   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and try again.
+//   field is missing. Check the field values, and then try again.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded a limit. Try your request again.
@@ -117,7 +121,7 @@ const opCreateDataSource = "CreateDataSource"
 // CreateDataSourceRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDataSource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -168,15 +172,15 @@ func (c *AppSync) CreateDataSourceRequest(input *CreateDataSourceInput) (req *re
 // Returned Error Codes:
 //   * ErrCodeBadRequestException "BadRequestException"
 //   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and try again.
+//   field is missing. Check the field values, and then try again.
 //
 //   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   Another modification is being made. That modification must complete before
+//   Another modification is in progress at this time and it must complete before
 //   you can make your change.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -206,12 +210,105 @@ func (c *AppSync) CreateDataSourceWithContext(ctx aws.Context, input *CreateData
 	return out, req.Send()
 }
 
+const opCreateFunction = "CreateFunction"
+
+// CreateFunctionRequest generates a "aws/request.Request" representing the
+// client's request for the CreateFunction operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateFunction for more information on using the CreateFunction
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateFunctionRequest method.
+//    req, resp := client.CreateFunctionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/CreateFunction
+func (c *AppSync) CreateFunctionRequest(input *CreateFunctionInput) (req *request.Request, output *CreateFunctionOutput) {
+	op := &request.Operation{
+		Name:       opCreateFunction,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v1/apis/{apiId}/functions",
+	}
+
+	if input == nil {
+		input = &CreateFunctionInput{}
+	}
+
+	output = &CreateFunctionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateFunction API operation for AWS AppSync.
+//
+// Creates a Function object.
+//
+// A function is a reusable entity. Multiple functions can be used to compose
+// the resolver logic.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS AppSync's
+// API operation CreateFunction for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Another modification is in progress at this time and it must complete before
+//   you can make your change.
+//
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
+//
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   You are not authorized to perform this operation.
+//
+//   * ErrCodeInternalFailureException "InternalFailureException"
+//   An internal AWS AppSync error occurred. Try your request again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/CreateFunction
+func (c *AppSync) CreateFunction(input *CreateFunctionInput) (*CreateFunctionOutput, error) {
+	req, out := c.CreateFunctionRequest(input)
+	return out, req.Send()
+}
+
+// CreateFunctionWithContext is the same as CreateFunction with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateFunction for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppSync) CreateFunctionWithContext(ctx aws.Context, input *CreateFunctionInput, opts ...request.Option) (*CreateFunctionOutput, error) {
+	req, out := c.CreateFunctionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateGraphqlApi = "CreateGraphqlApi"
 
 // CreateGraphqlApiRequest generates a "aws/request.Request" representing the
 // client's request for the CreateGraphqlApi operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -262,13 +359,13 @@ func (c *AppSync) CreateGraphqlApiRequest(input *CreateGraphqlApiInput) (req *re
 // Returned Error Codes:
 //   * ErrCodeBadRequestException "BadRequestException"
 //   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and try again.
+//   field is missing. Check the field values, and then try again.
 //
 //   * ErrCodeLimitExceededException "LimitExceededException"
 //   The request exceeded a limit. Try your request again.
 //
 //   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   Another modification is being made. That modification must complete before
+//   Another modification is in progress at this time and it must complete before
 //   you can make your change.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
@@ -307,7 +404,7 @@ const opCreateResolver = "CreateResolver"
 // CreateResolverRequest generates a "aws/request.Request" representing the
 // client's request for the CreateResolver operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -360,12 +457,12 @@ func (c *AppSync) CreateResolverRequest(input *CreateResolverInput) (req *reques
 //
 // Returned Error Codes:
 //   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   Another modification is being made. That modification must complete before
+//   Another modification is in progress at this time and it must complete before
 //   you can make your change.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -400,7 +497,7 @@ const opCreateType = "CreateType"
 // CreateTypeRequest generates a "aws/request.Request" representing the
 // client's request for the CreateType operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -451,15 +548,15 @@ func (c *AppSync) CreateTypeRequest(input *CreateTypeInput) (req *request.Reques
 // Returned Error Codes:
 //   * ErrCodeBadRequestException "BadRequestException"
 //   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and try again.
+//   field is missing. Check the field values, and then try again.
 //
 //   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   Another modification is being made. That modification must complete before
+//   Another modification is in progress at this time and it must complete before
 //   you can make your change.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -494,7 +591,7 @@ const opDeleteApiKey = "DeleteApiKey"
 // DeleteApiKeyRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteApiKey operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -528,6 +625,7 @@ func (c *AppSync) DeleteApiKeyRequest(input *DeleteApiKeyInput) (req *request.Re
 
 	output = &DeleteApiKeyOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -545,11 +643,11 @@ func (c *AppSync) DeleteApiKeyRequest(input *DeleteApiKeyInput) (req *request.Re
 // Returned Error Codes:
 //   * ErrCodeBadRequestException "BadRequestException"
 //   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and try again.
+//   field is missing. Check the field values, and then try again.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -584,7 +682,7 @@ const opDeleteDataSource = "DeleteDataSource"
 // DeleteDataSourceRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDataSource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -618,6 +716,7 @@ func (c *AppSync) DeleteDataSourceRequest(input *DeleteDataSourceInput) (req *re
 
 	output = &DeleteDataSourceOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -635,15 +734,15 @@ func (c *AppSync) DeleteDataSourceRequest(input *DeleteDataSourceInput) (req *re
 // Returned Error Codes:
 //   * ErrCodeBadRequestException "BadRequestException"
 //   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and try again.
+//   field is missing. Check the field values, and then try again.
 //
 //   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   Another modification is being made. That modification must complete before
+//   Another modification is in progress at this time and it must complete before
 //   you can make your change.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -673,12 +772,103 @@ func (c *AppSync) DeleteDataSourceWithContext(ctx aws.Context, input *DeleteData
 	return out, req.Send()
 }
 
+const opDeleteFunction = "DeleteFunction"
+
+// DeleteFunctionRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteFunction operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteFunction for more information on using the DeleteFunction
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteFunctionRequest method.
+//    req, resp := client.DeleteFunctionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DeleteFunction
+func (c *AppSync) DeleteFunctionRequest(input *DeleteFunctionInput) (req *request.Request, output *DeleteFunctionOutput) {
+	op := &request.Operation{
+		Name:       opDeleteFunction,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/v1/apis/{apiId}/functions/{functionId}",
+	}
+
+	if input == nil {
+		input = &DeleteFunctionInput{}
+	}
+
+	output = &DeleteFunctionOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteFunction API operation for AWS AppSync.
+//
+// Deletes a Function.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS AppSync's
+// API operation DeleteFunction for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Another modification is in progress at this time and it must complete before
+//   you can make your change.
+//
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
+//
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   You are not authorized to perform this operation.
+//
+//   * ErrCodeInternalFailureException "InternalFailureException"
+//   An internal AWS AppSync error occurred. Try your request again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DeleteFunction
+func (c *AppSync) DeleteFunction(input *DeleteFunctionInput) (*DeleteFunctionOutput, error) {
+	req, out := c.DeleteFunctionRequest(input)
+	return out, req.Send()
+}
+
+// DeleteFunctionWithContext is the same as DeleteFunction with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteFunction for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppSync) DeleteFunctionWithContext(ctx aws.Context, input *DeleteFunctionInput, opts ...request.Option) (*DeleteFunctionOutput, error) {
+	req, out := c.DeleteFunctionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteGraphqlApi = "DeleteGraphqlApi"
 
 // DeleteGraphqlApiRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteGraphqlApi operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -712,6 +902,7 @@ func (c *AppSync) DeleteGraphqlApiRequest(input *DeleteGraphqlApiInput) (req *re
 
 	output = &DeleteGraphqlApiOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -729,21 +920,24 @@ func (c *AppSync) DeleteGraphqlApiRequest(input *DeleteGraphqlApiInput) (req *re
 // Returned Error Codes:
 //   * ErrCodeBadRequestException "BadRequestException"
 //   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and try again.
+//   field is missing. Check the field values, and then try again.
 //
 //   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   Another modification is being made. That modification must complete before
+//   Another modification is in progress at this time and it must complete before
 //   you can make your change.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
 //
 //   * ErrCodeInternalFailureException "InternalFailureException"
 //   An internal AWS AppSync error occurred. Try your request again.
+//
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
+//   You do not have access to perform this operation on this resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/DeleteGraphqlApi
 func (c *AppSync) DeleteGraphqlApi(input *DeleteGraphqlApiInput) (*DeleteGraphqlApiOutput, error) {
@@ -772,7 +966,7 @@ const opDeleteResolver = "DeleteResolver"
 // DeleteResolverRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteResolver operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -806,6 +1000,7 @@ func (c *AppSync) DeleteResolverRequest(input *DeleteResolverInput) (req *reques
 
 	output = &DeleteResolverOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -822,12 +1017,12 @@ func (c *AppSync) DeleteResolverRequest(input *DeleteResolverInput) (req *reques
 //
 // Returned Error Codes:
 //   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   Another modification is being made. That modification must complete before
+//   Another modification is in progress at this time and it must complete before
 //   you can make your change.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -862,7 +1057,7 @@ const opDeleteType = "DeleteType"
 // DeleteTypeRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteType operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -896,6 +1091,7 @@ func (c *AppSync) DeleteTypeRequest(input *DeleteTypeInput) (req *request.Reques
 
 	output = &DeleteTypeOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -913,15 +1109,15 @@ func (c *AppSync) DeleteTypeRequest(input *DeleteTypeInput) (req *request.Reques
 // Returned Error Codes:
 //   * ErrCodeBadRequestException "BadRequestException"
 //   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and try again.
+//   field is missing. Check the field values, and then try again.
 //
 //   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   Another modification is being made. That modification must complete before
+//   Another modification is in progress at this time and it must complete before
 //   you can make your change.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -956,7 +1152,7 @@ const opGetDataSource = "GetDataSource"
 // GetDataSourceRequest generates a "aws/request.Request" representing the
 // client's request for the GetDataSource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1007,15 +1203,15 @@ func (c *AppSync) GetDataSourceRequest(input *GetDataSourceInput) (req *request.
 // Returned Error Codes:
 //   * ErrCodeBadRequestException "BadRequestException"
 //   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and try again.
+//   field is missing. Check the field values, and then try again.
 //
 //   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   Another modification is being made. That modification must complete before
+//   Another modification is in progress at this time and it must complete before
 //   you can make your change.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -1045,12 +1241,99 @@ func (c *AppSync) GetDataSourceWithContext(ctx aws.Context, input *GetDataSource
 	return out, req.Send()
 }
 
+const opGetFunction = "GetFunction"
+
+// GetFunctionRequest generates a "aws/request.Request" representing the
+// client's request for the GetFunction operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetFunction for more information on using the GetFunction
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetFunctionRequest method.
+//    req, resp := client.GetFunctionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetFunction
+func (c *AppSync) GetFunctionRequest(input *GetFunctionInput) (req *request.Request, output *GetFunctionOutput) {
+	op := &request.Operation{
+		Name:       opGetFunction,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v1/apis/{apiId}/functions/{functionId}",
+	}
+
+	if input == nil {
+		input = &GetFunctionInput{}
+	}
+
+	output = &GetFunctionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetFunction API operation for AWS AppSync.
+//
+// Get a Function.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS AppSync's
+// API operation GetFunction for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Another modification is in progress at this time and it must complete before
+//   you can make your change.
+//
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
+//
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   You are not authorized to perform this operation.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetFunction
+func (c *AppSync) GetFunction(input *GetFunctionInput) (*GetFunctionOutput, error) {
+	req, out := c.GetFunctionRequest(input)
+	return out, req.Send()
+}
+
+// GetFunctionWithContext is the same as GetFunction with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetFunction for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppSync) GetFunctionWithContext(ctx aws.Context, input *GetFunctionInput, opts ...request.Option) (*GetFunctionOutput, error) {
+	req, out := c.GetFunctionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetGraphqlApi = "GetGraphqlApi"
 
 // GetGraphqlApiRequest generates a "aws/request.Request" representing the
 // client's request for the GetGraphqlApi operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1101,17 +1384,20 @@ func (c *AppSync) GetGraphqlApiRequest(input *GetGraphqlApiInput) (req *request.
 // Returned Error Codes:
 //   * ErrCodeBadRequestException "BadRequestException"
 //   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and try again.
+//   field is missing. Check the field values, and then try again.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
 //
 //   * ErrCodeInternalFailureException "InternalFailureException"
 //   An internal AWS AppSync error occurred. Try your request again.
+//
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
+//   You do not have access to perform this operation on this resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/GetGraphqlApi
 func (c *AppSync) GetGraphqlApi(input *GetGraphqlApiInput) (*GetGraphqlApiOutput, error) {
@@ -1140,7 +1426,7 @@ const opGetIntrospectionSchema = "GetIntrospectionSchema"
 // GetIntrospectionSchemaRequest generates a "aws/request.Request" representing the
 // client's request for the GetIntrospectionSchema operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1193,8 +1479,8 @@ func (c *AppSync) GetIntrospectionSchemaRequest(input *GetIntrospectionSchemaInp
 //   The GraphQL schema is not valid.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -1229,7 +1515,7 @@ const opGetResolver = "GetResolver"
 // GetResolverRequest generates a "aws/request.Request" representing the
 // client's request for the GetResolver operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1279,12 +1565,12 @@ func (c *AppSync) GetResolverRequest(input *GetResolverInput) (req *request.Requ
 //
 // Returned Error Codes:
 //   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   Another modification is being made. That modification must complete before
+//   Another modification is in progress at this time and it must complete before
 //   you can make your change.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -1316,7 +1602,7 @@ const opGetSchemaCreationStatus = "GetSchemaCreationStatus"
 // GetSchemaCreationStatusRequest generates a "aws/request.Request" representing the
 // client's request for the GetSchemaCreationStatus operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1367,11 +1653,11 @@ func (c *AppSync) GetSchemaCreationStatusRequest(input *GetSchemaCreationStatusI
 // Returned Error Codes:
 //   * ErrCodeBadRequestException "BadRequestException"
 //   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and try again.
+//   field is missing. Check the field values, and then try again.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -1406,7 +1692,7 @@ const opGetType = "GetType"
 // GetTypeRequest generates a "aws/request.Request" representing the
 // client's request for the GetType operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1457,15 +1743,15 @@ func (c *AppSync) GetTypeRequest(input *GetTypeInput) (req *request.Request, out
 // Returned Error Codes:
 //   * ErrCodeBadRequestException "BadRequestException"
 //   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and try again.
+//   field is missing. Check the field values, and then try again.
 //
 //   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   Another modification is being made. That modification must complete before
+//   Another modification is in progress at this time and it must complete before
 //   you can make your change.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -1500,7 +1786,7 @@ const opListApiKeys = "ListApiKeys"
 // ListApiKeysRequest generates a "aws/request.Request" representing the
 // client's request for the ListApiKeys operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1556,11 +1842,11 @@ func (c *AppSync) ListApiKeysRequest(input *ListApiKeysInput) (req *request.Requ
 // Returned Error Codes:
 //   * ErrCodeBadRequestException "BadRequestException"
 //   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and try again.
+//   field is missing. Check the field values, and then try again.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -1595,7 +1881,7 @@ const opListDataSources = "ListDataSources"
 // ListDataSourcesRequest generates a "aws/request.Request" representing the
 // client's request for the ListDataSources operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1646,11 +1932,11 @@ func (c *AppSync) ListDataSourcesRequest(input *ListDataSourcesInput) (req *requ
 // Returned Error Codes:
 //   * ErrCodeBadRequestException "BadRequestException"
 //   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and try again.
+//   field is missing. Check the field values, and then try again.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -1680,12 +1966,102 @@ func (c *AppSync) ListDataSourcesWithContext(ctx aws.Context, input *ListDataSou
 	return out, req.Send()
 }
 
+const opListFunctions = "ListFunctions"
+
+// ListFunctionsRequest generates a "aws/request.Request" representing the
+// client's request for the ListFunctions operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListFunctions for more information on using the ListFunctions
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListFunctionsRequest method.
+//    req, resp := client.ListFunctionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListFunctions
+func (c *AppSync) ListFunctionsRequest(input *ListFunctionsInput) (req *request.Request, output *ListFunctionsOutput) {
+	op := &request.Operation{
+		Name:       opListFunctions,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v1/apis/{apiId}/functions",
+	}
+
+	if input == nil {
+		input = &ListFunctionsInput{}
+	}
+
+	output = &ListFunctionsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListFunctions API operation for AWS AppSync.
+//
+// List multiple functions.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS AppSync's
+// API operation ListFunctions for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
+//   The request is not well formed. For example, a value is invalid or a required
+//   field is missing. Check the field values, and then try again.
+//
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
+//
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   You are not authorized to perform this operation.
+//
+//   * ErrCodeInternalFailureException "InternalFailureException"
+//   An internal AWS AppSync error occurred. Try your request again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListFunctions
+func (c *AppSync) ListFunctions(input *ListFunctionsInput) (*ListFunctionsOutput, error) {
+	req, out := c.ListFunctionsRequest(input)
+	return out, req.Send()
+}
+
+// ListFunctionsWithContext is the same as ListFunctions with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListFunctions for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppSync) ListFunctionsWithContext(ctx aws.Context, input *ListFunctionsInput, opts ...request.Option) (*ListFunctionsOutput, error) {
+	req, out := c.ListFunctionsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListGraphqlApis = "ListGraphqlApis"
 
 // ListGraphqlApisRequest generates a "aws/request.Request" representing the
 // client's request for the ListGraphqlApis operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1736,7 +2112,7 @@ func (c *AppSync) ListGraphqlApisRequest(input *ListGraphqlApisInput) (req *requ
 // Returned Error Codes:
 //   * ErrCodeBadRequestException "BadRequestException"
 //   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and try again.
+//   field is missing. Check the field values, and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -1771,7 +2147,7 @@ const opListResolvers = "ListResolvers"
 // ListResolversRequest generates a "aws/request.Request" representing the
 // client's request for the ListResolvers operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1822,11 +2198,11 @@ func (c *AppSync) ListResolversRequest(input *ListResolversInput) (req *request.
 // Returned Error Codes:
 //   * ErrCodeBadRequestException "BadRequestException"
 //   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and try again.
+//   field is missing. Check the field values, and then try again.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -1856,12 +2232,198 @@ func (c *AppSync) ListResolversWithContext(ctx aws.Context, input *ListResolvers
 	return out, req.Send()
 }
 
+const opListResolversByFunction = "ListResolversByFunction"
+
+// ListResolversByFunctionRequest generates a "aws/request.Request" representing the
+// client's request for the ListResolversByFunction operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListResolversByFunction for more information on using the ListResolversByFunction
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListResolversByFunctionRequest method.
+//    req, resp := client.ListResolversByFunctionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListResolversByFunction
+func (c *AppSync) ListResolversByFunctionRequest(input *ListResolversByFunctionInput) (req *request.Request, output *ListResolversByFunctionOutput) {
+	op := &request.Operation{
+		Name:       opListResolversByFunction,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v1/apis/{apiId}/functions/{functionId}/resolvers",
+	}
+
+	if input == nil {
+		input = &ListResolversByFunctionInput{}
+	}
+
+	output = &ListResolversByFunctionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListResolversByFunction API operation for AWS AppSync.
+//
+// List the resolvers that are associated with a specific function.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS AppSync's
+// API operation ListResolversByFunction for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
+//   The request is not well formed. For example, a value is invalid or a required
+//   field is missing. Check the field values, and then try again.
+//
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
+//
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   You are not authorized to perform this operation.
+//
+//   * ErrCodeInternalFailureException "InternalFailureException"
+//   An internal AWS AppSync error occurred. Try your request again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListResolversByFunction
+func (c *AppSync) ListResolversByFunction(input *ListResolversByFunctionInput) (*ListResolversByFunctionOutput, error) {
+	req, out := c.ListResolversByFunctionRequest(input)
+	return out, req.Send()
+}
+
+// ListResolversByFunctionWithContext is the same as ListResolversByFunction with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListResolversByFunction for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppSync) ListResolversByFunctionWithContext(ctx aws.Context, input *ListResolversByFunctionInput, opts ...request.Option) (*ListResolversByFunctionOutput, error) {
+	req, out := c.ListResolversByFunctionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListTagsForResource = "ListTagsForResource"
+
+// ListTagsForResourceRequest generates a "aws/request.Request" representing the
+// client's request for the ListTagsForResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListTagsForResource for more information on using the ListTagsForResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListTagsForResourceRequest method.
+//    req, resp := client.ListTagsForResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListTagsForResource
+func (c *AppSync) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
+	op := &request.Operation{
+		Name:       opListTagsForResource,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v1/tags/{resourceArn}",
+	}
+
+	if input == nil {
+		input = &ListTagsForResourceInput{}
+	}
+
+	output = &ListTagsForResourceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListTagsForResource API operation for AWS AppSync.
+//
+// Lists the tags for a resource.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS AppSync's
+// API operation ListTagsForResource for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
+//   The request is not well formed. For example, a value is invalid or a required
+//   field is missing. Check the field values, and then try again.
+//
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
+//
+//   * ErrCodeLimitExceededException "LimitExceededException"
+//   The request exceeded a limit. Try your request again.
+//
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   You are not authorized to perform this operation.
+//
+//   * ErrCodeInternalFailureException "InternalFailureException"
+//   An internal AWS AppSync error occurred. Try your request again.
+//
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
+//   You do not have access to perform this operation on this resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/ListTagsForResource
+func (c *AppSync) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	return out, req.Send()
+}
+
+// ListTagsForResourceWithContext is the same as ListTagsForResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListTagsForResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppSync) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsForResourceInput, opts ...request.Option) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListTypes = "ListTypes"
 
 // ListTypesRequest generates a "aws/request.Request" representing the
 // client's request for the ListTypes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1912,15 +2474,15 @@ func (c *AppSync) ListTypesRequest(input *ListTypesInput) (req *request.Request,
 // Returned Error Codes:
 //   * ErrCodeBadRequestException "BadRequestException"
 //   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and try again.
+//   field is missing. Check the field values, and then try again.
 //
 //   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   Another modification is being made. That modification must complete before
+//   Another modification is in progress at this time and it must complete before
 //   you can make your change.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -1955,7 +2517,7 @@ const opStartSchemaCreation = "StartSchemaCreation"
 // StartSchemaCreationRequest generates a "aws/request.Request" representing the
 // client's request for the StartSchemaCreation operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2008,15 +2570,15 @@ func (c *AppSync) StartSchemaCreationRequest(input *StartSchemaCreationInput) (r
 // Returned Error Codes:
 //   * ErrCodeBadRequestException "BadRequestException"
 //   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and try again.
+//   field is missing. Check the field values, and then try again.
 //
 //   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   Another modification is being made. That modification must complete before
+//   Another modification is in progress at this time and it must complete before
 //   you can make your change.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -2046,12 +2608,206 @@ func (c *AppSync) StartSchemaCreationWithContext(ctx aws.Context, input *StartSc
 	return out, req.Send()
 }
 
+const opTagResource = "TagResource"
+
+// TagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the TagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See TagResource for more information on using the TagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the TagResourceRequest method.
+//    req, resp := client.TagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/TagResource
+func (c *AppSync) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
+	op := &request.Operation{
+		Name:       opTagResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v1/tags/{resourceArn}",
+	}
+
+	if input == nil {
+		input = &TagResourceInput{}
+	}
+
+	output = &TagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// TagResource API operation for AWS AppSync.
+//
+// Tags a resource with user-supplied tags.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS AppSync's
+// API operation TagResource for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
+//   The request is not well formed. For example, a value is invalid or a required
+//   field is missing. Check the field values, and then try again.
+//
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
+//
+//   * ErrCodeLimitExceededException "LimitExceededException"
+//   The request exceeded a limit. Try your request again.
+//
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   You are not authorized to perform this operation.
+//
+//   * ErrCodeInternalFailureException "InternalFailureException"
+//   An internal AWS AppSync error occurred. Try your request again.
+//
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
+//   You do not have access to perform this operation on this resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/TagResource
+func (c *AppSync) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	return out, req.Send()
+}
+
+// TagResourceWithContext is the same as TagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See TagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppSync) TagResourceWithContext(ctx aws.Context, input *TagResourceInput, opts ...request.Option) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUntagResource = "UntagResource"
+
+// UntagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the UntagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UntagResource for more information on using the UntagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UntagResourceRequest method.
+//    req, resp := client.UntagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UntagResource
+func (c *AppSync) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
+	op := &request.Operation{
+		Name:       opUntagResource,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/v1/tags/{resourceArn}",
+	}
+
+	if input == nil {
+		input = &UntagResourceInput{}
+	}
+
+	output = &UntagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UntagResource API operation for AWS AppSync.
+//
+// Untags a resource.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS AppSync's
+// API operation UntagResource for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
+//   The request is not well formed. For example, a value is invalid or a required
+//   field is missing. Check the field values, and then try again.
+//
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
+//
+//   * ErrCodeLimitExceededException "LimitExceededException"
+//   The request exceeded a limit. Try your request again.
+//
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   You are not authorized to perform this operation.
+//
+//   * ErrCodeInternalFailureException "InternalFailureException"
+//   An internal AWS AppSync error occurred. Try your request again.
+//
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
+//   You do not have access to perform this operation on this resource.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UntagResource
+func (c *AppSync) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	return out, req.Send()
+}
+
+// UntagResourceWithContext is the same as UntagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UntagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppSync) UntagResourceWithContext(ctx aws.Context, input *UntagResourceInput, opts ...request.Option) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateApiKey = "UpdateApiKey"
 
 // UpdateApiKeyRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateApiKey operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2102,11 +2858,11 @@ func (c *AppSync) UpdateApiKeyRequest(input *UpdateApiKeyInput) (req *request.Re
 // Returned Error Codes:
 //   * ErrCodeBadRequestException "BadRequestException"
 //   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and try again.
+//   field is missing. Check the field values, and then try again.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -2148,7 +2904,7 @@ const opUpdateDataSource = "UpdateDataSource"
 // UpdateDataSourceRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateDataSource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2199,15 +2955,15 @@ func (c *AppSync) UpdateDataSourceRequest(input *UpdateDataSourceInput) (req *re
 // Returned Error Codes:
 //   * ErrCodeBadRequestException "BadRequestException"
 //   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and try again.
+//   field is missing. Check the field values, and then try again.
 //
 //   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   Another modification is being made. That modification must complete before
+//   Another modification is in progress at this time and it must complete before
 //   you can make your change.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -2237,12 +2993,102 @@ func (c *AppSync) UpdateDataSourceWithContext(ctx aws.Context, input *UpdateData
 	return out, req.Send()
 }
 
+const opUpdateFunction = "UpdateFunction"
+
+// UpdateFunctionRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateFunction operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateFunction for more information on using the UpdateFunction
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateFunctionRequest method.
+//    req, resp := client.UpdateFunctionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UpdateFunction
+func (c *AppSync) UpdateFunctionRequest(input *UpdateFunctionInput) (req *request.Request, output *UpdateFunctionOutput) {
+	op := &request.Operation{
+		Name:       opUpdateFunction,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v1/apis/{apiId}/functions/{functionId}",
+	}
+
+	if input == nil {
+		input = &UpdateFunctionInput{}
+	}
+
+	output = &UpdateFunctionOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateFunction API operation for AWS AppSync.
+//
+// Updates a Function object.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS AppSync's
+// API operation UpdateFunction for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Another modification is in progress at this time and it must complete before
+//   you can make your change.
+//
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
+//
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   You are not authorized to perform this operation.
+//
+//   * ErrCodeInternalFailureException "InternalFailureException"
+//   An internal AWS AppSync error occurred. Try your request again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UpdateFunction
+func (c *AppSync) UpdateFunction(input *UpdateFunctionInput) (*UpdateFunctionOutput, error) {
+	req, out := c.UpdateFunctionRequest(input)
+	return out, req.Send()
+}
+
+// UpdateFunctionWithContext is the same as UpdateFunction with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateFunction for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *AppSync) UpdateFunctionWithContext(ctx aws.Context, input *UpdateFunctionInput, opts ...request.Option) (*UpdateFunctionOutput, error) {
+	req, out := c.UpdateFunctionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateGraphqlApi = "UpdateGraphqlApi"
 
 // UpdateGraphqlApiRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateGraphqlApi operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2293,21 +3139,24 @@ func (c *AppSync) UpdateGraphqlApiRequest(input *UpdateGraphqlApiInput) (req *re
 // Returned Error Codes:
 //   * ErrCodeBadRequestException "BadRequestException"
 //   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and try again.
+//   field is missing. Check the field values, and then try again.
 //
 //   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   Another modification is being made. That modification must complete before
+//   Another modification is in progress at this time and it must complete before
 //   you can make your change.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
 //
 //   * ErrCodeInternalFailureException "InternalFailureException"
 //   An internal AWS AppSync error occurred. Try your request again.
+//
+//   * ErrCodeAccessDeniedException "AccessDeniedException"
+//   You do not have access to perform this operation on this resource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/appsync-2017-07-25/UpdateGraphqlApi
 func (c *AppSync) UpdateGraphqlApi(input *UpdateGraphqlApiInput) (*UpdateGraphqlApiOutput, error) {
@@ -2336,7 +3185,7 @@ const opUpdateResolver = "UpdateResolver"
 // UpdateResolverRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateResolver operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2386,12 +3235,12 @@ func (c *AppSync) UpdateResolverRequest(input *UpdateResolverInput) (req *reques
 //
 // Returned Error Codes:
 //   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   Another modification is being made. That modification must complete before
+//   Another modification is in progress at this time and it must complete before
 //   you can make your change.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -2426,7 +3275,7 @@ const opUpdateType = "UpdateType"
 // UpdateTypeRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateType operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2477,15 +3326,15 @@ func (c *AppSync) UpdateTypeRequest(input *UpdateTypeInput) (req *request.Reques
 // Returned Error Codes:
 //   * ErrCodeBadRequestException "BadRequestException"
 //   The request is not well formed. For example, a value is invalid or a required
-//   field is missing. Check the field values, and try again.
+//   field is missing. Check the field values, and then try again.
 //
 //   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   Another modification is being made. That modification must complete before
+//   Another modification is in progress at this time and it must complete before
 //   you can make your change.
 //
 //   * ErrCodeNotFoundException "NotFoundException"
-//   The resource specified in the request was not found. Check the resource and
-//   try again.
+//   The resource specified in the request was not found. Check the resource,
+//   and then try again.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -2515,15 +3364,77 @@ func (c *AppSync) UpdateTypeWithContext(ctx aws.Context, input *UpdateTypeInput,
 	return out, req.Send()
 }
 
+// Describes an additional authentication provider.
+type AdditionalAuthenticationProvider struct {
+	_ struct{} `type:"structure"`
+
+	// The authentication type: API key, AWS IAM, OIDC, or Amazon Cognito user pools.
+	AuthenticationType *string `locationName:"authenticationType" type:"string" enum:"AuthenticationType"`
+
+	// The OpenID Connect configuration.
+	OpenIDConnectConfig *OpenIDConnectConfig `locationName:"openIDConnectConfig" type:"structure"`
+
+	// The Amazon Cognito user pool configuration.
+	UserPoolConfig *CognitoUserPoolConfig `locationName:"userPoolConfig" type:"structure"`
+}
+
+// String returns the string representation
+func (s AdditionalAuthenticationProvider) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AdditionalAuthenticationProvider) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AdditionalAuthenticationProvider) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AdditionalAuthenticationProvider"}
+	if s.OpenIDConnectConfig != nil {
+		if err := s.OpenIDConnectConfig.Validate(); err != nil {
+			invalidParams.AddNested("OpenIDConnectConfig", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.UserPoolConfig != nil {
+		if err := s.UserPoolConfig.Validate(); err != nil {
+			invalidParams.AddNested("UserPoolConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAuthenticationType sets the AuthenticationType field's value.
+func (s *AdditionalAuthenticationProvider) SetAuthenticationType(v string) *AdditionalAuthenticationProvider {
+	s.AuthenticationType = &v
+	return s
+}
+
+// SetOpenIDConnectConfig sets the OpenIDConnectConfig field's value.
+func (s *AdditionalAuthenticationProvider) SetOpenIDConnectConfig(v *OpenIDConnectConfig) *AdditionalAuthenticationProvider {
+	s.OpenIDConnectConfig = v
+	return s
+}
+
+// SetUserPoolConfig sets the UserPoolConfig field's value.
+func (s *AdditionalAuthenticationProvider) SetUserPoolConfig(v *CognitoUserPoolConfig) *AdditionalAuthenticationProvider {
+	s.UserPoolConfig = v
+	return s
+}
+
 // Describes an API key.
 //
-// Customers invoke AWS AppSync GraphQL APIs with API keys as an identity mechanism.
-// There are two key versions:
+// Customers invoke AWS AppSync GraphQL API operations with API keys as an identity
+// mechanism. There are two key versions:
 //
 // da1: This version was introduced at launch in November 2017. These keys always
-// expire after 7 days. Key expiration is managed by DynamoDB TTL. The keys
-// will cease to be valid after Feb 21, 2018 and should not be used after that
-// date.
+// expire after 7 days. Key expiration is managed by Amazon DynamoDB TTL. The
+// keys ceased to be valid after February 21, 2018 and should not be used after
+// that date.
 //
 //    * ListApiKeys returns the expiration time in milliseconds.
 //
@@ -2533,10 +3444,10 @@ func (c *AppSync) UpdateTypeWithContext(ctx aws.Context, input *UpdateTypeInput,
 //
 //    * DeleteApiKey deletes the item from the table.
 //
-//    * Expiration is stored in DynamoDB as milliseconds. This results in a
-//    bug where keys are not automatically deleted because DynamoDB expects
+//    * Expiration is stored in Amazon DynamoDB as milliseconds. This results
+//    in a bug where keys are not automatically deleted because DynamoDB expects
 //    the TTL to be stored in seconds. As a one-time action, we will delete
-//    these keys from the table after Feb 21, 2018.
+//    these keys from the table after February 21, 2018.
 //
 // da2: This version was introduced in February 2018 when AppSync added support
 // to extend key expiration.
@@ -2552,7 +3463,7 @@ func (c *AppSync) UpdateTypeWithContext(ctx aws.Context, input *UpdateTypeInput,
 //
 //    * DeleteApiKey deletes the item from the table.
 //
-//    * Expiration is stored in DynamoDB as seconds.
+//    * Expiration is stored in Amazon DynamoDB as seconds.
 type ApiKey struct {
 	_ struct{} `type:"structure"`
 
@@ -2595,6 +3506,152 @@ func (s *ApiKey) SetId(v string) *ApiKey {
 	return s
 }
 
+// The authorization config in case the HTTP endpoint requires authorization.
+type AuthorizationConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The authorization type required by the HTTP endpoint.
+	//
+	//    * AWS_IAM: The authorization type is Sigv4.
+	//
+	// AuthorizationType is a required field
+	AuthorizationType *string `locationName:"authorizationType" type:"string" required:"true" enum:"AuthorizationType"`
+
+	// The AWS IAM settings.
+	AwsIamConfig *AwsIamConfig `locationName:"awsIamConfig" type:"structure"`
+}
+
+// String returns the string representation
+func (s AuthorizationConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AuthorizationConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AuthorizationConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AuthorizationConfig"}
+	if s.AuthorizationType == nil {
+		invalidParams.Add(request.NewErrParamRequired("AuthorizationType"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAuthorizationType sets the AuthorizationType field's value.
+func (s *AuthorizationConfig) SetAuthorizationType(v string) *AuthorizationConfig {
+	s.AuthorizationType = &v
+	return s
+}
+
+// SetAwsIamConfig sets the AwsIamConfig field's value.
+func (s *AuthorizationConfig) SetAwsIamConfig(v *AwsIamConfig) *AuthorizationConfig {
+	s.AwsIamConfig = v
+	return s
+}
+
+// The AWS IAM configuration.
+type AwsIamConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The signing region for AWS IAM authorization.
+	SigningRegion *string `locationName:"signingRegion" type:"string"`
+
+	// The signing service name for AWS IAM authorization.
+	SigningServiceName *string `locationName:"signingServiceName" type:"string"`
+}
+
+// String returns the string representation
+func (s AwsIamConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AwsIamConfig) GoString() string {
+	return s.String()
+}
+
+// SetSigningRegion sets the SigningRegion field's value.
+func (s *AwsIamConfig) SetSigningRegion(v string) *AwsIamConfig {
+	s.SigningRegion = &v
+	return s
+}
+
+// SetSigningServiceName sets the SigningServiceName field's value.
+func (s *AwsIamConfig) SetSigningServiceName(v string) *AwsIamConfig {
+	s.SigningServiceName = &v
+	return s
+}
+
+// Describes an Amazon Cognito user pool configuration.
+type CognitoUserPoolConfig struct {
+	_ struct{} `type:"structure"`
+
+	// A regular expression for validating the incoming Amazon Cognito user pool
+	// app client ID.
+	AppIdClientRegex *string `locationName:"appIdClientRegex" type:"string"`
+
+	// The AWS Region in which the user pool was created.
+	//
+	// AwsRegion is a required field
+	AwsRegion *string `locationName:"awsRegion" type:"string" required:"true"`
+
+	// The user pool ID.
+	//
+	// UserPoolId is a required field
+	UserPoolId *string `locationName:"userPoolId" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CognitoUserPoolConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CognitoUserPoolConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CognitoUserPoolConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CognitoUserPoolConfig"}
+	if s.AwsRegion == nil {
+		invalidParams.Add(request.NewErrParamRequired("AwsRegion"))
+	}
+	if s.UserPoolId == nil {
+		invalidParams.Add(request.NewErrParamRequired("UserPoolId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAppIdClientRegex sets the AppIdClientRegex field's value.
+func (s *CognitoUserPoolConfig) SetAppIdClientRegex(v string) *CognitoUserPoolConfig {
+	s.AppIdClientRegex = &v
+	return s
+}
+
+// SetAwsRegion sets the AwsRegion field's value.
+func (s *CognitoUserPoolConfig) SetAwsRegion(v string) *CognitoUserPoolConfig {
+	s.AwsRegion = &v
+	return s
+}
+
+// SetUserPoolId sets the UserPoolId field's value.
+func (s *CognitoUserPoolConfig) SetUserPoolId(v string) *CognitoUserPoolConfig {
+	s.UserPoolId = &v
+	return s
+}
+
 type CreateApiKeyInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2628,6 +3685,9 @@ func (s *CreateApiKeyInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateApiKeyInput"}
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
+	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -2688,13 +3748,13 @@ type CreateDataSourceInput struct {
 	// A description of the DataSource.
 	Description *string `locationName:"description" type:"string"`
 
-	// DynamoDB settings.
+	// Amazon DynamoDB settings.
 	DynamodbConfig *DynamodbDataSourceConfig `locationName:"dynamodbConfig" type:"structure"`
 
-	// Amazon Elasticsearch settings.
+	// Amazon Elasticsearch Service settings.
 	ElasticsearchConfig *ElasticsearchDataSourceConfig `locationName:"elasticsearchConfig" type:"structure"`
 
-	// Http endpoint settings.
+	// HTTP endpoint settings.
 	HttpConfig *HttpDataSourceConfig `locationName:"httpConfig" type:"structure"`
 
 	// AWS Lambda settings.
@@ -2705,8 +3765,11 @@ type CreateDataSourceInput struct {
 	// Name is a required field
 	Name *string `locationName:"name" type:"string" required:"true"`
 
-	// The IAM service role ARN for the data source. The system assumes this role
-	// when accessing the data source.
+	// Relational database settings.
+	RelationalDatabaseConfig *RelationalDatabaseDataSourceConfig `locationName:"relationalDatabaseConfig" type:"structure"`
+
+	// The AWS IAM service role ARN for the data source. The system assumes this
+	// role when accessing the data source.
 	ServiceRoleArn *string `locationName:"serviceRoleArn" type:"string"`
 
 	// The type of the DataSource.
@@ -2731,6 +3794,9 @@ func (s *CreateDataSourceInput) Validate() error {
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
 	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
 	}
@@ -2745,6 +3811,11 @@ func (s *CreateDataSourceInput) Validate() error {
 	if s.ElasticsearchConfig != nil {
 		if err := s.ElasticsearchConfig.Validate(); err != nil {
 			invalidParams.AddNested("ElasticsearchConfig", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.HttpConfig != nil {
+		if err := s.HttpConfig.Validate(); err != nil {
+			invalidParams.AddNested("HttpConfig", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.LambdaConfig != nil {
@@ -2801,6 +3872,12 @@ func (s *CreateDataSourceInput) SetName(v string) *CreateDataSourceInput {
 	return s
 }
 
+// SetRelationalDatabaseConfig sets the RelationalDatabaseConfig field's value.
+func (s *CreateDataSourceInput) SetRelationalDatabaseConfig(v *RelationalDatabaseDataSourceConfig) *CreateDataSourceInput {
+	s.RelationalDatabaseConfig = v
+	return s
+}
+
 // SetServiceRoleArn sets the ServiceRoleArn field's value.
 func (s *CreateDataSourceInput) SetServiceRoleArn(v string) *CreateDataSourceInput {
 	s.ServiceRoleArn = &v
@@ -2836,15 +3913,164 @@ func (s *CreateDataSourceOutput) SetDataSource(v *DataSource) *CreateDataSourceO
 	return s
 }
 
+type CreateFunctionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The GraphQL API ID.
+	//
+	// ApiId is a required field
+	ApiId *string `location:"uri" locationName:"apiId" type:"string" required:"true"`
+
+	// The Function DataSource name.
+	//
+	// DataSourceName is a required field
+	DataSourceName *string `locationName:"dataSourceName" type:"string" required:"true"`
+
+	// The Function description.
+	Description *string `locationName:"description" type:"string"`
+
+	// The version of the request mapping template. Currently the supported value
+	// is 2018-05-29.
+	//
+	// FunctionVersion is a required field
+	FunctionVersion *string `locationName:"functionVersion" type:"string" required:"true"`
+
+	// The Function name. The function name does not have to be unique.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" type:"string" required:"true"`
+
+	// The Function request mapping template. Functions support only the 2018-05-29
+	// version of the request mapping template.
+	//
+	// RequestMappingTemplate is a required field
+	RequestMappingTemplate *string `locationName:"requestMappingTemplate" min:"1" type:"string" required:"true"`
+
+	// The Function response mapping template.
+	ResponseMappingTemplate *string `locationName:"responseMappingTemplate" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s CreateFunctionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateFunctionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateFunctionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateFunctionInput"}
+	if s.ApiId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ApiId"))
+	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
+	if s.DataSourceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DataSourceName"))
+	}
+	if s.FunctionVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("FunctionVersion"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.RequestMappingTemplate == nil {
+		invalidParams.Add(request.NewErrParamRequired("RequestMappingTemplate"))
+	}
+	if s.RequestMappingTemplate != nil && len(*s.RequestMappingTemplate) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RequestMappingTemplate", 1))
+	}
+	if s.ResponseMappingTemplate != nil && len(*s.ResponseMappingTemplate) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResponseMappingTemplate", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetApiId sets the ApiId field's value.
+func (s *CreateFunctionInput) SetApiId(v string) *CreateFunctionInput {
+	s.ApiId = &v
+	return s
+}
+
+// SetDataSourceName sets the DataSourceName field's value.
+func (s *CreateFunctionInput) SetDataSourceName(v string) *CreateFunctionInput {
+	s.DataSourceName = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateFunctionInput) SetDescription(v string) *CreateFunctionInput {
+	s.Description = &v
+	return s
+}
+
+// SetFunctionVersion sets the FunctionVersion field's value.
+func (s *CreateFunctionInput) SetFunctionVersion(v string) *CreateFunctionInput {
+	s.FunctionVersion = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateFunctionInput) SetName(v string) *CreateFunctionInput {
+	s.Name = &v
+	return s
+}
+
+// SetRequestMappingTemplate sets the RequestMappingTemplate field's value.
+func (s *CreateFunctionInput) SetRequestMappingTemplate(v string) *CreateFunctionInput {
+	s.RequestMappingTemplate = &v
+	return s
+}
+
+// SetResponseMappingTemplate sets the ResponseMappingTemplate field's value.
+func (s *CreateFunctionInput) SetResponseMappingTemplate(v string) *CreateFunctionInput {
+	s.ResponseMappingTemplate = &v
+	return s
+}
+
+type CreateFunctionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Function object.
+	FunctionConfiguration *FunctionConfiguration `locationName:"functionConfiguration" type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateFunctionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateFunctionOutput) GoString() string {
+	return s.String()
+}
+
+// SetFunctionConfiguration sets the FunctionConfiguration field's value.
+func (s *CreateFunctionOutput) SetFunctionConfiguration(v *FunctionConfiguration) *CreateFunctionOutput {
+	s.FunctionConfiguration = v
+	return s
+}
+
 type CreateGraphqlApiInput struct {
 	_ struct{} `type:"structure"`
 
-	// The authentication type: API key, IAM, or Amazon Cognito User Pools.
+	// A list of additional authentication providers for the GraphqlApi API.
+	AdditionalAuthenticationProviders []*AdditionalAuthenticationProvider `locationName:"additionalAuthenticationProviders" type:"list"`
+
+	// The authentication type: API key, AWS IAM, OIDC, or Amazon Cognito user pools.
 	//
 	// AuthenticationType is a required field
 	AuthenticationType *string `locationName:"authenticationType" type:"string" required:"true" enum:"AuthenticationType"`
 
-	// The Amazon CloudWatch logs configuration.
+	// The Amazon CloudWatch Logs configuration.
 	LogConfig *LogConfig `locationName:"logConfig" type:"structure"`
 
 	// A user-supplied name for the GraphqlApi.
@@ -2852,10 +4078,13 @@ type CreateGraphqlApiInput struct {
 	// Name is a required field
 	Name *string `locationName:"name" type:"string" required:"true"`
 
-	// The Open Id Connect configuration configuration.
+	// The OpenID Connect configuration.
 	OpenIDConnectConfig *OpenIDConnectConfig `locationName:"openIDConnectConfig" type:"structure"`
 
-	// The Amazon Cognito User Pool configuration.
+	// A TagMap object.
+	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
+
+	// The Amazon Cognito user pool configuration.
 	UserPoolConfig *UserPoolConfig `locationName:"userPoolConfig" type:"structure"`
 }
 
@@ -2877,6 +4106,19 @@ func (s *CreateGraphqlApiInput) Validate() error {
 	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+	if s.AdditionalAuthenticationProviders != nil {
+		for i, v := range s.AdditionalAuthenticationProviders {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AdditionalAuthenticationProviders", i), err.(request.ErrInvalidParams))
+			}
+		}
 	}
 	if s.LogConfig != nil {
 		if err := s.LogConfig.Validate(); err != nil {
@@ -2900,6 +4142,12 @@ func (s *CreateGraphqlApiInput) Validate() error {
 	return nil
 }
 
+// SetAdditionalAuthenticationProviders sets the AdditionalAuthenticationProviders field's value.
+func (s *CreateGraphqlApiInput) SetAdditionalAuthenticationProviders(v []*AdditionalAuthenticationProvider) *CreateGraphqlApiInput {
+	s.AdditionalAuthenticationProviders = v
+	return s
+}
+
 // SetAuthenticationType sets the AuthenticationType field's value.
 func (s *CreateGraphqlApiInput) SetAuthenticationType(v string) *CreateGraphqlApiInput {
 	s.AuthenticationType = &v
@@ -2921,6 +4169,12 @@ func (s *CreateGraphqlApiInput) SetName(v string) *CreateGraphqlApiInput {
 // SetOpenIDConnectConfig sets the OpenIDConnectConfig field's value.
 func (s *CreateGraphqlApiInput) SetOpenIDConnectConfig(v *OpenIDConnectConfig) *CreateGraphqlApiInput {
 	s.OpenIDConnectConfig = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateGraphqlApiInput) SetTags(v map[string]*string) *CreateGraphqlApiInput {
+	s.Tags = v
 	return s
 }
 
@@ -2962,14 +4216,26 @@ type CreateResolverInput struct {
 	ApiId *string `location:"uri" locationName:"apiId" type:"string" required:"true"`
 
 	// The name of the data source for which the resolver is being created.
-	//
-	// DataSourceName is a required field
-	DataSourceName *string `locationName:"dataSourceName" type:"string" required:"true"`
+	DataSourceName *string `locationName:"dataSourceName" type:"string"`
 
 	// The name of the field to attach the resolver to.
 	//
 	// FieldName is a required field
 	FieldName *string `locationName:"fieldName" type:"string" required:"true"`
+
+	// The resolver type.
+	//
+	//    * UNIT: A UNIT resolver type. A UNIT resolver is the default resolver
+	//    type. A UNIT resolver enables you to execute a GraphQL query against a
+	//    single data source.
+	//
+	//    * PIPELINE: A PIPELINE resolver type. A PIPELINE resolver enables you
+	//    to execute a series of Function in a serial manner. You can use a pipeline
+	//    resolver to execute a GraphQL query against multiple data sources.
+	Kind *string `locationName:"kind" type:"string" enum:"ResolverKind"`
+
+	// The PipelineConfig.
+	PipelineConfig *PipelineConfig `locationName:"pipelineConfig" type:"structure"`
 
 	// The mapping template to be used for requests.
 	//
@@ -3005,8 +4271,8 @@ func (s *CreateResolverInput) Validate() error {
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
 	}
-	if s.DataSourceName == nil {
-		invalidParams.Add(request.NewErrParamRequired("DataSourceName"))
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
 	}
 	if s.FieldName == nil {
 		invalidParams.Add(request.NewErrParamRequired("FieldName"))
@@ -3022,6 +4288,9 @@ func (s *CreateResolverInput) Validate() error {
 	}
 	if s.TypeName == nil {
 		invalidParams.Add(request.NewErrParamRequired("TypeName"))
+	}
+	if s.TypeName != nil && len(*s.TypeName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TypeName", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -3045,6 +4314,18 @@ func (s *CreateResolverInput) SetDataSourceName(v string) *CreateResolverInput {
 // SetFieldName sets the FieldName field's value.
 func (s *CreateResolverInput) SetFieldName(v string) *CreateResolverInput {
 	s.FieldName = &v
+	return s
+}
+
+// SetKind sets the Kind field's value.
+func (s *CreateResolverInput) SetKind(v string) *CreateResolverInput {
+	s.Kind = &v
+	return s
+}
+
+// SetPipelineConfig sets the PipelineConfig field's value.
+func (s *CreateResolverInput) SetPipelineConfig(v *PipelineConfig) *CreateResolverInput {
+	s.PipelineConfig = v
 	return s
 }
 
@@ -3126,6 +4407,9 @@ func (s *CreateTypeInput) Validate() error {
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
 	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
 	if s.Definition == nil {
 		invalidParams.Add(request.NewErrParamRequired("Definition"))
 	}
@@ -3190,23 +4474,26 @@ type DataSource struct {
 	// The description of the data source.
 	Description *string `locationName:"description" type:"string"`
 
-	// DynamoDB settings.
+	// Amazon DynamoDB settings.
 	DynamodbConfig *DynamodbDataSourceConfig `locationName:"dynamodbConfig" type:"structure"`
 
-	// Amazon Elasticsearch settings.
+	// Amazon Elasticsearch Service settings.
 	ElasticsearchConfig *ElasticsearchDataSourceConfig `locationName:"elasticsearchConfig" type:"structure"`
 
-	// Http endpoint settings.
+	// HTTP endpoint settings.
 	HttpConfig *HttpDataSourceConfig `locationName:"httpConfig" type:"structure"`
 
-	// Lambda settings.
+	// AWS Lambda settings.
 	LambdaConfig *LambdaDataSourceConfig `locationName:"lambdaConfig" type:"structure"`
 
 	// The name of the data source.
 	Name *string `locationName:"name" type:"string"`
 
-	// The IAM service role ARN for the data source. The system assumes this role
-	// when accessing the data source.
+	// Relational database settings.
+	RelationalDatabaseConfig *RelationalDatabaseDataSourceConfig `locationName:"relationalDatabaseConfig" type:"structure"`
+
+	// The AWS IAM service role ARN for the data source. The system assumes this
+	// role when accessing the data source.
 	ServiceRoleArn *string `locationName:"serviceRoleArn" type:"string"`
 
 	// The type of the data source.
@@ -3218,12 +4505,14 @@ type DataSource struct {
 	//
 	//    * AWS_LAMBDA: The data source is an AWS Lambda function.
 	//
-	//    * NONE: There is no data source. This type is used when when you wish
-	//    to invoke a GraphQL operation without connecting to a data source, such
-	//    as performing data transformation with resolvers or triggering a subscription
-	//    to be invoked from a mutation.
+	//    * NONE: There is no data source. This type is used when you wish to invoke
+	//    a GraphQL operation without connecting to a data source, such as performing
+	//    data transformation with resolvers or triggering a subscription to be
+	//    invoked from a mutation.
 	//
 	//    * HTTP: The data source is an HTTP endpoint.
+	//
+	//    * RELATIONAL_DATABASE: The data source is a relational database.
 	Type *string `locationName:"type" type:"string" enum:"DataSourceType"`
 }
 
@@ -3279,6 +4568,12 @@ func (s *DataSource) SetName(v string) *DataSource {
 	return s
 }
 
+// SetRelationalDatabaseConfig sets the RelationalDatabaseConfig field's value.
+func (s *DataSource) SetRelationalDatabaseConfig(v *RelationalDatabaseDataSourceConfig) *DataSource {
+	s.RelationalDatabaseConfig = v
+	return s
+}
+
 // SetServiceRoleArn sets the ServiceRoleArn field's value.
 func (s *DataSource) SetServiceRoleArn(v string) *DataSource {
 	s.ServiceRoleArn = &v
@@ -3321,8 +4616,14 @@ func (s *DeleteApiKeyInput) Validate() error {
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
 	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
 	if s.Id == nil {
 		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -3387,8 +4688,14 @@ func (s *DeleteDataSourceInput) Validate() error {
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
 	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -3423,6 +4730,78 @@ func (s DeleteDataSourceOutput) GoString() string {
 	return s.String()
 }
 
+type DeleteFunctionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The GraphQL API ID.
+	//
+	// ApiId is a required field
+	ApiId *string `location:"uri" locationName:"apiId" type:"string" required:"true"`
+
+	// The Function ID.
+	//
+	// FunctionId is a required field
+	FunctionId *string `location:"uri" locationName:"functionId" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteFunctionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteFunctionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteFunctionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteFunctionInput"}
+	if s.ApiId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ApiId"))
+	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
+	if s.FunctionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("FunctionId"))
+	}
+	if s.FunctionId != nil && len(*s.FunctionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FunctionId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetApiId sets the ApiId field's value.
+func (s *DeleteFunctionInput) SetApiId(v string) *DeleteFunctionInput {
+	s.ApiId = &v
+	return s
+}
+
+// SetFunctionId sets the FunctionId field's value.
+func (s *DeleteFunctionInput) SetFunctionId(v string) *DeleteFunctionInput {
+	s.FunctionId = &v
+	return s
+}
+
+type DeleteFunctionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteFunctionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteFunctionOutput) GoString() string {
+	return s.String()
+}
+
 type DeleteGraphqlApiInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3447,6 +4826,9 @@ func (s *DeleteGraphqlApiInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeleteGraphqlApiInput"}
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
+	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -3510,11 +4892,20 @@ func (s *DeleteResolverInput) Validate() error {
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
 	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
 	if s.FieldName == nil {
 		invalidParams.Add(request.NewErrParamRequired("FieldName"))
 	}
+	if s.FieldName != nil && len(*s.FieldName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FieldName", 1))
+	}
 	if s.TypeName == nil {
 		invalidParams.Add(request.NewErrParamRequired("TypeName"))
+	}
+	if s.TypeName != nil && len(*s.TypeName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TypeName", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -3585,8 +4976,14 @@ func (s *DeleteTypeInput) Validate() error {
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
 	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
 	if s.TypeName == nil {
 		invalidParams.Add(request.NewErrParamRequired("TypeName"))
+	}
+	if s.TypeName != nil && len(*s.TypeName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TypeName", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -3621,11 +5018,11 @@ func (s DeleteTypeOutput) GoString() string {
 	return s.String()
 }
 
-// Describes a DynamoDB data source configuration.
+// Describes an Amazon DynamoDB data source configuration.
 type DynamodbDataSourceConfig struct {
 	_ struct{} `type:"structure"`
 
-	// The AWS region.
+	// The AWS Region.
 	//
 	// AwsRegion is a required field
 	AwsRegion *string `locationName:"awsRegion" type:"string" required:"true"`
@@ -3687,7 +5084,7 @@ func (s *DynamodbDataSourceConfig) SetUseCallerCredentials(v bool) *DynamodbData
 type ElasticsearchDataSourceConfig struct {
 	_ struct{} `type:"structure"`
 
-	// The AWS region.
+	// The AWS Region.
 	//
 	// AwsRegion is a required field
 	AwsRegion *string `locationName:"awsRegion" type:"string" required:"true"`
@@ -3736,6 +5133,96 @@ func (s *ElasticsearchDataSourceConfig) SetEndpoint(v string) *ElasticsearchData
 	return s
 }
 
+// A function is a reusable entity. Multiple functions can be used to compose
+// the resolver logic.
+type FunctionConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the DataSource.
+	DataSourceName *string `locationName:"dataSourceName" type:"string"`
+
+	// The Function description.
+	Description *string `locationName:"description" type:"string"`
+
+	// The ARN of the Function object.
+	FunctionArn *string `locationName:"functionArn" type:"string"`
+
+	// A unique ID representing the Function object.
+	FunctionId *string `locationName:"functionId" type:"string"`
+
+	// The version of the request mapping template. Currently only the 2018-05-29
+	// version of the template is supported.
+	FunctionVersion *string `locationName:"functionVersion" type:"string"`
+
+	// The name of the Function object.
+	Name *string `locationName:"name" type:"string"`
+
+	// The Function request mapping template. Functions support only the 2018-05-29
+	// version of the request mapping template.
+	RequestMappingTemplate *string `locationName:"requestMappingTemplate" min:"1" type:"string"`
+
+	// The Function response mapping template.
+	ResponseMappingTemplate *string `locationName:"responseMappingTemplate" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s FunctionConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FunctionConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetDataSourceName sets the DataSourceName field's value.
+func (s *FunctionConfiguration) SetDataSourceName(v string) *FunctionConfiguration {
+	s.DataSourceName = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *FunctionConfiguration) SetDescription(v string) *FunctionConfiguration {
+	s.Description = &v
+	return s
+}
+
+// SetFunctionArn sets the FunctionArn field's value.
+func (s *FunctionConfiguration) SetFunctionArn(v string) *FunctionConfiguration {
+	s.FunctionArn = &v
+	return s
+}
+
+// SetFunctionId sets the FunctionId field's value.
+func (s *FunctionConfiguration) SetFunctionId(v string) *FunctionConfiguration {
+	s.FunctionId = &v
+	return s
+}
+
+// SetFunctionVersion sets the FunctionVersion field's value.
+func (s *FunctionConfiguration) SetFunctionVersion(v string) *FunctionConfiguration {
+	s.FunctionVersion = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *FunctionConfiguration) SetName(v string) *FunctionConfiguration {
+	s.Name = &v
+	return s
+}
+
+// SetRequestMappingTemplate sets the RequestMappingTemplate field's value.
+func (s *FunctionConfiguration) SetRequestMappingTemplate(v string) *FunctionConfiguration {
+	s.RequestMappingTemplate = &v
+	return s
+}
+
+// SetResponseMappingTemplate sets the ResponseMappingTemplate field's value.
+func (s *FunctionConfiguration) SetResponseMappingTemplate(v string) *FunctionConfiguration {
+	s.ResponseMappingTemplate = &v
+	return s
+}
+
 type GetDataSourceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3766,8 +5253,14 @@ func (s *GetDataSourceInput) Validate() error {
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
 	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -3811,6 +5304,87 @@ func (s *GetDataSourceOutput) SetDataSource(v *DataSource) *GetDataSourceOutput 
 	return s
 }
 
+type GetFunctionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The GraphQL API ID.
+	//
+	// ApiId is a required field
+	ApiId *string `location:"uri" locationName:"apiId" type:"string" required:"true"`
+
+	// The Function ID.
+	//
+	// FunctionId is a required field
+	FunctionId *string `location:"uri" locationName:"functionId" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetFunctionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetFunctionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetFunctionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetFunctionInput"}
+	if s.ApiId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ApiId"))
+	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
+	if s.FunctionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("FunctionId"))
+	}
+	if s.FunctionId != nil && len(*s.FunctionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FunctionId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetApiId sets the ApiId field's value.
+func (s *GetFunctionInput) SetApiId(v string) *GetFunctionInput {
+	s.ApiId = &v
+	return s
+}
+
+// SetFunctionId sets the FunctionId field's value.
+func (s *GetFunctionInput) SetFunctionId(v string) *GetFunctionInput {
+	s.FunctionId = &v
+	return s
+}
+
+type GetFunctionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Function object.
+	FunctionConfiguration *FunctionConfiguration `locationName:"functionConfiguration" type:"structure"`
+}
+
+// String returns the string representation
+func (s GetFunctionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetFunctionOutput) GoString() string {
+	return s.String()
+}
+
+// SetFunctionConfiguration sets the FunctionConfiguration field's value.
+func (s *GetFunctionOutput) SetFunctionConfiguration(v *FunctionConfiguration) *GetFunctionOutput {
+	s.FunctionConfiguration = v
+	return s
+}
+
 type GetGraphqlApiInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3835,6 +5409,9 @@ func (s *GetGraphqlApiInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetGraphqlApiInput"}
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
+	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -3884,6 +5461,9 @@ type GetIntrospectionSchemaInput struct {
 	//
 	// Format is a required field
 	Format *string `location:"querystring" locationName:"format" type:"string" required:"true" enum:"OutputType"`
+
+	// A flag that specifies whether the schema introspection should contain directives.
+	IncludeDirectives *bool `location:"querystring" locationName:"includeDirectives" type:"boolean"`
 }
 
 // String returns the string representation
@@ -3901,6 +5481,9 @@ func (s *GetIntrospectionSchemaInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetIntrospectionSchemaInput"}
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
+	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
 	}
 	if s.Format == nil {
 		invalidParams.Add(request.NewErrParamRequired("Format"))
@@ -3921,6 +5504,12 @@ func (s *GetIntrospectionSchemaInput) SetApiId(v string) *GetIntrospectionSchema
 // SetFormat sets the Format field's value.
 func (s *GetIntrospectionSchemaInput) SetFormat(v string) *GetIntrospectionSchemaInput {
 	s.Format = &v
+	return s
+}
+
+// SetIncludeDirectives sets the IncludeDirectives field's value.
+func (s *GetIntrospectionSchemaInput) SetIncludeDirectives(v bool) *GetIntrospectionSchemaInput {
+	s.IncludeDirectives = &v
 	return s
 }
 
@@ -3984,11 +5573,20 @@ func (s *GetResolverInput) Validate() error {
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
 	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
 	if s.FieldName == nil {
 		invalidParams.Add(request.NewErrParamRequired("FieldName"))
 	}
+	if s.FieldName != nil && len(*s.FieldName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FieldName", 1))
+	}
 	if s.TypeName == nil {
 		invalidParams.Add(request.NewErrParamRequired("TypeName"))
+	}
+	if s.TypeName != nil && len(*s.TypeName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TypeName", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -4063,6 +5661,9 @@ func (s *GetSchemaCreationStatusInput) Validate() error {
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
 	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -4082,8 +5683,8 @@ type GetSchemaCreationStatusOutput struct {
 	// Detailed information about the status of the schema creation operation.
 	Details *string `locationName:"details" type:"string"`
 
-	// The current state of the schema (PROCESSING, ACTIVE, or DELETING). Once the
-	// schema is in the ACTIVE state, you can add data.
+	// The current state of the schema (PROCESSING, FAILED, SUCCESS, or NOT_APPLICABLE).
+	// When the schema is in the ACTIVE state, you can add data.
 	Status *string `locationName:"status" type:"string" enum:"SchemaStatus"`
 }
 
@@ -4144,11 +5745,17 @@ func (s *GetTypeInput) Validate() error {
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
 	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
 	if s.Format == nil {
 		invalidParams.Add(request.NewErrParamRequired("Format"))
 	}
 	if s.TypeName == nil {
 		invalidParams.Add(request.NewErrParamRequired("TypeName"))
+	}
+	if s.TypeName != nil && len(*s.TypeName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TypeName", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -4202,6 +5809,9 @@ func (s *GetTypeOutput) SetType(v *Type) *GetTypeOutput {
 type GraphqlApi struct {
 	_ struct{} `type:"structure"`
 
+	// A list of additional authentication providers for the GraphqlApi API.
+	AdditionalAuthenticationProviders []*AdditionalAuthenticationProvider `locationName:"additionalAuthenticationProviders" type:"list"`
+
 	// The API ID.
 	ApiId *string `locationName:"apiId" type:"string"`
 
@@ -4217,13 +5827,16 @@ type GraphqlApi struct {
 	// The API name.
 	Name *string `locationName:"name" type:"string"`
 
-	// The Open Id Connect configuration.
+	// The OpenID Connect configuration.
 	OpenIDConnectConfig *OpenIDConnectConfig `locationName:"openIDConnectConfig" type:"structure"`
+
+	// The tags.
+	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 
 	// The URIs.
 	Uris map[string]*string `locationName:"uris" type:"map"`
 
-	// The Amazon Cognito User Pool configuration.
+	// The Amazon Cognito user pool configuration.
 	UserPoolConfig *UserPoolConfig `locationName:"userPoolConfig" type:"structure"`
 }
 
@@ -4235,6 +5848,12 @@ func (s GraphqlApi) String() string {
 // GoString returns the string representation
 func (s GraphqlApi) GoString() string {
 	return s.String()
+}
+
+// SetAdditionalAuthenticationProviders sets the AdditionalAuthenticationProviders field's value.
+func (s *GraphqlApi) SetAdditionalAuthenticationProviders(v []*AdditionalAuthenticationProvider) *GraphqlApi {
+	s.AdditionalAuthenticationProviders = v
+	return s
 }
 
 // SetApiId sets the ApiId field's value.
@@ -4273,6 +5892,12 @@ func (s *GraphqlApi) SetOpenIDConnectConfig(v *OpenIDConnectConfig) *GraphqlApi 
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *GraphqlApi) SetTags(v map[string]*string) *GraphqlApi {
+	s.Tags = v
+	return s
+}
+
 // SetUris sets the Uris field's value.
 func (s *GraphqlApi) SetUris(v map[string]*string) *GraphqlApi {
 	s.Uris = v
@@ -4285,14 +5910,17 @@ func (s *GraphqlApi) SetUserPoolConfig(v *UserPoolConfig) *GraphqlApi {
 	return s
 }
 
-// Describes a Http data source configuration.
+// Describes an HTTP data source configuration.
 type HttpDataSourceConfig struct {
 	_ struct{} `type:"structure"`
 
-	// The Http url endpoint. You can either specify the domain name or ip and port
-	// combination and the url scheme must be http(s). If the port is not specified,
-	// AWS AppSync will use the default port 80 for http endpoint and port 443 for
-	// https endpoints.
+	// The authorization config in case the HTTP endpoint requires authorization.
+	AuthorizationConfig *AuthorizationConfig `locationName:"authorizationConfig" type:"structure"`
+
+	// The HTTP URL endpoint. You can either specify the domain name or IP, and
+	// port combination, and the URL scheme must be HTTP or HTTPS. If the port is
+	// not specified, AWS AppSync uses the default port 80 for the HTTP endpoint
+	// and port 443 for HTTPS endpoints.
 	Endpoint *string `locationName:"endpoint" type:"string"`
 }
 
@@ -4306,13 +5934,34 @@ func (s HttpDataSourceConfig) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *HttpDataSourceConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "HttpDataSourceConfig"}
+	if s.AuthorizationConfig != nil {
+		if err := s.AuthorizationConfig.Validate(); err != nil {
+			invalidParams.AddNested("AuthorizationConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAuthorizationConfig sets the AuthorizationConfig field's value.
+func (s *HttpDataSourceConfig) SetAuthorizationConfig(v *AuthorizationConfig) *HttpDataSourceConfig {
+	s.AuthorizationConfig = v
+	return s
+}
+
 // SetEndpoint sets the Endpoint field's value.
 func (s *HttpDataSourceConfig) SetEndpoint(v string) *HttpDataSourceConfig {
 	s.Endpoint = &v
 	return s
 }
 
-// Describes a Lambda data source configuration.
+// Describes an AWS Lambda data source configuration.
 type LambdaDataSourceConfig struct {
 	_ struct{} `type:"structure"`
 
@@ -4382,6 +6031,9 @@ func (s *ListApiKeysInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListApiKeysInput"}
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
+	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -4473,6 +6125,9 @@ func (s *ListDataSourcesInput) Validate() error {
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
 	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -4527,6 +6182,99 @@ func (s *ListDataSourcesOutput) SetDataSources(v []*DataSource) *ListDataSources
 
 // SetNextToken sets the NextToken field's value.
 func (s *ListDataSourcesOutput) SetNextToken(v string) *ListDataSourcesOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListFunctionsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The GraphQL API ID.
+	//
+	// ApiId is a required field
+	ApiId *string `location:"uri" locationName:"apiId" type:"string" required:"true"`
+
+	// The maximum number of results you want the request to return.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" type:"integer"`
+
+	// An identifier that was returned from the previous call to this operation,
+	// which can be used to return the next set of items in the list.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListFunctionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListFunctionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListFunctionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListFunctionsInput"}
+	if s.ApiId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ApiId"))
+	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetApiId sets the ApiId field's value.
+func (s *ListFunctionsInput) SetApiId(v string) *ListFunctionsInput {
+	s.ApiId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListFunctionsInput) SetMaxResults(v int64) *ListFunctionsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListFunctionsInput) SetNextToken(v string) *ListFunctionsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListFunctionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of Function objects.
+	Functions []*FunctionConfiguration `locationName:"functions" type:"list"`
+
+	// An identifier that was returned from the previous call to this operation,
+	// which can be used to return the next set of items in the list.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListFunctionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListFunctionsOutput) GoString() string {
+	return s.String()
+}
+
+// SetFunctions sets the Functions field's value.
+func (s *ListFunctionsOutput) SetFunctions(v []*FunctionConfiguration) *ListFunctionsOutput {
+	s.Functions = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListFunctionsOutput) SetNextToken(v string) *ListFunctionsOutput {
 	s.NextToken = &v
 	return s
 }
@@ -4597,6 +6345,115 @@ func (s *ListGraphqlApisOutput) SetNextToken(v string) *ListGraphqlApisOutput {
 	return s
 }
 
+type ListResolversByFunctionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The API ID.
+	//
+	// ApiId is a required field
+	ApiId *string `location:"uri" locationName:"apiId" type:"string" required:"true"`
+
+	// The Function ID.
+	//
+	// FunctionId is a required field
+	FunctionId *string `location:"uri" locationName:"functionId" type:"string" required:"true"`
+
+	// The maximum number of results you want the request to return.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" type:"integer"`
+
+	// An identifier that was returned from the previous call to this operation,
+	// which you can use to return the next set of items in the list.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListResolversByFunctionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListResolversByFunctionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListResolversByFunctionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListResolversByFunctionInput"}
+	if s.ApiId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ApiId"))
+	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
+	if s.FunctionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("FunctionId"))
+	}
+	if s.FunctionId != nil && len(*s.FunctionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FunctionId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetApiId sets the ApiId field's value.
+func (s *ListResolversByFunctionInput) SetApiId(v string) *ListResolversByFunctionInput {
+	s.ApiId = &v
+	return s
+}
+
+// SetFunctionId sets the FunctionId field's value.
+func (s *ListResolversByFunctionInput) SetFunctionId(v string) *ListResolversByFunctionInput {
+	s.FunctionId = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListResolversByFunctionInput) SetMaxResults(v int64) *ListResolversByFunctionInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListResolversByFunctionInput) SetNextToken(v string) *ListResolversByFunctionInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListResolversByFunctionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An identifier that can be used to return the next set of items in the list.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// The list of resolvers.
+	Resolvers []*Resolver `locationName:"resolvers" type:"list"`
+}
+
+// String returns the string representation
+func (s ListResolversByFunctionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListResolversByFunctionOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListResolversByFunctionOutput) SetNextToken(v string) *ListResolversByFunctionOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetResolvers sets the Resolvers field's value.
+func (s *ListResolversByFunctionOutput) SetResolvers(v []*Resolver) *ListResolversByFunctionOutput {
+	s.Resolvers = v
+	return s
+}
+
 type ListResolversInput struct {
 	_ struct{} `type:"structure"`
 
@@ -4634,8 +6491,14 @@ func (s *ListResolversInput) Validate() error {
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
 	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
 	if s.TypeName == nil {
 		invalidParams.Add(request.NewErrParamRequired("TypeName"))
+	}
+	if s.TypeName != nil && len(*s.TypeName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TypeName", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -4701,6 +6564,70 @@ func (s *ListResolversOutput) SetResolvers(v []*Resolver) *ListResolversOutput {
 	return s
 }
 
+type ListTagsForResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The GraphqlApi ARN.
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"resourceArn" min:"70" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ListTagsForResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListTagsForResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListTagsForResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListTagsForResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 70 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 70))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *ListTagsForResourceInput) SetResourceArn(v string) *ListTagsForResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+type ListTagsForResourceOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A TagMap object.
+	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
+}
+
+// String returns the string representation
+func (s ListTagsForResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListTagsForResourceOutput) GoString() string {
+	return s.String()
+}
+
+// SetTags sets the Tags field's value.
+func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForResourceOutput {
+	s.Tags = v
+	return s
+}
+
 type ListTypesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -4737,6 +6664,9 @@ func (s *ListTypesInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ListTypesInput"}
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
+	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
 	}
 	if s.Format == nil {
 		invalidParams.Add(request.NewErrParamRequired("Format"))
@@ -4815,24 +6745,17 @@ type LogConfig struct {
 	// CloudWatchLogsRoleArn is a required field
 	CloudWatchLogsRoleArn *string `locationName:"cloudWatchLogsRoleArn" type:"string" required:"true"`
 
-	// The field logging level. Values can be NONE, ERROR, ALL.
+	// The field logging level. Values can be NONE, ERROR, or ALL.
 	//
 	//    * NONE: No field-level logs are captured.
 	//
 	//    * ERROR: Logs the following information only for the fields that are in
-	//    error:
-	//
-	// The error section in the server response.
-	//
-	// Field-level errors.
-	//
-	// The generated request/response functions that got resolved for error fields.
+	//    error: The error section in the server response. Field-level errors. The
+	//    generated request/response functions that got resolved for error fields.
 	//
 	//    * ALL: The following information is logged for all fields in the query:
-	//
-	// Field-level tracing information.
-	//
-	// The generated request/response functions that got resolved for each field.
+	//    Field-level tracing information. The generated request/response functions
+	//    that got resolved for each field.
 	//
 	// FieldLogLevel is a required field
 	FieldLogLevel *string `locationName:"fieldLogLevel" type:"string" required:"true" enum:"FieldLogLevel"`
@@ -4876,24 +6799,24 @@ func (s *LogConfig) SetFieldLogLevel(v string) *LogConfig {
 	return s
 }
 
-// Describes an Open Id Connect configuration.
+// Describes an OpenID Connect configuration.
 type OpenIDConnectConfig struct {
 	_ struct{} `type:"structure"`
 
 	// The number of milliseconds a token is valid after being authenticated.
 	AuthTTL *int64 `locationName:"authTTL" type:"long"`
 
-	// The client identifier of the Relying party at the OpenID Provider. This identifier
-	// is typically obtained when the Relying party is registered with the OpenID
-	// Provider. You can specify a regular expression so the AWS AppSync can validate
-	// against multiple client identifiers at a time
+	// The client identifier of the Relying party at the OpenID identity provider.
+	// This identifier is typically obtained when the Relying party is registered
+	// with the OpenID identity provider. You can specify a regular expression so
+	// the AWS AppSync can validate against multiple client identifiers at a time.
 	ClientId *string `locationName:"clientId" type:"string"`
 
 	// The number of milliseconds a token is valid after being issued to a user.
 	IatTTL *int64 `locationName:"iatTTL" type:"long"`
 
-	// The issuer for the open id connect configuration. The issuer returned by
-	// discovery MUST exactly match the value of iss in the ID Token.
+	// The issuer for the OpenID Connect configuration. The issuer returned by discovery
+	// must exactly match the value of iss in the ID token.
 	//
 	// Issuer is a required field
 	Issuer *string `locationName:"issuer" type:"string" required:"true"`
@@ -4946,6 +6869,126 @@ func (s *OpenIDConnectConfig) SetIssuer(v string) *OpenIDConnectConfig {
 	return s
 }
 
+// The pipeline configuration for a resolver of kind PIPELINE.
+type PipelineConfig struct {
+	_ struct{} `type:"structure"`
+
+	// A list of Function objects.
+	Functions []*string `locationName:"functions" type:"list"`
+}
+
+// String returns the string representation
+func (s PipelineConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PipelineConfig) GoString() string {
+	return s.String()
+}
+
+// SetFunctions sets the Functions field's value.
+func (s *PipelineConfig) SetFunctions(v []*string) *PipelineConfig {
+	s.Functions = v
+	return s
+}
+
+// The Amazon RDS HTTP endpoint configuration.
+type RdsHttpEndpointConfig struct {
+	_ struct{} `type:"structure"`
+
+	// AWS Region for RDS HTTP endpoint.
+	AwsRegion *string `locationName:"awsRegion" type:"string"`
+
+	// AWS secret store ARN for database credentials.
+	AwsSecretStoreArn *string `locationName:"awsSecretStoreArn" type:"string"`
+
+	// Logical database name.
+	DatabaseName *string `locationName:"databaseName" type:"string"`
+
+	// Amazon RDS cluster identifier.
+	DbClusterIdentifier *string `locationName:"dbClusterIdentifier" type:"string"`
+
+	// Logical schema name.
+	Schema *string `locationName:"schema" type:"string"`
+}
+
+// String returns the string representation
+func (s RdsHttpEndpointConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RdsHttpEndpointConfig) GoString() string {
+	return s.String()
+}
+
+// SetAwsRegion sets the AwsRegion field's value.
+func (s *RdsHttpEndpointConfig) SetAwsRegion(v string) *RdsHttpEndpointConfig {
+	s.AwsRegion = &v
+	return s
+}
+
+// SetAwsSecretStoreArn sets the AwsSecretStoreArn field's value.
+func (s *RdsHttpEndpointConfig) SetAwsSecretStoreArn(v string) *RdsHttpEndpointConfig {
+	s.AwsSecretStoreArn = &v
+	return s
+}
+
+// SetDatabaseName sets the DatabaseName field's value.
+func (s *RdsHttpEndpointConfig) SetDatabaseName(v string) *RdsHttpEndpointConfig {
+	s.DatabaseName = &v
+	return s
+}
+
+// SetDbClusterIdentifier sets the DbClusterIdentifier field's value.
+func (s *RdsHttpEndpointConfig) SetDbClusterIdentifier(v string) *RdsHttpEndpointConfig {
+	s.DbClusterIdentifier = &v
+	return s
+}
+
+// SetSchema sets the Schema field's value.
+func (s *RdsHttpEndpointConfig) SetSchema(v string) *RdsHttpEndpointConfig {
+	s.Schema = &v
+	return s
+}
+
+// Describes a relational database data source configuration.
+type RelationalDatabaseDataSourceConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Amazon RDS HTTP endpoint settings.
+	RdsHttpEndpointConfig *RdsHttpEndpointConfig `locationName:"rdsHttpEndpointConfig" type:"structure"`
+
+	// Source type for the relational database.
+	//
+	//    * RDS_HTTP_ENDPOINT: The relational database source type is an Amazon
+	//    RDS HTTP endpoint.
+	RelationalDatabaseSourceType *string `locationName:"relationalDatabaseSourceType" type:"string" enum:"RelationalDatabaseSourceType"`
+}
+
+// String returns the string representation
+func (s RelationalDatabaseDataSourceConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RelationalDatabaseDataSourceConfig) GoString() string {
+	return s.String()
+}
+
+// SetRdsHttpEndpointConfig sets the RdsHttpEndpointConfig field's value.
+func (s *RelationalDatabaseDataSourceConfig) SetRdsHttpEndpointConfig(v *RdsHttpEndpointConfig) *RelationalDatabaseDataSourceConfig {
+	s.RdsHttpEndpointConfig = v
+	return s
+}
+
+// SetRelationalDatabaseSourceType sets the RelationalDatabaseSourceType field's value.
+func (s *RelationalDatabaseDataSourceConfig) SetRelationalDatabaseSourceType(v string) *RelationalDatabaseDataSourceConfig {
+	s.RelationalDatabaseSourceType = &v
+	return s
+}
+
 // Describes a resolver.
 type Resolver struct {
 	_ struct{} `type:"structure"`
@@ -4955,6 +6998,20 @@ type Resolver struct {
 
 	// The resolver field name.
 	FieldName *string `locationName:"fieldName" type:"string"`
+
+	// The resolver type.
+	//
+	//    * UNIT: A UNIT resolver type. A UNIT resolver is the default resolver
+	//    type. A UNIT resolver enables you to execute a GraphQL query against a
+	//    single data source.
+	//
+	//    * PIPELINE: A PIPELINE resolver type. A PIPELINE resolver enables you
+	//    to execute a series of Function in a serial manner. You can use a pipeline
+	//    resolver to execute a GraphQL query against multiple data sources.
+	Kind *string `locationName:"kind" type:"string" enum:"ResolverKind"`
+
+	// The PipelineConfig.
+	PipelineConfig *PipelineConfig `locationName:"pipelineConfig" type:"structure"`
 
 	// The request mapping template.
 	RequestMappingTemplate *string `locationName:"requestMappingTemplate" min:"1" type:"string"`
@@ -4988,6 +7045,18 @@ func (s *Resolver) SetDataSourceName(v string) *Resolver {
 // SetFieldName sets the FieldName field's value.
 func (s *Resolver) SetFieldName(v string) *Resolver {
 	s.FieldName = &v
+	return s
+}
+
+// SetKind sets the Kind field's value.
+func (s *Resolver) SetKind(v string) *Resolver {
+	s.Kind = &v
+	return s
+}
+
+// SetPipelineConfig sets the PipelineConfig field's value.
+func (s *Resolver) SetPipelineConfig(v *PipelineConfig) *Resolver {
+	s.PipelineConfig = v
 	return s
 }
 
@@ -5047,6 +7116,9 @@ func (s *StartSchemaCreationInput) Validate() error {
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
 	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
 	if s.Definition == nil {
 		invalidParams.Add(request.NewErrParamRequired("Definition"))
 	}
@@ -5072,8 +7144,8 @@ func (s *StartSchemaCreationInput) SetDefinition(v []byte) *StartSchemaCreationI
 type StartSchemaCreationOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The current state of the schema (PROCESSING, ACTIVE, or DELETING). Once the
-	// schema is in the ACTIVE state, you can add data.
+	// The current state of the schema (PROCESSING, FAILED, SUCCESS, or NOT_APPLICABLE).
+	// When the schema is in the ACTIVE state, you can add data.
 	Status *string `locationName:"status" type:"string" enum:"SchemaStatus"`
 }
 
@@ -5091,6 +7163,78 @@ func (s StartSchemaCreationOutput) GoString() string {
 func (s *StartSchemaCreationOutput) SetStatus(v string) *StartSchemaCreationOutput {
 	s.Status = &v
 	return s
+}
+
+type TagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The GraphqlApi ARN.
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"resourceArn" min:"70" type:"string" required:"true"`
+
+	// A TagMap object.
+	//
+	// Tags is a required field
+	Tags map[string]*string `locationName:"tags" min:"1" type:"map" required:"true"`
+}
+
+// String returns the string representation
+func (s TagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TagResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 70 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 70))
+	}
+	if s.Tags == nil {
+		invalidParams.Add(request.NewErrParamRequired("Tags"))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *TagResourceInput) SetResourceArn(v string) *TagResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
+	s.Tags = v
+	return s
+}
+
+type TagResourceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s TagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagResourceOutput) GoString() string {
+	return s.String()
 }
 
 // Describes a type.
@@ -5153,10 +7297,82 @@ func (s *Type) SetName(v string) *Type {
 	return s
 }
 
+type UntagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The GraphqlApi ARN.
+	//
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"resourceArn" min:"70" type:"string" required:"true"`
+
+	// A list of TagKey objects.
+	//
+	// TagKeys is a required field
+	TagKeys []*string `location:"querystring" locationName:"tagKeys" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s UntagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UntagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UntagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UntagResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 70 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 70))
+	}
+	if s.TagKeys == nil {
+		invalidParams.Add(request.NewErrParamRequired("TagKeys"))
+	}
+	if s.TagKeys != nil && len(s.TagKeys) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TagKeys", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *UntagResourceInput) SetResourceArn(v string) *UntagResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetTagKeys sets the TagKeys field's value.
+func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
+	s.TagKeys = v
+	return s
+}
+
+type UntagResourceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UntagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UntagResourceOutput) GoString() string {
+	return s.String()
+}
+
 type UpdateApiKeyInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ID for the GraphQL API
+	// The ID for the GraphQL API.
 	//
 	// ApiId is a required field
 	ApiId *string `location:"uri" locationName:"apiId" type:"string" required:"true"`
@@ -5190,8 +7406,14 @@ func (s *UpdateApiKeyInput) Validate() error {
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
 	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
 	if s.Id == nil {
 		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -5258,22 +7480,25 @@ type UpdateDataSourceInput struct {
 	// The new description for the data source.
 	Description *string `locationName:"description" type:"string"`
 
-	// The new DynamoDB configuration.
+	// The new Amazon DynamoDB configuration.
 	DynamodbConfig *DynamodbDataSourceConfig `locationName:"dynamodbConfig" type:"structure"`
 
-	// The new Elasticsearch configuration.
+	// The new Elasticsearch Service configuration.
 	ElasticsearchConfig *ElasticsearchDataSourceConfig `locationName:"elasticsearchConfig" type:"structure"`
 
-	// The new http endpoint configuration
+	// The new HTTP endpoint configuration.
 	HttpConfig *HttpDataSourceConfig `locationName:"httpConfig" type:"structure"`
 
-	// The new Lambda configuration.
+	// The new AWS Lambda configuration.
 	LambdaConfig *LambdaDataSourceConfig `locationName:"lambdaConfig" type:"structure"`
 
 	// The new name for the data source.
 	//
 	// Name is a required field
 	Name *string `location:"uri" locationName:"name" type:"string" required:"true"`
+
+	// The new relational database configuration.
+	RelationalDatabaseConfig *RelationalDatabaseDataSourceConfig `locationName:"relationalDatabaseConfig" type:"structure"`
 
 	// The new service role ARN for the data source.
 	ServiceRoleArn *string `locationName:"serviceRoleArn" type:"string"`
@@ -5300,8 +7525,14 @@ func (s *UpdateDataSourceInput) Validate() error {
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
 	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
 	if s.Type == nil {
 		invalidParams.Add(request.NewErrParamRequired("Type"))
@@ -5314,6 +7545,11 @@ func (s *UpdateDataSourceInput) Validate() error {
 	if s.ElasticsearchConfig != nil {
 		if err := s.ElasticsearchConfig.Validate(); err != nil {
 			invalidParams.AddNested("ElasticsearchConfig", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.HttpConfig != nil {
+		if err := s.HttpConfig.Validate(); err != nil {
+			invalidParams.AddNested("HttpConfig", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.LambdaConfig != nil {
@@ -5370,6 +7606,12 @@ func (s *UpdateDataSourceInput) SetName(v string) *UpdateDataSourceInput {
 	return s
 }
 
+// SetRelationalDatabaseConfig sets the RelationalDatabaseConfig field's value.
+func (s *UpdateDataSourceInput) SetRelationalDatabaseConfig(v *RelationalDatabaseDataSourceConfig) *UpdateDataSourceInput {
+	s.RelationalDatabaseConfig = v
+	return s
+}
+
 // SetServiceRoleArn sets the ServiceRoleArn field's value.
 func (s *UpdateDataSourceInput) SetServiceRoleArn(v string) *UpdateDataSourceInput {
 	s.ServiceRoleArn = &v
@@ -5405,8 +7647,174 @@ func (s *UpdateDataSourceOutput) SetDataSource(v *DataSource) *UpdateDataSourceO
 	return s
 }
 
+type UpdateFunctionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The GraphQL API ID.
+	//
+	// ApiId is a required field
+	ApiId *string `location:"uri" locationName:"apiId" type:"string" required:"true"`
+
+	// The Function DataSource name.
+	//
+	// DataSourceName is a required field
+	DataSourceName *string `locationName:"dataSourceName" type:"string" required:"true"`
+
+	// The Function description.
+	Description *string `locationName:"description" type:"string"`
+
+	// The function ID.
+	//
+	// FunctionId is a required field
+	FunctionId *string `location:"uri" locationName:"functionId" type:"string" required:"true"`
+
+	// The version of the request mapping template. Currently the supported value
+	// is 2018-05-29.
+	//
+	// FunctionVersion is a required field
+	FunctionVersion *string `locationName:"functionVersion" type:"string" required:"true"`
+
+	// The Function name.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" type:"string" required:"true"`
+
+	// The Function request mapping template. Functions support only the 2018-05-29
+	// version of the request mapping template.
+	//
+	// RequestMappingTemplate is a required field
+	RequestMappingTemplate *string `locationName:"requestMappingTemplate" min:"1" type:"string" required:"true"`
+
+	// The Function request mapping template.
+	ResponseMappingTemplate *string `locationName:"responseMappingTemplate" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s UpdateFunctionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateFunctionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateFunctionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateFunctionInput"}
+	if s.ApiId == nil {
+		invalidParams.Add(request.NewErrParamRequired("ApiId"))
+	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
+	if s.DataSourceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DataSourceName"))
+	}
+	if s.FunctionId == nil {
+		invalidParams.Add(request.NewErrParamRequired("FunctionId"))
+	}
+	if s.FunctionId != nil && len(*s.FunctionId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FunctionId", 1))
+	}
+	if s.FunctionVersion == nil {
+		invalidParams.Add(request.NewErrParamRequired("FunctionVersion"))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.RequestMappingTemplate == nil {
+		invalidParams.Add(request.NewErrParamRequired("RequestMappingTemplate"))
+	}
+	if s.RequestMappingTemplate != nil && len(*s.RequestMappingTemplate) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RequestMappingTemplate", 1))
+	}
+	if s.ResponseMappingTemplate != nil && len(*s.ResponseMappingTemplate) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResponseMappingTemplate", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetApiId sets the ApiId field's value.
+func (s *UpdateFunctionInput) SetApiId(v string) *UpdateFunctionInput {
+	s.ApiId = &v
+	return s
+}
+
+// SetDataSourceName sets the DataSourceName field's value.
+func (s *UpdateFunctionInput) SetDataSourceName(v string) *UpdateFunctionInput {
+	s.DataSourceName = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateFunctionInput) SetDescription(v string) *UpdateFunctionInput {
+	s.Description = &v
+	return s
+}
+
+// SetFunctionId sets the FunctionId field's value.
+func (s *UpdateFunctionInput) SetFunctionId(v string) *UpdateFunctionInput {
+	s.FunctionId = &v
+	return s
+}
+
+// SetFunctionVersion sets the FunctionVersion field's value.
+func (s *UpdateFunctionInput) SetFunctionVersion(v string) *UpdateFunctionInput {
+	s.FunctionVersion = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateFunctionInput) SetName(v string) *UpdateFunctionInput {
+	s.Name = &v
+	return s
+}
+
+// SetRequestMappingTemplate sets the RequestMappingTemplate field's value.
+func (s *UpdateFunctionInput) SetRequestMappingTemplate(v string) *UpdateFunctionInput {
+	s.RequestMappingTemplate = &v
+	return s
+}
+
+// SetResponseMappingTemplate sets the ResponseMappingTemplate field's value.
+func (s *UpdateFunctionInput) SetResponseMappingTemplate(v string) *UpdateFunctionInput {
+	s.ResponseMappingTemplate = &v
+	return s
+}
+
+type UpdateFunctionOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Function object.
+	FunctionConfiguration *FunctionConfiguration `locationName:"functionConfiguration" type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateFunctionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateFunctionOutput) GoString() string {
+	return s.String()
+}
+
+// SetFunctionConfiguration sets the FunctionConfiguration field's value.
+func (s *UpdateFunctionOutput) SetFunctionConfiguration(v *FunctionConfiguration) *UpdateFunctionOutput {
+	s.FunctionConfiguration = v
+	return s
+}
+
 type UpdateGraphqlApiInput struct {
 	_ struct{} `type:"structure"`
+
+	// A list of additional authentication providers for the GraphqlApi API.
+	AdditionalAuthenticationProviders []*AdditionalAuthenticationProvider `locationName:"additionalAuthenticationProviders" type:"list"`
 
 	// The API ID.
 	//
@@ -5416,7 +7824,7 @@ type UpdateGraphqlApiInput struct {
 	// The new authentication type for the GraphqlApi object.
 	AuthenticationType *string `locationName:"authenticationType" type:"string" enum:"AuthenticationType"`
 
-	// The Amazon CloudWatch logs configuration for the GraphqlApi object.
+	// The Amazon CloudWatch Logs configuration for the GraphqlApi object.
 	LogConfig *LogConfig `locationName:"logConfig" type:"structure"`
 
 	// The new name for the GraphqlApi object.
@@ -5424,10 +7832,10 @@ type UpdateGraphqlApiInput struct {
 	// Name is a required field
 	Name *string `locationName:"name" type:"string" required:"true"`
 
-	// The Open Id Connect configuration configuration for the GraphqlApi object.
+	// The OpenID Connect configuration for the GraphqlApi object.
 	OpenIDConnectConfig *OpenIDConnectConfig `locationName:"openIDConnectConfig" type:"structure"`
 
-	// The new Amazon Cognito User Pool configuration for the GraphqlApi object.
+	// The new Amazon Cognito user pool configuration for the GraphqlApi object.
 	UserPoolConfig *UserPoolConfig `locationName:"userPoolConfig" type:"structure"`
 }
 
@@ -5447,8 +7855,21 @@ func (s *UpdateGraphqlApiInput) Validate() error {
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
 	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.AdditionalAuthenticationProviders != nil {
+		for i, v := range s.AdditionalAuthenticationProviders {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "AdditionalAuthenticationProviders", i), err.(request.ErrInvalidParams))
+			}
+		}
 	}
 	if s.LogConfig != nil {
 		if err := s.LogConfig.Validate(); err != nil {
@@ -5470,6 +7891,12 @@ func (s *UpdateGraphqlApiInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAdditionalAuthenticationProviders sets the AdditionalAuthenticationProviders field's value.
+func (s *UpdateGraphqlApiInput) SetAdditionalAuthenticationProviders(v []*AdditionalAuthenticationProvider) *UpdateGraphqlApiInput {
+	s.AdditionalAuthenticationProviders = v
+	return s
 }
 
 // SetApiId sets the ApiId field's value.
@@ -5540,14 +7967,26 @@ type UpdateResolverInput struct {
 	ApiId *string `location:"uri" locationName:"apiId" type:"string" required:"true"`
 
 	// The new data source name.
-	//
-	// DataSourceName is a required field
-	DataSourceName *string `locationName:"dataSourceName" type:"string" required:"true"`
+	DataSourceName *string `locationName:"dataSourceName" type:"string"`
 
 	// The new field name.
 	//
 	// FieldName is a required field
 	FieldName *string `location:"uri" locationName:"fieldName" type:"string" required:"true"`
+
+	// The resolver type.
+	//
+	//    * UNIT: A UNIT resolver type. A UNIT resolver is the default resolver
+	//    type. A UNIT resolver enables you to execute a GraphQL query against a
+	//    single data source.
+	//
+	//    * PIPELINE: A PIPELINE resolver type. A PIPELINE resolver enables you
+	//    to execute a series of Function in a serial manner. You can use a pipeline
+	//    resolver to execute a GraphQL query against multiple data sources.
+	Kind *string `locationName:"kind" type:"string" enum:"ResolverKind"`
+
+	// The PipelineConfig.
+	PipelineConfig *PipelineConfig `locationName:"pipelineConfig" type:"structure"`
 
 	// The new request mapping template.
 	//
@@ -5579,11 +8018,14 @@ func (s *UpdateResolverInput) Validate() error {
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
 	}
-	if s.DataSourceName == nil {
-		invalidParams.Add(request.NewErrParamRequired("DataSourceName"))
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
 	}
 	if s.FieldName == nil {
 		invalidParams.Add(request.NewErrParamRequired("FieldName"))
+	}
+	if s.FieldName != nil && len(*s.FieldName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FieldName", 1))
 	}
 	if s.RequestMappingTemplate == nil {
 		invalidParams.Add(request.NewErrParamRequired("RequestMappingTemplate"))
@@ -5596,6 +8038,9 @@ func (s *UpdateResolverInput) Validate() error {
 	}
 	if s.TypeName == nil {
 		invalidParams.Add(request.NewErrParamRequired("TypeName"))
+	}
+	if s.TypeName != nil && len(*s.TypeName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TypeName", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -5619,6 +8064,18 @@ func (s *UpdateResolverInput) SetDataSourceName(v string) *UpdateResolverInput {
 // SetFieldName sets the FieldName field's value.
 func (s *UpdateResolverInput) SetFieldName(v string) *UpdateResolverInput {
 	s.FieldName = &v
+	return s
+}
+
+// SetKind sets the Kind field's value.
+func (s *UpdateResolverInput) SetKind(v string) *UpdateResolverInput {
+	s.Kind = &v
+	return s
+}
+
+// SetPipelineConfig sets the PipelineConfig field's value.
+func (s *UpdateResolverInput) SetPipelineConfig(v *PipelineConfig) *UpdateResolverInput {
+	s.PipelineConfig = v
 	return s
 }
 
@@ -5701,11 +8158,17 @@ func (s *UpdateTypeInput) Validate() error {
 	if s.ApiId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ApiId"))
 	}
+	if s.ApiId != nil && len(*s.ApiId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApiId", 1))
+	}
 	if s.Format == nil {
 		invalidParams.Add(request.NewErrParamRequired("Format"))
 	}
 	if s.TypeName == nil {
 		invalidParams.Add(request.NewErrParamRequired("TypeName"))
+	}
+	if s.TypeName != nil && len(*s.TypeName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TypeName", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -5761,22 +8224,22 @@ func (s *UpdateTypeOutput) SetType(v *Type) *UpdateTypeOutput {
 	return s
 }
 
-// Describes an Amazon Cognito User Pool configuration.
+// Describes an Amazon Cognito user pool configuration.
 type UserPoolConfig struct {
 	_ struct{} `type:"structure"`
 
-	// A regular expression for validating the incoming Amazon Cognito User Pool
+	// A regular expression for validating the incoming Amazon Cognito user pool
 	// app client ID.
 	AppIdClientRegex *string `locationName:"appIdClientRegex" type:"string"`
 
-	// The AWS region in which the user pool was created.
+	// The AWS Region in which the user pool was created.
 	//
 	// AwsRegion is a required field
 	AwsRegion *string `locationName:"awsRegion" type:"string" required:"true"`
 
 	// The action that you want your GraphQL API to take when a request that uses
-	// Amazon Cognito User Pool authentication doesn't match the Amazon Cognito
-	// User Pool configuration.
+	// Amazon Cognito user pool authentication doesn't match the Amazon Cognito
+	// user pool configuration.
 	//
 	// DefaultAction is a required field
 	DefaultAction *string `locationName:"defaultAction" type:"string" required:"true" enum:"DefaultAction"`
@@ -5855,6 +8318,11 @@ const (
 )
 
 const (
+	// AuthorizationTypeAwsIam is a AuthorizationType enum value
+	AuthorizationTypeAwsIam = "AWS_IAM"
+)
+
+const (
 	// DataSourceTypeAwsLambda is a DataSourceType enum value
 	DataSourceTypeAwsLambda = "AWS_LAMBDA"
 
@@ -5869,6 +8337,9 @@ const (
 
 	// DataSourceTypeHttp is a DataSourceType enum value
 	DataSourceTypeHttp = "HTTP"
+
+	// DataSourceTypeRelationalDatabase is a DataSourceType enum value
+	DataSourceTypeRelationalDatabase = "RELATIONAL_DATABASE"
 )
 
 const (
@@ -5899,6 +8370,19 @@ const (
 )
 
 const (
+	// RelationalDatabaseSourceTypeRdsHttpEndpoint is a RelationalDatabaseSourceType enum value
+	RelationalDatabaseSourceTypeRdsHttpEndpoint = "RDS_HTTP_ENDPOINT"
+)
+
+const (
+	// ResolverKindUnit is a ResolverKind enum value
+	ResolverKindUnit = "UNIT"
+
+	// ResolverKindPipeline is a ResolverKind enum value
+	ResolverKindPipeline = "PIPELINE"
+)
+
+const (
 	// SchemaStatusProcessing is a SchemaStatus enum value
 	SchemaStatusProcessing = "PROCESSING"
 
@@ -5907,6 +8391,15 @@ const (
 
 	// SchemaStatusDeleting is a SchemaStatus enum value
 	SchemaStatusDeleting = "DELETING"
+
+	// SchemaStatusFailed is a SchemaStatus enum value
+	SchemaStatusFailed = "FAILED"
+
+	// SchemaStatusSuccess is a SchemaStatus enum value
+	SchemaStatusSuccess = "SUCCESS"
+
+	// SchemaStatusNotApplicable is a SchemaStatus enum value
+	SchemaStatusNotApplicable = "NOT_APPLICABLE"
 )
 
 const (

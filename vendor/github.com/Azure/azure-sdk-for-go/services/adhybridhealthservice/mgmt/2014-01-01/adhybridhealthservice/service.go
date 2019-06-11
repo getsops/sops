@@ -22,10 +22,11 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
-// ServiceClient is the REST APIs for Azure Active Drectory Connect Health
+// ServiceClient is the REST APIs for Azure Active Directory Connect Health
 type ServiceClient struct {
 	BaseClient
 }
@@ -49,6 +50,16 @@ func NewServiceClientWithBaseURI(baseURI string) ServiceClient {
 // fromDate - the start date.
 // toDate - the end date.
 func (client ServiceClient) GetMetrics(ctx context.Context, serviceName string, metricName string, groupName string, groupKey string, fromDate *date.Time, toDate *date.Time) (result MetricSets, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceClient.GetMetrics")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetMetricsPreparer(ctx, serviceName, metricName, groupName, groupKey, fromDate, toDate)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "adhybridhealthservice.ServiceClient", "GetMetrics", nil, "Failure preparing request")

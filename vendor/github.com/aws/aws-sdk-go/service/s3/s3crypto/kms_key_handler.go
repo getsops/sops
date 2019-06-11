@@ -65,7 +65,7 @@ func NewKMSKeyGeneratorWithMatDesc(kmsClient kmsiface.KMSAPI, cmkID string, matd
 //	decryptHandler := s3crypto.NewKMSWrapEntry(customKMSClient)
 //
 //	svc := s3crypto.NewDecryptionClient(sess, func(svc *s3crypto.DecryptionClient) {
-//		svc.WrapRegistry[KMSWrap] = decryptHandler
+//		svc.WrapRegistry[s3crypto.KMSWrap] = decryptHandler
 //	}))
 func NewKMSWrapEntry(kmsClient kmsiface.KMSAPI) WrapEntry {
 	// These values are read only making them thread safe

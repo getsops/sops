@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,13 +21,10 @@ package search
 
 import original "github.com/Azure/azure-sdk-for-go/services/search/mgmt/2015-08-19/search"
 
-type AdminKeysClient = original.AdminKeysClient
-
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
 type AdminKeyKind = original.AdminKeyKind
 
 const (
@@ -40,6 +37,13 @@ type HostingMode = original.HostingMode
 const (
 	Default     HostingMode = original.Default
 	HighDensity HostingMode = original.HighDensity
+)
+
+type IdentityType = original.IdentityType
+
+const (
+	None           IdentityType = original.None
+	SystemAssigned IdentityType = original.SystemAssigned
 )
 
 type ProvisioningState = original.ProvisioningState
@@ -64,11 +68,13 @@ const (
 type SkuName = original.SkuName
 
 const (
-	Basic     SkuName = original.Basic
-	Free      SkuName = original.Free
-	Standard  SkuName = original.Standard
-	Standard2 SkuName = original.Standard2
-	Standard3 SkuName = original.Standard3
+	Basic              SkuName = original.Basic
+	Free               SkuName = original.Free
+	Standard           SkuName = original.Standard
+	Standard2          SkuName = original.Standard2
+	Standard3          SkuName = original.Standard3
+	StorageOptimizedL1 SkuName = original.StorageOptimizedL1
+	StorageOptimizedL2 SkuName = original.StorageOptimizedL2
 )
 
 type UnavailableNameReason = original.UnavailableNameReason
@@ -79,6 +85,8 @@ const (
 )
 
 type AdminKeyResult = original.AdminKeyResult
+type AdminKeysClient = original.AdminKeysClient
+type BaseClient = original.BaseClient
 type CheckNameAvailabilityInput = original.CheckNameAvailabilityInput
 type CheckNameAvailabilityOutput = original.CheckNameAvailabilityOutput
 type CloudError = original.CloudError
@@ -88,46 +96,25 @@ type ListQueryKeysResult = original.ListQueryKeysResult
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
 type OperationListResult = original.OperationListResult
+type OperationsClient = original.OperationsClient
 type QueryKey = original.QueryKey
+type QueryKeysClient = original.QueryKeysClient
 type Resource = original.Resource
 type Service = original.Service
 type ServiceListResult = original.ServiceListResult
 type ServiceProperties = original.ServiceProperties
+type ServicesClient = original.ServicesClient
 type ServicesCreateOrUpdateFuture = original.ServicesCreateOrUpdateFuture
 type Sku = original.Sku
-type OperationsClient = original.OperationsClient
-type QueryKeysClient = original.QueryKeysClient
-type ServicesClient = original.ServicesClient
 
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
+}
 func NewAdminKeysClient(subscriptionID string) AdminKeysClient {
 	return original.NewAdminKeysClient(subscriptionID)
 }
 func NewAdminKeysClientWithBaseURI(baseURI string, subscriptionID string) AdminKeysClient {
 	return original.NewAdminKeysClientWithBaseURI(baseURI, subscriptionID)
-}
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
-}
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
-}
-func PossibleAdminKeyKindValues() []AdminKeyKind {
-	return original.PossibleAdminKeyKindValues()
-}
-func PossibleHostingModeValues() []HostingMode {
-	return original.PossibleHostingModeValues()
-}
-func PossibleProvisioningStateValues() []ProvisioningState {
-	return original.PossibleProvisioningStateValues()
-}
-func PossibleServiceStatusValues() []ServiceStatus {
-	return original.PossibleServiceStatusValues()
-}
-func PossibleSkuNameValues() []SkuName {
-	return original.PossibleSkuNameValues()
-}
-func PossibleUnavailableNameReasonValues() []UnavailableNameReason {
-	return original.PossibleUnavailableNameReasonValues()
 }
 func NewOperationsClient(subscriptionID string) OperationsClient {
 	return original.NewOperationsClient(subscriptionID)
@@ -146,6 +133,30 @@ func NewServicesClient(subscriptionID string) ServicesClient {
 }
 func NewServicesClientWithBaseURI(baseURI string, subscriptionID string) ServicesClient {
 	return original.NewServicesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
+}
+func PossibleAdminKeyKindValues() []AdminKeyKind {
+	return original.PossibleAdminKeyKindValues()
+}
+func PossibleHostingModeValues() []HostingMode {
+	return original.PossibleHostingModeValues()
+}
+func PossibleIdentityTypeValues() []IdentityType {
+	return original.PossibleIdentityTypeValues()
+}
+func PossibleProvisioningStateValues() []ProvisioningState {
+	return original.PossibleProvisioningStateValues()
+}
+func PossibleServiceStatusValues() []ServiceStatus {
+	return original.PossibleServiceStatusValues()
+}
+func PossibleSkuNameValues() []SkuName {
+	return original.PossibleSkuNameValues()
+}
+func PossibleUnavailableNameReasonValues() []UnavailableNameReason {
+	return original.PossibleUnavailableNameReasonValues()
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/latest"

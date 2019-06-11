@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewCommitmentAssociationsClientWithBaseURI(baseURI string, subscriptionID s
 // commitmentPlanName - the Azure ML commitment plan name.
 // commitmentAssociationName - the commitment association name.
 func (client CommitmentAssociationsClient) Get(ctx context.Context, resourceGroupName string, commitmentPlanName string, commitmentAssociationName string) (result CommitmentAssociation, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CommitmentAssociationsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, commitmentPlanName, commitmentAssociationName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "commitmentplans.CommitmentAssociationsClient", "Get", nil, "Failure preparing request")
@@ -117,6 +128,16 @@ func (client CommitmentAssociationsClient) GetResponder(resp *http.Response) (re
 // commitmentPlanName - the Azure ML commitment plan name.
 // skipToken - continuation token for pagination.
 func (client CommitmentAssociationsClient) List(ctx context.Context, resourceGroupName string, commitmentPlanName string, skipToken string) (result CommitmentAssociationListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CommitmentAssociationsClient.List")
+		defer func() {
+			sc := -1
+			if result.calr.Response.Response != nil {
+				sc = result.calr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, commitmentPlanName, skipToken)
 	if err != nil {
@@ -184,8 +205,8 @@ func (client CommitmentAssociationsClient) ListResponder(resp *http.Response) (r
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client CommitmentAssociationsClient) listNextResults(lastResults CommitmentAssociationListResult) (result CommitmentAssociationListResult, err error) {
-	req, err := lastResults.commitmentAssociationListResultPreparer()
+func (client CommitmentAssociationsClient) listNextResults(ctx context.Context, lastResults CommitmentAssociationListResult) (result CommitmentAssociationListResult, err error) {
+	req, err := lastResults.commitmentAssociationListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "commitmentplans.CommitmentAssociationsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -206,6 +227,16 @@ func (client CommitmentAssociationsClient) listNextResults(lastResults Commitmen
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client CommitmentAssociationsClient) ListComplete(ctx context.Context, resourceGroupName string, commitmentPlanName string, skipToken string) (result CommitmentAssociationListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CommitmentAssociationsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, commitmentPlanName, skipToken)
 	return
 }
@@ -217,6 +248,16 @@ func (client CommitmentAssociationsClient) ListComplete(ctx context.Context, res
 // commitmentAssociationName - the commitment association name.
 // movePayload - the move request payload.
 func (client CommitmentAssociationsClient) Move(ctx context.Context, resourceGroupName string, commitmentPlanName string, commitmentAssociationName string, movePayload MoveCommitmentAssociationRequest) (result CommitmentAssociation, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CommitmentAssociationsClient.Move")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.MovePreparer(ctx, resourceGroupName, commitmentPlanName, commitmentAssociationName, movePayload)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "commitmentplans.CommitmentAssociationsClient", "Move", nil, "Failure preparing request")

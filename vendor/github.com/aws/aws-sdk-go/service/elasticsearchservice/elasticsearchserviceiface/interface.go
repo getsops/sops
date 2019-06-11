@@ -64,6 +64,10 @@ type ElasticsearchServiceAPI interface {
 	AddTagsWithContext(aws.Context, *elasticsearchservice.AddTagsInput, ...request.Option) (*elasticsearchservice.AddTagsOutput, error)
 	AddTagsRequest(*elasticsearchservice.AddTagsInput) (*request.Request, *elasticsearchservice.AddTagsOutput)
 
+	CancelElasticsearchServiceSoftwareUpdate(*elasticsearchservice.CancelElasticsearchServiceSoftwareUpdateInput) (*elasticsearchservice.CancelElasticsearchServiceSoftwareUpdateOutput, error)
+	CancelElasticsearchServiceSoftwareUpdateWithContext(aws.Context, *elasticsearchservice.CancelElasticsearchServiceSoftwareUpdateInput, ...request.Option) (*elasticsearchservice.CancelElasticsearchServiceSoftwareUpdateOutput, error)
+	CancelElasticsearchServiceSoftwareUpdateRequest(*elasticsearchservice.CancelElasticsearchServiceSoftwareUpdateInput) (*request.Request, *elasticsearchservice.CancelElasticsearchServiceSoftwareUpdateOutput)
+
 	CreateElasticsearchDomain(*elasticsearchservice.CreateElasticsearchDomainInput) (*elasticsearchservice.CreateElasticsearchDomainOutput, error)
 	CreateElasticsearchDomainWithContext(aws.Context, *elasticsearchservice.CreateElasticsearchDomainInput, ...request.Option) (*elasticsearchservice.CreateElasticsearchDomainOutput, error)
 	CreateElasticsearchDomainRequest(*elasticsearchservice.CreateElasticsearchDomainInput) (*request.Request, *elasticsearchservice.CreateElasticsearchDomainOutput)
@@ -150,6 +154,10 @@ type ElasticsearchServiceAPI interface {
 	RemoveTags(*elasticsearchservice.RemoveTagsInput) (*elasticsearchservice.RemoveTagsOutput, error)
 	RemoveTagsWithContext(aws.Context, *elasticsearchservice.RemoveTagsInput, ...request.Option) (*elasticsearchservice.RemoveTagsOutput, error)
 	RemoveTagsRequest(*elasticsearchservice.RemoveTagsInput) (*request.Request, *elasticsearchservice.RemoveTagsOutput)
+
+	StartElasticsearchServiceSoftwareUpdate(*elasticsearchservice.StartElasticsearchServiceSoftwareUpdateInput) (*elasticsearchservice.StartElasticsearchServiceSoftwareUpdateOutput, error)
+	StartElasticsearchServiceSoftwareUpdateWithContext(aws.Context, *elasticsearchservice.StartElasticsearchServiceSoftwareUpdateInput, ...request.Option) (*elasticsearchservice.StartElasticsearchServiceSoftwareUpdateOutput, error)
+	StartElasticsearchServiceSoftwareUpdateRequest(*elasticsearchservice.StartElasticsearchServiceSoftwareUpdateInput) (*request.Request, *elasticsearchservice.StartElasticsearchServiceSoftwareUpdateOutput)
 
 	UpdateElasticsearchDomainConfig(*elasticsearchservice.UpdateElasticsearchDomainConfigInput) (*elasticsearchservice.UpdateElasticsearchDomainConfigOutput, error)
 	UpdateElasticsearchDomainConfigWithContext(aws.Context, *elasticsearchservice.UpdateElasticsearchDomainConfigInput, ...request.Option) (*elasticsearchservice.UpdateElasticsearchDomainConfigOutput, error)

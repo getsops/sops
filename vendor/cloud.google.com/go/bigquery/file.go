@@ -130,6 +130,8 @@ func (fc *FileConfig) populateExternalDataConfig(conf *bq.ExternalDataConfigurat
 type Encoding string
 
 const (
-	UTF_8      Encoding = "UTF-8"
+	// UTF_8 specifies the UTF-8 encoding type.
+	UTF_8 Encoding = "UTF-8"
+	// ISO_8859_1 specifies the ISO-8859-1 encoding type.
 	ISO_8859_1 Encoding = "ISO-8859-1"
 )

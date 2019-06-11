@@ -3,13 +3,13 @@
     "oauth2": {
       "scopes": {
         "https://www.googleapis.com/auth/drive": {
-          "description": "View and manage the files in your Google Drive"
+          "description": "See, edit, create, and delete all of your Google Drive files"
         },
         "https://www.googleapis.com/auth/drive.file": {
           "description": "View and manage Google Drive files and folders that you have opened or created with this app"
         },
         "https://www.googleapis.com/auth/drive.readonly": {
-          "description": "View the files in your Google Drive"
+          "description": "See and download all your Google Drive files"
         },
         "https://www.googleapis.com/auth/presentations": {
           "description": "View and manage your Google Slides presentations"
@@ -18,7 +18,7 @@
           "description": "View your Google Slides presentations"
         },
         "https://www.googleapis.com/auth/spreadsheets": {
-          "description": "View and manage your spreadsheets in Google Drive"
+          "description": "See, edit, create, and delete your spreadsheets in Google Drive"
         },
         "https://www.googleapis.com/auth/spreadsheets.readonly": {
           "description": "View your Google Spreadsheets"
@@ -30,7 +30,7 @@
   "baseUrl": "https://slides.googleapis.com/",
   "batchPath": "batch",
   "canonicalName": "Slides",
-  "description": "An API for creating and editing Google Slides presentations.",
+  "description": "Reads and writes Google Slides presentations.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/slides/",
   "icons": {
@@ -156,7 +156,7 @@
           ]
         },
         "create": {
-          "description": "Creates a new presentation using the title given in the request. If a\npresentationId is provided, uses it as the ID of the new presentation.\nOtherwise, a new presentationId is generated.\nReturns the created presentation.",
+          "description": "Creates a blank presentation using the title given in the request. If a\n`presentationId` is provided, it is used as the ID of the new presentation.\nOtherwise, a new ID is generated. Other fields in the request, including\nany provided content, are ignored.\nReturns the created presentation.",
           "flatPath": "v1/presentations",
           "httpMethod": "POST",
           "id": "slides.presentations.create",
@@ -302,7 +302,7 @@
       }
     }
   },
-  "revision": "20180716",
+  "revision": "20190305",
   "rootUrl": "https://slides.googleapis.com/",
   "schemas": {
     "AffineTransform": {
@@ -516,12 +516,28 @@
       "description": "Creates a line.",
       "id": "CreateLineRequest",
       "properties": {
+        "category": {
+          "description": "The category of the line to be created.\n\nThe exact line type created is\ndetermined based on the category and how it's routed to connect to other\npage elements.\n\nIf you specify both a `category` and a `line_category`, the `category`\ntakes precedence.\n\nIf you do not specify a value for `category`, but specify a value for\n`line_category`, then the specified `line_category` value is used.\n\nIf you do not specify either, then STRAIGHT is used.",
+          "enum": [
+            "LINE_CATEGORY_UNSPECIFIED",
+            "STRAIGHT",
+            "BENT",
+            "CURVED"
+          ],
+          "enumDescriptions": [
+            "Unspecified line category.",
+            "Straight connectors, including straight connector 1.",
+            "Bent connectors, including bent connector 2 to 5.",
+            "Curved connectors, including curved connector 2 to 5."
+          ],
+          "type": "string"
+        },
         "elementProperties": {
           "$ref": "PageElementProperties",
           "description": "The element properties for the line."
         },
         "lineCategory": {
-          "description": "The category of line to be created.",
+          "description": "The category of the line to be created.\n\n\u003cb\u003eDeprecated\u003c/b\u003e: use `category` instead.\n\nThe exact line type created is\ndetermined based on the category and how it's routed to connect to other\npage elements.\n\nIf you specify both a `category` and a `line_category`, the `category`\ntakes precedence.",
           "enum": [
             "STRAIGHT",
             "BENT",
@@ -1521,6 +1537,22 @@
       "description": "A PageElement kind representing a\nnon-connector line, straight connector, curved connector, or bent connector.",
       "id": "Line",
       "properties": {
+        "lineCategory": {
+          "description": "The category of the line.\n\nIt matches the `category` specified in CreateLineRequest, and can be updated with\nUpdateLineCategoryRequest.",
+          "enum": [
+            "LINE_CATEGORY_UNSPECIFIED",
+            "STRAIGHT",
+            "BENT",
+            "CURVED"
+          ],
+          "enumDescriptions": [
+            "Unspecified line category.",
+            "Straight connectors, including straight connector 1.",
+            "Bent connectors, including bent connector 2 to 5.",
+            "Curved connectors, including curved connector 2 to 5."
+          ],
+          "type": "string"
+        },
         "lineProperties": {
           "$ref": "LineProperties",
           "description": "The properties of the line."
@@ -1554,6 +1586,22 @@
             "Straight line. Corresponds to ECMA-376 ST_ShapeType 'line'. This line\ntype is not a connector."
           ],
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "LineConnection": {
+      "description": "The properties for one end of a Line\nconnection.",
+      "id": "LineConnection",
+      "properties": {
+        "connectedObjectId": {
+          "description": "The object ID of the connected page element.\n\nSome page elements, such as groups, tables, and lines\ndo not have connection sites and therefore cannot be connected to a\nconnector line.",
+          "type": "string"
+        },
+        "connectionSiteIndex": {
+          "description": "The index of the connection site on the connected page element.\n\nIn most cases, it corresponds to the predefined connection site index from\nthe ECMA-376 standard. More information on those connection sites can be\nfound in the description of the \"cnx\" attribute in section 20.1.9.9 and\nAnnex H. \"Predefined DrawingML Shape and Text Geometries\" of \"Office Open\nXML File Formats-Fundamentals and Markup Language Reference\", part 1 of\n[ECMA-376 5th edition]\n(http://www.ecma-international.org/publications/standards/Ecma-376.htm).\n\nThe position of each connection site can also be viewed from Slides editor.",
+          "format": "int32",
+          "type": "integer"
         }
       },
       "type": "object"
@@ -1625,6 +1673,10 @@
           ],
           "type": "string"
         },
+        "endConnection": {
+          "$ref": "LineConnection",
+          "description": "The connection at the end of the line. If unset, there is no connection.\n\nOnly lines with a Type indicating it is\na \"connector\" can have an `end_connection`."
+        },
         "lineFill": {
           "$ref": "LineFill",
           "description": "The fill of the line. The default line fill matches the defaults for new\nlines created in the Slides editor."
@@ -1662,6 +1714,10 @@
             "Hollow diamond."
           ],
           "type": "string"
+        },
+        "startConnection": {
+          "$ref": "LineConnection",
+          "description": "The connection at the beginning of the line. If unset, there is no\nconnection.\n\nOnly lines with a Type indicating it is\na \"connector\" can have a `start_connection`."
         },
         "weight": {
           "$ref": "Dimension",
@@ -2359,7 +2415,7 @@
             "A recolor effect that lightens the image using the page's forth available\ncolor from its color scheme.",
             "A recolor effect that lightens the image using the page's fifth available\ncolor from its color scheme.",
             "A recolor effect that lightens the image using the page's sixth available\ncolor from its color scheme.",
-            "A recolor effect that lightens the image using the page's seventh\navailable color from its color scheme.e.",
+            "A recolor effect that lightens the image using the page's seventh\navailable color from its color scheme.",
             "A recolor effect that lightens the image using the page's eighth\navailable color from its color scheme.",
             "A recolor effect that lightens the image using the page's ninth available\ncolor from its color scheme.",
             "A recolor effect that lightens the image using the page's tenth available\ncolor from its color scheme.",
@@ -2435,7 +2491,7 @@
           "type": "array"
         },
         "replaceMethod": {
-          "description": "The replace method.\nDeprecated: use `image_replace_method` instead.\n\nIf you specify both a `replace_method` and an `image_replace_method`, the\n`image_replace_method` takes precedence.",
+          "description": "The replace method.\n\n\u003cb\u003eDeprecated\u003c/b\u003e: use `image_replace_method` instead.\n\nIf you specify both a `replace_method` and an `image_replace_method`, the\n`image_replace_method` takes precedence.",
           "enum": [
             "CENTER_INSIDE",
             "CENTER_CROP"
@@ -2675,6 +2731,10 @@
           "$ref": "ReplaceImageRequest",
           "description": "Replaces an existing image with a new image."
         },
+        "rerouteLine": {
+          "$ref": "RerouteLineRequest",
+          "description": "Reroutes a line such that it's connected\nat the two closest connection sites on the connected page elements."
+        },
         "ungroupObjects": {
           "$ref": "UngroupObjectsRequest",
           "description": "Ungroups objects, such as groups."
@@ -2687,6 +2747,10 @@
           "$ref": "UpdateImagePropertiesRequest",
           "description": "Updates the properties of an Image."
         },
+        "updateLineCategory": {
+          "$ref": "UpdateLineCategoryRequest",
+          "description": "Updates the category of a line."
+        },
         "updateLineProperties": {
           "$ref": "UpdateLinePropertiesRequest",
           "description": "Updates the properties of a Line."
@@ -2698,6 +2762,10 @@
         "updatePageElementTransform": {
           "$ref": "UpdatePageElementTransformRequest",
           "description": "Updates the transform of a page element."
+        },
+        "updatePageElementsZOrder": {
+          "$ref": "UpdatePageElementsZOrderRequest",
+          "description": "Updates the Z-order of page elements."
         },
         "updatePageProperties": {
           "$ref": "UpdatePagePropertiesRequest",
@@ -2738,6 +2806,17 @@
         "updateVideoProperties": {
           "$ref": "UpdateVideoPropertiesRequest",
           "description": "Updates the properties of a Video."
+        }
+      },
+      "type": "object"
+    },
+    "RerouteLineRequest": {
+      "description": "Reroutes a line such that it's connected at the\ntwo closest connection sites on the connected page elements.",
+      "id": "RerouteLineRequest",
+      "properties": {
+        "objectId": {
+          "description": "The object ID of the line to reroute.\n\nOnly a line with a category\nindicating it is a \"connector\" can be rerouted. The start and end\nconnections of the line must be on different page elements.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -2824,7 +2903,7 @@
       "id": "Shadow",
       "properties": {
         "alignment": {
-          "description": "The alignment point of the shadow, that sets the origin for translate,\nscale and skew of the shadow.",
+          "description": "The alignment point of the shadow, that sets the origin for translate,\nscale and skew of the shadow. This property is read-only.",
           "enum": [
             "RECTANGLE_POSITION_UNSPECIFIED",
             "TOP_LEFT",
@@ -2879,7 +2958,7 @@
           "type": "string"
         },
         "rotateWithShape": {
-          "description": "Whether the shadow should rotate with the shape.",
+          "description": "Whether the shadow should rotate with the shape. This property is\nread-only.",
           "type": "boolean"
         },
         "transform": {
@@ -2887,7 +2966,7 @@
           "description": "Transform that encodes the translate, scale, and skew of the shadow,\nrelative to the alignment position."
         },
         "type": {
-          "description": "The type of the shadow.",
+          "description": "The type of the shadow. This property is read-only.",
           "enum": [
             "SHADOW_TYPE_UNSPECIFIED",
             "OUTER"
@@ -3629,7 +3708,7 @@
       "type": "object"
     },
     "TableRange": {
-      "description": "A table range represents a reference to a subset of a table.\n\nIt's important to note that the cells specified by a table range do not\nnecessarily form a rectangle. For example, let's say we have a 3 x 3 table\nwhere all the cells of the last row are merged together. The table looks\nlike this:\n\n              \n     [             ]\n\nA table range with location = (0, 0), row span = 3 and column span = 2\nspecifies the following cells:\n\n      x     x \n     [      x      ]",
+      "description": "A table range represents a reference to a subset of a table.\n\nIt's important to note that the cells specified by a table range do not\nnecessarily form a rectangle. For example, let's say we have a 3 x 3 table\nwhere all the cells of the last row are merged together. The table looks\nlike this:\n\n              \n     [             ]\n\nA table range with location = (0, 0), row span = 3 and column span = 2\nspecifies the following cells:\n\n      x     x \n     [ x    x    x ]",
       "id": "TableRange",
       "properties": {
         "columnSpan": {
@@ -3937,6 +4016,33 @@
       },
       "type": "object"
     },
+    "UpdateLineCategoryRequest": {
+      "description": "Updates the category of a line.",
+      "id": "UpdateLineCategoryRequest",
+      "properties": {
+        "lineCategory": {
+          "description": "The line category to update to.\n\nThe exact line type is determined based\non the category to update to and how it's routed to connect to other page\nelements.",
+          "enum": [
+            "LINE_CATEGORY_UNSPECIFIED",
+            "STRAIGHT",
+            "BENT",
+            "CURVED"
+          ],
+          "enumDescriptions": [
+            "Unspecified line category.",
+            "Straight connectors, including straight connector 1.",
+            "Bent connectors, including bent connector 2 to 5.",
+            "Curved connectors, including curved connector 2 to 5."
+          ],
+          "type": "string"
+        },
+        "objectId": {
+          "description": "The object ID of the line the update is applied to.\n\nOnly a line with a category\nindicating it is a \"connector\" can be updated.\n\nThe line may be rerouted after updating its category.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "UpdateLinePropertiesRequest": {
       "description": "Updates the properties of a Line.",
       "id": "UpdateLinePropertiesRequest",
@@ -4001,6 +4107,38 @@
         "transform": {
           "$ref": "AffineTransform",
           "description": "The input transform matrix used to update the page element."
+        }
+      },
+      "type": "object"
+    },
+    "UpdatePageElementsZOrderRequest": {
+      "description": "Updates the Z-order of page elements. Z-order is an ordering of the elements\non the page from back to front. The page element in the front may cover the\nelements that are behind it.",
+      "id": "UpdatePageElementsZOrderRequest",
+      "properties": {
+        "operation": {
+          "description": "The Z-order operation to apply on the page elements.\n\nWhen applying the operation on multiple page elements, the relative\nZ-orders within these page elements before the operation is maintained.",
+          "enum": [
+            "Z_ORDER_OPERATION_UNSPECIFIED",
+            "BRING_TO_FRONT",
+            "BRING_FORWARD",
+            "SEND_BACKWARD",
+            "SEND_TO_BACK"
+          ],
+          "enumDescriptions": [
+            "Unspecified operation.",
+            "Brings the page elements to the front of the page.",
+            "Brings the page elements forward on the page by one element relative to the\nforwardmost one in the specified page elements.",
+            "Sends the page elements backward on the page by one element relative to the\nfurthest behind one in the specified page elements.",
+            "Sends the page elements to the back of the page."
+          ],
+          "type": "string"
+        },
+        "pageElementObjectIds": {
+          "description": "The object IDs of the page elements to update.\n\nAll the page elements must be on the same page and must not be grouped.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         }
       },
       "type": "object"
@@ -4341,7 +4479,7 @@
           "type": "string"
         },
         "weight": {
-          "description": "The rendered weight of the text. This field can have any value that is a\nmultiple of `100` between `100` and `900`, inclusive. This range\ncorresponds to the numerical values described in the CSS 2.1\nSpecification, [section 15.6](https://www.w3.org/TR/CSS21/fonts.html#font-boldness),\nwith non-numerical values disallowed. Weights greater than or equal to\n`700` are considered bold, and weights less than `700`are not bold. The\ndefault value is `400` (\"normal\").",
+          "description": "The rendered weight of the text. This field can have any value that is a\nmultiple of `100` between `100` and `900`, inclusive. This range\ncorresponds to the numerical values described in the CSS 2.1\nSpecification,\n[section 15.6](https://www.w3.org/TR/CSS21/fonts.html#font-boldness),\nwith non-numerical values disallowed. Weights greater than or equal to\n`700` are considered bold, and weights less than `700`are not bold. The\ndefault value is `400` (\"normal\").",
           "format": "int32",
           "type": "integer"
         }

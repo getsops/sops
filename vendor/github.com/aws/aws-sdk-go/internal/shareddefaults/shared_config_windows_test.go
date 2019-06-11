@@ -1,3 +1,5 @@
+// +build windows
+
 package shareddefaults_test
 
 import (

@@ -18,12 +18,17 @@ package commitmentplans
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/machinelearning/mgmt/2016-05-01-preview/commitmentplans"
 
 // ResourceSkuRestrictionsReasonCode enumerates the values for resource sku restrictions reason code.
 type ResourceSkuRestrictionsReasonCode string
@@ -74,39 +79,39 @@ func PossibleSkuCapacityScaleTypeValues() []SkuCapacityScaleType {
 
 // CatalogSku details of a commitment plan SKU.
 type CatalogSku struct {
-	// ResourceType - Resource type name
+	// ResourceType - READ-ONLY; Resource type name
 	ResourceType *string `json:"resourceType,omitempty"`
-	// Name - SKU name
+	// Name - READ-ONLY; SKU name
 	Name *string `json:"name,omitempty"`
-	// Tier - SKU tier
+	// Tier - READ-ONLY; SKU tier
 	Tier *string `json:"tier,omitempty"`
-	// Locations - Regions where the SKU is available.
+	// Locations - READ-ONLY; Regions where the SKU is available.
 	Locations *[]string `json:"locations,omitempty"`
-	// Capacity - SKU scaling information
+	// Capacity - READ-ONLY; SKU scaling information
 	Capacity *SkuCapacity `json:"capacity,omitempty"`
-	// Capabilities - The capability information for the specified SKU.
+	// Capabilities - READ-ONLY; The capability information for the specified SKU.
 	Capabilities *[]SkuCapability `json:"capabilities,omitempty"`
-	// Costs - The cost information for the specified SKU.
+	// Costs - READ-ONLY; The cost information for the specified SKU.
 	Costs *[]SkuCost `json:"costs,omitempty"`
-	// Restrictions - Restrictions which would prevent a SKU from being used. This is empty if there are no restrictions.
+	// Restrictions - READ-ONLY; Restrictions which would prevent a SKU from being used. This is empty if there are no restrictions.
 	Restrictions *[]SkuRestrictions `json:"restrictions,omitempty"`
 }
 
-// CommitmentAssociation represents the association between a commitment plan and some other resource, such as a
-// Machine Learning web service.
+// CommitmentAssociation represents the association between a commitment plan and some other resource, such
+// as a Machine Learning web service.
 type CommitmentAssociation struct {
 	autorest.Response `json:"-"`
 	// Etag - An entity tag used to enforce optimistic concurrency.
 	Etag *string `json:"etag,omitempty"`
 	// Properties - The properties of the commitment association resource.
 	Properties *CommitmentAssociationProperties `json:"properties,omitempty"`
-	// ID - Resource Id.
+	// ID - READ-ONLY; Resource Id.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
 	// Location - Resource location.
 	Location *string `json:"location,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 	// Tags - User-defined tags for the resource.
 	Tags map[string]*string `json:"tags"`
@@ -121,17 +126,8 @@ func (ca CommitmentAssociation) MarshalJSON() ([]byte, error) {
 	if ca.Properties != nil {
 		objectMap["properties"] = ca.Properties
 	}
-	if ca.ID != nil {
-		objectMap["id"] = ca.ID
-	}
-	if ca.Name != nil {
-		objectMap["name"] = ca.Name
-	}
 	if ca.Location != nil {
 		objectMap["location"] = ca.Location
-	}
-	if ca.Type != nil {
-		objectMap["type"] = ca.Type
 	}
 	if ca.Tags != nil {
 		objectMap["tags"] = ca.Tags
@@ -148,26 +144,44 @@ type CommitmentAssociationListResult struct {
 	Value *[]CommitmentAssociation `json:"value,omitempty"`
 }
 
-// CommitmentAssociationListResultIterator provides access to a complete listing of CommitmentAssociation values.
+// CommitmentAssociationListResultIterator provides access to a complete listing of CommitmentAssociation
+// values.
 type CommitmentAssociationListResultIterator struct {
 	i    int
 	page CommitmentAssociationListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *CommitmentAssociationListResultIterator) Next() error {
+func (iter *CommitmentAssociationListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CommitmentAssociationListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *CommitmentAssociationListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -189,6 +203,11 @@ func (iter CommitmentAssociationListResultIterator) Value() CommitmentAssociatio
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the CommitmentAssociationListResultIterator type.
+func NewCommitmentAssociationListResultIterator(page CommitmentAssociationListResultPage) CommitmentAssociationListResultIterator {
+	return CommitmentAssociationListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (calr CommitmentAssociationListResult) IsEmpty() bool {
 	return calr.Value == nil || len(*calr.Value) == 0
@@ -196,11 +215,11 @@ func (calr CommitmentAssociationListResult) IsEmpty() bool {
 
 // commitmentAssociationListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (calr CommitmentAssociationListResult) commitmentAssociationListResultPreparer() (*http.Request, error) {
+func (calr CommitmentAssociationListResult) commitmentAssociationListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if calr.NextLink == nil || len(to.String(calr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(calr.NextLink)))
@@ -208,19 +227,36 @@ func (calr CommitmentAssociationListResult) commitmentAssociationListResultPrepa
 
 // CommitmentAssociationListResultPage contains a page of CommitmentAssociation values.
 type CommitmentAssociationListResultPage struct {
-	fn   func(CommitmentAssociationListResult) (CommitmentAssociationListResult, error)
+	fn   func(context.Context, CommitmentAssociationListResult) (CommitmentAssociationListResult, error)
 	calr CommitmentAssociationListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *CommitmentAssociationListResultPage) Next() error {
-	next, err := page.fn(page.calr)
+func (page *CommitmentAssociationListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CommitmentAssociationListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.calr)
 	if err != nil {
 		return err
 	}
 	page.calr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *CommitmentAssociationListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -241,13 +277,18 @@ func (page CommitmentAssociationListResultPage) Values() []CommitmentAssociation
 	return *page.calr.Value
 }
 
+// Creates a new instance of the CommitmentAssociationListResultPage type.
+func NewCommitmentAssociationListResultPage(getNextPage func(context.Context, CommitmentAssociationListResult) (CommitmentAssociationListResult, error)) CommitmentAssociationListResultPage {
+	return CommitmentAssociationListResultPage{fn: getNextPage}
+}
+
 // CommitmentAssociationProperties properties of an Azure ML commitment association.
 type CommitmentAssociationProperties struct {
-	// AssociatedResourceID - The ID of the resource this association points to, such as the ARM ID of an Azure ML web service.
+	// AssociatedResourceID - READ-ONLY; The ID of the resource this association points to, such as the ARM ID of an Azure ML web service.
 	AssociatedResourceID *string `json:"associatedResourceId,omitempty"`
-	// CommitmentPlanID - The ARM ID of the parent Azure ML commitment plan.
+	// CommitmentPlanID - READ-ONLY; The ARM ID of the parent Azure ML commitment plan.
 	CommitmentPlanID *string `json:"commitmentPlanId,omitempty"`
-	// CreationDate - The date at which this commitment association was created, in ISO 8601 format.
+	// CreationDate - READ-ONLY; The date at which this commitment association was created, in ISO 8601 format.
 	CreationDate *date.Time `json:"creationDate,omitempty"`
 }
 
@@ -256,17 +297,17 @@ type CommitmentPlan struct {
 	autorest.Response `json:"-"`
 	// Etag - An entity tag used to enforce optimistic concurrency.
 	Etag *string `json:"etag,omitempty"`
-	// Properties - The commitment plan properties.
+	// Properties - READ-ONLY; The commitment plan properties.
 	Properties *Properties `json:"properties,omitempty"`
 	// Sku - The commitment plan SKU.
 	Sku *ResourceSku `json:"sku,omitempty"`
-	// ID - Resource Id.
+	// ID - READ-ONLY; Resource Id.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
 	// Location - Resource location.
 	Location *string `json:"location,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 	// Tags - User-defined tags for the resource.
 	Tags map[string]*string `json:"tags"`
@@ -278,23 +319,11 @@ func (cp CommitmentPlan) MarshalJSON() ([]byte, error) {
 	if cp.Etag != nil {
 		objectMap["etag"] = cp.Etag
 	}
-	if cp.Properties != nil {
-		objectMap["properties"] = cp.Properties
-	}
 	if cp.Sku != nil {
 		objectMap["sku"] = cp.Sku
 	}
-	if cp.ID != nil {
-		objectMap["id"] = cp.ID
-	}
-	if cp.Name != nil {
-		objectMap["name"] = cp.Name
-	}
 	if cp.Location != nil {
 		objectMap["location"] = cp.Location
-	}
-	if cp.Type != nil {
-		objectMap["type"] = cp.Type
 	}
 	if cp.Tags != nil {
 		objectMap["tags"] = cp.Tags
@@ -317,20 +346,37 @@ type ListResultIterator struct {
 	page ListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ListResultIterator) Next() error {
+func (iter *ListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -352,6 +398,11 @@ func (iter ListResultIterator) Value() CommitmentPlan {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ListResultIterator type.
+func NewListResultIterator(page ListResultPage) ListResultIterator {
+	return ListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (lr ListResult) IsEmpty() bool {
 	return lr.Value == nil || len(*lr.Value) == 0
@@ -359,11 +410,11 @@ func (lr ListResult) IsEmpty() bool {
 
 // listResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (lr ListResult) listResultPreparer() (*http.Request, error) {
+func (lr ListResult) listResultPreparer(ctx context.Context) (*http.Request, error) {
 	if lr.NextLink == nil || len(to.String(lr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(lr.NextLink)))
@@ -371,19 +422,36 @@ func (lr ListResult) listResultPreparer() (*http.Request, error) {
 
 // ListResultPage contains a page of CommitmentPlan values.
 type ListResultPage struct {
-	fn func(ListResult) (ListResult, error)
+	fn func(context.Context, ListResult) (ListResult, error)
 	lr ListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ListResultPage) Next() error {
-	next, err := page.fn(page.lr)
+func (page *ListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.lr)
 	if err != nil {
 		return err
 	}
 	page.lr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -404,10 +472,43 @@ func (page ListResultPage) Values() []CommitmentPlan {
 	return *page.lr.Value
 }
 
-// MoveCommitmentAssociationRequest specifies the destination Azure ML commitment plan for a move operation.
+// Creates a new instance of the ListResultPage type.
+func NewListResultPage(getNextPage func(context.Context, ListResult) (ListResult, error)) ListResultPage {
+	return ListResultPage{fn: getNextPage}
+}
+
+// MoveCommitmentAssociationRequest specifies the destination Azure ML commitment plan for a move
+// operation.
 type MoveCommitmentAssociationRequest struct {
 	// DestinationPlanID - The ARM ID of the commitment plan to re-parent the commitment association to.
 	DestinationPlanID *string `json:"destinationPlanId,omitempty"`
+}
+
+// OperationDisplayInfo the API operation info.
+type OperationDisplayInfo struct {
+	// Description - READ-ONLY; The description of the operation.
+	Description *string `json:"description,omitempty"`
+	// Operation - READ-ONLY; The action that users can perform, based on their permission level.
+	Operation *string `json:"operation,omitempty"`
+	// Provider - READ-ONLY; The service provider.
+	Provider *string `json:"provider,omitempty"`
+	// Resource - READ-ONLY; The resource on which the operation is performed.
+	Resource *string `json:"resource,omitempty"`
+}
+
+// OperationEntity an API operation.
+type OperationEntity struct {
+	// Name - READ-ONLY; Operation name: {provider}/{resource}/{operation}.
+	Name *string `json:"name,omitempty"`
+	// Display - The API operation info.
+	Display *OperationDisplayInfo `json:"display,omitempty"`
+}
+
+// OperationEntityListResult the list of REST API operations.
+type OperationEntityListResult struct {
+	autorest.Response `json:"-"`
+	// Value - READ-ONLY; The list of operations.
+	Value *[]OperationEntity `json:"value,omitempty"`
 }
 
 // PatchPayload the properties of a commitment plan which may be updated via PATCH.
@@ -432,13 +533,13 @@ func (pp PatchPayload) MarshalJSON() ([]byte, error) {
 
 // PlanQuantity represents the quantity a commitment plan provides of a metered resource.
 type PlanQuantity struct {
-	// Allowance - The quantity added to the commitment plan at an interval specified by its allowance frequency.
+	// Allowance - READ-ONLY; The quantity added to the commitment plan at an interval specified by its allowance frequency.
 	Allowance *float64 `json:"allowance,omitempty"`
-	// Amount - The quantity available to the plan the last time usage was calculated.
+	// Amount - READ-ONLY; The quantity available to the plan the last time usage was calculated.
 	Amount *float64 `json:"amount,omitempty"`
-	// IncludedQuantityMeter - The Azure meter for usage against included quantities.
+	// IncludedQuantityMeter - READ-ONLY; The Azure meter for usage against included quantities.
 	IncludedQuantityMeter *string `json:"includedQuantityMeter,omitempty"`
-	// OverageMeter - The Azure meter for usage which exceeds included quantities.
+	// OverageMeter - READ-ONLY; The Azure meter for usage which exceeds included quantities.
 	OverageMeter *string `json:"overageMeter,omitempty"`
 }
 
@@ -503,20 +604,37 @@ type PlanUsageHistoryListResultIterator struct {
 	page PlanUsageHistoryListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *PlanUsageHistoryListResultIterator) Next() error {
+func (iter *PlanUsageHistoryListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PlanUsageHistoryListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *PlanUsageHistoryListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -538,6 +656,11 @@ func (iter PlanUsageHistoryListResultIterator) Value() PlanUsageHistory {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the PlanUsageHistoryListResultIterator type.
+func NewPlanUsageHistoryListResultIterator(page PlanUsageHistoryListResultPage) PlanUsageHistoryListResultIterator {
+	return PlanUsageHistoryListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (puhlr PlanUsageHistoryListResult) IsEmpty() bool {
 	return puhlr.Value == nil || len(*puhlr.Value) == 0
@@ -545,11 +668,11 @@ func (puhlr PlanUsageHistoryListResult) IsEmpty() bool {
 
 // planUsageHistoryListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (puhlr PlanUsageHistoryListResult) planUsageHistoryListResultPreparer() (*http.Request, error) {
+func (puhlr PlanUsageHistoryListResult) planUsageHistoryListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if puhlr.NextLink == nil || len(to.String(puhlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(puhlr.NextLink)))
@@ -557,19 +680,36 @@ func (puhlr PlanUsageHistoryListResult) planUsageHistoryListResultPreparer() (*h
 
 // PlanUsageHistoryListResultPage contains a page of PlanUsageHistory values.
 type PlanUsageHistoryListResultPage struct {
-	fn    func(PlanUsageHistoryListResult) (PlanUsageHistoryListResult, error)
+	fn    func(context.Context, PlanUsageHistoryListResult) (PlanUsageHistoryListResult, error)
 	puhlr PlanUsageHistoryListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *PlanUsageHistoryListResultPage) Next() error {
-	next, err := page.fn(page.puhlr)
+func (page *PlanUsageHistoryListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PlanUsageHistoryListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.puhlr)
 	if err != nil {
 		return err
 	}
 	page.puhlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *PlanUsageHistoryListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -590,75 +730,50 @@ func (page PlanUsageHistoryListResultPage) Values() []PlanUsageHistory {
 	return *page.puhlr.Value
 }
 
+// Creates a new instance of the PlanUsageHistoryListResultPage type.
+func NewPlanUsageHistoryListResultPage(getNextPage func(context.Context, PlanUsageHistoryListResult) (PlanUsageHistoryListResult, error)) PlanUsageHistoryListResultPage {
+	return PlanUsageHistoryListResultPage{fn: getNextPage}
+}
+
 // Properties properties of an Azure ML commitment plan.
 type Properties struct {
-	// ChargeForOverage - Indicates whether usage beyond the commitment plan's included quantities will be charged.
+	// ChargeForOverage - READ-ONLY; Indicates whether usage beyond the commitment plan's included quantities will be charged.
 	ChargeForOverage *bool `json:"chargeForOverage,omitempty"`
-	// ChargeForPlan - Indicates whether the commitment plan will incur a charge.
+	// ChargeForPlan - READ-ONLY; Indicates whether the commitment plan will incur a charge.
 	ChargeForPlan *bool `json:"chargeForPlan,omitempty"`
-	// CreationDate - The date at which this commitment plan was created, in ISO 8601 format.
+	// CreationDate - READ-ONLY; The date at which this commitment plan was created, in ISO 8601 format.
 	CreationDate *date.Time `json:"creationDate,omitempty"`
-	// IncludedQuantities - The included resource quantities this plan gives you.
+	// IncludedQuantities - READ-ONLY; The included resource quantities this plan gives you.
 	IncludedQuantities map[string]*PlanQuantity `json:"includedQuantities"`
-	// MaxAssociationLimit - The maximum number of commitment associations that can be children of this commitment plan.
+	// MaxAssociationLimit - READ-ONLY; The maximum number of commitment associations that can be children of this commitment plan.
 	MaxAssociationLimit *int32 `json:"maxAssociationLimit,omitempty"`
-	// MaxCapacityLimit - The maximum scale-out capacity for this commitment plan.
+	// MaxCapacityLimit - READ-ONLY; The maximum scale-out capacity for this commitment plan.
 	MaxCapacityLimit *int32 `json:"maxCapacityLimit,omitempty"`
-	// MinCapacityLimit - The minimum scale-out capacity for this commitment plan.
+	// MinCapacityLimit - READ-ONLY; The minimum scale-out capacity for this commitment plan.
 	MinCapacityLimit *int32 `json:"minCapacityLimit,omitempty"`
-	// PlanMeter - The Azure meter which will be used to charge for this commitment plan.
+	// PlanMeter - READ-ONLY; The Azure meter which will be used to charge for this commitment plan.
 	PlanMeter *string `json:"planMeter,omitempty"`
-	// RefillFrequencyInDays - The frequency at which this commitment plan's included quantities are refilled.
+	// RefillFrequencyInDays - READ-ONLY; The frequency at which this commitment plan's included quantities are refilled.
 	RefillFrequencyInDays *int32 `json:"refillFrequencyInDays,omitempty"`
-	// SuspendPlanOnOverage - Indicates whether this commitment plan will be moved into a suspended state if usage goes beyond the commitment plan's included quantities.
+	// SuspendPlanOnOverage - READ-ONLY; Indicates whether this commitment plan will be moved into a suspended state if usage goes beyond the commitment plan's included quantities.
 	SuspendPlanOnOverage *bool `json:"suspendPlanOnOverage,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for Properties.
 func (p Properties) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if p.ChargeForOverage != nil {
-		objectMap["chargeForOverage"] = p.ChargeForOverage
-	}
-	if p.ChargeForPlan != nil {
-		objectMap["chargeForPlan"] = p.ChargeForPlan
-	}
-	if p.CreationDate != nil {
-		objectMap["creationDate"] = p.CreationDate
-	}
-	if p.IncludedQuantities != nil {
-		objectMap["includedQuantities"] = p.IncludedQuantities
-	}
-	if p.MaxAssociationLimit != nil {
-		objectMap["maxAssociationLimit"] = p.MaxAssociationLimit
-	}
-	if p.MaxCapacityLimit != nil {
-		objectMap["maxCapacityLimit"] = p.MaxCapacityLimit
-	}
-	if p.MinCapacityLimit != nil {
-		objectMap["minCapacityLimit"] = p.MinCapacityLimit
-	}
-	if p.PlanMeter != nil {
-		objectMap["planMeter"] = p.PlanMeter
-	}
-	if p.RefillFrequencyInDays != nil {
-		objectMap["refillFrequencyInDays"] = p.RefillFrequencyInDays
-	}
-	if p.SuspendPlanOnOverage != nil {
-		objectMap["suspendPlanOnOverage"] = p.SuspendPlanOnOverage
-	}
 	return json.Marshal(objectMap)
 }
 
 // Resource common properties of an ARM resource.
 type Resource struct {
-	// ID - Resource Id.
+	// ID - READ-ONLY; Resource Id.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
 	// Location - Resource location.
 	Location *string `json:"location,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 	// Tags - User-defined tags for the resource.
 	Tags map[string]*string `json:"tags"`
@@ -667,17 +782,8 @@ type Resource struct {
 // MarshalJSON is the custom marshaler for Resource.
 func (r Resource) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if r.ID != nil {
-		objectMap["id"] = r.ID
-	}
-	if r.Name != nil {
-		objectMap["name"] = r.Name
-	}
 	if r.Location != nil {
 		objectMap["location"] = r.Location
-	}
-	if r.Type != nil {
-		objectMap["type"] = r.Type
 	}
 	if r.Tags != nil {
 		objectMap["tags"] = r.Tags
@@ -695,48 +801,49 @@ type ResourceSku struct {
 	Tier *string `json:"tier,omitempty"`
 }
 
-// SkuCapability describes The SKU capabilites object.
+// SkuCapability describes The SKU capabilities object.
 type SkuCapability struct {
-	// Name - The capability name.
+	// Name - READ-ONLY; The capability name.
 	Name *string `json:"name,omitempty"`
-	// Value - The capability value.
+	// Value - READ-ONLY; The capability value.
 	Value *string `json:"value,omitempty"`
 }
 
 // SkuCapacity describes scaling information of a SKU.
 type SkuCapacity struct {
-	// Minimum - The minimum capacity.
+	// Minimum - READ-ONLY; The minimum capacity.
 	Minimum *int64 `json:"minimum,omitempty"`
-	// Maximum - The maximum capacity that can be set.
+	// Maximum - READ-ONLY; The maximum capacity that can be set.
 	Maximum *int64 `json:"maximum,omitempty"`
-	// Default - The default capacity.
+	// Default - READ-ONLY; The default capacity.
 	Default *int64 `json:"default,omitempty"`
-	// ScaleType - The scale type applicable to the sku. Possible values include: 'Automatic', 'Manual', 'None'
+	// ScaleType - READ-ONLY; The scale type applicable to the sku. Possible values include: 'Automatic', 'Manual', 'None'
 	ScaleType SkuCapacityScaleType `json:"scaleType,omitempty"`
 }
 
 // SkuCost describes metadata for SKU cost info.
 type SkuCost struct {
-	// MeterID - The meter used for this part of a SKU's cost.
+	// MeterID - READ-ONLY; The meter used for this part of a SKU's cost.
 	MeterID *string `json:"meterID,omitempty"`
-	// Quantity - The multiplier for the meter ID.
+	// Quantity - READ-ONLY; The multiplier for the meter ID.
 	Quantity *int64 `json:"quantity,omitempty"`
-	// ExtendedUnit - The overall duration represented by the quantity.
+	// ExtendedUnit - READ-ONLY; The overall duration represented by the quantity.
 	ExtendedUnit *string `json:"extendedUnit,omitempty"`
 }
 
 // SkuListResult the list of commitment plan SKUs.
 type SkuListResult struct {
 	autorest.Response `json:"-"`
-	Value             *[]CatalogSku `json:"value,omitempty"`
+	// Value - READ-ONLY
+	Value *[]CatalogSku `json:"value,omitempty"`
 }
 
 // SkuRestrictions describes restrictions which would prevent a SKU from being used.
 type SkuRestrictions struct {
-	// Type - The type of restrictions. Possible values include: 'Location', 'Zone'
+	// Type - READ-ONLY; The type of restrictions. Possible values include: 'Location', 'Zone'
 	Type ResourceSkuRestrictionsType `json:"type,omitempty"`
-	// Values - The value of restrictions. If the restriction type is set to location. This would be different locations where the SKU is restricted.
+	// Values - READ-ONLY; The value of restrictions. If the restriction type is set to location. This would be different locations where the SKU is restricted.
 	Values *[]string `json:"values,omitempty"`
-	// ReasonCode - The reason for restriction. Possible values include: 'QuotaID', 'NotAvailableForSubscription'
+	// ReasonCode - READ-ONLY; The reason for restriction. Possible values include: 'QuotaID', 'NotAvailableForSubscription'
 	ReasonCode ResourceSkuRestrictionsReasonCode `json:"reasonCode,omitempty"`
 }

@@ -12,10 +12,10 @@
   "baseUrl": "https://www.googleapis.com/androidpublisher/v3/applications/",
   "batchPath": "batch/androidpublisher/v3",
   "canonicalName": "Android Publisher",
-  "description": "Lets Android application developers access their Google Play accounts.",
+  "description": "Accesses Android application developers' Google Play accounts.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/android-publisher",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/zem5Qd2iN88JN9HgdtGKjtTNK54\"",
+  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/aTw0jxIoMXy6EsyPRJoCzGu1biA\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/android-16.png",
     "x32": "https://www.google.com/images/icons/product/android-32.png"
@@ -388,6 +388,11 @@
                 "editId"
               ],
               "parameters": {
+                "ackBundleInstallationWarning": {
+                  "description": "Must be set to true if the bundle installation may trigger a warning on user devices (for example, if installation size may be over a threshold, typically 100 MB).",
+                  "location": "query",
+                  "type": "boolean"
+                },
                 "editId": {
                   "description": "Unique identifier for this edit.",
                   "location": "path",
@@ -1339,9 +1344,8 @@
                   "type": "string"
                 },
                 "track": {
-                  "description": "The track to read or modify. Acceptable values are: \"alpha\", \"beta\", \"production\", \"rollout\" or \"internal\".",
+                  "description": "The track to read or modify.",
                   "location": "path",
-                  "pattern": "(alpha|beta|production|rollout|internal)",
                   "required": true,
                   "type": "string"
                 }
@@ -1376,9 +1380,8 @@
                   "type": "string"
                 },
                 "track": {
-                  "description": "The track to read or modify. Acceptable values are: \"alpha\", \"beta\", \"production\", \"rollout\" or \"internal\".",
+                  "description": "The track to read or modify.",
                   "location": "path",
-                  "pattern": "(alpha|beta|production|rollout|internal)",
                   "required": true,
                   "type": "string"
                 }
@@ -1416,9 +1419,8 @@
                   "type": "string"
                 },
                 "track": {
-                  "description": "The track to read or modify. Acceptable values are: \"alpha\", \"beta\", \"production\", \"rollout\" or \"internal\".",
+                  "description": "The track to read or modify.",
                   "location": "path",
-                  "pattern": "(alpha|beta|production|rollout|internal)",
                   "required": true,
                   "type": "string"
                 }
@@ -1506,7 +1508,7 @@
               ]
             },
             "patch": {
-              "description": "Updates the track configuration for the specified track type. When halted, the rollout track cannot be updated without adding new APKs, and adding new APKs will cause it to resume. This method supports patch semantics.",
+              "description": "Updates the track configuration for the specified track type. This method supports patch semantics.",
               "httpMethod": "PATCH",
               "id": "androidpublisher.edits.tracks.patch",
               "parameterOrder": [
@@ -1546,7 +1548,7 @@
               ]
             },
             "update": {
-              "description": "Updates the track configuration for the specified track type. When halted, the rollout track cannot be updated without adding new APKs, and adding new APKs will cause it to resume.",
+              "description": "Updates the track configuration for the specified track type.",
               "httpMethod": "PUT",
               "id": "androidpublisher.edits.tracks.update",
               "parameterOrder": [
@@ -1793,6 +1795,91 @@
         }
       }
     },
+    "internalappsharingartifacts": {
+      "methods": {
+        "uploadapk": {
+          "description": "Uploads an APK to internal app sharing. If you are using the Google API client libraries, please increase the timeout of the http request before calling this endpoint (a timeout of 2 minutes is recommended). See: https://developers.google.com/api-client-library/java/google-api-java-client/errors for an example in java.",
+          "httpMethod": "POST",
+          "id": "androidpublisher.internalappsharingartifacts.uploadapk",
+          "mediaUpload": {
+            "accept": [
+              "application/octet-stream",
+              "application/vnd.android.package-archive"
+            ],
+            "maxSize": "1GB",
+            "protocols": {
+              "resumable": {
+                "multipart": true,
+                "path": "/resumable/upload/androidpublisher/v3/applications/internalappsharing/{packageName}/artifacts/apk"
+              },
+              "simple": {
+                "multipart": true,
+                "path": "/upload/androidpublisher/v3/applications/internalappsharing/{packageName}/artifacts/apk"
+              }
+            }
+          },
+          "parameterOrder": [
+            "packageName"
+          ],
+          "parameters": {
+            "packageName": {
+              "description": "Unique identifier for the Android app; for example, \"com.spiffygame\".",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "internalappsharing/{packageName}/artifacts/apk",
+          "response": {
+            "$ref": "InternalAppSharingArtifact"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/androidpublisher"
+          ],
+          "supportsMediaUpload": true
+        },
+        "uploadbundle": {
+          "description": "Uploads an app bundle to internal app sharing. If you are using the Google API client libraries, please increase the timeout of the http request before calling this endpoint (a timeout of 2 minutes is recommended). See: https://developers.google.com/api-client-library/java/google-api-java-client/errors for an example in java.",
+          "httpMethod": "POST",
+          "id": "androidpublisher.internalappsharingartifacts.uploadbundle",
+          "mediaUpload": {
+            "accept": [
+              "application/octet-stream"
+            ],
+            "maxSize": "2GB",
+            "protocols": {
+              "resumable": {
+                "multipart": true,
+                "path": "/resumable/upload/androidpublisher/v3/applications/internalappsharing/{packageName}/artifacts/bundle"
+              },
+              "simple": {
+                "multipart": true,
+                "path": "/upload/androidpublisher/v3/applications/internalappsharing/{packageName}/artifacts/bundle"
+              }
+            }
+          },
+          "parameterOrder": [
+            "packageName"
+          ],
+          "parameters": {
+            "packageName": {
+              "description": "Unique identifier for the Android app; for example, \"com.spiffygame\".",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "internalappsharing/{packageName}/artifacts/bundle",
+          "response": {
+            "$ref": "InternalAppSharingArtifact"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/androidpublisher"
+          ],
+          "supportsMediaUpload": true
+        }
+      }
+    },
     "orders": {
       "methods": {
         "refund": {
@@ -1833,6 +1920,43 @@
       "resources": {
         "products": {
           "methods": {
+            "acknowledge": {
+              "description": "Acknowledges a purchase of an inapp item.",
+              "httpMethod": "POST",
+              "id": "androidpublisher.purchases.products.acknowledge",
+              "parameterOrder": [
+                "packageName",
+                "productId",
+                "token"
+              ],
+              "parameters": {
+                "packageName": {
+                  "description": "The package name of the application the inapp product was sold in (for example, 'com.some.thing').",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                },
+                "productId": {
+                  "description": "The inapp product SKU (for example, 'com.some.thing.inapp1').",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                },
+                "token": {
+                  "description": "The token provided to the user's device when the subscription was purchased.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "{packageName}/purchases/products/{productId}/tokens/{token}:acknowledge",
+              "request": {
+                "$ref": "ProductPurchasesAcknowledgeRequest"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/androidpublisher"
+              ]
+            },
             "get": {
               "description": "Checks the purchase and consumption status of an inapp item.",
               "httpMethod": "GET",
@@ -1874,6 +1998,43 @@
         },
         "subscriptions": {
           "methods": {
+            "acknowledge": {
+              "description": "Acknowledges a subscription purchase.",
+              "httpMethod": "POST",
+              "id": "androidpublisher.purchases.subscriptions.acknowledge",
+              "parameterOrder": [
+                "packageName",
+                "subscriptionId",
+                "token"
+              ],
+              "parameters": {
+                "packageName": {
+                  "description": "The package name of the application for which this subscription was purchased (for example, 'com.some.thing').",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                },
+                "subscriptionId": {
+                  "description": "The purchased subscription ID (for example, 'monthly001').",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                },
+                "token": {
+                  "description": "The token provided to the user's device when the subscription was purchased.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "{packageName}/purchases/subscriptions/{subscriptionId}/tokens/{token}:acknowledge",
+              "request": {
+                "$ref": "SubscriptionPurchasesAcknowledgeRequest"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/androidpublisher"
+              ]
+            },
             "cancel": {
               "description": "Cancels a user's subscription purchase. The subscription remains valid until its expiration time.",
               "httpMethod": "POST",
@@ -2221,7 +2382,7 @@
       }
     }
   },
-  "revision": "20180827",
+  "revision": "20190509",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Apk": {
@@ -2374,6 +2535,21 @@
         "userComment": {
           "$ref": "UserComment",
           "description": "A comment from a user."
+        }
+      },
+      "type": "object"
+    },
+    "CountryTargeting": {
+      "id": "CountryTargeting",
+      "properties": {
+        "countries": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "includeRestOfWorld": {
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -2738,6 +2914,25 @@
       },
       "type": "object"
     },
+    "InternalAppSharingArtifact": {
+      "description": "An artifact resource which gets created when uploading an APK or Android App Bundle through internal app sharing.",
+      "id": "InternalAppSharingArtifact",
+      "properties": {
+        "certificateFingerprint": {
+          "description": "The SHA256 fingerprint of the certificate used to signed the generated artifact.",
+          "type": "string"
+        },
+        "downloadUrl": {
+          "description": "The download URL generated for the uploaded artifact. Users that are authorized to download can follow the link to the Play Store app to install it.",
+          "type": "string"
+        },
+        "sha256": {
+          "description": "The SHA-256 hash of the artifact represented as a lowercase hexadecimal number, matching the output of the sha256sum command.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "Listing": {
       "id": "Listing",
       "properties": {
@@ -2847,6 +3042,11 @@
       "description": "A ProductPurchase resource indicates the status of a user's inapp product purchase.",
       "id": "ProductPurchase",
       "properties": {
+        "acknowledgementState": {
+          "description": "The acknowledgement state of the inapp product. Possible values are:  \n- Yet to be acknowledged \n- Acknowledged",
+          "format": "int32",
+          "type": "integer"
+        },
         "consumptionState": {
           "description": "The consumption state of the inapp product. Possible values are:  \n- Yet to be consumed \n- Consumed",
           "format": "int32",
@@ -2876,9 +3076,19 @@
           "type": "string"
         },
         "purchaseType": {
-          "description": "The type of purchase of the inapp product. This field is only set if this purchase was not made using the standard in-app billing flow. Possible values are:  \n- Test (i.e. purchased from a license testing account) \n- Promo (i.e. purchased using a promo code)",
+          "description": "The type of purchase of the inapp product. This field is only set if this purchase was not made using the standard in-app billing flow. Possible values are:  \n- Test (i.e. purchased from a license testing account) \n- Promo (i.e. purchased using a promo code) \n- Rewarded (i.e. from watching a video ad instead of paying)",
           "format": "int32",
           "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "ProductPurchasesAcknowledgeRequest": {
+      "id": "ProductPurchasesAcknowledgeRequest",
+      "properties": {
+        "developerPayload": {
+          "description": "Payload to attach to the purchase.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -3047,6 +3257,11 @@
           "description": "Whether the subscription will automatically be renewed when it reaches its current expiry time.",
           "type": "boolean"
         },
+        "autoResumeTimeMillis": {
+          "description": "Time at which the subscription will be automatically resumed, in milliseconds since the Epoch. Only present if the user has requested to pause the subscription.",
+          "format": "int64",
+          "type": "string"
+        },
         "cancelReason": {
           "description": "The reason why a subscription was canceled or is not auto-renewing. Possible values are:  \n- User canceled the subscription \n- Subscription was canceled by the system, for example because of a billing problem \n- Subscription was replaced with a new subscription \n- Subscription was canceled by the developer",
           "format": "int32",
@@ -3138,6 +3353,16 @@
       },
       "type": "object"
     },
+    "SubscriptionPurchasesAcknowledgeRequest": {
+      "id": "SubscriptionPurchasesAcknowledgeRequest",
+      "properties": {
+        "developerPayload": {
+          "description": "Payload to attach to the purchase.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "SubscriptionPurchasesDeferRequest": {
       "id": "SubscriptionPurchasesDeferRequest",
       "properties": {
@@ -3223,6 +3448,9 @@
     "TrackRelease": {
       "id": "TrackRelease",
       "properties": {
+        "countryTargeting": {
+          "$ref": "CountryTargeting"
+        },
         "name": {
           "description": "The release name, used to identify this release in the Play Console UI. Not required to be unique. This is optional, if not set it will be generated from the version_name in the APKs.",
           "type": "string"

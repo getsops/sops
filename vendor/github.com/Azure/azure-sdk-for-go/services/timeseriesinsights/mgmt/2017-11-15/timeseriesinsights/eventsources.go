@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewEventSourcesClientWithBaseURI(baseURI string, subscriptionID string) Eve
 // eventSourceName - name of the event source.
 // parameters - parameters for creating an event source resource.
 func (client EventSourcesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, environmentName string, eventSourceName string, parameters BasicEventSourceCreateOrUpdateParameters) (result EventSourceResourceModel, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EventSourcesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: eventSourceName,
 			Constraints: []validation.Constraint{{Target: "eventSourceName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -130,6 +141,16 @@ func (client EventSourcesClient) CreateOrUpdateResponder(resp *http.Response) (r
 // eventSourceName - the name of the Time Series Insights event source associated with the specified
 // environment.
 func (client EventSourcesClient) Delete(ctx context.Context, resourceGroupName string, environmentName string, eventSourceName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EventSourcesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, environmentName, eventSourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "timeseriesinsights.EventSourcesClient", "Delete", nil, "Failure preparing request")
@@ -200,6 +221,16 @@ func (client EventSourcesClient) DeleteResponder(resp *http.Response) (result au
 // eventSourceName - the name of the Time Series Insights event source associated with the specified
 // environment.
 func (client EventSourcesClient) Get(ctx context.Context, resourceGroupName string, environmentName string, eventSourceName string) (result EventSourceResourceModel, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EventSourcesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, environmentName, eventSourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "timeseriesinsights.EventSourcesClient", "Get", nil, "Failure preparing request")
@@ -270,6 +301,16 @@ func (client EventSourcesClient) GetResponder(resp *http.Response) (result Event
 // environmentName - the name of the Time Series Insights environment associated with the specified resource
 // group.
 func (client EventSourcesClient) ListByEnvironment(ctx context.Context, resourceGroupName string, environmentName string) (result EventSourceListResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EventSourcesClient.ListByEnvironment")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByEnvironmentPreparer(ctx, resourceGroupName, environmentName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "timeseriesinsights.EventSourcesClient", "ListByEnvironment", nil, "Failure preparing request")
@@ -342,6 +383,16 @@ func (client EventSourcesClient) ListByEnvironmentResponder(resp *http.Response)
 // environment.
 // eventSourceUpdateParameters - request object that contains the updated information for the event source.
 func (client EventSourcesClient) Update(ctx context.Context, resourceGroupName string, environmentName string, eventSourceName string, eventSourceUpdateParameters EventSourceUpdateParameters) (result EventSourceResourceModel, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EventSourcesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, environmentName, eventSourceName, eventSourceUpdateParameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "timeseriesinsights.EventSourcesClient", "Update", nil, "Failure preparing request")

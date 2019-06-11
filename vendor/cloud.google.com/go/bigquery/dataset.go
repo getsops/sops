@@ -15,14 +15,13 @@
 package bigquery
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"time"
 
 	"cloud.google.com/go/internal/optional"
 	"cloud.google.com/go/internal/trace"
-
-	"golang.org/x/net/context"
 	bq "google.golang.org/api/bigquery/v2"
 	"google.golang.org/api/iterator"
 )
@@ -60,7 +59,7 @@ type DatasetMetadataToUpdate struct {
 	Description optional.String // The user-friendly description of this table.
 	Name        optional.String // The user-friendly name for this dataset.
 
-	// DefaultTableExpiration is the the default expiration time for new tables.
+	// DefaultTableExpiration is the default expiration time for new tables.
 	// If set to time.Duration(0), new tables never expire.
 	DefaultTableExpiration optional.Duration
 
@@ -316,7 +315,7 @@ func (it *TableIterator) Next() (*Table, error) {
 // PageInfo supports pagination. See the google.golang.org/api/iterator package for details.
 func (it *TableIterator) PageInfo() *iterator.PageInfo { return it.pageInfo }
 
-// for testing
+// listTables exists to aid testing.
 var listTables = func(it *TableIterator, pageSize int, pageToken string) (*bq.TableList, error) {
 	call := it.dataset.c.bqs.Tables.List(it.dataset.ProjectID, it.dataset.DatasetID).
 		PageToken(pageToken).
@@ -352,6 +351,91 @@ func bqToTable(tr *bq.TableReference, c *Client) *Table {
 		ProjectID: tr.ProjectId,
 		DatasetID: tr.DatasetId,
 		TableID:   tr.TableId,
+		c:         c,
+	}
+}
+
+// Model creates a handle to a BigQuery model in the dataset.
+// To determine if a model exists, call Model.Metadata.
+// If the model does not already exist, you can create it via execution
+// of a CREATE MODEL query.
+func (d *Dataset) Model(modelID string) *Model {
+	return &Model{ProjectID: d.ProjectID, DatasetID: d.DatasetID, ModelID: modelID, c: d.c}
+}
+
+// Models returns an iterator over the models in the Dataset.
+func (d *Dataset) Models(ctx context.Context) *ModelIterator {
+	it := &ModelIterator{
+		ctx:     ctx,
+		dataset: d,
+	}
+	it.pageInfo, it.nextFunc = iterator.NewPageInfo(
+		it.fetch,
+		func() int { return len(it.models) },
+		func() interface{} { b := it.models; it.models = nil; return b })
+	return it
+}
+
+// A ModelIterator is an iterator over Models.
+type ModelIterator struct {
+	ctx      context.Context
+	dataset  *Dataset
+	models   []*Model
+	pageInfo *iterator.PageInfo
+	nextFunc func() error
+}
+
+// Next returns the next result. Its second return value is Done if there are
+// no more results. Once Next returns Done, all subsequent calls will return
+// Done.
+func (it *ModelIterator) Next() (*Model, error) {
+	if err := it.nextFunc(); err != nil {
+		return nil, err
+	}
+	t := it.models[0]
+	it.models = it.models[1:]
+	return t, nil
+}
+
+// PageInfo supports pagination. See the google.golang.org/api/iterator package for details.
+func (it *ModelIterator) PageInfo() *iterator.PageInfo { return it.pageInfo }
+
+// listTables exists to aid testing.
+var listModels = func(it *ModelIterator, pageSize int, pageToken string) (*bq.ListModelsResponse, error) {
+	call := it.dataset.c.bqs.Models.List(it.dataset.ProjectID, it.dataset.DatasetID).
+		PageToken(pageToken).
+		Context(it.ctx)
+	setClientHeader(call.Header())
+	if pageSize > 0 {
+		call.MaxResults(int64(pageSize))
+	}
+	var res *bq.ListModelsResponse
+	err := runWithRetry(it.ctx, func() (err error) {
+		res, err = call.Do()
+		return err
+	})
+	return res, err
+}
+
+func (it *ModelIterator) fetch(pageSize int, pageToken string) (string, error) {
+	res, err := listModels(it, pageSize, pageToken)
+	if err != nil {
+		return "", err
+	}
+	for _, t := range res.Models {
+		it.models = append(it.models, bqToModel(t.ModelReference, it.dataset.c))
+	}
+	return res.NextPageToken, nil
+}
+
+func bqToModel(mr *bq.ModelReference, c *Client) *Model {
+	if mr == nil {
+		return nil
+	}
+	return &Model{
+		ProjectID: mr.ProjectId,
+		DatasetID: mr.DatasetId,
+		ModelID:   mr.ModelId,
 		c:         c,
 	}
 }
@@ -404,6 +488,9 @@ type DatasetIterator struct {
 // PageInfo supports pagination. See the google.golang.org/api/iterator package for details.
 func (it *DatasetIterator) PageInfo() *iterator.PageInfo { return it.pageInfo }
 
+// Next returns the next Dataset. Its second return value is iterator.Done if
+// there are no more results. Once Next returns Done, all subsequent calls will
+// return Done.
 func (it *DatasetIterator) Next() (*Dataset, error) {
 	if err := it.nextFunc(); err != nil {
 		return nil, err
@@ -461,8 +548,11 @@ type AccessEntry struct {
 type AccessRole string
 
 const (
-	OwnerRole  AccessRole = "OWNER"
+	// OwnerRole is the OWNER AccessRole.
+	OwnerRole AccessRole = "OWNER"
+	// ReaderRole is the READER AccessRole.
 	ReaderRole AccessRole = "READER"
+	// WriterRole is the WRITER AccessRole.
 	WriterRole AccessRole = "WRITER"
 )
 
@@ -470,19 +560,20 @@ const (
 type EntityType int
 
 const (
-	// A domain (e.g. "example.com")
+	// DomainEntity is a domain (e.g. "example.com").
 	DomainEntity EntityType = iota + 1
 
-	// Email address of a Google Group
+	// GroupEmailEntity is an email address of a Google Group.
 	GroupEmailEntity
 
-	// Email address of an individual user.
+	// UserEmailEntity is an email address of an individual user.
 	UserEmailEntity
 
-	// A special group: one of projectOwners, projectReaders, projectWriters or allAuthenticatedUsers.
+	// SpecialGroupEntity is a special group: one of projectOwners, projectReaders, projectWriters or
+	// allAuthenticatedUsers.
 	SpecialGroupEntity
 
-	// A BigQuery view.
+	// ViewEntity is a BigQuery view.
 	ViewEntity
 )
 

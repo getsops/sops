@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,9 +19,12 @@
 
 package keyvault
 
-import original "github.com/Azure/azure-sdk-for-go/services/keyvault/2016-10-01/keyvault"
+import (
+	"context"
 
-type BaseClient = original.BaseClient
+	original "github.com/Azure/azure-sdk-for-go/services/keyvault/2016-10-01/keyvault"
+)
+
 type ActionType = original.ActionType
 
 const (
@@ -111,6 +114,7 @@ type AdministratorDetails = original.AdministratorDetails
 type Attributes = original.Attributes
 type BackupKeyResult = original.BackupKeyResult
 type BackupSecretResult = original.BackupSecretResult
+type BaseClient = original.BaseClient
 type CertificateAttributes = original.CertificateAttributes
 type CertificateBundle = original.CertificateBundle
 type CertificateCreateParameters = original.CertificateCreateParameters
@@ -206,6 +210,60 @@ type X509CertificateProperties = original.X509CertificateProperties
 
 func New() BaseClient {
 	return original.New()
+}
+func NewCertificateIssuerListResultIterator(page CertificateIssuerListResultPage) CertificateIssuerListResultIterator {
+	return original.NewCertificateIssuerListResultIterator(page)
+}
+func NewCertificateIssuerListResultPage(getNextPage func(context.Context, CertificateIssuerListResult) (CertificateIssuerListResult, error)) CertificateIssuerListResultPage {
+	return original.NewCertificateIssuerListResultPage(getNextPage)
+}
+func NewCertificateListResultIterator(page CertificateListResultPage) CertificateListResultIterator {
+	return original.NewCertificateListResultIterator(page)
+}
+func NewCertificateListResultPage(getNextPage func(context.Context, CertificateListResult) (CertificateListResult, error)) CertificateListResultPage {
+	return original.NewCertificateListResultPage(getNextPage)
+}
+func NewDeletedCertificateListResultIterator(page DeletedCertificateListResultPage) DeletedCertificateListResultIterator {
+	return original.NewDeletedCertificateListResultIterator(page)
+}
+func NewDeletedCertificateListResultPage(getNextPage func(context.Context, DeletedCertificateListResult) (DeletedCertificateListResult, error)) DeletedCertificateListResultPage {
+	return original.NewDeletedCertificateListResultPage(getNextPage)
+}
+func NewDeletedKeyListResultIterator(page DeletedKeyListResultPage) DeletedKeyListResultIterator {
+	return original.NewDeletedKeyListResultIterator(page)
+}
+func NewDeletedKeyListResultPage(getNextPage func(context.Context, DeletedKeyListResult) (DeletedKeyListResult, error)) DeletedKeyListResultPage {
+	return original.NewDeletedKeyListResultPage(getNextPage)
+}
+func NewDeletedSecretListResultIterator(page DeletedSecretListResultPage) DeletedSecretListResultIterator {
+	return original.NewDeletedSecretListResultIterator(page)
+}
+func NewDeletedSecretListResultPage(getNextPage func(context.Context, DeletedSecretListResult) (DeletedSecretListResult, error)) DeletedSecretListResultPage {
+	return original.NewDeletedSecretListResultPage(getNextPage)
+}
+func NewKeyListResultIterator(page KeyListResultPage) KeyListResultIterator {
+	return original.NewKeyListResultIterator(page)
+}
+func NewKeyListResultPage(getNextPage func(context.Context, KeyListResult) (KeyListResult, error)) KeyListResultPage {
+	return original.NewKeyListResultPage(getNextPage)
+}
+func NewSasDefinitionListResultIterator(page SasDefinitionListResultPage) SasDefinitionListResultIterator {
+	return original.NewSasDefinitionListResultIterator(page)
+}
+func NewSasDefinitionListResultPage(getNextPage func(context.Context, SasDefinitionListResult) (SasDefinitionListResult, error)) SasDefinitionListResultPage {
+	return original.NewSasDefinitionListResultPage(getNextPage)
+}
+func NewSecretListResultIterator(page SecretListResultPage) SecretListResultIterator {
+	return original.NewSecretListResultIterator(page)
+}
+func NewSecretListResultPage(getNextPage func(context.Context, SecretListResult) (SecretListResult, error)) SecretListResultPage {
+	return original.NewSecretListResultPage(getNextPage)
+}
+func NewStorageListResultIterator(page StorageListResultPage) StorageListResultIterator {
+	return original.NewStorageListResultIterator(page)
+}
+func NewStorageListResultPage(getNextPage func(context.Context, StorageListResult) (StorageListResult, error)) StorageListResultPage {
+	return original.NewStorageListResultPage(getNextPage)
 }
 func NewWithoutDefaults() BaseClient {
 	return original.NewWithoutDefaults()

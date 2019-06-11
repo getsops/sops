@@ -160,6 +160,31 @@
         }
       ]
     },
+    "CreateTags": {
+      "name": "CreateTags",
+      "http": {
+        "method": "POST",
+        "requestUri": "/prod/tags/{resource-arn}",
+        "responseCode": 204
+      },
+      "input": {
+        "shape": "CreateTagsRequest"
+      },
+      "errors": [
+        {
+          "shape": "NotFoundException"
+        },
+        {
+          "shape": "BadRequestException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
+          "shape": "ForbiddenException"
+        }
+      ]
+    },
     "DeleteChannel": {
       "name": "DeleteChannel",
       "http": {
@@ -314,6 +339,68 @@
         },
         {
           "shape": "ConflictException"
+        }
+      ]
+    },
+    "DeleteSchedule": {
+      "name": "DeleteSchedule",
+      "http": {
+        "method": "DELETE",
+        "requestUri": "/prod/channels/{channelId}/schedule",
+        "responseCode": 200
+      },
+      "input": {
+        "shape": "DeleteScheduleRequest"
+      },
+      "output": {
+        "shape": "DeleteScheduleResponse"
+      },
+      "errors": [
+        {
+          "shape": "BadRequestException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
+          "shape": "ForbiddenException"
+        },
+        {
+          "shape": "BadGatewayException"
+        },
+        {
+          "shape": "NotFoundException"
+        },
+        {
+          "shape": "GatewayTimeoutException"
+        },
+        {
+          "shape": "TooManyRequestsException"
+        }
+      ]
+    },
+    "DeleteTags": {
+      "name": "DeleteTags",
+      "http": {
+        "method": "DELETE",
+        "requestUri": "/prod/tags/{resource-arn}",
+        "responseCode": 204
+      },
+      "input": {
+        "shape": "DeleteTagsRequest"
+      },
+      "errors": [
+        {
+          "shape": "NotFoundException"
+        },
+        {
+          "shape": "BadRequestException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
+          "shape": "ForbiddenException"
         }
       ]
     },
@@ -709,6 +796,34 @@
         }
       ]
     },
+    "ListTagsForResource": {
+      "name": "ListTagsForResource",
+      "http": {
+        "method": "GET",
+        "requestUri": "/prod/tags/{resource-arn}",
+        "responseCode": 200
+      },
+      "input": {
+        "shape": "ListTagsForResourceRequest"
+      },
+      "output": {
+        "shape": "ListTagsForResourceResponse"
+      },
+      "errors": [
+        {
+          "shape": "NotFoundException"
+        },
+        {
+          "shape": "BadRequestException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
+          "shape": "ForbiddenException"
+        }
+      ]
+    },
     "PurchaseOffering": {
       "name": "PurchaseOffering",
       "http": {
@@ -866,6 +981,49 @@
         }
       ]
     },
+    "UpdateChannelClass": {
+      "name": "UpdateChannelClass",
+      "http": {
+        "method": "PUT",
+        "requestUri": "/prod/channels/{channelId}/channelClass",
+        "responseCode": 200
+      },
+      "input": {
+        "shape": "UpdateChannelClassRequest"
+      },
+      "output": {
+        "shape": "UpdateChannelClassResponse"
+      },
+      "errors": [
+        {
+          "shape": "BadRequestException"
+        },
+        {
+          "shape": "UnprocessableEntityException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
+          "shape": "ForbiddenException"
+        },
+        {
+          "shape": "BadGatewayException"
+        },
+        {
+          "shape": "NotFoundException"
+        },
+        {
+          "shape": "GatewayTimeoutException"
+        },
+        {
+          "shape": "TooManyRequestsException"
+        },
+        {
+          "shape": "ConflictException"
+        }
+      ]
+    },
     "UpdateInput": {
       "name": "UpdateInput",
       "http": {
@@ -934,6 +1092,46 @@
         },
         {
           "shape": "GatewayTimeoutException"
+        },
+        {
+          "shape": "ConflictException"
+        }
+      ]
+    },
+    "UpdateReservation": {
+      "name": "UpdateReservation",
+      "http": {
+        "method": "PUT",
+        "requestUri": "/prod/reservations/{reservationId}",
+        "responseCode": 200
+      },
+      "input": {
+        "shape": "UpdateReservationRequest"
+      },
+      "output": {
+        "shape": "UpdateReservationResponse"
+      },
+      "errors": [
+        {
+          "shape": "BadRequestException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
+          "shape": "ForbiddenException"
+        },
+        {
+          "shape": "BadGatewayException"
+        },
+        {
+          "shape": "NotFoundException"
+        },
+        {
+          "shape": "GatewayTimeoutException"
+        },
+        {
+          "shape": "TooManyRequestsException"
         },
         {
           "shape": "ConflictException"
@@ -1386,7 +1584,7 @@
       "type": "structure",
       "members": {
         "Name": {
-          "shape": "__string",
+          "shape": "__stringMin1",
           "locationName": "name"
         },
         "SelectorSettings": {
@@ -1867,7 +2065,7 @@
           "locationName": "languageCode"
         },
         "Name": {
-          "shape": "__string",
+          "shape": "__stringMin1",
           "locationName": "name"
         },
         "SelectorSettings": {
@@ -1915,6 +2113,10 @@
           "shape": "__string",
           "locationName": "arn"
         },
+        "ChannelClass": {
+          "shape": "ChannelClass",
+          "locationName": "channelClass"
+        },
         "Destinations": {
           "shape": "__listOfOutputDestination",
           "locationName": "destinations"
@@ -1958,8 +2160,19 @@
         "State": {
           "shape": "ChannelState",
           "locationName": "state"
+        },
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
         }
       }
+    },
+    "ChannelClass": {
+      "type": "string",
+      "enum": [
+        "STANDARD",
+        "SINGLE_PIPELINE"
+      ]
     },
     "ChannelConfigurationValidationError": {
       "type": "structure",
@@ -1994,7 +2207,9 @@
         "RECOVERING",
         "STOPPING",
         "DELETING",
-        "DELETED"
+        "DELETED",
+        "UPDATING",
+        "UPDATE_FAILED"
       ]
     },
     "ChannelSummary": {
@@ -2003,6 +2218,10 @@
         "Arn": {
           "shape": "__string",
           "locationName": "arn"
+        },
+        "ChannelClass": {
+          "shape": "ChannelClass",
+          "locationName": "channelClass"
         },
         "Destinations": {
           "shape": "__listOfOutputDestination",
@@ -2043,6 +2262,10 @@
         "State": {
           "shape": "ChannelState",
           "locationName": "state"
+        },
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
         }
       }
     },
@@ -2062,6 +2285,10 @@
     "CreateChannel": {
       "type": "structure",
       "members": {
+        "ChannelClass": {
+          "shape": "ChannelClass",
+          "locationName": "channelClass"
+        },
         "Destinations": {
           "shape": "__listOfOutputDestination",
           "locationName": "destinations"
@@ -2099,12 +2326,20 @@
         "RoleArn": {
           "shape": "__string",
           "locationName": "roleArn"
+        },
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
         }
       }
     },
     "CreateChannelRequest": {
       "type": "structure",
       "members": {
+        "ChannelClass": {
+          "shape": "ChannelClass",
+          "locationName": "channelClass"
+        },
         "Destinations": {
           "shape": "__listOfOutputDestination",
           "locationName": "destinations"
@@ -2142,6 +2377,10 @@
         "RoleArn": {
           "shape": "__string",
           "locationName": "roleArn"
+        },
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
         }
       }
     },
@@ -2174,6 +2413,10 @@
           "shape": "__listOf__string",
           "locationName": "inputSecurityGroups"
         },
+        "MediaConnectFlows": {
+          "shape": "__listOfMediaConnectFlowRequest",
+          "locationName": "mediaConnectFlows"
+        },
         "Name": {
           "shape": "__string",
           "locationName": "name"
@@ -2183,13 +2426,25 @@
           "locationName": "requestId",
           "idempotencyToken": true
         },
+        "RoleArn": {
+          "shape": "__string",
+          "locationName": "roleArn"
+        },
         "Sources": {
           "shape": "__listOfInputSourceRequest",
           "locationName": "sources"
         },
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
+        },
         "Type": {
           "shape": "InputType",
           "locationName": "type"
+        },
+        "Vpc": {
+          "shape": "InputVpcRequest",
+          "locationName": "vpc"
         }
       }
     },
@@ -2204,6 +2459,10 @@
           "shape": "__listOf__string",
           "locationName": "inputSecurityGroups"
         },
+        "MediaConnectFlows": {
+          "shape": "__listOfMediaConnectFlowRequest",
+          "locationName": "mediaConnectFlows"
+        },
         "Name": {
           "shape": "__string",
           "locationName": "name"
@@ -2213,13 +2472,25 @@
           "locationName": "requestId",
           "idempotencyToken": true
         },
+        "RoleArn": {
+          "shape": "__string",
+          "locationName": "roleArn"
+        },
         "Sources": {
           "shape": "__listOfInputSourceRequest",
           "locationName": "sources"
         },
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
+        },
         "Type": {
           "shape": "InputType",
           "locationName": "type"
+        },
+        "Vpc": {
+          "shape": "InputVpcRequest",
+          "locationName": "vpc"
         }
       }
     },
@@ -2244,6 +2515,10 @@
     "CreateInputSecurityGroupRequest": {
       "type": "structure",
       "members": {
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
+        },
         "WhitelistRules": {
           "shape": "__listOfInputWhitelistRuleCidr",
           "locationName": "whitelistRules"
@@ -2268,6 +2543,23 @@
         }
       }
     },
+    "CreateTagsRequest": {
+      "type": "structure",
+      "members": {
+        "ResourceArn": {
+          "shape": "__string",
+          "location": "uri",
+          "locationName": "resource-arn"
+        },
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
+        }
+      },
+      "required": [
+        "ResourceArn"
+      ]
+    },
     "DeleteChannelRequest": {
       "type": "structure",
       "members": {
@@ -2287,6 +2579,10 @@
         "Arn": {
           "shape": "__string",
           "locationName": "arn"
+        },
+        "ChannelClass": {
+          "shape": "ChannelClass",
+          "locationName": "channelClass"
         },
         "Destinations": {
           "shape": "__listOfOutputDestination",
@@ -2331,6 +2627,10 @@
         "State": {
           "shape": "ChannelState",
           "locationName": "state"
+        },
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
         }
       }
     },
@@ -2450,11 +2750,52 @@
           "shape": "ReservationState",
           "locationName": "state"
         },
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
+        },
         "UsagePrice": {
           "shape": "__double",
           "locationName": "usagePrice"
         }
       }
+    },
+    "DeleteScheduleRequest": {
+      "type": "structure",
+      "members": {
+        "ChannelId": {
+          "shape": "__string",
+          "location": "uri",
+          "locationName": "channelId"
+        }
+      },
+      "required": [
+        "ChannelId"
+      ]
+    },
+    "DeleteScheduleResponse": {
+      "type": "structure",
+      "members": {
+      }
+    },
+    "DeleteTagsRequest": {
+      "type": "structure",
+      "members": {
+        "ResourceArn": {
+          "shape": "__string",
+          "location": "uri",
+          "locationName": "resource-arn"
+        },
+        "TagKeys": {
+          "shape": "__listOf__string",
+          "location": "querystring",
+          "locationName": "tagKeys"
+        }
+      },
+      "required": [
+        "TagKeys",
+        "ResourceArn"
+      ]
     },
     "DescribeChannelRequest": {
       "type": "structure",
@@ -2475,6 +2816,10 @@
         "Arn": {
           "shape": "__string",
           "locationName": "arn"
+        },
+        "ChannelClass": {
+          "shape": "ChannelClass",
+          "locationName": "channelClass"
         },
         "Destinations": {
           "shape": "__listOfOutputDestination",
@@ -2519,6 +2864,10 @@
         "State": {
           "shape": "ChannelState",
           "locationName": "state"
+        },
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
         }
       }
     },
@@ -2554,9 +2903,21 @@
           "shape": "__string",
           "locationName": "id"
         },
+        "InputClass": {
+          "shape": "InputClass",
+          "locationName": "inputClass"
+        },
+        "MediaConnectFlows": {
+          "shape": "__listOfMediaConnectFlow",
+          "locationName": "mediaConnectFlows"
+        },
         "Name": {
           "shape": "__string",
           "locationName": "name"
+        },
+        "RoleArn": {
+          "shape": "__string",
+          "locationName": "roleArn"
         },
         "SecurityGroups": {
           "shape": "__listOf__string",
@@ -2569,6 +2930,10 @@
         "State": {
           "shape": "InputState",
           "locationName": "state"
+        },
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
         },
         "Type": {
           "shape": "InputType",
@@ -2607,6 +2972,10 @@
         "State": {
           "shape": "InputSecurityGroupState",
           "locationName": "state"
+        },
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
         },
         "WhitelistRules": {
           "shape": "__listOfInputWhitelistRule",
@@ -2755,6 +3124,10 @@
         "State": {
           "shape": "ReservationState",
           "locationName": "state"
+        },
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
         },
         "UsagePrice": {
           "shape": "__double",
@@ -3336,7 +3709,34 @@
           "shape": "__string",
           "locationName": "time"
         }
-      }
+      },
+      "required": [
+        "Time"
+      ]
+    },
+    "FollowModeScheduleActionStartSettings": {
+      "type": "structure",
+      "members": {
+        "FollowPoint": {
+          "shape": "FollowPoint",
+          "locationName": "followPoint"
+        },
+        "ReferenceActionName": {
+          "shape": "__string",
+          "locationName": "referenceActionName"
+        }
+      },
+      "required": [
+        "ReferenceActionName",
+        "FollowPoint"
+      ]
+    },
+    "FollowPoint": {
+      "type": "string",
+      "enum": [
+        "END",
+        "START"
+      ]
     },
     "ForbiddenException": {
       "type": "structure",
@@ -3350,6 +3750,39 @@
       "error": {
         "httpStatusCode": 403
       }
+    },
+    "FrameCaptureGroupSettings": {
+      "type": "structure",
+      "members": {
+        "Destination": {
+          "shape": "OutputLocationRef",
+          "locationName": "destination"
+        }
+      },
+      "required": [
+        "Destination"
+      ]
+    },
+    "FrameCaptureOutputSettings": {
+      "type": "structure",
+      "members": {
+        "NameModifier": {
+          "shape": "__string",
+          "locationName": "nameModifier"
+        }
+      }
+    },
+    "FrameCaptureSettings": {
+      "type": "structure",
+      "members": {
+        "CaptureInterval": {
+          "shape": "__integerMin1Max3600",
+          "locationName": "captureInterval"
+        }
+      },
+      "required": [
+        "CaptureInterval"
+      ]
     },
     "GatewayTimeoutException": {
       "type": "structure",
@@ -3379,6 +3812,10 @@
           "shape": "InputLossBehavior",
           "locationName": "inputLossBehavior"
         },
+        "OutputLockingMode": {
+          "shape": "GlobalConfigurationOutputLockingMode",
+          "locationName": "outputLockingMode"
+        },
         "OutputTimingSource": {
           "shape": "GlobalConfigurationOutputTimingSource",
           "locationName": "outputTimingSource"
@@ -3401,6 +3838,13 @@
       "enum": [
         "DISABLED",
         "ENABLED"
+      ]
+    },
+    "GlobalConfigurationOutputLockingMode": {
+      "type": "string",
+      "enum": [
+        "EPOCH_LOCKING",
+        "PIPELINE_LOCKING"
       ]
     },
     "GlobalConfigurationOutputTimingSource": {
@@ -3515,6 +3959,7 @@
       "type": "string",
       "enum": [
         "CBR",
+        "QVBR",
         "VBR"
       ]
     },
@@ -3576,11 +4021,11 @@
           "locationName": "framerateControl"
         },
         "FramerateDenominator": {
-          "shape": "__integer",
+          "shape": "__integerMin1",
           "locationName": "framerateDenominator"
         },
         "FramerateNumerator": {
-          "shape": "__integer",
+          "shape": "__integerMin1",
           "locationName": "framerateNumerator"
         },
         "GopBReference": {
@@ -3639,6 +4084,10 @@
           "shape": "H264Profile",
           "locationName": "profile"
         },
+        "QvbrQualityLevel": {
+          "shape": "__integerMin1Max10",
+          "locationName": "qvbrQualityLevel"
+        },
         "RateControlMode": {
           "shape": "H264RateControlMode",
           "locationName": "rateControlMode"
@@ -3663,6 +4112,10 @@
           "shape": "H264SpatialAq",
           "locationName": "spatialAq"
         },
+        "SubgopLength": {
+          "shape": "H264SubGopLength",
+          "locationName": "subgopLength"
+        },
         "Syntax": {
           "shape": "H264Syntax",
           "locationName": "syntax"
@@ -3682,6 +4135,13 @@
       "enum": [
         "DISABLED",
         "ENABLED"
+      ]
+    },
+    "H264SubGopLength": {
+      "type": "string",
+      "enum": [
+        "DYNAMIC",
+        "FIXED"
       ]
     },
     "H264Syntax": {
@@ -3882,6 +4342,10 @@
           "shape": "HlsCdnSettings",
           "locationName": "hlsCdnSettings"
         },
+        "IFrameOnlyPlaylists": {
+          "shape": "IFrameOnlyPlaylistType",
+          "locationName": "iFrameOnlyPlaylists"
+        },
         "IndexNSegments": {
           "shape": "__integerMin3",
           "locationName": "indexNSegments"
@@ -3941,6 +4405,10 @@
         "ProgramDateTimePeriod": {
           "shape": "__integerMin0Max3600",
           "locationName": "programDateTimePeriod"
+        },
+        "RedundantManifest": {
+          "shape": "HlsRedundantManifest",
+          "locationName": "redundantManifest"
         },
         "SegmentLength": {
           "shape": "__integerMin1",
@@ -4100,6 +4568,13 @@
         "INCLUDE"
       ]
     },
+    "HlsRedundantManifest": {
+      "type": "string",
+      "enum": [
+        "DISABLED",
+        "ENABLED"
+      ]
+    },
     "HlsSegmentationMode": {
       "type": "string",
       "enum": [
@@ -4133,6 +4608,18 @@
         "NONE",
         "PRIV",
         "TDRL"
+      ]
+    },
+    "HlsTimedMetadataScheduleActionSettings": {
+      "type": "structure",
+      "members": {
+        "Id3": {
+          "shape": "__string",
+          "locationName": "id3"
+        }
+      },
+      "required": [
+        "Id3"
       ]
     },
     "HlsTsFileMode": {
@@ -4174,6 +4661,13 @@
         }
       }
     },
+    "IFrameOnlyPlaylistType": {
+      "type": "string",
+      "enum": [
+        "DISABLED",
+        "STANDARD"
+      ]
+    },
     "Input": {
       "type": "structure",
       "members": {
@@ -4193,9 +4687,21 @@
           "shape": "__string",
           "locationName": "id"
         },
+        "InputClass": {
+          "shape": "InputClass",
+          "locationName": "inputClass"
+        },
+        "MediaConnectFlows": {
+          "shape": "__listOfMediaConnectFlow",
+          "locationName": "mediaConnectFlows"
+        },
         "Name": {
           "shape": "__string",
           "locationName": "name"
+        },
+        "RoleArn": {
+          "shape": "__string",
+          "locationName": "roleArn"
         },
         "SecurityGroups": {
           "shape": "__listOf__string",
@@ -4209,6 +4715,10 @@
           "shape": "InputState",
           "locationName": "state"
         },
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
+        },
         "Type": {
           "shape": "InputType",
           "locationName": "type"
@@ -4218,6 +4728,10 @@
     "InputAttachment": {
       "type": "structure",
       "members": {
+        "InputAttachmentName": {
+          "shape": "__string",
+          "locationName": "inputAttachmentName"
+        },
         "InputId": {
           "shape": "__string",
           "locationName": "inputId"
@@ -4243,6 +4757,13 @@
       "required": [
         "InputChannel",
         "Gain"
+      ]
+    },
+    "InputClass": {
+      "type": "string",
+      "enum": [
+        "STANDARD",
+        "SINGLE_PIPELINE"
       ]
     },
     "InputCodec": {
@@ -4281,6 +4802,10 @@
         "Url": {
           "shape": "__string",
           "locationName": "url"
+        },
+        "Vpc": {
+          "shape": "InputDestinationVpc",
+          "locationName": "vpc"
         }
       }
     },
@@ -4290,6 +4815,19 @@
         "StreamName": {
           "shape": "__string",
           "locationName": "streamName"
+        }
+      }
+    },
+    "InputDestinationVpc": {
+      "type": "structure",
+      "members": {
+        "AvailabilityZone": {
+          "shape": "__string",
+          "locationName": "availabilityZone"
+        },
+        "NetworkInterfaceId": {
+          "shape": "__string",
+          "locationName": "networkInterfaceId"
         }
       }
     },
@@ -4329,6 +4867,13 @@
       ]
     },
     "InputLossActionForMsSmoothOut": {
+      "type": "string",
+      "enum": [
+        "EMIT_OUTPUT",
+        "PAUSE_OUTPUT"
+      ]
+    },
+    "InputLossActionForRtmpOut": {
       "type": "string",
       "enum": [
         "EMIT_OUTPUT",
@@ -4410,6 +4955,10 @@
           "shape": "InputSecurityGroupState",
           "locationName": "state"
         },
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
+        },
         "WhitelistRules": {
           "shape": "__listOfInputWhitelistRule",
           "locationName": "whitelistRules"
@@ -4428,6 +4977,10 @@
     "InputSecurityGroupWhitelistRequest": {
       "type": "structure",
       "members": {
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
+        },
         "WhitelistRules": {
           "shape": "__listOfInputWhitelistRuleCidr",
           "locationName": "whitelistRules"
@@ -4543,6 +5096,18 @@
         "DELETED"
       ]
     },
+    "InputSwitchScheduleActionSettings": {
+      "type": "structure",
+      "members": {
+        "InputAttachmentNameReference": {
+          "shape": "__string",
+          "locationName": "inputAttachmentNameReference"
+        }
+      },
+      "required": [
+        "InputAttachmentNameReference"
+      ]
+    },
     "InputType": {
       "type": "string",
       "enum": [
@@ -4550,7 +5115,25 @@
         "RTP_PUSH",
         "RTMP_PUSH",
         "RTMP_PULL",
-        "URL_PULL"
+        "URL_PULL",
+        "MP4_FILE",
+        "MEDIACONNECT"
+      ]
+    },
+    "InputVpcRequest": {
+      "type": "structure",
+      "members": {
+        "SecurityGroupIds": {
+          "shape": "__listOf__string",
+          "locationName": "securityGroupIds"
+        },
+        "SubnetIds": {
+          "shape": "__listOf__string",
+          "locationName": "subnetIds"
+        }
+      },
+      "required": [
+        "SubnetIds"
       ]
     },
     "InputWhitelistRule": {
@@ -4746,6 +5329,11 @@
     "ListOfferingsRequest": {
       "type": "structure",
       "members": {
+        "ChannelClass": {
+          "shape": "__string",
+          "location": "querystring",
+          "locationName": "channelClass"
+        },
         "ChannelConfiguration": {
           "shape": "__string",
           "location": "querystring",
@@ -4827,6 +5415,11 @@
     "ListReservationsRequest": {
       "type": "structure",
       "members": {
+        "ChannelClass": {
+          "shape": "__string",
+          "location": "querystring",
+          "locationName": "channelClass"
+        },
         "Codec": {
           "shape": "__string",
           "location": "querystring",
@@ -4897,6 +5490,28 @@
         "Reservations": {
           "shape": "__listOfReservation",
           "locationName": "reservations"
+        }
+      }
+    },
+    "ListTagsForResourceRequest": {
+      "type": "structure",
+      "members": {
+        "ResourceArn": {
+          "shape": "__string",
+          "location": "uri",
+          "locationName": "resource-arn"
+        }
+      },
+      "required": [
+        "ResourceArn"
+      ]
+    },
+    "ListTagsForResourceResponse": {
+      "type": "structure",
+      "members": {
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
         }
       }
     },
@@ -5324,6 +5939,50 @@
       "min": 1,
       "max": 1000
     },
+    "MediaConnectFlow": {
+      "type": "structure",
+      "members": {
+        "FlowArn": {
+          "shape": "__string",
+          "locationName": "flowArn"
+        }
+      }
+    },
+    "MediaConnectFlowRequest": {
+      "type": "structure",
+      "members": {
+        "FlowArn": {
+          "shape": "__string",
+          "locationName": "flowArn"
+        }
+      }
+    },
+    "MediaPackageGroupSettings": {
+      "type": "structure",
+      "members": {
+        "Destination": {
+          "shape": "OutputLocationRef",
+          "locationName": "destination"
+        }
+      },
+      "required": [
+        "Destination"
+      ]
+    },
+    "MediaPackageOutputDestinationSettings": {
+      "type": "structure",
+      "members": {
+        "ChannelId": {
+          "shape": "__stringMin1",
+          "locationName": "channelId"
+        }
+      }
+    },
+    "MediaPackageOutputSettings": {
+      "type": "structure",
+      "members": {
+      }
+    },
     "Mp2CodingMode": {
       "type": "string",
       "enum": [
@@ -5570,6 +6229,10 @@
           "shape": "__string",
           "locationName": "id"
         },
+        "MediaPackageSettings": {
+          "shape": "__listOfMediaPackageOutputDestinationSettings",
+          "locationName": "mediaPackageSettings"
+        },
         "Settings": {
           "shape": "__listOfOutputDestinationSettings",
           "locationName": "settings"
@@ -5625,9 +6288,17 @@
           "shape": "ArchiveGroupSettings",
           "locationName": "archiveGroupSettings"
         },
+        "FrameCaptureGroupSettings": {
+          "shape": "FrameCaptureGroupSettings",
+          "locationName": "frameCaptureGroupSettings"
+        },
         "HlsGroupSettings": {
           "shape": "HlsGroupSettings",
           "locationName": "hlsGroupSettings"
+        },
+        "MediaPackageGroupSettings": {
+          "shape": "MediaPackageGroupSettings",
+          "locationName": "mediaPackageGroupSettings"
         },
         "MsSmoothGroupSettings": {
           "shape": "MsSmoothGroupSettings",
@@ -5659,9 +6330,17 @@
           "shape": "ArchiveOutputSettings",
           "locationName": "archiveOutputSettings"
         },
+        "FrameCaptureOutputSettings": {
+          "shape": "FrameCaptureOutputSettings",
+          "locationName": "frameCaptureOutputSettings"
+        },
         "HlsOutputSettings": {
           "shape": "HlsOutputSettings",
           "locationName": "hlsOutputSettings"
+        },
+        "MediaPackageOutputSettings": {
+          "shape": "MediaPackageOutputSettings",
+          "locationName": "mediaPackageOutputSettings"
         },
         "MsSmoothOutputSettings": {
           "shape": "MsSmoothOutputSettings",
@@ -5682,6 +6361,34 @@
       "members": {
       }
     },
+    "PauseStateScheduleActionSettings": {
+      "type": "structure",
+      "members": {
+        "Pipelines": {
+          "shape": "__listOfPipelinePauseStateSettings",
+          "locationName": "pipelines"
+        }
+      }
+    },
+    "PipelineId": {
+      "type": "string",
+      "enum": [
+        "PIPELINE_0",
+        "PIPELINE_1"
+      ]
+    },
+    "PipelinePauseStateSettings": {
+      "type": "structure",
+      "members": {
+        "PipelineId": {
+          "shape": "PipelineId",
+          "locationName": "pipelineId"
+        }
+      },
+      "required": [
+        "PipelineId"
+      ]
+    },
     "PurchaseOffering": {
       "type": "structure",
       "members": {
@@ -5697,8 +6404,19 @@
           "shape": "__string",
           "locationName": "requestId",
           "idempotencyToken": true
+        },
+        "Start": {
+          "shape": "__string",
+          "locationName": "start"
+        },
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
         }
-      }
+      },
+      "required": [
+        "Count"
+      ]
     },
     "PurchaseOfferingRequest": {
       "type": "structure",
@@ -5720,10 +6438,19 @@
           "shape": "__string",
           "locationName": "requestId",
           "idempotencyToken": true
+        },
+        "Start": {
+          "shape": "__string",
+          "locationName": "start"
+        },
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
         }
       },
       "required": [
-        "OfferingId"
+        "OfferingId",
+        "Count"
       ]
     },
     "PurchaseOfferingResponse": {
@@ -5831,6 +6558,10 @@
           "shape": "ReservationState",
           "locationName": "state"
         },
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
+        },
         "UsagePrice": {
           "shape": "__double",
           "locationName": "usagePrice"
@@ -5872,6 +6603,10 @@
     "ReservationResourceSpecification": {
       "type": "structure",
       "members": {
+        "ChannelClass": {
+          "shape": "ChannelClass",
+          "locationName": "channelClass"
+        },
         "Codec": {
           "shape": "ReservationCodec",
           "locationName": "codec"
@@ -5991,6 +6726,10 @@
           "shape": "RtmpCaptionData",
           "locationName": "captionData"
         },
+        "InputLossAction": {
+          "shape": "InputLossActionForRtmpOut",
+          "locationName": "inputLossAction"
+        },
         "RestartDelay": {
           "shape": "__integerMin0",
           "locationName": "restartDelay"
@@ -6053,6 +6792,18 @@
     "ScheduleActionSettings": {
       "type": "structure",
       "members": {
+        "HlsTimedMetadataSettings": {
+          "shape": "HlsTimedMetadataScheduleActionSettings",
+          "locationName": "hlsTimedMetadataSettings"
+        },
+        "InputSwitchSettings": {
+          "shape": "InputSwitchScheduleActionSettings",
+          "locationName": "inputSwitchSettings"
+        },
+        "PauseStateSettings": {
+          "shape": "PauseStateScheduleActionSettings",
+          "locationName": "pauseStateSettings"
+        },
         "Scte35ReturnToNetworkSettings": {
           "shape": "Scte35ReturnToNetworkScheduleActionSettings",
           "locationName": "scte35ReturnToNetworkSettings"
@@ -6081,7 +6832,16 @@
         "FixedModeScheduleActionStartSettings": {
           "shape": "FixedModeScheduleActionStartSettings",
           "locationName": "fixedModeScheduleActionStartSettings"
+        },
+        "FollowModeScheduleActionStartSettings": {
+          "shape": "FollowModeScheduleActionStartSettings",
+          "locationName": "followModeScheduleActionStartSettings"
         }
+      }
+    },
+    "ScheduleDeleteResultModel": {
+      "type": "structure",
+      "members": {
       }
     },
     "ScheduleDescribeResultModel": {
@@ -6480,6 +7240,10 @@
           "shape": "__string",
           "locationName": "arn"
         },
+        "ChannelClass": {
+          "shape": "ChannelClass",
+          "locationName": "channelClass"
+        },
         "Destinations": {
           "shape": "__listOfOutputDestination",
           "locationName": "destinations"
@@ -6523,6 +7287,10 @@
         "State": {
           "shape": "ChannelState",
           "locationName": "state"
+        },
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
         }
       }
     },
@@ -6600,7 +7368,6 @@
         }
       },
       "required": [
-        "KeyProviderServer",
         "StaticKeyValue"
       ]
     },
@@ -6623,6 +7390,10 @@
         "Arn": {
           "shape": "__string",
           "locationName": "arn"
+        },
+        "ChannelClass": {
+          "shape": "ChannelClass",
+          "locationName": "channelClass"
         },
         "Destinations": {
           "shape": "__listOfOutputDestination",
@@ -6667,6 +7438,28 @@
         "State": {
           "shape": "ChannelState",
           "locationName": "state"
+        },
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
+        }
+      }
+    },
+    "Tags": {
+      "type": "map",
+      "key": {
+        "shape": "__string"
+      },
+      "value": {
+        "shape": "__string"
+      }
+    },
+    "TagsModel": {
+      "type": "structure",
+      "members": {
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
         }
       }
     },
@@ -6846,6 +7639,53 @@
         }
       }
     },
+    "UpdateChannelClass": {
+      "type": "structure",
+      "members": {
+        "ChannelClass": {
+          "shape": "ChannelClass",
+          "locationName": "channelClass"
+        },
+        "Destinations": {
+          "shape": "__listOfOutputDestination",
+          "locationName": "destinations"
+        }
+      },
+      "required": [
+        "ChannelClass"
+      ]
+    },
+    "UpdateChannelClassRequest": {
+      "type": "structure",
+      "members": {
+        "ChannelClass": {
+          "shape": "ChannelClass",
+          "locationName": "channelClass"
+        },
+        "ChannelId": {
+          "shape": "__string",
+          "location": "uri",
+          "locationName": "channelId"
+        },
+        "Destinations": {
+          "shape": "__listOfOutputDestination",
+          "locationName": "destinations"
+        }
+      },
+      "required": [
+        "ChannelId",
+        "ChannelClass"
+      ]
+    },
+    "UpdateChannelClassResponse": {
+      "type": "structure",
+      "members": {
+        "Channel": {
+          "shape": "Channel",
+          "locationName": "channel"
+        }
+      }
+    },
     "UpdateChannelRequest": {
       "type": "structure",
       "members": {
@@ -6916,9 +7756,17 @@
           "shape": "__listOf__string",
           "locationName": "inputSecurityGroups"
         },
+        "MediaConnectFlows": {
+          "shape": "__listOfMediaConnectFlowRequest",
+          "locationName": "mediaConnectFlows"
+        },
         "Name": {
           "shape": "__string",
           "locationName": "name"
+        },
+        "RoleArn": {
+          "shape": "__string",
+          "locationName": "roleArn"
         },
         "Sources": {
           "shape": "__listOfInputSourceRequest",
@@ -6942,9 +7790,17 @@
           "shape": "__listOf__string",
           "locationName": "inputSecurityGroups"
         },
+        "MediaConnectFlows": {
+          "shape": "__listOfMediaConnectFlowRequest",
+          "locationName": "mediaConnectFlows"
+        },
         "Name": {
           "shape": "__string",
           "locationName": "name"
+        },
+        "RoleArn": {
+          "shape": "__string",
+          "locationName": "roleArn"
         },
         "Sources": {
           "shape": "__listOfInputSourceRequest",
@@ -6981,6 +7837,10 @@
           "location": "uri",
           "locationName": "inputSecurityGroupId"
         },
+        "Tags": {
+          "shape": "Tags",
+          "locationName": "tags"
+        },
         "WhitelistRules": {
           "shape": "__listOfInputWhitelistRuleCidr",
           "locationName": "whitelistRules"
@@ -7008,6 +7868,50 @@
         }
       }
     },
+    "UpdateReservation": {
+      "type": "structure",
+      "members": {
+        "Name": {
+          "shape": "__string",
+          "locationName": "name"
+        }
+      }
+    },
+    "UpdateReservationRequest": {
+      "type": "structure",
+      "members": {
+        "Name": {
+          "shape": "__string",
+          "locationName": "name"
+        },
+        "ReservationId": {
+          "shape": "__string",
+          "location": "uri",
+          "locationName": "reservationId"
+        }
+      },
+      "required": [
+        "ReservationId"
+      ]
+    },
+    "UpdateReservationResponse": {
+      "type": "structure",
+      "members": {
+        "Reservation": {
+          "shape": "Reservation",
+          "locationName": "reservation"
+        }
+      }
+    },
+    "UpdateReservationResultModel": {
+      "type": "structure",
+      "members": {
+        "Reservation": {
+          "shape": "Reservation",
+          "locationName": "reservation"
+        }
+      }
+    },
     "ValidationError": {
       "type": "structure",
       "members": {
@@ -7024,6 +7928,10 @@
     "VideoCodecSettings": {
       "type": "structure",
       "members": {
+        "FrameCaptureSettings": {
+          "shape": "FrameCaptureSettings",
+          "locationName": "frameCaptureSettings"
+        },
         "H264Settings": {
           "shape": "H264Settings",
           "locationName": "h264Settings"
@@ -7279,6 +8187,11 @@
       "min": 1000,
       "max": 30000
     },
+    "__integerMin1Max10": {
+      "type": "integer",
+      "min": 1,
+      "max": 10
+    },
     "__integerMin1Max1000000": {
       "type": "integer",
       "min": 1,
@@ -7303,6 +8216,11 @@
       "type": "integer",
       "min": 1,
       "max": 32
+    },
+    "__integerMin1Max3600": {
+      "type": "integer",
+      "min": 1,
+      "max": 3600
     },
     "__integerMin1Max4": {
       "type": "integer",
@@ -7481,6 +8399,24 @@
         "shape": "InputWhitelistRuleCidr"
       }
     },
+    "__listOfMediaConnectFlow": {
+      "type": "list",
+      "member": {
+        "shape": "MediaConnectFlow"
+      }
+    },
+    "__listOfMediaConnectFlowRequest": {
+      "type": "list",
+      "member": {
+        "shape": "MediaConnectFlowRequest"
+      }
+    },
+    "__listOfMediaPackageOutputDestinationSettings": {
+      "type": "list",
+      "member": {
+        "shape": "MediaPackageOutputDestinationSettings"
+      }
+    },
     "__listOfOffering": {
       "type": "list",
       "member": {
@@ -7509,6 +8445,12 @@
       "type": "list",
       "member": {
         "shape": "OutputGroup"
+      }
+    },
+    "__listOfPipelinePauseStateSettings": {
+      "type": "list",
+      "member": {
+        "shape": "PipelinePauseStateSettings"
       }
     },
     "__listOfReservation": {
@@ -7590,6 +8532,14 @@
       "type": "string",
       "min": 6,
       "max": 6
+    },
+    "__timestampIso8601": {
+      "type": "timestamp",
+      "timestampFormat": "iso8601"
+    },
+    "__timestampUnix": {
+      "type": "timestamp",
+      "timestampFormat": "unixTimestamp"
     }
   }
 }

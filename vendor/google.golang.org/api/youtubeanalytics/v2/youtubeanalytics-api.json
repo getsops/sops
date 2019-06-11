@@ -420,7 +420,7 @@
       }
     }
   },
-  "revision": "20180601",
+  "revision": "20190531",
   "rootUrl": "https://youtubeanalytics.googleapis.com/",
   "schemas": {
     "EmptyResponse": {
@@ -468,11 +468,13 @@
         "locationType": {
           "enum": [
             "PATH",
-            "OTHER"
+            "OTHER",
+            "PARAMETER"
           ],
           "enumDescriptions": [
             "location is an xpath-like path pointing\nto the request field that caused the error.",
-            "other location type which can safely be shared\nexternally."
+            "other location type which can safely be shared\nexternally.",
+            "Location is request paramater. This maps to the {@link PARAMETERS} in\n{@link MessageLocation}."
           ],
           "type": "string"
         }

@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,6 +50,16 @@ func NewRestorableDroppedDatabasesClientWithBaseURI(baseURI string, subscription
 // restorableDroppededDatabaseID - the id of the deleted database in the form of
 // databaseName,deletionTimeInFileTimeFormat
 func (client RestorableDroppedDatabasesClient) Get(ctx context.Context, resourceGroupName string, serverName string, restorableDroppededDatabaseID string) (result RestorableDroppedDatabase, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RestorableDroppedDatabasesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName, restorableDroppededDatabaseID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.RestorableDroppedDatabasesClient", "Get", nil, "Failure preparing request")
@@ -118,6 +129,16 @@ func (client RestorableDroppedDatabasesClient) GetResponder(resp *http.Response)
 // from the Azure Resource Manager API or the portal.
 // serverName - the name of the server.
 func (client RestorableDroppedDatabasesClient) ListByServer(ctx context.Context, resourceGroupName string, serverName string) (result RestorableDroppedDatabaseListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RestorableDroppedDatabasesClient.ListByServer")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByServerPreparer(ctx, resourceGroupName, serverName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.RestorableDroppedDatabasesClient", "ListByServer", nil, "Failure preparing request")

@@ -36,7 +36,7 @@ const (
 	//
 	// The operation exceeds a resource limit, for example, the maximum number of
 	// policy objects that you can create for an AWS account. For more information,
-	// see Firewall Manager Limits (http://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
+	// see Firewall Manager Limits (https://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html)
 	// in the AWS WAF Developer Guide.
 	ErrCodeLimitExceededException = "LimitExceededException"
 

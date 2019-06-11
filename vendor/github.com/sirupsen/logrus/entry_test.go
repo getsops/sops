@@ -2,8 +2,10 @@ package logrus
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -30,6 +32,19 @@ func TestEntryWithError(t *testing.T) {
 
 	assert.Equal(err, entry.WithError(err).Data["err"])
 
+}
+
+func TestEntryWithContext(t *testing.T) {
+	assert := assert.New(t)
+	ctx := context.WithValue(context.Background(), "foo", "bar")
+
+	assert.Equal(ctx, WithContext(ctx).Context)
+
+	logger := New()
+	logger.Out = &bytes.Buffer{}
+	entry := NewEntry(logger)
+
+	assert.Equal(ctx, entry.WithContext(ctx).Context)
 }
 
 func TestEntryPanicln(t *testing.T) {
@@ -112,4 +127,43 @@ func TestEntryHooksPanic(t *testing.T) {
 
 	entry := NewEntry(logger)
 	entry.Info(badMessage)
+}
+
+func TestEntryWithIncorrectField(t *testing.T) {
+	assert := assert.New(t)
+
+	fn := func() {}
+
+	e := Entry{}
+	eWithFunc := e.WithFields(Fields{"func": fn})
+	eWithFuncPtr := e.WithFields(Fields{"funcPtr": &fn})
+
+	assert.Equal(eWithFunc.err, `can not add field "func"`)
+	assert.Equal(eWithFuncPtr.err, `can not add field "funcPtr"`)
+
+	eWithFunc = eWithFunc.WithField("not_a_func", "it is a string")
+	eWithFuncPtr = eWithFuncPtr.WithField("not_a_func", "it is a string")
+
+	assert.Equal(eWithFunc.err, `can not add field "func"`)
+	assert.Equal(eWithFuncPtr.err, `can not add field "funcPtr"`)
+
+	eWithFunc = eWithFunc.WithTime(time.Now())
+	eWithFuncPtr = eWithFuncPtr.WithTime(time.Now())
+
+	assert.Equal(eWithFunc.err, `can not add field "func"`)
+	assert.Equal(eWithFuncPtr.err, `can not add field "funcPtr"`)
+}
+
+func TestEntryLogfLevel(t *testing.T) {
+	logger := New()
+	buffer := &bytes.Buffer{}
+	logger.Out = buffer
+	logger.SetLevel(InfoLevel)
+	entry := NewEntry(logger)
+
+	entry.Logf(DebugLevel, "%s", "debug")
+	assert.NotContains(t, buffer.String(), "debug", )
+
+	entry.Logf(WarnLevel, "%s", "warn")
+	assert.Contains(t, buffer.String(), "warn", )
 }

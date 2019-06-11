@@ -132,6 +132,10 @@ type WorkMailAPI interface {
 	DisassociateMemberFromGroupWithContext(aws.Context, *workmail.DisassociateMemberFromGroupInput, ...request.Option) (*workmail.DisassociateMemberFromGroupOutput, error)
 	DisassociateMemberFromGroupRequest(*workmail.DisassociateMemberFromGroupInput) (*request.Request, *workmail.DisassociateMemberFromGroupOutput)
 
+	GetMailboxDetails(*workmail.GetMailboxDetailsInput) (*workmail.GetMailboxDetailsOutput, error)
+	GetMailboxDetailsWithContext(aws.Context, *workmail.GetMailboxDetailsInput, ...request.Option) (*workmail.GetMailboxDetailsOutput, error)
+	GetMailboxDetailsRequest(*workmail.GetMailboxDetailsInput) (*request.Request, *workmail.GetMailboxDetailsOutput)
+
 	ListAliases(*workmail.ListAliasesInput) (*workmail.ListAliasesOutput, error)
 	ListAliasesWithContext(aws.Context, *workmail.ListAliasesInput, ...request.Option) (*workmail.ListAliasesOutput, error)
 	ListAliasesRequest(*workmail.ListAliasesInput) (*request.Request, *workmail.ListAliasesOutput)
@@ -171,6 +175,9 @@ type WorkMailAPI interface {
 	ListResourceDelegatesWithContext(aws.Context, *workmail.ListResourceDelegatesInput, ...request.Option) (*workmail.ListResourceDelegatesOutput, error)
 	ListResourceDelegatesRequest(*workmail.ListResourceDelegatesInput) (*request.Request, *workmail.ListResourceDelegatesOutput)
 
+	ListResourceDelegatesPages(*workmail.ListResourceDelegatesInput, func(*workmail.ListResourceDelegatesOutput, bool) bool) error
+	ListResourceDelegatesPagesWithContext(aws.Context, *workmail.ListResourceDelegatesInput, func(*workmail.ListResourceDelegatesOutput, bool) bool, ...request.Option) error
+
 	ListResources(*workmail.ListResourcesInput) (*workmail.ListResourcesOutput, error)
 	ListResourcesWithContext(aws.Context, *workmail.ListResourcesInput, ...request.Option) (*workmail.ListResourcesOutput, error)
 	ListResourcesRequest(*workmail.ListResourcesInput) (*request.Request, *workmail.ListResourcesOutput)
@@ -196,6 +203,10 @@ type WorkMailAPI interface {
 	ResetPassword(*workmail.ResetPasswordInput) (*workmail.ResetPasswordOutput, error)
 	ResetPasswordWithContext(aws.Context, *workmail.ResetPasswordInput, ...request.Option) (*workmail.ResetPasswordOutput, error)
 	ResetPasswordRequest(*workmail.ResetPasswordInput) (*request.Request, *workmail.ResetPasswordOutput)
+
+	UpdateMailboxQuota(*workmail.UpdateMailboxQuotaInput) (*workmail.UpdateMailboxQuotaOutput, error)
+	UpdateMailboxQuotaWithContext(aws.Context, *workmail.UpdateMailboxQuotaInput, ...request.Option) (*workmail.UpdateMailboxQuotaOutput, error)
+	UpdateMailboxQuotaRequest(*workmail.UpdateMailboxQuotaInput) (*request.Request, *workmail.UpdateMailboxQuotaOutput)
 
 	UpdatePrimaryEmailAddress(*workmail.UpdatePrimaryEmailAddressInput) (*workmail.UpdatePrimaryEmailAddressOutput, error)
 	UpdatePrimaryEmailAddressWithContext(aws.Context, *workmail.UpdatePrimaryEmailAddressInput, ...request.Option) (*workmail.UpdatePrimaryEmailAddressOutput, error)

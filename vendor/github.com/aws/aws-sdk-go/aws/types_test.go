@@ -14,7 +14,7 @@ func TestWriteAtBuffer(t *testing.T) {
 		t.Errorf("expected no error, but received %v", err)
 	}
 	if e, a := 1, n; e != a {
-		t.Errorf("expected %d, but recieved %d", e, a)
+		t.Errorf("expected %d, but received %d", e, a)
 	}
 
 	n, err = b.WriteAt([]byte{1, 1, 1}, 5)
@@ -22,7 +22,7 @@ func TestWriteAtBuffer(t *testing.T) {
 		t.Errorf("expected no error, but received %v", err)
 	}
 	if e, a := 3, n; e != a {
-		t.Errorf("expected %d, but recieved %d", e, a)
+		t.Errorf("expected %d, but received %d", e, a)
 	}
 
 	n, err = b.WriteAt([]byte{2}, 1)
@@ -30,7 +30,7 @@ func TestWriteAtBuffer(t *testing.T) {
 		t.Errorf("expected no error, but received %v", err)
 	}
 	if e, a := 1, n; e != a {
-		t.Errorf("expected %d, but recieved %d", e, a)
+		t.Errorf("expected %d, but received %d", e, a)
 	}
 
 	n, err = b.WriteAt([]byte{3}, 2)

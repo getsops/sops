@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewVirtualNetworksClientWithBaseURI(baseURI string, subscriptionID string) 
 // virtualNetworkName - the name of the virtual network.
 // parameters - parameters supplied to the create/update Virtual Network operation
 func (client VirtualNetworksClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, virtualNetworkName string, parameters VirtualNetwork) (result VirtualNetworksCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworksClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, virtualNetworkName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.VirtualNetworksClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -92,10 +103,6 @@ func (client VirtualNetworksClient) CreateOrUpdateSender(req *http.Request) (fut
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -113,11 +120,21 @@ func (client VirtualNetworksClient) CreateOrUpdateResponder(resp *http.Response)
 	return
 }
 
-// Delete the Delete VirtualNetwork operation deletes the specifed virtual network
+// Delete the Delete VirtualNetwork operation deletes the specified virtual network
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // virtualNetworkName - the name of the virtual network.
 func (client VirtualNetworksClient) Delete(ctx context.Context, resourceGroupName string, virtualNetworkName string) (result VirtualNetworksDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworksClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, virtualNetworkName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.VirtualNetworksClient", "Delete", nil, "Failure preparing request")
@@ -163,10 +180,6 @@ func (client VirtualNetworksClient) DeleteSender(req *http.Request) (future Virt
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -189,6 +202,16 @@ func (client VirtualNetworksClient) DeleteResponder(resp *http.Response) (result
 // virtualNetworkName - the name of the virtual network.
 // expand - expand references resources.
 func (client VirtualNetworksClient) Get(ctx context.Context, resourceGroupName string, virtualNetworkName string, expand string) (result VirtualNetwork, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworksClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, virtualNetworkName, expand)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.VirtualNetworksClient", "Get", nil, "Failure preparing request")
@@ -258,6 +281,16 @@ func (client VirtualNetworksClient) GetResponder(resp *http.Response) (result Vi
 // Parameters:
 // resourceGroupName - the name of the resource group.
 func (client VirtualNetworksClient) List(ctx context.Context, resourceGroupName string) (result VirtualNetworkListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworksClient.List")
+		defer func() {
+			sc := -1
+			if result.vnlr.Response.Response != nil {
+				sc = result.vnlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -321,8 +354,8 @@ func (client VirtualNetworksClient) ListResponder(resp *http.Response) (result V
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client VirtualNetworksClient) listNextResults(lastResults VirtualNetworkListResult) (result VirtualNetworkListResult, err error) {
-	req, err := lastResults.virtualNetworkListResultPreparer()
+func (client VirtualNetworksClient) listNextResults(ctx context.Context, lastResults VirtualNetworkListResult) (result VirtualNetworkListResult, err error) {
+	req, err := lastResults.virtualNetworkListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "network.VirtualNetworksClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -343,12 +376,32 @@ func (client VirtualNetworksClient) listNextResults(lastResults VirtualNetworkLi
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client VirtualNetworksClient) ListComplete(ctx context.Context, resourceGroupName string) (result VirtualNetworkListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworksClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName)
 	return
 }
 
 // ListAll the list VirtualNetwork returns all Virtual Networks in a subscription
 func (client VirtualNetworksClient) ListAll(ctx context.Context) (result VirtualNetworkListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworksClient.ListAll")
+		defer func() {
+			sc := -1
+			if result.vnlr.Response.Response != nil {
+				sc = result.vnlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listAllNextResults
 	req, err := client.ListAllPreparer(ctx)
 	if err != nil {
@@ -411,8 +464,8 @@ func (client VirtualNetworksClient) ListAllResponder(resp *http.Response) (resul
 }
 
 // listAllNextResults retrieves the next set of results, if any.
-func (client VirtualNetworksClient) listAllNextResults(lastResults VirtualNetworkListResult) (result VirtualNetworkListResult, err error) {
-	req, err := lastResults.virtualNetworkListResultPreparer()
+func (client VirtualNetworksClient) listAllNextResults(ctx context.Context, lastResults VirtualNetworkListResult) (result VirtualNetworkListResult, err error) {
+	req, err := lastResults.virtualNetworkListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "network.VirtualNetworksClient", "listAllNextResults", nil, "Failure preparing next results request")
 	}
@@ -433,6 +486,16 @@ func (client VirtualNetworksClient) listAllNextResults(lastResults VirtualNetwor
 
 // ListAllComplete enumerates all values, automatically crossing page boundaries as required.
 func (client VirtualNetworksClient) ListAllComplete(ctx context.Context) (result VirtualNetworkListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworksClient.ListAll")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListAll(ctx)
 	return
 }

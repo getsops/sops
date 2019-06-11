@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -43,6 +44,16 @@ func NewBillingMetersClientWithBaseURI(baseURI string, subscriptionID string) Bi
 // Parameters:
 // billingLocation - azure Location of billable resource
 func (client BillingMetersClient) List(ctx context.Context, billingLocation string) (result BillingMeterCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BillingMetersClient.List")
+		defer func() {
+			sc := -1
+			if result.bmc.Response.Response != nil {
+				sc = result.bmc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, billingLocation)
 	if err != nil {
@@ -108,8 +119,8 @@ func (client BillingMetersClient) ListResponder(resp *http.Response) (result Bil
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client BillingMetersClient) listNextResults(lastResults BillingMeterCollection) (result BillingMeterCollection, err error) {
-	req, err := lastResults.billingMeterCollectionPreparer()
+func (client BillingMetersClient) listNextResults(ctx context.Context, lastResults BillingMeterCollection) (result BillingMeterCollection, err error) {
+	req, err := lastResults.billingMeterCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.BillingMetersClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -130,6 +141,16 @@ func (client BillingMetersClient) listNextResults(lastResults BillingMeterCollec
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client BillingMetersClient) ListComplete(ctx context.Context, billingLocation string) (result BillingMeterCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BillingMetersClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, billingLocation)
 	return
 }

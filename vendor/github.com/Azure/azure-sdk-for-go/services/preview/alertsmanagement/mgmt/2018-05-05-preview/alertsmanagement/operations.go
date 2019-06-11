@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -41,6 +42,16 @@ func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string, monit
 
 // List list all operations available through Azure Alerts Management Resource Provider.
 func (client OperationsClient) List(ctx context.Context) (result OperationsListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationsClient.List")
+		defer func() {
+			sc := -1
+			if result.ol.Response.Response != nil {
+				sc = result.ol.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -99,8 +110,8 @@ func (client OperationsClient) ListResponder(resp *http.Response) (result Operat
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client OperationsClient) listNextResults(lastResults OperationsList) (result OperationsList, err error) {
-	req, err := lastResults.operationsListPreparer()
+func (client OperationsClient) listNextResults(ctx context.Context, lastResults OperationsList) (result OperationsList, err error) {
+	req, err := lastResults.operationsListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "alertsmanagement.OperationsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -121,6 +132,16 @@ func (client OperationsClient) listNextResults(lastResults OperationsList) (resu
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client OperationsClient) ListComplete(ctx context.Context) (result OperationsListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }

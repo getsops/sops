@@ -15,12 +15,13 @@
 package logging_test
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
 
 	"cloud.google.com/go/logging"
-	"golang.org/x/net/context"
+	"go.opencensus.io/trace"
 )
 
 func ExampleNewClient() {
@@ -163,4 +164,20 @@ func ExampleParseSeverity() {
 	sev := logging.ParseSeverity("ALERT")
 	fmt.Println(sev)
 	// Output: Alert
+}
+
+// This example shows how to create a Logger that disables OpenCensus tracing of the
+// WriteLogEntries RPC.
+func ExampleContextFunc() {
+	ctx := context.Background()
+	client, err := logging.NewClient(ctx, "my-project")
+	if err != nil {
+		// TODO: Handle error.
+	}
+	lg := client.Logger("logID", logging.ContextFunc(func() (context.Context, func()) {
+		ctx, span := trace.StartSpan(context.Background(), "this span will not be exported",
+			trace.WithSampler(trace.NeverSample()))
+		return ctx, span.End
+	}))
+	_ = lg // TODO: Use lg
 }

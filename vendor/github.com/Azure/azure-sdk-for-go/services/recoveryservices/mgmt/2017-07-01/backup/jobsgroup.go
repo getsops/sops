@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewJobsGroupClientWithBaseURI(baseURI string, subscriptionID string) JobsGr
 // resourceGroupName - the name of the resource group where the recovery services vault is present.
 // filter - oData filter options.
 func (client JobsGroupClient) Export(ctx context.Context, vaultName string, resourceGroupName string, filter string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobsGroupClient.Export")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ExportPreparer(ctx, vaultName, resourceGroupName, filter)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "backup.JobsGroupClient", "Export", nil, "Failure preparing request")

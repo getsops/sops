@@ -18,7 +18,7 @@ const opAddRoleToDBCluster = "AddRoleToDBCluster"
 // AddRoleToDBClusterRequest generates a "aws/request.Request" representing the
 // client's request for the AddRoleToDBCluster operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -52,8 +52,7 @@ func (c *Neptune) AddRoleToDBClusterRequest(input *AddRoleToDBClusterInput) (req
 
 	output = &AddRoleToDBClusterOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -111,7 +110,7 @@ const opAddSourceIdentifierToSubscription = "AddSourceIdentifierToSubscription"
 // AddSourceIdentifierToSubscriptionRequest generates a "aws/request.Request" representing the
 // client's request for the AddSourceIdentifierToSubscription operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -161,8 +160,10 @@ func (c *Neptune) AddSourceIdentifierToSubscriptionRequest(input *AddSourceIdent
 //
 // Returned Error Codes:
 //   * ErrCodeSubscriptionNotFoundFault "SubscriptionNotFound"
+//   The designated subscription could not be found.
 //
 //   * ErrCodeSourceNotFoundFault "SourceNotFound"
+//   The source could not be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/neptune-2014-10-31/AddSourceIdentifierToSubscription
 func (c *Neptune) AddSourceIdentifierToSubscription(input *AddSourceIdentifierToSubscriptionInput) (*AddSourceIdentifierToSubscriptionOutput, error) {
@@ -191,7 +192,7 @@ const opAddTagsToResource = "AddTagsToResource"
 // AddTagsToResourceRequest generates a "aws/request.Request" representing the
 // client's request for the AddTagsToResource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -225,8 +226,7 @@ func (c *Neptune) AddTagsToResourceRequest(input *AddTagsToResourceInput) (req *
 
 	output = &AddTagsToResourceOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -281,7 +281,7 @@ const opApplyPendingMaintenanceAction = "ApplyPendingMaintenanceAction"
 // ApplyPendingMaintenanceActionRequest generates a "aws/request.Request" representing the
 // client's request for the ApplyPendingMaintenanceAction operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -361,7 +361,7 @@ const opCopyDBClusterParameterGroup = "CopyDBClusterParameterGroup"
 // CopyDBClusterParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CopyDBClusterParameterGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -447,7 +447,7 @@ const opCopyDBClusterSnapshot = "CopyDBClusterSnapshot"
 // CopyDBClusterSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the CopyDBClusterSnapshot operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -491,56 +491,7 @@ func (c *Neptune) CopyDBClusterSnapshotRequest(input *CopyDBClusterSnapshotInput
 // To copy a DB cluster snapshot from a shared manual DB cluster snapshot, SourceDBClusterSnapshotIdentifier
 // must be the Amazon Resource Name (ARN) of the shared DB cluster snapshot.
 //
-// You can copy an encrypted DB cluster snapshot from another AWS Region. In
-// that case, the AWS Region where you call the CopyDBClusterSnapshot action
-// is the destination AWS Region for the encrypted DB cluster snapshot to be
-// copied to. To copy an encrypted DB cluster snapshot from another AWS Region,
-// you must provide the following values:
-//
-//    * KmsKeyId - The AWS Key Management System (AWS KMS) key identifier for
-//    the key to use to encrypt the copy of the DB cluster snapshot in the destination
-//    AWS Region.
-//
-//    * PreSignedUrl - A URL that contains a Signature Version 4 signed request
-//    for the CopyDBClusterSnapshot action to be called in the source AWS Region
-//    where the DB cluster snapshot is copied from. The pre-signed URL must
-//    be a valid request for the CopyDBClusterSnapshot API action that can be
-//    executed in the source AWS Region that contains the encrypted DB cluster
-//    snapshot to be copied.
-//
-// The pre-signed URL request must contain the following parameter values:
-//
-// KmsKeyId - The KMS key identifier for the key to use to encrypt the copy
-//    of the DB cluster snapshot in the destination AWS Region. This is the
-//    same identifier for both the CopyDBClusterSnapshot action that is called
-//    in the destination AWS Region, and the action contained in the pre-signed
-//    URL.
-//
-// DestinationRegion - The name of the AWS Region that the DB cluster snapshot
-//    will be created in.
-//
-// SourceDBClusterSnapshotIdentifier - The DB cluster snapshot identifier for
-//    the encrypted DB cluster snapshot to be copied. This identifier must be
-//    in the Amazon Resource Name (ARN) format for the source AWS Region. For
-//    example, if you are copying an encrypted DB cluster snapshot from the
-//    us-west-2 AWS Region, then your SourceDBClusterSnapshotIdentifier looks
-//    like the following example: arn:aws:rds:us-west-2:123456789012:cluster-snapshot:neptune-cluster1-snapshot-20161115.
-//
-// To learn how to generate a Signature Version 4 signed request, see  Authenticating
-//    Requests: Using Query Parameters (AWS Signature Version 4) (http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html)
-//    and  Signature Version 4 Signing Process (http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html).
-//
-//    * TargetDBClusterSnapshotIdentifier - The identifier for the new copy
-//    of the DB cluster snapshot in the destination AWS Region.
-//
-//    * SourceDBClusterSnapshotIdentifier - The DB cluster snapshot identifier
-//    for the encrypted DB cluster snapshot to be copied. This identifier must
-//    be in the ARN format for the source AWS Region and is the same value as
-//    the SourceDBClusterSnapshotIdentifier in the pre-signed URL.
-//
-// To cancel the copy operation once it is in progress, delete the target DB
-// cluster snapshot identified by TargetDBClusterSnapshotIdentifier while that
-// DB cluster snapshot is in "copying" status.
+// You can't copy from one AWS Region to another.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -595,7 +546,7 @@ const opCopyDBParameterGroup = "CopyDBParameterGroup"
 // CopyDBParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CopyDBParameterGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -681,7 +632,7 @@ const opCreateDBCluster = "CreateDBCluster"
 // CreateDBClusterRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDBCluster operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -723,9 +674,7 @@ func (c *Neptune) CreateDBClusterRequest(input *CreateDBClusterInput) (req *requ
 // Creates a new Amazon Neptune DB cluster.
 //
 // You can use the ReplicationSourceIdentifier parameter to create the DB cluster
-// as a Read Replica of another DB cluster or Amazon Neptune DB instance. For
-// cross-region replication where the DB cluster identified by ReplicationSourceIdentifier
-// is encrypted, you must also specify the PreSignedUrl parameter.
+// as a Read Replica of another DB cluster or Amazon Neptune DB instance.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -815,7 +764,7 @@ const opCreateDBClusterParameterGroup = "CreateDBClusterParameterGroup"
 // CreateDBClusterParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDBClusterParameterGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -922,7 +871,7 @@ const opCreateDBClusterSnapshot = "CreateDBClusterSnapshot"
 // CreateDBClusterSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDBClusterSnapshot operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1013,7 +962,7 @@ const opCreateDBInstance = "CreateDBInstance"
 // CreateDBInstanceRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDBInstance operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1104,6 +1053,7 @@ func (c *Neptune) CreateDBInstanceRequest(input *CreateDBInstanceInput) (req *re
 //   Provisioned IOPS not available in the specified Availability Zone.
 //
 //   * ErrCodeOptionGroupNotFoundFault "OptionGroupNotFoundFault"
+//   The designated option group could not be found.
 //
 //   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
 //   DBClusterIdentifier does not refer to an existing DB cluster.
@@ -1151,7 +1101,7 @@ const opCreateDBParameterGroup = "CreateDBParameterGroup"
 // CreateDBParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDBParameterGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1254,7 +1204,7 @@ const opCreateDBSubnetGroup = "CreateDBSubnetGroup"
 // CreateDBSubnetGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDBSubnetGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1349,7 +1299,7 @@ const opCreateEventSubscription = "CreateEventSubscription"
 // CreateEventSubscriptionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateEventSubscription operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1418,18 +1368,25 @@ func (c *Neptune) CreateEventSubscriptionRequest(input *CreateEventSubscriptionI
 //
 // Returned Error Codes:
 //   * ErrCodeEventSubscriptionQuotaExceededFault "EventSubscriptionQuotaExceeded"
+//   You have exceeded the number of events you can subscribe to.
 //
 //   * ErrCodeSubscriptionAlreadyExistFault "SubscriptionAlreadyExist"
+//   This subscription already exists.
 //
 //   * ErrCodeSNSInvalidTopicFault "SNSInvalidTopic"
+//   The SNS topic is invalid.
 //
 //   * ErrCodeSNSNoAuthorizationFault "SNSNoAuthorization"
+//   There is no SNS authorization.
 //
 //   * ErrCodeSNSTopicArnNotFoundFault "SNSTopicArnNotFound"
+//   The ARN of the SNS topic could not be found.
 //
 //   * ErrCodeSubscriptionCategoryNotFoundFault "SubscriptionCategoryNotFound"
+//   The designated subscription category could not be found.
 //
 //   * ErrCodeSourceNotFoundFault "SourceNotFound"
+//   The source could not be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/neptune-2014-10-31/CreateEventSubscription
 func (c *Neptune) CreateEventSubscription(input *CreateEventSubscriptionInput) (*CreateEventSubscriptionOutput, error) {
@@ -1458,7 +1415,7 @@ const opDeleteDBCluster = "DeleteDBCluster"
 // DeleteDBClusterRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDBCluster operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1552,7 +1509,7 @@ const opDeleteDBClusterParameterGroup = "DeleteDBClusterParameterGroup"
 // DeleteDBClusterParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDBClusterParameterGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1586,8 +1543,7 @@ func (c *Neptune) DeleteDBClusterParameterGroupRequest(input *DeleteDBClusterPar
 
 	output = &DeleteDBClusterParameterGroupOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1639,7 +1595,7 @@ const opDeleteDBClusterSnapshot = "DeleteDBClusterSnapshot"
 // DeleteDBClusterSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDBClusterSnapshot operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1724,7 +1680,7 @@ const opDeleteDBInstance = "DeleteDBInstance"
 // DeleteDBInstanceRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDBInstance operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1780,14 +1736,7 @@ func (c *Neptune) DeleteDBInstanceRequest(input *DeleteDBInstanceInput) (req *re
 // If the specified DB instance is part of a DB cluster, you can't delete the
 // DB instance if both of the following conditions are true:
 //
-//    * The DB cluster is a Read Replica of another DB cluster.
-//
 //    * The DB instance is the only instance in the DB cluster.
-//
-// To delete a DB instance in this case, first call the PromoteReadReplicaDBCluster
-// API action to promote the DB cluster so it's no longer a Read Replica. After
-// the promotion completes, then call the DeleteDBInstance API action to delete
-// the final instance in the DB cluster.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1839,7 +1788,7 @@ const opDeleteDBParameterGroup = "DeleteDBParameterGroup"
 // DeleteDBParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDBParameterGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1873,8 +1822,7 @@ func (c *Neptune) DeleteDBParameterGroupRequest(input *DeleteDBParameterGroupInp
 
 	output = &DeleteDBParameterGroupOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1926,7 +1874,7 @@ const opDeleteDBSubnetGroup = "DeleteDBSubnetGroup"
 // DeleteDBSubnetGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDBSubnetGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1960,8 +1908,7 @@ func (c *Neptune) DeleteDBSubnetGroupRequest(input *DeleteDBSubnetGroupInput) (r
 
 	output = &DeleteDBSubnetGroupOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2015,7 +1962,7 @@ const opDeleteEventSubscription = "DeleteEventSubscription"
 // DeleteEventSubscriptionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteEventSubscription operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2065,8 +2012,10 @@ func (c *Neptune) DeleteEventSubscriptionRequest(input *DeleteEventSubscriptionI
 //
 // Returned Error Codes:
 //   * ErrCodeSubscriptionNotFoundFault "SubscriptionNotFound"
+//   The designated subscription could not be found.
 //
 //   * ErrCodeInvalidEventSubscriptionStateFault "InvalidEventSubscriptionState"
+//   The event subscription is in an invalid state.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/neptune-2014-10-31/DeleteEventSubscription
 func (c *Neptune) DeleteEventSubscription(input *DeleteEventSubscriptionInput) (*DeleteEventSubscriptionOutput, error) {
@@ -2095,7 +2044,7 @@ const opDescribeDBClusterParameterGroups = "DescribeDBClusterParameterGroups"
 // DescribeDBClusterParameterGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBClusterParameterGroups operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2176,7 +2125,7 @@ const opDescribeDBClusterParameters = "DescribeDBClusterParameters"
 // DescribeDBClusterParametersRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBClusterParameters operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2256,7 +2205,7 @@ const opDescribeDBClusterSnapshotAttributes = "DescribeDBClusterSnapshotAttribut
 // DescribeDBClusterSnapshotAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBClusterSnapshotAttributes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2346,7 +2295,7 @@ const opDescribeDBClusterSnapshots = "DescribeDBClusterSnapshots"
 // DescribeDBClusterSnapshotsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBClusterSnapshots operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2426,7 +2375,7 @@ const opDescribeDBClusters = "DescribeDBClusters"
 // DescribeDBClustersRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBClusters operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2505,7 +2454,7 @@ const opDescribeDBEngineVersions = "DescribeDBEngineVersions"
 // DescribeDBEngineVersionsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBEngineVersions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2591,7 +2540,7 @@ func (c *Neptune) DescribeDBEngineVersionsWithContext(ctx aws.Context, input *De
 //    // Example iterating over at most 3 pages of a DescribeDBEngineVersions operation.
 //    pageNum := 0
 //    err := client.DescribeDBEngineVersionsPages(params,
-//        func(page *DescribeDBEngineVersionsOutput, lastPage bool) bool {
+//        func(page *neptune.DescribeDBEngineVersionsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -2635,7 +2584,7 @@ const opDescribeDBInstances = "DescribeDBInstances"
 // DescribeDBInstancesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBInstances operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2726,7 +2675,7 @@ func (c *Neptune) DescribeDBInstancesWithContext(ctx aws.Context, input *Describ
 //    // Example iterating over at most 3 pages of a DescribeDBInstances operation.
 //    pageNum := 0
 //    err := client.DescribeDBInstancesPages(params,
-//        func(page *DescribeDBInstancesOutput, lastPage bool) bool {
+//        func(page *neptune.DescribeDBInstancesOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -2770,7 +2719,7 @@ const opDescribeDBParameterGroups = "DescribeDBParameterGroups"
 // DescribeDBParameterGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBParameterGroups operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2863,7 +2812,7 @@ func (c *Neptune) DescribeDBParameterGroupsWithContext(ctx aws.Context, input *D
 //    // Example iterating over at most 3 pages of a DescribeDBParameterGroups operation.
 //    pageNum := 0
 //    err := client.DescribeDBParameterGroupsPages(params,
-//        func(page *DescribeDBParameterGroupsOutput, lastPage bool) bool {
+//        func(page *neptune.DescribeDBParameterGroupsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -2907,7 +2856,7 @@ const opDescribeDBParameters = "DescribeDBParameters"
 // DescribeDBParametersRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBParameters operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2998,7 +2947,7 @@ func (c *Neptune) DescribeDBParametersWithContext(ctx aws.Context, input *Descri
 //    // Example iterating over at most 3 pages of a DescribeDBParameters operation.
 //    pageNum := 0
 //    err := client.DescribeDBParametersPages(params,
-//        func(page *DescribeDBParametersOutput, lastPage bool) bool {
+//        func(page *neptune.DescribeDBParametersOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -3042,7 +2991,7 @@ const opDescribeDBSubnetGroups = "DescribeDBSubnetGroups"
 // DescribeDBSubnetGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDBSubnetGroups operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3136,7 +3085,7 @@ func (c *Neptune) DescribeDBSubnetGroupsWithContext(ctx aws.Context, input *Desc
 //    // Example iterating over at most 3 pages of a DescribeDBSubnetGroups operation.
 //    pageNum := 0
 //    err := client.DescribeDBSubnetGroupsPages(params,
-//        func(page *DescribeDBSubnetGroupsOutput, lastPage bool) bool {
+//        func(page *neptune.DescribeDBSubnetGroupsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -3180,7 +3129,7 @@ const opDescribeEngineDefaultClusterParameters = "DescribeEngineDefaultClusterPa
 // DescribeEngineDefaultClusterParametersRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEngineDefaultClusterParameters operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3255,7 +3204,7 @@ const opDescribeEngineDefaultParameters = "DescribeEngineDefaultParameters"
 // DescribeEngineDefaultParametersRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEngineDefaultParameters operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3342,7 +3291,7 @@ func (c *Neptune) DescribeEngineDefaultParametersWithContext(ctx aws.Context, in
 //    // Example iterating over at most 3 pages of a DescribeEngineDefaultParameters operation.
 //    pageNum := 0
 //    err := client.DescribeEngineDefaultParametersPages(params,
-//        func(page *DescribeEngineDefaultParametersOutput, lastPage bool) bool {
+//        func(page *neptune.DescribeEngineDefaultParametersOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -3386,7 +3335,7 @@ const opDescribeEventCategories = "DescribeEventCategories"
 // DescribeEventCategoriesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEventCategories operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3461,7 +3410,7 @@ const opDescribeEventSubscriptions = "DescribeEventSubscriptions"
 // DescribeEventSubscriptionsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEventSubscriptions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3521,6 +3470,7 @@ func (c *Neptune) DescribeEventSubscriptionsRequest(input *DescribeEventSubscrip
 //
 // Returned Error Codes:
 //   * ErrCodeSubscriptionNotFoundFault "SubscriptionNotFound"
+//   The designated subscription could not be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/neptune-2014-10-31/DescribeEventSubscriptions
 func (c *Neptune) DescribeEventSubscriptions(input *DescribeEventSubscriptionsInput) (*DescribeEventSubscriptionsOutput, error) {
@@ -3555,7 +3505,7 @@ func (c *Neptune) DescribeEventSubscriptionsWithContext(ctx aws.Context, input *
 //    // Example iterating over at most 3 pages of a DescribeEventSubscriptions operation.
 //    pageNum := 0
 //    err := client.DescribeEventSubscriptionsPages(params,
-//        func(page *DescribeEventSubscriptionsOutput, lastPage bool) bool {
+//        func(page *neptune.DescribeEventSubscriptionsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -3599,7 +3549,7 @@ const opDescribeEvents = "DescribeEvents"
 // DescribeEventsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEvents operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3689,7 +3639,7 @@ func (c *Neptune) DescribeEventsWithContext(ctx aws.Context, input *DescribeEven
 //    // Example iterating over at most 3 pages of a DescribeEvents operation.
 //    pageNum := 0
 //    err := client.DescribeEventsPages(params,
-//        func(page *DescribeEventsOutput, lastPage bool) bool {
+//        func(page *neptune.DescribeEventsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -3733,7 +3683,7 @@ const opDescribeOrderableDBInstanceOptions = "DescribeOrderableDBInstanceOptions
 // DescribeOrderableDBInstanceOptionsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeOrderableDBInstanceOptions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3819,7 +3769,7 @@ func (c *Neptune) DescribeOrderableDBInstanceOptionsWithContext(ctx aws.Context,
 //    // Example iterating over at most 3 pages of a DescribeOrderableDBInstanceOptions operation.
 //    pageNum := 0
 //    err := client.DescribeOrderableDBInstanceOptionsPages(params,
-//        func(page *DescribeOrderableDBInstanceOptionsOutput, lastPage bool) bool {
+//        func(page *neptune.DescribeOrderableDBInstanceOptionsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -3863,7 +3813,7 @@ const opDescribePendingMaintenanceActions = "DescribePendingMaintenanceActions"
 // DescribePendingMaintenanceActionsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribePendingMaintenanceActions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3943,7 +3893,7 @@ const opDescribeValidDBInstanceModifications = "DescribeValidDBInstanceModificat
 // DescribeValidDBInstanceModificationsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeValidDBInstanceModifications operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4027,7 +3977,7 @@ const opFailoverDBCluster = "FailoverDBCluster"
 // FailoverDBClusterRequest generates a "aws/request.Request" representing the
 // client's request for the FailoverDBCluster operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4122,7 +4072,7 @@ const opListTagsForResource = "ListTagsForResource"
 // ListTagsForResourceRequest generates a "aws/request.Request" representing the
 // client's request for the ListTagsForResource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4207,7 +4157,7 @@ const opModifyDBCluster = "ModifyDBCluster"
 // ModifyDBClusterRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyDBCluster operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4321,7 +4271,7 @@ const opModifyDBClusterParameterGroup = "ModifyDBClusterParameterGroup"
 // ModifyDBClusterParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyDBClusterParameterGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4422,7 +4372,7 @@ const opModifyDBClusterSnapshotAttribute = "ModifyDBClusterSnapshotAttribute"
 // ModifyDBClusterSnapshotAttributeRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyDBClusterSnapshotAttribute operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4524,7 +4474,7 @@ const opModifyDBInstance = "ModifyDBInstance"
 // ModifyDBInstanceRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyDBInstance operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4610,6 +4560,7 @@ func (c *Neptune) ModifyDBInstanceRequest(input *ModifyDBInstanceInput) (req *re
 //   Provisioned IOPS not available in the specified Availability Zone.
 //
 //   * ErrCodeOptionGroupNotFoundFault "OptionGroupNotFoundFault"
+//   The designated option group could not be found.
 //
 //   * ErrCodeDBUpgradeDependencyFailureFault "DBUpgradeDependencyFailure"
 //   The DB upgrade failed because a resource the DB depends on could not be modified.
@@ -4657,7 +4608,7 @@ const opModifyDBParameterGroup = "ModifyDBParameterGroup"
 // ModifyDBParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyDBParameterGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4758,7 +4709,7 @@ const opModifyDBSubnetGroup = "ModifyDBSubnetGroup"
 // ModifyDBSubnetGroupRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyDBSubnetGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4853,7 +4804,7 @@ const opModifyEventSubscription = "ModifyEventSubscription"
 // ModifyEventSubscriptionRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyEventSubscription operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4909,16 +4860,22 @@ func (c *Neptune) ModifyEventSubscriptionRequest(input *ModifyEventSubscriptionI
 //
 // Returned Error Codes:
 //   * ErrCodeEventSubscriptionQuotaExceededFault "EventSubscriptionQuotaExceeded"
+//   You have exceeded the number of events you can subscribe to.
 //
 //   * ErrCodeSubscriptionNotFoundFault "SubscriptionNotFound"
+//   The designated subscription could not be found.
 //
 //   * ErrCodeSNSInvalidTopicFault "SNSInvalidTopic"
+//   The SNS topic is invalid.
 //
 //   * ErrCodeSNSNoAuthorizationFault "SNSNoAuthorization"
+//   There is no SNS authorization.
 //
 //   * ErrCodeSNSTopicArnNotFoundFault "SNSTopicArnNotFound"
+//   The ARN of the SNS topic could not be found.
 //
 //   * ErrCodeSubscriptionCategoryNotFoundFault "SubscriptionCategoryNotFound"
+//   The designated subscription category could not be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/neptune-2014-10-31/ModifyEventSubscription
 func (c *Neptune) ModifyEventSubscription(input *ModifyEventSubscriptionInput) (*ModifyEventSubscriptionOutput, error) {
@@ -4947,7 +4904,7 @@ const opPromoteReadReplicaDBCluster = "PromoteReadReplicaDBCluster"
 // PromoteReadReplicaDBClusterRequest generates a "aws/request.Request" representing the
 // client's request for the PromoteReadReplicaDBCluster operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4986,7 +4943,7 @@ func (c *Neptune) PromoteReadReplicaDBClusterRequest(input *PromoteReadReplicaDB
 
 // PromoteReadReplicaDBCluster API operation for Amazon Neptune.
 //
-// Promotes a Read Replica DB cluster to a standalone DB cluster.
+// Not supported.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5029,7 +4986,7 @@ const opRebootDBInstance = "RebootDBInstance"
 // RebootDBInstanceRequest generates a "aws/request.Request" representing the
 // client's request for the RebootDBInstance operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5118,7 +5075,7 @@ const opRemoveRoleFromDBCluster = "RemoveRoleFromDBCluster"
 // RemoveRoleFromDBClusterRequest generates a "aws/request.Request" representing the
 // client's request for the RemoveRoleFromDBCluster operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5152,8 +5109,7 @@ func (c *Neptune) RemoveRoleFromDBClusterRequest(input *RemoveRoleFromDBClusterI
 
 	output = &RemoveRoleFromDBClusterOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -5206,7 +5162,7 @@ const opRemoveSourceIdentifierFromSubscription = "RemoveSourceIdentifierFromSubs
 // RemoveSourceIdentifierFromSubscriptionRequest generates a "aws/request.Request" representing the
 // client's request for the RemoveSourceIdentifierFromSubscription operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5256,8 +5212,10 @@ func (c *Neptune) RemoveSourceIdentifierFromSubscriptionRequest(input *RemoveSou
 //
 // Returned Error Codes:
 //   * ErrCodeSubscriptionNotFoundFault "SubscriptionNotFound"
+//   The designated subscription could not be found.
 //
 //   * ErrCodeSourceNotFoundFault "SourceNotFound"
+//   The source could not be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/neptune-2014-10-31/RemoveSourceIdentifierFromSubscription
 func (c *Neptune) RemoveSourceIdentifierFromSubscription(input *RemoveSourceIdentifierFromSubscriptionInput) (*RemoveSourceIdentifierFromSubscriptionOutput, error) {
@@ -5286,7 +5244,7 @@ const opRemoveTagsFromResource = "RemoveTagsFromResource"
 // RemoveTagsFromResourceRequest generates a "aws/request.Request" representing the
 // client's request for the RemoveTagsFromResource operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5320,8 +5278,7 @@ func (c *Neptune) RemoveTagsFromResourceRequest(input *RemoveTagsFromResourceInp
 
 	output = &RemoveTagsFromResourceOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -5373,7 +5330,7 @@ const opResetDBClusterParameterGroup = "ResetDBClusterParameterGroup"
 // ResetDBClusterParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the ResetDBClusterParameterGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5466,7 +5423,7 @@ const opResetDBParameterGroup = "ResetDBParameterGroup"
 // ResetDBParameterGroupRequest generates a "aws/request.Request" representing the
 // client's request for the ResetDBParameterGroup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5556,7 +5513,7 @@ const opRestoreDBClusterFromSnapshot = "RestoreDBClusterFromSnapshot"
 // RestoreDBClusterFromSnapshotRequest generates a "aws/request.Request" representing the
 // client's request for the RestoreDBClusterFromSnapshot operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5666,9 +5623,14 @@ func (c *Neptune) RestoreDBClusterFromSnapshotRequest(input *RestoreDBClusterFro
 //   are not all in a common VPC.
 //
 //   * ErrCodeOptionGroupNotFoundFault "OptionGroupNotFoundFault"
+//   The designated option group could not be found.
 //
 //   * ErrCodeKMSKeyNotAccessibleFault "KMSKeyNotAccessibleFault"
 //   Error accessing KMS key.
+//
+//   * ErrCodeDBClusterParameterGroupNotFoundFault "DBClusterParameterGroupNotFound"
+//   DBClusterParameterGroupName does not refer to an existing DB Cluster parameter
+//   group.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/neptune-2014-10-31/RestoreDBClusterFromSnapshot
 func (c *Neptune) RestoreDBClusterFromSnapshot(input *RestoreDBClusterFromSnapshotInput) (*RestoreDBClusterFromSnapshotOutput, error) {
@@ -5697,7 +5659,7 @@ const opRestoreDBClusterToPointInTime = "RestoreDBClusterToPointInTime"
 // RestoreDBClusterToPointInTimeRequest generates a "aws/request.Request" representing the
 // client's request for the RestoreDBClusterToPointInTime operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5805,10 +5767,15 @@ func (c *Neptune) RestoreDBClusterToPointInTimeRequest(input *RestoreDBClusterTo
 //   Error accessing KMS key.
 //
 //   * ErrCodeOptionGroupNotFoundFault "OptionGroupNotFoundFault"
+//   The designated option group could not be found.
 //
 //   * ErrCodeStorageQuotaExceededFault "StorageQuotaExceeded"
 //   Request would result in user exceeding the allowed amount of storage available
 //   across all DB instances.
+//
+//   * ErrCodeDBClusterParameterGroupNotFoundFault "DBClusterParameterGroupNotFound"
+//   DBClusterParameterGroupName does not refer to an existing DB Cluster parameter
+//   group.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/neptune-2014-10-31/RestoreDBClusterToPointInTime
 func (c *Neptune) RestoreDBClusterToPointInTime(input *RestoreDBClusterToPointInTimeInput) (*RestoreDBClusterToPointInTimeOutput, error) {
@@ -5994,8 +5961,8 @@ type AddTagsToResourceInput struct {
 	_ struct{} `type:"structure"`
 
 	// The Amazon Neptune resource that the tags are added to. This value is an
-	// Amazon Resource Name (ARN). For information about creating an ARN, see  Constructing
-	// an Amazon Resource Name (ARN) (http://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing).
+	// Amazon Resource Name (ARN). For information about creating an ARN, see Constructing
+	// an Amazon Resource Name (ARN) (https://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing).
 	//
 	// ResourceName is a required field
 	ResourceName *string `type:"string" required:"true"`
@@ -6084,8 +6051,8 @@ type ApplyPendingMaintenanceActionInput struct {
 	OptInType *string `type:"string" required:"true"`
 
 	// The Amazon Resource Name (ARN) of the resource that the pending maintenance
-	// action applies to. For information about creating an ARN, see  Constructing
-	// an Amazon Resource Name (ARN) (http://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing).
+	// action applies to. For information about creating an ARN, see Constructing
+	// an Amazon Resource Name (ARN) (https://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing).
 	//
 	// ResourceIdentifier is a required field
 	ResourceIdentifier *string `type:"string" required:"true"`
@@ -6161,11 +6128,7 @@ func (s *ApplyPendingMaintenanceActionOutput) SetResourcePendingMaintenanceActio
 	return s
 }
 
-// Contains Availability Zone information.
-//
-// This data type is used as an element in the following data type:
-//
-//    * OrderableDBInstanceOption
+// Specifies an Availability Zone.
 type AvailabilityZone struct {
 	_ struct{} `type:"structure"`
 
@@ -6189,7 +6152,7 @@ func (s *AvailabilityZone) SetName(v string) *AvailabilityZone {
 	return s
 }
 
-// This data type is used as a response element in the action DescribeDBEngineVersions.
+// Specifies a character set.
 type CharacterSet struct {
 	_ struct{} `type:"structure"`
 
@@ -6260,8 +6223,8 @@ type CopyDBClusterParameterGroupInput struct {
 	_ struct{} `type:"structure"`
 
 	// The identifier or Amazon Resource Name (ARN) for the source DB cluster parameter
-	// group. For information about creating an ARN, see  Constructing an Amazon
-	// Resource Name (ARN) (http://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing).
+	// group. For information about creating an ARN, see Constructing an Amazon
+	// Resource Name (ARN) (https://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing).
 	//
 	// Constraints:
 	//
@@ -6277,8 +6240,7 @@ type CopyDBClusterParameterGroupInput struct {
 	// SourceDBClusterParameterGroupIdentifier is a required field
 	SourceDBClusterParameterGroupIdentifier *string `type:"string" required:"true"`
 
-	// A list of tags. For more information, see Tagging Amazon Neptune Resources
-	// (http://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html).
+	// The tags to be assigned to the copied DB cluster parameter group.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 
 	// A description for the copied DB cluster parameter group.
@@ -6406,67 +6368,31 @@ type CopyDBClusterSnapshotInput struct {
 	// If you copy an encrypted DB cluster snapshot that is shared from another
 	// AWS account, then you must specify a value for KmsKeyId.
 	//
-	// To copy an encrypted DB cluster snapshot to another AWS Region, you must
-	// set KmsKeyId to the KMS key ID you want to use to encrypt the copy of the
-	// DB cluster snapshot in the destination AWS Region. KMS encryption keys are
-	// specific to the AWS Region that they are created in, and you can't use encryption
-	// keys from one AWS Region in another AWS Region.
+	// KMS encryption keys are specific to the AWS Region that they are created
+	// in, and you can't use encryption keys from one AWS Region in another AWS
+	// Region.
 	KmsKeyId *string `type:"string"`
 
-	// The URL that contains a Signature Version 4 signed request for the CopyDBClusterSnapshot
-	// API action in the AWS Region that contains the source DB cluster snapshot
-	// to copy. The PreSignedUrl parameter must be used when copying an encrypted
-	// DB cluster snapshot from another AWS Region.
-	//
-	// The pre-signed URL must be a valid request for the CopyDBSClusterSnapshot
-	// API action that can be executed in the source AWS Region that contains the
-	// encrypted DB cluster snapshot to be copied. The pre-signed URL request must
-	// contain the following parameter values:
-	//
-	//    * KmsKeyId - The AWS KMS key identifier for the key to use to encrypt
-	//    the copy of the DB cluster snapshot in the destination AWS Region. This
-	//    is the same identifier for both the CopyDBClusterSnapshot action that
-	//    is called in the destination AWS Region, and the action contained in the
-	//    pre-signed URL.
-	//
-	//    * DestinationRegion - The name of the AWS Region that the DB cluster snapshot
-	//    will be created in.
-	//
-	//    * SourceDBClusterSnapshotIdentifier - The DB cluster snapshot identifier
-	//    for the encrypted DB cluster snapshot to be copied. This identifier must
-	//    be in the Amazon Resource Name (ARN) format for the source AWS Region.
-	//    For example, if you are copying an encrypted DB cluster snapshot from
-	//    the us-west-2 AWS Region, then your SourceDBClusterSnapshotIdentifier
-	//    looks like the following example: arn:aws:rds:us-west-2:123456789012:cluster-snapshot:neptune-cluster1-snapshot-20161115.
-	//
-	// To learn how to generate a Signature Version 4 signed request, see  Authenticating
-	// Requests: Using Query Parameters (AWS Signature Version 4) (http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html)
-	// and  Signature Version 4 Signing Process (http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html).
+	// Not currently supported.
 	PreSignedUrl *string `type:"string"`
 
 	// The identifier of the DB cluster snapshot to copy. This parameter is not
 	// case-sensitive.
 	//
-	// You can't copy an encrypted, shared DB cluster snapshot from one AWS Region
-	// to another.
+	// You can't copy from one AWS Region to another.
 	//
 	// Constraints:
 	//
 	//    * Must specify a valid system snapshot in the "available" state.
 	//
-	//    * If the source snapshot is in the same AWS Region as the copy, specify
-	//    a valid DB snapshot identifier.
-	//
-	//    * If the source snapshot is in a different AWS Region than the copy, specify
-	//    a valid DB cluster snapshot ARN.
+	//    * Specify a valid DB snapshot identifier.
 	//
 	// Example: my-cluster-snapshot1
 	//
 	// SourceDBClusterSnapshotIdentifier is a required field
 	SourceDBClusterSnapshotIdentifier *string `type:"string" required:"true"`
 
-	// A list of tags. For more information, see Tagging Amazon Neptune Resources
-	// (http://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html).
+	// The tags to assign to the new DB cluster snapshot copy.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 
 	// The identifier of the new DB cluster snapshot to create from the source DB
@@ -6578,7 +6504,7 @@ type CopyDBParameterGroupInput struct {
 	_ struct{} `type:"structure"`
 
 	// The identifier or ARN for the source DB parameter group. For information
-	// about creating an ARN, see  Constructing an Amazon Resource Name (ARN) (http://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing).
+	// about creating an ARN, see Constructing an Amazon Resource Name (ARN) (https://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing).
 	//
 	// Constraints:
 	//
@@ -6590,8 +6516,7 @@ type CopyDBParameterGroupInput struct {
 	// SourceDBParameterGroupIdentifier is a required field
 	SourceDBParameterGroupIdentifier *string `type:"string" required:"true"`
 
-	// A list of tags. For more information, see Tagging Amazon Neptune Resources
-	// (http://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html).
+	// The tags to be assigned to the copied DB parameter group.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 
 	// A description for the copied DB parameter group.
@@ -6603,13 +6528,13 @@ type CopyDBParameterGroupInput struct {
 	//
 	// Constraints:
 	//
-	//    * Cannot be null, empty, or blank
+	//    * Cannot be null, empty, or blank.
 	//
-	//    * Must contain from 1 to 255 letters, numbers, or hyphens
+	//    * Must contain from 1 to 255 letters, numbers, or hyphens.
 	//
-	//    * First character must be a letter
+	//    * First character must be a letter.
 	//
-	//    * Cannot end with a hyphen or contain two consecutive hyphens
+	//    * Cannot end with a hyphen or contain two consecutive hyphens.
 	//
 	// Example: my-db-parameter-group
 	//
@@ -6825,43 +6750,15 @@ type CreateDBClusterInput struct {
 	// Default: 8182
 	Port *int64 `type:"integer"`
 
-	// A URL that contains a Signature Version 4 signed request for the CreateDBCluster
-	// action to be called in the source AWS Region where the DB cluster is replicated
-	// from. You only need to specify PreSignedUrl when you are performing cross-region
-	// replication from an encrypted DB cluster.
-	//
-	// The pre-signed URL must be a valid request for the CreateDBCluster API action
-	// that can be executed in the source AWS Region that contains the encrypted
-	// DB cluster to be copied.
-	//
-	// The pre-signed URL request must contain the following parameter values:
-	//
-	//    * KmsKeyId - The AWS KMS key identifier for the key to use to encrypt
-	//    the copy of the DB cluster in the destination AWS Region. This should
-	//    refer to the same KMS key for both the CreateDBCluster action that is
-	//    called in the destination AWS Region, and the action contained in the
-	//    pre-signed URL.
-	//
-	//    * DestinationRegion - The name of the AWS Region that Read Replica will
-	//    be created in.
-	//
-	//    * ReplicationSourceIdentifier - The DB cluster identifier for the encrypted
-	//    DB cluster to be copied. This identifier must be in the Amazon Resource
-	//    Name (ARN) format for the source AWS Region. For example, if you are copying
-	//    an encrypted DB cluster from the us-west-2 AWS Region, then your ReplicationSourceIdentifier
-	//    would look like Example: arn:aws:rds:us-west-2:123456789012:cluster:neptune-cluster1.
-	//
-	// To learn how to generate a Signature Version 4 signed request, see  Authenticating
-	// Requests: Using Query Parameters (AWS Signature Version 4) (http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html)
-	// and  Signature Version 4 Signing Process (http://docs.aws.amazon.com/general/latest/gr/signature-version-4.html).
+	// This parameter is not currently supported.
 	PreSignedUrl *string `type:"string"`
 
 	// The daily time range during which automated backups are created if automated
 	// backups are enabled using the BackupRetentionPeriod parameter.
 	//
 	// The default is a 30-minute window selected at random from an 8-hour block
-	// of time for each AWS Region. To see the time blocks available, see  Adjusting
-	// the Preferred Maintenance Window (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html)
+	// of time for each AWS Region. To see the time blocks available, see Adjusting
+	// the Preferred Maintenance Window (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html)
 	// in the Amazon Neptune User Guide.
 	//
 	// Constraints:
@@ -6882,8 +6779,8 @@ type CreateDBClusterInput struct {
 	//
 	// The default is a 30-minute window selected at random from an 8-hour block
 	// of time for each AWS Region, occurring on a random day of the week. To see
-	// the time blocks available, see  Adjusting the Preferred Maintenance Window
-	// (http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html)
+	// the time blocks available, see Adjusting the Preferred Maintenance Window
+	// (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/AdjustingTheMaintenanceWindow.html)
 	// in the Amazon Neptune User Guide.
 	//
 	// Valid Days: Mon, Tue, Wed, Thu, Fri, Sat, Sun.
@@ -6898,8 +6795,7 @@ type CreateDBClusterInput struct {
 	// Specifies whether the DB cluster is encrypted.
 	StorageEncrypted *bool `type:"boolean"`
 
-	// A list of tags. For more information, see Tagging Amazon Neptune Resources
-	// (http://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html).
+	// The tags to assign to the new DB cluster.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 
 	// A list of EC2 VPC security groups to associate with this DB cluster.
@@ -7116,8 +7012,7 @@ type CreateDBClusterParameterGroupInput struct {
 	// Description is a required field
 	Description *string `type:"string" required:"true"`
 
-	// A list of tags. For more information, see Tagging Amazon Neptune Resources
-	// (http://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html).
+	// The tags to be assigned to the new DB cluster parameter group.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 }
 
@@ -7323,7 +7218,7 @@ type CreateDBInstanceInput struct {
 	// Default: true
 	AutoMinorVersionUpgrade *bool `type:"boolean"`
 
-	// The EC2 Availability Zone that the DB instance is created in.
+	// The EC2 Availability Zone that the DB instance is created in
 	//
 	// Default: A random, system-chosen Availability Zone in the endpoint's AWS
 	// Region.
@@ -7387,9 +7282,7 @@ type CreateDBInstanceInput struct {
 	// DBInstanceIdentifier is a required field
 	DBInstanceIdentifier *string `type:"string" required:"true"`
 
-	// The database name.
-	//
-	// Type: String
+	// Not supported.
 	DBName *string `type:"string"`
 
 	// The name of the DB parameter group to associate with this DB instance. If
@@ -7550,7 +7443,7 @@ type CreateDBInstanceInput struct {
 	// Valid Values: 0 - 15
 	PromotionTier *int64 `type:"integer"`
 
-	// This parameter is not supported.
+	// This flag should no longer be used.
 	//
 	// Deprecated: PubliclyAccessible has been deprecated
 	PubliclyAccessible *bool `deprecated:"true" type:"boolean"`
@@ -7568,8 +7461,7 @@ type CreateDBInstanceInput struct {
 	// Not applicable. Storage is managed by the DB Cluster.
 	StorageType *string `type:"string"`
 
-	// A list of tags. For more information, see Tagging Amazon Neptune Resources
-	// (http://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html).
+	// The tags to assign to the new instance.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 
 	// The ARN from the key store with which to associate the instance for TDE encryption.
@@ -7928,8 +7820,7 @@ type CreateDBParameterGroupInput struct {
 	// Description is a required field
 	Description *string `type:"string" required:"true"`
 
-	// A list of tags. For more information, see Tagging Amazon Neptune Resources
-	// (http://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html).
+	// The tags to be assigned to the new DB parameter group.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 }
 
@@ -8035,8 +7926,7 @@ type CreateDBSubnetGroupInput struct {
 	// SubnetIds is a required field
 	SubnetIds []*string `locationNameList:"SubnetIdentifier" type:"list" required:"true"`
 
-	// A list of tags. For more information, see Tagging Amazon Neptune Resources
-	// (http://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html).
+	// The tags to be assigned to the new DB subnet group.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 }
 
@@ -8175,8 +8065,7 @@ type CreateEventSubscriptionInput struct {
 	// SubscriptionName is a required field
 	SubscriptionName *string `type:"string" required:"true"`
 
-	// A list of tags. For more information, see Tagging Amazon Neptune Resources
-	// (http://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html).
+	// The tags to be applied to the new event subscription.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 }
 
@@ -8401,8 +8290,7 @@ type DBCluster struct {
 	// to the reader endpoint.
 	ReaderEndpoint *string `type:"string"`
 
-	// Contains the identifier of the source DB cluster if this DB cluster is a
-	// Read Replica.
+	// Not supported by Neptune.
 	ReplicationSourceIdentifier *string `type:"string"`
 
 	// Specifies the current state of this DB cluster.
@@ -9344,8 +9232,7 @@ type DBInstance struct {
 	// Specifies the Provisioned IOPS (I/O operations per second) value.
 	Iops *int64 `type:"integer"`
 
-	// If StorageEncrypted is true, the AWS KMS key identifier for the encrypted
-	// DB instance.
+	// Not supported: The encryption for DB instances is managed by the DB cluster.
 	KmsKeyId *string `type:"string"`
 
 	// Specifies the latest time to which a database can be restored with point-in-time
@@ -9397,7 +9284,7 @@ type DBInstance struct {
 	// primary instance after a failure of the existing primary instance.
 	PromotionTier *int64 `type:"integer"`
 
-	// This parameter is not supported.
+	// This flag should no longer be used.
 	//
 	// Deprecated: PubliclyAccessible has been deprecated
 	PubliclyAccessible *bool `deprecated:"true" type:"boolean"`
@@ -9422,7 +9309,7 @@ type DBInstance struct {
 	// is blank.
 	StatusInfos []*DBInstanceStatusInfo `locationNameList:"DBInstanceStatusInfo" type:"list"`
 
-	// Specifies whether the DB instance is encrypted.
+	// Not supported: The encryption for DB instances is managed by the DB cluster.
 	StorageEncrypted *bool `type:"boolean"`
 
 	// Specifies the storage type associated with DB instance.
@@ -9914,11 +9801,7 @@ func (s *DBParameterGroupStatus) SetParameterApplyStatus(v string) *DBParameterG
 	return s
 }
 
-// This data type is used as a response element in the following actions:
-//
-//    * ModifyDBInstance
-//
-//    * RebootDBInstance
+// Specifies membership in a designated DB security group.
 type DBSecurityGroupMembership struct {
 	_ struct{} `type:"structure"`
 
@@ -10765,8 +10648,6 @@ func (s *DescribeDBClusterParametersInput) SetSource(v string) *DescribeDBCluste
 	return s
 }
 
-// Provides details about a DB cluster parameter group including the parameters
-// in the DB cluster parameter group.
 type DescribeDBClusterParametersOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -11029,8 +10910,6 @@ func (s *DescribeDBClusterSnapshotsInput) SetSnapshotType(v string) *DescribeDBC
 	return s
 }
 
-// Provides a list of DB cluster snapshots for the user as the result of a call
-// to the DescribeDBClusterSnapshots action.
 type DescribeDBClusterSnapshotsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -11155,8 +11034,6 @@ func (s *DescribeDBClustersInput) SetMaxRecords(v int64) *DescribeDBClustersInpu
 	return s
 }
 
-// Contains the result of a successful invocation of the DescribeDBClusters
-// action.
 type DescribeDBClustersOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -11323,8 +11200,6 @@ func (s *DescribeDBEngineVersionsInput) SetMaxRecords(v int64) *DescribeDBEngine
 	return s
 }
 
-// Contains the result of a successful invocation of the DescribeDBEngineVersions
-// action.
 type DescribeDBEngineVersionsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -11453,8 +11328,6 @@ func (s *DescribeDBInstancesInput) SetMaxRecords(v int64) *DescribeDBInstancesIn
 	return s
 }
 
-// Contains the result of a successful invocation of the DescribeDBInstances
-// action.
 type DescribeDBInstancesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -11571,8 +11444,6 @@ func (s *DescribeDBParameterGroupsInput) SetMaxRecords(v int64) *DescribeDBParam
 	return s
 }
 
-// Contains the result of a successful invocation of the DescribeDBParameterGroups
-// action.
 type DescribeDBParameterGroupsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -11707,8 +11578,6 @@ func (s *DescribeDBParametersInput) SetSource(v string) *DescribeDBParametersInp
 	return s
 }
 
-// Contains the result of a successful invocation of the DescribeDBParameters
-// action.
 type DescribeDBParametersOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -11821,8 +11690,6 @@ func (s *DescribeDBSubnetGroupsInput) SetMaxRecords(v int64) *DescribeDBSubnetGr
 	return s
 }
 
-// Contains the result of a successful invocation of the DescribeDBSubnetGroups
-// action.
 type DescribeDBSubnetGroupsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -12126,7 +11993,6 @@ func (s *DescribeEventCategoriesInput) SetSourceType(v string) *DescribeEventCat
 	return s
 }
 
-// Data returned from the DescribeEventCategories action.
 type DescribeEventCategoriesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -12228,7 +12094,6 @@ func (s *DescribeEventSubscriptionsInput) SetSubscriptionName(v string) *Describ
 	return s
 }
 
-// Data returned by the DescribeEventSubscriptions action.
 type DescribeEventSubscriptionsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -12416,7 +12281,6 @@ func (s *DescribeEventsInput) SetStartTime(v time.Time) *DescribeEventsInput {
 	return s
 }
 
-// Contains the result of a successful invocation of the DescribeEvents action.
 type DescribeEventsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -12574,8 +12438,6 @@ func (s *DescribeOrderableDBInstanceOptionsInput) SetVpc(v bool) *DescribeOrdera
 	return s
 }
 
-// Contains the result of a successful invocation of the DescribeOrderableDBInstanceOptions
-// action.
 type DescribeOrderableDBInstanceOptionsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -12700,7 +12562,6 @@ func (s *DescribePendingMaintenanceActionsInput) SetResourceIdentifier(v string)
 	return s
 }
 
-// Data returned from the DescribePendingMaintenanceActions action.
 type DescribePendingMaintenanceActionsOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -12798,7 +12659,7 @@ func (s *DescribeValidDBInstanceModificationsOutput) SetValidDBInstanceModificat
 	return s
 }
 
-// An Active Directory Domain membership record associated with the DB instance.
+// An Active Directory Domain membership record associated with a DB instance.
 type DomainMembership struct {
 	_ struct{} `type:"structure"`
 
@@ -12884,13 +12745,7 @@ func (s *DoubleRange) SetTo(v float64) *DoubleRange {
 	return s
 }
 
-// This data type is used as a response element in the following actions:
-//
-//    * CreateDBInstance
-//
-//    * DescribeDBInstances
-//
-//    * DeleteDBInstance
+// Specifies a connection endpoint.
 type Endpoint struct {
 	_ struct{} `type:"structure"`
 
@@ -13321,8 +13176,8 @@ type ListTagsForResourceInput struct {
 	Filters []*Filter `locationNameList:"Filter" type:"list"`
 
 	// The Amazon Neptune resource with tags to be listed. This value is an Amazon
-	// Resource Name (ARN). For information about creating an ARN, see  Constructing
-	// an Amazon Resource Name (ARN) (http://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing).
+	// Resource Name (ARN). For information about creating an ARN, see Constructing
+	// an Amazon Resource Name (ARN) (https://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing).
 	//
 	// ResourceName is a required field
 	ResourceName *string `type:"string" required:"true"`
@@ -13855,10 +13710,6 @@ type ModifyDBInstanceInput struct {
 	// and Neptune has enabled auto patching for that engine version.
 	AutoMinorVersionUpgrade *bool `type:"boolean"`
 
-	// The number of days to retain automated backups. Setting this parameter to
-	// a positive number enables backups. Setting this parameter to 0 disables automated
-	// backups.
-	//
 	// Not applicable. The retention period for automated backups is managed by
 	// the DB cluster. For more information, see ModifyDBCluster.
 	//
@@ -13957,7 +13808,7 @@ type ModifyDBInstanceInput struct {
 	// Default: false
 	EnableIAMDatabaseAuthentication *bool `type:"boolean"`
 
-	// True to enable Performance Insights for the DB instance, and otherwise false.
+	// Not supported.
 	EnablePerformanceInsights *bool `type:"boolean"`
 
 	// The version number of the database engine to upgrade to. Changing this parameter
@@ -13979,17 +13830,10 @@ type ModifyDBInstanceInput struct {
 	// Default: Uses existing setting
 	Iops *int64 `type:"integer"`
 
-	// The license model for the DB instance.
-	//
-	// Valid values: license-included | bring-your-own-license | general-public-license
+	// Not supported.
 	LicenseModel *string `type:"string"`
 
-	// The new password for the master user. The password can include any printable
-	// ASCII character except "/", """, or "@".
-	//
 	// Not applicable.
-	//
-	// Default: Uses existing setting
 	MasterUserPassword *string `type:"string"`
 
 	// The interval, in seconds, between points when Enhanced Monitoring metrics
@@ -14044,9 +13888,7 @@ type ModifyDBInstanceInput struct {
 	// from a DB instance once it is associated with a DB instance
 	OptionGroupName *string `type:"string"`
 
-	// The AWS KMS key identifier for encryption of Performance Insights data. The
-	// KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the
-	// KMS key alias for the KMS encryption key.
+	// Not supported.
 	PerformanceInsightsKMSKeyId *string `type:"string"`
 
 	// The daily time range during which automated backups are created if automated
@@ -14092,32 +13934,12 @@ type ModifyDBInstanceInput struct {
 	// Valid Values: 0 - 15
 	PromotionTier *int64 `type:"integer"`
 
-	// This parameter is not supported.
+	// This flag should no longer be used.
 	//
 	// Deprecated: PubliclyAccessible has been deprecated
 	PubliclyAccessible *bool `deprecated:"true" type:"boolean"`
 
-	// Specifies the storage type to be associated with the DB instance.
-	//
-	// If you specify Provisioned IOPS (io1), you must also include a value for
-	// the Iops parameter.
-	//
-	// If you choose to migrate your DB instance from using standard storage to
-	// using Provisioned IOPS, or from using Provisioned IOPS to using standard
-	// storage, the process can take time. The duration of the migration depends
-	// on several factors such as database load, storage size, storage type (standard
-	// or Provisioned IOPS), amount of IOPS provisioned (if any), and the number
-	// of prior scale storage operations. Typical migration times are under 24 hours,
-	// but the process can take up to several days in some cases. During the migration,
-	// the DB instance is available for use, but might experience performance degradation.
-	// While the migration takes place, nightly backups for the instance are suspended.
-	// No other Amazon Neptune operations can take place for the instance, including
-	// modifying the instance, rebooting the instance, deleting the instance, creating
-	// a Read Replica for the instance, and creating a DB snapshot of the instance.
-	//
-	// Valid values: standard | gp2 | io1
-	//
-	// Default: io1 if the Iops parameter is specified, otherwise standard
+	// Not supported.
 	StorageType *string `type:"string"`
 
 	// The ARN from the key store with which to associate the instance for TDE encryption.
@@ -14901,11 +14723,7 @@ func (s *OrderableDBInstanceOption) SetVpc(v bool) *OrderableDBInstanceOption {
 	return s
 }
 
-// This data type is used as a request parameter in the ModifyDBParameterGroup
-// and ResetDBParameterGroup actions.
-//
-// This data type is used as a response element in the DescribeEngineDefaultParameters
-// and DescribeDBParameters actions.
+// Specifies a parameter.
 type Parameter struct {
 	_ struct{} `type:"structure"`
 
@@ -15171,8 +14989,7 @@ type PendingModifiedValues struct {
 	// Indicates that the Single-AZ DB instance is to change to a Multi-AZ deployment.
 	MultiAZ *bool `type:"boolean"`
 
-	// A list of the log types whose configuration is still pending. In other words,
-	// these log types are in the process of being activated or deactivated.
+	// Specifies the CloudWatch logs to be exported.
 	PendingCloudwatchLogsExports *PendingCloudwatchLogsExports `type:"structure"`
 
 	// Specifies the pending port for the DB instance.
@@ -15279,14 +15096,7 @@ func (s *PendingModifiedValues) SetStorageType(v string) *PendingModifiedValues 
 type PromoteReadReplicaDBClusterInput struct {
 	_ struct{} `type:"structure"`
 
-	// The identifier of the DB cluster Read Replica to promote. This parameter
-	// is not case-sensitive.
-	//
-	// Constraints:
-	//
-	//    * Must match the identifier of an existing DBCluster Read Replica.
-	//
-	// Example: my-cluster-replica1
+	// Not supported.
 	//
 	// DBClusterIdentifier is a required field
 	DBClusterIdentifier *string `type:"string" required:"true"`
@@ -15620,7 +15430,7 @@ type RemoveTagsFromResourceInput struct {
 
 	// The Amazon Neptune resource that the tags are removed from. This value is
 	// an Amazon Resource Name (ARN). For information about creating an ARN, see
-	//  Constructing an Amazon Resource Name (ARN) (http://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing).
+	// Constructing an Amazon Resource Name (ARN) (https://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html#tagging.ARN.Constructing).
 	//
 	// ResourceName is a required field
 	ResourceName *string `type:"string" required:"true"`
@@ -15844,8 +15654,6 @@ func (s *ResetDBParameterGroupInput) SetResetAllParameters(v bool) *ResetDBParam
 	return s
 }
 
-// Contains the result of a successful invocation of the ModifyDBParameterGroup
-// or ResetDBParameterGroup action.
 type ResetDBParameterGroupOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -15926,6 +15734,13 @@ type RestoreDBClusterFromSnapshotInput struct {
 	// DBClusterIdentifier is a required field
 	DBClusterIdentifier *string `type:"string" required:"true"`
 
+	// The name of the DB cluster parameter group to associate with the new DB cluster.
+	//
+	// Constraints:
+	//
+	//    * If supplied, must match the name of an existing DBClusterParameterGroup.
+	DBClusterParameterGroupName *string `type:"string"`
+
 	// The name of the DB subnet group to use for the new DB cluster.
 	//
 	// Constraints: If supplied, must match the name of an existing DBSubnetGroup.
@@ -15933,7 +15748,7 @@ type RestoreDBClusterFromSnapshotInput struct {
 	// Example: mySubnetgroup
 	DBSubnetGroupName *string `type:"string"`
 
-	// The database name for the restored DB cluster.
+	// Not supported.
 	DatabaseName *string `type:"string"`
 
 	// True to enable mapping of AWS Identity and Access Management (IAM) accounts
@@ -16044,6 +15859,12 @@ func (s *RestoreDBClusterFromSnapshotInput) SetDBClusterIdentifier(v string) *Re
 	return s
 }
 
+// SetDBClusterParameterGroupName sets the DBClusterParameterGroupName field's value.
+func (s *RestoreDBClusterFromSnapshotInput) SetDBClusterParameterGroupName(v string) *RestoreDBClusterFromSnapshotInput {
+	s.DBClusterParameterGroupName = &v
+	return s
+}
+
 // SetDBSubnetGroupName sets the DBSubnetGroupName field's value.
 func (s *RestoreDBClusterFromSnapshotInput) SetDBSubnetGroupName(v string) *RestoreDBClusterFromSnapshotInput {
 	s.DBSubnetGroupName = &v
@@ -16151,6 +15972,13 @@ type RestoreDBClusterToPointInTimeInput struct {
 	// DBClusterIdentifier is a required field
 	DBClusterIdentifier *string `type:"string" required:"true"`
 
+	// The name of the DB cluster parameter group to associate with the new DB cluster.
+	//
+	// Constraints:
+	//
+	//    * If supplied, must match the name of an existing DBClusterParameterGroup.
+	DBClusterParameterGroupName *string `type:"string"`
+
 	// The DB subnet group name to use for the new DB cluster.
 	//
 	// Constraints: If supplied, must match the name of an existing DBSubnetGroup.
@@ -16217,20 +16045,8 @@ type RestoreDBClusterToPointInTimeInput struct {
 	// Example: 2015-03-07T23:45:00Z
 	RestoreToTime *time.Time `type:"timestamp"`
 
-	// The type of restore to be performed. You can specify one of the following
-	// values:
-	//
-	//    * full-copy - The new DB cluster is restored as a full copy of the source
-	//    DB cluster.
-	//
-	//    * copy-on-write - The new DB cluster is restored as a clone of the source
-	//    DB cluster.
-	//
-	// Constraints: You can't specify copy-on-write if the engine version of the
-	// source DB cluster is earlier than 1.11.
-	//
-	// If you don't specify a RestoreType value, then the new DB cluster is restored
-	// as a full copy of the source DB cluster.
+	// The type of restore to be performed. The only type of restore currently supported
+	// is full-copy (the default).
 	RestoreType *string `type:"string"`
 
 	// The identifier of the source DB cluster from which to restore.
@@ -16242,8 +16058,7 @@ type RestoreDBClusterToPointInTimeInput struct {
 	// SourceDBClusterIdentifier is a required field
 	SourceDBClusterIdentifier *string `type:"string" required:"true"`
 
-	// A list of tags. For more information, see Tagging Amazon Neptune Resources
-	// (http://docs.aws.amazon.com/neptune/latest/UserGuide/tagging.ARN.html).
+	// The tags to be applied to the restored DB cluster.
 	Tags []*Tag `locationNameList:"Tag" type:"list"`
 
 	// A value that is set to true to restore the DB cluster to the latest restorable
@@ -16287,6 +16102,12 @@ func (s *RestoreDBClusterToPointInTimeInput) Validate() error {
 // SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
 func (s *RestoreDBClusterToPointInTimeInput) SetDBClusterIdentifier(v string) *RestoreDBClusterToPointInTimeInput {
 	s.DBClusterIdentifier = &v
+	return s
+}
+
+// SetDBClusterParameterGroupName sets the DBClusterParameterGroupName field's value.
+func (s *RestoreDBClusterToPointInTimeInput) SetDBClusterParameterGroupName(v string) *RestoreDBClusterToPointInTimeInput {
+	s.DBClusterParameterGroupName = &v
 	return s
 }
 
@@ -16381,16 +16202,14 @@ func (s *RestoreDBClusterToPointInTimeOutput) SetDBCluster(v *DBCluster) *Restor
 	return s
 }
 
+// Specifies a subnet.
+//
 // This data type is used as a response element in the DescribeDBSubnetGroups
 // action.
 type Subnet struct {
 	_ struct{} `type:"structure"`
 
-	// Contains Availability Zone information.
-	//
-	// This data type is used as an element in the following data type:
-	//
-	//    * OrderableDBInstanceOption
+	// Specifies the EC2 Availability Zone that the subnet is in.
 	SubnetAvailabilityZone *AvailabilityZone `type:"structure"`
 
 	// Specifies the identifier of the subnet.
@@ -16468,9 +16287,7 @@ func (s *Tag) SetValue(v string) *Tag {
 	return s
 }
 
-// A time zone associated with a DBInstance. This data type is an element in
-// the response to the DescribeDBInstances, and the DescribeDBEngineVersions
-// actions.
+// A time zone associated with a DBInstance.
 type Timezone struct {
 	_ struct{} `type:"structure"`
 
@@ -16582,6 +16399,7 @@ func (s *ValidDBInstanceModificationsMessage) SetStorage(v []*ValidStorageOption
 }
 
 // Information about valid modifications that you can make to your DB instance.
+//
 // Contains the result of a successful call to the DescribeValidDBInstanceModifications
 // action.
 type ValidStorageOptions struct {

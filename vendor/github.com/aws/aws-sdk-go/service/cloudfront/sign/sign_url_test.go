@@ -23,6 +23,10 @@ var testSignURL = []struct {
 		"http://example.com/a?Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cDovL2V4YW1wbGUuY29tL2EiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjEyNTc4OTQwMDB9fX1dfQ__&Signature=cMutWOvPMOPuh0KFDsOdbML~1fe0eEBC1hdMLGRbYr3mTRrVbKDdUXL6l3vlbE0Og3rTRS6mlaSORTwesN1srESH1pXFUyCVba8tWqNy1frEiL7jZLyzA1KndH0olfJDfgHXdw-Edtk0m8mqY~AnGIYGYDu659dWeP49jVeYn30XF9sYkRCdS5IezAkqh8TO9tTDNGS4Ic6DQue4agHUFLNv1VErTafUxlSBp8hlPCuMdtZLEBLr9UJVc3oWJI3zc1~9JgVTDjbXYV1-HgTn8qQsbAU2KcieUonIzTme2td-7c2FCC0EAbOF~6QXTHWcAiSB5nVmbxn-Mx-QMVsiLw__&Key-Pair-Id=KeyID",
 	},
 	{
+		"https://example.com/a?b=1&c=2", NewCannedPolicy("https://example.com/a?b=1&c=2", testSignTime), time.Time{}, true, false,
+		"https://example.com/a?b=1&c=2&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9leGFtcGxlLmNvbS9hP2I9MSZjPTIiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjEyNTc4OTQwMDB9fX1dfQ__&Signature=E6xB7RtIDvx8AxM1Wuup3ROYTQwBDW-qqcrb8lSUvtL78wenjh3P0YLXK-mFK0PSzdNtzI2ZIXja6Nh2yma0IVQiZMjn3wijvVsMy9fRXyusVXB1zYSfiInVr2uhqSb-ZCn1RD32ebyMD6IWn5Kss1fT4wefc8Q76J0Y4jprAvmLCtGnrW~quZdOg~KKmY-qK11ifNwv2ECADBxZeEx1PIDHdWuXYrCBJIwSl-bVscwQWDm2BzeYuHCaLuAVDuc62JJzc7nX3E1CA1VRHY~vegYjOV6zVxtp7aBV4RJUY4yfHNM4n640FXUPPwMacqE-lnNOfx704YVTl4tjzuvzuA__&Key-Pair-Id=KeyID",
+	},
+	{
 		"http://example.com/a", nil, testSignTime, false, false,
 		"http://example.com/a?Expires=1257894000&Signature=cMutWOvPMOPuh0KFDsOdbML~1fe0eEBC1hdMLGRbYr3mTRrVbKDdUXL6l3vlbE0Og3rTRS6mlaSORTwesN1srESH1pXFUyCVba8tWqNy1frEiL7jZLyzA1KndH0olfJDfgHXdw-Edtk0m8mqY~AnGIYGYDu659dWeP49jVeYn30XF9sYkRCdS5IezAkqh8TO9tTDNGS4Ic6DQue4agHUFLNv1VErTafUxlSBp8hlPCuMdtZLEBLr9UJVc3oWJI3zc1~9JgVTDjbXYV1-HgTn8qQsbAU2KcieUonIzTme2td-7c2FCC0EAbOF~6QXTHWcAiSB5nVmbxn-Mx-QMVsiLw__&Key-Pair-Id=KeyID",
 	},
@@ -93,6 +97,10 @@ var testBuildSignedURL = []struct {
 	{
 		"https://example.com/a?b=1", "KeyID", NewCannedPolicy("", testSignTime), true, []byte("b64Policy"), []byte("b64Sig"),
 		"https://example.com/a?b=1&Policy=b64Policy&Signature=b64Sig&Key-Pair-Id=KeyID",
+	},
+	{
+		"https://example.com/a?b=1&c=2", "KeyID", NewCannedPolicy("", testSignTime), true, []byte("b64Policy"), []byte("b64Sig"),
+		"https://example.com/a?b=1&c=2&Policy=b64Policy&Signature=b64Sig&Key-Pair-Id=KeyID",
 	},
 	{
 		"https://example.com/a", "KeyID", NewCannedPolicy("", testSignTime), true, []byte("b64Policy"), []byte("b64Sig"),

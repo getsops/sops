@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // AWS Directory Service.
 //    func myFunc(svc directoryserviceiface.DirectoryServiceAPI) bool {
-//        // Make svc.AddIpRoutes request
+//        // Make svc.AcceptSharedDirectory request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockDirectoryServiceClient struct {
 //        directoryserviceiface.DirectoryServiceAPI
 //    }
-//    func (m *mockDirectoryServiceClient) AddIpRoutes(input *directoryservice.AddIpRoutesInput) (*directoryservice.AddIpRoutesOutput, error) {
+//    func (m *mockDirectoryServiceClient) AcceptSharedDirectory(input *directoryservice.AcceptSharedDirectoryInput) (*directoryservice.AcceptSharedDirectoryOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,10 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type DirectoryServiceAPI interface {
+	AcceptSharedDirectory(*directoryservice.AcceptSharedDirectoryInput) (*directoryservice.AcceptSharedDirectoryOutput, error)
+	AcceptSharedDirectoryWithContext(aws.Context, *directoryservice.AcceptSharedDirectoryInput, ...request.Option) (*directoryservice.AcceptSharedDirectoryOutput, error)
+	AcceptSharedDirectoryRequest(*directoryservice.AcceptSharedDirectoryInput) (*request.Request, *directoryservice.AcceptSharedDirectoryOutput)
+
 	AddIpRoutes(*directoryservice.AddIpRoutesInput) (*directoryservice.AddIpRoutesOutput, error)
 	AddIpRoutesWithContext(aws.Context, *directoryservice.AddIpRoutesInput, ...request.Option) (*directoryservice.AddIpRoutesOutput, error)
 	AddIpRoutesRequest(*directoryservice.AddIpRoutesInput) (*request.Request, *directoryservice.AddIpRoutesOutput)
@@ -92,6 +96,10 @@ type DirectoryServiceAPI interface {
 	CreateDirectoryWithContext(aws.Context, *directoryservice.CreateDirectoryInput, ...request.Option) (*directoryservice.CreateDirectoryOutput, error)
 	CreateDirectoryRequest(*directoryservice.CreateDirectoryInput) (*request.Request, *directoryservice.CreateDirectoryOutput)
 
+	CreateLogSubscription(*directoryservice.CreateLogSubscriptionInput) (*directoryservice.CreateLogSubscriptionOutput, error)
+	CreateLogSubscriptionWithContext(aws.Context, *directoryservice.CreateLogSubscriptionInput, ...request.Option) (*directoryservice.CreateLogSubscriptionOutput, error)
+	CreateLogSubscriptionRequest(*directoryservice.CreateLogSubscriptionInput) (*request.Request, *directoryservice.CreateLogSubscriptionOutput)
+
 	CreateMicrosoftAD(*directoryservice.CreateMicrosoftADInput) (*directoryservice.CreateMicrosoftADOutput, error)
 	CreateMicrosoftADWithContext(aws.Context, *directoryservice.CreateMicrosoftADInput, ...request.Option) (*directoryservice.CreateMicrosoftADOutput, error)
 	CreateMicrosoftADRequest(*directoryservice.CreateMicrosoftADInput) (*request.Request, *directoryservice.CreateMicrosoftADOutput)
@@ -111,6 +119,10 @@ type DirectoryServiceAPI interface {
 	DeleteDirectory(*directoryservice.DeleteDirectoryInput) (*directoryservice.DeleteDirectoryOutput, error)
 	DeleteDirectoryWithContext(aws.Context, *directoryservice.DeleteDirectoryInput, ...request.Option) (*directoryservice.DeleteDirectoryOutput, error)
 	DeleteDirectoryRequest(*directoryservice.DeleteDirectoryInput) (*request.Request, *directoryservice.DeleteDirectoryOutput)
+
+	DeleteLogSubscription(*directoryservice.DeleteLogSubscriptionInput) (*directoryservice.DeleteLogSubscriptionOutput, error)
+	DeleteLogSubscriptionWithContext(aws.Context, *directoryservice.DeleteLogSubscriptionInput, ...request.Option) (*directoryservice.DeleteLogSubscriptionOutput, error)
+	DeleteLogSubscriptionRequest(*directoryservice.DeleteLogSubscriptionInput) (*request.Request, *directoryservice.DeleteLogSubscriptionOutput)
 
 	DeleteSnapshot(*directoryservice.DeleteSnapshotInput) (*directoryservice.DeleteSnapshotOutput, error)
 	DeleteSnapshotWithContext(aws.Context, *directoryservice.DeleteSnapshotInput, ...request.Option) (*directoryservice.DeleteSnapshotOutput, error)
@@ -142,6 +154,10 @@ type DirectoryServiceAPI interface {
 	DescribeEventTopics(*directoryservice.DescribeEventTopicsInput) (*directoryservice.DescribeEventTopicsOutput, error)
 	DescribeEventTopicsWithContext(aws.Context, *directoryservice.DescribeEventTopicsInput, ...request.Option) (*directoryservice.DescribeEventTopicsOutput, error)
 	DescribeEventTopicsRequest(*directoryservice.DescribeEventTopicsInput) (*request.Request, *directoryservice.DescribeEventTopicsOutput)
+
+	DescribeSharedDirectories(*directoryservice.DescribeSharedDirectoriesInput) (*directoryservice.DescribeSharedDirectoriesOutput, error)
+	DescribeSharedDirectoriesWithContext(aws.Context, *directoryservice.DescribeSharedDirectoriesInput, ...request.Option) (*directoryservice.DescribeSharedDirectoriesOutput, error)
+	DescribeSharedDirectoriesRequest(*directoryservice.DescribeSharedDirectoriesInput) (*request.Request, *directoryservice.DescribeSharedDirectoriesOutput)
 
 	DescribeSnapshots(*directoryservice.DescribeSnapshotsInput) (*directoryservice.DescribeSnapshotsOutput, error)
 	DescribeSnapshotsWithContext(aws.Context, *directoryservice.DescribeSnapshotsInput, ...request.Option) (*directoryservice.DescribeSnapshotsOutput, error)
@@ -179,6 +195,10 @@ type DirectoryServiceAPI interface {
 	ListIpRoutesWithContext(aws.Context, *directoryservice.ListIpRoutesInput, ...request.Option) (*directoryservice.ListIpRoutesOutput, error)
 	ListIpRoutesRequest(*directoryservice.ListIpRoutesInput) (*request.Request, *directoryservice.ListIpRoutesOutput)
 
+	ListLogSubscriptions(*directoryservice.ListLogSubscriptionsInput) (*directoryservice.ListLogSubscriptionsOutput, error)
+	ListLogSubscriptionsWithContext(aws.Context, *directoryservice.ListLogSubscriptionsInput, ...request.Option) (*directoryservice.ListLogSubscriptionsOutput, error)
+	ListLogSubscriptionsRequest(*directoryservice.ListLogSubscriptionsInput) (*request.Request, *directoryservice.ListLogSubscriptionsOutput)
+
 	ListSchemaExtensions(*directoryservice.ListSchemaExtensionsInput) (*directoryservice.ListSchemaExtensionsOutput, error)
 	ListSchemaExtensionsWithContext(aws.Context, *directoryservice.ListSchemaExtensionsInput, ...request.Option) (*directoryservice.ListSchemaExtensionsOutput, error)
 	ListSchemaExtensionsRequest(*directoryservice.ListSchemaExtensionsInput) (*request.Request, *directoryservice.ListSchemaExtensionsOutput)
@@ -190,6 +210,10 @@ type DirectoryServiceAPI interface {
 	RegisterEventTopic(*directoryservice.RegisterEventTopicInput) (*directoryservice.RegisterEventTopicOutput, error)
 	RegisterEventTopicWithContext(aws.Context, *directoryservice.RegisterEventTopicInput, ...request.Option) (*directoryservice.RegisterEventTopicOutput, error)
 	RegisterEventTopicRequest(*directoryservice.RegisterEventTopicInput) (*request.Request, *directoryservice.RegisterEventTopicOutput)
+
+	RejectSharedDirectory(*directoryservice.RejectSharedDirectoryInput) (*directoryservice.RejectSharedDirectoryOutput, error)
+	RejectSharedDirectoryWithContext(aws.Context, *directoryservice.RejectSharedDirectoryInput, ...request.Option) (*directoryservice.RejectSharedDirectoryOutput, error)
+	RejectSharedDirectoryRequest(*directoryservice.RejectSharedDirectoryInput) (*request.Request, *directoryservice.RejectSharedDirectoryOutput)
 
 	RemoveIpRoutes(*directoryservice.RemoveIpRoutesInput) (*directoryservice.RemoveIpRoutesOutput, error)
 	RemoveIpRoutesWithContext(aws.Context, *directoryservice.RemoveIpRoutesInput, ...request.Option) (*directoryservice.RemoveIpRoutesOutput, error)
@@ -207,9 +231,17 @@ type DirectoryServiceAPI interface {
 	RestoreFromSnapshotWithContext(aws.Context, *directoryservice.RestoreFromSnapshotInput, ...request.Option) (*directoryservice.RestoreFromSnapshotOutput, error)
 	RestoreFromSnapshotRequest(*directoryservice.RestoreFromSnapshotInput) (*request.Request, *directoryservice.RestoreFromSnapshotOutput)
 
+	ShareDirectory(*directoryservice.ShareDirectoryInput) (*directoryservice.ShareDirectoryOutput, error)
+	ShareDirectoryWithContext(aws.Context, *directoryservice.ShareDirectoryInput, ...request.Option) (*directoryservice.ShareDirectoryOutput, error)
+	ShareDirectoryRequest(*directoryservice.ShareDirectoryInput) (*request.Request, *directoryservice.ShareDirectoryOutput)
+
 	StartSchemaExtension(*directoryservice.StartSchemaExtensionInput) (*directoryservice.StartSchemaExtensionOutput, error)
 	StartSchemaExtensionWithContext(aws.Context, *directoryservice.StartSchemaExtensionInput, ...request.Option) (*directoryservice.StartSchemaExtensionOutput, error)
 	StartSchemaExtensionRequest(*directoryservice.StartSchemaExtensionInput) (*request.Request, *directoryservice.StartSchemaExtensionOutput)
+
+	UnshareDirectory(*directoryservice.UnshareDirectoryInput) (*directoryservice.UnshareDirectoryOutput, error)
+	UnshareDirectoryWithContext(aws.Context, *directoryservice.UnshareDirectoryInput, ...request.Option) (*directoryservice.UnshareDirectoryOutput, error)
+	UnshareDirectoryRequest(*directoryservice.UnshareDirectoryInput) (*request.Request, *directoryservice.UnshareDirectoryOutput)
 
 	UpdateConditionalForwarder(*directoryservice.UpdateConditionalForwarderInput) (*directoryservice.UpdateConditionalForwarderOutput, error)
 	UpdateConditionalForwarderWithContext(aws.Context, *directoryservice.UpdateConditionalForwarderInput, ...request.Option) (*directoryservice.UpdateConditionalForwarderOutput, error)
@@ -222,6 +254,10 @@ type DirectoryServiceAPI interface {
 	UpdateRadius(*directoryservice.UpdateRadiusInput) (*directoryservice.UpdateRadiusOutput, error)
 	UpdateRadiusWithContext(aws.Context, *directoryservice.UpdateRadiusInput, ...request.Option) (*directoryservice.UpdateRadiusOutput, error)
 	UpdateRadiusRequest(*directoryservice.UpdateRadiusInput) (*request.Request, *directoryservice.UpdateRadiusOutput)
+
+	UpdateTrust(*directoryservice.UpdateTrustInput) (*directoryservice.UpdateTrustOutput, error)
+	UpdateTrustWithContext(aws.Context, *directoryservice.UpdateTrustInput, ...request.Option) (*directoryservice.UpdateTrustOutput, error)
+	UpdateTrustRequest(*directoryservice.UpdateTrustInput) (*request.Request, *directoryservice.UpdateTrustOutput)
 
 	VerifyTrust(*directoryservice.VerifyTrustInput) (*directoryservice.VerifyTrustOutput, error)
 	VerifyTrustWithContext(aws.Context, *directoryservice.VerifyTrustInput, ...request.Option) (*directoryservice.VerifyTrustOutput, error)

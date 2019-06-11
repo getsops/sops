@@ -68,6 +68,14 @@ type GreengrassAPI interface {
 	AssociateServiceRoleToAccountWithContext(aws.Context, *greengrass.AssociateServiceRoleToAccountInput, ...request.Option) (*greengrass.AssociateServiceRoleToAccountOutput, error)
 	AssociateServiceRoleToAccountRequest(*greengrass.AssociateServiceRoleToAccountInput) (*request.Request, *greengrass.AssociateServiceRoleToAccountOutput)
 
+	CreateConnectorDefinition(*greengrass.CreateConnectorDefinitionInput) (*greengrass.CreateConnectorDefinitionOutput, error)
+	CreateConnectorDefinitionWithContext(aws.Context, *greengrass.CreateConnectorDefinitionInput, ...request.Option) (*greengrass.CreateConnectorDefinitionOutput, error)
+	CreateConnectorDefinitionRequest(*greengrass.CreateConnectorDefinitionInput) (*request.Request, *greengrass.CreateConnectorDefinitionOutput)
+
+	CreateConnectorDefinitionVersion(*greengrass.CreateConnectorDefinitionVersionInput) (*greengrass.CreateConnectorDefinitionVersionOutput, error)
+	CreateConnectorDefinitionVersionWithContext(aws.Context, *greengrass.CreateConnectorDefinitionVersionInput, ...request.Option) (*greengrass.CreateConnectorDefinitionVersionOutput, error)
+	CreateConnectorDefinitionVersionRequest(*greengrass.CreateConnectorDefinitionVersionInput) (*request.Request, *greengrass.CreateConnectorDefinitionVersionOutput)
+
 	CreateCoreDefinition(*greengrass.CreateCoreDefinitionInput) (*greengrass.CreateCoreDefinitionOutput, error)
 	CreateCoreDefinitionWithContext(aws.Context, *greengrass.CreateCoreDefinitionInput, ...request.Option) (*greengrass.CreateCoreDefinitionOutput, error)
 	CreateCoreDefinitionRequest(*greengrass.CreateCoreDefinitionInput) (*request.Request, *greengrass.CreateCoreDefinitionOutput)
@@ -136,6 +144,10 @@ type GreengrassAPI interface {
 	CreateSubscriptionDefinitionVersionWithContext(aws.Context, *greengrass.CreateSubscriptionDefinitionVersionInput, ...request.Option) (*greengrass.CreateSubscriptionDefinitionVersionOutput, error)
 	CreateSubscriptionDefinitionVersionRequest(*greengrass.CreateSubscriptionDefinitionVersionInput) (*request.Request, *greengrass.CreateSubscriptionDefinitionVersionOutput)
 
+	DeleteConnectorDefinition(*greengrass.DeleteConnectorDefinitionInput) (*greengrass.DeleteConnectorDefinitionOutput, error)
+	DeleteConnectorDefinitionWithContext(aws.Context, *greengrass.DeleteConnectorDefinitionInput, ...request.Option) (*greengrass.DeleteConnectorDefinitionOutput, error)
+	DeleteConnectorDefinitionRequest(*greengrass.DeleteConnectorDefinitionInput) (*request.Request, *greengrass.DeleteConnectorDefinitionOutput)
+
 	DeleteCoreDefinition(*greengrass.DeleteCoreDefinitionInput) (*greengrass.DeleteCoreDefinitionOutput, error)
 	DeleteCoreDefinitionWithContext(aws.Context, *greengrass.DeleteCoreDefinitionInput, ...request.Option) (*greengrass.DeleteCoreDefinitionOutput, error)
 	DeleteCoreDefinitionRequest(*greengrass.DeleteCoreDefinitionInput) (*request.Request, *greengrass.DeleteCoreDefinitionOutput)
@@ -176,9 +188,21 @@ type GreengrassAPI interface {
 	GetAssociatedRoleWithContext(aws.Context, *greengrass.GetAssociatedRoleInput, ...request.Option) (*greengrass.GetAssociatedRoleOutput, error)
 	GetAssociatedRoleRequest(*greengrass.GetAssociatedRoleInput) (*request.Request, *greengrass.GetAssociatedRoleOutput)
 
+	GetBulkDeploymentStatus(*greengrass.GetBulkDeploymentStatusInput) (*greengrass.GetBulkDeploymentStatusOutput, error)
+	GetBulkDeploymentStatusWithContext(aws.Context, *greengrass.GetBulkDeploymentStatusInput, ...request.Option) (*greengrass.GetBulkDeploymentStatusOutput, error)
+	GetBulkDeploymentStatusRequest(*greengrass.GetBulkDeploymentStatusInput) (*request.Request, *greengrass.GetBulkDeploymentStatusOutput)
+
 	GetConnectivityInfo(*greengrass.GetConnectivityInfoInput) (*greengrass.GetConnectivityInfoOutput, error)
 	GetConnectivityInfoWithContext(aws.Context, *greengrass.GetConnectivityInfoInput, ...request.Option) (*greengrass.GetConnectivityInfoOutput, error)
 	GetConnectivityInfoRequest(*greengrass.GetConnectivityInfoInput) (*request.Request, *greengrass.GetConnectivityInfoOutput)
+
+	GetConnectorDefinition(*greengrass.GetConnectorDefinitionInput) (*greengrass.GetConnectorDefinitionOutput, error)
+	GetConnectorDefinitionWithContext(aws.Context, *greengrass.GetConnectorDefinitionInput, ...request.Option) (*greengrass.GetConnectorDefinitionOutput, error)
+	GetConnectorDefinitionRequest(*greengrass.GetConnectorDefinitionInput) (*request.Request, *greengrass.GetConnectorDefinitionOutput)
+
+	GetConnectorDefinitionVersion(*greengrass.GetConnectorDefinitionVersionInput) (*greengrass.GetConnectorDefinitionVersionOutput, error)
+	GetConnectorDefinitionVersionWithContext(aws.Context, *greengrass.GetConnectorDefinitionVersionInput, ...request.Option) (*greengrass.GetConnectorDefinitionVersionOutput, error)
+	GetConnectorDefinitionVersionRequest(*greengrass.GetConnectorDefinitionVersionInput) (*request.Request, *greengrass.GetConnectorDefinitionVersionOutput)
 
 	GetCoreDefinition(*greengrass.GetCoreDefinitionInput) (*greengrass.GetCoreDefinitionOutput, error)
 	GetCoreDefinitionWithContext(aws.Context, *greengrass.GetCoreDefinitionInput, ...request.Option) (*greengrass.GetCoreDefinitionOutput, error)
@@ -252,6 +276,22 @@ type GreengrassAPI interface {
 	GetSubscriptionDefinitionVersionWithContext(aws.Context, *greengrass.GetSubscriptionDefinitionVersionInput, ...request.Option) (*greengrass.GetSubscriptionDefinitionVersionOutput, error)
 	GetSubscriptionDefinitionVersionRequest(*greengrass.GetSubscriptionDefinitionVersionInput) (*request.Request, *greengrass.GetSubscriptionDefinitionVersionOutput)
 
+	ListBulkDeploymentDetailedReports(*greengrass.ListBulkDeploymentDetailedReportsInput) (*greengrass.ListBulkDeploymentDetailedReportsOutput, error)
+	ListBulkDeploymentDetailedReportsWithContext(aws.Context, *greengrass.ListBulkDeploymentDetailedReportsInput, ...request.Option) (*greengrass.ListBulkDeploymentDetailedReportsOutput, error)
+	ListBulkDeploymentDetailedReportsRequest(*greengrass.ListBulkDeploymentDetailedReportsInput) (*request.Request, *greengrass.ListBulkDeploymentDetailedReportsOutput)
+
+	ListBulkDeployments(*greengrass.ListBulkDeploymentsInput) (*greengrass.ListBulkDeploymentsOutput, error)
+	ListBulkDeploymentsWithContext(aws.Context, *greengrass.ListBulkDeploymentsInput, ...request.Option) (*greengrass.ListBulkDeploymentsOutput, error)
+	ListBulkDeploymentsRequest(*greengrass.ListBulkDeploymentsInput) (*request.Request, *greengrass.ListBulkDeploymentsOutput)
+
+	ListConnectorDefinitionVersions(*greengrass.ListConnectorDefinitionVersionsInput) (*greengrass.ListConnectorDefinitionVersionsOutput, error)
+	ListConnectorDefinitionVersionsWithContext(aws.Context, *greengrass.ListConnectorDefinitionVersionsInput, ...request.Option) (*greengrass.ListConnectorDefinitionVersionsOutput, error)
+	ListConnectorDefinitionVersionsRequest(*greengrass.ListConnectorDefinitionVersionsInput) (*request.Request, *greengrass.ListConnectorDefinitionVersionsOutput)
+
+	ListConnectorDefinitions(*greengrass.ListConnectorDefinitionsInput) (*greengrass.ListConnectorDefinitionsOutput, error)
+	ListConnectorDefinitionsWithContext(aws.Context, *greengrass.ListConnectorDefinitionsInput, ...request.Option) (*greengrass.ListConnectorDefinitionsOutput, error)
+	ListConnectorDefinitionsRequest(*greengrass.ListConnectorDefinitionsInput) (*request.Request, *greengrass.ListConnectorDefinitionsOutput)
+
 	ListCoreDefinitionVersions(*greengrass.ListCoreDefinitionVersionsInput) (*greengrass.ListCoreDefinitionVersionsOutput, error)
 	ListCoreDefinitionVersionsWithContext(aws.Context, *greengrass.ListCoreDefinitionVersionsInput, ...request.Option) (*greengrass.ListCoreDefinitionVersionsOutput, error)
 	ListCoreDefinitionVersionsRequest(*greengrass.ListCoreDefinitionVersionsInput) (*request.Request, *greengrass.ListCoreDefinitionVersionsOutput)
@@ -316,13 +356,37 @@ type GreengrassAPI interface {
 	ListSubscriptionDefinitionsWithContext(aws.Context, *greengrass.ListSubscriptionDefinitionsInput, ...request.Option) (*greengrass.ListSubscriptionDefinitionsOutput, error)
 	ListSubscriptionDefinitionsRequest(*greengrass.ListSubscriptionDefinitionsInput) (*request.Request, *greengrass.ListSubscriptionDefinitionsOutput)
 
+	ListTagsForResource(*greengrass.ListTagsForResourceInput) (*greengrass.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *greengrass.ListTagsForResourceInput, ...request.Option) (*greengrass.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*greengrass.ListTagsForResourceInput) (*request.Request, *greengrass.ListTagsForResourceOutput)
+
 	ResetDeployments(*greengrass.ResetDeploymentsInput) (*greengrass.ResetDeploymentsOutput, error)
 	ResetDeploymentsWithContext(aws.Context, *greengrass.ResetDeploymentsInput, ...request.Option) (*greengrass.ResetDeploymentsOutput, error)
 	ResetDeploymentsRequest(*greengrass.ResetDeploymentsInput) (*request.Request, *greengrass.ResetDeploymentsOutput)
 
+	StartBulkDeployment(*greengrass.StartBulkDeploymentInput) (*greengrass.StartBulkDeploymentOutput, error)
+	StartBulkDeploymentWithContext(aws.Context, *greengrass.StartBulkDeploymentInput, ...request.Option) (*greengrass.StartBulkDeploymentOutput, error)
+	StartBulkDeploymentRequest(*greengrass.StartBulkDeploymentInput) (*request.Request, *greengrass.StartBulkDeploymentOutput)
+
+	StopBulkDeployment(*greengrass.StopBulkDeploymentInput) (*greengrass.StopBulkDeploymentOutput, error)
+	StopBulkDeploymentWithContext(aws.Context, *greengrass.StopBulkDeploymentInput, ...request.Option) (*greengrass.StopBulkDeploymentOutput, error)
+	StopBulkDeploymentRequest(*greengrass.StopBulkDeploymentInput) (*request.Request, *greengrass.StopBulkDeploymentOutput)
+
+	TagResource(*greengrass.TagResourceInput) (*greengrass.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *greengrass.TagResourceInput, ...request.Option) (*greengrass.TagResourceOutput, error)
+	TagResourceRequest(*greengrass.TagResourceInput) (*request.Request, *greengrass.TagResourceOutput)
+
+	UntagResource(*greengrass.UntagResourceInput) (*greengrass.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *greengrass.UntagResourceInput, ...request.Option) (*greengrass.UntagResourceOutput, error)
+	UntagResourceRequest(*greengrass.UntagResourceInput) (*request.Request, *greengrass.UntagResourceOutput)
+
 	UpdateConnectivityInfo(*greengrass.UpdateConnectivityInfoInput) (*greengrass.UpdateConnectivityInfoOutput, error)
 	UpdateConnectivityInfoWithContext(aws.Context, *greengrass.UpdateConnectivityInfoInput, ...request.Option) (*greengrass.UpdateConnectivityInfoOutput, error)
 	UpdateConnectivityInfoRequest(*greengrass.UpdateConnectivityInfoInput) (*request.Request, *greengrass.UpdateConnectivityInfoOutput)
+
+	UpdateConnectorDefinition(*greengrass.UpdateConnectorDefinitionInput) (*greengrass.UpdateConnectorDefinitionOutput, error)
+	UpdateConnectorDefinitionWithContext(aws.Context, *greengrass.UpdateConnectorDefinitionInput, ...request.Option) (*greengrass.UpdateConnectorDefinitionOutput, error)
+	UpdateConnectorDefinitionRequest(*greengrass.UpdateConnectorDefinitionInput) (*request.Request, *greengrass.UpdateConnectorDefinitionOutput)
 
 	UpdateCoreDefinition(*greengrass.UpdateCoreDefinitionInput) (*greengrass.UpdateCoreDefinitionOutput, error)
 	UpdateCoreDefinitionWithContext(aws.Context, *greengrass.UpdateCoreDefinitionInput, ...request.Option) (*greengrass.UpdateCoreDefinitionOutput, error)

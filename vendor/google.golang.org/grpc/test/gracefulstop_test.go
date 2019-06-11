@@ -19,6 +19,7 @@
 package test
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"net"
@@ -26,10 +27,9 @@ import (
 	"testing"
 	"time"
 
-	"golang.org/x/net/context"
+	"golang.org/x/net/http2"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/internal/leakcheck"
-
+	"google.golang.org/grpc/internal/envconfig"
 	testpb "google.golang.org/grpc/test/grpc_testing"
 )
 
@@ -52,6 +52,13 @@ func (d *delayListener) Accept() (net.Conn, error) {
 	default:
 		close(d.acceptCalled)
 		conn, err := d.Listener.Accept()
+		if err != nil {
+			return nil, err
+		}
+		framer := http2.NewFramer(conn, conn)
+		if err = framer.WriteSettings(http2.Setting{}); err != nil {
+			return nil, err
+		}
 		// Allow closing of listener only after accept.
 		// Note: Dial can return successfully, yet Accept
 		// might now have finished.
@@ -76,7 +83,7 @@ func (d *delayListener) allowClientRead() {
 	d.cc.allowRead()
 }
 
-func (d *delayListener) Dial(to time.Duration) (net.Conn, error) {
+func (d *delayListener) Dial(ctx context.Context) (net.Conn, error) {
 	if d.dialed {
 		// Only hand out one connection (net.Dial can return more even after the
 		// listener is closed).  This is not thread-safe, but Dial should never be
@@ -84,7 +91,7 @@ func (d *delayListener) Dial(to time.Duration) (net.Conn, error) {
 		return nil, fmt.Errorf("no more conns")
 	}
 	d.dialed = true
-	c, err := net.DialTimeout("tcp", d.Listener.Addr().String(), to)
+	c, err := (&net.Dialer{}).DialContext(ctx, "tcp", d.Listener.Addr().String())
 	if err != nil {
 		return nil, err
 	}
@@ -106,8 +113,16 @@ func (d *delayConn) Read(b []byte) (n int, err error) {
 	return d.Conn.Read(b)
 }
 
-func TestGracefulStop(t *testing.T) {
-	defer leakcheck.Check(t)
+func (s) TestGracefulStop(t *testing.T) {
+	// We need to turn off RequireHandshake because if it were on, it would
+	// block forever waiting to read the handshake, and the delayConn would
+	// never let it (the delay is intended to block until later in the test).
+	//
+	// Restore current setting after test.
+	old := envconfig.RequireHandshake
+	defer func() { envconfig.RequireHandshake = old }()
+	envconfig.RequireHandshake = envconfig.RequireHandshakeOff
+
 	// This test ensures GracefulStop cannot race and break RPCs on new
 	// connections created after GracefulStop was called but before
 	// listener.Accept() returns a "closing" error.
@@ -133,7 +148,7 @@ func TestGracefulStop(t *testing.T) {
 		closeCalled:  make(chan struct{}),
 		allowCloseCh: make(chan struct{}),
 	}
-	d := func(_ string, to time.Duration) (net.Conn, error) { return dlis.Dial(to) }
+	d := func(ctx context.Context, _ string) (net.Conn, error) { return dlis.Dial(ctx) }
 	serverGotReq := make(chan struct{})
 
 	ss := &stubServer{
@@ -176,8 +191,9 @@ func TestGracefulStop(t *testing.T) {
 	// even though GracefulStop has closed the listener.
 	ctx, dialCancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer dialCancel()
-	cc, err := grpc.DialContext(ctx, "", grpc.WithInsecure(), grpc.WithBlock(), grpc.WithDialer(d))
+	cc, err := grpc.DialContext(ctx, "", grpc.WithInsecure(), grpc.WithBlock(), grpc.WithContextDialer(d))
 	if err != nil {
+		dlis.allowClientRead()
 		t.Fatalf("grpc.Dial(%q) = %v", lis.Addr().String(), err)
 	}
 	client := testpb.NewTestServiceClient(cc)

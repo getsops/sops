@@ -5,7 +5,6 @@ import (
 
 	"github.com/smartystreets/assertions/internal/unit"
 	"github.com/smartystreets/assertions/should"
-	"github.com/smartystreets/logging"
 )
 
 func TestPassedResultFixture(t *testing.T) {
@@ -20,7 +19,7 @@ type PassedResultFixture struct {
 
 func (this *PassedResultFixture) Setup() {
 	this.result = So(1, should.Equal, 1)
-	this.result.logger = logging.Capture()
+	this.result.logger = capture()
 	this.result.stdout = this.result.logger.Log
 }
 

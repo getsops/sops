@@ -6,6 +6,7 @@ package http2
 
 import (
 	"bytes"
+	"context"
 	"crypto/tls"
 	"errors"
 	"flag"
@@ -2360,6 +2361,9 @@ func TestServer_NoCrash_HandlerClose_Then_ClientClose(t *testing.T) {
 		// it did before.
 		st.writeData(1, true, []byte("foo"))
 
+		// Get our flow control bytes back, since the handler didn't get them.
+		st.wantWindowUpdate(0, uint32(len("foo")))
+
 		// Sent after a peer sends data anyway (admittedly the
 		// previous RST_STREAM might've still been in-flight),
 		// but they'll get the more friendly 'cancel' code
@@ -2415,6 +2419,8 @@ func testRejectTLS(t *testing.T, max uint16) {
 
 func TestServer_Rejects_TLSBadCipher(t *testing.T) {
 	st := newServerTester(t, nil, func(c *tls.Config) {
+		// All TLS 1.3 ciphers are good. Test with TLS 1.2.
+		c.MaxVersion = tls.VersionTLS12
 		// Only list bad ones:
 		c.CipherSuites = []uint16{
 			tls.TLS_RSA_WITH_RC4_128_SHA,
@@ -2700,6 +2706,26 @@ func TestServerDoS_MaxHeaderListSize(t *testing.T) {
 	if !reflect.DeepEqual(headers, want) {
 		t.Errorf("Headers mismatch.\n got: %q\nwant: %q\n", headers, want)
 	}
+}
+
+func TestServer_Response_Stream_With_Missing_Trailer(t *testing.T) {
+	testServerResponse(t, func(w http.ResponseWriter, r *http.Request) error {
+		w.Header().Set("Trailer", "test-trailer")
+		return nil
+	}, func(st *serverTester) {
+		getSlash(st)
+		hf := st.wantHeaders()
+		if !hf.HeadersEnded() {
+			t.Fatal("want END_HEADERS flag")
+		}
+		df := st.wantData()
+		if len(df.data) != 0 {
+			t.Fatal("did not want data")
+		}
+		if !df.StreamEnded() {
+			t.Fatal("want END_STREAM flag")
+		}
+	})
 }
 
 func TestCompressionErrorOnWrite(t *testing.T) {
@@ -3520,7 +3546,7 @@ func TestCheckValidHTTP2Request(t *testing.T) {
 	}
 	for i, tt := range tests {
 		got := checkValidHTTP2RequestHeaders(tt.h)
-		if !reflect.DeepEqual(got, tt.want) {
+		if !equalError(got, tt.want) {
 			t.Errorf("%d. checkValidHTTP2Request = %v; want %v", i, got, tt.want)
 		}
 	}
@@ -3849,4 +3875,48 @@ func TestServer_Headers_HalfCloseRemote(t *testing.T) {
 	defer close(leaveHandler)
 
 	st.wantRSTStream(1, ErrCodeStreamClosed)
+}
+
+func TestServerGracefulShutdown(t *testing.T) {
+	var st *serverTester
+	handlerDone := make(chan struct{})
+	st = newServerTester(t, func(w http.ResponseWriter, r *http.Request) {
+		defer close(handlerDone)
+		go st.ts.Config.Shutdown(context.Background())
+
+		ga := st.wantGoAway()
+		if ga.ErrCode != ErrCodeNo {
+			t.Errorf("GOAWAY error = %v; want ErrCodeNo", ga.ErrCode)
+		}
+		if ga.LastStreamID != 1 {
+			t.Errorf("GOAWAY LastStreamID = %v; want 1", ga.LastStreamID)
+		}
+
+		w.Header().Set("x-foo", "bar")
+	})
+	defer st.Close()
+
+	st.greet()
+	st.bodylessReq1()
+
+	select {
+	case <-handlerDone:
+	case <-time.After(5 * time.Second):
+		t.Fatalf("server did not shutdown?")
+	}
+	hf := st.wantHeaders()
+	goth := st.decodeHeader(hf.HeaderBlockFragment())
+	wanth := [][2]string{
+		{":status", "200"},
+		{"x-foo", "bar"},
+		{"content-length", "0"},
+	}
+	if !reflect.DeepEqual(goth, wanth) {
+		t.Errorf("Got headers %v; want %v", goth, wanth)
+	}
+
+	n, err := st.cc.Read([]byte{0})
+	if n != 0 || err == nil {
+		t.Errorf("Read = %v, %v; want 0, non-nil", n, err)
+	}
 }

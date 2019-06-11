@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -48,6 +49,16 @@ func NewDscCompilationJobClientWithBaseURI(baseURI string, subscriptionID string
 // compilationJobID - the the DSC configuration Id.
 // parameters - the parameters supplied to the create compilation job operation.
 func (client DscCompilationJobClient) Create(ctx context.Context, resourceGroupName string, automationAccountName string, compilationJobID uuid.UUID, parameters DscCompilationJobCreateParameters) (result DscCompilationJob, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DscCompilationJobClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -130,6 +141,16 @@ func (client DscCompilationJobClient) CreateResponder(resp *http.Response) (resu
 // automationAccountName - the name of the automation account.
 // compilationJobID - the Dsc configuration compilation job id.
 func (client DscCompilationJobClient) Get(ctx context.Context, resourceGroupName string, automationAccountName string, compilationJobID uuid.UUID) (result DscCompilationJob, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DscCompilationJobClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -208,6 +229,16 @@ func (client DscCompilationJobClient) GetResponder(resp *http.Response) (result 
 // jobID - the job id.
 // jobStreamID - the job stream id.
 func (client DscCompilationJobClient) GetStream(ctx context.Context, resourceGroupName string, automationAccountName string, jobID uuid.UUID, jobStreamID string) (result JobStream, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DscCompilationJobClient.GetStream")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -286,6 +317,16 @@ func (client DscCompilationJobClient) GetStreamResponder(resp *http.Response) (r
 // automationAccountName - the name of the automation account.
 // filter - the filter to apply on the operation.
 func (client DscCompilationJobClient) ListByAutomationAccount(ctx context.Context, resourceGroupName string, automationAccountName string, filter string) (result DscCompilationJobListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DscCompilationJobClient.ListByAutomationAccount")
+		defer func() {
+			sc := -1
+			if result.dcjlr.Response.Response != nil {
+				sc = result.dcjlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -361,8 +402,8 @@ func (client DscCompilationJobClient) ListByAutomationAccountResponder(resp *htt
 }
 
 // listByAutomationAccountNextResults retrieves the next set of results, if any.
-func (client DscCompilationJobClient) listByAutomationAccountNextResults(lastResults DscCompilationJobListResult) (result DscCompilationJobListResult, err error) {
-	req, err := lastResults.dscCompilationJobListResultPreparer()
+func (client DscCompilationJobClient) listByAutomationAccountNextResults(ctx context.Context, lastResults DscCompilationJobListResult) (result DscCompilationJobListResult, err error) {
+	req, err := lastResults.dscCompilationJobListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "automation.DscCompilationJobClient", "listByAutomationAccountNextResults", nil, "Failure preparing next results request")
 	}
@@ -383,6 +424,16 @@ func (client DscCompilationJobClient) listByAutomationAccountNextResults(lastRes
 
 // ListByAutomationAccountComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DscCompilationJobClient) ListByAutomationAccountComplete(ctx context.Context, resourceGroupName string, automationAccountName string, filter string) (result DscCompilationJobListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DscCompilationJobClient.ListByAutomationAccount")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByAutomationAccount(ctx, resourceGroupName, automationAccountName, filter)
 	return
 }

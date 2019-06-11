@@ -98,6 +98,10 @@ type MediaPackageAPI interface {
 	ListOriginEndpointsPages(*mediapackage.ListOriginEndpointsInput, func(*mediapackage.ListOriginEndpointsOutput, bool) bool) error
 	ListOriginEndpointsPagesWithContext(aws.Context, *mediapackage.ListOriginEndpointsInput, func(*mediapackage.ListOriginEndpointsOutput, bool) bool, ...request.Option) error
 
+	ListTagsForResource(*mediapackage.ListTagsForResourceInput) (*mediapackage.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *mediapackage.ListTagsForResourceInput, ...request.Option) (*mediapackage.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*mediapackage.ListTagsForResourceInput) (*request.Request, *mediapackage.ListTagsForResourceOutput)
+
 	RotateChannelCredentials(*mediapackage.RotateChannelCredentialsInput) (*mediapackage.RotateChannelCredentialsOutput, error)
 	RotateChannelCredentialsWithContext(aws.Context, *mediapackage.RotateChannelCredentialsInput, ...request.Option) (*mediapackage.RotateChannelCredentialsOutput, error)
 	RotateChannelCredentialsRequest(*mediapackage.RotateChannelCredentialsInput) (*request.Request, *mediapackage.RotateChannelCredentialsOutput)
@@ -105,6 +109,14 @@ type MediaPackageAPI interface {
 	RotateIngestEndpointCredentials(*mediapackage.RotateIngestEndpointCredentialsInput) (*mediapackage.RotateIngestEndpointCredentialsOutput, error)
 	RotateIngestEndpointCredentialsWithContext(aws.Context, *mediapackage.RotateIngestEndpointCredentialsInput, ...request.Option) (*mediapackage.RotateIngestEndpointCredentialsOutput, error)
 	RotateIngestEndpointCredentialsRequest(*mediapackage.RotateIngestEndpointCredentialsInput) (*request.Request, *mediapackage.RotateIngestEndpointCredentialsOutput)
+
+	TagResource(*mediapackage.TagResourceInput) (*mediapackage.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *mediapackage.TagResourceInput, ...request.Option) (*mediapackage.TagResourceOutput, error)
+	TagResourceRequest(*mediapackage.TagResourceInput) (*request.Request, *mediapackage.TagResourceOutput)
+
+	UntagResource(*mediapackage.UntagResourceInput) (*mediapackage.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *mediapackage.UntagResourceInput, ...request.Option) (*mediapackage.UntagResourceOutput, error)
+	UntagResourceRequest(*mediapackage.UntagResourceInput) (*request.Request, *mediapackage.UntagResourceOutput)
 
 	UpdateChannel(*mediapackage.UpdateChannelInput) (*mediapackage.UpdateChannelOutput, error)
 	UpdateChannelWithContext(aws.Context, *mediapackage.UpdateChannelInput, ...request.Option) (*mediapackage.UpdateChannelOutput, error)

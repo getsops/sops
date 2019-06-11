@@ -15,14 +15,13 @@
 package bigquery
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"time"
 
-	"cloud.google.com/go/internal/trace"
-	"golang.org/x/net/context"
-
 	"cloud.google.com/go/internal/optional"
+	"cloud.google.com/go/internal/trace"
 	bq "google.golang.org/api/bigquery/v2"
 )
 
@@ -67,11 +66,18 @@ type TableMetadata struct {
 	// If non-nil, the table is partitioned by time.
 	TimePartitioning *TimePartitioning
 
+	// If set to true, queries that reference this table must specify a
+	// partition filter (e.g. a WHERE clause) that can be used to eliminate
+	// partitions. Used to prevent unintentional full data scans on large
+	// partitioned tables.
+	RequirePartitionFilter bool
+
 	// Clustering specifies the data clustering configuration for the table.
 	Clustering *Clustering
 
-	// The time when this table expires. If not set, the table will persist
-	// indefinitely. Expired tables will be deleted and their storage reclaimed.
+	// The time when this table expires. If set, this table will expire at the
+	// specified time. Expired tables will be deleted and their storage
+	// reclaimed. The zero value is ignored.
 	ExpirationTime time.Time
 
 	// User-provided labels.
@@ -93,6 +99,11 @@ type TableMetadata struct {
 	// The size of the table in bytes.
 	// This does not include data that is being buffered during a streaming insert.
 	NumBytes int64
+
+	// The number of bytes in the table considered "long-term storage" for reduced
+	// billing purposes.  See https://cloud.google.com/bigquery/pricing#long-term-storage
+	// for more information.
+	NumLongTermBytes int64
 
 	// The number of rows of data in this table.
 	// This does not include data that is being buffered during a streaming insert.
@@ -143,8 +154,14 @@ const (
 type TableType string
 
 const (
-	RegularTable  TableType = "TABLE"
-	ViewTable     TableType = "VIEW"
+	// RegularTable is a regular table.
+	RegularTable TableType = "TABLE"
+	// ViewTable is a table type describing that the table is view. See more
+	// information at https://cloud.google.com/bigquery/docs/views.
+	ViewTable TableType = "VIEW"
+	// ExternalTable is a table type describing that the table is an external
+	// table (also known as a federated data source). See more information at
+	// https://cloud.google.com/bigquery/external-data-sources.
 	ExternalTable TableType = "EXTERNAL"
 )
 
@@ -160,8 +177,11 @@ type TimePartitioning struct {
 	// DATE field. Its mode must be NULLABLE or REQUIRED.
 	Field string
 
-	// If true, queries that reference this table must include a filter (e.g. a WHERE predicate)
-	// that can be used for partition elimination.
+	// If set to true, queries that reference this table must specify a
+	// partition filter (e.g. a WHERE clause) that can be used to eliminate
+	// partitions. Used to prevent unintentional full data scans on large
+	// partitioned tables.
+	// DEPRECATED: use the top-level RequirePartitionFilter in TableMetadata.
 	RequirePartitionFilter bool
 }
 
@@ -273,7 +293,7 @@ func (t *Table) implicitTable() bool {
 // Create creates a table in the BigQuery service.
 // Pass in a TableMetadata value to configure the table.
 // If tm.View.Query is non-empty, the created table will be of type VIEW.
-// Expiration can only be set during table creation.
+// If no ExpirationTime is specified, the table will never expire.
 // After table creation, a view can be modified only if its table was initially created
 // with a view.
 func (t *Table) Create(ctx context.Context, tm *TableMetadata) (err error) {
@@ -325,7 +345,13 @@ func (tm *TableMetadata) toBQ() (*bq.Table, error) {
 	}
 	t.TimePartitioning = tm.TimePartitioning.toBQ()
 	t.Clustering = tm.Clustering.toBQ()
-	if !tm.ExpirationTime.IsZero() {
+	t.RequirePartitionFilter = tm.RequirePartitionFilter
+
+	if !validExpiration(tm.ExpirationTime) {
+		return nil, fmt.Errorf("invalid expiration time: %v.\n"+
+			"Valid expiration times are after 1678 and before 2262", tm.ExpirationTime)
+	}
+	if !tm.ExpirationTime.IsZero() && tm.ExpirationTime != NeverExpire {
 		t.ExpirationTime = tm.ExpirationTime.UnixNano() / 1e6
 	}
 	if tm.ExternalDataConfig != nil {
@@ -347,6 +373,9 @@ func (tm *TableMetadata) toBQ() (*bq.Table, error) {
 	}
 	if tm.NumBytes != 0 {
 		return nil, errors.New("cannot set NumBytes on create")
+	}
+	if tm.NumLongTermBytes != 0 {
+		return nil, errors.New("cannot set NumLongTermBytes on create")
 	}
 	if tm.NumRows != 0 {
 		return nil, errors.New("cannot set NumRows on create")
@@ -380,18 +409,20 @@ func (t *Table) Metadata(ctx context.Context) (md *TableMetadata, err error) {
 
 func bqToTableMetadata(t *bq.Table) (*TableMetadata, error) {
 	md := &TableMetadata{
-		Description:      t.Description,
-		Name:             t.FriendlyName,
-		Type:             TableType(t.Type),
-		FullID:           t.Id,
-		Labels:           t.Labels,
-		NumBytes:         t.NumBytes,
-		NumRows:          t.NumRows,
-		ExpirationTime:   unixMillisToTime(t.ExpirationTime),
-		CreationTime:     unixMillisToTime(t.CreationTime),
-		LastModifiedTime: unixMillisToTime(int64(t.LastModifiedTime)),
-		ETag:             t.Etag,
-		EncryptionConfig: bqToEncryptionConfig(t.EncryptionConfiguration),
+		Description:            t.Description,
+		Name:                   t.FriendlyName,
+		Type:                   TableType(t.Type),
+		FullID:                 t.Id,
+		Labels:                 t.Labels,
+		NumBytes:               t.NumBytes,
+		NumLongTermBytes:       t.NumLongTermBytes,
+		NumRows:                t.NumRows,
+		ExpirationTime:         unixMillisToTime(t.ExpirationTime),
+		CreationTime:           unixMillisToTime(t.CreationTime),
+		LastModifiedTime:       unixMillisToTime(int64(t.LastModifiedTime)),
+		ETag:                   t.Etag,
+		EncryptionConfig:       bqToEncryptionConfig(t.EncryptionConfiguration),
+		RequirePartitionFilter: t.RequirePartitionFilter,
 	}
 	if t.Schema != nil {
 		md.Schema = bqToSchema(t.Schema)
@@ -438,12 +469,18 @@ func (t *Table) read(ctx context.Context, pf pageFetcher) *RowIterator {
 	return newRowIterator(ctx, t, pf)
 }
 
+// NeverExpire is a sentinel value used to remove a table'e expiration time.
+var NeverExpire = time.Time{}.Add(-1)
+
 // Update modifies specific Table metadata fields.
 func (t *Table) Update(ctx context.Context, tm TableMetadataToUpdate, etag string) (md *TableMetadata, err error) {
 	ctx = trace.StartSpan(ctx, "cloud.google.com/go/bigquery.Table.Update")
 	defer func() { trace.EndSpan(ctx, err) }()
 
-	bqt := tm.toBQ()
+	bqt, err := tm.toBQ()
+	if err != nil {
+		return nil, err
+	}
 	call := t.c.bqs.Tables.Patch(t.ProjectID, t.DatasetID, t.TableID, bqt).Context(ctx)
 	setClientHeader(call.Header())
 	if etag != "" {
@@ -459,7 +496,7 @@ func (t *Table) Update(ctx context.Context, tm TableMetadataToUpdate, etag strin
 	return bqToTableMetadata(res)
 }
 
-func (tm *TableMetadataToUpdate) toBQ() *bq.Table {
+func (tm *TableMetadataToUpdate) toBQ() (*bq.Table, error) {
 	t := &bq.Table{}
 	forceSend := func(field string) {
 		t.ForceSendFields = append(t.ForceSendFields, field)
@@ -480,13 +517,26 @@ func (tm *TableMetadataToUpdate) toBQ() *bq.Table {
 	if tm.EncryptionConfig != nil {
 		t.EncryptionConfiguration = tm.EncryptionConfig.toBQ()
 	}
-	if !tm.ExpirationTime.IsZero() {
+
+	if !validExpiration(tm.ExpirationTime) {
+		return nil, invalidTimeError(tm.ExpirationTime)
+	}
+	if tm.ExpirationTime == NeverExpire {
+		t.NullFields = append(t.NullFields, "ExpirationTime")
+	} else if !tm.ExpirationTime.IsZero() {
 		t.ExpirationTime = tm.ExpirationTime.UnixNano() / 1e6
 		forceSend("ExpirationTime")
 	}
 	if tm.TimePartitioning != nil {
 		t.TimePartitioning = tm.TimePartitioning.toBQ()
-		t.TimePartitioning.ForceSendFields = []string{"Expiration", "RequirePartitionFilter"}
+		t.TimePartitioning.ForceSendFields = []string{"RequirePartitionFilter"}
+		if tm.TimePartitioning.Expiration == 0 {
+			t.TimePartitioning.NullFields = []string{"ExpirationMs"}
+		}
+	}
+	if tm.RequirePartitionFilter != nil {
+		t.RequirePartitionFilter = optional.ToBool(tm.RequirePartitionFilter)
+		forceSend("RequirePartitionFilter")
 	}
 	if tm.ViewQuery != nil {
 		t.View = &bq.ViewDefinition{
@@ -505,7 +555,23 @@ func (tm *TableMetadataToUpdate) toBQ() *bq.Table {
 	t.Labels = labels
 	t.ForceSendFields = append(t.ForceSendFields, forces...)
 	t.NullFields = append(t.NullFields, nulls...)
-	return t
+	return t, nil
+}
+
+// validExpiration ensures a specified time is either the sentinel NeverExpire,
+// the zero value, or within the defined range of UnixNano. Internal
+// represetations of expiration times are based upon Time.UnixNano. Any time
+// before 1678 or after 2262 cannot be represented by an int64 and is therefore
+// undefined and invalid. See https://godoc.org/time#Time.UnixNano.
+func validExpiration(t time.Time) bool {
+	return t == NeverExpire || t.IsZero() || time.Unix(0, t.UnixNano()).Equal(t)
+}
+
+// invalidTimeError emits a consistent error message for failures of the
+// validExpiration function.
+func invalidTimeError(t time.Time) error {
+	return fmt.Errorf("invalid expiration time %v. "+
+		"Valid expiration times are after 1678 and before 2262", t)
 }
 
 // TableMetadataToUpdate is used when updating a table's metadata.
@@ -525,7 +591,8 @@ type TableMetadataToUpdate struct {
 	// all mutable fields of EncryptionConfig are populated.
 	EncryptionConfig *EncryptionConfig
 
-	// The time when this table expires.
+	// The time when this table expires. To remove a table's expiration,
+	// set ExpirationTime to NeverExpire. The zero value is ignored.
 	ExpirationTime time.Time
 
 	// The query to use for a view.
@@ -539,6 +606,10 @@ type TableMetadataToUpdate struct {
 	// filtration is required at query time.  When calling Update, ensure
 	// that all mutable fields of TimePartitioning are populated.
 	TimePartitioning *TimePartitioning
+
+	// RequirePartitionFilter governs whether the table enforces partition
+	// elimination when referenced in a query.
+	RequirePartitionFilter optional.Bool
 
 	labelUpdater
 }

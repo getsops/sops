@@ -106,7 +106,11 @@ func TestPostWithRetries(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	client := &Client{Key: testKey, dir: &Directory{AuthzURL: ts.URL}}
+	client := &Client{
+		Key:          testKey,
+		DirectoryURL: ts.URL,
+		dir:          &Directory{AuthzURL: ts.URL},
+	}
 	// This call will fail with badNonce, causing a retry
 	if _, err := client.Authorize(context.Background(), "example.com"); err != nil {
 		t.Errorf("client.Authorize 1: %v", err)

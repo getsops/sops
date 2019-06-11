@@ -45,10 +45,19 @@
 //
 // Files, by calling the following:
 //
+//    * DeleteFile, which deletes the content of a specified file from a specified
+//    branch.
+//
+//    * GetFile, which returns the base-64 encoded content of a specified file.
+//
+//    * GetFolder, which returns the contents of a specified folder or directory.
+//
 //    * PutFile, which adds or modifies a file in a specified repository and
 //    branch.
 //
 // Information about committed code in a repository, by calling the following:
+//
+//    * CreateCommit, which creates a commit for changes to a repository.
 //
 //    * GetBlob, which returns the base-64 encoded content of an individual
 //    Git blob object within a repository.
@@ -109,6 +118,16 @@
 //    * UpdateComment, which updates the content of a comment on a commit in
 //    a repository.
 //
+// Tags used to tag resources in AWS CodeCommit (not Git tags), by calling the
+// following:
+//
+//    * ListTagsForResource, which gets information about AWS tags for a specified
+//    Amazon Resource Name (ARN) in AWS CodeCommit.
+//
+//    * TagResource, which adds or updates tags for a resource in AWS CodeCommit.
+//
+//    * UntagResource, which removes tags for a resource in AWS CodeCommit.
+//
 // Triggers, by calling the following:
 //
 //    * GetRepositoryTriggers, which returns information about triggers configured
@@ -121,7 +140,7 @@
 //    trigger by sending data to the trigger target.
 //
 // For information about how to use AWS CodeCommit, see the AWS CodeCommit User
-// Guide (http://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html).
+// Guide (https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html).
 //
 // See https://docs.aws.amazon.com/goto/WebAPI/codecommit-2015-04-13 for more information on this service.
 //

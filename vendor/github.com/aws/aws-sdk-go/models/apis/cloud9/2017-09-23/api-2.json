@@ -6,6 +6,7 @@
     "jsonVersion":"1.1",
     "protocol":"json",
     "serviceFullName":"AWS Cloud9",
+    "serviceId":"Cloud9",
     "signatureVersion":"v4",
     "targetPrefix":"AWSCloud9WorkspaceManagementService",
     "uid":"cloud9-2017-09-23"
@@ -347,12 +348,14 @@
         "description":{"shape":"EnvironmentDescription"},
         "type":{"shape":"EnvironmentType"},
         "arn":{"shape":"String"},
-        "ownerArn":{"shape":"String"}
+        "ownerArn":{"shape":"String"},
+        "lifecycle":{"shape":"EnvironmentLifecycle"}
       }
     },
     "EnvironmentDescription":{
       "type":"string",
-      "max":200
+      "max":200,
+      "sensitive":true
     },
     "EnvironmentId":{
       "type":"string",
@@ -361,6 +364,22 @@
     "EnvironmentIdList":{
       "type":"list",
       "member":{"shape":"EnvironmentId"}
+    },
+    "EnvironmentLifecycle":{
+      "type":"structure",
+      "members":{
+        "status":{"shape":"EnvironmentLifecycleStatus"},
+        "reason":{"shape":"String"},
+        "failureResource":{"shape":"String"}
+      }
+    },
+    "EnvironmentLifecycleStatus":{
+      "type":"string",
+      "enum":[
+        "CREATED",
+        "DELETING",
+        "DELETE_FAILED"
+      ]
     },
     "EnvironmentList":{
       "type":"list",
@@ -522,7 +541,7 @@
     },
     "UserArn":{
       "type":"string",
-      "pattern":"arn:aws:(iam|sts)::\\d+:\\S+"
+      "pattern":"arn:aws:(iam|sts)::\\d+:(root|user|federated-user|assumed-role)\\/?\\S*"
     }
   }
 }

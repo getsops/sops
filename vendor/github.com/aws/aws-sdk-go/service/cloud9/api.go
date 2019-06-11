@@ -8,6 +8,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
 
 const opCreateEnvironmentEC2 = "CreateEnvironmentEC2"
@@ -15,7 +17,7 @@ const opCreateEnvironmentEC2 = "CreateEnvironmentEC2"
 // CreateEnvironmentEC2Request generates a "aws/request.Request" representing the
 // client's request for the CreateEnvironmentEC2 operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -114,7 +116,7 @@ const opCreateEnvironmentMembership = "CreateEnvironmentMembership"
 // CreateEnvironmentMembershipRequest generates a "aws/request.Request" representing the
 // client's request for the CreateEnvironmentMembership operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -211,7 +213,7 @@ const opDeleteEnvironment = "DeleteEnvironment"
 // DeleteEnvironmentRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteEnvironment operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -245,6 +247,7 @@ func (c *Cloud9) DeleteEnvironmentRequest(input *DeleteEnvironmentInput) (req *r
 
 	output = &DeleteEnvironmentOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -309,7 +312,7 @@ const opDeleteEnvironmentMembership = "DeleteEnvironmentMembership"
 // DeleteEnvironmentMembershipRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteEnvironmentMembership operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -343,6 +346,7 @@ func (c *Cloud9) DeleteEnvironmentMembershipRequest(input *DeleteEnvironmentMemb
 
 	output = &DeleteEnvironmentMembershipOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -406,7 +410,7 @@ const opDescribeEnvironmentMemberships = "DescribeEnvironmentMemberships"
 // DescribeEnvironmentMembershipsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEnvironmentMemberships operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -516,7 +520,7 @@ func (c *Cloud9) DescribeEnvironmentMembershipsWithContext(ctx aws.Context, inpu
 //    // Example iterating over at most 3 pages of a DescribeEnvironmentMemberships operation.
 //    pageNum := 0
 //    err := client.DescribeEnvironmentMembershipsPages(params,
-//        func(page *DescribeEnvironmentMembershipsOutput, lastPage bool) bool {
+//        func(page *cloud9.DescribeEnvironmentMembershipsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -560,7 +564,7 @@ const opDescribeEnvironmentStatus = "DescribeEnvironmentStatus"
 // DescribeEnvironmentStatusRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEnvironmentStatus operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -657,7 +661,7 @@ const opDescribeEnvironments = "DescribeEnvironments"
 // DescribeEnvironmentsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEnvironments operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -754,7 +758,7 @@ const opListEnvironments = "ListEnvironments"
 // ListEnvironmentsRequest generates a "aws/request.Request" representing the
 // client's request for the ListEnvironments operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -863,7 +867,7 @@ func (c *Cloud9) ListEnvironmentsWithContext(ctx aws.Context, input *ListEnviron
 //    // Example iterating over at most 3 pages of a ListEnvironments operation.
 //    pageNum := 0
 //    err := client.ListEnvironmentsPages(params,
-//        func(page *ListEnvironmentsOutput, lastPage bool) bool {
+//        func(page *cloud9.ListEnvironmentsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -907,7 +911,7 @@ const opUpdateEnvironment = "UpdateEnvironment"
 // UpdateEnvironmentRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateEnvironment operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -941,6 +945,7 @@ func (c *Cloud9) UpdateEnvironmentRequest(input *UpdateEnvironmentInput) (req *r
 
 	output = &UpdateEnvironmentOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1004,7 +1009,7 @@ const opUpdateEnvironmentMembership = "UpdateEnvironmentMembership"
 // UpdateEnvironmentMembershipRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateEnvironmentMembership operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1112,7 +1117,7 @@ type CreateEnvironmentEC2Input struct {
 	ClientRequestToken *string `locationName:"clientRequestToken" type:"string"`
 
 	// The description of the environment to create.
-	Description *string `locationName:"description" type:"string"`
+	Description *string `locationName:"description" type:"string" sensitive:"true"`
 
 	// The type of instance to connect to the environment (for example, t2.micro).
 	//
@@ -1716,10 +1721,13 @@ type Environment struct {
 	Arn *string `locationName:"arn" type:"string"`
 
 	// The description for the environment.
-	Description *string `locationName:"description" type:"string"`
+	Description *string `locationName:"description" type:"string" sensitive:"true"`
 
 	// The ID of the environment.
 	Id *string `locationName:"id" type:"string"`
+
+	// The state of the environment in its creation or deletion lifecycle.
+	Lifecycle *EnvironmentLifecycle `locationName:"lifecycle" type:"structure"`
 
 	// The name of the environment.
 	Name *string `locationName:"name" min:"1" type:"string"`
@@ -1764,6 +1772,12 @@ func (s *Environment) SetId(v string) *Environment {
 	return s
 }
 
+// SetLifecycle sets the Lifecycle field's value.
+func (s *Environment) SetLifecycle(v *EnvironmentLifecycle) *Environment {
+	s.Lifecycle = v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *Environment) SetName(v string) *Environment {
 	s.Name = &v
@@ -1779,6 +1793,56 @@ func (s *Environment) SetOwnerArn(v string) *Environment {
 // SetType sets the Type field's value.
 func (s *Environment) SetType(v string) *Environment {
 	s.Type = &v
+	return s
+}
+
+// Information about the current creation or deletion lifecycle state of an
+// AWS Cloud9 development environment.
+type EnvironmentLifecycle struct {
+	_ struct{} `type:"structure"`
+
+	// If the environment failed to delete, the Amazon Resource Name (ARN) of the
+	// related AWS resource.
+	FailureResource *string `locationName:"failureResource" type:"string"`
+
+	// Any informational message about the lifecycle state of the environment.
+	Reason *string `locationName:"reason" type:"string"`
+
+	// The current creation or deletion lifecycle state of the environment.
+	//
+	//    * CREATED: The environment was successfully created.
+	//
+	//    * DELETE_FAILED: The environment failed to delete.
+	//
+	//    * DELETING: The environment is in the process of being deleted.
+	Status *string `locationName:"status" type:"string" enum:"EnvironmentLifecycleStatus"`
+}
+
+// String returns the string representation
+func (s EnvironmentLifecycle) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EnvironmentLifecycle) GoString() string {
+	return s.String()
+}
+
+// SetFailureResource sets the FailureResource field's value.
+func (s *EnvironmentLifecycle) SetFailureResource(v string) *EnvironmentLifecycle {
+	s.FailureResource = &v
+	return s
+}
+
+// SetReason sets the Reason field's value.
+func (s *EnvironmentLifecycle) SetReason(v string) *EnvironmentLifecycle {
+	s.Reason = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *EnvironmentLifecycle) SetStatus(v string) *EnvironmentLifecycle {
+	s.Status = &v
 	return s
 }
 
@@ -1927,7 +1991,7 @@ type UpdateEnvironmentInput struct {
 	_ struct{} `type:"structure"`
 
 	// Any new or replacement description for the environment.
-	Description *string `locationName:"description" type:"string"`
+	Description *string `locationName:"description" type:"string" sensitive:"true"`
 
 	// The ID of the environment to change settings.
 	//
@@ -2091,6 +2155,17 @@ func (s UpdateEnvironmentOutput) String() string {
 func (s UpdateEnvironmentOutput) GoString() string {
 	return s.String()
 }
+
+const (
+	// EnvironmentLifecycleStatusCreated is a EnvironmentLifecycleStatus enum value
+	EnvironmentLifecycleStatusCreated = "CREATED"
+
+	// EnvironmentLifecycleStatusDeleting is a EnvironmentLifecycleStatus enum value
+	EnvironmentLifecycleStatusDeleting = "DELETING"
+
+	// EnvironmentLifecycleStatusDeleteFailed is a EnvironmentLifecycleStatus enum value
+	EnvironmentLifecycleStatusDeleteFailed = "DELETE_FAILED"
+)
 
 const (
 	// EnvironmentStatusError is a EnvironmentStatus enum value

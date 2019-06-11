@@ -64,7 +64,7 @@ pooled and addressed in a round robin fashion.
 Using the Libraries with Docker
 
 Minimal docker images like Alpine lack CA certificates. This causes RPCs to appear to
-hang, because gRPC retries indefinitely. See https://github.com/GoogleCloudPlatform/google-cloud-go/issues/928
+hang, because gRPC retries indefinitely. See https://github.com/googleapis/google-cloud-go/issues/928
 for more information.
 
 

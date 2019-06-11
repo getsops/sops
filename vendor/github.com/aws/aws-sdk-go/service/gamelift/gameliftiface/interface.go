@@ -100,6 +100,10 @@ type GameLiftAPI interface {
 	CreatePlayerSessionsWithContext(aws.Context, *gamelift.CreatePlayerSessionsInput, ...request.Option) (*gamelift.CreatePlayerSessionsOutput, error)
 	CreatePlayerSessionsRequest(*gamelift.CreatePlayerSessionsInput) (*request.Request, *gamelift.CreatePlayerSessionsOutput)
 
+	CreateScript(*gamelift.CreateScriptInput) (*gamelift.CreateScriptOutput, error)
+	CreateScriptWithContext(aws.Context, *gamelift.CreateScriptInput, ...request.Option) (*gamelift.CreateScriptOutput, error)
+	CreateScriptRequest(*gamelift.CreateScriptInput) (*request.Request, *gamelift.CreateScriptOutput)
+
 	CreateVpcPeeringAuthorization(*gamelift.CreateVpcPeeringAuthorizationInput) (*gamelift.CreateVpcPeeringAuthorizationOutput, error)
 	CreateVpcPeeringAuthorizationWithContext(aws.Context, *gamelift.CreateVpcPeeringAuthorizationInput, ...request.Option) (*gamelift.CreateVpcPeeringAuthorizationOutput, error)
 	CreateVpcPeeringAuthorizationRequest(*gamelift.CreateVpcPeeringAuthorizationInput) (*request.Request, *gamelift.CreateVpcPeeringAuthorizationOutput)
@@ -128,9 +132,17 @@ type GameLiftAPI interface {
 	DeleteMatchmakingConfigurationWithContext(aws.Context, *gamelift.DeleteMatchmakingConfigurationInput, ...request.Option) (*gamelift.DeleteMatchmakingConfigurationOutput, error)
 	DeleteMatchmakingConfigurationRequest(*gamelift.DeleteMatchmakingConfigurationInput) (*request.Request, *gamelift.DeleteMatchmakingConfigurationOutput)
 
+	DeleteMatchmakingRuleSet(*gamelift.DeleteMatchmakingRuleSetInput) (*gamelift.DeleteMatchmakingRuleSetOutput, error)
+	DeleteMatchmakingRuleSetWithContext(aws.Context, *gamelift.DeleteMatchmakingRuleSetInput, ...request.Option) (*gamelift.DeleteMatchmakingRuleSetOutput, error)
+	DeleteMatchmakingRuleSetRequest(*gamelift.DeleteMatchmakingRuleSetInput) (*request.Request, *gamelift.DeleteMatchmakingRuleSetOutput)
+
 	DeleteScalingPolicy(*gamelift.DeleteScalingPolicyInput) (*gamelift.DeleteScalingPolicyOutput, error)
 	DeleteScalingPolicyWithContext(aws.Context, *gamelift.DeleteScalingPolicyInput, ...request.Option) (*gamelift.DeleteScalingPolicyOutput, error)
 	DeleteScalingPolicyRequest(*gamelift.DeleteScalingPolicyInput) (*request.Request, *gamelift.DeleteScalingPolicyOutput)
+
+	DeleteScript(*gamelift.DeleteScriptInput) (*gamelift.DeleteScriptOutput, error)
+	DeleteScriptWithContext(aws.Context, *gamelift.DeleteScriptInput, ...request.Option) (*gamelift.DeleteScriptOutput, error)
+	DeleteScriptRequest(*gamelift.DeleteScriptInput) (*request.Request, *gamelift.DeleteScriptOutput)
 
 	DeleteVpcPeeringAuthorization(*gamelift.DeleteVpcPeeringAuthorizationInput) (*gamelift.DeleteVpcPeeringAuthorizationOutput, error)
 	DeleteVpcPeeringAuthorizationWithContext(aws.Context, *gamelift.DeleteVpcPeeringAuthorizationInput, ...request.Option) (*gamelift.DeleteVpcPeeringAuthorizationOutput, error)
@@ -216,6 +228,10 @@ type GameLiftAPI interface {
 	DescribeScalingPoliciesWithContext(aws.Context, *gamelift.DescribeScalingPoliciesInput, ...request.Option) (*gamelift.DescribeScalingPoliciesOutput, error)
 	DescribeScalingPoliciesRequest(*gamelift.DescribeScalingPoliciesInput) (*request.Request, *gamelift.DescribeScalingPoliciesOutput)
 
+	DescribeScript(*gamelift.DescribeScriptInput) (*gamelift.DescribeScriptOutput, error)
+	DescribeScriptWithContext(aws.Context, *gamelift.DescribeScriptInput, ...request.Option) (*gamelift.DescribeScriptOutput, error)
+	DescribeScriptRequest(*gamelift.DescribeScriptInput) (*request.Request, *gamelift.DescribeScriptOutput)
+
 	DescribeVpcPeeringAuthorizations(*gamelift.DescribeVpcPeeringAuthorizationsInput) (*gamelift.DescribeVpcPeeringAuthorizationsOutput, error)
 	DescribeVpcPeeringAuthorizationsWithContext(aws.Context, *gamelift.DescribeVpcPeeringAuthorizationsInput, ...request.Option) (*gamelift.DescribeVpcPeeringAuthorizationsOutput, error)
 	DescribeVpcPeeringAuthorizationsRequest(*gamelift.DescribeVpcPeeringAuthorizationsInput) (*request.Request, *gamelift.DescribeVpcPeeringAuthorizationsOutput)
@@ -243,6 +259,10 @@ type GameLiftAPI interface {
 	ListFleets(*gamelift.ListFleetsInput) (*gamelift.ListFleetsOutput, error)
 	ListFleetsWithContext(aws.Context, *gamelift.ListFleetsInput, ...request.Option) (*gamelift.ListFleetsOutput, error)
 	ListFleetsRequest(*gamelift.ListFleetsInput) (*request.Request, *gamelift.ListFleetsOutput)
+
+	ListScripts(*gamelift.ListScriptsInput) (*gamelift.ListScriptsOutput, error)
+	ListScriptsWithContext(aws.Context, *gamelift.ListScriptsInput, ...request.Option) (*gamelift.ListScriptsOutput, error)
+	ListScriptsRequest(*gamelift.ListScriptsInput) (*request.Request, *gamelift.ListScriptsOutput)
 
 	PutScalingPolicy(*gamelift.PutScalingPolicyInput) (*gamelift.PutScalingPolicyOutput, error)
 	PutScalingPolicyWithContext(aws.Context, *gamelift.PutScalingPolicyInput, ...request.Option) (*gamelift.PutScalingPolicyOutput, error)
@@ -323,6 +343,10 @@ type GameLiftAPI interface {
 	UpdateRuntimeConfiguration(*gamelift.UpdateRuntimeConfigurationInput) (*gamelift.UpdateRuntimeConfigurationOutput, error)
 	UpdateRuntimeConfigurationWithContext(aws.Context, *gamelift.UpdateRuntimeConfigurationInput, ...request.Option) (*gamelift.UpdateRuntimeConfigurationOutput, error)
 	UpdateRuntimeConfigurationRequest(*gamelift.UpdateRuntimeConfigurationInput) (*request.Request, *gamelift.UpdateRuntimeConfigurationOutput)
+
+	UpdateScript(*gamelift.UpdateScriptInput) (*gamelift.UpdateScriptOutput, error)
+	UpdateScriptWithContext(aws.Context, *gamelift.UpdateScriptInput, ...request.Option) (*gamelift.UpdateScriptOutput, error)
+	UpdateScriptRequest(*gamelift.UpdateScriptInput) (*request.Request, *gamelift.UpdateScriptOutput)
 
 	ValidateMatchmakingRuleSet(*gamelift.ValidateMatchmakingRuleSetInput) (*gamelift.ValidateMatchmakingRuleSetOutput, error)
 	ValidateMatchmakingRuleSetWithContext(aws.Context, *gamelift.ValidateMatchmakingRuleSetInput, ...request.Option) (*gamelift.ValidateMatchmakingRuleSetOutput, error)

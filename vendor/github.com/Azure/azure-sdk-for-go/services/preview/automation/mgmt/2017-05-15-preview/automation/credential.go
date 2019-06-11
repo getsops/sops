@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewCredentialClientWithBaseURI(baseURI string, subscriptionID string) Crede
 // credentialName - the parameters supplied to the create or update credential operation.
 // parameters - the parameters supplied to the create or update credential operation.
 func (client CredentialClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, automationAccountName string, credentialName string, parameters CredentialCreateOrUpdateParameters) (result Credential, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CredentialClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -132,6 +143,16 @@ func (client CredentialClient) CreateOrUpdateResponder(resp *http.Response) (res
 // automationAccountName - the name of the automation account.
 // credentialName - the name of credential.
 func (client CredentialClient) Delete(ctx context.Context, resourceGroupName string, automationAccountName string, credentialName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CredentialClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -208,6 +229,16 @@ func (client CredentialClient) DeleteResponder(resp *http.Response) (result auto
 // automationAccountName - the name of the automation account.
 // credentialName - the name of credential.
 func (client CredentialClient) Get(ctx context.Context, resourceGroupName string, automationAccountName string, credentialName string) (result Credential, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CredentialClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -284,6 +315,16 @@ func (client CredentialClient) GetResponder(resp *http.Response) (result Credent
 // resourceGroupName - name of an Azure Resource group.
 // automationAccountName - the name of the automation account.
 func (client CredentialClient) ListByAutomationAccount(ctx context.Context, resourceGroupName string, automationAccountName string) (result CredentialListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CredentialClient.ListByAutomationAccount")
+		defer func() {
+			sc := -1
+			if result.clr.Response.Response != nil {
+				sc = result.clr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -356,8 +397,8 @@ func (client CredentialClient) ListByAutomationAccountResponder(resp *http.Respo
 }
 
 // listByAutomationAccountNextResults retrieves the next set of results, if any.
-func (client CredentialClient) listByAutomationAccountNextResults(lastResults CredentialListResult) (result CredentialListResult, err error) {
-	req, err := lastResults.credentialListResultPreparer()
+func (client CredentialClient) listByAutomationAccountNextResults(ctx context.Context, lastResults CredentialListResult) (result CredentialListResult, err error) {
+	req, err := lastResults.credentialListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "automation.CredentialClient", "listByAutomationAccountNextResults", nil, "Failure preparing next results request")
 	}
@@ -378,6 +419,16 @@ func (client CredentialClient) listByAutomationAccountNextResults(lastResults Cr
 
 // ListByAutomationAccountComplete enumerates all values, automatically crossing page boundaries as required.
 func (client CredentialClient) ListByAutomationAccountComplete(ctx context.Context, resourceGroupName string, automationAccountName string) (result CredentialListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CredentialClient.ListByAutomationAccount")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByAutomationAccount(ctx, resourceGroupName, automationAccountName)
 	return
 }
@@ -389,6 +440,16 @@ func (client CredentialClient) ListByAutomationAccountComplete(ctx context.Conte
 // credentialName - the parameters supplied to the Update credential operation.
 // parameters - the parameters supplied to the Update credential operation.
 func (client CredentialClient) Update(ctx context.Context, resourceGroupName string, automationAccountName string, credentialName string, parameters CredentialUpdateParameters) (result Credential, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CredentialClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

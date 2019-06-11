@@ -18,14 +18,19 @@ package account
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/datalake/store/mgmt/2015-10-01-preview/account"
 
 // DataLakeStoreAccountState enumerates the values for data lake store account state.
 type DataLakeStoreAccountState string
@@ -147,15 +152,16 @@ func PossibleOperationStatusValues() []OperationStatus {
 }
 
 // AzureAsyncOperationResult the response body contains the status of the specified asynchronous operation,
-// indicating whether it has succeeded, is in progress, or has failed. Note that this status is distinct from the
-// HTTP status code returned for the Get Operation Status operation itself. If the asynchronous operation
-// succeeded, the response body includes the HTTP status code for the successful request. If the asynchronous
-// operation failed, the response body includes the HTTP status code for the failed request and error information
-// regarding the failure.
+// indicating whether it has succeeded, is in progress, or has failed. Note that this status is distinct
+// from the HTTP status code returned for the Get Operation Status operation itself. If the asynchronous
+// operation succeeded, the response body includes the HTTP status code for the successful request. If the
+// asynchronous operation failed, the response body includes the HTTP status code for the failed request
+// and error information regarding the failure.
 type AzureAsyncOperationResult struct {
-	// Status - the status of the AzureAsuncOperation. Possible values include: 'OperationStatusInProgress', 'OperationStatusSucceeded', 'OperationStatusFailed'
+	// Status - READ-ONLY; the status of the AzureAsyncOperation. Possible values include: 'OperationStatusInProgress', 'OperationStatusSucceeded', 'OperationStatusFailed'
 	Status OperationStatus `json:"status,omitempty"`
-	Error  *Error          `json:"error,omitempty"`
+	// Error - READ-ONLY
+	Error *Error `json:"error,omitempty"`
 }
 
 // CreateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
@@ -167,7 +173,7 @@ type CreateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *CreateFuture) Result(client Client) (dlsa DataLakeStoreAccount, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "account.CreateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -193,9 +199,9 @@ type DataLakeStoreAccount struct {
 	Location *string `json:"location,omitempty"`
 	// Name - the account name.
 	Name *string `json:"name,omitempty"`
-	// Type - the namespace and type of the account.
+	// Type - READ-ONLY; the namespace and type of the account.
 	Type *string `json:"type,omitempty"`
-	// ID - the account subscription ID.
+	// ID - READ-ONLY; the account subscription ID.
 	ID *string `json:"id,omitempty"`
 	// Identity - The Key vault encryption identity, if any.
 	Identity *EncryptionIdentity `json:"identity,omitempty"`
@@ -214,12 +220,6 @@ func (dlsa DataLakeStoreAccount) MarshalJSON() ([]byte, error) {
 	if dlsa.Name != nil {
 		objectMap["name"] = dlsa.Name
 	}
-	if dlsa.Type != nil {
-		objectMap["type"] = dlsa.Type
-	}
-	if dlsa.ID != nil {
-		objectMap["id"] = dlsa.ID
-	}
 	if dlsa.Identity != nil {
 		objectMap["identity"] = dlsa.Identity
 	}
@@ -235,34 +235,52 @@ func (dlsa DataLakeStoreAccount) MarshalJSON() ([]byte, error) {
 // DataLakeStoreAccountListResult data Lake Store account list information response.
 type DataLakeStoreAccountListResult struct {
 	autorest.Response `json:"-"`
-	// Value - the results of the list operation
+	// Value - READ-ONLY; the results of the list operation
 	Value *[]DataLakeStoreAccount `json:"value,omitempty"`
-	// NextLink - the link (url) to the next page of results.
+	// NextLink - READ-ONLY; the link (url) to the next page of results.
 	NextLink *string `json:"nextLink,omitempty"`
-	// Count - the total count of results that are available, but might not be returned in the current page.
+	// Count - READ-ONLY; the total count of results that are available, but might not be returned in the current page.
 	Count *int64 `json:"count,omitempty"`
 }
 
-// DataLakeStoreAccountListResultIterator provides access to a complete listing of DataLakeStoreAccount values.
+// DataLakeStoreAccountListResultIterator provides access to a complete listing of DataLakeStoreAccount
+// values.
 type DataLakeStoreAccountListResultIterator struct {
 	i    int
 	page DataLakeStoreAccountListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *DataLakeStoreAccountListResultIterator) Next() error {
+func (iter *DataLakeStoreAccountListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DataLakeStoreAccountListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *DataLakeStoreAccountListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -284,6 +302,11 @@ func (iter DataLakeStoreAccountListResultIterator) Value() DataLakeStoreAccount 
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the DataLakeStoreAccountListResultIterator type.
+func NewDataLakeStoreAccountListResultIterator(page DataLakeStoreAccountListResultPage) DataLakeStoreAccountListResultIterator {
+	return DataLakeStoreAccountListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (dlsalr DataLakeStoreAccountListResult) IsEmpty() bool {
 	return dlsalr.Value == nil || len(*dlsalr.Value) == 0
@@ -291,11 +314,11 @@ func (dlsalr DataLakeStoreAccountListResult) IsEmpty() bool {
 
 // dataLakeStoreAccountListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (dlsalr DataLakeStoreAccountListResult) dataLakeStoreAccountListResultPreparer() (*http.Request, error) {
+func (dlsalr DataLakeStoreAccountListResult) dataLakeStoreAccountListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if dlsalr.NextLink == nil || len(to.String(dlsalr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(dlsalr.NextLink)))
@@ -303,19 +326,36 @@ func (dlsalr DataLakeStoreAccountListResult) dataLakeStoreAccountListResultPrepa
 
 // DataLakeStoreAccountListResultPage contains a page of DataLakeStoreAccount values.
 type DataLakeStoreAccountListResultPage struct {
-	fn     func(DataLakeStoreAccountListResult) (DataLakeStoreAccountListResult, error)
+	fn     func(context.Context, DataLakeStoreAccountListResult) (DataLakeStoreAccountListResult, error)
 	dlsalr DataLakeStoreAccountListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *DataLakeStoreAccountListResultPage) Next() error {
-	next, err := page.fn(page.dlsalr)
+func (page *DataLakeStoreAccountListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DataLakeStoreAccountListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.dlsalr)
 	if err != nil {
 		return err
 	}
 	page.dlsalr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *DataLakeStoreAccountListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -336,21 +376,26 @@ func (page DataLakeStoreAccountListResultPage) Values() []DataLakeStoreAccount {
 	return *page.dlsalr.Value
 }
 
+// Creates a new instance of the DataLakeStoreAccountListResultPage type.
+func NewDataLakeStoreAccountListResultPage(getNextPage func(context.Context, DataLakeStoreAccountListResult) (DataLakeStoreAccountListResult, error)) DataLakeStoreAccountListResultPage {
+	return DataLakeStoreAccountListResultPage{fn: getNextPage}
+}
+
 // DataLakeStoreAccountProperties data Lake Store account properties information
 type DataLakeStoreAccountProperties struct {
-	// ProvisioningState - the status of the Data Lake Store account while being provisioned. Possible values include: 'Failed', 'Creating', 'Running', 'Succeeded', 'Patching', 'Suspending', 'Resuming', 'Deleting', 'Deleted'
+	// ProvisioningState - READ-ONLY; the status of the Data Lake Store account while being provisioned. Possible values include: 'Failed', 'Creating', 'Running', 'Succeeded', 'Patching', 'Suspending', 'Resuming', 'Deleting', 'Deleted'
 	ProvisioningState DataLakeStoreAccountStatus `json:"provisioningState,omitempty"`
-	// State - the status of the Data Lake Store account after provisioning has completed. Possible values include: 'Active', 'Suspended'
+	// State - READ-ONLY; the status of the Data Lake Store account after provisioning has completed. Possible values include: 'Active', 'Suspended'
 	State DataLakeStoreAccountState `json:"state,omitempty"`
-	// CreationTime - the account creation time.
+	// CreationTime - READ-ONLY; the account creation time.
 	CreationTime *date.Time `json:"creationTime,omitempty"`
 	// EncryptionState - The current state of encryption for this Data Lake store account. Possible values include: 'Enabled', 'Disabled'
 	EncryptionState EncryptionState `json:"encryptionState,omitempty"`
-	// EncryptionProvisioningState - The current state of encryption provisioning for this Data Lake store account. Possible values include: 'EncryptionProvisioningStateCreating', 'EncryptionProvisioningStateSucceeded'
+	// EncryptionProvisioningState - READ-ONLY; The current state of encryption provisioning for this Data Lake store account. Possible values include: 'EncryptionProvisioningStateCreating', 'EncryptionProvisioningStateSucceeded'
 	EncryptionProvisioningState EncryptionProvisioningState `json:"encryptionProvisioningState,omitempty"`
 	// EncryptionConfig - The Key vault encryption configuration.
 	EncryptionConfig *EncryptionConfig `json:"encryptionConfig,omitempty"`
-	// LastModifiedTime - the account last modified time.
+	// LastModifiedTime - READ-ONLY; the account last modified time.
 	LastModifiedTime *date.Time `json:"lastModifiedTime,omitempty"`
 	// Endpoint - the gateway host.
 	Endpoint *string `json:"endpoint,omitempty"`
@@ -361,34 +406,52 @@ type DataLakeStoreAccountProperties struct {
 // DataLakeStoreFirewallRuleListResult data Lake Store firewall rule list information.
 type DataLakeStoreFirewallRuleListResult struct {
 	autorest.Response `json:"-"`
-	// Value - the results of the list operation
+	// Value - READ-ONLY; the results of the list operation
 	Value *[]FirewallRule `json:"value,omitempty"`
-	// NextLink - the link (url) to the next page of results.
+	// NextLink - READ-ONLY; the link (url) to the next page of results.
 	NextLink *string `json:"nextLink,omitempty"`
-	// Count - the total count of results that are available, but might not be returned in the current page.
+	// Count - READ-ONLY; the total count of results that are available, but might not be returned in the current page.
 	Count *int64 `json:"count,omitempty"`
 }
 
-// DataLakeStoreFirewallRuleListResultIterator provides access to a complete listing of FirewallRule values.
+// DataLakeStoreFirewallRuleListResultIterator provides access to a complete listing of FirewallRule
+// values.
 type DataLakeStoreFirewallRuleListResultIterator struct {
 	i    int
 	page DataLakeStoreFirewallRuleListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *DataLakeStoreFirewallRuleListResultIterator) Next() error {
+func (iter *DataLakeStoreFirewallRuleListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DataLakeStoreFirewallRuleListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *DataLakeStoreFirewallRuleListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -410,6 +473,11 @@ func (iter DataLakeStoreFirewallRuleListResultIterator) Value() FirewallRule {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the DataLakeStoreFirewallRuleListResultIterator type.
+func NewDataLakeStoreFirewallRuleListResultIterator(page DataLakeStoreFirewallRuleListResultPage) DataLakeStoreFirewallRuleListResultIterator {
+	return DataLakeStoreFirewallRuleListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (dlsfrlr DataLakeStoreFirewallRuleListResult) IsEmpty() bool {
 	return dlsfrlr.Value == nil || len(*dlsfrlr.Value) == 0
@@ -417,11 +485,11 @@ func (dlsfrlr DataLakeStoreFirewallRuleListResult) IsEmpty() bool {
 
 // dataLakeStoreFirewallRuleListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (dlsfrlr DataLakeStoreFirewallRuleListResult) dataLakeStoreFirewallRuleListResultPreparer() (*http.Request, error) {
+func (dlsfrlr DataLakeStoreFirewallRuleListResult) dataLakeStoreFirewallRuleListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if dlsfrlr.NextLink == nil || len(to.String(dlsfrlr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(dlsfrlr.NextLink)))
@@ -429,19 +497,36 @@ func (dlsfrlr DataLakeStoreFirewallRuleListResult) dataLakeStoreFirewallRuleList
 
 // DataLakeStoreFirewallRuleListResultPage contains a page of FirewallRule values.
 type DataLakeStoreFirewallRuleListResultPage struct {
-	fn      func(DataLakeStoreFirewallRuleListResult) (DataLakeStoreFirewallRuleListResult, error)
+	fn      func(context.Context, DataLakeStoreFirewallRuleListResult) (DataLakeStoreFirewallRuleListResult, error)
 	dlsfrlr DataLakeStoreFirewallRuleListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *DataLakeStoreFirewallRuleListResultPage) Next() error {
-	next, err := page.fn(page.dlsfrlr)
+func (page *DataLakeStoreFirewallRuleListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DataLakeStoreFirewallRuleListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.dlsfrlr)
 	if err != nil {
 		return err
 	}
 	page.dlsfrlr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *DataLakeStoreFirewallRuleListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -462,6 +547,11 @@ func (page DataLakeStoreFirewallRuleListResultPage) Values() []FirewallRule {
 	return *page.dlsfrlr.Value
 }
 
+// Creates a new instance of the DataLakeStoreFirewallRuleListResultPage type.
+func NewDataLakeStoreFirewallRuleListResultPage(getNextPage func(context.Context, DataLakeStoreFirewallRuleListResult) (DataLakeStoreFirewallRuleListResult, error)) DataLakeStoreFirewallRuleListResultPage {
+	return DataLakeStoreFirewallRuleListResultPage{fn: getNextPage}
+}
+
 // DeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
 type DeleteFuture struct {
 	azure.Future
@@ -471,7 +561,7 @@ type DeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *DeleteFuture) Result(client Client) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "account.DeleteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -496,33 +586,33 @@ type EncryptionConfig struct {
 type EncryptionIdentity struct {
 	// Type - The type of encryption being used. Currently the only supported type is 'SystemAssigned'. Possible values include: 'SystemAssigned'
 	Type EncryptionIdentityType `json:"type,omitempty"`
-	// PrincipalID - The principal identifier associated with the encryption.
+	// PrincipalID - READ-ONLY; The principal identifier associated with the encryption.
 	PrincipalID *uuid.UUID `json:"principalId,omitempty"`
-	// TenantID - The tenant identifier associated with the encryption.
+	// TenantID - READ-ONLY; The tenant identifier associated with the encryption.
 	TenantID *uuid.UUID `json:"tenantId,omitempty"`
 }
 
 // Error data Lake Store error information
 type Error struct {
-	// Code - the HTTP status code or error code associated with this error
+	// Code - READ-ONLY; the HTTP status code or error code associated with this error
 	Code *string `json:"code,omitempty"`
-	// Message - the error message to display.
+	// Message - READ-ONLY; the error message to display.
 	Message *string `json:"message,omitempty"`
-	// Target - the target of the error.
+	// Target - READ-ONLY; the target of the error.
 	Target *string `json:"target,omitempty"`
-	// Details - the list of error details
+	// Details - READ-ONLY; the list of error details
 	Details *[]ErrorDetails `json:"details,omitempty"`
-	// InnerError - the inner exceptions or errors, if any
+	// InnerError - READ-ONLY; the inner exceptions or errors, if any
 	InnerError *InnerError `json:"innerError,omitempty"`
 }
 
 // ErrorDetails data Lake Store error details information
 type ErrorDetails struct {
-	// Code - the HTTP status code or error code associated with this error
+	// Code - READ-ONLY; the HTTP status code or error code associated with this error
 	Code *string `json:"code,omitempty"`
-	// Message - the error message localized based on Accept-Language
+	// Message - READ-ONLY; the error message localized based on Accept-Language
 	Message *string `json:"message,omitempty"`
-	// Target - the target of the particular error (for example, the name of the property in error).
+	// Target - READ-ONLY; the target of the particular error (for example, the name of the property in error).
 	Target *string `json:"target,omitempty"`
 }
 
@@ -531,7 +621,7 @@ type FirewallRule struct {
 	autorest.Response `json:"-"`
 	// Name - the firewall rule's name.
 	Name *string `json:"name,omitempty"`
-	// Type - the namespace and type of the firewall Rule.
+	// Type - READ-ONLY; the namespace and type of the firewall Rule.
 	Type *string `json:"type,omitempty"`
 	// ID - the firewall rule's subscription ID.
 	ID *string `json:"id,omitempty"`
@@ -551,9 +641,9 @@ type FirewallRuleProperties struct {
 
 // InnerError data Lake Store inner error information
 type InnerError struct {
-	// Trace - the stack trace for the error
+	// Trace - READ-ONLY; the stack trace for the error
 	Trace *string `json:"trace,omitempty"`
-	// Context - the context for the error message
+	// Context - READ-ONLY; the context for the error message
 	Context *string `json:"context,omitempty"`
 }
 
@@ -576,7 +666,7 @@ type UpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *UpdateFuture) Result(client Client) (dlsa DataLakeStoreAccount, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "account.UpdateFuture", "Result", future.Response(), "Polling failure")
 		return

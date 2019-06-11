@@ -15,7 +15,7 @@
   "description": "Manages the deployment of apps to Android for Work users.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/android/work/play/emm-api",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/roOgUwR1ccx3Sqc93zbrjsOcnYQ\"",
+  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/tMJPG1kuAV-MqSsPmggFhhbAchQ\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/android-16.png",
     "x32": "https://www.google.com/images/icons/product/android-32.png"
@@ -446,29 +446,6 @@
             "https://www.googleapis.com/auth/androidenterprise"
           ]
         },
-        "getAndroidDevicePolicyConfig": {
-          "description": "Deprecated and unused.",
-          "httpMethod": "GET",
-          "id": "androidenterprise.enterprises.getAndroidDevicePolicyConfig",
-          "parameterOrder": [
-            "enterpriseId"
-          ],
-          "parameters": {
-            "enterpriseId": {
-              "description": "The ID of the enterprise.",
-              "location": "path",
-              "required": true,
-              "type": "string"
-            }
-          },
-          "path": "enterprises/{enterpriseId}/androidDevicePolicyConfig",
-          "response": {
-            "$ref": "AndroidDevicePolicyConfig"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/androidenterprise"
-          ]
-        },
         "getServiceAccount": {
           "description": "Returns a service account and credentials. The service account can be bound to the enterprise by calling setAccount. The service account is unique to this enterprise and EMM, and will be deleted if the enterprise is unbound. The credentials contain private key data and are not stored server-side.\n\nThis method can only be called after calling Enterprises.Enroll or Enterprises.CompleteSignup, and before Enterprises.SetAccount; at other times it will return an error.\n\nSubsequent calls after the first will generate a new, unique set of credentials, and invalidate the previously generated credentials.\n\nOnce the service account is bound to the enterprise, it can be managed using the serviceAccountKeys resource.",
           "httpMethod": "GET",
@@ -622,32 +599,6 @@
           },
           "response": {
             "$ref": "EnterpriseAccount"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/androidenterprise"
-          ]
-        },
-        "setAndroidDevicePolicyConfig": {
-          "description": "Deprecated and unused.",
-          "httpMethod": "PUT",
-          "id": "androidenterprise.enterprises.setAndroidDevicePolicyConfig",
-          "parameterOrder": [
-            "enterpriseId"
-          ],
-          "parameters": {
-            "enterpriseId": {
-              "description": "The ID of the enterprise.",
-              "location": "path",
-              "required": true,
-              "type": "string"
-            }
-          },
-          "path": "enterprises/{enterpriseId}/androidDevicePolicyConfig",
-          "request": {
-            "$ref": "AndroidDevicePolicyConfig"
-          },
-          "response": {
-            "$ref": "AndroidDevicePolicyConfig"
           },
           "scopes": [
             "https://www.googleapis.com/auth/androidenterprise"
@@ -1881,7 +1832,7 @@
               "type": "string"
             },
             "token": {
-              "description": "A pagination token is contained in a request''s response when there are more products. The token can be used in a subsequent request to obtain more products, and so forth. This parameter cannot be used in the initial request.",
+              "description": "A pagination token is contained in a request's response when there are more products. The token can be used in a subsequent request to obtain more products, and so forth. This parameter cannot be used in the initial request.",
               "location": "query",
               "type": "string"
             }
@@ -2427,7 +2378,7 @@
           ]
         },
         "generateAuthenticationToken": {
-          "description": "Generates an authentication token which the device policy client can use to provision the given EMM-managed user account on a device. The generated token is single-use and expires after a few minutes.\n\nThis call only works with EMM-managed accounts.",
+          "description": "Generates an authentication token which the device policy client can use to provision the given EMM-managed user account on a device. The generated token is single-use and expires after a few minutes.\n\nYou can provision a maximum of 10 devices per user.\n\nThis call only works with EMM-managed accounts.",
           "httpMethod": "POST",
           "id": "androidenterprise.users.generateAuthenticationToken",
           "parameterOrder": [
@@ -2756,8 +2707,185 @@
           ]
         }
       }
+    },
+    "webapps": {
+      "methods": {
+        "delete": {
+          "description": "Deletes an existing web app.",
+          "httpMethod": "DELETE",
+          "id": "androidenterprise.webapps.delete",
+          "parameterOrder": [
+            "enterpriseId",
+            "webAppId"
+          ],
+          "parameters": {
+            "enterpriseId": {
+              "description": "The ID of the enterprise.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "webAppId": {
+              "description": "The ID of the web app.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "enterprises/{enterpriseId}/webApps/{webAppId}",
+          "scopes": [
+            "https://www.googleapis.com/auth/androidenterprise"
+          ]
+        },
+        "get": {
+          "description": "Gets an existing web app.",
+          "httpMethod": "GET",
+          "id": "androidenterprise.webapps.get",
+          "parameterOrder": [
+            "enterpriseId",
+            "webAppId"
+          ],
+          "parameters": {
+            "enterpriseId": {
+              "description": "The ID of the enterprise.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "webAppId": {
+              "description": "The ID of the web app.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "enterprises/{enterpriseId}/webApps/{webAppId}",
+          "response": {
+            "$ref": "WebApp"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/androidenterprise"
+          ]
+        },
+        "insert": {
+          "description": "Creates a new web app for the enterprise.",
+          "httpMethod": "POST",
+          "id": "androidenterprise.webapps.insert",
+          "parameterOrder": [
+            "enterpriseId"
+          ],
+          "parameters": {
+            "enterpriseId": {
+              "description": "The ID of the enterprise.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "enterprises/{enterpriseId}/webApps",
+          "request": {
+            "$ref": "WebApp"
+          },
+          "response": {
+            "$ref": "WebApp"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/androidenterprise"
+          ]
+        },
+        "list": {
+          "description": "Retrieves the details of all web apps for a given enterprise.",
+          "httpMethod": "GET",
+          "id": "androidenterprise.webapps.list",
+          "parameterOrder": [
+            "enterpriseId"
+          ],
+          "parameters": {
+            "enterpriseId": {
+              "description": "The ID of the enterprise.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "enterprises/{enterpriseId}/webApps",
+          "response": {
+            "$ref": "WebAppsListResponse"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/androidenterprise"
+          ]
+        },
+        "patch": {
+          "description": "Updates an existing web app. This method supports patch semantics.",
+          "httpMethod": "PATCH",
+          "id": "androidenterprise.webapps.patch",
+          "parameterOrder": [
+            "enterpriseId",
+            "webAppId"
+          ],
+          "parameters": {
+            "enterpriseId": {
+              "description": "The ID of the enterprise.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "webAppId": {
+              "description": "The ID of the web app.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "enterprises/{enterpriseId}/webApps/{webAppId}",
+          "request": {
+            "$ref": "WebApp"
+          },
+          "response": {
+            "$ref": "WebApp"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/androidenterprise"
+          ]
+        },
+        "update": {
+          "description": "Updates an existing web app.",
+          "httpMethod": "PUT",
+          "id": "androidenterprise.webapps.update",
+          "parameterOrder": [
+            "enterpriseId",
+            "webAppId"
+          ],
+          "parameters": {
+            "enterpriseId": {
+              "description": "The ID of the enterprise.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "webAppId": {
+              "description": "The ID of the web app.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "enterprises/{enterpriseId}/webApps/{webAppId}",
+          "request": {
+            "$ref": "WebApp"
+          },
+          "response": {
+            "$ref": "WebApp"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/androidenterprise"
+          ]
+        }
+      }
     }
   },
+  "revision": "20190401",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Administrator": {
@@ -2796,32 +2924,90 @@
           "description": "Identifies what kind of resource this is. Value: the fixed string \"androidenterprise#administratorWebTokenSpec\".",
           "type": "string"
         },
+        "managedConfigurations": {
+          "$ref": "AdministratorWebTokenSpecManagedConfigurations",
+          "description": "Options for displaying the Managed Configuration page."
+        },
         "parent": {
           "description": "The URI of the parent frame hosting the iframe. To prevent XSS, the iframe may not be hosted at other URIs. This URI must be https.",
           "type": "string"
         },
         "permission": {
-          "description": "The list of permissions the admin is granted within the iframe. The admin will only be allowed to view an iframe if they have all of the permissions associated with it. The only valid value is \"approveApps\" that will allow the admin to access the iframe in \"approve\" mode.",
+          "description": "Deprecated. Use PlaySearch.approveApps.",
           "items": {
             "type": "string"
           },
           "type": "array"
+        },
+        "playSearch": {
+          "$ref": "AdministratorWebTokenSpecPlaySearch",
+          "description": "Options for displaying the managed Play Search apps page."
+        },
+        "privateApps": {
+          "$ref": "AdministratorWebTokenSpecPrivateApps",
+          "description": "Options for displaying the Private Apps page."
+        },
+        "storeBuilder": {
+          "$ref": "AdministratorWebTokenSpecStoreBuilder",
+          "description": "Options for displaying the Organize apps page."
+        },
+        "webApps": {
+          "$ref": "AdministratorWebTokenSpecWebApps",
+          "description": "Options for displaying the Web Apps page."
         }
       },
       "type": "object"
     },
-    "AndroidDevicePolicyConfig": {
-      "description": "Deprecated and unused.",
-      "id": "AndroidDevicePolicyConfig",
+    "AdministratorWebTokenSpecManagedConfigurations": {
+      "id": "AdministratorWebTokenSpecManagedConfigurations",
       "properties": {
-        "kind": {
-          "default": "androidenterprise#androidDevicePolicyConfig",
-          "description": "Identifies what kind of resource this is. Value: the fixed string \"androidenterprise#androidDevicePolicyConfig\".",
-          "type": "string"
+        "enabled": {
+          "description": "Whether the Managed Configuration page is displayed. Default is true.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "AdministratorWebTokenSpecPlaySearch": {
+      "id": "AdministratorWebTokenSpecPlaySearch",
+      "properties": {
+        "approveApps": {
+          "description": "Allow access to the iframe in approve mode. Default is false.",
+          "type": "boolean"
         },
-        "state": {
-          "description": "Deprecated and unused.",
-          "type": "string"
+        "enabled": {
+          "description": "Whether the managed Play Search apps page is displayed. Default is true.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "AdministratorWebTokenSpecPrivateApps": {
+      "id": "AdministratorWebTokenSpecPrivateApps",
+      "properties": {
+        "enabled": {
+          "description": "Whether the Private Apps page is displayed. Default is true.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "AdministratorWebTokenSpecStoreBuilder": {
+      "id": "AdministratorWebTokenSpecStoreBuilder",
+      "properties": {
+        "enabled": {
+          "description": "Whether the Organize apps page is displayed. Default is true.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "AdministratorWebTokenSpecWebApps": {
+      "id": "AdministratorWebTokenSpecWebApps",
+      "properties": {
+        "enabled": {
+          "description": "Whether the Web Apps page is displayed. Default is true.",
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -2950,9 +3136,20 @@
       "description": "This represents a single version of the app.",
       "id": "AppVersion",
       "properties": {
+        "isProduction": {
+          "description": "True if this version is a production APK.",
+          "type": "boolean"
+        },
         "track": {
-          "description": "The track that this app was published in. For example if track is \"alpha\", this is an alpha version of the app.",
+          "description": "Deprecated, use trackId instead.",
           "type": "string"
+        },
+        "trackId": {
+          "description": "Track ids that the app version is published in. Replaces the track field (deprecated), but doesn't include the production track (see isProduction instead).",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
         },
         "versionCode": {
           "description": "Unique increasing identifier for the app version.",
@@ -2994,6 +3191,52 @@
         "token": {
           "description": "The authentication token to be passed to the device policy client on the device where it can be used to provision the account for which this token was generated.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "AutoInstallConstraint": {
+      "description": "The auto-install constraint. Defines a set of restrictions for installation. At least one of the fields must be set.",
+      "id": "AutoInstallConstraint",
+      "properties": {
+        "chargingStateConstraint": {
+          "description": "Charging state constraint.",
+          "type": "string"
+        },
+        "deviceIdleStateConstraint": {
+          "description": "Device idle state constraint.",
+          "type": "string"
+        },
+        "networkTypeConstraint": {
+          "description": "Network type constraint.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "AutoInstallPolicy": {
+      "id": "AutoInstallPolicy",
+      "properties": {
+        "autoInstallConstraint": {
+          "description": "The constraints for auto-installing the app. You can specify a maximum of one constraint.",
+          "items": {
+            "$ref": "AutoInstallConstraint"
+          },
+          "type": "array"
+        },
+        "autoInstallMode": {
+          "description": "The auto-install mode. If unset defaults to \"doNotAutoInstall\".",
+          "type": "string"
+        },
+        "autoInstallPriority": {
+          "description": "The priority of the install, as an unsigned integer. A lower number means higher priority.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "minimumVersionCode": {
+          "description": "The minimum version of the app. If a lower version of the app is installed, then the app will be auto-updated according to the auto-install constraints, instead of waiting for the regular auto-update.",
+          "format": "int32",
+          "type": "integer"
         }
       },
       "type": "object"
@@ -3741,6 +3984,13 @@
       "description": "A Products resource represents an app in the Google Play store that is available to at least some users in the enterprise. (Some apps are restricted to a single enterprise, and no information about them is made available outside that enterprise.)\n\nThe information provided for each product (localized name, icon, link to the full Google Play details page) is intended to allow a basic representation of the product within an EMM user interface.",
       "id": "Product",
       "properties": {
+        "appTracks": {
+          "description": "The tracks visible to the enterprise.",
+          "items": {
+            "$ref": "TrackInfo"
+          },
+          "type": "array"
+        },
         "appVersion": {
           "description": "App versions currently available for this product.",
           "items": {
@@ -3760,7 +4010,7 @@
           "type": "array"
         },
         "availableTracks": {
-          "description": "The tracks that are visible to the enterprise.",
+          "description": "Deprecated, use appTracks instead.",
           "items": {
             "type": "string"
           },
@@ -3926,12 +4176,27 @@
       "description": "The policy for a product.",
       "id": "ProductPolicy",
       "properties": {
+        "autoInstallPolicy": {
+          "$ref": "AutoInstallPolicy",
+          "description": "The auto-install policy for the product."
+        },
+        "managedConfiguration": {
+          "$ref": "ManagedConfiguration",
+          "description": "The managed configuration for the product."
+        },
         "productId": {
           "description": "The ID of the product. For example, \"app:com.google.android.gm\".",
           "type": "string"
         },
+        "trackIds": {
+          "description": "Grants the device visibility to the specified product release track(s), identified by trackIds. The list of release tracks of a product can be obtained by calling Products.Get.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "tracks": {
-          "description": "Grants visibility to the specified track(s) of the product to the device. The track available to the device is based on the following order of preference: alpha, beta, production. For example, if an app has a prod version, a beta version and an alpha version and the enterprise has been granted visibility to both the alpha and beta tracks, if tracks is {\"beta\", \"production\"} then the beta version of the app is made available to the device. If there are no app versions in the specified track adding the \"alpha\" and \"beta\" values to the list of tracks will have no effect. Note that the enterprise requires access to alpha and/or beta tracks before users can be granted visibility to apps in those tracks.\n\nThe allowed sets are: {} (considered equivalent to {\"production\"}) {\"production\"} {\"beta\", \"production\"} {\"alpha\", \"beta\", \"production\"} The order of elements is not relevant. Any other set of tracks will be rejected with an error.",
+          "description": "Deprecated. Use trackIds instead.",
           "items": {
             "type": "string"
           },
@@ -3992,8 +4257,15 @@
           "description": "The product ID to make visible to the user. Required for each item in the productVisibility list.",
           "type": "string"
         },
+        "trackIds": {
+          "description": "Grants the user visibility to the specified product track(s), identified by trackIds.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
         "tracks": {
-          "description": "Grants visibility to the specified track(s) of the product to the user. The track available to the user is based on the following order of preference: alpha, beta, production. For example, if an app has a prod version, a beta version and an alpha version and the enterprise has been granted visibility to both the alpha and beta tracks, if tracks is {\"beta\", \"production\"} the user will be able to install the app and they will get the beta version of the app. If there are no app versions in the specified track adding the \"alpha\" and \"beta\" values to the list of tracks will have no effect. Note that the enterprise requires access to alpha and/or beta tracks before users can be granted visibility to apps in those tracks.\n\nThe allowed sets are: {} (considered equivalent to {\"production\"}) {\"production\"} {\"beta\", \"production\"} {\"alpha\", \"beta\", \"production\"} The order of elements is not relevant. Any other set of tracks will be rejected with an error.",
+          "description": "Deprecated. Use trackIds instead.",
           "items": {
             "type": "string"
           },
@@ -4245,7 +4517,7 @@
           "type": "string"
         },
         "link": {
-          "description": "Ordered list of pages a user should be able to reach from this page. The pages must exist, must not be this page, and once a link is created the page linked to cannot be deleted until all links to it are removed. It is recommended that the basic pages are created first, before adding the links between pages.\n\nNo attempt is made to verify that all pages are reachable from the homepage.",
+          "description": "Ordered list of pages a user should be able to reach from this page. The list can't include this page. It is recommended that the basic pages are created first, before adding the links between pages.\n\nThe API doesn't verify that the pages exist or the pages are reachable.",
           "items": {
             "type": "string"
           },
@@ -4268,6 +4540,21 @@
           "type": "string"
         },
         "previousPageToken": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TrackInfo": {
+      "description": "Id to name association of a track.",
+      "id": "TrackInfo",
+      "properties": {
+        "trackAlias": {
+          "description": "A modifiable name for a track. This is the visible name in the play developer console.",
+          "type": "string"
+        },
+        "trackId": {
+          "description": "Unmodifiable, unique track identifier. This identifier is the releaseTrackId in the url of the play developer console page that displays the track information.",
           "type": "string"
         }
       },
@@ -4374,6 +4661,75 @@
         "userValue": {
           "description": "The value of the placeholder, specific to the user.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "WebApp": {
+      "description": "A WebApps resource represents a web app created for an enterprise. Web apps are published to managed Google Play and can be distributed like other Android apps. On a user's device, a web app opens its specified URL.",
+      "id": "WebApp",
+      "properties": {
+        "displayMode": {
+          "description": "The display mode of the web app.\n\nPossible values include: \n- \"minimalUi\", the device's status bar, navigation bar, the app's URL, and a refresh button are visible when the app is open. For HTTP URLs, you can only select this option.\n- \"standalone\", the device's status bar and navigation bar are visible when the app is open.\n- \"fullScreen\", the app opens in full screen mode, hiding the device's status and navigation bars. All browser UI elements, page URL, system status bar and back button are not visible, and the web app takes up the entirety of the available display area.",
+          "type": "string"
+        },
+        "icons": {
+          "description": "A list of icons representing this website. If absent, a default icon (for create) or the current icon (for update) will be used.",
+          "items": {
+            "$ref": "WebAppIcon"
+          },
+          "type": "array"
+        },
+        "isPublished": {
+          "description": "A flag whether the app has been published to the Play store yet.",
+          "type": "boolean"
+        },
+        "startUrl": {
+          "description": "The start URL, i.e. the URL that should load when the user opens the application.",
+          "type": "string"
+        },
+        "title": {
+          "description": "The title of the web app as displayed to the user (e.g., amongst a list of other applications, or as a label for an icon).",
+          "type": "string"
+        },
+        "versionCode": {
+          "description": "The current version of the app.\n\n\nNote that the version can automatically increase during the lifetime of the web app, while Google does internal housekeeping to keep the web app up-to-date.",
+          "format": "int64",
+          "type": "string"
+        },
+        "webAppId": {
+          "description": "The ID of the application. A string of the form \"app:\u003cpackage name\u003e\" where the package name always starts with the prefix \"com.google.enterprise.webapp.\" followed by a random id.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "WebAppIcon": {
+      "description": "Icon for a web app.",
+      "id": "WebAppIcon",
+      "properties": {
+        "imageData": {
+          "description": "The actual bytes of the image in a base64url encoded string (c.f. RFC4648, section 5 \"Base 64 Encoding with URL and Filename Safe Alphabet\").  \n- The image type can be png or jpg.\n- The image should ideally be square.\n- The image should ideally have a size of 512x512.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "WebAppsListResponse": {
+      "description": "The web app details for an enterprise.",
+      "id": "WebAppsListResponse",
+      "properties": {
+        "kind": {
+          "default": "androidenterprise#webAppsListResponse",
+          "description": "Identifies what kind of resource this is. Value: the fixed string \"androidenterprise#webAppsListResponse\".",
+          "type": "string"
+        },
+        "webApp": {
+          "description": "The manifest describing a web app.",
+          "items": {
+            "$ref": "WebApp"
+          },
+          "type": "array"
         }
       },
       "type": "object"

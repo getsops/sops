@@ -1,5 +1,3 @@
-// +build go1.7
-
 /*
  *
  * Copyright 2016 gRPC authors.
@@ -21,6 +19,7 @@
 package stats_test
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"net"
@@ -30,7 +29,6 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/proto"
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/stats"
@@ -276,7 +274,7 @@ func (te *test) doUnaryCall(c *rpcConfig) (*testpb.SimpleRequest, *testpb.Simple
 	}
 	ctx := metadata.NewOutgoingContext(context.Background(), testMetadata)
 
-	resp, err = tc.UnaryCall(ctx, req, grpc.FailFast(c.failfast))
+	resp, err = tc.UnaryCall(ctx, req, grpc.WaitForReady(!c.failfast))
 	return req, resp, err
 }
 
@@ -287,7 +285,7 @@ func (te *test) doFullDuplexCallRoundtrip(c *rpcConfig) ([]*testpb.SimpleRequest
 		err   error
 	)
 	tc := testpb.NewTestServiceClient(te.clientConn())
-	stream, err := tc.FullDuplexCall(metadata.NewOutgoingContext(context.Background(), testMetadata), grpc.FailFast(c.failfast))
+	stream, err := tc.FullDuplexCall(metadata.NewOutgoingContext(context.Background(), testMetadata), grpc.WaitForReady(!c.failfast))
 	if err != nil {
 		return reqs, resps, err
 	}
@@ -326,7 +324,7 @@ func (te *test) doClientStreamCall(c *rpcConfig) ([]*testpb.SimpleRequest, *test
 		err  error
 	)
 	tc := testpb.NewTestServiceClient(te.clientConn())
-	stream, err := tc.ClientStreamCall(metadata.NewOutgoingContext(context.Background(), testMetadata), grpc.FailFast(c.failfast))
+	stream, err := tc.ClientStreamCall(metadata.NewOutgoingContext(context.Background(), testMetadata), grpc.WaitForReady(!c.failfast))
 	if err != nil {
 		return reqs, resp, err
 	}
@@ -361,7 +359,7 @@ func (te *test) doServerStreamCall(c *rpcConfig) (*testpb.SimpleRequest, []*test
 		startID = errorID
 	}
 	req = &testpb.SimpleRequest{Id: startID}
-	stream, err := tc.ServerStreamCall(metadata.NewOutgoingContext(context.Background(), testMetadata), req, grpc.FailFast(c.failfast))
+	stream, err := tc.ServerStreamCall(metadata.NewOutgoingContext(context.Background(), testMetadata), req, grpc.WaitForReady(!c.failfast))
 	if err != nil {
 		return req, resps, err
 	}
@@ -653,6 +651,16 @@ func checkEnd(t *testing.T, d *gotData, e *expectedData) {
 	expectedStatus, _ := status.FromError(e.err)
 	if actual.Code() != expectedStatus.Code() || actual.Message() != expectedStatus.Message() {
 		t.Fatalf("st.Error = %v, want %v", st.Error, e.err)
+	}
+
+	if st.Client {
+		if !reflect.DeepEqual(st.Trailer, testTrailerMetadata) {
+			t.Fatalf("st.Trailer = %v, want %v", st.Trailer, testTrailerMetadata)
+		}
+	} else {
+		if st.Trailer != nil {
+			t.Fatalf("st.Trailer = %v, want nil", st.Trailer)
+		}
 	}
 }
 

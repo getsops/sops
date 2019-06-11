@@ -18,14 +18,19 @@ package commerce
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"github.com/shopspring/decimal"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/commerce/mgmt/2015-06-01-preview/commerce"
 
 // AggregationGranularity enumerates the values for aggregation granularity.
 type AggregationGranularity string
@@ -346,8 +351,8 @@ func (oti OfferTermInfo) AsBasicOfferTermInfo() (BasicOfferTermInfo, bool) {
 	return &oti, true
 }
 
-// RateCardQueryParameters parameters that are used in the odata $filter query parameter for providing RateCard
-// information.
+// RateCardQueryParameters parameters that are used in the odata $filter query parameter for providing
+// RateCard information.
 type RateCardQueryParameters struct {
 	// OfferDurableID - The Offer ID parameter consists of the 'MS-AZR-' prefix, plus the Offer ID number (e.g., MS-AZR-0026P). See https://azure.microsoft.com/en-us/support/legal/offer-details/ for more information on the list of available Offer IDs, country/region availability, and billing currency.
 	OfferDurableID *string `json:"OfferDurableId,omitempty"`
@@ -580,20 +585,37 @@ type UsageAggregationListResultIterator struct {
 	page UsageAggregationListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *UsageAggregationListResultIterator) Next() error {
+func (iter *UsageAggregationListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UsageAggregationListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *UsageAggregationListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -615,6 +637,11 @@ func (iter UsageAggregationListResultIterator) Value() UsageAggregation {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the UsageAggregationListResultIterator type.
+func NewUsageAggregationListResultIterator(page UsageAggregationListResultPage) UsageAggregationListResultIterator {
+	return UsageAggregationListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (ualr UsageAggregationListResult) IsEmpty() bool {
 	return ualr.Value == nil || len(*ualr.Value) == 0
@@ -622,11 +649,11 @@ func (ualr UsageAggregationListResult) IsEmpty() bool {
 
 // usageAggregationListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ualr UsageAggregationListResult) usageAggregationListResultPreparer() (*http.Request, error) {
+func (ualr UsageAggregationListResult) usageAggregationListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if ualr.NextLink == nil || len(to.String(ualr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ualr.NextLink)))
@@ -634,19 +661,36 @@ func (ualr UsageAggregationListResult) usageAggregationListResultPreparer() (*ht
 
 // UsageAggregationListResultPage contains a page of UsageAggregation values.
 type UsageAggregationListResultPage struct {
-	fn   func(UsageAggregationListResult) (UsageAggregationListResult, error)
+	fn   func(context.Context, UsageAggregationListResult) (UsageAggregationListResult, error)
 	ualr UsageAggregationListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *UsageAggregationListResultPage) Next() error {
-	next, err := page.fn(page.ualr)
+func (page *UsageAggregationListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UsageAggregationListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.ualr)
 	if err != nil {
 		return err
 	}
 	page.ualr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *UsageAggregationListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -665,6 +709,11 @@ func (page UsageAggregationListResultPage) Values() []UsageAggregation {
 		return nil
 	}
 	return *page.ualr.Value
+}
+
+// Creates a new instance of the UsageAggregationListResultPage type.
+func NewUsageAggregationListResultPage(getNextPage func(context.Context, UsageAggregationListResult) (UsageAggregationListResult, error)) UsageAggregationListResultPage {
+	return UsageAggregationListResultPage{fn: getNextPage}
 }
 
 // UsageSample describes a sample of the usageAggregation.

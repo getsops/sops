@@ -367,11 +367,14 @@ func newSASClient(accountName, baseURL string, sasToken url.Values) Client {
 		accountName:     accountName,
 		baseURL:         baseURL,
 		accountSASToken: sasToken,
+		useHTTPS:        defaultUseHTTPS,
 	}
 	c.userAgent = c.getDefaultUserAgent()
 	// Get API version and protocol from token
 	c.apiVersion = sasToken.Get("sv")
-	c.useHTTPS = sasToken.Get("spr") == "https"
+	if spr := sasToken.Get("spr"); spr != "" {
+		c.useHTTPS = spr == "https"
+	}
 	return c
 }
 

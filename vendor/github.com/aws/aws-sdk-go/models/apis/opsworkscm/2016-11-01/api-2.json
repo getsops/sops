@@ -164,6 +164,20 @@
         {"shape":"ValidationException"}
       ]
     },
+    "ExportServerEngineAttribute":{
+      "name":"ExportServerEngineAttribute",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ExportServerEngineAttributeRequest"},
+      "output":{"shape":"ExportServerEngineAttributeResponse"},
+      "errors":[
+        {"shape":"ValidationException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidStateException"}
+      ]
+    },
     "RestoreServer":{
       "name":"RestoreServer",
       "http":{
@@ -505,6 +519,25 @@
     "EngineAttributes":{
       "type":"list",
       "member":{"shape":"EngineAttribute"}
+    },
+    "ExportServerEngineAttributeRequest":{
+      "type":"structure",
+      "required":[
+        "ExportAttributeName",
+        "ServerName"
+      ],
+      "members":{
+        "ExportAttributeName":{"shape":"String"},
+        "ServerName":{"shape":"ServerName"},
+        "InputAttributes":{"shape":"EngineAttributes"}
+      }
+    },
+    "ExportServerEngineAttributeResponse":{
+      "type":"structure",
+      "members":{
+        "EngineAttribute":{"shape":"EngineAttribute"},
+        "ServerName":{"shape":"ServerName"}
+      }
     },
     "InstanceProfileArn":{
       "type":"string",

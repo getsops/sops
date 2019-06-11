@@ -128,6 +128,36 @@
           "argument": "EndpointStatus"
         }
       ]
+    },
+    "TransformJobCompletedOrStopped": {
+      "delay": 60,
+      "maxAttempts": 60,
+      "operation": "DescribeTransformJob",
+      "acceptors": [
+        {
+          "expected": "Completed",
+          "matcher": "path",
+          "state": "success",
+          "argument": "TransformJobStatus"
+        },
+        {
+          "expected": "Stopped",
+          "matcher": "path",
+          "state": "success",
+          "argument": "TransformJobStatus"
+        },
+        {
+          "expected": "Failed",
+          "matcher": "path",
+          "state": "failure",
+          "argument": "TransformJobStatus"
+        },
+        {
+          "expected": "ValidationException",
+          "matcher": "error",
+          "state": "failure"
+        }
+      ]
     }
   }
 }

@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,20 +19,34 @@
 
 package documentdb
 
-import original "github.com/Azure/azure-sdk-for-go/services/cosmos-db/mgmt/2015-04-08/documentdb"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/cosmos-db/mgmt/2015-04-08/documentdb"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type CollectionClient = original.CollectionClient
-type CollectionPartitionClient = original.CollectionPartitionClient
-type CollectionPartitionRegionClient = original.CollectionPartitionRegionClient
-type CollectionRegionClient = original.CollectionRegionClient
-type DatabaseClient = original.DatabaseClient
-type DatabaseAccountRegionClient = original.DatabaseAccountRegionClient
-type DatabaseAccountsClient = original.DatabaseAccountsClient
+type ConflictResolutionMode = original.ConflictResolutionMode
+
+const (
+	Custom         ConflictResolutionMode = original.Custom
+	LastWriterWins ConflictResolutionMode = original.LastWriterWins
+)
+
+type DataType = original.DataType
+
+const (
+	LineString   DataType = original.LineString
+	MultiPolygon DataType = original.MultiPolygon
+	Number       DataType = original.Number
+	Point        DataType = original.Point
+	Polygon      DataType = original.Polygon
+	String       DataType = original.String
+)
+
 type DatabaseAccountKind = original.DatabaseAccountKind
 
 const (
@@ -57,6 +71,22 @@ const (
 	Strong           DefaultConsistencyLevel = original.Strong
 )
 
+type IndexKind = original.IndexKind
+
+const (
+	Hash    IndexKind = original.Hash
+	Range   IndexKind = original.Range
+	Spatial IndexKind = original.Spatial
+)
+
+type IndexingMode = original.IndexingMode
+
+const (
+	Consistent IndexingMode = original.Consistent
+	Lazy       IndexingMode = original.Lazy
+	None       IndexingMode = original.None
+)
+
 type KeyKind = original.KeyKind
 
 const (
@@ -66,15 +96,22 @@ const (
 	SecondaryReadonly KeyKind = original.SecondaryReadonly
 )
 
+type PartitionKind = original.PartitionKind
+
+const (
+	PartitionKindHash  PartitionKind = original.PartitionKindHash
+	PartitionKindRange PartitionKind = original.PartitionKindRange
+)
+
 type PrimaryAggregationType = original.PrimaryAggregationType
 
 const (
-	Average   PrimaryAggregationType = original.Average
-	Last      PrimaryAggregationType = original.Last
-	Maximum   PrimaryAggregationType = original.Maximum
-	Minimimum PrimaryAggregationType = original.Minimimum
-	None      PrimaryAggregationType = original.None
-	Total     PrimaryAggregationType = original.Total
+	PrimaryAggregationTypeAverage   PrimaryAggregationType = original.PrimaryAggregationTypeAverage
+	PrimaryAggregationTypeLast      PrimaryAggregationType = original.PrimaryAggregationTypeLast
+	PrimaryAggregationTypeMaximum   PrimaryAggregationType = original.PrimaryAggregationTypeMaximum
+	PrimaryAggregationTypeMinimimum PrimaryAggregationType = original.PrimaryAggregationTypeMinimimum
+	PrimaryAggregationTypeNone      PrimaryAggregationType = original.PrimaryAggregationTypeNone
+	PrimaryAggregationTypeTotal     PrimaryAggregationType = original.PrimaryAggregationTypeTotal
 )
 
 type UnitType = original.UnitType
@@ -89,8 +126,31 @@ const (
 	Seconds        UnitType = original.Seconds
 )
 
+type BaseClient = original.BaseClient
 type Capability = original.Capability
+type CassandraKeyspace = original.CassandraKeyspace
+type CassandraKeyspaceCreateUpdateParameters = original.CassandraKeyspaceCreateUpdateParameters
+type CassandraKeyspaceCreateUpdateProperties = original.CassandraKeyspaceCreateUpdateProperties
+type CassandraKeyspaceListResult = original.CassandraKeyspaceListResult
+type CassandraKeyspaceProperties = original.CassandraKeyspaceProperties
+type CassandraKeyspaceResource = original.CassandraKeyspaceResource
+type CassandraPartitionKey = original.CassandraPartitionKey
+type CassandraSchema = original.CassandraSchema
+type CassandraTable = original.CassandraTable
+type CassandraTableCreateUpdateParameters = original.CassandraTableCreateUpdateParameters
+type CassandraTableCreateUpdateProperties = original.CassandraTableCreateUpdateProperties
+type CassandraTableListResult = original.CassandraTableListResult
+type CassandraTableProperties = original.CassandraTableProperties
+type CassandraTableResource = original.CassandraTableResource
+type ClusterKey = original.ClusterKey
+type CollectionClient = original.CollectionClient
+type CollectionPartitionClient = original.CollectionPartitionClient
+type CollectionPartitionRegionClient = original.CollectionPartitionRegionClient
+type CollectionRegionClient = original.CollectionRegionClient
+type Column = original.Column
+type ConflictResolutionPolicy = original.ConflictResolutionPolicy
 type ConsistencyPolicy = original.ConsistencyPolicy
+type ContainerPartitionKey = original.ContainerPartitionKey
 type DatabaseAccount = original.DatabaseAccount
 type DatabaseAccountConnectionString = original.DatabaseAccountConnectionString
 type DatabaseAccountCreateUpdateParameters = original.DatabaseAccountCreateUpdateParameters
@@ -102,17 +162,55 @@ type DatabaseAccountPatchParameters = original.DatabaseAccountPatchParameters
 type DatabaseAccountPatchProperties = original.DatabaseAccountPatchProperties
 type DatabaseAccountProperties = original.DatabaseAccountProperties
 type DatabaseAccountRegenerateKeyParameters = original.DatabaseAccountRegenerateKeyParameters
+type DatabaseAccountRegionClient = original.DatabaseAccountRegionClient
+type DatabaseAccountsClient = original.DatabaseAccountsClient
 type DatabaseAccountsCreateOrUpdateFuture = original.DatabaseAccountsCreateOrUpdateFuture
+type DatabaseAccountsCreateUpdateCassandraKeyspaceFuture = original.DatabaseAccountsCreateUpdateCassandraKeyspaceFuture
+type DatabaseAccountsCreateUpdateCassandraTableFuture = original.DatabaseAccountsCreateUpdateCassandraTableFuture
+type DatabaseAccountsCreateUpdateGremlinDatabaseFuture = original.DatabaseAccountsCreateUpdateGremlinDatabaseFuture
+type DatabaseAccountsCreateUpdateGremlinGraphFuture = original.DatabaseAccountsCreateUpdateGremlinGraphFuture
+type DatabaseAccountsCreateUpdateMongoDBCollectionFuture = original.DatabaseAccountsCreateUpdateMongoDBCollectionFuture
+type DatabaseAccountsCreateUpdateMongoDBDatabaseFuture = original.DatabaseAccountsCreateUpdateMongoDBDatabaseFuture
+type DatabaseAccountsCreateUpdateSQLContainerFuture = original.DatabaseAccountsCreateUpdateSQLContainerFuture
+type DatabaseAccountsCreateUpdateSQLDatabaseFuture = original.DatabaseAccountsCreateUpdateSQLDatabaseFuture
+type DatabaseAccountsCreateUpdateTableFuture = original.DatabaseAccountsCreateUpdateTableFuture
+type DatabaseAccountsDeleteCassandraKeyspaceFuture = original.DatabaseAccountsDeleteCassandraKeyspaceFuture
+type DatabaseAccountsDeleteCassandraTableFuture = original.DatabaseAccountsDeleteCassandraTableFuture
 type DatabaseAccountsDeleteFuture = original.DatabaseAccountsDeleteFuture
+type DatabaseAccountsDeleteGremlinDatabaseFuture = original.DatabaseAccountsDeleteGremlinDatabaseFuture
+type DatabaseAccountsDeleteGremlinGraphFuture = original.DatabaseAccountsDeleteGremlinGraphFuture
+type DatabaseAccountsDeleteMongoDBCollectionFuture = original.DatabaseAccountsDeleteMongoDBCollectionFuture
+type DatabaseAccountsDeleteMongoDBDatabaseFuture = original.DatabaseAccountsDeleteMongoDBDatabaseFuture
+type DatabaseAccountsDeleteSQLContainerFuture = original.DatabaseAccountsDeleteSQLContainerFuture
+type DatabaseAccountsDeleteSQLDatabaseFuture = original.DatabaseAccountsDeleteSQLDatabaseFuture
+type DatabaseAccountsDeleteTableFuture = original.DatabaseAccountsDeleteTableFuture
 type DatabaseAccountsFailoverPriorityChangeFuture = original.DatabaseAccountsFailoverPriorityChangeFuture
 type DatabaseAccountsListResult = original.DatabaseAccountsListResult
 type DatabaseAccountsOfflineRegionFuture = original.DatabaseAccountsOfflineRegionFuture
 type DatabaseAccountsOnlineRegionFuture = original.DatabaseAccountsOnlineRegionFuture
 type DatabaseAccountsPatchFuture = original.DatabaseAccountsPatchFuture
 type DatabaseAccountsRegenerateKeyFuture = original.DatabaseAccountsRegenerateKeyFuture
+type DatabaseClient = original.DatabaseClient
 type ErrorResponse = original.ErrorResponse
+type ExcludedPath = original.ExcludedPath
+type ExtendedResourceProperties = original.ExtendedResourceProperties
 type FailoverPolicies = original.FailoverPolicies
 type FailoverPolicy = original.FailoverPolicy
+type GremlinDatabase = original.GremlinDatabase
+type GremlinDatabaseCreateUpdateParameters = original.GremlinDatabaseCreateUpdateParameters
+type GremlinDatabaseCreateUpdateProperties = original.GremlinDatabaseCreateUpdateProperties
+type GremlinDatabaseListResult = original.GremlinDatabaseListResult
+type GremlinDatabaseProperties = original.GremlinDatabaseProperties
+type GremlinDatabaseResource = original.GremlinDatabaseResource
+type GremlinGraph = original.GremlinGraph
+type GremlinGraphCreateUpdateParameters = original.GremlinGraphCreateUpdateParameters
+type GremlinGraphCreateUpdateProperties = original.GremlinGraphCreateUpdateProperties
+type GremlinGraphListResult = original.GremlinGraphListResult
+type GremlinGraphProperties = original.GremlinGraphProperties
+type GremlinGraphResource = original.GremlinGraphResource
+type IncludedPath = original.IncludedPath
+type Indexes = original.Indexes
+type IndexingPolicy = original.IndexingPolicy
 type Location = original.Location
 type Metric = original.Metric
 type MetricAvailability = original.MetricAvailability
@@ -121,35 +219,67 @@ type MetricDefinitionsListResult = original.MetricDefinitionsListResult
 type MetricListResult = original.MetricListResult
 type MetricName = original.MetricName
 type MetricValue = original.MetricValue
+type MongoDBCollection = original.MongoDBCollection
+type MongoDBCollectionCreateUpdateParameters = original.MongoDBCollectionCreateUpdateParameters
+type MongoDBCollectionCreateUpdateProperties = original.MongoDBCollectionCreateUpdateProperties
+type MongoDBCollectionListResult = original.MongoDBCollectionListResult
+type MongoDBCollectionProperties = original.MongoDBCollectionProperties
+type MongoDBCollectionResource = original.MongoDBCollectionResource
+type MongoDBDatabase = original.MongoDBDatabase
+type MongoDBDatabaseCreateUpdateParameters = original.MongoDBDatabaseCreateUpdateParameters
+type MongoDBDatabaseCreateUpdateProperties = original.MongoDBDatabaseCreateUpdateProperties
+type MongoDBDatabaseListResult = original.MongoDBDatabaseListResult
+type MongoDBDatabaseProperties = original.MongoDBDatabaseProperties
+type MongoDBDatabaseResource = original.MongoDBDatabaseResource
+type MongoIndex = original.MongoIndex
+type MongoIndexKeys = original.MongoIndexKeys
+type MongoIndexOptions = original.MongoIndexOptions
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
 type OperationListResult = original.OperationListResult
 type OperationListResultIterator = original.OperationListResultIterator
 type OperationListResultPage = original.OperationListResultPage
+type OperationsClient = original.OperationsClient
+type PartitionKeyRangeIDClient = original.PartitionKeyRangeIDClient
+type PartitionKeyRangeIDRegionClient = original.PartitionKeyRangeIDRegionClient
 type PartitionMetric = original.PartitionMetric
 type PartitionMetricListResult = original.PartitionMetricListResult
 type PartitionUsage = original.PartitionUsage
 type PartitionUsagesResult = original.PartitionUsagesResult
+type PercentileClient = original.PercentileClient
 type PercentileMetric = original.PercentileMetric
 type PercentileMetricListResult = original.PercentileMetricListResult
 type PercentileMetricValue = original.PercentileMetricValue
+type PercentileSourceTargetClient = original.PercentileSourceTargetClient
+type PercentileTargetClient = original.PercentileTargetClient
 type RegionForOnlineOffline = original.RegionForOnlineOffline
 type Resource = original.Resource
+type SQLContainer = original.SQLContainer
+type SQLContainerCreateUpdateParameters = original.SQLContainerCreateUpdateParameters
+type SQLContainerCreateUpdateProperties = original.SQLContainerCreateUpdateProperties
+type SQLContainerListResult = original.SQLContainerListResult
+type SQLContainerProperties = original.SQLContainerProperties
+type SQLContainerResource = original.SQLContainerResource
+type SQLDatabase = original.SQLDatabase
+type SQLDatabaseCreateUpdateParameters = original.SQLDatabaseCreateUpdateParameters
+type SQLDatabaseCreateUpdateProperties = original.SQLDatabaseCreateUpdateProperties
+type SQLDatabaseListResult = original.SQLDatabaseListResult
+type SQLDatabaseProperties = original.SQLDatabaseProperties
+type SQLDatabaseResource = original.SQLDatabaseResource
+type Table = original.Table
+type TableCreateUpdateParameters = original.TableCreateUpdateParameters
+type TableCreateUpdateProperties = original.TableCreateUpdateProperties
+type TableListResult = original.TableListResult
+type TableProperties = original.TableProperties
+type TableResource = original.TableResource
+type UniqueKey = original.UniqueKey
+type UniqueKeyPolicy = original.UniqueKeyPolicy
 type Usage = original.Usage
 type UsagesResult = original.UsagesResult
 type VirtualNetworkRule = original.VirtualNetworkRule
-type OperationsClient = original.OperationsClient
-type PartitionKeyRangeIDClient = original.PartitionKeyRangeIDClient
-type PartitionKeyRangeIDRegionClient = original.PartitionKeyRangeIDRegionClient
-type PercentileClient = original.PercentileClient
-type PercentileSourceTargetClient = original.PercentileSourceTargetClient
-type PercentileTargetClient = original.PercentileTargetClient
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
-}
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func NewCollectionClient(subscriptionID string) CollectionClient {
 	return original.NewCollectionClient(subscriptionID)
@@ -175,12 +305,6 @@ func NewCollectionRegionClient(subscriptionID string) CollectionRegionClient {
 func NewCollectionRegionClientWithBaseURI(baseURI string, subscriptionID string) CollectionRegionClient {
 	return original.NewCollectionRegionClientWithBaseURI(baseURI, subscriptionID)
 }
-func NewDatabaseClient(subscriptionID string) DatabaseClient {
-	return original.NewDatabaseClient(subscriptionID)
-}
-func NewDatabaseClientWithBaseURI(baseURI string, subscriptionID string) DatabaseClient {
-	return original.NewDatabaseClientWithBaseURI(baseURI, subscriptionID)
-}
 func NewDatabaseAccountRegionClient(subscriptionID string) DatabaseAccountRegionClient {
 	return original.NewDatabaseAccountRegionClient(subscriptionID)
 }
@@ -193,23 +317,17 @@ func NewDatabaseAccountsClient(subscriptionID string) DatabaseAccountsClient {
 func NewDatabaseAccountsClientWithBaseURI(baseURI string, subscriptionID string) DatabaseAccountsClient {
 	return original.NewDatabaseAccountsClientWithBaseURI(baseURI, subscriptionID)
 }
-func PossibleDatabaseAccountKindValues() []DatabaseAccountKind {
-	return original.PossibleDatabaseAccountKindValues()
+func NewDatabaseClient(subscriptionID string) DatabaseClient {
+	return original.NewDatabaseClient(subscriptionID)
 }
-func PossibleDatabaseAccountOfferTypeValues() []DatabaseAccountOfferType {
-	return original.PossibleDatabaseAccountOfferTypeValues()
+func NewDatabaseClientWithBaseURI(baseURI string, subscriptionID string) DatabaseClient {
+	return original.NewDatabaseClientWithBaseURI(baseURI, subscriptionID)
 }
-func PossibleDefaultConsistencyLevelValues() []DefaultConsistencyLevel {
-	return original.PossibleDefaultConsistencyLevelValues()
+func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
+	return original.NewOperationListResultIterator(page)
 }
-func PossibleKeyKindValues() []KeyKind {
-	return original.PossibleKeyKindValues()
-}
-func PossiblePrimaryAggregationTypeValues() []PrimaryAggregationType {
-	return original.PossiblePrimaryAggregationTypeValues()
-}
-func PossibleUnitTypeValues() []UnitType {
-	return original.PossibleUnitTypeValues()
+func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
+	return original.NewOperationListResultPage(getNextPage)
 }
 func NewOperationsClient(subscriptionID string) OperationsClient {
 	return original.NewOperationsClient(subscriptionID)
@@ -246,6 +364,42 @@ func NewPercentileTargetClient(subscriptionID string) PercentileTargetClient {
 }
 func NewPercentileTargetClientWithBaseURI(baseURI string, subscriptionID string) PercentileTargetClient {
 	return original.NewPercentileTargetClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
+}
+func PossibleConflictResolutionModeValues() []ConflictResolutionMode {
+	return original.PossibleConflictResolutionModeValues()
+}
+func PossibleDataTypeValues() []DataType {
+	return original.PossibleDataTypeValues()
+}
+func PossibleDatabaseAccountKindValues() []DatabaseAccountKind {
+	return original.PossibleDatabaseAccountKindValues()
+}
+func PossibleDatabaseAccountOfferTypeValues() []DatabaseAccountOfferType {
+	return original.PossibleDatabaseAccountOfferTypeValues()
+}
+func PossibleDefaultConsistencyLevelValues() []DefaultConsistencyLevel {
+	return original.PossibleDefaultConsistencyLevelValues()
+}
+func PossibleIndexKindValues() []IndexKind {
+	return original.PossibleIndexKindValues()
+}
+func PossibleIndexingModeValues() []IndexingMode {
+	return original.PossibleIndexingModeValues()
+}
+func PossibleKeyKindValues() []KeyKind {
+	return original.PossibleKeyKindValues()
+}
+func PossiblePartitionKindValues() []PartitionKind {
+	return original.PossiblePartitionKindValues()
+}
+func PossiblePrimaryAggregationTypeValues() []PrimaryAggregationType {
+	return original.PossiblePrimaryAggregationTypeValues()
+}
+func PossibleUnitTypeValues() []UnitType {
+	return original.PossibleUnitTypeValues()
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/latest"

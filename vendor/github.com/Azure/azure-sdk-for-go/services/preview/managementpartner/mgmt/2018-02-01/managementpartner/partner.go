@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -43,6 +44,16 @@ func NewPartnerClientWithBaseURI(baseURI string) PartnerClient {
 // Parameters:
 // partnerID - id of the Partner
 func (client PartnerClient) Create(ctx context.Context, partnerID string) (result PartnerResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PartnerClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreatePreparer(ctx, partnerID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "managementpartner.PartnerClient", "Create", nil, "Failure preparing request")
@@ -107,6 +118,16 @@ func (client PartnerClient) CreateResponder(resp *http.Response) (result Partner
 // Parameters:
 // partnerID - id of the Partner
 func (client PartnerClient) Delete(ctx context.Context, partnerID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PartnerClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, partnerID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "managementpartner.PartnerClient", "Delete", nil, "Failure preparing request")
@@ -170,6 +191,16 @@ func (client PartnerClient) DeleteResponder(resp *http.Response) (result autores
 // Parameters:
 // partnerID - id of the Partner
 func (client PartnerClient) Get(ctx context.Context, partnerID string) (result PartnerResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PartnerClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, partnerID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "managementpartner.PartnerClient", "Get", nil, "Failure preparing request")
@@ -234,6 +265,16 @@ func (client PartnerClient) GetResponder(resp *http.Response) (result PartnerRes
 // Parameters:
 // partnerID - id of the Partner
 func (client PartnerClient) Update(ctx context.Context, partnerID string) (result PartnerResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PartnerClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, partnerID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "managementpartner.PartnerClient", "Update", nil, "Failure preparing request")

@@ -6,11 +6,14 @@ package clientcredentials
 
 import (
 	"context"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"testing"
+
+	"golang.org/x/oauth2/internal"
 )
 
 func newConf(serverURL string) *Config {
@@ -29,6 +32,43 @@ type mockTransport struct {
 
 func (t *mockTransport) RoundTrip(req *http.Request) (resp *http.Response, err error) {
 	return t.rt(req)
+}
+
+func TestTokenSourceGrantTypeOverride(t *testing.T) {
+	wantGrantType := "password"
+	var gotGrantType string
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		body, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			t.Errorf("ioutil.ReadAll(r.Body) == %v, %v, want _, <nil>", body, err)
+		}
+		if err := r.Body.Close(); err != nil {
+			t.Errorf("r.Body.Close() == %v, want <nil>", err)
+		}
+		values, err := url.ParseQuery(string(body))
+		if err != nil {
+			t.Errorf("url.ParseQuery(%q) == %v, %v, want _, <nil>", body, values, err)
+		}
+		gotGrantType = values.Get("grant_type")
+		w.Header().Set("Content-Type", "application/x-www-form-urlencoded")
+		w.Write([]byte("access_token=90d64460d14870c08c81352a05dedd3465940a7c&token_type=bearer"))
+	}))
+	config := &Config{
+		ClientID:     "CLIENT_ID",
+		ClientSecret: "CLIENT_SECRET",
+		Scopes:       []string{"scope"},
+		TokenURL:     ts.URL + "/token",
+		EndpointParams: url.Values{
+			"grant_type": {wantGrantType},
+		},
+	}
+	token, err := config.TokenSource(context.Background()).Token()
+	if err != nil {
+		t.Errorf("config.TokenSource(_).Token() == %v, %v, want !<nil>, <nil>", token, err)
+	}
+	if gotGrantType != wantGrantType {
+		t.Errorf("grant_type == %q, want %q", gotGrantType, wantGrantType)
+	}
 }
 
 func TestTokenRequest(t *testing.T) {
@@ -74,21 +114,25 @@ func TestTokenRequest(t *testing.T) {
 }
 
 func TestTokenRefreshRequest(t *testing.T) {
+	internal.ResetAuthCache()
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.String() == "/somethingelse" {
 			return
 		}
 		if r.URL.String() != "/token" {
-			t.Errorf("Unexpected token refresh request URL, %v is found.", r.URL)
+			t.Errorf("Unexpected token refresh request URL: %q", r.URL)
 		}
 		headerContentType := r.Header.Get("Content-Type")
-		if headerContentType != "application/x-www-form-urlencoded" {
-			t.Errorf("Unexpected Content-Type header, %v is found.", headerContentType)
+		if got, want := headerContentType, "application/x-www-form-urlencoded"; got != want {
+			t.Errorf("Content-Type = %q; want %q", got, want)
 		}
 		body, _ := ioutil.ReadAll(r.Body)
-		if string(body) != "audience=audience1&grant_type=client_credentials&scope=scope1+scope2" {
-			t.Errorf("Unexpected refresh token payload, %v is found.", string(body))
+		const want = "audience=audience1&grant_type=client_credentials&scope=scope1+scope2"
+		if string(body) != want {
+			t.Errorf("Unexpected refresh token payload.\n got: %s\nwant: %s\n", body, want)
 		}
+		w.Header().Set("Content-Type", "application/json")
+		io.WriteString(w, `{"access_token": "foo", "refresh_token": "bar"}`)
 	}))
 	defer ts.Close()
 	conf := newConf(ts.URL)

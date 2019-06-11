@@ -10,7 +10,7 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-const Version = "3.3.0"
+const Version = "3.3.1"
 
 func PrintVersion(c *cli.Context) {
 	out := fmt.Sprintf("%s %s", c.App.Name, c.App.Version)

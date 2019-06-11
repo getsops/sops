@@ -85,8 +85,7 @@ func (iter *SyncFolderIterator) UploadObject() s3manager.BatchUploadObject {
 	}
 
 	return s3manager.BatchUploadObject{
-		&input,
-		nil,
+		Object: &input,
 	}
 }
 
@@ -110,11 +109,11 @@ func main() {
 
 	iter := NewSyncFolderIterator(*pathPtr, *bucketPtr)
 	if err := uploader.UploadWithIterator(aws.BackgroundContext(), iter); err != nil {
-		fmt.Fprintf(os.Stderr, "unexpected error has occured: %v", err)
+		fmt.Fprintf(os.Stderr, "unexpected error has occurred: %v", err)
 	}
 
 	if err := iter.Err(); err != nil {
-		fmt.Fprintf(os.Stderr, "unexpected error occured during file walking: %v", err)
+		fmt.Fprintf(os.Stderr, "unexpected error occurred during file walking: %v", err)
 	}
 
 	fmt.Println("Success")

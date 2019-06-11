@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewServiceRunnersClientWithBaseURI(baseURI string, subscriptionID string) S
 // name - the name of the service runner.
 // serviceRunner - a container for a managed identity to execute DevTest lab services.
 func (client ServiceRunnersClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, labName string, name string, serviceRunner ServiceRunner) (result ServiceRunner, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceRunnersClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, labName, name, serviceRunner)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.ServiceRunnersClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -117,6 +128,16 @@ func (client ServiceRunnersClient) CreateOrUpdateResponder(resp *http.Response) 
 // labName - the name of the lab.
 // name - the name of the service runner.
 func (client ServiceRunnersClient) Delete(ctx context.Context, resourceGroupName string, labName string, name string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceRunnersClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, labName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.ServiceRunnersClient", "Delete", nil, "Failure preparing request")
@@ -185,6 +206,16 @@ func (client ServiceRunnersClient) DeleteResponder(resp *http.Response) (result 
 // labName - the name of the lab.
 // name - the name of the service runner.
 func (client ServiceRunnersClient) Get(ctx context.Context, resourceGroupName string, labName string, name string) (result ServiceRunner, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceRunnersClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, labName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.ServiceRunnersClient", "Get", nil, "Failure preparing request")
@@ -256,6 +287,16 @@ func (client ServiceRunnersClient) GetResponder(resp *http.Response) (result Ser
 // top - the maximum number of resources to return from the operation.
 // orderby - the ordering expression for the results, using OData notation.
 func (client ServiceRunnersClient) List(ctx context.Context, resourceGroupName string, labName string, filter string, top *int32, orderby string) (result ResponseWithContinuationServiceRunnerPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceRunnersClient.List")
+		defer func() {
+			sc := -1
+			if result.rwcsr.Response.Response != nil {
+				sc = result.rwcsr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, labName, filter, top, orderby)
 	if err != nil {
@@ -329,8 +370,8 @@ func (client ServiceRunnersClient) ListResponder(resp *http.Response) (result Re
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ServiceRunnersClient) listNextResults(lastResults ResponseWithContinuationServiceRunner) (result ResponseWithContinuationServiceRunner, err error) {
-	req, err := lastResults.responseWithContinuationServiceRunnerPreparer()
+func (client ServiceRunnersClient) listNextResults(ctx context.Context, lastResults ResponseWithContinuationServiceRunner) (result ResponseWithContinuationServiceRunner, err error) {
+	req, err := lastResults.responseWithContinuationServiceRunnerPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "dtl.ServiceRunnersClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -351,6 +392,16 @@ func (client ServiceRunnersClient) listNextResults(lastResults ResponseWithConti
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ServiceRunnersClient) ListComplete(ctx context.Context, resourceGroupName string, labName string, filter string, top *int32, orderby string) (result ResponseWithContinuationServiceRunnerIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServiceRunnersClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, labName, filter, top, orderby)
 	return
 }

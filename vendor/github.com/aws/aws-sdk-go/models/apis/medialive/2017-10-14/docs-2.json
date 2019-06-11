@@ -6,10 +6,13 @@
     "CreateChannel": "Creates a new channel",
     "CreateInput": "Create an input",
     "CreateInputSecurityGroup": "Creates a Input Security Group",
+    "CreateTags": "Create tags for a resource",
     "DeleteChannel": "Starts deletion of channel. The associated outputs are also deleted.",
     "DeleteInput": "Deletes the input end point",
     "DeleteInputSecurityGroup": "Deletes an Input Security Group",
     "DeleteReservation": "Delete an expired reservation.",
+    "DeleteSchedule": "Delete all schedule actions on a channel.",
+    "DeleteTags": "Removes tags for a resource",
     "DescribeChannel": "Gets details about a channel",
     "DescribeInput": "Produces details about an input",
     "DescribeInputSecurityGroup": "Produces a summary of an Input Security Group",
@@ -21,94 +24,97 @@
     "ListInputs": "Produces list of inputs that have been created",
     "ListOfferings": "List offerings available for purchase.",
     "ListReservations": "List purchased reservations.",
+    "ListTagsForResource": "Produces list of tags that have been created for a resource",
     "PurchaseOffering": "Purchase an offering and create a reservation.",
     "StartChannel": "Starts an existing channel",
     "StopChannel": "Stops a running channel",
     "UpdateChannel": "Updates a channel.",
+    "UpdateChannelClass": "Changes the class of the channel.",
     "UpdateInput": "Updates an input.",
-    "UpdateInputSecurityGroup": "Update an Input Security Group's Whilelists."
+    "UpdateInputSecurityGroup": "Update an Input Security Group's Whilelists.",
+    "UpdateReservation": "Update reservation."
   },
   "shapes": {
     "AacCodingMode": {
-      "base": null,
+      "base": "Aac Coding Mode",
       "refs": {
         "AacSettings$CodingMode": "Mono, Stereo, or 5.1 channel layout. Valid values depend on rate control mode and profile. The adReceiverMix setting receives a stereo description plus control track and emits a mono AAC encode of the description track, with control data emitted in the PES header as per ETSI TS 101 154 Annex E."
       }
     },
     "AacInputType": {
-      "base": null,
+      "base": "Aac Input Type",
       "refs": {
         "AacSettings$InputType": "Set to \"broadcasterMixedAd\" when input contains pre-mixed main audio + AD (narration) as a stereo pair.  The Audio Type field (audioType) will be set to 3, which signals to downstream systems that this stream contains \"broadcaster mixed AD\". Note that the input received by the encoder must contain pre-mixed audio; the encoder does not perform the mixing. The values in audioTypeControl and audioType (in AudioDescription) are ignored when set to broadcasterMixedAd.\n\nLeave set to \"normal\" when input does not contain pre-mixed audio + AD."
       }
     },
     "AacProfile": {
-      "base": null,
+      "base": "Aac Profile",
       "refs": {
         "AacSettings$Profile": "AAC Profile."
       }
     },
     "AacRateControlMode": {
-      "base": null,
+      "base": "Aac Rate Control Mode",
       "refs": {
         "AacSettings$RateControlMode": "Rate Control Mode."
       }
     },
     "AacRawFormat": {
-      "base": null,
+      "base": "Aac Raw Format",
       "refs": {
         "AacSettings$RawFormat": "Sets LATM / LOAS AAC output for raw containers."
       }
     },
     "AacSettings": {
-      "base": null,
+      "base": "Aac Settings",
       "refs": {
         "AudioCodecSettings$AacSettings": null
       }
     },
     "AacSpec": {
-      "base": null,
+      "base": "Aac Spec",
       "refs": {
         "AacSettings$Spec": "Use MPEG-2 AAC audio instead of MPEG-4 AAC audio for raw or MPEG-2 Transport Stream containers."
       }
     },
     "AacVbrQuality": {
-      "base": null,
+      "base": "Aac Vbr Quality",
       "refs": {
         "AacSettings$VbrQuality": "VBR Quality Level - Only used if rateControlMode is VBR."
       }
     },
     "Ac3BitstreamMode": {
-      "base": null,
+      "base": "Ac3 Bitstream Mode",
       "refs": {
         "Ac3Settings$BitstreamMode": "Specifies the bitstream mode (bsmod) for the emitted AC-3 stream. See ATSC A/52-2012 for background on these values."
       }
     },
     "Ac3CodingMode": {
-      "base": null,
+      "base": "Ac3 Coding Mode",
       "refs": {
         "Ac3Settings$CodingMode": "Dolby Digital coding mode. Determines number of channels."
       }
     },
     "Ac3DrcProfile": {
-      "base": null,
+      "base": "Ac3 Drc Profile",
       "refs": {
         "Ac3Settings$DrcProfile": "If set to filmStandard, adds dynamic range compression signaling to the output bitstream as defined in the Dolby Digital specification."
       }
     },
     "Ac3LfeFilter": {
-      "base": null,
+      "base": "Ac3 Lfe Filter",
       "refs": {
         "Ac3Settings$LfeFilter": "When set to enabled, applies a 120Hz lowpass filter to the LFE channel prior to encoding. Only valid in codingMode32Lfe mode."
       }
     },
     "Ac3MetadataControl": {
-      "base": null,
+      "base": "Ac3 Metadata Control",
       "refs": {
         "Ac3Settings$MetadataControl": "When set to \"followInput\", encoder metadata will be sourced from the DD, DD+, or DolbyE decoder that supplied this audio data. If audio was not supplied from one of these streams, then the static metadata settings will be used."
       }
     },
     "Ac3Settings": {
-      "base": null,
+      "base": "Ac3 Settings",
       "refs": {
         "AudioCodecSettings$Ac3Settings": null
       }
@@ -119,163 +125,163 @@
       }
     },
     "AfdSignaling": {
-      "base": null,
+      "base": "Afd Signaling",
       "refs": {
         "H264Settings$AfdSignaling": "Indicates that AFD values will be written into the output stream.  If afdSignaling is \"auto\", the system will try to preserve the input AFD value (in cases where multiple AFD values are valid). If set to \"fixed\", the AFD value will be the value configured in the fixedAfd parameter."
       }
     },
     "ArchiveContainerSettings": {
-      "base": null,
+      "base": "Archive Container Settings",
       "refs": {
         "ArchiveOutputSettings$ContainerSettings": "Settings specific to the container type of the file."
       }
     },
     "ArchiveGroupSettings": {
-      "base": null,
+      "base": "Archive Group Settings",
       "refs": {
         "OutputGroupSettings$ArchiveGroupSettings": null
       }
     },
     "ArchiveOutputSettings": {
-      "base": null,
+      "base": "Archive Output Settings",
       "refs": {
         "OutputSettings$ArchiveOutputSettings": null
       }
     },
     "AribDestinationSettings": {
-      "base": null,
+      "base": "Arib Destination Settings",
       "refs": {
         "CaptionDestinationSettings$AribDestinationSettings": null
       }
     },
     "AribSourceSettings": {
-      "base": null,
+      "base": "Arib Source Settings",
       "refs": {
         "CaptionSelectorSettings$AribSourceSettings": null
       }
     },
     "AudioChannelMapping": {
-      "base": null,
+      "base": "Audio Channel Mapping",
       "refs": {
         "__listOfAudioChannelMapping$member": null
       }
     },
     "AudioCodecSettings": {
-      "base": null,
+      "base": "Audio Codec Settings",
       "refs": {
         "AudioDescription$CodecSettings": "Audio codec settings."
       }
     },
     "AudioDescription": {
-      "base": null,
+      "base": "Audio Description",
       "refs": {
         "__listOfAudioDescription$member": null
       }
     },
     "AudioDescriptionAudioTypeControl": {
-      "base": null,
+      "base": "Audio Description Audio Type Control",
       "refs": {
         "AudioDescription$AudioTypeControl": "Determines how audio type is determined.\n  followInput: If the input contains an ISO 639 audioType, then that value is passed through to the output. If the input contains no ISO 639 audioType, the value in Audio Type is included in the output.\n  useConfigured: The value in Audio Type is included in the output.\nNote that this field and audioType are both ignored if inputType is broadcasterMixedAd."
       }
     },
     "AudioDescriptionLanguageCodeControl": {
-      "base": null,
+      "base": "Audio Description Language Code Control",
       "refs": {
         "AudioDescription$LanguageCodeControl": "Choosing followInput will cause the ISO 639 language code of the output to follow the ISO 639 language code of the input. The languageCode will be used when useConfigured is set, or when followInput is selected but there is no ISO 639 language code specified by the input."
       }
     },
     "AudioLanguageSelection": {
-      "base": null,
+      "base": "Audio Language Selection",
       "refs": {
         "AudioSelectorSettings$AudioLanguageSelection": null
       }
     },
     "AudioLanguageSelectionPolicy": {
-      "base": null,
+      "base": "Audio Language Selection Policy",
       "refs": {
         "AudioLanguageSelection$LanguageSelectionPolicy": "When set to \"strict\", the transport stream demux strictly identifies audio streams by their language descriptor. If a PMT update occurs such that an audio stream matching the initially selected language is no longer present then mute will be encoded until the language returns. If \"loose\", then on a PMT update the demux will choose another audio stream in the program with the same stream type if it can't find one with the same language."
       }
     },
     "AudioNormalizationAlgorithm": {
-      "base": null,
+      "base": "Audio Normalization Algorithm",
       "refs": {
         "AudioNormalizationSettings$Algorithm": "Audio normalization algorithm to use. itu17701 conforms to the CALM Act specification, itu17702 conforms to the EBU R-128 specification."
       }
     },
     "AudioNormalizationAlgorithmControl": {
-      "base": null,
+      "base": "Audio Normalization Algorithm Control",
       "refs": {
         "AudioNormalizationSettings$AlgorithmControl": "When set to correctAudio the output audio is corrected using the chosen algorithm. If set to measureOnly, the audio will be measured but not adjusted."
       }
     },
     "AudioNormalizationSettings": {
-      "base": null,
+      "base": "Audio Normalization Settings",
       "refs": {
         "AudioDescription$AudioNormalizationSettings": "Advanced audio normalization settings."
       }
     },
     "AudioOnlyHlsSettings": {
-      "base": null,
+      "base": "Audio Only Hls Settings",
       "refs": {
         "HlsSettings$AudioOnlyHlsSettings": null
       }
     },
     "AudioOnlyHlsTrackType": {
-      "base": null,
+      "base": "Audio Only Hls Track Type",
       "refs": {
         "AudioOnlyHlsSettings$AudioTrackType": "Four types of audio-only tracks are supported:\n\nAudio-Only Variant Stream\nThe client can play back this audio-only stream instead of video in low-bandwidth scenarios. Represented as an EXT-X-STREAM-INF in the HLS manifest.\n\nAlternate Audio, Auto Select, Default\nAlternate rendition that the client should try to play back by default. Represented as an EXT-X-MEDIA in the HLS manifest with DEFAULT=YES, AUTOSELECT=YES\n\nAlternate Audio, Auto Select, Not Default\nAlternate rendition that the client may try to play back by default. Represented as an EXT-X-MEDIA in the HLS manifest with DEFAULT=NO, AUTOSELECT=YES\n\nAlternate Audio, not Auto Select\nAlternate rendition that the client will not try to play back by default. Represented as an EXT-X-MEDIA in the HLS manifest with DEFAULT=NO, AUTOSELECT=NO"
       }
     },
     "AudioPidSelection": {
-      "base": null,
+      "base": "Audio Pid Selection",
       "refs": {
         "AudioSelectorSettings$AudioPidSelection": null
       }
     },
     "AudioSelector": {
-      "base": null,
+      "base": "Audio Selector",
       "refs": {
         "__listOfAudioSelector$member": null
       }
     },
     "AudioSelectorSettings": {
-      "base": null,
+      "base": "Audio Selector Settings",
       "refs": {
         "AudioSelector$SelectorSettings": "The audio selector settings."
       }
     },
     "AudioType": {
-      "base": null,
+      "base": "Audio Type",
       "refs": {
         "AudioDescription$AudioType": "Applies only if audioTypeControl is useConfigured. The values for audioType are defined in ISO-IEC 13818-1."
       }
     },
     "AuthenticationScheme": {
-      "base": null,
+      "base": "Authentication Scheme",
       "refs": {
         "RtmpGroupSettings$AuthenticationScheme": "Authentication scheme to use when connecting with CDN"
       }
     },
     "AvailBlanking": {
-      "base": null,
+      "base": "Avail Blanking",
       "refs": {
         "EncoderSettings$AvailBlanking": "Settings for ad avail blanking."
       }
     },
     "AvailBlankingState": {
-      "base": null,
+      "base": "Avail Blanking State",
       "refs": {
         "AvailBlanking$State": "When set to enabled, causes video, audio and captions to be blanked when insertion metadata is added."
       }
     },
     "AvailConfiguration": {
-      "base": null,
+      "base": "Avail Configuration",
       "refs": {
         "EncoderSettings$AvailConfiguration": "Event-wide configuration settings for ad avail insertion."
       }
     },
     "AvailSettings": {
-      "base": null,
+      "base": "Avail Settings",
       "refs": {
         "AvailConfiguration$AvailSettings": "Ad avail settings."
       }
@@ -291,13 +297,13 @@
       }
     },
     "BatchScheduleActionCreateRequest": {
-      "base": "A list of schedule actions to create.",
+      "base": "A list of schedule actions to create (in a request) or that have been created (in a response).",
       "refs": {
         "BatchUpdateScheduleRequest$Creates": "Schedule actions to create in the schedule."
       }
     },
     "BatchScheduleActionCreateResult": {
-      "base": "Returned list of created schedule actions.",
+      "base": "List of actions that have been created in the schedule.",
       "refs": {
         "BatchUpdateScheduleResult$Creates": "Schedule actions created in the schedule."
       }
@@ -309,13 +315,13 @@
       }
     },
     "BatchScheduleActionDeleteResult": {
-      "base": "Returned list of deleted schedule actions.",
+      "base": "List of actions that have been deleted from the schedule.",
       "refs": {
         "BatchUpdateScheduleResult$Deletes": "Schedule actions deleted from the schedule."
       }
     },
     "BatchUpdateScheduleRequest": {
-      "base": "A schedule update, including actions to insert, and action names to delete.",
+      "base": "A request to create actions (add actions to the schedule), delete actions (remove actions from the schedule), or both create and delete actions.",
       "refs": {
       }
     },
@@ -325,61 +331,61 @@
       }
     },
     "BlackoutSlate": {
-      "base": null,
+      "base": "Blackout Slate",
       "refs": {
         "EncoderSettings$BlackoutSlate": "Settings for blackout slate."
       }
     },
     "BlackoutSlateNetworkEndBlackout": {
-      "base": null,
+      "base": "Blackout Slate Network End Blackout",
       "refs": {
         "BlackoutSlate$NetworkEndBlackout": "Setting to enabled causes the encoder to blackout the video, audio, and captions, and raise the \"Network Blackout Image\" slate when an SCTE104/35 Network End Segmentation Descriptor is encountered. The blackout will be lifted when the Network Start Segmentation Descriptor is encountered. The Network End and Network Start descriptors must contain a network ID that matches the value entered in \"Network ID\"."
       }
     },
     "BlackoutSlateState": {
-      "base": null,
+      "base": "Blackout Slate State",
       "refs": {
         "BlackoutSlate$State": "When set to enabled, causes video, audio and captions to be blanked when indicated by program metadata."
       }
     },
     "BurnInAlignment": {
-      "base": null,
+      "base": "Burn In Alignment",
       "refs": {
         "BurnInDestinationSettings$Alignment": "If no explicit xPosition or yPosition is provided, setting alignment to centered will place the captions at the bottom center of the output. Similarly, setting a left alignment will align captions to the bottom left of the output. If x and y positions are given in conjunction with the alignment parameter, the font will be justified (either left or centered) relative to those coordinates. Selecting \"smart\" justification will left-justify live subtitles and center-justify pre-recorded subtitles.  All burn-in and DVB-Sub font settings must match."
       }
     },
     "BurnInBackgroundColor": {
-      "base": null,
+      "base": "Burn In Background Color",
       "refs": {
         "BurnInDestinationSettings$BackgroundColor": "Specifies the color of the rectangle behind the captions.  All burn-in and DVB-Sub font settings must match."
       }
     },
     "BurnInDestinationSettings": {
-      "base": null,
+      "base": "Burn In Destination Settings",
       "refs": {
         "CaptionDestinationSettings$BurnInDestinationSettings": null
       }
     },
     "BurnInFontColor": {
-      "base": null,
+      "base": "Burn In Font Color",
       "refs": {
         "BurnInDestinationSettings$FontColor": "Specifies the color of the burned-in captions.  This option is not valid for source captions that are STL, 608/embedded or teletext.  These source settings are already pre-defined by the caption stream.  All burn-in and DVB-Sub font settings must match."
       }
     },
     "BurnInOutlineColor": {
-      "base": null,
+      "base": "Burn In Outline Color",
       "refs": {
         "BurnInDestinationSettings$OutlineColor": "Specifies font outline color. This option is not valid for source captions that are either 608/embedded or teletext. These source settings are already pre-defined by the caption stream. All burn-in and DVB-Sub font settings must match."
       }
     },
     "BurnInShadowColor": {
-      "base": null,
+      "base": "Burn In Shadow Color",
       "refs": {
         "BurnInDestinationSettings$ShadowColor": "Specifies the color of the shadow cast by the captions.  All burn-in and DVB-Sub font settings must match."
       }
     },
     "BurnInTeletextGridControl": {
-      "base": null,
+      "base": "Burn In Teletext Grid Control",
       "refs": {
         "BurnInDestinationSettings$TeletextGridControl": "Controls whether a fixed grid size will be used to generate the output subtitles bitmap. Only applicable for Teletext inputs and DVB-Sub/Burn-in outputs."
       }
@@ -391,7 +397,7 @@
       }
     },
     "CaptionDestinationSettings": {
-      "base": null,
+      "base": "Caption Destination Settings",
       "refs": {
         "CaptionDescription$DestinationSettings": "Additional settings for captions destination that depend on the destination type."
       }
@@ -409,7 +415,7 @@
       }
     },
     "CaptionSelectorSettings": {
-      "base": null,
+      "base": "Caption Selector Settings",
       "refs": {
         "CaptionSelector$SelectorSettings": "Caption selector settings."
       }
@@ -419,6 +425,16 @@
       "refs": {
         "CreateChannelResultModel$Channel": null,
         "UpdateChannelResultModel$Channel": null
+      }
+    },
+    "ChannelClass": {
+      "base": "A standard channel has two encoding pipelines and a single pipeline channel only has one.",
+      "refs": {
+        "Channel$ChannelClass": "The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.",
+        "ChannelSummary$ChannelClass": "The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.",
+        "CreateChannel$ChannelClass": "The class for this channel. STANDARD for a channel with two pipelines or SINGLE_PIPELINE for a channel with one pipeline.",
+        "ReservationResourceSpecification$ChannelClass": "Channel class, e.g. 'STANDARD'",
+        "UpdateChannelClass$ChannelClass": "The channel class that you wish to update this channel to use."
       }
     },
     "ChannelConfigurationValidationError": {
@@ -482,7 +498,7 @@
       }
     },
     "DvbSdtOutputSdt": {
-      "base": null,
+      "base": "Dvb Sdt Output Sdt",
       "refs": {
         "DvbSdtSettings$OutputSdt": "Selects method of inserting SDT information into output stream. The sdtFollow setting copies SDT information from input stream to output stream. The sdtFollowIfPresent setting copies SDT information from input stream to output stream if SDT information is present in the input, otherwise it will fall back on the user-defined values. The sdtManual setting means user will enter the SDT information. The sdtNone setting means output stream will not contain SDT information."
       }
@@ -494,49 +510,49 @@
       }
     },
     "DvbSubDestinationAlignment": {
-      "base": null,
+      "base": "Dvb Sub Destination Alignment",
       "refs": {
         "DvbSubDestinationSettings$Alignment": "If no explicit xPosition or yPosition is provided, setting alignment to centered will place the captions at the bottom center of the output. Similarly, setting a left alignment will align captions to the bottom left of the output. If x and y positions are given in conjunction with the alignment parameter, the font will be justified (either left or centered) relative to those coordinates. Selecting \"smart\" justification will left-justify live subtitles and center-justify pre-recorded subtitles.  This option is not valid for source captions that are STL or 608/embedded.  These source settings are already pre-defined by the caption stream.  All burn-in and DVB-Sub font settings must match."
       }
     },
     "DvbSubDestinationBackgroundColor": {
-      "base": null,
+      "base": "Dvb Sub Destination Background Color",
       "refs": {
         "DvbSubDestinationSettings$BackgroundColor": "Specifies the color of the rectangle behind the captions.  All burn-in and DVB-Sub font settings must match."
       }
     },
     "DvbSubDestinationFontColor": {
-      "base": null,
+      "base": "Dvb Sub Destination Font Color",
       "refs": {
         "DvbSubDestinationSettings$FontColor": "Specifies the color of the burned-in captions.  This option is not valid for source captions that are STL, 608/embedded or teletext.  These source settings are already pre-defined by the caption stream.  All burn-in and DVB-Sub font settings must match."
       }
     },
     "DvbSubDestinationOutlineColor": {
-      "base": null,
+      "base": "Dvb Sub Destination Outline Color",
       "refs": {
         "DvbSubDestinationSettings$OutlineColor": "Specifies font outline color. This option is not valid for source captions that are either 608/embedded or teletext. These source settings are already pre-defined by the caption stream. All burn-in and DVB-Sub font settings must match."
       }
     },
     "DvbSubDestinationSettings": {
-      "base": null,
+      "base": "Dvb Sub Destination Settings",
       "refs": {
         "CaptionDestinationSettings$DvbSubDestinationSettings": null
       }
     },
     "DvbSubDestinationShadowColor": {
-      "base": null,
+      "base": "Dvb Sub Destination Shadow Color",
       "refs": {
         "DvbSubDestinationSettings$ShadowColor": "Specifies the color of the shadow cast by the captions.  All burn-in and DVB-Sub font settings must match."
       }
     },
     "DvbSubDestinationTeletextGridControl": {
-      "base": null,
+      "base": "Dvb Sub Destination Teletext Grid Control",
       "refs": {
         "DvbSubDestinationSettings$TeletextGridControl": "Controls whether a fixed grid size will be used to generate the output subtitles bitmap. Only applicable for Teletext inputs and DVB-Sub/Burn-in outputs."
       }
     },
     "DvbSubSourceSettings": {
-      "base": null,
+      "base": "Dvb Sub Source Settings",
       "refs": {
         "CaptionSelectorSettings$DvbSubSourceSettings": null
       }
@@ -548,121 +564,121 @@
       }
     },
     "Eac3AttenuationControl": {
-      "base": null,
+      "base": "Eac3 Attenuation Control",
       "refs": {
         "Eac3Settings$AttenuationControl": "When set to attenuate3Db, applies a 3 dB attenuation to the surround channels. Only used for 3/2 coding mode."
       }
     },
     "Eac3BitstreamMode": {
-      "base": null,
+      "base": "Eac3 Bitstream Mode",
       "refs": {
         "Eac3Settings$BitstreamMode": "Specifies the bitstream mode (bsmod) for the emitted E-AC-3 stream. See ATSC A/52-2012 (Annex E) for background on these values."
       }
     },
     "Eac3CodingMode": {
-      "base": null,
+      "base": "Eac3 Coding Mode",
       "refs": {
         "Eac3Settings$CodingMode": "Dolby Digital Plus coding mode. Determines number of channels."
       }
     },
     "Eac3DcFilter": {
-      "base": null,
+      "base": "Eac3 Dc Filter",
       "refs": {
         "Eac3Settings$DcFilter": "When set to enabled, activates a DC highpass filter for all input channels."
       }
     },
     "Eac3DrcLine": {
-      "base": null,
+      "base": "Eac3 Drc Line",
       "refs": {
         "Eac3Settings$DrcLine": "Sets the Dolby dynamic range compression profile."
       }
     },
     "Eac3DrcRf": {
-      "base": null,
+      "base": "Eac3 Drc Rf",
       "refs": {
         "Eac3Settings$DrcRf": "Sets the profile for heavy Dolby dynamic range compression, ensures that the instantaneous signal peaks do not exceed specified levels."
       }
     },
     "Eac3LfeControl": {
-      "base": null,
+      "base": "Eac3 Lfe Control",
       "refs": {
         "Eac3Settings$LfeControl": "When encoding 3/2 audio, setting to lfe enables the LFE channel"
       }
     },
     "Eac3LfeFilter": {
-      "base": null,
+      "base": "Eac3 Lfe Filter",
       "refs": {
         "Eac3Settings$LfeFilter": "When set to enabled, applies a 120Hz lowpass filter to the LFE channel prior to encoding. Only valid with codingMode32 coding mode."
       }
     },
     "Eac3MetadataControl": {
-      "base": null,
+      "base": "Eac3 Metadata Control",
       "refs": {
         "Eac3Settings$MetadataControl": "When set to followInput, encoder metadata will be sourced from the DD, DD+, or DolbyE decoder that supplied this audio data. If audio was not supplied from one of these streams, then the static metadata settings will be used."
       }
     },
     "Eac3PassthroughControl": {
-      "base": null,
+      "base": "Eac3 Passthrough Control",
       "refs": {
         "Eac3Settings$PassthroughControl": "When set to whenPossible, input DD+ audio will be passed through if it is present on the input. This detection is dynamic over the life of the transcode. Inputs that alternate between DD+ and non-DD+ content will have a consistent DD+ output as the system alternates between passthrough and encoding."
       }
     },
     "Eac3PhaseControl": {
-      "base": null,
+      "base": "Eac3 Phase Control",
       "refs": {
         "Eac3Settings$PhaseControl": "When set to shift90Degrees, applies a 90-degree phase shift to the surround channels. Only used for 3/2 coding mode."
       }
     },
     "Eac3Settings": {
-      "base": null,
+      "base": "Eac3 Settings",
       "refs": {
         "AudioCodecSettings$Eac3Settings": null
       }
     },
     "Eac3StereoDownmix": {
-      "base": null,
+      "base": "Eac3 Stereo Downmix",
       "refs": {
         "Eac3Settings$StereoDownmix": "Stereo downmix preference. Only used for 3/2 coding mode."
       }
     },
     "Eac3SurroundExMode": {
-      "base": null,
+      "base": "Eac3 Surround Ex Mode",
       "refs": {
         "Eac3Settings$SurroundExMode": "When encoding 3/2 audio, sets whether an extra center back surround channel is matrix encoded into the left and right surround channels."
       }
     },
     "Eac3SurroundMode": {
-      "base": null,
+      "base": "Eac3 Surround Mode",
       "refs": {
         "Eac3Settings$SurroundMode": "When encoding 2/0 audio, sets whether Dolby Surround is matrix encoded into the two channels."
       }
     },
     "EmbeddedConvert608To708": {
-      "base": null,
+      "base": "Embedded Convert608 To708",
       "refs": {
         "EmbeddedSourceSettings$Convert608To708": "If upconvert, 608 data is both passed through via the \"608 compatibility bytes\" fields of the 708 wrapper as well as translated into 708. 708 data present in the source content will be discarded."
       }
     },
     "EmbeddedDestinationSettings": {
-      "base": null,
+      "base": "Embedded Destination Settings",
       "refs": {
         "CaptionDestinationSettings$EmbeddedDestinationSettings": null
       }
     },
     "EmbeddedPlusScte20DestinationSettings": {
-      "base": null,
+      "base": "Embedded Plus Scte20 Destination Settings",
       "refs": {
         "CaptionDestinationSettings$EmbeddedPlusScte20DestinationSettings": null
       }
     },
     "EmbeddedScte20Detection": {
-      "base": null,
+      "base": "Embedded Scte20 Detection",
       "refs": {
         "EmbeddedSourceSettings$Scte20Detection": "Set to \"auto\" to handle streams with intermittent and/or non-aligned SCTE-20 and Embedded captions."
       }
     },
     "EmbeddedSourceSettings": {
-      "base": null,
+      "base": "Embedded Source Settings",
       "refs": {
         "CaptionSelectorSettings$EmbeddedSourceSettings": null
       }
@@ -673,7 +689,7 @@
       }
     },
     "EncoderSettings": {
-      "base": null,
+      "base": "Encoder Settings",
       "refs": {
         "Channel$EncoderSettings": null,
         "CreateChannel$EncoderSettings": null,
@@ -681,32 +697,62 @@
       }
     },
     "FecOutputIncludeFec": {
-      "base": null,
+      "base": "Fec Output Include Fec",
       "refs": {
         "FecOutputSettings$IncludeFec": "Enables column only or column and row based FEC"
       }
     },
     "FecOutputSettings": {
-      "base": null,
+      "base": "Fec Output Settings",
       "refs": {
         "UdpOutputSettings$FecOutputSettings": "Settings for enabling and adjusting Forward Error Correction on UDP outputs."
       }
     },
     "FixedAfd": {
-      "base": null,
+      "base": "Fixed Afd",
       "refs": {
         "H264Settings$FixedAfd": "Four bit AFD value to write on all frames of video in the output stream. Only valid when afdSignaling is set to 'Fixed'."
       }
     },
     "FixedModeScheduleActionStartSettings": {
-      "base": "Fixed mode schedule action start settings",
+      "base": "Start time for the action.",
       "refs": {
-        "ScheduleActionStartSettings$FixedModeScheduleActionStartSettings": "Fixed timestamp action start. Conforms to ISO-8601."
+        "ScheduleActionStartSettings$FixedModeScheduleActionStartSettings": "Holds the start time for the action."
+      }
+    },
+    "FollowModeScheduleActionStartSettings": {
+      "base": "Settings to specify if an action follows another.",
+      "refs": {
+        "ScheduleActionStartSettings$FollowModeScheduleActionStartSettings": "Specifies an action to follow for scheduling this action."
+      }
+    },
+    "FollowPoint": {
+      "base": "Follow reference point.",
+      "refs": {
+        "FollowModeScheduleActionStartSettings$FollowPoint": "Identifies whether this action starts relative to the start or relative to the end of the reference action."
       }
     },
     "ForbiddenException": {
       "base": null,
       "refs": {
+      }
+    },
+    "FrameCaptureGroupSettings": {
+      "base": "Frame Capture Group Settings",
+      "refs": {
+        "OutputGroupSettings$FrameCaptureGroupSettings": null
+      }
+    },
+    "FrameCaptureOutputSettings": {
+      "base": "Frame Capture Output Settings",
+      "refs": {
+        "OutputSettings$FrameCaptureOutputSettings": null
+      }
+    },
+    "FrameCaptureSettings": {
+      "base": "Frame Capture Settings",
+      "refs": {
+        "VideoCodecSettings$FrameCaptureSettings": null
       }
     },
     "GatewayTimeoutException": {
@@ -715,315 +761,345 @@
       }
     },
     "GlobalConfiguration": {
-      "base": null,
+      "base": "Global Configuration",
       "refs": {
         "EncoderSettings$GlobalConfiguration": "Configuration settings that apply to the event as a whole."
       }
     },
     "GlobalConfigurationInputEndAction": {
-      "base": null,
+      "base": "Global Configuration Input End Action",
       "refs": {
-        "GlobalConfiguration$InputEndAction": "Indicates the action to take when an input completes (e.g. end-of-file.) Options include immediately switching to the next sequential input (via \"switchInput\"), switching to the next input and looping back to the first input when last input ends (via \"switchAndLoopInputs\") or not switching inputs and instead transcoding black / color / slate images per the \"Input Loss Behavior\" configuration until an activateInput REST command is received (via \"none\")."
+        "GlobalConfiguration$InputEndAction": "Indicates the action to take when the current input completes (e.g. end-of-file). When switchAndLoopInputs is configured the encoder will restart at the beginning of the first input.  When \"none\" is configured the encoder will transcode either black, a solid color, or a user specified slate images per the \"Input Loss Behavior\" configuration until the next input switch occurs (which is controlled through the Channel Schedule API)."
       }
     },
     "GlobalConfigurationLowFramerateInputs": {
-      "base": null,
+      "base": "Global Configuration Low Framerate Inputs",
       "refs": {
         "GlobalConfiguration$SupportLowFramerateInputs": "Adjusts video input buffer for streams with very low video framerates. This is commonly set to enabled for music channels with less than one video frame per second."
       }
     },
+    "GlobalConfigurationOutputLockingMode": {
+      "base": "Global Configuration Output Locking Mode",
+      "refs": {
+        "GlobalConfiguration$OutputLockingMode": "Indicates how MediaLive pipelines are synchronized.\n\nPIPELINELOCKING - MediaLive will attempt to synchronize the output of each pipeline to the other.\nEPOCHLOCKING - MediaLive will attempt to synchronize the output of each pipeline to the Unix epoch."
+      }
+    },
     "GlobalConfigurationOutputTimingSource": {
-      "base": null,
+      "base": "Global Configuration Output Timing Source",
       "refs": {
         "GlobalConfiguration$OutputTimingSource": "Indicates whether the rate of frames emitted by the Live encoder should be paced by its system clock (which optionally may be locked to another source via NTP) or should be locked to the clock of the source that is providing the input stream."
       }
     },
     "H264AdaptiveQuantization": {
-      "base": null,
+      "base": "H264 Adaptive Quantization",
       "refs": {
         "H264Settings$AdaptiveQuantization": "Adaptive quantization. Allows intra-frame quantizers to vary to improve visual quality."
       }
     },
     "H264ColorMetadata": {
-      "base": null,
+      "base": "H264 Color Metadata",
       "refs": {
         "H264Settings$ColorMetadata": "Includes colorspace metadata in the output."
       }
     },
     "H264EntropyEncoding": {
-      "base": null,
+      "base": "H264 Entropy Encoding",
       "refs": {
         "H264Settings$EntropyEncoding": "Entropy encoding mode.  Use cabac (must be in Main or High profile) or cavlc."
       }
     },
     "H264FlickerAq": {
-      "base": null,
+      "base": "H264 Flicker Aq",
       "refs": {
         "H264Settings$FlickerAq": "If set to enabled, adjust quantization within each frame to reduce flicker or 'pop' on I-frames."
       }
     },
     "H264FramerateControl": {
-      "base": null,
+      "base": "H264 Framerate Control",
       "refs": {
         "H264Settings$FramerateControl": "This field indicates how the output video frame rate is specified.  If \"specified\" is selected then the output video frame rate is determined by framerateNumerator and framerateDenominator, else if \"initializeFromSource\" is selected then the output video frame rate will be set equal to the input video frame rate of the first input."
       }
     },
     "H264GopBReference": {
-      "base": null,
+      "base": "H264 Gop BReference",
       "refs": {
         "H264Settings$GopBReference": "If enabled, use reference B frames for GOP structures that have B frames > 1."
       }
     },
     "H264GopSizeUnits": {
-      "base": null,
+      "base": "H264 Gop Size Units",
       "refs": {
         "H264Settings$GopSizeUnits": "Indicates if the gopSize is specified in frames or seconds. If seconds the system will convert the gopSize into a frame count at run time."
       }
     },
     "H264Level": {
-      "base": null,
+      "base": "H264 Level",
       "refs": {
         "H264Settings$Level": "H.264 Level."
       }
     },
     "H264LookAheadRateControl": {
-      "base": null,
+      "base": "H264 Look Ahead Rate Control",
       "refs": {
         "H264Settings$LookAheadRateControl": "Amount of lookahead. A value of low can decrease latency and memory usage, while high can produce better quality for certain content."
       }
     },
     "H264ParControl": {
-      "base": null,
+      "base": "H264 Par Control",
       "refs": {
         "H264Settings$ParControl": "This field indicates how the output pixel aspect ratio is specified.  If \"specified\" is selected then the output video pixel aspect ratio is determined by parNumerator and parDenominator, else if \"initializeFromSource\" is selected then the output pixsel aspect ratio will be set equal to the input video pixel aspect ratio of the first input."
       }
     },
     "H264Profile": {
-      "base": null,
+      "base": "H264 Profile",
       "refs": {
         "H264Settings$Profile": "H.264 Profile."
       }
     },
     "H264RateControlMode": {
-      "base": null,
+      "base": "H264 Rate Control Mode",
       "refs": {
-        "H264Settings$RateControlMode": "Rate control mode."
+        "H264Settings$RateControlMode": "Rate control mode. \n\nQVBR: Quality will match the specified quality level except when it is constrained by the\nmaximum bitrate.  Recommended if you or your viewers pay for bandwidth.\n\nVBR: Quality and bitrate vary, depending on the video complexity. Recommended instead of QVBR\nif you want to maintain a specific average bitrate over the duration of the channel.\n\nCBR: Quality varies, depending on the video complexity. Recommended only if you distribute\nyour assets to devices that cannot handle variable bitrates."
       }
     },
     "H264ScanType": {
-      "base": null,
+      "base": "H264 Scan Type",
       "refs": {
         "H264Settings$ScanType": "Sets the scan type of the output to progressive or top-field-first interlaced."
       }
     },
     "H264SceneChangeDetect": {
-      "base": null,
+      "base": "H264 Scene Change Detect",
       "refs": {
-        "H264Settings$SceneChangeDetect": "Scene change detection.  Inserts I-frames on scene changes when enabled."
+        "H264Settings$SceneChangeDetect": "Scene change detection.\n\n- On: inserts I-frames when scene change is detected.\n- Off: does not force an I-frame when scene change is detected."
       }
     },
     "H264Settings": {
-      "base": null,
+      "base": "H264 Settings",
       "refs": {
         "VideoCodecSettings$H264Settings": null
       }
     },
     "H264SpatialAq": {
-      "base": null,
+      "base": "H264 Spatial Aq",
       "refs": {
         "H264Settings$SpatialAq": "If set to enabled, adjust quantization within each frame based on spatial variation of content complexity."
       }
     },
+    "H264SubGopLength": {
+      "base": "H264 Sub Gop Length",
+      "refs": {
+        "H264Settings$SubgopLength": "If set to fixed, use gopNumBFrames B-frames per sub-GOP. If set to dynamic, optimize the number of B-frames used for each sub-GOP to improve visual quality."
+      }
+    },
     "H264Syntax": {
-      "base": null,
+      "base": "H264 Syntax",
       "refs": {
         "H264Settings$Syntax": "Produces a bitstream compliant with SMPTE RP-2027."
       }
     },
     "H264TemporalAq": {
-      "base": null,
+      "base": "H264 Temporal Aq",
       "refs": {
         "H264Settings$TemporalAq": "If set to enabled, adjust quantization within each frame based on temporal variation of content complexity."
       }
     },
     "H264TimecodeInsertionBehavior": {
-      "base": null,
+      "base": "H264 Timecode Insertion Behavior",
       "refs": {
         "H264Settings$TimecodeInsertion": "Determines how timecodes should be inserted into the video elementary stream.\n- 'disabled': Do not include timecodes\n- 'picTimingSei': Pass through picture timing SEI messages from the source specified in Timecode Config"
       }
     },
     "HlsAdMarkers": {
-      "base": null,
+      "base": "Hls Ad Markers",
       "refs": {
         "__listOfHlsAdMarkers$member": null
       }
     },
     "HlsAkamaiHttpTransferMode": {
-      "base": null,
+      "base": "Hls Akamai Http Transfer Mode",
       "refs": {
         "HlsAkamaiSettings$HttpTransferMode": "Specify whether or not to use chunked transfer encoding to Akamai. User should contact Akamai to enable this feature."
       }
     },
     "HlsAkamaiSettings": {
-      "base": null,
+      "base": "Hls Akamai Settings",
       "refs": {
         "HlsCdnSettings$HlsAkamaiSettings": null
       }
     },
     "HlsBasicPutSettings": {
-      "base": null,
+      "base": "Hls Basic Put Settings",
       "refs": {
         "HlsCdnSettings$HlsBasicPutSettings": null
       }
     },
     "HlsCaptionLanguageSetting": {
-      "base": null,
+      "base": "Hls Caption Language Setting",
       "refs": {
         "HlsGroupSettings$CaptionLanguageSetting": "Applies only to 608 Embedded output captions.\ninsert: Include CLOSED-CAPTIONS lines in the manifest. Specify at least one language in the CC1 Language Code field. One CLOSED-CAPTION line is added for each Language Code you specify. Make sure to specify the languages in the order in which they appear in the original source (if the source is embedded format) or the order of the caption selectors (if the source is other than embedded). Otherwise, languages in the manifest will not match up properly with the output captions.\nnone: Include CLOSED-CAPTIONS=NONE line in the manifest.\nomit: Omit any CLOSED-CAPTIONS line from the manifest."
       }
     },
     "HlsCdnSettings": {
-      "base": null,
+      "base": "Hls Cdn Settings",
       "refs": {
         "HlsGroupSettings$HlsCdnSettings": "Parameters that control interactions with the CDN."
       }
     },
     "HlsClientCache": {
-      "base": null,
+      "base": "Hls Client Cache",
       "refs": {
         "HlsGroupSettings$ClientCache": "When set to \"disabled\", sets the #EXT-X-ALLOW-CACHE:no tag in the manifest, which prevents clients from saving media segments for later replay."
       }
     },
     "HlsCodecSpecification": {
-      "base": null,
+      "base": "Hls Codec Specification",
       "refs": {
         "HlsGroupSettings$CodecSpecification": "Specification to use (RFC-6381 or the default RFC-4281) during m3u8 playlist generation."
       }
     },
     "HlsDirectoryStructure": {
-      "base": null,
+      "base": "Hls Directory Structure",
       "refs": {
         "HlsGroupSettings$DirectoryStructure": "Place segments in subdirectories."
       }
     },
     "HlsEncryptionType": {
-      "base": null,
+      "base": "Hls Encryption Type",
       "refs": {
         "HlsGroupSettings$EncryptionType": "Encrypts the segments with the given encryption scheme.  Exclude this parameter if no encryption is desired."
       }
     },
     "HlsGroupSettings": {
-      "base": null,
+      "base": "Hls Group Settings",
       "refs": {
         "OutputGroupSettings$HlsGroupSettings": null
       }
     },
     "HlsInputSettings": {
-      "base": null,
+      "base": "Hls Input Settings",
       "refs": {
         "NetworkInputSettings$HlsInputSettings": "Specifies HLS input settings when the uri is for a HLS manifest."
       }
     },
     "HlsIvInManifest": {
-      "base": null,
+      "base": "Hls Iv In Manifest",
       "refs": {
         "HlsGroupSettings$IvInManifest": "For use with encryptionType. The IV (Initialization Vector) is a 128-bit number used in conjunction with the key for encrypting blocks. If set to \"include\", IV is listed in the manifest, otherwise the IV is not in the manifest."
       }
     },
     "HlsIvSource": {
-      "base": null,
+      "base": "Hls Iv Source",
       "refs": {
         "HlsGroupSettings$IvSource": "For use with encryptionType. The IV (Initialization Vector) is a 128-bit number used in conjunction with the key for encrypting blocks. If this setting is \"followsSegmentNumber\", it will cause the IV to change every segment (to match the segment number). If this is set to \"explicit\", you must enter a constantIv value."
       }
     },
     "HlsManifestCompression": {
-      "base": null,
+      "base": "Hls Manifest Compression",
       "refs": {
         "HlsGroupSettings$ManifestCompression": "When set to gzip, compresses HLS playlist."
       }
     },
     "HlsManifestDurationFormat": {
-      "base": null,
+      "base": "Hls Manifest Duration Format",
       "refs": {
         "HlsGroupSettings$ManifestDurationFormat": "Indicates whether the output manifest should use floating point or integer values for segment duration."
       }
     },
     "HlsMediaStoreSettings": {
-      "base": null,
+      "base": "Hls Media Store Settings",
       "refs": {
         "HlsCdnSettings$HlsMediaStoreSettings": null
       }
     },
     "HlsMediaStoreStorageClass": {
-      "base": null,
+      "base": "Hls Media Store Storage Class",
       "refs": {
         "HlsMediaStoreSettings$MediaStoreStorageClass": "When set to temporal, output files are stored in non-persistent memory for faster reading and writing."
       }
     },
     "HlsMode": {
-      "base": null,
+      "base": "Hls Mode",
       "refs": {
         "HlsGroupSettings$Mode": "If \"vod\", all segments are indexed and kept permanently in the destination and manifest. If \"live\", only the number segments specified in keepSegments and indexNSegments are kept; newer segments replace older segments, which may prevent players from rewinding all the way to the beginning of the event.\n\nVOD mode uses HLS EXT-X-PLAYLIST-TYPE of EVENT while the channel is running, converting it to a \"VOD\" type manifest on completion of the stream."
       }
     },
     "HlsOutputSelection": {
-      "base": null,
+      "base": "Hls Output Selection",
       "refs": {
-        "HlsGroupSettings$OutputSelection": "Generates the .m3u8 playlist file for this HLS output group. The segmentsOnly option will output segments without the .m3u8 file."
+        "HlsGroupSettings$OutputSelection": "MANIFESTSANDSEGMENTS: Generates manifests (master manifest, if applicable, and media manifests) for this output group.\n\nSEGMENTSONLY: Does not generate any manifests for this output group."
       }
     },
     "HlsOutputSettings": {
-      "base": null,
+      "base": "Hls Output Settings",
       "refs": {
         "OutputSettings$HlsOutputSettings": null
       }
     },
     "HlsProgramDateTime": {
-      "base": null,
+      "base": "Hls Program Date Time",
       "refs": {
         "HlsGroupSettings$ProgramDateTime": "Includes or excludes EXT-X-PROGRAM-DATE-TIME tag in .m3u8 manifest files. The value is calculated as follows: either the program date and time are initialized using the input timecode source, or the time is initialized using the input timecode source and the date is initialized using the timestampOffset."
       }
     },
-    "HlsSegmentationMode": {
-      "base": null,
+    "HlsRedundantManifest": {
+      "base": "Hls Redundant Manifest",
       "refs": {
-        "HlsGroupSettings$SegmentationMode": "When set to useInputSegmentation, the output segment or fragment points are set by the RAI markers from the input streams."
+        "HlsGroupSettings$RedundantManifest": "ENABLED: The master manifest (.m3u8 file) for each pipeline includes information about both pipelines: first its own media files, then the media files of the other pipeline. This feature allows playout device that support stale manifest detection to switch from one manifest to the other, when the current manifest seems to be stale. There are still two destinations and two master manifests, but both master manifests reference the media files from both pipelines.\n\nDISABLED: The master manifest (.m3u8 file) for each pipeline includes information about its own pipeline only.\n\nFor an HLS output group with MediaPackage as the destination, the DISABLED behavior is always followed. MediaPackage regenerates the manifests it serves to players so a redundant manifest from MediaLive is irrelevant."
+      }
+    },
+    "HlsSegmentationMode": {
+      "base": "Hls Segmentation Mode",
+      "refs": {
+        "HlsGroupSettings$SegmentationMode": "useInputSegmentation has been deprecated. The configured segment size is always used."
       }
     },
     "HlsSettings": {
-      "base": null,
+      "base": "Hls Settings",
       "refs": {
         "HlsOutputSettings$HlsSettings": "Settings regarding the underlying stream. These settings are different for audio-only outputs."
       }
     },
     "HlsStreamInfResolution": {
-      "base": null,
+      "base": "Hls Stream Inf Resolution",
       "refs": {
         "HlsGroupSettings$StreamInfResolution": "Include or exclude RESOLUTION attribute for video in EXT-X-STREAM-INF tag of variant manifest."
       }
     },
     "HlsTimedMetadataId3Frame": {
-      "base": null,
+      "base": "Hls Timed Metadata Id3 Frame",
       "refs": {
         "HlsGroupSettings$TimedMetadataId3Frame": "Indicates ID3 frame that has the timecode."
       }
     },
-    "HlsTsFileMode": {
-      "base": null,
+    "HlsTimedMetadataScheduleActionSettings": {
+      "base": "Settings for the action to emit HLS metadata",
       "refs": {
-        "HlsGroupSettings$TsFileMode": "When set to \"singleFile\", emits the program as a single media resource (.ts) file, and uses #EXT-X-BYTERANGE tags to index segment for playback. Playback of VOD mode content during event is not guaranteed due to HTTP server caching."
+        "ScheduleActionSettings$HlsTimedMetadataSettings": "Action to insert HLS metadata"
+      }
+    },
+    "HlsTsFileMode": {
+      "base": "Hls Ts File Mode",
+      "refs": {
+        "HlsGroupSettings$TsFileMode": "SEGMENTEDFILES: Emit the program as segments - multiple .ts media files.\n\nSINGLEFILE: Applies only if Mode field is VOD. Emit the program as a single .ts media file. The media manifest includes #EXT-X-BYTERANGE tags to index segments for playback. A typical use for this value is when sending the output to AWS Elemental MediaConvert, which can accept only a single media file. Playback while the channel is running is not guaranteed due to HTTP server caching."
       }
     },
     "HlsWebdavHttpTransferMode": {
-      "base": null,
+      "base": "Hls Webdav Http Transfer Mode",
       "refs": {
         "HlsWebdavSettings$HttpTransferMode": "Specify whether or not to use chunked transfer encoding to WebDAV."
       }
     },
     "HlsWebdavSettings": {
-      "base": null,
+      "base": "Hls Webdav Settings",
       "refs": {
         "HlsCdnSettings$HlsWebdavSettings": null
+      }
+    },
+    "IFrameOnlyPlaylistType": {
+      "base": "When set to \"standard\", an I-Frame only playlist will be written out for each video output in the output group. This I-Frame only playlist will contain byte range offsets pointing to the I-frame(s) in each segment.",
+      "refs": {
+        "HlsGroupSettings$IFrameOnlyPlaylists": "DISABLED: Do not create an I-frame-only manifest, but do create the master and media manifests (according to the Output Selection field).\n\nSTANDARD: Create an I-frame-only manifest for each output that contains video, as well as the other manifests (according to the Output Selection field). The I-frame manifest contains a #EXT-X-I-FRAMES-ONLY tag to indicate it is I-frame only, and one or more #EXT-X-BYTERANGE entries identifying the I-frame position. For example, #EXT-X-BYTERANGE:160364@1461888\""
       }
     },
     "Input": {
@@ -1041,9 +1117,15 @@
       }
     },
     "InputChannelLevel": {
-      "base": null,
+      "base": "Input Channel Level",
       "refs": {
         "__listOfInputChannelLevel$member": null
+      }
+    },
+    "InputClass": {
+      "base": "A standard input has two sources and a single pipeline input only has one.",
+      "refs": {
+        "Input$InputClass": "STANDARD - MediaLive expects two sources to be connected to this input. If the channel is also STANDARD, both sources will be ingested. If the channel is SINGLE_PIPELINE, only the first source will be ingested; the second source will always be ignored, even if the first source fails.\nSINGLE_PIPELINE - You can connect only one source to this input. If the ChannelClass is also  SINGLE_PIPELINE, this value is valid. If the ChannelClass is STANDARD, this value is not valid because the channel requires two sources in the input.\n"
       }
     },
     "InputCodec": {
@@ -1053,13 +1135,13 @@
       }
     },
     "InputDeblockFilter": {
-      "base": null,
+      "base": "Input Deblock Filter",
       "refs": {
         "InputSettings$DeblockFilter": "Enable or disable the deblock filter when filtering."
       }
     },
     "InputDenoiseFilter": {
-      "base": null,
+      "base": "Input Denoise Filter",
       "refs": {
         "InputSettings$DenoiseFilter": "Enable or disable the denoise filter when filtering."
       }
@@ -1076,14 +1158,20 @@
         "__listOfInputDestinationRequest$member": null
       }
     },
+    "InputDestinationVpc": {
+      "base": "The properties for a VPC type input destination.",
+      "refs": {
+        "InputDestination$Vpc": null
+      }
+    },
     "InputFilter": {
-      "base": null,
+      "base": "Input Filter",
       "refs": {
         "InputSettings$InputFilter": "Turns on the filter for this input. MPEG-2 inputs have the deblocking filter enabled by default.\n1) auto - filtering will be applied depending on input type/quality\n2) disabled - no filtering will be applied to the input\n3) forced - filtering will be applied regardless of input type"
       }
     },
     "InputLocation": {
-      "base": null,
+      "base": "Input Location",
       "refs": {
         "AudioOnlyHlsSettings$AudioOnlyImage": "For use with an audio only Stream. Must be a .jpg or .png file. If given, this image will be used as the cover-art for the audio only output. Ideally, it should be formatted for an iPhone screen for two reasons. The iPhone does not resize the image, it crops a centered image on the top/bottom and left/right. Additionally, this image file gets saved bit-for-bit into every 10-second segment file, so will increase bandwidth by {image file size} * {segment count} * {user count.}.",
         "AvailBlanking$AvailBlankingImage": "Blanking image to be used. Leave empty for solid black. Only bmp and png images are supported.",
@@ -1092,36 +1180,42 @@
         "BurnInDestinationSettings$Font": "External font file used for caption burn-in. File extension must be 'ttf' or 'tte'.  Although the user can select output fonts for many different types of input captions,  embedded, STL and teletext sources use a strict grid system. Using external fonts with these caption sources could cause unexpected display of proportional fonts.  All burn-in and DVB-Sub font settings must match.",
         "DvbSubDestinationSettings$Font": "External font file used for caption burn-in. File extension must be 'ttf' or 'tte'.  Although the user can select output fonts for many different types of input captions, embedded, STL and teletext sources use a strict grid system. Using external fonts with these caption sources could cause unexpected display of proportional fonts.  All burn-in and DVB-Sub font settings must match.",
         "InputLossBehavior$InputLossImageSlate": "When input loss image type is \"slate\" these fields specify the parameters for accessing the slate.",
-        "StaticImageActivateScheduleActionSettings$Image": "The image to overlay on the video.  Must be a 32 bit BMP, PNG, or TGA file.  Must not be larger than the input video.",
+        "StaticImageActivateScheduleActionSettings$Image": "The location and filename of the image file to overlay on the video. The file must be a 32-bit BMP, PNG, or TGA file, and must not be larger (in pixels) than the input video.",
         "StaticKeySettings$KeyProviderServer": "The URL of the license server used for protecting content."
       }
     },
     "InputLossActionForHlsOut": {
-      "base": null,
+      "base": "Input Loss Action For Hls Out",
       "refs": {
         "HlsGroupSettings$InputLossAction": "Parameter that control output group behavior on input loss."
       }
     },
     "InputLossActionForMsSmoothOut": {
-      "base": null,
+      "base": "Input Loss Action For Ms Smooth Out",
       "refs": {
         "MsSmoothGroupSettings$InputLossAction": "Parameter that control output group behavior on input loss."
       }
     },
+    "InputLossActionForRtmpOut": {
+      "base": "Input Loss Action For Rtmp Out",
+      "refs": {
+        "RtmpGroupSettings$InputLossAction": "Controls the behavior of this RTMP group if input becomes unavailable.\n\n- emitOutput: Emit a slate until input returns.\n- pauseOutput: Stop transmitting data until input returns. This does not close the underlying RTMP connection."
+      }
+    },
     "InputLossActionForUdpOut": {
-      "base": null,
+      "base": "Input Loss Action For Udp Out",
       "refs": {
         "UdpGroupSettings$InputLossAction": "Specifies behavior of last resort when input video is lost, and no more backup inputs are available. When dropTs is selected the entire transport stream will stop being emitted.  When dropProgram is selected the program can be dropped from the transport stream (and replaced with null packets to meet the TS bitrate requirement).  Or, when emitProgram is chosen the transport stream will continue to be produced normally with repeat frames, black frames, or slate frames substituted for the absent input video."
       }
     },
     "InputLossBehavior": {
-      "base": null,
+      "base": "Input Loss Behavior",
       "refs": {
         "GlobalConfiguration$InputLossBehavior": "Settings for system actions when input is lost."
       }
     },
     "InputLossImageType": {
-      "base": null,
+      "base": "Input Loss Image Type",
       "refs": {
         "InputLossBehavior$InputLossImageType": "Indicates whether to substitute a solid color or a slate into the output after input loss exceeds blackFrameMsec."
       }
@@ -1170,7 +1264,7 @@
       }
     },
     "InputSourceEndBehavior": {
-      "base": null,
+      "base": "Input Source End Behavior",
       "refs": {
         "InputSettings$SourceEndBehavior": "Loop input if it is a file. This allows a file input to be streamed indefinitely."
       }
@@ -1196,11 +1290,23 @@
         "Input$State": null
       }
     },
+    "InputSwitchScheduleActionSettings": {
+      "base": "Settings for the action to switch an input.",
+      "refs": {
+        "ScheduleActionSettings$InputSwitchSettings": "Action to switch the input"
+      }
+    },
     "InputType": {
       "base": null,
       "refs": {
         "CreateInput$Type": null,
         "Input$Type": null
+      }
+    },
+    "InputVpcRequest": {
+      "base": "Settings for a private VPC Input.\nWhen this property is specified, the input destination addresses will be created in a VPC rather than with public Internet addresses.\nThis property requires setting the roleArn property on Input creation.\nNot compatible with the inputSecurityGroups property.\n",
+      "refs": {
+        "CreateInput$Vpc": null
       }
     },
     "InputWhitelistRule": {
@@ -1231,7 +1337,7 @@
       }
     },
     "KeyProviderSettings": {
-      "base": null,
+      "base": "Key Provider Settings",
       "refs": {
         "HlsGroupSettings$KeyProviderSettings": "The key provider settings."
       }
@@ -1267,7 +1373,7 @@
       }
     },
     "LogLevel": {
-      "base": null,
+      "base": "The log level the user wants for their channel.",
       "refs": {
         "Channel$LogLevel": "The log level being written to CloudWatch Logs.",
         "ChannelSummary$LogLevel": "The log level being written to CloudWatch Logs.",
@@ -1276,128 +1382,128 @@
       }
     },
     "M2tsAbsentInputAudioBehavior": {
-      "base": null,
+      "base": "M2ts Absent Input Audio Behavior",
       "refs": {
         "M2tsSettings$AbsentInputAudioBehavior": "When set to drop, output audio streams will be removed from the program if the selected input audio stream is removed from the input. This allows the output audio configuration to dynamically change based on input configuration. If this is set to encodeSilence, all output audio streams will output encoded silence when not connected to an active input stream."
       }
     },
     "M2tsArib": {
-      "base": null,
+      "base": "M2ts Arib",
       "refs": {
         "M2tsSettings$Arib": "When set to enabled, uses ARIB-compliant field muxing and removes video descriptor."
       }
     },
     "M2tsAribCaptionsPidControl": {
-      "base": null,
+      "base": "M2ts Arib Captions Pid Control",
       "refs": {
         "M2tsSettings$AribCaptionsPidControl": "If set to auto, pid number used for ARIB Captions will be auto-selected from unused pids.  If set to useConfigured, ARIB Captions will be on the configured pid number."
       }
     },
     "M2tsAudioBufferModel": {
-      "base": null,
+      "base": "M2ts Audio Buffer Model",
       "refs": {
         "M2tsSettings$AudioBufferModel": "When set to dvb, uses DVB buffer model for Dolby Digital audio.  When set to atsc, the ATSC model is used."
       }
     },
     "M2tsAudioInterval": {
-      "base": null,
+      "base": "M2ts Audio Interval",
       "refs": {
         "M2tsSettings$EbpAudioInterval": "When videoAndFixedIntervals is selected, audio EBP markers will be added to partitions 3 and 4. The interval between these additional markers will be fixed, and will be slightly shorter than the video EBP marker interval. Only available when EBP Cablelabs segmentation markers are selected.  Partitions 1 and 2 will always follow the video interval."
       }
     },
     "M2tsAudioStreamType": {
-      "base": null,
+      "base": "M2ts Audio Stream Type",
       "refs": {
         "M2tsSettings$AudioStreamType": "When set to atsc, uses stream type = 0x81 for AC3 and stream type = 0x87 for EAC3. When set to dvb, uses stream type = 0x06."
       }
     },
     "M2tsBufferModel": {
-      "base": null,
+      "base": "M2ts Buffer Model",
       "refs": {
         "M2tsSettings$BufferModel": "If set to multiplex, use multiplex buffer model for accurate interleaving.  Setting to bufferModel to none can lead to lower latency, but low-memory devices may not be able to play back the stream without interruptions."
       }
     },
     "M2tsCcDescriptor": {
-      "base": null,
+      "base": "M2ts Cc Descriptor",
       "refs": {
         "M2tsSettings$CcDescriptor": "When set to enabled, generates captionServiceDescriptor in PMT."
       }
     },
     "M2tsEbifControl": {
-      "base": null,
+      "base": "M2ts Ebif Control",
       "refs": {
         "M2tsSettings$Ebif": "If set to passthrough, passes any EBIF data from the input source to this output."
       }
     },
     "M2tsEbpPlacement": {
-      "base": null,
+      "base": "M2ts Ebp Placement",
       "refs": {
         "M2tsSettings$EbpPlacement": "Controls placement of EBP on Audio PIDs. If set to videoAndAudioPids, EBP markers will be placed on the video PID and all audio PIDs.  If set to videoPid, EBP markers will be placed on only the video PID."
       }
     },
     "M2tsEsRateInPes": {
-      "base": null,
+      "base": "M2ts Es Rate In Pes",
       "refs": {
         "M2tsSettings$EsRateInPes": "Include or exclude the ES Rate field in the PES header."
       }
     },
     "M2tsKlv": {
-      "base": null,
+      "base": "M2ts Klv",
       "refs": {
         "M2tsSettings$Klv": "If set to passthrough, passes any KLV data from the input source to this output."
       }
     },
     "M2tsPcrControl": {
-      "base": null,
+      "base": "M2ts Pcr Control",
       "refs": {
         "M2tsSettings$PcrControl": "When set to pcrEveryPesPacket, a Program Clock Reference value is inserted for every Packetized Elementary Stream (PES) header. This parameter is effective only when the PCR PID is the same as the video or audio elementary stream."
       }
     },
     "M2tsRateMode": {
-      "base": null,
+      "base": "M2ts Rate Mode",
       "refs": {
         "M2tsSettings$RateMode": "When vbr, does not insert null packets into transport stream to fill specified bitrate. The bitrate setting acts as the maximum bitrate when vbr is set."
       }
     },
     "M2tsScte35Control": {
-      "base": null,
+      "base": "M2ts Scte35 Control",
       "refs": {
         "M2tsSettings$Scte35Control": "Optionally pass SCTE-35 signals from the input source to this output."
       }
     },
     "M2tsSegmentationMarkers": {
-      "base": null,
+      "base": "M2ts Segmentation Markers",
       "refs": {
         "M2tsSettings$SegmentationMarkers": "Inserts segmentation markers at each segmentationTime period. raiSegstart sets the Random Access Indicator bit in the adaptation field. raiAdapt sets the RAI bit and adds the current timecode in the private data bytes. psiSegstart inserts PAT and PMT tables at the start of segments. ebp adds Encoder Boundary Point information to the adaptation field as per OpenCable specification OC-SP-EBP-I01-130118. ebpLegacy adds Encoder Boundary Point information to the adaptation field using a legacy proprietary format."
       }
     },
     "M2tsSegmentationStyle": {
-      "base": null,
+      "base": "M2ts Segmentation Style",
       "refs": {
         "M2tsSettings$SegmentationStyle": "The segmentation style parameter controls how segmentation markers are inserted into the transport stream. With avails, it is possible that segments may be truncated, which can influence where future segmentation markers are inserted.\n\nWhen a segmentation style of \"resetCadence\" is selected and a segment is truncated due to an avail, we will reset the segmentation cadence. This means the subsequent segment will have a duration of $segmentationTime seconds.\n\nWhen a segmentation style of \"maintainCadence\" is selected and a segment is truncated due to an avail, we will not reset the segmentation cadence. This means the subsequent segment will likely be truncated as well. However, all segments after that will have a duration of $segmentationTime seconds. Note that EBP lookahead is a slight exception to this rule."
       }
     },
     "M2tsSettings": {
-      "base": null,
+      "base": "M2ts Settings",
       "refs": {
         "ArchiveContainerSettings$M2tsSettings": null,
         "UdpContainerSettings$M2tsSettings": null
       }
     },
     "M2tsTimedMetadataBehavior": {
-      "base": null,
+      "base": "M2ts Timed Metadata Behavior",
       "refs": {
         "M2tsSettings$TimedMetadataBehavior": "When set to passthrough, timed metadata will be passed through from input to output."
       }
     },
     "M3u8PcrControl": {
-      "base": null,
+      "base": "M3u8 Pcr Control",
       "refs": {
         "M3u8Settings$PcrControl": "When set to pcrEveryPesPacket, a Program Clock Reference value is inserted for every Packetized Elementary Stream (PES) header. This parameter is effective only when the PCR PID is the same as the video or audio elementary stream."
       }
     },
     "M3u8Scte35Behavior": {
-      "base": null,
+      "base": "M3u8 Scte35 Behavior",
       "refs": {
         "M3u8Settings$Scte35Behavior": "If set to passthrough, passes any SCTE-35 signals from the input source to this output."
       }
@@ -1409,37 +1515,67 @@
       }
     },
     "M3u8TimedMetadataBehavior": {
-      "base": null,
+      "base": "M3u8 Timed Metadata Behavior",
       "refs": {
         "M3u8Settings$TimedMetadataBehavior": "When set to passthrough, timed metadata is passed through from input to output."
       }
     },
+    "MediaConnectFlow": {
+      "base": "The settings for a MediaConnect Flow.",
+      "refs": {
+        "__listOfMediaConnectFlow$member": null
+      }
+    },
+    "MediaConnectFlowRequest": {
+      "base": "The settings for a MediaConnect Flow.",
+      "refs": {
+        "__listOfMediaConnectFlowRequest$member": null
+      }
+    },
+    "MediaPackageGroupSettings": {
+      "base": "Media Package Group Settings",
+      "refs": {
+        "OutputGroupSettings$MediaPackageGroupSettings": null
+      }
+    },
+    "MediaPackageOutputDestinationSettings": {
+      "base": "Media Package Output Destination Settings",
+      "refs": {
+        "__listOfMediaPackageOutputDestinationSettings$member": null
+      }
+    },
+    "MediaPackageOutputSettings": {
+      "base": "Media Package Output Settings",
+      "refs": {
+        "OutputSettings$MediaPackageOutputSettings": null
+      }
+    },
     "Mp2CodingMode": {
-      "base": null,
+      "base": "Mp2 Coding Mode",
       "refs": {
         "Mp2Settings$CodingMode": "The MPEG2 Audio coding mode.  Valid values are codingMode10 (for mono) or codingMode20 (for stereo)."
       }
     },
     "Mp2Settings": {
-      "base": null,
+      "base": "Mp2 Settings",
       "refs": {
         "AudioCodecSettings$Mp2Settings": null
       }
     },
     "MsSmoothGroupSettings": {
-      "base": null,
+      "base": "Ms Smooth Group Settings",
       "refs": {
         "OutputGroupSettings$MsSmoothGroupSettings": null
       }
     },
     "MsSmoothOutputSettings": {
-      "base": null,
+      "base": "Ms Smooth Output Settings",
       "refs": {
         "OutputSettings$MsSmoothOutputSettings": null
       }
     },
     "NetworkInputServerValidation": {
-      "base": null,
+      "base": "Network Input Server Validation",
       "refs": {
         "NetworkInputSettings$ServerValidation": "Check HTTPS server certificates. When set to checkCryptographyOnly, cryptography in the certificate will be checked, but not the server's name. Certain subdomains (notably S3 buckets that use dots in the bucket name) do not strictly match the corresponding certificate's wildcard pattern and would otherwise cause the event to error. This setting is ignored for protocols that do not use https."
       }
@@ -1500,7 +1636,7 @@
       }
     },
     "OutputGroupSettings": {
-      "base": null,
+      "base": "Output Group Settings",
       "refs": {
         "OutputGroup$OutputGroupSettings": "Settings associated with the output group."
       }
@@ -1508,23 +1644,43 @@
     "OutputLocationRef": {
       "base": "Reference to an OutputDestination ID defined in the channel",
       "refs": {
-        "ArchiveGroupSettings$Destination": "A directory and base filename where archive files should be written.  If the base filename portion of the URI is left blank, the base filename of the first input will be automatically inserted.",
+        "ArchiveGroupSettings$Destination": "A directory and base filename where archive files should be written.",
+        "FrameCaptureGroupSettings$Destination": "The destination for the frame capture files. Either the URI for an Amazon S3 bucket and object, plus a file name prefix (for example, s3ssl://sportsDelivery/highlights/20180820/curling_) or the URI for a MediaStore container, plus a file name prefix (for example, mediastoressl://sportsDelivery/20180820/curling_). The final file names consist of the prefix from the destination field (for example, \"curling_\") + name modifier + the counter (5 digits, starting from 00001) + extension (which is always .jpg).  For example, curlingLow.00001.jpg",
         "HlsGroupSettings$Destination": "A directory or HTTP destination for the HLS segments, manifest files, and encryption keys (if enabled).",
+        "MediaPackageGroupSettings$Destination": "MediaPackage channel destination.",
         "MsSmoothGroupSettings$Destination": "Smooth Streaming publish point on an IIS server. Elemental Live acts as a \"Push\" encoder to IIS.",
         "RtmpOutputSettings$Destination": "The RTMP endpoint excluding the stream name (eg. rtmp://host/appname). For connection to Akamai, a username and password must be supplied. URI fields accept format identifiers.",
         "UdpOutputSettings$Destination": "Destination address and port number for RTP or UDP packets. Can be unicast or multicast RTP or UDP (eg. rtp://239.10.10.10:5001 or udp://10.100.100.100:5002)."
       }
     },
     "OutputSettings": {
-      "base": null,
+      "base": "Output Settings",
       "refs": {
         "Output$OutputSettings": "Output type-specific settings."
       }
     },
     "PassThroughSettings": {
-      "base": null,
+      "base": "Pass Through Settings",
       "refs": {
         "AudioCodecSettings$PassThroughSettings": null
+      }
+    },
+    "PauseStateScheduleActionSettings": {
+      "base": "Settings for the action to set pause state of a channel.",
+      "refs": {
+        "ScheduleActionSettings$PauseStateSettings": "Action to pause or unpause one or both channel pipelines"
+      }
+    },
+    "PipelineId": {
+      "base": "Pipeline ID",
+      "refs": {
+        "PipelinePauseStateSettings$PipelineId": "Pipeline ID to pause (\"PIPELINE_0\" or \"PIPELINE_1\")."
+      }
+    },
+    "PipelinePauseStateSettings": {
+      "base": "Settings for pausing a pipeline.",
+      "refs": {
+        "__listOfPipelinePauseStateSettings$member": null
       }
     },
     "PurchaseOffering": {
@@ -1538,7 +1694,7 @@
       }
     },
     "RemixSettings": {
-      "base": null,
+      "base": "Remix Settings",
       "refs": {
         "AudioDescription$RemixSettings": "Settings that control how input audio channels are remixed into the output audio channels."
       }
@@ -1547,6 +1703,7 @@
       "base": "Reserved resources available to use",
       "refs": {
         "PurchaseOfferingResultModel$Reservation": null,
+        "UpdateReservationResultModel$Reservation": null,
         "__listOfReservation$member": null
       }
     },
@@ -1616,120 +1773,125 @@
       }
     },
     "RtmpCacheFullBehavior": {
-      "base": null,
+      "base": "Rtmp Cache Full Behavior",
       "refs": {
         "RtmpGroupSettings$CacheFullBehavior": "Controls behavior when content cache fills up. If remote origin server stalls the RTMP connection and does not accept content fast enough the 'Media Cache' will fill up. When the cache reaches the duration specified by cacheLength the cache will stop accepting new content. If set to disconnectImmediately, the RTMP output will force a disconnect. Clear the media cache, and reconnect after restartDelay seconds. If set to waitForServer, the RTMP output will wait up to 5 minutes to allow the origin server to begin accepting data again."
       }
     },
     "RtmpCaptionData": {
-      "base": null,
+      "base": "Rtmp Caption Data",
       "refs": {
         "RtmpGroupSettings$CaptionData": "Controls the types of data that passes to onCaptionInfo outputs.  If set to 'all' then 608 and 708 carried DTVCC data will be passed.  If set to 'field1AndField2608' then DTVCC data will be stripped out, but 608 data from both fields will be passed. If set to 'field1608' then only the data carried in 608 from field 1 video will be passed."
       }
     },
     "RtmpCaptionInfoDestinationSettings": {
-      "base": null,
+      "base": "Rtmp Caption Info Destination Settings",
       "refs": {
         "CaptionDestinationSettings$RtmpCaptionInfoDestinationSettings": null
       }
     },
     "RtmpGroupSettings": {
-      "base": null,
+      "base": "Rtmp Group Settings",
       "refs": {
         "OutputGroupSettings$RtmpGroupSettings": null
       }
     },
     "RtmpOutputCertificateMode": {
-      "base": null,
+      "base": "Rtmp Output Certificate Mode",
       "refs": {
         "RtmpOutputSettings$CertificateMode": "If set to verifyAuthenticity, verify the tls certificate chain to a trusted Certificate Authority (CA).  This will cause rtmps outputs with self-signed certificates to fail."
       }
     },
     "RtmpOutputSettings": {
-      "base": null,
+      "base": "Rtmp Output Settings",
       "refs": {
         "OutputSettings$RtmpOutputSettings": null
       }
     },
     "ScheduleAction": {
-      "base": "A single schedule action.",
+      "base": "Contains information on a single schedule action.",
       "refs": {
         "__listOfScheduleAction$member": null
       }
     },
     "ScheduleActionSettings": {
-      "base": "Settings for a single schedule action.",
+      "base": "Holds the settings for a single schedule action.",
       "refs": {
         "ScheduleAction$ScheduleActionSettings": "Settings for this schedule action."
       }
     },
     "ScheduleActionStartSettings": {
-      "base": "When the schedule action starts.",
+      "base": "Settings to specify the start time for an action.",
       "refs": {
-        "ScheduleAction$ScheduleActionStartSettings": "When the action takes effect."
+        "ScheduleAction$ScheduleActionStartSettings": "The time for the action to start in the channel."
+      }
+    },
+    "ScheduleDeleteResultModel": {
+      "base": "Result of a schedule deletion.",
+      "refs": {
       }
     },
     "ScheduleDescribeResultModel": {
-      "base": "A complete schedule description.",
+      "base": "Results of a schedule describe.",
       "refs": {
       }
     },
     "Scte20Convert608To708": {
-      "base": null,
+      "base": "Scte20 Convert608 To708",
       "refs": {
         "Scte20SourceSettings$Convert608To708": "If upconvert, 608 data is both passed through via the \"608 compatibility bytes\" fields of the 708 wrapper as well as translated into 708. 708 data present in the source content will be discarded."
       }
     },
     "Scte20PlusEmbeddedDestinationSettings": {
-      "base": null,
+      "base": "Scte20 Plus Embedded Destination Settings",
       "refs": {
         "CaptionDestinationSettings$Scte20PlusEmbeddedDestinationSettings": null
       }
     },
     "Scte20SourceSettings": {
-      "base": null,
+      "base": "Scte20 Source Settings",
       "refs": {
         "CaptionSelectorSettings$Scte20SourceSettings": null
       }
     },
     "Scte27DestinationSettings": {
-      "base": null,
+      "base": "Scte27 Destination Settings",
       "refs": {
         "CaptionDestinationSettings$Scte27DestinationSettings": null
       }
     },
     "Scte27SourceSettings": {
-      "base": null,
+      "base": "Scte27 Source Settings",
       "refs": {
         "CaptionSelectorSettings$Scte27SourceSettings": null
       }
     },
     "Scte35AposNoRegionalBlackoutBehavior": {
-      "base": null,
+      "base": "Scte35 Apos No Regional Blackout Behavior",
       "refs": {
         "Scte35TimeSignalApos$NoRegionalBlackoutFlag": "When set to ignore, Segment Descriptors with noRegionalBlackoutFlag set to 0 will no longer trigger blackouts or Ad Avail slates"
       }
     },
     "Scte35AposWebDeliveryAllowedBehavior": {
-      "base": null,
+      "base": "Scte35 Apos Web Delivery Allowed Behavior",
       "refs": {
         "Scte35TimeSignalApos$WebDeliveryAllowedFlag": "When set to ignore, Segment Descriptors with webDeliveryAllowedFlag set to 0 will no longer trigger blackouts or Ad Avail slates"
       }
     },
     "Scte35ArchiveAllowedFlag": {
-      "base": "SCTE-35 segmentation_descriptor archive_allowed_flag.",
+      "base": "Corresponds to the archive_allowed parameter. A value of ARCHIVE_NOT_ALLOWED corresponds to 0 (false) in the SCTE-35 specification. If you include one of the \"restriction\" flags then you must include all four of them.",
       "refs": {
-        "Scte35DeliveryRestrictions$ArchiveAllowedFlag": "SCTE-35 segmentation_descriptor archive_allowed_flag."
+        "Scte35DeliveryRestrictions$ArchiveAllowedFlag": "Corresponds to SCTE-35 archive_allowed_flag."
       }
     },
     "Scte35DeliveryRestrictions": {
-      "base": "SCTE-35 Delivery Restrictions.",
+      "base": "Corresponds to SCTE-35 delivery_not_restricted_flag parameter. To declare delivery restrictions, include this element and its four \"restriction\" flags. To declare that there are no restrictions, omit this element.",
       "refs": {
-        "Scte35SegmentationDescriptor$DeliveryRestrictions": "SCTE-35 delivery restrictions."
+        "Scte35SegmentationDescriptor$DeliveryRestrictions": "Holds the four SCTE-35 delivery restriction parameters."
       }
     },
     "Scte35Descriptor": {
-      "base": "SCTE-35 Descriptor.",
+      "base": "Holds one set of SCTE-35 Descriptor Settings.",
       "refs": {
         "__listOfScte35Descriptor$member": null
       }
@@ -1741,175 +1903,195 @@
       }
     },
     "Scte35DeviceRestrictions": {
-      "base": "SCTE-35 Device Restrictions.",
+      "base": "Corresponds to the device_restrictions parameter in a segmentation_descriptor. If you include one of the \"restriction\" flags then you must include all four of them.",
       "refs": {
-        "Scte35DeliveryRestrictions$DeviceRestrictions": "SCTE-35 segmentation_descriptor web_delivery_allowed_flag."
+        "Scte35DeliveryRestrictions$DeviceRestrictions": "Corresponds to SCTE-35 device_restrictions parameter."
       }
     },
     "Scte35NoRegionalBlackoutFlag": {
-      "base": "SCTE-35 segmentation_descriptor no_regional_blackout_flag.",
+      "base": "Corresponds to the no_regional_blackout_flag parameter. A value of REGIONAL_BLACKOUT corresponds to 0 (false) in the SCTE-35 specification. If you include one of the \"restriction\" flags then you must include all four of them.",
       "refs": {
-        "Scte35DeliveryRestrictions$NoRegionalBlackoutFlag": "SCTE-35 segmentation_descriptor no_regional_blackout_flag."
+        "Scte35DeliveryRestrictions$NoRegionalBlackoutFlag": "Corresponds to SCTE-35 no_regional_blackout_flag parameter."
       }
     },
     "Scte35ReturnToNetworkScheduleActionSettings": {
-      "base": "SCTE-35 Return to Network Settings.",
+      "base": "Settings for a SCTE-35 return_to_network message.",
       "refs": {
-        "ScheduleActionSettings$Scte35ReturnToNetworkSettings": "SCTE-35 Return to Network Settings"
+        "ScheduleActionSettings$Scte35ReturnToNetworkSettings": "Action to insert SCTE-35 return_to_network message"
       }
     },
     "Scte35SegmentationCancelIndicator": {
-      "base": "SCTE-35 segmentation_descriptor segmentation_event_cancel_indicator.",
+      "base": "Corresponds to SCTE-35 segmentation_event_cancel_indicator. SEGMENTATION_EVENT_NOT_CANCELED corresponds to 0 in the SCTE-35 specification and indicates that this is an insertion request. SEGMENTATION_EVENT_CANCELED corresponds to 1 in the SCTE-35 specification and indicates that this is a cancelation request, in which case complete this field and the existing event ID to cancel.",
       "refs": {
-        "Scte35SegmentationDescriptor$SegmentationCancelIndicator": "SCTE-35 segmentation_descriptor segmentation_event_cancel_indicator."
+        "Scte35SegmentationDescriptor$SegmentationCancelIndicator": "Corresponds to SCTE-35 segmentation_event_cancel_indicator."
       }
     },
     "Scte35SegmentationDescriptor": {
-      "base": "SCTE-35 Segmentation Descriptor.",
+      "base": "Corresponds to SCTE-35 segmentation_descriptor.",
       "refs": {
         "Scte35DescriptorSettings$SegmentationDescriptorScte35DescriptorSettings": "SCTE-35 Segmentation Descriptor."
       }
     },
     "Scte35SpliceInsert": {
-      "base": null,
+      "base": "Scte35 Splice Insert",
       "refs": {
         "AvailSettings$Scte35SpliceInsert": null
       }
     },
     "Scte35SpliceInsertNoRegionalBlackoutBehavior": {
-      "base": null,
+      "base": "Scte35 Splice Insert No Regional Blackout Behavior",
       "refs": {
         "Scte35SpliceInsert$NoRegionalBlackoutFlag": "When set to ignore, Segment Descriptors with noRegionalBlackoutFlag set to 0 will no longer trigger blackouts or Ad Avail slates"
       }
     },
     "Scte35SpliceInsertScheduleActionSettings": {
-      "base": "SCTE-35 Splice Insert Settings.",
+      "base": "Settings for a SCTE-35 splice_insert message.",
       "refs": {
-        "ScheduleActionSettings$Scte35SpliceInsertSettings": "SCTE-35 Splice Insert Settings"
+        "ScheduleActionSettings$Scte35SpliceInsertSettings": "Action to insert SCTE-35 splice_insert message"
       }
     },
     "Scte35SpliceInsertWebDeliveryAllowedBehavior": {
-      "base": null,
+      "base": "Scte35 Splice Insert Web Delivery Allowed Behavior",
       "refs": {
         "Scte35SpliceInsert$WebDeliveryAllowedFlag": "When set to ignore, Segment Descriptors with webDeliveryAllowedFlag set to 0 will no longer trigger blackouts or Ad Avail slates"
       }
     },
     "Scte35TimeSignalApos": {
-      "base": null,
+      "base": "Scte35 Time Signal Apos",
       "refs": {
         "AvailSettings$Scte35TimeSignalApos": null
       }
     },
     "Scte35TimeSignalScheduleActionSettings": {
-      "base": "SCTE-35 Time Signal Settings.",
+      "base": "Settings for a SCTE-35 time_signal.",
       "refs": {
-        "ScheduleActionSettings$Scte35TimeSignalSettings": "SCTE-35 Time Signal Settings"
+        "ScheduleActionSettings$Scte35TimeSignalSettings": "Action to insert SCTE-35 time_signal message"
       }
     },
     "Scte35WebDeliveryAllowedFlag": {
-      "base": "SCTE-35 segmentation_descriptor web_delivery_allowed_flag.",
+      "base": "Corresponds to the web_delivery_allowed_flag parameter. A value of WEB_DELIVERY_NOT_ALLOWED corresponds to 0 (false) in the SCTE-35 specification. If you include one of the \"restriction\" flags then you must include all four of them.",
       "refs": {
-        "Scte35DeliveryRestrictions$WebDeliveryAllowedFlag": "SCTE-35 segmentation_descriptor web_delivery_allowed_flag."
+        "Scte35DeliveryRestrictions$WebDeliveryAllowedFlag": "Corresponds to SCTE-35 web_delivery_allowed_flag parameter."
       }
     },
     "SmoothGroupAudioOnlyTimecodeControl": {
-      "base": null,
+      "base": "Smooth Group Audio Only Timecode Control",
       "refs": {
         "MsSmoothGroupSettings$AudioOnlyTimecodeControl": "If set to passthrough for an audio-only MS Smooth output, the fragment absolute time will be set to the current timecode. This option does not write timecodes to the audio elementary stream."
       }
     },
     "SmoothGroupCertificateMode": {
-      "base": null,
+      "base": "Smooth Group Certificate Mode",
       "refs": {
         "MsSmoothGroupSettings$CertificateMode": "If set to verifyAuthenticity, verify the https certificate chain to a trusted Certificate Authority (CA).  This will cause https outputs to self-signed certificates to fail."
       }
     },
     "SmoothGroupEventIdMode": {
-      "base": null,
+      "base": "Smooth Group Event Id Mode",
       "refs": {
         "MsSmoothGroupSettings$EventIdMode": "Specifies whether or not to send an event ID to the IIS server. If no event ID is sent and the same Live Event is used without changing the publishing point, clients might see cached video from the previous run.\n\nOptions:\n- \"useConfigured\" - use the value provided in eventId\n- \"useTimestamp\" - generate and send an event ID based on the current timestamp\n- \"noEventId\" - do not send an event ID to the IIS server."
       }
     },
     "SmoothGroupEventStopBehavior": {
-      "base": null,
+      "base": "Smooth Group Event Stop Behavior",
       "refs": {
         "MsSmoothGroupSettings$EventStopBehavior": "When set to sendEos, send EOS signal to IIS server when stopping the event"
       }
     },
     "SmoothGroupSegmentationMode": {
-      "base": null,
+      "base": "Smooth Group Segmentation Mode",
       "refs": {
-        "MsSmoothGroupSettings$SegmentationMode": "When set to useInputSegmentation, the output segment or fragment points are set by the RAI markers from the input streams."
+        "MsSmoothGroupSettings$SegmentationMode": "useInputSegmentation has been deprecated. The configured segment size is always used."
       }
     },
     "SmoothGroupSparseTrackType": {
-      "base": null,
+      "base": "Smooth Group Sparse Track Type",
       "refs": {
         "MsSmoothGroupSettings$SparseTrackType": "If set to scte35, use incoming SCTE-35 messages to generate a sparse track in this group of MS-Smooth outputs."
       }
     },
     "SmoothGroupStreamManifestBehavior": {
-      "base": null,
+      "base": "Smooth Group Stream Manifest Behavior",
       "refs": {
         "MsSmoothGroupSettings$StreamManifestBehavior": "When set to send, send stream manifest so publishing point doesn't start until all streams start."
       }
     },
     "SmoothGroupTimestampOffsetMode": {
-      "base": null,
+      "base": "Smooth Group Timestamp Offset Mode",
       "refs": {
         "MsSmoothGroupSettings$TimestampOffsetMode": "Type of timestamp date offset to use.\n- useEventStartDate: Use the date the event was started as the offset\n- useConfiguredOffset: Use an explicitly configured date as the offset"
       }
     },
     "SmpteTtDestinationSettings": {
-      "base": null,
+      "base": "Smpte Tt Destination Settings",
       "refs": {
         "CaptionDestinationSettings$SmpteTtDestinationSettings": null
       }
     },
     "StandardHlsSettings": {
-      "base": null,
+      "base": "Standard Hls Settings",
       "refs": {
         "HlsSettings$StandardHlsSettings": null
       }
     },
     "StaticImageActivateScheduleActionSettings": {
-      "base": "Static image activate.",
+      "base": "Settings for the action to activate a static image.",
       "refs": {
-        "ScheduleActionSettings$StaticImageActivateSettings": "Static Image Activate"
+        "ScheduleActionSettings$StaticImageActivateSettings": "Action to activate a static image overlay"
       }
     },
     "StaticImageDeactivateScheduleActionSettings": {
-      "base": "Static image deactivate.",
+      "base": "Settings for the action to deactivate the image in a specific layer.",
       "refs": {
-        "ScheduleActionSettings$StaticImageDeactivateSettings": "Static Image Deactivate"
+        "ScheduleActionSettings$StaticImageDeactivateSettings": "Action to deactivate a static image overlay"
       }
     },
     "StaticKeySettings": {
-      "base": null,
+      "base": "Static Key Settings",
       "refs": {
         "KeyProviderSettings$StaticKeySettings": null
       }
     },
-    "TeletextDestinationSettings": {
+    "Tags": {
       "base": null,
+      "refs": {
+        "Channel$Tags": "A collection of key-value pairs.",
+        "ChannelSummary$Tags": "A collection of key-value pairs.",
+        "CreateChannel$Tags": "A collection of key-value pairs.",
+        "CreateInput$Tags": "A collection of key-value pairs.",
+        "Input$Tags": "A collection of key-value pairs.",
+        "InputSecurityGroup$Tags": "A collection of key-value pairs.",
+        "InputSecurityGroupWhitelistRequest$Tags": "A collection of key-value pairs.",
+        "PurchaseOffering$Tags": "A collection of key-value pairs",
+        "Reservation$Tags": "A collection of key-value pairs",
+        "TagsModel$Tags": null
+      }
+    },
+    "TagsModel": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "TeletextDestinationSettings": {
+      "base": "Teletext Destination Settings",
       "refs": {
         "CaptionDestinationSettings$TeletextDestinationSettings": null
       }
     },
     "TeletextSourceSettings": {
-      "base": null,
+      "base": "Teletext Source Settings",
       "refs": {
         "CaptionSelectorSettings$TeletextSourceSettings": null
       }
     },
     "TimecodeConfig": {
-      "base": null,
+      "base": "Timecode Config",
       "refs": {
         "EncoderSettings$TimecodeConfig": "Contains settings used to acquire and adjust timecode information from inputs."
       }
     },
     "TimecodeConfigSource": {
-      "base": null,
+      "base": "Timecode Config Source",
       "refs": {
         "TimecodeConfig$Source": "Identifies the source for the timecode that will be associated with the events outputs.\n-Embedded (embedded): Initialize the output timecode with timecode from the the source.  If no embedded timecode is detected in the source, the system falls back to using \"Start at 0\" (zerobased).\n-System Clock (systemclock): Use the UTC time.\n-Start at 0 (zerobased): The time of the first frame of the event will be 00:00:00:00."
       }
@@ -1920,37 +2102,37 @@
       }
     },
     "TtmlDestinationSettings": {
-      "base": null,
+      "base": "Ttml Destination Settings",
       "refs": {
         "CaptionDestinationSettings$TtmlDestinationSettings": null
       }
     },
     "TtmlDestinationStyleControl": {
-      "base": null,
+      "base": "Ttml Destination Style Control",
       "refs": {
         "TtmlDestinationSettings$StyleControl": "When set to passthrough, passes through style and position information from a TTML-like input source (TTML, SMPTE-TT, CFF-TT) to the CFF-TT output or TTML output."
       }
     },
     "UdpContainerSettings": {
-      "base": null,
+      "base": "Udp Container Settings",
       "refs": {
         "UdpOutputSettings$ContainerSettings": null
       }
     },
     "UdpGroupSettings": {
-      "base": null,
+      "base": "Udp Group Settings",
       "refs": {
         "OutputGroupSettings$UdpGroupSettings": null
       }
     },
     "UdpOutputSettings": {
-      "base": null,
+      "base": "Udp Output Settings",
       "refs": {
         "OutputSettings$UdpOutputSettings": null
       }
     },
     "UdpTimedMetadataId3Frame": {
-      "base": null,
+      "base": "Udp Timed Metadata Id3 Frame",
       "refs": {
         "UdpGroupSettings$TimedMetadataId3Frame": "Indicates ID3 frame that has the timecode."
       }
@@ -1961,6 +2143,11 @@
       }
     },
     "UpdateChannel": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateChannelClass": {
       "base": null,
       "refs": {
       }
@@ -1985,6 +2172,16 @@
       "refs": {
       }
     },
+    "UpdateReservation": {
+      "base": "UpdateReservation request",
+      "refs": {
+      }
+    },
+    "UpdateReservationResultModel": {
+      "base": "UpdateReservation response",
+      "refs": {
+      }
+    },
     "ValidationError": {
       "base": null,
       "refs": {
@@ -1992,7 +2189,7 @@
       }
     },
     "VideoCodecSettings": {
-      "base": null,
+      "base": "Video Codec Settings",
       "refs": {
         "VideoDescription$CodecSettings": "Video codec settings."
       }
@@ -2004,15 +2201,15 @@
       }
     },
     "VideoDescriptionRespondToAfd": {
-      "base": null,
+      "base": "Video Description Respond To Afd",
       "refs": {
-        "VideoDescription$RespondToAfd": "Indicates how to respond to the AFD values in the input stream. Setting to \"respond\" causes input video to be clipped, depending on AFD value, input display aspect ratio and output display aspect ratio."
+        "VideoDescription$RespondToAfd": "Indicates how to respond to the AFD values in the input stream. RESPOND causes input video to be clipped, depending on the AFD value, input display aspect ratio, and output display aspect ratio, and (except for FRAMECAPTURE codec) includes the values in the output. PASSTHROUGH (does not apply to FRAMECAPTURE codec) ignores the AFD values and includes the values in the output, so input video is not clipped. NONE ignores the AFD values and does not include the values through to the output, so input video is not clipped."
       }
     },
     "VideoDescriptionScalingBehavior": {
-      "base": null,
+      "base": "Video Description Scaling Behavior",
       "refs": {
-        "VideoDescription$ScalingBehavior": "When set to \"stretchToOutput\", automatically configures the output position to stretch the video to the specified output resolution. This option will override any position value."
+        "VideoDescription$ScalingBehavior": "STRETCHTOOUTPUT configures the output position to stretch the video to the specified output resolution (height and width). This option will override any position value. DEFAULT may insert black boxes (pillar boxes or letter boxes) around the video to provide the specified output resolution."
       }
     },
     "VideoSelector": {
@@ -2022,37 +2219,37 @@
       }
     },
     "VideoSelectorColorSpace": {
-      "base": null,
+      "base": "Video Selector Color Space",
       "refs": {
         "VideoSelector$ColorSpace": "Specifies the colorspace of an input. This setting works in tandem with colorSpaceConversion to determine if any conversion will be performed."
       }
     },
     "VideoSelectorColorSpaceUsage": {
-      "base": null,
+      "base": "Video Selector Color Space Usage",
       "refs": {
         "VideoSelector$ColorSpaceUsage": "Applies only if colorSpace is a value other than follow. This field controls how the value in the colorSpace field will be used. fallback means that when the input does include color space data, that data will be used, but when the input has no color space data, the value in colorSpace will be used. Choose fallback if your input is sometimes missing color space data, but when it does have color space data, that data is correct. force means to always use the value in colorSpace. Choose force if your input usually has no color space data or might have unreliable color space data."
       }
     },
     "VideoSelectorPid": {
-      "base": null,
+      "base": "Video Selector Pid",
       "refs": {
         "VideoSelectorSettings$VideoSelectorPid": null
       }
     },
     "VideoSelectorProgramId": {
-      "base": null,
+      "base": "Video Selector Program Id",
       "refs": {
         "VideoSelectorSettings$VideoSelectorProgramId": null
       }
     },
     "VideoSelectorSettings": {
-      "base": null,
+      "base": "Video Selector Settings",
       "refs": {
         "VideoSelector$SelectorSettings": "The video selector settings."
       }
     },
     "WebvttDestinationSettings": {
-      "base": null,
+      "base": "Webvtt Destination Settings",
       "refs": {
         "CaptionDestinationSettings$WebvttDestinationSettings": null
       }
@@ -2105,14 +2302,12 @@
         "ChannelSummary$PipelinesRunningCount": "The number of currently healthy pipelines.",
         "DvbSubDestinationSettings$ShadowXOffset": "Specifies the horizontal offset of the shadow relative to the captions in pixels. A value of -2 would result in a shadow offset 2 pixels to the left.  All burn-in and DVB-Sub font settings must match.",
         "DvbSubDestinationSettings$ShadowYOffset": "Specifies the vertical offset of the shadow relative to the captions in pixels. A value of -2 would result in a shadow offset 2 pixels above the text.  All burn-in and DVB-Sub font settings must match.",
-        "H264Settings$FramerateDenominator": "Framerate denominator.",
-        "H264Settings$FramerateNumerator": "Framerate numerator - framerate is a fraction, e.g. 24000 / 1001 = 23.976 fps.",
         "H264Settings$ParNumerator": "Pixel Aspect Ratio numerator.",
         "Offering$Duration": "Lease duration, e.g. '12'",
         "Reservation$Count": "Number of reserved resources",
         "Reservation$Duration": "Lease duration, e.g. '12'",
-        "VideoDescription$Height": "Output video height (in pixels). Leave blank to use source video height. If left blank, width must also be unspecified.",
-        "VideoDescription$Width": "Output video width (in pixels). Leave out to use source video width.  If left out, height must also be left out. Display aspect ratio is always preserved by letterboxing or pillarboxing when necessary."
+        "VideoDescription$Height": "Output video height, in pixels. Must be an even number. For most codecs, you can leave this field and width blank in order to use the height and width (resolution) from the source. Note, however, that leaving blank is not recommended. For the Frame Capture codec, height and width are required.",
+        "VideoDescription$Width": "Output video width, in pixels. Must be an even number. For most codecs, you can leave this field and height blank in order to use the height and width (resolution) from the source. Note, however, that leaving blank is not recommended. For the Frame Capture codec, height and width are required."
       }
     },
     "__integerMin0": {
@@ -2148,12 +2343,12 @@
         "MsSmoothGroupSettings$RestartDelay": "Number of seconds before initiating a restart due to output failure, due to exhausting the numRetries on one segment, or exceeding filecacheDuration.",
         "RtmpGroupSettings$RestartDelay": "If a streaming output fails, number of seconds to wait until a restart is initiated. A value of 0 means never restart.",
         "RtmpOutputSettings$NumRetries": "Number of retry attempts.",
-        "StaticImageActivateScheduleActionSettings$Duration": "The duration in milliseconds for the image to remain in the video. If omitted or set to 0, duration is infinite and image will remain until explicitly deactivated.",
-        "StaticImageActivateScheduleActionSettings$FadeIn": "The time in milliseconds for the image to fade in. Defaults to 0.",
-        "StaticImageActivateScheduleActionSettings$FadeOut": "The time in milliseconds for the image to fade out. Defaults to 0.",
-        "StaticImageActivateScheduleActionSettings$ImageX": "Placement of the left edge of the image on the horizontal axis in pixels. 0 is the left edge of the frame. Defaults to 0.",
-        "StaticImageActivateScheduleActionSettings$ImageY": "Placement of the top edge of the image on the vertical axis in pixels.  0 is the top edge of the frame. Defaults to 0.",
-        "StaticImageDeactivateScheduleActionSettings$FadeOut": "The time in milliseconds for the image to fade out. Defaults to 0.",
+        "StaticImageActivateScheduleActionSettings$Duration": "The duration in milliseconds for the image to remain on the video. If omitted or set to 0 the duration is unlimited and the image will remain until it is explicitly deactivated.",
+        "StaticImageActivateScheduleActionSettings$FadeIn": "The time in milliseconds for the image to fade in. The fade-in starts at the start time of the overlay. Default is 0 (no fade-in).",
+        "StaticImageActivateScheduleActionSettings$FadeOut": "Applies only if a duration is specified. The time in milliseconds for the image to fade out. The fade-out starts when the duration time is hit, so it effectively extends the duration. Default is 0 (no fade-out).",
+        "StaticImageActivateScheduleActionSettings$ImageX": "Placement of the left edge of the overlay relative to the left edge of the video frame, in pixels. 0 (the default) is the left edge of the frame. If the placement causes the overlay to extend beyond the right edge of the underlying video, then the overlay is cropped on the right.",
+        "StaticImageActivateScheduleActionSettings$ImageY": "Placement of the top edge of the overlay relative to the top edge of the video frame, in pixels. 0 (the default) is the top edge of the frame. If the placement causes the overlay to extend beyond the bottom edge of the underlying video, then the overlay is cropped on the bottom.",
+        "StaticImageDeactivateScheduleActionSettings$FadeOut": "The time in milliseconds for the image to fade out. Default is 0 (no fade-out).",
         "UdpGroupSettings$TimedMetadataId3Period": "Timed Metadata interval in seconds."
       }
     },
@@ -2168,8 +2363,8 @@
       "base": null,
       "refs": {
         "H264Settings$BufFillPct": "Percentage of the buffer that should initially be filled (HRD buffer model).",
-        "StaticImageActivateScheduleActionSettings$Opacity": "Opacity of image where 0 is transparent and 100 is fully opaque. Defaults to 100.",
-        "VideoDescription$Sharpness": "Changes the width of the anti-alias filter kernel used for scaling. Only applies if scaling is being performed and antiAlias is set to true. 0 is the softest setting, 100 the sharpest, and 50 recommended for most content."
+        "StaticImageActivateScheduleActionSettings$Opacity": "Opacity of image where 0 is transparent and 100 is fully opaque. Default is 100.",
+        "VideoDescription$Sharpness": "Changes the strength of the anti-alias filter used for scaling. 0 is the softest setting, 100 is the sharpest. A setting of 50 is recommended for most content."
       }
     },
     "__integerMin0Max1000": {
@@ -2185,7 +2380,7 @@
       "base": null,
       "refs": {
         "M2tsSettings$EbpLookaheadMs": "When set, enforces that Encoder Boundary Points do not come within the specified time interval of each other by looking ahead at input video. If another EBP is going to come in within the specified time interval, the current EBP is not emitted, and the segment is \"stretched\" to the next marker.  The lookahead value does not add latency to the system. The Live Event must be configured elsewhere to create sufficient latency to make the lookahead accurate.",
-        "MsSmoothGroupSettings$SendDelayMs": "Outputs that are \"output locked\" can use this delay. Assign a delay to the output that is \"secondary\".  Do not assign a delay to the \"primary\" output. The delay means that the primary output will always reach the downstream system before the secondary, which helps ensure that the downstream system always uses the primary output. (If there were no delay, the downstream system might flip-flop between whichever output happens to arrive first.) If the primary fails, the downstream system will switch to the secondary output. When the primary is restarted, the downstream system will switch back to the primary (because once again it is always arriving first)",
+        "MsSmoothGroupSettings$SendDelayMs": "Number of milliseconds to delay the output from the second pipeline.",
         "UdpOutputSettings$BufferMsec": "UDP output buffering in milliseconds. Larger values increase latency through the transcoder but simultaneously assist the transcoder in maintaining a constant, low-jitter UDP/RTP output while accommodating clock recovery, input switching, input disruptions, picture reordering, etc."
       }
     },
@@ -2199,7 +2394,7 @@
     "__integerMin0Max1099511627775": {
       "base": null,
       "refs": {
-        "Scte35SegmentationDescriptor$SegmentationDuration": "SCTE-35 segmentation_descriptor segmentation_duration specified in 90 KHz clock ticks."
+        "Scte35SegmentationDescriptor$SegmentationDuration": "Corresponds to SCTE-35 segmentation_duration. Optional. The duration for the time_signal, in 90 KHz ticks. To convert seconds to ticks, multiple the seconds by 90,000. Enter time in 90 KHz clock ticks. If you do not enter a duration, the time_signal will continue until you insert a cancellation message."
       }
     },
     "__integerMin0Max128": {
@@ -2227,12 +2422,12 @@
         "DvbSubDestinationSettings$BackgroundOpacity": "Specifies the opacity of the background rectangle. 255 is opaque; 0 is transparent. Leaving this parameter blank is equivalent to setting it to 0 (transparent).  All burn-in and DVB-Sub font settings must match.",
         "DvbSubDestinationSettings$FontOpacity": "Specifies the opacity of the burned-in captions. 255 is opaque; 0 is transparent.  All burn-in and DVB-Sub font settings must match.",
         "DvbSubDestinationSettings$ShadowOpacity": "Specifies the opacity of the shadow. 255 is opaque; 0 is transparent. Leaving this parameter blank is equivalent to setting it to 0 (transparent).  All burn-in and DVB-Sub font settings must match.",
-        "Scte35SegmentationDescriptor$SegmentNum": "SCTE-35 segmentation_descriptor segment_num.",
-        "Scte35SegmentationDescriptor$SegmentationTypeId": "SCTE-35 segmentation_descriptor segmentation_type_id.",
-        "Scte35SegmentationDescriptor$SegmentationUpidType": "SCTE-35 segmentation_descriptor segmentation_upid_type.",
-        "Scte35SegmentationDescriptor$SegmentsExpected": "SCTE-35 segmentation_descriptor segments_expected.",
-        "Scte35SegmentationDescriptor$SubSegmentNum": "SCTE-35 segmentation_descriptor sub_segment_num.",
-        "Scte35SegmentationDescriptor$SubSegmentsExpected": "SCTE-35 segmentation_descriptor sub_segments_expected."
+        "Scte35SegmentationDescriptor$SegmentNum": "Corresponds to SCTE-35 segment_num. A value that is valid for the specified segmentation_type_id.",
+        "Scte35SegmentationDescriptor$SegmentationTypeId": "Corresponds to SCTE-35 segmentation_type_id. One of the segmentation_type_id values listed in the SCTE-35 specification. On the console, enter the ID in decimal (for example, \"52\"). In the CLI, API, or an SDK, enter the ID in hex (for example, \"0x34\") or decimal (for example, \"52\").",
+        "Scte35SegmentationDescriptor$SegmentationUpidType": "Corresponds to SCTE-35 segmentation_upid_type. On the console, enter one of the types listed in the SCTE-35 specification, converted to a decimal. For example, \"0x0C\" hex from the specification is \"12\" in decimal. In the CLI, API, or an SDK, enter one of the types listed in the SCTE-35 specification, in either hex (for example, \"0x0C\" ) or in decimal (for example, \"12\").",
+        "Scte35SegmentationDescriptor$SegmentsExpected": "Corresponds to SCTE-35 segments_expected. A value that is valid for the specified segmentation_type_id.",
+        "Scte35SegmentationDescriptor$SubSegmentNum": "Corresponds to SCTE-35 sub_segment_num. A value that is valid for the specified segmentation_type_id.",
+        "Scte35SegmentationDescriptor$SubSegmentsExpected": "Corresponds to SCTE-35 sub_segments_expected. A value that is valid for the specified segmentation_type_id."
       }
     },
     "__integerMin0Max30": {
@@ -2251,7 +2446,7 @@
       "base": null,
       "refs": {
         "Scte35ReturnToNetworkScheduleActionSettings$SpliceEventId": "The splice_event_id for the SCTE-35 splice_insert, as defined in SCTE-35.",
-        "Scte35SegmentationDescriptor$SegmentationEventId": "SCTE-35 segmentation_descriptor segmentation_event_id.",
+        "Scte35SegmentationDescriptor$SegmentationEventId": "Corresponds to SCTE-35 segmentation_event_id. ",
         "Scte35SpliceInsertScheduleActionSettings$SpliceEventId": "The splice_event_id for the SCTE-35 splice_insert, as defined in SCTE-35."
       }
     },
@@ -2292,8 +2487,8 @@
       "refs": {
         "AudioChannelMapping$OutputChannel": "The index of the output channel being produced.",
         "H264Settings$GopNumBFrames": "Number of B-frames between reference frames.",
-        "StaticImageActivateScheduleActionSettings$Layer": "The Z order of the inserted image.  Images with higher layer values will be inserted on top of images with lower layer values. Permitted values are 0-7 inclusive. Defaults to 0.",
-        "StaticImageDeactivateScheduleActionSettings$Layer": "The Z order of the inserted image.  Images with higher layer values will be inserted on top of images with lower layer values. Permitted values are 0-7 inclusive. Defaults to 0."
+        "StaticImageActivateScheduleActionSettings$Layer": "The number of the layer, 0 to 7. There are 8 layers that can be overlaid on the video, each layer with a different image. The layers are in Z order, which means that overlays with higher values of layer are inserted on top of overlays with lower values of layer. Default is 0.",
+        "StaticImageDeactivateScheduleActionSettings$Layer": "The image overlay layer to deactivate, 0 to 7. Default is 0."
       }
     },
     "__integerMin0Max8191": {
@@ -2306,7 +2501,7 @@
     "__integerMin0Max8589934591": {
       "base": null,
       "refs": {
-        "Scte35SpliceInsertScheduleActionSettings$Duration": "The duration for the SCTE-35 splice_insert specified in 90KHz clock ticks. When duration is not specified the expectation is that a Scte35ReturnToNetwork action will be scheduled."
+        "Scte35SpliceInsertScheduleActionSettings$Duration": "Optional, the duration for the splice_insert, in 90 KHz ticks. To convert seconds to ticks, multiple the seconds by 90,000. If you enter a duration, there is an expectation that the downstream system can read the duration and cue in at that time. If you do not enter a duration, the splice_insert will continue indefinitely and there is an expectation that you will enter a return_to_network to end the splice_insert at the appropriate time."
       }
     },
     "__integerMin1": {
@@ -2314,29 +2509,37 @@
       "refs": {
         "ArchiveGroupSettings$RolloverInterval": "Number of seconds to write to archive file before closing and starting a new one.",
         "DvbSubSourceSettings$Pid": "When using DVB-Sub with Burn-In or SMPTE-TT, use this PID for the source content. Unused for DVB-Sub passthrough. All DVB-Sub content is passed through, regardless of selectors.",
+        "H264Settings$FramerateDenominator": "Framerate denominator.",
+        "H264Settings$FramerateNumerator": "Framerate numerator - framerate is a fraction, e.g. 24000 / 1001 = 23.976 fps.",
         "H264Settings$ParDenominator": "Pixel Aspect Ratio denominator.",
-        "HlsGroupSettings$KeepSegments": "If mode is \"live\", the number of TS segments to retain in the destination directory. If mode is \"vod\", this parameter has no effect.",
+        "HlsGroupSettings$KeepSegments": "Applies only if Mode field is LIVE. Specifies the number of media segments (.ts files) to retain in the destination directory.",
         "HlsGroupSettings$SegmentLength": "Length of MPEG-2 Transport Stream segments to create (in seconds). Note that segments will end on the next keyframe after this number of seconds, so actual segment length may be longer.",
         "HlsGroupSettings$SegmentsPerSubdirectory": "Number of segments to write to a subdirectory before starting a new one. directoryStructure must be subdirectoryPerStream for this setting to have an effect.",
         "MsSmoothGroupSettings$FragmentLength": "Length of mp4 fragments to generate (in seconds). Fragment length must be compatible with GOP size and framerate.",
         "PurchaseOffering$Count": "Number of resources",
         "RtmpOutputSettings$ConnectionRetryInterval": "Number of seconds to wait before retrying a connection to the Flash Media server if the connection is lost.",
         "Scte27SourceSettings$Pid": "The pid field is used in conjunction with the caption selector languageCode field as follows:\n  - Specify PID and Language: Extracts captions from that PID; the language is \"informational\".\n  - Specify PID and omit Language: Extracts the specified PID.\n  - Omit PID and specify Language: Extracts the specified language, whichever PID that happens to be.\n  - Omit PID and omit Language: Valid only if source is DVB-Sub that is being passed through; all languages will be passed through.",
-        "StaticImageActivateScheduleActionSettings$Height": "The height of the image when inserted into the video.  Defaults to the native height of the image.",
-        "StaticImageActivateScheduleActionSettings$Width": "The width of the image when inserted into the video.  Defaults to the native width of the image."
+        "StaticImageActivateScheduleActionSettings$Height": "The height of the image when inserted into the video, in pixels. The overlay will be scaled up or down to the specified height. Leave blank to use the native height of the overlay.",
+        "StaticImageActivateScheduleActionSettings$Width": "The width of the image when inserted into the video, in pixels. The overlay will be scaled up or down to the specified width. Leave blank to use the native width of the overlay."
       }
     },
     "__integerMin1000": {
       "base": null,
       "refs": {
-        "H264Settings$Bitrate": "Average bitrate in bits/second. Required for VBR, CBR, and ABR. For MS Smooth outputs, bitrates must be unique when rounded down to the nearest multiple of 1000.",
-        "H264Settings$MaxBitrate": "Maximum bitrate in bits/second (for VBR mode only)."
+        "H264Settings$Bitrate": "Average bitrate in bits/second. Required when the rate control mode is VBR or CBR. Not used for QVBR. In an MS Smooth output group, each output must have a unique value when its bitrate is rounded down to the nearest multiple of 1000.",
+        "H264Settings$MaxBitrate": "For QVBR: See the tooltip for Quality level \n\nFor VBR: Set the maximum bitrate in order to accommodate expected spikes in the complexity of the video."
       }
     },
     "__integerMin1000Max30000": {
       "base": null,
       "refs": {
         "DvbTdtSettings$RepInterval": "The number of milliseconds between instances of this table in the output transport stream."
+      }
+    },
+    "__integerMin1Max10": {
+      "base": null,
+      "refs": {
+        "H264Settings$QvbrQualityLevel": "Controls the target quality for the video encode. Applies only when the rate control mode is QVBR. Set values for the QVBR quality level field and Max bitrate field that suit your most important viewing devices. Recommended values are:\n- Primary screen: Quality level: 8 to 10. Max bitrate: 4M\n- PC or tablet: Quality level: 7. Max bitrate: 1.5M to 3M\n- Smartphone: Quality level: 6. Max bitrate: 1M to 1.5M"
       }
     },
     "__integerMin1Max1000000": {
@@ -2368,6 +2571,12 @@
       "base": null,
       "refs": {
         "H264Settings$Slices": "Number of slices per picture. Must be less than or equal to the number of macroblock rows for progressive pictures, and less than or equal to half the number of macroblock rows for interlaced pictures.\nThis field is optional; when no value is specified the encoder will choose the number of slices based on encode resolution."
+      }
+    },
+    "__integerMin1Max3600": {
+      "base": null,
+      "refs": {
+        "FrameCaptureSettings$CaptureInterval": "The frequency, in seconds, for capturing frames for inclusion in the output.  For example, \"10\" means capture a frame every 10 seconds."
       }
     },
     "__integerMin1Max4": {
@@ -2412,7 +2621,7 @@
     "__integerMin3": {
       "base": null,
       "refs": {
-        "HlsGroupSettings$IndexNSegments": "If mode is \"live\", the number of segments to retain in the manifest (.m3u8) file. This number must be less than or equal to keepSegments. If mode is \"vod\", this parameter has no effect."
+        "HlsGroupSettings$IndexNSegments": "Applies only if Mode field is LIVE. Specifies the maximum number of segments in the media manifest file. After this maximum, older segments are removed from the media manifest. This number must be less than or equal to the Keep Segments field."
       }
     },
     "__integerMin30": {
@@ -2573,6 +2782,25 @@
         "InputSecurityGroupWhitelistRequest$WhitelistRules": "List of IPv4 CIDR addresses to whitelist"
       }
     },
+    "__listOfMediaConnectFlow": {
+      "base": null,
+      "refs": {
+        "Input$MediaConnectFlows": "A list of MediaConnect Flows for this input."
+      }
+    },
+    "__listOfMediaConnectFlowRequest": {
+      "base": null,
+      "refs": {
+        "CreateInput$MediaConnectFlows": "A list of the MediaConnect Flows that you want to use in this input. You can specify as few as one\nFlow and presently, as many as two. The only requirement is when you have more than one is that each Flow is in a\nseparate Availability Zone as this ensures your EML input is redundant to AZ issues.\n",
+        "UpdateInput$MediaConnectFlows": "A list of the MediaConnect Flow ARNs that you want to use as the source of the input. You can specify as few as one\nFlow and presently, as many as two. The only requirement is when you have more than one is that each Flow is in a\nseparate Availability Zone as this ensures your EML input is redundant to AZ issues.\n"
+      }
+    },
+    "__listOfMediaPackageOutputDestinationSettings": {
+      "base": null,
+      "refs": {
+        "OutputDestination$MediaPackageSettings": "Destination settings for a MediaPackage output; one destination for both encoders."
+      }
+    },
     "__listOfOffering": {
       "base": null,
       "refs": {
@@ -2591,19 +2819,26 @@
         "Channel$Destinations": "A list of destinations of the channel. For UDP outputs, there is one\ndestination per output. For other types (HLS, for example), there is\none destination per packager.\n",
         "ChannelSummary$Destinations": "A list of destinations of the channel. For UDP outputs, there is one\ndestination per output. For other types (HLS, for example), there is\none destination per packager.\n",
         "CreateChannel$Destinations": null,
-        "UpdateChannel$Destinations": "A list of output destinations for this channel."
+        "UpdateChannel$Destinations": "A list of output destinations for this channel.",
+        "UpdateChannelClass$Destinations": "A list of output destinations for this channel."
       }
     },
     "__listOfOutputDestinationSettings": {
       "base": null,
       "refs": {
-        "OutputDestination$Settings": "Destination settings for output; one for each redundant encoder."
+        "OutputDestination$Settings": "Destination settings for a standard output; one destination for each redundant encoder."
       }
     },
     "__listOfOutputGroup": {
       "base": null,
       "refs": {
         "EncoderSettings$OutputGroups": null
+      }
+    },
+    "__listOfPipelinePauseStateSettings": {
+      "base": null,
+      "refs": {
+        "PauseStateScheduleActionSettings$Pipelines": null
       }
     },
     "__listOfReservation": {
@@ -2616,9 +2851,9 @@
       "base": null,
       "refs": {
         "BatchScheduleActionCreateRequest$ScheduleActions": "A list of schedule actions to create.",
-        "BatchScheduleActionCreateResult$ScheduleActions": "Returned list of created schedule actions.",
-        "BatchScheduleActionDeleteResult$ScheduleActions": "Returned list of deleted schedule actions.",
-        "ScheduleDescribeResultModel$ScheduleActions": "The list of schedule actions."
+        "BatchScheduleActionCreateResult$ScheduleActions": "List of actions that have been created in the schedule.",
+        "BatchScheduleActionDeleteResult$ScheduleActions": "List of actions that have been deleted from the schedule.",
+        "ScheduleDescribeResultModel$ScheduleActions": "The list of actions in the schedule."
       }
     },
     "__listOfScte35Descriptor": {
@@ -2642,11 +2877,13 @@
     "__listOf__string": {
       "base": null,
       "refs": {
-        "BatchScheduleActionDeleteRequest$ActionNames": "A list of schedule actions to delete, identified by unique name.",
+        "BatchScheduleActionDeleteRequest$ActionNames": "A list of schedule actions to delete.",
         "CreateInput$InputSecurityGroups": "A list of security groups referenced by IDs to attach to the input.",
         "Input$AttachedChannels": "A list of channel IDs that that input is attached to (currently an input can only be attached to one channel).",
-        "Input$SecurityGroups": "A list of IDs for all the security groups attached to the input.",
+        "Input$SecurityGroups": "A list of IDs for all the Input Security Groups attached to the input.",
         "InputSecurityGroup$Inputs": "The list of inputs currently using this Input Security Group.",
+        "InputVpcRequest$SecurityGroupIds": "A list of up to 5 EC2 VPC security group IDs to attach to the Input VPC network interfaces.\nRequires subnetIds. If none are specified then the VPC default security group will be used.\n",
+        "InputVpcRequest$SubnetIds": "A list of 2 VPC subnet IDs from the same VPC.\nSubnet IDs must be mapped to two unique availability zones (AZ).\n",
         "Output$AudioDescriptionNames": "The names of the AudioDescriptions used as audio sources for this output.",
         "Output$CaptionDescriptionNames": "The names of the CaptionDescriptions used as caption sources for this output.",
         "UpdateInput$InputSecurityGroups": "A list of security groups referenced by IDs to attach to the input."
@@ -2663,7 +2900,6 @@
         "AudioDescription$StreamName": "Used for MS Smooth and Apple HLS outputs. Indicates the name displayed by the player (eg. English, or Director Commentary).",
         "AudioLanguageSelection$LanguageCode": "Selects a specific three-letter language code from within an audio source.",
         "AudioOnlyHlsSettings$AudioGroupId": "Specifies the group to which the audio Rendition belongs.",
-        "AudioSelector$Name": "The name of this AudioSelector. AudioDescriptions will use this name to uniquely identify this Selector.  Selector names should be unique per input.",
         "BadGatewayException$Message": null,
         "BurnInDestinationSettings$FontSize": "When set to 'auto' fontSize will scale depending on the size of the output.  Giving a positive integer will specify the exact font size in points.  All burn-in and DVB-Sub font settings must match.",
         "CaptionDescription$CaptionSelectorName": "Specifies which input caption selector to use as a caption source when generating output captions. This field should match a captionSelector name.",
@@ -2671,7 +2907,6 @@
         "CaptionDescription$LanguageDescription": "Human readable information to indicate captions available for players (eg. English, or Spanish).",
         "CaptionDescription$Name": "Name of the caption description.  Used to associate a caption description with an output.  Names must be unique within an event.",
         "CaptionSelector$LanguageCode": "When specified this field indicates the three letter language code of the caption track to extract from the source.",
-        "CaptionSelector$Name": "Name identifier for a caption selector.  This name is used to associate this caption selector with one or more caption descriptions.  Names must be unique within an event.",
         "Channel$Arn": "The unique arn of the channel.",
         "Channel$Id": "The unique id of the channel.",
         "Channel$Name": "The name of the channel. (user-mutable)",
@@ -2688,8 +2923,11 @@
         "CreateChannel$RoleArn": "An optional Amazon Resource Name (ARN) of the role to assume when running the Channel.",
         "CreateInput$Name": "Name of the input.",
         "CreateInput$RequestId": "Unique identifier of the request to ensure the request is handled\nexactly once in case of retries.\n",
+        "CreateInput$RoleArn": "The Amazon Resource Name (ARN) of the role this input assumes during and after creation.",
         "DvbSubDestinationSettings$FontSize": "When set to auto fontSize will scale depending on the size of the output.  Giving a positive integer will specify the exact font size in points.  All burn-in and DVB-Sub font settings must match.",
-        "FixedModeScheduleActionStartSettings$Time": "Fixed timestamp action start. Conforms to ISO-8601.",
+        "FixedModeScheduleActionStartSettings$Time": "Start time for the action to start in the channel. (Not the time for the action to be added to the schedule: actions are always added to the schedule immediately.) UTC format: yyyy-mm-ddThh:mm:ss.nnnZ. All the letters are digits (for example, mm might be 01) except for the two constants \"T\" for time and \"Z\" for \"UTC format\".",
+        "FollowModeScheduleActionStartSettings$ReferenceActionName": "The action name of another action that this one refers to.",
+        "FrameCaptureOutputSettings$NameModifier": "Required if the output group contains more than one output. This modifier forms part of the output file name.",
         "GatewayTimeoutException$Message": null,
         "HlsAkamaiSettings$Salt": "Salt for authenticated Akamai.",
         "HlsAkamaiSettings$Token": "Token parameter for authenticated akamai. If not specified, _gda_ is used.",
@@ -2698,14 +2936,19 @@
         "HlsGroupSettings$KeyFormat": "The value specifies how the key is represented in the resource identified by the URI.  If parameter is absent, an implicit value of \"identity\" is used.  A reverse DNS string can also be given.",
         "HlsGroupSettings$KeyFormatVersions": "Either a single positive integer version value or a slash delimited list of version values (1/2/3).",
         "HlsOutputSettings$SegmentModifier": "String concatenated to end of segment filenames.",
+        "HlsTimedMetadataScheduleActionSettings$Id3": "Base64 string formatted according to the ID3 specification: http://id3.org/id3v2.4.0-structure",
         "Input$Arn": "The Unique ARN of the input (generated, immutable).",
         "Input$Id": "The generated ID of the input (unique for user account, immutable).",
         "Input$Name": "The user-assigned name (This is a mutable value).",
+        "Input$RoleArn": "The Amazon Resource Name (ARN) of the role this input assumes during and after creation.",
+        "InputAttachment$InputAttachmentName": "User-specified name for the attachment. This is required if the user wants to use this input in an input switch action.",
         "InputAttachment$InputId": "The ID of the input",
         "InputDestination$Ip": "The system-generated static IP address of endpoint.\nIt remains fixed for the lifetime of the input.\n",
         "InputDestination$Port": "The port number for the input.",
         "InputDestination$Url": "This represents the endpoint that the customer stream will be\npushed to.\n",
         "InputDestinationRequest$StreamName": "A unique name for the location the RTMP stream is being pushed\nto.\n",
+        "InputDestinationVpc$AvailabilityZone": "The availability zone of the Input destination.\n",
+        "InputDestinationVpc$NetworkInterfaceId": "The network interface ID of the Input destination in the VPC.\n",
         "InputLocation$PasswordParam": "key used to extract the password from EC2 Parameter store",
         "InputLocation$Uri": "Uniform Resource Identifier - This should be a path to a file accessible to the Live system (eg. a http:// URI) depending on the output type. For example, a RTMP destination should have a uri simliar to: \"rtmp://fmsserver/live\".",
         "InputLocation$Username": "Username if credentials are required to access a file or publishing point.  This can be either a plaintext username, or a reference to an AWS parameter store name from which the username can be retrieved.  AWS Parameter store format: \"ssm://<parameter name>\"",
@@ -2717,6 +2960,7 @@
         "InputSourceRequest$PasswordParam": "The key used to extract the password from EC2 Parameter store.",
         "InputSourceRequest$Url": "This represents the customer's source URL where stream is\npulled from.\n",
         "InputSourceRequest$Username": "The username for the input source.",
+        "InputSwitchScheduleActionSettings$InputAttachmentNameReference": "The name of the input attachment that should be switched to by this action.",
         "InputWhitelistRule$Cidr": "The IPv4 CIDR that's whitelisted.",
         "InputWhitelistRuleCidr$Cidr": "The IPv4 CIDR to whitelist.",
         "InternalServiceError$Message": null,
@@ -2748,6 +2992,8 @@
         "M3u8Settings$Scte35Pid": "Packet Identifier (PID) of the SCTE-35 stream in the transport stream. Can be entered as a decimal or hexadecimal value.",
         "M3u8Settings$TimedMetadataPid": "Packet Identifier (PID) of the timed metadata stream in the transport stream. Can be entered as a decimal or hexadecimal value.  Valid values are 32 (or 0x20)..8182 (or 0x1ff6).",
         "M3u8Settings$VideoPid": "Packet Identifier (PID) of the elementary video stream in the transport stream. Can be entered as a decimal or hexadecimal value.",
+        "MediaConnectFlow$FlowArn": "The unique ARN of the MediaConnect Flow being used as a source.",
+        "MediaConnectFlowRequest$FlowArn": "The ARN of the MediaConnect Flow that you want to use as a source.",
         "MsSmoothGroupSettings$AcquisitionPointId": "The value of the \"Acquisition Point Identity\" element used in each message placed in the sparse track.  Only enabled if sparseTrackType is not \"none\".",
         "MsSmoothGroupSettings$EventId": "MS Smooth event ID to be sent to the IIS server.\n\nShould only be specified if eventIdMode is set to useConfigured.",
         "MsSmoothGroupSettings$TimestampOffset": "Timestamp offset for the event.  Only used if timestampOffsetMode is set to useConfiguredOffset.",
@@ -2766,6 +3012,7 @@
         "OutputLocationRef$DestinationRefId": null,
         "PurchaseOffering$Name": "Name for the new reservation",
         "PurchaseOffering$RequestId": "Unique request ID to be specified. This is needed to prevent retries from creating multiple resources.",
+        "PurchaseOffering$Start": "Requested reservation start time (UTC) in ISO-8601 format. The specified time must be between the first day of the current month and one year from now. If no value is given, the default is now.",
         "Reservation$Arn": "Unique reservation ARN, e.g. 'arn:aws:medialive:us-west-2:123456789012:reservation:1234567'",
         "Reservation$CurrencyCode": "Currency code for usagePrice and fixedPrice in ISO-4217 format, e.g. 'USD'",
         "Reservation$End": "Reservation UTC end date and time in ISO-8601 format, e.g. '2019-03-01T00:00:00'",
@@ -2777,14 +3024,17 @@
         "Reservation$Start": "Reservation UTC start date and time in ISO-8601 format, e.g. '2018-03-01T00:00:00'",
         "ResourceConflict$Message": null,
         "ResourceNotFound$Message": null,
-        "ScheduleAction$ActionName": "The name of the action, must be unique within the schedule.",
+        "ScheduleAction$ActionName": "The name of the action, must be unique within the schedule. This name provides the main reference to an action once it is added to the schedule. A name is unique if it is no longer in the schedule. The schedule is automatically cleaned up to remove actions with a start time of more than 1 hour ago (approximately) so at that point a name can be reused.",
         "ScheduleDescribeResultModel$NextToken": "The next token; for use in pagination.",
-        "Scte35SegmentationDescriptor$SegmentationUpid": "SCTE-35 segmentation_descriptor segmentation_upid as a hex string.",
+        "Scte35SegmentationDescriptor$SegmentationUpid": "Corresponds to SCTE-35 segmentation_upid. Enter a string containing the hexadecimal representation of the characters that make up the SCTE-35 segmentation_upid value. Must contain an even number of hex characters. Do not include spaces between each hex pair. For example, the ASCII \"ADS Information\" becomes hex \"41445320496e666f726d6174696f6e.",
         "StandardHlsSettings$AudioRenditionSets": "List all the audio groups that are used with the video output stream. Input all the audio GROUP-IDs that are associated to the video, separate by ','.",
+        "Tags$member": null,
         "TeletextSourceSettings$PageNumber": "Specifies the teletext page number within the data stream from which to extract captions. Range of 0x100 (256) to 0x8FF (2303). Unused for passthrough. Should be specified as a hexadecimal string with no \"0x\" prefix.",
         "UpdateChannel$Name": "The name of the channel.",
         "UpdateChannel$RoleArn": "An optional Amazon Resource Name (ARN) of the role to assume when running the Channel. If you do not specify this on an update call but the role was previously set that role will be removed.",
         "UpdateInput$Name": "Name of the input.",
+        "UpdateInput$RoleArn": "The Amazon Resource Name (ARN) of the role this input assumes during and after creation.",
+        "UpdateReservation$Name": "Name of the reservation",
         "ValidationError$ElementPath": null,
         "ValidationError$ErrorMessage": null,
         "VideoDescription$Name": "The name of this VideoDescription. Outputs will use this name to uniquely identify this Description.  Description names should be unique within this Live Event.",
@@ -2800,8 +3050,11 @@
     "__stringMin1": {
       "base": null,
       "refs": {
+        "AudioSelector$Name": "The name of this AudioSelector. AudioDescriptions will use this name to uniquely identify this Selector.  Selector names should be unique per input.",
         "CaptionLanguageMapping$LanguageDescription": "Textual description of language",
-        "HlsOutputSettings$NameModifier": "String concatenated to the end of the destination filename. Accepts \\\"Format Identifiers\\\":#formatIdentifierParameters."
+        "CaptionSelector$Name": "Name identifier for a caption selector.  This name is used to associate this caption selector with one or more caption descriptions.  Names must be unique within an event.",
+        "HlsOutputSettings$NameModifier": "String concatenated to the end of the destination filename. Accepts \\\"Format Identifiers\\\":#formatIdentifierParameters.",
+        "MediaPackageOutputDestinationSettings$ChannelId": "ID of the channel in MediaPackage that is the destination for this output group. You do not need to specify the individual inputs in MediaPackage; MediaLive will handle the connection of the two MediaLive pipelines to the two MediaPackage inputs. The MediaPackage channel and MediaLive channel must be in the same region."
       }
     },
     "__stringMin1Max255": {

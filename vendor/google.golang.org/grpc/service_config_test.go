@@ -19,19 +19,81 @@
 package grpc
 
 import (
+	"encoding/json"
 	"fmt"
 	"math"
 	"reflect"
 	"testing"
 	"time"
+
+	"google.golang.org/grpc/balancer"
+	"google.golang.org/grpc/serviceconfig"
 )
 
-func TestParseLoadBalancer(t *testing.T) {
-	testcases := []struct {
-		scjs    string
-		wantSC  ServiceConfig
-		wantErr bool
-	}{
+type parseTestCase struct {
+	scjs    string
+	wantSC  *ServiceConfig
+	wantErr bool
+}
+
+func runParseTests(t *testing.T, testCases []parseTestCase) {
+	for _, c := range testCases {
+		sc, err := parseServiceConfig(c.scjs)
+		if !c.wantErr {
+			c.wantSC.rawJSONString = c.scjs
+		}
+		if c.wantErr != (err != nil) || !reflect.DeepEqual(sc, c.wantSC) {
+			t.Fatalf("parseServiceConfig(%s) = %+v, %v, want %+v, %v", c.scjs, sc, err, c.wantSC, c.wantErr)
+		}
+	}
+}
+
+type pbbData struct {
+	serviceconfig.LoadBalancingConfig
+	Foo string
+	Bar int
+}
+
+type parseBalancerBuilder struct{}
+
+func (parseBalancerBuilder) Name() string {
+	return "pbb"
+}
+
+func (parseBalancerBuilder) ParseConfig(c json.RawMessage) (serviceconfig.LoadBalancingConfig, error) {
+	d := pbbData{}
+	if err := json.Unmarshal(c, &d); err != nil {
+		return nil, err
+	}
+	return d, nil
+}
+
+func (parseBalancerBuilder) Build(cc balancer.ClientConn, opts balancer.BuildOptions) balancer.Balancer {
+	panic("unimplemented")
+}
+
+func init() {
+	balancer.Register(parseBalancerBuilder{})
+}
+
+func (s) TestParseLBConfig(t *testing.T) {
+	testcases := []parseTestCase{
+		{
+			`{
+    "loadBalancingConfig": [{"pbb": { "foo": "hi" } }]
+}`,
+			&ServiceConfig{
+				Methods:  make(map[string]MethodConfig),
+				lbConfig: &lbConfig{name: "pbb", cfg: pbbData{Foo: "hi"}},
+			},
+			false,
+		},
+	}
+	runParseTests(t, testcases)
+}
+
+func (s) TestParseLoadBalancer(t *testing.T) {
+	testcases := []parseTestCase{
 		{
 			`{
     "loadBalancingPolicy": "round_robin",
@@ -47,7 +109,7 @@ func TestParseLoadBalancer(t *testing.T) {
         }
     ]
 }`,
-			ServiceConfig{
+			&ServiceConfig{
 				LB: newString("round_robin"),
 				Methods: map[string]MethodConfig{
 					"/foo/Bar": {
@@ -72,25 +134,15 @@ func TestParseLoadBalancer(t *testing.T) {
         }
     ]
 }`,
-			ServiceConfig{},
+			nil,
 			true,
 		},
 	}
-
-	for _, c := range testcases {
-		sc, err := parseServiceConfig(c.scjs)
-		if c.wantErr != (err != nil) || !reflect.DeepEqual(sc, c.wantSC) {
-			t.Fatalf("parseServiceConfig(%s) = %+v, %v, want %+v, %v", c.scjs, sc, err, c.wantSC, c.wantErr)
-		}
-	}
+	runParseTests(t, testcases)
 }
 
-func TestParseWaitForReady(t *testing.T) {
-	testcases := []struct {
-		scjs    string
-		wantSC  ServiceConfig
-		wantErr bool
-	}{
+func (s) TestParseWaitForReady(t *testing.T) {
+	testcases := []parseTestCase{
 		{
 			`{
     "methodConfig": [
@@ -105,7 +157,7 @@ func TestParseWaitForReady(t *testing.T) {
         }
     ]
 }`,
-			ServiceConfig{
+			&ServiceConfig{
 				Methods: map[string]MethodConfig{
 					"/foo/Bar": {
 						WaitForReady: newBool(true),
@@ -128,7 +180,7 @@ func TestParseWaitForReady(t *testing.T) {
         }
     ]
 }`,
-			ServiceConfig{
+			&ServiceConfig{
 				Methods: map[string]MethodConfig{
 					"/foo/Bar": {
 						WaitForReady: newBool(false),
@@ -160,25 +212,16 @@ func TestParseWaitForReady(t *testing.T) {
         }
     ]
 }`,
-			ServiceConfig{},
+			nil,
 			true,
 		},
 	}
 
-	for _, c := range testcases {
-		sc, err := parseServiceConfig(c.scjs)
-		if c.wantErr != (err != nil) || !reflect.DeepEqual(sc, c.wantSC) {
-			t.Fatalf("parseServiceConfig(%s) = %+v, %v, want %+v, %v", c.scjs, sc, err, c.wantSC, c.wantErr)
-		}
-	}
+	runParseTests(t, testcases)
 }
 
-func TestPraseTimeOut(t *testing.T) {
-	testcases := []struct {
-		scjs    string
-		wantSC  ServiceConfig
-		wantErr bool
-	}{
+func (s) TestParseTimeOut(t *testing.T) {
+	testcases := []parseTestCase{
 		{
 			`{
     "methodConfig": [
@@ -193,7 +236,7 @@ func TestPraseTimeOut(t *testing.T) {
         }
     ]
 }`,
-			ServiceConfig{
+			&ServiceConfig{
 				Methods: map[string]MethodConfig{
 					"/foo/Bar": {
 						Timeout: newDuration(time.Second),
@@ -216,7 +259,7 @@ func TestPraseTimeOut(t *testing.T) {
         }
     ]
 }`,
-			ServiceConfig{},
+			nil,
 			true,
 		},
 		{
@@ -242,25 +285,16 @@ func TestPraseTimeOut(t *testing.T) {
         }
     ]
 }`,
-			ServiceConfig{},
+			nil,
 			true,
 		},
 	}
 
-	for _, c := range testcases {
-		sc, err := parseServiceConfig(c.scjs)
-		if c.wantErr != (err != nil) || !reflect.DeepEqual(sc, c.wantSC) {
-			t.Fatalf("parseServiceConfig(%s) = %+v, %v, want %+v, %v", c.scjs, sc, err, c.wantSC, c.wantErr)
-		}
-	}
+	runParseTests(t, testcases)
 }
 
-func TestPraseMsgSize(t *testing.T) {
-	testcases := []struct {
-		scjs    string
-		wantSC  ServiceConfig
-		wantErr bool
-	}{
+func (s) TestParseMsgSize(t *testing.T) {
+	testcases := []parseTestCase{
 		{
 			`{
     "methodConfig": [
@@ -276,7 +310,7 @@ func TestPraseMsgSize(t *testing.T) {
         }
     ]
 }`,
-			ServiceConfig{
+			&ServiceConfig{
 				Methods: map[string]MethodConfig{
 					"/foo/Bar": {
 						MaxReqSize:  newInt(1024),
@@ -311,20 +345,15 @@ func TestPraseMsgSize(t *testing.T) {
         }
     ]
 }`,
-			ServiceConfig{},
+			nil,
 			true,
 		},
 	}
 
-	for _, c := range testcases {
-		sc, err := parseServiceConfig(c.scjs)
-		if c.wantErr != (err != nil) || !reflect.DeepEqual(sc, c.wantSC) {
-			t.Fatalf("parseServiceConfig(%s) = %+v, %v, want %+v, %v", c.scjs, sc, err, c.wantSC, c.wantErr)
-		}
-	}
+	runParseTests(t, testcases)
 }
 
-func TestParseDuration(t *testing.T) {
+func (s) TestParseDuration(t *testing.T) {
 	testCases := []struct {
 		s    *string
 		want *time.Duration

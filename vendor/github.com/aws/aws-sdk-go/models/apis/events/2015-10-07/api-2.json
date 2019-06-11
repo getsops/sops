@@ -21,6 +21,7 @@
       "input":{"shape":"DeleteRuleRequest"},
       "errors":[
         {"shape":"ConcurrentModificationException"},
+        {"shape":"ManagedRuleException"},
         {"shape":"InternalException"}
       ]
     },
@@ -60,6 +61,7 @@
       "errors":[
         {"shape":"ResourceNotFoundException"},
         {"shape":"ConcurrentModificationException"},
+        {"shape":"ManagedRuleException"},
         {"shape":"InternalException"}
       ]
     },
@@ -73,6 +75,7 @@
       "errors":[
         {"shape":"ResourceNotFoundException"},
         {"shape":"ConcurrentModificationException"},
+        {"shape":"ManagedRuleException"},
         {"shape":"InternalException"}
       ]
     },
@@ -97,6 +100,19 @@
       "input":{"shape":"ListRulesRequest"},
       "output":{"shape":"ListRulesResponse"},
       "errors":[
+        {"shape":"InternalException"}
+      ]
+    },
+    "ListTagsForResource":{
+      "name":"ListTagsForResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListTagsForResourceRequest"},
+      "output":{"shape":"ListTagsForResourceResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
         {"shape":"InternalException"}
       ]
     },
@@ -151,6 +167,7 @@
         {"shape":"InvalidEventPatternException"},
         {"shape":"LimitExceededException"},
         {"shape":"ConcurrentModificationException"},
+        {"shape":"ManagedRuleException"},
         {"shape":"InternalException"}
       ]
     },
@@ -166,6 +183,7 @@
         {"shape":"ResourceNotFoundException"},
         {"shape":"ConcurrentModificationException"},
         {"shape":"LimitExceededException"},
+        {"shape":"ManagedRuleException"},
         {"shape":"InternalException"}
       ]
     },
@@ -193,7 +211,23 @@
       "errors":[
         {"shape":"ResourceNotFoundException"},
         {"shape":"ConcurrentModificationException"},
+        {"shape":"ManagedRuleException"},
         {"shape":"InternalException"}
+      ]
+    },
+    "TagResource":{
+      "name":"TagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"TagResourceRequest"},
+      "output":{"shape":"TagResourceResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"InternalException"},
+        {"shape":"ManagedRuleException"}
       ]
     },
     "TestEventPattern":{
@@ -207,6 +241,21 @@
       "errors":[
         {"shape":"InvalidEventPatternException"},
         {"shape":"InternalException"}
+      ]
+    },
+    "UntagResource":{
+      "name":"UntagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UntagResourceRequest"},
+      "output":{"shape":"UntagResourceResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InternalException"},
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"ManagedRuleException"}
       ]
     }
   },
@@ -270,11 +319,25 @@
       },
       "exception":true
     },
+    "Condition":{
+      "type":"structure",
+      "required":[
+        "Type",
+        "Key",
+        "Value"
+      ],
+      "members":{
+        "Type":{"shape":"String"},
+        "Key":{"shape":"String"},
+        "Value":{"shape":"String"}
+      }
+    },
     "DeleteRuleRequest":{
       "type":"structure",
       "required":["Name"],
       "members":{
-        "Name":{"shape":"RuleName"}
+        "Name":{"shape":"RuleName"},
+        "Force":{"shape":"Boolean"}
       }
     },
     "DescribeEventBusRequest":{
@@ -306,7 +369,8 @@
         "ScheduleExpression":{"shape":"ScheduleExpression"},
         "State":{"shape":"RuleState"},
         "Description":{"shape":"RuleDescription"},
-        "RoleArn":{"shape":"RoleArn"}
+        "RoleArn":{"shape":"RoleArn"},
+        "ManagedBy":{"shape":"ManagedBy"}
       }
     },
     "DisableRuleRequest":{
@@ -433,6 +497,19 @@
         "NextToken":{"shape":"NextToken"}
       }
     },
+    "ListTagsForResourceRequest":{
+      "type":"structure",
+      "required":["ResourceARN"],
+      "members":{
+        "ResourceARN":{"shape":"Arn"}
+      }
+    },
+    "ListTagsForResourceResponse":{
+      "type":"structure",
+      "members":{
+        "Tags":{"shape":"TagList"}
+      }
+    },
     "ListTargetsByRuleRequest":{
       "type":"structure",
       "required":["Rule"],
@@ -448,6 +525,17 @@
         "Targets":{"shape":"TargetList"},
         "NextToken":{"shape":"NextToken"}
       }
+    },
+    "ManagedBy":{
+      "type":"string",
+      "max":128,
+      "min":1
+    },
+    "ManagedRuleException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
     },
     "MessageGroupId":{"type":"string"},
     "NetworkConfiguration":{
@@ -525,7 +613,8 @@
       "members":{
         "Action":{"shape":"Action"},
         "Principal":{"shape":"Principal"},
-        "StatementId":{"shape":"StatementId"}
+        "StatementId":{"shape":"StatementId"},
+        "Condition":{"shape":"Condition"}
       }
     },
     "PutRuleRequest":{
@@ -537,7 +626,8 @@
         "EventPattern":{"shape":"EventPattern"},
         "State":{"shape":"RuleState"},
         "Description":{"shape":"RuleDescription"},
-        "RoleArn":{"shape":"RoleArn"}
+        "RoleArn":{"shape":"RoleArn"},
+        "Tags":{"shape":"TagList"}
       }
     },
     "PutRuleResponse":{
@@ -591,7 +681,8 @@
       ],
       "members":{
         "Rule":{"shape":"RuleName"},
-        "Ids":{"shape":"TargetIdList"}
+        "Ids":{"shape":"TargetIdList"},
+        "Force":{"shape":"Boolean"}
       }
     },
     "RemoveTargetsResponse":{
@@ -633,7 +724,8 @@
         "State":{"shape":"RuleState"},
         "Description":{"shape":"RuleDescription"},
         "ScheduleExpression":{"shape":"ScheduleExpression"},
-        "RoleArn":{"shape":"RoleArn"}
+        "RoleArn":{"shape":"RoleArn"},
+        "ManagedBy":{"shape":"ManagedBy"}
       }
     },
     "RuleArn":{
@@ -728,6 +820,51 @@
       "type":"list",
       "member":{"shape":"String"}
     },
+    "Tag":{
+      "type":"structure",
+      "required":[
+        "Key",
+        "Value"
+      ],
+      "members":{
+        "Key":{"shape":"TagKey"},
+        "Value":{"shape":"TagValue"}
+      }
+    },
+    "TagKey":{
+      "type":"string",
+      "max":128,
+      "min":1
+    },
+    "TagKeyList":{
+      "type":"list",
+      "member":{"shape":"TagKey"}
+    },
+    "TagList":{
+      "type":"list",
+      "member":{"shape":"Tag"}
+    },
+    "TagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "ResourceARN",
+        "Tags"
+      ],
+      "members":{
+        "ResourceARN":{"shape":"Arn"},
+        "Tags":{"shape":"TagList"}
+      }
+    },
+    "TagResourceResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "TagValue":{
+      "type":"string",
+      "max":256,
+      "min":0
+    },
     "Target":{
       "type":"structure",
       "required":[
@@ -810,6 +947,22 @@
       "key":{"shape":"InputTransformerPathKey"},
       "value":{"shape":"TargetInputPath"},
       "max":10
+    },
+    "UntagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "ResourceARN",
+        "TagKeys"
+      ],
+      "members":{
+        "ResourceARN":{"shape":"Arn"},
+        "TagKeys":{"shape":"TagKeyList"}
+      }
+    },
+    "UntagResourceResponse":{
+      "type":"structure",
+      "members":{
+      }
     }
   }
 }

@@ -511,6 +511,7 @@ func TestGetEventStream_ReadException(t *testing.T) {
 }
 
 var _ awserr.Error = (*ExceptionEvent)(nil)
+var _ awserr.Error = (*ExceptionEvent2)(nil)
 
 type loopReader struct {
 	source *bytes.Reader

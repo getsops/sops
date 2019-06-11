@@ -16,6 +16,7 @@ package datastore
 
 import (
 	"bytes"
+	"context"
 	"encoding/base64"
 	"encoding/gob"
 	"errors"
@@ -23,7 +24,6 @@ import (
 	"strings"
 
 	"github.com/golang/protobuf/proto"
-	"golang.org/x/net/context"
 	pb "google.golang.org/genproto/googleapis/datastore/v1"
 )
 
@@ -209,6 +209,19 @@ func (k *Key) Encode() string {
 
 // DecodeKey decodes a key from the opaque representation returned by Encode.
 func DecodeKey(encoded string) (*Key, error) {
+	k, err := decodeCloudKey(encoded)
+	if err != nil {
+		// Couldn't decode it as a Cloud Datastore key, try decoding it as a key encoded by google.golang.org/appengine/datastore.
+		if k := decodeGAEKey(encoded); k != nil {
+			return k, nil
+		}
+		// Return original error.
+		return nil, err
+	}
+	return k, nil
+}
+
+func decodeCloudKey(encoded string) (*Key, error) {
 	// Re-add padding.
 	if m := len(encoded) % 4; m != 0 {
 		encoded += strings.Repeat("=", 4-m)

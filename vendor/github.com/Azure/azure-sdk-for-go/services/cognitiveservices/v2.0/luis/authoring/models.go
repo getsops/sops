@@ -25,6 +25,9 @@ import (
 	"io"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v2.0/luis/authoring"
+
 // OperationStatusType enumerates the values for operation status type.
 type OperationStatusType string
 
@@ -58,6 +61,8 @@ const (
 	ReadableTypeHierarchicalEntityExtractor ReadableType = "Hierarchical Entity Extractor"
 	// ReadableTypeIntentClassifier ...
 	ReadableTypeIntentClassifier ReadableType = "Intent Classifier"
+	// ReadableTypeListEntityExtractor ...
+	ReadableTypeListEntityExtractor ReadableType = "List Entity Extractor"
 	// ReadableTypePatternAnyEntityExtractor ...
 	ReadableTypePatternAnyEntityExtractor ReadableType = "Pattern.Any Entity Extractor"
 	// ReadableTypePrebuiltEntityExtractor ...
@@ -68,7 +73,7 @@ const (
 
 // PossibleReadableTypeValues returns an array of possible values for the ReadableType const type.
 func PossibleReadableTypeValues() []ReadableType {
-	return []ReadableType{ReadableTypeClosedListEntityExtractor, ReadableTypeCompositeEntityExtractor, ReadableTypeEntityExtractor, ReadableTypeHierarchicalChildEntityExtractor, ReadableTypeHierarchicalEntityExtractor, ReadableTypeIntentClassifier, ReadableTypePatternAnyEntityExtractor, ReadableTypePrebuiltEntityExtractor, ReadableTypeRegexEntityExtractor}
+	return []ReadableType{ReadableTypeClosedListEntityExtractor, ReadableTypeCompositeEntityExtractor, ReadableTypeEntityExtractor, ReadableTypeHierarchicalChildEntityExtractor, ReadableTypeHierarchicalEntityExtractor, ReadableTypeIntentClassifier, ReadableTypeListEntityExtractor, ReadableTypePatternAnyEntityExtractor, ReadableTypePrebuiltEntityExtractor, ReadableTypeRegexEntityExtractor}
 }
 
 // ReadableType1 enumerates the values for readable type 1.
@@ -87,6 +92,8 @@ const (
 	ReadableType1HierarchicalEntityExtractor ReadableType1 = "Hierarchical Entity Extractor"
 	// ReadableType1IntentClassifier ...
 	ReadableType1IntentClassifier ReadableType1 = "Intent Classifier"
+	// ReadableType1ListEntityExtractor ...
+	ReadableType1ListEntityExtractor ReadableType1 = "List Entity Extractor"
 	// ReadableType1PatternAnyEntityExtractor ...
 	ReadableType1PatternAnyEntityExtractor ReadableType1 = "Pattern.Any Entity Extractor"
 	// ReadableType1PrebuiltEntityExtractor ...
@@ -97,7 +104,7 @@ const (
 
 // PossibleReadableType1Values returns an array of possible values for the ReadableType1 const type.
 func PossibleReadableType1Values() []ReadableType1 {
-	return []ReadableType1{ReadableType1ClosedListEntityExtractor, ReadableType1CompositeEntityExtractor, ReadableType1EntityExtractor, ReadableType1HierarchicalChildEntityExtractor, ReadableType1HierarchicalEntityExtractor, ReadableType1IntentClassifier, ReadableType1PatternAnyEntityExtractor, ReadableType1PrebuiltEntityExtractor, ReadableType1RegexEntityExtractor}
+	return []ReadableType1{ReadableType1ClosedListEntityExtractor, ReadableType1CompositeEntityExtractor, ReadableType1EntityExtractor, ReadableType1HierarchicalChildEntityExtractor, ReadableType1HierarchicalEntityExtractor, ReadableType1IntentClassifier, ReadableType1ListEntityExtractor, ReadableType1PatternAnyEntityExtractor, ReadableType1PrebuiltEntityExtractor, ReadableType1RegexEntityExtractor}
 }
 
 // ReadableType10 enumerates the values for readable type 10.
@@ -116,6 +123,8 @@ const (
 	ReadableType10HierarchicalEntityExtractor ReadableType10 = "Hierarchical Entity Extractor"
 	// ReadableType10IntentClassifier ...
 	ReadableType10IntentClassifier ReadableType10 = "Intent Classifier"
+	// ReadableType10ListEntityExtractor ...
+	ReadableType10ListEntityExtractor ReadableType10 = "List Entity Extractor"
 	// ReadableType10PatternAnyEntityExtractor ...
 	ReadableType10PatternAnyEntityExtractor ReadableType10 = "Pattern.Any Entity Extractor"
 	// ReadableType10PrebuiltEntityExtractor ...
@@ -126,7 +135,7 @@ const (
 
 // PossibleReadableType10Values returns an array of possible values for the ReadableType10 const type.
 func PossibleReadableType10Values() []ReadableType10 {
-	return []ReadableType10{ReadableType10ClosedListEntityExtractor, ReadableType10CompositeEntityExtractor, ReadableType10EntityExtractor, ReadableType10HierarchicalChildEntityExtractor, ReadableType10HierarchicalEntityExtractor, ReadableType10IntentClassifier, ReadableType10PatternAnyEntityExtractor, ReadableType10PrebuiltEntityExtractor, ReadableType10RegexEntityExtractor}
+	return []ReadableType10{ReadableType10ClosedListEntityExtractor, ReadableType10CompositeEntityExtractor, ReadableType10EntityExtractor, ReadableType10HierarchicalChildEntityExtractor, ReadableType10HierarchicalEntityExtractor, ReadableType10IntentClassifier, ReadableType10ListEntityExtractor, ReadableType10PatternAnyEntityExtractor, ReadableType10PrebuiltEntityExtractor, ReadableType10RegexEntityExtractor}
 }
 
 // ReadableType2 enumerates the values for readable type 2.
@@ -145,6 +154,8 @@ const (
 	ReadableType2HierarchicalEntityExtractor ReadableType2 = "Hierarchical Entity Extractor"
 	// ReadableType2IntentClassifier ...
 	ReadableType2IntentClassifier ReadableType2 = "Intent Classifier"
+	// ReadableType2ListEntityExtractor ...
+	ReadableType2ListEntityExtractor ReadableType2 = "List Entity Extractor"
 	// ReadableType2PatternAnyEntityExtractor ...
 	ReadableType2PatternAnyEntityExtractor ReadableType2 = "Pattern.Any Entity Extractor"
 	// ReadableType2PrebuiltEntityExtractor ...
@@ -155,7 +166,7 @@ const (
 
 // PossibleReadableType2Values returns an array of possible values for the ReadableType2 const type.
 func PossibleReadableType2Values() []ReadableType2 {
-	return []ReadableType2{ReadableType2ClosedListEntityExtractor, ReadableType2CompositeEntityExtractor, ReadableType2EntityExtractor, ReadableType2HierarchicalChildEntityExtractor, ReadableType2HierarchicalEntityExtractor, ReadableType2IntentClassifier, ReadableType2PatternAnyEntityExtractor, ReadableType2PrebuiltEntityExtractor, ReadableType2RegexEntityExtractor}
+	return []ReadableType2{ReadableType2ClosedListEntityExtractor, ReadableType2CompositeEntityExtractor, ReadableType2EntityExtractor, ReadableType2HierarchicalChildEntityExtractor, ReadableType2HierarchicalEntityExtractor, ReadableType2IntentClassifier, ReadableType2ListEntityExtractor, ReadableType2PatternAnyEntityExtractor, ReadableType2PrebuiltEntityExtractor, ReadableType2RegexEntityExtractor}
 }
 
 // ReadableType3 enumerates the values for readable type 3.
@@ -174,6 +185,8 @@ const (
 	ReadableType3HierarchicalEntityExtractor ReadableType3 = "Hierarchical Entity Extractor"
 	// ReadableType3IntentClassifier ...
 	ReadableType3IntentClassifier ReadableType3 = "Intent Classifier"
+	// ReadableType3ListEntityExtractor ...
+	ReadableType3ListEntityExtractor ReadableType3 = "List Entity Extractor"
 	// ReadableType3PatternAnyEntityExtractor ...
 	ReadableType3PatternAnyEntityExtractor ReadableType3 = "Pattern.Any Entity Extractor"
 	// ReadableType3PrebuiltEntityExtractor ...
@@ -184,7 +197,7 @@ const (
 
 // PossibleReadableType3Values returns an array of possible values for the ReadableType3 const type.
 func PossibleReadableType3Values() []ReadableType3 {
-	return []ReadableType3{ReadableType3ClosedListEntityExtractor, ReadableType3CompositeEntityExtractor, ReadableType3EntityExtractor, ReadableType3HierarchicalChildEntityExtractor, ReadableType3HierarchicalEntityExtractor, ReadableType3IntentClassifier, ReadableType3PatternAnyEntityExtractor, ReadableType3PrebuiltEntityExtractor, ReadableType3RegexEntityExtractor}
+	return []ReadableType3{ReadableType3ClosedListEntityExtractor, ReadableType3CompositeEntityExtractor, ReadableType3EntityExtractor, ReadableType3HierarchicalChildEntityExtractor, ReadableType3HierarchicalEntityExtractor, ReadableType3IntentClassifier, ReadableType3ListEntityExtractor, ReadableType3PatternAnyEntityExtractor, ReadableType3PrebuiltEntityExtractor, ReadableType3RegexEntityExtractor}
 }
 
 // ReadableType4 enumerates the values for readable type 4.
@@ -203,6 +216,8 @@ const (
 	ReadableType4HierarchicalEntityExtractor ReadableType4 = "Hierarchical Entity Extractor"
 	// ReadableType4IntentClassifier ...
 	ReadableType4IntentClassifier ReadableType4 = "Intent Classifier"
+	// ReadableType4ListEntityExtractor ...
+	ReadableType4ListEntityExtractor ReadableType4 = "List Entity Extractor"
 	// ReadableType4PatternAnyEntityExtractor ...
 	ReadableType4PatternAnyEntityExtractor ReadableType4 = "Pattern.Any Entity Extractor"
 	// ReadableType4PrebuiltEntityExtractor ...
@@ -213,7 +228,7 @@ const (
 
 // PossibleReadableType4Values returns an array of possible values for the ReadableType4 const type.
 func PossibleReadableType4Values() []ReadableType4 {
-	return []ReadableType4{ReadableType4ClosedListEntityExtractor, ReadableType4CompositeEntityExtractor, ReadableType4EntityExtractor, ReadableType4HierarchicalChildEntityExtractor, ReadableType4HierarchicalEntityExtractor, ReadableType4IntentClassifier, ReadableType4PatternAnyEntityExtractor, ReadableType4PrebuiltEntityExtractor, ReadableType4RegexEntityExtractor}
+	return []ReadableType4{ReadableType4ClosedListEntityExtractor, ReadableType4CompositeEntityExtractor, ReadableType4EntityExtractor, ReadableType4HierarchicalChildEntityExtractor, ReadableType4HierarchicalEntityExtractor, ReadableType4IntentClassifier, ReadableType4ListEntityExtractor, ReadableType4PatternAnyEntityExtractor, ReadableType4PrebuiltEntityExtractor, ReadableType4RegexEntityExtractor}
 }
 
 // ReadableType5 enumerates the values for readable type 5.
@@ -232,6 +247,8 @@ const (
 	ReadableType5HierarchicalEntityExtractor ReadableType5 = "Hierarchical Entity Extractor"
 	// ReadableType5IntentClassifier ...
 	ReadableType5IntentClassifier ReadableType5 = "Intent Classifier"
+	// ReadableType5ListEntityExtractor ...
+	ReadableType5ListEntityExtractor ReadableType5 = "List Entity Extractor"
 	// ReadableType5PatternAnyEntityExtractor ...
 	ReadableType5PatternAnyEntityExtractor ReadableType5 = "Pattern.Any Entity Extractor"
 	// ReadableType5PrebuiltEntityExtractor ...
@@ -242,7 +259,7 @@ const (
 
 // PossibleReadableType5Values returns an array of possible values for the ReadableType5 const type.
 func PossibleReadableType5Values() []ReadableType5 {
-	return []ReadableType5{ReadableType5ClosedListEntityExtractor, ReadableType5CompositeEntityExtractor, ReadableType5EntityExtractor, ReadableType5HierarchicalChildEntityExtractor, ReadableType5HierarchicalEntityExtractor, ReadableType5IntentClassifier, ReadableType5PatternAnyEntityExtractor, ReadableType5PrebuiltEntityExtractor, ReadableType5RegexEntityExtractor}
+	return []ReadableType5{ReadableType5ClosedListEntityExtractor, ReadableType5CompositeEntityExtractor, ReadableType5EntityExtractor, ReadableType5HierarchicalChildEntityExtractor, ReadableType5HierarchicalEntityExtractor, ReadableType5IntentClassifier, ReadableType5ListEntityExtractor, ReadableType5PatternAnyEntityExtractor, ReadableType5PrebuiltEntityExtractor, ReadableType5RegexEntityExtractor}
 }
 
 // ReadableType6 enumerates the values for readable type 6.
@@ -261,6 +278,8 @@ const (
 	ReadableType6HierarchicalEntityExtractor ReadableType6 = "Hierarchical Entity Extractor"
 	// ReadableType6IntentClassifier ...
 	ReadableType6IntentClassifier ReadableType6 = "Intent Classifier"
+	// ReadableType6ListEntityExtractor ...
+	ReadableType6ListEntityExtractor ReadableType6 = "List Entity Extractor"
 	// ReadableType6PatternAnyEntityExtractor ...
 	ReadableType6PatternAnyEntityExtractor ReadableType6 = "Pattern.Any Entity Extractor"
 	// ReadableType6PrebuiltEntityExtractor ...
@@ -271,7 +290,7 @@ const (
 
 // PossibleReadableType6Values returns an array of possible values for the ReadableType6 const type.
 func PossibleReadableType6Values() []ReadableType6 {
-	return []ReadableType6{ReadableType6ClosedListEntityExtractor, ReadableType6CompositeEntityExtractor, ReadableType6EntityExtractor, ReadableType6HierarchicalChildEntityExtractor, ReadableType6HierarchicalEntityExtractor, ReadableType6IntentClassifier, ReadableType6PatternAnyEntityExtractor, ReadableType6PrebuiltEntityExtractor, ReadableType6RegexEntityExtractor}
+	return []ReadableType6{ReadableType6ClosedListEntityExtractor, ReadableType6CompositeEntityExtractor, ReadableType6EntityExtractor, ReadableType6HierarchicalChildEntityExtractor, ReadableType6HierarchicalEntityExtractor, ReadableType6IntentClassifier, ReadableType6ListEntityExtractor, ReadableType6PatternAnyEntityExtractor, ReadableType6PrebuiltEntityExtractor, ReadableType6RegexEntityExtractor}
 }
 
 // ReadableType7 enumerates the values for readable type 7.
@@ -290,6 +309,8 @@ const (
 	ReadableType7HierarchicalEntityExtractor ReadableType7 = "Hierarchical Entity Extractor"
 	// ReadableType7IntentClassifier ...
 	ReadableType7IntentClassifier ReadableType7 = "Intent Classifier"
+	// ReadableType7ListEntityExtractor ...
+	ReadableType7ListEntityExtractor ReadableType7 = "List Entity Extractor"
 	// ReadableType7PatternAnyEntityExtractor ...
 	ReadableType7PatternAnyEntityExtractor ReadableType7 = "Pattern.Any Entity Extractor"
 	// ReadableType7PrebuiltEntityExtractor ...
@@ -300,7 +321,7 @@ const (
 
 // PossibleReadableType7Values returns an array of possible values for the ReadableType7 const type.
 func PossibleReadableType7Values() []ReadableType7 {
-	return []ReadableType7{ReadableType7ClosedListEntityExtractor, ReadableType7CompositeEntityExtractor, ReadableType7EntityExtractor, ReadableType7HierarchicalChildEntityExtractor, ReadableType7HierarchicalEntityExtractor, ReadableType7IntentClassifier, ReadableType7PatternAnyEntityExtractor, ReadableType7PrebuiltEntityExtractor, ReadableType7RegexEntityExtractor}
+	return []ReadableType7{ReadableType7ClosedListEntityExtractor, ReadableType7CompositeEntityExtractor, ReadableType7EntityExtractor, ReadableType7HierarchicalChildEntityExtractor, ReadableType7HierarchicalEntityExtractor, ReadableType7IntentClassifier, ReadableType7ListEntityExtractor, ReadableType7PatternAnyEntityExtractor, ReadableType7PrebuiltEntityExtractor, ReadableType7RegexEntityExtractor}
 }
 
 // ReadableType8 enumerates the values for readable type 8.
@@ -319,6 +340,8 @@ const (
 	ReadableType8HierarchicalEntityExtractor ReadableType8 = "Hierarchical Entity Extractor"
 	// ReadableType8IntentClassifier ...
 	ReadableType8IntentClassifier ReadableType8 = "Intent Classifier"
+	// ReadableType8ListEntityExtractor ...
+	ReadableType8ListEntityExtractor ReadableType8 = "List Entity Extractor"
 	// ReadableType8PatternAnyEntityExtractor ...
 	ReadableType8PatternAnyEntityExtractor ReadableType8 = "Pattern.Any Entity Extractor"
 	// ReadableType8PrebuiltEntityExtractor ...
@@ -329,7 +352,7 @@ const (
 
 // PossibleReadableType8Values returns an array of possible values for the ReadableType8 const type.
 func PossibleReadableType8Values() []ReadableType8 {
-	return []ReadableType8{ReadableType8ClosedListEntityExtractor, ReadableType8CompositeEntityExtractor, ReadableType8EntityExtractor, ReadableType8HierarchicalChildEntityExtractor, ReadableType8HierarchicalEntityExtractor, ReadableType8IntentClassifier, ReadableType8PatternAnyEntityExtractor, ReadableType8PrebuiltEntityExtractor, ReadableType8RegexEntityExtractor}
+	return []ReadableType8{ReadableType8ClosedListEntityExtractor, ReadableType8CompositeEntityExtractor, ReadableType8EntityExtractor, ReadableType8HierarchicalChildEntityExtractor, ReadableType8HierarchicalEntityExtractor, ReadableType8IntentClassifier, ReadableType8ListEntityExtractor, ReadableType8PatternAnyEntityExtractor, ReadableType8PrebuiltEntityExtractor, ReadableType8RegexEntityExtractor}
 }
 
 // ReadableType9 enumerates the values for readable type 9.
@@ -348,6 +371,8 @@ const (
 	ReadableType9HierarchicalEntityExtractor ReadableType9 = "Hierarchical Entity Extractor"
 	// ReadableType9IntentClassifier ...
 	ReadableType9IntentClassifier ReadableType9 = "Intent Classifier"
+	// ReadableType9ListEntityExtractor ...
+	ReadableType9ListEntityExtractor ReadableType9 = "List Entity Extractor"
 	// ReadableType9PatternAnyEntityExtractor ...
 	ReadableType9PatternAnyEntityExtractor ReadableType9 = "Pattern.Any Entity Extractor"
 	// ReadableType9PrebuiltEntityExtractor ...
@@ -358,7 +383,7 @@ const (
 
 // PossibleReadableType9Values returns an array of possible values for the ReadableType9 const type.
 func PossibleReadableType9Values() []ReadableType9 {
-	return []ReadableType9{ReadableType9ClosedListEntityExtractor, ReadableType9CompositeEntityExtractor, ReadableType9EntityExtractor, ReadableType9HierarchicalChildEntityExtractor, ReadableType9HierarchicalEntityExtractor, ReadableType9IntentClassifier, ReadableType9PatternAnyEntityExtractor, ReadableType9PrebuiltEntityExtractor, ReadableType9RegexEntityExtractor}
+	return []ReadableType9{ReadableType9ClosedListEntityExtractor, ReadableType9CompositeEntityExtractor, ReadableType9EntityExtractor, ReadableType9HierarchicalChildEntityExtractor, ReadableType9HierarchicalEntityExtractor, ReadableType9IntentClassifier, ReadableType9ListEntityExtractor, ReadableType9PatternAnyEntityExtractor, ReadableType9PrebuiltEntityExtractor, ReadableType9RegexEntityExtractor}
 }
 
 // Status enumerates the values for status.
@@ -445,11 +470,11 @@ type ApplicationInfoResponse struct {
 	Name *string `json:"name,omitempty"`
 	// Description - The description of the application.
 	Description *string `json:"description,omitempty"`
-	// Culture - The culture of the application. E.g.: en-us.
+	// Culture - The culture of the application. For example, "en-us".
 	Culture *string `json:"culture,omitempty"`
-	// UsageScenario - Defines the scenario for the new application. Optional. E.g.: IoT.
+	// UsageScenario - Defines the scenario for the new application. Optional. For example, IoT.
 	UsageScenario *string `json:"usageScenario,omitempty"`
-	// Domain - The domain for the new application. Optional. E.g.: Comics.
+	// Domain - The domain for the new application. Optional. For example, Comics.
 	Domain *string `json:"domain,omitempty"`
 	// VersionsCount - Amount of model versions within the application.
 	VersionsCount *int32 `json:"versionsCount,omitempty"`
@@ -469,8 +494,6 @@ type ApplicationPublishObject struct {
 	VersionID *string `json:"versionId,omitempty"`
 	// IsStaging - Indicates if the staging slot should be used, instead of the Production one.
 	IsStaging *bool `json:"isStaging,omitempty"`
-	// Region - The target region that the application is published to.
-	Region *string `json:"region,omitempty"`
 }
 
 // ApplicationSettings the application settings.
@@ -478,14 +501,14 @@ type ApplicationSettings struct {
 	autorest.Response `json:"-"`
 	// ID - The application ID.
 	ID *uuid.UUID `json:"id,omitempty"`
-	// IsPublic - Setting your application as public allows other people to use your application's endpoint using their own keys.
+	// IsPublic - Setting your application as public allows other people to use your application's endpoint using their own keys for billing purposes.
 	IsPublic *bool `json:"public,omitempty"`
 }
 
 // ApplicationSettingUpdateObject object model for updating an application's settings.
 type ApplicationSettingUpdateObject struct {
-	// Public - Setting your application as public allows other people to use your application's endpoint using their own keys.
-	Public *bool `json:"public,omitempty"`
+	// IsPublic - Setting your application as public allows other people to use your application's endpoint using their own keys.
+	IsPublic *bool `json:"public,omitempty"`
 }
 
 // ApplicationUpdateObject object model for updating the name or description of an application.
@@ -494,6 +517,14 @@ type ApplicationUpdateObject struct {
 	Name *string `json:"name,omitempty"`
 	// Description - The application's new description.
 	Description *string `json:"description,omitempty"`
+}
+
+// AppVersionSettingObject object model of an application version setting.
+type AppVersionSettingObject struct {
+	// Name - The application version setting name.
+	Name *string `json:"name,omitempty"`
+	// Value - The application version setting value.
+	Value *string `json:"value,omitempty"`
 }
 
 // AvailableCulture available culture for using in a new application.
@@ -514,7 +545,17 @@ type AvailablePrebuiltEntityModel struct {
 	Examples *string `json:"examples,omitempty"`
 }
 
-// BatchLabelExample response when adding a batch of labeled examples.
+// AzureAccountInfoObject defines the Azure account information object.
+type AzureAccountInfoObject struct {
+	// AzureSubscriptionID - The id for the Azure subscription.
+	AzureSubscriptionID *string `json:"azureSubscriptionId,omitempty"`
+	// ResourceGroup - The Azure resource group name.
+	ResourceGroup *string `json:"resourceGroup,omitempty"`
+	// AccountName - The Azure account name.
+	AccountName *string `json:"accountName,omitempty"`
+}
+
+// BatchLabelExample response when adding a batch of labeled example utterances.
 type BatchLabelExample struct {
 	Value    *LabelExampleResponse `json:"value,omitempty"`
 	HasError *bool                 `json:"hasError,omitempty"`
@@ -529,16 +570,16 @@ type ChildEntity struct {
 	Name *string `json:"name,omitempty"`
 }
 
-// ClosedList exported Model - A Closed List.
+// ClosedList exported Model - A list entity.
 type ClosedList struct {
-	// Name - Name of the closed list feature.
+	// Name - Name of the list entity.
 	Name *string `json:"name,omitempty"`
-	// SubLists - Sublists for the feature.
+	// SubLists - Sublists for the list entity.
 	SubLists *[]SubClosedList `json:"subLists,omitempty"`
 	Roles    *[]string        `json:"roles,omitempty"`
 }
 
-// ClosedListEntityExtractor closed List Entity Extractor.
+// ClosedListEntityExtractor list Entity Extractor.
 type ClosedListEntityExtractor struct {
 	autorest.Response `json:"-"`
 	// ID - The ID of the Entity Model.
@@ -547,32 +588,32 @@ type ClosedListEntityExtractor struct {
 	Name *string `json:"name,omitempty"`
 	// TypeID - The type ID of the Entity Model.
 	TypeID *int32 `json:"typeId,omitempty"`
-	// ReadableType - Possible values include: 'ReadableType4EntityExtractor', 'ReadableType4HierarchicalEntityExtractor', 'ReadableType4HierarchicalChildEntityExtractor', 'ReadableType4CompositeEntityExtractor', 'ReadableType4ClosedListEntityExtractor', 'ReadableType4PrebuiltEntityExtractor', 'ReadableType4IntentClassifier', 'ReadableType4PatternAnyEntityExtractor', 'ReadableType4RegexEntityExtractor'
+	// ReadableType - Possible values include: 'ReadableType4EntityExtractor', 'ReadableType4HierarchicalEntityExtractor', 'ReadableType4HierarchicalChildEntityExtractor', 'ReadableType4CompositeEntityExtractor', 'ReadableType4ListEntityExtractor', 'ReadableType4PrebuiltEntityExtractor', 'ReadableType4IntentClassifier', 'ReadableType4PatternAnyEntityExtractor', 'ReadableType4ClosedListEntityExtractor', 'ReadableType4RegexEntityExtractor'
 	ReadableType ReadableType4 `json:"readableType,omitempty"`
 	Roles        *[]EntityRole `json:"roles,omitempty"`
-	// SubLists - List of sub-lists.
+	// SubLists - List of sublists.
 	SubLists *[]SubClosedListResponse `json:"subLists,omitempty"`
 }
 
-// ClosedListModelCreateObject object model for creating a closed list.
+// ClosedListModelCreateObject object model for creating a list entity.
 type ClosedListModelCreateObject struct {
 	// SubLists - Sublists for the feature.
 	SubLists *[]WordListObject `json:"subLists,omitempty"`
-	// Name - Name of the closed list feature.
+	// Name - Name of the list entity.
 	Name *string `json:"name,omitempty"`
 }
 
-// ClosedListModelPatchObject object model for adding a batch of sublists to an existing closedlist.
+// ClosedListModelPatchObject object model for adding a batch of sublists to an existing list entity.
 type ClosedListModelPatchObject struct {
 	// SubLists - Sublists to add.
 	SubLists *[]WordListObject `json:"subLists,omitempty"`
 }
 
-// ClosedListModelUpdateObject object model for updating a closed list.
+// ClosedListModelUpdateObject object model for updating a list entity.
 type ClosedListModelUpdateObject struct {
 	// SubLists - The new sublists for the feature.
 	SubLists *[]WordListObject `json:"subLists,omitempty"`
-	// Name - The new name of the closed list feature.
+	// Name - The new name of the list entity.
 	Name *string `json:"name,omitempty"`
 }
 
@@ -596,14 +637,14 @@ type CompositeEntityExtractor struct {
 	Name *string `json:"name,omitempty"`
 	// TypeID - The type ID of the Entity Model.
 	TypeID *int32 `json:"typeId,omitempty"`
-	// ReadableType - Possible values include: 'ReadableType3EntityExtractor', 'ReadableType3HierarchicalEntityExtractor', 'ReadableType3HierarchicalChildEntityExtractor', 'ReadableType3CompositeEntityExtractor', 'ReadableType3ClosedListEntityExtractor', 'ReadableType3PrebuiltEntityExtractor', 'ReadableType3IntentClassifier', 'ReadableType3PatternAnyEntityExtractor', 'ReadableType3RegexEntityExtractor'
+	// ReadableType - Possible values include: 'ReadableType3EntityExtractor', 'ReadableType3HierarchicalEntityExtractor', 'ReadableType3HierarchicalChildEntityExtractor', 'ReadableType3CompositeEntityExtractor', 'ReadableType3ListEntityExtractor', 'ReadableType3PrebuiltEntityExtractor', 'ReadableType3IntentClassifier', 'ReadableType3PatternAnyEntityExtractor', 'ReadableType3ClosedListEntityExtractor', 'ReadableType3RegexEntityExtractor'
 	ReadableType ReadableType3 `json:"readableType,omitempty"`
 	Roles        *[]EntityRole `json:"roles,omitempty"`
 	// Children - List of child entities.
 	Children *[]ChildEntity `json:"children,omitempty"`
 }
 
-// CompositeEntityModel a composite entity.
+// CompositeEntityModel a composite entity extractor.
 type CompositeEntityModel struct {
 	// Children - Child entities.
 	Children *[]string `json:"children,omitempty"`
@@ -619,7 +660,7 @@ type CustomPrebuiltModel struct {
 	Name *string `json:"name,omitempty"`
 	// TypeID - The type ID of the Entity Model.
 	TypeID *int32 `json:"typeId,omitempty"`
-	// ReadableType - Possible values include: 'ReadableType7EntityExtractor', 'ReadableType7HierarchicalEntityExtractor', 'ReadableType7HierarchicalChildEntityExtractor', 'ReadableType7CompositeEntityExtractor', 'ReadableType7ClosedListEntityExtractor', 'ReadableType7PrebuiltEntityExtractor', 'ReadableType7IntentClassifier', 'ReadableType7PatternAnyEntityExtractor', 'ReadableType7RegexEntityExtractor'
+	// ReadableType - Possible values include: 'ReadableType7EntityExtractor', 'ReadableType7HierarchicalEntityExtractor', 'ReadableType7HierarchicalChildEntityExtractor', 'ReadableType7CompositeEntityExtractor', 'ReadableType7ListEntityExtractor', 'ReadableType7PrebuiltEntityExtractor', 'ReadableType7IntentClassifier', 'ReadableType7PatternAnyEntityExtractor', 'ReadableType7ClosedListEntityExtractor', 'ReadableType7RegexEntityExtractor'
 	ReadableType ReadableType7 `json:"readableType,omitempty"`
 	// CustomPrebuiltDomainName - The domain name.
 	CustomPrebuiltDomainName *string `json:"customPrebuiltDomainName,omitempty"`
@@ -642,6 +683,8 @@ type EndpointInfo struct {
 	AssignedEndpointKey *string `json:"assignedEndpointKey,omitempty"`
 	// EndpointRegion - The endpoint's region.
 	EndpointRegion *string `json:"endpointRegion,omitempty"`
+	// FailedRegions - Regions where publishing failed.
+	FailedRegions *string `json:"failedRegions,omitempty"`
 	// PublishedDateTime - Timestamp when was last published.
 	PublishedDateTime *string `json:"publishedDateTime,omitempty"`
 }
@@ -657,7 +700,7 @@ type EnqueueTrainingResponse struct {
 
 // EntitiesSuggestionExample predicted/suggested entity.
 type EntitiesSuggestionExample struct {
-	// Text - The utterance. E.g.: what's the weather like in seattle?
+	// Text - The utterance. For example, "What's the weather like in seattle?"
 	Text *string `json:"text,omitempty"`
 	// TokenizedText - The utterance tokenized.
 	TokenizedText *[]string `json:"tokenizedText,omitempty"`
@@ -676,7 +719,7 @@ type EntityExtractor struct {
 	Name *string `json:"name,omitempty"`
 	// TypeID - The type ID of the Entity Model.
 	TypeID *int32 `json:"typeId,omitempty"`
-	// ReadableType - Possible values include: 'ReadableType8EntityExtractor', 'ReadableType8HierarchicalEntityExtractor', 'ReadableType8HierarchicalChildEntityExtractor', 'ReadableType8CompositeEntityExtractor', 'ReadableType8ClosedListEntityExtractor', 'ReadableType8PrebuiltEntityExtractor', 'ReadableType8IntentClassifier', 'ReadableType8PatternAnyEntityExtractor', 'ReadableType8RegexEntityExtractor'
+	// ReadableType - Possible values include: 'ReadableType8EntityExtractor', 'ReadableType8HierarchicalEntityExtractor', 'ReadableType8HierarchicalChildEntityExtractor', 'ReadableType8CompositeEntityExtractor', 'ReadableType8ListEntityExtractor', 'ReadableType8PrebuiltEntityExtractor', 'ReadableType8IntentClassifier', 'ReadableType8PatternAnyEntityExtractor', 'ReadableType8ClosedListEntityExtractor', 'ReadableType8RegexEntityExtractor'
 	ReadableType ReadableType8 `json:"readableType,omitempty"`
 	Roles        *[]EntityRole `json:"roles,omitempty"`
 	// CustomPrebuiltDomainName - The domain name.
@@ -714,7 +757,7 @@ type EntityModelInfo struct {
 	Name *string `json:"name,omitempty"`
 	// TypeID - The type ID of the Entity Model.
 	TypeID *int32 `json:"typeId,omitempty"`
-	// ReadableType - Possible values include: 'ReadableTypeEntityExtractor', 'ReadableTypeHierarchicalEntityExtractor', 'ReadableTypeHierarchicalChildEntityExtractor', 'ReadableTypeCompositeEntityExtractor', 'ReadableTypeClosedListEntityExtractor', 'ReadableTypePrebuiltEntityExtractor', 'ReadableTypeIntentClassifier', 'ReadableTypePatternAnyEntityExtractor', 'ReadableTypeRegexEntityExtractor'
+	// ReadableType - Possible values include: 'ReadableTypeEntityExtractor', 'ReadableTypeHierarchicalEntityExtractor', 'ReadableTypeHierarchicalChildEntityExtractor', 'ReadableTypeCompositeEntityExtractor', 'ReadableTypeListEntityExtractor', 'ReadableTypePrebuiltEntityExtractor', 'ReadableTypeIntentClassifier', 'ReadableTypePatternAnyEntityExtractor', 'ReadableTypeClosedListEntityExtractor', 'ReadableTypeRegexEntityExtractor'
 	ReadableType ReadableType `json:"readableType,omitempty"`
 }
 
@@ -770,17 +813,53 @@ func (er ErrorResponse) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// ExampleLabelObject a labeled example.
+// UnmarshalJSON is the custom unmarshaler for ErrorResponse struct.
+func (er *ErrorResponse) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if er.AdditionalProperties == nil {
+					er.AdditionalProperties = make(map[string]interface{})
+				}
+				er.AdditionalProperties[k] = additionalProperties
+			}
+		case "errorType":
+			if v != nil {
+				var errorType string
+				err = json.Unmarshal(*v, &errorType)
+				if err != nil {
+					return err
+				}
+				er.ErrorType = &errorType
+			}
+		}
+	}
+
+	return nil
+}
+
+// ExampleLabelObject a labeled example utterance.
 type ExampleLabelObject struct {
-	// Text - The sample's utterance.
+	// Text - The example utterance.
 	Text *string `json:"text,omitempty"`
-	// EntityLabels - The idenfied entities within the utterance.
+	// EntityLabels - The identified entities within the example utterance.
 	EntityLabels *[]EntityLabelObject `json:"entityLabels,omitempty"`
-	// IntentName - The idenfitied intent representing the utterance.
+	// IntentName - The identified intent representing the example utterance.
 	IntentName *string `json:"intentName,omitempty"`
 }
 
-// ExplicitListItem explicit list item
+// ExplicitListItem explicit (exception) list item
 type ExplicitListItem struct {
 	autorest.Response `json:"-"`
 	// ID - The explicit list item ID.
@@ -789,13 +868,13 @@ type ExplicitListItem struct {
 	ExplicitListItem *string `json:"explicitListItem,omitempty"`
 }
 
-// ExplicitListItemCreateObject object model for creating an explicit list item.
+// ExplicitListItemCreateObject object model for creating an explicit (exception) list item.
 type ExplicitListItemCreateObject struct {
 	// ExplicitListItem - The explicit list item.
 	ExplicitListItem *string `json:"explicitListItem,omitempty"`
 }
 
-// ExplicitListItemUpdateObject model object for updating an explicit list item.
+// ExplicitListItemUpdateObject model object for updating an explicit (exception) list item.
 type ExplicitListItemUpdateObject struct {
 	// ExplicitListItem - The explicit list item.
 	ExplicitListItem *string `json:"explicitListItem,omitempty"`
@@ -823,7 +902,7 @@ type HierarchicalChildEntity struct {
 	autorest.Response `json:"-"`
 	// TypeID - The type ID of the Entity Model.
 	TypeID *int32 `json:"typeId,omitempty"`
-	// ReadableType - Possible values include: 'ReadableType6EntityExtractor', 'ReadableType6HierarchicalEntityExtractor', 'ReadableType6HierarchicalChildEntityExtractor', 'ReadableType6CompositeEntityExtractor', 'ReadableType6ClosedListEntityExtractor', 'ReadableType6PrebuiltEntityExtractor', 'ReadableType6IntentClassifier', 'ReadableType6PatternAnyEntityExtractor', 'ReadableType6RegexEntityExtractor'
+	// ReadableType - Possible values include: 'ReadableType6EntityExtractor', 'ReadableType6HierarchicalEntityExtractor', 'ReadableType6HierarchicalChildEntityExtractor', 'ReadableType6CompositeEntityExtractor', 'ReadableType6ListEntityExtractor', 'ReadableType6PrebuiltEntityExtractor', 'ReadableType6IntentClassifier', 'ReadableType6PatternAnyEntityExtractor', 'ReadableType6ClosedListEntityExtractor', 'ReadableType6RegexEntityExtractor'
 	ReadableType ReadableType6 `json:"readableType,omitempty"`
 	// ID - The ID (GUID) belonging to a child entity.
 	ID *uuid.UUID `json:"id,omitempty"`
@@ -850,14 +929,14 @@ type HierarchicalEntityExtractor struct {
 	Name *string `json:"name,omitempty"`
 	// TypeID - The type ID of the Entity Model.
 	TypeID *int32 `json:"typeId,omitempty"`
-	// ReadableType - Possible values include: 'ReadableType2EntityExtractor', 'ReadableType2HierarchicalEntityExtractor', 'ReadableType2HierarchicalChildEntityExtractor', 'ReadableType2CompositeEntityExtractor', 'ReadableType2ClosedListEntityExtractor', 'ReadableType2PrebuiltEntityExtractor', 'ReadableType2IntentClassifier', 'ReadableType2PatternAnyEntityExtractor', 'ReadableType2RegexEntityExtractor'
+	// ReadableType - Possible values include: 'ReadableType2EntityExtractor', 'ReadableType2HierarchicalEntityExtractor', 'ReadableType2HierarchicalChildEntityExtractor', 'ReadableType2CompositeEntityExtractor', 'ReadableType2ListEntityExtractor', 'ReadableType2PrebuiltEntityExtractor', 'ReadableType2IntentClassifier', 'ReadableType2PatternAnyEntityExtractor', 'ReadableType2ClosedListEntityExtractor', 'ReadableType2RegexEntityExtractor'
 	ReadableType ReadableType2 `json:"readableType,omitempty"`
 	Roles        *[]EntityRole `json:"roles,omitempty"`
 	// Children - List of child entities.
 	Children *[]ChildEntity `json:"children,omitempty"`
 }
 
-// HierarchicalEntityModel a Hierarchical Entity Extractor.
+// HierarchicalEntityModel a hierarchical entity extractor.
 type HierarchicalEntityModel struct {
 	// Children - Child entities.
 	Children *[]string `json:"children,omitempty"`
@@ -879,6 +958,12 @@ type Int32 struct {
 	Value             *int32 `json:"value,omitempty"`
 }
 
+// Int64 ...
+type Int64 struct {
+	autorest.Response `json:"-"`
+	Value             *int64 `json:"value,omitempty"`
+}
+
 // IntentClassifier intent Classifier.
 type IntentClassifier struct {
 	autorest.Response `json:"-"`
@@ -892,7 +977,7 @@ type IntentClassifier struct {
 	Name *string `json:"name,omitempty"`
 	// TypeID - The type ID of the Entity Model.
 	TypeID *int32 `json:"typeId,omitempty"`
-	// ReadableType - Possible values include: 'ReadableTypeEntityExtractor', 'ReadableTypeHierarchicalEntityExtractor', 'ReadableTypeHierarchicalChildEntityExtractor', 'ReadableTypeCompositeEntityExtractor', 'ReadableTypeClosedListEntityExtractor', 'ReadableTypePrebuiltEntityExtractor', 'ReadableTypeIntentClassifier', 'ReadableTypePatternAnyEntityExtractor', 'ReadableTypeRegexEntityExtractor'
+	// ReadableType - Possible values include: 'ReadableTypeEntityExtractor', 'ReadableTypeHierarchicalEntityExtractor', 'ReadableTypeHierarchicalChildEntityExtractor', 'ReadableTypeCompositeEntityExtractor', 'ReadableTypeListEntityExtractor', 'ReadableTypePrebuiltEntityExtractor', 'ReadableTypeIntentClassifier', 'ReadableTypePatternAnyEntityExtractor', 'ReadableTypeClosedListEntityExtractor', 'ReadableTypeRegexEntityExtractor'
 	ReadableType ReadableType `json:"readableType,omitempty"`
 }
 
@@ -906,9 +991,9 @@ type IntentPrediction struct {
 
 // IntentsSuggestionExample predicted/suggested intent.
 type IntentsSuggestionExample struct {
-	// Text - The utterance. E.g.: what's the weather like in seattle?
+	// Text - The utterance. For example, "What's the weather like in seattle?"
 	Text *string `json:"text,omitempty"`
-	// TokenizedText - The utterance tokenized.
+	// TokenizedText - The tokenized utterance.
 	TokenizedText *[]string `json:"tokenizedText,omitempty"`
 	// IntentPredictions - Predicted/suggested intents.
 	IntentPredictions *[]IntentPrediction `json:"intentPredictions,omitempty"`
@@ -934,7 +1019,7 @@ type JSONModelFeature struct {
 	Name *string `json:"name,omitempty"`
 	// Words - List of comma-separated phrases that represent the Phraselist.
 	Words *string `json:"words,omitempty"`
-	// Mode - An exchangeable phrase list feature are serves as single feature to the LUIS underlying training algorithm. It is used as a lexicon lookup feature where its value is 1 if the lexicon contains a given word or 0 if it doesn’t. Think of an exchangeable as a synonyms list. A non-exchangeable phrase list feature has all the phrases in the list serve as separate features to the underlying training algorithm. So, if you your phrase list feature contains 5 phrases, they will be mapped to 5 separate features. You can think of the non-exchangeable phrase list feature as an additional bag of words that you are willing to add to LUIS existing vocabulary features. Think of a non-exchangeable as set of different words. Default value is true.
+	// Mode - An interchangeable phrase list feature serves as a list of synonyms for training. A non-exchangeable phrase list serves as separate features for training. So, if your non-interchangeable phrase list contains 5 phrases, they will be mapped to 5 separate features. You can think of the non-interchangeable phrase list as an additional bag of words to add to LUIS existing vocabulary features. It is used as a lexicon lookup feature where its value is 1 if the lexicon contains a given word or 0 if it doesn’t.  Default value is true.
 	Mode *bool `json:"mode,omitempty"`
 }
 
@@ -962,7 +1047,7 @@ type JSONUtterance struct {
 type LabeledUtterance struct {
 	// ID - ID of Labeled Utterance.
 	ID *int32 `json:"id,omitempty"`
-	// Text - The utterance. E.g.: what's the weather like in seattle?
+	// Text - The utterance. For example, "What's the weather like in seattle?"
 	Text *string `json:"text,omitempty"`
 	// TokenizedText - The utterance tokenized.
 	TokenizedText *[]string `json:"tokenizedText,omitempty"`
@@ -976,16 +1061,16 @@ type LabeledUtterance struct {
 	EntityPredictions *[]EntityPrediction `json:"entityPredictions,omitempty"`
 }
 
-// LabelExampleResponse response when adding a labeled example.
+// LabelExampleResponse response when adding a labeled example utterance.
 type LabelExampleResponse struct {
 	autorest.Response `json:"-"`
-	// UtteranceText - The sample's utterance.
+	// UtteranceText - The example utterance.
 	UtteranceText *string `json:"UtteranceText,omitempty"`
 	// ExampleID - The newly created sample ID.
 	ExampleID *int32 `json:"ExampleId,omitempty"`
 }
 
-// LabelTextObject an object containing the example's text.
+// LabelTextObject an object containing the example utterance's text.
 type LabelTextObject struct {
 	// ID - The ID of the Label.
 	ID *int32 `json:"id,omitempty"`
@@ -999,6 +1084,12 @@ type ListApplicationInfoResponse struct {
 	Value             *[]ApplicationInfoResponse `json:"value,omitempty"`
 }
 
+// ListAppVersionSettingObject ...
+type ListAppVersionSettingObject struct {
+	autorest.Response `json:"-"`
+	Value             *[]AppVersionSettingObject `json:"value,omitempty"`
+}
+
 // ListAvailableCulture ...
 type ListAvailableCulture struct {
 	autorest.Response `json:"-"`
@@ -1009,6 +1100,12 @@ type ListAvailableCulture struct {
 type ListAvailablePrebuiltEntityModel struct {
 	autorest.Response `json:"-"`
 	Value             *[]AvailablePrebuiltEntityModel `json:"value,omitempty"`
+}
+
+// ListAzureAccountInfoObject ...
+type ListAzureAccountInfoObject struct {
+	autorest.Response `json:"-"`
+	Value             *[]AzureAccountInfoObject `json:"value,omitempty"`
 }
 
 // ListBatchLabelExample ...
@@ -1107,6 +1204,12 @@ type ListPatternAnyEntityExtractor struct {
 	Value             *[]PatternAnyEntityExtractor `json:"value,omitempty"`
 }
 
+// ListPatternFeatureInfo ...
+type ListPatternFeatureInfo struct {
+	autorest.Response `json:"-"`
+	Value             *[]PatternFeatureInfo `json:"value,omitempty"`
+}
+
 // ListPatternRuleInfo ...
 type ListPatternRuleInfo struct {
 	autorest.Response `json:"-"`
@@ -1172,7 +1275,7 @@ type LuisApp struct {
 	Intents *[]HierarchicalModel `json:"intents,omitempty"`
 	// Entities - List of entities.
 	Entities *[]HierarchicalModel `json:"entities,omitempty"`
-	// ClosedLists - List of closed lists.
+	// ClosedLists - List of list entities.
 	ClosedLists *[]ClosedList `json:"closedLists,omitempty"`
 	// Composites - List of composite entities.
 	Composites *[]HierarchicalModel `json:"composites,omitempty"`
@@ -1188,7 +1291,7 @@ type LuisApp struct {
 	ModelFeatures *[]JSONModelFeature `json:"model_features,omitempty"`
 	// Patterns - List of patterns.
 	Patterns *[]PatternRule `json:"patterns,omitempty"`
-	// Utterances - List of sample utterances.
+	// Utterances - List of example utterances.
 	Utterances *[]JSONUtterance `json:"utterances,omitempty"`
 }
 
@@ -1246,6 +1349,168 @@ func (la LuisApp) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// UnmarshalJSON is the custom unmarshaler for LuisApp struct.
+func (la *LuisApp) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		default:
+			if v != nil {
+				var additionalProperties interface{}
+				err = json.Unmarshal(*v, &additionalProperties)
+				if err != nil {
+					return err
+				}
+				if la.AdditionalProperties == nil {
+					la.AdditionalProperties = make(map[string]interface{})
+				}
+				la.AdditionalProperties[k] = additionalProperties
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				la.Name = &name
+			}
+		case "versionId":
+			if v != nil {
+				var versionID string
+				err = json.Unmarshal(*v, &versionID)
+				if err != nil {
+					return err
+				}
+				la.VersionID = &versionID
+			}
+		case "desc":
+			if v != nil {
+				var desc string
+				err = json.Unmarshal(*v, &desc)
+				if err != nil {
+					return err
+				}
+				la.Desc = &desc
+			}
+		case "culture":
+			if v != nil {
+				var culture string
+				err = json.Unmarshal(*v, &culture)
+				if err != nil {
+					return err
+				}
+				la.Culture = &culture
+			}
+		case "intents":
+			if v != nil {
+				var intents []HierarchicalModel
+				err = json.Unmarshal(*v, &intents)
+				if err != nil {
+					return err
+				}
+				la.Intents = &intents
+			}
+		case "entities":
+			if v != nil {
+				var entities []HierarchicalModel
+				err = json.Unmarshal(*v, &entities)
+				if err != nil {
+					return err
+				}
+				la.Entities = &entities
+			}
+		case "closedLists":
+			if v != nil {
+				var closedLists []ClosedList
+				err = json.Unmarshal(*v, &closedLists)
+				if err != nil {
+					return err
+				}
+				la.ClosedLists = &closedLists
+			}
+		case "composites":
+			if v != nil {
+				var composites []HierarchicalModel
+				err = json.Unmarshal(*v, &composites)
+				if err != nil {
+					return err
+				}
+				la.Composites = &composites
+			}
+		case "patternAnyEntities":
+			if v != nil {
+				var patternAnyEntities []PatternAny
+				err = json.Unmarshal(*v, &patternAnyEntities)
+				if err != nil {
+					return err
+				}
+				la.PatternAnyEntities = &patternAnyEntities
+			}
+		case "regex_entities":
+			if v != nil {
+				var regexEntities []RegexEntity
+				err = json.Unmarshal(*v, &regexEntities)
+				if err != nil {
+					return err
+				}
+				la.RegexEntities = &regexEntities
+			}
+		case "prebuiltEntities":
+			if v != nil {
+				var prebuiltEntities []PrebuiltEntity
+				err = json.Unmarshal(*v, &prebuiltEntities)
+				if err != nil {
+					return err
+				}
+				la.PrebuiltEntities = &prebuiltEntities
+			}
+		case "regex_features":
+			if v != nil {
+				var regexFeatures []JSONRegexFeature
+				err = json.Unmarshal(*v, &regexFeatures)
+				if err != nil {
+					return err
+				}
+				la.RegexFeatures = &regexFeatures
+			}
+		case "model_features":
+			if v != nil {
+				var modelFeatures []JSONModelFeature
+				err = json.Unmarshal(*v, &modelFeatures)
+				if err != nil {
+					return err
+				}
+				la.ModelFeatures = &modelFeatures
+			}
+		case "patterns":
+			if v != nil {
+				var patterns []PatternRule
+				err = json.Unmarshal(*v, &patterns)
+				if err != nil {
+					return err
+				}
+				la.Patterns = &patterns
+			}
+		case "utterances":
+			if v != nil {
+				var utterances []JSONUtterance
+				err = json.Unmarshal(*v, &utterances)
+				if err != nil {
+					return err
+				}
+				la.Utterances = &utterances
+			}
+		}
+	}
+
+	return nil
+}
+
 // ModelCreateObject object model for creating a new entity extractor.
 type ModelCreateObject struct {
 	// Name - Name of the new entity extractor.
@@ -1260,7 +1525,7 @@ type ModelInfo struct {
 	Name *string `json:"name,omitempty"`
 	// TypeID - The type ID of the Entity Model.
 	TypeID *int32 `json:"typeId,omitempty"`
-	// ReadableType - Possible values include: 'ReadableTypeEntityExtractor', 'ReadableTypeHierarchicalEntityExtractor', 'ReadableTypeHierarchicalChildEntityExtractor', 'ReadableTypeCompositeEntityExtractor', 'ReadableTypeClosedListEntityExtractor', 'ReadableTypePrebuiltEntityExtractor', 'ReadableTypeIntentClassifier', 'ReadableTypePatternAnyEntityExtractor', 'ReadableTypeRegexEntityExtractor'
+	// ReadableType - Possible values include: 'ReadableTypeEntityExtractor', 'ReadableTypeHierarchicalEntityExtractor', 'ReadableTypeHierarchicalChildEntityExtractor', 'ReadableTypeCompositeEntityExtractor', 'ReadableTypeListEntityExtractor', 'ReadableTypePrebuiltEntityExtractor', 'ReadableTypeIntentClassifier', 'ReadableTypePatternAnyEntityExtractor', 'ReadableTypeClosedListEntityExtractor', 'ReadableTypeRegexEntityExtractor'
 	ReadableType ReadableType `json:"readableType,omitempty"`
 }
 
@@ -1272,18 +1537,18 @@ type ModelInfoResponse struct {
 	Name *string `json:"name,omitempty"`
 	// TypeID - The type ID of the Entity Model.
 	TypeID *int32 `json:"typeId,omitempty"`
-	// ReadableType - Possible values include: 'ReadableType1EntityExtractor', 'ReadableType1HierarchicalEntityExtractor', 'ReadableType1HierarchicalChildEntityExtractor', 'ReadableType1CompositeEntityExtractor', 'ReadableType1ClosedListEntityExtractor', 'ReadableType1PrebuiltEntityExtractor', 'ReadableType1IntentClassifier', 'ReadableType1PatternAnyEntityExtractor', 'ReadableType1RegexEntityExtractor'
+	// ReadableType - Possible values include: 'ReadableType1EntityExtractor', 'ReadableType1HierarchicalEntityExtractor', 'ReadableType1HierarchicalChildEntityExtractor', 'ReadableType1CompositeEntityExtractor', 'ReadableType1ListEntityExtractor', 'ReadableType1PrebuiltEntityExtractor', 'ReadableType1IntentClassifier', 'ReadableType1PatternAnyEntityExtractor', 'ReadableType1ClosedListEntityExtractor', 'ReadableType1RegexEntityExtractor'
 	ReadableType ReadableType1 `json:"readableType,omitempty"`
 	Roles        *[]EntityRole `json:"roles,omitempty"`
 	// Children - List of child entities.
 	Children *[]ChildEntity `json:"children,omitempty"`
-	// SubLists - List of sub-lists.
+	// SubLists - List of sublists.
 	SubLists *[]SubClosedListResponse `json:"subLists,omitempty"`
 	// CustomPrebuiltDomainName - The domain name.
 	CustomPrebuiltDomainName *string `json:"customPrebuiltDomainName,omitempty"`
 	// CustomPrebuiltModelName - The intent name or entity name.
 	CustomPrebuiltModelName *string `json:"customPrebuiltModelName,omitempty"`
-	// RegexPattern - The Regex entity pattern.
+	// RegexPattern - The Regular Expression entity pattern.
 	RegexPattern *string             `json:"regexPattern,omitempty"`
 	ExplicitList *[]ExplicitListItem `json:"explicitList,omitempty"`
 }
@@ -1346,7 +1611,7 @@ type PatternAnyEntityExtractor struct {
 	Name *string `json:"name,omitempty"`
 	// TypeID - The type ID of the Entity Model.
 	TypeID *int32 `json:"typeId,omitempty"`
-	// ReadableType - Possible values include: 'ReadableType10EntityExtractor', 'ReadableType10HierarchicalEntityExtractor', 'ReadableType10HierarchicalChildEntityExtractor', 'ReadableType10CompositeEntityExtractor', 'ReadableType10ClosedListEntityExtractor', 'ReadableType10PrebuiltEntityExtractor', 'ReadableType10IntentClassifier', 'ReadableType10PatternAnyEntityExtractor', 'ReadableType10RegexEntityExtractor'
+	// ReadableType - Possible values include: 'ReadableType10EntityExtractor', 'ReadableType10HierarchicalEntityExtractor', 'ReadableType10HierarchicalChildEntityExtractor', 'ReadableType10CompositeEntityExtractor', 'ReadableType10ListEntityExtractor', 'ReadableType10PrebuiltEntityExtractor', 'ReadableType10IntentClassifier', 'ReadableType10PatternAnyEntityExtractor', 'ReadableType10ClosedListEntityExtractor', 'ReadableType10RegexEntityExtractor'
 	ReadableType ReadableType10      `json:"readableType,omitempty"`
 	Roles        *[]EntityRole       `json:"roles,omitempty"`
 	ExplicitList *[]ExplicitListItem `json:"explicitList,omitempty"`
@@ -1435,8 +1700,8 @@ type PatternUpdateObject struct {
 	IsActive *bool `json:"isActive,omitempty"`
 }
 
-// PersonalAssistantsResponse response containing user's endpoint keys and the endpoint URLs of the prebuilt
-// Cortana applications.
+// PersonalAssistantsResponse response containing user's endpoint keys and the endpoint URLs of the
+// prebuilt Cortana applications.
 type PersonalAssistantsResponse struct {
 	autorest.Response `json:"-"`
 	EndpointKeys      *[]uuid.UUID       `json:"endpointKeys,omitempty"`
@@ -1461,7 +1726,7 @@ type PhraselistCreateObject struct {
 	Phrases *string `json:"phrases,omitempty"`
 	// Name - The Phraselist name.
 	Name *string `json:"name,omitempty"`
-	// IsExchangeable - An exchangeable phrase list feature are serves as single feature to the LUIS underlying training algorithm. It is used as a lexicon lookup feature where its value is 1 if the lexicon contains a given word or 0 if it doesn’t. Think of an exchangeable as a synonyms list. A non-exchangeable phrase list feature has all the phrases in the list serve as separate features to the underlying training algorithm. So, if you your phrase list feature contains 5 phrases, they will be mapped to 5 separate features. You can think of the non-exchangeable phrase list feature as an additional bag of words that you are willing to add to LUIS existing vocabulary features. Think of a non-exchangeable as set of different words. Default value is true.
+	// IsExchangeable - An interchangeable phrase list feature serves as a list of synonyms for training. A non-exchangeable phrase list serves as separate features for training. So, if your non-interchangeable phrase list contains 5 phrases, they will be mapped to 5 separate features. You can think of the non-interchangeable phrase list as an additional bag of words to add to LUIS existing vocabulary features. It is used as a lexicon lookup feature where its value is 1 if the lexicon contains a given word or 0 if it doesn’t.  Default value is true.
 	IsExchangeable *bool `json:"isExchangeable,omitempty"`
 }
 
@@ -1502,14 +1767,15 @@ type PrebuiltDomain struct {
 	Entities    *[]PrebuiltDomainItem `json:"entities,omitempty"`
 }
 
-// PrebuiltDomainCreateBaseObject a model object containing the name of the custom prebuilt entity and the name of
-// the domain to which this model belongs.
+// PrebuiltDomainCreateBaseObject a model object containing the name of the custom prebuilt entity and the
+// name of the domain to which this model belongs.
 type PrebuiltDomainCreateBaseObject struct {
 	// DomainName - The domain name.
 	DomainName *string `json:"domainName,omitempty"`
 }
 
-// PrebuiltDomainCreateObject a prebuilt domain create object containing the name and culture of the domain.
+// PrebuiltDomainCreateObject a prebuilt domain create object containing the name and culture of the
+// domain.
 type PrebuiltDomainCreateObject struct {
 	// DomainName - The domain name.
 	DomainName *string `json:"domainName,omitempty"`
@@ -1524,8 +1790,8 @@ type PrebuiltDomainItem struct {
 	Examples    *string `json:"examples,omitempty"`
 }
 
-// PrebuiltDomainModelCreateObject a model object containing the name of the custom prebuilt intent or entity and
-// the name of the domain to which this model belongs.
+// PrebuiltDomainModelCreateObject a model object containing the name of the custom prebuilt intent or
+// entity and the name of the domain to which this model belongs.
 type PrebuiltDomainModelCreateObject struct {
 	// DomainName - The domain name.
 	DomainName *string `json:"domainName,omitempty"`
@@ -1554,7 +1820,7 @@ type PrebuiltEntityExtractor struct {
 	Name *string `json:"name,omitempty"`
 	// TypeID - The type ID of the Entity Model.
 	TypeID *int32 `json:"typeId,omitempty"`
-	// ReadableType - Possible values include: 'ReadableType5EntityExtractor', 'ReadableType5HierarchicalEntityExtractor', 'ReadableType5HierarchicalChildEntityExtractor', 'ReadableType5CompositeEntityExtractor', 'ReadableType5ClosedListEntityExtractor', 'ReadableType5PrebuiltEntityExtractor', 'ReadableType5IntentClassifier', 'ReadableType5PatternAnyEntityExtractor', 'ReadableType5RegexEntityExtractor'
+	// ReadableType - Possible values include: 'ReadableType5EntityExtractor', 'ReadableType5HierarchicalEntityExtractor', 'ReadableType5HierarchicalChildEntityExtractor', 'ReadableType5CompositeEntityExtractor', 'ReadableType5ListEntityExtractor', 'ReadableType5PrebuiltEntityExtractor', 'ReadableType5IntentClassifier', 'ReadableType5PatternAnyEntityExtractor', 'ReadableType5ClosedListEntityExtractor', 'ReadableType5RegexEntityExtractor'
 	ReadableType ReadableType5 `json:"readableType,omitempty"`
 	Roles        *[]EntityRole `json:"roles,omitempty"`
 }
@@ -1574,6 +1840,8 @@ type ProductionOrStagingEndpointInfo struct {
 	AssignedEndpointKey *string `json:"assignedEndpointKey,omitempty"`
 	// EndpointRegion - The endpoint's region.
 	EndpointRegion *string `json:"endpointRegion,omitempty"`
+	// FailedRegions - Regions where publishing failed.
+	FailedRegions *string `json:"failedRegions,omitempty"`
 	// PublishedDateTime - Timestamp when was last published.
 	PublishedDateTime *string `json:"publishedDateTime,omitempty"`
 }
@@ -1583,17 +1851,17 @@ type PublishSettings struct {
 	autorest.Response `json:"-"`
 	// ID - The application ID.
 	ID *uuid.UUID `json:"id,omitempty"`
-	// IsSentimentAnalysisEnabled - Setting sentiment analysis as true returns the Sentiment of the input utterance along with the resopnse
+	// IsSentimentAnalysisEnabled - Setting sentiment analysis as true returns the sentiment of the input utterance along with the response
 	IsSentimentAnalysisEnabled *bool `json:"sentimentAnalysis,omitempty"`
-	// IsSpeechEnabled - Setting speech as public enables speech priming in your app
+	// IsSpeechEnabled - Enables speech priming in your app
 	IsSpeechEnabled *bool `json:"speech,omitempty"`
-	// IsSpellCheckerEnabled - Setting spell checker as public enables spell checking the input utterance.
+	// IsSpellCheckerEnabled - Enables spell checking of the utterance.
 	IsSpellCheckerEnabled *bool `json:"spellChecker,omitempty"`
 }
 
 // PublishSettingUpdateObject object model for updating an application's publish settings.
 type PublishSettingUpdateObject struct {
-	// SentimentAnalysis - Setting sentiment analysis as true returns the Sentiment of the input utterance along with the resopnse
+	// SentimentAnalysis - Setting sentiment analysis as true returns the Sentiment of the input utterance along with the response
 	SentimentAnalysis *bool `json:"sentimentAnalysis,omitempty"`
 	// Speech - Setting speech as public enables speech priming in your app
 	Speech *bool `json:"speech,omitempty"`
@@ -1614,7 +1882,7 @@ type RegexEntity struct {
 	Roles        *[]string `json:"roles,omitempty"`
 }
 
-// RegexEntityExtractor regex Entity Extractor.
+// RegexEntityExtractor regular Expression Entity Extractor.
 type RegexEntityExtractor struct {
 	autorest.Response `json:"-"`
 	// ID - The ID of the Entity Model.
@@ -1623,24 +1891,24 @@ type RegexEntityExtractor struct {
 	Name *string `json:"name,omitempty"`
 	// TypeID - The type ID of the Entity Model.
 	TypeID *int32 `json:"typeId,omitempty"`
-	// ReadableType - Possible values include: 'ReadableType9EntityExtractor', 'ReadableType9HierarchicalEntityExtractor', 'ReadableType9HierarchicalChildEntityExtractor', 'ReadableType9CompositeEntityExtractor', 'ReadableType9ClosedListEntityExtractor', 'ReadableType9PrebuiltEntityExtractor', 'ReadableType9IntentClassifier', 'ReadableType9PatternAnyEntityExtractor', 'ReadableType9RegexEntityExtractor'
+	// ReadableType - Possible values include: 'ReadableType9EntityExtractor', 'ReadableType9HierarchicalEntityExtractor', 'ReadableType9HierarchicalChildEntityExtractor', 'ReadableType9CompositeEntityExtractor', 'ReadableType9ListEntityExtractor', 'ReadableType9PrebuiltEntityExtractor', 'ReadableType9IntentClassifier', 'ReadableType9PatternAnyEntityExtractor', 'ReadableType9ClosedListEntityExtractor', 'ReadableType9RegexEntityExtractor'
 	ReadableType ReadableType9 `json:"readableType,omitempty"`
 	Roles        *[]EntityRole `json:"roles,omitempty"`
-	// RegexPattern - The Regex entity pattern.
+	// RegexPattern - The Regular Expression entity pattern.
 	RegexPattern *string `json:"regexPattern,omitempty"`
 }
 
-// RegexModelCreateObject model object for creating a regex entity model.
+// RegexModelCreateObject model object for creating a regular expression entity model.
 type RegexModelCreateObject struct {
-	// RegexPattern - The regex entity pattern.
+	// RegexPattern - The regular expression entity pattern.
 	RegexPattern *string `json:"regexPattern,omitempty"`
 	// Name - The model name.
 	Name *string `json:"name,omitempty"`
 }
 
-// RegexModelUpdateObject model object for updating a regex entity model.
+// RegexModelUpdateObject model object for updating a regular expression entity model.
 type RegexModelUpdateObject struct {
-	// RegexPattern - The regex entity pattern.
+	// RegexPattern - The regular expression entity pattern.
 	RegexPattern *string `json:"regexPattern,omitempty"`
 	// Name - The model name.
 	Name *string `json:"name,omitempty"`
@@ -1667,7 +1935,7 @@ type String struct {
 	Value             *string `json:"value,omitempty"`
 }
 
-// SubClosedList sublist of items for a Closed list.
+// SubClosedList sublist of items for a list entity.
 type SubClosedList struct {
 	// CanonicalForm - The standard form that the list represents.
 	CanonicalForm *string `json:"canonicalForm,omitempty"`
@@ -1675,7 +1943,7 @@ type SubClosedList struct {
 	List *[]string `json:"list,omitempty"`
 }
 
-// SubClosedListResponse sublist of items for a Closed list.
+// SubClosedListResponse sublist of items for a list entity.
 type SubClosedListResponse struct {
 	// ID - The sublist ID
 	ID *int32 `json:"id,omitempty"`
@@ -1764,7 +2032,9 @@ func (vi VersionInfo) MarshalJSON() ([]byte, error) {
 	if vi.AssignedEndpointKey != nil {
 		objectMap["assignedEndpointKey"] = vi.AssignedEndpointKey
 	}
-	objectMap["externalApiKeys"] = vi.ExternalAPIKeys
+	if vi.ExternalAPIKeys != nil {
+		objectMap["externalApiKeys"] = vi.ExternalAPIKeys
+	}
 	if vi.IntentsCount != nil {
 		objectMap["intentsCount"] = vi.IntentsCount
 	}
@@ -1780,7 +2050,7 @@ func (vi VersionInfo) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
-// WordListBaseUpdateObject object model for updating one of the closed list's sublists.
+// WordListBaseUpdateObject object model for updating one of the list entity's sublists.
 type WordListBaseUpdateObject struct {
 	// CanonicalForm - The standard form that the list represents.
 	CanonicalForm *string `json:"canonicalForm,omitempty"`
@@ -1788,7 +2058,7 @@ type WordListBaseUpdateObject struct {
 	List *[]string `json:"list,omitempty"`
 }
 
-// WordListObject sublist of items for a Closed list.
+// WordListObject sublist of items for a list entity.
 type WordListObject struct {
 	// CanonicalForm - The standard form that the list represents.
 	CanonicalForm *string `json:"canonicalForm,omitempty"`

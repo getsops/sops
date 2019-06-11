@@ -58,6 +58,10 @@ func gpgBinary() string {
 }
 
 func (key *MasterKey) encryptWithGPGBinary(dataKey []byte) error {
+	fingerprint := key.Fingerprint
+	if offset := len(fingerprint) - 16; offset > 0 {
+		fingerprint = fingerprint[offset:]
+	}
 	args := []string{
 		"--no-default-recipient",
 		"--yes",
@@ -66,7 +70,7 @@ func (key *MasterKey) encryptWithGPGBinary(dataKey []byte) error {
 		"-r",
 		key.Fingerprint,
 		"--trusted-key",
-		key.Fingerprint[len(key.Fingerprint)-16:],
+		fingerprint,
 		"--no-encrypt-to",
 	}
 	cmd := exec.Command(gpgBinary(), args...)

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewDataSourcesClientWithBaseURI(baseURI string, subscriptionID string) Data
 // dataSourceName - the name of the datasource resource.
 // parameters - the parameters required to create or update a datasource.
 func (client DataSourcesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, workspaceName string, dataSourceName string, parameters DataSource) (result DataSource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DataSourcesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -128,6 +139,16 @@ func (client DataSourcesClient) CreateOrUpdateResponder(resp *http.Response) (re
 // workspaceName - name of the Log Analytics Workspace that contains the datasource.
 // dataSourceName - name of the datasource.
 func (client DataSourcesClient) Delete(ctx context.Context, resourceGroupName string, workspaceName string, dataSourceName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DataSourcesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -204,6 +225,16 @@ func (client DataSourcesClient) DeleteResponder(resp *http.Response) (result aut
 // workspaceName - name of the Log Analytics Workspace that contains the datasource.
 // dataSourceName - name of the datasource
 func (client DataSourcesClient) Get(ctx context.Context, resourceGroupName string, workspaceName string, dataSourceName string) (result DataSource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DataSourcesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -282,6 +313,16 @@ func (client DataSourcesClient) GetResponder(resp *http.Response) (result DataSo
 // filter - the filter to apply on the operation.
 // skiptoken - starting point of the collection of data source instances.
 func (client DataSourcesClient) ListByWorkspace(ctx context.Context, resourceGroupName string, workspaceName string, filter string, skiptoken string) (result DataSourceListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DataSourcesClient.ListByWorkspace")
+		defer func() {
+			sc := -1
+			if result.dslr.Response.Response != nil {
+				sc = result.dslr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -358,8 +399,8 @@ func (client DataSourcesClient) ListByWorkspaceResponder(resp *http.Response) (r
 }
 
 // listByWorkspaceNextResults retrieves the next set of results, if any.
-func (client DataSourcesClient) listByWorkspaceNextResults(lastResults DataSourceListResult) (result DataSourceListResult, err error) {
-	req, err := lastResults.dataSourceListResultPreparer()
+func (client DataSourcesClient) listByWorkspaceNextResults(ctx context.Context, lastResults DataSourceListResult) (result DataSourceListResult, err error) {
+	req, err := lastResults.dataSourceListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "operationalinsights.DataSourcesClient", "listByWorkspaceNextResults", nil, "Failure preparing next results request")
 	}
@@ -380,6 +421,16 @@ func (client DataSourcesClient) listByWorkspaceNextResults(lastResults DataSourc
 
 // ListByWorkspaceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DataSourcesClient) ListByWorkspaceComplete(ctx context.Context, resourceGroupName string, workspaceName string, filter string, skiptoken string) (result DataSourceListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DataSourcesClient.ListByWorkspace")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByWorkspace(ctx, resourceGroupName, workspaceName, filter, skiptoken)
 	return
 }

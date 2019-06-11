@@ -15,7 +15,7 @@
   "baseUrl": "https://servicecontrol.googleapis.com/",
   "batchPath": "batch",
   "canonicalName": "Service Control",
-  "description": "Google Service Control provides control plane functionality to managed services, such as logging, monitoring, and status checks.",
+  "description": "Provides control plane functionality to managed services, such as logging, monitoring, and status checks.",
   "discoveryVersion": "v1",
   "documentationLink": "https://cloud.google.com/service-control/",
   "fullyEncodeReservedExpansion": true,
@@ -165,62 +165,6 @@
             "https://www.googleapis.com/auth/servicecontrol"
           ]
         },
-        "endReconciliation": {
-          "description": "Signals the quota controller that service ends the ongoing usage\nreconciliation.\n\nThis method requires the `servicemanagement.services.quota`\npermission on the specified service. For more information, see\n[Google Cloud IAM](https://cloud.google.com/iam).",
-          "flatPath": "v1/services/{serviceName}:endReconciliation",
-          "httpMethod": "POST",
-          "id": "servicecontrol.services.endReconciliation",
-          "parameterOrder": [
-            "serviceName"
-          ],
-          "parameters": {
-            "serviceName": {
-              "description": "Name of the service as specified in the service configuration. For example,\n`\"pubsub.googleapis.com\"`.\n\nSee google.api.Service for the definition of a service name.",
-              "location": "path",
-              "required": true,
-              "type": "string"
-            }
-          },
-          "path": "v1/services/{serviceName}:endReconciliation",
-          "request": {
-            "$ref": "EndReconciliationRequest"
-          },
-          "response": {
-            "$ref": "EndReconciliationResponse"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/cloud-platform",
-            "https://www.googleapis.com/auth/servicecontrol"
-          ]
-        },
-        "releaseQuota": {
-          "description": "Releases previously allocated quota done through AllocateQuota method.\n\nThis method requires the `servicemanagement.services.quota`\npermission on the specified service. For more information, see\n[Cloud IAM](https://cloud.google.com/iam).\n\n\n**NOTE:** The client **must** fail-open on server errors `INTERNAL`,\n`UNKNOWN`, `DEADLINE_EXCEEDED`, and `UNAVAILABLE`. To ensure system\nreliability, the server may inject these errors to prohibit any hard\ndependency on the quota functionality.",
-          "flatPath": "v1/services/{serviceName}:releaseQuota",
-          "httpMethod": "POST",
-          "id": "servicecontrol.services.releaseQuota",
-          "parameterOrder": [
-            "serviceName"
-          ],
-          "parameters": {
-            "serviceName": {
-              "description": "Name of the service as specified in the service configuration. For example,\n`\"pubsub.googleapis.com\"`.\n\nSee google.api.Service for the definition of a service name.",
-              "location": "path",
-              "required": true,
-              "type": "string"
-            }
-          },
-          "path": "v1/services/{serviceName}:releaseQuota",
-          "request": {
-            "$ref": "ReleaseQuotaRequest"
-          },
-          "response": {
-            "$ref": "ReleaseQuotaResponse"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/cloud-platform",
-            "https://www.googleapis.com/auth/servicecontrol"
-          ]
-        },
         "report": {
           "description": "Reports operation results to Google Service Control, such as logs and\nmetrics. It should be called after an operation is completed.\n\nIf feasible, the client should aggregate reporting data for up to 5\nseconds to reduce API traffic. Limiting aggregation to 5 seconds is to\nreduce data loss during client crashes. Clients should carefully choose\nthe aggregation time window to avoid data loss risk more than 0.01%\nfor business and compliance reasons.\n\nNOTE: the ReportRequest has the size limit of 1MB.\n\nThis method requires the `servicemanagement.services.report` permission\non the specified service. For more information, see\n[Google Cloud IAM](https://cloud.google.com/iam).",
           "flatPath": "v1/services/{serviceName}:report",
@@ -248,39 +192,11 @@
             "https://www.googleapis.com/auth/cloud-platform",
             "https://www.googleapis.com/auth/servicecontrol"
           ]
-        },
-        "startReconciliation": {
-          "description": "Unlike rate quota, allocation quota does not get refilled periodically.\nSo, it is possible that the quota usage as seen by the service differs from\nwhat the One Platform considers the usage is. This is expected to happen\nonly rarely, but over time this can accumulate. Services can invoke\nStartReconciliation and EndReconciliation to correct this usage drift, as\ndescribed below:\n1. Service sends StartReconciliation with a timestamp in future for each\n   metric that needs to be reconciled. The timestamp being in future allows\n   to account for in-flight AllocateQuota and ReleaseQuota requests for the\n   same metric.\n2. One Platform records this timestamp and starts tracking subsequent\n   AllocateQuota and ReleaseQuota requests until EndReconciliation is\n   called.\n3. At or after the time specified in the StartReconciliation, service\n   sends EndReconciliation with the usage that needs to be reconciled to.\n4. One Platform adjusts its own record of usage for that metric to the\n   value specified in EndReconciliation by taking in to account any\n   allocation or release between StartReconciliation and EndReconciliation.\n\nSignals the quota controller that the service wants to perform a usage\nreconciliation as specified in the request.\n\nThis method requires the `servicemanagement.services.quota`\npermission on the specified service. For more information, see\n[Google Cloud IAM](https://cloud.google.com/iam).",
-          "flatPath": "v1/services/{serviceName}:startReconciliation",
-          "httpMethod": "POST",
-          "id": "servicecontrol.services.startReconciliation",
-          "parameterOrder": [
-            "serviceName"
-          ],
-          "parameters": {
-            "serviceName": {
-              "description": "Name of the service as specified in the service configuration. For example,\n`\"pubsub.googleapis.com\"`.\n\nSee google.api.Service for the definition of a service name.",
-              "location": "path",
-              "required": true,
-              "type": "string"
-            }
-          },
-          "path": "v1/services/{serviceName}:startReconciliation",
-          "request": {
-            "$ref": "StartReconciliationRequest"
-          },
-          "response": {
-            "$ref": "StartReconciliationResponse"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/cloud-platform",
-            "https://www.googleapis.com/auth/servicecontrol"
-          ]
         }
       }
     }
   },
-  "revision": "20180901",
+  "revision": "20190509",
   "rootUrl": "https://servicecontrol.googleapis.com/",
   "schemas": {
     "AllocateInfo": {
@@ -345,7 +261,7 @@
       "type": "object"
     },
     "AuditLog": {
-      "description": "Common audit log format for Google Cloud Platform API operations.\n\n",
+      "description": "Common audit log format for Google Cloud Platform API operations.\n\n\n",
       "id": "AuditLog",
       "properties": {
         "authenticationInfo": {
@@ -480,6 +396,17 @@
           "description": "The email address of the authenticated user (or service account on behalf\nof third party principal) making the request. For privacy reasons, the\nprincipal email address is redacted for all read-only operations that fail\nwith a \"permission denied\" error.",
           "type": "string"
         },
+        "serviceAccountDelegationInfo": {
+          "description": "Identity delegation history of an authenticated service account that makes\nthe request. It contains information on the real authorities that try to\naccess GCP resources by delegating on a service account. When multiple\nauthorities present, they are guaranteed to be sorted based on the original\nordering of the identity delegation events.",
+          "items": {
+            "$ref": "ServiceAccountDelegationInfo"
+          },
+          "type": "array"
+        },
+        "serviceAccountKeyName": {
+          "description": "The name of the service account key used to create or exchange\ncredentials for authenticating the service account making the request.\nThis is a scheme-less URI full resource name. For example:\n\n\"//iam.googleapis.com/projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}/keys/{key}\"",
+          "type": "string"
+        },
         "thirdPartyPrincipal": {
           "additionalProperties": {
             "description": "Properties of the object.",
@@ -534,6 +461,7 @@
             "BILLING_DISABLED",
             "PROJECT_DELETED",
             "PROJECT_INVALID",
+            "CONSUMER_INVALID",
             "IP_ADDRESS_BLOCKED",
             "REFERER_BLOCKED",
             "CLIENT_APP_BLOCKED",
@@ -571,6 +499,7 @@
             "The consumer cannot access the service because billing is disabled.",
             "The consumer's project has been marked as deleted (soft deletion).",
             "The consumer's project number or id does not represent a valid project.",
+            "The input consumer info does not represent a valid consumer folder or\norganization.",
             "The IP address of the consumer is invalid for the specific consumer\nproject.",
             "The referer address of the consumer request is invalid for the specific\nconsumer project.",
             "The client application of the consumer request is invalid for the\nspecific consumer project.",
@@ -591,7 +520,7 @@
             "The backend server for checking quota limits is unavailable.",
             "The Spanner for looking up LOAS project is unavailable.",
             "Cloud Resource Manager backend server is unavailable.",
-            "Backend server for evaluating security policy is unavailable.",
+            "NOTE: for customers in the scope of Beta/GA of\nhttps://cloud.google.com/vpc-service-controls, this error\nis no longer returned. If the security backend is unavailable, rpc\nUNAVAILABLE status will be returned instead. It should be ignored and\nshould not be used to reject client requests.",
             "Backend server for evaluating location policy is unavailable."
           ],
           "type": "string"
@@ -599,6 +528,10 @@
         "detail": {
           "description": "Free-form text providing details on the error cause of the error.",
           "type": "string"
+        },
+        "status": {
+          "$ref": "Status",
+          "description": "Contains public information about the check error. If available,\n`status.code` will be non zero and client can propagate it out as public\nerror."
         },
         "subject": {
           "description": "Subject to whom this error applies. See the specific code enum for more\ndetails on this field. For example:\n    - “project:\u003cproject-id or project-number\u003e”\n    - “folder:\u003cfolder-id\u003e”\n    - “organization:\u003corganization-id\u003e”",
@@ -642,7 +575,7 @@
           "type": "string"
         },
         "skipActivationCheck": {
-          "description": "Indicates if service activation check should be skipped for this request.\nDefault behavior is to perform the check and apply relevant quota.",
+          "description": "Indicates if service activation check should be skipped for this request.\nDefault behavior is to perform the check and apply relevant quota.\nWARNING: Setting this flag to \"true\" will disable quota enforcement.",
           "type": "boolean"
         }
       },
@@ -674,17 +607,44 @@
         "serviceConfigId": {
           "description": "The actual config id used to process the request.",
           "type": "string"
+        },
+        "serviceRolloutId": {
+          "description": "Unimplemented. The current service rollout id used to process the request.",
+          "type": "string"
         }
       },
       "type": "object"
     },
     "ConsumerInfo": {
-      "description": "`ConsumerInfo` provides information about the consumer project.",
+      "description": "`ConsumerInfo` provides information about the consumer.",
       "id": "ConsumerInfo",
       "properties": {
-        "projectNumber": {
-          "description": "The Google cloud project number, e.g. 1234567890. A value of 0 indicates\nno project number is found.",
+        "consumerNumber": {
+          "description": "The consumer identity number, can be Google cloud project number, folder\nnumber or organization number e.g. 1234567890. A value of 0 indicates no\nconsumer number is found.",
           "format": "int64",
+          "type": "string"
+        },
+        "projectNumber": {
+          "description": "The Google cloud project number, e.g. 1234567890. A value of 0 indicates\nno project number is found.\n\nNOTE: This field is deprecated after Chemist support flexible consumer\nid. New code should not depend on this field anymore.",
+          "format": "int64",
+          "type": "string"
+        },
+        "type": {
+          "description": "The type of the consumer which should have been defined in\n[Google Resource Manager](https://cloud.google.com/resource-manager/).",
+          "enum": [
+            "CONSUMER_TYPE_UNSPECIFIED",
+            "PROJECT",
+            "FOLDER",
+            "ORGANIZATION",
+            "SERVICE_SPECIFIC"
+          ],
+          "enumDescriptions": [
+            "This is never used.",
+            "The consumer is a Google Cloud Project.",
+            "The consumer is a Google Cloud Folder.",
+            "The consumer is a Google Cloud Organization.",
+            "Service-specific resource container which is defined by the service\nproducer to offer their users the ability to manage service control\nfunctionalities at a finer level of granularity than the PROJECT."
+          ],
           "type": "string"
         }
       },
@@ -742,50 +702,6 @@
       },
       "type": "object"
     },
-    "EndReconciliationRequest": {
-      "description": "Request message for QuotaController.EndReconciliation.",
-      "id": "EndReconciliationRequest",
-      "properties": {
-        "reconciliationOperation": {
-          "$ref": "QuotaOperation",
-          "description": "Operation that describes the quota reconciliation."
-        },
-        "serviceConfigId": {
-          "description": "Specifies which version of service configuration should be used to process\nthe request. If unspecified or no matching version can be found, the latest\none will be used.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "EndReconciliationResponse": {
-      "description": "Response message for QuotaController.EndReconciliation.",
-      "id": "EndReconciliationResponse",
-      "properties": {
-        "operationId": {
-          "description": "The same operation_id value used in the EndReconciliationRequest. Used for\nlogging and diagnostics purposes.",
-          "type": "string"
-        },
-        "quotaMetrics": {
-          "description": "Metric values as tracked by One Platform before the adjustment was made.\nThe following metrics will be included:\n\n1. Per quota metric total usage will be specified using the following gauge\nmetric:\n  \"serviceruntime.googleapis.com/allocation/consumer/quota_used_count\"\n\n2. Value for each quota limit associated with the metrics will be specified\nusing the following gauge metric:\n  \"serviceruntime.googleapis.com/quota/limit\"\n\n3. Delta value of the usage after the reconciliation for limits associated\nwith the metrics will be specified using the following metric:\n  \"serviceruntime.googleapis.com/allocation/reconciliation_delta\"\nThe delta value is defined as:\n  new_usage_from_client - existing_value_in_spanner.\nThis metric is not defined in serviceruntime.yaml or in Cloud Monarch.\nThis metric is meant for callers' use only. Since this metric is not\ndefined in the monitoring backend, reporting on this metric will result in\nan error.",
-          "items": {
-            "$ref": "MetricValueSet"
-          },
-          "type": "array"
-        },
-        "reconciliationErrors": {
-          "description": "Indicates the decision of the reconciliation end.",
-          "items": {
-            "$ref": "QuotaError"
-          },
-          "type": "array"
-        },
-        "serviceConfigId": {
-          "description": "ID of the actual config used to process the request.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
     "ExplicitBuckets": {
       "description": "Describing buckets with arbitrary user-provided width.",
       "id": "ExplicitBuckets",
@@ -823,8 +739,27 @@
       },
       "type": "object"
     },
+    "FirstPartyPrincipal": {
+      "description": "First party identity principal.",
+      "id": "FirstPartyPrincipal",
+      "properties": {
+        "principalEmail": {
+          "description": "The email address of a Google account.\n.",
+          "type": "string"
+        },
+        "serviceMetadata": {
+          "additionalProperties": {
+            "description": "Properties of the object.",
+            "type": "any"
+          },
+          "description": "Metadata about the service that uses the service account.\n.",
+          "type": "object"
+        }
+      },
+      "type": "object"
+    },
     "HttpRequest": {
-      "description": "A common proto for logging HTTP requests. Only contains semantics\ndefined by the HTTP specification. Product-specific logging\ninformation MUST be defined in a separate message.\n\nThis is an exact copy of HttpRequest message defined in Stackdriver.",
+      "description": "A common proto for logging HTTP requests. Only contains semantics\ndefined by the HTTP specification. Product-specific logging\ninformation MUST be defined in a separate message.",
       "id": "HttpRequest",
       "properties": {
         "cacheFillBytes": {
@@ -871,7 +806,7 @@
           "type": "string"
         },
         "requestUrl": {
-          "description": "The scheme (http, https), the host name, the path and the query\nportion of the URL that was requested.\nExample: `\"http://example.com/some/info?color=red\"`.",
+          "description": "The scheme (http, https), the host name, the path, and the query\nportion of the URL that was requested.\nExample: `\"http://example.com/some/info?color=red\"`.",
           "type": "string"
         },
         "responseSize": {
@@ -884,7 +819,7 @@
           "type": "string"
         },
         "status": {
-          "description": "The response code indicating the status of response.\nExamples: 200, 404.",
+          "description": "The response code indicating the status of the response.\nExamples: 200, 404.",
           "format": "int32",
           "type": "integer"
         },
@@ -996,7 +931,7 @@
           "type": "string"
         },
         "trace": {
-          "description": "Optional. Resource name of the trace associated with the log entry, if any.\nIf it contains a relative resource name, the name is assumed to be relative\nto `//tracing.googleapis.com`. Example:\n`projects/my-projectid/traces/06796866738c859f2f19b7cfb3214824`",
+          "description": "Optional. Resource name of the trace associated with the log entry, if any.\nIf this field contains a relative resource name, you can assume the name is\nrelative to `//tracing.googleapis.com`. Example:\n`projects/my-projectid/traces/06796866738c859f2f19b7cfb3214824`",
           "type": "string"
         }
       },
@@ -1119,7 +1054,7 @@
       "id": "Operation",
       "properties": {
         "consumerId": {
-          "description": "Identity of the consumer who is using the service.\nThis field should be filled in for the operations initiated by a\nconsumer, but not for service-initiated operations that are\nnot related to a specific consumer.\n\nThis can be in one of the following formats:\n  project:\u003cproject_id\u003e,\n  project_number:\u003cproject_number\u003e,\n  api_key:\u003capi_key\u003e.",
+          "description": "Identity of the consumer who is using the service.\nThis field should be filled in for the operations initiated by a\nconsumer, but not for service-initiated operations that are\nnot related to a specific consumer.\n\n- This can be in one of the following formats:\n    - project:PROJECT_ID,\n    - project`_`number:PROJECT_NUMBER,\n    - projects/PROJECT_ID or PROJECT_NUMBER,\n    - folders/FOLDER_NUMBER,\n    - organizations/ORGANIZATION_NUMBER,\n    - api`_`key:API_KEY.",
           "type": "string"
         },
         "endTime": {
@@ -1355,8 +1290,8 @@
           ],
           "enumDescriptions": [
             "Guard against implicit default. Must not be used.",
-            "For AllocateQuota request, allocates quota for the amount specified in\nthe service configuration or specified using the quota metrics. If the\namount is higher than the available quota, allocation error will be\nreturned and no quota will be allocated.",
-            "The operation allocates quota for the amount specified in the service\nconfiguration or specified using the quota metrics. If the amount is\nhigher than the available quota, request does not fail but all available\nquota will be allocated.",
+            "For AllocateQuota request, allocates quota for the amount specified in\nthe service configuration or specified using the quota metrics. If the\namount is higher than the available quota, allocation error will be\nreturned and no quota will be allocated.\nIf multiple quotas are part of the request, and one fails, none of the\nquotas are allocated or released.",
+            "The operation allocates quota for the amount specified in the service\nconfiguration or specified using the quota metrics. If the amount is\nhigher than the available quota, request does not fail but all available\nquota will be allocated.\nFor rate quota, BEST_EFFORT will continue to deduct from other groups\neven if one does not have enough quota. For allocation, it will find the\nminimum available amount across all groups and deduct that amount from\nall the affected groups.",
             "For AllocateQuota request, only checks if there is enough quota\navailable and does not change the available quota. No lock is placed on\nthe available quota either."
           ],
           "type": "string"
@@ -1382,50 +1317,6 @@
             "Does not change any available quota. Only checks if there is enough\nquota.\nNo lock is placed on the checked tokens neither.",
             "Increases available quota by the operation cost specified for the\noperation."
           ],
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "ReleaseQuotaRequest": {
-      "description": "Request message for the ReleaseQuota method.",
-      "id": "ReleaseQuotaRequest",
-      "properties": {
-        "releaseOperation": {
-          "$ref": "QuotaOperation",
-          "description": "Operation that describes the quota release."
-        },
-        "serviceConfigId": {
-          "description": "Specifies which version of service configuration should be used to process\nthe request. If unspecified or no matching version can be found, the latest\none will be used.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "ReleaseQuotaResponse": {
-      "description": "Response message for the ReleaseQuota method.",
-      "id": "ReleaseQuotaResponse",
-      "properties": {
-        "operationId": {
-          "description": "The same operation_id value used in the ReleaseQuotaRequest. Used for\nlogging and diagnostics purposes.",
-          "type": "string"
-        },
-        "quotaMetrics": {
-          "description": "Quota metrics to indicate the result of release. Depending on the\nrequest, one or more of the following metrics will be included:\n\n1. For rate quota, per quota group or per quota metric released amount\nwill be specified using the following delta metric:\n  \"serviceruntime.googleapis.com/api/consumer/quota_refund_count\"\n\n2. For allocation quota, per quota metric total usage will be specified\nusing the following gauge metric:\n  \"serviceruntime.googleapis.com/allocation/consumer/quota_used_count\"\n\n3. For allocation quota, value for each quota limit associated with\nthe metrics will be specified using the following gauge metric:\n  \"serviceruntime.googleapis.com/quota/limit\"",
-          "items": {
-            "$ref": "MetricValueSet"
-          },
-          "type": "array"
-        },
-        "releaseErrors": {
-          "description": "Indicates the decision of the release.",
-          "items": {
-            "$ref": "QuotaError"
-          },
-          "type": "array"
-        },
-        "serviceConfigId": {
-          "description": "ID of the actual config used to process the request.",
           "type": "string"
         }
       },
@@ -1499,6 +1390,10 @@
         },
         "serviceConfigId": {
           "description": "The actual config id used to process the request.",
+          "type": "string"
+        },
+        "serviceRolloutId": {
+          "description": "Unimplemented. The current service rollout id used to process the request.",
           "type": "string"
         }
       },
@@ -1590,7 +1485,7 @@
         },
         "requestAttributes": {
           "$ref": "Request",
-          "description": "Request attributes used in IAM condition evaluation. This field contains\nrequest attributes like request time and access levels associated with\nthe request.\n\nTo get the whole view of the attributes used in IAM\ncondition evaluation, the user must also look into\n`AuditLog.authentication_info.resource_attributes`."
+          "description": "Request attributes used in IAM condition evaluation. This field contains\nrequest attributes like request time and access levels associated with\nthe request.\n\n\nTo get the whole view of the attributes used in IAM\ncondition evaluation, the user must also look into\n`AuditLog.authentication_info.resource_attributes`."
         }
       },
       "type": "object"
@@ -1645,14 +1540,14 @@
       "id": "ResourceLocation",
       "properties": {
         "currentLocations": {
-          "description": "The locations of a resource after the execution of the operation.\nFor example:\n\n    \"europe-west1-a\"\n    \"us-east1\"\n    \"nam3\"",
+          "description": "The locations of a resource after the execution of the operation.\nRequests to create or delete a location based resource must populate\nthe 'current_locations' field and not the 'original_locations' field.\nFor example:\n\n    \"europe-west1-a\"\n    \"us-east1\"\n    \"nam3\"",
           "items": {
             "type": "string"
           },
           "type": "array"
         },
         "originalLocations": {
-          "description": "The locations of a resource prior to the execution of the operation.\nFor example:\n\n    \"europe-west1-a\"\n    \"us-east1\"\n    \"nam3\"",
+          "description": "The locations of a resource prior to the execution of the operation.\nRequests that mutate the resource's location must populate both the\n'original_locations' as well as the 'current_locations' fields.\nFor example:\n\n    \"europe-west1-a\"\n    \"us-east1\"\n    \"nam3\"",
           "items": {
             "type": "string"
           },
@@ -1661,52 +1556,23 @@
       },
       "type": "object"
     },
-    "StartReconciliationRequest": {
-      "description": "Request message for QuotaController.StartReconciliation.",
-      "id": "StartReconciliationRequest",
+    "ServiceAccountDelegationInfo": {
+      "description": "Identity delegation history of an authenticated service account.",
+      "id": "ServiceAccountDelegationInfo",
       "properties": {
-        "reconciliationOperation": {
-          "$ref": "QuotaOperation",
-          "description": "Operation that describes the quota reconciliation."
+        "firstPartyPrincipal": {
+          "$ref": "FirstPartyPrincipal",
+          "description": "First party (Google) identity as the real authority."
         },
-        "serviceConfigId": {
-          "description": "Specifies which version of service configuration should be used to process\nthe request. If unspecified or no matching version can be found, the latest\none will be used.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "StartReconciliationResponse": {
-      "description": "Response message for QuotaController.StartReconciliation.",
-      "id": "StartReconciliationResponse",
-      "properties": {
-        "operationId": {
-          "description": "The same operation_id value used in the StartReconciliationRequest. Used\nfor logging and diagnostics purposes.",
-          "type": "string"
-        },
-        "quotaMetrics": {
-          "description": "Metric values as tracked by One Platform before the start of\nreconciliation. The following metrics will be included:\n\n1. Per quota metric total usage will be specified using the following gauge\nmetric:\n  \"serviceruntime.googleapis.com/allocation/consumer/quota_used_count\"\n\n2. Value for each quota limit associated with the metrics will be specified\nusing the following gauge metric:\n  \"serviceruntime.googleapis.com/quota/limit\"",
-          "items": {
-            "$ref": "MetricValueSet"
-          },
-          "type": "array"
-        },
-        "reconciliationErrors": {
-          "description": "Indicates the decision of the reconciliation start.",
-          "items": {
-            "$ref": "QuotaError"
-          },
-          "type": "array"
-        },
-        "serviceConfigId": {
-          "description": "ID of the actual config used to process the request.",
-          "type": "string"
+        "thirdPartyPrincipal": {
+          "$ref": "ThirdPartyPrincipal",
+          "description": "Third party identity as the real authority."
         }
       },
       "type": "object"
     },
     "Status": {
-      "description": "The `Status` type defines a logical error model that is suitable for different\nprogramming environments, including REST APIs and RPC APIs. It is used by\n[gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error message,\nand error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
+      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error\nmessage, and error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
       "id": "Status",
       "properties": {
         "code": {
@@ -1728,6 +1594,21 @@
         "message": {
           "description": "A developer-facing error message, which should be in English. Any\nuser-facing error message should be localized and sent in the\ngoogle.rpc.Status.details field, or localized by the client.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ThirdPartyPrincipal": {
+      "description": "Third party identity principal.",
+      "id": "ThirdPartyPrincipal",
+      "properties": {
+        "thirdPartyClaims": {
+          "additionalProperties": {
+            "description": "Properties of the object.",
+            "type": "any"
+          },
+          "description": "Metadata about third party identity.",
+          "type": "object"
         }
       },
       "type": "object"

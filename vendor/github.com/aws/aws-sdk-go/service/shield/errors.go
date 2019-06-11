@@ -4,6 +4,13 @@ package shield
 
 const (
 
+	// ErrCodeAccessDeniedException for service response error code
+	// "AccessDeniedException".
+	//
+	// Exception that indicates the specified AttackId does not exist, or the requester
+	// does not have the appropriate permissions to access the AttackId.
+	ErrCodeAccessDeniedException = "AccessDeniedException"
+
 	// ErrCodeAccessDeniedForDependencyException for service response error code
 	// "AccessDeniedForDependencyException".
 	//

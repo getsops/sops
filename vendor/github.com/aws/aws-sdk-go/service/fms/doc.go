@@ -6,7 +6,7 @@
 // This is the AWS Firewall Manager API Reference. This guide is for developers
 // who need detailed information about the AWS Firewall Manager API actions,
 // data types, and errors. For detailed information about AWS Firewall Manager
-// features, see the AWS Firewall Manager Developer Guide (http://docs.aws.amazon.com/waf/latest/developerguide/fms-chapter.html).
+// features, see the AWS Firewall Manager Developer Guide (https://docs.aws.amazon.com/waf/latest/developerguide/fms-chapter.html).
 //
 // See https://docs.aws.amazon.com/goto/WebAPI/fms-2018-01-01 for more information on this service.
 //

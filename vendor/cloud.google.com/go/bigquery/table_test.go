@@ -56,10 +56,11 @@ func TestBQToTableMetadata(t *testing.T) {
 				Clustering: &bq.Clustering{
 					Fields: []string{"cfield1", "cfield2"},
 				},
+				RequirePartitionFilter:  true,
 				EncryptionConfiguration: &bq.EncryptionConfiguration{KmsKeyName: "keyName"},
-				Type:   "EXTERNAL",
-				View:   &bq.ViewDefinition{Query: "view-query"},
-				Labels: map[string]string{"a": "b"},
+				Type:                    "EXTERNAL",
+				View:                    &bq.ViewDefinition{Query: "view-query"},
+				Labels:                  map[string]string{"a": "b"},
 				ExternalDataConfiguration: &bq.ExternalDataConfiguration{
 					SourceFormat: "GOOGLE_SHEETS",
 				},
@@ -76,6 +77,7 @@ func TestBQToTableMetadata(t *testing.T) {
 				CreationTime:       aTime.Truncate(time.Millisecond),
 				LastModifiedTime:   aTime.Truncate(time.Millisecond),
 				NumBytes:           123,
+				NumLongTermBytes:   23,
 				NumRows:            7,
 				TimePartitioning: &TimePartitioning{
 					Expiration: 7890 * time.Millisecond,
@@ -84,6 +86,7 @@ func TestBQToTableMetadata(t *testing.T) {
 				Clustering: &Clustering{
 					Fields: []string{"cfield1", "cfield2"},
 				},
+				RequirePartitionFilter: true,
 				StreamingBuffer: &StreamingBuffer{
 					EstimatedBytes:  11,
 					EstimatedRows:   3,
@@ -133,8 +136,8 @@ func TestTableMetadataToBQ(t *testing.T) {
 						bqTableFieldSchema("desc", "name", "STRING", "REQUIRED"),
 					},
 				},
-				ExpirationTime: aTimeMillis,
-				Labels:         map[string]string{"a": "b"},
+				ExpirationTime:            aTimeMillis,
+				Labels:                    map[string]string{"a": "b"},
 				ExternalDataConfiguration: &bq.ExternalDataConfiguration{SourceFormat: "BIGTABLE"},
 				EncryptionConfiguration:   &bq.EncryptionConfiguration{KmsKeyName: "keyName"},
 			},
@@ -151,9 +154,10 @@ func TestTableMetadataToBQ(t *testing.T) {
 		},
 		{
 			&TableMetadata{
-				ViewQuery:        "q",
-				UseLegacySQL:     true,
-				TimePartitioning: &TimePartitioning{},
+				ViewQuery:              "q",
+				UseLegacySQL:           true,
+				TimePartitioning:       &TimePartitioning{},
+				RequirePartitionFilter: true,
 			},
 			&bq.Table{
 				View: &bq.ViewDefinition{
@@ -164,6 +168,7 @@ func TestTableMetadataToBQ(t *testing.T) {
 					Type:         "DAY",
 					ExpirationMs: 0,
 				},
+				RequirePartitionFilter: true,
 			},
 		},
 		{
@@ -194,6 +199,10 @@ func TestTableMetadataToBQ(t *testing.T) {
 				},
 			},
 		},
+		{
+			&TableMetadata{ExpirationTime: NeverExpire},
+			&bq.Table{ExpirationTime: 0},
+		},
 	} {
 		got, err := test.in.toBQ()
 		if err != nil {
@@ -215,9 +224,14 @@ func TestTableMetadataToBQ(t *testing.T) {
 		{CreationTime: aTime},
 		{LastModifiedTime: aTime},
 		{NumBytes: 1},
+		{NumLongTermBytes: 1},
 		{NumRows: 1},
 		{StreamingBuffer: &StreamingBuffer{}},
 		{ETag: "x"},
+		// expiration time outside allowable range is invalid
+		// See https://godoc.org/time#Time.UnixNano
+		{ExpirationTime: time.Date(1677, 9, 21, 0, 12, 43, 145224192, time.UTC).Add(-1)},
+		{ExpirationTime: time.Date(2262, 04, 11, 23, 47, 16, 854775807, time.UTC).Add(1)},
 	} {
 		_, err := in.toBQ()
 		if err == nil {
@@ -298,10 +312,79 @@ func TestTableMetadataToUpdateToBQ(t *testing.T) {
 				NullFields: []string{"Labels.D"},
 			},
 		},
+		{
+			tm: TableMetadataToUpdate{ExpirationTime: NeverExpire},
+			want: &bq.Table{
+				NullFields: []string{"ExpirationTime"},
+			},
+		},
+		{
+			tm: TableMetadataToUpdate{TimePartitioning: &TimePartitioning{Expiration: 0}},
+			want: &bq.Table{
+				TimePartitioning: &bq.TimePartitioning{
+					Type:            "DAY",
+					ForceSendFields: []string{"RequirePartitionFilter"},
+					NullFields:      []string{"ExpirationMs"},
+				},
+			},
+		},
+		{
+			tm: TableMetadataToUpdate{TimePartitioning: &TimePartitioning{Expiration: time.Duration(time.Hour)}},
+			want: &bq.Table{
+				TimePartitioning: &bq.TimePartitioning{
+					ExpirationMs:    3600000,
+					Type:            "DAY",
+					ForceSendFields: []string{"RequirePartitionFilter"},
+				},
+			},
+		},
+		{
+			tm: TableMetadataToUpdate{RequirePartitionFilter: false},
+			want: &bq.Table{
+				RequirePartitionFilter: false,
+				ForceSendFields:        []string{"RequirePartitionFilter"},
+			},
+		},
+		{
+			tm: TableMetadataToUpdate{RequirePartitionFilter: true},
+			want: &bq.Table{
+				RequirePartitionFilter: true,
+				ForceSendFields:        []string{"RequirePartitionFilter"},
+			},
+		},
 	} {
-		got := test.tm.toBQ()
+		got, _ := test.tm.toBQ()
 		if !testutil.Equal(got, test.want) {
 			t.Errorf("%+v:\ngot  %+v\nwant %+v", test.tm, got, test.want)
+		}
+	}
+}
+
+func TestTableMetadataToUpdateToBQErrors(t *testing.T) {
+	// See https://godoc.org/time#Time.UnixNano
+	start := time.Date(1677, 9, 21, 0, 12, 43, 145224192, time.UTC)
+	end := time.Date(2262, 04, 11, 23, 47, 16, 854775807, time.UTC)
+
+	for _, test := range []struct {
+		desc    string
+		aTime   time.Time
+		wantErr bool
+	}{
+		{desc: "ignored zero value", aTime: time.Time{}, wantErr: false},
+		{desc: "earliest valid time", aTime: start, wantErr: false},
+		{desc: "latested valid time", aTime: end, wantErr: false},
+		{desc: "invalid times before 1678", aTime: start.Add(-1), wantErr: true},
+		{desc: "invalid times after 2262", aTime: end.Add(1), wantErr: true},
+		{desc: "valid times after 1678", aTime: start.Add(1), wantErr: false},
+		{desc: "valid times before 2262", aTime: end.Add(-1), wantErr: false},
+	} {
+		tm := &TableMetadataToUpdate{ExpirationTime: test.aTime}
+		_, err := tm.toBQ()
+		if test.wantErr && err == nil {
+			t.Errorf("[%s] got no error, want error", test.desc)
+		}
+		if !test.wantErr && err != nil {
+			t.Errorf("[%s] got error, want no error", test.desc)
 		}
 	}
 }

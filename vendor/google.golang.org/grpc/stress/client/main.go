@@ -22,6 +22,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"math/rand"
@@ -31,7 +32,6 @@ import (
 	"sync"
 	"time"
 
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials"
@@ -215,27 +215,27 @@ func performRPCs(gauge *gauge, conn *grpc.ClientConn, selector *weightedRandomTe
 		test := selector.getNextTest()
 		switch test {
 		case "empty_unary":
-			interop.DoEmptyUnaryCall(client, grpc.FailFast(false))
+			interop.DoEmptyUnaryCall(client, grpc.WaitForReady(true))
 		case "large_unary":
-			interop.DoLargeUnaryCall(client, grpc.FailFast(false))
+			interop.DoLargeUnaryCall(client, grpc.WaitForReady(true))
 		case "client_streaming":
-			interop.DoClientStreaming(client, grpc.FailFast(false))
+			interop.DoClientStreaming(client, grpc.WaitForReady(true))
 		case "server_streaming":
-			interop.DoServerStreaming(client, grpc.FailFast(false))
+			interop.DoServerStreaming(client, grpc.WaitForReady(true))
 		case "ping_pong":
-			interop.DoPingPong(client, grpc.FailFast(false))
+			interop.DoPingPong(client, grpc.WaitForReady(true))
 		case "empty_stream":
-			interop.DoEmptyStream(client, grpc.FailFast(false))
+			interop.DoEmptyStream(client, grpc.WaitForReady(true))
 		case "timeout_on_sleeping_server":
-			interop.DoTimeoutOnSleepingServer(client, grpc.FailFast(false))
+			interop.DoTimeoutOnSleepingServer(client, grpc.WaitForReady(true))
 		case "cancel_after_begin":
-			interop.DoCancelAfterBegin(client, grpc.FailFast(false))
+			interop.DoCancelAfterBegin(client, grpc.WaitForReady(true))
 		case "cancel_after_first_response":
-			interop.DoCancelAfterFirstResponse(client, grpc.FailFast(false))
+			interop.DoCancelAfterFirstResponse(client, grpc.WaitForReady(true))
 		case "status_code_and_message":
-			interop.DoStatusCodeAndMessage(client, grpc.FailFast(false))
+			interop.DoStatusCodeAndMessage(client, grpc.WaitForReady(true))
 		case "custom_metadata":
-			interop.DoCustomMetadata(client, grpc.FailFast(false))
+			interop.DoCustomMetadata(client, grpc.WaitForReady(true))
 		}
 		numCalls++
 		gauge.set(int64(float64(numCalls) / time.Since(startTime).Seconds()))

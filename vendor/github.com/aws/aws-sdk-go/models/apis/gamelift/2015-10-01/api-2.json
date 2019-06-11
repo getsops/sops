@@ -6,6 +6,7 @@
     "jsonVersion":"1.1",
     "protocol":"json",
     "serviceFullName":"Amazon GameLift",
+    "serviceId":"GameLift",
     "signatureVersion":"v4",
     "targetPrefix":"GameLift",
     "uid":"gamelift-2015-10-01"
@@ -176,6 +177,21 @@
         {"shape":"NotFoundException"}
       ]
     },
+    "CreateScript":{
+      "name":"CreateScript",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateScriptInput"},
+      "output":{"shape":"CreateScriptOutput"},
+      "errors":[
+        {"shape":"UnauthorizedException"},
+        {"shape":"InvalidRequestException"},
+        {"shape":"ConflictException"},
+        {"shape":"InternalServiceException"}
+      ]
+    },
     "CreateVpcPeeringAuthorization":{
       "name":"CreateVpcPeeringAuthorization",
       "http":{
@@ -279,6 +295,21 @@
         {"shape":"UnsupportedRegionException"}
       ]
     },
+    "DeleteMatchmakingRuleSet":{
+      "name":"DeleteMatchmakingRuleSet",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteMatchmakingRuleSetInput"},
+      "output":{"shape":"DeleteMatchmakingRuleSetOutput"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"InternalServiceException"},
+        {"shape":"UnsupportedRegionException"},
+        {"shape":"NotFoundException"}
+      ]
+    },
     "DeleteScalingPolicy":{
       "name":"DeleteScalingPolicy",
       "http":{
@@ -291,6 +322,20 @@
         {"shape":"InvalidRequestException"},
         {"shape":"UnauthorizedException"},
         {"shape":"NotFoundException"}
+      ]
+    },
+    "DeleteScript":{
+      "name":"DeleteScript",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteScriptInput"},
+      "errors":[
+        {"shape":"InvalidRequestException"},
+        {"shape":"UnauthorizedException"},
+        {"shape":"NotFoundException"},
+        {"shape":"InternalServiceException"}
       ]
     },
     "DeleteVpcPeeringAuthorization":{
@@ -607,6 +652,21 @@
         {"shape":"NotFoundException"}
       ]
     },
+    "DescribeScript":{
+      "name":"DescribeScript",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeScriptInput"},
+      "output":{"shape":"DescribeScriptOutput"},
+      "errors":[
+        {"shape":"UnauthorizedException"},
+        {"shape":"InvalidRequestException"},
+        {"shape":"InternalServiceException"},
+        {"shape":"NotFoundException"}
+      ]
+    },
     "DescribeVpcPeeringAuthorizations":{
       "name":"DescribeVpcPeeringAuthorizations",
       "http":{
@@ -707,6 +767,20 @@
         {"shape":"NotFoundException"},
         {"shape":"InvalidRequestException"},
         {"shape":"UnauthorizedException"}
+      ]
+    },
+    "ListScripts":{
+      "name":"ListScripts",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListScriptsInput"},
+      "output":{"shape":"ListScriptsOutput"},
+      "errors":[
+        {"shape":"UnauthorizedException"},
+        {"shape":"InvalidRequestException"},
+        {"shape":"InternalServiceException"}
       ]
     },
     "PutScalingPolicy":{
@@ -1023,6 +1097,21 @@
         {"shape":"InvalidFleetStatusException"}
       ]
     },
+    "UpdateScript":{
+      "name":"UpdateScript",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateScriptInput"},
+      "output":{"shape":"UpdateScriptOutput"},
+      "errors":[
+        {"shape":"UnauthorizedException"},
+        {"shape":"InvalidRequestException"},
+        {"shape":"NotFoundException"},
+        {"shape":"InternalServiceException"}
+      ]
+    },
     "ValidateMatchmakingRuleSet":{
       "name":"ValidateMatchmakingRuleSet",
       "http":{
@@ -1192,13 +1281,13 @@
       "type":"structure",
       "required":[
         "Name",
-        "BuildId",
         "EC2InstanceType"
       ],
       "members":{
         "Name":{"shape":"NonZeroAndMaxString"},
         "Description":{"shape":"NonZeroAndMaxString"},
         "BuildId":{"shape":"BuildId"},
+        "ScriptId":{"shape":"ScriptId"},
         "ServerLaunchPath":{"shape":"NonZeroAndMaxString"},
         "ServerLaunchParameters":{"shape":"NonZeroAndMaxString"},
         "LogPaths":{"shape":"StringList"},
@@ -1210,7 +1299,8 @@
         "MetricGroups":{"shape":"MetricGroupList"},
         "PeerVpcAwsAccountId":{"shape":"NonZeroAndMaxString"},
         "PeerVpcId":{"shape":"NonZeroAndMaxString"},
-        "FleetType":{"shape":"FleetType"}
+        "FleetType":{"shape":"FleetType"},
+        "InstanceRoleArn":{"shape":"NonEmptyString"}
       }
     },
     "CreateFleetOutput":{
@@ -1340,6 +1430,21 @@
         "PlayerSessions":{"shape":"PlayerSessionList"}
       }
     },
+    "CreateScriptInput":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"NonZeroAndMaxString"},
+        "Version":{"shape":"NonZeroAndMaxString"},
+        "StorageLocation":{"shape":"S3Location"},
+        "ZipFile":{"shape":"ZipBlob"}
+      }
+    },
+    "CreateScriptOutput":{
+      "type":"structure",
+      "members":{
+        "Script":{"shape":"Script"}
+      }
+    },
     "CreateVpcPeeringAuthorizationInput":{
       "type":"structure",
       "required":[
@@ -1425,6 +1530,18 @@
       "members":{
       }
     },
+    "DeleteMatchmakingRuleSetInput":{
+      "type":"structure",
+      "required":["Name"],
+      "members":{
+        "Name":{"shape":"MatchmakingIdStringModel"}
+      }
+    },
+    "DeleteMatchmakingRuleSetOutput":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "DeleteScalingPolicyInput":{
       "type":"structure",
       "required":[
@@ -1434,6 +1551,13 @@
       "members":{
         "Name":{"shape":"NonZeroAndMaxString"},
         "FleetId":{"shape":"FleetId"}
+      }
+    },
+    "DeleteScriptInput":{
+      "type":"structure",
+      "required":["ScriptId"],
+      "members":{
+        "ScriptId":{"shape":"ScriptId"}
       }
     },
     "DeleteVpcPeeringAuthorizationInput":{
@@ -1756,6 +1880,19 @@
         "NextToken":{"shape":"NonZeroAndMaxString"}
       }
     },
+    "DescribeScriptInput":{
+      "type":"structure",
+      "required":["ScriptId"],
+      "members":{
+        "ScriptId":{"shape":"ScriptId"}
+      }
+    },
+    "DescribeScriptOutput":{
+      "type":"structure",
+      "members":{
+        "Script":{"shape":"Script"}
+      }
+    },
     "DescribeVpcPeeringAuthorizationsInput":{
       "type":"structure",
       "members":{
@@ -1931,6 +2068,7 @@
         "TerminationTime":{"shape":"Timestamp"},
         "Status":{"shape":"FleetStatus"},
         "BuildId":{"shape":"BuildId"},
+        "ScriptId":{"shape":"ScriptId"},
         "ServerLaunchPath":{"shape":"NonZeroAndMaxString"},
         "ServerLaunchParameters":{"shape":"NonZeroAndMaxString"},
         "LogPaths":{"shape":"StringList"},
@@ -1938,7 +2076,8 @@
         "OperatingSystem":{"shape":"OperatingSystem"},
         "ResourceCreationLimitPolicy":{"shape":"ResourceCreationLimitPolicy"},
         "MetricGroups":{"shape":"MetricGroupList"},
-        "StoppedActions":{"shape":"FleetActionList"}
+        "StoppedActions":{"shape":"FleetActionList"},
+        "InstanceRoleArn":{"shape":"NonEmptyString"}
       }
     },
     "FleetAttributesList":{
@@ -2369,6 +2508,7 @@
       "type":"structure",
       "members":{
         "BuildId":{"shape":"BuildId"},
+        "ScriptId":{"shape":"ScriptId"},
         "Limit":{"shape":"PositiveInteger"},
         "NextToken":{"shape":"NonZeroAndMaxString"}
       }
@@ -2378,6 +2518,20 @@
       "members":{
         "FleetIds":{"shape":"FleetIdList"},
         "NextToken":{"shape":"NonZeroAndMaxString"}
+      }
+    },
+    "ListScriptsInput":{
+      "type":"structure",
+      "members":{
+        "Limit":{"shape":"PositiveInteger"},
+        "NextToken":{"shape":"NonEmptyString"}
+      }
+    },
+    "ListScriptsOutput":{
+      "type":"structure",
+      "members":{
+        "Scripts":{"shape":"ScriptList"},
+        "NextToken":{"shape":"NonEmptyString"}
       }
     },
     "MatchedPlayerSession":{
@@ -2789,7 +2943,8 @@
       "members":{
         "Bucket":{"shape":"NonEmptyString"},
         "Key":{"shape":"NonEmptyString"},
-        "RoleArn":{"shape":"NonEmptyString"}
+        "RoleArn":{"shape":"NonEmptyString"},
+        "ObjectVersion":{"shape":"NonEmptyString"}
       }
     },
     "ScalingAdjustmentType":{
@@ -2831,6 +2986,25 @@
         "DELETED",
         "ERROR"
       ]
+    },
+    "Script":{
+      "type":"structure",
+      "members":{
+        "ScriptId":{"shape":"ScriptId"},
+        "Name":{"shape":"NonZeroAndMaxString"},
+        "Version":{"shape":"NonZeroAndMaxString"},
+        "SizeOnDisk":{"shape":"PositiveLong"},
+        "CreationTime":{"shape":"Timestamp"},
+        "StorageLocation":{"shape":"S3Location"}
+      }
+    },
+    "ScriptId":{
+      "type":"string",
+      "pattern":"^script-\\S+|^arn:.*script-\\S+"
+    },
+    "ScriptList":{
+      "type":"list",
+      "member":{"shape":"Script"}
     },
     "SearchGameSessionsInput":{
       "type":"structure",
@@ -3186,6 +3360,23 @@
         "RuntimeConfiguration":{"shape":"RuntimeConfiguration"}
       }
     },
+    "UpdateScriptInput":{
+      "type":"structure",
+      "required":["ScriptId"],
+      "members":{
+        "ScriptId":{"shape":"ScriptId"},
+        "Name":{"shape":"NonZeroAndMaxString"},
+        "Version":{"shape":"NonZeroAndMaxString"},
+        "StorageLocation":{"shape":"S3Location"},
+        "ZipFile":{"shape":"ZipBlob"}
+      }
+    },
+    "UpdateScriptOutput":{
+      "type":"structure",
+      "members":{
+        "Script":{"shape":"Script"}
+      }
+    },
     "ValidateMatchmakingRuleSetInput":{
       "type":"structure",
       "required":["RuleSetBody"],
@@ -3238,6 +3429,10 @@
     "WholeNumber":{
       "type":"integer",
       "min":0
+    },
+    "ZipBlob":{
+      "type":"blob",
+      "max":5000000
     }
   }
 }

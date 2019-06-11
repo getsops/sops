@@ -113,6 +113,35 @@
           "resources": {
             "registries": {
               "methods": {
+                "bindDeviceToGateway": {
+                  "description": "Associates the device with the gateway.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/registries/{registriesId}:bindDeviceToGateway",
+                  "httpMethod": "POST",
+                  "id": "cloudiot.projects.locations.registries.bindDeviceToGateway",
+                  "parameterOrder": [
+                    "parent"
+                  ],
+                  "parameters": {
+                    "parent": {
+                      "description": "The name of the registry. For example,\n`projects/example-project/locations/us-central1/registries/my-registry`.",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+/registries/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+parent}:bindDeviceToGateway",
+                  "request": {
+                    "$ref": "BindDeviceToGatewayRequest"
+                  },
+                  "response": {
+                    "$ref": "BindDeviceToGatewayResponse"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloudiot"
+                  ]
+                },
                 "create": {
                   "description": "Creates a device registry that contains devices.",
                   "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/registries",
@@ -352,6 +381,35 @@
                     "https://www.googleapis.com/auth/cloud-platform",
                     "https://www.googleapis.com/auth/cloudiot"
                   ]
+                },
+                "unbindDeviceFromGateway": {
+                  "description": "Deletes the association between the device and the gateway.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/registries/{registriesId}:unbindDeviceFromGateway",
+                  "httpMethod": "POST",
+                  "id": "cloudiot.projects.locations.registries.unbindDeviceFromGateway",
+                  "parameterOrder": [
+                    "parent"
+                  ],
+                  "parameters": {
+                    "parent": {
+                      "description": "The name of the registry. For example,\n`projects/example-project/locations/us-central1/registries/my-registry`.",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+/registries/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+parent}:unbindDeviceFromGateway",
+                  "request": {
+                    "$ref": "UnbindDeviceFromGatewayRequest"
+                  },
+                  "response": {
+                    "$ref": "UnbindDeviceFromGatewayResponse"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloudiot"
+                  ]
                 }
               },
               "resources": {
@@ -472,6 +530,26 @@
                           "location": "query",
                           "type": "string"
                         },
+                        "gatewayListOptions.associationsDeviceId": {
+                          "description": "If set, returns only the gateways with which the specified device is\nassociated. The device ID can be numeric (`num_id`) or the user-defined\nstring (`id`). For example, if `456` is specified, returns only the\ngateways to which the device with `num_id` 456 is bound.",
+                          "location": "query",
+                          "type": "string"
+                        },
+                        "gatewayListOptions.associationsGatewayId": {
+                          "description": "If set, only devices associated with the specified gateway are returned.\nThe gateway ID can be numeric (`num_id`) or the user-defined string\n(`id`). For example, if `123` is specified, only devices bound to the\ngateway with `num_id` 123 are returned.",
+                          "location": "query",
+                          "type": "string"
+                        },
+                        "gatewayListOptions.gatewayType": {
+                          "description": "If `GATEWAY` is specified, only gateways are returned. If `NON_GATEWAY`\nis specified, only non-gateway devices are returned. If\n`GATEWAY_TYPE_UNSPECIFIED` is specified, all devices are returned.",
+                          "enum": [
+                            "GATEWAY_TYPE_UNSPECIFIED",
+                            "GATEWAY",
+                            "NON_GATEWAY"
+                          ],
+                          "location": "query",
+                          "type": "string"
+                        },
                         "pageSize": {
                           "description": "The maximum number of devices to return in the response. If this value\nis zero, the service will select a default size. A call may return fewer\nobjects than requested. A non-empty `next_page_token` in the response\nindicates that more data is available.",
                           "format": "int32",
@@ -558,6 +636,35 @@
                       },
                       "response": {
                         "$ref": "Device"
+                      },
+                      "scopes": [
+                        "https://www.googleapis.com/auth/cloud-platform",
+                        "https://www.googleapis.com/auth/cloudiot"
+                      ]
+                    },
+                    "sendCommandToDevice": {
+                      "description": "Sends a command to the specified device. In order for a device to be able\nto receive commands, it must:\n1) be connected to Cloud IoT Core using the MQTT protocol, and\n2) be subscribed to the group of MQTT topics specified by\n   /devices/{device-id}/commands/#. This subscription will receive commands\n   at the top-level topic /devices/{device-id}/commands as well as commands\n   for subfolders, like /devices/{device-id}/commands/subfolder.\n   Note that subscribing to specific subfolders is not supported.\nIf the command could not be delivered to the device, this method will\nreturn an error; in particular, if the device is not subscribed, this\nmethod will return FAILED_PRECONDITION. Otherwise, this method will\nreturn OK. If the subscription is QoS 1, at least once delivery will be\nguaranteed; for QoS 0, no acknowledgment will be expected from the device.",
+                      "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/registries/{registriesId}/devices/{devicesId}:sendCommandToDevice",
+                      "httpMethod": "POST",
+                      "id": "cloudiot.projects.locations.registries.devices.sendCommandToDevice",
+                      "parameterOrder": [
+                        "name"
+                      ],
+                      "parameters": {
+                        "name": {
+                          "description": "The name of the device. For example,\n`projects/p0/locations/us-central1/registries/registry0/devices/device0` or\n`projects/p0/locations/us-central1/registries/registry0/devices/{num_id}`.",
+                          "location": "path",
+                          "pattern": "^projects/[^/]+/locations/[^/]+/registries/[^/]+/devices/[^/]+$",
+                          "required": true,
+                          "type": "string"
+                        }
+                      },
+                      "path": "v1/{+name}:sendCommandToDevice",
+                      "request": {
+                        "$ref": "SendCommandToDeviceRequest"
+                      },
+                      "response": {
+                        "$ref": "SendCommandToDeviceResponse"
                       },
                       "scopes": [
                         "https://www.googleapis.com/auth/cloud-platform",
@@ -733,38 +840,6 @@
                   "resources": {
                     "devices": {
                       "methods": {
-                        "get": {
-                          "description": "Gets details about a device.",
-                          "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/registries/{registriesId}/groups/{groupsId}/devices/{devicesId}",
-                          "httpMethod": "GET",
-                          "id": "cloudiot.projects.locations.registries.groups.devices.get",
-                          "parameterOrder": [
-                            "name"
-                          ],
-                          "parameters": {
-                            "fieldMask": {
-                              "description": "The fields of the `Device` resource to be returned in the response. If the\nfield mask is unset or empty, all fields are returned.",
-                              "format": "google-fieldmask",
-                              "location": "query",
-                              "type": "string"
-                            },
-                            "name": {
-                              "description": "The name of the device. For example,\n`projects/p0/locations/us-central1/registries/registry0/devices/device0` or\n`projects/p0/locations/us-central1/registries/registry0/devices/{num_id}`.",
-                              "location": "path",
-                              "pattern": "^projects/[^/]+/locations/[^/]+/registries/[^/]+/groups/[^/]+/devices/[^/]+$",
-                              "required": true,
-                              "type": "string"
-                            }
-                          },
-                          "path": "v1/{+name}",
-                          "response": {
-                            "$ref": "Device"
-                          },
-                          "scopes": [
-                            "https://www.googleapis.com/auth/cloud-platform",
-                            "https://www.googleapis.com/auth/cloudiot"
-                          ]
-                        },
                         "list": {
                           "description": "List devices in a device registry.",
                           "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/registries/{registriesId}/groups/{groupsId}/devices",
@@ -790,6 +865,26 @@
                             "fieldMask": {
                               "description": "The fields of the `Device` resource to be returned in the response. The\nfields `id` and `num_id` are always returned, along with any\nother fields specified.",
                               "format": "google-fieldmask",
+                              "location": "query",
+                              "type": "string"
+                            },
+                            "gatewayListOptions.associationsDeviceId": {
+                              "description": "If set, returns only the gateways with which the specified device is\nassociated. The device ID can be numeric (`num_id`) or the user-defined\nstring (`id`). For example, if `456` is specified, returns only the\ngateways to which the device with `num_id` 456 is bound.",
+                              "location": "query",
+                              "type": "string"
+                            },
+                            "gatewayListOptions.associationsGatewayId": {
+                              "description": "If set, only devices associated with the specified gateway are returned.\nThe gateway ID can be numeric (`num_id`) or the user-defined string\n(`id`). For example, if `123` is specified, only devices bound to the\ngateway with `num_id` 123 are returned.",
+                              "location": "query",
+                              "type": "string"
+                            },
+                            "gatewayListOptions.gatewayType": {
+                              "description": "If `GATEWAY` is specified, only gateways are returned. If `NON_GATEWAY`\nis specified, only non-gateway devices are returned. If\n`GATEWAY_TYPE_UNSPECIFIED` is specified, all devices are returned.",
+                              "enum": [
+                                "GATEWAY_TYPE_UNSPECIFIED",
+                                "GATEWAY",
+                                "NON_GATEWAY"
+                              ],
                               "location": "query",
                               "type": "string"
                             },
@@ -820,144 +915,6 @@
                             "https://www.googleapis.com/auth/cloud-platform",
                             "https://www.googleapis.com/auth/cloudiot"
                           ]
-                        },
-                        "modifyCloudToDeviceConfig": {
-                          "description": "Modifies the configuration for the device, which is eventually sent from\nthe Cloud IoT Core servers. Returns the modified configuration version and\nits metadata.",
-                          "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/registries/{registriesId}/groups/{groupsId}/devices/{devicesId}:modifyCloudToDeviceConfig",
-                          "httpMethod": "POST",
-                          "id": "cloudiot.projects.locations.registries.groups.devices.modifyCloudToDeviceConfig",
-                          "parameterOrder": [
-                            "name"
-                          ],
-                          "parameters": {
-                            "name": {
-                              "description": "The name of the device. For example,\n`projects/p0/locations/us-central1/registries/registry0/devices/device0` or\n`projects/p0/locations/us-central1/registries/registry0/devices/{num_id}`.",
-                              "location": "path",
-                              "pattern": "^projects/[^/]+/locations/[^/]+/registries/[^/]+/groups/[^/]+/devices/[^/]+$",
-                              "required": true,
-                              "type": "string"
-                            }
-                          },
-                          "path": "v1/{+name}:modifyCloudToDeviceConfig",
-                          "request": {
-                            "$ref": "ModifyCloudToDeviceConfigRequest"
-                          },
-                          "response": {
-                            "$ref": "DeviceConfig"
-                          },
-                          "scopes": [
-                            "https://www.googleapis.com/auth/cloud-platform",
-                            "https://www.googleapis.com/auth/cloudiot"
-                          ]
-                        },
-                        "patch": {
-                          "description": "Updates a device.",
-                          "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/registries/{registriesId}/groups/{groupsId}/devices/{devicesId}",
-                          "httpMethod": "PATCH",
-                          "id": "cloudiot.projects.locations.registries.groups.devices.patch",
-                          "parameterOrder": [
-                            "name"
-                          ],
-                          "parameters": {
-                            "name": {
-                              "description": "The resource path name. For example,\n`projects/p1/locations/us-central1/registries/registry0/devices/dev0` or\n`projects/p1/locations/us-central1/registries/registry0/devices/{num_id}`.\nWhen `name` is populated as a response from the service, it always ends\nin the device numeric ID.",
-                              "location": "path",
-                              "pattern": "^projects/[^/]+/locations/[^/]+/registries/[^/]+/groups/[^/]+/devices/[^/]+$",
-                              "required": true,
-                              "type": "string"
-                            },
-                            "updateMask": {
-                              "description": "Only updates the `device` fields indicated by this mask.\nThe field mask must not be empty, and it must not contain fields that\nare immutable or only set by the server.\nMutable top-level fields: `credentials`, `blocked`, and `metadata`",
-                              "format": "google-fieldmask",
-                              "location": "query",
-                              "type": "string"
-                            }
-                          },
-                          "path": "v1/{+name}",
-                          "request": {
-                            "$ref": "Device"
-                          },
-                          "response": {
-                            "$ref": "Device"
-                          },
-                          "scopes": [
-                            "https://www.googleapis.com/auth/cloud-platform",
-                            "https://www.googleapis.com/auth/cloudiot"
-                          ]
-                        }
-                      },
-                      "resources": {
-                        "configVersions": {
-                          "methods": {
-                            "list": {
-                              "description": "Lists the last few versions of the device configuration in descending\norder (i.e.: newest first).",
-                              "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/registries/{registriesId}/groups/{groupsId}/devices/{devicesId}/configVersions",
-                              "httpMethod": "GET",
-                              "id": "cloudiot.projects.locations.registries.groups.devices.configVersions.list",
-                              "parameterOrder": [
-                                "name"
-                              ],
-                              "parameters": {
-                                "name": {
-                                  "description": "The name of the device. For example,\n`projects/p0/locations/us-central1/registries/registry0/devices/device0` or\n`projects/p0/locations/us-central1/registries/registry0/devices/{num_id}`.",
-                                  "location": "path",
-                                  "pattern": "^projects/[^/]+/locations/[^/]+/registries/[^/]+/groups/[^/]+/devices/[^/]+$",
-                                  "required": true,
-                                  "type": "string"
-                                },
-                                "numVersions": {
-                                  "description": "The number of versions to list. Versions are listed in decreasing order of\nthe version number. The maximum number of versions retained is 10. If this\nvalue is zero, it will return all the versions available.",
-                                  "format": "int32",
-                                  "location": "query",
-                                  "type": "integer"
-                                }
-                              },
-                              "path": "v1/{+name}/configVersions",
-                              "response": {
-                                "$ref": "ListDeviceConfigVersionsResponse"
-                              },
-                              "scopes": [
-                                "https://www.googleapis.com/auth/cloud-platform",
-                                "https://www.googleapis.com/auth/cloudiot"
-                              ]
-                            }
-                          }
-                        },
-                        "states": {
-                          "methods": {
-                            "list": {
-                              "description": "Lists the last few versions of the device state in descending order (i.e.:\nnewest first).",
-                              "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/registries/{registriesId}/groups/{groupsId}/devices/{devicesId}/states",
-                              "httpMethod": "GET",
-                              "id": "cloudiot.projects.locations.registries.groups.devices.states.list",
-                              "parameterOrder": [
-                                "name"
-                              ],
-                              "parameters": {
-                                "name": {
-                                  "description": "The name of the device. For example,\n`projects/p0/locations/us-central1/registries/registry0/devices/device0` or\n`projects/p0/locations/us-central1/registries/registry0/devices/{num_id}`.",
-                                  "location": "path",
-                                  "pattern": "^projects/[^/]+/locations/[^/]+/registries/[^/]+/groups/[^/]+/devices/[^/]+$",
-                                  "required": true,
-                                  "type": "string"
-                                },
-                                "numStates": {
-                                  "description": "The number of states to list. States are listed in descending order of\nupdate time. The maximum number of states retained is 10. If this\nvalue is zero, it will return all the states available.",
-                                  "format": "int32",
-                                  "location": "query",
-                                  "type": "integer"
-                                }
-                              },
-                              "path": "v1/{+name}/states",
-                              "response": {
-                                "$ref": "ListDeviceStatesResponse"
-                              },
-                              "scopes": [
-                                "https://www.googleapis.com/auth/cloud-platform",
-                                "https://www.googleapis.com/auth/cloudiot"
-                              ]
-                            }
-                          }
                         }
                       }
                     }
@@ -970,19 +927,40 @@
       }
     }
   },
-  "revision": "20180822",
+  "revision": "20190516",
   "rootUrl": "https://cloudiot.googleapis.com/",
   "schemas": {
+    "BindDeviceToGatewayRequest": {
+      "description": "Request for `BindDeviceToGateway`.",
+      "id": "BindDeviceToGatewayRequest",
+      "properties": {
+        "deviceId": {
+          "description": "The device to associate with the specified gateway. The value of\n`device_id` can be either the device numeric ID or the user-defined device\nidentifier.",
+          "type": "string"
+        },
+        "gatewayId": {
+          "description": "The value of `gateway_id` can be either the device numeric ID or the\nuser-defined device identifier.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "BindDeviceToGatewayResponse": {
+      "description": "Response for `BindDeviceToGateway`.",
+      "id": "BindDeviceToGatewayResponse",
+      "properties": {},
+      "type": "object"
+    },
     "Binding": {
       "description": "Associates `members` with a `role`.",
       "id": "Binding",
       "properties": {
         "condition": {
           "$ref": "Expr",
-          "description": "Unimplemented. The condition that is associated with this binding.\nNOTE: an unsatisfied condition will not allow user access via current\nbinding. Different bindings, including their conditions, are examined\nindependently."
+          "description": "The condition that is associated with this binding.\nNOTE: An unsatisfied condition will not allow user access via current\nbinding. Different bindings, including their conditions, are examined\nindependently."
         },
         "members": {
-          "description": "Specifies the identities requesting access for a Cloud Platform resource.\n`members` can have the following values:\n\n* `allUsers`: A special identifier that represents anyone who is\n   on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone\n   who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google\n   account. For example, `alice@gmail.com` .\n\n\n* `serviceAccount:{emailid}`: An email address that represents a service\n   account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group.\n   For example, `admins@example.com`.\n\n\n* `domain:{domain}`: A Google Apps domain name that represents all the\n   users of that domain. For example, `google.com` or `example.com`.\n\n",
+          "description": "Specifies the identities requesting access for a Cloud Platform resource.\n`members` can have the following values:\n\n* `allUsers`: A special identifier that represents anyone who is\n   on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone\n   who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google\n   account. For example, `alice@gmail.com` .\n\n\n* `serviceAccount:{emailid}`: An email address that represents a service\n   account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group.\n   For example, `admins@example.com`.\n\n\n* `domain:{domain}`: The G Suite domain (primary) that represents all the\n   users of that domain. For example, `google.com` or `example.com`.\n\n",
           "items": {
             "type": "string"
           },
@@ -1013,6 +991,10 @@
             "$ref": "DeviceCredential"
           },
           "type": "array"
+        },
+        "gatewayConfig": {
+          "$ref": "GatewayConfig",
+          "description": "Gateway-related configuration and state."
         },
         "id": {
           "description": "The user-defined device identifier. The device ID must be unique\nwithin a device registry.",
@@ -1050,6 +1032,24 @@
         "lastStateTime": {
           "description": "[Output only] The last time a state event was received. Timestamps are\nperiodically collected and written to storage; they may be stale by a few\nminutes.",
           "format": "google-datetime",
+          "type": "string"
+        },
+        "logLevel": {
+          "description": "**Beta Feature**\n\nThe logging verbosity for device activity. If unspecified,\nDeviceRegistry.log_level will be used.",
+          "enum": [
+            "LOG_LEVEL_UNSPECIFIED",
+            "NONE",
+            "ERROR",
+            "INFO",
+            "DEBUG"
+          ],
+          "enumDescriptions": [
+            "No logging specified. If not specified, logging will be disabled.",
+            "Disables logging.",
+            "Error events will be logged.",
+            "Informational events will be logged, such as connections and\ndisconnections.",
+            "All events will be logged."
+          ],
           "type": "string"
         },
         "metadata": {
@@ -1144,6 +1144,24 @@
           "description": "The identifier of this device registry. For example, `myRegistry`.",
           "type": "string"
         },
+        "logLevel": {
+          "description": "**Beta Feature**\n\nThe default logging verbosity for activity from devices in this registry.\nThe verbosity level can be overridden by Device.log_level.",
+          "enum": [
+            "LOG_LEVEL_UNSPECIFIED",
+            "NONE",
+            "ERROR",
+            "INFO",
+            "DEBUG"
+          ],
+          "enumDescriptions": [
+            "No logging specified. If not specified, logging will be disabled.",
+            "Disables logging.",
+            "Error events will be logged.",
+            "Informational events will be logged, such as connections and\ndisconnections.",
+            "All events will be logged."
+          ],
+          "type": "string"
+        },
         "mqttConfig": {
           "$ref": "MqttConfig",
           "description": "The MQTT configuration for this device registry."
@@ -1215,6 +1233,52 @@
         },
         "title": {
           "description": "An optional title for the expression, i.e. a short string describing\nits purpose. This can be used e.g. in UIs which allow to enter the\nexpression.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GatewayConfig": {
+      "description": "Gateway-related configuration and state.",
+      "id": "GatewayConfig",
+      "properties": {
+        "gatewayAuthMethod": {
+          "description": "Indicates how to authorize and/or authenticate devices to access the\ngateway.",
+          "enum": [
+            "GATEWAY_AUTH_METHOD_UNSPECIFIED",
+            "ASSOCIATION_ONLY",
+            "DEVICE_AUTH_TOKEN_ONLY",
+            "ASSOCIATION_AND_DEVICE_AUTH_TOKEN"
+          ],
+          "enumDescriptions": [
+            "No authentication/authorization method specified. No devices are allowed to\naccess the gateway.",
+            "The device is authenticated through the gateway association only. Device\ncredentials are ignored even if provided.",
+            "The device is authenticated through its own credentials. Gateway\nassociation is not checked.",
+            "The device is authenticated through both device credentials and gateway\nassociation. The device must be bound to the gateway and must provide its\nown credentials."
+          ],
+          "type": "string"
+        },
+        "gatewayType": {
+          "description": "Indicates whether the device is a gateway.",
+          "enum": [
+            "GATEWAY_TYPE_UNSPECIFIED",
+            "GATEWAY",
+            "NON_GATEWAY"
+          ],
+          "enumDescriptions": [
+            "If unspecified, the device is considered a non-gateway device.",
+            "The device is a gateway.",
+            "The device is not a gateway."
+          ],
+          "type": "string"
+        },
+        "lastAccessedGatewayId": {
+          "description": "[Output only] The ID of the gateway the device accessed most recently.",
+          "type": "string"
+        },
+        "lastAccessedGatewayTime": {
+          "description": "[Output only] The most recent time at which the device accessed the gateway\nspecified in `last_accessed_gateway`.",
+          "format": "google-datetime",
           "type": "string"
         }
       },
@@ -1440,6 +1504,28 @@
       },
       "type": "object"
     },
+    "SendCommandToDeviceRequest": {
+      "description": "Request for `SendCommandToDevice`.",
+      "id": "SendCommandToDeviceRequest",
+      "properties": {
+        "binaryData": {
+          "description": "The command data to send to the device.",
+          "format": "byte",
+          "type": "string"
+        },
+        "subfolder": {
+          "description": "Optional subfolder for the command. If empty, the command will be delivered\nto the /devices/{device-id}/commands topic, otherwise it will be delivered\nto the /devices/{device-id}/commands/{subfolder} topic. Multi-level\nsubfolders are allowed. This field must not have more than 256 characters,\nand must not contain any MQTT wildcards (\"+\" or \"#\") or null characters.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SendCommandToDeviceResponse": {
+      "description": "Response for `SendCommandToDevice`.",
+      "id": "SendCommandToDeviceResponse",
+      "properties": {},
+      "type": "object"
+    },
     "SetIamPolicyRequest": {
       "description": "Request message for `SetIamPolicy` method.",
       "id": "SetIamPolicyRequest",
@@ -1463,7 +1549,7 @@
       "type": "object"
     },
     "Status": {
-      "description": "The `Status` type defines a logical error model that is suitable for different\nprogramming environments, including REST APIs and RPC APIs. It is used by\n[gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error message,\nand error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
+      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error\nmessage, and error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
       "id": "Status",
       "properties": {
         "code": {
@@ -1515,6 +1601,27 @@
           "type": "array"
         }
       },
+      "type": "object"
+    },
+    "UnbindDeviceFromGatewayRequest": {
+      "description": "Request for `UnbindDeviceFromGateway`.",
+      "id": "UnbindDeviceFromGatewayRequest",
+      "properties": {
+        "deviceId": {
+          "description": "The device to disassociate from the specified gateway. The value of\n`device_id` can be either the device numeric ID or the user-defined device\nidentifier.",
+          "type": "string"
+        },
+        "gatewayId": {
+          "description": "The value of `gateway_id` can be either the device numeric ID or the\nuser-defined device identifier.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "UnbindDeviceFromGatewayResponse": {
+      "description": "Response for `UnbindDeviceFromGateway`.",
+      "id": "UnbindDeviceFromGatewayResponse",
+      "properties": {},
       "type": "object"
     },
     "X509CertificateDetails": {

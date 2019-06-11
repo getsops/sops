@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,6 +51,16 @@ func NewJobVersionsClientWithBaseURI(baseURI string, subscriptionID string) JobV
 // jobName - the name of the job.
 // jobVersion - the version of the job to get.
 func (client JobVersionsClient) Get(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string, jobVersion int32) (result JobVersion, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobVersionsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName, jobAgentName, jobName, jobVersion)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.JobVersionsClient", "Get", nil, "Failure preparing request")
@@ -123,6 +134,16 @@ func (client JobVersionsClient) GetResponder(resp *http.Response) (result JobVer
 // jobAgentName - the name of the job agent.
 // jobName - the name of the job to get.
 func (client JobVersionsClient) ListByJob(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string) (result JobVersionListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobVersionsClient.ListByJob")
+		defer func() {
+			sc := -1
+			if result.jvlr.Response.Response != nil {
+				sc = result.jvlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByJobNextResults
 	req, err := client.ListByJobPreparer(ctx, resourceGroupName, serverName, jobAgentName, jobName)
 	if err != nil {
@@ -189,8 +210,8 @@ func (client JobVersionsClient) ListByJobResponder(resp *http.Response) (result 
 }
 
 // listByJobNextResults retrieves the next set of results, if any.
-func (client JobVersionsClient) listByJobNextResults(lastResults JobVersionListResult) (result JobVersionListResult, err error) {
-	req, err := lastResults.jobVersionListResultPreparer()
+func (client JobVersionsClient) listByJobNextResults(ctx context.Context, lastResults JobVersionListResult) (result JobVersionListResult, err error) {
+	req, err := lastResults.jobVersionListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.JobVersionsClient", "listByJobNextResults", nil, "Failure preparing next results request")
 	}
@@ -211,6 +232,16 @@ func (client JobVersionsClient) listByJobNextResults(lastResults JobVersionListR
 
 // ListByJobComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobVersionsClient) ListByJobComplete(ctx context.Context, resourceGroupName string, serverName string, jobAgentName string, jobName string) (result JobVersionListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobVersionsClient.ListByJob")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByJob(ctx, resourceGroupName, serverName, jobAgentName, jobName)
 	return
 }

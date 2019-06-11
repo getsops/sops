@@ -27,7 +27,7 @@ const opEmptyStream = "EmptyStream"
 // EmptyStreamRequest generates a "aws/request.Request" representing the
 // client's request for the EmptyStream operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -103,7 +103,7 @@ const opGetEventStream = "GetEventStream"
 // GetEventStreamRequest generates a "aws/request.Request" representing the
 // client's request for the GetEventStream operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -169,6 +169,83 @@ func (c *RPCService) GetEventStream(input *GetEventStreamInput) (*GetEventStream
 // for more information on using Contexts.
 func (c *RPCService) GetEventStreamWithContext(ctx aws.Context, input *GetEventStreamInput, opts ...request.Option) (*GetEventStreamOutput, error) {
 	req, out := c.GetEventStreamRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opOtherOperation = "OtherOperation"
+
+// OtherOperationRequest generates a "aws/request.Request" representing the
+// client's request for the OtherOperation operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See OtherOperation for more information on using the OtherOperation
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the OtherOperationRequest method.
+//    req, resp := client.OtherOperationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/RPCService-0000-00-00/OtherOperation
+func (c *RPCService) OtherOperationRequest(input *OtherOperationInput) (req *request.Request, output *OtherOperationOutput) {
+	op := &request.Operation{
+		Name:       opOtherOperation,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &OtherOperationInput{}
+	}
+
+	output = &OtherOperationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// OtherOperation API operation for RPC Service.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for RPC Service's
+// API operation OtherOperation for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeExceptionEvent2 "ExceptionEvent2"
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/RPCService-0000-00-00/OtherOperation
+func (c *RPCService) OtherOperation(input *OtherOperationInput) (*OtherOperationOutput, error) {
+	req, out := c.OtherOperationRequest(input)
+	return out, req.Send()
+}
+
+// OtherOperationWithContext is the same as OtherOperation with the addition of
+// the ability to pass a context and additional request options.
+//
+// See OtherOperation for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RPCService) OtherOperationWithContext(ctx aws.Context, input *OtherOperationInput, opts ...request.Option) (*OtherOperationOutput, error) {
+	req, out := c.OtherOperationRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -282,7 +359,7 @@ type EmptyStreamEventStreamReader interface {
 	// HTTP this will also close the HTTP connection.
 	Close() error
 
-	// Returns any error that has occured while reading from the event stream.
+	// Returns any error that has occurred while reading from the event stream.
 	Err() error
 }
 
@@ -543,6 +620,51 @@ func (s ExceptionEvent) Error() string {
 	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
 }
 
+type ExceptionEvent2 struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s ExceptionEvent2) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ExceptionEvent2) GoString() string {
+	return s.String()
+}
+
+// The ExceptionEvent2 is and event in the EventStream group of events.
+func (s *ExceptionEvent2) eventEventStream() {}
+
+// UnmarshalEvent unmarshals the EventStream Message into the ExceptionEvent2 value.
+// This method is only used internally within the SDK's EventStream handling.
+func (s *ExceptionEvent2) UnmarshalEvent(
+	payloadUnmarshaler protocol.PayloadUnmarshaler,
+	msg eventstream.Message,
+) error {
+	return nil
+}
+
+// Code returns the exception type name.
+func (s ExceptionEvent2) Code() string {
+	return "ExceptionEvent2"
+}
+
+// Message returns the exception's message.
+func (s ExceptionEvent2) Message() string {
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s ExceptionEvent2) OrigErr() error {
+	return nil
+}
+
+func (s ExceptionEvent2) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
 type ExplicitPayloadEvent struct {
 	_ struct{} `type:"structure" payload:"NestedVal"`
 
@@ -716,7 +838,7 @@ type GetEventStreamEventStreamReader interface {
 	// HTTP this will also close the HTTP connection.
 	Close() error
 
-	// Returns any error that has occured while reading from the event stream.
+	// Returns any error that has occurred while reading from the event stream.
 	Err() error
 }
 
@@ -841,6 +963,9 @@ func (r *readGetEventStreamEventStream) unmarshalerForEventType(
 
 	case "Exception":
 		return &ExceptionEvent{}, nil
+
+	case "Exception2":
+		return &ExceptionEvent2{}, nil
 	default:
 		return nil, awserr.New(
 			request.ErrCodeSerialization,
@@ -1185,6 +1310,34 @@ func (s *NestedShape) SetIntVal(v int64) *NestedShape {
 func (s *NestedShape) SetStrVal(v string) *NestedShape {
 	s.StrVal = &v
 	return s
+}
+
+type OtherOperationInput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s OtherOperationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OtherOperationInput) GoString() string {
+	return s.String()
+}
+
+type OtherOperationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s OtherOperationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OtherOperationOutput) GoString() string {
+	return s.String()
 }
 
 type PayloadOnlyBlobEvent struct {

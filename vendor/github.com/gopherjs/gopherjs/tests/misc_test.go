@@ -695,3 +695,18 @@ func TestInterfaceConversionRuntimeError(t *testing.T) {
 	e := (interface{})(0)
 	_ = e.(I)
 }
+
+func TestReflectMapIterationAndDelete(t *testing.T) {
+	m := map[string]int{
+		"one":   1,
+		"two":   2,
+		"three": 3,
+	}
+	iter := reflect.ValueOf(m).MapRange()
+	for iter.Next() {
+		delete(m, iter.Key().String())
+	}
+	if got, want := len(m), 0; got != want {
+		t.Fatalf("got %d, want %d", got, want)
+	}
+}

@@ -22,9 +22,9 @@
 package internal
 
 import (
+	"context"
 	"net"
 
-	"golang.org/x/net/context"
 	"google.golang.org/grpc/credentials"
 )
 

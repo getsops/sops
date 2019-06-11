@@ -22,9 +22,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/go-cmp/cmp"
-
 	"cloud.google.com/go/internal/testutil"
+	"github.com/google/go-cmp/cmp"
 )
 
 type embed1 struct {
@@ -182,14 +181,13 @@ func TestAgainstJSONEncodingEmbeddedTime(t *testing.T) {
 }
 
 type S2 struct {
-	NoTag      int
-	XXX        int           `json:"tag"` // tag name takes precedence
-	Anonymous  `json:"anon"` // anonymous non-structs also get their name from the tag
-	unexported int           `json:"tag"`
-	Embed      `json:"em"`   // embedded structs with tags become fields
-	Tag        int
-	YYY        int `json:"Tag"` // tag takes precedence over untagged field of the same name
-	Empty      int `json:""`    // empty tag is noop
+	NoTag     int
+	XXX       int           `json:"tag"` // tag name takes precedence
+	Anonymous `json:"anon"` // anonymous non-structs also get their name from the tag
+	Embed     `json:"em"`   // embedded structs with tags become fields
+	Tag       int
+	YYY       int `json:"Tag"` // tag takes precedence over untagged field of the same name
+	Empty     int `json:""`    // empty tag is noop
 	tEmbed1
 	tEmbed2
 }
@@ -280,15 +278,7 @@ func TestUnexportedAnonymousNonStruct(t *testing.T) {
 	// An unexported anonymous non-struct field should not be recorded.
 	// This is currently a bug in encoding/json.
 	// https://github.com/golang/go/issues/18009
-	type (
-		u int
-		v int
-		S struct {
-			u
-			v `json:"x"`
-			int
-		}
-	)
+	type S struct{}
 
 	got, err := NewCache(jsonTagParser, nil, nil).Fields(reflect.TypeOf(S{}))
 	if err != nil {

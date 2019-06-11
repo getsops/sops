@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewFactoriesClientWithBaseURI(baseURI string, subscriptionID string) Factor
 // locationID - the location identifier.
 // factoryRepoUpdate - update factory repo request definition.
 func (client FactoriesClient) ConfigureFactoryRepo(ctx context.Context, locationID string, factoryRepoUpdate FactoryRepoUpdate) (result Factory, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoriesClient.ConfigureFactoryRepo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: factoryRepoUpdate,
 			Constraints: []validation.Constraint{{Target: "factoryRepoUpdate.RepoConfiguration", Name: validation.Null, Rule: false,
@@ -128,6 +139,16 @@ func (client FactoriesClient) ConfigureFactoryRepoResponder(resp *http.Response)
 // ifMatch - eTag of the factory entity. Should only be specified for update, for which it should match
 // existing entity or can be * for unconditional update.
 func (client FactoriesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, factoryName string, factory Factory, ifMatch string) (result Factory, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoriesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -224,6 +245,16 @@ func (client FactoriesClient) CreateOrUpdateResponder(resp *http.Response) (resu
 // resourceGroupName - the resource group name.
 // factoryName - the factory name.
 func (client FactoriesClient) Delete(ctx context.Context, resourceGroupName string, factoryName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoriesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -304,6 +335,16 @@ func (client FactoriesClient) DeleteResponder(resp *http.Response) (result autor
 // ifNoneMatch - eTag of the factory entity. Should only be specified for get. If the ETag matches the existing
 // entity tag, or if * was provided, then no content will be returned.
 func (client FactoriesClient) Get(ctx context.Context, resourceGroupName string, factoryName string, ifNoneMatch string) (result Factory, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoriesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -382,8 +423,205 @@ func (client FactoriesClient) GetResponder(resp *http.Response) (result Factory,
 	return
 }
 
+// GetDataPlaneAccess get Data Plane access.
+// Parameters:
+// resourceGroupName - the resource group name.
+// factoryName - the factory name.
+// policy - data Plane user access policy definition.
+func (client FactoriesClient) GetDataPlaneAccess(ctx context.Context, resourceGroupName string, factoryName string, policy UserAccessPolicy) (result AccessPolicyResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoriesClient.GetDataPlaneAccess")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+		{TargetValue: factoryName,
+			Constraints: []validation.Constraint{{Target: "factoryName", Name: validation.MaxLength, Rule: 63, Chain: nil},
+				{Target: "factoryName", Name: validation.MinLength, Rule: 3, Chain: nil},
+				{Target: "factoryName", Name: validation.Pattern, Rule: `^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$`, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("datafactory.FactoriesClient", "GetDataPlaneAccess", err.Error())
+	}
+
+	req, err := client.GetDataPlaneAccessPreparer(ctx, resourceGroupName, factoryName, policy)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "datafactory.FactoriesClient", "GetDataPlaneAccess", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.GetDataPlaneAccessSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "datafactory.FactoriesClient", "GetDataPlaneAccess", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.GetDataPlaneAccessResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "datafactory.FactoriesClient", "GetDataPlaneAccess", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// GetDataPlaneAccessPreparer prepares the GetDataPlaneAccess request.
+func (client FactoriesClient) GetDataPlaneAccessPreparer(ctx context.Context, resourceGroupName string, factoryName string, policy UserAccessPolicy) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"factoryName":       autorest.Encode("path", factoryName),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-06-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPost(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/getDataPlaneAccess", pathParameters),
+		autorest.WithJSON(policy),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// GetDataPlaneAccessSender sends the GetDataPlaneAccess request. The method will close the
+// http.Response Body if it receives an error.
+func (client FactoriesClient) GetDataPlaneAccessSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// GetDataPlaneAccessResponder handles the response to the GetDataPlaneAccess request. The method always
+// closes the http.Response Body.
+func (client FactoriesClient) GetDataPlaneAccessResponder(resp *http.Response) (result AccessPolicyResponse, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// GetGitHubAccessToken get GitHub Access Token.
+// Parameters:
+// resourceGroupName - the resource group name.
+// factoryName - the factory name.
+// gitHubAccessTokenRequest - get GitHub access token request definition.
+func (client FactoriesClient) GetGitHubAccessToken(ctx context.Context, resourceGroupName string, factoryName string, gitHubAccessTokenRequest GitHubAccessTokenRequest) (result GitHubAccessTokenResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoriesClient.GetGitHubAccessToken")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: resourceGroupName,
+			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._\(\)]+$`, Chain: nil}}},
+		{TargetValue: factoryName,
+			Constraints: []validation.Constraint{{Target: "factoryName", Name: validation.MaxLength, Rule: 63, Chain: nil},
+				{Target: "factoryName", Name: validation.MinLength, Rule: 3, Chain: nil},
+				{Target: "factoryName", Name: validation.Pattern, Rule: `^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$`, Chain: nil}}},
+		{TargetValue: gitHubAccessTokenRequest,
+			Constraints: []validation.Constraint{{Target: "gitHubAccessTokenRequest.GitHubAccessCode", Name: validation.Null, Rule: true, Chain: nil},
+				{Target: "gitHubAccessTokenRequest.GitHubAccessTokenBaseURL", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("datafactory.FactoriesClient", "GetGitHubAccessToken", err.Error())
+	}
+
+	req, err := client.GetGitHubAccessTokenPreparer(ctx, resourceGroupName, factoryName, gitHubAccessTokenRequest)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "datafactory.FactoriesClient", "GetGitHubAccessToken", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.GetGitHubAccessTokenSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "datafactory.FactoriesClient", "GetGitHubAccessToken", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.GetGitHubAccessTokenResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "datafactory.FactoriesClient", "GetGitHubAccessToken", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// GetGitHubAccessTokenPreparer prepares the GetGitHubAccessToken request.
+func (client FactoriesClient) GetGitHubAccessTokenPreparer(ctx context.Context, resourceGroupName string, factoryName string, gitHubAccessTokenRequest GitHubAccessTokenRequest) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"factoryName":       autorest.Encode("path", factoryName),
+		"resourceGroupName": autorest.Encode("path", resourceGroupName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-06-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPost(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataFactory/factories/{factoryName}/getGitHubAccessToken", pathParameters),
+		autorest.WithJSON(gitHubAccessTokenRequest),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// GetGitHubAccessTokenSender sends the GetGitHubAccessToken request. The method will close the
+// http.Response Body if it receives an error.
+func (client FactoriesClient) GetGitHubAccessTokenSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// GetGitHubAccessTokenResponder handles the response to the GetGitHubAccessToken request. The method always
+// closes the http.Response Body.
+func (client FactoriesClient) GetGitHubAccessTokenResponder(resp *http.Response) (result GitHubAccessTokenResponse, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
 // List lists factories under the specified subscription.
 func (client FactoriesClient) List(ctx context.Context) (result FactoryListResponsePage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoriesClient.List")
+		defer func() {
+			sc := -1
+			if result.flr.Response.Response != nil {
+				sc = result.flr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -446,8 +684,8 @@ func (client FactoriesClient) ListResponder(resp *http.Response) (result Factory
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client FactoriesClient) listNextResults(lastResults FactoryListResponse) (result FactoryListResponse, err error) {
-	req, err := lastResults.factoryListResponsePreparer()
+func (client FactoriesClient) listNextResults(ctx context.Context, lastResults FactoryListResponse) (result FactoryListResponse, err error) {
+	req, err := lastResults.factoryListResponsePreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "datafactory.FactoriesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -468,6 +706,16 @@ func (client FactoriesClient) listNextResults(lastResults FactoryListResponse) (
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client FactoriesClient) ListComplete(ctx context.Context) (result FactoryListResponseIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoriesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -476,6 +724,16 @@ func (client FactoriesClient) ListComplete(ctx context.Context) (result FactoryL
 // Parameters:
 // resourceGroupName - the resource group name.
 func (client FactoriesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result FactoryListResponsePage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoriesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.flr.Response.Response != nil {
+				sc = result.flr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -547,8 +805,8 @@ func (client FactoriesClient) ListByResourceGroupResponder(resp *http.Response) 
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client FactoriesClient) listByResourceGroupNextResults(lastResults FactoryListResponse) (result FactoryListResponse, err error) {
-	req, err := lastResults.factoryListResponsePreparer()
+func (client FactoriesClient) listByResourceGroupNextResults(ctx context.Context, lastResults FactoryListResponse) (result FactoryListResponse, err error) {
+	req, err := lastResults.factoryListResponsePreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "datafactory.FactoriesClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -569,6 +827,16 @@ func (client FactoriesClient) listByResourceGroupNextResults(lastResults Factory
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client FactoriesClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result FactoryListResponseIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoriesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -579,6 +847,16 @@ func (client FactoriesClient) ListByResourceGroupComplete(ctx context.Context, r
 // factoryName - the factory name.
 // factoryUpdateParameters - the parameters for updating a factory.
 func (client FactoriesClient) Update(ctx context.Context, resourceGroupName string, factoryName string, factoryUpdateParameters FactoryUpdateParameters) (result Factory, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoriesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

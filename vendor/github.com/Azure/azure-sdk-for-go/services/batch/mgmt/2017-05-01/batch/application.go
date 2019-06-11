@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewApplicationClientWithBaseURI(baseURI string, subscriptionID string) Appl
 // applicationID - the ID of the application.
 // parameters - the parameters for the request.
 func (client ApplicationClient) Create(ctx context.Context, resourceGroupName string, accountName string, applicationID string, parameters *ApplicationCreateParameters) (result Application, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._]+$`, Chain: nil}}},
@@ -131,6 +142,16 @@ func (client ApplicationClient) CreateResponder(resp *http.Response) (result App
 // accountName - the name of the Batch account.
 // applicationID - the ID of the application.
 func (client ApplicationClient) Delete(ctx context.Context, resourceGroupName string, accountName string, applicationID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._]+$`, Chain: nil}}},
@@ -209,6 +230,16 @@ func (client ApplicationClient) DeleteResponder(resp *http.Response) (result aut
 // accountName - the name of the Batch account.
 // applicationID - the ID of the application.
 func (client ApplicationClient) Get(ctx context.Context, resourceGroupName string, accountName string, applicationID string) (result Application, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._]+$`, Chain: nil}}},
@@ -288,6 +319,16 @@ func (client ApplicationClient) GetResponder(resp *http.Response) (result Applic
 // accountName - the name of the Batch account.
 // maxresults - the maximum number of items to return in the response.
 func (client ApplicationClient) List(ctx context.Context, resourceGroupName string, accountName string, maxresults *int32) (result ListApplicationsResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationClient.List")
+		defer func() {
+			sc := -1
+			if result.lar.Response.Response != nil {
+				sc = result.lar.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._]+$`, Chain: nil}}},
@@ -365,8 +406,8 @@ func (client ApplicationClient) ListResponder(resp *http.Response) (result ListA
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ApplicationClient) listNextResults(lastResults ListApplicationsResult) (result ListApplicationsResult, err error) {
-	req, err := lastResults.listApplicationsResultPreparer()
+func (client ApplicationClient) listNextResults(ctx context.Context, lastResults ListApplicationsResult) (result ListApplicationsResult, err error) {
+	req, err := lastResults.listApplicationsResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "batch.ApplicationClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -387,6 +428,16 @@ func (client ApplicationClient) listNextResults(lastResults ListApplicationsResu
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ApplicationClient) ListComplete(ctx context.Context, resourceGroupName string, accountName string, maxresults *int32) (result ListApplicationsResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, accountName, maxresults)
 	return
 }
@@ -398,6 +449,16 @@ func (client ApplicationClient) ListComplete(ctx context.Context, resourceGroupN
 // applicationID - the ID of the application.
 // parameters - the parameters for the request.
 func (client ApplicationClient) Update(ctx context.Context, resourceGroupName string, accountName string, applicationID string, parameters ApplicationUpdateParameters) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.Pattern, Rule: `^[-\w\._]+$`, Chain: nil}}},

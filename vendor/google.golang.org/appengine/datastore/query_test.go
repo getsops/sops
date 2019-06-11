@@ -528,6 +528,14 @@ func TestQueryToProto(t *testing.T) {
 			},
 		},
 		{
+			desc:  "distinct on",
+			query: NewQuery("").Project("A", "B").DistinctOn("A"),
+			want: &pb.Query{
+				PropertyName:        []string{"A", "B"},
+				GroupByPropertyName: []string{"A"},
+			},
+		},
+		{
 			desc:  "keys only",
 			query: NewQuery("").KeysOnly(),
 			want: &pb.Query{

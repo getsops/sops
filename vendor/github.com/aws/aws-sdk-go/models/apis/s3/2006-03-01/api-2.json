@@ -10,7 +10,6 @@
     "serviceFullName":"Amazon Simple Storage Service",
     "serviceId":"S3",
     "signatureVersion":"s3",
-    "timestampFormat":"rfc822",
     "uid":"s3-2006-03-01"
   },
   "operations":{
@@ -18,7 +17,8 @@
       "name":"AbortMultipartUpload",
       "http":{
         "method":"DELETE",
-        "requestUri":"/{Bucket}/{Key+}"
+        "requestUri":"/{Bucket}/{Key+}",
+        "responseCode":204
       },
       "input":{"shape":"AbortMultipartUploadRequest"},
       "output":{"shape":"AbortMultipartUploadOutput"},
@@ -81,7 +81,8 @@
       "name":"DeleteBucket",
       "http":{
         "method":"DELETE",
-        "requestUri":"/{Bucket}"
+        "requestUri":"/{Bucket}",
+        "responseCode":204
       },
       "input":{"shape":"DeleteBucketRequest"},
       "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketDELETE.html"
@@ -90,7 +91,8 @@
       "name":"DeleteBucketAnalyticsConfiguration",
       "http":{
         "method":"DELETE",
-        "requestUri":"/{Bucket}?analytics"
+        "requestUri":"/{Bucket}?analytics",
+        "responseCode":204
       },
       "input":{"shape":"DeleteBucketAnalyticsConfigurationRequest"}
     },
@@ -98,7 +100,8 @@
       "name":"DeleteBucketCors",
       "http":{
         "method":"DELETE",
-        "requestUri":"/{Bucket}?cors"
+        "requestUri":"/{Bucket}?cors",
+        "responseCode":204
       },
       "input":{"shape":"DeleteBucketCorsRequest"},
       "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketDELETEcors.html"
@@ -107,7 +110,8 @@
       "name":"DeleteBucketEncryption",
       "http":{
         "method":"DELETE",
-        "requestUri":"/{Bucket}?encryption"
+        "requestUri":"/{Bucket}?encryption",
+        "responseCode":204
       },
       "input":{"shape":"DeleteBucketEncryptionRequest"}
     },
@@ -115,7 +119,8 @@
       "name":"DeleteBucketInventoryConfiguration",
       "http":{
         "method":"DELETE",
-        "requestUri":"/{Bucket}?inventory"
+        "requestUri":"/{Bucket}?inventory",
+        "responseCode":204
       },
       "input":{"shape":"DeleteBucketInventoryConfigurationRequest"}
     },
@@ -123,7 +128,8 @@
       "name":"DeleteBucketLifecycle",
       "http":{
         "method":"DELETE",
-        "requestUri":"/{Bucket}?lifecycle"
+        "requestUri":"/{Bucket}?lifecycle",
+        "responseCode":204
       },
       "input":{"shape":"DeleteBucketLifecycleRequest"},
       "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketDELETElifecycle.html"
@@ -132,7 +138,8 @@
       "name":"DeleteBucketMetricsConfiguration",
       "http":{
         "method":"DELETE",
-        "requestUri":"/{Bucket}?metrics"
+        "requestUri":"/{Bucket}?metrics",
+        "responseCode":204
       },
       "input":{"shape":"DeleteBucketMetricsConfigurationRequest"}
     },
@@ -140,7 +147,8 @@
       "name":"DeleteBucketPolicy",
       "http":{
         "method":"DELETE",
-        "requestUri":"/{Bucket}?policy"
+        "requestUri":"/{Bucket}?policy",
+        "responseCode":204
       },
       "input":{"shape":"DeleteBucketPolicyRequest"},
       "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketDELETEpolicy.html"
@@ -149,7 +157,8 @@
       "name":"DeleteBucketReplication",
       "http":{
         "method":"DELETE",
-        "requestUri":"/{Bucket}?replication"
+        "requestUri":"/{Bucket}?replication",
+        "responseCode":204
       },
       "input":{"shape":"DeleteBucketReplicationRequest"}
     },
@@ -157,7 +166,8 @@
       "name":"DeleteBucketTagging",
       "http":{
         "method":"DELETE",
-        "requestUri":"/{Bucket}?tagging"
+        "requestUri":"/{Bucket}?tagging",
+        "responseCode":204
       },
       "input":{"shape":"DeleteBucketTaggingRequest"},
       "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketDELETEtagging.html"
@@ -166,7 +176,8 @@
       "name":"DeleteBucketWebsite",
       "http":{
         "method":"DELETE",
-        "requestUri":"/{Bucket}?website"
+        "requestUri":"/{Bucket}?website",
+        "responseCode":204
       },
       "input":{"shape":"DeleteBucketWebsiteRequest"},
       "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketDELETEwebsite.html"
@@ -175,7 +186,8 @@
       "name":"DeleteObject",
       "http":{
         "method":"DELETE",
-        "requestUri":"/{Bucket}/{Key+}"
+        "requestUri":"/{Bucket}/{Key+}",
+        "responseCode":204
       },
       "input":{"shape":"DeleteObjectRequest"},
       "output":{"shape":"DeleteObjectOutput"},
@@ -185,7 +197,8 @@
       "name":"DeleteObjectTagging",
       "http":{
         "method":"DELETE",
-        "requestUri":"/{Bucket}/{Key+}?tagging"
+        "requestUri":"/{Bucket}/{Key+}?tagging",
+        "responseCode":204
       },
       "input":{"shape":"DeleteObjectTaggingRequest"},
       "output":{"shape":"DeleteObjectTaggingOutput"}
@@ -200,6 +213,15 @@
       "output":{"shape":"DeleteObjectsOutput"},
       "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/multiobjectdeleteapi.html",
       "alias":"DeleteMultipleObjects"
+    },
+    "DeletePublicAccessBlock":{
+      "name":"DeletePublicAccessBlock",
+      "http":{
+        "method":"DELETE",
+        "requestUri":"/{Bucket}?publicAccessBlock",
+        "responseCode":204
+      },
+      "input":{"shape":"DeletePublicAccessBlockRequest"}
     },
     "GetBucketAccelerateConfiguration":{
       "name":"GetBucketAccelerateConfiguration",
@@ -336,6 +358,15 @@
       "output":{"shape":"GetBucketPolicyOutput"},
       "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketGETpolicy.html"
     },
+    "GetBucketPolicyStatus":{
+      "name":"GetBucketPolicyStatus",
+      "http":{
+        "method":"GET",
+        "requestUri":"/{Bucket}?policyStatus"
+      },
+      "input":{"shape":"GetBucketPolicyStatusRequest"},
+      "output":{"shape":"GetBucketPolicyStatusOutput"}
+    },
     "GetBucketReplication":{
       "name":"GetBucketReplication",
       "http":{
@@ -411,6 +442,33 @@
       ],
       "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTObjectGETacl.html"
     },
+    "GetObjectLegalHold":{
+      "name":"GetObjectLegalHold",
+      "http":{
+        "method":"GET",
+        "requestUri":"/{Bucket}/{Key+}?legal-hold"
+      },
+      "input":{"shape":"GetObjectLegalHoldRequest"},
+      "output":{"shape":"GetObjectLegalHoldOutput"}
+    },
+    "GetObjectLockConfiguration":{
+      "name":"GetObjectLockConfiguration",
+      "http":{
+        "method":"GET",
+        "requestUri":"/{Bucket}?object-lock"
+      },
+      "input":{"shape":"GetObjectLockConfigurationRequest"},
+      "output":{"shape":"GetObjectLockConfigurationOutput"}
+    },
+    "GetObjectRetention":{
+      "name":"GetObjectRetention",
+      "http":{
+        "method":"GET",
+        "requestUri":"/{Bucket}/{Key+}?retention"
+      },
+      "input":{"shape":"GetObjectRetentionRequest"},
+      "output":{"shape":"GetObjectRetentionOutput"}
+    },
     "GetObjectTagging":{
       "name":"GetObjectTagging",
       "http":{
@@ -429,6 +487,15 @@
       "input":{"shape":"GetObjectTorrentRequest"},
       "output":{"shape":"GetObjectTorrentOutput"},
       "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTObjectGETtorrent.html"
+    },
+    "GetPublicAccessBlock":{
+      "name":"GetPublicAccessBlock",
+      "http":{
+        "method":"GET",
+        "requestUri":"/{Bucket}?publicAccessBlock"
+      },
+      "input":{"shape":"GetPublicAccessBlockRequest"},
+      "output":{"shape":"GetPublicAccessBlockOutput"}
     },
     "HeadBucket":{
       "name":"HeadBucket",
@@ -728,6 +795,33 @@
       ],
       "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTObjectPUTacl.html"
     },
+    "PutObjectLegalHold":{
+      "name":"PutObjectLegalHold",
+      "http":{
+        "method":"PUT",
+        "requestUri":"/{Bucket}/{Key+}?legal-hold"
+      },
+      "input":{"shape":"PutObjectLegalHoldRequest"},
+      "output":{"shape":"PutObjectLegalHoldOutput"}
+    },
+    "PutObjectLockConfiguration":{
+      "name":"PutObjectLockConfiguration",
+      "http":{
+        "method":"PUT",
+        "requestUri":"/{Bucket}?object-lock"
+      },
+      "input":{"shape":"PutObjectLockConfigurationRequest"},
+      "output":{"shape":"PutObjectLockConfigurationOutput"}
+    },
+    "PutObjectRetention":{
+      "name":"PutObjectRetention",
+      "http":{
+        "method":"PUT",
+        "requestUri":"/{Bucket}/{Key+}?retention"
+      },
+      "input":{"shape":"PutObjectRetentionRequest"},
+      "output":{"shape":"PutObjectRetentionOutput"}
+    },
     "PutObjectTagging":{
       "name":"PutObjectTagging",
       "http":{
@@ -736,6 +830,14 @@
       },
       "input":{"shape":"PutObjectTaggingRequest"},
       "output":{"shape":"PutObjectTaggingOutput"}
+    },
+    "PutPublicAccessBlock":{
+      "name":"PutPublicAccessBlock",
+      "http":{
+        "method":"PUT",
+        "requestUri":"/{Bucket}?publicAccessBlock"
+      },
+      "input":{"shape":"PutPublicAccessBlockRequest"}
     },
     "RestoreObject":{
       "name":"RestoreObject",
@@ -1030,6 +1132,7 @@
         "locationName":"Bucket"
       }
     },
+    "BypassGovernanceRetention":{"type":"boolean"},
     "BytesProcessed":{"type":"long"},
     "BytesReturned":{"type":"long"},
     "BytesScanned":{"type":"long"},
@@ -1467,6 +1570,21 @@
           "shape":"TaggingHeader",
           "location":"header",
           "locationName":"x-amz-tagging"
+        },
+        "ObjectLockMode":{
+          "shape":"ObjectLockMode",
+          "location":"header",
+          "locationName":"x-amz-object-lock-mode"
+        },
+        "ObjectLockRetainUntilDate":{
+          "shape":"ObjectLockRetainUntilDate",
+          "location":"header",
+          "locationName":"x-amz-object-lock-retain-until-date"
+        },
+        "ObjectLockLegalHoldStatus":{
+          "shape":"ObjectLockLegalHoldStatus",
+          "location":"header",
+          "locationName":"x-amz-object-lock-legal-hold"
         }
       }
     },
@@ -1559,6 +1677,11 @@
           "shape":"GrantWriteACP",
           "location":"header",
           "locationName":"x-amz-grant-write-acp"
+        },
+        "ObjectLockEnabledForBucket":{
+          "shape":"ObjectLockEnabledForBucket",
+          "location":"header",
+          "locationName":"x-amz-bucket-object-lock-enabled"
         }
       },
       "payload":"CreateBucketConfiguration"
@@ -1730,6 +1853,21 @@
           "shape":"TaggingHeader",
           "location":"header",
           "locationName":"x-amz-tagging"
+        },
+        "ObjectLockMode":{
+          "shape":"ObjectLockMode",
+          "location":"header",
+          "locationName":"x-amz-object-lock-mode"
+        },
+        "ObjectLockRetainUntilDate":{
+          "shape":"ObjectLockRetainUntilDate",
+          "location":"header",
+          "locationName":"x-amz-object-lock-retain-until-date"
+        },
+        "ObjectLockLegalHoldStatus":{
+          "shape":"ObjectLockLegalHoldStatus",
+          "location":"header",
+          "locationName":"x-amz-object-lock-legal-hold"
         }
       }
     },
@@ -1740,6 +1878,14 @@
     },
     "Days":{"type":"integer"},
     "DaysAfterInitiation":{"type":"integer"},
+    "DefaultRetention":{
+      "type":"structure",
+      "members":{
+        "Mode":{"shape":"ObjectLockRetentionMode"},
+        "Days":{"shape":"Days"},
+        "Years":{"shape":"Years"}
+      }
+    },
     "Delete":{
       "type":"structure",
       "required":["Objects"],
@@ -1907,6 +2053,19 @@
         "LastModified":{"shape":"LastModified"}
       }
     },
+    "DeleteMarkerReplication":{
+      "type":"structure",
+      "members":{
+        "Status":{"shape":"DeleteMarkerReplicationStatus"}
+      }
+    },
+    "DeleteMarkerReplicationStatus":{
+      "type":"string",
+      "enum":[
+        "Enabled",
+        "Disabled"
+      ]
+    },
     "DeleteMarkerVersionId":{"type":"string"},
     "DeleteMarkers":{
       "type":"list",
@@ -1964,6 +2123,11 @@
           "shape":"RequestPayer",
           "location":"header",
           "locationName":"x-amz-request-payer"
+        },
+        "BypassGovernanceRetention":{
+          "shape":"BypassGovernanceRetention",
+          "location":"header",
+          "locationName":"x-amz-bypass-governance-retention"
         }
       }
     },
@@ -2042,9 +2206,25 @@
           "shape":"RequestPayer",
           "location":"header",
           "locationName":"x-amz-request-payer"
+        },
+        "BypassGovernanceRetention":{
+          "shape":"BypassGovernanceRetention",
+          "location":"header",
+          "locationName":"x-amz-bypass-governance-retention"
         }
       },
       "payload":"Delete"
+    },
+    "DeletePublicAccessBlockRequest":{
+      "type":"structure",
+      "required":["Bucket"],
+      "members":{
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"Bucket"
+        }
+      }
     },
     "DeletedObject":{
       "type":"structure",
@@ -2134,7 +2314,9 @@
         "s3:ObjectCreated:CompleteMultipartUpload",
         "s3:ObjectRemoved:*",
         "s3:ObjectRemoved:Delete",
-        "s3:ObjectRemoved:DeleteMarkerCreated"
+        "s3:ObjectRemoved:DeleteMarkerCreated",
+        "s3:ObjectRestore:Post",
+        "s3:ObjectRestore:Completed"
       ]
     },
     "EventList":{
@@ -2450,6 +2632,24 @@
         }
       }
     },
+    "GetBucketPolicyStatusOutput":{
+      "type":"structure",
+      "members":{
+        "PolicyStatus":{"shape":"PolicyStatus"}
+      },
+      "payload":"PolicyStatus"
+    },
+    "GetBucketPolicyStatusRequest":{
+      "type":"structure",
+      "required":["Bucket"],
+      "members":{
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"Bucket"
+        }
+      }
+    },
     "GetBucketReplicationOutput":{
       "type":"structure",
       "members":{
@@ -2585,6 +2785,60 @@
           "shape":"RequestPayer",
           "location":"header",
           "locationName":"x-amz-request-payer"
+        }
+      }
+    },
+    "GetObjectLegalHoldOutput":{
+      "type":"structure",
+      "members":{
+        "LegalHold":{"shape":"ObjectLockLegalHold"}
+      },
+      "payload":"LegalHold"
+    },
+    "GetObjectLegalHoldRequest":{
+      "type":"structure",
+      "required":[
+        "Bucket",
+        "Key"
+      ],
+      "members":{
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"Bucket"
+        },
+        "Key":{
+          "shape":"ObjectKey",
+          "location":"uri",
+          "locationName":"Key"
+        },
+        "VersionId":{
+          "shape":"ObjectVersionId",
+          "location":"querystring",
+          "locationName":"versionId"
+        },
+        "RequestPayer":{
+          "shape":"RequestPayer",
+          "location":"header",
+          "locationName":"x-amz-request-payer"
+        }
+      }
+    },
+    "GetObjectLockConfigurationOutput":{
+      "type":"structure",
+      "members":{
+        "ObjectLockConfiguration":{"shape":"ObjectLockConfiguration"}
+      },
+      "payload":"ObjectLockConfiguration"
+    },
+    "GetObjectLockConfigurationRequest":{
+      "type":"structure",
+      "required":["Bucket"],
+      "members":{
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"Bucket"
         }
       }
     },
@@ -2729,6 +2983,21 @@
           "shape":"TagCount",
           "location":"header",
           "locationName":"x-amz-tagging-count"
+        },
+        "ObjectLockMode":{
+          "shape":"ObjectLockMode",
+          "location":"header",
+          "locationName":"x-amz-object-lock-mode"
+        },
+        "ObjectLockRetainUntilDate":{
+          "shape":"ObjectLockRetainUntilDate",
+          "location":"header",
+          "locationName":"x-amz-object-lock-retain-until-date"
+        },
+        "ObjectLockLegalHoldStatus":{
+          "shape":"ObjectLockLegalHoldStatus",
+          "location":"header",
+          "locationName":"x-amz-object-lock-legal-hold"
         }
       },
       "payload":"Body"
@@ -2837,6 +3106,42 @@
         }
       }
     },
+    "GetObjectRetentionOutput":{
+      "type":"structure",
+      "members":{
+        "Retention":{"shape":"ObjectLockRetention"}
+      },
+      "payload":"Retention"
+    },
+    "GetObjectRetentionRequest":{
+      "type":"structure",
+      "required":[
+        "Bucket",
+        "Key"
+      ],
+      "members":{
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"Bucket"
+        },
+        "Key":{
+          "shape":"ObjectKey",
+          "location":"uri",
+          "locationName":"Key"
+        },
+        "VersionId":{
+          "shape":"ObjectVersionId",
+          "location":"querystring",
+          "locationName":"versionId"
+        },
+        "RequestPayer":{
+          "shape":"RequestPayer",
+          "location":"header",
+          "locationName":"x-amz-request-payer"
+        }
+      }
+    },
     "GetObjectTaggingOutput":{
       "type":"structure",
       "required":["TagSet"],
@@ -2909,6 +3214,24 @@
           "shape":"RequestPayer",
           "location":"header",
           "locationName":"x-amz-request-payer"
+        }
+      }
+    },
+    "GetPublicAccessBlockOutput":{
+      "type":"structure",
+      "members":{
+        "PublicAccessBlockConfiguration":{"shape":"PublicAccessBlockConfiguration"}
+      },
+      "payload":"PublicAccessBlockConfiguration"
+    },
+    "GetPublicAccessBlockRequest":{
+      "type":"structure",
+      "required":["Bucket"],
+      "members":{
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"Bucket"
         }
       }
     },
@@ -3095,6 +3418,21 @@
           "shape":"PartsCount",
           "location":"header",
           "locationName":"x-amz-mp-parts-count"
+        },
+        "ObjectLockMode":{
+          "shape":"ObjectLockMode",
+          "location":"header",
+          "locationName":"x-amz-object-lock-mode"
+        },
+        "ObjectLockRetainUntilDate":{
+          "shape":"ObjectLockRetainUntilDate",
+          "location":"header",
+          "locationName":"x-amz-object-lock-retain-until-date"
+        },
+        "ObjectLockLegalHoldStatus":{
+          "shape":"ObjectLockLegalHoldStatus",
+          "location":"header",
+          "locationName":"x-amz-object-lock-legal-hold"
         }
       }
     },
@@ -3259,7 +3597,8 @@
       "type":"string",
       "enum":[
         "CSV",
-        "ORC"
+        "ORC",
+        "Parquet"
       ]
     },
     "InventoryFrequency":{
@@ -3286,7 +3625,10 @@
         "ETag",
         "IsMultipartUploaded",
         "ReplicationStatus",
-        "EncryptionStatus"
+        "EncryptionStatus",
+        "ObjectLockRetainUntilDate",
+        "ObjectLockMode",
+        "ObjectLockLegalHoldStatus"
       ]
     },
     "InventoryOptionalFields":{
@@ -3319,6 +3661,7 @@
     },
     "IsEnabled":{"type":"boolean"},
     "IsLatest":{"type":"boolean"},
+    "IsPublic":{"type":"boolean"},
     "IsTruncated":{"type":"boolean"},
     "JSONInput":{
       "type":"structure",
@@ -4085,6 +4428,63 @@
       "member":{"shape":"Object"},
       "flattened":true
     },
+    "ObjectLockConfiguration":{
+      "type":"structure",
+      "members":{
+        "ObjectLockEnabled":{"shape":"ObjectLockEnabled"},
+        "Rule":{"shape":"ObjectLockRule"}
+      }
+    },
+    "ObjectLockEnabled":{
+      "type":"string",
+      "enum":["Enabled"]
+    },
+    "ObjectLockEnabledForBucket":{"type":"boolean"},
+    "ObjectLockLegalHold":{
+      "type":"structure",
+      "members":{
+        "Status":{"shape":"ObjectLockLegalHoldStatus"}
+      }
+    },
+    "ObjectLockLegalHoldStatus":{
+      "type":"string",
+      "enum":[
+        "ON",
+        "OFF"
+      ]
+    },
+    "ObjectLockMode":{
+      "type":"string",
+      "enum":[
+        "GOVERNANCE",
+        "COMPLIANCE"
+      ]
+    },
+    "ObjectLockRetainUntilDate":{
+      "type":"timestamp",
+      "timestampFormat":"iso8601"
+    },
+    "ObjectLockRetention":{
+      "type":"structure",
+      "members":{
+        "Mode":{"shape":"ObjectLockRetentionMode"},
+        "RetainUntilDate":{"shape":"Date"}
+      }
+    },
+    "ObjectLockRetentionMode":{
+      "type":"string",
+      "enum":[
+        "GOVERNANCE",
+        "COMPLIANCE"
+      ]
+    },
+    "ObjectLockRule":{
+      "type":"structure",
+      "members":{
+        "DefaultRetention":{"shape":"DefaultRetention"}
+      }
+    },
+    "ObjectLockToken":{"type":"string"},
     "ObjectNotInActiveTierError":{
       "type":"structure",
       "members":{
@@ -4098,7 +4498,9 @@
         "REDUCED_REDUNDANCY",
         "GLACIER",
         "STANDARD_IA",
-        "ONEZONE_IA"
+        "ONEZONE_IA",
+        "INTELLIGENT_TIERING",
+        "DEEP_ARCHIVE"
       ]
     },
     "ObjectVersion":{
@@ -4188,7 +4590,17 @@
       ]
     },
     "Policy":{"type":"string"},
+    "PolicyStatus":{
+      "type":"structure",
+      "members":{
+        "IsPublic":{
+          "shape":"IsPublic",
+          "locationName":"IsPublic"
+        }
+      }
+    },
     "Prefix":{"type":"string"},
+    "Priority":{"type":"integer"},
     "Progress":{
       "type":"structure",
       "members":{
@@ -4213,6 +4625,27 @@
         "http",
         "https"
       ]
+    },
+    "PublicAccessBlockConfiguration":{
+      "type":"structure",
+      "members":{
+        "BlockPublicAcls":{
+          "shape":"Setting",
+          "locationName":"BlockPublicAcls"
+        },
+        "IgnorePublicAcls":{
+          "shape":"Setting",
+          "locationName":"IgnorePublicAcls"
+        },
+        "BlockPublicPolicy":{
+          "shape":"Setting",
+          "locationName":"BlockPublicPolicy"
+        },
+        "RestrictPublicBuckets":{
+          "shape":"Setting",
+          "locationName":"RestrictPublicBuckets"
+        }
+      }
     },
     "PutBucketAccelerateConfigurationRequest":{
       "type":"structure",
@@ -4570,6 +5003,11 @@
           "shape":"ReplicationConfiguration",
           "locationName":"ReplicationConfiguration",
           "xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}
+        },
+        "Token":{
+          "shape":"ObjectLockToken",
+          "location":"header",
+          "locationName":"x-amz-bucket-object-lock-token"
         }
       },
       "payload":"ReplicationConfiguration"
@@ -4759,6 +5197,98 @@
       },
       "payload":"AccessControlPolicy"
     },
+    "PutObjectLegalHoldOutput":{
+      "type":"structure",
+      "members":{
+        "RequestCharged":{
+          "shape":"RequestCharged",
+          "location":"header",
+          "locationName":"x-amz-request-charged"
+        }
+      }
+    },
+    "PutObjectLegalHoldRequest":{
+      "type":"structure",
+      "required":[
+        "Bucket",
+        "Key"
+      ],
+      "members":{
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"Bucket"
+        },
+        "Key":{
+          "shape":"ObjectKey",
+          "location":"uri",
+          "locationName":"Key"
+        },
+        "LegalHold":{
+          "shape":"ObjectLockLegalHold",
+          "locationName":"LegalHold",
+          "xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}
+        },
+        "RequestPayer":{
+          "shape":"RequestPayer",
+          "location":"header",
+          "locationName":"x-amz-request-payer"
+        },
+        "VersionId":{
+          "shape":"ObjectVersionId",
+          "location":"querystring",
+          "locationName":"versionId"
+        },
+        "ContentMD5":{
+          "shape":"ContentMD5",
+          "location":"header",
+          "locationName":"Content-MD5"
+        }
+      },
+      "payload":"LegalHold"
+    },
+    "PutObjectLockConfigurationOutput":{
+      "type":"structure",
+      "members":{
+        "RequestCharged":{
+          "shape":"RequestCharged",
+          "location":"header",
+          "locationName":"x-amz-request-charged"
+        }
+      }
+    },
+    "PutObjectLockConfigurationRequest":{
+      "type":"structure",
+      "required":["Bucket"],
+      "members":{
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"Bucket"
+        },
+        "ObjectLockConfiguration":{
+          "shape":"ObjectLockConfiguration",
+          "locationName":"ObjectLockConfiguration",
+          "xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}
+        },
+        "RequestPayer":{
+          "shape":"RequestPayer",
+          "location":"header",
+          "locationName":"x-amz-request-payer"
+        },
+        "Token":{
+          "shape":"ObjectLockToken",
+          "location":"header",
+          "locationName":"x-amz-bucket-object-lock-token"
+        },
+        "ContentMD5":{
+          "shape":"ContentMD5",
+          "location":"header",
+          "locationName":"Content-MD5"
+        }
+      },
+      "payload":"ObjectLockConfiguration"
+    },
     "PutObjectOutput":{
       "type":"structure",
       "members":{
@@ -4939,9 +5469,79 @@
           "shape":"TaggingHeader",
           "location":"header",
           "locationName":"x-amz-tagging"
+        },
+        "ObjectLockMode":{
+          "shape":"ObjectLockMode",
+          "location":"header",
+          "locationName":"x-amz-object-lock-mode"
+        },
+        "ObjectLockRetainUntilDate":{
+          "shape":"ObjectLockRetainUntilDate",
+          "location":"header",
+          "locationName":"x-amz-object-lock-retain-until-date"
+        },
+        "ObjectLockLegalHoldStatus":{
+          "shape":"ObjectLockLegalHoldStatus",
+          "location":"header",
+          "locationName":"x-amz-object-lock-legal-hold"
         }
       },
       "payload":"Body"
+    },
+    "PutObjectRetentionOutput":{
+      "type":"structure",
+      "members":{
+        "RequestCharged":{
+          "shape":"RequestCharged",
+          "location":"header",
+          "locationName":"x-amz-request-charged"
+        }
+      }
+    },
+    "PutObjectRetentionRequest":{
+      "type":"structure",
+      "required":[
+        "Bucket",
+        "Key"
+      ],
+      "members":{
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"Bucket"
+        },
+        "Key":{
+          "shape":"ObjectKey",
+          "location":"uri",
+          "locationName":"Key"
+        },
+        "Retention":{
+          "shape":"ObjectLockRetention",
+          "locationName":"Retention",
+          "xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}
+        },
+        "RequestPayer":{
+          "shape":"RequestPayer",
+          "location":"header",
+          "locationName":"x-amz-request-payer"
+        },
+        "VersionId":{
+          "shape":"ObjectVersionId",
+          "location":"querystring",
+          "locationName":"versionId"
+        },
+        "BypassGovernanceRetention":{
+          "shape":"BypassGovernanceRetention",
+          "location":"header",
+          "locationName":"x-amz-bypass-governance-retention"
+        },
+        "ContentMD5":{
+          "shape":"ContentMD5",
+          "location":"header",
+          "locationName":"Content-MD5"
+        }
+      },
+      "payload":"Retention"
     },
     "PutObjectTaggingOutput":{
       "type":"structure",
@@ -4988,6 +5588,31 @@
         }
       },
       "payload":"Tagging"
+    },
+    "PutPublicAccessBlockRequest":{
+      "type":"structure",
+      "required":[
+        "Bucket",
+        "PublicAccessBlockConfiguration"
+      ],
+      "members":{
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"Bucket"
+        },
+        "ContentMD5":{
+          "shape":"ContentMD5",
+          "location":"header",
+          "locationName":"Content-MD5"
+        },
+        "PublicAccessBlockConfiguration":{
+          "shape":"PublicAccessBlockConfiguration",
+          "locationName":"PublicAccessBlockConfiguration",
+          "xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}
+        }
+      },
+      "payload":"PublicAccessBlockConfiguration"
     },
     "QueueArn":{"type":"string"},
     "QueueConfiguration":{
@@ -5089,16 +5714,40 @@
     "ReplicationRule":{
       "type":"structure",
       "required":[
-        "Prefix",
         "Status",
         "Destination"
       ],
       "members":{
         "ID":{"shape":"ID"},
-        "Prefix":{"shape":"Prefix"},
+        "Priority":{"shape":"Priority"},
+        "Prefix":{
+          "shape":"Prefix",
+          "deprecated":true
+        },
+        "Filter":{"shape":"ReplicationRuleFilter"},
         "Status":{"shape":"ReplicationRuleStatus"},
         "SourceSelectionCriteria":{"shape":"SourceSelectionCriteria"},
-        "Destination":{"shape":"Destination"}
+        "Destination":{"shape":"Destination"},
+        "DeleteMarkerReplication":{"shape":"DeleteMarkerReplication"}
+      }
+    },
+    "ReplicationRuleAndOperator":{
+      "type":"structure",
+      "members":{
+        "Prefix":{"shape":"Prefix"},
+        "Tags":{
+          "shape":"TagSet",
+          "flattened":true,
+          "locationName":"Tag"
+        }
+      }
+    },
+    "ReplicationRuleFilter":{
+      "type":"structure",
+      "members":{
+        "Prefix":{"shape":"Prefix"},
+        "Tag":{"shape":"Tag"},
+        "And":{"shape":"ReplicationRuleAndOperator"}
       }
     },
     "ReplicationRuleStatus":{
@@ -5417,6 +6066,7 @@
       "member":{"shape":"ServerSideEncryptionRule"},
       "flattened":true
     },
+    "Setting":{"type":"boolean"},
     "Size":{"type":"integer"},
     "SourceSelectionCriteria":{
       "type":"structure",
@@ -5463,7 +6113,10 @@
         "STANDARD",
         "REDUCED_REDUNDANCY",
         "STANDARD_IA",
-        "ONEZONE_IA"
+        "ONEZONE_IA",
+        "INTELLIGENT_TIERING",
+        "GLACIER",
+        "DEEP_ARCHIVE"
       ]
     },
     "StorageClassAnalysis":{
@@ -5605,7 +6258,9 @@
       "enum":[
         "GLACIER",
         "STANDARD_IA",
-        "ONEZONE_IA"
+        "ONEZONE_IA",
+        "INTELLIGENT_TIERING",
+        "DEEP_ARCHIVE"
       ]
     },
     "Type":{
@@ -5881,6 +6536,7 @@
         "RoutingRules":{"shape":"RoutingRules"}
       }
     },
-    "WebsiteRedirectLocation":{"type":"string"}
+    "WebsiteRedirectLocation":{"type":"string"},
+    "Years":{"type":"integer"}
   }
 }

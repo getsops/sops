@@ -193,6 +193,43 @@
         "shape" : "InternalFailureException"
       } ]
     },
+    "ListTagsForResource" : {
+      "name" : "ListTagsForResource",
+      "http" : {
+        "method" : "GET",
+        "requestUri" : "/tags/{resource-arn}",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "ListTagsForResourceRequest"
+      },
+      "output" : {
+        "shape" : "ListTagsForResourceResponse"
+      },
+      "errors" : [ {
+        "shape" : "ResourceNotFoundException"
+      }, {
+        "shape" : "InternalFailureException"
+      } ]
+    },
+    "TagResource" : {
+      "name" : "TagResource",
+      "http" : {
+        "method" : "POST",
+        "requestUri" : "/tags/{resource-arn}",
+        "responseCode" : 204
+      },
+      "input" : {
+        "shape" : "TagResourceRequest"
+      },
+      "errors" : [ {
+        "shape" : "ResourceNotFoundException"
+      }, {
+        "shape" : "InvalidRequestException"
+      }, {
+        "shape" : "InternalFailureException"
+      } ]
+    },
     "UnclaimDevice" : {
       "name" : "UnclaimDevice",
       "http" : {
@@ -205,6 +242,24 @@
       },
       "output" : {
         "shape" : "UnclaimDeviceResponse"
+      },
+      "errors" : [ {
+        "shape" : "ResourceNotFoundException"
+      }, {
+        "shape" : "InvalidRequestException"
+      }, {
+        "shape" : "InternalFailureException"
+      } ]
+    },
+    "UntagResource" : {
+      "name" : "UntagResource",
+      "http" : {
+        "method" : "DELETE",
+        "requestUri" : "/tags/{resource-arn}",
+        "responseCode" : 204
+      },
+      "input" : {
+        "shape" : "UntagResourceRequest"
       },
       "errors" : [ {
         "shape" : "ResourceNotFoundException"
@@ -323,6 +378,10 @@
     "DeviceDescription" : {
       "type" : "structure",
       "members" : {
+        "Arn" : {
+          "shape" : "__string",
+          "locationName" : "arn"
+        },
         "Attributes" : {
           "shape" : "DeviceAttributes",
           "locationName" : "attributes"
@@ -342,6 +401,10 @@
         "Type" : {
           "shape" : "__string",
           "locationName" : "type"
+        },
+        "Tags" : {
+          "shape" : "__mapOf__string",
+          "locationName" : "tags"
         }
       }
     },
@@ -395,6 +458,10 @@
           "shape" : "__string",
           "location" : "uri",
           "locationName" : "deviceId"
+        },
+        "Tags" : {
+          "shape" : "__mapOf__string",
+          "locationName" : "tags"
         }
       },
       "required" : [ "DeviceId" ]
@@ -604,6 +671,26 @@
         }
       }
     },
+    "ListTagsForResourceRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ResourceArn" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "resource-arn"
+        }
+      },
+      "required" : [ "ResourceArn" ]
+    },
+    "ListTagsForResourceResponse" : {
+      "type" : "structure",
+      "members" : {
+        "Tags" : {
+          "shape" : "__mapOf__string",
+          "locationName" : "tags"
+        }
+      }
+    },
     "MaxResults" : {
       "type" : "integer",
       "min" : 1,
@@ -677,6 +764,21 @@
         "httpStatusCode" : 404
       }
     },
+    "TagResourceRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ResourceArn" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "resource-arn"
+        },
+        "Tags" : {
+          "shape" : "__mapOf__string",
+          "locationName" : "tags"
+        }
+      },
+      "required" : [ "ResourceArn", "Tags" ]
+    },
     "UnclaimDeviceRequest" : {
       "type" : "structure",
       "members" : {
@@ -696,6 +798,22 @@
           "locationName" : "state"
         }
       }
+    },
+    "UntagResourceRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ResourceArn" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "resource-arn"
+        },
+        "TagKeys" : {
+          "shape" : "__listOf__string",
+          "location" : "querystring",
+          "locationName" : "tagKeys"
+        }
+      },
+      "required" : [ "TagKeys", "ResourceArn" ]
     },
     "UpdateDeviceStateRequest" : {
       "type" : "structure",
@@ -746,8 +864,23 @@
         "shape" : "DeviceMethod"
       }
     },
+    "__listOf__string" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "__string"
+      }
+    },
     "__long" : {
       "type" : "long"
+    },
+    "__mapOf__string" : {
+      "type" : "map",
+      "key" : {
+        "shape" : "__string"
+      },
+      "value" : {
+        "shape" : "__string"
+      }
     },
     "__string" : {
       "type" : "string"

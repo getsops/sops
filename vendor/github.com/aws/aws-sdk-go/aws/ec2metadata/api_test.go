@@ -167,6 +167,25 @@ func TestGetRegion(t *testing.T) {
 	}
 }
 
+
+
+func TestGetRegion_invalidResponse(t *testing.T) {
+	server := initTestServer(
+		"/latest/meta-data/placement/availability-zone",
+		"", // no data in response
+	)
+	defer server.Close()
+	c := ec2metadata.New(unit.Session, &aws.Config{Endpoint: aws.String(server.URL + "/latest")})
+
+	region, err := c.Region()
+	if err == nil {
+		t.Errorf("expected error, got %v", err)
+	}
+	if e, a := "", region; e != a {
+		t.Errorf("expect %v, got %v", e, a)
+	}
+}
+
 func TestMetadataAvailable(t *testing.T) {
 	server := initTestServer(
 		"/latest/meta-data/instance-id",

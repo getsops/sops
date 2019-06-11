@@ -133,13 +133,13 @@ func TestSaveToken(t *testing.T) {
 	var actualToken Token
 	var expectedToken Token
 
-	json.Unmarshal([]byte(MockTokenJSON), expectedToken)
+	json.Unmarshal([]byte(MockTokenJSON), &expectedToken)
 
 	contents, err := ioutil.ReadFile(f.Name())
 	if err != nil {
 		t.Fatal("!!")
 	}
-	json.Unmarshal(contents, actualToken)
+	json.Unmarshal(contents, &actualToken)
 
 	if !reflect.DeepEqual(actualToken, expectedToken) {
 		t.Fatal("azure: token was not serialized correctly")

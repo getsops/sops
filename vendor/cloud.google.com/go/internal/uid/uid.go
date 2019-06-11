@@ -32,18 +32,31 @@ type Space struct {
 	Time   time.Time // Timestamp for UIDs. Read-only.
 	re     *regexp.Regexp
 	count  int32 // atomic
+	short  bool
 }
 
 // Options are optional values for a Space.
 type Options struct {
 	Sep  rune      // Separates parts of the UID. Defaults to '-'.
 	Time time.Time // Timestamp for all UIDs made with this space. Defaults to current time.
+
+	// Short, if true, makes the result of space.New shorter by 6 characters.
+	// This can be useful for character restricted IDs. It will use a shorter
+	// but less readable time representation, and will only use two characters
+	// for the count suffix instead of four.
+	//
+	// e.x. normal: gotest-20181030-59751273685000-0001
+	// e.x. short:  gotest-1540917351273685000-01
+	Short bool
 }
 
+// NewSpace creates a new UID space. A UID Space is used to generate unique IDs.
 func NewSpace(prefix string, opts *Options) *Space {
+	var short bool
 	sep := '-'
 	tm := time.Now().UTC()
 	if opts != nil {
+		short = opts.Short
 		if opts.Sep != 0 {
 			sep = opts.Sep
 		}
@@ -51,13 +64,21 @@ func NewSpace(prefix string, opts *Options) *Space {
 			tm = opts.Time
 		}
 	}
-	re := fmt.Sprintf(`^%s%[2]c(\d{4})(\d{2})(\d{2})%[2]c(\d+)%[2]c\d+$`,
-		regexp.QuoteMeta(prefix), sep)
+	var re string
+
+	if short {
+		re = fmt.Sprintf(`^%s%[2]c(\d+)%[2]c\d+$`, regexp.QuoteMeta(prefix), sep)
+	} else {
+		re = fmt.Sprintf(`^%s%[2]c(\d{4})(\d{2})(\d{2})%[2]c(\d+)%[2]c\d+$`,
+			regexp.QuoteMeta(prefix), sep)
+	}
+
 	return &Space{
 		Prefix: prefix,
 		Sep:    sep,
 		Time:   tm,
 		re:     regexp.MustCompile(re),
+		short:  short,
 	}
 }
 
@@ -69,6 +90,19 @@ func NewSpace(prefix string, opts *Options) *Space {
 // and sep.
 func (s *Space) New() string {
 	c := atomic.AddInt32(&s.count, 1)
+
+	if s.short && c > 99 {
+		// Short spaces only have space for 99 IDs. (two characters)
+		panic("Short space called New more than 99 times. Ran out of IDs.")
+	} else if c > 9999 {
+		// Spaces only have space for 9999 IDs. (four characters)
+		panic("New called more than 9999 times. Ran out of IDs.")
+	}
+
+	if s.short {
+		return fmt.Sprintf("%s%c%d%c%02d", s.Prefix, s.Sep, s.Time.UnixNano(), s.Sep, c)
+	}
+
 	// Write the time as a date followed by nanoseconds from midnight of that date.
 	// That makes it easier to see the approximate time of the ID when it is displayed.
 	y, m, d := s.Time.Date()
@@ -85,6 +119,15 @@ func (s *Space) Timestamp(uid string) (time.Time, bool) {
 	if subs == nil {
 		return time.Time{}, false
 	}
+
+	if s.short {
+		ns, err := strconv.ParseInt(subs[1], 10, 64)
+		if err != nil {
+			return time.Time{}, false
+		}
+		return time.Unix(ns/1e9, ns%1e9), true
+	}
+
 	y, err1 := strconv.Atoi(subs[1])
 	m, err2 := strconv.Atoi(subs[2])
 	d, err3 := strconv.Atoi(subs[3])

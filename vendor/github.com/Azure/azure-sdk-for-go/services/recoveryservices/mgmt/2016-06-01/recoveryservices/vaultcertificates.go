@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewVaultCertificatesClientWithBaseURI(baseURI string, subscriptionID string
 // certificateName - certificate friendly name.
 // certificateRequest - input parameters for uploading the vault certificate.
 func (client VaultCertificatesClient) Create(ctx context.Context, resourceGroupName string, vaultName string, certificateName string, certificateRequest CertificateRequest) (result VaultCertificateResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VaultCertificatesClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreatePreparer(ctx, resourceGroupName, vaultName, certificateName, certificateRequest)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "recoveryservices.VaultCertificatesClient", "Create", nil, "Failure preparing request")

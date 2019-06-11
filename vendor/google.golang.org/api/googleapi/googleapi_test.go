@@ -241,15 +241,15 @@ func TestCheckResponse(t *testing.T) {
 		g := CheckResponse(res)
 		if !reflect.DeepEqual(g, test.want) {
 			t.Errorf("CheckResponse: got %v, want %v", g, test.want)
-			gotJson, err := json.Marshal(g)
+			gotJSON, err := json.Marshal(g)
 			if err != nil {
 				t.Error(err)
 			}
-			wantJson, err := json.Marshal(test.want)
+			wantJSON, err := json.Marshal(test.want)
 			if err != nil {
 				t.Error(err)
 			}
-			t.Errorf("json(got):  %q\njson(want): %q", string(gotJson), string(wantJson))
+			t.Errorf("json(got):  %q\njson(want): %q", string(gotJSON), string(wantJSON))
 		}
 		if g != nil && g.Error() != test.errText {
 			t.Errorf("CheckResponse: unexpected error message.\nGot:  %q\nwant: %q", g, test.errText)

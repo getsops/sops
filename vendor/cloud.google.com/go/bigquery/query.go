@@ -15,10 +15,10 @@
 package bigquery
 
 import (
+	"context"
 	"errors"
 
 	"cloud.google.com/go/internal/trace"
-	"golang.org/x/net/context"
 	bq "google.golang.org/api/bigquery/v2"
 )
 
@@ -254,7 +254,23 @@ func bqToQueryConfig(q *bq.JobConfiguration, c *Client) (*QueryConfig, error) {
 type QueryPriority string
 
 const (
-	BatchPriority       QueryPriority = "BATCH"
+	// BatchPriority specifies that the query should be scheduled with the
+	// batch priority.  BigQuery queues each batch query on your behalf, and
+	// starts the query as soon as idle resources are available, usually within
+	// a few minutes. If BigQuery hasn't started the query within 24 hours,
+	// BigQuery changes the job priority to interactive. Batch queries don't
+	// count towards your concurrent rate limit, which can make it easier to
+	// start many queries at once.
+	//
+	// More information can be found at https://cloud.google.com/bigquery/docs/running-queries#batchqueries.
+	BatchPriority QueryPriority = "BATCH"
+	// InteractivePriority specifies that the query should be scheduled with
+	// interactive priority, which means that the query is executed as soon as
+	// possible. Interactive queries count towards your concurrent rate limit
+	// and your daily limit. It is the default priority with which queries get
+	// executed.
+	//
+	// More information can be found at https://cloud.google.com/bigquery/docs/running-queries#queries.
 	InteractivePriority QueryPriority = "INTERACTIVE"
 )
 

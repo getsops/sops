@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewJobStreamClientWithBaseURI(baseURI string, subscriptionID string) JobStr
 // jobID - the job id.
 // jobStreamID - the job stream id.
 func (client JobStreamClient) Get(ctx context.Context, resourceGroupName string, automationAccountName string, jobID string, jobStreamID string) (result JobStream, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobStreamClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -126,6 +137,16 @@ func (client JobStreamClient) GetResponder(resp *http.Response) (result JobStrea
 // jobID - the job Id.
 // filter - the filter to apply on the operation.
 func (client JobStreamClient) ListByJob(ctx context.Context, resourceGroupName string, automationAccountName string, jobID string, filter string) (result JobStreamListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobStreamClient.ListByJob")
+		defer func() {
+			sc := -1
+			if result.jslr.Response.Response != nil {
+				sc = result.jslr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -202,8 +223,8 @@ func (client JobStreamClient) ListByJobResponder(resp *http.Response) (result Jo
 }
 
 // listByJobNextResults retrieves the next set of results, if any.
-func (client JobStreamClient) listByJobNextResults(lastResults JobStreamListResult) (result JobStreamListResult, err error) {
-	req, err := lastResults.jobStreamListResultPreparer()
+func (client JobStreamClient) listByJobNextResults(ctx context.Context, lastResults JobStreamListResult) (result JobStreamListResult, err error) {
+	req, err := lastResults.jobStreamListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "automation.JobStreamClient", "listByJobNextResults", nil, "Failure preparing next results request")
 	}
@@ -224,6 +245,16 @@ func (client JobStreamClient) listByJobNextResults(lastResults JobStreamListResu
 
 // ListByJobComplete enumerates all values, automatically crossing page boundaries as required.
 func (client JobStreamClient) ListByJobComplete(ctx context.Context, resourceGroupName string, automationAccountName string, jobID string, filter string) (result JobStreamListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/JobStreamClient.ListByJob")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByJob(ctx, resourceGroupName, automationAccountName, jobID, filter)
 	return
 }

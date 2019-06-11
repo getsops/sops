@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,25 +46,35 @@ func NewGroupUserClientWithBaseURI(baseURI string, subscriptionID string) GroupU
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // groupID - group identifier. Must be unique in the current API Management service instance.
-// UID - user identifier. Must be unique in the current API Management service instance.
-func (client GroupUserClient) CheckEntityExists(ctx context.Context, resourceGroupName string, serviceName string, groupID string, UID string) (result autorest.Response, err error) {
+// userID - user identifier. Must be unique in the current API Management service instance.
+func (client GroupUserClient) CheckEntityExists(ctx context.Context, resourceGroupName string, serviceName string, groupID string, userID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GroupUserClient.CheckEntityExists")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "serviceName", Name: validation.MinLength, Rule: 1, Chain: nil},
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
 		{TargetValue: groupID,
-			Constraints: []validation.Constraint{{Target: "groupID", Name: validation.MaxLength, Rule: 80, Chain: nil},
+			Constraints: []validation.Constraint{{Target: "groupID", Name: validation.MaxLength, Rule: 256, Chain: nil},
 				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "groupID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
-		{TargetValue: UID,
-			Constraints: []validation.Constraint{{Target: "UID", Name: validation.MaxLength, Rule: 80, Chain: nil},
-				{Target: "UID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "UID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+				{Target: "groupID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
+		{TargetValue: userID,
+			Constraints: []validation.Constraint{{Target: "userID", Name: validation.MaxLength, Rule: 80, Chain: nil},
+				{Target: "userID", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "userID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.GroupUserClient", "CheckEntityExists", err.Error())
 	}
 
-	req, err := client.CheckEntityExistsPreparer(ctx, resourceGroupName, serviceName, groupID, UID)
+	req, err := client.CheckEntityExistsPreparer(ctx, resourceGroupName, serviceName, groupID, userID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.GroupUserClient", "CheckEntityExists", nil, "Failure preparing request")
 		return
@@ -85,13 +96,13 @@ func (client GroupUserClient) CheckEntityExists(ctx context.Context, resourceGro
 }
 
 // CheckEntityExistsPreparer prepares the CheckEntityExists request.
-func (client GroupUserClient) CheckEntityExistsPreparer(ctx context.Context, resourceGroupName string, serviceName string, groupID string, UID string) (*http.Request, error) {
+func (client GroupUserClient) CheckEntityExistsPreparer(ctx context.Context, resourceGroupName string, serviceName string, groupID string, userID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"groupId":           autorest.Encode("path", groupID),
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
 		"serviceName":       autorest.Encode("path", serviceName),
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
-		"uid":               autorest.Encode("path", UID),
+		"userId":            autorest.Encode("path", userID),
 	}
 
 	const APIVersion = "2018-06-01-preview"
@@ -102,7 +113,7 @@ func (client GroupUserClient) CheckEntityExistsPreparer(ctx context.Context, res
 	preparer := autorest.CreatePreparer(
 		autorest.AsHead(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/groups/{groupId}/users/{uid}", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/groups/{groupId}/users/{userId}", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
@@ -126,30 +137,40 @@ func (client GroupUserClient) CheckEntityExistsResponder(resp *http.Response) (r
 	return
 }
 
-// Create adds a user to the specified group.
+// Create add existing user to existing group
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // groupID - group identifier. Must be unique in the current API Management service instance.
-// UID - user identifier. Must be unique in the current API Management service instance.
-func (client GroupUserClient) Create(ctx context.Context, resourceGroupName string, serviceName string, groupID string, UID string) (result UserContract, err error) {
+// userID - user identifier. Must be unique in the current API Management service instance.
+func (client GroupUserClient) Create(ctx context.Context, resourceGroupName string, serviceName string, groupID string, userID string) (result UserContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GroupUserClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "serviceName", Name: validation.MinLength, Rule: 1, Chain: nil},
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
 		{TargetValue: groupID,
-			Constraints: []validation.Constraint{{Target: "groupID", Name: validation.MaxLength, Rule: 80, Chain: nil},
+			Constraints: []validation.Constraint{{Target: "groupID", Name: validation.MaxLength, Rule: 256, Chain: nil},
 				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "groupID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
-		{TargetValue: UID,
-			Constraints: []validation.Constraint{{Target: "UID", Name: validation.MaxLength, Rule: 80, Chain: nil},
-				{Target: "UID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "UID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+				{Target: "groupID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
+		{TargetValue: userID,
+			Constraints: []validation.Constraint{{Target: "userID", Name: validation.MaxLength, Rule: 80, Chain: nil},
+				{Target: "userID", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "userID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.GroupUserClient", "Create", err.Error())
 	}
 
-	req, err := client.CreatePreparer(ctx, resourceGroupName, serviceName, groupID, UID)
+	req, err := client.CreatePreparer(ctx, resourceGroupName, serviceName, groupID, userID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.GroupUserClient", "Create", nil, "Failure preparing request")
 		return
@@ -171,13 +192,13 @@ func (client GroupUserClient) Create(ctx context.Context, resourceGroupName stri
 }
 
 // CreatePreparer prepares the Create request.
-func (client GroupUserClient) CreatePreparer(ctx context.Context, resourceGroupName string, serviceName string, groupID string, UID string) (*http.Request, error) {
+func (client GroupUserClient) CreatePreparer(ctx context.Context, resourceGroupName string, serviceName string, groupID string, userID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"groupId":           autorest.Encode("path", groupID),
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
 		"serviceName":       autorest.Encode("path", serviceName),
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
-		"uid":               autorest.Encode("path", UID),
+		"userId":            autorest.Encode("path", userID),
 	}
 
 	const APIVersion = "2018-06-01-preview"
@@ -188,7 +209,7 @@ func (client GroupUserClient) CreatePreparer(ctx context.Context, resourceGroupN
 	preparer := autorest.CreatePreparer(
 		autorest.AsPut(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/groups/{groupId}/users/{uid}", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/groups/{groupId}/users/{userId}", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
@@ -218,25 +239,35 @@ func (client GroupUserClient) CreateResponder(resp *http.Response) (result UserC
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // groupID - group identifier. Must be unique in the current API Management service instance.
-// UID - user identifier. Must be unique in the current API Management service instance.
-func (client GroupUserClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, groupID string, UID string) (result autorest.Response, err error) {
+// userID - user identifier. Must be unique in the current API Management service instance.
+func (client GroupUserClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, groupID string, userID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GroupUserClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "serviceName", Name: validation.MinLength, Rule: 1, Chain: nil},
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
 		{TargetValue: groupID,
-			Constraints: []validation.Constraint{{Target: "groupID", Name: validation.MaxLength, Rule: 80, Chain: nil},
+			Constraints: []validation.Constraint{{Target: "groupID", Name: validation.MaxLength, Rule: 256, Chain: nil},
 				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "groupID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
-		{TargetValue: UID,
-			Constraints: []validation.Constraint{{Target: "UID", Name: validation.MaxLength, Rule: 80, Chain: nil},
-				{Target: "UID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "UID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+				{Target: "groupID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
+		{TargetValue: userID,
+			Constraints: []validation.Constraint{{Target: "userID", Name: validation.MaxLength, Rule: 80, Chain: nil},
+				{Target: "userID", Name: validation.MinLength, Rule: 1, Chain: nil},
+				{Target: "userID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.GroupUserClient", "Delete", err.Error())
 	}
 
-	req, err := client.DeletePreparer(ctx, resourceGroupName, serviceName, groupID, UID)
+	req, err := client.DeletePreparer(ctx, resourceGroupName, serviceName, groupID, userID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.GroupUserClient", "Delete", nil, "Failure preparing request")
 		return
@@ -258,13 +289,13 @@ func (client GroupUserClient) Delete(ctx context.Context, resourceGroupName stri
 }
 
 // DeletePreparer prepares the Delete request.
-func (client GroupUserClient) DeletePreparer(ctx context.Context, resourceGroupName string, serviceName string, groupID string, UID string) (*http.Request, error) {
+func (client GroupUserClient) DeletePreparer(ctx context.Context, resourceGroupName string, serviceName string, groupID string, userID string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"groupId":           autorest.Encode("path", groupID),
 		"resourceGroupName": autorest.Encode("path", resourceGroupName),
 		"serviceName":       autorest.Encode("path", serviceName),
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
-		"uid":               autorest.Encode("path", UID),
+		"userId":            autorest.Encode("path", userID),
 	}
 
 	const APIVersion = "2018-06-01-preview"
@@ -275,7 +306,7 @@ func (client GroupUserClient) DeletePreparer(ctx context.Context, resourceGroupN
 	preparer := autorest.CreatePreparer(
 		autorest.AsDelete(),
 		autorest.WithBaseURL(client.BaseURI),
-		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/groups/{groupId}/users/{uid}", pathParameters),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/groups/{groupId}/users/{userId}", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
@@ -299,32 +330,42 @@ func (client GroupUserClient) DeleteResponder(resp *http.Response) (result autor
 	return
 }
 
-// List lists a collection of the members of the group, specified by its identifier.
+// List lists a collection of user entities associated with the group.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
 // groupID - group identifier. Must be unique in the current API Management service instance.
-// filter - | Field            | Supported operators    | Supported functions               |
-// |------------------|------------------------|-----------------------------------|
-// | id               | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | firstName        | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | lastName         | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | email            | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | state            | eq                     | N/A                               |
-// | registrationDate | ge, le, eq, ne, gt, lt | N/A                               |
-// | note             | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
+// filter - | Field       | Supported operators    | Supported functions               |
+// |-------------|------------------------|-----------------------------------|
+//
+// |name | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |firstName | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |lastName | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |email | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
+// |registrationDate | ge, le, eq, ne, gt, lt |    |
+// |note | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith|
 // top - number of records to return.
 // skip - number of records to skip.
 func (client GroupUserClient) List(ctx context.Context, resourceGroupName string, serviceName string, groupID string, filter string, top *int32, skip *int32) (result UserCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GroupUserClient.List")
+		defer func() {
+			sc := -1
+			if result.uc.Response.Response != nil {
+				sc = result.uc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "serviceName", Name: validation.MinLength, Rule: 1, Chain: nil},
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
 		{TargetValue: groupID,
-			Constraints: []validation.Constraint{{Target: "groupID", Name: validation.MaxLength, Rule: 80, Chain: nil},
+			Constraints: []validation.Constraint{{Target: "groupID", Name: validation.MaxLength, Rule: 256, Chain: nil},
 				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "groupID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
+				{Target: "groupID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "top", Name: validation.InclusiveMinimum, Rule: 1, Chain: nil}}}}},
@@ -408,8 +449,8 @@ func (client GroupUserClient) ListResponder(resp *http.Response) (result UserCol
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client GroupUserClient) listNextResults(lastResults UserCollection) (result UserCollection, err error) {
-	req, err := lastResults.userCollectionPreparer()
+func (client GroupUserClient) listNextResults(ctx context.Context, lastResults UserCollection) (result UserCollection, err error) {
+	req, err := lastResults.userCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.GroupUserClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -430,6 +471,16 @@ func (client GroupUserClient) listNextResults(lastResults UserCollection) (resul
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client GroupUserClient) ListComplete(ctx context.Context, resourceGroupName string, serviceName string, groupID string, filter string, top *int32, skip *int32) (result UserCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GroupUserClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, serviceName, groupID, filter, top, skip)
 	return
 }

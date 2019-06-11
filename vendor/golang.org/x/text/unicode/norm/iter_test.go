@@ -9,7 +9,7 @@ import (
 	"testing"
 )
 
-func doIterNorm(f Form, s string) []byte {
+func doIterNormString(f Form, s string) []byte {
 	acc := []byte{}
 	i := Iter{}
 	i.InitString(f, s)
@@ -19,7 +19,20 @@ func doIterNorm(f Form, s string) []byte {
 	return acc
 }
 
+func doIterNorm(f Form, s string) []byte {
+	acc := []byte{}
+	i := Iter{}
+	i.Init(f, []byte(s))
+	for !i.Done() {
+		acc = append(acc, i.Next()...)
+	}
+	return acc
+}
+
 func TestIterNext(t *testing.T) {
+	runNormTests(t, "IterNext", func(f Form, out []byte, s string) []byte {
+		return doIterNormString(f, string(append(out, s...)))
+	})
 	runNormTests(t, "IterNext", func(f Form, out []byte, s string) []byte {
 		return doIterNorm(f, string(append(out, s...)))
 	})

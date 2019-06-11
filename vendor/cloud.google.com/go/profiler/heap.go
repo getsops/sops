@@ -16,13 +16,12 @@ package profiler
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"runtime"
 	"time"
 
 	"github.com/google/pprof/profile"
-
-	"golang.org/x/net/context"
 )
 
 // heapProfile collects an in-use heap profile. The heap profiles returned by

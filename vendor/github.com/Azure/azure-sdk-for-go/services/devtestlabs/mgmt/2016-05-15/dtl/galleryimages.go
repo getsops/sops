@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewGalleryImagesClientWithBaseURI(baseURI string, subscriptionID string) Ga
 // top - the maximum number of resources to return from the operation.
 // orderby - the ordering expression for the results, using OData notation.
 func (client GalleryImagesClient) List(ctx context.Context, resourceGroupName string, labName string, expand string, filter string, top *int32, orderby string) (result ResponseWithContinuationGalleryImagePage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GalleryImagesClient.List")
+		defer func() {
+			sc := -1
+			if result.rwcgi.Response.Response != nil {
+				sc = result.rwcgi.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, labName, expand, filter, top, orderby)
 	if err != nil {
@@ -124,8 +135,8 @@ func (client GalleryImagesClient) ListResponder(resp *http.Response) (result Res
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client GalleryImagesClient) listNextResults(lastResults ResponseWithContinuationGalleryImage) (result ResponseWithContinuationGalleryImage, err error) {
-	req, err := lastResults.responseWithContinuationGalleryImagePreparer()
+func (client GalleryImagesClient) listNextResults(ctx context.Context, lastResults ResponseWithContinuationGalleryImage) (result ResponseWithContinuationGalleryImage, err error) {
+	req, err := lastResults.responseWithContinuationGalleryImagePreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "dtl.GalleryImagesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -146,6 +157,16 @@ func (client GalleryImagesClient) listNextResults(lastResults ResponseWithContin
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client GalleryImagesClient) ListComplete(ctx context.Context, resourceGroupName string, labName string, expand string, filter string, top *int32, orderby string) (result ResponseWithContinuationGalleryImageIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GalleryImagesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, labName, expand, filter, top, orderby)
 	return
 }

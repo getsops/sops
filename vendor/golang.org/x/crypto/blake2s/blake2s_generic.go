@@ -4,6 +4,10 @@
 
 package blake2s
 
+import (
+	"math/bits"
+)
+
 // the precomputed values for BLAKE2s
 // there are 10 16-byte arrays - one for each round
 // the entries are calculated from the sigma constants.
@@ -47,118 +51,118 @@ func hashBlocksGeneric(h *[8]uint32, c *[2]uint32, flag uint32, blocks []byte) {
 			v0 += m[s[0]]
 			v0 += v4
 			v12 ^= v0
-			v12 = v12<<(32-16) | v12>>16
+			v12 = bits.RotateLeft32(v12, -16)
 			v8 += v12
 			v4 ^= v8
-			v4 = v4<<(32-12) | v4>>12
+			v4 = bits.RotateLeft32(v4, -12)
 			v1 += m[s[1]]
 			v1 += v5
 			v13 ^= v1
-			v13 = v13<<(32-16) | v13>>16
+			v13 = bits.RotateLeft32(v13, -16)
 			v9 += v13
 			v5 ^= v9
-			v5 = v5<<(32-12) | v5>>12
+			v5 = bits.RotateLeft32(v5, -12)
 			v2 += m[s[2]]
 			v2 += v6
 			v14 ^= v2
-			v14 = v14<<(32-16) | v14>>16
+			v14 = bits.RotateLeft32(v14, -16)
 			v10 += v14
 			v6 ^= v10
-			v6 = v6<<(32-12) | v6>>12
+			v6 = bits.RotateLeft32(v6, -12)
 			v3 += m[s[3]]
 			v3 += v7
 			v15 ^= v3
-			v15 = v15<<(32-16) | v15>>16
+			v15 = bits.RotateLeft32(v15, -16)
 			v11 += v15
 			v7 ^= v11
-			v7 = v7<<(32-12) | v7>>12
+			v7 = bits.RotateLeft32(v7, -12)
 
 			v0 += m[s[4]]
 			v0 += v4
 			v12 ^= v0
-			v12 = v12<<(32-8) | v12>>8
+			v12 = bits.RotateLeft32(v12, -8)
 			v8 += v12
 			v4 ^= v8
-			v4 = v4<<(32-7) | v4>>7
+			v4 = bits.RotateLeft32(v4, -7)
 			v1 += m[s[5]]
 			v1 += v5
 			v13 ^= v1
-			v13 = v13<<(32-8) | v13>>8
+			v13 = bits.RotateLeft32(v13, -8)
 			v9 += v13
 			v5 ^= v9
-			v5 = v5<<(32-7) | v5>>7
+			v5 = bits.RotateLeft32(v5, -7)
 			v2 += m[s[6]]
 			v2 += v6
 			v14 ^= v2
-			v14 = v14<<(32-8) | v14>>8
+			v14 = bits.RotateLeft32(v14, -8)
 			v10 += v14
 			v6 ^= v10
-			v6 = v6<<(32-7) | v6>>7
+			v6 = bits.RotateLeft32(v6, -7)
 			v3 += m[s[7]]
 			v3 += v7
 			v15 ^= v3
-			v15 = v15<<(32-8) | v15>>8
+			v15 = bits.RotateLeft32(v15, -8)
 			v11 += v15
 			v7 ^= v11
-			v7 = v7<<(32-7) | v7>>7
+			v7 = bits.RotateLeft32(v7, -7)
 
 			v0 += m[s[8]]
 			v0 += v5
 			v15 ^= v0
-			v15 = v15<<(32-16) | v15>>16
+			v15 = bits.RotateLeft32(v15, -16)
 			v10 += v15
 			v5 ^= v10
-			v5 = v5<<(32-12) | v5>>12
+			v5 = bits.RotateLeft32(v5, -12)
 			v1 += m[s[9]]
 			v1 += v6
 			v12 ^= v1
-			v12 = v12<<(32-16) | v12>>16
+			v12 = bits.RotateLeft32(v12, -16)
 			v11 += v12
 			v6 ^= v11
-			v6 = v6<<(32-12) | v6>>12
+			v6 = bits.RotateLeft32(v6, -12)
 			v2 += m[s[10]]
 			v2 += v7
 			v13 ^= v2
-			v13 = v13<<(32-16) | v13>>16
+			v13 = bits.RotateLeft32(v13, -16)
 			v8 += v13
 			v7 ^= v8
-			v7 = v7<<(32-12) | v7>>12
+			v7 = bits.RotateLeft32(v7, -12)
 			v3 += m[s[11]]
 			v3 += v4
 			v14 ^= v3
-			v14 = v14<<(32-16) | v14>>16
+			v14 = bits.RotateLeft32(v14, -16)
 			v9 += v14
 			v4 ^= v9
-			v4 = v4<<(32-12) | v4>>12
+			v4 = bits.RotateLeft32(v4, -12)
 
 			v0 += m[s[12]]
 			v0 += v5
 			v15 ^= v0
-			v15 = v15<<(32-8) | v15>>8
+			v15 = bits.RotateLeft32(v15, -8)
 			v10 += v15
 			v5 ^= v10
-			v5 = v5<<(32-7) | v5>>7
+			v5 = bits.RotateLeft32(v5, -7)
 			v1 += m[s[13]]
 			v1 += v6
 			v12 ^= v1
-			v12 = v12<<(32-8) | v12>>8
+			v12 = bits.RotateLeft32(v12, -8)
 			v11 += v12
 			v6 ^= v11
-			v6 = v6<<(32-7) | v6>>7
+			v6 = bits.RotateLeft32(v6, -7)
 			v2 += m[s[14]]
 			v2 += v7
 			v13 ^= v2
-			v13 = v13<<(32-8) | v13>>8
+			v13 = bits.RotateLeft32(v13, -8)
 			v8 += v13
 			v7 ^= v8
-			v7 = v7<<(32-7) | v7>>7
+			v7 = bits.RotateLeft32(v7, -7)
 			v3 += m[s[15]]
 			v3 += v4
 			v14 ^= v3
-			v14 = v14<<(32-8) | v14>>8
+			v14 = bits.RotateLeft32(v14, -8)
 			v9 += v14
 			v4 ^= v9
-			v4 = v4<<(32-7) | v4>>7
+			v4 = bits.RotateLeft32(v4, -7)
 		}
 
 		h[0] ^= v0 ^ v8

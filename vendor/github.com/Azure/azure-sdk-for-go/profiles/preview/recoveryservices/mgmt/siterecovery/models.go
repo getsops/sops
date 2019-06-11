@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,13 +19,16 @@
 
 package siterecovery
 
-import original "github.com/Azure/azure-sdk-for-go/services/recoveryservices/mgmt/2018-01-10/siterecovery"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/recoveryservices/mgmt/2018-01-10/siterecovery"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
 type A2ARpRecoveryPointType = original.A2ARpRecoveryPointType
 
 const (
@@ -73,6 +76,29 @@ const (
 	NotSpecified      DisableProtectionReason = original.NotSpecified
 )
 
+type DiskAccountType = original.DiskAccountType
+
+const (
+	PremiumLRS     DiskAccountType = original.PremiumLRS
+	StandardLRS    DiskAccountType = original.StandardLRS
+	StandardSSDLRS DiskAccountType = original.StandardSSDLRS
+)
+
+type DiskType = original.DiskType
+
+const (
+	DiskTypePremiumLRS     DiskType = original.DiskTypePremiumLRS
+	DiskTypeStandardLRS    DiskType = original.DiskTypeStandardLRS
+	DiskTypeStandardSSDLRS DiskType = original.DiskTypeStandardSSDLRS
+)
+
+type EthernetAddressType = original.EthernetAddressType
+
+const (
+	Dynamic EthernetAddressType = original.Dynamic
+	Static  EthernetAddressType = original.Static
+)
+
 type FailoverDeploymentModel = original.FailoverDeploymentModel
 
 const (
@@ -99,12 +125,6 @@ const (
 	HyperVReplicaAzureRpRecoveryPointTypeLatest                      HyperVReplicaAzureRpRecoveryPointType = original.HyperVReplicaAzureRpRecoveryPointTypeLatest
 	HyperVReplicaAzureRpRecoveryPointTypeLatestApplicationConsistent HyperVReplicaAzureRpRecoveryPointType = original.HyperVReplicaAzureRpRecoveryPointTypeLatestApplicationConsistent
 	HyperVReplicaAzureRpRecoveryPointTypeLatestProcessed             HyperVReplicaAzureRpRecoveryPointType = original.HyperVReplicaAzureRpRecoveryPointTypeLatestProcessed
-)
-
-type IdentityProviderType = original.IdentityProviderType
-
-const (
-	RecoveryServicesActiveDirectory IdentityProviderType = original.RecoveryServicesActiveDirectory
 )
 
 type InMageV2RpRecoveryPointType = original.InMageV2RpRecoveryPointType
@@ -140,6 +160,13 @@ type InstanceTypeBasicDisableProtectionProviderSpecificInput = original.Instance
 const (
 	InstanceTypeDisableProtectionProviderSpecificInput InstanceTypeBasicDisableProtectionProviderSpecificInput = original.InstanceTypeDisableProtectionProviderSpecificInput
 	InstanceTypeInMage                                 InstanceTypeBasicDisableProtectionProviderSpecificInput = original.InstanceTypeInMage
+)
+
+type InstanceTypeBasicEnableMigrationProviderSpecificInput = original.InstanceTypeBasicEnableMigrationProviderSpecificInput
+
+const (
+	InstanceTypeEnableMigrationProviderSpecificInput InstanceTypeBasicEnableMigrationProviderSpecificInput = original.InstanceTypeEnableMigrationProviderSpecificInput
+	InstanceTypeVMwareCbt                            InstanceTypeBasicEnableMigrationProviderSpecificInput = original.InstanceTypeVMwareCbt
 )
 
 type InstanceTypeBasicEnableProtectionProviderSpecificInput = original.InstanceTypeBasicEnableProtectionProviderSpecificInput
@@ -229,6 +256,20 @@ const (
 	InstanceTypeTestFailoverJobDetails     InstanceTypeBasicJobDetails = original.InstanceTypeTestFailoverJobDetails
 )
 
+type InstanceTypeBasicMigrateProviderSpecificInput = original.InstanceTypeBasicMigrateProviderSpecificInput
+
+const (
+	InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeMigrateProviderSpecificInput InstanceTypeBasicMigrateProviderSpecificInput = original.InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeMigrateProviderSpecificInput
+	InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeVMwareCbt                    InstanceTypeBasicMigrateProviderSpecificInput = original.InstanceTypeBasicMigrateProviderSpecificInputInstanceTypeVMwareCbt
+)
+
+type InstanceTypeBasicMigrationProviderSpecificSettings = original.InstanceTypeBasicMigrationProviderSpecificSettings
+
+const (
+	InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeMigrationProviderSpecificSettings InstanceTypeBasicMigrationProviderSpecificSettings = original.InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeMigrationProviderSpecificSettings
+	InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeVMwareCbt                         InstanceTypeBasicMigrationProviderSpecificSettings = original.InstanceTypeBasicMigrationProviderSpecificSettingsInstanceTypeVMwareCbt
+)
+
 type InstanceTypeBasicNetworkMappingFabricSpecificSettings = original.InstanceTypeBasicNetworkMappingFabricSpecificSettings
 
 const (
@@ -272,6 +313,7 @@ type InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails = origin
 const (
 	InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeA2A                                               InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails = original.InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeA2A
 	InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeProtectionContainerMappingProviderSpecificDetails InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails = original.InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeProtectionContainerMappingProviderSpecificDetails
+	InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeVMwareCbt                                         InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails = original.InstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsInstanceTypeVMwareCbt
 )
 
 type InstanceTypeBasicProviderSpecificFailoverInput = original.InstanceTypeBasicProviderSpecificFailoverInput
@@ -316,8 +358,9 @@ const (
 type InstanceTypeBasicReplicationProviderSpecificContainerCreationInput = original.InstanceTypeBasicReplicationProviderSpecificContainerCreationInput
 
 const (
-	InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeA2A                                               InstanceTypeBasicReplicationProviderSpecificContainerCreationInput = original.InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeA2A
-	InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeReplicationProviderSpecificContainerCreationInput InstanceTypeBasicReplicationProviderSpecificContainerCreationInput = original.InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeReplicationProviderSpecificContainerCreationInput
+	InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeA2A                                                                                  InstanceTypeBasicReplicationProviderSpecificContainerCreationInput = original.InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeA2A
+	InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeReplicationProviderSpecificContainerCreationInput                                    InstanceTypeBasicReplicationProviderSpecificContainerCreationInput = original.InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeReplicationProviderSpecificContainerCreationInput
+	InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeSixcSevendaFourFiveFiveFiveZeroSixfFourThreeffAOneSixaEightebOneZeroOneaebbSevenZero InstanceTypeBasicReplicationProviderSpecificContainerCreationInput = original.InstanceTypeBasicReplicationProviderSpecificContainerCreationInputInstanceTypeSixcSevendaFourFiveFiveFiveZeroSixfFourThreeffAOneSixaEightebOneZeroOneaebbSevenZero
 )
 
 type InstanceTypeBasicReplicationProviderSpecificContainerMappingInput = original.InstanceTypeBasicReplicationProviderSpecificContainerMappingInput
@@ -325,6 +368,7 @@ type InstanceTypeBasicReplicationProviderSpecificContainerMappingInput = origina
 const (
 	InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeA2A                                              InstanceTypeBasicReplicationProviderSpecificContainerMappingInput = original.InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeA2A
 	InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeReplicationProviderSpecificContainerMappingInput InstanceTypeBasicReplicationProviderSpecificContainerMappingInput = original.InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeReplicationProviderSpecificContainerMappingInput
+	InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeVMwareCbt                                        InstanceTypeBasicReplicationProviderSpecificContainerMappingInput = original.InstanceTypeBasicReplicationProviderSpecificContainerMappingInputInstanceTypeVMwareCbt
 )
 
 type InstanceTypeBasicReplicationProviderSpecificSettings = original.InstanceTypeBasicReplicationProviderSpecificSettings
@@ -378,6 +422,20 @@ const (
 	InstanceTypeVMNicUpdatesTaskDetails           InstanceTypeBasicTaskTypeDetails = original.InstanceTypeVMNicUpdatesTaskDetails
 )
 
+type InstanceTypeBasicTestMigrateProviderSpecificInput = original.InstanceTypeBasicTestMigrateProviderSpecificInput
+
+const (
+	InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeTestMigrateProviderSpecificInput InstanceTypeBasicTestMigrateProviderSpecificInput = original.InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeTestMigrateProviderSpecificInput
+	InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeVMwareCbt                        InstanceTypeBasicTestMigrateProviderSpecificInput = original.InstanceTypeBasicTestMigrateProviderSpecificInputInstanceTypeVMwareCbt
+)
+
+type InstanceTypeBasicUpdateMigrationItemProviderSpecificInput = original.InstanceTypeBasicUpdateMigrationItemProviderSpecificInput
+
+const (
+	InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeUpdateMigrationItemProviderSpecificInput InstanceTypeBasicUpdateMigrationItemProviderSpecificInput = original.InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeUpdateMigrationItemProviderSpecificInput
+	InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeVMwareCbt                                InstanceTypeBasicUpdateMigrationItemProviderSpecificInput = original.InstanceTypeBasicUpdateMigrationItemProviderSpecificInputInstanceTypeVMwareCbt
+)
+
 type InstanceTypeBasicUpdateReplicationProtectedItemProviderInput = original.InstanceTypeBasicUpdateReplicationProtectedItemProviderInput
 
 const (
@@ -393,6 +451,39 @@ const (
 	LicenseTypeNoLicenseType LicenseType = original.LicenseTypeNoLicenseType
 	LicenseTypeNotSpecified  LicenseType = original.LicenseTypeNotSpecified
 	LicenseTypeWindowsServer LicenseType = original.LicenseTypeWindowsServer
+)
+
+type MigrationItemOperation = original.MigrationItemOperation
+
+const (
+	DisableMigration   MigrationItemOperation = original.DisableMigration
+	Migrate            MigrationItemOperation = original.Migrate
+	TestMigrate        MigrationItemOperation = original.TestMigrate
+	TestMigrateCleanup MigrationItemOperation = original.TestMigrateCleanup
+)
+
+type MigrationRecoveryPointType = original.MigrationRecoveryPointType
+
+const (
+	MigrationRecoveryPointTypeApplicationConsistent MigrationRecoveryPointType = original.MigrationRecoveryPointTypeApplicationConsistent
+	MigrationRecoveryPointTypeCrashConsistent       MigrationRecoveryPointType = original.MigrationRecoveryPointTypeCrashConsistent
+	MigrationRecoveryPointTypeNotSpecified          MigrationRecoveryPointType = original.MigrationRecoveryPointTypeNotSpecified
+)
+
+type MigrationState = original.MigrationState
+
+const (
+	MigrationStateDisableMigrationFailed     MigrationState = original.MigrationStateDisableMigrationFailed
+	MigrationStateDisableMigrationInProgress MigrationState = original.MigrationStateDisableMigrationInProgress
+	MigrationStateEnableMigrationFailed      MigrationState = original.MigrationStateEnableMigrationFailed
+	MigrationStateEnableMigrationInProgress  MigrationState = original.MigrationStateEnableMigrationInProgress
+	MigrationStateInitialSeedingFailed       MigrationState = original.MigrationStateInitialSeedingFailed
+	MigrationStateInitialSeedingInProgress   MigrationState = original.MigrationStateInitialSeedingInProgress
+	MigrationStateMigrationFailed            MigrationState = original.MigrationStateMigrationFailed
+	MigrationStateMigrationInProgress        MigrationState = original.MigrationStateMigrationInProgress
+	MigrationStateMigrationSucceeded         MigrationState = original.MigrationStateMigrationSucceeded
+	MigrationStateNone                       MigrationState = original.MigrationStateNone
+	MigrationStateReplicating                MigrationState = original.MigrationStateReplicating
 )
 
 type MultiVMGroupCreateOption = original.MultiVMGroupCreateOption
@@ -510,6 +601,16 @@ const (
 	Required    SourceSiteOperations = original.Required
 )
 
+type TestMigrationState = original.TestMigrationState
+
+const (
+	TestMigrationStateNone                           TestMigrationState = original.TestMigrationStateNone
+	TestMigrationStateTestMigrationCleanupInProgress TestMigrationState = original.TestMigrationStateTestMigrationCleanupInProgress
+	TestMigrationStateTestMigrationFailed            TestMigrationState = original.TestMigrationStateTestMigrationFailed
+	TestMigrationStateTestMigrationInProgress        TestMigrationState = original.TestMigrationStateTestMigrationInProgress
+	TestMigrationStateTestMigrationSucceeded         TestMigrationState = original.TestMigrationStateTestMigrationSucceeded
+)
+
 type A2AApplyRecoveryPointInput = original.A2AApplyRecoveryPointInput
 type A2AContainerCreationInput = original.A2AContainerCreationInput
 type A2AContainerMappingInput = original.A2AContainerMappingInput
@@ -530,6 +631,9 @@ type A2AUpdateReplicationProtectedItemInput = original.A2AUpdateReplicationProte
 type A2AVMDiskInputDetails = original.A2AVMDiskInputDetails
 type A2AVMManagedDiskInputDetails = original.A2AVMManagedDiskInputDetails
 type A2AVMManagedDiskUpdateDetails = original.A2AVMManagedDiskUpdateDetails
+type ASRTask = original.ASRTask
+type AddRecoveryServicesProviderInput = original.AddRecoveryServicesProviderInput
+type AddRecoveryServicesProviderInputProperties = original.AddRecoveryServicesProviderInputProperties
 type AddVCenterRequest = original.AddVCenterRequest
 type AddVCenterRequestProperties = original.AddVCenterRequestProperties
 type Alert = original.Alert
@@ -539,10 +643,8 @@ type AlertCollectionPage = original.AlertCollectionPage
 type AlertProperties = original.AlertProperties
 type ApplyRecoveryPointInput = original.ApplyRecoveryPointInput
 type ApplyRecoveryPointInputProperties = original.ApplyRecoveryPointInputProperties
-type BasicApplyRecoveryPointProviderSpecificInput = original.BasicApplyRecoveryPointProviderSpecificInput
 type ApplyRecoveryPointProviderSpecificInput = original.ApplyRecoveryPointProviderSpecificInput
 type AsrJobDetails = original.AsrJobDetails
-type ASRTask = original.ASRTask
 type AutomationRunbookTaskDetails = original.AutomationRunbookTaskDetails
 type AzureFabricCreationInput = original.AzureFabricCreationInput
 type AzureFabricSpecificDetails = original.AzureFabricSpecificDetails
@@ -551,8 +653,41 @@ type AzureToAzureNetworkMappingSettings = original.AzureToAzureNetworkMappingSet
 type AzureToAzureUpdateNetworkMappingInput = original.AzureToAzureUpdateNetworkMappingInput
 type AzureToAzureVMSyncedConfigDetails = original.AzureToAzureVMSyncedConfigDetails
 type AzureVMDiskDetails = original.AzureVMDiskDetails
-type ComputeSizeErrorDetails = original.ComputeSizeErrorDetails
+type BaseClient = original.BaseClient
+type BasicApplyRecoveryPointProviderSpecificInput = original.BasicApplyRecoveryPointProviderSpecificInput
 type BasicConfigurationSettings = original.BasicConfigurationSettings
+type BasicDisableProtectionProviderSpecificInput = original.BasicDisableProtectionProviderSpecificInput
+type BasicEnableMigrationProviderSpecificInput = original.BasicEnableMigrationProviderSpecificInput
+type BasicEnableProtectionProviderSpecificInput = original.BasicEnableProtectionProviderSpecificInput
+type BasicEventProviderSpecificDetails = original.BasicEventProviderSpecificDetails
+type BasicEventSpecificDetails = original.BasicEventSpecificDetails
+type BasicFabricSpecificCreateNetworkMappingInput = original.BasicFabricSpecificCreateNetworkMappingInput
+type BasicFabricSpecificCreationInput = original.BasicFabricSpecificCreationInput
+type BasicFabricSpecificDetails = original.BasicFabricSpecificDetails
+type BasicFabricSpecificUpdateNetworkMappingInput = original.BasicFabricSpecificUpdateNetworkMappingInput
+type BasicGroupTaskDetails = original.BasicGroupTaskDetails
+type BasicJobDetails = original.BasicJobDetails
+type BasicMigrateProviderSpecificInput = original.BasicMigrateProviderSpecificInput
+type BasicMigrationProviderSpecificSettings = original.BasicMigrationProviderSpecificSettings
+type BasicNetworkMappingFabricSpecificSettings = original.BasicNetworkMappingFabricSpecificSettings
+type BasicPolicyProviderSpecificDetails = original.BasicPolicyProviderSpecificDetails
+type BasicPolicyProviderSpecificInput = original.BasicPolicyProviderSpecificInput
+type BasicProtectionContainerMappingProviderSpecificDetails = original.BasicProtectionContainerMappingProviderSpecificDetails
+type BasicProviderSpecificFailoverInput = original.BasicProviderSpecificFailoverInput
+type BasicProviderSpecificRecoveryPointDetails = original.BasicProviderSpecificRecoveryPointDetails
+type BasicRecoveryPlanActionDetails = original.BasicRecoveryPlanActionDetails
+type BasicRecoveryPlanProviderSpecificFailoverInput = original.BasicRecoveryPlanProviderSpecificFailoverInput
+type BasicReplicationProviderSpecificContainerCreationInput = original.BasicReplicationProviderSpecificContainerCreationInput
+type BasicReplicationProviderSpecificContainerMappingInput = original.BasicReplicationProviderSpecificContainerMappingInput
+type BasicReplicationProviderSpecificSettings = original.BasicReplicationProviderSpecificSettings
+type BasicReplicationProviderSpecificUpdateContainerMappingInput = original.BasicReplicationProviderSpecificUpdateContainerMappingInput
+type BasicReverseReplicationProviderSpecificInput = original.BasicReverseReplicationProviderSpecificInput
+type BasicSwitchProtectionProviderSpecificInput = original.BasicSwitchProtectionProviderSpecificInput
+type BasicTaskTypeDetails = original.BasicTaskTypeDetails
+type BasicTestMigrateProviderSpecificInput = original.BasicTestMigrateProviderSpecificInput
+type BasicUpdateMigrationItemProviderSpecificInput = original.BasicUpdateMigrationItemProviderSpecificInput
+type BasicUpdateReplicationProtectedItemProviderInput = original.BasicUpdateReplicationProtectedItemProviderInput
+type ComputeSizeErrorDetails = original.ComputeSizeErrorDetails
 type ConfigurationSettings = original.ConfigurationSettings
 type ConfigureAlertRequest = original.ConfigureAlertRequest
 type ConfigureAlertRequestProperties = original.ConfigureAlertRequestProperties
@@ -567,11 +702,11 @@ type CreateProtectionContainerMappingInput = original.CreateProtectionContainerM
 type CreateProtectionContainerMappingInputProperties = original.CreateProtectionContainerMappingInputProperties
 type CreateRecoveryPlanInput = original.CreateRecoveryPlanInput
 type CreateRecoveryPlanInputProperties = original.CreateRecoveryPlanInputProperties
+type CurrentJobDetails = original.CurrentJobDetails
 type CurrentScenarioDetails = original.CurrentScenarioDetails
 type DataStore = original.DataStore
 type DisableProtectionInput = original.DisableProtectionInput
 type DisableProtectionInputProperties = original.DisableProtectionInputProperties
-type BasicDisableProtectionProviderSpecificInput = original.BasicDisableProtectionProviderSpecificInput
 type DisableProtectionProviderSpecificInput = original.DisableProtectionProviderSpecificInput
 type DiscoverProtectableItemRequest = original.DiscoverProtectableItemRequest
 type DiscoverProtectableItemRequestProperties = original.DiscoverProtectableItemRequestProperties
@@ -580,9 +715,11 @@ type DiskEncryptionInfo = original.DiskEncryptionInfo
 type DiskEncryptionKeyInfo = original.DiskEncryptionKeyInfo
 type DiskVolumeDetails = original.DiskVolumeDetails
 type Display = original.Display
+type EnableMigrationInput = original.EnableMigrationInput
+type EnableMigrationInputProperties = original.EnableMigrationInputProperties
+type EnableMigrationProviderSpecificInput = original.EnableMigrationProviderSpecificInput
 type EnableProtectionInput = original.EnableProtectionInput
 type EnableProtectionInputProperties = original.EnableProtectionInputProperties
-type BasicEnableProtectionProviderSpecificInput = original.BasicEnableProtectionProviderSpecificInput
 type EnableProtectionProviderSpecificInput = original.EnableProtectionProviderSpecificInput
 type EncryptionDetails = original.EncryptionDetails
 type Event = original.Event
@@ -590,10 +727,8 @@ type EventCollection = original.EventCollection
 type EventCollectionIterator = original.EventCollectionIterator
 type EventCollectionPage = original.EventCollectionPage
 type EventProperties = original.EventProperties
-type BasicEventProviderSpecificDetails = original.BasicEventProviderSpecificDetails
 type EventProviderSpecificDetails = original.EventProviderSpecificDetails
 type EventQueryParameter = original.EventQueryParameter
-type BasicEventSpecificDetails = original.BasicEventSpecificDetails
 type EventSpecificDetails = original.EventSpecificDetails
 type ExportJobDetails = original.ExportJobDetails
 type Fabric = original.Fabric
@@ -604,19 +739,14 @@ type FabricCreationInput = original.FabricCreationInput
 type FabricCreationInputProperties = original.FabricCreationInputProperties
 type FabricProperties = original.FabricProperties
 type FabricReplicationGroupTaskDetails = original.FabricReplicationGroupTaskDetails
-type BasicFabricSpecificCreateNetworkMappingInput = original.BasicFabricSpecificCreateNetworkMappingInput
 type FabricSpecificCreateNetworkMappingInput = original.FabricSpecificCreateNetworkMappingInput
-type BasicFabricSpecificCreationInput = original.BasicFabricSpecificCreationInput
 type FabricSpecificCreationInput = original.FabricSpecificCreationInput
-type BasicFabricSpecificDetails = original.BasicFabricSpecificDetails
 type FabricSpecificDetails = original.FabricSpecificDetails
-type BasicFabricSpecificUpdateNetworkMappingInput = original.BasicFabricSpecificUpdateNetworkMappingInput
 type FabricSpecificUpdateNetworkMappingInput = original.FabricSpecificUpdateNetworkMappingInput
 type FailoverJobDetails = original.FailoverJobDetails
 type FailoverProcessServerRequest = original.FailoverProcessServerRequest
 type FailoverProcessServerRequestProperties = original.FailoverProcessServerRequestProperties
 type FailoverReplicationProtectedItemDetails = original.FailoverReplicationProtectedItemDetails
-type BasicGroupTaskDetails = original.BasicGroupTaskDetails
 type GroupTaskDetails = original.GroupTaskDetails
 type HealthError = original.HealthError
 type HealthErrorSummary = original.HealthErrorSummary
@@ -643,10 +773,8 @@ type HyperVReplicaPolicyInput = original.HyperVReplicaPolicyInput
 type HyperVReplicaReplicationDetails = original.HyperVReplicaReplicationDetails
 type HyperVSiteDetails = original.HyperVSiteDetails
 type HyperVVirtualMachineDetails = original.HyperVVirtualMachineDetails
-type IdentityInformation = original.IdentityInformation
-type InconsistentVMDetails = original.InconsistentVMDetails
-type InitialReplicationDetails = original.InitialReplicationDetails
-type InlineWorkflowTaskDetails = original.InlineWorkflowTaskDetails
+type IdentityProviderDetails = original.IdentityProviderDetails
+type IdentityProviderInput = original.IdentityProviderInput
 type InMageAgentDetails = original.InMageAgentDetails
 type InMageAgentVersionDetails = original.InMageAgentVersionDetails
 type InMageAzureV2ApplyRecoveryPointInput = original.InMageAzureV2ApplyRecoveryPointInput
@@ -673,13 +801,15 @@ type InMageProtectedDiskDetails = original.InMageProtectedDiskDetails
 type InMageReplicationDetails = original.InMageReplicationDetails
 type InMageReprotectInput = original.InMageReprotectInput
 type InMageVolumeExclusionOptions = original.InMageVolumeExclusionOptions
+type InconsistentVMDetails = original.InconsistentVMDetails
+type InitialReplicationDetails = original.InitialReplicationDetails
+type InlineWorkflowTaskDetails = original.InlineWorkflowTaskDetails
 type InnerHealthError = original.InnerHealthError
 type InputEndpoint = original.InputEndpoint
 type Job = original.Job
 type JobCollection = original.JobCollection
 type JobCollectionIterator = original.JobCollectionIterator
 type JobCollectionPage = original.JobCollectionPage
-type BasicJobDetails = original.BasicJobDetails
 type JobDetails = original.JobDetails
 type JobEntity = original.JobEntity
 type JobErrorDetails = original.JobErrorDetails
@@ -695,6 +825,22 @@ type LogicalNetworkCollectionPage = original.LogicalNetworkCollectionPage
 type LogicalNetworkProperties = original.LogicalNetworkProperties
 type ManualActionTaskDetails = original.ManualActionTaskDetails
 type MasterTargetServer = original.MasterTargetServer
+type MigrateInput = original.MigrateInput
+type MigrateInputProperties = original.MigrateInputProperties
+type MigrateProviderSpecificInput = original.MigrateProviderSpecificInput
+type MigrationItem = original.MigrationItem
+type MigrationItemCollection = original.MigrationItemCollection
+type MigrationItemCollectionIterator = original.MigrationItemCollectionIterator
+type MigrationItemCollectionPage = original.MigrationItemCollectionPage
+type MigrationItemProperties = original.MigrationItemProperties
+type MigrationItemsQueryParameter = original.MigrationItemsQueryParameter
+type MigrationProviderSpecificSettings = original.MigrationProviderSpecificSettings
+type MigrationRecoveryPoint = original.MigrationRecoveryPoint
+type MigrationRecoveryPointCollection = original.MigrationRecoveryPointCollection
+type MigrationRecoveryPointCollectionIterator = original.MigrationRecoveryPointCollectionIterator
+type MigrationRecoveryPointCollectionPage = original.MigrationRecoveryPointCollectionPage
+type MigrationRecoveryPointProperties = original.MigrationRecoveryPointProperties
+type MigrationRecoveryPointsClient = original.MigrationRecoveryPointsClient
 type MobilityServiceUpdate = original.MobilityServiceUpdate
 type Network = original.Network
 type NetworkCollection = original.NetworkCollection
@@ -704,16 +850,16 @@ type NetworkMapping = original.NetworkMapping
 type NetworkMappingCollection = original.NetworkMappingCollection
 type NetworkMappingCollectionIterator = original.NetworkMappingCollectionIterator
 type NetworkMappingCollectionPage = original.NetworkMappingCollectionPage
-type BasicNetworkMappingFabricSpecificSettings = original.BasicNetworkMappingFabricSpecificSettings
 type NetworkMappingFabricSpecificSettings = original.NetworkMappingFabricSpecificSettings
 type NetworkMappingProperties = original.NetworkMappingProperties
 type NetworkProperties = original.NetworkProperties
+type OSDetails = original.OSDetails
+type OSDiskDetails = original.OSDiskDetails
+type OperationsClient = original.OperationsClient
 type OperationsDiscovery = original.OperationsDiscovery
 type OperationsDiscoveryCollection = original.OperationsDiscoveryCollection
 type OperationsDiscoveryCollectionIterator = original.OperationsDiscoveryCollectionIterator
 type OperationsDiscoveryCollectionPage = original.OperationsDiscoveryCollectionPage
-type OSDetails = original.OSDetails
-type OSDiskDetails = original.OSDiskDetails
 type PlannedFailoverInput = original.PlannedFailoverInput
 type PlannedFailoverInputProperties = original.PlannedFailoverInputProperties
 type Policy = original.Policy
@@ -721,9 +867,7 @@ type PolicyCollection = original.PolicyCollection
 type PolicyCollectionIterator = original.PolicyCollectionIterator
 type PolicyCollectionPage = original.PolicyCollectionPage
 type PolicyProperties = original.PolicyProperties
-type BasicPolicyProviderSpecificDetails = original.BasicPolicyProviderSpecificDetails
 type PolicyProviderSpecificDetails = original.PolicyProviderSpecificDetails
-type BasicPolicyProviderSpecificInput = original.BasicPolicyProviderSpecificInput
 type PolicyProviderSpecificInput = original.PolicyProviderSpecificInput
 type ProcessServer = original.ProcessServer
 type ProtectableItem = original.ProtectableItem
@@ -743,19 +887,15 @@ type ProtectionContainerMappingCollection = original.ProtectionContainerMappingC
 type ProtectionContainerMappingCollectionIterator = original.ProtectionContainerMappingCollectionIterator
 type ProtectionContainerMappingCollectionPage = original.ProtectionContainerMappingCollectionPage
 type ProtectionContainerMappingProperties = original.ProtectionContainerMappingProperties
-type BasicProtectionContainerMappingProviderSpecificDetails = original.BasicProtectionContainerMappingProviderSpecificDetails
 type ProtectionContainerMappingProviderSpecificDetails = original.ProtectionContainerMappingProviderSpecificDetails
 type ProtectionContainerProperties = original.ProtectionContainerProperties
 type ProviderError = original.ProviderError
-type BasicProviderSpecificFailoverInput = original.BasicProviderSpecificFailoverInput
 type ProviderSpecificFailoverInput = original.ProviderSpecificFailoverInput
-type BasicProviderSpecificRecoveryPointDetails = original.BasicProviderSpecificRecoveryPointDetails
 type ProviderSpecificRecoveryPointDetails = original.ProviderSpecificRecoveryPointDetails
 type RcmAzureMigrationPolicyDetails = original.RcmAzureMigrationPolicyDetails
 type RecoveryPlan = original.RecoveryPlan
 type RecoveryPlanA2AFailoverInput = original.RecoveryPlanA2AFailoverInput
 type RecoveryPlanAction = original.RecoveryPlanAction
-type BasicRecoveryPlanActionDetails = original.BasicRecoveryPlanActionDetails
 type RecoveryPlanActionDetails = original.RecoveryPlanActionDetails
 type RecoveryPlanAutomationRunbookActionDetails = original.RecoveryPlanAutomationRunbookActionDetails
 type RecoveryPlanCollection = original.RecoveryPlanCollection
@@ -772,7 +912,6 @@ type RecoveryPlanPlannedFailoverInput = original.RecoveryPlanPlannedFailoverInpu
 type RecoveryPlanPlannedFailoverInputProperties = original.RecoveryPlanPlannedFailoverInputProperties
 type RecoveryPlanProperties = original.RecoveryPlanProperties
 type RecoveryPlanProtectedItem = original.RecoveryPlanProtectedItem
-type BasicRecoveryPlanProviderSpecificFailoverInput = original.BasicRecoveryPlanProviderSpecificFailoverInput
 type RecoveryPlanProviderSpecificFailoverInput = original.RecoveryPlanProviderSpecificFailoverInput
 type RecoveryPlanScriptActionDetails = original.RecoveryPlanScriptActionDetails
 type RecoveryPlanShutdownGroupTaskDetails = original.RecoveryPlanShutdownGroupTaskDetails
@@ -787,6 +926,7 @@ type RecoveryPointCollection = original.RecoveryPointCollection
 type RecoveryPointCollectionIterator = original.RecoveryPointCollectionIterator
 type RecoveryPointCollectionPage = original.RecoveryPointCollectionPage
 type RecoveryPointProperties = original.RecoveryPointProperties
+type RecoveryPointsClient = original.RecoveryPointsClient
 type RecoveryServicesProvider = original.RecoveryServicesProvider
 type RecoveryServicesProviderCollection = original.RecoveryServicesProviderCollection
 type RecoveryServicesProviderCollectionIterator = original.RecoveryServicesProviderCollectionIterator
@@ -796,7 +936,10 @@ type RemoveProtectionContainerMappingInput = original.RemoveProtectionContainerM
 type RemoveProtectionContainerMappingInputProperties = original.RemoveProtectionContainerMappingInputProperties
 type RenewCertificateInput = original.RenewCertificateInput
 type RenewCertificateInputProperties = original.RenewCertificateInputProperties
+type ReplicationAlertSettingsClient = original.ReplicationAlertSettingsClient
+type ReplicationEventsClient = original.ReplicationEventsClient
 type ReplicationFabricsCheckConsistencyFuture = original.ReplicationFabricsCheckConsistencyFuture
+type ReplicationFabricsClient = original.ReplicationFabricsClient
 type ReplicationFabricsCreateFuture = original.ReplicationFabricsCreateFuture
 type ReplicationFabricsDeleteFuture = original.ReplicationFabricsDeleteFuture
 type ReplicationFabricsMigrateToAadFuture = original.ReplicationFabricsMigrateToAadFuture
@@ -805,21 +948,35 @@ type ReplicationFabricsReassociateGatewayFuture = original.ReplicationFabricsRea
 type ReplicationFabricsRenewCertificateFuture = original.ReplicationFabricsRenewCertificateFuture
 type ReplicationGroupDetails = original.ReplicationGroupDetails
 type ReplicationJobsCancelFuture = original.ReplicationJobsCancelFuture
+type ReplicationJobsClient = original.ReplicationJobsClient
 type ReplicationJobsExportFuture = original.ReplicationJobsExportFuture
 type ReplicationJobsRestartFuture = original.ReplicationJobsRestartFuture
 type ReplicationJobsResumeFuture = original.ReplicationJobsResumeFuture
+type ReplicationLogicalNetworksClient = original.ReplicationLogicalNetworksClient
+type ReplicationMigrationItemsClient = original.ReplicationMigrationItemsClient
+type ReplicationMigrationItemsCreateFuture = original.ReplicationMigrationItemsCreateFuture
+type ReplicationMigrationItemsDeleteFuture = original.ReplicationMigrationItemsDeleteFuture
+type ReplicationMigrationItemsMigrateFuture = original.ReplicationMigrationItemsMigrateFuture
+type ReplicationMigrationItemsTestMigrateCleanupFuture = original.ReplicationMigrationItemsTestMigrateCleanupFuture
+type ReplicationMigrationItemsTestMigrateFuture = original.ReplicationMigrationItemsTestMigrateFuture
+type ReplicationMigrationItemsUpdateFuture = original.ReplicationMigrationItemsUpdateFuture
+type ReplicationNetworkMappingsClient = original.ReplicationNetworkMappingsClient
 type ReplicationNetworkMappingsCreateFuture = original.ReplicationNetworkMappingsCreateFuture
 type ReplicationNetworkMappingsDeleteFuture = original.ReplicationNetworkMappingsDeleteFuture
 type ReplicationNetworkMappingsUpdateFuture = original.ReplicationNetworkMappingsUpdateFuture
+type ReplicationNetworksClient = original.ReplicationNetworksClient
+type ReplicationPoliciesClient = original.ReplicationPoliciesClient
 type ReplicationPoliciesCreateFuture = original.ReplicationPoliciesCreateFuture
 type ReplicationPoliciesDeleteFuture = original.ReplicationPoliciesDeleteFuture
 type ReplicationPoliciesUpdateFuture = original.ReplicationPoliciesUpdateFuture
+type ReplicationProtectableItemsClient = original.ReplicationProtectableItemsClient
 type ReplicationProtectedItem = original.ReplicationProtectedItem
 type ReplicationProtectedItemCollection = original.ReplicationProtectedItemCollection
 type ReplicationProtectedItemCollectionIterator = original.ReplicationProtectedItemCollectionIterator
 type ReplicationProtectedItemCollectionPage = original.ReplicationProtectedItemCollectionPage
 type ReplicationProtectedItemProperties = original.ReplicationProtectedItemProperties
 type ReplicationProtectedItemsApplyRecoveryPointFuture = original.ReplicationProtectedItemsApplyRecoveryPointFuture
+type ReplicationProtectedItemsClient = original.ReplicationProtectedItemsClient
 type ReplicationProtectedItemsCreateFuture = original.ReplicationProtectedItemsCreateFuture
 type ReplicationProtectedItemsDeleteFuture = original.ReplicationProtectedItemsDeleteFuture
 type ReplicationProtectedItemsFailoverCommitFuture = original.ReplicationProtectedItemsFailoverCommitFuture
@@ -832,23 +989,22 @@ type ReplicationProtectedItemsTestFailoverFuture = original.ReplicationProtected
 type ReplicationProtectedItemsUnplannedFailoverFuture = original.ReplicationProtectedItemsUnplannedFailoverFuture
 type ReplicationProtectedItemsUpdateFuture = original.ReplicationProtectedItemsUpdateFuture
 type ReplicationProtectedItemsUpdateMobilityServiceFuture = original.ReplicationProtectedItemsUpdateMobilityServiceFuture
+type ReplicationProtectionContainerMappingsClient = original.ReplicationProtectionContainerMappingsClient
 type ReplicationProtectionContainerMappingsCreateFuture = original.ReplicationProtectionContainerMappingsCreateFuture
 type ReplicationProtectionContainerMappingsDeleteFuture = original.ReplicationProtectionContainerMappingsDeleteFuture
 type ReplicationProtectionContainerMappingsPurgeFuture = original.ReplicationProtectionContainerMappingsPurgeFuture
 type ReplicationProtectionContainerMappingsUpdateFuture = original.ReplicationProtectionContainerMappingsUpdateFuture
+type ReplicationProtectionContainersClient = original.ReplicationProtectionContainersClient
 type ReplicationProtectionContainersCreateFuture = original.ReplicationProtectionContainersCreateFuture
 type ReplicationProtectionContainersDeleteFuture = original.ReplicationProtectionContainersDeleteFuture
 type ReplicationProtectionContainersDiscoverProtectableItemFuture = original.ReplicationProtectionContainersDiscoverProtectableItemFuture
 type ReplicationProtectionContainersSwitchProtectionFuture = original.ReplicationProtectionContainersSwitchProtectionFuture
 type ReplicationProviderContainerUnmappingInput = original.ReplicationProviderContainerUnmappingInput
-type BasicReplicationProviderSpecificContainerCreationInput = original.BasicReplicationProviderSpecificContainerCreationInput
 type ReplicationProviderSpecificContainerCreationInput = original.ReplicationProviderSpecificContainerCreationInput
-type BasicReplicationProviderSpecificContainerMappingInput = original.BasicReplicationProviderSpecificContainerMappingInput
 type ReplicationProviderSpecificContainerMappingInput = original.ReplicationProviderSpecificContainerMappingInput
-type BasicReplicationProviderSpecificSettings = original.BasicReplicationProviderSpecificSettings
 type ReplicationProviderSpecificSettings = original.ReplicationProviderSpecificSettings
-type BasicReplicationProviderSpecificUpdateContainerMappingInput = original.BasicReplicationProviderSpecificUpdateContainerMappingInput
 type ReplicationProviderSpecificUpdateContainerMappingInput = original.ReplicationProviderSpecificUpdateContainerMappingInput
+type ReplicationRecoveryPlansClient = original.ReplicationRecoveryPlansClient
 type ReplicationRecoveryPlansCreateFuture = original.ReplicationRecoveryPlansCreateFuture
 type ReplicationRecoveryPlansDeleteFuture = original.ReplicationRecoveryPlansDeleteFuture
 type ReplicationRecoveryPlansFailoverCommitFuture = original.ReplicationRecoveryPlansFailoverCommitFuture
@@ -858,12 +1014,18 @@ type ReplicationRecoveryPlansTestFailoverCleanupFuture = original.ReplicationRec
 type ReplicationRecoveryPlansTestFailoverFuture = original.ReplicationRecoveryPlansTestFailoverFuture
 type ReplicationRecoveryPlansUnplannedFailoverFuture = original.ReplicationRecoveryPlansUnplannedFailoverFuture
 type ReplicationRecoveryPlansUpdateFuture = original.ReplicationRecoveryPlansUpdateFuture
+type ReplicationRecoveryServicesProvidersClient = original.ReplicationRecoveryServicesProvidersClient
+type ReplicationRecoveryServicesProvidersCreateFuture = original.ReplicationRecoveryServicesProvidersCreateFuture
 type ReplicationRecoveryServicesProvidersDeleteFuture = original.ReplicationRecoveryServicesProvidersDeleteFuture
 type ReplicationRecoveryServicesProvidersPurgeFuture = original.ReplicationRecoveryServicesProvidersPurgeFuture
 type ReplicationRecoveryServicesProvidersRefreshProviderFuture = original.ReplicationRecoveryServicesProvidersRefreshProviderFuture
+type ReplicationStorageClassificationMappingsClient = original.ReplicationStorageClassificationMappingsClient
 type ReplicationStorageClassificationMappingsCreateFuture = original.ReplicationStorageClassificationMappingsCreateFuture
 type ReplicationStorageClassificationMappingsDeleteFuture = original.ReplicationStorageClassificationMappingsDeleteFuture
+type ReplicationStorageClassificationsClient = original.ReplicationStorageClassificationsClient
+type ReplicationVaultHealthClient = original.ReplicationVaultHealthClient
 type ReplicationVaultHealthRefreshFuture = original.ReplicationVaultHealthRefreshFuture
+type ReplicationvCentersClient = original.ReplicationvCentersClient
 type ReplicationvCentersCreateFuture = original.ReplicationvCentersCreateFuture
 type ReplicationvCentersDeleteFuture = original.ReplicationvCentersDeleteFuture
 type ReplicationvCentersUpdateFuture = original.ReplicationvCentersUpdateFuture
@@ -874,7 +1036,6 @@ type ResumeJobParamsProperties = original.ResumeJobParamsProperties
 type RetentionVolume = original.RetentionVolume
 type ReverseReplicationInput = original.ReverseReplicationInput
 type ReverseReplicationInputProperties = original.ReverseReplicationInputProperties
-type BasicReverseReplicationProviderSpecificInput = original.BasicReverseReplicationProviderSpecificInput
 type ReverseReplicationProviderSpecificInput = original.ReverseReplicationProviderSpecificInput
 type RoleAssignment = original.RoleAssignment
 type RunAsAccount = original.RunAsAccount
@@ -897,22 +1058,29 @@ type Subnet = original.Subnet
 type SwitchProtectionInput = original.SwitchProtectionInput
 type SwitchProtectionInputProperties = original.SwitchProtectionInputProperties
 type SwitchProtectionJobDetails = original.SwitchProtectionJobDetails
-type BasicSwitchProtectionProviderSpecificInput = original.BasicSwitchProtectionProviderSpecificInput
 type SwitchProtectionProviderSpecificInput = original.SwitchProtectionProviderSpecificInput
 type TargetComputeSize = original.TargetComputeSize
 type TargetComputeSizeCollection = original.TargetComputeSizeCollection
 type TargetComputeSizeCollectionIterator = original.TargetComputeSizeCollectionIterator
 type TargetComputeSizeCollectionPage = original.TargetComputeSizeCollectionPage
 type TargetComputeSizeProperties = original.TargetComputeSizeProperties
-type BasicTaskTypeDetails = original.BasicTaskTypeDetails
+type TargetComputeSizesClient = original.TargetComputeSizesClient
 type TaskTypeDetails = original.TaskTypeDetails
 type TestFailoverCleanupInput = original.TestFailoverCleanupInput
 type TestFailoverCleanupInputProperties = original.TestFailoverCleanupInputProperties
 type TestFailoverInput = original.TestFailoverInput
 type TestFailoverInputProperties = original.TestFailoverInputProperties
 type TestFailoverJobDetails = original.TestFailoverJobDetails
+type TestMigrateCleanupInput = original.TestMigrateCleanupInput
+type TestMigrateCleanupInputProperties = original.TestMigrateCleanupInputProperties
+type TestMigrateInput = original.TestMigrateInput
+type TestMigrateInputProperties = original.TestMigrateInputProperties
+type TestMigrateProviderSpecificInput = original.TestMigrateProviderSpecificInput
 type UnplannedFailoverInput = original.UnplannedFailoverInput
 type UnplannedFailoverInputProperties = original.UnplannedFailoverInputProperties
+type UpdateMigrationItemInput = original.UpdateMigrationItemInput
+type UpdateMigrationItemInputProperties = original.UpdateMigrationItemInputProperties
+type UpdateMigrationItemProviderSpecificInput = original.UpdateMigrationItemProviderSpecificInput
 type UpdateMobilityServiceRequest = original.UpdateMobilityServiceRequest
 type UpdateMobilityServiceRequestProperties = original.UpdateMobilityServiceRequestProperties
 type UpdateNetworkMappingInput = original.UpdateNetworkMappingInput
@@ -925,17 +1093,36 @@ type UpdateRecoveryPlanInput = original.UpdateRecoveryPlanInput
 type UpdateRecoveryPlanInputProperties = original.UpdateRecoveryPlanInputProperties
 type UpdateReplicationProtectedItemInput = original.UpdateReplicationProtectedItemInput
 type UpdateReplicationProtectedItemInputProperties = original.UpdateReplicationProtectedItemInputProperties
-type BasicUpdateReplicationProtectedItemProviderInput = original.BasicUpdateReplicationProtectedItemProviderInput
 type UpdateReplicationProtectedItemProviderInput = original.UpdateReplicationProtectedItemProviderInput
 type UpdateVCenterRequest = original.UpdateVCenterRequest
 type UpdateVCenterRequestProperties = original.UpdateVCenterRequestProperties
-type VaultHealthDetails = original.VaultHealthDetails
-type VaultHealthProperties = original.VaultHealthProperties
 type VCenter = original.VCenter
 type VCenterCollection = original.VCenterCollection
 type VCenterCollectionIterator = original.VCenterCollectionIterator
 type VCenterCollectionPage = original.VCenterCollectionPage
 type VCenterProperties = original.VCenterProperties
+type VMNicDetails = original.VMNicDetails
+type VMNicInputDetails = original.VMNicInputDetails
+type VMNicUpdatesTaskDetails = original.VMNicUpdatesTaskDetails
+type VMwareCbtContainerCreationInput = original.VMwareCbtContainerCreationInput
+type VMwareCbtContainerMappingInput = original.VMwareCbtContainerMappingInput
+type VMwareCbtDiskInput = original.VMwareCbtDiskInput
+type VMwareCbtEnableMigrationInput = original.VMwareCbtEnableMigrationInput
+type VMwareCbtMigrateInput = original.VMwareCbtMigrateInput
+type VMwareCbtMigrationDetails = original.VMwareCbtMigrationDetails
+type VMwareCbtNicDetails = original.VMwareCbtNicDetails
+type VMwareCbtNicInput = original.VMwareCbtNicInput
+type VMwareCbtPolicyCreationInput = original.VMwareCbtPolicyCreationInput
+type VMwareCbtProtectedDiskDetails = original.VMwareCbtProtectedDiskDetails
+type VMwareCbtProtectionContainerMappingDetails = original.VMwareCbtProtectionContainerMappingDetails
+type VMwareCbtTestMigrateInput = original.VMwareCbtTestMigrateInput
+type VMwareCbtUpdateMigrationItemInput = original.VMwareCbtUpdateMigrationItemInput
+type VMwareDetails = original.VMwareDetails
+type VMwareV2FabricCreationInput = original.VMwareV2FabricCreationInput
+type VMwareV2FabricSpecificDetails = original.VMwareV2FabricSpecificDetails
+type VMwareVirtualMachineDetails = original.VMwareVirtualMachineDetails
+type VaultHealthDetails = original.VaultHealthDetails
+type VaultHealthProperties = original.VaultHealthProperties
 type VersionDetails = original.VersionDetails
 type VirtualMachineTaskDetails = original.VirtualMachineTaskDetails
 type VmmDetails = original.VmmDetails
@@ -946,204 +1133,70 @@ type VmmToVmmCreateNetworkMappingInput = original.VmmToVmmCreateNetworkMappingIn
 type VmmToVmmNetworkMappingSettings = original.VmmToVmmNetworkMappingSettings
 type VmmToVmmUpdateNetworkMappingInput = original.VmmToVmmUpdateNetworkMappingInput
 type VmmVirtualMachineDetails = original.VmmVirtualMachineDetails
-type VMNicDetails = original.VMNicDetails
-type VMNicInputDetails = original.VMNicInputDetails
-type VMNicUpdatesTaskDetails = original.VMNicUpdatesTaskDetails
-type VMwareCbtPolicyCreationInput = original.VMwareCbtPolicyCreationInput
 type VmwareCbtPolicyDetails = original.VmwareCbtPolicyDetails
-type VMwareDetails = original.VMwareDetails
-type VMwareV2FabricCreationInput = original.VMwareV2FabricCreationInput
-type VMwareV2FabricSpecificDetails = original.VMwareV2FabricSpecificDetails
-type VMwareVirtualMachineDetails = original.VMwareVirtualMachineDetails
-type OperationsClient = original.OperationsClient
-type RecoveryPointsClient = original.RecoveryPointsClient
-type ReplicationAlertSettingsClient = original.ReplicationAlertSettingsClient
-type ReplicationEventsClient = original.ReplicationEventsClient
-type ReplicationFabricsClient = original.ReplicationFabricsClient
-type ReplicationJobsClient = original.ReplicationJobsClient
-type ReplicationLogicalNetworksClient = original.ReplicationLogicalNetworksClient
-type ReplicationNetworkMappingsClient = original.ReplicationNetworkMappingsClient
-type ReplicationNetworksClient = original.ReplicationNetworksClient
-type ReplicationPoliciesClient = original.ReplicationPoliciesClient
-type ReplicationProtectableItemsClient = original.ReplicationProtectableItemsClient
-type ReplicationProtectedItemsClient = original.ReplicationProtectedItemsClient
-type ReplicationProtectionContainerMappingsClient = original.ReplicationProtectionContainerMappingsClient
-type ReplicationProtectionContainersClient = original.ReplicationProtectionContainersClient
-type ReplicationRecoveryPlansClient = original.ReplicationRecoveryPlansClient
-type ReplicationRecoveryServicesProvidersClient = original.ReplicationRecoveryServicesProvidersClient
-type ReplicationStorageClassificationMappingsClient = original.ReplicationStorageClassificationMappingsClient
-type ReplicationStorageClassificationsClient = original.ReplicationStorageClassificationsClient
-type ReplicationVaultHealthClient = original.ReplicationVaultHealthClient
-type ReplicationvCentersClient = original.ReplicationvCentersClient
-type TargetComputeSizesClient = original.TargetComputeSizesClient
 
 func New(subscriptionID string, resourceGroupName string, resourceName string) BaseClient {
 	return original.New(subscriptionID, resourceGroupName, resourceName)
 }
-func NewWithBaseURI(baseURI string, subscriptionID string, resourceGroupName string, resourceName string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID, resourceGroupName, resourceName)
+func NewAlertCollectionIterator(page AlertCollectionPage) AlertCollectionIterator {
+	return original.NewAlertCollectionIterator(page)
 }
-func PossibleA2ARpRecoveryPointTypeValues() []A2ARpRecoveryPointType {
-	return original.PossibleA2ARpRecoveryPointTypeValues()
+func NewAlertCollectionPage(getNextPage func(context.Context, AlertCollection) (AlertCollection, error)) AlertCollectionPage {
+	return original.NewAlertCollectionPage(getNextPage)
 }
-func PossibleAgentAutoUpdateStatusValues() []AgentAutoUpdateStatus {
-	return original.PossibleAgentAutoUpdateStatusValues()
+func NewEventCollectionIterator(page EventCollectionPage) EventCollectionIterator {
+	return original.NewEventCollectionIterator(page)
 }
-func PossibleAgentVersionStatusValues() []AgentVersionStatus {
-	return original.PossibleAgentVersionStatusValues()
+func NewEventCollectionPage(getNextPage func(context.Context, EventCollection) (EventCollection, error)) EventCollectionPage {
+	return original.NewEventCollectionPage(getNextPage)
 }
-func PossibleAlternateLocationRecoveryOptionValues() []AlternateLocationRecoveryOption {
-	return original.PossibleAlternateLocationRecoveryOptionValues()
+func NewFabricCollectionIterator(page FabricCollectionPage) FabricCollectionIterator {
+	return original.NewFabricCollectionIterator(page)
 }
-func PossibleDataSyncStatusValues() []DataSyncStatus {
-	return original.PossibleDataSyncStatusValues()
+func NewFabricCollectionPage(getNextPage func(context.Context, FabricCollection) (FabricCollection, error)) FabricCollectionPage {
+	return original.NewFabricCollectionPage(getNextPage)
 }
-func PossibleDisableProtectionReasonValues() []DisableProtectionReason {
-	return original.PossibleDisableProtectionReasonValues()
+func NewJobCollectionIterator(page JobCollectionPage) JobCollectionIterator {
+	return original.NewJobCollectionIterator(page)
 }
-func PossibleFailoverDeploymentModelValues() []FailoverDeploymentModel {
-	return original.PossibleFailoverDeploymentModelValues()
+func NewJobCollectionPage(getNextPage func(context.Context, JobCollection) (JobCollection, error)) JobCollectionPage {
+	return original.NewJobCollectionPage(getNextPage)
 }
-func PossibleHealthErrorCategoryValues() []HealthErrorCategory {
-	return original.PossibleHealthErrorCategoryValues()
+func NewLogicalNetworkCollectionIterator(page LogicalNetworkCollectionPage) LogicalNetworkCollectionIterator {
+	return original.NewLogicalNetworkCollectionIterator(page)
 }
-func PossibleHyperVReplicaAzureRpRecoveryPointTypeValues() []HyperVReplicaAzureRpRecoveryPointType {
-	return original.PossibleHyperVReplicaAzureRpRecoveryPointTypeValues()
+func NewLogicalNetworkCollectionPage(getNextPage func(context.Context, LogicalNetworkCollection) (LogicalNetworkCollection, error)) LogicalNetworkCollectionPage {
+	return original.NewLogicalNetworkCollectionPage(getNextPage)
 }
-func PossibleIdentityProviderTypeValues() []IdentityProviderType {
-	return original.PossibleIdentityProviderTypeValues()
+func NewMigrationItemCollectionIterator(page MigrationItemCollectionPage) MigrationItemCollectionIterator {
+	return original.NewMigrationItemCollectionIterator(page)
 }
-func PossibleInMageV2RpRecoveryPointTypeValues() []InMageV2RpRecoveryPointType {
-	return original.PossibleInMageV2RpRecoveryPointTypeValues()
+func NewMigrationItemCollectionPage(getNextPage func(context.Context, MigrationItemCollection) (MigrationItemCollection, error)) MigrationItemCollectionPage {
+	return original.NewMigrationItemCollectionPage(getNextPage)
 }
-func PossibleInstanceTypeValues() []InstanceType {
-	return original.PossibleInstanceTypeValues()
+func NewMigrationRecoveryPointCollectionIterator(page MigrationRecoveryPointCollectionPage) MigrationRecoveryPointCollectionIterator {
+	return original.NewMigrationRecoveryPointCollectionIterator(page)
 }
-func PossibleInstanceTypeBasicConfigurationSettingsValues() []InstanceTypeBasicConfigurationSettings {
-	return original.PossibleInstanceTypeBasicConfigurationSettingsValues()
+func NewMigrationRecoveryPointCollectionPage(getNextPage func(context.Context, MigrationRecoveryPointCollection) (MigrationRecoveryPointCollection, error)) MigrationRecoveryPointCollectionPage {
+	return original.NewMigrationRecoveryPointCollectionPage(getNextPage)
 }
-func PossibleInstanceTypeBasicDisableProtectionProviderSpecificInputValues() []InstanceTypeBasicDisableProtectionProviderSpecificInput {
-	return original.PossibleInstanceTypeBasicDisableProtectionProviderSpecificInputValues()
+func NewMigrationRecoveryPointsClient(subscriptionID string, resourceGroupName string, resourceName string) MigrationRecoveryPointsClient {
+	return original.NewMigrationRecoveryPointsClient(subscriptionID, resourceGroupName, resourceName)
 }
-func PossibleInstanceTypeBasicEnableProtectionProviderSpecificInputValues() []InstanceTypeBasicEnableProtectionProviderSpecificInput {
-	return original.PossibleInstanceTypeBasicEnableProtectionProviderSpecificInputValues()
+func NewMigrationRecoveryPointsClientWithBaseURI(baseURI string, subscriptionID string, resourceGroupName string, resourceName string) MigrationRecoveryPointsClient {
+	return original.NewMigrationRecoveryPointsClientWithBaseURI(baseURI, subscriptionID, resourceGroupName, resourceName)
 }
-func PossibleInstanceTypeBasicEventProviderSpecificDetailsValues() []InstanceTypeBasicEventProviderSpecificDetails {
-	return original.PossibleInstanceTypeBasicEventProviderSpecificDetailsValues()
+func NewNetworkCollectionIterator(page NetworkCollectionPage) NetworkCollectionIterator {
+	return original.NewNetworkCollectionIterator(page)
 }
-func PossibleInstanceTypeBasicEventSpecificDetailsValues() []InstanceTypeBasicEventSpecificDetails {
-	return original.PossibleInstanceTypeBasicEventSpecificDetailsValues()
+func NewNetworkCollectionPage(getNextPage func(context.Context, NetworkCollection) (NetworkCollection, error)) NetworkCollectionPage {
+	return original.NewNetworkCollectionPage(getNextPage)
 }
-func PossibleInstanceTypeBasicFabricSpecificCreateNetworkMappingInputValues() []InstanceTypeBasicFabricSpecificCreateNetworkMappingInput {
-	return original.PossibleInstanceTypeBasicFabricSpecificCreateNetworkMappingInputValues()
+func NewNetworkMappingCollectionIterator(page NetworkMappingCollectionPage) NetworkMappingCollectionIterator {
+	return original.NewNetworkMappingCollectionIterator(page)
 }
-func PossibleInstanceTypeBasicFabricSpecificCreationInputValues() []InstanceTypeBasicFabricSpecificCreationInput {
-	return original.PossibleInstanceTypeBasicFabricSpecificCreationInputValues()
-}
-func PossibleInstanceTypeBasicFabricSpecificDetailsValues() []InstanceTypeBasicFabricSpecificDetails {
-	return original.PossibleInstanceTypeBasicFabricSpecificDetailsValues()
-}
-func PossibleInstanceTypeBasicFabricSpecificUpdateNetworkMappingInputValues() []InstanceTypeBasicFabricSpecificUpdateNetworkMappingInput {
-	return original.PossibleInstanceTypeBasicFabricSpecificUpdateNetworkMappingInputValues()
-}
-func PossibleInstanceTypeBasicGroupTaskDetailsValues() []InstanceTypeBasicGroupTaskDetails {
-	return original.PossibleInstanceTypeBasicGroupTaskDetailsValues()
-}
-func PossibleInstanceTypeBasicJobDetailsValues() []InstanceTypeBasicJobDetails {
-	return original.PossibleInstanceTypeBasicJobDetailsValues()
-}
-func PossibleInstanceTypeBasicNetworkMappingFabricSpecificSettingsValues() []InstanceTypeBasicNetworkMappingFabricSpecificSettings {
-	return original.PossibleInstanceTypeBasicNetworkMappingFabricSpecificSettingsValues()
-}
-func PossibleInstanceTypeBasicPolicyProviderSpecificDetailsValues() []InstanceTypeBasicPolicyProviderSpecificDetails {
-	return original.PossibleInstanceTypeBasicPolicyProviderSpecificDetailsValues()
-}
-func PossibleInstanceTypeBasicPolicyProviderSpecificInputValues() []InstanceTypeBasicPolicyProviderSpecificInput {
-	return original.PossibleInstanceTypeBasicPolicyProviderSpecificInputValues()
-}
-func PossibleInstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsValues() []InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails {
-	return original.PossibleInstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsValues()
-}
-func PossibleInstanceTypeBasicProviderSpecificFailoverInputValues() []InstanceTypeBasicProviderSpecificFailoverInput {
-	return original.PossibleInstanceTypeBasicProviderSpecificFailoverInputValues()
-}
-func PossibleInstanceTypeBasicProviderSpecificRecoveryPointDetailsValues() []InstanceTypeBasicProviderSpecificRecoveryPointDetails {
-	return original.PossibleInstanceTypeBasicProviderSpecificRecoveryPointDetailsValues()
-}
-func PossibleInstanceTypeBasicRecoveryPlanActionDetailsValues() []InstanceTypeBasicRecoveryPlanActionDetails {
-	return original.PossibleInstanceTypeBasicRecoveryPlanActionDetailsValues()
-}
-func PossibleInstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputValues() []InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInput {
-	return original.PossibleInstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputValues()
-}
-func PossibleInstanceTypeBasicReplicationProviderSpecificContainerCreationInputValues() []InstanceTypeBasicReplicationProviderSpecificContainerCreationInput {
-	return original.PossibleInstanceTypeBasicReplicationProviderSpecificContainerCreationInputValues()
-}
-func PossibleInstanceTypeBasicReplicationProviderSpecificContainerMappingInputValues() []InstanceTypeBasicReplicationProviderSpecificContainerMappingInput {
-	return original.PossibleInstanceTypeBasicReplicationProviderSpecificContainerMappingInputValues()
-}
-func PossibleInstanceTypeBasicReplicationProviderSpecificSettingsValues() []InstanceTypeBasicReplicationProviderSpecificSettings {
-	return original.PossibleInstanceTypeBasicReplicationProviderSpecificSettingsValues()
-}
-func PossibleInstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInputValues() []InstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInput {
-	return original.PossibleInstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInputValues()
-}
-func PossibleInstanceTypeBasicReverseReplicationProviderSpecificInputValues() []InstanceTypeBasicReverseReplicationProviderSpecificInput {
-	return original.PossibleInstanceTypeBasicReverseReplicationProviderSpecificInputValues()
-}
-func PossibleInstanceTypeBasicSwitchProtectionProviderSpecificInputValues() []InstanceTypeBasicSwitchProtectionProviderSpecificInput {
-	return original.PossibleInstanceTypeBasicSwitchProtectionProviderSpecificInputValues()
-}
-func PossibleInstanceTypeBasicTaskTypeDetailsValues() []InstanceTypeBasicTaskTypeDetails {
-	return original.PossibleInstanceTypeBasicTaskTypeDetailsValues()
-}
-func PossibleInstanceTypeBasicUpdateReplicationProtectedItemProviderInputValues() []InstanceTypeBasicUpdateReplicationProtectedItemProviderInput {
-	return original.PossibleInstanceTypeBasicUpdateReplicationProtectedItemProviderInputValues()
-}
-func PossibleLicenseTypeValues() []LicenseType {
-	return original.PossibleLicenseTypeValues()
-}
-func PossibleMultiVMGroupCreateOptionValues() []MultiVMGroupCreateOption {
-	return original.PossibleMultiVMGroupCreateOptionValues()
-}
-func PossibleMultiVMSyncPointOptionValues() []MultiVMSyncPointOption {
-	return original.PossibleMultiVMSyncPointOptionValues()
-}
-func PossibleMultiVMSyncStatusValues() []MultiVMSyncStatus {
-	return original.PossibleMultiVMSyncStatusValues()
-}
-func PossiblePossibleOperationsDirectionsValues() []PossibleOperationsDirections {
-	return original.PossiblePossibleOperationsDirectionsValues()
-}
-func PossiblePresenceStatusValues() []PresenceStatus {
-	return original.PossiblePresenceStatusValues()
-}
-func PossibleRecoveryPlanActionLocationValues() []RecoveryPlanActionLocation {
-	return original.PossibleRecoveryPlanActionLocationValues()
-}
-func PossibleRecoveryPlanGroupTypeValues() []RecoveryPlanGroupType {
-	return original.PossibleRecoveryPlanGroupTypeValues()
-}
-func PossibleRecoveryPointSyncTypeValues() []RecoveryPointSyncType {
-	return original.PossibleRecoveryPointSyncTypeValues()
-}
-func PossibleRecoveryPointTypeValues() []RecoveryPointType {
-	return original.PossibleRecoveryPointTypeValues()
-}
-func PossibleReplicationProtectedItemOperationValues() []ReplicationProtectedItemOperation {
-	return original.PossibleReplicationProtectedItemOperationValues()
-}
-func PossibleRpInMageRecoveryPointTypeValues() []RpInMageRecoveryPointType {
-	return original.PossibleRpInMageRecoveryPointTypeValues()
-}
-func PossibleSetMultiVMSyncStatusValues() []SetMultiVMSyncStatus {
-	return original.PossibleSetMultiVMSyncStatusValues()
-}
-func PossibleSeverityValues() []Severity {
-	return original.PossibleSeverityValues()
-}
-func PossibleSourceSiteOperationsValues() []SourceSiteOperations {
-	return original.PossibleSourceSiteOperationsValues()
+func NewNetworkMappingCollectionPage(getNextPage func(context.Context, NetworkMappingCollection) (NetworkMappingCollection, error)) NetworkMappingCollectionPage {
+	return original.NewNetworkMappingCollectionPage(getNextPage)
 }
 func NewOperationsClient(subscriptionID string, resourceGroupName string, resourceName string) OperationsClient {
 	return original.NewOperationsClient(subscriptionID, resourceGroupName, resourceName)
@@ -1151,11 +1204,59 @@ func NewOperationsClient(subscriptionID string, resourceGroupName string, resour
 func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string, resourceGroupName string, resourceName string) OperationsClient {
 	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID, resourceGroupName, resourceName)
 }
+func NewOperationsDiscoveryCollectionIterator(page OperationsDiscoveryCollectionPage) OperationsDiscoveryCollectionIterator {
+	return original.NewOperationsDiscoveryCollectionIterator(page)
+}
+func NewOperationsDiscoveryCollectionPage(getNextPage func(context.Context, OperationsDiscoveryCollection) (OperationsDiscoveryCollection, error)) OperationsDiscoveryCollectionPage {
+	return original.NewOperationsDiscoveryCollectionPage(getNextPage)
+}
+func NewPolicyCollectionIterator(page PolicyCollectionPage) PolicyCollectionIterator {
+	return original.NewPolicyCollectionIterator(page)
+}
+func NewPolicyCollectionPage(getNextPage func(context.Context, PolicyCollection) (PolicyCollection, error)) PolicyCollectionPage {
+	return original.NewPolicyCollectionPage(getNextPage)
+}
+func NewProtectableItemCollectionIterator(page ProtectableItemCollectionPage) ProtectableItemCollectionIterator {
+	return original.NewProtectableItemCollectionIterator(page)
+}
+func NewProtectableItemCollectionPage(getNextPage func(context.Context, ProtectableItemCollection) (ProtectableItemCollection, error)) ProtectableItemCollectionPage {
+	return original.NewProtectableItemCollectionPage(getNextPage)
+}
+func NewProtectionContainerCollectionIterator(page ProtectionContainerCollectionPage) ProtectionContainerCollectionIterator {
+	return original.NewProtectionContainerCollectionIterator(page)
+}
+func NewProtectionContainerCollectionPage(getNextPage func(context.Context, ProtectionContainerCollection) (ProtectionContainerCollection, error)) ProtectionContainerCollectionPage {
+	return original.NewProtectionContainerCollectionPage(getNextPage)
+}
+func NewProtectionContainerMappingCollectionIterator(page ProtectionContainerMappingCollectionPage) ProtectionContainerMappingCollectionIterator {
+	return original.NewProtectionContainerMappingCollectionIterator(page)
+}
+func NewProtectionContainerMappingCollectionPage(getNextPage func(context.Context, ProtectionContainerMappingCollection) (ProtectionContainerMappingCollection, error)) ProtectionContainerMappingCollectionPage {
+	return original.NewProtectionContainerMappingCollectionPage(getNextPage)
+}
+func NewRecoveryPlanCollectionIterator(page RecoveryPlanCollectionPage) RecoveryPlanCollectionIterator {
+	return original.NewRecoveryPlanCollectionIterator(page)
+}
+func NewRecoveryPlanCollectionPage(getNextPage func(context.Context, RecoveryPlanCollection) (RecoveryPlanCollection, error)) RecoveryPlanCollectionPage {
+	return original.NewRecoveryPlanCollectionPage(getNextPage)
+}
+func NewRecoveryPointCollectionIterator(page RecoveryPointCollectionPage) RecoveryPointCollectionIterator {
+	return original.NewRecoveryPointCollectionIterator(page)
+}
+func NewRecoveryPointCollectionPage(getNextPage func(context.Context, RecoveryPointCollection) (RecoveryPointCollection, error)) RecoveryPointCollectionPage {
+	return original.NewRecoveryPointCollectionPage(getNextPage)
+}
 func NewRecoveryPointsClient(subscriptionID string, resourceGroupName string, resourceName string) RecoveryPointsClient {
 	return original.NewRecoveryPointsClient(subscriptionID, resourceGroupName, resourceName)
 }
 func NewRecoveryPointsClientWithBaseURI(baseURI string, subscriptionID string, resourceGroupName string, resourceName string) RecoveryPointsClient {
 	return original.NewRecoveryPointsClientWithBaseURI(baseURI, subscriptionID, resourceGroupName, resourceName)
+}
+func NewRecoveryServicesProviderCollectionIterator(page RecoveryServicesProviderCollectionPage) RecoveryServicesProviderCollectionIterator {
+	return original.NewRecoveryServicesProviderCollectionIterator(page)
+}
+func NewRecoveryServicesProviderCollectionPage(getNextPage func(context.Context, RecoveryServicesProviderCollection) (RecoveryServicesProviderCollection, error)) RecoveryServicesProviderCollectionPage {
+	return original.NewRecoveryServicesProviderCollectionPage(getNextPage)
 }
 func NewReplicationAlertSettingsClient(subscriptionID string, resourceGroupName string, resourceName string) ReplicationAlertSettingsClient {
 	return original.NewReplicationAlertSettingsClient(subscriptionID, resourceGroupName, resourceName)
@@ -1187,6 +1288,12 @@ func NewReplicationLogicalNetworksClient(subscriptionID string, resourceGroupNam
 func NewReplicationLogicalNetworksClientWithBaseURI(baseURI string, subscriptionID string, resourceGroupName string, resourceName string) ReplicationLogicalNetworksClient {
 	return original.NewReplicationLogicalNetworksClientWithBaseURI(baseURI, subscriptionID, resourceGroupName, resourceName)
 }
+func NewReplicationMigrationItemsClient(subscriptionID string, resourceGroupName string, resourceName string) ReplicationMigrationItemsClient {
+	return original.NewReplicationMigrationItemsClient(subscriptionID, resourceGroupName, resourceName)
+}
+func NewReplicationMigrationItemsClientWithBaseURI(baseURI string, subscriptionID string, resourceGroupName string, resourceName string) ReplicationMigrationItemsClient {
+	return original.NewReplicationMigrationItemsClientWithBaseURI(baseURI, subscriptionID, resourceGroupName, resourceName)
+}
 func NewReplicationNetworkMappingsClient(subscriptionID string, resourceGroupName string, resourceName string) ReplicationNetworkMappingsClient {
 	return original.NewReplicationNetworkMappingsClient(subscriptionID, resourceGroupName, resourceName)
 }
@@ -1210,6 +1317,12 @@ func NewReplicationProtectableItemsClient(subscriptionID string, resourceGroupNa
 }
 func NewReplicationProtectableItemsClientWithBaseURI(baseURI string, subscriptionID string, resourceGroupName string, resourceName string) ReplicationProtectableItemsClient {
 	return original.NewReplicationProtectableItemsClientWithBaseURI(baseURI, subscriptionID, resourceGroupName, resourceName)
+}
+func NewReplicationProtectedItemCollectionIterator(page ReplicationProtectedItemCollectionPage) ReplicationProtectedItemCollectionIterator {
+	return original.NewReplicationProtectedItemCollectionIterator(page)
+}
+func NewReplicationProtectedItemCollectionPage(getNextPage func(context.Context, ReplicationProtectedItemCollection) (ReplicationProtectedItemCollection, error)) ReplicationProtectedItemCollectionPage {
+	return original.NewReplicationProtectedItemCollectionPage(getNextPage)
 }
 func NewReplicationProtectedItemsClient(subscriptionID string, resourceGroupName string, resourceName string) ReplicationProtectedItemsClient {
 	return original.NewReplicationProtectedItemsClient(subscriptionID, resourceGroupName, resourceName)
@@ -1265,11 +1378,233 @@ func NewReplicationvCentersClient(subscriptionID string, resourceGroupName strin
 func NewReplicationvCentersClientWithBaseURI(baseURI string, subscriptionID string, resourceGroupName string, resourceName string) ReplicationvCentersClient {
 	return original.NewReplicationvCentersClientWithBaseURI(baseURI, subscriptionID, resourceGroupName, resourceName)
 }
+func NewStorageClassificationCollectionIterator(page StorageClassificationCollectionPage) StorageClassificationCollectionIterator {
+	return original.NewStorageClassificationCollectionIterator(page)
+}
+func NewStorageClassificationCollectionPage(getNextPage func(context.Context, StorageClassificationCollection) (StorageClassificationCollection, error)) StorageClassificationCollectionPage {
+	return original.NewStorageClassificationCollectionPage(getNextPage)
+}
+func NewStorageClassificationMappingCollectionIterator(page StorageClassificationMappingCollectionPage) StorageClassificationMappingCollectionIterator {
+	return original.NewStorageClassificationMappingCollectionIterator(page)
+}
+func NewStorageClassificationMappingCollectionPage(getNextPage func(context.Context, StorageClassificationMappingCollection) (StorageClassificationMappingCollection, error)) StorageClassificationMappingCollectionPage {
+	return original.NewStorageClassificationMappingCollectionPage(getNextPage)
+}
+func NewTargetComputeSizeCollectionIterator(page TargetComputeSizeCollectionPage) TargetComputeSizeCollectionIterator {
+	return original.NewTargetComputeSizeCollectionIterator(page)
+}
+func NewTargetComputeSizeCollectionPage(getNextPage func(context.Context, TargetComputeSizeCollection) (TargetComputeSizeCollection, error)) TargetComputeSizeCollectionPage {
+	return original.NewTargetComputeSizeCollectionPage(getNextPage)
+}
 func NewTargetComputeSizesClient(subscriptionID string, resourceGroupName string, resourceName string) TargetComputeSizesClient {
 	return original.NewTargetComputeSizesClient(subscriptionID, resourceGroupName, resourceName)
 }
 func NewTargetComputeSizesClientWithBaseURI(baseURI string, subscriptionID string, resourceGroupName string, resourceName string) TargetComputeSizesClient {
 	return original.NewTargetComputeSizesClientWithBaseURI(baseURI, subscriptionID, resourceGroupName, resourceName)
+}
+func NewVCenterCollectionIterator(page VCenterCollectionPage) VCenterCollectionIterator {
+	return original.NewVCenterCollectionIterator(page)
+}
+func NewVCenterCollectionPage(getNextPage func(context.Context, VCenterCollection) (VCenterCollection, error)) VCenterCollectionPage {
+	return original.NewVCenterCollectionPage(getNextPage)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string, resourceGroupName string, resourceName string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID, resourceGroupName, resourceName)
+}
+func PossibleA2ARpRecoveryPointTypeValues() []A2ARpRecoveryPointType {
+	return original.PossibleA2ARpRecoveryPointTypeValues()
+}
+func PossibleAgentAutoUpdateStatusValues() []AgentAutoUpdateStatus {
+	return original.PossibleAgentAutoUpdateStatusValues()
+}
+func PossibleAgentVersionStatusValues() []AgentVersionStatus {
+	return original.PossibleAgentVersionStatusValues()
+}
+func PossibleAlternateLocationRecoveryOptionValues() []AlternateLocationRecoveryOption {
+	return original.PossibleAlternateLocationRecoveryOptionValues()
+}
+func PossibleDataSyncStatusValues() []DataSyncStatus {
+	return original.PossibleDataSyncStatusValues()
+}
+func PossibleDisableProtectionReasonValues() []DisableProtectionReason {
+	return original.PossibleDisableProtectionReasonValues()
+}
+func PossibleDiskAccountTypeValues() []DiskAccountType {
+	return original.PossibleDiskAccountTypeValues()
+}
+func PossibleDiskTypeValues() []DiskType {
+	return original.PossibleDiskTypeValues()
+}
+func PossibleEthernetAddressTypeValues() []EthernetAddressType {
+	return original.PossibleEthernetAddressTypeValues()
+}
+func PossibleFailoverDeploymentModelValues() []FailoverDeploymentModel {
+	return original.PossibleFailoverDeploymentModelValues()
+}
+func PossibleHealthErrorCategoryValues() []HealthErrorCategory {
+	return original.PossibleHealthErrorCategoryValues()
+}
+func PossibleHyperVReplicaAzureRpRecoveryPointTypeValues() []HyperVReplicaAzureRpRecoveryPointType {
+	return original.PossibleHyperVReplicaAzureRpRecoveryPointTypeValues()
+}
+func PossibleInMageV2RpRecoveryPointTypeValues() []InMageV2RpRecoveryPointType {
+	return original.PossibleInMageV2RpRecoveryPointTypeValues()
+}
+func PossibleInstanceTypeBasicConfigurationSettingsValues() []InstanceTypeBasicConfigurationSettings {
+	return original.PossibleInstanceTypeBasicConfigurationSettingsValues()
+}
+func PossibleInstanceTypeBasicDisableProtectionProviderSpecificInputValues() []InstanceTypeBasicDisableProtectionProviderSpecificInput {
+	return original.PossibleInstanceTypeBasicDisableProtectionProviderSpecificInputValues()
+}
+func PossibleInstanceTypeBasicEnableMigrationProviderSpecificInputValues() []InstanceTypeBasicEnableMigrationProviderSpecificInput {
+	return original.PossibleInstanceTypeBasicEnableMigrationProviderSpecificInputValues()
+}
+func PossibleInstanceTypeBasicEnableProtectionProviderSpecificInputValues() []InstanceTypeBasicEnableProtectionProviderSpecificInput {
+	return original.PossibleInstanceTypeBasicEnableProtectionProviderSpecificInputValues()
+}
+func PossibleInstanceTypeBasicEventProviderSpecificDetailsValues() []InstanceTypeBasicEventProviderSpecificDetails {
+	return original.PossibleInstanceTypeBasicEventProviderSpecificDetailsValues()
+}
+func PossibleInstanceTypeBasicEventSpecificDetailsValues() []InstanceTypeBasicEventSpecificDetails {
+	return original.PossibleInstanceTypeBasicEventSpecificDetailsValues()
+}
+func PossibleInstanceTypeBasicFabricSpecificCreateNetworkMappingInputValues() []InstanceTypeBasicFabricSpecificCreateNetworkMappingInput {
+	return original.PossibleInstanceTypeBasicFabricSpecificCreateNetworkMappingInputValues()
+}
+func PossibleInstanceTypeBasicFabricSpecificCreationInputValues() []InstanceTypeBasicFabricSpecificCreationInput {
+	return original.PossibleInstanceTypeBasicFabricSpecificCreationInputValues()
+}
+func PossibleInstanceTypeBasicFabricSpecificDetailsValues() []InstanceTypeBasicFabricSpecificDetails {
+	return original.PossibleInstanceTypeBasicFabricSpecificDetailsValues()
+}
+func PossibleInstanceTypeBasicFabricSpecificUpdateNetworkMappingInputValues() []InstanceTypeBasicFabricSpecificUpdateNetworkMappingInput {
+	return original.PossibleInstanceTypeBasicFabricSpecificUpdateNetworkMappingInputValues()
+}
+func PossibleInstanceTypeBasicGroupTaskDetailsValues() []InstanceTypeBasicGroupTaskDetails {
+	return original.PossibleInstanceTypeBasicGroupTaskDetailsValues()
+}
+func PossibleInstanceTypeBasicJobDetailsValues() []InstanceTypeBasicJobDetails {
+	return original.PossibleInstanceTypeBasicJobDetailsValues()
+}
+func PossibleInstanceTypeBasicMigrateProviderSpecificInputValues() []InstanceTypeBasicMigrateProviderSpecificInput {
+	return original.PossibleInstanceTypeBasicMigrateProviderSpecificInputValues()
+}
+func PossibleInstanceTypeBasicMigrationProviderSpecificSettingsValues() []InstanceTypeBasicMigrationProviderSpecificSettings {
+	return original.PossibleInstanceTypeBasicMigrationProviderSpecificSettingsValues()
+}
+func PossibleInstanceTypeBasicNetworkMappingFabricSpecificSettingsValues() []InstanceTypeBasicNetworkMappingFabricSpecificSettings {
+	return original.PossibleInstanceTypeBasicNetworkMappingFabricSpecificSettingsValues()
+}
+func PossibleInstanceTypeBasicPolicyProviderSpecificDetailsValues() []InstanceTypeBasicPolicyProviderSpecificDetails {
+	return original.PossibleInstanceTypeBasicPolicyProviderSpecificDetailsValues()
+}
+func PossibleInstanceTypeBasicPolicyProviderSpecificInputValues() []InstanceTypeBasicPolicyProviderSpecificInput {
+	return original.PossibleInstanceTypeBasicPolicyProviderSpecificInputValues()
+}
+func PossibleInstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsValues() []InstanceTypeBasicProtectionContainerMappingProviderSpecificDetails {
+	return original.PossibleInstanceTypeBasicProtectionContainerMappingProviderSpecificDetailsValues()
+}
+func PossibleInstanceTypeBasicProviderSpecificFailoverInputValues() []InstanceTypeBasicProviderSpecificFailoverInput {
+	return original.PossibleInstanceTypeBasicProviderSpecificFailoverInputValues()
+}
+func PossibleInstanceTypeBasicProviderSpecificRecoveryPointDetailsValues() []InstanceTypeBasicProviderSpecificRecoveryPointDetails {
+	return original.PossibleInstanceTypeBasicProviderSpecificRecoveryPointDetailsValues()
+}
+func PossibleInstanceTypeBasicRecoveryPlanActionDetailsValues() []InstanceTypeBasicRecoveryPlanActionDetails {
+	return original.PossibleInstanceTypeBasicRecoveryPlanActionDetailsValues()
+}
+func PossibleInstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputValues() []InstanceTypeBasicRecoveryPlanProviderSpecificFailoverInput {
+	return original.PossibleInstanceTypeBasicRecoveryPlanProviderSpecificFailoverInputValues()
+}
+func PossibleInstanceTypeBasicReplicationProviderSpecificContainerCreationInputValues() []InstanceTypeBasicReplicationProviderSpecificContainerCreationInput {
+	return original.PossibleInstanceTypeBasicReplicationProviderSpecificContainerCreationInputValues()
+}
+func PossibleInstanceTypeBasicReplicationProviderSpecificContainerMappingInputValues() []InstanceTypeBasicReplicationProviderSpecificContainerMappingInput {
+	return original.PossibleInstanceTypeBasicReplicationProviderSpecificContainerMappingInputValues()
+}
+func PossibleInstanceTypeBasicReplicationProviderSpecificSettingsValues() []InstanceTypeBasicReplicationProviderSpecificSettings {
+	return original.PossibleInstanceTypeBasicReplicationProviderSpecificSettingsValues()
+}
+func PossibleInstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInputValues() []InstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInput {
+	return original.PossibleInstanceTypeBasicReplicationProviderSpecificUpdateContainerMappingInputValues()
+}
+func PossibleInstanceTypeBasicReverseReplicationProviderSpecificInputValues() []InstanceTypeBasicReverseReplicationProviderSpecificInput {
+	return original.PossibleInstanceTypeBasicReverseReplicationProviderSpecificInputValues()
+}
+func PossibleInstanceTypeBasicSwitchProtectionProviderSpecificInputValues() []InstanceTypeBasicSwitchProtectionProviderSpecificInput {
+	return original.PossibleInstanceTypeBasicSwitchProtectionProviderSpecificInputValues()
+}
+func PossibleInstanceTypeBasicTaskTypeDetailsValues() []InstanceTypeBasicTaskTypeDetails {
+	return original.PossibleInstanceTypeBasicTaskTypeDetailsValues()
+}
+func PossibleInstanceTypeBasicTestMigrateProviderSpecificInputValues() []InstanceTypeBasicTestMigrateProviderSpecificInput {
+	return original.PossibleInstanceTypeBasicTestMigrateProviderSpecificInputValues()
+}
+func PossibleInstanceTypeBasicUpdateMigrationItemProviderSpecificInputValues() []InstanceTypeBasicUpdateMigrationItemProviderSpecificInput {
+	return original.PossibleInstanceTypeBasicUpdateMigrationItemProviderSpecificInputValues()
+}
+func PossibleInstanceTypeBasicUpdateReplicationProtectedItemProviderInputValues() []InstanceTypeBasicUpdateReplicationProtectedItemProviderInput {
+	return original.PossibleInstanceTypeBasicUpdateReplicationProtectedItemProviderInputValues()
+}
+func PossibleInstanceTypeValues() []InstanceType {
+	return original.PossibleInstanceTypeValues()
+}
+func PossibleLicenseTypeValues() []LicenseType {
+	return original.PossibleLicenseTypeValues()
+}
+func PossibleMigrationItemOperationValues() []MigrationItemOperation {
+	return original.PossibleMigrationItemOperationValues()
+}
+func PossibleMigrationRecoveryPointTypeValues() []MigrationRecoveryPointType {
+	return original.PossibleMigrationRecoveryPointTypeValues()
+}
+func PossibleMigrationStateValues() []MigrationState {
+	return original.PossibleMigrationStateValues()
+}
+func PossibleMultiVMGroupCreateOptionValues() []MultiVMGroupCreateOption {
+	return original.PossibleMultiVMGroupCreateOptionValues()
+}
+func PossibleMultiVMSyncPointOptionValues() []MultiVMSyncPointOption {
+	return original.PossibleMultiVMSyncPointOptionValues()
+}
+func PossibleMultiVMSyncStatusValues() []MultiVMSyncStatus {
+	return original.PossibleMultiVMSyncStatusValues()
+}
+func PossiblePossibleOperationsDirectionsValues() []PossibleOperationsDirections {
+	return original.PossiblePossibleOperationsDirectionsValues()
+}
+func PossiblePresenceStatusValues() []PresenceStatus {
+	return original.PossiblePresenceStatusValues()
+}
+func PossibleRecoveryPlanActionLocationValues() []RecoveryPlanActionLocation {
+	return original.PossibleRecoveryPlanActionLocationValues()
+}
+func PossibleRecoveryPlanGroupTypeValues() []RecoveryPlanGroupType {
+	return original.PossibleRecoveryPlanGroupTypeValues()
+}
+func PossibleRecoveryPointSyncTypeValues() []RecoveryPointSyncType {
+	return original.PossibleRecoveryPointSyncTypeValues()
+}
+func PossibleRecoveryPointTypeValues() []RecoveryPointType {
+	return original.PossibleRecoveryPointTypeValues()
+}
+func PossibleReplicationProtectedItemOperationValues() []ReplicationProtectedItemOperation {
+	return original.PossibleReplicationProtectedItemOperationValues()
+}
+func PossibleRpInMageRecoveryPointTypeValues() []RpInMageRecoveryPointType {
+	return original.PossibleRpInMageRecoveryPointTypeValues()
+}
+func PossibleSetMultiVMSyncStatusValues() []SetMultiVMSyncStatus {
+	return original.PossibleSetMultiVMSyncStatusValues()
+}
+func PossibleSeverityValues() []Severity {
+	return original.PossibleSeverityValues()
+}
+func PossibleSourceSiteOperationsValues() []SourceSiteOperations {
+	return original.PossibleSourceSiteOperationsValues()
+}
+func PossibleTestMigrationStateValues() []TestMigrationState {
+	return original.PossibleTestMigrationStateValues()
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

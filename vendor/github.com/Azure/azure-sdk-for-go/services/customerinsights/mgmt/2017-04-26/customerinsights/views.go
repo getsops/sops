@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -42,13 +43,23 @@ func NewViewsClientWithBaseURI(baseURI string, subscriptionID string) ViewsClien
 	return ViewsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
-// CreateOrUpdate creates a view or updates an exisiting view in the hub.
+// CreateOrUpdate creates a view or updates an existing view in the hub.
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // hubName - the name of the hub.
 // viewName - the name of the view.
 // parameters - parameters supplied to the CreateOrUpdate View operation.
 func (client ViewsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, viewName string, parameters ViewResourceFormat) (result ViewResourceFormat, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ViewsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: viewName,
 			Constraints: []validation.Constraint{{Target: "viewName", Name: validation.MaxLength, Rule: 512, Chain: nil},
@@ -129,8 +140,18 @@ func (client ViewsClient) CreateOrUpdateResponder(resp *http.Response) (result V
 // resourceGroupName - the name of the resource group.
 // hubName - the name of the hub.
 // viewName - the name of the view.
-// userID - the user ID. Use * to retreive hub level view.
+// userID - the user ID. Use * to retrieve hub level view.
 func (client ViewsClient) Delete(ctx context.Context, resourceGroupName string, hubName string, viewName string, userID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ViewsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, hubName, viewName, userID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "customerinsights.ViewsClient", "Delete", nil, "Failure preparing request")
@@ -199,8 +220,18 @@ func (client ViewsClient) DeleteResponder(resp *http.Response) (result autorest.
 // resourceGroupName - the name of the resource group.
 // hubName - the name of the hub.
 // viewName - the name of the view.
-// userID - the user ID. Use * to retreive hub level view.
+// userID - the user ID. Use * to retrieve hub level view.
 func (client ViewsClient) Get(ctx context.Context, resourceGroupName string, hubName string, viewName string, userID string) (result ViewResourceFormat, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ViewsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, hubName, viewName, userID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "customerinsights.ViewsClient", "Get", nil, "Failure preparing request")
@@ -269,8 +300,18 @@ func (client ViewsClient) GetResponder(resp *http.Response) (result ViewResource
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // hubName - the name of the hub.
-// userID - the user ID. Use * to retreive hub level views.
+// userID - the user ID. Use * to retrieve hub level views.
 func (client ViewsClient) ListByHub(ctx context.Context, resourceGroupName string, hubName string, userID string) (result ViewListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ViewsClient.ListByHub")
+		defer func() {
+			sc := -1
+			if result.vlr.Response.Response != nil {
+				sc = result.vlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByHubNextResults
 	req, err := client.ListByHubPreparer(ctx, resourceGroupName, hubName, userID)
 	if err != nil {
@@ -336,8 +377,8 @@ func (client ViewsClient) ListByHubResponder(resp *http.Response) (result ViewLi
 }
 
 // listByHubNextResults retrieves the next set of results, if any.
-func (client ViewsClient) listByHubNextResults(lastResults ViewListResult) (result ViewListResult, err error) {
-	req, err := lastResults.viewListResultPreparer()
+func (client ViewsClient) listByHubNextResults(ctx context.Context, lastResults ViewListResult) (result ViewListResult, err error) {
+	req, err := lastResults.viewListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "customerinsights.ViewsClient", "listByHubNextResults", nil, "Failure preparing next results request")
 	}
@@ -358,6 +399,16 @@ func (client ViewsClient) listByHubNextResults(lastResults ViewListResult) (resu
 
 // ListByHubComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ViewsClient) ListByHubComplete(ctx context.Context, resourceGroupName string, hubName string, userID string) (result ViewListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ViewsClient.ListByHub")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByHub(ctx, resourceGroupName, hubName, userID)
 	return
 }

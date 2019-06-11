@@ -121,7 +121,8 @@ const (
 	// "InsufficientCacheClusterCapacity".
 	//
 	// The requested cache node type is not available in the specified Availability
-	// Zone.
+	// Zone. For more information, see InsufficientCacheClusterCapacity (http://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/ErrorMessages.html#ErrorMessages.INSUFFICIENT_CACHE_CLUSTER_CAPACITY)
+	// in the ElastiCache User Guide.
 	ErrCodeInsufficientCacheClusterCapacityFault = "InsufficientCacheClusterCapacity"
 
 	// ErrCodeInvalidARNFault for service response error code
@@ -185,6 +186,12 @@ const (
 	//
 	// The VPC network is in an invalid state.
 	ErrCodeInvalidVPCNetworkStateFault = "InvalidVPCNetworkStateFault"
+
+	// ErrCodeNoOperationFault for service response error code
+	// "NoOperationFault".
+	//
+	// The operation was not performed because no changes were required.
+	ErrCodeNoOperationFault = "NoOperationFault"
 
 	// ErrCodeNodeGroupNotFoundFault for service response error code
 	// "NodeGroupNotFoundFault".
@@ -253,6 +260,18 @@ const (
 	// The requested cache node offering does not exist.
 	ErrCodeReservedCacheNodesOfferingNotFoundFault = "ReservedCacheNodesOfferingNotFound"
 
+	// ErrCodeServiceLinkedRoleNotFoundFault for service response error code
+	// "ServiceLinkedRoleNotFoundFault".
+	//
+	// The specified service linked role (SLR) was not found.
+	ErrCodeServiceLinkedRoleNotFoundFault = "ServiceLinkedRoleNotFoundFault"
+
+	// ErrCodeServiceUpdateNotFoundFault for service response error code
+	// "ServiceUpdateNotFoundFault".
+	//
+	// The service update doesn't exist
+	ErrCodeServiceUpdateNotFoundFault = "ServiceUpdateNotFoundFault"
+
 	// ErrCodeSnapshotAlreadyExistsFault for service response error code
 	// "SnapshotAlreadyExistsFault".
 	//
@@ -308,5 +327,7 @@ const (
 
 	// ErrCodeTestFailoverNotAvailableFault for service response error code
 	// "TestFailoverNotAvailableFault".
+	//
+	// The TestFailover action is not available.
 	ErrCodeTestFailoverNotAvailableFault = "TestFailoverNotAvailableFault"
 )

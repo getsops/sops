@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewEnvironmentsClientWithBaseURI(baseURI string, subscriptionID string) Env
 // name - the name of the environment.
 // dtlEnvironment - an environment, which is essentially an ARM template deployment.
 func (client EnvironmentsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, labName string, userName string, name string, dtlEnvironment Environment) (result EnvironmentsCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EnvironmentsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: dtlEnvironment,
 			Constraints: []validation.Constraint{{Target: "dtlEnvironment.EnvironmentProperties", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -103,10 +114,6 @@ func (client EnvironmentsClient) CreateOrUpdateSender(req *http.Request) (future
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -131,6 +138,16 @@ func (client EnvironmentsClient) CreateOrUpdateResponder(resp *http.Response) (r
 // userName - the name of the user profile.
 // name - the name of the environment.
 func (client EnvironmentsClient) Delete(ctx context.Context, resourceGroupName string, labName string, userName string, name string) (result EnvironmentsDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EnvironmentsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, labName, userName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.EnvironmentsClient", "Delete", nil, "Failure preparing request")
@@ -178,10 +195,6 @@ func (client EnvironmentsClient) DeleteSender(req *http.Request) (future Environ
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -206,6 +219,16 @@ func (client EnvironmentsClient) DeleteResponder(resp *http.Response) (result au
 // name - the name of the environment.
 // expand - specify the $expand query. Example: 'properties($select=deploymentProperties)'
 func (client EnvironmentsClient) Get(ctx context.Context, resourceGroupName string, labName string, userName string, name string, expand string) (result Environment, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EnvironmentsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, labName, userName, name, expand)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.EnvironmentsClient", "Get", nil, "Failure preparing request")
@@ -283,6 +306,16 @@ func (client EnvironmentsClient) GetResponder(resp *http.Response) (result Envir
 // top - the maximum number of resources to return from the operation.
 // orderby - the ordering expression for the results, using OData notation.
 func (client EnvironmentsClient) List(ctx context.Context, resourceGroupName string, labName string, userName string, expand string, filter string, top *int32, orderby string) (result ResponseWithContinuationDtlEnvironmentPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EnvironmentsClient.List")
+		defer func() {
+			sc := -1
+			if result.rwcde.Response.Response != nil {
+				sc = result.rwcde.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, labName, userName, expand, filter, top, orderby)
 	if err != nil {
@@ -360,8 +393,8 @@ func (client EnvironmentsClient) ListResponder(resp *http.Response) (result Resp
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client EnvironmentsClient) listNextResults(lastResults ResponseWithContinuationDtlEnvironment) (result ResponseWithContinuationDtlEnvironment, err error) {
-	req, err := lastResults.responseWithContinuationDtlEnvironmentPreparer()
+func (client EnvironmentsClient) listNextResults(ctx context.Context, lastResults ResponseWithContinuationDtlEnvironment) (result ResponseWithContinuationDtlEnvironment, err error) {
+	req, err := lastResults.responseWithContinuationDtlEnvironmentPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "dtl.EnvironmentsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -382,6 +415,16 @@ func (client EnvironmentsClient) listNextResults(lastResults ResponseWithContinu
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client EnvironmentsClient) ListComplete(ctx context.Context, resourceGroupName string, labName string, userName string, expand string, filter string, top *int32, orderby string) (result ResponseWithContinuationDtlEnvironmentIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EnvironmentsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, labName, userName, expand, filter, top, orderby)
 	return
 }

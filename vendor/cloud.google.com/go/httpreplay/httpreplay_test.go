@@ -12,15 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// +build go1.8
-
 package httpreplay_test
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"net/http/httptest"
 	"os"
 	"testing"
 	"time"
@@ -28,7 +30,6 @@ import (
 	"cloud.google.com/go/httpreplay"
 	"cloud.google.com/go/internal/testutil"
 	"cloud.google.com/go/storage"
-	"golang.org/x/net/context"
 	"google.golang.org/api/option"
 )
 
@@ -37,14 +38,7 @@ func TestIntegration_RecordAndReplay(t *testing.T) {
 	if testing.Short() {
 		t.Skip("Integration tests skipped in short mode")
 	}
-	f, err := ioutil.TempFile("", "httpreplay")
-	if err != nil {
-		t.Fatal(err)
-	}
-	replayFilename := f.Name()
-	if err := f.Close(); err != nil {
-		t.Fatal(err)
-	}
+	replayFilename := tempFilename(t, "RecordAndReplay*.replay")
 	defer os.Remove(replayFilename)
 	projectID := testutil.ProjID()
 	if projectID == "" {
@@ -145,9 +139,8 @@ func testReadCRC(t *testing.T, hc *http.Client, mode string) {
 		uncompressedBucket = "gcp-public-data-landsat"
 		uncompressedObject = "LC08/PRE/044/034/LC80440342016259LGN00/LC80440342016259LGN00_MTL.txt"
 
-		gzippedBucket   = "storage-library-test-bucket"
-		gzippedObject   = "gzipped-text.txt"
-		gzippedContents = "hello world" // uncompressed contents of the file
+		gzippedBucket = "storage-library-test-bucket"
+		gzippedObject = "gzipped-text.txt"
 	)
 	ctx := context.Background()
 	client, err := storage.NewClient(ctx, option.WithHTTPClient(hc))
@@ -265,4 +258,120 @@ func testReadCRC(t *testing.T, hc *http.Client, mode string) {
 			t.Errorf("%s: %s: len: got %d, want %d", mode, test.desc, got, want)
 		}
 	}
+}
+
+func TestRemoveAndClear(t *testing.T) {
+	// Disable logging for this test, since it generates a lot.
+	log.SetOutput(ioutil.Discard)
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		fmt.Fprintln(w, "LGTM")
+	}))
+	defer srv.Close()
+
+	replayFilename := tempFilename(t, "TestRemoveAndClear*.replay")
+	defer os.Remove(replayFilename)
+
+	ctx := context.Background()
+	// Record
+	rec, err := httpreplay.NewRecorder(replayFilename, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	rec.ClearHeaders("Clear")
+	rec.RemoveRequestHeaders("Rem*")
+	rec.ClearQueryParams("c")
+	rec.RemoveQueryParams("r")
+	hc, err := rec.Client(ctx, option.WithoutAuthentication())
+	if err != nil {
+		t.Fatal(err)
+	}
+	query := "k=1&r=2&c=3"
+	req, err := http.NewRequest("GET", srv.URL+"?"+query, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	headers := map[string]string{"Keep": "ok", "Clear": "secret", "Remove": "bye"}
+	for k, v := range headers {
+		req.Header.Set(k, v)
+	}
+	if _, err := hc.Do(req); err != nil {
+		t.Fatal(err)
+	}
+	if err := rec.Close(); err != nil {
+		t.Fatal(err)
+	}
+
+	// Replay
+	// For both headers and query param:
+	// - k or Keep must be present and identical
+	// - c or Clear must be present, but can be different
+	// - r or Remove can be anything
+	for _, test := range []struct {
+		query       string
+		headers     map[string]string
+		wantSuccess bool
+	}{
+		{query, headers, true}, // same query string and headers
+		{query,
+			map[string]string{"Keep": "oops", "Clear": "secret", "Remove": "bye"},
+			false, // different Keep
+		},
+		{query, map[string]string{}, false},                               // missing Keep and Clear
+		{query, map[string]string{"Keep": "ok"}, false},                   // missing Clear
+		{query, map[string]string{"Keep": "ok", "Clear": "secret"}, true}, // missing Remove is OK
+		{
+			query,
+			map[string]string{"Keep": "ok", "Clear": "secret", "Remove": "whatev"},
+			true,
+		}, // different Remove is OK
+		{query, map[string]string{"Keep": "ok", "Clear": "diff"}, true}, // different Clear is OK
+		{"", headers, false},            // no query string
+		{"k=x&r=2&c=3", headers, false}, // different k
+		{"r=2", headers, false},         // missing k and c
+		{"k=1&r=2", headers, false},     // missing c
+		{"k=1&c=3", headers, true},      // missing r is OK
+		{"k=1&r=x&c=3", headers, true},  // different r is OK,
+		{"k=1&r=2&c=x", headers, true},  // different clear is OK
+	} {
+		rep, err := httpreplay.NewReplayer(replayFilename)
+		if err != nil {
+			t.Fatal(err)
+		}
+		hc, err = rep.Client(ctx)
+		if err != nil {
+			t.Fatal(err)
+		}
+		url := srv.URL
+		if test.query != "" {
+			url += "?" + test.query
+		}
+		req, err = http.NewRequest("GET", url, nil)
+		if err != nil {
+			t.Fatal(err)
+		}
+		for k, v := range test.headers {
+			req.Header.Set(k, v)
+		}
+		resp, err := hc.Do(req)
+		if err != nil {
+			t.Fatal(err)
+		}
+		rep.Close()
+		if (resp.StatusCode == 200) != test.wantSuccess {
+			t.Errorf("%q, %v: got %d, wanted success=%t",
+				test.query, test.headers, resp.StatusCode, test.wantSuccess)
+		}
+	}
+}
+
+func tempFilename(t *testing.T, pattern string) string {
+	f, err := ioutil.TempFile("", pattern)
+	if err != nil {
+		t.Fatal(err)
+	}
+	filename := f.Name()
+	if err := f.Close(); err != nil {
+		t.Fatal(err)
+	}
+	return filename
 }

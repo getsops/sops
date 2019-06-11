@@ -48,9 +48,8 @@ type serverTester struct {
 	hpackEnc  *hpack.Encoder
 
 	// reading frames:
-	frc       chan http2.Frame
-	frErrc    chan error
-	readTimer *time.Timer
+	frc    chan http2.Frame
+	frErrc chan error
 }
 
 func newServerTesterFromConn(t testing.TB, cc io.ReadWriteCloser) *serverTester {
@@ -148,20 +147,6 @@ func (st *serverTester) wantSettings() *http2.SettingsFrame {
 		st.t.Fatalf("got a %T; want *SettingsFrame", f)
 	}
 	return sf
-}
-
-func (st *serverTester) wantSettingsAck() {
-	f, err := st.readFrame()
-	if err != nil {
-		st.t.Fatal(err)
-	}
-	sf, ok := f.(*http2.SettingsFrame)
-	if !ok {
-		st.t.Fatalf("Wanting a settings ACK, received a %T", f)
-	}
-	if !sf.IsAck() {
-		st.t.Fatal("Settings Frame didn't have ACK set")
-	}
 }
 
 // wait for any activity from the server
@@ -270,11 +255,5 @@ func (st *serverTester) writeData(streamID uint32, endStream bool, data []byte) 
 func (st *serverTester) writeRSTStream(streamID uint32, code http2.ErrCode) {
 	if err := st.fr.WriteRSTStream(streamID, code); err != nil {
 		st.t.Fatalf("Error writing RST_STREAM: %v", err)
-	}
-}
-
-func (st *serverTester) writeDataPadded(streamID uint32, endStream bool, data, padding []byte) {
-	if err := st.fr.WriteDataPadded(streamID, endStream, data, padding); err != nil {
-		st.t.Fatalf("Error writing DATA with padding: %v", err)
 	}
 }

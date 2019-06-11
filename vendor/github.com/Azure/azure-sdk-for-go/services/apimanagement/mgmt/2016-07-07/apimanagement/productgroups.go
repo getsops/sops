@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewProductGroupsClientWithBaseURI(baseURI string, subscriptionID string) Pr
 // productID - product identifier. Must be unique in the current API Management service instance.
 // groupID - group identifier. Must be unique in the current API Management service instance.
 func (client ProductGroupsClient) Add(ctx context.Context, resourceGroupName string, serviceName string, productID string, groupID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProductGroupsClient.Add")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -140,6 +151,16 @@ func (client ProductGroupsClient) AddResponder(resp *http.Response) (result auto
 // top - number of records to return.
 // skip - number of records to skip.
 func (client ProductGroupsClient) ListByProduct(ctx context.Context, resourceGroupName string, serviceName string, productID string, filter string, top *int32, skip *int32) (result GroupCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProductGroupsClient.ListByProduct")
+		defer func() {
+			sc := -1
+			if result.gc.Response.Response != nil {
+				sc = result.gc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -232,8 +253,8 @@ func (client ProductGroupsClient) ListByProductResponder(resp *http.Response) (r
 }
 
 // listByProductNextResults retrieves the next set of results, if any.
-func (client ProductGroupsClient) listByProductNextResults(lastResults GroupCollection) (result GroupCollection, err error) {
-	req, err := lastResults.groupCollectionPreparer()
+func (client ProductGroupsClient) listByProductNextResults(ctx context.Context, lastResults GroupCollection) (result GroupCollection, err error) {
+	req, err := lastResults.groupCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.ProductGroupsClient", "listByProductNextResults", nil, "Failure preparing next results request")
 	}
@@ -254,6 +275,16 @@ func (client ProductGroupsClient) listByProductNextResults(lastResults GroupColl
 
 // ListByProductComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ProductGroupsClient) ListByProductComplete(ctx context.Context, resourceGroupName string, serviceName string, productID string, filter string, top *int32, skip *int32) (result GroupCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProductGroupsClient.ListByProduct")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByProduct(ctx, resourceGroupName, serviceName, productID, filter, top, skip)
 	return
 }
@@ -265,6 +296,16 @@ func (client ProductGroupsClient) ListByProductComplete(ctx context.Context, res
 // productID - product identifier. Must be unique in the current API Management service instance.
 // groupID - group identifier. Must be unique in the current API Management service instance.
 func (client ProductGroupsClient) Remove(ctx context.Context, resourceGroupName string, serviceName string, productID string, groupID string) (result ErrorBodyContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProductGroupsClient.Remove")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},

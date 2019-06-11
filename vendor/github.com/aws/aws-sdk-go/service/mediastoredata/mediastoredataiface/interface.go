@@ -76,6 +76,9 @@ type MediaStoreDataAPI interface {
 	ListItemsWithContext(aws.Context, *mediastoredata.ListItemsInput, ...request.Option) (*mediastoredata.ListItemsOutput, error)
 	ListItemsRequest(*mediastoredata.ListItemsInput) (*request.Request, *mediastoredata.ListItemsOutput)
 
+	ListItemsPages(*mediastoredata.ListItemsInput, func(*mediastoredata.ListItemsOutput, bool) bool) error
+	ListItemsPagesWithContext(aws.Context, *mediastoredata.ListItemsInput, func(*mediastoredata.ListItemsOutput, bool) bool, ...request.Option) error
+
 	PutObject(*mediastoredata.PutObjectInput) (*mediastoredata.PutObjectOutput, error)
 	PutObjectWithContext(aws.Context, *mediastoredata.PutObjectInput, ...request.Option) (*mediastoredata.PutObjectOutput, error)
 	PutObjectRequest(*mediastoredata.PutObjectInput) (*request.Request, *mediastoredata.PutObjectOutput)

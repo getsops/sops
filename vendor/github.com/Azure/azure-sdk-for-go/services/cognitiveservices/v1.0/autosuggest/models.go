@@ -22,6 +22,9 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v1.0/autosuggest"
+
 // ErrorCode enumerates the values for error code.
 type ErrorCode string
 
@@ -205,42 +208,61 @@ type BasicAction interface {
 
 // Action ...
 type Action struct {
-	Result      *[]BasicThing `json:"result,omitempty"`
-	DisplayName *string       `json:"displayName,omitempty"`
-	IsTopAction *bool         `json:"isTopAction,omitempty"`
-	ServiceURL  *string       `json:"serviceUrl,omitempty"`
-	// ThumbnailURL - The URL to a thumbnail of the item.
+	// Result - READ-ONLY
+	Result *[]BasicThing `json:"result,omitempty"`
+	// DisplayName - READ-ONLY
+	DisplayName *string `json:"displayName,omitempty"`
+	// IsTopAction - READ-ONLY
+	IsTopAction *bool `json:"isTopAction,omitempty"`
+	// ServiceURL - READ-ONLY
+	ServiceURL *string `json:"serviceUrl,omitempty"`
+	// ThumbnailURL - READ-ONLY; The URL to a thumbnail of the item.
 	ThumbnailURL *string `json:"thumbnailUrl,omitempty"`
-	// About - For internal use only.
+	// About - READ-ONLY; For internal use only.
 	About *[]BasicThing `json:"about,omitempty"`
-	// Mentions - For internal use only.
+	// Mentions - READ-ONLY; For internal use only.
 	Mentions *[]BasicThing `json:"mentions,omitempty"`
-	// Provider - The source of the creative work.
+	// Provider - READ-ONLY; The source of the creative work.
 	Provider *[]BasicThing `json:"provider,omitempty"`
-	Creator  BasicThing    `json:"creator,omitempty"`
-	// Text - Text content of this creative work
-	Text                *string    `json:"text,omitempty"`
-	DiscussionURL       *string    `json:"discussionUrl,omitempty"`
-	CommentCount        *int32     `json:"commentCount,omitempty"`
-	MainEntity          BasicThing `json:"mainEntity,omitempty"`
-	HeadLine            *string    `json:"headLine,omitempty"`
-	CopyrightHolder     BasicThing `json:"copyrightHolder,omitempty"`
-	CopyrightYear       *int32     `json:"copyrightYear,omitempty"`
-	Disclaimer          *string    `json:"disclaimer,omitempty"`
-	IsAccessibleForFree *bool      `json:"isAccessibleForFree,omitempty"`
-	Genre               *[]string  `json:"genre,omitempty"`
-	IsFamilyFriendly    *bool      `json:"isFamilyFriendly,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// Creator - READ-ONLY
+	Creator BasicThing `json:"creator,omitempty"`
+	// Text - READ-ONLY; Text content of this creative work
+	Text *string `json:"text,omitempty"`
+	// DiscussionURL - READ-ONLY
+	DiscussionURL *string `json:"discussionUrl,omitempty"`
+	// CommentCount - READ-ONLY
+	CommentCount *int32 `json:"commentCount,omitempty"`
+	// MainEntity - READ-ONLY
+	MainEntity BasicThing `json:"mainEntity,omitempty"`
+	// HeadLine - READ-ONLY
+	HeadLine *string `json:"headLine,omitempty"`
+	// CopyrightHolder - READ-ONLY
+	CopyrightHolder BasicThing `json:"copyrightHolder,omitempty"`
+	// CopyrightYear - READ-ONLY
+	CopyrightYear *int32 `json:"copyrightYear,omitempty"`
+	// Disclaimer - READ-ONLY
+	Disclaimer *string `json:"disclaimer,omitempty"`
+	// IsAccessibleForFree - READ-ONLY
+	IsAccessibleForFree *bool `json:"isAccessibleForFree,omitempty"`
+	// Genre - READ-ONLY
+	Genre *[]string `json:"genre,omitempty"`
+	// IsFamilyFriendly - READ-ONLY
+	IsFamilyFriendly *bool `json:"isFamilyFriendly,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// ReadLink - The URL that returns this resource.
+	// ReadLink - READ-ONLY; The URL that returns this resource.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
-	WebSearchURL             *string        `json:"webSearchUrl,omitempty"`
-	PotentialAction          *[]BasicAction `json:"potentialAction,omitempty"`
-	ImmediateAction          *[]BasicAction `json:"immediateAction,omitempty"`
-	PreferredClickthroughURL *string        `json:"preferredClickthroughUrl,omitempty"`
-	AdaptiveCard             *string        `json:"adaptiveCard,omitempty"`
-	// ID - A String identifier.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
+	WebSearchURL *string `json:"webSearchUrl,omitempty"`
+	// PotentialAction - READ-ONLY
+	PotentialAction *[]BasicAction `json:"potentialAction,omitempty"`
+	// ImmediateAction - READ-ONLY
+	ImmediateAction *[]BasicAction `json:"immediateAction,omitempty"`
+	// PreferredClickthroughURL - READ-ONLY
+	PreferredClickthroughURL *string `json:"preferredClickthroughUrl,omitempty"`
+	// AdaptiveCard - READ-ONLY
+	AdaptiveCard *string `json:"adaptiveCard,omitempty"`
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeSearchAction', 'TypeSuggestions', 'TypeSearchResultsAnswer', 'TypeAnswer', 'TypeThing', 'TypeAction', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeCreativeWork'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -287,84 +309,6 @@ func unmarshalBasicActionArray(body []byte) ([]BasicAction, error) {
 func (a Action) MarshalJSON() ([]byte, error) {
 	a.Type = TypeAction
 	objectMap := make(map[string]interface{})
-	if a.Result != nil {
-		objectMap["result"] = a.Result
-	}
-	if a.DisplayName != nil {
-		objectMap["displayName"] = a.DisplayName
-	}
-	if a.IsTopAction != nil {
-		objectMap["isTopAction"] = a.IsTopAction
-	}
-	if a.ServiceURL != nil {
-		objectMap["serviceUrl"] = a.ServiceURL
-	}
-	if a.ThumbnailURL != nil {
-		objectMap["thumbnailUrl"] = a.ThumbnailURL
-	}
-	if a.About != nil {
-		objectMap["about"] = a.About
-	}
-	if a.Mentions != nil {
-		objectMap["mentions"] = a.Mentions
-	}
-	if a.Provider != nil {
-		objectMap["provider"] = a.Provider
-	}
-	objectMap["creator"] = a.Creator
-	if a.Text != nil {
-		objectMap["text"] = a.Text
-	}
-	if a.DiscussionURL != nil {
-		objectMap["discussionUrl"] = a.DiscussionURL
-	}
-	if a.CommentCount != nil {
-		objectMap["commentCount"] = a.CommentCount
-	}
-	objectMap["mainEntity"] = a.MainEntity
-	if a.HeadLine != nil {
-		objectMap["headLine"] = a.HeadLine
-	}
-	objectMap["copyrightHolder"] = a.CopyrightHolder
-	if a.CopyrightYear != nil {
-		objectMap["copyrightYear"] = a.CopyrightYear
-	}
-	if a.Disclaimer != nil {
-		objectMap["disclaimer"] = a.Disclaimer
-	}
-	if a.IsAccessibleForFree != nil {
-		objectMap["isAccessibleForFree"] = a.IsAccessibleForFree
-	}
-	if a.Genre != nil {
-		objectMap["genre"] = a.Genre
-	}
-	if a.IsFamilyFriendly != nil {
-		objectMap["isFamilyFriendly"] = a.IsFamilyFriendly
-	}
-	if a.URL != nil {
-		objectMap["url"] = a.URL
-	}
-	if a.ReadLink != nil {
-		objectMap["readLink"] = a.ReadLink
-	}
-	if a.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = a.WebSearchURL
-	}
-	if a.PotentialAction != nil {
-		objectMap["potentialAction"] = a.PotentialAction
-	}
-	if a.ImmediateAction != nil {
-		objectMap["immediateAction"] = a.ImmediateAction
-	}
-	if a.PreferredClickthroughURL != nil {
-		objectMap["preferredClickthroughUrl"] = a.PreferredClickthroughURL
-	}
-	if a.AdaptiveCard != nil {
-		objectMap["adaptiveCard"] = a.AdaptiveCard
-	}
-	if a.ID != nil {
-		objectMap["id"] = a.ID
-	}
 	if a.Type != "" {
 		objectMap["_type"] = a.Type
 	}
@@ -743,15 +687,19 @@ type BasicAnswer interface {
 
 // Answer defines an answer.
 type Answer struct {
-	// ReadLink - The URL that returns this resource.
+	// ReadLink - READ-ONLY; The URL that returns this resource.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
-	WebSearchURL             *string        `json:"webSearchUrl,omitempty"`
-	PotentialAction          *[]BasicAction `json:"potentialAction,omitempty"`
-	ImmediateAction          *[]BasicAction `json:"immediateAction,omitempty"`
-	PreferredClickthroughURL *string        `json:"preferredClickthroughUrl,omitempty"`
-	AdaptiveCard             *string        `json:"adaptiveCard,omitempty"`
-	// ID - A String identifier.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
+	WebSearchURL *string `json:"webSearchUrl,omitempty"`
+	// PotentialAction - READ-ONLY
+	PotentialAction *[]BasicAction `json:"potentialAction,omitempty"`
+	// ImmediateAction - READ-ONLY
+	ImmediateAction *[]BasicAction `json:"immediateAction,omitempty"`
+	// PreferredClickthroughURL - READ-ONLY
+	PreferredClickthroughURL *string `json:"preferredClickthroughUrl,omitempty"`
+	// AdaptiveCard - READ-ONLY
+	AdaptiveCard *string `json:"adaptiveCard,omitempty"`
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeSearchAction', 'TypeSuggestions', 'TypeSearchResultsAnswer', 'TypeAnswer', 'TypeThing', 'TypeAction', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeCreativeWork'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -802,27 +750,6 @@ func unmarshalBasicAnswerArray(body []byte) ([]BasicAnswer, error) {
 func (a Answer) MarshalJSON() ([]byte, error) {
 	a.Type = TypeAnswer
 	objectMap := make(map[string]interface{})
-	if a.ReadLink != nil {
-		objectMap["readLink"] = a.ReadLink
-	}
-	if a.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = a.WebSearchURL
-	}
-	if a.PotentialAction != nil {
-		objectMap["potentialAction"] = a.PotentialAction
-	}
-	if a.ImmediateAction != nil {
-		objectMap["immediateAction"] = a.ImmediateAction
-	}
-	if a.PreferredClickthroughURL != nil {
-		objectMap["preferredClickthroughUrl"] = a.PreferredClickthroughURL
-	}
-	if a.AdaptiveCard != nil {
-		objectMap["adaptiveCard"] = a.AdaptiveCard
-	}
-	if a.ID != nil {
-		objectMap["id"] = a.ID
-	}
 	if a.Type != "" {
 		objectMap["_type"] = a.Type
 	}
@@ -1018,41 +945,56 @@ type BasicCreativeWork interface {
 	AsCreativeWork() (*CreativeWork, bool)
 }
 
-// CreativeWork the most generic kind of creative work, including books, movies, photographs, software programs,
-// etc.
+// CreativeWork the most generic kind of creative work, including books, movies, photographs, software
+// programs, etc.
 type CreativeWork struct {
-	// ThumbnailURL - The URL to a thumbnail of the item.
+	// ThumbnailURL - READ-ONLY; The URL to a thumbnail of the item.
 	ThumbnailURL *string `json:"thumbnailUrl,omitempty"`
-	// About - For internal use only.
+	// About - READ-ONLY; For internal use only.
 	About *[]BasicThing `json:"about,omitempty"`
-	// Mentions - For internal use only.
+	// Mentions - READ-ONLY; For internal use only.
 	Mentions *[]BasicThing `json:"mentions,omitempty"`
-	// Provider - The source of the creative work.
+	// Provider - READ-ONLY; The source of the creative work.
 	Provider *[]BasicThing `json:"provider,omitempty"`
-	Creator  BasicThing    `json:"creator,omitempty"`
-	// Text - Text content of this creative work
-	Text                *string    `json:"text,omitempty"`
-	DiscussionURL       *string    `json:"discussionUrl,omitempty"`
-	CommentCount        *int32     `json:"commentCount,omitempty"`
-	MainEntity          BasicThing `json:"mainEntity,omitempty"`
-	HeadLine            *string    `json:"headLine,omitempty"`
-	CopyrightHolder     BasicThing `json:"copyrightHolder,omitempty"`
-	CopyrightYear       *int32     `json:"copyrightYear,omitempty"`
-	Disclaimer          *string    `json:"disclaimer,omitempty"`
-	IsAccessibleForFree *bool      `json:"isAccessibleForFree,omitempty"`
-	Genre               *[]string  `json:"genre,omitempty"`
-	IsFamilyFriendly    *bool      `json:"isFamilyFriendly,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// Creator - READ-ONLY
+	Creator BasicThing `json:"creator,omitempty"`
+	// Text - READ-ONLY; Text content of this creative work
+	Text *string `json:"text,omitempty"`
+	// DiscussionURL - READ-ONLY
+	DiscussionURL *string `json:"discussionUrl,omitempty"`
+	// CommentCount - READ-ONLY
+	CommentCount *int32 `json:"commentCount,omitempty"`
+	// MainEntity - READ-ONLY
+	MainEntity BasicThing `json:"mainEntity,omitempty"`
+	// HeadLine - READ-ONLY
+	HeadLine *string `json:"headLine,omitempty"`
+	// CopyrightHolder - READ-ONLY
+	CopyrightHolder BasicThing `json:"copyrightHolder,omitempty"`
+	// CopyrightYear - READ-ONLY
+	CopyrightYear *int32 `json:"copyrightYear,omitempty"`
+	// Disclaimer - READ-ONLY
+	Disclaimer *string `json:"disclaimer,omitempty"`
+	// IsAccessibleForFree - READ-ONLY
+	IsAccessibleForFree *bool `json:"isAccessibleForFree,omitempty"`
+	// Genre - READ-ONLY
+	Genre *[]string `json:"genre,omitempty"`
+	// IsFamilyFriendly - READ-ONLY
+	IsFamilyFriendly *bool `json:"isFamilyFriendly,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// ReadLink - The URL that returns this resource.
+	// ReadLink - READ-ONLY; The URL that returns this resource.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
-	WebSearchURL             *string        `json:"webSearchUrl,omitempty"`
-	PotentialAction          *[]BasicAction `json:"potentialAction,omitempty"`
-	ImmediateAction          *[]BasicAction `json:"immediateAction,omitempty"`
-	PreferredClickthroughURL *string        `json:"preferredClickthroughUrl,omitempty"`
-	AdaptiveCard             *string        `json:"adaptiveCard,omitempty"`
-	// ID - A String identifier.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
+	WebSearchURL *string `json:"webSearchUrl,omitempty"`
+	// PotentialAction - READ-ONLY
+	PotentialAction *[]BasicAction `json:"potentialAction,omitempty"`
+	// ImmediateAction - READ-ONLY
+	ImmediateAction *[]BasicAction `json:"immediateAction,omitempty"`
+	// PreferredClickthroughURL - READ-ONLY
+	PreferredClickthroughURL *string `json:"preferredClickthroughUrl,omitempty"`
+	// AdaptiveCard - READ-ONLY
+	AdaptiveCard *string `json:"adaptiveCard,omitempty"`
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeSearchAction', 'TypeSuggestions', 'TypeSearchResultsAnswer', 'TypeAnswer', 'TypeThing', 'TypeAction', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeCreativeWork'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -1103,72 +1045,6 @@ func unmarshalBasicCreativeWorkArray(body []byte) ([]BasicCreativeWork, error) {
 func (cw CreativeWork) MarshalJSON() ([]byte, error) {
 	cw.Type = TypeCreativeWork
 	objectMap := make(map[string]interface{})
-	if cw.ThumbnailURL != nil {
-		objectMap["thumbnailUrl"] = cw.ThumbnailURL
-	}
-	if cw.About != nil {
-		objectMap["about"] = cw.About
-	}
-	if cw.Mentions != nil {
-		objectMap["mentions"] = cw.Mentions
-	}
-	if cw.Provider != nil {
-		objectMap["provider"] = cw.Provider
-	}
-	objectMap["creator"] = cw.Creator
-	if cw.Text != nil {
-		objectMap["text"] = cw.Text
-	}
-	if cw.DiscussionURL != nil {
-		objectMap["discussionUrl"] = cw.DiscussionURL
-	}
-	if cw.CommentCount != nil {
-		objectMap["commentCount"] = cw.CommentCount
-	}
-	objectMap["mainEntity"] = cw.MainEntity
-	if cw.HeadLine != nil {
-		objectMap["headLine"] = cw.HeadLine
-	}
-	objectMap["copyrightHolder"] = cw.CopyrightHolder
-	if cw.CopyrightYear != nil {
-		objectMap["copyrightYear"] = cw.CopyrightYear
-	}
-	if cw.Disclaimer != nil {
-		objectMap["disclaimer"] = cw.Disclaimer
-	}
-	if cw.IsAccessibleForFree != nil {
-		objectMap["isAccessibleForFree"] = cw.IsAccessibleForFree
-	}
-	if cw.Genre != nil {
-		objectMap["genre"] = cw.Genre
-	}
-	if cw.IsFamilyFriendly != nil {
-		objectMap["isFamilyFriendly"] = cw.IsFamilyFriendly
-	}
-	if cw.URL != nil {
-		objectMap["url"] = cw.URL
-	}
-	if cw.ReadLink != nil {
-		objectMap["readLink"] = cw.ReadLink
-	}
-	if cw.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = cw.WebSearchURL
-	}
-	if cw.PotentialAction != nil {
-		objectMap["potentialAction"] = cw.PotentialAction
-	}
-	if cw.ImmediateAction != nil {
-		objectMap["immediateAction"] = cw.ImmediateAction
-	}
-	if cw.PreferredClickthroughURL != nil {
-		objectMap["preferredClickthroughUrl"] = cw.PreferredClickthroughURL
-	}
-	if cw.AdaptiveCard != nil {
-		objectMap["adaptiveCard"] = cw.AdaptiveCard
-	}
-	if cw.ID != nil {
-		objectMap["id"] = cw.ID
-	}
 	if cw.Type != "" {
 		objectMap["_type"] = cw.Type
 	}
@@ -1513,11 +1389,11 @@ type Error struct {
 	Code ErrorCode `json:"code,omitempty"`
 	// Message - A description of the error.
 	Message *string `json:"message,omitempty"`
-	// MoreDetails - A description that provides additional information about the error.
+	// MoreDetails - READ-ONLY; A description that provides additional information about the error.
 	MoreDetails *string `json:"moreDetails,omitempty"`
-	// Parameter - The parameter in the request that caused the error.
+	// Parameter - READ-ONLY; The parameter in the request that caused the error.
 	Parameter *string `json:"parameter,omitempty"`
-	// Value - The parameter's value in the request that was not valid.
+	// Value - READ-ONLY; The parameter's value in the request that was not valid.
 	Value *string `json:"value,omitempty"`
 	// Type - Possible values include: 'TypeError'
 	Type TypeBasicError `json:"_type,omitempty"`
@@ -1566,15 +1442,6 @@ func (e Error) MarshalJSON() ([]byte, error) {
 	if e.Message != nil {
 		objectMap["message"] = e.Message
 	}
-	if e.MoreDetails != nil {
-		objectMap["moreDetails"] = e.MoreDetails
-	}
-	if e.Parameter != nil {
-		objectMap["parameter"] = e.Parameter
-	}
-	if e.Value != nil {
-		objectMap["value"] = e.Value
-	}
 	if e.Type != "" {
 		objectMap["_type"] = e.Type
 	}
@@ -1595,15 +1462,19 @@ func (e Error) AsBasicError() (BasicError, bool) {
 type ErrorResponse struct {
 	// Errors - A list of errors that describe the reasons why the request failed.
 	Errors *[]BasicError `json:"errors,omitempty"`
-	// ReadLink - The URL that returns this resource.
+	// ReadLink - READ-ONLY; The URL that returns this resource.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
-	WebSearchURL             *string        `json:"webSearchUrl,omitempty"`
-	PotentialAction          *[]BasicAction `json:"potentialAction,omitempty"`
-	ImmediateAction          *[]BasicAction `json:"immediateAction,omitempty"`
-	PreferredClickthroughURL *string        `json:"preferredClickthroughUrl,omitempty"`
-	AdaptiveCard             *string        `json:"adaptiveCard,omitempty"`
-	// ID - A String identifier.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
+	WebSearchURL *string `json:"webSearchUrl,omitempty"`
+	// PotentialAction - READ-ONLY
+	PotentialAction *[]BasicAction `json:"potentialAction,omitempty"`
+	// ImmediateAction - READ-ONLY
+	ImmediateAction *[]BasicAction `json:"immediateAction,omitempty"`
+	// PreferredClickthroughURL - READ-ONLY
+	PreferredClickthroughURL *string `json:"preferredClickthroughUrl,omitempty"`
+	// AdaptiveCard - READ-ONLY
+	AdaptiveCard *string `json:"adaptiveCard,omitempty"`
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeSearchAction', 'TypeSuggestions', 'TypeSearchResultsAnswer', 'TypeAnswer', 'TypeThing', 'TypeAction', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeCreativeWork'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -1615,27 +1486,6 @@ func (er ErrorResponse) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if er.Errors != nil {
 		objectMap["errors"] = er.Errors
-	}
-	if er.ReadLink != nil {
-		objectMap["readLink"] = er.ReadLink
-	}
-	if er.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = er.WebSearchURL
-	}
-	if er.PotentialAction != nil {
-		objectMap["potentialAction"] = er.PotentialAction
-	}
-	if er.ImmediateAction != nil {
-		objectMap["immediateAction"] = er.ImmediateAction
-	}
-	if er.PreferredClickthroughURL != nil {
-		objectMap["preferredClickthroughUrl"] = er.PreferredClickthroughURL
-	}
-	if er.AdaptiveCard != nil {
-		objectMap["adaptiveCard"] = er.AdaptiveCard
-	}
-	if er.ID != nil {
-		objectMap["id"] = er.ID
 	}
 	if er.Type != "" {
 		objectMap["_type"] = er.Type
@@ -1853,7 +1703,7 @@ type BasicIdentifiable interface {
 
 // Identifiable defines the identity of a resource.
 type Identifiable struct {
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeSearchAction', 'TypeSuggestions', 'TypeSearchResultsAnswer', 'TypeAnswer', 'TypeThing', 'TypeAction', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeCreativeWork'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -1932,9 +1782,6 @@ func unmarshalBasicIdentifiableArray(body []byte) ([]BasicIdentifiable, error) {
 func (i Identifiable) MarshalJSON() ([]byte, error) {
 	i.Type = TypeIdentifiable
 	objectMap := make(map[string]interface{})
-	if i.ID != nil {
-		objectMap["id"] = i.ID
-	}
 	if i.Type != "" {
 		objectMap["_type"] = i.Type
 	}
@@ -2045,15 +1892,16 @@ type BasicQueryContext interface {
 type QueryContext struct {
 	// OriginalQuery - The query string as specified in the request.
 	OriginalQuery *string `json:"originalQuery,omitempty"`
-	// AlteredQuery - The query string used by Bing to perform the query. Bing uses the altered query string if the original query string contained spelling mistakes. For example, if the query string is "saling downwind", the altered query string will be "sailing downwind". This field is included only if the original query string contains a spelling mistake.
+	// AlteredQuery - READ-ONLY; The query string used by Bing to perform the query. Bing uses the altered query string if the original query string contained spelling mistakes. For example, if the query string is "saling downwind", the altered query string will be "sailing downwind". This field is included only if the original query string contains a spelling mistake.
 	AlteredQuery *string `json:"alteredQuery,omitempty"`
-	// AlterationOverrideQuery - The query string to use to force Bing to use the original string. For example, if the query string is "saling downwind", the override query string will be "+saling downwind". Remember to encode the query string which results in "%2Bsaling+downwind". This field is included only if the original query string contains a spelling mistake.
+	// AlterationOverrideQuery - READ-ONLY; The query string to use to force Bing to use the original string. For example, if the query string is "saling downwind", the override query string will be "+saling downwind". Remember to encode the query string which results in "%2Bsaling+downwind". This field is included only if the original query string contains a spelling mistake.
 	AlterationOverrideQuery *string `json:"alterationOverrideQuery,omitempty"`
-	// AdultIntent - A Boolean value that indicates whether the specified query has adult intent. The value is true if the query has adult intent; otherwise, false.
+	// AdultIntent - READ-ONLY; A Boolean value that indicates whether the specified query has adult intent. The value is true if the query has adult intent; otherwise, false.
 	AdultIntent *bool `json:"adultIntent,omitempty"`
-	// AskUserForLocation - A Boolean value that indicates whether Bing requires the user's location to provide accurate results. If you specified the user's location by using the X-MSEdge-ClientIP and X-Search-Location headers, you can ignore this field. For location aware queries, such as "today's weather" or "restaurants near me" that need the user's location to provide accurate results, this field is set to true. For location aware queries that include the location (for example, "Seattle weather"), this field is set to false. This field is also set to false for queries that are not location aware, such as "best sellers".
+	// AskUserForLocation - READ-ONLY; A Boolean value that indicates whether Bing requires the user's location to provide accurate results. If you specified the user's location by using the X-MSEdge-ClientIP and X-Search-Location headers, you can ignore this field. For location aware queries, such as "today's weather" or "restaurants near me" that need the user's location to provide accurate results, this field is set to true. For location aware queries that include the location (for example, "Seattle weather"), this field is set to false. This field is also set to false for queries that are not location aware, such as "best sellers".
 	AskUserForLocation *bool `json:"askUserForLocation,omitempty"`
-	IsTransactional    *bool `json:"isTransactional,omitempty"`
+	// IsTransactional - READ-ONLY
+	IsTransactional *bool `json:"isTransactional,omitempty"`
 	// Type - Possible values include: 'TypeQueryContext'
 	Type TypeBasicQueryContext `json:"_type,omitempty"`
 }
@@ -2098,21 +1946,6 @@ func (qc QueryContext) MarshalJSON() ([]byte, error) {
 	if qc.OriginalQuery != nil {
 		objectMap["originalQuery"] = qc.OriginalQuery
 	}
-	if qc.AlteredQuery != nil {
-		objectMap["alteredQuery"] = qc.AlteredQuery
-	}
-	if qc.AlterationOverrideQuery != nil {
-		objectMap["alterationOverrideQuery"] = qc.AlterationOverrideQuery
-	}
-	if qc.AdultIntent != nil {
-		objectMap["adultIntent"] = qc.AdultIntent
-	}
-	if qc.AskUserForLocation != nil {
-		objectMap["askUserForLocation"] = qc.AskUserForLocation
-	}
-	if qc.IsTransactional != nil {
-		objectMap["isTransactional"] = qc.IsTransactional
-	}
 	if qc.Type != "" {
 		objectMap["_type"] = qc.Type
 	}
@@ -2148,18 +1981,22 @@ type BasicResponse interface {
 	AsResponse() (*Response, bool)
 }
 
-// Response defines a response. All schemas that could be returned at the root of a response should inherit from
-// this
+// Response defines a response. All schemas that could be returned at the root of a response should inherit
+// from this
 type Response struct {
-	// ReadLink - The URL that returns this resource.
+	// ReadLink - READ-ONLY; The URL that returns this resource.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
-	WebSearchURL             *string        `json:"webSearchUrl,omitempty"`
-	PotentialAction          *[]BasicAction `json:"potentialAction,omitempty"`
-	ImmediateAction          *[]BasicAction `json:"immediateAction,omitempty"`
-	PreferredClickthroughURL *string        `json:"preferredClickthroughUrl,omitempty"`
-	AdaptiveCard             *string        `json:"adaptiveCard,omitempty"`
-	// ID - A String identifier.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
+	WebSearchURL *string `json:"webSearchUrl,omitempty"`
+	// PotentialAction - READ-ONLY
+	PotentialAction *[]BasicAction `json:"potentialAction,omitempty"`
+	// ImmediateAction - READ-ONLY
+	ImmediateAction *[]BasicAction `json:"immediateAction,omitempty"`
+	// PreferredClickthroughURL - READ-ONLY
+	PreferredClickthroughURL *string `json:"preferredClickthroughUrl,omitempty"`
+	// AdaptiveCard - READ-ONLY
+	AdaptiveCard *string `json:"adaptiveCard,omitempty"`
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeSearchAction', 'TypeSuggestions', 'TypeSearchResultsAnswer', 'TypeAnswer', 'TypeThing', 'TypeAction', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeCreativeWork'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -2234,27 +2071,6 @@ func unmarshalBasicResponseArray(body []byte) ([]BasicResponse, error) {
 func (r Response) MarshalJSON() ([]byte, error) {
 	r.Type = TypeResponse
 	objectMap := make(map[string]interface{})
-	if r.ReadLink != nil {
-		objectMap["readLink"] = r.ReadLink
-	}
-	if r.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = r.WebSearchURL
-	}
-	if r.PotentialAction != nil {
-		objectMap["potentialAction"] = r.PotentialAction
-	}
-	if r.ImmediateAction != nil {
-		objectMap["immediateAction"] = r.ImmediateAction
-	}
-	if r.PreferredClickthroughURL != nil {
-		objectMap["preferredClickthroughUrl"] = r.PreferredClickthroughURL
-	}
-	if r.AdaptiveCard != nil {
-		objectMap["adaptiveCard"] = r.AdaptiveCard
-	}
-	if r.ID != nil {
-		objectMap["id"] = r.ID
-	}
 	if r.Type != "" {
 		objectMap["_type"] = r.Type
 	}
@@ -2649,46 +2465,67 @@ func (rb ResponseBase) AsBasicResponseBase() (BasicResponseBase, bool) {
 
 // SearchAction ...
 type SearchAction struct {
+	// DisplayText - READ-ONLY
 	DisplayText *string `json:"displayText,omitempty"`
-	Query       *string `json:"query,omitempty"`
-	// SearchKind - Possible values include: 'WebSearch', 'HistorySearch', 'DocumentSearch', 'TagSearch', 'LocationSearch', 'CustomSearch'
-	SearchKind  SearchKind    `json:"searchKind,omitempty"`
-	Result      *[]BasicThing `json:"result,omitempty"`
-	DisplayName *string       `json:"displayName,omitempty"`
-	IsTopAction *bool         `json:"isTopAction,omitempty"`
-	ServiceURL  *string       `json:"serviceUrl,omitempty"`
-	// ThumbnailURL - The URL to a thumbnail of the item.
+	// Query - READ-ONLY
+	Query *string `json:"query,omitempty"`
+	// SearchKind - READ-ONLY; Possible values include: 'WebSearch', 'HistorySearch', 'DocumentSearch', 'TagSearch', 'LocationSearch', 'CustomSearch'
+	SearchKind SearchKind `json:"searchKind,omitempty"`
+	// Result - READ-ONLY
+	Result *[]BasicThing `json:"result,omitempty"`
+	// DisplayName - READ-ONLY
+	DisplayName *string `json:"displayName,omitempty"`
+	// IsTopAction - READ-ONLY
+	IsTopAction *bool `json:"isTopAction,omitempty"`
+	// ServiceURL - READ-ONLY
+	ServiceURL *string `json:"serviceUrl,omitempty"`
+	// ThumbnailURL - READ-ONLY; The URL to a thumbnail of the item.
 	ThumbnailURL *string `json:"thumbnailUrl,omitempty"`
-	// About - For internal use only.
+	// About - READ-ONLY; For internal use only.
 	About *[]BasicThing `json:"about,omitempty"`
-	// Mentions - For internal use only.
+	// Mentions - READ-ONLY; For internal use only.
 	Mentions *[]BasicThing `json:"mentions,omitempty"`
-	// Provider - The source of the creative work.
+	// Provider - READ-ONLY; The source of the creative work.
 	Provider *[]BasicThing `json:"provider,omitempty"`
-	Creator  BasicThing    `json:"creator,omitempty"`
-	// Text - Text content of this creative work
-	Text                *string    `json:"text,omitempty"`
-	DiscussionURL       *string    `json:"discussionUrl,omitempty"`
-	CommentCount        *int32     `json:"commentCount,omitempty"`
-	MainEntity          BasicThing `json:"mainEntity,omitempty"`
-	HeadLine            *string    `json:"headLine,omitempty"`
-	CopyrightHolder     BasicThing `json:"copyrightHolder,omitempty"`
-	CopyrightYear       *int32     `json:"copyrightYear,omitempty"`
-	Disclaimer          *string    `json:"disclaimer,omitempty"`
-	IsAccessibleForFree *bool      `json:"isAccessibleForFree,omitempty"`
-	Genre               *[]string  `json:"genre,omitempty"`
-	IsFamilyFriendly    *bool      `json:"isFamilyFriendly,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// Creator - READ-ONLY
+	Creator BasicThing `json:"creator,omitempty"`
+	// Text - READ-ONLY; Text content of this creative work
+	Text *string `json:"text,omitempty"`
+	// DiscussionURL - READ-ONLY
+	DiscussionURL *string `json:"discussionUrl,omitempty"`
+	// CommentCount - READ-ONLY
+	CommentCount *int32 `json:"commentCount,omitempty"`
+	// MainEntity - READ-ONLY
+	MainEntity BasicThing `json:"mainEntity,omitempty"`
+	// HeadLine - READ-ONLY
+	HeadLine *string `json:"headLine,omitempty"`
+	// CopyrightHolder - READ-ONLY
+	CopyrightHolder BasicThing `json:"copyrightHolder,omitempty"`
+	// CopyrightYear - READ-ONLY
+	CopyrightYear *int32 `json:"copyrightYear,omitempty"`
+	// Disclaimer - READ-ONLY
+	Disclaimer *string `json:"disclaimer,omitempty"`
+	// IsAccessibleForFree - READ-ONLY
+	IsAccessibleForFree *bool `json:"isAccessibleForFree,omitempty"`
+	// Genre - READ-ONLY
+	Genre *[]string `json:"genre,omitempty"`
+	// IsFamilyFriendly - READ-ONLY
+	IsFamilyFriendly *bool `json:"isFamilyFriendly,omitempty"`
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// ReadLink - The URL that returns this resource.
+	// ReadLink - READ-ONLY; The URL that returns this resource.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
-	WebSearchURL             *string        `json:"webSearchUrl,omitempty"`
-	PotentialAction          *[]BasicAction `json:"potentialAction,omitempty"`
-	ImmediateAction          *[]BasicAction `json:"immediateAction,omitempty"`
-	PreferredClickthroughURL *string        `json:"preferredClickthroughUrl,omitempty"`
-	AdaptiveCard             *string        `json:"adaptiveCard,omitempty"`
-	// ID - A String identifier.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
+	WebSearchURL *string `json:"webSearchUrl,omitempty"`
+	// PotentialAction - READ-ONLY
+	PotentialAction *[]BasicAction `json:"potentialAction,omitempty"`
+	// ImmediateAction - READ-ONLY
+	ImmediateAction *[]BasicAction `json:"immediateAction,omitempty"`
+	// PreferredClickthroughURL - READ-ONLY
+	PreferredClickthroughURL *string `json:"preferredClickthroughUrl,omitempty"`
+	// AdaptiveCard - READ-ONLY
+	AdaptiveCard *string `json:"adaptiveCard,omitempty"`
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeSearchAction', 'TypeSuggestions', 'TypeSearchResultsAnswer', 'TypeAnswer', 'TypeThing', 'TypeAction', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeCreativeWork'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -2698,93 +2535,6 @@ type SearchAction struct {
 func (sa SearchAction) MarshalJSON() ([]byte, error) {
 	sa.Type = TypeSearchAction
 	objectMap := make(map[string]interface{})
-	if sa.DisplayText != nil {
-		objectMap["displayText"] = sa.DisplayText
-	}
-	if sa.Query != nil {
-		objectMap["query"] = sa.Query
-	}
-	if sa.SearchKind != "" {
-		objectMap["searchKind"] = sa.SearchKind
-	}
-	if sa.Result != nil {
-		objectMap["result"] = sa.Result
-	}
-	if sa.DisplayName != nil {
-		objectMap["displayName"] = sa.DisplayName
-	}
-	if sa.IsTopAction != nil {
-		objectMap["isTopAction"] = sa.IsTopAction
-	}
-	if sa.ServiceURL != nil {
-		objectMap["serviceUrl"] = sa.ServiceURL
-	}
-	if sa.ThumbnailURL != nil {
-		objectMap["thumbnailUrl"] = sa.ThumbnailURL
-	}
-	if sa.About != nil {
-		objectMap["about"] = sa.About
-	}
-	if sa.Mentions != nil {
-		objectMap["mentions"] = sa.Mentions
-	}
-	if sa.Provider != nil {
-		objectMap["provider"] = sa.Provider
-	}
-	objectMap["creator"] = sa.Creator
-	if sa.Text != nil {
-		objectMap["text"] = sa.Text
-	}
-	if sa.DiscussionURL != nil {
-		objectMap["discussionUrl"] = sa.DiscussionURL
-	}
-	if sa.CommentCount != nil {
-		objectMap["commentCount"] = sa.CommentCount
-	}
-	objectMap["mainEntity"] = sa.MainEntity
-	if sa.HeadLine != nil {
-		objectMap["headLine"] = sa.HeadLine
-	}
-	objectMap["copyrightHolder"] = sa.CopyrightHolder
-	if sa.CopyrightYear != nil {
-		objectMap["copyrightYear"] = sa.CopyrightYear
-	}
-	if sa.Disclaimer != nil {
-		objectMap["disclaimer"] = sa.Disclaimer
-	}
-	if sa.IsAccessibleForFree != nil {
-		objectMap["isAccessibleForFree"] = sa.IsAccessibleForFree
-	}
-	if sa.Genre != nil {
-		objectMap["genre"] = sa.Genre
-	}
-	if sa.IsFamilyFriendly != nil {
-		objectMap["isFamilyFriendly"] = sa.IsFamilyFriendly
-	}
-	if sa.URL != nil {
-		objectMap["url"] = sa.URL
-	}
-	if sa.ReadLink != nil {
-		objectMap["readLink"] = sa.ReadLink
-	}
-	if sa.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = sa.WebSearchURL
-	}
-	if sa.PotentialAction != nil {
-		objectMap["potentialAction"] = sa.PotentialAction
-	}
-	if sa.ImmediateAction != nil {
-		objectMap["immediateAction"] = sa.ImmediateAction
-	}
-	if sa.PreferredClickthroughURL != nil {
-		objectMap["preferredClickthroughUrl"] = sa.PreferredClickthroughURL
-	}
-	if sa.AdaptiveCard != nil {
-		objectMap["adaptiveCard"] = sa.AdaptiveCard
-	}
-	if sa.ID != nil {
-		objectMap["id"] = sa.ID
-	}
 	if sa.Type != "" {
 		objectMap["_type"] = sa.Type
 	}
@@ -3188,16 +2938,21 @@ type BasicSearchResultsAnswer interface {
 
 // SearchResultsAnswer defines a search result answer.
 type SearchResultsAnswer struct {
+	// QueryContext - READ-ONLY
 	QueryContext BasicQueryContext `json:"queryContext,omitempty"`
-	// ReadLink - The URL that returns this resource.
+	// ReadLink - READ-ONLY; The URL that returns this resource.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
-	WebSearchURL             *string        `json:"webSearchUrl,omitempty"`
-	PotentialAction          *[]BasicAction `json:"potentialAction,omitempty"`
-	ImmediateAction          *[]BasicAction `json:"immediateAction,omitempty"`
-	PreferredClickthroughURL *string        `json:"preferredClickthroughUrl,omitempty"`
-	AdaptiveCard             *string        `json:"adaptiveCard,omitempty"`
-	// ID - A String identifier.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
+	WebSearchURL *string `json:"webSearchUrl,omitempty"`
+	// PotentialAction - READ-ONLY
+	PotentialAction *[]BasicAction `json:"potentialAction,omitempty"`
+	// ImmediateAction - READ-ONLY
+	ImmediateAction *[]BasicAction `json:"immediateAction,omitempty"`
+	// PreferredClickthroughURL - READ-ONLY
+	PreferredClickthroughURL *string `json:"preferredClickthroughUrl,omitempty"`
+	// AdaptiveCard - READ-ONLY
+	AdaptiveCard *string `json:"adaptiveCard,omitempty"`
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeSearchAction', 'TypeSuggestions', 'TypeSearchResultsAnswer', 'TypeAnswer', 'TypeThing', 'TypeAction', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeCreativeWork'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -3244,28 +2999,6 @@ func unmarshalBasicSearchResultsAnswerArray(body []byte) ([]BasicSearchResultsAn
 func (sra SearchResultsAnswer) MarshalJSON() ([]byte, error) {
 	sra.Type = TypeSearchResultsAnswer
 	objectMap := make(map[string]interface{})
-	objectMap["queryContext"] = sra.QueryContext
-	if sra.ReadLink != nil {
-		objectMap["readLink"] = sra.ReadLink
-	}
-	if sra.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = sra.WebSearchURL
-	}
-	if sra.PotentialAction != nil {
-		objectMap["potentialAction"] = sra.PotentialAction
-	}
-	if sra.ImmediateAction != nil {
-		objectMap["immediateAction"] = sra.ImmediateAction
-	}
-	if sra.PreferredClickthroughURL != nil {
-		objectMap["preferredClickthroughUrl"] = sra.PreferredClickthroughURL
-	}
-	if sra.AdaptiveCard != nil {
-		objectMap["adaptiveCard"] = sra.AdaptiveCard
-	}
-	if sra.ID != nil {
-		objectMap["id"] = sra.ID
-	}
 	if sra.Type != "" {
 		objectMap["_type"] = sra.Type
 	}
@@ -3464,16 +3197,21 @@ func (sra *SearchResultsAnswer) UnmarshalJSON(body []byte) error {
 type Suggestions struct {
 	autorest.Response `json:"-"`
 	SuggestionGroups  *[]BasicSuggestionsSuggestionGroup `json:"suggestionGroups,omitempty"`
-	QueryContext      BasicQueryContext                  `json:"queryContext,omitempty"`
-	// ReadLink - The URL that returns this resource.
+	// QueryContext - READ-ONLY
+	QueryContext BasicQueryContext `json:"queryContext,omitempty"`
+	// ReadLink - READ-ONLY; The URL that returns this resource.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
-	WebSearchURL             *string        `json:"webSearchUrl,omitempty"`
-	PotentialAction          *[]BasicAction `json:"potentialAction,omitempty"`
-	ImmediateAction          *[]BasicAction `json:"immediateAction,omitempty"`
-	PreferredClickthroughURL *string        `json:"preferredClickthroughUrl,omitempty"`
-	AdaptiveCard             *string        `json:"adaptiveCard,omitempty"`
-	// ID - A String identifier.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
+	WebSearchURL *string `json:"webSearchUrl,omitempty"`
+	// PotentialAction - READ-ONLY
+	PotentialAction *[]BasicAction `json:"potentialAction,omitempty"`
+	// ImmediateAction - READ-ONLY
+	ImmediateAction *[]BasicAction `json:"immediateAction,omitempty"`
+	// PreferredClickthroughURL - READ-ONLY
+	PreferredClickthroughURL *string `json:"preferredClickthroughUrl,omitempty"`
+	// AdaptiveCard - READ-ONLY
+	AdaptiveCard *string `json:"adaptiveCard,omitempty"`
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeSearchAction', 'TypeSuggestions', 'TypeSearchResultsAnswer', 'TypeAnswer', 'TypeThing', 'TypeAction', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeCreativeWork'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -3485,28 +3223,6 @@ func (s Suggestions) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if s.SuggestionGroups != nil {
 		objectMap["suggestionGroups"] = s.SuggestionGroups
-	}
-	objectMap["queryContext"] = s.QueryContext
-	if s.ReadLink != nil {
-		objectMap["readLink"] = s.ReadLink
-	}
-	if s.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = s.WebSearchURL
-	}
-	if s.PotentialAction != nil {
-		objectMap["potentialAction"] = s.PotentialAction
-	}
-	if s.ImmediateAction != nil {
-		objectMap["immediateAction"] = s.ImmediateAction
-	}
-	if s.PreferredClickthroughURL != nil {
-		objectMap["preferredClickthroughUrl"] = s.PreferredClickthroughURL
-	}
-	if s.AdaptiveCard != nil {
-		objectMap["adaptiveCard"] = s.AdaptiveCard
-	}
-	if s.ID != nil {
-		objectMap["id"] = s.ID
 	}
 	if s.Type != "" {
 		objectMap["_type"] = s.Type
@@ -3795,17 +3511,21 @@ type BasicThing interface {
 
 // Thing defines a thing.
 type Thing struct {
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// ReadLink - The URL that returns this resource.
+	// ReadLink - READ-ONLY; The URL that returns this resource.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL To Bing's search result for this item.
-	WebSearchURL             *string        `json:"webSearchUrl,omitempty"`
-	PotentialAction          *[]BasicAction `json:"potentialAction,omitempty"`
-	ImmediateAction          *[]BasicAction `json:"immediateAction,omitempty"`
-	PreferredClickthroughURL *string        `json:"preferredClickthroughUrl,omitempty"`
-	AdaptiveCard             *string        `json:"adaptiveCard,omitempty"`
-	// ID - A String identifier.
+	// WebSearchURL - READ-ONLY; The URL To Bing's search result for this item.
+	WebSearchURL *string `json:"webSearchUrl,omitempty"`
+	// PotentialAction - READ-ONLY
+	PotentialAction *[]BasicAction `json:"potentialAction,omitempty"`
+	// ImmediateAction - READ-ONLY
+	ImmediateAction *[]BasicAction `json:"immediateAction,omitempty"`
+	// PreferredClickthroughURL - READ-ONLY
+	PreferredClickthroughURL *string `json:"preferredClickthroughUrl,omitempty"`
+	// AdaptiveCard - READ-ONLY
+	AdaptiveCard *string `json:"adaptiveCard,omitempty"`
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypeSearchAction', 'TypeSuggestions', 'TypeSearchResultsAnswer', 'TypeAnswer', 'TypeThing', 'TypeAction', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeCreativeWork'
 	Type TypeBasicResponseBase `json:"_type,omitempty"`
@@ -3860,30 +3580,6 @@ func unmarshalBasicThingArray(body []byte) ([]BasicThing, error) {
 func (t Thing) MarshalJSON() ([]byte, error) {
 	t.Type = TypeThing
 	objectMap := make(map[string]interface{})
-	if t.URL != nil {
-		objectMap["url"] = t.URL
-	}
-	if t.ReadLink != nil {
-		objectMap["readLink"] = t.ReadLink
-	}
-	if t.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = t.WebSearchURL
-	}
-	if t.PotentialAction != nil {
-		objectMap["potentialAction"] = t.PotentialAction
-	}
-	if t.ImmediateAction != nil {
-		objectMap["immediateAction"] = t.ImmediateAction
-	}
-	if t.PreferredClickthroughURL != nil {
-		objectMap["preferredClickthroughUrl"] = t.PreferredClickthroughURL
-	}
-	if t.AdaptiveCard != nil {
-		objectMap["adaptiveCard"] = t.AdaptiveCard
-	}
-	if t.ID != nil {
-		objectMap["id"] = t.ID
-	}
 	if t.Type != "" {
 		objectMap["_type"] = t.Type
 	}

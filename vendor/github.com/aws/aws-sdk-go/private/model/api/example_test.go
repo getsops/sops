@@ -220,10 +220,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/fooservice"
+	"` + SDKImportRoot + `/aws"
+	"` + SDKImportRoot + `/aws/awserr"
+	"` + SDKImportRoot + `/aws/session"
+	"` + SDKImportRoot + `/service/fooservice"
 )
 
 var _ time.Duration

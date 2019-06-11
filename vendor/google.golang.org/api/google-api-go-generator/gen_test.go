@@ -1,4 +1,4 @@
-// Copyright 2017 Google Inc. All Rights Reserved.
+// Copyright 2017 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -26,6 +26,8 @@ import (
 var updateGolden = flag.Bool("update_golden", false, "If true, causes TestAPIs to update golden files")
 
 func TestAPIs(t *testing.T) {
+	*copyrightYear = "YEAR"
+
 	names := []string{
 		"any",
 		"arrayofarray-1",
@@ -35,6 +37,8 @@ func TestAPIs(t *testing.T) {
 		"blogger-3",
 		"floats",
 		"getwithoutbody",
+		"http-body",
+		"json-body",
 		"mapofany",
 		"mapofarrayofobjects",
 		"mapofint64strings",

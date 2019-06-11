@@ -2,7 +2,7 @@
   "basePath": "",
   "baseUrl": "https://digitalassetlinks.googleapis.com/",
   "batchPath": "batch",
-  "description": "API for discovering relationships between online assets such as web sites or mobile apps.",
+  "description": "Discovers relationships between online assets such as websites or mobile apps.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/digital-asset-links/",
   "icons": {
@@ -96,7 +96,7 @@
     "assetlinks": {
       "methods": {
         "check": {
-          "description": "Determines whether the specified (directional) relationship exists between\nthe specified source and target assets.\n\nThe relation describes the intent of the link between the two assets as\nclaimed by the source asset.  An example for such relationships is the\ndelegation of privileges or permissions.\n\nThis command is most often used by infrastructure systems to check\npreconditions for an action.  For example, a client may want to know if it\nis OK to send a web URL to a particular mobile app instead. The client can\ncheck for the relevant asset link from the website to the mobile app to\ndecide if the operation should be allowed.\n\nA note about security: if you specify a secure asset as the source, such as\nan HTTPS website or an Android app, the API will ensure that any\nstatements used to generate the response have been made in a secure way by\nthe owner of that asset.  Conversely, if the source asset is an insecure\nHTTP website (that is, the URL starts with `http://` instead of `https://`),\nthe API cannot verify its statements securely, and it is not possible to\nensure that the website's statements have not been altered by a third\nparty.  For more information, see the [Digital Asset Links technical design\nspecification](https://github.com/google/digitalassetlinks/blob/master/well-known/details.md).",
+          "description": "Determines whether the specified (directional) relationship exists between\nthe specified source and target assets.\n\nThe relation describes the intent of the link between the two assets as\nclaimed by the source asset.  An example for such relationships is the\ndelegation of privileges or permissions.\n\nThis command is most often used by infrastructure systems to check\npreconditions for an action.  For example, a client may want to know if it\nis OK to send a web URL to a particular mobile app instead. The client can\ncheck for the relevant asset link from the website to the mobile app to\ndecide if the operation should be allowed.\n\nA note about security: if you specify a secure asset as the source, such as\nan HTTPS website or an Android app, the API will ensure that any\nstatements used to generate the response have been made in a secure way by\nthe owner of that asset.  Conversely, if the source asset is an insecure\nHTTP website (that is, the URL starts with `http://` instead of\n`https://`), the API cannot verify its statements securely, and it is not\npossible to ensure that the website's statements have not been altered by a\nthird party.  For more information, see the [Digital Asset Links technical\ndesign\nspecification](https://github.com/google/digitalassetlinks/blob/master/well-known/details.md).",
           "flatPath": "v1/assetlinks:check",
           "httpMethod": "GET",
           "id": "digitalassetlinks.assetlinks.check",
@@ -183,7 +183,7 @@
       }
     }
   },
-  "revision": "20180606",
+  "revision": "20190429",
   "rootUrl": "https://digitalassetlinks.googleapis.com/",
   "schemas": {
     "AndroidAppAsset": {

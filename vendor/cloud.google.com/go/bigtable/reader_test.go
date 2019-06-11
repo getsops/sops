@@ -24,7 +24,6 @@ import (
 	"testing"
 
 	"cloud.google.com/go/internal/testutil"
-
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/wrappers"
 	btspb "google.golang.org/genproto/googleapis/bigtable/v2"
@@ -226,13 +225,13 @@ type TestResult struct {
 }
 
 func TestAcceptance(t *testing.T) {
-	testJson, err := ioutil.ReadFile("./testdata/read-rows-acceptance-test.json")
+	testJSON, err := ioutil.ReadFile("./testdata/read-rows-acceptance-test.json")
 	if err != nil {
 		t.Fatalf("could not open acceptance test file %v", err)
 	}
 
 	var accTest AcceptanceTest
-	err = json.Unmarshal(testJson, &accTest)
+	err = json.Unmarshal(testJSON, &accTest)
 	if err != nil {
 		t.Fatalf("could not parse acceptance test file: %v", err)
 	}

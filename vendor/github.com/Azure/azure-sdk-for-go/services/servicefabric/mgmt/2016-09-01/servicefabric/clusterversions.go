@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewClusterVersionsClientWithBaseURI(baseURI string, subscriptionID string) 
 // environment - cluster operating system, the default means all
 // clusterVersion - the cluster code version
 func (client ClusterVersionsClient) Get(ctx context.Context, location string, environment string, clusterVersion string) (result ClusterCodeVersionsResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ClusterVersionsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, location, environment, clusterVersion)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabric.ClusterVersionsClient", "Get", nil, "Failure preparing request")
@@ -112,6 +123,16 @@ func (client ClusterVersionsClient) GetResponder(resp *http.Response) (result Cl
 // Parameters:
 // location - the location for the cluster code versions, this is different from cluster location
 func (client ClusterVersionsClient) List(ctx context.Context, location string) (result ClusterCodeVersionsListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ClusterVersionsClient.List")
+		defer func() {
+			sc := -1
+			if result.ccvlr.Response.Response != nil {
+				sc = result.ccvlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, location)
 	if err != nil {
@@ -175,8 +196,8 @@ func (client ClusterVersionsClient) ListResponder(resp *http.Response) (result C
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ClusterVersionsClient) listNextResults(lastResults ClusterCodeVersionsListResult) (result ClusterCodeVersionsListResult, err error) {
-	req, err := lastResults.clusterCodeVersionsListResultPreparer()
+func (client ClusterVersionsClient) listNextResults(ctx context.Context, lastResults ClusterCodeVersionsListResult) (result ClusterCodeVersionsListResult, err error) {
+	req, err := lastResults.clusterCodeVersionsListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "servicefabric.ClusterVersionsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -197,6 +218,16 @@ func (client ClusterVersionsClient) listNextResults(lastResults ClusterCodeVersi
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ClusterVersionsClient) ListComplete(ctx context.Context, location string) (result ClusterCodeVersionsListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ClusterVersionsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, location)
 	return
 }
@@ -206,6 +237,16 @@ func (client ClusterVersionsClient) ListComplete(ctx context.Context, location s
 // location - the location for the cluster code versions, this is different from cluster location
 // environment - cluster operating system, the default means all
 func (client ClusterVersionsClient) ListByEnvironment(ctx context.Context, location string, environment string) (result ClusterCodeVersionsListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ClusterVersionsClient.ListByEnvironment")
+		defer func() {
+			sc := -1
+			if result.ccvlr.Response.Response != nil {
+				sc = result.ccvlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByEnvironmentNextResults
 	req, err := client.ListByEnvironmentPreparer(ctx, location, environment)
 	if err != nil {
@@ -270,8 +311,8 @@ func (client ClusterVersionsClient) ListByEnvironmentResponder(resp *http.Respon
 }
 
 // listByEnvironmentNextResults retrieves the next set of results, if any.
-func (client ClusterVersionsClient) listByEnvironmentNextResults(lastResults ClusterCodeVersionsListResult) (result ClusterCodeVersionsListResult, err error) {
-	req, err := lastResults.clusterCodeVersionsListResultPreparer()
+func (client ClusterVersionsClient) listByEnvironmentNextResults(ctx context.Context, lastResults ClusterCodeVersionsListResult) (result ClusterCodeVersionsListResult, err error) {
+	req, err := lastResults.clusterCodeVersionsListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "servicefabric.ClusterVersionsClient", "listByEnvironmentNextResults", nil, "Failure preparing next results request")
 	}
@@ -292,6 +333,16 @@ func (client ClusterVersionsClient) listByEnvironmentNextResults(lastResults Clu
 
 // ListByEnvironmentComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ClusterVersionsClient) ListByEnvironmentComplete(ctx context.Context, location string, environment string) (result ClusterCodeVersionsListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ClusterVersionsClient.ListByEnvironment")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByEnvironment(ctx, location, environment)
 	return
 }
@@ -301,6 +352,16 @@ func (client ClusterVersionsClient) ListByEnvironmentComplete(ctx context.Contex
 // location - the location for the cluster code versions, this is different from cluster location
 // clusterVersion - the cluster code version
 func (client ClusterVersionsClient) ListByVersion(ctx context.Context, location string, clusterVersion string) (result ClusterCodeVersionsListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ClusterVersionsClient.ListByVersion")
+		defer func() {
+			sc := -1
+			if result.ccvlr.Response.Response != nil {
+				sc = result.ccvlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByVersionNextResults
 	req, err := client.ListByVersionPreparer(ctx, location, clusterVersion)
 	if err != nil {
@@ -365,8 +426,8 @@ func (client ClusterVersionsClient) ListByVersionResponder(resp *http.Response) 
 }
 
 // listByVersionNextResults retrieves the next set of results, if any.
-func (client ClusterVersionsClient) listByVersionNextResults(lastResults ClusterCodeVersionsListResult) (result ClusterCodeVersionsListResult, err error) {
-	req, err := lastResults.clusterCodeVersionsListResultPreparer()
+func (client ClusterVersionsClient) listByVersionNextResults(ctx context.Context, lastResults ClusterCodeVersionsListResult) (result ClusterCodeVersionsListResult, err error) {
+	req, err := lastResults.clusterCodeVersionsListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "servicefabric.ClusterVersionsClient", "listByVersionNextResults", nil, "Failure preparing next results request")
 	}
@@ -387,6 +448,16 @@ func (client ClusterVersionsClient) listByVersionNextResults(lastResults Cluster
 
 // ListByVersionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ClusterVersionsClient) ListByVersionComplete(ctx context.Context, location string, clusterVersion string) (result ClusterCodeVersionsListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ClusterVersionsClient.ListByVersion")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByVersion(ctx, location, clusterVersion)
 	return
 }

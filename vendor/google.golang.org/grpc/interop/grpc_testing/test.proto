@@ -68,6 +68,9 @@ message SimpleRequest {
 
   // Whether server should return a given status
   EchoStatus response_status = 7;
+
+  // Whether SimpleResponse should include server_id.
+  bool fill_server_id = 9;
 }
 
 // Unary response, as configured by the request.
@@ -78,9 +81,13 @@ message SimpleResponse {
   // The user the request came from, for verifying authentication was
   // successful when the client expected it.
   string username = 2;
-  
+
   // OAuth scope.
   string oauth_scope = 3;
+
+  // Server ID. This must be unique among different server instances,
+  // but the same across all RPC's made to a particular server instance.
+  string server_id = 4;
 }
 
 // Client-streaming request.

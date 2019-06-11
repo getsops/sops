@@ -9,13 +9,13 @@ import (
 func TestFailureSerializerCreatesSerializedVersionOfAssertionResult(t *testing.T) {
 	thing1 := Thing1{"Hi"}
 	thing2 := Thing2{"Bye"}
-	message := "Super-hip failure message."
+	message := "Super-hip failure message. Diff: Something that we don't need."
 	serializer := newSerializer()
 
 	actualResult := serializer.serialize(thing1, thing2, message)
 
 	expectedResult, _ := json.Marshal(FailureView{
-		Message:  message,
+		Message:  "Super-hip failure message.",
 		Expected: fmt.Sprintf("%+v", thing1),
 		Actual:   fmt.Sprintf("%+v", thing2),
 	})
@@ -26,7 +26,7 @@ func TestFailureSerializerCreatesSerializedVersionOfAssertionResult(t *testing.T
 
 	actualResult = serializer.serializeDetailed(thing1, thing2, message)
 	expectedResult, _ = json.Marshal(FailureView{
-		Message:  message,
+		Message:  "Super-hip failure message.",
 		Expected: fmt.Sprintf("%#v", thing1),
 		Actual:   fmt.Sprintf("%#v", thing2),
 	})

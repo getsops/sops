@@ -31,7 +31,7 @@ var (
 func mustGetMetadata(key string) []byte {
 	b, err := getMetadata(key)
 	if err != nil {
-		panic(fmt.Sprintf("Metadata fetch failed: %v", err))
+		panic(fmt.Sprintf("Metadata fetch failed for '%s': %v", key, err))
 	}
 	return b
 }

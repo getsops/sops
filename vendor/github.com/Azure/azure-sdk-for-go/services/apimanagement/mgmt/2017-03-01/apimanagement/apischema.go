@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,6 +51,16 @@ func NewAPISchemaClientWithBaseURI(baseURI string, subscriptionID string) APISch
 // ifMatch - the entity state (Etag) version of the Api Schema to update. A value of "*" can be used for
 // If-Match to unconditionally apply the operation.
 func (client APISchemaClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, apiid string, schemaID string, parameters SchemaContract, ifMatch string) (result SchemaContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APISchemaClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -148,6 +159,16 @@ func (client APISchemaClient) CreateOrUpdateResponder(resp *http.Response) (resu
 // ifMatch - the entity state (Etag) version of the Api schema to update. A value of "*" can be used for
 // If-Match to unconditionally apply the operation.
 func (client APISchemaClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, schemaID string, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APISchemaClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -235,6 +256,16 @@ func (client APISchemaClient) DeleteResponder(resp *http.Response) (result autor
 // apiid - API identifier. Must be unique in the current API Management service instance.
 // schemaID - schema identifier within an API. Must be unique in the current API Management service instance.
 func (client APISchemaClient) Get(ctx context.Context, resourceGroupName string, serviceName string, apiid string, schemaID string) (result SchemaContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APISchemaClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -322,6 +353,16 @@ func (client APISchemaClient) GetResponder(resp *http.Response) (result SchemaCo
 // apiid - API identifier. Must be unique in the current API Management service instance.
 // schemaID - schema identifier within an API. Must be unique in the current API Management service instance.
 func (client APISchemaClient) GetEntityTag(ctx context.Context, resourceGroupName string, serviceName string, apiid string, schemaID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APISchemaClient.GetEntityTag")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -407,6 +448,16 @@ func (client APISchemaClient) GetEntityTagResponder(resp *http.Response) (result
 // serviceName - the name of the API Management service.
 // apiid - API identifier. Must be unique in the current API Management service instance.
 func (client APISchemaClient) ListByAPI(ctx context.Context, resourceGroupName string, serviceName string, apiid string) (result SchemaCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APISchemaClient.ListByAPI")
+		defer func() {
+			sc := -1
+			if result.sc.Response.Response != nil {
+				sc = result.sc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -484,8 +535,8 @@ func (client APISchemaClient) ListByAPIResponder(resp *http.Response) (result Sc
 }
 
 // listByAPINextResults retrieves the next set of results, if any.
-func (client APISchemaClient) listByAPINextResults(lastResults SchemaCollection) (result SchemaCollection, err error) {
-	req, err := lastResults.schemaCollectionPreparer()
+func (client APISchemaClient) listByAPINextResults(ctx context.Context, lastResults SchemaCollection) (result SchemaCollection, err error) {
+	req, err := lastResults.schemaCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.APISchemaClient", "listByAPINextResults", nil, "Failure preparing next results request")
 	}
@@ -506,6 +557,16 @@ func (client APISchemaClient) listByAPINextResults(lastResults SchemaCollection)
 
 // ListByAPIComplete enumerates all values, automatically crossing page boundaries as required.
 func (client APISchemaClient) ListByAPIComplete(ctx context.Context, resourceGroupName string, serviceName string, apiid string) (result SchemaCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APISchemaClient.ListByAPI")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByAPI(ctx, resourceGroupName, serviceName, apiid)
 	return
 }

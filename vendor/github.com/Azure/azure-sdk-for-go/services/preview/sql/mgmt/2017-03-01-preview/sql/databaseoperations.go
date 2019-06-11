@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -50,6 +51,16 @@ func NewDatabaseOperationsClientWithBaseURI(baseURI string, subscriptionID strin
 // databaseName - the name of the database.
 // operationID - the operation identifier.
 func (client DatabaseOperationsClient) Cancel(ctx context.Context, resourceGroupName string, serverName string, databaseName string, operationID uuid.UUID) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DatabaseOperationsClient.Cancel")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CancelPreparer(ctx, resourceGroupName, serverName, databaseName, operationID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.DatabaseOperationsClient", "Cancel", nil, "Failure preparing request")
@@ -120,6 +131,16 @@ func (client DatabaseOperationsClient) CancelResponder(resp *http.Response) (res
 // serverName - the name of the server.
 // databaseName - the name of the database.
 func (client DatabaseOperationsClient) ListByDatabase(ctx context.Context, resourceGroupName string, serverName string, databaseName string) (result DatabaseOperationListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DatabaseOperationsClient.ListByDatabase")
+		defer func() {
+			sc := -1
+			if result.dolr.Response.Response != nil {
+				sc = result.dolr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByDatabaseNextResults
 	req, err := client.ListByDatabasePreparer(ctx, resourceGroupName, serverName, databaseName)
 	if err != nil {
@@ -185,8 +206,8 @@ func (client DatabaseOperationsClient) ListByDatabaseResponder(resp *http.Respon
 }
 
 // listByDatabaseNextResults retrieves the next set of results, if any.
-func (client DatabaseOperationsClient) listByDatabaseNextResults(lastResults DatabaseOperationListResult) (result DatabaseOperationListResult, err error) {
-	req, err := lastResults.databaseOperationListResultPreparer()
+func (client DatabaseOperationsClient) listByDatabaseNextResults(ctx context.Context, lastResults DatabaseOperationListResult) (result DatabaseOperationListResult, err error) {
+	req, err := lastResults.databaseOperationListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.DatabaseOperationsClient", "listByDatabaseNextResults", nil, "Failure preparing next results request")
 	}
@@ -207,6 +228,16 @@ func (client DatabaseOperationsClient) listByDatabaseNextResults(lastResults Dat
 
 // ListByDatabaseComplete enumerates all values, automatically crossing page boundaries as required.
 func (client DatabaseOperationsClient) ListByDatabaseComplete(ctx context.Context, resourceGroupName string, serverName string, databaseName string) (result DatabaseOperationListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DatabaseOperationsClient.ListByDatabase")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByDatabase(ctx, resourceGroupName, serverName, databaseName)
 	return
 }

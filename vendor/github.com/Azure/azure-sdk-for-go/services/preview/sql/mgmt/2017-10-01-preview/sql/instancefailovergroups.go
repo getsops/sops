@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,6 +51,16 @@ func NewInstanceFailoverGroupsClientWithBaseURI(baseURI string, subscriptionID s
 // failoverGroupName - the name of the failover group.
 // parameters - the failover group parameters.
 func (client InstanceFailoverGroupsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, locationName string, failoverGroupName string, parameters InstanceFailoverGroup) (result InstanceFailoverGroupsCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/InstanceFailoverGroupsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.InstanceFailoverGroupProperties", Name: validation.Null, Rule: false,
@@ -108,10 +119,6 @@ func (client InstanceFailoverGroupsClient) CreateOrUpdateSender(req *http.Reques
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -136,6 +143,16 @@ func (client InstanceFailoverGroupsClient) CreateOrUpdateResponder(resp *http.Re
 // locationName - the name of the region where the resource is located.
 // failoverGroupName - the name of the failover group.
 func (client InstanceFailoverGroupsClient) Delete(ctx context.Context, resourceGroupName string, locationName string, failoverGroupName string) (result InstanceFailoverGroupsDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/InstanceFailoverGroupsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, locationName, failoverGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.InstanceFailoverGroupsClient", "Delete", nil, "Failure preparing request")
@@ -182,10 +199,6 @@ func (client InstanceFailoverGroupsClient) DeleteSender(req *http.Request) (futu
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -209,6 +222,16 @@ func (client InstanceFailoverGroupsClient) DeleteResponder(resp *http.Response) 
 // locationName - the name of the region where the resource is located.
 // failoverGroupName - the name of the failover group.
 func (client InstanceFailoverGroupsClient) Failover(ctx context.Context, resourceGroupName string, locationName string, failoverGroupName string) (result InstanceFailoverGroupsFailoverFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/InstanceFailoverGroupsClient.Failover")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.FailoverPreparer(ctx, resourceGroupName, locationName, failoverGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.InstanceFailoverGroupsClient", "Failover", nil, "Failure preparing request")
@@ -255,10 +278,6 @@ func (client InstanceFailoverGroupsClient) FailoverSender(req *http.Request) (fu
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -284,6 +303,16 @@ func (client InstanceFailoverGroupsClient) FailoverResponder(resp *http.Response
 // locationName - the name of the region where the resource is located.
 // failoverGroupName - the name of the failover group.
 func (client InstanceFailoverGroupsClient) ForceFailoverAllowDataLoss(ctx context.Context, resourceGroupName string, locationName string, failoverGroupName string) (result InstanceFailoverGroupsForceFailoverAllowDataLossFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/InstanceFailoverGroupsClient.ForceFailoverAllowDataLoss")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ForceFailoverAllowDataLossPreparer(ctx, resourceGroupName, locationName, failoverGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.InstanceFailoverGroupsClient", "ForceFailoverAllowDataLoss", nil, "Failure preparing request")
@@ -330,10 +359,6 @@ func (client InstanceFailoverGroupsClient) ForceFailoverAllowDataLossSender(req 
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -358,6 +383,16 @@ func (client InstanceFailoverGroupsClient) ForceFailoverAllowDataLossResponder(r
 // locationName - the name of the region where the resource is located.
 // failoverGroupName - the name of the failover group.
 func (client InstanceFailoverGroupsClient) Get(ctx context.Context, resourceGroupName string, locationName string, failoverGroupName string) (result InstanceFailoverGroup, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/InstanceFailoverGroupsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, locationName, failoverGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.InstanceFailoverGroupsClient", "Get", nil, "Failure preparing request")
@@ -427,6 +462,16 @@ func (client InstanceFailoverGroupsClient) GetResponder(resp *http.Response) (re
 // from the Azure Resource Manager API or the portal.
 // locationName - the name of the region where the resource is located.
 func (client InstanceFailoverGroupsClient) ListByLocation(ctx context.Context, resourceGroupName string, locationName string) (result InstanceFailoverGroupListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/InstanceFailoverGroupsClient.ListByLocation")
+		defer func() {
+			sc := -1
+			if result.ifglr.Response.Response != nil {
+				sc = result.ifglr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByLocationNextResults
 	req, err := client.ListByLocationPreparer(ctx, resourceGroupName, locationName)
 	if err != nil {
@@ -491,8 +536,8 @@ func (client InstanceFailoverGroupsClient) ListByLocationResponder(resp *http.Re
 }
 
 // listByLocationNextResults retrieves the next set of results, if any.
-func (client InstanceFailoverGroupsClient) listByLocationNextResults(lastResults InstanceFailoverGroupListResult) (result InstanceFailoverGroupListResult, err error) {
-	req, err := lastResults.instanceFailoverGroupListResultPreparer()
+func (client InstanceFailoverGroupsClient) listByLocationNextResults(ctx context.Context, lastResults InstanceFailoverGroupListResult) (result InstanceFailoverGroupListResult, err error) {
+	req, err := lastResults.instanceFailoverGroupListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.InstanceFailoverGroupsClient", "listByLocationNextResults", nil, "Failure preparing next results request")
 	}
@@ -513,6 +558,16 @@ func (client InstanceFailoverGroupsClient) listByLocationNextResults(lastResults
 
 // ListByLocationComplete enumerates all values, automatically crossing page boundaries as required.
 func (client InstanceFailoverGroupsClient) ListByLocationComplete(ctx context.Context, resourceGroupName string, locationName string) (result InstanceFailoverGroupListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/InstanceFailoverGroupsClient.ListByLocation")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByLocation(ctx, resourceGroupName, locationName)
 	return
 }

@@ -15,18 +15,18 @@
 package pubsub
 
 import (
+	"context"
 	"fmt"
 	"testing"
 	"time"
 
 	"cloud.google.com/go/internal/testutil"
 	"cloud.google.com/go/pubsub/pstest"
-
-	"golang.org/x/net/context"
-
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 // All returns the remaining subscriptions from this iterator.
@@ -55,7 +55,10 @@ func TestSubscriptionID(t *testing.T) {
 
 func TestListProjectSubscriptions(t *testing.T) {
 	ctx := context.Background()
-	c, _ := newFake(t)
+	c, srv := newFake(t)
+	defer c.Close()
+	defer srv.Close()
+
 	topic := mustCreateTopic(t, c, "t")
 	var want []string
 	for i := 1; i <= 2; i++ {
@@ -87,7 +90,10 @@ func getSubIDs(subs []*Subscription) []string {
 
 func TestListTopicSubscriptions(t *testing.T) {
 	ctx := context.Background()
-	c, _ := newFake(t)
+	c, srv := newFake(t)
+	defer c.Close()
+	defer srv.Close()
+
 	topics := []*Topic{
 		mustCreateTopic(t, c, "t0"),
 		mustCreateTopic(t, c, "t1"),
@@ -118,11 +124,15 @@ const defaultRetentionDuration = 168 * time.Hour
 
 func TestUpdateSubscription(t *testing.T) {
 	ctx := context.Background()
-	client, _ := newFake(t)
+	client, srv := newFake(t)
 	defer client.Close()
+	defer srv.Close()
 
 	topic := mustCreateTopic(t, client, "t")
-	sub, err := client.CreateSubscription(ctx, "s", SubscriptionConfig{Topic: topic})
+	sub, err := client.CreateSubscription(ctx, "s", SubscriptionConfig{
+		Topic:            topic,
+		ExpirationPolicy: 30 * time.Hour,
+	})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -135,6 +145,7 @@ func TestUpdateSubscription(t *testing.T) {
 		AckDeadline:         10 * time.Second,
 		RetainAckedMessages: false,
 		RetentionDuration:   defaultRetentionDuration,
+		ExpirationPolicy:    30 * time.Hour,
 	}
 	if !testutil.Equal(cfg, want) {
 		t.Fatalf("\ngot  %+v\nwant %+v", cfg, want)
@@ -144,6 +155,7 @@ func TestUpdateSubscription(t *testing.T) {
 		AckDeadline:         20 * time.Second,
 		RetainAckedMessages: true,
 		Labels:              map[string]string{"label": "value"},
+		ExpirationPolicy:    72 * time.Hour,
 	})
 	if err != nil {
 		t.Fatal(err)
@@ -154,6 +166,7 @@ func TestUpdateSubscription(t *testing.T) {
 		RetainAckedMessages: true,
 		RetentionDuration:   defaultRetentionDuration,
 		Labels:              map[string]string{"label": "value"},
+		ExpirationPolicy:    72 * time.Hour,
 	}
 	if !testutil.Equal(got, want) {
 		t.Fatalf("\ngot  %+v\nwant %+v", got, want)
@@ -178,6 +191,41 @@ func TestUpdateSubscription(t *testing.T) {
 	}
 }
 
+func TestReceive(t *testing.T) {
+	testReceive(t, true)
+	testReceive(t, false)
+}
+
+func testReceive(t *testing.T, synchronous bool) {
+	ctx := context.Background()
+	client, srv := newFake(t)
+	defer client.Close()
+	defer srv.Close()
+
+	topic := mustCreateTopic(t, client, "t")
+	sub, err := client.CreateSubscription(ctx, "s", SubscriptionConfig{Topic: topic})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for i := 0; i < 256; i++ {
+		srv.Publish(topic.name, []byte{byte(i)}, nil)
+	}
+	sub.ReceiveSettings.Synchronous = synchronous
+	msgs, err := pullN(ctx, sub, 256, func(_ context.Context, m *Message) { m.Ack() })
+	if c := status.Convert(err); err != nil && c.Code() != codes.Canceled {
+		t.Fatalf("Pull: %v", err)
+	}
+	var seen [256]bool
+	for _, m := range msgs {
+		seen[m.Data[0]] = true
+	}
+	for i, saw := range seen {
+		if !saw {
+			t.Errorf("sync=%t: did not see message #%d", synchronous, i)
+		}
+	}
+}
+
 func (t1 *Topic) Equal(t2 *Topic) bool {
 	if t1 == nil && t2 == nil {
 		return true
@@ -188,6 +236,7 @@ func (t1 *Topic) Equal(t2 *Topic) bool {
 	return t1.c == t2.c && t1.name == t2.name
 }
 
+// Note: be sure to close client and server!
 func newFake(t *testing.T) (*Client, *pstest.Server) {
 	ctx := context.Background()
 	srv := pstest.NewServer()

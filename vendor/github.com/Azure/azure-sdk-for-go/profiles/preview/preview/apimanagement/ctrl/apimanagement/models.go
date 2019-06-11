@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,25 +19,12 @@
 
 package apimanagement
 
-import original "github.com/Azure/azure-sdk-for-go/services/preview/apimanagement/ctrl/2017-03-01/apimanagement"
+import (
+	"context"
 
-type APIClient = original.APIClient
-type APIExportClient = original.APIExportClient
-type APIOperationClient = original.APIOperationClient
-type APIOperationPolicyClient = original.APIOperationPolicyClient
-type APIPolicyClient = original.APIPolicyClient
-type APIProductClient = original.APIProductClient
-type APISchemaClient = original.APISchemaClient
-type AuthorizationServerClient = original.AuthorizationServerClient
-type BackendClient = original.BackendClient
-type CertificateClient = original.CertificateClient
-type BaseClient = original.BaseClient
-type DelegationSettingsClient = original.DelegationSettingsClient
-type EmailTemplateClient = original.EmailTemplateClient
-type GroupClient = original.GroupClient
-type GroupUserClient = original.GroupUserClient
-type IdentityProviderClient = original.IdentityProviderClient
-type LoggerClient = original.LoggerClient
+	original "github.com/Azure/azure-sdk-for-go/services/preview/apimanagement/ctrl/2017-03-01/apimanagement"
+)
+
 type APIType = original.APIType
 
 const (
@@ -201,8 +188,7 @@ const (
 	UserStateBlocked UserState = original.UserStateBlocked
 )
 
-type AccessInformationContract = original.AccessInformationContract
-type AccessInformationUpdateParameters = original.AccessInformationUpdateParameters
+type APIClient = original.APIClient
 type APICollection = original.APICollection
 type APICollectionIterator = original.APICollectionIterator
 type APICollectionPage = original.APICollectionPage
@@ -211,9 +197,18 @@ type APIContractProperties = original.APIContractProperties
 type APICreateOrUpdateParameter = original.APICreateOrUpdateParameter
 type APICreateOrUpdateParameterWsdlSelector = original.APICreateOrUpdateParameterWsdlSelector
 type APIEntityBaseContract = original.APIEntityBaseContract
+type APIExportClient = original.APIExportClient
 type APIExportResult = original.APIExportResult
+type APIOperationClient = original.APIOperationClient
+type APIOperationPolicyClient = original.APIOperationPolicyClient
+type APIPolicyClient = original.APIPolicyClient
+type APIProductClient = original.APIProductClient
+type APISchemaClient = original.APISchemaClient
 type APIUpdateContract = original.APIUpdateContract
+type AccessInformationContract = original.AccessInformationContract
+type AccessInformationUpdateParameters = original.AccessInformationUpdateParameters
 type AuthenticationSettingsContract = original.AuthenticationSettingsContract
+type AuthorizationServerClient = original.AuthorizationServerClient
 type AuthorizationServerCollection = original.AuthorizationServerCollection
 type AuthorizationServerCollectionIterator = original.AuthorizationServerCollectionIterator
 type AuthorizationServerCollectionPage = original.AuthorizationServerCollectionPage
@@ -223,6 +218,7 @@ type AuthorizationServerContractProperties = original.AuthorizationServerContrac
 type AuthorizationServerUpdateContract = original.AuthorizationServerUpdateContract
 type BackendAuthorizationHeaderCredentials = original.BackendAuthorizationHeaderCredentials
 type BackendBaseParameters = original.BackendBaseParameters
+type BackendClient = original.BackendClient
 type BackendCollection = original.BackendCollection
 type BackendCollectionIterator = original.BackendCollectionIterator
 type BackendCollectionPage = original.BackendCollectionPage
@@ -234,13 +230,17 @@ type BackendProxyContract = original.BackendProxyContract
 type BackendServiceFabricClusterProperties = original.BackendServiceFabricClusterProperties
 type BackendTLSProperties = original.BackendTLSProperties
 type BackendUpdateParameters = original.BackendUpdateParameters
+type BaseClient = original.BaseClient
+type CertificateClient = original.CertificateClient
 type CertificateCollection = original.CertificateCollection
 type CertificateCollectionIterator = original.CertificateCollectionIterator
 type CertificateCollectionPage = original.CertificateCollectionPage
 type CertificateContract = original.CertificateContract
 type CertificateContractProperties = original.CertificateContractProperties
 type CertificateCreateOrUpdateParameters = original.CertificateCreateOrUpdateParameters
+type DelegationSettingsClient = original.DelegationSettingsClient
 type DeployConfigurationParameters = original.DeployConfigurationParameters
+type EmailTemplateClient = original.EmailTemplateClient
 type EmailTemplateCollection = original.EmailTemplateCollection
 type EmailTemplateCollectionIterator = original.EmailTemplateCollectionIterator
 type EmailTemplateCollectionPage = original.EmailTemplateCollectionPage
@@ -251,6 +251,7 @@ type EmailTemplateUpdateParameters = original.EmailTemplateUpdateParameters
 type ErrorFieldContract = original.ErrorFieldContract
 type ErrorResponse = original.ErrorResponse
 type GenerateSsoURLResult = original.GenerateSsoURLResult
+type GroupClient = original.GroupClient
 type GroupCollection = original.GroupCollection
 type GroupCollectionIterator = original.GroupCollectionIterator
 type GroupCollectionPage = original.GroupCollectionPage
@@ -258,11 +259,14 @@ type GroupContract = original.GroupContract
 type GroupContractProperties = original.GroupContractProperties
 type GroupCreateParameters = original.GroupCreateParameters
 type GroupUpdateParameters = original.GroupUpdateParameters
+type GroupUserClient = original.GroupUserClient
 type IdentityProviderBaseParameters = original.IdentityProviderBaseParameters
+type IdentityProviderClient = original.IdentityProviderClient
 type IdentityProviderContract = original.IdentityProviderContract
 type IdentityProviderContractProperties = original.IdentityProviderContractProperties
 type IdentityProviderList = original.IdentityProviderList
 type IdentityProviderUpdateParameters = original.IdentityProviderUpdateParameters
+type LoggerClient = original.LoggerClient
 type LoggerCollection = original.LoggerCollection
 type LoggerCollectionIterator = original.LoggerCollectionIterator
 type LoggerCollectionPage = original.LoggerCollectionPage
@@ -270,6 +274,7 @@ type LoggerContract = original.LoggerContract
 type LoggerContractProperties = original.LoggerContractProperties
 type LoggerUpdateContract = original.LoggerUpdateContract
 type OAuth2AuthenticationSettingsContract = original.OAuth2AuthenticationSettingsContract
+type OpenIDConnectProviderClient = original.OpenIDConnectProviderClient
 type OpenIDConnectProviderCollection = original.OpenIDConnectProviderCollection
 type OpenIDConnectProviderCollectionIterator = original.OpenIDConnectProviderCollectionIterator
 type OpenIDConnectProviderCollectionPage = original.OpenIDConnectProviderCollectionPage
@@ -286,20 +291,28 @@ type OperationResultContract = original.OperationResultContract
 type OperationResultLogItemContract = original.OperationResultLogItemContract
 type OperationUpdateContract = original.OperationUpdateContract
 type ParameterContract = original.ParameterContract
+type PolicyClient = original.PolicyClient
 type PolicyCollection = original.PolicyCollection
 type PolicyContract = original.PolicyContract
 type PolicySnippetContract = original.PolicySnippetContract
+type PolicySnippetsClient = original.PolicySnippetsClient
 type PolicySnippetsCollection = original.PolicySnippetsCollection
 type PortalDelegationSettings = original.PortalDelegationSettings
 type PortalSigninSettings = original.PortalSigninSettings
 type PortalSignupSettings = original.PortalSignupSettings
+type ProductAPIClient = original.ProductAPIClient
+type ProductClient = original.ProductClient
 type ProductCollection = original.ProductCollection
 type ProductCollectionIterator = original.ProductCollectionIterator
 type ProductCollectionPage = original.ProductCollectionPage
 type ProductContract = original.ProductContract
 type ProductContractProperties = original.ProductContractProperties
 type ProductEntityBaseParameters = original.ProductEntityBaseParameters
+type ProductGroupClient = original.ProductGroupClient
+type ProductPolicyClient = original.ProductPolicyClient
+type ProductSubscriptionsClient = original.ProductSubscriptionsClient
 type ProductUpdateParameters = original.ProductUpdateParameters
+type PropertyClient = original.PropertyClient
 type PropertyCollection = original.PropertyCollection
 type PropertyCollectionIterator = original.PropertyCollectionIterator
 type PropertyCollectionPage = original.PropertyCollectionPage
@@ -307,17 +320,21 @@ type PropertyContract = original.PropertyContract
 type PropertyContractProperties = original.PropertyContractProperties
 type PropertyEntityBaseParameters = original.PropertyEntityBaseParameters
 type PropertyUpdateParameters = original.PropertyUpdateParameters
+type QuotaByCounterKeysClient = original.QuotaByCounterKeysClient
+type QuotaByPeriodKeysClient = original.QuotaByPeriodKeysClient
 type QuotaCounterCollection = original.QuotaCounterCollection
 type QuotaCounterContract = original.QuotaCounterContract
 type QuotaCounterValueContract = original.QuotaCounterValueContract
 type QuotaCounterValueContractProperties = original.QuotaCounterValueContractProperties
 type RegionContract = original.RegionContract
 type RegionListResult = original.RegionListResult
+type RegionsClient = original.RegionsClient
 type RegistrationDelegationSettingsProperties = original.RegistrationDelegationSettingsProperties
 type ReportCollection = original.ReportCollection
 type ReportCollectionIterator = original.ReportCollectionIterator
 type ReportCollectionPage = original.ReportCollectionPage
 type ReportRecordContract = original.ReportRecordContract
+type ReportsClient = original.ReportsClient
 type RepresentationContract = original.RepresentationContract
 type RequestContract = original.RequestContract
 type RequestReportCollection = original.RequestReportCollection
@@ -330,6 +347,9 @@ type SchemaCollectionPage = original.SchemaCollectionPage
 type SchemaContract = original.SchemaContract
 type SchemaContractProperties = original.SchemaContractProperties
 type SchemaDocumentProperties = original.SchemaDocumentProperties
+type SignInSettingsClient = original.SignInSettingsClient
+type SignUpSettingsClient = original.SignUpSettingsClient
+type SubscriptionClient = original.SubscriptionClient
 type SubscriptionCollection = original.SubscriptionCollection
 type SubscriptionCollectionIterator = original.SubscriptionCollectionIterator
 type SubscriptionCollectionPage = original.SubscriptionCollectionPage
@@ -337,14 +357,18 @@ type SubscriptionContract = original.SubscriptionContract
 type SubscriptionContractProperties = original.SubscriptionContractProperties
 type SubscriptionCreateParameters = original.SubscriptionCreateParameters
 type SubscriptionKeyParameterNamesContract = original.SubscriptionKeyParameterNamesContract
-type SubscriptionsDelegationSettingsProperties = original.SubscriptionsDelegationSettingsProperties
 type SubscriptionUpdateParameters = original.SubscriptionUpdateParameters
+type SubscriptionsDelegationSettingsProperties = original.SubscriptionsDelegationSettingsProperties
+type TenantAccessClient = original.TenantAccessClient
+type TenantAccessGitClient = original.TenantAccessGitClient
+type TenantConfigurationClient = original.TenantConfigurationClient
 type TenantConfigurationDeployFuture = original.TenantConfigurationDeployFuture
 type TenantConfigurationSaveFuture = original.TenantConfigurationSaveFuture
 type TenantConfigurationSyncStateContract = original.TenantConfigurationSyncStateContract
 type TenantConfigurationValidateFuture = original.TenantConfigurationValidateFuture
 type TermsOfServiceProperties = original.TermsOfServiceProperties
 type TokenBodyParameterContract = original.TokenBodyParameterContract
+type UserClient = original.UserClient
 type UserCollection = original.UserCollection
 type UserCollectionIterator = original.UserCollectionIterator
 type UserCollectionPage = original.UserCollectionPage
@@ -352,38 +376,27 @@ type UserContract = original.UserContract
 type UserContractProperties = original.UserContractProperties
 type UserCreateParameters = original.UserCreateParameters
 type UserEntityBaseParameters = original.UserEntityBaseParameters
+type UserGroupClient = original.UserGroupClient
+type UserIdentitiesClient = original.UserIdentitiesClient
 type UserIdentityCollection = original.UserIdentityCollection
 type UserIdentityContract = original.UserIdentityContract
+type UserSubscriptionClient = original.UserSubscriptionClient
 type UserTokenParameters = original.UserTokenParameters
 type UserTokenResult = original.UserTokenResult
 type UserUpdateParameters = original.UserUpdateParameters
 type X509CertificateName = original.X509CertificateName
-type OpenIDConnectProviderClient = original.OpenIDConnectProviderClient
-type PolicyClient = original.PolicyClient
-type PolicySnippetsClient = original.PolicySnippetsClient
-type ProductClient = original.ProductClient
-type ProductAPIClient = original.ProductAPIClient
-type ProductGroupClient = original.ProductGroupClient
-type ProductPolicyClient = original.ProductPolicyClient
-type ProductSubscriptionsClient = original.ProductSubscriptionsClient
-type PropertyClient = original.PropertyClient
-type QuotaByCounterKeysClient = original.QuotaByCounterKeysClient
-type QuotaByPeriodKeysClient = original.QuotaByPeriodKeysClient
-type RegionsClient = original.RegionsClient
-type ReportsClient = original.ReportsClient
-type SignInSettingsClient = original.SignInSettingsClient
-type SignUpSettingsClient = original.SignUpSettingsClient
-type SubscriptionClient = original.SubscriptionClient
-type TenantAccessClient = original.TenantAccessClient
-type TenantAccessGitClient = original.TenantAccessGitClient
-type TenantConfigurationClient = original.TenantConfigurationClient
-type UserClient = original.UserClient
-type UserGroupClient = original.UserGroupClient
-type UserIdentitiesClient = original.UserIdentitiesClient
-type UserSubscriptionClient = original.UserSubscriptionClient
 
+func New() BaseClient {
+	return original.New()
+}
 func NewAPIClient() APIClient {
 	return original.NewAPIClient()
+}
+func NewAPICollectionIterator(page APICollectionPage) APICollectionIterator {
+	return original.NewAPICollectionIterator(page)
+}
+func NewAPICollectionPage(getNextPage func(context.Context, APICollection) (APICollection, error)) APICollectionPage {
+	return original.NewAPICollectionPage(getNextPage)
 }
 func NewAPIExportClient() APIExportClient {
 	return original.NewAPIExportClient()
@@ -406,17 +419,29 @@ func NewAPISchemaClient() APISchemaClient {
 func NewAuthorizationServerClient() AuthorizationServerClient {
 	return original.NewAuthorizationServerClient()
 }
+func NewAuthorizationServerCollectionIterator(page AuthorizationServerCollectionPage) AuthorizationServerCollectionIterator {
+	return original.NewAuthorizationServerCollectionIterator(page)
+}
+func NewAuthorizationServerCollectionPage(getNextPage func(context.Context, AuthorizationServerCollection) (AuthorizationServerCollection, error)) AuthorizationServerCollectionPage {
+	return original.NewAuthorizationServerCollectionPage(getNextPage)
+}
 func NewBackendClient() BackendClient {
 	return original.NewBackendClient()
+}
+func NewBackendCollectionIterator(page BackendCollectionPage) BackendCollectionIterator {
+	return original.NewBackendCollectionIterator(page)
+}
+func NewBackendCollectionPage(getNextPage func(context.Context, BackendCollection) (BackendCollection, error)) BackendCollectionPage {
+	return original.NewBackendCollectionPage(getNextPage)
 }
 func NewCertificateClient() CertificateClient {
 	return original.NewCertificateClient()
 }
-func New() BaseClient {
-	return original.New()
+func NewCertificateCollectionIterator(page CertificateCollectionPage) CertificateCollectionIterator {
+	return original.NewCertificateCollectionIterator(page)
 }
-func NewWithoutDefaults() BaseClient {
-	return original.NewWithoutDefaults()
+func NewCertificateCollectionPage(getNextPage func(context.Context, CertificateCollection) (CertificateCollection, error)) CertificateCollectionPage {
+	return original.NewCertificateCollectionPage(getNextPage)
 }
 func NewDelegationSettingsClient() DelegationSettingsClient {
 	return original.NewDelegationSettingsClient()
@@ -424,8 +449,20 @@ func NewDelegationSettingsClient() DelegationSettingsClient {
 func NewEmailTemplateClient() EmailTemplateClient {
 	return original.NewEmailTemplateClient()
 }
+func NewEmailTemplateCollectionIterator(page EmailTemplateCollectionPage) EmailTemplateCollectionIterator {
+	return original.NewEmailTemplateCollectionIterator(page)
+}
+func NewEmailTemplateCollectionPage(getNextPage func(context.Context, EmailTemplateCollection) (EmailTemplateCollection, error)) EmailTemplateCollectionPage {
+	return original.NewEmailTemplateCollectionPage(getNextPage)
+}
 func NewGroupClient() GroupClient {
 	return original.NewGroupClient()
+}
+func NewGroupCollectionIterator(page GroupCollectionPage) GroupCollectionIterator {
+	return original.NewGroupCollectionIterator(page)
+}
+func NewGroupCollectionPage(getNextPage func(context.Context, GroupCollection) (GroupCollection, error)) GroupCollectionPage {
+	return original.NewGroupCollectionPage(getNextPage)
 }
 func NewGroupUserClient() GroupUserClient {
 	return original.NewGroupUserClient()
@@ -435,6 +472,132 @@ func NewIdentityProviderClient() IdentityProviderClient {
 }
 func NewLoggerClient() LoggerClient {
 	return original.NewLoggerClient()
+}
+func NewLoggerCollectionIterator(page LoggerCollectionPage) LoggerCollectionIterator {
+	return original.NewLoggerCollectionIterator(page)
+}
+func NewLoggerCollectionPage(getNextPage func(context.Context, LoggerCollection) (LoggerCollection, error)) LoggerCollectionPage {
+	return original.NewLoggerCollectionPage(getNextPage)
+}
+func NewOpenIDConnectProviderClient() OpenIDConnectProviderClient {
+	return original.NewOpenIDConnectProviderClient()
+}
+func NewOpenIDConnectProviderCollectionIterator(page OpenIDConnectProviderCollectionPage) OpenIDConnectProviderCollectionIterator {
+	return original.NewOpenIDConnectProviderCollectionIterator(page)
+}
+func NewOpenIDConnectProviderCollectionPage(getNextPage func(context.Context, OpenIDConnectProviderCollection) (OpenIDConnectProviderCollection, error)) OpenIDConnectProviderCollectionPage {
+	return original.NewOpenIDConnectProviderCollectionPage(getNextPage)
+}
+func NewOperationCollectionIterator(page OperationCollectionPage) OperationCollectionIterator {
+	return original.NewOperationCollectionIterator(page)
+}
+func NewOperationCollectionPage(getNextPage func(context.Context, OperationCollection) (OperationCollection, error)) OperationCollectionPage {
+	return original.NewOperationCollectionPage(getNextPage)
+}
+func NewPolicyClient() PolicyClient {
+	return original.NewPolicyClient()
+}
+func NewPolicySnippetsClient() PolicySnippetsClient {
+	return original.NewPolicySnippetsClient()
+}
+func NewProductAPIClient() ProductAPIClient {
+	return original.NewProductAPIClient()
+}
+func NewProductClient() ProductClient {
+	return original.NewProductClient()
+}
+func NewProductCollectionIterator(page ProductCollectionPage) ProductCollectionIterator {
+	return original.NewProductCollectionIterator(page)
+}
+func NewProductCollectionPage(getNextPage func(context.Context, ProductCollection) (ProductCollection, error)) ProductCollectionPage {
+	return original.NewProductCollectionPage(getNextPage)
+}
+func NewProductGroupClient() ProductGroupClient {
+	return original.NewProductGroupClient()
+}
+func NewProductPolicyClient() ProductPolicyClient {
+	return original.NewProductPolicyClient()
+}
+func NewProductSubscriptionsClient() ProductSubscriptionsClient {
+	return original.NewProductSubscriptionsClient()
+}
+func NewPropertyClient() PropertyClient {
+	return original.NewPropertyClient()
+}
+func NewPropertyCollectionIterator(page PropertyCollectionPage) PropertyCollectionIterator {
+	return original.NewPropertyCollectionIterator(page)
+}
+func NewPropertyCollectionPage(getNextPage func(context.Context, PropertyCollection) (PropertyCollection, error)) PropertyCollectionPage {
+	return original.NewPropertyCollectionPage(getNextPage)
+}
+func NewQuotaByCounterKeysClient() QuotaByCounterKeysClient {
+	return original.NewQuotaByCounterKeysClient()
+}
+func NewQuotaByPeriodKeysClient() QuotaByPeriodKeysClient {
+	return original.NewQuotaByPeriodKeysClient()
+}
+func NewRegionsClient() RegionsClient {
+	return original.NewRegionsClient()
+}
+func NewReportCollectionIterator(page ReportCollectionPage) ReportCollectionIterator {
+	return original.NewReportCollectionIterator(page)
+}
+func NewReportCollectionPage(getNextPage func(context.Context, ReportCollection) (ReportCollection, error)) ReportCollectionPage {
+	return original.NewReportCollectionPage(getNextPage)
+}
+func NewReportsClient() ReportsClient {
+	return original.NewReportsClient()
+}
+func NewSchemaCollectionIterator(page SchemaCollectionPage) SchemaCollectionIterator {
+	return original.NewSchemaCollectionIterator(page)
+}
+func NewSchemaCollectionPage(getNextPage func(context.Context, SchemaCollection) (SchemaCollection, error)) SchemaCollectionPage {
+	return original.NewSchemaCollectionPage(getNextPage)
+}
+func NewSignInSettingsClient() SignInSettingsClient {
+	return original.NewSignInSettingsClient()
+}
+func NewSignUpSettingsClient() SignUpSettingsClient {
+	return original.NewSignUpSettingsClient()
+}
+func NewSubscriptionClient() SubscriptionClient {
+	return original.NewSubscriptionClient()
+}
+func NewSubscriptionCollectionIterator(page SubscriptionCollectionPage) SubscriptionCollectionIterator {
+	return original.NewSubscriptionCollectionIterator(page)
+}
+func NewSubscriptionCollectionPage(getNextPage func(context.Context, SubscriptionCollection) (SubscriptionCollection, error)) SubscriptionCollectionPage {
+	return original.NewSubscriptionCollectionPage(getNextPage)
+}
+func NewTenantAccessClient() TenantAccessClient {
+	return original.NewTenantAccessClient()
+}
+func NewTenantAccessGitClient() TenantAccessGitClient {
+	return original.NewTenantAccessGitClient()
+}
+func NewTenantConfigurationClient() TenantConfigurationClient {
+	return original.NewTenantConfigurationClient()
+}
+func NewUserClient() UserClient {
+	return original.NewUserClient()
+}
+func NewUserCollectionIterator(page UserCollectionPage) UserCollectionIterator {
+	return original.NewUserCollectionIterator(page)
+}
+func NewUserCollectionPage(getNextPage func(context.Context, UserCollection) (UserCollection, error)) UserCollectionPage {
+	return original.NewUserCollectionPage(getNextPage)
+}
+func NewUserGroupClient() UserGroupClient {
+	return original.NewUserGroupClient()
+}
+func NewUserIdentitiesClient() UserIdentitiesClient {
+	return original.NewUserIdentitiesClient()
+}
+func NewUserSubscriptionClient() UserSubscriptionClient {
+	return original.NewUserSubscriptionClient()
+}
+func NewWithoutDefaults() BaseClient {
+	return original.NewWithoutDefaults()
 }
 func PossibleAPITypeValues() []APIType {
 	return original.PossibleAPITypeValues()
@@ -489,75 +652,6 @@ func PossibleTemplateNameValues() []TemplateName {
 }
 func PossibleUserStateValues() []UserState {
 	return original.PossibleUserStateValues()
-}
-func NewOpenIDConnectProviderClient() OpenIDConnectProviderClient {
-	return original.NewOpenIDConnectProviderClient()
-}
-func NewPolicyClient() PolicyClient {
-	return original.NewPolicyClient()
-}
-func NewPolicySnippetsClient() PolicySnippetsClient {
-	return original.NewPolicySnippetsClient()
-}
-func NewProductClient() ProductClient {
-	return original.NewProductClient()
-}
-func NewProductAPIClient() ProductAPIClient {
-	return original.NewProductAPIClient()
-}
-func NewProductGroupClient() ProductGroupClient {
-	return original.NewProductGroupClient()
-}
-func NewProductPolicyClient() ProductPolicyClient {
-	return original.NewProductPolicyClient()
-}
-func NewProductSubscriptionsClient() ProductSubscriptionsClient {
-	return original.NewProductSubscriptionsClient()
-}
-func NewPropertyClient() PropertyClient {
-	return original.NewPropertyClient()
-}
-func NewQuotaByCounterKeysClient() QuotaByCounterKeysClient {
-	return original.NewQuotaByCounterKeysClient()
-}
-func NewQuotaByPeriodKeysClient() QuotaByPeriodKeysClient {
-	return original.NewQuotaByPeriodKeysClient()
-}
-func NewRegionsClient() RegionsClient {
-	return original.NewRegionsClient()
-}
-func NewReportsClient() ReportsClient {
-	return original.NewReportsClient()
-}
-func NewSignInSettingsClient() SignInSettingsClient {
-	return original.NewSignInSettingsClient()
-}
-func NewSignUpSettingsClient() SignUpSettingsClient {
-	return original.NewSignUpSettingsClient()
-}
-func NewSubscriptionClient() SubscriptionClient {
-	return original.NewSubscriptionClient()
-}
-func NewTenantAccessClient() TenantAccessClient {
-	return original.NewTenantAccessClient()
-}
-func NewTenantAccessGitClient() TenantAccessGitClient {
-	return original.NewTenantAccessGitClient()
-}
-func NewTenantConfigurationClient() TenantConfigurationClient {
-	return original.NewTenantConfigurationClient()
-}
-func NewUserClient() UserClient {
-	return original.NewUserClient()
-}
-func NewUserGroupClient() UserGroupClient {
-	return original.NewUserGroupClient()
-}
-func NewUserIdentitiesClient() UserIdentitiesClient {
-	return original.NewUserIdentitiesClient()
-}
-func NewUserSubscriptionClient() UserSubscriptionClient {
-	return original.NewUserSubscriptionClient()
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

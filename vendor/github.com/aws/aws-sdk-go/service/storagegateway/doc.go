@@ -5,25 +5,25 @@
 //
 // AWS Storage Gateway is the service that connects an on-premises software
 // appliance with cloud-based storage to provide seamless and secure integration
-// between an organization's on-premises IT environment and AWS's storage infrastructure.
-// The service enables you to securely upload data to the AWS cloud for cost
-// effective backup and rapid disaster recovery.
+// between an organization's on-premises IT environment and the AWS storage
+// infrastructure. The service enables you to securely upload data to the AWS
+// cloud for cost effective backup and rapid disaster recovery.
 //
 // Use the following links to get started using the AWS Storage Gateway Service
 // API Reference:
 //
-//    * AWS Storage Gateway Required Request Headers (http://docs.aws.amazon.com/storagegateway/latest/userguide/AWSStorageGatewayAPI.html#AWSStorageGatewayHTTPRequestsHeaders):
+//    * AWS Storage Gateway Required Request Headers (https://docs.aws.amazon.com/storagegateway/latest/userguide/AWSStorageGatewayAPI.html#AWSStorageGatewayHTTPRequestsHeaders):
 //    Describes the required headers that you must send with every POST request
 //    to AWS Storage Gateway.
 //
-//    * Signing Requests (http://docs.aws.amazon.com/storagegateway/latest/userguide/AWSStorageGatewayAPI.html#AWSStorageGatewaySigningRequests):
+//    * Signing Requests (https://docs.aws.amazon.com/storagegateway/latest/userguide/AWSStorageGatewayAPI.html#AWSStorageGatewaySigningRequests):
 //    AWS Storage Gateway requires that you authenticate every request you send;
 //    this topic describes how sign such a request.
 //
-//    * Error Responses (http://docs.aws.amazon.com/storagegateway/latest/userguide/AWSStorageGatewayAPI.html#APIErrorResponses):
+//    * Error Responses (https://docs.aws.amazon.com/storagegateway/latest/userguide/AWSStorageGatewayAPI.html#APIErrorResponses):
 //    Provides reference information about AWS Storage Gateway errors.
 //
-//    * Operations in AWS Storage Gateway (http://docs.aws.amazon.com/storagegateway/latest/APIReference/API_Operations.html):
+//    * Operations in AWS Storage Gateway (https://docs.aws.amazon.com/storagegateway/latest/APIReference/API_Operations.html):
 //    Contains detailed descriptions of all AWS Storage Gateway operations,
 //    their request parameters, response elements, possible errors, and examples
 //    of requests and responses.
@@ -46,8 +46,8 @@
 // systems with the new format. For more information, see Longer EC2 and EBS
 // Resource IDs (https://aws.amazon.com/ec2/faqs/#longer-ids).
 //
-//  For example, a volume Amazon Resource Name (ARN) with the longer volume
-// ID format looks like the following:
+// For example, a volume Amazon Resource Name (ARN) with the longer volume ID
+// format looks like the following:
 //
 // arn:aws:storagegateway:us-west-2:111122223333:gateway/sgw-12A3456B/volume/vol-1122AABBCCDDEEFFG.
 //

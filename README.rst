@@ -24,13 +24,16 @@ Binaries and packages of the latest stable release are available at `https://git
 
 Development branch
 ~~~~~~~~~~~~~~~~~~
-For the adventurous, unstable features are available in the master branch, which you can install with:
+For the adventurous, unstable features are available in the `develop` branch, which you can install from source:
 
 .. code:: bash
 
 	$ go get -u go.mozilla.org/sops/cmd/sops
+        $ cd $GOPATH/src/go.mozilla.org/sops/
+        $ git checkout develop
+        $ make install
 
-(requires Go >= 1.8)
+(requires Go >= 1.12)
 
 If you don't have Go installed, set it up with:
 
@@ -215,7 +218,7 @@ And decrypt it using::
 	 $ sops --decrypt test.enc.yaml
 
 Encrypting using Azure Key Vault
-~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The Azure Key Vault integration uses service principals to access secrets in
 the vault. The following environment variables are used to authenticate:
 
@@ -410,9 +413,6 @@ AWS KMS Encryption Context
 SOPS has the ability to use `AWS KMS key policy and encryption context 
 <http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html>`_
 to refine the access control of a given KMS master key.
-
-When creating a new file, you can specify encryption context in the
-``--encryption-context`` flag by comma separated list of key-value pairs:
 
 When creating a new file, you can specify encryption context in the
 ``--encryption-context`` flag by comma separated list of key-value pairs:
@@ -852,6 +852,7 @@ formats like ``JSON`` do not. ``sops`` is able to handle both. This means the
 following multi-document will be encrypted as expected:
 
 .. code:: yaml
+
 	---
 	data: foo
 	---

@@ -36,7 +36,7 @@
           "MemorySize": 128,
           "Publish": true,
           "Role": "arn:aws:iam::123456789012:role/service-role/role-name",
-          "Runtime": "nodejs4.3",
+          "Runtime": "nodejs8.10",
           "Timeout": 15,
           "VpcConfig": {
           }
@@ -51,7 +51,7 @@
           "LastModified": "2016-11-21T19:49:20.006+0000",
           "MemorySize": 128,
           "Role": "arn:aws:iam::123456789012:role/service-role/role-name",
-          "Runtime": "nodejs4.3",
+          "Runtime": "nodejs8.10",
           "Timeout": 123,
           "Version": "1",
           "VpcConfig": {
@@ -226,7 +226,7 @@
             "LastModified": "2016-11-21T19:49:20.006+0000",
             "MemorySize": 128,
             "Role": "arn:aws:iam::123456789012:role/lambda_basic_execution",
-            "Runtime": "nodejs4.3",
+            "Runtime": "nodejs8.10",
             "Timeout": 3,
             "Version": "$LATEST",
             "VpcConfig": {

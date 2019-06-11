@@ -52,6 +52,7 @@ type DeploymentResponse struct {
 
 	Name                   string
 	DeploymentSlot         string
+	PrivateID              string
 	Status                 DeploymentStatus
 	Label                  string
 	URL                    string `xml:"Url"`
@@ -71,7 +72,7 @@ type DeploymentResponse struct {
 	ExtendedProperties     []ExtendedProperty `xml:">ExtendedProperty"`
 	PersistentVMDowntime   PersistentVMDowntime
 	VirtualIPs             []VirtualIP `xml:">VirtualIP"`
-	ExtensionConfiguration string      // cloud service extensions not fully implemented
+	ExtensionConfiguration ExtensionConfiguration
 	ReservedIPName         string
 	InternalDNSSuffix      string `xml:"InternalDnsSuffix"`
 }
@@ -87,6 +88,16 @@ const (
 	DeploymentStatusSuspending             DeploymentStatus = "Suspending"
 	DeploymentStatusDeploying              DeploymentStatus = "Deploying"
 	DeploymentStatusDeleting               DeploymentStatus = "Deleting"
+)
+
+// DeploymentSlot for cloud services are either Production or Staging Slots
+type DeploymentSlot string
+
+const (
+	// DeploymentSlotProduction represents the Production slot of a cloud service
+	DeploymentSlotProduction DeploymentSlot = "Production"
+	// DeploymentSlotStaging represents the Staging slot of a cloud service
+	DeploymentSlotStaging DeploymentSlot = "Staging"
 )
 
 type RoleInstance struct {
@@ -278,6 +289,26 @@ type DataDiskConfiguration struct {
 	OSDiskConfiguration
 	Name string // The Name of the DataDiskConfiguration being referenced to.
 
+}
+
+// ExtensionConfiguration Contains extensions that are added to the cloud service.
+// https://docs.microsoft.com/en-us/rest/api/compute/cloudservices/rest-get-deployment#bk_extensionconfig
+type ExtensionConfiguration struct {
+	NamedRoles []NamedRole `xml:"NamedRoles>Role,omitempty"`
+}
+
+// NamedRole specifies a list of extensions that are applied to specific roles in a deployment.
+// https://docs.microsoft.com/en-us/rest/api/compute/cloudservices/rest-get-deployment#bk_namedroles
+type NamedRole struct {
+	RoleName   string      `xml:",omitempty"`
+	Extensions []Extension `xml:"Extensions>Extension,omitempty"`
+}
+
+// Extension Specifies an extension that is to be deployed to a role in a cloud service.
+// https://docs.microsoft.com/en-us/rest/api/compute/cloudservices/rest-get-deployment#bk_extension
+type Extension struct {
+	ID    string `xml:"Id"`
+	State string
 }
 
 // ResourceExtensionReference contains a collection of resource extensions that

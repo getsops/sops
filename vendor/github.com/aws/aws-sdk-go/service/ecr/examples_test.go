@@ -121,6 +121,10 @@ func ExampleECR_CreateRepository_shared00() {
 				fmt.Println(ecr.ErrCodeServerException, aerr.Error())
 			case ecr.ErrCodeInvalidParameterException:
 				fmt.Println(ecr.ErrCodeInvalidParameterException, aerr.Error())
+			case ecr.ErrCodeInvalidTagParameterException:
+				fmt.Println(ecr.ErrCodeInvalidTagParameterException, aerr.Error())
+			case ecr.ErrCodeTooManyTagsException:
+				fmt.Println(ecr.ErrCodeTooManyTagsException, aerr.Error())
 			case ecr.ErrCodeRepositoryAlreadyExistsException:
 				fmt.Println(ecr.ErrCodeRepositoryAlreadyExistsException, aerr.Error())
 			case ecr.ErrCodeLimitExceededException:

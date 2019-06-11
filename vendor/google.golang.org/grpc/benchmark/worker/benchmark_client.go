@@ -19,13 +19,13 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"math"
 	"runtime"
 	"sync"
 	"time"
 
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/benchmark"
 	testpb "google.golang.org/grpc/benchmark/grpc_testing"

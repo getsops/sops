@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,13 +19,16 @@
 
 package webservices
 
-import original "github.com/Azure/azure-sdk-for-go/services/preview/machinelearning/mgmt/2016-05-01-preview/webservices"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/preview/machinelearning/mgmt/2016-05-01-preview/webservices"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
 type AssetType = original.AssetType
 
 const (
@@ -119,6 +122,9 @@ const (
 
 type AssetItem = original.AssetItem
 type AssetLocation = original.AssetLocation
+type BaseClient = original.BaseClient
+type BasicProperties = original.BasicProperties
+type Client = original.Client
 type ColumnSpecification = original.ColumnSpecification
 type CommitmentPlan = original.CommitmentPlan
 type CreateOrUpdateFuture = original.CreateOrUpdateFuture
@@ -139,7 +145,6 @@ type PaginatedWebServicesList = original.PaginatedWebServicesList
 type PaginatedWebServicesListIterator = original.PaginatedWebServicesListIterator
 type PaginatedWebServicesListPage = original.PaginatedWebServicesListPage
 type PatchFuture = original.PatchFuture
-type BasicProperties = original.BasicProperties
 type Properties = original.Properties
 type PropertiesForGraph = original.PropertiesForGraph
 type RealtimeConfiguration = original.RealtimeConfiguration
@@ -149,10 +154,21 @@ type ServiceInputOutputSpecification = original.ServiceInputOutputSpecification
 type StorageAccount = original.StorageAccount
 type TableSpecification = original.TableSpecification
 type WebService = original.WebService
-type Client = original.Client
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
+}
+func NewClient(subscriptionID string) Client {
+	return original.NewClient(subscriptionID)
+}
+func NewClientWithBaseURI(baseURI string, subscriptionID string) Client {
+	return original.NewClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewPaginatedWebServicesListIterator(page PaginatedWebServicesListPage) PaginatedWebServicesListIterator {
+	return original.NewPaginatedWebServicesListIterator(page)
+}
+func NewPaginatedWebServicesListPage(getNextPage func(context.Context, PaginatedWebServicesList) (PaginatedWebServicesList, error)) PaginatedWebServicesListPage {
+	return original.NewPaginatedWebServicesListPage(getNextPage)
 }
 func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
 	return original.NewWithBaseURI(baseURI, subscriptionID)
@@ -189,10 +205,4 @@ func UserAgent() string {
 }
 func Version() string {
 	return original.Version()
-}
-func NewClient(subscriptionID string) Client {
-	return original.NewClient(subscriptionID)
-}
-func NewClientWithBaseURI(baseURI string, subscriptionID string) Client {
-	return original.NewClientWithBaseURI(baseURI, subscriptionID)
 }

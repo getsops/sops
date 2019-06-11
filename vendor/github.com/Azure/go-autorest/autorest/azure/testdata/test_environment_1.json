@@ -16,5 +16,12 @@
     "serviceManagementVMDNSSuffix": "--asm-vm-dns-suffix--",
     "resourceManagerVMDNSSuffix":   "--arm-vm-dns-suffix--",
     "containerRegistryDNSSuffix":   "--container-registry-dns-suffix--",
-    "tokenAudience":                "--token-audience"
+    "tokenAudience":                "--token-audience",
+    "resourceIdentifiers": {
+        "batch": "--batch-resource-id--",
+        "datalake": "--datalake-resource-id--",
+        "graph": "--graph-resource-id--",
+        "keyVault": "--keyvault-resource-id--",
+        "operationalInsights": "--operational-insights-resource-id--"
+    }
 }

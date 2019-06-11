@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewIntegrationAccountAssembliesClientWithBaseURI(baseURI string, subscripti
 // assemblyArtifactName - the assembly artifact name.
 // assemblyArtifact - the assembly artifact.
 func (client IntegrationAccountAssembliesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, integrationAccountName string, assemblyArtifactName string, assemblyArtifact AssemblyDefinition) (result AssemblyDefinition, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountAssembliesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: assemblyArtifact,
 			Constraints: []validation.Constraint{{Target: "assemblyArtifact.Properties", Name: validation.Null, Rule: true,
@@ -126,6 +137,16 @@ func (client IntegrationAccountAssembliesClient) CreateOrUpdateResponder(resp *h
 // integrationAccountName - the integration account name.
 // assemblyArtifactName - the assembly artifact name.
 func (client IntegrationAccountAssembliesClient) Delete(ctx context.Context, resourceGroupName string, integrationAccountName string, assemblyArtifactName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountAssembliesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, integrationAccountName, assemblyArtifactName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.IntegrationAccountAssembliesClient", "Delete", nil, "Failure preparing request")
@@ -194,6 +215,16 @@ func (client IntegrationAccountAssembliesClient) DeleteResponder(resp *http.Resp
 // integrationAccountName - the integration account name.
 // assemblyArtifactName - the assembly artifact name.
 func (client IntegrationAccountAssembliesClient) Get(ctx context.Context, resourceGroupName string, integrationAccountName string, assemblyArtifactName string) (result AssemblyDefinition, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountAssembliesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, integrationAccountName, assemblyArtifactName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.IntegrationAccountAssembliesClient", "Get", nil, "Failure preparing request")
@@ -262,6 +293,16 @@ func (client IntegrationAccountAssembliesClient) GetResponder(resp *http.Respons
 // resourceGroupName - the resource group name.
 // integrationAccountName - the integration account name.
 func (client IntegrationAccountAssembliesClient) List(ctx context.Context, resourceGroupName string, integrationAccountName string) (result AssemblyCollection, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountAssembliesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, resourceGroupName, integrationAccountName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.IntegrationAccountAssembliesClient", "List", nil, "Failure preparing request")
@@ -330,6 +371,16 @@ func (client IntegrationAccountAssembliesClient) ListResponder(resp *http.Respon
 // integrationAccountName - the integration account name.
 // assemblyArtifactName - the assembly artifact name.
 func (client IntegrationAccountAssembliesClient) ListContentCallbackURL(ctx context.Context, resourceGroupName string, integrationAccountName string, assemblyArtifactName string) (result WorkflowTriggerCallbackURL, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountAssembliesClient.ListContentCallbackURL")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListContentCallbackURLPreparer(ctx, resourceGroupName, integrationAccountName, assemblyArtifactName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.IntegrationAccountAssembliesClient", "ListContentCallbackURL", nil, "Failure preparing request")

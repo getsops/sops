@@ -18,7 +18,7 @@ const opCreateBotVersion = "CreateBotVersion"
 // CreateBotVersionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateBotVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -125,7 +125,7 @@ const opCreateIntentVersion = "CreateIntentVersion"
 // CreateIntentVersionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateIntentVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -234,7 +234,7 @@ const opCreateSlotTypeVersion = "CreateSlotTypeVersion"
 // CreateSlotTypeVersionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateSlotTypeVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -342,7 +342,7 @@ const opDeleteBot = "DeleteBot"
 // DeleteBotRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteBot operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -376,8 +376,7 @@ func (c *LexModelBuildingService) DeleteBotRequest(input *DeleteBotInput) (req *
 
 	output = &DeleteBotOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -459,7 +458,7 @@ const opDeleteBotAlias = "DeleteBotAlias"
 // DeleteBotAliasRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteBotAlias operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -493,8 +492,7 @@ func (c *LexModelBuildingService) DeleteBotAliasRequest(input *DeleteBotAliasInp
 
 	output = &DeleteBotAliasOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -575,7 +573,7 @@ const opDeleteBotChannelAssociation = "DeleteBotChannelAssociation"
 // DeleteBotChannelAssociationRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteBotChannelAssociation operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -609,8 +607,7 @@ func (c *LexModelBuildingService) DeleteBotChannelAssociationRequest(input *Dele
 
 	output = &DeleteBotChannelAssociationOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -673,7 +670,7 @@ const opDeleteBotVersion = "DeleteBotVersion"
 // DeleteBotVersionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteBotVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -707,8 +704,7 @@ func (c *LexModelBuildingService) DeleteBotVersionRequest(input *DeleteBotVersio
 
 	output = &DeleteBotVersionOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -784,7 +780,7 @@ const opDeleteIntent = "DeleteIntent"
 // DeleteIntentRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteIntent operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -818,8 +814,7 @@ func (c *LexModelBuildingService) DeleteIntentRequest(input *DeleteIntentInput) 
 
 	output = &DeleteIntentOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -905,7 +900,7 @@ const opDeleteIntentVersion = "DeleteIntentVersion"
 // DeleteIntentVersionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteIntentVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -939,8 +934,7 @@ func (c *LexModelBuildingService) DeleteIntentVersionRequest(input *DeleteIntent
 
 	output = &DeleteIntentVersionOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1016,7 +1010,7 @@ const opDeleteSlotType = "DeleteSlotType"
 // DeleteSlotTypeRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteSlotType operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1050,8 +1044,7 @@ func (c *LexModelBuildingService) DeleteSlotTypeRequest(input *DeleteSlotTypeInp
 
 	output = &DeleteSlotTypeOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1139,7 +1132,7 @@ const opDeleteSlotTypeVersion = "DeleteSlotTypeVersion"
 // DeleteSlotTypeVersionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteSlotTypeVersion operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1173,8 +1166,7 @@ func (c *LexModelBuildingService) DeleteSlotTypeVersionRequest(input *DeleteSlot
 
 	output = &DeleteSlotTypeVersionOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1250,7 +1242,7 @@ const opDeleteUtterances = "DeleteUtterances"
 // DeleteUtterancesRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteUtterances operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1284,8 +1276,7 @@ func (c *LexModelBuildingService) DeleteUtterancesRequest(input *DeleteUtterance
 
 	output = &DeleteUtterancesOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1352,7 +1343,7 @@ const opGetBot = "GetBot"
 // GetBotRequest generates a "aws/request.Request" representing the
 // client's request for the GetBot operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1445,7 +1436,7 @@ const opGetBotAlias = "GetBotAlias"
 // GetBotAliasRequest generates a "aws/request.Request" representing the
 // client's request for the GetBotAlias operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1538,7 +1529,7 @@ const opGetBotAliases = "GetBotAliases"
 // GetBotAliasesRequest generates a "aws/request.Request" representing the
 // client's request for the GetBotAliases operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1638,7 +1629,7 @@ func (c *LexModelBuildingService) GetBotAliasesWithContext(ctx aws.Context, inpu
 //    // Example iterating over at most 3 pages of a GetBotAliases operation.
 //    pageNum := 0
 //    err := client.GetBotAliasesPages(params,
-//        func(page *GetBotAliasesOutput, lastPage bool) bool {
+//        func(page *lexmodelbuildingservice.GetBotAliasesOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -1682,7 +1673,7 @@ const opGetBotChannelAssociation = "GetBotChannelAssociation"
 // GetBotChannelAssociationRequest generates a "aws/request.Request" representing the
 // client's request for the GetBotChannelAssociation operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1776,7 +1767,7 @@ const opGetBotChannelAssociations = "GetBotChannelAssociations"
 // GetBotChannelAssociationsRequest generates a "aws/request.Request" representing the
 // client's request for the GetBotChannelAssociations operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1877,7 +1868,7 @@ func (c *LexModelBuildingService) GetBotChannelAssociationsWithContext(ctx aws.C
 //    // Example iterating over at most 3 pages of a GetBotChannelAssociations operation.
 //    pageNum := 0
 //    err := client.GetBotChannelAssociationsPages(params,
-//        func(page *GetBotChannelAssociationsOutput, lastPage bool) bool {
+//        func(page *lexmodelbuildingservice.GetBotChannelAssociationsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -1921,7 +1912,7 @@ const opGetBotVersions = "GetBotVersions"
 // GetBotVersionsRequest generates a "aws/request.Request" representing the
 // client's request for the GetBotVersions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2033,7 +2024,7 @@ func (c *LexModelBuildingService) GetBotVersionsWithContext(ctx aws.Context, inp
 //    // Example iterating over at most 3 pages of a GetBotVersions operation.
 //    pageNum := 0
 //    err := client.GetBotVersionsPages(params,
-//        func(page *GetBotVersionsOutput, lastPage bool) bool {
+//        func(page *lexmodelbuildingservice.GetBotVersionsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -2077,7 +2068,7 @@ const opGetBots = "GetBots"
 // GetBotsRequest generates a "aws/request.Request" representing the
 // client's request for the GetBots operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2188,7 +2179,7 @@ func (c *LexModelBuildingService) GetBotsWithContext(ctx aws.Context, input *Get
 //    // Example iterating over at most 3 pages of a GetBots operation.
 //    pageNum := 0
 //    err := client.GetBotsPages(params,
-//        func(page *GetBotsOutput, lastPage bool) bool {
+//        func(page *lexmodelbuildingservice.GetBotsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -2232,7 +2223,7 @@ const opGetBuiltinIntent = "GetBuiltinIntent"
 // GetBuiltinIntentRequest generates a "aws/request.Request" representing the
 // client's request for the GetBuiltinIntent operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2324,7 +2315,7 @@ const opGetBuiltinIntents = "GetBuiltinIntents"
 // GetBuiltinIntentsRequest generates a "aws/request.Request" representing the
 // client's request for the GetBuiltinIntents operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2424,7 +2415,7 @@ func (c *LexModelBuildingService) GetBuiltinIntentsWithContext(ctx aws.Context, 
 //    // Example iterating over at most 3 pages of a GetBuiltinIntents operation.
 //    pageNum := 0
 //    err := client.GetBuiltinIntentsPages(params,
-//        func(page *GetBuiltinIntentsOutput, lastPage bool) bool {
+//        func(page *lexmodelbuildingservice.GetBuiltinIntentsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -2468,7 +2459,7 @@ const opGetBuiltinSlotTypes = "GetBuiltinSlotTypes"
 // GetBuiltinSlotTypesRequest generates a "aws/request.Request" representing the
 // client's request for the GetBuiltinSlotTypes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2571,7 +2562,7 @@ func (c *LexModelBuildingService) GetBuiltinSlotTypesWithContext(ctx aws.Context
 //    // Example iterating over at most 3 pages of a GetBuiltinSlotTypes operation.
 //    pageNum := 0
 //    err := client.GetBuiltinSlotTypesPages(params,
-//        func(page *GetBuiltinSlotTypesOutput, lastPage bool) bool {
+//        func(page *lexmodelbuildingservice.GetBuiltinSlotTypesOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -2615,7 +2606,7 @@ const opGetExport = "GetExport"
 // GetExportRequest generates a "aws/request.Request" representing the
 // client's request for the GetExport operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2705,7 +2696,7 @@ const opGetImport = "GetImport"
 // GetImportRequest generates a "aws/request.Request" representing the
 // client's request for the GetImport operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2795,7 +2786,7 @@ const opGetIntent = "GetIntent"
 // GetIntentRequest generates a "aws/request.Request" representing the
 // client's request for the GetIntent operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2888,7 +2879,7 @@ const opGetIntentVersions = "GetIntentVersions"
 // GetIntentVersionsRequest generates a "aws/request.Request" representing the
 // client's request for the GetIntentVersions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3000,7 +2991,7 @@ func (c *LexModelBuildingService) GetIntentVersionsWithContext(ctx aws.Context, 
 //    // Example iterating over at most 3 pages of a GetIntentVersions operation.
 //    pageNum := 0
 //    err := client.GetIntentVersionsPages(params,
-//        func(page *GetIntentVersionsOutput, lastPage bool) bool {
+//        func(page *lexmodelbuildingservice.GetIntentVersionsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -3044,7 +3035,7 @@ const opGetIntents = "GetIntents"
 // GetIntentsRequest generates a "aws/request.Request" representing the
 // client's request for the GetIntents operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3094,7 +3085,7 @@ func (c *LexModelBuildingService) GetIntentsRequest(input *GetIntentsInput) (req
 //    * If you specify the nameContains field, returns the $LATEST version of
 //    all intents that contain the specified string.
 //
-//    *  If you don't specify the nameContains field, returns information about
+//    * If you don't specify the nameContains field, returns information about
 //    the $LATEST version of all intents.
 //
 // The operation requires permission for the lex:GetIntents action.
@@ -3154,7 +3145,7 @@ func (c *LexModelBuildingService) GetIntentsWithContext(ctx aws.Context, input *
 //    // Example iterating over at most 3 pages of a GetIntents operation.
 //    pageNum := 0
 //    err := client.GetIntentsPages(params,
-//        func(page *GetIntentsOutput, lastPage bool) bool {
+//        func(page *lexmodelbuildingservice.GetIntentsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -3198,7 +3189,7 @@ const opGetSlotType = "GetSlotType"
 // GetSlotTypeRequest generates a "aws/request.Request" representing the
 // client's request for the GetSlotType operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3291,7 +3282,7 @@ const opGetSlotTypeVersions = "GetSlotTypeVersions"
 // GetSlotTypeVersionsRequest generates a "aws/request.Request" representing the
 // client's request for the GetSlotTypeVersions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3403,7 +3394,7 @@ func (c *LexModelBuildingService) GetSlotTypeVersionsWithContext(ctx aws.Context
 //    // Example iterating over at most 3 pages of a GetSlotTypeVersions operation.
 //    pageNum := 0
 //    err := client.GetSlotTypeVersionsPages(params,
-//        func(page *GetSlotTypeVersionsOutput, lastPage bool) bool {
+//        func(page *lexmodelbuildingservice.GetSlotTypeVersionsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -3447,7 +3438,7 @@ const opGetSlotTypes = "GetSlotTypes"
 // GetSlotTypesRequest generates a "aws/request.Request" representing the
 // client's request for the GetSlotTypes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3497,7 +3488,7 @@ func (c *LexModelBuildingService) GetSlotTypesRequest(input *GetSlotTypesInput) 
 //    * If you specify the nameContains field, returns the $LATEST version of
 //    all slot types that contain the specified string.
 //
-//    *  If you don't specify the nameContains field, returns information about
+//    * If you don't specify the nameContains field, returns information about
 //    the $LATEST version of all slot types.
 //
 // The operation requires permission for the lex:GetSlotTypes action.
@@ -3557,7 +3548,7 @@ func (c *LexModelBuildingService) GetSlotTypesWithContext(ctx aws.Context, input
 //    // Example iterating over at most 3 pages of a GetSlotTypes operation.
 //    pageNum := 0
 //    err := client.GetSlotTypesPages(params,
-//        func(page *GetSlotTypesOutput, lastPage bool) bool {
+//        func(page *lexmodelbuildingservice.GetSlotTypesOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -3601,7 +3592,7 @@ const opGetUtterancesView = "GetUtterancesView"
 // GetUtterancesViewRequest generates a "aws/request.Request" representing the
 // client's request for the GetUtterancesView operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3707,7 +3698,7 @@ const opPutBot = "PutBot"
 // PutBotRequest generates a "aws/request.Request" representing the
 // client's request for the PutBot operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3751,15 +3742,19 @@ func (c *LexModelBuildingService) PutBotRequest(input *PutBotInput) (req *reques
 // and whether the bot is directed toward children under age 13. You can use
 // this to add intents later, or to remove intents from an existing bot. When
 // you create a bot with the minimum information, the bot is created or updated
-// but Amazon Lex returns the response FAILED. You can build the bot after you add one or more intents. For more information
-// about Amazon Lex bots, see how-it-works.
+// but Amazon Lex returns the response FAILED. You can build the bot after you
+// add one or more intents. For more information about Amazon Lex bots, see
+// how-it-works.
 //
 // If you specify the name of an existing bot, the fields in the request replace
-// the existing values in the $LATESTversion of the bot. Amazon Lex removes any fields that you don't provide
-// values for in the request, except for the idleTTLInSecondsand privacySettingsfields, which are set to their default values. If you don't specify values
-// for required fields, Amazon Lex throws an exception.
+// the existing values in the $LATEST version of the bot. Amazon Lex removes
+// any fields that you don't provide values for in the request, except for the
+// idleTTLInSeconds and privacySettings fields, which are set to their default
+// values. If you don't specify values for required fields, Amazon Lex throws
+// an exception.
 //
-// This operation requires permissions for the lex:PutBotaction. For more information, see auth-and-access-control
+// This operation requires permissions for the lex:PutBot action. For more information,
+// see auth-and-access-control.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3813,7 +3808,7 @@ const opPutBotAlias = "PutBotAlias"
 // PutBotAliasRequest generates a "aws/request.Request" representing the
 // client's request for the PutBotAlias operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3910,7 +3905,7 @@ const opPutIntent = "PutIntent"
 // PutIntentRequest generates a "aws/request.Request" representing the
 // client's request for the PutIntent operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3972,7 +3967,6 @@ func (c *LexModelBuildingService) PutIntentRequest(input *PutIntentInput) (req *
 //    application. If you use a Lambda function, when all of the intent information
 //    is available, Amazon Lex invokes your Lambda function. If you configure
 //    your intent to return the intent information to the client application.
-//
 //
 // You can specify other optional information in the request, such as:
 //
@@ -4048,7 +4042,7 @@ const opPutSlotType = "PutSlotType"
 // PutSlotTypeRequest generates a "aws/request.Request" representing the
 // client's request for the PutSlotType operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4154,7 +4148,7 @@ const opStartImport = "StartImport"
 // StartImportRequest generates a "aws/request.Request" representing the
 // client's request for the StartImport operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4324,7 +4318,7 @@ type BotChannelAssociation struct {
 	BotAlias *string `locationName:"botAlias" min:"1" type:"string"`
 
 	// Provides information necessary to communicate with the messaging platform.
-	BotConfiguration map[string]*string `locationName:"botConfiguration" min:"1" type:"map"`
+	BotConfiguration map[string]*string `locationName:"botConfiguration" min:"1" type:"map" sensitive:"true"`
 
 	// The name of the Amazon Lex bot to which this association is being made.
 	//
@@ -6201,8 +6195,7 @@ type GetBotAliasesInput struct {
 	// BotName is a required field
 	BotName *string `location:"uri" locationName:"botName" min:"2" type:"string" required:"true"`
 
-	// The maximum number of aliases to return in the response. The default is 50.
-	// .
+	// The maximum number of aliases to return in the response. The default is 50. .
 	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
 
 	// Substring to match in bot alias names. An alias will be returned if any part
@@ -6394,7 +6387,7 @@ type GetBotChannelAssociationOutput struct {
 
 	// Provides information that the messaging platform needs to communicate with
 	// the Amazon Lex bot.
-	BotConfiguration map[string]*string `locationName:"botConfiguration" min:"1" type:"map"`
+	BotConfiguration map[string]*string `locationName:"botConfiguration" min:"1" type:"map" sensitive:"true"`
 
 	// The name of the Amazon Lex bot.
 	BotName *string `locationName:"botName" min:"2" type:"string"`
@@ -6660,6 +6653,9 @@ func (s *GetBotInput) Validate() error {
 	}
 	if s.VersionOrAlias == nil {
 		invalidParams.Add(request.NewErrParamRequired("VersionOrAlias"))
+	}
+	if s.VersionOrAlias != nil && len(*s.VersionOrAlias) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VersionOrAlias", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -7084,6 +7080,9 @@ func (s *GetBuiltinIntentInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetBuiltinIntentInput"}
 	if s.Signature == nil {
 		invalidParams.Add(request.NewErrParamRequired("Signature"))
+	}
+	if s.Signature != nil && len(*s.Signature) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Signature", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -7544,6 +7543,9 @@ func (s *GetImportInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetImportInput"}
 	if s.ImportId == nil {
 		invalidParams.Add(request.NewErrParamRequired("ImportId"))
+	}
+	if s.ImportId != nil && len(*s.ImportId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ImportId", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -8799,7 +8801,7 @@ type PutBotAliasInput struct {
 	//
 	// When you want to update a bot alias, set the checksum field to the checksum
 	// of the most recent revision of the $LATEST version. If you don't specify
-	// the  checksum field, or if the checksum does not match the $LATEST version,
+	// the checksum field, or if the checksum does not match the $LATEST version,
 	// you get a PreconditionFailedException exception.
 	Checksum *string `locationName:"checksum" type:"string"`
 
@@ -8984,7 +8986,7 @@ type PutBotInput struct {
 	//
 	// When you want to update a bot, set the checksum field to the checksum of
 	// the most recent revision of the $LATEST version. If you don't specify the
-	//  checksum field, or if the checksum does not match the $LATEST version, you
+	// checksum field, or if the checksum does not match the $LATEST version, you
 	// get a PreconditionFailedException exception.
 	Checksum *string `locationName:"checksum" type:"string"`
 
@@ -9411,7 +9413,7 @@ type PutIntentInput struct {
 	//
 	// When you want to update a intent, set the checksum field to the checksum
 	// of the most recent revision of the $LATEST version. If you don't specify
-	// the  checksum field, or if the checksum does not match the $LATEST version,
+	// the checksum field, or if the checksum does not match the $LATEST version,
 	// you get a PreconditionFailedException exception.
 	Checksum *string `locationName:"checksum" type:"string"`
 
@@ -9841,7 +9843,7 @@ type PutSlotTypeInput struct {
 	//
 	// When you want to update a slot type, set the checksum field to the checksum
 	// of the most recent revision of the $LATEST version. If you don't specify
-	// the  checksum field, or if the checksum does not match the $LATEST version,
+	// the checksum field, or if the checksum does not match the $LATEST version,
 	// you get a PreconditionFailedException exception.
 	Checksum *string `locationName:"checksum" type:"string"`
 
@@ -10313,11 +10315,10 @@ type StartImportInput struct {
 	//    * FAIL_ON_CONFLICT - The import operation is stopped on the first conflict
 	//    between a resource in the import file and an existing resource. The name
 	//    of the resource causing the conflict is in the failureReason field of
-	//    the response to the GetImport operation.
-	//
-	// OVERWRITE_LATEST - The import operation proceeds even if there is a conflict
-	//    with an existing resource. The $LASTEST version of the existing resource
-	//    is overwritten with the data from the import file.
+	//    the response to the GetImport operation. OVERWRITE_LATEST - The import
+	//    operation proceeds even if there is a conflict with an existing resource.
+	//    The $LASTEST version of the existing resource is overwritten with the
+	//    data from the import file.
 	//
 	// MergeStrategy is a required field
 	MergeStrategy *string `locationName:"mergeStrategy" type:"string" required:"true" enum:"MergeStrategy"`

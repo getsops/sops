@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/url"
 	"strconv"
 )
@@ -47,11 +48,72 @@ func SetURLValuesSliceKeySuffix(s string) error {
 // JSON converts the contained object to a JSON string
 // representation
 func (m Map) JSON() (string, error) {
+	for k, v := range m {
+		m[k] = cleanUp(v)
+	}
+
 	result, err := json.Marshal(m)
 	if err != nil {
 		err = errors.New("objx: JSON encode failed with: " + err.Error())
 	}
 	return string(result), err
+}
+
+func cleanUpInterfaceArray(in []interface{}) []interface{} {
+	result := make([]interface{}, len(in))
+	for i, v := range in {
+		result[i] = cleanUp(v)
+	}
+	return result
+}
+
+func cleanUpInterfaceMap(in map[interface{}]interface{}) Map {
+	result := Map{}
+	for k, v := range in {
+		result[fmt.Sprintf("%v", k)] = cleanUp(v)
+	}
+	return result
+}
+
+func cleanUpStringMap(in map[string]interface{}) Map {
+	result := Map{}
+	for k, v := range in {
+		result[k] = cleanUp(v)
+	}
+	return result
+}
+
+func cleanUpMSIArray(in []map[string]interface{}) []Map {
+	result := make([]Map, len(in))
+	for i, v := range in {
+		result[i] = cleanUpStringMap(v)
+	}
+	return result
+}
+
+func cleanUpMapArray(in []Map) []Map {
+	result := make([]Map, len(in))
+	for i, v := range in {
+		result[i] = cleanUpStringMap(v)
+	}
+	return result
+}
+
+func cleanUp(v interface{}) interface{} {
+	switch v := v.(type) {
+	case []interface{}:
+		return cleanUpInterfaceArray(v)
+	case []map[string]interface{}:
+		return cleanUpMSIArray(v)
+	case map[interface{}]interface{}:
+		return cleanUpInterfaceMap(v)
+	case Map:
+		return cleanUpStringMap(v)
+	case []Map:
+		return cleanUpMapArray(v)
+	default:
+		return v
+	}
 }
 
 // MustJSON converts the contained object to a JSON string

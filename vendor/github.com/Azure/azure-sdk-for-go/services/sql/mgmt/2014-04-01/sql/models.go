@@ -18,6 +18,7 @@ package sql
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
@@ -25,6 +26,9 @@ import (
 	"github.com/satori/go.uuid"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/sql/mgmt/2014-04-01/sql"
 
 // AuthenticationType enumerates the values for authentication type.
 type AuthenticationType string
@@ -91,10 +95,16 @@ const (
 	Basic DatabaseEdition = "Basic"
 	// Business ...
 	Business DatabaseEdition = "Business"
+	// BusinessCritical ...
+	BusinessCritical DatabaseEdition = "BusinessCritical"
 	// DataWarehouse ...
 	DataWarehouse DatabaseEdition = "DataWarehouse"
 	// Free ...
 	Free DatabaseEdition = "Free"
+	// GeneralPurpose ...
+	GeneralPurpose DatabaseEdition = "GeneralPurpose"
+	// Hyperscale ...
+	Hyperscale DatabaseEdition = "Hyperscale"
 	// Premium ...
 	Premium DatabaseEdition = "Premium"
 	// PremiumRS ...
@@ -113,7 +123,7 @@ const (
 
 // PossibleDatabaseEditionValues returns an array of possible values for the DatabaseEdition const type.
 func PossibleDatabaseEditionValues() []DatabaseEdition {
-	return []DatabaseEdition{Basic, Business, DataWarehouse, Free, Premium, PremiumRS, Standard, Stretch, System, System2, Web}
+	return []DatabaseEdition{Basic, Business, BusinessCritical, DataWarehouse, Free, GeneralPurpose, Hyperscale, Premium, PremiumRS, Standard, Stretch, System, System2, Web}
 }
 
 // ElasticPoolEdition enumerates the values for elastic pool edition.
@@ -122,6 +132,10 @@ type ElasticPoolEdition string
 const (
 	// ElasticPoolEditionBasic ...
 	ElasticPoolEditionBasic ElasticPoolEdition = "Basic"
+	// ElasticPoolEditionBusinessCritical ...
+	ElasticPoolEditionBusinessCritical ElasticPoolEdition = "BusinessCritical"
+	// ElasticPoolEditionGeneralPurpose ...
+	ElasticPoolEditionGeneralPurpose ElasticPoolEdition = "GeneralPurpose"
 	// ElasticPoolEditionPremium ...
 	ElasticPoolEditionPremium ElasticPoolEdition = "Premium"
 	// ElasticPoolEditionStandard ...
@@ -130,7 +144,7 @@ const (
 
 // PossibleElasticPoolEditionValues returns an array of possible values for the ElasticPoolEdition const type.
 func PossibleElasticPoolEditionValues() []ElasticPoolEdition {
-	return []ElasticPoolEdition{ElasticPoolEditionBasic, ElasticPoolEditionPremium, ElasticPoolEditionStandard}
+	return []ElasticPoolEdition{ElasticPoolEditionBasic, ElasticPoolEditionBusinessCritical, ElasticPoolEditionGeneralPurpose, ElasticPoolEditionPremium, ElasticPoolEditionStandard}
 }
 
 // ElasticPoolState enumerates the values for elastic pool state.
@@ -529,23 +543,24 @@ type CheckNameAvailabilityRequest struct {
 	Type *string `json:"type,omitempty"`
 }
 
-// CheckNameAvailabilityResponse a response indicating whether the specified name for a resource is available.
+// CheckNameAvailabilityResponse a response indicating whether the specified name for a resource is
+// available.
 type CheckNameAvailabilityResponse struct {
 	autorest.Response `json:"-"`
-	// Available - True if the name is available, otherwise false.
+	// Available - READ-ONLY; True if the name is available, otherwise false.
 	Available *bool `json:"available,omitempty"`
-	// Message - A message explaining why the name is unavailable. Will be null if the name is available.
+	// Message - READ-ONLY; A message explaining why the name is unavailable. Will be null if the name is available.
 	Message *string `json:"message,omitempty"`
-	// Name - The name whose availability was checked.
+	// Name - READ-ONLY; The name whose availability was checked.
 	Name *string `json:"name,omitempty"`
-	// Reason - The reason code explaining why the name is unavailable. Will be null if the name is available. Possible values include: 'Invalid', 'AlreadyExists'
+	// Reason - READ-ONLY; The reason code explaining why the name is unavailable. Will be null if the name is available. Possible values include: 'Invalid', 'AlreadyExists'
 	Reason CheckNameAvailabilityReason `json:"reason,omitempty"`
 }
 
 // Database represents a database.
 type Database struct {
 	autorest.Response `json:"-"`
-	// Kind - Kind of database.  This is metadata used for the Azure portal experience.
+	// Kind - READ-ONLY; Kind of database.  This is metadata used for the Azure portal experience.
 	Kind *string `json:"kind,omitempty"`
 	// DatabaseProperties - The properties representing the resource.
 	*DatabaseProperties `json:"properties,omitempty"`
@@ -553,20 +568,17 @@ type Database struct {
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags.
 	Tags map[string]*string `json:"tags"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for Database.
 func (d Database) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if d.Kind != nil {
-		objectMap["kind"] = d.Kind
-	}
 	if d.DatabaseProperties != nil {
 		objectMap["properties"] = d.DatabaseProperties
 	}
@@ -575,15 +587,6 @@ func (d Database) MarshalJSON() ([]byte, error) {
 	}
 	if d.Tags != nil {
 		objectMap["tags"] = d.Tags
-	}
-	if d.ID != nil {
-		objectMap["id"] = d.ID
-	}
-	if d.Name != nil {
-		objectMap["name"] = d.Name
-	}
-	if d.Type != nil {
-		objectMap["type"] = d.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -677,15 +680,15 @@ type DatabaseListResult struct {
 type DatabaseProperties struct {
 	// Collation - The collation of the database. If createMode is not Default, this value is ignored.
 	Collation *string `json:"collation,omitempty"`
-	// CreationDate - The creation date of the database (ISO8601 format).
+	// CreationDate - READ-ONLY; The creation date of the database (ISO8601 format).
 	CreationDate *date.Time `json:"creationDate,omitempty"`
-	// ContainmentState - The containment state of the database.
+	// ContainmentState - READ-ONLY; The containment state of the database.
 	ContainmentState *int64 `json:"containmentState,omitempty"`
-	// CurrentServiceObjectiveID - The current service level objective ID of the database. This is the ID of the service level objective that is currently active.
+	// CurrentServiceObjectiveID - READ-ONLY; The current service level objective ID of the database. This is the ID of the service level objective that is currently active.
 	CurrentServiceObjectiveID *uuid.UUID `json:"currentServiceObjectiveId,omitempty"`
-	// DatabaseID - The ID of the database.
+	// DatabaseID - READ-ONLY; The ID of the database.
 	DatabaseID *uuid.UUID `json:"databaseId,omitempty"`
-	// EarliestRestoreDate - This records the earliest start date and time that restore is available for this database (ISO8601 format).
+	// EarliestRestoreDate - READ-ONLY; This records the earliest start date and time that restore is available for this database (ISO8601 format).
 	EarliestRestoreDate *date.Time `json:"earliestRestoreDate,omitempty"`
 	// CreateMode - Specifies the mode of database creation.
 	// Default: regular database creation.
@@ -705,29 +708,53 @@ type DatabaseProperties struct {
 	RestorePointInTime *date.Time `json:"restorePointInTime,omitempty"`
 	// RecoveryServicesRecoveryPointResourceID - Conditional. If createMode is RestoreLongTermRetentionBackup, then this value is required. Specifies the resource ID of the recovery point to restore from.
 	RecoveryServicesRecoveryPointResourceID *string `json:"recoveryServicesRecoveryPointResourceId,omitempty"`
-	// Edition - The edition of the database. The DatabaseEditions enumeration contains all the valid editions. If createMode is NonReadableSecondary or OnlineSecondary, this value is ignored. To see possible values, query the capabilities API (/subscriptions/{subscriptionId}/providers/Microsoft.Sql/locations/{locationID}/capabilities) referred to by operationId: "Capabilities_ListByLocation." or use the Azure CLI command `az sql db list-editions -l westus --query [].name`. Possible values include: 'Web', 'Business', 'Basic', 'Standard', 'Premium', 'PremiumRS', 'Free', 'Stretch', 'DataWarehouse', 'System', 'System2'
+	// Edition - The edition of the database. The DatabaseEditions enumeration contains all the valid editions. If createMode is NonReadableSecondary or OnlineSecondary, this value is ignored.
+	//
+	// The list of SKUs may vary by region and support offer. To determine the SKUs (including the SKU name, tier/edition, family, and capacity) that are available to your subscription in an Azure region, use the `Capabilities_ListByLocation` REST API or one of the following commands:
+	//
+	// ```azurecli
+	// az sql db list-editions -l <location> -o table
+	// ````
+	//
+	// ```powershell
+	// Get-AzSqlServerServiceObjective -Location <location>
+	// ````
+	// . Possible values include: 'Web', 'Business', 'Basic', 'Standard', 'Premium', 'PremiumRS', 'Free', 'Stretch', 'DataWarehouse', 'System', 'System2', 'GeneralPurpose', 'BusinessCritical', 'Hyperscale'
 	Edition DatabaseEdition `json:"edition,omitempty"`
 	// MaxSizeBytes - The max size of the database expressed in bytes. If createMode is not Default, this value is ignored. To see possible values, query the capabilities API (/subscriptions/{subscriptionId}/providers/Microsoft.Sql/locations/{locationID}/capabilities) referred to by operationId: "Capabilities_ListByLocation."
 	MaxSizeBytes *string `json:"maxSizeBytes,omitempty"`
-	// RequestedServiceObjectiveID - The configured service level objective ID of the database. This is the service level objective that is in the process of being applied to the database. Once successfully updated, it will match the value of currentServiceObjectiveId property. If requestedServiceObjectiveId and requestedServiceObjectiveName are both updated, the value of requestedServiceObjectiveId overrides the value of requestedServiceObjectiveName. To see possible values, query the capabilities API (/subscriptions/{subscriptionId}/providers/Microsoft.Sql/locations/{locationID}/capabilities) referred to by operationId: "Capabilities_ListByLocation." or use the Azure CLI command `az sql db list-editions --location <location> --query [].supportedServiceLevelObjectives[].name` .
+	// RequestedServiceObjectiveID - The configured service level objective ID of the database. This is the service level objective that is in the process of being applied to the database. Once successfully updated, it will match the value of currentServiceObjectiveId property. If requestedServiceObjectiveId and requestedServiceObjectiveName are both updated, the value of requestedServiceObjectiveId overrides the value of requestedServiceObjectiveName.
+	//
+	// The list of SKUs may vary by region and support offer. To determine the service objective ids that are available to your subscription in an Azure region, use the `Capabilities_ListByLocation` REST API.
 	RequestedServiceObjectiveID *uuid.UUID `json:"requestedServiceObjectiveId,omitempty"`
-	// RequestedServiceObjectiveName - The name of the configured service level objective of the database. This is the service level objective that is in the process of being applied to the database. Once successfully updated, it will match the value of serviceLevelObjective property. To see possible values, query the capabilities API (/subscriptions/{subscriptionId}/providers/Microsoft.Sql/locations/{locationID}/capabilities) referred to by operationId: "Capabilities_ListByLocation." or use the Azure CLI command `az sql db list-editions --location <location> --query [].supportedServiceLevelObjectives[].name`. Possible values include: 'ServiceObjectiveNameSystem', 'ServiceObjectiveNameSystem0', 'ServiceObjectiveNameSystem1', 'ServiceObjectiveNameSystem2', 'ServiceObjectiveNameSystem3', 'ServiceObjectiveNameSystem4', 'ServiceObjectiveNameSystem2L', 'ServiceObjectiveNameSystem3L', 'ServiceObjectiveNameSystem4L', 'ServiceObjectiveNameFree', 'ServiceObjectiveNameBasic', 'ServiceObjectiveNameS0', 'ServiceObjectiveNameS1', 'ServiceObjectiveNameS2', 'ServiceObjectiveNameS3', 'ServiceObjectiveNameS4', 'ServiceObjectiveNameS6', 'ServiceObjectiveNameS7', 'ServiceObjectiveNameS9', 'ServiceObjectiveNameS12', 'ServiceObjectiveNameP1', 'ServiceObjectiveNameP2', 'ServiceObjectiveNameP3', 'ServiceObjectiveNameP4', 'ServiceObjectiveNameP6', 'ServiceObjectiveNameP11', 'ServiceObjectiveNameP15', 'ServiceObjectiveNamePRS1', 'ServiceObjectiveNamePRS2', 'ServiceObjectiveNamePRS4', 'ServiceObjectiveNamePRS6', 'ServiceObjectiveNameDW100', 'ServiceObjectiveNameDW200', 'ServiceObjectiveNameDW300', 'ServiceObjectiveNameDW400', 'ServiceObjectiveNameDW500', 'ServiceObjectiveNameDW600', 'ServiceObjectiveNameDW1000', 'ServiceObjectiveNameDW1200', 'ServiceObjectiveNameDW1000c', 'ServiceObjectiveNameDW1500', 'ServiceObjectiveNameDW1500c', 'ServiceObjectiveNameDW2000', 'ServiceObjectiveNameDW2000c', 'ServiceObjectiveNameDW3000', 'ServiceObjectiveNameDW2500c', 'ServiceObjectiveNameDW3000c', 'ServiceObjectiveNameDW6000', 'ServiceObjectiveNameDW5000c', 'ServiceObjectiveNameDW6000c', 'ServiceObjectiveNameDW7500c', 'ServiceObjectiveNameDW10000c', 'ServiceObjectiveNameDW15000c', 'ServiceObjectiveNameDW30000c', 'ServiceObjectiveNameDS100', 'ServiceObjectiveNameDS200', 'ServiceObjectiveNameDS300', 'ServiceObjectiveNameDS400', 'ServiceObjectiveNameDS500', 'ServiceObjectiveNameDS600', 'ServiceObjectiveNameDS1000', 'ServiceObjectiveNameDS1200', 'ServiceObjectiveNameDS1500', 'ServiceObjectiveNameDS2000', 'ServiceObjectiveNameElasticPool'
+	// RequestedServiceObjectiveName - The name of the configured service level objective of the database. This is the service level objective that is in the process of being applied to the database. Once successfully updated, it will match the value of serviceLevelObjective property.
+	//
+	// The list of SKUs may vary by region and support offer. To determine the SKUs (including the SKU name, tier/edition, family, and capacity) that are available to your subscription in an Azure region, use the `Capabilities_ListByLocation` REST API or one of the following commands:
+	//
+	// ```azurecli
+	// az sql db list-editions -l <location> -o table
+	// ````
+	//
+	// ```powershell
+	// Get-AzSqlServerServiceObjective -Location <location>
+	// ````
+	// . Possible values include: 'ServiceObjectiveNameSystem', 'ServiceObjectiveNameSystem0', 'ServiceObjectiveNameSystem1', 'ServiceObjectiveNameSystem2', 'ServiceObjectiveNameSystem3', 'ServiceObjectiveNameSystem4', 'ServiceObjectiveNameSystem2L', 'ServiceObjectiveNameSystem3L', 'ServiceObjectiveNameSystem4L', 'ServiceObjectiveNameFree', 'ServiceObjectiveNameBasic', 'ServiceObjectiveNameS0', 'ServiceObjectiveNameS1', 'ServiceObjectiveNameS2', 'ServiceObjectiveNameS3', 'ServiceObjectiveNameS4', 'ServiceObjectiveNameS6', 'ServiceObjectiveNameS7', 'ServiceObjectiveNameS9', 'ServiceObjectiveNameS12', 'ServiceObjectiveNameP1', 'ServiceObjectiveNameP2', 'ServiceObjectiveNameP3', 'ServiceObjectiveNameP4', 'ServiceObjectiveNameP6', 'ServiceObjectiveNameP11', 'ServiceObjectiveNameP15', 'ServiceObjectiveNamePRS1', 'ServiceObjectiveNamePRS2', 'ServiceObjectiveNamePRS4', 'ServiceObjectiveNamePRS6', 'ServiceObjectiveNameDW100', 'ServiceObjectiveNameDW200', 'ServiceObjectiveNameDW300', 'ServiceObjectiveNameDW400', 'ServiceObjectiveNameDW500', 'ServiceObjectiveNameDW600', 'ServiceObjectiveNameDW1000', 'ServiceObjectiveNameDW1200', 'ServiceObjectiveNameDW1000c', 'ServiceObjectiveNameDW1500', 'ServiceObjectiveNameDW1500c', 'ServiceObjectiveNameDW2000', 'ServiceObjectiveNameDW2000c', 'ServiceObjectiveNameDW3000', 'ServiceObjectiveNameDW2500c', 'ServiceObjectiveNameDW3000c', 'ServiceObjectiveNameDW6000', 'ServiceObjectiveNameDW5000c', 'ServiceObjectiveNameDW6000c', 'ServiceObjectiveNameDW7500c', 'ServiceObjectiveNameDW10000c', 'ServiceObjectiveNameDW15000c', 'ServiceObjectiveNameDW30000c', 'ServiceObjectiveNameDS100', 'ServiceObjectiveNameDS200', 'ServiceObjectiveNameDS300', 'ServiceObjectiveNameDS400', 'ServiceObjectiveNameDS500', 'ServiceObjectiveNameDS600', 'ServiceObjectiveNameDS1000', 'ServiceObjectiveNameDS1200', 'ServiceObjectiveNameDS1500', 'ServiceObjectiveNameDS2000', 'ServiceObjectiveNameElasticPool'
 	RequestedServiceObjectiveName ServiceObjectiveName `json:"requestedServiceObjectiveName,omitempty"`
-	// ServiceLevelObjective - The current service level objective of the database. Possible values include: 'ServiceObjectiveNameSystem', 'ServiceObjectiveNameSystem0', 'ServiceObjectiveNameSystem1', 'ServiceObjectiveNameSystem2', 'ServiceObjectiveNameSystem3', 'ServiceObjectiveNameSystem4', 'ServiceObjectiveNameSystem2L', 'ServiceObjectiveNameSystem3L', 'ServiceObjectiveNameSystem4L', 'ServiceObjectiveNameFree', 'ServiceObjectiveNameBasic', 'ServiceObjectiveNameS0', 'ServiceObjectiveNameS1', 'ServiceObjectiveNameS2', 'ServiceObjectiveNameS3', 'ServiceObjectiveNameS4', 'ServiceObjectiveNameS6', 'ServiceObjectiveNameS7', 'ServiceObjectiveNameS9', 'ServiceObjectiveNameS12', 'ServiceObjectiveNameP1', 'ServiceObjectiveNameP2', 'ServiceObjectiveNameP3', 'ServiceObjectiveNameP4', 'ServiceObjectiveNameP6', 'ServiceObjectiveNameP11', 'ServiceObjectiveNameP15', 'ServiceObjectiveNamePRS1', 'ServiceObjectiveNamePRS2', 'ServiceObjectiveNamePRS4', 'ServiceObjectiveNamePRS6', 'ServiceObjectiveNameDW100', 'ServiceObjectiveNameDW200', 'ServiceObjectiveNameDW300', 'ServiceObjectiveNameDW400', 'ServiceObjectiveNameDW500', 'ServiceObjectiveNameDW600', 'ServiceObjectiveNameDW1000', 'ServiceObjectiveNameDW1200', 'ServiceObjectiveNameDW1000c', 'ServiceObjectiveNameDW1500', 'ServiceObjectiveNameDW1500c', 'ServiceObjectiveNameDW2000', 'ServiceObjectiveNameDW2000c', 'ServiceObjectiveNameDW3000', 'ServiceObjectiveNameDW2500c', 'ServiceObjectiveNameDW3000c', 'ServiceObjectiveNameDW6000', 'ServiceObjectiveNameDW5000c', 'ServiceObjectiveNameDW6000c', 'ServiceObjectiveNameDW7500c', 'ServiceObjectiveNameDW10000c', 'ServiceObjectiveNameDW15000c', 'ServiceObjectiveNameDW30000c', 'ServiceObjectiveNameDS100', 'ServiceObjectiveNameDS200', 'ServiceObjectiveNameDS300', 'ServiceObjectiveNameDS400', 'ServiceObjectiveNameDS500', 'ServiceObjectiveNameDS600', 'ServiceObjectiveNameDS1000', 'ServiceObjectiveNameDS1200', 'ServiceObjectiveNameDS1500', 'ServiceObjectiveNameDS2000', 'ServiceObjectiveNameElasticPool'
+	// ServiceLevelObjective - READ-ONLY; The current service level objective of the database. Possible values include: 'ServiceObjectiveNameSystem', 'ServiceObjectiveNameSystem0', 'ServiceObjectiveNameSystem1', 'ServiceObjectiveNameSystem2', 'ServiceObjectiveNameSystem3', 'ServiceObjectiveNameSystem4', 'ServiceObjectiveNameSystem2L', 'ServiceObjectiveNameSystem3L', 'ServiceObjectiveNameSystem4L', 'ServiceObjectiveNameFree', 'ServiceObjectiveNameBasic', 'ServiceObjectiveNameS0', 'ServiceObjectiveNameS1', 'ServiceObjectiveNameS2', 'ServiceObjectiveNameS3', 'ServiceObjectiveNameS4', 'ServiceObjectiveNameS6', 'ServiceObjectiveNameS7', 'ServiceObjectiveNameS9', 'ServiceObjectiveNameS12', 'ServiceObjectiveNameP1', 'ServiceObjectiveNameP2', 'ServiceObjectiveNameP3', 'ServiceObjectiveNameP4', 'ServiceObjectiveNameP6', 'ServiceObjectiveNameP11', 'ServiceObjectiveNameP15', 'ServiceObjectiveNamePRS1', 'ServiceObjectiveNamePRS2', 'ServiceObjectiveNamePRS4', 'ServiceObjectiveNamePRS6', 'ServiceObjectiveNameDW100', 'ServiceObjectiveNameDW200', 'ServiceObjectiveNameDW300', 'ServiceObjectiveNameDW400', 'ServiceObjectiveNameDW500', 'ServiceObjectiveNameDW600', 'ServiceObjectiveNameDW1000', 'ServiceObjectiveNameDW1200', 'ServiceObjectiveNameDW1000c', 'ServiceObjectiveNameDW1500', 'ServiceObjectiveNameDW1500c', 'ServiceObjectiveNameDW2000', 'ServiceObjectiveNameDW2000c', 'ServiceObjectiveNameDW3000', 'ServiceObjectiveNameDW2500c', 'ServiceObjectiveNameDW3000c', 'ServiceObjectiveNameDW6000', 'ServiceObjectiveNameDW5000c', 'ServiceObjectiveNameDW6000c', 'ServiceObjectiveNameDW7500c', 'ServiceObjectiveNameDW10000c', 'ServiceObjectiveNameDW15000c', 'ServiceObjectiveNameDW30000c', 'ServiceObjectiveNameDS100', 'ServiceObjectiveNameDS200', 'ServiceObjectiveNameDS300', 'ServiceObjectiveNameDS400', 'ServiceObjectiveNameDS500', 'ServiceObjectiveNameDS600', 'ServiceObjectiveNameDS1000', 'ServiceObjectiveNameDS1200', 'ServiceObjectiveNameDS1500', 'ServiceObjectiveNameDS2000', 'ServiceObjectiveNameElasticPool'
 	ServiceLevelObjective ServiceObjectiveName `json:"serviceLevelObjective,omitempty"`
-	// Status - The status of the database.
+	// Status - READ-ONLY; The status of the database.
 	Status *string `json:"status,omitempty"`
 	// ElasticPoolName - The name of the elastic pool the database is in. If elasticPoolName and requestedServiceObjectiveName are both updated, the value of requestedServiceObjectiveName is ignored. Not supported for DataWarehouse edition.
 	ElasticPoolName *string `json:"elasticPoolName,omitempty"`
-	// DefaultSecondaryLocation - The default secondary region for this database.
+	// DefaultSecondaryLocation - READ-ONLY; The default secondary region for this database.
 	DefaultSecondaryLocation *string `json:"defaultSecondaryLocation,omitempty"`
-	// ServiceTierAdvisors - The list of service tier advisors for this database. Expanded property
+	// ServiceTierAdvisors - READ-ONLY; The list of service tier advisors for this database. Expanded property
 	ServiceTierAdvisors *[]ServiceTierAdvisor `json:"serviceTierAdvisors,omitempty"`
-	// TransparentDataEncryption - The transparent data encryption info for this database.
+	// TransparentDataEncryption - READ-ONLY; The transparent data encryption info for this database.
 	TransparentDataEncryption *[]TransparentDataEncryption `json:"transparentDataEncryption,omitempty"`
-	// RecommendedIndex - The recommended indices for this database.
+	// RecommendedIndex - READ-ONLY; The recommended indices for this database.
 	RecommendedIndex *[]RecommendedIndex `json:"recommendedIndex,omitempty"`
-	// FailoverGroupID - The resource identifier of the failover group containing this database.
+	// FailoverGroupID - READ-ONLY; The resource identifier of the failover group containing this database.
 	FailoverGroupID *string `json:"failoverGroupId,omitempty"`
 	// ReadScale - Conditional. If the database is a geo-secondary, readScale indicates whether read-only connections are allowed to this database or not. Not supported for DataWarehouse edition. Possible values include: 'ReadScaleEnabled', 'ReadScaleDisabled'
 	ReadScale ReadScale `json:"readScale,omitempty"`
@@ -737,8 +764,8 @@ type DatabaseProperties struct {
 	ZoneRedundant *bool `json:"zoneRedundant,omitempty"`
 }
 
-// DatabasesCreateImportOperationFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// DatabasesCreateImportOperationFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type DatabasesCreateImportOperationFuture struct {
 	azure.Future
 }
@@ -747,7 +774,7 @@ type DatabasesCreateImportOperationFuture struct {
 // If the operation has not completed it will return an error.
 func (future *DatabasesCreateImportOperationFuture) Result(client DatabasesClient) (ier ImportExportResponse, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.DatabasesCreateImportOperationFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -776,7 +803,7 @@ type DatabasesCreateOrUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *DatabasesCreateOrUpdateFuture) Result(client DatabasesClient) (d Database, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.DatabasesCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -800,15 +827,15 @@ type DatabaseSecurityAlertPolicy struct {
 	autorest.Response `json:"-"`
 	// Location - The geo-location where the resource lives
 	Location *string `json:"location,omitempty"`
-	// Kind - Resource kind.
+	// Kind - READ-ONLY; Resource kind.
 	Kind *string `json:"kind,omitempty"`
 	// DatabaseSecurityAlertPolicyProperties - Properties of the security alert policy.
 	*DatabaseSecurityAlertPolicyProperties `json:"properties,omitempty"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -818,20 +845,8 @@ func (dsap DatabaseSecurityAlertPolicy) MarshalJSON() ([]byte, error) {
 	if dsap.Location != nil {
 		objectMap["location"] = dsap.Location
 	}
-	if dsap.Kind != nil {
-		objectMap["kind"] = dsap.Kind
-	}
 	if dsap.DatabaseSecurityAlertPolicyProperties != nil {
 		objectMap["properties"] = dsap.DatabaseSecurityAlertPolicyProperties
-	}
-	if dsap.ID != nil {
-		objectMap["id"] = dsap.ID
-	}
-	if dsap.Name != nil {
-		objectMap["name"] = dsap.Name
-	}
-	if dsap.Type != nil {
-		objectMap["type"] = dsap.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -909,7 +924,7 @@ func (dsap *DatabaseSecurityAlertPolicy) UnmarshalJSON(body []byte) error {
 type DatabaseSecurityAlertPolicyProperties struct {
 	// State - Specifies the state of the policy. If state is Enabled, storageEndpoint and storageAccountAccessKey are required. Possible values include: 'SecurityAlertPolicyStateNew', 'SecurityAlertPolicyStateEnabled', 'SecurityAlertPolicyStateDisabled'
 	State SecurityAlertPolicyState `json:"state,omitempty"`
-	// DisabledAlerts - Specifies the semicolon-separated list of alerts that are disabled, or empty string to disable no alerts. Possible values: Sql_Injection; Sql_Injection_Vulnerability; Access_Anomaly; Usage_Anomaly.
+	// DisabledAlerts - Specifies the semicolon-separated list of alerts that are disabled, or empty string to disable no alerts. Possible values: Sql_Injection; Sql_Injection_Vulnerability; Access_Anomaly; Data_Exfiltration; Unsafe_Action.
 	DisabledAlerts *string `json:"disabledAlerts,omitempty"`
 	// EmailAddresses - Specifies the semicolon-separated list of e-mail addresses to which the alert is sent.
 	EmailAddresses *string `json:"emailAddresses,omitempty"`
@@ -925,7 +940,8 @@ type DatabaseSecurityAlertPolicyProperties struct {
 	UseServerDefault SecurityAlertPolicyUseServerDefault `json:"useServerDefault,omitempty"`
 }
 
-// DatabasesExportFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// DatabasesExportFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type DatabasesExportFuture struct {
 	azure.Future
 }
@@ -934,7 +950,7 @@ type DatabasesExportFuture struct {
 // If the operation has not completed it will return an error.
 func (future *DatabasesExportFuture) Result(client DatabasesClient) (ier ImportExportResponse, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.DatabasesExportFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -953,7 +969,8 @@ func (future *DatabasesExportFuture) Result(client DatabasesClient) (ier ImportE
 	return
 }
 
-// DatabasesImportFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// DatabasesImportFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type DatabasesImportFuture struct {
 	azure.Future
 }
@@ -962,7 +979,7 @@ type DatabasesImportFuture struct {
 // If the operation has not completed it will return an error.
 func (future *DatabasesImportFuture) Result(client DatabasesClient) (ier ImportExportResponse, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.DatabasesImportFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -981,7 +998,8 @@ func (future *DatabasesImportFuture) Result(client DatabasesClient) (ier ImportE
 	return
 }
 
-// DatabasesPauseFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// DatabasesPauseFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type DatabasesPauseFuture struct {
 	azure.Future
 }
@@ -990,7 +1008,7 @@ type DatabasesPauseFuture struct {
 // If the operation has not completed it will return an error.
 func (future *DatabasesPauseFuture) Result(client DatabasesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.DatabasesPauseFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -1003,7 +1021,8 @@ func (future *DatabasesPauseFuture) Result(client DatabasesClient) (ar autorest.
 	return
 }
 
-// DatabasesResumeFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// DatabasesResumeFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type DatabasesResumeFuture struct {
 	azure.Future
 }
@@ -1012,7 +1031,7 @@ type DatabasesResumeFuture struct {
 // If the operation has not completed it will return an error.
 func (future *DatabasesResumeFuture) Result(client DatabasesClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.DatabasesResumeFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -1025,7 +1044,8 @@ func (future *DatabasesResumeFuture) Result(client DatabasesClient) (ar autorest
 	return
 }
 
-// DatabasesUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// DatabasesUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type DatabasesUpdateFuture struct {
 	azure.Future
 }
@@ -1034,7 +1054,7 @@ type DatabasesUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *DatabasesUpdateFuture) Result(client DatabasesClient) (d Database, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.DatabasesUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -1059,11 +1079,11 @@ type DatabaseUpdate struct {
 	Tags map[string]*string `json:"tags"`
 	// DatabaseProperties - The properties representing the resource.
 	*DatabaseProperties `json:"properties,omitempty"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -1075,15 +1095,6 @@ func (du DatabaseUpdate) MarshalJSON() ([]byte, error) {
 	}
 	if du.DatabaseProperties != nil {
 		objectMap["properties"] = du.DatabaseProperties
-	}
-	if du.ID != nil {
-		objectMap["id"] = du.ID
-	}
-	if du.Name != nil {
-		objectMap["name"] = du.Name
-	}
-	if du.Type != nil {
-		objectMap["type"] = du.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -1153,17 +1164,17 @@ type ElasticPool struct {
 	autorest.Response `json:"-"`
 	// ElasticPoolProperties - The properties representing the resource.
 	*ElasticPoolProperties `json:"properties,omitempty"`
-	// Kind - Kind of elastic pool.  This is metadata used for the Azure portal experience.
+	// Kind - READ-ONLY; Kind of elastic pool.  This is metadata used for the Azure portal experience.
 	Kind *string `json:"kind,omitempty"`
 	// Location - Resource location.
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags.
 	Tags map[string]*string `json:"tags"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -1173,23 +1184,11 @@ func (ep ElasticPool) MarshalJSON() ([]byte, error) {
 	if ep.ElasticPoolProperties != nil {
 		objectMap["properties"] = ep.ElasticPoolProperties
 	}
-	if ep.Kind != nil {
-		objectMap["kind"] = ep.Kind
-	}
 	if ep.Location != nil {
 		objectMap["location"] = ep.Location
 	}
 	if ep.Tags != nil {
 		objectMap["tags"] = ep.Tags
-	}
-	if ep.ID != nil {
-		objectMap["id"] = ep.ID
-	}
-	if ep.Name != nil {
-		objectMap["name"] = ep.Name
-	}
-	if ep.Type != nil {
-		objectMap["type"] = ep.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -1278,11 +1277,11 @@ type ElasticPoolActivity struct {
 	Location *string `json:"location,omitempty"`
 	// ElasticPoolActivityProperties - The properties representing the resource.
 	*ElasticPoolActivityProperties `json:"properties,omitempty"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -1294,15 +1293,6 @@ func (epa ElasticPoolActivity) MarshalJSON() ([]byte, error) {
 	}
 	if epa.ElasticPoolActivityProperties != nil {
 		objectMap["properties"] = epa.ElasticPoolActivityProperties
-	}
-	if epa.ID != nil {
-		objectMap["id"] = epa.ID
-	}
-	if epa.Name != nil {
-		objectMap["name"] = epa.Name
-	}
-	if epa.Type != nil {
-		objectMap["type"] = epa.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -1376,45 +1366,45 @@ type ElasticPoolActivityListResult struct {
 
 // ElasticPoolActivityProperties represents the properties of an elastic pool.
 type ElasticPoolActivityProperties struct {
-	// EndTime - The time the operation finished (ISO8601 format).
+	// EndTime - READ-ONLY; The time the operation finished (ISO8601 format).
 	EndTime *date.Time `json:"endTime,omitempty"`
-	// ErrorCode - The error code if available.
+	// ErrorCode - READ-ONLY; The error code if available.
 	ErrorCode *int32 `json:"errorCode,omitempty"`
-	// ErrorMessage - The error message if available.
+	// ErrorMessage - READ-ONLY; The error message if available.
 	ErrorMessage *string `json:"errorMessage,omitempty"`
-	// ErrorSeverity - The error severity if available.
+	// ErrorSeverity - READ-ONLY; The error severity if available.
 	ErrorSeverity *int32 `json:"errorSeverity,omitempty"`
-	// Operation - The operation name.
+	// Operation - READ-ONLY; The operation name.
 	Operation *string `json:"operation,omitempty"`
-	// OperationID - The unique operation ID.
+	// OperationID - READ-ONLY; The unique operation ID.
 	OperationID *uuid.UUID `json:"operationId,omitempty"`
-	// PercentComplete - The percentage complete if available.
+	// PercentComplete - READ-ONLY; The percentage complete if available.
 	PercentComplete *int32 `json:"percentComplete,omitempty"`
-	// RequestedDatabaseDtuMax - The requested max DTU per database if available.
+	// RequestedDatabaseDtuMax - READ-ONLY; The requested max DTU per database if available.
 	RequestedDatabaseDtuMax *int32 `json:"requestedDatabaseDtuMax,omitempty"`
-	// RequestedDatabaseDtuMin - The requested min DTU per database if available.
+	// RequestedDatabaseDtuMin - READ-ONLY; The requested min DTU per database if available.
 	RequestedDatabaseDtuMin *int32 `json:"requestedDatabaseDtuMin,omitempty"`
-	// RequestedDtu - The requested DTU for the pool if available.
+	// RequestedDtu - READ-ONLY; The requested DTU for the pool if available.
 	RequestedDtu *int32 `json:"requestedDtu,omitempty"`
-	// RequestedElasticPoolName - The requested name for the elastic pool if available.
+	// RequestedElasticPoolName - READ-ONLY; The requested name for the elastic pool if available.
 	RequestedElasticPoolName *string `json:"requestedElasticPoolName,omitempty"`
-	// RequestedStorageLimitInGB - The requested storage limit for the pool in GB if available.
+	// RequestedStorageLimitInGB - READ-ONLY; The requested storage limit for the pool in GB if available.
 	RequestedStorageLimitInGB *int64 `json:"requestedStorageLimitInGB,omitempty"`
-	// ElasticPoolName - The name of the elastic pool.
+	// ElasticPoolName - READ-ONLY; The name of the elastic pool.
 	ElasticPoolName *string `json:"elasticPoolName,omitempty"`
-	// ServerName - The name of the server the elastic pool is in.
+	// ServerName - READ-ONLY; The name of the server the elastic pool is in.
 	ServerName *string `json:"serverName,omitempty"`
-	// StartTime - The time the operation started (ISO8601 format).
+	// StartTime - READ-ONLY; The time the operation started (ISO8601 format).
 	StartTime *date.Time `json:"startTime,omitempty"`
-	// State - The current state of the operation.
+	// State - READ-ONLY; The current state of the operation.
 	State *string `json:"state,omitempty"`
-	// RequestedStorageLimitInMB - The requested storage limit in MB.
+	// RequestedStorageLimitInMB - READ-ONLY; The requested storage limit in MB.
 	RequestedStorageLimitInMB *int32 `json:"requestedStorageLimitInMB,omitempty"`
-	// RequestedDatabaseDtuGuarantee - The requested per database DTU guarantee.
+	// RequestedDatabaseDtuGuarantee - READ-ONLY; The requested per database DTU guarantee.
 	RequestedDatabaseDtuGuarantee *int32 `json:"requestedDatabaseDtuGuarantee,omitempty"`
-	// RequestedDatabaseDtuCap - The requested per database DTU cap.
+	// RequestedDatabaseDtuCap - READ-ONLY; The requested per database DTU cap.
 	RequestedDatabaseDtuCap *int32 `json:"requestedDatabaseDtuCap,omitempty"`
-	// RequestedDtuGuarantee - The requested DTU guarantee.
+	// RequestedDtuGuarantee - READ-ONLY; The requested DTU guarantee.
 	RequestedDtuGuarantee *int32 `json:"requestedDtuGuarantee,omitempty"`
 }
 
@@ -1424,11 +1414,11 @@ type ElasticPoolDatabaseActivity struct {
 	Location *string `json:"location,omitempty"`
 	// ElasticPoolDatabaseActivityProperties - The properties representing the resource.
 	*ElasticPoolDatabaseActivityProperties `json:"properties,omitempty"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -1440,15 +1430,6 @@ func (epda ElasticPoolDatabaseActivity) MarshalJSON() ([]byte, error) {
 	}
 	if epda.ElasticPoolDatabaseActivityProperties != nil {
 		objectMap["properties"] = epda.ElasticPoolDatabaseActivityProperties
-	}
-	if epda.ID != nil {
-		objectMap["id"] = epda.ID
-	}
-	if epda.Name != nil {
-		objectMap["name"] = epda.Name
-	}
-	if epda.Type != nil {
-		objectMap["type"] = epda.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -1513,7 +1494,8 @@ func (epda *ElasticPoolDatabaseActivity) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// ElasticPoolDatabaseActivityListResult represents the response to a list elastic pool database activity request.
+// ElasticPoolDatabaseActivityListResult represents the response to a list elastic pool database activity
+// request.
 type ElasticPoolDatabaseActivityListResult struct {
 	autorest.Response `json:"-"`
 	// Value - The list of elastic pool database activities.
@@ -1522,35 +1504,35 @@ type ElasticPoolDatabaseActivityListResult struct {
 
 // ElasticPoolDatabaseActivityProperties represents the properties of an elastic pool database activity.
 type ElasticPoolDatabaseActivityProperties struct {
-	// DatabaseName - The database name.
+	// DatabaseName - READ-ONLY; The database name.
 	DatabaseName *string `json:"databaseName,omitempty"`
-	// EndTime - The time the operation finished (ISO8601 format).
+	// EndTime - READ-ONLY; The time the operation finished (ISO8601 format).
 	EndTime *date.Time `json:"endTime,omitempty"`
-	// ErrorCode - The error code if available.
+	// ErrorCode - READ-ONLY; The error code if available.
 	ErrorCode *int32 `json:"errorCode,omitempty"`
-	// ErrorMessage - The error message if available.
+	// ErrorMessage - READ-ONLY; The error message if available.
 	ErrorMessage *string `json:"errorMessage,omitempty"`
-	// ErrorSeverity - The error severity if available.
+	// ErrorSeverity - READ-ONLY; The error severity if available.
 	ErrorSeverity *int32 `json:"errorSeverity,omitempty"`
-	// Operation - The operation name.
+	// Operation - READ-ONLY; The operation name.
 	Operation *string `json:"operation,omitempty"`
-	// OperationID - The unique operation ID.
+	// OperationID - READ-ONLY; The unique operation ID.
 	OperationID *uuid.UUID `json:"operationId,omitempty"`
-	// PercentComplete - The percentage complete if available.
+	// PercentComplete - READ-ONLY; The percentage complete if available.
 	PercentComplete *int32 `json:"percentComplete,omitempty"`
-	// RequestedElasticPoolName - The name for the elastic pool the database is moving into if available.
+	// RequestedElasticPoolName - READ-ONLY; The name for the elastic pool the database is moving into if available.
 	RequestedElasticPoolName *string `json:"requestedElasticPoolName,omitempty"`
-	// CurrentElasticPoolName - The name of the current elastic pool the database is in if available.
+	// CurrentElasticPoolName - READ-ONLY; The name of the current elastic pool the database is in if available.
 	CurrentElasticPoolName *string `json:"currentElasticPoolName,omitempty"`
-	// CurrentServiceObjective - The name of the current service objective if available.
+	// CurrentServiceObjective - READ-ONLY; The name of the current service objective if available.
 	CurrentServiceObjective *string `json:"currentServiceObjective,omitempty"`
-	// RequestedServiceObjective - The name of the requested service objective if available.
+	// RequestedServiceObjective - READ-ONLY; The name of the requested service objective if available.
 	RequestedServiceObjective *string `json:"requestedServiceObjective,omitempty"`
-	// ServerName - The name of the server the elastic pool is in.
+	// ServerName - READ-ONLY; The name of the server the elastic pool is in.
 	ServerName *string `json:"serverName,omitempty"`
-	// StartTime - The time the operation started (ISO8601 format).
+	// StartTime - READ-ONLY; The time the operation started (ISO8601 format).
 	StartTime *date.Time `json:"startTime,omitempty"`
-	// State - The current state of the operation.
+	// State - READ-ONLY; The current state of the operation.
 	State *string `json:"state,omitempty"`
 }
 
@@ -1563,11 +1545,11 @@ type ElasticPoolListResult struct {
 
 // ElasticPoolProperties represents the properties of an elastic pool.
 type ElasticPoolProperties struct {
-	// CreationDate - The creation date of the elastic pool (ISO8601 format).
+	// CreationDate - READ-ONLY; The creation date of the elastic pool (ISO8601 format).
 	CreationDate *date.Time `json:"creationDate,omitempty"`
-	// State - The state of the elastic pool. Possible values include: 'Creating', 'Ready', 'Disabled'
+	// State - READ-ONLY; The state of the elastic pool. Possible values include: 'Creating', 'Ready', 'Disabled'
 	State ElasticPoolState `json:"state,omitempty"`
-	// Edition - The edition of the elastic pool. Possible values include: 'ElasticPoolEditionBasic', 'ElasticPoolEditionStandard', 'ElasticPoolEditionPremium'
+	// Edition - The edition of the elastic pool. Possible values include: 'ElasticPoolEditionBasic', 'ElasticPoolEditionStandard', 'ElasticPoolEditionPremium', 'ElasticPoolEditionGeneralPurpose', 'ElasticPoolEditionBusinessCritical'
 	Edition ElasticPoolEdition `json:"edition,omitempty"`
 	// Dtu - The total shared DTU for the database elastic pool.
 	Dtu *int32 `json:"dtu,omitempty"`
@@ -1581,8 +1563,8 @@ type ElasticPoolProperties struct {
 	ZoneRedundant *bool `json:"zoneRedundant,omitempty"`
 }
 
-// ElasticPoolsCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ElasticPoolsCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ElasticPoolsCreateOrUpdateFuture struct {
 	azure.Future
 }
@@ -1591,7 +1573,7 @@ type ElasticPoolsCreateOrUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *ElasticPoolsCreateOrUpdateFuture) Result(client ElasticPoolsClient) (ep ElasticPool, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ElasticPoolsCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -1610,7 +1592,8 @@ func (future *ElasticPoolsCreateOrUpdateFuture) Result(client ElasticPoolsClient
 	return
 }
 
-// ElasticPoolsUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ElasticPoolsUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ElasticPoolsUpdateFuture struct {
 	azure.Future
 }
@@ -1619,7 +1602,7 @@ type ElasticPoolsUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *ElasticPoolsUpdateFuture) Result(client ElasticPoolsClient) (ep ElasticPool, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ElasticPoolsUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -1644,11 +1627,11 @@ type ElasticPoolUpdate struct {
 	Tags map[string]*string `json:"tags"`
 	// ElasticPoolProperties - The properties representing the resource.
 	*ElasticPoolProperties `json:"properties,omitempty"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -1660,15 +1643,6 @@ func (epu ElasticPoolUpdate) MarshalJSON() ([]byte, error) {
 	}
 	if epu.ElasticPoolProperties != nil {
 		objectMap["properties"] = epu.ElasticPoolProperties
-	}
-	if epu.ID != nil {
-		objectMap["id"] = epu.ID
-	}
-	if epu.Name != nil {
-		objectMap["name"] = epu.Name
-	}
-	if epu.Type != nil {
-		objectMap["type"] = epu.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -1752,40 +1726,25 @@ type ExportRequest struct {
 // FirewallRule represents a server firewall rule.
 type FirewallRule struct {
 	autorest.Response `json:"-"`
-	// Kind - Kind of server that contains this firewall rule.
+	// Kind - READ-ONLY; Kind of server that contains this firewall rule.
 	Kind *string `json:"kind,omitempty"`
-	// Location - Location of the server that contains this firewall rule.
+	// Location - READ-ONLY; Location of the server that contains this firewall rule.
 	Location *string `json:"location,omitempty"`
 	// FirewallRuleProperties - The properties representing the resource.
 	*FirewallRuleProperties `json:"properties,omitempty"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for FirewallRule.
 func (fr FirewallRule) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if fr.Kind != nil {
-		objectMap["kind"] = fr.Kind
-	}
-	if fr.Location != nil {
-		objectMap["location"] = fr.Location
-	}
 	if fr.FirewallRuleProperties != nil {
 		objectMap["properties"] = fr.FirewallRuleProperties
-	}
-	if fr.ID != nil {
-		objectMap["id"] = fr.ID
-	}
-	if fr.Name != nil {
-		objectMap["name"] = fr.Name
-	}
-	if fr.Type != nil {
-		objectMap["type"] = fr.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -1879,11 +1838,11 @@ type ImportExportResponse struct {
 	autorest.Response `json:"-"`
 	// ImportExportResponseProperties - The import/export operation properties.
 	*ImportExportResponseProperties `json:"properties,omitempty"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -1892,15 +1851,6 @@ func (ier ImportExportResponse) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if ier.ImportExportResponseProperties != nil {
 		objectMap["properties"] = ier.ImportExportResponseProperties
-	}
-	if ier.ID != nil {
-		objectMap["id"] = ier.ID
-	}
-	if ier.Name != nil {
-		objectMap["name"] = ier.Name
-	}
-	if ier.Type != nil {
-		objectMap["type"] = ier.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -1958,23 +1908,23 @@ func (ier *ImportExportResponse) UnmarshalJSON(body []byte) error {
 
 // ImportExportResponseProperties response for Import/Export Status operation.
 type ImportExportResponseProperties struct {
-	// RequestType - The request type of the operation.
+	// RequestType - READ-ONLY; The request type of the operation.
 	RequestType *string `json:"requestType,omitempty"`
-	// RequestID - The request type of the operation.
+	// RequestID - READ-ONLY; The request type of the operation.
 	RequestID *uuid.UUID `json:"requestId,omitempty"`
-	// ServerName - The name of the server.
+	// ServerName - READ-ONLY; The name of the server.
 	ServerName *string `json:"serverName,omitempty"`
-	// DatabaseName - The name of the database.
+	// DatabaseName - READ-ONLY; The name of the database.
 	DatabaseName *string `json:"databaseName,omitempty"`
-	// Status - The status message returned from the server.
+	// Status - READ-ONLY; The status message returned from the server.
 	Status *string `json:"status,omitempty"`
-	// LastModifiedTime - The operation status last modified time.
+	// LastModifiedTime - READ-ONLY; The operation status last modified time.
 	LastModifiedTime *string `json:"lastModifiedTime,omitempty"`
-	// QueuedTime - The operation queued time.
+	// QueuedTime - READ-ONLY; The operation queued time.
 	QueuedTime *string `json:"queuedTime,omitempty"`
-	// BlobURI - The blob uri.
+	// BlobURI - READ-ONLY; The blob uri.
 	BlobURI *string `json:"blobUri,omitempty"`
-	// ErrorMessage - The error message returned from the server.
+	// ErrorMessage - READ-ONLY; The error message returned from the server.
 	ErrorMessage *string `json:"errorMessage,omitempty"`
 }
 
@@ -2067,7 +2017,18 @@ func (ier *ImportExtensionRequest) UnmarshalJSON(body []byte) error {
 type ImportRequest struct {
 	// DatabaseName - The name of the database to import.
 	DatabaseName *string `json:"databaseName,omitempty"`
-	// Edition - The edition for the database being created. Possible values include: 'Web', 'Business', 'Basic', 'Standard', 'Premium', 'PremiumRS', 'Free', 'Stretch', 'DataWarehouse', 'System', 'System2'
+	// Edition - The edition for the database being created.
+	//
+	// The list of SKUs may vary by region and support offer. To determine the SKUs (including the SKU name, tier/edition, family, and capacity) that are available to your subscription in an Azure region, use the `Capabilities_ListByLocation` REST API or one of the following commands:
+	//
+	// ```azurecli
+	// az sql db list-editions -l <location> -o table
+	// ````
+	//
+	// ```powershell
+	// Get-AzSqlServerServiceObjective -Location <location>
+	// ````
+	// . Possible values include: 'Web', 'Business', 'Basic', 'Standard', 'Premium', 'PremiumRS', 'Free', 'Stretch', 'DataWarehouse', 'System', 'System2', 'GeneralPurpose', 'BusinessCritical', 'Hyperscale'
 	Edition DatabaseEdition `json:"edition,omitempty"`
 	// ServiceObjectiveName - The name of the service objective to assign to the database. Possible values include: 'ServiceObjectiveNameSystem', 'ServiceObjectiveNameSystem0', 'ServiceObjectiveNameSystem1', 'ServiceObjectiveNameSystem2', 'ServiceObjectiveNameSystem3', 'ServiceObjectiveNameSystem4', 'ServiceObjectiveNameSystem2L', 'ServiceObjectiveNameSystem3L', 'ServiceObjectiveNameSystem4L', 'ServiceObjectiveNameFree', 'ServiceObjectiveNameBasic', 'ServiceObjectiveNameS0', 'ServiceObjectiveNameS1', 'ServiceObjectiveNameS2', 'ServiceObjectiveNameS3', 'ServiceObjectiveNameS4', 'ServiceObjectiveNameS6', 'ServiceObjectiveNameS7', 'ServiceObjectiveNameS9', 'ServiceObjectiveNameS12', 'ServiceObjectiveNameP1', 'ServiceObjectiveNameP2', 'ServiceObjectiveNameP3', 'ServiceObjectiveNameP4', 'ServiceObjectiveNameP6', 'ServiceObjectiveNameP11', 'ServiceObjectiveNameP15', 'ServiceObjectiveNamePRS1', 'ServiceObjectiveNamePRS2', 'ServiceObjectiveNamePRS4', 'ServiceObjectiveNamePRS6', 'ServiceObjectiveNameDW100', 'ServiceObjectiveNameDW200', 'ServiceObjectiveNameDW300', 'ServiceObjectiveNameDW400', 'ServiceObjectiveNameDW500', 'ServiceObjectiveNameDW600', 'ServiceObjectiveNameDW1000', 'ServiceObjectiveNameDW1200', 'ServiceObjectiveNameDW1000c', 'ServiceObjectiveNameDW1500', 'ServiceObjectiveNameDW1500c', 'ServiceObjectiveNameDW2000', 'ServiceObjectiveNameDW2000c', 'ServiceObjectiveNameDW3000', 'ServiceObjectiveNameDW2500c', 'ServiceObjectiveNameDW3000c', 'ServiceObjectiveNameDW6000', 'ServiceObjectiveNameDW5000c', 'ServiceObjectiveNameDW6000c', 'ServiceObjectiveNameDW7500c', 'ServiceObjectiveNameDW10000c', 'ServiceObjectiveNameDW15000c', 'ServiceObjectiveNameDW30000c', 'ServiceObjectiveNameDS100', 'ServiceObjectiveNameDS200', 'ServiceObjectiveNameDS300', 'ServiceObjectiveNameDS400', 'ServiceObjectiveNameDS500', 'ServiceObjectiveNameDS600', 'ServiceObjectiveNameDS1000', 'ServiceObjectiveNameDS1200', 'ServiceObjectiveNameDS1500', 'ServiceObjectiveNameDS2000', 'ServiceObjectiveNameElasticPool'
 	ServiceObjectiveName ServiceObjectiveName `json:"serviceObjectiveName,omitempty"`
@@ -2089,36 +2050,36 @@ type ImportRequest struct {
 
 // OperationImpact the impact of an operation, both in absolute and relative terms.
 type OperationImpact struct {
-	// Name - The name of the impact dimension.
+	// Name - READ-ONLY; The name of the impact dimension.
 	Name *string `json:"name,omitempty"`
-	// Unit - The unit in which estimated impact to dimension is measured.
+	// Unit - READ-ONLY; The unit in which estimated impact to dimension is measured.
 	Unit *string `json:"unit,omitempty"`
-	// ChangeValueAbsolute - The absolute impact to dimension.
+	// ChangeValueAbsolute - READ-ONLY; The absolute impact to dimension.
 	ChangeValueAbsolute *float64 `json:"changeValueAbsolute,omitempty"`
-	// ChangeValueRelative - The relative impact to dimension (null if not applicable)
+	// ChangeValueRelative - READ-ONLY; The relative impact to dimension (null if not applicable)
 	ChangeValueRelative *float64 `json:"changeValueRelative,omitempty"`
 }
 
 // ProxyResource ARM proxy resource.
 type ProxyResource struct {
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
-// RecommendedElasticPool represents a recommented elastic pool.
+// RecommendedElasticPool represents a recommended elastic pool.
 type RecommendedElasticPool struct {
 	autorest.Response `json:"-"`
-	// RecommendedElasticPoolProperties - The properites representing the resource.
+	// RecommendedElasticPoolProperties - The properties representing the resource.
 	*RecommendedElasticPoolProperties `json:"properties,omitempty"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -2127,15 +2088,6 @@ func (rep RecommendedElasticPool) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if rep.RecommendedElasticPoolProperties != nil {
 		objectMap["properties"] = rep.RecommendedElasticPoolProperties
-	}
-	if rep.ID != nil {
-		objectMap["id"] = rep.ID
-	}
-	if rep.Name != nil {
-		objectMap["name"] = rep.Name
-	}
-	if rep.Type != nil {
-		objectMap["type"] = rep.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -2191,8 +2143,8 @@ func (rep *RecommendedElasticPool) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// RecommendedElasticPoolListMetricsResult represents the response to a list recommended elastic pool metrics
-// request.
+// RecommendedElasticPoolListMetricsResult represents the response to a list recommended elastic pool
+// metrics request.
 type RecommendedElasticPoolListMetricsResult struct {
 	autorest.Response `json:"-"`
 	// Value - The list of recommended elastic pools metrics.
@@ -2216,9 +2168,9 @@ type RecommendedElasticPoolMetric struct {
 	SizeGB *float64 `json:"sizeGB,omitempty"`
 }
 
-// RecommendedElasticPoolProperties represents the properties of a recommented elastic pool.
+// RecommendedElasticPoolProperties represents the properties of a recommended elastic pool.
 type RecommendedElasticPoolProperties struct {
-	// DatabaseEdition - The edition of the recommended elastic pool. The ElasticPoolEdition enumeration contains all the valid editions. Possible values include: 'ElasticPoolEditionBasic', 'ElasticPoolEditionStandard', 'ElasticPoolEditionPremium'
+	// DatabaseEdition - READ-ONLY; The edition of the recommended elastic pool. The ElasticPoolEdition enumeration contains all the valid editions. Possible values include: 'ElasticPoolEditionBasic', 'ElasticPoolEditionStandard', 'ElasticPoolEditionPremium', 'ElasticPoolEditionGeneralPurpose', 'ElasticPoolEditionBusinessCritical'
 	DatabaseEdition ElasticPoolEdition `json:"databaseEdition,omitempty"`
 	// Dtu - The DTU for the recommended elastic pool.
 	Dtu *float64 `json:"dtu,omitempty"`
@@ -2228,47 +2180,35 @@ type RecommendedElasticPoolProperties struct {
 	DatabaseDtuMax *float64 `json:"databaseDtuMax,omitempty"`
 	// StorageMB - Gets storage size in megabytes.
 	StorageMB *float64 `json:"storageMB,omitempty"`
-	// ObservationPeriodStart - The observation period start (ISO8601 format).
+	// ObservationPeriodStart - READ-ONLY; The observation period start (ISO8601 format).
 	ObservationPeriodStart *date.Time `json:"observationPeriodStart,omitempty"`
-	// ObservationPeriodEnd - The observation period start (ISO8601 format).
+	// ObservationPeriodEnd - READ-ONLY; The observation period start (ISO8601 format).
 	ObservationPeriodEnd *date.Time `json:"observationPeriodEnd,omitempty"`
-	// MaxObservedDtu - Gets maximum observed DTU.
+	// MaxObservedDtu - READ-ONLY; Gets maximum observed DTU.
 	MaxObservedDtu *float64 `json:"maxObservedDtu,omitempty"`
-	// MaxObservedStorageMB - Gets maximum observed storage in megabytes.
+	// MaxObservedStorageMB - READ-ONLY; Gets maximum observed storage in megabytes.
 	MaxObservedStorageMB *float64 `json:"maxObservedStorageMB,omitempty"`
-	// Databases - The list of databases in this pool. Expanded property
+	// Databases - READ-ONLY; The list of databases in this pool. Expanded property
 	Databases *[]Database `json:"databases,omitempty"`
-	// Metrics - The list of databases housed in the server. Expanded property
+	// Metrics - READ-ONLY; The list of databases housed in the server. Expanded property
 	Metrics *[]RecommendedElasticPoolMetric `json:"metrics,omitempty"`
 }
 
 // RecommendedIndex represents a database recommended index.
 type RecommendedIndex struct {
-	// RecommendedIndexProperties - The properties representing the resource.
+	// RecommendedIndexProperties - READ-ONLY; The properties representing the resource.
 	*RecommendedIndexProperties `json:"properties,omitempty"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for RecommendedIndex.
 func (ri RecommendedIndex) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if ri.RecommendedIndexProperties != nil {
-		objectMap["properties"] = ri.RecommendedIndexProperties
-	}
-	if ri.ID != nil {
-		objectMap["id"] = ri.ID
-	}
-	if ri.Name != nil {
-		objectMap["name"] = ri.Name
-	}
-	if ri.Type != nil {
-		objectMap["type"] = ri.Type
-	}
 	return json.Marshal(objectMap)
 }
 
@@ -2325,64 +2265,52 @@ func (ri *RecommendedIndex) UnmarshalJSON(body []byte) error {
 
 // RecommendedIndexProperties represents the properties of a database recommended index.
 type RecommendedIndexProperties struct {
-	// Action - The proposed index action. You can create a missing index, drop an unused index, or rebuild an existing index to improve its performance. Possible values include: 'Create', 'Drop', 'Rebuild'
+	// Action - READ-ONLY; The proposed index action. You can create a missing index, drop an unused index, or rebuild an existing index to improve its performance. Possible values include: 'Create', 'Drop', 'Rebuild'
 	Action RecommendedIndexAction `json:"action,omitempty"`
-	// State - The current recommendation state. Possible values include: 'Active', 'Pending', 'Executing', 'Verifying', 'PendingRevert', 'Reverting', 'Reverted', 'Ignored', 'Expired', 'Blocked', 'Success'
+	// State - READ-ONLY; The current recommendation state. Possible values include: 'Active', 'Pending', 'Executing', 'Verifying', 'PendingRevert', 'Reverting', 'Reverted', 'Ignored', 'Expired', 'Blocked', 'Success'
 	State RecommendedIndexState `json:"state,omitempty"`
-	// Created - The UTC datetime showing when this resource was created (ISO8601 format).
+	// Created - READ-ONLY; The UTC datetime showing when this resource was created (ISO8601 format).
 	Created *date.Time `json:"created,omitempty"`
-	// LastModified - The UTC datetime of when was this resource last changed (ISO8601 format).
+	// LastModified - READ-ONLY; The UTC datetime of when was this resource last changed (ISO8601 format).
 	LastModified *date.Time `json:"lastModified,omitempty"`
-	// IndexType - The type of index (CLUSTERED, NONCLUSTERED, COLUMNSTORE, CLUSTERED COLUMNSTORE). Possible values include: 'CLUSTERED', 'NONCLUSTERED', 'COLUMNSTORE', 'CLUSTEREDCOLUMNSTORE'
+	// IndexType - READ-ONLY; The type of index (CLUSTERED, NONCLUSTERED, COLUMNSTORE, CLUSTERED COLUMNSTORE). Possible values include: 'CLUSTERED', 'NONCLUSTERED', 'COLUMNSTORE', 'CLUSTEREDCOLUMNSTORE'
 	IndexType RecommendedIndexType `json:"indexType,omitempty"`
-	// Schema - The schema where table to build index over resides
+	// Schema - READ-ONLY; The schema where table to build index over resides
 	Schema *string `json:"schema,omitempty"`
-	// Table - The table on which to build index.
+	// Table - READ-ONLY; The table on which to build index.
 	Table *string `json:"table,omitempty"`
-	// Columns - Columns over which to build index
+	// Columns - READ-ONLY; Columns over which to build index
 	Columns *[]string `json:"columns,omitempty"`
-	// IncludedColumns - The list of column names to be included in the index
+	// IncludedColumns - READ-ONLY; The list of column names to be included in the index
 	IncludedColumns *[]string `json:"includedColumns,omitempty"`
-	// IndexScript - The full build index script
+	// IndexScript - READ-ONLY; The full build index script
 	IndexScript *string `json:"indexScript,omitempty"`
-	// EstimatedImpact - The estimated impact of doing recommended index action.
+	// EstimatedImpact - READ-ONLY; The estimated impact of doing recommended index action.
 	EstimatedImpact *[]OperationImpact `json:"estimatedImpact,omitempty"`
-	// ReportedImpact - The values reported after index action is complete.
+	// ReportedImpact - READ-ONLY; The values reported after index action is complete.
 	ReportedImpact *[]OperationImpact `json:"reportedImpact,omitempty"`
 }
 
 // ReplicationLink represents a database replication link.
 type ReplicationLink struct {
 	autorest.Response `json:"-"`
-	// Location - Location of the server that contains this firewall rule.
+	// Location - READ-ONLY; Location of the server that contains this firewall rule.
 	Location *string `json:"location,omitempty"`
 	// ReplicationLinkProperties - The properties representing the resource.
 	*ReplicationLinkProperties `json:"properties,omitempty"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for ReplicationLink.
 func (rl ReplicationLink) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if rl.Location != nil {
-		objectMap["location"] = rl.Location
-	}
 	if rl.ReplicationLinkProperties != nil {
 		objectMap["properties"] = rl.ReplicationLinkProperties
-	}
-	if rl.ID != nil {
-		objectMap["id"] = rl.ID
-	}
-	if rl.Name != nil {
-		objectMap["name"] = rl.Name
-	}
-	if rl.Type != nil {
-		objectMap["type"] = rl.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -2456,30 +2384,30 @@ type ReplicationLinkListResult struct {
 
 // ReplicationLinkProperties represents the properties of a database replication link.
 type ReplicationLinkProperties struct {
-	// IsTerminationAllowed - Legacy value indicating whether termination is allowed.  Currently always returns true.
+	// IsTerminationAllowed - READ-ONLY; Legacy value indicating whether termination is allowed.  Currently always returns true.
 	IsTerminationAllowed *bool `json:"isTerminationAllowed,omitempty"`
-	// ReplicationMode - Replication mode of this replication link.
+	// ReplicationMode - READ-ONLY; Replication mode of this replication link.
 	ReplicationMode *string `json:"replicationMode,omitempty"`
-	// PartnerServer - The name of the server hosting the partner database.
+	// PartnerServer - READ-ONLY; The name of the server hosting the partner database.
 	PartnerServer *string `json:"partnerServer,omitempty"`
-	// PartnerDatabase - The name of the partner database.
+	// PartnerDatabase - READ-ONLY; The name of the partner database.
 	PartnerDatabase *string `json:"partnerDatabase,omitempty"`
-	// PartnerLocation - The Azure Region of the partner database.
+	// PartnerLocation - READ-ONLY; The Azure Region of the partner database.
 	PartnerLocation *string `json:"partnerLocation,omitempty"`
-	// Role - The role of the database in the replication link. Possible values include: 'ReplicationRolePrimary', 'ReplicationRoleSecondary', 'ReplicationRoleNonReadableSecondary', 'ReplicationRoleSource', 'ReplicationRoleCopy'
+	// Role - READ-ONLY; The role of the database in the replication link. Possible values include: 'ReplicationRolePrimary', 'ReplicationRoleSecondary', 'ReplicationRoleNonReadableSecondary', 'ReplicationRoleSource', 'ReplicationRoleCopy'
 	Role ReplicationRole `json:"role,omitempty"`
-	// PartnerRole - The role of the partner database in the replication link. Possible values include: 'ReplicationRolePrimary', 'ReplicationRoleSecondary', 'ReplicationRoleNonReadableSecondary', 'ReplicationRoleSource', 'ReplicationRoleCopy'
+	// PartnerRole - READ-ONLY; The role of the partner database in the replication link. Possible values include: 'ReplicationRolePrimary', 'ReplicationRoleSecondary', 'ReplicationRoleNonReadableSecondary', 'ReplicationRoleSource', 'ReplicationRoleCopy'
 	PartnerRole ReplicationRole `json:"partnerRole,omitempty"`
-	// StartTime - The start time for the replication link.
+	// StartTime - READ-ONLY; The start time for the replication link.
 	StartTime *date.Time `json:"startTime,omitempty"`
-	// PercentComplete - The percentage of seeding complete for the replication link.
+	// PercentComplete - READ-ONLY; The percentage of seeding complete for the replication link.
 	PercentComplete *int32 `json:"percentComplete,omitempty"`
-	// ReplicationState - The replication state for the replication link. Possible values include: 'PENDING', 'SEEDING', 'CATCHUP', 'SUSPENDED'
+	// ReplicationState - READ-ONLY; The replication state for the replication link. Possible values include: 'PENDING', 'SEEDING', 'CATCHUP', 'SUSPENDED'
 	ReplicationState ReplicationState `json:"replicationState,omitempty"`
 }
 
-// ReplicationLinksFailoverAllowDataLossFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// ReplicationLinksFailoverAllowDataLossFuture an abstraction for monitoring and retrieving the results of
+// a long-running operation.
 type ReplicationLinksFailoverAllowDataLossFuture struct {
 	azure.Future
 }
@@ -2488,7 +2416,7 @@ type ReplicationLinksFailoverAllowDataLossFuture struct {
 // If the operation has not completed it will return an error.
 func (future *ReplicationLinksFailoverAllowDataLossFuture) Result(client ReplicationLinksClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ReplicationLinksFailoverAllowDataLossFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -2501,8 +2429,8 @@ func (future *ReplicationLinksFailoverAllowDataLossFuture) Result(client Replica
 	return
 }
 
-// ReplicationLinksFailoverFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ReplicationLinksFailoverFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ReplicationLinksFailoverFuture struct {
 	azure.Future
 }
@@ -2511,7 +2439,7 @@ type ReplicationLinksFailoverFuture struct {
 // If the operation has not completed it will return an error.
 func (future *ReplicationLinksFailoverFuture) Result(client ReplicationLinksClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ReplicationLinksFailoverFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -2526,42 +2454,30 @@ func (future *ReplicationLinksFailoverFuture) Result(client ReplicationLinksClie
 
 // Resource ARM resource.
 type Resource struct {
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
 // ServiceTierAdvisor represents a Service Tier Advisor.
 type ServiceTierAdvisor struct {
 	autorest.Response `json:"-"`
-	// ServiceTierAdvisorProperties - The properites representing the resource.
+	// ServiceTierAdvisorProperties - READ-ONLY; The properties representing the resource.
 	*ServiceTierAdvisorProperties `json:"properties,omitempty"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for ServiceTierAdvisor.
 func (sta ServiceTierAdvisor) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if sta.ServiceTierAdvisorProperties != nil {
-		objectMap["properties"] = sta.ServiceTierAdvisorProperties
-	}
-	if sta.ID != nil {
-		objectMap["id"] = sta.ID
-	}
-	if sta.Name != nil {
-		objectMap["name"] = sta.Name
-	}
-	if sta.Type != nil {
-		objectMap["type"] = sta.Type
-	}
 	return json.Marshal(objectMap)
 }
 
@@ -2625,53 +2541,53 @@ type ServiceTierAdvisorListResult struct {
 
 // ServiceTierAdvisorProperties represents the properties of a Service Tier Advisor.
 type ServiceTierAdvisorProperties struct {
-	// ObservationPeriodStart - The observation period start (ISO8601 format).
+	// ObservationPeriodStart - READ-ONLY; The observation period start (ISO8601 format).
 	ObservationPeriodStart *date.Time `json:"observationPeriodStart,omitempty"`
-	// ObservationPeriodEnd - The observation period start (ISO8601 format).
+	// ObservationPeriodEnd - READ-ONLY; The observation period start (ISO8601 format).
 	ObservationPeriodEnd *date.Time `json:"observationPeriodEnd,omitempty"`
-	// ActiveTimeRatio - The activeTimeRatio for service tier advisor.
+	// ActiveTimeRatio - READ-ONLY; The activeTimeRatio for service tier advisor.
 	ActiveTimeRatio *float64 `json:"activeTimeRatio,omitempty"`
-	// MinDtu - Gets or sets minDtu for service tier advisor.
+	// MinDtu - READ-ONLY; Gets or sets minDtu for service tier advisor.
 	MinDtu *float64 `json:"minDtu,omitempty"`
-	// AvgDtu - Gets or sets avgDtu for service tier advisor.
+	// AvgDtu - READ-ONLY; Gets or sets avgDtu for service tier advisor.
 	AvgDtu *float64 `json:"avgDtu,omitempty"`
-	// MaxDtu - Gets or sets maxDtu for service tier advisor.
+	// MaxDtu - READ-ONLY; Gets or sets maxDtu for service tier advisor.
 	MaxDtu *float64 `json:"maxDtu,omitempty"`
-	// MaxSizeInGB - Gets or sets maxSizeInGB for service tier advisor.
+	// MaxSizeInGB - READ-ONLY; Gets or sets maxSizeInGB for service tier advisor.
 	MaxSizeInGB *float64 `json:"maxSizeInGB,omitempty"`
-	// ServiceLevelObjectiveUsageMetrics - Gets or sets serviceLevelObjectiveUsageMetrics for the service tier advisor.
+	// ServiceLevelObjectiveUsageMetrics - READ-ONLY; Gets or sets serviceLevelObjectiveUsageMetrics for the service tier advisor.
 	ServiceLevelObjectiveUsageMetrics *[]SloUsageMetric `json:"serviceLevelObjectiveUsageMetrics,omitempty"`
-	// CurrentServiceLevelObjective - Gets or sets currentServiceLevelObjective for service tier advisor.
+	// CurrentServiceLevelObjective - READ-ONLY; Gets or sets currentServiceLevelObjective for service tier advisor.
 	CurrentServiceLevelObjective *string `json:"currentServiceLevelObjective,omitempty"`
-	// CurrentServiceLevelObjectiveID - Gets or sets currentServiceLevelObjectiveId for service tier advisor.
+	// CurrentServiceLevelObjectiveID - READ-ONLY; Gets or sets currentServiceLevelObjectiveId for service tier advisor.
 	CurrentServiceLevelObjectiveID *uuid.UUID `json:"currentServiceLevelObjectiveId,omitempty"`
-	// UsageBasedRecommendationServiceLevelObjective - Gets or sets usageBasedRecommendationServiceLevelObjective for service tier advisor.
+	// UsageBasedRecommendationServiceLevelObjective - READ-ONLY; Gets or sets usageBasedRecommendationServiceLevelObjective for service tier advisor.
 	UsageBasedRecommendationServiceLevelObjective *string `json:"usageBasedRecommendationServiceLevelObjective,omitempty"`
-	// UsageBasedRecommendationServiceLevelObjectiveID - Gets or sets usageBasedRecommendationServiceLevelObjectiveId for service tier advisor.
+	// UsageBasedRecommendationServiceLevelObjectiveID - READ-ONLY; Gets or sets usageBasedRecommendationServiceLevelObjectiveId for service tier advisor.
 	UsageBasedRecommendationServiceLevelObjectiveID *uuid.UUID `json:"usageBasedRecommendationServiceLevelObjectiveId,omitempty"`
-	// DatabaseSizeBasedRecommendationServiceLevelObjective - Gets or sets databaseSizeBasedRecommendationServiceLevelObjective for service tier advisor.
+	// DatabaseSizeBasedRecommendationServiceLevelObjective - READ-ONLY; Gets or sets databaseSizeBasedRecommendationServiceLevelObjective for service tier advisor.
 	DatabaseSizeBasedRecommendationServiceLevelObjective *string `json:"databaseSizeBasedRecommendationServiceLevelObjective,omitempty"`
-	// DatabaseSizeBasedRecommendationServiceLevelObjectiveID - Gets or sets databaseSizeBasedRecommendationServiceLevelObjectiveId for service tier advisor.
+	// DatabaseSizeBasedRecommendationServiceLevelObjectiveID - READ-ONLY; Gets or sets databaseSizeBasedRecommendationServiceLevelObjectiveId for service tier advisor.
 	DatabaseSizeBasedRecommendationServiceLevelObjectiveID *uuid.UUID `json:"databaseSizeBasedRecommendationServiceLevelObjectiveId,omitempty"`
-	// DisasterPlanBasedRecommendationServiceLevelObjective - Gets or sets disasterPlanBasedRecommendationServiceLevelObjective for service tier advisor.
+	// DisasterPlanBasedRecommendationServiceLevelObjective - READ-ONLY; Gets or sets disasterPlanBasedRecommendationServiceLevelObjective for service tier advisor.
 	DisasterPlanBasedRecommendationServiceLevelObjective *string `json:"disasterPlanBasedRecommendationServiceLevelObjective,omitempty"`
-	// DisasterPlanBasedRecommendationServiceLevelObjectiveID - Gets or sets disasterPlanBasedRecommendationServiceLevelObjectiveId for service tier advisor.
+	// DisasterPlanBasedRecommendationServiceLevelObjectiveID - READ-ONLY; Gets or sets disasterPlanBasedRecommendationServiceLevelObjectiveId for service tier advisor.
 	DisasterPlanBasedRecommendationServiceLevelObjectiveID *uuid.UUID `json:"disasterPlanBasedRecommendationServiceLevelObjectiveId,omitempty"`
-	// OverallRecommendationServiceLevelObjective - Gets or sets overallRecommendationServiceLevelObjective for service tier advisor.
+	// OverallRecommendationServiceLevelObjective - READ-ONLY; Gets or sets overallRecommendationServiceLevelObjective for service tier advisor.
 	OverallRecommendationServiceLevelObjective *string `json:"overallRecommendationServiceLevelObjective,omitempty"`
-	// OverallRecommendationServiceLevelObjectiveID - Gets or sets overallRecommendationServiceLevelObjectiveId for service tier advisor.
+	// OverallRecommendationServiceLevelObjectiveID - READ-ONLY; Gets or sets overallRecommendationServiceLevelObjectiveId for service tier advisor.
 	OverallRecommendationServiceLevelObjectiveID *uuid.UUID `json:"overallRecommendationServiceLevelObjectiveId,omitempty"`
-	// Confidence - Gets or sets confidence for service tier advisor.
+	// Confidence - READ-ONLY; Gets or sets confidence for service tier advisor.
 	Confidence *float64 `json:"confidence,omitempty"`
 }
 
 // SloUsageMetric a Slo Usage Metric.
 type SloUsageMetric struct {
-	// ServiceLevelObjective - The serviceLevelObjective for SLO usage metric. Possible values include: 'ServiceObjectiveNameSystem', 'ServiceObjectiveNameSystem0', 'ServiceObjectiveNameSystem1', 'ServiceObjectiveNameSystem2', 'ServiceObjectiveNameSystem3', 'ServiceObjectiveNameSystem4', 'ServiceObjectiveNameSystem2L', 'ServiceObjectiveNameSystem3L', 'ServiceObjectiveNameSystem4L', 'ServiceObjectiveNameFree', 'ServiceObjectiveNameBasic', 'ServiceObjectiveNameS0', 'ServiceObjectiveNameS1', 'ServiceObjectiveNameS2', 'ServiceObjectiveNameS3', 'ServiceObjectiveNameS4', 'ServiceObjectiveNameS6', 'ServiceObjectiveNameS7', 'ServiceObjectiveNameS9', 'ServiceObjectiveNameS12', 'ServiceObjectiveNameP1', 'ServiceObjectiveNameP2', 'ServiceObjectiveNameP3', 'ServiceObjectiveNameP4', 'ServiceObjectiveNameP6', 'ServiceObjectiveNameP11', 'ServiceObjectiveNameP15', 'ServiceObjectiveNamePRS1', 'ServiceObjectiveNamePRS2', 'ServiceObjectiveNamePRS4', 'ServiceObjectiveNamePRS6', 'ServiceObjectiveNameDW100', 'ServiceObjectiveNameDW200', 'ServiceObjectiveNameDW300', 'ServiceObjectiveNameDW400', 'ServiceObjectiveNameDW500', 'ServiceObjectiveNameDW600', 'ServiceObjectiveNameDW1000', 'ServiceObjectiveNameDW1200', 'ServiceObjectiveNameDW1000c', 'ServiceObjectiveNameDW1500', 'ServiceObjectiveNameDW1500c', 'ServiceObjectiveNameDW2000', 'ServiceObjectiveNameDW2000c', 'ServiceObjectiveNameDW3000', 'ServiceObjectiveNameDW2500c', 'ServiceObjectiveNameDW3000c', 'ServiceObjectiveNameDW6000', 'ServiceObjectiveNameDW5000c', 'ServiceObjectiveNameDW6000c', 'ServiceObjectiveNameDW7500c', 'ServiceObjectiveNameDW10000c', 'ServiceObjectiveNameDW15000c', 'ServiceObjectiveNameDW30000c', 'ServiceObjectiveNameDS100', 'ServiceObjectiveNameDS200', 'ServiceObjectiveNameDS300', 'ServiceObjectiveNameDS400', 'ServiceObjectiveNameDS500', 'ServiceObjectiveNameDS600', 'ServiceObjectiveNameDS1000', 'ServiceObjectiveNameDS1200', 'ServiceObjectiveNameDS1500', 'ServiceObjectiveNameDS2000', 'ServiceObjectiveNameElasticPool'
+	// ServiceLevelObjective - READ-ONLY; The serviceLevelObjective for SLO usage metric. Possible values include: 'ServiceObjectiveNameSystem', 'ServiceObjectiveNameSystem0', 'ServiceObjectiveNameSystem1', 'ServiceObjectiveNameSystem2', 'ServiceObjectiveNameSystem3', 'ServiceObjectiveNameSystem4', 'ServiceObjectiveNameSystem2L', 'ServiceObjectiveNameSystem3L', 'ServiceObjectiveNameSystem4L', 'ServiceObjectiveNameFree', 'ServiceObjectiveNameBasic', 'ServiceObjectiveNameS0', 'ServiceObjectiveNameS1', 'ServiceObjectiveNameS2', 'ServiceObjectiveNameS3', 'ServiceObjectiveNameS4', 'ServiceObjectiveNameS6', 'ServiceObjectiveNameS7', 'ServiceObjectiveNameS9', 'ServiceObjectiveNameS12', 'ServiceObjectiveNameP1', 'ServiceObjectiveNameP2', 'ServiceObjectiveNameP3', 'ServiceObjectiveNameP4', 'ServiceObjectiveNameP6', 'ServiceObjectiveNameP11', 'ServiceObjectiveNameP15', 'ServiceObjectiveNamePRS1', 'ServiceObjectiveNamePRS2', 'ServiceObjectiveNamePRS4', 'ServiceObjectiveNamePRS6', 'ServiceObjectiveNameDW100', 'ServiceObjectiveNameDW200', 'ServiceObjectiveNameDW300', 'ServiceObjectiveNameDW400', 'ServiceObjectiveNameDW500', 'ServiceObjectiveNameDW600', 'ServiceObjectiveNameDW1000', 'ServiceObjectiveNameDW1200', 'ServiceObjectiveNameDW1000c', 'ServiceObjectiveNameDW1500', 'ServiceObjectiveNameDW1500c', 'ServiceObjectiveNameDW2000', 'ServiceObjectiveNameDW2000c', 'ServiceObjectiveNameDW3000', 'ServiceObjectiveNameDW2500c', 'ServiceObjectiveNameDW3000c', 'ServiceObjectiveNameDW6000', 'ServiceObjectiveNameDW5000c', 'ServiceObjectiveNameDW6000c', 'ServiceObjectiveNameDW7500c', 'ServiceObjectiveNameDW10000c', 'ServiceObjectiveNameDW15000c', 'ServiceObjectiveNameDW30000c', 'ServiceObjectiveNameDS100', 'ServiceObjectiveNameDS200', 'ServiceObjectiveNameDS300', 'ServiceObjectiveNameDS400', 'ServiceObjectiveNameDS500', 'ServiceObjectiveNameDS600', 'ServiceObjectiveNameDS1000', 'ServiceObjectiveNameDS1200', 'ServiceObjectiveNameDS1500', 'ServiceObjectiveNameDS2000', 'ServiceObjectiveNameElasticPool'
 	ServiceLevelObjective ServiceObjectiveName `json:"serviceLevelObjective,omitempty"`
-	// ServiceLevelObjectiveID - The serviceLevelObjectiveId for SLO usage metric.
+	// ServiceLevelObjectiveID - READ-ONLY; The serviceLevelObjectiveId for SLO usage metric.
 	ServiceLevelObjectiveID *uuid.UUID `json:"serviceLevelObjectiveId,omitempty"`
-	// InRangeTimeRatio - Gets or sets inRangeTimeRatio for SLO usage metric.
+	// InRangeTimeRatio - READ-ONLY; Gets or sets inRangeTimeRatio for SLO usage metric.
 	InRangeTimeRatio *float64 `json:"inRangeTimeRatio,omitempty"`
 }
 
@@ -2681,11 +2597,11 @@ type TrackedResource struct {
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags.
 	Tags map[string]*string `json:"tags"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
@@ -2698,50 +2614,29 @@ func (tr TrackedResource) MarshalJSON() ([]byte, error) {
 	if tr.Tags != nil {
 		objectMap["tags"] = tr.Tags
 	}
-	if tr.ID != nil {
-		objectMap["id"] = tr.ID
-	}
-	if tr.Name != nil {
-		objectMap["name"] = tr.Name
-	}
-	if tr.Type != nil {
-		objectMap["type"] = tr.Type
-	}
 	return json.Marshal(objectMap)
 }
 
 // TransparentDataEncryption represents a database transparent data encryption configuration.
 type TransparentDataEncryption struct {
 	autorest.Response `json:"-"`
-	// Location - Resource location.
+	// Location - READ-ONLY; Resource location.
 	Location *string `json:"location,omitempty"`
 	// TransparentDataEncryptionProperties - Represents the properties of the resource.
 	*TransparentDataEncryptionProperties `json:"properties,omitempty"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for TransparentDataEncryption.
 func (tde TransparentDataEncryption) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if tde.Location != nil {
-		objectMap["location"] = tde.Location
-	}
 	if tde.TransparentDataEncryptionProperties != nil {
 		objectMap["properties"] = tde.TransparentDataEncryptionProperties
-	}
-	if tde.ID != nil {
-		objectMap["id"] = tde.ID
-	}
-	if tde.Name != nil {
-		objectMap["name"] = tde.Name
-	}
-	if tde.Type != nil {
-		objectMap["type"] = tde.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -2808,35 +2703,23 @@ func (tde *TransparentDataEncryption) UnmarshalJSON(body []byte) error {
 
 // TransparentDataEncryptionActivity represents a database transparent data encryption Scan.
 type TransparentDataEncryptionActivity struct {
-	// Location - Resource location.
+	// Location - READ-ONLY; Resource location.
 	Location *string `json:"location,omitempty"`
 	// TransparentDataEncryptionActivityProperties - Represents the properties of the resource.
 	*TransparentDataEncryptionActivityProperties `json:"properties,omitempty"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for TransparentDataEncryptionActivity.
 func (tdea TransparentDataEncryptionActivity) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if tdea.Location != nil {
-		objectMap["location"] = tdea.Location
-	}
 	if tdea.TransparentDataEncryptionActivityProperties != nil {
 		objectMap["properties"] = tdea.TransparentDataEncryptionActivityProperties
-	}
-	if tdea.ID != nil {
-		objectMap["id"] = tdea.ID
-	}
-	if tdea.Name != nil {
-		objectMap["name"] = tdea.Name
-	}
-	if tdea.Type != nil {
-		objectMap["type"] = tdea.Type
 	}
 	return json.Marshal(objectMap)
 }
@@ -2909,12 +2792,12 @@ type TransparentDataEncryptionActivityListResult struct {
 	Value *[]TransparentDataEncryptionActivity `json:"value,omitempty"`
 }
 
-// TransparentDataEncryptionActivityProperties represents the properties of a database transparent data encryption
-// Scan.
+// TransparentDataEncryptionActivityProperties represents the properties of a database transparent data
+// encryption Scan.
 type TransparentDataEncryptionActivityProperties struct {
-	// Status - The status of the database. Possible values include: 'Encrypting', 'Decrypting'
+	// Status - READ-ONLY; The status of the database. Possible values include: 'Encrypting', 'Decrypting'
 	Status TransparentDataEncryptionActivityStatus `json:"status,omitempty"`
-	// PercentComplete - The percent complete of the transparent data encryption scan for a database.
+	// PercentComplete - READ-ONLY; The percent complete of the transparent data encryption scan for a database.
 	PercentComplete *float64 `json:"percentComplete,omitempty"`
 }
 

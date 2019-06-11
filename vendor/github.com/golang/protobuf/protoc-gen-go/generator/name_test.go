@@ -68,6 +68,7 @@ func TestGoPackageOption(t *testing.T) {
 		{"foo", "", "foo", true},
 		{"github.com/golang/bar", "github.com/golang/bar", "bar", true},
 		{"github.com/golang/bar;baz", "github.com/golang/bar", "baz", true},
+		{"github.com/golang/string", "github.com/golang/string", "string", true},
 	}
 	for _, tc := range tests {
 		d := &FileDescriptor{
@@ -81,6 +82,25 @@ func TestGoPackageOption(t *testing.T) {
 		if impPath != tc.impPath || pkg != tc.pkg || ok != tc.ok {
 			t.Errorf("go_package = %q => (%q, %q, %t), want (%q, %q, %t)", tc.in,
 				impPath, pkg, ok, tc.impPath, tc.pkg, tc.ok)
+		}
+	}
+}
+
+func TestPackageNames(t *testing.T) {
+	g := New()
+	g.packageNames = make(map[GoImportPath]GoPackageName)
+	g.usedPackageNames = make(map[GoPackageName]bool)
+	for _, test := range []struct {
+		importPath GoImportPath
+		want       GoPackageName
+	}{
+		{"github.com/golang/foo", "foo"},
+		{"github.com/golang/second/package/named/foo", "foo1"},
+		{"github.com/golang/third/package/named/foo", "foo2"},
+		{"github.com/golang/conflicts/with/predeclared/ident/string", "string1"},
+	} {
+		if got := g.GoPackageName(test.importPath); got != test.want {
+			t.Errorf("GoPackageName(%v) = %v, want %v", test.importPath, got, test.want)
 		}
 	}
 }

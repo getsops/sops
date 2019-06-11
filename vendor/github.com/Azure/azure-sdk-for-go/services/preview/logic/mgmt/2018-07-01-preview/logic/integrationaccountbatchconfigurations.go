@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,6 +50,16 @@ func NewIntegrationAccountBatchConfigurationsClientWithBaseURI(baseURI string, s
 // batchConfigurationName - the batch configuration name.
 // batchConfiguration - the batch configuration.
 func (client IntegrationAccountBatchConfigurationsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, integrationAccountName string, batchConfigurationName string, batchConfiguration BatchConfiguration) (result BatchConfiguration, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountBatchConfigurationsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: batchConfiguration,
 			Constraints: []validation.Constraint{{Target: "batchConfiguration.Properties", Name: validation.Null, Rule: true,
@@ -129,6 +140,16 @@ func (client IntegrationAccountBatchConfigurationsClient) CreateOrUpdateResponde
 // integrationAccountName - the integration account name.
 // batchConfigurationName - the batch configuration name.
 func (client IntegrationAccountBatchConfigurationsClient) Delete(ctx context.Context, resourceGroupName string, integrationAccountName string, batchConfigurationName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountBatchConfigurationsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, integrationAccountName, batchConfigurationName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.IntegrationAccountBatchConfigurationsClient", "Delete", nil, "Failure preparing request")
@@ -197,6 +218,16 @@ func (client IntegrationAccountBatchConfigurationsClient) DeleteResponder(resp *
 // integrationAccountName - the integration account name.
 // batchConfigurationName - the batch configuration name.
 func (client IntegrationAccountBatchConfigurationsClient) Get(ctx context.Context, resourceGroupName string, integrationAccountName string, batchConfigurationName string) (result BatchConfiguration, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountBatchConfigurationsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, integrationAccountName, batchConfigurationName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.IntegrationAccountBatchConfigurationsClient", "Get", nil, "Failure preparing request")
@@ -265,6 +296,16 @@ func (client IntegrationAccountBatchConfigurationsClient) GetResponder(resp *htt
 // resourceGroupName - the resource group name.
 // integrationAccountName - the integration account name.
 func (client IntegrationAccountBatchConfigurationsClient) List(ctx context.Context, resourceGroupName string, integrationAccountName string) (result BatchConfigurationCollection, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountBatchConfigurationsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, resourceGroupName, integrationAccountName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.IntegrationAccountBatchConfigurationsClient", "List", nil, "Failure preparing request")

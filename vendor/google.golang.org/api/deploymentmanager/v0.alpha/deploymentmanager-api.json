@@ -24,7 +24,7 @@
   "description": "The Deployment Manager API allows users to declaratively configure, deploy and run complex solutions on the Google Cloud Platform.",
   "discoveryVersion": "v1",
   "documentationLink": "https://cloud.google.com/deployment-manager/",
-  "etag": "\"Zkyw9ACJZUvcYmlFaKGChzhmtnE/tdbJPMazx6MrJLWgJ0381Mo2V1Y\"",
+  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/i83A6zmc-n6BMrisOP13hqHZHL8\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -439,9 +439,9 @@
               "type": "string"
             },
             "resource": {
-              "description": "Name of the resource for this request.",
+              "description": "Name or id of the resource for this request.",
               "location": "path",
-              "pattern": "[a-z0-9](?:[-a-z0-9_]{0,61}[a-z0-9])?",
+              "pattern": "[a-z](?:[-a-z0-9_]{0,61}[a-z0-9])?|[1-9][0-9]{0,19}",
               "required": true,
               "type": "string"
             }
@@ -643,9 +643,9 @@
               "type": "string"
             },
             "resource": {
-              "description": "Name of the resource for this request.",
+              "description": "Name or id of the resource for this request.",
               "location": "path",
-              "pattern": "[a-z0-9](?:[-a-z0-9_]{0,61}[a-z0-9])?",
+              "pattern": "[a-z](?:[-a-z0-9_]{0,61}[a-z0-9])?|[1-9][0-9]{0,19}",
               "required": true,
               "type": "string"
             }
@@ -715,9 +715,9 @@
               "type": "string"
             },
             "resource": {
-              "description": "Name of the resource for this request.",
+              "description": "Name or id of the resource for this request.",
               "location": "path",
-              "pattern": "(?:[-a-z0-9_]{0,62}[a-z0-9])?",
+              "pattern": "[a-z](?:[-a-z0-9_]{0,61}[a-z0-9])?|[1-9][0-9]{0,19}",
               "required": true,
               "type": "string"
             }
@@ -1650,7 +1650,7 @@
       }
     }
   },
-  "revision": "20180609",
+  "revision": "20181207",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "AsyncOptions": {
@@ -1741,7 +1741,7 @@
       "properties": {
         "condition": {
           "$ref": "Expr",
-          "description": "The condition that is associated with this binding. NOTE: an unsatisfied condition will not allow user access via current binding. Different bindings, including their conditions, are examined independently. This field is only visible as GOOGLE_INTERNAL or CONDITION_TRUSTED_TESTER."
+          "description": "Unimplemented. The condition that is associated with this binding. NOTE: an unsatisfied condition will not allow user access via current binding. Different bindings, including their conditions, are examined independently."
         },
         "members": {
           "description": "Specifies the identities requesting access for a Cloud Platform resource. `members` can have the following values:\n\n* `allUsers`: A special identifier that represents anyone who is on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google account. For example, `alice@gmail.com` .\n\n\n\n* `serviceAccount:{emailid}`: An email address that represents a service account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group. For example, `admins@example.com`.\n\n\n\n* `domain:{domain}`: A Google Apps domain name that represents all the users of that domain. For example, `google.com` or `example.com`.",
@@ -1785,12 +1785,11 @@
           "type": "string"
         },
         "id": {
-          "description": "Output only. Unique identifier for the resource; defined by the server.",
           "format": "uint64",
           "type": "string"
         },
         "insertTime": {
-          "description": "Output only. Timestamp when the composite type was created, in RFC3339 text format.",
+          "description": "Output only. Creation timestamp in RFC3339 text format.",
           "type": "string"
         },
         "labels": {
@@ -1809,7 +1808,7 @@
           "description": "Output only. The Operation that most recently ran, or is currently running, on this composite type."
         },
         "selfLink": {
-          "description": "Output only. Self link for the type provider.",
+          "description": "Output only. Server defined URL for the resource.",
           "type": "string"
         },
         "status": {
@@ -1960,12 +1959,11 @@
           "type": "string"
         },
         "id": {
-          "description": "Output only. Unique identifier for the resource; defined by the server.",
           "format": "uint64",
           "type": "string"
         },
         "insertTime": {
-          "description": "Output only. Timestamp when the deployment was created, in RFC3339 text format .",
+          "description": "Output only. Creation timestamp in RFC3339 text format.",
           "type": "string"
         },
         "labels": {
@@ -1995,7 +1993,7 @@
           "type": "array"
         },
         "selfLink": {
-          "description": "Output only. Self link for the deployment.",
+          "description": "Output only. Server defined URL for the resource.",
           "type": "string"
         },
         "target": {
@@ -2005,6 +2003,10 @@
         "update": {
           "$ref": "DeploymentUpdate",
           "description": "Output only. If Deployment Manager is currently updating or previewing an update to this deployment, the updated configuration appears here."
+        },
+        "updateTime": {
+          "description": "Output only. Update timestamp in RFC3339 text format.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -2155,7 +2157,7 @@
       "id": "GlobalSetPolicyRequest",
       "properties": {
         "bindings": {
-          "description": "Flatten Policy to create a backwacd compatible wire-format. Deprecated. Use 'policy' to specify bindings.",
+          "description": "Flatten Policy to create a backward compatible wire-format. Deprecated. Use 'policy' to specify bindings.",
           "items": {
             "$ref": "Binding"
           },
@@ -2246,7 +2248,7 @@
       "type": "object"
     },
     "LogConfigCounterOptions": {
-      "description": "Increment a streamz counter with the specified metric and field names.\n\nMetric names should start with a '/', generally be lowercase-only, and end in \"_count\". Field names should not contain an initial slash. The actual exported metric names will have \"/iam/policy\" prepended.\n\nField names correspond to IAM request parameters and field values are their respective values.\n\nAt present the only supported field names are - \"iam_principal\", corresponding to IAMContext.principal; - \"\" (empty string), resulting in one aggretated counter with no field.\n\nExamples: counter { metric: \"/debug_access_count\" field: \"iam_principal\" } ==\u003e increment counter /iam/policy/backend_debug_access_count {iam_principal=[value of IAMContext.principal]}\n\nAt this time we do not support: * multiple field names (though this may be supported in the future) * decrementing the counter * incrementing it by anything other than 1",
+      "description": "Increment a streamz counter with the specified metric and field names.\n\nMetric names should start with a '/', generally be lowercase-only, and end in \"_count\". Field names should not contain an initial slash. The actual exported metric names will have \"/iam/policy\" prepended.\n\nField names correspond to IAM request parameters and field values are their respective values.\n\nSupported field names: - \"authority\", which is \"[token]\" if IAMContext.token is present, otherwise the value of IAMContext.authority_selector if present, and otherwise a representation of IAMContext.principal; or - \"iam_principal\", a representation of IAMContext.principal even if a token or authority selector is present; or - \"\" (empty string), resulting in a counter with no fields.\n\nExamples: counter { metric: \"/debug_access_count\" field: \"iam_principal\" } ==\u003e increment counter /iam/policy/backend_debug_access_count {iam_principal=[value of IAMContext.principal]}\n\nAt this time we do not support multiple field names (though this may be supported in the future).",
       "id": "LogConfigCounterOptions",
       "properties": {
         "field": {
@@ -2265,7 +2267,7 @@
       "id": "LogConfigDataAccessOptions",
       "properties": {
         "logMode": {
-          "description": "Whether Gin logging should happen in a fail-closed manner at the caller. This is relevant only in the LocalIAM implementation, for now.",
+          "description": "Whether Gin logging should happen in a fail-closed manner at the caller. This is relevant only in the LocalIAM implementation, for now.\n\nNOTE: Logging to Gin in a fail-closed manner is currently unsupported while work is being done to satisfy the requirements of go/345. Currently, setting LOG_FAIL_CLOSED mode will have no effect, but still exists because there is active work being done to support it (b/115874152).",
           "type": "string"
         }
       },
@@ -2284,7 +2286,6 @@
           "type": "string"
         },
         "id": {
-          "description": "Output only. Unique identifier for the resource; defined by the server.",
           "format": "uint64",
           "type": "string"
         },
@@ -2296,7 +2297,7 @@
           "type": "array"
         },
         "insertTime": {
-          "description": "Output only. Timestamp when the manifest was created, in RFC3339 text format.",
+          "description": "Output only. Creation timestamp in RFC3339 text format.",
           "type": "string"
         },
         "layout": {
@@ -2648,12 +2649,11 @@
           "type": "string"
         },
         "id": {
-          "description": "Output only. Unique identifier for the resource; defined by the server.",
           "format": "uint64",
           "type": "string"
         },
         "insertTime": {
-          "description": "Output only. Timestamp when the resource was created or acquired, in RFC3339 text format .",
+          "description": "Output only. Creation timestamp in RFC3339 text format.",
           "type": "string"
         },
         "lastUsedCredential": {
@@ -2688,7 +2688,7 @@
           "description": "Output only. If Deployment Manager is currently updating or previewing an update to this resource, the updated configuration appears here."
         },
         "updateTime": {
-          "description": "Output only. Timestamp when the resource was updated, in RFC3339 text format .",
+          "description": "Output only. Update timestamp in RFC3339 text format.",
           "type": "string"
         },
         "url": {
@@ -3012,12 +3012,11 @@
           "type": "string"
         },
         "id": {
-          "description": "Output only. Unique identifier for the resource; defined by the server.",
           "format": "uint64",
           "type": "string"
         },
         "insertTime": {
-          "description": "Output only. Timestamp when the type was created, in RFC3339 text format.",
+          "description": "Output only. Creation timestamp in RFC3339 text format.",
           "type": "string"
         },
         "labels": {
@@ -3036,14 +3035,14 @@
           "description": "Output only. The Operation that most recently ran, or is currently running, on this type."
         },
         "selfLink": {
-          "description": "Output only. Self link for the type.",
+          "description": "Output only. Server defined URL for the resource.",
           "type": "string"
         }
       },
       "type": "object"
     },
     "TypeInfo": {
-      "description": "Contains detailed information about a composite type, base type, or base type with specific collection.",
+      "description": "Type Information. Contains detailed information about a composite type, base type, or base type with specific collection.",
       "id": "TypeInfo",
       "properties": {
         "description": {
@@ -3055,7 +3054,6 @@
           "type": "string"
         },
         "kind": {
-          "default": "deploymentmanager#typeInfo",
           "description": "Output only. Type of the output. Always deploymentManager#TypeInfo for TypeInfo.",
           "type": "string"
         },
@@ -3068,7 +3066,7 @@
           "description": "For base types with a collection, we return a schema and documentation link For template types, we return only a schema"
         },
         "selfLink": {
-          "description": "Output only. Server-defined URL for the resource.",
+          "description": "Output only. Self link for the type provider.",
           "type": "string"
         },
         "title": {
@@ -3129,12 +3127,12 @@
           "type": "string"
         },
         "id": {
-          "description": "Output only. Unique identifier for the resource; defined by the server.",
+          "description": "Output only. Unique identifier for the resource defined by the server.",
           "format": "uint64",
           "type": "string"
         },
         "insertTime": {
-          "description": "Output only. Timestamp when the type provider was created, in RFC3339 text format.",
+          "description": "Output only. Creation timestamp in RFC3339 text format.",
           "type": "string"
         },
         "labels": {

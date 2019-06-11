@@ -19,23 +19,32 @@
 #  name = "github.com/x/y"
 #  version = "2.4.0"
 
+required = ["golang.org/x/lint/golint"]
+
+[prune]
+  unused-packages = true
+  go-tests = true
 
 [[constraint]]
   name = "github.com/dgrijalva/jwt-go"
   version = "3.1.0"
 
 [[constraint]]
-  branch = "master"
   name = "github.com/dimchansky/utfbom"
+  version = "1.0.0"
 
 [[constraint]]
-  branch = "master"
   name = "github.com/mitchellh/go-homedir"
+  version = "1.0.0"
 
 [[constraint]]
   name = "github.com/stretchr/testify"
   version = "1.2.0"
 
 [[constraint]]
-  branch = "master"
-  name = "golang.org/x/crypto"
+  name = "go.opencensus.io"
+  version = "0.19.2"
+
+[[constraint]]
+  name = "contrib.go.opencensus.io/exporter/ocagent"
+  version = "0.4.5"

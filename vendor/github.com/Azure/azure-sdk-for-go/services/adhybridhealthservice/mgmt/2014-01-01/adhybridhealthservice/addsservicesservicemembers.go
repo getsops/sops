@@ -21,10 +21,11 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
-// AddsServicesServiceMembersClient is the REST APIs for Azure Active Drectory Connect Health
+// AddsServicesServiceMembersClient is the REST APIs for Azure Active Directory Connect Health
 type AddsServicesServiceMembersClient struct {
 	BaseClient
 }
@@ -45,6 +46,16 @@ func NewAddsServicesServiceMembersClientWithBaseURI(baseURI string) AddsServices
 // serviceName - the name of the service under which the server is to be onboarded.
 // serviceMember - the server object.
 func (client AddsServicesServiceMembersClient) Add(ctx context.Context, serviceName string, serviceMember ServiceMember) (result ServiceMember, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AddsServicesServiceMembersClient.Add")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddPreparer(ctx, serviceName, serviceMember)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "adhybridhealthservice.AddsServicesServiceMembersClient", "Add", nil, "Failure preparing request")
@@ -115,6 +126,16 @@ func (client AddsServicesServiceMembersClient) AddResponder(resp *http.Response)
 // dimensionType - the server specific dimension.
 // dimensionSignature - the value of the dimension.
 func (client AddsServicesServiceMembersClient) List(ctx context.Context, serviceName string, filter string, dimensionType string, dimensionSignature string) (result ServiceMembersPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AddsServicesServiceMembersClient.List")
+		defer func() {
+			sc := -1
+			if result.sm.Response.Response != nil {
+				sc = result.sm.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, serviceName, filter, dimensionType, dimensionSignature)
 	if err != nil {
@@ -186,8 +207,8 @@ func (client AddsServicesServiceMembersClient) ListResponder(resp *http.Response
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client AddsServicesServiceMembersClient) listNextResults(lastResults ServiceMembers) (result ServiceMembers, err error) {
-	req, err := lastResults.serviceMembersPreparer()
+func (client AddsServicesServiceMembersClient) listNextResults(ctx context.Context, lastResults ServiceMembers) (result ServiceMembers, err error) {
+	req, err := lastResults.serviceMembersPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "adhybridhealthservice.AddsServicesServiceMembersClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -208,6 +229,16 @@ func (client AddsServicesServiceMembersClient) listNextResults(lastResults Servi
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AddsServicesServiceMembersClient) ListComplete(ctx context.Context, serviceName string, filter string, dimensionType string, dimensionSignature string) (result ServiceMembersIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AddsServicesServiceMembersClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, serviceName, filter, dimensionType, dimensionSignature)
 	return
 }

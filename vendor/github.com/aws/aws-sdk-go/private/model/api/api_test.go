@@ -7,8 +7,8 @@ import (
 )
 
 func TestAPI_StructName(t *testing.T) {
-	origAliases := serviceAliases
-	defer func() { serviceAliases = origAliases }()
+	origAliases := serviceAliaseNames
+	defer func() { serviceAliaseNames = origAliases }()
 
 	cases := map[string]struct {
 		Aliases    map[string]string
@@ -57,11 +57,13 @@ func TestAPI_StructName(t *testing.T) {
 
 	for k, c := range cases {
 		t.Run(k, func(t *testing.T) {
-			serviceAliases = c.Aliases
+			serviceAliaseNames = c.Aliases
 
 			a := API{
 				Metadata: c.Metadata,
 			}
+
+			a.Setup()
 
 			if e, o := c.StructName, a.StructName(); e != o {
 				t.Errorf("expect %v structName, got %v", e, o)

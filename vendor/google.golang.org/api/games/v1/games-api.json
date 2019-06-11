@@ -6,10 +6,7 @@
           "description": "View and manage its own configuration data in your Google Drive"
         },
         "https://www.googleapis.com/auth/games": {
-          "description": "Share your Google+ profile information and view and manage your game activity"
-        },
-        "https://www.googleapis.com/auth/plus.login": {
-          "description": "Know the list of people in your circles, your age range, and language"
+          "description": "Create, edit, and delete your Google Play Games activity"
         }
       }
     }
@@ -21,7 +18,7 @@
   "description": "The API for Google Play Game Services.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/games/services/",
-  "etag": "\"Zkyw9ACJZUvcYmlFaKGChzhmtnE/nv4huxV88vTM_jqlVOrKz7YYoy0\"",
+  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/cP1OKHBfQLMgkwY7eEy0cEQ_wBo\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -109,8 +106,7 @@
             "$ref": "AchievementDefinitionsListResponse"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         }
       }
@@ -152,8 +148,7 @@
             "$ref": "AchievementIncrementResponse"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "list": {
@@ -211,8 +206,7 @@
             "$ref": "PlayerAchievementListResponse"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "reveal": {
@@ -235,8 +229,7 @@
             "$ref": "AchievementRevealResponse"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "setStepsAtLeast": {
@@ -268,8 +261,7 @@
             "$ref": "AchievementSetStepsAtLeastResponse"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "unlock": {
@@ -285,6 +277,11 @@
               "location": "path",
               "required": true,
               "type": "string"
+            },
+            "builtinGameId": {
+              "description": "Override used only by built-in games in Play Games application.",
+              "location": "query",
+              "type": "string"
             }
           },
           "path": "achievements/{achievementId}/unlock",
@@ -292,14 +289,20 @@
             "$ref": "AchievementUnlockResponse"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "updateMultiple": {
           "description": "Updates multiple achievements for the currently authenticated player.",
           "httpMethod": "POST",
           "id": "games.achievements.updateMultiple",
+          "parameters": {
+            "builtinGameId": {
+              "description": "Override used only by built-in games in Play Games application.",
+              "location": "query",
+              "type": "string"
+            }
+          },
           "path": "achievements/updateMultiple",
           "request": {
             "$ref": "AchievementUpdateMultipleRequest"
@@ -308,8 +311,7 @@
             "$ref": "AchievementUpdateMultipleResponse"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         }
       }
@@ -356,18 +358,23 @@
             "$ref": "Application"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "played": {
           "description": "Indicate that the the currently authenticated user is playing your application.",
           "httpMethod": "POST",
           "id": "games.applications.played",
+          "parameters": {
+            "builtinGameId": {
+              "description": "Override used only by built-in games in Play Games application.",
+              "location": "query",
+              "type": "string"
+            }
+          },
           "path": "applications/played",
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "verify": {
@@ -390,8 +397,7 @@
             "$ref": "ApplicationVerifyResponse"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         }
       }
@@ -427,8 +433,7 @@
             "$ref": "PlayerEventListResponse"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "listDefinitions": {
@@ -460,8 +465,7 @@
             "$ref": "EventDefinitionListResponse"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "record": {
@@ -483,8 +487,7 @@
             "$ref": "EventUpdateResponse"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         }
       }
@@ -516,8 +519,7 @@
             "$ref": "Leaderboard"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "list": {
@@ -549,8 +551,7 @@
             "$ref": "LeaderboardListResponse"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         }
       }
@@ -566,8 +567,7 @@
             "$ref": "MetagameConfig"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "listCategoriesByPlayer": {
@@ -621,8 +621,7 @@
             "$ref": "CategoryListResponse"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         }
       }
@@ -654,8 +653,7 @@
             "$ref": "Player"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "list": {
@@ -708,8 +706,7 @@
             "$ref": "PlayerListResponse"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         }
       }
@@ -725,8 +722,7 @@
             "$ref": "PushTokenId"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "update": {
@@ -738,8 +734,7 @@
             "$ref": "PushToken"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         }
       }
@@ -778,8 +773,7 @@
           },
           "path": "quests/{questId}/milestones/{milestoneId}/claim",
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         }
       }
@@ -811,8 +805,7 @@
             "$ref": "Quest"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "list": {
@@ -853,8 +846,7 @@
             "$ref": "QuestListResponse"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         }
       }
@@ -881,8 +873,7 @@
             "$ref": "RevisionCheckResponse"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         }
       }
@@ -908,8 +899,7 @@
             "$ref": "Room"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "decline": {
@@ -937,8 +927,7 @@
             "$ref": "Room"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "dismiss": {
@@ -958,8 +947,7 @@
           },
           "path": "rooms/{roomId}/dismiss",
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "get": {
@@ -987,8 +975,7 @@
             "$ref": "Room"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "join": {
@@ -1019,8 +1006,7 @@
             "$ref": "Room"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "leave": {
@@ -1051,8 +1037,7 @@
             "$ref": "Room"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "list": {
@@ -1084,8 +1069,7 @@
             "$ref": "RoomList"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "reportStatus": {
@@ -1116,8 +1100,7 @@
             "$ref": "RoomStatus"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         }
       }
@@ -1203,8 +1186,7 @@
             "$ref": "PlayerLeaderboardScoreListResponse"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "list": {
@@ -1279,8 +1261,7 @@
             "$ref": "LeaderboardScores"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "listWindow": {
@@ -1366,8 +1347,7 @@
             "$ref": "LeaderboardScores"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "submit": {
@@ -1409,8 +1389,7 @@
             "$ref": "PlayerScoreResponse"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "submitMultiple": {
@@ -1432,8 +1411,7 @@
             "$ref": "PlayerScoreListResponse"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         }
       }
@@ -1466,8 +1444,7 @@
           },
           "scopes": [
             "https://www.googleapis.com/auth/drive.appdata",
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "list": {
@@ -1509,8 +1486,7 @@
           },
           "scopes": [
             "https://www.googleapis.com/auth/drive.appdata",
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         }
       }
@@ -1534,8 +1510,7 @@
           },
           "path": "turnbasedmatches/{matchId}/cancel",
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "create": {
@@ -1557,8 +1532,7 @@
             "$ref": "TurnBasedMatch"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "decline": {
@@ -1586,8 +1560,7 @@
             "$ref": "TurnBasedMatch"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "dismiss": {
@@ -1607,8 +1580,7 @@
           },
           "path": "turnbasedmatches/{matchId}/dismiss",
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "finish": {
@@ -1639,8 +1611,7 @@
             "$ref": "TurnBasedMatch"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "get": {
@@ -1673,8 +1644,7 @@
             "$ref": "TurnBasedMatch"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "join": {
@@ -1702,8 +1672,7 @@
             "$ref": "TurnBasedMatch"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "leave": {
@@ -1731,8 +1700,7 @@
             "$ref": "TurnBasedMatch"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "leaveTurn": {
@@ -1773,8 +1741,7 @@
             "$ref": "TurnBasedMatch"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "list": {
@@ -1819,8 +1786,7 @@
             "$ref": "TurnBasedMatchList"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "rematch": {
@@ -1854,8 +1820,7 @@
             "$ref": "TurnBasedMatchRematch"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "sync": {
@@ -1900,8 +1865,7 @@
             "$ref": "TurnBasedMatchSync"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         },
         "takeTurn": {
@@ -1932,14 +1896,13 @@
             "$ref": "TurnBasedMatch"
           },
           "scopes": [
-            "https://www.googleapis.com/auth/games",
-            "https://www.googleapis.com/auth/plus.login"
+            "https://www.googleapis.com/auth/games"
           ]
         }
       }
     }
   },
-  "revision": "20180417",
+  "revision": "20190516",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "AchievementDefinition": {

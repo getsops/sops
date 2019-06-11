@@ -10,8 +10,11 @@
     "DescribeOriginEndpoint" : "Gets details about an existing OriginEndpoint.",
     "ListChannels" : "Returns a collection of Channels.",
     "ListOriginEndpoints" : "Returns a collection of OriginEndpoint records.",
+    "ListTagsForResource" : null,
     "RotateChannelCredentials" : "Changes the Channel's first IngestEndpoint's username and password. WARNING - This API is deprecated. Please use RotateIngestEndpointCredentials instead",
     "RotateIngestEndpointCredentials" : "Rotate the IngestEndpoint's username and password, as specified by the IngestEndpoint's id.",
+    "TagResource" : null,
+    "UntagResource" : null,
     "UpdateChannel" : "Updates an existing Channel.",
     "UpdateOriginEndpoint" : "Updates an existing OriginEndpoint."
   },
@@ -120,6 +123,12 @@
         "__listOfIngestEndpoint$member" : null
       }
     },
+    "ManifestLayout" : {
+      "base" : null,
+      "refs" : {
+        "DashPackage$ManifestLayout" : "Determines the position of some tags in the Media Presentation Description (MPD).  When set to FULL, elements like SegmentTemplate and ContentProtection are included in each Representation.  When set to COMPACT, duplicate elements are combined and presented at the AdaptationSet level."
+      }
+    },
     "MssEncryption" : {
       "base" : "A Microsoft Smooth Streaming (MSS) encryption configuration.",
       "refs" : {
@@ -166,6 +175,12 @@
         "DashPackage$Profile" : "The Dynamic Adaptive Streaming over HTTP (DASH) profile type.  When set to \"HBBTV_1_5\", HbbTV 1.5 compliant output is enabled."
       }
     },
+    "SegmentTemplateFormat" : {
+      "base" : null,
+      "refs" : {
+        "DashPackage$SegmentTemplateFormat" : "Determines the type of SegmentTemplate included in the Media Presentation Description (MPD).  When set to NUMBER_WITH_TIMELINE, a full timeline is presented in each SegmentTemplate, with $Number$ media URLs.  When set to TIME_WITH_TIMELINE, a full timeline is presented in each SegmentTemplate, with $Time$ media URLs. When set to NUMBER_WITH_DURATION, only a duration is included in each SegmentTemplate, with $Number$ media URLs."
+      }
+    },
     "SpekeKeyProvider" : {
       "base" : "A configuration for accessing an external Secure Packager and Encoder Key Exchange (SPEKE) service that will provide encryption keys.",
       "refs" : {
@@ -190,6 +205,19 @@
         "HlsPackage$StreamSelection" : null,
         "MssPackage$StreamSelection" : null
       }
+    },
+    "Tags" : {
+      "base" : "A collection of tags associated with a resource",
+      "refs" : {
+        "Channel$Tags" : null,
+        "ChannelCreateParameters$Tags" : null,
+        "OriginEndpoint$Tags" : null,
+        "OriginEndpointCreateParameters$Tags" : null
+      }
+    },
+    "TagsModel" : {
+      "base" : null,
+      "refs" : { }
     },
     "__PeriodTriggersElement" : {
       "base" : null,
@@ -284,6 +312,12 @@
         "SpekeKeyProvider$SystemIds" : "The system IDs to include in key requests."
       }
     },
+    "__mapOf__string" : {
+      "base" : null,
+      "refs" : {
+        "TagsModel$Tags" : null
+      }
+    },
     "__string" : {
       "base" : null,
       "refs" : {
@@ -319,10 +353,13 @@
         "OriginEndpointList$NextToken" : "A token that can be used to resume pagination from the end of the collection.",
         "OriginEndpointUpdateParameters$Description" : "A short text description of the OriginEndpoint.",
         "OriginEndpointUpdateParameters$ManifestName" : "A short string that will be appended to the end of the Endpoint URL.",
+        "SpekeKeyProvider$CertificateArn" : "An Amazon Resource Name (ARN) of a Certificate Manager certificate\nthat MediaPackage will use for enforcing secure end-to-end data\ntransfer with the key provider service.\n",
         "SpekeKeyProvider$ResourceId" : "The resource ID to include in key requests.",
         "SpekeKeyProvider$RoleArn" : "An Amazon Resource Name (ARN) of an IAM role that AWS Elemental\nMediaPackage will assume when accessing the key provider service.\n",
         "SpekeKeyProvider$Url" : "The URL of the external key provider service.",
-        "__listOf__string$member" : null
+        "Tags$member" : null,
+        "__listOf__string$member" : null,
+        "__mapOf__string$member" : null
       }
     }
   }

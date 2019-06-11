@@ -25,14 +25,18 @@ import (
 )
 
 const (
-	azureDeploymentListURL        = "services/hostedservices/%s/deployments"
-	azureDeploymentURL            = "services/hostedservices/%s/deployments/%s"
-	azureListDeploymentsInSlotURL = "services/hostedservices/%s/deploymentslots/Production"
-	deleteAzureDeploymentURL      = "services/hostedservices/%s/deployments/%s?comp=media"
-	azureAddRoleURL               = "services/hostedservices/%s/deployments/%s/roles"
-	azureRoleURL                  = "services/hostedservices/%s/deployments/%s/roles/%s"
-	azureOperationsURL            = "services/hostedservices/%s/deployments/%s/roleinstances/%s/Operations"
-	azureRoleSizeListURL          = "rolesizes"
+	azureDeploymentListURL                    = "services/hostedservices/%s/deployments"
+	azureDeploymentURL                        = "services/hostedservices/%s/deployments/%s"
+	azureUpdateDeploymentURL                  = "services/hostedservices/%s/deployments/%s?comp=%s"
+	azureDeploymentSlotSwapURL                = "services/hostedservices/%s"
+	azureDeploymentSlotURL                    = "services/hostedservices/%s/deploymentslots/%s"
+	azureUpdateDeploymentSlotConfigurationURL = "services/hostedservices/%s/deploymentslots/%s?comp=%s"
+	deleteAzureDeploymentURL                  = "services/hostedservices/%s/deployments/%s?comp=media"
+	azureDeleteDeploymentBySlotURL            = "services/hostedservices/%s/deploymentslots/%s"
+	azureAddRoleURL                           = "services/hostedservices/%s/deployments/%s/roles"
+	azureRoleURL                              = "services/hostedservices/%s/deployments/%s/roles/%s"
+	azureOperationsURL                        = "services/hostedservices/%s/deployments/%s/roleinstances/%s/Operations"
+	azureRoleSizeListURL                      = "rolesizes"
 
 	errParamNotSpecified = "Parameter %s is not specified."
 )
@@ -79,17 +83,244 @@ func (vm VirtualMachineClient) CreateDeployment(
 	return vm.client.SendAzurePostRequest(requestURL, data)
 }
 
+// CreateDeploymentFromPackageOptions can be used to create a customized deployement request
+type CreateDeploymentFromPackageOptions struct {
+	Name                   string
+	PackageURL             string
+	Label                  string
+	Configuration          string
+	StartDeployment        bool
+	TreatWarningsAsError   bool
+	ExtendedProperties     []ExtendedProperty
+	ExtensionConfiguration ExtensionConfiguration
+}
+
+// CreateDeploymentRequest is the type for creating a deployment of a cloud service package
+// in the deployment based on the specified configuration. See
+// https://docs.microsoft.com/en-us/rest/api/compute/cloudservices/rest-create-deployment
+type CreateDeploymentRequest struct {
+	XMLName xml.Name `xml:"http://schemas.microsoft.com/windowsazure CreateDeployment"`
+	// Required parameters:
+	Name          string ``                 // Specifies the name of the deployment.
+	PackageURL    string `xml:"PackageUrl"` // Specifies a URL that refers to the location of the service package in the Blob service. The service package can be located either in a storage account beneath the same subscription or a Shared Access Signature (SAS) URI from any storage account.
+	Label         string ``                 // Specifies an identifier for the deployment that is base-64 encoded. The identifier can be up to 100 characters in length. It is recommended that the label be unique within the subscription. The label can be used for your tracking purposes.
+	Configuration string ``                 // Specifies the base-64 encoded service configuration file for the deployment.
+	// Optional parameters:
+	StartDeployment        bool                   ``                                  // Indicates whether to start the deployment immediately after it is created. The default value is false
+	TreatWarningsAsError   bool                   ``                                  // Indicates whether to treat package validation warnings as errors. The default value is false. If set to true, the Created Deployment operation fails if there are validation warnings on the service package.
+	ExtendedProperties     []ExtendedProperty     `xml:">ExtendedProperty,omitempty"` // Array of ExtendedProprties. Each extended property must have both a defined name and value. You can have a maximum of 25 extended property name and value pairs.
+	ExtensionConfiguration ExtensionConfiguration `xml:",omitempty"`
+}
+
+// CreateDeploymentFromPackage creates a deployment from a cloud services package (.cspkg) and configuration file (.cscfg)
+func (vm VirtualMachineClient) CreateDeploymentFromPackage(
+	cloudServiceName string,
+	deploymentSlot DeploymentSlot,
+	options CreateDeploymentFromPackageOptions) (management.OperationID, error) {
+
+	if cloudServiceName == "" {
+		return "", fmt.Errorf(errParamNotSpecified, "cloudServiceName")
+	}
+
+	req := CreateDeploymentRequest{
+		Name:                   options.Name,
+		Label:                  options.Label,
+		Configuration:          options.Configuration,
+		PackageURL:             options.PackageURL,
+		StartDeployment:        options.StartDeployment,
+		TreatWarningsAsError:   options.TreatWarningsAsError,
+		ExtendedProperties:     options.ExtendedProperties,
+		ExtensionConfiguration: options.ExtensionConfiguration,
+	}
+
+	data, err := xml.Marshal(req)
+	if err != nil {
+		return "", err
+	}
+
+	requestURL := fmt.Sprintf(azureDeploymentSlotURL, cloudServiceName, deploymentSlot)
+	return vm.client.SendAzurePostRequest(requestURL, data)
+}
+
+// SwapDeploymentRequest is the type used for specifying information to swap the deployments in
+// a cloud service
+// https://docs.microsoft.com/en-us/rest/api/compute/cloudservices/rest-swap-deployment
+type SwapDeploymentRequest struct {
+	XMLName xml.Name `xml:"http://schemas.microsoft.com/windowsazure Swap"`
+	// Required parameters:
+	Production       string
+	SourceDeployment string
+}
+
+// SwapDeployment initiates a virtual IP address swap between the staging and production deployment environments for a service.
+// If the service is currently running in the staging environment, it will be swapped to the production environment.
+// If it is running in the production environment, it will be swapped to staging.
+func (vm VirtualMachineClient) SwapDeployment(
+	cloudServiceName string) (management.OperationID, error) {
+
+	if cloudServiceName == "" {
+		return "", fmt.Errorf(errParamNotSpecified, "cloudServiceName")
+	}
+
+	productionDeploymentName, err := vm.GetDeploymentNameForSlot(cloudServiceName, DeploymentSlotProduction)
+	if err != nil {
+		return "", err
+	}
+
+	stagingDeploymentName, err := vm.GetDeploymentNameForSlot(cloudServiceName, DeploymentSlotStaging)
+	if err != nil {
+		return "", err
+	}
+
+	req := SwapDeploymentRequest{
+		Production:       productionDeploymentName,
+		SourceDeployment: stagingDeploymentName,
+	}
+
+	data, err := xml.Marshal(req)
+	if err != nil {
+		return "", err
+	}
+
+	requestURL := fmt.Sprintf(azureDeploymentSlotSwapURL, cloudServiceName)
+	return vm.client.SendAzurePostRequest(requestURL, data)
+}
+
+// ChangeDeploymentConfigurationRequestOptions can be used to update configuration of a deployment
+type ChangeDeploymentConfigurationRequestOptions struct {
+	Mode                   UpgradeType
+	Configuration          string
+	TreatWarningsAsError   bool
+	ExtendedProperties     []ExtendedProperty
+	ExtensionConfiguration ExtensionConfiguration
+}
+
+// ChangeDeploymentConfigurationRequest is the type for changing the configuration of a deployment of a cloud service p
+// https://docs.microsoft.com/en-us/rest/api/compute/cloudservices/rest-change-deployment-configuration
+type ChangeDeploymentConfigurationRequest struct {
+	XMLName xml.Name `xml:"http://schemas.microsoft.com/windowsazure ChangeConfiguration"`
+	// Required parameters:
+	Configuration string `` // Specifies the base-64 encoded service configuration file for the deployment.
+	// Optional parameters:
+	Mode                   UpgradeType            ``                                  // Specifies the type of Upgrade (Auto | Manual | Simultaneous) .
+	TreatWarningsAsError   bool                   ``                                  // Indicates whether to treat package validation warnings as errors. The default value is false. If set to true, the Created Deployment operation fails if there are validation warnings on the service package.
+	ExtendedProperties     []ExtendedProperty     `xml:">ExtendedProperty,omitempty"` // Array of ExtendedProprties. Each extended property must have both a defined name and value. You can have a maximum of 25 extended property name and value pairs.
+	ExtensionConfiguration ExtensionConfiguration `xml:",omitempty"`
+}
+
+// ChangeDeploymentConfiguration updates the configuration for a deployment from a configuration file (.cscfg)
+func (vm VirtualMachineClient) ChangeDeploymentConfiguration(
+	cloudServiceName string,
+	deploymentSlot DeploymentSlot,
+	options ChangeDeploymentConfigurationRequestOptions) (management.OperationID, error) {
+
+	if cloudServiceName == "" {
+		return "", fmt.Errorf(errParamNotSpecified, "cloudServiceName")
+	}
+
+	req := ChangeDeploymentConfigurationRequest{
+		Mode:                   options.Mode,
+		Configuration:          options.Configuration,
+		TreatWarningsAsError:   options.TreatWarningsAsError,
+		ExtendedProperties:     options.ExtendedProperties,
+		ExtensionConfiguration: options.ExtensionConfiguration,
+	}
+	if req.Mode == "" {
+		req.Mode = UpgradeTypeAuto
+	}
+
+	data, err := xml.Marshal(req)
+	if err != nil {
+		return "", err
+	}
+
+	requestURL := fmt.Sprintf(azureUpdateDeploymentSlotConfigurationURL, cloudServiceName, deploymentSlot, "config")
+	return vm.client.SendAzurePostRequest(requestURL, data)
+}
+
+// UpdateDeploymentStatusRequest is the type used to make UpdateDeploymentStatus requests
+type UpdateDeploymentStatusRequest struct {
+	XMLName xml.Name `xml:"http://schemas.microsoft.com/windowsazure UpdateDeploymentStatus"`
+	// Required parameters:
+	Status string
+}
+
+// UpdateDeploymentStatus changes the running status of a deployment. The status of a deployment can be running or suspended.
+// https://docs.microsoft.com/en-us/rest/api/compute/cloudservices/rest-update-deployment-status
+func (vm VirtualMachineClient) UpdateDeploymentStatus(
+	cloudServiceName string,
+	deploymentSlot DeploymentSlot,
+	status string) (management.OperationID, error) {
+
+	if cloudServiceName == "" {
+		return "", fmt.Errorf(errParamNotSpecified, "cloudServiceName")
+	}
+
+	if status != "Running" && status != "Suspended" {
+		return "", fmt.Errorf("Invalid status provided")
+	}
+
+	req := UpdateDeploymentStatusRequest{
+		Status: status,
+	}
+
+	data, err := xml.Marshal(req)
+	if err != nil {
+		return "", err
+	}
+
+	requestURL := fmt.Sprintf(azureUpdateDeploymentSlotConfigurationURL, cloudServiceName, deploymentSlot, "status")
+	return vm.client.SendAzurePostRequest(requestURL, data)
+}
+
+// UpdateDeploymentStatusByName changes the running status of a deployment. The status of a deployment can be running or suspended.
+// https://docs.microsoft.com/en-us/rest/api/compute/cloudservices/rest-update-deployment-status
+func (vm VirtualMachineClient) UpdateDeploymentStatusByName(
+	cloudServiceName string,
+	deploymentName string,
+	status string) (management.OperationID, error) {
+
+	if cloudServiceName == "" {
+		return "", fmt.Errorf(errParamNotSpecified, "cloudServiceName")
+	}
+
+	if status != "Running" && status != "Suspended" {
+		return "", fmt.Errorf("Invalid status provided")
+	}
+
+	req := UpdateDeploymentStatusRequest{
+		Status: status,
+	}
+
+	data, err := xml.Marshal(req)
+	if err != nil {
+		return "", err
+	}
+
+	requestURL := fmt.Sprintf(azureUpdateDeploymentURL, cloudServiceName, deploymentName, "status")
+	return vm.client.SendAzurePostRequest(requestURL, data)
+}
+
 // GetDeploymentName queries an existing Azure cloud service for the name of the Deployment,
 // if any, in its 'Production' slot (the only slot possible). If none exists, it returns empty
 // string but no error
 //
 //https://msdn.microsoft.com/en-us/library/azure/ee460804.aspx
 func (vm VirtualMachineClient) GetDeploymentName(cloudServiceName string) (string, error) {
+	return vm.GetDeploymentNameForSlot(cloudServiceName, DeploymentSlotProduction)
+}
+
+// GetDeploymentNameForSlot queries an existing Azure cloud service for the name of the Deployment,
+// in a given slot. If none exists, it returns empty
+// string but no error
+//
+//https://msdn.microsoft.com/en-us/library/azure/ee460804.aspx
+func (vm VirtualMachineClient) GetDeploymentNameForSlot(cloudServiceName string, deploymentSlot DeploymentSlot) (string, error) {
 	var deployment DeploymentResponse
 	if cloudServiceName == "" {
 		return "", fmt.Errorf(errParamNotSpecified, "cloudServiceName")
 	}
-	requestURL := fmt.Sprintf(azureListDeploymentsInSlotURL, cloudServiceName)
+	requestURL := fmt.Sprintf(azureDeploymentSlotURL, cloudServiceName, deploymentSlot)
 	response, err := vm.client.SendAzureGetRequest(requestURL)
 	if err != nil {
 		if management.IsResourceNotFoundError(err) {
@@ -123,6 +354,25 @@ func (vm VirtualMachineClient) GetDeployment(cloudServiceName, deploymentName st
 	return deployment, err
 }
 
+// GetDeploymentBySlot used to retrieve deployment events for a single deployment slot (staging or production)
+func (vm VirtualMachineClient) GetDeploymentBySlot(cloudServiceName string, deploymentSlot DeploymentSlot) (DeploymentResponse, error) {
+	var deployment DeploymentResponse
+	if cloudServiceName == "" {
+		return deployment, fmt.Errorf(errParamNotSpecified, "cloudServiceName")
+	}
+	if deploymentSlot == "" {
+		return deployment, fmt.Errorf(errParamNotSpecified, "deploymentSlot")
+	}
+	requestURL := fmt.Sprintf(azureDeploymentSlotURL, cloudServiceName, deploymentSlot)
+	response, azureErr := vm.client.SendAzureGetRequest(requestURL)
+	if azureErr != nil {
+		return deployment, azureErr
+	}
+
+	err := xml.Unmarshal(response, &deployment)
+	return deployment, err
+}
+
 func (vm VirtualMachineClient) DeleteDeployment(cloudServiceName, deploymentName string) (management.OperationID, error) {
 	if cloudServiceName == "" {
 		return "", fmt.Errorf(errParamNotSpecified, "cloudServiceName")
@@ -132,6 +382,18 @@ func (vm VirtualMachineClient) DeleteDeployment(cloudServiceName, deploymentName
 	}
 
 	requestURL := fmt.Sprintf(deleteAzureDeploymentURL, cloudServiceName, deploymentName)
+	return vm.client.SendAzureDeleteRequest(requestURL)
+}
+
+func (vm VirtualMachineClient) DeleteDeploymentBySlot(cloudServiceName string, deploymentSlot DeploymentSlot) (management.OperationID, error) {
+	if cloudServiceName == "" {
+		return "", fmt.Errorf(errParamNotSpecified, "cloudServiceName")
+	}
+	if deploymentSlot == "" {
+		return "", fmt.Errorf(errParamNotSpecified, "deploymentSlot")
+	}
+
+	requestURL := fmt.Sprintf(azureDeleteDeploymentBySlotURL, cloudServiceName, deploymentSlot)
 	return vm.client.SendAzureDeleteRequest(requestURL)
 }
 

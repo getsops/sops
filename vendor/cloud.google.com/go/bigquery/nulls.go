@@ -41,6 +41,14 @@ type NullString struct {
 
 func (n NullString) String() string { return nullstr(n.Valid, n.StringVal) }
 
+// NullGeography represents a BigQuery GEOGRAPHY string that may be NULL.
+type NullGeography struct {
+	GeographyVal string
+	Valid        bool // Valid is true if GeographyVal is not NULL.
+}
+
+func (n NullGeography) String() string { return nullstr(n.Valid, n.GeographyVal) }
+
 // NullFloat64 represents a BigQuery FLOAT64 that may be NULL.
 type NullFloat64 struct {
 	Float64 float64
@@ -99,13 +107,28 @@ func (n NullDateTime) String() string {
 	return CivilDateTimeString(n.DateTime)
 }
 
-func (n NullInt64) MarshalJSON() ([]byte, error)     { return nulljson(n.Valid, n.Int64) }
-func (n NullFloat64) MarshalJSON() ([]byte, error)   { return nulljson(n.Valid, n.Float64) }
-func (n NullBool) MarshalJSON() ([]byte, error)      { return nulljson(n.Valid, n.Bool) }
-func (n NullString) MarshalJSON() ([]byte, error)    { return nulljson(n.Valid, n.StringVal) }
-func (n NullTimestamp) MarshalJSON() ([]byte, error) { return nulljson(n.Valid, n.Timestamp) }
-func (n NullDate) MarshalJSON() ([]byte, error)      { return nulljson(n.Valid, n.Date) }
+// MarshalJSON converts the NullInt64 to JSON.
+func (n NullInt64) MarshalJSON() ([]byte, error) { return nulljson(n.Valid, n.Int64) }
 
+// MarshalJSON converts the NullFloat64 to JSON.
+func (n NullFloat64) MarshalJSON() ([]byte, error) { return nulljson(n.Valid, n.Float64) }
+
+// MarshalJSON converts the NullBool to JSON.
+func (n NullBool) MarshalJSON() ([]byte, error) { return nulljson(n.Valid, n.Bool) }
+
+// MarshalJSON converts the NullString to JSON.
+func (n NullString) MarshalJSON() ([]byte, error) { return nulljson(n.Valid, n.StringVal) }
+
+// MarshalJSON converts the NullGeography to JSON.
+func (n NullGeography) MarshalJSON() ([]byte, error) { return nulljson(n.Valid, n.GeographyVal) }
+
+// MarshalJSON converts the NullTimestamp to JSON.
+func (n NullTimestamp) MarshalJSON() ([]byte, error) { return nulljson(n.Valid, n.Timestamp) }
+
+// MarshalJSON converts the NullDate to JSON.
+func (n NullDate) MarshalJSON() ([]byte, error) { return nulljson(n.Valid, n.Date) }
+
+// MarshalJSON converts the NullTime to JSON.
 func (n NullTime) MarshalJSON() ([]byte, error) {
 	if !n.Valid {
 		return jsonNull, nil
@@ -113,6 +136,7 @@ func (n NullTime) MarshalJSON() ([]byte, error) {
 	return []byte(`"` + CivilTimeString(n.Time) + `"`), nil
 }
 
+// MarshalJSON converts the NullDateTime to JSON.
 func (n NullDateTime) MarshalJSON() ([]byte, error) {
 	if !n.Valid {
 		return jsonNull, nil
@@ -136,6 +160,7 @@ func nulljson(valid bool, v interface{}) ([]byte, error) {
 	return json.Marshal(v)
 }
 
+// UnmarshalJSON converts JSON into a NullInt64.
 func (n *NullInt64) UnmarshalJSON(b []byte) error {
 	n.Valid = false
 	n.Int64 = 0
@@ -150,6 +175,7 @@ func (n *NullInt64) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// UnmarshalJSON converts JSON into a NullFloat64.
 func (n *NullFloat64) UnmarshalJSON(b []byte) error {
 	n.Valid = false
 	n.Float64 = 0
@@ -164,6 +190,7 @@ func (n *NullFloat64) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// UnmarshalJSON converts JSON into a NullBool.
 func (n *NullBool) UnmarshalJSON(b []byte) error {
 	n.Valid = false
 	n.Bool = false
@@ -178,6 +205,7 @@ func (n *NullBool) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// UnmarshalJSON converts JSON into a NullString.
 func (n *NullString) UnmarshalJSON(b []byte) error {
 	n.Valid = false
 	n.StringVal = ""
@@ -192,6 +220,21 @@ func (n *NullString) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// UnmarshalJSON converts JSON into a NullGeography.
+func (n *NullGeography) UnmarshalJSON(b []byte) error {
+	n.Valid = false
+	n.GeographyVal = ""
+	if bytes.Equal(b, jsonNull) {
+		return nil
+	}
+	if err := json.Unmarshal(b, &n.GeographyVal); err != nil {
+		return err
+	}
+	n.Valid = true
+	return nil
+}
+
+// UnmarshalJSON converts JSON into a NullTimestamp.
 func (n *NullTimestamp) UnmarshalJSON(b []byte) error {
 	n.Valid = false
 	n.Timestamp = time.Time{}
@@ -206,6 +249,7 @@ func (n *NullTimestamp) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// UnmarshalJSON converts JSON into a NullDate.
 func (n *NullDate) UnmarshalJSON(b []byte) error {
 	n.Valid = false
 	n.Date = civil.Date{}
@@ -220,6 +264,7 @@ func (n *NullDate) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// UnmarshalJSON converts JSON into a NullTime.
 func (n *NullTime) UnmarshalJSON(b []byte) error {
 	n.Valid = false
 	n.Time = civil.Time{}
@@ -242,6 +287,7 @@ func (n *NullTime) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// UnmarshalJSON converts JSON into a NullDateTime.
 func (n *NullDateTime) UnmarshalJSON(b []byte) error {
 	n.Valid = false
 	n.DateTime = civil.DateTime{}
@@ -269,6 +315,7 @@ var (
 	typeOfNullFloat64   = reflect.TypeOf(NullFloat64{})
 	typeOfNullBool      = reflect.TypeOf(NullBool{})
 	typeOfNullString    = reflect.TypeOf(NullString{})
+	typeOfNullGeography = reflect.TypeOf(NullGeography{})
 	typeOfNullTimestamp = reflect.TypeOf(NullTimestamp{})
 	typeOfNullDate      = reflect.TypeOf(NullDate{})
 	typeOfNullTime      = reflect.TypeOf(NullTime{})
@@ -285,6 +332,8 @@ func nullableFieldType(t reflect.Type) FieldType {
 		return BooleanFieldType
 	case typeOfNullString:
 		return StringFieldType
+	case typeOfNullGeography:
+		return GeographyFieldType
 	case typeOfNullTimestamp:
 		return TimestampFieldType
 	case typeOfNullDate:
