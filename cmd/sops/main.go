@@ -136,6 +136,7 @@ func main() {
 					ConfigPath:  configPath,
 					InputPath:   fileName,
 					InputStore:  inputStore,
+					Cipher:      aes.NewCipher(),
 					KeyServices: keyservices(c),
 					Interactive: !c.Bool("yes"),
 				})

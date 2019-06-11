@@ -13,6 +13,7 @@ import (
 	"go.mozilla.org/sops/config"
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/logging"
+	"go.mozilla.org/sops/version"
 
 	"github.com/sirupsen/logrus"
 )
@@ -25,6 +26,7 @@ func init() {
 
 type Opts struct {
 	Interactive bool
+	Cipher      sops.Cipher
 	ConfigPath  string
 	InputPath   string
 	KeyServices []keyservice.KeyServiceClient
@@ -46,7 +48,7 @@ func Run(opts Opts) error {
 	}
 	_, fileName := filepath.Split(path)
 
-	conf, err := config.LoadForFile(opts.ConfigPath, opts.InputPath, make(map[string]*string))
+	conf, err := config.LoadDestinationRuleForFile(opts.ConfigPath, opts.InputPath, make(map[string]*string))
 	if err != nil {
 		return err
 	}
@@ -61,16 +63,39 @@ func Run(opts Opts) error {
 	}
 
 	// Re-encrypt if settings exist to do so
-	if len(conf.ReEncryptionKeyGroups) != 0 {
-		key, err := tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices)
+	if len(conf.KeyGroups[0]) != 0 {
+		log.Debug("Re-encrypting tree before publishing")
+		_, err = common.DecryptTree(common.DecryptTreeOpts{
+			Cipher:      opts.Cipher,
+			IgnoreMac:   false,
+			Tree:        tree,
+			KeyServices: opts.KeyServices,
+		})
 		if err != nil {
-			return common.NewExitError(err, codes.CouldNotRetrieveKey)
+			return err
 		}
-		tree.Metadata.KeyGroups = conf.ReEncryptionKeyGroups
-		tree.Metadata.ShamirThreshold = min(tree.Metadata.ShamirThreshold, len(tree.Metadata.KeyGroups))
-		errs := tree.Metadata.UpdateMasterKeysWithKeyServices(key, opts.KeyServices)
+
+		tree.Metadata = sops.Metadata{
+			KeyGroups:         conf.KeyGroups,
+			UnencryptedSuffix: conf.UnencryptedSuffix,
+			EncryptedSuffix:   conf.EncryptedSuffix,
+			Version:           version.Version,
+			ShamirThreshold:   conf.ShamirThreshold,
+		}
+
+		dataKey, errs := tree.GenerateDataKeyWithKeyServices(opts.KeyServices)
 		if len(errs) > 0 {
-			return fmt.Errorf("error updating one or more master keys: %s", errs)
+			err = fmt.Errorf("Could not generate data key: %s", errs)
+			return err
+		}
+
+		err = common.EncryptTree(common.EncryptTreeOpts{
+			DataKey: dataKey,
+			Tree:    tree,
+			Cipher:  opts.Cipher,
+		})
+		if err != nil {
+			return err
 		}
 
 		fileContents, err = opts.InputStore.EmitEncryptedFile(*tree)

@@ -137,7 +137,7 @@ destination_rules:
   - path_regex: ""
     s3_bucket: "foobar"
     s3_prefix: "test/"
-    reencryption_rule:
+    recreation_rule:
       pgp: newpgp
 `)
 
@@ -201,38 +201,38 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 }
 
 func TestLoadInvalidConfigFile(t *testing.T) {
-	_, err := loadForFileFromBytes(sampleInvalidConfig, "foobar2000", nil)
+	_, err := loadForFileFromBytes(sampleInvalidConfig, "foobar2000", nil, false)
 	assert.NotNil(t, err)
 }
 
 func TestKeyGroupsForFile(t *testing.T) {
-	conf, err := loadForFileFromBytes(sampleConfig, "foobar2000", nil)
+	conf, err := loadForFileFromBytes(sampleConfig, "foobar2000", nil, false)
 	assert.Nil(t, err)
 	assert.Equal(t, "2", conf.KeyGroups[0][0].ToString())
 	assert.Equal(t, "1", conf.KeyGroups[0][1].ToString())
-	conf, err = loadForFileFromBytes(sampleConfig, "whatever", nil)
+	conf, err = loadForFileFromBytes(sampleConfig, "whatever", nil, false)
 	assert.Nil(t, err)
 	assert.Equal(t, "bar", conf.KeyGroups[0][0].ToString())
 	assert.Equal(t, "foo", conf.KeyGroups[0][1].ToString())
 }
 
 func TestKeyGroupsForFileWithPath(t *testing.T) {
-	conf, err := loadForFileFromBytes(sampleConfigWithPath, "foo/bar2000", nil)
+	conf, err := loadForFileFromBytes(sampleConfigWithPath, "foo/bar2000", nil, false)
 	assert.Nil(t, err)
 	assert.Equal(t, "2", conf.KeyGroups[0][0].ToString())
 	assert.Equal(t, "1", conf.KeyGroups[0][1].ToString())
-	conf, err = loadForFileFromBytes(sampleConfigWithPath, "somefilename.yml", nil)
+	conf, err = loadForFileFromBytes(sampleConfigWithPath, "somefilename.yml", nil, false)
 	assert.Nil(t, err)
 	assert.Equal(t, "baggins", conf.KeyGroups[0][0].ToString())
 	assert.Equal(t, "bilbo", conf.KeyGroups[0][1].ToString())
-	conf, err = loadForFileFromBytes(sampleConfig, "whatever", nil)
+	conf, err = loadForFileFromBytes(sampleConfig, "whatever", nil, false)
 	assert.Nil(t, err)
 	assert.Equal(t, "bar", conf.KeyGroups[0][0].ToString())
 	assert.Equal(t, "foo", conf.KeyGroups[0][1].ToString())
 }
 
 func TestKeyGroupsForFileWithGroups(t *testing.T) {
-	conf, err := loadForFileFromBytes(sampleConfigWithGroups, "whatever", nil)
+	conf, err := loadForFileFromBytes(sampleConfigWithGroups, "whatever", nil, false)
 	assert.Nil(t, err)
 	assert.Equal(t, "bar", conf.KeyGroups[0][0].ToString())
 	assert.Equal(t, "foo", conf.KeyGroups[0][1].ToString())
@@ -241,28 +241,26 @@ func TestKeyGroupsForFileWithGroups(t *testing.T) {
 }
 
 func TestLoadConfigFileWithUnencryptedSuffix(t *testing.T) {
-	conf, err := loadForFileFromBytes(sampleConfigWithSuffixParameters, "foobar", nil)
+	conf, err := loadForFileFromBytes(sampleConfigWithSuffixParameters, "foobar", nil, false)
 	assert.Nil(t, err)
 	assert.Equal(t, "_unencrypted", conf.UnencryptedSuffix)
 }
 
 func TestLoadConfigFileWithEncryptedSuffix(t *testing.T) {
-	conf, err := loadForFileFromBytes(sampleConfigWithSuffixParameters, "barfoo", nil)
+	conf, err := loadForFileFromBytes(sampleConfigWithSuffixParameters, "barfoo", nil, false)
 	assert.Nil(t, err)
 	assert.Equal(t, "_enc", conf.EncryptedSuffix)
 }
 
 func TestLoadConfigFileWithInvalidParameters(t *testing.T) {
-	_, err := loadForFileFromBytes(sampleConfigWithInvalidParameters, "foobar", nil)
+	_, err := loadForFileFromBytes(sampleConfigWithInvalidParameters, "foobar", nil, false)
 	assert.NotNil(t, err)
 }
 
 func TestLoadConfigFileWithDestinationRule(t *testing.T) {
-	conf, err := loadForFileFromBytes(sampleConfigWithDestinationRule, "barfoo", nil)
+	conf, err := loadForFileFromBytes(sampleConfigWithDestinationRule, "barfoo", nil, true)
 	assert.Nil(t, err)
-	assert.Equal(t, "bar", conf.KeyGroups[0][0].ToString())
-	assert.Equal(t, "foo", conf.KeyGroups[0][1].ToString())
+	assert.Equal(t, "newpgp", conf.KeyGroups[0][0].ToString())
 	assert.NotNil(t, conf.Destination)
 	assert.Equal(t, "s3://foobar/test/barfoo", conf.Destination.Path("barfoo"))
-	assert.Equal(t, 1, len(conf.ReEncryptionKeyGroups))
 }
