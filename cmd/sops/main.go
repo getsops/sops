@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/url"
 	"os"
+	"path/filepath"
 	"reflect"
 	"strconv"
 	"strings"
@@ -430,7 +431,10 @@ func main() {
 		if c.Bool("in-place") && c.String("output") != "" {
 			return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
 		}
-		fileName := c.Args()[0]
+		fileName, err := filepath.Abs(c.Args()[0])
+		if err != nil {
+			return toExitError(err)
+		}
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
 			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-azure-kv") != "" ||
 				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-azure-kv") != "" {
