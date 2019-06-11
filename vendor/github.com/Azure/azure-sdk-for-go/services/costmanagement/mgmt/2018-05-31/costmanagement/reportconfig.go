@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewReportConfigClientWithBaseURI(baseURI string, subscriptionID string) Rep
 // reportConfigName - report Config Name.
 // parameters - parameters supplied to the CreateOrUpdate Report Config operation.
 func (client ReportConfigClient) CreateOrUpdate(ctx context.Context, reportConfigName string, parameters ReportConfig) (result ReportConfig, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportConfigClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.ReportConfigProperties", Name: validation.Null, Rule: false,
@@ -165,6 +176,16 @@ func (client ReportConfigClient) CreateOrUpdateResponder(resp *http.Response) (r
 // reportConfigName - report Config Name.
 // parameters - parameters supplied to the CreateOrUpdate Report Config operation.
 func (client ReportConfigClient) CreateOrUpdateByResourceGroupName(ctx context.Context, resourceGroupName string, reportConfigName string, parameters ReportConfig) (result ReportConfig, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportConfigClient.CreateOrUpdateByResourceGroupName")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.ReportConfigProperties", Name: validation.Null, Rule: false,
@@ -280,6 +301,16 @@ func (client ReportConfigClient) CreateOrUpdateByResourceGroupNameResponder(resp
 // Parameters:
 // reportConfigName - report Config Name.
 func (client ReportConfigClient) Delete(ctx context.Context, reportConfigName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportConfigClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, reportConfigName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "costmanagement.ReportConfigClient", "Delete", nil, "Failure preparing request")
@@ -345,6 +376,16 @@ func (client ReportConfigClient) DeleteResponder(resp *http.Response) (result au
 // resourceGroupName - azure Resource Group Name.
 // reportConfigName - report Config Name.
 func (client ReportConfigClient) DeleteByResourceGroupName(ctx context.Context, resourceGroupName string, reportConfigName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportConfigClient.DeleteByResourceGroupName")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteByResourceGroupNamePreparer(ctx, resourceGroupName, reportConfigName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "costmanagement.ReportConfigClient", "DeleteByResourceGroupName", nil, "Failure preparing request")
@@ -410,6 +451,16 @@ func (client ReportConfigClient) DeleteByResourceGroupNameResponder(resp *http.R
 // Parameters:
 // reportConfigName - report Config Name.
 func (client ReportConfigClient) Get(ctx context.Context, reportConfigName string) (result ReportConfig, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportConfigClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, reportConfigName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "costmanagement.ReportConfigClient", "Get", nil, "Failure preparing request")
@@ -476,6 +527,16 @@ func (client ReportConfigClient) GetResponder(resp *http.Response) (result Repor
 // resourceGroupName - azure Resource Group Name.
 // reportConfigName - report Config Name.
 func (client ReportConfigClient) GetByResourceGroupName(ctx context.Context, resourceGroupName string, reportConfigName string) (result ReportConfig, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportConfigClient.GetByResourceGroupName")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetByResourceGroupNamePreparer(ctx, resourceGroupName, reportConfigName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "costmanagement.ReportConfigClient", "GetByResourceGroupName", nil, "Failure preparing request")
@@ -540,6 +601,16 @@ func (client ReportConfigClient) GetByResourceGroupNameResponder(resp *http.Resp
 
 // List lists all report configs for a subscription.
 func (client ReportConfigClient) List(ctx context.Context) (result ReportConfigListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportConfigClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "costmanagement.ReportConfigClient", "List", nil, "Failure preparing request")
@@ -604,6 +675,16 @@ func (client ReportConfigClient) ListResponder(resp *http.Response) (result Repo
 // Parameters:
 // resourceGroupName - azure Resource Group Name.
 func (client ReportConfigClient) ListByResourceGroupName(ctx context.Context, resourceGroupName string) (result ReportConfigListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReportConfigClient.ListByResourceGroupName")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByResourceGroupNamePreparer(ctx, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "costmanagement.ReportConfigClient", "ListByResourceGroupName", nil, "Failure preparing request")

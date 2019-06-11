@@ -61,8 +61,6 @@ func newClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegio
 				SigningRegion: signingRegion,
 				Endpoint:      endpoint,
 				APIVersion:    "0000-00-00",
-				JSONVersion:   "1.1",
-				TargetPrefix:  "RESTXMLService_00000000",
 			},
 			handlers,
 		),

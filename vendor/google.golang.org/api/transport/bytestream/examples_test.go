@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@ package bytestream
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"io"
 	"log"
 
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )
 
@@ -41,7 +41,7 @@ func ExampleNewClient(serverPort int, resourceName string) {
 	if err != nil && err != io.EOF {
 		log.Printf("Read %d bytes, got err=%v", n, err)
 	}
-	log.Printf("read %q", string(buf.Bytes()))
+	log.Printf("read %q", buf.String())
 }
 
 func ExampleNewReader(serverPort int, resourceName string) {
@@ -61,7 +61,7 @@ func ExampleNewReader(serverPort int, resourceName string) {
 	if err != nil && err != io.EOF {
 		log.Printf("Read %d bytes, got err=%v", n, err)
 	}
-	log.Printf("read %q", string(buf.Bytes()))
+	log.Printf("read %q", buf.String())
 }
 
 func ExampleNewWriter(serverPort int, resourceName string) {

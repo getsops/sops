@@ -16,7 +16,7 @@ const opGetHLSStreamingSessionURL = "GetHLSStreamingSessionURL"
 // GetHLSStreamingSessionURLRequest generates a "aws/request.Request" representing the
 // client's request for the GetHLSStreamingSessionURL operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -63,14 +63,20 @@ func (c *KinesisVideoArchivedMedia) GetHLSStreamingSessionURLRequest(input *GetH
 // An Amazon Kinesis video stream has the following requirements for providing
 // data through HLS:
 //
-//    * The media type must be video/h264.
+//    * The media must contain h.264 encoded video and, optionally, AAC encoded
+//    audio. Specifically, the codec id of track 1 should be V_MPEG/ISO/AVC.
+//    Optionally, the codec id of track 2 should be A_AAC.
 //
 //    * Data retention must be greater than 0.
 //
-//    * The fragments must contain codec private data in the AVC (Advanced Video
-//    Coding) for H.264 format (MPEG-4 specification ISO/IEC 14496-15 (https://www.iso.org/standard/55980.html)).
-//    For information about adapting stream data to a given format, see NAL
-//    Adaptation Flags (http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/latest/dg/producer-reference-nal.html).
+//    * The video track of each fragment must contain codec private data in
+//    the Advanced Video Coding (AVC) for H.264 format (MPEG-4 specification
+//    ISO/IEC 14496-15 (https://www.iso.org/standard/55980.html)). For information
+//    about adapting stream data to a given format, see NAL Adaptation Flags
+//    (http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/producer-reference-nal.html).
+//
+//    * The audio track (if present) of each fragment must contain codec private
+//    data in the AAC format (AAC specification ISO/IEC 13818-7 (https://www.iso.org/standard/43345.html)).
 //
 // Kinesis Video Streams HLS sessions contain fragments in the fragmented MPEG-4
 // form (also called fMP4 or CMAF), rather than the MPEG-2 form (also called
@@ -94,66 +100,73 @@ func (c *KinesisVideoArchivedMedia) GetHLSStreamingSessionURLRequest(input *GetH
 //
 // The media that is made available through the playlist consists only of the
 // requested stream, time range, and format. No other media data (such as frames
-// outside the requested window or alternate bit rates) is made available.
+// outside the requested window or alternate bitrates) is made available.
 //
 // Provide the URL (containing the encrypted session token) for the HLS master
 // playlist to a media player that supports the HLS protocol. Kinesis Video
 // Streams makes the HLS media playlist, initialization fragment, and media
 // fragments available through the master playlist URL. The initialization fragment
 // contains the codec private data for the stream, and other data needed to
-// set up the video decoder and renderer. The media fragments contain H.264-encoded
-// video frames and time stamps.
+// set up the video or audio decoder and renderer. The media fragments contain
+// H.264-encoded video frames or AAC-encoded audio samples.
 //
 // The media player receives the authenticated URL and requests stream metadata
 // and media data normally. When the media player requests data, it calls the
 // following actions:
 //
-// GetHLSMasterPlaylist: Retrieves an HLS master playlist, which contains a
-// URL for the GetHLSMediaPlaylist action, and additional metadata for the media
-// player, including estimated bit rate and resolution.
+//    * GetHLSMasterPlaylist: Retrieves an HLS master playlist, which contains
+//    a URL for the GetHLSMediaPlaylist action for each track, and additional
+//    metadata for the media player, including estimated bitrate and resolution.
 //
-// GetHLSMediaPlaylist: Retrieves an HLS media playlist, which contains a URL
-// to access the MP4 initialization fragment with the GetMP4InitFragment action,
-// and URLs to access the MP4 media fragments with the GetMP4MediaFragment actions.
-// The HLS media playlist also contains metadata about the stream that the player
-// needs to play it, such as whether the PlaybackMode is LIVE or ON_DEMAND.
-// The HLS media playlist is typically static for sessions with a PlaybackType
-// of ON_DEMAND. The HLS media playlist is continually updated with new fragments
-// for sessions with a PlaybackType of LIVE.
+//    * GetHLSMediaPlaylist: Retrieves an HLS media playlist, which contains
+//    a URL to access the MP4 initialization fragment with the GetMP4InitFragment
+//    action, and URLs to access the MP4 media fragments with the GetMP4MediaFragment
+//    actions. The HLS media playlist also contains metadata about the stream
+//    that the player needs to play it, such as whether the PlaybackMode is
+//    LIVE or ON_DEMAND. The HLS media playlist is typically static for sessions
+//    with a PlaybackType of ON_DEMAND. The HLS media playlist is continually
+//    updated with new fragments for sessions with a PlaybackType of LIVE. There
+//    is a distinct HLS media playlist for the video track and the audio track
+//    (if applicable) that contains MP4 media URLs for the specific track.
 //
-// GetMP4InitFragment: Retrieves the MP4 initialization fragment. The media
-// player typically loads the initialization fragment before loading any media
-// fragments. This fragment contains the "fytp" and "moov" MP4 atoms, and the
-// child atoms that are needed to initialize the media player decoder.
+//    * GetMP4InitFragment: Retrieves the MP4 initialization fragment. The media
+//    player typically loads the initialization fragment before loading any
+//    media fragments. This fragment contains the "fytp" and "moov" MP4 atoms,
+//    and the child atoms that are needed to initialize the media player decoder.
+//    The initialization fragment does not correspond to a fragment in a Kinesis
+//    video stream. It contains only the codec private data for the stream and
+//    respective track, which the media player needs to decode the media frames.
 //
-// The initialization fragment does not correspond to a fragment in a Kinesis
-// video stream. It contains only the codec private data for the stream, which
-// the media player needs to decode video frames.
+//    * GetMP4MediaFragment: Retrieves MP4 media fragments. These fragments
+//    contain the "moof" and "mdat" MP4 atoms and their child atoms, containing
+//    the encoded fragment's media frames and their timestamps. After the first
+//    media fragment is made available in a streaming session, any fragments
+//    that don't contain the same codec private data cause an error to be returned
+//    when those different media fragments are loaded. Therefore, the codec
+//    private data should not change between fragments in a session. This also
+//    means that the session fails if the fragments in a stream change from
+//    having only video to having both audio and video. Data retrieved with
+//    this action is billable. See Pricing (https://aws.amazon.com/kinesis/video-streams/pricing/)
+//    for details.
 //
-// GetMP4MediaFragment: Retrieves MP4 media fragments. These fragments contain
-// the "moof" and "mdat" MP4 atoms and their child atoms, containing the encoded
-// fragment's video frames and their time stamps.
-//
-// After the first media fragment is made available in a streaming session,
-// any fragments that don't contain the same codec private data are excluded
-// in the HLS media playlist. Therefore, the codec private data does not change
-// between fragments in a session.
-//
-// Data retrieved with this action is billable. See Pricing (aws.amazon.comkinesis/video-streams/pricing/)
-// for details.
+//    * GetTSFragment: Retrieves MPEG TS fragments containing both initialization
+//    and media data for all tracks in the stream. If the ContainerFormat is
+//    MPEG_TS, this API is used instead of GetMP4InitFragment and GetMP4MediaFragment
+//    to retrieve stream media. Data retrieved with this action is billable.
+//    For more information, see Kinesis Video Streams pricing (https://aws.amazon.com/kinesis/video-streams/pricing/).
 //
 // The following restrictions apply to HLS sessions:
 //
-// A streaming session URL should not be shared between players. The service
-// might throttle a session if multiple media players are sharing it. For connection
-// limits, see Kinesis Video Streams Limits (http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/limits.html).
+//    * A streaming session URL should not be shared between players. The service
+//    might throttle a session if multiple media players are sharing it. For
+//    connection limits, see Kinesis Video Streams Limits (http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/limits.html).
 //
-// A Kinesis video stream can have a maximum of five active HLS streaming sessions.
-// If a new session is created when the maximum number of sessions is already
-// active, the oldest (earliest created) session is closed. The number of active
-// GetMedia connections on a Kinesis video stream does not count against this
-// limit, and the number of active HLS sessions does not count against the active
-// GetMedia connection limit.
+//    * A Kinesis video stream can have a maximum of five active HLS streaming
+//    sessions. If a new session is created when the maximum number of sessions
+//    is already active, the oldest (earliest created) session is closed. The
+//    number of active GetMedia connections on a Kinesis video stream does not
+//    count against this limit, and the number of active HLS sessions does not
+//    count against the active GetMedia connection limit.
 //
 // You can monitor the amount of data that the media player consumes by monitoring
 // the GetMP4MediaFragment.OutgoingBytes Amazon CloudWatch metric. For information
@@ -196,18 +209,21 @@ func (c *KinesisVideoArchivedMedia) GetHLSStreamingSessionURLRequest(input *GetH
 //   the given stream, or the token has expired.
 //
 //   * ErrCodeUnsupportedStreamMediaTypeException "UnsupportedStreamMediaTypeException"
-//   An HLS streaming session was requested for a stream with a media type that
-//   is not video/h264.
+//   The type of the media (for example, h.264 video or ACC audio) could not be
+//   determined from the codec IDs of the tracks in the first fragment for a playback
+//   session. The codec ID for track 1 should be V_MPEG/ISO/AVC and, optionally,
+//   the codec ID for track 2 should be A_AAC.
 //
 //   * ErrCodeNoDataRetentionException "NoDataRetentionException"
 //   A PlaybackMode of ON_DEMAND was requested for a stream that does not retain
 //   data (that is, has a DataRetentionInHours of 0).
 //
 //   * ErrCodeMissingCodecPrivateDataException "MissingCodecPrivateDataException"
-//   No Codec Private Data was found in the video stream.
+//   No codec private data was found in at least one of tracks of the video stream.
 //
 //   * ErrCodeInvalidCodecPrivateDataException "InvalidCodecPrivateDataException"
-//   The Codec Private Data in the video stream is not valid for this operation.
+//   The codec private data in at least one of the tracks of the video stream
+//   is not valid for this operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/kinesis-video-archived-media-2017-09-30/GetHLSStreamingSessionURL
 func (c *KinesisVideoArchivedMedia) GetHLSStreamingSessionURL(input *GetHLSStreamingSessionURLInput) (*GetHLSStreamingSessionURLOutput, error) {
@@ -236,7 +252,7 @@ const opGetMediaForFragmentList = "GetMediaForFragmentList"
 // GetMediaForFragmentListRequest generates a "aws/request.Request" representing the
 // client's request for the GetMediaForFragmentList operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -277,6 +293,10 @@ func (c *KinesisVideoArchivedMedia) GetMediaForFragmentListRequest(input *GetMed
 //
 // Gets media for a list of fragments (specified by fragment number) from the
 // archived data in an Amazon Kinesis video stream.
+//
+// You must first call the GetDataEndpoint API to get an endpoint. Then send
+// the GetMediaForFragmentList requests to this endpoint using the --endpoint-url
+// parameter (https://docs.aws.amazon.com/cli/latest/reference/).
 //
 // The following limits apply when using the GetMediaForFragmentList API:
 //
@@ -343,7 +363,7 @@ const opListFragments = "ListFragments"
 // ListFragmentsRequest generates a "aws/request.Request" representing the
 // client's request for the ListFragments operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -382,8 +402,17 @@ func (c *KinesisVideoArchivedMedia) ListFragmentsRequest(input *ListFragmentsInp
 
 // ListFragments API operation for Amazon Kinesis Video Streams Archived Media.
 //
-// Returns a list of Fragment objects from the specified stream and start location
-// within the archived data.
+// Returns a list of Fragment objects from the specified stream and timestamp
+// range within the archived data.
+//
+// Listing fragments is eventually consistent. This means that even if the producer
+// receives an acknowledgment that a fragment is persisted, the result might
+// not be returned immediately from a request to ListFragments. However, results
+// are typically available in less than one second.
+//
+// You must first call the GetDataEndpoint API to get an endpoint. Then send
+// the ListFragments requests to this endpoint using the --endpoint-url parameter
+// (https://docs.aws.amazon.com/cli/latest/reference/).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -450,10 +479,10 @@ type Fragment struct {
 	// media data.
 	FragmentSizeInBytes *int64 `type:"long"`
 
-	// The time stamp from the producer corresponding to the fragment.
+	// The timestamp from the producer corresponding to the fragment.
 	ProducerTimestamp *time.Time `type:"timestamp"`
 
-	// The time stamp from the AWS server corresponding to the fragment.
+	// The timestamp from the AWS server corresponding to the fragment.
 	ServerTimestamp *time.Time `type:"timestamp"`
 }
 
@@ -497,16 +526,31 @@ func (s *Fragment) SetServerTimestamp(v time.Time) *Fragment {
 	return s
 }
 
-// Describes the time stamp range and time stamp origin of a range of fragments.
+// Describes the timestamp range and timestamp origin of a range of fragments.
+//
+// Only fragments with a start timestamp greater than or equal to the given
+// start time and less than or equal to the end time are returned. For example,
+// if a stream contains fragments with the following start timestamps:
+//
+//    * 00:00:00
+//
+//    * 00:00:02
+//
+//    * 00:00:04
+//
+//    * 00:00:06
+//
+// A fragment selector range with a start time of 00:00:01 and end time of 00:00:04
+// would return the fragments with start times of 00:00:02 and 00:00:04.
 type FragmentSelector struct {
 	_ struct{} `type:"structure"`
 
-	// The origin of the time stamps to use (Server or Producer).
+	// The origin of the timestamps to use (Server or Producer).
 	//
 	// FragmentSelectorType is a required field
 	FragmentSelectorType *string `type:"string" required:"true" enum:"FragmentSelectorType"`
 
-	// The range of time stamps to return.
+	// The range of timestamps to return.
 	//
 	// TimestampRange is a required field
 	TimestampRange *TimestampRange `type:"structure" required:"true"`
@@ -558,22 +602,47 @@ func (s *FragmentSelector) SetTimestampRange(v *TimestampRange) *FragmentSelecto
 type GetHLSStreamingSessionURLInput struct {
 	_ struct{} `type:"structure"`
 
+	// Specifies which format should be used for packaging the media. Specifying
+	// the FRAGMENTED_MP4 container format packages the media into MP4 fragments
+	// (fMP4 or CMAF). This is the recommended packaging because there is minimal
+	// packaging overhead. The other container format option is MPEG_TS. HLS has
+	// supported MPEG TS chunks since it was released and is sometimes the only
+	// supported packaging on older HLS players. MPEG TS typically has a 5-25 percent
+	// packaging overhead. This means MPEG TS typically requires 5-25 percent more
+	// bandwidth and cost than fMP4.
+	//
+	// The default is FRAGMENTED_MP4.
+	ContainerFormat *string `type:"string" enum:"ContainerFormat"`
+
 	// Specifies when flags marking discontinuities between fragments will be added
 	// to the media playlists. The default is ALWAYS when HLSFragmentSelector is
 	// SERVER_TIMESTAMP, and NEVER when it is PRODUCER_TIMESTAMP.
 	//
 	// Media players typically build a timeline of media content to play, based
-	// on the time stamps of each fragment. This means that if there is any overlap
+	// on the timestamps of each fragment. This means that if there is any overlap
 	// between fragments (as is typical if HLSFragmentSelector is SERVER_TIMESTAMP),
 	// the media player timeline has small gaps between fragments in some places,
 	// and overwrites frames in other places. When there are discontinuity flags
 	// between fragments, the media player is expected to reset the timeline, resulting
 	// in the fragment being played immediately after the previous fragment. We
 	// recommend that you always have discontinuity flags between fragments if the
-	// fragment time stamps are not accurate or if fragments might be missing. You
+	// fragment timestamps are not accurate or if fragments might be missing. You
 	// should not place discontinuity flags between fragments for the player timeline
-	// to accurately map to the producer time stamps.
+	// to accurately map to the producer timestamps.
 	DiscontinuityMode *string `type:"string" enum:"DiscontinuityMode"`
+
+	// Specifies when the fragment start timestamps should be included in the HLS
+	// media playlist. Typically, media players report the playhead position as
+	// a time relative to the start of the first fragment in the playback session.
+	// However, when the start timestamps are included in the HLS media playlist,
+	// some media players might report the current playhead as an absolute time
+	// based on the fragment timestamps. This can be useful for creating a playback
+	// experience that shows viewers the wall-clock time of the media.
+	//
+	// The default is NEVER. When HLSFragmentSelector is SERVER_TIMESTAMP, the timestamps
+	// will be the server start timestamps. Similarly, when HLSFragmentSelector
+	// is PRODUCER_TIMESTAMP, the timestamps will be the producer start timestamps.
+	DisplayFragmentTimestamp *string `type:"string" enum:"DisplayFragmentTimestamp"`
 
 	// The time in seconds until the requested session expires. This value can be
 	// between 300 (5 minutes) and 43200 (12 hours).
@@ -584,7 +653,7 @@ type GetHLSStreamingSessionURLInput struct {
 	// The default is 300 (5 minutes).
 	Expires *int64 `min:"300" type:"integer"`
 
-	// The time range of the requested fragment, and the source of the time stamps.
+	// The time range of the requested fragment, and the source of the timestamps.
 	//
 	// This parameter is required if PlaybackMode is ON_DEMAND. This parameter is
 	// optional if PlaybackMode is LIVE. If PlaybackMode is LIVE, the FragmentSelectorType
@@ -616,23 +685,21 @@ type GetHLSStreamingSessionURLInput struct {
 	//
 	// Features of the two types of session include the following:
 	//
-	//    * LIVE: For sessions of this type, the HLS media playlist is continually
+	//    * LIVE : For sessions of this type, the HLS media playlist is continually
 	//    updated with the latest fragments as they become available. We recommend
 	//    that the media player retrieve a new playlist on a one-second interval.
 	//    When this type of session is played in a media player, the user interface
 	//    typically displays a "live" notification, with no scrubber control for
-	//    choosing the position in the playback window to display.
+	//    choosing the position in the playback window to display. In LIVE mode,
+	//    the newest available fragments are included in an HLS media playlist,
+	//    even if there is a gap between fragments (that is, if a fragment is missing).
+	//    A gap like this might cause a media player to halt or cause a jump in
+	//    playback. In this mode, fragments are not added to the HLS media playlist
+	//    if they are older than the newest fragment in the playlist. If the missing
+	//    fragment becomes available after a subsequent fragment is added to the
+	//    playlist, the older fragment is not added, and the gap is not filled.
 	//
-	// In LIVE mode, the newest available fragments are included in an HLS media
-	//    playlist, even if there is a gap between fragments (that is, if a fragment
-	//    is missing). A gap like this might cause a media player to halt or cause
-	//    a jump in playback. In this mode, fragments are not added to the HLS media
-	//    playlist if they are older than the newest fragment in the playlist. If
-	//    the missing fragment becomes available after a subsequent fragment is
-	//    added to the playlist, the older fragment is not added, and the gap is
-	//    not filled.
-	//
-	//    * ON_DEMAND: For sessions of this type, the HLS media playlist contains
+	//    * ON_DEMAND : For sessions of this type, the HLS media playlist contains
 	//    all the fragments for the session, up to the number that is specified
 	//    in MaxMediaPlaylistFragmentResults. The playlist must be retrieved only
 	//    once for each session. When this type of session is played in a media
@@ -640,12 +707,12 @@ type GetHLSStreamingSessionURLInput struct {
 	//    the position in the playback window to display.
 	//
 	// In both playback modes, if FragmentSelectorType is PRODUCER_TIMESTAMP, and
-	// if there are multiple fragments with the same start time stamp, the fragment
+	// if there are multiple fragments with the same start timestamp, the fragment
 	// that has the larger fragment number (that is, the newer fragment) is included
 	// in the HLS media playlist. The other fragments are not included. Fragments
-	// that have different time stamps but have overlapping durations are still
-	// included in the HLS media playlist. This can lead to unexpected behavior
-	// in the media player.
+	// that have different timestamps but have overlapping durations are still included
+	// in the HLS media playlist. This can lead to unexpected behavior in the media
+	// player.
 	//
 	// The default is LIVE.
 	PlaybackMode *string `type:"string" enum:"PlaybackMode"`
@@ -694,9 +761,21 @@ func (s *GetHLSStreamingSessionURLInput) Validate() error {
 	return nil
 }
 
+// SetContainerFormat sets the ContainerFormat field's value.
+func (s *GetHLSStreamingSessionURLInput) SetContainerFormat(v string) *GetHLSStreamingSessionURLInput {
+	s.ContainerFormat = &v
+	return s
+}
+
 // SetDiscontinuityMode sets the DiscontinuityMode field's value.
 func (s *GetHLSStreamingSessionURLInput) SetDiscontinuityMode(v string) *GetHLSStreamingSessionURLInput {
 	s.DiscontinuityMode = &v
+	return s
+}
+
+// SetDisplayFragmentTimestamp sets the DisplayFragmentTimestamp field's value.
+func (s *GetHLSStreamingSessionURLInput) SetDisplayFragmentTimestamp(v string) *GetHLSStreamingSessionURLInput {
+	s.DisplayFragmentTimestamp = &v
 	return s
 }
 
@@ -832,11 +911,11 @@ type GetMediaForFragmentListOutput struct {
 	//
 	//    * AWS_KINESISVIDEO_FRAGMENT_NUMBER - Fragment number returned in the chunk.
 	//
-	//    * AWS_KINESISVIDEO_SERVER_SIDE_TIMESTAMP - Server-side time stamp of the
+	//    * AWS_KINESISVIDEO_SERVER_SIDE_TIMESTAMP - Server-side timestamp of the
 	//    fragment.
 	//
-	//    * AWS_KINESISVIDEO_PRODUCER_SIDE_TIMESTAMP - Producer-side time stamp
-	//    of the fragment.
+	//    * AWS_KINESISVIDEO_PRODUCER_SIDE_TIMESTAMP - Producer-side timestamp of
+	//    the fragment.
 	//
 	// The following tags will be included if an exception occurs:
 	//
@@ -871,39 +950,39 @@ func (s *GetMediaForFragmentListOutput) SetPayload(v io.ReadCloser) *GetMediaFor
 	return s
 }
 
-// Contains the range of time stamps for the requested media, and the source
-// of the time stamps.
+// Contains the range of timestamps for the requested media, and the source
+// of the timestamps.
 type HLSFragmentSelector struct {
 	_ struct{} `type:"structure"`
 
-	// The source of the time stamps for the requested media.
+	// The source of the timestamps for the requested media.
 	//
 	// When FragmentSelectorType is set to PRODUCER_TIMESTAMP and GetHLSStreamingSessionURLInput$PlaybackMode
-	// is ON_DEMAND, the first fragment ingested with a producer time stamp within
+	// is ON_DEMAND, the first fragment ingested with a producer timestamp within
 	// the specified FragmentSelector$TimestampRange is included in the media playlist.
-	// In addition, the fragments with producer time stamps within the TimestampRange
+	// In addition, the fragments with producer timestamps within the TimestampRange
 	// ingested immediately following the first fragment (up to the GetHLSStreamingSessionURLInput$MaxMediaPlaylistFragmentResults
 	// value) are included.
 	//
-	// Fragments that have duplicate producer time stamps are deduplicated. This
+	// Fragments that have duplicate producer timestamps are deduplicated. This
 	// means that if producers are producing a stream of fragments with producer
-	// time stamps that are approximately equal to the true clock time, the HLS
-	// media playlists will contain all of the fragments within the requested time
-	// stamp range. If some fragments are ingested within the same time range and
-	// very different points in time, only the oldest ingested collection of fragments
+	// timestamps that are approximately equal to the true clock time, the HLS media
+	// playlists will contain all of the fragments within the requested timestamp
+	// range. If some fragments are ingested within the same time range and very
+	// different points in time, only the oldest ingested collection of fragments
 	// are returned.
 	//
 	// When FragmentSelectorType is set to PRODUCER_TIMESTAMP and GetHLSStreamingSessionURLInput$PlaybackMode
-	// is LIVE, the producer time stamps are used in the MP4 fragments and for deduplication.
-	// But the most recently ingested fragments based on server time stamps are
-	// included in the HLS media playlist. This means that even if fragments ingested
-	// in the past have producer time stamps with values now, they are not included
+	// is LIVE, the producer timestamps are used in the MP4 fragments and for deduplication.
+	// But the most recently ingested fragments based on server timestamps are included
+	// in the HLS media playlist. This means that even if fragments ingested in
+	// the past have producer timestamps with values now, they are not included
 	// in the HLS media playlist.
 	//
 	// The default is SERVER_TIMESTAMP.
 	FragmentSelectorType *string `type:"string" enum:"HLSFragmentSelectorType"`
 
-	// The start and end of the time stamp range for the requested media.
+	// The start and end of the timestamp range for the requested media.
 	//
 	// This value should not be present if PlaybackType is LIVE.
 	TimestampRange *HLSTimestampRange `type:"structure"`
@@ -931,7 +1010,7 @@ func (s *HLSFragmentSelector) SetTimestampRange(v *HLSTimestampRange) *HLSFragme
 	return s
 }
 
-// The start and end of the time stamp range for the requested media.
+// The start and end of the timestamp range for the requested media.
 //
 // This value should not be present if PlaybackType is LIVE.
 //
@@ -941,8 +1020,8 @@ func (s *HLSFragmentSelector) SetTimestampRange(v *HLSTimestampRange) *HLSFragme
 type HLSTimestampRange struct {
 	_ struct{} `type:"structure"`
 
-	// The end of the time stamp range for the requested media. This value must
-	// be within 3 hours of the specified StartTimestamp, and it must be later than
+	// The end of the timestamp range for the requested media. This value must be
+	// within 3 hours of the specified StartTimestamp, and it must be later than
 	// the StartTimestamp value.
 	//
 	// If FragmentSelectorType for the request is SERVER_TIMESTAMP, this value must
@@ -950,12 +1029,12 @@ type HLSTimestampRange struct {
 	//
 	// If the HLSTimestampRange value is specified, the EndTimestamp value is required.
 	//
-	// This value is inclusive. The EndTimestamp is compared to the (starting) time
-	// stamp of the fragment. Fragments that start before the EndTimestamp value
-	// and continue past it are included in the session.
+	// This value is inclusive. The EndTimestamp is compared to the (starting) timestamp
+	// of the fragment. Fragments that start before the EndTimestamp value and continue
+	// past it are included in the session.
 	EndTimestamp *time.Time `type:"timestamp"`
 
-	// The start of the time stamp range for the requested media.
+	// The start of the timestamp range for the requested media.
 	//
 	// If the HLSTimestampRange value is specified, the StartTimestamp value is
 	// required.
@@ -991,7 +1070,7 @@ func (s *HLSTimestampRange) SetStartTimestamp(v time.Time) *HLSTimestampRange {
 type ListFragmentsInput struct {
 	_ struct{} `type:"structure"`
 
-	// Describes the time stamp range and time stamp origin for the range of fragments
+	// Describes the timestamp range and timestamp origin for the range of fragments
 	// to return.
 	FragmentSelector *FragmentSelector `type:"structure"`
 
@@ -1074,7 +1153,8 @@ func (s *ListFragmentsInput) SetStreamName(v string) *ListFragmentsInput {
 type ListFragmentsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// A list of fragment numbers that correspond to the time stamp range provided.
+	// A list of archived Fragment objects from the stream that meet the selector
+	// criteria. Results are in no specific order, even across pages.
 	Fragments []*Fragment `type:"list"`
 
 	// If the returned list is truncated, the operation returns this token to use
@@ -1105,16 +1185,16 @@ func (s *ListFragmentsOutput) SetNextToken(v string) *ListFragmentsOutput {
 	return s
 }
 
-// The range of time stamps for which to return fragments.
+// The range of timestamps for which to return fragments.
 type TimestampRange struct {
 	_ struct{} `type:"structure"`
 
-	// The ending time stamp in the range of time stamps for which to return fragments.
+	// The ending timestamp in the range of timestamps for which to return fragments.
 	//
 	// EndTimestamp is a required field
 	EndTimestamp *time.Time `type:"timestamp" required:"true"`
 
-	// The starting time stamp in the range of time stamps for which to return fragments.
+	// The starting timestamp in the range of timestamps for which to return fragments.
 	//
 	// StartTimestamp is a required field
 	StartTimestamp *time.Time `type:"timestamp" required:"true"`
@@ -1159,11 +1239,27 @@ func (s *TimestampRange) SetStartTimestamp(v time.Time) *TimestampRange {
 }
 
 const (
+	// ContainerFormatFragmentedMp4 is a ContainerFormat enum value
+	ContainerFormatFragmentedMp4 = "FRAGMENTED_MP4"
+
+	// ContainerFormatMpegTs is a ContainerFormat enum value
+	ContainerFormatMpegTs = "MPEG_TS"
+)
+
+const (
 	// DiscontinuityModeAlways is a DiscontinuityMode enum value
 	DiscontinuityModeAlways = "ALWAYS"
 
 	// DiscontinuityModeNever is a DiscontinuityMode enum value
 	DiscontinuityModeNever = "NEVER"
+)
+
+const (
+	// DisplayFragmentTimestampAlways is a DisplayFragmentTimestamp enum value
+	DisplayFragmentTimestampAlways = "ALWAYS"
+
+	// DisplayFragmentTimestampNever is a DisplayFragmentTimestamp enum value
+	DisplayFragmentTimestampNever = "NEVER"
 )
 
 const (

@@ -856,6 +856,7 @@
         "T50",
         "T80",
         "T100",
+        "T42",
         "NoPreference"
       ]
     },
@@ -863,7 +864,9 @@
       "type":"string",
       "enum":[
         "STANDARD",
-        "EDGE"
+        "EDGE",
+        "EDGE_C",
+        "EDGE_CG"
       ]
     },
     "SnsTopicARN":{

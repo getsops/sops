@@ -49,6 +49,11 @@ message DeprecatedResponse {
   option deprecated = true;
   // DeprecatedField contains a DeprecatedEnum.
   DeprecatedEnum deprecated_field = 1 [deprecated=true];
+  // DeprecatedOneof contains a deprecated field.
+  oneof deprecated_oneof {
+    // DeprecatedOneofField is a deprecated field.
+    string deprecated_oneof_field = 2 [deprecated=true];
+  }
 }
 
 // DeprecatedEnum contains deprecated values.

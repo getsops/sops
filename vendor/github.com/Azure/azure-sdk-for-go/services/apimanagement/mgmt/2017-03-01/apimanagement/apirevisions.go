@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -52,6 +53,16 @@ func NewAPIRevisionsClientWithBaseURI(baseURI string, subscriptionID string) API
 // top - number of records to return.
 // skip - number of records to skip.
 func (client APIRevisionsClient) List(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (result APIRevisionCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIRevisionsClient.List")
+		defer func() {
+			sc := -1
+			if result.arc.Response.Response != nil {
+				sc = result.arc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
@@ -144,8 +155,8 @@ func (client APIRevisionsClient) ListResponder(resp *http.Response) (result APIR
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client APIRevisionsClient) listNextResults(lastResults APIRevisionCollection) (result APIRevisionCollection, err error) {
-	req, err := lastResults.aPIRevisionCollectionPreparer()
+func (client APIRevisionsClient) listNextResults(ctx context.Context, lastResults APIRevisionCollection) (result APIRevisionCollection, err error) {
+	req, err := lastResults.aPIRevisionCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.APIRevisionsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -166,6 +177,16 @@ func (client APIRevisionsClient) listNextResults(lastResults APIRevisionCollecti
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client APIRevisionsClient) ListComplete(ctx context.Context, resourceGroupName string, serviceName string, apiid string, filter string, top *int32, skip *int32) (result APIRevisionCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIRevisionsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, serviceName, apiid, filter, top, skip)
 	return
 }

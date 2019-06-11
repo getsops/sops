@@ -24,10 +24,16 @@ func TestXattr(t *testing.T) {
 
 	xattrName := "user.test"
 	xattrDataSet := "gopher"
-	err := unix.Setxattr(f, xattrName, []byte(xattrDataSet), 0)
+
+	err := unix.Setxattr(f, xattrName, []byte{}, 0)
 	if err == unix.ENOTSUP || err == unix.EOPNOTSUPP {
 		t.Skip("filesystem does not support extended attributes, skipping test")
 	} else if err != nil {
+		t.Fatalf("Setxattr: %v", err)
+	}
+
+	err = unix.Setxattr(f, xattrName, []byte(xattrDataSet), 0)
+	if err != nil {
 		t.Fatalf("Setxattr: %v", err)
 	}
 

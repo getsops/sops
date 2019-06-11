@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewIntegrationAccountSchemasClientWithBaseURI(baseURI string, subscriptionI
 // schemaName - the integration account schema name.
 // schema - the integration account schema.
 func (client IntegrationAccountSchemasClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, integrationAccountName string, schemaName string, schema IntegrationAccountSchema) (result IntegrationAccountSchema, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountSchemasClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: schema,
 			Constraints: []validation.Constraint{{Target: "schema.IntegrationAccountSchemaProperties", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -124,6 +135,16 @@ func (client IntegrationAccountSchemasClient) CreateOrUpdateResponder(resp *http
 // integrationAccountName - the integration account name.
 // schemaName - the integration account schema name.
 func (client IntegrationAccountSchemasClient) Delete(ctx context.Context, resourceGroupName string, integrationAccountName string, schemaName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountSchemasClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, integrationAccountName, schemaName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.IntegrationAccountSchemasClient", "Delete", nil, "Failure preparing request")
@@ -192,6 +213,16 @@ func (client IntegrationAccountSchemasClient) DeleteResponder(resp *http.Respons
 // integrationAccountName - the integration account name.
 // schemaName - the integration account schema name.
 func (client IntegrationAccountSchemasClient) Get(ctx context.Context, resourceGroupName string, integrationAccountName string, schemaName string) (result IntegrationAccountSchema, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountSchemasClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, integrationAccountName, schemaName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.IntegrationAccountSchemasClient", "Get", nil, "Failure preparing request")
@@ -262,6 +293,16 @@ func (client IntegrationAccountSchemasClient) GetResponder(resp *http.Response) 
 // top - the number of items to be included in the result.
 // filter - the filter to apply on the operation. Options for filters include: SchemaType.
 func (client IntegrationAccountSchemasClient) List(ctx context.Context, resourceGroupName string, integrationAccountName string, top *int32, filter string) (result IntegrationAccountSchemaListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountSchemasClient.List")
+		defer func() {
+			sc := -1
+			if result.iaslr.Response.Response != nil {
+				sc = result.iaslr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, integrationAccountName, top, filter)
 	if err != nil {
@@ -332,8 +373,8 @@ func (client IntegrationAccountSchemasClient) ListResponder(resp *http.Response)
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client IntegrationAccountSchemasClient) listNextResults(lastResults IntegrationAccountSchemaListResult) (result IntegrationAccountSchemaListResult, err error) {
-	req, err := lastResults.integrationAccountSchemaListResultPreparer()
+func (client IntegrationAccountSchemasClient) listNextResults(ctx context.Context, lastResults IntegrationAccountSchemaListResult) (result IntegrationAccountSchemaListResult, err error) {
+	req, err := lastResults.integrationAccountSchemaListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "logic.IntegrationAccountSchemasClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -354,6 +395,16 @@ func (client IntegrationAccountSchemasClient) listNextResults(lastResults Integr
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client IntegrationAccountSchemasClient) ListComplete(ctx context.Context, resourceGroupName string, integrationAccountName string, top *int32, filter string) (result IntegrationAccountSchemaListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountSchemasClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, integrationAccountName, top, filter)
 	return
 }
@@ -364,6 +415,16 @@ func (client IntegrationAccountSchemasClient) ListComplete(ctx context.Context, 
 // integrationAccountName - the integration account name.
 // schemaName - the integration account schema name.
 func (client IntegrationAccountSchemasClient) ListContentCallbackURL(ctx context.Context, resourceGroupName string, integrationAccountName string, schemaName string, listContentCallbackURL GetCallbackURLParameters) (result WorkflowTriggerCallbackURL, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IntegrationAccountSchemasClient.ListContentCallbackURL")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListContentCallbackURLPreparer(ctx, resourceGroupName, integrationAccountName, schemaName, listContentCallbackURL)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "logic.IntegrationAccountSchemasClient", "ListContentCallbackURL", nil, "Failure preparing request")

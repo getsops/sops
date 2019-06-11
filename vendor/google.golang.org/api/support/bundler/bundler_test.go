@@ -1,4 +1,4 @@
-// Copyright 2016 Google Inc. All Rights Reserved.
+// Copyright 2016 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,13 +15,12 @@
 package bundler
 
 import (
+	"context"
 	"fmt"
 	"reflect"
 	"sync"
 	"testing"
 	"time"
-
-	"golang.org/x/net/context"
 )
 
 func TestBundlerCount1(t *testing.T) {
@@ -283,7 +282,7 @@ func TestConcurrentFlush(t *testing.T) {
 
 	var wg sync.WaitGroup
 	defer wg.Wait()
-	for i := 0; i < 5000; i++ {
+	for i := 0; i < 50; i++ {
 		b.Add(i, 1)
 		if i%100 == 0 {
 			i := i

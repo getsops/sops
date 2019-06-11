@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,22 +19,16 @@
 
 package customerinsights
 
-import original "github.com/Azure/azure-sdk-for-go/services/customerinsights/mgmt/2017-04-26/customerinsights"
+import (
+	"context"
 
-type AuthorizationPoliciesClient = original.AuthorizationPoliciesClient
+	original "github.com/Azure/azure-sdk-for-go/services/customerinsights/mgmt/2017-04-26/customerinsights"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type ConnectorMappingsClient = original.ConnectorMappingsClient
-type ConnectorsClient = original.ConnectorsClient
-type HubsClient = original.HubsClient
-type ImagesClient = original.ImagesClient
-type InteractionsClient = original.InteractionsClient
-type KpiClient = original.KpiClient
-type LinksClient = original.LinksClient
 type CalculationWindowTypes = original.CalculationWindowTypes
 
 const (
@@ -237,12 +231,14 @@ const (
 )
 
 type AssignmentPrincipal = original.AssignmentPrincipal
+type AuthorizationPoliciesClient = original.AuthorizationPoliciesClient
 type AuthorizationPolicy = original.AuthorizationPolicy
 type AuthorizationPolicyListResult = original.AuthorizationPolicyListResult
 type AuthorizationPolicyListResultIterator = original.AuthorizationPolicyListResultIterator
 type AuthorizationPolicyListResultPage = original.AuthorizationPolicyListResultPage
 type AuthorizationPolicyResourceFormat = original.AuthorizationPolicyResourceFormat
 type AzureBlobConnectorProperties = original.AzureBlobConnectorProperties
+type BaseClient = original.BaseClient
 type CanonicalProfileDefinition = original.CanonicalProfileDefinition
 type CanonicalProfileDefinitionPropertiesItem = original.CanonicalProfileDefinitionPropertiesItem
 type Connector = original.Connector
@@ -260,7 +256,9 @@ type ConnectorMappingListResultPage = original.ConnectorMappingListResultPage
 type ConnectorMappingProperties = original.ConnectorMappingProperties
 type ConnectorMappingResourceFormat = original.ConnectorMappingResourceFormat
 type ConnectorMappingStructure = original.ConnectorMappingStructure
+type ConnectorMappingsClient = original.ConnectorMappingsClient
 type ConnectorResourceFormat = original.ConnectorResourceFormat
+type ConnectorsClient = original.ConnectorsClient
 type ConnectorsCreateOrUpdateFuture = original.ConnectorsCreateOrUpdateFuture
 type ConnectorsDeleteFuture = original.ConnectorsDeleteFuture
 type CrmConnectorEntities = original.CrmConnectorEntities
@@ -276,15 +274,19 @@ type HubListResult = original.HubListResult
 type HubListResultIterator = original.HubListResultIterator
 type HubListResultPage = original.HubListResultPage
 type HubPropertiesFormat = original.HubPropertiesFormat
+type HubsClient = original.HubsClient
 type HubsDeleteFuture = original.HubsDeleteFuture
 type ImageDefinition = original.ImageDefinition
+type ImagesClient = original.ImagesClient
 type InteractionListResult = original.InteractionListResult
 type InteractionListResultIterator = original.InteractionListResultIterator
 type InteractionListResultPage = original.InteractionListResultPage
 type InteractionResourceFormat = original.InteractionResourceFormat
-type InteractionsCreateOrUpdateFuture = original.InteractionsCreateOrUpdateFuture
 type InteractionTypeDefinition = original.InteractionTypeDefinition
+type InteractionsClient = original.InteractionsClient
+type InteractionsCreateOrUpdateFuture = original.InteractionsCreateOrUpdateFuture
 type KpiAlias = original.KpiAlias
+type KpiClient = original.KpiClient
 type KpiCreateOrUpdateFuture = original.KpiCreateOrUpdateFuture
 type KpiDefinition = original.KpiDefinition
 type KpiDeleteFuture = original.KpiDeleteFuture
@@ -301,6 +303,7 @@ type LinkListResult = original.LinkListResult
 type LinkListResultIterator = original.LinkListResultIterator
 type LinkListResultPage = original.LinkListResultPage
 type LinkResourceFormat = original.LinkResourceFormat
+type LinksClient = original.LinksClient
 type LinksCreateOrUpdateFuture = original.LinksCreateOrUpdateFuture
 type ListKpiDefinition = original.ListKpiDefinition
 type MetadataDefinitionBase = original.MetadataDefinitionBase
@@ -309,6 +312,7 @@ type OperationDisplay = original.OperationDisplay
 type OperationListResult = original.OperationListResult
 type OperationListResultIterator = original.OperationListResultIterator
 type OperationListResultPage = original.OperationListResultPage
+type OperationsClient = original.OperationsClient
 type Participant = original.Participant
 type ParticipantProfilePropertyReference = original.ParticipantProfilePropertyReference
 type ParticipantPropertyReference = original.ParticipantPropertyReference
@@ -322,18 +326,20 @@ type PredictionListResultPage = original.PredictionListResultPage
 type PredictionMappings = original.PredictionMappings
 type PredictionModelStatus = original.PredictionModelStatus
 type PredictionResourceFormat = original.PredictionResourceFormat
-type PredictionsCreateOrUpdateFuture = original.PredictionsCreateOrUpdateFuture
-type PredictionsDeleteFuture = original.PredictionsDeleteFuture
 type PredictionSystemGeneratedEntities = original.PredictionSystemGeneratedEntities
 type PredictionTrainingResults = original.PredictionTrainingResults
+type PredictionsClient = original.PredictionsClient
+type PredictionsCreateOrUpdateFuture = original.PredictionsCreateOrUpdateFuture
+type PredictionsDeleteFuture = original.PredictionsDeleteFuture
 type ProfileEnumValidValuesFormat = original.ProfileEnumValidValuesFormat
 type ProfileListResult = original.ProfileListResult
 type ProfileListResultIterator = original.ProfileListResultIterator
 type ProfileListResultPage = original.ProfileListResultPage
 type ProfileResourceFormat = original.ProfileResourceFormat
+type ProfileTypeDefinition = original.ProfileTypeDefinition
+type ProfilesClient = original.ProfilesClient
 type ProfilesCreateOrUpdateFuture = original.ProfilesCreateOrUpdateFuture
 type ProfilesDeleteFuture = original.ProfilesDeleteFuture
-type ProfileTypeDefinition = original.ProfileTypeDefinition
 type PropertyDefinition = original.PropertyDefinition
 type ProxyResource = original.ProxyResource
 type RelationshipDefinition = original.RelationshipDefinition
@@ -343,17 +349,19 @@ type RelationshipLinkListResult = original.RelationshipLinkListResult
 type RelationshipLinkListResultIterator = original.RelationshipLinkListResultIterator
 type RelationshipLinkListResultPage = original.RelationshipLinkListResultPage
 type RelationshipLinkResourceFormat = original.RelationshipLinkResourceFormat
+type RelationshipLinksClient = original.RelationshipLinksClient
 type RelationshipLinksCreateOrUpdateFuture = original.RelationshipLinksCreateOrUpdateFuture
 type RelationshipLinksDeleteFuture = original.RelationshipLinksDeleteFuture
 type RelationshipListResult = original.RelationshipListResult
 type RelationshipListResultIterator = original.RelationshipListResultIterator
 type RelationshipListResultPage = original.RelationshipListResultPage
 type RelationshipResourceFormat = original.RelationshipResourceFormat
+type RelationshipTypeFieldMapping = original.RelationshipTypeFieldMapping
+type RelationshipTypeMapping = original.RelationshipTypeMapping
+type RelationshipsClient = original.RelationshipsClient
 type RelationshipsCreateOrUpdateFuture = original.RelationshipsCreateOrUpdateFuture
 type RelationshipsDeleteFuture = original.RelationshipsDeleteFuture
 type RelationshipsLookup = original.RelationshipsLookup
-type RelationshipTypeFieldMapping = original.RelationshipTypeFieldMapping
-type RelationshipTypeMapping = original.RelationshipTypeMapping
 type Resource = original.Resource
 type ResourceSetDescription = original.ResourceSetDescription
 type Role = original.Role
@@ -362,11 +370,13 @@ type RoleAssignmentListResult = original.RoleAssignmentListResult
 type RoleAssignmentListResultIterator = original.RoleAssignmentListResultIterator
 type RoleAssignmentListResultPage = original.RoleAssignmentListResultPage
 type RoleAssignmentResourceFormat = original.RoleAssignmentResourceFormat
+type RoleAssignmentsClient = original.RoleAssignmentsClient
 type RoleAssignmentsCreateOrUpdateFuture = original.RoleAssignmentsCreateOrUpdateFuture
 type RoleListResult = original.RoleListResult
 type RoleListResultIterator = original.RoleListResultIterator
 type RoleListResultPage = original.RoleListResultPage
 type RoleResourceFormat = original.RoleResourceFormat
+type RolesClient = original.RolesClient
 type SalesforceConnectorProperties = original.SalesforceConnectorProperties
 type SalesforceDiscoverSetting = original.SalesforceDiscoverSetting
 type SalesforceTable = original.SalesforceTable
@@ -378,32 +388,40 @@ type ViewListResult = original.ViewListResult
 type ViewListResultIterator = original.ViewListResultIterator
 type ViewListResultPage = original.ViewListResultPage
 type ViewResourceFormat = original.ViewResourceFormat
+type ViewsClient = original.ViewsClient
 type WidgetType = original.WidgetType
 type WidgetTypeListResult = original.WidgetTypeListResult
 type WidgetTypeListResultIterator = original.WidgetTypeListResultIterator
 type WidgetTypeListResultPage = original.WidgetTypeListResultPage
 type WidgetTypeResourceFormat = original.WidgetTypeResourceFormat
-type OperationsClient = original.OperationsClient
-type PredictionsClient = original.PredictionsClient
-type ProfilesClient = original.ProfilesClient
-type RelationshipLinksClient = original.RelationshipLinksClient
-type RelationshipsClient = original.RelationshipsClient
-type RoleAssignmentsClient = original.RoleAssignmentsClient
-type RolesClient = original.RolesClient
-type ViewsClient = original.ViewsClient
 type WidgetTypesClient = original.WidgetTypesClient
 
+func New(subscriptionID string) BaseClient {
+	return original.New(subscriptionID)
+}
 func NewAuthorizationPoliciesClient(subscriptionID string) AuthorizationPoliciesClient {
 	return original.NewAuthorizationPoliciesClient(subscriptionID)
 }
 func NewAuthorizationPoliciesClientWithBaseURI(baseURI string, subscriptionID string) AuthorizationPoliciesClient {
 	return original.NewAuthorizationPoliciesClientWithBaseURI(baseURI, subscriptionID)
 }
-func New(subscriptionID string) BaseClient {
-	return original.New(subscriptionID)
+func NewAuthorizationPolicyListResultIterator(page AuthorizationPolicyListResultPage) AuthorizationPolicyListResultIterator {
+	return original.NewAuthorizationPolicyListResultIterator(page)
 }
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
+func NewAuthorizationPolicyListResultPage(getNextPage func(context.Context, AuthorizationPolicyListResult) (AuthorizationPolicyListResult, error)) AuthorizationPolicyListResultPage {
+	return original.NewAuthorizationPolicyListResultPage(getNextPage)
+}
+func NewConnectorListResultIterator(page ConnectorListResultPage) ConnectorListResultIterator {
+	return original.NewConnectorListResultIterator(page)
+}
+func NewConnectorListResultPage(getNextPage func(context.Context, ConnectorListResult) (ConnectorListResult, error)) ConnectorListResultPage {
+	return original.NewConnectorListResultPage(getNextPage)
+}
+func NewConnectorMappingListResultIterator(page ConnectorMappingListResultPage) ConnectorMappingListResultIterator {
+	return original.NewConnectorMappingListResultIterator(page)
+}
+func NewConnectorMappingListResultPage(getNextPage func(context.Context, ConnectorMappingListResult) (ConnectorMappingListResult, error)) ConnectorMappingListResultPage {
+	return original.NewConnectorMappingListResultPage(getNextPage)
 }
 func NewConnectorMappingsClient(subscriptionID string) ConnectorMappingsClient {
 	return original.NewConnectorMappingsClient(subscriptionID)
@@ -417,6 +435,12 @@ func NewConnectorsClient(subscriptionID string) ConnectorsClient {
 func NewConnectorsClientWithBaseURI(baseURI string, subscriptionID string) ConnectorsClient {
 	return original.NewConnectorsClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewHubListResultIterator(page HubListResultPage) HubListResultIterator {
+	return original.NewHubListResultIterator(page)
+}
+func NewHubListResultPage(getNextPage func(context.Context, HubListResult) (HubListResult, error)) HubListResultPage {
+	return original.NewHubListResultPage(getNextPage)
+}
 func NewHubsClient(subscriptionID string) HubsClient {
 	return original.NewHubsClient(subscriptionID)
 }
@@ -428,6 +452,12 @@ func NewImagesClient(subscriptionID string) ImagesClient {
 }
 func NewImagesClientWithBaseURI(baseURI string, subscriptionID string) ImagesClient {
 	return original.NewImagesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewInteractionListResultIterator(page InteractionListResultPage) InteractionListResultIterator {
+	return original.NewInteractionListResultIterator(page)
+}
+func NewInteractionListResultPage(getNextPage func(context.Context, InteractionListResult) (InteractionListResult, error)) InteractionListResultPage {
+	return original.NewInteractionListResultPage(getNextPage)
 }
 func NewInteractionsClient(subscriptionID string) InteractionsClient {
 	return original.NewInteractionsClient(subscriptionID)
@@ -441,11 +471,134 @@ func NewKpiClient(subscriptionID string) KpiClient {
 func NewKpiClientWithBaseURI(baseURI string, subscriptionID string) KpiClient {
 	return original.NewKpiClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewKpiListResultIterator(page KpiListResultPage) KpiListResultIterator {
+	return original.NewKpiListResultIterator(page)
+}
+func NewKpiListResultPage(getNextPage func(context.Context, KpiListResult) (KpiListResult, error)) KpiListResultPage {
+	return original.NewKpiListResultPage(getNextPage)
+}
+func NewLinkListResultIterator(page LinkListResultPage) LinkListResultIterator {
+	return original.NewLinkListResultIterator(page)
+}
+func NewLinkListResultPage(getNextPage func(context.Context, LinkListResult) (LinkListResult, error)) LinkListResultPage {
+	return original.NewLinkListResultPage(getNextPage)
+}
 func NewLinksClient(subscriptionID string) LinksClient {
 	return original.NewLinksClient(subscriptionID)
 }
 func NewLinksClientWithBaseURI(baseURI string, subscriptionID string) LinksClient {
 	return original.NewLinksClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
+	return original.NewOperationListResultIterator(page)
+}
+func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
+	return original.NewOperationListResultPage(getNextPage)
+}
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewPredictionListResultIterator(page PredictionListResultPage) PredictionListResultIterator {
+	return original.NewPredictionListResultIterator(page)
+}
+func NewPredictionListResultPage(getNextPage func(context.Context, PredictionListResult) (PredictionListResult, error)) PredictionListResultPage {
+	return original.NewPredictionListResultPage(getNextPage)
+}
+func NewPredictionsClient(subscriptionID string) PredictionsClient {
+	return original.NewPredictionsClient(subscriptionID)
+}
+func NewPredictionsClientWithBaseURI(baseURI string, subscriptionID string) PredictionsClient {
+	return original.NewPredictionsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewProfileListResultIterator(page ProfileListResultPage) ProfileListResultIterator {
+	return original.NewProfileListResultIterator(page)
+}
+func NewProfileListResultPage(getNextPage func(context.Context, ProfileListResult) (ProfileListResult, error)) ProfileListResultPage {
+	return original.NewProfileListResultPage(getNextPage)
+}
+func NewProfilesClient(subscriptionID string) ProfilesClient {
+	return original.NewProfilesClient(subscriptionID)
+}
+func NewProfilesClientWithBaseURI(baseURI string, subscriptionID string) ProfilesClient {
+	return original.NewProfilesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewRelationshipLinkListResultIterator(page RelationshipLinkListResultPage) RelationshipLinkListResultIterator {
+	return original.NewRelationshipLinkListResultIterator(page)
+}
+func NewRelationshipLinkListResultPage(getNextPage func(context.Context, RelationshipLinkListResult) (RelationshipLinkListResult, error)) RelationshipLinkListResultPage {
+	return original.NewRelationshipLinkListResultPage(getNextPage)
+}
+func NewRelationshipLinksClient(subscriptionID string) RelationshipLinksClient {
+	return original.NewRelationshipLinksClient(subscriptionID)
+}
+func NewRelationshipLinksClientWithBaseURI(baseURI string, subscriptionID string) RelationshipLinksClient {
+	return original.NewRelationshipLinksClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewRelationshipListResultIterator(page RelationshipListResultPage) RelationshipListResultIterator {
+	return original.NewRelationshipListResultIterator(page)
+}
+func NewRelationshipListResultPage(getNextPage func(context.Context, RelationshipListResult) (RelationshipListResult, error)) RelationshipListResultPage {
+	return original.NewRelationshipListResultPage(getNextPage)
+}
+func NewRelationshipsClient(subscriptionID string) RelationshipsClient {
+	return original.NewRelationshipsClient(subscriptionID)
+}
+func NewRelationshipsClientWithBaseURI(baseURI string, subscriptionID string) RelationshipsClient {
+	return original.NewRelationshipsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewRoleAssignmentListResultIterator(page RoleAssignmentListResultPage) RoleAssignmentListResultIterator {
+	return original.NewRoleAssignmentListResultIterator(page)
+}
+func NewRoleAssignmentListResultPage(getNextPage func(context.Context, RoleAssignmentListResult) (RoleAssignmentListResult, error)) RoleAssignmentListResultPage {
+	return original.NewRoleAssignmentListResultPage(getNextPage)
+}
+func NewRoleAssignmentsClient(subscriptionID string) RoleAssignmentsClient {
+	return original.NewRoleAssignmentsClient(subscriptionID)
+}
+func NewRoleAssignmentsClientWithBaseURI(baseURI string, subscriptionID string) RoleAssignmentsClient {
+	return original.NewRoleAssignmentsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewRoleListResultIterator(page RoleListResultPage) RoleListResultIterator {
+	return original.NewRoleListResultIterator(page)
+}
+func NewRoleListResultPage(getNextPage func(context.Context, RoleListResult) (RoleListResult, error)) RoleListResultPage {
+	return original.NewRoleListResultPage(getNextPage)
+}
+func NewRolesClient(subscriptionID string) RolesClient {
+	return original.NewRolesClient(subscriptionID)
+}
+func NewRolesClientWithBaseURI(baseURI string, subscriptionID string) RolesClient {
+	return original.NewRolesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewViewListResultIterator(page ViewListResultPage) ViewListResultIterator {
+	return original.NewViewListResultIterator(page)
+}
+func NewViewListResultPage(getNextPage func(context.Context, ViewListResult) (ViewListResult, error)) ViewListResultPage {
+	return original.NewViewListResultPage(getNextPage)
+}
+func NewViewsClient(subscriptionID string) ViewsClient {
+	return original.NewViewsClient(subscriptionID)
+}
+func NewViewsClientWithBaseURI(baseURI string, subscriptionID string) ViewsClient {
+	return original.NewViewsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWidgetTypeListResultIterator(page WidgetTypeListResultPage) WidgetTypeListResultIterator {
+	return original.NewWidgetTypeListResultIterator(page)
+}
+func NewWidgetTypeListResultPage(getNextPage func(context.Context, WidgetTypeListResult) (WidgetTypeListResult, error)) WidgetTypeListResultPage {
+	return original.NewWidgetTypeListResultPage(getNextPage)
+}
+func NewWidgetTypesClient(subscriptionID string) WidgetTypesClient {
+	return original.NewWidgetTypesClient(subscriptionID)
+}
+func NewWidgetTypesClientWithBaseURI(baseURI string, subscriptionID string) WidgetTypesClient {
+	return original.NewWidgetTypesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleCalculationWindowTypesValues() []CalculationWindowTypes {
 	return original.PossibleCalculationWindowTypesValues()
@@ -507,63 +660,9 @@ func PossibleRoleTypesValues() []RoleTypes {
 func PossibleStatusValues() []Status {
 	return original.PossibleStatusValues()
 }
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewPredictionsClient(subscriptionID string) PredictionsClient {
-	return original.NewPredictionsClient(subscriptionID)
-}
-func NewPredictionsClientWithBaseURI(baseURI string, subscriptionID string) PredictionsClient {
-	return original.NewPredictionsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewProfilesClient(subscriptionID string) ProfilesClient {
-	return original.NewProfilesClient(subscriptionID)
-}
-func NewProfilesClientWithBaseURI(baseURI string, subscriptionID string) ProfilesClient {
-	return original.NewProfilesClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewRelationshipLinksClient(subscriptionID string) RelationshipLinksClient {
-	return original.NewRelationshipLinksClient(subscriptionID)
-}
-func NewRelationshipLinksClientWithBaseURI(baseURI string, subscriptionID string) RelationshipLinksClient {
-	return original.NewRelationshipLinksClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewRelationshipsClient(subscriptionID string) RelationshipsClient {
-	return original.NewRelationshipsClient(subscriptionID)
-}
-func NewRelationshipsClientWithBaseURI(baseURI string, subscriptionID string) RelationshipsClient {
-	return original.NewRelationshipsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewRoleAssignmentsClient(subscriptionID string) RoleAssignmentsClient {
-	return original.NewRoleAssignmentsClient(subscriptionID)
-}
-func NewRoleAssignmentsClientWithBaseURI(baseURI string, subscriptionID string) RoleAssignmentsClient {
-	return original.NewRoleAssignmentsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewRolesClient(subscriptionID string) RolesClient {
-	return original.NewRolesClient(subscriptionID)
-}
-func NewRolesClientWithBaseURI(baseURI string, subscriptionID string) RolesClient {
-	return original.NewRolesClientWithBaseURI(baseURI, subscriptionID)
-}
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"
 }
 func Version() string {
 	return original.Version()
-}
-func NewViewsClient(subscriptionID string) ViewsClient {
-	return original.NewViewsClient(subscriptionID)
-}
-func NewViewsClientWithBaseURI(baseURI string, subscriptionID string) ViewsClient {
-	return original.NewViewsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewWidgetTypesClient(subscriptionID string) WidgetTypesClient {
-	return original.NewWidgetTypesClient(subscriptionID)
-}
-func NewWidgetTypesClientWithBaseURI(baseURI string, subscriptionID string) WidgetTypesClient {
-	return original.NewWidgetTypesClientWithBaseURI(baseURI, subscriptionID)
 }

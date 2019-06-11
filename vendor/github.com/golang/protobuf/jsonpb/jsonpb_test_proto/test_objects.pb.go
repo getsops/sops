@@ -3,14 +3,16 @@
 
 package jsonpb
 
-import proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
-import any "github.com/golang/protobuf/ptypes/any"
-import duration "github.com/golang/protobuf/ptypes/duration"
-import _struct "github.com/golang/protobuf/ptypes/struct"
-import timestamp "github.com/golang/protobuf/ptypes/timestamp"
-import wrappers "github.com/golang/protobuf/ptypes/wrappers"
+import (
+	fmt "fmt"
+	proto "github.com/golang/protobuf/proto"
+	any "github.com/golang/protobuf/ptypes/any"
+	duration "github.com/golang/protobuf/ptypes/duration"
+	_struct "github.com/golang/protobuf/ptypes/struct"
+	timestamp "github.com/golang/protobuf/ptypes/timestamp"
+	wrappers "github.com/golang/protobuf/ptypes/wrappers"
+	math "math"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -21,7 +23,7 @@ var _ = math.Inf
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
+const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 type Widget_Color int32
 
@@ -98,6 +100,7 @@ func (*Simple) ProtoMessage()    {}
 func (*Simple) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e97c739a0ce14cc6, []int{0}
 }
+
 func (m *Simple) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Simple.Unmarshal(m, b)
 }
@@ -268,6 +271,7 @@ func (*NonFinites) ProtoMessage()    {}
 func (*NonFinites) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e97c739a0ce14cc6, []int{1}
 }
+
 func (m *NonFinites) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_NonFinites.Unmarshal(m, b)
 }
@@ -352,6 +356,7 @@ func (*Repeats) ProtoMessage()    {}
 func (*Repeats) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e97c739a0ce14cc6, []int{2}
 }
+
 func (m *Repeats) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Repeats.Unmarshal(m, b)
 }
@@ -466,6 +471,7 @@ func (*Widget) ProtoMessage()    {}
 func (*Widget) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e97c739a0ce14cc6, []int{3}
 }
+
 func (m *Widget) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Widget.Unmarshal(m, b)
 }
@@ -540,6 +546,7 @@ func (*Maps) ProtoMessage()    {}
 func (*Maps) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e97c739a0ce14cc6, []int{4}
 }
+
 func (m *Maps) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Maps.Unmarshal(m, b)
 }
@@ -591,6 +598,7 @@ func (*MsgWithOneof) ProtoMessage()    {}
 func (*MsgWithOneof) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e97c739a0ce14cc6, []int{5}
 }
+
 func (m *MsgWithOneof) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MsgWithOneof.Unmarshal(m, b)
 }
@@ -685,118 +693,15 @@ func (m *MsgWithOneof) GetMsgWithRequired() *MsgWithRequired {
 	return nil
 }
 
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*MsgWithOneof) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
-	return _MsgWithOneof_OneofMarshaler, _MsgWithOneof_OneofUnmarshaler, _MsgWithOneof_OneofSizer, []interface{}{
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*MsgWithOneof) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
 		(*MsgWithOneof_Title)(nil),
 		(*MsgWithOneof_Salary)(nil),
 		(*MsgWithOneof_Country)(nil),
 		(*MsgWithOneof_HomeAddress)(nil),
 		(*MsgWithOneof_MsgWithRequired)(nil),
 	}
-}
-
-func _MsgWithOneof_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*MsgWithOneof)
-	// union
-	switch x := m.Union.(type) {
-	case *MsgWithOneof_Title:
-		b.EncodeVarint(1<<3 | proto.WireBytes)
-		b.EncodeStringBytes(x.Title)
-	case *MsgWithOneof_Salary:
-		b.EncodeVarint(2<<3 | proto.WireVarint)
-		b.EncodeVarint(uint64(x.Salary))
-	case *MsgWithOneof_Country:
-		b.EncodeVarint(3<<3 | proto.WireBytes)
-		b.EncodeStringBytes(x.Country)
-	case *MsgWithOneof_HomeAddress:
-		b.EncodeVarint(4<<3 | proto.WireBytes)
-		b.EncodeStringBytes(x.HomeAddress)
-	case *MsgWithOneof_MsgWithRequired:
-		b.EncodeVarint(5<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.MsgWithRequired); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("MsgWithOneof.Union has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _MsgWithOneof_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*MsgWithOneof)
-	switch tag {
-	case 1: // union.title
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Union = &MsgWithOneof_Title{x}
-		return true, err
-	case 2: // union.salary
-		if wire != proto.WireVarint {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeVarint()
-		m.Union = &MsgWithOneof_Salary{int64(x)}
-		return true, err
-	case 3: // union.Country
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Union = &MsgWithOneof_Country{x}
-		return true, err
-	case 4: // union.home_address
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Union = &MsgWithOneof_HomeAddress{x}
-		return true, err
-	case 5: // union.msg_with_required
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(MsgWithRequired)
-		err := b.DecodeMessage(msg)
-		m.Union = &MsgWithOneof_MsgWithRequired{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
-func _MsgWithOneof_OneofSizer(msg proto.Message) (n int) {
-	m := msg.(*MsgWithOneof)
-	// union
-	switch x := m.Union.(type) {
-	case *MsgWithOneof_Title:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.Title)))
-		n += len(x.Title)
-	case *MsgWithOneof_Salary:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(x.Salary))
-	case *MsgWithOneof_Country:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.Country)))
-		n += len(x.Country)
-	case *MsgWithOneof_HomeAddress:
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(len(x.HomeAddress)))
-		n += len(x.HomeAddress)
-	case *MsgWithOneof_MsgWithRequired:
-		s := proto.Size(x.MsgWithRequired)
-		n += 1 // tag and wire
-		n += proto.SizeVarint(uint64(s))
-		n += s
-	case nil:
-	default:
-		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
-	}
-	return n
 }
 
 type Real struct {
@@ -821,6 +726,7 @@ var extRange_Real = []proto.ExtensionRange{
 func (*Real) ExtensionRangeArray() []proto.ExtensionRange {
 	return extRange_Real
 }
+
 func (m *Real) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Real.Unmarshal(m, b)
 }
@@ -868,6 +774,7 @@ var extRange_Complex = []proto.ExtensionRange{
 func (*Complex) ExtensionRangeArray() []proto.ExtensionRange {
 	return extRange_Complex
 }
+
 func (m *Complex) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Complex.Unmarshal(m, b)
 }
@@ -898,7 +805,7 @@ var E_Complex_RealExtension = &proto.ExtensionDesc{
 	ExtensionType: (*Complex)(nil),
 	Field:         123,
 	Name:          "jsonpb.Complex.real_extension",
-	Tag:           "bytes,123,opt,name=real_extension,json=realExtension",
+	Tag:           "bytes,123,opt,name=real_extension",
 	Filename:      "test_objects.proto",
 }
 
@@ -929,6 +836,7 @@ func (*KnownTypes) ProtoMessage()    {}
 func (*KnownTypes) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e97c739a0ce14cc6, []int{8}
 }
+
 func (m *KnownTypes) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_KnownTypes.Unmarshal(m, b)
 }
@@ -1066,6 +974,7 @@ func (*MsgWithRequired) ProtoMessage()    {}
 func (*MsgWithRequired) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e97c739a0ce14cc6, []int{9}
 }
+
 func (m *MsgWithRequired) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MsgWithRequired.Unmarshal(m, b)
 }
@@ -1106,6 +1015,7 @@ func (*MsgWithIndirectRequired) ProtoMessage()    {}
 func (*MsgWithIndirectRequired) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e97c739a0ce14cc6, []int{10}
 }
+
 func (m *MsgWithIndirectRequired) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MsgWithIndirectRequired.Unmarshal(m, b)
 }
@@ -1158,6 +1068,7 @@ func (*MsgWithRequiredBytes) ProtoMessage()    {}
 func (*MsgWithRequiredBytes) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e97c739a0ce14cc6, []int{11}
 }
+
 func (m *MsgWithRequiredBytes) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MsgWithRequiredBytes.Unmarshal(m, b)
 }
@@ -1196,6 +1107,7 @@ func (*MsgWithRequiredWKT) ProtoMessage()    {}
 func (*MsgWithRequiredWKT) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e97c739a0ce14cc6, []int{12}
 }
+
 func (m *MsgWithRequiredWKT) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_MsgWithRequiredWKT.Unmarshal(m, b)
 }
@@ -1240,6 +1152,7 @@ var E_Extm = &proto.ExtensionDesc{
 }
 
 func init() {
+	proto.RegisterEnum("jsonpb.Widget_Color", Widget_Color_name, Widget_Color_value)
 	proto.RegisterType((*Simple)(nil), "jsonpb.Simple")
 	proto.RegisterType((*NonFinites)(nil), "jsonpb.NonFinites")
 	proto.RegisterType((*Repeats)(nil), "jsonpb.Repeats")
@@ -1249,6 +1162,7 @@ func init() {
 	proto.RegisterMapType((map[int64]string)(nil), "jsonpb.Maps.MInt64StrEntry")
 	proto.RegisterType((*MsgWithOneof)(nil), "jsonpb.MsgWithOneof")
 	proto.RegisterType((*Real)(nil), "jsonpb.Real")
+	proto.RegisterExtension(E_Complex_RealExtension)
 	proto.RegisterType((*Complex)(nil), "jsonpb.Complex")
 	proto.RegisterType((*KnownTypes)(nil), "jsonpb.KnownTypes")
 	proto.RegisterType((*MsgWithRequired)(nil), "jsonpb.MsgWithRequired")
@@ -1256,8 +1170,6 @@ func init() {
 	proto.RegisterMapType((map[string]*MsgWithRequired)(nil), "jsonpb.MsgWithIndirectRequired.MapFieldEntry")
 	proto.RegisterType((*MsgWithRequiredBytes)(nil), "jsonpb.MsgWithRequiredBytes")
 	proto.RegisterType((*MsgWithRequiredWKT)(nil), "jsonpb.MsgWithRequiredWKT")
-	proto.RegisterEnum("jsonpb.Widget_Color", Widget_Color_name, Widget_Color_value)
-	proto.RegisterExtension(E_Complex_RealExtension)
 	proto.RegisterExtension(E_Name)
 	proto.RegisterExtension(E_Extm)
 }

@@ -38,11 +38,11 @@ import (
 	"reflect"
 	"sort"
 	"strings"
+	"sync"
 	"testing"
 
 	"github.com/golang/protobuf/proto"
 	pb "github.com/golang/protobuf/proto/test_proto"
-	"golang.org/x/sync/errgroup"
 )
 
 func TestGetExtensionsWithMissingExtensions(t *testing.T) {
@@ -671,18 +671,22 @@ func TestMarshalRace(t *testing.T) {
 	// GetExtension will decode it lazily. Make sure this does
 	// not race against Marshal.
 
-	var g errgroup.Group
+	wg := sync.WaitGroup{}
+	errs := make(chan error, 3)
 	for n := 3; n > 0; n-- {
-		g.Go(func() error {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
 			_, err := proto.Marshal(m)
-			return err
-		})
-		g.Go(func() error {
-			_, err := proto.GetExtension(m, pb.E_Ext_More)
-			return err
-		})
+			errs <- err
+		}()
 	}
-	if err := g.Wait(); err != nil {
-		t.Fatal(err)
+	wg.Wait()
+	close(errs)
+
+	for err = range errs {
+		if err != nil {
+			t.Fatal(err)
+		}
 	}
 }

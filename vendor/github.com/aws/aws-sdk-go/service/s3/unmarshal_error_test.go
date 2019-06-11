@@ -162,7 +162,7 @@ func TestUnmarshalError(t *testing.T) {
 		if e, a := c.Code, err.(awserr.Error).Code(); e != a {
 			t.Errorf("%d, Code: expect %s, got %s", i, e, a)
 		}
-		if e, a := c.Msg, err.(awserr.Error).Message(); e != a {
+		if e, a := c.Msg, err.(awserr.Error).Message(); !strings.Contains(a, e) {
 			t.Errorf("%d, Message: expect %s, got %s", i, e, a)
 		}
 		if e, a := c.ReqID, err.(awserr.RequestFailure).RequestID(); e != a {

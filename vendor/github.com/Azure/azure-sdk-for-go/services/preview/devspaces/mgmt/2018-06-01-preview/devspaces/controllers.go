@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewControllersClientWithBaseURI(baseURI string, subscriptionID string) Cont
 // name - name of the resource.
 // controller - controller create parameters.
 func (client ControllersClient) Create(ctx context.Context, resourceGroupName string, name string, controller Controller) (result ControllersCreateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ControllersClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -112,10 +123,6 @@ func (client ControllersClient) CreateSender(req *http.Request) (future Controll
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -138,6 +145,16 @@ func (client ControllersClient) CreateResponder(resp *http.Response) (result Con
 // resourceGroupName - resource group to which the resource belongs.
 // name - name of the resource.
 func (client ControllersClient) Delete(ctx context.Context, resourceGroupName string, name string) (result ControllersDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ControllersClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -194,10 +211,6 @@ func (client ControllersClient) DeleteSender(req *http.Request) (future Controll
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -219,6 +232,16 @@ func (client ControllersClient) DeleteResponder(resp *http.Response) (result aut
 // resourceGroupName - resource group to which the resource belongs.
 // name - name of the resource.
 func (client ControllersClient) Get(ctx context.Context, resourceGroupName string, name string) (result Controller, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ControllersClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -294,6 +317,16 @@ func (client ControllersClient) GetResponder(resp *http.Response) (result Contro
 
 // List lists all the Azure Dev Spaces Controllers with their properties in the subscription.
 func (client ControllersClient) List(ctx context.Context) (result ControllerListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ControllersClient.List")
+		defer func() {
+			sc := -1
+			if result.cl.Response.Response != nil {
+				sc = result.cl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -356,8 +389,8 @@ func (client ControllersClient) ListResponder(resp *http.Response) (result Contr
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ControllersClient) listNextResults(lastResults ControllerList) (result ControllerList, err error) {
-	req, err := lastResults.controllerListPreparer()
+func (client ControllersClient) listNextResults(ctx context.Context, lastResults ControllerList) (result ControllerList, err error) {
+	req, err := lastResults.controllerListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "devspaces.ControllersClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -378,6 +411,16 @@ func (client ControllersClient) listNextResults(lastResults ControllerList) (res
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ControllersClient) ListComplete(ctx context.Context) (result ControllerListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ControllersClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -387,6 +430,16 @@ func (client ControllersClient) ListComplete(ctx context.Context) (result Contro
 // Parameters:
 // resourceGroupName - resource group to which the resource belongs.
 func (client ControllersClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result ControllerListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ControllersClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.cl.Response.Response != nil {
+				sc = result.cl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -457,8 +510,8 @@ func (client ControllersClient) ListByResourceGroupResponder(resp *http.Response
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client ControllersClient) listByResourceGroupNextResults(lastResults ControllerList) (result ControllerList, err error) {
-	req, err := lastResults.controllerListPreparer()
+func (client ControllersClient) listByResourceGroupNextResults(ctx context.Context, lastResults ControllerList) (result ControllerList, err error) {
+	req, err := lastResults.controllerListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "devspaces.ControllersClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -479,6 +532,16 @@ func (client ControllersClient) listByResourceGroupNextResults(lastResults Contr
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ControllersClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result ControllerListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ControllersClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -489,6 +552,16 @@ func (client ControllersClient) ListByResourceGroupComplete(ctx context.Context,
 // resourceGroupName - resource group to which the resource belongs.
 // name - name of the resource.
 func (client ControllersClient) ListConnectionDetails(ctx context.Context, resourceGroupName string, name string) (result ControllerConnectionDetailsList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ControllersClient.ListConnectionDetails")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -566,7 +639,18 @@ func (client ControllersClient) ListConnectionDetailsResponder(resp *http.Respon
 // Parameters:
 // resourceGroupName - resource group to which the resource belongs.
 // name - name of the resource.
+// controllerUpdateParameters - parameters for updating the Azure Dev Spaces Controller.
 func (client ControllersClient) Update(ctx context.Context, resourceGroupName string, name string, controllerUpdateParameters ControllerUpdateParameters) (result Controller, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ControllersClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

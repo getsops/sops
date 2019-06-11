@@ -15,6 +15,7 @@
 package uid
 
 import (
+	"fmt"
 	"testing"
 	"time"
 )
@@ -66,5 +67,22 @@ func TestOlder(t *testing.T) {
 	id2 := NewSpace("different-prefix", nil).New()
 	if got, want := s.Older(id2, time.Second), false; got != want {
 		t.Errorf("got %t, want %t", got, want)
+	}
+}
+
+func TestShorter(t *testing.T) {
+	now := time.Now()
+	shortSpace := NewSpace("uid", &Options{Short: true, Time: now})
+	shortUID := shortSpace.New()
+
+	want := fmt.Sprintf("uid-%d-01", now.UnixNano())
+	if shortUID != want {
+		t.Fatalf("expected %s, got %s", want, shortUID)
+	}
+
+	if got, ok := shortSpace.Timestamp(shortUID); !ok {
+		t.Fatal("expected to be able to parse timestamp from short space, but was unable to")
+	} else if got.UnixNano() != now.UnixNano() {
+		t.Fatalf("expected to get %v, got %v", now, got)
 	}
 }

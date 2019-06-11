@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -58,6 +59,16 @@ func NewUsageDetailsByEnrollmentAccountClientWithBaseURI(baseURI string, subscri
 // top - may be used to limit the number of results to the most recent N usageDetails.
 // apply - oData apply expression to aggregate usageDetails by tags or (tags and properties/usageStart)
 func (client UsageDetailsByEnrollmentAccountClient) List(ctx context.Context, enrollmentAccountID string, expand string, filter string, skiptoken string, top *int32, apply string) (result UsageDetailsListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UsageDetailsByEnrollmentAccountClient.List")
+		defer func() {
+			sc := -1
+			if result.udlr.Response.Response != nil {
+				sc = result.udlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
@@ -144,8 +155,8 @@ func (client UsageDetailsByEnrollmentAccountClient) ListResponder(resp *http.Res
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client UsageDetailsByEnrollmentAccountClient) listNextResults(lastResults UsageDetailsListResult) (result UsageDetailsListResult, err error) {
-	req, err := lastResults.usageDetailsListResultPreparer()
+func (client UsageDetailsByEnrollmentAccountClient) listNextResults(ctx context.Context, lastResults UsageDetailsListResult) (result UsageDetailsListResult, err error) {
+	req, err := lastResults.usageDetailsListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "consumption.UsageDetailsByEnrollmentAccountClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -166,6 +177,16 @@ func (client UsageDetailsByEnrollmentAccountClient) listNextResults(lastResults 
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client UsageDetailsByEnrollmentAccountClient) ListComplete(ctx context.Context, enrollmentAccountID string, expand string, filter string, skiptoken string, top *int32, apply string) (result UsageDetailsListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UsageDetailsByEnrollmentAccountClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, enrollmentAccountID, expand, filter, skiptoken, top, apply)
 	return
 }
@@ -188,6 +209,16 @@ func (client UsageDetailsByEnrollmentAccountClient) ListComplete(ctx context.Con
 // specifies a starting point to use for subsequent calls.
 // top - may be used to limit the number of results to the most recent N usageDetails.
 func (client UsageDetailsByEnrollmentAccountClient) ListByBillingPeriod(ctx context.Context, enrollmentAccountID string, billingPeriodName string, expand string, filter string, apply string, skiptoken string, top *int32) (result UsageDetailsListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UsageDetailsByEnrollmentAccountClient.ListByBillingPeriod")
+		defer func() {
+			sc := -1
+			if result.udlr.Response.Response != nil {
+				sc = result.udlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: top,
 			Constraints: []validation.Constraint{{Target: "top", Name: validation.Null, Rule: false,
@@ -275,8 +306,8 @@ func (client UsageDetailsByEnrollmentAccountClient) ListByBillingPeriodResponder
 }
 
 // listByBillingPeriodNextResults retrieves the next set of results, if any.
-func (client UsageDetailsByEnrollmentAccountClient) listByBillingPeriodNextResults(lastResults UsageDetailsListResult) (result UsageDetailsListResult, err error) {
-	req, err := lastResults.usageDetailsListResultPreparer()
+func (client UsageDetailsByEnrollmentAccountClient) listByBillingPeriodNextResults(ctx context.Context, lastResults UsageDetailsListResult) (result UsageDetailsListResult, err error) {
+	req, err := lastResults.usageDetailsListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "consumption.UsageDetailsByEnrollmentAccountClient", "listByBillingPeriodNextResults", nil, "Failure preparing next results request")
 	}
@@ -297,6 +328,16 @@ func (client UsageDetailsByEnrollmentAccountClient) listByBillingPeriodNextResul
 
 // ListByBillingPeriodComplete enumerates all values, automatically crossing page boundaries as required.
 func (client UsageDetailsByEnrollmentAccountClient) ListByBillingPeriodComplete(ctx context.Context, enrollmentAccountID string, billingPeriodName string, expand string, filter string, apply string, skiptoken string, top *int32) (result UsageDetailsListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UsageDetailsByEnrollmentAccountClient.ListByBillingPeriod")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByBillingPeriod(ctx, enrollmentAccountID, billingPeriodName, expand, filter, apply, skiptoken, top)
 	return
 }

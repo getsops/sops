@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewAPIOperationPolicyClient() APIOperationPolicyClient {
 // ifMatch - the entity state (Etag) version of the Api Operation policy to update. A value of "*" can be used
 // for If-Match to unconditionally apply the operation.
 func (client APIOperationPolicyClient) CreateOrUpdate(ctx context.Context, apimBaseURL string, apiid string, operationID string, parameters PolicyContract, ifMatch string) (result PolicyContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIOperationPolicyClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: apiid,
 			Constraints: []validation.Constraint{{Target: "apiid", Name: validation.MaxLength, Rule: 256, Chain: nil},
@@ -139,6 +150,16 @@ func (client APIOperationPolicyClient) CreateOrUpdateResponder(resp *http.Respon
 // ifMatch - the entity state (Etag) version of the Api Operation Policy to delete. A value of "*" can be used
 // for If-Match to unconditionally apply the operation.
 func (client APIOperationPolicyClient) Delete(ctx context.Context, apimBaseURL string, apiid string, operationID string, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIOperationPolicyClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: apiid,
 			Constraints: []validation.Constraint{{Target: "apiid", Name: validation.MaxLength, Rule: 256, Chain: nil},
@@ -225,6 +246,16 @@ func (client APIOperationPolicyClient) DeleteResponder(resp *http.Response) (res
 // operationID - operation identifier within an API. Must be unique in the current API Management service
 // instance.
 func (client APIOperationPolicyClient) Get(ctx context.Context, apimBaseURL string, apiid string, operationID string) (result PolicyContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIOperationPolicyClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: apiid,
 			Constraints: []validation.Constraint{{Target: "apiid", Name: validation.MaxLength, Rule: 256, Chain: nil},
@@ -311,6 +342,16 @@ func (client APIOperationPolicyClient) GetResponder(resp *http.Response) (result
 // operationID - operation identifier within an API. Must be unique in the current API Management service
 // instance.
 func (client APIOperationPolicyClient) ListByOperation(ctx context.Context, apimBaseURL string, apiid string, operationID string) (result PolicyCollection, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIOperationPolicyClient.ListByOperation")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: apiid,
 			Constraints: []validation.Constraint{{Target: "apiid", Name: validation.MaxLength, Rule: 256, Chain: nil},

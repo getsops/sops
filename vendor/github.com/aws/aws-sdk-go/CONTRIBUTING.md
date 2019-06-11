@@ -56,7 +56,7 @@ Please be aware of the following notes prior to opening a pull request:
 
 3. Wherever possible, pull requests should contain tests as appropriate.
    Bugfixes should contain tests that exercise the corrected behavior (i.e., the
-   test should fail without the bugfix and pass with it), and new features 
+   test should fail without the bugfix and pass with it), and new features
    should be accompanied by tests exercising the feature.
 
 4. Pull requests that contain failing tests will not be merged until the test
@@ -71,7 +71,7 @@ Please be aware of the following notes prior to opening a pull request:
 
 ### Testing
 
-To run the tests locally, running the `make unit` command will `go get` the 
+To run the tests locally, running the `make unit` command will `go get` the
 SDK's testing dependencies, and run vet, link and unit tests for the SDK.
 
 ```
@@ -88,7 +88,7 @@ go test -tags codegen ./private/...
 
 See the `Makefile` for additional testing tags that can be used in testing.
 
-To test on multiple platform the SDK includes several DockerFiles under the 
+To test on multiple platform the SDK includes several DockerFiles under the
 `awstesting/sandbox` folder, and associated make recipes to execute
 unit testing within environments configured for specific Go versions.
 

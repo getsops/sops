@@ -141,6 +141,7 @@
       "members":{
         "RoleArn":{"shape":"arnType"},
         "RoleSessionName":{"shape":"roleSessionNameType"},
+        "PolicyArns":{"shape":"policyDescriptorListType"},
         "Policy":{"shape":"sessionPolicyDocumentType"},
         "DurationSeconds":{"shape":"roleDurationSecondsType"},
         "ExternalId":{"shape":"externalIdType"},
@@ -167,6 +168,7 @@
         "RoleArn":{"shape":"arnType"},
         "PrincipalArn":{"shape":"arnType"},
         "SAMLAssertion":{"shape":"SAMLAssertionType"},
+        "PolicyArns":{"shape":"policyDescriptorListType"},
         "Policy":{"shape":"sessionPolicyDocumentType"},
         "DurationSeconds":{"shape":"roleDurationSecondsType"}
       }
@@ -196,6 +198,7 @@
         "RoleSessionName":{"shape":"roleSessionNameType"},
         "WebIdentityToken":{"shape":"clientTokenType"},
         "ProviderId":{"shape":"urlType"},
+        "PolicyArns":{"shape":"policyDescriptorListType"},
         "Policy":{"shape":"sessionPolicyDocumentType"},
         "DurationSeconds":{"shape":"roleDurationSecondsType"}
       }
@@ -293,6 +296,7 @@
       "members":{
         "Name":{"shape":"userNameType"},
         "Policy":{"shape":"sessionPolicyDocumentType"},
+        "PolicyArns":{"shape":"policyDescriptorListType"},
         "DurationSeconds":{"shape":"durationSecondsType"}
       }
     },
@@ -392,6 +396,12 @@
       },
       "exception":true
     },
+    "PolicyDescriptorType":{
+      "type":"structure",
+      "members":{
+        "arn":{"shape":"arnType"}
+      }
+    },
     "RegionDisabledException":{
       "type":"structure",
       "members":{
@@ -471,6 +481,10 @@
       "min":0
     },
     "packedPolicyTooLargeMessage":{"type":"string"},
+    "policyDescriptorListType":{
+      "type":"list",
+      "member":{"shape":"PolicyDescriptorType"}
+    },
     "regionDisabledMessage":{"type":"string"},
     "roleDurationSecondsType":{
       "type":"integer",

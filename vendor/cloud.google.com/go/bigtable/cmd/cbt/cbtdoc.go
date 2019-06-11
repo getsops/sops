@@ -14,7 +14,7 @@
 
 // DO NOT EDIT. THIS IS AUTOMATICALLY GENERATED.
 // Run "go generate" to regenerate.
-//go:generate go run cbt.go -o cbtdoc.go doc
+//go:generate go run cbt.go gcpolicy.go -o cbtdoc.go doc
 
 /*
 Cbt is a tool for doing basic interactions with Cloud Bigtable. To learn how to
@@ -78,6 +78,10 @@ Alpha features are not currently available to most Cloud Bigtable customers. The
 features might be changed in backward-incompatible ways and are not recommended
 for production use. They are not subject to any SLA or deprecation policy.
 
+Note: cbt does not support specifying arbitrary bytes on the command line for
+any value that Bigtable otherwise supports (e.g., row key, column qualifier,
+etc.).
+
 For convenience, values of the -project, -instance, -creds,
 -admin-endpoint and -data-endpoint flags may be specified in
 ~/.cbtrc in this format:
@@ -139,9 +143,10 @@ Usage:
 Create a table
 
 Usage:
-	cbt createtable <table> [families=family[:(maxage=<d> | maxversions=<n>)],...] [splits=split,...]
-	  families: Column families and their associated GC policies. See "setgcpolicy".
-	  					 Example: families=family1:maxage=1w,family2:maxversions=1
+	cbt createtable <table> [families=family[:gcpolicy],...] [splits=split,...]
+	  families: Column families and their associated GC policies. For gcpolicy,
+	  					see "setgcpolicy".
+						Example: families=family1:maxage=1w,family2:maxversions=1
 	  splits:   Row key to be used to initially split the table
 
 
@@ -304,7 +309,7 @@ Usage:
 Set the GC policy for a column family
 
 Usage:
-	cbt setgcpolicy <table> <family> ( maxage=<d> | maxversions=<n> | never)
+	cbt setgcpolicy <table> <family> ((maxage=<d> | maxversions=<n>) [(and|or) (maxage=<d> | maxversions=<n>),...] | never)
 
 	  maxage=<d>		Maximum timestamp age to preserve (e.g. "1h", "4d")
 	  maxversions=<n>	Maximum number of versions to preserve

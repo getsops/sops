@@ -31,10 +31,18 @@ var (
 	port = flag.Int("port", 9000, "the port number to bind to on the local machine")
 )
 
+const (
+	maxMsgSize = 256 * 1024 * 1024 // 256 MiB
+)
+
 func main() {
 	grpc.EnableTracing = false
 	flag.Parse()
-	srv, err := bttest.NewServer(fmt.Sprintf("%s:%d", *host, *port))
+	opts := []grpc.ServerOption{
+		grpc.MaxRecvMsgSize(maxMsgSize),
+		grpc.MaxSendMsgSize(maxMsgSize),
+	}
+	srv, err := bttest.NewServer(fmt.Sprintf("%s:%d", *host, *port), opts...)
 	if err != nil {
 		log.Fatalf("failed to start emulator: %v", err)
 	}

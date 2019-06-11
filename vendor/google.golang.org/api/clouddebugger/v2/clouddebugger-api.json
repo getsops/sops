@@ -422,7 +422,7 @@
       }
     }
   },
-  "revision": "20180712",
+  "revision": "20181114",
   "rootUrl": "https://clouddebugger.googleapis.com/",
   "schemas": {
     "AliasContext": {
@@ -665,7 +665,7 @@
           "description": "Human readable message to be displayed to the user about this debuggee.\nAbsence of this field indicates no status. The message can be either\ninformational or an error status."
         },
         "uniquifier": {
-          "description": "Uniquifier to further distiguish the application.\nIt is possible that different applications might have identical values in\nthe debuggee message, thus, incorrectly identified as a single application\nby the Controller service. This field adds salt to further distiguish the\napplication. Agents should consider seeding this field with value that\nidentifies the code, binary, configuration and environment.",
+          "description": "Uniquifier to further distinguish the application.\nIt is possible that different applications might have identical values in\nthe debuggee message, thus, incorrectly identified as a single application\nby the Controller service. This field adds salt to further distinguish the\napplication. Agents should consider seeding this field with value that\nidentifies the code, binary, configuration and environment.",
           "type": "string"
         }
       },
@@ -852,7 +852,7 @@
       "properties": {
         "debuggee": {
           "$ref": "Debuggee",
-          "description": "Debuggee resource.\nThe field `id` is guranteed to be set (in addition to the echoed fields).\nIf the field `is_disabled` is set to `true`, the agent should disable\nitself by removing all breakpoints and detaching from the application.\nIt should however continue to poll `RegisterDebuggee` until reenabled."
+          "description": "Debuggee resource.\nThe field `id` is guaranteed to be set (in addition to the echoed fields).\nIf the field `is_disabled` is set to `true`, the agent should disable\nitself by removing all breakpoints and detaching from the application.\nIt should however continue to poll `RegisterDebuggee` until reenabled."
         }
       },
       "type": "object"

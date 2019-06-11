@@ -17,7 +17,7 @@ const opBatchDeleteAttributes = "BatchDeleteAttributes"
 // BatchDeleteAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the BatchDeleteAttributes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -49,8 +49,7 @@ func (c *SimpleDB) BatchDeleteAttributesRequest(input *BatchDeleteAttributesInpu
 
 	output = &BatchDeleteAttributesOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -63,23 +62,24 @@ func (c *SimpleDB) BatchDeleteAttributesRequest(input *BatchDeleteAttributesInpu
 // If you specify BatchDeleteAttributes without attributes or values, all the
 // attributes for the item are deleted.
 //
-//  BatchDeleteAttributes is an idempotent operation; running it multiple times
+// BatchDeleteAttributes is an idempotent operation; running it multiple times
 // on the same item or attribute doesn't result in an error.
 //
-//  The BatchDeleteAttributes operation succeeds or fails in its entirety. There
+// The BatchDeleteAttributes operation succeeds or fails in its entirety. There
 // are no partial deletes. You can execute multiple BatchDeleteAttributes operations
 // and other operations in parallel. However, large numbers of concurrent BatchDeleteAttributes
 // calls can result in Service Unavailable (503) responses.
 //
-//  This operation is vulnerable to exceeding the maximum URL size when making
+// This operation is vulnerable to exceeding the maximum URL size when making
 // a REST request using the HTTP GET method.
 //
-//  This operation does not support conditions using Expected.X.Name, Expected.X.Value,
+// This operation does not support conditions using Expected.X.Name, Expected.X.Value,
 // or Expected.X.Exists.
 //
-// The following limitations are enforced for this operation: 1 MB request size
+// The following limitations are enforced for this operation:
+//    * 1 MB request size
 //
-// 25 item limit per BatchDeleteAttributes operation
+//    * 25 item limit per BatchDeleteAttributes operation
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -113,7 +113,7 @@ const opBatchPutAttributes = "BatchPutAttributes"
 // BatchPutAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the BatchPutAttributes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -145,8 +145,7 @@ func (c *SimpleDB) BatchPutAttributesRequest(input *BatchPutAttributesInput) (re
 
 	output = &BatchPutAttributesOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -179,22 +178,33 @@ func (c *SimpleDB) BatchPutAttributesRequest(input *BatchPutAttributesInput) (re
 // a BatchPutAttributes of {'I', 'b', '4' } with the Replace parameter set to
 // true, the final attributes of the item will be { 'a', '1' } and { 'b', '4'
 // }, replacing the previous values of the 'b' attribute with the new value.
-//
-// You cannot specify an empty string as an item or as an attribute name. The
-// BatchPutAttributes operation succeeds or fails in its entirety. There are
-// no partial puts. This operation is vulnerable to exceeding the maximum URL size when making
-// a REST request using the HTTP GET method. This operation does not support
-// conditions using Expected.X.Name, Expected.X.Value, or Expected.X.Exists.
+//   You cannot specify an empty string as an item or as an attribute name.
+//   The
+//    BatchPutAttributes
+//  operation succeeds or fails in its entirety. There are no partial puts.
+//  This operation is vulnerable to exceeding the maximum URL size when making
+//  a REST request using the HTTP GET method. This operation does not support
+//  conditions using
+//    Expected.X.Name
+// ,
+//    Expected.X.Value
+// , or
+//    Expected.X.Exists
+// .
 // You can execute multiple BatchPutAttributes operations and other operations
 // in parallel. However, large numbers of concurrent BatchPutAttributes calls
 // can result in Service Unavailable (503) responses.
 //
-// The following limitations are enforced for this operation: 256 attribute
-// name-value pairs per item
-// 1 MB request size
-// 1 billion attributes per domain
-// 10 GB of total user data storage per domain
-// 25 item limit per BatchPutAttributes operation
+// The following limitations are enforced for this operation:
+//    * 256 attribute name-value pairs per item
+//
+//    * 1 MB request size
+//
+//    * 1 billion attributes per domain
+//
+//    * 10 GB of total user data storage per domain
+//
+//    * 25 item limit per BatchPutAttributes operation
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -257,7 +267,7 @@ const opCreateDomain = "CreateDomain"
 // CreateDomainRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDomain operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -289,8 +299,7 @@ func (c *SimpleDB) CreateDomainRequest(input *CreateDomainInput) (req *request.R
 
 	output = &CreateDomainOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -299,11 +308,11 @@ func (c *SimpleDB) CreateDomainRequest(input *CreateDomainInput) (req *request.R
 // The CreateDomain operation creates a new domain. The domain name should be
 // unique among the domains associated with the Access Key ID provided in the
 // request. The CreateDomain operation may take 10 or more seconds to complete.
+//   CreateDomain is an idempotent operation; running it multiple times using
+//   the same domain name will not result in an error response.
+// The client can create up to 100 domains per account.
 //
-// CreateDomain is an idempotent operation; running it multiple times using
-// the same domain name will not result in an error response. The client can create up to 100 domains per account.
-//
-// If the client requires additional domains, go to  http://aws.amazon.com/contact-us/simpledb-limit-request/
+// If the client requires additional domains, go to http://aws.amazon.com/contact-us/simpledb-limit-request/
 // (http://aws.amazon.com/contact-us/simpledb-limit-request/).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -349,7 +358,7 @@ const opDeleteAttributes = "DeleteAttributes"
 // DeleteAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteAttributes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -381,8 +390,7 @@ func (c *SimpleDB) DeleteAttributesRequest(input *DeleteAttributesInput) (req *r
 
 	output = &DeleteAttributesOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -390,9 +398,11 @@ func (c *SimpleDB) DeleteAttributesRequest(input *DeleteAttributesInput) (req *r
 //
 // Deletes one or more attributes associated with an item. If all attributes
 // of the item are deleted, the item is deleted.
-//
-// If DeleteAttributes is called without being passed any attributes or values
-// specified, all the attributes for the item are deleted. DeleteAttributes is an idempotent operation; running it multiple times on
+//   If
+//    DeleteAttributes
+//  is called without being passed any attributes or values specified, all the
+//  attributes for the item are deleted.
+// DeleteAttributes is an idempotent operation; running it multiple times on
 // the same item or attribute does not result in an error response.
 //
 // Because Amazon SimpleDB makes multiple copies of item data and uses an eventual
@@ -446,7 +456,7 @@ const opDeleteDomain = "DeleteDomain"
 // DeleteDomainRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDomain operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -478,8 +488,7 @@ func (c *SimpleDB) DeleteDomainRequest(input *DeleteDomainInput) (req *request.R
 
 	output = &DeleteDomainOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -488,9 +497,10 @@ func (c *SimpleDB) DeleteDomainRequest(input *DeleteDomainInput) (req *request.R
 // The DeleteDomain operation deletes a domain. Any items (and their attributes)
 // in the domain are deleted as well. The DeleteDomain operation might take
 // 10 or more seconds to complete.
-//
-// Running DeleteDomain on a domain that does not exist or running the function
-// multiple times using the same domain name will not result in an error response.
+//   Running
+//    DeleteDomain
+//  on a domain that does not exist or running the function multiple times using
+//  the same domain name will not result in an error response.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -529,7 +539,7 @@ const opDomainMetadata = "DomainMetadata"
 // DomainMetadataRequest generates a "aws/request.Request" representing the
 // client's request for the DomainMetadata operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -610,7 +620,7 @@ const opGetAttributes = "GetAttributes"
 // GetAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the GetAttributes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -654,9 +664,8 @@ func (c *SimpleDB) GetAttributesRequest(input *GetAttributesInput) (req *request
 // If the item does not exist on the replica that was accessed for this operation,
 // an empty set is returned. The system does not return an error as it cannot
 // guarantee the item does not exist on other replicas.
-//
-// If GetAttributes is called without being passed any attribute names, all
-// the attributes for the item are returned.
+//   If GetAttributes is called without being passed any attribute names, all
+//   the attributes for the item are returned.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -701,7 +710,7 @@ const opListDomains = "ListDomains"
 // ListDomainsRequest generates a "aws/request.Request" representing the
 // client's request for the ListDomains operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -797,7 +806,7 @@ func (c *SimpleDB) ListDomainsWithContext(ctx aws.Context, input *ListDomainsInp
 //    // Example iterating over at most 3 pages of a ListDomains operation.
 //    pageNum := 0
 //    err := client.ListDomainsPages(params,
-//        func(page *ListDomainsOutput, lastPage bool) bool {
+//        func(page *simpledb.ListDomainsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -841,7 +850,7 @@ const opPutAttributes = "PutAttributes"
 // PutAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the PutAttributes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -873,8 +882,7 @@ func (c *SimpleDB) PutAttributesRequest(input *PutAttributesInput) (req *request
 
 	output = &PutAttributesOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(query.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -898,19 +906,23 @@ func (c *SimpleDB) PutAttributesRequest(input *PutAttributesInput) (req *request
 // using the attributes { 'b', '4' } with the Replace parameter set to true,
 // the final attributes of the item are changed to { 'a', '1' } and { 'b', '4'
 // }, which replaces the previous values of the 'b' attribute with the new value.
-//
-// Using PutAttributes to replace attribute values that do not exist will not
-// result in an error response. You cannot specify an empty string as an attribute name.
+//   Using
+//    PutAttributes
+//  to replace attribute values that do not exist will not result in an error
+//  response.
+// You cannot specify an empty string as an attribute name.
 //
 // Because Amazon SimpleDB makes multiple copies of client data and uses an
 // eventual consistency update model, an immediate GetAttributes or Select operation
 // (read) immediately after a PutAttributes or DeleteAttributes operation (write)
 // might not return the updated data.
 //
-// The following limitations are enforced for this operation: 256 total attribute
-// name-value pairs per item
-// One billion attributes per domain
-// 10 GB of total user data storage per domain
+// The following limitations are enforced for this operation:
+//    * 256 total attribute name-value pairs per item
+//
+//    * One billion attributes per domain
+//
+//    * 10 GB of total user data storage per domain
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -967,7 +979,7 @@ const opSelect = "Select"
 // SelectRequest generates a "aws/request.Request" representing the
 // client's request for the Select operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1090,7 +1102,7 @@ func (c *SimpleDB) SelectWithContext(ctx aws.Context, input *SelectInput, opts .
 //    // Example iterating over at most 3 pages of a Select operation.
 //    pageNum := 0
 //    err := client.SelectPages(params,
-//        func(page *SelectOutput, lastPage bool) bool {
+//        func(page *simpledb.SelectOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -1759,7 +1771,11 @@ type GetAttributesInput struct {
 	AttributeNames []*string `locationNameList:"AttributeName" type:"list" flattened:"true"`
 
 	// Determines whether or not strong consistency should be enforced when data
-	// is read from SimpleDB. If true
+	// is read from SimpleDB. If
+	//    true
+	// , any data previously written to SimpleDB will be returned. Otherwise, results
+	// will be consistent eventually, and the client may not see data that was written
+	// immediately before your read.
 	ConsistentRead *bool `type:"boolean"`
 
 	// The name of the domain in which to perform the operation.
@@ -1931,7 +1947,8 @@ type ListDomainsOutput struct {
 	DomainNames []*string `locationNameList:"DomainName" type:"list" flattened:"true"`
 
 	// An opaque token indicating that there are more domains than the specified
-	// MaxNumberOfDomains
+	//    MaxNumberOfDomains
+	//  still available.
 	NextToken *string `type:"string"`
 }
 
@@ -2067,7 +2084,9 @@ type ReplaceableAttribute struct {
 	Name *string `type:"string" required:"true"`
 
 	// A flag specifying whether or not to replace the attribute/value pair or to
-	// add a new attribute/value pair. The default setting is false
+	// add a new attribute/value pair. The default setting is
+	//    false
+	// .
 	Replace *bool `type:"boolean"`
 
 	// The value of the replaceable attribute.
@@ -2186,10 +2205,16 @@ type SelectInput struct {
 	_ struct{} `type:"structure"`
 
 	// Determines whether or not strong consistency should be enforced when data
-	// is read from SimpleDB. If true
+	// is read from SimpleDB. If
+	//    true
+	// , any data previously written to SimpleDB will be returned. Otherwise, results
+	// will be consistent eventually, and the client may not see data that was written
+	// immediately before your read.
 	ConsistentRead *bool `type:"boolean"`
 
-	// A string informing Amazon SimpleDB where to start the next list of ItemNames
+	// A string informing Amazon SimpleDB where to start the next list of
+	//    ItemNames
+	// .
 	NextToken *string `type:"string"`
 
 	// The expression used to query the domain.
@@ -2245,7 +2270,10 @@ type SelectOutput struct {
 	// A list of items that match the select expression.
 	Items []*Item `locationNameList:"Item" type:"list" flattened:"true"`
 
-	// An opaque token indicating that more items than MaxNumberOfItems
+	// An opaque token indicating that more items than
+	//    MaxNumberOfItems
+	//  were matched, the response size exceeded 1 megabyte, or the execution time
+	//  exceeded 5 seconds.
 	NextToken *string `type:"string"`
 }
 

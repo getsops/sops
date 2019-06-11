@@ -116,6 +116,10 @@ type KinesisAnalyticsAPI interface {
 	ListApplicationsWithContext(aws.Context, *kinesisanalytics.ListApplicationsInput, ...request.Option) (*kinesisanalytics.ListApplicationsOutput, error)
 	ListApplicationsRequest(*kinesisanalytics.ListApplicationsInput) (*request.Request, *kinesisanalytics.ListApplicationsOutput)
 
+	ListTagsForResource(*kinesisanalytics.ListTagsForResourceInput) (*kinesisanalytics.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *kinesisanalytics.ListTagsForResourceInput, ...request.Option) (*kinesisanalytics.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*kinesisanalytics.ListTagsForResourceInput) (*request.Request, *kinesisanalytics.ListTagsForResourceOutput)
+
 	StartApplication(*kinesisanalytics.StartApplicationInput) (*kinesisanalytics.StartApplicationOutput, error)
 	StartApplicationWithContext(aws.Context, *kinesisanalytics.StartApplicationInput, ...request.Option) (*kinesisanalytics.StartApplicationOutput, error)
 	StartApplicationRequest(*kinesisanalytics.StartApplicationInput) (*request.Request, *kinesisanalytics.StartApplicationOutput)
@@ -123,6 +127,14 @@ type KinesisAnalyticsAPI interface {
 	StopApplication(*kinesisanalytics.StopApplicationInput) (*kinesisanalytics.StopApplicationOutput, error)
 	StopApplicationWithContext(aws.Context, *kinesisanalytics.StopApplicationInput, ...request.Option) (*kinesisanalytics.StopApplicationOutput, error)
 	StopApplicationRequest(*kinesisanalytics.StopApplicationInput) (*request.Request, *kinesisanalytics.StopApplicationOutput)
+
+	TagResource(*kinesisanalytics.TagResourceInput) (*kinesisanalytics.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *kinesisanalytics.TagResourceInput, ...request.Option) (*kinesisanalytics.TagResourceOutput, error)
+	TagResourceRequest(*kinesisanalytics.TagResourceInput) (*request.Request, *kinesisanalytics.TagResourceOutput)
+
+	UntagResource(*kinesisanalytics.UntagResourceInput) (*kinesisanalytics.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *kinesisanalytics.UntagResourceInput, ...request.Option) (*kinesisanalytics.UntagResourceOutput, error)
+	UntagResourceRequest(*kinesisanalytics.UntagResourceInput) (*request.Request, *kinesisanalytics.UntagResourceOutput)
 
 	UpdateApplication(*kinesisanalytics.UpdateApplicationInput) (*kinesisanalytics.UpdateApplicationOutput, error)
 	UpdateApplicationWithContext(aws.Context, *kinesisanalytics.UpdateApplicationInput, ...request.Option) (*kinesisanalytics.UpdateApplicationOutput, error)

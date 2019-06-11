@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -39,6 +40,16 @@ func NewTenantAccessClient() TenantAccessClient {
 // apimBaseURL - the management endpoint of the API Management service, for example
 // https://myapimservice.management.azure-api.net.
 func (client TenantAccessClient) Get(ctx context.Context, apimBaseURL string) (result AccessInformationContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TenantAccessClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, apimBaseURL)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.TenantAccessClient", "Get", nil, "Failure preparing request")
@@ -108,6 +119,16 @@ func (client TenantAccessClient) GetResponder(resp *http.Response) (result Acces
 // apimBaseURL - the management endpoint of the API Management service, for example
 // https://myapimservice.management.azure-api.net.
 func (client TenantAccessClient) RegeneratePrimaryKey(ctx context.Context, apimBaseURL string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TenantAccessClient.RegeneratePrimaryKey")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.RegeneratePrimaryKeyPreparer(ctx, apimBaseURL)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.TenantAccessClient", "RegeneratePrimaryKey", nil, "Failure preparing request")
@@ -176,6 +197,16 @@ func (client TenantAccessClient) RegeneratePrimaryKeyResponder(resp *http.Respon
 // apimBaseURL - the management endpoint of the API Management service, for example
 // https://myapimservice.management.azure-api.net.
 func (client TenantAccessClient) RegenerateSecondaryKey(ctx context.Context, apimBaseURL string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TenantAccessClient.RegenerateSecondaryKey")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.RegenerateSecondaryKeyPreparer(ctx, apimBaseURL)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.TenantAccessClient", "RegenerateSecondaryKey", nil, "Failure preparing request")
@@ -247,6 +278,16 @@ func (client TenantAccessClient) RegenerateSecondaryKeyResponder(resp *http.Resp
 // ifMatch - the entity state (Etag) version of the property to update. A value of "*" can be used for If-Match
 // to unconditionally apply the operation.
 func (client TenantAccessClient) Update(ctx context.Context, apimBaseURL string, parameters AccessInformationUpdateParameters, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TenantAccessClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, apimBaseURL, parameters, ifMatch)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.TenantAccessClient", "Update", nil, "Failure preparing request")

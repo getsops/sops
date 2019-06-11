@@ -15,10 +15,10 @@
 package logadmin_test
 
 import (
+	"context"
 	"fmt"
 
 	"cloud.google.com/go/logging/logadmin"
-	"golang.org/x/net/context"
 )
 
 func ExampleNewClient() {

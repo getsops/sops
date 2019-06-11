@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewApplicationTypesClientWithBaseURI(baseURI string, subscriptionID string)
 // applicationTypeName - the name of the application type name resource.
 // parameters - the application type name resource.
 func (client ApplicationTypesClient) Create(ctx context.Context, resourceGroupName string, clusterName string, applicationTypeName string, parameters ApplicationTypeResource) (result ApplicationTypeResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationTypesClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreatePreparer(ctx, resourceGroupName, clusterName, applicationTypeName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabric.ApplicationTypesClient", "Create", nil, "Failure preparing request")
@@ -117,6 +128,16 @@ func (client ApplicationTypesClient) CreateResponder(resp *http.Response) (resul
 // clusterName - the name of the cluster resource.
 // applicationTypeName - the name of the application type name resource.
 func (client ApplicationTypesClient) Delete(ctx context.Context, resourceGroupName string, clusterName string, applicationTypeName string) (result ApplicationTypesDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationTypesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, clusterName, applicationTypeName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabric.ApplicationTypesClient", "Delete", nil, "Failure preparing request")
@@ -163,10 +184,6 @@ func (client ApplicationTypesClient) DeleteSender(req *http.Request) (future App
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -190,6 +207,16 @@ func (client ApplicationTypesClient) DeleteResponder(resp *http.Response) (resul
 // clusterName - the name of the cluster resource.
 // applicationTypeName - the name of the application type name resource.
 func (client ApplicationTypesClient) Get(ctx context.Context, resourceGroupName string, clusterName string, applicationTypeName string) (result ApplicationTypeResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationTypesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, clusterName, applicationTypeName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabric.ApplicationTypesClient", "Get", nil, "Failure preparing request")
@@ -259,6 +286,16 @@ func (client ApplicationTypesClient) GetResponder(resp *http.Response) (result A
 // resourceGroupName - the name of the resource group.
 // clusterName - the name of the cluster resource.
 func (client ApplicationTypesClient) List(ctx context.Context, resourceGroupName string, clusterName string) (result ApplicationTypeResourceList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationTypesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, resourceGroupName, clusterName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabric.ApplicationTypesClient", "List", nil, "Failure preparing request")

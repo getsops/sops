@@ -828,7 +828,7 @@
           "locationName" : "masterId"
         }
       },
-      "required" : [ "DetectorId" ]
+      "required" : [ "DetectorId", "MasterId", "InvitationId" ]
     },
     "AcceptInvitationResponse" : {
       "type" : "structure",
@@ -925,7 +925,7 @@
           "locationName" : "findingIds"
         }
       },
-      "required" : [ "DetectorId" ]
+      "required" : [ "DetectorId", "FindingIds" ]
     },
     "ArchiveFindingsResponse" : {
       "type" : "structure",
@@ -1033,11 +1033,21 @@
     "CreateDetectorRequest" : {
       "type" : "structure",
       "members" : {
+        "ClientToken" : {
+          "shape" : "__stringMin0Max64",
+          "locationName" : "clientToken",
+          "idempotencyToken" : true
+        },
         "Enable" : {
           "shape" : "Enable",
           "locationName" : "enable"
+        },
+        "FindingPublishingFrequency" : {
+          "shape" : "FindingPublishingFrequency",
+          "locationName" : "findingPublishingFrequency"
         }
-      }
+      },
+      "required" : [ "Enable" ]
     },
     "CreateDetectorResponse" : {
       "type" : "structure",
@@ -1082,7 +1092,7 @@
           "locationName" : "rank"
         }
       },
-      "required" : [ "DetectorId" ]
+      "required" : [ "DetectorId", "FindingCriteria", "Name" ]
     },
     "CreateFilterResponse" : {
       "type" : "structure",
@@ -1099,6 +1109,11 @@
         "Activate" : {
           "shape" : "Activate",
           "locationName" : "activate"
+        },
+        "ClientToken" : {
+          "shape" : "__stringMin0Max64",
+          "locationName" : "clientToken",
+          "idempotencyToken" : true
         },
         "DetectorId" : {
           "shape" : "__string",
@@ -1118,7 +1133,7 @@
           "locationName" : "name"
         }
       },
-      "required" : [ "DetectorId" ]
+      "required" : [ "DetectorId", "Format", "Activate", "Location", "Name" ]
     },
     "CreateIPSetResponse" : {
       "type" : "structure",
@@ -1142,7 +1157,7 @@
           "locationName" : "detectorId"
         }
       },
-      "required" : [ "DetectorId" ]
+      "required" : [ "DetectorId", "AccountDetails" ]
     },
     "CreateMembersResponse" : {
       "type" : "structure",
@@ -1179,6 +1194,11 @@
           "shape" : "Activate",
           "locationName" : "activate"
         },
+        "ClientToken" : {
+          "shape" : "__stringMin0Max64",
+          "locationName" : "clientToken",
+          "idempotencyToken" : true
+        },
         "DetectorId" : {
           "shape" : "__string",
           "location" : "uri",
@@ -1197,7 +1217,7 @@
           "locationName" : "name"
         }
       },
-      "required" : [ "DetectorId" ]
+      "required" : [ "DetectorId", "Format", "Activate", "Location", "Name" ]
     },
     "CreateThreatIntelSetResponse" : {
       "type" : "structure",
@@ -1218,7 +1238,8 @@
           "shape" : "AccountIds",
           "locationName" : "accountIds"
         }
-      }
+      },
+      "required" : [ "AccountIds" ]
     },
     "DeclineInvitationsResponse" : {
       "type" : "structure",
@@ -1291,7 +1312,8 @@
           "shape" : "AccountIds",
           "locationName" : "accountIds"
         }
-      }
+      },
+      "required" : [ "AccountIds" ]
     },
     "DeleteInvitationsResponse" : {
       "type" : "structure",
@@ -1315,7 +1337,7 @@
           "locationName" : "detectorId"
         }
       },
-      "required" : [ "DetectorId" ]
+      "required" : [ "DetectorId", "AccountIds" ]
     },
     "DeleteMembersResponse" : {
       "type" : "structure",
@@ -1387,7 +1409,7 @@
           "locationName" : "detectorId"
         }
       },
-      "required" : [ "DetectorId" ]
+      "required" : [ "DetectorId", "AccountIds" ]
     },
     "DisassociateMembersResponse" : {
       "type" : "structure",
@@ -1546,6 +1568,10 @@
         "shape" : "FindingId"
       }
     },
+    "FindingPublishingFrequency" : {
+      "type" : "string",
+      "enum" : [ "FIFTEEN_MINUTES", "ONE_HOUR", "SIX_HOURS" ]
+    },
     "FindingStatisticType" : {
       "type" : "string",
       "enum" : [ "COUNT_BY_SEVERITY" ]
@@ -1610,6 +1636,10 @@
         "CreatedAt" : {
           "shape" : "CreatedAt",
           "locationName" : "createdAt"
+        },
+        "FindingPublishingFrequency" : {
+          "shape" : "FindingPublishingFrequency",
+          "locationName" : "findingPublishingFrequency"
         },
         "ServiceRole" : {
           "shape" : "ServiceRole",
@@ -1683,7 +1713,7 @@
           "locationName" : "sortCriteria"
         }
       },
-      "required" : [ "DetectorId" ]
+      "required" : [ "DetectorId", "FindingIds" ]
     },
     "GetFindingsResponse" : {
       "type" : "structure",
@@ -1711,7 +1741,7 @@
           "locationName" : "findingStatisticTypes"
         }
       },
-      "required" : [ "DetectorId" ]
+      "required" : [ "DetectorId", "FindingStatisticTypes" ]
     },
     "GetFindingsStatisticsResponse" : {
       "type" : "structure",
@@ -1805,7 +1835,7 @@
           "locationName" : "detectorId"
         }
       },
-      "required" : [ "DetectorId" ]
+      "required" : [ "DetectorId", "AccountIds" ]
     },
     "GetMembersResponse" : {
       "type" : "structure",
@@ -1991,7 +2021,7 @@
           "locationName" : "message"
         }
       },
-      "required" : [ "DetectorId" ]
+      "required" : [ "DetectorId", "AccountIds" ]
     },
     "InviteMembersResponse" : {
       "type" : "structure",
@@ -2690,7 +2720,7 @@
           "locationName" : "detectorId"
         }
       },
-      "required" : [ "DetectorId" ]
+      "required" : [ "DetectorId", "AccountIds" ]
     },
     "StartMonitoringMembersResponse" : {
       "type" : "structure",
@@ -2714,7 +2744,7 @@
           "locationName" : "detectorId"
         }
       },
-      "required" : [ "DetectorId" ]
+      "required" : [ "DetectorId", "AccountIds" ]
     },
     "StopMonitoringMembersResponse" : {
       "type" : "structure",
@@ -2774,7 +2804,7 @@
           "locationName" : "findingIds"
         }
       },
-      "required" : [ "DetectorId" ]
+      "required" : [ "DetectorId", "FindingIds" ]
     },
     "UnarchiveFindingsResponse" : {
       "type" : "structure",
@@ -2811,6 +2841,10 @@
         "Enable" : {
           "shape" : "Enable",
           "locationName" : "enable"
+        },
+        "FindingPublishingFrequency" : {
+          "shape" : "FindingPublishingFrequency",
+          "locationName" : "findingPublishingFrequency"
         }
       },
       "required" : [ "DetectorId" ]
@@ -2881,7 +2915,7 @@
           "locationName" : "findingIds"
         }
       },
-      "required" : [ "DetectorId" ]
+      "required" : [ "DetectorId", "Feedback", "FindingIds" ]
     },
     "UpdateFindingsFeedbackResponse" : {
       "type" : "structure",

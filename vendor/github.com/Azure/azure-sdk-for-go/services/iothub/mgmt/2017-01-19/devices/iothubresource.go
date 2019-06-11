@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewIotHubResourceClientWithBaseURI(baseURI string, subscriptionID string) I
 // operationInputs - set the name parameter in the OperationInputs structure to the name of the IoT hub to
 // check.
 func (client IotHubResourceClient) CheckNameAvailability(ctx context.Context, operationInputs OperationInputs) (result IotHubNameAvailabilityInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.CheckNameAvailability")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: operationInputs,
 			Constraints: []validation.Constraint{{Target: "operationInputs.Name", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -120,6 +131,16 @@ func (client IotHubResourceClient) CheckNameAvailabilityResponder(resp *http.Res
 // eventHubEndpointName - the name of the Event Hub-compatible endpoint in the IoT hub.
 // name - the name of the consumer group to add.
 func (client IotHubResourceClient) CreateEventHubConsumerGroup(ctx context.Context, resourceGroupName string, resourceName string, eventHubEndpointName string, name string) (result EventHubConsumerGroupInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.CreateEventHubConsumerGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateEventHubConsumerGroupPreparer(ctx, resourceGroupName, resourceName, eventHubEndpointName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "CreateEventHubConsumerGroup", nil, "Failure preparing request")
@@ -192,6 +213,16 @@ func (client IotHubResourceClient) CreateEventHubConsumerGroupResponder(resp *ht
 // resourceName - the name of the IoT hub to create or update.
 // iotHubDescription - the IoT hub metadata and security metadata.
 func (client IotHubResourceClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, resourceName string, iotHubDescription IotHubDescription) (result IotHubResourceCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: iotHubDescription,
 			Constraints: []validation.Constraint{{Target: "iotHubDescription.Subscriptionid", Name: validation.Null, Rule: true, Chain: nil},
@@ -272,10 +303,6 @@ func (client IotHubResourceClient) CreateOrUpdateSender(req *http.Request) (futu
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -298,6 +325,16 @@ func (client IotHubResourceClient) CreateOrUpdateResponder(resp *http.Response) 
 // resourceGroupName - the name of the resource group that contains the IoT hub.
 // resourceName - the name of the IoT hub to delete.
 func (client IotHubResourceClient) Delete(ctx context.Context, resourceGroupName string, resourceName string) (result IotHubResourceDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "Delete", nil, "Failure preparing request")
@@ -343,10 +380,6 @@ func (client IotHubResourceClient) DeleteSender(req *http.Request) (future IotHu
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent, http.StatusNotFound))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -371,6 +404,16 @@ func (client IotHubResourceClient) DeleteResponder(resp *http.Response) (result 
 // eventHubEndpointName - the name of the Event Hub-compatible endpoint in the IoT hub.
 // name - the name of the consumer group to delete.
 func (client IotHubResourceClient) DeleteEventHubConsumerGroup(ctx context.Context, resourceGroupName string, resourceName string, eventHubEndpointName string, name string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.DeleteEventHubConsumerGroup")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeleteEventHubConsumerGroupPreparer(ctx, resourceGroupName, resourceName, eventHubEndpointName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "DeleteEventHubConsumerGroup", nil, "Failure preparing request")
@@ -442,6 +485,16 @@ func (client IotHubResourceClient) DeleteEventHubConsumerGroupResponder(resp *ht
 // resourceName - the name of the IoT hub.
 // exportDevicesParameters - the parameters that specify the export devices operation.
 func (client IotHubResourceClient) ExportDevices(ctx context.Context, resourceGroupName string, resourceName string, exportDevicesParameters ExportDevicesRequest) (result JobResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.ExportDevices")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: exportDevicesParameters,
 			Constraints: []validation.Constraint{{Target: "exportDevicesParameters.ExportBlobContainerURI", Name: validation.Null, Rule: true, Chain: nil},
@@ -518,6 +571,16 @@ func (client IotHubResourceClient) ExportDevicesResponder(resp *http.Response) (
 // resourceGroupName - the name of the resource group that contains the IoT hub.
 // resourceName - the name of the IoT hub.
 func (client IotHubResourceClient) Get(ctx context.Context, resourceGroupName string, resourceName string) (result IotHubDescription, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "Get", nil, "Failure preparing request")
@@ -587,6 +650,16 @@ func (client IotHubResourceClient) GetResponder(resp *http.Response) (result Iot
 // eventHubEndpointName - the name of the Event Hub-compatible endpoint in the IoT hub.
 // name - the name of the consumer group to retrieve.
 func (client IotHubResourceClient) GetEventHubConsumerGroup(ctx context.Context, resourceGroupName string, resourceName string, eventHubEndpointName string, name string) (result EventHubConsumerGroupInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.GetEventHubConsumerGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetEventHubConsumerGroupPreparer(ctx, resourceGroupName, resourceName, eventHubEndpointName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "GetEventHubConsumerGroup", nil, "Failure preparing request")
@@ -658,6 +731,16 @@ func (client IotHubResourceClient) GetEventHubConsumerGroupResponder(resp *http.
 // resourceName - the name of the IoT hub.
 // jobID - the job identifier.
 func (client IotHubResourceClient) GetJob(ctx context.Context, resourceGroupName string, resourceName string, jobID string) (result JobResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.GetJob")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetJobPreparer(ctx, resourceGroupName, resourceName, jobID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "GetJob", nil, "Failure preparing request")
@@ -728,6 +811,16 @@ func (client IotHubResourceClient) GetJobResponder(resp *http.Response) (result 
 // resourceName - the name of the IoT hub.
 // keyName - the name of the shared access policy.
 func (client IotHubResourceClient) GetKeysForKeyName(ctx context.Context, resourceGroupName string, resourceName string, keyName string) (result SharedAccessSignatureAuthorizationRule, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.GetKeysForKeyName")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetKeysForKeyNamePreparer(ctx, resourceGroupName, resourceName, keyName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "GetKeysForKeyName", nil, "Failure preparing request")
@@ -796,6 +889,16 @@ func (client IotHubResourceClient) GetKeysForKeyNameResponder(resp *http.Respons
 // resourceGroupName - the name of the resource group that contains the IoT hub.
 // resourceName - the name of the IoT hub.
 func (client IotHubResourceClient) GetQuotaMetrics(ctx context.Context, resourceGroupName string, resourceName string) (result IotHubQuotaMetricInfoListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.GetQuotaMetrics")
+		defer func() {
+			sc := -1
+			if result.ihqmilr.Response.Response != nil {
+				sc = result.ihqmilr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.getQuotaMetricsNextResults
 	req, err := client.GetQuotaMetricsPreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
@@ -860,8 +963,8 @@ func (client IotHubResourceClient) GetQuotaMetricsResponder(resp *http.Response)
 }
 
 // getQuotaMetricsNextResults retrieves the next set of results, if any.
-func (client IotHubResourceClient) getQuotaMetricsNextResults(lastResults IotHubQuotaMetricInfoListResult) (result IotHubQuotaMetricInfoListResult, err error) {
-	req, err := lastResults.iotHubQuotaMetricInfoListResultPreparer()
+func (client IotHubResourceClient) getQuotaMetricsNextResults(ctx context.Context, lastResults IotHubQuotaMetricInfoListResult) (result IotHubQuotaMetricInfoListResult, err error) {
+	req, err := lastResults.iotHubQuotaMetricInfoListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "getQuotaMetricsNextResults", nil, "Failure preparing next results request")
 	}
@@ -882,6 +985,16 @@ func (client IotHubResourceClient) getQuotaMetricsNextResults(lastResults IotHub
 
 // GetQuotaMetricsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client IotHubResourceClient) GetQuotaMetricsComplete(ctx context.Context, resourceGroupName string, resourceName string) (result IotHubQuotaMetricInfoListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.GetQuotaMetrics")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.GetQuotaMetrics(ctx, resourceGroupName, resourceName)
 	return
 }
@@ -891,6 +1004,16 @@ func (client IotHubResourceClient) GetQuotaMetricsComplete(ctx context.Context, 
 // resourceGroupName - the name of the resource group that contains the IoT hub.
 // resourceName - the name of the IoT hub.
 func (client IotHubResourceClient) GetStats(ctx context.Context, resourceGroupName string, resourceName string) (result RegistryStatistics, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.GetStats")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetStatsPreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "GetStats", nil, "Failure preparing request")
@@ -958,6 +1081,16 @@ func (client IotHubResourceClient) GetStatsResponder(resp *http.Response) (resul
 // resourceGroupName - the name of the resource group that contains the IoT hub.
 // resourceName - the name of the IoT hub.
 func (client IotHubResourceClient) GetValidSkus(ctx context.Context, resourceGroupName string, resourceName string) (result IotHubSkuDescriptionListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.GetValidSkus")
+		defer func() {
+			sc := -1
+			if result.ihsdlr.Response.Response != nil {
+				sc = result.ihsdlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.getValidSkusNextResults
 	req, err := client.GetValidSkusPreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
@@ -1022,8 +1155,8 @@ func (client IotHubResourceClient) GetValidSkusResponder(resp *http.Response) (r
 }
 
 // getValidSkusNextResults retrieves the next set of results, if any.
-func (client IotHubResourceClient) getValidSkusNextResults(lastResults IotHubSkuDescriptionListResult) (result IotHubSkuDescriptionListResult, err error) {
-	req, err := lastResults.iotHubSkuDescriptionListResultPreparer()
+func (client IotHubResourceClient) getValidSkusNextResults(ctx context.Context, lastResults IotHubSkuDescriptionListResult) (result IotHubSkuDescriptionListResult, err error) {
+	req, err := lastResults.iotHubSkuDescriptionListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "getValidSkusNextResults", nil, "Failure preparing next results request")
 	}
@@ -1044,6 +1177,16 @@ func (client IotHubResourceClient) getValidSkusNextResults(lastResults IotHubSku
 
 // GetValidSkusComplete enumerates all values, automatically crossing page boundaries as required.
 func (client IotHubResourceClient) GetValidSkusComplete(ctx context.Context, resourceGroupName string, resourceName string) (result IotHubSkuDescriptionListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.GetValidSkus")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.GetValidSkus(ctx, resourceGroupName, resourceName)
 	return
 }
@@ -1056,6 +1199,16 @@ func (client IotHubResourceClient) GetValidSkusComplete(ctx context.Context, res
 // resourceName - the name of the IoT hub.
 // importDevicesParameters - the parameters that specify the import devices operation.
 func (client IotHubResourceClient) ImportDevices(ctx context.Context, resourceGroupName string, resourceName string, importDevicesParameters ImportDevicesRequest) (result JobResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.ImportDevices")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: importDevicesParameters,
 			Constraints: []validation.Constraint{{Target: "importDevicesParameters.InputBlobContainerURI", Name: validation.Null, Rule: true, Chain: nil},
@@ -1131,6 +1284,16 @@ func (client IotHubResourceClient) ImportDevicesResponder(resp *http.Response) (
 // Parameters:
 // resourceGroupName - the name of the resource group that contains the IoT hubs.
 func (client IotHubResourceClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result IotHubDescriptionListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.ihdlr.Response.Response != nil {
+				sc = result.ihdlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -1194,8 +1357,8 @@ func (client IotHubResourceClient) ListByResourceGroupResponder(resp *http.Respo
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client IotHubResourceClient) listByResourceGroupNextResults(lastResults IotHubDescriptionListResult) (result IotHubDescriptionListResult, err error) {
-	req, err := lastResults.iotHubDescriptionListResultPreparer()
+func (client IotHubResourceClient) listByResourceGroupNextResults(ctx context.Context, lastResults IotHubDescriptionListResult) (result IotHubDescriptionListResult, err error) {
+	req, err := lastResults.iotHubDescriptionListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -1216,12 +1379,32 @@ func (client IotHubResourceClient) listByResourceGroupNextResults(lastResults Io
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client IotHubResourceClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result IotHubDescriptionListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
 
 // ListBySubscription get all the IoT hubs in a subscription.
 func (client IotHubResourceClient) ListBySubscription(ctx context.Context) (result IotHubDescriptionListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.ihdlr.Response.Response != nil {
+				sc = result.ihdlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listBySubscriptionNextResults
 	req, err := client.ListBySubscriptionPreparer(ctx)
 	if err != nil {
@@ -1284,8 +1467,8 @@ func (client IotHubResourceClient) ListBySubscriptionResponder(resp *http.Respon
 }
 
 // listBySubscriptionNextResults retrieves the next set of results, if any.
-func (client IotHubResourceClient) listBySubscriptionNextResults(lastResults IotHubDescriptionListResult) (result IotHubDescriptionListResult, err error) {
-	req, err := lastResults.iotHubDescriptionListResultPreparer()
+func (client IotHubResourceClient) listBySubscriptionNextResults(ctx context.Context, lastResults IotHubDescriptionListResult) (result IotHubDescriptionListResult, err error) {
+	req, err := lastResults.iotHubDescriptionListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "listBySubscriptionNextResults", nil, "Failure preparing next results request")
 	}
@@ -1306,6 +1489,16 @@ func (client IotHubResourceClient) listBySubscriptionNextResults(lastResults Iot
 
 // ListBySubscriptionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client IotHubResourceClient) ListBySubscriptionComplete(ctx context.Context) (result IotHubDescriptionListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListBySubscription(ctx)
 	return
 }
@@ -1317,6 +1510,16 @@ func (client IotHubResourceClient) ListBySubscriptionComplete(ctx context.Contex
 // resourceName - the name of the IoT hub.
 // eventHubEndpointName - the name of the Event Hub-compatible endpoint.
 func (client IotHubResourceClient) ListEventHubConsumerGroups(ctx context.Context, resourceGroupName string, resourceName string, eventHubEndpointName string) (result EventHubConsumerGroupsListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.ListEventHubConsumerGroups")
+		defer func() {
+			sc := -1
+			if result.ehcglr.Response.Response != nil {
+				sc = result.ehcglr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listEventHubConsumerGroupsNextResults
 	req, err := client.ListEventHubConsumerGroupsPreparer(ctx, resourceGroupName, resourceName, eventHubEndpointName)
 	if err != nil {
@@ -1382,8 +1585,8 @@ func (client IotHubResourceClient) ListEventHubConsumerGroupsResponder(resp *htt
 }
 
 // listEventHubConsumerGroupsNextResults retrieves the next set of results, if any.
-func (client IotHubResourceClient) listEventHubConsumerGroupsNextResults(lastResults EventHubConsumerGroupsListResult) (result EventHubConsumerGroupsListResult, err error) {
-	req, err := lastResults.eventHubConsumerGroupsListResultPreparer()
+func (client IotHubResourceClient) listEventHubConsumerGroupsNextResults(ctx context.Context, lastResults EventHubConsumerGroupsListResult) (result EventHubConsumerGroupsListResult, err error) {
+	req, err := lastResults.eventHubConsumerGroupsListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "listEventHubConsumerGroupsNextResults", nil, "Failure preparing next results request")
 	}
@@ -1404,6 +1607,16 @@ func (client IotHubResourceClient) listEventHubConsumerGroupsNextResults(lastRes
 
 // ListEventHubConsumerGroupsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client IotHubResourceClient) ListEventHubConsumerGroupsComplete(ctx context.Context, resourceGroupName string, resourceName string, eventHubEndpointName string) (result EventHubConsumerGroupsListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.ListEventHubConsumerGroups")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListEventHubConsumerGroups(ctx, resourceGroupName, resourceName, eventHubEndpointName)
 	return
 }
@@ -1414,6 +1627,16 @@ func (client IotHubResourceClient) ListEventHubConsumerGroupsComplete(ctx contex
 // resourceGroupName - the name of the resource group that contains the IoT hub.
 // resourceName - the name of the IoT hub.
 func (client IotHubResourceClient) ListJobs(ctx context.Context, resourceGroupName string, resourceName string) (result JobResponseListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.ListJobs")
+		defer func() {
+			sc := -1
+			if result.jrlr.Response.Response != nil {
+				sc = result.jrlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listJobsNextResults
 	req, err := client.ListJobsPreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
@@ -1478,8 +1701,8 @@ func (client IotHubResourceClient) ListJobsResponder(resp *http.Response) (resul
 }
 
 // listJobsNextResults retrieves the next set of results, if any.
-func (client IotHubResourceClient) listJobsNextResults(lastResults JobResponseListResult) (result JobResponseListResult, err error) {
-	req, err := lastResults.jobResponseListResultPreparer()
+func (client IotHubResourceClient) listJobsNextResults(ctx context.Context, lastResults JobResponseListResult) (result JobResponseListResult, err error) {
+	req, err := lastResults.jobResponseListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "listJobsNextResults", nil, "Failure preparing next results request")
 	}
@@ -1500,6 +1723,16 @@ func (client IotHubResourceClient) listJobsNextResults(lastResults JobResponseLi
 
 // ListJobsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client IotHubResourceClient) ListJobsComplete(ctx context.Context, resourceGroupName string, resourceName string) (result JobResponseListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.ListJobs")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListJobs(ctx, resourceGroupName, resourceName)
 	return
 }
@@ -1510,6 +1743,16 @@ func (client IotHubResourceClient) ListJobsComplete(ctx context.Context, resourc
 // resourceGroupName - the name of the resource group that contains the IoT hub.
 // resourceName - the name of the IoT hub.
 func (client IotHubResourceClient) ListKeys(ctx context.Context, resourceGroupName string, resourceName string) (result SharedAccessSignatureAuthorizationRuleListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.ListKeys")
+		defer func() {
+			sc := -1
+			if result.sasarlr.Response.Response != nil {
+				sc = result.sasarlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listKeysNextResults
 	req, err := client.ListKeysPreparer(ctx, resourceGroupName, resourceName)
 	if err != nil {
@@ -1574,8 +1817,8 @@ func (client IotHubResourceClient) ListKeysResponder(resp *http.Response) (resul
 }
 
 // listKeysNextResults retrieves the next set of results, if any.
-func (client IotHubResourceClient) listKeysNextResults(lastResults SharedAccessSignatureAuthorizationRuleListResult) (result SharedAccessSignatureAuthorizationRuleListResult, err error) {
-	req, err := lastResults.sharedAccessSignatureAuthorizationRuleListResultPreparer()
+func (client IotHubResourceClient) listKeysNextResults(ctx context.Context, lastResults SharedAccessSignatureAuthorizationRuleListResult) (result SharedAccessSignatureAuthorizationRuleListResult, err error) {
+	req, err := lastResults.sharedAccessSignatureAuthorizationRuleListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "devices.IotHubResourceClient", "listKeysNextResults", nil, "Failure preparing next results request")
 	}
@@ -1596,6 +1839,16 @@ func (client IotHubResourceClient) listKeysNextResults(lastResults SharedAccessS
 
 // ListKeysComplete enumerates all values, automatically crossing page boundaries as required.
 func (client IotHubResourceClient) ListKeysComplete(ctx context.Context, resourceGroupName string, resourceName string) (result SharedAccessSignatureAuthorizationRuleListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/IotHubResourceClient.ListKeys")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListKeys(ctx, resourceGroupName, resourceName)
 	return
 }

@@ -475,7 +475,9 @@
         "serialized": {
           "body": "{\"Config\": {\"A\": \"one\", \"B\": \"two\"}}",
           "uri": "/2014-01-01/jobsByPipeline/foo?Ascending=true&PageToken=bar",
-          "headers": {}
+          "headers": {
+            "Content-Type": "application/json"
+          }
         }
       }
     ]
@@ -556,7 +558,8 @@
           "body": "{\"Config\": {\"A\": \"one\", \"B\": \"two\"}}",
           "uri": "/2014-01-01/jobsByPipeline/foo?Ascending=true&PageToken=bar",
           "headers": {
-            "x-amz-checksum": "12345"
+            "x-amz-checksum": "12345",
+            "Content-Type": "application/json"
           }
         }
       }
@@ -672,7 +675,10 @@
         },
         "serialized": {
           "body": "{\"Bar\": \"QmxvYiBwYXJhbQ==\"}",
-          "uri": "/2014-01-01/foo_name"
+          "uri": "/2014-01-01/foo_name",
+          "headers": {
+            "Content-Type": "application/json"
+          }
         }
       }
     ]
@@ -789,7 +795,10 @@
         "serialized": {
           "method": "POST",
           "body": "{\"baz\": \"bar\"}",
-          "uri": "/"
+          "uri": "/",
+          "headers": {
+            "Content-Type": "application/json"
+          }
         }
       },
       {
@@ -939,7 +948,9 @@
         },
         "serialized": {
           "uri": "/path" ,
-          "headers": {},
+          "headers": {
+            "Content-Type": "application/json"
+          },
           "body": "{\"RecursiveStruct\": {\"NoRecurse\": \"foo\"}}"
         }
       },
@@ -963,7 +974,9 @@
         },
         "serialized": {
           "uri": "/path",
-          "headers": {},
+          "headers": {
+            "Content-Type": "application/json"
+          },
           "body": "{\"RecursiveStruct\": {\"RecursiveStruct\": {\"NoRecurse\": \"foo\"}}}"
         }
       },
@@ -991,7 +1004,9 @@
         },
         "serialized": {
           "uri": "/path",
-          "headers": {},
+          "headers": {
+            "Content-Type": "application/json"
+          },
           "body": "{\"RecursiveStruct\": {\"RecursiveStruct\": {\"RecursiveStruct\": {\"RecursiveStruct\": {\"NoRecurse\": \"foo\"}}}}}"
         }
       },
@@ -1020,7 +1035,9 @@
         },
         "serialized": {
           "uri": "/path",
-          "headers": {},
+          "headers": {
+            "Content-Type": "application/json"
+          },
           "body": "{\"RecursiveStruct\": {\"RecursiveList\": [{\"NoRecurse\": \"foo\"}, {\"NoRecurse\": \"bar\"}]}}"
         }
       },
@@ -1051,7 +1068,9 @@
         },
         "serialized": {
           "uri": "/path",
-          "headers": {},
+          "headers": {
+            "Content-Type": "application/json"
+          },
           "body": "{\"RecursiveStruct\": {\"RecursiveList\": [{\"NoRecurse\": \"foo\"}, {\"RecursiveStruct\": {\"NoRecurse\": \"bar\"}}]}}"
         }
       },
@@ -1080,7 +1099,9 @@
         },
         "serialized": {
           "uri": "/path",
-          "headers": {},
+          "headers": {
+            "Content-Type": "application/json"
+          },
           "body": "{\"RecursiveStruct\": {\"RecursiveMap\": {\"foo\": {\"NoRecurse\": \"foo\"}, \"bar\": {\"NoRecurse\": \"bar\"}}}}"
         }
       }
@@ -1180,7 +1201,8 @@
           "headers": {
             "x-amz-timearg": "Sun, 25 Jan 2015 08:00:00 GMT",
             "x-amz-timecustom-header": "1422172800",
-            "x-amz-timeformat-header": "1422172800"
+            "x-amz-timeformat-header": "1422172800",
+            "Content-Type": "application/json"
           },
           "body": "{\"TimeArg\": 1422172800, \"TimeCustom\": \"2015-01-25T08:00:00Z\", \"TimeFormat\": \"Sun, 25 Jan 2015 08:00:00 GMT\"}"
         }
@@ -1224,7 +1246,9 @@
         },
         "serialized": {
           "uri": "/path",
-          "headers": {},
+          "headers": {
+            "Content-Type": "application/json"
+          },
           "body": "{\"timestamp_location\": 1422172800}"
         }
       }
@@ -1310,7 +1334,9 @@
         },
         "serialized": {
           "uri": "/path",
-          "headers": {},
+          "headers": {
+            "Content-Type": "application/json"
+          },
           "body": "{\"Token\": \"abc123\"}"
         }
       },
@@ -1329,7 +1355,9 @@
         },
         "serialized": {
           "uri": "/path",
-          "headers": {},
+          "headers": {
+            "Content-Type": "application/json"
+          },
           "body": "{\"Token\": \"00000000-0000-4000-8000-000000000000\"}"
         }
       }
@@ -1406,7 +1434,10 @@
         },
         "serialized": {
           "uri": "/?Bar=%7B%22Foo%22%3A%22Bar%22%7D",
-          "headers": {"X-Amz-Foo": "eyJGb28iOiJCYXIifQ=="},
+          "headers": {
+            "X-Amz-Foo": "eyJGb28iOiJCYXIifQ==",
+            "Content-Type": "application/json"
+          },
           "body": "{\"BodyField\":\"{\\\"Foo\\\":\\\"Bar\\\"}\"}"
         }
       },
@@ -1427,7 +1458,9 @@
         },
         "serialized": {
           "uri": "/",
-          "headers": {},
+          "headers": {
+            "Content-Type": "application/json"
+          },
           "body": "{\"BodyListField\":[\"{\\\"Foo\\\":\\\"Bar\\\"}\"]}"
         }
       },
@@ -1515,11 +1548,14 @@
           "FooEnum": "foo",
           "QueryFooEnum": "bar",
           "ListEnums": ["foo", "", "bar"],
-          "QueryListEnums": ["0", "", "1"]
+          "QueryListEnums": ["0", "1", ""]
         },
         "serialized": {
           "uri": "/path?Enum=bar&List=0&List=1&List=",
-          "headers": {"x-amz-enum": "baz"},
+          "headers": {
+            "x-amz-enum": "baz",
+            "Content-Type": "application/json"
+          },
           "body": "{\"FooEnum\": \"foo\", \"ListEnums\": [\"foo\", \"\", \"bar\"]}"
         }
       },
@@ -1539,6 +1575,161 @@
         "serialized": {
           "uri": "/path",
           "headers": {}
+        }
+      }
+    ]
+  },
+  {
+    "description": "Endpoint host trait",
+    "metadata": {
+      "protocol": "rest-json",
+      "apiVersion": "2014-01-01"
+    },
+    "clientEndpoint": "https://service.region.amazonaws.com",
+    "shapes": {
+      "StaticInputShape": {
+        "type": "structure",
+        "members": {
+          "Name": {
+            "shape": "StringType"
+          }
+        }
+      },
+      "MemberRefInputShape": {
+        "type": "structure",
+        "members": {
+          "Name": {
+            "shape": "StringType",
+            "hostLabel": true
+          }
+        }
+      },
+      "StringType": {
+        "type": "string"
+      }
+    },
+    "cases": [
+      {
+        "given": {
+          "name": "StaticOp",
+          "input": {
+            "shape": "StaticInputShape"
+          },
+          "http": {
+            "method": "POST",
+            "requestUri": "/path"
+          },
+          "endpoint":{
+              "hostPrefix": "data-"
+          }
+        },
+        "params": {
+          "Name": "myname"
+        },
+        "serialized": {
+          "uri": "/path",
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "body": "{\"Name\": \"myname\"}",
+          "host": "data-service.region.amazonaws.com"
+        }
+      },
+      {
+        "given": {
+          "name": "MemberRefOp",
+          "input": {
+            "shape": "MemberRefInputShape"
+          },
+          "http": {
+            "method": "POST",
+            "requestUri": "/path"
+          },
+          "endpoint":{
+              "hostPrefix": "foo-{Name}."
+          }
+        },
+        "params": {
+          "Name": "myname"
+        },
+        "serialized": {
+          "uri": "/path",
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "body": "{\"Name\": \"myname\"}",
+          "host": "foo-myname.service.region.amazonaws.com"
+        }
+      }
+    ]
+  },
+  {
+    "description": "Header whitespace",
+    "metadata": {
+      "protocol": "rest-json",
+      "apiVersion": "2014-01-01"
+    },
+    "shapes": {
+      "InputShape": {
+        "type": "structure",
+        "members": {
+          "Header1": {
+            "shape": "StringType",
+            "location": "header"
+          },
+          "HeaderMap": {
+            "shape": "StringMap",
+            "location": "headers",
+            "locationName": "header-map-"
+          }
+        }
+      },
+      "StringType": {
+        "type": "string"
+      },
+      "StringMap": {
+        "type": "map",
+        "key": {
+          "shape": "StringType"
+        },
+        "value": {
+          "shape": "StringType"
+        }
+      }
+    },
+    "cases": [
+      {
+        "given": {
+          "http": {
+            "method": "GET",
+            "requestUri": "/"
+          },
+          "input": {
+            "shape": "InputShape"
+          },
+          "name": "OperationName"
+        },
+        "params": {
+          "Header1": "   headerValue",
+          "HeaderMap": {
+              "leading-space": "   value",
+              "with-space": "   value   ",
+              "leading-tab": "    value",
+              "   key-leading-space": "value",
+              "   key-with-space   ": "value"
+          }
+        },
+        "serialized": {
+          "body": "",
+          "uri": "/",
+          "headers": {
+              "header1": "headerValue",
+              "header-map-leading-space": "value",
+              "header-map-with-space": "value",
+              "header-map-leading-tab": "value",
+              "header-map-key-leading-space": "value",
+              "header-map-key-with-space": "value"
+          }
         }
       }
     ]

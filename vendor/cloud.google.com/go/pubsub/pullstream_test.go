@@ -15,11 +15,16 @@
 package pubsub
 
 import (
+	"context"
 	"testing"
+	"time"
 
-	gax "github.com/googleapis/gax-go"
-	"golang.org/x/net/context"
+	"cloud.google.com/go/internal/testutil"
+	"cloud.google.com/go/pubsub/pstest"
+	gax "github.com/googleapis/gax-go/v2"
+	"google.golang.org/api/option"
 	pb "google.golang.org/genproto/googleapis/pubsub/v1"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -68,6 +73,61 @@ func TestPullStreamGet(t *testing.T) {
 			t.Errorf("%s: got %s, want %s", test.desc, got, test.wantCode)
 		}
 	}
+}
+
+func TestPullStreamGet_ResourceUnavailable(t *testing.T) {
+	ctx := context.Background()
+
+	srv, err := testutil.NewServer()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer srv.Close()
+
+	ps := pstest.NewServer()
+	defer ps.Close()
+
+	s := ExhaustedServer{ps.GServer}
+	pb.RegisterPublisherServer(srv.Gsrv, &s)
+	pb.RegisterSubscriberServer(srv.Gsrv, &s)
+	srv.Start()
+
+	client, err := NewClient(ctx, "P",
+		option.WithEndpoint(srv.Addr),
+		option.WithoutAuthentication(),
+		option.WithGRPCDialOption(grpc.WithInsecure()))
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer client.Close()
+
+	errc := make(chan error)
+	go func() {
+		errc <- client.Subscription("foo").Receive(ctx, func(context.Context, *Message) {
+			t.Error("should not have received any data")
+		})
+	}()
+
+	select {
+	case <-time.After(5 * time.Second):
+		t.Fatal("Receive should have failed immediately")
+	case err := <-errc:
+		if gerr, ok := status.FromError(err); ok {
+			if gerr.Code() != codes.ResourceExhausted {
+				t.Fatal("expected to receive a grpc ResourceExhausted error")
+			}
+		} else {
+			t.Fatal("expected to receive a grpc ResourceExhausted error")
+		}
+	}
+}
+
+type ExhaustedServer struct {
+	pstest.GServer
+}
+
+func (*ExhaustedServer) StreamingPull(_ pb.Subscriber_StreamingPullServer) error {
+	return status.Errorf(codes.ResourceExhausted, "This server is exhausted!")
 }
 
 type testStreamingPullClient struct {

@@ -2,12 +2,14 @@
   "version":"2.0",
   "metadata":{
     "apiVersion":"2015-09-21",
-    "endpointPrefix":"ecr",
+    "endpointPrefix":"api.ecr",
     "jsonVersion":"1.1",
     "protocol":"json",
     "serviceAbbreviation":"Amazon ECR",
     "serviceFullName":"Amazon EC2 Container Registry",
+    "serviceId":"ECR",
     "signatureVersion":"v4",
+    "signingName":"ecr",
     "targetPrefix":"AmazonEC2ContainerRegistry_V20150921",
     "uid":"ecr-2015-09-21"
   },
@@ -84,6 +86,8 @@
       "errors":[
         {"shape":"ServerException"},
         {"shape":"InvalidParameterException"},
+        {"shape":"InvalidTagParameterException"},
+        {"shape":"TooManyTagsException"},
         {"shape":"RepositoryAlreadyExistsException"},
         {"shape":"LimitExceededException"}
       ]
@@ -264,6 +268,20 @@
         {"shape":"RepositoryNotFoundException"}
       ]
     },
+    "ListTagsForResource":{
+      "name":"ListTagsForResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListTagsForResourceRequest"},
+      "output":{"shape":"ListTagsForResourceResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"RepositoryNotFoundException"},
+        {"shape":"ServerException"}
+      ]
+    },
     "PutImage":{
       "name":"PutImage",
       "http":{
@@ -323,6 +341,38 @@
         {"shape":"RepositoryNotFoundException"},
         {"shape":"LifecyclePolicyNotFoundException"},
         {"shape":"LifecyclePolicyPreviewInProgressException"}
+      ]
+    },
+    "TagResource":{
+      "name":"TagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"TagResourceRequest"},
+      "output":{"shape":"TagResourceResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"InvalidTagParameterException"},
+        {"shape":"TooManyTagsException"},
+        {"shape":"RepositoryNotFoundException"},
+        {"shape":"ServerException"}
+      ]
+    },
+    "UntagResource":{
+      "name":"UntagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UntagResourceRequest"},
+      "output":{"shape":"UntagResourceResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"InvalidTagParameterException"},
+        {"shape":"TooManyTagsException"},
+        {"shape":"RepositoryNotFoundException"},
+        {"shape":"ServerException"}
       ]
     },
     "UploadLayerPart":{
@@ -457,7 +507,8 @@
       "type":"structure",
       "required":["repositoryName"],
       "members":{
-        "repositoryName":{"shape":"RepositoryName"}
+        "repositoryName":{"shape":"RepositoryName"},
+        "tags":{"shape":"TagList"}
       }
     },
     "CreateRepositoryResponse":{
@@ -612,7 +663,7 @@
         "repositoryName":{"shape":"RepositoryName"},
         "imageIds":{"shape":"ImageIdentifierList"},
         "nextToken":{"shape":"NextToken"},
-        "maxResults":{"shape":"MaxResults"},
+        "maxResults":{"shape":"LifecyclePreviewMaxResults"},
         "filter":{"shape":"LifecyclePolicyPreviewFilter"}
       }
     },
@@ -795,6 +846,13 @@
       },
       "exception":true
     },
+    "InvalidTagParameterException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ExceptionMessage"}
+      },
+      "exception":true
+    },
     "Layer":{
       "type":"structure",
       "members":{
@@ -943,8 +1001,13 @@
     },
     "LifecyclePolicyText":{
       "type":"string",
-      "max":10240,
+      "max":30720,
       "min":100
+    },
+    "LifecyclePreviewMaxResults":{
+      "type":"integer",
+      "max":100,
+      "min":1
     },
     "LimitExceededException":{
       "type":"structure",
@@ -977,9 +1040,22 @@
         "nextToken":{"shape":"NextToken"}
       }
     },
+    "ListTagsForResourceRequest":{
+      "type":"structure",
+      "required":["resourceArn"],
+      "members":{
+        "resourceArn":{"shape":"Arn"}
+      }
+    },
+    "ListTagsForResourceResponse":{
+      "type":"structure",
+      "members":{
+        "tags":{"shape":"TagList"}
+      }
+    },
     "MaxResults":{
       "type":"integer",
-      "max":100,
+      "max":1000,
       "min":1
     },
     "MediaType":{"type":"string"},
@@ -1145,12 +1221,69 @@
         "status":{"shape":"LifecyclePolicyPreviewStatus"}
       }
     },
+    "Tag":{
+      "type":"structure",
+      "members":{
+        "Key":{"shape":"TagKey"},
+        "Value":{"shape":"TagValue"}
+      }
+    },
+    "TagKey":{"type":"string"},
+    "TagKeyList":{
+      "type":"list",
+      "member":{"shape":"TagKey"}
+    },
+    "TagList":{
+      "type":"list",
+      "member":{"shape":"Tag"}
+    },
+    "TagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "resourceArn",
+        "tags"
+      ],
+      "members":{
+        "resourceArn":{"shape":"Arn"},
+        "tags":{"shape":"TagList"}
+      }
+    },
+    "TagResourceResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "TagStatus":{
       "type":"string",
       "enum":[
         "TAGGED",
-        "UNTAGGED"
+        "UNTAGGED",
+        "ANY"
       ]
+    },
+    "TagValue":{"type":"string"},
+    "TooManyTagsException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ExceptionMessage"}
+      },
+      "exception":true
+    },
+    "UntagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "resourceArn",
+        "tagKeys"
+      ],
+      "members":{
+        "resourceArn":{"shape":"Arn"},
+        "tagKeys":{"shape":"TagKeyList"}
+      }
+    },
+    "UntagResourceResponse":{
+      "type":"structure",
+      "members":{
+      }
     },
     "UploadId":{
       "type":"string",

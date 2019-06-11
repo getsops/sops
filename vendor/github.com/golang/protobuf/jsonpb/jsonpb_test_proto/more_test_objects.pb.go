@@ -3,9 +3,11 @@
 
 package jsonpb
 
-import proto "github.com/golang/protobuf/proto"
-import fmt "fmt"
-import math "math"
+import (
+	fmt "fmt"
+	proto "github.com/golang/protobuf/proto"
+	math "math"
+)
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
@@ -16,7 +18,7 @@ var _ = math.Inf
 // is compatible with the proto package it is being compiled against.
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
-const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
+const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
 type Numeral int32
 
@@ -59,6 +61,7 @@ func (*Simple3) ProtoMessage()    {}
 func (*Simple3) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e6c135db3023e377, []int{0}
 }
+
 func (m *Simple3) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Simple3.Unmarshal(m, b)
 }
@@ -97,6 +100,7 @@ func (*SimpleSlice3) ProtoMessage()    {}
 func (*SimpleSlice3) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e6c135db3023e377, []int{1}
 }
+
 func (m *SimpleSlice3) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SimpleSlice3.Unmarshal(m, b)
 }
@@ -135,6 +139,7 @@ func (*SimpleMap3) ProtoMessage()    {}
 func (*SimpleMap3) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e6c135db3023e377, []int{2}
 }
+
 func (m *SimpleMap3) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SimpleMap3.Unmarshal(m, b)
 }
@@ -173,6 +178,7 @@ func (*SimpleNull3) ProtoMessage()    {}
 func (*SimpleNull3) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e6c135db3023e377, []int{3}
 }
+
 func (m *SimpleNull3) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_SimpleNull3.Unmarshal(m, b)
 }
@@ -220,6 +226,7 @@ func (*Mappy) ProtoMessage()    {}
 func (*Mappy) Descriptor() ([]byte, []int) {
 	return fileDescriptor_e6c135db3023e377, []int{4}
 }
+
 func (m *Mappy) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Mappy.Unmarshal(m, b)
 }
@@ -309,6 +316,7 @@ func (m *Mappy) GetU64Booly() map[uint64]bool {
 }
 
 func init() {
+	proto.RegisterEnum("jsonpb.Numeral", Numeral_name, Numeral_value)
 	proto.RegisterType((*Simple3)(nil), "jsonpb.Simple3")
 	proto.RegisterType((*SimpleSlice3)(nil), "jsonpb.SimpleSlice3")
 	proto.RegisterType((*SimpleMap3)(nil), "jsonpb.SimpleMap3")
@@ -325,7 +333,6 @@ func init() {
 	proto.RegisterMapType((map[string]string)(nil), "jsonpb.Mappy.StrryEntry")
 	proto.RegisterMapType((map[uint32]bool)(nil), "jsonpb.Mappy.U32boolyEntry")
 	proto.RegisterMapType((map[uint64]bool)(nil), "jsonpb.Mappy.U64boolyEntry")
-	proto.RegisterEnum("jsonpb.Numeral", Numeral_name, Numeral_value)
 }
 
 func init() { proto.RegisterFile("more_test_objects.proto", fileDescriptor_e6c135db3023e377) }

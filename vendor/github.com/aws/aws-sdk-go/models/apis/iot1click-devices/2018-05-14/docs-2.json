@@ -1,16 +1,19 @@
 {
   "version" : "2.0",
-  "service" : "<p>Stub description</p>",
+  "service" : "<p>Describes all of the AWS IoT 1-Click device-related API operations for the service.\n Also provides sample requests, responses, and errors for the supported web services\n protocols.</p>",
   "operations" : {
-    "ClaimDevicesByClaimCode" : "<p>Adds device(s) to your account (i.e., claim one or more devices) if and only if\n you received a claim code with the device(s).</p>",
-    "DescribeDevice" : "<p>Given a device ID, returns a DescribeDeviceResponse object describing\n the details of the device.</p>",
-    "FinalizeDeviceClaim" : "<p>Given a device ID, finalizes the claim request for the associated device.</p><note>\n <p>Claiming a device consists of initiating a claim, then publishing a device\n event, and finalizing the claim. For a device of type button, a\n device event can be published by simply clicking the device.</p>\n </note>",
-    "GetDeviceMethods" : "<p>Given a device ID, returns the invokable methods associated with the\n device.</p>",
-    "InitiateDeviceClaim" : "<p>Given a device ID, initiates a claim request for the associated device.</p><note>\n <p>Claiming a device consists of initiating a claim, then publishing a device\n event, and finalizing the claim. For a device of type button, a\n device event can be published by simply clicking the device.</p>\n </note>",
+    "ClaimDevicesByClaimCode" : "<p>Adds device(s) to your account (i.e., claim one or more devices) if and only if you\n received a claim code with the device(s).</p>",
+    "DescribeDevice" : "<p>Given a device ID, returns a DescribeDeviceResponse object describing the\n details of the device.</p>",
+    "FinalizeDeviceClaim" : "<p>Given a device ID, finalizes the claim request for the associated device.</p><note>\n <p>Claiming a device consists of initiating a claim, then publishing a device event,\n and finalizing the claim. For a device of type button, a device event can\n be published by simply clicking the device.</p>\n </note>",
+    "GetDeviceMethods" : "<p>Given a device ID, returns the invokable methods associated with the device.</p>",
+    "InitiateDeviceClaim" : "<p>Given a device ID, initiates a claim request for the associated device.</p><note>\n <p>Claiming a device consists of initiating a claim, then publishing a device event,\n and finalizing the claim. For a device of type button, a device event can\n be published by simply clicking the device.</p>\n </note>",
     "InvokeDeviceMethod" : "<p>Given a device ID, issues a request to invoke a named device method (with possible\n parameters). See the \"Example POST\" code snippet below.</p>",
-    "ListDeviceEvents" : "<p>Using a device ID, returns a DeviceEventsResponse object containing\n an array of events for the device.</p>",
+    "ListDeviceEvents" : "<p>Using a device ID, returns a DeviceEventsResponse object containing an\n array of events for the device.</p>",
     "ListDevices" : "<p>Lists the 1-Click compatible devices associated with your AWS account.</p>",
+    "ListTagsForResource" : "<p>Lists the tags associated with the specified resource ARN.</p>",
+    "TagResource" : "<p>Adds or updates the tags associated with the resource ARN. See <a href=\"https://docs.aws.amazon.com/iot-1-click/latest/developerguide/1click-appendix.html#1click-limits\">AWS IoT 1-Click Service Limits</a> for the maximum number of tags allowed per\n resource.</p>",
     "UnclaimDevice" : "<p>Disassociates a device from your AWS account using its device ID.</p>",
+    "UntagResource" : "<p>Using tag keys, deletes the tags (key/value pairs) associated with the specified\n resource ARN.</p>",
     "UpdateDeviceState" : "<p>Using a Boolean value (true or false), this operation\n enables or disables the device given a device ID.</p>"
   },
   "shapes" : {
@@ -37,7 +40,7 @@
     "DeviceAttributes" : {
       "base" : "<p>\n DeviceAttributes is a string-to-string map specified by the user.</p>",
       "refs" : {
-        "DeviceDescription$Attributes" : "<p>An array of zero or more elements of DeviceAttribute objects\n providing user specified device attributes.</p>"
+        "DeviceDescription$Attributes" : "<p>An array of zero or more elements of DeviceAttribute objects providing\n user specified device attributes.</p>"
       }
     },
     "DeviceClaimResponse" : {
@@ -130,13 +133,13 @@
     "__doubleMin0Max100" : {
       "base" : null,
       "refs" : {
-        "DeviceDescription$RemainingLife" : "<p>A value between 0 and 1 inclusive, representing the fraction of life remaining for\n the device.</p>"
+        "DeviceDescription$RemainingLife" : "<p>A value between 0 and 1 inclusive, representing the fraction of life remaining for the\n device.</p>"
       }
     },
     "__integer" : {
       "base" : null,
       "refs" : {
-        "ClaimDevicesByClaimCodeResponse$Total" : "<p>The total number of devices associated with the claim code that has been processed\n in the claim request.</p>"
+        "ClaimDevicesByClaimCodeResponse$Total" : "<p>The total number of devices associated with the claim code that has been processed in\n the claim request.</p>"
       }
     },
     "__listOfDeviceDescription" : {
@@ -164,6 +167,7 @@
         "Device$Type" : "<p>The device type, such as \"button\".</p>",
         "DeviceAttributes$member" : null,
         "DeviceClaimResponse$State" : "<p>The device's final claim state.</p>",
+        "DeviceDescription$Arn" : "<p>The ARN of the device.</p>",
         "DeviceDescription$DeviceId" : "<p>The unique identifier of the device.</p>",
         "DeviceDescription$Type" : "<p>The type of the device, such as \"button\".</p>",
         "DeviceEvent$StdEvent" : "<p>A serialized JSON object representing the device-type specific event.</p>",

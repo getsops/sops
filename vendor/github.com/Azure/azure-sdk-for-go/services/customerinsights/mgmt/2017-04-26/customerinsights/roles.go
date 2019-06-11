@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewRolesClientWithBaseURI(baseURI string, subscriptionID string) RolesClien
 // resourceGroupName - the name of the resource group.
 // hubName - the name of the hub.
 func (client RolesClient) ListByHub(ctx context.Context, resourceGroupName string, hubName string) (result RoleListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RolesClient.ListByHub")
+		defer func() {
+			sc := -1
+			if result.rlr.Response.Response != nil {
+				sc = result.rlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByHubNextResults
 	req, err := client.ListByHubPreparer(ctx, resourceGroupName, hubName)
 	if err != nil {
@@ -110,8 +121,8 @@ func (client RolesClient) ListByHubResponder(resp *http.Response) (result RoleLi
 }
 
 // listByHubNextResults retrieves the next set of results, if any.
-func (client RolesClient) listByHubNextResults(lastResults RoleListResult) (result RoleListResult, err error) {
-	req, err := lastResults.roleListResultPreparer()
+func (client RolesClient) listByHubNextResults(ctx context.Context, lastResults RoleListResult) (result RoleListResult, err error) {
+	req, err := lastResults.roleListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "customerinsights.RolesClient", "listByHubNextResults", nil, "Failure preparing next results request")
 	}
@@ -132,6 +143,16 @@ func (client RolesClient) listByHubNextResults(lastResults RoleListResult) (resu
 
 // ListByHubComplete enumerates all values, automatically crossing page boundaries as required.
 func (client RolesClient) ListByHubComplete(ctx context.Context, resourceGroupName string, hubName string) (result RoleListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RolesClient.ListByHub")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByHub(ctx, resourceGroupName, hubName)
 	return
 }

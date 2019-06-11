@@ -15,16 +15,14 @@
 package bigquery
 
 import (
+	"context"
 	"errors"
 	"strconv"
 	"testing"
 	"time"
 
-	"github.com/google/go-cmp/cmp"
-
 	"cloud.google.com/go/internal/testutil"
-
-	"golang.org/x/net/context"
+	"github.com/google/go-cmp/cmp"
 	bq "google.golang.org/api/bigquery/v2"
 	itest "google.golang.org/api/iterator/testing"
 )
@@ -93,6 +91,75 @@ func TestTables(t *testing.T) {
 	msg, ok := itest.TestIterator(outTables,
 		func() interface{} { return c.Dataset("d1").Tables(context.Background()) },
 		func(it interface{}) (interface{}, error) { return it.(*TableIterator).Next() })
+	if !ok {
+		t.Error(msg)
+	}
+}
+
+// listModelsStub services list requests by returning data from an in-memory list of values.
+type listModelsStub struct {
+	expectedProject, expectedDataset string
+	models                           []*bq.Model
+}
+
+func (s *listModelsStub) listModels(it *ModelIterator, pageSize int, pageToken string) (*bq.ListModelsResponse, error) {
+	if it.dataset.ProjectID != s.expectedProject {
+		return nil, errors.New("wrong project id")
+	}
+	if it.dataset.DatasetID != s.expectedDataset {
+		return nil, errors.New("wrong dataset id")
+	}
+	const maxPageSize = 2
+	if pageSize <= 0 || pageSize > maxPageSize {
+		pageSize = maxPageSize
+	}
+	start := 0
+	if pageToken != "" {
+		var err error
+		start, err = strconv.Atoi(pageToken)
+		if err != nil {
+			return nil, err
+		}
+	}
+	end := start + pageSize
+	if end > len(s.models) {
+		end = len(s.models)
+	}
+	nextPageToken := ""
+	if end < len(s.models) {
+		nextPageToken = strconv.Itoa(end)
+	}
+	return &bq.ListModelsResponse{
+		Models:        s.models[start:end],
+		NextPageToken: nextPageToken,
+	}, nil
+}
+
+func TestModels(t *testing.T) {
+	c := &Client{projectID: "p1"}
+	inModels := []*bq.Model{
+		{ModelReference: &bq.ModelReference{ProjectId: "p1", DatasetId: "d1", ModelId: "m1"}},
+		{ModelReference: &bq.ModelReference{ProjectId: "p1", DatasetId: "d1", ModelId: "m2"}},
+		{ModelReference: &bq.ModelReference{ProjectId: "p1", DatasetId: "d1", ModelId: "m3"}},
+	}
+	outModels := []*Model{
+		{ProjectID: "p1", DatasetID: "d1", ModelID: "m1", c: c},
+		{ProjectID: "p1", DatasetID: "d1", ModelID: "m2", c: c},
+		{ProjectID: "p1", DatasetID: "d1", ModelID: "m3", c: c},
+	}
+
+	lms := &listModelsStub{
+		expectedProject: "p1",
+		expectedDataset: "d1",
+		models:          inModels,
+	}
+	old := listModels
+	listModels = lms.listModels // cannot use t.Parallel with this test
+	defer func() { listModels = old }()
+
+	msg, ok := itest.TestIterator(outModels,
+		func() interface{} { return c.Dataset("d1").Models(context.Background()) },
+		func(it interface{}) (interface{}, error) { return it.(*ModelIterator).Next() })
 	if !ok {
 		t.Error(msg)
 	}
@@ -271,8 +338,8 @@ func TestBQToDatasetMetadata(t *testing.T) {
 
 func TestDatasetMetadataToUpdateToBQ(t *testing.T) {
 	dm := DatasetMetadataToUpdate{
-		Description: "desc",
-		Name:        "name",
+		Description:            "desc",
+		Name:                   "name",
 		DefaultTableExpiration: time.Hour,
 	}
 	dm.SetLabel("label", "value")
@@ -286,9 +353,9 @@ func TestDatasetMetadataToUpdateToBQ(t *testing.T) {
 		Description:              "desc",
 		FriendlyName:             "name",
 		DefaultTableExpirationMs: 60 * 60 * 1000,
-		Labels:          map[string]string{"label": "value"},
-		ForceSendFields: []string{"Description", "FriendlyName"},
-		NullFields:      []string{"Labels.del"},
+		Labels:                   map[string]string{"label": "value"},
+		ForceSendFields:          []string{"Description", "FriendlyName"},
+		NullFields:               []string{"Labels.del"},
 	}
 	if diff := testutil.Diff(got, want); diff != "" {
 		t.Errorf("-got, +want:\n%s", diff)

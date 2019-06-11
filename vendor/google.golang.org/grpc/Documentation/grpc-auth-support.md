@@ -24,7 +24,7 @@ server.Serve(lis)
 # OAuth2
 
 For an example of how to configure client and server to use OAuth2 tokens, see
-[here](https://github.com/grpc/grpc-go/blob/master/examples/oauth/).
+[here](https://github.com/grpc/grpc-go/tree/master/examples/features/authentication).
 
 ## Validating a token on the server
 

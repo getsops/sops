@@ -22,6 +22,12 @@ const (
 	// The approval action has already been approved or rejected.
 	ErrCodeApprovalAlreadyCompletedException = "ApprovalAlreadyCompletedException"
 
+	// ErrCodeConcurrentModificationException for service response error code
+	// "ConcurrentModificationException".
+	//
+	// Unable to modify the tag due to a simultaneous update request.
+	ErrCodeConcurrentModificationException = "ConcurrentModificationException"
+
 	// ErrCodeInvalidActionDeclarationException for service response error code
 	// "InvalidActionDeclarationException".
 	//
@@ -33,6 +39,12 @@ const (
 	//
 	// The approval request already received a response or has expired.
 	ErrCodeInvalidApprovalTokenException = "InvalidApprovalTokenException"
+
+	// ErrCodeInvalidArnException for service response error code
+	// "InvalidArnException".
+	//
+	// The specified resource ARN is invalid.
+	ErrCodeInvalidArnException = "InvalidArnException"
 
 	// ErrCodeInvalidBlockerDeclarationException for service response error code
 	// "InvalidBlockerDeclarationException".
@@ -82,6 +94,12 @@ const (
 	//
 	// The specified structure was specified in an invalid format.
 	ErrCodeInvalidStructureException = "InvalidStructureException"
+
+	// ErrCodeInvalidTagsException for service response error code
+	// "InvalidTagsException".
+	//
+	// The specified resource tags are invalid.
+	ErrCodeInvalidTagsException = "InvalidTagsException"
 
 	// ErrCodeInvalidWebhookAuthenticationParametersException for service response error code
 	// "InvalidWebhookAuthenticationParametersException".
@@ -141,6 +159,12 @@ const (
 	// be found.
 	ErrCodePipelineVersionNotFoundException = "PipelineVersionNotFoundException"
 
+	// ErrCodeResourceNotFoundException for service response error code
+	// "ResourceNotFoundException".
+	//
+	// The specified resource was specified in an invalid format.
+	ErrCodeResourceNotFoundException = "ResourceNotFoundException"
+
 	// ErrCodeStageNotFoundException for service response error code
 	// "StageNotFoundException".
 	//
@@ -155,6 +179,12 @@ const (
 	// actions; one or more actions are still in progress; or another retry attempt
 	// is already in progress.
 	ErrCodeStageNotRetryableException = "StageNotRetryableException"
+
+	// ErrCodeTooManyTagsException for service response error code
+	// "TooManyTagsException".
+	//
+	// The tags limit for a resource has been exceeded.
+	ErrCodeTooManyTagsException = "TooManyTagsException"
 
 	// ErrCodeValidationException for service response error code
 	// "ValidationException".

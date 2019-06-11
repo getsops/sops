@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// +build go1.7
-
 package btree
 
 import (
@@ -251,18 +249,4 @@ func findLinear(k Key, s []item) (int, bool) {
 		return i - 1, true
 	}
 	return i, false
-}
-
-type byInts []item
-
-func (a byInts) Len() int {
-	return len(a)
-}
-
-func (a byInts) Less(i, j int) bool {
-	return a[i].key.(int) < a[j].key.(int)
-}
-
-func (a byInts) Swap(i, j int) {
-	a[i], a[j] = a[j], a[i]
 }

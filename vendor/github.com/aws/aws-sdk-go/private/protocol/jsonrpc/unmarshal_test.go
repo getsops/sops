@@ -109,7 +109,7 @@ const opOutputService1TestCaseOperation1 = "OperationName"
 // OutputService1TestCaseOperation1Request generates a "aws/request.Request" representing the
 // client's request for the OutputService1TestCaseOperation1 operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -309,7 +309,7 @@ const opOutputService2TestCaseOperation1 = "OperationName"
 // OutputService2TestCaseOperation1Request generates a "aws/request.Request" representing the
 // client's request for the OutputService2TestCaseOperation1 operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -475,7 +475,7 @@ const opOutputService3TestCaseOperation1 = "OperationName"
 // OutputService3TestCaseOperation1Request generates a "aws/request.Request" representing the
 // client's request for the OutputService3TestCaseOperation1 operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -663,7 +663,7 @@ const opOutputService4TestCaseOperation1 = "OperationName"
 // OutputService4TestCaseOperation1Request generates a "aws/request.Request" representing the
 // client's request for the OutputService4TestCaseOperation1 operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -731,7 +731,7 @@ const opOutputService4TestCaseOperation2 = "OperationName"
 // OutputService4TestCaseOperation2Request generates a "aws/request.Request" representing the
 // client's request for the OutputService4TestCaseOperation2 operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -927,7 +927,7 @@ const opOutputService5TestCaseOperation1 = "OperationName"
 // OutputService5TestCaseOperation1Request generates a "aws/request.Request" representing the
 // client's request for the OutputService5TestCaseOperation1 operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1071,7 +1071,7 @@ const opOutputService6TestCaseOperation1 = "OperationName"
 // OutputService6TestCaseOperation1Request generates a "aws/request.Request" representing the
 // client's request for the OutputService6TestCaseOperation1 operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1215,7 +1215,7 @@ const opOutputService7TestCaseOperation1 = "OperationName"
 // OutputService7TestCaseOperation1Request generates a "aws/request.Request" representing the
 // client's request for the OutputService7TestCaseOperation1 operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1310,6 +1310,297 @@ const (
 	JSONEnumTypeBar = "bar"
 )
 
+// OutputService8ProtocolTest provides the API operation methods for making requests to
+// . See this package's package overview docs
+// for details on the service.
+//
+// OutputService8ProtocolTest methods are safe to use concurrently. It is not safe to
+// modify mutate any of the struct's properties though.
+type OutputService8ProtocolTest struct {
+	*client.Client
+}
+
+// New creates a new instance of the OutputService8ProtocolTest client with a session.
+// If additional configuration is needed for the client instance use the optional
+// aws.Config parameter to add your extra config.
+//
+// Example:
+//     // Create a OutputService8ProtocolTest client from just a session.
+//     svc := outputservice8protocoltest.New(mySession)
+//
+//     // Create a OutputService8ProtocolTest client with additional configuration
+//     svc := outputservice8protocoltest.New(mySession, aws.NewConfig().WithRegion("us-west-2"))
+func NewOutputService8ProtocolTest(p client.ConfigProvider, cfgs ...*aws.Config) *OutputService8ProtocolTest {
+	c := p.ClientConfig("outputservice8protocoltest", cfgs...)
+	return newOutputService8ProtocolTestClient(*c.Config, c.Handlers, c.Endpoint, c.SigningRegion, c.SigningName)
+}
+
+// newClient creates, initializes and returns a new service client instance.
+func newOutputService8ProtocolTestClient(cfg aws.Config, handlers request.Handlers, endpoint, signingRegion, signingName string) *OutputService8ProtocolTest {
+	svc := &OutputService8ProtocolTest{
+		Client: client.New(
+			cfg,
+			metadata.ClientInfo{
+				ServiceName:   "OutputService8ProtocolTest",
+				ServiceID:     "OutputService8ProtocolTest",
+				SigningName:   signingName,
+				SigningRegion: signingRegion,
+				Endpoint:      endpoint,
+				APIVersion:    "",
+			},
+			handlers,
+		),
+	}
+
+	// Handlers
+	svc.Handlers.Sign.PushBackNamed(v4.SignRequestHandler)
+	svc.Handlers.Build.PushBackNamed(jsonrpc.BuildHandler)
+	svc.Handlers.Unmarshal.PushBackNamed(jsonrpc.UnmarshalHandler)
+	svc.Handlers.UnmarshalMeta.PushBackNamed(jsonrpc.UnmarshalMetaHandler)
+	svc.Handlers.UnmarshalError.PushBackNamed(jsonrpc.UnmarshalErrorHandler)
+
+	return svc
+}
+
+// newRequest creates a new request for a OutputService8ProtocolTest operation and runs any
+// custom request initialization.
+func (c *OutputService8ProtocolTest) newRequest(op *request.Operation, params, data interface{}) *request.Request {
+	req := c.NewRequest(op, params, data)
+
+	return req
+}
+
+const opOutputService8TestCaseOperation1 = "OperationName"
+
+// OutputService8TestCaseOperation1Request generates a "aws/request.Request" representing the
+// client's request for the OutputService8TestCaseOperation1 operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See OutputService8TestCaseOperation1 for more information on using the OutputService8TestCaseOperation1
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the OutputService8TestCaseOperation1Request method.
+//    req, resp := client.OutputService8TestCaseOperation1Request(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *OutputService8ProtocolTest) OutputService8TestCaseOperation1Request(input *OutputService8TestShapeOutputService8TestCaseOperation1Input) (req *request.Request, output *OutputService8TestShapeOutputService8TestCaseOperation1Output) {
+	op := &request.Operation{
+		Name:     opOutputService8TestCaseOperation1,
+		HTTPPath: "/",
+	}
+
+	if input == nil {
+		input = &OutputService8TestShapeOutputService8TestCaseOperation1Input{}
+	}
+
+	output = &OutputService8TestShapeOutputService8TestCaseOperation1Output{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// OutputService8TestCaseOperation1 API operation for .
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for 's
+// API operation OutputService8TestCaseOperation1 for usage and error information.
+func (c *OutputService8ProtocolTest) OutputService8TestCaseOperation1(input *OutputService8TestShapeOutputService8TestCaseOperation1Input) (*OutputService8TestShapeOutputService8TestCaseOperation1Output, error) {
+	req, out := c.OutputService8TestCaseOperation1Request(input)
+	return out, req.Send()
+}
+
+// OutputService8TestCaseOperation1WithContext is the same as OutputService8TestCaseOperation1 with the addition of
+// the ability to pass a context and additional request options.
+//
+// See OutputService8TestCaseOperation1 for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *OutputService8ProtocolTest) OutputService8TestCaseOperation1WithContext(ctx aws.Context, input *OutputService8TestShapeOutputService8TestCaseOperation1Input, opts ...request.Option) (*OutputService8TestShapeOutputService8TestCaseOperation1Output, error) {
+	req, out := c.OutputService8TestCaseOperation1Request(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opOutputService8TestCaseOperation2 = "OperationName"
+
+// OutputService8TestCaseOperation2Request generates a "aws/request.Request" representing the
+// client's request for the OutputService8TestCaseOperation2 operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See OutputService8TestCaseOperation2 for more information on using the OutputService8TestCaseOperation2
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the OutputService8TestCaseOperation2Request method.
+//    req, resp := client.OutputService8TestCaseOperation2Request(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *OutputService8ProtocolTest) OutputService8TestCaseOperation2Request(input *OutputService8TestShapeOutputService8TestCaseOperation2Input) (req *request.Request, output *OutputService8TestShapeOutputService8TestCaseOperation2Output) {
+	op := &request.Operation{
+		Name:     opOutputService8TestCaseOperation2,
+		HTTPPath: "/",
+	}
+
+	if input == nil {
+		input = &OutputService8TestShapeOutputService8TestCaseOperation2Input{}
+	}
+
+	output = &OutputService8TestShapeOutputService8TestCaseOperation2Output{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// OutputService8TestCaseOperation2 API operation for .
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for 's
+// API operation OutputService8TestCaseOperation2 for usage and error information.
+func (c *OutputService8ProtocolTest) OutputService8TestCaseOperation2(input *OutputService8TestShapeOutputService8TestCaseOperation2Input) (*OutputService8TestShapeOutputService8TestCaseOperation2Output, error) {
+	req, out := c.OutputService8TestCaseOperation2Request(input)
+	return out, req.Send()
+}
+
+// OutputService8TestCaseOperation2WithContext is the same as OutputService8TestCaseOperation2 with the addition of
+// the ability to pass a context and additional request options.
+//
+// See OutputService8TestCaseOperation2 for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *OutputService8ProtocolTest) OutputService8TestCaseOperation2WithContext(ctx aws.Context, input *OutputService8TestShapeOutputService8TestCaseOperation2Input, opts ...request.Option) (*OutputService8TestShapeOutputService8TestCaseOperation2Output, error) {
+	req, out := c.OutputService8TestCaseOperation2Request(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opOutputService8TestCaseOperation3 = "OperationName"
+
+// OutputService8TestCaseOperation3Request generates a "aws/request.Request" representing the
+// client's request for the OutputService8TestCaseOperation3 operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See OutputService8TestCaseOperation3 for more information on using the OutputService8TestCaseOperation3
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the OutputService8TestCaseOperation3Request method.
+//    req, resp := client.OutputService8TestCaseOperation3Request(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *OutputService8ProtocolTest) OutputService8TestCaseOperation3Request(input *OutputService8TestShapeOutputService8TestCaseOperation3Input) (req *request.Request, output *OutputService8TestShapeOutputService8TestCaseOperation3Output) {
+	op := &request.Operation{
+		Name:     opOutputService8TestCaseOperation3,
+		HTTPPath: "/",
+	}
+
+	if input == nil {
+		input = &OutputService8TestShapeOutputService8TestCaseOperation3Input{}
+	}
+
+	output = &OutputService8TestShapeOutputService8TestCaseOperation3Output{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// OutputService8TestCaseOperation3 API operation for .
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for 's
+// API operation OutputService8TestCaseOperation3 for usage and error information.
+func (c *OutputService8ProtocolTest) OutputService8TestCaseOperation3(input *OutputService8TestShapeOutputService8TestCaseOperation3Input) (*OutputService8TestShapeOutputService8TestCaseOperation3Output, error) {
+	req, out := c.OutputService8TestCaseOperation3Request(input)
+	return out, req.Send()
+}
+
+// OutputService8TestCaseOperation3WithContext is the same as OutputService8TestCaseOperation3 with the addition of
+// the ability to pass a context and additional request options.
+//
+// See OutputService8TestCaseOperation3 for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *OutputService8ProtocolTest) OutputService8TestCaseOperation3WithContext(ctx aws.Context, input *OutputService8TestShapeOutputService8TestCaseOperation3Input, opts ...request.Option) (*OutputService8TestShapeOutputService8TestCaseOperation3Output, error) {
+	req, out := c.OutputService8TestCaseOperation3Request(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+type OutputService8TestShapeOutputService8TestCaseOperation1Input struct {
+	_ struct{} `type:"structure"`
+}
+
+type OutputService8TestShapeOutputService8TestCaseOperation1Output struct {
+	_ struct{} `type:"structure"`
+}
+
+type OutputService8TestShapeOutputService8TestCaseOperation2Input struct {
+	_ struct{} `type:"structure"`
+}
+
+type OutputService8TestShapeOutputService8TestCaseOperation2Output struct {
+	_ struct{} `type:"structure"`
+}
+
+type OutputService8TestShapeOutputService8TestCaseOperation3Input struct {
+	_ struct{} `type:"structure"`
+}
+
+type OutputService8TestShapeOutputService8TestCaseOperation3Output struct {
+	_ struct{} `type:"structure"`
+}
+
 //
 // Tests begin here
 //
@@ -1324,8 +1615,8 @@ func TestOutputService1ProtocolTestScalarMembersCase1(t *testing.T) {
 	// set headers
 
 	// unmarshal response
-	jsonrpc.UnmarshalMeta(req)
-	jsonrpc.Unmarshal(req)
+	req.Handlers.UnmarshalMeta.Run(req)
+	req.Handlers.Unmarshal.Run(req)
 	if req.Error != nil {
 		t.Errorf("expect not error, got %v", req.Error)
 	}
@@ -1371,8 +1662,8 @@ func TestOutputService2ProtocolTestBlobMembersCase1(t *testing.T) {
 	// set headers
 
 	// unmarshal response
-	jsonrpc.UnmarshalMeta(req)
-	jsonrpc.Unmarshal(req)
+	req.Handlers.UnmarshalMeta.Run(req)
+	req.Handlers.Unmarshal.Run(req)
 	if req.Error != nil {
 		t.Errorf("expect not error, got %v", req.Error)
 	}
@@ -1400,8 +1691,8 @@ func TestOutputService3ProtocolTestTimestampMembersCase1(t *testing.T) {
 	// set headers
 
 	// unmarshal response
-	jsonrpc.UnmarshalMeta(req)
-	jsonrpc.Unmarshal(req)
+	req.Handlers.UnmarshalMeta.Run(req)
+	req.Handlers.Unmarshal.Run(req)
 	if req.Error != nil {
 		t.Errorf("expect not error, got %v", req.Error)
 	}
@@ -1438,8 +1729,8 @@ func TestOutputService4ProtocolTestListsCase1(t *testing.T) {
 	// set headers
 
 	// unmarshal response
-	jsonrpc.UnmarshalMeta(req)
-	jsonrpc.Unmarshal(req)
+	req.Handlers.UnmarshalMeta.Run(req)
+	req.Handlers.Unmarshal.Run(req)
 	if req.Error != nil {
 		t.Errorf("expect not error, got %v", req.Error)
 	}
@@ -1467,8 +1758,8 @@ func TestOutputService4ProtocolTestListsCase2(t *testing.T) {
 	// set headers
 
 	// unmarshal response
-	jsonrpc.UnmarshalMeta(req)
-	jsonrpc.Unmarshal(req)
+	req.Handlers.UnmarshalMeta.Run(req)
+	req.Handlers.Unmarshal.Run(req)
 	if req.Error != nil {
 		t.Errorf("expect not error, got %v", req.Error)
 	}
@@ -1508,8 +1799,8 @@ func TestOutputService5ProtocolTestMapsCase1(t *testing.T) {
 	// set headers
 
 	// unmarshal response
-	jsonrpc.UnmarshalMeta(req)
-	jsonrpc.Unmarshal(req)
+	req.Handlers.UnmarshalMeta.Run(req)
+	req.Handlers.Unmarshal.Run(req)
 	if req.Error != nil {
 		t.Errorf("expect not error, got %v", req.Error)
 	}
@@ -1543,8 +1834,8 @@ func TestOutputService6ProtocolTestIgnoresExtraDataCase1(t *testing.T) {
 	// set headers
 
 	// unmarshal response
-	jsonrpc.UnmarshalMeta(req)
-	jsonrpc.Unmarshal(req)
+	req.Handlers.UnmarshalMeta.Run(req)
+	req.Handlers.Unmarshal.Run(req)
 	if req.Error != nil {
 		t.Errorf("expect not error, got %v", req.Error)
 	}
@@ -1566,8 +1857,8 @@ func TestOutputService7ProtocolTestEnumOutputCase1(t *testing.T) {
 	// set headers
 
 	// unmarshal response
-	jsonrpc.UnmarshalMeta(req)
-	jsonrpc.Unmarshal(req)
+	req.Handlers.UnmarshalMeta.Run(req)
+	req.Handlers.Unmarshal.Run(req)
 	if req.Error != nil {
 		t.Errorf("expect not error, got %v", req.Error)
 	}
@@ -1584,6 +1875,75 @@ func TestOutputService7ProtocolTestEnumOutputCase1(t *testing.T) {
 	}
 	if e, a := "bar", *out.ListEnums[1]; e != a {
 		t.Errorf("expect %v, got %v", e, a)
+	}
+
+}
+
+func TestOutputService8ProtocolTestunmodeledNonjsonResponsePayloadCase1(t *testing.T) {
+	svc := NewOutputService8ProtocolTest(unit.Session, &aws.Config{Endpoint: aws.String("https://test")})
+
+	buf := bytes.NewReader([]byte("success"))
+	req, out := svc.OutputService8TestCaseOperation1Request(nil)
+	req.HTTPResponse = &http.Response{StatusCode: 200, Body: ioutil.NopCloser(buf), Header: http.Header{}}
+
+	// set headers
+
+	// unmarshal response
+	req.Handlers.UnmarshalMeta.Run(req)
+	req.Handlers.Unmarshal.Run(req)
+	if req.Error != nil {
+		t.Errorf("expect not error, got %v", req.Error)
+	}
+
+	// assert response
+	if out == nil {
+		t.Errorf("expect not to be nil")
+	}
+
+}
+
+func TestOutputService8ProtocolTestunmodeledNonjsonResponsePayloadCase2(t *testing.T) {
+	svc := NewOutputService8ProtocolTest(unit.Session, &aws.Config{Endpoint: aws.String("https://test")})
+
+	buf := bytes.NewReader([]byte("\"success\""))
+	req, out := svc.OutputService8TestCaseOperation2Request(nil)
+	req.HTTPResponse = &http.Response{StatusCode: 200, Body: ioutil.NopCloser(buf), Header: http.Header{}}
+
+	// set headers
+
+	// unmarshal response
+	req.Handlers.UnmarshalMeta.Run(req)
+	req.Handlers.Unmarshal.Run(req)
+	if req.Error != nil {
+		t.Errorf("expect not error, got %v", req.Error)
+	}
+
+	// assert response
+	if out == nil {
+		t.Errorf("expect not to be nil")
+	}
+
+}
+
+func TestOutputService8ProtocolTestunmodeledNonjsonResponsePayloadCase3(t *testing.T) {
+	svc := NewOutputService8ProtocolTest(unit.Session, &aws.Config{Endpoint: aws.String("https://test")})
+
+	buf := bytes.NewReader([]byte("{}"))
+	req, out := svc.OutputService8TestCaseOperation3Request(nil)
+	req.HTTPResponse = &http.Response{StatusCode: 200, Body: ioutil.NopCloser(buf), Header: http.Header{}}
+
+	// set headers
+
+	// unmarshal response
+	req.Handlers.UnmarshalMeta.Run(req)
+	req.Handlers.Unmarshal.Run(req)
+	if req.Error != nil {
+		t.Errorf("expect not error, got %v", req.Error)
+	}
+
+	// assert response
+	if out == nil {
+		t.Errorf("expect not to be nil")
 	}
 
 }

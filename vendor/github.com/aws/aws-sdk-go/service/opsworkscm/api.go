@@ -8,6 +8,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
 
 const opAssociateNode = "AssociateNode"
@@ -15,7 +17,7 @@ const opAssociateNode = "AssociateNode"
 // AssociateNodeRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateNode operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -121,7 +123,7 @@ const opCreateBackup = "CreateBackup"
 // CreateBackupRequest generates a "aws/request.Request" representing the
 // client's request for the CreateBackup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -223,7 +225,7 @@ const opCreateServer = "CreateServer"
 // CreateServerRequest generates a "aws/request.Request" representing the
 // client's request for the CreateServer operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -337,7 +339,7 @@ const opDeleteBackup = "DeleteBackup"
 // DeleteBackupRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteBackup operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -371,6 +373,7 @@ func (c *OpsWorksCM) DeleteBackupRequest(input *DeleteBackupInput) (req *request
 
 	output = &DeleteBackupOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -428,7 +431,7 @@ const opDeleteServer = "DeleteServer"
 // DeleteServerRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteServer operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -462,6 +465,7 @@ func (c *OpsWorksCM) DeleteServerRequest(input *DeleteServerInput) (req *request
 
 	output = &DeleteServerOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -524,7 +528,7 @@ const opDescribeAccountAttributes = "DescribeAccountAttributes"
 // DescribeAccountAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeAccountAttributes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -563,8 +567,7 @@ func (c *OpsWorksCM) DescribeAccountAttributesRequest(input *DescribeAccountAttr
 
 // DescribeAccountAttributes API operation for AWS OpsWorks for Chef Automate.
 //
-// Describes your account attributes, and creates requests to increase limits
-// before they are reached or exceeded.
+// Describes your OpsWorks-CM account attributes.
 //
 // This operation is synchronous.
 //
@@ -601,7 +604,7 @@ const opDescribeBackups = "DescribeBackups"
 // DescribeBackupsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeBackups operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -692,7 +695,7 @@ const opDescribeEvents = "DescribeEvents"
 // DescribeEventsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEvents operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -783,7 +786,7 @@ const opDescribeNodeAssociationStatus = "DescribeNodeAssociationStatus"
 // DescribeNodeAssociationStatusRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeNodeAssociationStatus operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -869,7 +872,7 @@ const opDescribeServers = "DescribeServers"
 // DescribeServersRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeServers operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -961,7 +964,7 @@ const opDisassociateNode = "DisassociateNode"
 // DisassociateNodeRequest generates a "aws/request.Request" representing the
 // client's request for the DisassociateNode operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1050,12 +1053,107 @@ func (c *OpsWorksCM) DisassociateNodeWithContext(ctx aws.Context, input *Disasso
 	return out, req.Send()
 }
 
+const opExportServerEngineAttribute = "ExportServerEngineAttribute"
+
+// ExportServerEngineAttributeRequest generates a "aws/request.Request" representing the
+// client's request for the ExportServerEngineAttribute operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ExportServerEngineAttribute for more information on using the ExportServerEngineAttribute
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ExportServerEngineAttributeRequest method.
+//    req, resp := client.ExportServerEngineAttributeRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/ExportServerEngineAttribute
+func (c *OpsWorksCM) ExportServerEngineAttributeRequest(input *ExportServerEngineAttributeInput) (req *request.Request, output *ExportServerEngineAttributeOutput) {
+	op := &request.Operation{
+		Name:       opExportServerEngineAttribute,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ExportServerEngineAttributeInput{}
+	}
+
+	output = &ExportServerEngineAttributeOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ExportServerEngineAttribute API operation for AWS OpsWorks for Chef Automate.
+//
+// Exports a specified server engine attribute as a base64-encoded string. For
+// example, you can export user data that you can use in EC2 to associate nodes
+// with a server.
+//
+// This operation is synchronous.
+//
+// A ValidationException is raised when parameters of the request are not valid.
+// A ResourceNotFoundException is thrown when the server does not exist. An
+// InvalidStateException is thrown when the server is in any of the following
+// states: CREATING, TERMINATED, FAILED or DELETING.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS OpsWorks for Chef Automate's
+// API operation ExportServerEngineAttribute for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeValidationException "ValidationException"
+//   One or more of the provided request parameters are not valid.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The requested resource does not exist, or access was denied.
+//
+//   * ErrCodeInvalidStateException "InvalidStateException"
+//   The resource is in a state that does not allow you to perform a specified
+//   action.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/opsworkscm-2016-11-01/ExportServerEngineAttribute
+func (c *OpsWorksCM) ExportServerEngineAttribute(input *ExportServerEngineAttributeInput) (*ExportServerEngineAttributeOutput, error) {
+	req, out := c.ExportServerEngineAttributeRequest(input)
+	return out, req.Send()
+}
+
+// ExportServerEngineAttributeWithContext is the same as ExportServerEngineAttribute with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ExportServerEngineAttribute for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *OpsWorksCM) ExportServerEngineAttributeWithContext(ctx aws.Context, input *ExportServerEngineAttributeInput, opts ...request.Option) (*ExportServerEngineAttributeOutput, error) {
+	req, out := c.ExportServerEngineAttributeRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opRestoreServer = "RestoreServer"
 
 // RestoreServerRequest generates a "aws/request.Request" representing the
 // client's request for the RestoreServer operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1089,6 +1187,7 @@ func (c *OpsWorksCM) RestoreServerRequest(input *RestoreServerInput) (req *reque
 
 	output = &RestoreServerOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1151,7 +1250,7 @@ const opStartMaintenance = "StartMaintenance"
 // StartMaintenanceRequest generates a "aws/request.Request" representing the
 // client's request for the StartMaintenance operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1245,7 +1344,7 @@ const opUpdateServer = "UpdateServer"
 // UpdateServerRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateServer operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1333,7 +1432,7 @@ const opUpdateServerEngineAttributes = "UpdateServerEngineAttributes"
 // UpdateServerEngineAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateServerEngineAttributes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1374,9 +1473,8 @@ func (c *OpsWorksCM) UpdateServerEngineAttributesRequest(input *UpdateServerEngi
 //
 // Updates engine-specific attributes on a specified server. The server enters
 // the MODIFYING state when this operation is in progress. Only one update can
-// occur at a time. You can use this command to reset a Chef server's private
-// key (CHEF_PIVOTAL_KEY), a Chef server's admin password (CHEF_DELIVERY_ADMIN_PASSWORD),
-// or a Puppet server's admin password (PUPPET_ADMIN_PASSWORD).
+// occur at a time. You can use this command to reset a Chef server's public
+// key (CHEF_PIVOTAL_KEY) or a Puppet server's admin password (PUPPET_ADMIN_PASSWORD).
 //
 // This operation is asynchronous.
 //
@@ -1918,31 +2016,37 @@ type CreateServerInput struct {
 	// default value is true.
 	DisableAutomatedBackup *bool `type:"boolean"`
 
-	// The configuration management engine to use. Valid values include Chef and
-	// Puppet.
+	// The configuration management engine to use. Valid values include ChefAutomate
+	// and Puppet.
 	Engine *string `type:"string"`
 
 	// Optional engine attributes on a specified server.
 	//
 	// Attributes accepted in a Chef createServer request:
 	//
-	//    * CHEF_PIVOTAL_KEY: A base64-encoded RSA private key that is not stored
-	//    by AWS OpsWorks for Chef Automate. This private key is required to access
-	//    the Chef API. When no CHEF_PIVOTAL_KEY is set, one is generated and returned
-	//    in the response.
+	//    * CHEF_AUTOMATE_PIVOTAL_KEY: A base64-encoded RSA public key. The corresponding
+	//    private key is required to access the Chef API. When no CHEF_AUTOMATE_PIVOTAL_KEY
+	//    is set, a private key is generated and returned in the response.
 	//
-	//    * CHEF_DELIVERY_ADMIN_PASSWORD: The password for the administrative user
-	//    in the Chef Automate GUI. The password length is a minimum of eight characters,
-	//    and a maximum of 32. The password can contain letters, numbers, and special
-	//    characters (!/@#$%^&+=_). The password must contain at least one lower
-	//    case letter, one upper case letter, one number, and one special character.
-	//    When no CHEF_DELIVERY_ADMIN_PASSWORD is set, one is generated and returned
-	//    in the response.
+	//    * CHEF_AUTOMATE_ADMIN_PASSWORD: The password for the administrative user
+	//    in the Chef Automate web-based dashboard. The password length is a minimum
+	//    of eight characters, and a maximum of 32. The password can contain letters,
+	//    numbers, and special characters (!/@#$%^&+=_). The password must contain
+	//    at least one lower case letter, one upper case letter, one number, and
+	//    one special character. When no CHEF_AUTOMATE_ADMIN_PASSWORD is set, one
+	//    is generated and returned in the response.
 	//
 	// Attributes accepted in a Puppet createServer request:
 	//
 	//    * PUPPET_ADMIN_PASSWORD: To work with the Puppet Enterprise console, a
 	//    password must use ASCII characters.
+	//
+	//    * PUPPET_R10K_REMOTE: The r10k remote is the URL of your control repository
+	//    (for example, ssh://git@your.git-repo.com:user/control-repo.git). Specifying
+	//    an r10k remote opens TCP port 8170.
+	//
+	//    * PUPPET_R10K_PRIVATE_KEY: If you are using a private Git repository,
+	//    add PUPPET_R10K_PRIVATE_KEY to specify a PEM-encoded private SSH key.
 	EngineAttributes []*EngineAttribute `type:"list"`
 
 	// The engine model of the server. Valid values in this release include Monolithic
@@ -1964,8 +2068,7 @@ type CreateServerInput struct {
 	// InstanceProfileArn is a required field
 	InstanceProfileArn *string `type:"string" required:"true"`
 
-	// The Amazon EC2 instance type to use. For example, m4.large. Recommended instance
-	// types include t2.medium and greater, m4.*, or c4.xlarge and greater.
+	// The Amazon EC2 instance type to use. For example, m5.large.
 	//
 	// InstanceType is a required field
 	InstanceType *string `type:"string" required:"true"`
@@ -1986,9 +2089,9 @@ type CreateServerInput struct {
 	// The specified time is in coordinated universal time (UTC). The default value
 	// is a random, daily start time.
 	//
-	// Example:08:00, which represents a daily start time of 08:00 UTC.
+	// Example: 08:00, which represents a daily start time of 08:00 UTC.
 	//
-	// Example:Mon:08:00, which represents a start time of every Monday at 08:00
+	// Example: Mon:08:00, which represents a start time of every Monday at 08:00
 	// UTC. (8:00 a.m.)
 	PreferredBackupWindow *string `type:"string"`
 
@@ -1998,7 +2101,7 @@ type CreateServerInput struct {
 	// time (UTC). The default value is a random one-hour period on Tuesday, Wednesday,
 	// or Friday. See TimeWindowDefinition for more information.
 	//
-	// Example:Mon:08:00, which represents a start time of every Monday at 08:00
+	// Example: Mon:08:00, which represents a start time of every Monday at 08:00
 	// UTC. (8:00 a.m.)
 	PreferredMaintenanceWindow *string `type:"string"`
 
@@ -2038,7 +2141,7 @@ type CreateServerInput struct {
 	// enabled.
 	//
 	// For more information about supported Amazon EC2 platforms, see Supported
-	// Platforms (http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-platforms.html).
+	// Platforms (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-platforms.html).
 	SubnetIds []*string `type:"list"`
 }
 
@@ -2721,7 +2824,7 @@ type DescribeServersOutput struct {
 
 	// Contains the response to a DescribeServers request.
 	//
-	// For Puppet Server:DescribeServersResponse$Servers$EngineAttributes contains
+	// For Puppet Server: DescribeServersResponse$Servers$EngineAttributes contains
 	// PUPPET_API_CA_CERT. This is the PEM-encoded CA certificate that is used by
 	// the Puppet API over TCP port number 8140. The CA certificate is also used
 	// to sign node certificates.
@@ -2852,7 +2955,7 @@ type EngineAttribute struct {
 	Name *string `type:"string"`
 
 	// The value of the engine attribute.
-	Value *string `type:"string"`
+	Value *string `type:"string" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -2877,6 +2980,122 @@ func (s *EngineAttribute) SetValue(v string) *EngineAttribute {
 	return s
 }
 
+type ExportServerEngineAttributeInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the export attribute. Currently, the supported export attribute
+	// is Userdata. This exports a user data script that includes parameters and
+	// values provided in the InputAttributes list.
+	//
+	// ExportAttributeName is a required field
+	ExportAttributeName *string `type:"string" required:"true"`
+
+	// The list of engine attributes. The list type is EngineAttribute. An EngineAttribute
+	// list item is a pair that includes an attribute name and its value. For the
+	// Userdata ExportAttributeName, the following are supported engine attribute
+	// names.
+	//
+	//    * RunList In Chef, a list of roles or recipes that are run in the specified
+	//    order. In Puppet, this parameter is ignored.
+	//
+	//    * OrganizationName In Chef, an organization name. AWS OpsWorks for Chef
+	//    Automate always creates the organization default. In Puppet, this parameter
+	//    is ignored.
+	//
+	//    * NodeEnvironment In Chef, a node environment (for example, development,
+	//    staging, or one-box). In Puppet, this parameter is ignored.
+	//
+	//    * NodeClientVersion In Chef, the version of the Chef engine (three numbers
+	//    separated by dots, such as 13.8.5). If this attribute is empty, OpsWorks
+	//    for Chef Automate uses the most current version. In Puppet, this parameter
+	//    is ignored.
+	InputAttributes []*EngineAttribute `type:"list"`
+
+	// The name of the server from which you are exporting the attribute.
+	//
+	// ServerName is a required field
+	ServerName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ExportServerEngineAttributeInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ExportServerEngineAttributeInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ExportServerEngineAttributeInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ExportServerEngineAttributeInput"}
+	if s.ExportAttributeName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ExportAttributeName"))
+	}
+	if s.ServerName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServerName"))
+	}
+	if s.ServerName != nil && len(*s.ServerName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ServerName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetExportAttributeName sets the ExportAttributeName field's value.
+func (s *ExportServerEngineAttributeInput) SetExportAttributeName(v string) *ExportServerEngineAttributeInput {
+	s.ExportAttributeName = &v
+	return s
+}
+
+// SetInputAttributes sets the InputAttributes field's value.
+func (s *ExportServerEngineAttributeInput) SetInputAttributes(v []*EngineAttribute) *ExportServerEngineAttributeInput {
+	s.InputAttributes = v
+	return s
+}
+
+// SetServerName sets the ServerName field's value.
+func (s *ExportServerEngineAttributeInput) SetServerName(v string) *ExportServerEngineAttributeInput {
+	s.ServerName = &v
+	return s
+}
+
+type ExportServerEngineAttributeOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The requested engine attribute pair with attribute name and value.
+	EngineAttribute *EngineAttribute `type:"structure"`
+
+	// The server name used in the request.
+	ServerName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ExportServerEngineAttributeOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ExportServerEngineAttributeOutput) GoString() string {
+	return s.String()
+}
+
+// SetEngineAttribute sets the EngineAttribute field's value.
+func (s *ExportServerEngineAttributeOutput) SetEngineAttribute(v *EngineAttribute) *ExportServerEngineAttributeOutput {
+	s.EngineAttribute = v
+	return s
+}
+
+// SetServerName sets the ServerName field's value.
+func (s *ExportServerEngineAttributeOutput) SetServerName(v string) *ExportServerEngineAttributeOutput {
+	s.ServerName = &v
+	return s
+}
+
 type RestoreServerInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2886,8 +3105,8 @@ type RestoreServerInput struct {
 	BackupId *string `type:"string" required:"true"`
 
 	// The type of the instance to create. Valid values must be specified in the
-	// following format: ^([cm][34]|t2).* For example, m4.large. Valid values are
-	// t2.medium, m4.large, and m4.2xlarge. If you do not specify this parameter,
+	// following format: ^([cm][34]|t2).* For example, m5.large. Valid values are
+	// m5.large, r5.xlarge, and r5.2xlarge. If you do not specify this parameter,
 	// RestoreServer uses the instance type from the specified backup.
 	InstanceType *string `type:"string"`
 
@@ -2991,7 +3210,7 @@ type Server struct {
 	// A DNS name that can be used to access the engine. Example: myserver-asdfghjkl.us-east-1.opsworks.io
 	Endpoint *string `type:"string"`
 
-	// The engine type of the server. Valid values in this release include Chef
+	// The engine type of the server. Valid values in this release include ChefAutomate
 	// and Puppet.
 	Engine *string `type:"string"`
 
@@ -3001,9 +3220,9 @@ type Server struct {
 	//
 	// Attributes returned in a createServer response for Chef
 	//
-	//    * CHEF_PIVOTAL_KEY: A base64-encoded RSA private key that is generated
-	//    by AWS OpsWorks for Chef Automate. This private key is required to access
-	//    the Chef API.
+	//    * CHEF_AUTOMATE_PIVOTAL_KEY: A base64-encoded RSA private key that is
+	//    generated by AWS OpsWorks for Chef Automate. This private key is required
+	//    to access the Chef API.
 	//
 	//    * CHEF_STARTER_KIT: A base64-encoded ZIP file. The ZIP file contains a
 	//    Chef starter kit, which includes a README, a configuration file, and the

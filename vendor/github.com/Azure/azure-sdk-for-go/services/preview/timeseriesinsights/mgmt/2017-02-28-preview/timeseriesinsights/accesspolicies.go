@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewAccessPoliciesClientWithBaseURI(baseURI string, subscriptionID string) A
 // accessPolicyName - name of the access policy.
 // parameters - parameters for creating an access policy.
 func (client AccessPoliciesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, environmentName string, accessPolicyName string, parameters AccessPolicyCreateOrUpdateParameters) (result AccessPolicyResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccessPoliciesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: accessPolicyName,
 			Constraints: []validation.Constraint{{Target: "accessPolicyName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -132,6 +143,16 @@ func (client AccessPoliciesClient) CreateOrUpdateResponder(resp *http.Response) 
 // accessPolicyName - the name of the Time Series Insights access policy associated with the specified
 // environment.
 func (client AccessPoliciesClient) Delete(ctx context.Context, resourceGroupName string, environmentName string, accessPolicyName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccessPoliciesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, environmentName, accessPolicyName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "timeseriesinsights.AccessPoliciesClient", "Delete", nil, "Failure preparing request")
@@ -202,6 +223,16 @@ func (client AccessPoliciesClient) DeleteResponder(resp *http.Response) (result 
 // accessPolicyName - the name of the Time Series Insights access policy associated with the specified
 // environment.
 func (client AccessPoliciesClient) Get(ctx context.Context, resourceGroupName string, environmentName string, accessPolicyName string) (result AccessPolicyResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccessPoliciesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, environmentName, accessPolicyName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "timeseriesinsights.AccessPoliciesClient", "Get", nil, "Failure preparing request")
@@ -271,6 +302,16 @@ func (client AccessPoliciesClient) GetResponder(resp *http.Response) (result Acc
 // environmentName - the name of the Time Series Insights environment associated with the specified resource
 // group.
 func (client AccessPoliciesClient) ListByEnvironment(ctx context.Context, resourceGroupName string, environmentName string) (result AccessPolicyListResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccessPoliciesClient.ListByEnvironment")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByEnvironmentPreparer(ctx, resourceGroupName, environmentName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "timeseriesinsights.AccessPoliciesClient", "ListByEnvironment", nil, "Failure preparing request")
@@ -343,6 +384,16 @@ func (client AccessPoliciesClient) ListByEnvironmentResponder(resp *http.Respons
 // environment.
 // accessPolicyUpdateParameters - request object that contains the updated information for the access policy.
 func (client AccessPoliciesClient) Update(ctx context.Context, resourceGroupName string, environmentName string, accessPolicyName string, accessPolicyUpdateParameters AccessPolicyUpdateParameters) (result AccessPolicyResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AccessPoliciesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, environmentName, accessPolicyName, accessPolicyUpdateParameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "timeseriesinsights.AccessPoliciesClient", "Update", nil, "Failure preparing request")

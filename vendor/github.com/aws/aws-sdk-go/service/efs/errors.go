@@ -100,8 +100,8 @@ const (
 	// The calling account has reached the limit for elastic network interfaces
 	// for the specific AWS Region. The client should try to delete some elastic
 	// network interfaces or get the account limit raised. For more information,
-	// see Amazon VPC Limits (http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html)
-	// in the Amazon VPC User Guide  (see the Network interfaces per VPC entry in
+	// see Amazon VPC Limits (https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html)
+	// in the Amazon VPC User Guide (see the Network interfaces per VPC entry in
 	// the table).
 	ErrCodeNetworkInterfaceLimitExceeded = "NetworkInterfaceLimitExceeded"
 

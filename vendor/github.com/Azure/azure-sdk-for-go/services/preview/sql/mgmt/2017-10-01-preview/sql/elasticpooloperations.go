@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -49,6 +50,16 @@ func NewElasticPoolOperationsClientWithBaseURI(baseURI string, subscriptionID st
 // serverName - the name of the server.
 // operationID - the operation identifier.
 func (client ElasticPoolOperationsClient) Cancel(ctx context.Context, resourceGroupName string, serverName string, elasticPoolName string, operationID uuid.UUID) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ElasticPoolOperationsClient.Cancel")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CancelPreparer(ctx, resourceGroupName, serverName, elasticPoolName, operationID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ElasticPoolOperationsClient", "Cancel", nil, "Failure preparing request")
@@ -118,6 +129,16 @@ func (client ElasticPoolOperationsClient) CancelResponder(resp *http.Response) (
 // from the Azure Resource Manager API or the portal.
 // serverName - the name of the server.
 func (client ElasticPoolOperationsClient) ListByElasticPool(ctx context.Context, resourceGroupName string, serverName string, elasticPoolName string) (result ElasticPoolOperationListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ElasticPoolOperationsClient.ListByElasticPool")
+		defer func() {
+			sc := -1
+			if result.epolr.Response.Response != nil {
+				sc = result.epolr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByElasticPoolNextResults
 	req, err := client.ListByElasticPoolPreparer(ctx, resourceGroupName, serverName, elasticPoolName)
 	if err != nil {
@@ -183,8 +204,8 @@ func (client ElasticPoolOperationsClient) ListByElasticPoolResponder(resp *http.
 }
 
 // listByElasticPoolNextResults retrieves the next set of results, if any.
-func (client ElasticPoolOperationsClient) listByElasticPoolNextResults(lastResults ElasticPoolOperationListResult) (result ElasticPoolOperationListResult, err error) {
-	req, err := lastResults.elasticPoolOperationListResultPreparer()
+func (client ElasticPoolOperationsClient) listByElasticPoolNextResults(ctx context.Context, lastResults ElasticPoolOperationListResult) (result ElasticPoolOperationListResult, err error) {
+	req, err := lastResults.elasticPoolOperationListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.ElasticPoolOperationsClient", "listByElasticPoolNextResults", nil, "Failure preparing next results request")
 	}
@@ -205,6 +226,16 @@ func (client ElasticPoolOperationsClient) listByElasticPoolNextResults(lastResul
 
 // ListByElasticPoolComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ElasticPoolOperationsClient) ListByElasticPoolComplete(ctx context.Context, resourceGroupName string, serverName string, elasticPoolName string) (result ElasticPoolOperationListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ElasticPoolOperationsClient.ListByElasticPool")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByElasticPool(ctx, resourceGroupName, serverName, elasticPoolName)
 	return
 }

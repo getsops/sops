@@ -15,11 +15,11 @@
 package errorreporting_test
 
 import (
+	"context"
 	"errors"
 	"log"
 
 	"cloud.google.com/go/errorreporting"
-	"golang.org/x/net/context"
 )
 
 func Example() {

@@ -72,9 +72,21 @@ type MediaTailorAPI interface {
 	ListPlaybackConfigurationsWithContext(aws.Context, *mediatailor.ListPlaybackConfigurationsInput, ...request.Option) (*mediatailor.ListPlaybackConfigurationsOutput, error)
 	ListPlaybackConfigurationsRequest(*mediatailor.ListPlaybackConfigurationsInput) (*request.Request, *mediatailor.ListPlaybackConfigurationsOutput)
 
+	ListTagsForResource(*mediatailor.ListTagsForResourceInput) (*mediatailor.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *mediatailor.ListTagsForResourceInput, ...request.Option) (*mediatailor.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*mediatailor.ListTagsForResourceInput) (*request.Request, *mediatailor.ListTagsForResourceOutput)
+
 	PutPlaybackConfiguration(*mediatailor.PutPlaybackConfigurationInput) (*mediatailor.PutPlaybackConfigurationOutput, error)
 	PutPlaybackConfigurationWithContext(aws.Context, *mediatailor.PutPlaybackConfigurationInput, ...request.Option) (*mediatailor.PutPlaybackConfigurationOutput, error)
 	PutPlaybackConfigurationRequest(*mediatailor.PutPlaybackConfigurationInput) (*request.Request, *mediatailor.PutPlaybackConfigurationOutput)
+
+	TagResource(*mediatailor.TagResourceInput) (*mediatailor.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *mediatailor.TagResourceInput, ...request.Option) (*mediatailor.TagResourceOutput, error)
+	TagResourceRequest(*mediatailor.TagResourceInput) (*request.Request, *mediatailor.TagResourceOutput)
+
+	UntagResource(*mediatailor.UntagResourceInput) (*mediatailor.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *mediatailor.UntagResourceInput, ...request.Option) (*mediatailor.UntagResourceOutput, error)
+	UntagResourceRequest(*mediatailor.UntagResourceInput) (*request.Request, *mediatailor.UntagResourceOutput)
 }
 
 var _ MediaTailorAPI = (*mediatailor.MediaTailor)(nil)

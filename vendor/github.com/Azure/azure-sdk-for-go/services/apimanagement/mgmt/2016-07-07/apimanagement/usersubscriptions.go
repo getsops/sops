@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -56,6 +57,16 @@ func NewUserSubscriptionsClientWithBaseURI(baseURI string, subscriptionID string
 // top - number of records to return.
 // skip - number of records to skip.
 func (client UserSubscriptionsClient) ListByUser(ctx context.Context, resourceGroupName string, serviceName string, UID string, filter string, top *int32, skip *int32) (result SubscriptionCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UserSubscriptionsClient.ListByUser")
+		defer func() {
+			sc := -1
+			if result.sc.Response.Response != nil {
+				sc = result.sc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -148,8 +159,8 @@ func (client UserSubscriptionsClient) ListByUserResponder(resp *http.Response) (
 }
 
 // listByUserNextResults retrieves the next set of results, if any.
-func (client UserSubscriptionsClient) listByUserNextResults(lastResults SubscriptionCollection) (result SubscriptionCollection, err error) {
-	req, err := lastResults.subscriptionCollectionPreparer()
+func (client UserSubscriptionsClient) listByUserNextResults(ctx context.Context, lastResults SubscriptionCollection) (result SubscriptionCollection, err error) {
+	req, err := lastResults.subscriptionCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.UserSubscriptionsClient", "listByUserNextResults", nil, "Failure preparing next results request")
 	}
@@ -170,6 +181,16 @@ func (client UserSubscriptionsClient) listByUserNextResults(lastResults Subscrip
 
 // ListByUserComplete enumerates all values, automatically crossing page boundaries as required.
 func (client UserSubscriptionsClient) ListByUserComplete(ctx context.Context, resourceGroupName string, serviceName string, UID string, filter string, top *int32, skip *int32) (result SubscriptionCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UserSubscriptionsClient.ListByUser")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByUser(ctx, resourceGroupName, serviceName, UID, filter, top, skip)
 	return
 }

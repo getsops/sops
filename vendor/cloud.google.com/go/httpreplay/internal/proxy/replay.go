@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// +build go1.8
-
 package proxy
 
 import (
@@ -21,14 +19,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"log"
-	"mime"
-	"mime/multipart"
 	"net/http"
 	"reflect"
-	"strings"
 	"sync"
 
 	"github.com/google/martian/martianlog"
@@ -40,15 +34,20 @@ func ForReplaying(filename string, port int) (*Proxy, error) {
 	if err != nil {
 		return nil, err
 	}
-	calls, initial, err := readLog(filename)
+	lg, err := readLog(filename)
 	if err != nil {
 		return nil, err
 	}
+	calls, err := constructCalls(lg)
+	if err != nil {
+		return nil, err
+	}
+	p.Initial = lg.Initial
 	p.mproxy.SetRoundTripper(&replayRoundTripper{
 		calls:         calls,
 		ignoreHeaders: p.ignoreHeaders,
+		conv:          lg.Converter,
 	})
-	p.Initial = initial
 
 	// Debug logging.
 	// TODO(jba): factor out from here and ForRecording.
@@ -63,26 +62,30 @@ func ForReplaying(filename string, port int) (*Proxy, error) {
 	return p, nil
 }
 
-// A call is an HTTP request and its matching response.
-type call struct {
-	req     *Request
-	reqBody *requestBody // parsed request body
-	res     *Response
-}
-
-func readLog(filename string) ([]*call, []byte, error) {
+func readLog(filename string) (*Log, error) {
 	bytes, err := ioutil.ReadFile(filename)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	var lg Log
 	if err := json.Unmarshal(bytes, &lg); err != nil {
-		return nil, nil, fmt.Errorf("%s: %v", filename, err)
+		return nil, fmt.Errorf("%s: %v", filename, err)
 	}
 	if lg.Version != LogVersion {
-		return nil, nil, fmt.Errorf("httpreplay proxy: read log version %s but current version is %s",
+		return nil, fmt.Errorf(
+			"httpreplay: read log version %s but current version is %s; re-record the log",
 			lg.Version, LogVersion)
 	}
+	return &lg, nil
+}
+
+// A call is an HTTP request and its matching response.
+type call struct {
+	req *Request
+	res *Response
+}
+
+func constructCalls(lg *Log) ([]*call, error) {
 	ignoreIDs := map[string]bool{} // IDs of requests to ignore
 	callsByID := map[string]*call{}
 	var calls []*call
@@ -94,47 +97,47 @@ func readLog(filename string) ([]*call, []byte, error) {
 		switch {
 		case !ok:
 			if e.Request == nil {
-				return nil, nil, fmt.Errorf("first entry for ID %s does not have a request", e.ID)
+				return nil, fmt.Errorf("first entry for ID %s does not have a request", e.ID)
 			}
 			if e.Request.Method == "CONNECT" {
 				// Ignore CONNECT methods.
 				ignoreIDs[e.ID] = true
 			} else {
-				reqBody, err := newRequestBodyFromLog(e.Request)
-				if err != nil {
-					return nil, nil, err
-				}
-				c := &call{e.Request, reqBody, e.Response}
+				c := &call{e.Request, e.Response}
 				calls = append(calls, c)
 				callsByID[e.ID] = c
 			}
 		case e.Request != nil:
 			if e.Response != nil {
-				return nil, nil, errors.New("HAR entry has both request and response")
+				return nil, errors.New("entry has both request and response")
 			}
 			c.req = e.Request
 		case e.Response != nil:
 			c.res = e.Response
 		default:
-			return nil, nil, errors.New("HAR entry has neither request nor response")
+			return nil, errors.New("entry has neither request nor response")
 		}
 	}
 	for _, c := range calls {
 		if c.req == nil || c.res == nil {
-			return nil, nil, fmt.Errorf("missing request or response: %+v", c)
+			return nil, fmt.Errorf("missing request or response: %+v", c)
 		}
 	}
-	return calls, lg.Initial, nil
+	return calls, nil
 }
 
 type replayRoundTripper struct {
 	mu            sync.Mutex
 	calls         []*call
 	ignoreHeaders map[string]bool
+	conv          *Converter
 }
 
 func (r *replayRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
-	reqBody, err := newRequestBodyFromHTTP(req)
+	if req.Body != nil {
+		defer req.Body.Close()
+	}
+	creq, err := r.conv.convertRequest(req)
 	if err != nil {
 		return nil, err
 	}
@@ -144,7 +147,7 @@ func (r *replayRoundTripper) RoundTrip(req *http.Request) (*http.Response, error
 		if call == nil {
 			continue
 		}
-		if requestsMatch(req, reqBody, call.req, call.reqBody, r.ignoreHeaders) {
+		if requestsMatch(creq, call.req, r.ignoreHeaders) {
 			r.calls[i] = nil // nil out this call so we don't reuse it
 			return toHTTPResponse(call.res, req), nil
 		}
@@ -152,128 +155,27 @@ func (r *replayRoundTripper) RoundTrip(req *http.Request) (*http.Response, error
 	return nil, fmt.Errorf("no matching request for %+v", req)
 }
 
-// Headers that shouldn't be compared, because they may differ on different executions
-// of the same code, or may not be present during record or replay.
-var ignoreHeaders = map[string]bool{}
-
-func init() {
-	// Sensitive headers are redacted in the log, so they won't be equal to incoming values.
-	for h := range sensitiveHeaders {
-		ignoreHeaders[h] = true
-	}
-	for _, h := range []string{
-		"Content-Type", // handled by requestBody
-		"Connection",
-		"Date",
-		"Host",
-		"Transfer-Encoding",
-		"Via",
-		"X-Forwarded-For",
-		"X-Forwarded-Host",
-		"X-Forwarded-Proto",
-		"X-Forwarded-Url",
-		"X-Cloud-Trace-Context", // OpenCensus traces have a random ID
-		"X-Goog-Api-Client",     // can differ for, e.g., different Go versions
-	} {
-		ignoreHeaders[h] = true
-	}
-}
-
 // Report whether the incoming request in matches the candidate request cand.
-func requestsMatch(in *http.Request, inBody *requestBody, cand *Request, candBody *requestBody, ignoreHeaders map[string]bool) bool {
+func requestsMatch(in, cand *Request, ignoreHeaders map[string]bool) bool {
 	if in.Method != cand.Method {
 		return false
 	}
-	if in.URL.String() != cand.URL {
+	if in.URL != cand.URL {
 		return false
 	}
-	if !inBody.equal(candBody) {
+	if in.MediaType != cand.MediaType {
 		return false
 	}
-	// Check headers last. See DebugHeaders.
-	return headersMatch(in.Header, cand.Header, ignoreHeaders)
-}
-
-// A requestBody represents the body of a request. If the content type is multipart, the
-// body is split into parts.
-//
-// The replaying proxy needs to understand multipart bodies because the boundaries are
-// generated randomly, so we can't just compare the entire bodies for equality.
-type requestBody struct {
-	mediaType string   // the media type part of the Content-Type header
-	parts     [][]byte // the parts of the body, or just a single []byte if not multipart
-}
-
-func newRequestBodyFromHTTP(req *http.Request) (*requestBody, error) {
-	defer req.Body.Close()
-	return newRequestBody(req.Header.Get("Content-Type"), req.Body)
-}
-
-func newRequestBodyFromLog(req *Request) (*requestBody, error) {
-	if req.Body == nil {
-		return nil, nil
-	}
-	return newRequestBody(req.Header.Get("Content-Type"), bytes.NewReader(req.Body))
-}
-
-// newRequestBody parses the Content-Type header, reads the body, and splits it into
-// parts if necessary.
-func newRequestBody(contentType string, body io.Reader) (*requestBody, error) {
-	if contentType == "" {
-		// No content-type header. There should not be a body.
-		if _, err := body.Read(make([]byte, 1)); err != io.EOF {
-			return nil, errors.New("no Content-Type, but body")
-		}
-		return nil, nil
-	}
-	mediaType, params, err := mime.ParseMediaType(contentType)
-	if err != nil {
-		return nil, err
-	}
-	rb := &requestBody{mediaType: mediaType}
-	if strings.HasPrefix(mediaType, "multipart/") {
-		mr := multipart.NewReader(body, params["boundary"])
-		for {
-			p, err := mr.NextPart()
-			if err == io.EOF {
-				break
-			}
-			if err != nil {
-				return nil, err
-			}
-			part, err := ioutil.ReadAll(p)
-			if err != nil {
-				return nil, err
-			}
-			// TODO(jba): care about part headers?
-			rb.parts = append(rb.parts, part)
-		}
-	} else {
-		bytes, err := ioutil.ReadAll(body)
-		if err != nil {
-			return nil, err
-		}
-		rb.parts = [][]byte{bytes}
-	}
-	return rb, nil
-}
-
-func (r1 *requestBody) equal(r2 *requestBody) bool {
-	if r1 == nil || r2 == nil {
-		return r1 == r2
-	}
-	if r1.mediaType != r2.mediaType {
+	if len(in.BodyParts) != len(cand.BodyParts) {
 		return false
 	}
-	if len(r1.parts) != len(r2.parts) {
-		return false
-	}
-	for i, p1 := range r1.parts {
-		if !bytes.Equal(p1, r2.parts[i]) {
+	for i, p1 := range in.BodyParts {
+		if !bytes.Equal(p1, cand.BodyParts[i]) {
 			return false
 		}
 	}
-	return true
+	// Check headers last. See DebugHeaders.
+	return headersMatch(in.Header, cand.Header, ignoreHeaders)
 }
 
 // DebugHeaders helps to determine whether a header should be ignored.

@@ -5,13 +5,13 @@
 package errgroup_test
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"net/http"
 	"os"
 	"testing"
 
-	"golang.org/x/net/context"
 	"golang.org/x/sync/errgroup"
 )
 

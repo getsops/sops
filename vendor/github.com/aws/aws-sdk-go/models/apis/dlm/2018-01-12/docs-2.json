@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "service": "<fullname>Amazon Data Lifecycle Manager</fullname> <p>With Amazon Data Lifecycle Manager, you can manage the lifecycle of your AWS resources. You create lifecycle policies, which are used to automate operations on the specified resources.</p> <p>Amazon DLM supports Amazon EBS volumes and snapshots. For information about using Amazon DLM with Amazon EBS, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshot-lifecycle.html\">Automating the Amazon EBS Snapshot Lifecycle</a> in the <i>Amazon EC2 User Guide</i>.</p>",
+  "service": "<fullname>Amazon Data Lifecycle Manager</fullname> <p>With Amazon Data Lifecycle Manager, you can manage the lifecycle of your AWS resources. You create lifecycle policies, which are used to automate operations on the specified resources.</p> <p>Amazon DLM supports Amazon EBS volumes and snapshots. For information about using Amazon DLM with Amazon EBS, see <a href=\"https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshot-lifecycle.html\">Automating the Amazon EBS Snapshot Lifecycle</a> in the <i>Amazon EC2 User Guide</i>.</p>",
   "operations": {
     "CreateLifecyclePolicy": "<p>Creates a policy to manage the lifecycle of the specified AWS resources. You can create up to 100 lifecycle policies.</p>",
     "DeleteLifecyclePolicy": "<p>Deletes the specified lifecycle policy and halts the automated operations that the policy specified.</p>",
@@ -9,6 +9,12 @@
     "UpdateLifecyclePolicy": "<p>Updates the specified lifecycle policy.</p>"
   },
   "shapes": {
+    "CopyTags": {
+      "base": null,
+      "refs": {
+        "Schedule$CopyTags": "<p>Copy all user-defined tags on a source volume to snapshots of the volume created by this policy.</p>"
+      }
+    },
     "Count": {
       "base": null,
       "refs": {
@@ -59,6 +65,12 @@
         "ResourceNotFoundException$Message": null
       }
     },
+    "ExcludeBootVolume": {
+      "base": null,
+      "refs": {
+        "Parameters$ExcludeBootVolume": "<p>When executing an EBS Snapshot Management – Instance policy, execute all CreateSnapshots calls with the <code>excludeBootVolume</code> set to the supplied field. Defaults to false. Only valid for EBS Snapshot Management – Instance policies.</p>"
+      }
+    },
     "ExecutionRoleArn": {
       "base": null,
       "refs": {
@@ -103,7 +115,7 @@
     "Interval": {
       "base": null,
       "refs": {
-        "CreateRule$Interval": "<p>The interval. The supported values are 12 and 24.</p>"
+        "CreateRule$Interval": "<p>The interval between snapshots. The supported values are 2, 3, 4, 6, 8, 12, and 24.</p>"
       }
     },
     "IntervalUnitValues": {
@@ -153,6 +165,12 @@
         "InvalidRequestException$MutuallyExclusiveParameters": "<p>The request included parameters that cannot be provided together.</p>"
       }
     },
+    "Parameters": {
+      "base": "<p>Optional parameters that can be added to the policy. The set of valid parameters depends on the combination of <code>policyType</code> and <code>resourceType</code> values.</p>",
+      "refs": {
+        "PolicyDetails$Parameters": "<p>A set of optional parameters that can be provided by the policy. </p>"
+      }
+    },
     "PolicyDescription": {
       "base": null,
       "refs": {
@@ -187,6 +205,12 @@
       "refs": {
         "GetLifecyclePoliciesRequest$PolicyIds": "<p>The identifiers of the data lifecycle policies.</p>",
         "ResourceNotFoundException$ResourceIds": "<p>Value is a list of resource IDs that were not found.</p>"
+      }
+    },
+    "PolicyTypeValues": {
+      "base": null,
+      "refs": {
+        "PolicyDetails$PolicyType": "<p>This field determines the valid target resource types and actions a policy can manage. This field defaults to EBS_SNAPSHOT_MANAGEMENT if not present.</p>"
       }
     },
     "ResourceNotFoundException": {
@@ -251,7 +275,8 @@
       "base": "<p>Specifies a tag for a resource.</p>",
       "refs": {
         "TagsToAddList$member": null,
-        "TargetTagList$member": null
+        "TargetTagList$member": null,
+        "VariableTagsList$member": null
       }
     },
     "TagFilter": {
@@ -294,7 +319,7 @@
     "TimesList": {
       "base": null,
       "refs": {
-        "CreateRule$Times": "<p>The time, in UTC, to start the operation.</p> <p>The operation occurs within a one-hour window following the specified time.</p>"
+        "CreateRule$Times": "<p>The time, in UTC, to start the operation. The supported format is hh:mm.</p> <p>The operation occurs within a one-hour window following the specified time.</p>"
       }
     },
     "Timestamp": {
@@ -312,6 +337,12 @@
     "UpdateLifecyclePolicyResponse": {
       "base": null,
       "refs": {
+      }
+    },
+    "VariableTagsList": {
+      "base": null,
+      "refs": {
+        "Schedule$VariableTags": "<p>A collection of key/value pairs with values determined dynamically when the policy is executed. Keys may be any valid Amazon EC2 tag key. Values must be in one of the two following formats: <code>$(instance-id)</code> or <code>$(timestamp)</code>. Variable tags are only valid for EBS Snapshot Management – Instance policies.</p>"
       }
     }
   }

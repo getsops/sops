@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewListManagementTermListsClient(endpoint string) ListManagementTermListsCl
 // contentType - the content type.
 // body - schema of the body.
 func (client ListManagementTermListsClient) Create(ctx context.Context, contentType string, body Body) (result TermList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListManagementTermListsClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreatePreparer(ctx, contentType, body)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "contentmoderator.ListManagementTermListsClient", "Create", nil, "Failure preparing request")
@@ -107,6 +118,16 @@ func (client ListManagementTermListsClient) CreateResponder(resp *http.Response)
 // Parameters:
 // listID - list Id of the image list.
 func (client ListManagementTermListsClient) Delete(ctx context.Context, listID string) (result String, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListManagementTermListsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, listID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "contentmoderator.ListManagementTermListsClient", "Delete", nil, "Failure preparing request")
@@ -167,6 +188,16 @@ func (client ListManagementTermListsClient) DeleteResponder(resp *http.Response)
 
 // GetAllTermLists gets all the Term Lists
 func (client ListManagementTermListsClient) GetAllTermLists(ctx context.Context) (result ListTermList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListManagementTermListsClient.GetAllTermLists")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetAllTermListsPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "contentmoderator.ListManagementTermListsClient", "GetAllTermLists", nil, "Failure preparing request")
@@ -225,6 +256,16 @@ func (client ListManagementTermListsClient) GetAllTermListsResponder(resp *http.
 // Parameters:
 // listID - list Id of the image list.
 func (client ListManagementTermListsClient) GetDetails(ctx context.Context, listID string) (result TermList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListManagementTermListsClient.GetDetails")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetDetailsPreparer(ctx, listID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "contentmoderator.ListManagementTermListsClient", "GetDetails", nil, "Failure preparing request")
@@ -288,6 +329,16 @@ func (client ListManagementTermListsClient) GetDetailsResponder(resp *http.Respo
 // listID - list Id of the image list.
 // language - language of the terms.
 func (client ListManagementTermListsClient) RefreshIndexMethod(ctx context.Context, listID string, language string) (result RefreshIndex, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListManagementTermListsClient.RefreshIndexMethod")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.RefreshIndexMethodPreparer(ctx, listID, language)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "contentmoderator.ListManagementTermListsClient", "RefreshIndexMethod", nil, "Failure preparing request")
@@ -357,6 +408,16 @@ func (client ListManagementTermListsClient) RefreshIndexMethodResponder(resp *ht
 // contentType - the content type.
 // body - schema of the body.
 func (client ListManagementTermListsClient) Update(ctx context.Context, listID string, contentType string, body Body) (result TermList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ListManagementTermListsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, listID, contentType, body)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "contentmoderator.ListManagementTermListsClient", "Update", nil, "Failure preparing request")

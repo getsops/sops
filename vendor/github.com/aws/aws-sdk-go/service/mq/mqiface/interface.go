@@ -68,6 +68,10 @@ type MQAPI interface {
 	CreateConfigurationWithContext(aws.Context, *mq.CreateConfigurationRequest, ...request.Option) (*mq.CreateConfigurationResponse, error)
 	CreateConfigurationRequest(*mq.CreateConfigurationRequest) (*request.Request, *mq.CreateConfigurationResponse)
 
+	CreateTags(*mq.CreateTagsInput) (*mq.CreateTagsOutput, error)
+	CreateTagsWithContext(aws.Context, *mq.CreateTagsInput, ...request.Option) (*mq.CreateTagsOutput, error)
+	CreateTagsRequest(*mq.CreateTagsInput) (*request.Request, *mq.CreateTagsOutput)
+
 	CreateUser(*mq.CreateUserRequest) (*mq.CreateUserOutput, error)
 	CreateUserWithContext(aws.Context, *mq.CreateUserRequest, ...request.Option) (*mq.CreateUserOutput, error)
 	CreateUserRequest(*mq.CreateUserRequest) (*request.Request, *mq.CreateUserOutput)
@@ -76,6 +80,10 @@ type MQAPI interface {
 	DeleteBrokerWithContext(aws.Context, *mq.DeleteBrokerInput, ...request.Option) (*mq.DeleteBrokerResponse, error)
 	DeleteBrokerRequest(*mq.DeleteBrokerInput) (*request.Request, *mq.DeleteBrokerResponse)
 
+	DeleteTags(*mq.DeleteTagsInput) (*mq.DeleteTagsOutput, error)
+	DeleteTagsWithContext(aws.Context, *mq.DeleteTagsInput, ...request.Option) (*mq.DeleteTagsOutput, error)
+	DeleteTagsRequest(*mq.DeleteTagsInput) (*request.Request, *mq.DeleteTagsOutput)
+
 	DeleteUser(*mq.DeleteUserInput) (*mq.DeleteUserOutput, error)
 	DeleteUserWithContext(aws.Context, *mq.DeleteUserInput, ...request.Option) (*mq.DeleteUserOutput, error)
 	DeleteUserRequest(*mq.DeleteUserInput) (*request.Request, *mq.DeleteUserOutput)
@@ -83,6 +91,14 @@ type MQAPI interface {
 	DescribeBroker(*mq.DescribeBrokerInput) (*mq.DescribeBrokerResponse, error)
 	DescribeBrokerWithContext(aws.Context, *mq.DescribeBrokerInput, ...request.Option) (*mq.DescribeBrokerResponse, error)
 	DescribeBrokerRequest(*mq.DescribeBrokerInput) (*request.Request, *mq.DescribeBrokerResponse)
+
+	DescribeBrokerEngineTypes(*mq.DescribeBrokerEngineTypesInput) (*mq.DescribeBrokerEngineTypesOutput, error)
+	DescribeBrokerEngineTypesWithContext(aws.Context, *mq.DescribeBrokerEngineTypesInput, ...request.Option) (*mq.DescribeBrokerEngineTypesOutput, error)
+	DescribeBrokerEngineTypesRequest(*mq.DescribeBrokerEngineTypesInput) (*request.Request, *mq.DescribeBrokerEngineTypesOutput)
+
+	DescribeBrokerInstanceOptions(*mq.DescribeBrokerInstanceOptionsInput) (*mq.DescribeBrokerInstanceOptionsOutput, error)
+	DescribeBrokerInstanceOptionsWithContext(aws.Context, *mq.DescribeBrokerInstanceOptionsInput, ...request.Option) (*mq.DescribeBrokerInstanceOptionsOutput, error)
+	DescribeBrokerInstanceOptionsRequest(*mq.DescribeBrokerInstanceOptionsInput) (*request.Request, *mq.DescribeBrokerInstanceOptionsOutput)
 
 	DescribeConfiguration(*mq.DescribeConfigurationInput) (*mq.DescribeConfigurationOutput, error)
 	DescribeConfigurationWithContext(aws.Context, *mq.DescribeConfigurationInput, ...request.Option) (*mq.DescribeConfigurationOutput, error)
@@ -107,6 +123,10 @@ type MQAPI interface {
 	ListConfigurations(*mq.ListConfigurationsInput) (*mq.ListConfigurationsResponse, error)
 	ListConfigurationsWithContext(aws.Context, *mq.ListConfigurationsInput, ...request.Option) (*mq.ListConfigurationsResponse, error)
 	ListConfigurationsRequest(*mq.ListConfigurationsInput) (*request.Request, *mq.ListConfigurationsResponse)
+
+	ListTags(*mq.ListTagsInput) (*mq.ListTagsOutput, error)
+	ListTagsWithContext(aws.Context, *mq.ListTagsInput, ...request.Option) (*mq.ListTagsOutput, error)
+	ListTagsRequest(*mq.ListTagsInput) (*request.Request, *mq.ListTagsOutput)
 
 	ListUsers(*mq.ListUsersInput) (*mq.ListUsersResponse, error)
 	ListUsersWithContext(aws.Context, *mq.ListUsersInput, ...request.Option) (*mq.ListUsersResponse, error)

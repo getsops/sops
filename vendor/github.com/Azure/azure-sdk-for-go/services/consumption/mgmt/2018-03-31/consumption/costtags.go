@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -40,13 +41,23 @@ func NewCostTagsClientWithBaseURI(baseURI string, subscriptionID string) CostTag
 	return CostTagsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
-// CreateOrUpdate the operation to create or update cost tags assiciated with a billing account. Update operation
+// CreateOrUpdate the operation to create or update cost tags associated with a billing account. Update operation
 // requires latest eTag to be set in the request mandatorily. You may obtain the latest eTag by performing a get
 // operation. Create operation does not require eTag.
 // Parameters:
 // billingAccountID - billingAccount ID
 // parameters - parameters supplied to the Create cost tags operation.
 func (client CostTagsClient) CreateOrUpdate(ctx context.Context, billingAccountID string, parameters CostTags) (result CostTags, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CostTagsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, billingAccountID, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "consumption.CostTagsClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -113,6 +124,16 @@ func (client CostTagsClient) CreateOrUpdateResponder(resp *http.Response) (resul
 // Parameters:
 // billingAccountID - billingAccount ID
 func (client CostTagsClient) Get(ctx context.Context, billingAccountID string) (result CostTags, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CostTagsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, billingAccountID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "consumption.CostTagsClient", "Get", nil, "Failure preparing request")

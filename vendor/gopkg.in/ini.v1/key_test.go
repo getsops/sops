@@ -216,6 +216,10 @@ func TestKey_Helpers(t *testing.T) {
 			So(err, ShouldBeNil)
 			So(v7.String(), ShouldEqual, t.String())
 
+			v8, err := sec.Key("HEX_NUMBER").Int()
+			So(err, ShouldBeNil)
+			So(v8, ShouldEqual, 0x3000)
+
 			Convey("Must get values with type", func() {
 				So(sec.Key("STRING").MustString("404"), ShouldEqual, "str")
 				So(sec.Key("BOOL").MustBool(), ShouldBeTrue)
@@ -225,6 +229,7 @@ func TestKey_Helpers(t *testing.T) {
 				So(sec.Key("UINT").MustUint(), ShouldEqual, 3)
 				So(sec.Key("UINT").MustUint64(), ShouldEqual, 3)
 				So(sec.Key("TIME").MustTime().String(), ShouldEqual, t.String())
+				So(sec.Key("HEX_NUMBER").MustInt(), ShouldEqual, 0x3000)
 
 				dur, err := time.ParseDuration("2h45m")
 				So(err, ShouldBeNil)
@@ -238,6 +243,7 @@ func TestKey_Helpers(t *testing.T) {
 					So(sec.Key("INT64_404").MustInt64(15), ShouldEqual, 15)
 					So(sec.Key("UINT_404").MustUint(6), ShouldEqual, 6)
 					So(sec.Key("UINT64_404").MustUint64(6), ShouldEqual, 6)
+					So(sec.Key("HEX_NUMBER_404").MustInt(0x3001), ShouldEqual, 0x3001)
 
 					t, err := time.Parse(time.RFC3339, "2014-01-01T20:17:05Z")
 					So(err, ShouldBeNil)
@@ -255,6 +261,7 @@ func TestKey_Helpers(t *testing.T) {
 						So(sec.Key("UINT64_404").String(), ShouldEqual, "6")
 						So(sec.Key("TIME_404").String(), ShouldEqual, "2014-01-01T20:17:05Z")
 						So(sec.Key("DURATION_404").String(), ShouldEqual, "2h45m0s")
+						So(sec.Key("HEX_NUMBER_404").String(), ShouldEqual, "12289")
 					})
 				})
 			})
@@ -514,10 +521,13 @@ func TestRecursiveValues(t *testing.T) {
 	Convey("Recursive values should not reflect on same key", t, func() {
 		f, err := ini.Load([]byte(`
 NAME = ini
+expires = yes
 [package]
-NAME = %(NAME)s`))
+NAME = %(NAME)s
+expires = %(expires)s`))
 		So(err, ShouldBeNil)
 		So(f, ShouldNotBeNil)
 		So(f.Section("package").Key("NAME").String(), ShouldEqual, "ini")
+		So(f.Section("package").Key("expires").String(), ShouldEqual, "yes")
 	})
 }

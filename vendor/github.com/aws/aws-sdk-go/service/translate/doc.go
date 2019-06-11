@@ -3,8 +3,8 @@
 // Package translate provides the client and types for making API
 // requests to Amazon Translate.
 //
-// Provides translation between English and one of six languages, or between
-// one of the six languages and English.
+// Provides translation between one source language and another of the same
+// set of languages.
 //
 // See https://docs.aws.amazon.com/goto/WebAPI/translate-2017-07-01 for more information on this service.
 //

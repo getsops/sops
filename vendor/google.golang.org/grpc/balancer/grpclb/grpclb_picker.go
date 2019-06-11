@@ -19,13 +19,14 @@
 package grpclb
 
 import (
+	"context"
 	"sync"
 	"sync/atomic"
 
-	"golang.org/x/net/context"
 	"google.golang.org/grpc/balancer"
 	lbpb "google.golang.org/grpc/balancer/grpclb/grpc_lb_v1"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/internal/grpcrand"
 	"google.golang.org/grpc/status"
 )
 
@@ -110,6 +111,13 @@ type rrPicker struct {
 	subConnsNext int
 }
 
+func newRRPicker(readySCs []balancer.SubConn) *rrPicker {
+	return &rrPicker{
+		subConns:     readySCs,
+		subConnsNext: grpcrand.Intn(len(readySCs)),
+	}
+}
+
 func (p *rrPicker) Pick(ctx context.Context, opts balancer.PickOptions) (balancer.SubConn, func(balancer.DoneInfo), error) {
 	p.mu.Lock()
 	defer p.mu.Unlock()
@@ -135,6 +143,15 @@ type lbPicker struct {
 	subConnsNext   int
 
 	stats *rpcStats
+}
+
+func newLBPicker(serverList []*lbpb.Server, readySCs []balancer.SubConn, stats *rpcStats) *lbPicker {
+	return &lbPicker{
+		serverList:   serverList,
+		subConns:     readySCs,
+		subConnsNext: grpcrand.Intn(len(readySCs)),
+		stats:        stats,
+	}
 }
 
 func (p *lbPicker) Pick(ctx context.Context, opts balancer.PickOptions) (balancer.SubConn, func(balancer.DoneInfo), error) {
@@ -167,4 +184,12 @@ func (p *lbPicker) Pick(ctx context.Context, opts balancer.PickOptions) (balance
 		}
 	}
 	return sc, done, nil
+}
+
+func (p *lbPicker) updateReadySCs(readySCs []balancer.SubConn) {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+
+	p.subConns = readySCs
+	p.subConnsNext = p.subConnsNext % len(readySCs)
 }

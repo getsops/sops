@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewCostInsightClientWithBaseURI(baseURI string, subscriptionID string) Cost
 // labName - the name of the lab.
 // name - the name of the cost insight.
 func (client CostInsightClient) GetResource(ctx context.Context, resourceGroupName string, labName string, name string) (result CostInsight, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CostInsightClient.GetResource")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetResourcePreparer(ctx, resourceGroupName, labName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.CostInsightClient", "GetResource", nil, "Failure preparing request")
@@ -114,6 +125,16 @@ func (client CostInsightClient) GetResourceResponder(resp *http.Response) (resul
 // labName - the name of the lab.
 // filter - the filter to apply on the operation.
 func (client CostInsightClient) List(ctx context.Context, resourceGroupName string, labName string, filter string, top *int32, orderBy string) (result ResponseWithContinuationCostInsightPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CostInsightClient.List")
+		defer func() {
+			sc := -1
+			if result.rwcci.Response.Response != nil {
+				sc = result.rwcci.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, labName, filter, top, orderBy)
 	if err != nil {
@@ -187,8 +208,8 @@ func (client CostInsightClient) ListResponder(resp *http.Response) (result Respo
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client CostInsightClient) listNextResults(lastResults ResponseWithContinuationCostInsight) (result ResponseWithContinuationCostInsight, err error) {
-	req, err := lastResults.responseWithContinuationCostInsightPreparer()
+func (client CostInsightClient) listNextResults(ctx context.Context, lastResults ResponseWithContinuationCostInsight) (result ResponseWithContinuationCostInsight, err error) {
+	req, err := lastResults.responseWithContinuationCostInsightPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "dtl.CostInsightClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -209,6 +230,16 @@ func (client CostInsightClient) listNextResults(lastResults ResponseWithContinua
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client CostInsightClient) ListComplete(ctx context.Context, resourceGroupName string, labName string, filter string, top *int32, orderBy string) (result ResponseWithContinuationCostInsightIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CostInsightClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, labName, filter, top, orderBy)
 	return
 }
@@ -219,6 +250,16 @@ func (client CostInsightClient) ListComplete(ctx context.Context, resourceGroupN
 // labName - the name of the lab.
 // name - the name of the cost insight.
 func (client CostInsightClient) RefreshData(ctx context.Context, resourceGroupName string, labName string, name string) (result CostInsightRefreshDataFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CostInsightClient.RefreshData")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.RefreshDataPreparer(ctx, resourceGroupName, labName, name)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.CostInsightClient", "RefreshData", nil, "Failure preparing request")
@@ -262,10 +303,6 @@ func (client CostInsightClient) RefreshDataSender(req *http.Request) (future Cos
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

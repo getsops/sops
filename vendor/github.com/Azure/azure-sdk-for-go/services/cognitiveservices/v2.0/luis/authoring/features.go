@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -36,13 +37,23 @@ func NewFeaturesClient(endpoint string) FeaturesClient {
 	return FeaturesClient{New(endpoint)}
 }
 
-// AddPhraseList creates a new phraselist feature.
+// AddPhraseList creates a new phraselist feature in a version of the application.
 // Parameters:
 // appID - the application ID.
 // versionID - the version ID.
 // phraselistCreateObject - a Phraselist object containing Name, comma-separated Phrases and the isExchangeable
 // boolean. Default value for isExchangeable is true.
 func (client FeaturesClient) AddPhraseList(ctx context.Context, appID uuid.UUID, versionID string, phraselistCreateObject PhraselistCreateObject) (result Int32, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FeaturesClient.AddPhraseList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddPhraseListPreparer(ctx, appID, versionID, phraselistCreateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.FeaturesClient", "AddPhraseList", nil, "Failure preparing request")
@@ -104,12 +115,22 @@ func (client FeaturesClient) AddPhraseListResponder(resp *http.Response) (result
 	return
 }
 
-// DeletePhraseList deletes a phraselist feature.
+// DeletePhraseList deletes a phraselist feature from a version of the application.
 // Parameters:
 // appID - the application ID.
 // versionID - the version ID.
 // phraselistID - the ID of the feature to be deleted.
 func (client FeaturesClient) DeletePhraseList(ctx context.Context, appID uuid.UUID, versionID string, phraselistID int32) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FeaturesClient.DeletePhraseList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePhraseListPreparer(ctx, appID, versionID, phraselistID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.FeaturesClient", "DeletePhraseList", nil, "Failure preparing request")
@@ -170,12 +191,22 @@ func (client FeaturesClient) DeletePhraseListResponder(resp *http.Response) (res
 	return
 }
 
-// GetPhraseList gets phraselist feature info.
+// GetPhraseList gets phraselist feature info in a version of the application.
 // Parameters:
 // appID - the application ID.
 // versionID - the version ID.
 // phraselistID - the ID of the feature to be retrieved.
 func (client FeaturesClient) GetPhraseList(ctx context.Context, appID uuid.UUID, versionID string, phraselistID int32) (result PhraseListFeatureInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FeaturesClient.GetPhraseList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPhraseListPreparer(ctx, appID, versionID, phraselistID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.FeaturesClient", "GetPhraseList", nil, "Failure preparing request")
@@ -236,13 +267,23 @@ func (client FeaturesClient) GetPhraseListResponder(resp *http.Response) (result
 	return
 }
 
-// List gets all the extraction features for the specified application version.
+// List gets all the extraction phraselist and pattern features in a version of the application.
 // Parameters:
 // appID - the application ID.
 // versionID - the version ID.
 // skip - the number of entries to skip. Default value is 0.
 // take - the number of entries to return. Maximum page size is 500. Default is 100.
 func (client FeaturesClient) List(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (result FeaturesResponseObject, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FeaturesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
@@ -327,13 +368,125 @@ func (client FeaturesClient) ListResponder(resp *http.Response) (result Features
 	return
 }
 
-// ListPhraseLists gets all the phraselist features.
+// ListApplicationVersionPatternFeatures [DEPRECATED NOTICE: This operation will soon be removed] Gets all the pattern
+// features.
+// Parameters:
+// appID - the application ID.
+// versionID - the version ID.
+// skip - the number of entries to skip. Default value is 0.
+// take - the number of entries to return. Maximum page size is 500. Default is 100.
+func (client FeaturesClient) ListApplicationVersionPatternFeatures(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (result ListPatternFeatureInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FeaturesClient.ListApplicationVersionPatternFeatures")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: skip,
+			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
+				Chain: []validation.Constraint{{Target: "skip", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil}}}}},
+		{TargetValue: take,
+			Constraints: []validation.Constraint{{Target: "take", Name: validation.Null, Rule: false,
+				Chain: []validation.Constraint{{Target: "take", Name: validation.InclusiveMaximum, Rule: int64(500), Chain: nil},
+					{Target: "take", Name: validation.InclusiveMinimum, Rule: 0, Chain: nil},
+				}}}}}); err != nil {
+		return result, validation.NewError("authoring.FeaturesClient", "ListApplicationVersionPatternFeatures", err.Error())
+	}
+
+	req, err := client.ListApplicationVersionPatternFeaturesPreparer(ctx, appID, versionID, skip, take)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "authoring.FeaturesClient", "ListApplicationVersionPatternFeatures", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.ListApplicationVersionPatternFeaturesSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "authoring.FeaturesClient", "ListApplicationVersionPatternFeatures", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.ListApplicationVersionPatternFeaturesResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "authoring.FeaturesClient", "ListApplicationVersionPatternFeatures", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// ListApplicationVersionPatternFeaturesPreparer prepares the ListApplicationVersionPatternFeatures request.
+func (client FeaturesClient) ListApplicationVersionPatternFeaturesPreparer(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
+	pathParameters := map[string]interface{}{
+		"appId":     autorest.Encode("path", appID),
+		"versionId": autorest.Encode("path", versionID),
+	}
+
+	queryParameters := map[string]interface{}{}
+	if skip != nil {
+		queryParameters["skip"] = autorest.Encode("query", *skip)
+	} else {
+		queryParameters["skip"] = autorest.Encode("query", 0)
+	}
+	if take != nil {
+		queryParameters["take"] = autorest.Encode("query", *take)
+	} else {
+		queryParameters["take"] = autorest.Encode("query", 100)
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsGet(),
+		autorest.WithCustomBaseURL("{Endpoint}/luis/api/v2.0", urlParameters),
+		autorest.WithPathParameters("/apps/{appId}/versions/{versionId}/patterns", pathParameters),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// ListApplicationVersionPatternFeaturesSender sends the ListApplicationVersionPatternFeatures request. The method will close the
+// http.Response Body if it receives an error.
+func (client FeaturesClient) ListApplicationVersionPatternFeaturesSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+}
+
+// ListApplicationVersionPatternFeaturesResponder handles the response to the ListApplicationVersionPatternFeatures request. The method always
+// closes the http.Response Body.
+func (client FeaturesClient) ListApplicationVersionPatternFeaturesResponder(resp *http.Response) (result ListPatternFeatureInfo, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result.Value),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// ListPhraseLists gets all the phraselist features in a version of the application.
 // Parameters:
 // appID - the application ID.
 // versionID - the version ID.
 // skip - the number of entries to skip. Default value is 0.
 // take - the number of entries to return. Maximum page size is 500. Default is 100.
 func (client FeaturesClient) ListPhraseLists(ctx context.Context, appID uuid.UUID, versionID string, skip *int32, take *int32) (result ListPhraseListFeatureInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FeaturesClient.ListPhraseLists")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: skip,
 			Constraints: []validation.Constraint{{Target: "skip", Name: validation.Null, Rule: false,
@@ -418,7 +571,8 @@ func (client FeaturesClient) ListPhraseListsResponder(resp *http.Response) (resu
 	return
 }
 
-// UpdatePhraseList updates the phrases, the state and the name of the phraselist feature.
+// UpdatePhraseList updates the phrases, the state and the name of the phraselist feature in a version of the
+// application.
 // Parameters:
 // appID - the application ID.
 // versionID - the version ID.
@@ -426,6 +580,16 @@ func (client FeaturesClient) ListPhraseListsResponder(resp *http.Response) (resu
 // phraselistUpdateObject - the new values for: - Just a boolean called IsActive, in which case the status of
 // the feature will be changed. - Name, Pattern, Mode, and a boolean called IsActive to update the feature.
 func (client FeaturesClient) UpdatePhraseList(ctx context.Context, appID uuid.UUID, versionID string, phraselistID int32, phraselistUpdateObject *PhraselistUpdateObject) (result OperationStatus, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FeaturesClient.UpdatePhraseList")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePhraseListPreparer(ctx, appID, versionID, phraselistID, phraselistUpdateObject)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "authoring.FeaturesClient", "UpdatePhraseList", nil, "Failure preparing request")

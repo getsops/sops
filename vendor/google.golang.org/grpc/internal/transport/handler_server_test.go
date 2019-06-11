@@ -19,6 +19,7 @@
 package transport
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -32,7 +33,6 @@ import (
 
 	"github.com/golang/protobuf/proto"
 	dpb "github.com/golang/protobuf/ptypes/duration"
-	"golang.org/x/net/context"
 	epb "google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
@@ -97,26 +97,6 @@ func TestHandlerTransport_NewServerHandlerTransport(t *testing.T) {
 				return struct{ onlyCloseNotifier }{w.(onlyCloseNotifier)}
 			},
 			wantErr: "gRPC requires a ResponseWriter supporting http.Flusher",
-		},
-		{
-			name: "not closenotifier",
-			req: &http.Request{
-				ProtoMajor: 2,
-				Method:     "POST",
-				Header: http.Header{
-					"Content-Type": {"application/grpc"},
-				},
-				RequestURI: "/service/foo.bar",
-			},
-			modrw: func(w http.ResponseWriter) http.ResponseWriter {
-				// Return w without its CloseNotify method
-				type onlyFlusher interface {
-					http.ResponseWriter
-					http.Flusher
-				}
-				return struct{ onlyFlusher }{w.(onlyFlusher)}
-			},
-			wantErr: "gRPC requires a ResponseWriter supporting http.CloseNotifier",
 		},
 		{
 			name: "valid",

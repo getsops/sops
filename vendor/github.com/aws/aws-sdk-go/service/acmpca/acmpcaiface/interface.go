@@ -68,9 +68,17 @@ type ACMPCAAPI interface {
 	CreateCertificateAuthorityAuditReportWithContext(aws.Context, *acmpca.CreateCertificateAuthorityAuditReportInput, ...request.Option) (*acmpca.CreateCertificateAuthorityAuditReportOutput, error)
 	CreateCertificateAuthorityAuditReportRequest(*acmpca.CreateCertificateAuthorityAuditReportInput) (*request.Request, *acmpca.CreateCertificateAuthorityAuditReportOutput)
 
+	CreatePermission(*acmpca.CreatePermissionInput) (*acmpca.CreatePermissionOutput, error)
+	CreatePermissionWithContext(aws.Context, *acmpca.CreatePermissionInput, ...request.Option) (*acmpca.CreatePermissionOutput, error)
+	CreatePermissionRequest(*acmpca.CreatePermissionInput) (*request.Request, *acmpca.CreatePermissionOutput)
+
 	DeleteCertificateAuthority(*acmpca.DeleteCertificateAuthorityInput) (*acmpca.DeleteCertificateAuthorityOutput, error)
 	DeleteCertificateAuthorityWithContext(aws.Context, *acmpca.DeleteCertificateAuthorityInput, ...request.Option) (*acmpca.DeleteCertificateAuthorityOutput, error)
 	DeleteCertificateAuthorityRequest(*acmpca.DeleteCertificateAuthorityInput) (*request.Request, *acmpca.DeleteCertificateAuthorityOutput)
+
+	DeletePermission(*acmpca.DeletePermissionInput) (*acmpca.DeletePermissionOutput, error)
+	DeletePermissionWithContext(aws.Context, *acmpca.DeletePermissionInput, ...request.Option) (*acmpca.DeletePermissionOutput, error)
+	DeletePermissionRequest(*acmpca.DeletePermissionInput) (*request.Request, *acmpca.DeletePermissionOutput)
 
 	DescribeCertificateAuthority(*acmpca.DescribeCertificateAuthorityInput) (*acmpca.DescribeCertificateAuthorityOutput, error)
 	DescribeCertificateAuthorityWithContext(aws.Context, *acmpca.DescribeCertificateAuthorityInput, ...request.Option) (*acmpca.DescribeCertificateAuthorityOutput, error)
@@ -104,9 +112,22 @@ type ACMPCAAPI interface {
 	ListCertificateAuthoritiesWithContext(aws.Context, *acmpca.ListCertificateAuthoritiesInput, ...request.Option) (*acmpca.ListCertificateAuthoritiesOutput, error)
 	ListCertificateAuthoritiesRequest(*acmpca.ListCertificateAuthoritiesInput) (*request.Request, *acmpca.ListCertificateAuthoritiesOutput)
 
+	ListCertificateAuthoritiesPages(*acmpca.ListCertificateAuthoritiesInput, func(*acmpca.ListCertificateAuthoritiesOutput, bool) bool) error
+	ListCertificateAuthoritiesPagesWithContext(aws.Context, *acmpca.ListCertificateAuthoritiesInput, func(*acmpca.ListCertificateAuthoritiesOutput, bool) bool, ...request.Option) error
+
+	ListPermissions(*acmpca.ListPermissionsInput) (*acmpca.ListPermissionsOutput, error)
+	ListPermissionsWithContext(aws.Context, *acmpca.ListPermissionsInput, ...request.Option) (*acmpca.ListPermissionsOutput, error)
+	ListPermissionsRequest(*acmpca.ListPermissionsInput) (*request.Request, *acmpca.ListPermissionsOutput)
+
+	ListPermissionsPages(*acmpca.ListPermissionsInput, func(*acmpca.ListPermissionsOutput, bool) bool) error
+	ListPermissionsPagesWithContext(aws.Context, *acmpca.ListPermissionsInput, func(*acmpca.ListPermissionsOutput, bool) bool, ...request.Option) error
+
 	ListTags(*acmpca.ListTagsInput) (*acmpca.ListTagsOutput, error)
 	ListTagsWithContext(aws.Context, *acmpca.ListTagsInput, ...request.Option) (*acmpca.ListTagsOutput, error)
 	ListTagsRequest(*acmpca.ListTagsInput) (*request.Request, *acmpca.ListTagsOutput)
+
+	ListTagsPages(*acmpca.ListTagsInput, func(*acmpca.ListTagsOutput, bool) bool) error
+	ListTagsPagesWithContext(aws.Context, *acmpca.ListTagsInput, func(*acmpca.ListTagsOutput, bool) bool, ...request.Option) error
 
 	RestoreCertificateAuthority(*acmpca.RestoreCertificateAuthorityInput) (*acmpca.RestoreCertificateAuthorityOutput, error)
 	RestoreCertificateAuthorityWithContext(aws.Context, *acmpca.RestoreCertificateAuthorityInput, ...request.Option) (*acmpca.RestoreCertificateAuthorityOutput, error)
@@ -127,6 +148,15 @@ type ACMPCAAPI interface {
 	UpdateCertificateAuthority(*acmpca.UpdateCertificateAuthorityInput) (*acmpca.UpdateCertificateAuthorityOutput, error)
 	UpdateCertificateAuthorityWithContext(aws.Context, *acmpca.UpdateCertificateAuthorityInput, ...request.Option) (*acmpca.UpdateCertificateAuthorityOutput, error)
 	UpdateCertificateAuthorityRequest(*acmpca.UpdateCertificateAuthorityInput) (*request.Request, *acmpca.UpdateCertificateAuthorityOutput)
+
+	WaitUntilAuditReportCreated(*acmpca.DescribeCertificateAuthorityAuditReportInput) error
+	WaitUntilAuditReportCreatedWithContext(aws.Context, *acmpca.DescribeCertificateAuthorityAuditReportInput, ...request.WaiterOption) error
+
+	WaitUntilCertificateAuthorityCSRCreated(*acmpca.GetCertificateAuthorityCsrInput) error
+	WaitUntilCertificateAuthorityCSRCreatedWithContext(aws.Context, *acmpca.GetCertificateAuthorityCsrInput, ...request.WaiterOption) error
+
+	WaitUntilCertificateIssued(*acmpca.GetCertificateInput) error
+	WaitUntilCertificateIssuedWithContext(aws.Context, *acmpca.GetCertificateInput, ...request.WaiterOption) error
 }
 
 var _ ACMPCAAPI = (*acmpca.ACMPCA)(nil)

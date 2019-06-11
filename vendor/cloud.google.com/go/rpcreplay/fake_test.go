@@ -15,16 +15,15 @@
 package rpcreplay
 
 import (
+	"context"
 	"io"
 	"log"
 	"net"
 
-	"golang.org/x/net/context"
+	pb "cloud.google.com/go/rpcreplay/proto/intstore"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-
-	pb "cloud.google.com/go/rpcreplay/proto/intstore"
 )
 
 // intStoreServer is an in-memory implementation of IntStore.
@@ -80,10 +79,12 @@ func (s *intStoreServer) Get(_ context.Context, req *pb.GetRequest) (*pb.Item, e
 	return &pb.Item{Name: req.Name, Value: val}, nil
 }
 
-func (s *intStoreServer) ListItems(_ *pb.ListItemsRequest, ss pb.IntStore_ListItemsServer) error {
+func (s *intStoreServer) ListItems(req *pb.ListItemsRequest, ss pb.IntStore_ListItemsServer) error {
 	for name, val := range s.items {
-		if err := ss.Send(&pb.Item{Name: name, Value: val}); err != nil {
-			return err
+		if val > req.GreaterThan {
+			if err := ss.Send(&pb.Item{Name: name, Value: val}); err != nil {
+				return err
+			}
 		}
 	}
 	return nil

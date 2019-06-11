@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"io"
 	"net/http"
 )
@@ -73,6 +74,16 @@ func NewReviewsClient(endpoint string) ReviewsClient {
 // reviewID - id of the review.
 // timescale - timescale of the video you are adding frames to.
 func (client ReviewsClient) AddVideoFrame(ctx context.Context, teamName string, reviewID string, timescale *int32) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReviewsClient.AddVideoFrame")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddVideoFramePreparer(ctx, teamName, reviewID, timescale)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "contentmoderator.ReviewsClient", "AddVideoFrame", nil, "Failure preparing request")
@@ -149,6 +160,16 @@ func (client ReviewsClient) AddVideoFrameResponder(resp *http.Response) (result 
 // frameMetadata - metadata of the frame.
 // timescale - timescale of the video .
 func (client ReviewsClient) AddVideoFrameStream(ctx context.Context, contentType string, teamName string, reviewID string, frameImageZip io.ReadCloser, frameMetadata string, timescale *int32) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReviewsClient.AddVideoFrameStream")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddVideoFrameStreamPreparer(ctx, contentType, teamName, reviewID, frameImageZip, frameMetadata, timescale)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "contentmoderator.ReviewsClient", "AddVideoFrameStream", nil, "Failure preparing request")
@@ -231,6 +252,16 @@ func (client ReviewsClient) AddVideoFrameStreamResponder(resp *http.Response) (r
 // videoFrameBody - body for add video frames API
 // timescale - timescale of the video.
 func (client ReviewsClient) AddVideoFrameURL(ctx context.Context, contentType string, teamName string, reviewID string, videoFrameBody []VideoFrameBodyItem, timescale *int32) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReviewsClient.AddVideoFrameURL")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: videoFrameBody,
 			Constraints: []validation.Constraint{{Target: "videoFrameBody", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -311,6 +342,16 @@ func (client ReviewsClient) AddVideoFrameURLResponder(resp *http.Response) (resu
 // reviewID - id of the review.
 // vttfile - transcript file of the video.
 func (client ReviewsClient) AddVideoTranscript(ctx context.Context, teamName string, reviewID string, vttfile io.ReadCloser) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReviewsClient.AddVideoTranscript")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.AddVideoTranscriptPreparer(ctx, teamName, reviewID, vttfile)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "contentmoderator.ReviewsClient", "AddVideoTranscript", nil, "Failure preparing request")
@@ -381,6 +422,16 @@ func (client ReviewsClient) AddVideoTranscriptResponder(resp *http.Response) (re
 // reviewID - id of the review.
 // transcriptModerationBody - body for add video transcript moderation result API
 func (client ReviewsClient) AddVideoTranscriptModerationResult(ctx context.Context, contentType string, teamName string, reviewID string, transcriptModerationBody []TranscriptModerationBodyItem) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReviewsClient.AddVideoTranscriptModerationResult")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: transcriptModerationBody,
 			Constraints: []validation.Constraint{{Target: "transcriptModerationBody", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -506,6 +557,16 @@ func (client ReviewsClient) AddVideoTranscriptModerationResultResponder(resp *ht
 // content - content to evaluate.
 // callBackEndpoint - callback endpoint for posting the create job result.
 func (client ReviewsClient) CreateJob(ctx context.Context, teamName string, contentType string, contentID string, workflowName string, jobContentType string, content Content, callBackEndpoint string) (result JobID, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReviewsClient.CreateJob")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: content,
 			Constraints: []validation.Constraint{{Target: "content.ContentValue", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -614,6 +675,16 @@ func (client ReviewsClient) CreateJobResponder(resp *http.Response) (result JobI
 // createReviewBody - body for create reviews API
 // subTeam - subTeam of your team, you want to assign the created review to.
 func (client ReviewsClient) CreateReviews(ctx context.Context, URLContentType string, teamName string, createReviewBody []CreateReviewBodyItem, subTeam string) (result ListString, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReviewsClient.CreateReviews")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: createReviewBody,
 			Constraints: []validation.Constraint{{Target: "createReviewBody", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -718,6 +789,16 @@ func (client ReviewsClient) CreateReviewsResponder(resp *http.Response) (result 
 // createVideoReviewsBody - body for create reviews API
 // subTeam - subTeam of your team, you want to assign the created review to.
 func (client ReviewsClient) CreateVideoReviews(ctx context.Context, contentType string, teamName string, createVideoReviewsBody []CreateVideoReviewsBodyItem, subTeam string) (result ListString, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReviewsClient.CreateVideoReviews")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: createVideoReviewsBody,
 			Constraints: []validation.Constraint{{Target: "createVideoReviewsBody", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -796,6 +877,16 @@ func (client ReviewsClient) CreateVideoReviewsResponder(resp *http.Response) (re
 // teamName - your Team Name.
 // jobID - id of the job.
 func (client ReviewsClient) GetJobDetails(ctx context.Context, teamName string, jobID string) (result Job, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReviewsClient.GetJobDetails")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetJobDetailsPreparer(ctx, teamName, jobID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "contentmoderator.ReviewsClient", "GetJobDetails", nil, "Failure preparing request")
@@ -860,6 +951,16 @@ func (client ReviewsClient) GetJobDetailsResponder(resp *http.Response) (result 
 // teamName - your Team Name.
 // reviewID - id of the review.
 func (client ReviewsClient) GetReview(ctx context.Context, teamName string, reviewID string) (result Review, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReviewsClient.GetReview")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetReviewPreparer(ctx, teamName, reviewID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "contentmoderator.ReviewsClient", "GetReview", nil, "Failure preparing request")
@@ -951,6 +1052,16 @@ func (client ReviewsClient) GetReviewResponder(resp *http.Response) (result Revi
 // noOfRecords - number of frames to fetch.
 // filter - get frames filtered by tags.
 func (client ReviewsClient) GetVideoFrames(ctx context.Context, teamName string, reviewID string, startSeed *int32, noOfRecords *int32, filter string) (result Frames, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReviewsClient.GetVideoFrames")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetVideoFramesPreparer(ctx, teamName, reviewID, startSeed, noOfRecords, filter)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "contentmoderator.ReviewsClient", "GetVideoFrames", nil, "Failure preparing request")
@@ -1027,6 +1138,16 @@ func (client ReviewsClient) GetVideoFramesResponder(resp *http.Response) (result
 // teamName - your team name.
 // reviewID - id of the review.
 func (client ReviewsClient) PublishVideoReview(ctx context.Context, teamName string, reviewID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReviewsClient.PublishVideoReview")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.PublishVideoReviewPreparer(ctx, teamName, reviewID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "contentmoderator.ReviewsClient", "PublishVideoReview", nil, "Failure preparing request")

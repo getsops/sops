@@ -107,7 +107,7 @@
     "projects": {
       "methods": {
         "getPolicy": {
-          "description": "Gets the policy for this project. Returns a default\npolicy if the project does not have one.",
+          "description": "A policy specifies the attestors that must attest to\na container image, before the project is allowed to deploy that\nimage. There is at most one policy per project. All image admission\nrequests are permitted if a project has no policy.\n\nGets the policy for this project. Returns a default\npolicy if the project does not have one.",
           "flatPath": "v1beta1/projects/{projectsId}/policy",
           "httpMethod": "GET",
           "id": "binaryauthorization.projects.getPolicy",
@@ -481,7 +481,7 @@
       }
     }
   },
-  "revision": "20180813",
+  "revision": "20190511",
   "rootUrl": "https://binaryauthorization.googleapis.com/",
   "schemas": {
     "AdmissionRule": {
@@ -492,11 +492,13 @@
           "description": "Required. The action when a pod creation is denied by the admission rule.",
           "enum": [
             "ENFORCEMENT_MODE_UNSPECIFIED",
-            "ENFORCED_BLOCK_AND_AUDIT_LOG"
+            "ENFORCED_BLOCK_AND_AUDIT_LOG",
+            "DRYRUN_AUDIT_LOG_ONLY"
           ],
           "enumDescriptions": [
-            "Mandatory.",
-            "Enforce the admission rule by blocking the pod creation."
+            "Do not use.",
+            "Enforce the admission rule by blocking the pod creation.",
+            "Dryrun mode: Audit logging only.  This will allow the pod creation as if\nthe admission request had specified break-glass."
           ],
           "type": "string"
         },
@@ -509,7 +511,7 @@
             "ALWAYS_DENY"
           ],
           "enumDescriptions": [
-            "Mandatory.",
+            "Do not use.",
             "This rule allows all all pod creations.",
             "This rule allows a pod creation if all the attestors listed in\n'require_attestations_by' have valid attestations for all of the\nimages in the pod spec.",
             "This rule denies all pod creations."
@@ -562,11 +564,11 @@
       "type": "object"
     },
     "AttestorPublicKey": {
-      "description": "An attestator public key that will be used to\nverify attestations signed by this attestor.",
+      "description": "An attestor public key that will be used to verify\nattestations signed by this attestor.",
       "id": "AttestorPublicKey",
       "properties": {
         "asciiArmoredPgpPublicKey": {
-          "description": "ASCII-armored representation of a PGP public key, as the entire output by\nthe command `gpg --export --armor foo@example.com` (either LF or CRLF\nline endings).",
+          "description": "ASCII-armored representation of a PGP public key, as the entire output by\nthe command `gpg --export --armor foo@example.com` (either LF or CRLF\nline endings).\nWhen using this field, `id` should be left blank.  The BinAuthz API\nhandlers will calculate the ID and fill it in automatically.  BinAuthz\ncomputes this ID as the OpenPGP RFC4880 V4 fingerprint, represented as\nupper-case hex.  If `id` is provided by the caller, it will be\noverwritten by the API-calculated ID.",
           "type": "string"
         },
         "comment": {
@@ -574,8 +576,12 @@
           "type": "string"
         },
         "id": {
-          "description": "Output only. This field will be overwritten with key ID information, for\nexample, an identifier extracted from a PGP public key. This field may not\nbe updated.",
+          "description": "The ID of this public key.\nSignatures verified by BinAuthz must include the ID of the public key that\ncan be used to verify them, and that ID must match the contents of this\nfield exactly.\nAdditional restrictions on this field can be imposed based on which public\nkey type is encapsulated. See the documentation on `public_key` cases below\nfor details.",
           "type": "string"
+        },
+        "pkixPublicKey": {
+          "$ref": "PkixPublicKey",
+          "description": "A raw PKIX SubjectPublicKeyInfo format public key.\n\nNOTE: `id` may be explicitly provided by the caller when using this\ntype of public key, but it MUST be a valid RFC3986 URI. If `id` is left\nblank, a default one will be computed based on the digest of the DER\nencoding of the public key."
         }
       },
       "type": "object"
@@ -586,10 +592,10 @@
       "properties": {
         "condition": {
           "$ref": "Expr",
-          "description": "Unimplemented. The condition that is associated with this binding.\nNOTE: an unsatisfied condition will not allow user access via current\nbinding. Different bindings, including their conditions, are examined\nindependently."
+          "description": "The condition that is associated with this binding.\nNOTE: An unsatisfied condition will not allow user access via current\nbinding. Different bindings, including their conditions, are examined\nindependently."
         },
         "members": {
-          "description": "Specifies the identities requesting access for a Cloud Platform resource.\n`members` can have the following values:\n\n* `allUsers`: A special identifier that represents anyone who is\n   on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone\n   who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google\n   account. For example, `alice@gmail.com` .\n\n\n* `serviceAccount:{emailid}`: An email address that represents a service\n   account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group.\n   For example, `admins@example.com`.\n\n\n* `domain:{domain}`: A Google Apps domain name that represents all the\n   users of that domain. For example, `google.com` or `example.com`.\n\n",
+          "description": "Specifies the identities requesting access for a Cloud Platform resource.\n`members` can have the following values:\n\n* `allUsers`: A special identifier that represents anyone who is\n   on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone\n   who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google\n   account. For example, `alice@gmail.com` .\n\n\n* `serviceAccount:{emailid}`: An email address that represents a service\n   account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group.\n   For example, `admins@example.com`.\n\n\n* `domain:{domain}`: The G Suite domain (primary) that represents all the\n   users of that domain. For example, `google.com` or `example.com`.\n\n",
           "items": {
             "type": "string"
           },
@@ -673,6 +679,49 @@
       },
       "type": "object"
     },
+    "PkixPublicKey": {
+      "description": "A public key in the PkixPublicKey format (see\nhttps://tools.ietf.org/html/rfc5280#section-4.1.2.7 for details).\nPublic keys of this type are typically textually encoded using the PEM\nformat.",
+      "id": "PkixPublicKey",
+      "properties": {
+        "publicKeyPem": {
+          "description": "A PEM-encoded public key, as described in\nhttps://tools.ietf.org/html/rfc7468#section-13",
+          "type": "string"
+        },
+        "signatureAlgorithm": {
+          "description": "The signature algorithm used to verify a message against a signature using\nthis key.\nThese signature algorithm must match the structure and any object\nidentifiers encoded in `public_key_pem` (i.e. this algorithm must match\nthat of the public key).",
+          "enum": [
+            "SIGNATURE_ALGORITHM_UNSPECIFIED",
+            "RSA_PSS_2048_SHA256",
+            "RSA_PSS_3072_SHA256",
+            "RSA_PSS_4096_SHA256",
+            "RSA_PSS_4096_SHA512",
+            "RSA_SIGN_PKCS1_2048_SHA256",
+            "RSA_SIGN_PKCS1_3072_SHA256",
+            "RSA_SIGN_PKCS1_4096_SHA256",
+            "RSA_SIGN_PKCS1_4096_SHA512",
+            "ECDSA_P256_SHA256",
+            "ECDSA_P384_SHA384",
+            "ECDSA_P521_SHA512"
+          ],
+          "enumDescriptions": [
+            "Not specified.",
+            "RSASSA-PSS 2048 bit key with a SHA256 digest.",
+            "RSASSA-PSS 3072 bit key with a SHA256 digest.",
+            "RSASSA-PSS 4096 bit key with a SHA256 digest.",
+            "RSASSA-PSS 4096 bit key with a SHA512 digest.",
+            "RSASSA-PKCS1-v1_5 with a 2048 bit key and a SHA256 digest.",
+            "RSASSA-PKCS1-v1_5 with a 3072 bit key and a SHA256 digest.",
+            "RSASSA-PKCS1-v1_5 with a 4096 bit key and a SHA256 digest.",
+            "RSASSA-PKCS1-v1_5 with a 4096 bit key and a SHA512 digest.",
+            "ECDSA on the NIST P-256 curve with a SHA256 digest.",
+            "ECDSA on the NIST P-384 curve with a SHA384 digest.",
+            "ECDSA on the NIST P-521 curve with a SHA512 digest."
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "Policy": {
       "description": "A policy for container image binary authorization.",
       "id": "Policy",
@@ -693,10 +742,24 @@
         },
         "defaultAdmissionRule": {
           "$ref": "AdmissionRule",
-          "description": "Required. Default admission rule for a cluster without a per-cluster\nadmission rule."
+          "description": "Required. Default admission rule for a cluster without a per-cluster, per-\nkubernetes-service-account, or per-istio-service-identity admission rule."
         },
         "description": {
           "description": "Optional. A descriptive comment.",
+          "type": "string"
+        },
+        "globalPolicyEvaluationMode": {
+          "description": "Optional. Controls the evaluation of a Google-maintained global admission\npolicy for common system-level images. Images not covered by the global\npolicy will be subject to the project admission policy. This setting\nhas no effect when specified inside a global admission policy.",
+          "enum": [
+            "GLOBAL_POLICY_EVALUATION_MODE_UNSPECIFIED",
+            "ENABLE",
+            "DISABLE"
+          ],
+          "enumDescriptions": [
+            "Not specified: DISABLE is assumed.",
+            "Enables global policy evaluation.",
+            "Disables global policy evaluation."
+          ],
           "type": "string"
         },
         "name": {

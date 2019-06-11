@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -43,6 +44,16 @@ func NewTopicTypesClientWithBaseURI(baseURI string, subscriptionID string) Topic
 // Parameters:
 // topicTypeName - name of the topic type
 func (client TopicTypesClient) Get(ctx context.Context, topicTypeName string) (result TopicTypeInfo, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TopicTypesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, topicTypeName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "eventgrid.TopicTypesClient", "Get", nil, "Failure preparing request")
@@ -105,6 +116,16 @@ func (client TopicTypesClient) GetResponder(resp *http.Response) (result TopicTy
 
 // List list all registered topic types
 func (client TopicTypesClient) List(ctx context.Context) (result TopicTypesListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TopicTypesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "eventgrid.TopicTypesClient", "List", nil, "Failure preparing request")
@@ -165,6 +186,16 @@ func (client TopicTypesClient) ListResponder(resp *http.Response) (result TopicT
 // Parameters:
 // topicTypeName - name of the topic type
 func (client TopicTypesClient) ListEventTypes(ctx context.Context, topicTypeName string) (result EventTypesListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TopicTypesClient.ListEventTypes")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListEventTypesPreparer(ctx, topicTypeName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "eventgrid.TopicTypesClient", "ListEventTypes", nil, "Failure preparing request")

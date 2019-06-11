@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewAPIVersionSetClientWithBaseURI(baseURI string, subscriptionID string) AP
 // parameters - create or update parameters.
 // ifMatch - eTag of the Entity. Not required when creating an entity, but required when updating an entity.
 func (client APIVersionSetClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serviceName string, versionSetID string, parameters APIVersionSetContract, ifMatch string) (result APIVersionSetContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIVersionSetClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -56,7 +67,7 @@ func (client APIVersionSetClient) CreateOrUpdate(ctx context.Context, resourceGr
 		{TargetValue: versionSetID,
 			Constraints: []validation.Constraint{{Target: "versionSetID", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "versionSetID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "versionSetID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}},
+				{Target: "versionSetID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.APIVersionSetContractProperties", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "parameters.APIVersionSetContractProperties.DisplayName", Name: validation.Null, Rule: true,
@@ -144,6 +155,16 @@ func (client APIVersionSetClient) CreateOrUpdateResponder(resp *http.Response) (
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client APIVersionSetClient) Delete(ctx context.Context, resourceGroupName string, serviceName string, versionSetID string, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIVersionSetClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -152,7 +173,7 @@ func (client APIVersionSetClient) Delete(ctx context.Context, resourceGroupName 
 		{TargetValue: versionSetID,
 			Constraints: []validation.Constraint{{Target: "versionSetID", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "versionSetID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "versionSetID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+				{Target: "versionSetID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.APIVersionSetClient", "Delete", err.Error())
 	}
 
@@ -225,6 +246,16 @@ func (client APIVersionSetClient) DeleteResponder(resp *http.Response) (result a
 // serviceName - the name of the API Management service.
 // versionSetID - api Version Set identifier. Must be unique in the current API Management service instance.
 func (client APIVersionSetClient) Get(ctx context.Context, resourceGroupName string, serviceName string, versionSetID string) (result APIVersionSetContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIVersionSetClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -233,7 +264,7 @@ func (client APIVersionSetClient) Get(ctx context.Context, resourceGroupName str
 		{TargetValue: versionSetID,
 			Constraints: []validation.Constraint{{Target: "versionSetID", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "versionSetID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "versionSetID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+				{Target: "versionSetID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.APIVersionSetClient", "Get", err.Error())
 	}
 
@@ -306,6 +337,16 @@ func (client APIVersionSetClient) GetResponder(resp *http.Response) (result APIV
 // serviceName - the name of the API Management service.
 // versionSetID - api Version Set identifier. Must be unique in the current API Management service instance.
 func (client APIVersionSetClient) GetEntityTag(ctx context.Context, resourceGroupName string, serviceName string, versionSetID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIVersionSetClient.GetEntityTag")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -314,7 +355,7 @@ func (client APIVersionSetClient) GetEntityTag(ctx context.Context, resourceGrou
 		{TargetValue: versionSetID,
 			Constraints: []validation.Constraint{{Target: "versionSetID", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "versionSetID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "versionSetID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+				{Target: "versionSetID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.APIVersionSetClient", "GetEntityTag", err.Error())
 	}
 
@@ -384,18 +425,21 @@ func (client APIVersionSetClient) GetEntityTagResponder(resp *http.Response) (re
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // serviceName - the name of the API Management service.
-// filter - | Field            | Supported operators    | Supported functions               |
-// |------------------|------------------------|-----------------------------------|
-// | id               | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | firstName        | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | lastName         | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | email            | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
-// | state            | eq                     | N/A                               |
-// | registrationDate | ge, le, eq, ne, gt, lt | N/A                               |
-// | note             | ge, le, eq, ne, gt, lt | substringof, contains, startswith, endswith |
+// filter - | Field       | Supported operators    | Supported functions               |
+// |-------------|------------------------|-----------------------------------|
 // top - number of records to return.
 // skip - number of records to skip.
 func (client APIVersionSetClient) ListByService(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result APIVersionSetCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIVersionSetClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.avsc.Response.Response != nil {
+				sc = result.avsc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -483,8 +527,8 @@ func (client APIVersionSetClient) ListByServiceResponder(resp *http.Response) (r
 }
 
 // listByServiceNextResults retrieves the next set of results, if any.
-func (client APIVersionSetClient) listByServiceNextResults(lastResults APIVersionSetCollection) (result APIVersionSetCollection, err error) {
-	req, err := lastResults.aPIVersionSetCollectionPreparer()
+func (client APIVersionSetClient) listByServiceNextResults(ctx context.Context, lastResults APIVersionSetCollection) (result APIVersionSetCollection, err error) {
+	req, err := lastResults.aPIVersionSetCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.APIVersionSetClient", "listByServiceNextResults", nil, "Failure preparing next results request")
 	}
@@ -505,6 +549,16 @@ func (client APIVersionSetClient) listByServiceNextResults(lastResults APIVersio
 
 // ListByServiceComplete enumerates all values, automatically crossing page boundaries as required.
 func (client APIVersionSetClient) ListByServiceComplete(ctx context.Context, resourceGroupName string, serviceName string, filter string, top *int32, skip *int32) (result APIVersionSetCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIVersionSetClient.ListByService")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByService(ctx, resourceGroupName, serviceName, filter, top, skip)
 	return
 }
@@ -518,6 +572,16 @@ func (client APIVersionSetClient) ListByServiceComplete(ctx context.Context, res
 // ifMatch - eTag of the Entity. ETag should match the current entity state from the header response of the GET
 // request or it should be * for unconditional update.
 func (client APIVersionSetClient) Update(ctx context.Context, resourceGroupName string, serviceName string, versionSetID string, parameters APIVersionSetUpdateParameters, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/APIVersionSetClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -526,7 +590,7 @@ func (client APIVersionSetClient) Update(ctx context.Context, resourceGroupName 
 		{TargetValue: versionSetID,
 			Constraints: []validation.Constraint{{Target: "versionSetID", Name: validation.MaxLength, Rule: 80, Chain: nil},
 				{Target: "versionSetID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "versionSetID", Name: validation.Pattern, Rule: `(^[\w]+$)|(^[\w][\w\-]+[\w]$)`, Chain: nil}}}}); err != nil {
+				{Target: "versionSetID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.APIVersionSetClient", "Update", err.Error())
 	}
 

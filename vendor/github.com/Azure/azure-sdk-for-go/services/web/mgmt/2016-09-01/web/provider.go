@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -41,6 +42,16 @@ func NewProviderClientWithBaseURI(baseURI string, subscriptionID string) Provide
 
 // GetAvailableStacks get available application frameworks and their versions
 func (client ProviderClient) GetAvailableStacks(ctx context.Context, osTypeSelected string) (result ApplicationStackCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProviderClient.GetAvailableStacks")
+		defer func() {
+			sc := -1
+			if result.asc.Response.Response != nil {
+				sc = result.asc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.getAvailableStacksNextResults
 	req, err := client.GetAvailableStacksPreparer(ctx, osTypeSelected)
 	if err != nil {
@@ -102,8 +113,8 @@ func (client ProviderClient) GetAvailableStacksResponder(resp *http.Response) (r
 }
 
 // getAvailableStacksNextResults retrieves the next set of results, if any.
-func (client ProviderClient) getAvailableStacksNextResults(lastResults ApplicationStackCollection) (result ApplicationStackCollection, err error) {
-	req, err := lastResults.applicationStackCollectionPreparer()
+func (client ProviderClient) getAvailableStacksNextResults(ctx context.Context, lastResults ApplicationStackCollection) (result ApplicationStackCollection, err error) {
+	req, err := lastResults.applicationStackCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.ProviderClient", "getAvailableStacksNextResults", nil, "Failure preparing next results request")
 	}
@@ -124,12 +135,32 @@ func (client ProviderClient) getAvailableStacksNextResults(lastResults Applicati
 
 // GetAvailableStacksComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ProviderClient) GetAvailableStacksComplete(ctx context.Context, osTypeSelected string) (result ApplicationStackCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProviderClient.GetAvailableStacks")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.GetAvailableStacks(ctx, osTypeSelected)
 	return
 }
 
 // GetAvailableStacksOnPrem get available application frameworks and their versions
 func (client ProviderClient) GetAvailableStacksOnPrem(ctx context.Context, osTypeSelected string) (result ApplicationStackCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProviderClient.GetAvailableStacksOnPrem")
+		defer func() {
+			sc := -1
+			if result.asc.Response.Response != nil {
+				sc = result.asc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.getAvailableStacksOnPremNextResults
 	req, err := client.GetAvailableStacksOnPremPreparer(ctx, osTypeSelected)
 	if err != nil {
@@ -195,8 +226,8 @@ func (client ProviderClient) GetAvailableStacksOnPremResponder(resp *http.Respon
 }
 
 // getAvailableStacksOnPremNextResults retrieves the next set of results, if any.
-func (client ProviderClient) getAvailableStacksOnPremNextResults(lastResults ApplicationStackCollection) (result ApplicationStackCollection, err error) {
-	req, err := lastResults.applicationStackCollectionPreparer()
+func (client ProviderClient) getAvailableStacksOnPremNextResults(ctx context.Context, lastResults ApplicationStackCollection) (result ApplicationStackCollection, err error) {
+	req, err := lastResults.applicationStackCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.ProviderClient", "getAvailableStacksOnPremNextResults", nil, "Failure preparing next results request")
 	}
@@ -217,6 +248,16 @@ func (client ProviderClient) getAvailableStacksOnPremNextResults(lastResults App
 
 // GetAvailableStacksOnPremComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ProviderClient) GetAvailableStacksOnPremComplete(ctx context.Context, osTypeSelected string) (result ApplicationStackCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProviderClient.GetAvailableStacksOnPrem")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.GetAvailableStacksOnPrem(ctx, osTypeSelected)
 	return
 }
@@ -224,6 +265,16 @@ func (client ProviderClient) GetAvailableStacksOnPremComplete(ctx context.Contex
 // ListOperations gets all available operations for the Microsoft.Web resource provider. Also exposes resource metric
 // definitions
 func (client ProviderClient) ListOperations(ctx context.Context) (result CsmOperationCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProviderClient.ListOperations")
+		defer func() {
+			sc := -1
+			if result.coc.Response.Response != nil {
+				sc = result.coc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listOperationsNextResults
 	req, err := client.ListOperationsPreparer(ctx)
 	if err != nil {
@@ -282,8 +333,8 @@ func (client ProviderClient) ListOperationsResponder(resp *http.Response) (resul
 }
 
 // listOperationsNextResults retrieves the next set of results, if any.
-func (client ProviderClient) listOperationsNextResults(lastResults CsmOperationCollection) (result CsmOperationCollection, err error) {
-	req, err := lastResults.csmOperationCollectionPreparer()
+func (client ProviderClient) listOperationsNextResults(ctx context.Context, lastResults CsmOperationCollection) (result CsmOperationCollection, err error) {
+	req, err := lastResults.csmOperationCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "web.ProviderClient", "listOperationsNextResults", nil, "Failure preparing next results request")
 	}
@@ -304,6 +355,16 @@ func (client ProviderClient) listOperationsNextResults(lastResults CsmOperationC
 
 // ListOperationsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ProviderClient) ListOperationsComplete(ctx context.Context) (result CsmOperationCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProviderClient.ListOperations")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListOperations(ctx)
 	return
 }

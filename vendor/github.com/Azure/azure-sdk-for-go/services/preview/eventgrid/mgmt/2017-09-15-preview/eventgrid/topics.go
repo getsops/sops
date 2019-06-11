@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewTopicsClientWithBaseURI(baseURI string, subscriptionID string) TopicsCli
 // topicName - name of the topic
 // topicInfo - topic information
 func (client TopicsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, topicName string, topicInfo Topic) (result TopicsCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TopicsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, topicName, topicInfo)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "eventgrid.TopicsClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -93,10 +104,6 @@ func (client TopicsClient) CreateOrUpdateSender(req *http.Request) (future Topic
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -119,6 +126,16 @@ func (client TopicsClient) CreateOrUpdateResponder(resp *http.Response) (result 
 // resourceGroupName - the name of the resource group within the user's subscription.
 // topicName - name of the topic
 func (client TopicsClient) Delete(ctx context.Context, resourceGroupName string, topicName string) (result TopicsDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TopicsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, topicName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "eventgrid.TopicsClient", "Delete", nil, "Failure preparing request")
@@ -164,10 +181,6 @@ func (client TopicsClient) DeleteSender(req *http.Request) (future TopicsDeleteF
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -189,6 +202,16 @@ func (client TopicsClient) DeleteResponder(resp *http.Response) (result autorest
 // resourceGroupName - the name of the resource group within the user's subscription.
 // topicName - name of the topic
 func (client TopicsClient) Get(ctx context.Context, resourceGroupName string, topicName string) (result Topic, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TopicsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, topicName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "eventgrid.TopicsClient", "Get", nil, "Failure preparing request")
@@ -255,6 +278,16 @@ func (client TopicsClient) GetResponder(resp *http.Response) (result Topic, err 
 // Parameters:
 // resourceGroupName - the name of the resource group within the user's subscription.
 func (client TopicsClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result TopicsListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TopicsClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "eventgrid.TopicsClient", "ListByResourceGroup", nil, "Failure preparing request")
@@ -318,6 +351,16 @@ func (client TopicsClient) ListByResourceGroupResponder(resp *http.Response) (re
 
 // ListBySubscription list all the topics under an Azure subscription
 func (client TopicsClient) ListBySubscription(ctx context.Context) (result TopicsListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TopicsClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListBySubscriptionPreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "eventgrid.TopicsClient", "ListBySubscription", nil, "Failure preparing request")
@@ -385,6 +428,16 @@ func (client TopicsClient) ListBySubscriptionResponder(resp *http.Response) (res
 // resourceTypeName - name of the topic type
 // resourceName - name of the topic
 func (client TopicsClient) ListEventTypes(ctx context.Context, resourceGroupName string, providerNamespace string, resourceTypeName string, resourceName string) (result EventTypesListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TopicsClient.ListEventTypes")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListEventTypesPreparer(ctx, resourceGroupName, providerNamespace, resourceTypeName, resourceName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "eventgrid.TopicsClient", "ListEventTypes", nil, "Failure preparing request")
@@ -454,6 +507,16 @@ func (client TopicsClient) ListEventTypesResponder(resp *http.Response) (result 
 // resourceGroupName - the name of the resource group within the user's subscription.
 // topicName - name of the topic
 func (client TopicsClient) ListSharedAccessKeys(ctx context.Context, resourceGroupName string, topicName string) (result TopicSharedAccessKeys, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TopicsClient.ListSharedAccessKeys")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListSharedAccessKeysPreparer(ctx, resourceGroupName, topicName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "eventgrid.TopicsClient", "ListSharedAccessKeys", nil, "Failure preparing request")
@@ -522,6 +585,16 @@ func (client TopicsClient) ListSharedAccessKeysResponder(resp *http.Response) (r
 // topicName - name of the topic
 // regenerateKeyRequest - request body to regenerate key
 func (client TopicsClient) RegenerateKey(ctx context.Context, resourceGroupName string, topicName string, regenerateKeyRequest TopicRegenerateKeyRequest) (result TopicSharedAccessKeys, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TopicsClient.RegenerateKey")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: regenerateKeyRequest,
 			Constraints: []validation.Constraint{{Target: "regenerateKeyRequest.KeyName", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -598,6 +671,16 @@ func (client TopicsClient) RegenerateKeyResponder(resp *http.Response) (result T
 // topicName - name of the topic
 // topicUpdateParameters - topic update information
 func (client TopicsClient) Update(ctx context.Context, resourceGroupName string, topicName string, topicUpdateParameters TopicUpdateParameters) (result TopicsUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TopicsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, topicName, topicUpdateParameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "eventgrid.TopicsClient", "Update", nil, "Failure preparing request")
@@ -642,10 +725,6 @@ func (client TopicsClient) UpdateSender(req *http.Request) (future TopicsUpdateF
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
 	if err != nil {
 		return
 	}

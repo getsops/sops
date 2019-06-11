@@ -40,14 +40,16 @@ type ShapeRef struct {
 	Streaming     bool
 	XMLAttribute  bool
 	// Ignore, if set, will not be sent over the wire
-	Ignore           bool
-	XMLNamespace     XMLInfo
-	Payload          string
-	IdempotencyToken bool   `json:"idempotencyToken"`
-	TimestampFormat  string `json:"timestampFormat"`
-	JSONValue        bool   `json:"jsonvalue"`
-	Deprecated       bool   `json:"deprecated"`
-	DeprecatedMsg    string `json:"deprecatedMessage"`
+	Ignore              bool
+	XMLNamespace        XMLInfo
+	Payload             string
+	IdempotencyToken    bool   `json:"idempotencyToken"`
+	TimestampFormat     string `json:"timestampFormat"`
+	JSONValue           bool   `json:"jsonvalue"`
+	Deprecated          bool   `json:"deprecated"`
+	DeprecatedMsg       string `json:"deprecatedMessage"`
+	EndpointDiscoveryID bool   `json:"endpointdiscoveryid"`
+	HostLabel           bool   `json:"hostLabel"`
 
 	OrigShapeName string `json:"-"`
 
@@ -55,6 +57,9 @@ type ShapeRef struct {
 
 	IsEventPayload bool `json:"eventpayload"`
 	IsEventHeader  bool `json:"eventheader"`
+
+	// Collection of custom tags the shape reference includes.
+	CustomTags ShapeTags
 }
 
 // A Shape defines the definition of a shape type
@@ -80,7 +85,6 @@ type Shape struct {
 	TimestampFormat  string `json:"timestampFormat"`
 	XMLNamespace     XMLInfo
 	Min              float64 // optional Minimum length (string, list) or value (number)
-	Max              float64 // optional Maximum length (string, list) or value (number)
 
 	EventStreamsMemberName string          `json:"-"`
 	EventStreamAPI         *EventStreamAPI `json:"-"`
@@ -103,12 +107,28 @@ type Shape struct {
 	Validations ShapeValidations
 
 	// Error information that is set if the shape is an error shape.
-	IsError   bool
 	ErrorInfo ErrorInfo `json:"error"`
 
 	// Flags that the shape cannot be rename. Prevents the shape from being
 	// renamed further by the Input/Output.
 	AliasedShapeName bool
+
+	// Sensitive types should not be logged by SDK type loggers.
+	Sensitive bool `json:"sensitive"`
+}
+
+// CanBeEmpty returns if the shape value can sent request as an empty value.
+// String, blob, list, and map are types must not be empty when the member is
+// serialized to the uri path, or decorated with HostLabel.
+func (ref *ShapeRef) CanBeEmpty() bool {
+	switch ref.Shape.Type {
+	case "string":
+		return !(ref.Location == "uri" || ref.HostLabel)
+	case "blob", "map", "list":
+		return !(ref.Location == "uri")
+	default:
+		return true
+	}
 }
 
 // ErrorCodeName will return the error shape's name formated for
@@ -126,6 +146,13 @@ func (s *Shape) ErrorName() string {
 		if len(s.ErrorInfo.Code) > 0 {
 			name = s.ErrorInfo.Code
 		}
+	}
+
+	if len(name) == 0 {
+		name = s.OrigShapeName
+	}
+	if len(name) == 0 {
+		name = s.ShapeName
 	}
 
 	return name
@@ -182,6 +209,13 @@ func (s *Shape) MemberNames() []string {
 	}
 	sort.Strings(names)
 	return names
+}
+
+// HasMember will return whether or not the shape has a given
+// member by name.
+func (s *Shape) HasMember(name string) bool {
+	_, ok := s.MemberRefs[name]
+	return ok
 }
 
 // GoTypeWithPkgName returns a shape's type as a string with the package name in
@@ -270,7 +304,7 @@ func (s *Shape) GoStructType(name string, ref *ShapeRef) string {
 	}
 
 	if ref.JSONValue {
-		s.API.imports["github.com/aws/aws-sdk-go/aws"] = true
+		s.API.AddSDKImport("aws")
 		return "aws.JSONValue"
 	}
 
@@ -403,7 +437,7 @@ func (s ShapeTags) String() string {
 
 // GoTags returns the rendered tags string for the ShapeRef
 func (ref *ShapeRef) GoTags(toplevel bool, isRequired bool) string {
-	tags := ShapeTags{}
+	tags := append(ShapeTags{}, ref.CustomTags...)
 
 	if ref.Location != "" {
 		tags = append(tags, ShapeTag{"location", ref.Location})
@@ -492,6 +526,10 @@ func (ref *ShapeRef) GoTags(toplevel bool, isRequired bool) string {
 
 	if ref.Ignore {
 		tags = append(tags, ShapeTag{"ignore", "true"})
+	}
+
+	if ref.Shape.Sensitive {
+		tags = append(tags, ShapeTag{"sensitive", "true"})
 	}
 
 	return fmt.Sprintf("`%s`", tags)
@@ -608,6 +646,12 @@ var structShapeTmpl = func() *template.Template {
 	)
 	shapeTmpl.Funcs(eventStreamEventShapeTmplFuncs)
 
+	template.Must(
+		shapeTmpl.AddParseTree(
+			"hostLabelsShapeTmpl",
+			hostLabelsShapeTmpl.Tree),
+	)
+
 	return shapeTmpl
 }()
 
@@ -702,6 +746,10 @@ type {{ .ShapeName }} struct {
 		{{ template "eventStreamExceptionEventShapeTmpl" $ }}
 	{{ end -}}
 {{ end }}
+
+{{ if $.HasHostLabelMembers }}
+	{{ template "hostLabelsShapeTmpl" $ }}
+{{ end }}
 `
 
 var enumShapeTmpl = template.Must(template.New("EnumShape").Parse(`
@@ -758,8 +806,22 @@ func (s *Shape) IsEnum() bool {
 	return s.Type == "string" && len(s.Enum) > 0
 }
 
-// IsRequired returns if member is a required field.
+// IsRequired returns if member is a required field. Required fields are fields
+// marked as required, hostLabels, or location of uri path.
 func (s *Shape) IsRequired(member string) bool {
+	ref, ok := s.MemberRefs[member]
+	if !ok {
+		panic(fmt.Sprintf(
+			"attempted to check required for unknown member, %s.%s",
+			s.ShapeName, member,
+		))
+	}
+	if ref.IdempotencyToken || ref.Shape.IdempotencyToken {
+		return false
+	}
+	if ref.Location == "uri" || ref.HostLabel {
+		return true
+	}
 	for _, n := range s.Required {
 		if n == member {
 			return true

@@ -324,6 +324,19 @@ func (s *StorageClientSuite) TestNewAccountSASClientFromEndpointToken(c *chk.C) 
 	c.Assert(cli.useHTTPS, chk.Equals, false)
 }
 
+func (s *StorageClientSuite) TestNewAccountSASClientWithoutSpr(c *chk.C) {
+	values, err := url.ParseQuery("st=2019-05-22T02%3A51%3A17Z&se=2019-05-23T02%3A51%3A17Z&sp=r&sv=2018-03-28&tn=test&sig=LYD0MvtngQduTB6SSoMGsbxX8xOCUZ6eUpn%2BVKyUWlc%3D")
+	c.Assert(err, chk.IsNil)
+
+	cli := NewAccountSASClient("nstestazure", values, azure.ChinaCloud)
+
+	c.Assert(cli.accountSASToken, chk.HasLen, 6)
+	c.Assert(cli.accountName, chk.Equals, "nstestazure")
+	c.Assert(cli.baseURL, chk.Equals, "core.chinacloudapi.cn")
+	c.Assert(cli.apiVersion, chk.Equals, "2018-03-28")
+	c.Assert(cli.useHTTPS, chk.Equals, true)
+}
+
 func (s *StorageClientSuite) TestIsValidStorageAccount(c *chk.C) {
 	type test struct {
 		account  string

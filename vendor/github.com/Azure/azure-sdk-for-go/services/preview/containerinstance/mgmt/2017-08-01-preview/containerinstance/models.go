@@ -18,12 +18,17 @@ package containerinstance
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/containerinstance/mgmt/2017-08-01-preview/containerinstance"
 
 // ContainerGroupNetworkProtocol enumerates the values for container group network protocol.
 type ContainerGroupNetworkProtocol string
@@ -151,11 +156,11 @@ type ContainerEvent struct {
 type ContainerGroup struct {
 	autorest.Response         `json:"-"`
 	*ContainerGroupProperties `json:"properties,omitempty"`
-	// ID - The resource id.
+	// ID - READ-ONLY; The resource id.
 	ID *string `json:"id,omitempty"`
-	// Name - The resource name.
+	// Name - READ-ONLY; The resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - The resource type.
+	// Type - READ-ONLY; The resource type.
 	Type *string `json:"type,omitempty"`
 	// Location - The resource location.
 	Location *string `json:"location,omitempty"`
@@ -168,15 +173,6 @@ func (cg ContainerGroup) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if cg.ContainerGroupProperties != nil {
 		objectMap["properties"] = cg.ContainerGroupProperties
-	}
-	if cg.ID != nil {
-		objectMap["id"] = cg.ID
-	}
-	if cg.Name != nil {
-		objectMap["name"] = cg.Name
-	}
-	if cg.Type != nil {
-		objectMap["type"] = cg.Type
 	}
 	if cg.Location != nil {
 		objectMap["location"] = cg.Location
@@ -271,20 +267,37 @@ type ContainerGroupListResultIterator struct {
 	page ContainerGroupListResultPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ContainerGroupListResultIterator) Next() error {
+func (iter *ContainerGroupListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ContainerGroupListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ContainerGroupListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -306,6 +319,11 @@ func (iter ContainerGroupListResultIterator) Value() ContainerGroup {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ContainerGroupListResultIterator type.
+func NewContainerGroupListResultIterator(page ContainerGroupListResultPage) ContainerGroupListResultIterator {
+	return ContainerGroupListResultIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (cglr ContainerGroupListResult) IsEmpty() bool {
 	return cglr.Value == nil || len(*cglr.Value) == 0
@@ -313,11 +331,11 @@ func (cglr ContainerGroupListResult) IsEmpty() bool {
 
 // containerGroupListResultPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (cglr ContainerGroupListResult) containerGroupListResultPreparer() (*http.Request, error) {
+func (cglr ContainerGroupListResult) containerGroupListResultPreparer(ctx context.Context) (*http.Request, error) {
 	if cglr.NextLink == nil || len(to.String(cglr.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(cglr.NextLink)))
@@ -325,19 +343,36 @@ func (cglr ContainerGroupListResult) containerGroupListResultPreparer() (*http.R
 
 // ContainerGroupListResultPage contains a page of ContainerGroup values.
 type ContainerGroupListResultPage struct {
-	fn   func(ContainerGroupListResult) (ContainerGroupListResult, error)
+	fn   func(context.Context, ContainerGroupListResult) (ContainerGroupListResult, error)
 	cglr ContainerGroupListResult
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ContainerGroupListResultPage) Next() error {
-	next, err := page.fn(page.cglr)
+func (page *ContainerGroupListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ContainerGroupListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.cglr)
 	if err != nil {
 		return err
 	}
 	page.cglr = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ContainerGroupListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -358,9 +393,14 @@ func (page ContainerGroupListResultPage) Values() []ContainerGroup {
 	return *page.cglr.Value
 }
 
+// Creates a new instance of the ContainerGroupListResultPage type.
+func NewContainerGroupListResultPage(getNextPage func(context.Context, ContainerGroupListResult) (ContainerGroupListResult, error)) ContainerGroupListResultPage {
+	return ContainerGroupListResultPage{fn: getNextPage}
+}
+
 // ContainerGroupProperties ...
 type ContainerGroupProperties struct {
-	// ProvisioningState - The provisioning state of the container group. This only appears in the response.
+	// ProvisioningState - READ-ONLY; The provisioning state of the container group. This only appears in the response.
 	ProvisioningState *string `json:"provisioningState,omitempty"`
 	// Containers - The containers within the container group.
 	Containers *[]Container `json:"containers,omitempty"`
@@ -372,7 +412,7 @@ type ContainerGroupProperties struct {
 	IPAddress *IPAddress `json:"ipAddress,omitempty"`
 	// OsType - The operating system type required by the containers in the container group. Possible values include: 'Windows', 'Linux'
 	OsType OperatingSystemTypes `json:"osType,omitempty"`
-	// State - The current state of the container group. This is only valid for the response.
+	// State - READ-ONLY; The current state of the container group. This is only valid for the response.
 	State *string `json:"state,omitempty"`
 	// Volumes - The list of volumes that can be mounted by containers in this container group.
 	Volumes *[]Volume `json:"volumes,omitempty"`
@@ -394,7 +434,7 @@ type ContainerProperties struct {
 	Ports *[]ContainerPort `json:"ports,omitempty"`
 	// EnvironmentVariables - The environment variables to set in the container instance.
 	EnvironmentVariables *[]EnvironmentVariable `json:"environmentVariables,omitempty"`
-	// InstanceView - The instance view of the container instance. Only valid in response.
+	// InstanceView - READ-ONLY; The instance view of the container instance. Only valid in response.
 	InstanceView *ContainerPropertiesInstanceView `json:"instanceView,omitempty"`
 	// Resources - The resource requirements of the container instance.
 	Resources *ResourceRequirements `json:"resources,omitempty"`
@@ -473,11 +513,11 @@ type Port struct {
 
 // Resource the Resource model definition.
 type Resource struct {
-	// ID - The resource id.
+	// ID - READ-ONLY; The resource id.
 	ID *string `json:"id,omitempty"`
-	// Name - The resource name.
+	// Name - READ-ONLY; The resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - The resource type.
+	// Type - READ-ONLY; The resource type.
 	Type *string `json:"type,omitempty"`
 	// Location - The resource location.
 	Location *string `json:"location,omitempty"`
@@ -488,15 +528,6 @@ type Resource struct {
 // MarshalJSON is the custom marshaler for Resource.
 func (r Resource) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if r.ID != nil {
-		objectMap["id"] = r.ID
-	}
-	if r.Name != nil {
-		objectMap["name"] = r.Name
-	}
-	if r.Type != nil {
-		objectMap["type"] = r.Type
-	}
 	if r.Location != nil {
 		objectMap["location"] = r.Location
 	}

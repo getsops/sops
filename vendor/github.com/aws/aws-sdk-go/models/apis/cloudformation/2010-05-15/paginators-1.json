@@ -5,6 +5,11 @@
       "output_token": "NextToken",
       "result_key": "StackEvents"
     },
+    "DescribeStackResourceDrifts": {
+      "input_token": "NextToken",
+      "limit_key": "MaxResults",
+      "output_token": "NextToken"
+    },
     "DescribeStackResources": {
       "result_key": "StackResources"
     },

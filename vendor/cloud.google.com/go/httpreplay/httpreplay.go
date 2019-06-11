@@ -12,22 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// +build go1.8
-
 // Package httpreplay provides an API for recording and replaying traffic
 // from HTTP-based Google API clients.
 //
 // To record:
-// 1.  Call NewRecorder to get a Recorder.
-// 2.  Use its Client method to obtain an HTTP client to use when making API calls.
-// 3.  Close the Recorder when you're done. That will save the
-//     log of interactions to the file you provided to NewRecorder.
+//  1.  Call NewRecorder to get a Recorder.
+//  2.  Use its Client method to obtain an HTTP client to use when making API calls.
+//  3.  Close the Recorder when you're done. That will save the log of interactions
+//      to the file you provided to NewRecorder.
 //
 // To replay:
-// 1.  Call NewReplayer with the same filename you used to record to get a Replayer.
-// 2.  Call its Client method and use the client to make the same API calls.
-//     You will get back the recorded responses.
-// 3.  Close the Replayer when you're done.
+//  1.  Call NewReplayer with the same filename you used to record to get a Replayer.
+//  2.  Call its Client method and use the client to make the same API calls.
+//      You will get back the recorded responses.
+//  3.  Close the Replayer when you're done.
 //
 // This package is EXPERIMENTAL and is subject to change or removal without notice.
 // It requires Go version 1.8 or higher.
@@ -36,18 +34,17 @@ package httpreplay
 // TODO(jba): add examples.
 
 import (
+	"context"
 	"net/http"
 
 	"cloud.google.com/go/httpreplay/internal/proxy"
-	"golang.org/x/net/context"
 	"google.golang.org/api/option"
 	htransport "google.golang.org/api/transport/http"
 )
 
 // A Recorder records HTTP interactions.
 type Recorder struct {
-	filename string
-	proxy    *proxy.Proxy
+	proxy *proxy.Proxy
 }
 
 // NewRecorder creates a recorder that writes to filename. The file will
@@ -61,6 +58,42 @@ func NewRecorder(filename string, initial []byte) (*Recorder, error) {
 	}
 	p.Initial = initial
 	return &Recorder{proxy: p}, nil
+}
+
+// RemoveRequestHeaders will remove request headers matching patterns from the log,
+// and skip matching them during replay.
+//
+// Pattern is taken literally except for *, which matches any sequence of characters.
+func (r *Recorder) RemoveRequestHeaders(patterns ...string) {
+	r.proxy.RemoveRequestHeaders(patterns)
+}
+
+// ClearHeaders will replace the value of request and response headers that match
+// any of the patterns with CLEARED, on both recording and replay.
+// Use ClearHeaders when the header information is secret or may change from run to
+// run, but you still want to verify that the headers are being sent and received.
+//
+// Pattern is taken literally except for *, which matches any sequence of characters.
+func (r *Recorder) ClearHeaders(patterns ...string) {
+	r.proxy.ClearHeaders(patterns)
+}
+
+// RemoveQueryParams will remove URL query parameters matching patterns from the log,
+// and skip matching them during replay.
+//
+// Pattern is taken literally except for *, which matches any sequence of characters.
+func (r *Recorder) RemoveQueryParams(patterns ...string) {
+	r.proxy.RemoveQueryParams(patterns)
+}
+
+// ClearQueryParams will replace the value of URL query parametrs that match any of
+// the patterns with CLEARED, on both recording and replay.
+// Use ClearQueryParams when the parameter information is secret or may change from
+// run to run, but you still want to verify that it are being sent.
+//
+// Pattern is taken literally except for *, which matches any sequence of characters.
+func (r *Recorder) ClearQueryParams(patterns ...string) {
+	r.proxy.ClearQueryParams(patterns)
 }
 
 // Client returns an http.Client to be used for recording. Provide authentication options

@@ -104,6 +104,35 @@
   },
   "protocol": "rest",
   "resources": {
+    "operations": {
+      "methods": {
+        "delete": {
+          "description": "Deletes a long-running operation. This method indicates that the client is\nno longer interested in the operation result. It does not cancel the\noperation. If the server doesn't support this method, it returns\n`google.rpc.Code.UNIMPLEMENTED`.",
+          "flatPath": "v1/operations/{operationsId}",
+          "httpMethod": "DELETE",
+          "id": "ml.operations.delete",
+          "parameterOrder": [
+            "name"
+          ],
+          "parameters": {
+            "name": {
+              "description": "The name of the operation resource to be deleted.",
+              "location": "path",
+              "pattern": "^operations/.+$",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "v1/{+name}",
+          "response": {
+            "$ref": "GoogleProtobuf__Empty"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/cloud-platform"
+          ]
+        }
+      }
+    },
     "projects": {
       "methods": {
         "getConfig": {
@@ -132,7 +161,7 @@
           ]
         },
         "predict": {
-          "description": "Performs prediction on the data in the request.\nCloud ML Engine implements a custom `predict` verb on top of an HTTP POST\nmethod. \u003cp\u003eFor details of the request and response format, see the **guide\nto the [predict request format](/ml-engine/docs/v1/predict-request)**.",
+          "description": "Performs prediction on the data in the request.\nAI Platform implements a custom `predict` verb on top of an HTTP POST\nmethod. \u003cp\u003eFor details of the request and response format, see the **guide\nto the [predict request format](/ml-engine/docs/v1/predict-request)**.",
           "flatPath": "v1/projects/{projectsId}:predict",
           "httpMethod": "POST",
           "id": "ml.projects.predict",
@@ -279,7 +308,7 @@
               ],
               "parameters": {
                 "filter": {
-                  "description": "Optional. Specifies the subset of jobs to retrieve.\nYou can filter on the value of one or more attributes of the job object.\nFor example, retrieve jobs with a job identifier that starts with 'census':\n\u003cp\u003e\u003ccode\u003egcloud ml-engine jobs list --filter='jobId:census*'\u003c/code\u003e\n\u003cp\u003eList all failed jobs with names that start with 'rnn':\n\u003cp\u003e\u003ccode\u003egcloud ml-engine jobs list --filter='jobId:rnn*\nAND state:FAILED'\u003c/code\u003e\n\u003cp\u003eFor more examples, see the guide to\n\u003ca href=\"/ml-engine/docs/tensorflow/monitor-training\"\u003emonitoring jobs\u003c/a\u003e.",
+                  "description": "Optional. Specifies the subset of jobs to retrieve.\nYou can filter on the value of one or more attributes of the job object.\nFor example, retrieve jobs with a job identifier that starts with 'census':\n\u003cp\u003e\u003ccode\u003egcloud ai-platform jobs list --filter='jobId:census*'\u003c/code\u003e\n\u003cp\u003eList all failed jobs with names that start with 'rnn':\n\u003cp\u003e\u003ccode\u003egcloud ai-platform jobs list --filter='jobId:rnn*\nAND state:FAILED'\u003c/code\u003e\n\u003cp\u003eFor more examples, see the guide to\n\u003ca href=\"/ml-engine/docs/tensorflow/monitor-training\"\u003emonitoring jobs\u003c/a\u003e.",
                   "location": "query",
                   "type": "string"
                 },
@@ -439,7 +468,7 @@
               ],
               "parameters": {
                 "pageSize": {
-                  "description": "Optional. The number of locations to retrieve per \"page\" of results. If there\nare more remaining results than this number, the response message will\ncontain a valid value in the `next_page_token` field.\n\nThe default value is 20, and the maximum page size is 100.",
+                  "description": "Optional. The number of locations to retrieve per \"page\" of results. If\nthere are more remaining results than this number, the response message\nwill contain a valid value in the `next_page_token` field.\n\nThe default value is 20, and the maximum page size is 100.",
                   "format": "int32",
                   "location": "query",
                   "type": "integer"
@@ -919,31 +948,6 @@
                 "https://www.googleapis.com/auth/cloud-platform"
               ]
             },
-            "delete": {
-              "description": "Deletes a long-running operation. This method indicates that the client is\nno longer interested in the operation result. It does not cancel the\noperation. If the server doesn't support this method, it returns\n`google.rpc.Code.UNIMPLEMENTED`.",
-              "flatPath": "v1/projects/{projectsId}/operations/{operationsId}",
-              "httpMethod": "DELETE",
-              "id": "ml.projects.operations.delete",
-              "parameterOrder": [
-                "name"
-              ],
-              "parameters": {
-                "name": {
-                  "description": "The name of the operation resource to be deleted.",
-                  "location": "path",
-                  "pattern": "^projects/[^/]+/operations/[^/]+$",
-                  "required": true,
-                  "type": "string"
-                }
-              },
-              "path": "v1/{+name}",
-              "response": {
-                "$ref": "GoogleProtobuf__Empty"
-              },
-              "scopes": [
-                "https://www.googleapis.com/auth/cloud-platform"
-              ]
-            },
             "get": {
               "description": "Gets the latest state of a long-running operation.  Clients can use this\nmethod to poll the operation result at intervals as recommended by the API\nservice.",
               "flatPath": "v1/projects/{projectsId}/operations/{operationsId}",
@@ -1015,19 +1019,19 @@
       }
     }
   },
-  "revision": "20180903",
+  "revision": "20190530",
   "rootUrl": "https://ml.googleapis.com/",
   "schemas": {
     "GoogleApi__HttpBody": {
-      "description": "Message that represents an arbitrary HTTP body. It should only be used for\npayload formats that can't be represented as JSON, such as raw binary or\nan HTML page.\n\n\nThis message can be used both in streaming and non-streaming API methods in\nthe request as well as the response.\n\nIt can be used as a top-level request field, which is convenient if one\nwants to extract parameters from either the URL or HTTP template into the\nrequest fields and also want access to the raw HTTP body.\n\nExample:\n\n    message GetResourceRequest {\n      // A unique request id.\n      string request_id = 1;\n\n      // The raw HTTP body is bound to this field.\n      google.api.HttpBody http_body = 2;\n    }\n\n    service ResourceService {\n      rpc GetResource(GetResourceRequest) returns (google.api.HttpBody);\n      rpc UpdateResource(google.api.HttpBody) returns (google.protobuf.Empty);\n    }\n\nExample with streaming methods:\n\n    service CaldavService {\n      rpc GetCalendar(stream google.api.HttpBody)\n        returns (stream google.api.HttpBody);\n      rpc UpdateCalendar(stream google.api.HttpBody)\n        returns (stream google.api.HttpBody);\n    }\n\nUse of this type only changes how the request and response bodies are\nhandled, all other features will continue to work unchanged.",
+      "description": "Message that represents an arbitrary HTTP body. It should only be used for\npayload formats that can't be represented as JSON, such as raw binary or\nan HTML page.\n\n\nThis message can be used both in streaming and non-streaming API methods in\nthe request as well as the response.\n\nIt can be used as a top-level request field, which is convenient if one\nwants to extract parameters from either the URL or HTTP template into the\nrequest fields and also want access to the raw HTTP body.\n\nExample:\n\n    message GetResourceRequest {\n      // A unique request id.\n      string request_id = 1;\n\n      // The raw HTTP body is bound to this field.\n      google.api.HttpBody http_body = 2;\n    }\n\n    service ResourceService {\n      rpc GetResource(GetResourceRequest) returns (google.api.HttpBody);\n      rpc UpdateResource(google.api.HttpBody) returns\n      (google.protobuf.Empty);\n    }\n\nExample with streaming methods:\n\n    service CaldavService {\n      rpc GetCalendar(stream google.api.HttpBody)\n        returns (stream google.api.HttpBody);\n      rpc UpdateCalendar(stream google.api.HttpBody)\n        returns (stream google.api.HttpBody);\n    }\n\nUse of this type only changes how the request and response bodies are\nhandled, all other features will continue to work unchanged.",
       "id": "GoogleApi__HttpBody",
       "properties": {
         "contentType": {
-          "description": "The HTTP Content-Type string representing the content type of the body.",
+          "description": "The HTTP Content-Type header value specifying the content type of the body.",
           "type": "string"
         },
         "data": {
-          "description": "HTTP body binary data.",
+          "description": "The HTTP request/response body as raw binary.",
           "format": "byte",
           "type": "string"
         },
@@ -1072,18 +1076,24 @@
           "type": "string"
         },
         "type": {
-          "description": "The available types of accelerators.",
+          "description": "The type of accelerator to use.",
           "enum": [
             "ACCELERATOR_TYPE_UNSPECIFIED",
             "NVIDIA_TESLA_K80",
             "NVIDIA_TESLA_P100",
-            "NVIDIA_TESLA_V100"
+            "NVIDIA_TESLA_V100",
+            "NVIDIA_TESLA_P4",
+            "NVIDIA_TESLA_T4",
+            "TPU_V2"
           ],
           "enumDescriptions": [
             "Unspecified accelerator type. Default to no GPU.",
-            "Nvidia tesla k80 GPU.",
-            "Nvidia tesla P100 GPU.",
-            "Nvidia tesla V100 GPU. Not supported for batch prediction."
+            "Nvidia Tesla K80 GPU.",
+            "Nvidia Tesla P100 GPU.",
+            "Nvidia Tesla V100 GPU.",
+            "Nvidia Tesla P4 GPU.",
+            "Nvidia Tesla T4 GPU.",
+            "TPU v2."
           ],
           "type": "string"
         }
@@ -1095,9 +1105,32 @@
       "id": "GoogleCloudMlV1__AutoScaling",
       "properties": {
         "minNodes": {
-          "description": "Optional. The minimum number of nodes to allocate for this model. These\nnodes are always up, starting from the time the model is deployed.\nTherefore, the cost of operating this model will be at least\n`rate` * `min_nodes` * number of hours since last billing cycle,\nwhere `rate` is the cost per node-hour as documented in the\n[pricing guide](/ml-engine/docs/pricing),\neven if no predictions are performed. There is additional cost for each\nprediction performed.\n\nUnlike manual scaling, if the load gets too heavy for the nodes\nthat are up, the service will automatically add nodes to handle the\nincreased load as well as scale back as traffic drops, always maintaining\nat least `min_nodes`. You will be charged for the time in which additional\nnodes are used.\n\nIf not specified, `min_nodes` defaults to 0, in which case, when traffic\nto a model stops (and after a cool-down period), nodes will be shut down\nand no charges will be incurred until traffic to the model resumes.\n\nYou can set `min_nodes` when creating the model version, and you can also\nupdate `min_nodes` for an existing version:\n\u003cpre\u003e\nupdate_body.json:\n{\n  'autoScaling': {\n    'minNodes': 5\n  }\n}\n\u003c/pre\u003e\nHTTP request:\n\u003cpre\u003e\nPATCH https://ml.googleapis.com/v1/{name=projects/*/models/*/versions/*}?update_mask=autoScaling.minNodes -d @./update_body.json\n\u003c/pre\u003e",
+          "description": "Optional. The minimum number of nodes to allocate for this model. These\nnodes are always up, starting from the time the model is deployed.\nTherefore, the cost of operating this model will be at least\n`rate` * `min_nodes` * number of hours since last billing cycle,\nwhere `rate` is the cost per node-hour as documented in the\n[pricing guide](/ml-engine/docs/pricing),\neven if no predictions are performed. There is additional cost for each\nprediction performed.\n\nUnlike manual scaling, if the load gets too heavy for the nodes\nthat are up, the service will automatically add nodes to handle the\nincreased load as well as scale back as traffic drops, always maintaining\nat least `min_nodes`. You will be charged for the time in which additional\nnodes are used.\n\nIf not specified, `min_nodes` defaults to 0, in which case, when traffic\nto a model stops (and after a cool-down period), nodes will be shut down\nand no charges will be incurred until traffic to the model resumes.\n\nYou can set `min_nodes` when creating the model version, and you can also\nupdate `min_nodes` for an existing version:\n\u003cpre\u003e\nupdate_body.json:\n{\n  'autoScaling': {\n    'minNodes': 5\n  }\n}\n\u003c/pre\u003e\nHTTP request:\n\u003cpre\u003e\nPATCH\nhttps://ml.googleapis.com/v1/{name=projects/*/models/*/versions/*}?update_mask=autoScaling.minNodes\n-d @./update_body.json\n\u003c/pre\u003e",
           "format": "int32",
           "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudMlV1__BuiltInAlgorithmOutput": {
+      "description": "Represents output related to a built-in algorithm Job.",
+      "id": "GoogleCloudMlV1__BuiltInAlgorithmOutput",
+      "properties": {
+        "framework": {
+          "description": "Framework on which the built-in algorithm was trained.",
+          "type": "string"
+        },
+        "modelPath": {
+          "description": "The Cloud Storage path to the `model/` directory where the training job\nsaves the trained model. Only set for successful jobs that don't use\nhyperparameter tuning.",
+          "type": "string"
+        },
+        "pythonVersion": {
+          "description": "Python version on which the built-in algorithm was trained.",
+          "type": "string"
+        },
+        "runtimeVersion": {
+          "description": "AI Platform runtime version on which the built-in algorithm was\ntrained.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -1115,16 +1148,22 @@
           "description": "Available accelerators for the capability.",
           "enumDescriptions": [
             "Unspecified accelerator type. Default to no GPU.",
-            "Nvidia tesla k80 GPU.",
-            "Nvidia tesla P100 GPU.",
-            "Nvidia tesla V100 GPU. Not supported for batch prediction."
+            "Nvidia Tesla K80 GPU.",
+            "Nvidia Tesla P100 GPU.",
+            "Nvidia Tesla V100 GPU.",
+            "Nvidia Tesla P4 GPU.",
+            "Nvidia Tesla T4 GPU.",
+            "TPU v2."
           ],
           "items": {
             "enum": [
               "ACCELERATOR_TYPE_UNSPECIFIED",
               "NVIDIA_TESLA_K80",
               "NVIDIA_TESLA_P100",
-              "NVIDIA_TESLA_V100"
+              "NVIDIA_TESLA_V100",
+              "NVIDIA_TESLA_P4",
+              "NVIDIA_TESLA_T4",
+              "TPU_V2"
             ],
             "type": "string"
           },
@@ -1188,6 +1227,10 @@
           },
           "type": "array"
         },
+        "builtInAlgorithmOutput": {
+          "$ref": "GoogleCloudMlV1__BuiltInAlgorithmOutput",
+          "description": "Details related to built-in algorithms jobs.\nOnly set for trials of built-in algorithms jobs that have succeeded."
+        },
         "finalMetric": {
           "$ref": "GoogleCloudMlV1_HyperparameterOutput_HyperparameterMetric",
           "description": "The final objective metric seen for this trial."
@@ -1215,14 +1258,14 @@
       "id": "GoogleCloudMlV1__HyperparameterSpec",
       "properties": {
         "algorithm": {
-          "description": "Optional. The search algorithm specified for the hyperparameter\ntuning job.\nUses the default CloudML Engine hyperparameter tuning\nalgorithm if unspecified.",
+          "description": "Optional. The search algorithm specified for the hyperparameter\ntuning job.\nUses the default AI Platform hyperparameter tuning\nalgorithm if unspecified.",
           "enum": [
             "ALGORITHM_UNSPECIFIED",
             "GRID_SEARCH",
             "RANDOM_SEARCH"
           ],
           "enumDescriptions": [
-            "The default algorithm used by hyperparameter tuning service.",
+            "The default algorithm used by the hyperparameter tuning service. This is\na Bayesian optimization algorithm.",
             "Simple grid search within the feasible space. To use grid search,\nall parameters must be `INTEGER`, `CATEGORICAL`, or `DISCRETE`.",
             "Simple random search within the feasible space."
           ],
@@ -1249,6 +1292,11 @@
         "hyperparameterMetricTag": {
           "description": "Optional. The Tensorflow summary tag name to use for optimizing trials. For\ncurrent versions of Tensorflow, this tag name should exactly match what is\nshown in Tensorboard, including all scopes.  For versions of Tensorflow\nprior to 0.12, this should be only the tag passed to tf.Summary.\nBy default, \"training/hptuning/metric\" will be used.",
           "type": "string"
+        },
+        "maxFailedTrials": {
+          "description": "Optional. The number of failed trials that need to be seen before failing\nthe hyperparameter tuning job. You can specify this field to override the\ndefault failing criteria for AI Platform hyperparameter tuning jobs.\n\nDefaults to zero, which means the service decides when a hyperparameter\njob should fail.",
+          "format": "int32",
+          "type": "integer"
         },
         "maxParallelTrials": {
           "description": "Optional. The number of training trials to run concurrently.\nYou can reduce the time it takes to perform hyperparameter tuning by adding\ntrials in parallel. However, each trail only benefits from the information\ngained in completed trials. That means that a trial does not get access to\nthe results of trials running at the same time, which could reduce the\nquality of the overall optimization.\n\nEach trial will use the same scale tier and machine types.\n\nDefaults to one.",
@@ -1483,12 +1531,16 @@
           "description": "Required. The name specified for the model when it was created.\n\nThe model name must be unique within the project it is created in.",
           "type": "string"
         },
+        "onlinePredictionConsoleLogging": {
+          "description": "Optional. If true, online prediction nodes send `stderr` and `stdout`\nstreams to Stackdriver Logging. These can be more verbose than the standard\naccess logs (see `onlinePredictionLogging`) and can incur higher cost.\nHowever, they are helpful for debugging. Note that\n[Stackdriver logs may incur a cost](/stackdriver/pricing), especially if\nyour project receives prediction requests at a high QPS. Estimate your\ncosts before enabling this option.\n\nDefault is false.",
+          "type": "boolean"
+        },
         "onlinePredictionLogging": {
-          "description": "Optional. If true, enables StackDriver Logging for online prediction.\nDefault is false.",
+          "description": "Optional. If true, online prediction access logs are sent to StackDriver\nLogging. These logs are like standard server access logs, containing\ninformation like timestamp and latency for each request. Note that\n[Stackdriver logs may incur a cost](/stackdriver/pricing), especially if\nyour project receives prediction requests at a high queries per second rate\n(QPS). Estimate your costs before enabling this option.\n\nDefault is false.",
           "type": "boolean"
         },
         "regions": {
-          "description": "Optional. The list of regions where the model is going to be deployed.\nCurrently only one region per model is supported.\nDefaults to 'us-central1' if nothing is set.\nSee the \u003ca href=\"/ml-engine/docs/tensorflow/regions\"\u003eavailable regions\u003c/a\u003e\nfor ML Engine services.\nNote:\n*   No matter where a model is deployed, it can always be accessed by\n    users from anywhere, both for online and batch prediction.\n*   The region for a batch prediction job is set by the region field when\n    submitting the batch prediction job and does not take its value from\n    this field.",
+          "description": "Optional. The list of regions where the model is going to be deployed.\nCurrently only one region per model is supported.\nDefaults to 'us-central1' if nothing is set.\nSee the \u003ca href=\"/ml-engine/docs/tensorflow/regions\"\u003eavailable regions\u003c/a\u003e\nfor AI Platform services.\nNote:\n*   No matter where a model is deployed, it can always be accessed by\n    users from anywhere, both for online and batch prediction.\n*   The region for a batch prediction job is set by the region field when\n    submitting the batch prediction job and does not take its value from\n    this field.",
           "items": {
             "type": "string"
           },
@@ -1650,10 +1702,6 @@
       "description": "Represents input parameters for a prediction job.",
       "id": "GoogleCloudMlV1__PredictionInput",
       "properties": {
-        "accelerator": {
-          "$ref": "GoogleCloudMlV1__AcceleratorConfig",
-          "description": "Optional. The type and number of accelerators to be attached to each\nmachine running the job."
-        },
         "batchSize": {
           "description": "Optional. Number of records per batch, defaults to 64.\nThe service will buffer batch_size number of records in memory before\ninvoking one Tensorflow prediction call internally. So take the record\nsize and memory available into consideration when setting this parameter.",
           "format": "int64",
@@ -1666,19 +1714,21 @@
             "JSON",
             "TEXT",
             "TF_RECORD",
-            "TF_RECORD_GZIP"
+            "TF_RECORD_GZIP",
+            "CSV"
           ],
           "enumDescriptions": [
             "Unspecified format.",
             "Each line of the file is a JSON dictionary representing one record.",
             "Deprecated. Use JSON instead.",
-            "INPUT ONLY. The source file is a TFRecord file.",
-            "INPUT ONLY. The source file is a GZIP-compressed TFRecord file."
+            "The source file is a TFRecord file.\nCurrently available only for input data.",
+            "The source file is a GZIP-compressed TFRecord file.\nCurrently available only for input data.",
+            "Values are comma-separated rows, with keys in a separate file.\nCurrently available only for output data."
           ],
           "type": "string"
         },
         "inputPaths": {
-          "description": "Required. The Google Cloud Storage location of the input data files.\nMay contain wildcards.",
+          "description": "Required. The Cloud Storage location of the input data files. May contain\n\u003ca href=\"/storage/docs/gsutil/addlhelp/WildcardNames\"\u003ewildcards\u003c/a\u003e.",
           "items": {
             "type": "string"
           },
@@ -1693,16 +1743,36 @@
           "description": "Use this field if you want to use the default version for the specified\nmodel. The string must use the following format:\n\n`\"projects/YOUR_PROJECT/models/YOUR_MODEL\"`",
           "type": "string"
         },
+        "outputDataFormat": {
+          "description": "Optional. Format of the output data files, defaults to JSON.",
+          "enum": [
+            "DATA_FORMAT_UNSPECIFIED",
+            "JSON",
+            "TEXT",
+            "TF_RECORD",
+            "TF_RECORD_GZIP",
+            "CSV"
+          ],
+          "enumDescriptions": [
+            "Unspecified format.",
+            "Each line of the file is a JSON dictionary representing one record.",
+            "Deprecated. Use JSON instead.",
+            "The source file is a TFRecord file.\nCurrently available only for input data.",
+            "The source file is a GZIP-compressed TFRecord file.\nCurrently available only for input data.",
+            "Values are comma-separated rows, with keys in a separate file.\nCurrently available only for output data."
+          ],
+          "type": "string"
+        },
         "outputPath": {
           "description": "Required. The output Google Cloud Storage location.",
           "type": "string"
         },
         "region": {
-          "description": "Required. The Google Compute Engine region to run the prediction job in.\nSee the \u003ca href=\"/ml-engine/docs/tensorflow/regions\"\u003eavailable regions\u003c/a\u003e\nfor ML Engine services.",
+          "description": "Required. The Google Compute Engine region to run the prediction job in.\nSee the \u003ca href=\"/ml-engine/docs/tensorflow/regions\"\u003eavailable regions\u003c/a\u003e\nfor AI Platform services.",
           "type": "string"
         },
         "runtimeVersion": {
-          "description": "Optional. The Google Cloud ML runtime version to use for this batch\nprediction. If not set, Google Cloud ML will pick the runtime version used\nduring the CreateVersion request for this model version, or choose the\nlatest stable version when model version information is not available\nsuch as when the model is specified by uri.",
+          "description": "Optional. The AI Platform runtime version to use for this batch\nprediction. If not set, AI Platform will pick the runtime version used\nduring the CreateVersion request for this model version, or choose the\nlatest stable version when model version information is not available\nsuch as when the model is specified by uri.",
           "type": "string"
         },
         "signatureName": {
@@ -1746,6 +1816,21 @@
       },
       "type": "object"
     },
+    "GoogleCloudMlV1__ReplicaConfig": {
+      "description": "Represents the configuration for a replica in a cluster.",
+      "id": "GoogleCloudMlV1__ReplicaConfig",
+      "properties": {
+        "acceleratorConfig": {
+          "$ref": "GoogleCloudMlV1__AcceleratorConfig",
+          "description": "Represents the type and number of accelerators used by the replica.\n[Learn about restrictions on accelerator configurations for\ntraining.](/ml-engine/docs/tensorflow/using-gpus#compute-engine-machine-types-with-gpu)"
+        },
+        "imageUri": {
+          "description": "The Docker image to run on the replica. This image must be in Container\nRegistry. Learn more about [configuring custom\ncontainers](/ml-engine/docs/distributed-training-containers).",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "GoogleCloudMlV1__SetDefaultVersionRequest": {
       "description": "Request message for the SetDefaultVersion request.",
       "id": "GoogleCloudMlV1__SetDefaultVersionRequest",
@@ -1771,8 +1856,12 @@
           "description": "Optional. A Google Cloud Storage path in which to store training outputs\nand other data needed for training. This path is passed to your TensorFlow\nprogram as the '--job-dir' command-line argument. The benefit of specifying\nthis field is that Cloud ML validates the path for use in training.",
           "type": "string"
         },
+        "masterConfig": {
+          "$ref": "GoogleCloudMlV1__ReplicaConfig",
+          "description": "Optional. The configuration for your master worker.\n\nYou should only set `masterConfig.acceleratorConfig` if `masterType` is set\nto a Compute Engine machine type. Learn about [restrictions on accelerator\nconfigurations for\ntraining.](/ml-engine/docs/tensorflow/using-gpus#compute-engine-machine-types-with-gpu)\n\nSet `masterConfig.imageUri` only if you build a custom image. Only one of\n`masterConfig.imageUri` and `runtimeVersion` should be set. Learn more about\n[configuring custom\ncontainers](/ml-engine/docs/distributed-training-containers)."
+        },
         "masterType": {
-          "description": "Optional. Specifies the type of virtual machine to use for your training\njob's master worker.\n\nThe following types are supported:\n\n\u003cdl\u003e\n  \u003cdt\u003estandard\u003c/dt\u003e\n  \u003cdd\u003e\n  A basic machine configuration suitable for training simple models with\n  small to moderate datasets.\n  \u003c/dd\u003e\n  \u003cdt\u003elarge_model\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine with a lot of memory, specially suited for parameter servers\n  when your model is large (having many hidden layers or layers with very\n  large numbers of nodes).\n  \u003c/dd\u003e\n  \u003cdt\u003ecomplex_model_s\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine suitable for the master and workers of the cluster when your\n  model requires more computation than the standard machine can handle\n  satisfactorily.\n  \u003c/dd\u003e\n  \u003cdt\u003ecomplex_model_m\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine with roughly twice the number of cores and roughly double the\n  memory of \u003ci\u003ecomplex_model_s\u003c/i\u003e.\n  \u003c/dd\u003e\n  \u003cdt\u003ecomplex_model_l\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine with roughly twice the number of cores and roughly double the\n  memory of \u003ci\u003ecomplex_model_m\u003c/i\u003e.\n  \u003c/dd\u003e\n  \u003cdt\u003estandard_gpu\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine equivalent to \u003ci\u003estandard\u003c/i\u003e that\n  also includes a single NVIDIA Tesla K80 GPU. See more about\n  \u003ca href=\"/ml-engine/docs/tensorflow/using-gpus\"\u003eusing GPUs to\n  train your model\u003c/a\u003e.\n  \u003c/dd\u003e\n  \u003cdt\u003ecomplex_model_m_gpu\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine equivalent to \u003ci\u003ecomplex_model_m\u003c/i\u003e that also includes\n  four NVIDIA Tesla K80 GPUs.\n  \u003c/dd\u003e\n  \u003cdt\u003ecomplex_model_l_gpu\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine equivalent to \u003ci\u003ecomplex_model_l\u003c/i\u003e that also includes\n  eight NVIDIA Tesla K80 GPUs.\n  \u003c/dd\u003e\n  \u003cdt\u003estandard_p100\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine equivalent to \u003ci\u003estandard\u003c/i\u003e that\n  also includes a single NVIDIA Tesla P100 GPU.\n  \u003c/dd\u003e\n  \u003cdt\u003ecomplex_model_m_p100\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine equivalent to \u003ci\u003ecomplex_model_m\u003c/i\u003e that also includes\n  four NVIDIA Tesla P100 GPUs.\n  \u003c/dd\u003e\n  \u003cdt\u003estandard_v100\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine equivalent to \u003ci\u003estandard\u003c/i\u003e that\n  also includes a single NVIDIA Tesla V100 GPU. The availability of these\n  GPUs is in the \u003ci\u003eBeta\u003c/i\u003e launch stage.\n  \u003c/dd\u003e\n  \u003cdt\u003elarge_model_v100\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine equivalent to \u003ci\u003elarge_model\u003c/i\u003e that\n  also includes a single NVIDIA Tesla V100 GPU. The availability of these\n  GPUs is in the \u003ci\u003eBeta\u003c/i\u003e launch stage.\n  \u003c/dd\u003e\n  \u003cdt\u003ecomplex_model_m_v100\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine equivalent to \u003ci\u003ecomplex_model_m\u003c/i\u003e that\n  also includes four NVIDIA Tesla V100 GPUs. The availability of these\n  GPUs is in the \u003ci\u003eBeta\u003c/i\u003e launch stage.\n  \u003c/dd\u003e\n  \u003cdt\u003ecomplex_model_l_v100\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine equivalent to \u003ci\u003ecomplex_model_l\u003c/i\u003e that\n  also includes eight NVIDIA Tesla V100 GPUs. The availability of these\n  GPUs is in the \u003ci\u003eBeta\u003c/i\u003e launch stage.\n  \u003c/dd\u003e\n  \u003cdt\u003ecloud_tpu\u003c/dt\u003e\n  \u003cdd\u003e\n  A TPU VM including one Cloud TPU. See more about\n  \u003ca href=\"/ml-engine/docs/tensorflow/using-tpus\"\u003eusing TPUs to train\n  your model\u003c/a\u003e.\n  \u003c/dd\u003e\n\u003c/dl\u003e\n\nYou must set this value when `scaleTier` is set to `CUSTOM`.",
+          "description": "Optional. Specifies the type of virtual machine to use for your training\njob's master worker.\n\nThe following types are supported:\n\n\u003cdl\u003e\n  \u003cdt\u003estandard\u003c/dt\u003e\n  \u003cdd\u003e\n  A basic machine configuration suitable for training simple models with\n  small to moderate datasets.\n  \u003c/dd\u003e\n  \u003cdt\u003elarge_model\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine with a lot of memory, specially suited for parameter servers\n  when your model is large (having many hidden layers or layers with very\n  large numbers of nodes).\n  \u003c/dd\u003e\n  \u003cdt\u003ecomplex_model_s\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine suitable for the master and workers of the cluster when your\n  model requires more computation than the standard machine can handle\n  satisfactorily.\n  \u003c/dd\u003e\n  \u003cdt\u003ecomplex_model_m\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine with roughly twice the number of cores and roughly double the\n  memory of \u003ci\u003ecomplex_model_s\u003c/i\u003e.\n  \u003c/dd\u003e\n  \u003cdt\u003ecomplex_model_l\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine with roughly twice the number of cores and roughly double the\n  memory of \u003ci\u003ecomplex_model_m\u003c/i\u003e.\n  \u003c/dd\u003e\n  \u003cdt\u003estandard_gpu\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine equivalent to \u003ci\u003estandard\u003c/i\u003e that\n  also includes a single NVIDIA Tesla K80 GPU. See more about\n  \u003ca href=\"/ml-engine/docs/tensorflow/using-gpus\"\u003eusing GPUs to\n  train your model\u003c/a\u003e.\n  \u003c/dd\u003e\n  \u003cdt\u003ecomplex_model_m_gpu\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine equivalent to \u003ci\u003ecomplex_model_m\u003c/i\u003e that also includes\n  four NVIDIA Tesla K80 GPUs.\n  \u003c/dd\u003e\n  \u003cdt\u003ecomplex_model_l_gpu\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine equivalent to \u003ci\u003ecomplex_model_l\u003c/i\u003e that also includes\n  eight NVIDIA Tesla K80 GPUs.\n  \u003c/dd\u003e\n  \u003cdt\u003estandard_p100\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine equivalent to \u003ci\u003estandard\u003c/i\u003e that\n  also includes a single NVIDIA Tesla P100 GPU.\n  \u003c/dd\u003e\n  \u003cdt\u003ecomplex_model_m_p100\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine equivalent to \u003ci\u003ecomplex_model_m\u003c/i\u003e that also includes\n  four NVIDIA Tesla P100 GPUs.\n  \u003c/dd\u003e\n  \u003cdt\u003estandard_v100\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine equivalent to \u003ci\u003estandard\u003c/i\u003e that\n  also includes a single NVIDIA Tesla V100 GPU.\n  \u003c/dd\u003e\n  \u003cdt\u003elarge_model_v100\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine equivalent to \u003ci\u003elarge_model\u003c/i\u003e that\n  also includes a single NVIDIA Tesla V100 GPU.\n  \u003c/dd\u003e\n  \u003cdt\u003ecomplex_model_m_v100\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine equivalent to \u003ci\u003ecomplex_model_m\u003c/i\u003e that\n  also includes four NVIDIA Tesla V100 GPUs.\n  \u003c/dd\u003e\n  \u003cdt\u003ecomplex_model_l_v100\u003c/dt\u003e\n  \u003cdd\u003e\n  A machine equivalent to \u003ci\u003ecomplex_model_l\u003c/i\u003e that\n  also includes eight NVIDIA Tesla V100 GPUs.\n  \u003c/dd\u003e\n  \u003cdt\u003ecloud_tpu\u003c/dt\u003e\n  \u003cdd\u003e\n  A TPU VM including one Cloud TPU. See more about\n  \u003ca href=\"/ml-engine/docs/tensorflow/using-tpus\"\u003eusing TPUs to train\n  your model\u003c/a\u003e.\n  \u003c/dd\u003e\n\u003c/dl\u003e\n\nYou may also use certain Compute Engine machine types directly in this\nfield. The following types are supported:\n\n- `n1-standard-4`\n- `n1-standard-8`\n- `n1-standard-16`\n- `n1-standard-32`\n- `n1-standard-64`\n- `n1-standard-96`\n- `n1-highmem-2`\n- `n1-highmem-4`\n- `n1-highmem-8`\n- `n1-highmem-16`\n- `n1-highmem-32`\n- `n1-highmem-64`\n- `n1-highmem-96`\n- `n1-highcpu-16`\n- `n1-highcpu-32`\n- `n1-highcpu-64`\n- `n1-highcpu-96`\n\nSee more about [using Compute Engine machine\ntypes](/ml-engine/docs/tensorflow/machine-types#compute-engine-machine-types).\n\nYou must set this value when `scaleTier` is set to `CUSTOM`.",
           "type": "string"
         },
         "packageUris": {
@@ -1782,13 +1871,17 @@
           },
           "type": "array"
         },
+        "parameterServerConfig": {
+          "$ref": "GoogleCloudMlV1__ReplicaConfig",
+          "description": "Optional. The configuration for parameter servers.\n\nYou should only set `parameterServerConfig.acceleratorConfig` if\n`parameterServerConfigType` is set to a Compute Engine machine type. [Learn\nabout restrictions on accelerator configurations for\ntraining.](/ml-engine/docs/tensorflow/using-gpus#compute-engine-machine-types-with-gpu)\n\nSet `parameterServerConfig.imageUri` only if you build a custom image for\nyour parameter server. If `parameterServerConfig.imageUri` has not been\nset, AI Platform uses the value of `masterConfig.imageUri`.\nLearn more about [configuring custom\ncontainers](/ml-engine/docs/distributed-training-containers)."
+        },
         "parameterServerCount": {
-          "description": "Optional. The number of parameter server replicas to use for the training\njob. Each replica in the cluster will be of the type specified in\n`parameter_server_type`.\n\nThis value can only be used when `scale_tier` is set to `CUSTOM`.If you\nset this value, you must also set `parameter_server_type`.",
+          "description": "Optional. The number of parameter server replicas to use for the training\njob. Each replica in the cluster will be of the type specified in\n`parameter_server_type`.\n\nThis value can only be used when `scale_tier` is set to `CUSTOM`.If you\nset this value, you must also set `parameter_server_type`.\n\nThe default value is zero.",
           "format": "int64",
           "type": "string"
         },
         "parameterServerType": {
-          "description": "Optional. Specifies the type of virtual machine to use for your training\njob's parameter server.\n\nThe supported values are the same as those described in the entry for\n`master_type`.\n\nThis value must be present when `scaleTier` is set to `CUSTOM` and\n`parameter_server_count` is greater than zero.",
+          "description": "Optional. Specifies the type of virtual machine to use for your training\njob's parameter server.\n\nThe supported values are the same as those described in the entry for\n`master_type`.\n\nThis value must be consistent with the category of machine type that\n`masterType` uses. In other words, both must be AI Platform machine\ntypes or both must be Compute Engine machine types.\n\nThis value must be present when `scaleTier` is set to `CUSTOM` and\n`parameter_server_count` is greater than zero.",
           "type": "string"
         },
         "pythonModule": {
@@ -1796,15 +1889,15 @@
           "type": "string"
         },
         "pythonVersion": {
-          "description": "Optional. The version of Python used in training. If not set, the default\nversion is '2.7'. Python '3.5' is available when `runtime_version` is set\nto '1.4' and above. Python '2.7' works with all supported runtime versions.",
+          "description": "Optional. The version of Python used in training. If not set, the default\nversion is '2.7'. Python '3.5' is available when `runtime_version` is set\nto '1.4' and above. Python '2.7' works with all supported\n\u003ca href=\"/ml-engine/docs/runtime-version-list\"\u003eruntime versions\u003c/a\u003e.",
           "type": "string"
         },
         "region": {
-          "description": "Required. The Google Compute Engine region to run the training job in.\nSee the \u003ca href=\"/ml-engine/docs/tensorflow/regions\"\u003eavailable regions\u003c/a\u003e\nfor ML Engine services.",
+          "description": "Required. The Google Compute Engine region to run the training job in.\nSee the \u003ca href=\"/ml-engine/docs/tensorflow/regions\"\u003eavailable regions\u003c/a\u003e\nfor AI Platform services.",
           "type": "string"
         },
         "runtimeVersion": {
-          "description": "Optional. The Google Cloud ML runtime version to use for training.  If not\nset, Google Cloud ML will choose a stable version, which is defined in the\ndocumentation of runtime version list.",
+          "description": "Optional. The AI Platform runtime version to use for training. If not\nset, AI Platform uses the default stable version, 1.0. For more\ninformation, see the\n\u003ca href=\"/ml-engine/docs/runtime-version-list\"\u003eruntime version list\u003c/a\u003e\nand\n\u003ca href=\"/ml-engine/docs/versioning\"\u003ehow to manage runtime versions\u003c/a\u003e.",
           "type": "string"
         },
         "scaleTier": {
@@ -1827,13 +1920,17 @@
           ],
           "type": "string"
         },
+        "workerConfig": {
+          "$ref": "GoogleCloudMlV1__ReplicaConfig",
+          "description": "Optional. The configuration for workers.\n\nYou should only set `workerConfig.acceleratorConfig` if `workerType` is set\nto a Compute Engine machine type. [Learn about restrictions on accelerator\nconfigurations for\ntraining.](/ml-engine/docs/tensorflow/using-gpus#compute-engine-machine-types-with-gpu)\n\nSet `workerConfig.imageUri` only if you build a custom image for your\nworker. If `workerConfig.imageUri` has not been set, AI Platform uses\nthe value of `masterConfig.imageUri`. Learn more about\n[configuring custom\ncontainers](/ml-engine/docs/distributed-training-containers)."
+        },
         "workerCount": {
-          "description": "Optional. The number of worker replicas to use for the training job. Each\nreplica in the cluster will be of the type specified in `worker_type`.\n\nThis value can only be used when `scale_tier` is set to `CUSTOM`. If you\nset this value, you must also set `worker_type`.",
+          "description": "Optional. The number of worker replicas to use for the training job. Each\nreplica in the cluster will be of the type specified in `worker_type`.\n\nThis value can only be used when `scale_tier` is set to `CUSTOM`. If you\nset this value, you must also set `worker_type`.\n\nThe default value is zero.",
           "format": "int64",
           "type": "string"
         },
         "workerType": {
-          "description": "Optional. Specifies the type of virtual machine to use for your training\njob's worker nodes.\n\nThe supported values are the same as those described in the entry for\n`masterType`.\n\nThis value must be present when `scaleTier` is set to `CUSTOM` and\n`workerCount` is greater than zero.",
+          "description": "Optional. Specifies the type of virtual machine to use for your training\njob's worker nodes.\n\nThe supported values are the same as those described in the entry for\n`masterType`.\n\nThis value must be consistent with the category of machine type that\n`masterType` uses. In other words, both must be AI Platform machine\ntypes or both must be Compute Engine machine types.\n\nIf you use `cloud_tpu` for this value, see special instructions for\n[configuring a custom TPU\nmachine](/ml-engine/docs/tensorflow/using-tpus#configuring_a_custom_tpu_machine).\n\nThis value must be present when `scaleTier` is set to `CUSTOM` and\n`workerCount` is greater than zero.",
           "type": "string"
         }
       },
@@ -1843,6 +1940,10 @@
       "description": "Represents results of a training job. Output only.",
       "id": "GoogleCloudMlV1__TrainingOutput",
       "properties": {
+        "builtInAlgorithmOutput": {
+          "$ref": "GoogleCloudMlV1__BuiltInAlgorithmOutput",
+          "description": "Details related to built-in algorithms jobs.\nOnly set for built-in algorithms jobs."
+        },
         "completedTrialCount": {
           "description": "The number of hyperparameter tuning trials that completed successfully.\nOnly set for hyperparameter tuning jobs.",
           "format": "int64",
@@ -1852,6 +1953,10 @@
           "description": "The amount of ML units consumed by the job.",
           "format": "double",
           "type": "number"
+        },
+        "isBuiltInAlgorithmJob": {
+          "description": "Whether this job is a built-in Algorithm job.",
+          "type": "boolean"
         },
         "isHyperparameterTuningJob": {
           "description": "Whether this job is a hyperparameter tuning job.",
@@ -1881,7 +1986,7 @@
           "type": "string"
         },
         "deploymentUri": {
-          "description": "Required. The Google Cloud Storage location of the trained model used to\ncreate the version. See the\n[guide to model\ndeployment](/ml-engine/docs/tensorflow/deploying-models) for more\ninformation.\n\nWhen passing Version to\n[projects.models.versions.create](/ml-engine/reference/rest/v1/projects.models.versions/create)\nthe model service uses the specified location as the source of the model.\nOnce deployed, the model version is hosted by the prediction service, so\nthis location is useful only as a historical record.\nThe total number of model files can't exceed 1000.",
+          "description": "Required. The Cloud Storage location of the trained model used to\ncreate the version. See the\n[guide to model\ndeployment](/ml-engine/docs/tensorflow/deploying-models) for more\ninformation.\n\nWhen passing Version to\n[projects.models.versions.create](/ml-engine/reference/rest/v1/projects.models.versions/create)\nthe model service uses the specified location as the source of the model.\nOnce deployed, the model version is hosted by the prediction service, so\nthis location is useful only as a historical record.\nThe total number of model files can't exceed 1000.",
           "type": "string"
         },
         "description": {
@@ -1898,7 +2003,7 @@
           "type": "string"
         },
         "framework": {
-          "description": "Optional. The machine learning framework Cloud ML Engine uses to train\nthis version of the model. Valid values are `TENSORFLOW`, `SCIKIT_LEARN`,\nand `XGBOOST`. If you do not specify a framework, Cloud ML Engine uses\nTensorFlow. If you choose `SCIKIT_LEARN` or `XGBOOST`, you must also set\nthe runtime version of the model to 1.4 or greater.",
+          "description": "Optional. The machine learning framework AI Platform uses to train\nthis version of the model. Valid values are `TENSORFLOW`, `SCIKIT_LEARN`,\n`XGBOOST`. If you do not specify a framework, AI Platform\nwill analyze files in the deployment_uri to determine a framework. If you\nchoose `SCIKIT_LEARN` or `XGBOOST`, you must also set the runtime version\nof the model to 1.4 or greater.\n\nDo **not** specify a framework if you're deploying a [custom\nprediction routine](/ml-engine/docs/tensorflow/custom-prediction-routines).",
           "enum": [
             "FRAMEWORK_UNSPECIFIED",
             "TENSORFLOW",
@@ -1906,7 +2011,7 @@
             "XGBOOST"
           ],
           "enumDescriptions": [
-            "Unspecified framework. Defaults to TensorFlow.",
+            "Unspecified framework. Assigns a value based on the file suffix.",
             "Tensorflow framework.",
             "Scikit-learn framework.",
             "XGBoost framework."
@@ -1930,7 +2035,7 @@
           "type": "string"
         },
         "machineType": {
-          "description": "Optional. The type of machine on which to serve the model. Currently only\napplies to online prediction service.\nThe following are currently supported and will be deprecated in\nBeta release.\n  mls1-highmem-1    1 core    2 Gb RAM\n  mls1-highcpu-4    4 core    2 Gb RAM\nThe following are available in Beta:\n  mls1-c1-m2        1 core    2 Gb RAM   Default\n  mls1-c4-m2        4 core    2 Gb RAM",
+          "description": "Optional. The type of machine on which to serve the model. Currently only\napplies to online prediction service.\n\u003cdl\u003e\n  \u003cdt\u003emls1-c1-m2\u003c/dt\u003e\n  \u003cdd\u003e\n  The \u003cb\u003edefault\u003c/b\u003e machine type, with 1 core and 2 GB RAM. The deprecated\n  name for this machine type is \"mls1-highmem-1\".\n  \u003c/dd\u003e\n  \u003cdt\u003emls1-c4-m2\u003c/dt\u003e\n  \u003cdd\u003e\n  In \u003cb\u003eBeta\u003c/b\u003e. This machine type has 4 cores and 2 GB RAM. The\n  deprecated name for this machine type is \"mls1-highcpu-4\".\n  \u003c/dd\u003e\n\u003c/dl\u003e",
           "type": "string"
         },
         "manualScaling": {
@@ -1941,12 +2046,27 @@
           "description": "Required.The name specified for the version when it was created.\n\nThe version name must be unique within the model it is created in.",
           "type": "string"
         },
+        "packageUris": {
+          "description": "Optional. Cloud Storage paths (`gs://…`) of packages for [custom\nprediction routines](/ml-engine/docs/tensorflow/custom-prediction-routines)\nor [scikit-learn pipelines with custom\ncode](/ml-engine/docs/scikit/exporting-for-prediction#custom-pipeline-code).\n\nFor a custom prediction routine, one of these packages must contain your\nPredictor class (see\n[`predictionClass`](#Version.FIELDS.prediction_class)). Additionally,\ninclude any dependencies used by your Predictor or scikit-learn pipeline\nuses that are not already included in your selected [runtime\nversion](/ml-engine/docs/tensorflow/runtime-version-list).\n\nIf you specify this field, you must also set\n[`runtimeVersion`](#Version.FIELDS.runtime_version) to 1.4 or greater.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "predictionClass": {
+          "description": "Optional. The fully qualified name\n(\u003cvar\u003emodule_name\u003c/var\u003e.\u003cvar\u003eclass_name\u003c/var\u003e) of a class that implements\nthe Predictor interface described in this reference field. The module\ncontaining this class should be included in a package provided to the\n[`packageUris` field](#Version.FIELDS.package_uris).\n\nSpecify this field if and only if you are deploying a [custom prediction\nroutine (beta)](/ml-engine/docs/tensorflow/custom-prediction-routines).\nIf you specify this field, you must set\n[`runtimeVersion`](#Version.FIELDS.runtime_version) to 1.4 or greater.\n\nThe following code sample provides the Predictor interface:\n\n```py\nclass Predictor(object):\n\"\"\"Interface for constructing custom predictors.\"\"\"\n\ndef predict(self, instances, **kwargs):\n    \"\"\"Performs custom prediction.\n\n    Instances are the decoded values from the request. They have already\n    been deserialized from JSON.\n\n    Args:\n        instances: A list of prediction input instances.\n        **kwargs: A dictionary of keyword args provided as additional\n            fields on the predict request body.\n\n    Returns:\n        A list of outputs containing the prediction results. This list must\n        be JSON serializable.\n    \"\"\"\n    raise NotImplementedError()\n\n@classmethod\ndef from_path(cls, model_dir):\n    \"\"\"Creates an instance of Predictor using the given path.\n\n    Loading of the predictor should be done in this method.\n\n    Args:\n        model_dir: The local directory that contains the exported model\n            file along with any additional files uploaded when creating the\n            version resource.\n\n    Returns:\n        An instance implementing this Predictor class.\n    \"\"\"\n    raise NotImplementedError()\n```\n\nLearn more about [the Predictor interface and custom prediction\nroutines](/ml-engine/docs/tensorflow/custom-prediction-routines).",
+          "type": "string"
+        },
         "pythonVersion": {
           "description": "Optional. The version of Python used in prediction. If not set, the default\nversion is '2.7'. Python '3.5' is available when `runtime_version` is set\nto '1.4' and above. Python '2.7' works with all supported runtime versions.",
           "type": "string"
         },
         "runtimeVersion": {
-          "description": "Optional. The Google Cloud ML runtime version to use for this deployment.\nIf not set, Google Cloud ML will choose a version.",
+          "description": "Optional. The AI Platform runtime version to use for this deployment.\nIf not set, AI Platform uses the default stable version, 1.0. For more\ninformation, see the\n[runtime version list](/ml-engine/docs/runtime-version-list) and\n[how to manage runtime versions](/ml-engine/docs/versioning).",
+          "type": "string"
+        },
+        "serviceAccount": {
+          "description": "Optional. Specifies the service account for resource access control.",
           "type": "string"
         },
         "state": {
@@ -2026,10 +2146,10 @@
       "properties": {
         "condition": {
           "$ref": "GoogleType__Expr",
-          "description": "Unimplemented. The condition that is associated with this binding.\nNOTE: an unsatisfied condition will not allow user access via current\nbinding. Different bindings, including their conditions, are examined\nindependently."
+          "description": "The condition that is associated with this binding.\nNOTE: An unsatisfied condition will not allow user access via current\nbinding. Different bindings, including their conditions, are examined\nindependently."
         },
         "members": {
-          "description": "Specifies the identities requesting access for a Cloud Platform resource.\n`members` can have the following values:\n\n* `allUsers`: A special identifier that represents anyone who is\n   on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone\n   who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google\n   account. For example, `alice@gmail.com` .\n\n\n* `serviceAccount:{emailid}`: An email address that represents a service\n   account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group.\n   For example, `admins@example.com`.\n\n\n* `domain:{domain}`: A Google Apps domain name that represents all the\n   users of that domain. For example, `google.com` or `example.com`.\n\n",
+          "description": "Specifies the identities requesting access for a Cloud Platform resource.\n`members` can have the following values:\n\n* `allUsers`: A special identifier that represents anyone who is\n   on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone\n   who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google\n   account. For example, `alice@gmail.com` .\n\n\n* `serviceAccount:{emailid}`: An email address that represents a service\n   account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group.\n   For example, `admins@example.com`.\n\n\n* `domain:{domain}`: The G Suite domain (primary) that represents all the\n   users of that domain. For example, `google.com` or `example.com`.\n\n",
           "items": {
             "type": "string"
           },
@@ -2156,7 +2276,7 @@
           "type": "object"
         },
         "name": {
-          "description": "The server-assigned name, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping, the\n`name` should have the format of `operations/some/unique/name`.",
+          "description": "The server-assigned name, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping, the\n`name` should be a resource name ending with `operations/{unique_id}`.",
           "type": "string"
         },
         "response": {
@@ -2177,7 +2297,7 @@
       "type": "object"
     },
     "GoogleRpc__Status": {
-      "description": "The `Status` type defines a logical error model that is suitable for different\nprogramming environments, including REST APIs and RPC APIs. It is used by\n[gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error message,\nand error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
+      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error\nmessage, and error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
       "id": "GoogleRpc__Status",
       "properties": {
         "code": {

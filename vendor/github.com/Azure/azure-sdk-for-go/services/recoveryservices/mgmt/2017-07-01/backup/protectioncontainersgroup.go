@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewProtectionContainersGroupClientWithBaseURI(baseURI string, subscriptionI
 // resourceGroupName - the name of the resource group where the recovery services vault is present.
 // filter - oData filter options.
 func (client ProtectionContainersGroupClient) List(ctx context.Context, vaultName string, resourceGroupName string, filter string) (result ProtectionContainerResourceListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProtectionContainersGroupClient.List")
+		defer func() {
+			sc := -1
+			if result.pcrl.Response.Response != nil {
+				sc = result.pcrl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, vaultName, resourceGroupName, filter)
 	if err != nil {
@@ -112,8 +123,8 @@ func (client ProtectionContainersGroupClient) ListResponder(resp *http.Response)
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ProtectionContainersGroupClient) listNextResults(lastResults ProtectionContainerResourceList) (result ProtectionContainerResourceList, err error) {
-	req, err := lastResults.protectionContainerResourceListPreparer()
+func (client ProtectionContainersGroupClient) listNextResults(ctx context.Context, lastResults ProtectionContainerResourceList) (result ProtectionContainerResourceList, err error) {
+	req, err := lastResults.protectionContainerResourceListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "backup.ProtectionContainersGroupClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -134,6 +145,16 @@ func (client ProtectionContainersGroupClient) listNextResults(lastResults Protec
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ProtectionContainersGroupClient) ListComplete(ctx context.Context, vaultName string, resourceGroupName string, filter string) (result ProtectionContainerResourceListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProtectionContainersGroupClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, vaultName, resourceGroupName, filter)
 	return
 }

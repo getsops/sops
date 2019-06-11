@@ -23,7 +23,7 @@ import (
 	"cloud.google.com/go/internal/fields"
 	"github.com/golang/protobuf/ptypes"
 	ts "github.com/golang/protobuf/ptypes/timestamp"
-	pb "google.golang.org/genproto/googleapis/firestore/v1beta1"
+	pb "google.golang.org/genproto/googleapis/firestore/v1"
 	"google.golang.org/genproto/googleapis/type/latlng"
 )
 
@@ -46,7 +46,9 @@ var (
 //   an int64 to represent integral values, and those types can't be properly
 //   represented in an int64.
 // - An error is returned for the special Delete value.
-func toProtoValue(v reflect.Value) (pbv *pb.Value, sawServerTimestamp bool, err error) {
+//
+// toProtoValue also reports whether it recursively encountered a transform.
+func toProtoValue(v reflect.Value) (pbv *pb.Value, sawTransform bool, err error) {
 	if !v.IsValid() {
 		return nullValue, false, nil
 	}
@@ -101,6 +103,8 @@ func toProtoValue(v reflect.Value) (pbv *pb.Value, sawServerTimestamp bool, err 
 		return &pb.Value{ValueType: &pb.Value_DoubleValue{v.Float()}}, false, nil
 	case reflect.String:
 		return &pb.Value{ValueType: &pb.Value_StringValue{v.String()}}, false, nil
+	case reflect.Array:
+		return arrayToProtoValue(v)
 	case reflect.Slice:
 		return sliceToProtoValue(v)
 	case reflect.Map:
@@ -123,25 +127,35 @@ func toProtoValue(v reflect.Value) (pbv *pb.Value, sawServerTimestamp bool, err 
 	}
 }
 
-func sliceToProtoValue(v reflect.Value) (*pb.Value, bool, error) {
-	// A nil slice is converted to a null value.
-	if v.IsNil() {
-		return nullValue, false, nil
-	}
+// arrayToProtoValue converts a array to a Firestore Value protobuf and reports
+// whether a transform was encountered.
+func arrayToProtoValue(v reflect.Value) (*pb.Value, bool, error) {
 	vals := make([]*pb.Value, v.Len())
 	for i := 0; i < v.Len(); i++ {
-		val, sawServerTimestamp, err := toProtoValue(v.Index(i))
+		val, sawTransform, err := toProtoValue(v.Index(i))
 		if err != nil {
 			return nil, false, err
 		}
-		if sawServerTimestamp {
-			return nil, false, errors.New("firestore: ServerTimestamp cannot occur in an array")
+		if sawTransform {
+			return nil, false, fmt.Errorf("firestore: transforms cannot occur in an array, but saw some in %v", v.Index(i))
 		}
 		vals[i] = val
 	}
 	return &pb.Value{ValueType: &pb.Value_ArrayValue{&pb.ArrayValue{Values: vals}}}, false, nil
 }
 
+// sliceToProtoValue converts a slice to a Firestore Value protobuf and reports
+// whether a transform was encountered.
+func sliceToProtoValue(v reflect.Value) (*pb.Value, bool, error) {
+	// A nil slice is converted to a null value.
+	if v.IsNil() {
+		return nullValue, false, nil
+	}
+	return arrayToProtoValue(v)
+}
+
+// mapToProtoValue converts a map to a Firestore Value protobuf and reports whether
+// a transform was encountered.
 func mapToProtoValue(v reflect.Value) (*pb.Value, bool, error) {
 	if v.Type().Key().Kind() != reflect.String {
 		return nil, false, errors.New("firestore: map key type must be string")
@@ -151,11 +165,17 @@ func mapToProtoValue(v reflect.Value) (*pb.Value, bool, error) {
 		return nullValue, false, nil
 	}
 	m := map[string]*pb.Value{}
-	sawServerTimestamp := false
+	sawTransform := false
 	for _, k := range v.MapKeys() {
 		mi := v.MapIndex(k)
 		if mi.Interface() == ServerTimestamp {
-			sawServerTimestamp = true
+			sawTransform = true
+			continue
+		} else if _, ok := mi.Interface().(arrayUnion); ok {
+			sawTransform = true
+			continue
+		} else if _, ok := mi.Interface().(arrayRemove); ok {
+			sawTransform = true
 			continue
 		}
 		val, sst, err := toProtoValue(mi)
@@ -163,7 +183,7 @@ func mapToProtoValue(v reflect.Value) (*pb.Value, bool, error) {
 			return nil, false, err
 		}
 		if sst {
-			sawServerTimestamp = true
+			sawTransform = true
 		}
 		if val == nil { // value was a map with all ServerTimestamp values
 			continue
@@ -171,28 +191,37 @@ func mapToProtoValue(v reflect.Value) (*pb.Value, bool, error) {
 		m[k.String()] = val
 	}
 	var pv *pb.Value
-	if len(m) == 0 && sawServerTimestamp {
-		// The entire map consisted of ServerTimestamp values.
+	if len(m) == 0 && sawTransform {
+		// The entire map consisted of transform values.
 		pv = nil
 	} else {
 		pv = &pb.Value{ValueType: &pb.Value_MapValue{&pb.MapValue{Fields: m}}}
 	}
-	return pv, sawServerTimestamp, nil
+	return pv, sawTransform, nil
 }
 
+// structToProtoValue converts a struct to a Firestore Value protobuf and reports
+// whether a transform was encountered.
 func structToProtoValue(v reflect.Value) (*pb.Value, bool, error) {
 	m := map[string]*pb.Value{}
 	fields, err := fieldCache.Fields(v.Type())
 	if err != nil {
 		return nil, false, err
 	}
-	sawServerTimestamp := false
+	sawTransform := false
+	if _, ok := v.Interface().(arrayUnion); ok {
+		return nil, false, errors.New("firestore: ArrayUnion may not be used in structs")
+	}
+	if _, ok := v.Interface().(arrayRemove); ok {
+		return nil, false, errors.New("firestore: ArrayRemove may not be used in structs")
+	}
+
 	for _, f := range fields {
 		fv := v.FieldByIndex(f.Index)
 		opts := f.ParsedTag.(tagOptions)
 		if opts.serverTimestamp {
 			// TODO(jba): should we return a non-zero time?
-			sawServerTimestamp = true
+			sawTransform = true
 			continue
 		}
 		if opts.omitEmpty && isEmptyValue(fv) {
@@ -203,7 +232,7 @@ func structToProtoValue(v reflect.Value) (*pb.Value, bool, error) {
 			return nil, false, err
 		}
 		if sst {
-			sawServerTimestamp = true
+			sawTransform = true
 		}
 		if val == nil { // value was a map with all ServerTimestamp values
 			continue
@@ -211,13 +240,13 @@ func structToProtoValue(v reflect.Value) (*pb.Value, bool, error) {
 		m[f.Name] = val
 	}
 	var pv *pb.Value
-	if len(m) == 0 && sawServerTimestamp {
+	if len(m) == 0 && sawTransform {
 		// The entire struct consisted of ServerTimestamp or omitempty values.
 		pv = nil
 	} else {
 		pv = &pb.Value{ValueType: &pb.Value_MapValue{&pb.MapValue{Fields: m}}}
 	}
-	return pv, sawServerTimestamp, nil
+	return pv, sawTransform, nil
 }
 
 type tagOptions struct {

@@ -18,7 +18,7 @@ const opCreateCertificateAuthority = "CreateCertificateAuthority"
 // CreateCertificateAuthorityRequest generates a "aws/request.Request" representing the
 // client's request for the CreateCertificateAuthority operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -83,6 +83,10 @@ func (c *ACMPCA) CreateCertificateAuthorityRequest(input *CreateCertificateAutho
 //   The S3 bucket policy is not valid. The policy must give ACM PCA rights to
 //   read from and write to the bucket and find the bucket location.
 //
+//   * ErrCodeInvalidTagException "InvalidTagException"
+//   The tag associated with the CA is not valid. The invalid argument is contained
+//   in the message field.
+//
 //   * ErrCodeLimitExceededException "LimitExceededException"
 //   An ACM PCA limit has been exceeded. See the exception message returned to
 //   determine the limit that was exceeded.
@@ -114,7 +118,7 @@ const opCreateCertificateAuthorityAuditReport = "CreateCertificateAuthorityAudit
 // CreateCertificateAuthorityAuditReportRequest generates a "aws/request.Request" representing the
 // client's request for the CreateCertificateAuthorityAuditReport operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -153,10 +157,10 @@ func (c *ACMPCA) CreateCertificateAuthorityAuditReportRequest(input *CreateCerti
 
 // CreateCertificateAuthorityAuditReport API operation for AWS Certificate Manager Private Certificate Authority.
 //
-// Creates an audit report that lists every time that the your CA private key
-// is used. The report is saved in the Amazon S3 bucket that you specify on
-// input. The IssueCertificate and RevokeCertificate operations use the private
-// key. You can generate a new report every 30 minutes.
+// Creates an audit report that lists every time that your CA private key is
+// used. The report is saved in the Amazon S3 bucket that you specify on input.
+// The IssueCertificate and RevokeCertificate operations use the private key.
+// You can generate a new report every 30 minutes.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -183,7 +187,8 @@ func (c *ACMPCA) CreateCertificateAuthorityAuditReportRequest(input *CreateCerti
 //   One or more of the specified arguments was not valid.
 //
 //   * ErrCodeInvalidStateException "InvalidStateException"
-//   The private CA is in a state during which a report cannot be generated.
+//   The private CA is in a state during which a report or certificate cannot
+//   be generated.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/acm-pca-2017-08-22/CreateCertificateAuthorityAuditReport
 func (c *ACMPCA) CreateCertificateAuthorityAuditReport(input *CreateCertificateAuthorityAuditReportInput) (*CreateCertificateAuthorityAuditReportOutput, error) {
@@ -207,12 +212,119 @@ func (c *ACMPCA) CreateCertificateAuthorityAuditReportWithContext(ctx aws.Contex
 	return out, req.Send()
 }
 
+const opCreatePermission = "CreatePermission"
+
+// CreatePermissionRequest generates a "aws/request.Request" representing the
+// client's request for the CreatePermission operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreatePermission for more information on using the CreatePermission
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreatePermissionRequest method.
+//    req, resp := client.CreatePermissionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/acm-pca-2017-08-22/CreatePermission
+func (c *ACMPCA) CreatePermissionRequest(input *CreatePermissionInput) (req *request.Request, output *CreatePermissionOutput) {
+	op := &request.Operation{
+		Name:       opCreatePermission,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreatePermissionInput{}
+	}
+
+	output = &CreatePermissionOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CreatePermission API operation for AWS Certificate Manager Private Certificate Authority.
+//
+// Assigns permissions from a private CA to a designated AWS service. Services
+// are specified by their service principals and can be given permission to
+// create and retrieve certificates on a private CA. Services can also be given
+// permission to list the active permissions that the private CA has granted.
+// For ACM to automatically renew your private CA's certificates, you must assign
+// all possible permissions from the CA to the ACM service principal.
+//
+// At this time, you can only assign permissions to ACM (acm.amazonaws.com).
+// Permissions can be revoked with the DeletePermission operation and listed
+// with the ListPermissions operation.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Certificate Manager Private Certificate Authority's
+// API operation CreatePermission for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   A resource such as a private CA, S3 bucket, certificate, or audit report
+//   cannot be found.
+//
+//   * ErrCodeInvalidArnException "InvalidArnException"
+//   The requested Amazon Resource Name (ARN) does not refer to an existing resource.
+//
+//   * ErrCodePermissionAlreadyExistsException "PermissionAlreadyExistsException"
+//   The designated permission has already been given to the user.
+//
+//   * ErrCodeLimitExceededException "LimitExceededException"
+//   An ACM PCA limit has been exceeded. See the exception message returned to
+//   determine the limit that was exceeded.
+//
+//   * ErrCodeInvalidStateException "InvalidStateException"
+//   The private CA is in a state during which a report or certificate cannot
+//   be generated.
+//
+//   * ErrCodeRequestFailedException "RequestFailedException"
+//   The request has failed for an unspecified reason.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/acm-pca-2017-08-22/CreatePermission
+func (c *ACMPCA) CreatePermission(input *CreatePermissionInput) (*CreatePermissionOutput, error) {
+	req, out := c.CreatePermissionRequest(input)
+	return out, req.Send()
+}
+
+// CreatePermissionWithContext is the same as CreatePermission with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreatePermission for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ACMPCA) CreatePermissionWithContext(ctx aws.Context, input *CreatePermissionInput, opts ...request.Option) (*CreatePermissionOutput, error) {
+	req, out := c.CreatePermissionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteCertificateAuthority = "DeleteCertificateAuthority"
 
 // DeleteCertificateAuthorityRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteCertificateAuthority operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -246,8 +358,7 @@ func (c *ACMPCA) DeleteCertificateAuthorityRequest(input *DeleteCertificateAutho
 
 	output = &DeleteCertificateAuthorityOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -264,13 +375,13 @@ func (c *ACMPCA) DeleteCertificateAuthorityRequest(input *DeleteCertificateAutho
 // delete it if the CA has been created but you haven't yet imported the signed
 // certificate (the Status is PENDING_CERTIFICATE) into ACM PCA.
 //
-// If the CA is in one of the aforementioned states and you call DeleteCertificateAuthority,
-// the CA's status changes to DELETED. However, the CA won't be permentantly
+// If the CA is in one of the previously mentioned states and you call DeleteCertificateAuthority,
+// the CA's status changes to DELETED. However, the CA won't be permanently
 // deleted until the restoration period has passed. By default, if you do not
 // set the PermanentDeletionTimeInDays parameter, the CA remains restorable
 // for 30 days. You can set the parameter from 7 to 30 days. The DescribeCertificateAuthority
 // operation returns the time remaining in the restoration window of a Private
-// CA in the DELETED state. To restore an eligable CA, call the RestoreCertificateAuthority
+// CA in the DELETED state. To restore an eligible CA, call the RestoreCertificateAuthority
 // operation.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -292,7 +403,8 @@ func (c *ACMPCA) DeleteCertificateAuthorityRequest(input *DeleteCertificateAutho
 //   The requested Amazon Resource Name (ARN) does not refer to an existing resource.
 //
 //   * ErrCodeInvalidStateException "InvalidStateException"
-//   The private CA is in a state during which a report cannot be generated.
+//   The private CA is in a state during which a report or certificate cannot
+//   be generated.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/acm-pca-2017-08-22/DeleteCertificateAuthority
 func (c *ACMPCA) DeleteCertificateAuthority(input *DeleteCertificateAuthorityInput) (*DeleteCertificateAuthorityOutput, error) {
@@ -316,12 +428,105 @@ func (c *ACMPCA) DeleteCertificateAuthorityWithContext(ctx aws.Context, input *D
 	return out, req.Send()
 }
 
+const opDeletePermission = "DeletePermission"
+
+// DeletePermissionRequest generates a "aws/request.Request" representing the
+// client's request for the DeletePermission operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeletePermission for more information on using the DeletePermission
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeletePermissionRequest method.
+//    req, resp := client.DeletePermissionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/acm-pca-2017-08-22/DeletePermission
+func (c *ACMPCA) DeletePermissionRequest(input *DeletePermissionInput) (req *request.Request, output *DeletePermissionOutput) {
+	op := &request.Operation{
+		Name:       opDeletePermission,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeletePermissionInput{}
+	}
+
+	output = &DeletePermissionOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeletePermission API operation for AWS Certificate Manager Private Certificate Authority.
+//
+// Revokes permissions that a private CA assigned to a designated AWS service.
+// Permissions can be created with the CreatePermission operation and listed
+// with the ListPermissions operation.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Certificate Manager Private Certificate Authority's
+// API operation DeletePermission for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   A resource such as a private CA, S3 bucket, certificate, or audit report
+//   cannot be found.
+//
+//   * ErrCodeInvalidArnException "InvalidArnException"
+//   The requested Amazon Resource Name (ARN) does not refer to an existing resource.
+//
+//   * ErrCodeInvalidStateException "InvalidStateException"
+//   The private CA is in a state during which a report or certificate cannot
+//   be generated.
+//
+//   * ErrCodeRequestFailedException "RequestFailedException"
+//   The request has failed for an unspecified reason.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/acm-pca-2017-08-22/DeletePermission
+func (c *ACMPCA) DeletePermission(input *DeletePermissionInput) (*DeletePermissionOutput, error) {
+	req, out := c.DeletePermissionRequest(input)
+	return out, req.Send()
+}
+
+// DeletePermissionWithContext is the same as DeletePermission with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeletePermission for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ACMPCA) DeletePermissionWithContext(ctx aws.Context, input *DeletePermissionInput, opts ...request.Option) (*DeletePermissionOutput, error) {
+	req, out := c.DeletePermissionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeCertificateAuthority = "DescribeCertificateAuthority"
 
 // DescribeCertificateAuthorityRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeCertificateAuthority operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -381,8 +586,8 @@ func (c *ACMPCA) DescribeCertificateAuthorityRequest(input *DescribeCertificateA
 //    CA can never return to the pending state. You must create a new CA.
 //
 //    * DELETED - Your private CA is within the restoration period, after which
-//    it will be permanently deleted. The length of time remaining in the CA's
-//    restoration period will also be included in this operation's output.
+//    it is permanently deleted. The length of time remaining in the CA's restoration
+//    period is also included in this operation's output.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -426,7 +631,7 @@ const opDescribeCertificateAuthorityAuditReport = "DescribeCertificateAuthorityA
 // DescribeCertificateAuthorityAuditReportRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeCertificateAuthorityAuditReport operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -515,7 +720,7 @@ const opGetCertificate = "GetCertificate"
 // GetCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the GetCertificate operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -584,7 +789,8 @@ func (c *ACMPCA) GetCertificateRequest(input *GetCertificateInput) (req *request
 //   The requested Amazon Resource Name (ARN) does not refer to an existing resource.
 //
 //   * ErrCodeInvalidStateException "InvalidStateException"
-//   The private CA is in a state during which a report cannot be generated.
+//   The private CA is in a state during which a report or certificate cannot
+//   be generated.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/acm-pca-2017-08-22/GetCertificate
 func (c *ACMPCA) GetCertificate(input *GetCertificateInput) (*GetCertificateOutput, error) {
@@ -613,7 +819,7 @@ const opGetCertificateAuthorityCertificate = "GetCertificateAuthorityCertificate
 // GetCertificateAuthorityCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the GetCertificateAuthorityCertificate operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -670,7 +876,8 @@ func (c *ACMPCA) GetCertificateAuthorityCertificateRequest(input *GetCertificate
 //   cannot be found.
 //
 //   * ErrCodeInvalidStateException "InvalidStateException"
-//   The private CA is in a state during which a report cannot be generated.
+//   The private CA is in a state during which a report or certificate cannot
+//   be generated.
 //
 //   * ErrCodeInvalidArnException "InvalidArnException"
 //   The requested Amazon Resource Name (ARN) does not refer to an existing resource.
@@ -702,7 +909,7 @@ const opGetCertificateAuthorityCsr = "GetCertificateAuthorityCsr"
 // GetCertificateAuthorityCsrRequest generates a "aws/request.Request" representing the
 // client's request for the GetCertificateAuthorityCsr operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -770,7 +977,8 @@ func (c *ACMPCA) GetCertificateAuthorityCsrRequest(input *GetCertificateAuthorit
 //   The requested Amazon Resource Name (ARN) does not refer to an existing resource.
 //
 //   * ErrCodeInvalidStateException "InvalidStateException"
-//   The private CA is in a state during which a report cannot be generated.
+//   The private CA is in a state during which a report or certificate cannot
+//   be generated.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/acm-pca-2017-08-22/GetCertificateAuthorityCsr
 func (c *ACMPCA) GetCertificateAuthorityCsr(input *GetCertificateAuthorityCsrInput) (*GetCertificateAuthorityCsrOutput, error) {
@@ -799,7 +1007,7 @@ const opImportCertificateAuthorityCertificate = "ImportCertificateAuthorityCerti
 // ImportCertificateAuthorityCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the ImportCertificateAuthorityCertificate operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -833,8 +1041,7 @@ func (c *ACMPCA) ImportCertificateAuthorityCertificateRequest(input *ImportCerti
 
 	output = &ImportCertificateAuthorityCertificateOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -883,7 +1090,8 @@ func (c *ACMPCA) ImportCertificateAuthorityCertificateRequest(input *ImportCerti
 //   The requested Amazon Resource Name (ARN) does not refer to an existing resource.
 //
 //   * ErrCodeInvalidStateException "InvalidStateException"
-//   The private CA is in a state during which a report cannot be generated.
+//   The private CA is in a state during which a report or certificate cannot
+//   be generated.
 //
 //   * ErrCodeMalformedCertificateException "MalformedCertificateException"
 //   One or more fields in the certificate are invalid.
@@ -919,7 +1127,7 @@ const opIssueCertificate = "IssueCertificate"
 // IssueCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the IssueCertificate operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -983,7 +1191,8 @@ func (c *ACMPCA) IssueCertificateRequest(input *IssueCertificateInput) (req *req
 //   cannot be found.
 //
 //   * ErrCodeInvalidStateException "InvalidStateException"
-//   The private CA is in a state during which a report cannot be generated.
+//   The private CA is in a state during which a report or certificate cannot
+//   be generated.
 //
 //   * ErrCodeInvalidArnException "InvalidArnException"
 //   The requested Amazon Resource Name (ARN) does not refer to an existing resource.
@@ -1021,7 +1230,7 @@ const opListCertificateAuthorities = "ListCertificateAuthorities"
 // ListCertificateAuthoritiesRequest generates a "aws/request.Request" representing the
 // client's request for the ListCertificateAuthorities operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1047,6 +1256,12 @@ func (c *ACMPCA) ListCertificateAuthoritiesRequest(input *ListCertificateAuthori
 		Name:       opListCertificateAuthorities,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -1097,12 +1312,214 @@ func (c *ACMPCA) ListCertificateAuthoritiesWithContext(ctx aws.Context, input *L
 	return out, req.Send()
 }
 
+// ListCertificateAuthoritiesPages iterates over the pages of a ListCertificateAuthorities operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListCertificateAuthorities method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListCertificateAuthorities operation.
+//    pageNum := 0
+//    err := client.ListCertificateAuthoritiesPages(params,
+//        func(page *acmpca.ListCertificateAuthoritiesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *ACMPCA) ListCertificateAuthoritiesPages(input *ListCertificateAuthoritiesInput, fn func(*ListCertificateAuthoritiesOutput, bool) bool) error {
+	return c.ListCertificateAuthoritiesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListCertificateAuthoritiesPagesWithContext same as ListCertificateAuthoritiesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ACMPCA) ListCertificateAuthoritiesPagesWithContext(ctx aws.Context, input *ListCertificateAuthoritiesInput, fn func(*ListCertificateAuthoritiesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListCertificateAuthoritiesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListCertificateAuthoritiesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListCertificateAuthoritiesOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
+const opListPermissions = "ListPermissions"
+
+// ListPermissionsRequest generates a "aws/request.Request" representing the
+// client's request for the ListPermissions operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListPermissions for more information on using the ListPermissions
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListPermissionsRequest method.
+//    req, resp := client.ListPermissionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/acm-pca-2017-08-22/ListPermissions
+func (c *ACMPCA) ListPermissionsRequest(input *ListPermissionsInput) (req *request.Request, output *ListPermissionsOutput) {
+	op := &request.Operation{
+		Name:       opListPermissions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListPermissionsInput{}
+	}
+
+	output = &ListPermissionsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListPermissions API operation for AWS Certificate Manager Private Certificate Authority.
+//
+// Lists all the permissions, if any, that have been assigned by a private CA.
+// Permissions can be granted with the CreatePermission operation and revoked
+// with the DeletePermission operation.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Certificate Manager Private Certificate Authority's
+// API operation ListPermissions for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   A resource such as a private CA, S3 bucket, certificate, or audit report
+//   cannot be found.
+//
+//   * ErrCodeInvalidArnException "InvalidArnException"
+//   The requested Amazon Resource Name (ARN) does not refer to an existing resource.
+//
+//   * ErrCodeInvalidNextTokenException "InvalidNextTokenException"
+//   The token specified in the NextToken argument is not valid. Use the token
+//   returned from your previous call to ListCertificateAuthorities.
+//
+//   * ErrCodeInvalidStateException "InvalidStateException"
+//   The private CA is in a state during which a report or certificate cannot
+//   be generated.
+//
+//   * ErrCodeRequestFailedException "RequestFailedException"
+//   The request has failed for an unspecified reason.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/acm-pca-2017-08-22/ListPermissions
+func (c *ACMPCA) ListPermissions(input *ListPermissionsInput) (*ListPermissionsOutput, error) {
+	req, out := c.ListPermissionsRequest(input)
+	return out, req.Send()
+}
+
+// ListPermissionsWithContext is the same as ListPermissions with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListPermissions for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ACMPCA) ListPermissionsWithContext(ctx aws.Context, input *ListPermissionsInput, opts ...request.Option) (*ListPermissionsOutput, error) {
+	req, out := c.ListPermissionsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListPermissionsPages iterates over the pages of a ListPermissions operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListPermissions method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListPermissions operation.
+//    pageNum := 0
+//    err := client.ListPermissionsPages(params,
+//        func(page *acmpca.ListPermissionsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *ACMPCA) ListPermissionsPages(input *ListPermissionsInput, fn func(*ListPermissionsOutput, bool) bool) error {
+	return c.ListPermissionsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListPermissionsPagesWithContext same as ListPermissionsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ACMPCA) ListPermissionsPagesWithContext(ctx aws.Context, input *ListPermissionsInput, fn func(*ListPermissionsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListPermissionsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListPermissionsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListPermissionsOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opListTags = "ListTags"
 
 // ListTagsRequest generates a "aws/request.Request" representing the
 // client's request for the ListTags operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1128,6 +1545,12 @@ func (c *ACMPCA) ListTagsRequest(input *ListTagsInput) (req *request.Request, ou
 		Name:       opListTags,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -1184,12 +1607,62 @@ func (c *ACMPCA) ListTagsWithContext(ctx aws.Context, input *ListTagsInput, opts
 	return out, req.Send()
 }
 
+// ListTagsPages iterates over the pages of a ListTags operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListTags method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListTags operation.
+//    pageNum := 0
+//    err := client.ListTagsPages(params,
+//        func(page *acmpca.ListTagsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *ACMPCA) ListTagsPages(input *ListTagsInput, fn func(*ListTagsOutput, bool) bool) error {
+	return c.ListTagsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListTagsPagesWithContext same as ListTagsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ACMPCA) ListTagsPagesWithContext(ctx aws.Context, input *ListTagsInput, fn func(*ListTagsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListTagsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListTagsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListTagsOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opRestoreCertificateAuthority = "RestoreCertificateAuthority"
 
 // RestoreCertificateAuthorityRequest generates a "aws/request.Request" representing the
 // client's request for the RestoreCertificateAuthority operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1223,8 +1696,7 @@ func (c *ACMPCA) RestoreCertificateAuthorityRequest(input *RestoreCertificateAut
 
 	output = &RestoreCertificateAuthorityOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1258,7 +1730,8 @@ func (c *ACMPCA) RestoreCertificateAuthorityRequest(input *RestoreCertificateAut
 //   cannot be found.
 //
 //   * ErrCodeInvalidStateException "InvalidStateException"
-//   The private CA is in a state during which a report cannot be generated.
+//   The private CA is in a state during which a report or certificate cannot
+//   be generated.
 //
 //   * ErrCodeInvalidArnException "InvalidArnException"
 //   The requested Amazon Resource Name (ARN) does not refer to an existing resource.
@@ -1290,7 +1763,7 @@ const opRevokeCertificate = "RevokeCertificate"
 // RevokeCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the RevokeCertificate operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1324,8 +1797,7 @@ func (c *ACMPCA) RevokeCertificateRequest(input *RevokeCertificateInput) (req *r
 
 	output = &RevokeCertificateOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1354,7 +1826,12 @@ func (c *ACMPCA) RevokeCertificateRequest(input *RevokeCertificateInput) (req *r
 //   The requested Amazon Resource Name (ARN) does not refer to an existing resource.
 //
 //   * ErrCodeInvalidStateException "InvalidStateException"
-//   The private CA is in a state during which a report cannot be generated.
+//   The private CA is in a state during which a report or certificate cannot
+//   be generated.
+//
+//   * ErrCodeLimitExceededException "LimitExceededException"
+//   An ACM PCA limit has been exceeded. See the exception message returned to
+//   determine the limit that was exceeded.
 //
 //   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
 //   A resource such as a private CA, S3 bucket, certificate, or audit report
@@ -1396,7 +1873,7 @@ const opTagCertificateAuthority = "TagCertificateAuthority"
 // TagCertificateAuthorityRequest generates a "aws/request.Request" representing the
 // client's request for the TagCertificateAuthority operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1430,8 +1907,7 @@ func (c *ACMPCA) TagCertificateAuthorityRequest(input *TagCertificateAuthorityIn
 
 	output = &TagCertificateAuthorityOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1463,7 +1939,8 @@ func (c *ACMPCA) TagCertificateAuthorityRequest(input *TagCertificateAuthorityIn
 //   The requested Amazon Resource Name (ARN) does not refer to an existing resource.
 //
 //   * ErrCodeInvalidStateException "InvalidStateException"
-//   The private CA is in a state during which a report cannot be generated.
+//   The private CA is in a state during which a report or certificate cannot
+//   be generated.
 //
 //   * ErrCodeInvalidTagException "InvalidTagException"
 //   The tag associated with the CA is not valid. The invalid argument is contained
@@ -1500,7 +1977,7 @@ const opUntagCertificateAuthority = "UntagCertificateAuthority"
 // UntagCertificateAuthorityRequest generates a "aws/request.Request" representing the
 // client's request for the UntagCertificateAuthority operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1534,8 +2011,7 @@ func (c *ACMPCA) UntagCertificateAuthorityRequest(input *UntagCertificateAuthori
 
 	output = &UntagCertificateAuthorityOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1564,7 +2040,8 @@ func (c *ACMPCA) UntagCertificateAuthorityRequest(input *UntagCertificateAuthori
 //   The requested Amazon Resource Name (ARN) does not refer to an existing resource.
 //
 //   * ErrCodeInvalidStateException "InvalidStateException"
-//   The private CA is in a state during which a report cannot be generated.
+//   The private CA is in a state during which a report or certificate cannot
+//   be generated.
 //
 //   * ErrCodeInvalidTagException "InvalidTagException"
 //   The tag associated with the CA is not valid. The invalid argument is contained
@@ -1597,7 +2074,7 @@ const opUpdateCertificateAuthority = "UpdateCertificateAuthority"
 // UpdateCertificateAuthorityRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateCertificateAuthority operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1631,8 +2108,7 @@ func (c *ACMPCA) UpdateCertificateAuthorityRequest(input *UpdateCertificateAutho
 
 	output = &UpdateCertificateAuthorityOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1665,7 +2141,8 @@ func (c *ACMPCA) UpdateCertificateAuthorityRequest(input *UpdateCertificateAutho
 //   The requested Amazon Resource Name (ARN) does not refer to an existing resource.
 //
 //   * ErrCodeInvalidStateException "InvalidStateException"
-//   The private CA is in a state during which a report cannot be generated.
+//   The private CA is in a state during which a report or certificate cannot
+//   be generated.
 //
 //   * ErrCodeInvalidPolicyException "InvalidPolicyException"
 //   The S3 bucket policy is not valid. The policy must give ACM PCA rights to
@@ -1865,7 +2342,7 @@ type CertificateAuthority struct {
 	_ struct{} `type:"structure"`
 
 	// Amazon Resource Name (ARN) for your private certificate authority (CA). The
-	// format is 12345678-1234-1234-1234-123456789012.
+	// format is 12345678-1234-1234-1234-123456789012 .
 	Arn *string `min:"5" type:"string"`
 
 	// Your private CA configuration.
@@ -1989,10 +2466,10 @@ func (s *CertificateAuthority) SetType(v string) *CertificateAuthority {
 
 // Contains configuration information for your private certificate authority
 // (CA). This includes information about the class of public key algorithm and
-// the key pair that your private CA creates when it issues a certificate, the
-// signature algorithm it uses used when issuing certificates, and its X.500
-// distinguished name. You must specify this information when you call the CreateCertificateAuthority
-// operation.
+// the key pair that your private CA creates when it issues a certificate. It
+// also includes the signature algorithm that it uses when issuing certificates,
+// and its X.500 distinguished name. You must specify this information when
+// you call the CreateCertificateAuthority operation.
 type CertificateAuthorityConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -2064,19 +2541,19 @@ func (s *CertificateAuthorityConfiguration) SetSubject(v *ASN1Subject) *Certific
 type CreateCertificateAuthorityAuditReportInput struct {
 	_ struct{} `type:"structure"`
 
-	// Format in which to create the report. This can be either JSON or CSV.
+	// The format in which to create the report. This can be either JSON or CSV.
 	//
 	// AuditReportResponseFormat is a required field
 	AuditReportResponseFormat *string `type:"string" required:"true" enum:"AuditReportResponseFormat"`
 
-	// Amazon Resource Name (ARN) of the CA to be audited. This is of the form:
+	// The Amazon Resource Name (ARN) of the CA to be audited. This is of the form:
 	//
-	// arn:aws:acm-pca:region:account:certificate-authority/12345678-1234-1234-1234-123456789012.
+	// arn:aws:acm-pca:region:account:certificate-authority/12345678-1234-1234-1234-123456789012 .
 	//
 	// CertificateAuthorityArn is a required field
 	CertificateAuthorityArn *string `min:"5" type:"string" required:"true"`
 
-	// Name of the S3 bucket that will contain the audit report.
+	// The name of the S3 bucket that will contain the audit report.
 	//
 	// S3BucketName is a required field
 	S3BucketName *string `type:"string" required:"true"`
@@ -2192,6 +2669,10 @@ type CreateCertificateAuthorityInput struct {
 	// your bucket in the CRL Distribution Points extension of your CA certificate.
 	// For more information, see the CrlConfiguration structure.
 	RevocationConfiguration *RevocationConfiguration `type:"structure"`
+
+	// Key-value pairs that will be attached to the new private CA. You can associate
+	// up to 50 tags with a private CA.
+	Tags []*Tag `min:"1" type:"list"`
 }
 
 // String returns the string representation
@@ -2216,6 +2697,9 @@ func (s *CreateCertificateAuthorityInput) Validate() error {
 	if s.IdempotencyToken != nil && len(*s.IdempotencyToken) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("IdempotencyToken", 1))
 	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
 	if s.CertificateAuthorityConfiguration != nil {
 		if err := s.CertificateAuthorityConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("CertificateAuthorityConfiguration", err.(request.ErrInvalidParams))
@@ -2224,6 +2708,16 @@ func (s *CreateCertificateAuthorityInput) Validate() error {
 	if s.RevocationConfiguration != nil {
 		if err := s.RevocationConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("RevocationConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
 		}
 	}
 
@@ -2257,13 +2751,19 @@ func (s *CreateCertificateAuthorityInput) SetRevocationConfiguration(v *Revocati
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *CreateCertificateAuthorityInput) SetTags(v []*Tag) *CreateCertificateAuthorityInput {
+	s.Tags = v
+	return s
+}
+
 type CreateCertificateAuthorityOutput struct {
 	_ struct{} `type:"structure"`
 
 	// If successful, the Amazon Resource Name (ARN) of the certificate authority
 	// (CA). This is of the form:
 	//
-	// arn:aws:acm-pca:region:account:certificate-authority/12345678-1234-1234-1234-123456789012.
+	// arn:aws:acm-pca:region:account:certificate-authority/12345678-1234-1234-1234-123456789012 .
 	CertificateAuthorityArn *string `min:"5" type:"string"`
 }
 
@@ -2281,6 +2781,110 @@ func (s CreateCertificateAuthorityOutput) GoString() string {
 func (s *CreateCertificateAuthorityOutput) SetCertificateAuthorityArn(v string) *CreateCertificateAuthorityOutput {
 	s.CertificateAuthorityArn = &v
 	return s
+}
+
+type CreatePermissionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The actions that the specified AWS service principal can use. These include
+	// IssueCertificate, GetCertificate, and ListPermissions.
+	//
+	// Actions is a required field
+	Actions []*string `min:"1" type:"list" required:"true"`
+
+	// The Amazon Resource Name (ARN) of the CA that grants the permissions. You
+	// can find the ARN by calling the ListCertificateAuthorities operation. This
+	// must have the following form:
+	//
+	// arn:aws:acm-pca:region:account:certificate-authority/12345678-1234-1234-1234-123456789012 .
+	//
+	// CertificateAuthorityArn is a required field
+	CertificateAuthorityArn *string `min:"5" type:"string" required:"true"`
+
+	// The AWS service or identity that receives the permission. At this time, the
+	// only valid principal is acm.amazonaws.com.
+	//
+	// Principal is a required field
+	Principal *string `type:"string" required:"true"`
+
+	// The ID of the calling account.
+	SourceAccount *string `min:"12" type:"string"`
+}
+
+// String returns the string representation
+func (s CreatePermissionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreatePermissionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreatePermissionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreatePermissionInput"}
+	if s.Actions == nil {
+		invalidParams.Add(request.NewErrParamRequired("Actions"))
+	}
+	if s.Actions != nil && len(s.Actions) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Actions", 1))
+	}
+	if s.CertificateAuthorityArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("CertificateAuthorityArn"))
+	}
+	if s.CertificateAuthorityArn != nil && len(*s.CertificateAuthorityArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("CertificateAuthorityArn", 5))
+	}
+	if s.Principal == nil {
+		invalidParams.Add(request.NewErrParamRequired("Principal"))
+	}
+	if s.SourceAccount != nil && len(*s.SourceAccount) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("SourceAccount", 12))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetActions sets the Actions field's value.
+func (s *CreatePermissionInput) SetActions(v []*string) *CreatePermissionInput {
+	s.Actions = v
+	return s
+}
+
+// SetCertificateAuthorityArn sets the CertificateAuthorityArn field's value.
+func (s *CreatePermissionInput) SetCertificateAuthorityArn(v string) *CreatePermissionInput {
+	s.CertificateAuthorityArn = &v
+	return s
+}
+
+// SetPrincipal sets the Principal field's value.
+func (s *CreatePermissionInput) SetPrincipal(v string) *CreatePermissionInput {
+	s.Principal = &v
+	return s
+}
+
+// SetSourceAccount sets the SourceAccount field's value.
+func (s *CreatePermissionInput) SetSourceAccount(v string) *CreatePermissionInput {
+	s.SourceAccount = &v
+	return s
+}
+
+type CreatePermissionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s CreatePermissionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreatePermissionOutput) GoString() string {
+	return s.String()
 }
 
 // Contains configuration information for a certificate revocation list (CRL).
@@ -2315,22 +2919,15 @@ func (s *CreateCertificateAuthorityOutput) SetCertificateAuthorityArn(v string) 
 //    * Next Update: The day and time by which the next CRL will be issued.
 //
 //    * Revoked Certificates: List of revoked certificates. Each list item contains
-//    the following information.
+//    the following information. Serial Number: The serial number, in hexadecimal
+//    format, of the revoked certificate. Revocation Date: Date and time the
+//    certificate was revoked. CRL Entry Extensions: Optional extensions for
+//    the CRL entry. X509v3 CRL Reason Code: Reason the certificate was revoked.
 //
-// Serial Number: The serial number, in hexadecimal format, of the revoked certificate.
-//
-// Revocation Date: Date and time the certificate was revoked.
-//
-// CRL Entry Extensions: Optional extensions for the CRL entry.
-//
-// X509v3 CRL Reason Code: Reason the certificate was revoked.
-//
-//    * CRL Extensions: Optional extensions for the CRL.
-//
-// X509v3 Authority Key Identifier: Identifies the public key associated with
-//    the private key used to sign the certificate.
-//
-// X509v3 CRL Number:: Decimal sequence number for the CRL.
+//    * CRL Extensions: Optional extensions for the CRL. X509v3 Authority Key
+//    Identifier: Identifies the public key associated with the private key
+//    used to sign the certificate. X509v3 CRL Number:: Decimal sequence number
+//    for the CRL.
 //
 //    * Signature Algorithm: Algorithm used by your private CA to sign the CRL.
 //
@@ -2427,7 +3024,7 @@ type DeleteCertificateAuthorityInput struct {
 	// The Amazon Resource Name (ARN) that was returned when you called CreateCertificateAuthority.
 	// This must have the following form:
 	//
-	// arn:aws:acm-pca:region:account:certificate-authority/12345678-1234-1234-1234-123456789012.
+	// arn:aws:acm-pca:region:account:certificate-authority/12345678-1234-1234-1234-123456789012 .
 	//
 	// CertificateAuthorityArn is a required field
 	CertificateAuthorityArn *string `min:"5" type:"string" required:"true"`
@@ -2492,6 +3089,92 @@ func (s DeleteCertificateAuthorityOutput) GoString() string {
 	return s.String()
 }
 
+type DeletePermissionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Number (ARN) of the private CA that issued the permissions.
+	// You can find the CA's ARN by calling the ListCertificateAuthorities operation.
+	// This must have the following form:
+	//
+	// arn:aws:acm-pca:region:account:certificate-authority/12345678-1234-1234-1234-123456789012 .
+	//
+	// CertificateAuthorityArn is a required field
+	CertificateAuthorityArn *string `min:"5" type:"string" required:"true"`
+
+	// The AWS service or identity that will have its CA permissions revoked. At
+	// this time, the only valid service principal is acm.amazonaws.com
+	//
+	// Principal is a required field
+	Principal *string `type:"string" required:"true"`
+
+	// The AWS account that calls this operation.
+	SourceAccount *string `min:"12" type:"string"`
+}
+
+// String returns the string representation
+func (s DeletePermissionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeletePermissionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeletePermissionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeletePermissionInput"}
+	if s.CertificateAuthorityArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("CertificateAuthorityArn"))
+	}
+	if s.CertificateAuthorityArn != nil && len(*s.CertificateAuthorityArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("CertificateAuthorityArn", 5))
+	}
+	if s.Principal == nil {
+		invalidParams.Add(request.NewErrParamRequired("Principal"))
+	}
+	if s.SourceAccount != nil && len(*s.SourceAccount) < 12 {
+		invalidParams.Add(request.NewErrParamMinLen("SourceAccount", 12))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCertificateAuthorityArn sets the CertificateAuthorityArn field's value.
+func (s *DeletePermissionInput) SetCertificateAuthorityArn(v string) *DeletePermissionInput {
+	s.CertificateAuthorityArn = &v
+	return s
+}
+
+// SetPrincipal sets the Principal field's value.
+func (s *DeletePermissionInput) SetPrincipal(v string) *DeletePermissionInput {
+	s.Principal = &v
+	return s
+}
+
+// SetSourceAccount sets the SourceAccount field's value.
+func (s *DeletePermissionInput) SetSourceAccount(v string) *DeletePermissionInput {
+	s.SourceAccount = &v
+	return s
+}
+
+type DeletePermissionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeletePermissionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeletePermissionOutput) GoString() string {
+	return s.String()
+}
+
 type DescribeCertificateAuthorityAuditReportInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2503,7 +3186,7 @@ type DescribeCertificateAuthorityAuditReportInput struct {
 
 	// The Amazon Resource Name (ARN) of the private CA. This must be of the form:
 	//
-	// arn:aws:acm-pca:region:account:certificate-authority/12345678-1234-1234-1234-123456789012.
+	// arn:aws:acm-pca:region:account:certificate-authority/12345678-1234-1234-1234-123456789012 .
 	//
 	// CertificateAuthorityArn is a required field
 	CertificateAuthorityArn *string `min:"5" type:"string" required:"true"`
@@ -2609,7 +3292,7 @@ type DescribeCertificateAuthorityInput struct {
 	// The Amazon Resource Name (ARN) that was returned when you called CreateCertificateAuthority.
 	// This must be of the form:
 	//
-	// arn:aws:acm-pca:region:account:certificate-authority/12345678-1234-1234-1234-123456789012.
+	// arn:aws:acm-pca:region:account:certificate-authority/12345678-1234-1234-1234-123456789012 .
 	//
 	// CertificateAuthorityArn is a required field
 	CertificateAuthorityArn *string `min:"5" type:"string" required:"true"`
@@ -2676,7 +3359,7 @@ type GetCertificateAuthorityCertificateInput struct {
 
 	// The Amazon Resource Name (ARN) of your private CA. This is of the form:
 	//
-	// arn:aws:acm-pca:region:account:certificate-authority/12345678-1234-1234-1234-123456789012.
+	// arn:aws:acm-pca:region:account:certificate-authority/12345678-1234-1234-1234-123456789012 .
 	//
 	// CertificateAuthorityArn is a required field
 	CertificateAuthorityArn *string `min:"5" type:"string" required:"true"`
@@ -2830,7 +3513,7 @@ type GetCertificateInput struct {
 	// The Amazon Resource Name (ARN) that was returned when you called CreateCertificateAuthority.
 	// This must be of the form:
 	//
-	// arn:aws:acm-pca:region:account:certificate-authority/12345678-1234-1234-1234-123456789012.
+	// arn:aws:acm-pca:region:account:certificate-authority/12345678-1234-1234-1234-123456789012 .
 	//
 	// CertificateAuthorityArn is a required field
 	CertificateAuthorityArn *string `min:"5" type:"string" required:"true"`
@@ -3248,6 +3931,114 @@ func (s *ListCertificateAuthoritiesOutput) SetNextToken(v string) *ListCertifica
 	return s
 }
 
+type ListPermissionsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Number (ARN) of the private CA to inspect. You can find
+	// the ARN by calling the ListCertificateAuthorities operation. This must be
+	// of the form: arn:aws:acm-pca:region:account:certificate-authority/12345678-1234-1234-1234-123456789012
+	// You can get a private CA's ARN by running the ListCertificateAuthorities
+	// operation.
+	//
+	// CertificateAuthorityArn is a required field
+	CertificateAuthorityArn *string `min:"5" type:"string" required:"true"`
+
+	// When paginating results, use this parameter to specify the maximum number
+	// of items to return in the response. If additional items exist beyond the
+	// number you specify, the NextToken element is sent in the response. Use this
+	// NextToken value in a subsequent request to retrieve additional items.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// When paginating results, use this parameter in a subsequent request after
+	// you receive a response with truncated results. Set it to the value of NextToken
+	// from the response you just received.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListPermissionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListPermissionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListPermissionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListPermissionsInput"}
+	if s.CertificateAuthorityArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("CertificateAuthorityArn"))
+	}
+	if s.CertificateAuthorityArn != nil && len(*s.CertificateAuthorityArn) < 5 {
+		invalidParams.Add(request.NewErrParamMinLen("CertificateAuthorityArn", 5))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCertificateAuthorityArn sets the CertificateAuthorityArn field's value.
+func (s *ListPermissionsInput) SetCertificateAuthorityArn(v string) *ListPermissionsInput {
+	s.CertificateAuthorityArn = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListPermissionsInput) SetMaxResults(v int64) *ListPermissionsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListPermissionsInput) SetNextToken(v string) *ListPermissionsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListPermissionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// When the list is truncated, this value is present and should be used for
+	// the NextToken parameter in a subsequent pagination request.
+	NextToken *string `min:"1" type:"string"`
+
+	// Summary information about each permission assigned by the specified private
+	// CA, including the action enabled, the policy provided, and the time of creation.
+	Permissions []*Permission `type:"list"`
+}
+
+// String returns the string representation
+func (s ListPermissionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListPermissionsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListPermissionsOutput) SetNextToken(v string) *ListPermissionsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPermissions sets the Permissions field's value.
+func (s *ListPermissionsOutput) SetPermissions(v []*Permission) *ListPermissionsOutput {
+	s.Permissions = v
+	return s
+}
+
 type ListTagsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3351,6 +4142,82 @@ func (s *ListTagsOutput) SetNextToken(v string) *ListTagsOutput {
 // SetTags sets the Tags field's value.
 func (s *ListTagsOutput) SetTags(v []*Tag) *ListTagsOutput {
 	s.Tags = v
+	return s
+}
+
+// Permissions designate which private CA operations can be performed by an
+// AWS service or entity. In order for ACM to automatically renew private certificates,
+// you must give the ACM service principal all available permissions (IssueCertificate,
+// GetCertificate, and ListPermissions). Permissions can be assigned with the
+// CreatePermission operation, removed with the DeletePermission operation,
+// and listed with the ListPermissions operation.
+type Permission struct {
+	_ struct{} `type:"structure"`
+
+	// The private CA operations that can be performed by the designated AWS service.
+	Actions []*string `min:"1" type:"list"`
+
+	// The Amazon Resource Number (ARN) of the private CA from which the permission
+	// was issued.
+	CertificateAuthorityArn *string `min:"5" type:"string"`
+
+	// The time at which the permission was created.
+	CreatedAt *time.Time `type:"timestamp"`
+
+	// The name of the policy that is associated with the permission.
+	Policy *string `type:"string"`
+
+	// The AWS service or entity that holds the permission. At this time, the only
+	// valid principal is acm.amazonaws.com.
+	Principal *string `type:"string"`
+
+	// The ID of the account that assigned the permission.
+	SourceAccount *string `type:"string"`
+}
+
+// String returns the string representation
+func (s Permission) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Permission) GoString() string {
+	return s.String()
+}
+
+// SetActions sets the Actions field's value.
+func (s *Permission) SetActions(v []*string) *Permission {
+	s.Actions = v
+	return s
+}
+
+// SetCertificateAuthorityArn sets the CertificateAuthorityArn field's value.
+func (s *Permission) SetCertificateAuthorityArn(v string) *Permission {
+	s.CertificateAuthorityArn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *Permission) SetCreatedAt(v time.Time) *Permission {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetPolicy sets the Policy field's value.
+func (s *Permission) SetPolicy(v string) *Permission {
+	s.Policy = &v
+	return s
+}
+
+// SetPrincipal sets the Principal field's value.
+func (s *Permission) SetPrincipal(v string) *Permission {
+	s.Principal = &v
+	return s
+}
+
+// SetSourceAccount sets the SourceAccount field's value.
+func (s *Permission) SetSourceAccount(v string) *Permission {
+	s.SourceAccount = &v
 	return s
 }
 
@@ -3916,6 +4783,17 @@ func (s *Validity) SetValue(v int64) *Validity {
 	s.Value = &v
 	return s
 }
+
+const (
+	// ActionTypeIssueCertificate is a ActionType enum value
+	ActionTypeIssueCertificate = "IssueCertificate"
+
+	// ActionTypeGetCertificate is a ActionType enum value
+	ActionTypeGetCertificate = "GetCertificate"
+
+	// ActionTypeListPermissions is a ActionType enum value
+	ActionTypeListPermissions = "ListPermissions"
+)
 
 const (
 	// AuditReportResponseFormatJson is a AuditReportResponseFormat enum value

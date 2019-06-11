@@ -515,13 +515,14 @@ func ExampleIAM_CreateOpenIDConnectProvider_shared00() {
 // To create an IAM role
 //
 // The following command creates a role named Test-Role and attaches a trust policy
-// to it that is provided as a URL-encoded JSON string.
+// that you must convert from JSON to a string. Upon success, the response includes
+// the same policy as a URL-encoded JSON string.
 func ExampleIAM_CreateRole_shared00() {
 	svc := iam.New(session.New())
 	input := &iam.CreateRoleInput{
-		AssumeRolePolicyDocument: aws.String("<URL-encoded-JSON>"),
-		Path:     aws.String("/"),
-		RoleName: aws.String("Test-Role"),
+		AssumeRolePolicyDocument: aws.String("<Stringified-JSON>"),
+		Path:                     aws.String("/"),
+		RoleName:                 aws.String("Test-Role"),
 	}
 
 	result, err := svc.CreateRole(input)
@@ -536,6 +537,8 @@ func ExampleIAM_CreateRole_shared00() {
 				fmt.Println(iam.ErrCodeEntityAlreadyExistsException, aerr.Error())
 			case iam.ErrCodeMalformedPolicyDocumentException:
 				fmt.Println(iam.ErrCodeMalformedPolicyDocumentException, aerr.Error())
+			case iam.ErrCodeConcurrentModificationException:
+				fmt.Println(iam.ErrCodeConcurrentModificationException, aerr.Error())
 			case iam.ErrCodeServiceFailureException:
 				fmt.Println(iam.ErrCodeServiceFailureException, aerr.Error())
 			default:
@@ -571,6 +574,10 @@ func ExampleIAM_CreateUser_shared00() {
 				fmt.Println(iam.ErrCodeEntityAlreadyExistsException, aerr.Error())
 			case iam.ErrCodeNoSuchEntityException:
 				fmt.Println(iam.ErrCodeNoSuchEntityException, aerr.Error())
+			case iam.ErrCodeInvalidInputException:
+				fmt.Println(iam.ErrCodeInvalidInputException, aerr.Error())
+			case iam.ErrCodeConcurrentModificationException:
+				fmt.Println(iam.ErrCodeConcurrentModificationException, aerr.Error())
 			case iam.ErrCodeServiceFailureException:
 				fmt.Println(iam.ErrCodeServiceFailureException, aerr.Error())
 			default:
@@ -812,6 +819,8 @@ func ExampleIAM_DeleteRole_shared00() {
 				fmt.Println(iam.ErrCodeLimitExceededException, aerr.Error())
 			case iam.ErrCodeUnmodifiableEntityException:
 				fmt.Println(iam.ErrCodeUnmodifiableEntityException, aerr.Error())
+			case iam.ErrCodeConcurrentModificationException:
+				fmt.Println(iam.ErrCodeConcurrentModificationException, aerr.Error())
 			case iam.ErrCodeServiceFailureException:
 				fmt.Println(iam.ErrCodeServiceFailureException, aerr.Error())
 			default:
@@ -919,6 +928,8 @@ func ExampleIAM_DeleteUser_shared00() {
 				fmt.Println(iam.ErrCodeNoSuchEntityException, aerr.Error())
 			case iam.ErrCodeDeleteConflictException:
 				fmt.Println(iam.ErrCodeDeleteConflictException, aerr.Error())
+			case iam.ErrCodeConcurrentModificationException:
+				fmt.Println(iam.ErrCodeConcurrentModificationException, aerr.Error())
 			case iam.ErrCodeServiceFailureException:
 				fmt.Println(iam.ErrCodeServiceFailureException, aerr.Error())
 			default:
@@ -992,6 +1003,37 @@ func ExampleIAM_DeleteVirtualMFADevice_shared00() {
 				fmt.Println(iam.ErrCodeLimitExceededException, aerr.Error())
 			case iam.ErrCodeServiceFailureException:
 				fmt.Println(iam.ErrCodeServiceFailureException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To generate a service last accessed data report for a policy
+//
+// The following operation generates a report for the policy: ExamplePolicy1
+func ExampleIAM_GenerateServiceLastAccessedDetails_shared00() {
+	svc := iam.New(session.New())
+	input := &iam.GenerateServiceLastAccessedDetailsInput{
+		Arn: aws.String("arn:aws:iam::123456789012:policy/ExamplePolicy1"),
+	}
+
+	result, err := svc.GenerateServiceLastAccessedDetails(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case iam.ErrCodeNoSuchEntityException:
+				fmt.Println(iam.ErrCodeNoSuchEntityException, aerr.Error())
+			case iam.ErrCodeInvalidInputException:
+				fmt.Println(iam.ErrCodeInvalidInputException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1144,6 +1186,70 @@ func ExampleIAM_GetRole_shared00() {
 				fmt.Println(iam.ErrCodeNoSuchEntityException, aerr.Error())
 			case iam.ErrCodeServiceFailureException:
 				fmt.Println(iam.ErrCodeServiceFailureException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To get details from a previously-generated report
+//
+// The following operation gets details about the report with the job ID: examplef-1305-c245-eba4-71fe298bcda7
+func ExampleIAM_GetServiceLastAccessedDetails_shared00() {
+	svc := iam.New(session.New())
+	input := &iam.GetServiceLastAccessedDetailsInput{
+		JobId: aws.String("examplef-1305-c245-eba4-71fe298bcda7"),
+	}
+
+	result, err := svc.GetServiceLastAccessedDetails(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case iam.ErrCodeNoSuchEntityException:
+				fmt.Println(iam.ErrCodeNoSuchEntityException, aerr.Error())
+			case iam.ErrCodeInvalidInputException:
+				fmt.Println(iam.ErrCodeInvalidInputException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To get sntity details from a previously-generated report
+//
+// The following operation returns details about the entities that attempted to access
+// the IAM service.
+func ExampleIAM_GetServiceLastAccessedDetailsWithEntities_shared00() {
+	svc := iam.New(session.New())
+	input := &iam.GetServiceLastAccessedDetailsWithEntitiesInput{
+		JobId:            aws.String("examplef-1305-c245-eba4-71fe298bcda7"),
+		ServiceNamespace: aws.String("iam"),
+	}
+
+	result, err := svc.GetServiceLastAccessedDetailsWithEntities(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case iam.ErrCodeNoSuchEntityException:
+				fmt.Println(iam.ErrCodeNoSuchEntityException, aerr.Error())
+			case iam.ErrCodeInvalidInputException:
+				fmt.Println(iam.ErrCodeInvalidInputException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -1337,6 +1443,73 @@ func ExampleIAM_ListGroupsForUser_shared00() {
 	fmt.Println(result)
 }
 
+// To list policies that allow access to a service
+//
+// The following operation lists policies that allow ExampleUser01 to access IAM or
+// EC2.
+func ExampleIAM_ListPoliciesGrantingServiceAccess_shared00() {
+	svc := iam.New(session.New())
+	input := &iam.ListPoliciesGrantingServiceAccessInput{
+		Arn: aws.String("arn:aws:iam::123456789012:user/ExampleUser01"),
+		ServiceNamespaces: []*string{
+			aws.String("iam"),
+			aws.String("ec2"),
+		},
+	}
+
+	result, err := svc.ListPoliciesGrantingServiceAccess(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case iam.ErrCodeNoSuchEntityException:
+				fmt.Println(iam.ErrCodeNoSuchEntityException, aerr.Error())
+			case iam.ErrCodeInvalidInputException:
+				fmt.Println(iam.ErrCodeInvalidInputException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To list the tags attached to an IAM role
+//
+// The following example shows how to list the tags attached to a role.
+func ExampleIAM_ListRoleTags_shared00() {
+	svc := iam.New(session.New())
+	input := &iam.ListRoleTagsInput{
+		RoleName: aws.String("taggedrole1"),
+	}
+
+	result, err := svc.ListRoleTags(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case iam.ErrCodeNoSuchEntityException:
+				fmt.Println(iam.ErrCodeNoSuchEntityException, aerr.Error())
+			case iam.ErrCodeServiceFailureException:
+				fmt.Println(iam.ErrCodeServiceFailureException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To list the signing certificates for an IAM user
 //
 // The following command lists the signing certificates for the IAM user named Bob.
@@ -1347,6 +1520,37 @@ func ExampleIAM_ListSigningCertificates_shared00() {
 	}
 
 	result, err := svc.ListSigningCertificates(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case iam.ErrCodeNoSuchEntityException:
+				fmt.Println(iam.ErrCodeNoSuchEntityException, aerr.Error())
+			case iam.ErrCodeServiceFailureException:
+				fmt.Println(iam.ErrCodeServiceFailureException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To list the tags attached to an IAM user
+//
+// The following example shows how to list the tags attached to a user.
+func ExampleIAM_ListUserTags_shared00() {
+	svc := iam.New(session.New())
+	input := &iam.ListUserTagsInput{
+		UserName: aws.String("anika"),
+	}
+
+	result, err := svc.ListUserTags(input)
 	if err != nil {
 		if aerr, ok := err.(awserr.Error); ok {
 			switch aerr.Code() {
@@ -1589,6 +1793,204 @@ func ExampleIAM_RemoveUserFromGroup_shared00() {
 				fmt.Println(iam.ErrCodeNoSuchEntityException, aerr.Error())
 			case iam.ErrCodeLimitExceededException:
 				fmt.Println(iam.ErrCodeLimitExceededException, aerr.Error())
+			case iam.ErrCodeServiceFailureException:
+				fmt.Println(iam.ErrCodeServiceFailureException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To delete an access key for an IAM user
+//
+// The following command sets the STS global endpoint token to version 2. Version 2
+// tokens are valid in all Regions.
+func ExampleIAM_SetSecurityTokenServicePreferences_shared00() {
+	svc := iam.New(session.New())
+	input := &iam.SetSecurityTokenServicePreferencesInput{
+		GlobalEndpointTokenVersion: aws.String("v2Token"),
+	}
+
+	result, err := svc.SetSecurityTokenServicePreferences(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case iam.ErrCodeServiceFailureException:
+				fmt.Println(iam.ErrCodeServiceFailureException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To add a tag key and value to an IAM role
+//
+// The following example shows how to add tags to an existing role.
+func ExampleIAM_TagRole_shared00() {
+	svc := iam.New(session.New())
+	input := &iam.TagRoleInput{
+		RoleName: aws.String("taggedrole"),
+		Tags: []*iam.Tag{
+			{
+				Key:   aws.String("Dept"),
+				Value: aws.String("Accounting"),
+			},
+			{
+				Key:   aws.String("CostCenter"),
+				Value: aws.String("12345"),
+			},
+		},
+	}
+
+	result, err := svc.TagRole(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case iam.ErrCodeNoSuchEntityException:
+				fmt.Println(iam.ErrCodeNoSuchEntityException, aerr.Error())
+			case iam.ErrCodeLimitExceededException:
+				fmt.Println(iam.ErrCodeLimitExceededException, aerr.Error())
+			case iam.ErrCodeInvalidInputException:
+				fmt.Println(iam.ErrCodeInvalidInputException, aerr.Error())
+			case iam.ErrCodeConcurrentModificationException:
+				fmt.Println(iam.ErrCodeConcurrentModificationException, aerr.Error())
+			case iam.ErrCodeServiceFailureException:
+				fmt.Println(iam.ErrCodeServiceFailureException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To add a tag key and value to an IAM user
+//
+// The following example shows how to add tags to an existing user.
+func ExampleIAM_TagUser_shared00() {
+	svc := iam.New(session.New())
+	input := &iam.TagUserInput{
+		Tags: []*iam.Tag{
+			{
+				Key:   aws.String("Dept"),
+				Value: aws.String("Accounting"),
+			},
+			{
+				Key:   aws.String("CostCenter"),
+				Value: aws.String("12345"),
+			},
+		},
+		UserName: aws.String("anika"),
+	}
+
+	result, err := svc.TagUser(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case iam.ErrCodeNoSuchEntityException:
+				fmt.Println(iam.ErrCodeNoSuchEntityException, aerr.Error())
+			case iam.ErrCodeLimitExceededException:
+				fmt.Println(iam.ErrCodeLimitExceededException, aerr.Error())
+			case iam.ErrCodeInvalidInputException:
+				fmt.Println(iam.ErrCodeInvalidInputException, aerr.Error())
+			case iam.ErrCodeConcurrentModificationException:
+				fmt.Println(iam.ErrCodeConcurrentModificationException, aerr.Error())
+			case iam.ErrCodeServiceFailureException:
+				fmt.Println(iam.ErrCodeServiceFailureException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To remove a tag from an IAM role
+//
+// The following example shows how to remove a tag with the key 'Dept' from a role named
+// 'taggedrole'.
+func ExampleIAM_UntagRole_shared00() {
+	svc := iam.New(session.New())
+	input := &iam.UntagRoleInput{
+		RoleName: aws.String("taggedrole"),
+		TagKeys: []*string{
+			aws.String("Dept"),
+		},
+	}
+
+	result, err := svc.UntagRole(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case iam.ErrCodeNoSuchEntityException:
+				fmt.Println(iam.ErrCodeNoSuchEntityException, aerr.Error())
+			case iam.ErrCodeConcurrentModificationException:
+				fmt.Println(iam.ErrCodeConcurrentModificationException, aerr.Error())
+			case iam.ErrCodeServiceFailureException:
+				fmt.Println(iam.ErrCodeServiceFailureException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To remove a tag from an IAM user
+//
+// The following example shows how to remove tags that are attached to a user named
+// 'anika'.
+func ExampleIAM_UntagUser_shared00() {
+	svc := iam.New(session.New())
+	input := &iam.UntagUserInput{
+		TagKeys: []*string{
+			aws.String("Dept"),
+		},
+		UserName: aws.String("anika"),
+	}
+
+	result, err := svc.UntagUser(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case iam.ErrCodeNoSuchEntityException:
+				fmt.Println(iam.ErrCodeNoSuchEntityException, aerr.Error())
+			case iam.ErrCodeConcurrentModificationException:
+				fmt.Println(iam.ErrCodeConcurrentModificationException, aerr.Error())
 			case iam.ErrCodeServiceFailureException:
 				fmt.Println(iam.ErrCodeServiceFailureException, aerr.Error())
 			default:
@@ -1849,6 +2251,8 @@ func ExampleIAM_UpdateUser_shared00() {
 				fmt.Println(iam.ErrCodeEntityAlreadyExistsException, aerr.Error())
 			case iam.ErrCodeEntityTemporarilyUnmodifiableException:
 				fmt.Println(iam.ErrCodeEntityTemporarilyUnmodifiableException, aerr.Error())
+			case iam.ErrCodeConcurrentModificationException:
+				fmt.Println(iam.ErrCodeConcurrentModificationException, aerr.Error())
 			case iam.ErrCodeServiceFailureException:
 				fmt.Println(iam.ErrCodeServiceFailureException, aerr.Error())
 			default:

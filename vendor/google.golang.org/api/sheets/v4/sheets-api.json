@@ -3,16 +3,16 @@
     "oauth2": {
       "scopes": {
         "https://www.googleapis.com/auth/drive": {
-          "description": "View and manage the files in your Google Drive"
+          "description": "See, edit, create, and delete all of your Google Drive files"
         },
         "https://www.googleapis.com/auth/drive.file": {
           "description": "View and manage Google Drive files and folders that you have opened or created with this app"
         },
         "https://www.googleapis.com/auth/drive.readonly": {
-          "description": "View the files in your Google Drive"
+          "description": "See and download all your Google Drive files"
         },
         "https://www.googleapis.com/auth/spreadsheets": {
-          "description": "View and manage your spreadsheets in Google Drive"
+          "description": "See, edit, create, and delete your spreadsheets in Google Drive"
         },
         "https://www.googleapis.com/auth/spreadsheets.readonly": {
           "description": "View your Google Spreadsheets"
@@ -808,7 +808,7 @@
       }
     }
   },
-  "revision": "20180727",
+  "revision": "20190429",
   "rootUrl": "https://sheets.googleapis.com/",
   "schemas": {
     "AddBandingRequest": {
@@ -839,7 +839,7 @@
       "properties": {
         "chart": {
           "$ref": "EmbeddedChart",
-          "description": "The chart that should be added to the spreadsheet, including the position\nwhere it should be placed. The chartId\nfield is optional; if one is not set, an id will be randomly generated. (It\nis an error to specify the ID of a chart that already exists.)"
+          "description": "The chart that should be added to the spreadsheet, including the position\nwhere it should be placed. The chartId\nfield is optional; if one is not set, an id will be randomly generated. (It\nis an error to specify the ID of an embedded object that already exists.)"
         }
       },
       "type": "object"
@@ -1235,9 +1235,9 @@
             "A \u003ca href=\"/chart/interactive/docs/gallery/linechart\"\u003eline chart\u003c/a\u003e.",
             "An \u003ca href=\"/chart/interactive/docs/gallery/areachart\"\u003earea chart\u003c/a\u003e.",
             "A \u003ca href=\"/chart/interactive/docs/gallery/columnchart\"\u003ecolumn chart\u003c/a\u003e.",
-            "A \u003ca href=\"/chart/interactive/docs/gallery/scatterchart\"\u003escatter chart\u003c/a\u003e.",
+            "A \u003ca href=\"/chart/interactive/docs/gallery/scatterchart\"\u003escatter\nchart\u003c/a\u003e.",
             "A \u003ca href=\"/chart/interactive/docs/gallery/combochart\"\u003ecombo chart\u003c/a\u003e.",
-            "A \u003ca href=\"/chart/interactive/docs/gallery/steppedareachart\"\u003estepped area chart\u003c/a\u003e."
+            "A \u003ca href=\"/chart/interactive/docs/gallery/steppedareachart\"\u003estepped area\nchart\u003c/a\u003e."
           ],
           "type": "string"
         }
@@ -1273,9 +1273,9 @@
             "A \u003ca href=\"/chart/interactive/docs/gallery/linechart\"\u003eline chart\u003c/a\u003e.",
             "An \u003ca href=\"/chart/interactive/docs/gallery/areachart\"\u003earea chart\u003c/a\u003e.",
             "A \u003ca href=\"/chart/interactive/docs/gallery/columnchart\"\u003ecolumn chart\u003c/a\u003e.",
-            "A \u003ca href=\"/chart/interactive/docs/gallery/scatterchart\"\u003escatter chart\u003c/a\u003e.",
+            "A \u003ca href=\"/chart/interactive/docs/gallery/scatterchart\"\u003escatter\nchart\u003c/a\u003e.",
             "A \u003ca href=\"/chart/interactive/docs/gallery/combochart\"\u003ecombo chart\u003c/a\u003e.",
-            "A \u003ca href=\"/chart/interactive/docs/gallery/steppedareachart\"\u003estepped area chart\u003c/a\u003e."
+            "A \u003ca href=\"/chart/interactive/docs/gallery/steppedareachart\"\u003estepped area\nchart\u003c/a\u003e."
           ],
           "type": "string"
         },
@@ -2018,7 +2018,7 @@
       "type": "object"
     },
     "CandlestickChartSpec": {
-      "description": "A \u003ca href=\"/chart/interactive/docs/gallery/candlestickchart\"\u003ecandlestick chart\u003c/a\u003e.",
+      "description": "A \u003ca href=\"/chart/interactive/docs/gallery/candlestickchart\"\u003ecandlestick\nchart\u003c/a\u003e.",
       "id": "CandlestickChartSpec",
       "properties": {
         "data": {
@@ -2399,7 +2399,7 @@
       "type": "object"
     },
     "Color": {
-      "description": "Represents a color in the RGBA color space. This representation is designed\nfor simplicity of conversion to/from color representations in various\nlanguages over compactness; for example, the fields of this representation\ncan be trivially provided to the constructor of \"java.awt.Color\" in Java; it\ncan also be trivially provided to UIColor's \"+colorWithRed:green:blue:alpha\"\nmethod in iOS; and, with just a little work, it can be easily formatted into\na CSS \"rgba()\" string in JavaScript, as well. Here are some examples:\n\nExample (Java):\n\n     import com.google.type.Color;\n\n     // ...\n     public static java.awt.Color fromProto(Color protocolor) {\n       float alpha = protocolor.hasAlpha()\n           ? protocolor.getAlpha().getValue()\n           : 1.0;\n\n       return new java.awt.Color(\n           protocolor.getRed(),\n           protocolor.getGreen(),\n           protocolor.getBlue(),\n           alpha);\n     }\n\n     public static Color toProto(java.awt.Color color) {\n       float red = (float) color.getRed();\n       float green = (float) color.getGreen();\n       float blue = (float) color.getBlue();\n       float denominator = 255.0;\n       Color.Builder resultBuilder =\n           Color\n               .newBuilder()\n               .setRed(red / denominator)\n               .setGreen(green / denominator)\n               .setBlue(blue / denominator);\n       int alpha = color.getAlpha();\n       if (alpha != 255) {\n         result.setAlpha(\n             FloatValue\n                 .newBuilder()\n                 .setValue(((float) alpha) / denominator)\n                 .build());\n       }\n       return resultBuilder.build();\n     }\n     // ...\n\nExample (iOS / Obj-C):\n\n     // ...\n     static UIColor* fromProto(Color* protocolor) {\n        float red = [protocolor red];\n        float green = [protocolor green];\n        float blue = [protocolor blue];\n        FloatValue* alpha_wrapper = [protocolor alpha];\n        float alpha = 1.0;\n        if (alpha_wrapper != nil) {\n          alpha = [alpha_wrapper value];\n        }\n        return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];\n     }\n\n     static Color* toProto(UIColor* color) {\n         CGFloat red, green, blue, alpha;\n         if (![color getRed:\u0026red green:\u0026green blue:\u0026blue alpha:\u0026alpha]) {\n           return nil;\n         }\n         Color* result = [[Color alloc] init];\n         [result setRed:red];\n         [result setGreen:green];\n         [result setBlue:blue];\n         if (alpha \u003c= 0.9999) {\n           [result setAlpha:floatWrapperWithValue(alpha)];\n         }\n         [result autorelease];\n         return result;\n    }\n    // ...\n\n Example (JavaScript):\n\n    // ...\n\n    var protoToCssColor = function(rgb_color) {\n       var redFrac = rgb_color.red || 0.0;\n       var greenFrac = rgb_color.green || 0.0;\n       var blueFrac = rgb_color.blue || 0.0;\n       var red = Math.floor(redFrac * 255);\n       var green = Math.floor(greenFrac * 255);\n       var blue = Math.floor(blueFrac * 255);\n\n       if (!('alpha' in rgb_color)) {\n          return rgbToCssColor_(red, green, blue);\n       }\n\n       var alphaFrac = rgb_color.alpha.value || 0.0;\n       var rgbParams = [red, green, blue].join(',');\n       return ['rgba(', rgbParams, ',', alphaFrac, ')'].join('');\n    };\n\n    var rgbToCssColor_ = function(red, green, blue) {\n      var rgbNumber = new Number((red \u003c\u003c 16) | (green \u003c\u003c 8) | blue);\n      var hexString = rgbNumber.toString(16);\n      var missingZeros = 6 - hexString.length;\n      var resultBuilder = ['#'];\n      for (var i = 0; i \u003c missingZeros; i++) {\n         resultBuilder.push('0');\n      }\n      resultBuilder.push(hexString);\n      return resultBuilder.join('');\n    };\n\n    // ...",
+      "description": "Represents a color in the RGBA color space. This representation is designed\nfor simplicity of conversion to/from color representations in various\nlanguages over compactness; for example, the fields of this representation\ncan be trivially provided to the constructor of \"java.awt.Color\" in Java; it\ncan also be trivially provided to UIColor's \"+colorWithRed:green:blue:alpha\"\nmethod in iOS; and, with just a little work, it can be easily formatted into\na CSS \"rgba()\" string in JavaScript, as well.\n\nNote: this proto does not carry information about the absolute color space\nthat should be used to interpret the RGB value (e.g. sRGB, Adobe RGB,\nDCI-P3, BT.2020, etc.). By default, applications SHOULD assume the sRGB color\nspace.\n\nExample (Java):\n\n     import com.google.type.Color;\n\n     // ...\n     public static java.awt.Color fromProto(Color protocolor) {\n       float alpha = protocolor.hasAlpha()\n           ? protocolor.getAlpha().getValue()\n           : 1.0;\n\n       return new java.awt.Color(\n           protocolor.getRed(),\n           protocolor.getGreen(),\n           protocolor.getBlue(),\n           alpha);\n     }\n\n     public static Color toProto(java.awt.Color color) {\n       float red = (float) color.getRed();\n       float green = (float) color.getGreen();\n       float blue = (float) color.getBlue();\n       float denominator = 255.0;\n       Color.Builder resultBuilder =\n           Color\n               .newBuilder()\n               .setRed(red / denominator)\n               .setGreen(green / denominator)\n               .setBlue(blue / denominator);\n       int alpha = color.getAlpha();\n       if (alpha != 255) {\n         result.setAlpha(\n             FloatValue\n                 .newBuilder()\n                 .setValue(((float) alpha) / denominator)\n                 .build());\n       }\n       return resultBuilder.build();\n     }\n     // ...\n\nExample (iOS / Obj-C):\n\n     // ...\n     static UIColor* fromProto(Color* protocolor) {\n        float red = [protocolor red];\n        float green = [protocolor green];\n        float blue = [protocolor blue];\n        FloatValue* alpha_wrapper = [protocolor alpha];\n        float alpha = 1.0;\n        if (alpha_wrapper != nil) {\n          alpha = [alpha_wrapper value];\n        }\n        return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];\n     }\n\n     static Color* toProto(UIColor* color) {\n         CGFloat red, green, blue, alpha;\n         if (![color getRed:\u0026red green:\u0026green blue:\u0026blue alpha:\u0026alpha]) {\n           return nil;\n         }\n         Color* result = [[Color alloc] init];\n         [result setRed:red];\n         [result setGreen:green];\n         [result setBlue:blue];\n         if (alpha \u003c= 0.9999) {\n           [result setAlpha:floatWrapperWithValue(alpha)];\n         }\n         [result autorelease];\n         return result;\n    }\n    // ...\n\n Example (JavaScript):\n\n    // ...\n\n    var protoToCssColor = function(rgb_color) {\n       var redFrac = rgb_color.red || 0.0;\n       var greenFrac = rgb_color.green || 0.0;\n       var blueFrac = rgb_color.blue || 0.0;\n       var red = Math.floor(redFrac * 255);\n       var green = Math.floor(greenFrac * 255);\n       var blue = Math.floor(blueFrac * 255);\n\n       if (!('alpha' in rgb_color)) {\n          return rgbToCssColor_(red, green, blue);\n       }\n\n       var alphaFrac = rgb_color.alpha.value || 0.0;\n       var rgbParams = [red, green, blue].join(',');\n       return ['rgba(', rgbParams, ',', alphaFrac, ')'].join('');\n    };\n\n    var rgbToCssColor_ = function(red, green, blue) {\n      var rgbNumber = new Number((red \u003c\u003c 16) | (green \u003c\u003c 8) | blue);\n      var hexString = rgbNumber.toString(16);\n      var missingZeros = 6 - hexString.length;\n      var resultBuilder = ['#'];\n      for (var i = 0; i \u003c missingZeros; i++) {\n         resultBuilder.push('0');\n      }\n      resultBuilder.push(hexString);\n      return resultBuilder.join('');\n    };\n\n    // ...",
       "id": "Color",
       "properties": {
         "alpha": {
@@ -3979,7 +3979,7 @@
       "id": "NumberFormat",
       "properties": {
         "pattern": {
-          "description": "Pattern string used for formatting.  If not set, a default pattern based on\nthe user's locale will be used if necessary for the given type.\nSee the [Date and Number Formats guide](/sheets/api/guides/formats) for more\ninformation about the supported patterns.",
+          "description": "Pattern string used for formatting.  If not set, a default pattern based on\nthe user's locale will be used if necessary for the given type.\nSee the [Date and Number Formats guide](/sheets/api/guides/formats) for\nmore information about the supported patterns.",
           "type": "string"
         },
         "type": {
@@ -5269,7 +5269,7 @@
       "id": "TextRotation",
       "properties": {
         "angle": {
-          "description": "The angle between the standard orientation and the desired orientation.\nMeasured in degrees. Valid values are between -90 and 90. Positive\nangles are angled upwards, negative are angled downwards.\n\nNote: For LTR text direction positive angles are in the counterclockwise\ndirection, whereas for RTL they are in the clockwise direction",
+          "description": "The angle between the standard orientation and the desired orientation.\nMeasured in degrees. Valid values are between -90 and 90. Positive\nangles are angled upwards, negative are angled downwards.\n\nNote: For LTR text direction positive angles are in the\ncounterclockwise direction, whereas for RTL they are in the clockwise\ndirection",
           "format": "int32",
           "type": "integer"
         },

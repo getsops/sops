@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,6 +51,16 @@ func NewFailoverGroupsClientWithBaseURI(baseURI string, subscriptionID string) F
 // failoverGroupName - the name of the failover group.
 // parameters - the failover group parameters.
 func (client FailoverGroupsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, failoverGroupName string, parameters FailoverGroup) (result FailoverGroupsCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FailoverGroupsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.FailoverGroupProperties", Name: validation.Null, Rule: false,
@@ -88,6 +99,7 @@ func (client FailoverGroupsClient) CreateOrUpdatePreparer(ctx context.Context, r
 		"api-version": APIVersion,
 	}
 
+	parameters.Location = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
@@ -104,10 +116,6 @@ func (client FailoverGroupsClient) CreateOrUpdateSender(req *http.Request) (futu
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
 	if err != nil {
 		return
 	}
@@ -135,6 +143,16 @@ func (client FailoverGroupsClient) CreateOrUpdateResponder(resp *http.Response) 
 // serverName - the name of the server containing the failover group.
 // failoverGroupName - the name of the failover group.
 func (client FailoverGroupsClient) Delete(ctx context.Context, resourceGroupName string, serverName string, failoverGroupName string) (result FailoverGroupsDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FailoverGroupsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, serverName, failoverGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.FailoverGroupsClient", "Delete", nil, "Failure preparing request")
@@ -181,10 +199,6 @@ func (client FailoverGroupsClient) DeleteSender(req *http.Request) (future Failo
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -208,6 +222,16 @@ func (client FailoverGroupsClient) DeleteResponder(resp *http.Response) (result 
 // serverName - the name of the server containing the failover group.
 // failoverGroupName - the name of the failover group.
 func (client FailoverGroupsClient) Failover(ctx context.Context, resourceGroupName string, serverName string, failoverGroupName string) (result FailoverGroupsFailoverFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FailoverGroupsClient.Failover")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.FailoverPreparer(ctx, resourceGroupName, serverName, failoverGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.FailoverGroupsClient", "Failover", nil, "Failure preparing request")
@@ -254,10 +278,6 @@ func (client FailoverGroupsClient) FailoverSender(req *http.Request) (future Fai
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -283,6 +303,16 @@ func (client FailoverGroupsClient) FailoverResponder(resp *http.Response) (resul
 // serverName - the name of the server containing the failover group.
 // failoverGroupName - the name of the failover group.
 func (client FailoverGroupsClient) ForceFailoverAllowDataLoss(ctx context.Context, resourceGroupName string, serverName string, failoverGroupName string) (result FailoverGroupsForceFailoverAllowDataLossFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FailoverGroupsClient.ForceFailoverAllowDataLoss")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ForceFailoverAllowDataLossPreparer(ctx, resourceGroupName, serverName, failoverGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.FailoverGroupsClient", "ForceFailoverAllowDataLoss", nil, "Failure preparing request")
@@ -329,10 +359,6 @@ func (client FailoverGroupsClient) ForceFailoverAllowDataLossSender(req *http.Re
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -357,6 +383,16 @@ func (client FailoverGroupsClient) ForceFailoverAllowDataLossResponder(resp *htt
 // serverName - the name of the server containing the failover group.
 // failoverGroupName - the name of the failover group.
 func (client FailoverGroupsClient) Get(ctx context.Context, resourceGroupName string, serverName string, failoverGroupName string) (result FailoverGroup, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FailoverGroupsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName, failoverGroupName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.FailoverGroupsClient", "Get", nil, "Failure preparing request")
@@ -426,6 +462,16 @@ func (client FailoverGroupsClient) GetResponder(resp *http.Response) (result Fai
 // from the Azure Resource Manager API or the portal.
 // serverName - the name of the server containing the failover group.
 func (client FailoverGroupsClient) ListByServer(ctx context.Context, resourceGroupName string, serverName string) (result FailoverGroupListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FailoverGroupsClient.ListByServer")
+		defer func() {
+			sc := -1
+			if result.fglr.Response.Response != nil {
+				sc = result.fglr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByServerNextResults
 	req, err := client.ListByServerPreparer(ctx, resourceGroupName, serverName)
 	if err != nil {
@@ -490,8 +536,8 @@ func (client FailoverGroupsClient) ListByServerResponder(resp *http.Response) (r
 }
 
 // listByServerNextResults retrieves the next set of results, if any.
-func (client FailoverGroupsClient) listByServerNextResults(lastResults FailoverGroupListResult) (result FailoverGroupListResult, err error) {
-	req, err := lastResults.failoverGroupListResultPreparer()
+func (client FailoverGroupsClient) listByServerNextResults(ctx context.Context, lastResults FailoverGroupListResult) (result FailoverGroupListResult, err error) {
+	req, err := lastResults.failoverGroupListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.FailoverGroupsClient", "listByServerNextResults", nil, "Failure preparing next results request")
 	}
@@ -512,6 +558,16 @@ func (client FailoverGroupsClient) listByServerNextResults(lastResults FailoverG
 
 // ListByServerComplete enumerates all values, automatically crossing page boundaries as required.
 func (client FailoverGroupsClient) ListByServerComplete(ctx context.Context, resourceGroupName string, serverName string) (result FailoverGroupListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FailoverGroupsClient.ListByServer")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByServer(ctx, resourceGroupName, serverName)
 	return
 }
@@ -524,6 +580,16 @@ func (client FailoverGroupsClient) ListByServerComplete(ctx context.Context, res
 // failoverGroupName - the name of the failover group.
 // parameters - the failover group parameters.
 func (client FailoverGroupsClient) Update(ctx context.Context, resourceGroupName string, serverName string, failoverGroupName string, parameters FailoverGroupUpdate) (result FailoverGroupsUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FailoverGroupsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, resourceGroupName, serverName, failoverGroupName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.FailoverGroupsClient", "Update", nil, "Failure preparing request")
@@ -569,10 +635,6 @@ func (client FailoverGroupsClient) UpdateSender(req *http.Request) (future Failo
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

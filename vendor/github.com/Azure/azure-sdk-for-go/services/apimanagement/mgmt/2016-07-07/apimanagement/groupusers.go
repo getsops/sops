@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewGroupUsersClientWithBaseURI(baseURI string, subscriptionID string) Group
 // groupID - group identifier. Must be unique in the current API Management service instance.
 // UID - user identifier. Must be unique in the current API Management service instance.
 func (client GroupUsersClient) Add(ctx context.Context, resourceGroupName string, serviceName string, groupID string, UID string) (result ErrorBodyContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GroupUsersClient.Add")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -144,6 +155,16 @@ func (client GroupUsersClient) AddResponder(resp *http.Response) (result ErrorBo
 // top - number of records to return.
 // skip - number of records to skip.
 func (client GroupUsersClient) ListByGroup(ctx context.Context, resourceGroupName string, serviceName string, groupID string, filter string, top *int32, skip *int32) (result UserCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GroupUsersClient.ListByGroup")
+		defer func() {
+			sc := -1
+			if result.uc.Response.Response != nil {
+				sc = result.uc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -236,8 +257,8 @@ func (client GroupUsersClient) ListByGroupResponder(resp *http.Response) (result
 }
 
 // listByGroupNextResults retrieves the next set of results, if any.
-func (client GroupUsersClient) listByGroupNextResults(lastResults UserCollection) (result UserCollection, err error) {
-	req, err := lastResults.userCollectionPreparer()
+func (client GroupUsersClient) listByGroupNextResults(ctx context.Context, lastResults UserCollection) (result UserCollection, err error) {
+	req, err := lastResults.userCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "apimanagement.GroupUsersClient", "listByGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -258,6 +279,16 @@ func (client GroupUsersClient) listByGroupNextResults(lastResults UserCollection
 
 // ListByGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client GroupUsersClient) ListByGroupComplete(ctx context.Context, resourceGroupName string, serviceName string, groupID string, filter string, top *int32, skip *int32) (result UserCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GroupUsersClient.ListByGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByGroup(ctx, resourceGroupName, serviceName, groupID, filter, top, skip)
 	return
 }
@@ -269,6 +300,16 @@ func (client GroupUsersClient) ListByGroupComplete(ctx context.Context, resource
 // groupID - group identifier. Must be unique in the current API Management service instance.
 // UID - user identifier. Must be unique in the current API Management service instance.
 func (client GroupUsersClient) Remove(ctx context.Context, resourceGroupName string, serviceName string, groupID string, UID string) (result ErrorBodyContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/GroupUsersClient.Remove")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: serviceName,
 			Constraints: []validation.Constraint{{Target: "serviceName", Name: validation.MaxLength, Rule: 50, Chain: nil},

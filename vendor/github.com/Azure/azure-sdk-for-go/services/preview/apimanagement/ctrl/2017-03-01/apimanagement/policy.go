@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -41,6 +42,16 @@ func NewPolicyClient() PolicyClient {
 // https://myapimservice.management.azure-api.net.
 // parameters - the policy contents to apply.
 func (client PolicyClient) CreateOrUpdate(ctx context.Context, apimBaseURL string, parameters PolicyContract) (result PolicyContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PolicyClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.PolicyContent", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -120,6 +131,16 @@ func (client PolicyClient) CreateOrUpdateResponder(resp *http.Response) (result 
 // ifMatch - the entity state (Etag) version of the policy to be deleted. A value of "*" can be used for
 // If-Match to unconditionally apply the operation.
 func (client PolicyClient) Delete(ctx context.Context, apimBaseURL string, ifMatch string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PolicyClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, apimBaseURL, ifMatch)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.PolicyClient", "Delete", nil, "Failure preparing request")
@@ -189,6 +210,16 @@ func (client PolicyClient) DeleteResponder(resp *http.Response) (result autorest
 // apimBaseURL - the management endpoint of the API Management service, for example
 // https://myapimservice.management.azure-api.net.
 func (client PolicyClient) Get(ctx context.Context, apimBaseURL string) (result PolicyContract, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PolicyClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, apimBaseURL)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.PolicyClient", "Get", nil, "Failure preparing request")
@@ -259,6 +290,16 @@ func (client PolicyClient) GetResponder(resp *http.Response) (result PolicyContr
 // https://myapimservice.management.azure-api.net.
 // scope - policy scope.
 func (client PolicyClient) List(ctx context.Context, apimBaseURL string, scope PolicyScopeContract) (result PolicyCollection, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PolicyClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, apimBaseURL, scope)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "apimanagement.PolicyClient", "List", nil, "Failure preparing request")

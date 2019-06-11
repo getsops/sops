@@ -18,11 +18,16 @@ package azurestack
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/to"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/azurestack/mgmt/2017-06-01/azurestack"
 
 // ComputeRole enumerates the values for compute role.
 type ComputeRole string
@@ -97,18 +102,18 @@ type ActivationKeyResult struct {
 	ActivationKey *string `json:"activationKey,omitempty"`
 }
 
-// CustomerSubscription customer subcription.
+// CustomerSubscription customer subscription.
 type CustomerSubscription struct {
 	autorest.Response `json:"-"`
 	// CustomerSubscriptionProperties - Customer subscription properties.
 	*CustomerSubscriptionProperties `json:"properties,omitempty"`
-	// ID - ID of the resource.
+	// ID - READ-ONLY; ID of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - Name of the resource.
+	// Name - READ-ONLY; Name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - Type of Resource.
+	// Type - READ-ONLY; Type of Resource.
 	Type *string `json:"type,omitempty"`
-	// Etag - The entity tag used for optimistic concurency when modifying the resource.
+	// Etag - The entity tag used for optimistic concurrency when modifying the resource.
 	Etag *string `json:"etag,omitempty"`
 }
 
@@ -117,15 +122,6 @@ func (cs CustomerSubscription) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if cs.CustomerSubscriptionProperties != nil {
 		objectMap["properties"] = cs.CustomerSubscriptionProperties
-	}
-	if cs.ID != nil {
-		objectMap["id"] = cs.ID
-	}
-	if cs.Name != nil {
-		objectMap["name"] = cs.Name
-	}
-	if cs.Type != nil {
-		objectMap["type"] = cs.Type
 	}
 	if cs.Etag != nil {
 		objectMap["etag"] = cs.Etag
@@ -208,20 +204,37 @@ type CustomerSubscriptionListIterator struct {
 	page CustomerSubscriptionListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *CustomerSubscriptionListIterator) Next() error {
+func (iter *CustomerSubscriptionListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CustomerSubscriptionListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *CustomerSubscriptionListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -243,6 +256,11 @@ func (iter CustomerSubscriptionListIterator) Value() CustomerSubscription {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the CustomerSubscriptionListIterator type.
+func NewCustomerSubscriptionListIterator(page CustomerSubscriptionListPage) CustomerSubscriptionListIterator {
+	return CustomerSubscriptionListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (csl CustomerSubscriptionList) IsEmpty() bool {
 	return csl.Value == nil || len(*csl.Value) == 0
@@ -250,11 +268,11 @@ func (csl CustomerSubscriptionList) IsEmpty() bool {
 
 // customerSubscriptionListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (csl CustomerSubscriptionList) customerSubscriptionListPreparer() (*http.Request, error) {
+func (csl CustomerSubscriptionList) customerSubscriptionListPreparer(ctx context.Context) (*http.Request, error) {
 	if csl.NextLink == nil || len(to.String(csl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(csl.NextLink)))
@@ -262,19 +280,36 @@ func (csl CustomerSubscriptionList) customerSubscriptionListPreparer() (*http.Re
 
 // CustomerSubscriptionListPage contains a page of CustomerSubscription values.
 type CustomerSubscriptionListPage struct {
-	fn  func(CustomerSubscriptionList) (CustomerSubscriptionList, error)
+	fn  func(context.Context, CustomerSubscriptionList) (CustomerSubscriptionList, error)
 	csl CustomerSubscriptionList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *CustomerSubscriptionListPage) Next() error {
-	next, err := page.fn(page.csl)
+func (page *CustomerSubscriptionListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/CustomerSubscriptionListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.csl)
 	if err != nil {
 		return err
 	}
 	page.csl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *CustomerSubscriptionListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -295,6 +330,11 @@ func (page CustomerSubscriptionListPage) Values() []CustomerSubscription {
 	return *page.csl.Value
 }
 
+// Creates a new instance of the CustomerSubscriptionListPage type.
+func NewCustomerSubscriptionListPage(getNextPage func(context.Context, CustomerSubscriptionList) (CustomerSubscriptionList, error)) CustomerSubscriptionListPage {
+	return CustomerSubscriptionListPage{fn: getNextPage}
+}
+
 // CustomerSubscriptionProperties customer subscription properties.
 type CustomerSubscriptionProperties struct {
 	// TenantID - Tenant Id.
@@ -303,9 +343,9 @@ type CustomerSubscriptionProperties struct {
 
 // DataDiskImage data disk image.
 type DataDiskImage struct {
-	// Lun - The LUN.
+	// Lun - READ-ONLY; The LUN.
 	Lun *int32 `json:"lun,omitempty"`
-	// SourceBlobSasURI - SAS key for source blob.
+	// SourceBlobSasURI - READ-ONLY; SAS key for source blob.
 	SourceBlobSasURI *string `json:"sourceBlobSasUri,omitempty"`
 }
 
@@ -323,16 +363,16 @@ type Display struct {
 
 // ErrorDetails the details of the error.
 type ErrorDetails struct {
-	// Code - Error code.
+	// Code - READ-ONLY; Error code.
 	Code *string `json:"code,omitempty"`
-	// Message - Error message indicating why the operation failed.
+	// Message - READ-ONLY; Error message indicating why the operation failed.
 	Message *string `json:"message,omitempty"`
-	// Target - The target of the particular error.
+	// Target - READ-ONLY; The target of the particular error.
 	Target *string `json:"target,omitempty"`
 }
 
-// ErrorResponse error response indicates that the service is not able to process the incoming request. The reason
-// is provided in the error message.
+// ErrorResponse error response indicates that the service is not able to process the incoming request. The
+// reason is provided in the error message.
 type ErrorResponse struct {
 	// Error - The details of the error.
 	Error *ErrorDetails `json:"error,omitempty"`
@@ -341,26 +381,17 @@ type ErrorResponse struct {
 // ExtendedProduct extended description about the product required for installing it into Azure Stack.
 type ExtendedProduct struct {
 	autorest.Response `json:"-"`
-	// GalleryPackageBlobSasURI - The URI to the .azpkg file that provides information required for showing product in the gallery.
+	// GalleryPackageBlobSasURI - READ-ONLY; The URI to the .azpkg file that provides information required for showing product in the gallery.
 	GalleryPackageBlobSasURI *string `json:"galleryPackageBlobSasUri,omitempty"`
-	// ProductKind - Specifies the kind of the product (virtualMachine or virtualMachineExtension).
+	// ProductKind - READ-ONLY; Specifies the kind of the product (virtualMachine or virtualMachineExtension).
 	ProductKind *string `json:"productKind,omitempty"`
-	// ExtendedProductProperties - Specifies additional properties describing the product.
+	// ExtendedProductProperties - READ-ONLY; Specifies additional properties describing the product.
 	*ExtendedProductProperties `json:"properties,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for ExtendedProduct.
 func (ep ExtendedProduct) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if ep.GalleryPackageBlobSasURI != nil {
-		objectMap["galleryPackageBlobSasUri"] = ep.GalleryPackageBlobSasURI
-	}
-	if ep.ProductKind != nil {
-		objectMap["productKind"] = ep.ProductKind
-	}
-	if ep.ExtendedProductProperties != nil {
-		objectMap["properties"] = ep.ExtendedProductProperties
-	}
 	return json.Marshal(objectMap)
 }
 
@@ -408,56 +439,29 @@ func (ep *ExtendedProduct) UnmarshalJSON(body []byte) error {
 
 // ExtendedProductProperties product information.
 type ExtendedProductProperties struct {
-	// ComputeRole - Specifies kind of compute role inclided in the package. Possible values include: 'None', 'IaaS', 'PaaS'
+	// ComputeRole - READ-ONLY; Specifies kind of compute role included in the package. Possible values include: 'None', 'IaaS', 'PaaS'
 	ComputeRole ComputeRole `json:"computeRole,omitempty"`
-	// IsSystemExtension - Specifies if product is a Virtual Machine Extension.
+	// IsSystemExtension - READ-ONLY; Specifies if product is a Virtual Machine Extension.
 	IsSystemExtension *bool `json:"isSystemExtension,omitempty"`
-	// URI - Specifies a download location where content can be downloaded from.
+	// URI - READ-ONLY; Specifies a download location where content can be downloaded from.
 	*URI `json:"sourceBlob,omitempty"`
-	// SupportMultipleExtensions - Indicates if specified product supports multiple extensions.
+	// SupportMultipleExtensions - READ-ONLY; Indicates if specified product supports multiple extensions.
 	SupportMultipleExtensions *bool `json:"supportMultipleExtensions,omitempty"`
-	// Version - Specifies product version.
+	// Version - READ-ONLY; Specifies product version.
 	Version *string `json:"version,omitempty"`
-	// VMOsType - Specifies operating system used by the product. Possible values include: 'OperatingSystemNone', 'OperatingSystemWindows', 'OperatingSystemLinux'
+	// VMOsType - READ-ONLY; Specifies operating system used by the product. Possible values include: 'OperatingSystemNone', 'OperatingSystemWindows', 'OperatingSystemLinux'
 	VMOsType OperatingSystem `json:"vmOsType,omitempty"`
-	// VMScaleSetEnabled - Indicates if virtual machine Scale Set is enabled in the specified product.
+	// VMScaleSetEnabled - READ-ONLY; Indicates if virtual machine Scale Set is enabled in the specified product.
 	VMScaleSetEnabled *bool `json:"vmScaleSetEnabled,omitempty"`
-	// OsDiskImage - OS disk image used by product.
+	// OsDiskImage - READ-ONLY; OS disk image used by product.
 	OsDiskImage *OsDiskImage `json:"osDiskImage,omitempty"`
-	// DataDiskImages - List of attached data disks.
+	// DataDiskImages - READ-ONLY; List of attached data disks.
 	DataDiskImages *[]DataDiskImage `json:"dataDiskImages,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for ExtendedProductProperties.
 func (epp ExtendedProductProperties) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if epp.ComputeRole != "" {
-		objectMap["computeRole"] = epp.ComputeRole
-	}
-	if epp.IsSystemExtension != nil {
-		objectMap["isSystemExtension"] = epp.IsSystemExtension
-	}
-	if epp.URI != nil {
-		objectMap["sourceBlob"] = epp.URI
-	}
-	if epp.SupportMultipleExtensions != nil {
-		objectMap["supportMultipleExtensions"] = epp.SupportMultipleExtensions
-	}
-	if epp.Version != nil {
-		objectMap["version"] = epp.Version
-	}
-	if epp.VMOsType != "" {
-		objectMap["vmOsType"] = epp.VMOsType
-	}
-	if epp.VMScaleSetEnabled != nil {
-		objectMap["vmScaleSetEnabled"] = epp.VMScaleSetEnabled
-	}
-	if epp.OsDiskImage != nil {
-		objectMap["osDiskImage"] = epp.OsDiskImage
-	}
-	if epp.DataDiskImages != nil {
-		objectMap["dataDiskImages"] = epp.DataDiskImages
-	}
 	return json.Marshal(objectMap)
 }
 
@@ -596,20 +600,37 @@ type OperationListIterator struct {
 	page OperationListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *OperationListIterator) Next() error {
+func (iter *OperationListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *OperationListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -631,6 +652,11 @@ func (iter OperationListIterator) Value() Operation {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the OperationListIterator type.
+func NewOperationListIterator(page OperationListPage) OperationListIterator {
+	return OperationListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (ol OperationList) IsEmpty() bool {
 	return ol.Value == nil || len(*ol.Value) == 0
@@ -638,11 +664,11 @@ func (ol OperationList) IsEmpty() bool {
 
 // operationListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (ol OperationList) operationListPreparer() (*http.Request, error) {
+func (ol OperationList) operationListPreparer(ctx context.Context) (*http.Request, error) {
 	if ol.NextLink == nil || len(to.String(ol.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(ol.NextLink)))
@@ -650,19 +676,36 @@ func (ol OperationList) operationListPreparer() (*http.Request, error) {
 
 // OperationListPage contains a page of Operation values.
 type OperationListPage struct {
-	fn func(OperationList) (OperationList, error)
+	fn func(context.Context, OperationList) (OperationList, error)
 	ol OperationList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *OperationListPage) Next() error {
-	next, err := page.fn(page.ol)
+func (page *OperationListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/OperationListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.ol)
 	if err != nil {
 		return err
 	}
 	page.ol = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *OperationListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -683,11 +726,16 @@ func (page OperationListPage) Values() []Operation {
 	return *page.ol.Value
 }
 
+// Creates a new instance of the OperationListPage type.
+func NewOperationListPage(getNextPage func(context.Context, OperationList) (OperationList, error)) OperationListPage {
+	return OperationListPage{fn: getNextPage}
+}
+
 // OsDiskImage OS disk image.
 type OsDiskImage struct {
-	// OperatingSystem - OS operating system type. Possible values include: 'OperatingSystemNone', 'OperatingSystemWindows', 'OperatingSystemLinux'
+	// OperatingSystem - READ-ONLY; OS operating system type. Possible values include: 'OperatingSystemNone', 'OperatingSystemWindows', 'OperatingSystemLinux'
 	OperatingSystem OperatingSystem `json:"operatingSystem,omitempty"`
-	// SourceBlobSasURI - SAS key for source blob.
+	// SourceBlobSasURI - READ-ONLY; SAS key for source blob.
 	SourceBlobSasURI *string `json:"sourceBlobSasUri,omitempty"`
 }
 
@@ -696,13 +744,13 @@ type Product struct {
 	autorest.Response `json:"-"`
 	// ProductNestedProperties - Properties of the product resource.
 	*ProductNestedProperties `json:"properties,omitempty"`
-	// ID - ID of the resource.
+	// ID - READ-ONLY; ID of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - Name of the resource.
+	// Name - READ-ONLY; Name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - Type of Resource.
+	// Type - READ-ONLY; Type of Resource.
 	Type *string `json:"type,omitempty"`
-	// Etag - The entity tag used for optimistic concurency when modifying the resource.
+	// Etag - The entity tag used for optimistic concurrency when modifying the resource.
 	Etag *string `json:"etag,omitempty"`
 }
 
@@ -711,15 +759,6 @@ func (p Product) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if p.ProductNestedProperties != nil {
 		objectMap["properties"] = p.ProductNestedProperties
-	}
-	if p.ID != nil {
-		objectMap["id"] = p.ID
-	}
-	if p.Name != nil {
-		objectMap["name"] = p.Name
-	}
-	if p.Type != nil {
-		objectMap["type"] = p.Type
 	}
 	if p.Etag != nil {
 		objectMap["etag"] = p.Etag
@@ -810,20 +849,37 @@ type ProductListIterator struct {
 	page ProductListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *ProductListIterator) Next() error {
+func (iter *ProductListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProductListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *ProductListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -845,6 +901,11 @@ func (iter ProductListIterator) Value() Product {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the ProductListIterator type.
+func NewProductListIterator(page ProductListPage) ProductListIterator {
+	return ProductListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (pl ProductList) IsEmpty() bool {
 	return pl.Value == nil || len(*pl.Value) == 0
@@ -852,11 +913,11 @@ func (pl ProductList) IsEmpty() bool {
 
 // productListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (pl ProductList) productListPreparer() (*http.Request, error) {
+func (pl ProductList) productListPreparer(ctx context.Context) (*http.Request, error) {
 	if pl.NextLink == nil || len(to.String(pl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(pl.NextLink)))
@@ -864,19 +925,36 @@ func (pl ProductList) productListPreparer() (*http.Request, error) {
 
 // ProductListPage contains a page of Product values.
 type ProductListPage struct {
-	fn func(ProductList) (ProductList, error)
+	fn func(context.Context, ProductList) (ProductList, error)
 	pl ProductList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *ProductListPage) Next() error {
-	next, err := page.fn(page.pl)
+func (page *ProductListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProductListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.pl)
 	if err != nil {
 		return err
 	}
 	page.pl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *ProductListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -895,6 +973,11 @@ func (page ProductListPage) Values() []Product {
 		return nil
 	}
 	return *page.pl.Value
+}
+
+// Creates a new instance of the ProductListPage type.
+func NewProductListPage(getNextPage func(context.Context, ProductList) (ProductList, error)) ProductListPage {
+	return ProductListPage{fn: getNextPage}
 }
 
 // ProductNestedProperties properties portion of the product resource.
@@ -946,17 +1029,17 @@ type Registration struct {
 	autorest.Response `json:"-"`
 	// RegistrationProperties - Registration resource.
 	*RegistrationProperties `json:"properties,omitempty"`
-	// ID - ID of the resource.
+	// ID - READ-ONLY; ID of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - Name of the resource.
+	// Name - READ-ONLY; Name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - Type of Resource.
+	// Type - READ-ONLY; Type of Resource.
 	Type *string `json:"type,omitempty"`
 	// Location - Location of the resource.
 	Location *string `json:"location,omitempty"`
 	// Tags - Custom tags for the resource.
 	Tags map[string]*string `json:"tags"`
-	// Etag - The entity tag used for optimistic concurency when modifying the resource.
+	// Etag - The entity tag used for optimistic concurrency when modifying the resource.
 	Etag *string `json:"etag,omitempty"`
 }
 
@@ -965,15 +1048,6 @@ func (r Registration) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if r.RegistrationProperties != nil {
 		objectMap["properties"] = r.RegistrationProperties
-	}
-	if r.ID != nil {
-		objectMap["id"] = r.ID
-	}
-	if r.Name != nil {
-		objectMap["name"] = r.Name
-	}
-	if r.Type != nil {
-		objectMap["type"] = r.Type
 	}
 	if r.Location != nil {
 		objectMap["location"] = r.Location
@@ -1080,20 +1154,37 @@ type RegistrationListIterator struct {
 	page RegistrationListPage
 }
 
-// Next advances to the next value.  If there was an error making
+// NextWithContext advances to the next value.  If there was an error making
 // the request the iterator does not advance and the error is returned.
-func (iter *RegistrationListIterator) Next() error {
+func (iter *RegistrationListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RegistrationListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	iter.i++
 	if iter.i < len(iter.page.Values()) {
 		return nil
 	}
-	err := iter.page.Next()
+	err = iter.page.NextWithContext(ctx)
 	if err != nil {
 		iter.i--
 		return err
 	}
 	iter.i = 0
 	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *RegistrationListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the enumeration should be started or is not yet complete.
@@ -1115,6 +1206,11 @@ func (iter RegistrationListIterator) Value() Registration {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the RegistrationListIterator type.
+func NewRegistrationListIterator(page RegistrationListPage) RegistrationListIterator {
+	return RegistrationListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (rl RegistrationList) IsEmpty() bool {
 	return rl.Value == nil || len(*rl.Value) == 0
@@ -1122,11 +1218,11 @@ func (rl RegistrationList) IsEmpty() bool {
 
 // registrationListPreparer prepares a request to retrieve the next set of results.
 // It returns nil if no more results exist.
-func (rl RegistrationList) registrationListPreparer() (*http.Request, error) {
+func (rl RegistrationList) registrationListPreparer(ctx context.Context) (*http.Request, error) {
 	if rl.NextLink == nil || len(to.String(rl.NextLink)) < 1 {
 		return nil, nil
 	}
-	return autorest.Prepare(&http.Request{},
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
 		autorest.AsJSON(),
 		autorest.AsGet(),
 		autorest.WithBaseURL(to.String(rl.NextLink)))
@@ -1134,19 +1230,36 @@ func (rl RegistrationList) registrationListPreparer() (*http.Request, error) {
 
 // RegistrationListPage contains a page of Registration values.
 type RegistrationListPage struct {
-	fn func(RegistrationList) (RegistrationList, error)
+	fn func(context.Context, RegistrationList) (RegistrationList, error)
 	rl RegistrationList
 }
 
-// Next advances to the next page of values.  If there was an error making
+// NextWithContext advances to the next page of values.  If there was an error making
 // the request the page does not advance and the error is returned.
-func (page *RegistrationListPage) Next() error {
-	next, err := page.fn(page.rl)
+func (page *RegistrationListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RegistrationListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.rl)
 	if err != nil {
 		return err
 	}
 	page.rl = next
 	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *RegistrationListPage) Next() error {
+	return page.NextWithContext(context.Background())
 }
 
 // NotDone returns true if the page enumeration should be started or is not yet complete.
@@ -1165,6 +1278,11 @@ func (page RegistrationListPage) Values() []Registration {
 		return nil
 	}
 	return *page.rl.Value
+}
+
+// Creates a new instance of the RegistrationListPage type.
+func NewRegistrationListPage(getNextPage func(context.Context, RegistrationList) (RegistrationList, error)) RegistrationListPage {
+	return RegistrationListPage{fn: getNextPage}
 }
 
 // RegistrationParameter registration resource
@@ -1220,7 +1338,7 @@ func (rp *RegistrationParameter) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// RegistrationParameterProperties properties of the Azure Stack regstration resource
+// RegistrationParameterProperties properties of the Azure Stack registration resource
 type RegistrationParameterProperties struct {
 	// RegistrationToken - The token identifying registered Azure Stack
 	RegistrationToken *string `json:"registrationToken,omitempty"`
@@ -1238,44 +1356,35 @@ type RegistrationProperties struct {
 
 // Resource base resource object.
 type Resource struct {
-	// ID - ID of the resource.
+	// ID - READ-ONLY; ID of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - Name of the resource.
+	// Name - READ-ONLY; Name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - Type of Resource.
+	// Type - READ-ONLY; Type of Resource.
 	Type *string `json:"type,omitempty"`
-	// Etag - The entity tag used for optimistic concurency when modifying the resource.
+	// Etag - The entity tag used for optimistic concurrency when modifying the resource.
 	Etag *string `json:"etag,omitempty"`
 }
 
 // TrackedResource base resource object.
 type TrackedResource struct {
-	// ID - ID of the resource.
+	// ID - READ-ONLY; ID of the resource.
 	ID *string `json:"id,omitempty"`
-	// Name - Name of the resource.
+	// Name - READ-ONLY; Name of the resource.
 	Name *string `json:"name,omitempty"`
-	// Type - Type of Resource.
+	// Type - READ-ONLY; Type of Resource.
 	Type *string `json:"type,omitempty"`
 	// Location - Location of the resource.
 	Location *string `json:"location,omitempty"`
 	// Tags - Custom tags for the resource.
 	Tags map[string]*string `json:"tags"`
-	// Etag - The entity tag used for optimistic concurency when modifying the resource.
+	// Etag - The entity tag used for optimistic concurrency when modifying the resource.
 	Etag *string `json:"etag,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for TrackedResource.
 func (tr TrackedResource) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if tr.ID != nil {
-		objectMap["id"] = tr.ID
-	}
-	if tr.Name != nil {
-		objectMap["name"] = tr.Name
-	}
-	if tr.Type != nil {
-		objectMap["type"] = tr.Type
-	}
 	if tr.Location != nil {
 		objectMap["location"] = tr.Location
 	}
@@ -1290,52 +1399,31 @@ func (tr TrackedResource) MarshalJSON() ([]byte, error) {
 
 // URI the URI.
 type URI struct {
-	// URI - The URI.
+	// URI - READ-ONLY; The URI.
 	URI *string `json:"uri,omitempty"`
 }
 
 // VirtualMachineExtensionProductProperties product information.
 type VirtualMachineExtensionProductProperties struct {
-	// ComputeRole - Specifies kind of compute role inclided in the package. Possible values include: 'None', 'IaaS', 'PaaS'
+	// ComputeRole - READ-ONLY; Specifies kind of compute role included in the package. Possible values include: 'None', 'IaaS', 'PaaS'
 	ComputeRole ComputeRole `json:"computeRole,omitempty"`
-	// IsSystemExtension - Specifies if product is a Virtual Machine Extension.
+	// IsSystemExtension - READ-ONLY; Specifies if product is a Virtual Machine Extension.
 	IsSystemExtension *bool `json:"isSystemExtension,omitempty"`
-	// URI - Specifies a download location where content can be downloaded from.
+	// URI - READ-ONLY; Specifies a download location where content can be downloaded from.
 	*URI `json:"sourceBlob,omitempty"`
-	// SupportMultipleExtensions - Indicates if specified product supports multiple extensions.
+	// SupportMultipleExtensions - READ-ONLY; Indicates if specified product supports multiple extensions.
 	SupportMultipleExtensions *bool `json:"supportMultipleExtensions,omitempty"`
-	// Version - Specifies product version.
+	// Version - READ-ONLY; Specifies product version.
 	Version *string `json:"version,omitempty"`
-	// VMOsType - Specifies operating system used by the product. Possible values include: 'OperatingSystemNone', 'OperatingSystemWindows', 'OperatingSystemLinux'
+	// VMOsType - READ-ONLY; Specifies operating system used by the product. Possible values include: 'OperatingSystemNone', 'OperatingSystemWindows', 'OperatingSystemLinux'
 	VMOsType OperatingSystem `json:"vmOsType,omitempty"`
-	// VMScaleSetEnabled - Indicates if virtual machine Scale Set is enabled in the specified product.
+	// VMScaleSetEnabled - READ-ONLY; Indicates if virtual machine Scale Set is enabled in the specified product.
 	VMScaleSetEnabled *bool `json:"vmScaleSetEnabled,omitempty"`
 }
 
 // MarshalJSON is the custom marshaler for VirtualMachineExtensionProductProperties.
 func (vmepp VirtualMachineExtensionProductProperties) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if vmepp.ComputeRole != "" {
-		objectMap["computeRole"] = vmepp.ComputeRole
-	}
-	if vmepp.IsSystemExtension != nil {
-		objectMap["isSystemExtension"] = vmepp.IsSystemExtension
-	}
-	if vmepp.URI != nil {
-		objectMap["sourceBlob"] = vmepp.URI
-	}
-	if vmepp.SupportMultipleExtensions != nil {
-		objectMap["supportMultipleExtensions"] = vmepp.SupportMultipleExtensions
-	}
-	if vmepp.Version != nil {
-		objectMap["version"] = vmepp.Version
-	}
-	if vmepp.VMOsType != "" {
-		objectMap["vmOsType"] = vmepp.VMOsType
-	}
-	if vmepp.VMScaleSetEnabled != nil {
-		objectMap["vmScaleSetEnabled"] = vmepp.VMScaleSetEnabled
-	}
 	return json.Marshal(objectMap)
 }
 
@@ -1419,10 +1507,10 @@ func (vmepp *VirtualMachineExtensionProductProperties) UnmarshalJSON(body []byte
 
 // VirtualMachineProductProperties product information.
 type VirtualMachineProductProperties struct {
-	// Version - Specifies product version.
+	// Version - READ-ONLY; Specifies product version.
 	Version *string `json:"version,omitempty"`
-	// OsDiskImage - OS disk image used by product.
+	// OsDiskImage - READ-ONLY; OS disk image used by product.
 	OsDiskImage *OsDiskImage `json:"osDiskImage,omitempty"`
-	// DataDiskImages - List of attached data disks.
+	// DataDiskImages - READ-ONLY; List of attached data disks.
 	DataDiskImages *[]DataDiskImage `json:"dataDiskImages,omitempty"`
 }

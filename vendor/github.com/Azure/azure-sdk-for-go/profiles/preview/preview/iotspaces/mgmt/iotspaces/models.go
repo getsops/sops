@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@
 package iotspaces
 
 import (
+	"context"
+
 	original "github.com/Azure/azure-sdk-for-go/services/preview/iotspaces/mgmt/2017-10-01-preview/iotspaces"
 	uuid "github.com/satori/go.uuid"
 )
@@ -28,8 +30,6 @@ const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type Client = original.Client
 type NameUnavailabilityReason = original.NameUnavailabilityReason
 
 const (
@@ -56,6 +56,8 @@ const (
 	S3 Sku = original.S3
 )
 
+type BaseClient = original.BaseClient
+type Client = original.Client
 type CreateOrUpdateFuture = original.CreateOrUpdateFuture
 type DeleteFuture = original.DeleteFuture
 type Description = original.Description
@@ -70,25 +72,43 @@ type OperationInputs = original.OperationInputs
 type OperationListResult = original.OperationListResult
 type OperationListResultIterator = original.OperationListResultIterator
 type OperationListResultPage = original.OperationListResultPage
+type OperationsClient = original.OperationsClient
 type PatchDescription = original.PatchDescription
 type Properties = original.Properties
 type Resource = original.Resource
 type SkuInfo = original.SkuInfo
 type StorageContainerProperties = original.StorageContainerProperties
 type UpdateFuture = original.UpdateFuture
-type OperationsClient = original.OperationsClient
 
 func New(subscriptionID uuid.UUID) BaseClient {
 	return original.New(subscriptionID)
-}
-func NewWithBaseURI(baseURI string, subscriptionID uuid.UUID) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func NewClient(subscriptionID uuid.UUID) Client {
 	return original.NewClient(subscriptionID)
 }
 func NewClientWithBaseURI(baseURI string, subscriptionID uuid.UUID) Client {
 	return original.NewClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewDescriptionListResultIterator(page DescriptionListResultPage) DescriptionListResultIterator {
+	return original.NewDescriptionListResultIterator(page)
+}
+func NewDescriptionListResultPage(getNextPage func(context.Context, DescriptionListResult) (DescriptionListResult, error)) DescriptionListResultPage {
+	return original.NewDescriptionListResultPage(getNextPage)
+}
+func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
+	return original.NewOperationListResultIterator(page)
+}
+func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
+	return original.NewOperationListResultPage(getNextPage)
+}
+func NewOperationsClient(subscriptionID uuid.UUID) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID uuid.UUID) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID uuid.UUID) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleNameUnavailabilityReasonValues() []NameUnavailabilityReason {
 	return original.PossibleNameUnavailabilityReasonValues()
@@ -98,12 +118,6 @@ func PossibleProvisioningStateValues() []ProvisioningState {
 }
 func PossibleSkuValues() []Sku {
 	return original.PossibleSkuValues()
-}
-func NewOperationsClient(subscriptionID uuid.UUID) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID uuid.UUID) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

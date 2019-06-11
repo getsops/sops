@@ -23,6 +23,7 @@ import (
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -51,6 +52,16 @@ func NewTriggersClientWithBaseURI(baseURI string, subscriptionID string) Trigger
 // ifMatch - eTag of the trigger entity.  Should only be specified for update, for which it should match
 // existing entity or can be * for unconditional update.
 func (client TriggersClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, trigger TriggerResource, ifMatch string) (result TriggerResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TriggersClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -144,6 +155,16 @@ func (client TriggersClient) CreateOrUpdateResponder(resp *http.Response) (resul
 // factoryName - the factory name.
 // triggerName - the trigger name.
 func (client TriggersClient) Delete(ctx context.Context, resourceGroupName string, factoryName string, triggerName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TriggersClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -228,6 +249,16 @@ func (client TriggersClient) DeleteResponder(resp *http.Response) (result autore
 // factoryName - the factory name.
 // triggerName - the trigger name.
 func (client TriggersClient) Get(ctx context.Context, resourceGroupName string, factoryName string, triggerName string) (result TriggerResource, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TriggersClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -312,6 +343,16 @@ func (client TriggersClient) GetResponder(resp *http.Response) (result TriggerRe
 // resourceGroupName - the resource group name.
 // factoryName - the factory name.
 func (client TriggersClient) ListByFactory(ctx context.Context, resourceGroupName string, factoryName string) (result TriggerListResponsePage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TriggersClient.ListByFactory")
+		defer func() {
+			sc := -1
+			if result.tlr.Response.Response != nil {
+				sc = result.tlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -388,8 +429,8 @@ func (client TriggersClient) ListByFactoryResponder(resp *http.Response) (result
 }
 
 // listByFactoryNextResults retrieves the next set of results, if any.
-func (client TriggersClient) listByFactoryNextResults(lastResults TriggerListResponse) (result TriggerListResponse, err error) {
-	req, err := lastResults.triggerListResponsePreparer()
+func (client TriggersClient) listByFactoryNextResults(ctx context.Context, lastResults TriggerListResponse) (result TriggerListResponse, err error) {
+	req, err := lastResults.triggerListResponsePreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "datafactory.TriggersClient", "listByFactoryNextResults", nil, "Failure preparing next results request")
 	}
@@ -410,6 +451,16 @@ func (client TriggersClient) listByFactoryNextResults(lastResults TriggerListRes
 
 // ListByFactoryComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TriggersClient) ListByFactoryComplete(ctx context.Context, resourceGroupName string, factoryName string) (result TriggerListResponseIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TriggersClient.ListByFactory")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByFactory(ctx, resourceGroupName, factoryName)
 	return
 }
@@ -422,6 +473,16 @@ func (client TriggersClient) ListByFactoryComplete(ctx context.Context, resource
 // startTime - start time for trigger runs.
 // endTime - end time for trigger runs.
 func (client TriggersClient) ListRuns(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, startTime date.Time, endTime date.Time) (result TriggerRunListResponsePage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TriggersClient.ListRuns")
+		defer func() {
+			sc := -1
+			if result.trlr.Response.Response != nil {
+				sc = result.trlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -505,8 +566,8 @@ func (client TriggersClient) ListRunsResponder(resp *http.Response) (result Trig
 }
 
 // listRunsNextResults retrieves the next set of results, if any.
-func (client TriggersClient) listRunsNextResults(lastResults TriggerRunListResponse) (result TriggerRunListResponse, err error) {
-	req, err := lastResults.triggerRunListResponsePreparer()
+func (client TriggersClient) listRunsNextResults(ctx context.Context, lastResults TriggerRunListResponse) (result TriggerRunListResponse, err error) {
+	req, err := lastResults.triggerRunListResponsePreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "datafactory.TriggersClient", "listRunsNextResults", nil, "Failure preparing next results request")
 	}
@@ -527,6 +588,16 @@ func (client TriggersClient) listRunsNextResults(lastResults TriggerRunListRespo
 
 // ListRunsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client TriggersClient) ListRunsComplete(ctx context.Context, resourceGroupName string, factoryName string, triggerName string, startTime date.Time, endTime date.Time) (result TriggerRunListResponseIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TriggersClient.ListRuns")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListRuns(ctx, resourceGroupName, factoryName, triggerName, startTime, endTime)
 	return
 }
@@ -537,6 +608,16 @@ func (client TriggersClient) ListRunsComplete(ctx context.Context, resourceGroup
 // factoryName - the factory name.
 // triggerName - the trigger name.
 func (client TriggersClient) Start(ctx context.Context, resourceGroupName string, factoryName string, triggerName string) (result TriggersStartFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TriggersClient.Start")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -599,10 +680,6 @@ func (client TriggersClient) StartSender(req *http.Request) (future TriggersStar
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -625,6 +702,16 @@ func (client TriggersClient) StartResponder(resp *http.Response) (result autores
 // factoryName - the factory name.
 // triggerName - the trigger name.
 func (client TriggersClient) Stop(ctx context.Context, resourceGroupName string, factoryName string, triggerName string) (result TriggersStopFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/TriggersClient.Stop")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -684,10 +771,6 @@ func (client TriggersClient) StopSender(req *http.Request) (future TriggersStopF
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK))
 	if err != nil {
 		return
 	}

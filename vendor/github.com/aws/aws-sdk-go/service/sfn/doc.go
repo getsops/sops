@@ -20,7 +20,7 @@
 // own servers, or any system that has access to AWS. You can access and use
 // Step Functions using the console, the AWS SDKs, or an HTTP API. For more
 // information about Step Functions, see the AWS Step Functions Developer Guide
-// (http://docs.aws.amazon.com/step-functions/latest/dg/welcome.html).
+// (https://docs.aws.amazon.com/step-functions/latest/dg/welcome.html) .
 //
 // See https://docs.aws.amazon.com/goto/WebAPI/states-2016-11-23 for more information on this service.
 //

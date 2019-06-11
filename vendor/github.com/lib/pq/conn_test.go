@@ -1127,10 +1127,11 @@ func TestReadFloatPrecision(t *testing.T) {
 	db := openTestConn(t)
 	defer db.Close()
 
-	row := db.QueryRow("SELECT float4 '0.10000122', float8 '35.03554004971999'")
+	row := db.QueryRow("SELECT float4 '0.10000122', float8 '35.03554004971999', float4 '1.2'")
 	var float4val float32
 	var float8val float64
-	err := row.Scan(&float4val, &float8val)
+	var float4val2 float64
+	err := row.Scan(&float4val, &float8val, &float4val2)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -1139,6 +1140,9 @@ func TestReadFloatPrecision(t *testing.T) {
 	}
 	if float8val != float64(35.03554004971999) {
 		t.Errorf("Expected float8 fidelity to be maintained; got no match")
+	}
+	if float4val2 != float64(1.2) {
+		t.Errorf("Expected float4 fidelity into a float64 to be maintained; got no match")
 	}
 }
 
@@ -1550,6 +1554,38 @@ func TestQuoteIdentifier(t *testing.T) {
 	}
 }
 
+func TestQuoteLiteral(t *testing.T) {
+	var cases = []struct {
+		input string
+		want  string
+	}{
+		{`foo`, `'foo'`},
+		{`foo bar baz`, `'foo bar baz'`},
+		{`foo'bar`, `'foo''bar'`},
+		{`foo\bar`, ` E'foo\\bar'`},
+		{`foo\ba'r`, ` E'foo\\ba''r'`},
+		{`foo"bar`, `'foo"bar'`},
+		{`foo\x00bar`, ` E'foo\\x00bar'`},
+		{`\x00foo`, ` E'\\x00foo'`},
+		{`'`, `''''`},
+		{`''`, `''''''`},
+		{`\`, ` E'\\'`},
+		{`'abc'; DROP TABLE users;`, `'''abc''; DROP TABLE users;'`},
+		{`\'`, ` E'\\'''`},
+		{`E'\''`, ` E'E''\\'''''`},
+		{`e'\''`, ` E'e''\\'''''`},
+		{`E'\'abc\'; DROP TABLE users;'`, ` E'E''\\''abc\\''; DROP TABLE users;'''`},
+		{`e'\'abc\'; DROP TABLE users;'`, ` E'e''\\''abc\\''; DROP TABLE users;'''`},
+	}
+
+	for _, test := range cases {
+		got := QuoteLiteral(test.input)
+		if got != test.want {
+			t.Errorf("QuoteLiteral(%q) = %v want %v", test.input, got, test.want)
+		}
+	}
+}
+
 func TestRowsResultTag(t *testing.T) {
 	type ResultTag interface {
 		Result() driver.Result
@@ -1655,5 +1691,51 @@ func TestQuickClose(t *testing.T) {
 	}
 	if err := tx.Commit(); err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestMultipleResult(t *testing.T) {
+	db := openTestConn(t)
+	defer db.Close()
+
+	rows, err := db.Query(`
+		begin;
+			select * from information_schema.tables limit 1;
+			select * from information_schema.columns limit 2;
+		commit;
+	`)
+	if err != nil {
+		t.Fatal(err)
+	}
+	type set struct {
+		cols     []string
+		rowCount int
+	}
+	buf := []*set{}
+	for {
+		cols, err := rows.Columns()
+		if err != nil {
+			t.Fatal(err)
+		}
+		s := &set{
+			cols: cols,
+		}
+		buf = append(buf, s)
+
+		for rows.Next() {
+			s.rowCount++
+		}
+		if !rows.NextResultSet() {
+			break
+		}
+	}
+	if len(buf) != 2 {
+		t.Fatalf("got %d sets, expected 2", len(buf))
+	}
+	if len(buf[0].cols) == len(buf[1].cols) || len(buf[1].cols) == 0 {
+		t.Fatal("invalid cols size, expected different column count and greater then zero")
+	}
+	if buf[0].rowCount != 1 || buf[1].rowCount != 2 {
+		t.Fatal("incorrect number of rows returned")
 	}
 }

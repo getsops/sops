@@ -15,6 +15,7 @@
 package firestore
 
 import (
+	"context"
 	"errors"
 	"flag"
 	"fmt"
@@ -32,8 +33,6 @@ import (
 	"cloud.google.com/go/internal/uid"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
-
-	"golang.org/x/net/context"
 	"google.golang.org/api/option"
 	"google.golang.org/genproto/googleapis/type/latlng"
 	"google.golang.org/grpc"
@@ -320,25 +319,19 @@ func TestIntegration_Add(t *testing.T) {
 
 func TestIntegration_Set(t *testing.T) {
 	coll := integrationColl(t)
-	ctx := context.Background()
 	h := testHelper{t}
+	ctx := context.Background()
 
 	// Set Should be able to create a new doc.
 	doc := coll.NewDoc()
-	wr1, err := doc.Set(ctx, integrationTestMap)
-	if err != nil {
-		t.Fatal(err)
-	}
+	wr1 := h.mustSet(doc, integrationTestMap)
 	// Calling Set on the doc completely replaces the contents.
 	// The update time should increase.
 	newData := map[string]interface{}{
 		"str": "change",
 		"x":   "1",
 	}
-	wr2, err := doc.Set(ctx, newData)
-	if err != nil {
-		t.Fatal(err)
-	}
+	wr2 := h.mustSet(doc, newData)
 	if !wr1.UpdateTime.Before(wr2.UpdateTime) {
 		t.Errorf("update time did not increase: old=%s, new=%s", wr1.UpdateTime, wr2.UpdateTime)
 	}
@@ -392,7 +385,11 @@ func TestIntegration_Set(t *testing.T) {
 	}
 
 	// use firestore.Delete to delete a field.
+	// TODO(deklerk): We should be able to use mustSet, but then we get a test error. We should investigate this.
 	_, err = doc.Set(ctx, map[string]interface{}{"str": Delete}, MergeAll)
+	if err != nil {
+		t.Fatal(err)
+	}
 	ds = h.mustGet(doc)
 	want = map[string]interface{}{
 		"x": "4",
@@ -405,10 +402,7 @@ func TestIntegration_Set(t *testing.T) {
 	// Writing an empty doc with MergeAll should create the doc.
 	doc2 := coll.NewDoc()
 	want = map[string]interface{}{}
-	_, err = doc2.Set(ctx, want, MergeAll)
-	if err != nil {
-		t.Fatal(err)
-	}
+	h.mustSet(doc2, want, MergeAll)
 	ds = h.mustGet(doc2)
 	if got := ds.Data(); !testEqual(got, want) {
 		t.Errorf("got %v, want %v", got, want)
@@ -420,7 +414,7 @@ func TestIntegration_Delete(t *testing.T) {
 	doc := integrationColl(t).NewDoc()
 	h := testHelper{t}
 	h.mustCreate(doc, integrationTestMap)
-	wr := h.mustDelete(doc)
+	h.mustDelete(doc)
 	// Confirm that doc doesn't exist.
 	if _, err := doc.Get(ctx); grpc.Code(err) != codes.NotFound {
 		t.Fatalf("got error <%v>, want NotFound", err)
@@ -432,7 +426,7 @@ func TestIntegration_Delete(t *testing.T) {
 		er(doc.Delete(ctx)))
 	// TODO(jba): confirm that the server should return InvalidArgument instead of
 	// FailedPrecondition.
-	wr = h.mustCreate(doc, integrationTestMap)
+	wr := h.mustCreate(doc, integrationTestMap)
 	codeEq(t, "Delete with wrong LastUpdateTime", codes.FailedPrecondition,
 		er(doc.Delete(ctx, LastUpdateTime(wr.UpdateTime.Add(-time.Millisecond)))))
 	codeEq(t, "Delete with right LastUpdateTime", codes.OK,
@@ -550,27 +544,16 @@ func TestIntegration_ServerTimestamp(t *testing.T) {
 }
 
 func TestIntegration_MergeServerTimestamp(t *testing.T) {
-	ctx := context.Background()
 	doc := integrationColl(t).NewDoc()
 	h := testHelper{t}
 
 	// Create a doc with an ordinary field "a" and a ServerTimestamp field "b".
-	_, err := doc.Set(ctx, map[string]interface{}{
-		"a": 1,
-		"b": ServerTimestamp})
-	if err != nil {
-		t.Fatal(err)
-	}
+	h.mustSet(doc, map[string]interface{}{"a": 1, "b": ServerTimestamp})
 	docSnap := h.mustGet(doc)
 	data1 := docSnap.Data()
 	// Merge with a document with a different value of "a". However,
 	// specify only "b" in the list of merge fields.
-	_, err = doc.Set(ctx,
-		map[string]interface{}{"a": 2, "b": ServerTimestamp},
-		Merge([]string{"b"}))
-	if err != nil {
-		t.Fatal(err)
-	}
+	h.mustSet(doc, map[string]interface{}{"a": 2, "b": ServerTimestamp}, Merge([]string{"b"}))
 	// The result should leave "a" unchanged, while "b" is updated.
 	docSnap = h.mustGet(doc)
 	data2 := docSnap.Data()
@@ -585,33 +568,24 @@ func TestIntegration_MergeServerTimestamp(t *testing.T) {
 }
 
 func TestIntegration_MergeNestedServerTimestamp(t *testing.T) {
-	ctx := context.Background()
 	doc := integrationColl(t).NewDoc()
 	h := testHelper{t}
 
 	// Create a doc with an ordinary field "a" a ServerTimestamp field "b",
 	// and a second ServerTimestamp field "c.d".
-	_, err := doc.Set(ctx, map[string]interface{}{
+	h.mustSet(doc, map[string]interface{}{
 		"a": 1,
 		"b": ServerTimestamp,
 		"c": map[string]interface{}{"d": ServerTimestamp},
 	})
-	if err != nil {
-		t.Fatal(err)
-	}
 	data1 := h.mustGet(doc).Data()
 	// Merge with a document with a different value of "a". However,
 	// specify only "c.d" in the list of merge fields.
-	_, err = doc.Set(ctx,
-		map[string]interface{}{
-			"a": 2,
-			"b": ServerTimestamp,
-			"c": map[string]interface{}{"d": ServerTimestamp},
-		},
-		Merge([]string{"c", "d"}))
-	if err != nil {
-		t.Fatal(err)
-	}
+	h.mustSet(doc, map[string]interface{}{
+		"a": 2,
+		"b": ServerTimestamp,
+		"c": map[string]interface{}{"d": ServerTimestamp},
+	}, Merge([]string{"c", "d"}))
 	// The result should leave "a" and "b" unchanged, while "c.d" is updated.
 	data2 := h.mustGet(doc).Data()
 	if got, want := data2["a"], data1["a"]; got != want {
@@ -666,11 +640,9 @@ func TestIntegration_Query(t *testing.T) {
 	ctx := context.Background()
 	coll := integrationColl(t)
 	h := testHelper{t}
-	var docs []*DocumentRef
 	var wants []map[string]interface{}
 	for i := 0; i < 3; i++ {
 		doc := coll.NewDoc()
-		docs = append(docs, doc)
 		// To support running this test in parallel with the others, use a field name
 		// that we don't use anywhere else.
 		h.mustCreate(doc, map[string]interface{}{"q": i, "x": 1})
@@ -986,6 +958,176 @@ func TestIntegration_WatchDocument(t *testing.T) {
 	}
 }
 
+func TestIntegration_ArrayUnion_Create(t *testing.T) {
+	path := "somepath"
+	data := map[string]interface{}{
+		path: ArrayUnion("a", "b"),
+	}
+
+	doc := integrationColl(t).NewDoc()
+	h := testHelper{t}
+	h.mustCreate(doc, data)
+	ds := h.mustGet(doc)
+	var gotMap map[string][]string
+	if err := ds.DataTo(&gotMap); err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := gotMap[path]; !ok {
+		t.Fatalf("expected a %v key in data, got %v", path, gotMap)
+	}
+
+	want := []string{"a", "b"}
+	for i, v := range gotMap[path] {
+		if v != want[i] {
+			t.Fatalf("got\n%#v\nwant\n%#v", gotMap[path], want)
+		}
+	}
+}
+
+func TestIntegration_ArrayUnion_Update(t *testing.T) {
+	doc := integrationColl(t).NewDoc()
+	h := testHelper{t}
+	path := "somepath"
+
+	h.mustCreate(doc, map[string]interface{}{
+		path: []string{"a", "b"},
+	})
+	fpus := []Update{
+		{
+			Path:  path,
+			Value: ArrayUnion("this should be added"),
+		},
+	}
+	h.mustUpdate(doc, fpus)
+	ds := h.mustGet(doc)
+	var gotMap map[string][]string
+	err := ds.DataTo(&gotMap)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := gotMap[path]; !ok {
+		t.Fatalf("expected a %v key in data, got %v", path, gotMap)
+	}
+
+	want := []string{"a", "b", "this should be added"}
+	for i, v := range gotMap[path] {
+		if v != want[i] {
+			t.Fatalf("got\n%#v\nwant\n%#v", gotMap[path], want)
+		}
+	}
+}
+
+func TestIntegration_ArrayUnion_Set(t *testing.T) {
+	coll := integrationColl(t)
+	h := testHelper{t}
+	path := "somepath"
+
+	doc := coll.NewDoc()
+	newData := map[string]interface{}{
+		path: ArrayUnion("a", "b"),
+	}
+	h.mustSet(doc, newData)
+	ds := h.mustGet(doc)
+	var gotMap map[string][]string
+	if err := ds.DataTo(&gotMap); err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := gotMap[path]; !ok {
+		t.Fatalf("expected a %v key in data, got %v", path, gotMap)
+	}
+
+	want := []string{"a", "b"}
+	for i, v := range gotMap[path] {
+		if v != want[i] {
+			t.Fatalf("got\n%#v\nwant\n%#v", gotMap[path], want)
+		}
+	}
+}
+
+func TestIntegration_ArrayRemove_Create(t *testing.T) {
+	doc := integrationColl(t).NewDoc()
+	h := testHelper{t}
+	path := "somepath"
+
+	h.mustCreate(doc, map[string]interface{}{
+		path: ArrayRemove("a", "b"),
+	})
+
+	ds := h.mustGet(doc)
+	var gotMap map[string][]string
+	err := ds.DataTo(&gotMap)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := gotMap[path]; !ok {
+		t.Fatalf("expected a %v key in data, got %v", path, gotMap)
+	}
+
+	// A create with arrayRemove results in an empty array.
+	want := []string(nil)
+	if !testEqual(gotMap[path], want) {
+		t.Fatalf("got\n%#v\nwant\n%#v", gotMap[path], want)
+	}
+}
+
+func TestIntegration_ArrayRemove_Update(t *testing.T) {
+	doc := integrationColl(t).NewDoc()
+	h := testHelper{t}
+	path := "somepath"
+
+	h.mustCreate(doc, map[string]interface{}{
+		path: []string{"a", "this should be removed", "c"},
+	})
+	fpus := []Update{
+		{
+			Path:  path,
+			Value: ArrayRemove("this should be removed"),
+		},
+	}
+	h.mustUpdate(doc, fpus)
+	ds := h.mustGet(doc)
+	var gotMap map[string][]string
+	err := ds.DataTo(&gotMap)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := gotMap[path]; !ok {
+		t.Fatalf("expected a %v key in data, got %v", path, gotMap)
+	}
+
+	want := []string{"a", "c"}
+	for i, v := range gotMap[path] {
+		if v != want[i] {
+			t.Fatalf("got\n%#v\nwant\n%#v", gotMap[path], want)
+		}
+	}
+}
+
+func TestIntegration_ArrayRemove_Set(t *testing.T) {
+	coll := integrationColl(t)
+	h := testHelper{t}
+	path := "somepath"
+
+	doc := coll.NewDoc()
+	newData := map[string]interface{}{
+		path: ArrayRemove("a", "b"),
+	}
+	h.mustSet(doc, newData)
+	ds := h.mustGet(doc)
+	var gotMap map[string][]string
+	if err := ds.DataTo(&gotMap); err != nil {
+		t.Fatal(err)
+	}
+	if _, ok := gotMap[path]; !ok {
+		t.Fatalf("expected a %v key in data, got %v", path, gotMap)
+	}
+
+	want := []string(nil)
+	if !testEqual(gotMap[path], want) {
+		t.Fatalf("got\n%#v\nwant\n%#v", gotMap[path], want)
+	}
+}
+
 type imap map[string]interface{}
 
 func TestIntegration_WatchQuery(t *testing.T) {
@@ -1088,6 +1230,76 @@ func TestIntegration_WatchQueryCancel(t *testing.T) {
 	codeEq(t, "after cancel", codes.Canceled, err)
 }
 
+func TestIntegration_MissingDocs(t *testing.T) {
+	ctx := context.Background()
+	h := testHelper{t}
+	client := integrationClient(t)
+	coll := client.Collection(collectionIDs.New())
+	dr1 := coll.NewDoc()
+	dr2 := coll.NewDoc()
+	dr3 := dr2.Collection("sub").NewDoc()
+	h.mustCreate(dr1, integrationTestMap)
+	defer h.mustDelete(dr1)
+	h.mustCreate(dr3, integrationTestMap)
+	defer h.mustDelete(dr3)
+
+	// dr1 is a document in coll. dr2 was never created, but there are documents in
+	// its sub-collections. It is "missing".
+	// The Collection.DocumentRefs method includes missing document refs.
+	want := []string{dr1.Path, dr2.Path}
+	drs, err := coll.DocumentRefs(ctx).GetAll()
+	if err != nil {
+		t.Fatal(err)
+	}
+	var got []string
+	for _, dr := range drs {
+		got = append(got, dr.Path)
+	}
+	sort.Strings(want)
+	sort.Strings(got)
+	if !testutil.Equal(got, want) {
+		t.Errorf("got %v, want %v", got, want)
+	}
+}
+
+func TestIntegration_CollectionGroupQueries(t *testing.T) {
+	shouldBeFoundID := collectionIDs.New()
+	shouldNotBeFoundID := collectionIDs.New()
+
+	ctx := context.Background()
+	h := testHelper{t}
+	client := integrationClient(t)
+	cr1 := client.Collection(shouldBeFoundID)
+	dr1 := cr1.Doc("should-be-found-1")
+	h.mustCreate(dr1, map[string]string{"some-key": "should-be-found"})
+	defer h.mustDelete(dr1)
+
+	dr1.Collection(shouldBeFoundID)
+	dr2 := cr1.Doc("should-be-found-2")
+	h.mustCreate(dr2, map[string]string{"some-key": "should-be-found"})
+	defer h.mustDelete(dr2)
+
+	cr3 := client.Collection(shouldNotBeFoundID)
+	dr3 := cr3.Doc("should-not-be-found")
+	h.mustCreate(dr3, map[string]string{"some-key": "should-NOT-be-found"})
+	defer h.mustDelete(dr3)
+
+	cg := client.CollectionGroup(shouldBeFoundID)
+	snaps, err := cg.Documents(ctx).GetAll()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(snaps) != 2 {
+		t.Fatalf("expected 2 snapshots but got %d", len(snaps))
+	}
+	if snaps[0].Ref.ID != "should-be-found-1" {
+		t.Fatalf("expected ID 'should-be-found-1', got %s", snaps[0].Ref.ID)
+	}
+	if snaps[1].Ref.ID != "should-be-found-2" {
+		t.Fatalf("expected ID 'should-be-found-2', got %s", snaps[1].Ref.ID)
+	}
+}
+
 func codeEq(t *testing.T, msg string, code codes.Code, err error) {
 	if grpc.Code(err) != code {
 		t.Fatalf("%s:\ngot <%v>\nwant code %s", msg, err, code)
@@ -1154,4 +1366,36 @@ func (h testHelper) mustDelete(doc *DocumentRef) *WriteResult {
 		h.t.Fatalf("%s: updating: %v", loc(), err)
 	}
 	return wr
+}
+
+func (h testHelper) mustSet(doc *DocumentRef, data interface{}, opts ...SetOption) *WriteResult {
+	wr, err := doc.Set(context.Background(), data, opts...)
+	if err != nil {
+		h.t.Fatalf("%s: updating: %v", loc(), err)
+	}
+	return wr
+}
+
+func TestDetectProjectID(t *testing.T) {
+	if testing.Short() {
+		t.Skip("Integration tests skipped in short mode")
+	}
+	ctx := context.Background()
+
+	creds := testutil.Credentials(ctx)
+	if creds == nil {
+		t.Skip("Integration tests skipped. See CONTRIBUTING.md for details")
+	}
+
+	// Use creds with project ID.
+	if _, err := NewClient(ctx, DetectProjectID, option.WithCredentials(creds)); err != nil {
+		t.Errorf("NewClient: %v", err)
+	}
+
+	ts := testutil.ErroringTokenSource{}
+	// Try to use creds without project ID.
+	_, err := NewClient(ctx, DetectProjectID, option.WithTokenSource(ts))
+	if err == nil || err.Error() != "firestore: see the docs on DetectProjectID" {
+		t.Errorf("expected an error while using TokenSource that does not have a project ID")
+	}
 }

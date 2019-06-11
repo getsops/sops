@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewContainerClientWithBaseURI(baseURI string, subscriptionID string) Contai
 // containerName - the name of the container instance.
 // containerExecRequest - the request for the exec command.
 func (client ContainerClient) ExecuteCommand(ctx context.Context, resourceGroupName string, containerGroupName string, containerName string, containerExecRequest ContainerExecRequest) (result ContainerExecResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ContainerClient.ExecuteCommand")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ExecuteCommandPreparer(ctx, resourceGroupName, containerGroupName, containerName, containerExecRequest)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "containerinstance.ContainerClient", "ExecuteCommand", nil, "Failure preparing request")
@@ -120,6 +131,16 @@ func (client ContainerClient) ExecuteCommandResponder(resp *http.Response) (resu
 // tail - the number of lines to show from the tail of the container instance log. If not provided, all
 // available logs are shown up to 4mb.
 func (client ContainerClient) ListLogs(ctx context.Context, resourceGroupName string, containerGroupName string, containerName string, tail *int32) (result Logs, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ContainerClient.ListLogs")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListLogsPreparer(ctx, resourceGroupName, containerGroupName, containerName, tail)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "containerinstance.ContainerClient", "ListLogs", nil, "Failure preparing request")

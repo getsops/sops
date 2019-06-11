@@ -54,14 +54,12 @@ var exampleCustomizations = map[string]template.FuncMap{}
 
 var exampleTmpls = template.Must(template.New("example").Funcs(exampleFuncMap).Parse(`
 {{ generateTypes . }}
-{{ commentify (wrap .Title 80 false) }}
+{{ commentify (wrap .Title 80) }}
 //
-{{ commentify (wrap .Description 80 false) }}
+{{ commentify (wrap .Description 80) }}
 func Example{{ .API.StructName }}_{{ .MethodName }}() {
 	svc := {{ .API.PackageName }}.New(session.New())
-	input := &{{ .Operation.InputRef.Shape.GoTypeWithPkgNameElem  }} {
-		{{ generateExampleInput . -}}
-	}
+	input := {{ generateExampleInput . }}
 
 	result, err := svc.{{ .OperationName }}(input)
 	if err != nil {
@@ -130,7 +128,10 @@ func (ex Example) GoCode() string {
 
 func generateExampleInput(ex Example) string {
 	if ex.Operation.HasInput() {
-		return ex.Builder.BuildShape(&ex.Operation.InputRef, ex.Input, false)
+		return fmt.Sprintf("&%s{\n%s\n}",
+			ex.Builder.GoType(&ex.Operation.InputRef, true),
+			ex.Builder.BuildShape(&ex.Operation.InputRef, ex.Input, false),
+		)
 	}
 	return ""
 }

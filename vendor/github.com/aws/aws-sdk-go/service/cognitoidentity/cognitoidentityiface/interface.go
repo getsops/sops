@@ -108,6 +108,10 @@ type CognitoIdentityAPI interface {
 	ListIdentityPoolsWithContext(aws.Context, *cognitoidentity.ListIdentityPoolsInput, ...request.Option) (*cognitoidentity.ListIdentityPoolsOutput, error)
 	ListIdentityPoolsRequest(*cognitoidentity.ListIdentityPoolsInput) (*request.Request, *cognitoidentity.ListIdentityPoolsOutput)
 
+	ListTagsForResource(*cognitoidentity.ListTagsForResourceInput) (*cognitoidentity.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *cognitoidentity.ListTagsForResourceInput, ...request.Option) (*cognitoidentity.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*cognitoidentity.ListTagsForResourceInput) (*request.Request, *cognitoidentity.ListTagsForResourceOutput)
+
 	LookupDeveloperIdentity(*cognitoidentity.LookupDeveloperIdentityInput) (*cognitoidentity.LookupDeveloperIdentityOutput, error)
 	LookupDeveloperIdentityWithContext(aws.Context, *cognitoidentity.LookupDeveloperIdentityInput, ...request.Option) (*cognitoidentity.LookupDeveloperIdentityOutput, error)
 	LookupDeveloperIdentityRequest(*cognitoidentity.LookupDeveloperIdentityInput) (*request.Request, *cognitoidentity.LookupDeveloperIdentityOutput)
@@ -120,6 +124,10 @@ type CognitoIdentityAPI interface {
 	SetIdentityPoolRolesWithContext(aws.Context, *cognitoidentity.SetIdentityPoolRolesInput, ...request.Option) (*cognitoidentity.SetIdentityPoolRolesOutput, error)
 	SetIdentityPoolRolesRequest(*cognitoidentity.SetIdentityPoolRolesInput) (*request.Request, *cognitoidentity.SetIdentityPoolRolesOutput)
 
+	TagResource(*cognitoidentity.TagResourceInput) (*cognitoidentity.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *cognitoidentity.TagResourceInput, ...request.Option) (*cognitoidentity.TagResourceOutput, error)
+	TagResourceRequest(*cognitoidentity.TagResourceInput) (*request.Request, *cognitoidentity.TagResourceOutput)
+
 	UnlinkDeveloperIdentity(*cognitoidentity.UnlinkDeveloperIdentityInput) (*cognitoidentity.UnlinkDeveloperIdentityOutput, error)
 	UnlinkDeveloperIdentityWithContext(aws.Context, *cognitoidentity.UnlinkDeveloperIdentityInput, ...request.Option) (*cognitoidentity.UnlinkDeveloperIdentityOutput, error)
 	UnlinkDeveloperIdentityRequest(*cognitoidentity.UnlinkDeveloperIdentityInput) (*request.Request, *cognitoidentity.UnlinkDeveloperIdentityOutput)
@@ -127,6 +135,10 @@ type CognitoIdentityAPI interface {
 	UnlinkIdentity(*cognitoidentity.UnlinkIdentityInput) (*cognitoidentity.UnlinkIdentityOutput, error)
 	UnlinkIdentityWithContext(aws.Context, *cognitoidentity.UnlinkIdentityInput, ...request.Option) (*cognitoidentity.UnlinkIdentityOutput, error)
 	UnlinkIdentityRequest(*cognitoidentity.UnlinkIdentityInput) (*request.Request, *cognitoidentity.UnlinkIdentityOutput)
+
+	UntagResource(*cognitoidentity.UntagResourceInput) (*cognitoidentity.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *cognitoidentity.UntagResourceInput, ...request.Option) (*cognitoidentity.UntagResourceOutput, error)
+	UntagResourceRequest(*cognitoidentity.UntagResourceInput) (*request.Request, *cognitoidentity.UntagResourceOutput)
 
 	UpdateIdentityPool(*cognitoidentity.IdentityPool) (*cognitoidentity.IdentityPool, error)
 	UpdateIdentityPoolWithContext(aws.Context, *cognitoidentity.IdentityPool, ...request.Option) (*cognitoidentity.IdentityPool, error)

@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -45,6 +46,16 @@ func NewMachinesClientWithBaseURI(baseURI string, subscriptionID string, acceptL
 // projectName - name of the Azure Migrate project.
 // machineName - unique name of a machine in private datacenter.
 func (client MachinesClient) Get(ctx context.Context, resourceGroupName string, projectName string, machineName string) (result Machine, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MachinesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, projectName, machineName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "migrate.MachinesClient", "Get", nil, "Failure preparing request")
@@ -118,6 +129,16 @@ func (client MachinesClient) GetResponder(resp *http.Response) (result Machine, 
 // resourceGroupName - name of the Azure Resource Group that project is part of.
 // projectName - name of the Azure Migrate project.
 func (client MachinesClient) ListByProject(ctx context.Context, resourceGroupName string, projectName string) (result MachineResultList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/MachinesClient.ListByProject")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByProjectPreparer(ctx, resourceGroupName, projectName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "migrate.MachinesClient", "ListByProject", nil, "Failure preparing request")

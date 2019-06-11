@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -50,6 +51,16 @@ func NewBackupLongTermRetentionVaultsClientWithBaseURI(baseURI string, subscript
 // serverName - the name of the server.
 // parameters - the required parameters to update a backup long term retention vault
 func (client BackupLongTermRetentionVaultsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, parameters BackupLongTermRetentionVault) (result BackupLongTermRetentionVaultsCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BackupLongTermRetentionVaultsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.BackupLongTermRetentionVaultProperties", Name: validation.Null, Rule: false,
@@ -86,6 +97,7 @@ func (client BackupLongTermRetentionVaultsClient) CreateOrUpdatePreparer(ctx con
 		"api-version": APIVersion,
 	}
 
+	parameters.Location = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
@@ -102,10 +114,6 @@ func (client BackupLongTermRetentionVaultsClient) CreateOrUpdateSender(req *http
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
 	if err != nil {
 		return
 	}
@@ -132,6 +140,16 @@ func (client BackupLongTermRetentionVaultsClient) CreateOrUpdateResponder(resp *
 // from the Azure Resource Manager API or the portal.
 // serverName - the name of the server.
 func (client BackupLongTermRetentionVaultsClient) Get(ctx context.Context, resourceGroupName string, serverName string) (result BackupLongTermRetentionVault, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BackupLongTermRetentionVaultsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.BackupLongTermRetentionVaultsClient", "Get", nil, "Failure preparing request")
@@ -201,6 +219,16 @@ func (client BackupLongTermRetentionVaultsClient) GetResponder(resp *http.Respon
 // from the Azure Resource Manager API or the portal.
 // serverName - the name of the server.
 func (client BackupLongTermRetentionVaultsClient) ListByServer(ctx context.Context, resourceGroupName string, serverName string) (result BackupLongTermRetentionVaultListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BackupLongTermRetentionVaultsClient.ListByServer")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListByServerPreparer(ctx, resourceGroupName, serverName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.BackupLongTermRetentionVaultsClient", "ListByServer", nil, "Failure preparing request")

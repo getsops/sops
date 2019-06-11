@@ -19,17 +19,23 @@
     "GetRepositoryPolicy": "<p>Retrieves the repository policy for a specified repository.</p>",
     "InitiateLayerUpload": "<p>Notify Amazon ECR that you intend to upload an image layer.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>",
     "ListImages": "<p>Lists all the image IDs for a given repository.</p> <p>You can filter images based on whether or not they are tagged by setting the <code>tagStatus</code> parameter to <code>TAGGED</code> or <code>UNTAGGED</code>. For example, you can filter your results to return only <code>UNTAGGED</code> images and then pipe that result to a <a>BatchDeleteImage</a> operation to delete them. Or, you can filter your results to return only <code>TAGGED</code> images to list all of the tags in your repository.</p>",
+    "ListTagsForResource": "<p>List the tags for an Amazon ECR resource.</p>",
     "PutImage": "<p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>",
     "PutLifecyclePolicy": "<p>Creates or updates a lifecycle policy. For information about lifecycle policy syntax, see <a href=\"http://docs.aws.amazon.com/AmazonECR/latest/userguide/LifecyclePolicies.html\">Lifecycle Policy Template</a>.</p>",
     "SetRepositoryPolicy": "<p>Applies a repository policy on a specified repository to control access permissions.</p>",
     "StartLifecyclePolicyPreview": "<p>Starts a preview of the specified lifecycle policy. This allows you to see the results before creating the lifecycle policy.</p>",
+    "TagResource": "<p>Adds specified tags to a resource with the specified ARN. Existing tags on a resource are not changed if they are not specified in the request parameters.</p>",
+    "UntagResource": "<p>Deletes specified tags from a resource.</p>",
     "UploadLayerPart": "<p>Uploads an image layer part to Amazon ECR.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"
   },
   "shapes": {
     "Arn": {
       "base": null,
       "refs": {
-        "Repository$repositoryArn": "<p>The Amazon Resource Name (ARN) that identifies the repository. The ARN contains the <code>arn:aws:ecr</code> namespace, followed by the region of the repository, AWS account ID of the repository owner, repository namespace, and repository name. For example, <code>arn:aws:ecr:region:012345678910:repository/test</code>.</p>"
+        "ListTagsForResourceRequest$resourceArn": "<p>The Amazon Resource Name (ARN) that identifies the resource for which to list the tags. Currently, the only supported resource is an Amazon ECR repository.</p>",
+        "Repository$repositoryArn": "<p>The Amazon Resource Name (ARN) that identifies the repository. The ARN contains the <code>arn:aws:ecr</code> namespace, followed by the region of the repository, AWS account ID of the repository owner, repository namespace, and repository name. For example, <code>arn:aws:ecr:region:012345678910:repository/test</code>.</p>",
+        "TagResourceRequest$resourceArn": "<p>The Amazon Resource Name (ARN) of the the resource to which to add tags. Currently, the only supported resource is an Amazon ECR repository.</p>",
+        "UntagResourceRequest$resourceArn": "<p>The Amazon Resource Name (ARN) of the resource from which to remove tags. Currently, the only supported resource is an Amazon ECR repository.</p>"
       }
     },
     "AuthorizationData": {
@@ -196,6 +202,7 @@
         "InvalidLayerException$message": "<p>The error message associated with the exception.</p>",
         "InvalidLayerPartException$message": "<p>The error message associated with the exception.</p>",
         "InvalidParameterException$message": "<p>The error message associated with the exception.</p>",
+        "InvalidTagParameterException$message": null,
         "LayerAlreadyExistsException$message": "<p>The error message associated with the exception.</p>",
         "LayerInaccessibleException$message": "<p>The error message associated with the exception.</p>",
         "LayerPartTooSmallException$message": "<p>The error message associated with the exception.</p>",
@@ -209,6 +216,7 @@
         "RepositoryNotFoundException$message": "<p>The error message associated with the exception.</p>",
         "RepositoryPolicyNotFoundException$message": "<p>The error message associated with the exception.</p>",
         "ServerException$message": "<p>The error message associated with the exception.</p>",
+        "TooManyTagsException$message": null,
         "UploadNotFoundException$message": "<p>The error message associated with the exception.</p>"
       }
     },
@@ -433,6 +441,11 @@
       "refs": {
       }
     },
+    "InvalidTagParameterException": {
+      "base": "<p>An invalid parameter has been specified. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>",
+      "refs": {
+      }
+    },
     "Layer": {
       "base": "<p>An object representing an Amazon ECR image layer.</p>",
       "refs": {
@@ -593,6 +606,12 @@
         "StartLifecyclePolicyPreviewResponse$lifecyclePolicyText": "<p>The JSON repository policy text.</p>"
       }
     },
+    "LifecyclePreviewMaxResults": {
+      "base": null,
+      "refs": {
+        "GetLifecyclePolicyPreviewRequest$maxResults": "<p>The maximum number of repository results returned by <code>GetLifecyclePolicyPreviewRequest</code> in&#x2028; paginated output. When this parameter is used, <code>GetLifecyclePolicyPreviewRequest</code> only returns&#x2028; <code>maxResults</code> results in a single page along with a <code>nextToken</code>&#x2028; response element. The remaining results of the initial request can be seen by sending&#x2028; another <code>GetLifecyclePolicyPreviewRequest</code> request with the returned <code>nextToken</code>&#x2028; value. This value can be between 1 and 1000. If this&#x2028; parameter is not used, then <code>GetLifecyclePolicyPreviewRequest</code> returns up to&#x2028; 100 results and a <code>nextToken</code> value, if&#x2028; applicable. This option cannot be used when you specify images with <code>imageIds</code>.</p>"
+      }
+    },
     "LimitExceededException": {
       "base": "<p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href=\"http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html\">Amazon ECR Default Service Limits</a> in the Amazon Elastic Container Registry User Guide.</p>",
       "refs": {
@@ -614,13 +633,22 @@
       "refs": {
       }
     },
+    "ListTagsForResourceRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListTagsForResourceResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "MaxResults": {
       "base": null,
       "refs": {
-        "DescribeImagesRequest$maxResults": "<p>The maximum number of repository results returned by <code>DescribeImages</code> in paginated output. When this parameter is used, <code>DescribeImages</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeImages</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>DescribeImages</code> returns up to 100 results and a <code>nextToken</code> value, if applicable. This option cannot be used when you specify images with <code>imageIds</code>.</p>",
-        "DescribeRepositoriesRequest$maxResults": "<p>The maximum number of repository results returned by <code>DescribeRepositories</code> in paginated output. When this parameter is used, <code>DescribeRepositories</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeRepositories</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>DescribeRepositories</code> returns up to 100 results and a <code>nextToken</code> value, if applicable. This option cannot be used when you specify repositories with <code>repositoryNames</code>.</p>",
-        "GetLifecyclePolicyPreviewRequest$maxResults": "<p>The maximum number of repository results returned by <code>GetLifecyclePolicyPreviewRequest</code> in&#x2028; paginated output. When this parameter is used, <code>GetLifecyclePolicyPreviewRequest</code> only returns&#x2028; <code>maxResults</code> results in a single page along with a <code>nextToken</code>&#x2028; response element. The remaining results of the initial request can be seen by sending&#x2028; another <code>GetLifecyclePolicyPreviewRequest</code> request with the returned <code>nextToken</code>&#x2028; value. This value can be between 1 and 100. If this&#x2028; parameter is not used, then <code>GetLifecyclePolicyPreviewRequest</code> returns up to&#x2028; 100 results and a <code>nextToken</code> value, if&#x2028; applicable. This option cannot be used when you specify images with <code>imageIds</code>.</p>",
-        "ListImagesRequest$maxResults": "<p>The maximum number of image results returned by <code>ListImages</code> in paginated output. When this parameter is used, <code>ListImages</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListImages</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListImages</code> returns up to 100 results and a <code>nextToken</code> value, if applicable.</p>"
+        "DescribeImagesRequest$maxResults": "<p>The maximum number of repository results returned by <code>DescribeImages</code> in paginated output. When this parameter is used, <code>DescribeImages</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeImages</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 1000. If this parameter is not used, then <code>DescribeImages</code> returns up to 100 results and a <code>nextToken</code> value, if applicable. This option cannot be used when you specify images with <code>imageIds</code>.</p>",
+        "DescribeRepositoriesRequest$maxResults": "<p>The maximum number of repository results returned by <code>DescribeRepositories</code> in paginated output. When this parameter is used, <code>DescribeRepositories</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeRepositories</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 1000. If this parameter is not used, then <code>DescribeRepositories</code> returns up to 100 results and a <code>nextToken</code> value, if applicable. This option cannot be used when you specify repositories with <code>repositoryNames</code>.</p>",
+        "ListImagesRequest$maxResults": "<p>The maximum number of image results returned by <code>ListImages</code> in paginated output. When this parameter is used, <code>ListImages</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListImages</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 1000. If this parameter is not used, then <code>ListImages</code> returns up to 100 results and a <code>nextToken</code> value, if applicable.</p>"
       }
     },
     "MediaType": {
@@ -765,7 +793,7 @@
         "DeleteRepositoryPolicyRequest$repositoryName": "<p>The name of the repository that is associated with the repository policy to delete.</p>",
         "DeleteRepositoryPolicyResponse$repositoryName": "<p>The repository name associated with the request.</p>",
         "DeleteRepositoryRequest$repositoryName": "<p>The name of the repository to delete.</p>",
-        "DescribeImagesRequest$repositoryName": "<p>A list of repositories to describe. If this parameter is omitted, then all repositories in a registry are described.</p>",
+        "DescribeImagesRequest$repositoryName": "<p>A list of repositories to describe.</p>",
         "GetDownloadUrlForLayerRequest$repositoryName": "<p>The name of the repository that is associated with the image layer to download.</p>",
         "GetLifecyclePolicyPreviewRequest$repositoryName": "<p>The name of the repository.</p>",
         "GetLifecyclePolicyPreviewResponse$repositoryName": "<p>The repository name associated with the request.</p>",
@@ -846,12 +874,70 @@
       "refs": {
       }
     },
+    "Tag": {
+      "base": "<p>The metadata that you apply to a resource to help you categorize and organize them. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>",
+      "refs": {
+        "TagList$member": null
+      }
+    },
+    "TagKey": {
+      "base": null,
+      "refs": {
+        "Tag$Key": "<p>One part of a key-value pair that make up a tag. A <code>key</code> is a general label that acts like a category for more specific tag values.</p>",
+        "TagKeyList$member": null
+      }
+    },
+    "TagKeyList": {
+      "base": null,
+      "refs": {
+        "UntagResourceRequest$tagKeys": "<p>The keys of the tags to be removed.</p>"
+      }
+    },
+    "TagList": {
+      "base": null,
+      "refs": {
+        "CreateRepositoryRequest$tags": "<p/>",
+        "ListTagsForResourceResponse$tags": "<p>The tags for the resource.</p>",
+        "TagResourceRequest$tags": "<p>The tags to add to the resource. A tag is an array of key-value pairs. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>"
+      }
+    },
+    "TagResourceRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "TagResourceResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "TagStatus": {
       "base": null,
       "refs": {
         "DescribeImagesFilter$tagStatus": "<p>The tag status with which to filter your <a>DescribeImages</a> results. You can filter results based on whether they are <code>TAGGED</code> or <code>UNTAGGED</code>.</p>",
         "LifecyclePolicyPreviewFilter$tagStatus": "<p>The tag status of the image.</p>",
         "ListImagesFilter$tagStatus": "<p>The tag status with which to filter your <a>ListImages</a> results. You can filter results based on whether they are <code>TAGGED</code> or <code>UNTAGGED</code>.</p>"
+      }
+    },
+    "TagValue": {
+      "base": null,
+      "refs": {
+        "Tag$Value": "<p>The optional part of a key-value pair that make up a tag. A <code>value</code> acts as a descriptor within a tag category (key).</p>"
+      }
+    },
+    "TooManyTagsException": {
+      "base": "<p>The list of tags on the repository is over the limit. The maximum number of tags that can be applied to a repository is 50.</p>",
+      "refs": {
+      }
+    },
+    "UntagResourceRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UntagResourceResponse": {
+      "base": null,
+      "refs": {
       }
     },
     "UploadId": {

@@ -1,5 +1,5 @@
 [default]
-s3 = 
+s3 =
   unsupported_key=123
   other_unsupported=abc
 

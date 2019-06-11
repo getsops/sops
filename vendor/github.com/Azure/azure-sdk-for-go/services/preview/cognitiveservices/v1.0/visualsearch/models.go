@@ -22,6 +22,9 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/cognitiveservices/v1.0/visualsearch"
+
 // Currency enumerates the values for currency.
 type Currency string
 
@@ -549,39 +552,39 @@ type BasicAction interface {
 
 // Action defines an action.
 type Action struct {
-	// Result - The result produced in the action.
+	// Result - READ-ONLY; The result produced in the action.
 	Result *[]BasicThing `json:"result,omitempty"`
-	// DisplayName - A display name for the action.
+	// DisplayName - READ-ONLY; A display name for the action.
 	DisplayName *string `json:"displayName,omitempty"`
-	// IsTopAction - A Boolean representing whether this result is the top action.
+	// IsTopAction - READ-ONLY; A Boolean representing whether this result is the top action.
 	IsTopAction *bool `json:"isTopAction,omitempty"`
-	// ServiceURL - Use this URL to get additional data to determine how to take the appropriate action. For example, the serviceUrl might return JSON along with an image URL.
+	// ServiceURL - READ-ONLY; Use this URL to get additional data to determine how to take the appropriate action. For example, the serviceUrl might return JSON along with an image URL.
 	ServiceURL *string `json:"serviceUrl,omitempty"`
-	// ThumbnailURL - The URL to a thumbnail of the item.
+	// ThumbnailURL - READ-ONLY; The URL to a thumbnail of the item.
 	ThumbnailURL *string `json:"thumbnailUrl,omitempty"`
-	// Provider - The source of the creative work.
+	// Provider - READ-ONLY; The source of the creative work.
 	Provider *[]BasicThing `json:"provider,omitempty"`
-	// DatePublished - The date on which the CreativeWork was published.
+	// DatePublished - READ-ONLY; The date on which the CreativeWork was published.
 	DatePublished *string `json:"datePublished,omitempty"`
-	// Text - Text content of this creative work.
+	// Text - READ-ONLY; Text content of this creative work.
 	Text *string `json:"text,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Image - An image of the item.
+	// Image - READ-ONLY; An image of the item.
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// AlternateName - An alias for the item.
+	// AlternateName - READ-ONLY; An alias for the item.
 	AlternateName *string `json:"alternateName,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -648,57 +651,6 @@ func unmarshalBasicActionArray(body []byte) ([]BasicAction, error) {
 func (a Action) MarshalJSON() ([]byte, error) {
 	a.Type = TypeAction
 	objectMap := make(map[string]interface{})
-	if a.Result != nil {
-		objectMap["result"] = a.Result
-	}
-	if a.DisplayName != nil {
-		objectMap["displayName"] = a.DisplayName
-	}
-	if a.IsTopAction != nil {
-		objectMap["isTopAction"] = a.IsTopAction
-	}
-	if a.ServiceURL != nil {
-		objectMap["serviceUrl"] = a.ServiceURL
-	}
-	if a.ThumbnailURL != nil {
-		objectMap["thumbnailUrl"] = a.ThumbnailURL
-	}
-	if a.Provider != nil {
-		objectMap["provider"] = a.Provider
-	}
-	if a.DatePublished != nil {
-		objectMap["datePublished"] = a.DatePublished
-	}
-	if a.Text != nil {
-		objectMap["text"] = a.Text
-	}
-	if a.Name != nil {
-		objectMap["name"] = a.Name
-	}
-	if a.URL != nil {
-		objectMap["url"] = a.URL
-	}
-	if a.Image != nil {
-		objectMap["image"] = a.Image
-	}
-	if a.Description != nil {
-		objectMap["description"] = a.Description
-	}
-	if a.AlternateName != nil {
-		objectMap["alternateName"] = a.AlternateName
-	}
-	if a.BingID != nil {
-		objectMap["bingId"] = a.BingID
-	}
-	if a.ReadLink != nil {
-		objectMap["readLink"] = a.ReadLink
-	}
-	if a.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = a.WebSearchURL
-	}
-	if a.ID != nil {
-		objectMap["id"] = a.ID
-	}
 	if a.Type != "" {
 		objectMap["_type"] = a.Type
 	}
@@ -1067,37 +1019,37 @@ func (a *Action) UnmarshalJSON(body []byte) error {
 
 // AggregateOffer defines a list of offers from merchants that are related to the image.
 type AggregateOffer struct {
-	// Offers - A list of offers from merchants that have offerings related to the image.
+	// Offers - READ-ONLY; A list of offers from merchants that have offerings related to the image.
 	Offers *[]BasicOffer `json:"offers,omitempty"`
-	// Seller - Seller for this offer.
+	// Seller - READ-ONLY; Seller for this offer.
 	Seller *Organization `json:"seller,omitempty"`
-	// Price - The item's price.
+	// Price - READ-ONLY; The item's price.
 	Price *float64 `json:"price,omitempty"`
-	// PriceCurrency - The monetary currency. For example, USD. Possible values include: 'USD', 'CAD', 'GBP', 'EUR', 'COP', 'JPY', 'CNY', 'AUD', 'INR', 'AED', 'AFN', 'ALL', 'AMD', 'ANG', 'AOA', 'ARS', 'AWG', 'AZN', 'BAM', 'BBD', 'BDT', 'BGN', 'BHD', 'BIF', 'BMD', 'BND', 'BOB', 'BOV', 'BRL', 'BSD', 'BTN', 'BWP', 'BYR', 'BZD', 'CDF', 'CHE', 'CHF', 'CHW', 'CLF', 'CLP', 'COU', 'CRC', 'CUC', 'CUP', 'CVE', 'CZK', 'DJF', 'DKK', 'DOP', 'DZD', 'EGP', 'ERN', 'ETB', 'FJD', 'FKP', 'GEL', 'GHS', 'GIP', 'GMD', 'GNF', 'GTQ', 'GYD', 'HKD', 'HNL', 'HRK', 'HTG', 'HUF', 'IDR', 'ILS', 'IQD', 'IRR', 'ISK', 'JMD', 'JOD', 'KES', 'KGS', 'KHR', 'KMF', 'KPW', 'KRW', 'KWD', 'KYD', 'KZT', 'LAK', 'LBP', 'LKR', 'LRD', 'LSL', 'LYD', 'MAD', 'MDL', 'MGA', 'MKD', 'MMK', 'MNT', 'MOP', 'MRO', 'MUR', 'MVR', 'MWK', 'MXN', 'MXV', 'MYR', 'MZN', 'NAD', 'NGN', 'NIO', 'NOK', 'NPR', 'NZD', 'OMR', 'PAB', 'PEN', 'PGK', 'PHP', 'PKR', 'PLN', 'PYG', 'QAR', 'RON', 'RSD', 'RUB', 'RWF', 'SAR', 'SBD', 'SCR', 'SDG', 'SEK', 'SGD', 'SHP', 'SLL', 'SOS', 'SRD', 'SSP', 'STD', 'SYP', 'SZL', 'THB', 'TJS', 'TMT', 'TND', 'TOP', 'TRY', 'TTD', 'TWD', 'TZS', 'UAH', 'UGX', 'UYU', 'UZS', 'VEF', 'VND', 'VUV', 'WST', 'XAF', 'XCD', 'XOF', 'XPF', 'YER', 'ZAR', 'ZMW'
+	// PriceCurrency - READ-ONLY; The monetary currency. For example, USD. Possible values include: 'USD', 'CAD', 'GBP', 'EUR', 'COP', 'JPY', 'CNY', 'AUD', 'INR', 'AED', 'AFN', 'ALL', 'AMD', 'ANG', 'AOA', 'ARS', 'AWG', 'AZN', 'BAM', 'BBD', 'BDT', 'BGN', 'BHD', 'BIF', 'BMD', 'BND', 'BOB', 'BOV', 'BRL', 'BSD', 'BTN', 'BWP', 'BYR', 'BZD', 'CDF', 'CHE', 'CHF', 'CHW', 'CLF', 'CLP', 'COU', 'CRC', 'CUC', 'CUP', 'CVE', 'CZK', 'DJF', 'DKK', 'DOP', 'DZD', 'EGP', 'ERN', 'ETB', 'FJD', 'FKP', 'GEL', 'GHS', 'GIP', 'GMD', 'GNF', 'GTQ', 'GYD', 'HKD', 'HNL', 'HRK', 'HTG', 'HUF', 'IDR', 'ILS', 'IQD', 'IRR', 'ISK', 'JMD', 'JOD', 'KES', 'KGS', 'KHR', 'KMF', 'KPW', 'KRW', 'KWD', 'KYD', 'KZT', 'LAK', 'LBP', 'LKR', 'LRD', 'LSL', 'LYD', 'MAD', 'MDL', 'MGA', 'MKD', 'MMK', 'MNT', 'MOP', 'MRO', 'MUR', 'MVR', 'MWK', 'MXN', 'MXV', 'MYR', 'MZN', 'NAD', 'NGN', 'NIO', 'NOK', 'NPR', 'NZD', 'OMR', 'PAB', 'PEN', 'PGK', 'PHP', 'PKR', 'PLN', 'PYG', 'QAR', 'RON', 'RSD', 'RUB', 'RWF', 'SAR', 'SBD', 'SCR', 'SDG', 'SEK', 'SGD', 'SHP', 'SLL', 'SOS', 'SRD', 'SSP', 'STD', 'SYP', 'SZL', 'THB', 'TJS', 'TMT', 'TND', 'TOP', 'TRY', 'TTD', 'TWD', 'TZS', 'UAH', 'UGX', 'UYU', 'UZS', 'VEF', 'VND', 'VUV', 'WST', 'XAF', 'XCD', 'XOF', 'XPF', 'YER', 'ZAR', 'ZMW'
 	PriceCurrency Currency `json:"priceCurrency,omitempty"`
-	// Availability - The item's availability. The following are the possible values: Discontinued, InStock, InStoreOnly, LimitedAvailability, OnlineOnly, OutOfStock, PreOrder, SoldOut. Possible values include: 'Discontinued', 'InStock', 'InStoreOnly', 'LimitedAvailability', 'OnlineOnly', 'OutOfStock', 'PreOrder', 'SoldOut'
+	// Availability - READ-ONLY; The item's availability. The following are the possible values: Discontinued, InStock, InStoreOnly, LimitedAvailability, OnlineOnly, OutOfStock, PreOrder, SoldOut. Possible values include: 'Discontinued', 'InStock', 'InStoreOnly', 'LimitedAvailability', 'OnlineOnly', 'OutOfStock', 'PreOrder', 'SoldOut'
 	Availability ItemAvailability `json:"availability,omitempty"`
-	// AggregateRating - An aggregated rating that indicates how well the product has been rated by others.
+	// AggregateRating - READ-ONLY; An aggregated rating that indicates how well the product has been rated by others.
 	AggregateRating *AggregateRating `json:"aggregateRating,omitempty"`
-	// LastUpdated - The last date that the offer was updated. The date is in the form YYYY-MM-DD.
+	// LastUpdated - READ-ONLY; The last date that the offer was updated. The date is in the form YYYY-MM-DD.
 	LastUpdated *string `json:"lastUpdated,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Image - An image of the item.
+	// Image - READ-ONLY; An image of the item.
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// AlternateName - An alias for the item.
+	// AlternateName - READ-ONLY; An alias for the item.
 	AlternateName *string `json:"alternateName,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -1107,54 +1059,6 @@ type AggregateOffer struct {
 func (ao AggregateOffer) MarshalJSON() ([]byte, error) {
 	ao.Type = TypeAggregateOffer
 	objectMap := make(map[string]interface{})
-	if ao.Offers != nil {
-		objectMap["offers"] = ao.Offers
-	}
-	if ao.Seller != nil {
-		objectMap["seller"] = ao.Seller
-	}
-	if ao.Price != nil {
-		objectMap["price"] = ao.Price
-	}
-	if ao.PriceCurrency != "" {
-		objectMap["priceCurrency"] = ao.PriceCurrency
-	}
-	if ao.Availability != "" {
-		objectMap["availability"] = ao.Availability
-	}
-	if ao.AggregateRating != nil {
-		objectMap["aggregateRating"] = ao.AggregateRating
-	}
-	if ao.LastUpdated != nil {
-		objectMap["lastUpdated"] = ao.LastUpdated
-	}
-	if ao.Name != nil {
-		objectMap["name"] = ao.Name
-	}
-	if ao.URL != nil {
-		objectMap["url"] = ao.URL
-	}
-	if ao.Image != nil {
-		objectMap["image"] = ao.Image
-	}
-	if ao.Description != nil {
-		objectMap["description"] = ao.Description
-	}
-	if ao.AlternateName != nil {
-		objectMap["alternateName"] = ao.AlternateName
-	}
-	if ao.BingID != nil {
-		objectMap["bingId"] = ao.BingID
-	}
-	if ao.ReadLink != nil {
-		objectMap["readLink"] = ao.ReadLink
-	}
-	if ao.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = ao.WebSearchURL
-	}
-	if ao.ID != nil {
-		objectMap["id"] = ao.ID
-	}
 	if ao.Type != "" {
 		objectMap["_type"] = ao.Type
 	}
@@ -1515,13 +1419,13 @@ func (ao *AggregateOffer) UnmarshalJSON(body []byte) error {
 
 // AggregateRating defines the metrics that indicate how well an item was rated by others.
 type AggregateRating struct {
-	// ReviewCount - The number of times the recipe has been rated or reviewed.
+	// ReviewCount - READ-ONLY; The number of times the recipe has been rated or reviewed.
 	ReviewCount *int32 `json:"reviewCount,omitempty"`
 	// RatingValue - The mean (average) rating. The possible values are 1.0 through 5.0.
 	RatingValue *float64 `json:"ratingValue,omitempty"`
-	// BestRating - The highest rated review. The possible values are 1.0 through 5.0.
+	// BestRating - READ-ONLY; The highest rated review. The possible values are 1.0 through 5.0.
 	BestRating *float64 `json:"bestRating,omitempty"`
-	// Text - Text representation of an item.
+	// Text - READ-ONLY; Text representation of an item.
 	Text *string `json:"text,omitempty"`
 	// Type - Possible values include: 'TypePropertiesItem', 'TypeAggregateRating', 'TypeRating'
 	Type TypeBasicPropertiesItem `json:"_type,omitempty"`
@@ -1531,17 +1435,8 @@ type AggregateRating struct {
 func (ar AggregateRating) MarshalJSON() ([]byte, error) {
 	ar.Type = TypeAggregateRating
 	objectMap := make(map[string]interface{})
-	if ar.ReviewCount != nil {
-		objectMap["reviewCount"] = ar.ReviewCount
-	}
 	if ar.RatingValue != nil {
 		objectMap["ratingValue"] = ar.RatingValue
-	}
-	if ar.BestRating != nil {
-		objectMap["bestRating"] = ar.BestRating
-	}
-	if ar.Text != nil {
-		objectMap["text"] = ar.Text
 	}
 	if ar.Type != "" {
 		objectMap["_type"] = ar.Type
@@ -1593,34 +1488,34 @@ type BasicCreativeWork interface {
 	AsCreativeWork() (*CreativeWork, bool)
 }
 
-// CreativeWork the most generic kind of creative work, including books, movies, photographs, software programs,
-// etc.
+// CreativeWork the most generic kind of creative work, including books, movies, photographs, software
+// programs, etc.
 type CreativeWork struct {
-	// ThumbnailURL - The URL to a thumbnail of the item.
+	// ThumbnailURL - READ-ONLY; The URL to a thumbnail of the item.
 	ThumbnailURL *string `json:"thumbnailUrl,omitempty"`
-	// Provider - The source of the creative work.
+	// Provider - READ-ONLY; The source of the creative work.
 	Provider *[]BasicThing `json:"provider,omitempty"`
-	// DatePublished - The date on which the CreativeWork was published.
+	// DatePublished - READ-ONLY; The date on which the CreativeWork was published.
 	DatePublished *string `json:"datePublished,omitempty"`
-	// Text - Text content of this creative work.
+	// Text - READ-ONLY; Text content of this creative work.
 	Text *string `json:"text,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Image - An image of the item.
+	// Image - READ-ONLY; An image of the item.
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// AlternateName - An alias for the item.
+	// AlternateName - READ-ONLY; An alias for the item.
 	AlternateName *string `json:"alternateName,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -1703,45 +1598,6 @@ func unmarshalBasicCreativeWorkArray(body []byte) ([]BasicCreativeWork, error) {
 func (cw CreativeWork) MarshalJSON() ([]byte, error) {
 	cw.Type = TypeCreativeWork
 	objectMap := make(map[string]interface{})
-	if cw.ThumbnailURL != nil {
-		objectMap["thumbnailUrl"] = cw.ThumbnailURL
-	}
-	if cw.Provider != nil {
-		objectMap["provider"] = cw.Provider
-	}
-	if cw.DatePublished != nil {
-		objectMap["datePublished"] = cw.DatePublished
-	}
-	if cw.Text != nil {
-		objectMap["text"] = cw.Text
-	}
-	if cw.Name != nil {
-		objectMap["name"] = cw.Name
-	}
-	if cw.URL != nil {
-		objectMap["url"] = cw.URL
-	}
-	if cw.Image != nil {
-		objectMap["image"] = cw.Image
-	}
-	if cw.Description != nil {
-		objectMap["description"] = cw.Description
-	}
-	if cw.AlternateName != nil {
-		objectMap["alternateName"] = cw.AlternateName
-	}
-	if cw.BingID != nil {
-		objectMap["bingId"] = cw.BingID
-	}
-	if cw.ReadLink != nil {
-		objectMap["readLink"] = cw.ReadLink
-	}
-	if cw.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = cw.WebSearchURL
-	}
-	if cw.ID != nil {
-		objectMap["id"] = cw.ID
-	}
 	if cw.Type != "" {
 		objectMap["_type"] = cw.Type
 	}
@@ -2073,8 +1929,8 @@ func (cw *CreativeWork) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// CropArea a JSON object consisting of coordinates specifying the four corners of a cropped rectangle within the
-// input image.
+// CropArea a JSON object consisting of coordinates specifying the four corners of a cropped rectangle
+// within the input image.
 type CropArea struct {
 	// Top - The top coordinate of the region to be cropped. The coordinate is a fractional value of the original image's height and is measured from the top edge of the image. Specify the coordinate as a value from 0.0 through 1.0.
 	Top *float64 `json:"top,omitempty"`
@@ -2090,15 +1946,15 @@ type CropArea struct {
 type Error struct {
 	// Code - The error code that identifies the category of error. Possible values include: 'None', 'ServerError', 'InvalidRequest', 'RateLimitExceeded', 'InvalidAuthorization', 'InsufficientAuthorization'
 	Code ErrorCode `json:"code,omitempty"`
-	// SubCode - The error code that further helps to identify the error. Possible values include: 'UnexpectedError', 'ResourceError', 'NotImplemented', 'ParameterMissing', 'ParameterInvalidValue', 'HTTPNotAllowed', 'Blocked', 'AuthorizationMissing', 'AuthorizationRedundancy', 'AuthorizationDisabled', 'AuthorizationExpired'
+	// SubCode - READ-ONLY; The error code that further helps to identify the error. Possible values include: 'UnexpectedError', 'ResourceError', 'NotImplemented', 'ParameterMissing', 'ParameterInvalidValue', 'HTTPNotAllowed', 'Blocked', 'AuthorizationMissing', 'AuthorizationRedundancy', 'AuthorizationDisabled', 'AuthorizationExpired'
 	SubCode ErrorSubCode `json:"subCode,omitempty"`
 	// Message - A description of the error.
 	Message *string `json:"message,omitempty"`
-	// MoreDetails - A description that provides additional information about the error.
+	// MoreDetails - READ-ONLY; A description that provides additional information about the error.
 	MoreDetails *string `json:"moreDetails,omitempty"`
-	// Parameter - The parameter in the request that caused the error.
+	// Parameter - READ-ONLY; The parameter in the request that caused the error.
 	Parameter *string `json:"parameter,omitempty"`
-	// Value - The parameter's value in the request that was not valid.
+	// Value - READ-ONLY; The parameter's value in the request that was not valid.
 	Value *string `json:"value,omitempty"`
 }
 
@@ -2106,11 +1962,11 @@ type Error struct {
 type ErrorResponse struct {
 	// Errors - A list of errors that describe the reasons why the request failed.
 	Errors *[]Error `json:"errors,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -2122,15 +1978,6 @@ func (er ErrorResponse) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if er.Errors != nil {
 		objectMap["errors"] = er.Errors
-	}
-	if er.ReadLink != nil {
-		objectMap["readLink"] = er.ReadLink
-	}
-	if er.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = er.WebSearchURL
-	}
-	if er.ID != nil {
-		objectMap["id"] = er.ID
 	}
 	if er.Type != "" {
 		objectMap["_type"] = er.Type
@@ -2323,8 +2170,8 @@ func (er ErrorResponse) AsBasicResponseBase() (BasicResponseBase, bool) {
 	return &er, true
 }
 
-// Filters a key-value object consisting of filters that may be specified to limit the results returned by the API.
-// Current available filters: site.
+// Filters a key-value object consisting of filters that may be specified to limit the results returned by
+// the API. Current available filters: site.
 type Filters struct {
 	// Site - The URL of the site to return similar images and similar products from. (e.g., "www.bing.com", "bing.com").
 	Site *string `json:"site,omitempty"`
@@ -2370,7 +2217,7 @@ type BasicIdentifiable interface {
 
 // Identifiable defines the identity of a resource.
 type Identifiable struct {
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -2509,9 +2356,6 @@ func unmarshalBasicIdentifiableArray(body []byte) ([]BasicIdentifiable, error) {
 func (i Identifiable) MarshalJSON() ([]byte, error) {
 	i.Type = TypeIdentifiable
 	objectMap := make(map[string]interface{})
-	if i.ID != nil {
-		objectMap["id"] = i.ID
-	}
 	if i.Type != "" {
 		objectMap["_type"] = i.Type
 	}
@@ -2715,41 +2559,41 @@ type BasicImageAction interface {
 
 // ImageAction defines an image action.
 type ImageAction struct {
-	// ActionType - A string representing the type of action.
+	// ActionType - READ-ONLY; A string representing the type of action.
 	ActionType *string `json:"actionType,omitempty"`
-	// Result - The result produced in the action.
+	// Result - READ-ONLY; The result produced in the action.
 	Result *[]BasicThing `json:"result,omitempty"`
-	// DisplayName - A display name for the action.
+	// DisplayName - READ-ONLY; A display name for the action.
 	DisplayName *string `json:"displayName,omitempty"`
-	// IsTopAction - A Boolean representing whether this result is the top action.
+	// IsTopAction - READ-ONLY; A Boolean representing whether this result is the top action.
 	IsTopAction *bool `json:"isTopAction,omitempty"`
-	// ServiceURL - Use this URL to get additional data to determine how to take the appropriate action. For example, the serviceUrl might return JSON along with an image URL.
+	// ServiceURL - READ-ONLY; Use this URL to get additional data to determine how to take the appropriate action. For example, the serviceUrl might return JSON along with an image URL.
 	ServiceURL *string `json:"serviceUrl,omitempty"`
-	// ThumbnailURL - The URL to a thumbnail of the item.
+	// ThumbnailURL - READ-ONLY; The URL to a thumbnail of the item.
 	ThumbnailURL *string `json:"thumbnailUrl,omitempty"`
-	// Provider - The source of the creative work.
+	// Provider - READ-ONLY; The source of the creative work.
 	Provider *[]BasicThing `json:"provider,omitempty"`
-	// DatePublished - The date on which the CreativeWork was published.
+	// DatePublished - READ-ONLY; The date on which the CreativeWork was published.
 	DatePublished *string `json:"datePublished,omitempty"`
-	// Text - Text content of this creative work.
+	// Text - READ-ONLY; Text content of this creative work.
 	Text *string `json:"text,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Image - An image of the item.
+	// Image - READ-ONLY; An image of the item.
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// AlternateName - An alias for the item.
+	// AlternateName - READ-ONLY; An alias for the item.
 	AlternateName *string `json:"alternateName,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -2812,60 +2656,6 @@ func unmarshalBasicImageActionArray(body []byte) ([]BasicImageAction, error) {
 func (ia ImageAction) MarshalJSON() ([]byte, error) {
 	ia.Type = TypeImageAction
 	objectMap := make(map[string]interface{})
-	if ia.ActionType != nil {
-		objectMap["actionType"] = ia.ActionType
-	}
-	if ia.Result != nil {
-		objectMap["result"] = ia.Result
-	}
-	if ia.DisplayName != nil {
-		objectMap["displayName"] = ia.DisplayName
-	}
-	if ia.IsTopAction != nil {
-		objectMap["isTopAction"] = ia.IsTopAction
-	}
-	if ia.ServiceURL != nil {
-		objectMap["serviceUrl"] = ia.ServiceURL
-	}
-	if ia.ThumbnailURL != nil {
-		objectMap["thumbnailUrl"] = ia.ThumbnailURL
-	}
-	if ia.Provider != nil {
-		objectMap["provider"] = ia.Provider
-	}
-	if ia.DatePublished != nil {
-		objectMap["datePublished"] = ia.DatePublished
-	}
-	if ia.Text != nil {
-		objectMap["text"] = ia.Text
-	}
-	if ia.Name != nil {
-		objectMap["name"] = ia.Name
-	}
-	if ia.URL != nil {
-		objectMap["url"] = ia.URL
-	}
-	if ia.Image != nil {
-		objectMap["image"] = ia.Image
-	}
-	if ia.Description != nil {
-		objectMap["description"] = ia.Description
-	}
-	if ia.AlternateName != nil {
-		objectMap["alternateName"] = ia.AlternateName
-	}
-	if ia.BingID != nil {
-		objectMap["bingId"] = ia.BingID
-	}
-	if ia.ReadLink != nil {
-		objectMap["readLink"] = ia.ReadLink
-	}
-	if ia.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = ia.WebSearchURL
-	}
-	if ia.ID != nil {
-		objectMap["id"] = ia.ID
-	}
 	if ia.Type != "" {
 		objectMap["_type"] = ia.Type
 	}
@@ -3243,41 +3033,41 @@ func (ia *ImageAction) UnmarshalJSON(body []byte) error {
 
 // ImageEntityAction defines an entity action.
 type ImageEntityAction struct {
-	// ActionType - A string representing the type of action.
+	// ActionType - READ-ONLY; A string representing the type of action.
 	ActionType *string `json:"actionType,omitempty"`
-	// Result - The result produced in the action.
+	// Result - READ-ONLY; The result produced in the action.
 	Result *[]BasicThing `json:"result,omitempty"`
-	// DisplayName - A display name for the action.
+	// DisplayName - READ-ONLY; A display name for the action.
 	DisplayName *string `json:"displayName,omitempty"`
-	// IsTopAction - A Boolean representing whether this result is the top action.
+	// IsTopAction - READ-ONLY; A Boolean representing whether this result is the top action.
 	IsTopAction *bool `json:"isTopAction,omitempty"`
-	// ServiceURL - Use this URL to get additional data to determine how to take the appropriate action. For example, the serviceUrl might return JSON along with an image URL.
+	// ServiceURL - READ-ONLY; Use this URL to get additional data to determine how to take the appropriate action. For example, the serviceUrl might return JSON along with an image URL.
 	ServiceURL *string `json:"serviceUrl,omitempty"`
-	// ThumbnailURL - The URL to a thumbnail of the item.
+	// ThumbnailURL - READ-ONLY; The URL to a thumbnail of the item.
 	ThumbnailURL *string `json:"thumbnailUrl,omitempty"`
-	// Provider - The source of the creative work.
+	// Provider - READ-ONLY; The source of the creative work.
 	Provider *[]BasicThing `json:"provider,omitempty"`
-	// DatePublished - The date on which the CreativeWork was published.
+	// DatePublished - READ-ONLY; The date on which the CreativeWork was published.
 	DatePublished *string `json:"datePublished,omitempty"`
-	// Text - Text content of this creative work.
+	// Text - READ-ONLY; Text content of this creative work.
 	Text *string `json:"text,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Image - An image of the item.
+	// Image - READ-ONLY; An image of the item.
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// AlternateName - An alias for the item.
+	// AlternateName - READ-ONLY; An alias for the item.
 	AlternateName *string `json:"alternateName,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -3287,60 +3077,6 @@ type ImageEntityAction struct {
 func (iea ImageEntityAction) MarshalJSON() ([]byte, error) {
 	iea.Type = TypeImageEntityAction
 	objectMap := make(map[string]interface{})
-	if iea.ActionType != nil {
-		objectMap["actionType"] = iea.ActionType
-	}
-	if iea.Result != nil {
-		objectMap["result"] = iea.Result
-	}
-	if iea.DisplayName != nil {
-		objectMap["displayName"] = iea.DisplayName
-	}
-	if iea.IsTopAction != nil {
-		objectMap["isTopAction"] = iea.IsTopAction
-	}
-	if iea.ServiceURL != nil {
-		objectMap["serviceUrl"] = iea.ServiceURL
-	}
-	if iea.ThumbnailURL != nil {
-		objectMap["thumbnailUrl"] = iea.ThumbnailURL
-	}
-	if iea.Provider != nil {
-		objectMap["provider"] = iea.Provider
-	}
-	if iea.DatePublished != nil {
-		objectMap["datePublished"] = iea.DatePublished
-	}
-	if iea.Text != nil {
-		objectMap["text"] = iea.Text
-	}
-	if iea.Name != nil {
-		objectMap["name"] = iea.Name
-	}
-	if iea.URL != nil {
-		objectMap["url"] = iea.URL
-	}
-	if iea.Image != nil {
-		objectMap["image"] = iea.Image
-	}
-	if iea.Description != nil {
-		objectMap["description"] = iea.Description
-	}
-	if iea.AlternateName != nil {
-		objectMap["alternateName"] = iea.AlternateName
-	}
-	if iea.BingID != nil {
-		objectMap["bingId"] = iea.BingID
-	}
-	if iea.ReadLink != nil {
-		objectMap["readLink"] = iea.ReadLink
-	}
-	if iea.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = iea.WebSearchURL
-	}
-	if iea.ID != nil {
-		objectMap["id"] = iea.ID
-	}
 	if iea.Type != "" {
 		objectMap["_type"] = iea.Type
 	}
@@ -3716,8 +3452,8 @@ func (iea *ImageEntityAction) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// ImageInfo a JSON object that identities the image to get insights of . It also includes the optional crop area
-// that you use to identify the region of interest in the image.
+// ImageInfo a JSON object that identities the image to get insights of . It also includes the optional
+// crop area that you use to identify the region of interest in the image.
 type ImageInfo struct {
 	// ImageInsightsToken - An image insights token. To get the insights token, call one of the Image Search APIs (for example, /images/search). In the search results, the [Image](https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-images-api-v7-reference#image) object's [imageInsightsToken](https://docs.microsoft.com/en-us/rest/api/cognitiveservices/bing-images-api-v7-reference#image-imageinsightstoken) field contains the token. The imageInsightsToken and url fields mutually exclusive; do not specify both. Do not specify an insights token if the request includes the image form data.
 	ImageInsightsToken *string `json:"imageInsightsToken,omitempty"`
@@ -3730,15 +3466,15 @@ type ImageInfo struct {
 // ImageKnowledge defines a visual search API response.
 type ImageKnowledge struct {
 	autorest.Response `json:"-"`
-	// Tags - A list of visual search tags.
+	// Tags - READ-ONLY; A list of visual search tags.
 	Tags *[]ImageTag `json:"tags,omitempty"`
-	// Image - Image object containing metadata about the requested image.
+	// Image - READ-ONLY; Image object containing metadata about the requested image.
 	Image *ImageObject `json:"image,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -3748,21 +3484,6 @@ type ImageKnowledge struct {
 func (ik ImageKnowledge) MarshalJSON() ([]byte, error) {
 	ik.Type = TypeImageKnowledge
 	objectMap := make(map[string]interface{})
-	if ik.Tags != nil {
-		objectMap["tags"] = ik.Tags
-	}
-	if ik.Image != nil {
-		objectMap["image"] = ik.Image
-	}
-	if ik.ReadLink != nil {
-		objectMap["readLink"] = ik.ReadLink
-	}
-	if ik.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = ik.WebSearchURL
-	}
-	if ik.ID != nil {
-		objectMap["id"] = ik.ID
-	}
 	if ik.Type != "" {
 		objectMap["_type"] = ik.Type
 	}
@@ -3956,43 +3677,43 @@ func (ik ImageKnowledge) AsBasicResponseBase() (BasicResponseBase, bool) {
 
 // ImageModuleAction defines an image list action.
 type ImageModuleAction struct {
-	// Data - A list of images.
+	// Data - READ-ONLY; A list of images.
 	Data *ImagesModule `json:"data,omitempty"`
-	// ActionType - A string representing the type of action.
+	// ActionType - READ-ONLY; A string representing the type of action.
 	ActionType *string `json:"actionType,omitempty"`
-	// Result - The result produced in the action.
+	// Result - READ-ONLY; The result produced in the action.
 	Result *[]BasicThing `json:"result,omitempty"`
-	// DisplayName - A display name for the action.
+	// DisplayName - READ-ONLY; A display name for the action.
 	DisplayName *string `json:"displayName,omitempty"`
-	// IsTopAction - A Boolean representing whether this result is the top action.
+	// IsTopAction - READ-ONLY; A Boolean representing whether this result is the top action.
 	IsTopAction *bool `json:"isTopAction,omitempty"`
-	// ServiceURL - Use this URL to get additional data to determine how to take the appropriate action. For example, the serviceUrl might return JSON along with an image URL.
+	// ServiceURL - READ-ONLY; Use this URL to get additional data to determine how to take the appropriate action. For example, the serviceUrl might return JSON along with an image URL.
 	ServiceURL *string `json:"serviceUrl,omitempty"`
-	// ThumbnailURL - The URL to a thumbnail of the item.
+	// ThumbnailURL - READ-ONLY; The URL to a thumbnail of the item.
 	ThumbnailURL *string `json:"thumbnailUrl,omitempty"`
-	// Provider - The source of the creative work.
+	// Provider - READ-ONLY; The source of the creative work.
 	Provider *[]BasicThing `json:"provider,omitempty"`
-	// DatePublished - The date on which the CreativeWork was published.
+	// DatePublished - READ-ONLY; The date on which the CreativeWork was published.
 	DatePublished *string `json:"datePublished,omitempty"`
-	// Text - Text content of this creative work.
+	// Text - READ-ONLY; Text content of this creative work.
 	Text *string `json:"text,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Image - An image of the item.
+	// Image - READ-ONLY; An image of the item.
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// AlternateName - An alias for the item.
+	// AlternateName - READ-ONLY; An alias for the item.
 	AlternateName *string `json:"alternateName,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -4002,63 +3723,6 @@ type ImageModuleAction struct {
 func (ima ImageModuleAction) MarshalJSON() ([]byte, error) {
 	ima.Type = TypeImageModuleAction
 	objectMap := make(map[string]interface{})
-	if ima.Data != nil {
-		objectMap["data"] = ima.Data
-	}
-	if ima.ActionType != nil {
-		objectMap["actionType"] = ima.ActionType
-	}
-	if ima.Result != nil {
-		objectMap["result"] = ima.Result
-	}
-	if ima.DisplayName != nil {
-		objectMap["displayName"] = ima.DisplayName
-	}
-	if ima.IsTopAction != nil {
-		objectMap["isTopAction"] = ima.IsTopAction
-	}
-	if ima.ServiceURL != nil {
-		objectMap["serviceUrl"] = ima.ServiceURL
-	}
-	if ima.ThumbnailURL != nil {
-		objectMap["thumbnailUrl"] = ima.ThumbnailURL
-	}
-	if ima.Provider != nil {
-		objectMap["provider"] = ima.Provider
-	}
-	if ima.DatePublished != nil {
-		objectMap["datePublished"] = ima.DatePublished
-	}
-	if ima.Text != nil {
-		objectMap["text"] = ima.Text
-	}
-	if ima.Name != nil {
-		objectMap["name"] = ima.Name
-	}
-	if ima.URL != nil {
-		objectMap["url"] = ima.URL
-	}
-	if ima.Image != nil {
-		objectMap["image"] = ima.Image
-	}
-	if ima.Description != nil {
-		objectMap["description"] = ima.Description
-	}
-	if ima.AlternateName != nil {
-		objectMap["alternateName"] = ima.AlternateName
-	}
-	if ima.BingID != nil {
-		objectMap["bingId"] = ima.BingID
-	}
-	if ima.ReadLink != nil {
-		objectMap["readLink"] = ima.ReadLink
-	}
-	if ima.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = ima.WebSearchURL
-	}
-	if ima.ID != nil {
-		objectMap["id"] = ima.ID
-	}
 	if ima.Type != "" {
 		objectMap["_type"] = ima.Type
 	}
@@ -4445,57 +4109,57 @@ func (ima *ImageModuleAction) UnmarshalJSON(body []byte) error {
 
 // ImageObject defines an image.
 type ImageObject struct {
-	// Thumbnail - The URL to a thumbnail of the image.
+	// Thumbnail - READ-ONLY; The URL to a thumbnail of the image.
 	Thumbnail *ImageObject `json:"thumbnail,omitempty"`
-	// ImageInsightsToken - The token that you use in a subsequent call to Visual Search API to get additional information about the image. For information about using this token, see the imageInsightsToken field inside the knowledgeRequest request parameter.
+	// ImageInsightsToken - READ-ONLY; The token that you use in a subsequent call to Visual Search API to get additional information about the image. For information about using this token, see the imageInsightsToken field inside the knowledgeRequest request parameter.
 	ImageInsightsToken *string `json:"imageInsightsToken,omitempty"`
-	// InsightsMetadata - A count of the number of websites where you can shop or perform other actions related to the image. For example, if the image is of an apple pie, this object includes a count of the number of websites where you can buy an apple pie. To indicate the number of offers in your UX, include badging such as a shopping cart icon that contains the count. When the user clicks on the icon, use imageInisghtsToken in a subsequent Visual Search API call to get the list of shopping websites.
+	// InsightsMetadata - READ-ONLY; A count of the number of websites where you can shop or perform other actions related to the image. For example, if the image is of an apple pie, this object includes a count of the number of websites where you can buy an apple pie. To indicate the number of offers in your UX, include badging such as a shopping cart icon that contains the count. When the user clicks on the icon, use imageInsightsToken in a subsequent Visual Search API call to get the list of shopping websites.
 	InsightsMetadata *ImagesImageMetadata `json:"insightsMetadata,omitempty"`
-	// ImageID - Unique Id for the image.
+	// ImageID - READ-ONLY; Unique Id for the image.
 	ImageID *string `json:"imageId,omitempty"`
-	// AccentColor - A three-byte hexadecimal number that represents the color that dominates the image. Use the color as the temporary background in your client until the image is loaded.
+	// AccentColor - READ-ONLY; A three-byte hexadecimal number that represents the color that dominates the image. Use the color as the temporary background in your client until the image is loaded.
 	AccentColor *string `json:"accentColor,omitempty"`
-	// VisualWords - For interal use only.
+	// VisualWords - READ-ONLY; For internal use only.
 	VisualWords *string `json:"visualWords,omitempty"`
-	// ContentURL - Original URL to retrieve the source (file) for the media object (e.g., the source URL for the image).
+	// ContentURL - READ-ONLY; Original URL to retrieve the source (file) for the media object (e.g., the source URL for the image).
 	ContentURL *string `json:"contentUrl,omitempty"`
-	// HostPageURL - URL of the page that hosts the media object.
+	// HostPageURL - READ-ONLY; URL of the page that hosts the media object.
 	HostPageURL *string `json:"hostPageUrl,omitempty"`
-	// ContentSize - Size of the media object content. Use format "value unit" (e.g., "1024 B").
+	// ContentSize - READ-ONLY; Size of the media object content. Use format "value unit" (e.g., "1024 B").
 	ContentSize *string `json:"contentSize,omitempty"`
-	// EncodingFormat - Encoding format (e.g., mp3, mp4, jpeg, etc).
+	// EncodingFormat - READ-ONLY; Encoding format (e.g., png, gif, jpeg, etc).
 	EncodingFormat *string `json:"encodingFormat,omitempty"`
-	// HostPageDisplayURL - Display URL of the page that hosts the media object.
+	// HostPageDisplayURL - READ-ONLY; Display URL of the page that hosts the media object.
 	HostPageDisplayURL *string `json:"hostPageDisplayUrl,omitempty"`
-	// Width - The width of the media object, in pixels.
+	// Width - READ-ONLY; The width of the media object, in pixels.
 	Width *int32 `json:"width,omitempty"`
-	// Height - The height of the media object, in pixels.
+	// Height - READ-ONLY; The height of the media object, in pixels.
 	Height *int32 `json:"height,omitempty"`
-	// ThumbnailURL - The URL to a thumbnail of the item.
+	// ThumbnailURL - READ-ONLY; The URL to a thumbnail of the item.
 	ThumbnailURL *string `json:"thumbnailUrl,omitempty"`
-	// Provider - The source of the creative work.
+	// Provider - READ-ONLY; The source of the creative work.
 	Provider *[]BasicThing `json:"provider,omitempty"`
-	// DatePublished - The date on which the CreativeWork was published.
+	// DatePublished - READ-ONLY; The date on which the CreativeWork was published.
 	DatePublished *string `json:"datePublished,omitempty"`
-	// Text - Text content of this creative work.
+	// Text - READ-ONLY; Text content of this creative work.
 	Text *string `json:"text,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Image - An image of the item.
+	// Image - READ-ONLY; An image of the item.
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// AlternateName - An alias for the item.
+	// AlternateName - READ-ONLY; An alias for the item.
 	AlternateName *string `json:"alternateName,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -4505,84 +4169,6 @@ type ImageObject struct {
 func (ioVar ImageObject) MarshalJSON() ([]byte, error) {
 	ioVar.Type = TypeImageObject
 	objectMap := make(map[string]interface{})
-	if ioVar.Thumbnail != nil {
-		objectMap["thumbnail"] = ioVar.Thumbnail
-	}
-	if ioVar.ImageInsightsToken != nil {
-		objectMap["imageInsightsToken"] = ioVar.ImageInsightsToken
-	}
-	if ioVar.InsightsMetadata != nil {
-		objectMap["insightsMetadata"] = ioVar.InsightsMetadata
-	}
-	if ioVar.ImageID != nil {
-		objectMap["imageId"] = ioVar.ImageID
-	}
-	if ioVar.AccentColor != nil {
-		objectMap["accentColor"] = ioVar.AccentColor
-	}
-	if ioVar.VisualWords != nil {
-		objectMap["visualWords"] = ioVar.VisualWords
-	}
-	if ioVar.ContentURL != nil {
-		objectMap["contentUrl"] = ioVar.ContentURL
-	}
-	if ioVar.HostPageURL != nil {
-		objectMap["hostPageUrl"] = ioVar.HostPageURL
-	}
-	if ioVar.ContentSize != nil {
-		objectMap["contentSize"] = ioVar.ContentSize
-	}
-	if ioVar.EncodingFormat != nil {
-		objectMap["encodingFormat"] = ioVar.EncodingFormat
-	}
-	if ioVar.HostPageDisplayURL != nil {
-		objectMap["hostPageDisplayUrl"] = ioVar.HostPageDisplayURL
-	}
-	if ioVar.Width != nil {
-		objectMap["width"] = ioVar.Width
-	}
-	if ioVar.Height != nil {
-		objectMap["height"] = ioVar.Height
-	}
-	if ioVar.ThumbnailURL != nil {
-		objectMap["thumbnailUrl"] = ioVar.ThumbnailURL
-	}
-	if ioVar.Provider != nil {
-		objectMap["provider"] = ioVar.Provider
-	}
-	if ioVar.DatePublished != nil {
-		objectMap["datePublished"] = ioVar.DatePublished
-	}
-	if ioVar.Text != nil {
-		objectMap["text"] = ioVar.Text
-	}
-	if ioVar.Name != nil {
-		objectMap["name"] = ioVar.Name
-	}
-	if ioVar.URL != nil {
-		objectMap["url"] = ioVar.URL
-	}
-	if ioVar.Image != nil {
-		objectMap["image"] = ioVar.Image
-	}
-	if ioVar.Description != nil {
-		objectMap["description"] = ioVar.Description
-	}
-	if ioVar.AlternateName != nil {
-		objectMap["alternateName"] = ioVar.AlternateName
-	}
-	if ioVar.BingID != nil {
-		objectMap["bingId"] = ioVar.BingID
-	}
-	if ioVar.ReadLink != nil {
-		objectMap["readLink"] = ioVar.ReadLink
-	}
-	if ioVar.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = ioVar.WebSearchURL
-	}
-	if ioVar.ID != nil {
-		objectMap["id"] = ioVar.ID
-	}
 	if ioVar.Type != "" {
 		objectMap["_type"] = ioVar.Type
 	}
@@ -5033,43 +4619,43 @@ func (ioVar *ImageObject) UnmarshalJSON(body []byte) error {
 
 // ImageRecipesAction defines an recipe action.
 type ImageRecipesAction struct {
-	// Data - A list of recipes related to the image.
+	// Data - READ-ONLY; A list of recipes related to the image.
 	Data *RecipesModule `json:"data,omitempty"`
-	// ActionType - A string representing the type of action.
+	// ActionType - READ-ONLY; A string representing the type of action.
 	ActionType *string `json:"actionType,omitempty"`
-	// Result - The result produced in the action.
+	// Result - READ-ONLY; The result produced in the action.
 	Result *[]BasicThing `json:"result,omitempty"`
-	// DisplayName - A display name for the action.
+	// DisplayName - READ-ONLY; A display name for the action.
 	DisplayName *string `json:"displayName,omitempty"`
-	// IsTopAction - A Boolean representing whether this result is the top action.
+	// IsTopAction - READ-ONLY; A Boolean representing whether this result is the top action.
 	IsTopAction *bool `json:"isTopAction,omitempty"`
-	// ServiceURL - Use this URL to get additional data to determine how to take the appropriate action. For example, the serviceUrl might return JSON along with an image URL.
+	// ServiceURL - READ-ONLY; Use this URL to get additional data to determine how to take the appropriate action. For example, the serviceUrl might return JSON along with an image URL.
 	ServiceURL *string `json:"serviceUrl,omitempty"`
-	// ThumbnailURL - The URL to a thumbnail of the item.
+	// ThumbnailURL - READ-ONLY; The URL to a thumbnail of the item.
 	ThumbnailURL *string `json:"thumbnailUrl,omitempty"`
-	// Provider - The source of the creative work.
+	// Provider - READ-ONLY; The source of the creative work.
 	Provider *[]BasicThing `json:"provider,omitempty"`
-	// DatePublished - The date on which the CreativeWork was published.
+	// DatePublished - READ-ONLY; The date on which the CreativeWork was published.
 	DatePublished *string `json:"datePublished,omitempty"`
-	// Text - Text content of this creative work.
+	// Text - READ-ONLY; Text content of this creative work.
 	Text *string `json:"text,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Image - An image of the item.
+	// Image - READ-ONLY; An image of the item.
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// AlternateName - An alias for the item.
+	// AlternateName - READ-ONLY; An alias for the item.
 	AlternateName *string `json:"alternateName,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -5079,63 +4665,6 @@ type ImageRecipesAction struct {
 func (ira ImageRecipesAction) MarshalJSON() ([]byte, error) {
 	ira.Type = TypeImageRecipesAction
 	objectMap := make(map[string]interface{})
-	if ira.Data != nil {
-		objectMap["data"] = ira.Data
-	}
-	if ira.ActionType != nil {
-		objectMap["actionType"] = ira.ActionType
-	}
-	if ira.Result != nil {
-		objectMap["result"] = ira.Result
-	}
-	if ira.DisplayName != nil {
-		objectMap["displayName"] = ira.DisplayName
-	}
-	if ira.IsTopAction != nil {
-		objectMap["isTopAction"] = ira.IsTopAction
-	}
-	if ira.ServiceURL != nil {
-		objectMap["serviceUrl"] = ira.ServiceURL
-	}
-	if ira.ThumbnailURL != nil {
-		objectMap["thumbnailUrl"] = ira.ThumbnailURL
-	}
-	if ira.Provider != nil {
-		objectMap["provider"] = ira.Provider
-	}
-	if ira.DatePublished != nil {
-		objectMap["datePublished"] = ira.DatePublished
-	}
-	if ira.Text != nil {
-		objectMap["text"] = ira.Text
-	}
-	if ira.Name != nil {
-		objectMap["name"] = ira.Name
-	}
-	if ira.URL != nil {
-		objectMap["url"] = ira.URL
-	}
-	if ira.Image != nil {
-		objectMap["image"] = ira.Image
-	}
-	if ira.Description != nil {
-		objectMap["description"] = ira.Description
-	}
-	if ira.AlternateName != nil {
-		objectMap["alternateName"] = ira.AlternateName
-	}
-	if ira.BingID != nil {
-		objectMap["bingId"] = ira.BingID
-	}
-	if ira.ReadLink != nil {
-		objectMap["readLink"] = ira.ReadLink
-	}
-	if ira.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = ira.WebSearchURL
-	}
-	if ira.ID != nil {
-		objectMap["id"] = ira.ID
-	}
 	if ira.Type != "" {
 		objectMap["_type"] = ira.Type
 	}
@@ -5522,43 +5051,43 @@ func (ira *ImageRecipesAction) UnmarshalJSON(body []byte) error {
 
 // ImageRelatedSearchesAction defines an related search action.
 type ImageRelatedSearchesAction struct {
-	// Data - A list of queries related to the image.
+	// Data - READ-ONLY; A list of queries related to the image.
 	Data *RelatedSearchesModule `json:"data,omitempty"`
-	// ActionType - A string representing the type of action.
+	// ActionType - READ-ONLY; A string representing the type of action.
 	ActionType *string `json:"actionType,omitempty"`
-	// Result - The result produced in the action.
+	// Result - READ-ONLY; The result produced in the action.
 	Result *[]BasicThing `json:"result,omitempty"`
-	// DisplayName - A display name for the action.
+	// DisplayName - READ-ONLY; A display name for the action.
 	DisplayName *string `json:"displayName,omitempty"`
-	// IsTopAction - A Boolean representing whether this result is the top action.
+	// IsTopAction - READ-ONLY; A Boolean representing whether this result is the top action.
 	IsTopAction *bool `json:"isTopAction,omitempty"`
-	// ServiceURL - Use this URL to get additional data to determine how to take the appropriate action. For example, the serviceUrl might return JSON along with an image URL.
+	// ServiceURL - READ-ONLY; Use this URL to get additional data to determine how to take the appropriate action. For example, the serviceUrl might return JSON along with an image URL.
 	ServiceURL *string `json:"serviceUrl,omitempty"`
-	// ThumbnailURL - The URL to a thumbnail of the item.
+	// ThumbnailURL - READ-ONLY; The URL to a thumbnail of the item.
 	ThumbnailURL *string `json:"thumbnailUrl,omitempty"`
-	// Provider - The source of the creative work.
+	// Provider - READ-ONLY; The source of the creative work.
 	Provider *[]BasicThing `json:"provider,omitempty"`
-	// DatePublished - The date on which the CreativeWork was published.
+	// DatePublished - READ-ONLY; The date on which the CreativeWork was published.
 	DatePublished *string `json:"datePublished,omitempty"`
-	// Text - Text content of this creative work.
+	// Text - READ-ONLY; Text content of this creative work.
 	Text *string `json:"text,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Image - An image of the item.
+	// Image - READ-ONLY; An image of the item.
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// AlternateName - An alias for the item.
+	// AlternateName - READ-ONLY; An alias for the item.
 	AlternateName *string `json:"alternateName,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -5568,63 +5097,6 @@ type ImageRelatedSearchesAction struct {
 func (irsa ImageRelatedSearchesAction) MarshalJSON() ([]byte, error) {
 	irsa.Type = TypeImageRelatedSearchesAction
 	objectMap := make(map[string]interface{})
-	if irsa.Data != nil {
-		objectMap["data"] = irsa.Data
-	}
-	if irsa.ActionType != nil {
-		objectMap["actionType"] = irsa.ActionType
-	}
-	if irsa.Result != nil {
-		objectMap["result"] = irsa.Result
-	}
-	if irsa.DisplayName != nil {
-		objectMap["displayName"] = irsa.DisplayName
-	}
-	if irsa.IsTopAction != nil {
-		objectMap["isTopAction"] = irsa.IsTopAction
-	}
-	if irsa.ServiceURL != nil {
-		objectMap["serviceUrl"] = irsa.ServiceURL
-	}
-	if irsa.ThumbnailURL != nil {
-		objectMap["thumbnailUrl"] = irsa.ThumbnailURL
-	}
-	if irsa.Provider != nil {
-		objectMap["provider"] = irsa.Provider
-	}
-	if irsa.DatePublished != nil {
-		objectMap["datePublished"] = irsa.DatePublished
-	}
-	if irsa.Text != nil {
-		objectMap["text"] = irsa.Text
-	}
-	if irsa.Name != nil {
-		objectMap["name"] = irsa.Name
-	}
-	if irsa.URL != nil {
-		objectMap["url"] = irsa.URL
-	}
-	if irsa.Image != nil {
-		objectMap["image"] = irsa.Image
-	}
-	if irsa.Description != nil {
-		objectMap["description"] = irsa.Description
-	}
-	if irsa.AlternateName != nil {
-		objectMap["alternateName"] = irsa.AlternateName
-	}
-	if irsa.BingID != nil {
-		objectMap["bingId"] = irsa.BingID
-	}
-	if irsa.ReadLink != nil {
-		objectMap["readLink"] = irsa.ReadLink
-	}
-	if irsa.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = irsa.WebSearchURL
-	}
-	if irsa.ID != nil {
-		objectMap["id"] = irsa.ID
-	}
 	if irsa.Type != "" {
 		objectMap["_type"] = irsa.Type
 	}
@@ -6011,43 +5483,43 @@ func (irsa *ImageRelatedSearchesAction) UnmarshalJSON(body []byte) error {
 
 // ImageShoppingSourcesAction defines a shopping sources action.
 type ImageShoppingSourcesAction struct {
-	// Data - A list of merchants that offer items related to the image.
+	// Data - READ-ONLY; A list of merchants that offer items related to the image.
 	Data *AggregateOffer `json:"data,omitempty"`
-	// ActionType - A string representing the type of action.
+	// ActionType - READ-ONLY; A string representing the type of action.
 	ActionType *string `json:"actionType,omitempty"`
-	// Result - The result produced in the action.
+	// Result - READ-ONLY; The result produced in the action.
 	Result *[]BasicThing `json:"result,omitempty"`
-	// DisplayName - A display name for the action.
+	// DisplayName - READ-ONLY; A display name for the action.
 	DisplayName *string `json:"displayName,omitempty"`
-	// IsTopAction - A Boolean representing whether this result is the top action.
+	// IsTopAction - READ-ONLY; A Boolean representing whether this result is the top action.
 	IsTopAction *bool `json:"isTopAction,omitempty"`
-	// ServiceURL - Use this URL to get additional data to determine how to take the appropriate action. For example, the serviceUrl might return JSON along with an image URL.
+	// ServiceURL - READ-ONLY; Use this URL to get additional data to determine how to take the appropriate action. For example, the serviceUrl might return JSON along with an image URL.
 	ServiceURL *string `json:"serviceUrl,omitempty"`
-	// ThumbnailURL - The URL to a thumbnail of the item.
+	// ThumbnailURL - READ-ONLY; The URL to a thumbnail of the item.
 	ThumbnailURL *string `json:"thumbnailUrl,omitempty"`
-	// Provider - The source of the creative work.
+	// Provider - READ-ONLY; The source of the creative work.
 	Provider *[]BasicThing `json:"provider,omitempty"`
-	// DatePublished - The date on which the CreativeWork was published.
+	// DatePublished - READ-ONLY; The date on which the CreativeWork was published.
 	DatePublished *string `json:"datePublished,omitempty"`
-	// Text - Text content of this creative work.
+	// Text - READ-ONLY; Text content of this creative work.
 	Text *string `json:"text,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Image - An image of the item.
+	// Image - READ-ONLY; An image of the item.
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// AlternateName - An alias for the item.
+	// AlternateName - READ-ONLY; An alias for the item.
 	AlternateName *string `json:"alternateName,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -6057,63 +5529,6 @@ type ImageShoppingSourcesAction struct {
 func (issa ImageShoppingSourcesAction) MarshalJSON() ([]byte, error) {
 	issa.Type = TypeImageShoppingSourcesAction
 	objectMap := make(map[string]interface{})
-	if issa.Data != nil {
-		objectMap["data"] = issa.Data
-	}
-	if issa.ActionType != nil {
-		objectMap["actionType"] = issa.ActionType
-	}
-	if issa.Result != nil {
-		objectMap["result"] = issa.Result
-	}
-	if issa.DisplayName != nil {
-		objectMap["displayName"] = issa.DisplayName
-	}
-	if issa.IsTopAction != nil {
-		objectMap["isTopAction"] = issa.IsTopAction
-	}
-	if issa.ServiceURL != nil {
-		objectMap["serviceUrl"] = issa.ServiceURL
-	}
-	if issa.ThumbnailURL != nil {
-		objectMap["thumbnailUrl"] = issa.ThumbnailURL
-	}
-	if issa.Provider != nil {
-		objectMap["provider"] = issa.Provider
-	}
-	if issa.DatePublished != nil {
-		objectMap["datePublished"] = issa.DatePublished
-	}
-	if issa.Text != nil {
-		objectMap["text"] = issa.Text
-	}
-	if issa.Name != nil {
-		objectMap["name"] = issa.Name
-	}
-	if issa.URL != nil {
-		objectMap["url"] = issa.URL
-	}
-	if issa.Image != nil {
-		objectMap["image"] = issa.Image
-	}
-	if issa.Description != nil {
-		objectMap["description"] = issa.Description
-	}
-	if issa.AlternateName != nil {
-		objectMap["alternateName"] = issa.AlternateName
-	}
-	if issa.BingID != nil {
-		objectMap["bingId"] = issa.BingID
-	}
-	if issa.ReadLink != nil {
-		objectMap["readLink"] = issa.ReadLink
-	}
-	if issa.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = issa.WebSearchURL
-	}
-	if issa.ID != nil {
-		objectMap["id"] = issa.ID
-	}
 	if issa.Type != "" {
 		objectMap["_type"] = issa.Type
 	}
@@ -6498,48 +5913,48 @@ func (issa *ImageShoppingSourcesAction) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// ImagesImageMetadata defines a count of the number of websites where you can shop or perform other actions
-// related to the image.
+// ImagesImageMetadata defines a count of the number of websites where you can shop or perform other
+// actions related to the image.
 type ImagesImageMetadata struct {
-	// ShoppingSourcesCount - The number of websites that sell the products seen in the image.
+	// ShoppingSourcesCount - READ-ONLY; The number of websites that sell the products seen in the image.
 	ShoppingSourcesCount *int32 `json:"shoppingSourcesCount,omitempty"`
-	// RecipeSourcesCount - The number of websites that offer recipes of the food seen in the image.
+	// RecipeSourcesCount - READ-ONLY; The number of websites that offer recipes of the food seen in the image.
 	RecipeSourcesCount *int32 `json:"recipeSourcesCount,omitempty"`
-	// AggregateOffer - A summary of the online offers of products found in the image. For example, if the image is of a dress, the offer might identify the lowest price and the number of offers found. Only visually similar products insights include this field. The offer includes the following fields: Name, AggregateRating, OfferCount, and LowPrice.
+	// AggregateOffer - READ-ONLY; A summary of the online offers of products found in the image. For example, if the image is of a dress, the offer might identify the lowest price and the number of offers found. Only visually similar products insights include this field. The offer includes the following fields: Name, AggregateRating, OfferCount, and LowPrice.
 	AggregateOffer *AggregateOffer `json:"aggregateOffer,omitempty"`
 }
 
 // ImagesModule defines a list of images.
 type ImagesModule struct {
-	// Value - A list of images.
+	// Value - READ-ONLY; A list of images.
 	Value *[]ImageObject `json:"value,omitempty"`
 }
 
 // ImageTag a visual search tag.
 type ImageTag struct {
-	// DisplayName - Display name for this tag. For the default tag, the display name is empty.
+	// DisplayName - READ-ONLY; Display name for this tag. For the default tag, the display name is empty.
 	DisplayName *string `json:"displayName,omitempty"`
-	// BoundingBox - The bounding box for this tag. For the default tag, there is no bounding box.
+	// BoundingBox - READ-ONLY; The bounding box for this tag. For the default tag, there is no bounding box.
 	BoundingBox *ImageTagRegion `json:"boundingBox,omitempty"`
-	// Actions - Actions within this tag. The order of the items denotes the default ranking order of these actions, with the first action being the most likely user intent.
+	// Actions - READ-ONLY; Actions within this tag. The order of the items denotes the default ranking order of these actions, with the first action being the most likely user intent.
 	Actions *[]BasicImageAction `json:"actions,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Image - An image of the item.
+	// Image - READ-ONLY; An image of the item.
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// AlternateName - An alias for the item.
+	// AlternateName - READ-ONLY; An alias for the item.
 	AlternateName *string `json:"alternateName,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -6549,42 +5964,6 @@ type ImageTag struct {
 func (it ImageTag) MarshalJSON() ([]byte, error) {
 	it.Type = TypeImageTag
 	objectMap := make(map[string]interface{})
-	if it.DisplayName != nil {
-		objectMap["displayName"] = it.DisplayName
-	}
-	if it.BoundingBox != nil {
-		objectMap["boundingBox"] = it.BoundingBox
-	}
-	if it.Actions != nil {
-		objectMap["actions"] = it.Actions
-	}
-	if it.Name != nil {
-		objectMap["name"] = it.Name
-	}
-	if it.URL != nil {
-		objectMap["url"] = it.URL
-	}
-	if it.Image != nil {
-		objectMap["image"] = it.Image
-	}
-	if it.Description != nil {
-		objectMap["description"] = it.Description
-	}
-	if it.AlternateName != nil {
-		objectMap["alternateName"] = it.AlternateName
-	}
-	if it.BingID != nil {
-		objectMap["bingId"] = it.BingID
-	}
-	if it.ReadLink != nil {
-		objectMap["readLink"] = it.ReadLink
-	}
-	if it.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = it.WebSearchURL
-	}
-	if it.ID != nil {
-		objectMap["id"] = it.ID
-	}
 	if it.Type != "" {
 		objectMap["_type"] = it.Type
 	}
@@ -6925,26 +6304,26 @@ type BasicIntangible interface {
 	AsIntangible() (*Intangible, bool)
 }
 
-// Intangible a utility class that serves as the umbrella for a number of 'intangible' things such as quantities,
-// structured values, etc.
+// Intangible a utility class that serves as the umbrella for a number of 'intangible' things such as
+// quantities, structured values, etc.
 type Intangible struct {
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Image - An image of the item.
+	// Image - READ-ONLY; An image of the item.
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// AlternateName - An alias for the item.
+	// AlternateName - READ-ONLY; An alias for the item.
 	AlternateName *string `json:"alternateName,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -6999,33 +6378,6 @@ func unmarshalBasicIntangibleArray(body []byte) ([]BasicIntangible, error) {
 func (i Intangible) MarshalJSON() ([]byte, error) {
 	i.Type = TypeIntangible
 	objectMap := make(map[string]interface{})
-	if i.Name != nil {
-		objectMap["name"] = i.Name
-	}
-	if i.URL != nil {
-		objectMap["url"] = i.URL
-	}
-	if i.Image != nil {
-		objectMap["image"] = i.Image
-	}
-	if i.Description != nil {
-		objectMap["description"] = i.Description
-	}
-	if i.AlternateName != nil {
-		objectMap["alternateName"] = i.AlternateName
-	}
-	if i.BingID != nil {
-		objectMap["bingId"] = i.BingID
-	}
-	if i.ReadLink != nil {
-		objectMap["readLink"] = i.ReadLink
-	}
-	if i.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = i.WebSearchURL
-	}
-	if i.ID != nil {
-		objectMap["id"] = i.ID
-	}
 	if i.Type != "" {
 		objectMap["_type"] = i.Type
 	}
@@ -7217,8 +6569,8 @@ func (i Intangible) AsBasicResponseBase() (BasicResponseBase, bool) {
 	return &i, true
 }
 
-// KnowledgeRequest a JSON object containing information about the request, such as filters for the resulting
-// actions.
+// KnowledgeRequest a JSON object containing information about the request, such as filters for the
+// resulting actions.
 type KnowledgeRequest struct {
 	// Filters - A key-value object consisting of filters that may be specified to limit the results returned by the API.
 	Filters *Filters `json:"filters,omitempty"`
@@ -7232,45 +6584,45 @@ type BasicMediaObject interface {
 
 // MediaObject defines a media object.
 type MediaObject struct {
-	// ContentURL - Original URL to retrieve the source (file) for the media object (e.g., the source URL for the image).
+	// ContentURL - READ-ONLY; Original URL to retrieve the source (file) for the media object (e.g., the source URL for the image).
 	ContentURL *string `json:"contentUrl,omitempty"`
-	// HostPageURL - URL of the page that hosts the media object.
+	// HostPageURL - READ-ONLY; URL of the page that hosts the media object.
 	HostPageURL *string `json:"hostPageUrl,omitempty"`
-	// ContentSize - Size of the media object content. Use format "value unit" (e.g., "1024 B").
+	// ContentSize - READ-ONLY; Size of the media object content. Use format "value unit" (e.g., "1024 B").
 	ContentSize *string `json:"contentSize,omitempty"`
-	// EncodingFormat - Encoding format (e.g., mp3, mp4, jpeg, etc).
+	// EncodingFormat - READ-ONLY; Encoding format (e.g., png, gif, jpeg, etc).
 	EncodingFormat *string `json:"encodingFormat,omitempty"`
-	// HostPageDisplayURL - Display URL of the page that hosts the media object.
+	// HostPageDisplayURL - READ-ONLY; Display URL of the page that hosts the media object.
 	HostPageDisplayURL *string `json:"hostPageDisplayUrl,omitempty"`
-	// Width - The width of the media object, in pixels.
+	// Width - READ-ONLY; The width of the media object, in pixels.
 	Width *int32 `json:"width,omitempty"`
-	// Height - The height of the media object, in pixels.
+	// Height - READ-ONLY; The height of the media object, in pixels.
 	Height *int32 `json:"height,omitempty"`
-	// ThumbnailURL - The URL to a thumbnail of the item.
+	// ThumbnailURL - READ-ONLY; The URL to a thumbnail of the item.
 	ThumbnailURL *string `json:"thumbnailUrl,omitempty"`
-	// Provider - The source of the creative work.
+	// Provider - READ-ONLY; The source of the creative work.
 	Provider *[]BasicThing `json:"provider,omitempty"`
-	// DatePublished - The date on which the CreativeWork was published.
+	// DatePublished - READ-ONLY; The date on which the CreativeWork was published.
 	DatePublished *string `json:"datePublished,omitempty"`
-	// Text - Text content of this creative work.
+	// Text - READ-ONLY; Text content of this creative work.
 	Text *string `json:"text,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Image - An image of the item.
+	// Image - READ-ONLY; An image of the item.
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// AlternateName - An alias for the item.
+	// AlternateName - READ-ONLY; An alias for the item.
 	AlternateName *string `json:"alternateName,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -7317,66 +6669,6 @@ func unmarshalBasicMediaObjectArray(body []byte) ([]BasicMediaObject, error) {
 func (mo MediaObject) MarshalJSON() ([]byte, error) {
 	mo.Type = TypeMediaObject
 	objectMap := make(map[string]interface{})
-	if mo.ContentURL != nil {
-		objectMap["contentUrl"] = mo.ContentURL
-	}
-	if mo.HostPageURL != nil {
-		objectMap["hostPageUrl"] = mo.HostPageURL
-	}
-	if mo.ContentSize != nil {
-		objectMap["contentSize"] = mo.ContentSize
-	}
-	if mo.EncodingFormat != nil {
-		objectMap["encodingFormat"] = mo.EncodingFormat
-	}
-	if mo.HostPageDisplayURL != nil {
-		objectMap["hostPageDisplayUrl"] = mo.HostPageDisplayURL
-	}
-	if mo.Width != nil {
-		objectMap["width"] = mo.Width
-	}
-	if mo.Height != nil {
-		objectMap["height"] = mo.Height
-	}
-	if mo.ThumbnailURL != nil {
-		objectMap["thumbnailUrl"] = mo.ThumbnailURL
-	}
-	if mo.Provider != nil {
-		objectMap["provider"] = mo.Provider
-	}
-	if mo.DatePublished != nil {
-		objectMap["datePublished"] = mo.DatePublished
-	}
-	if mo.Text != nil {
-		objectMap["text"] = mo.Text
-	}
-	if mo.Name != nil {
-		objectMap["name"] = mo.Name
-	}
-	if mo.URL != nil {
-		objectMap["url"] = mo.URL
-	}
-	if mo.Image != nil {
-		objectMap["image"] = mo.Image
-	}
-	if mo.Description != nil {
-		objectMap["description"] = mo.Description
-	}
-	if mo.AlternateName != nil {
-		objectMap["alternateName"] = mo.AlternateName
-	}
-	if mo.BingID != nil {
-		objectMap["bingId"] = mo.BingID
-	}
-	if mo.ReadLink != nil {
-		objectMap["readLink"] = mo.ReadLink
-	}
-	if mo.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = mo.WebSearchURL
-	}
-	if mo.ID != nil {
-		objectMap["id"] = mo.ID
-	}
 	if mo.Type != "" {
 		objectMap["_type"] = mo.Type
 	}
@@ -7772,8 +7064,8 @@ func (mo *MediaObject) UnmarshalJSON(body []byte) error {
 }
 
 // NormalizedQuadrilateral defines a region of an image. The region is a convex quadrilateral defined by
-// coordinates of its top left, top right, bottom left, and bottom right points. The coordinates are fractional
-// values of the original image's width and height in the range 0.0 through 1.0.
+// coordinates of its top left, top right, bottom left, and bottom right points. The coordinates are
+// fractional values of the original image's width and height in the range 0.0 through 1.0.
 type NormalizedQuadrilateral struct {
 	// TopLeft - The top left corner coordinate.
 	TopLeft *Point2D `json:"topLeft,omitempty"`
@@ -7783,23 +7075,23 @@ type NormalizedQuadrilateral struct {
 	BottomRight *Point2D `json:"bottomRight,omitempty"`
 	// BottomLeft - The bottom left corner coordinate.
 	BottomLeft *Point2D `json:"bottomLeft,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Image - An image of the item.
+	// Image - READ-ONLY; An image of the item.
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// AlternateName - An alias for the item.
+	// AlternateName - READ-ONLY; An alias for the item.
 	AlternateName *string `json:"alternateName,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -7820,33 +7112,6 @@ func (nq NormalizedQuadrilateral) MarshalJSON() ([]byte, error) {
 	}
 	if nq.BottomLeft != nil {
 		objectMap["bottomLeft"] = nq.BottomLeft
-	}
-	if nq.Name != nil {
-		objectMap["name"] = nq.Name
-	}
-	if nq.URL != nil {
-		objectMap["url"] = nq.URL
-	}
-	if nq.Image != nil {
-		objectMap["image"] = nq.Image
-	}
-	if nq.Description != nil {
-		objectMap["description"] = nq.Description
-	}
-	if nq.AlternateName != nil {
-		objectMap["alternateName"] = nq.AlternateName
-	}
-	if nq.BingID != nil {
-		objectMap["bingId"] = nq.BingID
-	}
-	if nq.ReadLink != nil {
-		objectMap["readLink"] = nq.ReadLink
-	}
-	if nq.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = nq.WebSearchURL
-	}
-	if nq.ID != nil {
-		objectMap["id"] = nq.ID
 	}
 	if nq.Type != "" {
 		objectMap["_type"] = nq.Type
@@ -8047,35 +7312,35 @@ type BasicOffer interface {
 
 // Offer defines a merchant's offer.
 type Offer struct {
-	// Seller - Seller for this offer.
+	// Seller - READ-ONLY; Seller for this offer.
 	Seller *Organization `json:"seller,omitempty"`
-	// Price - The item's price.
+	// Price - READ-ONLY; The item's price.
 	Price *float64 `json:"price,omitempty"`
-	// PriceCurrency - The monetary currency. For example, USD. Possible values include: 'USD', 'CAD', 'GBP', 'EUR', 'COP', 'JPY', 'CNY', 'AUD', 'INR', 'AED', 'AFN', 'ALL', 'AMD', 'ANG', 'AOA', 'ARS', 'AWG', 'AZN', 'BAM', 'BBD', 'BDT', 'BGN', 'BHD', 'BIF', 'BMD', 'BND', 'BOB', 'BOV', 'BRL', 'BSD', 'BTN', 'BWP', 'BYR', 'BZD', 'CDF', 'CHE', 'CHF', 'CHW', 'CLF', 'CLP', 'COU', 'CRC', 'CUC', 'CUP', 'CVE', 'CZK', 'DJF', 'DKK', 'DOP', 'DZD', 'EGP', 'ERN', 'ETB', 'FJD', 'FKP', 'GEL', 'GHS', 'GIP', 'GMD', 'GNF', 'GTQ', 'GYD', 'HKD', 'HNL', 'HRK', 'HTG', 'HUF', 'IDR', 'ILS', 'IQD', 'IRR', 'ISK', 'JMD', 'JOD', 'KES', 'KGS', 'KHR', 'KMF', 'KPW', 'KRW', 'KWD', 'KYD', 'KZT', 'LAK', 'LBP', 'LKR', 'LRD', 'LSL', 'LYD', 'MAD', 'MDL', 'MGA', 'MKD', 'MMK', 'MNT', 'MOP', 'MRO', 'MUR', 'MVR', 'MWK', 'MXN', 'MXV', 'MYR', 'MZN', 'NAD', 'NGN', 'NIO', 'NOK', 'NPR', 'NZD', 'OMR', 'PAB', 'PEN', 'PGK', 'PHP', 'PKR', 'PLN', 'PYG', 'QAR', 'RON', 'RSD', 'RUB', 'RWF', 'SAR', 'SBD', 'SCR', 'SDG', 'SEK', 'SGD', 'SHP', 'SLL', 'SOS', 'SRD', 'SSP', 'STD', 'SYP', 'SZL', 'THB', 'TJS', 'TMT', 'TND', 'TOP', 'TRY', 'TTD', 'TWD', 'TZS', 'UAH', 'UGX', 'UYU', 'UZS', 'VEF', 'VND', 'VUV', 'WST', 'XAF', 'XCD', 'XOF', 'XPF', 'YER', 'ZAR', 'ZMW'
+	// PriceCurrency - READ-ONLY; The monetary currency. For example, USD. Possible values include: 'USD', 'CAD', 'GBP', 'EUR', 'COP', 'JPY', 'CNY', 'AUD', 'INR', 'AED', 'AFN', 'ALL', 'AMD', 'ANG', 'AOA', 'ARS', 'AWG', 'AZN', 'BAM', 'BBD', 'BDT', 'BGN', 'BHD', 'BIF', 'BMD', 'BND', 'BOB', 'BOV', 'BRL', 'BSD', 'BTN', 'BWP', 'BYR', 'BZD', 'CDF', 'CHE', 'CHF', 'CHW', 'CLF', 'CLP', 'COU', 'CRC', 'CUC', 'CUP', 'CVE', 'CZK', 'DJF', 'DKK', 'DOP', 'DZD', 'EGP', 'ERN', 'ETB', 'FJD', 'FKP', 'GEL', 'GHS', 'GIP', 'GMD', 'GNF', 'GTQ', 'GYD', 'HKD', 'HNL', 'HRK', 'HTG', 'HUF', 'IDR', 'ILS', 'IQD', 'IRR', 'ISK', 'JMD', 'JOD', 'KES', 'KGS', 'KHR', 'KMF', 'KPW', 'KRW', 'KWD', 'KYD', 'KZT', 'LAK', 'LBP', 'LKR', 'LRD', 'LSL', 'LYD', 'MAD', 'MDL', 'MGA', 'MKD', 'MMK', 'MNT', 'MOP', 'MRO', 'MUR', 'MVR', 'MWK', 'MXN', 'MXV', 'MYR', 'MZN', 'NAD', 'NGN', 'NIO', 'NOK', 'NPR', 'NZD', 'OMR', 'PAB', 'PEN', 'PGK', 'PHP', 'PKR', 'PLN', 'PYG', 'QAR', 'RON', 'RSD', 'RUB', 'RWF', 'SAR', 'SBD', 'SCR', 'SDG', 'SEK', 'SGD', 'SHP', 'SLL', 'SOS', 'SRD', 'SSP', 'STD', 'SYP', 'SZL', 'THB', 'TJS', 'TMT', 'TND', 'TOP', 'TRY', 'TTD', 'TWD', 'TZS', 'UAH', 'UGX', 'UYU', 'UZS', 'VEF', 'VND', 'VUV', 'WST', 'XAF', 'XCD', 'XOF', 'XPF', 'YER', 'ZAR', 'ZMW'
 	PriceCurrency Currency `json:"priceCurrency,omitempty"`
-	// Availability - The item's availability. The following are the possible values: Discontinued, InStock, InStoreOnly, LimitedAvailability, OnlineOnly, OutOfStock, PreOrder, SoldOut. Possible values include: 'Discontinued', 'InStock', 'InStoreOnly', 'LimitedAvailability', 'OnlineOnly', 'OutOfStock', 'PreOrder', 'SoldOut'
+	// Availability - READ-ONLY; The item's availability. The following are the possible values: Discontinued, InStock, InStoreOnly, LimitedAvailability, OnlineOnly, OutOfStock, PreOrder, SoldOut. Possible values include: 'Discontinued', 'InStock', 'InStoreOnly', 'LimitedAvailability', 'OnlineOnly', 'OutOfStock', 'PreOrder', 'SoldOut'
 	Availability ItemAvailability `json:"availability,omitempty"`
-	// AggregateRating - An aggregated rating that indicates how well the product has been rated by others.
+	// AggregateRating - READ-ONLY; An aggregated rating that indicates how well the product has been rated by others.
 	AggregateRating *AggregateRating `json:"aggregateRating,omitempty"`
-	// LastUpdated - The last date that the offer was updated. The date is in the form YYYY-MM-DD.
+	// LastUpdated - READ-ONLY; The last date that the offer was updated. The date is in the form YYYY-MM-DD.
 	LastUpdated *string `json:"lastUpdated,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Image - An image of the item.
+	// Image - READ-ONLY; An image of the item.
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// AlternateName - An alias for the item.
+	// AlternateName - READ-ONLY; An alias for the item.
 	AlternateName *string `json:"alternateName,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -8122,51 +7387,6 @@ func unmarshalBasicOfferArray(body []byte) ([]BasicOffer, error) {
 func (o Offer) MarshalJSON() ([]byte, error) {
 	o.Type = TypeOffer
 	objectMap := make(map[string]interface{})
-	if o.Seller != nil {
-		objectMap["seller"] = o.Seller
-	}
-	if o.Price != nil {
-		objectMap["price"] = o.Price
-	}
-	if o.PriceCurrency != "" {
-		objectMap["priceCurrency"] = o.PriceCurrency
-	}
-	if o.Availability != "" {
-		objectMap["availability"] = o.Availability
-	}
-	if o.AggregateRating != nil {
-		objectMap["aggregateRating"] = o.AggregateRating
-	}
-	if o.LastUpdated != nil {
-		objectMap["lastUpdated"] = o.LastUpdated
-	}
-	if o.Name != nil {
-		objectMap["name"] = o.Name
-	}
-	if o.URL != nil {
-		objectMap["url"] = o.URL
-	}
-	if o.Image != nil {
-		objectMap["image"] = o.Image
-	}
-	if o.Description != nil {
-		objectMap["description"] = o.Description
-	}
-	if o.AlternateName != nil {
-		objectMap["alternateName"] = o.AlternateName
-	}
-	if o.BingID != nil {
-		objectMap["bingId"] = o.BingID
-	}
-	if o.ReadLink != nil {
-		objectMap["readLink"] = o.ReadLink
-	}
-	if o.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = o.WebSearchURL
-	}
-	if o.ID != nil {
-		objectMap["id"] = o.ID
-	}
 	if o.Type != "" {
 		objectMap["_type"] = o.Type
 	}
@@ -8360,23 +7580,23 @@ func (o Offer) AsBasicResponseBase() (BasicResponseBase, bool) {
 
 // Organization defines an organization.
 type Organization struct {
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Image - An image of the item.
+	// Image - READ-ONLY; An image of the item.
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// AlternateName - An alias for the item.
+	// AlternateName - READ-ONLY; An alias for the item.
 	AlternateName *string `json:"alternateName,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -8386,33 +7606,6 @@ type Organization struct {
 func (o Organization) MarshalJSON() ([]byte, error) {
 	o.Type = TypeOrganization
 	objectMap := make(map[string]interface{})
-	if o.Name != nil {
-		objectMap["name"] = o.Name
-	}
-	if o.URL != nil {
-		objectMap["url"] = o.URL
-	}
-	if o.Image != nil {
-		objectMap["image"] = o.Image
-	}
-	if o.Description != nil {
-		objectMap["description"] = o.Description
-	}
-	if o.AlternateName != nil {
-		objectMap["alternateName"] = o.AlternateName
-	}
-	if o.BingID != nil {
-		objectMap["bingId"] = o.BingID
-	}
-	if o.ReadLink != nil {
-		objectMap["readLink"] = o.ReadLink
-	}
-	if o.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = o.WebSearchURL
-	}
-	if o.ID != nil {
-		objectMap["id"] = o.ID
-	}
 	if o.Type != "" {
 		objectMap["_type"] = o.Type
 	}
@@ -8606,27 +7799,27 @@ func (o Organization) AsBasicResponseBase() (BasicResponseBase, bool) {
 
 // Person defines a person.
 type Person struct {
-	// JobTitle - The person's job title.
+	// JobTitle - READ-ONLY; The person's job title.
 	JobTitle *string `json:"jobTitle,omitempty"`
-	// TwitterProfile - The URL of the person's twitter profile.
+	// TwitterProfile - READ-ONLY; The URL of the person's twitter profile.
 	TwitterProfile *string `json:"twitterProfile,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Image - An image of the item.
+	// Image - READ-ONLY; An image of the item.
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// AlternateName - An alias for the item.
+	// AlternateName - READ-ONLY; An alias for the item.
 	AlternateName *string `json:"alternateName,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -8636,39 +7829,6 @@ type Person struct {
 func (p Person) MarshalJSON() ([]byte, error) {
 	p.Type = TypePerson
 	objectMap := make(map[string]interface{})
-	if p.JobTitle != nil {
-		objectMap["jobTitle"] = p.JobTitle
-	}
-	if p.TwitterProfile != nil {
-		objectMap["twitterProfile"] = p.TwitterProfile
-	}
-	if p.Name != nil {
-		objectMap["name"] = p.Name
-	}
-	if p.URL != nil {
-		objectMap["url"] = p.URL
-	}
-	if p.Image != nil {
-		objectMap["image"] = p.Image
-	}
-	if p.Description != nil {
-		objectMap["description"] = p.Description
-	}
-	if p.AlternateName != nil {
-		objectMap["alternateName"] = p.AlternateName
-	}
-	if p.BingID != nil {
-		objectMap["bingId"] = p.BingID
-	}
-	if p.ReadLink != nil {
-		objectMap["readLink"] = p.ReadLink
-	}
-	if p.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = p.WebSearchURL
-	}
-	if p.ID != nil {
-		objectMap["id"] = p.ID
-	}
 	if p.Type != "" {
 		objectMap["_type"] = p.Type
 	}
@@ -8866,23 +8026,23 @@ type Point2D struct {
 	X *float64 `json:"x,omitempty"`
 	// Y - The y-coordinate of the point.
 	Y *float64 `json:"y,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Image - An image of the item.
+	// Image - READ-ONLY; An image of the item.
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// AlternateName - An alias for the item.
+	// AlternateName - READ-ONLY; An alias for the item.
 	AlternateName *string `json:"alternateName,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -8897,33 +8057,6 @@ func (p2 Point2D) MarshalJSON() ([]byte, error) {
 	}
 	if p2.Y != nil {
 		objectMap["y"] = p2.Y
-	}
-	if p2.Name != nil {
-		objectMap["name"] = p2.Name
-	}
-	if p2.URL != nil {
-		objectMap["url"] = p2.URL
-	}
-	if p2.Image != nil {
-		objectMap["image"] = p2.Image
-	}
-	if p2.Description != nil {
-		objectMap["description"] = p2.Description
-	}
-	if p2.AlternateName != nil {
-		objectMap["alternateName"] = p2.AlternateName
-	}
-	if p2.BingID != nil {
-		objectMap["bingId"] = p2.BingID
-	}
-	if p2.ReadLink != nil {
-		objectMap["readLink"] = p2.ReadLink
-	}
-	if p2.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = p2.WebSearchURL
-	}
-	if p2.ID != nil {
-		objectMap["id"] = p2.ID
 	}
 	if p2.Type != "" {
 		objectMap["_type"] = p2.Type
@@ -9126,7 +8259,7 @@ type BasicPropertiesItem interface {
 
 // PropertiesItem defines an item.
 type PropertiesItem struct {
-	// Text - Text representation of an item.
+	// Text - READ-ONLY; Text representation of an item.
 	Text *string `json:"text,omitempty"`
 	// Type - Possible values include: 'TypePropertiesItem', 'TypeAggregateRating', 'TypeRating'
 	Type TypeBasicPropertiesItem `json:"_type,omitempty"`
@@ -9177,9 +8310,6 @@ func unmarshalBasicPropertiesItemArray(body []byte) ([]BasicPropertiesItem, erro
 func (pi PropertiesItem) MarshalJSON() ([]byte, error) {
 	pi.Type = TypePropertiesItem
 	objectMap := make(map[string]interface{})
-	if pi.Text != nil {
-		objectMap["text"] = pi.Text
-	}
 	if pi.Type != "" {
 		objectMap["_type"] = pi.Type
 	}
@@ -9215,13 +8345,13 @@ func (pi PropertiesItem) AsBasicPropertiesItem() (BasicPropertiesItem, bool) {
 type Query struct {
 	// Text - The query string. Use this string as the query term in a new search request.
 	Text *string `json:"text,omitempty"`
-	// DisplayText - The display version of the query term.
+	// DisplayText - READ-ONLY; The display version of the query term.
 	DisplayText *string `json:"displayText,omitempty"`
-	// WebSearchURL - The URL that takes the user to the Bing search results page for the query.
+	// WebSearchURL - READ-ONLY; The URL that takes the user to the Bing search results page for the query.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// SearchLink - The URL that you use to get the results of the related search. Before using the URL, you must append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header. Use this URL if you're displaying the results in your own user interface. Otherwise, use the webSearchUrl URL.
+	// SearchLink - READ-ONLY; The URL that you use to get the results of the related search. Before using the URL, you must append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header. Use this URL if you're displaying the results in your own user interface. Otherwise, use the webSearchUrl URL.
 	SearchLink *string `json:"searchLink,omitempty"`
-	// Thumbnail - The URL to a thumbnail of a related image.
+	// Thumbnail - READ-ONLY; The URL to a thumbnail of a related image.
 	Thumbnail *ImageObject `json:"thumbnail,omitempty"`
 }
 
@@ -9235,9 +8365,9 @@ type BasicRating interface {
 type Rating struct {
 	// RatingValue - The mean (average) rating. The possible values are 1.0 through 5.0.
 	RatingValue *float64 `json:"ratingValue,omitempty"`
-	// BestRating - The highest rated review. The possible values are 1.0 through 5.0.
+	// BestRating - READ-ONLY; The highest rated review. The possible values are 1.0 through 5.0.
 	BestRating *float64 `json:"bestRating,omitempty"`
-	// Text - Text representation of an item.
+	// Text - READ-ONLY; Text representation of an item.
 	Text *string `json:"text,omitempty"`
 	// Type - Possible values include: 'TypePropertiesItem', 'TypeAggregateRating', 'TypeRating'
 	Type TypeBasicPropertiesItem `json:"_type,omitempty"`
@@ -9287,12 +8417,6 @@ func (r Rating) MarshalJSON() ([]byte, error) {
 	if r.RatingValue != nil {
 		objectMap["ratingValue"] = r.RatingValue
 	}
-	if r.BestRating != nil {
-		objectMap["bestRating"] = r.BestRating
-	}
-	if r.Text != nil {
-		objectMap["text"] = r.Text
-	}
 	if r.Type != "" {
 		objectMap["_type"] = r.Type
 	}
@@ -9326,37 +8450,37 @@ func (r Rating) AsBasicPropertiesItem() (BasicPropertiesItem, bool) {
 
 // Recipe defines a cooking recipe.
 type Recipe struct {
-	// CookTime - The amount of time the food takes to cook. For example, PT25M. For information about the time format, see http://en.wikipedia.org/wiki/ISO_8601#Durations.
+	// CookTime - READ-ONLY; The amount of time the food takes to cook. For example, PT25M. For information about the time format, see http://en.wikipedia.org/wiki/ISO_8601#Durations.
 	CookTime *string `json:"cookTime,omitempty"`
-	// PrepTime - The amount of time required to prepare the ingredients. For example, PT15M. For information about the time format, see http://en.wikipedia.org/wiki/ISO_8601#Durations.
+	// PrepTime - READ-ONLY; The amount of time required to prepare the ingredients. For example, PT15M. For information about the time format, see http://en.wikipedia.org/wiki/ISO_8601#Durations.
 	PrepTime *string `json:"prepTime,omitempty"`
-	// TotalTime - The total amount of time it takes to prepare and cook the recipe. For example, PT45M. For information about the time format, see http://en.wikipedia.org/wiki/ISO_8601#Durations.
+	// TotalTime - READ-ONLY; The total amount of time it takes to prepare and cook the recipe. For example, PT45M. For information about the time format, see http://en.wikipedia.org/wiki/ISO_8601#Durations.
 	TotalTime *string `json:"totalTime,omitempty"`
-	// ThumbnailURL - The URL to a thumbnail of the item.
+	// ThumbnailURL - READ-ONLY; The URL to a thumbnail of the item.
 	ThumbnailURL *string `json:"thumbnailUrl,omitempty"`
-	// Provider - The source of the creative work.
+	// Provider - READ-ONLY; The source of the creative work.
 	Provider *[]BasicThing `json:"provider,omitempty"`
-	// DatePublished - The date on which the CreativeWork was published.
+	// DatePublished - READ-ONLY; The date on which the CreativeWork was published.
 	DatePublished *string `json:"datePublished,omitempty"`
-	// Text - Text content of this creative work.
+	// Text - READ-ONLY; Text content of this creative work.
 	Text *string `json:"text,omitempty"`
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Image - An image of the item.
+	// Image - READ-ONLY; An image of the item.
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// AlternateName - An alias for the item.
+	// AlternateName - READ-ONLY; An alias for the item.
 	AlternateName *string `json:"alternateName,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -9366,54 +8490,6 @@ type Recipe struct {
 func (r Recipe) MarshalJSON() ([]byte, error) {
 	r.Type = TypeRecipe
 	objectMap := make(map[string]interface{})
-	if r.CookTime != nil {
-		objectMap["cookTime"] = r.CookTime
-	}
-	if r.PrepTime != nil {
-		objectMap["prepTime"] = r.PrepTime
-	}
-	if r.TotalTime != nil {
-		objectMap["totalTime"] = r.TotalTime
-	}
-	if r.ThumbnailURL != nil {
-		objectMap["thumbnailUrl"] = r.ThumbnailURL
-	}
-	if r.Provider != nil {
-		objectMap["provider"] = r.Provider
-	}
-	if r.DatePublished != nil {
-		objectMap["datePublished"] = r.DatePublished
-	}
-	if r.Text != nil {
-		objectMap["text"] = r.Text
-	}
-	if r.Name != nil {
-		objectMap["name"] = r.Name
-	}
-	if r.URL != nil {
-		objectMap["url"] = r.URL
-	}
-	if r.Image != nil {
-		objectMap["image"] = r.Image
-	}
-	if r.Description != nil {
-		objectMap["description"] = r.Description
-	}
-	if r.AlternateName != nil {
-		objectMap["alternateName"] = r.AlternateName
-	}
-	if r.BingID != nil {
-		objectMap["bingId"] = r.BingID
-	}
-	if r.ReadLink != nil {
-		objectMap["readLink"] = r.ReadLink
-	}
-	if r.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = r.WebSearchURL
-	}
-	if r.ID != nil {
-		objectMap["id"] = r.ID
-	}
 	if r.Type != "" {
 		objectMap["_type"] = r.Type
 	}
@@ -9774,18 +8850,18 @@ func (r *Recipe) UnmarshalJSON(body []byte) error {
 
 // RecipesModule defines a list of recipes.
 type RecipesModule struct {
-	// Value - A list of recipes.
+	// Value - READ-ONLY; A list of recipes.
 	Value *[]Recipe `json:"value,omitempty"`
 }
 
 // RelatedSearchesModule defines a list of related searches.
 type RelatedSearchesModule struct {
-	// Value - A list of related searches.
+	// Value - READ-ONLY; A list of related searches.
 	Value *[]Query `json:"value,omitempty"`
 }
 
-// Request a JSON object that contains information about the image to get insights of. Specify this object only in
-// a knowledgeRequest form data.
+// Request a JSON object that contains information about the image to get insights of. Specify this object
+// only in a knowledgeRequest form data.
 type Request struct {
 	// ImageInfo - A JSON object that identities the image to get insights of.
 	ImageInfo *ImageInfo `json:"imageInfo,omitempty"`
@@ -9829,13 +8905,14 @@ type BasicResponse interface {
 	AsResponse() (*Response, bool)
 }
 
-// Response defines a response. All schemas that return at the root of the response must inherit from this object.
+// Response defines a response. All schemas that return at the root of the response must inherit from this
+// object.
 type Response struct {
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -9970,15 +9047,6 @@ func unmarshalBasicResponseArray(body []byte) ([]BasicResponse, error) {
 func (r Response) MarshalJSON() ([]byte, error) {
 	r.Type = TypeResponse
 	objectMap := make(map[string]interface{})
-	if r.ReadLink != nil {
-		objectMap["readLink"] = r.ReadLink
-	}
-	if r.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = r.WebSearchURL
-	}
-	if r.ID != nil {
-		objectMap["id"] = r.ID
-	}
 	if r.Type != "" {
 		objectMap["_type"] = r.Type
 	}
@@ -10553,23 +9621,23 @@ type BasicStructuredValue interface {
 
 // StructuredValue ...
 type StructuredValue struct {
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Image - An image of the item.
+	// Image - READ-ONLY; An image of the item.
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// AlternateName - An alias for the item.
+	// AlternateName - READ-ONLY; An alias for the item.
 	AlternateName *string `json:"alternateName,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -10620,33 +9688,6 @@ func unmarshalBasicStructuredValueArray(body []byte) ([]BasicStructuredValue, er
 func (sv StructuredValue) MarshalJSON() ([]byte, error) {
 	sv.Type = TypeStructuredValue
 	objectMap := make(map[string]interface{})
-	if sv.Name != nil {
-		objectMap["name"] = sv.Name
-	}
-	if sv.URL != nil {
-		objectMap["url"] = sv.URL
-	}
-	if sv.Image != nil {
-		objectMap["image"] = sv.Image
-	}
-	if sv.Description != nil {
-		objectMap["description"] = sv.Description
-	}
-	if sv.AlternateName != nil {
-		objectMap["alternateName"] = sv.AlternateName
-	}
-	if sv.BingID != nil {
-		objectMap["bingId"] = sv.BingID
-	}
-	if sv.ReadLink != nil {
-		objectMap["readLink"] = sv.ReadLink
-	}
-	if sv.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = sv.WebSearchURL
-	}
-	if sv.ID != nil {
-		objectMap["id"] = sv.ID
-	}
 	if sv.Type != "" {
 		objectMap["_type"] = sv.Type
 	}
@@ -10872,23 +9913,23 @@ type BasicThing interface {
 
 // Thing defines a thing.
 type Thing struct {
-	// Name - The name of the thing represented by this object.
+	// Name - READ-ONLY; The name of the thing represented by this object.
 	Name *string `json:"name,omitempty"`
-	// URL - The URL to get more information about the thing represented by this object.
+	// URL - READ-ONLY; The URL to get more information about the thing represented by this object.
 	URL *string `json:"url,omitempty"`
-	// Image - An image of the item.
+	// Image - READ-ONLY; An image of the item.
 	Image *ImageObject `json:"image,omitempty"`
-	// Description - A short description of the item.
+	// Description - READ-ONLY; A short description of the item.
 	Description *string `json:"description,omitempty"`
-	// AlternateName - An alias for the item.
+	// AlternateName - READ-ONLY; An alias for the item.
 	AlternateName *string `json:"alternateName,omitempty"`
-	// BingID - An ID that uniquely identifies this item.
+	// BingID - READ-ONLY; An ID that uniquely identifies this item.
 	BingID *string `json:"bingId,omitempty"`
-	// ReadLink - The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
+	// ReadLink - READ-ONLY; The URL that returns this resource. To use the URL, append query parameters as appropriate and include the Ocp-Apim-Subscription-Key header.
 	ReadLink *string `json:"readLink,omitempty"`
-	// WebSearchURL - The URL to Bing's search result for this item.
+	// WebSearchURL - READ-ONLY; The URL to Bing's search result for this item.
 	WebSearchURL *string `json:"webSearchUrl,omitempty"`
-	// ID - A String identifier.
+	// ID - READ-ONLY; A String identifier.
 	ID *string `json:"id,omitempty"`
 	// Type - Possible values include: 'TypeResponseBase', 'TypePoint2D', 'TypeNormalizedQuadrilateral', 'TypeImageAction', 'TypeImageTag', 'TypeOrganization', 'TypeOffer', 'TypeAggregateOffer', 'TypeImageObject', 'TypeImageKnowledge', 'TypeResponse', 'TypeIdentifiable', 'TypeErrorResponse', 'TypeThing', 'TypeAction', 'TypeMediaObject', 'TypeCreativeWork', 'TypePerson', 'TypeIntangible', 'TypeImageEntityAction', 'TypeImageModuleAction', 'TypeRecipe', 'TypeImageRecipesAction', 'TypeImageRelatedSearchesAction', 'TypeImageShoppingSourcesAction', 'TypeStructuredValue'
 	Type Type `json:"_type,omitempty"`
@@ -11011,33 +10052,6 @@ func unmarshalBasicThingArray(body []byte) ([]BasicThing, error) {
 func (t Thing) MarshalJSON() ([]byte, error) {
 	t.Type = TypeThing
 	objectMap := make(map[string]interface{})
-	if t.Name != nil {
-		objectMap["name"] = t.Name
-	}
-	if t.URL != nil {
-		objectMap["url"] = t.URL
-	}
-	if t.Image != nil {
-		objectMap["image"] = t.Image
-	}
-	if t.Description != nil {
-		objectMap["description"] = t.Description
-	}
-	if t.AlternateName != nil {
-		objectMap["alternateName"] = t.AlternateName
-	}
-	if t.BingID != nil {
-		objectMap["bingId"] = t.BingID
-	}
-	if t.ReadLink != nil {
-		objectMap["readLink"] = t.ReadLink
-	}
-	if t.WebSearchURL != nil {
-		objectMap["webSearchUrl"] = t.WebSearchURL
-	}
-	if t.ID != nil {
-		objectMap["id"] = t.ID
-	}
 	if t.Type != "" {
 		objectMap["_type"] = t.Type
 	}

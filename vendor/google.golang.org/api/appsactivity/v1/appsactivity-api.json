@@ -14,7 +14,7 @@
   "description": "Provides a historical view of activity.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/google-apps/activity/",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/adguqXy9JBlA2vwrlXZEhWfVyo0\"",
+  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/CGupfnZG_qKM1HNP9Q7CnX6bxR8\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -74,7 +74,7 @@
     "activities": {
       "methods": {
         "list": {
-          "description": "Returns a list of activities visible to the current logged in user. Visible activities are determined by the visiblity settings of the object that was acted on, e.g. Drive files a user can see. An activity is a record of past events. Multiple events may be merged if they are similar. A request is scoped to activities from a given Google service using the source parameter.",
+          "description": "Returns a list of activities visible to the current logged in user. Visible activities are determined by the visibility settings of the object that was acted on, e.g. Drive files a user can see. An activity is a record of past events. Multiple events may be merged if they are similar. A request is scoped to activities from a given Google service using the source parameter.",
           "httpMethod": "GET",
           "id": "appsactivity.activities.list",
           "parameters": {
@@ -121,7 +121,7 @@
             },
             "userId": {
               "default": "me",
-              "description": "Indicates the user to return activity for. Use the special value me to indicate the currently authenticated user.",
+              "description": "The ID used for ACL checks (does not filter the resulting event list by the assigned value). Use the special value me to indicate the currently authenticated user.",
               "location": "query",
               "type": "string"
             }
@@ -137,6 +137,7 @@
       }
     }
   },
+  "revision": "20190331",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Activity": {

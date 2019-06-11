@@ -34,6 +34,40 @@
           "expected": "NoSuchEntity"
         }
       ]
+    },
+    "RoleExists": {
+      "delay": 1,
+      "operation": "GetRole",
+      "maxAttempts": 20,
+      "acceptors": [
+        {
+          "state": "success",
+          "matcher": "status",
+          "expected": 200
+        },
+        {
+          "state": "retry",
+          "matcher": "error",
+          "expected": "NoSuchEntity"
+        }
+      ]
+    },
+    "PolicyExists": {
+      "delay": 1,
+      "operation": "GetPolicy",
+      "maxAttempts": 20,
+      "acceptors": [
+        {
+          "state": "success",
+          "matcher": "status",
+          "expected": 200
+        },
+        {
+          "state": "retry",
+          "matcher": "error",
+          "expected": "NoSuchEntity"
+        }
+      ]
     }
   }
 }

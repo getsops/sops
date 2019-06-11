@@ -70,6 +70,13 @@
       "error":{"httpStatusCode":400},
       "exception":true
     },
+    "ContainerFormat":{
+      "type":"string",
+      "enum":[
+        "FRAGMENTED_MP4",
+        "MPEG_TS"
+      ]
+    },
     "ContentType":{
       "type":"string",
       "max":128,
@@ -77,6 +84,13 @@
       "pattern":"^[a-zA-Z0-9_\\.\\-]+$"
     },
     "DiscontinuityMode":{
+      "type":"string",
+      "enum":[
+        "ALWAYS",
+        "NEVER"
+      ]
+    },
+    "DisplayFragmentTimestamp":{
       "type":"string",
       "enum":[
         "ALWAYS",
@@ -140,7 +154,9 @@
         "StreamARN":{"shape":"ResourceARN"},
         "PlaybackMode":{"shape":"PlaybackMode"},
         "HLSFragmentSelector":{"shape":"HLSFragmentSelector"},
+        "ContainerFormat":{"shape":"ContainerFormat"},
         "DiscontinuityMode":{"shape":"DiscontinuityMode"},
+        "DisplayFragmentTimestamp":{"shape":"DisplayFragmentTimestamp"},
         "Expires":{"shape":"Expires"},
         "MaxMediaPlaylistFragmentResults":{"shape":"PageLimit"}
       }

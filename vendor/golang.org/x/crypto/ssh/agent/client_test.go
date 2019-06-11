@@ -8,11 +8,13 @@ import (
 	"bytes"
 	"crypto/rand"
 	"errors"
+	"io"
 	"net"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strconv"
+	"sync"
 	"testing"
 	"time"
 
@@ -20,7 +22,7 @@ import (
 )
 
 // startOpenSSHAgent executes ssh-agent, and returns an Agent interface to it.
-func startOpenSSHAgent(t *testing.T) (client Agent, socket string, cleanup func()) {
+func startOpenSSHAgent(t *testing.T) (client ExtendedAgent, socket string, cleanup func()) {
 	if testing.Short() {
 		// ssh-agent is not always available, and the key
 		// types supported vary by platform.
@@ -79,18 +81,22 @@ func startOpenSSHAgent(t *testing.T) (client Agent, socket string, cleanup func(
 	}
 }
 
-// startKeyringAgent uses Keyring to simulate a ssh-agent Server and returns a client.
-func startKeyringAgent(t *testing.T) (client Agent, cleanup func()) {
+func startAgent(t *testing.T, agent Agent) (client ExtendedAgent, cleanup func()) {
 	c1, c2, err := netPipe()
 	if err != nil {
 		t.Fatalf("netPipe: %v", err)
 	}
-	go ServeAgent(NewKeyring(), c2)
+	go ServeAgent(agent, c2)
 
 	return NewClient(c1), func() {
 		c1.Close()
 		c2.Close()
 	}
+}
+
+// startKeyringAgent uses Keyring to simulate a ssh-agent Server and returns a client.
+func startKeyringAgent(t *testing.T) (client ExtendedAgent, cleanup func()) {
+	return startAgent(t, NewKeyring())
 }
 
 func testOpenSSHAgent(t *testing.T, key interface{}, cert *ssh.Certificate, lifetimeSecs uint32) {
@@ -107,7 +113,7 @@ func testKeyringAgent(t *testing.T, key interface{}, cert *ssh.Certificate, life
 	testAgentInterface(t, agent, key, cert, lifetimeSecs)
 }
 
-func testAgentInterface(t *testing.T, agent Agent, key interface{}, cert *ssh.Certificate, lifetimeSecs uint32) {
+func testAgentInterface(t *testing.T, agent ExtendedAgent, key interface{}, cert *ssh.Certificate, lifetimeSecs uint32) {
 	signer, err := ssh.NewSignerFromKey(key)
 	if err != nil {
 		t.Fatalf("NewSignerFromKey(%T): %v", key, err)
@@ -159,6 +165,25 @@ func testAgentInterface(t *testing.T, agent Agent, key interface{}, cert *ssh.Ce
 		t.Fatalf("Verify(%s): %v", pubKey.Type(), err)
 	}
 
+	// For tests on RSA keys, try signing with SHA-256 and SHA-512 flags
+	if pubKey.Type() == "ssh-rsa" {
+		sshFlagTest := func(flag SignatureFlags, expectedSigFormat string) {
+			sig, err = agent.SignWithFlags(pubKey, data, flag)
+			if err != nil {
+				t.Fatalf("SignWithFlags(%s): %v", pubKey.Type(), err)
+			}
+			if sig.Format != expectedSigFormat {
+				t.Fatalf("Signature format didn't match expected value: %s != %s", sig.Format, expectedSigFormat)
+			}
+			if err := pubKey.Verify(data, sig); err != nil {
+				t.Fatalf("Verify(%s): %v", pubKey.Type(), err)
+			}
+		}
+		sshFlagTest(0, ssh.SigAlgoRSA)
+		sshFlagTest(SignatureFlagRsaSha256, ssh.SigAlgoRSASHA2256)
+		sshFlagTest(SignatureFlagRsaSha512, ssh.SigAlgoRSASHA2512)
+	}
+
 	// If the key has a lifetime, is it removed when it should be?
 	if lifetimeSecs > 0 {
 		time.Sleep(time.Second*time.Duration(lifetimeSecs) + 100*time.Millisecond)
@@ -171,6 +196,63 @@ func testAgentInterface(t *testing.T, agent Agent, key interface{}, cert *ssh.Ce
 		}
 	}
 
+}
+
+func TestMalformedRequests(t *testing.T) {
+	keyringAgent := NewKeyring()
+	listener, err := netListener()
+	if err != nil {
+		t.Fatalf("netListener: %v", err)
+	}
+	defer listener.Close()
+
+	testCase := func(t *testing.T, requestBytes []byte, wantServerErr bool) {
+		var wg sync.WaitGroup
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			c, err := listener.Accept()
+			if err != nil {
+				t.Errorf("listener.Accept: %v", err)
+				return
+			}
+			defer c.Close()
+
+			err = ServeAgent(keyringAgent, c)
+			if err == nil {
+				t.Error("ServeAgent should have returned an error to malformed input")
+			} else {
+				if (err != io.EOF) != wantServerErr {
+					t.Errorf("ServeAgent returned expected error: %v", err)
+				}
+			}
+		}()
+
+		c, err := net.Dial("tcp", listener.Addr().String())
+		if err != nil {
+			t.Fatalf("net.Dial: %v", err)
+		}
+		_, err = c.Write(requestBytes)
+		if err != nil {
+			t.Errorf("Unexpected error writing raw bytes on connection: %v", err)
+		}
+		c.Close()
+		wg.Wait()
+	}
+
+	var testCases = []struct {
+		name          string
+		requestBytes  []byte
+		wantServerErr bool
+	}{
+		{"Empty request", []byte{}, false},
+		{"Short header", []byte{0x00}, true},
+		{"Empty body", []byte{0x00, 0x00, 0x00, 0x00}, true},
+		{"Short body", []byte{0x00, 0x00, 0x00, 0x01}, false},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) { testCase(t, tc.requestBytes, tc.wantServerErr) })
+	}
 }
 
 func TestAgent(t *testing.T) {
@@ -192,16 +274,25 @@ func TestCert(t *testing.T) {
 	testKeyringAgent(t, testPrivateKeys["rsa"], cert, 0)
 }
 
-// netPipe is analogous to net.Pipe, but it uses a real net.Conn, and
-// therefore is buffered (net.Pipe deadlocks if both sides start with
-// a write.)
-func netPipe() (net.Conn, net.Conn, error) {
+// netListener creates a localhost network listener.
+func netListener() (net.Listener, error) {
 	listener, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {
 		listener, err = net.Listen("tcp", "[::1]:0")
 		if err != nil {
-			return nil, nil, err
+			return nil, err
 		}
+	}
+	return listener, nil
+}
+
+// netPipe is analogous to net.Pipe, but it uses a real net.Conn, and
+// therefore is buffered (net.Pipe deadlocks if both sides start with
+// a write.)
+func netPipe() (net.Conn, net.Conn, error) {
+	listener, err := netListener()
+	if err != nil {
+		return nil, nil, err
 	}
 	defer listener.Close()
 	c1, err := net.Dial("tcp", listener.Addr().String())
@@ -216,6 +307,35 @@ func netPipe() (net.Conn, net.Conn, error) {
 	}
 
 	return c1, c2, nil
+}
+
+func TestServerResponseTooLarge(t *testing.T) {
+	a, b, err := netPipe()
+	if err != nil {
+		t.Fatalf("netPipe: %v", err)
+	}
+
+	defer a.Close()
+	defer b.Close()
+
+	var response identitiesAnswerAgentMsg
+	response.NumKeys = 1
+	response.Keys = make([]byte, maxAgentResponseBytes+1)
+
+	agent := NewClient(a)
+	go func() {
+		n, _ := b.Write(ssh.Marshal(response))
+		if n < 4 {
+			t.Fatalf("At least 4 bytes (the response size) should have been successfully written: %d < 4", n)
+		}
+	}()
+	_, err = agent.List()
+	if err == nil {
+		t.Fatal("Did not get error result")
+	}
+	if err.Error() != "agent: client error: response too large" {
+		t.Fatal("Did not get expected error result")
+	}
 }
 
 func TestAuth(t *testing.T) {
@@ -375,5 +495,40 @@ func testAgentLifetime(t *testing.T, agent Agent) {
 		t.Errorf("List: %v", err)
 	} else if len(keys) != 0 {
 		t.Errorf("Want 0 keys, got %v", len(keys))
+	}
+}
+
+type keyringExtended struct {
+	*keyring
+}
+
+func (r *keyringExtended) Extension(extensionType string, contents []byte) ([]byte, error) {
+	if extensionType != "my-extension@example.com" {
+		return []byte{agentExtensionFailure}, nil
+	}
+	return append([]byte{agentSuccess}, contents...), nil
+}
+
+func TestAgentExtensions(t *testing.T) {
+	agent, _, cleanup := startOpenSSHAgent(t)
+	defer cleanup()
+	_, err := agent.Extension("my-extension@example.com", []byte{0x00, 0x01, 0x02})
+	if err == nil {
+		t.Fatal("should have gotten agent extension failure")
+	}
+
+	agent, cleanup = startAgent(t, &keyringExtended{})
+	defer cleanup()
+	result, err := agent.Extension("my-extension@example.com", []byte{0x00, 0x01, 0x02})
+	if err != nil {
+		t.Fatalf("agent extension failure: %v", err)
+	}
+	if len(result) != 4 || !bytes.Equal(result, []byte{agentSuccess, 0x00, 0x01, 0x02}) {
+		t.Fatalf("agent extension result invalid: %v", result)
+	}
+
+	_, err = agent.Extension("bad-extension@example.com", []byte{0x00, 0x01, 0x02})
+	if err == nil {
+		t.Fatal("should have gotten agent extension failure")
 	}
 }

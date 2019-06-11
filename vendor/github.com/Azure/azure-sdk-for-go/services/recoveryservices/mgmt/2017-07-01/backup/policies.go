@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -46,6 +47,16 @@ func NewPoliciesClientWithBaseURI(baseURI string, subscriptionID string) Policie
 // resourceGroupName - the name of the resource group where the recovery services vault is present.
 // filter - oData filter options.
 func (client PoliciesClient) List(ctx context.Context, vaultName string, resourceGroupName string, filter string) (result ProtectionPolicyResourceListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PoliciesClient.List")
+		defer func() {
+			sc := -1
+			if result.pprl.Response.Response != nil {
+				sc = result.pprl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, vaultName, resourceGroupName, filter)
 	if err != nil {
@@ -113,8 +124,8 @@ func (client PoliciesClient) ListResponder(resp *http.Response) (result Protecti
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client PoliciesClient) listNextResults(lastResults ProtectionPolicyResourceList) (result ProtectionPolicyResourceList, err error) {
-	req, err := lastResults.protectionPolicyResourceListPreparer()
+func (client PoliciesClient) listNextResults(ctx context.Context, lastResults ProtectionPolicyResourceList) (result ProtectionPolicyResourceList, err error) {
+	req, err := lastResults.protectionPolicyResourceListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "backup.PoliciesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -135,6 +146,16 @@ func (client PoliciesClient) listNextResults(lastResults ProtectionPolicyResourc
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client PoliciesClient) ListComplete(ctx context.Context, vaultName string, resourceGroupName string, filter string) (result ProtectionPolicyResourceListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PoliciesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, vaultName, resourceGroupName, filter)
 	return
 }

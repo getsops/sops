@@ -18,7 +18,7 @@
   "baseUrl": "https://bigquerydatatransfer.googleapis.com/",
   "batchPath": "batch",
   "canonicalName": "BigQuery Data Transfer",
-  "description": "Transfers data from partner SaaS applications to Google BigQuery on a scheduled, managed basis.",
+  "description": "Schedule queries or transfer external data from SaaS applications to Google BigQuery on a regular basis.",
   "discoveryVersion": "v1",
   "documentationLink": "https://cloud.google.com/bigquery/",
   "fullyEncodeReservedExpansion": true,
@@ -406,6 +406,11 @@
                       "pattern": "^projects/[^/]+/locations/[^/]+$",
                       "required": true,
                       "type": "string"
+                    },
+                    "versionInfo": {
+                      "description": "Optional version info. If users want to find a very recent access token,\nthat is, immediately after approving access, users have to set the\nversion_info claim in the token request. To obtain the version_info, users\nmust use the “none+gsession” response type. which be return a\nversion_info back in the authorization response which be be put in a JWT\nclaim in the token request.",
+                      "location": "query",
+                      "type": "string"
                     }
                   },
                   "path": "v1/{+parent}/transferConfigs",
@@ -441,6 +446,7 @@
                     "$ref": "Empty"
                   },
                   "scopes": [
+                    "https://www.googleapis.com/auth/bigquery",
                     "https://www.googleapis.com/auth/cloud-platform"
                   ]
                 },
@@ -530,7 +536,7 @@
                       "type": "string"
                     },
                     "name": {
-                      "description": "The resource name of the transfer config.\nTransfer config names have the form\n`projects/{project_id}/transferConfigs/{config_id}`.\nWhere `config_id` is usually a uuid, even though it is not\nguaranteed or required. The name is ignored when creating a transfer\nconfig.",
+                      "description": "The resource name of the transfer config.\nTransfer config names have the form of\n`projects/{project_id}/locations/{region}/transferConfigs/{config_id}`.\nThe name is automatically generated based on the config_id specified in\nCreateTransferConfigRequest along with project_id and region. If config_id\nis not provided, usually a uuid, even though it is not guaranteed or\nrequired, will be generated for config_id.",
                       "location": "path",
                       "pattern": "^projects/[^/]+/locations/[^/]+/transferConfigs/[^/]+$",
                       "required": true,
@@ -539,6 +545,11 @@
                     "updateMask": {
                       "description": "Required list of fields to be updated in this request.",
                       "format": "google-fieldmask",
+                      "location": "query",
+                      "type": "string"
+                    },
+                    "versionInfo": {
+                      "description": "Optional version info. If users want to find a very recent access token,\nthat is, immediately after approving access, users have to set the\nversion_info claim in the token request. To obtain the version_info, users\nmust use the “none+gsession” response type. which be return a\nversion_info back in the authorization response which be be put in a JWT\nclaim in the token request.",
                       "location": "query",
                       "type": "string"
                     }
@@ -555,7 +566,7 @@
                   ]
                 },
                 "scheduleRuns": {
-                  "description": "Creates transfer runs for a time range [start_time, end_time].\nFor each date - or whatever granularity the data source supports - in the\nrange, one transfer run is created.\nNote that runs are created per UTC time in the time range.",
+                  "description": "Creates transfer runs for a time range [start_time, end_time].\nFor each date - or whatever granularity the data source supports - in the\nrange, one transfer run is created.\nNote that runs are created per UTC time in the time range.\nDEPRECATED: use StartManualTransferRuns instead.",
                   "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/transferConfigs/{transferConfigsId}:scheduleRuns",
                   "httpMethod": "POST",
                   "id": "bigquerydatatransfer.projects.locations.transferConfigs.scheduleRuns",
@@ -577,6 +588,35 @@
                   },
                   "response": {
                     "$ref": "ScheduleTransferRunsResponse"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/bigquery",
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
+                },
+                "startManualRuns": {
+                  "description": "Start manual transfer runs to be executed now with schedule_time equal to\ncurrent time. The transfer runs can be created for a time range where the\nrun_time is between start_time (inclusive) and end_time (exclusive), or for\na specific run_time.",
+                  "flatPath": "v1/projects/{projectsId}/locations/{locationsId}/transferConfigs/{transferConfigsId}:startManualRuns",
+                  "httpMethod": "POST",
+                  "id": "bigquerydatatransfer.projects.locations.transferConfigs.startManualRuns",
+                  "parameterOrder": [
+                    "parent"
+                  ],
+                  "parameters": {
+                    "parent": {
+                      "description": "Transfer configuration name in the form:\n`projects/{project_id}/transferConfigs/{config_id}`.",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+/locations/[^/]+/transferConfigs/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v1/{+parent}:startManualRuns",
+                  "request": {
+                    "$ref": "StartManualTransferRunsRequest"
+                  },
+                  "response": {
+                    "$ref": "StartManualTransferRunsResponse"
                   },
                   "scopes": [
                     "https://www.googleapis.com/auth/bigquery",
@@ -785,6 +825,11 @@
                   "pattern": "^projects/[^/]+$",
                   "required": true,
                   "type": "string"
+                },
+                "versionInfo": {
+                  "description": "Optional version info. If users want to find a very recent access token,\nthat is, immediately after approving access, users have to set the\nversion_info claim in the token request. To obtain the version_info, users\nmust use the “none+gsession” response type. which be return a\nversion_info back in the authorization response which be be put in a JWT\nclaim in the token request.",
+                  "location": "query",
+                  "type": "string"
                 }
               },
               "path": "v1/{+parent}/transferConfigs",
@@ -820,6 +865,7 @@
                 "$ref": "Empty"
               },
               "scopes": [
+                "https://www.googleapis.com/auth/bigquery",
                 "https://www.googleapis.com/auth/cloud-platform"
               ]
             },
@@ -909,7 +955,7 @@
                   "type": "string"
                 },
                 "name": {
-                  "description": "The resource name of the transfer config.\nTransfer config names have the form\n`projects/{project_id}/transferConfigs/{config_id}`.\nWhere `config_id` is usually a uuid, even though it is not\nguaranteed or required. The name is ignored when creating a transfer\nconfig.",
+                  "description": "The resource name of the transfer config.\nTransfer config names have the form of\n`projects/{project_id}/locations/{region}/transferConfigs/{config_id}`.\nThe name is automatically generated based on the config_id specified in\nCreateTransferConfigRequest along with project_id and region. If config_id\nis not provided, usually a uuid, even though it is not guaranteed or\nrequired, will be generated for config_id.",
                   "location": "path",
                   "pattern": "^projects/[^/]+/transferConfigs/[^/]+$",
                   "required": true,
@@ -918,6 +964,11 @@
                 "updateMask": {
                   "description": "Required list of fields to be updated in this request.",
                   "format": "google-fieldmask",
+                  "location": "query",
+                  "type": "string"
+                },
+                "versionInfo": {
+                  "description": "Optional version info. If users want to find a very recent access token,\nthat is, immediately after approving access, users have to set the\nversion_info claim in the token request. To obtain the version_info, users\nmust use the “none+gsession” response type. which be return a\nversion_info back in the authorization response which be be put in a JWT\nclaim in the token request.",
                   "location": "query",
                   "type": "string"
                 }
@@ -934,7 +985,7 @@
               ]
             },
             "scheduleRuns": {
-              "description": "Creates transfer runs for a time range [start_time, end_time].\nFor each date - or whatever granularity the data source supports - in the\nrange, one transfer run is created.\nNote that runs are created per UTC time in the time range.",
+              "description": "Creates transfer runs for a time range [start_time, end_time].\nFor each date - or whatever granularity the data source supports - in the\nrange, one transfer run is created.\nNote that runs are created per UTC time in the time range.\nDEPRECATED: use StartManualTransferRuns instead.",
               "flatPath": "v1/projects/{projectsId}/transferConfigs/{transferConfigsId}:scheduleRuns",
               "httpMethod": "POST",
               "id": "bigquerydatatransfer.projects.transferConfigs.scheduleRuns",
@@ -956,6 +1007,35 @@
               },
               "response": {
                 "$ref": "ScheduleTransferRunsResponse"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/bigquery",
+                "https://www.googleapis.com/auth/cloud-platform"
+              ]
+            },
+            "startManualRuns": {
+              "description": "Start manual transfer runs to be executed now with schedule_time equal to\ncurrent time. The transfer runs can be created for a time range where the\nrun_time is between start_time (inclusive) and end_time (exclusive), or for\na specific run_time.",
+              "flatPath": "v1/projects/{projectsId}/transferConfigs/{transferConfigsId}:startManualRuns",
+              "httpMethod": "POST",
+              "id": "bigquerydatatransfer.projects.transferConfigs.startManualRuns",
+              "parameterOrder": [
+                "parent"
+              ],
+              "parameters": {
+                "parent": {
+                  "description": "Transfer configuration name in the form:\n`projects/{project_id}/transferConfigs/{config_id}`.",
+                  "location": "path",
+                  "pattern": "^projects/[^/]+/transferConfigs/[^/]+$",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v1/{+parent}:startManualRuns",
+              "request": {
+                "$ref": "StartManualTransferRunsRequest"
+              },
+              "response": {
+                "$ref": "StartManualTransferRunsResponse"
               },
               "scopes": [
                 "https://www.googleapis.com/auth/bigquery",
@@ -1143,7 +1223,7 @@
       }
     }
   },
-  "revision": "20180715",
+  "revision": "20190323",
   "rootUrl": "https://bigquerydatatransfer.googleapis.com/",
   "schemas": {
     "CheckValidCredsRequest": {
@@ -1504,6 +1584,27 @@
       },
       "type": "object"
     },
+    "ScheduleOptions": {
+      "description": "Options customizing the data transfer schedule.",
+      "id": "ScheduleOptions",
+      "properties": {
+        "disableAutoScheduling": {
+          "description": "If true, automatic scheduling of data transfer runs for this configuration\nwill be disabled. The runs can be started on ad-hoc basis using\nStartManualTransferRuns API. When automatic scheduling is disabled, the\nTransferConfig.schedule field will be ignored.",
+          "type": "boolean"
+        },
+        "endTime": {
+          "description": "Defines time to stop scheduling transfer runs. A transfer run cannot be\nscheduled at or after the end time. The end time can be changed at any\nmoment. The time when a data transfer can be trigerred manually is not\nlimited by this option.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "startTime": {
+          "description": "Specifies time to start scheduling transfer runs. The first run will be\nscheduled at or after the start time according to a recurrence pattern\ndefined in the schedule string. The start time can be changed at any\nmoment. The time when a data transfer can be trigerred manually is not\nlimited by this option.",
+          "format": "google-datetime",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "ScheduleTransferRunsRequest": {
       "description": "A request to schedule transfer runs for a time range.",
       "id": "ScheduleTransferRunsRequest",
@@ -1535,8 +1636,38 @@
       },
       "type": "object"
     },
+    "StartManualTransferRunsRequest": {
+      "description": "A request to start manual transfer runs.",
+      "id": "StartManualTransferRunsRequest",
+      "properties": {
+        "requestedRunTime": {
+          "description": "Specific run_time for a transfer run to be started. The\nrequested_run_time must not be in the future.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "requestedTimeRange": {
+          "$ref": "TimeRange",
+          "description": "Time range for the transfer runs that should be started."
+        }
+      },
+      "type": "object"
+    },
+    "StartManualTransferRunsResponse": {
+      "description": "A response to start manual transfer runs.",
+      "id": "StartManualTransferRunsResponse",
+      "properties": {
+        "runs": {
+          "description": "The transfer runs that were created.",
+          "items": {
+            "$ref": "TransferRun"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "Status": {
-      "description": "The `Status` type defines a logical error model that is suitable for different\nprogramming environments, including REST APIs and RPC APIs. It is used by\n[gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error message,\nand error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
+      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error\nmessage, and error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
       "id": "Status",
       "properties": {
         "code": {
@@ -1557,6 +1688,23 @@
         },
         "message": {
           "description": "A developer-facing error message, which should be in English. Any\nuser-facing error message should be localized and sent in the\ngoogle.rpc.Status.details field, or localized by the client.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TimeRange": {
+      "description": "A specification for a time range, this will request transfer runs with\nrun_time between start_time (inclusive) and end_time (exclusive).",
+      "id": "TimeRange",
+      "properties": {
+        "endTime": {
+          "description": "End time of the range of transfer runs. For example,\n`\"2017-05-30T00:00:00+00:00\"`. The end_time must not be in the future.\nCreates transfer runs where run_time is in the range betwen start_time\n(inclusive) and end_time (exlusive).",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "startTime": {
+          "description": "Start time of the range of transfer runs. For example,\n`\"2017-05-25T00:00:00+00:00\"`. The start_time must be strictly less than\nthe end_time. Creates transfer runs where run_time is in the range betwen\nstart_time (inclusive) and end_time (exlusive).",
+          "format": "google-datetime",
           "type": "string"
         }
       },
@@ -1592,7 +1740,7 @@
           "type": "string"
         },
         "name": {
-          "description": "The resource name of the transfer config.\nTransfer config names have the form\n`projects/{project_id}/transferConfigs/{config_id}`.\nWhere `config_id` is usually a uuid, even though it is not\nguaranteed or required. The name is ignored when creating a transfer\nconfig.",
+          "description": "The resource name of the transfer config.\nTransfer config names have the form of\n`projects/{project_id}/locations/{region}/transferConfigs/{config_id}`.\nThe name is automatically generated based on the config_id specified in\nCreateTransferConfigRequest along with project_id and region. If config_id\nis not provided, usually a uuid, even though it is not guaranteed or\nrequired, will be generated for config_id.",
           "type": "string"
         },
         "nextRunTime": {
@@ -1612,6 +1760,10 @@
           "description": "Data transfer schedule.\nIf the data source does not support a custom schedule, this should be\nempty. If it is empty, the default value for the data source will be\nused.\nThe specified times are in UTC.\nExamples of valid format:\n`1st,3rd monday of month 15:30`,\n`every wed,fri of jan,jun 13:15`, and\n`first sunday of quarter 00:00`.\nSee more explanation about the format here:\nhttps://cloud.google.com/appengine/docs/flexible/python/scheduling-jobs-with-cron-yaml#the_schedule_format\nNOTE: the granularity should be at least 8 hours, or less frequent.",
           "type": "string"
         },
+        "scheduleOptions": {
+          "$ref": "ScheduleOptions",
+          "description": "Options customizing the data transfer schedule."
+        },
         "state": {
           "description": "Output only. State of the most recently updated transfer run.",
           "enum": [
@@ -1626,7 +1778,7 @@
             "State placeholder.",
             "Data transfer is scheduled and is waiting to be picked up by\ndata transfer backend.",
             "Data transfer is in progress.",
-            "Data transfer completed successsfully.",
+            "Data transfer completed successfully.",
             "Data transfer failed.",
             "Data transfer is cancelled."
           ],
@@ -1638,7 +1790,7 @@
           "type": "string"
         },
         "userId": {
-          "description": "Output only. Unique ID of the user on whose behalf transfer is done.\nApplicable only to data sources that do not support service accounts.\nWhen set to 0, the data source service account credentials are used.\nMay be negative. Note, that this identifier is not stable.\nIt may change over time even for the same user.",
+          "description": "Deprecated. Unique ID of the user on whose behalf transfer is done.",
           "format": "int64",
           "type": "string"
         }
@@ -1743,7 +1895,7 @@
             "State placeholder.",
             "Data transfer is scheduled and is waiting to be picked up by\ndata transfer backend.",
             "Data transfer is in progress.",
-            "Data transfer completed successsfully.",
+            "Data transfer completed successfully.",
             "Data transfer failed.",
             "Data transfer is cancelled."
           ],
@@ -1755,7 +1907,7 @@
           "type": "string"
         },
         "userId": {
-          "description": "Output only. Unique ID of the user on whose behalf transfer is done.\nApplicable only to data sources that do not support service accounts.\nWhen set to 0, the data source service account credentials are used.\nMay be negative. Note, that this identifier is not stable.\nIt may change over time even for the same user.",
+          "description": "Deprecated. Unique ID of the user on whose behalf transfer is done.",
           "format": "int64",
           "type": "string"
         }

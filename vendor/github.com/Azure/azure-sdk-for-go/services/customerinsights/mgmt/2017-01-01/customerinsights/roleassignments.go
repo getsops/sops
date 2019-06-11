@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,6 +50,16 @@ func NewRoleAssignmentsClientWithBaseURI(baseURI string, subscriptionID string) 
 // assignmentName - the assignment name
 // parameters - parameters supplied to the CreateOrUpdate RoleAssignment operation.
 func (client RoleAssignmentsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, hubName string, assignmentName string, parameters RoleAssignmentResourceFormat) (result RoleAssignmentsCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RoleAssignmentsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: assignmentName,
 			Constraints: []validation.Constraint{{Target: "assignmentName", Name: validation.MaxLength, Rule: 128, Chain: nil},
@@ -108,10 +119,6 @@ func (client RoleAssignmentsClient) CreateOrUpdateSender(req *http.Request) (fut
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -135,6 +142,16 @@ func (client RoleAssignmentsClient) CreateOrUpdateResponder(resp *http.Response)
 // hubName - the name of the hub.
 // assignmentName - the name of the role assignment.
 func (client RoleAssignmentsClient) Delete(ctx context.Context, resourceGroupName string, hubName string, assignmentName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RoleAssignmentsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, hubName, assignmentName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "customerinsights.RoleAssignmentsClient", "Delete", nil, "Failure preparing request")
@@ -203,6 +220,16 @@ func (client RoleAssignmentsClient) DeleteResponder(resp *http.Response) (result
 // hubName - the name of the hub.
 // assignmentName - the name of the role assignment.
 func (client RoleAssignmentsClient) Get(ctx context.Context, resourceGroupName string, hubName string, assignmentName string) (result RoleAssignmentResourceFormat, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RoleAssignmentsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, hubName, assignmentName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "customerinsights.RoleAssignmentsClient", "Get", nil, "Failure preparing request")
@@ -271,6 +298,16 @@ func (client RoleAssignmentsClient) GetResponder(resp *http.Response) (result Ro
 // resourceGroupName - the name of the resource group.
 // hubName - the name of the hub.
 func (client RoleAssignmentsClient) ListByHub(ctx context.Context, resourceGroupName string, hubName string) (result RoleAssignmentListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RoleAssignmentsClient.ListByHub")
+		defer func() {
+			sc := -1
+			if result.ralr.Response.Response != nil {
+				sc = result.ralr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByHubNextResults
 	req, err := client.ListByHubPreparer(ctx, resourceGroupName, hubName)
 	if err != nil {
@@ -335,8 +372,8 @@ func (client RoleAssignmentsClient) ListByHubResponder(resp *http.Response) (res
 }
 
 // listByHubNextResults retrieves the next set of results, if any.
-func (client RoleAssignmentsClient) listByHubNextResults(lastResults RoleAssignmentListResult) (result RoleAssignmentListResult, err error) {
-	req, err := lastResults.roleAssignmentListResultPreparer()
+func (client RoleAssignmentsClient) listByHubNextResults(ctx context.Context, lastResults RoleAssignmentListResult) (result RoleAssignmentListResult, err error) {
+	req, err := lastResults.roleAssignmentListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "customerinsights.RoleAssignmentsClient", "listByHubNextResults", nil, "Failure preparing next results request")
 	}
@@ -357,6 +394,16 @@ func (client RoleAssignmentsClient) listByHubNextResults(lastResults RoleAssignm
 
 // ListByHubComplete enumerates all values, automatically crossing page boundaries as required.
 func (client RoleAssignmentsClient) ListByHubComplete(ctx context.Context, resourceGroupName string, hubName string) (result RoleAssignmentListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RoleAssignmentsClient.ListByHub")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByHub(ctx, resourceGroupName, hubName)
 	return
 }

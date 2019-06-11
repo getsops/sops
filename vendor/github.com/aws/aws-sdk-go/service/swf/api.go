@@ -18,7 +18,7 @@ const opCountClosedWorkflowExecutions = "CountClosedWorkflowExecutions"
 // CountClosedWorkflowExecutionsRequest generates a "aws/request.Request" representing the
 // client's request for the CountClosedWorkflowExecutions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -72,13 +72,9 @@ func (c *SWF) CountClosedWorkflowExecutionsRequest(input *CountClosedWorkflowExe
 //    * Use an Action element to allow or deny permission to call this action.
 //
 //    * Constrain the following parameters by using a Condition element with
-//    the appropriate keys.
-//
-// tagFilter.tag: String constraint. The key is swf:tagFilter.tag.
-//
-// typeFilter.name: String constraint. The key is swf:typeFilter.name.
-//
-// typeFilter.version: String constraint. The key is swf:typeFilter.version.
+//    the appropriate keys. tagFilter.tag: String constraint. The key is swf:tagFilter.tag.
+//    typeFilter.name: String constraint. The key is swf:typeFilter.name. typeFilter.version:
+//    String constraint. The key is swf:typeFilter.version.
 //
 // If the caller doesn't have sufficient permissions to invoke the action, or
 // the parameter values fall outside the specified constraints, the action fails.
@@ -130,7 +126,7 @@ const opCountOpenWorkflowExecutions = "CountOpenWorkflowExecutions"
 // CountOpenWorkflowExecutionsRequest generates a "aws/request.Request" representing the
 // client's request for the CountOpenWorkflowExecutions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -184,13 +180,9 @@ func (c *SWF) CountOpenWorkflowExecutionsRequest(input *CountOpenWorkflowExecuti
 //    * Use an Action element to allow or deny permission to call this action.
 //
 //    * Constrain the following parameters by using a Condition element with
-//    the appropriate keys.
-//
-// tagFilter.tag: String constraint. The key is swf:tagFilter.tag.
-//
-// typeFilter.name: String constraint. The key is swf:typeFilter.name.
-//
-// typeFilter.version: String constraint. The key is swf:typeFilter.version.
+//    the appropriate keys. tagFilter.tag: String constraint. The key is swf:tagFilter.tag.
+//    typeFilter.name: String constraint. The key is swf:typeFilter.name. typeFilter.version:
+//    String constraint. The key is swf:typeFilter.version.
 //
 // If the caller doesn't have sufficient permissions to invoke the action, or
 // the parameter values fall outside the specified constraints, the action fails.
@@ -242,7 +234,7 @@ const opCountPendingActivityTasks = "CountPendingActivityTasks"
 // CountPendingActivityTasksRequest generates a "aws/request.Request" representing the
 // client's request for the CountPendingActivityTasks operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -348,7 +340,7 @@ const opCountPendingDecisionTasks = "CountPendingDecisionTasks"
 // CountPendingDecisionTasksRequest generates a "aws/request.Request" representing the
 // client's request for the CountPendingDecisionTasks operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -454,7 +446,7 @@ const opDeprecateActivityType = "DeprecateActivityType"
 // DeprecateActivityTypeRequest generates a "aws/request.Request" representing the
 // client's request for the DeprecateActivityType operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -486,8 +478,7 @@ func (c *SWF) DeprecateActivityTypeRequest(input *DeprecateActivityTypeInput) (r
 
 	output = &DeprecateActivityTypeOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -511,11 +502,9 @@ func (c *SWF) DeprecateActivityTypeRequest(input *DeprecateActivityTypeInput) (r
 //    * Use an Action element to allow or deny permission to call this action.
 //
 //    * Constrain the following parameters by using a Condition element with
-//    the appropriate keys.
-//
-// activityType.name: String constraint. The key is swf:activityType.name.
-//
-// activityType.version: String constraint. The key is swf:activityType.version.
+//    the appropriate keys. activityType.name: String constraint. The key is
+//    swf:activityType.name. activityType.version: String constraint. The key
+//    is swf:activityType.version.
 //
 // If the caller doesn't have sufficient permissions to invoke the action, or
 // the parameter values fall outside the specified constraints, the action fails.
@@ -570,7 +559,7 @@ const opDeprecateDomain = "DeprecateDomain"
 // DeprecateDomainRequest generates a "aws/request.Request" representing the
 // client's request for the DeprecateDomain operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -602,8 +591,7 @@ func (c *SWF) DeprecateDomainRequest(input *DeprecateDomainInput) (req *request.
 
 	output = &DeprecateDomainOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -684,7 +672,7 @@ const opDeprecateWorkflowType = "DeprecateWorkflowType"
 // DeprecateWorkflowTypeRequest generates a "aws/request.Request" representing the
 // client's request for the DeprecateWorkflowType operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -716,8 +704,7 @@ func (c *SWF) DeprecateWorkflowTypeRequest(input *DeprecateWorkflowTypeInput) (r
 
 	output = &DeprecateWorkflowTypeOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -742,11 +729,9 @@ func (c *SWF) DeprecateWorkflowTypeRequest(input *DeprecateWorkflowTypeInput) (r
 //    * Use an Action element to allow or deny permission to call this action.
 //
 //    * Constrain the following parameters by using a Condition element with
-//    the appropriate keys.
-//
-// workflowType.name: String constraint. The key is swf:workflowType.name.
-//
-// workflowType.version: String constraint. The key is swf:workflowType.version.
+//    the appropriate keys. workflowType.name: String constraint. The key is
+//    swf:workflowType.name. workflowType.version: String constraint. The key
+//    is swf:workflowType.version.
 //
 // If the caller doesn't have sufficient permissions to invoke the action, or
 // the parameter values fall outside the specified constraints, the action fails.
@@ -801,7 +786,7 @@ const opDescribeActivityType = "DescribeActivityType"
 // DescribeActivityTypeRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeActivityType operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -853,11 +838,9 @@ func (c *SWF) DescribeActivityTypeRequest(input *DescribeActivityTypeInput) (req
 //    * Use an Action element to allow or deny permission to call this action.
 //
 //    * Constrain the following parameters by using a Condition element with
-//    the appropriate keys.
-//
-// activityType.name: String constraint. The key is swf:activityType.name.
-//
-// activityType.version: String constraint. The key is swf:activityType.version.
+//    the appropriate keys. activityType.name: String constraint. The key is
+//    swf:activityType.name. activityType.version: String constraint. The key
+//    is swf:activityType.version.
 //
 // If the caller doesn't have sufficient permissions to invoke the action, or
 // the parameter values fall outside the specified constraints, the action fails.
@@ -909,7 +892,7 @@ const opDescribeDomain = "DescribeDomain"
 // DescribeDomainRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDomain operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1011,7 +994,7 @@ const opDescribeWorkflowExecution = "DescribeWorkflowExecution"
 // DescribeWorkflowExecutionRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeWorkflowExecution operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1116,7 +1099,7 @@ const opDescribeWorkflowType = "DescribeWorkflowType"
 // DescribeWorkflowTypeRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeWorkflowType operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1168,11 +1151,9 @@ func (c *SWF) DescribeWorkflowTypeRequest(input *DescribeWorkflowTypeInput) (req
 //    * Use an Action element to allow or deny permission to call this action.
 //
 //    * Constrain the following parameters by using a Condition element with
-//    the appropriate keys.
-//
-// workflowType.name: String constraint. The key is swf:workflowType.name.
-//
-// workflowType.version: String constraint. The key is swf:workflowType.version.
+//    the appropriate keys. workflowType.name: String constraint. The key is
+//    swf:workflowType.name. workflowType.version: String constraint. The key
+//    is swf:workflowType.version.
 //
 // If the caller doesn't have sufficient permissions to invoke the action, or
 // the parameter values fall outside the specified constraints, the action fails.
@@ -1224,7 +1205,7 @@ const opGetWorkflowExecutionHistory = "GetWorkflowExecutionHistory"
 // GetWorkflowExecutionHistoryRequest generates a "aws/request.Request" representing the
 // client's request for the GetWorkflowExecutionHistory operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1342,7 +1323,7 @@ func (c *SWF) GetWorkflowExecutionHistoryWithContext(ctx aws.Context, input *Get
 //    // Example iterating over at most 3 pages of a GetWorkflowExecutionHistory operation.
 //    pageNum := 0
 //    err := client.GetWorkflowExecutionHistoryPages(params,
-//        func(page *GetWorkflowExecutionHistoryOutput, lastPage bool) bool {
+//        func(page *swf.GetWorkflowExecutionHistoryOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -1386,7 +1367,7 @@ const opListActivityTypes = "ListActivityTypes"
 // ListActivityTypesRequest generates a "aws/request.Request" representing the
 // client's request for the ListActivityTypes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1503,7 +1484,7 @@ func (c *SWF) ListActivityTypesWithContext(ctx aws.Context, input *ListActivityT
 //    // Example iterating over at most 3 pages of a ListActivityTypes operation.
 //    pageNum := 0
 //    err := client.ListActivityTypesPages(params,
-//        func(page *ListActivityTypesOutput, lastPage bool) bool {
+//        func(page *swf.ListActivityTypesOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -1547,7 +1528,7 @@ const opListClosedWorkflowExecutions = "ListClosedWorkflowExecutions"
 // ListClosedWorkflowExecutionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListClosedWorkflowExecutions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1609,13 +1590,9 @@ func (c *SWF) ListClosedWorkflowExecutionsRequest(input *ListClosedWorkflowExecu
 //    * Use an Action element to allow or deny permission to call this action.
 //
 //    * Constrain the following parameters by using a Condition element with
-//    the appropriate keys.
-//
-// tagFilter.tag: String constraint. The key is swf:tagFilter.tag.
-//
-// typeFilter.name: String constraint. The key is swf:typeFilter.name.
-//
-// typeFilter.version: String constraint. The key is swf:typeFilter.version.
+//    the appropriate keys. tagFilter.tag: String constraint. The key is swf:tagFilter.tag.
+//    typeFilter.name: String constraint. The key is swf:typeFilter.name. typeFilter.version:
+//    String constraint. The key is swf:typeFilter.version.
 //
 // If the caller doesn't have sufficient permissions to invoke the action, or
 // the parameter values fall outside the specified constraints, the action fails.
@@ -1673,7 +1650,7 @@ func (c *SWF) ListClosedWorkflowExecutionsWithContext(ctx aws.Context, input *Li
 //    // Example iterating over at most 3 pages of a ListClosedWorkflowExecutions operation.
 //    pageNum := 0
 //    err := client.ListClosedWorkflowExecutionsPages(params,
-//        func(page *WorkflowExecutionInfos, lastPage bool) bool {
+//        func(page *swf.WorkflowExecutionInfos, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -1717,7 +1694,7 @@ const opListDomains = "ListDomains"
 // ListDomainsRequest generates a "aws/request.Request" representing the
 // client's request for the ListDomains operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1831,7 +1808,7 @@ func (c *SWF) ListDomainsWithContext(ctx aws.Context, input *ListDomainsInput, o
 //    // Example iterating over at most 3 pages of a ListDomains operation.
 //    pageNum := 0
 //    err := client.ListDomainsPages(params,
-//        func(page *ListDomainsOutput, lastPage bool) bool {
+//        func(page *swf.ListDomainsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -1875,7 +1852,7 @@ const opListOpenWorkflowExecutions = "ListOpenWorkflowExecutions"
 // ListOpenWorkflowExecutionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListOpenWorkflowExecutions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1937,13 +1914,9 @@ func (c *SWF) ListOpenWorkflowExecutionsRequest(input *ListOpenWorkflowExecution
 //    * Use an Action element to allow or deny permission to call this action.
 //
 //    * Constrain the following parameters by using a Condition element with
-//    the appropriate keys.
-//
-// tagFilter.tag: String constraint. The key is swf:tagFilter.tag.
-//
-// typeFilter.name: String constraint. The key is swf:typeFilter.name.
-//
-// typeFilter.version: String constraint. The key is swf:typeFilter.version.
+//    the appropriate keys. tagFilter.tag: String constraint. The key is swf:tagFilter.tag.
+//    typeFilter.name: String constraint. The key is swf:typeFilter.name. typeFilter.version:
+//    String constraint. The key is swf:typeFilter.version.
 //
 // If the caller doesn't have sufficient permissions to invoke the action, or
 // the parameter values fall outside the specified constraints, the action fails.
@@ -2001,7 +1974,7 @@ func (c *SWF) ListOpenWorkflowExecutionsWithContext(ctx aws.Context, input *List
 //    // Example iterating over at most 3 pages of a ListOpenWorkflowExecutions operation.
 //    pageNum := 0
 //    err := client.ListOpenWorkflowExecutionsPages(params,
-//        func(page *WorkflowExecutionInfos, lastPage bool) bool {
+//        func(page *swf.WorkflowExecutionInfos, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -2045,7 +2018,7 @@ const opListWorkflowTypes = "ListWorkflowTypes"
 // ListWorkflowTypesRequest generates a "aws/request.Request" representing the
 // client's request for the ListWorkflowTypes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2160,7 +2133,7 @@ func (c *SWF) ListWorkflowTypesWithContext(ctx aws.Context, input *ListWorkflowT
 //    // Example iterating over at most 3 pages of a ListWorkflowTypes operation.
 //    pageNum := 0
 //    err := client.ListWorkflowTypesPages(params,
-//        func(page *ListWorkflowTypesOutput, lastPage bool) bool {
+//        func(page *swf.ListWorkflowTypesOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -2204,7 +2177,7 @@ const opPollForActivityTask = "PollForActivityTask"
 // PollForActivityTaskRequest generates a "aws/request.Request" representing the
 // client's request for the PollForActivityTask operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2322,7 +2295,7 @@ const opPollForDecisionTask = "PollForDecisionTask"
 // PollForDecisionTaskRequest generates a "aws/request.Request" representing the
 // client's request for the PollForDecisionTask operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2462,7 +2435,7 @@ func (c *SWF) PollForDecisionTaskWithContext(ctx aws.Context, input *PollForDeci
 //    // Example iterating over at most 3 pages of a PollForDecisionTask operation.
 //    pageNum := 0
 //    err := client.PollForDecisionTaskPages(params,
-//        func(page *PollForDecisionTaskOutput, lastPage bool) bool {
+//        func(page *swf.PollForDecisionTaskOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -2506,7 +2479,7 @@ const opRecordActivityTaskHeartbeat = "RecordActivityTaskHeartbeat"
 // RecordActivityTaskHeartbeatRequest generates a "aws/request.Request" representing the
 // client's request for the RecordActivityTaskHeartbeat operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2632,7 +2605,7 @@ const opRegisterActivityType = "RegisterActivityType"
 // RegisterActivityTypeRequest generates a "aws/request.Request" representing the
 // client's request for the RegisterActivityType operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2664,8 +2637,7 @@ func (c *SWF) RegisterActivityTypeRequest(input *RegisterActivityTypeInput) (req
 
 	output = &RegisterActivityTypeOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2689,13 +2661,9 @@ func (c *SWF) RegisterActivityTypeRequest(input *RegisterActivityTypeInput) (req
 //    * Use an Action element to allow or deny permission to call this action.
 //
 //    * Constrain the following parameters by using a Condition element with
-//    the appropriate keys.
-//
-// defaultTaskList.name: String constraint. The key is swf:defaultTaskList.name.
-//
-// name: String constraint. The key is swf:name.
-//
-// version: String constraint. The key is swf:version.
+//    the appropriate keys. defaultTaskList.name: String constraint. The key
+//    is swf:defaultTaskList.name. name: String constraint. The key is swf:name.
+//    version: String constraint. The key is swf:version.
 //
 // If the caller doesn't have sufficient permissions to invoke the action, or
 // the parameter values fall outside the specified constraints, the action fails.
@@ -2758,7 +2726,7 @@ const opRegisterDomain = "RegisterDomain"
 // RegisterDomainRequest generates a "aws/request.Request" representing the
 // client's request for the RegisterDomain operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2790,8 +2758,7 @@ func (c *SWF) RegisterDomainRequest(input *RegisterDomainInput) (req *request.Re
 
 	output = &RegisterDomainOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2866,7 +2833,7 @@ const opRegisterWorkflowType = "RegisterWorkflowType"
 // RegisterWorkflowTypeRequest generates a "aws/request.Request" representing the
 // client's request for the RegisterWorkflowType operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2898,8 +2865,7 @@ func (c *SWF) RegisterWorkflowTypeRequest(input *RegisterWorkflowTypeInput) (req
 
 	output = &RegisterWorkflowTypeOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2926,13 +2892,9 @@ func (c *SWF) RegisterWorkflowTypeRequest(input *RegisterWorkflowTypeInput) (req
 //    * Use an Action element to allow or deny permission to call this action.
 //
 //    * Constrain the following parameters by using a Condition element with
-//    the appropriate keys.
-//
-// defaultTaskList.name: String constraint. The key is swf:defaultTaskList.name.
-//
-// name: String constraint. The key is swf:name.
-//
-// version: String constraint. The key is swf:version.
+//    the appropriate keys. defaultTaskList.name: String constraint. The key
+//    is swf:defaultTaskList.name. name: String constraint. The key is swf:name.
+//    version: String constraint. The key is swf:version.
 //
 // If the caller doesn't have sufficient permissions to invoke the action, or
 // the parameter values fall outside the specified constraints, the action fails.
@@ -2995,7 +2957,7 @@ const opRequestCancelWorkflowExecution = "RequestCancelWorkflowExecution"
 // RequestCancelWorkflowExecutionRequest generates a "aws/request.Request" representing the
 // client's request for the RequestCancelWorkflowExecution operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3027,8 +2989,7 @@ func (c *SWF) RequestCancelWorkflowExecutionRequest(input *RequestCancelWorkflow
 
 	output = &RequestCancelWorkflowExecutionOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -3109,7 +3070,7 @@ const opRespondActivityTaskCanceled = "RespondActivityTaskCanceled"
 // RespondActivityTaskCanceledRequest generates a "aws/request.Request" representing the
 // client's request for the RespondActivityTaskCanceled operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3141,8 +3102,7 @@ func (c *SWF) RespondActivityTaskCanceledRequest(input *RespondActivityTaskCance
 
 	output = &RespondActivityTaskCanceledOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -3226,7 +3186,7 @@ const opRespondActivityTaskCompleted = "RespondActivityTaskCompleted"
 // RespondActivityTaskCompletedRequest generates a "aws/request.Request" representing the
 // client's request for the RespondActivityTaskCompleted operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3258,8 +3218,7 @@ func (c *SWF) RespondActivityTaskCompletedRequest(input *RespondActivityTaskComp
 
 	output = &RespondActivityTaskCompletedOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -3342,7 +3301,7 @@ const opRespondActivityTaskFailed = "RespondActivityTaskFailed"
 // RespondActivityTaskFailedRequest generates a "aws/request.Request" representing the
 // client's request for the RespondActivityTaskFailed operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3374,8 +3333,7 @@ func (c *SWF) RespondActivityTaskFailedRequest(input *RespondActivityTaskFailedI
 
 	output = &RespondActivityTaskFailedOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -3453,7 +3411,7 @@ const opRespondDecisionTaskCompleted = "RespondDecisionTaskCompleted"
 // RespondDecisionTaskCompletedRequest generates a "aws/request.Request" representing the
 // client's request for the RespondDecisionTaskCompleted operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3485,8 +3443,7 @@ func (c *SWF) RespondDecisionTaskCompletedRequest(input *RespondDecisionTaskComp
 
 	output = &RespondDecisionTaskCompletedOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -3553,7 +3510,7 @@ const opSignalWorkflowExecution = "SignalWorkflowExecution"
 // SignalWorkflowExecutionRequest generates a "aws/request.Request" representing the
 // client's request for the SignalWorkflowExecution operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3585,8 +3542,7 @@ func (c *SWF) SignalWorkflowExecutionRequest(input *SignalWorkflowExecutionInput
 
 	output = &SignalWorkflowExecutionOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -3665,7 +3621,7 @@ const opStartWorkflowExecution = "StartWorkflowExecution"
 // StartWorkflowExecutionRequest generates a "aws/request.Request" representing the
 // client's request for the StartWorkflowExecution operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3718,23 +3674,13 @@ func (c *SWF) StartWorkflowExecutionRequest(input *StartWorkflowExecutionInput) 
 //    * Use an Action element to allow or deny permission to call this action.
 //
 //    * Constrain the following parameters by using a Condition element with
-//    the appropriate keys.
-//
-// tagList.member.0: The key is swf:tagList.member.0.
-//
-// tagList.member.1: The key is swf:tagList.member.1.
-//
-// tagList.member.2: The key is swf:tagList.member.2.
-//
-// tagList.member.3: The key is swf:tagList.member.3.
-//
-// tagList.member.4: The key is swf:tagList.member.4.
-//
-// taskList: String constraint. The key is swf:taskList.name.
-//
-// workflowType.name: String constraint. The key is swf:workflowType.name.
-//
-// workflowType.version: String constraint. The key is swf:workflowType.version.
+//    the appropriate keys. tagList.member.0: The key is swf:tagList.member.0.
+//    tagList.member.1: The key is swf:tagList.member.1. tagList.member.2: The
+//    key is swf:tagList.member.2. tagList.member.3: The key is swf:tagList.member.3.
+//    tagList.member.4: The key is swf:tagList.member.4. taskList: String constraint.
+//    The key is swf:taskList.name. workflowType.name: String constraint. The
+//    key is swf:workflowType.name. workflowType.version: String constraint.
+//    The key is swf:workflowType.version.
 //
 // If the caller doesn't have sufficient permissions to invoke the action, or
 // the parameter values fall outside the specified constraints, the action fails.
@@ -3811,7 +3757,7 @@ const opTerminateWorkflowExecution = "TerminateWorkflowExecution"
 // TerminateWorkflowExecutionRequest generates a "aws/request.Request" representing the
 // client's request for the TerminateWorkflowExecution operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3843,8 +3789,7 @@ func (c *SWF) TerminateWorkflowExecutionRequest(input *TerminateWorkflowExecutio
 
 	output = &TerminateWorkflowExecutionOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -4444,11 +4389,11 @@ type ActivityTypeConfiguration struct {
 	// task must report progress by calling RecordActivityTaskHeartbeat.
 	//
 	// You can specify this value only when registering an activity type. The registered
-	// default value can be overridden when you schedule a task through the ScheduleActivityTaskDecision.
-	// If the activity worker subsequently attempts to record a heartbeat or returns
-	// a result, the activity worker receives an UnknownResource fault. In this
-	// case, Amazon SWF no longer considers the activity task to be valid; the activity
-	// worker should clean up the activity task.
+	// default value can be overridden when you schedule a task through the ScheduleActivityTask
+	// Decision. If the activity worker subsequently attempts to record a heartbeat
+	// or returns a result, the activity worker receives an UnknownResource fault.
+	// In this case, Amazon SWF no longer considers the activity task to be valid;
+	// the activity worker should clean up the activity task.
 	//
 	// The duration is specified in seconds, an integer greater than or equal to
 	// 0. You can use NONE to specify unlimited duration.
@@ -4456,8 +4401,8 @@ type ActivityTypeConfiguration struct {
 
 	// The default task list specified for this activity type at registration. This
 	// default is used if a task list isn't provided when a task is scheduled through
-	// the ScheduleActivityTaskDecision. You can override the default registered
-	// task list when scheduling a task through the ScheduleActivityTaskDecision.
+	// the ScheduleActivityTask Decision. You can override the default registered
+	// task list when scheduling a task through the ScheduleActivityTask Decision.
 	DefaultTaskList *TaskList `locationName:"defaultTaskList" type:"structure"`
 
 	// The default task priority for tasks of this activity type, specified at registration.
@@ -4474,7 +4419,7 @@ type ActivityTypeConfiguration struct {
 
 	// The default maximum duration, specified when registering the activity type,
 	// for tasks of this activity type. You can override this default when scheduling
-	// a task through the ScheduleActivityTaskDecision.
+	// a task through the ScheduleActivityTask Decision.
 	//
 	// The duration is specified in seconds, an integer greater than or equal to
 	// 0. You can use NONE to specify unlimited duration.
@@ -4482,7 +4427,8 @@ type ActivityTypeConfiguration struct {
 
 	// The default maximum duration, specified when registering the activity type,
 	// that a task of an activity type can wait before being assigned to a worker.
-	// You can override this default when scheduling a task through the ScheduleActivityTaskDecision.
+	// You can override this default when scheduling a task through the ScheduleActivityTask
+	// Decision.
 	//
 	// The duration is specified in seconds, an integer greater than or equal to
 	// 0. You can use NONE to specify unlimited duration.
@@ -4490,7 +4436,7 @@ type ActivityTypeConfiguration struct {
 
 	// The default maximum duration for tasks of an activity type specified when
 	// registering the activity type. You can override this default when scheduling
-	// a task through the ScheduleActivityTaskDecision.
+	// a task through the ScheduleActivityTask Decision.
 	//
 	// The duration is specified in seconds, an integer greater than or equal to
 	// 0. You can use NONE to specify unlimited duration.
@@ -4824,7 +4770,7 @@ type ChildWorkflowExecutionCanceledEventAttributes struct {
 	Details *string `locationName:"details" type:"string"`
 
 	// The ID of the StartChildWorkflowExecutionInitiated event corresponding to
-	// the StartChildWorkflowExecutionDecision to start this child workflow execution.
+	// the StartChildWorkflowExecution Decision to start this child workflow execution.
 	// This information can be useful for diagnosing problems by tracing back the
 	// chain of events leading up to this event.
 	//
@@ -4894,7 +4840,7 @@ type ChildWorkflowExecutionCompletedEventAttributes struct {
 	_ struct{} `type:"structure"`
 
 	// The ID of the StartChildWorkflowExecutionInitiated event corresponding to
-	// the StartChildWorkflowExecutionDecision to start this child workflow execution.
+	// the StartChildWorkflowExecution Decision to start this child workflow execution.
 	// This information can be useful for diagnosing problems by tracing back the
 	// chain of events leading up to this event.
 	//
@@ -4970,7 +4916,7 @@ type ChildWorkflowExecutionFailedEventAttributes struct {
 	Details *string `locationName:"details" type:"string"`
 
 	// The ID of the StartChildWorkflowExecutionInitiated event corresponding to
-	// the StartChildWorkflowExecutionDecision to start this child workflow execution.
+	// the StartChildWorkflowExecution Decision to start this child workflow execution.
 	// This information can be useful for diagnosing problems by tracing back the
 	// chain of events leading up to this event.
 	//
@@ -5049,7 +4995,7 @@ type ChildWorkflowExecutionStartedEventAttributes struct {
 	_ struct{} `type:"structure"`
 
 	// The ID of the StartChildWorkflowExecutionInitiated event corresponding to
-	// the StartChildWorkflowExecutionDecision to start this child workflow execution.
+	// the StartChildWorkflowExecution Decision to start this child workflow execution.
 	// This information can be useful for diagnosing problems by tracing back the
 	// chain of events leading up to this event.
 	//
@@ -5100,7 +5046,7 @@ type ChildWorkflowExecutionTerminatedEventAttributes struct {
 	_ struct{} `type:"structure"`
 
 	// The ID of the StartChildWorkflowExecutionInitiated event corresponding to
-	// the StartChildWorkflowExecutionDecision to start this child workflow execution.
+	// the StartChildWorkflowExecution Decision to start this child workflow execution.
 	// This information can be useful for diagnosing problems by tracing back the
 	// chain of events leading up to this event.
 	//
@@ -5164,7 +5110,7 @@ type ChildWorkflowExecutionTimedOutEventAttributes struct {
 	_ struct{} `type:"structure"`
 
 	// The ID of the StartChildWorkflowExecutionInitiated event corresponding to
-	// the StartChildWorkflowExecutionDecision to start this child workflow execution.
+	// the StartChildWorkflowExecution Decision to start this child workflow execution.
 	// This information can be useful for diagnosing problems by tracing back the
 	// chain of events leading up to this event.
 	//
@@ -5379,13 +5325,9 @@ func (s *CompleteWorkflowExecutionFailedEventAttributes) SetDecisionTaskComplete
 //    * Use an Action element to allow or deny permission to call this action.
 //
 //    * Constrain the following parameters by using a Condition element with
-//    the appropriate keys.
-//
-// tag – A tag used to identify the workflow execution
-//
-// taskList – String constraint. The key is swf:taskList.name.
-//
-// workflowType.version – String constraint. The key is swf:workflowType.version.
+//    the appropriate keys. tag – A tag used to identify the workflow execution
+//    taskList – String constraint. The key is swf:taskList.name. workflowType.version
+//    – String constraint. The key is swf:workflowType.version.
 //
 // If the caller doesn't have sufficient permissions to invoke the action, or
 // the parameter values fall outside the specified constraints, the action fails.
@@ -5999,13 +5941,13 @@ func (s *CountPendingDecisionTasksInput) SetTaskList(v *TaskList) *CountPendingD
 //    * CompleteWorkflowExecution – Closes the workflow execution and records
 //    a WorkflowExecutionCompleted event in the history .
 //
-//    * ContinueAsNewWorkflowExecution – Closes the workflow execution and starts
-//    a new workflow execution of the same type using the same workflow ID and
-//    a unique run Id. A WorkflowExecutionContinuedAsNew event is recorded in
-//    the history.
+//    * ContinueAsNewWorkflowExecution – Closes the workflow execution and
+//    starts a new workflow execution of the same type using the same workflow
+//    ID and a unique run Id. A WorkflowExecutionContinuedAsNew event is recorded
+//    in the history.
 //
-//    * FailWorkflowExecution – Closes the workflow execution and records a
-//    WorkflowExecutionFailed event in the history.
+//    * FailWorkflowExecution – Closes the workflow execution and records
+//    a WorkflowExecutionFailed event in the history.
 //
 //    * RecordMarker – Records a MarkerRecorded event in the history. Markers
 //    can be used for adding custom information in the history for instance
@@ -6074,15 +6016,15 @@ func (s *CountPendingDecisionTasksInput) SetTaskList(v *TaskList) *CountPendingD
 //    failed. This could happen if there is no open activity task with the specified
 //    activityId.
 //
-//    * StartTimerFailed – A StartTimer decision failed. This could happen if
-//    there is another open timer with the same timerId.
+//    * StartTimerFailed – A StartTimer decision failed. This could happen
+//    if there is another open timer with the same timerId.
 //
 //    * CancelTimerFailed – A CancelTimer decision failed. This could happen
 //    if there is no open timer with the specified timerId.
 //
-//    * StartChildWorkflowExecutionFailed – A StartChildWorkflowExecution decision
-//    failed. This could happen if the workflow type specified isn't registered,
-//    is deprecated, or the decision isn't properly configured.
+//    * StartChildWorkflowExecutionFailed – A StartChildWorkflowExecution
+//    decision failed. This could happen if the workflow type specified isn't
+//    registered, is deprecated, or the decision isn't properly configured.
 //
 //    * SignalExternalWorkflowExecutionFailed – A SignalExternalWorkflowExecution
 //    decision failed. This could happen if the workflowID specified in the
@@ -6092,9 +6034,9 @@ func (s *CountPendingDecisionTasksInput) SetTaskList(v *TaskList) *CountPendingD
 //    decision failed. This could happen if the workflowID specified in the
 //    decision was incorrect.
 //
-//    * CancelWorkflowExecutionFailed – A CancelWorkflowExecution decision failed.
-//    This could happen if there is an unhandled decision task pending in the
-//    workflow execution.
+//    * CancelWorkflowExecutionFailed – A CancelWorkflowExecution decision
+//    failed. This could happen if there is an unhandled decision task pending
+//    in the workflow execution.
 //
 //    * CompleteWorkflowExecutionFailed – A CompleteWorkflowExecution decision
 //    failed. This could happen if there is an unhandled decision task pending
@@ -6847,8 +6789,8 @@ type DescribeActivityTypeOutput struct {
 	//    * REGISTERED – The type is registered and available. Workers supporting
 	//    this type should be running.
 	//
-	//    * DEPRECATED – The type was deprecated using DeprecateActivityType, but
-	//    is still in use. You should keep workers supporting this type running.
+	//    * DEPRECATED – The type was deprecated using DeprecateActivityType,
+	//    but is still in use. You should keep workers supporting this type running.
 	//    You cannot create new tasks of this type.
 	//
 	// TypeInfo is a required field
@@ -7165,8 +7107,8 @@ type DescribeWorkflowTypeOutput struct {
 	//    * REGISTERED – The type is registered and available. Workers supporting
 	//    this type should be running.
 	//
-	//    * DEPRECATED – The type was deprecated using DeprecateWorkflowType, but
-	//    is still in use. You should keep workers supporting this type running.
+	//    * DEPRECATED – The type was deprecated using DeprecateWorkflowType,
+	//    but is still in use. You should keep workers supporting this type running.
 	//    You cannot create new workflow executions of this type.
 	//
 	// TypeInfo is a required field
@@ -7235,12 +7177,12 @@ type DomainInfo struct {
 
 	// The status of the domain:
 	//
-	//    * REGISTERED – The domain is properly registered and available. You can
-	//    use this domain for registering types and creating new workflow executions.
+	//    * REGISTERED – The domain is properly registered and available. You
+	//    can use this domain for registering types and creating new workflow executions.
 	//
-	//
-	//    * DEPRECATED – The domain was deprecated using DeprecateDomain, but is
-	//    still in use. You should not create new workflow executions in this domain.
+	//    * DEPRECATED – The domain was deprecated using DeprecateDomain, but
+	//    is still in use. You should not create new workflow executions in this
+	//    domain.
 	//
 	// Status is a required field
 	Status *string `locationName:"status" type:"string" required:"true" enum:"RegistrationStatus"`
@@ -7647,16 +7589,16 @@ func (s *GetWorkflowExecutionHistoryOutput) SetNextPageToken(v string) *GetWorkf
 
 // Event within a workflow execution. A history event can be one of these types:
 //
-//    * ActivityTaskCancelRequested – A RequestCancelActivityTask decision was
-//    received by the system.
+//    * ActivityTaskCancelRequested – A RequestCancelActivityTask decision
+//    was received by the system.
 //
 //    * ActivityTaskCanceled – The activity task was successfully canceled.
 //
-//    * ActivityTaskCompleted – An activity worker successfully completed an
-//    activity task by calling RespondActivityTaskCompleted.
+//    * ActivityTaskCompleted – An activity worker successfully completed
+//    an activity task by calling RespondActivityTaskCompleted.
 //
-//    * ActivityTaskFailed – An activity worker failed an activity task by calling
-//    RespondActivityTaskFailed.
+//    * ActivityTaskFailed – An activity worker failed an activity task by
+//    calling RespondActivityTaskFailed.
 //
 //    * ActivityTaskScheduled – An activity task was scheduled for execution.
 //
@@ -7678,8 +7620,8 @@ func (s *GetWorkflowExecutionHistoryOutput) SetNextPageToken(v string) *GetWorkf
 //    * ChildWorkflowExecutionCompleted – A child workflow execution, started
 //    by this workflow execution, completed successfully and was closed.
 //
-//    * ChildWorkflowExecutionFailed – A child workflow execution, started by
-//    this workflow execution, failed to complete successfully and was closed.
+//    * ChildWorkflowExecutionFailed – A child workflow execution, started
+//    by this workflow execution, failed to complete successfully and was closed.
 //
 //    * ChildWorkflowExecutionStarted – A child workflow execution was successfully
 //    started.
@@ -7690,7 +7632,8 @@ func (s *GetWorkflowExecutionHistoryOutput) SetNextPageToken(v string) *GetWorkf
 //    * ChildWorkflowExecutionTimedOut – A child workflow execution, started
 //    by this workflow execution, timed out and was closed.
 //
-//    * CompleteWorkflowExecutionFailed – The workflow execution failed to complete.
+//    * CompleteWorkflowExecutionFailed – The workflow execution failed to
+//    complete.
 //
 //    * ContinueAsNewWorkflowExecutionFailed – The workflow execution failed
 //    to complete after being continued as a new workflow execution.
@@ -7715,8 +7658,8 @@ func (s *GetWorkflowExecutionHistoryOutput) SetNextPageToken(v string) *GetWorkf
 //    * FailWorkflowExecutionFailed – A request to mark a workflow execution
 //    as failed, itself failed.
 //
-//    * MarkerRecorded – A marker was recorded in the workflow history as the
-//    result of a RecordMarker decision.
+//    * MarkerRecorded – A marker was recorded in the workflow history as
+//    the result of a RecordMarker decision.
 //
 //    * RecordMarkerFailed – A RecordMarker decision was returned as failed.
 //
@@ -7736,8 +7679,8 @@ func (s *GetWorkflowExecutionHistoryOutput) SetNextPageToken(v string) *GetWorkf
 //    * SignalExternalWorkflowExecutionFailed – The request to signal an external
 //    workflow execution failed.
 //
-//    * SignalExternalWorkflowExecutionInitiated – A request to signal an external
-//    workflow was made.
+//    * SignalExternalWorkflowExecutionInitiated – A request to signal an
+//    external workflow was made.
 //
 //    * StartActivityTaskFailed – A scheduled activity task failed to start.
 //
@@ -7745,8 +7688,8 @@ func (s *GetWorkflowExecutionHistoryOutput) SetNextPageToken(v string) *GetWorkf
 //    decision. This happens when the decision isn't configured properly, for
 //    example the workflow type specified isn't registered.
 //
-//    * StartChildWorkflowExecutionInitiated – A request was made to start a
-//    child workflow execution.
+//    * StartChildWorkflowExecutionInitiated – A request was made to start
+//    a child workflow execution.
 //
 //    * StartTimerFailed – Failed to process StartTimer decision. This happens
 //    when the decision isn't configured properly, for example a timer already
@@ -7758,8 +7701,8 @@ func (s *GetWorkflowExecutionHistoryOutput) SetNextPageToken(v string) *GetWorkf
 //    * TimerFired – A timer, previously started for this workflow execution,
 //    fired.
 //
-//    * TimerStarted – A timer was started for the workflow execution due to
-//    a StartTimer decision.
+//    * TimerStarted – A timer was started for the workflow execution due
+//    to a StartTimer decision.
 //
 //    * WorkflowExecutionCancelRequested – A request to cancel this workflow
 //    execution was made.
@@ -7767,8 +7710,8 @@ func (s *GetWorkflowExecutionHistoryOutput) SetNextPageToken(v string) *GetWorkf
 //    * WorkflowExecutionCanceled – The workflow execution was successfully
 //    canceled and closed.
 //
-//    * WorkflowExecutionCompleted – The workflow execution was closed due to
-//    successful completion.
+//    * WorkflowExecutionCompleted – The workflow execution was closed due
+//    to successful completion.
 //
 //    * WorkflowExecutionContinuedAsNew – The workflow execution was closed
 //    and a new execution of the same type was created with the same workflowId.
@@ -10107,7 +10050,7 @@ type RegisterActivityTypeInput struct {
 	// a task of this type must report progress by calling RecordActivityTaskHeartbeat.
 	// If the timeout is exceeded, the activity task is automatically timed out.
 	// This default can be overridden when scheduling an activity task using the
-	// ScheduleActivityTaskDecision. If the activity worker subsequently attempts
+	// ScheduleActivityTask Decision. If the activity worker subsequently attempts
 	// to record a heartbeat or returns a result, the activity worker receives an
 	// UnknownResource fault. In this case, Amazon SWF no longer considers the activity
 	// task to be valid; the activity worker should clean up the activity task.
@@ -10118,7 +10061,7 @@ type RegisterActivityTypeInput struct {
 
 	// If set, specifies the default task list to use for scheduling tasks of this
 	// activity type. This default task list is used if a task list isn't provided
-	// when a task is scheduled through the ScheduleActivityTaskDecision.
+	// when a task is scheduled through the ScheduleActivityTask Decision.
 	DefaultTaskList *TaskList `locationName:"defaultTaskList" type:"structure"`
 
 	// The default task priority to assign to the activity type. If not assigned,
@@ -10133,7 +10076,7 @@ type RegisterActivityTypeInput struct {
 
 	// If set, specifies the default maximum duration for a task of this activity
 	// type. This default can be overridden when scheduling an activity task using
-	// the ScheduleActivityTaskDecision.
+	// the ScheduleActivityTask Decision.
 	//
 	// The duration is specified in seconds, an integer greater than or equal to
 	// 0. You can use NONE to specify unlimited duration.
@@ -10141,7 +10084,7 @@ type RegisterActivityTypeInput struct {
 
 	// If set, specifies the default maximum duration that a task of this activity
 	// type can wait before being assigned to a worker. This default can be overridden
-	// when scheduling an activity task using the ScheduleActivityTaskDecision.
+	// when scheduling an activity task using the ScheduleActivityTask Decision.
 	//
 	// The duration is specified in seconds, an integer greater than or equal to
 	// 0. You can use NONE to specify unlimited duration.
@@ -10149,7 +10092,7 @@ type RegisterActivityTypeInput struct {
 
 	// If set, specifies the default maximum duration that a worker can take to
 	// process tasks of this activity type. This default can be overridden when
-	// scheduling an activity task using the ScheduleActivityTaskDecision.
+	// scheduling an activity task using the ScheduleActivityTask Decision.
 	//
 	// The duration is specified in seconds, an integer greater than or equal to
 	// 0. You can use NONE to specify unlimited duration.
@@ -10405,7 +10348,7 @@ type RegisterWorkflowTypeInput struct {
 	// when a workflow execution of this type is terminated, by calling the TerminateWorkflowExecution
 	// action explicitly or due to an expired timeout. This default can be overridden
 	// when starting a workflow execution using the StartWorkflowExecution action
-	// or the StartChildWorkflowExecutionDecision.
+	// or the StartChildWorkflowExecution Decision.
 	//
 	// The supported child policies are:
 	//
@@ -10421,7 +10364,7 @@ type RegisterWorkflowTypeInput struct {
 
 	// If set, specifies the default maximum duration for executions of this workflow
 	// type. You can override this default when starting an execution through the
-	// StartWorkflowExecution Action or StartChildWorkflowExecutionDecision.
+	// StartWorkflowExecution Action or StartChildWorkflowExecution Decision.
 	//
 	// The duration is specified in seconds; an integer greater than or equal to
 	// 0. Unlike some of the other timeout parameters in Amazon SWF, you cannot
@@ -10442,7 +10385,7 @@ type RegisterWorkflowTypeInput struct {
 	// If set, specifies the default task list to use for scheduling decision tasks
 	// for executions of this workflow type. This default is used only if a task
 	// list isn't provided when starting the execution through the StartWorkflowExecution
-	// Action or StartChildWorkflowExecutionDecision.
+	// Action or StartChildWorkflowExecution Decision.
 	DefaultTaskList *TaskList `locationName:"defaultTaskList" type:"structure"`
 
 	// The default task priority to assign to the workflow type. If not assigned,
@@ -10457,7 +10400,8 @@ type RegisterWorkflowTypeInput struct {
 
 	// If set, specifies the default maximum duration of decision tasks for this
 	// workflow type. This default can be overridden when starting a workflow execution
-	// using the StartWorkflowExecution action or the StartChildWorkflowExecutionDecision.
+	// using the StartWorkflowExecution action or the StartChildWorkflowExecution
+	// Decision.
 	//
 	// The duration is specified in seconds, an integer greater than or equal to
 	// 0. You can use NONE to specify unlimited duration.
@@ -11361,13 +11305,10 @@ func (s RespondDecisionTaskCompletedOutput) GoString() string {
 //    * Use an Action element to allow or deny permission to call this action.
 //
 //    * Constrain the following parameters by using a Condition element with
-//    the appropriate keys.
-//
-// activityType.name – String constraint. The key is swf:activityType.name.
-//
-// activityType.version – String constraint. The key is swf:activityType.version.
-//
-// taskList – String constraint. The key is swf:taskList.name.
+//    the appropriate keys. activityType.name – String constraint. The key
+//    is swf:activityType.name. activityType.version – String constraint.
+//    The key is swf:activityType.version. taskList – String constraint. The
+//    key is swf:taskList.name.
 //
 // If the caller doesn't have sufficient permissions to invoke the action, or
 // the parameter values fall outside the specified constraints, the action fails.
@@ -12198,16 +12139,11 @@ func (s SignalWorkflowExecutionOutput) GoString() string {
 //    * Use an Action element to allow or deny permission to call this action.
 //
 //    * Constrain the following parameters by using a Condition element with
-//    the appropriate keys.
-//
-// tagList.member.N – The key is "swf:tagList.N" where N is the tag number from
-//    0 to 4, inclusive.
-//
-// taskList – String constraint. The key is swf:taskList.name.
-//
-// workflowType.name – String constraint. The key is swf:workflowType.name.
-//
-// workflowType.version – String constraint. The key is swf:workflowType.version.
+//    the appropriate keys. tagList.member.N – The key is "swf:tagList.N"
+//    where N is the tag number from 0 to 4, inclusive. taskList – String
+//    constraint. The key is swf:taskList.name. workflowType.name – String
+//    constraint. The key is swf:workflowType.name. workflowType.version –
+//    String constraint. The key is swf:workflowType.version.
 //
 // If the caller doesn't have sufficient permissions to invoke the action, or
 // the parameter values fall outside the specified constraints, the action fails.
@@ -12437,7 +12373,7 @@ type StartChildWorkflowExecutionFailedEventAttributes struct {
 	//
 	// When cause is set to OPERATION_NOT_PERMITTED, the decision fails because
 	// it lacks sufficient permissions. For details and example IAM policies, see
-	//  Using IAM to Manage Access to Amazon SWF Workflows (http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html)
+	// Using IAM to Manage Access to Amazon SWF Workflows (http://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-dev-iam.html)
 	// in the Amazon SWF Developer Guide.
 	//
 	// Cause is a required field
@@ -12448,7 +12384,7 @@ type StartChildWorkflowExecutionFailedEventAttributes struct {
 	Control *string `locationName:"control" type:"string"`
 
 	// The ID of the DecisionTaskCompleted event corresponding to the decision task
-	// that resulted in the StartChildWorkflowExecutionDecision to request this
+	// that resulted in the StartChildWorkflowExecution Decision to request this
 	// child workflow execution. This information can be useful for diagnosing problems
 	// by tracing back the chain of events.
 	//
@@ -12456,9 +12392,10 @@ type StartChildWorkflowExecutionFailedEventAttributes struct {
 	DecisionTaskCompletedEventId *int64 `locationName:"decisionTaskCompletedEventId" type:"long" required:"true"`
 
 	// When the cause is WORKFLOW_ALREADY_RUNNING, initiatedEventId is the ID of
-	// the StartChildWorkflowExecutionInitiated event that corresponds to the StartChildWorkflowExecutionDecision
-	// to start the workflow execution. You can use this information to diagnose
-	// problems by tracing back the chain of events leading up to this event.
+	// the StartChildWorkflowExecutionInitiated event that corresponds to the StartChildWorkflowExecution
+	// Decision to start the workflow execution. You can use this information to
+	// diagnose problems by tracing back the chain of events leading up to this
+	// event.
 	//
 	// When the cause isn't WORKFLOW_ALREADY_RUNNING, initiatedEventId is set to
 	// 0 because the StartChildWorkflowExecutionInitiated event doesn't exist.
@@ -12471,7 +12408,7 @@ type StartChildWorkflowExecutionFailedEventAttributes struct {
 	// WorkflowId is a required field
 	WorkflowId *string `locationName:"workflowId" min:"1" type:"string" required:"true"`
 
-	// The workflow type provided in the StartChildWorkflowExecutionDecision that
+	// The workflow type provided in the StartChildWorkflowExecution Decision that
 	// failed.
 	//
 	// WorkflowType is a required field
@@ -12551,7 +12488,7 @@ type StartChildWorkflowExecutionInitiatedEventAttributes struct {
 	Control *string `locationName:"control" type:"string"`
 
 	// The ID of the DecisionTaskCompleted event corresponding to the decision task
-	// that resulted in the StartChildWorkflowExecutionDecision to request this
+	// that resulted in the StartChildWorkflowExecution Decision to request this
 	// child workflow execution. This information can be useful for diagnosing problems
 	// by tracing back the cause of events.
 	//
@@ -14098,8 +14035,8 @@ type WorkflowExecutionInfo struct {
 	//
 	//    * FAILED – the execution failed to complete.
 	//
-	//    * TIMED_OUT – the execution did not complete in the alloted time and was
-	//    automatically timed out.
+	//    * TIMED_OUT – the execution did not complete in the alloted time and
+	//    was automatically timed out.
 	//
 	//    * CONTINUED_AS_NEW – the execution is logically continued. This means
 	//    the current execution was completed and a new execution was started to
@@ -14416,7 +14353,7 @@ type WorkflowExecutionStartedEventAttributes struct {
 	LambdaRole *string `locationName:"lambdaRole" min:"1" type:"string"`
 
 	// The ID of the StartChildWorkflowExecutionInitiated event corresponding to
-	// the StartChildWorkflowExecutionDecision to start this workflow execution.
+	// the StartChildWorkflowExecution Decision to start this workflow execution.
 	// The source event with this ID can be found in the history of the source workflow
 	// execution. This information can be useful for diagnosing problems by tracing
 	// back the chain of events leading up to this event.
@@ -14720,7 +14657,7 @@ type WorkflowTypeConfiguration struct {
 	// execution of this type is terminated, by calling the TerminateWorkflowExecution
 	// action explicitly or due to an expired timeout. This default can be overridden
 	// when starting a workflow execution using the StartWorkflowExecution action
-	// or the StartChildWorkflowExecutionDecision.
+	// or the StartChildWorkflowExecution Decision.
 	//
 	// The supported child policies are:
 	//
@@ -14737,7 +14674,7 @@ type WorkflowTypeConfiguration struct {
 	// The default maximum duration, specified when registering the workflow type,
 	// for executions of this workflow type. This default can be overridden when
 	// starting a workflow execution using the StartWorkflowExecution action or
-	// the StartChildWorkflowExecutionDecision.
+	// the StartChildWorkflowExecution Decision.
 	//
 	// The duration is specified in seconds, an integer greater than or equal to
 	// 0. You can use NONE to specify unlimited duration.
@@ -14755,7 +14692,7 @@ type WorkflowTypeConfiguration struct {
 	// The default task list, specified when registering the workflow type, for
 	// decisions tasks scheduled for workflow executions of this type. This default
 	// can be overridden when starting a workflow execution using the StartWorkflowExecution
-	// action or the StartChildWorkflowExecutionDecision.
+	// action or the StartChildWorkflowExecution Decision.
 	DefaultTaskList *TaskList `locationName:"defaultTaskList" type:"structure"`
 
 	// The default task priority, specified when registering the workflow type,
@@ -14777,7 +14714,7 @@ type WorkflowTypeConfiguration struct {
 	// time then the task is automatically timed out and rescheduled. If the decider
 	// eventually reports a completion or failure, it is ignored. This default can
 	// be overridden when starting a workflow execution using the StartWorkflowExecution
-	// action or the StartChildWorkflowExecutionDecision.
+	// action or the StartChildWorkflowExecution Decision.
 	//
 	// The duration is specified in seconds, an integer greater than or equal to
 	// 0. You can use NONE to specify unlimited duration.

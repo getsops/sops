@@ -186,7 +186,7 @@ func TestLogResponse(t *testing.T) {
 
 		if c.ReadBody {
 			if e, a := len(c.ExpectBody), c.Body.Len(); e != a {
-				t.Errorf("%d, expect orginal body not to of been read", i)
+				t.Errorf("%d, expect original body not to of been read", i)
 			}
 		}
 

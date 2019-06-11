@@ -15,12 +15,12 @@
 package vision
 
 import (
+	"context"
 	"fmt"
 	"reflect"
 	"testing"
 
 	"github.com/golang/protobuf/proto"
-	"golang.org/x/net/context"
 	pb "google.golang.org/genproto/googleapis/cloud/vision/v1"
 	"google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc"
@@ -122,6 +122,16 @@ func TestClientMethods(t *testing.T) {
 			func() (interface{}, error) { return c.CropHints(ctx, img, ictx) },
 			[]*pb.Feature{{Type: pb.Feature_CROP_HINTS, MaxResults: 0}},
 			batchResponse.Responses[0].CropHintsAnnotation,
+		},
+		{
+			func() (interface{}, error) { return c.LocalizeObjects(ctx, img, ictx) },
+			[]*pb.Feature{{Type: pb.Feature_OBJECT_LOCALIZATION, MaxResults: 0}},
+			batchResponse.Responses[0].LocalizedObjectAnnotations,
+		},
+		{
+			func() (interface{}, error) { return c.ProductSearch(ctx, img, ictx) },
+			[]*pb.Feature{{Type: pb.Feature_PRODUCT_SEARCH, MaxResults: 0}},
+			batchResponse.Responses[0].ProductSearchResults,
 		},
 	} {
 		mockImageAnnotator.reqs = nil

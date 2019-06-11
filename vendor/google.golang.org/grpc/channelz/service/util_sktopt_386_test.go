@@ -1,4 +1,4 @@
-// +build 386,linux,!appengine,go1.7
+// +build 386,linux,!appengine
 
 /*
  *

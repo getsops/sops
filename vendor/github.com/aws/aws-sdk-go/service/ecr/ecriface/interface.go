@@ -137,6 +137,10 @@ type ECRAPI interface {
 	ListImagesPages(*ecr.ListImagesInput, func(*ecr.ListImagesOutput, bool) bool) error
 	ListImagesPagesWithContext(aws.Context, *ecr.ListImagesInput, func(*ecr.ListImagesOutput, bool) bool, ...request.Option) error
 
+	ListTagsForResource(*ecr.ListTagsForResourceInput) (*ecr.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *ecr.ListTagsForResourceInput, ...request.Option) (*ecr.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*ecr.ListTagsForResourceInput) (*request.Request, *ecr.ListTagsForResourceOutput)
+
 	PutImage(*ecr.PutImageInput) (*ecr.PutImageOutput, error)
 	PutImageWithContext(aws.Context, *ecr.PutImageInput, ...request.Option) (*ecr.PutImageOutput, error)
 	PutImageRequest(*ecr.PutImageInput) (*request.Request, *ecr.PutImageOutput)
@@ -152,6 +156,14 @@ type ECRAPI interface {
 	StartLifecyclePolicyPreview(*ecr.StartLifecyclePolicyPreviewInput) (*ecr.StartLifecyclePolicyPreviewOutput, error)
 	StartLifecyclePolicyPreviewWithContext(aws.Context, *ecr.StartLifecyclePolicyPreviewInput, ...request.Option) (*ecr.StartLifecyclePolicyPreviewOutput, error)
 	StartLifecyclePolicyPreviewRequest(*ecr.StartLifecyclePolicyPreviewInput) (*request.Request, *ecr.StartLifecyclePolicyPreviewOutput)
+
+	TagResource(*ecr.TagResourceInput) (*ecr.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *ecr.TagResourceInput, ...request.Option) (*ecr.TagResourceOutput, error)
+	TagResourceRequest(*ecr.TagResourceInput) (*request.Request, *ecr.TagResourceOutput)
+
+	UntagResource(*ecr.UntagResourceInput) (*ecr.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *ecr.UntagResourceInput, ...request.Option) (*ecr.UntagResourceOutput, error)
+	UntagResourceRequest(*ecr.UntagResourceInput) (*request.Request, *ecr.UntagResourceOutput)
 
 	UploadLayerPart(*ecr.UploadLayerPartInput) (*ecr.UploadLayerPartOutput, error)
 	UploadLayerPartWithContext(aws.Context, *ecr.UploadLayerPartInput, ...request.Option) (*ecr.UploadLayerPartOutput, error)

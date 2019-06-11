@@ -15,10 +15,9 @@
 package storage
 
 import (
+	"context"
 	"strings"
 	"testing"
-
-	"golang.org/x/net/context"
 )
 
 func TestCopyMissingFields(t *testing.T) {

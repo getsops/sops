@@ -24,11 +24,11 @@ AWS credentials. See the [`Configuring Credentials`](http://docs.aws.amazon.com/
 section of the SDK's API Reference guide on how the SDK loads your AWS credentials.
 
 The server requires the S3 `-b bucket` the presigned URLs will be generated for. A
-`-r region` is only needed if the bucket is in AWS China or AWS Gov Cloud. For 
+`-r region` is only needed if the bucket is in AWS China or AWS Gov Cloud. For
 buckets in AWS the server will use the [`s3manager.GetBucketRegion`](http://docs.aws.amazon.com/sdk-for-go/api/service/s3/s3manager/#GetBucketRegion) utility to lookup the bucket's region.
 
 You should run the service in the background or in a separate terminal tab before
-moving onto the client. 
+moving onto the client.
 
 
 ```sh
@@ -43,7 +43,7 @@ defaults.
 
 Use the client application to request a presigned URL from the server and use
 that presigned URL to download the object from S3. Calling the client with the
-`-get key` flag will do this. An optional `-f filename` flag can be provided as 
+`-get key` flag will do this. An optional `-f filename` flag can be provided as
 well to write the object to. If no flag is provided the object will be written
 to `stdout`
 
@@ -63,7 +63,7 @@ URL. The `method` value can be `GET` or `PUT` for the `GetObject` or `PutObject`
 curl -v "http://127.0.0.1:8080/presign/my-object/key?method=GET"
 ```
 
-The server will respond with a JSON value. The value contains three pieces of 
+The server will respond with a JSON value. The value contains three pieces of
 information that the client will need to correctly make the request. First is
 the presigned URL. This is the URL the client will make the request to. Second
 is the HTTP method the request should be sent as. This is included to simplify
@@ -97,7 +97,7 @@ service
 go run -tags example client/client.go -put "my-object/key" -f filename
 ```
 
-Like the download case this will make a HTTP request to the server for the 
+Like the download case this will make a HTTP request to the server for the
 presigned URL. The Server will respond with a presigned URL for S3's `PutObject`
 API operation. In addition the `method` query parameter the client will also
 include a `contentLength` this value instructs the server to generate the presigned
@@ -118,7 +118,7 @@ such as additional constraints the server puts on the presigned URLs like
 `Content-Type`.
 
 In addition to adding constraints to the presigned URLs the service could be
-updated to obfuscate S3 object's key. Instead of the client knowing the object's 
+updated to obfuscate S3 object's key. Instead of the client knowing the object's
 key, a lookup system could be used instead. This could be substitution based,
 or lookup into an external data store such as DynamoDB.
 

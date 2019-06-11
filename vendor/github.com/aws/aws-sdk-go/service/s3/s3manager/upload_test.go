@@ -104,7 +104,7 @@ func TestUploadOrderMulti(t *testing.T) {
 
 	resp, err := u.Upload(&s3manager.UploadInput{
 		Bucket:               aws.String("Bucket"),
-		Key:                  aws.String("Key"),
+		Key:                  aws.String("Key - value"),
 		Body:                 bytes.NewReader(buf12MB),
 		ServerSideEncryption: aws.String("aws:kms"),
 		SSEKMSKeyId:          aws.String("KmsId"),
@@ -120,8 +120,8 @@ func TestUploadOrderMulti(t *testing.T) {
 		t.Errorf("Expected %v, but received %v", expected, *ops)
 	}
 
-	if "https://location" != resp.Location {
-		t.Errorf("Expected %q, but received %q", "https://location", resp.Location)
+	if e, a := `https://s3.mock-region.amazonaws.com/Bucket/Key%20-%20value`, resp.Location; e != a {
+		t.Errorf("Expected %q, but received %q", e, a)
 	}
 
 	if "UPLOAD-ID" != resp.UploadID {
@@ -268,12 +268,12 @@ func TestUploadFailIfPartSizeTooSmall(t *testing.T) {
 	}
 
 	aerr := err.(awserr.Error)
-	if "ConfigError" != aerr.Code() {
-		t.Errorf("Expected %q, but received %q", "ConfigError", aerr.Code())
+	if e, a := "ConfigError", aerr.Code(); e != a {
+		t.Errorf("Expected %q, but received %q", e, a)
 	}
 
-	if strings.Contains("part size must be at least", aerr.Message()) {
-		t.Errorf("Expected string to contain %q, but received %q", "part size must be at least", aerr.Message())
+	if e, a := "part size must be at least", aerr.Message(); !strings.Contains(a, e) {
+		t.Errorf("expect %v to be in %v", e, a)
 	}
 }
 
@@ -282,7 +282,7 @@ func TestUploadOrderSingle(t *testing.T) {
 	mgr := s3manager.NewUploaderWithClient(s)
 	resp, err := mgr.Upload(&s3manager.UploadInput{
 		Bucket:               aws.String("Bucket"),
-		Key:                  aws.String("Key"),
+		Key:                  aws.String("Key - value"),
 		Body:                 bytes.NewReader(buf2MB),
 		ServerSideEncryption: aws.String("aws:kms"),
 		SSEKMSKeyId:          aws.String("KmsId"),
@@ -297,8 +297,8 @@ func TestUploadOrderSingle(t *testing.T) {
 		t.Errorf("Expected %v, but received %v", vals, *ops)
 	}
 
-	if len(resp.Location) == 0 {
-		t.Error("Expected Location to not be empty")
+	if e, a := `https://s3.mock-region.amazonaws.com/Bucket/Key%20-%20value`, resp.Location; e != a {
+		t.Errorf("Expected %q, but received %q", e, a)
 	}
 
 	if e := "VERSION-ID"; e != *resp.VersionID {
@@ -785,52 +785,44 @@ func TestUploadInputS3PutObjectInputPairity(t *testing.T) {
 }
 
 type testIncompleteReader struct {
-	Buf   []byte
-	Count int
+	Size int64
+	read int64
 }
 
 func (r *testIncompleteReader) Read(p []byte) (n int, err error) {
-	if r.Count < 0 {
-		return 0, io.ErrUnexpectedEOF
+	r.read += int64(len(p))
+	if r.read >= r.Size {
+		return int(r.read - r.Size), io.ErrUnexpectedEOF
 	}
-
-	r.Count--
-	return copy(p, r.Buf), nil
+	return len(p), nil
 }
 
 func TestUploadUnexpectedEOF(t *testing.T) {
-	s, ops, args := loggingSvc(emptyList)
+	s, ops, _ := loggingSvc(emptyList)
 	mgr := s3manager.NewUploaderWithClient(s, func(u *s3manager.Uploader) {
 		u.Concurrency = 1
+		u.PartSize = s3manager.MinUploadPartSize
 	})
 	_, err := mgr.Upload(&s3manager.UploadInput{
 		Bucket: aws.String("Bucket"),
 		Key:    aws.String("Key"),
 		Body: &testIncompleteReader{
-			Buf:   make([]byte, 1024*1024*5),
-			Count: 1,
+			Size: int64(s3manager.MinUploadPartSize + 1),
 		},
 	})
-
 	if err == nil {
 		t.Error("Expected error, but received none")
 	}
 
+	// Ensure upload started.
 	if e, a := "CreateMultipartUpload", (*ops)[0]; e != a {
 		t.Errorf("Expected %q, but received %q", e, a)
 	}
 
-	if e, a := "UploadPart", (*ops)[1]; e != a {
-		t.Errorf("Expected %q, but received %q", e, a)
-	}
-
+	// Part may or may not be sent because of timing of sending parts and
+	// reading next part in upload manager. Just check for the last abort.
 	if e, a := "AbortMultipartUpload", (*ops)[len(*ops)-1]; e != a {
 		t.Errorf("Expected %q, but received %q", e, a)
-	}
-
-	// Part lengths
-	if e, a := 1024*1024*5, buflen(val((*args)[1], "Body")); e != a {
-		t.Errorf("Expected %d, but received %d", e, a)
 	}
 }
 
@@ -999,5 +991,42 @@ func TestUploadWithContextCanceled(t *testing.T) {
 	}
 	if e, a := "canceled", aerr.Message(); !strings.Contains(a, e) {
 		t.Errorf("expected error message to contain %q, but did not %q", e, a)
+	}
+}
+
+// S3 Uploader incorrectly fails an upload if the content being uploaded
+// has a size of MinPartSize * MaxUploadParts.
+// Github:  aws/aws-sdk-go#2557
+func TestUploadMaxPartsEOF(t *testing.T) {
+	s, ops, _ := loggingSvc(emptyList)
+	mgr := s3manager.NewUploaderWithClient(s, func(u *s3manager.Uploader) {
+		u.Concurrency = 1
+		u.PartSize = s3manager.DefaultUploadPartSize
+		u.MaxUploadParts = 2
+	})
+	f := bytes.NewReader(make([]byte, int(mgr.PartSize)*mgr.MaxUploadParts))
+
+	r1 := io.NewSectionReader(f, 0, s3manager.DefaultUploadPartSize)
+	r2 := io.NewSectionReader(f, s3manager.DefaultUploadPartSize, 2*s3manager.DefaultUploadPartSize)
+	body := io.MultiReader(r1, r2)
+
+	_, err := mgr.Upload(&s3manager.UploadInput{
+		Bucket: aws.String("Bucket"),
+		Key:    aws.String("Key"),
+		Body:   body,
+	})
+
+	if err != nil {
+		t.Fatalf("expect no error, got %v", err)
+	}
+
+	expectOps := []string{
+		"CreateMultipartUpload",
+		"UploadPart",
+		"UploadPart",
+		"CompleteMultipartUpload",
+	}
+	if e, a := expectOps, *ops; !reflect.DeepEqual(e, a) {
+		t.Errorf("expect %v ops, got %v", e, a)
 	}
 }

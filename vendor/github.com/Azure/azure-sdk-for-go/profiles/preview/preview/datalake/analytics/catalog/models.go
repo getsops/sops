@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,15 +19,16 @@
 
 package catalog
 
-import original "github.com/Azure/azure-sdk-for-go/services/preview/datalake/analytics/2015-10-01-preview/catalog"
+import (
+	"context"
 
-type Client = original.Client
+	original "github.com/Azure/azure-sdk-for-go/services/preview/datalake/analytics/2015-10-01-preview/catalog"
+)
 
 const (
 	DefaultAdlaCatalogDNSSuffix = original.DefaultAdlaCatalogDNSSuffix
 )
 
-type BaseClient = original.BaseClient
 type FileType = original.FileType
 
 const (
@@ -35,6 +36,8 @@ const (
 	Resource FileType = original.Resource
 )
 
+type BaseClient = original.BaseClient
+type Client = original.Client
 type DataLakeAnalyticsCatalogSecretCreateOrUpdateParameters = original.DataLakeAnalyticsCatalogSecretCreateOrUpdateParameters
 type DdlName = original.DdlName
 type EntityID = original.EntityID
@@ -103,11 +106,89 @@ type USQLViewList = original.USQLViewList
 type USQLViewListIterator = original.USQLViewListIterator
 type USQLViewListPage = original.USQLViewListPage
 
+func New() BaseClient {
+	return original.New()
+}
 func NewClient() Client {
 	return original.NewClient()
 }
-func New() BaseClient {
-	return original.New()
+func NewUSQLAssemblyListIterator(page USQLAssemblyListPage) USQLAssemblyListIterator {
+	return original.NewUSQLAssemblyListIterator(page)
+}
+func NewUSQLAssemblyListPage(getNextPage func(context.Context, USQLAssemblyList) (USQLAssemblyList, error)) USQLAssemblyListPage {
+	return original.NewUSQLAssemblyListPage(getNextPage)
+}
+func NewUSQLCredentialListIterator(page USQLCredentialListPage) USQLCredentialListIterator {
+	return original.NewUSQLCredentialListIterator(page)
+}
+func NewUSQLCredentialListPage(getNextPage func(context.Context, USQLCredentialList) (USQLCredentialList, error)) USQLCredentialListPage {
+	return original.NewUSQLCredentialListPage(getNextPage)
+}
+func NewUSQLDatabaseListIterator(page USQLDatabaseListPage) USQLDatabaseListIterator {
+	return original.NewUSQLDatabaseListIterator(page)
+}
+func NewUSQLDatabaseListPage(getNextPage func(context.Context, USQLDatabaseList) (USQLDatabaseList, error)) USQLDatabaseListPage {
+	return original.NewUSQLDatabaseListPage(getNextPage)
+}
+func NewUSQLExternalDataSourceListIterator(page USQLExternalDataSourceListPage) USQLExternalDataSourceListIterator {
+	return original.NewUSQLExternalDataSourceListIterator(page)
+}
+func NewUSQLExternalDataSourceListPage(getNextPage func(context.Context, USQLExternalDataSourceList) (USQLExternalDataSourceList, error)) USQLExternalDataSourceListPage {
+	return original.NewUSQLExternalDataSourceListPage(getNextPage)
+}
+func NewUSQLProcedureListIterator(page USQLProcedureListPage) USQLProcedureListIterator {
+	return original.NewUSQLProcedureListIterator(page)
+}
+func NewUSQLProcedureListPage(getNextPage func(context.Context, USQLProcedureList) (USQLProcedureList, error)) USQLProcedureListPage {
+	return original.NewUSQLProcedureListPage(getNextPage)
+}
+func NewUSQLSchemaListIterator(page USQLSchemaListPage) USQLSchemaListIterator {
+	return original.NewUSQLSchemaListIterator(page)
+}
+func NewUSQLSchemaListPage(getNextPage func(context.Context, USQLSchemaList) (USQLSchemaList, error)) USQLSchemaListPage {
+	return original.NewUSQLSchemaListPage(getNextPage)
+}
+func NewUSQLTableListIterator(page USQLTableListPage) USQLTableListIterator {
+	return original.NewUSQLTableListIterator(page)
+}
+func NewUSQLTableListPage(getNextPage func(context.Context, USQLTableList) (USQLTableList, error)) USQLTableListPage {
+	return original.NewUSQLTableListPage(getNextPage)
+}
+func NewUSQLTablePartitionListIterator(page USQLTablePartitionListPage) USQLTablePartitionListIterator {
+	return original.NewUSQLTablePartitionListIterator(page)
+}
+func NewUSQLTablePartitionListPage(getNextPage func(context.Context, USQLTablePartitionList) (USQLTablePartitionList, error)) USQLTablePartitionListPage {
+	return original.NewUSQLTablePartitionListPage(getNextPage)
+}
+func NewUSQLTableStatisticsListIterator(page USQLTableStatisticsListPage) USQLTableStatisticsListIterator {
+	return original.NewUSQLTableStatisticsListIterator(page)
+}
+func NewUSQLTableStatisticsListPage(getNextPage func(context.Context, USQLTableStatisticsList) (USQLTableStatisticsList, error)) USQLTableStatisticsListPage {
+	return original.NewUSQLTableStatisticsListPage(getNextPage)
+}
+func NewUSQLTableTypeListIterator(page USQLTableTypeListPage) USQLTableTypeListIterator {
+	return original.NewUSQLTableTypeListIterator(page)
+}
+func NewUSQLTableTypeListPage(getNextPage func(context.Context, USQLTableTypeList) (USQLTableTypeList, error)) USQLTableTypeListPage {
+	return original.NewUSQLTableTypeListPage(getNextPage)
+}
+func NewUSQLTableValuedFunctionListIterator(page USQLTableValuedFunctionListPage) USQLTableValuedFunctionListIterator {
+	return original.NewUSQLTableValuedFunctionListIterator(page)
+}
+func NewUSQLTableValuedFunctionListPage(getNextPage func(context.Context, USQLTableValuedFunctionList) (USQLTableValuedFunctionList, error)) USQLTableValuedFunctionListPage {
+	return original.NewUSQLTableValuedFunctionListPage(getNextPage)
+}
+func NewUSQLTypeListIterator(page USQLTypeListPage) USQLTypeListIterator {
+	return original.NewUSQLTypeListIterator(page)
+}
+func NewUSQLTypeListPage(getNextPage func(context.Context, USQLTypeList) (USQLTypeList, error)) USQLTypeListPage {
+	return original.NewUSQLTypeListPage(getNextPage)
+}
+func NewUSQLViewListIterator(page USQLViewListPage) USQLViewListIterator {
+	return original.NewUSQLViewListIterator(page)
+}
+func NewUSQLViewListPage(getNextPage func(context.Context, USQLViewList) (USQLViewList, error)) USQLViewListPage {
+	return original.NewUSQLViewListPage(getNextPage)
 }
 func NewWithoutDefaults(adlaCatalogDNSSuffix string) BaseClient {
 	return original.NewWithoutDefaults(adlaCatalogDNSSuffix)

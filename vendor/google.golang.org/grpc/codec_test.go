@@ -25,7 +25,7 @@ import (
 	"google.golang.org/grpc/encoding/proto"
 )
 
-func TestGetCodecForProtoIsNotNil(t *testing.T) {
+func (s) TestGetCodecForProtoIsNotNil(t *testing.T) {
 	if encoding.GetCodec(proto.Name) == nil {
 		t.Fatalf("encoding.GetCodec(%q) must not be nil by default", proto.Name)
 	}

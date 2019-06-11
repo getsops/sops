@@ -15,17 +15,15 @@
 package firestore
 
 import (
+	"context"
 	"math"
 	"sort"
 	"testing"
 
-	"golang.org/x/net/context"
-
 	"cloud.google.com/go/internal/pretty"
-	pb "google.golang.org/genproto/googleapis/firestore/v1beta1"
-
 	tspb "github.com/golang/protobuf/ptypes/timestamp"
 	"github.com/golang/protobuf/ptypes/wrappers"
+	pb "google.golang.org/genproto/googleapis/firestore/v1"
 )
 
 func TestFilterToProto(t *testing.T) {
@@ -88,13 +86,10 @@ func TestQueryToProto(t *testing.T) {
 	c := &Client{projectID: "P", databaseID: "DB"}
 	coll := c.Collection("C")
 	q := coll.Query
-	type S struct {
-		A int `firestore:"a"`
-	}
 	docsnap := &DocumentSnapshot{
 		Ref: coll.Doc("D"),
 		proto: &pb.Document{
-			Fields: map[string]*pb.Value{"a": intval(7), "b": intval(8)},
+			Fields: map[string]*pb.Value{"a": intval(7), "b": intval(8), "c": arrayval(intval(1), intval(2))},
 		},
 	}
 	for _, test := range []struct {
@@ -147,6 +142,11 @@ func TestQueryToProto(t *testing.T) {
 			desc: `q.Where("a", "==", NaN)`,
 			in:   q.Where("a", "==", float32(math.NaN())),
 			want: &pb.StructuredQuery{Where: filtr([]string{"a"}, "==", math.NaN())},
+		},
+		{
+			desc: `q.Where("c", "array-contains", 1)`,
+			in:   q.Where("c", "array-contains", 1),
+			want: &pb.StructuredQuery{Where: filtr([]string{"c"}, "array-contains", 1)},
 		},
 		{
 			desc: `q.Where("a", ">", 5).Where("b", "<", "foo")`,
@@ -255,11 +255,11 @@ func TestQueryToProto(t *testing.T) {
 					{Field: fref1("__name__"), Direction: pb.StructuredQuery_ASCENDING},
 				},
 				StartAt: &pb.Cursor{
-					Values: []*pb.Value{refval(coll.parentPath + "/documents/C/foo")},
+					Values: []*pb.Value{refval(coll.parentPath + "/C/foo")},
 					Before: false,
 				},
 				EndAt: &pb.Cursor{
-					Values: []*pb.Value{refval(coll.parentPath + "/documents/C/bar")},
+					Values: []*pb.Value{refval(coll.parentPath + "/C/bar")},
 					Before: true,
 				},
 			},
@@ -312,7 +312,7 @@ func TestQueryToProto(t *testing.T) {
 					{Field: fref1("__name__"), Direction: pb.StructuredQuery_ASCENDING},
 				},
 				StartAt: &pb.Cursor{
-					Values: []*pb.Value{refval(coll.parentPath + "/documents/C/D")},
+					Values: []*pb.Value{refval(coll.parentPath + "/C/D")},
 					Before: true,
 				},
 			},
@@ -326,7 +326,7 @@ func TestQueryToProto(t *testing.T) {
 					{Field: fref1("__name__"), Direction: pb.StructuredQuery_ASCENDING},
 				},
 				StartAt: &pb.Cursor{
-					Values: []*pb.Value{intval(7), refval(coll.parentPath + "/documents/C/D")},
+					Values: []*pb.Value{intval(7), refval(coll.parentPath + "/C/D")},
 					Before: true,
 				},
 			},
@@ -341,7 +341,7 @@ func TestQueryToProto(t *testing.T) {
 					{Field: fref1("__name__"), Direction: pb.StructuredQuery_DESCENDING},
 				},
 				StartAt: &pb.Cursor{
-					Values: []*pb.Value{intval(7), refval(coll.parentPath + "/documents/C/D")},
+					Values: []*pb.Value{intval(7), refval(coll.parentPath + "/C/D")},
 					Before: true,
 				},
 			},
@@ -356,7 +356,7 @@ func TestQueryToProto(t *testing.T) {
 					{Field: fref1("__name__"), Direction: pb.StructuredQuery_ASCENDING},
 				},
 				StartAt: &pb.Cursor{
-					Values: []*pb.Value{intval(7), intval(8), refval(coll.parentPath + "/documents/C/D")},
+					Values: []*pb.Value{intval(7), intval(8), refval(coll.parentPath + "/C/D")},
 					Before: true,
 				},
 			},
@@ -370,7 +370,7 @@ func TestQueryToProto(t *testing.T) {
 					{Field: fref1("__name__"), Direction: pb.StructuredQuery_ASCENDING},
 				},
 				StartAt: &pb.Cursor{
-					Values: []*pb.Value{refval(coll.parentPath + "/documents/C/D")},
+					Values: []*pb.Value{refval(coll.parentPath + "/C/D")},
 					Before: true,
 				},
 			},
@@ -385,7 +385,7 @@ func TestQueryToProto(t *testing.T) {
 					{Field: fref1("__name__"), Direction: pb.StructuredQuery_ASCENDING},
 				},
 				StartAt: &pb.Cursor{
-					Values: []*pb.Value{intval(7), refval(coll.parentPath + "/documents/C/D")},
+					Values: []*pb.Value{intval(7), refval(coll.parentPath + "/C/D")},
 					Before: true,
 				},
 			},
@@ -410,7 +410,7 @@ func TestQueryToProto(t *testing.T) {
 					{Field: fref1("__name__"), Direction: pb.StructuredQuery_ASCENDING},
 				},
 				StartAt: &pb.Cursor{
-					Values: []*pb.Value{intval(7), refval(coll.parentPath + "/documents/C/D")},
+					Values: []*pb.Value{intval(7), refval(coll.parentPath + "/C/D")},
 					Before: true,
 				},
 			},
@@ -418,12 +418,12 @@ func TestQueryToProto(t *testing.T) {
 	} {
 		got, err := test.in.toProto()
 		if err != nil {
-			t.Errorf("%s: %v", test.desc, err)
+			t.Fatalf("%s: %v", test.desc, err)
 			continue
 		}
 		test.want.From = []*pb.StructuredQuery_CollectionSelector{{CollectionId: "C"}}
 		if !testEqual(got, test.want) {
-			t.Errorf("%s:\ngot\n%v\nwant\n%v", test.desc, pretty.Value(got), pretty.Value(test.want))
+			t.Fatalf("%s:\ngot\n%v\nwant\n%v", test.desc, pretty.Value(got), pretty.Value(test.want))
 		}
 	}
 }
@@ -444,32 +444,32 @@ func TestQueryToProtoErrors(t *testing.T) {
 		},
 	}
 	q := coll.Query
-	for _, query := range []Query{
-		{}, // no collection ID
+	for i, query := range []Query{
+		{},                                     // no collection ID
 		q.Where("x", "!=", 1),                  // invalid operator
 		q.Where("~", ">", 1),                   // invalid path
 		q.WherePath([]string{"*", ""}, ">", 1), // invalid path
 		q.StartAt(1),                           // no OrderBy
 		q.StartAt(2).OrderBy("x", Asc).OrderBy("y", Desc), // wrong # OrderBy
-		q.Select("*"),                                     // invalid path
-		q.SelectPaths([]string{"/", "", "~"}),             // invalid path
-		q.OrderBy("[", Asc),                               // invalid path
-		q.OrderByPath([]string{""}, Desc),                 // invalid path
-		q.Where("x", "==", st),                            // ServerTimestamp in filter
-		q.OrderBy("a", Asc).StartAt(st),                   // ServerTimestamp in Start
-		q.OrderBy("a", Asc).EndAt(st),                     // ServerTimestamp in End
-		q.Where("x", "==", del),                           // Delete in filter
-		q.OrderBy("a", Asc).StartAt(del),                  // Delete in Start
-		q.OrderBy("a", Asc).EndAt(del),                    // Delete in End
-		q.OrderBy(DocumentID, Asc).StartAt(7),             // wrong type for __name__
-		q.OrderBy(DocumentID, Asc).EndAt(7),               // wrong type for __name__
-		q.OrderBy("b", Asc).StartAt(docsnap),              // doc snapshot does not have order-by field
-		q.StartAt(docsnap).EndAt("x"),                     // mixed doc snapshot and fields
-		q.StartAfter("x").EndBefore(docsnap),              // mixed doc snapshot and fields
+		q.Select("*"),                         // invalid path
+		q.SelectPaths([]string{"/", "", "~"}), // invalid path
+		q.OrderBy("[", Asc),                   // invalid path
+		q.OrderByPath([]string{""}, Desc),     // invalid path
+		q.Where("x", "==", st),                // ServerTimestamp in filter
+		q.OrderBy("a", Asc).StartAt(st),       // ServerTimestamp in Start
+		q.OrderBy("a", Asc).EndAt(st),         // ServerTimestamp in End
+		q.Where("x", "==", del),               // Delete in filter
+		q.OrderBy("a", Asc).StartAt(del),      // Delete in Start
+		q.OrderBy("a", Asc).EndAt(del),        // Delete in End
+		q.OrderBy(DocumentID, Asc).StartAt(7), // wrong type for __name__
+		q.OrderBy(DocumentID, Asc).EndAt(7),   // wrong type for __name__
+		q.OrderBy("b", Asc).StartAt(docsnap),  // doc snapshot does not have order-by field
+		q.StartAt(docsnap).EndAt("x"),         // mixed doc snapshot and fields
+		q.StartAfter("x").EndBefore(docsnap),  // mixed doc snapshot and fields
 	} {
 		_, err := query.toProto()
 		if err == nil {
-			t.Errorf("%+v: got nil, want error", query)
+			t.Errorf("query %d \"%+v\": got nil, want error", i, query)
 		}
 	}
 }
@@ -545,18 +545,19 @@ func TestQueryMethodsDoNotModifyReceiver(t *testing.T) {
 }
 
 func TestQueryFromCollectionRef(t *testing.T) {
-	c := &Client{}
+	c := &Client{projectID: "P", databaseID: "D"}
 	coll := c.Collection("C")
 	got := coll.Select("x").Offset(8)
 	want := Query{
 		c:            c,
-		parentPath:   c.path(),
+		parentPath:   c.path() + "/documents",
+		path:         "projects/P/databases/D/documents/C",
 		collectionID: "C",
 		selection:    []FieldPath{{"x"}},
 		offset:       8,
 	}
 	if !testEqual(got, want) {
-		t.Fatalf("got %+v, want %+v", got, want)
+		t.Fatalf("\ngot  %+v, \nwant %+v", got, want)
 	}
 }
 
@@ -699,6 +700,144 @@ func TestQueryCompareFunc(t *testing.T) {
 	if _, err := cf(s, s); err == nil {
 		t.Error("got nil, want error")
 	}
+}
+
+func TestQuerySubCollections(t *testing.T) {
+	c := &Client{projectID: "P", databaseID: "DB"}
+
+	/*
+		        parent-collection
+			+---------+  +---------+
+			|                      |
+			|                      |
+		parent-doc			some-other-parent-doc
+			|
+			|
+		sub-collection
+			|
+			|
+		sub-doc
+			|
+			|
+		sub-sub-collection
+			|
+			|
+		sub-sub-doc
+	*/
+	parentColl := c.Collection("parent-collection")
+	parentDoc := parentColl.Doc("parent-doc")
+	someOtherParentDoc := parentColl.Doc("some-other-parent-doc")
+	subColl := parentDoc.Collection("sub-collection")
+	subDoc := subColl.Doc("sub-doc")
+	subSubColl := subDoc.Collection("sub-sub-collection")
+	subSubDoc := subSubColl.Doc("sub-sub-doc")
+
+	testCases := []struct {
+		queryColl      *CollectionRef
+		queryFilterDoc *DocumentRef // startAt or endBefore
+		wantColl       string
+		wantRef        string
+		wantErr        bool
+	}{
+		// Queries are allowed at depth 0.
+		{parentColl, parentDoc, "parent-collection", "projects/P/databases/DB/documents/parent-collection/parent-doc", false},
+		// Queries are allowed at any depth.
+		{subColl, subDoc, "sub-collection", "projects/P/databases/DB/documents/parent-collection/parent-doc/sub-collection/sub-doc", false},
+		// Queries must be on immediate children (not allowed on grandchildren).
+		{subColl, someOtherParentDoc, "", "", true},
+		// Queries must be on immediate children (not allowed on siblings).
+		{subColl, subSubDoc, "", "", true},
+	}
+
+	// startAt
+	for _, testCase := range testCases {
+		// Query a child within the document.
+		q := testCase.queryColl.StartAt(&DocumentSnapshot{
+			Ref: testCase.queryFilterDoc,
+			proto: &pb.Document{
+				Fields: map[string]*pb.Value{"a": intval(7)},
+			},
+		}).OrderBy("a", Asc)
+		got, err := q.toProto()
+		if testCase.wantErr {
+			if err == nil {
+				t.Fatal("expected err, got nil")
+			}
+			continue
+		}
+
+		if err != nil {
+			t.Fatal(err)
+		}
+		want := &pb.StructuredQuery{
+			From: []*pb.StructuredQuery_CollectionSelector{
+				{CollectionId: testCase.wantColl},
+			},
+			OrderBy: []*pb.StructuredQuery_Order{
+				{Field: fref1("a"), Direction: pb.StructuredQuery_ASCENDING},
+				{Field: fref1("__name__"), Direction: pb.StructuredQuery_ASCENDING},
+			},
+			StartAt: &pb.Cursor{
+				Values: []*pb.Value{
+					intval(7),
+					// This is the only part of the assertion we really care about.
+					refval(testCase.wantRef),
+				},
+				Before: true,
+			},
+		}
+		if !testEqual(got, want) {
+			t.Fatalf("got\n%v\nwant\n%v", pretty.Value(got), pretty.Value(want))
+		}
+	}
+
+	// endBefore
+	for _, testCase := range testCases {
+		// Query a child within the document.
+		q := testCase.queryColl.EndBefore(&DocumentSnapshot{
+			Ref: testCase.queryFilterDoc,
+			proto: &pb.Document{
+				Fields: map[string]*pb.Value{"a": intval(7)},
+			},
+		}).OrderBy("a", Asc)
+		got, err := q.toProto()
+		if testCase.wantErr {
+			if err == nil {
+				t.Fatal("expected err, got nil")
+			}
+			continue
+		}
+
+		if err != nil {
+			t.Fatal(err)
+		}
+		want := &pb.StructuredQuery{
+			From: []*pb.StructuredQuery_CollectionSelector{
+				{CollectionId: testCase.wantColl},
+			},
+			OrderBy: []*pb.StructuredQuery_Order{
+				{Field: fref1("a"), Direction: pb.StructuredQuery_ASCENDING},
+				{Field: fref1("__name__"), Direction: pb.StructuredQuery_ASCENDING},
+			},
+			EndAt: &pb.Cursor{
+				Values: []*pb.Value{
+					intval(7),
+					// This is the only part of the assertion we really care about.
+					refval(testCase.wantRef),
+				},
+				Before: true,
+			},
+		}
+		if !testEqual(got, want) {
+			t.Fatalf("got\n%v\nwant\n%v", pretty.Value(got), pretty.Value(want))
+		}
+	}
+}
+
+// Stop should be callable on an uninitialized QuerySnapshotIterator.
+func TestStop_Uninitialized(t *testing.T) {
+	i := &QuerySnapshotIterator{}
+	i.Stop()
 }
 
 type byQuery struct {

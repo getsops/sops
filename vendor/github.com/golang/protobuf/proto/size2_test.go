@@ -32,6 +32,7 @@
 package proto
 
 import (
+	"math"
 	"testing"
 )
 
@@ -51,8 +52,8 @@ func TestVarintSize(t *testing.T) {
 		{128, 2},
 		{16383, 2},
 		{16384, 3},
-		{1<<63 - 1, 9},
-		{1 << 63, 10},
+		{math.MaxInt64, 9},
+		{math.MaxInt64 + 1, 10},
 	}
 	for _, tc := range testCases {
 		size := SizeVarint(tc.n)

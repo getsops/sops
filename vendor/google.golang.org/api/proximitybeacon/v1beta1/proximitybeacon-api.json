@@ -642,7 +642,7 @@
       }
     }
   },
-  "revision": "20180610",
+  "revision": "20190304",
   "rootUrl": "https://proximitybeacon.googleapis.com/",
   "schemas": {
     "AdvertisedId": {
@@ -830,16 +830,16 @@
       "type": "object"
     },
     "Date": {
-      "description": "Represents a whole calendar date, e.g. date of birth. The time of day and\ntime zone are either specified elsewhere or are not significant. The date\nis relative to the Proleptic Gregorian Calendar. The day may be 0 to\nrepresent a year and month where the day is not significant, e.g. credit card\nexpiration date. The year may be 0 to represent a month and day independent\nof year, e.g. anniversary date. Related types are google.type.TimeOfDay\nand `google.protobuf.Timestamp`.",
+      "description": "Represents a whole or partial calendar date, e.g. a birthday. The time of day\nand time zone are either specified elsewhere or are not significant. The date\nis relative to the Proleptic Gregorian Calendar. This can represent:\n\n* A full date, with non-zero year, month and day values\n* A month and day value, with a zero year, e.g. an anniversary\n* A year on its own, with zero month and day values\n* A year and month value, with a zero day, e.g. a credit card expiration date\n\nRelated types are google.type.TimeOfDay and `google.protobuf.Timestamp`.",
       "id": "Date",
       "properties": {
         "day": {
-          "description": "Day of month. Must be from 1 to 31 and valid for the year and month, or 0\nif specifying a year/month where the day is not significant.",
+          "description": "Day of month. Must be from 1 to 31 and valid for the year and month, or 0\nif specifying a year by itself or a year and month where the day is not\nsignificant.",
           "format": "int32",
           "type": "integer"
         },
         "month": {
-          "description": "Month of year. Must be from 1 to 12, or 0 if specifying a date without a\nmonth.",
+          "description": "Month of year. Must be from 1 to 12, or 0 if specifying a year without a\nmonth and day.",
           "format": "int32",
           "type": "integer"
         },
@@ -904,7 +904,7 @@
       "type": "object"
     },
     "EphemeralIdRegistration": {
-      "description": "Write-only registration parameters for beacons using Eddystone-EID format.\nTwo ways of securely registering an Eddystone-EID beacon with the service\nare supported:\n\n1. Perform an ECDH key exchange via this API, including a previous call\n   to `GET /v1beta1/eidparams`. In this case the fields\n   `beacon_ecdh_public_key` and `service_ecdh_public_key` should be\n   populated and `beacon_identity_key` should not be populated. This\n   method ensures that only the two parties in the ECDH key exchange can\n   compute the identity key, which becomes a secret between them.\n2. Derive or obtain the beacon's identity key via other secure means\n   (perhaps an ECDH key exchange between the beacon and a mobile device\n   or any other secure method), and then submit the resulting identity key\n   to the service. In this case `beacon_identity_key` field should be\n   populated, and neither of `beacon_ecdh_public_key` nor\n   `service_ecdh_public_key` fields should be. The security of this method\n   depends on how securely the parties involved (in particular the\n   bluetooth client) handle the identity key, and obviously on how\n   securely the identity key was generated.\n\nSee [the Eddystone specification](https://github.com/google/eddystone/tree/master/eddystone-eid) at GitHub.",
+      "description": "Write-only registration parameters for beacons using Eddystone-EID format.\nTwo ways of securely registering an Eddystone-EID beacon with the service\nare supported:\n\n1. Perform an ECDH key exchange via this API, including a previous call\n   to `GET /v1beta1/eidparams`. In this case the fields\n   `beacon_ecdh_public_key` and `service_ecdh_public_key` should be\n   populated and `beacon_identity_key` should not be populated. This\n   method ensures that only the two parties in the ECDH key exchange can\n   compute the identity key, which becomes a secret between them.\n2. Derive or obtain the beacon's identity key via other secure means\n   (perhaps an ECDH key exchange between the beacon and a mobile device\n   or any other secure method), and then submit the resulting identity key\n   to the service. In this case `beacon_identity_key` field should be\n   populated, and neither of `beacon_ecdh_public_key` nor\n   `service_ecdh_public_key` fields should be. The security of this method\n   depends on how securely the parties involved (in particular the\n   bluetooth client) handle the identity key, and obviously on how\n   securely the identity key was generated.\n\nSee [the Eddystone\nspecification](https://github.com/google/eddystone/tree/master/eddystone-eid)\nat GitHub.",
       "id": "EphemeralIdRegistration",
       "properties": {
         "beaconEcdhPublicKey": {
@@ -928,7 +928,7 @@
           "type": "string"
         },
         "rotationPeriodExponent": {
-          "description": "Indicates the nominal period between each rotation of the beacon's\nephemeral ID. \"Nominal\" because the beacon should randomize the\nactual interval. See [the spec at github](https://github.com/google/eddystone/tree/master/eddystone-eid)\nfor details. This value corresponds to a power-of-two scaler on the\nbeacon's clock: when the scaler value is K, the beacon will begin\nbroadcasting a new ephemeral ID on average every 2^K seconds.",
+          "description": "Indicates the nominal period between each rotation of the beacon's\nephemeral ID. \"Nominal\" because the beacon should randomize the\nactual interval. See [the spec at\ngithub](https://github.com/google/eddystone/tree/master/eddystone-eid)\nfor details. This value corresponds to a power-of-two scaler on the\nbeacon's clock: when the scaler value is K, the beacon will begin\nbroadcasting a new ephemeral ID on average every 2^K seconds.",
           "format": "uint32",
           "type": "integer"
         },

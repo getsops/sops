@@ -18,10 +18,15 @@ package operationsmanagement
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
+	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"net/http"
 )
+
+// The package's fully qualified name.
+const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/operationsmanagement/mgmt/2015-11-01-preview/operationsmanagement"
 
 // ArmTemplateParameter parameter to pass to ARM template
 type ArmTemplateParameter struct {
@@ -48,11 +53,11 @@ type CodeMessageErrorError struct {
 // ManagementAssociation the container for solution.
 type ManagementAssociation struct {
 	autorest.Response `json:"-"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
@@ -60,8 +65,8 @@ type ManagementAssociation struct {
 	Properties *ManagementAssociationProperties `json:"properties,omitempty"`
 }
 
-// ManagementAssociationProperties managementAssociation properties supported by the OperationsManagement resource
-// provider.
+// ManagementAssociationProperties managementAssociation properties supported by the OperationsManagement
+// resource provider.
 type ManagementAssociationProperties struct {
 	// ApplicationID - The applicationId of the appliance for this association.
 	ApplicationID *string `json:"applicationId,omitempty"`
@@ -70,18 +75,18 @@ type ManagementAssociationProperties struct {
 // ManagementAssociationPropertiesList the list of ManagementAssociation response
 type ManagementAssociationPropertiesList struct {
 	autorest.Response `json:"-"`
-	// Value - List of Management Association properites within the subscription.
+	// Value - List of Management Association properties within the subscription.
 	Value *[]ManagementAssociation `json:"value,omitempty"`
 }
 
 // ManagementConfiguration the container for solution.
 type ManagementConfiguration struct {
 	autorest.Response `json:"-"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
@@ -89,8 +94,8 @@ type ManagementConfiguration struct {
 	Properties *ManagementConfigurationProperties `json:"properties,omitempty"`
 }
 
-// ManagementConfigurationProperties managementConfiguration properties supported by the OperationsManagement
-// resource provider.
+// ManagementConfigurationProperties managementConfiguration properties supported by the
+// OperationsManagement resource provider.
 type ManagementConfigurationProperties struct {
 	// ApplicationID - The applicationId of the appliance for this Management.
 	ApplicationID *string `json:"applicationId,omitempty"`
@@ -98,7 +103,7 @@ type ManagementConfigurationProperties struct {
 	ParentResourceType *string `json:"parentResourceType,omitempty"`
 	// Parameters - Parameters to run the ARM template
 	Parameters *[]ArmTemplateParameter `json:"parameters,omitempty"`
-	// ProvisioningState - The provisioning state for the ManagementConfiguration.
+	// ProvisioningState - READ-ONLY; The provisioning state for the ManagementConfiguration.
 	ProvisioningState *string `json:"provisioningState,omitempty"`
 	// Template - The Json object containing the ARM template to deploy
 	Template interface{} `json:"template,omitempty"`
@@ -107,7 +112,7 @@ type ManagementConfigurationProperties struct {
 // ManagementConfigurationPropertiesList the list of ManagementConfiguration response
 type ManagementConfigurationPropertiesList struct {
 	autorest.Response `json:"-"`
-	// Value - List of Management Configuration properites within the subscription.
+	// Value - List of Management Configuration properties within the subscription.
 	Value *[]ManagementConfiguration `json:"value,omitempty"`
 }
 
@@ -139,18 +144,53 @@ type OperationListResult struct {
 // Solution the container for solution.
 type Solution struct {
 	autorest.Response `json:"-"`
-	// ID - Resource ID.
+	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - Resource name.
+	// Name - READ-ONLY; Resource name.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type.
+	// Type - READ-ONLY; Resource type.
 	Type *string `json:"type,omitempty"`
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
+	// Tags - Resource tags
+	Tags map[string]*string `json:"tags"`
 	// Plan - Plan for solution object supported by the OperationsManagement resource provider.
 	Plan *SolutionPlan `json:"plan,omitempty"`
 	// Properties - Properties for solution object supported by the OperationsManagement resource provider.
 	Properties *SolutionProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for Solution.
+func (s Solution) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if s.Location != nil {
+		objectMap["location"] = s.Location
+	}
+	if s.Tags != nil {
+		objectMap["tags"] = s.Tags
+	}
+	if s.Plan != nil {
+		objectMap["plan"] = s.Plan
+	}
+	if s.Properties != nil {
+		objectMap["properties"] = s.Properties
+	}
+	return json.Marshal(objectMap)
+}
+
+// SolutionPatch the properties of a Solution that can be patched.
+type SolutionPatch struct {
+	// Tags - Resource tags
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for SolutionPatch.
+func (sp SolutionPatch) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if sp.Tags != nil {
+		objectMap["tags"] = sp.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // SolutionPlan plan for solution object supported by the OperationsManagement resource provider.
@@ -169,7 +209,7 @@ type SolutionPlan struct {
 type SolutionProperties struct {
 	// WorkspaceResourceID - The azure resourceId for the workspace where the solution will be deployed/enabled.
 	WorkspaceResourceID *string `json:"workspaceResourceId,omitempty"`
-	// ProvisioningState - The provisioning state for the solution.
+	// ProvisioningState - READ-ONLY; The provisioning state for the solution.
 	ProvisioningState *string `json:"provisioningState,omitempty"`
 	// ContainedResources - The azure resources that will be contained within the solutions. They will be locked and gets deleted automatically when the solution is deleted.
 	ContainedResources *[]string `json:"containedResources,omitempty"`
@@ -180,7 +220,7 @@ type SolutionProperties struct {
 // SolutionPropertiesList the list of solution response
 type SolutionPropertiesList struct {
 	autorest.Response `json:"-"`
-	// Value - List of solution properites within the subscription.
+	// Value - List of solution properties within the subscription.
 	Value *[]Solution `json:"value,omitempty"`
 }
 
@@ -194,7 +234,7 @@ type SolutionsCreateOrUpdateFuture struct {
 // If the operation has not completed it will return an error.
 func (future *SolutionsCreateOrUpdateFuture) Result(client SolutionsClient) (s Solution, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "operationsmanagement.SolutionsCreateOrUpdateFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -213,7 +253,8 @@ func (future *SolutionsCreateOrUpdateFuture) Result(client SolutionsClient) (s S
 	return
 }
 
-// SolutionsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// SolutionsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type SolutionsDeleteFuture struct {
 	azure.Future
 }
@@ -222,7 +263,7 @@ type SolutionsDeleteFuture struct {
 // If the operation has not completed it will return an error.
 func (future *SolutionsDeleteFuture) Result(client SolutionsClient) (ar autorest.Response, err error) {
 	var done bool
-	done, err = future.Done(client)
+	done, err = future.DoneWithContext(context.Background(), client)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "operationsmanagement.SolutionsDeleteFuture", "Result", future.Response(), "Polling failure")
 		return
@@ -232,5 +273,34 @@ func (future *SolutionsDeleteFuture) Result(client SolutionsClient) (ar autorest
 		return
 	}
 	ar.Response = future.Response()
+	return
+}
+
+// SolutionsUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
+type SolutionsUpdateFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *SolutionsUpdateFuture) Result(client SolutionsClient) (s Solution, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "operationsmanagement.SolutionsUpdateFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("operationsmanagement.SolutionsUpdateFuture")
+		return
+	}
+	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if s.Response.Response, err = future.GetResult(sender); err == nil && s.Response.Response.StatusCode != http.StatusNoContent {
+		s, err = client.UpdateResponder(s.Response.Response)
+		if err != nil {
+			err = autorest.NewErrorWithError(err, "operationsmanagement.SolutionsUpdateFuture", "Result", s.Response.Response, "Failure responding to request")
+		}
+	}
 	return
 }

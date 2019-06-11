@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -34,12 +35,7 @@ type ImagesClient struct {
 
 // NewImagesClient creates an instance of the ImagesClient client.
 func NewImagesClient() ImagesClient {
-	return NewImagesClientWithBaseURI(DefaultBaseURI)
-}
-
-// NewImagesClientWithBaseURI creates an instance of the ImagesClient client.
-func NewImagesClientWithBaseURI(baseURI string) ImagesClient {
-	return ImagesClient{NewWithBaseURI(baseURI)}
+	return ImagesClient{New()}
 }
 
 // Details sends the details request.
@@ -237,6 +233,16 @@ func NewImagesClientWithBaseURI(baseURI string) ImagesClient {
 // label in a user interface. There are few user interface strings in the JSON response objects. Also, any
 // links to Bing.com properties in the response objects apply the specified language.
 func (client ImagesClient) Details(ctx context.Context, query string, acceptLanguage string, contentType string, userAgent string, clientID string, clientIP string, location string, cropBottom *float64, cropLeft *float64, cropRight *float64, cropTop *float64, cropType ImageCropType, countryCode string, ID string, imageURL string, insightsToken string, modules []ImageInsightModule, market string, safeSearch SafeSearch, setLang string) (result ImageInsights, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ImagesClient.Details")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DetailsPreparer(ctx, query, acceptLanguage, contentType, userAgent, clientID, clientIP, location, cropBottom, cropLeft, cropRight, cropTop, cropType, countryCode, ID, imageURL, insightsToken, modules, market, safeSearch, setLang)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "imagesearch.ImagesClient", "Details", nil, "Failure preparing request")
@@ -260,6 +266,10 @@ func (client ImagesClient) Details(ctx context.Context, query string, acceptLang
 
 // DetailsPreparer prepares the Details request.
 func (client ImagesClient) DetailsPreparer(ctx context.Context, query string, acceptLanguage string, contentType string, userAgent string, clientID string, clientIP string, location string, cropBottom *float64, cropLeft *float64, cropRight *float64, cropTop *float64, cropType ImageCropType, countryCode string, ID string, imageURL string, insightsToken string, modules []ImageInsightModule, market string, safeSearch SafeSearch, setLang string) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
 	queryParameters := map[string]interface{}{
 		"q": autorest.Encode("query", query),
 	}
@@ -305,7 +315,7 @@ func (client ImagesClient) DetailsPreparer(ctx context.Context, query string, ac
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsGet(),
-		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithCustomBaseURL("{Endpoint}/bing/v7.0", urlParameters),
 		autorest.WithPath("/images/details"),
 		autorest.WithQueryParameters(queryParameters),
 		autorest.WithHeader("X-BingApis-SDK", "true"))
@@ -567,6 +577,16 @@ func (client ImagesClient) DetailsResponder(resp *http.Response) (result ImageIn
 // width - filter images that have the specified width, in pixels. You may use this filter with the size filter
 // to return small images that have a width of 150 pixels.
 func (client ImagesClient) Search(ctx context.Context, query string, acceptLanguage string, userAgent string, clientID string, clientIP string, location string, aspect ImageAspect, colorParameter ImageColor, countryCode string, count *int32, freshness Freshness, height *int32, ID string, imageContent ImageContent, imageType ImageType, license ImageLicense, market string, maxFileSize *int64, maxHeight *int64, maxWidth *int64, minFileSize *int64, minHeight *int64, minWidth *int64, offset *int64, safeSearch SafeSearch, size ImageSize, setLang string, width *int32) (result Images, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ImagesClient.Search")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.SearchPreparer(ctx, query, acceptLanguage, userAgent, clientID, clientIP, location, aspect, colorParameter, countryCode, count, freshness, height, ID, imageContent, imageType, license, market, maxFileSize, maxHeight, maxWidth, minFileSize, minHeight, minWidth, offset, safeSearch, size, setLang, width)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "imagesearch.ImagesClient", "Search", nil, "Failure preparing request")
@@ -590,6 +610,10 @@ func (client ImagesClient) Search(ctx context.Context, query string, acceptLangu
 
 // SearchPreparer prepares the Search request.
 func (client ImagesClient) SearchPreparer(ctx context.Context, query string, acceptLanguage string, userAgent string, clientID string, clientIP string, location string, aspect ImageAspect, colorParameter ImageColor, countryCode string, count *int32, freshness Freshness, height *int32, ID string, imageContent ImageContent, imageType ImageType, license ImageLicense, market string, maxFileSize *int64, maxHeight *int64, maxWidth *int64, minFileSize *int64, minHeight *int64, minWidth *int64, offset *int64, safeSearch SafeSearch, size ImageSize, setLang string, width *int32) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
 	queryParameters := map[string]interface{}{
 		"q": autorest.Encode("query", query),
 	}
@@ -662,7 +686,7 @@ func (client ImagesClient) SearchPreparer(ctx context.Context, query string, acc
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsGet(),
-		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithCustomBaseURL("{Endpoint}/bing/v7.0", urlParameters),
 		autorest.WithPath("/images/search"),
 		autorest.WithQueryParameters(queryParameters),
 		autorest.WithHeader("X-BingApis-SDK", "true"))
@@ -831,6 +855,16 @@ func (client ImagesClient) SearchResponder(resp *http.Response) (result Images, 
 // label in a user interface. There are few user interface strings in the JSON response objects. Also, any
 // links to Bing.com properties in the response objects apply the specified language.
 func (client ImagesClient) Trending(ctx context.Context, acceptLanguage string, userAgent string, clientID string, clientIP string, location string, countryCode string, market string, safeSearch SafeSearch, setLang string) (result TrendingImages, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ImagesClient.Trending")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.TrendingPreparer(ctx, acceptLanguage, userAgent, clientID, clientIP, location, countryCode, market, safeSearch, setLang)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "imagesearch.ImagesClient", "Trending", nil, "Failure preparing request")
@@ -854,6 +888,10 @@ func (client ImagesClient) Trending(ctx context.Context, acceptLanguage string, 
 
 // TrendingPreparer prepares the Trending request.
 func (client ImagesClient) TrendingPreparer(ctx context.Context, acceptLanguage string, userAgent string, clientID string, clientIP string, location string, countryCode string, market string, safeSearch SafeSearch, setLang string) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
 	queryParameters := map[string]interface{}{}
 	if len(countryCode) > 0 {
 		queryParameters["cc"] = autorest.Encode("query", countryCode)
@@ -870,7 +908,7 @@ func (client ImagesClient) TrendingPreparer(ctx context.Context, acceptLanguage 
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsGet(),
-		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithCustomBaseURL("{Endpoint}/bing/v7.0", urlParameters),
 		autorest.WithPath("/images/trending"),
 		autorest.WithQueryParameters(queryParameters),
 		autorest.WithHeader("X-BingApis-SDK", "true"))

@@ -15,6 +15,7 @@
 package storage
 
 import (
+	"context"
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
@@ -26,20 +27,19 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"regexp"
+	"sort"
 	"strings"
 	"testing"
 	"time"
 
 	"cloud.google.com/go/iam"
 	"cloud.google.com/go/internal/testutil"
-
-	"golang.org/x/net/context"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 	raw "google.golang.org/api/storage/v1"
 )
 
-func TestHeaderSanitization(t *testing.T) {
+func TestV2HeaderSanitization(t *testing.T) {
 	t.Parallel()
 	var tests = []struct {
 		desc string
@@ -78,122 +78,269 @@ func TestHeaderSanitization(t *testing.T) {
 		},
 	}
 	for _, test := range tests {
-		got := sanitizeHeaders(test.in)
+		got := v2SanitizeHeaders(test.in)
 		if !testutil.Equal(got, test.want) {
 			t.Errorf("%s: got %v, want %v", test.desc, got, test.want)
 		}
 	}
 }
 
-func TestSignedURL(t *testing.T) {
+func TestV4HeaderSanitization(t *testing.T) {
 	t.Parallel()
-	expires, _ := time.Parse(time.RFC3339, "2002-10-02T10:00:00-05:00")
-	url, err := SignedURL("bucket-name", "object-name", &SignedURLOptions{
-		GoogleAccessID: "xxx@clientid",
-		PrivateKey:     dummyKey("rsa"),
-		Method:         "GET",
-		MD5:            "ICy5YqxZB1uWSwcVLSNLcA==",
-		Expires:        expires,
-		ContentType:    "application/json",
-		Headers:        []string{"x-goog-header1:true", "x-goog-header2:false"},
-	})
-	if err != nil {
-		t.Error(err)
-	}
-	want := "https://storage.googleapis.com/bucket-name/object-name?" +
-		"Expires=1033570800&GoogleAccessId=xxx%40clientid&Signature=" +
-		"RfsHlPtbB2JUYjzCgNr2Mi%2BjggdEuL1V7E6N9o6aaqwVLBDuTv3I0%2B9" +
-		"x94E6rmmr%2FVgnmZigkIUxX%2Blfl7LgKf30uPGLt0mjKGH2p7r9ey1ONJ" +
-		"%2BhVec23FnTRcSgopglvHPuCMWU2oNJE%2F1y8EwWE27baHrG1RhRHbLVF" +
-		"bPpLZ9xTRFK20pluIkfHV00JGljB1imqQHXM%2B2XPWqBngLr%2FwqxLN7i" +
-		"FcUiqR8xQEOHF%2F2e7fbkTHPNq4TazaLZ8X0eZ3eFdJ55A5QmNi8atlN4W" +
-		"5q7Hvs0jcxElG3yqIbx439A995BkspLiAcA%2Fo4%2BxAwEMkGLICdbvakq" +
-		"3eEprNCojw%3D%3D"
-	if url != want {
-		t.Fatalf("Unexpected signed URL; found %v", url)
-	}
-}
-
-func TestSignedURL_PEMPrivateKey(t *testing.T) {
-	t.Parallel()
-	expires, _ := time.Parse(time.RFC3339, "2002-10-02T10:00:00-05:00")
-	url, err := SignedURL("bucket-name", "object-name", &SignedURLOptions{
-		GoogleAccessID: "xxx@clientid",
-		PrivateKey:     dummyKey("pem"),
-		Method:         "GET",
-		MD5:            "ICy5YqxZB1uWSwcVLSNLcA==",
-		Expires:        expires,
-		ContentType:    "application/json",
-		Headers:        []string{"x-goog-header1:true", "x-goog-header2:false"},
-	})
-	if err != nil {
-		t.Error(err)
-	}
-	want := "https://storage.googleapis.com/bucket-name/object-name?" +
-		"Expires=1033570800&GoogleAccessId=xxx%40clientid&Signature=" +
-		"TiyKD%2FgGb6Kh0kkb2iF%2FfF%2BnTx7L0J4YiZua8AcTmnidutePEGIU5" +
-		"NULYlrGl6l52gz4zqFb3VFfIRTcPXMdXnnFdMCDhz2QuJBUpsU1Ai9zlyTQ" +
-		"dkb6ShG03xz9%2BEXWAUQO4GBybJw%2FULASuv37xA00SwLdkqj8YdyS5II" +
-		"1lro%3D"
-	if url != want {
-		t.Fatalf("Unexpected signed URL; found %v", url)
-	}
-}
-
-func TestSignedURL_SignBytes(t *testing.T) {
-	t.Parallel()
-	expires, _ := time.Parse(time.RFC3339, "2002-10-02T10:00:00-05:00")
-	url, err := SignedURL("bucket-name", "object-name", &SignedURLOptions{
-		GoogleAccessID: "xxx@clientid",
-		SignBytes: func(b []byte) ([]byte, error) {
-			return []byte("signed"), nil
+	var tests = []struct {
+		desc string
+		in   []string
+		want []string
+	}{
+		{
+			desc: "already sanitized headers should not be modified",
+			in:   []string{"x-goog-header1:true", "x-goog-header2:0"},
+			want: []string{"x-goog-header1:true", "x-goog-header2:0"},
 		},
-		Method:      "GET",
-		MD5:         "ICy5YqxZB1uWSwcVLSNLcA==",
-		Expires:     expires,
-		ContentType: "application/json",
-		Headers:     []string{"x-goog-header1:true", "x-goog-header2:false"},
-	})
-	if err != nil {
-		t.Error(err)
+		{
+			desc: "dirty headers should be formatted correctly",
+			in:   []string{" x-goog-header1 : \textra-spaces ", "X-Goog-Header2:CamelCaseValue"},
+			want: []string{"x-goog-header1:extra-spaces", "x-goog-header2:CamelCaseValue"},
+		},
+		{
+			desc: "duplicate headers should be merged",
+			in:   []string{"x-goog-header1:value1", "X-Goog-Header1:value2"},
+			want: []string{"x-goog-header1:value1,value2"},
+		},
+		{
+			desc: "multiple spaces in value are stripped down to one",
+			in:   []string{"foo:bar        gaz"},
+			want: []string{"foo:bar gaz"},
+		},
 	}
-	want := "https://storage.googleapis.com/bucket-name/object-name?" +
-		"Expires=1033570800&GoogleAccessId=xxx%40clientid&Signature=" +
-		"c2lnbmVk" // base64('signed') == 'c2lnbmVk'
-	if url != want {
-		t.Fatalf("Unexpected signed URL\ngot:  %q\nwant: %q", url, want)
+	for _, test := range tests {
+		got := v4SanitizeHeaders(test.in)
+		sort.Strings(got)
+		sort.Strings(test.want)
+		if !testutil.Equal(got, test.want) {
+			t.Errorf("%s: got %v, want %v", test.desc, got, test.want)
+		}
 	}
 }
 
-func TestSignedURL_URLUnsafeObjectName(t *testing.T) {
-	t.Parallel()
+func TestSignedURLV2(t *testing.T) {
 	expires, _ := time.Parse(time.RFC3339, "2002-10-02T10:00:00-05:00")
-	url, err := SignedURL("bucket-name", "object name界", &SignedURLOptions{
-		GoogleAccessID: "xxx@clientid",
-		PrivateKey:     dummyKey("pem"),
-		Method:         "GET",
-		MD5:            "ICy5YqxZB1uWSwcVLSNLcA==",
-		Expires:        expires,
-		ContentType:    "application/json",
-		Headers:        []string{"x-goog-header1:true", "x-goog-header2:false"},
-	})
-	if err != nil {
-		t.Error(err)
+
+	tests := []struct {
+		desc       string
+		objectName string
+		opts       *SignedURLOptions
+		want       string
+	}{
+		{
+			desc:       "SignedURLV2 works",
+			objectName: "object-name",
+			opts: &SignedURLOptions{
+				GoogleAccessID: "xxx@clientid",
+				PrivateKey:     dummyKey("rsa"),
+				Method:         "GET",
+				MD5:            "ICy5YqxZB1uWSwcVLSNLcA==",
+				Expires:        expires,
+				ContentType:    "application/json",
+				Headers:        []string{"x-goog-header1:true", "x-goog-header2:false"},
+			},
+			want: "https://storage.googleapis.com/bucket-name/object-name?" +
+				"Expires=1033570800&GoogleAccessId=xxx%40clientid&Signature=" +
+				"RfsHlPtbB2JUYjzCgNr2Mi%2BjggdEuL1V7E6N9o6aaqwVLBDuTv3I0%2B9" +
+				"x94E6rmmr%2FVgnmZigkIUxX%2Blfl7LgKf30uPGLt0mjKGH2p7r9ey1ONJ" +
+				"%2BhVec23FnTRcSgopglvHPuCMWU2oNJE%2F1y8EwWE27baHrG1RhRHbLVF" +
+				"bPpLZ9xTRFK20pluIkfHV00JGljB1imqQHXM%2B2XPWqBngLr%2FwqxLN7i" +
+				"FcUiqR8xQEOHF%2F2e7fbkTHPNq4TazaLZ8X0eZ3eFdJ55A5QmNi8atlN4W" +
+				"5q7Hvs0jcxElG3yqIbx439A995BkspLiAcA%2Fo4%2BxAwEMkGLICdbvakq" +
+				"3eEprNCojw%3D%3D",
+		},
+		{
+			desc:       "With a PEM Private Key",
+			objectName: "object-name",
+			opts: &SignedURLOptions{
+				GoogleAccessID: "xxx@clientid",
+				PrivateKey:     dummyKey("pem"),
+				Method:         "GET",
+				MD5:            "ICy5YqxZB1uWSwcVLSNLcA==",
+				Expires:        expires,
+				ContentType:    "application/json",
+				Headers:        []string{"x-goog-header1:true", "x-goog-header2:false"},
+			},
+			want: "https://storage.googleapis.com/bucket-name/object-name?" +
+				"Expires=1033570800&GoogleAccessId=xxx%40clientid&Signature=" +
+				"TiyKD%2FgGb6Kh0kkb2iF%2FfF%2BnTx7L0J4YiZua8AcTmnidutePEGIU5" +
+				"NULYlrGl6l52gz4zqFb3VFfIRTcPXMdXnnFdMCDhz2QuJBUpsU1Ai9zlyTQ" +
+				"dkb6ShG03xz9%2BEXWAUQO4GBybJw%2FULASuv37xA00SwLdkqj8YdyS5II" +
+				"1lro%3D",
+		},
+		{
+			desc:       "With custom SignBytes",
+			objectName: "object-name",
+			opts: &SignedURLOptions{
+				GoogleAccessID: "xxx@clientid",
+				SignBytes: func(b []byte) ([]byte, error) {
+					return []byte("signed"), nil
+				},
+				Method:      "GET",
+				MD5:         "ICy5YqxZB1uWSwcVLSNLcA==",
+				Expires:     expires,
+				ContentType: "application/json",
+				Headers:     []string{"x-goog-header1:true", "x-goog-header2:false"},
+			},
+			want: "https://storage.googleapis.com/bucket-name/object-name?" +
+				"Expires=1033570800&GoogleAccessId=xxx%40clientid&Signature=" +
+				"c2lnbmVk", // base64('signed') == 'c2lnbmVk'
+		},
+		{
+			desc:       "With unsafe object name",
+			objectName: "object name界",
+			opts: &SignedURLOptions{
+				GoogleAccessID: "xxx@clientid",
+				PrivateKey:     dummyKey("pem"),
+				Method:         "GET",
+				MD5:            "ICy5YqxZB1uWSwcVLSNLcA==",
+				Expires:        expires,
+				ContentType:    "application/json",
+				Headers:        []string{"x-goog-header1:true", "x-goog-header2:false"},
+			},
+			want: "https://storage.googleapis.com/bucket-name/object%20name%E7%95%8C?" +
+				"Expires=1033570800&GoogleAccessId=xxx%40clientid&Signature=bxVH1%2Bl%2" +
+				"BSxpnj3XuqKz6mOFk6M94Y%2B4w85J6FCmJan%2FNhGSpndP6fAw1uLHlOn%2F8xUaY%2F" +
+				"SfZ5GzcQ%2BbxOL1WA37yIwZ7xgLYlO%2ByAi3GuqMUmHZiNCai28emODXQ8RtWHvgv6dE" +
+				"SQ%2F0KpDMIWW7rYCaUa63UkUyeSQsKhrVqkIA%3D",
+		},
 	}
-	want := "https://storage.googleapis.com/bucket-name/object%20name%E7%95%8C?" +
-		"Expires=1033570800&GoogleAccessId=xxx%40clientid&Signature=bxVH1%2Bl%2" +
-		"BSxpnj3XuqKz6mOFk6M94Y%2B4w85J6FCmJan%2FNhGSpndP6fAw1uLHlOn%2F8xUaY%2F" +
-		"SfZ5GzcQ%2BbxOL1WA37yIwZ7xgLYlO%2ByAi3GuqMUmHZiNCai28emODXQ8RtWHvgv6dE" +
-		"SQ%2F0KpDMIWW7rYCaUa63UkUyeSQsKhrVqkIA%3D"
-	if url != want {
-		t.Fatalf("Unexpected signed URL; found %v", url)
+
+	for _, test := range tests {
+		u, err := SignedURL("bucket-name", test.objectName, test.opts)
+		if err != nil {
+			t.Fatalf("[%s] %v", test.desc, err)
+		}
+		if u != test.want {
+			t.Fatalf("[%s] Unexpected signed URL; found %v", test.desc, u)
+		}
+	}
+}
+
+func TestSignedURLV4(t *testing.T) {
+	expires, _ := time.Parse(time.RFC3339, "2002-10-02T10:00:00-05:00")
+
+	tests := []struct {
+		desc       string
+		objectName string
+		now        time.Time
+		opts       *SignedURLOptions
+		// Note for future implementors: X-Goog-Signature generated by having
+		// the client run through its algorithm with pre-defined input and copy
+		// pasting the output. These tests are not great for testing whether
+		// the right signature is calculated - instead we rely on the backend
+		// and integration tests for that.
+		want string
+	}{
+		{
+			desc:       "SignURLV4 works",
+			objectName: "object-name",
+			now:        expires.Add(-24 * time.Hour),
+			opts: &SignedURLOptions{
+				GoogleAccessID: "xxx@clientid",
+				PrivateKey:     dummyKey("rsa"),
+				Method:         "POST",
+				Expires:        expires,
+				Scheme:         SigningSchemeV4,
+				ContentType:    "application/json",
+				MD5:            "ICy5YqxZB1uWSwcVLSNLcA==",
+				Headers:        []string{"x-goog-header1:true", "x-goog-header2:false"},
+			},
+			want: "https://storage.googleapis.com/bucket-name/object-name" +
+				"?X-Goog-Algorithm=GOOG4-RSA-SHA256" +
+				"&X-Goog-Credential=xxx%40clientid%2F20021001%2Fauto%2Fstorage%2Fgoog4_request" +
+				"&X-Goog-Date=20021001T100000Z&X-Goog-Expires=86400" +
+				"&X-Goog-Signature=774b11d89663d0562b0909131b8495e70d24e31f3417d3f8fd1438a72b620b256111a7221fecab14a6ebb7dc7eed7984316a794789beb4ecdda67a77407f6de1a68113e8fa2b885e330036a995c08f0f2a7d2c212a3d0a2fd1b392d40305d3fe31ab94c547a7541278f4a956ebb6565ebe4cb27f26e30b334adb7b065adc0d27f9eaa42ee76d75d673fc4523d023d9a636de0b5329f5dffbf80024cf21fdc6236e89aa41976572bfe4807be9a9a01f644ed9f546dcf1e0394665be7610f58c36b3d63379f4d1b64f646f7427f1fc55bb89d7fdd59017d007156c99e26440e828581cddf83faf03e739e5987c062d503f2b73f24049c25edc60ecbbc09f6ce945" +
+				"&X-Goog-SignedHeaders=content-md5%3Bcontent-type%3Bhost%3Bx-goog-header1%3Bx-goog-header2",
+		},
+		{
+			desc:       "With PEM Private Key",
+			objectName: "object-name",
+			now:        expires.Add(-24 * time.Hour),
+			opts: &SignedURLOptions{
+				GoogleAccessID: "xxx@clientid",
+				PrivateKey:     dummyKey("pem"),
+				Method:         "GET",
+				Expires:        expires,
+				Scheme:         SigningSchemeV4,
+			},
+			want: "https://storage.googleapis.com/bucket-name/object-name" +
+				"?X-Goog-Algorithm=GOOG4-RSA-SHA256" +
+				"&X-Goog-Credential=xxx%40clientid%2F20021001%2Fauto%2Fstorage%2Fgoog4_request" +
+				"&X-Goog-Date=20021001T100000Z&X-Goog-Expires=86400" +
+				"&X-Goog-Signature=5592f4b8b2cae14025b619546d69bb463ca8f2caaab538a3cc6b5868c8c64b83a8b04b57d8a82c8696a192f62abddc8d99e0454b3fc33feac5bf87c353f0703aab6cfee60364aaeecec2edd37c1d6e6793d90812b5811b7936a014a3efad5d08477b4fbfaebf04fa61f1ca03f31bcdc46a161868cd2f4e98def6c82634a01454" +
+				"&X-Goog-SignedHeaders=host",
+		},
+		{
+			desc:       "Unsafe object name",
+			objectName: "object name界",
+			now:        expires.Add(-24 * time.Hour),
+			opts: &SignedURLOptions{
+				GoogleAccessID: "xxx@clientid",
+				PrivateKey:     dummyKey("pem"),
+				Method:         "GET",
+				Expires:        expires,
+				Scheme:         SigningSchemeV4,
+			},
+			want: "https://storage.googleapis.com/bucket-name/object%20name%E7%95%8C" +
+				"?X-Goog-Algorithm=GOOG4-RSA-SHA256" +
+				"&X-Goog-Credential=xxx%40clientid%2F20021001%2Fauto%2Fstorage%2Fgoog4_request" +
+				"&X-Goog-Date=20021001T100000Z&X-Goog-Expires=86400" +
+				"&X-Goog-Signature=90fd455fb47725b45c08d65ddf99078184710ad30f09bc2a190c5416ba1596e4c58420e2e48744b03de2d1b85dc8679dcb4c36af6e7a1b2547cd62becaad72aebbbaf7c1686f1aa0fedf8a9b01cef20a8b8630d824a6f8b81bb9eb75f342a7d8a28457a4efd2baac93e37089b84b1506b2af72712187f638e0eafbac650b071a" +
+				"&X-Goog-SignedHeaders=host",
+		},
+		{
+			desc:       "With custom SignBytes",
+			objectName: "object-name",
+			now:        expires.Add(-24 * time.Hour),
+			opts: &SignedURLOptions{
+				GoogleAccessID: "xxx@clientid",
+				SignBytes: func(b []byte) ([]byte, error) {
+					return []byte("signed"), nil
+				},
+				Method:  "GET",
+				Expires: expires,
+				Scheme:  SigningSchemeV4,
+			},
+			want: "https://storage.googleapis.com/bucket-name/object-name" +
+				"?X-Goog-Algorithm=GOOG4-RSA-SHA256" +
+				"&X-Goog-Credential=xxx%40clientid%2F20021001%2Fauto%2Fstorage%2Fgoog4_request" +
+				"&X-Goog-Date=20021001T100000Z&X-Goog-Expires=86400" +
+				"&X-Goog-Signature=7369676e6564" + // hex('signed') = '7369676e6564'
+				"&X-Goog-SignedHeaders=host",
+		},
+	}
+	oldUTCNow := utcNow
+	defer func() {
+		utcNow = oldUTCNow
+	}()
+
+	for _, test := range tests {
+		t.Logf("Testcase: '%s'", test.desc)
+
+		utcNow = func() time.Time {
+			return test.now
+		}
+		got, err := SignedURL("bucket-name", test.objectName, test.opts)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if got != test.want {
+			t.Fatalf("\n\tgot:\t%v\n\twant:\t%v", got, test.want)
+		}
 	}
 }
 
 func TestSignedURL_MissingOptions(t *testing.T) {
-	t.Parallel()
+	now, _ := time.Parse(time.RFC3339, "2002-10-01T00:00:00-05:00")
+	expires, _ := time.Parse(time.RFC3339, "2002-10-15T00:00:00-05:00")
 	pk := dummyKey("rsa")
-	expires, _ := time.Parse(time.RFC3339, "2002-10-02T10:00:00-05:00")
+
 	var tests = []struct {
 		opts   *SignedURLOptions
 		errMsg string
@@ -246,7 +393,75 @@ func TestSignedURL_MissingOptions(t *testing.T) {
 			},
 			"invalid MD5 checksum",
 		},
+		// SigningSchemeV4 tests
+		{
+			&SignedURLOptions{
+				PrivateKey: pk,
+				Method:     "GET",
+				Expires:    expires,
+				Scheme:     SigningSchemeV4,
+			},
+			"missing required GoogleAccessID",
+		},
+		{
+			&SignedURLOptions{
+				GoogleAccessID: "access_id",
+				Method:         "GET",
+				Expires:        expires,
+				SignBytes:      func(b []byte) ([]byte, error) { return b, nil },
+				PrivateKey:     pk,
+				Scheme:         SigningSchemeV4,
+			},
+			"exactly one of PrivateKey or SignedBytes must be set",
+		},
+		{
+			&SignedURLOptions{
+				GoogleAccessID: "access_id",
+				PrivateKey:     pk,
+				Expires:        expires,
+				Scheme:         SigningSchemeV4,
+			},
+			"missing required method",
+		},
+		{
+			&SignedURLOptions{
+				GoogleAccessID: "access_id",
+				PrivateKey:     pk,
+				Method:         "PUT",
+				Scheme:         SigningSchemeV4,
+			},
+			"missing required expires",
+		},
+		{
+			&SignedURLOptions{
+				GoogleAccessID: "access_id",
+				PrivateKey:     pk,
+				Method:         "PUT",
+				Expires:        now.Add(time.Hour),
+				MD5:            "invalid",
+				Scheme:         SigningSchemeV4,
+			},
+			"invalid MD5 checksum",
+		},
+		{
+			&SignedURLOptions{
+				GoogleAccessID: "access_id",
+				PrivateKey:     pk,
+				Method:         "GET",
+				Expires:        expires,
+				Scheme:         SigningSchemeV4,
+			},
+			"expires must be within seven days from now",
+		},
 	}
+	oldUTCNow := utcNow
+	defer func() {
+		utcNow = oldUTCNow
+	}()
+	utcNow = func() time.Time {
+		return now
+	}
+
 	for _, test := range tests {
 		_, err := SignedURL("bucket", "name", test.opts)
 		if !strings.Contains(err.Error(), test.errMsg) {
@@ -256,7 +471,7 @@ func TestSignedURL_MissingOptions(t *testing.T) {
 }
 
 func dummyKey(kind string) []byte {
-	slurp, err := ioutil.ReadFile(fmt.Sprintf("./testdata/dummy_%s", kind))
+	slurp, err := ioutil.ReadFile(fmt.Sprintf("./internal/test/dummy_%s", kind))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -365,68 +580,92 @@ func TestCondition(t *testing.T) {
 	obj := c.Bucket("buck").Object("obj")
 	dst := c.Bucket("dstbuck").Object("dst")
 	tests := []struct {
-		fn   func()
+		fn   func() error
 		want string
 	}{
 		{
-			func() { obj.Generation(1234).NewReader(ctx) },
+			func() error {
+				_, err := obj.Generation(1234).NewReader(ctx)
+				return err
+			},
 			"GET /buck/obj?generation=1234",
 		},
 		{
-			func() { obj.If(Conditions{GenerationMatch: 1234}).NewReader(ctx) },
+			func() error {
+				_, err := obj.If(Conditions{GenerationMatch: 1234}).NewReader(ctx)
+				return err
+			},
 			"GET /buck/obj?ifGenerationMatch=1234",
 		},
 		{
-			func() { obj.If(Conditions{GenerationNotMatch: 1234}).NewReader(ctx) },
+			func() error {
+				_, err := obj.If(Conditions{GenerationNotMatch: 1234}).NewReader(ctx)
+				return err
+			},
 			"GET /buck/obj?ifGenerationNotMatch=1234",
 		},
 		{
-			func() { obj.If(Conditions{MetagenerationMatch: 1234}).NewReader(ctx) },
+			func() error {
+				_, err := obj.If(Conditions{MetagenerationMatch: 1234}).NewReader(ctx)
+				return err
+			},
 			"GET /buck/obj?ifMetagenerationMatch=1234",
 		},
 		{
-			func() { obj.If(Conditions{MetagenerationNotMatch: 1234}).NewReader(ctx) },
+			func() error {
+				_, err := obj.If(Conditions{MetagenerationNotMatch: 1234}).NewReader(ctx)
+				return err
+			},
 			"GET /buck/obj?ifMetagenerationNotMatch=1234",
 		},
 		{
-			func() { obj.If(Conditions{MetagenerationNotMatch: 1234}).Attrs(ctx) },
+			func() error {
+				_, err := obj.If(Conditions{MetagenerationNotMatch: 1234}).Attrs(ctx)
+				return err
+			},
 			"GET /storage/v1/b/buck/o/obj?alt=json&ifMetagenerationNotMatch=1234&prettyPrint=false&projection=full",
 		},
-
 		{
-			func() { obj.If(Conditions{MetagenerationMatch: 1234}).Update(ctx, ObjectAttrsToUpdate{}) },
+			func() error {
+				_, err := obj.If(Conditions{MetagenerationMatch: 1234}).Update(ctx, ObjectAttrsToUpdate{})
+				return err
+			},
 			"PATCH /storage/v1/b/buck/o/obj?alt=json&ifMetagenerationMatch=1234&prettyPrint=false&projection=full",
 		},
 		{
-			func() { obj.Generation(1234).Delete(ctx) },
+			func() error { return obj.Generation(1234).Delete(ctx) },
 			"DELETE /storage/v1/b/buck/o/obj?alt=json&generation=1234&prettyPrint=false",
 		},
 		{
-			func() {
+			func() error {
 				w := obj.If(Conditions{GenerationMatch: 1234}).NewWriter(ctx)
 				w.ContentType = "text/plain"
-				w.Close()
+				return w.Close()
 			},
 			"POST /upload/storage/v1/b/buck/o?alt=json&ifGenerationMatch=1234&prettyPrint=false&projection=full&uploadType=multipart",
 		},
 		{
-			func() {
+			func() error {
 				w := obj.If(Conditions{DoesNotExist: true}).NewWriter(ctx)
 				w.ContentType = "text/plain"
-				w.Close()
+				return w.Close()
 			},
 			"POST /upload/storage/v1/b/buck/o?alt=json&ifGenerationMatch=0&prettyPrint=false&projection=full&uploadType=multipart",
 		},
 		{
-			func() {
-				dst.If(Conditions{MetagenerationMatch: 5678}).CopierFrom(obj.If(Conditions{GenerationMatch: 1234})).Run(ctx)
+			func() error {
+				_, err := dst.If(Conditions{MetagenerationMatch: 5678}).CopierFrom(obj.If(Conditions{GenerationMatch: 1234})).Run(ctx)
+				return err
 			},
 			"POST /storage/v1/b/buck/o/obj/rewriteTo/b/dstbuck/o/dst?alt=json&ifMetagenerationMatch=5678&ifSourceGenerationMatch=1234&prettyPrint=false&projection=full",
 		},
 	}
 
 	for i, tt := range tests {
-		tt.fn()
+		if err := tt.fn(); err != nil && err != io.EOF {
+			t.Error(err)
+			continue
+		}
 		select {
 		case r := <-gotReq:
 			got := r.Method + " " + r.RequestURI
@@ -625,9 +864,9 @@ func TestObjectCompose(t *testing.T) {
 		if tt.wantErr {
 			continue
 		}
-		url, body := <-gotURL, <-gotBody
-		if url != tt.wantURL {
-			t.Errorf("%s: request URL\ngot  %q\nwant %q", tt.desc, url, tt.wantURL)
+		u, body := <-gotURL, <-gotBody
+		if u != tt.wantURL {
+			t.Errorf("%s: request URL\ngot  %q\nwant %q", tt.desc, u, tt.wantURL)
 		}
 		var req raw.ComposeRequest
 		if err := json.Unmarshal(body, &req); err != nil {
@@ -787,5 +1026,89 @@ func newTestServer(handler func(w http.ResponseWriter, r *http.Request)) (*http.
 	return &http.Client{Transport: tr}, func() {
 		tr.CloseIdleConnections()
 		ts.Close()
+	}
+}
+
+func TestRawObjectToObjectAttrs(t *testing.T) {
+	t.Parallel()
+	tests := []struct {
+		in   *raw.Object
+		want *ObjectAttrs
+	}{
+		{in: nil, want: nil},
+		{
+			in: &raw.Object{
+				Bucket:                  "Test",
+				ContentLanguage:         "en-us",
+				ContentType:             "video/mpeg",
+				EventBasedHold:          false,
+				Etag:                    "Zkyw9ACJZUvcYmlFaKGChzhmtnE/dt1zHSfweiWpwzdGsqXwuJZqiD0",
+				Generation:              7,
+				Md5Hash:                 "MTQ2ODNjYmE0NDRkYmNjNmRiMjk3NjQ1ZTY4M2Y1YzE=",
+				Name:                    "foo.mp4",
+				RetentionExpirationTime: "2019-03-31T19:33:36Z",
+				Size:                    1 << 20,
+				TimeCreated:             "2019-03-31T19:32:10Z",
+				TimeDeleted:             "2019-03-31T19:33:39Z",
+				TemporaryHold:           true,
+			},
+			want: &ObjectAttrs{
+				Bucket:                  "Test",
+				Created:                 time.Date(2019, 3, 31, 19, 32, 10, 0, time.UTC),
+				ContentLanguage:         "en-us",
+				ContentType:             "video/mpeg",
+				Deleted:                 time.Date(2019, 3, 31, 19, 33, 39, 0, time.UTC),
+				EventBasedHold:          false,
+				Etag:                    "Zkyw9ACJZUvcYmlFaKGChzhmtnE/dt1zHSfweiWpwzdGsqXwuJZqiD0",
+				Generation:              7,
+				MD5:                     []byte("14683cba444dbcc6db297645e683f5c1"),
+				Name:                    "foo.mp4",
+				RetentionExpirationTime: time.Date(2019, 3, 31, 19, 33, 36, 0, time.UTC),
+				Size:                    1 << 20,
+				TemporaryHold:           true,
+			},
+		},
+	}
+
+	for i, tt := range tests {
+		got := newObject(tt.in)
+		if diff := testutil.Diff(got, tt.want); diff != "" {
+			t.Errorf("#%d: newObject mismatches:\ngot=-, want=+:\n%s", i, diff)
+		}
+	}
+}
+
+func TestObjectAttrsToRawObject(t *testing.T) {
+	t.Parallel()
+	bucketName := "the-bucket"
+	in := &ObjectAttrs{
+		Bucket:                  "Test",
+		Created:                 time.Date(2019, 3, 31, 19, 32, 10, 0, time.UTC),
+		ContentLanguage:         "en-us",
+		ContentType:             "video/mpeg",
+		Deleted:                 time.Date(2019, 3, 31, 19, 33, 39, 0, time.UTC),
+		EventBasedHold:          false,
+		Etag:                    "Zkyw9ACJZUvcYmlFaKGChzhmtnE/dt1zHSfweiWpwzdGsqXwuJZqiD0",
+		Generation:              7,
+		MD5:                     []byte("14683cba444dbcc6db297645e683f5c1"),
+		Name:                    "foo.mp4",
+		RetentionExpirationTime: time.Date(2019, 3, 31, 19, 33, 36, 0, time.UTC),
+		Size:                    1 << 20,
+		TemporaryHold:           true,
+	}
+	want := &raw.Object{
+		Bucket:                  bucketName,
+		ContentLanguage:         "en-us",
+		ContentType:             "video/mpeg",
+		EventBasedHold:          false,
+		Name:                    "foo.mp4",
+		RetentionExpirationTime: "2019-03-31T19:33:36Z",
+		TemporaryHold:           true,
+	}
+	got := in.toRawObject(bucketName)
+	if !testutil.Equal(got, want) {
+		if diff := testutil.Diff(got, want); diff != "" {
+			t.Errorf("toRawObject mismatches:\ngot=-, want=+:\n%s", diff)
+		}
 	}
 }

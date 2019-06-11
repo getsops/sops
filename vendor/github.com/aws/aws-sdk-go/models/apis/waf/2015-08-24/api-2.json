@@ -894,7 +894,8 @@
       "errors":[
         {"shape":"WAFInternalErrorException"},
         {"shape":"WAFNonexistentItemException"},
-        {"shape":"WAFStaleDataException"}
+        {"shape":"WAFStaleDataException"},
+        {"shape":"WAFServiceLinkedRoleErrorException"}
       ]
     },
     "PutPermissionPolicy":{
@@ -1160,7 +1161,8 @@
         "RuleId":{"shape":"ResourceId"},
         "Action":{"shape":"WafAction"},
         "OverrideAction":{"shape":"WafOverrideAction"},
-        "Type":{"shape":"WafRuleType"}
+        "Type":{"shape":"WafRuleType"},
+        "ExcludedRules":{"shape":"ExcludedRules"}
       }
     },
     "ActivatedRules":{
@@ -1718,6 +1720,17 @@
       "members":{
         "ChangeToken":{"shape":"ChangeToken"}
       }
+    },
+    "ExcludedRule":{
+      "type":"structure",
+      "required":["RuleId"],
+      "members":{
+        "RuleId":{"shape":"ResourceId"}
+      }
+    },
+    "ExcludedRules":{
+      "type":"list",
+      "member":{"shape":"ExcludedRule"}
     },
     "FieldToMatch":{
       "type":"structure",
@@ -2664,7 +2677,8 @@
         "GEO_MATCH_LOCATION_VALUE",
         "RATE_KEY",
         "RULE_TYPE",
-        "NEXT_MARKER"
+        "NEXT_MARKER",
+        "RESOURCE_ARN"
       ]
     },
     "ParameterExceptionParameter":{
@@ -2675,7 +2689,8 @@
       "type":"string",
       "enum":[
         "INVALID_OPTION",
-        "ILLEGAL_COMBINATION"
+        "ILLEGAL_COMBINATION",
+        "ILLEGAL_ARGUMENT"
       ]
     },
     "PolicyString":{
@@ -3492,6 +3507,13 @@
       },
       "exception":true
     },
+    "WAFServiceLinkedRoleErrorException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"errorMessage"}
+      },
+      "exception":true
+    },
     "WAFStaleDataException":{
       "type":"structure",
       "members":{
@@ -3555,7 +3577,8 @@
         "Name":{"shape":"ResourceName"},
         "MetricName":{"shape":"MetricName"},
         "DefaultAction":{"shape":"WafAction"},
-        "Rules":{"shape":"ActivatedRules"}
+        "Rules":{"shape":"ActivatedRules"},
+        "WebACLArn":{"shape":"ResourceArn"}
       }
     },
     "WebACLSummaries":{

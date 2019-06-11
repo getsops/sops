@@ -26,7 +26,6 @@ import (
 	"time"
 
 	"cloud.google.com/go/civil"
-
 	bq "google.golang.org/api/bigquery/v2"
 )
 
@@ -171,6 +170,14 @@ func setString(v reflect.Value, x interface{}) error {
 	return nil
 }
 
+func setGeography(v reflect.Value, x interface{}) error {
+	if x == nil {
+		return errNoNulls
+	}
+	v.SetString(x.(string))
+	return nil
+}
+
 func setBytes(v reflect.Value, x interface{}) error {
 	if x == nil {
 		v.SetBytes(nil)
@@ -286,6 +293,18 @@ func determineSetFunc(ftype reflect.Type, stype FieldType) setFunc {
 			return func(v reflect.Value, x interface{}) error {
 				return setNull(v, x, func() interface{} {
 					return NullString{StringVal: x.(string), Valid: true}
+				})
+			}
+		}
+
+	case GeographyFieldType:
+		if ftype.Kind() == reflect.String {
+			return setGeography
+		}
+		if ftype == typeOfNullGeography {
+			return func(v reflect.Value, x interface{}) error {
+				return setNull(v, x, func() interface{} {
+					return NullGeography{GeographyVal: x.(string), Valid: true}
 				})
 			}
 		}
@@ -498,7 +517,7 @@ func (vls *ValuesSaver) Save() (map[string]Value, string, error) {
 
 func valuesToMap(vs []Value, schema Schema) (map[string]Value, error) {
 	if len(vs) != len(schema) {
-		return nil, errors.New("Schema does not match length of row to be inserted")
+		return nil, errors.New("schema does not match length of row to be inserted")
 	}
 
 	m := make(map[string]Value)
@@ -630,10 +649,11 @@ func structFieldToUploadValue(vfield reflect.Value, schemaField *FieldSchema) (i
 		return m, nil
 	}
 	// A repeated nested field is converted into a slice of maps.
-	if vfield.Len() == 0 {
+	// If the field is zero-length (but not nil), we return a zero-length []Value.
+	if vfield.IsNil() {
 		return nil, nil
 	}
-	var vals []Value
+	vals := []Value{}
 	for i := 0; i < vfield.Len(); i++ {
 		m, err := structToMap(vfield.Index(i), schemaField.Schema)
 		if err != nil {
@@ -707,11 +727,10 @@ func formatUploadValue(v reflect.Value, fs *FieldSchema, cvt func(reflect.Value)
 func CivilTimeString(t civil.Time) string {
 	if t.Nanosecond == 0 {
 		return t.String()
-	} else {
-		micro := (t.Nanosecond + 500) / 1000 // round to nearest microsecond
-		t.Nanosecond = 0
-		return t.String() + fmt.Sprintf(".%06d", micro)
 	}
+	micro := (t.Nanosecond + 500) / 1000 // round to nearest microsecond
+	t.Nanosecond = 0
+	return t.String() + fmt.Sprintf(".%06d", micro)
 }
 
 // CivilDateTimeString returns a string representing a civil.DateTime in a format compatible
@@ -735,10 +754,10 @@ func parseCivilDateTime(s string) (civil.DateTime, error) {
 }
 
 const (
-	// The maximum number of digits in a NUMERIC value.
+	// NumericPrecisionDigits is the maximum number of digits in a NUMERIC value.
 	NumericPrecisionDigits = 38
 
-	// The maximum number of digits after the decimal point in a NUMERIC value.
+	// NumericScaleDigits is the maximum number of digits after the decimal point in a NUMERIC value.
 	NumericScaleDigits = 9
 )
 
@@ -865,6 +884,8 @@ func convertBasicType(val string, typ FieldType) (Value, error) {
 			return nil, fmt.Errorf("bigquery: invalid NUMERIC value %q", val)
 		}
 		return Value(r), nil
+	case GeographyFieldType:
+		return val, nil
 	default:
 		return nil, fmt.Errorf("unrecognized type: %s", typ)
 	}

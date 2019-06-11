@@ -6,7 +6,7 @@
         "input": {
           "DurationSeconds": 3600,
           "ExternalId": "123ABC",
-          "Policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"Stmt1\",\"Effect\":\"Allow\",\"Action\":\"s3:*\",\"Resource\":\"*\"}]}",
+          "Policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"Stmt1\",\"Effect\":\"Allow\",\"Action\":\"s3:ListAllMyBuckets\",\"Resource\":\"*\"}]}",
           "RoleArn": "arn:aws:iam::123456789012:role/demo",
           "RoleSessionName": "Bob"
         },
@@ -38,6 +38,7 @@
       {
         "input": {
           "DurationSeconds": 3600,
+          "Policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"Stmt1\",\"Effect\":\"Allow\",\"Action\":\"s3:ListAllMyBuckets\",\"Resource\":\"*\"}]}",
           "ProviderId": "www.amazon.com",
           "RoleArn": "arn:aws:iam::123456789012:role/FederatedWebIdentityRole",
           "RoleSessionName": "app1",
@@ -150,7 +151,7 @@
         "input": {
           "DurationSeconds": 3600,
           "Name": "Bob",
-          "Policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"Stmt1\",\"Effect\":\"Allow\",\"Action\":\"s3:*\",\"Resource\":\"*\"}]}"
+          "Policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Sid\":\"Stmt1\",\"Effect\":\"Allow\",\"Action\":\"s3:ListAllMyBuckets\",\"Resource\":\"*\"}]}"
         },
         "output": {
           "Credentials": {

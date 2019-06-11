@@ -21,6 +21,8 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -42,11 +44,125 @@ func NewReplicationRecoveryServicesProvidersClientWithBaseURI(baseURI string, su
 	return ReplicationRecoveryServicesProvidersClient{NewWithBaseURI(baseURI, subscriptionID, resourceGroupName, resourceName)}
 }
 
+// Create the operation to add a recovery services provider.
+// Parameters:
+// fabricName - fabric name.
+// providerName - recovery services provider name.
+// addProviderInput - add provider input.
+func (client ReplicationRecoveryServicesProvidersClient) Create(ctx context.Context, fabricName string, providerName string, addProviderInput AddRecoveryServicesProviderInput) (result ReplicationRecoveryServicesProvidersCreateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationRecoveryServicesProvidersClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: addProviderInput,
+			Constraints: []validation.Constraint{{Target: "addProviderInput.Properties", Name: validation.Null, Rule: true,
+				Chain: []validation.Constraint{{Target: "addProviderInput.Properties.MachineName", Name: validation.Null, Rule: true, Chain: nil},
+					{Target: "addProviderInput.Properties.AuthenticationIdentityInput", Name: validation.Null, Rule: true,
+						Chain: []validation.Constraint{{Target: "addProviderInput.Properties.AuthenticationIdentityInput.TenantID", Name: validation.Null, Rule: true, Chain: nil},
+							{Target: "addProviderInput.Properties.AuthenticationIdentityInput.ApplicationID", Name: validation.Null, Rule: true, Chain: nil},
+							{Target: "addProviderInput.Properties.AuthenticationIdentityInput.ObjectID", Name: validation.Null, Rule: true, Chain: nil},
+							{Target: "addProviderInput.Properties.AuthenticationIdentityInput.Audience", Name: validation.Null, Rule: true, Chain: nil},
+							{Target: "addProviderInput.Properties.AuthenticationIdentityInput.AadAuthority", Name: validation.Null, Rule: true, Chain: nil},
+						}},
+					{Target: "addProviderInput.Properties.ResourceAccessIdentityInput", Name: validation.Null, Rule: true,
+						Chain: []validation.Constraint{{Target: "addProviderInput.Properties.ResourceAccessIdentityInput.TenantID", Name: validation.Null, Rule: true, Chain: nil},
+							{Target: "addProviderInput.Properties.ResourceAccessIdentityInput.ApplicationID", Name: validation.Null, Rule: true, Chain: nil},
+							{Target: "addProviderInput.Properties.ResourceAccessIdentityInput.ObjectID", Name: validation.Null, Rule: true, Chain: nil},
+							{Target: "addProviderInput.Properties.ResourceAccessIdentityInput.Audience", Name: validation.Null, Rule: true, Chain: nil},
+							{Target: "addProviderInput.Properties.ResourceAccessIdentityInput.AadAuthority", Name: validation.Null, Rule: true, Chain: nil},
+						}},
+				}}}}}); err != nil {
+		return result, validation.NewError("siterecovery.ReplicationRecoveryServicesProvidersClient", "Create", err.Error())
+	}
+
+	req, err := client.CreatePreparer(ctx, fabricName, providerName, addProviderInput)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationRecoveryServicesProvidersClient", "Create", nil, "Failure preparing request")
+		return
+	}
+
+	result, err = client.CreateSender(req)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationRecoveryServicesProvidersClient", "Create", result.Response(), "Failure sending request")
+		return
+	}
+
+	return
+}
+
+// CreatePreparer prepares the Create request.
+func (client ReplicationRecoveryServicesProvidersClient) CreatePreparer(ctx context.Context, fabricName string, providerName string, addProviderInput AddRecoveryServicesProviderInput) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"fabricName":        autorest.Encode("path", fabricName),
+		"providerName":      autorest.Encode("path", providerName),
+		"resourceGroupName": autorest.Encode("path", client.ResourceGroupName),
+		"resourceName":      autorest.Encode("path", client.ResourceName),
+		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2018-01-10"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPut(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/Subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{resourceName}/replicationFabrics/{fabricName}/replicationRecoveryServicesProviders/{providerName}", pathParameters),
+		autorest.WithJSON(addProviderInput),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// CreateSender sends the Create request. The method will close the
+// http.Response Body if it receives an error.
+func (client ReplicationRecoveryServicesProvidersClient) CreateSender(req *http.Request) (future ReplicationRecoveryServicesProvidersCreateFuture, err error) {
+	var resp *http.Response
+	resp, err = autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+	if err != nil {
+		return
+	}
+	future.Future, err = azure.NewFutureFromResponse(resp)
+	return
+}
+
+// CreateResponder handles the response to the Create request. The method always
+// closes the http.Response Body.
+func (client ReplicationRecoveryServicesProvidersClient) CreateResponder(resp *http.Response) (result RecoveryServicesProvider, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
 // Delete the operation to removes/delete(unregister) a recovery services provider from the vault
 // Parameters:
 // fabricName - fabric name.
 // providerName - recovery services provider name.
 func (client ReplicationRecoveryServicesProvidersClient) Delete(ctx context.Context, fabricName string, providerName string) (result ReplicationRecoveryServicesProvidersDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationRecoveryServicesProvidersClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, fabricName, providerName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationRecoveryServicesProvidersClient", "Delete", nil, "Failure preparing request")
@@ -94,10 +210,6 @@ func (client ReplicationRecoveryServicesProvidersClient) DeleteSender(req *http.
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -119,6 +231,16 @@ func (client ReplicationRecoveryServicesProvidersClient) DeleteResponder(resp *h
 // fabricName - fabric name.
 // providerName - recovery services provider name
 func (client ReplicationRecoveryServicesProvidersClient) Get(ctx context.Context, fabricName string, providerName string) (result RecoveryServicesProvider, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationRecoveryServicesProvidersClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, fabricName, providerName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationRecoveryServicesProvidersClient", "Get", nil, "Failure preparing request")
@@ -185,6 +307,16 @@ func (client ReplicationRecoveryServicesProvidersClient) GetResponder(resp *http
 
 // List lists the registered recovery services providers in the vault
 func (client ReplicationRecoveryServicesProvidersClient) List(ctx context.Context) (result RecoveryServicesProviderCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationRecoveryServicesProvidersClient.List")
+		defer func() {
+			sc := -1
+			if result.rspc.Response.Response != nil {
+				sc = result.rspc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -249,8 +381,8 @@ func (client ReplicationRecoveryServicesProvidersClient) ListResponder(resp *htt
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ReplicationRecoveryServicesProvidersClient) listNextResults(lastResults RecoveryServicesProviderCollection) (result RecoveryServicesProviderCollection, err error) {
-	req, err := lastResults.recoveryServicesProviderCollectionPreparer()
+func (client ReplicationRecoveryServicesProvidersClient) listNextResults(ctx context.Context, lastResults RecoveryServicesProviderCollection) (result RecoveryServicesProviderCollection, err error) {
+	req, err := lastResults.recoveryServicesProviderCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "siterecovery.ReplicationRecoveryServicesProvidersClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -271,6 +403,16 @@ func (client ReplicationRecoveryServicesProvidersClient) listNextResults(lastRes
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReplicationRecoveryServicesProvidersClient) ListComplete(ctx context.Context) (result RecoveryServicesProviderCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationRecoveryServicesProvidersClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -279,6 +421,16 @@ func (client ReplicationRecoveryServicesProvidersClient) ListComplete(ctx contex
 // Parameters:
 // fabricName - fabric name
 func (client ReplicationRecoveryServicesProvidersClient) ListByReplicationFabrics(ctx context.Context, fabricName string) (result RecoveryServicesProviderCollectionPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationRecoveryServicesProvidersClient.ListByReplicationFabrics")
+		defer func() {
+			sc := -1
+			if result.rspc.Response.Response != nil {
+				sc = result.rspc.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByReplicationFabricsNextResults
 	req, err := client.ListByReplicationFabricsPreparer(ctx, fabricName)
 	if err != nil {
@@ -344,8 +496,8 @@ func (client ReplicationRecoveryServicesProvidersClient) ListByReplicationFabric
 }
 
 // listByReplicationFabricsNextResults retrieves the next set of results, if any.
-func (client ReplicationRecoveryServicesProvidersClient) listByReplicationFabricsNextResults(lastResults RecoveryServicesProviderCollection) (result RecoveryServicesProviderCollection, err error) {
-	req, err := lastResults.recoveryServicesProviderCollectionPreparer()
+func (client ReplicationRecoveryServicesProvidersClient) listByReplicationFabricsNextResults(ctx context.Context, lastResults RecoveryServicesProviderCollection) (result RecoveryServicesProviderCollection, err error) {
+	req, err := lastResults.recoveryServicesProviderCollectionPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "siterecovery.ReplicationRecoveryServicesProvidersClient", "listByReplicationFabricsNextResults", nil, "Failure preparing next results request")
 	}
@@ -366,6 +518,16 @@ func (client ReplicationRecoveryServicesProvidersClient) listByReplicationFabric
 
 // ListByReplicationFabricsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ReplicationRecoveryServicesProvidersClient) ListByReplicationFabricsComplete(ctx context.Context, fabricName string) (result RecoveryServicesProviderCollectionIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationRecoveryServicesProvidersClient.ListByReplicationFabrics")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByReplicationFabrics(ctx, fabricName)
 	return
 }
@@ -375,6 +537,16 @@ func (client ReplicationRecoveryServicesProvidersClient) ListByReplicationFabric
 // fabricName - fabric name.
 // providerName - recovery services provider name.
 func (client ReplicationRecoveryServicesProvidersClient) Purge(ctx context.Context, fabricName string, providerName string) (result ReplicationRecoveryServicesProvidersPurgeFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationRecoveryServicesProvidersClient.Purge")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.PurgePreparer(ctx, fabricName, providerName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationRecoveryServicesProvidersClient", "Purge", nil, "Failure preparing request")
@@ -422,10 +594,6 @@ func (client ReplicationRecoveryServicesProvidersClient) PurgeSender(req *http.R
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -447,6 +615,16 @@ func (client ReplicationRecoveryServicesProvidersClient) PurgeResponder(resp *ht
 // fabricName - fabric name.
 // providerName - recovery services provider name.
 func (client ReplicationRecoveryServicesProvidersClient) RefreshProvider(ctx context.Context, fabricName string, providerName string) (result ReplicationRecoveryServicesProvidersRefreshProviderFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ReplicationRecoveryServicesProvidersClient.RefreshProvider")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.RefreshProviderPreparer(ctx, fabricName, providerName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "siterecovery.ReplicationRecoveryServicesProvidersClient", "RefreshProvider", nil, "Failure preparing request")
@@ -491,10 +669,6 @@ func (client ReplicationRecoveryServicesProvidersClient) RefreshProviderSender(r
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
 	if err != nil {
 		return
 	}

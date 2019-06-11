@@ -23,6 +23,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/civil"
+	"github.com/golang/protobuf/proto"
 	proto3 "github.com/golang/protobuf/ptypes/struct"
 	sppb "google.golang.org/genproto/googleapis/spanner/v1"
 )
@@ -1111,6 +1112,284 @@ func TestDecodeStruct(t *testing.T) {
 		}
 		if err == nil && !testEqual(test.ptr, test.want) {
 			t.Errorf("#%d: got %+v, want %+v", i, test.ptr, test.want)
+		}
+	}
+}
+
+func TestEncodeStructValueDynamicStructs(t *testing.T) {
+	dynStructType := reflect.StructOf([]reflect.StructField{
+		{Name: "A", Type: reflect.TypeOf(0), Tag: `spanner:"a"`},
+		{Name: "B", Type: reflect.TypeOf(""), Tag: `spanner:"b"`},
+	})
+	dynNullableStructType := reflect.PtrTo(dynStructType)
+	dynStructArrType := reflect.SliceOf(dynStructType)
+	dynNullableStructArrType := reflect.SliceOf(dynNullableStructType)
+
+	dynStructValue := reflect.New(dynStructType)
+	dynStructValue.Elem().Field(0).SetInt(10)
+	dynStructValue.Elem().Field(1).SetString("abc")
+
+	dynStructArrValue := reflect.MakeSlice(dynNullableStructArrType, 2, 2)
+	dynStructArrValue.Index(0).Set(reflect.Zero(dynNullableStructType))
+	dynStructArrValue.Index(1).Set(dynStructValue)
+
+	structProtoType := structType(
+		mkField("a", intType()),
+		mkField("b", stringType()))
+
+	arrProtoType := listType(structProtoType)
+
+	for _, test := range []encodeTest{
+		{
+			"Dynanic non-NULL struct value.",
+			dynStructValue.Elem().Interface(),
+			listProto(intProto(10), stringProto("abc")),
+			structProtoType,
+		},
+		{
+			"Dynanic NULL struct value.",
+			reflect.Zero(dynNullableStructType).Interface(),
+			nullProto(),
+			structProtoType,
+		},
+		{
+			"Empty array of dynamic structs.",
+			reflect.MakeSlice(dynStructArrType, 0, 0).Interface(),
+			listProto([]*proto3.Value{}...),
+			arrProtoType,
+		},
+		{
+			"NULL array of non-NULL-able dynamic structs.",
+			reflect.Zero(dynStructArrType).Interface(),
+			nullProto(),
+			arrProtoType,
+		},
+		{
+			"NULL array of NULL-able(nil) dynamic structs.",
+			reflect.Zero(dynNullableStructArrType).Interface(),
+			nullProto(),
+			arrProtoType,
+		},
+		{
+			"Array containing NULL(nil) dynamic-typed struct elements.",
+			dynStructArrValue.Interface(),
+			listProto(
+				nullProto(),
+				listProto(intProto(10), stringProto("abc"))),
+			arrProtoType,
+		},
+	} {
+		encodeStructValue(test, t)
+	}
+}
+
+func TestEncodeStructValueEmptyStruct(t *testing.T) {
+	emptyListValue := listProto([]*proto3.Value{}...)
+	emptyStructType := structType([]*sppb.StructType_Field{}...)
+	emptyStruct := struct{}{}
+	nullEmptyStruct := (*struct{})(nil)
+
+	dynamicEmptyStructType := reflect.StructOf(make([]reflect.StructField, 0, 0))
+	dynamicStructArrType := reflect.SliceOf(reflect.PtrTo((dynamicEmptyStructType)))
+
+	dynamicEmptyStruct := reflect.New(dynamicEmptyStructType)
+	dynamicNullEmptyStruct := reflect.Zero(reflect.PtrTo(dynamicEmptyStructType))
+
+	dynamicStructArrValue := reflect.MakeSlice(dynamicStructArrType, 2, 2)
+	dynamicStructArrValue.Index(0).Set(dynamicNullEmptyStruct)
+	dynamicStructArrValue.Index(1).Set(dynamicEmptyStruct)
+
+	for _, test := range []encodeTest{
+		{
+			"Go empty struct.",
+			emptyStruct,
+			emptyListValue,
+			emptyStructType,
+		},
+		{
+			"Dynamic empty struct.",
+			dynamicEmptyStruct.Interface(),
+			emptyListValue,
+			emptyStructType,
+		},
+		{
+			"Go NULL empty struct.",
+			nullEmptyStruct,
+			nullProto(),
+			emptyStructType,
+		},
+		{
+			"Dynamic NULL empty struct.",
+			dynamicNullEmptyStruct.Interface(),
+			nullProto(),
+			emptyStructType,
+		},
+		{
+			"Non-empty array of dynamic NULL and non-NULL empty structs.",
+			dynamicStructArrValue.Interface(),
+			listProto(nullProto(), emptyListValue),
+			listType(emptyStructType),
+		},
+		{
+			"Non-empty array of nullable empty structs.",
+			[]*struct{}{nullEmptyStruct, &emptyStruct},
+			listProto(nullProto(), emptyListValue),
+			listType(emptyStructType),
+		},
+		{
+			"Empty array of empty struct.",
+			[]struct{}{},
+			emptyListValue,
+			listType(emptyStructType),
+		},
+		{
+			"Null array of empty structs.",
+			[]struct{}(nil),
+			nullProto(),
+			listType(emptyStructType),
+		},
+	} {
+		encodeStructValue(test, t)
+	}
+}
+
+func TestEncodeStructValueMixedStructTypes(t *testing.T) {
+	type staticStruct struct {
+		F int `spanner:"fStatic"`
+	}
+	s1 := staticStruct{10}
+	s2 := (*staticStruct)(nil)
+
+	var f float64
+	dynStructType := reflect.StructOf([]reflect.StructField{
+		{Name: "A", Type: reflect.TypeOf(f), Tag: `spanner:"fDynamic"`},
+	})
+	s3 := reflect.New(dynStructType)
+	s3.Elem().Field(0).SetFloat(3.14)
+
+	for _, test := range []encodeTest{
+		{
+			"'struct' with static and dynamic *struct, []*struct, []struct fields",
+			struct {
+				A []staticStruct
+				B []*staticStruct
+				C interface{}
+			}{
+				[]staticStruct{s1, s1},
+				[]*staticStruct{&s1, s2},
+				s3.Interface(),
+			},
+			listProto(
+				listProto(listProto(intProto(10)), listProto(intProto(10))),
+				listProto(listProto(intProto(10)), nullProto()),
+				listProto(floatProto(3.14))),
+			structType(
+				mkField("A", listType(structType(mkField("fStatic", intType())))),
+				mkField("B", listType(structType(mkField("fStatic", intType())))),
+				mkField("C", structType(mkField("fDynamic", floatType())))),
+		},
+	} {
+		encodeStructValue(test, t)
+	}
+}
+
+func TestBindParamsDynamic(t *testing.T) {
+	// Verify Statement.bindParams generates correct values and types.
+	st := Statement{
+		SQL:    "SELECT id from t_foo WHERE col = @var",
+		Params: map[string]interface{}{"var": nil},
+	}
+	want := &sppb.ExecuteSqlRequest{
+		Params: &proto3.Struct{
+			Fields: map[string]*proto3.Value{"var": nil},
+		},
+		ParamTypes: map[string]*sppb.Type{"var": nil},
+	}
+	var (
+		t1, _ = time.Parse(time.RFC3339Nano, "2016-11-15T15:04:05.999999999Z")
+		// Boundaries
+		t2, _ = time.Parse(time.RFC3339Nano, "0001-01-01T00:00:00.000000000Z")
+	)
+	dynamicStructType := reflect.StructOf([]reflect.StructField{
+		{Name: "A", Type: reflect.TypeOf(t1), Tag: `spanner:"field"`},
+		{Name: "B", Type: reflect.TypeOf(3.14), Tag: `spanner:""`},
+	})
+	dynamicStructArrType := reflect.SliceOf(reflect.PtrTo(dynamicStructType))
+	dynamicEmptyStructType := reflect.StructOf(make([]reflect.StructField, 0, 0))
+
+	dynamicStructTypeProto := structType(
+		mkField("field", timeType()),
+		mkField("", floatType()))
+
+	s3 := reflect.New(dynamicStructType)
+	s3.Elem().Field(0).Set(reflect.ValueOf(t1))
+	s3.Elem().Field(1).SetFloat(1.4)
+
+	s4 := reflect.New(dynamicStructType)
+	s4.Elem().Field(0).Set(reflect.ValueOf(t2))
+	s4.Elem().Field(1).SetFloat(-13.3)
+
+	dynamicStructArrayVal := reflect.MakeSlice(dynamicStructArrType, 2, 2)
+	dynamicStructArrayVal.Index(0).Set(s3)
+	dynamicStructArrayVal.Index(1).Set(s4)
+
+	for _, test := range []struct {
+		val       interface{}
+		wantField *proto3.Value
+		wantType  *sppb.Type
+	}{
+		{
+			s3.Interface(),
+			listProto(timeProto(t1), floatProto(1.4)),
+			structType(
+				mkField("field", timeType()),
+				mkField("", floatType())),
+		},
+		{
+			reflect.Zero(reflect.PtrTo(dynamicEmptyStructType)).Interface(),
+			nullProto(),
+			structType([]*sppb.StructType_Field{}...),
+		},
+		{
+			dynamicStructArrayVal.Interface(),
+			listProto(
+				listProto(timeProto(t1), floatProto(1.4)),
+				listProto(timeProto(t2), floatProto(-13.3))),
+			listType(dynamicStructTypeProto),
+		},
+		{
+			[]*struct {
+				F1 time.Time `spanner:"field"`
+				F2 float64   `spanner:""`
+			}{
+				nil,
+				{t1, 1.4},
+			},
+			listProto(
+				nullProto(),
+				listProto(timeProto(t1), floatProto(1.4))),
+			listType(dynamicStructTypeProto),
+		},
+	} {
+		st.Params["var"] = test.val
+		want.Params.Fields["var"] = test.wantField
+		want.ParamTypes["var"] = test.wantType
+		gotParams, gotParamTypes, gotErr := st.convertParams()
+		if gotErr != nil {
+			t.Error(gotErr)
+			continue
+		}
+		gotParamField := gotParams.Fields["var"]
+		if !proto.Equal(gotParamField, test.wantField) {
+			// handle NaN
+			if test.wantType.Code == floatType().Code && proto.MarshalTextString(gotParamField) == proto.MarshalTextString(test.wantField) {
+				continue
+			}
+			t.Errorf("%#v: got %v, want %v\n", test.val, gotParamField, test.wantField)
+		}
+		gotParamType := gotParamTypes["var"]
+		if !proto.Equal(gotParamType, test.wantType) {
+			t.Errorf("%#v: got %v, want %v\n", test.val, gotParamType, test.wantField)
 		}
 	}
 }

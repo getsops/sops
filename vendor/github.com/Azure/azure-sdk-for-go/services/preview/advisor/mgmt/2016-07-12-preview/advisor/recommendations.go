@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -43,6 +44,16 @@ func NewRecommendationsClientWithBaseURI(baseURI string, subscriptionID string) 
 // Generate initiates the recommendation generation or computation process for a subscription. This operation is
 // asynchronous. The generated recommendations are stored in a cache in the Advisor service.
 func (client RecommendationsClient) Generate(ctx context.Context) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecommendationsClient.Generate")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GeneratePreparer(ctx)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "advisor.RecommendationsClient", "Generate", nil, "Failure preparing request")
@@ -108,6 +119,16 @@ func (client RecommendationsClient) GenerateResponder(resp *http.Response) (resu
 // recommendation applies.
 // recommendationID - the recommendation ID.
 func (client RecommendationsClient) Get(ctx context.Context, resourceURI string, recommendationID string) (result ResourceRecommendationBase, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecommendationsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceURI, recommendationID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "advisor.RecommendationsClient", "Get", nil, "Failure preparing request")
@@ -176,6 +197,16 @@ func (client RecommendationsClient) GetResponder(resp *http.Response) (result Re
 // operationID - the operation ID, which can be found from the Location field in the generate recommendation
 // response header.
 func (client RecommendationsClient) GetGenerateRecommendationsStatus(ctx context.Context, operationID uuid.UUID) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecommendationsClient.GetGenerateRecommendationsStatus")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetGenerateRecommendationsStatusPreparer(ctx, operationID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "advisor.RecommendationsClient", "GetGenerateRecommendationsStatus", nil, "Failure preparing request")
@@ -243,6 +274,16 @@ func (client RecommendationsClient) GetGenerateRecommendationsStatusResponder(re
 // top - the number of recommendations per page if a paged version of this API is being used.
 // skipToken - the page-continuation token to use with a paged version of this API.
 func (client RecommendationsClient) List(ctx context.Context, filter string, top *int32, skipToken string) (result ResourceRecommendationBaseListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecommendationsClient.List")
+		defer func() {
+			sc := -1
+			if result.rrblr.Response.Response != nil {
+				sc = result.rrblr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, filter, top, skipToken)
 	if err != nil {
@@ -314,8 +355,8 @@ func (client RecommendationsClient) ListResponder(resp *http.Response) (result R
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client RecommendationsClient) listNextResults(lastResults ResourceRecommendationBaseListResult) (result ResourceRecommendationBaseListResult, err error) {
-	req, err := lastResults.resourceRecommendationBaseListResultPreparer()
+func (client RecommendationsClient) listNextResults(ctx context.Context, lastResults ResourceRecommendationBaseListResult) (result ResourceRecommendationBaseListResult, err error) {
+	req, err := lastResults.resourceRecommendationBaseListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "advisor.RecommendationsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -336,6 +377,16 @@ func (client RecommendationsClient) listNextResults(lastResults ResourceRecommen
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client RecommendationsClient) ListComplete(ctx context.Context, filter string, top *int32, skipToken string) (result ResourceRecommendationBaseListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecommendationsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, filter, top, skipToken)
 	return
 }

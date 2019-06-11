@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewArmTemplatesClientWithBaseURI(baseURI string, subscriptionID string) Arm
 // name - the name of the azure Resource Manager template.
 // expand - specify the $expand query. Example: 'properties($select=displayName)'
 func (client ArmTemplatesClient) Get(ctx context.Context, resourceGroupName string, labName string, artifactSourceName string, name string, expand string) (result ArmTemplate, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ArmTemplatesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, labName, artifactSourceName, name, expand)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "dtl.ArmTemplatesClient", "Get", nil, "Failure preparing request")
@@ -124,6 +135,16 @@ func (client ArmTemplatesClient) GetResponder(resp *http.Response) (result ArmTe
 // top - the maximum number of resources to return from the operation.
 // orderby - the ordering expression for the results, using OData notation.
 func (client ArmTemplatesClient) List(ctx context.Context, resourceGroupName string, labName string, artifactSourceName string, expand string, filter string, top *int32, orderby string) (result ResponseWithContinuationArmTemplatePage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ArmTemplatesClient.List")
+		defer func() {
+			sc := -1
+			if result.rwcat.Response.Response != nil {
+				sc = result.rwcat.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, labName, artifactSourceName, expand, filter, top, orderby)
 	if err != nil {
@@ -201,8 +222,8 @@ func (client ArmTemplatesClient) ListResponder(resp *http.Response) (result Resp
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ArmTemplatesClient) listNextResults(lastResults ResponseWithContinuationArmTemplate) (result ResponseWithContinuationArmTemplate, err error) {
-	req, err := lastResults.responseWithContinuationArmTemplatePreparer()
+func (client ArmTemplatesClient) listNextResults(ctx context.Context, lastResults ResponseWithContinuationArmTemplate) (result ResponseWithContinuationArmTemplate, err error) {
+	req, err := lastResults.responseWithContinuationArmTemplatePreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "dtl.ArmTemplatesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -223,6 +244,16 @@ func (client ArmTemplatesClient) listNextResults(lastResults ResponseWithContinu
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ArmTemplatesClient) ListComplete(ctx context.Context, resourceGroupName string, labName string, artifactSourceName string, expand string, filter string, top *int32, orderby string) (result ResponseWithContinuationArmTemplateIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ArmTemplatesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, labName, artifactSourceName, expand, filter, top, orderby)
 	return
 }

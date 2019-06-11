@@ -15,6 +15,7 @@
 package datastore
 
 import (
+	"context"
 	"encoding/base64"
 	"errors"
 	"fmt"
@@ -25,7 +26,6 @@ import (
 
 	"cloud.google.com/go/internal/trace"
 	wrapperspb "github.com/golang/protobuf/ptypes/wrappers"
-	"golang.org/x/net/context"
 	"google.golang.org/api/iterator"
 	pb "google.golang.org/genproto/googleapis/datastore/v1"
 )
@@ -581,8 +581,6 @@ func (c *Client) Run(ctx context.Context, q *Query) *Iterator {
 		},
 	}
 
-	ctx = trace.StartSpan(ctx, "cloud.google.com/go/datastore.Query.Run")
-	defer func() { trace.EndSpan(ctx, t.err) }()
 	if q.namespace != "" {
 		t.req.PartitionId = &pb.PartitionId{
 			NamespaceId: q.namespace,
@@ -670,6 +668,10 @@ func (t *Iterator) next() (*Key, *pb.Entity, error) {
 
 // nextBatch makes a single call to the server for a batch of results.
 func (t *Iterator) nextBatch() error {
+	if t.err != nil {
+		return t.err
+	}
+
 	if t.limit == 0 {
 		return iterator.Done // Short-circuits the zero-item response.
 	}
@@ -768,7 +770,7 @@ func (c Cursor) String() string {
 	return strings.TrimRight(base64.URLEncoding.EncodeToString(c.cc), "=")
 }
 
-// Decode decodes a cursor from its base-64 string representation.
+// DecodeCursor decodes a cursor from its base-64 string representation.
 func DecodeCursor(s string) (Cursor, error) {
 	if s == "" {
 		return Cursor{}, nil

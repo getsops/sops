@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,15 +19,16 @@
 
 package redis
 
-import original "github.com/Azure/azure-sdk-for-go/services/redis/mgmt/2018-03-01/redis"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/redis/mgmt/2018-03-01/redis"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
-type FirewallRulesClient = original.FirewallRulesClient
-type LinkedServerClient = original.LinkedServerClient
 type DayOfWeek = original.DayOfWeek
 
 const (
@@ -105,7 +106,9 @@ const (
 )
 
 type AccessKeys = original.AccessKeys
+type BaseClient = original.BaseClient
 type CheckNameAvailabilityParameters = original.CheckNameAvailabilityParameters
+type Client = original.Client
 type CommonProperties = original.CommonProperties
 type CreateFuture = original.CreateFuture
 type CreateParameters = original.CreateParameters
@@ -119,10 +122,12 @@ type FirewallRuleListResult = original.FirewallRuleListResult
 type FirewallRuleListResultIterator = original.FirewallRuleListResultIterator
 type FirewallRuleListResultPage = original.FirewallRuleListResultPage
 type FirewallRuleProperties = original.FirewallRuleProperties
+type FirewallRulesClient = original.FirewallRulesClient
 type ForceRebootResponse = original.ForceRebootResponse
 type ImportDataFuture = original.ImportDataFuture
 type ImportRDBParameters = original.ImportRDBParameters
 type LinkedServer = original.LinkedServer
+type LinkedServerClient = original.LinkedServerClient
 type LinkedServerCreateFuture = original.LinkedServerCreateFuture
 type LinkedServerCreateParameters = original.LinkedServerCreateParameters
 type LinkedServerCreateProperties = original.LinkedServerCreateProperties
@@ -140,10 +145,12 @@ type OperationDisplay = original.OperationDisplay
 type OperationListResult = original.OperationListResult
 type OperationListResultIterator = original.OperationListResultIterator
 type OperationListResultPage = original.OperationListResultPage
+type OperationsClient = original.OperationsClient
 type PatchSchedule = original.PatchSchedule
 type PatchScheduleListResult = original.PatchScheduleListResult
 type PatchScheduleListResultIterator = original.PatchScheduleListResultIterator
 type PatchScheduleListResultPage = original.PatchScheduleListResultPage
+type PatchSchedulesClient = original.PatchSchedulesClient
 type Properties = original.Properties
 type ProxyResource = original.ProxyResource
 type RebootParameters = original.RebootParameters
@@ -157,15 +164,21 @@ type TrackedResource = original.TrackedResource
 type UpdateParameters = original.UpdateParameters
 type UpdateProperties = original.UpdateProperties
 type UpgradeNotification = original.UpgradeNotification
-type OperationsClient = original.OperationsClient
-type PatchSchedulesClient = original.PatchSchedulesClient
-type Client = original.Client
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
 }
-func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
-	return original.NewWithBaseURI(baseURI, subscriptionID)
+func NewClient(subscriptionID string) Client {
+	return original.NewClient(subscriptionID)
+}
+func NewClientWithBaseURI(baseURI string, subscriptionID string) Client {
+	return original.NewClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewFirewallRuleListResultIterator(page FirewallRuleListResultPage) FirewallRuleListResultIterator {
+	return original.NewFirewallRuleListResultIterator(page)
+}
+func NewFirewallRuleListResultPage(getNextPage func(context.Context, FirewallRuleListResult) (FirewallRuleListResult, error)) FirewallRuleListResultPage {
+	return original.NewFirewallRuleListResultPage(getNextPage)
 }
 func NewFirewallRulesClient(subscriptionID string) FirewallRulesClient {
 	return original.NewFirewallRulesClient(subscriptionID)
@@ -178,6 +191,45 @@ func NewLinkedServerClient(subscriptionID string) LinkedServerClient {
 }
 func NewLinkedServerClientWithBaseURI(baseURI string, subscriptionID string) LinkedServerClient {
 	return original.NewLinkedServerClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewLinkedServerWithPropertiesListIterator(page LinkedServerWithPropertiesListPage) LinkedServerWithPropertiesListIterator {
+	return original.NewLinkedServerWithPropertiesListIterator(page)
+}
+func NewLinkedServerWithPropertiesListPage(getNextPage func(context.Context, LinkedServerWithPropertiesList) (LinkedServerWithPropertiesList, error)) LinkedServerWithPropertiesListPage {
+	return original.NewLinkedServerWithPropertiesListPage(getNextPage)
+}
+func NewListResultIterator(page ListResultPage) ListResultIterator {
+	return original.NewListResultIterator(page)
+}
+func NewListResultPage(getNextPage func(context.Context, ListResult) (ListResult, error)) ListResultPage {
+	return original.NewListResultPage(getNextPage)
+}
+func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
+	return original.NewOperationListResultIterator(page)
+}
+func NewOperationListResultPage(getNextPage func(context.Context, OperationListResult) (OperationListResult, error)) OperationListResultPage {
+	return original.NewOperationListResultPage(getNextPage)
+}
+func NewOperationsClient(subscriptionID string) OperationsClient {
+	return original.NewOperationsClient(subscriptionID)
+}
+func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
+	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewPatchScheduleListResultIterator(page PatchScheduleListResultPage) PatchScheduleListResultIterator {
+	return original.NewPatchScheduleListResultIterator(page)
+}
+func NewPatchScheduleListResultPage(getNextPage func(context.Context, PatchScheduleListResult) (PatchScheduleListResult, error)) PatchScheduleListResultPage {
+	return original.NewPatchScheduleListResultPage(getNextPage)
+}
+func NewPatchSchedulesClient(subscriptionID string) PatchSchedulesClient {
+	return original.NewPatchSchedulesClient(subscriptionID)
+}
+func NewPatchSchedulesClientWithBaseURI(baseURI string, subscriptionID string) PatchSchedulesClient {
+	return original.NewPatchSchedulesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
+	return original.NewWithBaseURI(baseURI, subscriptionID)
 }
 func PossibleDayOfWeekValues() []DayOfWeek {
 	return original.PossibleDayOfWeekValues()
@@ -202,24 +254,6 @@ func PossibleSkuNameValues() []SkuName {
 }
 func PossibleTLSVersionValues() []TLSVersion {
 	return original.PossibleTLSVersionValues()
-}
-func NewOperationsClient(subscriptionID string) OperationsClient {
-	return original.NewOperationsClient(subscriptionID)
-}
-func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
-	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewPatchSchedulesClient(subscriptionID string) PatchSchedulesClient {
-	return original.NewPatchSchedulesClient(subscriptionID)
-}
-func NewPatchSchedulesClientWithBaseURI(baseURI string, subscriptionID string) PatchSchedulesClient {
-	return original.NewPatchSchedulesClientWithBaseURI(baseURI, subscriptionID)
-}
-func NewClient(subscriptionID string) Client {
-	return original.NewClient(subscriptionID)
-}
-func NewClientWithBaseURI(baseURI string, subscriptionID string) Client {
-	return original.NewClientWithBaseURI(baseURI, subscriptionID)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

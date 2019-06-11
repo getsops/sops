@@ -37,13 +37,13 @@ func TestStandaloneSign(t *testing.T) {
 
 		actual := req.Header.Get("Authorization")
 		if e, a := c.ExpSig, actual; e != a {
-			t.Errorf("expected %v, but recieved %v", e, a)
+			t.Errorf("expected %v, but received %v", e, a)
 		}
 		if e, a := c.OrigURI, req.URL.Path; e != a {
-			t.Errorf("expected %v, but recieved %v", e, a)
+			t.Errorf("expected %v, but received %v", e, a)
 		}
 		if e, a := c.EscapedURI, req.URL.EscapedPath(); e != a {
-			t.Errorf("expected %v, but recieved %v", e, a)
+			t.Errorf("expected %v, but received %v", e, a)
 		}
 	}
 }
@@ -74,13 +74,13 @@ func TestStandaloneSign_RawPath(t *testing.T) {
 
 		actual := req.Header.Get("Authorization")
 		if e, a := c.ExpSig, actual; e != a {
-			t.Errorf("expected %v, but recieved %v", e, a)
+			t.Errorf("expected %v, but received %v", e, a)
 		}
 		if e, a := c.OrigURI, req.URL.Path; e != a {
-			t.Errorf("expected %v, but recieved %v", e, a)
+			t.Errorf("expected %v, but received %v", e, a)
 		}
 		if e, a := c.EscapedURI, req.URL.EscapedPath(); e != a {
-			t.Errorf("expected %v, but recieved %v", e, a)
+			t.Errorf("expected %v, but received %v", e, a)
 		}
 	}
 }

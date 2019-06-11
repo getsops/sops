@@ -15,7 +15,7 @@ const opDeletePlaybackConfiguration = "DeletePlaybackConfiguration"
 // DeletePlaybackConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the DeletePlaybackConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -49,14 +49,13 @@ func (c *MediaTailor) DeletePlaybackConfigurationRequest(input *DeletePlaybackCo
 
 	output = &DeletePlaybackConfigurationOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
 // DeletePlaybackConfiguration API operation for AWS MediaTailor.
 //
-// Deletes the configuration for the specified name.
+// Deletes the playback configuration for the specified name.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -91,7 +90,7 @@ const opGetPlaybackConfiguration = "GetPlaybackConfiguration"
 // GetPlaybackConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the GetPlaybackConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -130,7 +129,7 @@ func (c *MediaTailor) GetPlaybackConfigurationRequest(input *GetPlaybackConfigur
 
 // GetPlaybackConfiguration API operation for AWS MediaTailor.
 //
-// Returns the configuration for the specified name.
+// Returns the playback configuration for the specified name.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -165,7 +164,7 @@ const opListPlaybackConfigurations = "ListPlaybackConfigurations"
 // ListPlaybackConfigurationsRequest generates a "aws/request.Request" representing the
 // client's request for the ListPlaybackConfigurations operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -204,10 +203,10 @@ func (c *MediaTailor) ListPlaybackConfigurationsRequest(input *ListPlaybackConfi
 
 // ListPlaybackConfigurations API operation for AWS MediaTailor.
 //
-// Returns a list of the configurations defined in AWS Elemental MediaTailor.
-// You can specify a max number of configurations to return at a time. The default
-// max is 50. Results are returned in pagefuls. If AWS Elemental MediaTailor
-// has more configurations than the specified max, it provides parameters in
+// Returns a list of the playback configurations defined in AWS Elemental MediaTailor.
+// You can specify a maximum number of configurations to return at a time. The
+// default maximum is 50. Results are returned in pagefuls. If MediaTailor has
+// more configurations than the specified maximum, it provides parameters in
 // the response that you can use to retrieve the next pageful.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -238,12 +237,92 @@ func (c *MediaTailor) ListPlaybackConfigurationsWithContext(ctx aws.Context, inp
 	return out, req.Send()
 }
 
+const opListTagsForResource = "ListTagsForResource"
+
+// ListTagsForResourceRequest generates a "aws/request.Request" representing the
+// client's request for the ListTagsForResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListTagsForResource for more information on using the ListTagsForResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListTagsForResourceRequest method.
+//    req, resp := client.ListTagsForResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/ListTagsForResource
+func (c *MediaTailor) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
+	op := &request.Operation{
+		Name:       opListTagsForResource,
+		HTTPMethod: "GET",
+		HTTPPath:   "/tags/{ResourceArn}",
+	}
+
+	if input == nil {
+		input = &ListTagsForResourceInput{}
+	}
+
+	output = &ListTagsForResourceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListTagsForResource API operation for AWS MediaTailor.
+//
+// Returns a list of the tags assigned to the specified playback configuration
+// resource.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS MediaTailor's
+// API operation ListTagsForResource for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
+//   One of the parameters in the request is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/ListTagsForResource
+func (c *MediaTailor) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	return out, req.Send()
+}
+
+// ListTagsForResourceWithContext is the same as ListTagsForResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListTagsForResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaTailor) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsForResourceInput, opts ...request.Option) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opPutPlaybackConfiguration = "PutPlaybackConfiguration"
 
 // PutPlaybackConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the PutPlaybackConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -282,7 +361,7 @@ func (c *MediaTailor) PutPlaybackConfigurationRequest(input *PutPlaybackConfigur
 
 // PutPlaybackConfiguration API operation for AWS MediaTailor.
 //
-// Adds a new configuration to AWS Elemental MediaTailor.
+// Adds a new playback configuration to AWS Elemental MediaTailor.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -312,6 +391,168 @@ func (c *MediaTailor) PutPlaybackConfigurationWithContext(ctx aws.Context, input
 	return out, req.Send()
 }
 
+const opTagResource = "TagResource"
+
+// TagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the TagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See TagResource for more information on using the TagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the TagResourceRequest method.
+//    req, resp := client.TagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/TagResource
+func (c *MediaTailor) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
+	op := &request.Operation{
+		Name:       opTagResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/tags/{ResourceArn}",
+	}
+
+	if input == nil {
+		input = &TagResourceInput{}
+	}
+
+	output = &TagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// TagResource API operation for AWS MediaTailor.
+//
+// Adds tags to the specified playback configuration resource. You can specify
+// one or more tags to add.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS MediaTailor's
+// API operation TagResource for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
+//   One of the parameters in the request is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/TagResource
+func (c *MediaTailor) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	return out, req.Send()
+}
+
+// TagResourceWithContext is the same as TagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See TagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaTailor) TagResourceWithContext(ctx aws.Context, input *TagResourceInput, opts ...request.Option) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUntagResource = "UntagResource"
+
+// UntagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the UntagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UntagResource for more information on using the UntagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UntagResourceRequest method.
+//    req, resp := client.UntagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/UntagResource
+func (c *MediaTailor) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
+	op := &request.Operation{
+		Name:       opUntagResource,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/tags/{ResourceArn}",
+	}
+
+	if input == nil {
+		input = &UntagResourceInput{}
+	}
+
+	output = &UntagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UntagResource API operation for AWS MediaTailor.
+//
+// Removes tags from the specified playback configuration resource. You can
+// specify one or more tags to remove.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS MediaTailor's
+// API operation UntagResource for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeBadRequestException "BadRequestException"
+//   One of the parameters in the request is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediatailor-2018-04-23/UntagResource
+func (c *MediaTailor) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	return out, req.Send()
+}
+
+// UntagResourceWithContext is the same as UntagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UntagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaTailor) UntagResourceWithContext(ctx aws.Context, input *UntagResourceInput, opts ...request.Option) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 // The configuration for using a content delivery network (CDN), like Amazon
 // CloudFront, for content and ad segment management.
 type CdnConfiguration struct {
@@ -326,10 +567,10 @@ type CdnConfiguration struct {
 	AdSegmentUrlPrefix *string `type:"string"`
 
 	// A content delivery network (CDN) to cache content segments, so that content
-	// requests don’t always have to go to the origin server. First, create a rule
-	// in your CDN for the content segment origin server. Then specify the rule's
-	// name in this ContentSegmentUrlPrefix. When AWS Elemental MediaTailor serves
-	// a manifest, it reports your CDN as the source for content segments.
+	// requests don’t always have to go to the origin server. First, create a
+	// rule in your CDN for the content segment origin server. Then specify the
+	// rule's name in this ContentSegmentUrlPrefix. When AWS Elemental MediaTailor
+	// serves a manifest, it reports your CDN as the source for content segments.
 	ContentSegmentUrlPrefix *string `type:"string"`
 }
 
@@ -355,6 +596,104 @@ func (s *CdnConfiguration) SetContentSegmentUrlPrefix(v string) *CdnConfiguratio
 	return s
 }
 
+// The configuration for DASH content.
+type DashConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The URL generated by MediaTailor to initiate a playback session. The session
+	// uses server-side reporting. This setting is ignored in PUT operations.
+	ManifestEndpointPrefix *string `type:"string"`
+
+	// The setting that controls whether MediaTailor includes the Location tag in
+	// DASH manifests. MediaTailor populates the Location tag with the URL for manifest
+	// update requests, to be used by players that don't support sticky redirects.
+	// Disable this if you have CDN routing rules set up for accessing MediaTailor
+	// manifests, and you are either using client-side reporting or your players
+	// support sticky HTTP redirects. Valid values are DISABLED and EMT_DEFAULT.
+	// The EMT_DEFAULT setting enables the inclusion of the tag and is the default
+	// value.
+	MpdLocation *string `type:"string"`
+
+	// The setting that controls whether MediaTailor handles manifests from the
+	// origin server as multi-period manifests or single-period manifests. If your
+	// origin server produces single-period manifests, set this to SINGLE_PERIOD.
+	// The default setting is MULTI_PERIOD. For multi-period manifests, omit this
+	// setting or set it to MULTI_PERIOD.
+	OriginManifestType *string `type:"string" enum:"OriginManifestType"`
+}
+
+// String returns the string representation
+func (s DashConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DashConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetManifestEndpointPrefix sets the ManifestEndpointPrefix field's value.
+func (s *DashConfiguration) SetManifestEndpointPrefix(v string) *DashConfiguration {
+	s.ManifestEndpointPrefix = &v
+	return s
+}
+
+// SetMpdLocation sets the MpdLocation field's value.
+func (s *DashConfiguration) SetMpdLocation(v string) *DashConfiguration {
+	s.MpdLocation = &v
+	return s
+}
+
+// SetOriginManifestType sets the OriginManifestType field's value.
+func (s *DashConfiguration) SetOriginManifestType(v string) *DashConfiguration {
+	s.OriginManifestType = &v
+	return s
+}
+
+// The configuration for DASH PUT operations.
+type DashConfigurationForPut struct {
+	_ struct{} `type:"structure"`
+
+	// The setting that controls whether MediaTailor includes the Location tag in
+	// DASH manifests. MediaTailor populates the Location tag with the URL for manifest
+	// update requests, to be used by players that don't support sticky redirects.
+	// Disable this if you have CDN routing rules set up for accessing MediaTailor
+	// manifests, and you are either using client-side reporting or your players
+	// support sticky HTTP redirects. Valid values are DISABLED and EMT_DEFAULT.
+	// The EMT_DEFAULT setting enables the inclusion of the tag and is the default
+	// value.
+	MpdLocation *string `type:"string"`
+
+	// The setting that controls whether MediaTailor handles manifests from the
+	// origin server as multi-period manifests or single-period manifests. If your
+	// origin server produces single-period manifests, set this to SINGLE_PERIOD.
+	// The default setting is MULTI_PERIOD. For multi-period manifests, omit this
+	// setting or set it to MULTI_PERIOD.
+	OriginManifestType *string `type:"string" enum:"OriginManifestType"`
+}
+
+// String returns the string representation
+func (s DashConfigurationForPut) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DashConfigurationForPut) GoString() string {
+	return s.String()
+}
+
+// SetMpdLocation sets the MpdLocation field's value.
+func (s *DashConfigurationForPut) SetMpdLocation(v string) *DashConfigurationForPut {
+	s.MpdLocation = &v
+	return s
+}
+
+// SetOriginManifestType sets the OriginManifestType field's value.
+func (s *DashConfigurationForPut) SetOriginManifestType(v string) *DashConfigurationForPut {
+	s.OriginManifestType = &v
+	return s
+}
+
 type DeletePlaybackConfigurationInput struct {
 	_ struct{} `type:"structure"`
 
@@ -377,6 +716,9 @@ func (s *DeletePlaybackConfigurationInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeletePlaybackConfigurationInput"}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -428,6 +770,9 @@ func (s *GetPlaybackConfigurationInput) Validate() error {
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
 	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -448,18 +793,24 @@ type GetPlaybackConfigurationOutput struct {
 	// of static parameters and placeholders for dynamic parameters. AWS Elemental
 	// MediaTailor substitutes player-specific and session-specific parameters as
 	// needed when calling the ADS. Alternately, for testing, you can provide a
-	// static VAST URL. The maximum length is 25000 characters.
+	// static VAST URL. The maximum length is 25,000 characters.
 	AdDecisionServerUrl *string `type:"string"`
 
 	// The configuration for using a content delivery network (CDN), like Amazon
 	// CloudFront, for content and ad segment management.
 	CdnConfiguration *CdnConfiguration `type:"structure"`
 
+	// The configuration for DASH content.
+	DashConfiguration *DashConfiguration `type:"structure"`
+
 	// The configuration for HLS content.
 	HlsConfiguration *HlsConfiguration `type:"structure"`
 
-	// The identifier for the configuration.
+	// The identifier for the playback configuration.
 	Name *string `type:"string"`
+
+	// The Amazon Resource Name (ARN) for the playback configuration.
+	PlaybackConfigurationArn *string `type:"string"`
 
 	// The URL that the player accesses to get a manifest from AWS Elemental MediaTailor.
 	// This session will use server-side reporting.
@@ -469,13 +820,22 @@ type GetPlaybackConfigurationOutput struct {
 	// reporting.
 	SessionInitializationEndpointPrefix *string `type:"string"`
 
-	// URL for a high-quality video asset to transcode and use to fill in time that's
-	// not used by ads. AWS Elemental MediaTailor shows the slate to fill in gaps
-	// in media content. Configuring the slate is optional for non-VPAID configurations.
-	// For VPAID, the slate is required because AWS Elemental MediaTailor provides
-	// it in the slots designated for dynamic ad content. The slate must be a high-quality
-	// asset that contains both audio and video.
+	// The URL for a high-quality video asset to transcode and use to fill in time
+	// that's not used by ads. AWS Elemental MediaTailor shows the slate to fill
+	// in gaps in media content. Configuring the slate is optional for non-VPAID
+	// playback configurations. For VPAID, the slate is required because MediaTailor
+	// provides it in the slots designated for dynamic ad content. The slate must
+	// be a high-quality asset that contains both audio and video.
 	SlateAdUrl *string `type:"string"`
+
+	// The tags assigned to the playback configuration.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The name that is used to associate this playback configuration with a custom
+	// transcode profile. This overrides the dynamic transcoding defaults of MediaTailor.
+	// Use this only if you have already set up custom profiles with the help of
+	// AWS Support.
+	TranscodeProfileName *string `type:"string"`
 
 	// The URL prefix for the master playlist for the stream, minus the asset ID.
 	// The maximum length is 512 characters.
@@ -504,6 +864,12 @@ func (s *GetPlaybackConfigurationOutput) SetCdnConfiguration(v *CdnConfiguration
 	return s
 }
 
+// SetDashConfiguration sets the DashConfiguration field's value.
+func (s *GetPlaybackConfigurationOutput) SetDashConfiguration(v *DashConfiguration) *GetPlaybackConfigurationOutput {
+	s.DashConfiguration = v
+	return s
+}
+
 // SetHlsConfiguration sets the HlsConfiguration field's value.
 func (s *GetPlaybackConfigurationOutput) SetHlsConfiguration(v *HlsConfiguration) *GetPlaybackConfigurationOutput {
 	s.HlsConfiguration = v
@@ -513,6 +879,12 @@ func (s *GetPlaybackConfigurationOutput) SetHlsConfiguration(v *HlsConfiguration
 // SetName sets the Name field's value.
 func (s *GetPlaybackConfigurationOutput) SetName(v string) *GetPlaybackConfigurationOutput {
 	s.Name = &v
+	return s
+}
+
+// SetPlaybackConfigurationArn sets the PlaybackConfigurationArn field's value.
+func (s *GetPlaybackConfigurationOutput) SetPlaybackConfigurationArn(v string) *GetPlaybackConfigurationOutput {
+	s.PlaybackConfigurationArn = &v
 	return s
 }
 
@@ -531,6 +903,18 @@ func (s *GetPlaybackConfigurationOutput) SetSessionInitializationEndpointPrefix(
 // SetSlateAdUrl sets the SlateAdUrl field's value.
 func (s *GetPlaybackConfigurationOutput) SetSlateAdUrl(v string) *GetPlaybackConfigurationOutput {
 	s.SlateAdUrl = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *GetPlaybackConfigurationOutput) SetTags(v map[string]*string) *GetPlaybackConfigurationOutput {
+	s.Tags = v
+	return s
+}
+
+// SetTranscodeProfileName sets the TranscodeProfileName field's value.
+func (s *GetPlaybackConfigurationOutput) SetTranscodeProfileName(v string) *GetPlaybackConfigurationOutput {
+	s.TranscodeProfileName = &v
 	return s
 }
 
@@ -611,13 +995,13 @@ func (s *ListPlaybackConfigurationsInput) SetNextToken(v string) *ListPlaybackCo
 type ListPlaybackConfigurationsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Array of playback configurations. This may be all of the available configurations
-	// or a subset, depending on the settings you provide and on the total number
+	// Array of playback configurations. This might be all the available configurations
+	// or a subset, depending on the settings that you provide and the total number
 	// of configurations stored.
 	Items []*PlaybackConfiguration `type:"list"`
 
-	// Pagination token returned by the GET list request when results overrun the
-	// meximum allowed. Use the token to fetch the next page of results.
+	// Pagination token returned by the GET list request when results exceed the
+	// maximum allowed. Use the token to fetch the next page of results.
 	NextToken *string `type:"string"`
 }
 
@@ -643,6 +1027,67 @@ func (s *ListPlaybackConfigurationsOutput) SetNextToken(v string) *ListPlaybackC
 	return s
 }
 
+type ListTagsForResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"ResourceArn" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ListTagsForResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListTagsForResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListTagsForResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListTagsForResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *ListTagsForResourceInput) SetResourceArn(v string) *ListTagsForResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+type ListTagsForResourceOutput struct {
+	_ struct{} `type:"structure"`
+
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation
+func (s ListTagsForResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListTagsForResourceOutput) GoString() string {
+	return s.String()
+}
+
+// SetTags sets the Tags field's value.
+func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForResourceOutput {
+	s.Tags = v
+	return s
+}
+
 type PlaybackConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -652,9 +1097,25 @@ type PlaybackConfiguration struct {
 	// CloudFront, for content and ad segment management.
 	CdnConfiguration *CdnConfiguration `type:"structure"`
 
+	// The configuration for DASH content.
+	DashConfiguration *DashConfiguration `type:"structure"`
+
+	// The configuration for HLS content.
+	HlsConfiguration *HlsConfiguration `type:"structure"`
+
 	Name *string `type:"string"`
 
+	PlaybackConfigurationArn *string `type:"string"`
+
+	PlaybackEndpointPrefix *string `type:"string"`
+
+	SessionInitializationEndpointPrefix *string `type:"string"`
+
 	SlateAdUrl *string `type:"string"`
+
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	TranscodeProfileName *string `type:"string"`
 
 	VideoContentSourceUrl *string `type:"string"`
 }
@@ -681,15 +1142,57 @@ func (s *PlaybackConfiguration) SetCdnConfiguration(v *CdnConfiguration) *Playba
 	return s
 }
 
+// SetDashConfiguration sets the DashConfiguration field's value.
+func (s *PlaybackConfiguration) SetDashConfiguration(v *DashConfiguration) *PlaybackConfiguration {
+	s.DashConfiguration = v
+	return s
+}
+
+// SetHlsConfiguration sets the HlsConfiguration field's value.
+func (s *PlaybackConfiguration) SetHlsConfiguration(v *HlsConfiguration) *PlaybackConfiguration {
+	s.HlsConfiguration = v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *PlaybackConfiguration) SetName(v string) *PlaybackConfiguration {
 	s.Name = &v
 	return s
 }
 
+// SetPlaybackConfigurationArn sets the PlaybackConfigurationArn field's value.
+func (s *PlaybackConfiguration) SetPlaybackConfigurationArn(v string) *PlaybackConfiguration {
+	s.PlaybackConfigurationArn = &v
+	return s
+}
+
+// SetPlaybackEndpointPrefix sets the PlaybackEndpointPrefix field's value.
+func (s *PlaybackConfiguration) SetPlaybackEndpointPrefix(v string) *PlaybackConfiguration {
+	s.PlaybackEndpointPrefix = &v
+	return s
+}
+
+// SetSessionInitializationEndpointPrefix sets the SessionInitializationEndpointPrefix field's value.
+func (s *PlaybackConfiguration) SetSessionInitializationEndpointPrefix(v string) *PlaybackConfiguration {
+	s.SessionInitializationEndpointPrefix = &v
+	return s
+}
+
 // SetSlateAdUrl sets the SlateAdUrl field's value.
 func (s *PlaybackConfiguration) SetSlateAdUrl(v string) *PlaybackConfiguration {
 	s.SlateAdUrl = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *PlaybackConfiguration) SetTags(v map[string]*string) *PlaybackConfiguration {
+	s.Tags = v
+	return s
+}
+
+// SetTranscodeProfileName sets the TranscodeProfileName field's value.
+func (s *PlaybackConfiguration) SetTranscodeProfileName(v string) *PlaybackConfiguration {
+	s.TranscodeProfileName = &v
 	return s
 }
 
@@ -706,23 +1209,35 @@ type PutPlaybackConfigurationInput struct {
 	// of static parameters and placeholders for dynamic parameters. AWS Elemental
 	// MediaTailor substitutes player-specific and session-specific parameters as
 	// needed when calling the ADS. Alternately, for testing you can provide a static
-	// VAST URL. The maximum length is 25000 characters.
+	// VAST URL. The maximum length is 25,000 characters.
 	AdDecisionServerUrl *string `type:"string"`
 
 	// The configuration for using a content delivery network (CDN), like Amazon
 	// CloudFront, for content and ad segment management.
 	CdnConfiguration *CdnConfiguration `type:"structure"`
 
-	// The identifier for the configuration.
+	// The configuration for DASH content.
+	DashConfiguration *DashConfigurationForPut `type:"structure"`
+
+	// The identifier for the playback configuration.
 	Name *string `type:"string"`
 
 	// The URL for a high-quality video asset to transcode and use to fill in time
 	// that's not used by ads. AWS Elemental MediaTailor shows the slate to fill
 	// in gaps in media content. Configuring the slate is optional for non-VPAID
-	// configurations. For VPAID, the slate is required because AWS Elemental MediaTailor
-	// provides it in the slots that are designated for dynamic ad content. The
-	// slate must be a high-quality asset that contains both audio and video.
+	// configurations. For VPAID, the slate is required because MediaTailor provides
+	// it in the slots that are designated for dynamic ad content. The slate must
+	// be a high-quality asset that contains both audio and video.
 	SlateAdUrl *string `type:"string"`
+
+	// The tags to assign to the playback configuration.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The name that is used to associate this playback configuration with a custom
+	// transcode profile. This overrides the dynamic transcoding defaults of MediaTailor.
+	// Use this only if you have already set up custom profiles with the help of
+	// AWS Support.
+	TranscodeProfileName *string `type:"string"`
 
 	// The URL prefix for the master playlist for the stream, minus the asset ID.
 	// The maximum length is 512 characters.
@@ -751,6 +1266,12 @@ func (s *PutPlaybackConfigurationInput) SetCdnConfiguration(v *CdnConfiguration)
 	return s
 }
 
+// SetDashConfiguration sets the DashConfiguration field's value.
+func (s *PutPlaybackConfigurationInput) SetDashConfiguration(v *DashConfigurationForPut) *PutPlaybackConfigurationInput {
+	s.DashConfiguration = v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *PutPlaybackConfigurationInput) SetName(v string) *PutPlaybackConfigurationInput {
 	s.Name = &v
@@ -760,6 +1281,18 @@ func (s *PutPlaybackConfigurationInput) SetName(v string) *PutPlaybackConfigurat
 // SetSlateAdUrl sets the SlateAdUrl field's value.
 func (s *PutPlaybackConfigurationInput) SetSlateAdUrl(v string) *PutPlaybackConfigurationInput {
 	s.SlateAdUrl = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *PutPlaybackConfigurationInput) SetTags(v map[string]*string) *PutPlaybackConfigurationInput {
+	s.Tags = v
+	return s
+}
+
+// SetTranscodeProfileName sets the TranscodeProfileName field's value.
+func (s *PutPlaybackConfigurationInput) SetTranscodeProfileName(v string) *PutPlaybackConfigurationInput {
+	s.TranscodeProfileName = &v
 	return s
 }
 
@@ -778,16 +1311,25 @@ type PutPlaybackConfigurationOutput struct {
 	// CloudFront, for content and ad segment management.
 	CdnConfiguration *CdnConfiguration `type:"structure"`
 
+	// The configuration for DASH content.
+	DashConfiguration *DashConfiguration `type:"structure"`
+
 	// The configuration for HLS content.
 	HlsConfiguration *HlsConfiguration `type:"structure"`
 
 	Name *string `type:"string"`
+
+	PlaybackConfigurationArn *string `type:"string"`
 
 	PlaybackEndpointPrefix *string `type:"string"`
 
 	SessionInitializationEndpointPrefix *string `type:"string"`
 
 	SlateAdUrl *string `type:"string"`
+
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	TranscodeProfileName *string `type:"string"`
 
 	VideoContentSourceUrl *string `type:"string"`
 }
@@ -814,6 +1356,12 @@ func (s *PutPlaybackConfigurationOutput) SetCdnConfiguration(v *CdnConfiguration
 	return s
 }
 
+// SetDashConfiguration sets the DashConfiguration field's value.
+func (s *PutPlaybackConfigurationOutput) SetDashConfiguration(v *DashConfiguration) *PutPlaybackConfigurationOutput {
+	s.DashConfiguration = v
+	return s
+}
+
 // SetHlsConfiguration sets the HlsConfiguration field's value.
 func (s *PutPlaybackConfigurationOutput) SetHlsConfiguration(v *HlsConfiguration) *PutPlaybackConfigurationOutput {
 	s.HlsConfiguration = v
@@ -823,6 +1371,12 @@ func (s *PutPlaybackConfigurationOutput) SetHlsConfiguration(v *HlsConfiguration
 // SetName sets the Name field's value.
 func (s *PutPlaybackConfigurationOutput) SetName(v string) *PutPlaybackConfigurationOutput {
 	s.Name = &v
+	return s
+}
+
+// SetPlaybackConfigurationArn sets the PlaybackConfigurationArn field's value.
+func (s *PutPlaybackConfigurationOutput) SetPlaybackConfigurationArn(v string) *PutPlaybackConfigurationOutput {
+	s.PlaybackConfigurationArn = &v
 	return s
 }
 
@@ -844,8 +1398,158 @@ func (s *PutPlaybackConfigurationOutput) SetSlateAdUrl(v string) *PutPlaybackCon
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *PutPlaybackConfigurationOutput) SetTags(v map[string]*string) *PutPlaybackConfigurationOutput {
+	s.Tags = v
+	return s
+}
+
+// SetTranscodeProfileName sets the TranscodeProfileName field's value.
+func (s *PutPlaybackConfigurationOutput) SetTranscodeProfileName(v string) *PutPlaybackConfigurationOutput {
+	s.TranscodeProfileName = &v
+	return s
+}
+
 // SetVideoContentSourceUrl sets the VideoContentSourceUrl field's value.
 func (s *PutPlaybackConfigurationOutput) SetVideoContentSourceUrl(v string) *PutPlaybackConfigurationOutput {
 	s.VideoContentSourceUrl = &v
 	return s
 }
+
+type TagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"ResourceArn" type:"string" required:"true"`
+
+	// Tags is a required field
+	Tags map[string]*string `locationName:"tags" type:"map" required:"true"`
+}
+
+// String returns the string representation
+func (s TagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TagResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 1))
+	}
+	if s.Tags == nil {
+		invalidParams.Add(request.NewErrParamRequired("Tags"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *TagResourceInput) SetResourceArn(v string) *TagResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
+	s.Tags = v
+	return s
+}
+
+type TagResourceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s TagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagResourceOutput) GoString() string {
+	return s.String()
+}
+
+type UntagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"ResourceArn" type:"string" required:"true"`
+
+	// TagKeys is a required field
+	TagKeys []*string `location:"querystring" locationName:"tagKeys" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s UntagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UntagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UntagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UntagResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 1))
+	}
+	if s.TagKeys == nil {
+		invalidParams.Add(request.NewErrParamRequired("TagKeys"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *UntagResourceInput) SetResourceArn(v string) *UntagResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetTagKeys sets the TagKeys field's value.
+func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
+	s.TagKeys = v
+	return s
+}
+
+type UntagResourceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UntagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UntagResourceOutput) GoString() string {
+	return s.String()
+}
+
+const (
+	// OriginManifestTypeSinglePeriod is a OriginManifestType enum value
+	OriginManifestTypeSinglePeriod = "SINGLE_PERIOD"
+
+	// OriginManifestTypeMultiPeriod is a OriginManifestType enum value
+	OriginManifestTypeMultiPeriod = "MULTI_PERIOD"
+)

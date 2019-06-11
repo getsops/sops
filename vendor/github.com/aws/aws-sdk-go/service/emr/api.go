@@ -18,7 +18,7 @@ const opAddInstanceFleet = "AddInstanceFleet"
 // AddInstanceFleetRequest generates a "aws/request.Request" representing the
 // client's request for the AddInstanceFleet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -103,7 +103,7 @@ const opAddInstanceGroups = "AddInstanceGroups"
 // AddInstanceGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the AddInstanceGroups operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -183,7 +183,7 @@ const opAddJobFlowSteps = "AddJobFlowSteps"
 // AddJobFlowStepsRequest generates a "aws/request.Request" representing the
 // client's request for the AddJobFlowSteps operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -230,7 +230,7 @@ func (c *EMR) AddJobFlowStepsRequest(input *AddJobFlowStepsInput) (req *request.
 // the 256-step limitation in various ways, including using SSH to connect to
 // the master node and submitting queries directly to the software running on
 // the master node, such as Hive and Hadoop. For more information on how to
-// do this, see Add More than 256 Steps to a Cluster (http://docs.aws.amazon.com/emr/latest/ManagementGuide/AddMoreThan256Steps.html)
+// do this, see Add More than 256 Steps to a Cluster (https://docs.aws.amazon.com/emr/latest/ManagementGuide/AddMoreThan256Steps.html)
 // in the Amazon EMR Management Guide.
 //
 // A step specifies the location of a JAR file stored either on the master node
@@ -285,7 +285,7 @@ const opAddTags = "AddTags"
 // AddTagsRequest generates a "aws/request.Request" representing the
 // client's request for the AddTags operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -319,6 +319,7 @@ func (c *EMR) AddTagsRequest(input *AddTagsInput) (req *request.Request, output 
 
 	output = &AddTagsOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -326,7 +327,7 @@ func (c *EMR) AddTagsRequest(input *AddTagsInput) (req *request.Request, output 
 //
 // Adds tags to an Amazon EMR resource. Tags make it easier to associate clusters
 // in various ways, such as grouping clusters to track your Amazon EMR resource
-// allocation costs. For more information, see Tag Clusters (http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html).
+// allocation costs. For more information, see Tag Clusters (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -369,7 +370,7 @@ const opCancelSteps = "CancelSteps"
 // CancelStepsRequest generates a "aws/request.Request" representing the
 // client's request for the CancelSteps operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -456,7 +457,7 @@ const opCreateSecurityConfiguration = "CreateSecurityConfiguration"
 // CreateSecurityConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the CreateSecurityConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -539,7 +540,7 @@ const opDeleteSecurityConfiguration = "DeleteSecurityConfiguration"
 // DeleteSecurityConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteSecurityConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -573,6 +574,7 @@ func (c *EMR) DeleteSecurityConfigurationRequest(input *DeleteSecurityConfigurat
 
 	output = &DeleteSecurityConfigurationOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -621,7 +623,7 @@ const opDescribeCluster = "DescribeCluster"
 // DescribeClusterRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeCluster operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -704,7 +706,7 @@ const opDescribeJobFlows = "DescribeJobFlows"
 // DescribeJobFlowsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeJobFlows operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -764,7 +766,7 @@ func (c *EMR) DescribeJobFlowsRequest(input *DescribeJobFlowsInput) (req *reques
 //
 //    * Job flows created and completed in the last two weeks
 //
-//    *  Job flows created within the last two months that are in one of the
+//    * Job flows created within the last two months that are in one of the
 //    following states: RUNNING, WAITING, SHUTTING_DOWN, STARTING
 //
 // Amazon EMR can return a maximum of 512 job flow descriptions.
@@ -812,7 +814,7 @@ const opDescribeSecurityConfiguration = "DescribeSecurityConfiguration"
 // DescribeSecurityConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeSecurityConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -895,7 +897,7 @@ const opDescribeStep = "DescribeStep"
 // DescribeStepRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeStep operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -977,7 +979,7 @@ const opListBootstrapActions = "ListBootstrapActions"
 // ListBootstrapActionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListBootstrapActions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1071,7 +1073,7 @@ func (c *EMR) ListBootstrapActionsWithContext(ctx aws.Context, input *ListBootst
 //    // Example iterating over at most 3 pages of a ListBootstrapActions operation.
 //    pageNum := 0
 //    err := client.ListBootstrapActionsPages(params,
-//        func(page *ListBootstrapActionsOutput, lastPage bool) bool {
+//        func(page *emr.ListBootstrapActionsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -1115,7 +1117,7 @@ const opListClusters = "ListClusters"
 // ListClustersRequest generates a "aws/request.Request" representing the
 // client's request for the ListClusters operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1213,7 +1215,7 @@ func (c *EMR) ListClustersWithContext(ctx aws.Context, input *ListClustersInput,
 //    // Example iterating over at most 3 pages of a ListClusters operation.
 //    pageNum := 0
 //    err := client.ListClustersPages(params,
-//        func(page *ListClustersOutput, lastPage bool) bool {
+//        func(page *emr.ListClustersOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -1257,7 +1259,7 @@ const opListInstanceFleets = "ListInstanceFleets"
 // ListInstanceFleetsRequest generates a "aws/request.Request" representing the
 // client's request for the ListInstanceFleets operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1354,7 +1356,7 @@ func (c *EMR) ListInstanceFleetsWithContext(ctx aws.Context, input *ListInstance
 //    // Example iterating over at most 3 pages of a ListInstanceFleets operation.
 //    pageNum := 0
 //    err := client.ListInstanceFleetsPages(params,
-//        func(page *ListInstanceFleetsOutput, lastPage bool) bool {
+//        func(page *emr.ListInstanceFleetsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -1398,7 +1400,7 @@ const opListInstanceGroups = "ListInstanceGroups"
 // ListInstanceGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the ListInstanceGroups operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1492,7 +1494,7 @@ func (c *EMR) ListInstanceGroupsWithContext(ctx aws.Context, input *ListInstance
 //    // Example iterating over at most 3 pages of a ListInstanceGroups operation.
 //    pageNum := 0
 //    err := client.ListInstanceGroupsPages(params,
-//        func(page *ListInstanceGroupsOutput, lastPage bool) bool {
+//        func(page *emr.ListInstanceGroupsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -1536,7 +1538,7 @@ const opListInstances = "ListInstances"
 // ListInstancesRequest generates a "aws/request.Request" representing the
 // client's request for the ListInstances operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1633,7 +1635,7 @@ func (c *EMR) ListInstancesWithContext(ctx aws.Context, input *ListInstancesInpu
 //    // Example iterating over at most 3 pages of a ListInstances operation.
 //    pageNum := 0
 //    err := client.ListInstancesPages(params,
-//        func(page *ListInstancesOutput, lastPage bool) bool {
+//        func(page *emr.ListInstancesOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -1677,7 +1679,7 @@ const opListSecurityConfigurations = "ListSecurityConfigurations"
 // ListSecurityConfigurationsRequest generates a "aws/request.Request" representing the
 // client's request for the ListSecurityConfigurations operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1703,6 +1705,12 @@ func (c *EMR) ListSecurityConfigurationsRequest(input *ListSecurityConfiguration
 		Name:       opListSecurityConfigurations,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"Marker"},
+			OutputTokens:    []string{"Marker"},
+			LimitToken:      "",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -1757,12 +1765,62 @@ func (c *EMR) ListSecurityConfigurationsWithContext(ctx aws.Context, input *List
 	return out, req.Send()
 }
 
+// ListSecurityConfigurationsPages iterates over the pages of a ListSecurityConfigurations operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListSecurityConfigurations method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListSecurityConfigurations operation.
+//    pageNum := 0
+//    err := client.ListSecurityConfigurationsPages(params,
+//        func(page *emr.ListSecurityConfigurationsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *EMR) ListSecurityConfigurationsPages(input *ListSecurityConfigurationsInput, fn func(*ListSecurityConfigurationsOutput, bool) bool) error {
+	return c.ListSecurityConfigurationsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListSecurityConfigurationsPagesWithContext same as ListSecurityConfigurationsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EMR) ListSecurityConfigurationsPagesWithContext(ctx aws.Context, input *ListSecurityConfigurationsInput, fn func(*ListSecurityConfigurationsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListSecurityConfigurationsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListSecurityConfigurationsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListSecurityConfigurationsOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opListSteps = "ListSteps"
 
 // ListStepsRequest generates a "aws/request.Request" representing the
 // client's request for the ListSteps operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1857,7 +1915,7 @@ func (c *EMR) ListStepsWithContext(ctx aws.Context, input *ListStepsInput, opts 
 //    // Example iterating over at most 3 pages of a ListSteps operation.
 //    pageNum := 0
 //    err := client.ListStepsPages(params,
-//        func(page *ListStepsOutput, lastPage bool) bool {
+//        func(page *emr.ListStepsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -1901,7 +1959,7 @@ const opModifyInstanceFleet = "ModifyInstanceFleet"
 // ModifyInstanceFleetRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyInstanceFleet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1935,8 +1993,7 @@ func (c *EMR) ModifyInstanceFleetRequest(input *ModifyInstanceFleetInput) (req *
 
 	output = &ModifyInstanceFleetOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1990,7 +2047,7 @@ const opModifyInstanceGroups = "ModifyInstanceGroups"
 // ModifyInstanceGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the ModifyInstanceGroups operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2024,8 +2081,7 @@ func (c *EMR) ModifyInstanceGroupsRequest(input *ModifyInstanceGroupsInput) (req
 
 	output = &ModifyInstanceGroupsOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2075,7 +2131,7 @@ const opPutAutoScalingPolicy = "PutAutoScalingPolicy"
 // PutAutoScalingPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the PutAutoScalingPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2152,7 +2208,7 @@ const opRemoveAutoScalingPolicy = "RemoveAutoScalingPolicy"
 // RemoveAutoScalingPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the RemoveAutoScalingPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2186,6 +2242,7 @@ func (c *EMR) RemoveAutoScalingPolicyRequest(input *RemoveAutoScalingPolicyInput
 
 	output = &RemoveAutoScalingPolicyOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2227,7 +2284,7 @@ const opRemoveTags = "RemoveTags"
 // RemoveTagsRequest generates a "aws/request.Request" representing the
 // client's request for the RemoveTags operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2261,6 +2318,7 @@ func (c *EMR) RemoveTagsRequest(input *RemoveTagsInput) (req *request.Request, o
 
 	output = &RemoveTagsOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2268,7 +2326,7 @@ func (c *EMR) RemoveTagsRequest(input *RemoveTagsInput) (req *request.Request, o
 //
 // Removes tags from an Amazon EMR resource. Tags make it easier to associate
 // clusters in various ways, such as grouping clusters to track your Amazon
-// EMR resource allocation costs. For more information, see Tag Clusters (http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html).
+// EMR resource allocation costs. For more information, see Tag Clusters (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html).
 //
 // The following example removes the stack tag with value Prod from a cluster:
 //
@@ -2313,7 +2371,7 @@ const opRunJobFlow = "RunJobFlow"
 // RunJobFlowRequest generates a "aws/request.Request" representing the
 // client's request for the RunJobFlow operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2355,11 +2413,11 @@ func (c *EMR) RunJobFlowRequest(input *RunJobFlowInput) (req *request.Request, o
 // RunJobFlow creates and starts running a new cluster (job flow). The cluster
 // runs the steps specified. After the steps complete, the cluster stops and
 // the HDFS partition is lost. To prevent loss of data, configure the last step
-// of the job flow to store results in Amazon S3. If the JobFlowInstancesConfigKeepJobFlowAliveWhenNoSteps
-// parameter is set to TRUE, the cluster transitions to the WAITING state rather
-// than shutting down after the steps have completed.
+// of the job flow to store results in Amazon S3. If the JobFlowInstancesConfig
+// KeepJobFlowAliveWhenNoSteps parameter is set to TRUE, the cluster transitions
+// to the WAITING state rather than shutting down after the steps have completed.
 //
-// For additional protection, you can set the JobFlowInstancesConfigTerminationProtected
+// For additional protection, you can set the JobFlowInstancesConfig TerminationProtected
 // parameter to TRUE to lock the cluster and prevent it from being terminated
 // by API call, user intervention, or in the event of a job flow error.
 //
@@ -2370,7 +2428,7 @@ func (c *EMR) RunJobFlowRequest(input *RunJobFlowInput) (req *request.Request, o
 // the 256-step limitation in various ways, including using the SSH shell to
 // connect to the master node and submitting queries directly to the software
 // running on the master node, such as Hive and Hadoop. For more information
-// on how to do this, see Add More than 256 Steps to a Cluster (http://docs.aws.amazon.com/emr/latest/ManagementGuide/AddMoreThan256Steps.html)
+// on how to do this, see Add More than 256 Steps to a Cluster (https://docs.aws.amazon.com/emr/latest/ManagementGuide/AddMoreThan256Steps.html)
 // in the Amazon EMR Management Guide.
 //
 // For long running clusters, we recommend that you periodically store your
@@ -2419,7 +2477,7 @@ const opSetTerminationProtection = "SetTerminationProtection"
 // SetTerminationProtectionRequest generates a "aws/request.Request" representing the
 // client's request for the SetTerminationProtection operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2453,8 +2511,7 @@ func (c *EMR) SetTerminationProtectionRequest(input *SetTerminationProtectionInp
 
 	output = &SetTerminationProtectionOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2475,7 +2532,7 @@ func (c *EMR) SetTerminationProtectionRequest(input *SetTerminationProtectionInp
 // to true, you must first unlock the job flow by a subsequent call to SetTerminationProtection
 // in which you set the value to false.
 //
-// For more information, seeManaging Cluster Termination (http://docs.aws.amazon.com/emr/latest/ManagementGuide/UsingEMR_TerminationProtection.html)
+// For more information, seeManaging Cluster Termination (https://docs.aws.amazon.com/emr/latest/ManagementGuide/UsingEMR_TerminationProtection.html)
 // in the Amazon EMR Management Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -2517,7 +2574,7 @@ const opSetVisibleToAllUsers = "SetVisibleToAllUsers"
 // SetVisibleToAllUsersRequest generates a "aws/request.Request" representing the
 // client's request for the SetVisibleToAllUsers operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2551,8 +2608,7 @@ func (c *EMR) SetVisibleToAllUsersRequest(input *SetVisibleToAllUsersInput) (req
 
 	output = &SetVisibleToAllUsersOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2604,7 +2660,7 @@ const opTerminateJobFlows = "TerminateJobFlows"
 // TerminateJobFlowsRequest generates a "aws/request.Request" representing the
 // client's request for the TerminateJobFlows operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2638,8 +2694,7 @@ func (c *EMR) TerminateJobFlowsRequest(input *TerminateJobFlowsInput) (req *requ
 
 	output = &TerminateJobFlowsOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -3035,24 +3090,16 @@ func (s AddTagsOutput) GoString() string {
 	return s.String()
 }
 
-// An application is any Amazon or third-party software that you can add to
-// the cluster. This structure contains a list of strings that indicates the
-// software to use with the cluster and accepts a user argument list. Amazon
-// EMR accepts and forwards the argument list to the corresponding installation
-// script as bootstrap action argument. For more information, see Using the
-// MapR Distribution for Hadoop (http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-mapr.html).
-// Currently supported values are:
+// With Amazon EMR release version 4.0 and later, the only accepted parameter
+// is the application name. To pass arguments to applications, you use configuration
+// classifications specified using configuration JSON objects. For more information,
+// see Configuring Applications (https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-configure-apps.html).
 //
-//    * "mapr-m3" - launch the cluster using MapR M3 Edition.
-//
-//    * "mapr-m5" - launch the cluster using MapR M5 Edition.
-//
-//    * "mapr" with the user arguments specifying "--edition,m3" or "--edition,m5"
-//    - launch the cluster using MapR M3 or M5 Edition, respectively.
-//
-// In Amazon EMR releases 4.x and later, the only accepted parameter is the
-// application name. To pass arguments to applications, you supply a configuration
-// for each application.
+// With earlier Amazon EMR releases, the application is any Amazon or third-party
+// software that you can add to the cluster. This structure contains a list
+// of strings that indicates the software to use with the cluster and accepts
+// a user argument list. Amazon EMR accepts and forwards the argument list to
+// the corresponding installation script as bootstrap action argument.
 type Application struct {
 	_ struct{} `type:"structure"`
 
@@ -3649,6 +3696,7 @@ type Cluster struct {
 	// The unique identifier for the cluster.
 	Id *string `type:"string"`
 
+	//
 	// The instance fleet configuration is available only in Amazon EMR versions
 	// 4.8.0 and later, excluding 5.0.x versions.
 	//
@@ -3659,7 +3707,7 @@ type Cluster struct {
 
 	// Attributes for Kerberos configuration when Kerberos authentication is enabled
 	// using a security configuration. For more information see Use Kerberos Authentication
-	// (http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-kerberos.html)
+	// (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-kerberos.html)
 	// in the EMR Management Guide.
 	KerberosAttributes *KerberosAttributes `type:"structure"`
 
@@ -3685,8 +3733,8 @@ type Cluster struct {
 	// application packages installed on the cluster. Release labels are in the
 	// form emr-x.x.x, where x.x.x is an Amazon EMR release version, for example,
 	// emr-5.14.0. For more information about Amazon EMR release versions and included
-	// application versions and features, see http://docs.aws.amazon.com/emr/latest/ReleaseGuide/
-	// (http://docs.aws.amazon.com/emr/latest/ReleaseGuide/). The release label
+	// application versions and features, see https://docs.aws.amazon.com/emr/latest/ReleaseGuide/
+	// (https://docs.aws.amazon.com/emr/latest/ReleaseGuide/). The release label
 	// applies only to Amazon EMR releases versions 4.x and later. Earlier versions
 	// use AmiVersion.
 	ReleaseLabel *string `type:"string"`
@@ -4119,6 +4167,7 @@ func (s *Command) SetScriptPath(v string) *Command {
 	return s
 }
 
+//
 // Amazon EMR releases 4.x or later.
 //
 // An optional configuration specification to be used when provisioning cluster
@@ -4126,7 +4175,7 @@ func (s *Command) SetScriptPath(v string) *Command {
 // bundled with Amazon EMR. A configuration consists of a classification, properties,
 // and optional nested configurations. A classification refers to an application-specific
 // configuration file. Properties are the settings you want to change in that
-// file. For more information, see Configuring Applications (http://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-configure-apps.html).
+// file. For more information, see Configuring Applications (https://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-configure-apps.html).
 type Configuration struct {
 	_ struct{} `type:"structure"`
 
@@ -4177,7 +4226,7 @@ type CreateSecurityConfigurationInput struct {
 	Name *string `type:"string" required:"true"`
 
 	// The security configuration details in JSON format. For JSON parameters and
-	// examples, see Use Security Configurations to Set Up Cluster Security (http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-security-configurations.html)
+	// examples, see Use Security Configurations to Set Up Cluster Security (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-security-configurations.html)
 	// in the Amazon EMR Management Guide.
 	//
 	// SecurityConfiguration is a required field
@@ -4789,7 +4838,8 @@ type Ec2InstanceAttributes struct {
 	// A list of additional Amazon EC2 security group IDs for the master node.
 	AdditionalMasterSecurityGroups []*string `type:"list"`
 
-	// A list of additional Amazon EC2 security group IDs for the slave nodes.
+	// A list of additional Amazon EC2 security group IDs for the core and task
+	// nodes.
 	AdditionalSlaveSecurityGroups []*string `type:"list"`
 
 	// The Availability Zone in which the cluster will run.
@@ -4812,7 +4862,7 @@ type Ec2InstanceAttributes struct {
 	// The identifier of the Amazon EC2 security group for the master node.
 	EmrManagedMasterSecurityGroup *string `type:"string"`
 
-	// The identifier of the Amazon EC2 security group for the slave nodes.
+	// The identifier of the Amazon EC2 security group for the core and task nodes.
 	EmrManagedSlaveSecurityGroup *string `type:"string"`
 
 	// The IAM role that was specified when the cluster was launched. The EC2 instances
@@ -5660,8 +5710,8 @@ type InstanceFleetStatus struct {
 
 	// A code representing the instance fleet status.
 	//
-	//    * PROVISIONING—The instance fleet is provisioning EC2 resources and is
-	//    not yet ready to run jobs.
+	//    * PROVISIONING—The instance fleet is provisioning EC2 resources and
+	//    is not yet ready to run jobs.
 	//
 	//    * BOOTSTRAPPING—EC2 instances and other resources have been provisioned
 	//    and the bootstrap actions specified for the instances are underway.
@@ -5669,8 +5719,8 @@ type InstanceFleetStatus struct {
 	//    * RUNNING—EC2 instances and other resources are running. They are either
 	//    executing jobs or waiting to execute jobs.
 	//
-	//    * RESIZING—A resize operation is underway. EC2 instances are either being
-	//    added or removed.
+	//    * RESIZING—A resize operation is underway. EC2 instances are either
+	//    being added or removed.
 	//
 	//    * SUSPENDED—A resize operation could not complete. Existing EC2 instances
 	//    are running, but instances can't be added or removed.
@@ -5782,12 +5832,17 @@ type InstanceGroup struct {
 	// to the On-Demand price.
 	BidPrice *string `type:"string"`
 
+	//
 	// Amazon EMR releases 4.x or later.
 	//
 	// The list of configurations supplied for an EMR cluster instance group. You
 	// can specify a separate configuration for each instance group (master, core,
 	// and task).
 	Configurations []*Configuration `type:"list"`
+
+	// The version number of the requested configuration specification for this
+	// instance group.
+	ConfigurationsVersion *int64 `type:"long"`
 
 	// The EBS block devices that are mapped to this instance group.
 	EbsBlockDevices []*EbsBlockDevice `type:"list"`
@@ -5805,6 +5860,14 @@ type InstanceGroup struct {
 
 	// The EC2 instance type for all instances in the instance group.
 	InstanceType *string `min:"1" type:"string"`
+
+	// A list of configurations that were successfully applied for an instance group
+	// last time.
+	LastSuccessfullyAppliedConfigurations []*Configuration `type:"list"`
+
+	// The version number of a configuration specification that was successfully
+	// applied for an instance group last time.
+	LastSuccessfullyAppliedConfigurationsVersion *int64 `type:"long"`
 
 	// The marketplace to provision instances for this group. Valid values are ON_DEMAND
 	// or SPOT.
@@ -5854,6 +5917,12 @@ func (s *InstanceGroup) SetConfigurations(v []*Configuration) *InstanceGroup {
 	return s
 }
 
+// SetConfigurationsVersion sets the ConfigurationsVersion field's value.
+func (s *InstanceGroup) SetConfigurationsVersion(v int64) *InstanceGroup {
+	s.ConfigurationsVersion = &v
+	return s
+}
+
 // SetEbsBlockDevices sets the EbsBlockDevices field's value.
 func (s *InstanceGroup) SetEbsBlockDevices(v []*EbsBlockDevice) *InstanceGroup {
 	s.EbsBlockDevices = v
@@ -5881,6 +5950,18 @@ func (s *InstanceGroup) SetInstanceGroupType(v string) *InstanceGroup {
 // SetInstanceType sets the InstanceType field's value.
 func (s *InstanceGroup) SetInstanceType(v string) *InstanceGroup {
 	s.InstanceType = &v
+	return s
+}
+
+// SetLastSuccessfullyAppliedConfigurations sets the LastSuccessfullyAppliedConfigurations field's value.
+func (s *InstanceGroup) SetLastSuccessfullyAppliedConfigurations(v []*Configuration) *InstanceGroup {
+	s.LastSuccessfullyAppliedConfigurations = v
+	return s
+}
+
+// SetLastSuccessfullyAppliedConfigurationsVersion sets the LastSuccessfullyAppliedConfigurationsVersion field's value.
+func (s *InstanceGroup) SetLastSuccessfullyAppliedConfigurationsVersion(v int64) *InstanceGroup {
+	s.LastSuccessfullyAppliedConfigurationsVersion = &v
 	return s
 }
 
@@ -5938,6 +6019,7 @@ type InstanceGroupConfig struct {
 	// to the On-Demand price.
 	BidPrice *string `type:"string"`
 
+	//
 	// Amazon EMR releases 4.x or later.
 	//
 	// The list of configurations supplied for an EMR cluster instance group. You
@@ -6227,9 +6309,12 @@ func (s *InstanceGroupDetail) SetState(v string) *InstanceGroupDetail {
 	return s
 }
 
-// Modify an instance group size.
+// Modify the size or configurations of an instance group.
 type InstanceGroupModifyConfig struct {
 	_ struct{} `type:"structure"`
+
+	// A list of new or modified configurations to apply for an instance group.
+	Configurations []*Configuration `type:"list"`
 
 	// The EC2 InstanceIds to terminate. After you terminate the instances, the
 	// instance group will not return to its original requested size.
@@ -6268,6 +6353,12 @@ func (s *InstanceGroupModifyConfig) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetConfigurations sets the Configurations field's value.
+func (s *InstanceGroupModifyConfig) SetConfigurations(v []*Configuration) *InstanceGroupModifyConfig {
+	s.Configurations = v
+	return s
 }
 
 // SetEC2InstanceIdsToTerminate sets the EC2InstanceIdsToTerminate field's value.
@@ -7029,7 +7120,8 @@ type JobFlowInstancesConfig struct {
 	// A list of additional Amazon EC2 security group IDs for the master node.
 	AdditionalMasterSecurityGroups []*string `type:"list"`
 
-	// A list of additional Amazon EC2 security group IDs for the slave nodes.
+	// A list of additional Amazon EC2 security group IDs for the core and task
+	// nodes.
 	AdditionalSlaveSecurityGroups []*string `type:"list"`
 
 	// The name of the EC2 key pair that can be used to ssh to the master node as
@@ -7060,7 +7152,7 @@ type JobFlowInstancesConfig struct {
 	// The identifier of the Amazon EC2 security group for the master node.
 	EmrManagedMasterSecurityGroup *string `type:"string"`
 
-	// The identifier of the Amazon EC2 security group for the slave nodes.
+	// The identifier of the Amazon EC2 security group for the core and task nodes.
 	EmrManagedSlaveSecurityGroup *string `type:"string"`
 
 	// Applies only to Amazon EMR release versions earlier than 4.0. The Hadoop
@@ -7074,6 +7166,7 @@ type JobFlowInstancesConfig struct {
 	// The number of EC2 instances in the cluster.
 	InstanceCount *int64 `type:"integer"`
 
+	//
 	// The instance fleet configuration is available only in Amazon EMR versions
 	// 4.8.0 and later, excluding 5.0.x versions.
 	//
@@ -7098,7 +7191,7 @@ type JobFlowInstancesConfig struct {
 	// to access clusters in VPC private subnets.
 	ServiceAccessSecurityGroup *string `type:"string"`
 
-	// The EC2 instance type of the slave nodes.
+	// The EC2 instance type of the core and task nodes.
 	SlaveInstanceType *string `min:"1" type:"string"`
 
 	// Specifies whether to lock the cluster to prevent the Amazon EC2 instances
@@ -7272,8 +7365,9 @@ type JobFlowInstancesDetail struct {
 	HadoopVersion *string `type:"string"`
 
 	// The number of Amazon EC2 instances in the cluster. If the value is 1, the
-	// same instance serves as both the master and slave node. If the value is greater
-	// than 1, one instance is the master node and all others are slave nodes.
+	// same instance serves as both the master and core and task node. If the value
+	// is greater than 1, one instance is the master node and all others are core
+	// and task nodes.
 	//
 	// InstanceCount is a required field
 	InstanceCount *int64 `type:"integer" required:"true"`
@@ -7308,7 +7402,7 @@ type JobFlowInstancesDetail struct {
 	// The Amazon EC2 Availability Zone for the cluster.
 	Placement *PlacementType `type:"structure"`
 
-	// The Amazon EC2 slave node instance type.
+	// The Amazon EC2 core and task node instance type.
 	//
 	// SlaveInstanceType is a required field
 	SlaveInstanceType *string `min:"1" type:"string" required:"true"`
@@ -7409,7 +7503,7 @@ func (s *JobFlowInstancesDetail) SetTerminationProtected(v bool) *JobFlowInstanc
 
 // Attributes for Kerberos configuration when Kerberos authentication is enabled
 // using a security configuration. For more information see Use Kerberos Authentication
-// (http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-kerberos.html)
+// (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-kerberos.html)
 // in the EMR Management Guide.
 type KerberosAttributes struct {
 	_ struct{} `type:"structure"`
@@ -8618,9 +8712,10 @@ type RunJobFlowInput struct {
 	// 4.0 and later, ReleaseLabel is used. To specify a custom AMI, use CustomAmiID.
 	AmiVersion *string `type:"string"`
 
-	// For Amazon EMR releases 4.0 and later. A list of applications for the cluster.
-	// Valid values are: "Hadoop", "Hive", "Mahout", "Pig", and "Spark." They are
-	// case insensitive.
+	// Applies to Amazon EMR releases 4.0 and later. A case-insensitive list of
+	// applications for Amazon EMR to install and configure when launching the cluster.
+	// For a list of applications available for each Amazon EMR release version,
+	// see the Amazon EMR Release Guide (https://docs.aws.amazon.com/emr/latest/ReleaseGuide/).
 	Applications []*Application `type:"list"`
 
 	// An IAM role for automatic scaling policies. The default role is EMR_AutoScaling_DefaultRole.
@@ -8638,15 +8733,15 @@ type RunJobFlowInput struct {
 	// Available only in Amazon EMR version 5.7.0 and later. The ID of a custom
 	// Amazon EBS-backed Linux AMI. If specified, Amazon EMR uses this AMI when
 	// it launches cluster EC2 instances. For more information about custom AMIs
-	// in Amazon EMR, see Using a Custom AMI (http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-custom-ami.html)
+	// in Amazon EMR, see Using a Custom AMI (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-custom-ami.html)
 	// in the Amazon EMR Management Guide. If omitted, the cluster uses the base
 	// Linux AMI for the ReleaseLabel specified. For Amazon EMR versions 2.x and
 	// 3.x, use AmiVersion instead.
 	//
 	// For information about creating a custom AMI, see Creating an Amazon EBS-Backed
-	// Linux AMI (http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-an-ami-ebs.html)
+	// Linux AMI (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-an-ami-ebs.html)
 	// in the Amazon Elastic Compute Cloud User Guide for Linux Instances. For information
-	// about finding an AMI ID, see Finding a Linux AMI (http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html).
+	// about finding an AMI ID, see Finding a Linux AMI (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html).
 	CustomAmiId *string `type:"string"`
 
 	// The size, in GiB, of the EBS root device volume of the Linux AMI that is
@@ -8666,7 +8761,7 @@ type RunJobFlowInput struct {
 
 	// Attributes for Kerberos configuration when Kerberos authentication is enabled
 	// using a security configuration. For more information see Use Kerberos Authentication
-	// (http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-kerberos.html)
+	// (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-kerberos.html)
 	// in the EMR Management Guide.
 	KerberosAttributes *KerberosAttributes `type:"structure"`
 
@@ -8679,6 +8774,7 @@ type RunJobFlowInput struct {
 	// Name is a required field
 	Name *string `type:"string" required:"true"`
 
+	//
 	// For Amazon EMR releases 3.x and 2.x. For Amazon EMR releases 4.x and later,
 	// use Applications.
 	//
@@ -8686,7 +8782,7 @@ type RunJobFlowInput struct {
 	// flow that accepts a user argument list. EMR accepts and forwards the argument
 	// list to the corresponding installation script as bootstrap action arguments.
 	// For more information, see "Launch a Job Flow on the MapR Distribution for
-	// Hadoop" in the Amazon EMR Developer Guide (http://docs.aws.amazon.com/emr/latest/DeveloperGuide/emr-dg.pdf).
+	// Hadoop" in the Amazon EMR Developer Guide (https://docs.aws.amazon.com/emr/latest/DeveloperGuide/emr-dg.pdf).
 	// Supported values are:
 	//
 	//    * "mapr-m3" - launch the cluster using MapR M3 Edition.
@@ -8711,8 +8807,8 @@ type RunJobFlowInput struct {
 	// application packages installed on the cluster. Release labels are in the
 	// form emr-x.x.x, where x.x.x is an Amazon EMR release version, for example,
 	// emr-5.14.0. For more information about Amazon EMR release versions and included
-	// application versions and features, see http://docs.aws.amazon.com/emr/latest/ReleaseGuide/
-	// (http://docs.aws.amazon.com/emr/latest/ReleaseGuide/). The release label
+	// application versions and features, see https://docs.aws.amazon.com/emr/latest/ReleaseGuide/
+	// (https://docs.aws.amazon.com/emr/latest/ReleaseGuide/). The release label
 	// applies only to Amazon EMR releases versions 4.x and later. Earlier versions
 	// use AmiVersion.
 	ReleaseLabel *string `type:"string"`
@@ -8748,11 +8844,12 @@ type RunJobFlowInput struct {
 	// A list of steps to run.
 	Steps []*StepConfig `type:"list"`
 
+	//
 	// For Amazon EMR releases 3.x and 2.x. For Amazon EMR releases 4.x and later,
 	// use Applications.
 	//
 	// A list of strings that indicates third-party software to use. For more information,
-	// see the Amazon EMR Developer Guide (http://docs.aws.amazon.com/emr/latest/DeveloperGuide/emr-dg.pdf).
+	// see the Amazon EMR Developer Guide (https://docs.aws.amazon.com/emr/latest/DeveloperGuide/emr-dg.pdf).
 	// Currently supported values are:
 	//
 	//    * "mapr-m3" - launch the job flow using MapR M3 Edition.
@@ -9327,8 +9424,7 @@ type SetTerminationProtectionInput struct {
 	_ struct{} `type:"structure"`
 
 	// A list of strings that uniquely identify the clusters to protect. This identifier
-	// is returned by RunJobFlow and can also be obtained from DescribeJobFlows
-	// .
+	// is returned by RunJobFlow and can also be obtained from DescribeJobFlows .
 	//
 	// JobFlowIds is a required field
 	JobFlowIds []*string `type:"list" required:"true"`
@@ -9596,10 +9692,11 @@ type SpotProvisioningSpecification struct {
 	BlockDurationMinutes *int64 `type:"integer"`
 
 	// The action to take when TargetSpotCapacity has not been fulfilled when the
-	// TimeoutDurationMinutes has expired. Spot instances are not uprovisioned within
-	// the Spot provisioining timeout. Valid values are TERMINATE_CLUSTER and SWITCH_TO_ON_DEMAND.
-	// SWITCH_TO_ON_DEMAND specifies that if no Spot instances are available, On-Demand
-	// Instances should be provisioned to fulfill any remaining Spot capacity.
+	// TimeoutDurationMinutes has expired; that is, when all Spot instances could
+	// not be provisioned within the Spot provisioning timeout. Valid values are
+	// TERMINATE_CLUSTER and SWITCH_TO_ON_DEMAND. SWITCH_TO_ON_DEMAND specifies
+	// that if no Spot instances are available, On-Demand Instances should be provisioned
+	// to fulfill any remaining Spot capacity.
 	//
 	// TimeoutAction is a required field
 	TimeoutAction *string `type:"string" required:"true" enum:"SpotProvisioningTimeoutAction"`
@@ -9661,8 +9758,9 @@ func (s *SpotProvisioningSpecification) SetTimeoutDurationMinutes(v int64) *Spot
 type Step struct {
 	_ struct{} `type:"structure"`
 
-	// This specifies what action to take when the cluster step fails. Possible
-	// values are TERMINATE_CLUSTER, CANCEL_AND_WAIT, and CONTINUE.
+	// The action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER,
+	// CANCEL_AND_WAIT, and CONTINUE. TERMINATE_JOB_FLOW is provided for backward
+	// compatibility. We recommend using TERMINATE_CLUSTER instead.
 	ActionOnFailure *string `type:"string" enum:"ActionOnFailure"`
 
 	// The Hadoop job configuration of the cluster step.
@@ -9722,7 +9820,9 @@ func (s *Step) SetStatus(v *StepStatus) *Step {
 type StepConfig struct {
 	_ struct{} `type:"structure"`
 
-	// The action to take if the step fails.
+	// The action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER,
+	// CANCEL_AND_WAIT, and CONTINUE. TERMINATE_JOB_FLOW is provided for backward
+	// compatibility. We recommend using TERMINATE_CLUSTER instead.
 	ActionOnFailure *string `type:"string" enum:"ActionOnFailure"`
 
 	// The JAR file used for the step.
@@ -9976,8 +10076,9 @@ func (s *StepStatus) SetTimeline(v *StepTimeline) *StepStatus {
 type StepSummary struct {
 	_ struct{} `type:"structure"`
 
-	// This specifies what action to take when the cluster step fails. Possible
-	// values are TERMINATE_CLUSTER, CANCEL_AND_WAIT, and CONTINUE.
+	// The action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER,
+	// CANCEL_AND_WAIT, and CONTINUE. TERMINATE_JOB_FLOW is available for backward
+	// compatibility. We recommend using TERMINATE_CLUSTER instead.
 	ActionOnFailure *string `type:"string" enum:"ActionOnFailure"`
 
 	// The Hadoop job configuration of the cluster step.
@@ -10113,16 +10214,16 @@ func (s *SupportedProductConfig) SetName(v string) *SupportedProductConfig {
 // A key/value pair containing user-defined metadata that you can associate
 // with an Amazon EMR resource. Tags make it easier to associate clusters in
 // various ways, such as grouping clusters to track your Amazon EMR resource
-// allocation costs. For more information, see Tag Clusters (http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html).
+// allocation costs. For more information, see Tag Clusters (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html).
 type Tag struct {
 	_ struct{} `type:"structure"`
 
 	// A user-defined key, which is the minimum required information for a valid
-	// tag. For more information, see Tag  (http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html).
+	// tag. For more information, see Tag (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html).
 	Key *string `type:"string"`
 
 	// A user-defined value, which is optional in a tag. For more information, see
-	// Tag Clusters (http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html).
+	// Tag Clusters (https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-plan-tags.html).
 	Value *string `type:"string"`
 }
 
@@ -10457,6 +10558,9 @@ const (
 
 	// InstanceGroupStateRunning is a InstanceGroupState enum value
 	InstanceGroupStateRunning = "RUNNING"
+
+	// InstanceGroupStateReconfiguring is a InstanceGroupState enum value
+	InstanceGroupStateReconfiguring = "RECONFIGURING"
 
 	// InstanceGroupStateResizing is a InstanceGroupState enum value
 	InstanceGroupStateResizing = "RESIZING"

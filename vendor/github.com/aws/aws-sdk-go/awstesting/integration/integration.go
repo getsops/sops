@@ -29,10 +29,6 @@ func init() {
 		logLevel = aws.LogLevel(aws.LogDebugWithSigning | aws.LogDebugWithHTTPBody)
 	}
 	Session.Config.LogLevel = logLevel
-
-	if aws.StringValue(Session.Config.Region) == "" {
-		panic("AWS_REGION must be configured to run integration tests")
-	}
 }
 
 // UniqueID returns a unique UUID-like identifier for use in generating
@@ -41,4 +37,15 @@ func UniqueID() string {
 	uuid := make([]byte, 16)
 	io.ReadFull(rand.Reader, uuid)
 	return fmt.Sprintf("%x", uuid)
+}
+
+// SessionWithDefaultRegion returns a copy of the integration session with the
+// region set if one was not already provided.
+func SessionWithDefaultRegion(region string) *session.Session {
+	sess := Session.Copy()
+	if v := aws.StringValue(sess.Config.Region); len(v) == 0 {
+		sess.Config.Region = aws.String(region)
+	}
+
+	return sess
 }

@@ -46,13 +46,13 @@ func (l typeList) Swap(i, j int) {
 //     proj := expression.NamesList(expression.Name("aName"), expression.Name("anotherName"), expression.Name("oneOtherName"))
 //
 //     builder := expression.NewBuilder().WithKeyCondition(keyCond).WithProjection(proj)
-//     expression := builder.Build()
+//     expr := builder.Build()
 //
 //     queryInput := dynamodb.QueryInput{
-//       KeyConditionExpression:    expression.KeyCondition(),
-//       ProjectionExpression:      expression.Projection(),
-//       ExpressionAttributeNames:  expression.Names(),
-//       ExpressionAttributeValues: expression.Values(),
+//       KeyConditionExpression:    expr.KeyCondition(),
+//       ProjectionExpression:      expr.Projection(),
+//       ExpressionAttributeNames:  expr.Names(),
+//       ExpressionAttributeValues: expr.Values(),
 //       TableName: aws.String("SomeTable"),
 //     }
 type Builder struct {
@@ -89,13 +89,13 @@ func NewBuilder() Builder {
 //     // Add keyCond and proj to builder as a Key Condition and Projection
 //     // respectively
 //     builder := expression.NewBuilder().WithKeyCondition(keyCond).WithProjection(proj)
-//     expression := builder.Build()
+//     expr := builder.Build()
 //
 //     queryInput := dynamodb.QueryInput{
-//       KeyConditionExpression:    expression.KeyCondition(),
-//       ProjectionExpression:      expression.Projection(),
-//       ExpressionAttributeNames:  expression.Names(),
-//       ExpressionAttributeValues: expression.Values(),
+//       KeyConditionExpression:    expr.KeyCondition(),
+//       ProjectionExpression:      expr.Projection(),
+//       ExpressionAttributeNames:  expr.Names(),
+//       ExpressionAttributeValues: expr.Values(),
 //       TableName: aws.String("SomeTable"),
 //     }
 func (b Builder) Build() (Expression, error) {
@@ -177,7 +177,7 @@ func (b Builder) buildChildTrees() (aliasList, map[expressionType]string, error)
 //     // existing ProjectionBuilder
 //     builder = builder.WithProjection(proj)
 //     // create an Expression struct
-//     expression := builder.Build()
+//     expr := builder.Build()
 func (b Builder) WithCondition(conditionBuilder ConditionBuilder) Builder {
 	if b.expressionMap == nil {
 		b.expressionMap = map[expressionType]treeBuilder{}
@@ -201,7 +201,7 @@ func (b Builder) WithCondition(conditionBuilder ConditionBuilder) Builder {
 //     // existing ConditionBuilder
 //     builder = builder.WithCondition(cond)
 //     // create an Expression struct
-//     expression := builder.Build()
+//     expr := builder.Build()
 func (b Builder) WithProjection(projectionBuilder ProjectionBuilder) Builder {
 	if b.expressionMap == nil {
 		b.expressionMap = map[expressionType]treeBuilder{}
@@ -225,7 +225,7 @@ func (b Builder) WithProjection(projectionBuilder ProjectionBuilder) Builder {
 //     // existing ConditionBuilder
 //     builder = builder.WithCondition(cond)
 //     // create an Expression struct
-//     expression := builder.Build()
+//     expr := builder.Build()
 func (b Builder) WithKeyCondition(keyConditionBuilder KeyConditionBuilder) Builder {
 	if b.expressionMap == nil {
 		b.expressionMap = map[expressionType]treeBuilder{}
@@ -249,7 +249,7 @@ func (b Builder) WithKeyCondition(keyConditionBuilder KeyConditionBuilder) Build
 //     // existing ConditionBuilder
 //     builder = builder.WithCondition(cond)
 //     // create an Expression struct
-//     expression := builder.Build()
+//     expr := builder.Build()
 func (b Builder) WithFilter(filterBuilder ConditionBuilder) Builder {
 	if b.expressionMap == nil {
 		b.expressionMap = map[expressionType]treeBuilder{}
@@ -273,7 +273,7 @@ func (b Builder) WithFilter(filterBuilder ConditionBuilder) Builder {
 //     // existing ConditionBuilder
 //     builder = builder.WithCondition(cond)
 //     // create an Expression struct
-//     expression := builder.Build()
+//     expr := builder.Build()
 func (b Builder) WithUpdate(updateBuilder UpdateBuilder) Builder {
 	if b.expressionMap == nil {
 		b.expressionMap = map[expressionType]treeBuilder{}
@@ -296,13 +296,13 @@ func (b Builder) WithUpdate(updateBuilder UpdateBuilder) Builder {
 //     // Add keyCond and proj to builder as a Key Condition and Projection
 //     // respectively
 //     builder := expression.NewBuilder().WithKeyCondition(keyCond).WithProjection(proj)
-//     expression := builder.Build()
+//     expr := builder.Build()
 //
 //     queryInput := dynamodb.QueryInput{
-//       KeyConditionExpression:    expression.KeyCondition(),
-//       ProjectionExpression:      expression.Projection(),
-//       ExpressionAttributeNames:  expression.Names(),
-//       ExpressionAttributeValues: expression.Values(),
+//       KeyConditionExpression:    expr.KeyCondition(),
+//       ProjectionExpression:      expr.Projection(),
+//       ExpressionAttributeNames:  expr.Names(),
+//       ExpressionAttributeValues: expr.Values(),
 //       TableName: aws.String("SomeTable"),
 //     }
 type Expression struct {

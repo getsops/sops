@@ -83,8 +83,8 @@ Range usage:
 
 ```
 v, err := semver.Parse("1.2.3")
-range, err := semver.ParseRange(">1.0.0 <2.0.0 || >=3.0.0")
-if range(v) {
+expectedRange, err := semver.ParseRange(">1.0.0 <2.0.0 || >=3.0.0")
+if expectedRange(v) {
     //valid
 }
 

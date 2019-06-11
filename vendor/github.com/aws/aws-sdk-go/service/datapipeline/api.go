@@ -18,7 +18,7 @@ const opActivatePipeline = "ActivatePipeline"
 // ActivatePipelineRequest generates a "aws/request.Request" representing the
 // client's request for the ActivatePipeline operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -52,6 +52,7 @@ func (c *DataPipeline) ActivatePipelineRequest(input *ActivatePipelineInput) (re
 
 	output = &ActivatePipelineOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -116,7 +117,7 @@ const opAddTags = "AddTags"
 // AddTagsRequest generates a "aws/request.Request" representing the
 // client's request for the AddTags operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -150,6 +151,7 @@ func (c *DataPipeline) AddTagsRequest(input *AddTagsInput) (req *request.Request
 
 	output = &AddTagsOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -207,7 +209,7 @@ const opCreatePipeline = "CreatePipeline"
 // CreatePipelineRequest generates a "aws/request.Request" representing the
 // client's request for the CreatePipeline operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -292,7 +294,7 @@ const opDeactivatePipeline = "DeactivatePipeline"
 // DeactivatePipelineRequest generates a "aws/request.Request" representing the
 // client's request for the DeactivatePipeline operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -326,6 +328,7 @@ func (c *DataPipeline) DeactivatePipelineRequest(input *DeactivatePipelineInput)
 
 	output = &DeactivatePipelineOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -388,7 +391,7 @@ const opDeletePipeline = "DeletePipeline"
 // DeletePipelineRequest generates a "aws/request.Request" representing the
 // client's request for the DeletePipeline operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -422,8 +425,7 @@ func (c *DataPipeline) DeletePipelineRequest(input *DeletePipelineInput) (req *r
 
 	output = &DeletePipelineOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -485,7 +487,7 @@ const opDescribeObjects = "DescribeObjects"
 // DescribeObjectsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeObjects operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -590,7 +592,7 @@ func (c *DataPipeline) DescribeObjectsWithContext(ctx aws.Context, input *Descri
 //    // Example iterating over at most 3 pages of a DescribeObjects operation.
 //    pageNum := 0
 //    err := client.DescribeObjectsPages(params,
-//        func(page *DescribeObjectsOutput, lastPage bool) bool {
+//        func(page *datapipeline.DescribeObjectsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -634,7 +636,7 @@ const opDescribePipelines = "DescribePipelines"
 // DescribePipelinesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribePipelines operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -733,7 +735,7 @@ const opEvaluateExpression = "EvaluateExpression"
 // EvaluateExpressionRequest generates a "aws/request.Request" representing the
 // client's request for the EvaluateExpression operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -829,7 +831,7 @@ const opGetPipelineDefinition = "GetPipelineDefinition"
 // GetPipelineDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the GetPipelineDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -921,7 +923,7 @@ const opListPipelines = "ListPipelines"
 // ListPipelinesRequest generates a "aws/request.Request" representing the
 // client's request for the ListPipelines operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1018,7 +1020,7 @@ func (c *DataPipeline) ListPipelinesWithContext(ctx aws.Context, input *ListPipe
 //    // Example iterating over at most 3 pages of a ListPipelines operation.
 //    pageNum := 0
 //    err := client.ListPipelinesPages(params,
-//        func(page *ListPipelinesOutput, lastPage bool) bool {
+//        func(page *datapipeline.ListPipelinesOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -1062,7 +1064,7 @@ const opPollForTask = "PollForTask"
 // PollForTaskRequest generates a "aws/request.Request" representing the
 // client's request for the PollForTask operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1162,7 +1164,7 @@ const opPutPipelineDefinition = "PutPipelineDefinition"
 // PutPipelineDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the PutPipelineDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1207,12 +1209,9 @@ func (c *DataPipeline) PutPipelineDefinitionRequest(input *PutPipelineDefinition
 // PutPipelineDefinition also validates the configuration as it adds it to the
 // pipeline. Changes to the pipeline are saved unless one of the following three
 // validation errors exists in the pipeline.
-//
-// An object is missing a name or identifier field.
-// A string or reference field is empty.
-// The number of objects in the pipeline exceeds the maximum allowed objects.
-//
-// The pipeline is in a FINISHED state.
+//   An object is missing a name or identifier field. A string or reference
+//   field is empty. The number of objects in the pipeline exceeds the maximum
+//   allowed objects. The pipeline is in a FINISHED state.
 // Pipeline object definitions are passed to the PutPipelineDefinition action
 // and returned by the GetPipelineDefinition action.
 //
@@ -1266,7 +1265,7 @@ const opQueryObjects = "QueryObjects"
 // QueryObjectsRequest generates a "aws/request.Request" representing the
 // client's request for the QueryObjects operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1370,7 +1369,7 @@ func (c *DataPipeline) QueryObjectsWithContext(ctx aws.Context, input *QueryObje
 //    // Example iterating over at most 3 pages of a QueryObjects operation.
 //    pageNum := 0
 //    err := client.QueryObjectsPages(params,
-//        func(page *QueryObjectsOutput, lastPage bool) bool {
+//        func(page *datapipeline.QueryObjectsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -1414,7 +1413,7 @@ const opRemoveTags = "RemoveTags"
 // RemoveTagsRequest generates a "aws/request.Request" representing the
 // client's request for the RemoveTags operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1448,6 +1447,7 @@ func (c *DataPipeline) RemoveTagsRequest(input *RemoveTagsInput) (req *request.R
 
 	output = &RemoveTagsOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1505,7 +1505,7 @@ const opReportTaskProgress = "ReportTaskProgress"
 // ReportTaskProgressRequest generates a "aws/request.Request" representing the
 // client's request for the ReportTaskProgress operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1610,7 +1610,7 @@ const opReportTaskRunnerHeartbeat = "ReportTaskRunnerHeartbeat"
 // ReportTaskRunnerHeartbeatRequest generates a "aws/request.Request" representing the
 // client's request for the ReportTaskRunnerHeartbeat operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1698,7 +1698,7 @@ const opSetStatus = "SetStatus"
 // SetStatusRequest generates a "aws/request.Request" representing the
 // client's request for the SetStatus operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1732,8 +1732,7 @@ func (c *DataPipeline) SetStatusRequest(input *SetStatusInput) (req *request.Req
 
 	output = &SetStatusOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1795,7 +1794,7 @@ const opSetTaskStatus = "SetTaskStatus"
 // SetTaskStatusRequest generates a "aws/request.Request" representing the
 // client's request for the SetTaskStatus operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1829,6 +1828,7 @@ func (c *DataPipeline) SetTaskStatusRequest(input *SetTaskStatusInput) (req *req
 
 	output = &SetTaskStatusOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1893,7 +1893,7 @@ const opValidatePipelineDefinition = "ValidatePipelineDefinition"
 // ValidatePipelineDefinitionRequest generates a "aws/request.Request" representing the
 // client's request for the ValidatePipelineDefinition operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2980,21 +2980,35 @@ type Operator struct {
 	// The comparison operators EQ and REF_EQ act on the following fields:
 	//
 	//    * name
+	//
 	//    * @sphere
+	//
 	//    * parent
+	//
 	//    * @componentParent
+	//
 	//    * @instanceParent
+	//
 	//    * @status
+	//
 	//    * @scheduledStartTime
+	//
 	//    * @scheduledEndTime
+	//
 	//    * @actualStartTime
+	//
 	//    * @actualEndTime
+	//
 	// The comparison operators GE, LE, and BETWEEN act on the following fields:
 	//
 	//    * @scheduledStartTime
+	//
 	//    * @scheduledEndTime
+	//
 	//    * @actualStartTime
+	//
 	//    * @actualEndTime
+	//
 	// Note that fields beginning with the at sign (@) are read-only and set by
 	// the web service. When you name fields, you should choose names containing
 	// only alpha-numeric values, as symbols may be reserved by AWS Data Pipeline.

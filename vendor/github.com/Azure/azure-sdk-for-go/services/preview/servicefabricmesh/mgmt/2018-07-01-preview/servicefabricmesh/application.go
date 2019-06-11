@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,6 +50,16 @@ func NewApplicationClientWithBaseURI(baseURI string, subscriptionID string) Appl
 // applicationName - the identity of the application.
 // applicationResourceDescription - description for creating an application resource.
 func (client ApplicationClient) Create(ctx context.Context, resourceGroupName string, applicationName string, applicationResourceDescription ApplicationResourceDescription) (result ApplicationResourceDescription, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: applicationResourceDescription,
 			Constraints: []validation.Constraint{{Target: "applicationResourceDescription.ApplicationResourceProperties", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
@@ -124,6 +135,16 @@ func (client ApplicationClient) CreateResponder(resp *http.Response) (result App
 // resourceGroupName - azure resource group name
 // applicationName - the identity of the application.
 func (client ApplicationClient) Delete(ctx context.Context, resourceGroupName string, applicationName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, applicationName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabricmesh.ApplicationClient", "Delete", nil, "Failure preparing request")
@@ -191,6 +212,16 @@ func (client ApplicationClient) DeleteResponder(resp *http.Response) (result aut
 // resourceGroupName - azure resource group name
 // applicationName - the identity of the application.
 func (client ApplicationClient) Get(ctx context.Context, resourceGroupName string, applicationName string) (result ApplicationResourceDescription, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, applicationName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "servicefabricmesh.ApplicationClient", "Get", nil, "Failure preparing request")
@@ -258,6 +289,16 @@ func (client ApplicationClient) GetResponder(resp *http.Response) (result Applic
 // Parameters:
 // resourceGroupName - azure resource group name
 func (client ApplicationClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result ApplicationResourceDescriptionListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.ardl.Response.Response != nil {
+				sc = result.ardl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByResourceGroupNextResults
 	req, err := client.ListByResourceGroupPreparer(ctx, resourceGroupName)
 	if err != nil {
@@ -321,8 +362,8 @@ func (client ApplicationClient) ListByResourceGroupResponder(resp *http.Response
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client ApplicationClient) listByResourceGroupNextResults(lastResults ApplicationResourceDescriptionList) (result ApplicationResourceDescriptionList, err error) {
-	req, err := lastResults.applicationResourceDescriptionListPreparer()
+func (client ApplicationClient) listByResourceGroupNextResults(ctx context.Context, lastResults ApplicationResourceDescriptionList) (result ApplicationResourceDescriptionList, err error) {
+	req, err := lastResults.applicationResourceDescriptionListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "servicefabricmesh.ApplicationClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -343,6 +384,16 @@ func (client ApplicationClient) listByResourceGroupNextResults(lastResults Appli
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ApplicationClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result ApplicationResourceDescriptionListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -350,6 +401,16 @@ func (client ApplicationClient) ListByResourceGroupComplete(ctx context.Context,
 // ListBySubscription gets the information about all application resources in a given subscription. The information
 // includes the information about the application's services and other runtime properties.
 func (client ApplicationClient) ListBySubscription(ctx context.Context) (result ApplicationResourceDescriptionListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.ardl.Response.Response != nil {
+				sc = result.ardl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listBySubscriptionNextResults
 	req, err := client.ListBySubscriptionPreparer(ctx)
 	if err != nil {
@@ -412,8 +473,8 @@ func (client ApplicationClient) ListBySubscriptionResponder(resp *http.Response)
 }
 
 // listBySubscriptionNextResults retrieves the next set of results, if any.
-func (client ApplicationClient) listBySubscriptionNextResults(lastResults ApplicationResourceDescriptionList) (result ApplicationResourceDescriptionList, err error) {
-	req, err := lastResults.applicationResourceDescriptionListPreparer()
+func (client ApplicationClient) listBySubscriptionNextResults(ctx context.Context, lastResults ApplicationResourceDescriptionList) (result ApplicationResourceDescriptionList, err error) {
+	req, err := lastResults.applicationResourceDescriptionListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "servicefabricmesh.ApplicationClient", "listBySubscriptionNextResults", nil, "Failure preparing next results request")
 	}
@@ -434,6 +495,16 @@ func (client ApplicationClient) listBySubscriptionNextResults(lastResults Applic
 
 // ListBySubscriptionComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ApplicationClient) ListBySubscriptionComplete(ctx context.Context) (result ApplicationResourceDescriptionListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationClient.ListBySubscription")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListBySubscription(ctx)
 	return
 }

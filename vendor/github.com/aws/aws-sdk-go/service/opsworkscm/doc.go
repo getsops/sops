@@ -20,7 +20,7 @@
 //    they are deleted.
 //
 //    * Engine: The engine is the specific configuration manager that you want
-//    to use. Valid values in this release include Chef and Puppet.
+//    to use. Valid values in this release include ChefAutomate and Puppet.
 //
 //    * Backup: This is an application-level backup of the data that the configuration
 //    manager stores. AWS OpsWorks CM creates an S3 bucket for backups when
@@ -35,7 +35,6 @@
 //    * Account attributes: Every account has attributes that are assigned in
 //    the AWS OpsWorks CM database. These attributes store information about
 //    configuration limits (servers, backups, etc.) and your customer account.
-//
 //
 // Endpoints
 //

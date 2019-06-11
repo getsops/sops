@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
+	"github.com/Azure/go-autorest/tracing"
 	"github.com/satori/go.uuid"
 	"net/http"
 )
@@ -45,6 +46,16 @@ func NewRecurrenceClient() RecurrenceClient {
 // endDateTime - the end date for when to get recurrence and aggregate its data. The startDateTime and
 // endDateTime can be no more than 30 days apart.
 func (client RecurrenceClient) Get(ctx context.Context, accountName string, recurrenceIdentity uuid.UUID, startDateTime *date.Time, endDateTime *date.Time) (result RecurrenceInformation, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecurrenceClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, accountName, recurrenceIdentity, startDateTime, endDateTime)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "job.RecurrenceClient", "Get", nil, "Failure preparing request")
@@ -124,6 +135,16 @@ func (client RecurrenceClient) GetResponder(resp *http.Response) (result Recurre
 // endDateTime - the end date for when to get the list of recurrences. The startDateTime and endDateTime can be
 // no more than 30 days apart.
 func (client RecurrenceClient) List(ctx context.Context, accountName string, startDateTime *date.Time, endDateTime *date.Time) (result RecurrenceInformationListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecurrenceClient.List")
+		defer func() {
+			sc := -1
+			if result.rilr.Response.Response != nil {
+				sc = result.rilr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, accountName, startDateTime, endDateTime)
 	if err != nil {
@@ -193,8 +214,8 @@ func (client RecurrenceClient) ListResponder(resp *http.Response) (result Recurr
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client RecurrenceClient) listNextResults(lastResults RecurrenceInformationListResult) (result RecurrenceInformationListResult, err error) {
-	req, err := lastResults.recurrenceInformationListResultPreparer()
+func (client RecurrenceClient) listNextResults(ctx context.Context, lastResults RecurrenceInformationListResult) (result RecurrenceInformationListResult, err error) {
+	req, err := lastResults.recurrenceInformationListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "job.RecurrenceClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -215,6 +236,16 @@ func (client RecurrenceClient) listNextResults(lastResults RecurrenceInformation
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client RecurrenceClient) ListComplete(ctx context.Context, accountName string, startDateTime *date.Time, endDateTime *date.Time) (result RecurrenceInformationListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/RecurrenceClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, accountName, startDateTime, endDateTime)
 	return
 }

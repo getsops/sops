@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewProjectsClientWithBaseURI(baseURI string, subscriptionID string) Project
 // serviceName - name of the service
 // projectName - name of the project
 func (client ProjectsClient) CreateOrUpdate(ctx context.Context, parameters Project, groupName string, serviceName string, projectName string) (result Project, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, parameters, groupName, serviceName, projectName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datamigration.ProjectsClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -120,6 +131,16 @@ func (client ProjectsClient) CreateOrUpdateResponder(resp *http.Response) (resul
 // projectName - name of the project
 // deleteRunningTasks - delete the resource even if it contains running tasks
 func (client ProjectsClient) Delete(ctx context.Context, groupName string, serviceName string, projectName string, deleteRunningTasks *bool) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, groupName, serviceName, projectName, deleteRunningTasks)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datamigration.ProjectsClient", "Delete", nil, "Failure preparing request")
@@ -192,6 +213,16 @@ func (client ProjectsClient) DeleteResponder(resp *http.Response) (result autore
 // serviceName - name of the service
 // projectName - name of the project
 func (client ProjectsClient) Get(ctx context.Context, groupName string, serviceName string, projectName string) (result Project, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, groupName, serviceName, projectName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datamigration.ProjectsClient", "Get", nil, "Failure preparing request")
@@ -261,6 +292,16 @@ func (client ProjectsClient) GetResponder(resp *http.Response) (result Project, 
 // groupName - name of the resource group
 // serviceName - name of the service
 func (client ProjectsClient) List(ctx context.Context, groupName string, serviceName string) (result ProjectListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.List")
+		defer func() {
+			sc := -1
+			if result.pl.Response.Response != nil {
+				sc = result.pl.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, groupName, serviceName)
 	if err != nil {
@@ -325,8 +366,8 @@ func (client ProjectsClient) ListResponder(resp *http.Response) (result ProjectL
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ProjectsClient) listNextResults(lastResults ProjectList) (result ProjectList, err error) {
-	req, err := lastResults.projectListPreparer()
+func (client ProjectsClient) listNextResults(ctx context.Context, lastResults ProjectList) (result ProjectList, err error) {
+	req, err := lastResults.projectListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "datamigration.ProjectsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -347,6 +388,16 @@ func (client ProjectsClient) listNextResults(lastResults ProjectList) (result Pr
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ProjectsClient) ListComplete(ctx context.Context, groupName string, serviceName string) (result ProjectListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, groupName, serviceName)
 	return
 }
@@ -359,6 +410,16 @@ func (client ProjectsClient) ListComplete(ctx context.Context, groupName string,
 // serviceName - name of the service
 // projectName - name of the project
 func (client ProjectsClient) Update(ctx context.Context, parameters Project, groupName string, serviceName string, projectName string) (result Project, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProjectsClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.UpdatePreparer(ctx, parameters, groupName, serviceName, projectName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datamigration.ProjectsClient", "Update", nil, "Failure preparing request")

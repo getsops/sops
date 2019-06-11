@@ -91,6 +91,10 @@ func TestStructOfWithInterface(t *testing.T) {
 	t.Skip("StructOf")
 }
 
+func TestStructOfTooManyFields(t *testing.T) {
+	t.Skip("StructOf")
+}
+
 var deepEqualTests = []DeepEqualTest{
 	// Equalities
 	{nil, nil, true},

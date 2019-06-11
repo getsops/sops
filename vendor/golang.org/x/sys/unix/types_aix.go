@@ -22,6 +22,11 @@ package unix
 #include <utime.h>
 #include <sys/utsname.h>
 #include <sys/poll.h>
+#include <sys/resource.h>
+#include <sys/stat.h>
+#include <sys/statfs.h>
+#include <sys/termio.h>
+#include <sys/ioctl.h>
 
 #include <termios.h>
 
@@ -33,7 +38,6 @@ package unix
 
 #include <dirent.h>
 #include <fcntl.h>
-#include <gcrypt.h>
 
 enum {
 	sizeofPtr = sizeof(void*),
@@ -55,14 +59,14 @@ struct sockaddr_any {
 */
 import "C"
 
-// Machine characteristics; for internal use.
+// Machine characteristics
 
 const (
-	sizeofPtr      = C.sizeofPtr
-	sizeofShort    = C.sizeof_short
-	sizeofInt      = C.sizeof_int
-	sizeofLong     = C.sizeof_long
-	sizeofLongLong = C.sizeof_longlong
+	SizeofPtr      = C.sizeofPtr
+	SizeofShort    = C.sizeof_short
+	SizeofInt      = C.sizeof_int
+	SizeofLong     = C.sizeof_long
+	SizeofLongLong = C.sizeof_longlong
 	PathMax        = C.PATH_MAX
 )
 
@@ -82,8 +86,6 @@ type Mode_t C.mode_t
 // Time
 
 type Timespec C.struct_timespec
-
-type StTimespec C.struct_st_timespec
 
 type Timeval C.struct_timeval
 
@@ -129,6 +131,8 @@ type RawSockaddrInet6 C.struct_sockaddr_in6
 
 type RawSockaddrUnix C.struct_sockaddr_un
 
+type RawSockaddrDatalink C.struct_sockaddr_dl
+
 type RawSockaddr C.struct_sockaddr
 
 type RawSockaddrAny C.struct_sockaddr_any
@@ -152,17 +156,18 @@ type Linger C.struct_linger
 type Msghdr C.struct_msghdr
 
 const (
-	SizeofSockaddrInet4 = C.sizeof_struct_sockaddr_in
-	SizeofSockaddrInet6 = C.sizeof_struct_sockaddr_in6
-	SizeofSockaddrAny   = C.sizeof_struct_sockaddr_any
-	SizeofSockaddrUnix  = C.sizeof_struct_sockaddr_un
-	SizeofLinger        = C.sizeof_struct_linger
-	SizeofIPMreq        = C.sizeof_struct_ip_mreq
-	SizeofIPv6Mreq      = C.sizeof_struct_ipv6_mreq
-	SizeofIPv6MTUInfo   = C.sizeof_struct_ip6_mtuinfo
-	SizeofMsghdr        = C.sizeof_struct_msghdr
-	SizeofCmsghdr       = C.sizeof_struct_cmsghdr
-	SizeofICMPv6Filter  = C.sizeof_struct_icmp6_filter
+	SizeofSockaddrInet4    = C.sizeof_struct_sockaddr_in
+	SizeofSockaddrInet6    = C.sizeof_struct_sockaddr_in6
+	SizeofSockaddrAny      = C.sizeof_struct_sockaddr_any
+	SizeofSockaddrUnix     = C.sizeof_struct_sockaddr_un
+	SizeofSockaddrDatalink = C.sizeof_struct_sockaddr_dl
+	SizeofLinger           = C.sizeof_struct_linger
+	SizeofIPMreq           = C.sizeof_struct_ip_mreq
+	SizeofIPv6Mreq         = C.sizeof_struct_ipv6_mreq
+	SizeofIPv6MTUInfo      = C.sizeof_struct_ip6_mtuinfo
+	SizeofMsghdr           = C.sizeof_struct_msghdr
+	SizeofCmsghdr          = C.sizeof_struct_cmsghdr
+	SizeofICMPv6Filter     = C.sizeof_struct_icmp6_filter
 )
 
 // Routing and interface messages
@@ -223,6 +228,9 @@ const (
 type Flock_t C.struct_flock64
 
 // Statfs
+
+type Fsid_t C.struct_fsid_t
+type Fsid64_t C.struct_fsid64_t
 
 type Statfs_t C.struct_statfs
 

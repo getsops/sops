@@ -23,8 +23,6 @@
 // or during the maintenance window. The reference structure is as follows,
 // and we list following some related topics from the user guide.
 //
-// Amazon Neptune API Reference
-//
 // See https://docs.aws.amazon.com/goto/WebAPI/neptune-2014-10-31 for more information on this service.
 //
 // See neptune package documentation for more information.

@@ -21,7 +21,6 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
-	"sync"
 	"testing"
 	"time"
 
@@ -434,7 +433,7 @@ func TestCreatePutTracker202SuccessLocation(t *testing.T) {
 	if pt.pollingMethod() != PollingLocation {
 		t.Fatalf("wrong polling method: %s", pt.pollingMethod())
 	}
-	if pt.finalGetURL() != mocks.TestLocationURL {
+	if pt.finalGetURL() != resp.Request.URL.String() {
 		t.Fatalf("wrong final GET URL: %s", pt.finalGetURL())
 	}
 }
@@ -450,7 +449,7 @@ func TestCreatePutTracker202SuccessBoth(t *testing.T) {
 	if pt.pollingMethod() != PollingAsyncOperation {
 		t.Fatalf("wrong polling method: %s", pt.pollingMethod())
 	}
-	if pt.finalGetURL() != mocks.TestLocationURL {
+	if pt.finalGetURL() != resp.Request.URL.String() {
 		t.Fatalf("wrong final GET URL: %s", pt.finalGetURL())
 	}
 }
@@ -488,7 +487,7 @@ func TestPollPutTrackerSuccessNoHeaders(t *testing.T) {
 	}
 	sender := mocks.NewSender()
 	sender.AppendResponse(newProvisioningStatusResponse("InProgress"))
-	err = pt.pollForStatus(sender)
+	err = pt.pollForStatus(context.Background(), sender)
 	if err != nil {
 		t.Fatalf("failed to poll for status: %v", err)
 	}
@@ -506,7 +505,7 @@ func TestPollPutTrackerFailNoHeadersEmptyBody(t *testing.T) {
 	}
 	sender := mocks.NewSender()
 	sender.AppendResponse(mocks.NewResponseWithBodyAndStatus(&mocks.Body{}, http.StatusOK, "status ok"))
-	err = pt.pollForStatus(sender)
+	err = pt.pollForStatus(context.Background(), sender)
 	if err != nil {
 		t.Fatalf("failed to poll for status: %v", err)
 	}
@@ -526,7 +525,7 @@ func TestAsyncPollingReturnsWrappedError(t *testing.T) {
 	}
 	sender := mocks.NewSender()
 	sender.AppendResponse(newOperationResourceErrorResponse("Failed"))
-	err = pt.pollForStatus(sender)
+	err = pt.pollForStatus(context.Background(), sender)
 	if err == nil {
 		t.Fatal("unexpected nil polling error")
 	}
@@ -551,7 +550,7 @@ func TestLocationPollingReturnsWrappedError(t *testing.T) {
 	}
 	sender := mocks.NewSender()
 	sender.AppendResponse(newProvisioningStatusErrorResponse("Failed"))
-	err = pt.pollForStatus(sender)
+	err = pt.pollForStatus(context.Background(), sender)
 	if err == nil {
 		t.Fatal("unexpected nil polling error")
 	}
@@ -576,7 +575,7 @@ func TestLocationPollingReturnsUnwrappedError(t *testing.T) {
 	}
 	sender := mocks.NewSender()
 	sender.AppendResponse(newProvisioningStatusUnwrappedErrorResponse("Failed"))
-	err = pt.pollForStatus(sender)
+	err = pt.pollForStatus(context.Background(), sender)
 	if err == nil {
 		t.Fatal("unexpected nil polling error")
 	}
@@ -593,97 +592,12 @@ func TestLocationPollingReturnsUnwrappedError(t *testing.T) {
 	}
 }
 
-// DoPollForAsynchronous (legacy so not many tests plus it builds on Future which has more tests)
-
-func TestDoPollForAsynchronous_Success(t *testing.T) {
-	r1 := newSimpleAsyncResp()
-	r2 := newOperationResourceResponse("busy")
-	r3 := newOperationResourceResponse(operationSucceeded)
-
-	sender := mocks.NewSender()
-	sender.AppendResponse(r1)
-	sender.AppendAndRepeatResponse(r2, 2)
-	sender.AppendAndRepeatResponse(r3, 1)
-
-	r, err := autorest.SendWithSender(sender, newAsyncReq(http.MethodPut, nil), DoPollForAsynchronous(time.Millisecond))
-	if err != nil {
-		t.Fatalf("failed to poll for status: %v", err)
-	}
-
-	if sender.Attempts() < sender.NumResponses() {
-		t.Fatal("DoPollForAsynchronous stopped polling before receiving a terminated OperationResource")
-	}
-	autorest.Respond(r, autorest.ByClosing())
-}
-
-func TestDoPollForAsynchronous_Failed(t *testing.T) {
-	r1 := newSimpleAsyncResp()
-	r2 := newOperationResourceResponse("busy")
-	r3 := newOperationResourceErrorResponse(operationFailed)
-
-	sender := mocks.NewSender()
-	sender.AppendResponse(r1)
-	sender.AppendAndRepeatResponse(r2, 2)
-	sender.AppendAndRepeatResponse(r3, 1)
-
-	r, err := autorest.SendWithSender(sender, newAsyncReq(http.MethodPut, nil), DoPollForAsynchronous(time.Millisecond))
-	if err == nil {
-		t.Fatal("unexpected nil error when polling")
-	}
-	if se, ok := err.(*ServiceError); !ok {
-		t.Fatal("incorrect error type")
-	} else if se.Code == "" {
-		t.Fatal("empty service error code")
-	} else if se.Message == "" {
-		t.Fatal("empty service error message")
-	}
-
-	if sender.Attempts() < sender.NumResponses() {
-		t.Fatalf("DoPollForAsynchronous stopped polling before receiving a terminated OperationResource")
-	}
-	autorest.Respond(r, autorest.ByClosing())
-}
-
-func TestDoPollForAsynchronous_CanBeCanceled(t *testing.T) {
-	ctx, cancel := context.WithCancel(context.Background())
-	delay := 5 * time.Second
-
-	r1 := newSimpleAsyncResp()
-
-	sender := mocks.NewSender()
-	sender.AppendResponse(r1)
-	sender.AppendAndRepeatResponse(newOperationResourceResponse("Busy"), -1)
-
-	var wg sync.WaitGroup
-	wg.Add(1)
-	start := time.Now()
-	end := time.Now()
-	var err error
-	go func() {
-		req := newAsyncReq(http.MethodPut, nil)
-		req = req.WithContext(ctx)
-		var r *http.Response
-		r, err = autorest.SendWithSender(sender, req, DoPollForAsynchronous(delay))
-		autorest.Respond(r, autorest.ByClosing())
-		end = time.Now()
-		wg.Done()
-	}()
-	cancel()
-	wg.Wait()
-	time.Sleep(5 * time.Millisecond)
-	if err == nil {
-		t.Fatalf("DoPollForAsynchronous didn't cancel")
-	}
-	if end.Sub(start) >= delay {
-		t.Fatalf("DoPollForAsynchronous failed to cancel")
-	}
-}
-
 func TestFuture_PollsUntilProvisioningStatusSucceeds(t *testing.T) {
 	r2 := newOperationResourceResponse("busy")
 	r3 := newOperationResourceResponse(operationSucceeded)
 
 	sender := mocks.NewSender()
+	ctx := context.Background()
 	sender.AppendAndRepeatResponse(r2, 2)
 	sender.AppendResponse(r3)
 
@@ -692,7 +606,7 @@ func TestFuture_PollsUntilProvisioningStatusSucceeds(t *testing.T) {
 		t.Fatalf("failed to create future: %v", err)
 	}
 
-	for done, err := future.Done(sender); !done; done, err = future.Done(sender) {
+	for done, err := future.DoneWithContext(ctx, sender); !done; done, err = future.DoneWithContext(ctx, sender) {
 		if future.PollingMethod() != PollingAsyncOperation {
 			t.Fatalf("wrong future polling method: %s", future.PollingMethod())
 		}
@@ -763,7 +677,7 @@ func TestFuture_MarshallingWithError(t *testing.T) {
 		t.Fatalf("failed to create future: %v", err)
 	}
 
-	err = future.WaitForCompletion(context.Background(), client)
+	err = future.WaitForCompletionRef(context.Background(), client)
 	if err == nil {
 		t.Fatal("expected non-nil error")
 	}
@@ -796,39 +710,6 @@ func TestFuture_CreateFromFailedOperation(t *testing.T) {
 	if err == nil {
 		t.Fatal("expected non-nil error")
 	}
-}
-
-func TestFuture_WaitForCompletion(t *testing.T) {
-	r2 := newOperationResourceResponse("busy")
-	r3 := newOperationResourceResponse(operationSucceeded)
-
-	sender := mocks.NewSender()
-	sender.AppendAndRepeatResponse(r2, 2)
-	sender.AppendResponse(r3)
-	client := autorest.Client{
-		PollingDelay:    1 * time.Second,
-		PollingDuration: autorest.DefaultPollingDuration,
-		RetryAttempts:   autorest.DefaultRetryAttempts,
-		RetryDuration:   1 * time.Second,
-		Sender:          sender,
-	}
-
-	future, err := NewFutureFromResponse(newSimpleAsyncResp())
-	if err != nil {
-		t.Fatalf("failed to create future: %v", err)
-	}
-
-	err = future.WaitForCompletion(context.Background(), client)
-	if err != nil {
-		t.Fatalf("WaitForCompletion returned non-nil error")
-	}
-
-	if sender.Attempts() < sender.NumResponses() {
-		t.Fatalf("stopped polling before receiving a terminated OperationResource")
-	}
-
-	autorest.Respond(future.Response(),
-		autorest.ByClosing())
 }
 
 func TestFuture_WaitForCompletionRef(t *testing.T) {
@@ -955,7 +836,7 @@ func TestFuture_GetResultFromNonAsyncOperation(t *testing.T) {
 	if pm := future.PollingMethod(); pm != PollingUnknown {
 		t.Fatalf("wrong polling method: %s", pm)
 	}
-	done, err := future.Done(nil)
+	done, err := future.DoneWithContext(context.Background(), nil)
 	if err != nil {
 		t.Fatalf("failed to check status: %v", err)
 	}

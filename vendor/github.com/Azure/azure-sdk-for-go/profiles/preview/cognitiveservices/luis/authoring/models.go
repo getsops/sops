@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,11 +21,6 @@ package authoring
 
 import original "github.com/Azure/azure-sdk-for-go/services/cognitiveservices/v2.0/luis/authoring"
 
-type AppsClient = original.AppsClient
-type BaseClient = original.BaseClient
-type ExamplesClient = original.ExamplesClient
-type FeaturesClient = original.FeaturesClient
-type ModelClient = original.ModelClient
 type OperationStatusType = original.OperationStatusType
 
 const (
@@ -43,6 +38,7 @@ const (
 	ReadableTypeHierarchicalChildEntityExtractor ReadableType = original.ReadableTypeHierarchicalChildEntityExtractor
 	ReadableTypeHierarchicalEntityExtractor      ReadableType = original.ReadableTypeHierarchicalEntityExtractor
 	ReadableTypeIntentClassifier                 ReadableType = original.ReadableTypeIntentClassifier
+	ReadableTypeListEntityExtractor              ReadableType = original.ReadableTypeListEntityExtractor
 	ReadableTypePatternAnyEntityExtractor        ReadableType = original.ReadableTypePatternAnyEntityExtractor
 	ReadableTypePrebuiltEntityExtractor          ReadableType = original.ReadableTypePrebuiltEntityExtractor
 	ReadableTypeRegexEntityExtractor             ReadableType = original.ReadableTypeRegexEntityExtractor
@@ -57,6 +53,7 @@ const (
 	ReadableType1HierarchicalChildEntityExtractor ReadableType1 = original.ReadableType1HierarchicalChildEntityExtractor
 	ReadableType1HierarchicalEntityExtractor      ReadableType1 = original.ReadableType1HierarchicalEntityExtractor
 	ReadableType1IntentClassifier                 ReadableType1 = original.ReadableType1IntentClassifier
+	ReadableType1ListEntityExtractor              ReadableType1 = original.ReadableType1ListEntityExtractor
 	ReadableType1PatternAnyEntityExtractor        ReadableType1 = original.ReadableType1PatternAnyEntityExtractor
 	ReadableType1PrebuiltEntityExtractor          ReadableType1 = original.ReadableType1PrebuiltEntityExtractor
 	ReadableType1RegexEntityExtractor             ReadableType1 = original.ReadableType1RegexEntityExtractor
@@ -71,6 +68,7 @@ const (
 	ReadableType10HierarchicalChildEntityExtractor ReadableType10 = original.ReadableType10HierarchicalChildEntityExtractor
 	ReadableType10HierarchicalEntityExtractor      ReadableType10 = original.ReadableType10HierarchicalEntityExtractor
 	ReadableType10IntentClassifier                 ReadableType10 = original.ReadableType10IntentClassifier
+	ReadableType10ListEntityExtractor              ReadableType10 = original.ReadableType10ListEntityExtractor
 	ReadableType10PatternAnyEntityExtractor        ReadableType10 = original.ReadableType10PatternAnyEntityExtractor
 	ReadableType10PrebuiltEntityExtractor          ReadableType10 = original.ReadableType10PrebuiltEntityExtractor
 	ReadableType10RegexEntityExtractor             ReadableType10 = original.ReadableType10RegexEntityExtractor
@@ -85,6 +83,7 @@ const (
 	ReadableType2HierarchicalChildEntityExtractor ReadableType2 = original.ReadableType2HierarchicalChildEntityExtractor
 	ReadableType2HierarchicalEntityExtractor      ReadableType2 = original.ReadableType2HierarchicalEntityExtractor
 	ReadableType2IntentClassifier                 ReadableType2 = original.ReadableType2IntentClassifier
+	ReadableType2ListEntityExtractor              ReadableType2 = original.ReadableType2ListEntityExtractor
 	ReadableType2PatternAnyEntityExtractor        ReadableType2 = original.ReadableType2PatternAnyEntityExtractor
 	ReadableType2PrebuiltEntityExtractor          ReadableType2 = original.ReadableType2PrebuiltEntityExtractor
 	ReadableType2RegexEntityExtractor             ReadableType2 = original.ReadableType2RegexEntityExtractor
@@ -99,6 +98,7 @@ const (
 	ReadableType3HierarchicalChildEntityExtractor ReadableType3 = original.ReadableType3HierarchicalChildEntityExtractor
 	ReadableType3HierarchicalEntityExtractor      ReadableType3 = original.ReadableType3HierarchicalEntityExtractor
 	ReadableType3IntentClassifier                 ReadableType3 = original.ReadableType3IntentClassifier
+	ReadableType3ListEntityExtractor              ReadableType3 = original.ReadableType3ListEntityExtractor
 	ReadableType3PatternAnyEntityExtractor        ReadableType3 = original.ReadableType3PatternAnyEntityExtractor
 	ReadableType3PrebuiltEntityExtractor          ReadableType3 = original.ReadableType3PrebuiltEntityExtractor
 	ReadableType3RegexEntityExtractor             ReadableType3 = original.ReadableType3RegexEntityExtractor
@@ -113,6 +113,7 @@ const (
 	ReadableType4HierarchicalChildEntityExtractor ReadableType4 = original.ReadableType4HierarchicalChildEntityExtractor
 	ReadableType4HierarchicalEntityExtractor      ReadableType4 = original.ReadableType4HierarchicalEntityExtractor
 	ReadableType4IntentClassifier                 ReadableType4 = original.ReadableType4IntentClassifier
+	ReadableType4ListEntityExtractor              ReadableType4 = original.ReadableType4ListEntityExtractor
 	ReadableType4PatternAnyEntityExtractor        ReadableType4 = original.ReadableType4PatternAnyEntityExtractor
 	ReadableType4PrebuiltEntityExtractor          ReadableType4 = original.ReadableType4PrebuiltEntityExtractor
 	ReadableType4RegexEntityExtractor             ReadableType4 = original.ReadableType4RegexEntityExtractor
@@ -127,6 +128,7 @@ const (
 	ReadableType5HierarchicalChildEntityExtractor ReadableType5 = original.ReadableType5HierarchicalChildEntityExtractor
 	ReadableType5HierarchicalEntityExtractor      ReadableType5 = original.ReadableType5HierarchicalEntityExtractor
 	ReadableType5IntentClassifier                 ReadableType5 = original.ReadableType5IntentClassifier
+	ReadableType5ListEntityExtractor              ReadableType5 = original.ReadableType5ListEntityExtractor
 	ReadableType5PatternAnyEntityExtractor        ReadableType5 = original.ReadableType5PatternAnyEntityExtractor
 	ReadableType5PrebuiltEntityExtractor          ReadableType5 = original.ReadableType5PrebuiltEntityExtractor
 	ReadableType5RegexEntityExtractor             ReadableType5 = original.ReadableType5RegexEntityExtractor
@@ -141,6 +143,7 @@ const (
 	ReadableType6HierarchicalChildEntityExtractor ReadableType6 = original.ReadableType6HierarchicalChildEntityExtractor
 	ReadableType6HierarchicalEntityExtractor      ReadableType6 = original.ReadableType6HierarchicalEntityExtractor
 	ReadableType6IntentClassifier                 ReadableType6 = original.ReadableType6IntentClassifier
+	ReadableType6ListEntityExtractor              ReadableType6 = original.ReadableType6ListEntityExtractor
 	ReadableType6PatternAnyEntityExtractor        ReadableType6 = original.ReadableType6PatternAnyEntityExtractor
 	ReadableType6PrebuiltEntityExtractor          ReadableType6 = original.ReadableType6PrebuiltEntityExtractor
 	ReadableType6RegexEntityExtractor             ReadableType6 = original.ReadableType6RegexEntityExtractor
@@ -155,6 +158,7 @@ const (
 	ReadableType7HierarchicalChildEntityExtractor ReadableType7 = original.ReadableType7HierarchicalChildEntityExtractor
 	ReadableType7HierarchicalEntityExtractor      ReadableType7 = original.ReadableType7HierarchicalEntityExtractor
 	ReadableType7IntentClassifier                 ReadableType7 = original.ReadableType7IntentClassifier
+	ReadableType7ListEntityExtractor              ReadableType7 = original.ReadableType7ListEntityExtractor
 	ReadableType7PatternAnyEntityExtractor        ReadableType7 = original.ReadableType7PatternAnyEntityExtractor
 	ReadableType7PrebuiltEntityExtractor          ReadableType7 = original.ReadableType7PrebuiltEntityExtractor
 	ReadableType7RegexEntityExtractor             ReadableType7 = original.ReadableType7RegexEntityExtractor
@@ -169,6 +173,7 @@ const (
 	ReadableType8HierarchicalChildEntityExtractor ReadableType8 = original.ReadableType8HierarchicalChildEntityExtractor
 	ReadableType8HierarchicalEntityExtractor      ReadableType8 = original.ReadableType8HierarchicalEntityExtractor
 	ReadableType8IntentClassifier                 ReadableType8 = original.ReadableType8IntentClassifier
+	ReadableType8ListEntityExtractor              ReadableType8 = original.ReadableType8ListEntityExtractor
 	ReadableType8PatternAnyEntityExtractor        ReadableType8 = original.ReadableType8PatternAnyEntityExtractor
 	ReadableType8PrebuiltEntityExtractor          ReadableType8 = original.ReadableType8PrebuiltEntityExtractor
 	ReadableType8RegexEntityExtractor             ReadableType8 = original.ReadableType8RegexEntityExtractor
@@ -183,6 +188,7 @@ const (
 	ReadableType9HierarchicalChildEntityExtractor ReadableType9 = original.ReadableType9HierarchicalChildEntityExtractor
 	ReadableType9HierarchicalEntityExtractor      ReadableType9 = original.ReadableType9HierarchicalEntityExtractor
 	ReadableType9IntentClassifier                 ReadableType9 = original.ReadableType9IntentClassifier
+	ReadableType9ListEntityExtractor              ReadableType9 = original.ReadableType9ListEntityExtractor
 	ReadableType9PatternAnyEntityExtractor        ReadableType9 = original.ReadableType9PatternAnyEntityExtractor
 	ReadableType9PrebuiltEntityExtractor          ReadableType9 = original.ReadableType9PrebuiltEntityExtractor
 	ReadableType9RegexEntityExtractor             ReadableType9 = original.ReadableType9RegexEntityExtractor
@@ -216,14 +222,19 @@ const (
 	Trained       TrainingStatus = original.Trained
 )
 
+type AppVersionSettingObject = original.AppVersionSettingObject
 type ApplicationCreateObject = original.ApplicationCreateObject
 type ApplicationInfoResponse = original.ApplicationInfoResponse
 type ApplicationPublishObject = original.ApplicationPublishObject
-type ApplicationSettings = original.ApplicationSettings
 type ApplicationSettingUpdateObject = original.ApplicationSettingUpdateObject
+type ApplicationSettings = original.ApplicationSettings
 type ApplicationUpdateObject = original.ApplicationUpdateObject
+type AppsClient = original.AppsClient
 type AvailableCulture = original.AvailableCulture
 type AvailablePrebuiltEntityModel = original.AvailablePrebuiltEntityModel
+type AzureAccountInfoObject = original.AzureAccountInfoObject
+type AzureAccountsClient = original.AzureAccountsClient
+type BaseClient = original.BaseClient
 type BatchLabelExample = original.BatchLabelExample
 type ChildEntity = original.ChildEntity
 type ClosedList = original.ClosedList
@@ -249,10 +260,12 @@ type EntityRoleCreateObject = original.EntityRoleCreateObject
 type EntityRoleUpdateObject = original.EntityRoleUpdateObject
 type ErrorResponse = original.ErrorResponse
 type ExampleLabelObject = original.ExampleLabelObject
+type ExamplesClient = original.ExamplesClient
 type ExplicitListItem = original.ExplicitListItem
 type ExplicitListItemCreateObject = original.ExplicitListItemCreateObject
 type ExplicitListItemUpdateObject = original.ExplicitListItemUpdateObject
 type FeatureInfoObject = original.FeatureInfoObject
+type FeaturesClient = original.FeaturesClient
 type FeaturesResponseObject = original.FeaturesResponseObject
 type HierarchicalChildEntity = original.HierarchicalChildEntity
 type HierarchicalChildModelCreateObject = original.HierarchicalChildModelCreateObject
@@ -261,6 +274,7 @@ type HierarchicalEntityExtractor = original.HierarchicalEntityExtractor
 type HierarchicalEntityModel = original.HierarchicalEntityModel
 type HierarchicalModel = original.HierarchicalModel
 type Int32 = original.Int32
+type Int64 = original.Int64
 type IntentClassifier = original.IntentClassifier
 type IntentPrediction = original.IntentPrediction
 type IntentsSuggestionExample = original.IntentsSuggestionExample
@@ -268,12 +282,14 @@ type JSONEntity = original.JSONEntity
 type JSONModelFeature = original.JSONModelFeature
 type JSONRegexFeature = original.JSONRegexFeature
 type JSONUtterance = original.JSONUtterance
-type LabeledUtterance = original.LabeledUtterance
 type LabelExampleResponse = original.LabelExampleResponse
 type LabelTextObject = original.LabelTextObject
+type LabeledUtterance = original.LabeledUtterance
+type ListAppVersionSettingObject = original.ListAppVersionSettingObject
 type ListApplicationInfoResponse = original.ListApplicationInfoResponse
 type ListAvailableCulture = original.ListAvailableCulture
 type ListAvailablePrebuiltEntityModel = original.ListAvailablePrebuiltEntityModel
+type ListAzureAccountInfoObject = original.ListAzureAccountInfoObject
 type ListBatchLabelExample = original.ListBatchLabelExample
 type ListClosedListEntityExtractor = original.ListClosedListEntityExtractor
 type ListCompositeEntityExtractor = original.ListCompositeEntityExtractor
@@ -285,11 +301,12 @@ type ListExplicitListItem = original.ListExplicitListItem
 type ListHierarchicalEntityExtractor = original.ListHierarchicalEntityExtractor
 type ListIntentClassifier = original.ListIntentClassifier
 type ListIntentsSuggestionExample = original.ListIntentsSuggestionExample
-type ListLabeledUtterance = original.ListLabeledUtterance
 type ListLabelTextObject = original.ListLabelTextObject
+type ListLabeledUtterance = original.ListLabeledUtterance
 type ListModelInfoResponse = original.ListModelInfoResponse
 type ListModelTrainingInfo = original.ListModelTrainingInfo
 type ListPatternAnyEntityExtractor = original.ListPatternAnyEntityExtractor
+type ListPatternFeatureInfo = original.ListPatternFeatureInfo
 type ListPatternRuleInfo = original.ListPatternRuleInfo
 type ListPhraseListFeatureInfo = original.ListPhraseListFeatureInfo
 type ListPrebuiltDomain = original.ListPrebuiltDomain
@@ -299,6 +316,7 @@ type ListString = original.ListString
 type ListUUID = original.ListUUID
 type ListVersionInfo = original.ListVersionInfo
 type LuisApp = original.LuisApp
+type ModelClient = original.ModelClient
 type ModelCreateObject = original.ModelCreateObject
 type ModelInfo = original.ModelInfo
 type ModelInfoResponse = original.ModelInfoResponse
@@ -311,6 +329,7 @@ type PatternAny = original.PatternAny
 type PatternAnyEntityExtractor = original.PatternAnyEntityExtractor
 type PatternAnyModelCreateObject = original.PatternAnyModelCreateObject
 type PatternAnyModelUpdateObject = original.PatternAnyModelUpdateObject
+type PatternClient = original.PatternClient
 type PatternCreateObject = original.PatternCreateObject
 type PatternFeatureInfo = original.PatternFeatureInfo
 type PatternRule = original.PatternRule
@@ -318,9 +337,10 @@ type PatternRuleCreateObject = original.PatternRuleCreateObject
 type PatternRuleInfo = original.PatternRuleInfo
 type PatternRuleUpdateObject = original.PatternRuleUpdateObject
 type PatternUpdateObject = original.PatternUpdateObject
+type PermissionsClient = original.PermissionsClient
 type PersonalAssistantsResponse = original.PersonalAssistantsResponse
-type PhraselistCreateObject = original.PhraselistCreateObject
 type PhraseListFeatureInfo = original.PhraseListFeatureInfo
+type PhraselistCreateObject = original.PhraselistCreateObject
 type PhraselistUpdateObject = original.PhraselistUpdateObject
 type PrebuiltDomain = original.PrebuiltDomain
 type PrebuiltDomainCreateBaseObject = original.PrebuiltDomainCreateBaseObject
@@ -331,37 +351,36 @@ type PrebuiltDomainObject = original.PrebuiltDomainObject
 type PrebuiltEntity = original.PrebuiltEntity
 type PrebuiltEntityExtractor = original.PrebuiltEntityExtractor
 type ProductionOrStagingEndpointInfo = original.ProductionOrStagingEndpointInfo
-type PublishSettings = original.PublishSettings
 type PublishSettingUpdateObject = original.PublishSettingUpdateObject
+type PublishSettings = original.PublishSettings
 type ReadCloser = original.ReadCloser
 type RegexEntity = original.RegexEntity
 type RegexEntityExtractor = original.RegexEntityExtractor
 type RegexModelCreateObject = original.RegexModelCreateObject
 type RegexModelUpdateObject = original.RegexModelUpdateObject
 type SetString = original.SetString
+type SettingsClient = original.SettingsClient
 type String = original.String
 type SubClosedList = original.SubClosedList
 type SubClosedListResponse = original.SubClosedListResponse
 type TaskUpdateObject = original.TaskUpdateObject
+type TrainClient = original.TrainClient
+type UUID = original.UUID
 type UserAccessList = original.UserAccessList
 type UserCollaborator = original.UserCollaborator
-type UUID = original.UUID
 type VersionInfo = original.VersionInfo
+type VersionsClient = original.VersionsClient
 type WordListBaseUpdateObject = original.WordListBaseUpdateObject
 type WordListObject = original.WordListObject
-type PatternClient = original.PatternClient
-type PermissionsClient = original.PermissionsClient
-type TrainClient = original.TrainClient
-type VersionsClient = original.VersionsClient
 
-func NewAppsClient(endpoint string) AppsClient {
-	return original.NewAppsClient(endpoint)
-}
 func New(endpoint string) BaseClient {
 	return original.New(endpoint)
 }
-func NewWithoutDefaults(endpoint string) BaseClient {
-	return original.NewWithoutDefaults(endpoint)
+func NewAppsClient(endpoint string) AppsClient {
+	return original.NewAppsClient(endpoint)
+}
+func NewAzureAccountsClient(endpoint string) AzureAccountsClient {
+	return original.NewAzureAccountsClient(endpoint)
 }
 func NewExamplesClient(endpoint string) ExamplesClient {
 	return original.NewExamplesClient(endpoint)
@@ -372,17 +391,32 @@ func NewFeaturesClient(endpoint string) FeaturesClient {
 func NewModelClient(endpoint string) ModelClient {
 	return original.NewModelClient(endpoint)
 }
+func NewPatternClient(endpoint string) PatternClient {
+	return original.NewPatternClient(endpoint)
+}
+func NewPermissionsClient(endpoint string) PermissionsClient {
+	return original.NewPermissionsClient(endpoint)
+}
+func NewSettingsClient(endpoint string) SettingsClient {
+	return original.NewSettingsClient(endpoint)
+}
+func NewTrainClient(endpoint string) TrainClient {
+	return original.NewTrainClient(endpoint)
+}
+func NewVersionsClient(endpoint string) VersionsClient {
+	return original.NewVersionsClient(endpoint)
+}
+func NewWithoutDefaults(endpoint string) BaseClient {
+	return original.NewWithoutDefaults(endpoint)
+}
 func PossibleOperationStatusTypeValues() []OperationStatusType {
 	return original.PossibleOperationStatusTypeValues()
 }
-func PossibleReadableTypeValues() []ReadableType {
-	return original.PossibleReadableTypeValues()
+func PossibleReadableType10Values() []ReadableType10 {
+	return original.PossibleReadableType10Values()
 }
 func PossibleReadableType1Values() []ReadableType1 {
 	return original.PossibleReadableType1Values()
-}
-func PossibleReadableType10Values() []ReadableType10 {
-	return original.PossibleReadableType10Values()
 }
 func PossibleReadableType2Values() []ReadableType2 {
 	return original.PossibleReadableType2Values()
@@ -408,30 +442,21 @@ func PossibleReadableType8Values() []ReadableType8 {
 func PossibleReadableType9Values() []ReadableType9 {
 	return original.PossibleReadableType9Values()
 }
-func PossibleStatusValues() []Status {
-	return original.PossibleStatusValues()
+func PossibleReadableTypeValues() []ReadableType {
+	return original.PossibleReadableTypeValues()
 }
 func PossibleStatus1Values() []Status1 {
 	return original.PossibleStatus1Values()
 }
+func PossibleStatusValues() []Status {
+	return original.PossibleStatusValues()
+}
 func PossibleTrainingStatusValues() []TrainingStatus {
 	return original.PossibleTrainingStatusValues()
-}
-func NewPatternClient(endpoint string) PatternClient {
-	return original.NewPatternClient(endpoint)
-}
-func NewPermissionsClient(endpoint string) PermissionsClient {
-	return original.NewPermissionsClient(endpoint)
-}
-func NewTrainClient(endpoint string) TrainClient {
-	return original.NewTrainClient(endpoint)
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"
 }
 func Version() string {
 	return original.Version()
-}
-func NewVersionsClient(endpoint string) VersionsClient {
-	return original.NewVersionsClient(endpoint)
 }

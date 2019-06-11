@@ -17,10 +17,10 @@ limitations under the License.
 package spanner
 
 import (
+	"context"
 	"errors"
 	"testing"
 
-	"golang.org/x/net/context"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -39,6 +39,10 @@ func TestToSpannerError(t *testing.T) {
 		err := toSpannerError(test.err)
 		if got, want := err.(*Error).Code, test.wantCode; got != want {
 			t.Errorf("%v: got %s, want %s", test.err, got, want)
+		}
+		converted := status.Convert(err)
+		if converted.Code() != test.wantCode {
+			t.Errorf("%v: got status %v, want status %v", test.err, converted.Code(), test.wantCode)
 		}
 	}
 }

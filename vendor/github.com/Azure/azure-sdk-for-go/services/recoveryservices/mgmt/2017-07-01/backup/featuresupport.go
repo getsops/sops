@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,6 +45,16 @@ func NewFeatureSupportClientWithBaseURI(baseURI string, subscriptionID string) F
 // azureRegion - azure region to hit Api
 // parameters - feature support request object
 func (client FeatureSupportClient) Validate(ctx context.Context, azureRegion string, parameters BasicFeatureSupportRequest) (result AzureVMResourceFeatureSupportResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FeatureSupportClient.Validate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ValidatePreparer(ctx, azureRegion, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "backup.FeatureSupportClient", "Validate", nil, "Failure preparing request")

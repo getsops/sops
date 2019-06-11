@@ -149,6 +149,18 @@
         "ListEnvironmentsResult$environmentIds": "<p>The list of environment identifiers.</p>"
       }
     },
+    "EnvironmentLifecycle": {
+      "base": "<p>Information about the current creation or deletion lifecycle state of an AWS Cloud9 development environment.</p>",
+      "refs": {
+        "Environment$lifecycle": "<p>The state of the environment in its creation or deletion lifecycle.</p>"
+      }
+    },
+    "EnvironmentLifecycleStatus": {
+      "base": null,
+      "refs": {
+        "EnvironmentLifecycle$status": "<p>The current creation or deletion lifecycle state of the environment.</p> <ul> <li> <p> <code>CREATED</code>: The environment was successfully created.</p> </li> <li> <p> <code>DELETE_FAILED</code>: The environment failed to delete.</p> </li> <li> <p> <code>DELETING</code>: The environment is in the process of being deleted.</p> </li> </ul>"
+      }
+    },
     "EnvironmentList": {
       "base": null,
       "refs": {
@@ -260,6 +272,8 @@
         "DescribeEnvironmentStatusResult$message": "<p>Any informational message about the status of the environment.</p>",
         "Environment$arn": "<p>The Amazon Resource Name (ARN) of the environment.</p>",
         "Environment$ownerArn": "<p>The Amazon Resource Name (ARN) of the environment owner.</p>",
+        "EnvironmentLifecycle$reason": "<p>Any informational message about the lifecycle state of the environment.</p>",
+        "EnvironmentLifecycle$failureResource": "<p>If the environment failed to delete, the Amazon Resource Name (ARN) of the related AWS resource.</p>",
         "EnvironmentMember$userId": "<p>The user ID in AWS Identity and Access Management (AWS IAM) of the environment member.</p>",
         "ListEnvironmentsRequest$nextToken": "<p>During a previous call, if there are more than 25 items in the list, only the first 25 items are returned, along with a unique string called a <i>next token</i>. To get the next batch of items in the list, call this operation again, adding the next token to the call. To get all of the items in the list, keep calling this operation with each subsequent next token that is returned, until no more next tokens are returned.</p>",
         "ListEnvironmentsResult$nextToken": "<p>If there are more than 25 items in the list, only the first 25 items are returned, along with a unique string called a <i>next token</i>. To get the next batch of items in the list, call this operation again, adding the next token to the call.</p>"

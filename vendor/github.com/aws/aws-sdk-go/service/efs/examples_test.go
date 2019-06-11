@@ -34,6 +34,12 @@ func ExampleEFS_CreateFileSystem_shared00() {
 	input := &efs.CreateFileSystemInput{
 		CreationToken:   aws.String("tokenstring"),
 		PerformanceMode: aws.String("generalPurpose"),
+		Tags: []*efs.Tag{
+			{
+				Key:   aws.String("Name"),
+				Value: aws.String("MyFileSystem"),
+			},
+		},
 	}
 
 	result, err := svc.CreateFileSystem(input)
@@ -294,6 +300,41 @@ func ExampleEFS_DescribeFileSystems_shared00() {
 	fmt.Println(result)
 }
 
+// To describe the lifecycle configuration for a file system
+//
+// This operation describes a file system's LifecycleConfiguration. EFS lifecycle management
+// uses the LifecycleConfiguration object to identify which files to move to the EFS
+// Infrequent Access (IA) storage class.
+func ExampleEFS_DescribeLifecycleConfiguration_shared00() {
+	svc := efs.New(session.New())
+	input := &efs.DescribeLifecycleConfigurationInput{
+		FileSystemId: aws.String("fs-01234567"),
+	}
+
+	result, err := svc.DescribeLifecycleConfiguration(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case efs.ErrCodeInternalServerError:
+				fmt.Println(efs.ErrCodeInternalServerError, aerr.Error())
+			case efs.ErrCodeBadRequest:
+				fmt.Println(efs.ErrCodeBadRequest, aerr.Error())
+			case efs.ErrCodeFileSystemNotFound:
+				fmt.Println(efs.ErrCodeFileSystemNotFound, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To describe the security groups for a mount target
 //
 // This operation describes all of the security groups for a file system's mount target.
@@ -426,6 +467,49 @@ func ExampleEFS_ModifyMountTargetSecurityGroups_shared00() {
 				fmt.Println(efs.ErrCodeSecurityGroupLimitExceeded, aerr.Error())
 			case efs.ErrCodeSecurityGroupNotFound:
 				fmt.Println(efs.ErrCodeSecurityGroupNotFound, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// Creates a new lifecycleconfiguration object for a file system
+//
+// This operation enables lifecycle management on a file system by creating a new LifecycleConfiguration
+// object. A LifecycleConfiguration object defines when files in an Amazon EFS file
+// system are automatically transitioned to the lower-cost EFS Infrequent Access (IA)
+// storage class. A LifecycleConfiguration applies to all files in a file system.
+func ExampleEFS_PutLifecycleConfiguration_shared00() {
+	svc := efs.New(session.New())
+	input := &efs.PutLifecycleConfigurationInput{
+		FileSystemId: aws.String("fs-01234567"),
+		LifecyclePolicies: []*efs.LifecyclePolicy{
+			{
+				TransitionToIA: aws.String("AFTER_30_DAYS"),
+			},
+		},
+	}
+
+	result, err := svc.PutLifecycleConfiguration(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case efs.ErrCodeBadRequest:
+				fmt.Println(efs.ErrCodeBadRequest, aerr.Error())
+			case efs.ErrCodeInternalServerError:
+				fmt.Println(efs.ErrCodeInternalServerError, aerr.Error())
+			case efs.ErrCodeFileSystemNotFound:
+				fmt.Println(efs.ErrCodeFileSystemNotFound, aerr.Error())
+			case efs.ErrCodeIncorrectFileSystemLifeCycleState:
+				fmt.Println(efs.ErrCodeIncorrectFileSystemLifeCycleState, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}

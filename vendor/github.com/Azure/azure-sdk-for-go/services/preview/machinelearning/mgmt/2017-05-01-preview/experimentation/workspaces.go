@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -48,6 +49,16 @@ func NewWorkspacesClientWithBaseURI(baseURI string, subscriptionID string) Works
 // workspaceName - the name of the machine learning team account workspace.
 // parameters - the parameters for creating or updating a machine learning workspace.
 func (client WorkspacesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, accountName string, workspaceName string, parameters Workspace) (result Workspace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -134,6 +145,16 @@ func (client WorkspacesClient) CreateOrUpdateResponder(resp *http.Response) (res
 // accountName - the name of the machine learning team account.
 // workspaceName - the name of the machine learning team account workspace.
 func (client WorkspacesClient) Delete(ctx context.Context, resourceGroupName string, accountName string, workspaceName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -214,6 +235,16 @@ func (client WorkspacesClient) DeleteResponder(resp *http.Response) (result auto
 // accountName - the name of the machine learning team account.
 // workspaceName - the name of the machine learning team account workspace.
 func (client WorkspacesClient) Get(ctx context.Context, resourceGroupName string, accountName string, workspaceName string) (result Workspace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -294,6 +325,16 @@ func (client WorkspacesClient) GetResponder(resp *http.Response) (result Workspa
 // accountName - the name of the machine learning team account.
 // resourceGroupName - the name of the resource group to which the machine learning team account belongs.
 func (client WorkspacesClient) ListByAccounts(ctx context.Context, accountName string, resourceGroupName string) (result WorkspaceListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.ListByAccounts")
+		defer func() {
+			sc := -1
+			if result.wlr.Response.Response != nil {
+				sc = result.wlr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -366,8 +407,8 @@ func (client WorkspacesClient) ListByAccountsResponder(resp *http.Response) (res
 }
 
 // listByAccountsNextResults retrieves the next set of results, if any.
-func (client WorkspacesClient) listByAccountsNextResults(lastResults WorkspaceListResult) (result WorkspaceListResult, err error) {
-	req, err := lastResults.workspaceListResultPreparer()
+func (client WorkspacesClient) listByAccountsNextResults(ctx context.Context, lastResults WorkspaceListResult) (result WorkspaceListResult, err error) {
+	req, err := lastResults.workspaceListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "experimentation.WorkspacesClient", "listByAccountsNextResults", nil, "Failure preparing next results request")
 	}
@@ -388,6 +429,16 @@ func (client WorkspacesClient) listByAccountsNextResults(lastResults WorkspaceLi
 
 // ListByAccountsComplete enumerates all values, automatically crossing page boundaries as required.
 func (client WorkspacesClient) ListByAccountsComplete(ctx context.Context, accountName string, resourceGroupName string) (result WorkspaceListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.ListByAccounts")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByAccounts(ctx, accountName, resourceGroupName)
 	return
 }
@@ -399,6 +450,16 @@ func (client WorkspacesClient) ListByAccountsComplete(ctx context.Context, accou
 // workspaceName - the name of the machine learning team account workspace.
 // parameters - the parameters for updating a machine learning workspace.
 func (client WorkspacesClient) Update(ctx context.Context, resourceGroupName string, accountName string, workspaceName string, parameters WorkspaceUpdateParameters) (result Workspace, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/WorkspacesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: accountName,
 			Constraints: []validation.Constraint{{Target: "accountName", Name: validation.MaxLength, Rule: 50, Chain: nil},

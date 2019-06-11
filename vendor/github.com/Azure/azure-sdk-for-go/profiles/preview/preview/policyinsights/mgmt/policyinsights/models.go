@@ -1,6 +1,6 @@
 // +build go1.9
 
-// Copyright 2018 Microsoft Corporation
+// Copyright 2019 Microsoft Corporation
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -19,13 +19,16 @@
 
 package policyinsights
 
-import original "github.com/Azure/azure-sdk-for-go/services/preview/policyinsights/mgmt/2017-12-12-preview/policyinsights"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/preview/policyinsights/mgmt/2018-07-01-preview/policyinsights"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
 )
 
-type BaseClient = original.BaseClient
 type PolicyStatesResource = original.PolicyStatesResource
 
 const (
@@ -33,33 +36,53 @@ const (
 	Latest  PolicyStatesResource = original.Latest
 )
 
+type BaseClient = original.BaseClient
+type ErrorDefinition = original.ErrorDefinition
+type ErrorResponse = original.ErrorResponse
+type ExpressionEvaluationDetails = original.ExpressionEvaluationDetails
+type IfNotExistsEvaluationDetails = original.IfNotExistsEvaluationDetails
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
+type OperationsClient = original.OperationsClient
 type OperationsListResults = original.OperationsListResults
 type PolicyAssignmentSummary = original.PolicyAssignmentSummary
 type PolicyDefinitionSummary = original.PolicyDefinitionSummary
+type PolicyDetails = original.PolicyDetails
+type PolicyEvaluationDetails = original.PolicyEvaluationDetails
 type PolicyEvent = original.PolicyEvent
+type PolicyEventsClient = original.PolicyEventsClient
 type PolicyEventsQueryResults = original.PolicyEventsQueryResults
 type PolicyState = original.PolicyState
+type PolicyStatesClient = original.PolicyStatesClient
 type PolicyStatesQueryResults = original.PolicyStatesQueryResults
+type PolicyTrackedResource = original.PolicyTrackedResource
+type PolicyTrackedResourcesClient = original.PolicyTrackedResourcesClient
+type PolicyTrackedResourcesQueryResults = original.PolicyTrackedResourcesQueryResults
+type PolicyTrackedResourcesQueryResultsIterator = original.PolicyTrackedResourcesQueryResultsIterator
+type PolicyTrackedResourcesQueryResultsPage = original.PolicyTrackedResourcesQueryResultsPage
 type QueryFailure = original.QueryFailure
 type QueryFailureError = original.QueryFailureError
+type Remediation = original.Remediation
+type RemediationDeployment = original.RemediationDeployment
+type RemediationDeploymentSummary = original.RemediationDeploymentSummary
+type RemediationDeploymentsListResult = original.RemediationDeploymentsListResult
+type RemediationDeploymentsListResultIterator = original.RemediationDeploymentsListResultIterator
+type RemediationDeploymentsListResultPage = original.RemediationDeploymentsListResultPage
+type RemediationFilters = original.RemediationFilters
+type RemediationListResult = original.RemediationListResult
+type RemediationListResultIterator = original.RemediationListResultIterator
+type RemediationListResultPage = original.RemediationListResultPage
+type RemediationProperties = original.RemediationProperties
+type RemediationsClient = original.RemediationsClient
 type String = original.String
 type SummarizeResults = original.SummarizeResults
 type Summary = original.Summary
 type SummaryResults = original.SummaryResults
-type OperationsClient = original.OperationsClient
-type PolicyEventsClient = original.PolicyEventsClient
-type PolicyStatesClient = original.PolicyStatesClient
+type TrackedResourceModificationDetails = original.TrackedResourceModificationDetails
+type TypedErrorInfo = original.TypedErrorInfo
 
 func New() BaseClient {
 	return original.New()
-}
-func NewWithBaseURI(baseURI string) BaseClient {
-	return original.NewWithBaseURI(baseURI)
-}
-func PossiblePolicyStatesResourceValues() []PolicyStatesResource {
-	return original.PossiblePolicyStatesResourceValues()
 }
 func NewOperationsClient() OperationsClient {
 	return original.NewOperationsClient()
@@ -78,6 +101,42 @@ func NewPolicyStatesClient() PolicyStatesClient {
 }
 func NewPolicyStatesClientWithBaseURI(baseURI string) PolicyStatesClient {
 	return original.NewPolicyStatesClientWithBaseURI(baseURI)
+}
+func NewPolicyTrackedResourcesClient() PolicyTrackedResourcesClient {
+	return original.NewPolicyTrackedResourcesClient()
+}
+func NewPolicyTrackedResourcesClientWithBaseURI(baseURI string) PolicyTrackedResourcesClient {
+	return original.NewPolicyTrackedResourcesClientWithBaseURI(baseURI)
+}
+func NewPolicyTrackedResourcesQueryResultsIterator(page PolicyTrackedResourcesQueryResultsPage) PolicyTrackedResourcesQueryResultsIterator {
+	return original.NewPolicyTrackedResourcesQueryResultsIterator(page)
+}
+func NewPolicyTrackedResourcesQueryResultsPage(getNextPage func(context.Context, PolicyTrackedResourcesQueryResults) (PolicyTrackedResourcesQueryResults, error)) PolicyTrackedResourcesQueryResultsPage {
+	return original.NewPolicyTrackedResourcesQueryResultsPage(getNextPage)
+}
+func NewRemediationDeploymentsListResultIterator(page RemediationDeploymentsListResultPage) RemediationDeploymentsListResultIterator {
+	return original.NewRemediationDeploymentsListResultIterator(page)
+}
+func NewRemediationDeploymentsListResultPage(getNextPage func(context.Context, RemediationDeploymentsListResult) (RemediationDeploymentsListResult, error)) RemediationDeploymentsListResultPage {
+	return original.NewRemediationDeploymentsListResultPage(getNextPage)
+}
+func NewRemediationListResultIterator(page RemediationListResultPage) RemediationListResultIterator {
+	return original.NewRemediationListResultIterator(page)
+}
+func NewRemediationListResultPage(getNextPage func(context.Context, RemediationListResult) (RemediationListResult, error)) RemediationListResultPage {
+	return original.NewRemediationListResultPage(getNextPage)
+}
+func NewRemediationsClient() RemediationsClient {
+	return original.NewRemediationsClient()
+}
+func NewRemediationsClientWithBaseURI(baseURI string) RemediationsClient {
+	return original.NewRemediationsClientWithBaseURI(baseURI)
+}
+func NewWithBaseURI(baseURI string) BaseClient {
+	return original.NewWithBaseURI(baseURI)
+}
+func PossiblePolicyStatesResourceValues() []PolicyStatesResource {
+	return original.PossiblePolicyStatesResourceValues()
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

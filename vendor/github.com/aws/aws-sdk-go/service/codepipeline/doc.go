@@ -8,7 +8,7 @@
 // This is the AWS CodePipeline API Reference. This guide provides descriptions
 // of the actions and data types for AWS CodePipeline. Some functionality for
 // your pipeline is only configurable through the API. For additional information,
-// see the AWS CodePipeline User Guide (http://docs.aws.amazon.com/codepipeline/latest/userguide/welcome.html).
+// see the AWS CodePipeline User Guide (https://docs.aws.amazon.com/codepipeline/latest/userguide/welcome.html).
 //
 // You can use the AWS CodePipeline API to work with pipelines, stages, actions,
 // and transitions, as described below.
@@ -30,6 +30,11 @@
 //
 //    * GetPipelineState, which returns information about the current state
 //    of the stages and actions of a pipeline.
+//
+//    * ListActionExecutions, which returns action-level details for past executions.
+//    The details include full stage and action-level details, including individual
+//    action duration, status, any errors which occurred during the execution,
+//    and input and output artifact location details.
 //
 //    * ListPipelines, which gets a summary of all of the pipelines associated
 //    with your account.
@@ -53,7 +58,7 @@
 // which returns the entire structure of the pipeline, including the stages
 // of that pipeline. For more information about the structure of stages and
 // actions, also refer to the AWS CodePipeline Pipeline Structure Reference
-// (http://docs.aws.amazon.com/codepipeline/latest/userguide/pipeline-structure.html).
+// (https://docs.aws.amazon.com/codepipeline/latest/userguide/pipeline-structure.html).
 //
 // Pipeline stages include actions, which are categorized into categories such
 // as source or build actions performed within a stage of a pipeline. For example,
@@ -104,7 +109,6 @@
 //    * GetJobDetails, which returns the details of a job,
 //
 //    * PollForJobs, which determines whether there are any jobs to act upon,
-//
 //
 //    * PutJobFailureResult, which provides details of a job failure, and
 //

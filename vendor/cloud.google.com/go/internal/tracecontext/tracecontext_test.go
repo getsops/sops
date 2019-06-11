@@ -64,20 +64,22 @@ func TestDecode(t *testing.T) {
 			wantOk:      true,
 		},
 	}
-	for _, tt := range tests {
-		gotTraceID, gotSpanID, gotOpts, gotOk := Decode(tt.data)
-		if !testutil.Equal(gotTraceID, tt.wantTraceID) {
-			t.Errorf("%s: Decode() gotTraceID = %v, want %v", tt.name, gotTraceID, tt.wantTraceID)
-		}
-		if gotSpanID != tt.wantSpanID {
-			t.Errorf("%s: Decode() gotSpanID = %v, want %v", tt.name, gotSpanID, tt.wantSpanID)
-		}
-		if gotOpts != tt.wantOpts {
-			t.Errorf("%s: Decode() gotOpts = %v, want %v", tt.name, gotOpts, tt.wantOpts)
-		}
-		if gotOk != tt.wantOk {
-			t.Errorf("%s: Decode() gotOk = %v, want %v", tt.name, gotOk, tt.wantOk)
-		}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			gotTraceID, gotSpanID, gotOpts, gotOk := Decode(test.data)
+			if !testutil.Equal(gotTraceID, test.wantTraceID) {
+				t.Errorf("%s: Decode() gotTraceID = %v, want %v", test.name, gotTraceID, test.wantTraceID)
+			}
+			if gotSpanID != test.wantSpanID {
+				t.Errorf("%s: Decode() gotSpanID = %v, want %v", test.name, gotSpanID, test.wantSpanID)
+			}
+			if gotOpts != test.wantOpts {
+				t.Errorf("%s: Decode() gotOpts = %v, want %v", test.name, gotOpts, test.wantOpts)
+			}
+			if gotOk != test.wantOk {
+				t.Errorf("%s: Decode() gotOk = %v, want %v", test.name, gotOk, test.wantOk)
+			}
+		})
 	}
 }
 
@@ -110,14 +112,16 @@ func TestEncode(t *testing.T) {
 			wantData: validData,
 		},
 	}
-	for _, tt := range tests {
-		gotN := Encode(tt.dst, tt.traceID, tt.spanID, tt.opts)
-		if gotN != tt.wantN {
-			t.Errorf("%s: n = %v, want %v", tt.name, gotN, tt.wantN)
-		}
-		if gotData := tt.dst; !testutil.Equal(gotData, tt.wantData) {
-			t.Errorf("%s: dst = %v, want %v", tt.name, gotData, tt.wantData)
-		}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			gotN := Encode(test.dst, test.traceID, test.spanID, test.opts)
+			if gotN != test.wantN {
+				t.Errorf("%s: n = %v, want %v", test.name, gotN, test.wantN)
+			}
+			if gotData := test.dst; !testutil.Equal(gotData, test.wantData) {
+				t.Errorf("%s: dst = %v, want %v", test.name, gotData, test.wantData)
+			}
+		})
 	}
 }
 

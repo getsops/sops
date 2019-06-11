@@ -209,19 +209,19 @@ func TestMinorNotRequired(t *testing.T) {
 func BenchmarkEqual(b *testing.B) {
 	b.StopTimer()
 	passwd := []byte("somepasswordyoulike")
-	hash, _ := GenerateFromPassword(passwd, 10)
+	hash, _ := GenerateFromPassword(passwd, DefaultCost)
 	b.StartTimer()
 	for i := 0; i < b.N; i++ {
 		CompareHashAndPassword(hash, passwd)
 	}
 }
 
-func BenchmarkGeneration(b *testing.B) {
+func BenchmarkDefaultCost(b *testing.B) {
 	b.StopTimer()
 	passwd := []byte("mylongpassword1234")
 	b.StartTimer()
 	for i := 0; i < b.N; i++ {
-		GenerateFromPassword(passwd, 10)
+		GenerateFromPassword(passwd, DefaultCost)
 	}
 }
 

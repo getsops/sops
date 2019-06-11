@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -34,12 +35,7 @@ type EntitiesClient struct {
 
 // NewEntitiesClient creates an instance of the EntitiesClient client.
 func NewEntitiesClient() EntitiesClient {
-	return NewEntitiesClientWithBaseURI(DefaultBaseURI)
-}
-
-// NewEntitiesClientWithBaseURI creates an instance of the EntitiesClient client.
-func NewEntitiesClientWithBaseURI(baseURI string) EntitiesClient {
-	return EntitiesClient{NewWithBaseURI(baseURI)}
+	return EntitiesClient{New()}
 }
 
 // Search sends the search request.
@@ -145,6 +141,16 @@ func NewEntitiesClientWithBaseURI(baseURI string) EntitiesClient {
 // string that's used as a label in a user interface. There are few user interface strings in the JSON response
 // objects. Also, any links to Bing.com properties in the response objects apply the specified language.
 func (client EntitiesClient) Search(ctx context.Context, query string, acceptLanguage string, pragma string, userAgent string, clientID string, clientIP string, location string, countryCode string, market string, responseFilter []AnswerType, responseFormat []ResponseFormat, safeSearch SafeSearch, setLang string) (result SearchResponse, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EntitiesClient.Search")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.SearchPreparer(ctx, query, acceptLanguage, pragma, userAgent, clientID, clientIP, location, countryCode, market, responseFilter, responseFormat, safeSearch, setLang)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "entitysearch.EntitiesClient", "Search", nil, "Failure preparing request")
@@ -168,6 +174,10 @@ func (client EntitiesClient) Search(ctx context.Context, query string, acceptLan
 
 // SearchPreparer prepares the Search request.
 func (client EntitiesClient) SearchPreparer(ctx context.Context, query string, acceptLanguage string, pragma string, userAgent string, clientID string, clientIP string, location string, countryCode string, market string, responseFilter []AnswerType, responseFormat []ResponseFormat, safeSearch SafeSearch, setLang string) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
 	queryParameters := map[string]interface{}{
 		"q": autorest.Encode("query", query),
 	}
@@ -194,7 +204,7 @@ func (client EntitiesClient) SearchPreparer(ctx context.Context, query string, a
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsGet(),
-		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithCustomBaseURL("{Endpoint}/bing/v7.0", urlParameters),
 		autorest.WithPath("/entities"),
 		autorest.WithQueryParameters(queryParameters),
 		autorest.WithHeader("X-BingApis-SDK", "true"))

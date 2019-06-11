@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -52,6 +53,16 @@ func NewServerKeysClientWithBaseURI(baseURI string, subscriptionID string) Serve
 // name should be formatted as: YourVaultName_YourKeyName_01234567890123456789012345678901
 // parameters - the requested server key resource state.
 func (client ServerKeysClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, serverName string, keyName string, parameters ServerKey) (result ServerKeysCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServerKeysClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, serverName, keyName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ServerKeysClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -81,6 +92,7 @@ func (client ServerKeysClient) CreateOrUpdatePreparer(ctx context.Context, resou
 		"api-version": APIVersion,
 	}
 
+	parameters.Location = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
@@ -97,10 +109,6 @@ func (client ServerKeysClient) CreateOrUpdateSender(req *http.Request) (future S
 	var resp *http.Response
 	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
-	if err != nil {
-		return
-	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated, http.StatusAccepted))
 	if err != nil {
 		return
 	}
@@ -128,6 +136,16 @@ func (client ServerKeysClient) CreateOrUpdateResponder(resp *http.Response) (res
 // serverName - the name of the server.
 // keyName - the name of the server key to be deleted.
 func (client ServerKeysClient) Delete(ctx context.Context, resourceGroupName string, serverName string, keyName string) (result ServerKeysDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServerKeysClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, serverName, keyName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ServerKeysClient", "Delete", nil, "Failure preparing request")
@@ -174,10 +192,6 @@ func (client ServerKeysClient) DeleteSender(req *http.Request) (future ServerKey
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -201,6 +215,16 @@ func (client ServerKeysClient) DeleteResponder(resp *http.Response) (result auto
 // serverName - the name of the server.
 // keyName - the name of the server key to be retrieved.
 func (client ServerKeysClient) Get(ctx context.Context, resourceGroupName string, serverName string, keyName string) (result ServerKey, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServerKeysClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, serverName, keyName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "sql.ServerKeysClient", "Get", nil, "Failure preparing request")
@@ -270,6 +294,16 @@ func (client ServerKeysClient) GetResponder(resp *http.Response) (result ServerK
 // from the Azure Resource Manager API or the portal.
 // serverName - the name of the server.
 func (client ServerKeysClient) ListByServer(ctx context.Context, resourceGroupName string, serverName string) (result ServerKeyListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServerKeysClient.ListByServer")
+		defer func() {
+			sc := -1
+			if result.sklr.Response.Response != nil {
+				sc = result.sklr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listByServerNextResults
 	req, err := client.ListByServerPreparer(ctx, resourceGroupName, serverName)
 	if err != nil {
@@ -334,8 +368,8 @@ func (client ServerKeysClient) ListByServerResponder(resp *http.Response) (resul
 }
 
 // listByServerNextResults retrieves the next set of results, if any.
-func (client ServerKeysClient) listByServerNextResults(lastResults ServerKeyListResult) (result ServerKeyListResult, err error) {
-	req, err := lastResults.serverKeyListResultPreparer()
+func (client ServerKeysClient) listByServerNextResults(ctx context.Context, lastResults ServerKeyListResult) (result ServerKeyListResult, err error) {
+	req, err := lastResults.serverKeyListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "sql.ServerKeysClient", "listByServerNextResults", nil, "Failure preparing next results request")
 	}
@@ -356,6 +390,16 @@ func (client ServerKeysClient) listByServerNextResults(lastResults ServerKeyList
 
 // ListByServerComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ServerKeysClient) ListByServerComplete(ctx context.Context, resourceGroupName string, serverName string) (result ServerKeyListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ServerKeysClient.ListByServer")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByServer(ctx, resourceGroupName, serverName)
 	return
 }

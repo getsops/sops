@@ -7,8 +7,14 @@ const (
 	// ErrCodeAlreadyExistsException for service response error code
 	// "AlreadyExistsException".
 	//
-	// The resource being created already exists. HTTP Status Code: 400
+	// The resource being created already exists.
 	ErrCodeAlreadyExistsException = "AlreadyExistsException"
+
+	// ErrCodeConcurrentModificationException for service response error code
+	// "ConcurrentModificationException".
+	//
+	// There is a concurrent modification of resources.
+	ErrCodeConcurrentModificationException = "ConcurrentModificationException"
 
 	// ErrCodeDeviceNotRegisteredException for service response error code
 	// "DeviceNotRegisteredException".
@@ -17,35 +23,76 @@ const (
 	// no longer managed by this account.
 	ErrCodeDeviceNotRegisteredException = "DeviceNotRegisteredException"
 
+	// ErrCodeInvalidCertificateAuthorityException for service response error code
+	// "InvalidCertificateAuthorityException".
+	//
+	// The Certificate Authority can't issue or revoke a certificate.
+	ErrCodeInvalidCertificateAuthorityException = "InvalidCertificateAuthorityException"
+
+	// ErrCodeInvalidDeviceException for service response error code
+	// "InvalidDeviceException".
+	//
+	// The device is in an invalid state.
+	ErrCodeInvalidDeviceException = "InvalidDeviceException"
+
+	// ErrCodeInvalidSecretsManagerResourceException for service response error code
+	// "InvalidSecretsManagerResourceException".
+	//
+	// A password in SecretsManager is in an invalid state.
+	ErrCodeInvalidSecretsManagerResourceException = "InvalidSecretsManagerResourceException"
+
+	// ErrCodeInvalidServiceLinkedRoleStateException for service response error code
+	// "InvalidServiceLinkedRoleStateException".
+	//
+	// The service linked role is locked for deletion.
+	ErrCodeInvalidServiceLinkedRoleStateException = "InvalidServiceLinkedRoleStateException"
+
 	// ErrCodeInvalidUserStatusException for service response error code
 	// "InvalidUserStatusException".
 	//
 	// The attempt to update a user is invalid due to the user's current status.
-	// HTTP Status Code: 400
 	ErrCodeInvalidUserStatusException = "InvalidUserStatusException"
 
 	// ErrCodeLimitExceededException for service response error code
 	// "LimitExceededException".
 	//
 	// You are performing an action that would put you beyond your account's limits.
-	// HTTP Status Code: 400
 	ErrCodeLimitExceededException = "LimitExceededException"
 
 	// ErrCodeNameInUseException for service response error code
 	// "NameInUseException".
 	//
-	// The name sent in the request is already in use. HTTP Status Code: 400
+	// The name sent in the request is already in use.
 	ErrCodeNameInUseException = "NameInUseException"
 
 	// ErrCodeNotFoundException for service response error code
 	// "NotFoundException".
 	//
-	// The resource is not found. HTTP Status Code: 400
+	// The resource is not found.
 	ErrCodeNotFoundException = "NotFoundException"
+
+	// ErrCodeResourceAssociatedException for service response error code
+	// "ResourceAssociatedException".
+	//
+	// Another resource is associated with the resource in the request.
+	ErrCodeResourceAssociatedException = "ResourceAssociatedException"
 
 	// ErrCodeResourceInUseException for service response error code
 	// "ResourceInUseException".
 	//
-	// The resource in the request is already in use. HTTP Status Code: 400
+	// The resource in the request is already in use.
 	ErrCodeResourceInUseException = "ResourceInUseException"
+
+	// ErrCodeSkillNotLinkedException for service response error code
+	// "SkillNotLinkedException".
+	//
+	// The skill must be linked to a third-party account.
+	ErrCodeSkillNotLinkedException = "SkillNotLinkedException"
+
+	// ErrCodeUnauthorizedException for service response error code
+	// "UnauthorizedException".
+	//
+	// The caller has no permissions to operate on the resource involved in the
+	// API call.
+	ErrCodeUnauthorizedException = "UnauthorizedException"
 )

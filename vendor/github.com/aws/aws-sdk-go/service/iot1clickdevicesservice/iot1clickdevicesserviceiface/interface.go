@@ -92,9 +92,21 @@ type IoT1ClickDevicesServiceAPI interface {
 	ListDevicesWithContext(aws.Context, *iot1clickdevicesservice.ListDevicesInput, ...request.Option) (*iot1clickdevicesservice.ListDevicesOutput, error)
 	ListDevicesRequest(*iot1clickdevicesservice.ListDevicesInput) (*request.Request, *iot1clickdevicesservice.ListDevicesOutput)
 
+	ListTagsForResource(*iot1clickdevicesservice.ListTagsForResourceInput) (*iot1clickdevicesservice.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *iot1clickdevicesservice.ListTagsForResourceInput, ...request.Option) (*iot1clickdevicesservice.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*iot1clickdevicesservice.ListTagsForResourceInput) (*request.Request, *iot1clickdevicesservice.ListTagsForResourceOutput)
+
+	TagResource(*iot1clickdevicesservice.TagResourceInput) (*iot1clickdevicesservice.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *iot1clickdevicesservice.TagResourceInput, ...request.Option) (*iot1clickdevicesservice.TagResourceOutput, error)
+	TagResourceRequest(*iot1clickdevicesservice.TagResourceInput) (*request.Request, *iot1clickdevicesservice.TagResourceOutput)
+
 	UnclaimDevice(*iot1clickdevicesservice.UnclaimDeviceInput) (*iot1clickdevicesservice.UnclaimDeviceOutput, error)
 	UnclaimDeviceWithContext(aws.Context, *iot1clickdevicesservice.UnclaimDeviceInput, ...request.Option) (*iot1clickdevicesservice.UnclaimDeviceOutput, error)
 	UnclaimDeviceRequest(*iot1clickdevicesservice.UnclaimDeviceInput) (*request.Request, *iot1clickdevicesservice.UnclaimDeviceOutput)
+
+	UntagResource(*iot1clickdevicesservice.UntagResourceInput) (*iot1clickdevicesservice.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *iot1clickdevicesservice.UntagResourceInput, ...request.Option) (*iot1clickdevicesservice.UntagResourceOutput, error)
+	UntagResourceRequest(*iot1clickdevicesservice.UntagResourceInput) (*request.Request, *iot1clickdevicesservice.UntagResourceOutput)
 
 	UpdateDeviceState(*iot1clickdevicesservice.UpdateDeviceStateInput) (*iot1clickdevicesservice.UpdateDeviceStateOutput, error)
 	UpdateDeviceStateWithContext(aws.Context, *iot1clickdevicesservice.UpdateDeviceStateInput, ...request.Option) (*iot1clickdevicesservice.UpdateDeviceStateOutput, error)

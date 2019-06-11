@@ -15,6 +15,7 @@
 package storage
 
 import (
+	"context"
 	"crypto/sha256"
 	"encoding/base64"
 	"net/http"
@@ -22,10 +23,8 @@ import (
 	"testing"
 
 	"cloud.google.com/go/internal/testutil"
-
-	"golang.org/x/net/context"
-
 	"google.golang.org/api/googleapi"
+	"google.golang.org/api/option"
 )
 
 var testEncryptionKey = []byte("secret-key-that-is-32-bytes-long")
@@ -135,4 +134,44 @@ func TestRaceOnCancel(t *testing.T) {
 	cancel()
 	// This call to Write concurrently reads w.err (L169).
 	w.Write([]byte(nil))
+}
+
+func TestCancelDoesNotLeak(t *testing.T) {
+	ctx, cancel := context.WithCancel(context.Background())
+	const contents = "hello world"
+	mt := mockTransport{}
+
+	client, err := NewClient(ctx, option.WithHTTPClient(&http.Client{Transport: &mt}))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	wc := client.Bucket("bucketname").Object("filename1").NewWriter(ctx)
+	wc.ContentType = "text/plain"
+
+	// We can't check that the Write fails, since it depends on the write to the
+	// underling mockTransport failing which is racy.
+	wc.Write([]byte(contents))
+
+	cancel()
+}
+
+func TestCloseDoesNotLeak(t *testing.T) {
+	ctx := context.Background()
+	const contents = "hello world"
+	mt := mockTransport{}
+
+	client, err := NewClient(ctx, option.WithHTTPClient(&http.Client{Transport: &mt}))
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	wc := client.Bucket("bucketname").Object("filename1").NewWriter(ctx)
+	wc.ContentType = "text/plain"
+
+	// We can't check that the Write fails, since it depends on the write to the
+	// underling mockTransport failing which is racy.
+	wc.Write([]byte(contents))
+
+	wc.Close()
 }

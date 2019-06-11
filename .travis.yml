@@ -1,5 +1,5 @@
 language: go
-go: 1.9
+go: 1.12
 go_import_path: go.mozilla.org/sops/
 
 addons:
@@ -15,8 +15,8 @@ before_install:
   - source ~/.cargo/env
 
 script:
-  - 'if [ "$TRAVIS_REPO_SLUG" != "mozilla/sops" ]; then make; fi'
-  - 'if [ "$TRAVIS_REPO_SLUG" = "mozilla/sops" ]; then make origin-build; fi'
+  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then make; fi'
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then make origin-build; fi'
   - bash <(curl -s https://codecov.io/bash)
 
 before_deploy:

@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewContainerLogsClientWithBaseURI(baseURI string, subscriptionID string) Co
 // tail - the number of lines to show from the tail of the container instance log. If not provided, all
 // available logs are shown up to 4mb.
 func (client ContainerLogsClient) List(ctx context.Context, resourceGroupName string, containerName string, containerGroupName string, tail *int32) (result Logs, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ContainerLogsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ListPreparer(ctx, resourceGroupName, containerName, containerGroupName, tail)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "containerinstance.ContainerLogsClient", "List", nil, "Failure preparing request")

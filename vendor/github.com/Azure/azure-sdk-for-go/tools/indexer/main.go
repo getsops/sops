@@ -26,18 +26,18 @@ import (
 
 // adds any missing SDK packages to godoc.org
 func main() {
-	dir := ""
+	// by default assume we're running from the source dir
+	// and calculate the relative path to the services directory.
+	dir := "../../services"
 	if len(os.Args) > 1 {
 		// assume second arg is source dir
 		dir = os.Args[1]
-	} else {
-		// if no args specified assume we're running from the source dir
-		// and calculate the relative path to the services directory.
-		var err error
-		dir, err = filepath.Abs("../../services")
-		if err != nil {
-			panic(err)
-		}
+	}
+
+	var err error
+	dir, err = filepath.Abs(dir)
+	if err != nil {
+		panic(err)
 	}
 
 	pkgs, err := util.GetPackagesForIndexing(dir)

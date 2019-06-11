@@ -160,6 +160,76 @@ func ExampleECS_CreateService_shared01() {
 	fmt.Println(result)
 }
 
+// To delete your account setting
+//
+// This example deletes the account setting for your user for the specified resource
+// type.
+func ExampleECS_DeleteAccountSetting_shared00() {
+	svc := ecs.New(session.New())
+	input := &ecs.DeleteAccountSettingInput{
+		Name: aws.String("serviceLongArnFormat"),
+	}
+
+	result, err := svc.DeleteAccountSetting(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case ecs.ErrCodeServerException:
+				fmt.Println(ecs.ErrCodeServerException, aerr.Error())
+			case ecs.ErrCodeClientException:
+				fmt.Println(ecs.ErrCodeClientException, aerr.Error())
+			case ecs.ErrCodeInvalidParameterException:
+				fmt.Println(ecs.ErrCodeInvalidParameterException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To delete the account settings for a specific IAM user or IAM role
+//
+// This example deletes the account setting for a specific IAM user or IAM role for
+// the specified resource type. Only the root user can view or modify the account settings
+// for another user.
+func ExampleECS_DeleteAccountSetting_shared01() {
+	svc := ecs.New(session.New())
+	input := &ecs.DeleteAccountSettingInput{
+		Name:         aws.String("containerInstanceLongArnFormat"),
+		PrincipalArn: aws.String("arn:aws:iam::<aws_account_id>:user/principalName"),
+	}
+
+	result, err := svc.DeleteAccountSetting(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case ecs.ErrCodeServerException:
+				fmt.Println(ecs.ErrCodeServerException, aerr.Error())
+			case ecs.ErrCodeClientException:
+				fmt.Println(ecs.ErrCodeClientException, aerr.Error())
+			case ecs.ErrCodeInvalidParameterException:
+				fmt.Println(ecs.ErrCodeInvalidParameterException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To delete an empty cluster
 //
 // This example deletes an empty cluster in your default region.
@@ -460,6 +530,73 @@ func ExampleECS_DescribeTasks_shared00() {
 	fmt.Println(result)
 }
 
+// To view your effective account settings
+//
+// This example displays the effective account settings for your account.
+func ExampleECS_ListAccountSettings_shared00() {
+	svc := ecs.New(session.New())
+	input := &ecs.ListAccountSettingsInput{
+		EffectiveSettings: aws.Bool(true),
+	}
+
+	result, err := svc.ListAccountSettings(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case ecs.ErrCodeServerException:
+				fmt.Println(ecs.ErrCodeServerException, aerr.Error())
+			case ecs.ErrCodeClientException:
+				fmt.Println(ecs.ErrCodeClientException, aerr.Error())
+			case ecs.ErrCodeInvalidParameterException:
+				fmt.Println(ecs.ErrCodeInvalidParameterException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To view the effective account settings for a specific IAM user or IAM role
+//
+// This example displays the effective account settings for the specified user or role.
+func ExampleECS_ListAccountSettings_shared01() {
+	svc := ecs.New(session.New())
+	input := &ecs.ListAccountSettingsInput{
+		EffectiveSettings: aws.Bool(true),
+		PrincipalArn:      aws.String("arn:aws:iam::<aws_account_id>:user/principalName"),
+	}
+
+	result, err := svc.ListAccountSettings(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case ecs.ErrCodeServerException:
+				fmt.Println(ecs.ErrCodeServerException, aerr.Error())
+			case ecs.ErrCodeClientException:
+				fmt.Println(ecs.ErrCodeClientException, aerr.Error())
+			case ecs.ErrCodeInvalidParameterException:
+				fmt.Println(ecs.ErrCodeInvalidParameterException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To list your available clusters
 //
 // This example lists all of your available clusters in your default region.
@@ -546,6 +683,41 @@ func ExampleECS_ListServices_shared00() {
 				fmt.Println(ecs.ErrCodeInvalidParameterException, aerr.Error())
 			case ecs.ErrCodeClusterNotFoundException:
 				fmt.Println(ecs.ErrCodeClusterNotFoundException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To list the tags for a cluster.
+//
+// This example lists the tags for the 'dev' cluster.
+func ExampleECS_ListTagsForResource_shared00() {
+	svc := ecs.New(session.New())
+	input := &ecs.ListTagsForResourceInput{
+		ResourceArn: aws.String("arn:aws:ecs:region:aws_account_id:cluster/dev"),
+	}
+
+	result, err := svc.ListTagsForResource(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case ecs.ErrCodeServerException:
+				fmt.Println(ecs.ErrCodeServerException, aerr.Error())
+			case ecs.ErrCodeClientException:
+				fmt.Println(ecs.ErrCodeClientException, aerr.Error())
+			case ecs.ErrCodeClusterNotFoundException:
+				fmt.Println(ecs.ErrCodeClusterNotFoundException, aerr.Error())
+			case ecs.ErrCodeInvalidParameterException:
+				fmt.Println(ecs.ErrCodeInvalidParameterException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -728,7 +900,7 @@ func ExampleECS_ListTasks_shared00() {
 // To list the tasks on a particular container instance
 //
 // This example lists the tasks of a specified container instance. Specifying a ``containerInstance``
-// value limits  the  results  to  tasks  that belong to that container instance.
+// value limits the results to tasks that belong to that container instance.
 func ExampleECS_ListTasks_shared01() {
 	svc := ecs.New(session.New())
 	input := &ecs.ListTasksInput{
@@ -750,6 +922,117 @@ func ExampleECS_ListTasks_shared01() {
 				fmt.Println(ecs.ErrCodeClusterNotFoundException, aerr.Error())
 			case ecs.ErrCodeServiceNotFoundException:
 				fmt.Println(ecs.ErrCodeServiceNotFoundException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To modify your account settings
+//
+// This example modifies your account settings to opt in to the new ARN and resource
+// ID format for Amazon ECS services. If you’re using this command as the root user,
+// then changes apply to the entire AWS account, unless an IAM user or role explicitly
+// overrides these settings for themselves.
+func ExampleECS_PutAccountSetting_shared00() {
+	svc := ecs.New(session.New())
+	input := &ecs.PutAccountSettingInput{
+		Name:  aws.String("serviceLongArnFormat"),
+		Value: aws.String("enabled"),
+	}
+
+	result, err := svc.PutAccountSetting(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case ecs.ErrCodeServerException:
+				fmt.Println(ecs.ErrCodeServerException, aerr.Error())
+			case ecs.ErrCodeClientException:
+				fmt.Println(ecs.ErrCodeClientException, aerr.Error())
+			case ecs.ErrCodeInvalidParameterException:
+				fmt.Println(ecs.ErrCodeInvalidParameterException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To modify the account settings for a specific IAM user or IAM role
+//
+// This example modifies the account setting for a specific IAM user or IAM role to
+// opt in to the new ARN and resource ID format for Amazon ECS container instances.
+// If you’re using this command as the root user, then changes apply to the entire
+// AWS account, unless an IAM user or role explicitly overrides these settings for themselves.
+func ExampleECS_PutAccountSetting_shared01() {
+	svc := ecs.New(session.New())
+	input := &ecs.PutAccountSettingInput{
+		Name:         aws.String("containerInstanceLongArnFormat"),
+		PrincipalArn: aws.String("arn:aws:iam::<aws_account_id>:user/principalName"),
+		Value:        aws.String("enabled"),
+	}
+
+	result, err := svc.PutAccountSetting(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case ecs.ErrCodeServerException:
+				fmt.Println(ecs.ErrCodeServerException, aerr.Error())
+			case ecs.ErrCodeClientException:
+				fmt.Println(ecs.ErrCodeClientException, aerr.Error())
+			case ecs.ErrCodeInvalidParameterException:
+				fmt.Println(ecs.ErrCodeInvalidParameterException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To modify the default account settings for all IAM users or roles on an account
+//
+// This example modifies the default account setting for the specified resource for
+// all IAM users or roles on an account. These changes apply to the entire AWS account,
+// unless an IAM user or role explicitly overrides these settings for themselves.
+func ExampleECS_PutAccountSettingDefault_shared00() {
+	svc := ecs.New(session.New())
+	input := &ecs.PutAccountSettingDefaultInput{
+		Name:  aws.String("serviceLongArnFormat"),
+		Value: aws.String("enabled"),
+	}
+
+	result, err := svc.PutAccountSettingDefault(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case ecs.ErrCodeServerException:
+				fmt.Println(ecs.ErrCodeServerException, aerr.Error())
+			case ecs.ErrCodeClientException:
+				fmt.Println(ecs.ErrCodeClientException, aerr.Error())
+			case ecs.ErrCodeInvalidParameterException:
+				fmt.Println(ecs.ErrCodeInvalidParameterException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -843,6 +1126,89 @@ func ExampleECS_RunTask_shared00() {
 				fmt.Println(ecs.ErrCodeAccessDeniedException, aerr.Error())
 			case ecs.ErrCodeBlockedException:
 				fmt.Println(ecs.ErrCodeBlockedException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To tag a cluster.
+//
+// This example tags the 'dev' cluster with key 'team' and value 'dev'.
+func ExampleECS_TagResource_shared00() {
+	svc := ecs.New(session.New())
+	input := &ecs.TagResourceInput{
+		ResourceArn: aws.String("arn:aws:ecs:region:aws_account_id:cluster/dev"),
+		Tags: []*ecs.Tag{
+			{
+				Key:   aws.String("team"),
+				Value: aws.String("dev"),
+			},
+		},
+	}
+
+	result, err := svc.TagResource(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case ecs.ErrCodeServerException:
+				fmt.Println(ecs.ErrCodeServerException, aerr.Error())
+			case ecs.ErrCodeClientException:
+				fmt.Println(ecs.ErrCodeClientException, aerr.Error())
+			case ecs.ErrCodeClusterNotFoundException:
+				fmt.Println(ecs.ErrCodeClusterNotFoundException, aerr.Error())
+			case ecs.ErrCodeResourceNotFoundException:
+				fmt.Println(ecs.ErrCodeResourceNotFoundException, aerr.Error())
+			case ecs.ErrCodeInvalidParameterException:
+				fmt.Println(ecs.ErrCodeInvalidParameterException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To untag a cluster.
+//
+// This example deletes the 'team' tag from the 'dev' cluster.
+func ExampleECS_UntagResource_shared00() {
+	svc := ecs.New(session.New())
+	input := &ecs.UntagResourceInput{
+		ResourceArn: aws.String("arn:aws:ecs:region:aws_account_id:cluster/dev"),
+		TagKeys: []*string{
+			aws.String("team"),
+		},
+	}
+
+	result, err := svc.UntagResource(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case ecs.ErrCodeServerException:
+				fmt.Println(ecs.ErrCodeServerException, aerr.Error())
+			case ecs.ErrCodeClientException:
+				fmt.Println(ecs.ErrCodeClientException, aerr.Error())
+			case ecs.ErrCodeClusterNotFoundException:
+				fmt.Println(ecs.ErrCodeClusterNotFoundException, aerr.Error())
+			case ecs.ErrCodeResourceNotFoundException:
+				fmt.Println(ecs.ErrCodeResourceNotFoundException, aerr.Error())
+			case ecs.ErrCodeInvalidParameterException:
+				fmt.Println(ecs.ErrCodeInvalidParameterException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}

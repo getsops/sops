@@ -23,6 +23,7 @@
     "AdminResetUserPassword": "<p>Resets the specified user's password in a user pool as an administrator. Works on any user.</p> <p>When a developer calls this API, the current password is invalidated, so it must be changed. If a user tries to sign in after the API is called, the app will get a PasswordResetRequiredException exception back and should direct the user down the flow to reset the password, which is the same as the forgot password flow. In addition, if the user pool has phone verification selected and a verified phone number exists for the user, or if email verification is selected and a verified email exists for the user, calling this API will also result in sending a message to the end user with the code to change their password.</p> <p>Requires developer credentials.</p>",
     "AdminRespondToAuthChallenge": "<p>Responds to an authentication challenge, as an administrator.</p> <p>Requires developer credentials.</p>",
     "AdminSetUserMFAPreference": "<p>Sets the user's multi-factor authentication (MFA) preference.</p>",
+    "AdminSetUserPassword": null,
     "AdminSetUserSettings": "<p>Sets all the user settings for a specified user name. Works on any user.</p> <p>Requires developer credentials.</p>",
     "AdminUpdateAuthEventFeedback": "<p>Provides feedback for an authentication event as to whether it was from a valid user. This feedback is used for improving the risk evaluation decision for the user pool as part of Amazon Cognito advanced security.</p>",
     "AdminUpdateDeviceStatus": "<p>Updates the device status as an administrator.</p> <p>Requires developer credentials.</p>",
@@ -72,6 +73,7 @@
     "ListGroups": "<p>Lists the groups associated with a user pool.</p> <p>Requires developer credentials.</p>",
     "ListIdentityProviders": "<p>Lists information about all identity providers for a user pool.</p>",
     "ListResourceServers": "<p>Lists the resource servers for a user pool.</p>",
+    "ListTagsForResource": "<p>Lists the tags that are assigned to an Amazon Cognito user pool.</p> <p>A tag is a label that you can apply to user pools to categorize and manage them in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>You can use this action up to 10 times per second, per account.</p>",
     "ListUserImportJobs": "<p>Lists the user import jobs.</p>",
     "ListUserPoolClients": "<p>Lists the clients that have been created for the specified user pool.</p>",
     "ListUserPools": "<p>Lists the user pools associated with an AWS account.</p>",
@@ -87,6 +89,8 @@
     "SignUp": "<p>Registers the user in the specified user pool and creates a user name, password, and user attributes.</p>",
     "StartUserImportJob": "<p>Starts the user import.</p>",
     "StopUserImportJob": "<p>Stops the user import job.</p>",
+    "TagResource": "<p>Assigns a set of tags to an Amazon Cognito user pool. A tag is a label that you can use to categorize and manage user pools in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>Each tag consists of a key and value, both of which you define. A key is a general category for more specific values. For example, if you have two versions of a user pool, one for testing and another for production, you might assign an <code>Environment</code> tag key to both user pools. The value of this key might be <code>Test</code> for one user pool and <code>Production</code> for the other.</p> <p>Tags are useful for cost tracking and access control. You can activate your tags so that they appear on the Billing and Cost Management console, where you can track the costs associated with your user pools. In an IAM policy, you can constrain permissions for user pools based on specific tags or tag values.</p> <p>You can use this action up to 5 times per second, per account. A user pool can have as many as 50 tags.</p>",
+    "UntagResource": "<p>Removes the specified tags from an Amazon Cognito user pool. You can use this action up to 5 times per second, per account</p>",
     "UpdateAuthEventFeedback": "<p>Provides the feedback for an authentication event whether it was from a valid user or not. This feedback is used for improving the risk evaluation decision for the user pool as part of Amazon Cognito advanced security.</p>",
     "UpdateDeviceStatus": "<p>Updates the device status.</p>",
     "UpdateGroup": "<p>Updates the specified group with the specified attributes.</p> <p>Requires developer credentials.</p>",
@@ -95,6 +99,7 @@
     "UpdateUserAttributes": "<p>Allows a user to update a specific attribute (one at a time).</p>",
     "UpdateUserPool": "<p>Updates the specified user pool with the specified attributes. If you don't provide a value for an attribute, it will be set to the default value. You can get a list of the current user pool settings with .</p>",
     "UpdateUserPoolClient": "<p>Updates the specified user pool app client with the specified attributes. If you don't provide a value for an attribute, it will be set to the default value. You can get a list of the current user pool app client settings with .</p>",
+    "UpdateUserPoolDomain": "<p>Updates the Secure Sockets Layer (SSL) certificate for the custom domain for your user pool.</p> <p>You can use this operation to provide the Amazon Resource Name (ARN) of a new certificate to Amazon Cognito. You cannot use it to change the domain for a user pool.</p> <p>A custom domain is used to host the Amazon Cognito hosted UI, which provides sign-up and sign-in pages for your application. When you set up a custom domain, you provide a certificate that you manage with AWS Certificate Manager (ACM). When necessary, you can use this operation to change the certificate that you applied to your custom domain.</p> <p>Usually, this is unnecessary following routine certificate renewal with ACM. When you renew your existing certificate in ACM, the ARN for your certificate remains the same, and your custom domain uses the new certificate automatically.</p> <p>However, if you replace your existing certificate with a new one, ACM gives the new certificate a new ARN. To apply the new certificate to your custom domain, you must provide this ARN to Amazon Cognito.</p> <p>When you add your new certificate in ACM, you must choose US East (N. Virginia) as the AWS Region.</p> <p>After you submit your request, Amazon Cognito requires up to 1 hour to distribute your new certificate to your custom domain.</p> <p>For more information about adding a custom domain to your user pool, see <a href=\"https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-add-custom-domain.html\">Using Your Own Domain for the Hosted UI</a>.</p>",
     "VerifySoftwareToken": "<p>Use this API to register a user's entered TOTP code and mark the user's software token MFA status as \"verified\" if successful. The request takes an access token or a session string, but not both.</p>",
     "VerifyUserAttribute": "<p>Verifies the specified user attributes in the user pool.</p>"
   },
@@ -184,7 +189,7 @@
     "AdminCreateUserUnusedAccountValidityDaysType": {
       "base": null,
       "refs": {
-        "AdminCreateUserConfigType$UnusedAccountValidityDays": "<p>The user account expiration limit, in days, after which the account is no longer usable. To reset the account after that time limit, you must call <code>AdminCreateUser</code> again, specifying <code>\"RESEND\"</code> for the <code>MessageAction</code> parameter. The default value for this parameter is 7.</p>"
+        "AdminCreateUserConfigType$UnusedAccountValidityDays": "<p>The user account expiration limit, in days, after which the account is no longer usable. To reset the account after that time limit, you must call <code>AdminCreateUser</code> again, specifying <code>\"RESEND\"</code> for the <code>MessageAction</code> parameter. The default value for this parameter is 7. </p> <note> <p>If you set a value for <code>TemporaryPasswordValidityDays</code> in <code>PasswordPolicy</code>, that value will be used and <code>UnusedAccountValidityDays</code> will be deprecated for that user pool. </p> </note>"
       }
     },
     "AdminDeleteUserAttributesRequest": {
@@ -342,6 +347,16 @@
       "refs": {
       }
     },
+    "AdminSetUserPasswordRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "AdminSetUserPasswordResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "AdminSetUserSettingsRequest": {
       "base": "<p>Represents the request to set user settings as an administrator.</p>",
       "refs": {
@@ -445,7 +460,7 @@
         "CreateGroupRequest$RoleArn": "<p>The role ARN for the group.</p>",
         "CreateUserImportJobRequest$CloudWatchLogsRoleArn": "<p>The role ARN for the Amazon CloudWatch Logging role for the user import job.</p>",
         "CustomDomainConfigType$CertificateArn": "<p>The Amazon Resource Name (ARN) of an AWS Certificate Manager SSL certificate. You use this certificate for the subdomain of your custom domain.</p>",
-        "EmailConfigurationType$SourceArn": "<p>The Amazon Resource Name (ARN) of the email source.</p>",
+        "EmailConfigurationType$SourceArn": "<p>The Amazon Resource Name (ARN) of a verified email address in Amazon SES. This email address is used in one of the following ways, depending on the value that you specify for the <code>EmailSendingAccount</code> parameter:</p> <ul> <li> <p>If you specify <code>COGNITO_DEFAULT</code>, Amazon Cognito uses this address as the custom FROM address when it emails your users by using its built-in email account.</p> </li> <li> <p>If you specify <code>DEVELOPER</code>, Amazon Cognito emails your users with this address by calling Amazon SES on your behalf.</p> </li> </ul>",
         "GroupType$RoleArn": "<p>The role ARN for the group.</p>",
         "LambdaConfigType$PreSignUp": "<p>A pre-registration AWS Lambda trigger.</p>",
         "LambdaConfigType$CustomMessage": "<p>A custom Message AWS Lambda trigger.</p>",
@@ -457,8 +472,11 @@
         "LambdaConfigType$VerifyAuthChallengeResponse": "<p>Verifies the authentication challenge response.</p>",
         "LambdaConfigType$PreTokenGeneration": "<p>A Lambda trigger that is invoked before token generation.</p>",
         "LambdaConfigType$UserMigration": "<p>The user migration Lambda config type.</p>",
+        "ListTagsForResourceRequest$ResourceArn": "<p>The Amazon Resource Name (ARN) of the user pool that the tags are assigned to.</p>",
         "NotifyConfigurationType$SourceArn": "<p>The Amazon Resource Name (ARN) of the identity that is associated with the sending authorization policy. It permits Amazon Cognito to send for the email address specified in the <code>From</code> parameter.</p>",
         "SmsConfigurationType$SnsCallerArn": "<p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) caller.</p>",
+        "TagResourceRequest$ResourceArn": "<p>The Amazon Resource Name (ARN) of the user pool to assign the tags to.</p>",
+        "UntagResourceRequest$ResourceArn": "<p>The Amazon Resource Name (ARN) of the user pool that the tags are assigned to.</p>",
         "UpdateGroupRequest$RoleArn": "<p>The new role ARN for the group. This is used for setting the <code>cognito:roles</code> and <code>cognito:preferred_role</code> claims in the token.</p>",
         "UserImportJobType$CloudWatchLogsRoleArn": "<p>The role ARN for the Amazon CloudWatch Logging role for the user import job. For more information, see \"Creating the CloudWatch Logs IAM Role\" in the Amazon Cognito Developer Guide.</p>",
         "UserPoolType$Arn": "<p>The Amazon Resource Name (ARN) for the user pool.</p>"
@@ -586,6 +604,7 @@
       "refs": {
         "AdminCreateUserConfigType$AllowAdminCreateUserOnly": "<p>Set to <code>True</code> if only the administrator is allowed to create user profiles. Set to <code>False</code> if users can sign themselves up via an app.</p>",
         "AdminGetUserResponse$Enabled": "<p>Indicates that the status is enabled.</p>",
+        "AdminSetUserPasswordRequest$Permanent": null,
         "AnalyticsConfigurationType$UserDataShared": "<p>If <code>UserDataShared</code> is <code>true</code>, Amazon Cognito will include user data in the events it publishes to Amazon Pinpoint analytics.</p>",
         "ConfirmDeviceResponse$UserConfirmationNecessary": "<p>Indicates whether the user confirmation is necessary to confirm the device response.</p>",
         "CreateUserPoolClientRequest$AllowedOAuthFlowsUserPoolClient": "<p>Set to <code>True</code> if the client is allowed to follow the OAuth protocol when interacting with Cognito user pools.</p>",
@@ -598,7 +617,7 @@
         "SMSMfaSettingsType$Enabled": "<p>Specifies whether SMS text message MFA is enabled.</p>",
         "SMSMfaSettingsType$PreferredMfa": "<p>The preferred MFA method.</p>",
         "SchemaAttributeType$DeveloperOnlyAttribute": "<p>Specifies whether the attribute type is developer only.</p>",
-        "SchemaAttributeType$Mutable": "<p>Specifies whether the value of the attribute can be changed.</p>",
+        "SchemaAttributeType$Mutable": "<p>Specifies whether the value of the attribute can be changed.</p> <p>For any user pool attribute that's mapped to an identity provider attribute, you must set this parameter to <code>true</code>. Amazon Cognito updates mapped attributes when users sign in to your application through an identity provider. If an attribute is immutable, Amazon Cognito throws an error when it attempts to update the attribute. For more information, see <a href=\"https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-specifying-attribute-mapping.html\">Specifying Identity Provider Attribute Mappings for Your User Pool</a>.</p>",
         "SchemaAttributeType$Required": "<p>Specifies whether a user pool attribute is required. If the attribute is required and the user does not provide a value, registration or sign-in will fail.</p>",
         "SignUpResponse$UserConfirmed": "<p>A response from the server indicating that a user registration has been confirmed.</p>",
         "SoftwareTokenMfaConfigType$Enabled": "<p>Specifies whether software token MFA is enabled.</p>",
@@ -736,7 +755,7 @@
       "base": null,
       "refs": {
         "CreateUserPoolClientRequest$ReadAttributes": "<p>The read attributes.</p>",
-        "CreateUserPoolClientRequest$WriteAttributes": "<p>The write attributes.</p>",
+        "CreateUserPoolClientRequest$WriteAttributes": "<p>The user pool attributes that the app client can write to.</p> <p>If your app client allows users to sign in through an identity provider, this array must include all attributes that are mapped to identity provider attributes. Amazon Cognito updates mapped attributes when users sign in to your application through an identity provider. If your app client lacks write access to a mapped attribute, Amazon Cognito throws an error when it attempts to update the attribute. For more information, see <a href=\"https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-specifying-attribute-mapping.html\">Specifying Identity Provider Attribute Mappings for Your User Pool</a>.</p>",
         "UpdateUserPoolClientRequest$ReadAttributes": "<p>The read-only attributes of the user pool.</p>",
         "UpdateUserPoolClientRequest$WriteAttributes": "<p>The writeable attributes of the user pool.</p>",
         "UserPoolClientType$ReadAttributes": "<p>The Read-only attributes.</p>",
@@ -941,8 +960,9 @@
     "CustomDomainConfigType": {
       "base": "<p>The configuration for a custom domain that hosts the sign-up and sign-in webpages for your application.</p>",
       "refs": {
-        "CreateUserPoolDomainRequest$CustomDomainConfig": "<p>The configuration for a custom domain that hosts the sign-up and sign-in webpages for your application.</p> <p>Provide this parameter only if you want to use own custom domain for your user pool. Otherwise, you can exclude this parameter and use the Amazon Cognito hosted domain instead.</p> <p>For more information about the hosted domain and custom domains, see <a href=\"http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-assign-domain.html\">Configuring a User Pool Domain</a>.</p>",
-        "DomainDescriptionType$CustomDomainConfig": null
+        "CreateUserPoolDomainRequest$CustomDomainConfig": "<p>The configuration for a custom domain that hosts the sign-up and sign-in webpages for your application.</p> <p>Provide this parameter only if you want to use a custom domain for your user pool. Otherwise, you can exclude this parameter and use the Amazon Cognito hosted domain instead.</p> <p>For more information about the hosted domain and custom domains, see <a href=\"https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-assign-domain.html\">Configuring a User Pool Domain</a>.</p>",
+        "DomainDescriptionType$CustomDomainConfig": "<p>The configuration for a custom domain that hosts the sign-up and sign-in webpages for your application.</p>",
+        "UpdateUserPoolDomainRequest$CustomDomainConfig": "<p>The configuration for a custom domain that hosts the sign-up and sign-in pages for your application. Use this object to specify an SSL certificate that is managed by ACM.</p>"
       }
     },
     "DateType": {
@@ -1201,8 +1221,10 @@
         "DeleteUserPoolDomainRequest$Domain": "<p>The domain string.</p>",
         "DescribeUserPoolDomainRequest$Domain": "<p>The domain string.</p>",
         "DomainDescriptionType$Domain": "<p>The domain string.</p>",
+        "UpdateUserPoolDomainRequest$Domain": "<p>The domain name for the custom domain that hosts the sign-up and sign-in pages for your application. For example: <code>auth.example.com</code>. </p> <p>This string can include only lowercase letters, numbers, and hyphens. Do not use a hyphen for the first or last character. Use periods to separate subdomain names.</p>",
+        "UpdateUserPoolDomainResponse$CloudFrontDomain": "<p>The Amazon CloudFront endpoint that Amazon Cognito set up when you added the custom domain to your user pool.</p>",
         "UserPoolType$Domain": "<p>Holds the domain prefix if the user pool has a domain associated with it.</p>",
-        "UserPoolType$CustomDomain": null
+        "UserPoolType$CustomDomain": "<p>A custom domain name that you provide to Amazon Cognito. This parameter applies only if you use a custom domain to host the sign-up and sign-in pages for your application. For example: <code>auth.example.com</code>.</p> <p>For more information about adding a custom domain to your user pool, see <a href=\"https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-add-custom-domain.html\">Using Your Own Domain for the Hosted UI</a>.</p>"
       }
     },
     "DomainVersionType": {
@@ -1241,6 +1263,12 @@
       "base": null,
       "refs": {
         "NotifyEmailType$Subject": "<p>The subject.</p>"
+      }
+    },
+    "EmailSendingAccountType": {
+      "base": null,
+      "refs": {
+        "EmailConfigurationType$EmailSendingAccount": "<p>Specifies whether Amazon Cognito emails your users by using its built-in email functionality or your Amazon SES email configuration. Specify one of the following values:</p> <dl> <dt>COGNITO_DEFAULT</dt> <dd> <p>When Amazon Cognito emails your users, it uses its built-in email functionality. When you use the default option, Amazon Cognito allows only a limited number of emails each day for your user pool. For typical production environments, the default email limit is below the required delivery volume. To achieve a higher delivery volume, specify DEVELOPER to use your Amazon SES email configuration.</p> <p>To look up the email delivery limit for the default option, see <a href=\"https://docs.aws.amazon.com/cognito/latest/developerguide/limits.html\">Limits in Amazon Cognito</a> in the <i>Amazon Cognito Developer Guide</i>.</p> <p>The default FROM address is no-reply@verificationemail.com. To customize the FROM address, provide the ARN of an Amazon SES verified email address for the <code>SourceArn</code> parameter.</p> </dd> <dt>DEVELOPER</dt> <dd> <p>When Amazon Cognito emails your users, it uses your Amazon SES configuration. Amazon Cognito calls Amazon SES on your behalf to send email from your verified email address. When you use this option, the email delivery limits are the same limits that apply to your Amazon SES verified email address in your AWS account.</p> <p>If you use this option, you must provide the ARN of an Amazon SES verified email address for the <code>SourceArn</code> parameter.</p> <p>Before Amazon Cognito can email your users, it requires additional permissions to call Amazon SES on your behalf. When you update your user pool with this option, Amazon Cognito creates a <i>service-linked role</i>, which is a type of IAM role, in your AWS account. This role contains the permissions that allow Amazon Cognito to access Amazon SES and send email messages with your address. For more information about the service-linked role that Amazon Cognito creates, see <a href=\"https://docs.aws.amazon.com/cognito/latest/developerguide/using-service-linked-roles.html\">Using Service-Linked Roles for Amazon Cognito</a> in the <i>Amazon Cognito Developer Guide</i>.</p> </dd> </dl>"
       }
     },
     "EmailVerificationMessageByLinkType": {
@@ -1714,6 +1742,16 @@
       "refs": {
       }
     },
+    "ListTagsForResourceRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListTagsForResourceResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "ListUserImportJobsRequest": {
       "base": "<p>Represents the request to list the user import jobs.</p>",
       "refs": {
@@ -1896,7 +1934,7 @@
       "base": null,
       "refs": {
         "CreateUserPoolClientRequest$AllowedOAuthFlows": "<p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>token</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p>",
-        "UpdateUserPoolClientRequest$AllowedOAuthFlows": "<p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>token</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p>",
+        "UpdateUserPoolClientRequest$AllowedOAuthFlows": "<p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p>",
         "UserPoolClientType$AllowedOAuthFlows": "<p>Set to <code>code</code> to initiate a code grant flow, which provides an authorization code as the response. This code can be exchanged for access tokens with the token endpoint.</p> <p>Set to <code>token</code> to specify that the client should get the access token (and, optionally, ID token, based on scopes) directly.</p>"
       }
     },
@@ -1949,6 +1987,7 @@
       "base": null,
       "refs": {
         "AdminCreateUserRequest$TemporaryPassword": "<p>The user's temporary password. This password must conform to the password policy that you specified when you created the user pool.</p> <p>The temporary password is valid only once. To complete the Admin Create User flow, the user must enter the temporary password in the sign-in page along with a new password to be used in all future sign-ins.</p> <p>This parameter is not required. If you do not specify a value, Amazon Cognito generates one for you.</p> <p>The temporary password can only be used until the user account expiration limit that you specified when you created the user pool. To reset the account after that time limit, you must call <code>AdminCreateUser</code> again, specifying <code>\"RESEND\"</code> for the <code>MessageAction</code> parameter.</p>",
+        "AdminSetUserPasswordRequest$Password": null,
         "ChangePasswordRequest$PreviousPassword": "<p>The old password.</p>",
         "ChangePasswordRequest$ProposedPassword": "<p>The new password.</p>",
         "ConfirmForgotPasswordRequest$Password": "<p>The password sent by a user's request to retrieve a forgotten password.</p>",
@@ -2478,8 +2517,6 @@
         "StringAttributeConstraintsType$MaxLength": "<p>The maximum length.</p>",
         "UserContextDataType$EncodedData": "<p>Contextual data such as the user's device fingerprint, IP address, or location used for evaluating the risk of an unexpected event by Amazon Cognito advanced security.</p>",
         "UserMFASettingListType$member": null,
-        "UserPoolTagsType$key": null,
-        "UserPoolTagsType$value": null,
         "UserPoolType$SmsConfigurationFailure": "<p>The reason why the SMS configuration cannot send the messages to your users.</p>",
         "UserPoolType$EmailConfigurationFailure": "<p>The reason why the email configuration cannot send the messages to your users.</p>",
         "VerifySoftwareTokenRequest$FriendlyDeviceName": "<p>The friendly device name.</p>"
@@ -2488,9 +2525,38 @@
     "SupportedIdentityProvidersListType": {
       "base": null,
       "refs": {
-        "CreateUserPoolClientRequest$SupportedIdentityProviders": "<p>A list of provider names for the identity providers that are supported on this client.</p>",
+        "CreateUserPoolClientRequest$SupportedIdentityProviders": "<p>A list of provider names for the identity providers that are supported on this client. The following are supported: <code>COGNITO</code>, <code>Facebook</code>, <code>Google</code> and <code>LoginWithAmazon</code>.</p>",
         "UpdateUserPoolClientRequest$SupportedIdentityProviders": "<p>A list of provider names for the identity providers that are supported on this client.</p>",
         "UserPoolClientType$SupportedIdentityProviders": "<p>A list of provider names for the identity providers that are supported on this client.</p>"
+      }
+    },
+    "TagKeysType": {
+      "base": null,
+      "refs": {
+        "UserPoolTagsListType$member": null,
+        "UserPoolTagsType$key": null
+      }
+    },
+    "TagResourceRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "TagResourceResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "TagValueType": {
+      "base": null,
+      "refs": {
+        "UserPoolTagsType$value": null
+      }
+    },
+    "TemporaryPasswordValidityDaysType": {
+      "base": null,
+      "refs": {
+        "PasswordPolicyType$TemporaryPasswordValidityDays": null
       }
     },
     "TokenModelType": {
@@ -2548,6 +2614,16 @@
     },
     "UnsupportedUserStateException": {
       "base": "<p>The request failed because the user is in an unsupported state.</p>",
+      "refs": {
+      }
+    },
+    "UntagResourceRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UntagResourceResponse": {
+      "base": null,
       "refs": {
       }
     },
@@ -2618,6 +2694,16 @@
     },
     "UpdateUserPoolClientResponse": {
       "base": "<p>Represents the response from the server to the request to update the user pool client.</p>",
+      "refs": {
+      }
+    },
+    "UpdateUserPoolDomainRequest": {
+      "base": "<p>The UpdateUserPoolDomain request input.</p>",
+      "refs": {
+      }
+    },
+    "UpdateUserPoolDomainResponse": {
+      "base": "<p>The UpdateUserPoolDomain response output.</p>",
       "refs": {
       }
     },
@@ -2775,6 +2861,7 @@
         "AdminResetUserPasswordRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to reset the user's password.</p>",
         "AdminRespondToAuthChallengeRequest$UserPoolId": "<p>The ID of the Amazon Cognito user pool.</p>",
         "AdminSetUserMFAPreferenceRequest$UserPoolId": "<p>The user pool ID.</p>",
+        "AdminSetUserPasswordRequest$UserPoolId": null,
         "AdminSetUserSettingsRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to set the user's settings, such as MFA options.</p>",
         "AdminUpdateAuthEventFeedbackRequest$UserPoolId": "<p>The user pool ID.</p>",
         "AdminUpdateDeviceStatusRequest$UserPoolId": "<p>The user pool ID.</p>",
@@ -2828,6 +2915,7 @@
         "UpdateIdentityProviderRequest$UserPoolId": "<p>The user pool ID.</p>",
         "UpdateResourceServerRequest$UserPoolId": "<p>The user pool ID for the user pool.</p>",
         "UpdateUserPoolClientRequest$UserPoolId": "<p>The user pool ID for the user pool where you want to update the user pool client.</p>",
+        "UpdateUserPoolDomainRequest$UserPoolId": "<p>The ID of the user pool that is associated with the custom domain that you are updating the certificate for.</p>",
         "UpdateUserPoolRequest$UserPoolId": "<p>The user pool ID for the user pool you want to update.</p>",
         "UserImportJobType$UserPoolId": "<p>The user pool ID for the user pool that the users are being imported into.</p>",
         "UserPoolClientDescription$UserPoolId": "<p>The user pool ID for the user pool where you want to describe the user pool client.</p>",
@@ -2874,12 +2962,20 @@
       "refs": {
       }
     },
+    "UserPoolTagsListType": {
+      "base": null,
+      "refs": {
+        "UntagResourceRequest$TagKeys": "<p>The keys of the tags to remove from the user pool.</p>"
+      }
+    },
     "UserPoolTagsType": {
       "base": null,
       "refs": {
-        "CreateUserPoolRequest$UserPoolTags": "<p>The cost allocation tags for the user pool. For more information, see <a href=\"http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-cost-allocation-tagging.html\">Adding Cost Allocation Tags to Your User Pool</a> </p>",
-        "UpdateUserPoolRequest$UserPoolTags": "<p>The cost allocation tags for the user pool. For more information, see <a href=\"http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-cost-allocation-tagging.html\">Adding Cost Allocation Tags to Your User Pool</a> </p>",
-        "UserPoolType$UserPoolTags": "<p>The cost allocation tags for the user pool. For more information, see <a href=\"http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-cost-allocation-tagging.html\">Adding Cost Allocation Tags to Your User Pool</a> </p>"
+        "CreateUserPoolRequest$UserPoolTags": "<p>The tag keys and values to assign to the user pool. A tag is a label that you can use to categorize and manage user pools in different ways, such as by purpose, owner, environment, or other criteria.</p>",
+        "ListTagsForResourceResponse$Tags": "<p>The tags that are assigned to the user pool.</p>",
+        "TagResourceRequest$Tags": "<p>The tags to assign to the user pool.</p>",
+        "UpdateUserPoolRequest$UserPoolTags": "<p>The tag keys and values to assign to the user pool. A tag is a label that you can use to categorize and manage user pools in different ways, such as by purpose, owner, environment, or other criteria.</p>",
+        "UserPoolType$UserPoolTags": "<p>The tags that are assigned to the user pool. A tag is a label that you can apply to user pools to categorize and manage them in different ways, such as by purpose, owner, environment, or other criteria.</p>"
       }
     },
     "UserPoolType": {
@@ -2892,8 +2988,8 @@
     "UserStatusType": {
       "base": null,
       "refs": {
-        "AdminGetUserResponse$UserStatus": "<p>The user status. Can be one of the following:</p> <ul> <li> <p>UNCONFIRMED - User has been created but not confirmed.</p> </li> <li> <p>CONFIRMED - User has been confirmed.</p> </li> <li> <p>ARCHIVED - User is no longer active.</p> </li> <li> <p>COMPROMISED - User is disabled due to a potential security threat.</p> </li> <li> <p>UNKNOWN - User status is not known.</p> </li> </ul>",
-        "UserType$UserStatus": "<p>The user status. Can be one of the following:</p> <ul> <li> <p>UNCONFIRMED - User has been created but not confirmed.</p> </li> <li> <p>CONFIRMED - User has been confirmed.</p> </li> <li> <p>ARCHIVED - User is no longer active.</p> </li> <li> <p>COMPROMISED - User is disabled due to a potential security threat.</p> </li> <li> <p>UNKNOWN - User status is not known.</p> </li> </ul>"
+        "AdminGetUserResponse$UserStatus": "<p>The user status. Can be one of the following:</p> <ul> <li> <p>UNCONFIRMED - User has been created but not confirmed.</p> </li> <li> <p>CONFIRMED - User has been confirmed.</p> </li> <li> <p>ARCHIVED - User is no longer active.</p> </li> <li> <p>COMPROMISED - User is disabled due to a potential security threat.</p> </li> <li> <p>UNKNOWN - User status is not known.</p> </li> <li> <p>RESET_REQUIRED - User is confirmed, but the user must request a code and reset his or her password before he or she can sign in.</p> </li> <li> <p>FORCE_CHANGE_PASSWORD - The user is confirmed and the user can sign in using a temporary password, but on first sign-in, the user must change his or her password to a new value before doing anything else. </p> </li> </ul>",
+        "UserType$UserStatus": "<p>The user status. Can be one of the following:</p> <ul> <li> <p>UNCONFIRMED - User has been created but not confirmed.</p> </li> <li> <p>CONFIRMED - User has been confirmed.</p> </li> <li> <p>ARCHIVED - User is no longer active.</p> </li> <li> <p>COMPROMISED - User is disabled due to a potential security threat.</p> </li> <li> <p>UNKNOWN - User status is not known.</p> </li> <li> <p>RESET_REQUIRED - User is confirmed, but the user must request a code and reset his or her password before he or she can sign in.</p> </li> <li> <p>FORCE_CHANGE_PASSWORD - The user is confirmed and the user can sign in using a temporary password, but on first sign-in, the user must change his or her password to a new value before doing anything else. </p> </li> </ul>"
       }
     },
     "UserType": {
@@ -2941,6 +3037,7 @@
         "AdminRemoveUserFromGroupRequest$Username": "<p>The username for the user.</p>",
         "AdminResetUserPasswordRequest$Username": "<p>The user name of the user whose password you wish to reset.</p>",
         "AdminSetUserMFAPreferenceRequest$Username": "<p>The user pool username or alias.</p>",
+        "AdminSetUserPasswordRequest$Username": null,
         "AdminSetUserSettingsRequest$Username": "<p>The user name of the user for whom you wish to set user settings.</p>",
         "AdminUpdateAuthEventFeedbackRequest$Username": "<p>The user pool username.</p>",
         "AdminUpdateDeviceStatusRequest$Username": "<p>The user name.</p>",

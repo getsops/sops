@@ -284,6 +284,21 @@
         "shape": "ListOriginEndpointsResponse"
       }
     }, 
+    "ListTagsForResource": {
+      "errors": [], 
+      "http": {
+        "method": "GET", 
+        "requestUri": "/tags/{resource-arn}", 
+        "responseCode": 200
+      }, 
+      "input": {
+        "shape": "ListTagsForResourceRequest"
+      }, 
+      "name": "ListTagsForResource", 
+      "output": {
+        "shape": "ListTagsForResourceResponse"
+      }
+    }, 
     "RotateChannelCredentials": {
       "deprecated": true, 
       "deprecatedMessage": "This API is deprecated. Please use RotateIngestEndpointCredentials instead", 
@@ -353,6 +368,30 @@
       "output": {
         "shape": "RotateIngestEndpointCredentialsResponse"
       }
+    }, 
+    "TagResource": {
+      "errors": [], 
+      "http": {
+        "method": "POST", 
+        "requestUri": "/tags/{resource-arn}", 
+        "responseCode": 204
+      }, 
+      "input": {
+        "shape": "TagResourceRequest"
+      }, 
+      "name": "TagResource"
+    }, 
+    "UntagResource": {
+      "errors": [], 
+      "http": {
+        "method": "DELETE", 
+        "requestUri": "/tags/{resource-arn}", 
+        "responseCode": 204
+      }, 
+      "input": {
+        "shape": "UntagResourceRequest"
+      }, 
+      "name": "UntagResource"
     }, 
     "UpdateChannel": {
       "errors": [
@@ -449,6 +488,10 @@
         "Id": {
           "locationName": "id", 
           "shape": "__string"
+        }, 
+        "Tags": {
+          "locationName": "tags", 
+          "shape": "Tags"
         }
       }, 
       "type": "structure"
@@ -462,6 +505,10 @@
         "Id": {
           "locationName": "id", 
           "shape": "__string"
+        }, 
+        "Tags": {
+          "locationName": "tags", 
+          "shape": "Tags"
         }
       }, 
       "required": [
@@ -566,6 +613,10 @@
         "Id": {
           "locationName": "id", 
           "shape": "__string"
+        }, 
+        "Tags": {
+          "locationName": "tags", 
+          "shape": "Tags"
         }
       }, 
       "required": [
@@ -590,6 +641,10 @@
         "Id": {
           "locationName": "id", 
           "shape": "__string"
+        }, 
+        "Tags": {
+          "locationName": "tags", 
+          "shape": "Tags"
         }
       }, 
       "type": "structure"
@@ -631,6 +686,10 @@
         "StartoverWindowSeconds": {
           "locationName": "startoverWindowSeconds", 
           "shape": "__integer"
+        }, 
+        "Tags": {
+          "locationName": "tags", 
+          "shape": "Tags"
         }, 
         "TimeDelaySeconds": {
           "locationName": "timeDelaySeconds", 
@@ -689,6 +748,10 @@
           "locationName": "startoverWindowSeconds", 
           "shape": "__integer"
         }, 
+        "Tags": {
+          "locationName": "tags", 
+          "shape": "Tags"
+        }, 
         "TimeDelaySeconds": {
           "locationName": "timeDelaySeconds", 
           "shape": "__integer"
@@ -726,6 +789,10 @@
           "locationName": "encryption", 
           "shape": "DashEncryption"
         }, 
+        "ManifestLayout": {
+          "locationName": "manifestLayout", 
+          "shape": "ManifestLayout"
+        }, 
         "ManifestWindowSeconds": {
           "locationName": "manifestWindowSeconds", 
           "shape": "__integer"
@@ -749,6 +816,10 @@
         "SegmentDurationSeconds": {
           "locationName": "segmentDurationSeconds", 
           "shape": "__integer"
+        }, 
+        "SegmentTemplateFormat": {
+          "locationName": "segmentTemplateFormat", 
+          "shape": "SegmentTemplateFormat"
         }, 
         "StreamSelection": {
           "locationName": "streamSelection", 
@@ -825,6 +896,10 @@
         "Id": {
           "locationName": "id", 
           "shape": "__string"
+        }, 
+        "Tags": {
+          "locationName": "tags", 
+          "shape": "Tags"
         }
       }, 
       "type": "structure"
@@ -883,6 +958,10 @@
         "StartoverWindowSeconds": {
           "locationName": "startoverWindowSeconds", 
           "shape": "__integer"
+        }, 
+        "Tags": {
+          "locationName": "tags", 
+          "shape": "Tags"
         }, 
         "TimeDelaySeconds": {
           "locationName": "timeDelaySeconds", 
@@ -1168,6 +1247,35 @@
       }, 
       "type": "structure"
     }, 
+    "ListTagsForResourceRequest": {
+      "members": {
+        "ResourceArn": {
+          "location": "uri", 
+          "locationName": "resource-arn", 
+          "shape": "__string"
+        }
+      }, 
+      "required": [
+        "ResourceArn"
+      ], 
+      "type": "structure"
+    }, 
+    "ListTagsForResourceResponse": {
+      "members": {
+        "Tags": {
+          "locationName": "tags", 
+          "shape": "__mapOf__string"
+        }
+      }, 
+      "type": "structure"
+    }, 
+    "ManifestLayout": {
+      "enum": [
+        "FULL", 
+        "COMPACT"
+      ], 
+      "type": "string"
+    }, 
     "MaxResults": {
       "max": 1000, 
       "min": 1, 
@@ -1261,6 +1369,10 @@
           "locationName": "startoverWindowSeconds", 
           "shape": "__integer"
         }, 
+        "Tags": {
+          "locationName": "tags", 
+          "shape": "Tags"
+        }, 
         "TimeDelaySeconds": {
           "locationName": "timeDelaySeconds", 
           "shape": "__integer"
@@ -1313,6 +1425,10 @@
         "StartoverWindowSeconds": {
           "locationName": "startoverWindowSeconds", 
           "shape": "__integer"
+        }, 
+        "Tags": {
+          "locationName": "tags", 
+          "shape": "Tags"
         }, 
         "TimeDelaySeconds": {
           "locationName": "timeDelaySeconds", 
@@ -1430,6 +1546,10 @@
         "Id": {
           "locationName": "id", 
           "shape": "__string"
+        }, 
+        "Tags": {
+          "locationName": "tags", 
+          "shape": "Tags"
         }
       }, 
       "type": "structure"
@@ -1470,9 +1590,21 @@
         "Id": {
           "locationName": "id", 
           "shape": "__string"
+        }, 
+        "Tags": {
+          "locationName": "tags", 
+          "shape": "Tags"
         }
       }, 
       "type": "structure"
+    }, 
+    "SegmentTemplateFormat": {
+      "enum": [
+        "NUMBER_WITH_TIMELINE", 
+        "TIME_WITH_TIMELINE",
+        "NUMBER_WITH_DURATION"
+      ], 
+      "type": "string"
     }, 
     "ServiceUnavailableException": {
       "error": {
@@ -1489,6 +1621,10 @@
     }, 
     "SpekeKeyProvider": {
       "members": {
+        "CertificateArn": {
+          "locationName": "certificateArn", 
+          "shape": "__string"
+        }, 
         "ResourceId": {
           "locationName": "resourceId", 
           "shape": "__string"
@@ -1539,6 +1675,45 @@
       }, 
       "type": "structure"
     }, 
+    "TagResourceRequest": {
+      "members": {
+        "ResourceArn": {
+          "location": "uri", 
+          "locationName": "resource-arn", 
+          "shape": "__string"
+        }, 
+        "Tags": {
+          "locationName": "tags", 
+          "shape": "__mapOf__string"
+        }
+      }, 
+      "required": [
+        "ResourceArn", 
+        "Tags"
+      ], 
+      "type": "structure"
+    }, 
+    "Tags": {
+      "key": {
+        "shape": "__string"
+      }, 
+      "type": "map", 
+      "value": {
+        "shape": "__string"
+      }
+    }, 
+    "TagsModel": {
+      "members": {
+        "Tags": {
+          "locationName": "tags", 
+          "shape": "__mapOf__string"
+        }
+      }, 
+      "required": [
+        "Tags"
+      ], 
+      "type": "structure"
+    }, 
     "TooManyRequestsException": {
       "error": {
         "httpStatusCode": 429
@@ -1563,6 +1738,25 @@
           "shape": "__string"
         }
       }, 
+      "type": "structure"
+    }, 
+    "UntagResourceRequest": {
+      "members": {
+        "ResourceArn": {
+          "location": "uri", 
+          "locationName": "resource-arn", 
+          "shape": "__string"
+        }, 
+        "TagKeys": {
+          "location": "querystring", 
+          "locationName": "tagKeys", 
+          "shape": "__listOf__string"
+        }
+      }, 
+      "required": [
+        "TagKeys", 
+        "ResourceArn"
+      ], 
       "type": "structure"
     }, 
     "UpdateChannelRequest": {
@@ -1599,6 +1793,10 @@
         "Id": {
           "locationName": "id", 
           "shape": "__string"
+        }, 
+        "Tags": {
+          "locationName": "tags", 
+          "shape": "Tags"
         }
       }, 
       "type": "structure"
@@ -1694,6 +1892,10 @@
           "locationName": "startoverWindowSeconds", 
           "shape": "__integer"
         }, 
+        "Tags": {
+          "locationName": "tags", 
+          "shape": "Tags"
+        }, 
         "TimeDelaySeconds": {
           "locationName": "timeDelaySeconds", 
           "shape": "__integer"
@@ -1768,6 +1970,15 @@
     }, 
     "__long": {
       "type": "long"
+    }, 
+    "__mapOf__string": {
+      "key": {
+        "shape": "__string"
+      }, 
+      "type": "map", 
+      "value": {
+        "shape": "__string"
+      }
     }, 
     "__string": {
       "type": "string"

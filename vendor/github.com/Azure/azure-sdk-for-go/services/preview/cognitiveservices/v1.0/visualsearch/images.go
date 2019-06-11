@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"io"
 	"net/http"
 )
@@ -35,12 +36,7 @@ type ImagesClient struct {
 
 // NewImagesClient creates an instance of the ImagesClient client.
 func NewImagesClient() ImagesClient {
-	return NewImagesClientWithBaseURI(DefaultBaseURI)
-}
-
-// NewImagesClientWithBaseURI creates an instance of the ImagesClient client.
-func NewImagesClientWithBaseURI(baseURI string) ImagesClient {
-	return ImagesClient{NewWithBaseURI(baseURI)}
+	return ImagesClient{New()}
 }
 
 // VisualSearch sends the visual search request.
@@ -163,6 +159,16 @@ func NewImagesClientWithBaseURI(baseURI string) ImagesClient {
 // form data in the same request only if knowledgeRequest form data specifies the cropArea field only  (it must
 // not include an insights token or URL).
 func (client ImagesClient) VisualSearch(ctx context.Context, acceptLanguage string, contentType string, userAgent string, clientID string, clientIP string, location string, market string, safeSearch SafeSearch, setLang string, knowledgeRequest string, imageParameter io.ReadCloser) (result ImageKnowledge, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ImagesClient.VisualSearch")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.VisualSearchPreparer(ctx, acceptLanguage, contentType, userAgent, clientID, clientIP, location, market, safeSearch, setLang, knowledgeRequest, imageParameter)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "visualsearch.ImagesClient", "VisualSearch", nil, "Failure preparing request")
@@ -186,6 +192,10 @@ func (client ImagesClient) VisualSearch(ctx context.Context, acceptLanguage stri
 
 // VisualSearchPreparer prepares the VisualSearch request.
 func (client ImagesClient) VisualSearchPreparer(ctx context.Context, acceptLanguage string, contentType string, userAgent string, clientID string, clientIP string, location string, market string, safeSearch SafeSearch, setLang string, knowledgeRequest string, imageParameter io.ReadCloser) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
 	queryParameters := map[string]interface{}{}
 	if len(market) > 0 {
 		queryParameters["mkt"] = autorest.Encode("query", market)
@@ -207,7 +217,7 @@ func (client ImagesClient) VisualSearchPreparer(ctx context.Context, acceptLangu
 
 	preparer := autorest.CreatePreparer(
 		autorest.AsPost(),
-		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithCustomBaseURL("{Endpoint}/bing/v7.0", urlParameters),
 		autorest.WithPath("/images/visualsearch"),
 		autorest.WithQueryParameters(queryParameters),
 		autorest.WithMultiPartFormData(formDataParameters),

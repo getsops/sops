@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewScheduleClientWithBaseURI(baseURI string, subscriptionID string) Schedul
 // scheduleName - the schedule name.
 // parameters - the parameters supplied to the create or update schedule operation.
 func (client ScheduleClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, automationAccountName string, scheduleName string, parameters ScheduleCreateOrUpdateParameters) (result Schedule, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ScheduleClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -130,6 +141,16 @@ func (client ScheduleClient) CreateOrUpdateResponder(resp *http.Response) (resul
 // automationAccountName - the name of the automation account.
 // scheduleName - the schedule name.
 func (client ScheduleClient) Delete(ctx context.Context, resourceGroupName string, automationAccountName string, scheduleName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ScheduleClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -206,6 +227,16 @@ func (client ScheduleClient) DeleteResponder(resp *http.Response) (result autore
 // automationAccountName - the name of the automation account.
 // scheduleName - the schedule name.
 func (client ScheduleClient) Get(ctx context.Context, resourceGroupName string, automationAccountName string, scheduleName string) (result Schedule, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ScheduleClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -282,6 +313,16 @@ func (client ScheduleClient) GetResponder(resp *http.Response) (result Schedule,
 // resourceGroupName - name of an Azure Resource group.
 // automationAccountName - the name of the automation account.
 func (client ScheduleClient) ListByAutomationAccount(ctx context.Context, resourceGroupName string, automationAccountName string) (result ScheduleListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ScheduleClient.ListByAutomationAccount")
+		defer func() {
+			sc := -1
+			if result.slr.Response.Response != nil {
+				sc = result.slr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -354,8 +395,8 @@ func (client ScheduleClient) ListByAutomationAccountResponder(resp *http.Respons
 }
 
 // listByAutomationAccountNextResults retrieves the next set of results, if any.
-func (client ScheduleClient) listByAutomationAccountNextResults(lastResults ScheduleListResult) (result ScheduleListResult, err error) {
-	req, err := lastResults.scheduleListResultPreparer()
+func (client ScheduleClient) listByAutomationAccountNextResults(ctx context.Context, lastResults ScheduleListResult) (result ScheduleListResult, err error) {
+	req, err := lastResults.scheduleListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "automation.ScheduleClient", "listByAutomationAccountNextResults", nil, "Failure preparing next results request")
 	}
@@ -376,6 +417,16 @@ func (client ScheduleClient) listByAutomationAccountNextResults(lastResults Sche
 
 // ListByAutomationAccountComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ScheduleClient) ListByAutomationAccountComplete(ctx context.Context, resourceGroupName string, automationAccountName string) (result ScheduleListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ScheduleClient.ListByAutomationAccount")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByAutomationAccount(ctx, resourceGroupName, automationAccountName)
 	return
 }
@@ -387,6 +438,16 @@ func (client ScheduleClient) ListByAutomationAccountComplete(ctx context.Context
 // scheduleName - the schedule name.
 // parameters - the parameters supplied to the update schedule operation.
 func (client ScheduleClient) Update(ctx context.Context, resourceGroupName string, automationAccountName string, scheduleName string, parameters ScheduleUpdateParameters) (result Schedule, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ScheduleClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

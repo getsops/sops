@@ -9,6 +9,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 )
 
 const opDeleteLexicon = "DeleteLexicon"
@@ -16,7 +18,7 @@ const opDeleteLexicon = "DeleteLexicon"
 // DeleteLexiconRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteLexicon operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -50,6 +52,7 @@ func (c *Polly) DeleteLexiconRequest(input *DeleteLexiconInput) (req *request.Re
 
 	output = &DeleteLexiconOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -107,7 +110,7 @@ const opDescribeVoices = "DescribeVoices"
 // DescribeVoicesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeVoices operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -206,7 +209,7 @@ const opGetLexicon = "GetLexicon"
 // GetLexiconRequest generates a "aws/request.Request" representing the
 // client's request for the GetLexicon operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -294,7 +297,7 @@ const opGetSpeechSynthesisTask = "GetSpeechSynthesisTask"
 // GetSpeechSynthesisTaskRequest generates a "aws/request.Request" representing the
 // client's request for the GetSpeechSynthesisTask operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -383,7 +386,7 @@ const opListLexicons = "ListLexicons"
 // ListLexiconsRequest generates a "aws/request.Request" representing the
 // client's request for the ListLexicons operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -467,7 +470,7 @@ const opListSpeechSynthesisTasks = "ListSpeechSynthesisTasks"
 // ListSpeechSynthesisTasksRequest generates a "aws/request.Request" representing the
 // client's request for the ListSpeechSynthesisTasks operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -564,7 +567,7 @@ func (c *Polly) ListSpeechSynthesisTasksWithContext(ctx aws.Context, input *List
 //    // Example iterating over at most 3 pages of a ListSpeechSynthesisTasks operation.
 //    pageNum := 0
 //    err := client.ListSpeechSynthesisTasksPages(params,
-//        func(page *ListSpeechSynthesisTasksOutput, lastPage bool) bool {
+//        func(page *polly.ListSpeechSynthesisTasksOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -608,7 +611,7 @@ const opPutLexicon = "PutLexicon"
 // PutLexiconRequest generates a "aws/request.Request" representing the
 // client's request for the PutLexicon operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -642,6 +645,7 @@ func (c *Polly) PutLexiconRequest(input *PutLexiconInput) (req *request.Request,
 
 	output = &PutLexiconOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -713,7 +717,7 @@ const opStartSpeechSynthesisTask = "StartSpeechSynthesisTask"
 // StartSpeechSynthesisTaskRequest generates a "aws/request.Request" representing the
 // client's request for the StartSpeechSynthesisTask operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -843,7 +847,7 @@ const opSynthesizeSpeech = "SynthesizeSpeech"
 // SynthesizeSpeechRequest generates a "aws/request.Request" representing the
 // client's request for the SynthesizeSpeech operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -960,7 +964,7 @@ type DeleteLexiconInput struct {
 	// The name of the lexicon to delete. Must be an existing lexicon in the region.
 	//
 	// Name is a required field
-	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true"`
+	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -978,6 +982,9 @@ func (s *DeleteLexiconInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "DeleteLexiconInput"}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1093,7 +1100,7 @@ type GetLexiconInput struct {
 	// Name of the lexicon.
 	//
 	// Name is a required field
-	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true"`
+	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -1111,6 +1118,9 @@ func (s *GetLexiconInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetLexiconInput"}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1165,7 +1175,7 @@ type GetSpeechSynthesisTaskInput struct {
 	// The Amazon Polly generated identifier for a speech synthesis task.
 	//
 	// TaskId is a required field
-	TaskId *string `location:"uri" locationName:"TaskId" min:"1" type:"string" required:"true"`
+	TaskId *string `location:"uri" locationName:"TaskId" type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -1234,7 +1244,7 @@ type Lexicon struct {
 	Content *string `type:"string"`
 
 	// Name of the lexicon.
-	Name *string `type:"string"`
+	Name *string `type:"string" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -1339,7 +1349,7 @@ type LexiconDescription struct {
 	Attributes *LexiconAttributes `type:"structure"`
 
 	// Name of the lexicon.
-	Name *string `type:"string"`
+	Name *string `type:"string" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -1524,7 +1534,7 @@ type PutLexiconInput struct {
 	// long.
 	//
 	// Name is a required field
-	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true"`
+	Name *string `location:"uri" locationName:"LexiconName" type:"string" required:"true" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -1545,6 +1555,9 @@ func (s *PutLexiconInput) Validate() error {
 	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1814,7 +1827,7 @@ type SynthesisTask struct {
 	SpeechMarkTypes []*string `type:"list"`
 
 	// The Amazon Polly generated identifier for a speech synthesis task.
-	TaskId *string `min:"1" type:"string"`
+	TaskId *string `type:"string"`
 
 	// Current status of the individual speech synthesis task.
 	TaskStatus *string `type:"string" enum:"TaskStatus"`
@@ -1948,6 +1961,9 @@ type SynthesizeSpeechInput struct {
 	// The format in which the returned output will be encoded. For audio stream,
 	// this will be mp3, ogg_vorbis, or pcm. For speech marks, this will be json.
 	//
+	// When pcm is used, the content returned is audio/pcm in a signed 16-bit, 1
+	// channel (mono), little-endian format.
+	//
 	// OutputFormat is a required field
 	OutputFormat *string `type:"string" required:"true" enum:"OutputFormat"`
 
@@ -2066,15 +2082,14 @@ type SynthesizeSpeechOutput struct {
 	// Specifies the type audio stream. This should reflect the OutputFormat parameter
 	// in your request.
 	//
-	//    *  If you request mp3 as the OutputFormat, the ContentType returned is
+	//    * If you request mp3 as the OutputFormat, the ContentType returned is
 	//    audio/mpeg.
 	//
-	//    *  If you request ogg_vorbis as the OutputFormat, the ContentType returned
+	//    * If you request ogg_vorbis as the OutputFormat, the ContentType returned
 	//    is audio/ogg.
 	//
-	//    *  If you request pcm as the OutputFormat, the ContentType returned is
+	//    * If you request pcm as the OutputFormat, the ContentType returned is
 	//    audio/pcm in a signed 16-bit, 1 channel (mono), little-endian format.
-	//
 	//
 	//    * If you request json as the OutputFormat, the ContentType returned is
 	//    audio/json.
@@ -2197,6 +2212,12 @@ const (
 )
 
 const (
+	// LanguageCodeArb is a LanguageCode enum value
+	LanguageCodeArb = "arb"
+
+	// LanguageCodeCmnCn is a LanguageCode enum value
+	LanguageCodeCmnCn = "cmn-CN"
+
 	// LanguageCodeCyGb is a LanguageCode enum value
 	LanguageCodeCyGb = "cy-GB"
 
@@ -2223,6 +2244,9 @@ const (
 
 	// LanguageCodeEsEs is a LanguageCode enum value
 	LanguageCodeEsEs = "es-ES"
+
+	// LanguageCodeEsMx is a LanguageCode enum value
+	LanguageCodeEsMx = "es-MX"
 
 	// LanguageCodeEsUs is a LanguageCode enum value
 	LanguageCodeEsUs = "es-US"
@@ -2327,44 +2351,77 @@ const (
 )
 
 const (
-	// VoiceIdGeraint is a VoiceId enum value
-	VoiceIdGeraint = "Geraint"
-
-	// VoiceIdGwyneth is a VoiceId enum value
-	VoiceIdGwyneth = "Gwyneth"
-
-	// VoiceIdMads is a VoiceId enum value
-	VoiceIdMads = "Mads"
-
-	// VoiceIdNaja is a VoiceId enum value
-	VoiceIdNaja = "Naja"
-
-	// VoiceIdHans is a VoiceId enum value
-	VoiceIdHans = "Hans"
-
-	// VoiceIdMarlene is a VoiceId enum value
-	VoiceIdMarlene = "Marlene"
-
-	// VoiceIdNicole is a VoiceId enum value
-	VoiceIdNicole = "Nicole"
-
-	// VoiceIdRussell is a VoiceId enum value
-	VoiceIdRussell = "Russell"
+	// VoiceIdAditi is a VoiceId enum value
+	VoiceIdAditi = "Aditi"
 
 	// VoiceIdAmy is a VoiceId enum value
 	VoiceIdAmy = "Amy"
 
+	// VoiceIdAstrid is a VoiceId enum value
+	VoiceIdAstrid = "Astrid"
+
+	// VoiceIdBianca is a VoiceId enum value
+	VoiceIdBianca = "Bianca"
+
 	// VoiceIdBrian is a VoiceId enum value
 	VoiceIdBrian = "Brian"
+
+	// VoiceIdCarla is a VoiceId enum value
+	VoiceIdCarla = "Carla"
+
+	// VoiceIdCarmen is a VoiceId enum value
+	VoiceIdCarmen = "Carmen"
+
+	// VoiceIdCeline is a VoiceId enum value
+	VoiceIdCeline = "Celine"
+
+	// VoiceIdChantal is a VoiceId enum value
+	VoiceIdChantal = "Chantal"
+
+	// VoiceIdConchita is a VoiceId enum value
+	VoiceIdConchita = "Conchita"
+
+	// VoiceIdCristiano is a VoiceId enum value
+	VoiceIdCristiano = "Cristiano"
+
+	// VoiceIdDora is a VoiceId enum value
+	VoiceIdDora = "Dora"
 
 	// VoiceIdEmma is a VoiceId enum value
 	VoiceIdEmma = "Emma"
 
-	// VoiceIdRaveena is a VoiceId enum value
-	VoiceIdRaveena = "Raveena"
+	// VoiceIdEnrique is a VoiceId enum value
+	VoiceIdEnrique = "Enrique"
+
+	// VoiceIdEwa is a VoiceId enum value
+	VoiceIdEwa = "Ewa"
+
+	// VoiceIdFiliz is a VoiceId enum value
+	VoiceIdFiliz = "Filiz"
+
+	// VoiceIdGeraint is a VoiceId enum value
+	VoiceIdGeraint = "Geraint"
+
+	// VoiceIdGiorgio is a VoiceId enum value
+	VoiceIdGiorgio = "Giorgio"
+
+	// VoiceIdGwyneth is a VoiceId enum value
+	VoiceIdGwyneth = "Gwyneth"
+
+	// VoiceIdHans is a VoiceId enum value
+	VoiceIdHans = "Hans"
+
+	// VoiceIdInes is a VoiceId enum value
+	VoiceIdInes = "Ines"
 
 	// VoiceIdIvy is a VoiceId enum value
 	VoiceIdIvy = "Ivy"
+
+	// VoiceIdJacek is a VoiceId enum value
+	VoiceIdJacek = "Jacek"
+
+	// VoiceIdJan is a VoiceId enum value
+	VoiceIdJan = "Jan"
 
 	// VoiceIdJoanna is a VoiceId enum value
 	VoiceIdJoanna = "Joanna"
@@ -2375,56 +2432,17 @@ const (
 	// VoiceIdJustin is a VoiceId enum value
 	VoiceIdJustin = "Justin"
 
+	// VoiceIdKarl is a VoiceId enum value
+	VoiceIdKarl = "Karl"
+
 	// VoiceIdKendra is a VoiceId enum value
 	VoiceIdKendra = "Kendra"
 
 	// VoiceIdKimberly is a VoiceId enum value
 	VoiceIdKimberly = "Kimberly"
 
-	// VoiceIdMatthew is a VoiceId enum value
-	VoiceIdMatthew = "Matthew"
-
-	// VoiceIdSalli is a VoiceId enum value
-	VoiceIdSalli = "Salli"
-
-	// VoiceIdConchita is a VoiceId enum value
-	VoiceIdConchita = "Conchita"
-
-	// VoiceIdEnrique is a VoiceId enum value
-	VoiceIdEnrique = "Enrique"
-
-	// VoiceIdMiguel is a VoiceId enum value
-	VoiceIdMiguel = "Miguel"
-
-	// VoiceIdPenelope is a VoiceId enum value
-	VoiceIdPenelope = "Penelope"
-
-	// VoiceIdChantal is a VoiceId enum value
-	VoiceIdChantal = "Chantal"
-
-	// VoiceIdCeline is a VoiceId enum value
-	VoiceIdCeline = "Celine"
-
 	// VoiceIdLea is a VoiceId enum value
 	VoiceIdLea = "Lea"
-
-	// VoiceIdMathieu is a VoiceId enum value
-	VoiceIdMathieu = "Mathieu"
-
-	// VoiceIdDora is a VoiceId enum value
-	VoiceIdDora = "Dora"
-
-	// VoiceIdKarl is a VoiceId enum value
-	VoiceIdKarl = "Karl"
-
-	// VoiceIdCarla is a VoiceId enum value
-	VoiceIdCarla = "Carla"
-
-	// VoiceIdGiorgio is a VoiceId enum value
-	VoiceIdGiorgio = "Giorgio"
-
-	// VoiceIdMizuki is a VoiceId enum value
-	VoiceIdMizuki = "Mizuki"
 
 	// VoiceIdLiv is a VoiceId enum value
 	VoiceIdLiv = "Liv"
@@ -2432,57 +2450,78 @@ const (
 	// VoiceIdLotte is a VoiceId enum value
 	VoiceIdLotte = "Lotte"
 
-	// VoiceIdRuben is a VoiceId enum value
-	VoiceIdRuben = "Ruben"
+	// VoiceIdLucia is a VoiceId enum value
+	VoiceIdLucia = "Lucia"
 
-	// VoiceIdEwa is a VoiceId enum value
-	VoiceIdEwa = "Ewa"
-
-	// VoiceIdJacek is a VoiceId enum value
-	VoiceIdJacek = "Jacek"
-
-	// VoiceIdJan is a VoiceId enum value
-	VoiceIdJan = "Jan"
+	// VoiceIdMads is a VoiceId enum value
+	VoiceIdMads = "Mads"
 
 	// VoiceIdMaja is a VoiceId enum value
 	VoiceIdMaja = "Maja"
 
-	// VoiceIdRicardo is a VoiceId enum value
-	VoiceIdRicardo = "Ricardo"
+	// VoiceIdMarlene is a VoiceId enum value
+	VoiceIdMarlene = "Marlene"
 
-	// VoiceIdVitoria is a VoiceId enum value
-	VoiceIdVitoria = "Vitoria"
+	// VoiceIdMathieu is a VoiceId enum value
+	VoiceIdMathieu = "Mathieu"
 
-	// VoiceIdCristiano is a VoiceId enum value
-	VoiceIdCristiano = "Cristiano"
-
-	// VoiceIdInes is a VoiceId enum value
-	VoiceIdInes = "Ines"
-
-	// VoiceIdCarmen is a VoiceId enum value
-	VoiceIdCarmen = "Carmen"
+	// VoiceIdMatthew is a VoiceId enum value
+	VoiceIdMatthew = "Matthew"
 
 	// VoiceIdMaxim is a VoiceId enum value
 	VoiceIdMaxim = "Maxim"
 
-	// VoiceIdTatyana is a VoiceId enum value
-	VoiceIdTatyana = "Tatyana"
+	// VoiceIdMia is a VoiceId enum value
+	VoiceIdMia = "Mia"
 
-	// VoiceIdAstrid is a VoiceId enum value
-	VoiceIdAstrid = "Astrid"
+	// VoiceIdMiguel is a VoiceId enum value
+	VoiceIdMiguel = "Miguel"
 
-	// VoiceIdFiliz is a VoiceId enum value
-	VoiceIdFiliz = "Filiz"
+	// VoiceIdMizuki is a VoiceId enum value
+	VoiceIdMizuki = "Mizuki"
 
-	// VoiceIdVicki is a VoiceId enum value
-	VoiceIdVicki = "Vicki"
+	// VoiceIdNaja is a VoiceId enum value
+	VoiceIdNaja = "Naja"
 
-	// VoiceIdTakumi is a VoiceId enum value
-	VoiceIdTakumi = "Takumi"
+	// VoiceIdNicole is a VoiceId enum value
+	VoiceIdNicole = "Nicole"
+
+	// VoiceIdPenelope is a VoiceId enum value
+	VoiceIdPenelope = "Penelope"
+
+	// VoiceIdRaveena is a VoiceId enum value
+	VoiceIdRaveena = "Raveena"
+
+	// VoiceIdRicardo is a VoiceId enum value
+	VoiceIdRicardo = "Ricardo"
+
+	// VoiceIdRuben is a VoiceId enum value
+	VoiceIdRuben = "Ruben"
+
+	// VoiceIdRussell is a VoiceId enum value
+	VoiceIdRussell = "Russell"
+
+	// VoiceIdSalli is a VoiceId enum value
+	VoiceIdSalli = "Salli"
 
 	// VoiceIdSeoyeon is a VoiceId enum value
 	VoiceIdSeoyeon = "Seoyeon"
 
-	// VoiceIdAditi is a VoiceId enum value
-	VoiceIdAditi = "Aditi"
+	// VoiceIdTakumi is a VoiceId enum value
+	VoiceIdTakumi = "Takumi"
+
+	// VoiceIdTatyana is a VoiceId enum value
+	VoiceIdTatyana = "Tatyana"
+
+	// VoiceIdVicki is a VoiceId enum value
+	VoiceIdVicki = "Vicki"
+
+	// VoiceIdVitoria is a VoiceId enum value
+	VoiceIdVitoria = "Vitoria"
+
+	// VoiceIdZeina is a VoiceId enum value
+	VoiceIdZeina = "Zeina"
+
+	// VoiceIdZhiyu is a VoiceId enum value
+	VoiceIdZhiyu = "Zhiyu"
 )

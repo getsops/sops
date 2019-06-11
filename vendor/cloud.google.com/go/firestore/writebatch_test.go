@@ -15,16 +15,13 @@
 package firestore
 
 import (
+	"context"
 	"testing"
 
-	pb "google.golang.org/genproto/googleapis/firestore/v1beta1"
-
-	"golang.org/x/net/context"
+	pb "google.golang.org/genproto/googleapis/firestore/v1"
 )
 
 func TestWriteBatch(t *testing.T) {
-	type update struct{ A int }
-
 	c, srv := newMock(t)
 	docPrefix := c.Collection("C").Path + "/"
 	srv.addRPC(

@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -43,6 +44,16 @@ func NewUsagesClientWithBaseURI(baseURI string, subscriptionID string) UsagesCli
 // Parameters:
 // location - the Azure region of the operation
 func (client UsagesClient) List(ctx context.Context, location string) (result QuotaListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UsagesClient.List")
+		defer func() {
+			sc := -1
+			if result.ql.Response.Response != nil {
+				sc = result.ql.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, location)
 	if err != nil {
@@ -106,8 +117,8 @@ func (client UsagesClient) ListResponder(resp *http.Response) (result QuotaList,
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client UsagesClient) listNextResults(lastResults QuotaList) (result QuotaList, err error) {
-	req, err := lastResults.quotaListPreparer()
+func (client UsagesClient) listNextResults(ctx context.Context, lastResults QuotaList) (result QuotaList, err error) {
+	req, err := lastResults.quotaListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "datamigration.UsagesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -128,6 +139,16 @@ func (client UsagesClient) listNextResults(lastResults QuotaList) (result QuotaL
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client UsagesClient) ListComplete(ctx context.Context, location string) (result QuotaListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/UsagesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, location)
 	return
 }

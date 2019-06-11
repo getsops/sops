@@ -15,11 +15,11 @@
 package logadmin_test
 
 import (
+	"context"
 	"fmt"
 	"time"
 
 	"cloud.google.com/go/logging/logadmin"
-	"golang.org/x/net/context"
 	"google.golang.org/api/iterator"
 )
 

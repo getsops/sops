@@ -32,6 +32,19 @@ func (t AWSEpochTime) MarshalJSON() ([]byte, error) {
 	return []byte(fmt.Sprintf(`{"AWS:EpochTime":%d}`, t.UTC().Unix())), nil
 }
 
+// UnmarshalJSON unserializes AWS Profile epoch time.
+func (t *AWSEpochTime) UnmarshalJSON(data []byte) error {
+	var epochTime struct {
+		Sec int64 `json:"AWS:EpochTime"`
+	}
+	err := json.Unmarshal(data, &epochTime)
+	if err != nil {
+		return err
+	}
+	t.Time = time.Unix(epochTime.Sec, 0).UTC()
+	return nil
+}
+
 // An IPAddress wraps an IPAddress source IP providing JSON serialization information
 type IPAddress struct {
 	SourceIP string `json:"AWS:SourceIp"`
@@ -169,11 +182,10 @@ func NewCannedPolicy(resource string, expires time.Time) *Policy {
 
 // encodePolicy encodes the Policy as JSON and also base 64 encodes it.
 func encodePolicy(p *Policy) (b64Policy, jsonPolicy []byte, err error) {
-	jsonPolicy, err = json.Marshal(p)
+	jsonPolicy, err = encodePolicyJSON(p)
 	if err != nil {
 		return nil, nil, fmt.Errorf("failed to encode policy, %s", err.Error())
 	}
-
 	// Remove leading and trailing white space, JSON encoding will note include
 	// whitespace within the encoding.
 	jsonPolicy = bytes.TrimSpace(jsonPolicy)

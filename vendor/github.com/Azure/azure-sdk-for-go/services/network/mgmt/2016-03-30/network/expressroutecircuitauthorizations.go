@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -41,7 +42,8 @@ func NewExpressRouteCircuitAuthorizationsClientWithBaseURI(baseURI string, subsc
 	return ExpressRouteCircuitAuthorizationsClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
-// CreateOrUpdate the Put Authorization operation creates/updates an authorization in thespecified ExpressRouteCircuits
+// CreateOrUpdate the Put Authorization operation creates/updates an authorization in the specified
+// ExpressRouteCircuits
 // Parameters:
 // resourceGroupName - the name of the resource group.
 // circuitName - the name of the express route circuit.
@@ -49,6 +51,16 @@ func NewExpressRouteCircuitAuthorizationsClientWithBaseURI(baseURI string, subsc
 // authorizationParameters - parameters supplied to the create/update ExpressRouteCircuitAuthorization
 // operation
 func (client ExpressRouteCircuitAuthorizationsClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, circuitName string, authorizationName string, authorizationParameters ExpressRouteCircuitAuthorization) (result ExpressRouteCircuitAuthorizationsCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExpressRouteCircuitAuthorizationsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, resourceGroupName, circuitName, authorizationName, authorizationParameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.ExpressRouteCircuitAuthorizationsClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -97,10 +109,6 @@ func (client ExpressRouteCircuitAuthorizationsClient) CreateOrUpdateSender(req *
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusCreated))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -125,6 +133,16 @@ func (client ExpressRouteCircuitAuthorizationsClient) CreateOrUpdateResponder(re
 // circuitName - the name of the express route circuit.
 // authorizationName - the name of the authorization.
 func (client ExpressRouteCircuitAuthorizationsClient) Delete(ctx context.Context, resourceGroupName string, circuitName string, authorizationName string) (result ExpressRouteCircuitAuthorizationsDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExpressRouteCircuitAuthorizationsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, resourceGroupName, circuitName, authorizationName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.ExpressRouteCircuitAuthorizationsClient", "Delete", nil, "Failure preparing request")
@@ -171,10 +189,6 @@ func (client ExpressRouteCircuitAuthorizationsClient) DeleteSender(req *http.Req
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -197,6 +211,16 @@ func (client ExpressRouteCircuitAuthorizationsClient) DeleteResponder(resp *http
 // circuitName - the name of the express route circuit.
 // authorizationName - the name of the authorization.
 func (client ExpressRouteCircuitAuthorizationsClient) Get(ctx context.Context, resourceGroupName string, circuitName string, authorizationName string) (result ExpressRouteCircuitAuthorization, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExpressRouteCircuitAuthorizationsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, resourceGroupName, circuitName, authorizationName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "network.ExpressRouteCircuitAuthorizationsClient", "Get", nil, "Failure preparing request")
@@ -263,8 +287,18 @@ func (client ExpressRouteCircuitAuthorizationsClient) GetResponder(resp *http.Re
 // List the List authorization operation retrieves all the authorizations in an ExpressRouteCircuit.
 // Parameters:
 // resourceGroupName - the name of the resource group.
-// circuitName - the name of the curcuit.
+// circuitName - the name of the circuit.
 func (client ExpressRouteCircuitAuthorizationsClient) List(ctx context.Context, resourceGroupName string, circuitName string) (result AuthorizationListResultPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExpressRouteCircuitAuthorizationsClient.List")
+		defer func() {
+			sc := -1
+			if result.alr.Response.Response != nil {
+				sc = result.alr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, circuitName)
 	if err != nil {
@@ -329,8 +363,8 @@ func (client ExpressRouteCircuitAuthorizationsClient) ListResponder(resp *http.R
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client ExpressRouteCircuitAuthorizationsClient) listNextResults(lastResults AuthorizationListResult) (result AuthorizationListResult, err error) {
-	req, err := lastResults.authorizationListResultPreparer()
+func (client ExpressRouteCircuitAuthorizationsClient) listNextResults(ctx context.Context, lastResults AuthorizationListResult) (result AuthorizationListResult, err error) {
+	req, err := lastResults.authorizationListResultPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "network.ExpressRouteCircuitAuthorizationsClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -351,6 +385,16 @@ func (client ExpressRouteCircuitAuthorizationsClient) listNextResults(lastResult
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client ExpressRouteCircuitAuthorizationsClient) ListComplete(ctx context.Context, resourceGroupName string, circuitName string) (result AuthorizationListResultIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ExpressRouteCircuitAuthorizationsClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx, resourceGroupName, circuitName)
 	return
 }

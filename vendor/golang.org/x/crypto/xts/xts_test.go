@@ -103,3 +103,19 @@ func TestShorterCiphertext(t *testing.T) {
 		t.Errorf("En/Decryption is not inverse")
 	}
 }
+
+func BenchmarkXTS(b *testing.B) {
+	b.ReportAllocs()
+	c, err := NewCipher(aes.NewCipher, make([]byte, 32))
+	if err != nil {
+		b.Fatalf("NewCipher failed: %s", err)
+	}
+	plaintext := make([]byte, 32)
+	encrypted := make([]byte, 48)
+	decrypted := make([]byte, 48)
+
+	for i := 0; i < b.N; i++ {
+		c.Encrypt(encrypted, plaintext, 0)
+		c.Decrypt(decrypted, encrypted[:len(plaintext)], 0)
+	}
+}

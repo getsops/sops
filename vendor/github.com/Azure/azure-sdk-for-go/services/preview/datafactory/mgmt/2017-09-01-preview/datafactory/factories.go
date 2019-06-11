@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -47,6 +48,16 @@ func NewFactoriesClientWithBaseURI(baseURI string, subscriptionID string) Factor
 // factoryName - the factory name.
 // runID - the pipeline run identifier.
 func (client FactoriesClient) CancelPipelineRun(ctx context.Context, resourceGroupName string, factoryName string, runID string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoriesClient.CancelPipelineRun")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -126,6 +137,16 @@ func (client FactoriesClient) CancelPipelineRunResponder(resp *http.Response) (r
 // locationID - the location identifier.
 // factoryRepoUpdate - update factory repo request definition.
 func (client FactoriesClient) ConfigureFactoryRepo(ctx context.Context, locationID string, factoryRepoUpdate FactoryRepoUpdate) (result Factory, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoriesClient.ConfigureFactoryRepo")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ConfigureFactoryRepoPreparer(ctx, locationID, factoryRepoUpdate)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "datafactory.FactoriesClient", "ConfigureFactoryRepo", nil, "Failure preparing request")
@@ -195,6 +216,16 @@ func (client FactoriesClient) ConfigureFactoryRepoResponder(resp *http.Response)
 // factoryName - the factory name.
 // factory - factory resource definition.
 func (client FactoriesClient) CreateOrUpdate(ctx context.Context, resourceGroupName string, factoryName string, factory Factory) (result Factory, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoriesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -279,6 +310,16 @@ func (client FactoriesClient) CreateOrUpdateResponder(resp *http.Response) (resu
 // resourceGroupName - the resource group name.
 // factoryName - the factory name.
 func (client FactoriesClient) Delete(ctx context.Context, resourceGroupName string, factoryName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoriesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -357,6 +398,16 @@ func (client FactoriesClient) DeleteResponder(resp *http.Response) (result autor
 // resourceGroupName - the resource group name.
 // factoryName - the factory name.
 func (client FactoriesClient) Get(ctx context.Context, resourceGroupName string, factoryName string) (result Factory, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoriesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -433,6 +484,16 @@ func (client FactoriesClient) GetResponder(resp *http.Response) (result Factory,
 
 // List lists factories under the specified subscription.
 func (client FactoriesClient) List(ctx context.Context) (result FactoryListResponsePage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoriesClient.List")
+		defer func() {
+			sc := -1
+			if result.flr.Response.Response != nil {
+				sc = result.flr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx)
 	if err != nil {
@@ -495,8 +556,8 @@ func (client FactoriesClient) ListResponder(resp *http.Response) (result Factory
 }
 
 // listNextResults retrieves the next set of results, if any.
-func (client FactoriesClient) listNextResults(lastResults FactoryListResponse) (result FactoryListResponse, err error) {
-	req, err := lastResults.factoryListResponsePreparer()
+func (client FactoriesClient) listNextResults(ctx context.Context, lastResults FactoryListResponse) (result FactoryListResponse, err error) {
+	req, err := lastResults.factoryListResponsePreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "datafactory.FactoriesClient", "listNextResults", nil, "Failure preparing next results request")
 	}
@@ -517,6 +578,16 @@ func (client FactoriesClient) listNextResults(lastResults FactoryListResponse) (
 
 // ListComplete enumerates all values, automatically crossing page boundaries as required.
 func (client FactoriesClient) ListComplete(ctx context.Context) (result FactoryListResponseIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoriesClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.List(ctx)
 	return
 }
@@ -525,6 +596,16 @@ func (client FactoriesClient) ListComplete(ctx context.Context) (result FactoryL
 // Parameters:
 // resourceGroupName - the resource group name.
 func (client FactoriesClient) ListByResourceGroup(ctx context.Context, resourceGroupName string) (result FactoryListResponsePage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoriesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.flr.Response.Response != nil {
+				sc = result.flr.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -596,8 +677,8 @@ func (client FactoriesClient) ListByResourceGroupResponder(resp *http.Response) 
 }
 
 // listByResourceGroupNextResults retrieves the next set of results, if any.
-func (client FactoriesClient) listByResourceGroupNextResults(lastResults FactoryListResponse) (result FactoryListResponse, err error) {
-	req, err := lastResults.factoryListResponsePreparer()
+func (client FactoriesClient) listByResourceGroupNextResults(ctx context.Context, lastResults FactoryListResponse) (result FactoryListResponse, err error) {
+	req, err := lastResults.factoryListResponsePreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "datafactory.FactoriesClient", "listByResourceGroupNextResults", nil, "Failure preparing next results request")
 	}
@@ -618,6 +699,16 @@ func (client FactoriesClient) listByResourceGroupNextResults(lastResults Factory
 
 // ListByResourceGroupComplete enumerates all values, automatically crossing page boundaries as required.
 func (client FactoriesClient) ListByResourceGroupComplete(ctx context.Context, resourceGroupName string) (result FactoryListResponseIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoriesClient.ListByResourceGroup")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.ListByResourceGroup(ctx, resourceGroupName)
 	return
 }
@@ -628,6 +719,16 @@ func (client FactoriesClient) ListByResourceGroupComplete(ctx context.Context, r
 // factoryName - the factory name.
 // factoryUpdateParameters - the parameters for updating a factory.
 func (client FactoriesClient) Update(ctx context.Context, resourceGroupName string, factoryName string, factoryUpdateParameters FactoryUpdateParameters) (result Factory, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/FactoriesClient.Update")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -49,6 +50,16 @@ func NewVolumesClientWithBaseURI(baseURI string, subscriptionID string) VolumesC
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client VolumesClient) CreateOrUpdate(ctx context.Context, deviceName string, volumeContainerName string, volumeName string, parameters Volume, resourceGroupName string, managerName string) (result VolumesCreateOrUpdateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VolumesClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.VolumeProperties", Name: validation.Null, Rule: true,
@@ -111,10 +122,6 @@ func (client VolumesClient) CreateOrUpdateSender(req *http.Request) (future Volu
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -140,6 +147,16 @@ func (client VolumesClient) CreateOrUpdateResponder(resp *http.Response) (result
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client VolumesClient) Delete(ctx context.Context, deviceName string, volumeContainerName string, volumeName string, resourceGroupName string, managerName string) (result VolumesDeleteFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VolumesClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -195,10 +212,6 @@ func (client VolumesClient) DeleteSender(req *http.Request) (future VolumesDelet
 	if err != nil {
 		return
 	}
-	err = autorest.Respond(resp, azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted, http.StatusNoContent))
-	if err != nil {
-		return
-	}
 	future.Future, err = azure.NewFutureFromResponse(resp)
 	return
 }
@@ -223,6 +236,16 @@ func (client VolumesClient) DeleteResponder(resp *http.Response) (result autores
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client VolumesClient) Get(ctx context.Context, deviceName string, volumeContainerName string, volumeName string, resourceGroupName string, managerName string) (result Volume, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VolumesClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -301,6 +324,16 @@ func (client VolumesClient) GetResponder(resp *http.Response) (result Volume, er
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client VolumesClient) ListByDevice(ctx context.Context, deviceName string, resourceGroupName string, managerName string) (result VolumeList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VolumesClient.ListByDevice")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -378,6 +411,16 @@ func (client VolumesClient) ListByDeviceResponder(resp *http.Response) (result V
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client VolumesClient) ListByVolumeContainer(ctx context.Context, deviceName string, volumeContainerName string, resourceGroupName string, managerName string) (result VolumeList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VolumesClient.ListByVolumeContainer")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -457,6 +500,16 @@ func (client VolumesClient) ListByVolumeContainerResponder(resp *http.Response) 
 // resourceGroupName - the resource group name
 // managerName - the manager name
 func (client VolumesClient) ListMetricDefinition(ctx context.Context, deviceName string, volumeContainerName string, volumeName string, resourceGroupName string, managerName string) (result MetricDefinitionList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VolumesClient.ListMetricDefinition")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},
@@ -538,6 +591,16 @@ func (client VolumesClient) ListMetricDefinitionResponder(resp *http.Response) (
 // managerName - the manager name
 // filter - oData Filter options
 func (client VolumesClient) ListMetrics(ctx context.Context, deviceName string, volumeContainerName string, volumeName string, resourceGroupName string, managerName string, filter string) (result MetricList, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/VolumesClient.ListMetrics")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: managerName,
 			Constraints: []validation.Constraint{{Target: "managerName", Name: validation.MaxLength, Rule: 50, Chain: nil},

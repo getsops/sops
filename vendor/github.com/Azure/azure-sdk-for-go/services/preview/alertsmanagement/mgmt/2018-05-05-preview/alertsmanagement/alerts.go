@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,6 +45,16 @@ func NewAlertsClientWithBaseURI(baseURI string, subscriptionID string, monitorSe
 // alertID - unique ID of an alert object.
 // newState - filter by state
 func (client AlertsClient) ChangeState(ctx context.Context, alertID string, newState AlertState) (result Alert, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsClient.ChangeState")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.ChangeStatePreparer(ctx, alertID, newState)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "alertsmanagement.AlertsClient", "ChangeState", nil, "Failure preparing request")
@@ -123,6 +134,16 @@ func (client AlertsClient) ChangeStateResponder(resp *http.Response) (result Ale
 // fields and 'asc' for others.
 // timeRange - filter by time range, default value is 1 day
 func (client AlertsClient) GetAll(ctx context.Context, targetResource string, targetResourceGroup string, targetResourceType string, monitorCondition MonitorCondition, severity Severity, alertState AlertState, smartGroupID string, includePayload *bool, pageCount *int32, sortBy AlertsSortByFields, sortOrder string, timeRange TimeRange) (result AlertsListPage, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsClient.GetAll")
+		defer func() {
+			sc := -1
+			if result.al.Response.Response != nil {
+				sc = result.al.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.fn = client.getAllNextResults
 	req, err := client.GetAllPreparer(ctx, targetResource, targetResourceGroup, targetResourceType, monitorCondition, severity, alertState, smartGroupID, includePayload, pageCount, sortBy, sortOrder, timeRange)
 	if err != nil {
@@ -224,8 +245,8 @@ func (client AlertsClient) GetAllResponder(resp *http.Response) (result AlertsLi
 }
 
 // getAllNextResults retrieves the next set of results, if any.
-func (client AlertsClient) getAllNextResults(lastResults AlertsList) (result AlertsList, err error) {
-	req, err := lastResults.alertsListPreparer()
+func (client AlertsClient) getAllNextResults(ctx context.Context, lastResults AlertsList) (result AlertsList, err error) {
+	req, err := lastResults.alertsListPreparer(ctx)
 	if err != nil {
 		return result, autorest.NewErrorWithError(err, "alertsmanagement.AlertsClient", "getAllNextResults", nil, "Failure preparing next results request")
 	}
@@ -246,6 +267,16 @@ func (client AlertsClient) getAllNextResults(lastResults AlertsList) (result Ale
 
 // GetAllComplete enumerates all values, automatically crossing page boundaries as required.
 func (client AlertsClient) GetAllComplete(ctx context.Context, targetResource string, targetResourceGroup string, targetResourceType string, monitorCondition MonitorCondition, severity Severity, alertState AlertState, smartGroupID string, includePayload *bool, pageCount *int32, sortBy AlertsSortByFields, sortOrder string, timeRange TimeRange) (result AlertsListIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsClient.GetAll")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	result.page, err = client.GetAll(ctx, targetResource, targetResourceGroup, targetResourceType, monitorCondition, severity, alertState, smartGroupID, includePayload, pageCount, sortBy, sortOrder, timeRange)
 	return
 }
@@ -254,6 +285,16 @@ func (client AlertsClient) GetAllComplete(ctx context.Context, targetResource st
 // Parameters:
 // alertID - unique ID of an alert object.
 func (client AlertsClient) GetByID(ctx context.Context, alertID string) (result Alert, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsClient.GetByID")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetByIDPreparer(ctx, alertID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "alertsmanagement.AlertsClient", "GetByID", nil, "Failure preparing request")
@@ -319,6 +360,16 @@ func (client AlertsClient) GetByIDResponder(resp *http.Response) (result Alert, 
 // Parameters:
 // alertID - unique ID of an alert object.
 func (client AlertsClient) GetHistory(ctx context.Context, alertID string) (result AlertModification, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsClient.GetHistory")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetHistoryPreparer(ctx, alertID)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "alertsmanagement.AlertsClient", "GetHistory", nil, "Failure preparing request")
@@ -385,6 +436,16 @@ func (client AlertsClient) GetHistoryResponder(resp *http.Response) (result Aler
 // targetResourceGroup - filter by target resource group name
 // timeRange - filter by time range, default value is 1 day
 func (client AlertsClient) GetSummary(ctx context.Context, targetResourceGroup string, timeRange TimeRange) (result AlertsSummary, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/AlertsClient.GetSummary")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetSummaryPreparer(ctx, targetResourceGroup, timeRange)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "alertsmanagement.AlertsClient", "GetSummary", nil, "Failure preparing request")

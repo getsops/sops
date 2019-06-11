@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -44,6 +45,16 @@ func NewPolicyDefinitionsClientWithBaseURI(baseURI string, subscriptionID string
 // policyDefinitionName - the policy definition name.
 // parameters - the policy definition properties
 func (client PolicyDefinitionsClient) CreateOrUpdate(ctx context.Context, policyDefinitionName string, parameters PolicyDefinition) (result PolicyDefinition, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PolicyDefinitionsClient.CreateOrUpdate")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.CreateOrUpdatePreparer(ctx, policyDefinitionName, parameters)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "resources.PolicyDefinitionsClient", "CreateOrUpdate", nil, "Failure preparing request")
@@ -111,6 +122,16 @@ func (client PolicyDefinitionsClient) CreateOrUpdateResponder(resp *http.Respons
 // Parameters:
 // policyDefinitionName - the policy definition name.
 func (client PolicyDefinitionsClient) Delete(ctx context.Context, policyDefinitionName string) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PolicyDefinitionsClient.Delete")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.DeletePreparer(ctx, policyDefinitionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "resources.PolicyDefinitionsClient", "Delete", nil, "Failure preparing request")
@@ -175,6 +196,16 @@ func (client PolicyDefinitionsClient) DeleteResponder(resp *http.Response) (resu
 // Parameters:
 // policyDefinitionName - the policy definition name.
 func (client PolicyDefinitionsClient) Get(ctx context.Context, policyDefinitionName string) (result PolicyDefinition, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/PolicyDefinitionsClient.Get")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetPreparer(ctx, policyDefinitionName)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "resources.PolicyDefinitionsClient", "Get", nil, "Failure preparing request")

@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
 
@@ -43,6 +44,16 @@ func NewLocationsClientWithBaseURI(baseURI string, subscriptionID string) Locati
 // Parameters:
 // location - the resource location without whitespace.
 func (client LocationsClient) GetCapability(ctx context.Context, location string) (result CapabilityInformation, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LocationsClient.GetCapability")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
 	req, err := client.GetCapabilityPreparer(ctx, location)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "account.LocationsClient", "GetCapability", nil, "Failure preparing request")
@@ -98,6 +109,81 @@ func (client LocationsClient) GetCapabilityResponder(resp *http.Response) (resul
 		resp,
 		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusNotFound),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// GetUsage gets the current usage count and the limit for the resources of the location under the subscription.
+// Parameters:
+// location - the resource location without whitespace.
+func (client LocationsClient) GetUsage(ctx context.Context, location string) (result UsageListResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/LocationsClient.GetUsage")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	req, err := client.GetUsagePreparer(ctx, location)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "account.LocationsClient", "GetUsage", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.GetUsageSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "account.LocationsClient", "GetUsage", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.GetUsageResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "account.LocationsClient", "GetUsage", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// GetUsagePreparer prepares the GetUsage request.
+func (client LocationsClient) GetUsagePreparer(ctx context.Context, location string) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"location":       autorest.Encode("path", location),
+		"subscriptionId": autorest.Encode("path", client.SubscriptionID),
+	}
+
+	const APIVersion = "2016-11-01"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsGet(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/subscriptions/{subscriptionId}/providers/Microsoft.DataLakeStore/locations/{location}/usages", pathParameters),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// GetUsageSender sends the GetUsage request. The method will close the
+// http.Response Body if it receives an error.
+func (client LocationsClient) GetUsageSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		azure.DoRetryWithRegistration(client.Client))
+}
+
+// GetUsageResponder handles the response to the GetUsage request. The method always
+// closes the http.Response Body.
+func (client LocationsClient) GetUsageResponder(resp *http.Response) (result UsageListResult, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
 	result.Response = autorest.Response{Response: resp}

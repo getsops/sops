@@ -17,7 +17,6 @@ fi
 
 # Generate various test protos.
 PROTO_DIRS=(
-  conformance/internal/conformance_proto
   jsonpb/jsonpb_test_proto
   proto
   protoc-gen-go/testdata

@@ -59,6 +59,26 @@
         "shape" : "ForbiddenException"
       } ]
     },
+    "CreateTags" : {
+      "name" : "CreateTags",
+      "http" : {
+        "method" : "POST",
+        "requestUri" : "/v1/tags/{resource-arn}",
+        "responseCode" : 204
+      },
+      "input" : {
+        "shape" : "CreateTagsRequest"
+      },
+      "errors" : [ {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      } ]
+    },
     "CreateUser" : {
       "name" : "CreateUser",
       "http" : {
@@ -96,6 +116,26 @@
       },
       "output" : {
         "shape" : "DeleteBrokerResponse"
+      },
+      "errors" : [ {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      } ]
+    },
+    "DeleteTags" : {
+      "name" : "DeleteTags",
+      "http" : {
+        "method" : "DELETE",
+        "requestUri" : "/v1/tags/{resource-arn}",
+        "responseCode" : 204
+      },
+      "input" : {
+        "shape" : "DeleteTagsRequest"
       },
       "errors" : [ {
         "shape" : "NotFoundException"
@@ -146,6 +186,48 @@
       "errors" : [ {
         "shape" : "NotFoundException"
       }, {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      } ]
+    },
+    "DescribeBrokerEngineTypes" : {
+      "name" : "DescribeBrokerEngineTypes",
+      "http" : {
+        "method" : "GET",
+        "requestUri" : "/v1/broker-engine-types",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "DescribeBrokerEngineTypesRequest"
+      },
+      "output" : {
+        "shape" : "DescribeBrokerEngineTypesResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      } ]
+    },
+    "DescribeBrokerInstanceOptions" : {
+      "name" : "DescribeBrokerInstanceOptions",
+      "http" : {
+        "method" : "GET",
+        "requestUri" : "/v1/broker-instance-options",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "DescribeBrokerInstanceOptionsRequest"
+      },
+      "output" : {
+        "shape" : "DescribeBrokerInstanceOptionsResponse"
+      },
+      "errors" : [ {
         "shape" : "BadRequestException"
       }, {
         "shape" : "InternalServerErrorException"
@@ -287,6 +369,29 @@
         "shape" : "ForbiddenException"
       } ]
     },
+    "ListTags" : {
+      "name" : "ListTags",
+      "http" : {
+        "method" : "GET",
+        "requestUri" : "/v1/tags/{resource-arn}",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "ListTagsRequest"
+      },
+      "output" : {
+        "shape" : "ListTagsResponse"
+      },
+      "errors" : [ {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      } ]
+    },
     "ListUsers" : {
       "name" : "ListUsers",
       "http" : {
@@ -353,6 +458,8 @@
       }, {
         "shape" : "InternalServerErrorException"
       }, {
+        "shape" : "ConflictException"
+      }, {
         "shape" : "ForbiddenException"
       } ]
     },
@@ -408,6 +515,15 @@
     }
   },
   "shapes" : {
+    "AvailabilityZone" : {
+      "type" : "structure",
+      "members" : {
+        "Name" : {
+          "shape" : "__string",
+          "locationName" : "name"
+        }
+      }
+    },
     "BadRequestException" : {
       "type" : "structure",
       "members" : {
@@ -425,6 +541,36 @@
         "httpStatusCode" : 400
       }
     },
+    "BrokerEngineType" : {
+      "type" : "structure",
+      "members" : {
+        "EngineType" : {
+          "shape" : "EngineType",
+          "locationName" : "engineType"
+        },
+        "EngineVersions" : {
+          "shape" : "__listOfEngineVersion",
+          "locationName" : "engineVersions"
+        }
+      }
+    },
+    "BrokerEngineTypeOutput" : {
+      "type" : "structure",
+      "members" : {
+        "BrokerEngineTypes" : {
+          "shape" : "__listOfBrokerEngineType",
+          "locationName" : "brokerEngineTypes"
+        },
+        "MaxResults" : {
+          "shape" : "__integerMin5Max100",
+          "locationName" : "maxResults"
+        },
+        "NextToken" : {
+          "shape" : "__string",
+          "locationName" : "nextToken"
+        }
+      }
+    },
     "BrokerInstance" : {
       "type" : "structure",
       "members" : {
@@ -439,6 +585,44 @@
         "IpAddress" : {
           "shape" : "__string",
           "locationName" : "ipAddress"
+        }
+      }
+    },
+    "BrokerInstanceOption" : {
+      "type" : "structure",
+      "members" : {
+        "AvailabilityZones" : {
+          "shape" : "__listOfAvailabilityZone",
+          "locationName" : "availabilityZones"
+        },
+        "EngineType" : {
+          "shape" : "EngineType",
+          "locationName" : "engineType"
+        },
+        "HostInstanceType" : {
+          "shape" : "__string",
+          "locationName" : "hostInstanceType"
+        },
+        "SupportedEngineVersions" : {
+          "shape" : "__listOf__string",
+          "locationName" : "supportedEngineVersions"
+        }
+      }
+    },
+    "BrokerInstanceOptionsOutput" : {
+      "type" : "structure",
+      "members" : {
+        "BrokerInstanceOptions" : {
+          "shape" : "__listOfBrokerInstanceOption",
+          "locationName" : "brokerInstanceOptions"
+        },
+        "MaxResults" : {
+          "shape" : "__integerMin5Max100",
+          "locationName" : "maxResults"
+        },
+        "NextToken" : {
+          "shape" : "__string",
+          "locationName" : "nextToken"
         }
       }
     },
@@ -517,6 +701,10 @@
         "Name" : {
           "shape" : "__string",
           "locationName" : "name"
+        },
+        "Tags" : {
+          "shape" : "__mapOf__string",
+          "locationName" : "tags"
         }
       }
     },
@@ -640,6 +828,10 @@
           "shape" : "__listOf__string",
           "locationName" : "subnetIds"
         },
+        "Tags" : {
+          "shape" : "__mapOf__string",
+          "locationName" : "tags"
+        },
         "Users" : {
           "shape" : "__listOfUser",
           "locationName" : "users"
@@ -715,6 +907,10 @@
           "shape" : "__listOf__string",
           "locationName" : "subnetIds"
         },
+        "Tags" : {
+          "shape" : "__mapOf__string",
+          "locationName" : "tags"
+        },
         "Users" : {
           "shape" : "__listOfUser",
           "locationName" : "users"
@@ -748,6 +944,10 @@
         "Name" : {
           "shape" : "__string",
           "locationName" : "name"
+        },
+        "Tags" : {
+          "shape" : "__mapOf__string",
+          "locationName" : "tags"
         }
       }
     },
@@ -790,6 +990,10 @@
         "Name" : {
           "shape" : "__string",
           "locationName" : "name"
+        },
+        "Tags" : {
+          "shape" : "__mapOf__string",
+          "locationName" : "tags"
         }
       }
     },
@@ -817,6 +1021,21 @@
           "locationName" : "name"
         }
       }
+    },
+    "CreateTagsRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ResourceArn" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "resource-arn"
+        },
+        "Tags" : {
+          "shape" : "__mapOf__string",
+          "locationName" : "tags"
+        }
+      },
+      "required" : [ "ResourceArn" ]
     },
     "CreateUserInput" : {
       "type" : "structure",
@@ -900,6 +1119,22 @@
         }
       }
     },
+    "DeleteTagsRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ResourceArn" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "resource-arn"
+        },
+        "TagKeys" : {
+          "shape" : "__listOf__string",
+          "location" : "querystring",
+          "locationName" : "tagKeys"
+        }
+      },
+      "required" : [ "TagKeys", "ResourceArn" ]
+    },
     "DeleteUserRequest" : {
       "type" : "structure",
       "members" : {
@@ -923,6 +1158,85 @@
     "DeploymentMode" : {
       "type" : "string",
       "enum" : [ "SINGLE_INSTANCE", "ACTIVE_STANDBY_MULTI_AZ" ]
+    },
+    "DescribeBrokerEngineTypesRequest" : {
+      "type" : "structure",
+      "members" : {
+        "EngineType" : {
+          "shape" : "__string",
+          "location" : "querystring",
+          "locationName" : "engineType"
+        },
+        "MaxResults" : {
+          "shape" : "MaxResults",
+          "location" : "querystring",
+          "locationName" : "maxResults"
+        },
+        "NextToken" : {
+          "shape" : "__string",
+          "location" : "querystring",
+          "locationName" : "nextToken"
+        }
+      }
+    },
+    "DescribeBrokerEngineTypesResponse" : {
+      "type" : "structure",
+      "members" : {
+        "BrokerEngineTypes" : {
+          "shape" : "__listOfBrokerEngineType",
+          "locationName" : "brokerEngineTypes"
+        },
+        "MaxResults" : {
+          "shape" : "__integerMin5Max100",
+          "locationName" : "maxResults"
+        },
+        "NextToken" : {
+          "shape" : "__string",
+          "locationName" : "nextToken"
+        }
+      }
+    },
+    "DescribeBrokerInstanceOptionsRequest" : {
+      "type" : "structure",
+      "members" : {
+        "EngineType" : {
+          "shape" : "__string",
+          "location" : "querystring",
+          "locationName" : "engineType"
+        },
+        "HostInstanceType" : {
+          "shape" : "__string",
+          "location" : "querystring",
+          "locationName" : "hostInstanceType"
+        },
+        "MaxResults" : {
+          "shape" : "MaxResults",
+          "location" : "querystring",
+          "locationName" : "maxResults"
+        },
+        "NextToken" : {
+          "shape" : "__string",
+          "location" : "querystring",
+          "locationName" : "nextToken"
+        }
+      }
+    },
+    "DescribeBrokerInstanceOptionsResponse" : {
+      "type" : "structure",
+      "members" : {
+        "BrokerInstanceOptions" : {
+          "shape" : "__listOfBrokerInstanceOption",
+          "locationName" : "brokerInstanceOptions"
+        },
+        "MaxResults" : {
+          "shape" : "__integerMin5Max100",
+          "locationName" : "maxResults"
+        },
+        "NextToken" : {
+          "shape" : "__string",
+          "locationName" : "nextToken"
+        }
+      }
     },
     "DescribeBrokerOutput" : {
       "type" : "structure",
@@ -983,6 +1297,10 @@
           "shape" : "WeeklyStartTime",
           "locationName" : "maintenanceWindowStartTime"
         },
+        "PendingEngineVersion" : {
+          "shape" : "__string",
+          "locationName" : "pendingEngineVersion"
+        },
         "PubliclyAccessible" : {
           "shape" : "__boolean",
           "locationName" : "publiclyAccessible"
@@ -994,6 +1312,10 @@
         "SubnetIds" : {
           "shape" : "__listOf__string",
           "locationName" : "subnetIds"
+        },
+        "Tags" : {
+          "shape" : "__mapOf__string",
+          "locationName" : "tags"
         },
         "Users" : {
           "shape" : "__listOfUserSummary",
@@ -1071,6 +1393,10 @@
           "shape" : "WeeklyStartTime",
           "locationName" : "maintenanceWindowStartTime"
         },
+        "PendingEngineVersion" : {
+          "shape" : "__string",
+          "locationName" : "pendingEngineVersion"
+        },
         "PubliclyAccessible" : {
           "shape" : "__boolean",
           "locationName" : "publiclyAccessible"
@@ -1082,6 +1408,10 @@
         "SubnetIds" : {
           "shape" : "__listOf__string",
           "locationName" : "subnetIds"
+        },
+        "Tags" : {
+          "shape" : "__mapOf__string",
+          "locationName" : "tags"
         },
         "Users" : {
           "shape" : "__listOfUserSummary",
@@ -1134,6 +1464,10 @@
         "Name" : {
           "shape" : "__string",
           "locationName" : "name"
+        },
+        "Tags" : {
+          "shape" : "__mapOf__string",
+          "locationName" : "tags"
         }
       }
     },
@@ -1264,6 +1598,15 @@
     "EngineType" : {
       "type" : "string",
       "enum" : [ "ACTIVEMQ" ]
+    },
+    "EngineVersion" : {
+      "type" : "structure",
+      "members" : {
+        "Name" : {
+          "shape" : "__string",
+          "locationName" : "name"
+        }
+      }
     },
     "Error" : {
       "type" : "structure",
@@ -1465,6 +1808,26 @@
         }
       }
     },
+    "ListTagsRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ResourceArn" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "resource-arn"
+        }
+      },
+      "required" : [ "ResourceArn" ]
+    },
+    "ListTagsResponse" : {
+      "type" : "structure",
+      "members" : {
+        "Tags" : {
+          "shape" : "__mapOf__string",
+          "locationName" : "tags"
+        }
+      }
+    },
     "ListUsersOutput" : {
       "type" : "structure",
       "members" : {
@@ -1637,6 +2000,15 @@
       "type" : "string",
       "enum" : [ "DISALLOWED_ELEMENT_REMOVED", "DISALLOWED_ATTRIBUTE_REMOVED", "INVALID_ATTRIBUTE_VALUE_REMOVED" ]
     },
+    "Tags" : {
+      "type" : "structure",
+      "members" : {
+        "Tags" : {
+          "shape" : "__mapOf__string",
+          "locationName" : "tags"
+        }
+      }
+    },
     "UnauthorizedException" : {
       "type" : "structure",
       "members" : {
@@ -1657,9 +2029,17 @@
     "UpdateBrokerInput" : {
       "type" : "structure",
       "members" : {
+        "AutoMinorVersionUpgrade" : {
+          "shape" : "__boolean",
+          "locationName" : "autoMinorVersionUpgrade"
+        },
         "Configuration" : {
           "shape" : "ConfigurationId",
           "locationName" : "configuration"
+        },
+        "EngineVersion" : {
+          "shape" : "__string",
+          "locationName" : "engineVersion"
         },
         "Logs" : {
           "shape" : "Logs",
@@ -1670,6 +2050,10 @@
     "UpdateBrokerOutput" : {
       "type" : "structure",
       "members" : {
+        "AutoMinorVersionUpgrade" : {
+          "shape" : "__boolean",
+          "locationName" : "autoMinorVersionUpgrade"
+        },
         "BrokerId" : {
           "shape" : "__string",
           "locationName" : "brokerId"
@@ -1677,6 +2061,10 @@
         "Configuration" : {
           "shape" : "ConfigurationId",
           "locationName" : "configuration"
+        },
+        "EngineVersion" : {
+          "shape" : "__string",
+          "locationName" : "engineVersion"
         },
         "Logs" : {
           "shape" : "Logs",
@@ -1687,6 +2075,10 @@
     "UpdateBrokerRequest" : {
       "type" : "structure",
       "members" : {
+        "AutoMinorVersionUpgrade" : {
+          "shape" : "__boolean",
+          "locationName" : "autoMinorVersionUpgrade"
+        },
         "BrokerId" : {
           "shape" : "__string",
           "location" : "uri",
@@ -1695,6 +2087,10 @@
         "Configuration" : {
           "shape" : "ConfigurationId",
           "locationName" : "configuration"
+        },
+        "EngineVersion" : {
+          "shape" : "__string",
+          "locationName" : "engineVersion"
         },
         "Logs" : {
           "shape" : "Logs",
@@ -1706,6 +2102,10 @@
     "UpdateBrokerResponse" : {
       "type" : "structure",
       "members" : {
+        "AutoMinorVersionUpgrade" : {
+          "shape" : "__boolean",
+          "locationName" : "autoMinorVersionUpgrade"
+        },
         "BrokerId" : {
           "shape" : "__string",
           "locationName" : "brokerId"
@@ -1713,6 +2113,10 @@
         "Configuration" : {
           "shape" : "ConfigurationId",
           "locationName" : "configuration"
+        },
+        "EngineVersion" : {
+          "shape" : "__string",
+          "locationName" : "engineVersion"
         },
         "Logs" : {
           "shape" : "Logs",
@@ -1941,10 +2345,28 @@
       "min" : 5,
       "max" : 100
     },
+    "__listOfAvailabilityZone" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "AvailabilityZone"
+      }
+    },
+    "__listOfBrokerEngineType" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "BrokerEngineType"
+      }
+    },
     "__listOfBrokerInstance" : {
       "type" : "list",
       "member" : {
         "shape" : "BrokerInstance"
+      }
+    },
+    "__listOfBrokerInstanceOption" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "BrokerInstanceOption"
       }
     },
     "__listOfBrokerSummary" : {
@@ -1969,6 +2391,12 @@
       "type" : "list",
       "member" : {
         "shape" : "ConfigurationRevision"
+      }
+    },
+    "__listOfEngineVersion" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "EngineVersion"
       }
     },
     "__listOfSanitizationWarning" : {
@@ -1997,6 +2425,15 @@
     },
     "__long" : {
       "type" : "long"
+    },
+    "__mapOf__string" : {
+      "type" : "map",
+      "key" : {
+        "shape" : "__string"
+      },
+      "value" : {
+        "shape" : "__string"
+      }
     },
     "__string" : {
       "type" : "string"

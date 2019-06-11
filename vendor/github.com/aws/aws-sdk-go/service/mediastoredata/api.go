@@ -10,6 +10,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/signer/v4"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 )
 
 const opDeleteObject = "DeleteObject"
@@ -17,7 +19,7 @@ const opDeleteObject = "DeleteObject"
 // DeleteObjectRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteObject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -51,6 +53,7 @@ func (c *MediaStoreData) DeleteObjectRequest(input *DeleteObjectInput) (req *req
 
 	output = &DeleteObjectOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -102,7 +105,7 @@ const opDescribeObject = "DescribeObject"
 // DescribeObjectRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeObject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -187,7 +190,7 @@ const opGetObject = "GetObject"
 // GetObjectRequest generates a "aws/request.Request" representing the
 // client's request for the GetObject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -226,7 +229,9 @@ func (c *MediaStoreData) GetObjectRequest(input *GetObjectInput) (req *request.R
 
 // GetObject API operation for AWS Elemental MediaStore Data Plane.
 //
-// Downloads the object at the specified path.
+// Downloads the object at the specified path. If the object’s upload availability
+// is set to streaming, AWS Elemental MediaStore downloads the object even if
+// it’s still uploading the object.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -275,7 +280,7 @@ const opListItems = "ListItems"
 // ListItemsRequest generates a "aws/request.Request" representing the
 // client's request for the ListItems operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -301,6 +306,12 @@ func (c *MediaStoreData) ListItemsRequest(input *ListItemsInput) (req *request.R
 		Name:       opListItems,
 		HTTPMethod: "GET",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -353,12 +364,62 @@ func (c *MediaStoreData) ListItemsWithContext(ctx aws.Context, input *ListItemsI
 	return out, req.Send()
 }
 
+// ListItemsPages iterates over the pages of a ListItems operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListItems method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListItems operation.
+//    pageNum := 0
+//    err := client.ListItemsPages(params,
+//        func(page *mediastoredata.ListItemsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *MediaStoreData) ListItemsPages(input *ListItemsInput, fn func(*ListItemsOutput, bool) bool) error {
+	return c.ListItemsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListItemsPagesWithContext same as ListItemsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaStoreData) ListItemsPagesWithContext(ctx aws.Context, input *ListItemsInput, fn func(*ListItemsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListItemsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListItemsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListItemsOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opPutObject = "PutObject"
 
 // PutObjectRequest generates a "aws/request.Request" representing the
 // client's request for the PutObject operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -400,7 +461,8 @@ func (c *MediaStoreData) PutObjectRequest(input *PutObjectInput) (req *request.R
 
 // PutObject API operation for AWS Elemental MediaStore Data Plane.
 //
-// Uploads an object to the specified path. Object sizes are limited to 10 MB.
+// Uploads an object to the specified path. Object sizes are limited to 25 MB
+// for standard upload availability and 10 MB for streaming upload availability.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -630,8 +692,10 @@ type GetObjectInput struct {
 	Path *string `location:"uri" locationName:"Path" min:"1" type:"string" required:"true"`
 
 	// The range bytes of an object to retrieve. For more information about the
-	// Range header, go to http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35
-	// (http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35).
+	// Range header, see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35
+	// (http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35). AWS Elemental
+	// MediaStore ignores this header for partially uploaded objects that have streaming
+	// upload availability.
 	Range *string `location:"header" locationName:"Range" type:"string"`
 }
 
@@ -839,11 +903,24 @@ func (s *Item) SetType(v string) *Item {
 type ListItemsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The maximum results to return. The service might return fewer results.
+	// The maximum number of results to return per API request. For example, you
+	// submit a ListItems request with MaxResults set at 500. Although 2,000 items
+	// match your request, the service returns no more than the first 500 items.
+	// (The service also returns a NextToken value that you can use to fetch the
+	// next batch of results.) The service might return fewer results than the MaxResults
+	// value.
+	//
+	// If MaxResults is not included in the request, the service defaults to pagination
+	// with a maximum of 1,000 results per page.
 	MaxResults *int64 `location:"querystring" locationName:"MaxResults" min:"1" type:"integer"`
 
-	// The NextToken received in the ListItemsResponse for the same container and
-	// path. Tokens expire after 15 minutes.
+	// The token that identifies which batch of results that you want to see. For
+	// example, you submit a ListItems request with MaxResults set at 500. The service
+	// returns the first batch of results (up to 500) and a NextToken value. To
+	// see the next batch of results, you can submit the ListItems request a second
+	// time and specify the NextToken value.
+	//
+	// Tokens expire after 15 minutes.
 	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
 
 	// The path in the container from which to retrieve items. Format: <folder name>/<folder
@@ -895,10 +972,14 @@ func (s *ListItemsInput) SetPath(v string) *ListItemsInput {
 type ListItemsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Metadata entries for the folders and objects at the requested path.
+	// The metadata entries for the folders and objects at the requested path.
 	Items []*Item `type:"list"`
 
-	// The NextToken used to request the next page of results using ListItems.
+	// The token that can be used in a request to view the next set of results.
+	// For example, you submit a ListItems request that matches 2,000 items with
+	// MaxResults set at 500. The service returns the first batch of results (up
+	// to 500) and a NextToken value that can be used to fetch the next batch of
+	// results.
 	NextToken *string `type:"string"`
 }
 
@@ -928,6 +1009,11 @@ type PutObjectInput struct {
 	_ struct{} `type:"structure" payload:"Body"`
 
 	// The bytes to be stored.
+	//
+	// To use an non-seekable io.Reader for this request wrap the io.Reader with
+	// "aws.ReadSeekCloser". The SDK will not retry request errors for non-seekable
+	// readers. This will allow the SDK to send the reader's payload as chunked
+	// transfer encoding.
 	//
 	// Body is a required field
 	Body io.ReadSeeker `type:"blob" required:"true"`
@@ -973,6 +1059,16 @@ type PutObjectInput struct {
 	// temporal storage class, and objects are persisted into durable storage shortly
 	// after being received.
 	StorageClass *string `location:"header" locationName:"x-amz-storage-class" min:"1" type:"string" enum:"StorageClass"`
+
+	// Indicates the availability of an object while it is still uploading. If the
+	// value is set to streaming, the object is available for downloading after
+	// some initial buffering but before the object is uploaded completely. If the
+	// value is set to standard, the object is available for downloading only when
+	// it is uploaded completely. The default value for this header is standard.
+	//
+	// To use this header, you must also set the HTTP Transfer-Encoding header to
+	// chunked.
+	UploadAvailability *string `location:"header" locationName:"x-amz-upload-availability" min:"1" type:"string" enum:"UploadAvailability"`
 }
 
 // String returns the string representation
@@ -999,6 +1095,9 @@ func (s *PutObjectInput) Validate() error {
 	}
 	if s.StorageClass != nil && len(*s.StorageClass) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("StorageClass", 1))
+	}
+	if s.UploadAvailability != nil && len(*s.UploadAvailability) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UploadAvailability", 1))
 	}
 
 	if invalidParams.Len() > 0 {
@@ -1037,6 +1136,12 @@ func (s *PutObjectInput) SetStorageClass(v string) *PutObjectInput {
 	return s
 }
 
+// SetUploadAvailability sets the UploadAvailability field's value.
+func (s *PutObjectInput) SetUploadAvailability(v string) *PutObjectInput {
+	s.UploadAvailability = &v
+	return s
+}
+
 type PutObjectOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1046,7 +1151,7 @@ type PutObjectOutput struct {
 	// Unique identifier of the object in the container.
 	ETag *string `min:"1" type:"string"`
 
-	// The storage class where the object was persisted. Should be “Temporal”.
+	// The storage class where the object was persisted. The class should be “Temporal”.
 	StorageClass *string `min:"1" type:"string" enum:"StorageClass"`
 }
 
@@ -1089,4 +1194,12 @@ const (
 const (
 	// StorageClassTemporal is a StorageClass enum value
 	StorageClassTemporal = "TEMPORAL"
+)
+
+const (
+	// UploadAvailabilityStandard is a UploadAvailability enum value
+	UploadAvailabilityStandard = "STANDARD"
+
+	// UploadAvailabilityStreaming is a UploadAvailability enum value
+	UploadAvailabilityStreaming = "STREAMING"
 )

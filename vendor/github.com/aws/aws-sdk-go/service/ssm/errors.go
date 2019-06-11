@@ -126,8 +126,8 @@ const (
 	// ErrCodeDoesNotExistException for service response error code
 	// "DoesNotExistException".
 	//
-	// Error returned when the ID specified for a resource, such as a Maintenance
-	// Window or Patch baseline, doesn't exist.
+	// Error returned when the ID specified for a resource, such as a maintenance
+	// window or Patch baseline, doesn't exist.
 	//
 	// For information about resource limits in Systems Manager, see AWS Systems
 	// Manager Limits (http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm).
@@ -139,6 +139,13 @@ const (
 	// The content of the association document matches another document. Change
 	// the content of the document and try again.
 	ErrCodeDuplicateDocumentContent = "DuplicateDocumentContent"
+
+	// ErrCodeDuplicateDocumentVersionName for service response error code
+	// "DuplicateDocumentVersionName".
+	//
+	// The version name has already been used in this document. Specify a different
+	// version name, and then try again.
+	ErrCodeDuplicateDocumentVersionName = "DuplicateDocumentVersionName"
 
 	// ErrCodeDuplicateInstanceId for service response error code
 	// "DuplicateInstanceId".
@@ -175,6 +182,14 @@ const (
 	// Error returned when an idempotent operation is retried and the parameters
 	// don't match the original call to the API with the same idempotency token.
 	ErrCodeIdempotentParameterMismatch = "IdempotentParameterMismatch"
+
+	// ErrCodeIncompatiblePolicyException for service response error code
+	// "IncompatiblePolicyException".
+	//
+	// There is a conflict in the policies specified for this parameter. You can't,
+	// for example, specify two Expiration policies for a parameter. Review your
+	// policies, and try again.
+	ErrCodeIncompatiblePolicyException = "IncompatiblePolicyException"
 
 	// ErrCodeInternalServerError for service response error code
 	// "InternalServerError".
@@ -257,7 +272,7 @@ const (
 	// ErrCodeInvalidDeletionIdException for service response error code
 	// "InvalidDeletionIdException".
 	//
-	// The ID specified for the delete operation does not exist or is not valide.
+	// The ID specified for the delete operation does not exist or is not valid.
 	// Verify the ID and try again.
 	ErrCodeInvalidDeletionIdException = "InvalidDeletionIdException"
 
@@ -426,6 +441,19 @@ const (
 	// The plugin name is not valid.
 	ErrCodeInvalidPluginName = "InvalidPluginName"
 
+	// ErrCodeInvalidPolicyAttributeException for service response error code
+	// "InvalidPolicyAttributeException".
+	//
+	// A policy attribute or its value is invalid.
+	ErrCodeInvalidPolicyAttributeException = "InvalidPolicyAttributeException"
+
+	// ErrCodeInvalidPolicyTypeException for service response error code
+	// "InvalidPolicyTypeException".
+	//
+	// The policy type is not supported. Parameter Store supports the following
+	// policy types: Expiration, ExpirationNotification, and NoChangeNotification.
+	ErrCodeInvalidPolicyTypeException = "InvalidPolicyTypeException"
+
 	// ErrCodeInvalidResourceId for service response error code
 	// "InvalidResourceId".
 	//
@@ -485,7 +513,7 @@ const (
 	// "InvocationDoesNotExist".
 	//
 	// The command ID and instance ID you specified did not match any invocations.
-	// Verify the command ID adn the instance ID and try again.
+	// Verify the command ID and the instance ID and try again.
 	ErrCodeInvocationDoesNotExist = "InvocationDoesNotExist"
 
 	// ErrCodeItemContentMismatchException for service response error code
@@ -550,6 +578,13 @@ const (
 	// and version, and try again.
 	ErrCodeParameterVersionNotFound = "ParameterVersionNotFound"
 
+	// ErrCodePoliciesLimitExceededException for service response error code
+	// "PoliciesLimitExceededException".
+	//
+	// You specified more than the maximum number of allowed policies for the parameter.
+	// The maximum is 10.
+	ErrCodePoliciesLimitExceededException = "PoliciesLimitExceededException"
+
 	// ErrCodeResourceDataSyncAlreadyExistsException for service response error code
 	// "ResourceDataSyncAlreadyExistsException".
 	//
@@ -585,11 +620,18 @@ const (
 	// "ResourceLimitExceededException".
 	//
 	// Error returned when the caller has exceeded the default resource limits.
-	// For example, too many Maintenance Windows or Patch baselines have been created.
+	// For example, too many maintenance windows or patch baselines have been created.
 	//
 	// For information about resource limits in Systems Manager, see AWS Systems
 	// Manager Limits (http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm).
 	ErrCodeResourceLimitExceededException = "ResourceLimitExceededException"
+
+	// ErrCodeServiceSettingNotFound for service response error code
+	// "ServiceSettingNotFound".
+	//
+	// The specified service setting was not found. Either the service name or the
+	// setting has not been provisioned by the AWS service team.
+	ErrCodeServiceSettingNotFound = "ServiceSettingNotFound"
 
 	// ErrCodeStatusUnchanged for service response error code
 	// "StatusUnchanged".
@@ -638,6 +680,16 @@ const (
 	//
 	// The size of inventory data has exceeded the total size limit for the resource.
 	ErrCodeTotalSizeLimitExceededException = "TotalSizeLimitExceededException"
+
+	// ErrCodeUnsupportedFeatureRequiredException for service response error code
+	// "UnsupportedFeatureRequiredException".
+	//
+	// Microsoft application patching is only available on EC2 instances and Advanced
+	// Instances. To patch Microsoft applications on on-premises servers and VMs,
+	// you must enable Advanced Instances. For more information, see Using the Advanced-Instances
+	// Tier (http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances-advanced.html)
+	// in the AWS Systems Manager User Guide.
+	ErrCodeUnsupportedFeatureRequiredException = "UnsupportedFeatureRequiredException"
 
 	// ErrCodeUnsupportedInventoryItemContextException for service response error code
 	// "UnsupportedInventoryItemContextException".

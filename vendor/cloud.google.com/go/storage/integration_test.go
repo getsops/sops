@@ -17,6 +17,7 @@ package storage
 import (
 	"bytes"
 	"compress/gzip"
+	"context"
 	"crypto/md5"
 	"crypto/sha256"
 	"encoding/base64"
@@ -38,14 +39,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/google/go-cmp/cmp"
-	"github.com/google/go-cmp/cmp/cmpopts"
-	"golang.org/x/net/context"
-
 	"cloud.google.com/go/httpreplay"
 	"cloud.google.com/go/iam"
 	"cloud.google.com/go/internal/testutil"
 	"cloud.google.com/go/internal/uid"
+	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 	"google.golang.org/api/googleapi"
 	"google.golang.org/api/iterator"
 	itesting "google.golang.org/api/iterator/testing"
@@ -358,6 +357,80 @@ func TestIntegration_BucketUpdate(t *testing.T) {
 	if !testutil.Equal(attrs.Lifecycle, wantLifecycle) {
 		t.Fatalf("got %v, want %v", attrs.Lifecycle, wantLifecycle)
 	}
+}
+
+func TestIntegration_BucketPolicyOnly(t *testing.T) {
+	ctx := context.Background()
+	client := testConfig(ctx, t)
+	defer client.Close()
+	h := testHelper{t}
+	bkt := client.Bucket(bucketName)
+
+	// Insert an object with custom ACL.
+	o := bkt.Object("bucketPolicyOnly")
+	defer func() {
+		if err := o.Delete(ctx); err != nil {
+			log.Printf("failed to delete test object: %v", err)
+		}
+	}()
+	wc := o.NewWriter(ctx)
+	wc.ContentType = "text/plain"
+	h.mustWrite(wc, []byte("test"))
+	a := o.ACL()
+	aclEntity := ACLEntity("user-test@example.com")
+	err := a.Set(ctx, aclEntity, RoleReader)
+	if err != nil {
+		t.Fatalf("set ACL failed: %v", err)
+	}
+
+	// Enable BucketPolicyOnly.
+	ua := BucketAttrsToUpdate{BucketPolicyOnly: &BucketPolicyOnly{Enabled: true}}
+	attrs := h.mustUpdateBucket(bkt, ua)
+	if got, want := attrs.BucketPolicyOnly.Enabled, true; got != want {
+		t.Fatalf("got %v, want %v", got, want)
+	}
+	if got := attrs.BucketPolicyOnly.LockedTime; got.IsZero() {
+		t.Fatal("got a zero time value, want a populated value")
+	}
+
+	// Confirm BucketAccessControl returns error.
+	_, err = bkt.ACL().List(ctx)
+	if err == nil {
+		t.Fatal("expected Bucket ACL list to fail")
+	}
+
+	// Confirm ObjectAccessControl returns error.
+	_, err = o.ACL().List(ctx)
+	if err == nil {
+		t.Fatal("expected Object ACL list to fail")
+	}
+
+	// Disable BucketPolicyOnly.
+	ua = BucketAttrsToUpdate{BucketPolicyOnly: &BucketPolicyOnly{Enabled: false}}
+	attrs = h.mustUpdateBucket(bkt, ua)
+	if got, want := attrs.BucketPolicyOnly.Enabled, false; got != want {
+		t.Fatalf("got %v, want %v", got, want)
+	}
+
+	// Check that the object ACLs are the same.
+	acls, err := o.ACL().List(ctx)
+	if err != nil {
+		t.Fatalf("object ACL list failed: %v", err)
+	}
+
+	// Check that ACL rules contain custom ACL from above.
+	if !containsACL(acls, aclEntity, RoleReader) {
+		t.Fatalf("expected ACLs %v to include custom ACL entity %v", acls, aclEntity)
+	}
+}
+
+func containsACL(acls []ACLRule, e ACLEntity, r ACLRole) bool {
+	for _, a := range acls {
+		if a.Entity == e && a.Role == r {
+			return true
+		}
+	}
+	return false
 }
 
 func TestIntegration_ConditionalDelete(t *testing.T) {
@@ -838,7 +911,11 @@ func TestIntegration_SignedURL(t *testing.T) {
 		fail    bool
 	}{
 		{
-			desc: "basic",
+			desc: "basic v2",
+		},
+		{
+			desc: "basic v4",
+			opts: SignedURLOptions{Scheme: SigningSchemeV4},
 		},
 		{
 			desc:    "MD5 sent and matches",
@@ -896,9 +973,166 @@ func TestIntegration_SignedURL(t *testing.T) {
 	}
 }
 
+func TestIntegration_SignedURL_WithEncryptionKeys(t *testing.T) {
+	t.Skip("Internal bug 128647687")
+
+	if testing.Short() { // do not test during replay
+		t.Skip("Integration tests skipped in short mode")
+	}
+	// To test SignedURL, we need a real user email and private key. Extract
+	// them from the JSON key file.
+	jwtConf, err := testutil.JWTConfig()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if jwtConf == nil {
+		t.Skip("JSON key file is not present")
+	}
+
+	ctx := context.Background()
+	client := testConfig(ctx, t)
+	defer client.Close()
+
+	// TODO(deklerk): document how these were generated and their significance
+	encryptionKey := "AAryxNglNkXQY0Wa+h9+7BLSFMhCzPo22MtXUWjOBbI="
+	encryptionKeySha256 := "QlCdVONb17U1aCTAjrFvMbnxW/Oul8VAvnG1875WJ3k="
+	headers := map[string][]string{
+		"x-goog-encryption-algorithm":  {"AES256"},
+		"x-goog-encryption-key":        {encryptionKey},
+		"x-goog-encryption-key-sha256": {encryptionKeySha256},
+	}
+	contents := []byte(`{"message":"encryption with csek works"}`)
+	tests := []struct {
+		desc string
+		opts *SignedURLOptions
+	}{
+		{
+			desc: "v4 URL with customer supplied encryption keys for PUT",
+			opts: &SignedURLOptions{
+				Method: "PUT",
+				Headers: []string{
+					"x-goog-encryption-algorithm:AES256",
+					"x-goog-encryption-key:AAryxNglNkXQY0Wa+h9+7BLSFMhCzPo22MtXUWjOBbI=",
+					"x-goog-encryption-key-sha256:QlCdVONb17U1aCTAjrFvMbnxW/Oul8VAvnG1875WJ3k=",
+				},
+				Scheme: SigningSchemeV4,
+			},
+		},
+		{
+			desc: "v4 URL with customer supplied encryption keys for GET",
+			opts: &SignedURLOptions{
+				Method: "GET",
+				Headers: []string{
+					"x-goog-encryption-algorithm:AES256",
+					fmt.Sprintf("x-goog-encryption-key:%s", encryptionKey),
+					fmt.Sprintf("x-goog-encryption-key-sha256:%s", encryptionKeySha256),
+				},
+				Scheme: SigningSchemeV4,
+			},
+		},
+	}
+	defer func() {
+		// Delete encrypted object.
+		bkt := client.Bucket(bucketName)
+		err := bkt.Object("csek.json").Delete(ctx)
+		if err != nil {
+			log.Printf("failed to deleted encrypted file: %v", err)
+		}
+	}()
+
+	for _, test := range tests {
+		opts := test.opts
+		opts.GoogleAccessID = jwtConf.Email
+		opts.PrivateKey = jwtConf.PrivateKey
+		opts.Expires = time.Now().Add(time.Hour)
+
+		u, err := SignedURL(bucketName, "csek.json", test.opts)
+		if err != nil {
+			t.Fatalf("%s: %v", test.desc, err)
+		}
+
+		if test.opts.Method == "PUT" {
+			if _, err := putURL(u, headers, bytes.NewReader(contents)); err != nil {
+				t.Fatalf("%s: %v", test.desc, err)
+			}
+		}
+
+		if test.opts.Method == "GET" {
+			got, err := getURL(u, headers)
+			if err != nil {
+				t.Fatalf("%s: %v", test.desc, err)
+			}
+			if !bytes.Equal(got, contents) {
+				t.Fatalf("%s: got %q, want %q", test.desc, got, contents)
+			}
+		}
+	}
+}
+
+func TestIntegration_SignedURL_EmptyStringObjectName(t *testing.T) {
+	if testing.Short() { // do not test during replay
+		t.Skip("Integration tests skipped in short mode")
+	}
+
+	// To test SignedURL, we need a real user email and private key. Extract them
+	// from the JSON key file.
+	jwtConf, err := testutil.JWTConfig()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if jwtConf == nil {
+		t.Skip("JSON key file is not present")
+	}
+
+	ctx := context.Background()
+	client := testConfig(ctx, t)
+	defer client.Close()
+
+	opts := &SignedURLOptions{
+		Scheme:         SigningSchemeV4,
+		Method:         "GET",
+		GoogleAccessID: jwtConf.Email,
+		PrivateKey:     jwtConf.PrivateKey,
+		Expires:        time.Now().Add(time.Hour),
+	}
+
+	u, err := SignedURL(bucketName, "", opts)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Should be some ListBucketResult response.
+	_, err = getURL(u, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 // Make a GET request to a URL using an unauthenticated client, and return its contents.
 func getURL(url string, headers map[string][]string) ([]byte, error) {
 	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header = headers
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+	bytes, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+	if res.StatusCode != 200 {
+		return nil, fmt.Errorf("code=%d, body=%s", res.StatusCode, string(bytes))
+	}
+	return bytes, nil
+}
+
+// Make a PUT request to a URL using an unauthenticated client, and return its contents.
+func putURL(url string, headers map[string][]string, payload io.Reader) ([]byte, error) {
+	req, err := http.NewRequest("PUT", url, payload)
 	if err != nil {
 		return nil, err
 	}
@@ -1792,11 +2026,11 @@ func TestIntegration_PublicBucket(t *testing.T) {
 	}
 
 	errCode := func(err error) int {
-		if err, ok := err.(*googleapi.Error); !ok {
+		err2, ok := err.(*googleapi.Error)
+		if !ok {
 			return -1
-		} else {
-			return err.Code
 		}
+		return err2.Code
 	}
 
 	// Reading from or writing to a non-public bucket fails.
@@ -1827,9 +2061,8 @@ func TestIntegration_ReadCRC(t *testing.T) {
 		uncompressedBucket = "gcp-public-data-landsat"
 		uncompressedObject = "LC08/PRE/044/034/LC80440342016259LGN00/LC80440342016259LGN00_MTL.txt"
 
-		gzippedBucket   = "storage-library-test-bucket"
-		gzippedObject   = "gzipped-text.txt"
-		gzippedContents = "hello world" // uncompressed contents of the file
+		gzippedBucket = "storage-library-test-bucket"
+		gzippedObject = "gzipped-text.txt"
 	)
 	ctx := context.Background()
 	client, err := newTestClient(ctx, option.WithoutAuthentication())
@@ -2035,6 +2268,137 @@ func TestIntegration_UpdateCORS(t *testing.T) {
 	}
 }
 
+func TestIntegration_UpdateDefaultEventBasedHold(t *testing.T) {
+	ctx := context.Background()
+	client := testConfig(ctx, t)
+	defer client.Close()
+	h := testHelper{t}
+
+	bkt := client.Bucket(uidSpace.New())
+	h.mustCreate(bkt, testutil.ProjID(), &BucketAttrs{})
+	defer h.mustDeleteBucket(bkt)
+	attrs := h.mustBucketAttrs(bkt)
+	if attrs.DefaultEventBasedHold != false {
+		t.Errorf("got=%v, want=%v", attrs.DefaultEventBasedHold, false)
+	}
+
+	h.mustUpdateBucket(bkt, BucketAttrsToUpdate{DefaultEventBasedHold: true})
+	attrs = h.mustBucketAttrs(bkt)
+	if attrs.DefaultEventBasedHold != true {
+		t.Errorf("got=%v, want=%v", attrs.DefaultEventBasedHold, true)
+	}
+
+	// Omitting it should leave the value unchanged.
+	h.mustUpdateBucket(bkt, BucketAttrsToUpdate{RequesterPays: true})
+	attrs = h.mustBucketAttrs(bkt)
+	if attrs.DefaultEventBasedHold != true {
+		t.Errorf("got=%v, want=%v", attrs.DefaultEventBasedHold, true)
+	}
+}
+
+func TestIntegration_UpdateEventBasedHold(t *testing.T) {
+	ctx := context.Background()
+	client := testConfig(ctx, t)
+	defer client.Close()
+	h := testHelper{t}
+
+	bkt := client.Bucket(uidSpace.New())
+	h.mustCreate(bkt, testutil.ProjID(), &BucketAttrs{})
+	obj := bkt.Object("some-obj")
+	h.mustWrite(obj.NewWriter(ctx), randomContents())
+
+	defer func() {
+		h.mustUpdateObject(obj, ObjectAttrsToUpdate{EventBasedHold: false})
+		h.mustDeleteObject(obj)
+		h.mustDeleteBucket(bkt)
+	}()
+
+	attrs := h.mustObjectAttrs(obj)
+	if attrs.EventBasedHold != false {
+		t.Fatalf("got=%v, want=%v", attrs.EventBasedHold, false)
+	}
+
+	h.mustUpdateObject(obj, ObjectAttrsToUpdate{EventBasedHold: true})
+	attrs = h.mustObjectAttrs(obj)
+	if attrs.EventBasedHold != true {
+		t.Fatalf("got=%v, want=%v", attrs.EventBasedHold, true)
+	}
+
+	// Omitting it should leave the value unchanged.
+	h.mustUpdateObject(obj, ObjectAttrsToUpdate{ContentType: "foo"})
+	attrs = h.mustObjectAttrs(obj)
+	if attrs.EventBasedHold != true {
+		t.Fatalf("got=%v, want=%v", attrs.EventBasedHold, true)
+	}
+}
+
+func TestIntegration_UpdateTemporaryHold(t *testing.T) {
+	ctx := context.Background()
+	client := testConfig(ctx, t)
+	defer client.Close()
+	h := testHelper{t}
+
+	bkt := client.Bucket(uidSpace.New())
+	h.mustCreate(bkt, testutil.ProjID(), &BucketAttrs{})
+	obj := bkt.Object("some-obj")
+	h.mustWrite(obj.NewWriter(ctx), randomContents())
+
+	defer func() {
+		h.mustUpdateObject(obj, ObjectAttrsToUpdate{TemporaryHold: false})
+		h.mustDeleteObject(obj)
+		h.mustDeleteBucket(bkt)
+	}()
+
+	attrs := h.mustObjectAttrs(obj)
+	if attrs.TemporaryHold != false {
+		t.Fatalf("got=%v, want=%v", attrs.TemporaryHold, false)
+	}
+
+	h.mustUpdateObject(obj, ObjectAttrsToUpdate{TemporaryHold: true})
+	attrs = h.mustObjectAttrs(obj)
+	if attrs.TemporaryHold != true {
+		t.Fatalf("got=%v, want=%v", attrs.TemporaryHold, true)
+	}
+
+	// Omitting it should leave the value unchanged.
+	h.mustUpdateObject(obj, ObjectAttrsToUpdate{ContentType: "foo"})
+	attrs = h.mustObjectAttrs(obj)
+	if attrs.TemporaryHold != true {
+		t.Fatalf("got=%v, want=%v", attrs.TemporaryHold, true)
+	}
+}
+
+func TestIntegration_UpdateRetentionExpirationTime(t *testing.T) {
+	ctx := context.Background()
+	client := testConfig(ctx, t)
+	defer client.Close()
+	h := testHelper{t}
+
+	bkt := client.Bucket(uidSpace.New())
+	h.mustCreate(bkt, testutil.ProjID(), &BucketAttrs{RetentionPolicy: &RetentionPolicy{RetentionPeriod: time.Hour}})
+	obj := bkt.Object("some-obj")
+	h.mustWrite(obj.NewWriter(ctx), randomContents())
+
+	defer func() {
+		h.mustUpdateBucket(bkt, BucketAttrsToUpdate{RetentionPolicy: &RetentionPolicy{RetentionPeriod: 0}})
+
+		// RetentionPeriod of less than a day is explicitly called out
+		// as best effort and not guaranteed, so let's log problems deleting
+		// objects instead of failing.
+		if err := obj.Delete(context.Background()); err != nil {
+			t.Logf("%s: object delete: %v", loc(), err)
+		}
+		if err := bkt.Delete(context.Background()); err != nil {
+			t.Logf("%s: bucket delete: %v", loc(), err)
+		}
+	}()
+
+	attrs := h.mustObjectAttrs(obj)
+	if attrs.RetentionExpirationTime == (time.Time{}) {
+		t.Fatalf("got=%v, wanted a non-zero value", attrs.RetentionExpirationTime)
+	}
+}
+
 func TestIntegration_UpdateRetentionPolicy(t *testing.T) {
 	ctx := context.Background()
 	client := testConfig(ctx, t)
@@ -2116,9 +2480,17 @@ func TestIntegration_LockBucket(t *testing.T) {
 	bkt := client.Bucket(uidSpace.New())
 	h.mustCreate(bkt, testutil.ProjID(), &BucketAttrs{RetentionPolicy: &RetentionPolicy{RetentionPeriod: time.Hour * 25}})
 	attrs := h.mustBucketAttrs(bkt)
+	if attrs.RetentionPolicy.IsLocked {
+		t.Fatal("Expected bucket to begin unlocked, but it was not")
+	}
 	err := bkt.If(BucketConditions{MetagenerationMatch: attrs.MetaGeneration}).LockRetentionPolicy(ctx)
 	if err != nil {
 		t.Fatal("could not lock", err)
+	}
+
+	attrs = h.mustBucketAttrs(bkt)
+	if !attrs.RetentionPolicy.IsLocked {
+		t.Fatal("Expected bucket to be locked, but it was not")
 	}
 
 	_, err = bkt.Update(ctx, BucketAttrsToUpdate{RetentionPolicy: &RetentionPolicy{RetentionPeriod: time.Hour}})
@@ -2336,6 +2708,49 @@ func TestIntegration_ServiceAccount(t *testing.T) {
 	want := "@gs-project-accounts.iam.gserviceaccount.com"
 	if !strings.Contains(s, want) {
 		t.Fatalf("got %v, want to contain %v", s, want)
+	}
+}
+
+func TestIntegration_ReaderAttrs(t *testing.T) {
+	ctx := context.Background()
+	client := testConfig(ctx, t)
+	defer client.Close()
+	bkt := client.Bucket(bucketName)
+
+	const defaultType = "text/plain"
+	obj := "some-object"
+	c := randomContents()
+	if err := writeObject(ctx, bkt.Object(obj), defaultType, c); err != nil {
+		t.Errorf("Write for %v failed with %v", obj, err)
+	}
+	oh := bkt.Object(obj)
+
+	rc, err := oh.NewReader(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	attrs, err := oh.Attrs(ctx)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	got := rc.Attrs
+	want := ReaderObjectAttrs{
+		Size:            attrs.Size,
+		ContentType:     attrs.ContentType,
+		ContentEncoding: attrs.ContentEncoding,
+		CacheControl:    attrs.CacheControl,
+		LastModified:    got.LastModified, // ignored, tested separately
+		Generation:      attrs.Generation,
+		Metageneration:  attrs.Metageneration,
+	}
+	if got != want {
+		t.Fatalf("got %v, wanted %v", got, want)
+	}
+
+	if got.LastModified.IsZero() {
+		t.Fatal("LastModified is 0, should be >0")
 	}
 }
 

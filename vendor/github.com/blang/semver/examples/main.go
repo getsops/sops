@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/blang/semver"
 )
 
@@ -33,7 +34,7 @@ func main() {
 	}
 
 	// Make == Parse (Value), New for Pointer
-	v001, err := semver.Make("0.0.1")
+	v001, _ := semver.Make("0.0.1")
 
 	fmt.Println("\nUse Version.Compare for comparisons (-1, 0, 1):")
 	fmt.Printf("%q is greater than %q: Compare == %d\n", v001, v, v001.Compare(v))

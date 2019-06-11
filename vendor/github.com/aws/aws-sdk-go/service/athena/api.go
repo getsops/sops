@@ -3,11 +3,14 @@
 package athena
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
+	"github.com/aws/aws-sdk-go/private/protocol/jsonrpc"
 )
 
 const opBatchGetNamedQuery = "BatchGetNamedQuery"
@@ -15,7 +18,7 @@ const opBatchGetNamedQuery = "BatchGetNamedQuery"
 // BatchGetNamedQueryRequest generates a "aws/request.Request" representing the
 // client's request for the BatchGetNamedQuery operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -55,12 +58,14 @@ func (c *Athena) BatchGetNamedQueryRequest(input *BatchGetNamedQueryInput) (req 
 // BatchGetNamedQuery API operation for Amazon Athena.
 //
 // Returns the details of a single named query or a list of up to 50 queries,
-// which you provide as an array of query ID strings. Use ListNamedQueries to
-// get the list of named query IDs. If information could not be retrieved for
-// a submitted query ID, information about the query ID submitted is listed
-// under UnprocessedNamedQueryId. Named queries are different from executed
-// queries. Use BatchGetQueryExecution to get details about each unique query
-// execution, and ListQueryExecutions to get a list of query execution IDs.
+// which you provide as an array of query ID strings. Requires you to have access
+// to the workgroup in which the queries were saved. Use ListNamedQueriesInput
+// to get the list of named query IDs in the specified workgroup. If information
+// could not be retrieved for a submitted query ID, information about the query
+// ID submitted is listed under UnprocessedNamedQueryId. Named queries differ
+// from executed queries. Use BatchGetQueryExecutionInput to get details about
+// each unique query execution, and ListQueryExecutionsInput to get a list of
+// query execution IDs.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -105,7 +110,7 @@ const opBatchGetQueryExecution = "BatchGetQueryExecution"
 // BatchGetQueryExecutionRequest generates a "aws/request.Request" representing the
 // client's request for the BatchGetQueryExecution operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -146,9 +151,10 @@ func (c *Athena) BatchGetQueryExecutionRequest(input *BatchGetQueryExecutionInpu
 //
 // Returns the details of a single query execution or a list of up to 50 query
 // executions, which you provide as an array of query execution ID strings.
-// To get a list of query execution IDs, use ListQueryExecutions. Query executions
-// are different from named (saved) queries. Use BatchGetNamedQuery to get details
-// about named queries.
+// Requires you to have access to the workgroup in which the queries ran. To
+// get a list of query execution IDs, use ListQueryExecutionsInput$WorkGroup.
+// Query executions differ from named (saved) queries. Use BatchGetNamedQueryInput
+// to get details about named queries.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -193,7 +199,7 @@ const opCreateNamedQuery = "CreateNamedQuery"
 // CreateNamedQueryRequest generates a "aws/request.Request" representing the
 // client's request for the CreateNamedQuery operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -232,7 +238,8 @@ func (c *Athena) CreateNamedQueryRequest(input *CreateNamedQueryInput) (req *req
 
 // CreateNamedQuery API operation for Amazon Athena.
 //
-// Creates a named query.
+// Creates a named query in the specified workgroup. Requires that you have
+// access to the workgroup.
 //
 // For code samples using the AWS SDK for Java, see Examples and Code Samples
 // (http://docs.aws.amazon.com/athena/latest/ug/code-samples.html) in the Amazon
@@ -276,12 +283,97 @@ func (c *Athena) CreateNamedQueryWithContext(ctx aws.Context, input *CreateNamed
 	return out, req.Send()
 }
 
+const opCreateWorkGroup = "CreateWorkGroup"
+
+// CreateWorkGroupRequest generates a "aws/request.Request" representing the
+// client's request for the CreateWorkGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateWorkGroup for more information on using the CreateWorkGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateWorkGroupRequest method.
+//    req, resp := client.CreateWorkGroupRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/CreateWorkGroup
+func (c *Athena) CreateWorkGroupRequest(input *CreateWorkGroupInput) (req *request.Request, output *CreateWorkGroupOutput) {
+	op := &request.Operation{
+		Name:       opCreateWorkGroup,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateWorkGroupInput{}
+	}
+
+	output = &CreateWorkGroupOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CreateWorkGroup API operation for Amazon Athena.
+//
+// Creates a workgroup with the specified name.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Athena's
+// API operation CreateWorkGroup for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInternalServerException "InternalServerException"
+//   Indicates a platform issue, which may be due to a transient condition or
+//   outage.
+//
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   Indicates that something is wrong with the input to the request. For example,
+//   a required parameter may be missing or out of range.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/CreateWorkGroup
+func (c *Athena) CreateWorkGroup(input *CreateWorkGroupInput) (*CreateWorkGroupOutput, error) {
+	req, out := c.CreateWorkGroupRequest(input)
+	return out, req.Send()
+}
+
+// CreateWorkGroupWithContext is the same as CreateWorkGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateWorkGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Athena) CreateWorkGroupWithContext(ctx aws.Context, input *CreateWorkGroupInput, opts ...request.Option) (*CreateWorkGroupOutput, error) {
+	req, out := c.CreateWorkGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteNamedQuery = "DeleteNamedQuery"
 
 // DeleteNamedQueryRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteNamedQuery operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -315,12 +407,14 @@ func (c *Athena) DeleteNamedQueryRequest(input *DeleteNamedQueryInput) (req *req
 
 	output = &DeleteNamedQueryOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
 // DeleteNamedQuery API operation for Amazon Athena.
 //
-// Deletes a named query.
+// Deletes the named query if you have access to the workgroup in which the
+// query was saved.
 //
 // For code samples using the AWS SDK for Java, see Examples and Code Samples
 // (http://docs.aws.amazon.com/athena/latest/ug/code-samples.html) in the Amazon
@@ -364,12 +458,98 @@ func (c *Athena) DeleteNamedQueryWithContext(ctx aws.Context, input *DeleteNamed
 	return out, req.Send()
 }
 
+const opDeleteWorkGroup = "DeleteWorkGroup"
+
+// DeleteWorkGroupRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteWorkGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteWorkGroup for more information on using the DeleteWorkGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteWorkGroupRequest method.
+//    req, resp := client.DeleteWorkGroupRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/DeleteWorkGroup
+func (c *Athena) DeleteWorkGroupRequest(input *DeleteWorkGroupInput) (req *request.Request, output *DeleteWorkGroupOutput) {
+	op := &request.Operation{
+		Name:       opDeleteWorkGroup,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteWorkGroupInput{}
+	}
+
+	output = &DeleteWorkGroupOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteWorkGroup API operation for Amazon Athena.
+//
+// Deletes the workgroup with the specified name. The primary workgroup cannot
+// be deleted.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Athena's
+// API operation DeleteWorkGroup for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInternalServerException "InternalServerException"
+//   Indicates a platform issue, which may be due to a transient condition or
+//   outage.
+//
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   Indicates that something is wrong with the input to the request. For example,
+//   a required parameter may be missing or out of range.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/DeleteWorkGroup
+func (c *Athena) DeleteWorkGroup(input *DeleteWorkGroupInput) (*DeleteWorkGroupOutput, error) {
+	req, out := c.DeleteWorkGroupRequest(input)
+	return out, req.Send()
+}
+
+// DeleteWorkGroupWithContext is the same as DeleteWorkGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteWorkGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Athena) DeleteWorkGroupWithContext(ctx aws.Context, input *DeleteWorkGroupInput, opts ...request.Option) (*DeleteWorkGroupOutput, error) {
+	req, out := c.DeleteWorkGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetNamedQuery = "GetNamedQuery"
 
 // GetNamedQueryRequest generates a "aws/request.Request" representing the
 // client's request for the GetNamedQuery operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -408,7 +588,8 @@ func (c *Athena) GetNamedQueryRequest(input *GetNamedQueryInput) (req *request.R
 
 // GetNamedQuery API operation for Amazon Athena.
 //
-// Returns information about a single query.
+// Returns information about a single query. Requires that you have access to
+// the workgroup in which the query was saved.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -453,7 +634,7 @@ const opGetQueryExecution = "GetQueryExecution"
 // GetQueryExecutionRequest generates a "aws/request.Request" representing the
 // client's request for the GetQueryExecution operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -492,8 +673,9 @@ func (c *Athena) GetQueryExecutionRequest(input *GetQueryExecutionInput) (req *r
 
 // GetQueryExecution API operation for Amazon Athena.
 //
-// Returns information about a single execution of a query. Each time a query
-// executes, information about the query execution is saved with a unique ID.
+// Returns information about a single execution of a query if you have access
+// to the workgroup in which the query ran. Each time a query executes, information
+// about the query execution is saved with a unique ID.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -538,7 +720,7 @@ const opGetQueryResults = "GetQueryResults"
 // GetQueryResultsRequest generates a "aws/request.Request" representing the
 // client's request for the GetQueryResults operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -583,9 +765,10 @@ func (c *Athena) GetQueryResultsRequest(input *GetQueryResultsInput) (req *reque
 
 // GetQueryResults API operation for Amazon Athena.
 //
-// Returns the results of a single query execution specified by QueryExecutionId.
-// This request does not execute the query but returns results. Use StartQueryExecution
-// to run a query.
+// Returns the results of a single query execution specified by QueryExecutionId
+// if you have access to the workgroup in which the query ran. This request
+// does not execute the query but returns results. Use StartQueryExecution to
+// run a query.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -636,7 +819,7 @@ func (c *Athena) GetQueryResultsWithContext(ctx aws.Context, input *GetQueryResu
 //    // Example iterating over at most 3 pages of a GetQueryResults operation.
 //    pageNum := 0
 //    err := client.GetQueryResultsPages(params,
-//        func(page *GetQueryResultsOutput, lastPage bool) bool {
+//        func(page *athena.GetQueryResultsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -675,12 +858,96 @@ func (c *Athena) GetQueryResultsPagesWithContext(ctx aws.Context, input *GetQuer
 	return p.Err()
 }
 
+const opGetWorkGroup = "GetWorkGroup"
+
+// GetWorkGroupRequest generates a "aws/request.Request" representing the
+// client's request for the GetWorkGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetWorkGroup for more information on using the GetWorkGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetWorkGroupRequest method.
+//    req, resp := client.GetWorkGroupRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/GetWorkGroup
+func (c *Athena) GetWorkGroupRequest(input *GetWorkGroupInput) (req *request.Request, output *GetWorkGroupOutput) {
+	op := &request.Operation{
+		Name:       opGetWorkGroup,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetWorkGroupInput{}
+	}
+
+	output = &GetWorkGroupOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetWorkGroup API operation for Amazon Athena.
+//
+// Returns information about the workgroup with the specified name.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Athena's
+// API operation GetWorkGroup for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInternalServerException "InternalServerException"
+//   Indicates a platform issue, which may be due to a transient condition or
+//   outage.
+//
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   Indicates that something is wrong with the input to the request. For example,
+//   a required parameter may be missing or out of range.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/GetWorkGroup
+func (c *Athena) GetWorkGroup(input *GetWorkGroupInput) (*GetWorkGroupOutput, error) {
+	req, out := c.GetWorkGroupRequest(input)
+	return out, req.Send()
+}
+
+// GetWorkGroupWithContext is the same as GetWorkGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetWorkGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Athena) GetWorkGroupWithContext(ctx aws.Context, input *GetWorkGroupInput, opts ...request.Option) (*GetWorkGroupOutput, error) {
+	req, out := c.GetWorkGroupRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListNamedQueries = "ListNamedQueries"
 
 // ListNamedQueriesRequest generates a "aws/request.Request" representing the
 // client's request for the ListNamedQueries operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -725,7 +992,8 @@ func (c *Athena) ListNamedQueriesRequest(input *ListNamedQueriesInput) (req *req
 
 // ListNamedQueries API operation for Amazon Athena.
 //
-// Provides a list of all available query IDs.
+// Provides a list of available query IDs only for queries saved in the specified
+// workgroup. Requires that you have access to the workgroup.
 //
 // For code samples using the AWS SDK for Java, see Examples and Code Samples
 // (http://docs.aws.amazon.com/athena/latest/ug/code-samples.html) in the Amazon
@@ -780,7 +1048,7 @@ func (c *Athena) ListNamedQueriesWithContext(ctx aws.Context, input *ListNamedQu
 //    // Example iterating over at most 3 pages of a ListNamedQueries operation.
 //    pageNum := 0
 //    err := client.ListNamedQueriesPages(params,
-//        func(page *ListNamedQueriesOutput, lastPage bool) bool {
+//        func(page *athena.ListNamedQueriesOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -824,7 +1092,7 @@ const opListQueryExecutions = "ListQueryExecutions"
 // ListQueryExecutionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListQueryExecutions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -869,7 +1137,9 @@ func (c *Athena) ListQueryExecutionsRequest(input *ListQueryExecutionsInput) (re
 
 // ListQueryExecutions API operation for Amazon Athena.
 //
-// Provides a list of all available query execution IDs.
+// Provides a list of available query execution IDs for the queries in the specified
+// workgroup. Requires you to have access to the workgroup in which the queries
+// ran.
 //
 // For code samples using the AWS SDK for Java, see Examples and Code Samples
 // (http://docs.aws.amazon.com/athena/latest/ug/code-samples.html) in the Amazon
@@ -924,7 +1194,7 @@ func (c *Athena) ListQueryExecutionsWithContext(ctx aws.Context, input *ListQuer
 //    // Example iterating over at most 3 pages of a ListQueryExecutions operation.
 //    pageNum := 0
 //    err := client.ListQueryExecutionsPages(params,
-//        func(page *ListQueryExecutionsOutput, lastPage bool) bool {
+//        func(page *athena.ListQueryExecutionsOutput, lastPage bool) bool {
 //            pageNum++
 //            fmt.Println(page)
 //            return pageNum <= 3
@@ -963,12 +1233,239 @@ func (c *Athena) ListQueryExecutionsPagesWithContext(ctx aws.Context, input *Lis
 	return p.Err()
 }
 
+const opListTagsForResource = "ListTagsForResource"
+
+// ListTagsForResourceRequest generates a "aws/request.Request" representing the
+// client's request for the ListTagsForResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListTagsForResource for more information on using the ListTagsForResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListTagsForResourceRequest method.
+//    req, resp := client.ListTagsForResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/ListTagsForResource
+func (c *Athena) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
+	op := &request.Operation{
+		Name:       opListTagsForResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListTagsForResourceInput{}
+	}
+
+	output = &ListTagsForResourceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListTagsForResource API operation for Amazon Athena.
+//
+// Lists the tags associated with this workgroup.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Athena's
+// API operation ListTagsForResource for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInternalServerException "InternalServerException"
+//   Indicates a platform issue, which may be due to a transient condition or
+//   outage.
+//
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   Indicates that something is wrong with the input to the request. For example,
+//   a required parameter may be missing or out of range.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   A resource, such as a workgroup, was not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/ListTagsForResource
+func (c *Athena) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	return out, req.Send()
+}
+
+// ListTagsForResourceWithContext is the same as ListTagsForResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListTagsForResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Athena) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsForResourceInput, opts ...request.Option) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListWorkGroups = "ListWorkGroups"
+
+// ListWorkGroupsRequest generates a "aws/request.Request" representing the
+// client's request for the ListWorkGroups operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListWorkGroups for more information on using the ListWorkGroups
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListWorkGroupsRequest method.
+//    req, resp := client.ListWorkGroupsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/ListWorkGroups
+func (c *Athena) ListWorkGroupsRequest(input *ListWorkGroupsInput) (req *request.Request, output *ListWorkGroupsOutput) {
+	op := &request.Operation{
+		Name:       opListWorkGroups,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListWorkGroupsInput{}
+	}
+
+	output = &ListWorkGroupsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListWorkGroups API operation for Amazon Athena.
+//
+// Lists available workgroups for the account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Athena's
+// API operation ListWorkGroups for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInternalServerException "InternalServerException"
+//   Indicates a platform issue, which may be due to a transient condition or
+//   outage.
+//
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   Indicates that something is wrong with the input to the request. For example,
+//   a required parameter may be missing or out of range.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/ListWorkGroups
+func (c *Athena) ListWorkGroups(input *ListWorkGroupsInput) (*ListWorkGroupsOutput, error) {
+	req, out := c.ListWorkGroupsRequest(input)
+	return out, req.Send()
+}
+
+// ListWorkGroupsWithContext is the same as ListWorkGroups with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListWorkGroups for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Athena) ListWorkGroupsWithContext(ctx aws.Context, input *ListWorkGroupsInput, opts ...request.Option) (*ListWorkGroupsOutput, error) {
+	req, out := c.ListWorkGroupsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListWorkGroupsPages iterates over the pages of a ListWorkGroups operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListWorkGroups method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListWorkGroups operation.
+//    pageNum := 0
+//    err := client.ListWorkGroupsPages(params,
+//        func(page *athena.ListWorkGroupsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Athena) ListWorkGroupsPages(input *ListWorkGroupsInput, fn func(*ListWorkGroupsOutput, bool) bool) error {
+	return c.ListWorkGroupsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListWorkGroupsPagesWithContext same as ListWorkGroupsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Athena) ListWorkGroupsPagesWithContext(ctx aws.Context, input *ListWorkGroupsInput, fn func(*ListWorkGroupsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListWorkGroupsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListWorkGroupsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListWorkGroupsOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opStartQueryExecution = "StartQueryExecution"
 
 // StartQueryExecutionRequest generates a "aws/request.Request" representing the
 // client's request for the StartQueryExecution operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1007,7 +1504,8 @@ func (c *Athena) StartQueryExecutionRequest(input *StartQueryExecutionInput) (re
 
 // StartQueryExecution API operation for Amazon Athena.
 //
-// Runs (executes) the SQL query statements contained in the Query string.
+// Runs the SQL query statements contained in the Query. Requires you to have
+// access to the workgroup in which the query ran.
 //
 // For code samples using the AWS SDK for Java, see Examples and Code Samples
 // (http://docs.aws.amazon.com/athena/latest/ug/code-samples.html) in the Amazon
@@ -1059,7 +1557,7 @@ const opStopQueryExecution = "StopQueryExecution"
 // StopQueryExecutionRequest generates a "aws/request.Request" representing the
 // client's request for the StopQueryExecution operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1093,12 +1591,14 @@ func (c *Athena) StopQueryExecutionRequest(input *StopQueryExecutionInput) (req 
 
 	output = &StopQueryExecutionOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
 // StopQueryExecution API operation for Amazon Athena.
 //
-// Stops a query execution.
+// Stops a query execution. Requires you to have access to the workgroup in
+// which the query ran.
 //
 // For code samples using the AWS SDK for Java, see Examples and Code Samples
 // (http://docs.aws.amazon.com/athena/latest/ug/code-samples.html) in the Amazon
@@ -1137,6 +1637,282 @@ func (c *Athena) StopQueryExecution(input *StopQueryExecutionInput) (*StopQueryE
 // for more information on using Contexts.
 func (c *Athena) StopQueryExecutionWithContext(ctx aws.Context, input *StopQueryExecutionInput, opts ...request.Option) (*StopQueryExecutionOutput, error) {
 	req, out := c.StopQueryExecutionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opTagResource = "TagResource"
+
+// TagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the TagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See TagResource for more information on using the TagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the TagResourceRequest method.
+//    req, resp := client.TagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/TagResource
+func (c *Athena) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
+	op := &request.Operation{
+		Name:       opTagResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &TagResourceInput{}
+	}
+
+	output = &TagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// TagResource API operation for Amazon Athena.
+//
+// Adds one or more tags to the resource, such as a workgroup. A tag is a label
+// that you assign to an AWS Athena resource (a workgroup). Each tag consists
+// of a key and an optional value, both of which you define. Tags enable you
+// to categorize resources (workgroups) in Athena, for example, by purpose,
+// owner, or environment. Use a consistent set of tag keys to make it easier
+// to search and filter workgroups in your account. For best practices, see
+// AWS Tagging Strategies (https://aws.amazon.com/answers/account-management/aws-tagging-strategies/).
+// The key length is from 1 (minimum) to 128 (maximum) Unicode characters in
+// UTF-8. The tag value length is from 0 (minimum) to 256 (maximum) Unicode
+// characters in UTF-8. You can use letters and numbers representable in UTF-8,
+// and the following characters: + - = . _ : / @. Tag keys and values are case-sensitive.
+// Tag keys must be unique per resource. If you specify more than one, separate
+// them by commas.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Athena's
+// API operation TagResource for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInternalServerException "InternalServerException"
+//   Indicates a platform issue, which may be due to a transient condition or
+//   outage.
+//
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   Indicates that something is wrong with the input to the request. For example,
+//   a required parameter may be missing or out of range.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   A resource, such as a workgroup, was not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/TagResource
+func (c *Athena) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	return out, req.Send()
+}
+
+// TagResourceWithContext is the same as TagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See TagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Athena) TagResourceWithContext(ctx aws.Context, input *TagResourceInput, opts ...request.Option) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUntagResource = "UntagResource"
+
+// UntagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the UntagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UntagResource for more information on using the UntagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UntagResourceRequest method.
+//    req, resp := client.UntagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/UntagResource
+func (c *Athena) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
+	op := &request.Operation{
+		Name:       opUntagResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UntagResourceInput{}
+	}
+
+	output = &UntagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UntagResource API operation for Amazon Athena.
+//
+// Removes one or more tags from the workgroup resource. Takes as an input a
+// list of TagKey Strings separated by commas, and removes their tags at the
+// same time.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Athena's
+// API operation UntagResource for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInternalServerException "InternalServerException"
+//   Indicates a platform issue, which may be due to a transient condition or
+//   outage.
+//
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   Indicates that something is wrong with the input to the request. For example,
+//   a required parameter may be missing or out of range.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   A resource, such as a workgroup, was not found.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/UntagResource
+func (c *Athena) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	return out, req.Send()
+}
+
+// UntagResourceWithContext is the same as UntagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UntagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Athena) UntagResourceWithContext(ctx aws.Context, input *UntagResourceInput, opts ...request.Option) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateWorkGroup = "UpdateWorkGroup"
+
+// UpdateWorkGroupRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateWorkGroup operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateWorkGroup for more information on using the UpdateWorkGroup
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateWorkGroupRequest method.
+//    req, resp := client.UpdateWorkGroupRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/UpdateWorkGroup
+func (c *Athena) UpdateWorkGroupRequest(input *UpdateWorkGroupInput) (req *request.Request, output *UpdateWorkGroupOutput) {
+	op := &request.Operation{
+		Name:       opUpdateWorkGroup,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateWorkGroupInput{}
+	}
+
+	output = &UpdateWorkGroupOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateWorkGroup API operation for Amazon Athena.
+//
+// Updates the workgroup with the specified name. The workgroup's name cannot
+// be changed.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Athena's
+// API operation UpdateWorkGroup for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInternalServerException "InternalServerException"
+//   Indicates a platform issue, which may be due to a transient condition or
+//   outage.
+//
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   Indicates that something is wrong with the input to the request. For example,
+//   a required parameter may be missing or out of range.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/athena-2017-05-18/UpdateWorkGroup
+func (c *Athena) UpdateWorkGroup(input *UpdateWorkGroupInput) (*UpdateWorkGroupOutput, error) {
+	req, out := c.UpdateWorkGroupRequest(input)
+	return out, req.Send()
+}
+
+// UpdateWorkGroupWithContext is the same as UpdateWorkGroup with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateWorkGroup for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Athena) UpdateWorkGroupWithContext(ctx aws.Context, input *UpdateWorkGroupInput, opts ...request.Option) (*UpdateWorkGroupOutput, error) {
+	req, out := c.UpdateWorkGroupRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1417,18 +2193,21 @@ type CreateNamedQueryInput struct {
 	// Database is a required field
 	Database *string `min:"1" type:"string" required:"true"`
 
-	// A brief explanation of the query.
+	// The query description.
 	Description *string `min:"1" type:"string"`
 
-	// The plain language name for the query.
+	// The query name.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
-	// The text of the query itself. In other words, all query statements.
+	// The contents of the query with all query statements.
 	//
 	// QueryString is a required field
 	QueryString *string `min:"1" type:"string" required:"true"`
+
+	// The name of the workgroup in which the named query is being created.
+	WorkGroup *string `type:"string"`
 }
 
 // String returns the string representation
@@ -1505,6 +2284,12 @@ func (s *CreateNamedQueryInput) SetQueryString(v string) *CreateNamedQueryInput 
 	return s
 }
 
+// SetWorkGroup sets the WorkGroup field's value.
+func (s *CreateNamedQueryInput) SetWorkGroup(v string) *CreateNamedQueryInput {
+	s.WorkGroup = &v
+	return s
+}
+
 type CreateNamedQueryOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1526,6 +2311,107 @@ func (s CreateNamedQueryOutput) GoString() string {
 func (s *CreateNamedQueryOutput) SetNamedQueryId(v string) *CreateNamedQueryOutput {
 	s.NamedQueryId = &v
 	return s
+}
+
+type CreateWorkGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The configuration for the workgroup, which includes the location in Amazon
+	// S3 where query results are stored, the encryption configuration, if any,
+	// used for encrypting query results, whether the Amazon CloudWatch Metrics
+	// are enabled for the workgroup, the limit for the amount of bytes scanned
+	// (cutoff) per query, if it is specified, and whether workgroup's settings
+	// (specified with EnforceWorkGroupConfiguration) in the WorkGroupConfiguration
+	// override client-side settings. See WorkGroupConfiguration$EnforceWorkGroupConfiguration.
+	Configuration *WorkGroupConfiguration `type:"structure"`
+
+	// The workgroup description.
+	Description *string `type:"string"`
+
+	// The workgroup name.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// One or more tags, separated by commas, that you want to attach to the workgroup
+	// as you create it.
+	Tags []*Tag `type:"list"`
+}
+
+// String returns the string representation
+func (s CreateWorkGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateWorkGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateWorkGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateWorkGroupInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Configuration != nil {
+		if err := s.Configuration.Validate(); err != nil {
+			invalidParams.AddNested("Configuration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConfiguration sets the Configuration field's value.
+func (s *CreateWorkGroupInput) SetConfiguration(v *WorkGroupConfiguration) *CreateWorkGroupInput {
+	s.Configuration = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateWorkGroupInput) SetDescription(v string) *CreateWorkGroupInput {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateWorkGroupInput) SetName(v string) *CreateWorkGroupInput {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateWorkGroupInput) SetTags(v []*Tag) *CreateWorkGroupInput {
+	s.Tags = v
+	return s
+}
+
+type CreateWorkGroupOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateWorkGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateWorkGroupOutput) GoString() string {
+	return s.String()
 }
 
 // A piece of data (a field in the table).
@@ -1556,9 +2442,7 @@ type DeleteNamedQueryInput struct {
 	_ struct{} `type:"structure"`
 
 	// The unique ID of the query to delete.
-	//
-	// NamedQueryId is a required field
-	NamedQueryId *string `type:"string" required:"true" idempotencyToken:"true"`
+	NamedQueryId *string `type:"string" idempotencyToken:"true"`
 }
 
 // String returns the string representation
@@ -1569,19 +2453,6 @@ func (s DeleteNamedQueryInput) String() string {
 // GoString returns the string representation
 func (s DeleteNamedQueryInput) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *DeleteNamedQueryInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "DeleteNamedQueryInput"}
-	if s.NamedQueryId == nil {
-		invalidParams.Add(request.NewErrParamRequired("NamedQueryId"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 // SetNamedQueryId sets the NamedQueryId field's value.
@@ -1604,14 +2475,80 @@ func (s DeleteNamedQueryOutput) GoString() string {
 	return s.String()
 }
 
-// If query results are encrypted in Amazon S3, indicates the Amazon S3 encryption
-// option used.
+type DeleteWorkGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The option to delete the workgroup and its contents even if the workgroup
+	// contains any named queries.
+	RecursiveDeleteOption *bool `type:"boolean"`
+
+	// The unique name of the workgroup to delete.
+	//
+	// WorkGroup is a required field
+	WorkGroup *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteWorkGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteWorkGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteWorkGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteWorkGroupInput"}
+	if s.WorkGroup == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkGroup"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetRecursiveDeleteOption sets the RecursiveDeleteOption field's value.
+func (s *DeleteWorkGroupInput) SetRecursiveDeleteOption(v bool) *DeleteWorkGroupInput {
+	s.RecursiveDeleteOption = &v
+	return s
+}
+
+// SetWorkGroup sets the WorkGroup field's value.
+func (s *DeleteWorkGroupInput) SetWorkGroup(v string) *DeleteWorkGroupInput {
+	s.WorkGroup = &v
+	return s
+}
+
+type DeleteWorkGroupOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteWorkGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteWorkGroupOutput) GoString() string {
+	return s.String()
+}
+
+// If query results are encrypted in Amazon S3, indicates the encryption option
+// used (for example, SSE-KMS or CSE-KMS) and key information.
 type EncryptionConfiguration struct {
 	_ struct{} `type:"structure"`
 
 	// Indicates whether Amazon S3 server-side encryption with Amazon S3-managed
 	// keys (SSE-S3), server-side encryption with KMS-managed keys (SSE-KMS), or
 	// client-side encryption with KMS-managed keys (CSE-KMS) is used.
+	//
+	// If a query runs in a workgroup and the workgroup overrides client-side settings,
+	// then the workgroup's setting for encryption is used. It specifies whether
+	// query results must be encrypted, for all queries that run in this workgroup.
 	//
 	// EncryptionOption is a required field
 	EncryptionOption *string `type:"string" required:"true" enum:"EncryptionOption"`
@@ -1785,7 +2722,7 @@ type GetQueryResultsInput struct {
 
 	// The token that specifies where to start pagination if a previous request
 	// was truncated.
-	NextToken *string `type:"string"`
+	NextToken *string `min:"1" type:"string"`
 
 	// The unique ID of the query execution.
 	//
@@ -1806,6 +2743,9 @@ func (s GetQueryResultsInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *GetQueryResultsInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "GetQueryResultsInput"}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
 	if s.QueryExecutionId == nil {
 		invalidParams.Add(request.NewErrParamRequired("QueryExecutionId"))
 	}
@@ -1838,10 +2778,13 @@ type GetQueryResultsOutput struct {
 	_ struct{} `type:"structure"`
 
 	// A token to be used by the next request if this request is truncated.
-	NextToken *string `type:"string"`
+	NextToken *string `min:"1" type:"string"`
 
 	// The results of the query execution.
 	ResultSet *ResultSet `type:"structure"`
+
+	// The number of rows inserted with a CREATE TABLE AS SELECT statement.
+	UpdateCount *int64 `type:"long"`
 }
 
 // String returns the string representation
@@ -1866,6 +2809,73 @@ func (s *GetQueryResultsOutput) SetResultSet(v *ResultSet) *GetQueryResultsOutpu
 	return s
 }
 
+// SetUpdateCount sets the UpdateCount field's value.
+func (s *GetQueryResultsOutput) SetUpdateCount(v int64) *GetQueryResultsOutput {
+	s.UpdateCount = &v
+	return s
+}
+
+type GetWorkGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the workgroup.
+	//
+	// WorkGroup is a required field
+	WorkGroup *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetWorkGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetWorkGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetWorkGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetWorkGroupInput"}
+	if s.WorkGroup == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkGroup"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetWorkGroup sets the WorkGroup field's value.
+func (s *GetWorkGroupInput) SetWorkGroup(v string) *GetWorkGroupInput {
+	s.WorkGroup = &v
+	return s
+}
+
+type GetWorkGroupOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the workgroup.
+	WorkGroup *WorkGroup `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetWorkGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetWorkGroupOutput) GoString() string {
+	return s.String()
+}
+
+// SetWorkGroup sets the WorkGroup field's value.
+func (s *GetWorkGroupOutput) SetWorkGroup(v *WorkGroup) *GetWorkGroupOutput {
+	s.WorkGroup = v
+	return s
+}
+
 type ListNamedQueriesInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1874,7 +2884,10 @@ type ListNamedQueriesInput struct {
 
 	// The token that specifies where to start pagination if a previous request
 	// was truncated.
-	NextToken *string `type:"string"`
+	NextToken *string `min:"1" type:"string"`
+
+	// The name of the workgroup from which the named queries are being returned.
+	WorkGroup *string `type:"string"`
 }
 
 // String returns the string representation
@@ -1885,6 +2898,19 @@ func (s ListNamedQueriesInput) String() string {
 // GoString returns the string representation
 func (s ListNamedQueriesInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListNamedQueriesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListNamedQueriesInput"}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetMaxResults sets the MaxResults field's value.
@@ -1899,6 +2925,12 @@ func (s *ListNamedQueriesInput) SetNextToken(v string) *ListNamedQueriesInput {
 	return s
 }
 
+// SetWorkGroup sets the WorkGroup field's value.
+func (s *ListNamedQueriesInput) SetWorkGroup(v string) *ListNamedQueriesInput {
+	s.WorkGroup = &v
+	return s
+}
+
 type ListNamedQueriesOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -1906,7 +2938,7 @@ type ListNamedQueriesOutput struct {
 	NamedQueryIds []*string `min:"1" type:"list"`
 
 	// A token to be used by the next request if this request is truncated.
-	NextToken *string `type:"string"`
+	NextToken *string `min:"1" type:"string"`
 }
 
 // String returns the string representation
@@ -1939,7 +2971,10 @@ type ListQueryExecutionsInput struct {
 
 	// The token that specifies where to start pagination if a previous request
 	// was truncated.
-	NextToken *string `type:"string"`
+	NextToken *string `min:"1" type:"string"`
+
+	// The name of the workgroup from which queries are being returned.
+	WorkGroup *string `type:"string"`
 }
 
 // String returns the string representation
@@ -1950,6 +2985,19 @@ func (s ListQueryExecutionsInput) String() string {
 // GoString returns the string representation
 func (s ListQueryExecutionsInput) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListQueryExecutionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListQueryExecutionsInput"}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetMaxResults sets the MaxResults field's value.
@@ -1964,11 +3012,17 @@ func (s *ListQueryExecutionsInput) SetNextToken(v string) *ListQueryExecutionsIn
 	return s
 }
 
+// SetWorkGroup sets the WorkGroup field's value.
+func (s *ListQueryExecutionsInput) SetWorkGroup(v string) *ListQueryExecutionsInput {
+	s.WorkGroup = &v
+	return s
+}
+
 type ListQueryExecutionsOutput struct {
 	_ struct{} `type:"structure"`
 
 	// A token to be used by the next request if this request is truncated.
-	NextToken *string `type:"string"`
+	NextToken *string `min:"1" type:"string"`
 
 	// The unique IDs of each query execution as an array of strings.
 	QueryExecutionIds []*string `min:"1" type:"list"`
@@ -1996,8 +3050,189 @@ func (s *ListQueryExecutionsOutput) SetQueryExecutionIds(v []*string) *ListQuery
 	return s
 }
 
-// A query, where QueryString is the SQL query statements that comprise the
-// query.
+type ListTagsForResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of results to be returned per request that lists the tags
+	// for the workgroup resource.
+	MaxResults *int64 `min:"75" type:"integer"`
+
+	// The token for the next set of results, or null if there are no additional
+	// results for this request, where the request lists the tags for the workgroup
+	// resource with the specified ARN.
+	NextToken *string `min:"1" type:"string"`
+
+	// Lists the tags for the workgroup resource with the specified ARN.
+	//
+	// ResourceARN is a required field
+	ResourceARN *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ListTagsForResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListTagsForResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListTagsForResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListTagsForResourceInput"}
+	if s.MaxResults != nil && *s.MaxResults < 75 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 75))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.ResourceARN == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceARN"))
+	}
+	if s.ResourceARN != nil && len(*s.ResourceARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceARN", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListTagsForResourceInput) SetMaxResults(v int64) *ListTagsForResourceInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListTagsForResourceInput) SetNextToken(v string) *ListTagsForResourceInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetResourceARN sets the ResourceARN field's value.
+func (s *ListTagsForResourceInput) SetResourceARN(v string) *ListTagsForResourceInput {
+	s.ResourceARN = &v
+	return s
+}
+
+type ListTagsForResourceOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A token to be used by the next request if this request is truncated.
+	NextToken *string `min:"1" type:"string"`
+
+	// The list of tags associated with this workgroup.
+	Tags []*Tag `type:"list"`
+}
+
+// String returns the string representation
+func (s ListTagsForResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListTagsForResourceOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListTagsForResourceOutput) SetNextToken(v string) *ListTagsForResourceOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *ListTagsForResourceOutput) SetTags(v []*Tag) *ListTagsForResourceOutput {
+	s.Tags = v
+	return s
+}
+
+type ListWorkGroupsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of workgroups to return in this request.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// A token to be used by the next request if this request is truncated.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListWorkGroupsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListWorkGroupsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListWorkGroupsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListWorkGroupsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListWorkGroupsInput) SetMaxResults(v int64) *ListWorkGroupsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListWorkGroupsInput) SetNextToken(v string) *ListWorkGroupsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListWorkGroupsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A token to be used by the next request if this request is truncated.
+	NextToken *string `min:"1" type:"string"`
+
+	// The list of workgroups, including their names, descriptions, creation times,
+	// and states.
+	WorkGroups []*WorkGroupSummary `type:"list"`
+}
+
+// String returns the string representation
+func (s ListWorkGroupsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListWorkGroupsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListWorkGroupsOutput) SetNextToken(v string) *ListWorkGroupsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetWorkGroups sets the WorkGroups field's value.
+func (s *ListWorkGroupsOutput) SetWorkGroups(v []*WorkGroupSummary) *ListWorkGroupsOutput {
+	s.WorkGroups = v
+	return s
+}
+
+// A query, where QueryString is the list of SQL query statements that comprise
+// the query.
 type NamedQuery struct {
 	_ struct{} `type:"structure"`
 
@@ -2006,10 +3241,10 @@ type NamedQuery struct {
 	// Database is a required field
 	Database *string `min:"1" type:"string" required:"true"`
 
-	// A brief description of the query.
+	// The query description.
 	Description *string `min:"1" type:"string"`
 
-	// The plain-language name of the query.
+	// The query name.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
@@ -2021,6 +3256,9 @@ type NamedQuery struct {
 	//
 	// QueryString is a required field
 	QueryString *string `min:"1" type:"string" required:"true"`
+
+	// The name of the workgroup that contains the named query.
+	WorkGroup *string `type:"string"`
 }
 
 // String returns the string representation
@@ -2063,6 +3301,12 @@ func (s *NamedQuery) SetQueryString(v string) *NamedQuery {
 	return s
 }
 
+// SetWorkGroup sets the WorkGroup field's value.
+func (s *NamedQuery) SetWorkGroup(v string) *NamedQuery {
+	s.WorkGroup = &v
+	return s
+}
+
 // Information about a single instance of a query execution.
 type QueryExecution struct {
 	_ struct{} `type:"structure"`
@@ -2077,16 +3321,28 @@ type QueryExecution struct {
 	QueryExecutionId *string `type:"string"`
 
 	// The location in Amazon S3 where query results were stored and the encryption
-	// option, if any, used for query results.
+	// option, if any, used for query results. These are known as "client-side settings".
+	// If workgroup settings override client-side settings, then the query uses
+	// the location for the query results and the encryption configuration that
+	// are specified for the workgroup.
 	ResultConfiguration *ResultConfiguration `type:"structure"`
 
+	// The type of query statement that was run. DDL indicates DDL query statements.
+	// DML indicates DML (Data Manipulation Language) query statements, such as
+	// CREATE TABLE AS SELECT. UTILITY indicates query statements other than DDL
+	// and DML, such as SHOW CREATE TABLE, or DESCRIBE <table>.
+	StatementType *string `type:"string" enum:"StatementType"`
+
 	// The amount of data scanned during the query execution and the amount of time
-	// that it took to execute.
+	// that it took to execute, and the type of statement that was run.
 	Statistics *QueryExecutionStatistics `type:"structure"`
 
 	// The completion date, current state, submission time, and state change reason
 	// (if applicable) for the query execution.
 	Status *QueryExecutionStatus `type:"structure"`
+
+	// The name of the workgroup in which the query ran.
+	WorkGroup *string `type:"string"`
 }
 
 // String returns the string representation
@@ -2123,6 +3379,12 @@ func (s *QueryExecution) SetResultConfiguration(v *ResultConfiguration) *QueryEx
 	return s
 }
 
+// SetStatementType sets the StatementType field's value.
+func (s *QueryExecution) SetStatementType(v string) *QueryExecution {
+	s.StatementType = &v
+	return s
+}
+
 // SetStatistics sets the Statistics field's value.
 func (s *QueryExecution) SetStatistics(v *QueryExecutionStatistics) *QueryExecution {
 	s.Statistics = v
@@ -2132,6 +3394,12 @@ func (s *QueryExecution) SetStatistics(v *QueryExecutionStatistics) *QueryExecut
 // SetStatus sets the Status field's value.
 func (s *QueryExecution) SetStatus(v *QueryExecutionStatus) *QueryExecution {
 	s.Status = v
+	return s
+}
+
+// SetWorkGroup sets the WorkGroup field's value.
+func (s *QueryExecution) SetWorkGroup(v string) *QueryExecution {
+	s.WorkGroup = &v
 	return s
 }
 
@@ -2173,7 +3441,7 @@ func (s *QueryExecutionContext) SetDatabase(v string) *QueryExecutionContext {
 }
 
 // The amount of data scanned during the query execution and the amount of time
-// that it took to execute.
+// that it took to execute, and the type of statement that was run.
 type QueryExecutionStatistics struct {
 	_ struct{} `type:"structure"`
 
@@ -2214,11 +3482,12 @@ type QueryExecutionStatus struct {
 	// The date and time that the query completed.
 	CompletionDateTime *time.Time `type:"timestamp"`
 
-	// The state of query execution. SUBMITTED indicates that the query is queued
-	// for execution. RUNNING indicates that the query is scanning data and returning
-	// results. SUCCEEDED indicates that the query completed without error. FAILED
-	// indicates that the query experienced an error and did not complete processing.
-	// CANCELLED indicates that user input interrupted query execution.
+	// The state of query execution. QUEUED state is listed but is not used by Athena
+	// and is reserved for future use. RUNNING indicates that the query has been
+	// submitted to the service, and Athena will execute the query as soon as resources
+	// are available. SUCCEEDED indicates that the query completed without errors.
+	// FAILED indicates that the query experienced an error and did not complete
+	// processing. CANCELLED indicates that a user input interrupted query execution.
 	State *string `type:"string" enum:"QueryExecutionState"`
 
 	// Further detail about the status of the query.
@@ -2263,18 +3532,30 @@ func (s *QueryExecutionStatus) SetSubmissionDateTime(v time.Time) *QueryExecutio
 }
 
 // The location in Amazon S3 where query results are stored and the encryption
-// option, if any, used for query results.
+// option, if any, used for query results. These are known as "client-side settings".
+// If workgroup settings override client-side settings, then the query uses
+// the location for the query results and the encryption configuration that
+// are specified for the workgroup.
 type ResultConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// If query results are encrypted in S3, indicates the S3 encryption option
-	// used (for example, SSE-KMS or CSE-KMS and key information.
+	// If query results are encrypted in Amazon S3, indicates the encryption option
+	// used (for example, SSE-KMS or CSE-KMS) and key information. This is a client-side
+	// setting. If workgroup settings override client-side settings, then the query
+	// uses the encryption configuration that is specified for the workgroup, and
+	// also uses the location for storing query results specified in the workgroup.
+	// See WorkGroupConfiguration$EnforceWorkGroupConfiguration and Workgroup Settings
+	// Override Client-Side Settings (https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html).
 	EncryptionConfiguration *EncryptionConfiguration `type:"structure"`
 
-	// The location in S3 where query results are stored.
-	//
-	// OutputLocation is a required field
-	OutputLocation *string `type:"string" required:"true"`
+	// The location in Amazon S3 where your query results are stored, such as s3://path/to/query/bucket/.
+	// For more information, see Queries and Query Result Files. (https://docs.aws.amazon.com/athena/latest/ug/querying.html)
+	// If workgroup settings override client-side settings, then the query uses
+	// the location for the query results and the encryption configuration that
+	// are specified for the workgroup. The "workgroup settings override" is specified
+	// in EnforceWorkGroupConfiguration (true/false) in the WorkGroupConfiguration.
+	// See WorkGroupConfiguration$EnforceWorkGroupConfiguration.
+	OutputLocation *string `type:"string"`
 }
 
 // String returns the string representation
@@ -2290,9 +3571,6 @@ func (s ResultConfiguration) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ResultConfiguration) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ResultConfiguration"}
-	if s.OutputLocation == nil {
-		invalidParams.Add(request.NewErrParamRequired("OutputLocation"))
-	}
 	if s.EncryptionConfiguration != nil {
 		if err := s.EncryptionConfiguration.Validate(); err != nil {
 			invalidParams.AddNested("EncryptionConfiguration", err.(request.ErrInvalidParams))
@@ -2314,6 +3592,91 @@ func (s *ResultConfiguration) SetEncryptionConfiguration(v *EncryptionConfigurat
 // SetOutputLocation sets the OutputLocation field's value.
 func (s *ResultConfiguration) SetOutputLocation(v string) *ResultConfiguration {
 	s.OutputLocation = &v
+	return s
+}
+
+// The information about the updates in the query results, such as output location
+// and encryption configuration for the query results.
+type ResultConfigurationUpdates struct {
+	_ struct{} `type:"structure"`
+
+	// The encryption configuration for the query results.
+	EncryptionConfiguration *EncryptionConfiguration `type:"structure"`
+
+	// The location in Amazon S3 where your query results are stored, such as s3://path/to/query/bucket/.
+	// For more information, see Queries and Query Result Files. (https://docs.aws.amazon.com/athena/latest/ug/querying.html)
+	// If workgroup settings override client-side settings, then the query uses
+	// the location for the query results and the encryption configuration that
+	// are specified for the workgroup. The "workgroup settings override" is specified
+	// in EnforceWorkGroupConfiguration (true/false) in the WorkGroupConfiguration.
+	// See WorkGroupConfiguration$EnforceWorkGroupConfiguration.
+	OutputLocation *string `type:"string"`
+
+	// If set to "true", indicates that the previously-specified encryption configuration
+	// (also known as the client-side setting) for queries in this workgroup should
+	// be ignored and set to null. If set to "false" or not set, and a value is
+	// present in the EncryptionConfiguration in ResultConfigurationUpdates (the
+	// client-side setting), the EncryptionConfiguration in the workgroup's ResultConfiguration
+	// will be updated with the new value. For more information, see Workgroup Settings
+	// Override Client-Side Settings (https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html).
+	RemoveEncryptionConfiguration *bool `type:"boolean"`
+
+	// If set to "true", indicates that the previously-specified query results location
+	// (also known as a client-side setting) for queries in this workgroup should
+	// be ignored and set to null. If set to "false" or not set, and a value is
+	// present in the OutputLocation in ResultConfigurationUpdates (the client-side
+	// setting), the OutputLocation in the workgroup's ResultConfiguration will
+	// be updated with the new value. For more information, see Workgroup Settings
+	// Override Client-Side Settings (https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html).
+	RemoveOutputLocation *bool `type:"boolean"`
+}
+
+// String returns the string representation
+func (s ResultConfigurationUpdates) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ResultConfigurationUpdates) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ResultConfigurationUpdates) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ResultConfigurationUpdates"}
+	if s.EncryptionConfiguration != nil {
+		if err := s.EncryptionConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("EncryptionConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEncryptionConfiguration sets the EncryptionConfiguration field's value.
+func (s *ResultConfigurationUpdates) SetEncryptionConfiguration(v *EncryptionConfiguration) *ResultConfigurationUpdates {
+	s.EncryptionConfiguration = v
+	return s
+}
+
+// SetOutputLocation sets the OutputLocation field's value.
+func (s *ResultConfigurationUpdates) SetOutputLocation(v string) *ResultConfigurationUpdates {
+	s.OutputLocation = &v
+	return s
+}
+
+// SetRemoveEncryptionConfiguration sets the RemoveEncryptionConfiguration field's value.
+func (s *ResultConfigurationUpdates) SetRemoveEncryptionConfiguration(v bool) *ResultConfigurationUpdates {
+	s.RemoveEncryptionConfiguration = &v
+	return s
+}
+
+// SetRemoveOutputLocation sets the RemoveOutputLocation field's value.
+func (s *ResultConfigurationUpdates) SetRemoveOutputLocation(v bool) *ResultConfigurationUpdates {
+	s.RemoveOutputLocation = &v
 	return s
 }
 
@@ -2357,7 +3720,7 @@ func (s *ResultSet) SetRows(v []*Row) *ResultSet {
 type ResultSetMetadata struct {
 	_ struct{} `type:"structure"`
 
-	// Information about the columns in a query execution result.
+	// Information about the columns returned in a query result metadata.
 	ColumnInfo []*ColumnInfo `type:"list"`
 }
 
@@ -2423,10 +3786,14 @@ type StartQueryExecutionInput struct {
 	QueryString *string `min:"1" type:"string" required:"true"`
 
 	// Specifies information about where and how to save the results of the query
-	// execution.
-	//
-	// ResultConfiguration is a required field
-	ResultConfiguration *ResultConfiguration `type:"structure" required:"true"`
+	// execution. If the query runs in a workgroup, then workgroup's settings may
+	// override query settings. This affects the query results location. The workgroup
+	// settings override is specified in EnforceWorkGroupConfiguration (true/false)
+	// in the WorkGroupConfiguration. See WorkGroupConfiguration$EnforceWorkGroupConfiguration.
+	ResultConfiguration *ResultConfiguration `type:"structure"`
+
+	// The name of the workgroup in which the query is being started.
+	WorkGroup *string `type:"string"`
 }
 
 // String returns the string representation
@@ -2450,9 +3817,6 @@ func (s *StartQueryExecutionInput) Validate() error {
 	}
 	if s.QueryString != nil && len(*s.QueryString) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("QueryString", 1))
-	}
-	if s.ResultConfiguration == nil {
-		invalidParams.Add(request.NewErrParamRequired("ResultConfiguration"))
 	}
 	if s.QueryExecutionContext != nil {
 		if err := s.QueryExecutionContext.Validate(); err != nil {
@@ -2495,6 +3859,12 @@ func (s *StartQueryExecutionInput) SetResultConfiguration(v *ResultConfiguration
 	return s
 }
 
+// SetWorkGroup sets the WorkGroup field's value.
+func (s *StartQueryExecutionInput) SetWorkGroup(v string) *StartQueryExecutionInput {
+	s.WorkGroup = &v
+	return s
+}
+
 type StartQueryExecutionOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -2522,9 +3892,7 @@ type StopQueryExecutionInput struct {
 	_ struct{} `type:"structure"`
 
 	// The unique ID of the query execution to stop.
-	//
-	// QueryExecutionId is a required field
-	QueryExecutionId *string `type:"string" required:"true" idempotencyToken:"true"`
+	QueryExecutionId *string `type:"string" idempotencyToken:"true"`
 }
 
 // String returns the string representation
@@ -2535,19 +3903,6 @@ func (s StopQueryExecutionInput) String() string {
 // GoString returns the string representation
 func (s StopQueryExecutionInput) GoString() string {
 	return s.String()
-}
-
-// Validate inspects the fields of the type to determine if they are valid.
-func (s *StopQueryExecutionInput) Validate() error {
-	invalidParams := request.ErrInvalidParams{Context: "StopQueryExecutionInput"}
-	if s.QueryExecutionId == nil {
-		invalidParams.Add(request.NewErrParamRequired("QueryExecutionId"))
-	}
-
-	if invalidParams.Len() > 0 {
-		return invalidParams
-	}
-	return nil
 }
 
 // SetQueryExecutionId sets the QueryExecutionId field's value.
@@ -2567,6 +3922,147 @@ func (s StopQueryExecutionOutput) String() string {
 
 // GoString returns the string representation
 func (s StopQueryExecutionOutput) GoString() string {
+	return s.String()
+}
+
+// A tag that you can add to a resource. A tag is a label that you assign to
+// an AWS Athena resource (a workgroup). Each tag consists of a key and an optional
+// value, both of which you define. Tags enable you to categorize workgroups
+// in Athena, for example, by purpose, owner, or environment. Use a consistent
+// set of tag keys to make it easier to search and filter workgroups in your
+// account. The maximum tag key length is 128 Unicode characters in UTF-8. The
+// maximum tag value length is 256 Unicode characters in UTF-8. You can use
+// letters and numbers representable in UTF-8, and the following characters:
+// + - = . _ : / @. Tag keys and values are case-sensitive. Tag keys must be
+// unique per resource.
+type Tag struct {
+	_ struct{} `type:"structure"`
+
+	// A tag key. The tag key length is from 1 to 128 Unicode characters in UTF-8.
+	// You can use letters and numbers representable in UTF-8, and the following
+	// characters: + - = . _ : / @. Tag keys are case-sensitive and must be unique
+	// per resource.
+	Key *string `min:"1" type:"string"`
+
+	// A tag value. The tag value length is from 0 to 256 Unicode characters in
+	// UTF-8. You can use letters and numbers representable in UTF-8, and the following
+	// characters: + - = . _ : / @. Tag values are case-sensitive.
+	Value *string `type:"string"`
+}
+
+// String returns the string representation
+func (s Tag) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Tag) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Tag) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Tag"}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKey sets the Key field's value.
+func (s *Tag) SetKey(v string) *Tag {
+	s.Key = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *Tag) SetValue(v string) *Tag {
+	s.Value = &v
+	return s
+}
+
+type TagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// Requests that one or more tags are added to the resource (such as a workgroup)
+	// for the specified ARN.
+	//
+	// ResourceARN is a required field
+	ResourceARN *string `min:"1" type:"string" required:"true"`
+
+	// One or more tags, separated by commas, to be added to the resource, such
+	// as a workgroup.
+	//
+	// Tags is a required field
+	Tags []*Tag `type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s TagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TagResourceInput"}
+	if s.ResourceARN == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceARN"))
+	}
+	if s.ResourceARN != nil && len(*s.ResourceARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceARN", 1))
+	}
+	if s.Tags == nil {
+		invalidParams.Add(request.NewErrParamRequired("Tags"))
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceARN sets the ResourceARN field's value.
+func (s *TagResourceInput) SetResourceARN(v string) *TagResourceInput {
+	s.ResourceARN = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *TagResourceInput) SetTags(v []*Tag) *TagResourceInput {
+	s.Tags = v
+	return s
+}
+
+type TagResourceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s TagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
 
@@ -2657,6 +4153,456 @@ func (s *UnprocessedQueryExecutionId) SetQueryExecutionId(v string) *Unprocessed
 	return s
 }
 
+type UntagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// Removes one or more tags from the workgroup resource for the specified ARN.
+	//
+	// ResourceARN is a required field
+	ResourceARN *string `min:"1" type:"string" required:"true"`
+
+	// Removes the tags associated with one or more tag keys from the workgroup
+	// resource.
+	//
+	// TagKeys is a required field
+	TagKeys []*string `type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s UntagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UntagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UntagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UntagResourceInput"}
+	if s.ResourceARN == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceARN"))
+	}
+	if s.ResourceARN != nil && len(*s.ResourceARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceARN", 1))
+	}
+	if s.TagKeys == nil {
+		invalidParams.Add(request.NewErrParamRequired("TagKeys"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceARN sets the ResourceARN field's value.
+func (s *UntagResourceInput) SetResourceARN(v string) *UntagResourceInput {
+	s.ResourceARN = &v
+	return s
+}
+
+// SetTagKeys sets the TagKeys field's value.
+func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
+	s.TagKeys = v
+	return s
+}
+
+type UntagResourceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UntagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UntagResourceOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateWorkGroupInput struct {
+	_ struct{} `type:"structure"`
+
+	// The workgroup configuration that will be updated for the given workgroup.
+	ConfigurationUpdates *WorkGroupConfigurationUpdates `type:"structure"`
+
+	// The workgroup description.
+	Description *string `type:"string"`
+
+	// The workgroup state that will be updated for the given workgroup.
+	State *string `type:"string" enum:"WorkGroupState"`
+
+	// The specified workgroup that will be updated.
+	//
+	// WorkGroup is a required field
+	WorkGroup *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s UpdateWorkGroupInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateWorkGroupInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateWorkGroupInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateWorkGroupInput"}
+	if s.WorkGroup == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorkGroup"))
+	}
+	if s.ConfigurationUpdates != nil {
+		if err := s.ConfigurationUpdates.Validate(); err != nil {
+			invalidParams.AddNested("ConfigurationUpdates", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConfigurationUpdates sets the ConfigurationUpdates field's value.
+func (s *UpdateWorkGroupInput) SetConfigurationUpdates(v *WorkGroupConfigurationUpdates) *UpdateWorkGroupInput {
+	s.ConfigurationUpdates = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateWorkGroupInput) SetDescription(v string) *UpdateWorkGroupInput {
+	s.Description = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *UpdateWorkGroupInput) SetState(v string) *UpdateWorkGroupInput {
+	s.State = &v
+	return s
+}
+
+// SetWorkGroup sets the WorkGroup field's value.
+func (s *UpdateWorkGroupInput) SetWorkGroup(v string) *UpdateWorkGroupInput {
+	s.WorkGroup = &v
+	return s
+}
+
+type UpdateWorkGroupOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateWorkGroupOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateWorkGroupOutput) GoString() string {
+	return s.String()
+}
+
+// A workgroup, which contains a name, description, creation time, state, and
+// other configuration, listed under WorkGroup$Configuration. Each workgroup
+// enables you to isolate queries for you or your group of users from other
+// queries in the same account, to configure the query results location and
+// the encryption configuration (known as workgroup settings), to enable sending
+// query metrics to Amazon CloudWatch, and to establish per-query data usage
+// control limits for all queries in a workgroup. The workgroup settings override
+// is specified in EnforceWorkGroupConfiguration (true/false) in the WorkGroupConfiguration.
+// See WorkGroupConfiguration$EnforceWorkGroupConfiguration.
+type WorkGroup struct {
+	_ struct{} `type:"structure"`
+
+	// The configuration of the workgroup, which includes the location in Amazon
+	// S3 where query results are stored, the encryption configuration, if any,
+	// used for query results; whether the Amazon CloudWatch Metrics are enabled
+	// for the workgroup; whether workgroup settings override client-side settings;
+	// and the data usage limit for the amount of data scanned per query, if it
+	// is specified. The workgroup settings override is specified in EnforceWorkGroupConfiguration
+	// (true/false) in the WorkGroupConfiguration. See WorkGroupConfiguration$EnforceWorkGroupConfiguration.
+	Configuration *WorkGroupConfiguration `type:"structure"`
+
+	// The date and time the workgroup was created.
+	CreationTime *time.Time `type:"timestamp"`
+
+	// The workgroup description.
+	Description *string `type:"string"`
+
+	// The workgroup name.
+	//
+	// Name is a required field
+	Name *string `type:"string" required:"true"`
+
+	// The state of the workgroup: ENABLED or DISABLED.
+	State *string `type:"string" enum:"WorkGroupState"`
+}
+
+// String returns the string representation
+func (s WorkGroup) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s WorkGroup) GoString() string {
+	return s.String()
+}
+
+// SetConfiguration sets the Configuration field's value.
+func (s *WorkGroup) SetConfiguration(v *WorkGroupConfiguration) *WorkGroup {
+	s.Configuration = v
+	return s
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *WorkGroup) SetCreationTime(v time.Time) *WorkGroup {
+	s.CreationTime = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *WorkGroup) SetDescription(v string) *WorkGroup {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *WorkGroup) SetName(v string) *WorkGroup {
+	s.Name = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *WorkGroup) SetState(v string) *WorkGroup {
+	s.State = &v
+	return s
+}
+
+// The configuration of the workgroup, which includes the location in Amazon
+// S3 where query results are stored, the encryption option, if any, used for
+// query results, whether the Amazon CloudWatch Metrics are enabled for the
+// workgroup and whether workgroup settings override query settings, and the
+// data usage limit for the amount of data scanned per query, if it is specified.
+// The workgroup settings override is specified in EnforceWorkGroupConfiguration
+// (true/false) in the WorkGroupConfiguration. See WorkGroupConfiguration$EnforceWorkGroupConfiguration.
+type WorkGroupConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// The upper data usage limit (cutoff) for the amount of bytes a single query
+	// in a workgroup is allowed to scan.
+	BytesScannedCutoffPerQuery *int64 `min:"1e+07" type:"long"`
+
+	// If set to "true", the settings for the workgroup override client-side settings.
+	// If set to "false", client-side settings are used. For more information, see
+	// Workgroup Settings Override Client-Side Settings (https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html).
+	EnforceWorkGroupConfiguration *bool `type:"boolean"`
+
+	// Indicates that the Amazon CloudWatch metrics are enabled for the workgroup.
+	PublishCloudWatchMetricsEnabled *bool `type:"boolean"`
+
+	// The configuration for the workgroup, which includes the location in Amazon
+	// S3 where query results are stored and the encryption option, if any, used
+	// for query results.
+	ResultConfiguration *ResultConfiguration `type:"structure"`
+}
+
+// String returns the string representation
+func (s WorkGroupConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s WorkGroupConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *WorkGroupConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "WorkGroupConfiguration"}
+	if s.BytesScannedCutoffPerQuery != nil && *s.BytesScannedCutoffPerQuery < 1e+07 {
+		invalidParams.Add(request.NewErrParamMinValue("BytesScannedCutoffPerQuery", 1e+07))
+	}
+	if s.ResultConfiguration != nil {
+		if err := s.ResultConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("ResultConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBytesScannedCutoffPerQuery sets the BytesScannedCutoffPerQuery field's value.
+func (s *WorkGroupConfiguration) SetBytesScannedCutoffPerQuery(v int64) *WorkGroupConfiguration {
+	s.BytesScannedCutoffPerQuery = &v
+	return s
+}
+
+// SetEnforceWorkGroupConfiguration sets the EnforceWorkGroupConfiguration field's value.
+func (s *WorkGroupConfiguration) SetEnforceWorkGroupConfiguration(v bool) *WorkGroupConfiguration {
+	s.EnforceWorkGroupConfiguration = &v
+	return s
+}
+
+// SetPublishCloudWatchMetricsEnabled sets the PublishCloudWatchMetricsEnabled field's value.
+func (s *WorkGroupConfiguration) SetPublishCloudWatchMetricsEnabled(v bool) *WorkGroupConfiguration {
+	s.PublishCloudWatchMetricsEnabled = &v
+	return s
+}
+
+// SetResultConfiguration sets the ResultConfiguration field's value.
+func (s *WorkGroupConfiguration) SetResultConfiguration(v *ResultConfiguration) *WorkGroupConfiguration {
+	s.ResultConfiguration = v
+	return s
+}
+
+// The configuration information that will be updated for this workgroup, which
+// includes the location in Amazon S3 where query results are stored, the encryption
+// option, if any, used for query results, whether the Amazon CloudWatch Metrics
+// are enabled for the workgroup, whether the workgroup settings override the
+// client-side settings, and the data usage limit for the amount of bytes scanned
+// per query, if it is specified.
+type WorkGroupConfigurationUpdates struct {
+	_ struct{} `type:"structure"`
+
+	// The upper limit (cutoff) for the amount of bytes a single query in a workgroup
+	// is allowed to scan.
+	BytesScannedCutoffPerQuery *int64 `min:"1e+07" type:"long"`
+
+	// If set to "true", the settings for the workgroup override client-side settings.
+	// If set to "false" client-side settings are used. For more information, see
+	// Workgroup Settings Override Client-Side Settings (https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html).
+	EnforceWorkGroupConfiguration *bool `type:"boolean"`
+
+	// Indicates whether this workgroup enables publishing metrics to Amazon CloudWatch.
+	PublishCloudWatchMetricsEnabled *bool `type:"boolean"`
+
+	// Indicates that the data usage control limit per query is removed. WorkGroupConfiguration$BytesScannedCutoffPerQuery
+	RemoveBytesScannedCutoffPerQuery *bool `type:"boolean"`
+
+	// The result configuration information about the queries in this workgroup
+	// that will be updated. Includes the updated results location and an updated
+	// option for encrypting query results.
+	ResultConfigurationUpdates *ResultConfigurationUpdates `type:"structure"`
+}
+
+// String returns the string representation
+func (s WorkGroupConfigurationUpdates) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s WorkGroupConfigurationUpdates) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *WorkGroupConfigurationUpdates) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "WorkGroupConfigurationUpdates"}
+	if s.BytesScannedCutoffPerQuery != nil && *s.BytesScannedCutoffPerQuery < 1e+07 {
+		invalidParams.Add(request.NewErrParamMinValue("BytesScannedCutoffPerQuery", 1e+07))
+	}
+	if s.ResultConfigurationUpdates != nil {
+		if err := s.ResultConfigurationUpdates.Validate(); err != nil {
+			invalidParams.AddNested("ResultConfigurationUpdates", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBytesScannedCutoffPerQuery sets the BytesScannedCutoffPerQuery field's value.
+func (s *WorkGroupConfigurationUpdates) SetBytesScannedCutoffPerQuery(v int64) *WorkGroupConfigurationUpdates {
+	s.BytesScannedCutoffPerQuery = &v
+	return s
+}
+
+// SetEnforceWorkGroupConfiguration sets the EnforceWorkGroupConfiguration field's value.
+func (s *WorkGroupConfigurationUpdates) SetEnforceWorkGroupConfiguration(v bool) *WorkGroupConfigurationUpdates {
+	s.EnforceWorkGroupConfiguration = &v
+	return s
+}
+
+// SetPublishCloudWatchMetricsEnabled sets the PublishCloudWatchMetricsEnabled field's value.
+func (s *WorkGroupConfigurationUpdates) SetPublishCloudWatchMetricsEnabled(v bool) *WorkGroupConfigurationUpdates {
+	s.PublishCloudWatchMetricsEnabled = &v
+	return s
+}
+
+// SetRemoveBytesScannedCutoffPerQuery sets the RemoveBytesScannedCutoffPerQuery field's value.
+func (s *WorkGroupConfigurationUpdates) SetRemoveBytesScannedCutoffPerQuery(v bool) *WorkGroupConfigurationUpdates {
+	s.RemoveBytesScannedCutoffPerQuery = &v
+	return s
+}
+
+// SetResultConfigurationUpdates sets the ResultConfigurationUpdates field's value.
+func (s *WorkGroupConfigurationUpdates) SetResultConfigurationUpdates(v *ResultConfigurationUpdates) *WorkGroupConfigurationUpdates {
+	s.ResultConfigurationUpdates = v
+	return s
+}
+
+// The summary information for the workgroup, which includes its name, state,
+// description, and the date and time it was created.
+type WorkGroupSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The workgroup creation date and time.
+	CreationTime *time.Time `type:"timestamp"`
+
+	// The workgroup description.
+	Description *string `type:"string"`
+
+	// The name of the workgroup.
+	Name *string `type:"string"`
+
+	// The state of the workgroup.
+	State *string `type:"string" enum:"WorkGroupState"`
+}
+
+// String returns the string representation
+func (s WorkGroupSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s WorkGroupSummary) GoString() string {
+	return s.String()
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *WorkGroupSummary) SetCreationTime(v time.Time) *WorkGroupSummary {
+	s.CreationTime = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *WorkGroupSummary) SetDescription(v string) *WorkGroupSummary {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *WorkGroupSummary) SetName(v string) *WorkGroupSummary {
+	s.Name = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *WorkGroupSummary) SetState(v string) *WorkGroupSummary {
+	s.State = &v
+	return s
+}
+
 const (
 	// ColumnNullableNotNull is a ColumnNullable enum value
 	ColumnNullableNotNull = "NOT_NULL"
@@ -2697,6 +4643,27 @@ const (
 )
 
 const (
+	// StatementTypeDdl is a StatementType enum value
+	StatementTypeDdl = "DDL"
+
+	// StatementTypeDml is a StatementType enum value
+	StatementTypeDml = "DML"
+
+	// StatementTypeUtility is a StatementType enum value
+	StatementTypeUtility = "UTILITY"
+)
+
+// The reason for the query throttling, for example, when it exceeds the concurrent
+// query limit.
+const (
 	// ThrottleReasonConcurrentQueryLimitExceeded is a ThrottleReason enum value
 	ThrottleReasonConcurrentQueryLimitExceeded = "CONCURRENT_QUERY_LIMIT_EXCEEDED"
+)
+
+const (
+	// WorkGroupStateEnabled is a WorkGroupState enum value
+	WorkGroupStateEnabled = "ENABLED"
+
+	// WorkGroupStateDisabled is a WorkGroupState enum value
+	WorkGroupStateDisabled = "DISABLED"
 )

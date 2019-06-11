@@ -1,5 +1,210 @@
 # CHANGELOG
 
+## v12.1.0
+
+### New Features
+
+- Added `to.ByteSlicePtr()`.
+- Added blob/queue storage resource ID to `azure.ResourceIdentifier`.
+
+## v12.0.0
+
+### Breaking Changes
+
+In preparation for modules the following deprecated content has been removed.
+
+  - async.NewFuture()
+  - async.Future.Done()
+  - async.Future.WaitForCompletion()
+  - async.DoPollForAsynchronous()
+  - The `utils` package
+  - validation.NewErrorWithValidationError()
+  - The `version` package
+
+## v11.9.0
+
+### New Features
+
+- Add `ResourceIdentifiers` field to `azure.Environment` containing resource IDs for public and sovereign clouds.
+
+## v11.8.0
+
+### New Features
+
+- Added `autorest.NewClientWithOptions()` to support endpoints that require free renegotiation.
+
+## v11.7.1
+
+### Bug Fixes
+
+- Fix missing support for http(s) proxy when using the default sender.
+
+## v11.7.0
+
+### New Features
+
+- Added methods to obtain a ServicePrincipalToken on the various credential configuration types in the `auth` package.
+
+## v11.6.1
+
+### Bug Fixes
+
+- Fix ACR DNS endpoint for government clouds.
+- Add Cosmos DB DNS endpoints.
+- Update dependencies to resolve build breaks in OpenCensus.
+
+## v11.6.0
+
+### New Features
+
+- Added type `autorest.BasicAuthorizer` to support Basic authentication.
+
+## v11.5.2
+
+### Bug Fixes
+
+- Fixed `GetTokenFromCLI` did not work with zsh.
+
+## v11.5.1
+
+### Bug Fixes
+
+- In `Client.sender()` set the minimum TLS version on HTTP clients to 1.2.
+
+## v11.5.0
+
+### New Features
+
+- The `auth` package has been refactored so that the environment and file settings are now available.
+- The methods used in `auth.NewAuthorizerFromEnvironment()` are now exported so that custom authorization chains can be created.
+- Added support for certificate authorization for file-based config.
+
+## v11.4.0
+
+### New Features
+
+- Added `adal.AddToUserAgent()` so callers can append custom data to the user-agent header used for ADAL requests.
+- Exported `adal.UserAgent()` for parity with `autorest.Client`.
+
+## v11.3.2
+
+### Bug Fixes
+
+- In `Future.WaitForCompletionRef()` if the provided context has a deadline don't add the default deadline.
+
+## v11.3.1
+
+### Bug Fixes
+
+- For an LRO PUT operation the final GET URL was incorrectly set to the Location polling header in some cases.
+
+## v11.3.0
+
+### New Features
+
+- Added method `ServicePrincipalToken()` to `DeviceFlowConfig` type.
+
+## v11.2.8
+
+### Bug Fixes
+
+- Deprecate content in the `version` package. The functionality has been superseded by content in the `autorest` package.
+
+## v11.2.7
+
+### Bug Fixes
+
+- Fix environment variable name for enabling tracing from `AZURE_SDK_TRACING_ENABELD` to `AZURE_SDK_TRACING_ENABLED`.
+  Note that for backward compatibility reasons, both will work until the next major version release of the package.
+
+## v11.2.6
+
+### Bug Fixes
+
+- If zero bytes are read from a polling response body don't attempt to unmarshal them.
+
+## v11.2.5
+
+### Bug Fixes
+
+- Removed race condition in `autorest.DoRetryForStatusCodes`.
+
+## v11.2.4
+
+### Bug Fixes
+
+- Function `cli.ProfilePath` now respects environment `AZURE_CONFIG_DIR` if available.
+
+## v11.2.1
+
+NOTE: Versions of Go prior to 1.10 have been removed from CI as they no
+longer work with golint.
+
+### Bug Fixes
+
+- Method `MSIConfig.Authorizer` now supports user-assigned identities.
+- The adal package now reports its own user-agent string.
+
+## v11.2.0
+
+### New Features
+
+- Added `tracing` package that enables instrumentation of HTTP and API calls.
+  Setting the env variable `AZURE_SDK_TRACING_ENABLED` or calling `tracing.Enable`
+  will start instrumenting the code for metrics and traces.
+  Additionally, setting the env variable `OCAGENT_TRACE_EXPORTER_ENDPOINT` or
+  calling `tracing.EnableWithAIForwarding` will start the instrumentation and connect to an
+  App Insights Local Forwarder that is needs to be running. Note that if the
+  AI Local Forwarder is not running tracking will still be enabled.
+  By default, instrumentation is disabled. Once enabled, instrumentation can also
+  be programatically disabled by calling `Disable`.
+- Added `DoneWithContext` call for checking LRO status. `Done` has been deprecated.
+
+### Bug Fixes
+
+- Don't use the initial request's context for LRO polling.
+- Don't override the `refreshLock` and the `http.Client` when unmarshalling `ServicePrincipalToken` if
+  it is already set.
+
+## v11.1.1
+
+### Bug Fixes
+
+- When creating a future always include the polling tracker even if there's a failure; this allows the underlying response to be obtained by the caller.
+
+## v11.1.0
+
+### New Features
+
+- Added `auth.NewAuthorizerFromCLI` to create an authorizer configured from the Azure 2.0 CLI.
+- Added `adal.NewOAuthConfigWithAPIVersion` to create an OAuthConfig with the specified API version.
+
+## v11.0.1
+
+### New Features
+
+- Added `x5c` header to client assertion for certificate Issuer+Subject Name authentication.
+
+## v11.0.0
+
+### Breaking Changes
+
+- To handle differences between ADFS and AAD the following fields have had their types changed from `string` to `json.Number`
+  - ExpiresIn
+  - ExpiresOn
+  - NotBefore
+
+### New Features
+
+- Added `auth.NewAuthorizerFromFileWithResource` to create an authorizer from the config file with the specified resource.
+- Setting a client's `PollingDuration` to zero will use the provided context to control a LRO's polling duration.
+
+## v10.15.5
+
+### Bug Fixes
+
+- In `DoRetryForStatusCodes`, if a request's context is cancelled return the last response.
+
 ## v10.15.4
 
 ### Bug Fixes
@@ -22,21 +227,21 @@
 
 ### Bug Fixes
 
-- If an LRO API returns a ```Failed``` provisioning state in the initial response return an error at that point so the caller doesn't have to poll.
-- For failed LROs without an OData v4 error include the response body in the error's ```AdditionalInfo``` field to aid in diagnosing the failure.
+- If an LRO API returns a `Failed` provisioning state in the initial response return an error at that point so the caller doesn't have to poll.
+- For failed LROs without an OData v4 error include the response body in the error's `AdditionalInfo` field to aid in diagnosing the failure.
 
 ## v10.15.0
 
 ### New Features
 
 - Add initial support for request/response logging via setting environment variables.
-  Setting ```AZURE_GO_SDK_LOG_LEVEL``` to ```LogInfo``` will log request/response
-  without their bodies.  To include the bodies set the log level to ```LogDebug```.
+  Setting `AZURE_GO_SDK_LOG_LEVEL` to `LogInfo` will log request/response
+  without their bodies. To include the bodies set the log level to `LogDebug`.
   By default the logger writes to strerr, however it can also write to stdout or a file
-  if specified in ```AZURE_GO_SDK_LOG_FILE```.  Note that if the specified file
+  if specified in `AZURE_GO_SDK_LOG_FILE`. Note that if the specified file
   already exists it will be truncated.
   IMPORTANT: by default the logger will redact the Authorization and Ocp-Apim-Subscription-Key
-  headers.  Any other secrets will *not* be redacted.
+  headers. Any other secrets will _not_ be redacted.
 
 ## v10.14.0
 
@@ -118,10 +323,10 @@
 
 ### Deprecated Methods
 
-| Old Method | New Method |
-|-------------:|:-----------:|
-|azure.NewFuture() | azure.NewFutureFromResponse()|
-|Future.WaitForCompletion() | Future.WaitForCompletionRef()|
+|                 Old Method |          New Method           |
+| -------------------------: | :---------------------------: |
+|          azure.NewFuture() | azure.NewFutureFromResponse() |
+| Future.WaitForCompletion() | Future.WaitForCompletionRef() |
 
 ### New Features
 
@@ -153,7 +358,7 @@
 
 ### New Features
 
-- Added *WithContext() methods to ADAL token refresh operations.
+- Added \*WithContext() methods to ADAL token refresh operations.
 
 ## v10.6.2
 
@@ -186,12 +391,14 @@
 ## v10.4.0
 
 ### New Features
+
 - Added helper for parsing Azure Resource ID's.
 - Added deprecation message to utils.GetEnvVarOrExit()
 
 ## v10.3.0
 
 ### New Features
+
 - Added EnvironmentFromURL method to load an Environment from a given URL. This function is particularly useful in the private and hybrid Cloud model, where one may define their own endpoints
 - Added TokenAudience endpoint to Environment structure. This is useful in private and hybrid cloud models where TokenAudience endpoint can be different from ResourceManagerEndpoint
 
@@ -249,6 +456,7 @@
 - The adal.Token type has been decomposed from adal.ServicePrincipalToken (this was necessary in order to fix the token refresh race).
 
 ## v9.10.0
+
 - Fix the Service Bus suffix in Azure public env
 - Add Service Bus Endpoint (AAD ResourceURI) for use in [Azure Service Bus RBAC Preview](https://docs.microsoft.com/en-us/azure/service-bus-messaging/service-bus-role-based-access-control)
 
@@ -302,6 +510,7 @@
 ## v9.5.3
 
 ### Bug Fixes
+
 - Don't remove encoding of existing URL Query parameters when calling autorest.WithQueryParameters.
 - Set correct Content Type when using autorest.WithFormData.
 
@@ -309,7 +518,7 @@
 
 ### Bug Fixes
 
-- Check for nil *http.Response before dereferencing it.
+- Check for nil \*http.Response before dereferencing it.
 
 ## v9.5.1
 
@@ -393,8 +602,8 @@
 
 ### Bug Fixes
 
- - RetriableRequest can now tolerate a ReadSeekable body being read but not reset.
- - Adding missing Apache Headers
+- RetriableRequest can now tolerate a ReadSeekable body being read but not reset.
+- Adding missing Apache Headers
 
 ## v9.0.0
 
@@ -423,9 +632,11 @@ Updates to Error string formats for clarity. Also, adding a copy of the http.Res
 - Make RetriableRequest work with multiple versions of Go
 
 ## v8.1.1
+
 Updates the RetriableRequest to take advantage of GetBody() added in Go 1.8.
 
 ## v8.1.0
+
 Adds RetriableRequest type for more efficient handling of retrying HTTP requests.
 
 ## v8.0.0
@@ -434,9 +645,11 @@ ADAL refactored into its own package.
 Support for UNIX time.
 
 ## v7.3.1
+
 - Version Testing now removed from production bits that are shipped with the library.
 
 ## v7.3.0
+
 - Exposing new `RespondDecorator`, `ByDiscardingBody`. This allows operations
   to acknowledge that they do not need either the entire or a trailing portion
   of accepts response body. In doing so, Go's http library can reuse HTTP
@@ -446,40 +659,49 @@ Support for UNIX time.
 - Updating Glide dependencies.
 
 ## v7.2.5
+
 - Fixed the Active Directory endpoint for the China cloud.
 - Removes UTF-8 BOM if present in response payload.
 - Added telemetry.
 
 ## v7.2.3
+
 - Fixing bug in calls to `DelayForBackoff` that caused doubling of delay
   duration.
 
 ## v7.2.2
+
 - autorest/azure: added ASM and ARM VM DNS suffixes.
 
 ## v7.2.1
+
 - fixed parsing of UTC times that are not RFC3339 conformant.
 
 ## v7.2.0
+
 - autorest/validation: Reformat validation error for better error message.
 
 ## v7.1.0
+
 - preparer: Added support for multipart formdata - WithMultiPartFormdata()
 - preparer: Added support for sending file in request body - WithFile
 - client: Added RetryDuration parameter.
 - autorest/validation: new package for validation code for Azure Go SDK.
 
 ## v7.0.7
+
 - Add trailing / to endpoint
 - azure: add EnvironmentFromName
 
 ## v7.0.6
+
 - Add retry logic for 408, 500, 502, 503 and 504 status codes.
 - Change url path and query encoding logic.
 - Fix DelayForBackoff for proper exponential delay.
 - Add CookieJar in Client.
 
 ## v7.0.5
+
 - Add check to start polling only when status is in [200,201,202].
 - Refactoring for unchecked errors.
 - azure/persist changes.
@@ -488,20 +710,25 @@ Support for UNIX time.
 - Add attribute details in service error.
 
 ## v7.0.4
+
 - Better error messages for long running operation failures
 
 ## v7.0.3
+
 - Corrected DoPollForAsynchronous to properly handle the initial response
 
 ## v7.0.2
+
 - Corrected DoPollForAsynchronous to continue using the polling method first discovered
 
 ## v7.0.1
+
 - Fixed empty JSON input error in ByUnmarshallingJSON
 - Fixed polling support for GET calls
 - Changed format name from TimeRfc1123 to TimeRFC1123
 
 ## v7.0.0
+
 - Added ByCopying responder with supporting TeeReadCloser
 - Rewrote Azure asynchronous handling
 - Reverted to only unmarshalling JSON
@@ -518,9 +745,11 @@ only checked for one of those (that is, the presence of the `Azure-AsyncOperatio
 The new code correctly covers all cases and aligns with the other Azure SDKs.
 
 ## v6.1.0
+
 - Introduced `date.ByUnmarshallingJSONDate` and `date.ByUnmarshallingJSONTime` to enable JSON encoded values.
 
 ## v6.0.0
+
 - Completely reworked the handling of polled and asynchronous requests
 - Removed unnecessary routines
 - Reworked `mocks.Sender` to replay a series of `http.Response` objects
@@ -531,21 +760,25 @@ Handling polled and asynchronous requests is no longer part of `Client#Send`. In
 and `azure.DoPollForAsynchronous` for examples.
 
 ## v5.0.0
+
 - Added new RespondDecorators unmarshalling primitive types
 - Corrected application of inspection and authorization PrependDecorators
 
 ## v4.0.0
+
 - Added support for Azure long-running operations.
 - Added cancelation support to all decorators and functions that may delay.
 - Breaking: `DelayForBackoff` now accepts a channel, which may be nil.
 
 ## v3.1.0
+
 - Add support for OAuth Device Flow authorization.
 - Add support for ServicePrincipalTokens that are backed by an existing token, rather than other secret material.
 - Add helpers for persisting and restoring Tokens.
 - Increased code coverage in the github.com/Azure/autorest/azure package
 
 ## v3.0.0
+
 - Breaking: `NewErrorWithError` no longer takes `statusCode int`.
 - Breaking: `NewErrorWithStatusCode` is replaced with `NewErrorWithResponse`.
 - Breaking: `Client#Send()` no longer takes `codes ...int` argument.
