@@ -168,56 +168,20 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 	return groups, nil
 }
 
-func loadForFileFromBytes(confBytes []byte, filePath string, kmsEncryptionContext map[string]*string, getFromDestinationRule bool) (*Config, error) {
-	conf := configFile{}
-	err := conf.load(confBytes)
+func loadConfigFile(confPath string) (*configFile, error) {
+	confBytes, err := ioutil.ReadFile(confPath)
+	if err != nil {
+		return nil, fmt.Errorf("could not read config file: %s", err)
+	}
+	conf := &configFile{}
+	err = conf.load(confBytes)
 	if err != nil {
 		return nil, fmt.Errorf("error loading config: %s", err)
 	}
+	return conf, nil
+}
 
-	var rule *creationRule
-	var dRule *destinationRule
-
-	if getFromDestinationRule {
-		if len(conf.DestinationRules) > 0 {
-			for _, r := range conf.DestinationRules {
-				if r.PathRegex == "" {
-					dRule = &r
-					rule = &dRule.RecreationRule
-					break
-				}
-				if r.PathRegex != "" {
-					if match, _ := regexp.MatchString(r.PathRegex, filePath); match {
-						dRule = &r
-						rule = &dRule.RecreationRule
-						break
-					}
-				}
-			}
-		}
-	} else {
-		for _, r := range conf.CreationRules {
-			if r.PathRegex == "" {
-				rule = &r
-				break
-			}
-			if r.PathRegex != "" {
-				if match, _ := regexp.MatchString(r.PathRegex, filePath); match {
-					rule = &r
-					break
-				}
-			}
-		}
-	}
-
-	if rule == nil {
-		if getFromDestinationRule {
-			rule = &creationRule{}
-		} else {
-			return nil, fmt.Errorf("error loading config: no matching creation rules found")
-		}
-	}
-
+func configFromRule(rule *creationRule, kmsEncryptionContext map[string]*string) (*Config, error) {
 	if rule.UnencryptedSuffix != "" && rule.EncryptedSuffix != "" {
 		return nil, fmt.Errorf("error loading config: cannot use both encrypted_suffix and unencrypted_suffix for the same rule")
 	}
@@ -225,6 +189,39 @@ func loadForFileFromBytes(confBytes []byte, filePath string, kmsEncryptionContex
 	groups, err := getKeyGroupsFromCreationRule(rule, kmsEncryptionContext)
 	if err != nil {
 		return nil, err
+	}
+
+	return &Config{
+		KeyGroups:         groups,
+		ShamirThreshold:   rule.ShamirThreshold,
+		UnencryptedSuffix: rule.UnencryptedSuffix,
+		EncryptedSuffix:   rule.EncryptedSuffix,
+	}, nil
+}
+
+func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
+	var rule *creationRule
+	var dRule *destinationRule
+
+	if len(conf.DestinationRules) > 0 {
+		for _, r := range conf.DestinationRules {
+			if r.PathRegex == "" {
+				dRule = &r
+				rule = &dRule.RecreationRule
+				break
+			}
+			if r.PathRegex != "" {
+				if match, _ := regexp.MatchString(r.PathRegex, filePath); match {
+					dRule = &r
+					rule = &dRule.RecreationRule
+					break
+				}
+			}
+		}
+	}
+
+	if dRule == nil {
+		return nil, fmt.Errorf("error loading config: no matching destination found in config")
 	}
 
 	var dest publish.Destination
@@ -240,32 +237,60 @@ func loadForFileFromBytes(confBytes []byte, filePath string, kmsEncryptionContex
 		}
 	}
 
-	return &Config{
-		KeyGroups:         groups,
-		ShamirThreshold:   rule.ShamirThreshold,
-		UnencryptedSuffix: rule.UnencryptedSuffix,
-		EncryptedSuffix:   rule.EncryptedSuffix,
-		Destination:       dest,
-	}, nil
+	config, err := configFromRule(rule, kmsEncryptionContext)
+	if err != nil {
+		return nil, err
+	}
+	config.Destination = dest
+
+	return config, nil
+}
+
+func parseCreationRuleForFile(conf *configFile, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
+	var rule *creationRule
+
+	for _, r := range conf.CreationRules {
+		if r.PathRegex == "" {
+			rule = &r
+			break
+		}
+		if r.PathRegex != "" {
+			if match, _ := regexp.MatchString(r.PathRegex, filePath); match {
+				rule = &r
+				break
+			}
+		}
+	}
+
+	if rule == nil {
+		return nil, fmt.Errorf("error loading config: no matching creation rules found")
+	}
+
+	config, err := configFromRule(rule, kmsEncryptionContext)
+	if err != nil {
+		return nil, err
+	}
+
+	return config, nil
 }
 
 // LoadForFile load the configuration for a given SOPS file from the config file at confPath. A kmsEncryptionContext
 // should be provided for configurations that do not contain key groups, as there's no way to specify context inside
 // a SOPS config file outside of key groups.
 func LoadForFile(confPath string, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
-	confBytes, err := ioutil.ReadFile(confPath)
+	conf, err := loadConfigFile(confPath)
 	if err != nil {
-		return nil, fmt.Errorf("could not read config file: %s", err)
+		return nil, err
 	}
-	return loadForFileFromBytes(confBytes, filePath, kmsEncryptionContext, false)
+	return parseCreationRuleForFile(conf, filePath, kmsEncryptionContext)
 }
 
 // LoadDestinationRuleForFile works the same as LoadForFile, but gets the "creation_rule" from the matching destination_rule's
 // "recreation_rule".
 func LoadDestinationRuleForFile(confPath string, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
-	confBytes, err := ioutil.ReadFile(confPath)
+	conf, err := loadConfigFile(confPath)
 	if err != nil {
-		return nil, fmt.Errorf("could not read config file: %s", err)
+		return nil, err
 	}
-	return loadForFileFromBytes(confBytes, filePath, kmsEncryptionContext, true)
+	return parseDestinationRuleForFile(conf, filePath, kmsEncryptionContext)
 }

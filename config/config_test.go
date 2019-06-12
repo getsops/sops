@@ -141,6 +141,13 @@ destination_rules:
       pgp: newpgp
 `)
 
+func parseConfigFile(confBytes []byte, t *testing.T) *configFile {
+	conf := &configFile{}
+	err := conf.load(confBytes)
+	assert.Nil(t, err)
+	return conf
+}
+
 func TestLoadConfigFile(t *testing.T) {
 	expected := configFile{
 		CreationRules: []creationRule{
@@ -201,38 +208,38 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 }
 
 func TestLoadInvalidConfigFile(t *testing.T) {
-	_, err := loadForFileFromBytes(sampleInvalidConfig, "foobar2000", nil, false)
+	_, err := parseCreationRuleForFile(parseConfigFile(sampleInvalidConfig, t), "foobar2000", nil)
 	assert.NotNil(t, err)
 }
 
 func TestKeyGroupsForFile(t *testing.T) {
-	conf, err := loadForFileFromBytes(sampleConfig, "foobar2000", nil, false)
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfig, t), "foobar2000", nil)
 	assert.Nil(t, err)
 	assert.Equal(t, "2", conf.KeyGroups[0][0].ToString())
 	assert.Equal(t, "1", conf.KeyGroups[0][1].ToString())
-	conf, err = loadForFileFromBytes(sampleConfig, "whatever", nil, false)
+	conf, err = parseCreationRuleForFile(parseConfigFile(sampleConfig, t), "whatever", nil)
 	assert.Nil(t, err)
 	assert.Equal(t, "bar", conf.KeyGroups[0][0].ToString())
 	assert.Equal(t, "foo", conf.KeyGroups[0][1].ToString())
 }
 
 func TestKeyGroupsForFileWithPath(t *testing.T) {
-	conf, err := loadForFileFromBytes(sampleConfigWithPath, "foo/bar2000", nil, false)
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithPath, t), "foo/bar2000", nil)
 	assert.Nil(t, err)
 	assert.Equal(t, "2", conf.KeyGroups[0][0].ToString())
 	assert.Equal(t, "1", conf.KeyGroups[0][1].ToString())
-	conf, err = loadForFileFromBytes(sampleConfigWithPath, "somefilename.yml", nil, false)
+	conf, err = parseCreationRuleForFile(parseConfigFile(sampleConfigWithPath, t), "somefilename.yml", nil)
 	assert.Nil(t, err)
 	assert.Equal(t, "baggins", conf.KeyGroups[0][0].ToString())
 	assert.Equal(t, "bilbo", conf.KeyGroups[0][1].ToString())
-	conf, err = loadForFileFromBytes(sampleConfig, "whatever", nil, false)
+	conf, err = parseCreationRuleForFile(parseConfigFile(sampleConfig, t), "whatever", nil)
 	assert.Nil(t, err)
 	assert.Equal(t, "bar", conf.KeyGroups[0][0].ToString())
 	assert.Equal(t, "foo", conf.KeyGroups[0][1].ToString())
 }
 
 func TestKeyGroupsForFileWithGroups(t *testing.T) {
-	conf, err := loadForFileFromBytes(sampleConfigWithGroups, "whatever", nil, false)
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithGroups, t), "whatever", nil)
 	assert.Nil(t, err)
 	assert.Equal(t, "bar", conf.KeyGroups[0][0].ToString())
 	assert.Equal(t, "foo", conf.KeyGroups[0][1].ToString())
@@ -241,24 +248,24 @@ func TestKeyGroupsForFileWithGroups(t *testing.T) {
 }
 
 func TestLoadConfigFileWithUnencryptedSuffix(t *testing.T) {
-	conf, err := loadForFileFromBytes(sampleConfigWithSuffixParameters, "foobar", nil, false)
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithSuffixParameters, t), "foobar", nil)
 	assert.Nil(t, err)
 	assert.Equal(t, "_unencrypted", conf.UnencryptedSuffix)
 }
 
 func TestLoadConfigFileWithEncryptedSuffix(t *testing.T) {
-	conf, err := loadForFileFromBytes(sampleConfigWithSuffixParameters, "barfoo", nil, false)
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithSuffixParameters, t), "barfoo", nil)
 	assert.Nil(t, err)
 	assert.Equal(t, "_enc", conf.EncryptedSuffix)
 }
 
 func TestLoadConfigFileWithInvalidParameters(t *testing.T) {
-	_, err := loadForFileFromBytes(sampleConfigWithInvalidParameters, "foobar", nil, false)
+	_, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithInvalidParameters, t), "foobar", nil)
 	assert.NotNil(t, err)
 }
 
 func TestLoadConfigFileWithDestinationRule(t *testing.T) {
-	conf, err := loadForFileFromBytes(sampleConfigWithDestinationRule, "barfoo", nil, true)
+	conf, err := parseDestinationRuleForFile(parseConfigFile(sampleConfigWithDestinationRule, t), "barfoo", nil)
 	assert.Nil(t, err)
 	assert.Equal(t, "newpgp", conf.KeyGroups[0][0].ToString())
 	assert.NotNil(t, conf.Destination)
