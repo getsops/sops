@@ -8,9 +8,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/fatih/color"
 	wordwrap "github.com/mitchellh/go-wordwrap"
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/cmd/sops/codes"
+	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/stores/dotenv"
@@ -338,4 +340,66 @@ func RecoverDataKeyFromBuggyKMS(opts GenericDecryptOpts, tree *sops.Tree) []byte
 	}
 
 	return nil
+}
+
+type Diff struct {
+	Common  []keys.MasterKey
+	Added   []keys.MasterKey
+	Removed []keys.MasterKey
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+func DiffKeyGroups(ours, theirs []sops.KeyGroup) []Diff {
+	var diffs []Diff
+	for i := 0; i < max(len(ours), len(theirs)); i++ {
+		var diff Diff
+		var ourGroup, theirGroup sops.KeyGroup
+		if len(ours) > i {
+			ourGroup = ours[i]
+		}
+		if len(theirs) > i {
+			theirGroup = theirs[i]
+		}
+		ourKeys := make(map[string]struct{})
+		theirKeys := make(map[string]struct{})
+		for _, key := range ourGroup {
+			ourKeys[key.ToString()] = struct{}{}
+		}
+		for _, key := range theirGroup {
+			if _, ok := ourKeys[key.ToString()]; ok {
+				diff.Common = append(diff.Common, key)
+			} else {
+				diff.Added = append(diff.Added, key)
+			}
+			theirKeys[key.ToString()] = struct{}{}
+		}
+		for _, key := range ourGroup {
+			if _, ok := theirKeys[key.ToString()]; !ok {
+				diff.Removed = append(diff.Removed, key)
+			}
+		}
+		diffs = append(diffs, diff)
+	}
+	return diffs
+}
+
+func PrettyPrintDiffs(diffs []Diff) {
+	for i, diff := range diffs {
+		color.New(color.Underline).Printf("Group %d\n", i+1)
+		for _, c := range diff.Common {
+			fmt.Printf("    %s\n", c.ToString())
+		}
+		for _, c := range diff.Added {
+			color.New(color.FgGreen).Printf("+++ %s\n", c.ToString())
+		}
+		for _, c := range diff.Removed {
+			color.New(color.FgRed).Printf("--- %s\n", c.ToString())
+		}
+	}
 }

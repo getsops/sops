@@ -27,11 +27,8 @@ func (gcsd *GCSDestination) Upload(fileContents []byte, fileName string) error {
 		return err
 	}
 	wc := client.Bucket(gcsd.gcsBucket).Object(gcsd.gcsPrefix + fileName).NewWriter(ctx)
+	defer wc.Close()
 	_, err = wc.Write(fileContents)
-	if err != nil {
-		return err
-	}
-	err = wc.Close()
 	if err != nil {
 		return err
 	}

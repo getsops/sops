@@ -75,6 +75,18 @@ func Run(opts Opts) error {
 			return err
 		}
 
+		diffs := common.DiffKeyGroups(tree.Metadata.KeyGroups, conf.KeyGroups)
+		keysWillChange := false
+		for _, diff := range diffs {
+			if len(diff.Added) > 0 || len(diff.Removed) > 0 {
+				keysWillChange = true
+			}
+		}
+		if keysWillChange {
+			fmt.Printf("The following changes will be made to the file's key groups:\n")
+			common.PrettyPrintDiffs(diffs)
+		}
+
 		tree.Metadata = sops.Metadata{
 			KeyGroups:         conf.KeyGroups,
 			UnencryptedSuffix: conf.UnencryptedSuffix,
@@ -112,7 +124,7 @@ func Run(opts Opts) error {
 	if opts.Interactive {
 		var response string
 		for response != "y" && response != "n" {
-			fmt.Printf("\nuploading %s to %s ? (y/n): ", path, conf.Destination.Path(fileName))
+			fmt.Printf("uploading %s to %s ? (y/n): ", path, conf.Destination.Path(fileName))
 			_, err := fmt.Scanln(&response)
 			if err != nil {
 				return err
