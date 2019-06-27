@@ -6,11 +6,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/fatih/color"
-	"go.mozilla.org/sops"
+	"go.mozilla.org/sops/cmd/sops/codes"
 	"go.mozilla.org/sops/cmd/sops/common"
 	"go.mozilla.org/sops/config"
-	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
 )
 
@@ -48,10 +46,11 @@ func updateFile(opts Opts) error {
 	if err != nil {
 		return err
 	}
-	diffs := diffKeyGroups(tree.Metadata.KeyGroups, conf.KeyGroups)
+
+	diffs := common.DiffKeyGroups(tree.Metadata.KeyGroups, conf.KeyGroups)
 	keysWillChange := false
 	for _, diff := range diffs {
-		if len(diff.added) > 0 || len(diff.removed) > 0 {
+		if len(diff.Added) > 0 || len(diff.Removed) > 0 {
 			keysWillChange = true
 		}
 	}
@@ -60,18 +59,8 @@ func updateFile(opts Opts) error {
 		return nil
 	}
 	fmt.Printf("The following changes will be made to the file's groups:\n")
-	for i, diff := range diffs {
-		color.New(color.Underline).Printf("Group %d\n", i+1)
-		for _, c := range diff.common {
-			fmt.Printf("    %s\n", c.ToString())
-		}
-		for _, c := range diff.added {
-			color.New(color.FgGreen).Printf("+++ %s\n", c.ToString())
-		}
-		for _, c := range diff.removed {
-			color.New(color.FgRed).Printf("--- %s\n", c.ToString())
-		}
-	}
+	common.PrettyPrintDiffs(diffs)
+
 	if opts.Interactive {
 		var response string
 		for response != "y" && response != "n" {
@@ -88,7 +77,7 @@ func updateFile(opts Opts) error {
 	}
 	key, err := tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices)
 	if err != nil {
-		return fmt.Errorf("error getting data key: %s", err)
+		return common.NewExitError(err, codes.CouldNotRetrieveKey)
 	}
 	tree.Metadata.KeyGroups = conf.KeyGroups
 	if opts.GroupQuorum != 0 {
@@ -101,7 +90,7 @@ func updateFile(opts Opts) error {
 	}
 	output, err := store.EmitEncryptedFile(*tree)
 	if err != nil {
-		return fmt.Errorf("error marshaling tree: %s", err)
+		return common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
 	}
 	outputFile, err := os.Create(opts.InputPath)
 	if err != nil {
@@ -116,56 +105,9 @@ func updateFile(opts Opts) error {
 	return nil
 }
 
-type diff struct {
-	common  []keys.MasterKey
-	added   []keys.MasterKey
-	removed []keys.MasterKey
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
-
 func min(a, b int) int {
 	if a < b {
 		return a
 	}
 	return b
-}
-
-func diffKeyGroups(ours, theirs []sops.KeyGroup) []diff {
-	var diffs []diff
-	for i := 0; i < max(len(ours), len(theirs)); i++ {
-		var diff diff
-		var ourGroup, theirGroup sops.KeyGroup
-		if len(ours) > i {
-			ourGroup = ours[i]
-		}
-		if len(theirs) > i {
-			theirGroup = theirs[i]
-		}
-		ourKeys := make(map[string]struct{})
-		theirKeys := make(map[string]struct{})
-		for _, key := range ourGroup {
-			ourKeys[key.ToString()] = struct{}{}
-		}
-		for _, key := range theirGroup {
-			if _, ok := ourKeys[key.ToString()]; ok {
-				diff.common = append(diff.common, key)
-			} else {
-				diff.added = append(diff.added, key)
-			}
-			theirKeys[key.ToString()] = struct{}{}
-		}
-		for _, key := range ourGroup {
-			if _, ok := theirKeys[key.ToString()]; !ok {
-				diff.removed = append(diff.removed, key)
-			}
-		}
-		diffs = append(diffs, diff)
-	}
-	return diffs
 }

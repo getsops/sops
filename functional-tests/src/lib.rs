@@ -76,6 +76,37 @@ mod tests {
 
     #[test]
     #[ignore]
+    fn publish_json_file_s3() {
+        let file_path = prepare_temp_file("test_encrypt_publish_s3.json",
+                                          b"{
+    \"foo\": 2,
+    \"bar\": \"baz\"
+}");
+        assert!(Command::new(SOPS_BINARY_PATH)
+            .arg("-e")
+            .arg("-i")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops")
+            .status
+            .success(),
+            "SOPS failed to encrypt a file");
+        assert!(Command::new(SOPS_BINARY_PATH)
+            .arg("publish")
+            .arg("--yes")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops")
+            .status
+            .success(),
+            "sops failed to publish a file to S3");
+
+        //TODO: Check that file exists in S3 Bucket
+    }
+
+
+    #[test]
+    #[ignore]
     fn encrypt_json_file_kms() {
         let kms_arn = env::var(KMS_KEY).expect("Expected $FUNCTIONAL_TEST_KMS_ARN env var to be set");
 
@@ -260,7 +291,7 @@ b: ba"#
         }
         panic!("Output YAML does not have the expected structure");
     }
-    
+
     #[test]
     fn set_yaml_file_string() {
         let file_path = prepare_temp_file("test_set_string.yaml",
