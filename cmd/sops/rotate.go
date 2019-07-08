@@ -38,7 +38,7 @@ func rotate(opts rotateOpts) ([]byte, error) {
 		File: tree.FilePath,
 	})
 
-	dataKey, err := common.DecryptTree(common.DecryptTreeOpts{
+	_, err := common.DecryptTree(common.DecryptTreeOpts{
 		Cipher: opts.Cipher, IgnoreMac: opts.IgnoreMAC, Tree: tree,
 		KeyServices: opts.KeyServices,
 	})

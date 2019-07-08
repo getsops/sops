@@ -241,7 +241,6 @@ func FixAWSKMSEncryptionContextBug(opts GenericDecryptOpts, tree *sops.Tree) (*s
 		}
 	}
 
-	dataKey := []byte{}
 	// If there is another key, then we should be able to just decrypt
 	// without having to try different variations of the encryption context.
 	dataKey, err := DecryptTree(DecryptTreeOpts{
