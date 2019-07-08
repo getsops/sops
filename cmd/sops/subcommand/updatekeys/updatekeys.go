@@ -12,6 +12,7 @@ import (
 	"go.mozilla.org/sops/keyservice"
 )
 
+// Opts represents key operation options and config
 type Opts struct {
 	InputPath   string
 	GroupQuorum int
@@ -20,6 +21,7 @@ type Opts struct {
 	ConfigPath  string
 }
 
+// UpdateKeys update the keys for a given file
 func UpdateKeys(opts Opts) error {
 	path, err := filepath.Abs(opts.InputPath)
 	if err != nil {

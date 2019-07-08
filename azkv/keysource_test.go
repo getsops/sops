@@ -92,16 +92,16 @@ func TestKeyToMap(t *testing.T) {
 	}, key.ToMap())
 }
 
-var azureKeyAcceptanceTestUrl = flag.String("azure-key", "", "URL to Azure Key Vault (note that this can incur real costs!)")
+var azureKeyAcceptanceTestURL = flag.String("azure-key", "", "URL to Azure Key Vault (note that this can incur real costs!)")
 
 func TestRoundtrip(t *testing.T) {
-	if *azureKeyAcceptanceTestUrl == "" {
+	if *azureKeyAcceptanceTestURL == "" {
 		t.Skip("Azure URL not provided, skipping acceptance test")
 	}
 
 	input := []byte("test-string")
 
-	key, err := NewMasterKeyFromURL(*azureKeyAcceptanceTestUrl)
+	key, err := NewMasterKeyFromURL(*azureKeyAcceptanceTestURL)
 	if err != nil {
 		t.Fatal(err)
 	}

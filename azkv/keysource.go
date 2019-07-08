@@ -73,7 +73,7 @@ func MasterKeysFromURLs(urls string) ([]*MasterKey, error) {
 	return keys, nil
 }
 
-// NewMasterKeyFromResourceID takes an Azure Key Vault key URL and returns a new MasterKey
+// NewMasterKeyFromURL takes an Azure Key Vault key URL and returns a new MasterKey
 // URL format is {vaultUrl}/keys/{key-name}/{key-version}
 func NewMasterKeyFromURL(url string) (*MasterKey, error) {
 	k := &MasterKey{}

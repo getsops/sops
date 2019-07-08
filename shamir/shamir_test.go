@@ -188,9 +188,9 @@ func TestInterpolate_Rand(t *testing.T) {
 			t.Fatalf("err: %v", err)
 		}
 
-		x_vals := []uint8{1, 2, 3}
-		y_vals := []uint8{p.evaluate(1), p.evaluate(2), p.evaluate(3)}
-		out := interpolatePolynomial(x_vals, y_vals, 0)
+		xVals := []uint8{1, 2, 3}
+		yVals := []uint8{p.evaluate(1), p.evaluate(2), p.evaluate(3)}
+		out := interpolatePolynomial(xVals, yVals, 0)
 		if out != uint8(i) {
 			t.Fatalf("Bad: %v %d", out, i)
 		}

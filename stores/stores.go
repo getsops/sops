@@ -309,6 +309,7 @@ func (pgpKey *pgpkey) toInternal() (*pgp.MasterKey, error) {
 	}, nil
 }
 
+// ExampleComplexTree is an example sops.Tree object exhibiting complex relationships
 var ExampleComplexTree = sops.Tree{
 	Branches: sops.TreeBranches{
 		sops.TreeBranch{
@@ -343,6 +344,8 @@ var ExampleComplexTree = sops.Tree{
 	},
 }
 
+// ExampleSimpleTree is an example sops.Tree object exhibiting only simple relationships
+// with only one nested branch and only simple string values
 var ExampleSimpleTree = sops.Tree{
 	Branches: sops.TreeBranches{
 		sops.TreeBranch{
@@ -367,6 +370,8 @@ var ExampleSimpleTree = sops.Tree{
 	},
 }
 
+// ExampleFlatTree is an example sops.Tree object exhibiting only simple relationships
+// with no nested branches and only simple string values
 var ExampleFlatTree = sops.Tree{
 	Branches: sops.TreeBranches{
 		sops.TreeBranch{
