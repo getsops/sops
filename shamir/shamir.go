@@ -127,7 +127,7 @@ func div(a, b uint8) uint8 {
 // mult multiplies two numbers in GF(2^8)
 // GF(2^8) multiplication using log/exp tables
 func mult(a, b uint8) (out uint8) {
-	var zero uint8
+	var goodVal, zero uint8
 	log_a := logTable[a]
 	log_b := logTable[b]
 	sum := (int(log_a) + int(log_b)) % 255
@@ -136,7 +136,7 @@ func mult(a, b uint8) (out uint8) {
 
 	// Ensure we return zero if either a or b are zero but aren't subject to
 	// timing attacks
-	goodVal := ret
+	goodVal = ret
 
 	if subtle.ConstantTimeByteEq(a, 0) == 1 {
 		ret = zero
@@ -150,7 +150,7 @@ func mult(a, b uint8) (out uint8) {
 		// This operation does not do anything logically useful. It
 		// only ensures a constant number of assignments to thwart
 		// timing attacks.
-		ret = ret
+		goodVal = zero
 	}
 
 	return ret
