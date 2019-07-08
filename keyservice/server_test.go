@@ -63,10 +63,10 @@ func TestKmsKeyToMasterKey(t *testing.T) {
 			masterKey := kmsKeyToMasterKey(key)
 			foundCtx := masterKey.EncryptionContext
 
-			for k, _ := range c.expectedCtx {
+			for k := range c.expectedCtx {
 				require.Containsf(t, foundCtx, k, "Context does not contain expected key '%s'", k)
 			}
-			for k, _ := range foundCtx {
+			for k := range foundCtx {
 				require.Containsf(t, c.expectedCtx, k, "Context contains an unexpected key '%s' which cannot be found from expected map", k)
 			}
 			for k, expected := range c.expectedCtx {
