@@ -67,7 +67,7 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 		}
 		if line[0] == '#' {
 			branch = append(branch, sops.TreeItem{
-				Key: sops.Comment{string(line[1:])},
+				Key:   sops.Comment{string(line[1:])},
 				Value: nil,
 			})
 		} else {
