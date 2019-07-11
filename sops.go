@@ -101,7 +101,7 @@ type TreeItem struct {
 type TreeBranch []TreeItem
 
 // TreeBranches is a collection of TreeBranch
-// trees usually have more than one branch
+// Trees usually have more than one branch
 type TreeBranches []TreeBranch
 
 func valueFromPathAndLeaf(path []interface{}, leaf interface{}) interface{} {

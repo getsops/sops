@@ -24,8 +24,8 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-// ExampleFileEmitter represents actions needed for a struct to be comliant
-// with the sops example-file emitter interface
+// ExampleFileEmitter emits example files. This is used by the `sops` binary
+// whenever a new file is created, in order to present the user with a non-empty file
 type ExampleFileEmitter interface {
 	EmitExample() []byte
 }

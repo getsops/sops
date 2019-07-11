@@ -101,7 +101,7 @@ func (store Store) treeBranchToYamlMap(in sops.TreeBranch) yaml.MapSlice {
 	return branch
 }
 
-// LoadEncryptedFile loads the contexts of an encrypted yaml file onto a
+// LoadEncryptedFile loads the contents of an encrypted yaml file onto a
 // sops.Tree runtime object
 func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	var data []yaml.MapSlice
@@ -138,7 +138,7 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	}, nil
 }
 
-// LoadPlainFile loads the contexts of a plaintext yaml file onto a
+// LoadPlainFile loads the contents of a plaintext yaml file onto a
 // sops.Tree runtime obejct
 func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	var data []yaml.MapSlice

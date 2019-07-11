@@ -13,7 +13,7 @@ type GCSDestination struct {
 	gcsPrefix string
 }
 
-// NewGCSDestination is the constructor for a new Google Cloud Storage destination
+// NewGCSDestination is the constructor for a Google Cloud Storage destination
 func NewGCSDestination(gcsBucket string, gcsPrefix string) *GCSDestination {
 	return &GCSDestination{gcsBucket, gcsPrefix}
 }
@@ -23,7 +23,7 @@ func (gcsd *GCSDestination) Path(fileName string) string {
 	return fmt.Sprintf("gcs://%s/%s%s", gcsd.gcsBucket, gcsd.gcsPrefix, fileName)
 }
 
-// Upload uploads contents to a new file in GCS
+// Upload uploads contents to a file in GCS
 func (gcsd *GCSDestination) Upload(fileContents []byte, fileName string) error {
 	ctx := context.Background()
 	client, err := storage.NewClient(ctx)

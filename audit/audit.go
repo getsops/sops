@@ -81,7 +81,7 @@ func Register(auditor Auditor) {
 	auditors = append(auditors, auditor)
 }
 
-// Auditor is notified when noteworthy events happen, for example when a file is encrypted or decrypted. 
+// Auditor is notified when noteworthy events happen, for example when a file is encrypted or decrypted.
 type Auditor interface {
 	Handle(event interface{})
 }
@@ -107,7 +107,7 @@ type PostgresAuditor struct {
 	DB *sql.DB
 }
 
-// NewPostgresAuditor is the constructor for a new PostgresAuditor object
+// NewPostgresAuditor is the constructor for a new PostgresAuditor struct
 // initialized with the given db connection string
 func NewPostgresAuditor(connStr string) (*PostgresAuditor, error) {
 	db, err := sql.Open("postgres", connStr)
