@@ -81,8 +81,12 @@ func Register(auditor Auditor) {
 	auditors = append(auditors, auditor)
 }
 
-// Auditor is notified when noteworthy events happen, for example when a file is encrypted or decrypted.
+// Auditor is notified when noteworthy events happen,
+// for example when a file is encrypted or decrypted.
 type Auditor interface {
+	// Handle() takes an audit event and attempts to persists it;
+	// how it is persisted and how errors are handled is up to the
+	// implementation of this interface.
 	Handle(event interface{})
 }
 
@@ -101,8 +105,10 @@ type RotateEvent struct {
 	File string
 }
 
-// PostgresAuditor is a Postgres SQL DB implementation of the
-// Auditor interface
+// PostgresAuditor is a Postgres SQL DB implementation of the Auditor interface.
+// It persists the audit event by writing a row to the 'audit_event' table.
+// Errors with writing to the database will output a log message and the
+// process will exit with status set to 1
 type PostgresAuditor struct {
 	DB *sql.DB
 }
@@ -125,8 +131,8 @@ func NewPostgresAuditor(connStr string) (*PostgresAuditor, error) {
 	return pg, nil
 }
 
-// Handle is the PostgresAuditor implementation of the function required by the
-// Auditor interface
+// Handle persists the audit event by writing a row to the
+// 'audit_event' postgres table
 func (p *PostgresAuditor) Handle(event interface{}) {
 	u, err := user.Current()
 	if err != nil {
