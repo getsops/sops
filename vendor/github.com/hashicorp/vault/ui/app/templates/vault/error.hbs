@@ -1,0 +1,34 @@
+<NavHeader data-test-header-without-nav as |Nav|>
+  <Nav.home>
+    <HomeLink @class="navbar-item splash-page-logo">
+      <LogoEdition />
+    </HomeLink>
+  </Nav.home>
+</NavHeader>
+<section class="section">
+  <div class="container">
+    {{#if (eq model.httpStatus 404)}}
+      {{not-found model=model}}
+    {{else}}
+      <PageHeader as |p|>
+        <p.levelLeft>
+          <h1 class="title is-3 has-text-grey">
+            {{#if (eq model.httpStatus 403)}}
+              Not authorized
+            {{else}}
+              Error
+            {{/if}}
+          </h1>
+        </p.levelLeft>
+      </PageHeader>
+      <BlockError>
+        {{#if model.message}}
+          <p>{{model.message}}</p>
+        {{/if}}
+        {{#each model.errors as |error|}}
+          <p>{{error}}</p>
+        {{/each}}
+      </BlockError>
+    {{/if}}
+  </div>
+</section>

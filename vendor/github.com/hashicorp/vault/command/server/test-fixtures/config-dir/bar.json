@@ -1,0 +1,14 @@
+{
+    "ui":false,
+
+    "listener": {
+        "tcp": {
+            "address": "127.0.0.1:443"
+        }
+    },
+
+    "max_lease_ttl": "10h",
+
+    "api_addr": "https://vault.local",
+    "cluster_addr": "https://127.0.0.1:444"
+}
