@@ -14,7 +14,7 @@ type S3Destination struct {
 	s3Prefix string
 }
 
-func NewS3Destination(s3Bucket string, s3Prefix string) *S3Destination {
+func NewS3Destination(s3Bucket, s3Prefix string) *S3Destination {
 	return &S3Destination{s3Bucket, s3Prefix}
 }
 
@@ -35,4 +35,9 @@ func (s3d *S3Destination) Upload(fileContents []byte, fileName string) error {
 		return err
 	}
 	return nil
+}
+
+// Returns NotImplementedError
+func (s3d *S3Destination) UploadUnencrypted(data map[string]interface{}, fileName string) error {
+	return &NotImplementedError{"S3 does not support uploading the unencrypted file contents."}
 }

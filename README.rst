@@ -809,12 +809,56 @@ This command requires a ``.sops.yaml`` configuration file. Below is an example:
         path_regex: gcs/*
         recreation_rule:
            pgp: F69E4901EDBAD2D1753F8C67A64535C4163FB307
+      - vault_path: "sops/"
+        path_regex: vault/*
 
-The above configuration will place all files under ``s3/*`` into the S3 bucket ``sops-secrets`` and
-will place all files under ``gcs/*`` into the GCS bucket ``sops-secrets``. As well, it will decrypt
-these files and re-encrypt them using the ``F69E4901EDBAD2D1753F8C67A64535C4163FB307`` pgp key.
+The above configuration will place all files under ``s3/*`` into the S3 bucket ``sops-secrets``,
+all files under ``gcs/*`` into the GCS bucket ``sops-secrets``, and the contents of all files under
+``vault/*`` into Vault's KV store under the path ``secrets/sops/``. For the files that will be
+published to S3 and GCS, it will decrypt them and re-encrypt them using the
+``F69E4901EDBAD2D1753F8C67A64535C4163FB307`` pgp key.
 
 You would deploy a file to S3 with a command like: ``sops publish s3/app.yaml``
+
+Publishing to Vault
+*******************
+
+There are two settings for Vault that you can place in your destination rules. The first
+is ``vault_path``, which is required. The second is ``vault_address``, which is optional.
+
+``sops`` uses the official Vault API provided by Hashicorp, which makes use of `environment
+variables <https://www.vaultproject.io/docs/commands/#environment-variables>`_ for
+configuring the client.
+
+Below is an example of publishing to Vault (using token auth with a local dev instance of Vault).
+
+.. code:: bash
+
+   $ export VAULT_TOKEN=...
+   $ export VAULT_ADDR='http://127.0.0.1:8200'
+   $ sops -d vault/test.yaml
+   example_string: bar
+   example_number: 42
+   example_map:
+       key: value
+   $ sops publish vault/test.yaml
+   uploading /home/user/sops_directory/vault/test.yaml to http://127.0.0.1:8200/v1/secret/data/sops/test.yaml ? (y/n): y
+   $ vault kv get secret/sops/test.yaml
+   ====== Metadata ======
+   Key              Value
+   ---              -----
+   created_time     2019-07-11T03:32:17.074792017Z
+   deletion_time    n/a
+   destroyed        false
+   version          3
+
+   ========= Data =========
+   Key               Value
+   ---               -----
+   example_map       map[key:value]
+   example_number    42
+   example_string    bar
+
 
 Important information on types
 ------------------------------
