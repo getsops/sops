@@ -688,3 +688,34 @@ func ToBytes(in interface{}) ([]byte, error) {
 		return nil, fmt.Errorf("Could not convert unknown type %T to bytes", in)
 	}
 }
+
+// EmitAsMap will emit the tree branches as a map. This is used by the publish
+// command for writing decrypted trees to various destinations. Should only be
+// used for outputting to data structures in code.
+func EmitAsMap(in TreeBranches) (map[string]interface{}, error) {
+	data := map[string]interface{}{}
+
+	for _, branch := range in {
+		for _, item := range branch {
+			if _, ok := item.Key.(Comment); ok {
+				continue
+			}
+			val, err := encodeValueForMap(item.Value)
+			if err != nil {
+				return nil, err
+			}
+			data[item.Key.(string)] = val
+		}
+	}
+
+	return data, nil
+}
+
+func encodeValueForMap(v interface{}) (interface{}, error) {
+	switch v := v.(type) {
+	case TreeBranch:
+		return EmitAsMap([]TreeBranch{v})
+	default:
+		return v, nil
+	}
+}

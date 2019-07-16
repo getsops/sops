@@ -95,6 +95,8 @@ type destinationRule struct {
 	S3Prefix       string       `yaml:"s3_prefix"`
 	GCSBucket      string       `yaml:"gcs_bucket"`
 	GCSPrefix      string       `yaml:"gcs_prefix"`
+	VaultPath      string       `yaml:"vault_path"`
+	VaultAddress   string       `yaml:"vault_address"`
 	RecreationRule creationRule `yaml:"recreation_rule,omitempty"`
 }
 
@@ -226,14 +228,17 @@ func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptio
 
 	var dest publish.Destination
 	if dRule != nil {
-		if dRule.S3Bucket != "" && dRule.GCSBucket != "" {
-			return nil, fmt.Errorf("error loading config: both s3_bucket and gcs_bucket were found for destination rule, you can only use one.")
+		if dRule.S3Bucket != "" && dRule.GCSBucket != "" && dRule.VaultPath != "" {
+			return nil, fmt.Errorf("error loading config: more than one destinations were found in a single destination rule, you can only use one per rule.")
 		}
 		if dRule.S3Bucket != "" {
 			dest = publish.NewS3Destination(dRule.S3Bucket, dRule.S3Prefix)
 		}
 		if dRule.GCSBucket != "" {
 			dest = publish.NewGCSDestination(dRule.GCSBucket, dRule.GCSPrefix)
+		}
+		if dRule.VaultPath != "" {
+			dest = publish.NewVaultDestination(dRule.VaultAddress, dRule.VaultPath)
 		}
 	}
 

@@ -18,3 +18,5 @@ destination_rules:
       path_regex: test_encrypt_publish_s3.json
       reencryption_rule:
         pgp: 620B9A4C96230B91E7473D20113D2B26EA0890C7
+    - vault_path: "functional-test/"
+      path_regex: test_encrypt_publish_vault.json

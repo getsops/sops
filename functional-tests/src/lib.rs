@@ -104,6 +104,34 @@ mod tests {
         //TODO: Check that file exists in S3 Bucket
     }
 
+    #[test]
+    fn publish_json_file_vault() {
+        let file_path = prepare_temp_file("test_encrypt_publish_vault.json",
+                                          b"{
+    \"foo\": 2,
+    \"bar\": \"baz\"
+}");
+        assert!(Command::new(SOPS_BINARY_PATH)
+            .arg("-e")
+            .arg("-i")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops")
+            .status
+            .success(),
+            "SOPS failed to encrypt a file");
+        assert!(Command::new(SOPS_BINARY_PATH)
+            .arg("publish")
+            .arg("--yes")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops")
+            .status
+            .success(),
+            "sops failed to publish a file to Vault");
+
+        //TODO: Check that file exists in Vault
+    }
 
     #[test]
     #[ignore]

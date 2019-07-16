@@ -1,0 +1,21 @@
+{{#if (has-feature "Control Groups")}}
+  <PageHeader as |p|>
+    <p.levelLeft>
+      <h1 class="title is-3">
+        Control Groups
+      </h1>
+    </p.levelLeft>
+  </PageHeader>
+  {{#if model.canConfigure}}
+    <Toolbar>
+      <ToolbarActions>
+        <ToolbarLink @params={{array 'vault.cluster.access.control-groups-configure'}}>
+          Configure
+        </ToolbarLink>
+      </ToolbarActions>
+    </Toolbar>
+  {{/if}}
+  <ControlGroup @model={{model}} />
+{{else}}
+  <UpgradePage @title="Control Groups" @minimumEdition="Vault Enterprise Premium" />
+{{/if}}

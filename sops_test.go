@@ -577,3 +577,49 @@ func TestSetArrayNonLeaf(t *testing.T) {
 		},
 	}, set)
 }
+
+func TestEmitAsMap(t *testing.T) {
+	expected := map[string]interface{}{
+		"foobar": "barfoo",
+		"number": 42,
+		"foo": map[string]interface{}{
+			"bar": map[string]interface{}{
+				"baz": "foobar",
+			},
+		},
+	}
+	branches := TreeBranches{
+		TreeBranch{
+			TreeItem{
+				Key:   "foobar",
+				Value: "barfoo",
+			},
+			TreeItem{
+				Key:   "number",
+				Value: 42,
+			},
+		},
+		TreeBranch{
+			TreeItem{
+				Key: "foo",
+				Value: TreeBranch{
+					TreeItem{
+						Key: "bar",
+						Value: TreeBranch{
+							TreeItem{
+								Key:   "baz",
+								Value: "foobar",
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	data, err := EmitAsMap(branches)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, expected, data)
+	}
+}

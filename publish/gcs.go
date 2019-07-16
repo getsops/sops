@@ -14,7 +14,7 @@ type GCSDestination struct {
 }
 
 // NewGCSDestination is the constructor for a Google Cloud Storage destination
-func NewGCSDestination(gcsBucket string, gcsPrefix string) *GCSDestination {
+func NewGCSDestination(gcsBucket, gcsPrefix string) *GCSDestination {
 	return &GCSDestination{gcsBucket, gcsPrefix}
 }
 
@@ -37,4 +37,9 @@ func (gcsd *GCSDestination) Upload(fileContents []byte, fileName string) error {
 		return err
 	}
 	return nil
+}
+
+// Returns NotImplementedError
+func (gcsd *GCSDestination) UploadUnencrypted(data map[string]interface{}, fileName string) error {
+	return &NotImplementedError{"GCS does not support uploading the unencrypted file contents."}
 }
