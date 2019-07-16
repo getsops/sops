@@ -19,10 +19,13 @@ type BinaryStore struct {
 	store Store
 }
 
+// LoadEncryptedFile loads an encrypted json file onto a sops.Tree object
 func (store BinaryStore) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	return store.store.LoadEncryptedFile(in)
 }
 
+// LoadPlainFile loads a plaintext json file onto a sops.Tree encapsulated
+// within a sops.TreeBranches object
 func (store BinaryStore) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	return sops.TreeBranches{
 		sops.TreeBranch{
@@ -34,10 +37,12 @@ func (store BinaryStore) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	}, nil
 }
 
+// EmitEncryptedFile produces an encrypted json file's bytes from its corresponding sops.Tree object
 func (store BinaryStore) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	return store.store.EmitEncryptedFile(in)
 }
 
+// EmitPlainFile produces plaintext json file's bytes from its corresponding sops.TreeBranches object
 func (store BinaryStore) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 	// JSON stores a single object per file
 	for _, item := range in[0] {
@@ -48,10 +53,13 @@ func (store BinaryStore) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 	return nil, fmt.Errorf("No binary data found in tree")
 }
 
+// EmitValue extracts a value from a generic interface{} object representing a structured set
+// of binary files
 func (store BinaryStore) EmitValue(v interface{}) ([]byte, error) {
 	return nil, fmt.Errorf("Binary files are not structured and extracting a single value is not possible")
 }
 
+// EmitExample returns the example's plaintext json file bytes
 func (store BinaryStore) EmitExample() []byte {
 	return []byte("Welcome to SOPS! Edit this file as you please!")
 }
@@ -207,6 +215,7 @@ func (store Store) reindentJSON(in []byte) ([]byte, error) {
 	return out.Bytes(), err
 }
 
+// LoadEncryptedFile loads an encrypted secrets file onto a sops.Tree object
 func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	// Because we don't know what fields the input file will have, we have to
 	// load the file in two steps.
@@ -252,6 +261,7 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	}, nil
 }
 
+// LoadPlainFile loads plaintext json file bytes onto a sops.TreeBranches object
 func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	branch, err := store.treeBranchFromJSON(in)
 	if err != nil {
@@ -262,6 +272,8 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	}, nil
 }
 
+// EmitEncryptedFile returns the encrypted bytes of the json file corresponding to a
+// sops.Tree runtime object
 func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	tree := append(in.Branches[0], sops.TreeItem{Key: "sops", Value: stores.MetadataFromInternal(in.Metadata)})
 	out, err := store.jsonFromTreeBranch(tree)
@@ -271,6 +283,8 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	return out, nil
 }
 
+// EmitPlainFile returns the plaintext bytes of the json file corresponding to a
+// sops.TreeBranches runtime object
 func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 	out, err := store.jsonFromTreeBranch(in[0])
 	if err != nil {
@@ -279,6 +293,8 @@ func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 	return out, nil
 }
 
+// EmitValue returns bytes corresponding to a single encoded value
+// in a generic interface{} object
 func (store *Store) EmitValue(v interface{}) ([]byte, error) {
 	s, err := store.encodeValue(v)
 	if err != nil {
@@ -287,6 +303,7 @@ func (store *Store) EmitValue(v interface{}) ([]byte, error) {
 	return store.reindentJSON(s)
 }
 
+// EmitExample returns the bytes corresponding to an example complex tree
 func (store *Store) EmitExample() []byte {
 	bytes, err := store.EmitPlainFile(stores.ExampleComplexTree.Branches)
 	if err != nil {

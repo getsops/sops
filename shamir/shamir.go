@@ -73,8 +73,8 @@ func (p *polynomial) evaluate(x uint8) uint8 {
 // An implementation of Lagrange interpolation
 // <https://en.wikipedia.org/wiki/Lagrange_polynomial>
 // For this particular implementation, x is always 0
-func interpolatePolynomial(x_samples, y_samples []uint8, x uint8) uint8 {
-	limit := len(x_samples)
+func interpolatePolynomial(xSamples, ySamples []uint8, x uint8) uint8 {
+	limit := len(xSamples)
 	var result, basis uint8
 	for i := 0; i < limit; i++ {
 		basis = 1
@@ -82,12 +82,12 @@ func interpolatePolynomial(x_samples, y_samples []uint8, x uint8) uint8 {
 			if i == j {
 				continue
 			}
-			num := add(x, x_samples[j])
-			denom := add(x_samples[i], x_samples[j])
+			num := add(x, xSamples[j])
+			denom := add(xSamples[i], xSamples[j])
 			term := div(num, denom)
 			basis = mult(basis, term)
 		}
-		group := mult(y_samples[i], basis)
+		group := mult(ySamples[i], basis)
 		result = add(result, group)
 	}
 	return result
@@ -103,9 +103,9 @@ func div(a, b uint8) uint8 {
 	}
 
 	var goodVal, zero uint8
-	log_a := logTable[a]
-	log_b := logTable[b]
-	diff := (int(log_a) - int(log_b)) % 255
+	logA := logTable[a]
+	logB := logTable[b]
+	diff := (int(logA) - int(logB)) % 255
 	if diff < 0 {
 		diff += 255
 	}
@@ -258,8 +258,8 @@ func Combine(parts [][]byte) ([]byte, error) {
 	secret := make([]byte, firstPartLen-1)
 
 	// Buffer to store the samples
-	x_samples := make([]uint8, len(parts))
-	y_samples := make([]uint8, len(parts))
+	xSamples := make([]uint8, len(parts))
+	ySamples := make([]uint8, len(parts))
 
 	// Set the x value for each sample and ensure no x_sample values are the same,
 	// otherwise div() can be unhappy
@@ -272,19 +272,19 @@ func Combine(parts [][]byte) ([]byte, error) {
 			return nil, fmt.Errorf("duplicate part detected")
 		}
 		checkMap[samp] = true
-		x_samples[i] = samp
+		xSamples[i] = samp
 	}
 
 	// Reconstruct each byte
 	for idx := range secret {
 		// Set the y value for each sample
 		for i, part := range parts {
-			y_samples[i] = part[idx]
+			ySamples[i] = part[idx]
 		}
 
 		// Use Lagrange interpolation to retrieve the free term
 		// of the original polynomial
-		val := interpolatePolynomial(x_samples, y_samples, 0)
+		val := interpolatePolynomial(xSamples, ySamples, 0)
 
 		// Evaluate the 0th value to get the intercept
 		secret[idx] = val

@@ -106,7 +106,7 @@ func tokenize(path string) []token {
 			state = StateList
 			i += len(listSeparator)
 		} else {
-			i += 1
+			i++
 		}
 	}
 	finishPrevToken()
