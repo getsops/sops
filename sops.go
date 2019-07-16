@@ -100,6 +100,7 @@ type TreeItem struct {
 // TreeBranch is a branch inside sops's tree. It is a slice of TreeItems and is therefore ordered
 type TreeBranch []TreeItem
 
+// TreeBranches is a collection of TreeBranch
 // Trees usually have more than one branch
 type TreeBranches []TreeBranch
 
@@ -110,10 +111,9 @@ func valueFromPathAndLeaf(path []interface{}, leaf interface{}) interface{} {
 			return []interface{}{
 				leaf,
 			}
-		} else {
-			return []interface{}{
-				valueFromPathAndLeaf(path[1:], leaf),
-			}
+		}
+		return []interface{}{
+			valueFromPathAndLeaf(path[1:], leaf),
 		}
 	default:
 		if len(path) == 1 {
@@ -123,13 +123,12 @@ func valueFromPathAndLeaf(path []interface{}, leaf interface{}) interface{} {
 					Value: leaf,
 				},
 			}
-		} else {
-			return TreeBranch{
-				TreeItem{
-					Key:   component,
-					Value: valueFromPathAndLeaf(path[1:], leaf),
-				},
-			}
+		}
+		return TreeBranch{
+			TreeItem{
+				Key:   component,
+				Value: valueFromPathAndLeaf(path[1:], leaf),
+			},
 		}
 	}
 }
@@ -150,31 +149,28 @@ func set(branch interface{}, path []interface{}, value interface{}) interface{} 
 		// Not found, need to add the next path entry to the branch
 		if len(path) == 1 {
 			return append(branch, TreeItem{Key: path[0], Value: value})
-		} else {
-			return valueFromPathAndLeaf(path, value)
 		}
+		return valueFromPathAndLeaf(path, value)
 	case []interface{}:
 		position := path[0].(int)
 		if len(path) == 1 {
 			if position >= len(branch) {
 				return append(branch, value)
-			} else {
-				branch[position] = value
 			}
-			return branch
+			branch[position] = value
 		} else {
 			if position >= len(branch) {
 				branch = append(branch, valueFromPathAndLeaf(path[1:], value))
-			} else {
-				branch[position] = set(branch[position], path[1:], value)
 			}
-			return branch
+			branch[position] = set(branch[position], path[1:], value)
 		}
+		return branch
 	default:
 		return valueFromPathAndLeaf(path, value)
 	}
 }
 
+// Set sets a value on a given tree for the specified path
 func (branch TreeBranch) Set(path []interface{}, value interface{}) TreeBranch {
 	return set(branch, path, value).(TreeBranch)
 }
@@ -486,6 +482,8 @@ type PlainFileEmitter interface {
 	EmitPlainFile(TreeBranches) ([]byte, error)
 }
 
+// ValueEmitter is the interface for emitting a value. It provides a way to emit
+// values from the internal SOPS representation so that they can be shown
 type ValueEmitter interface {
 	EmitValue(interface{}) ([]byte, error)
 }
@@ -634,7 +632,7 @@ func decryptKeyGroup(group KeyGroup, svcs []keyservice.KeyServiceClient) ([]byte
 // of the key services, returning as soon as one key service succeeds.
 func decryptKey(key keys.MasterKey, svcs []keyservice.KeyServiceClient) ([]byte, error) {
 	svcKey := keyservice.KeyFromMasterKey(key)
-	var part []byte = nil
+	var part []byte
 	decryptErr := decryptKeyError{
 		keyName: key.ToString(),
 	}

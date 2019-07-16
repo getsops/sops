@@ -17,12 +17,14 @@ type TextFormatter struct {
 	logrus.TextFormatter
 }
 
+// Format formats a log entry onto bytes
 func (f *TextFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 	bytes, err := f.TextFormatter.Format(entry)
 	name := color.New(color.Bold).Sprintf("[%s]", f.LoggerName)
 	return []byte(fmt.Sprintf("%s\t %s", name, bytes)), err
 }
 
+// NewLogger is the constructor for a new Logger object with the given name
 func NewLogger(name string) *logrus.Logger {
 	log := logrus.New()
 	log.SetLevel(logrus.WarnLevel)
@@ -33,10 +35,12 @@ func NewLogger(name string) *logrus.Logger {
 	return log
 }
 
+// SetLevel sets the given level for all current Loggers
 func SetLevel(level logrus.Level) {
 	for k := range Loggers {
 		Loggers[k].SetLevel(level)
 	}
 }
 
+// Loggers is the runtime map of logger name to logger object
 var Loggers map[string]*logrus.Logger

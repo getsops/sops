@@ -136,6 +136,7 @@ func (store Store) treeItemFromSection(section *ini.Section) (sops.TreeItem, err
 	return sectionItem, nil
 }
 
+// LoadEncryptedFile loads encrypted INI file's bytes onto a sops.Tree runtime object
 func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	iniFileOuter, err := ini.Load(in)
 	if err != nil {
@@ -192,6 +193,7 @@ func (store *Store) iniSectionToMetadata(sopsSection *ini.Section) (stores.Metad
 	return md, err
 }
 
+// LoadPlainFile loads a plaintext INI file's bytes onto a sops.TreeBranches runtime object
 func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	branches, err := store.treeBranchesFromIni(in)
 	if err != nil {
@@ -200,6 +202,8 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	return branches, nil
 }
 
+// EmitEncryptedFile returns encrypted INI file bytes corresponding to a sops.Tree
+// runtime object
 func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 
 	metadata := stores.MetadataFromInternal(in.Metadata)
@@ -298,6 +302,7 @@ func encodeMetadataItem(prefix string, kind reflect.Kind, field reflect.Value) (
 	return result, nil
 }
 
+// EmitPlainFile returns the plaintext INI file bytes corresponding to a sops.TreeBranches object
 func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 	out, err := store.iniFromTreeBranches(in)
 	if err != nil {
@@ -315,10 +320,12 @@ func (store Store) encodeValue(v interface{}) ([]byte, error) {
 	}
 }
 
+// EmitValue returns a single value encoded in a generic interface{} as bytes
 func (store *Store) EmitValue(v interface{}) ([]byte, error) {
 	return store.encodeValue(v)
 }
 
+// EmitExample returns the plaintext INI file bytes corresponding to the SimpleTree example
 func (store *Store) EmitExample() []byte {
 	bytes, err := store.EmitPlainFile(stores.ExampleSimpleTree.Branches)
 	if err != nil {

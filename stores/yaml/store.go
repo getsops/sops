@@ -101,6 +101,8 @@ func (store Store) treeBranchToYamlMap(in sops.TreeBranch) yaml.MapSlice {
 	return branch
 }
 
+// LoadEncryptedFile loads the contents of an encrypted yaml file onto a
+// sops.Tree runtime object
 func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	var data []yaml.MapSlice
 	if err := (yaml.CommentUnmarshaler{}).UnmarshalDocuments(in, &data); err != nil {
@@ -136,6 +138,8 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	}, nil
 }
 
+// LoadPlainFile loads the contents of a plaintext yaml file onto a
+// sops.Tree runtime obejct
 func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	var data []yaml.MapSlice
 	if err := (yaml.CommentUnmarshaler{}).UnmarshalDocuments(in, &data); err != nil {
@@ -149,6 +153,8 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	return branches, nil
 }
 
+// EmitEncryptedFile returns the encrypted bytes of the yaml file corresponding to a
+// sops.Tree runtime object
 func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	out := []byte{}
 	for i, branch := range in.Branches {
@@ -166,6 +172,8 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	return out, nil
 }
 
+// EmitPlainFile returns the plaintext bytes of the yaml file corresponding to a
+// sops.TreeBranches runtime object
 func (store *Store) EmitPlainFile(branches sops.TreeBranches) ([]byte, error) {
 	var out []byte
 	for i, branch := range branches {
@@ -182,11 +190,14 @@ func (store *Store) EmitPlainFile(branches sops.TreeBranches) ([]byte, error) {
 	return out, nil
 }
 
+// EmitValue returns bytes corresponding to a single encoded value
+// in a generic interface{} object
 func (store *Store) EmitValue(v interface{}) ([]byte, error) {
 	v = store.treeValueToYamlValue(v)
 	return (&yaml.YAMLMarshaler{Indent: 4}).Marshal(v)
 }
 
+// EmitExample returns the bytes corresponding to an example complex tree
 func (store *Store) EmitExample() []byte {
 	bytes, err := store.EmitPlainFile(stores.ExampleComplexTree.Branches)
 	if err != nil {

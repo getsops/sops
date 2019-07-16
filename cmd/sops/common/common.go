@@ -24,10 +24,13 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
+// ExampleFileEmitter emits example files. This is used by the `sops` binary
+// whenever a new file is created, in order to present the user with a non-empty file
 type ExampleFileEmitter interface {
 	EmitExample() []byte
 }
 
+// Store handles marshaling and unmarshaling from SOPS files
 type Store interface {
 	sops.Store
 	ExampleFileEmitter
@@ -107,6 +110,8 @@ func LoadEncryptedFile(loader sops.EncryptedFileLoader, inputPath string) (*sops
 	return &tree, err
 }
 
+// NewExitError returns a cli.ExitError given an error (wrapped in a generic interface{})
+// and an exit code to represent the failure
 func NewExitError(i interface{}, exitCode int) *cli.ExitError {
 	if userErr, ok := i.(sops.UserError); ok {
 		return NewExitError(userErr.UserError(), exitCode)
@@ -114,22 +119,28 @@ func NewExitError(i interface{}, exitCode int) *cli.ExitError {
 	return cli.NewExitError(i, exitCode)
 }
 
+// IsYAMLFile returns true if a given file path corresponds to a YAML file
 func IsYAMLFile(path string) bool {
 	return strings.HasSuffix(path, ".yaml") || strings.HasSuffix(path, ".yml")
 }
 
+// IsJSONFile returns true if a given file path corresponds to a JSON file
 func IsJSONFile(path string) bool {
 	return strings.HasSuffix(path, ".json")
 }
 
+// IsEnvFile returns true if a given file path corresponds to a .env file
 func IsEnvFile(path string) bool {
 	return strings.HasSuffix(path, ".env")
 }
 
+// IsIniFile returns true if a given file path corresponds to a INI file
 func IsIniFile(path string) bool {
 	return strings.HasSuffix(path, ".ini")
 }
 
+// DefaultStoreForPath returns the correct format-specific implementation
+// of the Store interface given the path to a file
 func DefaultStoreForPath(path string) Store {
 	if IsYAMLFile(path) {
 		return &yaml.Store{}
@@ -143,8 +154,12 @@ func DefaultStoreForPath(path string) Store {
 	return &json.BinaryStore{}
 }
 
+// KMS_ENC_CTX_BUG_FIXED_VERSION represents the SOPS version in which the
+// encryption context bug was fixed
 const KMS_ENC_CTX_BUG_FIXED_VERSION = "3.3.0"
 
+// DetectKMSEncryptionContextBug returns true if the encryption context bug is detected
+// in a given runtime sops.Tree object
 func DetectKMSEncryptionContextBug(tree *sops.Tree) (bool, error) {
 	versionCheck, err := version.AIsNewerThanB(KMS_ENC_CTX_BUG_FIXED_VERSION, tree.Metadata.Version)
 	if err != nil {
@@ -161,6 +176,7 @@ func DetectKMSEncryptionContextBug(tree *sops.Tree) (bool, error) {
 	return false, nil
 }
 
+// GetKMSKeyWithEncryptionCtx returns the first KMS key affected by the encryption context bug as well as its location in the key groups.
 func GetKMSKeyWithEncryptionCtx(tree *sops.Tree) (keyGroupIndex int, keyIndex int, key *kms.MasterKey) {
 	for i, kg := range tree.Metadata.KeyGroups {
 		for n, k := range kg {
@@ -181,6 +197,7 @@ func GetKMSKeyWithEncryptionCtx(tree *sops.Tree) (keyGroupIndex int, keyIndex in
 	return 0, 0, nil
 }
 
+// GenericDecryptOpts represents decryption options and config
 type GenericDecryptOpts struct {
 	Cipher      sops.Cipher
 	InputStore  sops.Store
@@ -235,10 +252,9 @@ func FixAWSKMSEncryptionContextBug(opts GenericDecryptOpts, tree *sops.Tree) (*s
 			}
 		}
 		if response == "n" {
-			return nil, fmt.Errorf("Exiting. User responded no.")
-		} else {
-			persistFix = true
+			return nil, fmt.Errorf("Exiting. User responded no")
 		}
+		persistFix = true
 	}
 
 	// If there is another key, then we should be able to just decrypt
@@ -341,6 +357,7 @@ func RecoverDataKeyFromBuggyKMS(opts GenericDecryptOpts, tree *sops.Tree) []byte
 	return nil
 }
 
+// Diff represents a key diff
 type Diff struct {
 	Common  []keys.MasterKey
 	Added   []keys.MasterKey
@@ -354,6 +371,7 @@ func max(a, b int) int {
 	return b
 }
 
+// DiffKeyGroups returns the list of diffs found in two sops.keyGroup slices
 func DiffKeyGroups(ours, theirs []sops.KeyGroup) []Diff {
 	var diffs []Diff
 	for i := 0; i < max(len(ours), len(theirs)); i++ {
@@ -388,6 +406,7 @@ func DiffKeyGroups(ours, theirs []sops.KeyGroup) []Diff {
 	return diffs
 }
 
+// PrettyPrintDiffs prints a slice of Diff objects to stdout
 func PrettyPrintDiffs(diffs []Diff) {
 	for i, diff := range diffs {
 		color.New(color.Underline).Printf("Group %d\n", i+1)

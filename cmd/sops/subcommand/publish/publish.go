@@ -24,6 +24,7 @@ func init() {
 	log = logging.NewLogger("PUBLISH")
 }
 
+// Opts represents publish options and config
 type Opts struct {
 	Interactive bool
 	Cipher      sops.Cipher
@@ -33,6 +34,7 @@ type Opts struct {
 	InputStore  sops.Store
 }
 
+// Run publish operation
 func Run(opts Opts) error {
 	var fileContents []byte
 	path, err := filepath.Abs(opts.InputPath)
