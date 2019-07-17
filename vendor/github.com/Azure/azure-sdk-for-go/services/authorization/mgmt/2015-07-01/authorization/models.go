@@ -19,6 +19,7 @@ package authorization
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/to"
 	"github.com/Azure/go-autorest/tracing"
@@ -36,8 +37,77 @@ type ClassicAdministrator struct {
 	Name *string `json:"name,omitempty"`
 	// Type - The type of the administrator.
 	Type *string `json:"type,omitempty"`
-	// Properties - Properties for the classic administrator.
-	Properties *ClassicAdministratorProperties `json:"properties,omitempty"`
+	// ClassicAdministratorProperties - Properties for the classic administrator.
+	*ClassicAdministratorProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ClassicAdministrator.
+func (ca ClassicAdministrator) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ca.ID != nil {
+		objectMap["id"] = ca.ID
+	}
+	if ca.Name != nil {
+		objectMap["name"] = ca.Name
+	}
+	if ca.Type != nil {
+		objectMap["type"] = ca.Type
+	}
+	if ca.ClassicAdministratorProperties != nil {
+		objectMap["properties"] = ca.ClassicAdministratorProperties
+	}
+	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for ClassicAdministrator struct.
+func (ca *ClassicAdministrator) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				ca.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				ca.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ca.Type = &typeVar
+			}
+		case "properties":
+			if v != nil {
+				var classicAdministratorProperties ClassicAdministratorProperties
+				err = json.Unmarshal(*v, &classicAdministratorProperties)
+				if err != nil {
+					return err
+				}
+				ca.ClassicAdministratorProperties = &classicAdministratorProperties
+			}
+		}
+	}
+
+	return nil
 }
 
 // ClassicAdministratorListResult classicAdministrator list result information.
@@ -735,8 +805,68 @@ type RoleDefinition struct {
 	Name *string `json:"name,omitempty"`
 	// Type - READ-ONLY; The role definition type.
 	Type *string `json:"type,omitempty"`
-	// Properties - Role definition properties.
-	Properties *RoleDefinitionProperties `json:"properties,omitempty"`
+	// RoleDefinitionProperties - Role definition properties.
+	*RoleDefinitionProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for RoleDefinition.
+func (rd RoleDefinition) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if rd.RoleDefinitionProperties != nil {
+		objectMap["properties"] = rd.RoleDefinitionProperties
+	}
+	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for RoleDefinition struct.
+func (rd *RoleDefinition) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				rd.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				rd.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				rd.Type = &typeVar
+			}
+		case "properties":
+			if v != nil {
+				var roleDefinitionProperties RoleDefinitionProperties
+				err = json.Unmarshal(*v, &roleDefinitionProperties)
+				if err != nil {
+					return err
+				}
+				rd.RoleDefinitionProperties = &roleDefinitionProperties
+			}
+		}
+	}
+
+	return nil
 }
 
 // RoleDefinitionFilter role Definitions filter
@@ -897,8 +1027,8 @@ type RoleDefinitionProperties struct {
 	RoleName *string `json:"roleName,omitempty"`
 	// Description - The role definition description.
 	Description *string `json:"description,omitempty"`
-	// Type - The role type.
-	Type *string `json:"type,omitempty"`
+	// RoleType - The role type.
+	RoleType *string `json:"type,omitempty"`
 	// Permissions - Role definition permissions.
 	Permissions *[]Permission `json:"permissions,omitempty"`
 	// AssignableScopes - Role definition assignable scopes.

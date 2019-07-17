@@ -27,6 +27,7 @@
   "description": "Reads and writes Google Sheets.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/sheets/",
+  "fullyEncodeReservedExpansion": true,
   "icons": {
     "x16": "http://www.google.com/images/icons/product/search-16.gif",
     "x32": "http://www.google.com/images/icons/product/search-32.gif"
@@ -808,7 +809,7 @@
       }
     }
   },
-  "revision": "20190429",
+  "revision": "20190708",
   "rootUrl": "https://sheets.googleapis.com/",
   "schemas": {
     "AddBandingRequest": {

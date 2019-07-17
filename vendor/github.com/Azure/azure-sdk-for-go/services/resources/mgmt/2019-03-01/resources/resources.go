@@ -100,7 +100,7 @@ func (client Client) CheckExistencePreparer(ctx context.Context, resourceGroupNa
 		"subscriptionId":            autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-05-01"
+	const APIVersion = "2019-03-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -175,7 +175,7 @@ func (client Client) CheckExistenceByIDPreparer(ctx context.Context, resourceID 
 		"resourceId": resourceID,
 	}
 
-	const APIVersion = "2018-05-01"
+	const APIVersion = "2019-03-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -263,7 +263,7 @@ func (client Client) CreateOrUpdatePreparer(ctx context.Context, resourceGroupNa
 		"subscriptionId":            autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-05-01"
+	const APIVersion = "2019-03-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -349,7 +349,7 @@ func (client Client) CreateOrUpdateByIDPreparer(ctx context.Context, resourceID 
 		"resourceId": resourceID,
 	}
 
-	const APIVersion = "2018-05-01"
+	const APIVersion = "2019-03-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -443,7 +443,7 @@ func (client Client) DeletePreparer(ctx context.Context, resourceGroupName strin
 		"subscriptionId":            autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-05-01"
+	const APIVersion = "2019-03-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -518,7 +518,7 @@ func (client Client) DeleteByIDPreparer(ctx context.Context, resourceID string) 
 		"resourceId": resourceID,
 	}
 
-	const APIVersion = "2018-05-01"
+	const APIVersion = "2019-03-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -615,7 +615,7 @@ func (client Client) GetPreparer(ctx context.Context, resourceGroupName string, 
 		"subscriptionId":            autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-05-01"
+	const APIVersion = "2019-03-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -691,7 +691,7 @@ func (client Client) GetByIDPreparer(ctx context.Context, resourceID string) (*h
 		"resourceId": resourceID,
 	}
 
-	const APIVersion = "2018-05-01"
+	const APIVersion = "2019-03-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -779,7 +779,7 @@ func (client Client) ListPreparer(ctx context.Context, filter string, expand str
 		"subscriptionId": autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-05-01"
+	const APIVersion = "2019-03-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -923,7 +923,7 @@ func (client Client) ListByResourceGroupPreparer(ctx context.Context, resourceGr
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-05-01"
+	const APIVersion = "2019-03-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -1049,7 +1049,7 @@ func (client Client) MoveResourcesPreparer(ctx context.Context, sourceResourceGr
 		"subscriptionId":          autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-05-01"
+	const APIVersion = "2019-03-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -1142,7 +1142,7 @@ func (client Client) UpdatePreparer(ctx context.Context, resourceGroupName strin
 		"subscriptionId":            autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-05-01"
+	const APIVersion = "2019-03-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -1221,7 +1221,7 @@ func (client Client) UpdateByIDPreparer(ctx context.Context, resourceID string, 
 		"resourceId": resourceID,
 	}
 
-	const APIVersion = "2018-05-01"
+	const APIVersion = "2019-03-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -1311,7 +1311,7 @@ func (client Client) ValidateMoveResourcesPreparer(ctx context.Context, sourceRe
 		"subscriptionId":          autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2018-05-01"
+	const APIVersion = "2019-03-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}

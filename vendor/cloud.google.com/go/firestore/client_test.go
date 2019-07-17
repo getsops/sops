@@ -107,8 +107,9 @@ func TestClientCollDocErrors(t *testing.T) {
 }
 
 func TestGetAll(t *testing.T) {
-	c, srv := newMock(t)
-	defer c.Close()
+	c, srv, cleanup := newMock(t)
+	defer cleanup()
+
 	const dbPath = "projects/projectID/databases/(default)"
 	req := &pb.BatchGetDocumentsRequest{
 		Database: dbPath,
@@ -180,13 +181,97 @@ func testGetAll(t *testing.T, c *Client, srv *mockServer, dbPath string, getAll 
 	}
 }
 
+func TestGetAllWithEqualRefs(t *testing.T) {
+	c, srv, cleanup := newMock(t)
+	defer cleanup()
+
+	const dbPath = "projects/projectID/databases/(default)"
+	req := &pb.BatchGetDocumentsRequest{
+		Database: dbPath,
+		Documents: []string{
+			dbPath + "/documents/C/a",
+			dbPath + "/documents/C/a",
+			dbPath + "/documents/C/c",
+			dbPath + "/documents/C/a",
+			dbPath + "/documents/C/b",
+			dbPath + "/documents/C/c",
+			dbPath + "/documents/C/b",
+		},
+	}
+	testGetAllWithEqualRefs(t, c, srv, dbPath, func(drs []*DocumentRef) ([]*DocumentSnapshot, error) {
+		return c.GetAll(context.Background(), drs)
+	}, req)
+}
+
+func testGetAllWithEqualRefs(t *testing.T, c *Client, srv *mockServer, dbPath string, getAll func([]*DocumentRef) ([]*DocumentSnapshot, error), req *pb.BatchGetDocumentsRequest) {
+	wantPBDocs := []*pb.Document{
+		{
+			Name:       dbPath + "/documents/C/a",
+			CreateTime: aTimestamp,
+			UpdateTime: aTimestamp,
+			Fields:     map[string]*pb.Value{"f": intval(2)},
+		},
+		{
+			Name:       dbPath + "/documents/C/c",
+			CreateTime: aTimestamp,
+			UpdateTime: aTimestamp,
+			Fields:     map[string]*pb.Value{"f": intval(1)},
+		},
+		nil,
+	}
+	srv.addRPC(req,
+		[]interface{}{
+			// deliberately put these out of order
+			&pb.BatchGetDocumentsResponse{
+				Result:   &pb.BatchGetDocumentsResponse_Found{wantPBDocs[1]},
+				ReadTime: aTimestamp3,
+			},
+			&pb.BatchGetDocumentsResponse{
+				Result:   &pb.BatchGetDocumentsResponse_Found{wantPBDocs[0]},
+				ReadTime: aTimestamp,
+			},
+			&pb.BatchGetDocumentsResponse{
+				Result:   &pb.BatchGetDocumentsResponse_Missing{dbPath + "/documents/C/b"},
+				ReadTime: aTimestamp2,
+			},
+		},
+	)
+	coll := c.Collection("C")
+	var docRefs []*DocumentRef
+	for _, name := range []string{"a", "a", "c", "a", "b", "c", "b"} {
+		docRefs = append(docRefs, coll.Doc(name))
+	}
+	// GetAll should return the same number of document snapshots as the
+	// number of document references in the input range, even when that means
+	// that the same document snapshot is referenced multiple times in the
+	// returned collection.
+	docs, err := getAll(docRefs)
+	if err != nil {
+		t.Fatal(err)
+	}
+	wantDocsIndices := []int{0, 0, 1, 0, 2, 1, 2}
+	wantReadTimes := []*tspb.Timestamp{aTimestamp, aTimestamp, aTimestamp3, aTimestamp, aTimestamp2, aTimestamp3, aTimestamp2}
+	if got, want := len(docs), len(wantDocsIndices); got != want {
+		t.Errorf("got %d docs, wanted %d", got, want)
+	}
+	for i, got := range docs {
+		want, err := newDocumentSnapshot(docRefs[i], wantPBDocs[wantDocsIndices[i]], c, wantReadTimes[i])
+		if err != nil {
+			t.Fatal(err)
+		}
+		if diff := testDiff(got, want); diff != "" {
+			t.Errorf("#%d: got=--, want==++\n%s", i, diff)
+		}
+	}
+}
+
 func TestGetAllErrors(t *testing.T) {
 	ctx := context.Background()
-	const (
-		dbPath  = "projects/projectID/databases/(default)"
-		docPath = dbPath + "/documents/C/a"
-	)
-	c, srv := newMock(t)
+	c, srv, cleanup := newMock(t)
+	defer cleanup()
+
+	const dbPath = "projects/projectID/databases/(default)"
+	const docPath = dbPath + "/documents/C/a"
 	if _, err := c.GetAll(ctx, []*DocumentRef{nil}); err != errNilDocRef {
 		t.Errorf("got %v, want errNilDocRef", err)
 	}

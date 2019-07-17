@@ -124,9 +124,11 @@ func TestPacketConnReadWriteUnicastICMP(t *testing.T) {
 		if toggle {
 			psh = nil
 			if err := p.SetChecksum(true, 2); err != nil {
-				// AIX and Solaris never allow to modify
-				// ICMP properties.
-				if runtime.GOOS != "aix" && runtime.GOOS != "solaris" {
+				// AIX, Illumos and Solaris never allow
+				// modification of ICMP properties.
+				switch runtime.GOOS {
+				case "aix", "illumos", "solaris":
+				default:
 					t.Fatal(err)
 				}
 			}

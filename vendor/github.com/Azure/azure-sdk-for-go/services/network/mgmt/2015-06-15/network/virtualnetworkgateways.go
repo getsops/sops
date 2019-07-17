@@ -202,13 +202,13 @@ func (client VirtualNetworkGatewaysClient) DeleteResponder(resp *http.Response) 
 // resourceGroupName - the name of the resource group.
 // virtualNetworkGatewayName - the name of the virtual network gateway.
 // parameters - parameters supplied to the generate virtual network gateway VPN client package operation.
-func (client VirtualNetworkGatewaysClient) Generatevpnclientpackage(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string, parameters VpnClientParameters) (result String, err error) {
+func (client VirtualNetworkGatewaysClient) Generatevpnclientpackage(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string, parameters VpnClientParameters) (result VirtualNetworkGatewaysGeneratevpnclientpackageFuture, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/VirtualNetworkGatewaysClient.Generatevpnclientpackage")
 		defer func() {
 			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
 			}
 			tracing.EndSpan(ctx, sc, err)
 		}()
@@ -219,16 +219,10 @@ func (client VirtualNetworkGatewaysClient) Generatevpnclientpackage(ctx context.
 		return
 	}
 
-	resp, err := client.GeneratevpnclientpackageSender(req)
+	result, err = client.GeneratevpnclientpackageSender(req)
 	if err != nil {
-		result.Response = autorest.Response{Response: resp}
-		err = autorest.NewErrorWithError(err, "network.VirtualNetworkGatewaysClient", "Generatevpnclientpackage", resp, "Failure sending request")
+		err = autorest.NewErrorWithError(err, "network.VirtualNetworkGatewaysClient", "Generatevpnclientpackage", result.Response(), "Failure sending request")
 		return
-	}
-
-	result, err = client.GeneratevpnclientpackageResponder(resp)
-	if err != nil {
-		err = autorest.NewErrorWithError(err, "network.VirtualNetworkGatewaysClient", "Generatevpnclientpackage", resp, "Failure responding to request")
 	}
 
 	return
@@ -259,9 +253,15 @@ func (client VirtualNetworkGatewaysClient) GeneratevpnclientpackagePreparer(ctx 
 
 // GeneratevpnclientpackageSender sends the Generatevpnclientpackage request. The method will close the
 // http.Response Body if it receives an error.
-func (client VirtualNetworkGatewaysClient) GeneratevpnclientpackageSender(req *http.Request) (*http.Response, error) {
-	return autorest.SendWithSender(client, req,
+func (client VirtualNetworkGatewaysClient) GeneratevpnclientpackageSender(req *http.Request) (future VirtualNetworkGatewaysGeneratevpnclientpackageFuture, err error) {
+	var resp *http.Response
+	resp, err = autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
+	if err != nil {
+		return
+	}
+	future.Future, err = azure.NewFutureFromResponse(resp)
+	return
 }
 
 // GeneratevpnclientpackageResponder handles the response to the Generatevpnclientpackage request. The method always
@@ -271,7 +271,7 @@ func (client VirtualNetworkGatewaysClient) GeneratevpnclientpackageResponder(res
 		resp,
 		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
-		autorest.ByUnmarshallingJSON(&result.Value),
+		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
 	result.Response = autorest.Response{Response: resp}
 	return

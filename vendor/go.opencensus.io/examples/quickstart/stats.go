@@ -56,7 +56,7 @@ var (
 
 // TagKeys for the stats quickstart.
 var (
-	keyMethod, _ = tag.NewKey("method")
+	keyMethod = tag.MustNewKey("method")
 )
 
 // Views for the stats quickstart.

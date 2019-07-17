@@ -70,6 +70,12 @@ go_library(
 )
 
 protoc_gen_swagger(
-    name = "expamplepb_protoc_gen_swagger",
+    name = "examplepb_protoc_gen_swagger",
     proto = ":examplepb_proto",
+)
+
+protoc_gen_swagger(
+    name = "examplepb_protoc_gen_swagger_merged",
+    proto = ":examplepb_proto",
+    single_output = True,  # Outputs a single swagger.json file.
 )

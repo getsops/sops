@@ -6551,6 +6551,54 @@ const (
 	// ESPartitionInstanceTypeM410xlargeElasticsearch is a ESPartitionInstanceType enum value
 	ESPartitionInstanceTypeM410xlargeElasticsearch = "m4.10xlarge.elasticsearch"
 
+	// ESPartitionInstanceTypeM5LargeElasticsearch is a ESPartitionInstanceType enum value
+	ESPartitionInstanceTypeM5LargeElasticsearch = "m5.large.elasticsearch"
+
+	// ESPartitionInstanceTypeM5XlargeElasticsearch is a ESPartitionInstanceType enum value
+	ESPartitionInstanceTypeM5XlargeElasticsearch = "m5.xlarge.elasticsearch"
+
+	// ESPartitionInstanceTypeM52xlargeElasticsearch is a ESPartitionInstanceType enum value
+	ESPartitionInstanceTypeM52xlargeElasticsearch = "m5.2xlarge.elasticsearch"
+
+	// ESPartitionInstanceTypeM54xlargeElasticsearch is a ESPartitionInstanceType enum value
+	ESPartitionInstanceTypeM54xlargeElasticsearch = "m5.4xlarge.elasticsearch"
+
+	// ESPartitionInstanceTypeM512xlargeElasticsearch is a ESPartitionInstanceType enum value
+	ESPartitionInstanceTypeM512xlargeElasticsearch = "m5.12xlarge.elasticsearch"
+
+	// ESPartitionInstanceTypeR5LargeElasticsearch is a ESPartitionInstanceType enum value
+	ESPartitionInstanceTypeR5LargeElasticsearch = "r5.large.elasticsearch"
+
+	// ESPartitionInstanceTypeR5XlargeElasticsearch is a ESPartitionInstanceType enum value
+	ESPartitionInstanceTypeR5XlargeElasticsearch = "r5.xlarge.elasticsearch"
+
+	// ESPartitionInstanceTypeR52xlargeElasticsearch is a ESPartitionInstanceType enum value
+	ESPartitionInstanceTypeR52xlargeElasticsearch = "r5.2xlarge.elasticsearch"
+
+	// ESPartitionInstanceTypeR54xlargeElasticsearch is a ESPartitionInstanceType enum value
+	ESPartitionInstanceTypeR54xlargeElasticsearch = "r5.4xlarge.elasticsearch"
+
+	// ESPartitionInstanceTypeR512xlargeElasticsearch is a ESPartitionInstanceType enum value
+	ESPartitionInstanceTypeR512xlargeElasticsearch = "r5.12xlarge.elasticsearch"
+
+	// ESPartitionInstanceTypeC5LargeElasticsearch is a ESPartitionInstanceType enum value
+	ESPartitionInstanceTypeC5LargeElasticsearch = "c5.large.elasticsearch"
+
+	// ESPartitionInstanceTypeC5XlargeElasticsearch is a ESPartitionInstanceType enum value
+	ESPartitionInstanceTypeC5XlargeElasticsearch = "c5.xlarge.elasticsearch"
+
+	// ESPartitionInstanceTypeC52xlargeElasticsearch is a ESPartitionInstanceType enum value
+	ESPartitionInstanceTypeC52xlargeElasticsearch = "c5.2xlarge.elasticsearch"
+
+	// ESPartitionInstanceTypeC54xlargeElasticsearch is a ESPartitionInstanceType enum value
+	ESPartitionInstanceTypeC54xlargeElasticsearch = "c5.4xlarge.elasticsearch"
+
+	// ESPartitionInstanceTypeC59xlargeElasticsearch is a ESPartitionInstanceType enum value
+	ESPartitionInstanceTypeC59xlargeElasticsearch = "c5.9xlarge.elasticsearch"
+
+	// ESPartitionInstanceTypeC518xlargeElasticsearch is a ESPartitionInstanceType enum value
+	ESPartitionInstanceTypeC518xlargeElasticsearch = "c5.18xlarge.elasticsearch"
+
 	// ESPartitionInstanceTypeT2MicroElasticsearch is a ESPartitionInstanceType enum value
 	ESPartitionInstanceTypeT2MicroElasticsearch = "t2.micro.elasticsearch"
 

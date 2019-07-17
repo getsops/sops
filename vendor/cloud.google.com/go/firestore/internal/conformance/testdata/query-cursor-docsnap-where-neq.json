@@ -1,0 +1,75 @@
+{
+  "tests": [
+    {
+      "description": "query: cursor method with a document snapshot and an inequality where clause",
+      "comment": "A Where clause with an inequality results in an OrderBy clause\non that clause's path, if there are no other OrderBy clauses.",
+      "query": {
+        "collPath": "projects/projectID/databases/(default)/documents/C",
+        "clauses": [
+          {
+            "where": {
+              "path": {
+                "field": [
+                  "a"
+                ]
+              },
+              "op": "\u003c=",
+              "jsonValue": "3"
+            }
+          },
+          {
+            "endBefore": {
+              "docSnapshot": {
+                "path": "projects/projectID/databases/(default)/documents/C/D",
+                "jsonData": "{\"a\": 7, \"b\": 8}"
+              }
+            }
+          }
+        ],
+        "query": {
+          "from": [
+            {
+              "collectionId": "C"
+            }
+          ],
+          "where": {
+            "fieldFilter": {
+              "field": {
+                "fieldPath": "a"
+              },
+              "op": "LESS_THAN_OR_EQUAL",
+              "value": {
+                "integerValue": "3"
+              }
+            }
+          },
+          "orderBy": [
+            {
+              "field": {
+                "fieldPath": "a"
+              },
+              "direction": "ASCENDING"
+            },
+            {
+              "field": {
+                "fieldPath": "__name__"
+              },
+              "direction": "ASCENDING"
+            }
+          ],
+          "endAt": {
+            "values": [
+              {
+                "integerValue": "7"
+              },
+              {
+                "referenceValue": "projects/projectID/databases/(default)/documents/C/D"
+              }
+            ],
+            "before": true
+          }
+        }
+      }
+    }
+  ]
+}

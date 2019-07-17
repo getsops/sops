@@ -28,6 +28,7 @@ type CasesAggregationsClientAPI = original.CasesAggregationsClientAPI
 type CasesClientAPI = original.CasesClientAPI
 type DataConnectorsClientAPI = original.DataConnectorsClientAPI
 type EntitiesClientAPI = original.EntitiesClientAPI
+type EntityQueriesClientAPI = original.EntityQueriesClientAPI
 type OfficeConsentsClientAPI = original.OfficeConsentsClientAPI
 type OperationsClientAPI = original.OperationsClientAPI
 type ProductSettingsClientAPI = original.ProductSettingsClientAPI

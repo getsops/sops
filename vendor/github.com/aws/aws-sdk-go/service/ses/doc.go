@@ -6,11 +6,11 @@
 // This document contains reference information for the Amazon Simple Email
 // Service (https://aws.amazon.com/ses/) (Amazon SES) API, version 2010-12-01.
 // This document is best used in conjunction with the Amazon SES Developer Guide
-// (http://docs.aws.amazon.com/ses/latest/DeveloperGuide/Welcome.html).
+// (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/Welcome.html).
 //
 // For a list of Amazon SES endpoints to use in service requests, see Regions
-// and Amazon SES (http://docs.aws.amazon.com/ses/latest/DeveloperGuide/regions.html)
-// in the Amazon SES Developer Guide (http://docs.aws.amazon.com/ses/latest/DeveloperGuide/Welcome.html).
+// and Amazon SES (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/regions.html)
+// in the Amazon SES Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/Welcome.html).
 //
 // See https://docs.aws.amazon.com/goto/WebAPI/email-2010-12-01 for more information on this service.
 //

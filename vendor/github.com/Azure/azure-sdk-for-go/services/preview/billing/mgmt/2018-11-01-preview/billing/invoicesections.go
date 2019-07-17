@@ -44,7 +44,7 @@ func NewInvoiceSectionsClientWithBaseURI(baseURI string, subscriptionID string) 
 // Parameters:
 // billingAccountName - billing Account Id.
 // parameters - parameters supplied to the Create InvoiceSection operation.
-func (client InvoiceSectionsClient) Create(ctx context.Context, billingAccountName string, parameters InvoiceSectionProperties) (result InvoiceSectionsCreateFuture, err error) {
+func (client InvoiceSectionsClient) Create(ctx context.Context, billingAccountName string, parameters InvoiceSectionCreationRequest) (result InvoiceSectionsCreateFuture, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/InvoiceSectionsClient.Create")
 		defer func() {
@@ -71,7 +71,7 @@ func (client InvoiceSectionsClient) Create(ctx context.Context, billingAccountNa
 }
 
 // CreatePreparer prepares the Create request.
-func (client InvoiceSectionsClient) CreatePreparer(ctx context.Context, billingAccountName string, parameters InvoiceSectionProperties) (*http.Request, error) {
+func (client InvoiceSectionsClient) CreatePreparer(ctx context.Context, billingAccountName string, parameters InvoiceSectionCreationRequest) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"billingAccountName": autorest.Encode("path", billingAccountName),
 	}

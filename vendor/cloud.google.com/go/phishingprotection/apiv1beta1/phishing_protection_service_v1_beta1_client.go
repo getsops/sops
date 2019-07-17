@@ -19,6 +19,7 @@ package phishingprotection
 import (
 	"context"
 	"fmt"
+	"net/url"
 
 	gax "github.com/googleapis/gax-go/v2"
 	"google.golang.org/api/option"
@@ -109,7 +110,7 @@ func (c *PhishingProtectionServiceV1Beta1Client) setGoogleClientInfo(keyval ...s
 // in order to protect users that could get exposed to this threat in
 // the future.
 func (c *PhishingProtectionServiceV1Beta1Client) ReportPhishing(ctx context.Context, req *phishingprotectionpb.ReportPhishingRequest, opts ...gax.CallOption) (*phishingprotectionpb.ReportPhishingResponse, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ReportPhishing[0:len(c.CallOptions.ReportPhishing):len(c.CallOptions.ReportPhishing)], opts...)
 	var resp *phishingprotectionpb.ReportPhishingResponse

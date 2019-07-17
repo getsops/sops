@@ -44,7 +44,8 @@ func NewClientWithBaseURI(baseURI string) Client {
 // Parameters:
 // reservationID - id of the Reservation Item
 // reservationOrderID - order Id of the reservation
-func (client Client) Get(ctx context.Context, reservationID string, reservationOrderID string) (result Response, err error) {
+// expand - supported value of this query is renewProperties
+func (client Client) Get(ctx context.Context, reservationID string, reservationOrderID string, expand string) (result Response, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/Client.Get")
 		defer func() {
@@ -55,7 +56,7 @@ func (client Client) Get(ctx context.Context, reservationID string, reservationO
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	req, err := client.GetPreparer(ctx, reservationID, reservationOrderID)
+	req, err := client.GetPreparer(ctx, reservationID, reservationOrderID, expand)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "reservations.Client", "Get", nil, "Failure preparing request")
 		return
@@ -77,7 +78,7 @@ func (client Client) Get(ctx context.Context, reservationID string, reservationO
 }
 
 // GetPreparer prepares the Get request.
-func (client Client) GetPreparer(ctx context.Context, reservationID string, reservationOrderID string) (*http.Request, error) {
+func (client Client) GetPreparer(ctx context.Context, reservationID string, reservationOrderID string, expand string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"reservationId":      autorest.Encode("path", reservationID),
 		"reservationOrderId": autorest.Encode("path", reservationOrderID),
@@ -86,6 +87,9 @@ func (client Client) GetPreparer(ctx context.Context, reservationID string, rese
 	const APIVersion = "2019-04-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
+	}
+	if len(expand) > 0 {
+		queryParameters["expand"] = autorest.Encode("query", expand)
 	}
 
 	preparer := autorest.CreatePreparer(

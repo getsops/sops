@@ -1743,6 +1743,267 @@ func (future *DatabaseAccountsRegenerateKeyFuture) Result(client DatabaseAccount
 	return
 }
 
+// DatabaseAccountsUpdateCassandraKeyspaceThroughputFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
+type DatabaseAccountsUpdateCassandraKeyspaceThroughputFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *DatabaseAccountsUpdateCassandraKeyspaceThroughputFuture) Result(client DatabaseAccountsClient) (t Throughput, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "documentdb.DatabaseAccountsUpdateCassandraKeyspaceThroughputFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("documentdb.DatabaseAccountsUpdateCassandraKeyspaceThroughputFuture")
+		return
+	}
+	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if t.Response.Response, err = future.GetResult(sender); err == nil && t.Response.Response.StatusCode != http.StatusNoContent {
+		t, err = client.UpdateCassandraKeyspaceThroughputResponder(t.Response.Response)
+		if err != nil {
+			err = autorest.NewErrorWithError(err, "documentdb.DatabaseAccountsUpdateCassandraKeyspaceThroughputFuture", "Result", t.Response.Response, "Failure responding to request")
+		}
+	}
+	return
+}
+
+// DatabaseAccountsUpdateCassandraTableThroughputFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
+type DatabaseAccountsUpdateCassandraTableThroughputFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *DatabaseAccountsUpdateCassandraTableThroughputFuture) Result(client DatabaseAccountsClient) (t Throughput, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "documentdb.DatabaseAccountsUpdateCassandraTableThroughputFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("documentdb.DatabaseAccountsUpdateCassandraTableThroughputFuture")
+		return
+	}
+	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if t.Response.Response, err = future.GetResult(sender); err == nil && t.Response.Response.StatusCode != http.StatusNoContent {
+		t, err = client.UpdateCassandraTableThroughputResponder(t.Response.Response)
+		if err != nil {
+			err = autorest.NewErrorWithError(err, "documentdb.DatabaseAccountsUpdateCassandraTableThroughputFuture", "Result", t.Response.Response, "Failure responding to request")
+		}
+	}
+	return
+}
+
+// DatabaseAccountsUpdateGremlinDatabaseThroughputFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
+type DatabaseAccountsUpdateGremlinDatabaseThroughputFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *DatabaseAccountsUpdateGremlinDatabaseThroughputFuture) Result(client DatabaseAccountsClient) (t Throughput, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "documentdb.DatabaseAccountsUpdateGremlinDatabaseThroughputFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("documentdb.DatabaseAccountsUpdateGremlinDatabaseThroughputFuture")
+		return
+	}
+	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if t.Response.Response, err = future.GetResult(sender); err == nil && t.Response.Response.StatusCode != http.StatusNoContent {
+		t, err = client.UpdateGremlinDatabaseThroughputResponder(t.Response.Response)
+		if err != nil {
+			err = autorest.NewErrorWithError(err, "documentdb.DatabaseAccountsUpdateGremlinDatabaseThroughputFuture", "Result", t.Response.Response, "Failure responding to request")
+		}
+	}
+	return
+}
+
+// DatabaseAccountsUpdateGremlinGraphThroughputFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
+type DatabaseAccountsUpdateGremlinGraphThroughputFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *DatabaseAccountsUpdateGremlinGraphThroughputFuture) Result(client DatabaseAccountsClient) (t Throughput, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "documentdb.DatabaseAccountsUpdateGremlinGraphThroughputFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("documentdb.DatabaseAccountsUpdateGremlinGraphThroughputFuture")
+		return
+	}
+	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if t.Response.Response, err = future.GetResult(sender); err == nil && t.Response.Response.StatusCode != http.StatusNoContent {
+		t, err = client.UpdateGremlinGraphThroughputResponder(t.Response.Response)
+		if err != nil {
+			err = autorest.NewErrorWithError(err, "documentdb.DatabaseAccountsUpdateGremlinGraphThroughputFuture", "Result", t.Response.Response, "Failure responding to request")
+		}
+	}
+	return
+}
+
+// DatabaseAccountsUpdateMongoDBCollectionThroughputFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
+type DatabaseAccountsUpdateMongoDBCollectionThroughputFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *DatabaseAccountsUpdateMongoDBCollectionThroughputFuture) Result(client DatabaseAccountsClient) (t Throughput, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "documentdb.DatabaseAccountsUpdateMongoDBCollectionThroughputFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("documentdb.DatabaseAccountsUpdateMongoDBCollectionThroughputFuture")
+		return
+	}
+	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if t.Response.Response, err = future.GetResult(sender); err == nil && t.Response.Response.StatusCode != http.StatusNoContent {
+		t, err = client.UpdateMongoDBCollectionThroughputResponder(t.Response.Response)
+		if err != nil {
+			err = autorest.NewErrorWithError(err, "documentdb.DatabaseAccountsUpdateMongoDBCollectionThroughputFuture", "Result", t.Response.Response, "Failure responding to request")
+		}
+	}
+	return
+}
+
+// DatabaseAccountsUpdateMongoDBDatabaseThroughputFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
+type DatabaseAccountsUpdateMongoDBDatabaseThroughputFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *DatabaseAccountsUpdateMongoDBDatabaseThroughputFuture) Result(client DatabaseAccountsClient) (t Throughput, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "documentdb.DatabaseAccountsUpdateMongoDBDatabaseThroughputFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("documentdb.DatabaseAccountsUpdateMongoDBDatabaseThroughputFuture")
+		return
+	}
+	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if t.Response.Response, err = future.GetResult(sender); err == nil && t.Response.Response.StatusCode != http.StatusNoContent {
+		t, err = client.UpdateMongoDBDatabaseThroughputResponder(t.Response.Response)
+		if err != nil {
+			err = autorest.NewErrorWithError(err, "documentdb.DatabaseAccountsUpdateMongoDBDatabaseThroughputFuture", "Result", t.Response.Response, "Failure responding to request")
+		}
+	}
+	return
+}
+
+// DatabaseAccountsUpdateSQLContainerThroughputFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
+type DatabaseAccountsUpdateSQLContainerThroughputFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *DatabaseAccountsUpdateSQLContainerThroughputFuture) Result(client DatabaseAccountsClient) (t Throughput, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "documentdb.DatabaseAccountsUpdateSQLContainerThroughputFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("documentdb.DatabaseAccountsUpdateSQLContainerThroughputFuture")
+		return
+	}
+	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if t.Response.Response, err = future.GetResult(sender); err == nil && t.Response.Response.StatusCode != http.StatusNoContent {
+		t, err = client.UpdateSQLContainerThroughputResponder(t.Response.Response)
+		if err != nil {
+			err = autorest.NewErrorWithError(err, "documentdb.DatabaseAccountsUpdateSQLContainerThroughputFuture", "Result", t.Response.Response, "Failure responding to request")
+		}
+	}
+	return
+}
+
+// DatabaseAccountsUpdateSQLDatabaseThroughputFuture an abstraction for monitoring and retrieving the
+// results of a long-running operation.
+type DatabaseAccountsUpdateSQLDatabaseThroughputFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *DatabaseAccountsUpdateSQLDatabaseThroughputFuture) Result(client DatabaseAccountsClient) (t Throughput, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "documentdb.DatabaseAccountsUpdateSQLDatabaseThroughputFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("documentdb.DatabaseAccountsUpdateSQLDatabaseThroughputFuture")
+		return
+	}
+	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if t.Response.Response, err = future.GetResult(sender); err == nil && t.Response.Response.StatusCode != http.StatusNoContent {
+		t, err = client.UpdateSQLDatabaseThroughputResponder(t.Response.Response)
+		if err != nil {
+			err = autorest.NewErrorWithError(err, "documentdb.DatabaseAccountsUpdateSQLDatabaseThroughputFuture", "Result", t.Response.Response, "Failure responding to request")
+		}
+	}
+	return
+}
+
+// DatabaseAccountsUpdateTableThroughputFuture an abstraction for monitoring and retrieving the results of
+// a long-running operation.
+type DatabaseAccountsUpdateTableThroughputFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *DatabaseAccountsUpdateTableThroughputFuture) Result(client DatabaseAccountsClient) (t Throughput, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "documentdb.DatabaseAccountsUpdateTableThroughputFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("documentdb.DatabaseAccountsUpdateTableThroughputFuture")
+		return
+	}
+	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if t.Response.Response, err = future.GetResult(sender); err == nil && t.Response.Response.StatusCode != http.StatusNoContent {
+		t, err = client.UpdateTableThroughputResponder(t.Response.Response)
+		if err != nil {
+			err = autorest.NewErrorWithError(err, "documentdb.DatabaseAccountsUpdateTableThroughputFuture", "Result", t.Response.Response, "Failure responding to request")
+		}
+	}
+	return
+}
+
 // ErrorResponse error Response.
 type ErrorResponse struct {
 	// Code - Error code.
@@ -2214,6 +2475,8 @@ type Location struct {
 	ProvisioningState *string `json:"provisioningState,omitempty"`
 	// FailoverPriority - The failover priority of the region. A failover priority of 0 indicates a write region. The maximum value for a failover priority = (total number of regions - 1). Failover priority values must be unique for each of the regions in which the database account exists.
 	FailoverPriority *int32 `json:"failoverPriority,omitempty"`
+	// IsZoneRedundant - Flag to indicate whether or not this region is an AvailabilityZone region
+	IsZoneRedundant *bool `json:"isZoneRedundant,omitempty"`
 }
 
 // Metric metric data
@@ -3582,6 +3845,163 @@ type TableProperties struct {
 type TableResource struct {
 	// ID - Name of the Cosmos DB table
 	ID *string `json:"id,omitempty"`
+}
+
+// Throughput an Azure Cosmos DB resource throughput.
+type Throughput struct {
+	autorest.Response `json:"-"`
+	// ThroughputProperties - The properties of an Azure Cosmos DB resource throughput
+	*ThroughputProperties `json:"properties,omitempty"`
+	// ID - READ-ONLY; The unique resource identifier of the database account.
+	ID *string `json:"id,omitempty"`
+	// Name - READ-ONLY; The name of the database account.
+	Name *string `json:"name,omitempty"`
+	// Type - READ-ONLY; The type of Azure resource.
+	Type *string `json:"type,omitempty"`
+	// Location - The location of the resource group to which the resource belongs.
+	Location *string            `json:"location,omitempty"`
+	Tags     map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for Throughput.
+func (t Throughput) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if t.ThroughputProperties != nil {
+		objectMap["properties"] = t.ThroughputProperties
+	}
+	if t.Location != nil {
+		objectMap["location"] = t.Location
+	}
+	if t.Tags != nil {
+		objectMap["tags"] = t.Tags
+	}
+	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for Throughput struct.
+func (t *Throughput) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var throughputProperties ThroughputProperties
+				err = json.Unmarshal(*v, &throughputProperties)
+				if err != nil {
+					return err
+				}
+				t.ThroughputProperties = &throughputProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				t.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				t.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				t.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				t.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				t.Tags = tags
+			}
+		}
+	}
+
+	return nil
+}
+
+// ThroughputProperties the properties of an Azure Cosmos DB resource throughput
+type ThroughputProperties struct {
+	// Throughput - Value of the Cosmos DB resource throughput
+	Throughput *int32 `json:"throughput,omitempty"`
+}
+
+// ThroughputResource cosmos DB resource throughput object
+type ThroughputResource struct {
+	// Throughput - Value of the Cosmos DB resource throughput
+	Throughput *int32 `json:"throughput,omitempty"`
+}
+
+// ThroughputUpdateParameters parameters to update Cosmos DB resource throughput.
+type ThroughputUpdateParameters struct {
+	// ThroughputUpdateProperties - Properties to update Azure Cosmos DB resource throughput.
+	*ThroughputUpdateProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ThroughputUpdateParameters.
+func (tup ThroughputUpdateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if tup.ThroughputUpdateProperties != nil {
+		objectMap["properties"] = tup.ThroughputUpdateProperties
+	}
+	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for ThroughputUpdateParameters struct.
+func (tup *ThroughputUpdateParameters) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var throughputUpdateProperties ThroughputUpdateProperties
+				err = json.Unmarshal(*v, &throughputUpdateProperties)
+				if err != nil {
+					return err
+				}
+				tup.ThroughputUpdateProperties = &throughputUpdateProperties
+			}
+		}
+	}
+
+	return nil
+}
+
+// ThroughputUpdateProperties properties to update Azure Cosmos DB resource throughput.
+type ThroughputUpdateProperties struct {
+	// Resource - The standard JSON format of a resource throughput
+	Resource *ThroughputResource `json:"resource,omitempty"`
 }
 
 // UniqueKey the unique key on that enforces uniqueness constraint on documents in the collection in the

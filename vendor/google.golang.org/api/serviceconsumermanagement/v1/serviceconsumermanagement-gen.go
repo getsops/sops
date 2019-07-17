@@ -1373,6 +1373,15 @@ type Documentation struct {
 	// order.
 	Rules []*DocumentationRule `json:"rules,omitempty"`
 
+	// ServiceRootUrl: Specifies the service root url if the default one
+	// (the service name
+	// from the yaml file) is not suitable. This can be seen in any
+	// fully
+	// specified service urls as well as sections that show a base that
+	// other
+	// urls are relative to.
+	ServiceRootUrl string `json:"serviceRootUrl,omitempty"`
+
 	// Summary: A short summary of what the service does. Can only be
 	// provided by
 	// plain text.
@@ -5074,9 +5083,7 @@ type V1ServiceAccount struct {
 	// Email: The email address of the service account.
 	Email string `json:"email,omitempty"`
 
-	// IamAccountName: The IAM resource name of the service account in the
-	// following format:
-	// projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}.
+	// IamAccountName: Deprecated. See b/136209818.
 	IamAccountName string `json:"iamAccountName,omitempty"`
 
 	// Name: P4 SA resource name.

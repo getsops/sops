@@ -91,6 +91,12 @@ func ExampleWAFRegional_CreateRule_shared00() {
 				fmt.Println(wafregional.ErrCodeWAFInvalidParameterException, aerr.Error())
 			case wafregional.ErrCodeWAFLimitsExceededException:
 				fmt.Println(wafregional.ErrCodeWAFLimitsExceededException, aerr.Error())
+			case wafregional.ErrCodeWAFTagOperationException:
+				fmt.Println(wafregional.ErrCodeWAFTagOperationException, aerr.Error())
+			case wafregional.ErrCodeWAFTagOperationInternalErrorException:
+				fmt.Println(wafregional.ErrCodeWAFTagOperationInternalErrorException, aerr.Error())
+			case wafregional.ErrCodeWAFBadRequestException:
+				fmt.Println(wafregional.ErrCodeWAFBadRequestException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -215,6 +221,12 @@ func ExampleWAFRegional_CreateWebACL_shared00() {
 				fmt.Println(wafregional.ErrCodeWAFInvalidParameterException, aerr.Error())
 			case wafregional.ErrCodeWAFLimitsExceededException:
 				fmt.Println(wafregional.ErrCodeWAFLimitsExceededException, aerr.Error())
+			case wafregional.ErrCodeWAFTagOperationException:
+				fmt.Println(wafregional.ErrCodeWAFTagOperationException, aerr.Error())
+			case wafregional.ErrCodeWAFTagOperationInternalErrorException:
+				fmt.Println(wafregional.ErrCodeWAFTagOperationInternalErrorException, aerr.Error())
+			case wafregional.ErrCodeWAFBadRequestException:
+				fmt.Println(wafregional.ErrCodeWAFBadRequestException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -375,6 +387,10 @@ func ExampleWAFRegional_DeleteRule_shared00() {
 				fmt.Println(wafregional.ErrCodeWAFReferencedItemException, aerr.Error())
 			case wafregional.ErrCodeWAFNonEmptyEntityException:
 				fmt.Println(wafregional.ErrCodeWAFNonEmptyEntityException, aerr.Error())
+			case wafregional.ErrCodeWAFTagOperationException:
+				fmt.Println(wafregional.ErrCodeWAFTagOperationException, aerr.Error())
+			case wafregional.ErrCodeWAFTagOperationInternalErrorException:
+				fmt.Println(wafregional.ErrCodeWAFTagOperationInternalErrorException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -495,6 +511,10 @@ func ExampleWAFRegional_DeleteWebACL_shared00() {
 				fmt.Println(wafregional.ErrCodeWAFReferencedItemException, aerr.Error())
 			case wafregional.ErrCodeWAFNonEmptyEntityException:
 				fmt.Println(wafregional.ErrCodeWAFNonEmptyEntityException, aerr.Error())
+			case wafregional.ErrCodeWAFTagOperationException:
+				fmt.Println(wafregional.ErrCodeWAFTagOperationException, aerr.Error())
+			case wafregional.ErrCodeWAFTagOperationInternalErrorException:
+				fmt.Println(wafregional.ErrCodeWAFTagOperationInternalErrorException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}

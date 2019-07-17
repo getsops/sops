@@ -712,6 +712,87 @@ func (c *ConfigService) DeleteEvaluationResultsWithContext(ctx aws.Context, inpu
 	return out, req.Send()
 }
 
+const opDeleteOrganizationConfigRule = "DeleteOrganizationConfigRule"
+
+// DeleteOrganizationConfigRuleRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteOrganizationConfigRule operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteOrganizationConfigRule for more information on using the DeleteOrganizationConfigRule
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteOrganizationConfigRuleRequest method.
+//    req, resp := client.DeleteOrganizationConfigRuleRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/DeleteOrganizationConfigRule
+func (c *ConfigService) DeleteOrganizationConfigRuleRequest(input *DeleteOrganizationConfigRuleInput) (req *request.Request, output *DeleteOrganizationConfigRuleOutput) {
+	op := &request.Operation{
+		Name:       opDeleteOrganizationConfigRule,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteOrganizationConfigRuleInput{}
+	}
+
+	output = &DeleteOrganizationConfigRuleOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteOrganizationConfigRule API operation for AWS Config.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Config's
+// API operation DeleteOrganizationConfigRule for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNoSuchOrganizationConfigRuleException "NoSuchOrganizationConfigRuleException"
+//
+//   * ErrCodeResourceInUseException "ResourceInUseException"
+//   The rule is currently being deleted or the rule is deleting your evaluation
+//   results. Try your request again later.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/DeleteOrganizationConfigRule
+func (c *ConfigService) DeleteOrganizationConfigRule(input *DeleteOrganizationConfigRuleInput) (*DeleteOrganizationConfigRuleOutput, error) {
+	req, out := c.DeleteOrganizationConfigRuleRequest(input)
+	return out, req.Send()
+}
+
+// DeleteOrganizationConfigRuleWithContext is the same as DeleteOrganizationConfigRule with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteOrganizationConfigRule for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ConfigService) DeleteOrganizationConfigRuleWithContext(ctx aws.Context, input *DeleteOrganizationConfigRuleInput, opts ...request.Option) (*DeleteOrganizationConfigRuleOutput, error) {
+	req, out := c.DeleteOrganizationConfigRuleRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeletePendingAggregationRequest = "DeletePendingAggregationRequest"
 
 // DeletePendingAggregationRequestRequest generates a "aws/request.Request" representing the
@@ -851,6 +932,8 @@ func (c *ConfigService) DeleteRemediationConfigurationRequest(input *DeleteRemed
 // Returned Error Codes:
 //   * ErrCodeNoSuchRemediationConfigurationException "NoSuchRemediationConfigurationException"
 //   You specified an AWS Config rule without a remediation configuration.
+//
+//   * ErrCodeRemediationInProgressException "RemediationInProgressException"
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/DeleteRemediationConfiguration
 func (c *ConfigService) DeleteRemediationConfiguration(input *DeleteRemediationConfigurationInput) (*DeleteRemediationConfigurationOutput, error) {
@@ -2147,6 +2230,172 @@ func (c *ConfigService) DescribeDeliveryChannelsWithContext(ctx aws.Context, inp
 	return out, req.Send()
 }
 
+const opDescribeOrganizationConfigRuleStatuses = "DescribeOrganizationConfigRuleStatuses"
+
+// DescribeOrganizationConfigRuleStatusesRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeOrganizationConfigRuleStatuses operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeOrganizationConfigRuleStatuses for more information on using the DescribeOrganizationConfigRuleStatuses
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeOrganizationConfigRuleStatusesRequest method.
+//    req, resp := client.DescribeOrganizationConfigRuleStatusesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/DescribeOrganizationConfigRuleStatuses
+func (c *ConfigService) DescribeOrganizationConfigRuleStatusesRequest(input *DescribeOrganizationConfigRuleStatusesInput) (req *request.Request, output *DescribeOrganizationConfigRuleStatusesOutput) {
+	op := &request.Operation{
+		Name:       opDescribeOrganizationConfigRuleStatuses,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeOrganizationConfigRuleStatusesInput{}
+	}
+
+	output = &DescribeOrganizationConfigRuleStatusesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeOrganizationConfigRuleStatuses API operation for AWS Config.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Config's
+// API operation DescribeOrganizationConfigRuleStatuses for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNoSuchOrganizationConfigRuleException "NoSuchOrganizationConfigRuleException"
+//
+//   * ErrCodeInvalidLimitException "InvalidLimitException"
+//   The specified limit is outside the allowable range.
+//
+//   * ErrCodeInvalidNextTokenException "InvalidNextTokenException"
+//   The specified next token is invalid. Specify the nextToken string that was
+//   returned in the previous response to get the next page of results.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/DescribeOrganizationConfigRuleStatuses
+func (c *ConfigService) DescribeOrganizationConfigRuleStatuses(input *DescribeOrganizationConfigRuleStatusesInput) (*DescribeOrganizationConfigRuleStatusesOutput, error) {
+	req, out := c.DescribeOrganizationConfigRuleStatusesRequest(input)
+	return out, req.Send()
+}
+
+// DescribeOrganizationConfigRuleStatusesWithContext is the same as DescribeOrganizationConfigRuleStatuses with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeOrganizationConfigRuleStatuses for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ConfigService) DescribeOrganizationConfigRuleStatusesWithContext(ctx aws.Context, input *DescribeOrganizationConfigRuleStatusesInput, opts ...request.Option) (*DescribeOrganizationConfigRuleStatusesOutput, error) {
+	req, out := c.DescribeOrganizationConfigRuleStatusesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeOrganizationConfigRules = "DescribeOrganizationConfigRules"
+
+// DescribeOrganizationConfigRulesRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeOrganizationConfigRules operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeOrganizationConfigRules for more information on using the DescribeOrganizationConfigRules
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeOrganizationConfigRulesRequest method.
+//    req, resp := client.DescribeOrganizationConfigRulesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/DescribeOrganizationConfigRules
+func (c *ConfigService) DescribeOrganizationConfigRulesRequest(input *DescribeOrganizationConfigRulesInput) (req *request.Request, output *DescribeOrganizationConfigRulesOutput) {
+	op := &request.Operation{
+		Name:       opDescribeOrganizationConfigRules,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeOrganizationConfigRulesInput{}
+	}
+
+	output = &DescribeOrganizationConfigRulesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeOrganizationConfigRules API operation for AWS Config.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Config's
+// API operation DescribeOrganizationConfigRules for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNoSuchOrganizationConfigRuleException "NoSuchOrganizationConfigRuleException"
+//
+//   * ErrCodeInvalidNextTokenException "InvalidNextTokenException"
+//   The specified next token is invalid. Specify the nextToken string that was
+//   returned in the previous response to get the next page of results.
+//
+//   * ErrCodeInvalidLimitException "InvalidLimitException"
+//   The specified limit is outside the allowable range.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/DescribeOrganizationConfigRules
+func (c *ConfigService) DescribeOrganizationConfigRules(input *DescribeOrganizationConfigRulesInput) (*DescribeOrganizationConfigRulesOutput, error) {
+	req, out := c.DescribeOrganizationConfigRulesRequest(input)
+	return out, req.Send()
+}
+
+// DescribeOrganizationConfigRulesWithContext is the same as DescribeOrganizationConfigRules with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeOrganizationConfigRules for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ConfigService) DescribeOrganizationConfigRulesWithContext(ctx aws.Context, input *DescribeOrganizationConfigRulesInput, opts ...request.Option) (*DescribeOrganizationConfigRulesOutput, error) {
+	req, out := c.DescribeOrganizationConfigRulesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribePendingAggregationRequests = "DescribePendingAggregationRequests"
 
 // DescribePendingAggregationRequestsRequest generates a "aws/request.Request" representing the
@@ -3360,6 +3609,89 @@ func (c *ConfigService) GetDiscoveredResourceCountsWithContext(ctx aws.Context, 
 	return out, req.Send()
 }
 
+const opGetOrganizationConfigRuleDetailedStatus = "GetOrganizationConfigRuleDetailedStatus"
+
+// GetOrganizationConfigRuleDetailedStatusRequest generates a "aws/request.Request" representing the
+// client's request for the GetOrganizationConfigRuleDetailedStatus operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetOrganizationConfigRuleDetailedStatus for more information on using the GetOrganizationConfigRuleDetailedStatus
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetOrganizationConfigRuleDetailedStatusRequest method.
+//    req, resp := client.GetOrganizationConfigRuleDetailedStatusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/GetOrganizationConfigRuleDetailedStatus
+func (c *ConfigService) GetOrganizationConfigRuleDetailedStatusRequest(input *GetOrganizationConfigRuleDetailedStatusInput) (req *request.Request, output *GetOrganizationConfigRuleDetailedStatusOutput) {
+	op := &request.Operation{
+		Name:       opGetOrganizationConfigRuleDetailedStatus,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetOrganizationConfigRuleDetailedStatusInput{}
+	}
+
+	output = &GetOrganizationConfigRuleDetailedStatusOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetOrganizationConfigRuleDetailedStatus API operation for AWS Config.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Config's
+// API operation GetOrganizationConfigRuleDetailedStatus for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNoSuchOrganizationConfigRuleException "NoSuchOrganizationConfigRuleException"
+//
+//   * ErrCodeInvalidLimitException "InvalidLimitException"
+//   The specified limit is outside the allowable range.
+//
+//   * ErrCodeInvalidNextTokenException "InvalidNextTokenException"
+//   The specified next token is invalid. Specify the nextToken string that was
+//   returned in the previous response to get the next page of results.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/GetOrganizationConfigRuleDetailedStatus
+func (c *ConfigService) GetOrganizationConfigRuleDetailedStatus(input *GetOrganizationConfigRuleDetailedStatusInput) (*GetOrganizationConfigRuleDetailedStatusOutput, error) {
+	req, out := c.GetOrganizationConfigRuleDetailedStatusRequest(input)
+	return out, req.Send()
+}
+
+// GetOrganizationConfigRuleDetailedStatusWithContext is the same as GetOrganizationConfigRuleDetailedStatus with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetOrganizationConfigRuleDetailedStatus for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ConfigService) GetOrganizationConfigRuleDetailedStatusWithContext(ctx aws.Context, input *GetOrganizationConfigRuleDetailedStatusInput, opts ...request.Option) (*GetOrganizationConfigRuleDetailedStatusOutput, error) {
+	req, out := c.GetOrganizationConfigRuleDetailedStatusRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetResourceConfigHistory = "GetResourceConfigHistory"
 
 // GetResourceConfigHistoryRequest generates a "aws/request.Request" representing the
@@ -4441,6 +4773,112 @@ func (c *ConfigService) PutEvaluations(input *PutEvaluationsInput) (*PutEvaluati
 // for more information on using Contexts.
 func (c *ConfigService) PutEvaluationsWithContext(ctx aws.Context, input *PutEvaluationsInput, opts ...request.Option) (*PutEvaluationsOutput, error) {
 	req, out := c.PutEvaluationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opPutOrganizationConfigRule = "PutOrganizationConfigRule"
+
+// PutOrganizationConfigRuleRequest generates a "aws/request.Request" representing the
+// client's request for the PutOrganizationConfigRule operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutOrganizationConfigRule for more information on using the PutOrganizationConfigRule
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutOrganizationConfigRuleRequest method.
+//    req, resp := client.PutOrganizationConfigRuleRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/PutOrganizationConfigRule
+func (c *ConfigService) PutOrganizationConfigRuleRequest(input *PutOrganizationConfigRuleInput) (req *request.Request, output *PutOrganizationConfigRuleOutput) {
+	op := &request.Operation{
+		Name:       opPutOrganizationConfigRule,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &PutOrganizationConfigRuleInput{}
+	}
+
+	output = &PutOrganizationConfigRuleOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// PutOrganizationConfigRule API operation for AWS Config.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Config's
+// API operation PutOrganizationConfigRule for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeMaxNumberOfOrganizationConfigRulesExceededException "MaxNumberOfOrganizationConfigRulesExceededException"
+//
+//   * ErrCodeResourceInUseException "ResourceInUseException"
+//   The rule is currently being deleted or the rule is deleting your evaluation
+//   results. Try your request again later.
+//
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValueException"
+//   One or more of the specified parameters are invalid. Verify that your parameters
+//   are valid and try again.
+//
+//   * ErrCodeValidationException "ValidationException"
+//   The requested action is not valid.
+//
+//   * ErrCodeOrganizationAccessDeniedException "OrganizationAccessDeniedException"
+//   No permission to call the EnableAWSServiceAccess API.
+//
+//   * ErrCodeNoAvailableOrganizationException "NoAvailableOrganizationException"
+//   Organization does is no longer available.
+//
+//   * ErrCodeOrganizationAllFeaturesNotEnabledException "OrganizationAllFeaturesNotEnabledException"
+//   The configuration aggregator cannot be created because organization does
+//   not have all features enabled.
+//
+//   * ErrCodeInsufficientPermissionsException "InsufficientPermissionsException"
+//   Indicates one of the following errors:
+//
+//      * The rule cannot be created because the IAM role assigned to AWS Config
+//      lacks permissions to perform the config:Put* action.
+//
+//      * The AWS Lambda function cannot be invoked. Check the function ARN, and
+//      check the function's permissions.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/config-2014-11-12/PutOrganizationConfigRule
+func (c *ConfigService) PutOrganizationConfigRule(input *PutOrganizationConfigRuleInput) (*PutOrganizationConfigRuleOutput, error) {
+	req, out := c.PutOrganizationConfigRuleRequest(input)
+	return out, req.Send()
+}
+
+// PutOrganizationConfigRuleWithContext is the same as PutOrganizationConfigRule with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutOrganizationConfigRule for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ConfigService) PutOrganizationConfigRuleWithContext(ctx aws.Context, input *PutOrganizationConfigRuleInput, opts ...request.Option) (*PutOrganizationConfigRuleOutput, error) {
+	req, out := c.PutOrganizationConfigRuleRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -7709,6 +8147,59 @@ func (s DeleteEvaluationResultsOutput) GoString() string {
 	return s.String()
 }
 
+type DeleteOrganizationConfigRuleInput struct {
+	_ struct{} `type:"structure"`
+
+	// OrganizationConfigRuleName is a required field
+	OrganizationConfigRuleName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteOrganizationConfigRuleInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteOrganizationConfigRuleInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteOrganizationConfigRuleInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteOrganizationConfigRuleInput"}
+	if s.OrganizationConfigRuleName == nil {
+		invalidParams.Add(request.NewErrParamRequired("OrganizationConfigRuleName"))
+	}
+	if s.OrganizationConfigRuleName != nil && len(*s.OrganizationConfigRuleName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OrganizationConfigRuleName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetOrganizationConfigRuleName sets the OrganizationConfigRuleName field's value.
+func (s *DeleteOrganizationConfigRuleInput) SetOrganizationConfigRuleName(v string) *DeleteOrganizationConfigRuleInput {
+	s.OrganizationConfigRuleName = &v
+	return s
+}
+
+type DeleteOrganizationConfigRuleOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteOrganizationConfigRuleOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteOrganizationConfigRuleOutput) GoString() string {
+	return s.String()
+}
+
 type DeletePendingAggregationRequestInput struct {
 	_ struct{} `type:"structure"`
 
@@ -9012,6 +9503,142 @@ func (s DescribeDeliveryChannelsOutput) GoString() string {
 // SetDeliveryChannels sets the DeliveryChannels field's value.
 func (s *DescribeDeliveryChannelsOutput) SetDeliveryChannels(v []*DeliveryChannel) *DescribeDeliveryChannelsOutput {
 	s.DeliveryChannels = v
+	return s
+}
+
+type DescribeOrganizationConfigRuleStatusesInput struct {
+	_ struct{} `type:"structure"`
+
+	Limit *int64 `type:"integer"`
+
+	NextToken *string `type:"string"`
+
+	OrganizationConfigRuleNames []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeOrganizationConfigRuleStatusesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeOrganizationConfigRuleStatusesInput) GoString() string {
+	return s.String()
+}
+
+// SetLimit sets the Limit field's value.
+func (s *DescribeOrganizationConfigRuleStatusesInput) SetLimit(v int64) *DescribeOrganizationConfigRuleStatusesInput {
+	s.Limit = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeOrganizationConfigRuleStatusesInput) SetNextToken(v string) *DescribeOrganizationConfigRuleStatusesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetOrganizationConfigRuleNames sets the OrganizationConfigRuleNames field's value.
+func (s *DescribeOrganizationConfigRuleStatusesInput) SetOrganizationConfigRuleNames(v []*string) *DescribeOrganizationConfigRuleStatusesInput {
+	s.OrganizationConfigRuleNames = v
+	return s
+}
+
+type DescribeOrganizationConfigRuleStatusesOutput struct {
+	_ struct{} `type:"structure"`
+
+	NextToken *string `type:"string"`
+
+	OrganizationConfigRuleStatuses []*OrganizationConfigRuleStatus `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeOrganizationConfigRuleStatusesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeOrganizationConfigRuleStatusesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeOrganizationConfigRuleStatusesOutput) SetNextToken(v string) *DescribeOrganizationConfigRuleStatusesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetOrganizationConfigRuleStatuses sets the OrganizationConfigRuleStatuses field's value.
+func (s *DescribeOrganizationConfigRuleStatusesOutput) SetOrganizationConfigRuleStatuses(v []*OrganizationConfigRuleStatus) *DescribeOrganizationConfigRuleStatusesOutput {
+	s.OrganizationConfigRuleStatuses = v
+	return s
+}
+
+type DescribeOrganizationConfigRulesInput struct {
+	_ struct{} `type:"structure"`
+
+	Limit *int64 `type:"integer"`
+
+	NextToken *string `type:"string"`
+
+	OrganizationConfigRuleNames []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeOrganizationConfigRulesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeOrganizationConfigRulesInput) GoString() string {
+	return s.String()
+}
+
+// SetLimit sets the Limit field's value.
+func (s *DescribeOrganizationConfigRulesInput) SetLimit(v int64) *DescribeOrganizationConfigRulesInput {
+	s.Limit = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeOrganizationConfigRulesInput) SetNextToken(v string) *DescribeOrganizationConfigRulesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetOrganizationConfigRuleNames sets the OrganizationConfigRuleNames field's value.
+func (s *DescribeOrganizationConfigRulesInput) SetOrganizationConfigRuleNames(v []*string) *DescribeOrganizationConfigRulesInput {
+	s.OrganizationConfigRuleNames = v
+	return s
+}
+
+type DescribeOrganizationConfigRulesOutput struct {
+	_ struct{} `type:"structure"`
+
+	NextToken *string `type:"string"`
+
+	OrganizationConfigRules []*OrganizationConfigRule `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeOrganizationConfigRulesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeOrganizationConfigRulesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeOrganizationConfigRulesOutput) SetNextToken(v string) *DescribeOrganizationConfigRulesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetOrganizationConfigRules sets the OrganizationConfigRules field's value.
+func (s *DescribeOrganizationConfigRulesOutput) SetOrganizationConfigRules(v []*OrganizationConfigRule) *DescribeOrganizationConfigRulesOutput {
+	s.OrganizationConfigRules = v
 	return s
 }
 
@@ -10588,6 +11215,99 @@ func (s *GetDiscoveredResourceCountsOutput) SetTotalDiscoveredResources(v int64)
 	return s
 }
 
+type GetOrganizationConfigRuleDetailedStatusInput struct {
+	_ struct{} `type:"structure"`
+
+	Filters *StatusDetailFilters `type:"structure"`
+
+	Limit *int64 `type:"integer"`
+
+	NextToken *string `type:"string"`
+
+	// OrganizationConfigRuleName is a required field
+	OrganizationConfigRuleName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetOrganizationConfigRuleDetailedStatusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetOrganizationConfigRuleDetailedStatusInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetOrganizationConfigRuleDetailedStatusInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetOrganizationConfigRuleDetailedStatusInput"}
+	if s.OrganizationConfigRuleName == nil {
+		invalidParams.Add(request.NewErrParamRequired("OrganizationConfigRuleName"))
+	}
+	if s.OrganizationConfigRuleName != nil && len(*s.OrganizationConfigRuleName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OrganizationConfigRuleName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *GetOrganizationConfigRuleDetailedStatusInput) SetFilters(v *StatusDetailFilters) *GetOrganizationConfigRuleDetailedStatusInput {
+	s.Filters = v
+	return s
+}
+
+// SetLimit sets the Limit field's value.
+func (s *GetOrganizationConfigRuleDetailedStatusInput) SetLimit(v int64) *GetOrganizationConfigRuleDetailedStatusInput {
+	s.Limit = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetOrganizationConfigRuleDetailedStatusInput) SetNextToken(v string) *GetOrganizationConfigRuleDetailedStatusInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetOrganizationConfigRuleName sets the OrganizationConfigRuleName field's value.
+func (s *GetOrganizationConfigRuleDetailedStatusInput) SetOrganizationConfigRuleName(v string) *GetOrganizationConfigRuleDetailedStatusInput {
+	s.OrganizationConfigRuleName = &v
+	return s
+}
+
+type GetOrganizationConfigRuleDetailedStatusOutput struct {
+	_ struct{} `type:"structure"`
+
+	NextToken *string `type:"string"`
+
+	OrganizationConfigRuleDetailedStatus []*MemberAccountStatus `type:"list"`
+}
+
+// String returns the string representation
+func (s GetOrganizationConfigRuleDetailedStatusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetOrganizationConfigRuleDetailedStatusOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetOrganizationConfigRuleDetailedStatusOutput) SetNextToken(v string) *GetOrganizationConfigRuleDetailedStatusOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetOrganizationConfigRuleDetailedStatus sets the OrganizationConfigRuleDetailedStatus field's value.
+func (s *GetOrganizationConfigRuleDetailedStatusOutput) SetOrganizationConfigRuleDetailedStatus(v []*MemberAccountStatus) *GetOrganizationConfigRuleDetailedStatusOutput {
+	s.OrganizationConfigRuleDetailedStatus = v
+	return s
+}
+
 // The input for the GetResourceConfigHistory action.
 type GetResourceConfigHistoryInput struct {
 	_ struct{} `type:"structure"`
@@ -11113,6 +11833,71 @@ func (s *ListTagsForResourceOutput) SetTags(v []*Tag) *ListTagsForResourceOutput
 	return s
 }
 
+type MemberAccountStatus struct {
+	_ struct{} `type:"structure"`
+
+	// AccountId is a required field
+	AccountId *string `type:"string" required:"true"`
+
+	// ConfigRuleName is a required field
+	ConfigRuleName *string `min:"1" type:"string" required:"true"`
+
+	ErrorCode *string `type:"string"`
+
+	ErrorMessage *string `type:"string"`
+
+	LastUpdateTime *time.Time `type:"timestamp"`
+
+	// MemberAccountRuleStatus is a required field
+	MemberAccountRuleStatus *string `type:"string" required:"true" enum:"MemberAccountRuleStatus"`
+}
+
+// String returns the string representation
+func (s MemberAccountStatus) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s MemberAccountStatus) GoString() string {
+	return s.String()
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *MemberAccountStatus) SetAccountId(v string) *MemberAccountStatus {
+	s.AccountId = &v
+	return s
+}
+
+// SetConfigRuleName sets the ConfigRuleName field's value.
+func (s *MemberAccountStatus) SetConfigRuleName(v string) *MemberAccountStatus {
+	s.ConfigRuleName = &v
+	return s
+}
+
+// SetErrorCode sets the ErrorCode field's value.
+func (s *MemberAccountStatus) SetErrorCode(v string) *MemberAccountStatus {
+	s.ErrorCode = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *MemberAccountStatus) SetErrorMessage(v string) *MemberAccountStatus {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetLastUpdateTime sets the LastUpdateTime field's value.
+func (s *MemberAccountStatus) SetLastUpdateTime(v time.Time) *MemberAccountStatus {
+	s.LastUpdateTime = &v
+	return s
+}
+
+// SetMemberAccountRuleStatus sets the MemberAccountRuleStatus field's value.
+func (s *MemberAccountStatus) SetMemberAccountRuleStatus(v string) *MemberAccountStatus {
+	s.MemberAccountRuleStatus = &v
+	return s
+}
+
 // This object contains regions to set up the aggregator and an IAM role to
 // retrieve organization details.
 type OrganizationAggregationSource struct {
@@ -11172,6 +11957,352 @@ func (s *OrganizationAggregationSource) SetAwsRegions(v []*string) *Organization
 // SetRoleArn sets the RoleArn field's value.
 func (s *OrganizationAggregationSource) SetRoleArn(v string) *OrganizationAggregationSource {
 	s.RoleArn = &v
+	return s
+}
+
+type OrganizationConfigRule struct {
+	_ struct{} `type:"structure"`
+
+	ExcludedAccounts []*string `type:"list"`
+
+	LastUpdateTime *time.Time `type:"timestamp"`
+
+	// OrganizationConfigRuleArn is a required field
+	OrganizationConfigRuleArn *string `min:"1" type:"string" required:"true"`
+
+	// OrganizationConfigRuleName is a required field
+	OrganizationConfigRuleName *string `min:"1" type:"string" required:"true"`
+
+	OrganizationCustomRuleMetadata *OrganizationCustomRuleMetadata `type:"structure"`
+
+	OrganizationManagedRuleMetadata *OrganizationManagedRuleMetadata `type:"structure"`
+}
+
+// String returns the string representation
+func (s OrganizationConfigRule) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OrganizationConfigRule) GoString() string {
+	return s.String()
+}
+
+// SetExcludedAccounts sets the ExcludedAccounts field's value.
+func (s *OrganizationConfigRule) SetExcludedAccounts(v []*string) *OrganizationConfigRule {
+	s.ExcludedAccounts = v
+	return s
+}
+
+// SetLastUpdateTime sets the LastUpdateTime field's value.
+func (s *OrganizationConfigRule) SetLastUpdateTime(v time.Time) *OrganizationConfigRule {
+	s.LastUpdateTime = &v
+	return s
+}
+
+// SetOrganizationConfigRuleArn sets the OrganizationConfigRuleArn field's value.
+func (s *OrganizationConfigRule) SetOrganizationConfigRuleArn(v string) *OrganizationConfigRule {
+	s.OrganizationConfigRuleArn = &v
+	return s
+}
+
+// SetOrganizationConfigRuleName sets the OrganizationConfigRuleName field's value.
+func (s *OrganizationConfigRule) SetOrganizationConfigRuleName(v string) *OrganizationConfigRule {
+	s.OrganizationConfigRuleName = &v
+	return s
+}
+
+// SetOrganizationCustomRuleMetadata sets the OrganizationCustomRuleMetadata field's value.
+func (s *OrganizationConfigRule) SetOrganizationCustomRuleMetadata(v *OrganizationCustomRuleMetadata) *OrganizationConfigRule {
+	s.OrganizationCustomRuleMetadata = v
+	return s
+}
+
+// SetOrganizationManagedRuleMetadata sets the OrganizationManagedRuleMetadata field's value.
+func (s *OrganizationConfigRule) SetOrganizationManagedRuleMetadata(v *OrganizationManagedRuleMetadata) *OrganizationConfigRule {
+	s.OrganizationManagedRuleMetadata = v
+	return s
+}
+
+type OrganizationConfigRuleStatus struct {
+	_ struct{} `type:"structure"`
+
+	ErrorCode *string `type:"string"`
+
+	ErrorMessage *string `type:"string"`
+
+	LastUpdateTime *time.Time `type:"timestamp"`
+
+	// OrganizationConfigRuleName is a required field
+	OrganizationConfigRuleName *string `min:"1" type:"string" required:"true"`
+
+	// OrganizationRuleStatus is a required field
+	OrganizationRuleStatus *string `type:"string" required:"true" enum:"OrganizationRuleStatus"`
+}
+
+// String returns the string representation
+func (s OrganizationConfigRuleStatus) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OrganizationConfigRuleStatus) GoString() string {
+	return s.String()
+}
+
+// SetErrorCode sets the ErrorCode field's value.
+func (s *OrganizationConfigRuleStatus) SetErrorCode(v string) *OrganizationConfigRuleStatus {
+	s.ErrorCode = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *OrganizationConfigRuleStatus) SetErrorMessage(v string) *OrganizationConfigRuleStatus {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetLastUpdateTime sets the LastUpdateTime field's value.
+func (s *OrganizationConfigRuleStatus) SetLastUpdateTime(v time.Time) *OrganizationConfigRuleStatus {
+	s.LastUpdateTime = &v
+	return s
+}
+
+// SetOrganizationConfigRuleName sets the OrganizationConfigRuleName field's value.
+func (s *OrganizationConfigRuleStatus) SetOrganizationConfigRuleName(v string) *OrganizationConfigRuleStatus {
+	s.OrganizationConfigRuleName = &v
+	return s
+}
+
+// SetOrganizationRuleStatus sets the OrganizationRuleStatus field's value.
+func (s *OrganizationConfigRuleStatus) SetOrganizationRuleStatus(v string) *OrganizationConfigRuleStatus {
+	s.OrganizationRuleStatus = &v
+	return s
+}
+
+type OrganizationCustomRuleMetadata struct {
+	_ struct{} `type:"structure"`
+
+	Description *string `type:"string"`
+
+	InputParameters *string `min:"1" type:"string"`
+
+	// LambdaFunctionArn is a required field
+	LambdaFunctionArn *string `min:"1" type:"string" required:"true"`
+
+	MaximumExecutionFrequency *string `type:"string" enum:"MaximumExecutionFrequency"`
+
+	// OrganizationConfigRuleTriggerTypes is a required field
+	OrganizationConfigRuleTriggerTypes []*string `type:"list" required:"true"`
+
+	ResourceIdScope *string `min:"1" type:"string"`
+
+	ResourceTypesScope []*string `type:"list"`
+
+	TagKeyScope *string `min:"1" type:"string"`
+
+	TagValueScope *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s OrganizationCustomRuleMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OrganizationCustomRuleMetadata) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *OrganizationCustomRuleMetadata) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "OrganizationCustomRuleMetadata"}
+	if s.InputParameters != nil && len(*s.InputParameters) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputParameters", 1))
+	}
+	if s.LambdaFunctionArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("LambdaFunctionArn"))
+	}
+	if s.LambdaFunctionArn != nil && len(*s.LambdaFunctionArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("LambdaFunctionArn", 1))
+	}
+	if s.OrganizationConfigRuleTriggerTypes == nil {
+		invalidParams.Add(request.NewErrParamRequired("OrganizationConfigRuleTriggerTypes"))
+	}
+	if s.ResourceIdScope != nil && len(*s.ResourceIdScope) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceIdScope", 1))
+	}
+	if s.TagKeyScope != nil && len(*s.TagKeyScope) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TagKeyScope", 1))
+	}
+	if s.TagValueScope != nil && len(*s.TagValueScope) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TagValueScope", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *OrganizationCustomRuleMetadata) SetDescription(v string) *OrganizationCustomRuleMetadata {
+	s.Description = &v
+	return s
+}
+
+// SetInputParameters sets the InputParameters field's value.
+func (s *OrganizationCustomRuleMetadata) SetInputParameters(v string) *OrganizationCustomRuleMetadata {
+	s.InputParameters = &v
+	return s
+}
+
+// SetLambdaFunctionArn sets the LambdaFunctionArn field's value.
+func (s *OrganizationCustomRuleMetadata) SetLambdaFunctionArn(v string) *OrganizationCustomRuleMetadata {
+	s.LambdaFunctionArn = &v
+	return s
+}
+
+// SetMaximumExecutionFrequency sets the MaximumExecutionFrequency field's value.
+func (s *OrganizationCustomRuleMetadata) SetMaximumExecutionFrequency(v string) *OrganizationCustomRuleMetadata {
+	s.MaximumExecutionFrequency = &v
+	return s
+}
+
+// SetOrganizationConfigRuleTriggerTypes sets the OrganizationConfigRuleTriggerTypes field's value.
+func (s *OrganizationCustomRuleMetadata) SetOrganizationConfigRuleTriggerTypes(v []*string) *OrganizationCustomRuleMetadata {
+	s.OrganizationConfigRuleTriggerTypes = v
+	return s
+}
+
+// SetResourceIdScope sets the ResourceIdScope field's value.
+func (s *OrganizationCustomRuleMetadata) SetResourceIdScope(v string) *OrganizationCustomRuleMetadata {
+	s.ResourceIdScope = &v
+	return s
+}
+
+// SetResourceTypesScope sets the ResourceTypesScope field's value.
+func (s *OrganizationCustomRuleMetadata) SetResourceTypesScope(v []*string) *OrganizationCustomRuleMetadata {
+	s.ResourceTypesScope = v
+	return s
+}
+
+// SetTagKeyScope sets the TagKeyScope field's value.
+func (s *OrganizationCustomRuleMetadata) SetTagKeyScope(v string) *OrganizationCustomRuleMetadata {
+	s.TagKeyScope = &v
+	return s
+}
+
+// SetTagValueScope sets the TagValueScope field's value.
+func (s *OrganizationCustomRuleMetadata) SetTagValueScope(v string) *OrganizationCustomRuleMetadata {
+	s.TagValueScope = &v
+	return s
+}
+
+type OrganizationManagedRuleMetadata struct {
+	_ struct{} `type:"structure"`
+
+	Description *string `type:"string"`
+
+	InputParameters *string `min:"1" type:"string"`
+
+	MaximumExecutionFrequency *string `type:"string" enum:"MaximumExecutionFrequency"`
+
+	ResourceIdScope *string `min:"1" type:"string"`
+
+	ResourceTypesScope []*string `type:"list"`
+
+	// RuleIdentifier is a required field
+	RuleIdentifier *string `min:"1" type:"string" required:"true"`
+
+	TagKeyScope *string `min:"1" type:"string"`
+
+	TagValueScope *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s OrganizationManagedRuleMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OrganizationManagedRuleMetadata) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *OrganizationManagedRuleMetadata) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "OrganizationManagedRuleMetadata"}
+	if s.InputParameters != nil && len(*s.InputParameters) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InputParameters", 1))
+	}
+	if s.ResourceIdScope != nil && len(*s.ResourceIdScope) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceIdScope", 1))
+	}
+	if s.RuleIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("RuleIdentifier"))
+	}
+	if s.RuleIdentifier != nil && len(*s.RuleIdentifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RuleIdentifier", 1))
+	}
+	if s.TagKeyScope != nil && len(*s.TagKeyScope) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TagKeyScope", 1))
+	}
+	if s.TagValueScope != nil && len(*s.TagValueScope) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TagValueScope", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *OrganizationManagedRuleMetadata) SetDescription(v string) *OrganizationManagedRuleMetadata {
+	s.Description = &v
+	return s
+}
+
+// SetInputParameters sets the InputParameters field's value.
+func (s *OrganizationManagedRuleMetadata) SetInputParameters(v string) *OrganizationManagedRuleMetadata {
+	s.InputParameters = &v
+	return s
+}
+
+// SetMaximumExecutionFrequency sets the MaximumExecutionFrequency field's value.
+func (s *OrganizationManagedRuleMetadata) SetMaximumExecutionFrequency(v string) *OrganizationManagedRuleMetadata {
+	s.MaximumExecutionFrequency = &v
+	return s
+}
+
+// SetResourceIdScope sets the ResourceIdScope field's value.
+func (s *OrganizationManagedRuleMetadata) SetResourceIdScope(v string) *OrganizationManagedRuleMetadata {
+	s.ResourceIdScope = &v
+	return s
+}
+
+// SetResourceTypesScope sets the ResourceTypesScope field's value.
+func (s *OrganizationManagedRuleMetadata) SetResourceTypesScope(v []*string) *OrganizationManagedRuleMetadata {
+	s.ResourceTypesScope = v
+	return s
+}
+
+// SetRuleIdentifier sets the RuleIdentifier field's value.
+func (s *OrganizationManagedRuleMetadata) SetRuleIdentifier(v string) *OrganizationManagedRuleMetadata {
+	s.RuleIdentifier = &v
+	return s
+}
+
+// SetTagKeyScope sets the TagKeyScope field's value.
+func (s *OrganizationManagedRuleMetadata) SetTagKeyScope(v string) *OrganizationManagedRuleMetadata {
+	s.TagKeyScope = &v
+	return s
+}
+
+// SetTagValueScope sets the TagValueScope field's value.
+func (s *OrganizationManagedRuleMetadata) SetTagValueScope(v string) *OrganizationManagedRuleMetadata {
+	s.TagValueScope = &v
 	return s
 }
 
@@ -11708,6 +12839,101 @@ func (s PutEvaluationsOutput) GoString() string {
 // SetFailedEvaluations sets the FailedEvaluations field's value.
 func (s *PutEvaluationsOutput) SetFailedEvaluations(v []*Evaluation) *PutEvaluationsOutput {
 	s.FailedEvaluations = v
+	return s
+}
+
+type PutOrganizationConfigRuleInput struct {
+	_ struct{} `type:"structure"`
+
+	ExcludedAccounts []*string `type:"list"`
+
+	// OrganizationConfigRuleName is a required field
+	OrganizationConfigRuleName *string `min:"1" type:"string" required:"true"`
+
+	OrganizationCustomRuleMetadata *OrganizationCustomRuleMetadata `type:"structure"`
+
+	OrganizationManagedRuleMetadata *OrganizationManagedRuleMetadata `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutOrganizationConfigRuleInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutOrganizationConfigRuleInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutOrganizationConfigRuleInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutOrganizationConfigRuleInput"}
+	if s.OrganizationConfigRuleName == nil {
+		invalidParams.Add(request.NewErrParamRequired("OrganizationConfigRuleName"))
+	}
+	if s.OrganizationConfigRuleName != nil && len(*s.OrganizationConfigRuleName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OrganizationConfigRuleName", 1))
+	}
+	if s.OrganizationCustomRuleMetadata != nil {
+		if err := s.OrganizationCustomRuleMetadata.Validate(); err != nil {
+			invalidParams.AddNested("OrganizationCustomRuleMetadata", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.OrganizationManagedRuleMetadata != nil {
+		if err := s.OrganizationManagedRuleMetadata.Validate(); err != nil {
+			invalidParams.AddNested("OrganizationManagedRuleMetadata", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetExcludedAccounts sets the ExcludedAccounts field's value.
+func (s *PutOrganizationConfigRuleInput) SetExcludedAccounts(v []*string) *PutOrganizationConfigRuleInput {
+	s.ExcludedAccounts = v
+	return s
+}
+
+// SetOrganizationConfigRuleName sets the OrganizationConfigRuleName field's value.
+func (s *PutOrganizationConfigRuleInput) SetOrganizationConfigRuleName(v string) *PutOrganizationConfigRuleInput {
+	s.OrganizationConfigRuleName = &v
+	return s
+}
+
+// SetOrganizationCustomRuleMetadata sets the OrganizationCustomRuleMetadata field's value.
+func (s *PutOrganizationConfigRuleInput) SetOrganizationCustomRuleMetadata(v *OrganizationCustomRuleMetadata) *PutOrganizationConfigRuleInput {
+	s.OrganizationCustomRuleMetadata = v
+	return s
+}
+
+// SetOrganizationManagedRuleMetadata sets the OrganizationManagedRuleMetadata field's value.
+func (s *PutOrganizationConfigRuleInput) SetOrganizationManagedRuleMetadata(v *OrganizationManagedRuleMetadata) *PutOrganizationConfigRuleInput {
+	s.OrganizationManagedRuleMetadata = v
+	return s
+}
+
+type PutOrganizationConfigRuleOutput struct {
+	_ struct{} `type:"structure"`
+
+	OrganizationConfigRuleArn *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s PutOrganizationConfigRuleOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutOrganizationConfigRuleOutput) GoString() string {
+	return s.String()
+}
+
+// SetOrganizationConfigRuleArn sets the OrganizationConfigRuleArn field's value.
+func (s *PutOrganizationConfigRuleOutput) SetOrganizationConfigRuleArn(v string) *PutOrganizationConfigRuleOutput {
+	s.OrganizationConfigRuleArn = &v
 	return s
 }
 
@@ -13179,6 +14405,36 @@ func (s *StaticValue) SetValues(v []*string) *StaticValue {
 	return s
 }
 
+type StatusDetailFilters struct {
+	_ struct{} `type:"structure"`
+
+	AccountId *string `type:"string"`
+
+	MemberAccountRuleStatus *string `type:"string" enum:"MemberAccountRuleStatus"`
+}
+
+// String returns the string representation
+func (s StatusDetailFilters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StatusDetailFilters) GoString() string {
+	return s.String()
+}
+
+// SetAccountId sets the AccountId field's value.
+func (s *StatusDetailFilters) SetAccountId(v string) *StatusDetailFilters {
+	s.AccountId = &v
+	return s
+}
+
+// SetMemberAccountRuleStatus sets the MemberAccountRuleStatus field's value.
+func (s *StatusDetailFilters) SetMemberAccountRuleStatus(v string) *StatusDetailFilters {
+	s.MemberAccountRuleStatus = &v
+	return s
+}
+
 // The input for the StopConfigurationRecorder action.
 type StopConfigurationRecorderInput struct {
 	_ struct{} `type:"structure"`
@@ -13559,6 +14815,26 @@ const (
 )
 
 const (
+	// MemberAccountRuleStatusCreateSuccessful is a MemberAccountRuleStatus enum value
+	MemberAccountRuleStatusCreateSuccessful = "CREATE_SUCCESSFUL"
+
+	// MemberAccountRuleStatusCreateInProgress is a MemberAccountRuleStatus enum value
+	MemberAccountRuleStatusCreateInProgress = "CREATE_IN_PROGRESS"
+
+	// MemberAccountRuleStatusCreateFailed is a MemberAccountRuleStatus enum value
+	MemberAccountRuleStatusCreateFailed = "CREATE_FAILED"
+
+	// MemberAccountRuleStatusDeleteSuccessful is a MemberAccountRuleStatus enum value
+	MemberAccountRuleStatusDeleteSuccessful = "DELETE_SUCCESSFUL"
+
+	// MemberAccountRuleStatusDeleteFailed is a MemberAccountRuleStatus enum value
+	MemberAccountRuleStatusDeleteFailed = "DELETE_FAILED"
+
+	// MemberAccountRuleStatusDeleteInProgress is a MemberAccountRuleStatus enum value
+	MemberAccountRuleStatusDeleteInProgress = "DELETE_IN_PROGRESS"
+)
+
+const (
 	// MessageTypeConfigurationItemChangeNotification is a MessageType enum value
 	MessageTypeConfigurationItemChangeNotification = "ConfigurationItemChangeNotification"
 
@@ -13570,6 +14846,37 @@ const (
 
 	// MessageTypeOversizedConfigurationItemChangeNotification is a MessageType enum value
 	MessageTypeOversizedConfigurationItemChangeNotification = "OversizedConfigurationItemChangeNotification"
+)
+
+const (
+	// OrganizationConfigRuleTriggerTypeConfigurationItemChangeNotification is a OrganizationConfigRuleTriggerType enum value
+	OrganizationConfigRuleTriggerTypeConfigurationItemChangeNotification = "ConfigurationItemChangeNotification"
+
+	// OrganizationConfigRuleTriggerTypeOversizedConfigurationItemChangeNotification is a OrganizationConfigRuleTriggerType enum value
+	OrganizationConfigRuleTriggerTypeOversizedConfigurationItemChangeNotification = "OversizedConfigurationItemChangeNotification"
+
+	// OrganizationConfigRuleTriggerTypeScheduledNotification is a OrganizationConfigRuleTriggerType enum value
+	OrganizationConfigRuleTriggerTypeScheduledNotification = "ScheduledNotification"
+)
+
+const (
+	// OrganizationRuleStatusCreateSuccessful is a OrganizationRuleStatus enum value
+	OrganizationRuleStatusCreateSuccessful = "CREATE_SUCCESSFUL"
+
+	// OrganizationRuleStatusCreateInProgress is a OrganizationRuleStatus enum value
+	OrganizationRuleStatusCreateInProgress = "CREATE_IN_PROGRESS"
+
+	// OrganizationRuleStatusCreateFailed is a OrganizationRuleStatus enum value
+	OrganizationRuleStatusCreateFailed = "CREATE_FAILED"
+
+	// OrganizationRuleStatusDeleteSuccessful is a OrganizationRuleStatus enum value
+	OrganizationRuleStatusDeleteSuccessful = "DELETE_SUCCESSFUL"
+
+	// OrganizationRuleStatusDeleteFailed is a OrganizationRuleStatus enum value
+	OrganizationRuleStatusDeleteFailed = "DELETE_FAILED"
+
+	// OrganizationRuleStatusDeleteInProgress is a OrganizationRuleStatus enum value
+	OrganizationRuleStatusDeleteInProgress = "DELETE_IN_PROGRESS"
 )
 
 const (

@@ -77,7 +77,10 @@
         {"shape":"WAFInternalErrorException"},
         {"shape":"WAFDisallowedNameException"},
         {"shape":"WAFInvalidParameterException"},
-        {"shape":"WAFLimitsExceededException"}
+        {"shape":"WAFLimitsExceededException"},
+        {"shape":"WAFTagOperationException"},
+        {"shape":"WAFTagOperationInternalErrorException"},
+        {"shape":"WAFBadRequestException"}
       ]
     },
     "CreateRegexMatchSet":{
@@ -123,7 +126,10 @@
         {"shape":"WAFInternalErrorException"},
         {"shape":"WAFDisallowedNameException"},
         {"shape":"WAFInvalidParameterException"},
-        {"shape":"WAFLimitsExceededException"}
+        {"shape":"WAFLimitsExceededException"},
+        {"shape":"WAFTagOperationException"},
+        {"shape":"WAFTagOperationInternalErrorException"},
+        {"shape":"WAFBadRequestException"}
       ]
     },
     "CreateRuleGroup":{
@@ -138,7 +144,10 @@
         {"shape":"WAFStaleDataException"},
         {"shape":"WAFInternalErrorException"},
         {"shape":"WAFDisallowedNameException"},
-        {"shape":"WAFLimitsExceededException"}
+        {"shape":"WAFLimitsExceededException"},
+        {"shape":"WAFTagOperationException"},
+        {"shape":"WAFTagOperationInternalErrorException"},
+        {"shape":"WAFBadRequestException"}
       ]
     },
     "CreateSizeConstraintSet":{
@@ -189,7 +198,10 @@
         {"shape":"WAFInvalidAccountException"},
         {"shape":"WAFDisallowedNameException"},
         {"shape":"WAFInvalidParameterException"},
-        {"shape":"WAFLimitsExceededException"}
+        {"shape":"WAFLimitsExceededException"},
+        {"shape":"WAFTagOperationException"},
+        {"shape":"WAFTagOperationInternalErrorException"},
+        {"shape":"WAFBadRequestException"}
       ]
     },
     "CreateXssMatchSet":{
@@ -302,7 +314,9 @@
         {"shape":"WAFInvalidAccountException"},
         {"shape":"WAFNonexistentItemException"},
         {"shape":"WAFReferencedItemException"},
-        {"shape":"WAFNonEmptyEntityException"}
+        {"shape":"WAFNonEmptyEntityException"},
+        {"shape":"WAFTagOperationException"},
+        {"shape":"WAFTagOperationInternalErrorException"}
       ]
     },
     "DeleteRegexMatchSet":{
@@ -353,7 +367,9 @@
         {"shape":"WAFInvalidAccountException"},
         {"shape":"WAFNonexistentItemException"},
         {"shape":"WAFReferencedItemException"},
-        {"shape":"WAFNonEmptyEntityException"}
+        {"shape":"WAFNonEmptyEntityException"},
+        {"shape":"WAFTagOperationException"},
+        {"shape":"WAFTagOperationInternalErrorException"}
       ]
     },
     "DeleteRuleGroup":{
@@ -370,7 +386,9 @@
         {"shape":"WAFNonexistentItemException"},
         {"shape":"WAFReferencedItemException"},
         {"shape":"WAFNonEmptyEntityException"},
-        {"shape":"WAFInvalidOperationException"}
+        {"shape":"WAFInvalidOperationException"},
+        {"shape":"WAFTagOperationException"},
+        {"shape":"WAFTagOperationInternalErrorException"}
       ]
     },
     "DeleteSizeConstraintSet":{
@@ -421,7 +439,9 @@
         {"shape":"WAFInvalidAccountException"},
         {"shape":"WAFNonexistentItemException"},
         {"shape":"WAFReferencedItemException"},
-        {"shape":"WAFNonEmptyEntityException"}
+        {"shape":"WAFNonEmptyEntityException"},
+        {"shape":"WAFTagOperationException"},
+        {"shape":"WAFTagOperationInternalErrorException"}
       ]
     },
     "DeleteXssMatchSet":{
@@ -857,6 +877,23 @@
         {"shape":"WAFInternalErrorException"}
       ]
     },
+    "ListTagsForResource":{
+      "name":"ListTagsForResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListTagsForResourceRequest"},
+      "output":{"shape":"ListTagsForResourceResponse"},
+      "errors":[
+        {"shape":"WAFInternalErrorException"},
+        {"shape":"WAFInvalidParameterException"},
+        {"shape":"WAFNonexistentItemException"},
+        {"shape":"WAFBadRequestException"},
+        {"shape":"WAFTagOperationException"},
+        {"shape":"WAFTagOperationInternalErrorException"}
+      ]
+    },
     "ListWebACLs":{
       "name":"ListWebACLs",
       "http":{
@@ -911,6 +948,41 @@
         {"shape":"WAFStaleDataException"},
         {"shape":"WAFNonexistentItemException"},
         {"shape":"WAFInvalidPermissionPolicyException"}
+      ]
+    },
+    "TagResource":{
+      "name":"TagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"TagResourceRequest"},
+      "output":{"shape":"TagResourceResponse"},
+      "errors":[
+        {"shape":"WAFInternalErrorException"},
+        {"shape":"WAFInvalidParameterException"},
+        {"shape":"WAFLimitsExceededException"},
+        {"shape":"WAFNonexistentItemException"},
+        {"shape":"WAFBadRequestException"},
+        {"shape":"WAFTagOperationException"},
+        {"shape":"WAFTagOperationInternalErrorException"}
+      ]
+    },
+    "UntagResource":{
+      "name":"UntagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UntagResourceRequest"},
+      "output":{"shape":"UntagResourceResponse"},
+      "errors":[
+        {"shape":"WAFInternalErrorException"},
+        {"shape":"WAFInvalidParameterException"},
+        {"shape":"WAFNonexistentItemException"},
+        {"shape":"WAFBadRequestException"},
+        {"shape":"WAFTagOperationException"},
+        {"shape":"WAFTagOperationInternalErrorException"}
       ]
     },
     "UpdateByteMatchSet":{
@@ -1331,7 +1403,8 @@
         "MetricName":{"shape":"MetricName"},
         "RateKey":{"shape":"RateKey"},
         "RateLimit":{"shape":"RateLimit"},
-        "ChangeToken":{"shape":"ChangeToken"}
+        "ChangeToken":{"shape":"ChangeToken"},
+        "Tags":{"shape":"TagList"}
       }
     },
     "CreateRateBasedRuleResponse":{
@@ -1387,7 +1460,8 @@
       "members":{
         "Name":{"shape":"ResourceName"},
         "MetricName":{"shape":"MetricName"},
-        "ChangeToken":{"shape":"ChangeToken"}
+        "ChangeToken":{"shape":"ChangeToken"},
+        "Tags":{"shape":"TagList"}
       }
     },
     "CreateRuleGroupResponse":{
@@ -1407,7 +1481,8 @@
       "members":{
         "Name":{"shape":"ResourceName"},
         "MetricName":{"shape":"MetricName"},
-        "ChangeToken":{"shape":"ChangeToken"}
+        "ChangeToken":{"shape":"ChangeToken"},
+        "Tags":{"shape":"TagList"}
       }
     },
     "CreateRuleResponse":{
@@ -1465,7 +1540,8 @@
         "Name":{"shape":"ResourceName"},
         "MetricName":{"shape":"MetricName"},
         "DefaultAction":{"shape":"WafAction"},
-        "ChangeToken":{"shape":"ChangeToken"}
+        "ChangeToken":{"shape":"ChangeToken"},
+        "Tags":{"shape":"TagList"}
       }
     },
     "CreateWebACLResponse":{
@@ -2581,6 +2657,22 @@
         "RuleGroups":{"shape":"SubscribedRuleGroupSummaries"}
       }
     },
+    "ListTagsForResourceRequest":{
+      "type":"structure",
+      "required":["ResourceARN"],
+      "members":{
+        "NextMarker":{"shape":"NextMarker"},
+        "Limit":{"shape":"PaginationLimit"},
+        "ResourceARN":{"shape":"ResourceArn"}
+      }
+    },
+    "ListTagsForResourceResponse":{
+      "type":"structure",
+      "members":{
+        "NextMarker":{"shape":"NextMarker"},
+        "TagInfoForResource":{"shape":"TagInfoForResource"}
+      }
+    },
     "ListWebACLsRequest":{
       "type":"structure",
       "members":{
@@ -2678,7 +2770,9 @@
         "RATE_KEY",
         "RULE_TYPE",
         "NEXT_MARKER",
-        "RESOURCE_ARN"
+        "RESOURCE_ARN",
+        "TAGS",
+        "TAG_KEYS"
       ]
     },
     "ParameterExceptionParameter":{
@@ -2690,7 +2784,8 @@
       "enum":[
         "INVALID_OPTION",
         "ILLEGAL_COMBINATION",
-        "ILLEGAL_ARGUMENT"
+        "ILLEGAL_ARGUMENT",
+        "INVALID_TAG_KEY"
       ]
     },
     "PolicyString":{
@@ -3167,6 +3262,56 @@
         "MetricName":{"shape":"MetricName"}
       }
     },
+    "Tag":{
+      "type":"structure",
+      "members":{
+        "Key":{"shape":"TagKey"},
+        "Value":{"shape":"TagValue"}
+      }
+    },
+    "TagInfoForResource":{
+      "type":"structure",
+      "members":{
+        "ResourceARN":{"shape":"ResourceArn"},
+        "TagList":{"shape":"TagList"}
+      }
+    },
+    "TagKey":{
+      "type":"string",
+      "max":128,
+      "min":1
+    },
+    "TagKeyList":{
+      "type":"list",
+      "member":{"shape":"TagKey"},
+      "min":1
+    },
+    "TagList":{
+      "type":"list",
+      "member":{"shape":"Tag"},
+      "min":1
+    },
+    "TagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "ResourceARN",
+        "Tags"
+      ],
+      "members":{
+        "ResourceARN":{"shape":"ResourceArn"},
+        "Tags":{"shape":"TagList"}
+      }
+    },
+    "TagResourceResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "TagValue":{
+      "type":"string",
+      "max":256,
+      "min":0
+    },
     "TextTransformation":{
       "type":"string",
       "enum":[
@@ -3191,6 +3336,22 @@
     },
     "Timestamp":{"type":"timestamp"},
     "URIString":{"type":"string"},
+    "UntagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "ResourceARN",
+        "TagKeys"
+      ],
+      "members":{
+        "ResourceARN":{"shape":"ResourceArn"},
+        "TagKeys":{"shape":"TagKeyList"}
+      }
+    },
+    "UntagResourceResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "UpdateByteMatchSetRequest":{
       "type":"structure",
       "required":[
@@ -3421,6 +3582,13 @@
         "ChangeToken":{"shape":"ChangeToken"}
       }
     },
+    "WAFBadRequestException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"errorMessage"}
+      },
+      "exception":true
+    },
     "WAFDisallowedNameException":{
       "type":"structure",
       "members":{
@@ -3527,6 +3695,21 @@
         "message":{"shape":"errorMessage"}
       },
       "exception":true
+    },
+    "WAFTagOperationException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"errorMessage"}
+      },
+      "exception":true
+    },
+    "WAFTagOperationInternalErrorException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"errorMessage"}
+      },
+      "exception":true,
+      "fault":true
     },
     "WafAction":{
       "type":"structure",

@@ -54,10 +54,7 @@ func main() {
 
 	trace.ApplyConfig(trace.Config{DefaultSampler: trace.AlwaysSample()})
 
-	frontendKey, err = tag.NewKey("example.com/keys/frontend")
-	if err != nil {
-		log.Fatal(err)
-	}
+	frontendKey = tag.MustNewKey("example.com/keys/frontend")
 	videoSize = stats.Int64("example.com/measure/video_size", "size of processed videos", stats.UnitBytes)
 	view.SetReportingPeriod(2 * time.Second)
 

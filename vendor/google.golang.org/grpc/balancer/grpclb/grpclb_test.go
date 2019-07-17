@@ -529,18 +529,54 @@ func TestDropRequest(t *testing.T) {
 		ServerName: lbServerName,
 	}}})
 
-	// Wait for the 1st, non-fail-fast RPC to succeed. This ensures both server
-	// connections are made, because the first one has Drop set to true.
-	var i int
-	for i = 0; i < 1000; i++ {
-		if _, err := testC.EmptyCall(ctx, &testpb.Empty{}, grpc.WaitForReady(true)); err == nil {
+	var (
+		i int
+		p peer.Peer
+	)
+	const (
+		// Poll to wait for something to happen. Total timeout 1 second. Sleep 1
+		// ms each loop, and do at most 1000 loops.
+		sleepEachLoop = time.Millisecond
+		loopCount     = int(time.Second / sleepEachLoop)
+	)
+	// Make a non-fail-fast RPC and wait for it to succeed.
+	for i = 0; i < loopCount; i++ {
+		if _, err := testC.EmptyCall(ctx, &testpb.Empty{}, grpc.WaitForReady(true), grpc.Peer(&p)); err == nil {
 			break
 		}
-		time.Sleep(time.Millisecond)
+		time.Sleep(sleepEachLoop)
 	}
-	if i >= 1000 {
-		t.Fatalf("%v.SayHello(_, _) = _, %v, want _, <nil>", testC, err)
+	if i >= loopCount {
+		t.Fatalf("timeout waiting for the first connection to become ready. EmptyCall(_, _) = _, %v, want _, <nil>", err)
 	}
+
+	// Make RPCs until the peer is different. So we know both connections are
+	// READY.
+	for i = 0; i < loopCount; i++ {
+		var temp peer.Peer
+		if _, err := testC.EmptyCall(ctx, &testpb.Empty{}, grpc.WaitForReady(true), grpc.Peer(&temp)); err == nil {
+			if temp.Addr.(*net.TCPAddr).Port != p.Addr.(*net.TCPAddr).Port {
+				break
+			}
+		}
+		time.Sleep(sleepEachLoop)
+	}
+	if i >= loopCount {
+		t.Fatalf("timeout waiting for the second connection to become ready")
+	}
+
+	// More RPCs until drop happens. So we know the picker index, and the
+	// expected behavior of following RPCs.
+	for i = 0; i < loopCount; i++ {
+		if _, err := testC.EmptyCall(ctx, &testpb.Empty{}, grpc.WaitForReady(true)); status.Code(err) == codes.Unavailable {
+			break
+		}
+		time.Sleep(sleepEachLoop)
+	}
+	if i >= loopCount {
+		t.Fatalf("timeout waiting for drop. EmptyCall(_, _) = _, %v, want _, <Unavailable>", err)
+	}
+
 	select {
 	case <-ctx.Done():
 		t.Fatal("timed out", ctx.Err())
@@ -548,25 +584,33 @@ func TestDropRequest(t *testing.T) {
 	}
 	for _, failfast := range []bool{true, false} {
 		for i := 0; i < 3; i++ {
-			// 1st RPCs pick the second item in server list. They should succeed
+			// 1st RPCs pick the first item in server list. They should succeed
 			// since they choose the non-drop-request backend according to the
 			// round robin policy.
 			if _, err := testC.EmptyCall(context.Background(), &testpb.Empty{}, grpc.WaitForReady(!failfast)); err != nil {
 				t.Errorf("%v.EmptyCall(_, _) = _, %v, want _, <nil>", testC, err)
 			}
-			// 2st RPCs should fail, because they pick last item in server list,
+			// 2nd RPCs pick the second item in server list. They should succeed
+			// since they choose the non-drop-request backend according to the
+			// round robin policy.
+			if _, err := testC.EmptyCall(context.Background(), &testpb.Empty{}, grpc.WaitForReady(!failfast)); err != nil {
+				t.Errorf("%v.EmptyCall(_, _) = _, %v, want _, <nil>", testC, err)
+			}
+			// 3rd RPCs should fail, because they pick last item in server list,
 			// with Drop set to true.
 			if _, err := testC.EmptyCall(context.Background(), &testpb.Empty{}, grpc.WaitForReady(!failfast)); status.Code(err) != codes.Unavailable {
 				t.Errorf("%v.EmptyCall(_, _) = _, %v, want _, %s", testC, err, codes.Unavailable)
 			}
-			// 3rd RPCs pick the first item in server list. They should succeed
-			// since they choose the non-drop-request backend according to the
-			// round robin policy.
-			if _, err := testC.EmptyCall(context.Background(), &testpb.Empty{}, grpc.WaitForReady(!failfast)); err != nil {
-				t.Errorf("%v.EmptyCall(_, _) = _, %v, want _, <nil>", testC, err)
-			}
 		}
 	}
+
+	// Make one more RPC to move the picker index one step further, so it's not
+	// 0. The following RPCs will test that drop index is not reset. If picker
+	// index is at 0, we cannot tell whether it's reset or not.
+	if _, err := testC.EmptyCall(context.Background(), &testpb.Empty{}, grpc.WaitForReady(true)); err != nil {
+		t.Errorf("%v.EmptyCall(_, _) = _, %v, want _, <nil>", testC, err)
+	}
+
 	tss.backends[0].Stop()
 	// This last pick was backend 0. Closing backend 0 doesn't reset drop index
 	// (for level 1 picking), so the following picks will be (backend1, drop,

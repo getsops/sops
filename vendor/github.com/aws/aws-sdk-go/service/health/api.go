@@ -2183,4 +2183,7 @@ const (
 
 	// EventTypeCategoryScheduledChange is a eventTypeCategory enum value
 	EventTypeCategoryScheduledChange = "scheduledChange"
+
+	// EventTypeCategoryInvestigation is a eventTypeCategory enum value
+	EventTypeCategoryInvestigation = "investigation"
 )

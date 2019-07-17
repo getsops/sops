@@ -19,7 +19,7 @@
 
 package servicefabric
 
-import original "github.com/Azure/azure-sdk-for-go/services/servicefabric/6.4/servicefabric"
+import original "github.com/Azure/azure-sdk-for-go/services/servicefabric/6.5/servicefabric"
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
@@ -1405,12 +1405,12 @@ const (
 type ServicePlacementPolicyType = original.ServicePlacementPolicyType
 
 const (
-	ServicePlacementPolicyTypeInvalid                    ServicePlacementPolicyType = original.ServicePlacementPolicyTypeInvalid
-	ServicePlacementPolicyTypeInvalidDomain              ServicePlacementPolicyType = original.ServicePlacementPolicyTypeInvalidDomain
-	ServicePlacementPolicyTypeNonPartiallyPlaceService   ServicePlacementPolicyType = original.ServicePlacementPolicyTypeNonPartiallyPlaceService
-	ServicePlacementPolicyTypePreferredPrimaryDomain     ServicePlacementPolicyType = original.ServicePlacementPolicyTypePreferredPrimaryDomain
-	ServicePlacementPolicyTypeRequiredDomain             ServicePlacementPolicyType = original.ServicePlacementPolicyTypeRequiredDomain
-	ServicePlacementPolicyTypeRequiredDomainDistribution ServicePlacementPolicyType = original.ServicePlacementPolicyTypeRequiredDomainDistribution
+	ServicePlacementPolicyTypeInvalid                   ServicePlacementPolicyType = original.ServicePlacementPolicyTypeInvalid
+	ServicePlacementPolicyTypeInvalidDomain             ServicePlacementPolicyType = original.ServicePlacementPolicyTypeInvalidDomain
+	ServicePlacementPolicyTypeNonPartiallyPlaceService  ServicePlacementPolicyType = original.ServicePlacementPolicyTypeNonPartiallyPlaceService
+	ServicePlacementPolicyTypePreferPrimaryDomain       ServicePlacementPolicyType = original.ServicePlacementPolicyTypePreferPrimaryDomain
+	ServicePlacementPolicyTypeRequireDomain             ServicePlacementPolicyType = original.ServicePlacementPolicyTypeRequireDomain
+	ServicePlacementPolicyTypeRequireDomainDistribution ServicePlacementPolicyType = original.ServicePlacementPolicyTypeRequireDomainDistribution
 )
 
 type ServiceStatus = original.ServiceStatus
@@ -1467,9 +1467,9 @@ type Type = original.Type
 const (
 	TypeInvalidDomain                     Type = original.TypeInvalidDomain
 	TypeNonPartiallyPlaceService          Type = original.TypeNonPartiallyPlaceService
-	TypePreferredPrimaryDomain            Type = original.TypePreferredPrimaryDomain
-	TypeRequiredDomain                    Type = original.TypeRequiredDomain
-	TypeRequiredDomainDistribution        Type = original.TypeRequiredDomainDistribution
+	TypePreferPrimaryDomain               Type = original.TypePreferPrimaryDomain
+	TypeRequireDomain                     Type = original.TypeRequireDomain
+	TypeRequireDomainDistribution         Type = original.TypeRequireDomainDistribution
 	TypeServicePlacementPolicyDescription Type = original.TypeServicePlacementPolicyDescription
 )
 
@@ -1496,6 +1496,17 @@ const (
 	UpgradeModeMonitored         UpgradeMode = original.UpgradeModeMonitored
 	UpgradeModeUnmonitoredAuto   UpgradeMode = original.UpgradeModeUnmonitoredAuto
 	UpgradeModeUnmonitoredManual UpgradeMode = original.UpgradeModeUnmonitoredManual
+)
+
+type UpgradeSortOrder = original.UpgradeSortOrder
+
+const (
+	UpgradeSortOrderDefault                UpgradeSortOrder = original.UpgradeSortOrderDefault
+	UpgradeSortOrderInvalid                UpgradeSortOrder = original.UpgradeSortOrderInvalid
+	UpgradeSortOrderLexicographical        UpgradeSortOrder = original.UpgradeSortOrderLexicographical
+	UpgradeSortOrderNumeric                UpgradeSortOrder = original.UpgradeSortOrderNumeric
+	UpgradeSortOrderReverseLexicographical UpgradeSortOrder = original.UpgradeSortOrderReverseLexicographical
+	UpgradeSortOrderReverseNumeric         UpgradeSortOrder = original.UpgradeSortOrderReverseNumeric
 )
 
 type UpgradeState = original.UpgradeState
@@ -1678,6 +1689,7 @@ type ClusterHealthChunkQueryDescription = original.ClusterHealthChunkQueryDescri
 type ClusterHealthPolicies = original.ClusterHealthPolicies
 type ClusterHealthPolicy = original.ClusterHealthPolicy
 type ClusterHealthReportExpiredEvent = original.ClusterHealthReportExpiredEvent
+type ClusterLoadInfo = original.ClusterLoadInfo
 type ClusterManifest = original.ClusterManifest
 type ClusterNewHealthReportEvent = original.ClusterNewHealthReportEvent
 type ClusterUpgradeCompletedEvent = original.ClusterUpgradeCompletedEvent
@@ -1748,7 +1760,7 @@ type EnableBackupDescription = original.EnableBackupDescription
 type EndpointProperties = original.EndpointProperties
 type EndpointRef = original.EndpointRef
 type EnsureAvailabilitySafetyCheck = original.EnsureAvailabilitySafetyCheck
-type EnsurePartitionQurumSafetyCheck = original.EnsurePartitionQurumSafetyCheck
+type EnsurePartitionQuorumSafetyCheck = original.EnsurePartitionQuorumSafetyCheck
 type EntityHealth = original.EntityHealth
 type EntityHealthState = original.EntityHealthState
 type EntityHealthStateChunk = original.EntityHealthStateChunk
@@ -1771,6 +1783,7 @@ type FileInfo = original.FileInfo
 type FileShareBackupStorageDescription = original.FileShareBackupStorageDescription
 type FileVersion = original.FileVersion
 type FolderInfo = original.FolderInfo
+type FolderSizeInfo = original.FolderSizeInfo
 type FrequencyBasedBackupScheduleDescription = original.FrequencyBasedBackupScheduleDescription
 type GUIDPropertyValue = original.GUIDPropertyValue
 type GatewayDestination = original.GatewayDestination
@@ -1790,6 +1803,8 @@ type HealthEvent = original.HealthEvent
 type HealthInformation = original.HealthInformation
 type HealthStateCount = original.HealthStateCount
 type HealthStatistics = original.HealthStatistics
+type IdentityDescription = original.IdentityDescription
+type IdentityItemDescription = original.IdentityItemDescription
 type ImageRegistryCredential = original.ImageRegistryCredential
 type ImageStoreContent = original.ImageStoreContent
 type ImageStoreCopyDescription = original.ImageStoreCopyDescription
@@ -1816,9 +1831,12 @@ type ListRepairTask = original.ListRepairTask
 type ListReplicaEvent = original.ListReplicaEvent
 type ListServiceEvent = original.ListServiceEvent
 type ListServiceTypeInfo = original.ListServiceTypeInfo
+type LoadMetricInformation = original.LoadMetricInformation
 type LoadMetricReport = original.LoadMetricReport
 type LoadMetricReportInfo = original.LoadMetricReportInfo
 type LocalNetworkResourceProperties = original.LocalNetworkResourceProperties
+type ManagedApplicationIdentity = original.ManagedApplicationIdentity
+type ManagedApplicationIdentityDescription = original.ManagedApplicationIdentityDescription
 type MeshApplicationClient = original.MeshApplicationClient
 type MeshCodePackageClient = original.MeshCodePackageClient
 type MeshGatewayClient = original.MeshGatewayClient
@@ -2006,6 +2024,7 @@ type ServiceHealthState = original.ServiceHealthState
 type ServiceHealthStateChunk = original.ServiceHealthStateChunk
 type ServiceHealthStateChunkList = original.ServiceHealthStateChunkList
 type ServiceHealthStateFilter = original.ServiceHealthStateFilter
+type ServiceIdentity = original.ServiceIdentity
 type ServiceInfo = original.ServiceInfo
 type ServiceInfoModel = original.ServiceInfoModel
 type ServiceLoadMetricDescription = original.ServiceLoadMetricDescription
@@ -2068,6 +2087,7 @@ type TimeBasedBackupScheduleDescription = original.TimeBasedBackupScheduleDescri
 type TimeOfDay = original.TimeOfDay
 type TimeRange = original.TimeRange
 type UniformInt64RangePartitionSchemeDescription = original.UniformInt64RangePartitionSchemeDescription
+type UnplacedReplicaInformation = original.UnplacedReplicaInformation
 type UnprovisionApplicationTypeDescriptionInfo = original.UnprovisionApplicationTypeDescriptionInfo
 type UnprovisionFabricDescription = original.UnprovisionFabricDescription
 type UpdateClusterUpgradeDescription = original.UpdateClusterUpgradeDescription
@@ -2560,6 +2580,9 @@ func PossibleUpgradeKindValues() []UpgradeKind {
 }
 func PossibleUpgradeModeValues() []UpgradeMode {
 	return original.PossibleUpgradeModeValues()
+}
+func PossibleUpgradeSortOrderValues() []UpgradeSortOrder {
+	return original.PossibleUpgradeSortOrderValues()
 }
 func PossibleUpgradeStateValues() []UpgradeState {
 	return original.PossibleUpgradeStateValues()

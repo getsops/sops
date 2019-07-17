@@ -19,6 +19,7 @@ package storage
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"time"
 
 	gax "github.com/googleapis/gax-go/v2"
@@ -163,7 +164,7 @@ func (c *BigQueryStorageClient) setGoogleClientInfo(keyval ...string) {
 // Read sessions automatically expire 24 hours after they are created and do
 // not require manual clean-up by the caller.
 func (c *BigQueryStorageClient) CreateReadSession(ctx context.Context, req *storagepb.CreateReadSessionRequest, opts ...gax.CallOption) (*storagepb.ReadSession, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v&%s=%v", "table_reference.project_id", req.GetTableReference().GetProjectId(), "table_reference.dataset_id", req.GetTableReference().GetDatasetId()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v&%s=%v", "table_reference.project_id", url.QueryEscape(req.GetTableReference().GetProjectId()), "table_reference.dataset_id", url.QueryEscape(req.GetTableReference().GetDatasetId())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.CreateReadSession[0:len(c.CallOptions.CreateReadSession):len(c.CallOptions.CreateReadSession)], opts...)
 	var resp *storagepb.ReadSession
@@ -188,7 +189,7 @@ func (c *BigQueryStorageClient) CreateReadSession(ctx context.Context, req *stor
 // based on the total table size and the number of active streams in the read
 // session, and may change as other streams continue to read data.
 func (c *BigQueryStorageClient) ReadRows(ctx context.Context, req *storagepb.ReadRowsRequest, opts ...gax.CallOption) (storagepb.BigQueryStorage_ReadRowsClient, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "read_position.stream.name", req.GetReadPosition().GetStream().GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "read_position.stream.name", url.QueryEscape(req.GetReadPosition().GetStream().GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ReadRows[0:len(c.CallOptions.ReadRows):len(c.CallOptions.ReadRows)], opts...)
 	var resp storagepb.BigQueryStorage_ReadRowsClient
@@ -207,7 +208,7 @@ func (c *BigQueryStorageClient) ReadRows(ctx context.Context, req *storagepb.Rea
 // dynamically adjust the parallelism of a batch processing task upwards by
 // adding additional workers.
 func (c *BigQueryStorageClient) BatchCreateReadSessionStreams(ctx context.Context, req *storagepb.BatchCreateReadSessionStreamsRequest, opts ...gax.CallOption) (*storagepb.BatchCreateReadSessionStreamsResponse, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "session.name", req.GetSession().GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "session.name", url.QueryEscape(req.GetSession().GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.BatchCreateReadSessionStreams[0:len(c.CallOptions.BatchCreateReadSessionStreams):len(c.CallOptions.BatchCreateReadSessionStreams)], opts...)
 	var resp *storagepb.BatchCreateReadSessionStreamsResponse
@@ -237,7 +238,7 @@ func (c *BigQueryStorageClient) BatchCreateReadSessionStreams(ctx context.Contex
 // in the Session, or if SplitReadStream() has been called on the given
 // Stream.
 func (c *BigQueryStorageClient) FinalizeStream(ctx context.Context, req *storagepb.FinalizeStreamRequest, opts ...gax.CallOption) error {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "stream.name", req.GetStream().GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "stream.name", url.QueryEscape(req.GetStream().GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.FinalizeStream[0:len(c.CallOptions.FinalizeStream):len(c.CallOptions.FinalizeStream)], opts...)
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
@@ -262,7 +263,7 @@ func (c *BigQueryStorageClient) FinalizeStream(ctx context.Context, req *storage
 //
 // This method is guaranteed to be idempotent.
 func (c *BigQueryStorageClient) SplitReadStream(ctx context.Context, req *storagepb.SplitReadStreamRequest, opts ...gax.CallOption) (*storagepb.SplitReadStreamResponse, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "original_stream.name", req.GetOriginalStream().GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "original_stream.name", url.QueryEscape(req.GetOriginalStream().GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.SplitReadStream[0:len(c.CallOptions.SplitReadStream):len(c.CallOptions.SplitReadStream)], opts...)
 	var resp *storagepb.SplitReadStreamResponse

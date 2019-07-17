@@ -339,3 +339,14 @@ func (paf passAllFilter) String() string { return "passAllFilter()" }
 func (paf passAllFilter) proto() *btpb.RowFilter {
 	return &btpb.RowFilter{Filter: &btpb.RowFilter_PassAllFilter{PassAllFilter: true}}
 }
+
+// BlockAllFilter returns a filter that matches nothing.
+func BlockAllFilter() Filter { return blockAllFilter{} }
+
+type blockAllFilter struct{}
+
+func (baf blockAllFilter) String() string { return "blockAllFilter()" }
+
+func (baf blockAllFilter) proto() *btpb.RowFilter {
+	return &btpb.RowFilter{Filter: &btpb.RowFilter_BlockAllFilter{BlockAllFilter: true}}
+}

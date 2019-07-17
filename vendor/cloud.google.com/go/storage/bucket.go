@@ -317,6 +317,11 @@ type BucketAttrs struct {
 	// Etag is the HTTP/1.1 Entity tag for the bucket.
 	// This field is read-only.
 	Etag string
+
+	// LocationType describes how data is stored and replicated.
+	// Typical values are "multi-region", "region" and "dual-region".
+	// This field is read-only.
+	LocationType string
 }
 
 // BucketPolicyOnly configures access checks to use only bucket-level IAM
@@ -506,6 +511,7 @@ func newBucket(b *raw.Bucket) (*BucketAttrs, error) {
 		Website:               toBucketWebsite(b.Website),
 		BucketPolicyOnly:      toBucketPolicyOnly(b.IamConfiguration),
 		Etag:                  b.Etag,
+		LocationType:          b.LocationType,
 	}, nil
 }
 

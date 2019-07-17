@@ -258,12 +258,16 @@ const (
 type Unit = original.Unit
 
 const (
+	UnitBitsPerSecond  Unit = original.UnitBitsPerSecond
 	UnitBytes          Unit = original.UnitBytes
 	UnitByteSeconds    Unit = original.UnitByteSeconds
 	UnitBytesPerSecond Unit = original.UnitBytesPerSecond
+	UnitCores          Unit = original.UnitCores
 	UnitCount          Unit = original.UnitCount
 	UnitCountPerSecond Unit = original.UnitCountPerSecond
+	UnitMilliCores     Unit = original.UnitMilliCores
 	UnitMilliSeconds   Unit = original.UnitMilliSeconds
+	UnitNanoCores      Unit = original.UnitNanoCores
 	UnitPercent        Unit = original.UnitPercent
 	UnitSeconds        Unit = original.UnitSeconds
 	UnitUnspecified    Unit = original.UnitUnspecified

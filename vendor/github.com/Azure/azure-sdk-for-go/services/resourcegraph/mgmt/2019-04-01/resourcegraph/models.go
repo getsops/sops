@@ -61,6 +61,21 @@ func PossibleFacetSortOrderValues() []FacetSortOrder {
 	return []FacetSortOrder{Asc, Desc}
 }
 
+// ResultFormat enumerates the values for result format.
+type ResultFormat string
+
+const (
+	// ResultFormatObjectArray ...
+	ResultFormatObjectArray ResultFormat = "objectArray"
+	// ResultFormatTable ...
+	ResultFormatTable ResultFormat = "table"
+)
+
+// PossibleResultFormatValues returns an array of possible values for the ResultFormat const type.
+func PossibleResultFormatValues() []ResultFormat {
+	return []ResultFormat{ResultFormatObjectArray, ResultFormatTable}
+}
+
 // ResultTruncated enumerates the values for result truncated.
 type ResultTruncated string
 
@@ -351,7 +366,7 @@ type FacetResult struct {
 	// Count - Number of records returned in the facet response.
 	Count *int32 `json:"count,omitempty"`
 	// Data - A table containing the desired facets. Only present if the facet is valid.
-	Data *Table `json:"data,omitempty"`
+	Data interface{} `json:"data,omitempty"`
 	// Expression - Facet expression, same as in the corresponding facet request.
 	Expression *string `json:"expression,omitempty"`
 	// ResultType - Possible values include: 'ResultTypeFacet', 'ResultTypeFacetResult', 'ResultTypeFacetError'
@@ -450,6 +465,8 @@ type QueryRequestOptions struct {
 	Top *int32 `json:"$top,omitempty"`
 	// Skip - The number of rows to skip from the beginning of the results. Overrides the next page offset when ```$skipToken``` property is present.
 	Skip *int32 `json:"$skip,omitempty"`
+	// ResultFormat - Defines in which format query result returned. Possible values include: 'ResultFormatTable', 'ResultFormatObjectArray'
+	ResultFormat ResultFormat `json:"resultFormat,omitempty"`
 }
 
 // QueryResponse query result.
@@ -464,7 +481,7 @@ type QueryResponse struct {
 	// SkipToken - When present, the value can be passed to a subsequent query call (together with the same query and subscriptions used in the current request) to retrieve the next page of data.
 	SkipToken *string `json:"$skipToken,omitempty"`
 	// Data - Query output in tabular format.
-	Data *Table `json:"data,omitempty"`
+	Data interface{} `json:"data,omitempty"`
 	// Facets - Query facets.
 	Facets *[]BasicFacet `json:"facets,omitempty"`
 }
@@ -516,12 +533,12 @@ func (qr *QueryResponse) UnmarshalJSON(body []byte) error {
 			}
 		case "data":
 			if v != nil {
-				var data Table
+				var data interface{}
 				err = json.Unmarshal(*v, &data)
 				if err != nil {
 					return err
 				}
-				qr.Data = &data
+				qr.Data = data
 			}
 		case "facets":
 			if v != nil {

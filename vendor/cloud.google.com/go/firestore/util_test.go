@@ -79,8 +79,8 @@ func TestTestEqual(t *testing.T) {
 	}
 }
 
-func newMock(t *testing.T) (*Client, *mockServer) {
-	srv, err := newMockServer()
+func newMock(t *testing.T) (_ *Client, _ *mockServer, _ func()) {
+	srv, cleanup, err := newMockServer()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -92,7 +92,11 @@ func newMock(t *testing.T) (*Client, *mockServer) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	return client, srv
+	return client, srv, func() {
+		client.Close()
+		conn.Close()
+		cleanup()
+	}
 }
 
 func intval(i int) *pb.Value {

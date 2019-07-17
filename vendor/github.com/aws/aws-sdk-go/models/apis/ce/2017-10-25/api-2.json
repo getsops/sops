@@ -116,6 +116,20 @@
         {"shape":"InvalidNextTokenException"},
         {"shape":"RequestChangedException"}
       ]
+    },
+    "GetUsageForecast":{
+      "name":"GetUsageForecast",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetUsageForecastRequest"},
+      "output":{"shape":"GetUsageForecastResponse"},
+      "errors":[
+        {"shape":"LimitExceededException"},
+        {"shape":"DataUnavailableException"},
+        {"shape":"UnresolvableUsageUnitException"}
+      ]
     }
   },
   "shapes":{
@@ -488,6 +502,28 @@
         "TotalSize":{"shape":"PageSize"}
       }
     },
+    "GetUsageForecastRequest":{
+      "type":"structure",
+      "required":[
+        "TimePeriod",
+        "Metric",
+        "Granularity"
+      ],
+      "members":{
+        "TimePeriod":{"shape":"DateInterval"},
+        "Metric":{"shape":"Metric"},
+        "Granularity":{"shape":"Granularity"},
+        "Filter":{"shape":"Expression"},
+        "PredictionIntervalLevel":{"shape":"PredictionIntervalLevel"}
+      }
+    },
+    "GetUsageForecastResponse":{
+      "type":"structure",
+      "members":{
+        "Total":{"shape":"MetricValue"},
+        "ForecastResultsByTime":{"shape":"ForecastResultsByTime"}
+      }
+    },
     "Granularity":{
       "type":"string",
       "enum":[
@@ -812,6 +848,13 @@
     "TotalPotentialRISavings":{"type":"string"},
     "TotalRunningHours":{"type":"string"},
     "TotalRunningNormalizedUnits":{"type":"string"},
+    "UnresolvableUsageUnitException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ErrorMessage"}
+      },
+      "exception":true
+    },
     "UnusedHours":{"type":"string"},
     "UnusedUnits":{"type":"string"},
     "UtilizationByTime":{

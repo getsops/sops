@@ -200,6 +200,7 @@ func NewProjectsService(s *Service) *ProjectsService {
 	rs.Image = NewProjectsImageService(s)
 	rs.InspectTemplates = NewProjectsInspectTemplatesService(s)
 	rs.JobTriggers = NewProjectsJobTriggersService(s)
+	rs.Locations = NewProjectsLocationsService(s)
 	rs.StoredInfoTypes = NewProjectsStoredInfoTypesService(s)
 	return rs
 }
@@ -218,6 +219,8 @@ type ProjectsService struct {
 	InspectTemplates *ProjectsInspectTemplatesService
 
 	JobTriggers *ProjectsJobTriggersService
+
+	Locations *ProjectsLocationsService
 
 	StoredInfoTypes *ProjectsStoredInfoTypesService
 }
@@ -276,6 +279,27 @@ type ProjectsJobTriggersService struct {
 	s *Service
 }
 
+func NewProjectsLocationsService(s *Service) *ProjectsLocationsService {
+	rs := &ProjectsLocationsService{s: s}
+	rs.Content = NewProjectsLocationsContentService(s)
+	return rs
+}
+
+type ProjectsLocationsService struct {
+	s *Service
+
+	Content *ProjectsLocationsContentService
+}
+
+func NewProjectsLocationsContentService(s *Service) *ProjectsLocationsContentService {
+	rs := &ProjectsLocationsContentService{s: s}
+	return rs
+}
+
+type ProjectsLocationsContentService struct {
+	s *Service
+}
+
 func NewProjectsStoredInfoTypesService(s *Service) *ProjectsStoredInfoTypesService {
 	rs := &ProjectsStoredInfoTypesService{s: s}
 	return rs
@@ -296,6 +320,9 @@ type GooglePrivacyDlpV2Action struct {
 
 	// PubSub: Publish a notification to a pubsub topic.
 	PubSub *GooglePrivacyDlpV2PublishToPubSub `json:"pubSub,omitempty"`
+
+	// PublishFindingsToCloudDataCatalog: Publish findings to Cloud Datahub.
+	PublishFindingsToCloudDataCatalog *GooglePrivacyDlpV2PublishFindingsToCloudDataCatalog `json:"publishFindingsToCloudDataCatalog,omitempty"`
 
 	// PublishSummaryToCscc: Publish summary to Cloud Security Command
 	// Center (Alpha).
@@ -742,6 +769,7 @@ type GooglePrivacyDlpV2ByteContentItem struct {
 	//   "IMAGE_PNG"
 	//   "IMAGE_SVG"
 	//   "TEXT_UTF8"
+	//   "AVRO"
 	Type string `json:"type,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Data") to
@@ -1068,6 +1096,8 @@ type GooglePrivacyDlpV2CloudStorageOptions struct {
 	//   "IMAGE" - Included file extensions:
 	//   bmp, gif, jpg, jpeg, jpe, png.
 	// bytes_limit_per_file has no effect on image files.
+	//   "AVRO" - Included file extensions:
+	//   avro
 	FileTypes []string `json:"fileTypes,omitempty"`
 
 	// FilesLimitPercent: Limits the number of files to scan to this
@@ -2347,6 +2377,11 @@ type GooglePrivacyDlpV2DeidentifyContentRequest struct {
 	// Item: The item to de-identify. Will be treated as text.
 	Item *GooglePrivacyDlpV2ContentItem `json:"item,omitempty"`
 
+	// Location: The geographic location to process de-identification.
+	// Reserved for future
+	// extensions.
+	Location string `json:"location,omitempty"`
+
 	// ForceSendFields is a list of field names (e.g. "DeidentifyConfig") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
@@ -2692,11 +2727,13 @@ func (s *GooglePrivacyDlpV2DeltaPresenceEstimationResult) MarshalJSON() ([]byte,
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// GooglePrivacyDlpV2DetectionRule: Rule for modifying a CustomInfoType
-// to alter behavior under certain
-// circumstances, depending on the specific details of the rule. Not
-// supported
-// for the `surrogate_type` custom info type.
+// GooglePrivacyDlpV2DetectionRule: Deprecated; use `InspectionRuleSet`
+// instead. Rule for modifying a
+// `CustomInfoType` to alter behavior under certain circumstances,
+// depending
+// on the specific details of the rule. Not supported for the
+// `surrogate_type`
+// custom infoType.
 type GooglePrivacyDlpV2DetectionRule struct {
 	// HotwordRule: Hotword-based detection rule.
 	HotwordRule *GooglePrivacyDlpV2HotwordRule `json:"hotwordRule,omitempty"`
@@ -2836,7 +2873,6 @@ type GooglePrivacyDlpV2DlpJob struct {
 	//   "DONE" - The job is no longer running.
 	//   "CANCELED" - The job was canceled before it could complete.
 	//   "FAILED" - The job had an error and did not complete.
-	//   "WAITING_FOR_TP_CREATION" - Job waiting on Tenant Project creation.
 	State string `json:"state,omitempty"`
 
 	// Type: The type of job.
@@ -5704,6 +5740,26 @@ func (s *GooglePrivacyDlpV2Proximity) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// GooglePrivacyDlpV2PublishFindingsToCloudDataCatalog: Publish findings
+// of a DlpJob to Cloud Data Catalog. Labels summarizing the
+// results of the DlpJob will be applied to the entry for the resource
+// scanned
+// in Cloud Data Catalog. Any labels previously written by another
+// DlpJob will
+// be deleted. InfoType naming patterns are strictly enforced when using
+// this
+// feature. Note that the findings will be persisted in Cloud Data
+// Catalog
+// storage and are governed by Data Catalog service-specific policy,
+// see
+// https://cloud.google.com/terms/service-terms
+// Only a single instance of this action can be specified and only
+// allowed if
+// all resources being scanned are BigQuery tables.
+// Compatible with: Inspect
+type GooglePrivacyDlpV2PublishFindingsToCloudDataCatalog struct {
+}
+
 // GooglePrivacyDlpV2PublishSummaryToCscc: Publish the result summary of
 // a DlpJob to the Cloud Security
 // Command Center (CSCC Alpha).
@@ -7674,81 +7730,14 @@ type GoogleProtobufEmpty struct {
 // is suitable for
 // different programming environments, including REST APIs and RPC APIs.
 // It is
-// used by [gRPC](https://github.com/grpc). The error model is designed
-// to be:
+// used by [gRPC](https://github.com/grpc). Each `Status` message
+// contains
+// three pieces of data: error code, error message, and error
+// details.
 //
-// - Simple to use and understand for most users
-// - Flexible enough to meet unexpected needs
-//
-// # Overview
-//
-// The `Status` message contains three pieces of data: error code,
-// error
-// message, and error details. The error code should be an enum value
-// of
-// google.rpc.Code, but it may accept additional error codes if needed.
-// The
-// error message should be a developer-facing English message that
-// helps
-// developers *understand* and *resolve* the error. If a localized
-// user-facing
-// error message is needed, put the localized message in the error
-// details or
-// localize it in the client. The optional error details may contain
-// arbitrary
-// information about the error. There is a predefined set of error
-// detail types
-// in the package `google.rpc` that can be used for common error
-// conditions.
-//
-// # Language mapping
-//
-// The `Status` message is the logical representation of the error
-// model, but it
-// is not necessarily the actual wire format. When the `Status` message
-// is
-// exposed in different client libraries and different wire protocols,
-// it can be
-// mapped differently. For example, it will likely be mapped to some
-// exceptions
-// in Java, but more likely mapped to some error codes in C.
-//
-// # Other uses
-//
-// The error model and the `Status` message can be used in a variety
-// of
-// environments, either with or without APIs, to provide a
-// consistent developer experience across different
-// environments.
-//
-// Example uses of this error model include:
-//
-// - Partial errors. If a service needs to return partial errors to the
-// client,
-//     it may embed the `Status` in the normal response to indicate the
-// partial
-//     errors.
-//
-// - Workflow errors. A typical workflow has multiple steps. Each step
-// may
-//     have a `Status` message for error reporting.
-//
-// - Batch operations. If a client uses batch request and batch
-// response, the
-//     `Status` message should be used directly inside batch response,
-// one for
-//     each error sub-response.
-//
-// - Asynchronous operations. If an API call embeds asynchronous
-// operation
-//     results in its response, the status of those operations should
-// be
-//     represented directly using the `Status` message.
-//
-// - Logging. If some API errors are stored in logs, the message
-// `Status` could
-//     be used directly after any stripping needed for security/privacy
-// reasons.
+// You can find out more about this error model and how to work with it
+// in the
+// [API Design Guide](https://cloud.google.com/apis/design/errors).
 type GoogleRpcStatus struct {
 	// Code: The status code, which should be an enum value of
 	// google.rpc.Code.
@@ -14412,6 +14401,168 @@ func (c *ProjectsJobTriggersPatchCall) Do(opts ...googleapi.CallOption) (*Google
 	//   },
 	//   "response": {
 	//     "$ref": "GooglePrivacyDlpV2JobTrigger"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/cloud-platform"
+	//   ]
+	// }
+
+}
+
+// method id "dlp.projects.locations.content.deidentify":
+
+type ProjectsLocationsContentDeidentifyCall struct {
+	s                                          *Service
+	parent                                     string
+	location                                   string
+	googleprivacydlpv2deidentifycontentrequest *GooglePrivacyDlpV2DeidentifyContentRequest
+	urlParams_                                 gensupport.URLParams
+	ctx_                                       context.Context
+	header_                                    http.Header
+}
+
+// Deidentify: De-identifies potentially sensitive info from a
+// ContentItem.
+// This method has limits on input size and output size.
+// See https://cloud.google.com/dlp/docs/deidentify-sensitive-data
+// to
+// learn more.
+//
+// When no InfoTypes or CustomInfoTypes are specified in this request,
+// the
+// system will automatically choose what detectors to run. By default
+// this may
+// be all types, but may change over time as detectors are updated.
+func (r *ProjectsLocationsContentService) Deidentify(parent string, location string, googleprivacydlpv2deidentifycontentrequest *GooglePrivacyDlpV2DeidentifyContentRequest) *ProjectsLocationsContentDeidentifyCall {
+	c := &ProjectsLocationsContentDeidentifyCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.parent = parent
+	c.location = location
+	c.googleprivacydlpv2deidentifycontentrequest = googleprivacydlpv2deidentifycontentrequest
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *ProjectsLocationsContentDeidentifyCall) Fields(s ...googleapi.Field) *ProjectsLocationsContentDeidentifyCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *ProjectsLocationsContentDeidentifyCall) Context(ctx context.Context) *ProjectsLocationsContentDeidentifyCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *ProjectsLocationsContentDeidentifyCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *ProjectsLocationsContentDeidentifyCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.googleprivacydlpv2deidentifycontentrequest)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
+	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "v2/{+parent}/locations/{location}/content:deidentify")
+	urls += "?" + c.urlParams_.Encode()
+	req, err := http.NewRequest("POST", urls, body)
+	if err != nil {
+		return nil, err
+	}
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"parent":   c.parent,
+		"location": c.location,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "dlp.projects.locations.content.deidentify" call.
+// Exactly one of *GooglePrivacyDlpV2DeidentifyContentResponse or error
+// will be non-nil. Any non-2xx status code is an error. Response
+// headers are in either
+// *GooglePrivacyDlpV2DeidentifyContentResponse.ServerResponse.Header or
+// (if a response was returned at all) in
+// error.(*googleapi.Error).Header. Use googleapi.IsNotModified to check
+// whether the returned error was because http.StatusNotModified was
+// returned.
+func (c *ProjectsLocationsContentDeidentifyCall) Do(opts ...googleapi.CallOption) (*GooglePrivacyDlpV2DeidentifyContentResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &GooglePrivacyDlpV2DeidentifyContentResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "De-identifies potentially sensitive info from a ContentItem.\nThis method has limits on input size and output size.\nSee https://cloud.google.com/dlp/docs/deidentify-sensitive-data to\nlearn more.\n\nWhen no InfoTypes or CustomInfoTypes are specified in this request, the\nsystem will automatically choose what detectors to run. By default this may\nbe all types, but may change over time as detectors are updated.",
+	//   "flatPath": "v2/projects/{projectsId}/locations/{location}/content:deidentify",
+	//   "httpMethod": "POST",
+	//   "id": "dlp.projects.locations.content.deidentify",
+	//   "parameterOrder": [
+	//     "parent",
+	//     "location"
+	//   ],
+	//   "parameters": {
+	//     "location": {
+	//       "description": "The geographic location to process de-identification. Reserved for future\nextensions.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "parent": {
+	//       "description": "The parent resource name, for example projects/my-project-id.",
+	//       "location": "path",
+	//       "pattern": "^projects/[^/]+$",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "v2/{+parent}/locations/{location}/content:deidentify",
+	//   "request": {
+	//     "$ref": "GooglePrivacyDlpV2DeidentifyContentRequest"
+	//   },
+	//   "response": {
+	//     "$ref": "GooglePrivacyDlpV2DeidentifyContentResponse"
 	//   },
 	//   "scopes": [
 	//     "https://www.googleapis.com/auth/cloud-platform"

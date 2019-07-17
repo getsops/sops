@@ -21,7 +21,12 @@ package cognitiveservices
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"context"
 	"github.com/Azure/go-autorest/autorest"
+	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/Azure/go-autorest/tracing"
+	"net/http"
 )
 
 const (
@@ -48,4 +53,83 @@ func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
 		BaseURI:        baseURI,
 		SubscriptionID: subscriptionID,
 	}
+}
+
+// CheckDomainAvailability check whether a domain is available.
+// Parameters:
+// parameters - check Domain Availability parameter.
+func (client BaseClient) CheckDomainAvailability(ctx context.Context, parameters CheckDomainAvailabilityParameter) (result CheckDomainAvailabilityResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.CheckDomainAvailability")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: parameters,
+			Constraints: []validation.Constraint{{Target: "parameters.SubdomainName", Name: validation.Null, Rule: true, Chain: nil},
+				{Target: "parameters.Type", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("cognitiveservices.BaseClient", "CheckDomainAvailability", err.Error())
+	}
+
+	req, err := client.CheckDomainAvailabilityPreparer(ctx, parameters)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "cognitiveservices.BaseClient", "CheckDomainAvailability", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.CheckDomainAvailabilitySender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "cognitiveservices.BaseClient", "CheckDomainAvailability", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.CheckDomainAvailabilityResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "cognitiveservices.BaseClient", "CheckDomainAvailability", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// CheckDomainAvailabilityPreparer prepares the CheckDomainAvailability request.
+func (client BaseClient) CheckDomainAvailabilityPreparer(ctx context.Context, parameters CheckDomainAvailabilityParameter) (*http.Request, error) {
+	const APIVersion = "2017-04-18"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPost(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPath("/providers/Microsoft.CognitiveServices/checkDomainAvailability"),
+		autorest.WithJSON(parameters),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// CheckDomainAvailabilitySender sends the CheckDomainAvailability request. The method will close the
+// http.Response Body if it receives an error.
+func (client BaseClient) CheckDomainAvailabilitySender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+}
+
+// CheckDomainAvailabilityResponder handles the response to the CheckDomainAvailability request. The method always
+// closes the http.Response Body.
+func (client BaseClient) CheckDomainAvailabilityResponder(resp *http.Response) (result CheckDomainAvailabilityResult, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
 }

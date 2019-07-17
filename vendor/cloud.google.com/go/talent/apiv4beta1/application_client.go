@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"net/url"
 	"time"
 
 	"github.com/golang/protobuf/proto"
@@ -131,7 +132,7 @@ func (c *ApplicationClient) setGoogleClientInfo(keyval ...string) {
 
 // CreateApplication creates a new application entity.
 func (c *ApplicationClient) CreateApplication(ctx context.Context, req *talentpb.CreateApplicationRequest, opts ...gax.CallOption) (*talentpb.Application, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.CreateApplication[0:len(c.CallOptions.CreateApplication):len(c.CallOptions.CreateApplication)], opts...)
 	var resp *talentpb.Application
@@ -148,7 +149,7 @@ func (c *ApplicationClient) CreateApplication(ctx context.Context, req *talentpb
 
 // GetApplication retrieves specified application.
 func (c *ApplicationClient) GetApplication(ctx context.Context, req *talentpb.GetApplicationRequest, opts ...gax.CallOption) (*talentpb.Application, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.GetApplication[0:len(c.CallOptions.GetApplication):len(c.CallOptions.GetApplication)], opts...)
 	var resp *talentpb.Application
@@ -165,7 +166,7 @@ func (c *ApplicationClient) GetApplication(ctx context.Context, req *talentpb.Ge
 
 // UpdateApplication updates specified application.
 func (c *ApplicationClient) UpdateApplication(ctx context.Context, req *talentpb.UpdateApplicationRequest, opts ...gax.CallOption) (*talentpb.Application, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "application.name", req.GetApplication().GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "application.name", url.QueryEscape(req.GetApplication().GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.UpdateApplication[0:len(c.CallOptions.UpdateApplication):len(c.CallOptions.UpdateApplication)], opts...)
 	var resp *talentpb.Application
@@ -182,7 +183,7 @@ func (c *ApplicationClient) UpdateApplication(ctx context.Context, req *talentpb
 
 // DeleteApplication deletes specified application.
 func (c *ApplicationClient) DeleteApplication(ctx context.Context, req *talentpb.DeleteApplicationRequest, opts ...gax.CallOption) error {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.DeleteApplication[0:len(c.CallOptions.DeleteApplication):len(c.CallOptions.DeleteApplication)], opts...)
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
@@ -195,7 +196,7 @@ func (c *ApplicationClient) DeleteApplication(ctx context.Context, req *talentpb
 
 // ListApplications lists all applications associated with the profile.
 func (c *ApplicationClient) ListApplications(ctx context.Context, req *talentpb.ListApplicationsRequest, opts ...gax.CallOption) *ApplicationIterator {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ListApplications[0:len(c.CallOptions.ListApplications):len(c.CallOptions.ListApplications)], opts...)
 	it := &ApplicationIterator{}

@@ -15,7 +15,7 @@
   "description": "Manages the deployment of apps to Android for Work users.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/android/work/play/emm-api",
-  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/tMJPG1kuAV-MqSsPmggFhhbAchQ\"",
+  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/GOyaohosJtPtOLAbitwIhilRmds\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/android-16.png",
     "x32": "https://www.google.com/images/icons/product/android-32.png"
@@ -74,6 +74,40 @@
   "resources": {
     "devices": {
       "methods": {
+        "forceReportUpload": {
+          "description": "Uploads a report containing any changes in app states on the device since the last report was generated. You can call this method up to 3 times every 24 hours for a given device.",
+          "httpMethod": "POST",
+          "id": "androidenterprise.devices.forceReportUpload",
+          "parameterOrder": [
+            "enterpriseId",
+            "userId",
+            "deviceId"
+          ],
+          "parameters": {
+            "deviceId": {
+              "description": "The ID of the device.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "enterpriseId": {
+              "description": "The ID of the enterprise.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "userId": {
+              "description": "The ID of the user.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "path": "enterprises/{enterpriseId}/users/{userId}/devices/{deviceId}/forceReportUpload",
+          "scopes": [
+            "https://www.googleapis.com/auth/androidenterprise"
+          ]
+        },
         "get": {
           "description": "Retrieves the details of a device.",
           "httpMethod": "GET",
@@ -2885,7 +2919,7 @@
       }
     }
   },
-  "revision": "20190401",
+  "revision": "20190530",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Administrator": {
@@ -3121,6 +3155,24 @@
       },
       "type": "object"
     },
+    "AppState": {
+      "description": "List of states set by the app.",
+      "id": "AppState",
+      "properties": {
+        "keyedAppState": {
+          "description": "List of keyed app states. This field will always be present.",
+          "items": {
+            "$ref": "KeyedAppState"
+          },
+          "type": "array"
+        },
+        "packageName": {
+          "description": "The package name of the app. This field will always be present.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "AppUpdateEvent": {
       "description": "An event generated when a new version of an app is uploaded to Google Play. Notifications are sent for new public versions only: alpha, beta, or canary versions do not generate this event. To fetch up-to-date version history for an app, use Products.Get on the EMM API.",
       "id": "AppUpdateEvent",
@@ -3284,6 +3336,48 @@
         "policy": {
           "$ref": "Policy",
           "description": "The policy enforced on the device."
+        },
+        "report": {
+          "$ref": "DeviceReport",
+          "description": "The device report updated with the latest app states."
+        }
+      },
+      "type": "object"
+    },
+    "DeviceReport": {
+      "description": "Device report updated with the latest app states for managed apps on the device.",
+      "id": "DeviceReport",
+      "properties": {
+        "appState": {
+          "description": "List of app states set by managed apps on the device. App states are defined by the app's developers. This field will always be present.",
+          "items": {
+            "$ref": "AppState"
+          },
+          "type": "array"
+        },
+        "lastUpdatedTimestampMillis": {
+          "description": "The timestamp of the last report update in milliseconds since epoch. This field will always be present.",
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "DeviceReportUpdateEvent": {
+      "description": "An event generated when an updated device report is available.",
+      "id": "DeviceReportUpdateEvent",
+      "properties": {
+        "deviceId": {
+          "description": "The Android ID of the device. This field will always be present.",
+          "type": "string"
+        },
+        "report": {
+          "$ref": "DeviceReport",
+          "description": "The device report updated with the latest app states. This field will always be present."
+        },
+        "userId": {
+          "description": "The ID of the user. This field will always be present.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -3589,6 +3683,34 @@
       },
       "type": "object"
     },
+    "KeyedAppState": {
+      "description": "Represents a keyed app state containing a key, timestamp, severity level, optional description, and optional data.",
+      "id": "KeyedAppState",
+      "properties": {
+        "data": {
+          "description": "Additional field intended for machine-readable data. For example, a number or JSON object. To prevent XSS, we recommend removing any HTML from the data before displaying it.",
+          "type": "string"
+        },
+        "key": {
+          "description": "Key indicating what the app is providing a state for. The content of the key is set by the app's developer. To prevent XSS, we recommend removing any HTML from the key before displaying it. This field will always be present.",
+          "type": "string"
+        },
+        "message": {
+          "description": "Free-form, human-readable message describing the app state. For example, an error message. To prevent XSS, we recommend removing any HTML from the message before displaying it.",
+          "type": "string"
+        },
+        "severity": {
+          "description": "Severity of the app state. This field will always be present.",
+          "type": "string"
+        },
+        "stateTimestampMillis": {
+          "description": "Timestamp of when the app set the state in milliseconds since epoch. This field will always be present.",
+          "format": "int64",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "LocalizedText": {
       "description": "A localized string with its locale.",
       "id": "LocalizedText",
@@ -3853,6 +3975,10 @@
           "$ref": "AppUpdateEvent",
           "description": "Notifications about app updates."
         },
+        "deviceReportUpdateEvent": {
+          "$ref": "DeviceReportUpdateEvent",
+          "description": "Notifications about device report updates."
+        },
         "enterpriseId": {
           "description": "The ID of the enterprise for which the notification is sent. This will always be present.",
           "type": "string"
@@ -3960,6 +4086,10 @@
       "properties": {
         "autoUpdatePolicy": {
           "description": "The auto-update policy for apps installed on the device. \"choiceToTheUser\" allows the device's user to configure the app update policy. \"always\" enables auto updates. \"never\" disables auto updates. \"wifiOnly\" enables auto updates only when the device is connected to wifi.",
+          "type": "string"
+        },
+        "deviceReportPolicy": {
+          "description": "Whether the device reports app states to the EMM. The default value is \"deviceReportDisabled\".",
           "type": "string"
         },
         "maintenanceWindow": {

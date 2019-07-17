@@ -68,6 +68,31 @@ func PossibleClusterProvisioningStateValues() []ClusterProvisioningState {
 	return []ClusterProvisioningState{ClusterProvisioningStateCanceled, ClusterProvisioningStateDeleting, ClusterProvisioningStateFailed, ClusterProvisioningStateInProgress, ClusterProvisioningStateSucceeded}
 }
 
+// DaysOfWeek enumerates the values for days of week.
+type DaysOfWeek string
+
+const (
+	// Friday ...
+	Friday DaysOfWeek = "Friday"
+	// Monday ...
+	Monday DaysOfWeek = "Monday"
+	// Saturday ...
+	Saturday DaysOfWeek = "Saturday"
+	// Sunday ...
+	Sunday DaysOfWeek = "Sunday"
+	// Thursday ...
+	Thursday DaysOfWeek = "Thursday"
+	// Tuesday ...
+	Tuesday DaysOfWeek = "Tuesday"
+	// Wednesday ...
+	Wednesday DaysOfWeek = "Wednesday"
+)
+
+// PossibleDaysOfWeekValues returns an array of possible values for the DaysOfWeek const type.
+func PossibleDaysOfWeekValues() []DaysOfWeek {
+	return []DaysOfWeek{Friday, Monday, Saturday, Sunday, Thursday, Tuesday, Wednesday}
+}
+
 // DirectoryType enumerates the values for directory type.
 type DirectoryType string
 
@@ -79,6 +104,21 @@ const (
 // PossibleDirectoryTypeValues returns an array of possible values for the DirectoryType const type.
 func PossibleDirectoryTypeValues() []DirectoryType {
 	return []DirectoryType{ActiveDirectory}
+}
+
+// FilterMode enumerates the values for filter mode.
+type FilterMode string
+
+const (
+	// Exclude ...
+	Exclude FilterMode = "Exclude"
+	// Include ...
+	Include FilterMode = "Include"
+)
+
+// PossibleFilterModeValues returns an array of possible values for the FilterMode const type.
+func PossibleFilterModeValues() []FilterMode {
+	return []FilterMode{Exclude, Include}
 }
 
 // JSONWebKeyEncryptionAlgorithm enumerates the values for json web key encryption algorithm.
@@ -199,6 +239,10 @@ type ApplicationGetHTTPSEndpoint struct {
 	DestinationPort *int32 `json:"destinationPort,omitempty"`
 	// PublicPort - The public port to connect to.
 	PublicPort *int32 `json:"publicPort,omitempty"`
+	// SubDomainSuffix - The subDomainSuffix of the application.
+	SubDomainSuffix *string `json:"subDomainSuffix,omitempty"`
+	// DisableGatewayAuth - The value indicates whether to disable GatewayAuth.
+	DisableGatewayAuth *bool `json:"disableGatewayAuth,omitempty"`
 }
 
 // ApplicationListResult result of the request to list cluster Applications. It contains a list of
@@ -424,6 +468,81 @@ func (future *ApplicationsDeleteFuture) Result(client ApplicationsClient) (ar au
 	}
 	ar.Response = future.Response()
 	return
+}
+
+// Autoscale the autoscale request parameters
+type Autoscale struct {
+	// Capacity - Parameters for load-based autoscale
+	Capacity *AutoscaleCapacity `json:"capacity,omitempty"`
+	// Recurrence - Parameters for schedule-based autoscale
+	Recurrence *AutoscaleRecurrence `json:"recurrence,omitempty"`
+}
+
+// AutoscaleCapacity the load-based autoscale request parameters
+type AutoscaleCapacity struct {
+	// MinInstanceCount - The minimum instance count of the cluster
+	MinInstanceCount *int32 `json:"minInstanceCount,omitempty"`
+	// MaxInstanceCount - The maximum instance count of the cluster
+	MaxInstanceCount *int32 `json:"maxInstanceCount,omitempty"`
+}
+
+// AutoscaleRecurrence schedule-based autoscale request parameters
+type AutoscaleRecurrence struct {
+	// TimeZone - The time zone for the autoscale schedule times
+	TimeZone *string `json:"timeZone,omitempty"`
+	// Schedule - Array of schedule-based autoscale rules
+	Schedule *[]AutoscaleSchedule `json:"schedule,omitempty"`
+}
+
+// AutoscaleSchedule parameters for a schedule-based autoscale rule, consisting of an array of days + a
+// time and capacity
+type AutoscaleSchedule struct {
+	// Days - Days of the week for a schedule-based autoscale rule
+	Days *[]DaysOfWeek `json:"days,omitempty"`
+	// TimeAndCapacity - Time and capacity for a schedule-based autoscale rule
+	TimeAndCapacity *AutoscaleTimeAndCapacity `json:"timeAndCapacity,omitempty"`
+}
+
+// AutoscaleTimeAndCapacity time and capacity request parameters
+type AutoscaleTimeAndCapacity struct {
+	// Time - 24-hour time in the form xx:xx
+	Time *string `json:"time,omitempty"`
+	// MinInstanceCount - The minimum instance count of the cluster
+	MinInstanceCount *int32 `json:"minInstanceCount,omitempty"`
+	// MaxInstanceCount - The maximum instance count of the cluster
+	MaxInstanceCount *int32 `json:"maxInstanceCount,omitempty"`
+}
+
+// BillingMeters the billing meters.
+type BillingMeters struct {
+	// MeterParameter - The virtual machine sizes.
+	MeterParameter *string `json:"meterParameter,omitempty"`
+	// Meter - The HDInsight meter guid.
+	Meter *string `json:"meter,omitempty"`
+	// Unit - The unit of meter, VMHours or CoreHours.
+	Unit *string `json:"unit,omitempty"`
+}
+
+// BillingResources the billing resources.
+type BillingResources struct {
+	// Region - The region or location.
+	Region *string `json:"region,omitempty"`
+	// BillingMeters - The billing meter information.
+	BillingMeters *[]BillingMeters `json:"billingMeters,omitempty"`
+	// DiskBillingMeters - The managed disk billing information.
+	DiskBillingMeters *[]DiskBillingMeters `json:"diskBillingMeters,omitempty"`
+}
+
+// BillingResponseListResult the response for the operation to get regional billingSpecs for a
+// subscription.
+type BillingResponseListResult struct {
+	autorest.Response `json:"-"`
+	// VMSizes - The virtual machine sizes to include or exclude.
+	VMSizes *[]string `json:"vmSizes,omitempty"`
+	// VMSizeFilters - The virtual machine filtering mode. Effectively this can enabling or disabling the virtual machine sizes in a particular set.
+	VMSizeFilters *[]VMSizeCompatibilityFilterV2 `json:"vmSizeFilters,omitempty"`
+	// BillingResources - The billing and managed disk billing resources for a region.
+	BillingResources *[]BillingResources `json:"billingResources,omitempty"`
 }
 
 // Cluster the HDInsight cluster.
@@ -1031,6 +1150,16 @@ type DataDisksGroups struct {
 	DiskSizeGB *int32 `json:"diskSizeGB,omitempty"`
 }
 
+// DiskBillingMeters the disk billing meters.
+type DiskBillingMeters struct {
+	// DiskRpMeter - The managed disk meter guid.
+	DiskRpMeter *string `json:"diskRpMeter,omitempty"`
+	// Sku - The managed disk billing sku, P30 or S30.
+	Sku *string `json:"sku,omitempty"`
+	// Tier - The managed disk billing tier, Standard or Premium. Possible values include: 'Standard', 'Premium'
+	Tier Tier `json:"tier,omitempty"`
+}
+
 // DiskEncryptionProperties the disk encryption properties
 type DiskEncryptionProperties struct {
 	// VaultURI - Base key vault URI where the customers key is located eg. https://myvault.vault.azure.net
@@ -1419,6 +1548,8 @@ type Role struct {
 	MinInstanceCount *int32 `json:"minInstanceCount,omitempty"`
 	// TargetInstanceCount - The instance count of the cluster.
 	TargetInstanceCount *int32 `json:"targetInstanceCount,omitempty"`
+	// AutoscaleConfiguration - The autoscale configurations.
+	AutoscaleConfiguration *Autoscale `json:"autoscale,omitempty"`
 	// HardwareProfile - The hardware profile.
 	HardwareProfile *HardwareProfile `json:"hardwareProfile,omitempty"`
 	// OsProfile - The operating system profile.
@@ -1933,4 +2064,26 @@ type VirtualNetworkProfile struct {
 	ID *string `json:"id,omitempty"`
 	// Subnet - The name of the subnet.
 	Subnet *string `json:"subnet,omitempty"`
+}
+
+// VMSizeCompatibilityFilterV2 this class represent a single filter object that defines a multidimensional
+// set. The dimensions of this set are Regions, ClusterFlavors, NodeTypes and ClusterVersions. The
+// constraint should be defined based on the following: FilterMode (Exclude vs Include), VMSizes (the vm
+// sizes in affect of exclusion/inclusion) and the ordering of the Filters. Later filters override previous
+// settings if conflicted.
+type VMSizeCompatibilityFilterV2 struct {
+	// FilterMode - The filtering mode. Effectively this can enabling or disabling the VM sizes in a particular set. Possible values include: 'Exclude', 'Include'
+	FilterMode FilterMode `json:"filterMode,omitempty"`
+	// Regions - The list of regions under the effect of the filter.
+	Regions *[]string `json:"regions,omitempty"`
+	// ClusterFlavors - The list of cluster flavors under the effect of the filter.
+	ClusterFlavors *[]string `json:"clusterFlavors,omitempty"`
+	// NodeTypes - The list of node types affected by the filter.
+	NodeTypes *[]string `json:"nodeTypes,omitempty"`
+	// ClusterVersions - The list of cluster versions affected in Major.Minor format.
+	ClusterVersions *[]string `json:"clusterVersions,omitempty"`
+	// OsType - The OSType affected, Windows or Linux.
+	OsType *[]OSType `json:"osType,omitempty"`
+	// VMSizes - The list of virtual machine sizes to include or exclude.
+	VMSizes *[]string `json:"vmSizes,omitempty"`
 }

@@ -296,6 +296,24 @@ func ExampleIncidentClient_GetSignal() {
 	_ = resp
 }
 
+func ExampleIncidentClient_LookupSignal() {
+	ctx := context.Background()
+	c, err := irm.NewIncidentClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+
+	req := &irmpb.LookupSignalRequest{
+		// TODO: Fill request struct fields.
+	}
+	resp, err := c.LookupSignal(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}
+
 func ExampleIncidentClient_UpdateSignal() {
 	ctx := context.Background()
 	c, err := irm.NewIncidentClient(ctx)

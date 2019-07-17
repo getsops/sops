@@ -20,6 +20,7 @@ package authorizationapi
 import (
 	"context"
 	"github.com/Azure/azure-sdk-for-go/services/preview/authorization/mgmt/2018-01-01-preview/authorization"
+	"github.com/Azure/go-autorest/autorest"
 )
 
 // ClassicAdministratorsClientAPI contains the set of methods on the ClassicAdministratorsClient type.
@@ -28,6 +29,13 @@ type ClassicAdministratorsClientAPI interface {
 }
 
 var _ ClassicAdministratorsClientAPI = (*authorization.ClassicAdministratorsClient)(nil)
+
+// GlobalAdministratorClientAPI contains the set of methods on the GlobalAdministratorClient type.
+type GlobalAdministratorClientAPI interface {
+	ElevateAccess(ctx context.Context) (result autorest.Response, err error)
+}
+
+var _ GlobalAdministratorClientAPI = (*authorization.GlobalAdministratorClient)(nil)
 
 // ProviderOperationsMetadataClientAPI contains the set of methods on the ProviderOperationsMetadataClient type.
 type ProviderOperationsMetadataClientAPI interface {

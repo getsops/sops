@@ -33,6 +33,7 @@
   "description": "Reads and writes Google Slides presentations.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/slides/",
+  "fullyEncodeReservedExpansion": true,
   "icons": {
     "x16": "http://www.google.com/images/icons/product/search-16.gif",
     "x32": "http://www.google.com/images/icons/product/search-32.gif"
@@ -302,7 +303,7 @@
       }
     }
   },
-  "revision": "20190305",
+  "revision": "20190702",
   "rootUrl": "https://slides.googleapis.com/",
   "schemas": {
     "AffineTransform": {
@@ -2129,7 +2130,7 @@
       "properties": {
         "colorScheme": {
           "$ref": "ColorScheme",
-          "description": "The color scheme of the page. If unset, the color scheme is inherited from\na parent page. If the page has no parent, the color scheme uses a default\nSlides color scheme. This field is read-only."
+          "description": "The color scheme of the page. If unset, the color scheme is inherited from\na parent page. If the page has no parent, the color scheme uses a default\nSlides color scheme, matching the defaults in the Slides editor.\n\nOnly the concrete colors of the first 12 ThemeColorTypes are editable. In addition, only\nthe color scheme on Master\npages can be updated. To update the field, a color scheme containing\nmappings from all the first 12 ThemeColorTypes to their concrete colors\nmust be provided. Colors for the remaining ThemeColorTypes will be ignored."
         },
         "pageBackgroundFill": {
           "$ref": "PageBackgroundFill",

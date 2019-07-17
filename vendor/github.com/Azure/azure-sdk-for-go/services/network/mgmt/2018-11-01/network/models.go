@@ -212,6 +212,8 @@ func PossibleApplicationGatewaySkuNameValues() []ApplicationGatewaySkuName {
 type ApplicationGatewaySslCipherSuite string
 
 const (
+	// TLSDHEDSSWITH3DESEDECBCSHA ...
+	TLSDHEDSSWITH3DESEDECBCSHA ApplicationGatewaySslCipherSuite = "TLS_DHE_DSS_WITH_3DES_EDE_CBC_SHA"
 	// TLSDHEDSSWITHAES128CBCSHA ...
 	TLSDHEDSSWITHAES128CBCSHA ApplicationGatewaySslCipherSuite = "TLS_DHE_DSS_WITH_AES_128_CBC_SHA"
 	// TLSDHEDSSWITHAES128CBCSHA256 ...
@@ -244,10 +246,14 @@ const (
 	TLSECDHERSAWITHAES128CBCSHA ApplicationGatewaySslCipherSuite = "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA"
 	// TLSECDHERSAWITHAES128CBCSHA256 ...
 	TLSECDHERSAWITHAES128CBCSHA256 ApplicationGatewaySslCipherSuite = "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256"
+	// TLSECDHERSAWITHAES128GCMSHA256 ...
+	TLSECDHERSAWITHAES128GCMSHA256 ApplicationGatewaySslCipherSuite = "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
 	// TLSECDHERSAWITHAES256CBCSHA ...
 	TLSECDHERSAWITHAES256CBCSHA ApplicationGatewaySslCipherSuite = "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA"
 	// TLSECDHERSAWITHAES256CBCSHA384 ...
 	TLSECDHERSAWITHAES256CBCSHA384 ApplicationGatewaySslCipherSuite = "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384"
+	// TLSECDHERSAWITHAES256GCMSHA384 ...
+	TLSECDHERSAWITHAES256GCMSHA384 ApplicationGatewaySslCipherSuite = "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384"
 	// TLSRSAWITH3DESEDECBCSHA ...
 	TLSRSAWITH3DESEDECBCSHA ApplicationGatewaySslCipherSuite = "TLS_RSA_WITH_3DES_EDE_CBC_SHA"
 	// TLSRSAWITHAES128CBCSHA ...
@@ -266,7 +272,7 @@ const (
 
 // PossibleApplicationGatewaySslCipherSuiteValues returns an array of possible values for the ApplicationGatewaySslCipherSuite const type.
 func PossibleApplicationGatewaySslCipherSuiteValues() []ApplicationGatewaySslCipherSuite {
-	return []ApplicationGatewaySslCipherSuite{TLSDHEDSSWITHAES128CBCSHA, TLSDHEDSSWITHAES128CBCSHA256, TLSDHEDSSWITHAES256CBCSHA, TLSDHEDSSWITHAES256CBCSHA256, TLSDHERSAWITHAES128CBCSHA, TLSDHERSAWITHAES128GCMSHA256, TLSDHERSAWITHAES256CBCSHA, TLSDHERSAWITHAES256GCMSHA384, TLSECDHEECDSAWITHAES128CBCSHA, TLSECDHEECDSAWITHAES128CBCSHA256, TLSECDHEECDSAWITHAES128GCMSHA256, TLSECDHEECDSAWITHAES256CBCSHA, TLSECDHEECDSAWITHAES256CBCSHA384, TLSECDHEECDSAWITHAES256GCMSHA384, TLSECDHERSAWITHAES128CBCSHA, TLSECDHERSAWITHAES128CBCSHA256, TLSECDHERSAWITHAES256CBCSHA, TLSECDHERSAWITHAES256CBCSHA384, TLSRSAWITH3DESEDECBCSHA, TLSRSAWITHAES128CBCSHA, TLSRSAWITHAES128CBCSHA256, TLSRSAWITHAES128GCMSHA256, TLSRSAWITHAES256CBCSHA, TLSRSAWITHAES256CBCSHA256, TLSRSAWITHAES256GCMSHA384}
+	return []ApplicationGatewaySslCipherSuite{TLSDHEDSSWITH3DESEDECBCSHA, TLSDHEDSSWITHAES128CBCSHA, TLSDHEDSSWITHAES128CBCSHA256, TLSDHEDSSWITHAES256CBCSHA, TLSDHEDSSWITHAES256CBCSHA256, TLSDHERSAWITHAES128CBCSHA, TLSDHERSAWITHAES128GCMSHA256, TLSDHERSAWITHAES256CBCSHA, TLSDHERSAWITHAES256GCMSHA384, TLSECDHEECDSAWITHAES128CBCSHA, TLSECDHEECDSAWITHAES128CBCSHA256, TLSECDHEECDSAWITHAES128GCMSHA256, TLSECDHEECDSAWITHAES256CBCSHA, TLSECDHEECDSAWITHAES256CBCSHA384, TLSECDHEECDSAWITHAES256GCMSHA384, TLSECDHERSAWITHAES128CBCSHA, TLSECDHERSAWITHAES128CBCSHA256, TLSECDHERSAWITHAES128GCMSHA256, TLSECDHERSAWITHAES256CBCSHA, TLSECDHERSAWITHAES256CBCSHA384, TLSECDHERSAWITHAES256GCMSHA384, TLSRSAWITH3DESEDECBCSHA, TLSRSAWITHAES128CBCSHA, TLSRSAWITHAES128CBCSHA256, TLSRSAWITHAES128GCMSHA256, TLSRSAWITHAES256CBCSHA, TLSRSAWITHAES256CBCSHA256, TLSRSAWITHAES256GCMSHA384}
 }
 
 // ApplicationGatewaySslPolicyName enumerates the values for application gateway ssl policy name.
@@ -2050,30 +2056,6 @@ type ApplicationGatewayAutoscaleConfiguration struct {
 	MinCapacity *int32 `json:"minCapacity,omitempty"`
 	// MaxCapacity - Upper bound on number of Application Gateway capacity
 	MaxCapacity *int32 `json:"maxCapacity,omitempty"`
-}
-
-// ApplicationGatewayAvailableRequestHeadersResult response for ApplicationGatewayAvailableRequestHeaders
-// API service call.
-type ApplicationGatewayAvailableRequestHeadersResult struct {
-	autorest.Response `json:"-"`
-	// Value - The list of supported request headers in application gateway.
-	Value *[]string `json:"value,omitempty"`
-}
-
-// ApplicationGatewayAvailableResponseHeadersResult response for ApplicationGatewayAvailableResponeHeaders
-// API service call.
-type ApplicationGatewayAvailableResponseHeadersResult struct {
-	autorest.Response `json:"-"`
-	// Value - The list of supported response header in application gateway.
-	Value *[]string `json:"value,omitempty"`
-}
-
-// ApplicationGatewayAvailableServerVariablesResult response for ApplicationGatewayAvailableServerVariables
-// API service call.
-type ApplicationGatewayAvailableServerVariablesResult struct {
-	autorest.Response `json:"-"`
-	// Value - The list of supported server variables in application gateway.
-	Value *[]string `json:"value,omitempty"`
 }
 
 // ApplicationGatewayAvailableSslOptions response for ApplicationGatewayAvailableSslOptions API service
@@ -15183,6 +15165,12 @@ func NewListP2SVpnServerConfigurationsResultPage(getNextPage func(context.Contex
 	return ListP2SVpnServerConfigurationsResultPage{fn: getNextPage}
 }
 
+// ListString ...
+type ListString struct {
+	autorest.Response `json:"-"`
+	Value             *[]string `json:"value,omitempty"`
+}
+
 // ListVirtualHubsResult result of the request to list VirtualHubs. It contains a list of VirtualHubs and a
 // URL nextLink to get the next set of results.
 type ListVirtualHubsResult struct {
@@ -19575,6 +19563,29 @@ type ProfilePropertiesFormat struct {
 	ResourceGUID *string `json:"resourceGuid,omitempty"`
 	// ProvisioningState - READ-ONLY; The provisioning state of the resource.
 	ProvisioningState *string `json:"provisioningState,omitempty"`
+}
+
+// ProfilesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
+type ProfilesDeleteFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *ProfilesDeleteFuture) Result(client ProfilesClient) (ar autorest.Response, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "network.ProfilesDeleteFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("network.ProfilesDeleteFuture")
+		return
+	}
+	ar.Response = future.Response()
+	return
 }
 
 // ProtocolConfiguration configuration of the protocol.
@@ -25661,6 +25672,35 @@ func (future *VirtualNetworkGatewaysGeneratevpnclientpackageFuture) Result(clien
 		s, err = client.GeneratevpnclientpackageResponder(s.Response.Response)
 		if err != nil {
 			err = autorest.NewErrorWithError(err, "network.VirtualNetworkGatewaysGeneratevpnclientpackageFuture", "Result", s.Response.Response, "Failure responding to request")
+		}
+	}
+	return
+}
+
+// VirtualNetworkGatewaysGenerateVpnProfileFuture an abstraction for monitoring and retrieving the results
+// of a long-running operation.
+type VirtualNetworkGatewaysGenerateVpnProfileFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *VirtualNetworkGatewaysGenerateVpnProfileFuture) Result(client VirtualNetworkGatewaysClient) (s String, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "network.VirtualNetworkGatewaysGenerateVpnProfileFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("network.VirtualNetworkGatewaysGenerateVpnProfileFuture")
+		return
+	}
+	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if s.Response.Response, err = future.GetResult(sender); err == nil && s.Response.Response.StatusCode != http.StatusNoContent {
+		s, err = client.GenerateVpnProfileResponder(s.Response.Response)
+		if err != nil {
+			err = autorest.NewErrorWithError(err, "network.VirtualNetworkGatewaysGenerateVpnProfileFuture", "Result", s.Response.Response, "Failure responding to request")
 		}
 	}
 	return

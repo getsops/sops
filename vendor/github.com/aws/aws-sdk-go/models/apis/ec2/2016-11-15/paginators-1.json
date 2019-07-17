@@ -314,6 +314,24 @@
       "output_token": "NextToken",
       "result_key": "Tags"
     },
+    "DescribeTrafficMirrorFilters": {
+      "input_token": "NextToken",
+      "limit_key": "MaxResults",
+      "output_token": "NextToken",
+      "result_key": "TrafficMirrorFilters"
+    },
+    "DescribeTrafficMirrorSessions": {
+      "input_token": "NextToken",
+      "limit_key": "MaxResults",
+      "output_token": "NextToken",
+      "result_key": "TrafficMirrorSessions"
+    },
+    "DescribeTrafficMirrorTargets": {
+      "input_token": "NextToken",
+      "limit_key": "MaxResults",
+      "output_token": "NextToken",
+      "result_key": "TrafficMirrorTargets"
+    },
     "DescribeTransitGatewayAttachments": {
       "input_token": "NextToken",
       "limit_key": "MaxResults",

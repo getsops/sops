@@ -1017,6 +1017,35 @@ func ExampleIAM_DeleteVirtualMFADevice_shared00() {
 	fmt.Println(result)
 }
 
+// To generate a service last accessed data report for an organizational unit
+//
+// The following operation generates a report for the organizational unit ou-rge0-awexample
+func ExampleIAM_GenerateOrganizationsAccessReport_shared00() {
+	svc := iam.New(session.New())
+	input := &iam.GenerateOrganizationsAccessReportInput{
+		EntityPath: aws.String("o-a1b2c3d4e5/r-f6g7h8i9j0example/ou-1a2b3c-k9l8m7n6o5example"),
+	}
+
+	result, err := svc.GenerateOrganizationsAccessReport(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case iam.ErrCodeReportGenerationLimitExceededException:
+				fmt.Println(iam.ErrCodeReportGenerationLimitExceededException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
 // To generate a service last accessed data report for a policy
 //
 // The following operation generates a report for the policy: ExamplePolicy1
@@ -1155,6 +1184,35 @@ func ExampleIAM_GetLoginProfile_shared00() {
 				fmt.Println(iam.ErrCodeNoSuchEntityException, aerr.Error())
 			case iam.ErrCodeServiceFailureException:
 				fmt.Println(iam.ErrCodeServiceFailureException, aerr.Error())
+			default:
+				fmt.Println(aerr.Error())
+			}
+		} else {
+			// Print the error, cast err to awserr.Error to get the Code and
+			// Message from an error.
+			fmt.Println(err.Error())
+		}
+		return
+	}
+
+	fmt.Println(result)
+}
+
+// To get details from a previously generated organizational unit report
+//
+// The following operation gets details about the report with the job ID: examplea-1234-b567-cde8-90fg123abcd4
+func ExampleIAM_GetOrganizationsAccessReport_shared00() {
+	svc := iam.New(session.New())
+	input := &iam.GetOrganizationsAccessReportInput{
+		JobId: aws.String("examplea-1234-b567-cde8-90fg123abcd4"),
+	}
+
+	result, err := svc.GetOrganizationsAccessReport(input)
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case iam.ErrCodeNoSuchEntityException:
+				fmt.Println(iam.ErrCodeNoSuchEntityException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}

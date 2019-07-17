@@ -403,9 +403,10 @@ func TestNewBucket(t *testing.T) {
 		Acl: []*raw.BucketAccessControl{
 			{Bucket: "name", Role: "READER", Email: "joe@example.com", Entity: "allUsers"},
 		},
-		Encryption: &raw.BucketEncryption{DefaultKmsKeyName: "key"},
-		Logging:    &raw.BucketLogging{LogBucket: "lb", LogObjectPrefix: "p"},
-		Website:    &raw.BucketWebsite{MainPageSuffix: "mps", NotFoundPage: "404"},
+		LocationType: "dual-region",
+		Encryption:   &raw.BucketEncryption{DefaultKmsKeyName: "key"},
+		Logging:      &raw.BucketLogging{LogBucket: "lb", LogObjectPrefix: "p"},
+		Website:      &raw.BucketWebsite{MainPageSuffix: "mps", NotFoundPage: "404"},
 	}
 	want := &BucketAttrs{
 		Name:                  "name",
@@ -453,6 +454,7 @@ func TestNewBucket(t *testing.T) {
 		Website:          &BucketWebsite{MainPageSuffix: "mps", NotFoundPage: "404"},
 		ACL:              []ACLRule{{Entity: "allUsers", Role: RoleReader, Email: "joe@example.com"}},
 		DefaultObjectACL: nil,
+		LocationType:     "dual-region",
 	}
 	got, err := newBucket(rb)
 	if err != nil {

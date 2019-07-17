@@ -684,7 +684,7 @@ func (client ApplicationGatewaysClient) ListAllComplete(ctx context.Context) (re
 }
 
 // ListAvailableRequestHeaders lists all available request headers.
-func (client ApplicationGatewaysClient) ListAvailableRequestHeaders(ctx context.Context) (result ApplicationGatewayAvailableRequestHeadersResult, err error) {
+func (client ApplicationGatewaysClient) ListAvailableRequestHeaders(ctx context.Context) (result ListString, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationGatewaysClient.ListAvailableRequestHeaders")
 		defer func() {
@@ -744,19 +744,19 @@ func (client ApplicationGatewaysClient) ListAvailableRequestHeadersSender(req *h
 
 // ListAvailableRequestHeadersResponder handles the response to the ListAvailableRequestHeaders request. The method always
 // closes the http.Response Body.
-func (client ApplicationGatewaysClient) ListAvailableRequestHeadersResponder(resp *http.Response) (result ApplicationGatewayAvailableRequestHeadersResult, err error) {
+func (client ApplicationGatewaysClient) ListAvailableRequestHeadersResponder(resp *http.Response) (result ListString, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
-		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByUnmarshallingJSON(&result.Value),
 		autorest.ByClosing())
 	result.Response = autorest.Response{Response: resp}
 	return
 }
 
 // ListAvailableResponseHeaders lists all available response headers.
-func (client ApplicationGatewaysClient) ListAvailableResponseHeaders(ctx context.Context) (result ApplicationGatewayAvailableResponseHeadersResult, err error) {
+func (client ApplicationGatewaysClient) ListAvailableResponseHeaders(ctx context.Context) (result ListString, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationGatewaysClient.ListAvailableResponseHeaders")
 		defer func() {
@@ -816,19 +816,19 @@ func (client ApplicationGatewaysClient) ListAvailableResponseHeadersSender(req *
 
 // ListAvailableResponseHeadersResponder handles the response to the ListAvailableResponseHeaders request. The method always
 // closes the http.Response Body.
-func (client ApplicationGatewaysClient) ListAvailableResponseHeadersResponder(resp *http.Response) (result ApplicationGatewayAvailableResponseHeadersResult, err error) {
+func (client ApplicationGatewaysClient) ListAvailableResponseHeadersResponder(resp *http.Response) (result ListString, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
-		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByUnmarshallingJSON(&result.Value),
 		autorest.ByClosing())
 	result.Response = autorest.Response{Response: resp}
 	return
 }
 
 // ListAvailableServerVariables lists all available server variables.
-func (client ApplicationGatewaysClient) ListAvailableServerVariables(ctx context.Context) (result ApplicationGatewayAvailableServerVariablesResult, err error) {
+func (client ApplicationGatewaysClient) ListAvailableServerVariables(ctx context.Context) (result ListString, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/ApplicationGatewaysClient.ListAvailableServerVariables")
 		defer func() {
@@ -888,12 +888,12 @@ func (client ApplicationGatewaysClient) ListAvailableServerVariablesSender(req *
 
 // ListAvailableServerVariablesResponder handles the response to the ListAvailableServerVariables request. The method always
 // closes the http.Response Body.
-func (client ApplicationGatewaysClient) ListAvailableServerVariablesResponder(resp *http.Response) (result ApplicationGatewayAvailableServerVariablesResult, err error) {
+func (client ApplicationGatewaysClient) ListAvailableServerVariablesResponder(resp *http.Response) (result ListString, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),
 		azure.WithErrorUnlessStatusCode(http.StatusOK),
-		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByUnmarshallingJSON(&result.Value),
 		autorest.ByClosing())
 	result.Response = autorest.Response{Response: resp}
 	return

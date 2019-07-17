@@ -26,16 +26,17 @@ import (
 )
 
 var (
-	m     = stats.Float64("m", "", "")
-	k1, _ = tag.NewKey("k1")
-	k2, _ = tag.NewKey("k2")
-	k3, _ = tag.NewKey("k3")
-	k4, _ = tag.NewKey("k4")
-	k5, _ = tag.NewKey("k5")
-	k6, _ = tag.NewKey("k6")
-	k7, _ = tag.NewKey("k7")
-	k8, _ = tag.NewKey("k8")
-	view  = &View{
+	m  = stats.Float64("m", "", "")
+	k1 = tag.MustNewKey("k1")
+	k2 = tag.MustNewKey("k2")
+	k3 = tag.MustNewKey("k3")
+	k4 = tag.MustNewKey("k4")
+	k5 = tag.MustNewKey("k5")
+	k6 = tag.MustNewKey("k6")
+	k7 = tag.MustNewKey("k7")
+	k8 = tag.MustNewKey("k8")
+
+	view = &View{
 		Measure:     m,
 		Aggregation: Distribution(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
 		TagKeys:     []tag.Key{k1, k2},

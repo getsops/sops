@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"net/url"
 	"time"
 
 	"github.com/golang/protobuf/proto"
@@ -142,7 +143,7 @@ func (c *FirestoreAdminClient) SetGoogleClientInfo(keyval ...string) {
 // which may be used to track the status of the creation. The metadata for
 // the operation will be the type [IndexOperationMetadata][google.firestore.admin.v1.IndexOperationMetadata].
 func (c *FirestoreAdminClient) CreateIndex(ctx context.Context, req *adminpb.CreateIndexRequest, opts ...gax.CallOption) (*longrunningpb.Operation, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.CreateIndex[0:len(c.CallOptions.CreateIndex):len(c.CallOptions.CreateIndex)], opts...)
 	var resp *longrunningpb.Operation
@@ -159,7 +160,7 @@ func (c *FirestoreAdminClient) CreateIndex(ctx context.Context, req *adminpb.Cre
 
 // ListIndexes lists composite indexes.
 func (c *FirestoreAdminClient) ListIndexes(ctx context.Context, req *adminpb.ListIndexesRequest, opts ...gax.CallOption) *IndexIterator {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ListIndexes[0:len(c.CallOptions.ListIndexes):len(c.CallOptions.ListIndexes)], opts...)
 	it := &IndexIterator{}
@@ -198,7 +199,7 @@ func (c *FirestoreAdminClient) ListIndexes(ctx context.Context, req *adminpb.Lis
 
 // GetIndex gets a composite index.
 func (c *FirestoreAdminClient) GetIndex(ctx context.Context, req *adminpb.GetIndexRequest, opts ...gax.CallOption) (*adminpb.Index, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.GetIndex[0:len(c.CallOptions.GetIndex):len(c.CallOptions.GetIndex)], opts...)
 	var resp *adminpb.Index
@@ -215,7 +216,7 @@ func (c *FirestoreAdminClient) GetIndex(ctx context.Context, req *adminpb.GetInd
 
 // DeleteIndex deletes a composite index.
 func (c *FirestoreAdminClient) DeleteIndex(ctx context.Context, req *adminpb.DeleteIndexRequest, opts ...gax.CallOption) error {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.DeleteIndex[0:len(c.CallOptions.DeleteIndex):len(c.CallOptions.DeleteIndex)], opts...)
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
@@ -232,7 +233,7 @@ func (c *FirestoreAdminClient) DeleteIndex(ctx context.Context, req *adminpb.Del
 // created. If an ImportDocuments operation is cancelled, it is possible
 // that a subset of the data has already been imported to Cloud Firestore.
 func (c *FirestoreAdminClient) ImportDocuments(ctx context.Context, req *adminpb.ImportDocumentsRequest, opts ...gax.CallOption) (*longrunningpb.Operation, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ImportDocuments[0:len(c.CallOptions.ImportDocuments):len(c.CallOptions.ImportDocuments)], opts...)
 	var resp *longrunningpb.Operation
@@ -256,7 +257,7 @@ func (c *FirestoreAdminClient) ImportDocuments(ctx context.Context, req *adminpb
 // cancelled before completion it may leave partial data behind in Google
 // Cloud Storage.
 func (c *FirestoreAdminClient) ExportDocuments(ctx context.Context, req *adminpb.ExportDocumentsRequest, opts ...gax.CallOption) (*longrunningpb.Operation, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ExportDocuments[0:len(c.CallOptions.ExportDocuments):len(c.CallOptions.ExportDocuments)], opts...)
 	var resp *longrunningpb.Operation
@@ -273,7 +274,7 @@ func (c *FirestoreAdminClient) ExportDocuments(ctx context.Context, req *adminpb
 
 // GetField gets the metadata and configuration for a Field.
 func (c *FirestoreAdminClient) GetField(ctx context.Context, req *adminpb.GetFieldRequest, opts ...gax.CallOption) (*adminpb.Field, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.GetField[0:len(c.CallOptions.GetField):len(c.CallOptions.GetField)], opts...)
 	var resp *adminpb.Field
@@ -295,7 +296,7 @@ func (c *FirestoreAdminClient) GetField(ctx context.Context, req *adminpb.GetFie
 // [FirestoreAdmin.ListFields][google.firestore.admin.v1.FirestoreAdmin.ListFields] with the filter set to
 // indexConfig.usesAncestorConfig:false.
 func (c *FirestoreAdminClient) ListFields(ctx context.Context, req *adminpb.ListFieldsRequest, opts ...gax.CallOption) *FieldIterator {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ListFields[0:len(c.CallOptions.ListFields):len(c.CallOptions.ListFields)], opts...)
 	it := &FieldIterator{}
@@ -346,7 +347,7 @@ func (c *FirestoreAdminClient) ListFields(ctx context.Context, req *adminpb.List
 // the special Field with resource name:
 // projects/{project_id}/databases/{database_id}/collectionGroups/__default__/fields/*.
 func (c *FirestoreAdminClient) UpdateField(ctx context.Context, req *adminpb.UpdateFieldRequest, opts ...gax.CallOption) (*longrunningpb.Operation, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "field.name", req.GetField().GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "field.name", url.QueryEscape(req.GetField().GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.UpdateField[0:len(c.CallOptions.UpdateField):len(c.CallOptions.UpdateField)], opts...)
 	var resp *longrunningpb.Operation

@@ -365,6 +365,21 @@ func PossibleHyperVGenerationValues() []HyperVGeneration {
 	return []HyperVGeneration{V1, V2}
 }
 
+// HyperVGenerationType enumerates the values for hyper v generation type.
+type HyperVGenerationType string
+
+const (
+	// HyperVGenerationTypeV1 ...
+	HyperVGenerationTypeV1 HyperVGenerationType = "V1"
+	// HyperVGenerationTypeV2 ...
+	HyperVGenerationTypeV2 HyperVGenerationType = "V2"
+)
+
+// PossibleHyperVGenerationTypeValues returns an array of possible values for the HyperVGenerationType const type.
+func PossibleHyperVGenerationTypeValues() []HyperVGenerationType {
+	return []HyperVGenerationType{HyperVGenerationTypeV1, HyperVGenerationTypeV2}
+}
+
 // HyperVGenerationTypes enumerates the values for hyper v generation types.
 type HyperVGenerationTypes string
 
@@ -1304,7 +1319,7 @@ type APIErrorBase struct {
 
 // AutomaticOSUpgradePolicy the configuration parameters used for performing automatic OS upgrade.
 type AutomaticOSUpgradePolicy struct {
-	// EnableAutomaticOSUpgrade - Indicates whether OS upgrades should automatically be applied to scale set instances in a rolling fashion when a newer version of the OS image becomes available. Default value is false. If this is set to true for Windows based scale sets, recommendation is to set [enableAutomaticUpdates](https://docs.microsoft.com/dotnet/api/microsoft.azure.management.compute.models.windowsconfiguration.enableautomaticupdates?view=azure-dotnet) to false.
+	// EnableAutomaticOSUpgrade - Indicates whether OS upgrades should automatically be applied to scale set instances in a rolling fashion when a newer version of the OS image becomes available. Default value is false. <br><br> If this is set to true for Windows based scale sets, [enableAutomaticUpdates](https://docs.microsoft.com/dotnet/api/microsoft.azure.management.compute.models.windowsconfiguration.enableautomaticupdates?view=azure-dotnet) is automatically set to false and cannot be set to true.
 	EnableAutomaticOSUpgrade *bool `json:"enableAutomaticOSUpgrade,omitempty"`
 	// DisableAutomaticRollback - Whether OS image rollback feature should be disabled. Default value is false.
 	DisableAutomaticRollback *bool `json:"disableAutomaticRollback,omitempty"`
@@ -5040,7 +5055,7 @@ func NewProximityPlacementGroupListResultPage(getNextPage func(context.Context, 
 
 // ProximityPlacementGroupProperties describes the properties of a Proximity Placement Group.
 type ProximityPlacementGroupProperties struct {
-	// ProximityPlacementGroupType - Specifies the type of the proximity placement group. <br><br> Possible values are: <br><br> **Standard** <br><br> **Ultra**. Possible values include: 'Standard', 'Ultra'
+	// ProximityPlacementGroupType - Specifies the type of the proximity placement group. <br><br> Possible values are: <br><br> **Standard** : Co-locate resources within an Azure region or Availability Zone. <br><br> **Ultra** : For future use. Possible values include: 'Standard', 'Ultra'
 	ProximityPlacementGroupType ProximityPlacementGroupType `json:"proximityPlacementGroupType,omitempty"`
 	// VirtualMachines - READ-ONLY; A list of references to all virtual machines in the proximity placement group.
 	VirtualMachines *[]SubResource `json:"virtualMachines,omitempty"`
@@ -5253,12 +5268,12 @@ type ResourceSkuRestrictions struct {
 	ReasonCode ResourceSkuRestrictionsReasonCode `json:"reasonCode,omitempty"`
 }
 
-// ResourceSkusResult the Compute List Skus operation response.
+// ResourceSkusResult the List Resource Skus operation response.
 type ResourceSkusResult struct {
 	autorest.Response `json:"-"`
 	// Value - The list of skus available for the subscription.
 	Value *[]ResourceSku `json:"value,omitempty"`
-	// NextLink - The uri to fetch the next page of Compute Skus. Call ListNext() with this to fetch the next page of VMSS Skus.
+	// NextLink - The URI to fetch the next page of Resource Skus. Call ListNext() with this URI to fetch the next page of Resource Skus
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
@@ -7261,6 +7276,8 @@ type VirtualMachineInstanceView struct {
 	OsName *string `json:"osName,omitempty"`
 	// OsVersion - The version of Operating System running on the virtual machine.
 	OsVersion *string `json:"osVersion,omitempty"`
+	// HyperVGeneration - Specifies the HyperVGeneration Type associated with a resource. Possible values include: 'HyperVGenerationTypeV1', 'HyperVGenerationTypeV2'
+	HyperVGeneration HyperVGenerationType `json:"hyperVGeneration,omitempty"`
 	// RdpThumbPrint - The Remote desktop certificate thumbprint.
 	RdpThumbPrint *string `json:"rdpThumbPrint,omitempty"`
 	// VMAgent - The VM Agent running on the virtual machine.
@@ -7454,7 +7471,7 @@ type VirtualMachineProperties struct {
 // VirtualMachineReimageParameters parameters for Reimaging Virtual Machine. NOTE: Virtual Machine OS disk
 // will always be reimaged
 type VirtualMachineReimageParameters struct {
-	// TempDisk - Specifies whether to reimage temp disk. Default value: false.
+	// TempDisk - Specifies whether to reimage temp disk. Default value: false. Note: This temp disk reimage parameter is only supported for VM/VMSS with Ephemeral OS disk.
 	TempDisk *bool `json:"tempDisk,omitempty"`
 }
 
@@ -8910,7 +8927,7 @@ type VirtualMachineScaleSetPublicIPAddressConfigurationProperties struct {
 type VirtualMachineScaleSetReimageParameters struct {
 	// InstanceIds - The virtual machine scale set instance ids. Omitting the virtual machine scale set instance ids will result in the operation being performed on all virtual machines in the virtual machine scale set.
 	InstanceIds *[]string `json:"instanceIds,omitempty"`
-	// TempDisk - Specifies whether to reimage temp disk. Default value: false.
+	// TempDisk - Specifies whether to reimage temp disk. Default value: false. Note: This temp disk reimage parameter is only supported for VM/VMSS with Ephemeral OS disk.
 	TempDisk *bool `json:"tempDisk,omitempty"`
 }
 
@@ -10157,7 +10174,7 @@ type VirtualMachineScaleSetVMProtectionPolicy struct {
 
 // VirtualMachineScaleSetVMReimageParameters describes a Virtual Machine Scale Set VM Reimage Parameters.
 type VirtualMachineScaleSetVMReimageParameters struct {
-	// TempDisk - Specifies whether to reimage temp disk. Default value: false.
+	// TempDisk - Specifies whether to reimage temp disk. Default value: false. Note: This temp disk reimage parameter is only supported for VM/VMSS with Ephemeral OS disk.
 	TempDisk *bool `json:"tempDisk,omitempty"`
 }
 
@@ -10885,7 +10902,7 @@ type VMScaleSetConvertToSinglePlacementGroupInput struct {
 type WindowsConfiguration struct {
 	// ProvisionVMAgent - Indicates whether virtual machine agent should be provisioned on the virtual machine. <br><br> When this property is not specified in the request body, default behavior is to set it to true.  This will ensure that VM Agent is installed on the VM so that extensions can be added to the VM later.
 	ProvisionVMAgent *bool `json:"provisionVMAgent,omitempty"`
-	// EnableAutomaticUpdates - Indicates whether virtual machine is enabled for automatic Windows updates. Default value is true. <br><br> For virtual machine scale sets, this property can be updated and updates will take effect on OS reprovisioning.
+	// EnableAutomaticUpdates - Indicates whether Automatic Updates is enabled for the Windows virtual machine. Default value is true. <br><br> For virtual machine scale sets, this property can be updated and updates will take effect on OS reprovisioning.
 	EnableAutomaticUpdates *bool `json:"enableAutomaticUpdates,omitempty"`
 	// TimeZone - Specifies the time zone of the virtual machine. e.g. "Pacific Standard Time"
 	TimeZone *string `json:"timeZone,omitempty"`

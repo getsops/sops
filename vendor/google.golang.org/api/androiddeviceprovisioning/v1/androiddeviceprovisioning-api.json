@@ -824,7 +824,7 @@
       }
     }
   },
-  "revision": "20190531",
+  "revision": "20190704",
   "rootUrl": "https://androiddeviceprovisioning.googleapis.com/",
   "schemas": {
     "ClaimDeviceRequest": {
@@ -896,7 +896,7 @@
       "id": "Company",
       "properties": {
         "adminEmails": {
-          "description": "Input only. Optional. Email address of customer's users in the admin role.\nEach email address must be associated with a Google Account.",
+          "description": "Optional. Input only. Email address of customer's users in the admin role.\nEach email address must be associated with a Google Account.",
           "items": {
             "type": "string"
           },

@@ -381,7 +381,7 @@ func (client JobsClient) GetResponder(resp *http.Response) (result Job, err erro
 // accountName - the Media Services account name.
 // transformName - the Transform name.
 // filter - restricts the set of items returned.
-// orderby - specifies the the key by which the result collection should be ordered.
+// orderby - specifies the key by which the result collection should be ordered.
 func (client JobsClient) List(ctx context.Context, resourceGroupName string, accountName string, transformName string, filter string, orderby string) (result JobCollectionPage, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/JobsClient.List")

@@ -87,7 +87,7 @@ func TestPullStreamGet_ResourceUnavailable(t *testing.T) {
 	ps := pstest.NewServer()
 	defer ps.Close()
 
-	s := ExhaustedServer{ps.GServer}
+	s := ExhaustedServer{&ps.GServer}
 	pb.RegisterPublisherServer(srv.Gsrv, &s)
 	pb.RegisterSubscriberServer(srv.Gsrv, &s)
 	srv.Start()
@@ -123,7 +123,7 @@ func TestPullStreamGet_ResourceUnavailable(t *testing.T) {
 }
 
 type ExhaustedServer struct {
-	pstest.GServer
+	*pstest.GServer
 }
 
 func (*ExhaustedServer) StreamingPull(_ pb.Subscriber_StreamingPullServer) error {

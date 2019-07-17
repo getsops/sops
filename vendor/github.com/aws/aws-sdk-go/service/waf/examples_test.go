@@ -90,6 +90,12 @@ func ExampleWAF_CreateRule_shared00() {
 				fmt.Println(waf.ErrCodeInvalidParameterException, aerr.Error())
 			case waf.ErrCodeLimitsExceededException:
 				fmt.Println(waf.ErrCodeLimitsExceededException, aerr.Error())
+			case waf.ErrCodeTagOperationException:
+				fmt.Println(waf.ErrCodeTagOperationException, aerr.Error())
+			case waf.ErrCodeTagOperationInternalErrorException:
+				fmt.Println(waf.ErrCodeTagOperationInternalErrorException, aerr.Error())
+			case waf.ErrCodeBadRequestException:
+				fmt.Println(waf.ErrCodeBadRequestException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -214,6 +220,12 @@ func ExampleWAF_CreateWebACL_shared00() {
 				fmt.Println(waf.ErrCodeInvalidParameterException, aerr.Error())
 			case waf.ErrCodeLimitsExceededException:
 				fmt.Println(waf.ErrCodeLimitsExceededException, aerr.Error())
+			case waf.ErrCodeTagOperationException:
+				fmt.Println(waf.ErrCodeTagOperationException, aerr.Error())
+			case waf.ErrCodeTagOperationInternalErrorException:
+				fmt.Println(waf.ErrCodeTagOperationInternalErrorException, aerr.Error())
+			case waf.ErrCodeBadRequestException:
+				fmt.Println(waf.ErrCodeBadRequestException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -374,6 +386,10 @@ func ExampleWAF_DeleteRule_shared00() {
 				fmt.Println(waf.ErrCodeReferencedItemException, aerr.Error())
 			case waf.ErrCodeNonEmptyEntityException:
 				fmt.Println(waf.ErrCodeNonEmptyEntityException, aerr.Error())
+			case waf.ErrCodeTagOperationException:
+				fmt.Println(waf.ErrCodeTagOperationException, aerr.Error())
+			case waf.ErrCodeTagOperationInternalErrorException:
+				fmt.Println(waf.ErrCodeTagOperationInternalErrorException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}
@@ -494,6 +510,10 @@ func ExampleWAF_DeleteWebACL_shared00() {
 				fmt.Println(waf.ErrCodeReferencedItemException, aerr.Error())
 			case waf.ErrCodeNonEmptyEntityException:
 				fmt.Println(waf.ErrCodeNonEmptyEntityException, aerr.Error())
+			case waf.ErrCodeTagOperationException:
+				fmt.Println(waf.ErrCodeTagOperationException, aerr.Error())
+			case waf.ErrCodeTagOperationInternalErrorException:
+				fmt.Println(waf.ErrCodeTagOperationInternalErrorException, aerr.Error())
 			default:
 				fmt.Println(aerr.Error())
 			}

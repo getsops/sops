@@ -3909,6 +3909,280 @@ func (c *ApiGatewayV2) GetStagesWithContext(ctx aws.Context, input *GetStagesInp
 	return out, req.Send()
 }
 
+const opGetTags = "GetTags"
+
+// GetTagsRequest generates a "aws/request.Request" representing the
+// client's request for the GetTags operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetTags for more information on using the GetTags
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetTagsRequest method.
+//    req, resp := client.GetTagsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/apigatewayv2-2018-11-29/GetTags
+func (c *ApiGatewayV2) GetTagsRequest(input *GetTagsInput) (req *request.Request, output *GetTagsOutput) {
+	op := &request.Operation{
+		Name:       opGetTags,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v2/tags/{resource-arn}",
+	}
+
+	if input == nil {
+		input = &GetTagsInput{}
+	}
+
+	output = &GetTagsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetTags API operation for AmazonApiGatewayV2.
+//
+// Gets the Tags for a resource.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AmazonApiGatewayV2's
+// API operation GetTags for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource specified in the request was not found. See the message field
+//   for more information.
+//
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   A limit has been exceeded. See the accompanying error message for details.
+//
+//   * ErrCodeBadRequestException "BadRequestException"
+//   The request is not valid, for example, the input is incomplete or incorrect.
+//   See the accompanying error message for details.
+//
+//   * ErrCodeConflictException "ConflictException"
+//   The requested operation would cause a conflict with the current state of
+//   a service resource associated with the request. Resolve the conflict before
+//   retrying this request. See the accompanying error message for details.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/apigatewayv2-2018-11-29/GetTags
+func (c *ApiGatewayV2) GetTags(input *GetTagsInput) (*GetTagsOutput, error) {
+	req, out := c.GetTagsRequest(input)
+	return out, req.Send()
+}
+
+// GetTagsWithContext is the same as GetTags with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetTags for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ApiGatewayV2) GetTagsWithContext(ctx aws.Context, input *GetTagsInput, opts ...request.Option) (*GetTagsOutput, error) {
+	req, out := c.GetTagsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opTagResource = "TagResource"
+
+// TagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the TagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See TagResource for more information on using the TagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the TagResourceRequest method.
+//    req, resp := client.TagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/apigatewayv2-2018-11-29/TagResource
+func (c *ApiGatewayV2) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
+	op := &request.Operation{
+		Name:       opTagResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v2/tags/{resource-arn}",
+	}
+
+	if input == nil {
+		input = &TagResourceInput{}
+	}
+
+	output = &TagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// TagResource API operation for AmazonApiGatewayV2.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AmazonApiGatewayV2's
+// API operation TagResource for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource specified in the request was not found. See the message field
+//   for more information.
+//
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   A limit has been exceeded. See the accompanying error message for details.
+//
+//   * ErrCodeBadRequestException "BadRequestException"
+//   The request is not valid, for example, the input is incomplete or incorrect.
+//   See the accompanying error message for details.
+//
+//   * ErrCodeConflictException "ConflictException"
+//   The requested operation would cause a conflict with the current state of
+//   a service resource associated with the request. Resolve the conflict before
+//   retrying this request. See the accompanying error message for details.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/apigatewayv2-2018-11-29/TagResource
+func (c *ApiGatewayV2) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	return out, req.Send()
+}
+
+// TagResourceWithContext is the same as TagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See TagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ApiGatewayV2) TagResourceWithContext(ctx aws.Context, input *TagResourceInput, opts ...request.Option) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUntagResource = "UntagResource"
+
+// UntagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the UntagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UntagResource for more information on using the UntagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UntagResourceRequest method.
+//    req, resp := client.UntagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/apigatewayv2-2018-11-29/UntagResource
+func (c *ApiGatewayV2) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
+	op := &request.Operation{
+		Name:       opUntagResource,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/v2/tags/{resource-arn}",
+	}
+
+	if input == nil {
+		input = &UntagResourceInput{}
+	}
+
+	output = &UntagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UntagResource API operation for AmazonApiGatewayV2.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AmazonApiGatewayV2's
+// API operation UntagResource for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeNotFoundException "NotFoundException"
+//   The resource specified in the request was not found. See the message field
+//   for more information.
+//
+//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   A limit has been exceeded. See the accompanying error message for details.
+//
+//   * ErrCodeBadRequestException "BadRequestException"
+//   The request is not valid, for example, the input is incomplete or incorrect.
+//   See the accompanying error message for details.
+//
+//   * ErrCodeConflictException "ConflictException"
+//   The requested operation would cause a conflict with the current state of
+//   a service resource associated with the request. Resolve the conflict before
+//   retrying this request. See the accompanying error message for details.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/apigatewayv2-2018-11-29/UntagResource
+func (c *ApiGatewayV2) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	return out, req.Send()
+}
+
+// UntagResourceWithContext is the same as UntagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UntagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *ApiGatewayV2) UntagResourceWithContext(ctx aws.Context, input *UntagResourceInput, opts ...request.Option) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateApi = "UpdateApi"
 
 // UpdateApiRequest generates a "aws/request.Request" representing the
@@ -4994,6 +5268,9 @@ type Api struct {
 	// RouteSelectionExpression is a required field
 	RouteSelectionExpression *string `locationName:"routeSelectionExpression" type:"string" required:"true"`
 
+	// Tags for the API.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
 	// A version identifier for the API.
 	Version *string `locationName:"version" type:"string"`
 
@@ -5063,6 +5340,12 @@ func (s *Api) SetProtocolType(v string) *Api {
 // SetRouteSelectionExpression sets the RouteSelectionExpression field's value.
 func (s *Api) SetRouteSelectionExpression(v string) *Api {
 	s.RouteSelectionExpression = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *Api) SetTags(v map[string]*string) *Api {
+	s.Tags = v
 	return s
 }
 
@@ -5983,6 +6266,10 @@ type CreateDomainNameInput struct {
 
 	// The domain name configurations.
 	DomainNameConfigurations []*DomainNameConfiguration `locationName:"domainNameConfigurations" type:"list"`
+
+	// A key value pair of string with key length between[1-128] and value length
+	// between[1-256]
+	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
 // String returns the string representation
@@ -6020,6 +6307,12 @@ func (s *CreateDomainNameInput) SetDomainNameConfigurations(v []*DomainNameConfi
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *CreateDomainNameInput) SetTags(v map[string]*string) *CreateDomainNameInput {
+	s.Tags = v
+	return s
+}
+
 type CreateDomainNameOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -6033,6 +6326,10 @@ type CreateDomainNameOutput struct {
 
 	// The domain name configurations.
 	DomainNameConfigurations []*DomainNameConfiguration `locationName:"domainNameConfigurations" type:"list"`
+
+	// A key value pair of string with key length between[1-128] and value length
+	// between[1-256]
+	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
 // String returns the string representation
@@ -6060,6 +6357,12 @@ func (s *CreateDomainNameOutput) SetDomainName(v string) *CreateDomainNameOutput
 // SetDomainNameConfigurations sets the DomainNameConfigurations field's value.
 func (s *CreateDomainNameOutput) SetDomainNameConfigurations(v []*DomainNameConfiguration) *CreateDomainNameOutput {
 	s.DomainNameConfigurations = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateDomainNameOutput) SetTags(v map[string]*string) *CreateDomainNameOutput {
+	s.Tags = v
 	return s
 }
 
@@ -7246,6 +7549,10 @@ type CreateStageInput struct {
 
 	// The stage variable map.
 	StageVariables map[string]*string `locationName:"stageVariables" type:"map"`
+
+	// A key value pair of string with key length between[1-128] and value length
+	// between[1-256]
+	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
 // String returns the string representation
@@ -7331,6 +7638,12 @@ func (s *CreateStageInput) SetStageVariables(v map[string]*string) *CreateStageI
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *CreateStageInput) SetTags(v map[string]*string) *CreateStageInput {
+	s.Tags = v
+	return s
+}
+
 type CreateStageOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -7361,6 +7674,10 @@ type CreateStageOutput struct {
 
 	// The stage variable map.
 	StageVariables map[string]*string `locationName:"stageVariables" type:"map"`
+
+	// A key value pair of string with key length between[1-128] and value length
+	// between[1-256]
+	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
 // String returns the string representation
@@ -7430,6 +7747,12 @@ func (s *CreateStageOutput) SetStageName(v string) *CreateStageOutput {
 // SetStageVariables sets the StageVariables field's value.
 func (s *CreateStageOutput) SetStageVariables(v map[string]*string) *CreateStageOutput {
 	s.StageVariables = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateStageOutput) SetTags(v map[string]*string) *CreateStageOutput {
+	s.Tags = v
 	return s
 }
 
@@ -8256,6 +8579,9 @@ type DomainName struct {
 
 	// The domain name configurations.
 	DomainNameConfigurations []*DomainNameConfiguration `locationName:"domainNameConfigurations" type:"list"`
+
+	// Tags for the DomainName.
+	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
 // String returns the string representation
@@ -8286,6 +8612,12 @@ func (s *DomainName) SetDomainNameConfigurations(v []*DomainNameConfiguration) *
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *DomainName) SetTags(v map[string]*string) *DomainName {
+	s.Tags = v
+	return s
+}
+
 // The domain name configuration.
 type DomainNameConfiguration struct {
 	_ struct{} `type:"structure"`
@@ -8305,11 +8637,25 @@ type DomainNameConfiguration struct {
 	// for this domain name was uploaded.
 	CertificateUploadDate *time.Time `locationName:"certificateUploadDate" type:"timestamp" timestampFormat:"iso8601"`
 
+	// The status of the domain name migration. The valid values are AVAILABLE and
+	// UPDATING. If the status is UPDATING, the domain cannot be modified further
+	// until the existing operation is complete. If it is AVAILABLE, the domain
+	// can be updated.
+	DomainNameStatus *string `locationName:"domainNameStatus" type:"string" enum:"DomainNameStatus"`
+
+	// An optional text message containing detailed information about status of
+	// the domain name migration.
+	DomainNameStatusMessage *string `locationName:"domainNameStatusMessage" type:"string"`
+
 	// The endpoint type.
 	EndpointType *string `locationName:"endpointType" type:"string" enum:"EndpointType"`
 
 	// The Amazon Route 53 Hosted Zone ID of the endpoint.
 	HostedZoneId *string `locationName:"hostedZoneId" type:"string"`
+
+	// The Transport Layer Security (TLS) version of the security policy for this
+	// domain name. The valid values are TLS_1_0 and TLS_1_2.
+	SecurityPolicy *string `locationName:"securityPolicy" type:"string" enum:"SecurityPolicy"`
 }
 
 // String returns the string representation
@@ -8346,6 +8692,18 @@ func (s *DomainNameConfiguration) SetCertificateUploadDate(v time.Time) *DomainN
 	return s
 }
 
+// SetDomainNameStatus sets the DomainNameStatus field's value.
+func (s *DomainNameConfiguration) SetDomainNameStatus(v string) *DomainNameConfiguration {
+	s.DomainNameStatus = &v
+	return s
+}
+
+// SetDomainNameStatusMessage sets the DomainNameStatusMessage field's value.
+func (s *DomainNameConfiguration) SetDomainNameStatusMessage(v string) *DomainNameConfiguration {
+	s.DomainNameStatusMessage = &v
+	return s
+}
+
 // SetEndpointType sets the EndpointType field's value.
 func (s *DomainNameConfiguration) SetEndpointType(v string) *DomainNameConfiguration {
 	s.EndpointType = &v
@@ -8355,6 +8713,12 @@ func (s *DomainNameConfiguration) SetEndpointType(v string) *DomainNameConfigura
 // SetHostedZoneId sets the HostedZoneId field's value.
 func (s *DomainNameConfiguration) SetHostedZoneId(v string) *DomainNameConfiguration {
 	s.HostedZoneId = &v
+	return s
+}
+
+// SetSecurityPolicy sets the SecurityPolicy field's value.
+func (s *DomainNameConfiguration) SetSecurityPolicy(v string) *DomainNameConfiguration {
+	s.SecurityPolicy = &v
 	return s
 }
 
@@ -8622,6 +8986,10 @@ type GetApiOutput struct {
 	// for more information.
 	RouteSelectionExpression *string `locationName:"routeSelectionExpression" type:"string"`
 
+	// A key value pair of string with key length between[1-128] and value length
+	// between[1-256]
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
 	// A string with a length between [1-64].
 	Version *string `locationName:"version" type:"string"`
 
@@ -8689,6 +9057,12 @@ func (s *GetApiOutput) SetProtocolType(v string) *GetApiOutput {
 // SetRouteSelectionExpression sets the RouteSelectionExpression field's value.
 func (s *GetApiOutput) SetRouteSelectionExpression(v string) *GetApiOutput {
 	s.RouteSelectionExpression = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *GetApiOutput) SetTags(v map[string]*string) *GetApiOutput {
+	s.Tags = v
 	return s
 }
 
@@ -9265,6 +9639,10 @@ type GetDomainNameOutput struct {
 
 	// The domain name configurations.
 	DomainNameConfigurations []*DomainNameConfiguration `locationName:"domainNameConfigurations" type:"list"`
+
+	// A key value pair of string with key length between[1-128] and value length
+	// between[1-256]
+	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
 // String returns the string representation
@@ -9292,6 +9670,12 @@ func (s *GetDomainNameOutput) SetDomainName(v string) *GetDomainNameOutput {
 // SetDomainNameConfigurations sets the DomainNameConfigurations field's value.
 func (s *GetDomainNameOutput) SetDomainNameConfigurations(v []*DomainNameConfiguration) *GetDomainNameOutput {
 	s.DomainNameConfigurations = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *GetDomainNameOutput) SetTags(v map[string]*string) *GetDomainNameOutput {
+	s.Tags = v
 	return s
 }
 
@@ -10792,6 +11176,10 @@ type GetStageOutput struct {
 
 	// The stage variable map.
 	StageVariables map[string]*string `locationName:"stageVariables" type:"map"`
+
+	// A key value pair of string with key length between[1-128] and value length
+	// between[1-256]
+	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
 // String returns the string representation
@@ -10861,6 +11249,12 @@ func (s *GetStageOutput) SetStageName(v string) *GetStageOutput {
 // SetStageVariables sets the StageVariables field's value.
 func (s *GetStageOutput) SetStageVariables(v map[string]*string) *GetStageOutput {
 	s.StageVariables = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *GetStageOutput) SetTags(v map[string]*string) *GetStageOutput {
+	s.Tags = v
 	return s
 }
 
@@ -10948,6 +11342,67 @@ func (s *GetStagesOutput) SetItems(v []*Stage) *GetStagesOutput {
 // SetNextToken sets the NextToken field's value.
 func (s *GetStagesOutput) SetNextToken(v string) *GetStagesOutput {
 	s.NextToken = &v
+	return s
+}
+
+type GetTagsInput struct {
+	_ struct{} `type:"structure"`
+
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"resource-arn" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetTagsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetTagsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetTagsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetTagsInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *GetTagsInput) SetResourceArn(v string) *GetTagsInput {
+	s.ResourceArn = &v
+	return s
+}
+
+type GetTagsOutput struct {
+	_ struct{} `type:"structure"`
+
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation
+func (s GetTagsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetTagsOutput) GoString() string {
+	return s.String()
+}
+
+// SetTags sets the Tags field's value.
+func (s *GetTagsOutput) SetTags(v map[string]*string) *GetTagsOutput {
+	s.Tags = v
 	return s
 }
 
@@ -11642,6 +12097,9 @@ type Stage struct {
 	// can have alphanumeric and underscore characters, and the values must match
 	// [A-Za-z0-9-._~:/?#&=,]+.
 	StageVariables map[string]*string `locationName:"stageVariables" type:"map"`
+
+	// Tags for the Stage.
+	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
 // String returns the string representation
@@ -11712,6 +12170,140 @@ func (s *Stage) SetStageName(v string) *Stage {
 func (s *Stage) SetStageVariables(v map[string]*string) *Stage {
 	s.StageVariables = v
 	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *Stage) SetTags(v map[string]*string) *Stage {
+	s.Tags = v
+	return s
+}
+
+type TagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"resource-arn" type:"string" required:"true"`
+
+	// A key value pair of string with key length between[1-128] and value length
+	// between[1-256]
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation
+func (s TagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TagResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *TagResourceInput) SetResourceArn(v string) *TagResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *TagResourceInput) SetTags(v map[string]*string) *TagResourceInput {
+	s.Tags = v
+	return s
+}
+
+type TagResourceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s TagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagResourceOutput) GoString() string {
+	return s.String()
+}
+
+type UntagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// ResourceArn is a required field
+	ResourceArn *string `location:"uri" locationName:"resource-arn" type:"string" required:"true"`
+
+	// TagKeys is a required field
+	TagKeys []*string `location:"querystring" locationName:"tagKeys" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s UntagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UntagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UntagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UntagResourceInput"}
+	if s.ResourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceArn"))
+	}
+	if s.ResourceArn != nil && len(*s.ResourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceArn", 1))
+	}
+	if s.TagKeys == nil {
+		invalidParams.Add(request.NewErrParamRequired("TagKeys"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceArn sets the ResourceArn field's value.
+func (s *UntagResourceInput) SetResourceArn(v string) *UntagResourceInput {
+	s.ResourceArn = &v
+	return s
+}
+
+// SetTagKeys sets the TagKeys field's value.
+func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
+	s.TagKeys = v
+	return s
+}
+
+type UntagResourceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UntagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UntagResourceOutput) GoString() string {
+	return s.String()
 }
 
 type UpdateApiInput struct {
@@ -11984,6 +12576,10 @@ type UpdateApiOutput struct {
 	// for more information.
 	RouteSelectionExpression *string `locationName:"routeSelectionExpression" type:"string"`
 
+	// A key value pair of string with key length between[1-128] and value length
+	// between[1-256]
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
 	// A string with a length between [1-64].
 	Version *string `locationName:"version" type:"string"`
 
@@ -12051,6 +12647,12 @@ func (s *UpdateApiOutput) SetProtocolType(v string) *UpdateApiOutput {
 // SetRouteSelectionExpression sets the RouteSelectionExpression field's value.
 func (s *UpdateApiOutput) SetRouteSelectionExpression(v string) *UpdateApiOutput {
 	s.RouteSelectionExpression = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *UpdateApiOutput) SetTags(v map[string]*string) *UpdateApiOutput {
+	s.Tags = v
 	return s
 }
 
@@ -12494,6 +13096,10 @@ type UpdateDomainNameOutput struct {
 
 	// The domain name configurations.
 	DomainNameConfigurations []*DomainNameConfiguration `locationName:"domainNameConfigurations" type:"list"`
+
+	// A key value pair of string with key length between[1-128] and value length
+	// between[1-256]
+	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
 // String returns the string representation
@@ -12521,6 +13127,12 @@ func (s *UpdateDomainNameOutput) SetDomainName(v string) *UpdateDomainNameOutput
 // SetDomainNameConfigurations sets the DomainNameConfigurations field's value.
 func (s *UpdateDomainNameOutput) SetDomainNameConfigurations(v []*DomainNameConfiguration) *UpdateDomainNameOutput {
 	s.DomainNameConfigurations = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *UpdateDomainNameOutput) SetTags(v map[string]*string) *UpdateDomainNameOutput {
+	s.Tags = v
 	return s
 }
 
@@ -13868,6 +14480,10 @@ type UpdateStageOutput struct {
 
 	// The stage variable map.
 	StageVariables map[string]*string `locationName:"stageVariables" type:"map"`
+
+	// A key value pair of string with key length between[1-128] and value length
+	// between[1-256]
+	Tags map[string]*string `locationName:"tags" type:"map"`
 }
 
 // String returns the string representation
@@ -13940,6 +14556,12 @@ func (s *UpdateStageOutput) SetStageVariables(v map[string]*string) *UpdateStage
 	return s
 }
 
+// SetTags sets the Tags field's value.
+func (s *UpdateStageOutput) SetTags(v map[string]*string) *UpdateStageOutput {
+	s.Tags = v
+	return s
+}
+
 // The authorization type. Valid values are NONE for open access, AWS_IAM for
 // using AWS IAM permissions, and CUSTOM for using a Lambda authorizer.
 const (
@@ -13988,6 +14610,14 @@ const (
 
 	// DeploymentStatusDeployed is a DeploymentStatus enum value
 	DeploymentStatusDeployed = "DEPLOYED"
+)
+
+const (
+	// DomainNameStatusAvailable is a DomainNameStatus enum value
+	DomainNameStatusAvailable = "AVAILABLE"
+
+	// DomainNameStatusUpdating is a DomainNameStatus enum value
+	DomainNameStatusUpdating = "UPDATING"
 )
 
 // Represents an endpoint type.
@@ -14044,4 +14674,12 @@ const (
 const (
 	// ProtocolTypeWebsocket is a ProtocolType enum value
 	ProtocolTypeWebsocket = "WEBSOCKET"
+)
+
+const (
+	// SecurityPolicyTls10 is a SecurityPolicy enum value
+	SecurityPolicyTls10 = "TLS_1_0"
+
+	// SecurityPolicyTls12 is a SecurityPolicy enum value
+	SecurityPolicyTls12 = "TLS_1_2"
 )

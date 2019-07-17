@@ -212,6 +212,10 @@ type ServiceCatalogAPI interface {
 	DescribeServiceActionWithContext(aws.Context, *servicecatalog.DescribeServiceActionInput, ...request.Option) (*servicecatalog.DescribeServiceActionOutput, error)
 	DescribeServiceActionRequest(*servicecatalog.DescribeServiceActionInput) (*request.Request, *servicecatalog.DescribeServiceActionOutput)
 
+	DescribeServiceActionExecutionParameters(*servicecatalog.DescribeServiceActionExecutionParametersInput) (*servicecatalog.DescribeServiceActionExecutionParametersOutput, error)
+	DescribeServiceActionExecutionParametersWithContext(aws.Context, *servicecatalog.DescribeServiceActionExecutionParametersInput, ...request.Option) (*servicecatalog.DescribeServiceActionExecutionParametersOutput, error)
+	DescribeServiceActionExecutionParametersRequest(*servicecatalog.DescribeServiceActionExecutionParametersInput) (*request.Request, *servicecatalog.DescribeServiceActionExecutionParametersOutput)
+
 	DescribeTagOption(*servicecatalog.DescribeTagOptionInput) (*servicecatalog.DescribeTagOptionOutput, error)
 	DescribeTagOptionWithContext(aws.Context, *servicecatalog.DescribeTagOptionInput, ...request.Option) (*servicecatalog.DescribeTagOptionOutput, error)
 	DescribeTagOptionRequest(*servicecatalog.DescribeTagOptionInput) (*request.Request, *servicecatalog.DescribeTagOptionOutput)

@@ -19,6 +19,7 @@ package debugger
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"time"
 
 	gax "github.com/googleapis/gax-go/v2"
@@ -138,7 +139,7 @@ func (c *Debugger2Client) SetGoogleClientInfo(keyval ...string) {
 
 // SetBreakpoint sets the breakpoint to the debuggee.
 func (c *Debugger2Client) SetBreakpoint(ctx context.Context, req *clouddebuggerpb.SetBreakpointRequest, opts ...gax.CallOption) (*clouddebuggerpb.SetBreakpointResponse, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "debuggee_id", req.GetDebuggeeId()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "debuggee_id", url.QueryEscape(req.GetDebuggeeId())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.SetBreakpoint[0:len(c.CallOptions.SetBreakpoint):len(c.CallOptions.SetBreakpoint)], opts...)
 	var resp *clouddebuggerpb.SetBreakpointResponse
@@ -183,7 +184,7 @@ func (c *Debugger2Client) DeleteBreakpoint(ctx context.Context, req *clouddebugg
 
 // ListBreakpoints lists all breakpoints for the debuggee.
 func (c *Debugger2Client) ListBreakpoints(ctx context.Context, req *clouddebuggerpb.ListBreakpointsRequest, opts ...gax.CallOption) (*clouddebuggerpb.ListBreakpointsResponse, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "debuggee_id", req.GetDebuggeeId()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "debuggee_id", url.QueryEscape(req.GetDebuggeeId())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ListBreakpoints[0:len(c.CallOptions.ListBreakpoints):len(c.CallOptions.ListBreakpoints)], opts...)
 	var resp *clouddebuggerpb.ListBreakpointsResponse

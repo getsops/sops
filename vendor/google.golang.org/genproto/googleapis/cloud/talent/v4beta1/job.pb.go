@@ -46,9 +46,7 @@ type Job struct {
 	// [requisition_id][google.cloud.talent.v4beta1.Job.requisition_id] since this
 	// value is unique.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// Required.
-	//
-	// The resource name of the company listing the job.
+	// Required. The resource name of the company listing the job.
 	//
 	// The format is
 	// "projects/{project_id}/tenants/{tenant_id}/companies/{company_id}", for
@@ -57,29 +55,23 @@ type Job struct {
 	// Tenant id is optional and the default tenant is used if unspecified, for
 	// example, "projects/api-test-project/companies/bar".
 	Company string `protobuf:"bytes,2,opt,name=company,proto3" json:"company,omitempty"`
-	// Required.
-	//
-	// The requisition ID, also referred to as the posting ID, is assigned by the
-	// client to identify a job. This field is intended to be used by clients
-	// for client identification and tracking of postings. A job isn't allowed
-	// to be created if there is another job with the same
+	// Required. The requisition ID, also referred to as the posting ID, is
+	// assigned by the client to identify a job. This field is intended to be used
+	// by clients for client identification and tracking of postings. A job isn't
+	// allowed to be created if there is another job with the same
 	// [company][google.cloud.talent.v4beta1.Job.name],
 	// [language_code][google.cloud.talent.v4beta1.Job.language_code] and
 	// [requisition_id][google.cloud.talent.v4beta1.Job.requisition_id].
 	//
 	// The maximum number of allowed characters is 255.
 	RequisitionId string `protobuf:"bytes,3,opt,name=requisition_id,json=requisitionId,proto3" json:"requisition_id,omitempty"`
-	// Required.
-	//
-	// The title of the job, such as "Software Engineer"
+	// Required. The title of the job, such as "Software Engineer"
 	//
 	// The maximum number of allowed characters is 500.
 	Title string `protobuf:"bytes,4,opt,name=title,proto3" json:"title,omitempty"`
-	// Required.
-	//
-	// The description of the job, which typically includes a multi-paragraph
-	// description of the company and related information. Separate fields are
-	// provided on the job object for
+	// Required. The description of the job, which typically includes a
+	// multi-paragraph description of the company and related information.
+	// Separate fields are provided on the job object for
 	// [responsibilities][google.cloud.talent.v4beta1.Job.responsibilities],
 	// [qualifications][google.cloud.talent.v4beta1.Job.qualifications], and other
 	// job characteristics. Use of these separate job fields is recommended.
@@ -111,23 +103,15 @@ type Job struct {
 	//
 	// The maximum number of allowed characters is 500.
 	Addresses []string `protobuf:"bytes,6,rep,name=addresses,proto3" json:"addresses,omitempty"`
-	// Optional.
-	//
-	// Job application information.
+	// Optional. Job application information.
 	ApplicationInfo *Job_ApplicationInfo `protobuf:"bytes,7,opt,name=application_info,json=applicationInfo,proto3" json:"application_info,omitempty"`
-	// Optional.
-	//
-	// The benefits included with the job.
+	// Optional. The benefits included with the job.
 	JobBenefits []JobBenefit `protobuf:"varint,8,rep,packed,name=job_benefits,json=jobBenefits,proto3,enum=google.cloud.talent.v4beta1.JobBenefit" json:"job_benefits,omitempty"`
-	// Optional.
-	//
-	// Job compensation information (a.k.a. "pay rate") i.e., the compensation
-	// that will paid to the employee.
+	// Optional. Job compensation information (a.k.a. "pay rate") i.e., the
+	// compensation that will paid to the employee.
 	CompensationInfo *CompensationInfo `protobuf:"bytes,9,opt,name=compensation_info,json=compensationInfo,proto3" json:"compensation_info,omitempty"`
-	// Optional.
-	//
-	// A map of fields to hold both filterable and non-filterable custom job
-	// attributes that are not covered by the provided structured fields.
+	// Optional. A map of fields to hold both filterable and non-filterable custom
+	// job attributes that are not covered by the provided structured fields.
 	//
 	// The keys of the map are strings up to 64 bytes and must match the
 	// pattern: [a-zA-Z][a-zA-Z0-9_]*. For example, key0LikeThis or
@@ -139,33 +123,24 @@ type Job struct {
 	// `string_values`, the maximum total size of `string_values` across all keys
 	// is 50KB.
 	CustomAttributes map[string]*CustomAttribute `protobuf:"bytes,10,rep,name=custom_attributes,json=customAttributes,proto3" json:"custom_attributes,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	// Optional.
-	//
-	// The desired education degrees for the job, such as Bachelors, Masters.
+	// Optional. The desired education degrees for the job, such as Bachelors,
+	// Masters.
 	DegreeTypes []DegreeType `protobuf:"varint,11,rep,packed,name=degree_types,json=degreeTypes,proto3,enum=google.cloud.talent.v4beta1.DegreeType" json:"degree_types,omitempty"`
-	// Optional.
-	//
-	// The department or functional area within the company with the open
-	// position.
+	// Optional. The department or functional area within the company with the
+	// open position.
 	//
 	// The maximum number of allowed characters is 255.
 	Department string `protobuf:"bytes,12,opt,name=department,proto3" json:"department,omitempty"`
-	// Optional.
-	//
-	// The employment type(s) of a job, for example,
+	// Optional. The employment type(s) of a job, for example,
 	// [full time][google.cloud.talent.v4beta1.EmploymentType.FULL_TIME] or
 	// [part time][google.cloud.talent.v4beta1.EmploymentType.PART_TIME].
 	EmploymentTypes []EmploymentType `protobuf:"varint,13,rep,packed,name=employment_types,json=employmentTypes,proto3,enum=google.cloud.talent.v4beta1.EmploymentType" json:"employment_types,omitempty"`
-	// Optional.
-	//
-	// A description of bonus, commission, and other compensation
+	// Optional. A description of bonus, commission, and other compensation
 	// incentives associated with the job not including salary or pay.
 	//
 	// The maximum number of allowed characters is 10,000.
 	Incentives string `protobuf:"bytes,14,opt,name=incentives,proto3" json:"incentives,omitempty"`
-	// Optional.
-	//
-	// The language of the posting. This field is distinct from
+	// Optional. The language of the posting. This field is distinct from
 	// any requirements for fluency that are associated with the job.
 	//
 	// Language codes must be in BCP-47 format, such as "en-US" or "sr-Latn".
@@ -179,13 +154,10 @@ type Job struct {
 	// [Job.description][google.cloud.talent.v4beta1.Job.description] is assigned,
 	// otherwise defaults to 'en_US'.
 	LanguageCode string `protobuf:"bytes,15,opt,name=language_code,json=languageCode,proto3" json:"language_code,omitempty"`
-	// Optional.
-	//
-	// The experience level associated with the job, such as "Entry Level".
+	// Optional. The experience level associated with the job, such as "Entry
+	// Level".
 	JobLevel JobLevel `protobuf:"varint,16,opt,name=job_level,json=jobLevel,proto3,enum=google.cloud.talent.v4beta1.JobLevel" json:"job_level,omitempty"`
-	// Optional.
-	//
-	// A promotion value of the job, as determined by the client.
+	// Optional. A promotion value of the job, as determined by the client.
 	// The value determines the sort order of the jobs returned when searching for
 	// jobs using the featured jobs search call, with higher promotional values
 	// being returned first and ties being resolved by relevance sort. Only the
@@ -193,9 +165,7 @@ type Job struct {
 	//
 	// Default value is 0, and negative values are treated as 0.
 	PromotionValue int32 `protobuf:"varint,17,opt,name=promotion_value,json=promotionValue,proto3" json:"promotion_value,omitempty"`
-	// Optional.
-	//
-	// A description of the qualifications required to perform the
+	// Optional. A description of the qualifications required to perform the
 	// job. The use of this field is recommended
 	// as an alternative to using the more general
 	// [description][google.cloud.talent.v4beta1.Job.description] field.
@@ -205,9 +175,7 @@ type Job struct {
 	//
 	// The maximum number of allowed characters is 10,000.
 	Qualifications string `protobuf:"bytes,18,opt,name=qualifications,proto3" json:"qualifications,omitempty"`
-	// Optional.
-	//
-	// A description of job responsibilities. The use of this field is
+	// Optional. A description of job responsibilities. The use of this field is
 	// recommended as an alternative to using the more general
 	// [description][google.cloud.talent.v4beta1.Job.description] field.
 	//
@@ -216,54 +184,45 @@ type Job struct {
 	//
 	// The maximum number of allowed characters is 10,000.
 	Responsibilities string `protobuf:"bytes,19,opt,name=responsibilities,proto3" json:"responsibilities,omitempty"`
-	// Optional.
-	//
-	// The job [PostingRegion][google.cloud.talent.v4beta1.PostingRegion] (for
-	// example, state, country) throughout which the job is available. If this
-	// field is set, a
-	// [LocationFilter][google.cloud.talent.v4beta1.LocationFilter] in a search
-	// query within the job region finds this job posting if an exact location
-	// match isn't specified. If this field is set to
+	// Optional. The job
+	// [PostingRegion][google.cloud.talent.v4beta1.PostingRegion] (for example,
+	// state, country) throughout which the job is available. If this field is
+	// set, a [LocationFilter][google.cloud.talent.v4beta1.LocationFilter] in a
+	// search query within the job region finds this job posting if an exact
+	// location match isn't specified. If this field is set to
 	// [PostingRegion.NATION][google.cloud.talent.v4beta1.PostingRegion.NATION] or
 	// [PostingRegion.ADMINISTRATIVE_AREA][google.cloud.talent.v4beta1.PostingRegion.ADMINISTRATIVE_AREA],
 	// setting job [Job.addresses][google.cloud.talent.v4beta1.Job.addresses] to
 	// the same location level as this field is strongly recommended.
 	PostingRegion PostingRegion `protobuf:"varint,20,opt,name=posting_region,json=postingRegion,proto3,enum=google.cloud.talent.v4beta1.PostingRegion" json:"posting_region,omitempty"`
-	// Optional.
-	//
-	// The visibility of the job.
+	// Optional. The visibility of the job.
 	//
 	// Defaults to
 	// [Visibility.ACCOUNT_ONLY][google.cloud.talent.v4beta1.Visibility.ACCOUNT_ONLY]
 	// if not specified.
 	Visibility Visibility `protobuf:"varint,21,opt,name=visibility,proto3,enum=google.cloud.talent.v4beta1.Visibility" json:"visibility,omitempty"`
-	// Optional.
-	//
-	// The start timestamp of the job in UTC time zone. Typically this field
-	// is used for contracting engagements. Invalid timestamps are ignored.
+	// Optional. The start timestamp of the job in UTC time zone. Typically this
+	// field is used for contracting engagements. Invalid timestamps are ignored.
 	JobStartTime *timestamp.Timestamp `protobuf:"bytes,22,opt,name=job_start_time,json=jobStartTime,proto3" json:"job_start_time,omitempty"`
-	// Optional.
-	//
-	// The end timestamp of the job. Typically this field is used for contracting
-	// engagements. Invalid timestamps are ignored.
+	// Optional. The end timestamp of the job. Typically this field is used for
+	// contracting engagements. Invalid timestamps are ignored.
 	JobEndTime *timestamp.Timestamp `protobuf:"bytes,23,opt,name=job_end_time,json=jobEndTime,proto3" json:"job_end_time,omitempty"`
-	// Optional.
-	//
-	// The timestamp this job posting was most recently published. The default
-	// value is the time the request arrives at the server. Invalid timestamps are
-	// ignored.
+	// Optional. The timestamp this job posting was most recently published. The
+	// default value is the time the request arrives at the server. Invalid
+	// timestamps are ignored.
 	PostingPublishTime *timestamp.Timestamp `protobuf:"bytes,24,opt,name=posting_publish_time,json=postingPublishTime,proto3" json:"posting_publish_time,omitempty"`
 	// Optional but strongly recommended for the best service
 	// experience.
 	//
 	// The expiration timestamp of the job. After this timestamp, the
 	// job is marked as expired, and it no longer appears in search results. The
-	// expired job can't be deleted or listed by the
-	// [DeleteJob][google.cloud.talent.v4beta1.JobService.DeleteJob] and
-	// [ListJobs][google.cloud.talent.v4beta1.JobService.ListJobs] APIs, but it
-	// can be retrieved with the
+	// expired job can't be listed by the
+	// [ListJobs][google.cloud.talent.v4beta1.JobService.ListJobs] API, but it can
+	// be retrieved with the
 	// [GetJob][google.cloud.talent.v4beta1.JobService.GetJob] API or updated with
-	// the [UpdateJob][google.cloud.talent.v4beta1.JobService.UpdateJob] API. An
+	// the [UpdateJob][google.cloud.talent.v4beta1.JobService.UpdateJob] API or
+	// deleted with the
+	// [DeleteJob][google.cloud.talent.v4beta1.JobService.DeleteJob] API. An
 	// expired job can be updated and opened again by using a future expiration
 	// timestamp. Updating an expired job fails if there is another existing open
 	// job with same [company][google.cloud.talent.v4beta1.Job.company],
@@ -271,15 +230,24 @@ type Job struct {
 	// [requisition_id][google.cloud.talent.v4beta1.Job.requisition_id].
 	//
 	// The expired jobs are retained in our system for 90 days. However, the
-	// overall expired job count cannot exceed 3 times the maximum of open jobs
-	// count over the past week, otherwise jobs with earlier expire time are
-	// cleaned first. Expired jobs are no longer accessible after they are cleaned
+	// overall expired job count cannot exceed 3 times the maximum number of
+	// open jobs over previous 7 days. If this threshold is exceeded,
+	// expired jobs are cleaned out in order of earliest expire time.
+	// Expired jobs are no longer accessible after they are cleaned
 	// out.
 	//
 	// Invalid timestamps are ignored, and treated as expire time not provided.
 	//
-	// Timestamp before the instant request is made is considered valid, the job
-	// will be treated as expired immediately.
+	// If the timestamp is before the instant request is made, the job
+	// is treated as expired immediately on creation. This kind of job can
+	// not be updated. And when creating a job with past timestamp, the
+	// [posting_publish_time][google.cloud.talent.v4beta1.Job.posting_publish_time]
+	// must be set before
+	// [posting_expire_time][google.cloud.talent.v4beta1.Job.posting_expire_time].
+	// The purpose of this feature is to allow other objects, such as
+	// [Application][google.cloud.talent.v4beta1.Application], to refer a job that
+	// didn't exist in the system prior to becoming expired. If you want to modify
+	// a job that was expired on creation, delete it and create a new one.
 	//
 	// If this value isn't provided at the time of job creation or is invalid,
 	// the job posting expires after 30 days from the job's creation time. For
@@ -303,9 +271,7 @@ type Job struct {
 	CompanyDisplayName string `protobuf:"bytes,28,opt,name=company_display_name,json=companyDisplayName,proto3" json:"company_display_name,omitempty"`
 	// Output only. Derived details about the job posting.
 	DerivedInfo *Job_DerivedInfo `protobuf:"bytes,29,opt,name=derived_info,json=derivedInfo,proto3" json:"derived_info,omitempty"`
-	// Optional.
-	//
-	// Options for job processing.
+	// Optional. Options for job processing.
 	ProcessingOptions    *Job_ProcessingOptions `protobuf:"bytes,30,opt,name=processing_options,json=processingOptions,proto3" json:"processing_options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}               `json:"-"`
 	XXX_unrecognized     []byte                 `json:"-"`
@@ -549,27 +515,21 @@ func (m *Job) GetProcessingOptions() *Job_ProcessingOptions {
 
 // Application related details of a job posting.
 type Job_ApplicationInfo struct {
-	// Optional.
-	//
-	// Use this field to specify email address(es) to which resumes or
+	// Optional. Use this field to specify email address(es) to which resumes or
 	// applications can be sent.
 	//
 	// The maximum number of allowed characters for each entry is 255.
 	Emails []string `protobuf:"bytes,1,rep,name=emails,proto3" json:"emails,omitempty"`
-	// Optional.
-	//
-	// Use this field to provide instructions, such as "Mail your application
-	// to ...", that a candidate can follow to apply for the job.
+	// Optional. Use this field to provide instructions, such as "Mail your
+	// application to ...", that a candidate can follow to apply for the job.
 	//
 	// This field accepts and sanitizes HTML input, and also accepts
 	// bold, italic, ordered list, and unordered list markup tags.
 	//
 	// The maximum number of allowed characters is 3,000.
 	Instruction string `protobuf:"bytes,2,opt,name=instruction,proto3" json:"instruction,omitempty"`
-	// Optional.
-	//
-	// Use this URI field to direct an applicant to a website, for example to
-	// link to an online application form.
+	// Optional. Use this URI field to direct an applicant to a website, for
+	// example to link to an online application form.
 	//
 	// The maximum number of allowed characters for each entry is 2,000.
 	Uris                 []string `protobuf:"bytes,3,rep,name=uris,proto3" json:"uris,omitempty"`
@@ -688,14 +648,10 @@ func (m *Job_DerivedInfo) GetJobCategories() []JobCategory {
 //
 // Options for job processing.
 type Job_ProcessingOptions struct {
-	// Optional.
-	//
-	// If set to `true`, the service does not attempt to resolve a
+	// Optional. If set to `true`, the service does not attempt to resolve a
 	// more precise address for the job.
 	DisableStreetAddressResolution bool `protobuf:"varint,1,opt,name=disable_street_address_resolution,json=disableStreetAddressResolution,proto3" json:"disable_street_address_resolution,omitempty"`
-	// Optional.
-	//
-	// Option for job HTML content sanitization. Applied fields are:
+	// Optional. Option for job HTML content sanitization. Applied fields are:
 	//
 	// * description
 	// * applicationInfo.instruction

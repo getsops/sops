@@ -234,6 +234,10 @@ type SESAPI interface {
 	ListVerifiedEmailAddressesWithContext(aws.Context, *ses.ListVerifiedEmailAddressesInput, ...request.Option) (*ses.ListVerifiedEmailAddressesOutput, error)
 	ListVerifiedEmailAddressesRequest(*ses.ListVerifiedEmailAddressesInput) (*request.Request, *ses.ListVerifiedEmailAddressesOutput)
 
+	PutConfigurationSetDeliveryOptions(*ses.PutConfigurationSetDeliveryOptionsInput) (*ses.PutConfigurationSetDeliveryOptionsOutput, error)
+	PutConfigurationSetDeliveryOptionsWithContext(aws.Context, *ses.PutConfigurationSetDeliveryOptionsInput, ...request.Option) (*ses.PutConfigurationSetDeliveryOptionsOutput, error)
+	PutConfigurationSetDeliveryOptionsRequest(*ses.PutConfigurationSetDeliveryOptionsInput) (*request.Request, *ses.PutConfigurationSetDeliveryOptionsOutput)
+
 	PutIdentityPolicy(*ses.PutIdentityPolicyInput) (*ses.PutIdentityPolicyOutput, error)
 	PutIdentityPolicyWithContext(aws.Context, *ses.PutIdentityPolicyInput, ...request.Option) (*ses.PutIdentityPolicyOutput, error)
 	PutIdentityPolicyRequest(*ses.PutIdentityPolicyInput) (*request.Request, *ses.PutIdentityPolicyOutput)

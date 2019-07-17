@@ -1,5 +1,31 @@
 # CHANGELOG
 
+## v12.3.0
+
+### New Features
+
+- Support for multi-tenant via x-ms-authorization-auxiliary header has been added for client credentials with
+  secret scenario; this basically bundles multiple OAuthConfig and ServicePrincipalToken types into corresponding
+  MultiTenant* types along with a new authorizer that adds the primary and auxiliary token headers to the reqest.
+  The authenticaion helpers have been updated to support this scenario; if environment var AZURE_AUXILIARY_TENANT_IDS
+  is set with a semicolon delimited list of tenants the multi-tenant codepath will kick in to create the appropriate authorizer.
+  See `adal.NewMultiTenantOAuthConfig`, `adal.NewMultiTenantServicePrincipalToken` and `autorest.NewMultiTenantServicePrincipalTokenAuthorizer`
+  along with their supporting types and methods.
+- Added `autorest.WithSendDecorators` and `autorest.GetSendDecorators` for adding and retrieving a custom chain of SendDecorators to the provided context.
+- Added `autorest.DoRetryForStatusCodesWithCap` and `autorest.DelayForBackoffWithCap` to enforce an upper bound on the duration between retries.
+
+## v12.2.0
+
+### New Features
+
+- Added `autorest.WithXML`, `autorest.AsMerge`, `autorest.WithBytes` preparer decorators.
+- Added `autorest.ByUnmarshallingBytes` response decorator.
+- Added `Response.IsHTTPStatus` and `Response.HasHTTPStatus` helper methods for inspecting HTTP status code in `autorest.Response` types.
+
+### Bug Fixes
+
+- `autorest.DelayWithRetryAfter` now supports HTTP-Dates in the `Retry-After` header and is not limited to just 429 status codes.
+
 ## v12.1.0
 
 ### New Features

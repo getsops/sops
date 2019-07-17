@@ -292,7 +292,7 @@ func (client TransformsClient) GetResponder(resp *http.Response) (result Transfo
 // resourceGroupName - the name of the resource group within the Azure subscription.
 // accountName - the Media Services account name.
 // filter - restricts the set of items returned.
-// orderby - specifies the the key by which the result collection should be ordered.
+// orderby - specifies the key by which the result collection should be ordered.
 func (client TransformsClient) List(ctx context.Context, resourceGroupName string, accountName string, filter string, orderby string) (result TransformCollectionPage, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/TransformsClient.List")

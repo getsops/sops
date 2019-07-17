@@ -395,7 +395,7 @@
                   "type": "string"
                 },
                 "updateMask": {
-                  "description": "Required.  Mask to control which fields get updated. Must be non-empty.",
+                  "description": "Required. Mask to control which fields get updated. Must be non-empty.",
                   "format": "google-fieldmask",
                   "location": "query",
                   "type": "string"
@@ -692,7 +692,7 @@
       }
     }
   },
-  "revision": "20190529",
+  "revision": "20190704",
   "rootUrl": "https://accesscontextmanager.googleapis.com/",
   "schemas": {
     "AccessLevel": {

@@ -1986,8 +1986,8 @@ type ServiceBusDeadletterMessagesAvailableWithNoListenersEventData struct {
 type SignalRServiceClientConnectionConnectedEventData struct {
 	// Timestamp - The time at which the event occurred.
 	Timestamp *date.Time `json:"timestamp,omitempty"`
-	// Hub - The hub of connected client connection.
-	Hub *string `json:"hub,omitempty"`
+	// HubName - The hub of connected client connection.
+	HubName *string `json:"hubName,omitempty"`
 	// ConnectionID - The connection Id of connected client connection.
 	ConnectionID *string `json:"connectionId,omitempty"`
 	// UserID - The user Id of connected client connection.
@@ -1999,8 +1999,8 @@ type SignalRServiceClientConnectionConnectedEventData struct {
 type SignalRServiceClientConnectionDisconnectedEventData struct {
 	// Timestamp - The time at which the event occurred.
 	Timestamp *date.Time `json:"timestamp,omitempty"`
-	// Hub - The hub of connected client connection.
-	Hub *string `json:"hub,omitempty"`
+	// HubName - The hub of connected client connection.
+	HubName *string `json:"hubName,omitempty"`
 	// ConnectionID - The connection Id of connected client connection.
 	ConnectionID *string `json:"connectionId,omitempty"`
 	// UserID - The user Id of connected client connection.

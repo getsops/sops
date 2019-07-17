@@ -19,6 +19,7 @@ package errorreporting
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"time"
 
 	gax "github.com/googleapis/gax-go/v2"
@@ -121,7 +122,7 @@ func (c *ErrorGroupClient) SetGoogleClientInfo(keyval ...string) {
 
 // GetGroup get the specified group.
 func (c *ErrorGroupClient) GetGroup(ctx context.Context, req *clouderrorreportingpb.GetGroupRequest, opts ...gax.CallOption) (*clouderrorreportingpb.ErrorGroup, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "group_name", req.GetGroupName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "group_name", url.QueryEscape(req.GetGroupName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.GetGroup[0:len(c.CallOptions.GetGroup):len(c.CallOptions.GetGroup)], opts...)
 	var resp *clouderrorreportingpb.ErrorGroup
@@ -139,7 +140,7 @@ func (c *ErrorGroupClient) GetGroup(ctx context.Context, req *clouderrorreportin
 // UpdateGroup replace the data for the specified group.
 // Fails if the group does not exist.
 func (c *ErrorGroupClient) UpdateGroup(ctx context.Context, req *clouderrorreportingpb.UpdateGroupRequest, opts ...gax.CallOption) (*clouderrorreportingpb.ErrorGroup, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "group.name", req.GetGroup().GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "group.name", url.QueryEscape(req.GetGroup().GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.UpdateGroup[0:len(c.CallOptions.UpdateGroup):len(c.CallOptions.UpdateGroup)], opts...)
 	var resp *clouderrorreportingpb.ErrorGroup

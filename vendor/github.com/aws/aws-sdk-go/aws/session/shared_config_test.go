@@ -125,6 +125,77 @@ func TestLoadSharedConfig(t *testing.T) {
 			Profile:   "profile_name",
 			Err:       SharedConfigLoadError{Filename: filepath.Join("testdata", "shared_config_invalid_ini")},
 		},
+		{
+			Filenames: []string{testConfigOtherFilename, testConfigFilename},
+			Profile:   "assume_role_with_credential_source",
+			Expected: sharedConfig{
+				AssumeRole: assumeRoleConfig{
+					RoleARN:          "assume_role_with_credential_source_role_arn",
+					CredentialSource: credSourceEc2Metadata,
+				},
+			},
+		},
+		{
+			Filenames: []string{testConfigOtherFilename, testConfigFilename},
+			Profile:   "multiple_assume_role",
+			Expected: sharedConfig{
+				AssumeRole: assumeRoleConfig{
+					RoleARN:       "multiple_assume_role_role_arn",
+					SourceProfile: "assume_role",
+				},
+				AssumeRoleSource: &sharedConfig{
+					AssumeRole: assumeRoleConfig{
+						RoleARN:       "assume_role_role_arn",
+						SourceProfile: "complete_creds",
+					},
+					AssumeRoleSource: &sharedConfig{
+						Creds: credentials.Value{
+							AccessKeyID:     "complete_creds_akid",
+							SecretAccessKey: "complete_creds_secret",
+							ProviderName:    fmt.Sprintf("SharedConfigCredentials: %s", testConfigFilename),
+						},
+					},
+				},
+			},
+		},
+		{
+			Filenames: []string{testConfigOtherFilename, testConfigFilename},
+			Profile:   "multiple_assume_role_with_credential_source",
+			Expected: sharedConfig{
+				AssumeRole: assumeRoleConfig{
+					RoleARN:       "multiple_assume_role_with_credential_source_role_arn",
+					SourceProfile: "assume_role_with_credential_source",
+				},
+				AssumeRoleSource: &sharedConfig{
+					AssumeRole: assumeRoleConfig{
+						RoleARN:          "assume_role_with_credential_source_role_arn",
+						CredentialSource: credSourceEc2Metadata,
+					},
+				},
+			},
+		},
+		{
+			Filenames: []string{testConfigOtherFilename, testConfigFilename},
+			Profile:   "multiple_assume_role_with_credential_source2",
+			Expected: sharedConfig{
+				AssumeRole: assumeRoleConfig{
+					RoleARN:       "multiple_assume_role_with_credential_source2_role_arn",
+					SourceProfile: "multiple_assume_role_with_credential_source",
+				},
+				AssumeRoleSource: &sharedConfig{
+					AssumeRole: assumeRoleConfig{
+						RoleARN:       "multiple_assume_role_with_credential_source_role_arn",
+						SourceProfile: "assume_role_with_credential_source",
+					},
+					AssumeRoleSource: &sharedConfig{
+						AssumeRole: assumeRoleConfig{
+							RoleARN:          "assume_role_with_credential_source_role_arn",
+							CredentialSource: credSourceEc2Metadata,
+						},
+					},
+				},
+			},
+		},
 	}
 
 	for i, c := range cases {
@@ -139,7 +210,7 @@ func TestLoadSharedConfig(t *testing.T) {
 		if err != nil {
 			t.Errorf("%d, expect nil, %v", i, err)
 		}
-		if e, a := c.Expected, cfg; !reflect.DeepEqual(e,a) {
+		if e, a := c.Expected, cfg; !reflect.DeepEqual(e, a) {
 			t.Errorf("%d, expect %v, got %v", i, e, a)
 		}
 	}
@@ -249,7 +320,7 @@ func TestLoadSharedConfigFromFile(t *testing.T) {
 		if err != nil {
 			t.Errorf("%d, expect nil, %v", i, err)
 		}
-		if e, a := c.Expected, cfg; e != a {
+		if e, a := c.Expected, cfg; !reflect.DeepEqual(e, a) {
 			t.Errorf("%d, expect %v, got %v", i, e, a)
 		}
 	}

@@ -1,0 +1,68 @@
+{
+  "tests": [
+    {
+      "description": "query: StartAt/EndBefore with values",
+      "comment": "Cursor methods take the same number of values as there are OrderBy clauses.",
+      "query": {
+        "collPath": "projects/projectID/databases/(default)/documents/C",
+        "clauses": [
+          {
+            "orderBy": {
+              "path": {
+                "field": [
+                  "a"
+                ]
+              },
+              "direction": "asc"
+            }
+          },
+          {
+            "startAt": {
+              "jsonValues": [
+                "7"
+              ]
+            }
+          },
+          {
+            "endBefore": {
+              "jsonValues": [
+                "9"
+              ]
+            }
+          }
+        ],
+        "query": {
+          "from": [
+            {
+              "collectionId": "C"
+            }
+          ],
+          "orderBy": [
+            {
+              "field": {
+                "fieldPath": "a"
+              },
+              "direction": "ASCENDING"
+            }
+          ],
+          "startAt": {
+            "values": [
+              {
+                "integerValue": "7"
+              }
+            ],
+            "before": true
+          },
+          "endAt": {
+            "values": [
+              {
+                "integerValue": "9"
+              }
+            ],
+            "before": true
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,88 +1,93 @@
 ---
 version: 1
-rwmutex: {}
 interactions:
 - request:
     body: ""
     form: {}
     headers:
       Authorization:
-      - SharedKey golangrocksonazure:Mtj+R4Ckw8JZEVYWC90vvqKKG8BwxCQXgunDgOIIrMg=
+      - SharedKey golangrocksonazure:owVQH6d1n2dfamkYS/oYHeVHx3RPtDVNNjoI6ufQUn0=
       User-Agent:
-      - Go/go1.9beta1 (amd64-windows) azure-storage-go/10.0.2 api-version/2016-05-31
+      - Go/go1.12.4 (amd64-windows) azure-storage-go/latest api-version/2018-03-28
         blob
       x-ms-date:
-      - Thu, 20 Jul 2017 23:34:04 GMT
+      - Tue, 28 May 2019 22:36:01 GMT
       x-ms-version:
-      - 2016-05-31
+      - "2018-03-28"
     url: https://golangrocksonazure.blob.core.windows.net/cnt-61containersuitetestsettheng?restype=container
     method: PUT
   response:
     body: ""
     headers:
+      Content-Length:
+      - "0"
       Date:
-      - Thu, 20 Jul 2017 23:34:03 GMT
+      - Tue, 28 May 2019 22:36:01 GMT
       Etag:
-      - '"0x8D4CFC7CE75EBE2"'
+      - '"0x8D6E3BCDCDEE689"'
       Last-Modified:
-      - Thu, 20 Jul 2017 23:34:03 GMT
+      - Tue, 28 May 2019 22:36:01 GMT
       Server:
       - Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0
       X-Ms-Request-Id:
-      - 7d61314a-0001-0009-2fb0-01ca46000000
+      - 3781b5dc-e01e-00b7-6fa5-15d5a7000000
       X-Ms-Version:
-      - 2016-05-31
+      - "2018-03-28"
     status: 201 Created
     code: 201
+    duration: ""
 - request:
     body: <SignedIdentifiers><SignedIdentifier><Id>AutoRestIsSuperCool</Id><AccessPolicy><Start>2050-12-20T21:55:06Z</Start><Expiry>2050-12-21T07:55:06Z</Expiry><Permission>rwd</Permission></AccessPolicy></SignedIdentifier><SignedIdentifier><Id>GolangRocksOnAzure</Id><AccessPolicy><Start>2050-12-21T17:55:06Z</Start><Expiry>2050-12-22T03:55:06Z</Expiry><Permission>r</Permission></AccessPolicy></SignedIdentifier></SignedIdentifiers>
     form: {}
     headers:
       Authorization:
-      - SharedKey golangrocksonazure:DZCaX3tsteRAyWCEEJvEq178Q/Qb6XjZEAt/PwfcqHc=
+      - SharedKey golangrocksonazure:nPFdYee17W5t1ejbDeCZSL1Ke+XV/JUdekPwmfVsU0M=
       Content-Length:
       - "424"
       User-Agent:
-      - Go/go1.9beta1 (amd64-windows) azure-storage-go/10.0.2 api-version/2016-05-31
+      - Go/go1.12.4 (amd64-windows) azure-storage-go/latest api-version/2018-03-28
         blob
       x-ms-blob-public-access:
       - blob
       x-ms-date:
-      - Thu, 20 Jul 2017 23:34:04 GMT
+      - Tue, 28 May 2019 22:36:01 GMT
       x-ms-version:
-      - 2016-05-31
+      - "2018-03-28"
     url: https://golangrocksonazure.blob.core.windows.net/cnt-61containersuitetestsettheng?comp=acl&restype=container
     method: PUT
   response:
     body: ""
     headers:
+      Content-Length:
+      - "0"
       Date:
-      - Thu, 20 Jul 2017 23:34:03 GMT
+      - Tue, 28 May 2019 22:36:01 GMT
       Etag:
-      - '"0x8D4CFC7CEFBE1B7"'
+      - '"0x8D6E3BCDCE0A1AD"'
       Last-Modified:
-      - Thu, 20 Jul 2017 23:34:04 GMT
+      - Tue, 28 May 2019 22:36:01 GMT
       Server:
       - Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0
       X-Ms-Request-Id:
-      - 7d61314c-0001-0009-30b0-01ca46000000
+      - 3781b5ea-e01e-00b7-7aa5-15d5a7000000
       X-Ms-Version:
-      - 2016-05-31
+      - "2018-03-28"
     status: 200 OK
     code: 200
+    duration: ""
 - request:
     body: ""
     form: {}
     headers:
       Authorization:
-      - SharedKey golangrocksonazure:p/5wgteu9gf6wLuDYRbU9v0giyxBaA2Pdh5IJXHydps=
+      - SharedKey golangrocksonazure:Dbh784LzA1LLgRNDa+Ki2cwxLKQZfIE6e21YfHDvx9E=
       User-Agent:
-      - Go/go1.9beta1 (amd64-windows) azure-storage-go/10.0.2 api-version/2016-05-31
+      - Go/go1.12.4 (amd64-windows) azure-storage-go/latest api-version/2018-03-28
         blob
       x-ms-date:
-      - Thu, 20 Jul 2017 23:34:04 GMT
+      - Tue, 28 May 2019 22:36:01 GMT
       x-ms-version:
-      - 2016-05-31
+      - "2018-03-28"
     url: https://golangrocksonazure.blob.core.windows.net/cnt-61containersuitetestsettheng?comp=acl&restype=container
     method: GET
   response:
@@ -91,46 +96,50 @@ interactions:
       Content-Type:
       - application/xml
       Date:
-      - Thu, 20 Jul 2017 23:34:03 GMT
+      - Tue, 28 May 2019 22:36:01 GMT
       Etag:
-      - '"0x8D4CFC7CEFBE1B7"'
+      - '"0x8D6E3BCDCE0A1AD"'
       Last-Modified:
-      - Thu, 20 Jul 2017 23:34:04 GMT
+      - Tue, 28 May 2019 22:36:01 GMT
       Server:
       - Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0
       X-Ms-Blob-Public-Access:
       - blob
       X-Ms-Request-Id:
-      - 7d61314e-0001-0009-32b0-01ca46000000
+      - 3781b5fc-e01e-00b7-06a5-15d5a7000000
       X-Ms-Version:
-      - 2016-05-31
+      - "2018-03-28"
     status: 200 OK
     code: 200
+    duration: ""
 - request:
     body: ""
     form: {}
     headers:
       Authorization:
-      - SharedKey golangrocksonazure:yJ3UHkxdTIwQzc5ZDNFinb/56WzxWPrbq2SeH4VDc0g=
+      - SharedKey golangrocksonazure:wSNxaQUeXLhdi8YH4tJucPXqJjh9kzl5m4/HrPcE9mA=
       User-Agent:
-      - Go/go1.9beta1 (amd64-windows) azure-storage-go/10.0.2 api-version/2016-05-31
+      - Go/go1.12.4 (amd64-windows) azure-storage-go/latest api-version/2018-03-28
         blob
       x-ms-date:
-      - Thu, 20 Jul 2017 23:34:04 GMT
+      - Tue, 28 May 2019 22:36:01 GMT
       x-ms-version:
-      - 2016-05-31
+      - "2018-03-28"
     url: https://golangrocksonazure.blob.core.windows.net/cnt-61containersuitetestsettheng?restype=container
     method: DELETE
   response:
     body: ""
     headers:
+      Content-Length:
+      - "0"
       Date:
-      - Thu, 20 Jul 2017 23:34:03 GMT
+      - Tue, 28 May 2019 22:36:01 GMT
       Server:
       - Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0
       X-Ms-Request-Id:
-      - 7d61314f-0001-0009-33b0-01ca46000000
+      - 3781b608-e01e-00b7-0fa5-15d5a7000000
       X-Ms-Version:
-      - 2016-05-31
+      - "2018-03-28"
     status: 202 Accepted
     code: 202
+    duration: ""

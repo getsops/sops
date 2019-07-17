@@ -917,7 +917,7 @@ type ComponentPurgeBody struct {
 type ComponentPurgeBodyFilters struct {
 	// Column - The column of the table over which the given query should run
 	Column *string `json:"column,omitempty"`
-	// Operator - A query operator to evaluate over the provided column and value(s).
+	// Operator - A query operator to evaluate over the provided column and value(s). Supported operators are ==, =~, in, in~, >, >=, <, <=, between, and have the same behavior as they would in a KQL query.
 	Operator *string `json:"operator,omitempty"`
 	// Value - the value for the operator to function over. This can be a number (e.g., > 100), a string (timestamp >= '2017-09-01') or array of values.
 	Value interface{} `json:"value,omitempty"`

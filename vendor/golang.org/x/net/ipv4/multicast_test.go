@@ -29,7 +29,7 @@ var packetConnReadWriteMulticastUDPTests = []struct {
 
 func TestPacketConnReadWriteMulticastUDP(t *testing.T) {
 	switch runtime.GOOS {
-	case "fuchsia", "hurd", "js", "nacl", "plan9", "solaris", "windows":
+	case "fuchsia", "hurd", "illumos", "js", "nacl", "plan9", "solaris", "windows":
 		t.Skipf("not supported on %s", runtime.GOOS)
 	}
 	ifi, err := nettest.RoutedInterface("ip4", net.FlagUp|net.FlagMulticast|net.FlagLoopback)
@@ -117,7 +117,7 @@ var packetConnReadWriteMulticastICMPTests = []struct {
 
 func TestPacketConnReadWriteMulticastICMP(t *testing.T) {
 	switch runtime.GOOS {
-	case "fuchsia", "hurd", "js", "nacl", "plan9", "solaris", "windows":
+	case "fuchsia", "hurd", "illumos", "js", "nacl", "plan9", "solaris", "windows":
 		t.Skipf("not supported on %s", runtime.GOOS)
 	}
 	if !nettest.SupportsRawSocket() {
@@ -167,8 +167,8 @@ func TestPacketConnReadWriteMulticastICMP(t *testing.T) {
 			t.Fatal(err)
 		}
 		cf := ipv4.FlagDst | ipv4.FlagInterface
-		if runtime.GOOS != "solaris" {
-			// Solaris never allows to modify ICMP properties.
+		if runtime.GOOS != "illumos" && runtime.GOOS != "solaris" {
+			// Illumos and Solaris never allow modification of ICMP properties.
 			cf |= ipv4.FlagTTL
 		}
 
@@ -228,7 +228,7 @@ var rawConnReadWriteMulticastICMPTests = []struct {
 
 func TestRawConnReadWriteMulticastICMP(t *testing.T) {
 	switch runtime.GOOS {
-	case "fuchsia", "hurd", "js", "nacl", "plan9", "solaris", "windows":
+	case "fuchsia", "hurd", "illumos", "js", "nacl", "plan9", "solaris", "windows":
 		t.Skipf("not supported on %s", runtime.GOOS)
 	}
 	if testing.Short() {

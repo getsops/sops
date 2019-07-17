@@ -2483,7 +2483,7 @@
       }
     }
   },
-  "revision": "20190524",
+  "revision": "20190610",
   "rootUrl": "https://container.googleapis.com/",
   "schemas": {
     "AcceleratorConfig": {
@@ -2524,7 +2524,7 @@
         },
         "kubernetesDashboard": {
           "$ref": "KubernetesDashboard",
-          "description": "Configuration for the Kubernetes Dashboard."
+          "description": "Configuration for the Kubernetes Dashboard.\nThis addon is deprecated, and will be disabled in 1.15. It is recommended\nto use the Cloud Console to manage and monitor your Kubernetes clusters,\nworkloads and applications. For more information, see:\nhttps://cloud.google.com/kubernetes-engine/docs/concepts/dashboards"
         },
         "networkPolicyConfig": {
           "$ref": "NetworkPolicyConfig",
@@ -2894,6 +2894,10 @@
         "subnetwork": {
           "description": "The name of the Google Compute Engine\n[subnetwork](/compute/docs/subnetworks) to which the\ncluster is connected. On output this shows the subnetwork ID instead of\nthe name.",
           "type": "string"
+        },
+        "tierSettings": {
+          "$ref": "TierSettings",
+          "description": "Cluster tier settings."
         },
         "tpuIpv4CidrBlock": {
           "description": "[Output only] The IP address range of the Cloud TPUs in this cluster, in\n[CIDR](http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing)\nnotation (e.g. `1.2.3.4/29`).",
@@ -3563,7 +3567,6 @@
           "type": "string"
         },
         "clusterCaCertificate": {
-          "description": "[Output only] Base64-encoded public certificate that is the root of\ntrust for the cluster.",
           "type": "string"
         },
         "password": {
@@ -3729,7 +3732,7 @@
           "additionalProperties": {
             "type": "string"
           },
-          "description": "The metadata key/value pairs assigned to instances in the cluster.\n\nKeys must conform to the regexp [a-zA-Z0-9-_]+ and be less than 128 bytes\nin length. These are reflected as part of a URL in the metadata server.\nAdditionally, to avoid ambiguity, keys must not conflict with any other\nmetadata keys for the project or be one of the reserved keys:\n \"cluster-location\"\n \"cluster-name\"\n \"cluster-uid\"\n \"configure-sh\"\n \"containerd-configure-sh\"\n \"enable-oslogin\"\n \"gci-ensure-gke-docker\"\n \"gci-update-strategy\"\n \"instance-template\"\n \"kube-env\"\n \"startup-script\"\n \"user-data\"\n\nValues are free-form strings, and only have meaning as interpreted by\nthe image running in the instance. The only restriction placed on them is\nthat each value's size must be less than or equal to 32 KB.\n\nThe total size of all keys and values must be less than 512 KB.",
+          "description": "The metadata key/value pairs assigned to instances in the cluster.\n\nKeys must conform to the regexp [a-zA-Z0-9-_]+ and be less than 128 bytes\nin length. These are reflected as part of a URL in the metadata server.\nAdditionally, to avoid ambiguity, keys must not conflict with any other\nmetadata keys for the project or be one of the reserved keys:\n \"cluster-location\"\n \"cluster-name\"\n \"cluster-uid\"\n \"configure-sh\"\n \"containerd-configure-sh\"\n \"enable-oslogin\"\n \"gci-ensure-gke-docker\"\n \"gci-update-strategy\"\n \"instance-template\"\n \"kube-env\"\n \"startup-script\"\n \"user-data\"\n \"disable-address-manager\"\n \"windows-startup-script-ps1\"\n \"common-psm1\"\n \"k8s-node-setup-psm1\"\n \"install-ssh-psm1\"\n \"user-profile-psm1\"\n \"serial-port-logging-enable\"\nValues are free-form strings, and only have meaning as interpreted by\nthe image running in the instance. The only restriction placed on them is\nthat each value's size must be less than or equal to 32 KB.\n\nThe total size of all keys and values must be less than 512 KB.",
           "type": "object"
         },
         "minCpuPlatform": {
@@ -3754,6 +3757,10 @@
         "serviceAccount": {
           "description": "The Google Cloud Platform Service Account to be used by the node VMs. If\nno Service Account is specified, the \"default\" service account is used.",
           "type": "string"
+        },
+        "shieldedInstanceConfig": {
+          "$ref": "ShieldedInstanceConfig",
+          "description": "Shielded Instance options."
         },
         "tags": {
           "description": "The list of instance tags applied to all nodes. Tags are used to identify\nvalid sources or targets for network firewalls and are specified by\nthe client during cluster or node pool creation. Each tag within the list\nmust comply with RFC1035.",
@@ -4626,6 +4633,21 @@
       },
       "type": "object"
     },
+    "ShieldedInstanceConfig": {
+      "description": "A set of Shielded Instance options.",
+      "id": "ShieldedInstanceConfig",
+      "properties": {
+        "enableIntegrityMonitoring": {
+          "description": "Defines whether the instance has integrity monitoring enabled.\n\nEnables monitoring and attestation of the boot integrity of the instance.\nThe attestation is performed against the integrity policy baseline. This\nbaseline is initially derived from the implicitly trusted boot image when\nthe instance is created.",
+          "type": "boolean"
+        },
+        "enableSecureBoot": {
+          "description": "Defines whether the instance has Secure Boot enabled.\n\nSecure Boot helps ensure that the system only runs authentic software by\nverifying the digital signature of all boot components, and halting the\nboot process if signature verification fails.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
     "StartIPRotationRequest": {
       "description": "StartIPRotationRequest creates a new IP for the cluster and then performs\na node upgrade on each node pool to point to the new IP.",
       "id": "StartIPRotationRequest",
@@ -4677,6 +4699,27 @@
         },
         "message": {
           "description": "Human-friendly representation of the condition",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TierSettings": {
+      "description": "Cluster tier settings.",
+      "id": "TierSettings",
+      "properties": {
+        "tier": {
+          "description": "Cluster tier.",
+          "enum": [
+            "UNSPECIFIED",
+            "STANDARD",
+            "ADVANCED"
+          ],
+          "enumDescriptions": [
+            "UNSPECIFIED is the default value. If this value is set during create or\nupdate, it defaults to the project level tier setting.",
+            "Represents the standard tier or base Google Kubernetes Engine offering.",
+            "Represents the advanced tier."
+          ],
           "type": "string"
         }
       },

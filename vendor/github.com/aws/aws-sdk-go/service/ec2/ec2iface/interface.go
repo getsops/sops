@@ -344,6 +344,22 @@ type EC2API interface {
 	CreateTagsWithContext(aws.Context, *ec2.CreateTagsInput, ...request.Option) (*ec2.CreateTagsOutput, error)
 	CreateTagsRequest(*ec2.CreateTagsInput) (*request.Request, *ec2.CreateTagsOutput)
 
+	CreateTrafficMirrorFilter(*ec2.CreateTrafficMirrorFilterInput) (*ec2.CreateTrafficMirrorFilterOutput, error)
+	CreateTrafficMirrorFilterWithContext(aws.Context, *ec2.CreateTrafficMirrorFilterInput, ...request.Option) (*ec2.CreateTrafficMirrorFilterOutput, error)
+	CreateTrafficMirrorFilterRequest(*ec2.CreateTrafficMirrorFilterInput) (*request.Request, *ec2.CreateTrafficMirrorFilterOutput)
+
+	CreateTrafficMirrorFilterRule(*ec2.CreateTrafficMirrorFilterRuleInput) (*ec2.CreateTrafficMirrorFilterRuleOutput, error)
+	CreateTrafficMirrorFilterRuleWithContext(aws.Context, *ec2.CreateTrafficMirrorFilterRuleInput, ...request.Option) (*ec2.CreateTrafficMirrorFilterRuleOutput, error)
+	CreateTrafficMirrorFilterRuleRequest(*ec2.CreateTrafficMirrorFilterRuleInput) (*request.Request, *ec2.CreateTrafficMirrorFilterRuleOutput)
+
+	CreateTrafficMirrorSession(*ec2.CreateTrafficMirrorSessionInput) (*ec2.CreateTrafficMirrorSessionOutput, error)
+	CreateTrafficMirrorSessionWithContext(aws.Context, *ec2.CreateTrafficMirrorSessionInput, ...request.Option) (*ec2.CreateTrafficMirrorSessionOutput, error)
+	CreateTrafficMirrorSessionRequest(*ec2.CreateTrafficMirrorSessionInput) (*request.Request, *ec2.CreateTrafficMirrorSessionOutput)
+
+	CreateTrafficMirrorTarget(*ec2.CreateTrafficMirrorTargetInput) (*ec2.CreateTrafficMirrorTargetOutput, error)
+	CreateTrafficMirrorTargetWithContext(aws.Context, *ec2.CreateTrafficMirrorTargetInput, ...request.Option) (*ec2.CreateTrafficMirrorTargetOutput, error)
+	CreateTrafficMirrorTargetRequest(*ec2.CreateTrafficMirrorTargetInput) (*request.Request, *ec2.CreateTrafficMirrorTargetOutput)
+
 	CreateTransitGateway(*ec2.CreateTransitGatewayInput) (*ec2.CreateTransitGatewayOutput, error)
 	CreateTransitGatewayWithContext(aws.Context, *ec2.CreateTransitGatewayInput, ...request.Option) (*ec2.CreateTransitGatewayOutput, error)
 	CreateTransitGatewayRequest(*ec2.CreateTransitGatewayInput) (*request.Request, *ec2.CreateTransitGatewayOutput)
@@ -495,6 +511,22 @@ type EC2API interface {
 	DeleteTags(*ec2.DeleteTagsInput) (*ec2.DeleteTagsOutput, error)
 	DeleteTagsWithContext(aws.Context, *ec2.DeleteTagsInput, ...request.Option) (*ec2.DeleteTagsOutput, error)
 	DeleteTagsRequest(*ec2.DeleteTagsInput) (*request.Request, *ec2.DeleteTagsOutput)
+
+	DeleteTrafficMirrorFilter(*ec2.DeleteTrafficMirrorFilterInput) (*ec2.DeleteTrafficMirrorFilterOutput, error)
+	DeleteTrafficMirrorFilterWithContext(aws.Context, *ec2.DeleteTrafficMirrorFilterInput, ...request.Option) (*ec2.DeleteTrafficMirrorFilterOutput, error)
+	DeleteTrafficMirrorFilterRequest(*ec2.DeleteTrafficMirrorFilterInput) (*request.Request, *ec2.DeleteTrafficMirrorFilterOutput)
+
+	DeleteTrafficMirrorFilterRule(*ec2.DeleteTrafficMirrorFilterRuleInput) (*ec2.DeleteTrafficMirrorFilterRuleOutput, error)
+	DeleteTrafficMirrorFilterRuleWithContext(aws.Context, *ec2.DeleteTrafficMirrorFilterRuleInput, ...request.Option) (*ec2.DeleteTrafficMirrorFilterRuleOutput, error)
+	DeleteTrafficMirrorFilterRuleRequest(*ec2.DeleteTrafficMirrorFilterRuleInput) (*request.Request, *ec2.DeleteTrafficMirrorFilterRuleOutput)
+
+	DeleteTrafficMirrorSession(*ec2.DeleteTrafficMirrorSessionInput) (*ec2.DeleteTrafficMirrorSessionOutput, error)
+	DeleteTrafficMirrorSessionWithContext(aws.Context, *ec2.DeleteTrafficMirrorSessionInput, ...request.Option) (*ec2.DeleteTrafficMirrorSessionOutput, error)
+	DeleteTrafficMirrorSessionRequest(*ec2.DeleteTrafficMirrorSessionInput) (*request.Request, *ec2.DeleteTrafficMirrorSessionOutput)
+
+	DeleteTrafficMirrorTarget(*ec2.DeleteTrafficMirrorTargetInput) (*ec2.DeleteTrafficMirrorTargetOutput, error)
+	DeleteTrafficMirrorTargetWithContext(aws.Context, *ec2.DeleteTrafficMirrorTargetInput, ...request.Option) (*ec2.DeleteTrafficMirrorTargetOutput, error)
+	DeleteTrafficMirrorTargetRequest(*ec2.DeleteTrafficMirrorTargetInput) (*request.Request, *ec2.DeleteTrafficMirrorTargetOutput)
 
 	DeleteTransitGateway(*ec2.DeleteTransitGatewayInput) (*ec2.DeleteTransitGatewayOutput, error)
 	DeleteTransitGatewayWithContext(aws.Context, *ec2.DeleteTransitGatewayInput, ...request.Option) (*ec2.DeleteTransitGatewayOutput, error)
@@ -990,6 +1022,27 @@ type EC2API interface {
 	DescribeTagsPages(*ec2.DescribeTagsInput, func(*ec2.DescribeTagsOutput, bool) bool) error
 	DescribeTagsPagesWithContext(aws.Context, *ec2.DescribeTagsInput, func(*ec2.DescribeTagsOutput, bool) bool, ...request.Option) error
 
+	DescribeTrafficMirrorFilters(*ec2.DescribeTrafficMirrorFiltersInput) (*ec2.DescribeTrafficMirrorFiltersOutput, error)
+	DescribeTrafficMirrorFiltersWithContext(aws.Context, *ec2.DescribeTrafficMirrorFiltersInput, ...request.Option) (*ec2.DescribeTrafficMirrorFiltersOutput, error)
+	DescribeTrafficMirrorFiltersRequest(*ec2.DescribeTrafficMirrorFiltersInput) (*request.Request, *ec2.DescribeTrafficMirrorFiltersOutput)
+
+	DescribeTrafficMirrorFiltersPages(*ec2.DescribeTrafficMirrorFiltersInput, func(*ec2.DescribeTrafficMirrorFiltersOutput, bool) bool) error
+	DescribeTrafficMirrorFiltersPagesWithContext(aws.Context, *ec2.DescribeTrafficMirrorFiltersInput, func(*ec2.DescribeTrafficMirrorFiltersOutput, bool) bool, ...request.Option) error
+
+	DescribeTrafficMirrorSessions(*ec2.DescribeTrafficMirrorSessionsInput) (*ec2.DescribeTrafficMirrorSessionsOutput, error)
+	DescribeTrafficMirrorSessionsWithContext(aws.Context, *ec2.DescribeTrafficMirrorSessionsInput, ...request.Option) (*ec2.DescribeTrafficMirrorSessionsOutput, error)
+	DescribeTrafficMirrorSessionsRequest(*ec2.DescribeTrafficMirrorSessionsInput) (*request.Request, *ec2.DescribeTrafficMirrorSessionsOutput)
+
+	DescribeTrafficMirrorSessionsPages(*ec2.DescribeTrafficMirrorSessionsInput, func(*ec2.DescribeTrafficMirrorSessionsOutput, bool) bool) error
+	DescribeTrafficMirrorSessionsPagesWithContext(aws.Context, *ec2.DescribeTrafficMirrorSessionsInput, func(*ec2.DescribeTrafficMirrorSessionsOutput, bool) bool, ...request.Option) error
+
+	DescribeTrafficMirrorTargets(*ec2.DescribeTrafficMirrorTargetsInput) (*ec2.DescribeTrafficMirrorTargetsOutput, error)
+	DescribeTrafficMirrorTargetsWithContext(aws.Context, *ec2.DescribeTrafficMirrorTargetsInput, ...request.Option) (*ec2.DescribeTrafficMirrorTargetsOutput, error)
+	DescribeTrafficMirrorTargetsRequest(*ec2.DescribeTrafficMirrorTargetsInput) (*request.Request, *ec2.DescribeTrafficMirrorTargetsOutput)
+
+	DescribeTrafficMirrorTargetsPages(*ec2.DescribeTrafficMirrorTargetsInput, func(*ec2.DescribeTrafficMirrorTargetsOutput, bool) bool) error
+	DescribeTrafficMirrorTargetsPagesWithContext(aws.Context, *ec2.DescribeTrafficMirrorTargetsInput, func(*ec2.DescribeTrafficMirrorTargetsOutput, bool) bool, ...request.Option) error
+
 	DescribeTransitGatewayAttachments(*ec2.DescribeTransitGatewayAttachmentsInput) (*ec2.DescribeTransitGatewayAttachmentsOutput, error)
 	DescribeTransitGatewayAttachmentsWithContext(aws.Context, *ec2.DescribeTransitGatewayAttachmentsInput, ...request.Option) (*ec2.DescribeTransitGatewayAttachmentsOutput, error)
 	DescribeTransitGatewayAttachmentsRequest(*ec2.DescribeTransitGatewayAttachmentsInput) (*request.Request, *ec2.DescribeTransitGatewayAttachmentsOutput)
@@ -1379,6 +1432,18 @@ type EC2API interface {
 	ModifySubnetAttribute(*ec2.ModifySubnetAttributeInput) (*ec2.ModifySubnetAttributeOutput, error)
 	ModifySubnetAttributeWithContext(aws.Context, *ec2.ModifySubnetAttributeInput, ...request.Option) (*ec2.ModifySubnetAttributeOutput, error)
 	ModifySubnetAttributeRequest(*ec2.ModifySubnetAttributeInput) (*request.Request, *ec2.ModifySubnetAttributeOutput)
+
+	ModifyTrafficMirrorFilterNetworkServices(*ec2.ModifyTrafficMirrorFilterNetworkServicesInput) (*ec2.ModifyTrafficMirrorFilterNetworkServicesOutput, error)
+	ModifyTrafficMirrorFilterNetworkServicesWithContext(aws.Context, *ec2.ModifyTrafficMirrorFilterNetworkServicesInput, ...request.Option) (*ec2.ModifyTrafficMirrorFilterNetworkServicesOutput, error)
+	ModifyTrafficMirrorFilterNetworkServicesRequest(*ec2.ModifyTrafficMirrorFilterNetworkServicesInput) (*request.Request, *ec2.ModifyTrafficMirrorFilterNetworkServicesOutput)
+
+	ModifyTrafficMirrorFilterRule(*ec2.ModifyTrafficMirrorFilterRuleInput) (*ec2.ModifyTrafficMirrorFilterRuleOutput, error)
+	ModifyTrafficMirrorFilterRuleWithContext(aws.Context, *ec2.ModifyTrafficMirrorFilterRuleInput, ...request.Option) (*ec2.ModifyTrafficMirrorFilterRuleOutput, error)
+	ModifyTrafficMirrorFilterRuleRequest(*ec2.ModifyTrafficMirrorFilterRuleInput) (*request.Request, *ec2.ModifyTrafficMirrorFilterRuleOutput)
+
+	ModifyTrafficMirrorSession(*ec2.ModifyTrafficMirrorSessionInput) (*ec2.ModifyTrafficMirrorSessionOutput, error)
+	ModifyTrafficMirrorSessionWithContext(aws.Context, *ec2.ModifyTrafficMirrorSessionInput, ...request.Option) (*ec2.ModifyTrafficMirrorSessionOutput, error)
+	ModifyTrafficMirrorSessionRequest(*ec2.ModifyTrafficMirrorSessionInput) (*request.Request, *ec2.ModifyTrafficMirrorSessionOutput)
 
 	ModifyTransitGatewayVpcAttachment(*ec2.ModifyTransitGatewayVpcAttachmentInput) (*ec2.ModifyTransitGatewayVpcAttachmentOutput, error)
 	ModifyTransitGatewayVpcAttachmentWithContext(aws.Context, *ec2.ModifyTransitGatewayVpcAttachmentInput, ...request.Option) (*ec2.ModifyTransitGatewayVpcAttachmentOutput, error)

@@ -27,7 +27,6 @@ import (
 	"io"
 	"math"
 	"net"
-	"reflect"
 	"runtime"
 	"strconv"
 	"strings"
@@ -40,6 +39,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/internal/leakcheck"
 	"google.golang.org/grpc/internal/syscall"
+	"google.golang.org/grpc/internal/testutils"
 	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/status"
 )
@@ -1690,7 +1690,7 @@ func TestEncodingRequiredStatus(t *testing.T) {
 	if _, err := s.trReader.(*transportReader).Read(p); err != io.EOF {
 		t.Fatalf("Read got error %v, want %v", err, io.EOF)
 	}
-	if !reflect.DeepEqual(s.Status(), encodingTestStatus) {
+	if !testutils.StatusErrEqual(s.Status().Err(), encodingTestStatus.Err()) {
 		t.Fatalf("stream with status %v, want %v", s.Status(), encodingTestStatus)
 	}
 	ct.Close()
@@ -1968,16 +1968,18 @@ func TestReadGivesSameErrorAfterAnyErrorOccurs(t *testing.T) {
 	}
 	s.trReader = &transportReader{
 		reader: &recvBufferReader{
-			ctx:     s.ctx,
-			ctxDone: s.ctx.Done(),
-			recv:    s.buf,
+			ctx:        s.ctx,
+			ctxDone:    s.ctx.Done(),
+			recv:       s.buf,
+			freeBuffer: func(*bytes.Buffer) {},
 		},
 		windowHandler: func(int) {},
 	}
 	testData := make([]byte, 1)
 	testData[0] = 5
+	testBuffer := bytes.NewBuffer(testData)
 	testErr := errors.New("test error")
-	s.write(recvMsg{data: testData, err: testErr})
+	s.write(recvMsg{buffer: testBuffer, err: testErr})
 
 	inBuf := make([]byte, 1)
 	actualCount, actualErr := s.Read(inBuf)
@@ -1988,8 +1990,8 @@ func TestReadGivesSameErrorAfterAnyErrorOccurs(t *testing.T) {
 		t.Errorf("_ , actualErr := s.Read(_) differs; want actualErr.Error() to be %v; got %v", testErr.Error(), actualErr.Error())
 	}
 
-	s.write(recvMsg{data: testData, err: nil})
-	s.write(recvMsg{data: testData, err: errors.New("different error from first")})
+	s.write(recvMsg{buffer: testBuffer, err: nil})
+	s.write(recvMsg{buffer: testBuffer, err: errors.New("different error from first")})
 
 	for i := 0; i < 2; i++ {
 		inBuf := make([]byte, 1)

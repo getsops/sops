@@ -355,7 +355,7 @@ func (s *ClaimDevicesRequest) MarshalJSON() ([]byte, error) {
 // Company: A reseller, vendor, or customer in the zero-touch reseller
 // and customer APIs.
 type Company struct {
-	// AdminEmails: Input only. Optional. Email address of customer's users
+	// AdminEmails: Optional. Input only. Email address of customer's users
 	// in the admin role.
 	// Each email address must be associated with a Google Account.
 	AdminEmails []string `json:"adminEmails,omitempty"`

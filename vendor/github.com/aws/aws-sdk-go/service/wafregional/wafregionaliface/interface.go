@@ -305,6 +305,10 @@ type WAFRegionalAPI interface {
 	ListSubscribedRuleGroupsWithContext(aws.Context, *waf.ListSubscribedRuleGroupsInput, ...request.Option) (*waf.ListSubscribedRuleGroupsOutput, error)
 	ListSubscribedRuleGroupsRequest(*waf.ListSubscribedRuleGroupsInput) (*request.Request, *waf.ListSubscribedRuleGroupsOutput)
 
+	ListTagsForResource(*waf.ListTagsForResourceInput) (*waf.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *waf.ListTagsForResourceInput, ...request.Option) (*waf.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*waf.ListTagsForResourceInput) (*request.Request, *waf.ListTagsForResourceOutput)
+
 	ListWebACLs(*waf.ListWebACLsInput) (*waf.ListWebACLsOutput, error)
 	ListWebACLsWithContext(aws.Context, *waf.ListWebACLsInput, ...request.Option) (*waf.ListWebACLsOutput, error)
 	ListWebACLsRequest(*waf.ListWebACLsInput) (*request.Request, *waf.ListWebACLsOutput)
@@ -320,6 +324,14 @@ type WAFRegionalAPI interface {
 	PutPermissionPolicy(*waf.PutPermissionPolicyInput) (*waf.PutPermissionPolicyOutput, error)
 	PutPermissionPolicyWithContext(aws.Context, *waf.PutPermissionPolicyInput, ...request.Option) (*waf.PutPermissionPolicyOutput, error)
 	PutPermissionPolicyRequest(*waf.PutPermissionPolicyInput) (*request.Request, *waf.PutPermissionPolicyOutput)
+
+	TagResource(*waf.TagResourceInput) (*waf.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *waf.TagResourceInput, ...request.Option) (*waf.TagResourceOutput, error)
+	TagResourceRequest(*waf.TagResourceInput) (*request.Request, *waf.TagResourceOutput)
+
+	UntagResource(*waf.UntagResourceInput) (*waf.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *waf.UntagResourceInput, ...request.Option) (*waf.UntagResourceOutput, error)
+	UntagResourceRequest(*waf.UntagResourceInput) (*request.Request, *waf.UntagResourceOutput)
 
 	UpdateByteMatchSet(*waf.UpdateByteMatchSetInput) (*waf.UpdateByteMatchSetOutput, error)
 	UpdateByteMatchSetWithContext(aws.Context, *waf.UpdateByteMatchSetInput, ...request.Option) (*waf.UpdateByteMatchSetOutput, error)

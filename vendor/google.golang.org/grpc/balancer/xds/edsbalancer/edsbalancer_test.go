@@ -334,6 +334,24 @@ func TestEDS_TwoLocalities(t *testing.T) {
 	}); err != nil {
 		t.Fatalf("want %v, got %v", want, err)
 	}
+
+	// Change weight of the locality[1] to 0, it should never be picked.
+	clab6 := newClusterLoadAssignmentBuilder(testClusterNames[0], nil)
+	clab6.addLocality(testSubZones[1], 0, testEndpointAddrs[1:2])
+	clab6.addLocality(testSubZones[2], 1, testEndpointAddrs[2:4])
+	edsb.HandleEDSResponse(clab6.build())
+
+	// Test pick with two subconns different locality weight.
+	p6 := <-cc.newPickerCh
+	// Locality-1 will be not be picked, and locality-2 will be picked.
+	// Locality-2 contains sc3 and sc4. So expect sc3, sc4.
+	want = []balancer.SubConn{sc3, sc4}
+	if err := isRoundRobin(want, func() balancer.SubConn {
+		sc, _, _ := p6.Pick(context.Background(), balancer.PickOptions{})
+		return sc
+	}); err != nil {
+		t.Fatalf("want %v, got %v", want, err)
+	}
 }
 
 func TestClose(t *testing.T) {

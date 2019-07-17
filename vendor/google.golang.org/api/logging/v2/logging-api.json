@@ -24,7 +24,7 @@
   "baseUrl": "https://logging.googleapis.com/",
   "batchPath": "batch",
   "canonicalName": "Logging",
-  "description": "Writes log entries and manages your Logging configuration.",
+  "description": "Writes log entries and manages your Stackdriver Logging configuration. The table entries below are presented in alphabetical order, not in order of common use. For explanations of the concepts found in the table entries, read the Stackdriver Logging documentation.",
   "discoveryVersion": "v1",
   "documentationLink": "https://cloud.google.com/logging/docs/",
   "fullyEncodeReservedExpansion": true,
@@ -2535,7 +2535,7 @@
       }
     }
   },
-  "revision": "20190525",
+  "revision": "20190608",
   "rootUrl": "https://logging.googleapis.com/",
   "schemas": {
     "BucketOptions": {
@@ -2923,7 +2923,7 @@
         },
         "resource": {
           "$ref": "MonitoredResource",
-          "description": "Required. The primary monitored resource associated with this log entry.Example: a log entry that reports a database error would be associated with the monitored resource designating the particular database that reported the error."
+          "description": "Required. The monitored resource that produced this log entry.Example: a log entry that reports a database error would be associated with the monitored resource designating the particular database that reported the error."
         },
         "severity": {
           "description": "Optional. The severity of the log entry. The default value is LogSeverity.DEFAULT.",

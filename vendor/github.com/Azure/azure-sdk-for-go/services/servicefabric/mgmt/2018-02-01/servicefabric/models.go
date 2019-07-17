@@ -1790,7 +1790,7 @@ func (cudhp ClusterUpgradeDeltaHealthPolicy) MarshalJSON() ([]byte, error) {
 type ClusterUpgradePolicy struct {
 	// ForceRestart - If true, then processes are forcefully restarted during upgrade even when the code version has not changed (the upgrade only changes configuration or data).
 	ForceRestart *bool `json:"forceRestart,omitempty"`
-	// UpgradeReplicaSetCheckTimeout - The maximum amount of time to block processing of an upgrade domain and revent loss of availability when there are unexpected issues. When this timeout expires, processing of the upgrade domain will proceed regardless of availability loss issues. The timeout is reset at the start of each upgrade domain. The timeout can be in either hh:mm:ss or in d.hh:mm:ss.ms format.
+	// UpgradeReplicaSetCheckTimeout - The maximum amount of time to block processing of an upgrade domain and prevent loss of availability when there are unexpected issues. When this timeout expires, processing of the upgrade domain will proceed regardless of availability loss issues. The timeout is reset at the start of each upgrade domain. The timeout can be in either hh:mm:ss or in d.hh:mm:ss.ms format.
 	UpgradeReplicaSetCheckTimeout *string `json:"upgradeReplicaSetCheckTimeout,omitempty"`
 	// HealthCheckWaitDuration - The length of time to wait after completing an upgrade domain before performing health checks. The duration can be in either hh:mm:ss or in d.hh:mm:ss.ms format.
 	HealthCheckWaitDuration *string `json:"healthCheckWaitDuration,omitempty"`
@@ -1922,12 +1922,12 @@ type NodeTypeDescription struct {
 	// DurabilityLevel - The durability level of the node type. Learn about [DurabilityLevel](https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-cluster-capacity).
 	//   - Bronze - No privileges. This is the default.
 	//   - Silver - The infrastructure jobs can be paused for a duration of 10 minutes per UD.
-	//   - Gold - The infrastructure jobs can be paused for a duration of 2 hours per UD. Gold durability can be enabled only on full node VM skus like D15_V2, G5 etc.
+	//   - Gold - The infrastructure jobs can be paused for a duration of 2 hours per UD. Gold durability can be enabled only on full node VM SKUs like D15_V2, G5 etc.
 	// . Possible values include: 'Bronze', 'Silver', 'Gold'
 	DurabilityLevel DurabilityLevel `json:"durabilityLevel,omitempty"`
 	// ApplicationPorts - The range of ports from which cluster assigned port to Service Fabric applications.
 	ApplicationPorts *EndpointRangeDescription `json:"applicationPorts,omitempty"`
-	// EphemeralPorts - The range of empheral ports that nodes in this node type should be configured with.
+	// EphemeralPorts - The range of ephemeral ports that nodes in this node type should be configured with.
 	EphemeralPorts *EndpointRangeDescription `json:"ephemeralPorts,omitempty"`
 	// IsPrimary - The node type on which system services will run. Only one node type should be marked as primary. Primary node type cannot be deleted or changed for existing clusters.
 	IsPrimary *bool `json:"isPrimary,omitempty"`

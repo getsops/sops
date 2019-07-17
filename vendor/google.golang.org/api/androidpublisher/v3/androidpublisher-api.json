@@ -15,7 +15,7 @@
   "description": "Accesses Android application developers' Google Play accounts.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/android-publisher",
-  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/aTw0jxIoMXy6EsyPRJoCzGu1biA\"",
+  "etag": "\"9eZ1uxVRThTDhLJCZHhqs3eQWz4/tLEn1KkE5NEmlpywSz1Qx5p8WMk\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/android-16.png",
     "x32": "https://www.google.com/images/icons/product/android-32.png"
@@ -2382,7 +2382,7 @@
       }
     }
   },
-  "revision": "20190509",
+  "revision": "20190702",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Apk": {
@@ -2933,6 +2933,31 @@
       },
       "type": "object"
     },
+    "IntroductoryPriceInfo": {
+      "description": "Contains the introductory price information for a subscription.",
+      "id": "IntroductoryPriceInfo",
+      "properties": {
+        "introductoryPriceAmountMicros": {
+          "description": "Introductory price of the subscription, not including tax. The currency is the same as price_currency_code. Price is expressed in micro-units, where 1,000,000 micro-units represents one unit of the currency. For example, if the subscription price is €1.99, price_amount_micros is 1990000.",
+          "format": "int64",
+          "type": "string"
+        },
+        "introductoryPriceCurrencyCode": {
+          "description": "ISO 4217 currency code for the introductory subscription price. For example, if the price is specified in British pounds sterling, price_currency_code is \"GBP\".",
+          "type": "string"
+        },
+        "introductoryPriceCycles": {
+          "description": "The number of billing period to offer introductory pricing.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "introductoryPricePeriod": {
+          "description": "Introductory price period, specified in ISO 8601 format. Common values are (but not limited to) \"P1W\" (one week), \"P1M\" (one month), \"P3M\" (three months), \"P6M\" (six months), and \"P1Y\" (one year).",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "Listing": {
       "id": "Listing",
       "properties": {
@@ -3066,7 +3091,7 @@
           "type": "string"
         },
         "purchaseState": {
-          "description": "The purchase state of the order. Possible values are:  \n- Purchased \n- Canceled",
+          "description": "The purchase state of the order. Possible values are:  \n- Purchased \n- Canceled \n- Pending",
           "format": "int32",
           "type": "integer"
         },
@@ -3253,6 +3278,11 @@
       "description": "A SubscriptionPurchase resource indicates the status of a user's subscription purchase.",
       "id": "SubscriptionPurchase",
       "properties": {
+        "acknowledgementState": {
+          "description": "The acknowledgement state of the subscription product. Possible values are:  \n- Yet to be acknowledged \n- Acknowledged",
+          "format": "int32",
+          "type": "integer"
+        },
         "autoRenewing": {
           "description": "Whether the subscription will automatically be renewed when it reaches its current expiry time.",
           "type": "boolean"
@@ -3296,6 +3326,10 @@
           "description": "The given name of the user when the subscription was purchased. Only present for purchases made with 'Subscribe with Google'.",
           "type": "string"
         },
+        "introductoryPriceInfo": {
+          "$ref": "IntroductoryPriceInfo",
+          "description": "Introductory price information of the subscription. This is only present when the subscription was purchased with an introductory price.\n\nThis field does not indicate the subscription is currently in introductory price period."
+        },
         "kind": {
           "default": "androidpublisher#subscriptionPurchase",
           "description": "This kind represents a subscriptionPurchase object in the androidpublisher service.",
@@ -3328,7 +3362,7 @@
           "type": "string"
         },
         "profileId": {
-          "description": "The profile id of the user when the subscription was purchased. Only present for purchases made with 'Subscribe with Google'.",
+          "description": "The Google profile id of the user when the subscription was purchased. Only present for purchases made with 'Subscribe with Google'.",
           "type": "string"
         },
         "profileName": {
@@ -3388,12 +3422,14 @@
       "id": "Testers",
       "properties": {
         "googleGroups": {
+          "description": "A list of all Google Groups, as email addresses, that define testers for this track.",
           "items": {
             "type": "string"
           },
           "type": "array"
         },
         "googlePlusCommunities": {
+          "description": "A list of all Google+ Communities, as URLs, that define testers for this track.",
           "items": {
             "type": "string"
           },

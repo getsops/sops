@@ -380,7 +380,7 @@ func (rep *Replayer) Connection() (*grpc.ClientConn, error) {
 	// But we do need something to attach gRPC interceptors to.
 	// So we start a local server and connect to it, then close it down.
 	srv := grpc.NewServer()
-	l, err := net.Listen("tcp", "127.0.0.1:0")
+	l, err := net.Listen("tcp", "localhost:0")
 	if err != nil {
 		return nil, err
 	}

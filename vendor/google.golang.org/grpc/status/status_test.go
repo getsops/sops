@@ -35,11 +35,25 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
+// errEqual is essentially a copy of testutils.StatusErrEqual(), to avoid a
+// cyclic dependency.
+func errEqual(err1, err2 error) bool {
+	status1, ok := FromError(err1)
+	if !ok {
+		return false
+	}
+	status2, ok := FromError(err2)
+	if !ok {
+		return false
+	}
+	return proto.Equal(status1.Proto(), status2.Proto())
+}
+
 func TestErrorsWithSameParameters(t *testing.T) {
 	const description = "some description"
 	e1 := Errorf(codes.AlreadyExists, description)
 	e2 := Errorf(codes.AlreadyExists, description)
-	if e1 == e2 || !reflect.DeepEqual(e1, e2) {
+	if e1 == e2 || !errEqual(e1, e2) {
 		t.Fatalf("Errors should be equivalent but unique - e1: %v, %v  e2: %p, %v", e1.(*statusError), e1, e2.(*statusError), e2)
 	}
 }
@@ -156,7 +170,7 @@ func TestFromErrorImplementsInterface(t *testing.T) {
 		t.Fatalf("FromError(%v) = %v, %v; want <Code()=%s, Message()=%q, Err()!=nil>, true", err, s, ok, code, message)
 	}
 	pd := s.Proto().GetDetails()
-	if len(pd) != 1 || !reflect.DeepEqual(pd[0], details[0]) {
+	if len(pd) != 1 || !proto.Equal(pd[0], details[0]) {
 		t.Fatalf("s.Proto.GetDetails() = %v; want <Details()=%s>", pd, details)
 	}
 }

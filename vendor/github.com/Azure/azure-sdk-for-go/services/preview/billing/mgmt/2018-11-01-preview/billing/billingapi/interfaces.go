@@ -27,6 +27,7 @@ import (
 type AccountsClientAPI interface {
 	Get(ctx context.Context, billingAccountName string, expand string) (result billing.Account, err error)
 	List(ctx context.Context, expand string) (result billing.AccountListResult, err error)
+	Update(ctx context.Context, billingAccountName string, parameters billing.AccountUpdateProperties) (result billing.AccountsUpdateFuture, err error)
 }
 
 var _ AccountsClientAPI = (*billing.AccountsClient)(nil)
@@ -39,12 +40,12 @@ type PaymentMethodsClientAPI interface {
 
 var _ PaymentMethodsClientAPI = (*billing.PaymentMethodsClient)(nil)
 
-// AccountsValidateAddressClientAPI contains the set of methods on the AccountsValidateAddressClient type.
-type AccountsValidateAddressClientAPI interface {
-	Post(ctx context.Context, billingAccountName string, address billing.Address) (result billing.ValidateAddressResponse, err error)
+// AddressesClientAPI contains the set of methods on the AddressesClient type.
+type AddressesClientAPI interface {
+	Validate(ctx context.Context, address billing.Address) (result billing.ValidateAddressResponse, err error)
 }
 
-var _ AccountsValidateAddressClientAPI = (*billing.AccountsValidateAddressClient)(nil)
+var _ AddressesClientAPI = (*billing.AddressesClient)(nil)
 
 // AvailableBalancesClientAPI contains the set of methods on the AvailableBalancesClient type.
 type AvailableBalancesClientAPI interface {
@@ -55,6 +56,7 @@ var _ AvailableBalancesClientAPI = (*billing.AvailableBalancesClient)(nil)
 
 // ProfilesClientAPI contains the set of methods on the ProfilesClient type.
 type ProfilesClientAPI interface {
+	Create(ctx context.Context, billingAccountName string, parameters billing.ProfileCreationParameters) (result billing.ProfilesCreateFuture, err error)
 	Get(ctx context.Context, billingAccountName string, billingProfileName string, expand string) (result billing.Profile, err error)
 	ListByBillingAccountName(ctx context.Context, billingAccountName string, expand string) (result billing.ProfileListResult, err error)
 	Update(ctx context.Context, billingAccountName string, billingProfileName string, parameters billing.Profile) (result billing.ProfilesUpdateFuture, err error)
@@ -64,7 +66,7 @@ var _ ProfilesClientAPI = (*billing.ProfilesClient)(nil)
 
 // InvoiceSectionsClientAPI contains the set of methods on the InvoiceSectionsClient type.
 type InvoiceSectionsClientAPI interface {
-	Create(ctx context.Context, billingAccountName string, parameters billing.InvoiceSectionProperties) (result billing.InvoiceSectionsCreateFuture, err error)
+	Create(ctx context.Context, billingAccountName string, parameters billing.InvoiceSectionCreationRequest) (result billing.InvoiceSectionsCreateFuture, err error)
 	ElevateToBillingProfile(ctx context.Context, billingAccountName string, invoiceSectionName string) (result autorest.Response, err error)
 	Get(ctx context.Context, billingAccountName string, invoiceSectionName string, expand string) (result billing.InvoiceSection, err error)
 	ListByBillingAccountName(ctx context.Context, billingAccountName string, expand string) (result billing.InvoiceSectionListResult, err error)
@@ -114,6 +116,7 @@ type SubscriptionsClientAPI interface {
 	ListByBillingProfileName(ctx context.Context, billingAccountName string, billingProfileName string) (result billing.SubscriptionsListResult, err error)
 	ListByInvoiceSectionName(ctx context.Context, billingAccountName string, invoiceSectionName string) (result billing.SubscriptionsListResult, err error)
 	Transfer(ctx context.Context, billingAccountName string, invoiceSectionName string, billingSubscriptionName string, parameters billing.TransferBillingSubscriptionRequestProperties) (result billing.SubscriptionsTransferFuture, err error)
+	ValidateTransfer(ctx context.Context, billingAccountName string, invoiceSectionName string, billingSubscriptionName string, parameters billing.TransferBillingSubscriptionRequestProperties) (result billing.ValidateSubscriptionTransferEligibilityResult, err error)
 }
 
 var _ SubscriptionsClientAPI = (*billing.SubscriptionsClient)(nil)
@@ -126,6 +129,7 @@ type ProductsClientAPI interface {
 	Transfer(ctx context.Context, billingAccountName string, invoiceSectionName string, productName string, parameters billing.TransferProductRequestProperties) (result billing.ProductSummary, err error)
 	UpdateAutoRenewByBillingAccountName(ctx context.Context, billingAccountName string, productName string, body billing.UpdateAutoRenewRequest) (result billing.UpdateAutoRenewOperationSummary, err error)
 	UpdateAutoRenewByInvoiceSectionName(ctx context.Context, billingAccountName string, invoiceSectionName string, productName string, body billing.UpdateAutoRenewRequest) (result billing.UpdateAutoRenewOperationSummary, err error)
+	ValidateTransfer(ctx context.Context, billingAccountName string, invoiceSectionName string, productName string, parameters billing.TransferProductRequestProperties) (result billing.ValidateProductTransferEligibilityResult, err error)
 }
 
 var _ ProductsClientAPI = (*billing.ProductsClient)(nil)
@@ -227,3 +231,11 @@ type AgreementsClientAPI interface {
 }
 
 var _ AgreementsClientAPI = (*billing.AgreementsClient)(nil)
+
+// LineOfCreditsClientAPI contains the set of methods on the LineOfCreditsClient type.
+type LineOfCreditsClientAPI interface {
+	Get(ctx context.Context) (result billing.LineOfCredit, err error)
+	Update(ctx context.Context, parameters billing.LineOfCredit) (result billing.LineOfCreditsUpdateFuture, err error)
+}
+
+var _ LineOfCreditsClientAPI = (*billing.LineOfCreditsClient)(nil)

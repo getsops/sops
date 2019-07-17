@@ -65,14 +65,14 @@ func BenchmarkRecord8_Parallel(b *testing.B) {
 
 func BenchmarkRecord8_8Tags(b *testing.B) {
 	ctx := context.Background()
-	key1, _ := tag.NewKey("key1")
-	key2, _ := tag.NewKey("key2")
-	key3, _ := tag.NewKey("key3")
-	key4, _ := tag.NewKey("key4")
-	key5, _ := tag.NewKey("key5")
-	key6, _ := tag.NewKey("key6")
-	key7, _ := tag.NewKey("key7")
-	key8, _ := tag.NewKey("key8")
+	key1 := tag.MustNewKey("key1")
+	key2 := tag.MustNewKey("key2")
+	key3 := tag.MustNewKey("key3")
+	key4 := tag.MustNewKey("key4")
+	key5 := tag.MustNewKey("key5")
+	key6 := tag.MustNewKey("key6")
+	key7 := tag.MustNewKey("key7")
+	key8 := tag.MustNewKey("key8")
 
 	tag.New(ctx,
 		tag.Insert(key1, "value"),

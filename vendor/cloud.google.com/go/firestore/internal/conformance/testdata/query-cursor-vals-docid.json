@@ -1,0 +1,67 @@
+{
+  "tests": [
+    {
+      "description": "query: cursor methods with __name__",
+      "comment": "Cursor values corresponding to a __name__ field take the document path relative to the\nquery's collection.",
+      "query": {
+        "collPath": "projects/projectID/databases/(default)/documents/C",
+        "clauses": [
+          {
+            "orderBy": {
+              "path": {
+                "field": [
+                  "__name__"
+                ]
+              },
+              "direction": "asc"
+            }
+          },
+          {
+            "startAfter": {
+              "jsonValues": [
+                "\"D1\""
+              ]
+            }
+          },
+          {
+            "endBefore": {
+              "jsonValues": [
+                "\"D2\""
+              ]
+            }
+          }
+        ],
+        "query": {
+          "from": [
+            {
+              "collectionId": "C"
+            }
+          ],
+          "orderBy": [
+            {
+              "field": {
+                "fieldPath": "__name__"
+              },
+              "direction": "ASCENDING"
+            }
+          ],
+          "startAt": {
+            "values": [
+              {
+                "referenceValue": "projects/projectID/databases/(default)/documents/C/D1"
+              }
+            ]
+          },
+          "endAt": {
+            "values": [
+              {
+                "referenceValue": "projects/projectID/databases/(default)/documents/C/D2"
+              }
+            ],
+            "before": true
+          }
+        }
+      }
+    }
+  ]
+}

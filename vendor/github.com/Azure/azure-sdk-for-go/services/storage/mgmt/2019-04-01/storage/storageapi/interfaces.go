@@ -91,7 +91,7 @@ type BlobContainersClientAPI interface {
 	Get(ctx context.Context, resourceGroupName string, accountName string, containerName string) (result storage.BlobContainer, err error)
 	GetImmutabilityPolicy(ctx context.Context, resourceGroupName string, accountName string, containerName string, ifMatch string) (result storage.ImmutabilityPolicy, err error)
 	Lease(ctx context.Context, resourceGroupName string, accountName string, containerName string, parameters *storage.LeaseContainerRequest) (result storage.LeaseContainerResponse, err error)
-	List(ctx context.Context, resourceGroupName string, accountName string, skipToken string, maxpagesize string, filter string) (result storage.ListContainerItems, err error)
+	List(ctx context.Context, resourceGroupName string, accountName string, skipToken string, maxpagesize string, filter string) (result storage.ListContainerItemsPage, err error)
 	LockImmutabilityPolicy(ctx context.Context, resourceGroupName string, accountName string, containerName string, ifMatch string) (result storage.ImmutabilityPolicy, err error)
 	SetLegalHold(ctx context.Context, resourceGroupName string, accountName string, containerName string, legalHold storage.LegalHold) (result storage.LegalHold, err error)
 	Update(ctx context.Context, resourceGroupName string, accountName string, containerName string, blobContainer storage.BlobContainer) (result storage.BlobContainer, err error)

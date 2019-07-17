@@ -15,6 +15,7 @@ import (
 	"strings"
 	"sync"
 	"testing"
+	"time"
 
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
@@ -263,6 +264,7 @@ func TestABE(t *testing.T) {
 	testABECreate(t, 8080)
 	testABECreateBody(t, 8080)
 	testABEBulkCreate(t, 8080)
+	testABEBulkCreateWithError(t, 8080)
 	testABELookup(t, 8080)
 	testABELookupNotFound(t, 8080)
 	testABEList(t, 8080)
@@ -546,6 +548,65 @@ func testABEBulkCreate(t *testing.T, port int) {
 	}
 	if got, want := resp.Trailer.Get("Grpc-Trailer-Bar"), "bar2"; got != want {
 		t.Errorf("Grpc-Trailer-Bar was %q, wanted %q", got, want)
+	}
+}
+
+func testABEBulkCreateWithError(t *testing.T, port int) {
+	count := 0
+	r, w := io.Pipe()
+	go func(w io.WriteCloser) {
+		defer func() {
+			if cerr := w.Close(); cerr != nil {
+				t.Errorf("w.Close() failed with %v; want success", cerr)
+			}
+		}()
+		for _, val := range []string{
+			"foo", "bar", "baz", "qux", "quux",
+		} {
+			time.Sleep(1 * time.Millisecond)
+
+			want := gw.ABitOfEverything{
+				StringValue: fmt.Sprintf("strprefix/%s", val),
+			}
+			var m jsonpb.Marshaler
+			if err := m.Marshal(w, &want); err != nil {
+				t.Fatalf("m.Marshal(%#v, w) failed with %v; want success", want, err)
+			}
+			if _, err := io.WriteString(w, "\n"); err != nil {
+				t.Errorf("w.Write(%q) failed with %v; want success", "\n", err)
+				return
+			}
+			count++
+		}
+	}(w)
+
+	apiURL := fmt.Sprintf("http://localhost:%d/v1/example/a_bit_of_everything/bulk", port)
+	request, err := http.NewRequest("POST", apiURL, r)
+	if err != nil {
+		t.Fatalf("http.NewRequest(%q, %q, nil) failed with %v; want success", "POST", apiURL, err)
+	}
+	request.Header.Add("Grpc-Metadata-error", "some error")
+
+	resp, err := http.DefaultClient.Do(request)
+	if err != nil {
+		t.Errorf("http.Post(%q) failed with %v; want success", apiURL, err)
+		return
+	}
+	defer resp.Body.Close()
+	buf, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		t.Errorf("ioutil.ReadAll(resp.Body) failed with %v; want success", err)
+		return
+	}
+
+	if got, want := resp.StatusCode, http.StatusBadRequest; got != want {
+		t.Errorf("resp.StatusCode = %d; want %d", got, want)
+		t.Logf("%s", buf)
+	}
+
+	var msg errorBody
+	if err := json.Unmarshal(buf, &msg); err != nil {
+		t.Fatalf("json.Unmarshal(%s, &msg) failed with %v; want success", buf, err)
 	}
 }
 

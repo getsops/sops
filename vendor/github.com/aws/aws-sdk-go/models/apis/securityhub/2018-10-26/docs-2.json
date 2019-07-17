@@ -1,36 +1,43 @@
 {
   "version": "2.0",
-  "service": "<p>AWS Security Hub provides you with a comprehensive view of your security state in AWS and your compliance with the security industry standards and best practices. Security Hub collects security data from across AWS accounts, services, and supported third-party partners and helps you analyze your security trends and identify the highest priority security issues. For more information, see <a href=\"https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html\">AWS Security Hub User Guide</a>. </p> <important> <p>Important: AWS Security Hub is currently in Preview release.</p> </important>",
+  "service": "<p>Security Hub provides you with a comprehensive view of the security state of your AWS environment and resources. It also provides you with the compliance status of your environment based on CIS AWS Foundations compliance checks. Security Hub collects security data from AWS accounts, services, and integrated third-party products and helps you analyze security trends in your environment to identify the highest priority security issues. For more information about Security Hub, see the <i> <a href=\"https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html\">AWS Security Hub User Guide</a> </i>.</p> <p>When you use operations in the Security Hub API, the requests are executed only in the AWS Region that is currently active or in the specific AWS Region that you specify in your request. Any configuration or settings change that results from the operation is applied only to that Region. To make the same change in other Regions, execute the same command for each Region to apply the change to. For example, if your Region is set to <code>us-west-2</code>, when you use <code>CreateMembers</code> to add a member account to Security Hub, the association of the member account with the master account is created only in the us-west-2 Region. Security Hub must be enabled for the member account in the same Region that the invite was sent from.</p>",
   "operations": {
-    "AcceptInvitation": "<p>Accepts the invitation to be monitored by a Security Hub master account.</p>",
-    "BatchDisableStandards": "<p>Disables the standards specified by the standards subscription ARNs. In the context of Security Hub, supported standards (for example, CIS AWS Foundations) are automated and continuous checks that help determine your compliance status against security industry (including AWS) best practices.</p>",
-    "BatchEnableStandards": "<p>Enables the standards specified by the standards ARNs. In the context of Security Hub, supported standards (for example, CIS AWS Foundations) are automated and continuous checks that help determine your compliance status against security industry (including AWS) best practices. </p>",
-    "BatchImportFindings": "<p>Imports security findings generated from an integrated third-party product into Security Hub.</p>",
-    "CreateInsight": "<p>Creates an insight, which is a consolidation of findings that identifies a security area that requires attention or intervention.</p>",
-    "CreateMembers": "<p>Creates Security Hub member accounts associated with the account used for this action, which becomes the Security Hub Master account. Security Hub must be enabled in the account used to make this request.</p>",
-    "DeclineInvitations": "<p>Declines invitations that are sent to this AWS account (invitee) from the AWS accounts (inviters) that are specified by the provided <code>AccountIds</code>.</p>",
+    "AcceptInvitation": "<p>Accepts the invitation to be a member account and be monitored by the Security Hub master account that the invitation was sent from. When the member account accepts the invitation, permission is granted to the master account to view findings generated in the member account.</p>",
+    "BatchDisableStandards": "<p>Disables the standards specified by the provided <code>StandardsSubscriptionArns</code>. For more information, see <a href=\"https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-standards.html\">Standards Supported in AWS Security Hub</a>.</p>",
+    "BatchEnableStandards": "<p>Enables the standards specified by the provided <code>standardsArn</code>. In this release, only CIS AWS Foundations standards are supported. For more information, see <a href=\"https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-standards.html\">Standards Supported in AWS Security Hub</a>.</p>",
+    "BatchImportFindings": "<p>Imports security findings generated from an integrated third-party product into Security Hub. This action is requested by the integrated product to import its findings into Security Hub. The maximum allowed size for a finding is 240 Kb. An error is returned for any finding larger than 240 Kb.</p>",
+    "CreateActionTarget": "<p>Creates a custom action target in Security Hub. You can use custom actions on findings and insights in Security Hub to trigger target actions in Amazon CloudWatch Events.</p>",
+    "CreateInsight": "<p>Creates a custom insight in Security Hub. An insight is a consolidation of findings that relate to a security issue that requires attention or remediation. Use the <code>GroupByAttribute</code> to group the related findings in the insight.</p>",
+    "CreateMembers": "<p>Creates a member association in Security Hub between the specified accounts and the account used to make the request, which is the master account. To successfully create a member, you must use this action from an account that already has Security Hub enabled. You can use the <a>EnableSecurityHub</a> to enable Security Hub.</p> <p>After you use <code>CreateMembers</code> to create member account associations in Security Hub, you need to use the <a>InviteMembers</a> action, which invites the accounts to enable Security Hub and become member accounts in Security Hub. If the invitation is accepted by the account owner, the account becomes a member account in Security Hub, and a permission policy is added that permits the master account to view the findings generated in the member account. When Security Hub is enabled in the invited account, findings start being sent to both the member and master accounts.</p> <p>You can remove the association between the master and member accounts by using the <a>DisassociateFromMasterAccount</a> or <a>DisassociateMembers</a> operation.</p>",
+    "DeclineInvitations": "<p>Declines invitations to become a member account.</p>",
+    "DeleteActionTarget": "<p>Deletes a custom action target from Security Hub. Deleting a custom action target doesn't affect any findings or insights that were already sent to Amazon CloudWatch Events using the custom action.</p>",
     "DeleteInsight": "<p>Deletes the insight specified by the <code>InsightArn</code>.</p>",
-    "DeleteInvitations": "<p>Deletes invitations that were sent to theis AWS account (invitee) by the AWS accounts (inviters) that are specified by their account IDs. </p>",
-    "DeleteMembers": "<p>Deletes the Security Hub member accounts that the account IDs specify.</p>",
-    "DescribeProducts": "<p>Returns information about the products available that you can subscribe to.</p>",
-    "DisableImportFindingsForProduct": "<p>Cancels the subscription that allows a findings-generating solution (product) to import its findings into Security Hub.</p>",
-    "DisableSecurityHub": "<p>Disables the Security Hub service.</p>",
-    "DisassociateFromMasterAccount": "<p>Disassociates the current Security Hub member account from its master account.</p>",
-    "DisassociateMembers": "<p>Disassociates the Security Hub member accounts that are specified by the account IDs from their master account. </p>",
-    "EnableImportFindingsForProduct": "<p>Sets up the subscription that enables a findings-generating solution (product) to import its findings into Security Hub.</p>",
-    "EnableSecurityHub": "<p>Enables the Security Hub service.</p>",
-    "GetEnabledStandards": "<p>Lists and describes enabled standards.</p>",
-    "GetFindings": "<p>Lists and describes Security Hub-aggregated findings that filter attributes specify.</p>",
+    "DeleteInvitations": "<p>Deletes invitations received by the AWS account to become a member account.</p>",
+    "DeleteMembers": "<p>Deletes the specified member accounts from Security Hub.</p>",
+    "DescribeActionTargets": "<p>Returns a list of the custom action targets in Security Hub in your account.</p>",
+    "DescribeHub": "<p>Returns details about the Hub resource in your account, including the <code>HubArn</code> and the time when you enabled Security Hub.</p>",
+    "DescribeProducts": "<p>Returns information about the products available that you can subscribe to and integrate with Security Hub to consolidate findings.</p>",
+    "DisableImportFindingsForProduct": "<p>Disables the integration of the specified product with Security Hub. Findings from that product are no longer sent to Security Hub after the integration is disabled.</p>",
+    "DisableSecurityHub": "<p>Disables Security Hub in your account only in the current Region. To disable Security Hub in all Regions, you must submit one request per Region where you have enabled Security Hub. When you disable Security Hub for a master account, it doesn't disable Security Hub for any associated member accounts.</p> <p>When you disable Security Hub, your existing findings and insights and any Security Hub configuration settings are deleted after 90 days and can't be recovered. Any standards that were enabled are disabled, and your master and member account associations are removed. If you want to save your existing findings, you must export them before you disable Security Hub.</p>",
+    "DisassociateFromMasterAccount": "<p>Disassociates the current Security Hub member account from the associated master account.</p>",
+    "DisassociateMembers": "<p>Disassociates the specified member accounts from the associated master account.</p>",
+    "EnableImportFindingsForProduct": "<p>Enables the integration of a partner product with Security Hub. Integrated products send findings to Security Hub. When you enable a product integration, a permission policy that grants permission for the product to send findings to Security Hub is applied.</p>",
+    "EnableSecurityHub": "<p>Enables Security Hub for your account in the current Region or the Region you specify in the request. When you enable Security Hub, you grant to Security Hub the permissions necessary to gather findings from AWS Config, Amazon GuardDuty, Amazon Inspector, and Amazon Macie. To learn more, see <a href=\"https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-settingup.html\">Setting Up AWS Security Hub</a>.</p>",
+    "GetEnabledStandards": "<p>Returns a list of the standards that are currently enabled.</p>",
+    "GetFindings": "<p>Returns a list of findings that match the specified criteria.</p>",
     "GetInsightResults": "<p>Lists the results of the Security Hub insight that the insight ARN specifies.</p>",
     "GetInsights": "<p>Lists and describes insights that insight ARNs specify.</p>",
     "GetInvitationsCount": "<p>Returns the count of all Security Hub membership invitations that were sent to the current member account, not including the currently accepted invitation. </p>",
     "GetMasterAccount": "<p>Provides the details for the Security Hub master account to the current member account. </p>",
     "GetMembers": "<p>Returns the details on the Security Hub member accounts that the account IDs specify.</p>",
-    "InviteMembers": "<p>Invites other AWS accounts to enable Security Hub and become Security Hub member accounts. When an account accepts the invitation and becomes a member account, the master account can view Security Hub findings of the member account. </p>",
+    "InviteMembers": "<p>Invites other AWS accounts to become member accounts for the Security Hub master account that the invitation is sent from. Before you can use this action to invite a member, you must first create the member account in Security Hub by using the <a>CreateMembers</a> action. When the account owner accepts the invitation to become a member account and enables Security Hub, the master account can view the findings generated from member account.</p>",
     "ListEnabledProductsForImport": "<p>Lists all findings-generating solutions (products) whose findings you have subscribed to receive in Security Hub.</p>",
     "ListInvitations": "<p>Lists all Security Hub membership invitations that were sent to the current AWS account. </p>",
     "ListMembers": "<p>Lists details about all member accounts for the current Security Hub master account.</p>",
-    "ListProductSubscribers": "<p>Returns a list of account IDs that are subscribed to the product.</p>",
+    "ListTagsForResource": "<p>Returns a list of tags associated with a resource.</p>",
+    "TagResource": "<p>Adds one or more tags to a resource.</p>",
+    "UntagResource": "<p>Removes one or more tags from a resource.</p>",
+    "UpdateActionTarget": "<p>Updates the name and description of a custom action target in Security Hub.</p>",
     "UpdateFindings": "<p>Updates the <code>Note</code> and <code>RecordState</code> of the Security Hub-aggregated findings that the filter attributes specify. Any member account that can view the finding also sees the update to the finding.</p>",
     "UpdateInsight": "<p>Updates the Security Hub insight that the insight ARN specifies.</p>"
   },
@@ -66,38 +73,51 @@
       "base": null,
       "refs": {
         "AccountDetails$AccountId": "<p>The ID of an AWS account.</p>",
-        "Invitation$AccountId": "<p>The account ID of the Security Hub master account that sent the invitation. </p>",
-        "Member$AccountId": "<p>The AWS account ID of a Security Hub member account.</p>",
-        "Result$AccountId": "<p>An ID of the AWS account that couldn't be processed. </p>"
+        "Invitation$AccountId": "<p>The account ID of the Security Hub master account that the invitation was sent from.</p>",
+        "Member$AccountId": "<p>The AWS account ID of the member account.</p>",
+        "Result$AccountId": "<p>An AWS account ID of the account that wasn't be processed.</p>"
       }
     },
     "AccountIdList": {
       "base": null,
       "refs": {
-        "DeclineInvitationsRequest$AccountIds": "<p>A list of account IDs that specify the accounts from which invitations to Security Hub are declined.</p>",
-        "DeleteInvitationsRequest$AccountIds": "<p>A list of account IDs that specify accounts whose invitations to Security Hub you want to delete. </p>",
-        "DeleteMembersRequest$AccountIds": "<p>A list of account IDs of the Security Hub member accounts that you want to delete. </p>",
-        "DisassociateMembersRequest$AccountIds": "<p>The account IDs of the member accounts that you want to disassociate from the master account.</p>",
+        "DeclineInvitationsRequest$AccountIds": "<p>A list of account IDs that specify the accounts that invitations to Security Hub are declined from.</p>",
+        "DeleteInvitationsRequest$AccountIds": "<p>A list of the account IDs that sent the invitations to delete.</p>",
+        "DeleteMembersRequest$AccountIds": "<p>A list of account IDs of the member accounts to delete.</p>",
+        "DisassociateMembersRequest$AccountIds": "<p>The account IDs of the member accounts to disassociate from the master account.</p>",
         "GetMembersRequest$AccountIds": "<p>A list of account IDs for the Security Hub member accounts that you want to return the details for. </p>",
         "InviteMembersRequest$AccountIds": "<p>A list of IDs of the AWS accounts that you want to invite to Security Hub as members. </p>"
+      }
+    },
+    "ActionTarget": {
+      "base": "<p>An <code>ActionTarget</code> object.</p>",
+      "refs": {
+        "ActionTargetList$member": null
+      }
+    },
+    "ActionTargetList": {
+      "base": null,
+      "refs": {
+        "DescribeActionTargetsResponse$ActionTargets": "<p>A list of <code>ActionTarget</code> objects. Each object includes the <code>ActionTargetArn</code>, <code>Description</code>, and <code>Name</code> of a custom action target available in Security Hub.</p>"
       }
     },
     "ArnList": {
       "base": null,
       "refs": {
+        "DescribeActionTargetsRequest$ActionTargetArns": "<p>A list of custom action target ARNs for the custom action targets to retrieve.</p>",
         "GetInsightsRequest$InsightArns": "<p>The ARNs of the insights that you want to describe.</p>"
       }
     },
     "AwsEc2InstanceDetails": {
       "base": "<p>The details of an Amazon EC2 instance.</p>",
       "refs": {
-        "ResourceDetails$AwsEc2Instance": "<p>The details of an Amazon EC2 instance.</p>"
+        "ResourceDetails$AwsEc2Instance": "<p>Details about an Amazon EC2 instance related to a finding.</p>"
       }
     },
     "AwsIamAccessKeyDetails": {
       "base": "<p>IAM access key details related to a finding.</p>",
       "refs": {
-        "ResourceDetails$AwsIamAccessKey": "<p>IAM access key details related to a finding.</p>"
+        "ResourceDetails$AwsIamAccessKey": "<p>Details about an IAM access key related to a finding.</p>"
       }
     },
     "AwsIamAccessKeyStatus": {
@@ -109,11 +129,11 @@
     "AwsS3BucketDetails": {
       "base": "<p>The details of an Amazon S3 bucket.</p>",
       "refs": {
-        "ResourceDetails$AwsS3Bucket": "<p>The details of an Amazon S3 Bucket.</p>"
+        "ResourceDetails$AwsS3Bucket": "<p>Details about an Amazon S3 Bucket related to a finding.</p>"
       }
     },
     "AwsSecurityFinding": {
-      "base": "<p>Provides consistent format for the contents of the Security Hub-aggregated findings. AwsSecurityFinding format enables you to share findings between AWS security services and third-party solutions, and compliance checks.</p> <note> <p>A finding is a potential security issue generated either by AWS services (Amazon GuardDuty, Amazon Inspector, and Amazon Macie) or by the integrated third-party solutions and compliance checks.</p> </note>",
+      "base": "<p>Provides consistent format for the contents of the Security Hub-aggregated findings. <code>AwsSecurityFinding</code> format enables you to share findings between AWS security services and third-party solutions, and compliance checks.</p> <note> <p>A finding is a potential security issue generated either by AWS services (Amazon GuardDuty, Amazon Inspector, and Amazon Macie) or by the integrated third-party solutions and compliance checks.</p> </note>",
       "refs": {
         "AwsSecurityFindingList$member": null
       }
@@ -121,9 +141,9 @@
     "AwsSecurityFindingFilters": {
       "base": "<p>A collection of attributes that are applied to all active Security Hub-aggregated findings and that result in a subset of findings that are included in this insight. </p>",
       "refs": {
-        "CreateInsightRequest$Filters": "<p>A collection of attributes that are applied to all of the active findings aggregated by Security Hub, and that result in a subset of findings that are included in this insight.</p>",
-        "GetFindingsRequest$Filters": "<p>A collection of attributes that is used for querying findings.</p>",
-        "Insight$Filters": "<p>A collection of attributes that are applied to all active Security Hub-aggregated findings and that result in a subset of findings that are included in this insight. </p>",
+        "CreateInsightRequest$Filters": "<p>One or more attributes used to filter the findings included in the insight. Only findings that match the criteria defined in the filters are included in the insight.</p>",
+        "GetFindingsRequest$Filters": "<p>The findings attributes used to define a condition to filter the findings returned.</p>",
+        "Insight$Filters": "<p>One or more attributes used to filter the findings included in the insight. Only findings that match the criteria defined in the filters are included in the insight.</p>",
         "UpdateFindingsRequest$Filters": "<p>A collection of attributes that specify which findings you want to update.</p>",
         "UpdateInsightRequest$Filters": "<p>The updated filters that define this insight.</p>"
       }
@@ -131,8 +151,8 @@
     "AwsSecurityFindingList": {
       "base": null,
       "refs": {
-        "BatchImportFindingsRequest$Findings": "<p>A list of findings to import. You must submit them in the AwsSecurityFinding format.</p>",
-        "GetFindingsResponse$Findings": "<p>Findings details returned by the operation.</p>"
+        "BatchImportFindingsRequest$Findings": "<p>A list of findings to import. To successfully import a finding, it must follow the <a href=\"https://docs.aws.amazon.com/securityhub/latest/userguide/securityhub-findings-format.html\">AWS Security Finding Format</a>.</p>",
+        "GetFindingsResponse$Findings": "<p>The findings that matched the filters specified in the request.</p>"
       }
     },
     "BatchDisableStandardsRequest": {
@@ -192,7 +212,17 @@
     "ContainerDetails": {
       "base": "<p>Container details related to a finding.</p>",
       "refs": {
-        "ResourceDetails$Container": "<p>Container details related to a finding.</p>"
+        "ResourceDetails$Container": "<p>Details about a container resource related to a finding.</p>"
+      }
+    },
+    "CreateActionTargetRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateActionTargetResponse": {
+      "base": null,
+      "refs": {
       }
     },
     "CreateInsightRequest": {
@@ -259,6 +289,16 @@
       "refs": {
       }
     },
+    "DeleteActionTargetRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DeleteActionTargetResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "DeleteInsightRequest": {
       "base": null,
       "refs": {
@@ -285,6 +325,26 @@
       }
     },
     "DeleteMembersResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeActionTargetsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeActionTargetsResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeHubRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeHubResponse": {
       "base": null,
       "refs": {
       }
@@ -345,7 +405,7 @@
         "NumberFilter$Gte": "<p>The greater-than-equal condition to be applied to a single field when querying for findings. </p>",
         "NumberFilter$Lte": "<p>The less-than-equal condition to be applied to a single field when querying for findings. </p>",
         "NumberFilter$Eq": "<p>The equal-to condition to be applied to a single field when querying for findings.</p>",
-        "Severity$Product": "<p>The native severity as defined by the security-findings provider's solution that generated the finding.</p>"
+        "Severity$Product": "<p>The native severity as defined by the AWS service or integrated partner product that generated the finding.</p>"
       }
     },
     "EnableImportFindingsForProductRequest": {
@@ -371,10 +431,10 @@
     "FieldMap": {
       "base": null,
       "refs": {
-        "AwsSecurityFinding$ProductFields": "<p>A data type where security-findings providers can include additional solution-specific details that aren't part of the defined AwsSecurityFinding format.</p>",
+        "AwsSecurityFinding$ProductFields": "<p>A data type where security-findings providers can include additional solution-specific details that aren't part of the defined <code>AwsSecurityFinding</code> format.</p>",
         "AwsSecurityFinding$UserDefinedFields": "<p>A list of name/value string pairs associated with the finding. These are custom, user-defined fields added to a finding. </p>",
         "Resource$Tags": "<p>A list of AWS tags associated with a resource at the time the finding was processed.</p>",
-        "ResourceDetails$Other": "<p>The details of a resource that doesn't have a specific subfield for the resource type defined.</p>"
+        "ResourceDetails$Other": "<p>Details about a resource that doesn't have a specific type defined.</p>"
       }
     },
     "GetEnabledStandardsRequest": {
@@ -448,7 +508,7 @@
       }
     },
     "ImportFindingsError": {
-      "base": "<p>Includes details of the list of the findings that can't be imported. </p>",
+      "base": "<p>Includes details of the list of the findings that can't be imported.</p>",
       "refs": {
         "ImportFindingsErrorList$member": null
       }
@@ -460,7 +520,7 @@
       }
     },
     "Insight": {
-      "base": "<p>Contains information about a Security Hub insight. </p>",
+      "base": "<p>Contains information about a Security Hub insight.</p>",
       "refs": {
         "InsightList$member": null
       }
@@ -493,9 +553,9 @@
       "base": null,
       "refs": {
         "AwsSecurityFinding$Confidence": "<p>A finding's confidence. Confidence is defined as the likelihood that a finding accurately identifies the behavior or issue that it was intended to identify. Confidence is scored on a 0-100 basis using a ratio scale, where 0 means zero percent confidence and 100 means 100 percent confidence.</p>",
-        "AwsSecurityFinding$Criticality": "<p>The level of importance assigned to the resources associated with the finding. A score of 0 means the underlying resources have no criticality, and a score of 100 is reserved for the most critical resources.</p>",
+        "AwsSecurityFinding$Criticality": "<p>The level of importance assigned to the resources associated with the finding. A score of 0 means that the underlying resources have no criticality, and a score of 100 is reserved for the most critical resources.</p>",
         "BatchImportFindingsResponse$FailedCount": "<p>The number of findings that failed to import.</p>",
-        "BatchImportFindingsResponse$SuccessCount": "<p>The number of findings that were successfully imported</p>",
+        "BatchImportFindingsResponse$SuccessCount": "<p>The number of findings that were successfully imported.</p>",
         "DateRange$Value": "<p>A date range value for the date filter.</p>",
         "GetInvitationsCountResponse$InvitationsCount": "<p>The number of all membership invitations sent to this Security Hub member account, not including the currently accepted invitation. </p>",
         "InsightResultValue$Count": "<p>The number of findings returned for each <code>GroupByAttributeValue</code>.</p>",
@@ -522,7 +582,7 @@
       }
     },
     "Invitation": {
-      "base": "<p>The details of an invitation that the Security Hub master account sent to an AWS account. </p>",
+      "base": "<p>Details about an invitation.</p>",
       "refs": {
         "GetMasterAccountResponse$Master": "<p>A list of details about the Security Hub master account for the current member account. </p>",
         "InvitationList$member": null
@@ -545,7 +605,7 @@
       }
     },
     "IpFilter": {
-      "base": "<p>The IP filter for querying findings.&gt;</p>",
+      "base": "<p>The IP filter for querying findings.</p>",
       "refs": {
         "IpFilterList$member": null
       }
@@ -608,12 +668,12 @@
       "refs": {
       }
     },
-    "ListProductSubscribersRequest": {
+    "ListTagsForResourceRequest": {
       "base": null,
       "refs": {
       }
     },
-    "ListProductSubscribersResponse": {
+    "ListTagsForResourceResponse": {
       "base": null,
       "refs": {
       }
@@ -651,13 +711,13 @@
     "MapFilterComparison": {
       "base": null,
       "refs": {
-        "MapFilter$Comparison": "<p>The condition to be applied to a key value when querying for findings with a map filter.</p>"
+        "MapFilter$Comparison": "<p>The condition to apply to a key value when querying for findings with a map filter.</p>"
       }
     },
     "MapFilterList": {
       "base": null,
       "refs": {
-        "AwsSecurityFindingFilters$ProductFields": "<p>A data type where security-findings providers can include additional solution-specific details that aren't part of the defined AwsSecurityFinding format.</p>",
+        "AwsSecurityFindingFilters$ProductFields": "<p>A data type where security-findings providers can include additional solution-specific details that aren't part of the defined <code>AwsSecurityFinding</code> format.</p>",
         "AwsSecurityFindingFilters$UserDefinedFields": "<p>A list of name/value string pairs associated with the finding. These are custom, user-defined fields added to a finding. </p>",
         "AwsSecurityFindingFilters$ResourceTags": "<p>A list of AWS tags associated with a resource at the time the finding was processed.</p>",
         "AwsSecurityFindingFilters$ResourceDetailsOther": "<p>The details of a resource that doesn't have a specific subfield for the resource type defined.</p>"
@@ -666,18 +726,18 @@
     "MaxResults": {
       "base": null,
       "refs": {
+        "DescribeActionTargetsRequest$MaxResults": "<p>The maximum number of results to return.</p>",
         "DescribeProductsRequest$MaxResults": "<p>The maximum number of results to return.</p>",
-        "GetEnabledStandardsRequest$MaxResults": "<p>The maximum number of items that you want in the response.</p>",
-        "GetFindingsRequest$MaxResults": "<p>Indicates the maximum number of items that you want in the response.</p>",
+        "GetEnabledStandardsRequest$MaxResults": "<p>The maximum number of results to return in the response.</p>",
+        "GetFindingsRequest$MaxResults": "<p>The maximum number of findings to return.</p>",
         "GetInsightsRequest$MaxResults": "<p>The maximum number of items that you want in the response.</p>",
         "ListEnabledProductsForImportRequest$MaxResults": "<p>The maximum number of items that you want in the response.</p>",
         "ListInvitationsRequest$MaxResults": "<p>The maximum number of items that you want in the response. </p>",
-        "ListMembersRequest$MaxResults": "<p>The maximum number of items that you want in the response. </p>",
-        "ListProductSubscribersRequest$MaxResults": "<p>The maximum number of results to return.</p>"
+        "ListMembersRequest$MaxResults": "<p>The maximum number of items that you want in the response. </p>"
       }
     },
     "Member": {
-      "base": "<p>The details for a Security Hub member account.</p>",
+      "base": "<p>The details about a member account.</p>",
       "refs": {
         "MemberList$member": null
       }
@@ -704,6 +764,8 @@
     "NextToken": {
       "base": null,
       "refs": {
+        "DescribeActionTargetsRequest$NextToken": "<p>The token that is required for pagination.</p>",
+        "DescribeActionTargetsResponse$NextToken": "<p>The token that is required for pagination.</p>",
         "DescribeProductsRequest$NextToken": "<p>The token that is required for pagination.</p>",
         "DescribeProductsResponse$NextToken": "<p>The token that is required for pagination.</p>",
         "GetEnabledStandardsRequest$NextToken": "<p>Paginates results. On your first call to the <code>GetEnabledStandards</code> operation, set the value of this parameter to <code>NULL</code>. For subsequent calls to the operation, fill <code>nextToken</code> in the request with the value of <code>nextToken</code> from the previous response to continue listing data.</p>",
@@ -715,20 +777,21 @@
         "ListEnabledProductsForImportRequest$NextToken": "<p>Paginates results. On your first call to the <code>ListEnabledProductsForImport</code> operation, set the value of this parameter to <code>NULL</code>. For subsequent calls to the operation, fill <code>nextToken</code> in the request with the value of <code>NextToken</code> from the previous response to continue listing data.</p>",
         "ListEnabledProductsForImportResponse$NextToken": "<p>The token that is required for pagination.</p>",
         "ListInvitationsRequest$NextToken": "<p>Paginates results. On your first call to the <code>ListInvitations</code> operation, set the value of this parameter to <code>NULL</code>. For subsequent calls to the operation, fill <code>nextToken</code> in the request with the value of <code>NextToken</code> from the previous response to continue listing data. </p>",
-        "ListMembersRequest$NextToken": "<p>Paginates results. Set the value of this parameter to <code>NULL</code> on your first call to the <code>ListMembers</code> operation. For subsequent calls to the operation, fill <code>nextToken</code> in the request with the value of <code>nextToken</code> from the previous response to continue listing data. </p>",
-        "ListProductSubscribersRequest$NextToken": "<p>The token that is required for pagination.</p>",
-        "ListProductSubscribersResponse$NextToken": "<p>The token that is required for pagination.</p>"
+        "ListMembersRequest$NextToken": "<p>Paginates results. Set the value of this parameter to <code>NULL</code> on your first call to the <code>ListMembers</code> operation. For subsequent calls to the operation, fill <code>nextToken</code> in the request with the value of <code>nextToken</code> from the previous response to continue listing data. </p>"
       }
     },
     "NonEmptyString": {
       "base": null,
       "refs": {
-        "AcceptInvitationRequest$MasterId": "<p>The account ID of the Security Hub master account whose invitation you're accepting.</p>",
-        "AcceptInvitationRequest$InvitationId": "<p>The ID of the invitation that the Security Hub master account sends to the AWS account.</p>",
+        "AcceptInvitationRequest$MasterId": "<p>The account ID of the Security Hub master account that sent the invitation.</p>",
+        "AcceptInvitationRequest$InvitationId": "<p>The ID of the invitation sent from the Security Hub master account.</p>",
         "AccessDeniedException$Message": null,
         "AccessDeniedException$Code": null,
         "AccountDetails$Email": "<p>The email of an AWS account.</p>",
         "AccountIdList$member": null,
+        "ActionTarget$ActionTargetArn": "<p>The ARN for the target action.</p>",
+        "ActionTarget$Name": "<p>The name of the action target.</p>",
+        "ActionTarget$Description": "<p>The description of the target action.</p>",
         "ArnList$member": null,
         "AwsEc2InstanceDetails$Type": "<p>The instance type of the instance. </p>",
         "AwsEc2InstanceDetails$ImageId": "<p>The Amazon Machine Image (AMI) ID of the instance.</p>",
@@ -757,23 +820,32 @@
         "ContainerDetails$Name": "<p>The name of the container related to a finding.</p>",
         "ContainerDetails$ImageId": "<p>The identifier of the image related to a finding.</p>",
         "ContainerDetails$ImageName": "<p>The name of the image related to a finding.</p>",
-        "ContainerDetails$LaunchedAt": "<p>The date/time that the container was started.</p>",
-        "CreateInsightRequest$Name": "<p>The user-defined name that identifies the insight to create.</p>",
-        "CreateInsightRequest$GroupByAttribute": "<p>The attribute by which the insight's findings are grouped. This attribute is used as a findings aggregator for the purposes of viewing and managing multiple related findings under a single operand.</p>",
+        "ContainerDetails$LaunchedAt": "<p>The date and time when the container started.</p>",
+        "CreateActionTargetRequest$Name": "<p>The name of the custom action target.</p>",
+        "CreateActionTargetRequest$Description": "<p>The description for the custom action target.</p>",
+        "CreateActionTargetRequest$Id": "<p>The ID for the custom action target.</p>",
+        "CreateActionTargetResponse$ActionTargetArn": "<p>The ARN for the custom action target.</p>",
+        "CreateInsightRequest$Name": "<p>The name of the custom insight to create.</p>",
+        "CreateInsightRequest$GroupByAttribute": "<p>The attribute used as the aggregator to group related findings for the insight.</p>",
         "CreateInsightResponse$InsightArn": "<p>The ARN of the insight created.</p>",
         "DateFilter$Start": "<p>A start date for the date filter.</p>",
         "DateFilter$End": "<p>An end date for the date filter.</p>",
+        "DeleteActionTargetRequest$ActionTargetArn": "<p>The ARN of the custom action target to delete.</p>",
+        "DeleteActionTargetResponse$ActionTargetArn": "<p>The ARN of the custom action target that was deleted.</p>",
         "DeleteInsightRequest$InsightArn": "<p>The ARN of the insight to delete.</p>",
         "DeleteInsightResponse$InsightArn": "<p>The ARN of the insight that was deleted.</p>",
-        "DisableImportFindingsForProductRequest$ProductSubscriptionArn": "<p>The ARN of a resource that represents your subscription to a supported product.</p>",
-        "EnableImportFindingsForProductRequest$ProductArn": "<p>The ARN of the product that generates findings that you want to import into Security Hub.</p>",
-        "EnableImportFindingsForProductResponse$ProductSubscriptionArn": "<p>The ARN of a resource that represents your subscription to the product that generates the findings that you want to import into Security Hub.</p>",
+        "DescribeHubRequest$HubArn": "<p>The ARN of the Hub resource to retrieve.</p>",
+        "DescribeHubResponse$HubArn": "<p>The ARN of the Hub resource retrieved.</p>",
+        "DescribeHubResponse$SubscribedAt": "<p>The date and time when Security Hub was enabled in the account.</p>",
+        "DisableImportFindingsForProductRequest$ProductSubscriptionArn": "<p>The ARN of the integrated product to disable the integration for.</p>",
+        "EnableImportFindingsForProductRequest$ProductArn": "<p>The ARN of the product to enable the integration for.</p>",
+        "EnableImportFindingsForProductResponse$ProductSubscriptionArn": "<p>The ARN of your subscription to the product to enable integrations for.</p>",
         "FieldMap$key": null,
         "FieldMap$value": null,
         "GetInsightResultsRequest$InsightArn": "<p>The ARN of the insight whose results you want to see.</p>",
         "ImportFindingsError$Id": "<p>The ID of the error made during the <code>BatchImportFindings</code> operation.</p>",
-        "ImportFindingsError$ErrorCode": "<p>The code of the error made during the <code>BatchImportFindings</code> operation. </p>",
-        "ImportFindingsError$ErrorMessage": "<p>The message of the error made during the <code>BatchImportFindings</code> operation. </p>",
+        "ImportFindingsError$ErrorCode": "<p>The code of the error made during the <code>BatchImportFindings</code> operation.</p>",
+        "ImportFindingsError$ErrorMessage": "<p>The message of the error made during the <code>BatchImportFindings</code> operation.</p>",
         "Insight$InsightArn": "<p>The ARN of a Security Hub insight.</p>",
         "Insight$Name": "<p>The name of a Security Hub insight.</p>",
         "Insight$GroupByAttribute": "<p>The attribute that the insight's findings are grouped by. This attribute is used as a findings aggregator for the purposes of viewing and managing multiple related findings under a single operand.</p>",
@@ -786,21 +858,20 @@
         "InvalidAccessException$Code": null,
         "InvalidInputException$Message": null,
         "InvalidInputException$Code": null,
-        "Invitation$InvitationId": "<p>The ID of the invitation that the Security Hub master account sent.</p>",
-        "Invitation$MemberStatus": "<p>The current relationship status between the inviter and invitee accounts.</p>",
+        "Invitation$InvitationId": "<p>The ID of the invitation sent to the member account.</p>",
+        "Invitation$MemberStatus": "<p>The current status of the association between member and master accounts.</p>",
         "IpFilter$Cidr": "<p>A finding's CIDR value.</p>",
         "KeywordFilter$Value": "<p>A value for the keyword.</p>",
         "LimitExceededException$Message": null,
         "LimitExceededException$Code": null,
         "ListInvitationsResponse$NextToken": "<p>The token that is required for pagination.</p>",
         "ListMembersResponse$NextToken": "<p>The token that is required for pagination.</p>",
-        "ListProductSubscribersRequest$ProductArn": "<p>The ARN of the product.</p>",
         "Malware$Name": "<p>The name of the malware that was observed.</p>",
         "Malware$Path": "<p>The file system path of the malware that was observed.</p>",
         "MapFilter$Key": "<p>The key of the map filter.</p>",
         "MapFilter$Value": "<p>The value for the key in the map filter.</p>",
-        "Member$Email": "<p>The email of a Security Hub member account.</p>",
-        "Member$MasterId": "<p>The AWS account ID of the Security Hub master account to this member account.</p>",
+        "Member$Email": "<p>The email address of the member account.</p>",
+        "Member$MasterId": "<p>The AWS account ID of the Security Hub master account associated with this member account.</p>",
         "Member$MemberStatus": "<p>The status of the relationship between the member account and its master account. </p>",
         "Network$Protocol": "<p>The protocol of network-related information about a finding.</p>",
         "Network$SourceIpV4": "<p>The source IPv4 address of network-related information about a finding.</p>",
@@ -818,20 +889,19 @@
         "ProcessDetails$Name": "<p>The name of the process.</p>",
         "ProcessDetails$Path": "<p>The path to the process executable.</p>",
         "ProcessDetails$LaunchedAt": "<p>The date/time that the process was launched.</p>",
-        "ProcessDetails$TerminatedAt": "<p>The date/time that the process was terminated.</p>",
+        "ProcessDetails$TerminatedAt": "<p>The date and time when the process was terminated.</p>",
         "Product$ProductArn": "<p>The ARN assigned to the product.</p>",
         "Product$ProductName": "<p>The name of the product.</p>",
         "Product$CompanyName": "<p>The name of the company that provides the product.</p>",
         "Product$Description": "<p>A description of the product.</p>",
         "Product$MarketplaceUrl": "<p>The URL for the page that contains more information about the product.</p>",
         "Product$ActivationUrl": "<p>The URL used to activate the product.</p>",
-        "Product$ProductSubscriptionResourcePolicy": "<p>The resource policy asasociated with the product.</p>",
-        "ProductSubscribersList$member": null,
+        "Product$ProductSubscriptionResourcePolicy": "<p>The resource policy associated with the product.</p>",
         "ProductSubscriptionArnList$member": null,
-        "Recommendation$Text": "<p>The recommendation of what to do about the issue described in a finding. </p>",
-        "Recommendation$Url": "<p>A URL to link to general remediation information for the finding type of a finding. </p>",
-        "RelatedFinding$ProductArn": "<p>The ARN of the solution that generated a related finding.</p>",
-        "RelatedFinding$Id": "<p>The solution-generated identifier for a related finding.</p>",
+        "Recommendation$Text": "<p>Describes the recommended steps to take to remediate an issue identified in a finding.</p>",
+        "Recommendation$Url": "<p>A URL to a page or site that contains information about how to remediate a finding.</p>",
+        "RelatedFinding$ProductArn": "<p>The ARN of the product that generated a related finding.</p>",
+        "RelatedFinding$Id": "<p>The product-generated identifier for a related finding.</p>",
         "Resource$Type": "<p>The type of the resource that details are provided for.</p>",
         "Resource$Id": "<p>The canonical identifier for the given resource type.</p>",
         "Resource$Region": "<p>The canonical AWS external Region name where this resource is located.</p>",
@@ -839,21 +909,24 @@
         "ResourceConflictException$Code": null,
         "ResourceNotFoundException$Message": null,
         "ResourceNotFoundException$Code": null,
-        "Result$ProcessingResult": "<p>The reason for why an account couldn't be processed.</p>",
-        "SortCriterion$Field": "<p>The finding attribute used for sorting findings.</p>",
+        "Result$ProcessingResult": "<p>The reason that the account wasn't be processed.</p>",
+        "SortCriterion$Field": "<p>The finding attribute used to sort findings.</p>",
         "StandardsInputParameterMap$key": null,
         "StandardsInputParameterMap$value": null,
         "StandardsSubscription$StandardsSubscriptionArn": "<p>The ARN of a resource that represents your subscription to a supported standard.</p>",
-        "StandardsSubscription$StandardsArn": "<p>The ARN of a standard.</p> <important> <p>In this release, Security Hub supports only the CIS AWS Foundations standard. </p> <p>Its ARN is arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0.</p> </important>",
+        "StandardsSubscription$StandardsArn": "<p>The ARN of a standard.</p> <p>In this release, Security Hub supports only the CIS AWS Foundations standard, which uses the following ARN: <code>arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0.</code> </p>",
         "StandardsSubscriptionArns$member": null,
-        "StandardsSubscriptionRequest$StandardsArn": "<p>The ARN of the standard that you want to enable.</p> <important> <p>In this release, Security Hub only supports the CIS AWS Foundations standard. </p> <p>Its ARN is arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0.</p> </important>",
+        "StandardsSubscriptionRequest$StandardsArn": "<p>The ARN of the standard that you want to enable.</p> <important> <p>In this release, Security Hub only supports the CIS AWS Foundations standard. </p> <p>Its ARN is <code>arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0</code>.</p> </important>",
         "StringFilter$Value": "<p>The string filter value.</p>",
         "StringList$member": null,
         "ThreatIntelIndicator$Value": "<p>The value of a threat intel indicator.</p>",
-        "ThreatIntelIndicator$LastObservedAt": "<p>The date/time of the last observation of a threat intel indicator.</p>",
-        "ThreatIntelIndicator$Source": "<p>The source of the threat intel.</p>",
-        "ThreatIntelIndicator$SourceUrl": "<p>The URL for more details from the source of the threat intel.</p>",
+        "ThreatIntelIndicator$LastObservedAt": "<p>The date and time when the most recent instance of a threat intel indicator was observed.</p>",
+        "ThreatIntelIndicator$Source": "<p>The source of the threat intel indicator.</p>",
+        "ThreatIntelIndicator$SourceUrl": "<p>The URL to the page or site where you can get more information about the threat intel indicator.</p>",
         "TypeList$member": null,
+        "UpdateActionTargetRequest$ActionTargetArn": "<p>The ARN of the custom action target to update.</p>",
+        "UpdateActionTargetRequest$Name": "<p>The updated name of the custom action target.</p>",
+        "UpdateActionTargetRequest$Description": "<p>The updated description for the custom action target.</p>",
         "UpdateInsightRequest$InsightArn": "<p>The ARN of the insight that you want to update.</p>",
         "UpdateInsightRequest$Name": "<p>The updated name for the insight.</p>",
         "UpdateInsightRequest$GroupByAttribute": "<p>The updated <code>GroupBy</code> attribute that defines this insight.</p>"
@@ -883,7 +956,7 @@
         "AwsSecurityFindingFilters$SeverityProduct": "<p>The native severity as defined by the security-findings provider's solution that generated the finding.</p>",
         "AwsSecurityFindingFilters$SeverityNormalized": "<p>The normalized severity of a finding.</p>",
         "AwsSecurityFindingFilters$Confidence": "<p>A finding's confidence. Confidence is defined as the likelihood that a finding accurately identifies the behavior or issue that it was intended to identify. Confidence is scored on a 0-100 basis using a ratio scale, where 0 means zero percent confidence and 100 means 100 percent confidence.</p>",
-        "AwsSecurityFindingFilters$Criticality": "<p>The level of importance assigned to the resources associated with the finding. A score of 0 means the underlying resources have no criticality, and a score of 100 is reserved for the most critical resources.</p>",
+        "AwsSecurityFindingFilters$Criticality": "<p>The level of importance assigned to the resources associated with the finding. A score of 0 means that the underlying resources have no criticality, and a score of 100 is reserved for the most critical resources.</p>",
         "AwsSecurityFindingFilters$NetworkSourcePort": "<p>The source port of network-related information about a finding.</p>",
         "AwsSecurityFindingFilters$NetworkDestinationPort": "<p>The destination port of network-related information about a finding.</p>",
         "AwsSecurityFindingFilters$ProcessPid": "<p>The process ID.</p>",
@@ -908,12 +981,6 @@
         "ProductsList$member": null
       }
     },
-    "ProductSubscribersList": {
-      "base": null,
-      "refs": {
-        "ListProductSubscribersResponse$ProductSubscribers": "<p>A list of account IDs that are subscribed to the product.</p>"
-      }
-    },
     "ProductSubscriptionArnList": {
       "base": null,
       "refs": {
@@ -923,13 +990,13 @@
     "ProductsList": {
       "base": null,
       "refs": {
-        "DescribeProductsResponse$Products": "<p>A list of products.</p>"
+        "DescribeProductsResponse$Products": "<p>A list of products, including details for each product.</p>"
       }
     },
     "Recommendation": {
       "base": "<p>A recommendation on how to remediate the issue identified in a finding.</p>",
       "refs": {
-        "Remediation$Recommendation": "<p>A recommendation on how to remediate the issue identified within a finding.</p>"
+        "Remediation$Recommendation": "<p>A recommendation on the steps to take to remediate the issue identified by a finding.</p>"
       }
     },
     "RecordState": {
@@ -940,7 +1007,7 @@
       }
     },
     "RelatedFinding": {
-      "base": "<p>A related finding's details.</p>",
+      "base": "<p>Details about a related finding.</p>",
       "refs": {
         "RelatedFindingList$member": null
       }
@@ -952,15 +1019,23 @@
       }
     },
     "Remediation": {
-      "base": "<p>The remediation options for a finding. </p>",
+      "base": "<p>Details about the remediation steps for a finding.</p>",
       "refs": {
-        "AwsSecurityFinding$Remediation": "<p>An data type that describes the remediation options for a finding.</p>"
+        "AwsSecurityFinding$Remediation": "<p>A data type that describes the remediation options for a finding.</p>"
       }
     },
     "Resource": {
-      "base": "<p>A resource data type that describes a resource that the finding refers to.</p>",
+      "base": "<p>A resource related to a finding.</p>",
       "refs": {
         "ResourceList$member": null
+      }
+    },
+    "ResourceArn": {
+      "base": null,
+      "refs": {
+        "ListTagsForResourceRequest$ResourceArn": "<p>The ARN of the resource to retrieve tags for.</p>",
+        "TagResourceRequest$ResourceArn": "<p>The ARN of the resource to apply the tags to.</p>",
+        "UntagResourceRequest$ResourceArn": "<p>The ARN of the resource to remove the tags from.</p>"
       }
     },
     "ResourceConflictException": {
@@ -969,9 +1044,9 @@
       }
     },
     "ResourceDetails": {
-      "base": "<p>Additional details about the resource.</p>",
+      "base": "<p>Additional details about a resource related to a finding.</p>",
       "refs": {
-        "Resource$Details": "<p>Additional details about the resource.</p>"
+        "Resource$Details": "<p>Additional details about the resource related to a finding.</p>"
       }
     },
     "ResourceList": {
@@ -986,7 +1061,7 @@
       }
     },
     "Result": {
-      "base": "<p>The account details that couldn't be processed.</p>",
+      "base": "<p>Details about the account that wasn't processed.</p>",
       "refs": {
         "ResultList$member": null
       }
@@ -994,16 +1069,16 @@
     "ResultList": {
       "base": null,
       "refs": {
-        "CreateMembersResponse$UnprocessedAccounts": "<p>A list of account ID and email address pairs of the AWS accounts that couldn't be processed.</p>",
-        "DeclineInvitationsResponse$UnprocessedAccounts": "<p>A list of account ID and email address pairs of the AWS accounts that couldn't be processed. </p>",
-        "DeleteInvitationsResponse$UnprocessedAccounts": "<p>A list of account ID and email address pairs of the AWS accounts that couldn't be processed. </p>",
-        "DeleteMembersResponse$UnprocessedAccounts": "<p>A list of account ID and email address pairs of the AWS accounts that couldn't be processed. </p>",
+        "CreateMembersResponse$UnprocessedAccounts": "<p>A list of account ID and email address pairs of the AWS accounts that weren't processed.</p>",
+        "DeclineInvitationsResponse$UnprocessedAccounts": "<p>A list of account ID and email address pairs of the AWS accounts that weren't processed.</p>",
+        "DeleteInvitationsResponse$UnprocessedAccounts": "<p>A list of account ID and email address pairs of the AWS accounts that invitations weren't deleted for.</p>",
+        "DeleteMembersResponse$UnprocessedAccounts": "<p>A list of account ID and email address pairs of the AWS accounts that weren't deleted.</p>",
         "GetMembersResponse$UnprocessedAccounts": "<p>A list of account ID and email address pairs of the AWS accounts that couldn't be processed.</p>",
         "InviteMembersResponse$UnprocessedAccounts": "<p>A list of account ID and email address pairs of the AWS accounts that couldn't be processed. </p>"
       }
     },
     "Severity": {
-      "base": "<p>A finding's severity.</p>",
+      "base": "<p>The severity of the finding.</p>",
       "refs": {
         "AwsSecurityFinding$Severity": "<p>A finding's severity.</p>"
       }
@@ -1011,11 +1086,11 @@
     "SortCriteria": {
       "base": null,
       "refs": {
-        "GetFindingsRequest$SortCriteria": "<p>A collection of attributes used for sorting findings.</p>"
+        "GetFindingsRequest$SortCriteria": "<p>Findings attributes used to sort the list of findings returned.</p>"
       }
     },
     "SortCriterion": {
-      "base": "<p>A collection of attributes used for sorting findings.</p>",
+      "base": "<p>A collection of finding attributes used to sort findings.</p>",
       "refs": {
         "SortCriteria$member": null
       }
@@ -1023,20 +1098,20 @@
     "SortOrder": {
       "base": null,
       "refs": {
-        "SortCriterion$SortOrder": "<p>The order used for sorting findings.</p>"
+        "SortCriterion$SortOrder": "<p>The order used to sort findings.</p>"
       }
     },
     "StandardsInputParameterMap": {
       "base": null,
       "refs": {
-        "StandardsSubscription$StandardsInput": "<p/>",
-        "StandardsSubscriptionRequest$StandardsInput": "<p/>"
+        "StandardsSubscription$StandardsInput": "<p>A key-value pair of input for the standard.</p>",
+        "StandardsSubscriptionRequest$StandardsInput": "<p>A key-value pair of input for the standard.</p>"
       }
     },
     "StandardsStatus": {
       "base": null,
       "refs": {
-        "StandardsSubscription$StandardsStatus": "<p>The standard's status.</p>"
+        "StandardsSubscription$StandardsStatus": "<p>The status of the standards subscription.</p>"
       }
     },
     "StandardsSubscription": {
@@ -1048,8 +1123,8 @@
     "StandardsSubscriptionArns": {
       "base": null,
       "refs": {
-        "BatchDisableStandardsRequest$StandardsSubscriptionArns": "<p>The ARNs of the standards subscriptions that you want to disable.</p>",
-        "GetEnabledStandardsRequest$StandardsSubscriptionArns": "<p>The list of standards subscription ARNS that you want to list and describe.</p>"
+        "BatchDisableStandardsRequest$StandardsSubscriptionArns": "<p>The ARNs of the standards subscriptions to disable.</p>",
+        "GetEnabledStandardsRequest$StandardsSubscriptionArns": "<p>A list of the standards subscription ARNs for the standards to retrieve.</p>"
       }
     },
     "StandardsSubscriptionRequest": {
@@ -1061,7 +1136,7 @@
     "StandardsSubscriptionRequests": {
       "base": null,
       "refs": {
-        "BatchEnableStandardsRequest$StandardsSubscriptionRequests": "<p>The list of standards that you want to enable.</p> <important> <p>In this release, Security Hub supports only the CIS AWS Foundations standard.</p> <p>Its ARN is <code>arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0</code>.</p> </important>"
+        "BatchEnableStandardsRequest$StandardsSubscriptionRequests": "<p>The list of standards compliance checks to enable.</p> <important> <p>In this release, Security Hub supports only the CIS AWS Foundations standard.</p> <p>The ARN for the standard is <code>arn:aws:securityhub:::ruleset/cis-aws-foundations-benchmark/v/1.2.0</code>.</p> </important>"
       }
     },
     "StandardsSubscriptions": {
@@ -1069,7 +1144,7 @@
       "refs": {
         "BatchDisableStandardsResponse$StandardsSubscriptions": "<p>The details of the standards subscriptions that were disabled.</p>",
         "BatchEnableStandardsResponse$StandardsSubscriptions": "<p>The details of the standards subscriptions that were enabled.</p>",
-        "GetEnabledStandardsResponse$StandardsSubscriptions": "<p>The standards subscription details returned by the operation.</p>"
+        "GetEnabledStandardsResponse$StandardsSubscriptions": "<p>A list of <code>StandardsSubscriptions</code> objects that include information about the enabled standards.</p>"
       }
     },
     "StringFilter": {
@@ -1133,7 +1208,7 @@
         "AwsSecurityFindingFilters$ResourceContainerImageId": "<p>The identifier of the image related to a finding.</p>",
         "AwsSecurityFindingFilters$ResourceContainerImageName": "<p>The name of the image related to a finding.</p>",
         "AwsSecurityFindingFilters$ComplianceStatus": "<p>Exclusive to findings that are generated as the result of a check run against a specific rule in a supported standard (for example, CIS AWS Foundations). Contains compliance-related finding details.</p>",
-        "AwsSecurityFindingFilters$VerificationState": "<p>The veracity of a finding. </p>",
+        "AwsSecurityFindingFilters$VerificationState": "<p>The veracity of a finding.</p>",
         "AwsSecurityFindingFilters$WorkflowState": "<p>The workflow state of a finding.</p>",
         "AwsSecurityFindingFilters$RecordState": "<p>The updated record state for the finding.</p>",
         "AwsSecurityFindingFilters$RelatedFindingsProductArn": "<p>The ARN of the solution that generated a related finding.</p>",
@@ -1149,8 +1224,45 @@
         "AwsEc2InstanceDetails$IpV6Addresses": "<p>The IPv6 addresses associated with the instance.</p>"
       }
     },
+    "TagKey": {
+      "base": null,
+      "refs": {
+        "TagKeyList$member": null,
+        "TagMap$key": null
+      }
+    },
+    "TagKeyList": {
+      "base": null,
+      "refs": {
+        "UntagResourceRequest$TagKeys": "<p>The tag keys associated with the tags to remove from the resource.</p>"
+      }
+    },
+    "TagMap": {
+      "base": null,
+      "refs": {
+        "EnableSecurityHubRequest$Tags": "<p>The tags to add to the Hub resource when you enable Security Hub.</p>",
+        "ListTagsForResourceResponse$Tags": "<p>The tags associated with a resource.</p>",
+        "TagResourceRequest$Tags": "<p>The tags to add to the resource.</p>"
+      }
+    },
+    "TagResourceRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "TagResourceResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "TagValue": {
+      "base": null,
+      "refs": {
+        "TagMap$value": null
+      }
+    },
     "ThreatIntelIndicator": {
-      "base": "<p>Threat intel details related to a finding.</p>",
+      "base": "<p>Details about the threat intel related to a finding.</p>",
       "refs": {
         "ThreatIntelIndicatorList$member": null
       }
@@ -1177,14 +1289,34 @@
       "base": null,
       "refs": {
         "Invitation$InvitedAt": "<p>The timestamp of when the invitation was sent.</p>",
-        "Member$InvitedAt": "<p>The timestamp of when the member account was invited to Security Hub.</p>",
-        "Member$UpdatedAt": "<p>The timestamp of when this member account was updated.</p>"
+        "Member$InvitedAt": "<p>A timestamp for the date and time when the invitation was sent to the member account.</p>",
+        "Member$UpdatedAt": "<p>The timestamp for the date and time when the member account was updated.</p>"
       }
     },
     "TypeList": {
       "base": null,
       "refs": {
         "AwsSecurityFinding$Types": "<p>One or more finding types in the format of <code>namespace/category/classifier</code> that classify a finding.</p> <p>Valid namespace values are: Software and Configuration Checks | TTPs | Effects | Unusual Behaviors | Sensitive Data Identifications</p>"
+      }
+    },
+    "UntagResourceRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UntagResourceResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateActionTargetRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateActionTargetResponse": {
+      "base": null,
+      "refs": {
       }
     },
     "UpdateFindingsRequest": {

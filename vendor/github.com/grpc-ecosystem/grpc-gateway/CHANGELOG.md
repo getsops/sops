@@ -1,5 +1,73 @@
 # Change Log
 
+## [v1.9.4](https://github.com/grpc-ecosystem/grpc-gateway/tree/v1.9.4) (2019-07-09)
+[Full Changelog](https://github.com/grpc-ecosystem/grpc-gateway/compare/v1.9.3...v1.9.4)
+
+**Closed issues:**
+
+- Read the Http Post Body  [\#921](https://github.com/grpc-ecosystem/grpc-gateway/issues/921)
+- Swagger document generation, required field is invalid [\#665](https://github.com/grpc-ecosystem/grpc-gateway/issues/665)
+
+**Merged pull requests:**
+
+- Fix query.go to avoid invalid protobuf assumptions [\#967](https://github.com/grpc-ecosystem/grpc-gateway/pull/967) ([dsnet](https://github.com/dsnet))
+- doc\(readme\): fix typo [\#965](https://github.com/grpc-ecosystem/grpc-gateway/pull/965) ([franxois](https://github.com/franxois))
+- Added comments to base\_path to explain behavior [\#919](https://github.com/grpc-ecosystem/grpc-gateway/pull/919) ([nu11ptr](https://github.com/nu11ptr))
+
+## [v1.9.3](https://github.com/grpc-ecosystem/grpc-gateway/tree/v1.9.3) (2019-06-28)
+[Full Changelog](https://github.com/grpc-ecosystem/grpc-gateway/compare/v1.9.2...v1.9.3)
+
+**Fixed bugs:**
+
+- EOF when calling Send for client streams [\#961](https://github.com/grpc-ecosystem/grpc-gateway/issues/961)
+
+**Closed issues:**
+
+- Please make a new release! [\#963](https://github.com/grpc-ecosystem/grpc-gateway/issues/963)
+- application/x-www-form-urlencoded support. [\#960](https://github.com/grpc-ecosystem/grpc-gateway/issues/960)
+- Bazel files are out of date [\#955](https://github.com/grpc-ecosystem/grpc-gateway/issues/955)
+- Configurable AllowUnknownFields in jsonpb? [\#448](https://github.com/grpc-ecosystem/grpc-gateway/issues/448)
+
+**Merged pull requests:**
+
+- Generate changelog for 1.9.3 [\#964](https://github.com/grpc-ecosystem/grpc-gateway/pull/964) ([johanbrandhorst](https://github.com/johanbrandhorst))
+- EOF on send [\#962](https://github.com/grpc-ecosystem/grpc-gateway/pull/962) ([gustavocovas](https://github.com/gustavocovas))
+- Add new option for the decoder - to disallow unknown fields [\#959](https://github.com/grpc-ecosystem/grpc-gateway/pull/959) ([vsaveliev](https://github.com/vsaveliev))
+- Update to rules\_go and buildtools [\#956](https://github.com/grpc-ecosystem/grpc-gateway/pull/956) ([drigz](https://github.com/drigz))
+- docs/customizingyourgateway: add ?pretty example [\#954](https://github.com/grpc-ecosystem/grpc-gateway/pull/954) ([srenatus](https://github.com/srenatus))
+- protoc\_gen\_swagger: Add attr for allow\_merge [\#944](https://github.com/grpc-ecosystem/grpc-gateway/pull/944) ([prestonvanloon](https://github.com/prestonvanloon))
+
+## [v1.9.2](https://github.com/grpc-ecosystem/grpc-gateway/tree/v1.9.2) (2019-06-17)
+[Full Changelog](https://github.com/grpc-ecosystem/grpc-gateway/compare/v1.9.1...v1.9.2)
+
+**Fixed bugs:**
+
+- 404s using colons in the middle of the last path segment [\#224](https://github.com/grpc-ecosystem/grpc-gateway/issues/224)
+
+**Merged pull requests:**
+
+- Generate changelog for 1.9.2 [\#953](https://github.com/grpc-ecosystem/grpc-gateway/pull/953) ([johanbrandhorst](https://github.com/johanbrandhorst))
+- Improve README file [\#950](https://github.com/grpc-ecosystem/grpc-gateway/pull/950) ([charleswhchan](https://github.com/charleswhchan))
+- Support colon in final path segment, last match wins behavior \(behind flags\) [\#949](https://github.com/grpc-ecosystem/grpc-gateway/pull/949) ([jfhamlin](https://github.com/jfhamlin))
+
+## [v1.9.1](https://github.com/grpc-ecosystem/grpc-gateway/tree/v1.9.1) (2019-06-13)
+[Full Changelog](https://github.com/grpc-ecosystem/grpc-gateway/compare/v1.9.0...v1.9.1)
+
+**Closed issues:**
+
+- grpc: received message larger than max [\#943](https://github.com/grpc-ecosystem/grpc-gateway/issues/943)
+- json 1.1 api support for grpc-ecosystem to use queryparams with filter [\#938](https://github.com/grpc-ecosystem/grpc-gateway/issues/938)
+- i import a new gateway.Endpoint without recompile [\#937](https://github.com/grpc-ecosystem/grpc-gateway/issues/937)
+- all SubConns are in TransientFailure [\#936](https://github.com/grpc-ecosystem/grpc-gateway/issues/936)
+- Merging swagger specs fails to use rpc comments \(again\) [\#923](https://github.com/grpc-ecosystem/grpc-gateway/issues/923)
+
+**Merged pull requests:**
+
+- Generate changelog for 1.9.1 [\#946](https://github.com/grpc-ecosystem/grpc-gateway/pull/946) ([johanbrandhorst](https://github.com/johanbrandhorst))
+- Revert "protoc-gen-swagger: check typeIndex when typeName is Method" [\#945](https://github.com/grpc-ecosystem/grpc-gateway/pull/945) ([johanbrandhorst](https://github.com/johanbrandhorst))
+- fix query params not populate if method is post [\#939](https://github.com/grpc-ecosystem/grpc-gateway/pull/939) ([mingqing](https://github.com/mingqing))
+- Fix make test on MacOS [\#935](https://github.com/grpc-ecosystem/grpc-gateway/pull/935) ([emilaasa](https://github.com/emilaasa))
+
 ## [v1.9.0](https://github.com/grpc-ecosystem/grpc-gateway/tree/v1.9.0) (2019-05-14)
 [Full Changelog](https://github.com/grpc-ecosystem/grpc-gateway/compare/v1.8.6...v1.9.0)
 
@@ -9,6 +77,7 @@
 
 **Merged pull requests:**
 
+- Generate changelog for 1.9.0 [\#933](https://github.com/grpc-ecosystem/grpc-gateway/pull/933) ([johanbrandhorst](https://github.com/johanbrandhorst))
 - use error value for bad URI so custom error handler could treat it special [\#932](https://github.com/grpc-ecosystem/grpc-gateway/pull/932) ([jhump](https://github.com/jhump))
 - newline between JSON messages [\#931](https://github.com/grpc-ecosystem/grpc-gateway/pull/931) ([jhump](https://github.com/jhump))
 - ability to customize stream errors [\#930](https://github.com/grpc-ecosystem/grpc-gateway/pull/930) ([jhump](https://github.com/jhump))
@@ -201,10 +270,6 @@
 
 ## [v1.6.3](https://github.com/grpc-ecosystem/grpc-gateway/tree/v1.6.3) (2018-12-21)
 [Full Changelog](https://github.com/grpc-ecosystem/grpc-gateway/compare/v1.6.2...v1.6.3)
-
-**Fixed bugs:**
-
-- Comments of rpc method gets copied if multiple services are present in a proto file. [\#746](https://github.com/grpc-ecosystem/grpc-gateway/issues/746)
 
 **Closed issues:**
 

@@ -234,6 +234,14 @@ type DocDBAPI interface {
 	RestoreDBClusterToPointInTimeWithContext(aws.Context, *docdb.RestoreDBClusterToPointInTimeInput, ...request.Option) (*docdb.RestoreDBClusterToPointInTimeOutput, error)
 	RestoreDBClusterToPointInTimeRequest(*docdb.RestoreDBClusterToPointInTimeInput) (*request.Request, *docdb.RestoreDBClusterToPointInTimeOutput)
 
+	StartDBCluster(*docdb.StartDBClusterInput) (*docdb.StartDBClusterOutput, error)
+	StartDBClusterWithContext(aws.Context, *docdb.StartDBClusterInput, ...request.Option) (*docdb.StartDBClusterOutput, error)
+	StartDBClusterRequest(*docdb.StartDBClusterInput) (*request.Request, *docdb.StartDBClusterOutput)
+
+	StopDBCluster(*docdb.StopDBClusterInput) (*docdb.StopDBClusterOutput, error)
+	StopDBClusterWithContext(aws.Context, *docdb.StopDBClusterInput, ...request.Option) (*docdb.StopDBClusterOutput, error)
+	StopDBClusterRequest(*docdb.StopDBClusterInput) (*request.Request, *docdb.StopDBClusterOutput)
+
 	WaitUntilDBInstanceAvailable(*docdb.DescribeDBInstancesInput) error
 	WaitUntilDBInstanceAvailableWithContext(aws.Context, *docdb.DescribeDBInstancesInput, ...request.WaiterOption) error
 

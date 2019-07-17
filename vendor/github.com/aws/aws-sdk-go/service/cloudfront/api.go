@@ -13,7 +13,7 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/restxml"
 )
 
-const opCreateCloudFrontOriginAccessIdentity = "CreateCloudFrontOriginAccessIdentity2018_11_05"
+const opCreateCloudFrontOriginAccessIdentity = "CreateCloudFrontOriginAccessIdentity2019_03_26"
 
 // CreateCloudFrontOriginAccessIdentityRequest generates a "aws/request.Request" representing the
 // client's request for the CreateCloudFrontOriginAccessIdentity operation. The "output" return
@@ -38,12 +38,12 @@ const opCreateCloudFrontOriginAccessIdentity = "CreateCloudFrontOriginAccessIden
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/CreateCloudFrontOriginAccessIdentity
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/CreateCloudFrontOriginAccessIdentity
 func (c *CloudFront) CreateCloudFrontOriginAccessIdentityRequest(input *CreateCloudFrontOriginAccessIdentityInput) (req *request.Request, output *CreateCloudFrontOriginAccessIdentityOutput) {
 	op := &request.Operation{
 		Name:       opCreateCloudFrontOriginAccessIdentity,
 		HTTPMethod: "POST",
-		HTTPPath:   "/2018-11-05/origin-access-identity/cloudfront",
+		HTTPPath:   "/2019-03-26/origin-access-identity/cloudfront",
 	}
 
 	if input == nil {
@@ -61,7 +61,7 @@ func (c *CloudFront) CreateCloudFrontOriginAccessIdentityRequest(input *CreateCl
 // origin, you can use an origin access identity to require users to access
 // your content using a CloudFront URL instead of the Amazon S3 URL. For more
 // information about how to use origin access identities, see Serving Private
-// Content through CloudFront (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html)
+// Content through CloudFront (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html)
 // in the Amazon CloudFront Developer Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -92,7 +92,7 @@ func (c *CloudFront) CreateCloudFrontOriginAccessIdentityRequest(input *CreateCl
 //   * ErrCodeInconsistentQuantities "InconsistentQuantities"
 //   The value of Quantity and the size of Items don't match.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/CreateCloudFrontOriginAccessIdentity
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/CreateCloudFrontOriginAccessIdentity
 func (c *CloudFront) CreateCloudFrontOriginAccessIdentity(input *CreateCloudFrontOriginAccessIdentityInput) (*CreateCloudFrontOriginAccessIdentityOutput, error) {
 	req, out := c.CreateCloudFrontOriginAccessIdentityRequest(input)
 	return out, req.Send()
@@ -114,7 +114,7 @@ func (c *CloudFront) CreateCloudFrontOriginAccessIdentityWithContext(ctx aws.Con
 	return out, req.Send()
 }
 
-const opCreateDistribution = "CreateDistribution2018_11_05"
+const opCreateDistribution = "CreateDistribution2019_03_26"
 
 // CreateDistributionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDistribution operation. The "output" return
@@ -139,12 +139,12 @@ const opCreateDistribution = "CreateDistribution2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/CreateDistribution
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/CreateDistribution
 func (c *CloudFront) CreateDistributionRequest(input *CreateDistributionInput) (req *request.Request, output *CreateDistributionOutput) {
 	op := &request.Operation{
 		Name:       opCreateDistribution,
 		HTTPMethod: "POST",
-		HTTPPath:   "/2018-11-05/distribution",
+		HTTPPath:   "/2019-03-26/distribution",
 	}
 
 	if input == nil {
@@ -164,15 +164,13 @@ func (c *CloudFront) CreateDistributionRequest(input *CreateDistributionInput) (
 // API version/distribution/distribution ID resource.
 //
 // When you update a distribution, there are more required fields than when
-// you create a distribution. When you update your distribution by using UpdateDistribution,
+// you create a distribution. When you update your distribution by using UpdateDistribution
+// (https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_UpdateDistribution.html),
 // follow the steps included in the documentation to get the current configuration
 // and then make your updates. This helps to make sure that you include all
 // of the required fields. To view a summary, see Required Fields for Create
-// Distribution and Update Distribution (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-overview-required-fields.html)
+// Distribution and Update Distribution (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-overview-required-fields.html)
 // in the Amazon CloudFront Developer Guide.
-//
-// If you are using Adobe Flash Media Server's RTMP protocol, you set up a different
-// kind of CloudFront distribution. For more information, see CreateStreamingDistribution.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -183,6 +181,7 @@ func (c *CloudFront) CreateDistributionRequest(input *CreateDistributionInput) (
 //
 // Returned Error Codes:
 //   * ErrCodeCNAMEAlreadyExists "CNAMEAlreadyExists"
+//   The CNAME specified is already defined for CloudFront.
 //
 //   * ErrCodeDistributionAlreadyExists "DistributionAlreadyExists"
 //   The caller reference you attempted to create the distribution with is associated
@@ -205,8 +204,10 @@ func (c *CloudFront) CreateDistributionRequest(input *CreateDistributionInput) (
 //   One or more of your trusted signers don't exist.
 //
 //   * ErrCodeInvalidViewerCertificate "InvalidViewerCertificate"
+//   A viewer certificate specified in the response body is not valid.
 //
 //   * ErrCodeInvalidMinimumProtocolVersion "InvalidMinimumProtocolVersion"
+//   The minimum protocol version specified is not valid.
 //
 //   * ErrCodeMissingBody "MissingBody"
 //   This operation requires a body. Ensure that the body is present and the Content-Type
@@ -227,8 +228,10 @@ func (c *CloudFront) CreateDistributionRequest(input *CreateDistributionInput) (
 //   a slash (/).
 //
 //   * ErrCodeInvalidErrorCode "InvalidErrorCode"
+//   An invalid error code was specified.
 //
 //   * ErrCodeInvalidResponseCode "InvalidResponseCode"
+//   A response code specified in the response body is not valid.
 //
 //   * ErrCodeInvalidArgument "InvalidArgument"
 //   The argument is invalid.
@@ -262,8 +265,10 @@ func (c *CloudFront) CreateDistributionRequest(input *CreateDistributionInput) (
 //   when expected.
 //
 //   * ErrCodeTooManyHeadersInForwardedValues "TooManyHeadersInForwardedValues"
+//   Your request contains too many headers in forwarded values.
 //
 //   * ErrCodeInvalidHeadersForS3Origin "InvalidHeadersForS3Origin"
+//   The headers specified are not valid for an Amazon S3 origin.
 //
 //   * ErrCodeInconsistentQuantities "InconsistentQuantities"
 //   The value of Quantity and the size of Items don't match.
@@ -272,22 +277,29 @@ func (c *CloudFront) CreateDistributionRequest(input *CreateDistributionInput) (
 //   You cannot create anymore custom SSL/TLS certificates.
 //
 //   * ErrCodeInvalidLocationCode "InvalidLocationCode"
+//   The location code specified is not valid.
 //
 //   * ErrCodeInvalidGeoRestrictionParameter "InvalidGeoRestrictionParameter"
+//   The specified geo restriction parameter is not valid.
 //
 //   * ErrCodeInvalidProtocolSettings "InvalidProtocolSettings"
 //   You cannot specify SSLv3 as the minimum protocol version if you only want
 //   to support only clients that support Server Name Indication (SNI).
 //
 //   * ErrCodeInvalidTTLOrder "InvalidTTLOrder"
+//   TTL order specified in the response body is not valid.
 //
 //   * ErrCodeInvalidWebACLId "InvalidWebACLId"
+//   A web ACL id specified in the response body is not valid.
 //
 //   * ErrCodeTooManyOriginCustomHeaders "TooManyOriginCustomHeaders"
+//   Your request contains too many origin custom headers.
 //
 //   * ErrCodeTooManyQueryStringParameters "TooManyQueryStringParameters"
+//   Your request contains too many query string parameters.
 //
 //   * ErrCodeInvalidQueryStringParameters "InvalidQueryStringParameters"
+//   Query string parameters specified in the response body are not valid.
 //
 //   * ErrCodeTooManyDistributionsWithLambdaAssociations "TooManyDistributionsWithLambdaAssociations"
 //   Processing your request would cause the maximum number of distributions with
@@ -301,8 +313,10 @@ func (c *CloudFront) CreateDistributionRequest(input *CreateDistributionInput) (
 //   The specified Lambda function association is invalid.
 //
 //   * ErrCodeInvalidOriginReadTimeout "InvalidOriginReadTimeout"
+//   The read timeout specified for the origin is not valid.
 //
 //   * ErrCodeInvalidOriginKeepaliveTimeout "InvalidOriginKeepaliveTimeout"
+//   The keep alive timeout specified for the origin is not valid.
 //
 //   * ErrCodeNoSuchFieldLevelEncryptionConfig "NoSuchFieldLevelEncryptionConfig"
 //   The specified configuration for field-level encryption doesn't exist.
@@ -315,7 +329,7 @@ func (c *CloudFront) CreateDistributionRequest(input *CreateDistributionInput) (
 //   The maximum number of distributions have been associated with the specified
 //   configuration for field-level encryption.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/CreateDistribution
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/CreateDistribution
 func (c *CloudFront) CreateDistribution(input *CreateDistributionInput) (*CreateDistributionOutput, error) {
 	req, out := c.CreateDistributionRequest(input)
 	return out, req.Send()
@@ -337,7 +351,7 @@ func (c *CloudFront) CreateDistributionWithContext(ctx aws.Context, input *Creat
 	return out, req.Send()
 }
 
-const opCreateDistributionWithTags = "CreateDistributionWithTags2018_11_05"
+const opCreateDistributionWithTags = "CreateDistributionWithTags2019_03_26"
 
 // CreateDistributionWithTagsRequest generates a "aws/request.Request" representing the
 // client's request for the CreateDistributionWithTags operation. The "output" return
@@ -362,12 +376,12 @@ const opCreateDistributionWithTags = "CreateDistributionWithTags2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/CreateDistributionWithTags
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/CreateDistributionWithTags
 func (c *CloudFront) CreateDistributionWithTagsRequest(input *CreateDistributionWithTagsInput) (req *request.Request, output *CreateDistributionWithTagsOutput) {
 	op := &request.Operation{
 		Name:       opCreateDistributionWithTags,
 		HTTPMethod: "POST",
-		HTTPPath:   "/2018-11-05/distribution?WithTags",
+		HTTPPath:   "/2019-03-26/distribution?WithTags",
 	}
 
 	if input == nil {
@@ -392,6 +406,7 @@ func (c *CloudFront) CreateDistributionWithTagsRequest(input *CreateDistribution
 //
 // Returned Error Codes:
 //   * ErrCodeCNAMEAlreadyExists "CNAMEAlreadyExists"
+//   The CNAME specified is already defined for CloudFront.
 //
 //   * ErrCodeDistributionAlreadyExists "DistributionAlreadyExists"
 //   The caller reference you attempted to create the distribution with is associated
@@ -414,8 +429,10 @@ func (c *CloudFront) CreateDistributionWithTagsRequest(input *CreateDistribution
 //   One or more of your trusted signers don't exist.
 //
 //   * ErrCodeInvalidViewerCertificate "InvalidViewerCertificate"
+//   A viewer certificate specified in the response body is not valid.
 //
 //   * ErrCodeInvalidMinimumProtocolVersion "InvalidMinimumProtocolVersion"
+//   The minimum protocol version specified is not valid.
 //
 //   * ErrCodeMissingBody "MissingBody"
 //   This operation requires a body. Ensure that the body is present and the Content-Type
@@ -436,8 +453,10 @@ func (c *CloudFront) CreateDistributionWithTagsRequest(input *CreateDistribution
 //   a slash (/).
 //
 //   * ErrCodeInvalidErrorCode "InvalidErrorCode"
+//   An invalid error code was specified.
 //
 //   * ErrCodeInvalidResponseCode "InvalidResponseCode"
+//   A response code specified in the response body is not valid.
 //
 //   * ErrCodeInvalidArgument "InvalidArgument"
 //   The argument is invalid.
@@ -471,8 +490,10 @@ func (c *CloudFront) CreateDistributionWithTagsRequest(input *CreateDistribution
 //   when expected.
 //
 //   * ErrCodeTooManyHeadersInForwardedValues "TooManyHeadersInForwardedValues"
+//   Your request contains too many headers in forwarded values.
 //
 //   * ErrCodeInvalidHeadersForS3Origin "InvalidHeadersForS3Origin"
+//   The headers specified are not valid for an Amazon S3 origin.
 //
 //   * ErrCodeInconsistentQuantities "InconsistentQuantities"
 //   The value of Quantity and the size of Items don't match.
@@ -481,24 +502,32 @@ func (c *CloudFront) CreateDistributionWithTagsRequest(input *CreateDistribution
 //   You cannot create anymore custom SSL/TLS certificates.
 //
 //   * ErrCodeInvalidLocationCode "InvalidLocationCode"
+//   The location code specified is not valid.
 //
 //   * ErrCodeInvalidGeoRestrictionParameter "InvalidGeoRestrictionParameter"
+//   The specified geo restriction parameter is not valid.
 //
 //   * ErrCodeInvalidProtocolSettings "InvalidProtocolSettings"
 //   You cannot specify SSLv3 as the minimum protocol version if you only want
 //   to support only clients that support Server Name Indication (SNI).
 //
 //   * ErrCodeInvalidTTLOrder "InvalidTTLOrder"
+//   TTL order specified in the response body is not valid.
 //
 //   * ErrCodeInvalidWebACLId "InvalidWebACLId"
+//   A web ACL id specified in the response body is not valid.
 //
 //   * ErrCodeTooManyOriginCustomHeaders "TooManyOriginCustomHeaders"
+//   Your request contains too many origin custom headers.
 //
 //   * ErrCodeInvalidTagging "InvalidTagging"
+//   Tagging specified in the response body is not valid.
 //
 //   * ErrCodeTooManyQueryStringParameters "TooManyQueryStringParameters"
+//   Your request contains too many query string parameters.
 //
 //   * ErrCodeInvalidQueryStringParameters "InvalidQueryStringParameters"
+//   Query string parameters specified in the response body are not valid.
 //
 //   * ErrCodeTooManyDistributionsWithLambdaAssociations "TooManyDistributionsWithLambdaAssociations"
 //   Processing your request would cause the maximum number of distributions with
@@ -512,8 +541,10 @@ func (c *CloudFront) CreateDistributionWithTagsRequest(input *CreateDistribution
 //   The specified Lambda function association is invalid.
 //
 //   * ErrCodeInvalidOriginReadTimeout "InvalidOriginReadTimeout"
+//   The read timeout specified for the origin is not valid.
 //
 //   * ErrCodeInvalidOriginKeepaliveTimeout "InvalidOriginKeepaliveTimeout"
+//   The keep alive timeout specified for the origin is not valid.
 //
 //   * ErrCodeNoSuchFieldLevelEncryptionConfig "NoSuchFieldLevelEncryptionConfig"
 //   The specified configuration for field-level encryption doesn't exist.
@@ -526,7 +557,7 @@ func (c *CloudFront) CreateDistributionWithTagsRequest(input *CreateDistribution
 //   The maximum number of distributions have been associated with the specified
 //   configuration for field-level encryption.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/CreateDistributionWithTags
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/CreateDistributionWithTags
 func (c *CloudFront) CreateDistributionWithTags(input *CreateDistributionWithTagsInput) (*CreateDistributionWithTagsOutput, error) {
 	req, out := c.CreateDistributionWithTagsRequest(input)
 	return out, req.Send()
@@ -548,7 +579,7 @@ func (c *CloudFront) CreateDistributionWithTagsWithContext(ctx aws.Context, inpu
 	return out, req.Send()
 }
 
-const opCreateFieldLevelEncryptionConfig = "CreateFieldLevelEncryptionConfig2018_11_05"
+const opCreateFieldLevelEncryptionConfig = "CreateFieldLevelEncryptionConfig2019_03_26"
 
 // CreateFieldLevelEncryptionConfigRequest generates a "aws/request.Request" representing the
 // client's request for the CreateFieldLevelEncryptionConfig operation. The "output" return
@@ -573,12 +604,12 @@ const opCreateFieldLevelEncryptionConfig = "CreateFieldLevelEncryptionConfig2018
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/CreateFieldLevelEncryptionConfig
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/CreateFieldLevelEncryptionConfig
 func (c *CloudFront) CreateFieldLevelEncryptionConfigRequest(input *CreateFieldLevelEncryptionConfigInput) (req *request.Request, output *CreateFieldLevelEncryptionConfigOutput) {
 	op := &request.Operation{
 		Name:       opCreateFieldLevelEncryptionConfig,
 		HTTPMethod: "POST",
-		HTTPPath:   "/2018-11-05/field-level-encryption",
+		HTTPPath:   "/2019-03-26/field-level-encryption",
 	}
 
 	if input == nil {
@@ -629,7 +660,7 @@ func (c *CloudFront) CreateFieldLevelEncryptionConfigRequest(input *CreateFieldL
 //   * ErrCodeQueryArgProfileEmpty "QueryArgProfileEmpty"
 //   No profile specified for the field-level encryption query argument.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/CreateFieldLevelEncryptionConfig
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/CreateFieldLevelEncryptionConfig
 func (c *CloudFront) CreateFieldLevelEncryptionConfig(input *CreateFieldLevelEncryptionConfigInput) (*CreateFieldLevelEncryptionConfigOutput, error) {
 	req, out := c.CreateFieldLevelEncryptionConfigRequest(input)
 	return out, req.Send()
@@ -651,7 +682,7 @@ func (c *CloudFront) CreateFieldLevelEncryptionConfigWithContext(ctx aws.Context
 	return out, req.Send()
 }
 
-const opCreateFieldLevelEncryptionProfile = "CreateFieldLevelEncryptionProfile2018_11_05"
+const opCreateFieldLevelEncryptionProfile = "CreateFieldLevelEncryptionProfile2019_03_26"
 
 // CreateFieldLevelEncryptionProfileRequest generates a "aws/request.Request" representing the
 // client's request for the CreateFieldLevelEncryptionProfile operation. The "output" return
@@ -676,12 +707,12 @@ const opCreateFieldLevelEncryptionProfile = "CreateFieldLevelEncryptionProfile20
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/CreateFieldLevelEncryptionProfile
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/CreateFieldLevelEncryptionProfile
 func (c *CloudFront) CreateFieldLevelEncryptionProfileRequest(input *CreateFieldLevelEncryptionProfileInput) (req *request.Request, output *CreateFieldLevelEncryptionProfileOutput) {
 	op := &request.Operation{
 		Name:       opCreateFieldLevelEncryptionProfile,
 		HTTPMethod: "POST",
-		HTTPPath:   "/2018-11-05/field-level-encryption-profile",
+		HTTPPath:   "/2019-03-26/field-level-encryption-profile",
 	}
 
 	if input == nil {
@@ -731,7 +762,7 @@ func (c *CloudFront) CreateFieldLevelEncryptionProfileRequest(input *CreateField
 //   The maximum number of field patterns for field-level encryption have been
 //   created.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/CreateFieldLevelEncryptionProfile
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/CreateFieldLevelEncryptionProfile
 func (c *CloudFront) CreateFieldLevelEncryptionProfile(input *CreateFieldLevelEncryptionProfileInput) (*CreateFieldLevelEncryptionProfileOutput, error) {
 	req, out := c.CreateFieldLevelEncryptionProfileRequest(input)
 	return out, req.Send()
@@ -753,7 +784,7 @@ func (c *CloudFront) CreateFieldLevelEncryptionProfileWithContext(ctx aws.Contex
 	return out, req.Send()
 }
 
-const opCreateInvalidation = "CreateInvalidation2018_11_05"
+const opCreateInvalidation = "CreateInvalidation2019_03_26"
 
 // CreateInvalidationRequest generates a "aws/request.Request" representing the
 // client's request for the CreateInvalidation operation. The "output" return
@@ -778,12 +809,12 @@ const opCreateInvalidation = "CreateInvalidation2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/CreateInvalidation
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/CreateInvalidation
 func (c *CloudFront) CreateInvalidationRequest(input *CreateInvalidationInput) (req *request.Request, output *CreateInvalidationOutput) {
 	op := &request.Operation{
 		Name:       opCreateInvalidation,
 		HTTPMethod: "POST",
-		HTTPPath:   "/2018-11-05/distribution/{DistributionId}/invalidation",
+		HTTPPath:   "/2019-03-26/distribution/{DistributionId}/invalidation",
 	}
 
 	if input == nil {
@@ -821,6 +852,7 @@ func (c *CloudFront) CreateInvalidationRequest(input *CreateInvalidationInput) (
 //   The specified distribution does not exist.
 //
 //   * ErrCodeBatchTooLarge "BatchTooLarge"
+//   Invalidation batch specified is too large.
 //
 //   * ErrCodeTooManyInvalidationsInProgress "TooManyInvalidationsInProgress"
 //   You have exceeded the maximum number of allowable InProgress invalidation
@@ -829,7 +861,7 @@ func (c *CloudFront) CreateInvalidationRequest(input *CreateInvalidationInput) (
 //   * ErrCodeInconsistentQuantities "InconsistentQuantities"
 //   The value of Quantity and the size of Items don't match.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/CreateInvalidation
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/CreateInvalidation
 func (c *CloudFront) CreateInvalidation(input *CreateInvalidationInput) (*CreateInvalidationOutput, error) {
 	req, out := c.CreateInvalidationRequest(input)
 	return out, req.Send()
@@ -851,7 +883,7 @@ func (c *CloudFront) CreateInvalidationWithContext(ctx aws.Context, input *Creat
 	return out, req.Send()
 }
 
-const opCreatePublicKey = "CreatePublicKey2018_11_05"
+const opCreatePublicKey = "CreatePublicKey2019_03_26"
 
 // CreatePublicKeyRequest generates a "aws/request.Request" representing the
 // client's request for the CreatePublicKey operation. The "output" return
@@ -876,12 +908,12 @@ const opCreatePublicKey = "CreatePublicKey2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/CreatePublicKey
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/CreatePublicKey
 func (c *CloudFront) CreatePublicKeyRequest(input *CreatePublicKeyInput) (req *request.Request, output *CreatePublicKeyOutput) {
 	op := &request.Operation{
 		Name:       opCreatePublicKey,
 		HTTPMethod: "POST",
-		HTTPPath:   "/2018-11-05/public-key",
+		HTTPPath:   "/2019-03-26/public-key",
 	}
 
 	if input == nil {
@@ -916,7 +948,7 @@ func (c *CloudFront) CreatePublicKeyRequest(input *CreatePublicKeyInput) (req *r
 //   The maximum number of public keys for field-level encryption have been created.
 //   To create a new public key, delete one of the existing keys.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/CreatePublicKey
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/CreatePublicKey
 func (c *CloudFront) CreatePublicKey(input *CreatePublicKeyInput) (*CreatePublicKeyOutput, error) {
 	req, out := c.CreatePublicKeyRequest(input)
 	return out, req.Send()
@@ -938,7 +970,7 @@ func (c *CloudFront) CreatePublicKeyWithContext(ctx aws.Context, input *CreatePu
 	return out, req.Send()
 }
 
-const opCreateStreamingDistribution = "CreateStreamingDistribution2018_11_05"
+const opCreateStreamingDistribution = "CreateStreamingDistribution2019_03_26"
 
 // CreateStreamingDistributionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateStreamingDistribution operation. The "output" return
@@ -963,12 +995,12 @@ const opCreateStreamingDistribution = "CreateStreamingDistribution2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/CreateStreamingDistribution
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/CreateStreamingDistribution
 func (c *CloudFront) CreateStreamingDistributionRequest(input *CreateStreamingDistributionInput) (req *request.Request, output *CreateStreamingDistributionOutput) {
 	op := &request.Operation{
 		Name:       opCreateStreamingDistribution,
 		HTTPMethod: "POST",
-		HTTPPath:   "/2018-11-05/streaming-distribution",
+		HTTPPath:   "/2019-03-26/streaming-distribution",
 	}
 
 	if input == nil {
@@ -982,13 +1014,13 @@ func (c *CloudFront) CreateStreamingDistributionRequest(input *CreateStreamingDi
 
 // CreateStreamingDistribution API operation for Amazon CloudFront.
 //
-// Creates a new RMTP distribution. An RTMP distribution is similar to a web
+// Creates a new RTMP distribution. An RTMP distribution is similar to a web
 // distribution, but an RTMP distribution streams media files using the Adobe
 // Real-Time Messaging Protocol (RTMP) instead of serving files using HTTP.
 //
-// To create a new web distribution, submit a POST request to the CloudFront
-// API version/distribution resource. The request body must include a document
-// with a StreamingDistributionConfig element. The response echoes the StreamingDistributionConfig
+// To create a new distribution, submit a POST request to the CloudFront API
+// version/distribution resource. The request body must include a document with
+// a StreamingDistributionConfig element. The response echoes the StreamingDistributionConfig
 // element and returns other information about the RTMP distribution.
 //
 // To get the status of your request, use the GET StreamingDistribution API
@@ -997,7 +1029,7 @@ func (c *CloudFront) CreateStreamingDistributionRequest(input *CreateStreamingDi
 // minutes.
 //
 // For more information about web distributions, see Working with RTMP Distributions
-// (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-rtmp.html)
+// (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-rtmp.html)
 // in the Amazon CloudFront Developer Guide.
 //
 // Beginning with the 2012-05-05 version of the CloudFront API, we made substantial
@@ -1020,8 +1052,11 @@ func (c *CloudFront) CreateStreamingDistributionRequest(input *CreateStreamingDi
 //
 // Returned Error Codes:
 //   * ErrCodeCNAMEAlreadyExists "CNAMEAlreadyExists"
+//   The CNAME specified is already defined for CloudFront.
 //
 //   * ErrCodeStreamingDistributionAlreadyExists "StreamingDistributionAlreadyExists"
+//   The caller reference you attempted to create the streaming distribution with
+//   is associated with another distribution
 //
 //   * ErrCodeInvalidOrigin "InvalidOrigin"
 //   The Amazon S3 origin server specified does not refer to a valid Amazon S3
@@ -1044,6 +1079,7 @@ func (c *CloudFront) CreateStreamingDistributionRequest(input *CreateStreamingDi
 //   header is set.
 //
 //   * ErrCodeTooManyStreamingDistributionCNAMEs "TooManyStreamingDistributionCNAMEs"
+//   Your request contains more CNAMEs than are allowed per distribution.
 //
 //   * ErrCodeTooManyStreamingDistributions "TooManyStreamingDistributions"
 //   Processing your request would cause you to exceed the maximum number of streaming
@@ -1055,7 +1091,7 @@ func (c *CloudFront) CreateStreamingDistributionRequest(input *CreateStreamingDi
 //   * ErrCodeInconsistentQuantities "InconsistentQuantities"
 //   The value of Quantity and the size of Items don't match.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/CreateStreamingDistribution
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/CreateStreamingDistribution
 func (c *CloudFront) CreateStreamingDistribution(input *CreateStreamingDistributionInput) (*CreateStreamingDistributionOutput, error) {
 	req, out := c.CreateStreamingDistributionRequest(input)
 	return out, req.Send()
@@ -1077,7 +1113,7 @@ func (c *CloudFront) CreateStreamingDistributionWithContext(ctx aws.Context, inp
 	return out, req.Send()
 }
 
-const opCreateStreamingDistributionWithTags = "CreateStreamingDistributionWithTags2018_11_05"
+const opCreateStreamingDistributionWithTags = "CreateStreamingDistributionWithTags2019_03_26"
 
 // CreateStreamingDistributionWithTagsRequest generates a "aws/request.Request" representing the
 // client's request for the CreateStreamingDistributionWithTags operation. The "output" return
@@ -1102,12 +1138,12 @@ const opCreateStreamingDistributionWithTags = "CreateStreamingDistributionWithTa
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/CreateStreamingDistributionWithTags
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/CreateStreamingDistributionWithTags
 func (c *CloudFront) CreateStreamingDistributionWithTagsRequest(input *CreateStreamingDistributionWithTagsInput) (req *request.Request, output *CreateStreamingDistributionWithTagsOutput) {
 	op := &request.Operation{
 		Name:       opCreateStreamingDistributionWithTags,
 		HTTPMethod: "POST",
-		HTTPPath:   "/2018-11-05/streaming-distribution?WithTags",
+		HTTPPath:   "/2019-03-26/streaming-distribution?WithTags",
 	}
 
 	if input == nil {
@@ -1132,8 +1168,11 @@ func (c *CloudFront) CreateStreamingDistributionWithTagsRequest(input *CreateStr
 //
 // Returned Error Codes:
 //   * ErrCodeCNAMEAlreadyExists "CNAMEAlreadyExists"
+//   The CNAME specified is already defined for CloudFront.
 //
 //   * ErrCodeStreamingDistributionAlreadyExists "StreamingDistributionAlreadyExists"
+//   The caller reference you attempted to create the streaming distribution with
+//   is associated with another distribution
 //
 //   * ErrCodeInvalidOrigin "InvalidOrigin"
 //   The Amazon S3 origin server specified does not refer to a valid Amazon S3
@@ -1156,6 +1195,7 @@ func (c *CloudFront) CreateStreamingDistributionWithTagsRequest(input *CreateStr
 //   header is set.
 //
 //   * ErrCodeTooManyStreamingDistributionCNAMEs "TooManyStreamingDistributionCNAMEs"
+//   Your request contains more CNAMEs than are allowed per distribution.
 //
 //   * ErrCodeTooManyStreamingDistributions "TooManyStreamingDistributions"
 //   Processing your request would cause you to exceed the maximum number of streaming
@@ -1168,8 +1208,9 @@ func (c *CloudFront) CreateStreamingDistributionWithTagsRequest(input *CreateStr
 //   The value of Quantity and the size of Items don't match.
 //
 //   * ErrCodeInvalidTagging "InvalidTagging"
+//   Tagging specified in the response body is not valid.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/CreateStreamingDistributionWithTags
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/CreateStreamingDistributionWithTags
 func (c *CloudFront) CreateStreamingDistributionWithTags(input *CreateStreamingDistributionWithTagsInput) (*CreateStreamingDistributionWithTagsOutput, error) {
 	req, out := c.CreateStreamingDistributionWithTagsRequest(input)
 	return out, req.Send()
@@ -1191,7 +1232,7 @@ func (c *CloudFront) CreateStreamingDistributionWithTagsWithContext(ctx aws.Cont
 	return out, req.Send()
 }
 
-const opDeleteCloudFrontOriginAccessIdentity = "DeleteCloudFrontOriginAccessIdentity2018_11_05"
+const opDeleteCloudFrontOriginAccessIdentity = "DeleteCloudFrontOriginAccessIdentity2019_03_26"
 
 // DeleteCloudFrontOriginAccessIdentityRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteCloudFrontOriginAccessIdentity operation. The "output" return
@@ -1216,12 +1257,12 @@ const opDeleteCloudFrontOriginAccessIdentity = "DeleteCloudFrontOriginAccessIden
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/DeleteCloudFrontOriginAccessIdentity
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/DeleteCloudFrontOriginAccessIdentity
 func (c *CloudFront) DeleteCloudFrontOriginAccessIdentityRequest(input *DeleteCloudFrontOriginAccessIdentityInput) (req *request.Request, output *DeleteCloudFrontOriginAccessIdentityOutput) {
 	op := &request.Operation{
 		Name:       opDeleteCloudFrontOriginAccessIdentity,
 		HTTPMethod: "DELETE",
-		HTTPPath:   "/2018-11-05/origin-access-identity/cloudfront/{Id}",
+		HTTPPath:   "/2019-03-26/origin-access-identity/cloudfront/{Id}",
 	}
 
 	if input == nil {
@@ -1260,8 +1301,9 @@ func (c *CloudFront) DeleteCloudFrontOriginAccessIdentityRequest(input *DeleteCl
 //   to false.
 //
 //   * ErrCodeOriginAccessIdentityInUse "CloudFrontOriginAccessIdentityInUse"
+//   The Origin Access Identity specified is already in use.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/DeleteCloudFrontOriginAccessIdentity
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/DeleteCloudFrontOriginAccessIdentity
 func (c *CloudFront) DeleteCloudFrontOriginAccessIdentity(input *DeleteCloudFrontOriginAccessIdentityInput) (*DeleteCloudFrontOriginAccessIdentityOutput, error) {
 	req, out := c.DeleteCloudFrontOriginAccessIdentityRequest(input)
 	return out, req.Send()
@@ -1283,7 +1325,7 @@ func (c *CloudFront) DeleteCloudFrontOriginAccessIdentityWithContext(ctx aws.Con
 	return out, req.Send()
 }
 
-const opDeleteDistribution = "DeleteDistribution2018_11_05"
+const opDeleteDistribution = "DeleteDistribution2019_03_26"
 
 // DeleteDistributionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteDistribution operation. The "output" return
@@ -1308,12 +1350,12 @@ const opDeleteDistribution = "DeleteDistribution2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/DeleteDistribution
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/DeleteDistribution
 func (c *CloudFront) DeleteDistributionRequest(input *DeleteDistributionInput) (req *request.Request, output *DeleteDistributionOutput) {
 	op := &request.Operation{
 		Name:       opDeleteDistribution,
 		HTTPMethod: "DELETE",
-		HTTPPath:   "/2018-11-05/distribution/{Id}",
+		HTTPPath:   "/2019-03-26/distribution/{Id}",
 	}
 
 	if input == nil {
@@ -1342,6 +1384,8 @@ func (c *CloudFront) DeleteDistributionRequest(input *DeleteDistributionInput) (
 //   Access denied.
 //
 //   * ErrCodeDistributionNotDisabled "DistributionNotDisabled"
+//   The specified CloudFront distribution is not disabled. You must disable the
+//   distribution before you can delete it.
 //
 //   * ErrCodeInvalidIfMatchVersion "InvalidIfMatchVersion"
 //   The If-Match version is missing or not valid for the distribution.
@@ -1353,7 +1397,7 @@ func (c *CloudFront) DeleteDistributionRequest(input *DeleteDistributionInput) (
 //   The precondition given in one or more of the request-header fields evaluated
 //   to false.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/DeleteDistribution
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/DeleteDistribution
 func (c *CloudFront) DeleteDistribution(input *DeleteDistributionInput) (*DeleteDistributionOutput, error) {
 	req, out := c.DeleteDistributionRequest(input)
 	return out, req.Send()
@@ -1375,7 +1419,7 @@ func (c *CloudFront) DeleteDistributionWithContext(ctx aws.Context, input *Delet
 	return out, req.Send()
 }
 
-const opDeleteFieldLevelEncryptionConfig = "DeleteFieldLevelEncryptionConfig2018_11_05"
+const opDeleteFieldLevelEncryptionConfig = "DeleteFieldLevelEncryptionConfig2019_03_26"
 
 // DeleteFieldLevelEncryptionConfigRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteFieldLevelEncryptionConfig operation. The "output" return
@@ -1400,12 +1444,12 @@ const opDeleteFieldLevelEncryptionConfig = "DeleteFieldLevelEncryptionConfig2018
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/DeleteFieldLevelEncryptionConfig
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/DeleteFieldLevelEncryptionConfig
 func (c *CloudFront) DeleteFieldLevelEncryptionConfigRequest(input *DeleteFieldLevelEncryptionConfigInput) (req *request.Request, output *DeleteFieldLevelEncryptionConfigOutput) {
 	op := &request.Operation{
 		Name:       opDeleteFieldLevelEncryptionConfig,
 		HTTPMethod: "DELETE",
-		HTTPPath:   "/2018-11-05/field-level-encryption/{Id}",
+		HTTPPath:   "/2019-03-26/field-level-encryption/{Id}",
 	}
 
 	if input == nil {
@@ -1446,7 +1490,7 @@ func (c *CloudFront) DeleteFieldLevelEncryptionConfigRequest(input *DeleteFieldL
 //   * ErrCodeFieldLevelEncryptionConfigInUse "FieldLevelEncryptionConfigInUse"
 //   The specified configuration for field-level encryption is in use.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/DeleteFieldLevelEncryptionConfig
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/DeleteFieldLevelEncryptionConfig
 func (c *CloudFront) DeleteFieldLevelEncryptionConfig(input *DeleteFieldLevelEncryptionConfigInput) (*DeleteFieldLevelEncryptionConfigOutput, error) {
 	req, out := c.DeleteFieldLevelEncryptionConfigRequest(input)
 	return out, req.Send()
@@ -1468,7 +1512,7 @@ func (c *CloudFront) DeleteFieldLevelEncryptionConfigWithContext(ctx aws.Context
 	return out, req.Send()
 }
 
-const opDeleteFieldLevelEncryptionProfile = "DeleteFieldLevelEncryptionProfile2018_11_05"
+const opDeleteFieldLevelEncryptionProfile = "DeleteFieldLevelEncryptionProfile2019_03_26"
 
 // DeleteFieldLevelEncryptionProfileRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteFieldLevelEncryptionProfile operation. The "output" return
@@ -1493,12 +1537,12 @@ const opDeleteFieldLevelEncryptionProfile = "DeleteFieldLevelEncryptionProfile20
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/DeleteFieldLevelEncryptionProfile
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/DeleteFieldLevelEncryptionProfile
 func (c *CloudFront) DeleteFieldLevelEncryptionProfileRequest(input *DeleteFieldLevelEncryptionProfileInput) (req *request.Request, output *DeleteFieldLevelEncryptionProfileOutput) {
 	op := &request.Operation{
 		Name:       opDeleteFieldLevelEncryptionProfile,
 		HTTPMethod: "DELETE",
-		HTTPPath:   "/2018-11-05/field-level-encryption-profile/{Id}",
+		HTTPPath:   "/2019-03-26/field-level-encryption-profile/{Id}",
 	}
 
 	if input == nil {
@@ -1539,7 +1583,7 @@ func (c *CloudFront) DeleteFieldLevelEncryptionProfileRequest(input *DeleteField
 //   * ErrCodeFieldLevelEncryptionProfileInUse "FieldLevelEncryptionProfileInUse"
 //   The specified profile for field-level encryption is in use.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/DeleteFieldLevelEncryptionProfile
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/DeleteFieldLevelEncryptionProfile
 func (c *CloudFront) DeleteFieldLevelEncryptionProfile(input *DeleteFieldLevelEncryptionProfileInput) (*DeleteFieldLevelEncryptionProfileOutput, error) {
 	req, out := c.DeleteFieldLevelEncryptionProfileRequest(input)
 	return out, req.Send()
@@ -1561,7 +1605,7 @@ func (c *CloudFront) DeleteFieldLevelEncryptionProfileWithContext(ctx aws.Contex
 	return out, req.Send()
 }
 
-const opDeletePublicKey = "DeletePublicKey2018_11_05"
+const opDeletePublicKey = "DeletePublicKey2019_03_26"
 
 // DeletePublicKeyRequest generates a "aws/request.Request" representing the
 // client's request for the DeletePublicKey operation. The "output" return
@@ -1586,12 +1630,12 @@ const opDeletePublicKey = "DeletePublicKey2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/DeletePublicKey
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/DeletePublicKey
 func (c *CloudFront) DeletePublicKeyRequest(input *DeletePublicKeyInput) (req *request.Request, output *DeletePublicKeyOutput) {
 	op := &request.Operation{
 		Name:       opDeletePublicKey,
 		HTTPMethod: "DELETE",
-		HTTPPath:   "/2018-11-05/public-key/{Id}",
+		HTTPPath:   "/2019-03-26/public-key/{Id}",
 	}
 
 	if input == nil {
@@ -1632,7 +1676,7 @@ func (c *CloudFront) DeletePublicKeyRequest(input *DeletePublicKeyInput) (req *r
 //   The precondition given in one or more of the request-header fields evaluated
 //   to false.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/DeletePublicKey
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/DeletePublicKey
 func (c *CloudFront) DeletePublicKey(input *DeletePublicKeyInput) (*DeletePublicKeyOutput, error) {
 	req, out := c.DeletePublicKeyRequest(input)
 	return out, req.Send()
@@ -1654,7 +1698,7 @@ func (c *CloudFront) DeletePublicKeyWithContext(ctx aws.Context, input *DeletePu
 	return out, req.Send()
 }
 
-const opDeleteStreamingDistribution = "DeleteStreamingDistribution2018_11_05"
+const opDeleteStreamingDistribution = "DeleteStreamingDistribution2019_03_26"
 
 // DeleteStreamingDistributionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteStreamingDistribution operation. The "output" return
@@ -1679,12 +1723,12 @@ const opDeleteStreamingDistribution = "DeleteStreamingDistribution2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/DeleteStreamingDistribution
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/DeleteStreamingDistribution
 func (c *CloudFront) DeleteStreamingDistributionRequest(input *DeleteStreamingDistributionInput) (req *request.Request, output *DeleteStreamingDistributionOutput) {
 	op := &request.Operation{
 		Name:       opDeleteStreamingDistribution,
 		HTTPMethod: "DELETE",
-		HTTPPath:   "/2018-11-05/streaming-distribution/{Id}",
+		HTTPPath:   "/2019-03-26/streaming-distribution/{Id}",
 	}
 
 	if input == nil {
@@ -1733,7 +1777,7 @@ func (c *CloudFront) DeleteStreamingDistributionRequest(input *DeleteStreamingDi
 // that the distribution was successfully deleted.
 //
 // For information about deleting a distribution using the CloudFront console,
-// see Deleting a Distribution (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html)
+// see Deleting a Distribution (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html)
 // in the Amazon CloudFront Developer Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -1748,6 +1792,8 @@ func (c *CloudFront) DeleteStreamingDistributionRequest(input *DeleteStreamingDi
 //   Access denied.
 //
 //   * ErrCodeStreamingDistributionNotDisabled "StreamingDistributionNotDisabled"
+//   The specified CloudFront distribution is not disabled. You must disable the
+//   distribution before you can delete it.
 //
 //   * ErrCodeInvalidIfMatchVersion "InvalidIfMatchVersion"
 //   The If-Match version is missing or not valid for the distribution.
@@ -1759,7 +1805,7 @@ func (c *CloudFront) DeleteStreamingDistributionRequest(input *DeleteStreamingDi
 //   The precondition given in one or more of the request-header fields evaluated
 //   to false.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/DeleteStreamingDistribution
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/DeleteStreamingDistribution
 func (c *CloudFront) DeleteStreamingDistribution(input *DeleteStreamingDistributionInput) (*DeleteStreamingDistributionOutput, error) {
 	req, out := c.DeleteStreamingDistributionRequest(input)
 	return out, req.Send()
@@ -1781,7 +1827,7 @@ func (c *CloudFront) DeleteStreamingDistributionWithContext(ctx aws.Context, inp
 	return out, req.Send()
 }
 
-const opGetCloudFrontOriginAccessIdentity = "GetCloudFrontOriginAccessIdentity2018_11_05"
+const opGetCloudFrontOriginAccessIdentity = "GetCloudFrontOriginAccessIdentity2019_03_26"
 
 // GetCloudFrontOriginAccessIdentityRequest generates a "aws/request.Request" representing the
 // client's request for the GetCloudFrontOriginAccessIdentity operation. The "output" return
@@ -1806,12 +1852,12 @@ const opGetCloudFrontOriginAccessIdentity = "GetCloudFrontOriginAccessIdentity20
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetCloudFrontOriginAccessIdentity
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetCloudFrontOriginAccessIdentity
 func (c *CloudFront) GetCloudFrontOriginAccessIdentityRequest(input *GetCloudFrontOriginAccessIdentityInput) (req *request.Request, output *GetCloudFrontOriginAccessIdentityOutput) {
 	op := &request.Operation{
 		Name:       opGetCloudFrontOriginAccessIdentity,
 		HTTPMethod: "GET",
-		HTTPPath:   "/2018-11-05/origin-access-identity/cloudfront/{Id}",
+		HTTPPath:   "/2019-03-26/origin-access-identity/cloudfront/{Id}",
 	}
 
 	if input == nil {
@@ -1841,7 +1887,7 @@ func (c *CloudFront) GetCloudFrontOriginAccessIdentityRequest(input *GetCloudFro
 //   * ErrCodeAccessDenied "AccessDenied"
 //   Access denied.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetCloudFrontOriginAccessIdentity
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetCloudFrontOriginAccessIdentity
 func (c *CloudFront) GetCloudFrontOriginAccessIdentity(input *GetCloudFrontOriginAccessIdentityInput) (*GetCloudFrontOriginAccessIdentityOutput, error) {
 	req, out := c.GetCloudFrontOriginAccessIdentityRequest(input)
 	return out, req.Send()
@@ -1863,7 +1909,7 @@ func (c *CloudFront) GetCloudFrontOriginAccessIdentityWithContext(ctx aws.Contex
 	return out, req.Send()
 }
 
-const opGetCloudFrontOriginAccessIdentityConfig = "GetCloudFrontOriginAccessIdentityConfig2018_11_05"
+const opGetCloudFrontOriginAccessIdentityConfig = "GetCloudFrontOriginAccessIdentityConfig2019_03_26"
 
 // GetCloudFrontOriginAccessIdentityConfigRequest generates a "aws/request.Request" representing the
 // client's request for the GetCloudFrontOriginAccessIdentityConfig operation. The "output" return
@@ -1888,12 +1934,12 @@ const opGetCloudFrontOriginAccessIdentityConfig = "GetCloudFrontOriginAccessIden
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetCloudFrontOriginAccessIdentityConfig
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetCloudFrontOriginAccessIdentityConfig
 func (c *CloudFront) GetCloudFrontOriginAccessIdentityConfigRequest(input *GetCloudFrontOriginAccessIdentityConfigInput) (req *request.Request, output *GetCloudFrontOriginAccessIdentityConfigOutput) {
 	op := &request.Operation{
 		Name:       opGetCloudFrontOriginAccessIdentityConfig,
 		HTTPMethod: "GET",
-		HTTPPath:   "/2018-11-05/origin-access-identity/cloudfront/{Id}/config",
+		HTTPPath:   "/2019-03-26/origin-access-identity/cloudfront/{Id}/config",
 	}
 
 	if input == nil {
@@ -1923,7 +1969,7 @@ func (c *CloudFront) GetCloudFrontOriginAccessIdentityConfigRequest(input *GetCl
 //   * ErrCodeAccessDenied "AccessDenied"
 //   Access denied.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetCloudFrontOriginAccessIdentityConfig
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetCloudFrontOriginAccessIdentityConfig
 func (c *CloudFront) GetCloudFrontOriginAccessIdentityConfig(input *GetCloudFrontOriginAccessIdentityConfigInput) (*GetCloudFrontOriginAccessIdentityConfigOutput, error) {
 	req, out := c.GetCloudFrontOriginAccessIdentityConfigRequest(input)
 	return out, req.Send()
@@ -1945,7 +1991,7 @@ func (c *CloudFront) GetCloudFrontOriginAccessIdentityConfigWithContext(ctx aws.
 	return out, req.Send()
 }
 
-const opGetDistribution = "GetDistribution2018_11_05"
+const opGetDistribution = "GetDistribution2019_03_26"
 
 // GetDistributionRequest generates a "aws/request.Request" representing the
 // client's request for the GetDistribution operation. The "output" return
@@ -1970,12 +2016,12 @@ const opGetDistribution = "GetDistribution2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetDistribution
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetDistribution
 func (c *CloudFront) GetDistributionRequest(input *GetDistributionInput) (req *request.Request, output *GetDistributionOutput) {
 	op := &request.Operation{
 		Name:       opGetDistribution,
 		HTTPMethod: "GET",
-		HTTPPath:   "/2018-11-05/distribution/{Id}",
+		HTTPPath:   "/2019-03-26/distribution/{Id}",
 	}
 
 	if input == nil {
@@ -2005,7 +2051,7 @@ func (c *CloudFront) GetDistributionRequest(input *GetDistributionInput) (req *r
 //   * ErrCodeAccessDenied "AccessDenied"
 //   Access denied.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetDistribution
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetDistribution
 func (c *CloudFront) GetDistribution(input *GetDistributionInput) (*GetDistributionOutput, error) {
 	req, out := c.GetDistributionRequest(input)
 	return out, req.Send()
@@ -2027,7 +2073,7 @@ func (c *CloudFront) GetDistributionWithContext(ctx aws.Context, input *GetDistr
 	return out, req.Send()
 }
 
-const opGetDistributionConfig = "GetDistributionConfig2018_11_05"
+const opGetDistributionConfig = "GetDistributionConfig2019_03_26"
 
 // GetDistributionConfigRequest generates a "aws/request.Request" representing the
 // client's request for the GetDistributionConfig operation. The "output" return
@@ -2052,12 +2098,12 @@ const opGetDistributionConfig = "GetDistributionConfig2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetDistributionConfig
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetDistributionConfig
 func (c *CloudFront) GetDistributionConfigRequest(input *GetDistributionConfigInput) (req *request.Request, output *GetDistributionConfigOutput) {
 	op := &request.Operation{
 		Name:       opGetDistributionConfig,
 		HTTPMethod: "GET",
-		HTTPPath:   "/2018-11-05/distribution/{Id}/config",
+		HTTPPath:   "/2019-03-26/distribution/{Id}/config",
 	}
 
 	if input == nil {
@@ -2087,7 +2133,7 @@ func (c *CloudFront) GetDistributionConfigRequest(input *GetDistributionConfigIn
 //   * ErrCodeAccessDenied "AccessDenied"
 //   Access denied.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetDistributionConfig
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetDistributionConfig
 func (c *CloudFront) GetDistributionConfig(input *GetDistributionConfigInput) (*GetDistributionConfigOutput, error) {
 	req, out := c.GetDistributionConfigRequest(input)
 	return out, req.Send()
@@ -2109,7 +2155,7 @@ func (c *CloudFront) GetDistributionConfigWithContext(ctx aws.Context, input *Ge
 	return out, req.Send()
 }
 
-const opGetFieldLevelEncryption = "GetFieldLevelEncryption2018_11_05"
+const opGetFieldLevelEncryption = "GetFieldLevelEncryption2019_03_26"
 
 // GetFieldLevelEncryptionRequest generates a "aws/request.Request" representing the
 // client's request for the GetFieldLevelEncryption operation. The "output" return
@@ -2134,12 +2180,12 @@ const opGetFieldLevelEncryption = "GetFieldLevelEncryption2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetFieldLevelEncryption
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetFieldLevelEncryption
 func (c *CloudFront) GetFieldLevelEncryptionRequest(input *GetFieldLevelEncryptionInput) (req *request.Request, output *GetFieldLevelEncryptionOutput) {
 	op := &request.Operation{
 		Name:       opGetFieldLevelEncryption,
 		HTTPMethod: "GET",
-		HTTPPath:   "/2018-11-05/field-level-encryption/{Id}",
+		HTTPPath:   "/2019-03-26/field-level-encryption/{Id}",
 	}
 
 	if input == nil {
@@ -2169,7 +2215,7 @@ func (c *CloudFront) GetFieldLevelEncryptionRequest(input *GetFieldLevelEncrypti
 //   * ErrCodeNoSuchFieldLevelEncryptionConfig "NoSuchFieldLevelEncryptionConfig"
 //   The specified configuration for field-level encryption doesn't exist.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetFieldLevelEncryption
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetFieldLevelEncryption
 func (c *CloudFront) GetFieldLevelEncryption(input *GetFieldLevelEncryptionInput) (*GetFieldLevelEncryptionOutput, error) {
 	req, out := c.GetFieldLevelEncryptionRequest(input)
 	return out, req.Send()
@@ -2191,7 +2237,7 @@ func (c *CloudFront) GetFieldLevelEncryptionWithContext(ctx aws.Context, input *
 	return out, req.Send()
 }
 
-const opGetFieldLevelEncryptionConfig = "GetFieldLevelEncryptionConfig2018_11_05"
+const opGetFieldLevelEncryptionConfig = "GetFieldLevelEncryptionConfig2019_03_26"
 
 // GetFieldLevelEncryptionConfigRequest generates a "aws/request.Request" representing the
 // client's request for the GetFieldLevelEncryptionConfig operation. The "output" return
@@ -2216,12 +2262,12 @@ const opGetFieldLevelEncryptionConfig = "GetFieldLevelEncryptionConfig2018_11_05
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetFieldLevelEncryptionConfig
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetFieldLevelEncryptionConfig
 func (c *CloudFront) GetFieldLevelEncryptionConfigRequest(input *GetFieldLevelEncryptionConfigInput) (req *request.Request, output *GetFieldLevelEncryptionConfigOutput) {
 	op := &request.Operation{
 		Name:       opGetFieldLevelEncryptionConfig,
 		HTTPMethod: "GET",
-		HTTPPath:   "/2018-11-05/field-level-encryption/{Id}/config",
+		HTTPPath:   "/2019-03-26/field-level-encryption/{Id}/config",
 	}
 
 	if input == nil {
@@ -2251,7 +2297,7 @@ func (c *CloudFront) GetFieldLevelEncryptionConfigRequest(input *GetFieldLevelEn
 //   * ErrCodeNoSuchFieldLevelEncryptionConfig "NoSuchFieldLevelEncryptionConfig"
 //   The specified configuration for field-level encryption doesn't exist.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetFieldLevelEncryptionConfig
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetFieldLevelEncryptionConfig
 func (c *CloudFront) GetFieldLevelEncryptionConfig(input *GetFieldLevelEncryptionConfigInput) (*GetFieldLevelEncryptionConfigOutput, error) {
 	req, out := c.GetFieldLevelEncryptionConfigRequest(input)
 	return out, req.Send()
@@ -2273,7 +2319,7 @@ func (c *CloudFront) GetFieldLevelEncryptionConfigWithContext(ctx aws.Context, i
 	return out, req.Send()
 }
 
-const opGetFieldLevelEncryptionProfile = "GetFieldLevelEncryptionProfile2018_11_05"
+const opGetFieldLevelEncryptionProfile = "GetFieldLevelEncryptionProfile2019_03_26"
 
 // GetFieldLevelEncryptionProfileRequest generates a "aws/request.Request" representing the
 // client's request for the GetFieldLevelEncryptionProfile operation. The "output" return
@@ -2298,12 +2344,12 @@ const opGetFieldLevelEncryptionProfile = "GetFieldLevelEncryptionProfile2018_11_
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetFieldLevelEncryptionProfile
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetFieldLevelEncryptionProfile
 func (c *CloudFront) GetFieldLevelEncryptionProfileRequest(input *GetFieldLevelEncryptionProfileInput) (req *request.Request, output *GetFieldLevelEncryptionProfileOutput) {
 	op := &request.Operation{
 		Name:       opGetFieldLevelEncryptionProfile,
 		HTTPMethod: "GET",
-		HTTPPath:   "/2018-11-05/field-level-encryption-profile/{Id}",
+		HTTPPath:   "/2019-03-26/field-level-encryption-profile/{Id}",
 	}
 
 	if input == nil {
@@ -2333,7 +2379,7 @@ func (c *CloudFront) GetFieldLevelEncryptionProfileRequest(input *GetFieldLevelE
 //   * ErrCodeNoSuchFieldLevelEncryptionProfile "NoSuchFieldLevelEncryptionProfile"
 //   The specified profile for field-level encryption doesn't exist.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetFieldLevelEncryptionProfile
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetFieldLevelEncryptionProfile
 func (c *CloudFront) GetFieldLevelEncryptionProfile(input *GetFieldLevelEncryptionProfileInput) (*GetFieldLevelEncryptionProfileOutput, error) {
 	req, out := c.GetFieldLevelEncryptionProfileRequest(input)
 	return out, req.Send()
@@ -2355,7 +2401,7 @@ func (c *CloudFront) GetFieldLevelEncryptionProfileWithContext(ctx aws.Context, 
 	return out, req.Send()
 }
 
-const opGetFieldLevelEncryptionProfileConfig = "GetFieldLevelEncryptionProfileConfig2018_11_05"
+const opGetFieldLevelEncryptionProfileConfig = "GetFieldLevelEncryptionProfileConfig2019_03_26"
 
 // GetFieldLevelEncryptionProfileConfigRequest generates a "aws/request.Request" representing the
 // client's request for the GetFieldLevelEncryptionProfileConfig operation. The "output" return
@@ -2380,12 +2426,12 @@ const opGetFieldLevelEncryptionProfileConfig = "GetFieldLevelEncryptionProfileCo
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetFieldLevelEncryptionProfileConfig
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetFieldLevelEncryptionProfileConfig
 func (c *CloudFront) GetFieldLevelEncryptionProfileConfigRequest(input *GetFieldLevelEncryptionProfileConfigInput) (req *request.Request, output *GetFieldLevelEncryptionProfileConfigOutput) {
 	op := &request.Operation{
 		Name:       opGetFieldLevelEncryptionProfileConfig,
 		HTTPMethod: "GET",
-		HTTPPath:   "/2018-11-05/field-level-encryption-profile/{Id}/config",
+		HTTPPath:   "/2019-03-26/field-level-encryption-profile/{Id}/config",
 	}
 
 	if input == nil {
@@ -2415,7 +2461,7 @@ func (c *CloudFront) GetFieldLevelEncryptionProfileConfigRequest(input *GetField
 //   * ErrCodeNoSuchFieldLevelEncryptionProfile "NoSuchFieldLevelEncryptionProfile"
 //   The specified profile for field-level encryption doesn't exist.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetFieldLevelEncryptionProfileConfig
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetFieldLevelEncryptionProfileConfig
 func (c *CloudFront) GetFieldLevelEncryptionProfileConfig(input *GetFieldLevelEncryptionProfileConfigInput) (*GetFieldLevelEncryptionProfileConfigOutput, error) {
 	req, out := c.GetFieldLevelEncryptionProfileConfigRequest(input)
 	return out, req.Send()
@@ -2437,7 +2483,7 @@ func (c *CloudFront) GetFieldLevelEncryptionProfileConfigWithContext(ctx aws.Con
 	return out, req.Send()
 }
 
-const opGetInvalidation = "GetInvalidation2018_11_05"
+const opGetInvalidation = "GetInvalidation2019_03_26"
 
 // GetInvalidationRequest generates a "aws/request.Request" representing the
 // client's request for the GetInvalidation operation. The "output" return
@@ -2462,12 +2508,12 @@ const opGetInvalidation = "GetInvalidation2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetInvalidation
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetInvalidation
 func (c *CloudFront) GetInvalidationRequest(input *GetInvalidationInput) (req *request.Request, output *GetInvalidationOutput) {
 	op := &request.Operation{
 		Name:       opGetInvalidation,
 		HTTPMethod: "GET",
-		HTTPPath:   "/2018-11-05/distribution/{DistributionId}/invalidation/{Id}",
+		HTTPPath:   "/2019-03-26/distribution/{DistributionId}/invalidation/{Id}",
 	}
 
 	if input == nil {
@@ -2500,7 +2546,7 @@ func (c *CloudFront) GetInvalidationRequest(input *GetInvalidationInput) (req *r
 //   * ErrCodeAccessDenied "AccessDenied"
 //   Access denied.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetInvalidation
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetInvalidation
 func (c *CloudFront) GetInvalidation(input *GetInvalidationInput) (*GetInvalidationOutput, error) {
 	req, out := c.GetInvalidationRequest(input)
 	return out, req.Send()
@@ -2522,7 +2568,7 @@ func (c *CloudFront) GetInvalidationWithContext(ctx aws.Context, input *GetInval
 	return out, req.Send()
 }
 
-const opGetPublicKey = "GetPublicKey2018_11_05"
+const opGetPublicKey = "GetPublicKey2019_03_26"
 
 // GetPublicKeyRequest generates a "aws/request.Request" representing the
 // client's request for the GetPublicKey operation. The "output" return
@@ -2547,12 +2593,12 @@ const opGetPublicKey = "GetPublicKey2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetPublicKey
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetPublicKey
 func (c *CloudFront) GetPublicKeyRequest(input *GetPublicKeyInput) (req *request.Request, output *GetPublicKeyOutput) {
 	op := &request.Operation{
 		Name:       opGetPublicKey,
 		HTTPMethod: "GET",
-		HTTPPath:   "/2018-11-05/public-key/{Id}",
+		HTTPPath:   "/2019-03-26/public-key/{Id}",
 	}
 
 	if input == nil {
@@ -2582,7 +2628,7 @@ func (c *CloudFront) GetPublicKeyRequest(input *GetPublicKeyInput) (req *request
 //   * ErrCodeNoSuchPublicKey "NoSuchPublicKey"
 //   The specified public key doesn't exist.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetPublicKey
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetPublicKey
 func (c *CloudFront) GetPublicKey(input *GetPublicKeyInput) (*GetPublicKeyOutput, error) {
 	req, out := c.GetPublicKeyRequest(input)
 	return out, req.Send()
@@ -2604,7 +2650,7 @@ func (c *CloudFront) GetPublicKeyWithContext(ctx aws.Context, input *GetPublicKe
 	return out, req.Send()
 }
 
-const opGetPublicKeyConfig = "GetPublicKeyConfig2018_11_05"
+const opGetPublicKeyConfig = "GetPublicKeyConfig2019_03_26"
 
 // GetPublicKeyConfigRequest generates a "aws/request.Request" representing the
 // client's request for the GetPublicKeyConfig operation. The "output" return
@@ -2629,12 +2675,12 @@ const opGetPublicKeyConfig = "GetPublicKeyConfig2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetPublicKeyConfig
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetPublicKeyConfig
 func (c *CloudFront) GetPublicKeyConfigRequest(input *GetPublicKeyConfigInput) (req *request.Request, output *GetPublicKeyConfigOutput) {
 	op := &request.Operation{
 		Name:       opGetPublicKeyConfig,
 		HTTPMethod: "GET",
-		HTTPPath:   "/2018-11-05/public-key/{Id}/config",
+		HTTPPath:   "/2019-03-26/public-key/{Id}/config",
 	}
 
 	if input == nil {
@@ -2664,7 +2710,7 @@ func (c *CloudFront) GetPublicKeyConfigRequest(input *GetPublicKeyConfigInput) (
 //   * ErrCodeNoSuchPublicKey "NoSuchPublicKey"
 //   The specified public key doesn't exist.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetPublicKeyConfig
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetPublicKeyConfig
 func (c *CloudFront) GetPublicKeyConfig(input *GetPublicKeyConfigInput) (*GetPublicKeyConfigOutput, error) {
 	req, out := c.GetPublicKeyConfigRequest(input)
 	return out, req.Send()
@@ -2686,7 +2732,7 @@ func (c *CloudFront) GetPublicKeyConfigWithContext(ctx aws.Context, input *GetPu
 	return out, req.Send()
 }
 
-const opGetStreamingDistribution = "GetStreamingDistribution2018_11_05"
+const opGetStreamingDistribution = "GetStreamingDistribution2019_03_26"
 
 // GetStreamingDistributionRequest generates a "aws/request.Request" representing the
 // client's request for the GetStreamingDistribution operation. The "output" return
@@ -2711,12 +2757,12 @@ const opGetStreamingDistribution = "GetStreamingDistribution2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetStreamingDistribution
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetStreamingDistribution
 func (c *CloudFront) GetStreamingDistributionRequest(input *GetStreamingDistributionInput) (req *request.Request, output *GetStreamingDistributionOutput) {
 	op := &request.Operation{
 		Name:       opGetStreamingDistribution,
 		HTTPMethod: "GET",
-		HTTPPath:   "/2018-11-05/streaming-distribution/{Id}",
+		HTTPPath:   "/2019-03-26/streaming-distribution/{Id}",
 	}
 
 	if input == nil {
@@ -2747,7 +2793,7 @@ func (c *CloudFront) GetStreamingDistributionRequest(input *GetStreamingDistribu
 //   * ErrCodeAccessDenied "AccessDenied"
 //   Access denied.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetStreamingDistribution
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetStreamingDistribution
 func (c *CloudFront) GetStreamingDistribution(input *GetStreamingDistributionInput) (*GetStreamingDistributionOutput, error) {
 	req, out := c.GetStreamingDistributionRequest(input)
 	return out, req.Send()
@@ -2769,7 +2815,7 @@ func (c *CloudFront) GetStreamingDistributionWithContext(ctx aws.Context, input 
 	return out, req.Send()
 }
 
-const opGetStreamingDistributionConfig = "GetStreamingDistributionConfig2018_11_05"
+const opGetStreamingDistributionConfig = "GetStreamingDistributionConfig2019_03_26"
 
 // GetStreamingDistributionConfigRequest generates a "aws/request.Request" representing the
 // client's request for the GetStreamingDistributionConfig operation. The "output" return
@@ -2794,12 +2840,12 @@ const opGetStreamingDistributionConfig = "GetStreamingDistributionConfig2018_11_
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetStreamingDistributionConfig
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetStreamingDistributionConfig
 func (c *CloudFront) GetStreamingDistributionConfigRequest(input *GetStreamingDistributionConfigInput) (req *request.Request, output *GetStreamingDistributionConfigOutput) {
 	op := &request.Operation{
 		Name:       opGetStreamingDistributionConfig,
 		HTTPMethod: "GET",
-		HTTPPath:   "/2018-11-05/streaming-distribution/{Id}/config",
+		HTTPPath:   "/2019-03-26/streaming-distribution/{Id}/config",
 	}
 
 	if input == nil {
@@ -2829,7 +2875,7 @@ func (c *CloudFront) GetStreamingDistributionConfigRequest(input *GetStreamingDi
 //   * ErrCodeAccessDenied "AccessDenied"
 //   Access denied.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/GetStreamingDistributionConfig
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/GetStreamingDistributionConfig
 func (c *CloudFront) GetStreamingDistributionConfig(input *GetStreamingDistributionConfigInput) (*GetStreamingDistributionConfigOutput, error) {
 	req, out := c.GetStreamingDistributionConfigRequest(input)
 	return out, req.Send()
@@ -2851,7 +2897,7 @@ func (c *CloudFront) GetStreamingDistributionConfigWithContext(ctx aws.Context, 
 	return out, req.Send()
 }
 
-const opListCloudFrontOriginAccessIdentities = "ListCloudFrontOriginAccessIdentities2018_11_05"
+const opListCloudFrontOriginAccessIdentities = "ListCloudFrontOriginAccessIdentities2019_03_26"
 
 // ListCloudFrontOriginAccessIdentitiesRequest generates a "aws/request.Request" representing the
 // client's request for the ListCloudFrontOriginAccessIdentities operation. The "output" return
@@ -2876,12 +2922,12 @@ const opListCloudFrontOriginAccessIdentities = "ListCloudFrontOriginAccessIdenti
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/ListCloudFrontOriginAccessIdentities
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/ListCloudFrontOriginAccessIdentities
 func (c *CloudFront) ListCloudFrontOriginAccessIdentitiesRequest(input *ListCloudFrontOriginAccessIdentitiesInput) (req *request.Request, output *ListCloudFrontOriginAccessIdentitiesOutput) {
 	op := &request.Operation{
 		Name:       opListCloudFrontOriginAccessIdentities,
 		HTTPMethod: "GET",
-		HTTPPath:   "/2018-11-05/origin-access-identity/cloudfront",
+		HTTPPath:   "/2019-03-26/origin-access-identity/cloudfront",
 		Paginator: &request.Paginator{
 			InputTokens:     []string{"Marker"},
 			OutputTokens:    []string{"CloudFrontOriginAccessIdentityList.NextMarker"},
@@ -2914,7 +2960,7 @@ func (c *CloudFront) ListCloudFrontOriginAccessIdentitiesRequest(input *ListClou
 //   * ErrCodeInvalidArgument "InvalidArgument"
 //   The argument is invalid.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/ListCloudFrontOriginAccessIdentities
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/ListCloudFrontOriginAccessIdentities
 func (c *CloudFront) ListCloudFrontOriginAccessIdentities(input *ListCloudFrontOriginAccessIdentitiesInput) (*ListCloudFrontOriginAccessIdentitiesOutput, error) {
 	req, out := c.ListCloudFrontOriginAccessIdentitiesRequest(input)
 	return out, req.Send()
@@ -2986,7 +3032,7 @@ func (c *CloudFront) ListCloudFrontOriginAccessIdentitiesPagesWithContext(ctx aw
 	return p.Err()
 }
 
-const opListDistributions = "ListDistributions2018_11_05"
+const opListDistributions = "ListDistributions2019_03_26"
 
 // ListDistributionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListDistributions operation. The "output" return
@@ -3011,12 +3057,12 @@ const opListDistributions = "ListDistributions2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/ListDistributions
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/ListDistributions
 func (c *CloudFront) ListDistributionsRequest(input *ListDistributionsInput) (req *request.Request, output *ListDistributionsOutput) {
 	op := &request.Operation{
 		Name:       opListDistributions,
 		HTTPMethod: "GET",
-		HTTPPath:   "/2018-11-05/distribution",
+		HTTPPath:   "/2019-03-26/distribution",
 		Paginator: &request.Paginator{
 			InputTokens:     []string{"Marker"},
 			OutputTokens:    []string{"DistributionList.NextMarker"},
@@ -3036,7 +3082,7 @@ func (c *CloudFront) ListDistributionsRequest(input *ListDistributionsInput) (re
 
 // ListDistributions API operation for Amazon CloudFront.
 //
-// List distributions.
+// List CloudFront distributions.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3049,7 +3095,7 @@ func (c *CloudFront) ListDistributionsRequest(input *ListDistributionsInput) (re
 //   * ErrCodeInvalidArgument "InvalidArgument"
 //   The argument is invalid.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/ListDistributions
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/ListDistributions
 func (c *CloudFront) ListDistributions(input *ListDistributionsInput) (*ListDistributionsOutput, error) {
 	req, out := c.ListDistributionsRequest(input)
 	return out, req.Send()
@@ -3121,7 +3167,7 @@ func (c *CloudFront) ListDistributionsPagesWithContext(ctx aws.Context, input *L
 	return p.Err()
 }
 
-const opListDistributionsByWebACLId = "ListDistributionsByWebACLId2018_11_05"
+const opListDistributionsByWebACLId = "ListDistributionsByWebACLId2019_03_26"
 
 // ListDistributionsByWebACLIdRequest generates a "aws/request.Request" representing the
 // client's request for the ListDistributionsByWebACLId operation. The "output" return
@@ -3146,12 +3192,12 @@ const opListDistributionsByWebACLId = "ListDistributionsByWebACLId2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/ListDistributionsByWebACLId
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/ListDistributionsByWebACLId
 func (c *CloudFront) ListDistributionsByWebACLIdRequest(input *ListDistributionsByWebACLIdInput) (req *request.Request, output *ListDistributionsByWebACLIdOutput) {
 	op := &request.Operation{
 		Name:       opListDistributionsByWebACLId,
 		HTTPMethod: "GET",
-		HTTPPath:   "/2018-11-05/distributionsByWebACLId/{WebACLId}",
+		HTTPPath:   "/2019-03-26/distributionsByWebACLId/{WebACLId}",
 	}
 
 	if input == nil {
@@ -3179,8 +3225,9 @@ func (c *CloudFront) ListDistributionsByWebACLIdRequest(input *ListDistributions
 //   The argument is invalid.
 //
 //   * ErrCodeInvalidWebACLId "InvalidWebACLId"
+//   A web ACL id specified in the response body is not valid.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/ListDistributionsByWebACLId
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/ListDistributionsByWebACLId
 func (c *CloudFront) ListDistributionsByWebACLId(input *ListDistributionsByWebACLIdInput) (*ListDistributionsByWebACLIdOutput, error) {
 	req, out := c.ListDistributionsByWebACLIdRequest(input)
 	return out, req.Send()
@@ -3202,7 +3249,7 @@ func (c *CloudFront) ListDistributionsByWebACLIdWithContext(ctx aws.Context, inp
 	return out, req.Send()
 }
 
-const opListFieldLevelEncryptionConfigs = "ListFieldLevelEncryptionConfigs2018_11_05"
+const opListFieldLevelEncryptionConfigs = "ListFieldLevelEncryptionConfigs2019_03_26"
 
 // ListFieldLevelEncryptionConfigsRequest generates a "aws/request.Request" representing the
 // client's request for the ListFieldLevelEncryptionConfigs operation. The "output" return
@@ -3227,12 +3274,12 @@ const opListFieldLevelEncryptionConfigs = "ListFieldLevelEncryptionConfigs2018_1
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/ListFieldLevelEncryptionConfigs
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/ListFieldLevelEncryptionConfigs
 func (c *CloudFront) ListFieldLevelEncryptionConfigsRequest(input *ListFieldLevelEncryptionConfigsInput) (req *request.Request, output *ListFieldLevelEncryptionConfigsOutput) {
 	op := &request.Operation{
 		Name:       opListFieldLevelEncryptionConfigs,
 		HTTPMethod: "GET",
-		HTTPPath:   "/2018-11-05/field-level-encryption",
+		HTTPPath:   "/2019-03-26/field-level-encryption",
 	}
 
 	if input == nil {
@@ -3260,7 +3307,7 @@ func (c *CloudFront) ListFieldLevelEncryptionConfigsRequest(input *ListFieldLeve
 //   * ErrCodeInvalidArgument "InvalidArgument"
 //   The argument is invalid.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/ListFieldLevelEncryptionConfigs
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/ListFieldLevelEncryptionConfigs
 func (c *CloudFront) ListFieldLevelEncryptionConfigs(input *ListFieldLevelEncryptionConfigsInput) (*ListFieldLevelEncryptionConfigsOutput, error) {
 	req, out := c.ListFieldLevelEncryptionConfigsRequest(input)
 	return out, req.Send()
@@ -3282,7 +3329,7 @@ func (c *CloudFront) ListFieldLevelEncryptionConfigsWithContext(ctx aws.Context,
 	return out, req.Send()
 }
 
-const opListFieldLevelEncryptionProfiles = "ListFieldLevelEncryptionProfiles2018_11_05"
+const opListFieldLevelEncryptionProfiles = "ListFieldLevelEncryptionProfiles2019_03_26"
 
 // ListFieldLevelEncryptionProfilesRequest generates a "aws/request.Request" representing the
 // client's request for the ListFieldLevelEncryptionProfiles operation. The "output" return
@@ -3307,12 +3354,12 @@ const opListFieldLevelEncryptionProfiles = "ListFieldLevelEncryptionProfiles2018
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/ListFieldLevelEncryptionProfiles
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/ListFieldLevelEncryptionProfiles
 func (c *CloudFront) ListFieldLevelEncryptionProfilesRequest(input *ListFieldLevelEncryptionProfilesInput) (req *request.Request, output *ListFieldLevelEncryptionProfilesOutput) {
 	op := &request.Operation{
 		Name:       opListFieldLevelEncryptionProfiles,
 		HTTPMethod: "GET",
-		HTTPPath:   "/2018-11-05/field-level-encryption-profile",
+		HTTPPath:   "/2019-03-26/field-level-encryption-profile",
 	}
 
 	if input == nil {
@@ -3340,7 +3387,7 @@ func (c *CloudFront) ListFieldLevelEncryptionProfilesRequest(input *ListFieldLev
 //   * ErrCodeInvalidArgument "InvalidArgument"
 //   The argument is invalid.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/ListFieldLevelEncryptionProfiles
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/ListFieldLevelEncryptionProfiles
 func (c *CloudFront) ListFieldLevelEncryptionProfiles(input *ListFieldLevelEncryptionProfilesInput) (*ListFieldLevelEncryptionProfilesOutput, error) {
 	req, out := c.ListFieldLevelEncryptionProfilesRequest(input)
 	return out, req.Send()
@@ -3362,7 +3409,7 @@ func (c *CloudFront) ListFieldLevelEncryptionProfilesWithContext(ctx aws.Context
 	return out, req.Send()
 }
 
-const opListInvalidations = "ListInvalidations2018_11_05"
+const opListInvalidations = "ListInvalidations2019_03_26"
 
 // ListInvalidationsRequest generates a "aws/request.Request" representing the
 // client's request for the ListInvalidations operation. The "output" return
@@ -3387,12 +3434,12 @@ const opListInvalidations = "ListInvalidations2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/ListInvalidations
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/ListInvalidations
 func (c *CloudFront) ListInvalidationsRequest(input *ListInvalidationsInput) (req *request.Request, output *ListInvalidationsOutput) {
 	op := &request.Operation{
 		Name:       opListInvalidations,
 		HTTPMethod: "GET",
-		HTTPPath:   "/2018-11-05/distribution/{DistributionId}/invalidation",
+		HTTPPath:   "/2019-03-26/distribution/{DistributionId}/invalidation",
 		Paginator: &request.Paginator{
 			InputTokens:     []string{"Marker"},
 			OutputTokens:    []string{"InvalidationList.NextMarker"},
@@ -3431,7 +3478,7 @@ func (c *CloudFront) ListInvalidationsRequest(input *ListInvalidationsInput) (re
 //   * ErrCodeAccessDenied "AccessDenied"
 //   Access denied.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/ListInvalidations
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/ListInvalidations
 func (c *CloudFront) ListInvalidations(input *ListInvalidationsInput) (*ListInvalidationsOutput, error) {
 	req, out := c.ListInvalidationsRequest(input)
 	return out, req.Send()
@@ -3503,7 +3550,7 @@ func (c *CloudFront) ListInvalidationsPagesWithContext(ctx aws.Context, input *L
 	return p.Err()
 }
 
-const opListPublicKeys = "ListPublicKeys2018_11_05"
+const opListPublicKeys = "ListPublicKeys2019_03_26"
 
 // ListPublicKeysRequest generates a "aws/request.Request" representing the
 // client's request for the ListPublicKeys operation. The "output" return
@@ -3528,12 +3575,12 @@ const opListPublicKeys = "ListPublicKeys2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/ListPublicKeys
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/ListPublicKeys
 func (c *CloudFront) ListPublicKeysRequest(input *ListPublicKeysInput) (req *request.Request, output *ListPublicKeysOutput) {
 	op := &request.Operation{
 		Name:       opListPublicKeys,
 		HTTPMethod: "GET",
-		HTTPPath:   "/2018-11-05/public-key",
+		HTTPPath:   "/2019-03-26/public-key",
 	}
 
 	if input == nil {
@@ -3560,7 +3607,7 @@ func (c *CloudFront) ListPublicKeysRequest(input *ListPublicKeysInput) (req *req
 //   * ErrCodeInvalidArgument "InvalidArgument"
 //   The argument is invalid.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/ListPublicKeys
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/ListPublicKeys
 func (c *CloudFront) ListPublicKeys(input *ListPublicKeysInput) (*ListPublicKeysOutput, error) {
 	req, out := c.ListPublicKeysRequest(input)
 	return out, req.Send()
@@ -3582,7 +3629,7 @@ func (c *CloudFront) ListPublicKeysWithContext(ctx aws.Context, input *ListPubli
 	return out, req.Send()
 }
 
-const opListStreamingDistributions = "ListStreamingDistributions2018_11_05"
+const opListStreamingDistributions = "ListStreamingDistributions2019_03_26"
 
 // ListStreamingDistributionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListStreamingDistributions operation. The "output" return
@@ -3607,12 +3654,12 @@ const opListStreamingDistributions = "ListStreamingDistributions2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/ListStreamingDistributions
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/ListStreamingDistributions
 func (c *CloudFront) ListStreamingDistributionsRequest(input *ListStreamingDistributionsInput) (req *request.Request, output *ListStreamingDistributionsOutput) {
 	op := &request.Operation{
 		Name:       opListStreamingDistributions,
 		HTTPMethod: "GET",
-		HTTPPath:   "/2018-11-05/streaming-distribution",
+		HTTPPath:   "/2019-03-26/streaming-distribution",
 		Paginator: &request.Paginator{
 			InputTokens:     []string{"Marker"},
 			OutputTokens:    []string{"StreamingDistributionList.NextMarker"},
@@ -3645,7 +3692,7 @@ func (c *CloudFront) ListStreamingDistributionsRequest(input *ListStreamingDistr
 //   * ErrCodeInvalidArgument "InvalidArgument"
 //   The argument is invalid.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/ListStreamingDistributions
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/ListStreamingDistributions
 func (c *CloudFront) ListStreamingDistributions(input *ListStreamingDistributionsInput) (*ListStreamingDistributionsOutput, error) {
 	req, out := c.ListStreamingDistributionsRequest(input)
 	return out, req.Send()
@@ -3717,7 +3764,7 @@ func (c *CloudFront) ListStreamingDistributionsPagesWithContext(ctx aws.Context,
 	return p.Err()
 }
 
-const opListTagsForResource = "ListTagsForResource2018_11_05"
+const opListTagsForResource = "ListTagsForResource2019_03_26"
 
 // ListTagsForResourceRequest generates a "aws/request.Request" representing the
 // client's request for the ListTagsForResource operation. The "output" return
@@ -3742,12 +3789,12 @@ const opListTagsForResource = "ListTagsForResource2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/ListTagsForResource
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/ListTagsForResource
 func (c *CloudFront) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
 	op := &request.Operation{
 		Name:       opListTagsForResource,
 		HTTPMethod: "GET",
-		HTTPPath:   "/2018-11-05/tagging",
+		HTTPPath:   "/2019-03-26/tagging",
 	}
 
 	if input == nil {
@@ -3778,10 +3825,12 @@ func (c *CloudFront) ListTagsForResourceRequest(input *ListTagsForResourceInput)
 //   The argument is invalid.
 //
 //   * ErrCodeInvalidTagging "InvalidTagging"
+//   Tagging specified in the response body is not valid.
 //
 //   * ErrCodeNoSuchResource "NoSuchResource"
+//   A resource that was specified is not valid.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/ListTagsForResource
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/ListTagsForResource
 func (c *CloudFront) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
 	req, out := c.ListTagsForResourceRequest(input)
 	return out, req.Send()
@@ -3803,7 +3852,7 @@ func (c *CloudFront) ListTagsForResourceWithContext(ctx aws.Context, input *List
 	return out, req.Send()
 }
 
-const opTagResource = "TagResource2018_11_05"
+const opTagResource = "TagResource2019_03_26"
 
 // TagResourceRequest generates a "aws/request.Request" representing the
 // client's request for the TagResource operation. The "output" return
@@ -3828,12 +3877,12 @@ const opTagResource = "TagResource2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/TagResource
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/TagResource
 func (c *CloudFront) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
 	op := &request.Operation{
 		Name:       opTagResource,
 		HTTPMethod: "POST",
-		HTTPPath:   "/2018-11-05/tagging?Operation=Tag",
+		HTTPPath:   "/2019-03-26/tagging?Operation=Tag",
 	}
 
 	if input == nil {
@@ -3865,10 +3914,12 @@ func (c *CloudFront) TagResourceRequest(input *TagResourceInput) (req *request.R
 //   The argument is invalid.
 //
 //   * ErrCodeInvalidTagging "InvalidTagging"
+//   Tagging specified in the response body is not valid.
 //
 //   * ErrCodeNoSuchResource "NoSuchResource"
+//   A resource that was specified is not valid.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/TagResource
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/TagResource
 func (c *CloudFront) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
 	req, out := c.TagResourceRequest(input)
 	return out, req.Send()
@@ -3890,7 +3941,7 @@ func (c *CloudFront) TagResourceWithContext(ctx aws.Context, input *TagResourceI
 	return out, req.Send()
 }
 
-const opUntagResource = "UntagResource2018_11_05"
+const opUntagResource = "UntagResource2019_03_26"
 
 // UntagResourceRequest generates a "aws/request.Request" representing the
 // client's request for the UntagResource operation. The "output" return
@@ -3915,12 +3966,12 @@ const opUntagResource = "UntagResource2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/UntagResource
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/UntagResource
 func (c *CloudFront) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
 	op := &request.Operation{
 		Name:       opUntagResource,
 		HTTPMethod: "POST",
-		HTTPPath:   "/2018-11-05/tagging?Operation=Untag",
+		HTTPPath:   "/2019-03-26/tagging?Operation=Untag",
 	}
 
 	if input == nil {
@@ -3952,10 +4003,12 @@ func (c *CloudFront) UntagResourceRequest(input *UntagResourceInput) (req *reque
 //   The argument is invalid.
 //
 //   * ErrCodeInvalidTagging "InvalidTagging"
+//   Tagging specified in the response body is not valid.
 //
 //   * ErrCodeNoSuchResource "NoSuchResource"
+//   A resource that was specified is not valid.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/UntagResource
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/UntagResource
 func (c *CloudFront) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
 	req, out := c.UntagResourceRequest(input)
 	return out, req.Send()
@@ -3977,7 +4030,7 @@ func (c *CloudFront) UntagResourceWithContext(ctx aws.Context, input *UntagResou
 	return out, req.Send()
 }
 
-const opUpdateCloudFrontOriginAccessIdentity = "UpdateCloudFrontOriginAccessIdentity2018_11_05"
+const opUpdateCloudFrontOriginAccessIdentity = "UpdateCloudFrontOriginAccessIdentity2019_03_26"
 
 // UpdateCloudFrontOriginAccessIdentityRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateCloudFrontOriginAccessIdentity operation. The "output" return
@@ -4002,12 +4055,12 @@ const opUpdateCloudFrontOriginAccessIdentity = "UpdateCloudFrontOriginAccessIden
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/UpdateCloudFrontOriginAccessIdentity
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/UpdateCloudFrontOriginAccessIdentity
 func (c *CloudFront) UpdateCloudFrontOriginAccessIdentityRequest(input *UpdateCloudFrontOriginAccessIdentityInput) (req *request.Request, output *UpdateCloudFrontOriginAccessIdentityOutput) {
 	op := &request.Operation{
 		Name:       opUpdateCloudFrontOriginAccessIdentity,
 		HTTPMethod: "PUT",
-		HTTPPath:   "/2018-11-05/origin-access-identity/cloudfront/{Id}/config",
+		HTTPPath:   "/2019-03-26/origin-access-identity/cloudfront/{Id}/config",
 	}
 
 	if input == nil {
@@ -4057,7 +4110,7 @@ func (c *CloudFront) UpdateCloudFrontOriginAccessIdentityRequest(input *UpdateCl
 //   * ErrCodeInconsistentQuantities "InconsistentQuantities"
 //   The value of Quantity and the size of Items don't match.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/UpdateCloudFrontOriginAccessIdentity
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/UpdateCloudFrontOriginAccessIdentity
 func (c *CloudFront) UpdateCloudFrontOriginAccessIdentity(input *UpdateCloudFrontOriginAccessIdentityInput) (*UpdateCloudFrontOriginAccessIdentityOutput, error) {
 	req, out := c.UpdateCloudFrontOriginAccessIdentityRequest(input)
 	return out, req.Send()
@@ -4079,7 +4132,7 @@ func (c *CloudFront) UpdateCloudFrontOriginAccessIdentityWithContext(ctx aws.Con
 	return out, req.Send()
 }
 
-const opUpdateDistribution = "UpdateDistribution2018_11_05"
+const opUpdateDistribution = "UpdateDistribution2019_03_26"
 
 // UpdateDistributionRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateDistribution operation. The "output" return
@@ -4104,12 +4157,12 @@ const opUpdateDistribution = "UpdateDistribution2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/UpdateDistribution
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/UpdateDistribution
 func (c *CloudFront) UpdateDistributionRequest(input *UpdateDistributionInput) (req *request.Request, output *UpdateDistributionOutput) {
 	op := &request.Operation{
 		Name:       opUpdateDistribution,
 		HTTPMethod: "PUT",
-		HTTPPath:   "/2018-11-05/distribution/{Id}/config",
+		HTTPPath:   "/2019-03-26/distribution/{Id}/config",
 	}
 
 	if input == nil {
@@ -4130,7 +4183,7 @@ func (c *CloudFront) UpdateDistributionRequest(input *UpdateDistributionInput) (
 // API action, follow the steps here to get the current configuration and then
 // make your updates, to make sure that you include all of the required fields.
 // To view a summary, see Required Fields for Create Distribution and Update
-// Distribution (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-overview-required-fields.html)
+// Distribution (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-overview-required-fields.html)
 // in the Amazon CloudFront Developer Guide.
 //
 // The update process includes getting the current distribution configuration,
@@ -4138,13 +4191,13 @@ func (c *CloudFront) UpdateDistributionRequest(input *UpdateDistributionInput) (
 // submitting an UpdateDistribution request to make the updates.
 //
 // For information about updating a distribution using the CloudFront console
-// instead, see Creating a Distribution (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-creating-console.html)
+// instead, see Creating a Distribution (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-creating-console.html)
 // in the Amazon CloudFront Developer Guide.
 //
 // To update a web distribution using the CloudFront API
 //
-// Submit a GetDistributionConfig request to get the current configuration and
-// an Etag header for the distribution.
+// Submit a GetDistributionConfig (https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetDistributionConfig.html)
+// request to get the current configuration and an Etag header for the distribution.
 //
 // If you update the distribution again, you must get a new Etag header.
 //
@@ -4184,8 +4237,9 @@ func (c *CloudFront) UpdateDistributionRequest(input *UpdateDistributionInput) (
 // Review the response to the UpdateDistribution request to confirm that the
 // configuration was successfully updated.
 //
-// Optional: Submit a GetDistribution request to confirm that your changes have
-// propagated. When propagation is complete, the value of Status is Deployed.
+// Optional: Submit a GetDistribution (https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_GetDistribution.html)
+// request to confirm that your changes have propagated. When propagation is
+// complete, the value of Status is Deployed.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4199,6 +4253,7 @@ func (c *CloudFront) UpdateDistributionRequest(input *UpdateDistributionInput) (
 //   Access denied.
 //
 //   * ErrCodeCNAMEAlreadyExists "CNAMEAlreadyExists"
+//   The CNAME specified is already defined for CloudFront.
 //
 //   * ErrCodeIllegalUpdate "IllegalUpdate"
 //   Origin and CallerReference cannot be updated.
@@ -4228,8 +4283,10 @@ func (c *CloudFront) UpdateDistributionRequest(input *UpdateDistributionInput) (
 //   a slash (/).
 //
 //   * ErrCodeInvalidErrorCode "InvalidErrorCode"
+//   An invalid error code was specified.
 //
 //   * ErrCodeInvalidResponseCode "InvalidResponseCode"
+//   A response code specified in the response body is not valid.
 //
 //   * ErrCodeInvalidArgument "InvalidArgument"
 //   The argument is invalid.
@@ -4244,8 +4301,10 @@ func (c *CloudFront) UpdateDistributionRequest(input *UpdateDistributionInput) (
 //   One or more of your trusted signers don't exist.
 //
 //   * ErrCodeInvalidViewerCertificate "InvalidViewerCertificate"
+//   A viewer certificate specified in the response body is not valid.
 //
 //   * ErrCodeInvalidMinimumProtocolVersion "InvalidMinimumProtocolVersion"
+//   The minimum protocol version specified is not valid.
 //
 //   * ErrCodeInvalidRequiredProtocol "InvalidRequiredProtocol"
 //   This operation requires the HTTPS protocol. Ensure that you specify the HTTPS
@@ -4276,8 +4335,10 @@ func (c *CloudFront) UpdateDistributionRequest(input *UpdateDistributionInput) (
 //   when expected.
 //
 //   * ErrCodeTooManyHeadersInForwardedValues "TooManyHeadersInForwardedValues"
+//   Your request contains too many headers in forwarded values.
 //
 //   * ErrCodeInvalidHeadersForS3Origin "InvalidHeadersForS3Origin"
+//   The headers specified are not valid for an Amazon S3 origin.
 //
 //   * ErrCodeInconsistentQuantities "InconsistentQuantities"
 //   The value of Quantity and the size of Items don't match.
@@ -4286,18 +4347,25 @@ func (c *CloudFront) UpdateDistributionRequest(input *UpdateDistributionInput) (
 //   You cannot create anymore custom SSL/TLS certificates.
 //
 //   * ErrCodeInvalidLocationCode "InvalidLocationCode"
+//   The location code specified is not valid.
 //
 //   * ErrCodeInvalidGeoRestrictionParameter "InvalidGeoRestrictionParameter"
+//   The specified geo restriction parameter is not valid.
 //
 //   * ErrCodeInvalidTTLOrder "InvalidTTLOrder"
+//   TTL order specified in the response body is not valid.
 //
 //   * ErrCodeInvalidWebACLId "InvalidWebACLId"
+//   A web ACL id specified in the response body is not valid.
 //
 //   * ErrCodeTooManyOriginCustomHeaders "TooManyOriginCustomHeaders"
+//   Your request contains too many origin custom headers.
 //
 //   * ErrCodeTooManyQueryStringParameters "TooManyQueryStringParameters"
+//   Your request contains too many query string parameters.
 //
 //   * ErrCodeInvalidQueryStringParameters "InvalidQueryStringParameters"
+//   Query string parameters specified in the response body are not valid.
 //
 //   * ErrCodeTooManyDistributionsWithLambdaAssociations "TooManyDistributionsWithLambdaAssociations"
 //   Processing your request would cause the maximum number of distributions with
@@ -4311,8 +4379,10 @@ func (c *CloudFront) UpdateDistributionRequest(input *UpdateDistributionInput) (
 //   The specified Lambda function association is invalid.
 //
 //   * ErrCodeInvalidOriginReadTimeout "InvalidOriginReadTimeout"
+//   The read timeout specified for the origin is not valid.
 //
 //   * ErrCodeInvalidOriginKeepaliveTimeout "InvalidOriginKeepaliveTimeout"
+//   The keep alive timeout specified for the origin is not valid.
 //
 //   * ErrCodeNoSuchFieldLevelEncryptionConfig "NoSuchFieldLevelEncryptionConfig"
 //   The specified configuration for field-level encryption doesn't exist.
@@ -4325,7 +4395,7 @@ func (c *CloudFront) UpdateDistributionRequest(input *UpdateDistributionInput) (
 //   The maximum number of distributions have been associated with the specified
 //   configuration for field-level encryption.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/UpdateDistribution
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/UpdateDistribution
 func (c *CloudFront) UpdateDistribution(input *UpdateDistributionInput) (*UpdateDistributionOutput, error) {
 	req, out := c.UpdateDistributionRequest(input)
 	return out, req.Send()
@@ -4347,7 +4417,7 @@ func (c *CloudFront) UpdateDistributionWithContext(ctx aws.Context, input *Updat
 	return out, req.Send()
 }
 
-const opUpdateFieldLevelEncryptionConfig = "UpdateFieldLevelEncryptionConfig2018_11_05"
+const opUpdateFieldLevelEncryptionConfig = "UpdateFieldLevelEncryptionConfig2019_03_26"
 
 // UpdateFieldLevelEncryptionConfigRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateFieldLevelEncryptionConfig operation. The "output" return
@@ -4372,12 +4442,12 @@ const opUpdateFieldLevelEncryptionConfig = "UpdateFieldLevelEncryptionConfig2018
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/UpdateFieldLevelEncryptionConfig
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/UpdateFieldLevelEncryptionConfig
 func (c *CloudFront) UpdateFieldLevelEncryptionConfigRequest(input *UpdateFieldLevelEncryptionConfigInput) (req *request.Request, output *UpdateFieldLevelEncryptionConfigOutput) {
 	op := &request.Operation{
 		Name:       opUpdateFieldLevelEncryptionConfig,
 		HTTPMethod: "PUT",
-		HTTPPath:   "/2018-11-05/field-level-encryption/{Id}/config",
+		HTTPPath:   "/2019-03-26/field-level-encryption/{Id}/config",
 	}
 
 	if input == nil {
@@ -4437,7 +4507,7 @@ func (c *CloudFront) UpdateFieldLevelEncryptionConfigRequest(input *UpdateFieldL
 //   * ErrCodeQueryArgProfileEmpty "QueryArgProfileEmpty"
 //   No profile specified for the field-level encryption query argument.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/UpdateFieldLevelEncryptionConfig
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/UpdateFieldLevelEncryptionConfig
 func (c *CloudFront) UpdateFieldLevelEncryptionConfig(input *UpdateFieldLevelEncryptionConfigInput) (*UpdateFieldLevelEncryptionConfigOutput, error) {
 	req, out := c.UpdateFieldLevelEncryptionConfigRequest(input)
 	return out, req.Send()
@@ -4459,7 +4529,7 @@ func (c *CloudFront) UpdateFieldLevelEncryptionConfigWithContext(ctx aws.Context
 	return out, req.Send()
 }
 
-const opUpdateFieldLevelEncryptionProfile = "UpdateFieldLevelEncryptionProfile2018_11_05"
+const opUpdateFieldLevelEncryptionProfile = "UpdateFieldLevelEncryptionProfile2019_03_26"
 
 // UpdateFieldLevelEncryptionProfileRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateFieldLevelEncryptionProfile operation. The "output" return
@@ -4484,12 +4554,12 @@ const opUpdateFieldLevelEncryptionProfile = "UpdateFieldLevelEncryptionProfile20
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/UpdateFieldLevelEncryptionProfile
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/UpdateFieldLevelEncryptionProfile
 func (c *CloudFront) UpdateFieldLevelEncryptionProfileRequest(input *UpdateFieldLevelEncryptionProfileInput) (req *request.Request, output *UpdateFieldLevelEncryptionProfileOutput) {
 	op := &request.Operation{
 		Name:       opUpdateFieldLevelEncryptionProfile,
 		HTTPMethod: "PUT",
-		HTTPPath:   "/2018-11-05/field-level-encryption-profile/{Id}/config",
+		HTTPPath:   "/2019-03-26/field-level-encryption-profile/{Id}/config",
 	}
 
 	if input == nil {
@@ -4552,7 +4622,7 @@ func (c *CloudFront) UpdateFieldLevelEncryptionProfileRequest(input *UpdateField
 //   The maximum number of field patterns for field-level encryption have been
 //   created.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/UpdateFieldLevelEncryptionProfile
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/UpdateFieldLevelEncryptionProfile
 func (c *CloudFront) UpdateFieldLevelEncryptionProfile(input *UpdateFieldLevelEncryptionProfileInput) (*UpdateFieldLevelEncryptionProfileOutput, error) {
 	req, out := c.UpdateFieldLevelEncryptionProfileRequest(input)
 	return out, req.Send()
@@ -4574,7 +4644,7 @@ func (c *CloudFront) UpdateFieldLevelEncryptionProfileWithContext(ctx aws.Contex
 	return out, req.Send()
 }
 
-const opUpdatePublicKey = "UpdatePublicKey2018_11_05"
+const opUpdatePublicKey = "UpdatePublicKey2019_03_26"
 
 // UpdatePublicKeyRequest generates a "aws/request.Request" representing the
 // client's request for the UpdatePublicKey operation. The "output" return
@@ -4599,12 +4669,12 @@ const opUpdatePublicKey = "UpdatePublicKey2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/UpdatePublicKey
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/UpdatePublicKey
 func (c *CloudFront) UpdatePublicKeyRequest(input *UpdatePublicKeyInput) (req *request.Request, output *UpdatePublicKeyOutput) {
 	op := &request.Operation{
 		Name:       opUpdatePublicKey,
 		HTTPMethod: "PUT",
-		HTTPPath:   "/2018-11-05/public-key/{Id}/config",
+		HTTPPath:   "/2019-03-26/public-key/{Id}/config",
 	}
 
 	if input == nil {
@@ -4651,7 +4721,7 @@ func (c *CloudFront) UpdatePublicKeyRequest(input *UpdatePublicKeyInput) (req *r
 //   The precondition given in one or more of the request-header fields evaluated
 //   to false.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/UpdatePublicKey
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/UpdatePublicKey
 func (c *CloudFront) UpdatePublicKey(input *UpdatePublicKeyInput) (*UpdatePublicKeyOutput, error) {
 	req, out := c.UpdatePublicKeyRequest(input)
 	return out, req.Send()
@@ -4673,7 +4743,7 @@ func (c *CloudFront) UpdatePublicKeyWithContext(ctx aws.Context, input *UpdatePu
 	return out, req.Send()
 }
 
-const opUpdateStreamingDistribution = "UpdateStreamingDistribution2018_11_05"
+const opUpdateStreamingDistribution = "UpdateStreamingDistribution2019_03_26"
 
 // UpdateStreamingDistributionRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateStreamingDistribution operation. The "output" return
@@ -4698,12 +4768,12 @@ const opUpdateStreamingDistribution = "UpdateStreamingDistribution2018_11_05"
 //        fmt.Println(resp)
 //    }
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/UpdateStreamingDistribution
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/UpdateStreamingDistribution
 func (c *CloudFront) UpdateStreamingDistributionRequest(input *UpdateStreamingDistributionInput) (req *request.Request, output *UpdateStreamingDistributionOutput) {
 	op := &request.Operation{
 		Name:       opUpdateStreamingDistribution,
 		HTTPMethod: "PUT",
-		HTTPPath:   "/2018-11-05/streaming-distribution/{Id}/config",
+		HTTPPath:   "/2019-03-26/streaming-distribution/{Id}/config",
 	}
 
 	if input == nil {
@@ -4731,6 +4801,7 @@ func (c *CloudFront) UpdateStreamingDistributionRequest(input *UpdateStreamingDi
 //   Access denied.
 //
 //   * ErrCodeCNAMEAlreadyExists "CNAMEAlreadyExists"
+//   The CNAME specified is already defined for CloudFront.
 //
 //   * ErrCodeIllegalUpdate "IllegalUpdate"
 //   Origin and CallerReference cannot be updated.
@@ -4750,6 +4821,7 @@ func (c *CloudFront) UpdateStreamingDistributionRequest(input *UpdateStreamingDi
 //   to false.
 //
 //   * ErrCodeTooManyStreamingDistributionCNAMEs "TooManyStreamingDistributionCNAMEs"
+//   Your request contains more CNAMEs than are allowed per distribution.
 //
 //   * ErrCodeInvalidArgument "InvalidArgument"
 //   The argument is invalid.
@@ -4766,7 +4838,7 @@ func (c *CloudFront) UpdateStreamingDistributionRequest(input *UpdateStreamingDi
 //   * ErrCodeInconsistentQuantities "InconsistentQuantities"
 //   The value of Quantity and the size of Items don't match.
 //
-// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2018-11-05/UpdateStreamingDistribution
+// See also, https://docs.aws.amazon.com/goto/WebAPI/cloudfront-2019-03-26/UpdateStreamingDistribution
 func (c *CloudFront) UpdateStreamingDistribution(input *UpdateStreamingDistributionInput) (*UpdateStreamingDistributionOutput, error) {
 	req, out := c.UpdateStreamingDistributionRequest(input)
 	return out, req.Send()
@@ -4798,30 +4870,23 @@ func (c *CloudFront) UpdateStreamingDistributionWithContext(ctx aws.Context, inp
 // are associated with the trusted signer's AWS account. If no KeyPairId element
 // appears for a Signer, that signer can't create signed URLs.
 //
-// For more information, see Serving Private Content through CloudFront (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html)
+// For more information, see Serving Private Content through CloudFront (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html)
 // in the Amazon CloudFront Developer Guide.
 type ActiveTrustedSigners struct {
 	_ struct{} `type:"structure"`
 
 	// Enabled is true if any of the AWS accounts listed in the TrustedSigners complex
-	// type for this RTMP distribution have active CloudFront key pairs. If not,
-	// Enabled is false.
-	//
-	// For more information, see ActiveTrustedSigners.
+	// type for this distribution have active CloudFront key pairs. If not, Enabled
+	// is false.
 	//
 	// Enabled is a required field
 	Enabled *bool `type:"boolean" required:"true"`
 
 	// A complex type that contains one Signer complex type for each trusted signer
 	// that is specified in the TrustedSigners complex type.
-	//
-	// For more information, see ActiveTrustedSigners.
 	Items []*Signer `locationNameList:"Signer" type:"list"`
 
-	// A complex type that contains one Signer complex type for each trusted signer
-	// specified in the TrustedSigners complex type.
-	//
-	// For more information, see ActiveTrustedSigners.
+	// The number of trusted signers specified in the TrustedSigners complex type.
 	//
 	// Quantity is a required field
 	Quantity *int64 `type:"integer" required:"true"`
@@ -4852,6 +4917,63 @@ func (s *ActiveTrustedSigners) SetItems(v []*Signer) *ActiveTrustedSigners {
 // SetQuantity sets the Quantity field's value.
 func (s *ActiveTrustedSigners) SetQuantity(v int64) *ActiveTrustedSigners {
 	s.Quantity = &v
+	return s
+}
+
+// AWS services in China customers must file for an Internet Content Provider
+// (ICP) recordal if they want to serve content publicly on an alternate domain
+// name, also known as a CNAME, that they've added to CloudFront. AliasICPRecordal
+// provides the ICP recordal status for CNAMEs associated with distributions.
+// The status is returned in the CloudFront response; you can't configure it
+// yourself.
+//
+// For more information about ICP recordals, see Signup, Accounts, and Credentials
+// (https://docs.amazonaws.cn/en_us/aws/latest/userguide/accounts-and-credentials.html)
+// in Getting Started with AWS services in China.
+type AliasICPRecordal struct {
+	_ struct{} `type:"structure"`
+
+	// A domain name associated with a distribution.
+	CNAME *string `type:"string"`
+
+	// The Internet Content Provider (ICP) recordal status for a CNAME. The ICPRecordalStatus
+	// is set to APPROVED for all CNAMEs (aliases) in regions outside of China.
+	//
+	// The status values returned are the following:
+	//
+	//    * APPROVED indicates that the associated CNAME has a valid ICP recordal
+	//    number. Multiple CNAMEs can be associated with a distribution, and CNAMEs
+	//    can correspond to different ICP recordals. To be marked as APPROVED, that
+	//    is, valid to use with China region, a CNAME must have one ICP recordal
+	//    number associated with it.
+	//
+	//    * SUSPENDED indicates that the associated CNAME does not have a valid
+	//    ICP recordal number.
+	//
+	//    * PENDING indicates that at least one CNAME associated with the distribution
+	//    does not have a valid ICP recordal number.
+	ICPRecordalStatus *string `type:"string" enum:"ICPRecordalStatus"`
+}
+
+// String returns the string representation
+func (s AliasICPRecordal) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AliasICPRecordal) GoString() string {
+	return s.String()
+}
+
+// SetCNAME sets the CNAME field's value.
+func (s *AliasICPRecordal) SetCNAME(v string) *AliasICPRecordal {
+	s.CNAME = &v
+	return s
+}
+
+// SetICPRecordalStatus sets the ICPRecordalStatus field's value.
+func (s *AliasICPRecordal) SetICPRecordalStatus(v string) *AliasICPRecordal {
+	s.ICPRecordalStatus = &v
 	return s
 }
 
@@ -5009,7 +5131,7 @@ func (s *AllowedMethods) SetQuantity(v int64) *AllowedMethods {
 // to get objects from one of the origins, but the other origin is never used.
 //
 // For the current limit on the number of cache behaviors that you can add to
-// a distribution, see Amazon CloudFront Limits (http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront)
+// a distribution, see Amazon CloudFront Limits (https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront)
 // in the AWS General Reference.
 //
 // If you don't want to specify any cache behaviors, include only an empty CacheBehaviors
@@ -5023,7 +5145,7 @@ func (s *AllowedMethods) SetQuantity(v int64) *AllowedMethods {
 // configuration and specify all of the cache behaviors that you want to include
 // in the updated distribution.
 //
-// For more information about cache behaviors, see Cache Behaviors (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesCacheBehavior)
+// For more information about cache behaviors, see Cache Behaviors (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesCacheBehavior)
 // in the Amazon CloudFront Developer Guide.
 type CacheBehavior struct {
 	_ struct{} `type:"structure"`
@@ -5047,7 +5169,7 @@ type CacheBehavior struct {
 
 	// Whether you want CloudFront to automatically compress certain files for this
 	// cache behavior. If so, specify true; if not, specify false. For more information,
-	// see Serving Compressed Files (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html)
+	// see Serving Compressed Files (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html)
 	// in the Amazon CloudFront Developer Guide.
 	Compress *bool `type:"boolean"`
 
@@ -5055,8 +5177,8 @@ type CacheBehavior struct {
 	// before CloudFront forwards another request to your origin to determine whether
 	// the object has been updated. The value that you specify applies only when
 	// your origin does not add HTTP headers such as Cache-Control max-age, Cache-Control
-	// s-maxage, and Expires to objects. For more information, see Specifying How
-	// Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration) (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html)
+	// s-maxage, and Expires to objects. For more information, see Managing How
+	// Long Content Stays in an Edge Cache (Expiration) (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html)
 	// in the Amazon CloudFront Developer Guide.
 	DefaultTTL *int64 `type:"long"`
 
@@ -5078,16 +5200,16 @@ type CacheBehavior struct {
 	// before CloudFront forwards another request to your origin to determine whether
 	// the object has been updated. The value that you specify applies only when
 	// your origin adds HTTP headers such as Cache-Control max-age, Cache-Control
-	// s-maxage, and Expires to objects. For more information, see Specifying How
-	// Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration) (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html)
+	// s-maxage, and Expires to objects. For more information, see Managing How
+	// Long Content Stays in an Edge Cache (Expiration) (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html)
 	// in the Amazon CloudFront Developer Guide.
 	MaxTTL *int64 `type:"long"`
 
 	// The minimum amount of time that you want objects to stay in CloudFront caches
 	// before CloudFront forwards another request to your origin to determine whether
-	// the object has been updated. For more information, see Specifying How Long
-	// Objects and Errors Stay in a CloudFront Edge Cache (Expiration) (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html)
-	// in the Amazon Amazon CloudFront Developer Guide.
+	// the object has been updated. For more information, see Managing How Long
+	// Content Stays in an Edge Cache (Expiration) (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html)
+	// in the Amazon CloudFront Developer Guide.
 	//
 	// You must specify 0 for MinTTL if you configure CloudFront to forward all
 	// headers to your origin (under Headers, if you specify 1 for Quantity and
@@ -5109,7 +5231,7 @@ type CacheBehavior struct {
 	// If the request for an object does not match the path pattern for any cache
 	// behaviors, CloudFront applies the behavior in the default cache behavior.
 	//
-	// For more information, see Path Pattern (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesPathPattern)
+	// For more information, see Path Pattern (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesPathPattern)
 	// in the Amazon CloudFront Developer Guide.
 	//
 	// PathPattern is a required field
@@ -5135,8 +5257,8 @@ type CacheBehavior struct {
 	// If you want to require signed URLs in requests for objects in the target
 	// origin that match the PathPattern for this cache behavior, specify true for
 	// Enabled, and specify the applicable values for Quantity and Items. For more
-	// information, see Serving Private Content through CloudFront (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html)
-	// in the Amazon Amazon CloudFront Developer Guide.
+	// information, see Serving Private Content through CloudFront (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html)
+	// in the Amazon CloudFront Developer Guide.
 	//
 	// If you don't want to require signed URLs in requests for objects that match
 	// PathPattern, specify false for Enabled and 0 for Quantity. Omit Items.
@@ -5162,7 +5284,7 @@ type CacheBehavior struct {
 	//    HTTP status code of 403 (Forbidden).
 	//
 	// For more information about requiring the HTTPS protocol, see Using an HTTPS
-	// Connection to Access Your Objects (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html)
+	// Connection to Access Your Objects (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html)
 	// in the Amazon CloudFront Developer Guide.
 	//
 	// The only way to guarantee that viewers retrieve an object that was fetched
@@ -5171,8 +5293,8 @@ type CacheBehavior struct {
 	// you clear your objects' cache because cached objects are protocol agnostic.
 	// That means that an edge location will return an object from the cache regardless
 	// of whether the current request protocol matches the protocol used previously.
-	// For more information, see Specifying How Long Objects and Errors Stay in
-	// a CloudFront Edge Cache (Expiration) (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html)
+	// For more information, see Managing How Long Content Stays in an Edge Cache
+	// (Expiration) (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html)
 	// in the Amazon CloudFront Developer Guide.
 	//
 	// ViewerProtocolPolicy is a required field
@@ -5618,8 +5740,7 @@ func (s *ContentTypeProfiles) SetQuantity(v int64) *ContentTypeProfiles {
 
 // A complex type that specifies whether you want CloudFront to forward cookies
 // to the origin and, if so, which ones. For more information about forwarding
-// cookies to the origin, see How CloudFront Forwards, Caches, and Logs Cookies
-// (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html)
+// cookies to the origin, see Caching Content Based on Request Headers (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/header-caching.html)
 // in the Amazon CloudFront Developer Guide.
 type CookieNames struct {
 	_ struct{} `type:"structure"`
@@ -5672,8 +5793,7 @@ func (s *CookieNames) SetQuantity(v int64) *CookieNames {
 
 // A complex type that specifies whether you want CloudFront to forward cookies
 // to the origin and, if so, which ones. For more information about forwarding
-// cookies to the origin, see How CloudFront Forwards, Caches, and Logs Cookies
-// (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html)
+// cookies to the origin, see Caching Content Based on Cookies (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html)
 // in the Amazon CloudFront Developer Guide.
 type CookiePreference struct {
 	_ struct{} `type:"structure"`
@@ -5699,7 +5819,7 @@ type CookiePreference struct {
 	// deletes them automatically.
 	//
 	// For the current limit on the number of cookie names that you can whitelist
-	// for each cache behavior, see Amazon CloudFront Limits (http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront)
+	// for each cache behavior, see CloudFront Limits (https://docs.aws.amazon.com/general/latest/gr/xrefaws_service_limits.html#limits_cloudfront)
 	// in the AWS General Reference.
 	WhitelistedNames *CookieNames `type:"structure"`
 }
@@ -5744,14 +5864,19 @@ func (s *CookiePreference) SetWhitelistedNames(v *CookieNames) *CookiePreference
 	return s
 }
 
-// The request to create a new origin access identity.
+// The request to create a new origin access identity (OAI). An origin access
+// identity is a special CloudFront user that you can associate with Amazon
+// S3 origins, so that you can secure all or just some of your Amazon S3 content.
+// For more information, see Restricting Access to Amazon S3 Content by Using
+// an Origin Access Identity (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html)
+// in the Amazon CloudFront Developer Guide.
 type CreateCloudFrontOriginAccessIdentityInput struct {
 	_ struct{} `type:"structure" payload:"CloudFrontOriginAccessIdentityConfig"`
 
 	// The current configuration information for the identity.
 	//
 	// CloudFrontOriginAccessIdentityConfig is a required field
-	CloudFrontOriginAccessIdentityConfig *OriginAccessIdentityConfig `locationName:"CloudFrontOriginAccessIdentityConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2018-11-05/"`
+	CloudFrontOriginAccessIdentityConfig *OriginAccessIdentityConfig `locationName:"CloudFrontOriginAccessIdentityConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2019-03-26/"`
 }
 
 // String returns the string representation
@@ -5838,7 +5963,7 @@ type CreateDistributionInput struct {
 	// The distribution's configuration information.
 	//
 	// DistributionConfig is a required field
-	DistributionConfig *DistributionConfig `locationName:"DistributionConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2018-11-05/"`
+	DistributionConfig *DistributionConfig `locationName:"DistributionConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2019-03-26/"`
 }
 
 // String returns the string representation
@@ -5925,7 +6050,7 @@ type CreateDistributionWithTagsInput struct {
 	// The distribution's configuration information.
 	//
 	// DistributionConfigWithTags is a required field
-	DistributionConfigWithTags *DistributionConfigWithTags `locationName:"DistributionConfigWithTags" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2018-11-05/"`
+	DistributionConfigWithTags *DistributionConfigWithTags `locationName:"DistributionConfigWithTags" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2019-03-26/"`
 }
 
 // String returns the string representation
@@ -6011,7 +6136,7 @@ type CreateFieldLevelEncryptionConfigInput struct {
 	// The request to create a new field-level encryption configuration.
 	//
 	// FieldLevelEncryptionConfig is a required field
-	FieldLevelEncryptionConfig *FieldLevelEncryptionConfig `locationName:"FieldLevelEncryptionConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2018-11-05/"`
+	FieldLevelEncryptionConfig *FieldLevelEncryptionConfig `locationName:"FieldLevelEncryptionConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2019-03-26/"`
 }
 
 // String returns the string representation
@@ -6097,7 +6222,7 @@ type CreateFieldLevelEncryptionProfileInput struct {
 	// The request to create a field-level encryption profile.
 	//
 	// FieldLevelEncryptionProfileConfig is a required field
-	FieldLevelEncryptionProfileConfig *FieldLevelEncryptionProfileConfig `locationName:"FieldLevelEncryptionProfileConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2018-11-05/"`
+	FieldLevelEncryptionProfileConfig *FieldLevelEncryptionProfileConfig `locationName:"FieldLevelEncryptionProfileConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2019-03-26/"`
 }
 
 // String returns the string representation
@@ -6188,7 +6313,7 @@ type CreateInvalidationInput struct {
 	// The batch information for the invalidation.
 	//
 	// InvalidationBatch is a required field
-	InvalidationBatch *InvalidationBatch `locationName:"InvalidationBatch" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2018-11-05/"`
+	InvalidationBatch *InvalidationBatch `locationName:"InvalidationBatch" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2019-03-26/"`
 }
 
 // String returns the string representation
@@ -6277,7 +6402,7 @@ type CreatePublicKeyInput struct {
 	// The request to add a public key to CloudFront.
 	//
 	// PublicKeyConfig is a required field
-	PublicKeyConfig *PublicKeyConfig `locationName:"PublicKeyConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2018-11-05/"`
+	PublicKeyConfig *PublicKeyConfig `locationName:"PublicKeyConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2019-03-26/"`
 }
 
 // String returns the string representation
@@ -6363,7 +6488,7 @@ type CreateStreamingDistributionInput struct {
 	// The streaming distribution's configuration information.
 	//
 	// StreamingDistributionConfig is a required field
-	StreamingDistributionConfig *StreamingDistributionConfig `locationName:"StreamingDistributionConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2018-11-05/"`
+	StreamingDistributionConfig *StreamingDistributionConfig `locationName:"StreamingDistributionConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2019-03-26/"`
 }
 
 // String returns the string representation
@@ -6450,7 +6575,7 @@ type CreateStreamingDistributionWithTagsInput struct {
 	// The streaming distribution's configuration information.
 	//
 	// StreamingDistributionConfigWithTags is a required field
-	StreamingDistributionConfigWithTags *StreamingDistributionConfigWithTags `locationName:"StreamingDistributionConfigWithTags" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2018-11-05/"`
+	StreamingDistributionConfigWithTags *StreamingDistributionConfigWithTags `locationName:"StreamingDistributionConfigWithTags" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2019-03-26/"`
 }
 
 // String returns the string representation
@@ -6538,7 +6663,7 @@ func (s *CreateStreamingDistributionWithTagsOutput) SetStreamingDistribution(v *
 //    * How long CloudFront caches HTTP status codes in the 4xx and 5xx range.
 //
 // For more information about custom error pages, see Customizing Error Responses
-// (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html)
+// (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html)
 // in the Amazon CloudFront Developer Guide.
 type CustomErrorResponse struct {
 	_ struct{} `type:"structure"`
@@ -6551,7 +6676,7 @@ type CustomErrorResponse struct {
 	// If you don't want to specify a value, include an empty element, <ErrorCachingMinTTL>,
 	// in the XML document.
 	//
-	// For more information, see Customizing Error Responses (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html)
+	// For more information, see Customizing Error Responses (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html)
 	// in the Amazon CloudFront Developer Guide.
 	ErrorCachingMinTTL *int64 `type:"long"`
 
@@ -6664,7 +6789,7 @@ func (s *CustomErrorResponse) SetResponsePagePath(v string) *CustomErrorResponse
 //    * How long CloudFront caches HTTP status codes in the 4xx and 5xx range.
 //
 // For more information about custom error pages, see Customizing Error Responses
-// (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html)
+// (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html)
 // in the Amazon CloudFront Developer Guide.
 type CustomErrorResponses struct {
 	_ struct{} `type:"structure"`
@@ -6786,7 +6911,7 @@ func (s *CustomHeaders) SetQuantity(v int64) *CustomHeaders {
 	return s
 }
 
-// A customer origin or an Amazon S3 bucket configured as a website endpoint.
+// A custom origin or an Amazon S3 bucket configured as a website endpoint.
 type CustomOriginConfig struct {
 	_ struct{} `type:"structure"`
 
@@ -6923,7 +7048,7 @@ type DefaultCacheBehavior struct {
 
 	// Whether you want CloudFront to automatically compress certain files for this
 	// cache behavior. If so, specify true; if not, specify false. For more information,
-	// see Serving Compressed Files (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html)
+	// see Serving Compressed Files (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html)
 	// in the Amazon CloudFront Developer Guide.
 	Compress *bool `type:"boolean"`
 
@@ -6931,8 +7056,8 @@ type DefaultCacheBehavior struct {
 	// before CloudFront forwards another request to your origin to determine whether
 	// the object has been updated. The value that you specify applies only when
 	// your origin does not add HTTP headers such as Cache-Control max-age, Cache-Control
-	// s-maxage, and Expires to objects. For more information, see Specifying How
-	// Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration) (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html)
+	// s-maxage, and Expires to objects. For more information, see Managing How
+	// Long Content Stays in an Edge Cache (Expiration) (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html)
 	// in the Amazon CloudFront Developer Guide.
 	DefaultTTL *int64 `type:"long"`
 
@@ -6950,13 +7075,20 @@ type DefaultCacheBehavior struct {
 	// a cache behavior.
 	LambdaFunctionAssociations *LambdaFunctionAssociations `type:"structure"`
 
+	// The maximum amount of time that you want objects to stay in CloudFront caches
+	// before CloudFront forwards another request to your origin to determine whether
+	// the object has been updated. The value that you specify applies only when
+	// your origin adds HTTP headers such as Cache-Control max-age, Cache-Control
+	// s-maxage, and Expires to objects. For more information, see Managing How
+	// Long Content Stays in an Edge Cache (Expiration) (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html)
+	// in the Amazon CloudFront Developer Guide.
 	MaxTTL *int64 `type:"long"`
 
 	// The minimum amount of time that you want objects to stay in CloudFront caches
 	// before CloudFront forwards another request to your origin to determine whether
-	// the object has been updated. For more information, see Specifying How Long
-	// Objects and Errors Stay in a CloudFront Edge Cache (Expiration) (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html)
-	// in the Amazon Amazon CloudFront Developer Guide.
+	// the object has been updated. For more information, see Managing How Long
+	// Content Stays in an Edge Cache (Expiration) (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html)
+	// in the Amazon CloudFront Developer Guide.
 	//
 	// You must specify 0 for MinTTL if you configure CloudFront to forward all
 	// headers to your origin (under Headers, if you specify 1 for Quantity and
@@ -6985,8 +7117,8 @@ type DefaultCacheBehavior struct {
 	// If you want to require signed URLs in requests for objects in the target
 	// origin that match the PathPattern for this cache behavior, specify true for
 	// Enabled, and specify the applicable values for Quantity and Items. For more
-	// information, see Serving Private Content through CloudFront (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html)
-	// in the Amazon Amazon CloudFront Developer Guide.
+	// information, see Serving Private Content through CloudFront (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html)
+	// in the Amazon CloudFront Developer Guide.
 	//
 	// If you don't want to require signed URLs in requests for objects that match
 	// PathPattern, specify false for Enabled and 0 for Quantity. Omit Items.
@@ -7012,7 +7144,7 @@ type DefaultCacheBehavior struct {
 	//    HTTP status code of 403 (Forbidden).
 	//
 	// For more information about requiring the HTTPS protocol, see Using an HTTPS
-	// Connection to Access Your Objects (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html)
+	// Connection to Access Your Objects (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html)
 	// in the Amazon CloudFront Developer Guide.
 	//
 	// The only way to guarantee that viewers retrieve an object that was fetched
@@ -7021,8 +7153,8 @@ type DefaultCacheBehavior struct {
 	// you clear your objects' cache because cached objects are protocol agnostic.
 	// That means that an edge location will return an object from the cache regardless
 	// of whether the current request protocol matches the protocol used previously.
-	// For more information, see Specifying How Long Objects and Errors Stay in
-	// a CloudFront Edge Cache (Expiration) (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html)
+	// For more information, see Managing How Long Content Stays in an Edge Cache
+	// (Expiration) (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html)
 	// in the Amazon CloudFront Developer Guide.
 	//
 	// ViewerProtocolPolicy is a required field
@@ -7255,7 +7387,7 @@ func (s DeleteCloudFrontOriginAccessIdentityOutput) GoString() string {
 // distribution was successfully deleted.
 //
 // For information about deleting a distribution using the CloudFront console,
-// see Deleting a Distribution (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html)
+// see Deleting a Distribution (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html)
 // in the Amazon CloudFront Developer Guide.
 type DeleteDistributionInput struct {
 	_ struct{} `type:"structure"`
@@ -7583,7 +7715,8 @@ func (s DeleteStreamingDistributionOutput) GoString() string {
 	return s.String()
 }
 
-// The distribution's information.
+// A distribution tells CloudFront where you want content to be delivered from,
+// and the details about how to track and manage content delivery.
 type Distribution struct {
 	_ struct{} `type:"structure"`
 
@@ -7604,6 +7737,16 @@ type Distribution struct {
 	//
 	// ActiveTrustedSigners is a required field
 	ActiveTrustedSigners *ActiveTrustedSigners `type:"structure" required:"true"`
+
+	// AWS services in China customers must file for an Internet Content Provider
+	// (ICP) recordal if they want to serve content publicly on an alternate domain
+	// name, also known as a CNAME, that they've added to CloudFront. AliasICPRecordal
+	// provides the ICP recordal status for CNAMEs associated with distributions.
+	//
+	// For more information about ICP recordals, see Signup, Accounts, and Credentials
+	// (https://docs.amazonaws.cn/en_us/aws/latest/userguide/accounts-and-credentials.html)
+	// in Getting Started with AWS services in China.
+	AliasICPRecordals []*AliasICPRecordal `locationNameList:"AliasICPRecordal" type:"list"`
 
 	// The current configuration information for the distribution. Send a GET request
 	// to the /CloudFront API version/distribution ID/config resource.
@@ -7658,6 +7801,12 @@ func (s *Distribution) SetARN(v string) *Distribution {
 // SetActiveTrustedSigners sets the ActiveTrustedSigners field's value.
 func (s *Distribution) SetActiveTrustedSigners(v *ActiveTrustedSigners) *Distribution {
 	s.ActiveTrustedSigners = v
+	return s
+}
+
+// SetAliasICPRecordals sets the AliasICPRecordals field's value.
+func (s *Distribution) SetAliasICPRecordals(v []*AliasICPRecordal) *Distribution {
+	s.AliasICPRecordals = v
 	return s
 }
 
@@ -7732,7 +7881,7 @@ type DistributionConfig struct {
 	// the new comment.
 	//
 	// Comment is a required field
-	Comment *string `type:"string" required:"true"`
+	Comment *string `type:"string" required:"true" sensitive:"true"`
 
 	// A complex type that controls the following:
 	//
@@ -7742,7 +7891,7 @@ type DistributionConfig struct {
 	//    * How long CloudFront caches HTTP status codes in the 4xx and 5xx range.
 	//
 	// For more information about custom error pages, see Customizing Error Responses
-	// (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html)
+	// (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html)
 	// in the Amazon CloudFront Developer Guide.
 	CustomErrorResponses *CustomErrorResponses `type:"structure"`
 
@@ -7771,7 +7920,7 @@ type DistributionConfig struct {
 	// and specify the new object.
 	//
 	// For more information about the default root object, see Creating a Default
-	// Root Object (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DefaultRootObject.html)
+	// Root Object (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/DefaultRootObject.html)
 	// in the Amazon CloudFront Developer Guide.
 	DefaultRootObject *string `type:"string"`
 
@@ -7806,7 +7955,7 @@ type DistributionConfig struct {
 	// that can access your content, don't enable IPv6. If you want to restrict
 	// access to some content by IP address and not restrict access to other content
 	// (or restrict access but not by IP address), you can create two distributions.
-	// For more information, see Creating a Signed URL Using a Custom Policy (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-creating-signed-url-custom-policy.html)
+	// For more information, see Creating a Signed URL Using a Custom Policy (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-creating-signed-url-custom-policy.html)
 	// in the Amazon CloudFront Developer Guide.
 	//
 	// If you're using an Amazon Route 53 alias resource record set to route traffic
@@ -7818,7 +7967,7 @@ type DistributionConfig struct {
 	//    * You're using alternate domain names in the URLs for your objects
 	//
 	// For more information, see Routing Traffic to an Amazon CloudFront Web Distribution
-	// by Using Your Domain Name (http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-to-cloudfront-distribution.html)
+	// by Using Your Domain Name (https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-to-cloudfront-distribution.html)
 	// in the Amazon Route 53 Developer Guide.
 	//
 	// If you created a CNAME resource record set, either with Amazon Route 53 or
@@ -7829,7 +7978,7 @@ type DistributionConfig struct {
 
 	// A complex type that controls whether access logs are written for the distribution.
 	//
-	// For more information about logging, see Access Logs (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html)
+	// For more information about logging, see Access Logs (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/AccessLogs.html)
 	// in the Amazon CloudFront Developer Guide.
 	Logging *LoggingConfig `type:"structure"`
 
@@ -7852,10 +8001,10 @@ type DistributionConfig struct {
 	// performance.
 	//
 	// For more information about price classes, see Choosing the Price Class for
-	// a CloudFront Distribution (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PriceClass.html)
+	// a CloudFront Distribution (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PriceClass.html)
 	// in the Amazon CloudFront Developer Guide. For information about CloudFront
 	// pricing, including how price classes (such as Price Class 100) map to CloudFront
-	// regions, see Amazon CloudFront Pricing (https://aws.amazon.com/cloudfront/pricing/).
+	// regions, see Amazon CloudFront Pricing (http://aws.amazon.com/cloudfront/pricing/).
 	// For price class information, scroll down to see the table at the bottom of
 	// the page.
 	PriceClass *string `type:"string" enum:"PriceClass"`
@@ -7864,82 +8013,10 @@ type DistributionConfig struct {
 	// of your content.
 	Restrictions *Restrictions `type:"structure"`
 
-	// A complex type that specifies the following:
-	//
-	//    * Whether you want viewers to use HTTP or HTTPS to request your objects.
-	//
-	//    * If you want viewers to use HTTPS, whether you're using an alternate
-	//    domain name such as example.com or the CloudFront domain name for your
-	//    distribution, such as d111111abcdef8.cloudfront.net.
-	//
-	//    * If you're using an alternate domain name, whether AWS Certificate Manager
-	//    (ACM) provided the certificate, or you purchased a certificate from a
-	//    third-party certificate authority and imported it into ACM or uploaded
-	//    it to the IAM certificate store.
-	//
-	// You must specify only one of the following values:
-	//
-	//    * ViewerCertificate$ACMCertificateArn
-	//
-	//    * ViewerCertificate$IAMCertificateId
-	//
-	//    * ViewerCertificate$CloudFrontDefaultCertificate
-	//
-	// Don't specify false for CloudFrontDefaultCertificate.
-	//
-	// If you want viewers to use HTTP instead of HTTPS to request your objects:
-	// Specify the following value:
-	//
-	// <CloudFrontDefaultCertificate>true<CloudFrontDefaultCertificate>
-	//
-	// In addition, specify allow-all for ViewerProtocolPolicy for all of your cache
-	// behaviors.
-	//
-	// If you want viewers to use HTTPS to request your objects: Choose the type
-	// of certificate that you want to use based on whether you're using an alternate
-	// domain name for your objects or the CloudFront domain name:
-	//
-	//    * If you're using an alternate domain name, such as example.com: Specify
-	//    one of the following values, depending on whether ACM provided your certificate
-	//    or you purchased your certificate from third-party certificate authority:
-	//    <ACMCertificateArn>ARN for ACM SSL/TLS certificate<ACMCertificateArn>
-	//    where ARN for ACM SSL/TLS certificate is the ARN for the ACM SSL/TLS certificate
-	//    that you want to use for this distribution. <IAMCertificateId>IAM certificate
-	//    ID<IAMCertificateId> where IAM certificate ID is the ID that IAM returned
-	//    when you added the certificate to the IAM certificate store. If you specify
-	//    ACMCertificateArn or IAMCertificateId, you must also specify a value for
-	//    SSLSupportMethod. If you choose to use an ACM certificate or a certificate
-	//    in the IAM certificate store, we recommend that you use only an alternate
-	//    domain name in your object URLs (https://example.com/logo.jpg). If you
-	//    use the domain name that is associated with your CloudFront distribution
-	//    (such as https://d111111abcdef8.cloudfront.net/logo.jpg) and the viewer
-	//    supports SNI, then CloudFront behaves normally. However, if the browser
-	//    does not support SNI, the user's experience depends on the value that
-	//    you choose for SSLSupportMethod: vip: The viewer displays a warning because
-	//    there is a mismatch between the CloudFront domain name and the domain
-	//    name in your SSL/TLS certificate. sni-only: CloudFront drops the connection
-	//    with the browser without returning the object.
-	//
-	//    * If you're using the CloudFront domain name for your distribution, such
-	//    as d111111abcdef8.cloudfront.net : Specify the following value: <CloudFrontDefaultCertificate>true<CloudFrontDefaultCertificate>
-	//
-	// If you want viewers to use HTTPS, you must also specify one of the following
-	// values in your cache behaviors:
-	//
-	//    * <ViewerProtocolPolicy>https-only<ViewerProtocolPolicy>
-	//
-	//    * <ViewerProtocolPolicy>redirect-to-https<ViewerProtocolPolicy>
-	//
-	// You can also optionally require that CloudFront use HTTPS to communicate
-	// with your origin by specifying one of the following values for the applicable
-	// origins:
-	//
-	//    * <OriginProtocolPolicy>https-only<OriginProtocolPolicy>
-	//
-	//    * <OriginProtocolPolicy>match-viewer<OriginProtocolPolicy>
-	//
-	// For more information, see Using Alternate Domain Names and HTTPS (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html#CNAMEsAndHTTPS)
-	// in the Amazon CloudFront Developer Guide.
+	// A complex type that specifies whether you want viewers to use HTTP or HTTPS
+	// to request your objects, whether you're using an alternate domain name with
+	// HTTPS, and if so, if you're using AWS Certificate Manager (ACM) or a third-party
+	// certificate authority.
 	ViewerCertificate *ViewerCertificate `type:"structure"`
 
 	// A unique identifier that specifies the AWS WAF web ACL, if any, to associate
@@ -8290,6 +8367,16 @@ type DistributionSummary struct {
 	// ARN is a required field
 	ARN *string `type:"string" required:"true"`
 
+	// AWS services in China customers must file for an Internet Content Provider
+	// (ICP) recordal if they want to serve content publicly on an alternate domain
+	// name, also known as a CNAME, that they've added to CloudFront. AliasICPRecordal
+	// provides the ICP recordal status for CNAMEs associated with distributions.
+	//
+	// For more information about ICP recordals, see Signup, Accounts, and Credentials
+	// (https://docs.amazonaws.cn/en_us/aws/latest/userguide/accounts-and-credentials.html)
+	// in Getting Started with AWS services in China.
+	AliasICPRecordals []*AliasICPRecordal `locationNameList:"AliasICPRecordal" type:"list"`
+
 	// A complex type that contains information about CNAMEs (alternate domain names),
 	// if any, for this distribution.
 	//
@@ -8377,82 +8464,10 @@ type DistributionSummary struct {
 	// Status is a required field
 	Status *string `type:"string" required:"true"`
 
-	// A complex type that specifies the following:
-	//
-	//    * Whether you want viewers to use HTTP or HTTPS to request your objects.
-	//
-	//    * If you want viewers to use HTTPS, whether you're using an alternate
-	//    domain name such as example.com or the CloudFront domain name for your
-	//    distribution, such as d111111abcdef8.cloudfront.net.
-	//
-	//    * If you're using an alternate domain name, whether AWS Certificate Manager
-	//    (ACM) provided the certificate, or you purchased a certificate from a
-	//    third-party certificate authority and imported it into ACM or uploaded
-	//    it to the IAM certificate store.
-	//
-	// You must specify only one of the following values:
-	//
-	//    * ViewerCertificate$ACMCertificateArn
-	//
-	//    * ViewerCertificate$IAMCertificateId
-	//
-	//    * ViewerCertificate$CloudFrontDefaultCertificate
-	//
-	// Don't specify false for CloudFrontDefaultCertificate.
-	//
-	// If you want viewers to use HTTP instead of HTTPS to request your objects:
-	// Specify the following value:
-	//
-	// <CloudFrontDefaultCertificate>true<CloudFrontDefaultCertificate>
-	//
-	// In addition, specify allow-all for ViewerProtocolPolicy for all of your cache
-	// behaviors.
-	//
-	// If you want viewers to use HTTPS to request your objects: Choose the type
-	// of certificate that you want to use based on whether you're using an alternate
-	// domain name for your objects or the CloudFront domain name:
-	//
-	//    * If you're using an alternate domain name, such as example.com: Specify
-	//    one of the following values, depending on whether ACM provided your certificate
-	//    or you purchased your certificate from third-party certificate authority:
-	//    <ACMCertificateArn>ARN for ACM SSL/TLS certificate<ACMCertificateArn>
-	//    where ARN for ACM SSL/TLS certificate is the ARN for the ACM SSL/TLS certificate
-	//    that you want to use for this distribution. <IAMCertificateId>IAM certificate
-	//    ID<IAMCertificateId> where IAM certificate ID is the ID that IAM returned
-	//    when you added the certificate to the IAM certificate store. If you specify
-	//    ACMCertificateArn or IAMCertificateId, you must also specify a value for
-	//    SSLSupportMethod. If you choose to use an ACM certificate or a certificate
-	//    in the IAM certificate store, we recommend that you use only an alternate
-	//    domain name in your object URLs (https://example.com/logo.jpg). If you
-	//    use the domain name that is associated with your CloudFront distribution
-	//    (such as https://d111111abcdef8.cloudfront.net/logo.jpg) and the viewer
-	//    supports SNI, then CloudFront behaves normally. However, if the browser
-	//    does not support SNI, the user's experience depends on the value that
-	//    you choose for SSLSupportMethod: vip: The viewer displays a warning because
-	//    there is a mismatch between the CloudFront domain name and the domain
-	//    name in your SSL/TLS certificate. sni-only: CloudFront drops the connection
-	//    with the browser without returning the object.
-	//
-	//    * If you're using the CloudFront domain name for your distribution, such
-	//    as d111111abcdef8.cloudfront.net : Specify the following value: <CloudFrontDefaultCertificate>true<CloudFrontDefaultCertificate>
-	//
-	// If you want viewers to use HTTPS, you must also specify one of the following
-	// values in your cache behaviors:
-	//
-	//    * <ViewerProtocolPolicy>https-only<ViewerProtocolPolicy>
-	//
-	//    * <ViewerProtocolPolicy>redirect-to-https<ViewerProtocolPolicy>
-	//
-	// You can also optionally require that CloudFront use HTTPS to communicate
-	// with your origin by specifying one of the following values for the applicable
-	// origins:
-	//
-	//    * <OriginProtocolPolicy>https-only<OriginProtocolPolicy>
-	//
-	//    * <OriginProtocolPolicy>match-viewer<OriginProtocolPolicy>
-	//
-	// For more information, see Using Alternate Domain Names and HTTPS (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html#CNAMEsAndHTTPS)
-	// in the Amazon CloudFront Developer Guide.
+	// A complex type that specifies whether you want viewers to use HTTP or HTTPS
+	// to request your objects, whether you're using an alternate domain name with
+	// HTTPS, and if so, if you're using AWS Certificate Manager (ACM) or a third-party
+	// certificate authority.
 	//
 	// ViewerCertificate is a required field
 	ViewerCertificate *ViewerCertificate `type:"structure" required:"true"`
@@ -8476,6 +8491,12 @@ func (s DistributionSummary) GoString() string {
 // SetARN sets the ARN field's value.
 func (s *DistributionSummary) SetARN(v string) *DistributionSummary {
 	s.ARN = &v
+	return s
+}
+
+// SetAliasICPRecordals sets the AliasICPRecordals field's value.
+func (s *DistributionSummary) SetAliasICPRecordals(v []*AliasICPRecordal) *DistributionSummary {
+	s.AliasICPRecordals = v
 	return s
 }
 
@@ -9299,14 +9320,19 @@ type ForwardedValues struct {
 	// A complex type that specifies whether you want CloudFront to forward cookies
 	// to the origin and, if so, which ones. For more information about forwarding
 	// cookies to the origin, see How CloudFront Forwards, Caches, and Logs Cookies
-	// (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html)
+	// (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html)
 	// in the Amazon CloudFront Developer Guide.
 	//
 	// Cookies is a required field
 	Cookies *CookiePreference `type:"structure" required:"true"`
 
 	// A complex type that specifies the Headers, if any, that you want CloudFront
-	// to base caching on for this cache behavior.
+	// to forward to the origin for this cache behavior (whitelisted headers). For
+	// the headers that you specify, CloudFront also caches separate versions of
+	// a specified object that is based on the header values in viewer requests.
+	//
+	// For more information, see Caching Content Based on Request Headers (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/header-caching.html)
+	// in the Amazon CloudFront Developer Guide.
 	Headers *Headers `type:"structure"`
 
 	// Indicates whether you want CloudFront to forward query strings to the origin
@@ -9330,7 +9356,7 @@ type ForwardedValues struct {
 	// parameters.
 	//
 	// For more information, see Configuring CloudFront to Cache Based on Query
-	// String Parameters (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/QueryStringParameters.html)
+	// String Parameters (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/QueryStringParameters.html)
 	// in the Amazon CloudFront Developer Guide.
 	//
 	// QueryString is a required field
@@ -9494,7 +9520,7 @@ func (s *GeoRestriction) SetRestrictionType(v string) *GeoRestriction {
 }
 
 // The origin access identity's configuration information. For more information,
-// see CloudFrontOriginAccessIdentityConfigComplexType.
+// see CloudFrontOriginAccessIdentityConfig (https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_CloudFrontOriginAccessIdentityConfig.html).
 type GetCloudFrontOriginAccessIdentityConfigInput struct {
 	_ struct{} `type:"structure"`
 
@@ -9649,7 +9675,8 @@ func (s *GetCloudFrontOriginAccessIdentityOutput) SetETag(v string) *GetCloudFro
 type GetDistributionConfigInput struct {
 	_ struct{} `type:"structure"`
 
-	// The distribution's ID.
+	// The distribution's ID. If the ID is empty, an empty distribution configuration
+	// is returned.
 	//
 	// Id is a required field
 	Id *string `location:"uri" locationName:"Id" type:"string" required:"true"`
@@ -9724,7 +9751,8 @@ func (s *GetDistributionConfigOutput) SetETag(v string) *GetDistributionConfigOu
 type GetDistributionInput struct {
 	_ struct{} `type:"structure"`
 
-	// The distribution's ID.
+	// The distribution's ID. If the ID is empty, an empty distribution configuration
+	// is returned.
 	//
 	// Id is a required field
 	Id *string `location:"uri" locationName:"Id" type:"string" required:"true"`
@@ -10154,7 +10182,7 @@ type GetInvalidationOutput struct {
 	_ struct{} `type:"structure" payload:"Invalidation"`
 
 	// The invalidation's information. For more information, see Invalidation Complex
-	// Type (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/InvalidationDatatype.html).
+	// Type (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/InvalidationDatatype.html).
 	Invalidation *Invalidation `type:"structure"`
 }
 
@@ -10481,7 +10509,7 @@ func (s *GetStreamingDistributionOutput) SetStreamingDistribution(v *StreamingDi
 // your content based on values in the product header. CloudFront forwards the
 // product header to the origin and caches the response from the origin once
 // for each header value. For more information about caching based on header
-// values, see How CloudFront Forwards and Caches Headers (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/header-caching.html)
+// values, see How CloudFront Forwards and Caches Headers (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/header-caching.html)
 // in the Amazon CloudFront Developer Guide.
 type Headers struct {
 	_ struct{} `type:"structure"`
@@ -10512,9 +10540,9 @@ type Headers struct {
 	// the following documentation:
 	//
 	//    * S3 bucket: See HTTP Request Headers That CloudFront Removes or Updates
-	//    (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/RequestAndResponseBehaviorS3Origin.html#request-s3-removed-headers)
+	//    (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/RequestAndResponseBehaviorS3Origin.html#request-s3-removed-headers)
 	//
-	//    * Custom origin: See HTTP Request Headers and CloudFront Behavior (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/RequestAndResponseBehaviorCustomOrigin.html#request-custom-headers-behavior)
+	//    * Custom origin: See HTTP Request Headers and CloudFront Behavior (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/RequestAndResponseBehaviorCustomOrigin.html#request-custom-headers-behavior)
 	//
 	// Quantity is a required field
 	Quantity *int64 `type:"integer" required:"true"`
@@ -10640,7 +10668,7 @@ type InvalidationBatch struct {
 
 	// A complex type that contains information about the objects that you want
 	// to invalidate. For more information, see Specifying the Objects to Invalidate
-	// (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html#invalidation-specifying-objects)
+	// (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html#invalidation-specifying-objects)
 	// in the Amazon CloudFront Developer Guide.
 	//
 	// Paths is a required field
@@ -10692,7 +10720,7 @@ func (s *InvalidationBatch) SetPaths(v *Paths) *InvalidationBatch {
 
 // The InvalidationList complex type describes the list of invalidation objects.
 // For more information about invalidation, see Invalidating Objects (Web Distributions
-// Only) (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html)
+// Only) (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html)
 // in the Amazon CloudFront Developer Guide.
 type InvalidationList struct {
 	_ struct{} `type:"structure"`
@@ -10827,19 +10855,19 @@ func (s *InvalidationSummary) SetStatus(v string) *InvalidationSummary {
 // A complex type that lists the active CloudFront key pairs, if any, that are
 // associated with AwsAccountNumber.
 //
-// For more information, see ActiveTrustedSigners.
+// For more information, see ActiveTrustedSigners (https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ActiveTrustedSigners.html).
 type KeyPairIds struct {
 	_ struct{} `type:"structure"`
 
 	// A complex type that lists the active CloudFront key pairs, if any, that are
 	// associated with AwsAccountNumber.
 	//
-	// For more information, see ActiveTrustedSigners.
+	// For more information, see ActiveTrustedSigners (https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ActiveTrustedSigners.html).
 	Items []*string `locationNameList:"KeyPairId" type:"list"`
 
 	// The number of active CloudFront key pairs for AwsAccountNumber.
 	//
-	// For more information, see ActiveTrustedSigners.
+	// For more information, see ActiveTrustedSigners (https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ActiveTrustedSigners.html).
 	//
 	// Quantity is a required field
 	Quantity *int64 `type:"integer" required:"true"`
@@ -10896,7 +10924,7 @@ type LambdaFunctionAssociation struct {
 
 	// A flag that allows a Lambda function to have read access to the body content.
 	// For more information, see Accessing the Request Body by Choosing the Include
-	// Body Option (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-include-body-access.html)
+	// Body Option (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/lambda-include-body-access.html)
 	// in the Amazon CloudFront Developer Guide.
 	IncludeBody *bool `type:"boolean"`
 
@@ -11730,7 +11758,7 @@ func (s *LoggingConfig) SetPrefix(v string) *LoggingConfig {
 // group. You must specify at least one origin or origin group.
 //
 // For the current limit on the number of origins or origin groups that you
-// can specify for a distribution, see Amazon CloudFront Limits (http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront)
+// can specify for a distribution, see Amazon CloudFront Limits (https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront)
 // in the AWS General Reference.
 type Origin struct {
 	_ struct{} `type:"structure"`
@@ -11749,7 +11777,7 @@ type Origin struct {
 	// Amazon S3 static website hosting endpoint for the bucket.
 	//
 	// For more information about specifying this value for different types of origins,
-	// see Origin Domain Name (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesDomainName)
+	// see Origin Domain Name (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesDomainName)
 	// in the Amazon CloudFront Developer Guide.
 	//
 	// Constraints for Amazon S3 origins:
@@ -11785,7 +11813,7 @@ type Origin struct {
 	// the cache behavior to route requests by specifying the value of the Id element
 	// for that origin. When a request matches the path pattern for that cache behavior,
 	// CloudFront routes the request to the specified origin. For more information,
-	// see Cache Behavior Settings (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesCacheBehavior)
+	// see Cache Behavior Settings (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesCacheBehavior)
 	// in the Amazon CloudFront Developer Guide.
 	//
 	// Id is a required field
@@ -12162,8 +12190,8 @@ type OriginCustomHeader struct {
 
 	// The name of a header that you want CloudFront to forward to your origin.
 	// For more information, see Forwarding Custom Headers to Your Origin (Web Distributions
-	// Only) (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/forward-custom-headers.html)
-	// in the Amazon Amazon CloudFront Developer Guide.
+	// Only) (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/forward-custom-headers.html)
+	// in the Amazon CloudFront Developer Guide.
 	//
 	// HeaderName is a required field
 	HeaderName *string `type:"string" required:"true"`
@@ -12629,7 +12657,7 @@ func (s *Origins) SetQuantity(v int64) *Origins {
 
 // A complex type that contains information about the objects that you want
 // to invalidate. For more information, see Specifying the Objects to Invalidate
-// (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html#invalidation-specifying-objects)
+// (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html#invalidation-specifying-objects)
 // in the Amazon CloudFront Developer Guide.
 type Paths struct {
 	_ struct{} `type:"structure"`
@@ -12637,7 +12665,8 @@ type Paths struct {
 	// A complex type that contains a list of the paths that you want to invalidate.
 	Items []*string `locationNameList:"Path" type:"list"`
 
-	// The number of objects that you want to invalidate.
+	// The number of invalidation paths specified for the objects that you want
+	// to invalidate.
 	//
 	// Quantity is a required field
 	Quantity *int64 `type:"integer" required:"true"`
@@ -13101,15 +13130,17 @@ func (s *QueryArgProfiles) SetQuantity(v int64) *QueryArgProfiles {
 	return s
 }
 
+// A complex type that contains information about the query string parameters
+// that you want CloudFront to use for caching for a cache behavior.
 type QueryStringCacheKeys struct {
 	_ struct{} `type:"structure"`
 
-	// (Optional) A list that contains the query string parameters that you want
-	// CloudFront to use as a basis for caching for this cache behavior. If Quantity
-	// is 0, you can omit Items.
+	// A list that contains the query string parameters that you want CloudFront
+	// to use as a basis for caching for a cache behavior. If Quantity is 0, you
+	// can omit Items.
 	Items []*string `locationNameList:"Name" type:"list"`
 
-	// The number of whitelisted query string parameters for this cache behavior.
+	// The number of whitelisted query string parameters for a cache behavior.
 	//
 	// Quantity is a required field
 	Quantity *int64 `type:"integer" required:"true"`
@@ -13206,7 +13237,7 @@ type S3Origin struct {
 	// DomainName is a required field
 	DomainName *string `type:"string" required:"true"`
 
-	// The CloudFront origin access identity to associate with the RTMP distribution.
+	// The CloudFront origin access identity to associate with the distribution.
 	// Use an origin access identity to configure the distribution so that end users
 	// can only access objects in an Amazon S3 bucket through CloudFront.
 	//
@@ -13221,8 +13252,8 @@ type S3Origin struct {
 	// and specify the new origin access identity.
 	//
 	// For more information, see Using an Origin Access Identity to Restrict Access
-	// to Your Amazon S3 Content (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html)
-	// in the Amazon Amazon CloudFront Developer Guide.
+	// to Your Amazon S3 Content (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-s3.html)
+	// in the Amazon CloudFront Developer Guide.
 	//
 	// OriginAccessIdentity is a required field
 	OriginAccessIdentity *string `type:"string" required:"true"`
@@ -13292,7 +13323,7 @@ type S3OriginConfig struct {
 	// and specify the new origin access identity.
 	//
 	// For more information about the origin access identity, see Serving Private
-	// Content through CloudFront (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html)
+	// Content through CloudFront (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html)
 	// in the Amazon CloudFront Developer Guide.
 	//
 	// OriginAccessIdentity is a required field
@@ -13334,7 +13365,7 @@ type Signer struct {
 	_ struct{} `type:"structure"`
 
 	// An AWS account that is included in the TrustedSigners complex type for this
-	// RTMP distribution. Valid values include:
+	// distribution. Valid values include:
 	//
 	//    * self, which is the AWS account used to create the distribution.
 	//
@@ -13425,7 +13456,9 @@ func (s *StatusCodes) SetQuantity(v int64) *StatusCodes {
 	return s
 }
 
-// A streaming distribution.
+// A streaming distribution tells CloudFront where you want RTMP content to
+// be delivered from, and the details about how to track and manage content
+// delivery.
 type StreamingDistribution struct {
 	_ struct{} `type:"structure"`
 
@@ -13445,7 +13478,7 @@ type StreamingDistribution struct {
 	// are associated with the trusted signer's AWS account. If no KeyPairId element
 	// appears for a Signer, that signer can't create signed URLs.
 	//
-	// For more information, see Serving Private Content through CloudFront (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html)
+	// For more information, see Serving Private Content through CloudFront (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html)
 	// in the Amazon CloudFront Developer Guide.
 	//
 	// ActiveTrustedSigners is a required field
@@ -13579,7 +13612,7 @@ type StreamingDistributionConfig struct {
 	// create signed URLs for private content. If you want the distribution to use
 	// signed URLs, include this element; if you want the distribution to use public
 	// URLs, remove this element. For more information, see Serving Private Content
-	// through CloudFront (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html)
+	// through CloudFront (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html)
 	// in the Amazon CloudFront Developer Guide.
 	//
 	// TrustedSigners is a required field
@@ -13837,7 +13870,7 @@ func (s *StreamingDistributionList) SetQuantity(v int64) *StreamingDistributionL
 	return s
 }
 
-// A summary of the information for an Amazon CloudFront streaming distribution.
+// A summary of the information for a CloudFront streaming distribution.
 type StreamingDistributionSummary struct {
 	_ struct{} `type:"structure"`
 
@@ -13879,6 +13912,9 @@ type StreamingDistributionSummary struct {
 	// LastModifiedTime is a required field
 	LastModifiedTime *time.Time `type:"timestamp" required:"true"`
 
+	// A complex type that contains information about price class for this streaming
+	// distribution.
+	//
 	// PriceClass is a required field
 	PriceClass *string `type:"string" required:"true" enum:"PriceClass"`
 
@@ -13905,6 +13941,9 @@ type StreamingDistributionSummary struct {
 	// signers, change Enabled to true (if it's currently false), change Quantity
 	// as applicable, and specify all of the trusted signers that you want to include
 	// in the updated distribution.
+	//
+	// For more information, see Serving Private Content through CloudFront (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html)
+	// in the Amazon CloudFront Developer Guide.
 	//
 	// TrustedSigners is a required field
 	TrustedSigners *TrustedSigners `type:"structure" required:"true"`
@@ -14155,7 +14194,7 @@ type TagResourceInput struct {
 	// A complex type that contains zero or more Tag elements.
 	//
 	// Tags is a required field
-	Tags *Tags `locationName:"Tags" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2018-11-05/"`
+	Tags *Tags `locationName:"Tags" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2019-03-26/"`
 }
 
 // String returns the string representation
@@ -14265,8 +14304,8 @@ func (s *Tags) SetItems(v []*Tag) *Tags {
 // If you want to require signed URLs in requests for objects in the target
 // origin that match the PathPattern for this cache behavior, specify true for
 // Enabled, and specify the applicable values for Quantity and Items. For more
-// information, see Serving Private Content through CloudFront (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html)
-// in the Amazon Amazon CloudFront Developer Guide.
+// information, see Serving Private Content through CloudFront (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html)
+// in the Amazon CloudFront Developer Guide.
 //
 // If you don't want to require signed URLs in requests for objects that match
 // PathPattern, specify false for Enabled and 0 for Quantity. Omit Items.
@@ -14275,7 +14314,9 @@ func (s *Tags) SetItems(v []*Tag) *Tags {
 // true (if it's currently false), change Quantity as applicable, and specify
 // all of the trusted signers that you want to include in the updated distribution.
 //
-// For more information about updating the distribution configuration, see DistributionConfig .
+// For more information about updating the distribution configuration, see DistributionConfig
+// (https://docs.aws.amazon.com/cloudfront/latest/APIReference/DistributionConfig.html)
+// in the Amazon CloudFront API Reference.
 type TrustedSigners struct {
 	_ struct{} `type:"structure"`
 
@@ -14351,7 +14392,7 @@ type UntagResourceInput struct {
 	// A complex type that contains zero or more Tag key elements.
 	//
 	// TagKeys is a required field
-	TagKeys *TagKeys `locationName:"TagKeys" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2018-11-05/"`
+	TagKeys *TagKeys `locationName:"TagKeys" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2019-03-26/"`
 }
 
 // String returns the string representation
@@ -14413,7 +14454,7 @@ type UpdateCloudFrontOriginAccessIdentityInput struct {
 	// The identity's configuration information.
 	//
 	// CloudFrontOriginAccessIdentityConfig is a required field
-	CloudFrontOriginAccessIdentityConfig *OriginAccessIdentityConfig `locationName:"CloudFrontOriginAccessIdentityConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2018-11-05/"`
+	CloudFrontOriginAccessIdentityConfig *OriginAccessIdentityConfig `locationName:"CloudFrontOriginAccessIdentityConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2019-03-26/"`
 
 	// The identity's id.
 	//
@@ -14517,7 +14558,7 @@ type UpdateDistributionInput struct {
 	// The distribution's configuration information.
 	//
 	// DistributionConfig is a required field
-	DistributionConfig *DistributionConfig `locationName:"DistributionConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2018-11-05/"`
+	DistributionConfig *DistributionConfig `locationName:"DistributionConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2019-03-26/"`
 
 	// The distribution's id.
 	//
@@ -14620,7 +14661,7 @@ type UpdateFieldLevelEncryptionConfigInput struct {
 	// Request to update a field-level encryption configuration.
 	//
 	// FieldLevelEncryptionConfig is a required field
-	FieldLevelEncryptionConfig *FieldLevelEncryptionConfig `locationName:"FieldLevelEncryptionConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2018-11-05/"`
+	FieldLevelEncryptionConfig *FieldLevelEncryptionConfig `locationName:"FieldLevelEncryptionConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2019-03-26/"`
 
 	// The ID of the configuration you want to update.
 	//
@@ -14723,7 +14764,7 @@ type UpdateFieldLevelEncryptionProfileInput struct {
 	// Request to update a field-level encryption profile.
 	//
 	// FieldLevelEncryptionProfileConfig is a required field
-	FieldLevelEncryptionProfileConfig *FieldLevelEncryptionProfileConfig `locationName:"FieldLevelEncryptionProfileConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2018-11-05/"`
+	FieldLevelEncryptionProfileConfig *FieldLevelEncryptionProfileConfig `locationName:"FieldLevelEncryptionProfileConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2019-03-26/"`
 
 	// The ID of the field-level encryption profile request.
 	//
@@ -14834,7 +14875,7 @@ type UpdatePublicKeyInput struct {
 	// Request to update public key information.
 	//
 	// PublicKeyConfig is a required field
-	PublicKeyConfig *PublicKeyConfig `locationName:"PublicKeyConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2018-11-05/"`
+	PublicKeyConfig *PublicKeyConfig `locationName:"PublicKeyConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2019-03-26/"`
 }
 
 // String returns the string representation
@@ -14937,7 +14978,7 @@ type UpdateStreamingDistributionInput struct {
 	// The streaming distribution's configuration information.
 	//
 	// StreamingDistributionConfig is a required field
-	StreamingDistributionConfig *StreamingDistributionConfig `locationName:"StreamingDistributionConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2018-11-05/"`
+	StreamingDistributionConfig *StreamingDistributionConfig `locationName:"StreamingDistributionConfig" type:"structure" required:"true" xmlURI:"http://cloudfront.amazonaws.com/doc/2019-03-26/"`
 }
 
 // String returns the string representation
@@ -15038,102 +15079,68 @@ func (s *UpdateStreamingDistributionOutput) SetStreamingDistribution(v *Streamin
 //    third-party certificate authority and imported it into ACM or uploaded
 //    it to the IAM certificate store.
 //
-// You must specify only one of the following values:
+// Specify only one of the following values:
 //
-//    * ViewerCertificate$ACMCertificateArn
+//    * ACMCertificateArn (https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ViewerCertificate.html#cloudfront-Type-ViewerCertificate-ACMCertificateArn)
 //
-//    * ViewerCertificate$IAMCertificateId
+//    * IAMCertificateId (https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ViewerCertificate.html#cloudfront-Type-ViewerCertificate-IAMCertificateId)
 //
-//    * ViewerCertificate$CloudFrontDefaultCertificate
+//    * CloudFrontDefaultCertificate (https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ViewerCertificate.html#cloudfront-Type-ViewerCertificate-CloudFrontDefaultCertificate)
 //
-// Don't specify false for CloudFrontDefaultCertificate.
-//
-// If you want viewers to use HTTP instead of HTTPS to request your objects:
-// Specify the following value:
-//
-// <CloudFrontDefaultCertificate>true<CloudFrontDefaultCertificate>
-//
-// In addition, specify allow-all for ViewerProtocolPolicy for all of your cache
-// behaviors.
-//
-// If you want viewers to use HTTPS to request your objects: Choose the type
-// of certificate that you want to use based on whether you're using an alternate
-// domain name for your objects or the CloudFront domain name:
-//
-//    * If you're using an alternate domain name, such as example.com: Specify
-//    one of the following values, depending on whether ACM provided your certificate
-//    or you purchased your certificate from third-party certificate authority:
-//    <ACMCertificateArn>ARN for ACM SSL/TLS certificate<ACMCertificateArn>
-//    where ARN for ACM SSL/TLS certificate is the ARN for the ACM SSL/TLS certificate
-//    that you want to use for this distribution. <IAMCertificateId>IAM certificate
-//    ID<IAMCertificateId> where IAM certificate ID is the ID that IAM returned
-//    when you added the certificate to the IAM certificate store. If you specify
-//    ACMCertificateArn or IAMCertificateId, you must also specify a value for
-//    SSLSupportMethod. If you choose to use an ACM certificate or a certificate
-//    in the IAM certificate store, we recommend that you use only an alternate
-//    domain name in your object URLs (https://example.com/logo.jpg). If you
-//    use the domain name that is associated with your CloudFront distribution
-//    (such as https://d111111abcdef8.cloudfront.net/logo.jpg) and the viewer
-//    supports SNI, then CloudFront behaves normally. However, if the browser
-//    does not support SNI, the user's experience depends on the value that
-//    you choose for SSLSupportMethod: vip: The viewer displays a warning because
-//    there is a mismatch between the CloudFront domain name and the domain
-//    name in your SSL/TLS certificate. sni-only: CloudFront drops the connection
-//    with the browser without returning the object.
-//
-//    * If you're using the CloudFront domain name for your distribution, such
-//    as d111111abcdef8.cloudfront.net : Specify the following value: <CloudFrontDefaultCertificate>true<CloudFrontDefaultCertificate>
-//
-// If you want viewers to use HTTPS, you must also specify one of the following
-// values in your cache behaviors:
-//
-//    * <ViewerProtocolPolicy>https-only<ViewerProtocolPolicy>
-//
-//    * <ViewerProtocolPolicy>redirect-to-https<ViewerProtocolPolicy>
-//
-// You can also optionally require that CloudFront use HTTPS to communicate
-// with your origin by specifying one of the following values for the applicable
-// origins:
-//
-//    * <OriginProtocolPolicy>https-only<OriginProtocolPolicy>
-//
-//    * <OriginProtocolPolicy>match-viewer<OriginProtocolPolicy>
-//
-// For more information, see Using Alternate Domain Names and HTTPS (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html#CNAMEsAndHTTPS)
+// For more information, see Using Alternate Domain Names and HTTPS (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html#CNAMEsAndHTTPS)
 // in the Amazon CloudFront Developer Guide.
 type ViewerCertificate struct {
 	_ struct{} `type:"structure"`
 
-	// For information about how and when to use ACMCertificateArn, see ViewerCertificate.
+	// If you want viewers to use HTTPS to request your objects and you're using
+	// an alternate domain name, you must choose the type of certificate that you
+	// want to use. Specify the following value if ACM provided your certificate:
+	//
+	//    * <ACMCertificateArn>ARN for ACM SSL/TLS certificate<ACMCertificateArn>
+	//    where ARN for ACM SSL/TLS certificate is the ARN for the ACM SSL/TLS certificate
+	//    that you want to use for this distribution.
+	//
+	// If you specify ACMCertificateArn, you must also specify a value for SSLSupportMethod.
 	ACMCertificateArn *string `type:"string"`
 
-	// This field has been deprecated. Use one of the following fields instead:
+	// This field is no longer used. Use one of the following fields instead:
 	//
-	//    * ViewerCertificate$ACMCertificateArn
+	//    * ACMCertificateArn (https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ViewerCertificate.html#cloudfront-Type-ViewerCertificate-ACMCertificateArn)
 	//
-	//    * ViewerCertificate$IAMCertificateId
+	//    * IAMCertificateId (https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ViewerCertificate.html#cloudfront-Type-ViewerCertificate-IAMCertificateId)
 	//
-	//    * ViewerCertificate$CloudFrontDefaultCertificate
+	//    * CloudFrontDefaultCertificate (https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ViewerCertificate.html#cloudfront-Type-ViewerCertificate-CloudFrontDefaultCertificate)
 	//
 	// Deprecated: Certificate has been deprecated
 	Certificate *string `deprecated:"true" type:"string"`
 
-	// This field has been deprecated. Use one of the following fields instead:
+	// This field is no longer used. Use one of the following fields instead:
 	//
-	//    * ViewerCertificate$ACMCertificateArn
+	//    * ACMCertificateArn (https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ViewerCertificate.html#cloudfront-Type-ViewerCertificate-ACMCertificateArn)
 	//
-	//    * ViewerCertificate$IAMCertificateId
+	//    * IAMCertificateId (https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ViewerCertificate.html#cloudfront-Type-ViewerCertificate-IAMCertificateId)
 	//
-	//    * ViewerCertificate$CloudFrontDefaultCertificate
+	//    * CloudFrontDefaultCertificate (https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ViewerCertificate.html#cloudfront-Type-ViewerCertificate-CloudFrontDefaultCertificate)
 	//
 	// Deprecated: CertificateSource has been deprecated
 	CertificateSource *string `deprecated:"true" type:"string" enum:"CertificateSource"`
 
-	// For information about how and when to use CloudFrontDefaultCertificate, see
-	// ViewerCertificate.
+	// If you're using the CloudFront domain name for your distribution, such as
+	// d111111abcdef8.cloudfront.net, specify the following value:
+	//
+	//    * <CloudFrontDefaultCertificate>true<CloudFrontDefaultCertificate>
 	CloudFrontDefaultCertificate *bool `type:"boolean"`
 
-	// For information about how and when to use IAMCertificateId, see ViewerCertificate.
+	// If you want viewers to use HTTPS to request your objects and you're using
+	// an alternate domain name, you must choose the type of certificate that you
+	// want to use. Specify the following value if you purchased your certificate
+	// from a third-party certificate authority:
+	//
+	//    * <IAMCertificateId>IAM certificate ID<IAMCertificateId> where IAM certificate
+	//    ID is the ID that IAM returned when you added the certificate to the IAM
+	//    certificate store.
+	//
+	// If you specify IAMCertificateId, you must also specify a value for SSLSupportMethod.
 	IAMCertificateId *string `type:"string"`
 
 	// Specify the security policy that you want CloudFront to use for HTTPS connections.
@@ -15165,32 +15172,34 @@ type ViewerCertificate struct {
 	// For information about the relationship between the security policy that you
 	// choose and the protocols and ciphers that CloudFront uses to communicate
 	// with viewers, see Supported SSL/TLS Protocols and Ciphers for Communication
-	// Between Viewers and CloudFront (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/secure-connections-supported-viewer-protocols-ciphers.html#secure-connections-supported-ciphers)
+	// Between Viewers and CloudFront (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/secure-connections-supported-viewer-protocols-ciphers.html#secure-connections-supported-ciphers)
 	// in the Amazon CloudFront Developer Guide.
 	MinimumProtocolVersion *string `type:"string" enum:"MinimumProtocolVersion"`
 
-	// If you specify a value for ViewerCertificate$ACMCertificateArn or for ViewerCertificate$IAMCertificateId,
+	// If you specify a value for ACMCertificateArn (https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ViewerCertificate.html#cloudfront-Type-ViewerCertificate-ACMCertificateArn)
+	// or for IAMCertificateId (https://docs.aws.amazon.com/cloudfront/latest/APIReference/API_ViewerCertificate.html#cloudfront-Type-ViewerCertificate-IAMCertificateId),
 	// you must also specify how you want CloudFront to serve HTTPS requests: using
-	// a method that works for all clients or one that works for most clients:
-	//
-	//    * vip: CloudFront uses dedicated IP addresses for your content and can
-	//    respond to HTTPS requests from any viewer. However, you will incur additional
-	//    monthly charges.
+	// a method that works for browsers and clients released after 2010 or one that
+	// works for all clients.
 	//
 	//    * sni-only: CloudFront can respond to HTTPS requests from viewers that
 	//    support Server Name Indication (SNI). All modern browsers support SNI,
-	//    but some browsers still in use don't support SNI. If some of your users'
-	//    browsers don't support SNI, we recommend that you do one of the following:
-	//    Use the vip option (dedicated IP addresses) instead of sni-only. Use the
-	//    CloudFront SSL/TLS certificate instead of a custom certificate. This requires
-	//    that you use the CloudFront domain name of your distribution in the URLs
-	//    for your objects, for example, https://d111111abcdef8.cloudfront.net/logo.png.
-	//    If you can control which browser your users use, upgrade the browser to
-	//    one that supports SNI. Use HTTP instead of HTTPS.
+	//    but there are a few that don't. For a current list of the browsers that
+	//    support SNI, see the Wikipedia entry Server Name Indication (http://en.wikipedia.org/wiki/Server_Name_Indication).
+	//    To learn about options to explore if you have users with browsers that
+	//    don't include SNI support, see Choosing How CloudFront Serves HTTPS Requests
+	//    (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cnames-https-dedicated-ip-or-sni.html)
+	//    in the Amazon CloudFront Developer Guide.
+	//
+	//    * vip: CloudFront uses dedicated IP addresses for your content and can
+	//    respond to HTTPS requests from any viewer. However, there are additional
+	//    monthly charges. For details, including specific pricing information,
+	//    see Custom SSL options for Amazon CloudFront (http://aws.amazon.com/cloudfront/custom-ssl-domains/)
+	//    on the AWS marketing site.
 	//
 	// Don't specify a value for SSLSupportMethod if you specified <CloudFrontDefaultCertificate>true<CloudFrontDefaultCertificate>.
 	//
-	// For more information, see Using Alternate Domain Names and HTTPS (http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html#CNAMEsAndHTTPS.html)
+	// For more information, see Choosing How CloudFront Serves HTTPS Requests (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cnames-https-dedicated-ip-or-sni.html)
 	// in the Amazon CloudFront Developer Guide.
 	SSLSupportMethod *string `type:"string" enum:"SSLSupportMethod"`
 }
@@ -15294,6 +15303,17 @@ const (
 
 	// HttpVersionHttp2 is a HttpVersion enum value
 	HttpVersionHttp2 = "http2"
+)
+
+const (
+	// ICPRecordalStatusApproved is a ICPRecordalStatus enum value
+	ICPRecordalStatusApproved = "APPROVED"
+
+	// ICPRecordalStatusSuspended is a ICPRecordalStatus enum value
+	ICPRecordalStatusSuspended = "SUSPENDED"
+
+	// ICPRecordalStatusPending is a ICPRecordalStatus enum value
+	ICPRecordalStatusPending = "PENDING"
 )
 
 const (

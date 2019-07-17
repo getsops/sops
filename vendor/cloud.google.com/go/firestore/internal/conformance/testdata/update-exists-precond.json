@@ -1,0 +1,16 @@
+{
+  "tests": [
+    {
+      "description": "update: Exists precondition is invalid",
+      "comment": "The Update method does not support an explicit exists precondition.",
+      "update": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "precondition": {
+          "exists": true
+        },
+        "jsonData": "{\"a\": 1}",
+        "isError": true
+      }
+    }
+  ]
+}

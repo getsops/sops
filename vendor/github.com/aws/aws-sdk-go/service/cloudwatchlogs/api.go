@@ -2747,8 +2747,11 @@ func (c *CloudWatchLogs) GetQueryResultsRequest(input *GetQueryResultsInput) (re
 // GetQueryResults API operation for Amazon CloudWatch Logs.
 //
 // Returns the results from the specified query. If the query is in progress,
-// partial results of that current execution are returned. Only the fields requested
-// in the query are returned.
+// partial results of that current execution are returned.
+//
+// Only the fields requested in the query are returned, along with a @ptr field
+// which is the identifier for the log record. You can use the value of @ptr
+// in a operation to get the full log record.
 //
 // GetQueryResults does not start a query execution. To run a query, use .
 //
@@ -3118,8 +3121,8 @@ func (c *CloudWatchLogs) PutLogEventsRequest(input *PutLogEventsInput) (req *req
 //    * None of the log events in the batch can be more than 2 hours in the
 //    future.
 //
-//    * None of the log events in the batch can be older than 14 days or the
-//    retention period of the log group.
+//    * None of the log events in the batch can be older than 14 days or older
+//    than the retention period of the log group.
 //
 //    * The log events in the batch must be in chronological ordered by their
 //    timestamp. The timestamp is the time the event occurred, expressed as
@@ -3618,6 +3621,10 @@ func (c *CloudWatchLogs) StartQueryRequest(input *StartQueryInput) (req *request
 // the log group and time range to query, and the query string to use.
 //
 // For more information, see CloudWatch Logs Insights Query Syntax (https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html).
+//
+// Queries time out after 15 minutes of execution. If your queries are timing
+// out, reduce the time range being searched, or partition your query into a
+// number of queries.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6036,6 +6043,10 @@ type FilterLogEventsInput struct {
 	// in a single response. If the value is false, all the matched log events in
 	// the first log stream are searched first, then those in the next log stream,
 	// and so on. The default is false.
+	//
+	// IMPORTANT: Starting on June 17, 2019, this parameter will be ignored and
+	// the value will be assumed to be true. The response from this operation will
+	// always interleave events from multiple log streams within a log group.
 	Interleaved *bool `locationName:"interleaved" type:"boolean"`
 
 	// The maximum number of events to return. The default is 10,000 events.
@@ -6630,7 +6641,11 @@ type GetQueryResultsOutput struct {
 	Statistics *QueryStatistics `locationName:"statistics" type:"structure"`
 
 	// The status of the most recent running of the query. Possible values are Cancelled,
-	// Complete, Failed, Running, Scheduled, and Unknown.
+	// Complete, Failed, Running, Scheduled, Timeout, and Unknown.
+	//
+	// Queries time out after 15 minutes of execution. To avoid having your queries
+	// time out, reduce the time range being searched, or partition your query into
+	// a number of queries.
 	Status *string `locationName:"status" type:"string" enum:"QueryStatus"`
 }
 
@@ -6930,6 +6945,10 @@ type LogStream struct {
 	LogStreamName *string `locationName:"logStreamName" min:"1" type:"string"`
 
 	// The number of bytes stored.
+	//
+	// IMPORTANT: Starting on June 17, 2019, this parameter will be deprecated for
+	// log streams, and will be reported as zero. This change applies only to log
+	// streams. The storedBytes parameter for log groups is not affected.
 	StoredBytes *int64 `locationName:"storedBytes" type:"long"`
 
 	// The sequence token.
@@ -7102,7 +7121,7 @@ func (s *MetricFilterMatchRecord) SetExtractedValues(v map[string]*string) *Metr
 	return s
 }
 
-// Indicates how to transform ingested log eventsto metric data in a CloudWatch
+// Indicates how to transform ingested log events to metric data in a CloudWatch
 // metric.
 type MetricTransformation struct {
 	_ struct{} `type:"structure"`
@@ -7648,6 +7667,7 @@ type PutResourcePolicyInput struct {
 
 	// Details of the new policy, including the identity of the principal that is
 	// enabled to put logs to this account. This is formatted as a JSON string.
+	// This parameter is required.
 	//
 	// The following example creates a resource policy enabling the Route 53 service
 	// to put DNS query logs in to the specified log group. Replace "logArn" with

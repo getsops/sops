@@ -42,6 +42,13 @@ const (
 	Desc FacetSortOrder = original.Desc
 )
 
+type ResultFormat = original.ResultFormat
+
+const (
+	ResultFormatObjectArray ResultFormat = original.ResultFormatObjectArray
+	ResultFormatTable       ResultFormat = original.ResultFormatTable
+)
+
 type ResultTruncated = original.ResultTruncated
 
 const (
@@ -94,6 +101,9 @@ func PossibleColumnDataTypeValues() []ColumnDataType {
 }
 func PossibleFacetSortOrderValues() []FacetSortOrder {
 	return original.PossibleFacetSortOrderValues()
+}
+func PossibleResultFormatValues() []ResultFormat {
+	return original.PossibleResultFormatValues()
 }
 func PossibleResultTruncatedValues() []ResultTruncated {
 	return original.PossibleResultTruncatedValues()

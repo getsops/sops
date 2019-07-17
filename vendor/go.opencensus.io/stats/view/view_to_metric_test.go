@@ -111,9 +111,9 @@ func init() {
 }
 
 func initTags() {
-	tk1, _ = tag.NewKey("k1")
-	tk2, _ = tag.NewKey("k2")
-	tk3, _ = tag.NewKey("k3")
+	tk1 = tag.MustNewKey("k1")
+	tk2 = tag.MustNewKey("k2")
+	tk3 = tag.MustNewKey("k3")
 	tk1v1 = tag.Tag{Key: tk1, Value: v1}
 	tk2v2 = tag.Tag{Key: tk2, Value: v2}
 

@@ -6,7 +6,7 @@
 
 // Package commentanalyzer provides access to the Perspective Comment Analyzer API.
 //
-// For product documentation, see: https://conversationai.github.io/
+// For product documentation, see: https://github.com/conversationai/perspectiveapi/blob/master/README.md
 //
 // Creating a client
 //

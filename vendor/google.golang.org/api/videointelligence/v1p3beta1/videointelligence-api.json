@@ -127,7 +127,7 @@
       }
     }
   },
-  "revision": "20190308",
+  "revision": "20190618",
   "rootUrl": "https://videointelligence.googleapis.com/",
   "schemas": {
     "GoogleCloudVideointelligenceV1_AnnotateVideoProgress": {
@@ -399,7 +399,7 @@
       "id": "GoogleCloudVideointelligenceV1_SpeechRecognitionAlternative",
       "properties": {
         "confidence": {
-          "description": "The confidence estimate between 0.0 and 1.0. A higher number\nindicates an estimated greater likelihood that the recognized words are\ncorrect. This field is typically provided only for the top hypothesis, and\nonly for `is_final=true` results. Clients should not rely on the\n`confidence` field as it is not guaranteed to be accurate or consistent.\nThe default of 0.0 is a sentinel value indicating `confidence` was not set.",
+          "description": "Output only. The confidence estimate between 0.0 and 1.0. A higher number\nindicates an estimated greater likelihood that the recognized words are\ncorrect. This field is set only for the top alternative.\nThis field is not guaranteed to be accurate and users should not rely on it\nto be always provided.\nThe default of 0.0 is a sentinel value indicating `confidence` was not set.",
           "format": "float",
           "type": "number"
         },
@@ -408,7 +408,7 @@
           "type": "string"
         },
         "words": {
-          "description": "A list of word-specific information for each recognized word.",
+          "description": "Output only. A list of word-specific information for each recognized word.\nNote: When `enable_speaker_diarization` is true, you will see all the words\nfrom the beginning of the audio.",
           "items": {
             "$ref": "GoogleCloudVideointelligenceV1_WordInfo"
           },
@@ -496,6 +496,28 @@
       "description": "Annotation progress for a single video.",
       "id": "GoogleCloudVideointelligenceV1_VideoAnnotationProgress",
       "properties": {
+        "feature": {
+          "description": "Specifies which feature is being tracked if the request contains more than\none features.",
+          "enum": [
+            "FEATURE_UNSPECIFIED",
+            "LABEL_DETECTION",
+            "SHOT_CHANGE_DETECTION",
+            "EXPLICIT_CONTENT_DETECTION",
+            "SPEECH_TRANSCRIPTION",
+            "TEXT_DETECTION",
+            "OBJECT_TRACKING"
+          ],
+          "enumDescriptions": [
+            "Unspecified.",
+            "Label detection. Detect objects, such as dog or flower.",
+            "Shot change detection.",
+            "Explicit content detection.",
+            "Speech transcription.",
+            "OCR text detection and tracking.",
+            "Object detection and tracking."
+          ],
+          "type": "string"
+        },
         "inputUri": {
           "description": "Video file location in\n[Google Cloud Storage](https://cloud.google.com/storage/).",
           "type": "string"
@@ -504,6 +526,10 @@
           "description": "Approximate percentage processed thus far. Guaranteed to be\n100 when fully processed.",
           "format": "int32",
           "type": "integer"
+        },
+        "segment": {
+          "$ref": "GoogleCloudVideointelligenceV1_VideoSegment",
+          "description": "Specifies which segment is being tracked if the request contains more than\none segments."
         },
         "startTime": {
           "description": "Time when the request was received.",
@@ -549,7 +575,7 @@
           "type": "array"
         },
         "segmentLabelAnnotations": {
-          "description": "Label annotations on video level or user specified segment level.\nThere is exactly one element for each unique label.",
+          "description": "Topical label annotations on video level or user specified segment level.\nThere is exactly one element for each unique label.",
           "items": {
             "$ref": "GoogleCloudVideointelligenceV1_LabelAnnotation"
           },
@@ -563,7 +589,7 @@
           "type": "array"
         },
         "shotLabelAnnotations": {
-          "description": "Label annotations on shot level.\nThere is exactly one element for each unique label.",
+          "description": "Topical label annotations on shot level.\nThere is exactly one element for each unique label.",
           "items": {
             "$ref": "GoogleCloudVideointelligenceV1_LabelAnnotation"
           },
@@ -903,7 +929,7 @@
       "id": "GoogleCloudVideointelligenceV1beta2_SpeechRecognitionAlternative",
       "properties": {
         "confidence": {
-          "description": "The confidence estimate between 0.0 and 1.0. A higher number\nindicates an estimated greater likelihood that the recognized words are\ncorrect. This field is typically provided only for the top hypothesis, and\nonly for `is_final=true` results. Clients should not rely on the\n`confidence` field as it is not guaranteed to be accurate or consistent.\nThe default of 0.0 is a sentinel value indicating `confidence` was not set.",
+          "description": "Output only. The confidence estimate between 0.0 and 1.0. A higher number\nindicates an estimated greater likelihood that the recognized words are\ncorrect. This field is set only for the top alternative.\nThis field is not guaranteed to be accurate and users should not rely on it\nto be always provided.\nThe default of 0.0 is a sentinel value indicating `confidence` was not set.",
           "format": "float",
           "type": "number"
         },
@@ -912,7 +938,7 @@
           "type": "string"
         },
         "words": {
-          "description": "A list of word-specific information for each recognized word.",
+          "description": "Output only. A list of word-specific information for each recognized word.\nNote: When `enable_speaker_diarization` is true, you will see all the words\nfrom the beginning of the audio.",
           "items": {
             "$ref": "GoogleCloudVideointelligenceV1beta2_WordInfo"
           },
@@ -1000,6 +1026,28 @@
       "description": "Annotation progress for a single video.",
       "id": "GoogleCloudVideointelligenceV1beta2_VideoAnnotationProgress",
       "properties": {
+        "feature": {
+          "description": "Specifies which feature is being tracked if the request contains more than\none features.",
+          "enum": [
+            "FEATURE_UNSPECIFIED",
+            "LABEL_DETECTION",
+            "SHOT_CHANGE_DETECTION",
+            "EXPLICIT_CONTENT_DETECTION",
+            "SPEECH_TRANSCRIPTION",
+            "TEXT_DETECTION",
+            "OBJECT_TRACKING"
+          ],
+          "enumDescriptions": [
+            "Unspecified.",
+            "Label detection. Detect objects, such as dog or flower.",
+            "Shot change detection.",
+            "Explicit content detection.",
+            "Speech transcription.",
+            "OCR text detection and tracking.",
+            "Object detection and tracking."
+          ],
+          "type": "string"
+        },
         "inputUri": {
           "description": "Video file location in\n[Google Cloud Storage](https://cloud.google.com/storage/).",
           "type": "string"
@@ -1008,6 +1056,10 @@
           "description": "Approximate percentage processed thus far. Guaranteed to be\n100 when fully processed.",
           "format": "int32",
           "type": "integer"
+        },
+        "segment": {
+          "$ref": "GoogleCloudVideointelligenceV1beta2_VideoSegment",
+          "description": "Specifies which segment is being tracked if the request contains more than\none segments."
         },
         "startTime": {
           "description": "Time when the request was received.",
@@ -1053,7 +1105,7 @@
           "type": "array"
         },
         "segmentLabelAnnotations": {
-          "description": "Label annotations on video level or user specified segment level.\nThere is exactly one element for each unique label.",
+          "description": "Topical label annotations on video level or user specified segment level.\nThere is exactly one element for each unique label.",
           "items": {
             "$ref": "GoogleCloudVideointelligenceV1beta2_LabelAnnotation"
           },
@@ -1067,7 +1119,7 @@
           "type": "array"
         },
         "shotLabelAnnotations": {
-          "description": "Label annotations on shot level.\nThere is exactly one element for each unique label.",
+          "description": "Topical label annotations on shot level.\nThere is exactly one element for each unique label.",
           "items": {
             "$ref": "GoogleCloudVideointelligenceV1beta2_LabelAnnotation"
           },
@@ -1407,7 +1459,7 @@
       "id": "GoogleCloudVideointelligenceV1p1beta1_SpeechRecognitionAlternative",
       "properties": {
         "confidence": {
-          "description": "The confidence estimate between 0.0 and 1.0. A higher number\nindicates an estimated greater likelihood that the recognized words are\ncorrect. This field is typically provided only for the top hypothesis, and\nonly for `is_final=true` results. Clients should not rely on the\n`confidence` field as it is not guaranteed to be accurate or consistent.\nThe default of 0.0 is a sentinel value indicating `confidence` was not set.",
+          "description": "Output only. The confidence estimate between 0.0 and 1.0. A higher number\nindicates an estimated greater likelihood that the recognized words are\ncorrect. This field is set only for the top alternative.\nThis field is not guaranteed to be accurate and users should not rely on it\nto be always provided.\nThe default of 0.0 is a sentinel value indicating `confidence` was not set.",
           "format": "float",
           "type": "number"
         },
@@ -1416,7 +1468,7 @@
           "type": "string"
         },
         "words": {
-          "description": "A list of word-specific information for each recognized word.",
+          "description": "Output only. A list of word-specific information for each recognized word.\nNote: When `enable_speaker_diarization` is true, you will see all the words\nfrom the beginning of the audio.",
           "items": {
             "$ref": "GoogleCloudVideointelligenceV1p1beta1_WordInfo"
           },
@@ -1504,6 +1556,28 @@
       "description": "Annotation progress for a single video.",
       "id": "GoogleCloudVideointelligenceV1p1beta1_VideoAnnotationProgress",
       "properties": {
+        "feature": {
+          "description": "Specifies which feature is being tracked if the request contains more than\none features.",
+          "enum": [
+            "FEATURE_UNSPECIFIED",
+            "LABEL_DETECTION",
+            "SHOT_CHANGE_DETECTION",
+            "EXPLICIT_CONTENT_DETECTION",
+            "SPEECH_TRANSCRIPTION",
+            "TEXT_DETECTION",
+            "OBJECT_TRACKING"
+          ],
+          "enumDescriptions": [
+            "Unspecified.",
+            "Label detection. Detect objects, such as dog or flower.",
+            "Shot change detection.",
+            "Explicit content detection.",
+            "Speech transcription.",
+            "OCR text detection and tracking.",
+            "Object detection and tracking."
+          ],
+          "type": "string"
+        },
         "inputUri": {
           "description": "Video file location in\n[Google Cloud Storage](https://cloud.google.com/storage/).",
           "type": "string"
@@ -1512,6 +1586,10 @@
           "description": "Approximate percentage processed thus far. Guaranteed to be\n100 when fully processed.",
           "format": "int32",
           "type": "integer"
+        },
+        "segment": {
+          "$ref": "GoogleCloudVideointelligenceV1p1beta1_VideoSegment",
+          "description": "Specifies which segment is being tracked if the request contains more than\none segments."
         },
         "startTime": {
           "description": "Time when the request was received.",
@@ -1557,7 +1635,7 @@
           "type": "array"
         },
         "segmentLabelAnnotations": {
-          "description": "Label annotations on video level or user specified segment level.\nThere is exactly one element for each unique label.",
+          "description": "Topical label annotations on video level or user specified segment level.\nThere is exactly one element for each unique label.",
           "items": {
             "$ref": "GoogleCloudVideointelligenceV1p1beta1_LabelAnnotation"
           },
@@ -1571,7 +1649,7 @@
           "type": "array"
         },
         "shotLabelAnnotations": {
-          "description": "Label annotations on shot level.\nThere is exactly one element for each unique label.",
+          "description": "Topical label annotations on shot level.\nThere is exactly one element for each unique label.",
           "items": {
             "$ref": "GoogleCloudVideointelligenceV1p1beta1_LabelAnnotation"
           },
@@ -1911,7 +1989,7 @@
       "id": "GoogleCloudVideointelligenceV1p2beta1_SpeechRecognitionAlternative",
       "properties": {
         "confidence": {
-          "description": "The confidence estimate between 0.0 and 1.0. A higher number\nindicates an estimated greater likelihood that the recognized words are\ncorrect. This field is typically provided only for the top hypothesis, and\nonly for `is_final=true` results. Clients should not rely on the\n`confidence` field as it is not guaranteed to be accurate or consistent.\nThe default of 0.0 is a sentinel value indicating `confidence` was not set.",
+          "description": "Output only. The confidence estimate between 0.0 and 1.0. A higher number\nindicates an estimated greater likelihood that the recognized words are\ncorrect. This field is set only for the top alternative.\nThis field is not guaranteed to be accurate and users should not rely on it\nto be always provided.\nThe default of 0.0 is a sentinel value indicating `confidence` was not set.",
           "format": "float",
           "type": "number"
         },
@@ -1920,7 +1998,7 @@
           "type": "string"
         },
         "words": {
-          "description": "A list of word-specific information for each recognized word.",
+          "description": "Output only. A list of word-specific information for each recognized word.\nNote: When `enable_speaker_diarization` is true, you will see all the words\nfrom the beginning of the audio.",
           "items": {
             "$ref": "GoogleCloudVideointelligenceV1p2beta1_WordInfo"
           },
@@ -2008,6 +2086,28 @@
       "description": "Annotation progress for a single video.",
       "id": "GoogleCloudVideointelligenceV1p2beta1_VideoAnnotationProgress",
       "properties": {
+        "feature": {
+          "description": "Specifies which feature is being tracked if the request contains more than\none features.",
+          "enum": [
+            "FEATURE_UNSPECIFIED",
+            "LABEL_DETECTION",
+            "SHOT_CHANGE_DETECTION",
+            "EXPLICIT_CONTENT_DETECTION",
+            "SPEECH_TRANSCRIPTION",
+            "TEXT_DETECTION",
+            "OBJECT_TRACKING"
+          ],
+          "enumDescriptions": [
+            "Unspecified.",
+            "Label detection. Detect objects, such as dog or flower.",
+            "Shot change detection.",
+            "Explicit content detection.",
+            "Speech transcription.",
+            "OCR text detection and tracking.",
+            "Object detection and tracking."
+          ],
+          "type": "string"
+        },
         "inputUri": {
           "description": "Video file location in\n[Google Cloud Storage](https://cloud.google.com/storage/).",
           "type": "string"
@@ -2016,6 +2116,10 @@
           "description": "Approximate percentage processed thus far. Guaranteed to be\n100 when fully processed.",
           "format": "int32",
           "type": "integer"
+        },
+        "segment": {
+          "$ref": "GoogleCloudVideointelligenceV1p2beta1_VideoSegment",
+          "description": "Specifies which segment is being tracked if the request contains more than\none segments."
         },
         "startTime": {
           "description": "Time when the request was received.",
@@ -2061,7 +2165,7 @@
           "type": "array"
         },
         "segmentLabelAnnotations": {
-          "description": "Label annotations on video level or user specified segment level.\nThere is exactly one element for each unique label.",
+          "description": "Topical label annotations on video level or user specified segment level.\nThere is exactly one element for each unique label.",
           "items": {
             "$ref": "GoogleCloudVideointelligenceV1p2beta1_LabelAnnotation"
           },
@@ -2075,7 +2179,7 @@
           "type": "array"
         },
         "shotLabelAnnotations": {
-          "description": "Label annotations on shot level.\nThere is exactly one element for each unique label.",
+          "description": "Topical label annotations on shot level.\nThere is exactly one element for each unique label.",
           "items": {
             "$ref": "GoogleCloudVideointelligenceV1p2beta1_LabelAnnotation"
           },
@@ -2173,7 +2277,8 @@
             "Explicit content detection.",
             "Speech transcription.",
             "OCR text detection and tracking.",
-            "Object detection and tracking."
+            "Object detection and tracking.",
+            "Logo detection, tracking, and recognition."
           ],
           "items": {
             "enum": [
@@ -2183,7 +2288,8 @@
               "EXPLICIT_CONTENT_DETECTION",
               "SPEECH_TRANSCRIPTION",
               "TEXT_DETECTION",
-              "OBJECT_TRACKING"
+              "OBJECT_TRACKING",
+              "LOGO_RECOGNITION"
             ],
             "type": "string"
           },
@@ -2223,6 +2329,26 @@
             "$ref": "GoogleCloudVideointelligenceV1p3beta1_VideoAnnotationResults"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVideointelligenceV1p3beta1_DetectedAttribute": {
+      "description": "A generic detected attribute represented by name in string format.",
+      "id": "GoogleCloudVideointelligenceV1p3beta1_DetectedAttribute",
+      "properties": {
+        "confidence": {
+          "description": "Detected attribute confidence. Range [0, 1].",
+          "format": "float",
+          "type": "number"
+        },
+        "name": {
+          "description": "The name of the attribute, i.e. glasses, dark_glasses, mouth_open etc.\nA full list of supported type names will be provided in the document.",
+          "type": "string"
+        },
+        "value": {
+          "description": "Text value of the detection result. For example, the value for \"HairColor\"\ncan be \"black\", \"blonde\", etc.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -2409,6 +2535,31 @@
       },
       "type": "object"
     },
+    "GoogleCloudVideointelligenceV1p3beta1_LogoRecognitionAnnotation": {
+      "description": "Annotation corresponding to one detected, tracked and recognized logo class.",
+      "id": "GoogleCloudVideointelligenceV1p3beta1_LogoRecognitionAnnotation",
+      "properties": {
+        "entity": {
+          "$ref": "GoogleCloudVideointelligenceV1p3beta1_Entity",
+          "description": "Entity category information to specify the logo class that all the logo\ntracks within this LogoRecognitionAnnotation are recognized as."
+        },
+        "segments": {
+          "description": "All video segments where the recognized logo appears. There might be\nmultiple instances of the same logo class appearing in one VideoSegment.",
+          "items": {
+            "$ref": "GoogleCloudVideointelligenceV1p3beta1_VideoSegment"
+          },
+          "type": "array"
+        },
+        "tracks": {
+          "description": "All logo tracks where the recognized logo appears. Each track corresponds\nto one logo instance appearing in consecutive frames.",
+          "items": {
+            "$ref": "GoogleCloudVideointelligenceV1p3beta1_Track"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "GoogleCloudVideointelligenceV1p3beta1_NormalizedBoundingBox": {
       "description": "Normalized bounding box.\nThe normalized vertex coordinates are relative to the original image.\nRange: [0, 1].",
       "id": "GoogleCloudVideointelligenceV1p3beta1_NormalizedBoundingBox",
@@ -2499,6 +2650,17 @@
       },
       "type": "object"
     },
+    "GoogleCloudVideointelligenceV1p3beta1_ObjectTrackingConfig": {
+      "description": "Config for OBJECT_TRACKING.",
+      "id": "GoogleCloudVideointelligenceV1p3beta1_ObjectTrackingConfig",
+      "properties": {
+        "model": {
+          "description": "Model to use for object tracking.\nSupported values: \"builtin/stable\" (the default if unset) and\n\"builtin/latest\".",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "GoogleCloudVideointelligenceV1p3beta1_ObjectTrackingFrame": {
       "description": "Video frame level annotations for object detection and tracking. This field\nstores per frame location, time offset, and confidence.",
       "id": "GoogleCloudVideointelligenceV1p3beta1_ObjectTrackingFrame",
@@ -2545,7 +2707,7 @@
       "id": "GoogleCloudVideointelligenceV1p3beta1_SpeechRecognitionAlternative",
       "properties": {
         "confidence": {
-          "description": "The confidence estimate between 0.0 and 1.0. A higher number\nindicates an estimated greater likelihood that the recognized words are\ncorrect. This field is typically provided only for the top hypothesis, and\nonly for `is_final=true` results. Clients should not rely on the\n`confidence` field as it is not guaranteed to be accurate or consistent.\nThe default of 0.0 is a sentinel value indicating `confidence` was not set.",
+          "description": "Output only. The confidence estimate between 0.0 and 1.0. A higher number\nindicates an estimated greater likelihood that the recognized words are\ncorrect. This field is set only for the top alternative.\nThis field is not guaranteed to be accurate and users should not rely on it\nto be always provided.\nThe default of 0.0 is a sentinel value indicating `confidence` was not set.",
           "format": "float",
           "type": "number"
         },
@@ -2554,7 +2716,7 @@
           "type": "string"
         },
         "words": {
-          "description": "A list of word-specific information for each recognized word.",
+          "description": "Output only. A list of word-specific information for each recognized word.\nNote: When `enable_speaker_diarization` is true, you will see all the words\nfrom the beginning of the audio.",
           "items": {
             "$ref": "GoogleCloudVideointelligenceV1p3beta1_WordInfo"
           },
@@ -2712,6 +2874,10 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "model": {
+          "description": "Model to use for text detection.\nSupported values: \"builtin/stable\" (the default if unset) and\n\"builtin/latest\".",
+          "type": "string"
         }
       },
       "type": "object"
@@ -2755,10 +2921,87 @@
       },
       "type": "object"
     },
+    "GoogleCloudVideointelligenceV1p3beta1_TimestampedObject": {
+      "description": "For tracking related features, such as LOGO_RECOGNITION, FACE_DETECTION,\nCELEBRITY_RECOGNITION, PERSON_DETECTION.\nAn object at time_offset with attributes, and located with\nnormalized_bounding_box.",
+      "id": "GoogleCloudVideointelligenceV1p3beta1_TimestampedObject",
+      "properties": {
+        "attributes": {
+          "description": "Optional. The attributes of the object in the bounding box.",
+          "items": {
+            "$ref": "GoogleCloudVideointelligenceV1p3beta1_DetectedAttribute"
+          },
+          "type": "array"
+        },
+        "normalizedBoundingBox": {
+          "$ref": "GoogleCloudVideointelligenceV1p3beta1_NormalizedBoundingBox",
+          "description": "Normalized Bounding box in a frame, where the object is located."
+        },
+        "timeOffset": {
+          "description": "Time-offset, relative to the beginning of the video,\ncorresponding to the video frame for this object.",
+          "format": "google-duration",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "GoogleCloudVideointelligenceV1p3beta1_Track": {
+      "description": "A track of an object instance.",
+      "id": "GoogleCloudVideointelligenceV1p3beta1_Track",
+      "properties": {
+        "attributes": {
+          "description": "Optional. Attributes in the track level.",
+          "items": {
+            "$ref": "GoogleCloudVideointelligenceV1p3beta1_DetectedAttribute"
+          },
+          "type": "array"
+        },
+        "confidence": {
+          "description": "Optional. The confidence score of the tracked object.",
+          "format": "float",
+          "type": "number"
+        },
+        "segment": {
+          "$ref": "GoogleCloudVideointelligenceV1p3beta1_VideoSegment",
+          "description": "Video segment of a track."
+        },
+        "timestampedObjects": {
+          "description": "The object with timestamp and attributes per frame in the track.",
+          "items": {
+            "$ref": "GoogleCloudVideointelligenceV1p3beta1_TimestampedObject"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "GoogleCloudVideointelligenceV1p3beta1_VideoAnnotationProgress": {
       "description": "Annotation progress for a single video.",
       "id": "GoogleCloudVideointelligenceV1p3beta1_VideoAnnotationProgress",
       "properties": {
+        "feature": {
+          "description": "Specifies which feature is being tracked if the request contains more than\none features.",
+          "enum": [
+            "FEATURE_UNSPECIFIED",
+            "LABEL_DETECTION",
+            "SHOT_CHANGE_DETECTION",
+            "EXPLICIT_CONTENT_DETECTION",
+            "SPEECH_TRANSCRIPTION",
+            "TEXT_DETECTION",
+            "OBJECT_TRACKING",
+            "LOGO_RECOGNITION"
+          ],
+          "enumDescriptions": [
+            "Unspecified.",
+            "Label detection. Detect objects, such as dog or flower.",
+            "Shot change detection.",
+            "Explicit content detection.",
+            "Speech transcription.",
+            "OCR text detection and tracking.",
+            "Object detection and tracking.",
+            "Logo detection, tracking, and recognition."
+          ],
+          "type": "string"
+        },
         "inputUri": {
           "description": "Video file location in\n[Google Cloud Storage](https://cloud.google.com/storage/).",
           "type": "string"
@@ -2767,6 +3010,10 @@
           "description": "Approximate percentage processed thus far. Guaranteed to be\n100 when fully processed.",
           "format": "int32",
           "type": "integer"
+        },
+        "segment": {
+          "$ref": "GoogleCloudVideointelligenceV1p3beta1_VideoSegment",
+          "description": "Specifies which segment is being tracked if the request contains more than\none segments."
         },
         "startTime": {
           "description": "Time when the request was received.",
@@ -2804,6 +3051,13 @@
           "description": "Video file location in\n[Google Cloud Storage](https://cloud.google.com/storage/).",
           "type": "string"
         },
+        "logoRecognitionAnnotations": {
+          "description": "Annotations for list of logos detected, tracked and recognized in video.",
+          "items": {
+            "$ref": "GoogleCloudVideointelligenceV1p3beta1_LogoRecognitionAnnotation"
+          },
+          "type": "array"
+        },
         "objectAnnotations": {
           "description": "Annotations for list of objects detected and tracked in video.",
           "items": {
@@ -2812,7 +3066,7 @@
           "type": "array"
         },
         "segmentLabelAnnotations": {
-          "description": "Label annotations on video level or user specified segment level.\nThere is exactly one element for each unique label.",
+          "description": "Topical label annotations on video level or user specified segment level.\nThere is exactly one element for each unique label.",
           "items": {
             "$ref": "GoogleCloudVideointelligenceV1p3beta1_LabelAnnotation"
           },
@@ -2826,7 +3080,7 @@
           "type": "array"
         },
         "shotLabelAnnotations": {
-          "description": "Label annotations on shot level.\nThere is exactly one element for each unique label.",
+          "description": "Topical label annotations on shot level.\nThere is exactly one element for each unique label.",
           "items": {
             "$ref": "GoogleCloudVideointelligenceV1p3beta1_LabelAnnotation"
           },
@@ -2860,6 +3114,10 @@
         "labelDetectionConfig": {
           "$ref": "GoogleCloudVideointelligenceV1p3beta1_LabelDetectionConfig",
           "description": "Config for LABEL_DETECTION."
+        },
+        "objectTrackingConfig": {
+          "$ref": "GoogleCloudVideointelligenceV1p3beta1_ObjectTrackingConfig",
+          "description": "Config for OBJECT_TRACKING."
         },
         "segments": {
           "description": "Video segments to annotate. The segments may overlap and are not required\nto be contiguous or span the whole video. If unspecified, each video is\ntreated as a single segment.",
@@ -2952,7 +3210,7 @@
           "type": "object"
         },
         "name": {
-          "description": "The server-assigned name, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping, the\n`name` should have the format of `operations/some/unique/name`.",
+          "description": "The server-assigned name, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping, the\n`name` should be a resource name ending with `operations/{unique_id}`.",
           "type": "string"
         },
         "response": {
@@ -2967,7 +3225,7 @@
       "type": "object"
     },
     "GoogleRpc_Status": {
-      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error\nmessage, and error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
+      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors).",
       "id": "GoogleRpc_Status",
       "properties": {
         "code": {

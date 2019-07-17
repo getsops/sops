@@ -42,8 +42,8 @@ var (
 )
 
 func TestRecordWithAttachments(t *testing.T) {
-	k1, _ := tag.NewKey("k1")
-	k2, _ := tag.NewKey("k2")
+	k1 := tag.MustNewKey("k1")
+	k2 := tag.MustNewKey("k2")
 	distribution := view.Distribution(5, 10)
 	m := stats.Int64("TestRecordWithAttachments/m1", "", stats.UnitDimensionless)
 	v := &view.View{

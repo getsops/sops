@@ -511,6 +511,25 @@
         "title": "To remove a virtual MFA device"
       }
     ],
+    "GenerateOrganizationsAccessReport": [
+      {
+        "input": {
+          "EntityPath": "o-a1b2c3d4e5/r-f6g7h8i9j0example/ou-1a2b3c-k9l8m7n6o5example"
+        },
+        "output": {
+          "JobId": "examplea-1234-b567-cde8-90fg123abcd4"
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "The following operation generates a report for the organizational unit ou-rge0-awexample",
+        "id": "generateorganizationsaccessreport-ou",
+        "title": "To generate a service last accessed data report for an organizational unit"
+      }
+    ],
     "GenerateServiceLastAccessedDetails": [
       {
         "input": {
@@ -655,6 +674,53 @@
         "description": "The following command gets information about the password for the IAM user named Anika.",
         "id": "d6b580cc-909f-4925-9caa-d425cbc1ad47",
         "title": "To get password information for an IAM user"
+      }
+    ],
+    "GetOrganizationsAccessReport": [
+      {
+        "input": {
+          "JobId": "examplea-1234-b567-cde8-90fg123abcd4"
+        },
+        "output": {
+          "AccessDetails": [
+            {
+              "EntityPath": "o-a1b2c3d4e5/r-f6g7h8i9j0example/ou-1a2b3c-k9l8m7n6o5example/111122223333",
+              "LastAuthenticatedTime": "2019-05-25T16:29:52Z",
+              "Region": "us-east-1",
+              "ServiceName": "Amazon DynamoDB",
+              "ServiceNamespace": "dynamodb",
+              "TotalAuthenticatedEntities": 2
+            },
+            {
+              "EntityPath": "o-a1b2c3d4e5/r-f6g7h8i9j0example/ou-1a2b3c-k9l8m7n6o5example/123456789012",
+              "LastAuthenticatedTime": "2019-06-15T13:12:06Z",
+              "Region": "us-east-1",
+              "ServiceName": "AWS Identity and Access Management",
+              "ServiceNamespace": "iam",
+              "TotalAuthenticatedEntities": 4
+            },
+            {
+              "ServiceName": "Amazon Simple Storage Service",
+              "ServiceNamespace": "s3",
+              "TotalAuthenticatedEntities": 0
+            }
+          ],
+          "IsTruncated": false,
+          "JobCompletionDate": "2019-06-18T19:47:35.241Z",
+          "JobCreationDate": "2019-06-18T19:47:31.466Z",
+          "JobStatus": "COMPLETED",
+          "NumberOfServicesAccessible": 3,
+          "NumberOfServicesNotAccessed": 1
+        },
+        "comments": {
+          "input": {
+          },
+          "output": {
+          }
+        },
+        "description": "The following operation gets details about the report with the job ID: examplea-1234-b567-cde8-90fg123abcd4",
+        "id": "getorganizationsaccessreport-ou",
+        "title": "To get details from a previously generated organizational unit report"
       }
     ],
     "GetRole": [

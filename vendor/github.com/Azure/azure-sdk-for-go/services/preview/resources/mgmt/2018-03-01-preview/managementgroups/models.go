@@ -399,6 +399,236 @@ func (future *DeleteFuture) Result(client Client) (or OperationResults, err erro
 	return
 }
 
+// DescendantInfo the descendant.
+type DescendantInfo struct {
+	// ID - READ-ONLY; The fully qualified ID for the descendant.  For example, /providers/Microsoft.Management/managementGroups/0000000-0000-0000-0000-000000000000 or /subscriptions/0000000-0000-0000-0000-000000000000
+	ID *string `json:"id,omitempty"`
+	// Type - READ-ONLY; The type of the resource. For example, /providers/Microsoft.Management/managementGroups or /subscriptions
+	Type *string `json:"type,omitempty"`
+	// Name - READ-ONLY; The name of the descendant. For example, 00000000-0000-0000-0000-000000000000
+	Name                      *string `json:"name,omitempty"`
+	*DescendantInfoProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for DescendantInfo.
+func (di DescendantInfo) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if di.DescendantInfoProperties != nil {
+		objectMap["properties"] = di.DescendantInfoProperties
+	}
+	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for DescendantInfo struct.
+func (di *DescendantInfo) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				di.ID = &ID
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				di.Type = &typeVar
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				di.Name = &name
+			}
+		case "properties":
+			if v != nil {
+				var descendantInfoProperties DescendantInfoProperties
+				err = json.Unmarshal(*v, &descendantInfoProperties)
+				if err != nil {
+					return err
+				}
+				di.DescendantInfoProperties = &descendantInfoProperties
+			}
+		}
+	}
+
+	return nil
+}
+
+// DescendantInfoProperties the generic properties of an descendant.
+type DescendantInfoProperties struct {
+	// DisplayName - The friendly name of the management group.
+	DisplayName *string                    `json:"displayName,omitempty"`
+	Parent      *DescendantParentGroupInfo `json:"parent,omitempty"`
+}
+
+// DescendantListResult describes the result of the request to view descendants.
+type DescendantListResult struct {
+	autorest.Response `json:"-"`
+	// Value - The list of descendants.
+	Value *[]DescendantInfo `json:"value,omitempty"`
+	// NextLink - READ-ONLY; The URL to use for getting the next set of results.
+	NextLink *string `json:"nextLink,omitempty"`
+}
+
+// DescendantListResultIterator provides access to a complete listing of DescendantInfo values.
+type DescendantListResultIterator struct {
+	i    int
+	page DescendantListResultPage
+}
+
+// NextWithContext advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+func (iter *DescendantListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DescendantListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	iter.i++
+	if iter.i < len(iter.page.Values()) {
+		return nil
+	}
+	err = iter.page.NextWithContext(ctx)
+	if err != nil {
+		iter.i--
+		return err
+	}
+	iter.i = 0
+	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *DescendantListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
+}
+
+// NotDone returns true if the enumeration should be started or is not yet complete.
+func (iter DescendantListResultIterator) NotDone() bool {
+	return iter.page.NotDone() && iter.i < len(iter.page.Values())
+}
+
+// Response returns the raw server response from the last page request.
+func (iter DescendantListResultIterator) Response() DescendantListResult {
+	return iter.page.Response()
+}
+
+// Value returns the current value or a zero-initialized value if the
+// iterator has advanced beyond the end of the collection.
+func (iter DescendantListResultIterator) Value() DescendantInfo {
+	if !iter.page.NotDone() {
+		return DescendantInfo{}
+	}
+	return iter.page.Values()[iter.i]
+}
+
+// Creates a new instance of the DescendantListResultIterator type.
+func NewDescendantListResultIterator(page DescendantListResultPage) DescendantListResultIterator {
+	return DescendantListResultIterator{page: page}
+}
+
+// IsEmpty returns true if the ListResult contains no values.
+func (dlr DescendantListResult) IsEmpty() bool {
+	return dlr.Value == nil || len(*dlr.Value) == 0
+}
+
+// descendantListResultPreparer prepares a request to retrieve the next set of results.
+// It returns nil if no more results exist.
+func (dlr DescendantListResult) descendantListResultPreparer(ctx context.Context) (*http.Request, error) {
+	if dlr.NextLink == nil || len(to.String(dlr.NextLink)) < 1 {
+		return nil, nil
+	}
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+		autorest.AsJSON(),
+		autorest.AsGet(),
+		autorest.WithBaseURL(to.String(dlr.NextLink)))
+}
+
+// DescendantListResultPage contains a page of DescendantInfo values.
+type DescendantListResultPage struct {
+	fn  func(context.Context, DescendantListResult) (DescendantListResult, error)
+	dlr DescendantListResult
+}
+
+// NextWithContext advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+func (page *DescendantListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/DescendantListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.dlr)
+	if err != nil {
+		return err
+	}
+	page.dlr = next
+	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *DescendantListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
+}
+
+// NotDone returns true if the page enumeration should be started or is not yet complete.
+func (page DescendantListResultPage) NotDone() bool {
+	return !page.dlr.IsEmpty()
+}
+
+// Response returns the raw server response from the last page request.
+func (page DescendantListResultPage) Response() DescendantListResult {
+	return page.dlr
+}
+
+// Values returns the slice of values for the current page or nil if there are no values.
+func (page DescendantListResultPage) Values() []DescendantInfo {
+	if page.dlr.IsEmpty() {
+		return nil
+	}
+	return *page.dlr.Value
+}
+
+// Creates a new instance of the DescendantListResultPage type.
+func NewDescendantListResultPage(getNextPage func(context.Context, DescendantListResult) (DescendantListResult, error)) DescendantListResultPage {
+	return DescendantListResultPage{fn: getNextPage}
+}
+
+// DescendantParentGroupInfo the ID of the parent management group.
+type DescendantParentGroupInfo struct {
+	// ID - The fully qualified ID for the parent management group.  For example, /providers/Microsoft.Management/managementGroups/0000000-0000-0000-0000-000000000000
+	ID *string `json:"id,omitempty"`
+}
+
 // Details the details of a management group.
 type Details struct {
 	// Version - The version number of the object.

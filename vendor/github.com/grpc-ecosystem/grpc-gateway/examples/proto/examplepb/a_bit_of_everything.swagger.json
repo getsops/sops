@@ -1589,6 +1589,8 @@
     },
     "/v2/example/empty": {
       "get": {
+        "summary": "Create a new ABitOfEverything",
+        "description": "This API creates a new ABitOfEverything",
         "operationId": "Empty",
         "responses": {
           "200": {

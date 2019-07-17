@@ -221,10 +221,7 @@ func (t *BatchReadOnlyTransaction) Cleanup(ctx context.Context) {
 	}
 	t.sh = nil
 	sid, client := sh.getID(), sh.getClient()
-	err := runRetryable(ctx, func(ctx context.Context) error {
-		_, e := client.DeleteSession(ctx, &sppb.DeleteSessionRequest{Name: sid})
-		return e
-	})
+	err := client.DeleteSession(ctx, &sppb.DeleteSessionRequest{Name: sid})
 	if err != nil {
 		log.Printf("Failed to delete session %v. Error: %v", sid, err)
 	}

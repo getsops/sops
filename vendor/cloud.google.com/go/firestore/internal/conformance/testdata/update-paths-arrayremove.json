@@ -1,0 +1,73 @@
+{
+  "tests": [
+    {
+      "description": "update-paths: ArrayRemove with data",
+      "comment": "A key with ArrayRemove is removed from the data in the update \noperation. Instead it appears in a separate Transform operation.",
+      "updatePaths": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "fieldPaths": [
+          {
+            "field": [
+              "a"
+            ]
+          },
+          {
+            "field": [
+              "b"
+            ]
+          }
+        ],
+        "jsonValues": [
+          "1",
+          "[\"ArrayRemove\", 1, 2, 3]"
+        ],
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d",
+                "fields": {
+                  "a": {
+                    "integerValue": "1"
+                  }
+                }
+              },
+              "updateMask": {
+                "fieldPaths": [
+                  "a"
+                ]
+              },
+              "currentDocument": {
+                "exists": true
+              }
+            },
+            {
+              "transform": {
+                "document": "projects/projectID/databases/(default)/documents/C/d",
+                "fieldTransforms": [
+                  {
+                    "fieldPath": "b",
+                    "removeAllFromArray": {
+                      "values": [
+                        {
+                          "integerValue": "1"
+                        },
+                        {
+                          "integerValue": "2"
+                        },
+                        {
+                          "integerValue": "3"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

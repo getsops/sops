@@ -9096,7 +9096,8 @@ func (c *APIGateway) TestInvokeAuthorizerRequest(input *TestInvokeAuthorizerInpu
 // Simulate the execution of an Authorizer in your RestApi with headers, parameters,
 // and an incoming request body.
 //
-// Enable custom authorizers (https://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html)
+// Use Lambda Function as Authorizer (https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html)
+// Use Cognito User Pool as Authorizer (https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html)
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -11585,7 +11586,8 @@ func (s *ApiStage) SetThrottle(v map[string]*ThrottleSettings) *ApiStage {
 // Represents an authorization layer for methods. If enabled on a method, API
 // Gateway will activate the authorizer when a client calls the method.
 //
-// Enable custom authorization (https://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html)
+// Use Lambda Function as Authorizer (https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html)
+// Use Cognito User Pool as Authorizer (https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html)
 type Authorizer struct {
 	_ struct{} `type:"structure"`
 
@@ -11640,11 +11642,12 @@ type Authorizer struct {
 	IdentitySource *string `locationName:"identitySource" type:"string"`
 
 	// A validation expression for the incoming identity token. For TOKEN authorizers,
-	// this value is a regular expression. API Gateway will match the aud field
-	// of the incoming token from the client against the specified regular expression.
-	// It will invoke the authorizer's Lambda function when there is a match. Otherwise,
-	// it will return a 401 Unauthorized response without calling the Lambda function.
-	// The validation expression does not apply to the REQUEST authorizer.
+	// this value is a regular expression. For COGNITO_USER_POOLS authorizers, API
+	// Gateway will match the aud field of the incoming token from the client against
+	// the specified regular expression. It will invoke the authorizer's Lambda
+	// function when there is a match. Otherwise, it will return a 401 Unauthorized
+	// response without calling the Lambda function. The validation expression does
+	// not apply to the REQUEST authorizer.
 	IdentityValidationExpression *string `locationName:"identityValidationExpression" type:"string"`
 
 	// [Required] The name of the authorizer.
@@ -12055,11 +12058,12 @@ type CreateAuthorizerInput struct {
 	IdentitySource *string `locationName:"identitySource" type:"string"`
 
 	// A validation expression for the incoming identity token. For TOKEN authorizers,
-	// this value is a regular expression. API Gateway will match the aud field
-	// of the incoming token from the client against the specified regular expression.
-	// It will invoke the authorizer's Lambda function when there is a match. Otherwise,
-	// it will return a 401 Unauthorized response without calling the Lambda function.
-	// The validation expression does not apply to the REQUEST authorizer.
+	// this value is a regular expression. For COGNITO_USER_POOLS authorizers, API
+	// Gateway will match the aud field of the incoming token from the client against
+	// the specified regular expression. It will invoke the authorizer's Lambda
+	// function when there is a match. Otherwise, it will return a 401 Unauthorized
+	// response without calling the Lambda function. The validation expression does
+	// not apply to the REQUEST authorizer.
 	IdentityValidationExpression *string `locationName:"identityValidationExpression" type:"string"`
 
 	// [Required] The name of the authorizer.
@@ -12184,7 +12188,7 @@ type CreateBasePathMappingInput struct {
 
 	// The base path name that callers of the API must provide as part of the URL
 	// after the domain name. This value must be unique for all of the mappings
-	// across a single API. Leave this blank if you do not want callers to specify
+	// across a single API. Specify '(none)' if you do not want callers to specify
 	// a base path name after the domain name.
 	BasePath *string `locationName:"basePath" type:"string"`
 
@@ -12198,8 +12202,8 @@ type CreateBasePathMappingInput struct {
 	// RestApiId is a required field
 	RestApiId *string `locationName:"restApiId" type:"string" required:"true"`
 
-	// The name of the API's stage that you want to use for this mapping. Leave
-	// this blank if you do not want callers to explicitly specify the stage name
+	// The name of the API's stage that you want to use for this mapping. Specify
+	// '(none)' if you do not want callers to explicitly specify the stage name
 	// after any base path name.
 	Stage *string `locationName:"stage" type:"string"`
 }
@@ -12575,6 +12579,10 @@ type CreateDomainNameInput struct {
 	// for this domain name.
 	RegionalCertificateName *string `locationName:"regionalCertificateName" type:"string"`
 
+	// The Transport Layer Security (TLS) version + cipher suite for this DomainName.
+	// The valid values are TLS_1_0 and TLS_1_2.
+	SecurityPolicy *string `locationName:"securityPolicy" type:"string" enum:"SecurityPolicy"`
+
 	// The key-value map of strings. The valid character set is [a-zA-Z+-=._:/].
 	// The tag key can be up to 128 characters and must not start with aws:. The
 	// tag value can be up to 256 characters.
@@ -12655,6 +12663,12 @@ func (s *CreateDomainNameInput) SetRegionalCertificateArn(v string) *CreateDomai
 // SetRegionalCertificateName sets the RegionalCertificateName field's value.
 func (s *CreateDomainNameInput) SetRegionalCertificateName(v string) *CreateDomainNameInput {
 	s.RegionalCertificateName = &v
+	return s
+}
+
+// SetSecurityPolicy sets the SecurityPolicy field's value.
+func (s *CreateDomainNameInput) SetSecurityPolicy(v string) *CreateDomainNameInput {
+	s.SecurityPolicy = &v
 	return s
 }
 
@@ -13060,7 +13074,9 @@ type CreateStageInput struct {
 	// RestApiId is a required field
 	RestApiId *string `location:"uri" locationName:"restapi_id" type:"string" required:"true"`
 
-	// [Required] The name for the Stage resource.
+	// [Required] The name for the Stage resource. Stage names can only contain
+	// alphanumeric characters, hyphens, and underscores. Maximum length is 128
+	// characters.
 	//
 	// StageName is a required field
 	StageName *string `locationName:"stageName" type:"string" required:"true"`
@@ -13549,6 +13565,8 @@ type DeleteBasePathMappingInput struct {
 	_ struct{} `type:"structure"`
 
 	// [Required] The base path name of the BasePathMapping resource to delete.
+	//
+	// To specify an empty base path, set this parameter to '(none)'.
 	//
 	// BasePath is a required field
 	BasePath *string `location:"uri" locationName:"base_path" type:"string" required:"true"`
@@ -15358,6 +15376,16 @@ type DomainName struct {
 	// The custom domain name as an API host name, for example, my-api.example.com.
 	DomainName *string `locationName:"domainName" type:"string"`
 
+	// The status of the DomainName migration. The valid values are AVAILABLE and
+	// UPDATING. If the status is UPDATING, the domain cannot be modified further
+	// until the existing operation is complete. If it is AVAILABLE, the domain
+	// can be updated.
+	DomainNameStatus *string `locationName:"domainNameStatus" type:"string" enum:"DomainNameStatus"`
+
+	// An optional text message containing detailed information about status of
+	// the DomainName migration.
+	DomainNameStatusMessage *string `locationName:"domainNameStatusMessage" type:"string"`
+
 	// The endpoint configuration of this DomainName showing the endpoint types
 	// of the domain name.
 	EndpointConfiguration *EndpointConfiguration `locationName:"endpointConfiguration" type:"structure"`
@@ -15380,6 +15408,10 @@ type DomainName struct {
 	// For more information, see Set up a Regional Custom Domain Name (https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-regional-api-custom-domain-create.html)
 	// and AWS Regions and Endpoints for API Gateway (https://docs.aws.amazon.com/general/latest/gr/rande.html#apigateway_region).
 	RegionalHostedZoneId *string `locationName:"regionalHostedZoneId" type:"string"`
+
+	// The Transport Layer Security (TLS) version + cipher suite for this DomainName.
+	// The valid values are TLS_1_0 and TLS_1_2.
+	SecurityPolicy *string `locationName:"securityPolicy" type:"string" enum:"SecurityPolicy"`
 
 	// The collection of tags. Each tag element is associated with a given resource.
 	Tags map[string]*string `locationName:"tags" type:"map"`
@@ -15431,6 +15463,18 @@ func (s *DomainName) SetDomainName(v string) *DomainName {
 	return s
 }
 
+// SetDomainNameStatus sets the DomainNameStatus field's value.
+func (s *DomainName) SetDomainNameStatus(v string) *DomainName {
+	s.DomainNameStatus = &v
+	return s
+}
+
+// SetDomainNameStatusMessage sets the DomainNameStatusMessage field's value.
+func (s *DomainName) SetDomainNameStatusMessage(v string) *DomainName {
+	s.DomainNameStatusMessage = &v
+	return s
+}
+
 // SetEndpointConfiguration sets the EndpointConfiguration field's value.
 func (s *DomainName) SetEndpointConfiguration(v *EndpointConfiguration) *DomainName {
 	s.EndpointConfiguration = v
@@ -15458,6 +15502,12 @@ func (s *DomainName) SetRegionalDomainName(v string) *DomainName {
 // SetRegionalHostedZoneId sets the RegionalHostedZoneId field's value.
 func (s *DomainName) SetRegionalHostedZoneId(v string) *DomainName {
 	s.RegionalHostedZoneId = &v
+	return s
+}
+
+// SetSecurityPolicy sets the SecurityPolicy field's value.
+func (s *DomainName) SetSecurityPolicy(v string) *DomainName {
+	s.SecurityPolicy = &v
 	return s
 }
 
@@ -15972,7 +16022,8 @@ func (s *GetAuthorizersInput) SetRestApiId(v string) *GetAuthorizersInput {
 
 // Represents a collection of Authorizer resources.
 //
-// Enable custom authorization (https://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html)
+// Use Lambda Function as Authorizer (https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html)
+// Use Cognito User Pool as Authorizer (https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-integrate-with-cognito.html)
 type GetAuthorizersOutput struct {
 	_ struct{} `type:"structure"`
 
@@ -16010,7 +16061,7 @@ type GetBasePathMappingInput struct {
 
 	// [Required] The base path name that callers of the API must provide as part
 	// of the URL after the domain name. This value must be unique for all of the
-	// mappings across a single API. Leave this blank if you do not want callers
+	// mappings across a single API. Specify '(none)' if you do not want callers
 	// to specify any base path name after the domain name.
 	//
 	// BasePath is a required field
@@ -18844,7 +18895,7 @@ type GetTagsInput struct {
 	Position *string `location:"querystring" locationName:"position" type:"string"`
 
 	// [Required] The ARN of a resource that can be tagged. The resource ARN must
-	// be URL-encoded. At present, Stage is the only taggable resource.
+	// be URL-encoded.
 	//
 	// ResourceArn is a required field
 	ResourceArn *string `location:"uri" locationName:"resource_arn" type:"string" required:"true"`
@@ -19660,8 +19711,8 @@ type ImportRestApiInput struct {
 	// endpointConfigurationTypes=REGIONAL, or endpointConfigurationTypes=PRIVATE.
 	// The default endpoint type is EDGE.
 	//
-	// To handle imported basePath, set parameters as basePath=ignore, basePath=prepend
-	// or basePath=split.
+	// To handle imported basepath, set parameters as basepath=ignore, basepath=prepend
+	// or basepath=split.
 	//
 	// For example, the AWS CLI command to exclude documentation from the imported
 	// API is:
@@ -19725,10 +19776,14 @@ func (s *ImportRestApiInput) SetParameters(v map[string]*string) *ImportRestApiI
 type Integration struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies the integration's cache key parameters.
+	// A list of request parameters whose values API Gateway caches. To be valid
+	// values for cacheKeyParameters, these parameters must also be specified for
+	// Method requestParameters.
 	CacheKeyParameters []*string `locationName:"cacheKeyParameters" type:"list"`
 
-	// Specifies the integration's cache namespace.
+	// An API-specific tag group of related cached parameters. To be valid values
+	// for cacheKeyParameters, these parameters must also be specified for Method
+	// requestParameters.
 	CacheNamespace *string `locationName:"cacheNamespace" type:"string"`
 
 	// The (id (https://docs.aws.amazon.com/apigateway/api-reference/resource/vpc-link/#id))
@@ -19753,7 +19808,7 @@ type Integration struct {
 	//
 	// If this property is not defined, the request payload will be passed through
 	// from the method request to integration request without modification, provided
-	// that the passthroughBehaviors is configured to support payload pass-through.
+	// that the passthroughBehavior is configured to support payload pass-through.
 	ContentHandling *string `locationName:"contentHandling" type:"string" enum:"ContentHandlingStrategy"`
 
 	// Specifies the credentials required for the integration, if any. For AWS integrations,
@@ -20249,8 +20304,8 @@ type Method struct {
 	MethodResponses map[string]*MethodResponse `locationName:"methodResponses" type:"map"`
 
 	// A human-friendly operation identifier for the method. For example, you can
-	// assign the operationName of ListPets for the GET /pets method in PetStore
-	// (https://petstore-demo-endpoint.execute-api.com/petstore/pets) example.
+	// assign the operationName of ListPets for the GET /pets method in the PetStore
+	// example.
 	OperationName *string `locationName:"operationName" type:"string"`
 
 	// A key-value map specifying data schemas, represented by Model resources,
@@ -20866,10 +20921,10 @@ func (s *PutGatewayResponseInput) SetStatusCode(v string) *PutGatewayResponseInp
 type PutIntegrationInput struct {
 	_ struct{} `type:"structure"`
 
-	// Specifies a put integration input's cache key parameters.
+	// An API-specific tag group of related cached parameters.
 	CacheKeyParameters []*string `locationName:"cacheKeyParameters" type:"list"`
 
-	// Specifies a put integration input's cache namespace.
+	// A list of request parameters whose values are to be cached.
 	CacheNamespace *string `locationName:"cacheNamespace" type:"string"`
 
 	// The (id (https://docs.aws.amazon.com/apigateway/api-reference/resource/vpc-link/#id))
@@ -20894,7 +20949,7 @@ type PutIntegrationInput struct {
 	//
 	// If this property is not defined, the request payload will be passed through
 	// from the method request to integration request without modification, provided
-	// that the passthroughBehaviors is configured to support payload pass-through.
+	// that the passthroughBehavior is configured to support payload pass-through.
 	ContentHandling *string `locationName:"contentHandling" type:"string" enum:"ContentHandlingStrategy"`
 
 	// Specifies whether credentials are required for a put integration.
@@ -21304,8 +21359,8 @@ type PutMethodInput struct {
 	HttpMethod *string `location:"uri" locationName:"http_method" type:"string" required:"true"`
 
 	// A human-friendly operation identifier for the method. For example, you can
-	// assign the operationName of ListPets for the GET /pets method in PetStore
-	// (https://petstore-demo-endpoint.execute-api.com/petstore/pets) example.
+	// assign the operationName of ListPets for the GET /pets method in the PetStore
+	// example.
 	OperationName *string `locationName:"operationName" type:"string"`
 
 	// Specifies the Model resources used for the request's content type. Request
@@ -22117,7 +22172,8 @@ type Stage struct {
 	MethodSettings map[string]*MethodSetting `locationName:"methodSettings" type:"map"`
 
 	// The name of the stage is the first path segment in the Uniform Resource Identifier
-	// (URI) of a call to API Gateway.
+	// (URI) of a call to API Gateway. Stage names can only contain alphanumeric
+	// characters, hyphens, and underscores. Maximum length is 128 characters.
 	StageName *string `locationName:"stageName" type:"string"`
 
 	// The collection of tags. Each tag element is associated with a given resource.
@@ -22285,7 +22341,7 @@ type TagResourceInput struct {
 	_ struct{} `type:"structure"`
 
 	// [Required] The ARN of a resource that can be tagged. The resource ARN must
-	// be URL-encoded. At present, Stage is the only taggable resource.
+	// be URL-encoded.
 	//
 	// ResourceArn is a required field
 	ResourceArn *string `location:"uri" locationName:"resource_arn" type:"string" required:"true"`
@@ -22798,7 +22854,7 @@ type UntagResourceInput struct {
 	_ struct{} `type:"structure"`
 
 	// [Required] The ARN of a resource that can be tagged. The resource ARN must
-	// be URL-encoded. At present, Stage is the only taggable resource.
+	// be URL-encoded.
 	//
 	// ResourceArn is a required field
 	ResourceArn *string `location:"uri" locationName:"resource_arn" type:"string" required:"true"`
@@ -23015,6 +23071,8 @@ type UpdateBasePathMappingInput struct {
 	_ struct{} `type:"structure"`
 
 	// [Required] The base path of the BasePathMapping resource to change.
+	//
+	// To specify an empty base path, set this parameter to '(none)'.
 	//
 	// BasePath is a required field
 	BasePath *string `location:"uri" locationName:"base_path" type:"string" required:"true"`
@@ -25020,6 +25078,17 @@ const (
 	DocumentationPartTypeResponseBody = "RESPONSE_BODY"
 )
 
+const (
+	// DomainNameStatusAvailable is a DomainNameStatus enum value
+	DomainNameStatusAvailable = "AVAILABLE"
+
+	// DomainNameStatusUpdating is a DomainNameStatus enum value
+	DomainNameStatusUpdating = "UPDATING"
+
+	// DomainNameStatusPending is a DomainNameStatus enum value
+	DomainNameStatusPending = "PENDING"
+)
+
 // The endpoint type. The valid values are EDGE for edge-optimized API setup,
 // most suitable for mobile applications; REGIONAL for regional API endpoint
 // setup, most suitable for calling from AWS Region; and PRIVATE for private
@@ -25163,6 +25232,14 @@ const (
 
 	// QuotaPeriodTypeMonth is a QuotaPeriodType enum value
 	QuotaPeriodTypeMonth = "MONTH"
+)
+
+const (
+	// SecurityPolicyTls10 is a SecurityPolicy enum value
+	SecurityPolicyTls10 = "TLS_1_0"
+
+	// SecurityPolicyTls12 is a SecurityPolicy enum value
+	SecurityPolicyTls12 = "TLS_1_2"
 )
 
 const (

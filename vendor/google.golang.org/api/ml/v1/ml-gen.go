@@ -111,7 +111,6 @@ func New(client *http.Client) (*Service, error) {
 		return nil, errors.New("client is nil")
 	}
 	s := &Service{client: client, BasePath: basePath}
-	s.Operations = NewOperationsService(s)
 	s.Projects = NewProjectsService(s)
 	return s, nil
 }
@@ -121,8 +120,6 @@ type Service struct {
 	BasePath  string // API endpoint base URL
 	UserAgent string // optional additional User-Agent fragment
 
-	Operations *OperationsService
-
 	Projects *ProjectsService
 }
 
@@ -131,15 +128,6 @@ func (s *Service) userAgent() string {
 		return googleapi.UserAgent
 	}
 	return googleapi.UserAgent + " " + s.UserAgent
-}
-
-func NewOperationsService(s *Service) *OperationsService {
-	rs := &OperationsService{s: s}
-	return rs
-}
-
-type OperationsService struct {
-	s *Service
 }
 
 func NewProjectsService(s *Service) *ProjectsService {
@@ -646,6 +634,9 @@ type GoogleCloudMlV1__HyperparameterOutput struct {
 	// Only set for trials of built-in algorithms jobs that have succeeded.
 	BuiltInAlgorithmOutput *GoogleCloudMlV1__BuiltInAlgorithmOutput `json:"builtInAlgorithmOutput,omitempty"`
 
+	// EndTime: Output only. End time for the trial.
+	EndTime string `json:"endTime,omitempty"`
+
 	// FinalMetric: The final objective metric seen for this trial.
 	FinalMetric *GoogleCloudMlV1HyperparameterOutputHyperparameterMetric `json:"finalMetric,omitempty"`
 
@@ -654,6 +645,26 @@ type GoogleCloudMlV1__HyperparameterOutput struct {
 
 	// IsTrialStoppedEarly: True if the trial is stopped early.
 	IsTrialStoppedEarly bool `json:"isTrialStoppedEarly,omitempty"`
+
+	// StartTime: Output only. Start time for the trial.
+	StartTime string `json:"startTime,omitempty"`
+
+	// State: Output only. The detailed state of the trial.
+	//
+	// Possible values:
+	//   "STATE_UNSPECIFIED" - The job state is unspecified.
+	//   "QUEUED" - The job has been just created and processing has not yet
+	// begun.
+	//   "PREPARING" - The service is preparing to run the job.
+	//   "RUNNING" - The job is in progress.
+	//   "SUCCEEDED" - The job completed successfully.
+	//   "FAILED" - The job failed.
+	// `error_message` should contain the details of the failure.
+	//   "CANCELLING" - The job is being cancelled.
+	// `error_message` should describe the reason for the cancellation.
+	//   "CANCELLED" - The job has been cancelled.
+	// `error_message` should describe the reason for the cancellation.
+	State string `json:"state,omitempty"`
 
 	// TrialId: The trial id for these results.
 	TrialId string `json:"trialId,omitempty"`
@@ -717,12 +728,12 @@ type GoogleCloudMlV1__HyperparameterSpec struct {
 	//   "MINIMIZE" - Minimize the goal metric.
 	Goal string `json:"goal,omitempty"`
 
-	// HyperparameterMetricTag: Optional. The Tensorflow summary tag name to
+	// HyperparameterMetricTag: Optional. The TensorFlow summary tag name to
 	// use for optimizing trials. For
-	// current versions of Tensorflow, this tag name should exactly match
+	// current versions of TensorFlow, this tag name should exactly match
 	// what is
-	// shown in Tensorboard, including all scopes.  For versions of
-	// Tensorflow
+	// shown in TensorBoard, including all scopes.  For versions of
+	// TensorFlow
 	// prior to 0.12, this should be only the tag passed to tf.Summary.
 	// By default, "training/hptuning/metric" will be used.
 	HyperparameterMetricTag string `json:"hyperparameterMetricTag,omitempty"`
@@ -1665,6 +1676,13 @@ type GoogleCloudMlV1__ReplicaConfig struct {
 	// containers](/ml-engine/docs/distributed-training-containers).
 	ImageUri string `json:"imageUri,omitempty"`
 
+	// TpuTfVersion: TensorFlow version used in the custom container. This
+	// field is required if
+	// the replica is a TPU worker that uses a custom container. Otherwise,
+	// do not
+	// specify this field.
+	TpuTfVersion string `json:"tpuTfVersion,omitempty"`
+
 	// ForceSendFields is a list of field names (e.g. "AcceleratorConfig")
 	// to unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
@@ -1867,6 +1885,10 @@ type GoogleCloudMlV1__TrainingInput struct {
 	//
 	// You must set this value when `scaleTier` is set to `CUSTOM`.
 	MasterType string `json:"masterType,omitempty"`
+
+	// MaxRunningTime: Optional. The maximum job running time. The default
+	// is 7 days.
+	MaxRunningTime string `json:"maxRunningTime,omitempty"`
 
 	// PackageUris: Required. The Google Cloud Storage location of the
 	// packages with
@@ -2109,6 +2131,15 @@ type GoogleCloudMlV1__TrainingOutput struct {
 	// ConsumedMLUnits: The amount of ML units consumed by the job.
 	ConsumedMLUnits float64 `json:"consumedMLUnits,omitempty"`
 
+	// HyperparameterMetricTag: The TensorFlow summary tag name used for
+	// optimizing hyperparameter tuning
+	// trials.
+	// See
+	// [`HyperparameterSpec.hyperparameterMetricTag`](#HyperparameterSpec
+	// .FIELDS.hyperparameter_metric_tag)
+	// for more information. Only set for hyperparameter tuning jobs.
+	HyperparameterMetricTag string `json:"hyperparameterMetricTag,omitempty"`
+
 	// IsBuiltInAlgorithmJob: Whether this job is a built-in Algorithm job.
 	IsBuiltInAlgorithmJob bool `json:"isBuiltInAlgorithmJob,omitempty"`
 
@@ -2303,7 +2334,7 @@ type GoogleCloudMlV1__Version struct {
 	// on the selected number of nodes.
 	ManualScaling *GoogleCloudMlV1__ManualScaling `json:"manualScaling,omitempty"`
 
-	// Name: Required.The name specified for the version when it was
+	// Name: Required. The name specified for the version when it was
 	// created.
 	//
 	// The version name must be unique within the model it is created in.
@@ -2500,7 +2531,7 @@ func (s *GoogleCloudMlV1__Version) MarshalJSON() ([]byte, error) {
 //             {
 //               "log_type": "DATA_READ",
 //               "exempted_members": [
-//                 "user:foo@gmail.com"
+//                 "user:jose@example.com"
 //               ]
 //             },
 //             {
@@ -2512,7 +2543,7 @@ func (s *GoogleCloudMlV1__Version) MarshalJSON() ([]byte, error) {
 //           ]
 //         },
 //         {
-//           "service": "fooservice.googleapis.com"
+//           "service": "sampleservice.googleapis.com"
 //           "audit_log_configs": [
 //             {
 //               "log_type": "DATA_READ",
@@ -2520,7 +2551,7 @@ func (s *GoogleCloudMlV1__Version) MarshalJSON() ([]byte, error) {
 //             {
 //               "log_type": "DATA_WRITE",
 //               "exempted_members": [
-//                 "user:bar@gmail.com"
+//                 "user:aliya@example.com"
 //               ]
 //             }
 //           ]
@@ -2528,11 +2559,11 @@ func (s *GoogleCloudMlV1__Version) MarshalJSON() ([]byte, error) {
 //       ]
 //     }
 //
-// For fooservice, this policy enables DATA_READ, DATA_WRITE and
+// For sampleservice, this policy enables DATA_READ, DATA_WRITE and
 // ADMIN_READ
-// logging. It also exempts foo@gmail.com from DATA_READ logging,
+// logging. It also exempts jose@example.com from DATA_READ logging,
 // and
-// bar@gmail.com from DATA_WRITE logging.
+// aliya@example.com from DATA_WRITE logging.
 type GoogleIamV1__AuditConfig struct {
 	// AuditLogConfigs: The configuration for logging of each type of
 	// permission.
@@ -2578,7 +2609,7 @@ func (s *GoogleIamV1__AuditConfig) MarshalJSON() ([]byte, error) {
 //         {
 //           "log_type": "DATA_READ",
 //           "exempted_members": [
-//             "user:foo@gmail.com"
+//             "user:jose@example.com"
 //           ]
 //         },
 //         {
@@ -2589,7 +2620,7 @@ func (s *GoogleIamV1__AuditConfig) MarshalJSON() ([]byte, error) {
 //
 // This enables 'DATA_READ' and 'DATA_WRITE' logging, while
 // exempting
-// foo@gmail.com from DATA_READ logging.
+// jose@example.com from DATA_READ logging.
 type GoogleIamV1__AuditLogConfig struct {
 	// ExemptedMembers: Specifies the identities that do not cause logging
 	// for this type of
@@ -2654,7 +2685,7 @@ type GoogleIamV1__Binding struct {
 	//
 	// * `user:{emailid}`: An email address that represents a specific
 	// Google
-	//    account. For example, `alice@gmail.com` .
+	//    account. For example, `alice@example.com` .
 	//
 	//
 	// * `serviceAccount:{emailid}`: An email address that represents a
@@ -2778,7 +2809,7 @@ type GoogleIamV1__Policy struct {
 	//
 	// If no `etag` is provided in the call to `setIamPolicy`, then the
 	// existing
-	// policy is overwritten blindly.
+	// policy is overwritten.
 	Etag string `json:"etag,omitempty"`
 
 	// Version: Deprecated.
@@ -3059,81 +3090,14 @@ type GoogleProtobuf__Empty struct {
 // that is suitable for
 // different programming environments, including REST APIs and RPC APIs.
 // It is
-// used by [gRPC](https://github.com/grpc). The error model is designed
-// to be:
+// used by [gRPC](https://github.com/grpc). Each `Status` message
+// contains
+// three pieces of data: error code, error message, and error
+// details.
 //
-// - Simple to use and understand for most users
-// - Flexible enough to meet unexpected needs
-//
-// # Overview
-//
-// The `Status` message contains three pieces of data: error code,
-// error
-// message, and error details. The error code should be an enum value
-// of
-// google.rpc.Code, but it may accept additional error codes if needed.
-// The
-// error message should be a developer-facing English message that
-// helps
-// developers *understand* and *resolve* the error. If a localized
-// user-facing
-// error message is needed, put the localized message in the error
-// details or
-// localize it in the client. The optional error details may contain
-// arbitrary
-// information about the error. There is a predefined set of error
-// detail types
-// in the package `google.rpc` that can be used for common error
-// conditions.
-//
-// # Language mapping
-//
-// The `Status` message is the logical representation of the error
-// model, but it
-// is not necessarily the actual wire format. When the `Status` message
-// is
-// exposed in different client libraries and different wire protocols,
-// it can be
-// mapped differently. For example, it will likely be mapped to some
-// exceptions
-// in Java, but more likely mapped to some error codes in C.
-//
-// # Other uses
-//
-// The error model and the `Status` message can be used in a variety
-// of
-// environments, either with or without APIs, to provide a
-// consistent developer experience across different
-// environments.
-//
-// Example uses of this error model include:
-//
-// - Partial errors. If a service needs to return partial errors to the
-// client,
-//     it may embed the `Status` in the normal response to indicate the
-// partial
-//     errors.
-//
-// - Workflow errors. A typical workflow has multiple steps. Each step
-// may
-//     have a `Status` message for error reporting.
-//
-// - Batch operations. If a client uses batch request and batch
-// response, the
-//     `Status` message should be used directly inside batch response,
-// one for
-//     each error sub-response.
-//
-// - Asynchronous operations. If an API call embeds asynchronous
-// operation
-//     results in its response, the status of those operations should
-// be
-//     represented directly using the `Status` message.
-//
-// - Logging. If some API errors are stored in logs, the message
-// `Status` could
-//     be used directly after any stripping needed for security/privacy
-// reasons.
+// You can find out more about this error model and how to work with it
+// in the
+// [API Design Guide](https://cloud.google.com/apis/design/errors).
 type GoogleRpc__Status struct {
 	// Code: The status code, which should be an enum value of
 	// google.rpc.Code.
@@ -3226,141 +3190,6 @@ func (s *GoogleType__Expr) MarshalJSON() ([]byte, error) {
 	type NoMethod GoogleType__Expr
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
-}
-
-// method id "ml.operations.delete":
-
-type OperationsDeleteCall struct {
-	s          *Service
-	name       string
-	urlParams_ gensupport.URLParams
-	ctx_       context.Context
-	header_    http.Header
-}
-
-// Delete: Deletes a long-running operation. This method indicates that
-// the client is
-// no longer interested in the operation result. It does not cancel
-// the
-// operation. If the server doesn't support this method, it
-// returns
-// `google.rpc.Code.UNIMPLEMENTED`.
-func (r *OperationsService) Delete(name string) *OperationsDeleteCall {
-	c := &OperationsDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.name = name
-	return c
-}
-
-// Fields allows partial responses to be retrieved. See
-// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
-// for more information.
-func (c *OperationsDeleteCall) Fields(s ...googleapi.Field) *OperationsDeleteCall {
-	c.urlParams_.Set("fields", googleapi.CombineFields(s))
-	return c
-}
-
-// Context sets the context to be used in this call's Do method. Any
-// pending HTTP request will be aborted if the provided context is
-// canceled.
-func (c *OperationsDeleteCall) Context(ctx context.Context) *OperationsDeleteCall {
-	c.ctx_ = ctx
-	return c
-}
-
-// Header returns an http.Header that can be modified by the caller to
-// add HTTP headers to the request.
-func (c *OperationsDeleteCall) Header() http.Header {
-	if c.header_ == nil {
-		c.header_ = make(http.Header)
-	}
-	return c.header_
-}
-
-func (c *OperationsDeleteCall) doRequest(alt string) (*http.Response, error) {
-	reqHeaders := make(http.Header)
-	for k, v := range c.header_ {
-		reqHeaders[k] = v
-	}
-	reqHeaders.Set("User-Agent", c.s.userAgent())
-	var body io.Reader = nil
-	c.urlParams_.Set("alt", alt)
-	c.urlParams_.Set("prettyPrint", "false")
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1/{+name}")
-	urls += "?" + c.urlParams_.Encode()
-	req, err := http.NewRequest("DELETE", urls, body)
-	if err != nil {
-		return nil, err
-	}
-	req.Header = reqHeaders
-	googleapi.Expand(req.URL, map[string]string{
-		"name": c.name,
-	})
-	return gensupport.SendRequest(c.ctx_, c.s.client, req)
-}
-
-// Do executes the "ml.operations.delete" call.
-// Exactly one of *GoogleProtobuf__Empty or error will be non-nil. Any
-// non-2xx status code is an error. Response headers are in either
-// *GoogleProtobuf__Empty.ServerResponse.Header or (if a response was
-// returned at all) in error.(*googleapi.Error).Header. Use
-// googleapi.IsNotModified to check whether the returned error was
-// because http.StatusNotModified was returned.
-func (c *OperationsDeleteCall) Do(opts ...googleapi.CallOption) (*GoogleProtobuf__Empty, error) {
-	gensupport.SetOptions(c.urlParams_, opts...)
-	res, err := c.doRequest("json")
-	if res != nil && res.StatusCode == http.StatusNotModified {
-		if res.Body != nil {
-			res.Body.Close()
-		}
-		return nil, &googleapi.Error{
-			Code:   res.StatusCode,
-			Header: res.Header,
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer googleapi.CloseBody(res)
-	if err := googleapi.CheckResponse(res); err != nil {
-		return nil, err
-	}
-	ret := &GoogleProtobuf__Empty{
-		ServerResponse: googleapi.ServerResponse{
-			Header:         res.Header,
-			HTTPStatusCode: res.StatusCode,
-		},
-	}
-	target := &ret
-	if err := gensupport.DecodeResponse(target, res); err != nil {
-		return nil, err
-	}
-	return ret, nil
-	// {
-	//   "description": "Deletes a long-running operation. This method indicates that the client is\nno longer interested in the operation result. It does not cancel the\noperation. If the server doesn't support this method, it returns\n`google.rpc.Code.UNIMPLEMENTED`.",
-	//   "flatPath": "v1/operations/{operationsId}",
-	//   "httpMethod": "DELETE",
-	//   "id": "ml.operations.delete",
-	//   "parameterOrder": [
-	//     "name"
-	//   ],
-	//   "parameters": {
-	//     "name": {
-	//       "description": "The name of the operation resource to be deleted.",
-	//       "location": "path",
-	//       "pattern": "^operations/.+$",
-	//       "required": true,
-	//       "type": "string"
-	//     }
-	//   },
-	//   "path": "v1/{+name}",
-	//   "response": {
-	//     "$ref": "GoogleProtobuf__Empty"
-	//   },
-	//   "scopes": [
-	//     "https://www.googleapis.com/auth/cloud-platform"
-	//   ]
-	// }
-
 }
 
 // method id "ml.projects.getConfig":
@@ -4105,6 +3934,18 @@ func (r *ProjectsJobsService) GetIamPolicy(resource string) *ProjectsJobsGetIamP
 	return c
 }
 
+// OptionsRequestedPolicyVersion sets the optional parameter
+// "options.requestedPolicyVersion": The policy format version to be
+// returned.
+// Acceptable values are 0 and 1.
+// If the value is 0, or the field is omitted, policy format version 1
+// will be
+// returned.
+func (c *ProjectsJobsGetIamPolicyCall) OptionsRequestedPolicyVersion(optionsRequestedPolicyVersion int64) *ProjectsJobsGetIamPolicyCall {
+	c.urlParams_.Set("options.requestedPolicyVersion", fmt.Sprint(optionsRequestedPolicyVersion))
+	return c
+}
+
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -4211,6 +4052,12 @@ func (c *ProjectsJobsGetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Google
 	//     "resource"
 	//   ],
 	//   "parameters": {
+	//     "options.requestedPolicyVersion": {
+	//       "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+	//       "format": "int32",
+	//       "location": "query",
+	//       "type": "integer"
+	//     },
 	//     "resource": {
 	//       "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",
@@ -5721,6 +5568,18 @@ func (r *ProjectsModelsService) GetIamPolicy(resource string) *ProjectsModelsGet
 	return c
 }
 
+// OptionsRequestedPolicyVersion sets the optional parameter
+// "options.requestedPolicyVersion": The policy format version to be
+// returned.
+// Acceptable values are 0 and 1.
+// If the value is 0, or the field is omitted, policy format version 1
+// will be
+// returned.
+func (c *ProjectsModelsGetIamPolicyCall) OptionsRequestedPolicyVersion(optionsRequestedPolicyVersion int64) *ProjectsModelsGetIamPolicyCall {
+	c.urlParams_.Set("options.requestedPolicyVersion", fmt.Sprint(optionsRequestedPolicyVersion))
+	return c
+}
+
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -5827,6 +5686,12 @@ func (c *ProjectsModelsGetIamPolicyCall) Do(opts ...googleapi.CallOption) (*Goog
 	//     "resource"
 	//   ],
 	//   "parameters": {
+	//     "options.requestedPolicyVersion": {
+	//       "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+	//       "format": "int32",
+	//       "location": "query",
+	//       "type": "integer"
+	//     },
 	//     "resource": {
 	//       "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",

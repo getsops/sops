@@ -845,6 +845,22 @@ func TestMarshalInnerToken(t *testing.T) {
 	}
 }
 
+func TestNewMultiTenantServicePrincipalToken(t *testing.T) {
+	cfg, err := NewMultiTenantOAuthConfig(TestActiveDirectoryEndpoint, TestTenantID, TestAuxTenantIDs, OAuthOptions{})
+	if err != nil {
+		t.Fatalf("autorest/adal: unexpected error while creating multitenant config: %v", err)
+	}
+	mt, err := NewMultiTenantServicePrincipalToken(cfg, "clientID", "superSecret", "resource")
+	if !strings.Contains(mt.PrimaryToken.inner.OauthConfig.AuthorizeEndpoint.String(), TestTenantID) {
+		t.Fatal("didn't find primary tenant ID in primary SPT")
+	}
+	for i := range mt.AuxiliaryTokens {
+		if ep := mt.AuxiliaryTokens[i].inner.OauthConfig.AuthorizeEndpoint.String(); !strings.Contains(ep, fmt.Sprintf("%s%d", TestAuxTenantPrefix, i)) {
+			t.Fatalf("didn't find auxiliary tenant ID in token %s", ep)
+		}
+	}
+}
+
 func newTokenJSON(expiresOn string, resource string) string {
 	return fmt.Sprintf(`{
 		"access_token" : "accessToken",

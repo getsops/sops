@@ -33,6 +33,7 @@ for dir in $MANUALS $STABLE_GAPICS; do
   # TODO(deklerk): there's probably a nicer way to do this that doesn't require
   # two invocations
   if ! apidiff -incompatible /tmp/pkg.master $pkg | (! read); then
+    echo "Detected incompatible API changes between master@HEAD and current state:"
     apidiff -incompatible /tmp/pkg.master $pkg
     exit 1
   fi

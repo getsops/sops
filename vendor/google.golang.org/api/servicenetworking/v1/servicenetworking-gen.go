@@ -895,9 +895,8 @@ type Connection struct {
 	// service consumer's VPC network.
 	Network string `json:"network,omitempty"`
 
-	// Peering: Output only.
-	// The name of the VPC Network Peering connection that was created by
-	// the
+	// Peering: Output only. The name of the VPC Network Peering connection
+	// that was created by the
 	// service producer.
 	Peering string `json:"peering,omitempty"`
 
@@ -916,9 +915,8 @@ type Connection struct {
 	// empty will restore previously allocated IP ranges.
 	ReservedPeeringRanges []string `json:"reservedPeeringRanges,omitempty"`
 
-	// Service: Output only.
-	// The name of the peering service that's associated with this
-	// connection, in
+	// Service: Output only. The name of the peering service that's
+	// associated with this connection, in
 	// the following format: `services/{service name}`.
 	Service string `json:"service,omitempty"`
 
@@ -1317,6 +1315,15 @@ type Documentation struct {
 	// **NOTE:** All service configuration rules follow "last one wins"
 	// order.
 	Rules []*DocumentationRule `json:"rules,omitempty"`
+
+	// ServiceRootUrl: Specifies the service root url if the default one
+	// (the service name
+	// from the yaml file) is not suitable. This can be seen in any
+	// fully
+	// specified service urls as well as sections that show a base that
+	// other
+	// urls are relative to.
+	ServiceRootUrl string `json:"serviceRootUrl,omitempty"`
 
 	// Summary: A short summary of what the service does. Can only be
 	// provided by

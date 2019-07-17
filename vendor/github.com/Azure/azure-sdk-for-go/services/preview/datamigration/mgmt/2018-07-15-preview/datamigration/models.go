@@ -759,6 +759,30 @@ func PossibleResultTypeBasicMigrateMySQLAzureDbForMySQLSyncTaskOutputValues() []
 	return []ResultTypeBasicMigrateMySQLAzureDbForMySQLSyncTaskOutput{ResultTypeBasicMigrateMySQLAzureDbForMySQLSyncTaskOutputResultTypeDatabaseLevelErrorOutput, ResultTypeBasicMigrateMySQLAzureDbForMySQLSyncTaskOutputResultTypeDatabaseLevelOutput, ResultTypeBasicMigrateMySQLAzureDbForMySQLSyncTaskOutputResultTypeErrorOutput, ResultTypeBasicMigrateMySQLAzureDbForMySQLSyncTaskOutputResultTypeMigrateMySQLAzureDbForMySQLSyncTaskOutput, ResultTypeBasicMigrateMySQLAzureDbForMySQLSyncTaskOutputResultTypeMigrationLevelOutput, ResultTypeBasicMigrateMySQLAzureDbForMySQLSyncTaskOutputResultTypeTableLevelOutput}
 }
 
+// ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput enumerates the values for result type basic
+// migrate oracle azure db postgre sql sync task output.
+type ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput string
+
+const (
+	// ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelErrorOutput ...
+	ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelErrorOutput ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput = "DatabaseLevelErrorOutput"
+	// ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelOutput ...
+	ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelOutput ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput = "DatabaseLevelOutput"
+	// ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeErrorOutput ...
+	ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeErrorOutput ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput = "ErrorOutput"
+	// ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrateOracleAzureDbPostgreSQLSyncTaskOutput ...
+	ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrateOracleAzureDbPostgreSQLSyncTaskOutput ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput = "MigrateOracleAzureDbPostgreSqlSyncTaskOutput"
+	// ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrationLevelOutput ...
+	ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrationLevelOutput ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput = "MigrationLevelOutput"
+	// ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeTableLevelOutput ...
+	ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeTableLevelOutput ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput = "TableLevelOutput"
+)
+
+// PossibleResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputValues returns an array of possible values for the ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput const type.
+func PossibleResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputValues() []ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput {
+	return []ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput{ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelErrorOutput, ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelOutput, ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeErrorOutput, ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrateOracleAzureDbPostgreSQLSyncTaskOutput, ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrationLevelOutput, ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeTableLevelOutput}
+}
+
 // ResultTypeBasicMigratePostgreSQLAzureDbForPostgreSQLSyncTaskOutput enumerates the values for result type
 // basic migrate postgre sql azure db for postgre sql sync task output.
 type ResultTypeBasicMigratePostgreSQLAzureDbForPostgreSQLSyncTaskOutput string
@@ -1131,6 +1155,8 @@ const (
 	TaskTypeConnectMongoDb TaskType = "Connect.MongoDb"
 	// TaskTypeConnectToSourceMySQL ...
 	TaskTypeConnectToSourceMySQL TaskType = "ConnectToSource.MySql"
+	// TaskTypeConnectToSourceOracleSync ...
+	TaskTypeConnectToSourceOracleSync TaskType = "ConnectToSource.Oracle.Sync"
 	// TaskTypeConnectToSourcePostgreSQLSync ...
 	TaskTypeConnectToSourcePostgreSQLSync TaskType = "ConnectToSource.PostgreSql.Sync"
 	// TaskTypeConnectToSourceSQLServer ...
@@ -1145,6 +1171,8 @@ const (
 	TaskTypeConnectToTargetAzureSQLDbMI TaskType = "ConnectToTarget.AzureSqlDbMI"
 	// TaskTypeConnectToTargetAzureSQLDbMISyncLRS ...
 	TaskTypeConnectToTargetAzureSQLDbMISyncLRS TaskType = "ConnectToTarget.AzureSqlDbMI.Sync.LRS"
+	// TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync ...
+	TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync TaskType = "ConnectToTarget.Oracle.AzureDbForPostgreSql.Sync"
 	// TaskTypeConnectToTargetSQLDb ...
 	TaskTypeConnectToTargetSQLDb TaskType = "ConnectToTarget.SqlDb"
 	// TaskTypeConnectToTargetSQLDbSync ...
@@ -1159,6 +1187,8 @@ const (
 	TaskTypeMigrateMongoDb TaskType = "Migrate.MongoDb"
 	// TaskTypeMigrateMySQLAzureDbForMySQLSync ...
 	TaskTypeMigrateMySQLAzureDbForMySQLSync TaskType = "Migrate.MySql.AzureDbForMySql.Sync"
+	// TaskTypeMigrateOracleSQLSync ...
+	TaskTypeMigrateOracleSQLSync TaskType = "Migrate.Oracle.Sql.Sync"
 	// TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync ...
 	TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync TaskType = "Migrate.PostgreSql.AzureDbForPostgreSql.Sync"
 	// TaskTypeMigrateSchemaSQLServerSQLDb ...
@@ -1171,6 +1201,12 @@ const (
 	TaskTypeMigrateSQLServerAzureSQLDbSync TaskType = "Migrate.SqlServer.AzureSqlDb.Sync"
 	// TaskTypeMigrateSQLServerSQLDb ...
 	TaskTypeMigrateSQLServerSQLDb TaskType = "Migrate.SqlServer.SqlDb"
+	// TaskTypeServiceCheckOCI ...
+	TaskTypeServiceCheckOCI TaskType = "Service.Check.OCI"
+	// TaskTypeServiceInstallOCI ...
+	TaskTypeServiceInstallOCI TaskType = "Service.Install.OCI"
+	// TaskTypeServiceUploadOCI ...
+	TaskTypeServiceUploadOCI TaskType = "Service.Upload.OCI"
 	// TaskTypeUnknown ...
 	TaskTypeUnknown TaskType = "Unknown"
 	// TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI ...
@@ -1181,11 +1217,13 @@ const (
 	TaskTypeValidateMigrationInputSQLServerSQLDbSync TaskType = "ValidateMigrationInput.SqlServer.SqlDb.Sync"
 	// TaskTypeValidateMongoDb ...
 	TaskTypeValidateMongoDb TaskType = "Validate.MongoDb"
+	// TaskTypeValidateOracleAzureDbPostgreSQLSync ...
+	TaskTypeValidateOracleAzureDbPostgreSQLSync TaskType = "Validate.Oracle.AzureDbPostgreSql.Sync"
 )
 
 // PossibleTaskTypeValues returns an array of possible values for the TaskType const type.
 func PossibleTaskTypeValues() []TaskType {
-	return []TaskType{TaskTypeConnectMongoDb, TaskTypeConnectToSourceMySQL, TaskTypeConnectToSourcePostgreSQLSync, TaskTypeConnectToSourceSQLServer, TaskTypeConnectToSourceSQLServerSync, TaskTypeConnectToTargetAzureDbForMySQL, TaskTypeConnectToTargetAzureDbForPostgreSQLSync, TaskTypeConnectToTargetAzureSQLDbMI, TaskTypeConnectToTargetAzureSQLDbMISyncLRS, TaskTypeConnectToTargetSQLDb, TaskTypeConnectToTargetSQLDbSync, TaskTypeGetTDECertificatesSQL, TaskTypeGetUserTablesAzureSQLDbSync, TaskTypeGetUserTablesSQL, TaskTypeMigrateMongoDb, TaskTypeMigrateMySQLAzureDbForMySQLSync, TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync, TaskTypeMigrateSchemaSQLServerSQLDb, TaskTypeMigrateSQLServerAzureSQLDbMI, TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS, TaskTypeMigrateSQLServerAzureSQLDbSync, TaskTypeMigrateSQLServerSQLDb, TaskTypeUnknown, TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI, TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS, TaskTypeValidateMigrationInputSQLServerSQLDbSync, TaskTypeValidateMongoDb}
+	return []TaskType{TaskTypeConnectMongoDb, TaskTypeConnectToSourceMySQL, TaskTypeConnectToSourceOracleSync, TaskTypeConnectToSourcePostgreSQLSync, TaskTypeConnectToSourceSQLServer, TaskTypeConnectToSourceSQLServerSync, TaskTypeConnectToTargetAzureDbForMySQL, TaskTypeConnectToTargetAzureDbForPostgreSQLSync, TaskTypeConnectToTargetAzureSQLDbMI, TaskTypeConnectToTargetAzureSQLDbMISyncLRS, TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync, TaskTypeConnectToTargetSQLDb, TaskTypeConnectToTargetSQLDbSync, TaskTypeGetTDECertificatesSQL, TaskTypeGetUserTablesAzureSQLDbSync, TaskTypeGetUserTablesSQL, TaskTypeMigrateMongoDb, TaskTypeMigrateMySQLAzureDbForMySQLSync, TaskTypeMigrateOracleSQLSync, TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync, TaskTypeMigrateSchemaSQLServerSQLDb, TaskTypeMigrateSQLServerAzureSQLDbMI, TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS, TaskTypeMigrateSQLServerAzureSQLDbSync, TaskTypeMigrateSQLServerSQLDb, TaskTypeServiceCheckOCI, TaskTypeServiceInstallOCI, TaskTypeServiceUploadOCI, TaskTypeUnknown, TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI, TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS, TaskTypeValidateMigrationInputSQLServerSQLDbSync, TaskTypeValidateMongoDb, TaskTypeValidateOracleAzureDbPostgreSQLSync}
 }
 
 // Type enumerates the values for type.
@@ -1198,6 +1236,8 @@ const (
 	TypeMongoDbConnectionInfo Type = "MongoDbConnectionInfo"
 	// TypeMySQLConnectionInfo ...
 	TypeMySQLConnectionInfo Type = "MySqlConnectionInfo"
+	// TypeOracleConnectionInfo ...
+	TypeOracleConnectionInfo Type = "OracleConnectionInfo"
 	// TypePostgreSQLConnectionInfo ...
 	TypePostgreSQLConnectionInfo Type = "PostgreSqlConnectionInfo"
 	// TypeSQLConnectionInfo ...
@@ -1208,7 +1248,7 @@ const (
 
 // PossibleTypeValues returns an array of possible values for the Type const type.
 func PossibleTypeValues() []Type {
-	return []Type{TypeMiSQLConnectionInfo, TypeMongoDbConnectionInfo, TypeMySQLConnectionInfo, TypePostgreSQLConnectionInfo, TypeSQLConnectionInfo, TypeUnknown}
+	return []Type{TypeMiSQLConnectionInfo, TypeMongoDbConnectionInfo, TypeMySQLConnectionInfo, TypeOracleConnectionInfo, TypePostgreSQLConnectionInfo, TypeSQLConnectionInfo, TypeUnknown}
 }
 
 // UpdateActionType enumerates the values for update action type.
@@ -1343,6 +1383,311 @@ type BackupSetInfo struct {
 type BlobShare struct {
 	// SasURI - SAS URI of Azure Storage Account Container.
 	SasURI *string `json:"sasUri,omitempty"`
+}
+
+// CheckOCIDriverTaskInput input for the service task to check for OCI drivers.
+type CheckOCIDriverTaskInput struct {
+	// ServerVersion - Version of the source server to check against.  Optional.
+	ServerVersion *string `json:"serverVersion,omitempty"`
+}
+
+// CheckOCIDriverTaskOutput output for the service task to check for OCI drivers.
+type CheckOCIDriverTaskOutput struct {
+	// InstalledDriver - READ-ONLY; Information about the installed driver if found and valid.
+	InstalledDriver map[string][]OracleOCIDriverInfo `json:"installedDriver"`
+	// ValidationErrors - READ-ONLY; Validation errors
+	ValidationErrors *[]ReportableException `json:"validationErrors,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for CheckOCIDriverTaskOutput.
+func (codto CheckOCIDriverTaskOutput) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	return json.Marshal(objectMap)
+}
+
+// CheckOCIDriverTaskProperties properties for the task that checks for OCI drivers.
+type CheckOCIDriverTaskProperties struct {
+	Input *CheckOCIDriverTaskInput `json:"input,omitempty"`
+	// Output - READ-ONLY; Task output. This is ignored if submitted.
+	Output *[]CheckOCIDriverTaskOutput `json:"output,omitempty"`
+	// Errors - READ-ONLY; Array of errors. This is ignored if submitted.
+	Errors *[]ODataError `json:"errors,omitempty"`
+	// State - READ-ONLY; The state of the task. This is ignored if submitted. Possible values include: 'TaskStateUnknown', 'TaskStateQueued', 'TaskStateRunning', 'TaskStateCanceled', 'TaskStateSucceeded', 'TaskStateFailed', 'TaskStateFailedInputValidation', 'TaskStateFaulted'
+	State TaskState `json:"state,omitempty"`
+	// Commands - READ-ONLY; Array of command properties.
+	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
+	// ClientData - Key value pairs of client data to attach meta data information to task
+	ClientData map[string]*string `json:"clientData"`
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
+	TaskType TaskType `json:"taskType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) MarshalJSON() ([]byte, error) {
+	codtp.TaskType = TaskTypeServiceCheckOCI
+	objectMap := make(map[string]interface{})
+	if codtp.Input != nil {
+		objectMap["input"] = codtp.Input
+	}
+	if codtp.ClientData != nil {
+		objectMap["clientData"] = codtp.ClientData
+	}
+	if codtp.TaskType != "" {
+		objectMap["taskType"] = codtp.TaskType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsGetTdeCertificatesSQLTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsGetTdeCertificatesSQLTaskProperties() (*GetTdeCertificatesSQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMigrationInputSQLServerSQLMISyncTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsValidateMigrationInputSQLServerSQLMISyncTaskProperties() (*ValidateMigrationInputSQLServerSQLMISyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMigrationInputSQLServerSQLMITaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsValidateMigrationInputSQLServerSQLMITaskProperties() (*ValidateMigrationInputSQLServerSQLMITaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsMigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties() (*MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateMySQLAzureDbForMySQLSyncTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsMigrateMySQLAzureDbForMySQLSyncTaskProperties() (*MigrateMySQLAzureDbForMySQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsMigrateSQLServerSQLDbSyncTaskProperties() (*MigrateSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsMigrateSQLServerSQLDbTaskProperties() (*MigrateSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLMISyncTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsMigrateSQLServerSQLMISyncTaskProperties() (*MigrateSQLServerSQLMISyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLMITaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsMigrateSQLServerSQLMITaskProperties() (*MigrateSQLServerSQLMITaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsMigrateMongoDbTaskProperties() (*MigrateMongoDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetAzureDbForMySQLTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsConnectToTargetAzureDbForMySQLTaskProperties() (*ConnectToTargetAzureDbForMySQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLMISyncTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsConnectToTargetSQLMISyncTaskProperties() (*ConnectToTargetSQLMISyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLMITaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsConnectToTargetSQLMITaskProperties() (*ConnectToTargetSQLMITaskProperties, bool) {
+	return nil, false
+}
+
+// AsGetUserTablesSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsGetUserTablesSQLSyncTaskProperties() (*GetUserTablesSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsGetUserTablesSQLTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsGetUserTablesSQLTaskProperties() (*GetUserTablesSQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsConnectToTargetSQLSQLDbSyncTaskProperties() (*ConnectToTargetSQLSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourcePostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsConnectToSourcePostgreSQLSyncTaskProperties() (*ConnectToSourcePostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceSQLServerSyncTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsConnectToSourceSQLServerSyncTaskProperties() (*ConnectToSourceSQLServerSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceSQLServerTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsConnectToSourceSQLServerTaskProperties() (*ConnectToSourceSQLServerTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToMongoDbTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsConnectToMongoDbTaskProperties() (*ConnectToMongoDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceMySQLTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsConnectToSourceMySQLTaskProperties() (*ConnectToSourceMySQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return &codtp, true
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsProjectTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsProjectTaskProperties() (*ProjectTaskProperties, bool) {
+	return nil, false
+}
+
+// AsBasicProjectTaskProperties is the BasicProjectTaskProperties implementation for CheckOCIDriverTaskProperties.
+func (codtp CheckOCIDriverTaskProperties) AsBasicProjectTaskProperties() (BasicProjectTaskProperties, bool) {
+	return &codtp, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for CheckOCIDriverTaskProperties struct.
+func (codtp *CheckOCIDriverTaskProperties) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "input":
+			if v != nil {
+				var input CheckOCIDriverTaskInput
+				err = json.Unmarshal(*v, &input)
+				if err != nil {
+					return err
+				}
+				codtp.Input = &input
+			}
+		case "output":
+			if v != nil {
+				var output []CheckOCIDriverTaskOutput
+				err = json.Unmarshal(*v, &output)
+				if err != nil {
+					return err
+				}
+				codtp.Output = &output
+			}
+		case "errors":
+			if v != nil {
+				var errorsVar []ODataError
+				err = json.Unmarshal(*v, &errorsVar)
+				if err != nil {
+					return err
+				}
+				codtp.Errors = &errorsVar
+			}
+		case "state":
+			if v != nil {
+				var state TaskState
+				err = json.Unmarshal(*v, &state)
+				if err != nil {
+					return err
+				}
+				codtp.State = state
+			}
+		case "commands":
+			if v != nil {
+				commands, err := unmarshalBasicCommandPropertiesArray(*v)
+				if err != nil {
+					return err
+				}
+				codtp.Commands = &commands
+			}
+		case "clientData":
+			if v != nil {
+				var clientData map[string]*string
+				err = json.Unmarshal(*v, &clientData)
+				if err != nil {
+					return err
+				}
+				codtp.ClientData = clientData
+			}
+		case "taskType":
+			if v != nil {
+				var taskType TaskType
+				err = json.Unmarshal(*v, &taskType)
+				if err != nil {
+					return err
+				}
+				codtp.TaskType = taskType
+			}
+		}
+	}
+
+	return nil
 }
 
 // BasicCommandProperties base class for all types of DMS command properties. If command is not supported by current
@@ -1487,6 +1832,7 @@ func (cpm *CommandPropertiesModel) UnmarshalJSON(body []byte) error {
 type BasicConnectionInfo interface {
 	AsMiSQLConnectionInfo() (*MiSQLConnectionInfo, bool)
 	AsPostgreSQLConnectionInfo() (*PostgreSQLConnectionInfo, bool)
+	AsOracleConnectionInfo() (*OracleConnectionInfo, bool)
 	AsMySQLConnectionInfo() (*MySQLConnectionInfo, bool)
 	AsMongoDbConnectionInfo() (*MongoDbConnectionInfo, bool)
 	AsSQLConnectionInfo() (*SQLConnectionInfo, bool)
@@ -1499,7 +1845,7 @@ type ConnectionInfo struct {
 	UserName *string `json:"userName,omitempty"`
 	// Password - Password credential.
 	Password *string `json:"password,omitempty"`
-	// Type - Possible values include: 'TypeUnknown', 'TypeMiSQLConnectionInfo', 'TypePostgreSQLConnectionInfo', 'TypeMySQLConnectionInfo', 'TypeMongoDbConnectionInfo', 'TypeSQLConnectionInfo'
+	// Type - Possible values include: 'TypeUnknown', 'TypeMiSQLConnectionInfo', 'TypePostgreSQLConnectionInfo', 'TypeOracleConnectionInfo', 'TypeMySQLConnectionInfo', 'TypeMongoDbConnectionInfo', 'TypeSQLConnectionInfo'
 	Type Type `json:"type,omitempty"`
 }
 
@@ -1519,6 +1865,10 @@ func unmarshalBasicConnectionInfo(body []byte) (BasicConnectionInfo, error) {
 		var psci PostgreSQLConnectionInfo
 		err := json.Unmarshal(body, &psci)
 		return psci, err
+	case string(TypeOracleConnectionInfo):
+		var oci OracleConnectionInfo
+		err := json.Unmarshal(body, &oci)
+		return oci, err
 	case string(TypeMySQLConnectionInfo):
 		var msci MySQLConnectionInfo
 		err := json.Unmarshal(body, &msci)
@@ -1582,6 +1932,11 @@ func (ci ConnectionInfo) AsPostgreSQLConnectionInfo() (*PostgreSQLConnectionInfo
 	return nil, false
 }
 
+// AsOracleConnectionInfo is the BasicConnectionInfo implementation for ConnectionInfo.
+func (ci ConnectionInfo) AsOracleConnectionInfo() (*OracleConnectionInfo, bool) {
+	return nil, false
+}
+
 // AsMySQLConnectionInfo is the BasicConnectionInfo implementation for ConnectionInfo.
 func (ci ConnectionInfo) AsMySQLConnectionInfo() (*MySQLConnectionInfo, bool) {
 	return nil, false
@@ -1621,7 +1976,7 @@ type ConnectToMongoDbTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -1646,6 +2001,11 @@ func (ctmdtp ConnectToMongoDbTaskProperties) AsGetTdeCertificatesSQLTaskProperti
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToMongoDbTaskProperties.
+func (ctmdtp ConnectToMongoDbTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToMongoDbTaskProperties.
 func (ctmdtp ConnectToMongoDbTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -1663,6 +2023,11 @@ func (ctmdtp ConnectToMongoDbTaskProperties) AsValidateMigrationInputSQLServerSQ
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToMongoDbTaskProperties.
 func (ctmdtp ConnectToMongoDbTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToMongoDbTaskProperties.
+func (ctmdtp ConnectToMongoDbTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -1726,6 +2091,11 @@ func (ctmdtp ConnectToMongoDbTaskProperties) AsGetUserTablesSQLTaskProperties() 
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToMongoDbTaskProperties.
+func (ctmdtp ConnectToMongoDbTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToMongoDbTaskProperties.
 func (ctmdtp ConnectToMongoDbTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -1738,6 +2108,11 @@ func (ctmdtp ConnectToMongoDbTaskProperties) AsConnectToTargetSQLSQLDbSyncTaskPr
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToMongoDbTaskProperties.
 func (ctmdtp ConnectToMongoDbTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToMongoDbTaskProperties.
+func (ctmdtp ConnectToMongoDbTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -1768,6 +2143,21 @@ func (ctmdtp ConnectToMongoDbTaskProperties) AsConnectToSourceMySQLTaskPropertie
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToMongoDbTaskProperties.
 func (ctmdtp ConnectToMongoDbTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToMongoDbTaskProperties.
+func (ctmdtp ConnectToMongoDbTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToMongoDbTaskProperties.
+func (ctmdtp ConnectToMongoDbTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToMongoDbTaskProperties.
+func (ctmdtp ConnectToMongoDbTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -1882,7 +2272,7 @@ type ConnectToSourceMySQLTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -1907,6 +2297,11 @@ func (ctsmstp ConnectToSourceMySQLTaskProperties) AsGetTdeCertificatesSQLTaskPro
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceMySQLTaskProperties.
+func (ctsmstp ConnectToSourceMySQLTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceMySQLTaskProperties.
 func (ctsmstp ConnectToSourceMySQLTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -1924,6 +2319,11 @@ func (ctsmstp ConnectToSourceMySQLTaskProperties) AsValidateMigrationInputSQLSer
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceMySQLTaskProperties.
 func (ctsmstp ConnectToSourceMySQLTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceMySQLTaskProperties.
+func (ctsmstp ConnectToSourceMySQLTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -1987,6 +2387,11 @@ func (ctsmstp ConnectToSourceMySQLTaskProperties) AsGetUserTablesSQLTaskProperti
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceMySQLTaskProperties.
+func (ctsmstp ConnectToSourceMySQLTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceMySQLTaskProperties.
 func (ctsmstp ConnectToSourceMySQLTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -1999,6 +2404,11 @@ func (ctsmstp ConnectToSourceMySQLTaskProperties) AsConnectToTargetSQLSQLDbSyncT
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceMySQLTaskProperties.
 func (ctsmstp ConnectToSourceMySQLTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceMySQLTaskProperties.
+func (ctsmstp ConnectToSourceMySQLTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -2029,6 +2439,21 @@ func (ctsmstp ConnectToSourceMySQLTaskProperties) AsConnectToSourceMySQLTaskProp
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceMySQLTaskProperties.
 func (ctsmstp ConnectToSourceMySQLTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceMySQLTaskProperties.
+func (ctsmstp ConnectToSourceMySQLTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceMySQLTaskProperties.
+func (ctsmstp ConnectToSourceMySQLTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceMySQLTaskProperties.
+func (ctsmstp ConnectToSourceMySQLTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -2119,7 +2544,7 @@ func (ctsmstp *ConnectToSourceMySQLTaskProperties) UnmarshalJSON(body []byte) er
 	return nil
 }
 
-// ConnectToSourceNonSQLTaskOutput output for connect to Oracle, MySQL type source
+// ConnectToSourceNonSQLTaskOutput output for connect to MySQL type source
 type ConnectToSourceNonSQLTaskOutput struct {
 	// ID - READ-ONLY; Result identifier
 	ID *string `json:"id,omitempty"`
@@ -2131,6 +2556,311 @@ type ConnectToSourceNonSQLTaskOutput struct {
 	Databases *[]string `json:"databases,omitempty"`
 	// ValidationErrors - READ-ONLY; Validation errors associated with the task
 	ValidationErrors *[]ReportableException `json:"validationErrors,omitempty"`
+}
+
+// ConnectToSourceOracleSyncTaskInput input for the task that validates Oracle database connection
+type ConnectToSourceOracleSyncTaskInput struct {
+	// SourceConnectionInfo - Information for connecting to Oracle source
+	SourceConnectionInfo *OracleConnectionInfo `json:"sourceConnectionInfo,omitempty"`
+}
+
+// ConnectToSourceOracleSyncTaskOutput output for the task that validates Oracle database connection
+type ConnectToSourceOracleSyncTaskOutput struct {
+	// SourceServerVersion - READ-ONLY; Version of the source server
+	SourceServerVersion *string `json:"sourceServerVersion,omitempty"`
+	// Databases - READ-ONLY; List of schemas on source server
+	Databases *[]string `json:"databases,omitempty"`
+	// SourceServerBrandVersion - READ-ONLY; Source server brand version
+	SourceServerBrandVersion *string `json:"sourceServerBrandVersion,omitempty"`
+	// ValidationErrors - READ-ONLY; Validation errors associated with the task
+	ValidationErrors *[]ReportableException `json:"validationErrors,omitempty"`
+}
+
+// ConnectToSourceOracleSyncTaskProperties properties for the task that validates Oracle database
+// connection
+type ConnectToSourceOracleSyncTaskProperties struct {
+	// Input - Task input
+	Input *ConnectToSourceOracleSyncTaskInput `json:"input,omitempty"`
+	// Output - READ-ONLY; Task output. This is ignored if submitted.
+	Output *[]ConnectToSourceOracleSyncTaskOutput `json:"output,omitempty"`
+	// Errors - READ-ONLY; Array of errors. This is ignored if submitted.
+	Errors *[]ODataError `json:"errors,omitempty"`
+	// State - READ-ONLY; The state of the task. This is ignored if submitted. Possible values include: 'TaskStateUnknown', 'TaskStateQueued', 'TaskStateRunning', 'TaskStateCanceled', 'TaskStateSucceeded', 'TaskStateFailed', 'TaskStateFailedInputValidation', 'TaskStateFaulted'
+	State TaskState `json:"state,omitempty"`
+	// Commands - READ-ONLY; Array of command properties.
+	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
+	// ClientData - Key value pairs of client data to attach meta data information to task
+	ClientData map[string]*string `json:"clientData"`
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
+	TaskType TaskType `json:"taskType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) MarshalJSON() ([]byte, error) {
+	ctsostp.TaskType = TaskTypeConnectToSourceOracleSync
+	objectMap := make(map[string]interface{})
+	if ctsostp.Input != nil {
+		objectMap["input"] = ctsostp.Input
+	}
+	if ctsostp.ClientData != nil {
+		objectMap["clientData"] = ctsostp.ClientData
+	}
+	if ctsostp.TaskType != "" {
+		objectMap["taskType"] = ctsostp.TaskType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsGetTdeCertificatesSQLTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsGetTdeCertificatesSQLTaskProperties() (*GetTdeCertificatesSQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMigrationInputSQLServerSQLMISyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsValidateMigrationInputSQLServerSQLMISyncTaskProperties() (*ValidateMigrationInputSQLServerSQLMISyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMigrationInputSQLServerSQLMITaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsValidateMigrationInputSQLServerSQLMITaskProperties() (*ValidateMigrationInputSQLServerSQLMITaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsMigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties() (*MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateMySQLAzureDbForMySQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsMigrateMySQLAzureDbForMySQLSyncTaskProperties() (*MigrateMySQLAzureDbForMySQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsMigrateSQLServerSQLDbSyncTaskProperties() (*MigrateSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsMigrateSQLServerSQLDbTaskProperties() (*MigrateSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLMISyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsMigrateSQLServerSQLMISyncTaskProperties() (*MigrateSQLServerSQLMISyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLMITaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsMigrateSQLServerSQLMITaskProperties() (*MigrateSQLServerSQLMITaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsMigrateMongoDbTaskProperties() (*MigrateMongoDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetAzureDbForMySQLTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsConnectToTargetAzureDbForMySQLTaskProperties() (*ConnectToTargetAzureDbForMySQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLMISyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsConnectToTargetSQLMISyncTaskProperties() (*ConnectToTargetSQLMISyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLMITaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsConnectToTargetSQLMITaskProperties() (*ConnectToTargetSQLMITaskProperties, bool) {
+	return nil, false
+}
+
+// AsGetUserTablesSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsGetUserTablesSQLSyncTaskProperties() (*GetUserTablesSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsGetUserTablesSQLTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsGetUserTablesSQLTaskProperties() (*GetUserTablesSQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsConnectToTargetSQLSQLDbSyncTaskProperties() (*ConnectToTargetSQLSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
+	return &ctsostp, true
+}
+
+// AsConnectToSourcePostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsConnectToSourcePostgreSQLSyncTaskProperties() (*ConnectToSourcePostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceSQLServerSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsConnectToSourceSQLServerSyncTaskProperties() (*ConnectToSourceSQLServerSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceSQLServerTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsConnectToSourceSQLServerTaskProperties() (*ConnectToSourceSQLServerTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsConnectToMongoDbTaskProperties() (*ConnectToMongoDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceMySQLTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsConnectToSourceMySQLTaskProperties() (*ConnectToSourceMySQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsProjectTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsProjectTaskProperties() (*ProjectTaskProperties, bool) {
+	return nil, false
+}
+
+// AsBasicProjectTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceOracleSyncTaskProperties.
+func (ctsostp ConnectToSourceOracleSyncTaskProperties) AsBasicProjectTaskProperties() (BasicProjectTaskProperties, bool) {
+	return &ctsostp, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for ConnectToSourceOracleSyncTaskProperties struct.
+func (ctsostp *ConnectToSourceOracleSyncTaskProperties) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "input":
+			if v != nil {
+				var input ConnectToSourceOracleSyncTaskInput
+				err = json.Unmarshal(*v, &input)
+				if err != nil {
+					return err
+				}
+				ctsostp.Input = &input
+			}
+		case "output":
+			if v != nil {
+				var output []ConnectToSourceOracleSyncTaskOutput
+				err = json.Unmarshal(*v, &output)
+				if err != nil {
+					return err
+				}
+				ctsostp.Output = &output
+			}
+		case "errors":
+			if v != nil {
+				var errorsVar []ODataError
+				err = json.Unmarshal(*v, &errorsVar)
+				if err != nil {
+					return err
+				}
+				ctsostp.Errors = &errorsVar
+			}
+		case "state":
+			if v != nil {
+				var state TaskState
+				err = json.Unmarshal(*v, &state)
+				if err != nil {
+					return err
+				}
+				ctsostp.State = state
+			}
+		case "commands":
+			if v != nil {
+				commands, err := unmarshalBasicCommandPropertiesArray(*v)
+				if err != nil {
+					return err
+				}
+				ctsostp.Commands = &commands
+			}
+		case "clientData":
+			if v != nil {
+				var clientData map[string]*string
+				err = json.Unmarshal(*v, &clientData)
+				if err != nil {
+					return err
+				}
+				ctsostp.ClientData = clientData
+			}
+		case "taskType":
+			if v != nil {
+				var taskType TaskType
+				err = json.Unmarshal(*v, &taskType)
+				if err != nil {
+					return err
+				}
+				ctsostp.TaskType = taskType
+			}
+		}
+	}
+
+	return nil
 }
 
 // ConnectToSourcePostgreSQLSyncTaskInput input for the task that validates connection to PostgreSQL and
@@ -2170,7 +2900,7 @@ type ConnectToSourcePostgreSQLSyncTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -2195,6 +2925,11 @@ func (ctspsstp ConnectToSourcePostgreSQLSyncTaskProperties) AsGetTdeCertificates
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourcePostgreSQLSyncTaskProperties.
+func (ctspsstp ConnectToSourcePostgreSQLSyncTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourcePostgreSQLSyncTaskProperties.
 func (ctspsstp ConnectToSourcePostgreSQLSyncTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -2212,6 +2947,11 @@ func (ctspsstp ConnectToSourcePostgreSQLSyncTaskProperties) AsValidateMigrationI
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourcePostgreSQLSyncTaskProperties.
 func (ctspsstp ConnectToSourcePostgreSQLSyncTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourcePostgreSQLSyncTaskProperties.
+func (ctspsstp ConnectToSourcePostgreSQLSyncTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -2275,6 +3015,11 @@ func (ctspsstp ConnectToSourcePostgreSQLSyncTaskProperties) AsGetUserTablesSQLTa
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourcePostgreSQLSyncTaskProperties.
+func (ctspsstp ConnectToSourcePostgreSQLSyncTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourcePostgreSQLSyncTaskProperties.
 func (ctspsstp ConnectToSourcePostgreSQLSyncTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -2287,6 +3032,11 @@ func (ctspsstp ConnectToSourcePostgreSQLSyncTaskProperties) AsConnectToTargetSQL
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourcePostgreSQLSyncTaskProperties.
 func (ctspsstp ConnectToSourcePostgreSQLSyncTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourcePostgreSQLSyncTaskProperties.
+func (ctspsstp ConnectToSourcePostgreSQLSyncTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -2317,6 +3067,21 @@ func (ctspsstp ConnectToSourcePostgreSQLSyncTaskProperties) AsConnectToSourceMyS
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourcePostgreSQLSyncTaskProperties.
 func (ctspsstp ConnectToSourcePostgreSQLSyncTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourcePostgreSQLSyncTaskProperties.
+func (ctspsstp ConnectToSourcePostgreSQLSyncTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourcePostgreSQLSyncTaskProperties.
+func (ctspsstp ConnectToSourcePostgreSQLSyncTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourcePostgreSQLSyncTaskProperties.
+func (ctspsstp ConnectToSourcePostgreSQLSyncTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -2422,7 +3187,7 @@ type ConnectToSourceSQLServerSyncTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -2447,6 +3212,11 @@ func (ctsssstp ConnectToSourceSQLServerSyncTaskProperties) AsGetTdeCertificatesS
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerSyncTaskProperties.
+func (ctsssstp ConnectToSourceSQLServerSyncTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerSyncTaskProperties.
 func (ctsssstp ConnectToSourceSQLServerSyncTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -2464,6 +3234,11 @@ func (ctsssstp ConnectToSourceSQLServerSyncTaskProperties) AsValidateMigrationIn
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerSyncTaskProperties.
 func (ctsssstp ConnectToSourceSQLServerSyncTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerSyncTaskProperties.
+func (ctsssstp ConnectToSourceSQLServerSyncTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -2527,6 +3302,11 @@ func (ctsssstp ConnectToSourceSQLServerSyncTaskProperties) AsGetUserTablesSQLTas
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerSyncTaskProperties.
+func (ctsssstp ConnectToSourceSQLServerSyncTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerSyncTaskProperties.
 func (ctsssstp ConnectToSourceSQLServerSyncTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -2539,6 +3319,11 @@ func (ctsssstp ConnectToSourceSQLServerSyncTaskProperties) AsConnectToTargetSQLS
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerSyncTaskProperties.
 func (ctsssstp ConnectToSourceSQLServerSyncTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerSyncTaskProperties.
+func (ctsssstp ConnectToSourceSQLServerSyncTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -2569,6 +3354,21 @@ func (ctsssstp ConnectToSourceSQLServerSyncTaskProperties) AsConnectToSourceMySQ
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerSyncTaskProperties.
 func (ctsssstp ConnectToSourceSQLServerSyncTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerSyncTaskProperties.
+func (ctsssstp ConnectToSourceSQLServerSyncTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerSyncTaskProperties.
+func (ctsssstp ConnectToSourceSQLServerSyncTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerSyncTaskProperties.
+func (ctsssstp ConnectToSourceSQLServerSyncTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -3040,7 +3840,7 @@ type ConnectToSourceSQLServerTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -3065,6 +3865,11 @@ func (ctssstp ConnectToSourceSQLServerTaskProperties) AsGetTdeCertificatesSQLTas
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerTaskProperties.
+func (ctssstp ConnectToSourceSQLServerTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerTaskProperties.
 func (ctssstp ConnectToSourceSQLServerTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -3082,6 +3887,11 @@ func (ctssstp ConnectToSourceSQLServerTaskProperties) AsValidateMigrationInputSQ
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerTaskProperties.
 func (ctssstp ConnectToSourceSQLServerTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerTaskProperties.
+func (ctssstp ConnectToSourceSQLServerTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -3145,6 +3955,11 @@ func (ctssstp ConnectToSourceSQLServerTaskProperties) AsGetUserTablesSQLTaskProp
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerTaskProperties.
+func (ctssstp ConnectToSourceSQLServerTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerTaskProperties.
 func (ctssstp ConnectToSourceSQLServerTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -3157,6 +3972,11 @@ func (ctssstp ConnectToSourceSQLServerTaskProperties) AsConnectToTargetSQLSQLDbS
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerTaskProperties.
 func (ctssstp ConnectToSourceSQLServerTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerTaskProperties.
+func (ctssstp ConnectToSourceSQLServerTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -3187,6 +4007,21 @@ func (ctssstp ConnectToSourceSQLServerTaskProperties) AsConnectToSourceMySQLTask
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerTaskProperties.
 func (ctssstp ConnectToSourceSQLServerTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerTaskProperties.
+func (ctssstp ConnectToSourceSQLServerTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerTaskProperties.
+func (ctssstp ConnectToSourceSQLServerTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToSourceSQLServerTaskProperties.
+func (ctssstp ConnectToSourceSQLServerTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -3315,7 +4150,7 @@ type ConnectToTargetAzureDbForMySQLTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -3340,6 +4175,11 @@ func (cttadfmstp ConnectToTargetAzureDbForMySQLTaskProperties) AsGetTdeCertifica
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForMySQLTaskProperties.
+func (cttadfmstp ConnectToTargetAzureDbForMySQLTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForMySQLTaskProperties.
 func (cttadfmstp ConnectToTargetAzureDbForMySQLTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -3357,6 +4197,11 @@ func (cttadfmstp ConnectToTargetAzureDbForMySQLTaskProperties) AsValidateMigrati
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForMySQLTaskProperties.
 func (cttadfmstp ConnectToTargetAzureDbForMySQLTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForMySQLTaskProperties.
+func (cttadfmstp ConnectToTargetAzureDbForMySQLTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -3420,6 +4265,11 @@ func (cttadfmstp ConnectToTargetAzureDbForMySQLTaskProperties) AsGetUserTablesSQ
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForMySQLTaskProperties.
+func (cttadfmstp ConnectToTargetAzureDbForMySQLTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForMySQLTaskProperties.
 func (cttadfmstp ConnectToTargetAzureDbForMySQLTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -3432,6 +4282,11 @@ func (cttadfmstp ConnectToTargetAzureDbForMySQLTaskProperties) AsConnectToTarget
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForMySQLTaskProperties.
 func (cttadfmstp ConnectToTargetAzureDbForMySQLTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForMySQLTaskProperties.
+func (cttadfmstp ConnectToTargetAzureDbForMySQLTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -3462,6 +4317,21 @@ func (cttadfmstp ConnectToTargetAzureDbForMySQLTaskProperties) AsConnectToSource
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForMySQLTaskProperties.
 func (cttadfmstp ConnectToTargetAzureDbForMySQLTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForMySQLTaskProperties.
+func (cttadfmstp ConnectToTargetAzureDbForMySQLTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForMySQLTaskProperties.
+func (cttadfmstp ConnectToTargetAzureDbForMySQLTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForMySQLTaskProperties.
+func (cttadfmstp ConnectToTargetAzureDbForMySQLTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -3591,7 +4461,7 @@ type ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -3616,6 +4486,11 @@ func (cttadfpsstp ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties) AsGetTd
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties.
+func (cttadfpsstp ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties.
 func (cttadfpsstp ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -3633,6 +4508,11 @@ func (cttadfpsstp ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties) AsValid
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties.
 func (cttadfpsstp ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties.
+func (cttadfpsstp ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -3696,6 +4576,11 @@ func (cttadfpsstp ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties) AsGetUs
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties.
+func (cttadfpsstp ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties.
 func (cttadfpsstp ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return &cttadfpsstp, true
@@ -3708,6 +4593,11 @@ func (cttadfpsstp ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties) AsConne
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties.
 func (cttadfpsstp ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties.
+func (cttadfpsstp ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -3738,6 +4628,21 @@ func (cttadfpsstp ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties) AsConne
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties.
 func (cttadfpsstp ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties.
+func (cttadfpsstp ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties.
+func (cttadfpsstp ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties.
+func (cttadfpsstp ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -3828,6 +4733,314 @@ func (cttadfpsstp *ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties) Unmars
 	return nil
 }
 
+// ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskInput input for the task that validates connection to
+// Azure Database for PostgreSQL and target server requirements for Oracle source.
+type ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskInput struct {
+	// TargetConnectionInfo - Connection information for target Azure Database for PostgreSQL server
+	TargetConnectionInfo *PostgreSQLConnectionInfo `json:"targetConnectionInfo,omitempty"`
+}
+
+// ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskOutput output for the task that validates connection to
+// Azure Database for PostgreSQL and target server requirements for Oracle source.
+type ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskOutput struct {
+	// TargetServerVersion - READ-ONLY; Version of the target server
+	TargetServerVersion *string `json:"targetServerVersion,omitempty"`
+	// Databases - READ-ONLY; List of databases on target server
+	Databases *[]string `json:"databases,omitempty"`
+	// TargetServerBrandVersion - READ-ONLY; Target server brand version
+	TargetServerBrandVersion *string `json:"targetServerBrandVersion,omitempty"`
+	// ValidationErrors - READ-ONLY; Validation errors associated with the task
+	ValidationErrors *[]ReportableException `json:"validationErrors,omitempty"`
+}
+
+// ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties properties for the task that validates
+// connection to Azure Database For PostgreSQL server and target server requirements for online migration
+// for Oracle source.
+type ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties struct {
+	// Input - Task input
+	Input *ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskInput `json:"input,omitempty"`
+	// Output - READ-ONLY; Task output. This is ignored if submitted.
+	Output *[]ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskOutput `json:"output,omitempty"`
+	// Errors - READ-ONLY; Array of errors. This is ignored if submitted.
+	Errors *[]ODataError `json:"errors,omitempty"`
+	// State - READ-ONLY; The state of the task. This is ignored if submitted. Possible values include: 'TaskStateUnknown', 'TaskStateQueued', 'TaskStateRunning', 'TaskStateCanceled', 'TaskStateSucceeded', 'TaskStateFailed', 'TaskStateFailedInputValidation', 'TaskStateFaulted'
+	State TaskState `json:"state,omitempty"`
+	// Commands - READ-ONLY; Array of command properties.
+	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
+	// ClientData - Key value pairs of client data to attach meta data information to task
+	ClientData map[string]*string `json:"clientData"`
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
+	TaskType TaskType `json:"taskType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) MarshalJSON() ([]byte, error) {
+	cttoadfpsstp.TaskType = TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync
+	objectMap := make(map[string]interface{})
+	if cttoadfpsstp.Input != nil {
+		objectMap["input"] = cttoadfpsstp.Input
+	}
+	if cttoadfpsstp.ClientData != nil {
+		objectMap["clientData"] = cttoadfpsstp.ClientData
+	}
+	if cttoadfpsstp.TaskType != "" {
+		objectMap["taskType"] = cttoadfpsstp.TaskType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsGetTdeCertificatesSQLTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsGetTdeCertificatesSQLTaskProperties() (*GetTdeCertificatesSQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMigrationInputSQLServerSQLMISyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsValidateMigrationInputSQLServerSQLMISyncTaskProperties() (*ValidateMigrationInputSQLServerSQLMISyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMigrationInputSQLServerSQLMITaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsValidateMigrationInputSQLServerSQLMITaskProperties() (*ValidateMigrationInputSQLServerSQLMITaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties() (*MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateMySQLAzureDbForMySQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateMySQLAzureDbForMySQLSyncTaskProperties() (*MigrateMySQLAzureDbForMySQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateSQLServerSQLDbSyncTaskProperties() (*MigrateSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateSQLServerSQLDbTaskProperties() (*MigrateSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLMISyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateSQLServerSQLMISyncTaskProperties() (*MigrateSQLServerSQLMISyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLMITaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateSQLServerSQLMITaskProperties() (*MigrateSQLServerSQLMITaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateMongoDbTaskProperties() (*MigrateMongoDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetAzureDbForMySQLTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetAzureDbForMySQLTaskProperties() (*ConnectToTargetAzureDbForMySQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLMISyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetSQLMISyncTaskProperties() (*ConnectToTargetSQLMISyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLMITaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetSQLMITaskProperties() (*ConnectToTargetSQLMITaskProperties, bool) {
+	return nil, false
+}
+
+// AsGetUserTablesSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsGetUserTablesSQLSyncTaskProperties() (*GetUserTablesSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsGetUserTablesSQLTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsGetUserTablesSQLTaskProperties() (*GetUserTablesSQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return &cttoadfpsstp, true
+}
+
+// AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetSQLSQLDbSyncTaskProperties() (*ConnectToTargetSQLSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourcePostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToSourcePostgreSQLSyncTaskProperties() (*ConnectToSourcePostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceSQLServerSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToSourceSQLServerSyncTaskProperties() (*ConnectToSourceSQLServerSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceSQLServerTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToSourceSQLServerTaskProperties() (*ConnectToSourceSQLServerTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToMongoDbTaskProperties() (*ConnectToMongoDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceMySQLTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToSourceMySQLTaskProperties() (*ConnectToSourceMySQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsProjectTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsProjectTaskProperties() (*ProjectTaskProperties, bool) {
+	return nil, false
+}
+
+// AsBasicProjectTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) AsBasicProjectTaskProperties() (BasicProjectTaskProperties, bool) {
+	return &cttoadfpsstp, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties struct.
+func (cttoadfpsstp *ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "input":
+			if v != nil {
+				var input ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskInput
+				err = json.Unmarshal(*v, &input)
+				if err != nil {
+					return err
+				}
+				cttoadfpsstp.Input = &input
+			}
+		case "output":
+			if v != nil {
+				var output []ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskOutput
+				err = json.Unmarshal(*v, &output)
+				if err != nil {
+					return err
+				}
+				cttoadfpsstp.Output = &output
+			}
+		case "errors":
+			if v != nil {
+				var errorsVar []ODataError
+				err = json.Unmarshal(*v, &errorsVar)
+				if err != nil {
+					return err
+				}
+				cttoadfpsstp.Errors = &errorsVar
+			}
+		case "state":
+			if v != nil {
+				var state TaskState
+				err = json.Unmarshal(*v, &state)
+				if err != nil {
+					return err
+				}
+				cttoadfpsstp.State = state
+			}
+		case "commands":
+			if v != nil {
+				commands, err := unmarshalBasicCommandPropertiesArray(*v)
+				if err != nil {
+					return err
+				}
+				cttoadfpsstp.Commands = &commands
+			}
+		case "clientData":
+			if v != nil {
+				var clientData map[string]*string
+				err = json.Unmarshal(*v, &clientData)
+				if err != nil {
+					return err
+				}
+				cttoadfpsstp.ClientData = clientData
+			}
+		case "taskType":
+			if v != nil {
+				var taskType TaskType
+				err = json.Unmarshal(*v, &taskType)
+				if err != nil {
+					return err
+				}
+				cttoadfpsstp.TaskType = taskType
+			}
+		}
+	}
+
+	return nil
+}
+
 // ConnectToTargetSQLDbTaskInput input for the task that validates connection to SQL DB and target server
 // requirements
 type ConnectToTargetSQLDbTaskInput struct {
@@ -3869,7 +5082,7 @@ type ConnectToTargetSQLDbTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -3894,6 +5107,11 @@ func (cttsdtp ConnectToTargetSQLDbTaskProperties) AsGetTdeCertificatesSQLTaskPro
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLDbTaskProperties.
+func (cttsdtp ConnectToTargetSQLDbTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLDbTaskProperties.
 func (cttsdtp ConnectToTargetSQLDbTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -3911,6 +5129,11 @@ func (cttsdtp ConnectToTargetSQLDbTaskProperties) AsValidateMigrationInputSQLSer
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLDbTaskProperties.
 func (cttsdtp ConnectToTargetSQLDbTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLDbTaskProperties.
+func (cttsdtp ConnectToTargetSQLDbTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -3974,6 +5197,11 @@ func (cttsdtp ConnectToTargetSQLDbTaskProperties) AsGetUserTablesSQLTaskProperti
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLDbTaskProperties.
+func (cttsdtp ConnectToTargetSQLDbTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLDbTaskProperties.
 func (cttsdtp ConnectToTargetSQLDbTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -3987,6 +5215,11 @@ func (cttsdtp ConnectToTargetSQLDbTaskProperties) AsConnectToTargetSQLSQLDbSyncT
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLDbTaskProperties.
 func (cttsdtp ConnectToTargetSQLDbTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
 	return &cttsdtp, true
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLDbTaskProperties.
+func (cttsdtp ConnectToTargetSQLDbTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
+	return nil, false
 }
 
 // AsConnectToSourcePostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLDbTaskProperties.
@@ -4016,6 +5249,21 @@ func (cttsdtp ConnectToTargetSQLDbTaskProperties) AsConnectToSourceMySQLTaskProp
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLDbTaskProperties.
 func (cttsdtp ConnectToTargetSQLDbTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLDbTaskProperties.
+func (cttsdtp ConnectToTargetSQLDbTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLDbTaskProperties.
+func (cttsdtp ConnectToTargetSQLDbTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLDbTaskProperties.
+func (cttsdtp ConnectToTargetSQLDbTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -4141,7 +5389,7 @@ type ConnectToTargetSQLMISyncTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -4166,6 +5414,11 @@ func (cttsmstp ConnectToTargetSQLMISyncTaskProperties) AsGetTdeCertificatesSQLTa
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMISyncTaskProperties.
+func (cttsmstp ConnectToTargetSQLMISyncTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMISyncTaskProperties.
 func (cttsmstp ConnectToTargetSQLMISyncTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -4183,6 +5436,11 @@ func (cttsmstp ConnectToTargetSQLMISyncTaskProperties) AsValidateMigrationInputS
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMISyncTaskProperties.
 func (cttsmstp ConnectToTargetSQLMISyncTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMISyncTaskProperties.
+func (cttsmstp ConnectToTargetSQLMISyncTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -4246,6 +5504,11 @@ func (cttsmstp ConnectToTargetSQLMISyncTaskProperties) AsGetUserTablesSQLTaskPro
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMISyncTaskProperties.
+func (cttsmstp ConnectToTargetSQLMISyncTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMISyncTaskProperties.
 func (cttsmstp ConnectToTargetSQLMISyncTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -4258,6 +5521,11 @@ func (cttsmstp ConnectToTargetSQLMISyncTaskProperties) AsConnectToTargetSQLSQLDb
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMISyncTaskProperties.
 func (cttsmstp ConnectToTargetSQLMISyncTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMISyncTaskProperties.
+func (cttsmstp ConnectToTargetSQLMISyncTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -4288,6 +5556,21 @@ func (cttsmstp ConnectToTargetSQLMISyncTaskProperties) AsConnectToSourceMySQLTas
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMISyncTaskProperties.
 func (cttsmstp ConnectToTargetSQLMISyncTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMISyncTaskProperties.
+func (cttsmstp ConnectToTargetSQLMISyncTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMISyncTaskProperties.
+func (cttsmstp ConnectToTargetSQLMISyncTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMISyncTaskProperties.
+func (cttsmstp ConnectToTargetSQLMISyncTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -4417,7 +5700,7 @@ type ConnectToTargetSQLMITaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -4442,6 +5725,11 @@ func (cttsmtp ConnectToTargetSQLMITaskProperties) AsGetTdeCertificatesSQLTaskPro
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMITaskProperties.
+func (cttsmtp ConnectToTargetSQLMITaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMITaskProperties.
 func (cttsmtp ConnectToTargetSQLMITaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -4459,6 +5747,11 @@ func (cttsmtp ConnectToTargetSQLMITaskProperties) AsValidateMigrationInputSQLSer
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMITaskProperties.
 func (cttsmtp ConnectToTargetSQLMITaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMITaskProperties.
+func (cttsmtp ConnectToTargetSQLMITaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -4522,6 +5815,11 @@ func (cttsmtp ConnectToTargetSQLMITaskProperties) AsGetUserTablesSQLTaskProperti
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMITaskProperties.
+func (cttsmtp ConnectToTargetSQLMITaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMITaskProperties.
 func (cttsmtp ConnectToTargetSQLMITaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -4534,6 +5832,11 @@ func (cttsmtp ConnectToTargetSQLMITaskProperties) AsConnectToTargetSQLSQLDbSyncT
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMITaskProperties.
 func (cttsmtp ConnectToTargetSQLMITaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMITaskProperties.
+func (cttsmtp ConnectToTargetSQLMITaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -4564,6 +5867,21 @@ func (cttsmtp ConnectToTargetSQLMITaskProperties) AsConnectToSourceMySQLTaskProp
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMITaskProperties.
 func (cttsmtp ConnectToTargetSQLMITaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMITaskProperties.
+func (cttsmtp ConnectToTargetSQLMITaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMITaskProperties.
+func (cttsmtp ConnectToTargetSQLMITaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLMITaskProperties.
+func (cttsmtp ConnectToTargetSQLMITaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -4678,7 +5996,7 @@ type ConnectToTargetSQLSQLDbSyncTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -4703,6 +6021,11 @@ func (cttssdstp ConnectToTargetSQLSQLDbSyncTaskProperties) AsGetTdeCertificatesS
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLSQLDbSyncTaskProperties.
+func (cttssdstp ConnectToTargetSQLSQLDbSyncTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLSQLDbSyncTaskProperties.
 func (cttssdstp ConnectToTargetSQLSQLDbSyncTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -4720,6 +6043,11 @@ func (cttssdstp ConnectToTargetSQLSQLDbSyncTaskProperties) AsValidateMigrationIn
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLSQLDbSyncTaskProperties.
 func (cttssdstp ConnectToTargetSQLSQLDbSyncTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLSQLDbSyncTaskProperties.
+func (cttssdstp ConnectToTargetSQLSQLDbSyncTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -4783,6 +6111,11 @@ func (cttssdstp ConnectToTargetSQLSQLDbSyncTaskProperties) AsGetUserTablesSQLTas
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLSQLDbSyncTaskProperties.
+func (cttssdstp ConnectToTargetSQLSQLDbSyncTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLSQLDbSyncTaskProperties.
 func (cttssdstp ConnectToTargetSQLSQLDbSyncTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -4795,6 +6128,11 @@ func (cttssdstp ConnectToTargetSQLSQLDbSyncTaskProperties) AsConnectToTargetSQLS
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLSQLDbSyncTaskProperties.
 func (cttssdstp ConnectToTargetSQLSQLDbSyncTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLSQLDbSyncTaskProperties.
+func (cttssdstp ConnectToTargetSQLSQLDbSyncTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -4825,6 +6163,21 @@ func (cttssdstp ConnectToTargetSQLSQLDbSyncTaskProperties) AsConnectToSourceMySQ
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLSQLDbSyncTaskProperties.
 func (cttssdstp ConnectToTargetSQLSQLDbSyncTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLSQLDbSyncTaskProperties.
+func (cttssdstp ConnectToTargetSQLSQLDbSyncTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLSQLDbSyncTaskProperties.
+func (cttssdstp ConnectToTargetSQLSQLDbSyncTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ConnectToTargetSQLSQLDbSyncTaskProperties.
+func (cttssdstp ConnectToTargetSQLSQLDbSyncTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -5368,7 +6721,7 @@ type GetTdeCertificatesSQLTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -5393,6 +6746,11 @@ func (gtcstp GetTdeCertificatesSQLTaskProperties) AsGetTdeCertificatesSQLTaskPro
 	return &gtcstp, true
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for GetTdeCertificatesSQLTaskProperties.
+func (gtcstp GetTdeCertificatesSQLTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for GetTdeCertificatesSQLTaskProperties.
 func (gtcstp GetTdeCertificatesSQLTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -5410,6 +6768,11 @@ func (gtcstp GetTdeCertificatesSQLTaskProperties) AsValidateMigrationInputSQLSer
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for GetTdeCertificatesSQLTaskProperties.
 func (gtcstp GetTdeCertificatesSQLTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for GetTdeCertificatesSQLTaskProperties.
+func (gtcstp GetTdeCertificatesSQLTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -5473,6 +6836,11 @@ func (gtcstp GetTdeCertificatesSQLTaskProperties) AsGetUserTablesSQLTaskProperti
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for GetTdeCertificatesSQLTaskProperties.
+func (gtcstp GetTdeCertificatesSQLTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for GetTdeCertificatesSQLTaskProperties.
 func (gtcstp GetTdeCertificatesSQLTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -5485,6 +6853,11 @@ func (gtcstp GetTdeCertificatesSQLTaskProperties) AsConnectToTargetSQLSQLDbSyncT
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for GetTdeCertificatesSQLTaskProperties.
 func (gtcstp GetTdeCertificatesSQLTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for GetTdeCertificatesSQLTaskProperties.
+func (gtcstp GetTdeCertificatesSQLTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -5515,6 +6888,21 @@ func (gtcstp GetTdeCertificatesSQLTaskProperties) AsConnectToSourceMySQLTaskProp
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for GetTdeCertificatesSQLTaskProperties.
 func (gtcstp GetTdeCertificatesSQLTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for GetTdeCertificatesSQLTaskProperties.
+func (gtcstp GetTdeCertificatesSQLTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for GetTdeCertificatesSQLTaskProperties.
+func (gtcstp GetTdeCertificatesSQLTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for GetTdeCertificatesSQLTaskProperties.
+func (gtcstp GetTdeCertificatesSQLTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -5652,7 +7040,7 @@ type GetUserTablesSQLSyncTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -5677,6 +7065,11 @@ func (gutsstp GetUserTablesSQLSyncTaskProperties) AsGetTdeCertificatesSQLTaskPro
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLSyncTaskProperties.
+func (gutsstp GetUserTablesSQLSyncTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLSyncTaskProperties.
 func (gutsstp GetUserTablesSQLSyncTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -5694,6 +7087,11 @@ func (gutsstp GetUserTablesSQLSyncTaskProperties) AsValidateMigrationInputSQLSer
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLSyncTaskProperties.
 func (gutsstp GetUserTablesSQLSyncTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLSyncTaskProperties.
+func (gutsstp GetUserTablesSQLSyncTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -5757,6 +7155,11 @@ func (gutsstp GetUserTablesSQLSyncTaskProperties) AsGetUserTablesSQLTaskProperti
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLSyncTaskProperties.
+func (gutsstp GetUserTablesSQLSyncTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLSyncTaskProperties.
 func (gutsstp GetUserTablesSQLSyncTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -5769,6 +7172,11 @@ func (gutsstp GetUserTablesSQLSyncTaskProperties) AsConnectToTargetSQLSQLDbSyncT
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLSyncTaskProperties.
 func (gutsstp GetUserTablesSQLSyncTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLSyncTaskProperties.
+func (gutsstp GetUserTablesSQLSyncTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -5799,6 +7207,21 @@ func (gutsstp GetUserTablesSQLSyncTaskProperties) AsConnectToSourceMySQLTaskProp
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLSyncTaskProperties.
 func (gutsstp GetUserTablesSQLSyncTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLSyncTaskProperties.
+func (gutsstp GetUserTablesSQLSyncTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLSyncTaskProperties.
+func (gutsstp GetUserTablesSQLSyncTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLSyncTaskProperties.
+func (gutsstp GetUserTablesSQLSyncTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -5928,7 +7351,7 @@ type GetUserTablesSQLTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -5953,6 +7376,11 @@ func (gutstp GetUserTablesSQLTaskProperties) AsGetTdeCertificatesSQLTaskProperti
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLTaskProperties.
+func (gutstp GetUserTablesSQLTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLTaskProperties.
 func (gutstp GetUserTablesSQLTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -5970,6 +7398,11 @@ func (gutstp GetUserTablesSQLTaskProperties) AsValidateMigrationInputSQLServerSQ
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLTaskProperties.
 func (gutstp GetUserTablesSQLTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLTaskProperties.
+func (gutstp GetUserTablesSQLTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -6033,6 +7466,11 @@ func (gutstp GetUserTablesSQLTaskProperties) AsGetUserTablesSQLTaskProperties() 
 	return &gutstp, true
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLTaskProperties.
+func (gutstp GetUserTablesSQLTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLTaskProperties.
 func (gutstp GetUserTablesSQLTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -6045,6 +7483,11 @@ func (gutstp GetUserTablesSQLTaskProperties) AsConnectToTargetSQLSQLDbSyncTaskPr
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLTaskProperties.
 func (gutstp GetUserTablesSQLTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLTaskProperties.
+func (gutstp GetUserTablesSQLTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -6075,6 +7518,21 @@ func (gutstp GetUserTablesSQLTaskProperties) AsConnectToSourceMySQLTaskPropertie
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLTaskProperties.
 func (gutstp GetUserTablesSQLTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLTaskProperties.
+func (gutstp GetUserTablesSQLTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLTaskProperties.
+func (gutstp GetUserTablesSQLTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for GetUserTablesSQLTaskProperties.
+func (gutstp GetUserTablesSQLTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -6158,6 +7616,303 @@ func (gutstp *GetUserTablesSQLTaskProperties) UnmarshalJSON(body []byte) error {
 					return err
 				}
 				gutstp.TaskType = taskType
+			}
+		}
+	}
+
+	return nil
+}
+
+// InstallOCIDriverTaskInput input for the service task to install an OCI driver.
+type InstallOCIDriverTaskInput struct {
+	// DriverPackageName - Name of the uploaded driver package to install.
+	DriverPackageName *string `json:"driverPackageName,omitempty"`
+}
+
+// InstallOCIDriverTaskOutput output for the service task to install an OCI driver.
+type InstallOCIDriverTaskOutput struct {
+	// ValidationErrors - READ-ONLY; Validation errors
+	ValidationErrors *[]ReportableException `json:"validationErrors,omitempty"`
+}
+
+// InstallOCIDriverTaskProperties properties for the task that installs an OCI driver.
+type InstallOCIDriverTaskProperties struct {
+	Input *InstallOCIDriverTaskInput `json:"input,omitempty"`
+	// Output - READ-ONLY; Task output. This is ignored if submitted.
+	Output *[]InstallOCIDriverTaskOutput `json:"output,omitempty"`
+	// Errors - READ-ONLY; Array of errors. This is ignored if submitted.
+	Errors *[]ODataError `json:"errors,omitempty"`
+	// State - READ-ONLY; The state of the task. This is ignored if submitted. Possible values include: 'TaskStateUnknown', 'TaskStateQueued', 'TaskStateRunning', 'TaskStateCanceled', 'TaskStateSucceeded', 'TaskStateFailed', 'TaskStateFailedInputValidation', 'TaskStateFaulted'
+	State TaskState `json:"state,omitempty"`
+	// Commands - READ-ONLY; Array of command properties.
+	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
+	// ClientData - Key value pairs of client data to attach meta data information to task
+	ClientData map[string]*string `json:"clientData"`
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
+	TaskType TaskType `json:"taskType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) MarshalJSON() ([]byte, error) {
+	iodtp.TaskType = TaskTypeServiceInstallOCI
+	objectMap := make(map[string]interface{})
+	if iodtp.Input != nil {
+		objectMap["input"] = iodtp.Input
+	}
+	if iodtp.ClientData != nil {
+		objectMap["clientData"] = iodtp.ClientData
+	}
+	if iodtp.TaskType != "" {
+		objectMap["taskType"] = iodtp.TaskType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsGetTdeCertificatesSQLTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsGetTdeCertificatesSQLTaskProperties() (*GetTdeCertificatesSQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMigrationInputSQLServerSQLMISyncTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsValidateMigrationInputSQLServerSQLMISyncTaskProperties() (*ValidateMigrationInputSQLServerSQLMISyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMigrationInputSQLServerSQLMITaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsValidateMigrationInputSQLServerSQLMITaskProperties() (*ValidateMigrationInputSQLServerSQLMITaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsMigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties() (*MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateMySQLAzureDbForMySQLSyncTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsMigrateMySQLAzureDbForMySQLSyncTaskProperties() (*MigrateMySQLAzureDbForMySQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsMigrateSQLServerSQLDbSyncTaskProperties() (*MigrateSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsMigrateSQLServerSQLDbTaskProperties() (*MigrateSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLMISyncTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsMigrateSQLServerSQLMISyncTaskProperties() (*MigrateSQLServerSQLMISyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLMITaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsMigrateSQLServerSQLMITaskProperties() (*MigrateSQLServerSQLMITaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsMigrateMongoDbTaskProperties() (*MigrateMongoDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetAzureDbForMySQLTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsConnectToTargetAzureDbForMySQLTaskProperties() (*ConnectToTargetAzureDbForMySQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLMISyncTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsConnectToTargetSQLMISyncTaskProperties() (*ConnectToTargetSQLMISyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLMITaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsConnectToTargetSQLMITaskProperties() (*ConnectToTargetSQLMITaskProperties, bool) {
+	return nil, false
+}
+
+// AsGetUserTablesSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsGetUserTablesSQLSyncTaskProperties() (*GetUserTablesSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsGetUserTablesSQLTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsGetUserTablesSQLTaskProperties() (*GetUserTablesSQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsConnectToTargetSQLSQLDbSyncTaskProperties() (*ConnectToTargetSQLSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourcePostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsConnectToSourcePostgreSQLSyncTaskProperties() (*ConnectToSourcePostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceSQLServerSyncTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsConnectToSourceSQLServerSyncTaskProperties() (*ConnectToSourceSQLServerSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceSQLServerTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsConnectToSourceSQLServerTaskProperties() (*ConnectToSourceSQLServerTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToMongoDbTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsConnectToMongoDbTaskProperties() (*ConnectToMongoDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceMySQLTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsConnectToSourceMySQLTaskProperties() (*ConnectToSourceMySQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
+	return &iodtp, true
+}
+
+// AsProjectTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsProjectTaskProperties() (*ProjectTaskProperties, bool) {
+	return nil, false
+}
+
+// AsBasicProjectTaskProperties is the BasicProjectTaskProperties implementation for InstallOCIDriverTaskProperties.
+func (iodtp InstallOCIDriverTaskProperties) AsBasicProjectTaskProperties() (BasicProjectTaskProperties, bool) {
+	return &iodtp, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for InstallOCIDriverTaskProperties struct.
+func (iodtp *InstallOCIDriverTaskProperties) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "input":
+			if v != nil {
+				var input InstallOCIDriverTaskInput
+				err = json.Unmarshal(*v, &input)
+				if err != nil {
+					return err
+				}
+				iodtp.Input = &input
+			}
+		case "output":
+			if v != nil {
+				var output []InstallOCIDriverTaskOutput
+				err = json.Unmarshal(*v, &output)
+				if err != nil {
+					return err
+				}
+				iodtp.Output = &output
+			}
+		case "errors":
+			if v != nil {
+				var errorsVar []ODataError
+				err = json.Unmarshal(*v, &errorsVar)
+				if err != nil {
+					return err
+				}
+				iodtp.Errors = &errorsVar
+			}
+		case "state":
+			if v != nil {
+				var state TaskState
+				err = json.Unmarshal(*v, &state)
+				if err != nil {
+					return err
+				}
+				iodtp.State = state
+			}
+		case "commands":
+			if v != nil {
+				commands, err := unmarshalBasicCommandPropertiesArray(*v)
+				if err != nil {
+					return err
+				}
+				iodtp.Commands = &commands
+			}
+		case "clientData":
+			if v != nil {
+				var clientData map[string]*string
+				err = json.Unmarshal(*v, &clientData)
+				if err != nil {
+					return err
+				}
+				iodtp.ClientData = clientData
+			}
+		case "taskType":
+			if v != nil {
+				var taskType TaskType
+				err = json.Unmarshal(*v, &taskType)
+				if err != nil {
+					return err
+				}
+				iodtp.TaskType = taskType
 			}
 		}
 	}
@@ -6255,7 +8010,7 @@ type MigrateMongoDbTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -6280,6 +8035,11 @@ func (mmdtp MigrateMongoDbTaskProperties) AsGetTdeCertificatesSQLTaskProperties(
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateMongoDbTaskProperties.
+func (mmdtp MigrateMongoDbTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateMongoDbTaskProperties.
 func (mmdtp MigrateMongoDbTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -6297,6 +8057,11 @@ func (mmdtp MigrateMongoDbTaskProperties) AsValidateMigrationInputSQLServerSQLMI
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateMongoDbTaskProperties.
 func (mmdtp MigrateMongoDbTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateMongoDbTaskProperties.
+func (mmdtp MigrateMongoDbTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -6360,6 +8125,11 @@ func (mmdtp MigrateMongoDbTaskProperties) AsGetUserTablesSQLTaskProperties() (*G
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateMongoDbTaskProperties.
+func (mmdtp MigrateMongoDbTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateMongoDbTaskProperties.
 func (mmdtp MigrateMongoDbTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -6372,6 +8142,11 @@ func (mmdtp MigrateMongoDbTaskProperties) AsConnectToTargetSQLSQLDbSyncTaskPrope
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateMongoDbTaskProperties.
 func (mmdtp MigrateMongoDbTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateMongoDbTaskProperties.
+func (mmdtp MigrateMongoDbTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -6402,6 +8177,21 @@ func (mmdtp MigrateMongoDbTaskProperties) AsConnectToSourceMySQLTaskProperties()
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateMongoDbTaskProperties.
 func (mmdtp MigrateMongoDbTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateMongoDbTaskProperties.
+func (mmdtp MigrateMongoDbTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateMongoDbTaskProperties.
+func (mmdtp MigrateMongoDbTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateMongoDbTaskProperties.
+func (mmdtp MigrateMongoDbTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -7017,7 +8807,7 @@ type MigrateMySQLAzureDbForMySQLSyncTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -7042,6 +8832,11 @@ func (mmsadfmsstp MigrateMySQLAzureDbForMySQLSyncTaskProperties) AsGetTdeCertifi
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateMySQLAzureDbForMySQLSyncTaskProperties.
+func (mmsadfmsstp MigrateMySQLAzureDbForMySQLSyncTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateMySQLAzureDbForMySQLSyncTaskProperties.
 func (mmsadfmsstp MigrateMySQLAzureDbForMySQLSyncTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -7059,6 +8854,11 @@ func (mmsadfmsstp MigrateMySQLAzureDbForMySQLSyncTaskProperties) AsValidateMigra
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateMySQLAzureDbForMySQLSyncTaskProperties.
 func (mmsadfmsstp MigrateMySQLAzureDbForMySQLSyncTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateMySQLAzureDbForMySQLSyncTaskProperties.
+func (mmsadfmsstp MigrateMySQLAzureDbForMySQLSyncTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -7122,6 +8922,11 @@ func (mmsadfmsstp MigrateMySQLAzureDbForMySQLSyncTaskProperties) AsGetUserTables
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateMySQLAzureDbForMySQLSyncTaskProperties.
+func (mmsadfmsstp MigrateMySQLAzureDbForMySQLSyncTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateMySQLAzureDbForMySQLSyncTaskProperties.
 func (mmsadfmsstp MigrateMySQLAzureDbForMySQLSyncTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -7134,6 +8939,11 @@ func (mmsadfmsstp MigrateMySQLAzureDbForMySQLSyncTaskProperties) AsConnectToTarg
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateMySQLAzureDbForMySQLSyncTaskProperties.
 func (mmsadfmsstp MigrateMySQLAzureDbForMySQLSyncTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateMySQLAzureDbForMySQLSyncTaskProperties.
+func (mmsadfmsstp MigrateMySQLAzureDbForMySQLSyncTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -7164,6 +8974,21 @@ func (mmsadfmsstp MigrateMySQLAzureDbForMySQLSyncTaskProperties) AsConnectToSour
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateMySQLAzureDbForMySQLSyncTaskProperties.
 func (mmsadfmsstp MigrateMySQLAzureDbForMySQLSyncTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateMySQLAzureDbForMySQLSyncTaskProperties.
+func (mmsadfmsstp MigrateMySQLAzureDbForMySQLSyncTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateMySQLAzureDbForMySQLSyncTaskProperties.
+func (mmsadfmsstp MigrateMySQLAzureDbForMySQLSyncTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateMySQLAzureDbForMySQLSyncTaskProperties.
+func (mmsadfmsstp MigrateMySQLAzureDbForMySQLSyncTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -7251,6 +9076,812 @@ func (mmsadfmsstp *MigrateMySQLAzureDbForMySQLSyncTaskProperties) UnmarshalJSON(
 	}
 
 	return nil
+}
+
+// MigrateOracleAzureDbForPostgreSQLSyncTaskProperties properties for the task that migrates Oracle to
+// Azure Database for PostgreSQL for online migrations
+type MigrateOracleAzureDbForPostgreSQLSyncTaskProperties struct {
+	// Input - Task input
+	Input *MigrateOracleAzureDbPostgreSQLSyncTaskInput `json:"input,omitempty"`
+	// Output - READ-ONLY; Task output. This is ignored if submitted.
+	Output *[]BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput `json:"output,omitempty"`
+	// Errors - READ-ONLY; Array of errors. This is ignored if submitted.
+	Errors *[]ODataError `json:"errors,omitempty"`
+	// State - READ-ONLY; The state of the task. This is ignored if submitted. Possible values include: 'TaskStateUnknown', 'TaskStateQueued', 'TaskStateRunning', 'TaskStateCanceled', 'TaskStateSucceeded', 'TaskStateFailed', 'TaskStateFailedInputValidation', 'TaskStateFaulted'
+	State TaskState `json:"state,omitempty"`
+	// Commands - READ-ONLY; Array of command properties.
+	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
+	// ClientData - Key value pairs of client data to attach meta data information to task
+	ClientData map[string]*string `json:"clientData"`
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
+	TaskType TaskType `json:"taskType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) MarshalJSON() ([]byte, error) {
+	moadfpsstp.TaskType = TaskTypeMigrateOracleSQLSync
+	objectMap := make(map[string]interface{})
+	if moadfpsstp.Input != nil {
+		objectMap["input"] = moadfpsstp.Input
+	}
+	if moadfpsstp.ClientData != nil {
+		objectMap["clientData"] = moadfpsstp.ClientData
+	}
+	if moadfpsstp.TaskType != "" {
+		objectMap["taskType"] = moadfpsstp.TaskType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsGetTdeCertificatesSQLTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsGetTdeCertificatesSQLTaskProperties() (*GetTdeCertificatesSQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMigrationInputSQLServerSQLMISyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsValidateMigrationInputSQLServerSQLMISyncTaskProperties() (*ValidateMigrationInputSQLServerSQLMISyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMigrationInputSQLServerSQLMITaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsValidateMigrationInputSQLServerSQLMITaskProperties() (*ValidateMigrationInputSQLServerSQLMITaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return &moadfpsstp, true
+}
+
+// AsMigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties() (*MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateMySQLAzureDbForMySQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateMySQLAzureDbForMySQLSyncTaskProperties() (*MigrateMySQLAzureDbForMySQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateSQLServerSQLDbSyncTaskProperties() (*MigrateSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateSQLServerSQLDbTaskProperties() (*MigrateSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLMISyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateSQLServerSQLMISyncTaskProperties() (*MigrateSQLServerSQLMISyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLMITaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateSQLServerSQLMITaskProperties() (*MigrateSQLServerSQLMITaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateMongoDbTaskProperties() (*MigrateMongoDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetAzureDbForMySQLTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetAzureDbForMySQLTaskProperties() (*ConnectToTargetAzureDbForMySQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLMISyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetSQLMISyncTaskProperties() (*ConnectToTargetSQLMISyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLMITaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetSQLMITaskProperties() (*ConnectToTargetSQLMITaskProperties, bool) {
+	return nil, false
+}
+
+// AsGetUserTablesSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsGetUserTablesSQLSyncTaskProperties() (*GetUserTablesSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsGetUserTablesSQLTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsGetUserTablesSQLTaskProperties() (*GetUserTablesSQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetSQLSQLDbSyncTaskProperties() (*ConnectToTargetSQLSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourcePostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToSourcePostgreSQLSyncTaskProperties() (*ConnectToSourcePostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceSQLServerSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToSourceSQLServerSyncTaskProperties() (*ConnectToSourceSQLServerSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceSQLServerTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToSourceSQLServerTaskProperties() (*ConnectToSourceSQLServerTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToMongoDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToMongoDbTaskProperties() (*ConnectToMongoDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceMySQLTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToSourceMySQLTaskProperties() (*ConnectToSourceMySQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsProjectTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsProjectTaskProperties() (*ProjectTaskProperties, bool) {
+	return nil, false
+}
+
+// AsBasicProjectTaskProperties is the BasicProjectTaskProperties implementation for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) AsBasicProjectTaskProperties() (BasicProjectTaskProperties, bool) {
+	return &moadfpsstp, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for MigrateOracleAzureDbForPostgreSQLSyncTaskProperties struct.
+func (moadfpsstp *MigrateOracleAzureDbForPostgreSQLSyncTaskProperties) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "input":
+			if v != nil {
+				var input MigrateOracleAzureDbPostgreSQLSyncTaskInput
+				err = json.Unmarshal(*v, &input)
+				if err != nil {
+					return err
+				}
+				moadfpsstp.Input = &input
+			}
+		case "output":
+			if v != nil {
+				output, err := unmarshalBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputArray(*v)
+				if err != nil {
+					return err
+				}
+				moadfpsstp.Output = &output
+			}
+		case "errors":
+			if v != nil {
+				var errorsVar []ODataError
+				err = json.Unmarshal(*v, &errorsVar)
+				if err != nil {
+					return err
+				}
+				moadfpsstp.Errors = &errorsVar
+			}
+		case "state":
+			if v != nil {
+				var state TaskState
+				err = json.Unmarshal(*v, &state)
+				if err != nil {
+					return err
+				}
+				moadfpsstp.State = state
+			}
+		case "commands":
+			if v != nil {
+				commands, err := unmarshalBasicCommandPropertiesArray(*v)
+				if err != nil {
+					return err
+				}
+				moadfpsstp.Commands = &commands
+			}
+		case "clientData":
+			if v != nil {
+				var clientData map[string]*string
+				err = json.Unmarshal(*v, &clientData)
+				if err != nil {
+					return err
+				}
+				moadfpsstp.ClientData = clientData
+			}
+		case "taskType":
+			if v != nil {
+				var taskType TaskType
+				err = json.Unmarshal(*v, &taskType)
+				if err != nil {
+					return err
+				}
+				moadfpsstp.TaskType = taskType
+			}
+		}
+	}
+
+	return nil
+}
+
+// MigrateOracleAzureDbPostgreSQLSyncDatabaseInput database specific information for Oracle to Azure
+// Database for PostgreSQL migration task inputs
+type MigrateOracleAzureDbPostgreSQLSyncDatabaseInput struct {
+	// Name - Name of the migration pipeline
+	Name *string `json:"name,omitempty"`
+	// SchemaName - Name of the source schema
+	SchemaName *string `json:"schemaName,omitempty"`
+	// TableMap - Mapping of source to target tables
+	TableMap map[string]*string `json:"tableMap"`
+	// TargetDatabaseName - Name of target database. Note: Target database will be truncated before starting migration.
+	TargetDatabaseName *string `json:"targetDatabaseName,omitempty"`
+	// MigrationSetting - Migration settings which tune the migration behavior
+	MigrationSetting map[string]*string `json:"migrationSetting"`
+	// SourceSetting - Source settings to tune source endpoint migration behavior
+	SourceSetting map[string]*string `json:"sourceSetting"`
+	// TargetSetting - Target settings to tune target endpoint migration behavior
+	TargetSetting map[string]*string `json:"targetSetting"`
+}
+
+// MarshalJSON is the custom marshaler for MigrateOracleAzureDbPostgreSQLSyncDatabaseInput.
+func (moadpssdi MigrateOracleAzureDbPostgreSQLSyncDatabaseInput) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if moadpssdi.Name != nil {
+		objectMap["name"] = moadpssdi.Name
+	}
+	if moadpssdi.SchemaName != nil {
+		objectMap["schemaName"] = moadpssdi.SchemaName
+	}
+	if moadpssdi.TableMap != nil {
+		objectMap["tableMap"] = moadpssdi.TableMap
+	}
+	if moadpssdi.TargetDatabaseName != nil {
+		objectMap["targetDatabaseName"] = moadpssdi.TargetDatabaseName
+	}
+	if moadpssdi.MigrationSetting != nil {
+		objectMap["migrationSetting"] = moadpssdi.MigrationSetting
+	}
+	if moadpssdi.SourceSetting != nil {
+		objectMap["sourceSetting"] = moadpssdi.SourceSetting
+	}
+	if moadpssdi.TargetSetting != nil {
+		objectMap["targetSetting"] = moadpssdi.TargetSetting
+	}
+	return json.Marshal(objectMap)
+}
+
+// MigrateOracleAzureDbPostgreSQLSyncTaskInput input for the task that migrates Oracle databases to Azure
+// Database for PostgreSQL for online migrations
+type MigrateOracleAzureDbPostgreSQLSyncTaskInput struct {
+	// SelectedDatabases - Databases to migrate
+	SelectedDatabases *[]MigrateOracleAzureDbPostgreSQLSyncDatabaseInput `json:"selectedDatabases,omitempty"`
+	// TargetConnectionInfo - Connection information for target Azure Database for PostgreSQL
+	TargetConnectionInfo *PostgreSQLConnectionInfo `json:"targetConnectionInfo,omitempty"`
+	// SourceConnectionInfo - Connection information for source Oracle
+	SourceConnectionInfo *OracleConnectionInfo `json:"sourceConnectionInfo,omitempty"`
+}
+
+// BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput output for the task that migrates Oracle databases to Azure
+// Database for PostgreSQL for online migrations
+type BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput interface {
+	AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError, bool)
+	AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputError() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputError, bool)
+	AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel, bool)
+	AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel, bool)
+	AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel, bool)
+	AsMigrateOracleAzureDbPostgreSQLSyncTaskOutput() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutput, bool)
+}
+
+// MigrateOracleAzureDbPostgreSQLSyncTaskOutput output for the task that migrates Oracle databases to Azure
+// Database for PostgreSQL for online migrations
+type MigrateOracleAzureDbPostgreSQLSyncTaskOutput struct {
+	// ID - READ-ONLY; Result identifier
+	ID *string `json:"id,omitempty"`
+	// ResultType - Possible values include: 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrateOracleAzureDbPostgreSQLSyncTaskOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelErrorOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeErrorOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeTableLevelOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrationLevelOutput'
+	ResultType ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput `json:"resultType,omitempty"`
+}
+
+func unmarshalBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput(body []byte) (BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput, error) {
+	var m map[string]interface{}
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return nil, err
+	}
+
+	switch m["resultType"] {
+	case string(ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelErrorOutput):
+		var moadpsstode MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError
+		err := json.Unmarshal(body, &moadpsstode)
+		return moadpsstode, err
+	case string(ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeErrorOutput):
+		var moadpsstoe MigrateOracleAzureDbPostgreSQLSyncTaskOutputError
+		err := json.Unmarshal(body, &moadpsstoe)
+		return moadpsstoe, err
+	case string(ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeTableLevelOutput):
+		var moadpsstotl MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel
+		err := json.Unmarshal(body, &moadpsstotl)
+		return moadpsstotl, err
+	case string(ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelOutput):
+		var moadpsstodl MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel
+		err := json.Unmarshal(body, &moadpsstodl)
+		return moadpsstodl, err
+	case string(ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrationLevelOutput):
+		var moadpsstoml MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel
+		err := json.Unmarshal(body, &moadpsstoml)
+		return moadpsstoml, err
+	default:
+		var moadpssto MigrateOracleAzureDbPostgreSQLSyncTaskOutput
+		err := json.Unmarshal(body, &moadpssto)
+		return moadpssto, err
+	}
+}
+func unmarshalBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputArray(body []byte) ([]BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput, error) {
+	var rawMessages []*json.RawMessage
+	err := json.Unmarshal(body, &rawMessages)
+	if err != nil {
+		return nil, err
+	}
+
+	moadpsstoArray := make([]BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput, len(rawMessages))
+
+	for index, rawMessage := range rawMessages {
+		moadpssto, err := unmarshalBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput(*rawMessage)
+		if err != nil {
+			return nil, err
+		}
+		moadpsstoArray[index] = moadpssto
+	}
+	return moadpsstoArray, nil
+}
+
+// MarshalJSON is the custom marshaler for MigrateOracleAzureDbPostgreSQLSyncTaskOutput.
+func (moadpssto MigrateOracleAzureDbPostgreSQLSyncTaskOutput) MarshalJSON() ([]byte, error) {
+	moadpssto.ResultType = ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrateOracleAzureDbPostgreSQLSyncTaskOutput
+	objectMap := make(map[string]interface{})
+	if moadpssto.ResultType != "" {
+		objectMap["resultType"] = moadpssto.ResultType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutput.
+func (moadpssto MigrateOracleAzureDbPostgreSQLSyncTaskOutput) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputError is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutput.
+func (moadpssto MigrateOracleAzureDbPostgreSQLSyncTaskOutput) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputError() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputError, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutput.
+func (moadpssto MigrateOracleAzureDbPostgreSQLSyncTaskOutput) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutput.
+func (moadpssto MigrateOracleAzureDbPostgreSQLSyncTaskOutput) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutput.
+func (moadpssto MigrateOracleAzureDbPostgreSQLSyncTaskOutput) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutput is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutput.
+func (moadpssto MigrateOracleAzureDbPostgreSQLSyncTaskOutput) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutput() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutput, bool) {
+	return &moadpssto, true
+}
+
+// AsBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutput.
+func (moadpssto MigrateOracleAzureDbPostgreSQLSyncTaskOutput) AsBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput() (BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput, bool) {
+	return &moadpssto, true
+}
+
+// MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError ...
+type MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError struct {
+	// ErrorMessage - Error message
+	ErrorMessage *string `json:"errorMessage,omitempty"`
+	// Events - List of error events.
+	Events *[]SyncMigrationDatabaseErrorEvent `json:"events,omitempty"`
+	// ID - READ-ONLY; Result identifier
+	ID *string `json:"id,omitempty"`
+	// ResultType - Possible values include: 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrateOracleAzureDbPostgreSQLSyncTaskOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelErrorOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeErrorOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeTableLevelOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrationLevelOutput'
+	ResultType ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput `json:"resultType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError.
+func (moadpsstode MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError) MarshalJSON() ([]byte, error) {
+	moadpsstode.ResultType = ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelErrorOutput
+	objectMap := make(map[string]interface{})
+	if moadpsstode.ErrorMessage != nil {
+		objectMap["errorMessage"] = moadpsstode.ErrorMessage
+	}
+	if moadpsstode.Events != nil {
+		objectMap["events"] = moadpsstode.Events
+	}
+	if moadpsstode.ResultType != "" {
+		objectMap["resultType"] = moadpsstode.ResultType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError.
+func (moadpsstode MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError, bool) {
+	return &moadpsstode, true
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputError is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError.
+func (moadpsstode MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputError() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputError, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError.
+func (moadpsstode MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError.
+func (moadpsstode MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError.
+func (moadpsstode MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutput is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError.
+func (moadpsstode MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutput() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutput, bool) {
+	return nil, false
+}
+
+// AsBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError.
+func (moadpsstode MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError) AsBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput() (BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput, bool) {
+	return &moadpsstode, true
+}
+
+// MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel ...
+type MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel struct {
+	// DatabaseName - READ-ONLY; Name of the database
+	DatabaseName *string `json:"databaseName,omitempty"`
+	// StartedOn - READ-ONLY; Migration start time
+	StartedOn *date.Time `json:"startedOn,omitempty"`
+	// EndedOn - READ-ONLY; Migration end time
+	EndedOn *date.Time `json:"endedOn,omitempty"`
+	// MigrationState - READ-ONLY; Migration state that this database is in. Possible values include: 'SyncDatabaseMigrationReportingStateUNDEFINED', 'SyncDatabaseMigrationReportingStateCONFIGURING', 'SyncDatabaseMigrationReportingStateINITIALIAZING', 'SyncDatabaseMigrationReportingStateSTARTING', 'SyncDatabaseMigrationReportingStateRUNNING', 'SyncDatabaseMigrationReportingStateREADYTOCOMPLETE', 'SyncDatabaseMigrationReportingStateCOMPLETING', 'SyncDatabaseMigrationReportingStateCOMPLETE', 'SyncDatabaseMigrationReportingStateCANCELLING', 'SyncDatabaseMigrationReportingStateCANCELLED', 'SyncDatabaseMigrationReportingStateFAILED'
+	MigrationState SyncDatabaseMigrationReportingState `json:"migrationState,omitempty"`
+	// IncomingChanges - READ-ONLY; Number of incoming changes
+	IncomingChanges *int64 `json:"incomingChanges,omitempty"`
+	// AppliedChanges - READ-ONLY; Number of applied changes
+	AppliedChanges *int64 `json:"appliedChanges,omitempty"`
+	// CdcInsertCounter - READ-ONLY; Number of cdc inserts
+	CdcInsertCounter *int64 `json:"cdcInsertCounter,omitempty"`
+	// CdcDeleteCounter - READ-ONLY; Number of cdc deletes
+	CdcDeleteCounter *int64 `json:"cdcDeleteCounter,omitempty"`
+	// CdcUpdateCounter - READ-ONLY; Number of cdc updates
+	CdcUpdateCounter *int64 `json:"cdcUpdateCounter,omitempty"`
+	// FullLoadCompletedTables - READ-ONLY; Number of tables completed in full load
+	FullLoadCompletedTables *int64 `json:"fullLoadCompletedTables,omitempty"`
+	// FullLoadLoadingTables - READ-ONLY; Number of tables loading in full load
+	FullLoadLoadingTables *int64 `json:"fullLoadLoadingTables,omitempty"`
+	// FullLoadQueuedTables - READ-ONLY; Number of tables queued in full load
+	FullLoadQueuedTables *int64 `json:"fullLoadQueuedTables,omitempty"`
+	// FullLoadErroredTables - READ-ONLY; Number of tables errored in full load
+	FullLoadErroredTables *int64 `json:"fullLoadErroredTables,omitempty"`
+	// InitializationCompleted - READ-ONLY; Indicates if initial load (full load) has been completed
+	InitializationCompleted *bool `json:"initializationCompleted,omitempty"`
+	// Latency - READ-ONLY; CDC apply latency
+	Latency *int64 `json:"latency,omitempty"`
+	// ID - READ-ONLY; Result identifier
+	ID *string `json:"id,omitempty"`
+	// ResultType - Possible values include: 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrateOracleAzureDbPostgreSQLSyncTaskOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelErrorOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeErrorOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeTableLevelOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrationLevelOutput'
+	ResultType ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput `json:"resultType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel.
+func (moadpsstodl MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel) MarshalJSON() ([]byte, error) {
+	moadpsstodl.ResultType = ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelOutput
+	objectMap := make(map[string]interface{})
+	if moadpsstodl.ResultType != "" {
+		objectMap["resultType"] = moadpsstodl.ResultType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel.
+func (moadpsstodl MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputError is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel.
+func (moadpsstodl MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputError() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputError, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel.
+func (moadpsstodl MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel.
+func (moadpsstodl MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel, bool) {
+	return &moadpsstodl, true
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel.
+func (moadpsstodl MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutput is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel.
+func (moadpsstodl MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutput() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutput, bool) {
+	return nil, false
+}
+
+// AsBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel.
+func (moadpsstodl MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel) AsBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput() (BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput, bool) {
+	return &moadpsstodl, true
+}
+
+// MigrateOracleAzureDbPostgreSQLSyncTaskOutputError ...
+type MigrateOracleAzureDbPostgreSQLSyncTaskOutputError struct {
+	// Error - READ-ONLY; Migration error
+	Error *ReportableException `json:"error,omitempty"`
+	// ID - READ-ONLY; Result identifier
+	ID *string `json:"id,omitempty"`
+	// ResultType - Possible values include: 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrateOracleAzureDbPostgreSQLSyncTaskOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelErrorOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeErrorOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeTableLevelOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrationLevelOutput'
+	ResultType ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput `json:"resultType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for MigrateOracleAzureDbPostgreSQLSyncTaskOutputError.
+func (moadpsstoe MigrateOracleAzureDbPostgreSQLSyncTaskOutputError) MarshalJSON() ([]byte, error) {
+	moadpsstoe.ResultType = ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeErrorOutput
+	objectMap := make(map[string]interface{})
+	if moadpsstoe.ResultType != "" {
+		objectMap["resultType"] = moadpsstoe.ResultType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputError.
+func (moadpsstoe MigrateOracleAzureDbPostgreSQLSyncTaskOutputError) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputError is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputError.
+func (moadpsstoe MigrateOracleAzureDbPostgreSQLSyncTaskOutputError) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputError() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputError, bool) {
+	return &moadpsstoe, true
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputError.
+func (moadpsstoe MigrateOracleAzureDbPostgreSQLSyncTaskOutputError) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputError.
+func (moadpsstoe MigrateOracleAzureDbPostgreSQLSyncTaskOutputError) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputError.
+func (moadpsstoe MigrateOracleAzureDbPostgreSQLSyncTaskOutputError) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutput is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputError.
+func (moadpsstoe MigrateOracleAzureDbPostgreSQLSyncTaskOutputError) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutput() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutput, bool) {
+	return nil, false
+}
+
+// AsBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputError.
+func (moadpsstoe MigrateOracleAzureDbPostgreSQLSyncTaskOutputError) AsBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput() (BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput, bool) {
+	return &moadpsstoe, true
+}
+
+// MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel ...
+type MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel struct {
+	// StartedOn - READ-ONLY; Migration start time
+	StartedOn *date.Time `json:"startedOn,omitempty"`
+	// EndedOn - READ-ONLY; Migration end time
+	EndedOn *date.Time `json:"endedOn,omitempty"`
+	// SourceServerVersion - READ-ONLY; Source server version
+	SourceServerVersion *string `json:"sourceServerVersion,omitempty"`
+	// SourceServer - READ-ONLY; Source server name
+	SourceServer *string `json:"sourceServer,omitempty"`
+	// TargetServerVersion - READ-ONLY; Target server version
+	TargetServerVersion *string `json:"targetServerVersion,omitempty"`
+	// TargetServer - READ-ONLY; Target server name
+	TargetServer *string `json:"targetServer,omitempty"`
+	// ID - READ-ONLY; Result identifier
+	ID *string `json:"id,omitempty"`
+	// ResultType - Possible values include: 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrateOracleAzureDbPostgreSQLSyncTaskOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelErrorOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeErrorOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeTableLevelOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrationLevelOutput'
+	ResultType ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput `json:"resultType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel.
+func (moadpsstoml MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel) MarshalJSON() ([]byte, error) {
+	moadpsstoml.ResultType = ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrationLevelOutput
+	objectMap := make(map[string]interface{})
+	if moadpsstoml.ResultType != "" {
+		objectMap["resultType"] = moadpsstoml.ResultType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel.
+func (moadpsstoml MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputError is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel.
+func (moadpsstoml MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputError() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputError, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel.
+func (moadpsstoml MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel.
+func (moadpsstoml MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel.
+func (moadpsstoml MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel, bool) {
+	return &moadpsstoml, true
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutput is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel.
+func (moadpsstoml MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutput() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutput, bool) {
+	return nil, false
+}
+
+// AsBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel.
+func (moadpsstoml MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel) AsBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput() (BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput, bool) {
+	return &moadpsstoml, true
+}
+
+// MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel ...
+type MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel struct {
+	// TableName - READ-ONLY; Name of the table
+	TableName *string `json:"tableName,omitempty"`
+	// DatabaseName - READ-ONLY; Name of the database
+	DatabaseName *string `json:"databaseName,omitempty"`
+	// CdcInsertCounter - READ-ONLY; Number of applied inserts
+	CdcInsertCounter *int64 `json:"cdcInsertCounter,omitempty"`
+	// CdcUpdateCounter - READ-ONLY; Number of applied updates
+	CdcUpdateCounter *int64 `json:"cdcUpdateCounter,omitempty"`
+	// CdcDeleteCounter - READ-ONLY; Number of applied deletes
+	CdcDeleteCounter *int64 `json:"cdcDeleteCounter,omitempty"`
+	// FullLoadEstFinishTime - READ-ONLY; Estimate to finish full load
+	FullLoadEstFinishTime *date.Time `json:"fullLoadEstFinishTime,omitempty"`
+	// FullLoadStartedOn - READ-ONLY; Full load start time
+	FullLoadStartedOn *date.Time `json:"fullLoadStartedOn,omitempty"`
+	// FullLoadEndedOn - READ-ONLY; Full load end time
+	FullLoadEndedOn *date.Time `json:"fullLoadEndedOn,omitempty"`
+	// FullLoadTotalRows - READ-ONLY; Number of rows applied in full load
+	FullLoadTotalRows *int64 `json:"fullLoadTotalRows,omitempty"`
+	// State - READ-ONLY; Current state of the table migration. Possible values include: 'SyncTableMigrationStateBEFORELOAD', 'SyncTableMigrationStateFULLLOAD', 'SyncTableMigrationStateCOMPLETED', 'SyncTableMigrationStateCANCELED', 'SyncTableMigrationStateERROR', 'SyncTableMigrationStateFAILED'
+	State SyncTableMigrationState `json:"state,omitempty"`
+	// TotalChangesApplied - READ-ONLY; Total number of applied changes
+	TotalChangesApplied *int64 `json:"totalChangesApplied,omitempty"`
+	// DataErrorsCounter - READ-ONLY; Number of data errors occurred
+	DataErrorsCounter *int64 `json:"dataErrorsCounter,omitempty"`
+	// LastModifiedTime - READ-ONLY; Last modified time on target
+	LastModifiedTime *date.Time `json:"lastModifiedTime,omitempty"`
+	// ID - READ-ONLY; Result identifier
+	ID *string `json:"id,omitempty"`
+	// ResultType - Possible values include: 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrateOracleAzureDbPostgreSQLSyncTaskOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelErrorOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeErrorOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeTableLevelOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelOutput', 'ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrationLevelOutput'
+	ResultType ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput `json:"resultType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel.
+func (moadpsstotl MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel) MarshalJSON() ([]byte, error) {
+	moadpsstotl.ResultType = ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeTableLevelOutput
+	objectMap := make(map[string]interface{})
+	if moadpsstotl.ResultType != "" {
+		objectMap["resultType"] = moadpsstotl.ResultType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel.
+func (moadpsstotl MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputError is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel.
+func (moadpsstotl MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputError() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputError, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel.
+func (moadpsstotl MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel, bool) {
+	return &moadpsstotl, true
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel.
+func (moadpsstotl MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel.
+func (moadpsstotl MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbPostgreSQLSyncTaskOutput is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel.
+func (moadpsstotl MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel) AsMigrateOracleAzureDbPostgreSQLSyncTaskOutput() (*MigrateOracleAzureDbPostgreSQLSyncTaskOutput, bool) {
+	return nil, false
+}
+
+// AsBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput is the BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput implementation for MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel.
+func (moadpsstotl MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel) AsBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput() (BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput, bool) {
+	return &moadpsstotl, true
 }
 
 // MigratePostgreSQLAzureDbForPostgreSQLSyncDatabaseInput database specific information for PostgreSQL to
@@ -7778,7 +10409,7 @@ type MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -7803,6 +10434,11 @@ func (mpsadfpsstp MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties) AsGet
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties.
+func (mpsadfpsstp MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties.
 func (mpsadfpsstp MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -7820,6 +10456,11 @@ func (mpsadfpsstp MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties) AsVal
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties.
 func (mpsadfpsstp MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties.
+func (mpsadfpsstp MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -7883,6 +10524,11 @@ func (mpsadfpsstp MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties) AsGet
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties.
+func (mpsadfpsstp MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties.
 func (mpsadfpsstp MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -7895,6 +10541,11 @@ func (mpsadfpsstp MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties) AsCon
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties.
 func (mpsadfpsstp MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties.
+func (mpsadfpsstp MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -7925,6 +10576,21 @@ func (mpsadfpsstp MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties) AsCon
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties.
 func (mpsadfpsstp MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties.
+func (mpsadfpsstp MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties.
+func (mpsadfpsstp MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties.
+func (mpsadfpsstp MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -8341,7 +11007,7 @@ type MigrateSchemaSQLServerSQLDbTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -8366,6 +11032,11 @@ func (mssssdtp MigrateSchemaSQLServerSQLDbTaskProperties) AsGetTdeCertificatesSQ
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSchemaSQLServerSQLDbTaskProperties.
+func (mssssdtp MigrateSchemaSQLServerSQLDbTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateSchemaSQLServerSQLDbTaskProperties.
 func (mssssdtp MigrateSchemaSQLServerSQLDbTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -8383,6 +11054,11 @@ func (mssssdtp MigrateSchemaSQLServerSQLDbTaskProperties) AsValidateMigrationInp
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSchemaSQLServerSQLDbTaskProperties.
 func (mssssdtp MigrateSchemaSQLServerSQLDbTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSchemaSQLServerSQLDbTaskProperties.
+func (mssssdtp MigrateSchemaSQLServerSQLDbTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -8446,6 +11122,11 @@ func (mssssdtp MigrateSchemaSQLServerSQLDbTaskProperties) AsGetUserTablesSQLTask
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSchemaSQLServerSQLDbTaskProperties.
+func (mssssdtp MigrateSchemaSQLServerSQLDbTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSchemaSQLServerSQLDbTaskProperties.
 func (mssssdtp MigrateSchemaSQLServerSQLDbTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -8458,6 +11139,11 @@ func (mssssdtp MigrateSchemaSQLServerSQLDbTaskProperties) AsConnectToTargetSQLSQ
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateSchemaSQLServerSQLDbTaskProperties.
 func (mssssdtp MigrateSchemaSQLServerSQLDbTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSchemaSQLServerSQLDbTaskProperties.
+func (mssssdtp MigrateSchemaSQLServerSQLDbTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -8489,6 +11175,21 @@ func (mssssdtp MigrateSchemaSQLServerSQLDbTaskProperties) AsConnectToSourceMySQL
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateSchemaSQLServerSQLDbTaskProperties.
 func (mssssdtp MigrateSchemaSQLServerSQLDbTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
 	return &mssssdtp, true
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateSchemaSQLServerSQLDbTaskProperties.
+func (mssssdtp MigrateSchemaSQLServerSQLDbTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateSchemaSQLServerSQLDbTaskProperties.
+func (mssssdtp MigrateSchemaSQLServerSQLDbTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateSchemaSQLServerSQLDbTaskProperties.
+func (mssssdtp MigrateSchemaSQLServerSQLDbTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
+	return nil, false
 }
 
 // AsProjectTaskProperties is the BasicProjectTaskProperties implementation for MigrateSchemaSQLServerSQLDbTaskProperties.
@@ -9202,7 +11903,7 @@ type MigrateSQLServerSQLDbSyncTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -9227,6 +11928,11 @@ func (msssdstp MigrateSQLServerSQLDbSyncTaskProperties) AsGetTdeCertificatesSQLT
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbSyncTaskProperties.
+func (msssdstp MigrateSQLServerSQLDbSyncTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbSyncTaskProperties.
 func (msssdstp MigrateSQLServerSQLDbSyncTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -9244,6 +11950,11 @@ func (msssdstp MigrateSQLServerSQLDbSyncTaskProperties) AsValidateMigrationInput
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbSyncTaskProperties.
 func (msssdstp MigrateSQLServerSQLDbSyncTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbSyncTaskProperties.
+func (msssdstp MigrateSQLServerSQLDbSyncTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -9307,6 +12018,11 @@ func (msssdstp MigrateSQLServerSQLDbSyncTaskProperties) AsGetUserTablesSQLTaskPr
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbSyncTaskProperties.
+func (msssdstp MigrateSQLServerSQLDbSyncTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbSyncTaskProperties.
 func (msssdstp MigrateSQLServerSQLDbSyncTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -9319,6 +12035,11 @@ func (msssdstp MigrateSQLServerSQLDbSyncTaskProperties) AsConnectToTargetSQLSQLD
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbSyncTaskProperties.
 func (msssdstp MigrateSQLServerSQLDbSyncTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbSyncTaskProperties.
+func (msssdstp MigrateSQLServerSQLDbSyncTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -9349,6 +12070,21 @@ func (msssdstp MigrateSQLServerSQLDbSyncTaskProperties) AsConnectToSourceMySQLTa
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbSyncTaskProperties.
 func (msssdstp MigrateSQLServerSQLDbSyncTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbSyncTaskProperties.
+func (msssdstp MigrateSQLServerSQLDbSyncTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbSyncTaskProperties.
+func (msssdstp MigrateSQLServerSQLDbSyncTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbSyncTaskProperties.
+func (msssdstp MigrateSQLServerSQLDbSyncTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -9852,7 +12588,7 @@ type MigrateSQLServerSQLDbTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -9877,6 +12613,11 @@ func (msssdtp MigrateSQLServerSQLDbTaskProperties) AsGetTdeCertificatesSQLTaskPr
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbTaskProperties.
+func (msssdtp MigrateSQLServerSQLDbTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbTaskProperties.
 func (msssdtp MigrateSQLServerSQLDbTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -9894,6 +12635,11 @@ func (msssdtp MigrateSQLServerSQLDbTaskProperties) AsValidateMigrationInputSQLSe
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbTaskProperties.
 func (msssdtp MigrateSQLServerSQLDbTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbTaskProperties.
+func (msssdtp MigrateSQLServerSQLDbTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -9957,6 +12703,11 @@ func (msssdtp MigrateSQLServerSQLDbTaskProperties) AsGetUserTablesSQLTaskPropert
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbTaskProperties.
+func (msssdtp MigrateSQLServerSQLDbTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbTaskProperties.
 func (msssdtp MigrateSQLServerSQLDbTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -9969,6 +12720,11 @@ func (msssdtp MigrateSQLServerSQLDbTaskProperties) AsConnectToTargetSQLSQLDbSync
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbTaskProperties.
 func (msssdtp MigrateSQLServerSQLDbTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbTaskProperties.
+func (msssdtp MigrateSQLServerSQLDbTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -9999,6 +12755,21 @@ func (msssdtp MigrateSQLServerSQLDbTaskProperties) AsConnectToSourceMySQLTaskPro
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbTaskProperties.
 func (msssdtp MigrateSQLServerSQLDbTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbTaskProperties.
+func (msssdtp MigrateSQLServerSQLDbTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbTaskProperties.
+func (msssdtp MigrateSQLServerSQLDbTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLDbTaskProperties.
+func (msssdtp MigrateSQLServerSQLDbTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -10406,7 +13177,7 @@ type MigrateSQLServerSQLMISyncTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -10431,6 +13202,11 @@ func (msssmstp MigrateSQLServerSQLMISyncTaskProperties) AsGetTdeCertificatesSQLT
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMISyncTaskProperties.
+func (msssmstp MigrateSQLServerSQLMISyncTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMISyncTaskProperties.
 func (msssmstp MigrateSQLServerSQLMISyncTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -10448,6 +13224,11 @@ func (msssmstp MigrateSQLServerSQLMISyncTaskProperties) AsValidateMigrationInput
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMISyncTaskProperties.
 func (msssmstp MigrateSQLServerSQLMISyncTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMISyncTaskProperties.
+func (msssmstp MigrateSQLServerSQLMISyncTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -10511,6 +13292,11 @@ func (msssmstp MigrateSQLServerSQLMISyncTaskProperties) AsGetUserTablesSQLTaskPr
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMISyncTaskProperties.
+func (msssmstp MigrateSQLServerSQLMISyncTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMISyncTaskProperties.
 func (msssmstp MigrateSQLServerSQLMISyncTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -10523,6 +13309,11 @@ func (msssmstp MigrateSQLServerSQLMISyncTaskProperties) AsConnectToTargetSQLSQLD
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMISyncTaskProperties.
 func (msssmstp MigrateSQLServerSQLMISyncTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMISyncTaskProperties.
+func (msssmstp MigrateSQLServerSQLMISyncTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -10553,6 +13344,21 @@ func (msssmstp MigrateSQLServerSQLMISyncTaskProperties) AsConnectToSourceMySQLTa
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMISyncTaskProperties.
 func (msssmstp MigrateSQLServerSQLMISyncTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMISyncTaskProperties.
+func (msssmstp MigrateSQLServerSQLMISyncTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMISyncTaskProperties.
+func (msssmstp MigrateSQLServerSQLMISyncTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMISyncTaskProperties.
+func (msssmstp MigrateSQLServerSQLMISyncTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -11137,7 +13943,7 @@ type MigrateSQLServerSQLMITaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -11162,6 +13968,11 @@ func (msssmtp MigrateSQLServerSQLMITaskProperties) AsGetTdeCertificatesSQLTaskPr
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMITaskProperties.
+func (msssmtp MigrateSQLServerSQLMITaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMITaskProperties.
 func (msssmtp MigrateSQLServerSQLMITaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -11179,6 +13990,11 @@ func (msssmtp MigrateSQLServerSQLMITaskProperties) AsValidateMigrationInputSQLSe
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMITaskProperties.
 func (msssmtp MigrateSQLServerSQLMITaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMITaskProperties.
+func (msssmtp MigrateSQLServerSQLMITaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -11242,6 +14058,11 @@ func (msssmtp MigrateSQLServerSQLMITaskProperties) AsGetUserTablesSQLTaskPropert
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMITaskProperties.
+func (msssmtp MigrateSQLServerSQLMITaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMITaskProperties.
 func (msssmtp MigrateSQLServerSQLMITaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -11254,6 +14075,11 @@ func (msssmtp MigrateSQLServerSQLMITaskProperties) AsConnectToTargetSQLSQLDbSync
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMITaskProperties.
 func (msssmtp MigrateSQLServerSQLMITaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMITaskProperties.
+func (msssmtp MigrateSQLServerSQLMITaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -11284,6 +14110,21 @@ func (msssmtp MigrateSQLServerSQLMITaskProperties) AsConnectToSourceMySQLTaskPro
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMITaskProperties.
 func (msssmtp MigrateSQLServerSQLMITaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMITaskProperties.
+func (msssmtp MigrateSQLServerSQLMITaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMITaskProperties.
+func (msssmtp MigrateSQLServerSQLMITaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for MigrateSQLServerSQLMITaskProperties.
+func (msssmtp MigrateSQLServerSQLMITaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -11571,7 +14412,7 @@ type MiSQLConnectionInfo struct {
 	UserName *string `json:"userName,omitempty"`
 	// Password - Password credential.
 	Password *string `json:"password,omitempty"`
-	// Type - Possible values include: 'TypeUnknown', 'TypeMiSQLConnectionInfo', 'TypePostgreSQLConnectionInfo', 'TypeMySQLConnectionInfo', 'TypeMongoDbConnectionInfo', 'TypeSQLConnectionInfo'
+	// Type - Possible values include: 'TypeUnknown', 'TypeMiSQLConnectionInfo', 'TypePostgreSQLConnectionInfo', 'TypeOracleConnectionInfo', 'TypeMySQLConnectionInfo', 'TypeMongoDbConnectionInfo', 'TypeSQLConnectionInfo'
 	Type Type `json:"type,omitempty"`
 }
 
@@ -11601,6 +14442,11 @@ func (msci MiSQLConnectionInfo) AsMiSQLConnectionInfo() (*MiSQLConnectionInfo, b
 
 // AsPostgreSQLConnectionInfo is the BasicConnectionInfo implementation for MiSQLConnectionInfo.
 func (msci MiSQLConnectionInfo) AsPostgreSQLConnectionInfo() (*PostgreSQLConnectionInfo, bool) {
+	return nil, false
+}
+
+// AsOracleConnectionInfo is the BasicConnectionInfo implementation for MiSQLConnectionInfo.
+func (msci MiSQLConnectionInfo) AsOracleConnectionInfo() (*OracleConnectionInfo, bool) {
 	return nil, false
 }
 
@@ -11832,7 +14678,7 @@ type MongoDbConnectionInfo struct {
 	UserName *string `json:"userName,omitempty"`
 	// Password - Password credential.
 	Password *string `json:"password,omitempty"`
-	// Type - Possible values include: 'TypeUnknown', 'TypeMiSQLConnectionInfo', 'TypePostgreSQLConnectionInfo', 'TypeMySQLConnectionInfo', 'TypeMongoDbConnectionInfo', 'TypeSQLConnectionInfo'
+	// Type - Possible values include: 'TypeUnknown', 'TypeMiSQLConnectionInfo', 'TypePostgreSQLConnectionInfo', 'TypeOracleConnectionInfo', 'TypeMySQLConnectionInfo', 'TypeMongoDbConnectionInfo', 'TypeSQLConnectionInfo'
 	Type Type `json:"type,omitempty"`
 }
 
@@ -11862,6 +14708,11 @@ func (mdci MongoDbConnectionInfo) AsMiSQLConnectionInfo() (*MiSQLConnectionInfo,
 
 // AsPostgreSQLConnectionInfo is the BasicConnectionInfo implementation for MongoDbConnectionInfo.
 func (mdci MongoDbConnectionInfo) AsPostgreSQLConnectionInfo() (*PostgreSQLConnectionInfo, bool) {
+	return nil, false
+}
+
+// AsOracleConnectionInfo is the BasicConnectionInfo implementation for MongoDbConnectionInfo.
+func (mdci MongoDbConnectionInfo) AsOracleConnectionInfo() (*OracleConnectionInfo, bool) {
 	return nil, false
 }
 
@@ -12416,7 +15267,7 @@ type MySQLConnectionInfo struct {
 	UserName *string `json:"userName,omitempty"`
 	// Password - Password credential.
 	Password *string `json:"password,omitempty"`
-	// Type - Possible values include: 'TypeUnknown', 'TypeMiSQLConnectionInfo', 'TypePostgreSQLConnectionInfo', 'TypeMySQLConnectionInfo', 'TypeMongoDbConnectionInfo', 'TypeSQLConnectionInfo'
+	// Type - Possible values include: 'TypeUnknown', 'TypeMiSQLConnectionInfo', 'TypePostgreSQLConnectionInfo', 'TypeOracleConnectionInfo', 'TypeMySQLConnectionInfo', 'TypeMongoDbConnectionInfo', 'TypeSQLConnectionInfo'
 	Type Type `json:"type,omitempty"`
 }
 
@@ -12449,6 +15300,11 @@ func (msci MySQLConnectionInfo) AsMiSQLConnectionInfo() (*MiSQLConnectionInfo, b
 
 // AsPostgreSQLConnectionInfo is the BasicConnectionInfo implementation for MySQLConnectionInfo.
 func (msci MySQLConnectionInfo) AsPostgreSQLConnectionInfo() (*PostgreSQLConnectionInfo, bool) {
+	return nil, false
+}
+
+// AsOracleConnectionInfo is the BasicConnectionInfo implementation for MySQLConnectionInfo.
+func (msci MySQLConnectionInfo) AsOracleConnectionInfo() (*OracleConnectionInfo, bool) {
 	return nil, false
 }
 
@@ -12570,6 +15426,93 @@ type ODataError struct {
 	Details *[]ODataError `json:"details,omitempty"`
 }
 
+// OracleConnectionInfo information for connecting to Oracle server
+type OracleConnectionInfo struct {
+	// DataSource - EZConnect or TNSName connection string.
+	DataSource *string `json:"dataSource,omitempty"`
+	// UserName - User name
+	UserName *string `json:"userName,omitempty"`
+	// Password - Password credential.
+	Password *string `json:"password,omitempty"`
+	// Type - Possible values include: 'TypeUnknown', 'TypeMiSQLConnectionInfo', 'TypePostgreSQLConnectionInfo', 'TypeOracleConnectionInfo', 'TypeMySQLConnectionInfo', 'TypeMongoDbConnectionInfo', 'TypeSQLConnectionInfo'
+	Type Type `json:"type,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for OracleConnectionInfo.
+func (oci OracleConnectionInfo) MarshalJSON() ([]byte, error) {
+	oci.Type = TypeOracleConnectionInfo
+	objectMap := make(map[string]interface{})
+	if oci.DataSource != nil {
+		objectMap["dataSource"] = oci.DataSource
+	}
+	if oci.UserName != nil {
+		objectMap["userName"] = oci.UserName
+	}
+	if oci.Password != nil {
+		objectMap["password"] = oci.Password
+	}
+	if oci.Type != "" {
+		objectMap["type"] = oci.Type
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsMiSQLConnectionInfo is the BasicConnectionInfo implementation for OracleConnectionInfo.
+func (oci OracleConnectionInfo) AsMiSQLConnectionInfo() (*MiSQLConnectionInfo, bool) {
+	return nil, false
+}
+
+// AsPostgreSQLConnectionInfo is the BasicConnectionInfo implementation for OracleConnectionInfo.
+func (oci OracleConnectionInfo) AsPostgreSQLConnectionInfo() (*PostgreSQLConnectionInfo, bool) {
+	return nil, false
+}
+
+// AsOracleConnectionInfo is the BasicConnectionInfo implementation for OracleConnectionInfo.
+func (oci OracleConnectionInfo) AsOracleConnectionInfo() (*OracleConnectionInfo, bool) {
+	return &oci, true
+}
+
+// AsMySQLConnectionInfo is the BasicConnectionInfo implementation for OracleConnectionInfo.
+func (oci OracleConnectionInfo) AsMySQLConnectionInfo() (*MySQLConnectionInfo, bool) {
+	return nil, false
+}
+
+// AsMongoDbConnectionInfo is the BasicConnectionInfo implementation for OracleConnectionInfo.
+func (oci OracleConnectionInfo) AsMongoDbConnectionInfo() (*MongoDbConnectionInfo, bool) {
+	return nil, false
+}
+
+// AsSQLConnectionInfo is the BasicConnectionInfo implementation for OracleConnectionInfo.
+func (oci OracleConnectionInfo) AsSQLConnectionInfo() (*SQLConnectionInfo, bool) {
+	return nil, false
+}
+
+// AsConnectionInfo is the BasicConnectionInfo implementation for OracleConnectionInfo.
+func (oci OracleConnectionInfo) AsConnectionInfo() (*ConnectionInfo, bool) {
+	return nil, false
+}
+
+// AsBasicConnectionInfo is the BasicConnectionInfo implementation for OracleConnectionInfo.
+func (oci OracleConnectionInfo) AsBasicConnectionInfo() (BasicConnectionInfo, bool) {
+	return &oci, true
+}
+
+// OracleOCIDriverInfo information about an Oracle OCI driver.
+type OracleOCIDriverInfo struct {
+	// DriverName - READ-ONLY; The name of the driver package
+	DriverName *string `json:"driverName,omitempty"`
+	// DriverSize - READ-ONLY; The size in bytes of the driver package
+	DriverSize *string `json:"driverSize,omitempty"`
+	// ArchiveChecksum - READ-ONLY; The MD5 Base64 encoded checksum for the driver package.
+	ArchiveChecksum *string `json:"archiveChecksum,omitempty"`
+	// OracleChecksum - READ-ONLY; The checksum for the driver package provided by Oracle.
+	OracleChecksum *string `json:"oracleChecksum,omitempty"`
+	// AssemblyVersion - READ-ONLY; Version listed in the OCI assembly 'oci.dll'
+	AssemblyVersion *string `json:"assemblyVersion,omitempty"`
+	// SupportedOracleVersions - READ-ONLY; List of Oracle database versions supported by this driver. Only major minor of the version is listed.
+	SupportedOracleVersions *[]string `json:"supportedOracleVersions,omitempty"`
+}
+
 // OrphanedUserInfo information of orphaned users on the SQL server database.
 type OrphanedUserInfo struct {
 	// Name - Name of the orphaned user
@@ -12590,7 +15533,7 @@ type PostgreSQLConnectionInfo struct {
 	UserName *string `json:"userName,omitempty"`
 	// Password - Password credential.
 	Password *string `json:"password,omitempty"`
-	// Type - Possible values include: 'TypeUnknown', 'TypeMiSQLConnectionInfo', 'TypePostgreSQLConnectionInfo', 'TypeMySQLConnectionInfo', 'TypeMongoDbConnectionInfo', 'TypeSQLConnectionInfo'
+	// Type - Possible values include: 'TypeUnknown', 'TypeMiSQLConnectionInfo', 'TypePostgreSQLConnectionInfo', 'TypeOracleConnectionInfo', 'TypeMySQLConnectionInfo', 'TypeMongoDbConnectionInfo', 'TypeSQLConnectionInfo'
 	Type Type `json:"type,omitempty"`
 }
 
@@ -12627,6 +15570,11 @@ func (psci PostgreSQLConnectionInfo) AsMiSQLConnectionInfo() (*MiSQLConnectionIn
 // AsPostgreSQLConnectionInfo is the BasicConnectionInfo implementation for PostgreSQLConnectionInfo.
 func (psci PostgreSQLConnectionInfo) AsPostgreSQLConnectionInfo() (*PostgreSQLConnectionInfo, bool) {
 	return &psci, true
+}
+
+// AsOracleConnectionInfo is the BasicConnectionInfo implementation for PostgreSQLConnectionInfo.
+func (psci PostgreSQLConnectionInfo) AsOracleConnectionInfo() (*OracleConnectionInfo, bool) {
+	return nil, false
 }
 
 // AsMySQLConnectionInfo is the BasicConnectionInfo implementation for PostgreSQLConnectionInfo.
@@ -13122,10 +16070,12 @@ func (pt *ProjectTask) UnmarshalJSON(body []byte) error {
 // client, this object is returned.
 type BasicProjectTaskProperties interface {
 	AsGetTdeCertificatesSQLTaskProperties() (*GetTdeCertificatesSQLTaskProperties, bool)
+	AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool)
 	AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool)
 	AsValidateMigrationInputSQLServerSQLMISyncTaskProperties() (*ValidateMigrationInputSQLServerSQLMISyncTaskProperties, bool)
 	AsValidateMigrationInputSQLServerSQLMITaskProperties() (*ValidateMigrationInputSQLServerSQLMITaskProperties, bool)
 	AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool)
+	AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool)
 	AsMigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties() (*MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties, bool)
 	AsMigrateMySQLAzureDbForMySQLSyncTaskProperties() (*MigrateMySQLAzureDbForMySQLSyncTaskProperties, bool)
 	AsMigrateSQLServerSQLDbSyncTaskProperties() (*MigrateSQLServerSQLDbSyncTaskProperties, bool)
@@ -13138,15 +16088,20 @@ type BasicProjectTaskProperties interface {
 	AsConnectToTargetSQLMITaskProperties() (*ConnectToTargetSQLMITaskProperties, bool)
 	AsGetUserTablesSQLSyncTaskProperties() (*GetUserTablesSQLSyncTaskProperties, bool)
 	AsGetUserTablesSQLTaskProperties() (*GetUserTablesSQLTaskProperties, bool)
+	AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool)
 	AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool)
 	AsConnectToTargetSQLSQLDbSyncTaskProperties() (*ConnectToTargetSQLSQLDbSyncTaskProperties, bool)
 	AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool)
+	AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool)
 	AsConnectToSourcePostgreSQLSyncTaskProperties() (*ConnectToSourcePostgreSQLSyncTaskProperties, bool)
 	AsConnectToSourceSQLServerSyncTaskProperties() (*ConnectToSourceSQLServerSyncTaskProperties, bool)
 	AsConnectToSourceSQLServerTaskProperties() (*ConnectToSourceSQLServerTaskProperties, bool)
 	AsConnectToMongoDbTaskProperties() (*ConnectToMongoDbTaskProperties, bool)
 	AsConnectToSourceMySQLTaskProperties() (*ConnectToSourceMySQLTaskProperties, bool)
 	AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool)
+	AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool)
+	AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool)
+	AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool)
 	AsProjectTaskProperties() (*ProjectTaskProperties, bool)
 }
 
@@ -13161,7 +16116,7 @@ type ProjectTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -13177,6 +16132,10 @@ func unmarshalBasicProjectTaskProperties(body []byte) (BasicProjectTaskPropertie
 		var gtcstp GetTdeCertificatesSQLTaskProperties
 		err := json.Unmarshal(body, &gtcstp)
 		return gtcstp, err
+	case string(TaskTypeValidateOracleAzureDbPostgreSQLSync):
+		var voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties
+		err := json.Unmarshal(body, &voadfpsstp)
+		return voadfpsstp, err
 	case string(TaskTypeValidateMongoDb):
 		var vmdtp ValidateMongoDbTaskProperties
 		err := json.Unmarshal(body, &vmdtp)
@@ -13193,6 +16152,10 @@ func unmarshalBasicProjectTaskProperties(body []byte) (BasicProjectTaskPropertie
 		var vmisssdstp ValidateMigrationInputSQLServerSQLDbSyncTaskProperties
 		err := json.Unmarshal(body, &vmisssdstp)
 		return vmisssdstp, err
+	case string(TaskTypeMigrateOracleSQLSync):
+		var moadfpsstp MigrateOracleAzureDbForPostgreSQLSyncTaskProperties
+		err := json.Unmarshal(body, &moadfpsstp)
+		return moadfpsstp, err
 	case string(TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync):
 		var mpsadfpsstp MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties
 		err := json.Unmarshal(body, &mpsadfpsstp)
@@ -13241,6 +16204,10 @@ func unmarshalBasicProjectTaskProperties(body []byte) (BasicProjectTaskPropertie
 		var gutstp GetUserTablesSQLTaskProperties
 		err := json.Unmarshal(body, &gutstp)
 		return gutstp, err
+	case string(TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync):
+		var cttoadfpsstp ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties
+		err := json.Unmarshal(body, &cttoadfpsstp)
+		return cttoadfpsstp, err
 	case string(TaskTypeConnectToTargetAzureDbForPostgreSQLSync):
 		var cttadfpsstp ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties
 		err := json.Unmarshal(body, &cttadfpsstp)
@@ -13253,6 +16220,10 @@ func unmarshalBasicProjectTaskProperties(body []byte) (BasicProjectTaskPropertie
 		var cttsdtp ConnectToTargetSQLDbTaskProperties
 		err := json.Unmarshal(body, &cttsdtp)
 		return cttsdtp, err
+	case string(TaskTypeConnectToSourceOracleSync):
+		var ctsostp ConnectToSourceOracleSyncTaskProperties
+		err := json.Unmarshal(body, &ctsostp)
+		return ctsostp, err
 	case string(TaskTypeConnectToSourcePostgreSQLSync):
 		var ctspsstp ConnectToSourcePostgreSQLSyncTaskProperties
 		err := json.Unmarshal(body, &ctspsstp)
@@ -13277,6 +16248,18 @@ func unmarshalBasicProjectTaskProperties(body []byte) (BasicProjectTaskPropertie
 		var mssssdtp MigrateSchemaSQLServerSQLDbTaskProperties
 		err := json.Unmarshal(body, &mssssdtp)
 		return mssssdtp, err
+	case string(TaskTypeServiceCheckOCI):
+		var codtp CheckOCIDriverTaskProperties
+		err := json.Unmarshal(body, &codtp)
+		return codtp, err
+	case string(TaskTypeServiceUploadOCI):
+		var uodtp UploadOCIDriverTaskProperties
+		err := json.Unmarshal(body, &uodtp)
+		return uodtp, err
+	case string(TaskTypeServiceInstallOCI):
+		var iodtp InstallOCIDriverTaskProperties
+		err := json.Unmarshal(body, &iodtp)
+		return iodtp, err
 	default:
 		var ptp ProjectTaskProperties
 		err := json.Unmarshal(body, &ptp)
@@ -13320,6 +16303,11 @@ func (ptp ProjectTaskProperties) AsGetTdeCertificatesSQLTaskProperties() (*GetTd
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ProjectTaskProperties.
+func (ptp ProjectTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ProjectTaskProperties.
 func (ptp ProjectTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -13337,6 +16325,11 @@ func (ptp ProjectTaskProperties) AsValidateMigrationInputSQLServerSQLMITaskPrope
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ProjectTaskProperties.
 func (ptp ProjectTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ProjectTaskProperties.
+func (ptp ProjectTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -13400,6 +16393,11 @@ func (ptp ProjectTaskProperties) AsGetUserTablesSQLTaskProperties() (*GetUserTab
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ProjectTaskProperties.
+func (ptp ProjectTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ProjectTaskProperties.
 func (ptp ProjectTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -13412,6 +16410,11 @@ func (ptp ProjectTaskProperties) AsConnectToTargetSQLSQLDbSyncTaskProperties() (
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ProjectTaskProperties.
 func (ptp ProjectTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for ProjectTaskProperties.
+func (ptp ProjectTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -13442,6 +16445,21 @@ func (ptp ProjectTaskProperties) AsConnectToSourceMySQLTaskProperties() (*Connec
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ProjectTaskProperties.
 func (ptp ProjectTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ProjectTaskProperties.
+func (ptp ProjectTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ProjectTaskProperties.
+func (ptp ProjectTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ProjectTaskProperties.
+func (ptp ProjectTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -13999,7 +17017,7 @@ type SelectedCertificateInput struct {
 	Password *string `json:"password,omitempty"`
 }
 
-// ServerProperties server properties for Oracle, MySQL type source
+// ServerProperties server properties for MySQL type source
 type ServerProperties struct {
 	// ServerPlatform - READ-ONLY; Name of the server platform
 	ServerPlatform *string `json:"serverPlatform,omitempty"`
@@ -14797,7 +17815,7 @@ type SQLConnectionInfo struct {
 	UserName *string `json:"userName,omitempty"`
 	// Password - Password credential.
 	Password *string `json:"password,omitempty"`
-	// Type - Possible values include: 'TypeUnknown', 'TypeMiSQLConnectionInfo', 'TypePostgreSQLConnectionInfo', 'TypeMySQLConnectionInfo', 'TypeMongoDbConnectionInfo', 'TypeSQLConnectionInfo'
+	// Type - Possible values include: 'TypeUnknown', 'TypeMiSQLConnectionInfo', 'TypePostgreSQLConnectionInfo', 'TypeOracleConnectionInfo', 'TypeMySQLConnectionInfo', 'TypeMongoDbConnectionInfo', 'TypeSQLConnectionInfo'
 	Type Type `json:"type,omitempty"`
 }
 
@@ -14842,6 +17860,11 @@ func (sci SQLConnectionInfo) AsMiSQLConnectionInfo() (*MiSQLConnectionInfo, bool
 
 // AsPostgreSQLConnectionInfo is the BasicConnectionInfo implementation for SQLConnectionInfo.
 func (sci SQLConnectionInfo) AsPostgreSQLConnectionInfo() (*PostgreSQLConnectionInfo, bool) {
+	return nil, false
+}
+
+// AsOracleConnectionInfo is the BasicConnectionInfo implementation for SQLConnectionInfo.
+func (sci SQLConnectionInfo) AsOracleConnectionInfo() (*OracleConnectionInfo, bool) {
 	return nil, false
 }
 
@@ -15087,6 +18110,305 @@ func (tr TrackedResource) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// UploadOCIDriverTaskInput input for the service task to upload an OCI driver.
+type UploadOCIDriverTaskInput struct {
+	// DriverShare - File share information for the OCI driver archive.
+	DriverShare *FileShare `json:"driverShare,omitempty"`
+}
+
+// UploadOCIDriverTaskOutput output for the service task to upload an OCI driver.
+type UploadOCIDriverTaskOutput struct {
+	// DriverPackageName - READ-ONLY; The name of the driver package that was validated and uploaded.
+	DriverPackageName *string `json:"driverPackageName,omitempty"`
+	// ValidationErrors - READ-ONLY; Validation errors
+	ValidationErrors *[]ReportableException `json:"validationErrors,omitempty"`
+}
+
+// UploadOCIDriverTaskProperties properties for the task that uploads an OCI driver.
+type UploadOCIDriverTaskProperties struct {
+	Input *UploadOCIDriverTaskInput `json:"input,omitempty"`
+	// Output - READ-ONLY; Task output. This is ignored if submitted.
+	Output *[]UploadOCIDriverTaskOutput `json:"output,omitempty"`
+	// Errors - READ-ONLY; Array of errors. This is ignored if submitted.
+	Errors *[]ODataError `json:"errors,omitempty"`
+	// State - READ-ONLY; The state of the task. This is ignored if submitted. Possible values include: 'TaskStateUnknown', 'TaskStateQueued', 'TaskStateRunning', 'TaskStateCanceled', 'TaskStateSucceeded', 'TaskStateFailed', 'TaskStateFailedInputValidation', 'TaskStateFaulted'
+	State TaskState `json:"state,omitempty"`
+	// Commands - READ-ONLY; Array of command properties.
+	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
+	// ClientData - Key value pairs of client data to attach meta data information to task
+	ClientData map[string]*string `json:"clientData"`
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
+	TaskType TaskType `json:"taskType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) MarshalJSON() ([]byte, error) {
+	uodtp.TaskType = TaskTypeServiceUploadOCI
+	objectMap := make(map[string]interface{})
+	if uodtp.Input != nil {
+		objectMap["input"] = uodtp.Input
+	}
+	if uodtp.ClientData != nil {
+		objectMap["clientData"] = uodtp.ClientData
+	}
+	if uodtp.TaskType != "" {
+		objectMap["taskType"] = uodtp.TaskType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsGetTdeCertificatesSQLTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsGetTdeCertificatesSQLTaskProperties() (*GetTdeCertificatesSQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMigrationInputSQLServerSQLMISyncTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsValidateMigrationInputSQLServerSQLMISyncTaskProperties() (*ValidateMigrationInputSQLServerSQLMISyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMigrationInputSQLServerSQLMITaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsValidateMigrationInputSQLServerSQLMITaskProperties() (*ValidateMigrationInputSQLServerSQLMITaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsMigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties() (*MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateMySQLAzureDbForMySQLSyncTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsMigrateMySQLAzureDbForMySQLSyncTaskProperties() (*MigrateMySQLAzureDbForMySQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsMigrateSQLServerSQLDbSyncTaskProperties() (*MigrateSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsMigrateSQLServerSQLDbTaskProperties() (*MigrateSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLMISyncTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsMigrateSQLServerSQLMISyncTaskProperties() (*MigrateSQLServerSQLMISyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLMITaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsMigrateSQLServerSQLMITaskProperties() (*MigrateSQLServerSQLMITaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsMigrateMongoDbTaskProperties() (*MigrateMongoDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetAzureDbForMySQLTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsConnectToTargetAzureDbForMySQLTaskProperties() (*ConnectToTargetAzureDbForMySQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLMISyncTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsConnectToTargetSQLMISyncTaskProperties() (*ConnectToTargetSQLMISyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLMITaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsConnectToTargetSQLMITaskProperties() (*ConnectToTargetSQLMITaskProperties, bool) {
+	return nil, false
+}
+
+// AsGetUserTablesSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsGetUserTablesSQLSyncTaskProperties() (*GetUserTablesSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsGetUserTablesSQLTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsGetUserTablesSQLTaskProperties() (*GetUserTablesSQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsConnectToTargetSQLSQLDbSyncTaskProperties() (*ConnectToTargetSQLSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourcePostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsConnectToSourcePostgreSQLSyncTaskProperties() (*ConnectToSourcePostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceSQLServerSyncTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsConnectToSourceSQLServerSyncTaskProperties() (*ConnectToSourceSQLServerSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceSQLServerTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsConnectToSourceSQLServerTaskProperties() (*ConnectToSourceSQLServerTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToMongoDbTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsConnectToMongoDbTaskProperties() (*ConnectToMongoDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceMySQLTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsConnectToSourceMySQLTaskProperties() (*ConnectToSourceMySQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return &uodtp, true
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsProjectTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsProjectTaskProperties() (*ProjectTaskProperties, bool) {
+	return nil, false
+}
+
+// AsBasicProjectTaskProperties is the BasicProjectTaskProperties implementation for UploadOCIDriverTaskProperties.
+func (uodtp UploadOCIDriverTaskProperties) AsBasicProjectTaskProperties() (BasicProjectTaskProperties, bool) {
+	return &uodtp, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for UploadOCIDriverTaskProperties struct.
+func (uodtp *UploadOCIDriverTaskProperties) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "input":
+			if v != nil {
+				var input UploadOCIDriverTaskInput
+				err = json.Unmarshal(*v, &input)
+				if err != nil {
+					return err
+				}
+				uodtp.Input = &input
+			}
+		case "output":
+			if v != nil {
+				var output []UploadOCIDriverTaskOutput
+				err = json.Unmarshal(*v, &output)
+				if err != nil {
+					return err
+				}
+				uodtp.Output = &output
+			}
+		case "errors":
+			if v != nil {
+				var errorsVar []ODataError
+				err = json.Unmarshal(*v, &errorsVar)
+				if err != nil {
+					return err
+				}
+				uodtp.Errors = &errorsVar
+			}
+		case "state":
+			if v != nil {
+				var state TaskState
+				err = json.Unmarshal(*v, &state)
+				if err != nil {
+					return err
+				}
+				uodtp.State = state
+			}
+		case "commands":
+			if v != nil {
+				commands, err := unmarshalBasicCommandPropertiesArray(*v)
+				if err != nil {
+					return err
+				}
+				uodtp.Commands = &commands
+			}
+		case "clientData":
+			if v != nil {
+				var clientData map[string]*string
+				err = json.Unmarshal(*v, &clientData)
+				if err != nil {
+					return err
+				}
+				uodtp.ClientData = clientData
+			}
+		case "taskType":
+			if v != nil {
+				var taskType TaskType
+				err = json.Unmarshal(*v, &taskType)
+				if err != nil {
+					return err
+				}
+				uodtp.TaskType = taskType
+			}
+		}
+	}
+
+	return nil
+}
+
 // ValidateMigrationInputSQLServerSQLDbSyncTaskProperties properties for task that validates migration
 // input for SQL to Azure SQL DB sync migrations
 type ValidateMigrationInputSQLServerSQLDbSyncTaskProperties struct {
@@ -15102,7 +18424,7 @@ type ValidateMigrationInputSQLServerSQLDbSyncTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -15127,6 +18449,11 @@ func (vmisssdstp ValidateMigrationInputSQLServerSQLDbSyncTaskProperties) AsGetTd
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLDbSyncTaskProperties.
+func (vmisssdstp ValidateMigrationInputSQLServerSQLDbSyncTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLDbSyncTaskProperties.
 func (vmisssdstp ValidateMigrationInputSQLServerSQLDbSyncTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -15145,6 +18472,11 @@ func (vmisssdstp ValidateMigrationInputSQLServerSQLDbSyncTaskProperties) AsValid
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLDbSyncTaskProperties.
 func (vmisssdstp ValidateMigrationInputSQLServerSQLDbSyncTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
 	return &vmisssdstp, true
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLDbSyncTaskProperties.
+func (vmisssdstp ValidateMigrationInputSQLServerSQLDbSyncTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
 }
 
 // AsMigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLDbSyncTaskProperties.
@@ -15207,6 +18539,11 @@ func (vmisssdstp ValidateMigrationInputSQLServerSQLDbSyncTaskProperties) AsGetUs
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLDbSyncTaskProperties.
+func (vmisssdstp ValidateMigrationInputSQLServerSQLDbSyncTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLDbSyncTaskProperties.
 func (vmisssdstp ValidateMigrationInputSQLServerSQLDbSyncTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -15219,6 +18556,11 @@ func (vmisssdstp ValidateMigrationInputSQLServerSQLDbSyncTaskProperties) AsConne
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLDbSyncTaskProperties.
 func (vmisssdstp ValidateMigrationInputSQLServerSQLDbSyncTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLDbSyncTaskProperties.
+func (vmisssdstp ValidateMigrationInputSQLServerSQLDbSyncTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -15249,6 +18591,21 @@ func (vmisssdstp ValidateMigrationInputSQLServerSQLDbSyncTaskProperties) AsConne
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLDbSyncTaskProperties.
 func (vmisssdstp ValidateMigrationInputSQLServerSQLDbSyncTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLDbSyncTaskProperties.
+func (vmisssdstp ValidateMigrationInputSQLServerSQLDbSyncTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLDbSyncTaskProperties.
+func (vmisssdstp ValidateMigrationInputSQLServerSQLDbSyncTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLDbSyncTaskProperties.
+func (vmisssdstp ValidateMigrationInputSQLServerSQLDbSyncTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -15382,7 +18739,7 @@ type ValidateMigrationInputSQLServerSQLMISyncTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -15407,6 +18764,11 @@ func (vmisssmstp ValidateMigrationInputSQLServerSQLMISyncTaskProperties) AsGetTd
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMISyncTaskProperties.
+func (vmisssmstp ValidateMigrationInputSQLServerSQLMISyncTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMISyncTaskProperties.
 func (vmisssmstp ValidateMigrationInputSQLServerSQLMISyncTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -15424,6 +18786,11 @@ func (vmisssmstp ValidateMigrationInputSQLServerSQLMISyncTaskProperties) AsValid
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMISyncTaskProperties.
 func (vmisssmstp ValidateMigrationInputSQLServerSQLMISyncTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMISyncTaskProperties.
+func (vmisssmstp ValidateMigrationInputSQLServerSQLMISyncTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -15487,6 +18854,11 @@ func (vmisssmstp ValidateMigrationInputSQLServerSQLMISyncTaskProperties) AsGetUs
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMISyncTaskProperties.
+func (vmisssmstp ValidateMigrationInputSQLServerSQLMISyncTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMISyncTaskProperties.
 func (vmisssmstp ValidateMigrationInputSQLServerSQLMISyncTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -15499,6 +18871,11 @@ func (vmisssmstp ValidateMigrationInputSQLServerSQLMISyncTaskProperties) AsConne
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMISyncTaskProperties.
 func (vmisssmstp ValidateMigrationInputSQLServerSQLMISyncTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMISyncTaskProperties.
+func (vmisssmstp ValidateMigrationInputSQLServerSQLMISyncTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -15529,6 +18906,21 @@ func (vmisssmstp ValidateMigrationInputSQLServerSQLMISyncTaskProperties) AsConne
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMISyncTaskProperties.
 func (vmisssmstp ValidateMigrationInputSQLServerSQLMISyncTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMISyncTaskProperties.
+func (vmisssmstp ValidateMigrationInputSQLServerSQLMISyncTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMISyncTaskProperties.
+func (vmisssmstp ValidateMigrationInputSQLServerSQLMISyncTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMISyncTaskProperties.
+func (vmisssmstp ValidateMigrationInputSQLServerSQLMISyncTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -15674,7 +19066,7 @@ type ValidateMigrationInputSQLServerSQLMITaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -15699,6 +19091,11 @@ func (vmisssmtp ValidateMigrationInputSQLServerSQLMITaskProperties) AsGetTdeCert
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMITaskProperties.
+func (vmisssmtp ValidateMigrationInputSQLServerSQLMITaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMITaskProperties.
 func (vmisssmtp ValidateMigrationInputSQLServerSQLMITaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return nil, false
@@ -15716,6 +19113,11 @@ func (vmisssmtp ValidateMigrationInputSQLServerSQLMITaskProperties) AsValidateMi
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMITaskProperties.
 func (vmisssmtp ValidateMigrationInputSQLServerSQLMITaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMITaskProperties.
+func (vmisssmtp ValidateMigrationInputSQLServerSQLMITaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -15779,6 +19181,11 @@ func (vmisssmtp ValidateMigrationInputSQLServerSQLMITaskProperties) AsGetUserTab
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMITaskProperties.
+func (vmisssmtp ValidateMigrationInputSQLServerSQLMITaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMITaskProperties.
 func (vmisssmtp ValidateMigrationInputSQLServerSQLMITaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -15791,6 +19198,11 @@ func (vmisssmtp ValidateMigrationInputSQLServerSQLMITaskProperties) AsConnectToT
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMITaskProperties.
 func (vmisssmtp ValidateMigrationInputSQLServerSQLMITaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMITaskProperties.
+func (vmisssmtp ValidateMigrationInputSQLServerSQLMITaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -15821,6 +19233,21 @@ func (vmisssmtp ValidateMigrationInputSQLServerSQLMITaskProperties) AsConnectToS
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMITaskProperties.
 func (vmisssmtp ValidateMigrationInputSQLServerSQLMITaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMITaskProperties.
+func (vmisssmtp ValidateMigrationInputSQLServerSQLMITaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMITaskProperties.
+func (vmisssmtp ValidateMigrationInputSQLServerSQLMITaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ValidateMigrationInputSQLServerSQLMITaskProperties.
+func (vmisssmtp ValidateMigrationInputSQLServerSQLMITaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -15925,7 +19352,7 @@ type ValidateMongoDbTaskProperties struct {
 	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
 	// ClientData - Key value pairs of client data to attach meta data information to task
 	ClientData map[string]*string `json:"clientData"`
-	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb'
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
 	TaskType TaskType `json:"taskType,omitempty"`
 }
 
@@ -15950,6 +19377,11 @@ func (vmdtp ValidateMongoDbTaskProperties) AsGetTdeCertificatesSQLTaskProperties
 	return nil, false
 }
 
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMongoDbTaskProperties.
+func (vmdtp ValidateMongoDbTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ValidateMongoDbTaskProperties.
 func (vmdtp ValidateMongoDbTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
 	return &vmdtp, true
@@ -15967,6 +19399,11 @@ func (vmdtp ValidateMongoDbTaskProperties) AsValidateMigrationInputSQLServerSQLM
 
 // AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMongoDbTaskProperties.
 func (vmdtp ValidateMongoDbTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMongoDbTaskProperties.
+func (vmdtp ValidateMongoDbTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -16030,6 +19467,11 @@ func (vmdtp ValidateMongoDbTaskProperties) AsGetUserTablesSQLTaskProperties() (*
 	return nil, false
 }
 
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMongoDbTaskProperties.
+func (vmdtp ValidateMongoDbTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
 // AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMongoDbTaskProperties.
 func (vmdtp ValidateMongoDbTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
 	return nil, false
@@ -16042,6 +19484,11 @@ func (vmdtp ValidateMongoDbTaskProperties) AsConnectToTargetSQLSQLDbSyncTaskProp
 
 // AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ValidateMongoDbTaskProperties.
 func (vmdtp ValidateMongoDbTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateMongoDbTaskProperties.
+func (vmdtp ValidateMongoDbTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
 	return nil, false
 }
 
@@ -16072,6 +19519,21 @@ func (vmdtp ValidateMongoDbTaskProperties) AsConnectToSourceMySQLTaskProperties(
 
 // AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ValidateMongoDbTaskProperties.
 func (vmdtp ValidateMongoDbTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ValidateMongoDbTaskProperties.
+func (vmdtp ValidateMongoDbTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ValidateMongoDbTaskProperties.
+func (vmdtp ValidateMongoDbTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ValidateMongoDbTaskProperties.
+func (vmdtp ValidateMongoDbTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
 	return nil, false
 }
 
@@ -16160,6 +19622,299 @@ func (vmdtp *ValidateMongoDbTaskProperties) UnmarshalJSON(body []byte) error {
 	}
 
 	return nil
+}
+
+// ValidateOracleAzureDbForPostgreSQLSyncTaskProperties properties for the task that validates a migration
+// for Oracle to Azure Database for PostgreSQL for online migrations
+type ValidateOracleAzureDbForPostgreSQLSyncTaskProperties struct {
+	Input *MigrateOracleAzureDbPostgreSQLSyncTaskInput `json:"input,omitempty"`
+	// Output - READ-ONLY; An array containing a single validation error response object
+	Output *[]ValidateOracleAzureDbPostgreSQLSyncTaskOutput `json:"output,omitempty"`
+	// Errors - READ-ONLY; Array of errors. This is ignored if submitted.
+	Errors *[]ODataError `json:"errors,omitempty"`
+	// State - READ-ONLY; The state of the task. This is ignored if submitted. Possible values include: 'TaskStateUnknown', 'TaskStateQueued', 'TaskStateRunning', 'TaskStateCanceled', 'TaskStateSucceeded', 'TaskStateFailed', 'TaskStateFailedInputValidation', 'TaskStateFaulted'
+	State TaskState `json:"state,omitempty"`
+	// Commands - READ-ONLY; Array of command properties.
+	Commands *[]BasicCommandProperties `json:"commands,omitempty"`
+	// ClientData - Key value pairs of client data to attach meta data information to task
+	ClientData map[string]*string `json:"clientData"`
+	// TaskType - Possible values include: 'TaskTypeUnknown', 'TaskTypeGetTDECertificatesSQL', 'TaskTypeValidateOracleAzureDbPostgreSQLSync', 'TaskTypeValidateMongoDb', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS', 'TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI', 'TaskTypeValidateMigrationInputSQLServerSQLDbSync', 'TaskTypeMigrateOracleSQLSync', 'TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync', 'TaskTypeMigrateMySQLAzureDbForMySQLSync', 'TaskTypeMigrateSQLServerAzureSQLDbSync', 'TaskTypeMigrateSQLServerSQLDb', 'TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS', 'TaskTypeMigrateSQLServerAzureSQLDbMI', 'TaskTypeMigrateMongoDb', 'TaskTypeConnectToTargetAzureDbForMySQL', 'TaskTypeConnectToTargetAzureSQLDbMISyncLRS', 'TaskTypeConnectToTargetAzureSQLDbMI', 'TaskTypeGetUserTablesAzureSQLDbSync', 'TaskTypeGetUserTablesSQL', 'TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetAzureDbForPostgreSQLSync', 'TaskTypeConnectToTargetSQLDbSync', 'TaskTypeConnectToTargetSQLDb', 'TaskTypeConnectToSourceOracleSync', 'TaskTypeConnectToSourcePostgreSQLSync', 'TaskTypeConnectToSourceSQLServerSync', 'TaskTypeConnectToSourceSQLServer', 'TaskTypeConnectMongoDb', 'TaskTypeConnectToSourceMySQL', 'TaskTypeMigrateSchemaSQLServerSQLDb', 'TaskTypeServiceCheckOCI', 'TaskTypeServiceUploadOCI', 'TaskTypeServiceInstallOCI'
+	TaskType TaskType `json:"taskType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) MarshalJSON() ([]byte, error) {
+	voadfpsstp.TaskType = TaskTypeValidateOracleAzureDbPostgreSQLSync
+	objectMap := make(map[string]interface{})
+	if voadfpsstp.Input != nil {
+		objectMap["input"] = voadfpsstp.Input
+	}
+	if voadfpsstp.ClientData != nil {
+		objectMap["clientData"] = voadfpsstp.ClientData
+	}
+	if voadfpsstp.TaskType != "" {
+		objectMap["taskType"] = voadfpsstp.TaskType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsGetTdeCertificatesSQLTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsGetTdeCertificatesSQLTaskProperties() (*GetTdeCertificatesSQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsValidateOracleAzureDbForPostgreSQLSyncTaskProperties() (*ValidateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return &voadfpsstp, true
+}
+
+// AsValidateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsValidateMongoDbTaskProperties() (*ValidateMongoDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMigrationInputSQLServerSQLMISyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsValidateMigrationInputSQLServerSQLMISyncTaskProperties() (*ValidateMigrationInputSQLServerSQLMISyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMigrationInputSQLServerSQLMITaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsValidateMigrationInputSQLServerSQLMITaskProperties() (*ValidateMigrationInputSQLServerSQLMITaskProperties, bool) {
+	return nil, false
+}
+
+// AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsValidateMigrationInputSQLServerSQLDbSyncTaskProperties() (*ValidateMigrationInputSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateOracleAzureDbForPostgreSQLSyncTaskProperties() (*MigrateOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties() (*MigratePostgreSQLAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateMySQLAzureDbForMySQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateMySQLAzureDbForMySQLSyncTaskProperties() (*MigrateMySQLAzureDbForMySQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateSQLServerSQLDbSyncTaskProperties() (*MigrateSQLServerSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateSQLServerSQLDbTaskProperties() (*MigrateSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLMISyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateSQLServerSQLMISyncTaskProperties() (*MigrateSQLServerSQLMISyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSQLServerSQLMITaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateSQLServerSQLMITaskProperties() (*MigrateSQLServerSQLMITaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateMongoDbTaskProperties() (*MigrateMongoDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetAzureDbForMySQLTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetAzureDbForMySQLTaskProperties() (*ConnectToTargetAzureDbForMySQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLMISyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetSQLMISyncTaskProperties() (*ConnectToTargetSQLMISyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLMITaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetSQLMITaskProperties() (*ConnectToTargetSQLMITaskProperties, bool) {
+	return nil, false
+}
+
+// AsGetUserTablesSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsGetUserTablesSQLSyncTaskProperties() (*GetUserTablesSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsGetUserTablesSQLTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsGetUserTablesSQLTaskProperties() (*GetUserTablesSQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetAzureDbForPostgreSQLSyncTaskProperties() (*ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLSQLDbSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetSQLSQLDbSyncTaskProperties() (*ConnectToTargetSQLSQLDbSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToTargetSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToTargetSQLDbTaskProperties() (*ConnectToTargetSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceOracleSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToSourceOracleSyncTaskProperties() (*ConnectToSourceOracleSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourcePostgreSQLSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToSourcePostgreSQLSyncTaskProperties() (*ConnectToSourcePostgreSQLSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceSQLServerSyncTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToSourceSQLServerSyncTaskProperties() (*ConnectToSourceSQLServerSyncTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceSQLServerTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToSourceSQLServerTaskProperties() (*ConnectToSourceSQLServerTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToMongoDbTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToMongoDbTaskProperties() (*ConnectToMongoDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsConnectToSourceMySQLTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsConnectToSourceMySQLTaskProperties() (*ConnectToSourceMySQLTaskProperties, bool) {
+	return nil, false
+}
+
+// AsMigrateSchemaSQLServerSQLDbTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsMigrateSchemaSQLServerSQLDbTaskProperties() (*MigrateSchemaSQLServerSQLDbTaskProperties, bool) {
+	return nil, false
+}
+
+// AsCheckOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsCheckOCIDriverTaskProperties() (*CheckOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsUploadOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsUploadOCIDriverTaskProperties() (*UploadOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsInstallOCIDriverTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsInstallOCIDriverTaskProperties() (*InstallOCIDriverTaskProperties, bool) {
+	return nil, false
+}
+
+// AsProjectTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsProjectTaskProperties() (*ProjectTaskProperties, bool) {
+	return nil, false
+}
+
+// AsBasicProjectTaskProperties is the BasicProjectTaskProperties implementation for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties.
+func (voadfpsstp ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) AsBasicProjectTaskProperties() (BasicProjectTaskProperties, bool) {
+	return &voadfpsstp, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for ValidateOracleAzureDbForPostgreSQLSyncTaskProperties struct.
+func (voadfpsstp *ValidateOracleAzureDbForPostgreSQLSyncTaskProperties) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "input":
+			if v != nil {
+				var input MigrateOracleAzureDbPostgreSQLSyncTaskInput
+				err = json.Unmarshal(*v, &input)
+				if err != nil {
+					return err
+				}
+				voadfpsstp.Input = &input
+			}
+		case "output":
+			if v != nil {
+				var output []ValidateOracleAzureDbPostgreSQLSyncTaskOutput
+				err = json.Unmarshal(*v, &output)
+				if err != nil {
+					return err
+				}
+				voadfpsstp.Output = &output
+			}
+		case "errors":
+			if v != nil {
+				var errorsVar []ODataError
+				err = json.Unmarshal(*v, &errorsVar)
+				if err != nil {
+					return err
+				}
+				voadfpsstp.Errors = &errorsVar
+			}
+		case "state":
+			if v != nil {
+				var state TaskState
+				err = json.Unmarshal(*v, &state)
+				if err != nil {
+					return err
+				}
+				voadfpsstp.State = state
+			}
+		case "commands":
+			if v != nil {
+				commands, err := unmarshalBasicCommandPropertiesArray(*v)
+				if err != nil {
+					return err
+				}
+				voadfpsstp.Commands = &commands
+			}
+		case "clientData":
+			if v != nil {
+				var clientData map[string]*string
+				err = json.Unmarshal(*v, &clientData)
+				if err != nil {
+					return err
+				}
+				voadfpsstp.ClientData = clientData
+			}
+		case "taskType":
+			if v != nil {
+				var taskType TaskType
+				err = json.Unmarshal(*v, &taskType)
+				if err != nil {
+					return err
+				}
+				voadfpsstp.TaskType = taskType
+			}
+		}
+	}
+
+	return nil
+}
+
+// ValidateOracleAzureDbPostgreSQLSyncTaskOutput output for task that validates migration input for Oracle
+// to Azure Database for PostgreSQL for online migrations
+type ValidateOracleAzureDbPostgreSQLSyncTaskOutput struct {
+	// ValidationErrors - READ-ONLY; Errors associated with a selected database object
+	ValidationErrors *[]ReportableException `json:"validationErrors,omitempty"`
 }
 
 // ValidateSyncMigrationInputSQLServerTaskInput input for task that validates migration input for SQL sync

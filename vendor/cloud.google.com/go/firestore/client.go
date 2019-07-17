@@ -169,10 +169,17 @@ func (c *Client) idsToRef(IDs []string, dbPath string) (*CollectionRef, *Documen
 	return coll, nil
 }
 
-// GetAll retrieves multiple documents with a single call. The DocumentSnapshots are
-// returned in the order of the given DocumentRefs.
+// GetAll retrieves multiple documents with a single call. The
+// DocumentSnapshots are returned in the order of the given DocumentRefs.
+// The return value will always contain the same number of DocumentSnapshots
+// as the number of DocumentRefs in the input.
 //
-// If a document is not present, the corresponding DocumentSnapshot's Exists method will return false.
+// If the same DocumentRef is specified multiple times in the input, the return
+// value will contain the same number of DocumentSnapshots referencing the same
+// document.
+//
+// If a document is not present, the corresponding DocumentSnapshot's Exists
+// method will return false.
 func (c *Client) GetAll(ctx context.Context, docRefs []*DocumentRef) (_ []*DocumentSnapshot, err error) {
 	ctx = trace.StartSpan(ctx, "cloud.google.com/go/firestore.GetAll")
 	defer func() { trace.EndSpan(ctx, err) }()
@@ -182,13 +189,13 @@ func (c *Client) GetAll(ctx context.Context, docRefs []*DocumentRef) (_ []*Docum
 
 func (c *Client) getAll(ctx context.Context, docRefs []*DocumentRef, tid []byte) ([]*DocumentSnapshot, error) {
 	var docNames []string
-	docIndex := map[string]int{} // doc name to position in docRefs
+	docIndices := map[string][]int{} // doc name to positions in docRefs
 	for i, dr := range docRefs {
 		if dr == nil {
 			return nil, errNilDocRef
 		}
 		docNames = append(docNames, dr.Path)
-		docIndex[dr.Path] = i
+		docIndices[dr.Path] = append(docIndices[dr.Path], i)
 	}
 	req := &pb.BatchGetDocumentsRequest{
 		Database:  c.path(),
@@ -215,30 +222,32 @@ func (c *Client) getAll(ctx context.Context, docRefs []*DocumentRef, tid []byte)
 		resps = append(resps, resp)
 	}
 
-	// Results may arrive out of order. Put each at the right index.
+	// Results may arrive out of order. Put each at the right indices.
 	docs := make([]*DocumentSnapshot, len(docNames))
 	for _, resp := range resps {
 		var (
-			i   int
-			doc *pb.Document
-			err error
+			indices []int
+			doc     *pb.Document
+			err     error
 		)
 		switch r := resp.Result.(type) {
 		case *pb.BatchGetDocumentsResponse_Found:
-			i = docIndex[r.Found.Name]
+			indices = docIndices[r.Found.Name]
 			doc = r.Found
 		case *pb.BatchGetDocumentsResponse_Missing:
-			i = docIndex[r.Missing]
+			indices = docIndices[r.Missing]
 			doc = nil
 		default:
 			return nil, errors.New("firestore: unknown BatchGetDocumentsResponse result type")
 		}
-		if docs[i] != nil {
-			return nil, fmt.Errorf("firestore: %q seen twice", docRefs[i].Path)
-		}
-		docs[i], err = newDocumentSnapshot(docRefs[i], doc, c, resp.ReadTime)
-		if err != nil {
-			return nil, err
+		for _, index := range indices {
+			if docs[index] != nil {
+				return nil, fmt.Errorf("firestore: %q seen twice", docRefs[index].Path)
+			}
+			docs[index], err = newDocumentSnapshot(docRefs[index], doc, c, resp.ReadTime)
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 	return docs, nil

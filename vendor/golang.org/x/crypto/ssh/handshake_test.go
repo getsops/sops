@@ -421,6 +421,9 @@ func TestHandshakeErrorHandlingWriteCoupled(t *testing.T) {
 // handshakeTransport deadlocks, the go runtime will detect it and
 // panic.
 func testHandshakeErrorHandlingN(t *testing.T, readLimit, writeLimit int, coupled bool) {
+	if runtime.GOOS == "js" && runtime.GOARCH == "wasm" {
+		t.Skip("skipping on js/wasm; see golang.org/issue/32840")
+	}
 	msg := Marshal(&serviceRequestMsg{strings.Repeat("x", int(minRekeyThreshold)/4)})
 
 	a, b := memPipe()

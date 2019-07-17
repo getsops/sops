@@ -106,7 +106,7 @@ func (s *Subscription) SeekToTime(ctx context.Context, t time.Time) error {
 	}
 	_, err = s.c.subc.Seek(ctx, &pb.SeekRequest{
 		Subscription: s.name,
-		Target:       &pb.SeekRequest_Time{ts},
+		Target:       &pb.SeekRequest_Time{Time: ts},
 	})
 	return err
 }
@@ -142,7 +142,7 @@ func (s *Subscription) CreateSnapshot(ctx context.Context, name string) (*Snapsh
 func (s *Subscription) SeekToSnapshot(ctx context.Context, snap *Snapshot) error {
 	_, err := s.c.subc.Seek(ctx, &pb.SeekRequest{
 		Subscription: s.name,
-		Target:       &pb.SeekRequest_Snapshot{snap.name},
+		Target:       &pb.SeekRequest_Snapshot{Snapshot: snap.name},
 	})
 	return err
 }

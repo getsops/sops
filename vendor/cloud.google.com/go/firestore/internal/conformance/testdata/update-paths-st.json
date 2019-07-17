@@ -1,0 +1,61 @@
+{
+  "tests": [
+    {
+      "description": "update-paths: ServerTimestamp with data",
+      "comment": "A key with the special ServerTimestamp sentinel is removed from\nthe data in the update operation. Instead it appears in a separate Transform operation.\nNote that in these tests, the string \"ServerTimestamp\" should be replaced with the\nspecial ServerTimestamp value.",
+      "updatePaths": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "fieldPaths": [
+          {
+            "field": [
+              "a"
+            ]
+          },
+          {
+            "field": [
+              "b"
+            ]
+          }
+        ],
+        "jsonValues": [
+          "1",
+          "\"ServerTimestamp\""
+        ],
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d",
+                "fields": {
+                  "a": {
+                    "integerValue": "1"
+                  }
+                }
+              },
+              "updateMask": {
+                "fieldPaths": [
+                  "a"
+                ]
+              },
+              "currentDocument": {
+                "exists": true
+              }
+            },
+            {
+              "transform": {
+                "document": "projects/projectID/databases/(default)/documents/C/d",
+                "fieldTransforms": [
+                  {
+                    "fieldPath": "b",
+                    "setToServerValue": "REQUEST_TIME"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

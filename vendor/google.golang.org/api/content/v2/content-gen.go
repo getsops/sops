@@ -1840,6 +1840,33 @@ func (s *Amount) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+type BusinessDayConfig struct {
+	// BusinessDays: Regular business days. May not be empty.
+	BusinessDays []string `json:"businessDays,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "BusinessDays") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "BusinessDays") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *BusinessDayConfig) MarshalJSON() ([]byte, error) {
+	type NoMethod BusinessDayConfig
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 type CarrierRate struct {
 	// CarrierName: Carrier service, such as "UPS" or "Fedex". The list of
 	// supported carriers can be retrieved via the getSupportedCarriers
@@ -2813,6 +2840,11 @@ type DeliveryTime struct {
 	// the cutoff time will be defaulted to 8AM PST.
 	CutoffTime *CutoffTime `json:"cutoffTime,omitempty"`
 
+	// HandlingBusinessDayConfig: The business days during which orders can
+	// be handled. If not provided, Monday to Friday business days will be
+	// assumed.
+	HandlingBusinessDayConfig *BusinessDayConfig `json:"handlingBusinessDayConfig,omitempty"`
+
 	// HolidayCutoffs: Holiday cutoff definitions. If configured, they
 	// specify order cutoff times for holiday-specific shipping.
 	HolidayCutoffs []*HolidayCutoff `json:"holidayCutoffs,omitempty"`
@@ -2834,13 +2866,18 @@ type DeliveryTime struct {
 
 	// MinTransitTimeInDays: Minimum number of business days that is spent
 	// in transit. 0 means same day delivery, 1 means next day delivery.
-	// Either {min,max}transitTimeInDays or transitTimeTable must be set,
+	// Either {min,max}TransitTimeInDays or transitTimeTable must be set,
 	// but not both.
 	MinTransitTimeInDays int64 `json:"minTransitTimeInDays,omitempty"`
 
+	// TransitBusinessDayConfig: The business days during which orders can
+	// be in-transit. If not provided, Monday to Friday business days will
+	// be assumed.
+	TransitBusinessDayConfig *BusinessDayConfig `json:"transitBusinessDayConfig,omitempty"`
+
 	// TransitTimeTable: Transit time table, number of business days spent
 	// in transit based on row and column dimensions. Either
-	// {min,max}transitTimeInDays or transitTimeTable can be set, but not
+	// {min,max}TransitTimeInDays or transitTimeTable can be set, but not
 	// both.
 	TransitTimeTable *TransitTable `json:"transitTimeTable,omitempty"`
 
@@ -5446,10 +5483,14 @@ type OrderShipment struct {
 	// - "lasership"
 	// - "mpx"
 	// - "uds"
+	// - "efw"
 	//
 	// Acceptable values for FR are:
 	// - "colissimo"
 	// - "chronopost"
+	// - "gls"
+	// - "dpd"
+	// - "bpost"
 	Carrier string `json:"carrier,omitempty"`
 
 	// CreationDate: Date on which the shipment has been created, in ISO
@@ -11133,6 +11174,9 @@ type TestOrderLineItemProduct struct {
 
 	// ContentLanguage: The two-letter ISO 639-1 language code for the item.
 	ContentLanguage string `json:"contentLanguage,omitempty"`
+
+	// Fees: Fees for the item. Optional.
+	Fees []*OrderLineItemProductFee `json:"fees,omitempty"`
 
 	// Gtin: Global Trade Item Number (GTIN) of the item. Optional.
 	Gtin string `json:"gtin,omitempty"`
@@ -21695,8 +21739,7 @@ func (c *OrdersListCall) PlacedDateStart(placedDateStart string) *OrdersListCall
 }
 
 // Statuses sets the optional parameter "statuses": Obtains orders that
-// match any of the specified statuses. Multiple values can be specified
-// with comma separation. Additionally, please note that active is a
+// match any of the specified statuses. Please note that active is a
 // shortcut for pendingShipment and partiallyShipped, and completed is a
 // shortcut for shipped, partiallyDelivered, delivered,
 // partiallyReturned, returned, and canceled.
@@ -21862,7 +21905,7 @@ func (c *OrdersListCall) Do(opts ...googleapi.CallOption) (*OrdersListResponse, 
 	//       "type": "string"
 	//     },
 	//     "statuses": {
-	//       "description": "Obtains orders that match any of the specified statuses. Multiple values can be specified with comma separation. Additionally, please note that active is a shortcut for pendingShipment and partiallyShipped, and completed is a shortcut for shipped, partiallyDelivered, delivered, partiallyReturned, returned, and canceled.",
+	//       "description": "Obtains orders that match any of the specified statuses. Please note that active is a shortcut for pendingShipment and partiallyShipped, and completed is a shortcut for shipped, partiallyDelivered, delivered, partiallyReturned, returned, and canceled.",
 	//       "enum": [
 	//         "active",
 	//         "canceled",

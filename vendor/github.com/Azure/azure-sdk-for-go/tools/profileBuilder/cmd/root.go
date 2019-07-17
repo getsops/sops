@@ -27,6 +27,7 @@ import (
 var (
 	clearOutputFlag bool
 	verboseFlag     bool
+	modulesFlag     bool
 	profileName     string
 	outputRootDir   string
 )
@@ -58,6 +59,7 @@ func Execute() {
 func init() {
 	rootCmd.PersistentFlags().BoolVarP(&clearOutputFlag, "clear-output", "c", false, "Removes any directories in the output-folder before writing a profile.")
 	rootCmd.PersistentFlags().BoolVarP(&verboseFlag, "verbose", "v", false, "Use stderr to log verbose output.")
+	rootCmd.PersistentFlags().BoolVarP(&modulesFlag, "modules", "m", false, "Executes commands in modules-aware mode.")
 	rootCmd.PersistentFlags().StringVarP(&profileName, "name", "n", "", "The name that should be used to identify the profile.")
 	rootCmd.PersistentFlags().StringVarP(&outputRootDir, "output-location", "o", "", "The folder in which to output the generated profile.")
 	rootCmd.MarkPersistentFlagRequired("name")

@@ -106,6 +106,14 @@ const (
 	Web        SQLImageSku = original.Web
 )
 
+type SQLManagementMode = original.SQLManagementMode
+
+const (
+	Full        SQLManagementMode = original.Full
+	LightWeight SQLManagementMode = original.LightWeight
+	NoAgent     SQLManagementMode = original.NoAgent
+)
+
 type SQLServerLicenseType = original.SQLServerLicenseType
 
 const (
@@ -269,6 +277,9 @@ func PossibleOperationOriginValues() []OperationOrigin {
 }
 func PossibleSQLImageSkuValues() []SQLImageSku {
 	return original.PossibleSQLImageSkuValues()
+}
+func PossibleSQLManagementModeValues() []SQLManagementMode {
+	return original.PossibleSQLManagementModeValues()
 }
 func PossibleSQLServerLicenseTypeValues() []SQLServerLicenseType {
 	return original.PossibleSQLServerLicenseTypeValues()

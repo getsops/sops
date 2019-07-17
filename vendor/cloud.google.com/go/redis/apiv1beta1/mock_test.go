@@ -111,6 +111,30 @@ func (s *mockCloudRedisServer) UpdateInstance(ctx context.Context, req *redispb.
 	return s.resps[0].(*longrunningpb.Operation), nil
 }
 
+func (s *mockCloudRedisServer) ImportInstance(ctx context.Context, req *redispb.ImportInstanceRequest) (*longrunningpb.Operation, error) {
+	md, _ := metadata.FromIncomingContext(ctx)
+	if xg := md["x-goog-api-client"]; len(xg) == 0 || !strings.Contains(xg[0], "gl-go/") {
+		return nil, fmt.Errorf("x-goog-api-client = %v, expected gl-go key", xg)
+	}
+	s.reqs = append(s.reqs, req)
+	if s.err != nil {
+		return nil, s.err
+	}
+	return s.resps[0].(*longrunningpb.Operation), nil
+}
+
+func (s *mockCloudRedisServer) ExportInstance(ctx context.Context, req *redispb.ExportInstanceRequest) (*longrunningpb.Operation, error) {
+	md, _ := metadata.FromIncomingContext(ctx)
+	if xg := md["x-goog-api-client"]; len(xg) == 0 || !strings.Contains(xg[0], "gl-go/") {
+		return nil, fmt.Errorf("x-goog-api-client = %v, expected gl-go key", xg)
+	}
+	s.reqs = append(s.reqs, req)
+	if s.err != nil {
+		return nil, s.err
+	}
+	return s.resps[0].(*longrunningpb.Operation), nil
+}
+
 func (s *mockCloudRedisServer) FailoverInstance(ctx context.Context, req *redispb.FailoverInstanceRequest) (*longrunningpb.Operation, error) {
 	md, _ := metadata.FromIncomingContext(ctx)
 	if xg := md["x-goog-api-client"]; len(xg) == 0 || !strings.Contains(xg[0], "gl-go/") {
@@ -249,19 +273,21 @@ func TestCloudRedisGetInstance(t *testing.T) {
 	var statusMessage string = "statusMessage-239442758"
 	var memorySizeGb int32 = 34199707
 	var authorizedNetwork string = "authorizedNetwork-1733809270"
+	var persistenceIamIdentity string = "persistenceIamIdentity1061944584"
 	var expectedResponse = &redispb.Instance{
-		Name:                  name2,
-		DisplayName:           displayName,
-		LocationId:            locationId,
-		AlternativeLocationId: alternativeLocationId,
-		RedisVersion:          redisVersion,
-		ReservedIpRange:       reservedIpRange,
-		Host:                  host,
-		Port:                  port,
-		CurrentLocationId:     currentLocationId,
-		StatusMessage:         statusMessage,
-		MemorySizeGb:          memorySizeGb,
-		AuthorizedNetwork:     authorizedNetwork,
+		Name:                   name2,
+		DisplayName:            displayName,
+		LocationId:             locationId,
+		AlternativeLocationId:  alternativeLocationId,
+		RedisVersion:           redisVersion,
+		ReservedIpRange:        reservedIpRange,
+		Host:                   host,
+		Port:                   port,
+		CurrentLocationId:      currentLocationId,
+		StatusMessage:          statusMessage,
+		MemorySizeGb:           memorySizeGb,
+		AuthorizedNetwork:      authorizedNetwork,
+		PersistenceIamIdentity: persistenceIamIdentity,
 	}
 
 	mockCloudRedis.err = nil
@@ -330,19 +356,21 @@ func TestCloudRedisCreateInstance(t *testing.T) {
 	var statusMessage string = "statusMessage-239442758"
 	var memorySizeGb2 int32 = 1493816946
 	var authorizedNetwork string = "authorizedNetwork-1733809270"
+	var persistenceIamIdentity string = "persistenceIamIdentity1061944584"
 	var expectedResponse = &redispb.Instance{
-		Name:                  name,
-		DisplayName:           displayName,
-		LocationId:            locationId,
-		AlternativeLocationId: alternativeLocationId,
-		RedisVersion:          redisVersion,
-		ReservedIpRange:       reservedIpRange,
-		Host:                  host,
-		Port:                  port,
-		CurrentLocationId:     currentLocationId,
-		StatusMessage:         statusMessage,
-		MemorySizeGb:          memorySizeGb2,
-		AuthorizedNetwork:     authorizedNetwork,
+		Name:                   name,
+		DisplayName:            displayName,
+		LocationId:             locationId,
+		AlternativeLocationId:  alternativeLocationId,
+		RedisVersion:           redisVersion,
+		ReservedIpRange:        reservedIpRange,
+		Host:                   host,
+		Port:                   port,
+		CurrentLocationId:      currentLocationId,
+		StatusMessage:          statusMessage,
+		MemorySizeGb:           memorySizeGb2,
+		AuthorizedNetwork:      authorizedNetwork,
+		PersistenceIamIdentity: persistenceIamIdentity,
 	}
 
 	mockCloudRedis.err = nil
@@ -455,19 +483,21 @@ func TestCloudRedisUpdateInstance(t *testing.T) {
 	var statusMessage string = "statusMessage-239442758"
 	var memorySizeGb2 int32 = 1493816946
 	var authorizedNetwork string = "authorizedNetwork-1733809270"
+	var persistenceIamIdentity string = "persistenceIamIdentity1061944584"
 	var expectedResponse = &redispb.Instance{
-		Name:                  name,
-		DisplayName:           displayName2,
-		LocationId:            locationId,
-		AlternativeLocationId: alternativeLocationId,
-		RedisVersion:          redisVersion,
-		ReservedIpRange:       reservedIpRange,
-		Host:                  host,
-		Port:                  port,
-		CurrentLocationId:     currentLocationId,
-		StatusMessage:         statusMessage,
-		MemorySizeGb:          memorySizeGb2,
-		AuthorizedNetwork:     authorizedNetwork,
+		Name:                   name,
+		DisplayName:            displayName2,
+		LocationId:             locationId,
+		AlternativeLocationId:  alternativeLocationId,
+		RedisVersion:           redisVersion,
+		ReservedIpRange:        reservedIpRange,
+		Host:                   host,
+		Port:                   port,
+		CurrentLocationId:      currentLocationId,
+		StatusMessage:          statusMessage,
+		MemorySizeGb:           memorySizeGb2,
+		AuthorizedNetwork:      authorizedNetwork,
+		PersistenceIamIdentity: persistenceIamIdentity,
 	}
 
 	mockCloudRedis.err = nil
@@ -573,8 +603,35 @@ func TestCloudRedisUpdateInstanceError(t *testing.T) {
 	}
 	_ = resp
 }
-func TestCloudRedisDeleteInstance(t *testing.T) {
-	var expectedResponse *emptypb.Empty = &emptypb.Empty{}
+func TestCloudRedisImportInstance(t *testing.T) {
+	var name2 string = "name2-1052831874"
+	var displayName string = "displayName1615086568"
+	var locationId string = "locationId552319461"
+	var alternativeLocationId string = "alternativeLocationId-718920621"
+	var redisVersion string = "redisVersion-685310444"
+	var reservedIpRange string = "reservedIpRange-1082940580"
+	var host string = "host3208616"
+	var port int32 = 3446913
+	var currentLocationId string = "currentLocationId1312712735"
+	var statusMessage string = "statusMessage-239442758"
+	var memorySizeGb int32 = 34199707
+	var authorizedNetwork string = "authorizedNetwork-1733809270"
+	var persistenceIamIdentity string = "persistenceIamIdentity1061944584"
+	var expectedResponse = &redispb.Instance{
+		Name:                   name2,
+		DisplayName:            displayName,
+		LocationId:             locationId,
+		AlternativeLocationId:  alternativeLocationId,
+		RedisVersion:           redisVersion,
+		ReservedIpRange:        reservedIpRange,
+		Host:                   host,
+		Port:                   port,
+		CurrentLocationId:      currentLocationId,
+		StatusMessage:          statusMessage,
+		MemorySizeGb:           memorySizeGb,
+		AuthorizedNetwork:      authorizedNetwork,
+		PersistenceIamIdentity: persistenceIamIdentity,
+	}
 
 	mockCloudRedis.err = nil
 	mockCloudRedis.reqs = nil
@@ -590,8 +647,10 @@ func TestCloudRedisDeleteInstance(t *testing.T) {
 	})
 
 	var formattedName string = fmt.Sprintf("projects/%s/locations/%s/instances/%s", "[PROJECT]", "[LOCATION]", "[INSTANCE]")
-	var request = &redispb.DeleteInstanceRequest{
-		Name: formattedName,
+	var inputConfig *redispb.InputConfig = &redispb.InputConfig{}
+	var request = &redispb.ImportInstanceRequest{
+		Name:        formattedName,
+		InputConfig: inputConfig,
 	}
 
 	c, err := NewCloudRedisClient(context.Background(), clientOpt)
@@ -599,11 +658,11 @@ func TestCloudRedisDeleteInstance(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	respLRO, err := c.DeleteInstance(context.Background(), request)
+	respLRO, err := c.ImportInstance(context.Background(), request)
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = respLRO.Wait(context.Background())
+	resp, err := respLRO.Wait(context.Background())
 
 	if err != nil {
 		t.Fatal(err)
@@ -613,9 +672,12 @@ func TestCloudRedisDeleteInstance(t *testing.T) {
 		t.Errorf("wrong request %q, want %q", got, want)
 	}
 
+	if want, got := expectedResponse, resp; !proto.Equal(want, got) {
+		t.Errorf("wrong response %q, want %q)", got, want)
+	}
 }
 
-func TestCloudRedisDeleteInstanceError(t *testing.T) {
+func TestCloudRedisImportInstanceError(t *testing.T) {
 	errCode := codes.PermissionDenied
 	mockCloudRedis.err = nil
 	mockCloudRedis.resps = append(mockCloudRedis.resps[:0], &longrunningpb.Operation{
@@ -630,8 +692,10 @@ func TestCloudRedisDeleteInstanceError(t *testing.T) {
 	})
 
 	var formattedName string = fmt.Sprintf("projects/%s/locations/%s/instances/%s", "[PROJECT]", "[LOCATION]", "[INSTANCE]")
-	var request = &redispb.DeleteInstanceRequest{
-		Name: formattedName,
+	var inputConfig *redispb.InputConfig = &redispb.InputConfig{}
+	var request = &redispb.ImportInstanceRequest{
+		Name:        formattedName,
+		InputConfig: inputConfig,
 	}
 
 	c, err := NewCloudRedisClient(context.Background(), clientOpt)
@@ -639,17 +703,131 @@ func TestCloudRedisDeleteInstanceError(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	respLRO, err := c.DeleteInstance(context.Background(), request)
+	respLRO, err := c.ImportInstance(context.Background(), request)
 	if err != nil {
 		t.Fatal(err)
 	}
-	err = respLRO.Wait(context.Background())
+	resp, err := respLRO.Wait(context.Background())
 
 	if st, ok := gstatus.FromError(err); !ok {
 		t.Errorf("got error %v, expected grpc error", err)
 	} else if c := st.Code(); c != errCode {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
+	_ = resp
+}
+func TestCloudRedisExportInstance(t *testing.T) {
+	var name2 string = "name2-1052831874"
+	var displayName string = "displayName1615086568"
+	var locationId string = "locationId552319461"
+	var alternativeLocationId string = "alternativeLocationId-718920621"
+	var redisVersion string = "redisVersion-685310444"
+	var reservedIpRange string = "reservedIpRange-1082940580"
+	var host string = "host3208616"
+	var port int32 = 3446913
+	var currentLocationId string = "currentLocationId1312712735"
+	var statusMessage string = "statusMessage-239442758"
+	var memorySizeGb int32 = 34199707
+	var authorizedNetwork string = "authorizedNetwork-1733809270"
+	var persistenceIamIdentity string = "persistenceIamIdentity1061944584"
+	var expectedResponse = &redispb.Instance{
+		Name:                   name2,
+		DisplayName:            displayName,
+		LocationId:             locationId,
+		AlternativeLocationId:  alternativeLocationId,
+		RedisVersion:           redisVersion,
+		ReservedIpRange:        reservedIpRange,
+		Host:                   host,
+		Port:                   port,
+		CurrentLocationId:      currentLocationId,
+		StatusMessage:          statusMessage,
+		MemorySizeGb:           memorySizeGb,
+		AuthorizedNetwork:      authorizedNetwork,
+		PersistenceIamIdentity: persistenceIamIdentity,
+	}
+
+	mockCloudRedis.err = nil
+	mockCloudRedis.reqs = nil
+
+	any, err := ptypes.MarshalAny(expectedResponse)
+	if err != nil {
+		t.Fatal(err)
+	}
+	mockCloudRedis.resps = append(mockCloudRedis.resps[:0], &longrunningpb.Operation{
+		Name:   "longrunning-test",
+		Done:   true,
+		Result: &longrunningpb.Operation_Response{Response: any},
+	})
+
+	var formattedName string = fmt.Sprintf("projects/%s/locations/%s/instances/%s", "[PROJECT]", "[LOCATION]", "[INSTANCE]")
+	var outputConfig *redispb.OutputConfig = &redispb.OutputConfig{}
+	var request = &redispb.ExportInstanceRequest{
+		Name:         formattedName,
+		OutputConfig: outputConfig,
+	}
+
+	c, err := NewCloudRedisClient(context.Background(), clientOpt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	respLRO, err := c.ExportInstance(context.Background(), request)
+	if err != nil {
+		t.Fatal(err)
+	}
+	resp, err := respLRO.Wait(context.Background())
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if want, got := request, mockCloudRedis.reqs[0]; !proto.Equal(want, got) {
+		t.Errorf("wrong request %q, want %q", got, want)
+	}
+
+	if want, got := expectedResponse, resp; !proto.Equal(want, got) {
+		t.Errorf("wrong response %q, want %q)", got, want)
+	}
+}
+
+func TestCloudRedisExportInstanceError(t *testing.T) {
+	errCode := codes.PermissionDenied
+	mockCloudRedis.err = nil
+	mockCloudRedis.resps = append(mockCloudRedis.resps[:0], &longrunningpb.Operation{
+		Name: "longrunning-test",
+		Done: true,
+		Result: &longrunningpb.Operation_Error{
+			Error: &status.Status{
+				Code:    int32(errCode),
+				Message: "test error",
+			},
+		},
+	})
+
+	var formattedName string = fmt.Sprintf("projects/%s/locations/%s/instances/%s", "[PROJECT]", "[LOCATION]", "[INSTANCE]")
+	var outputConfig *redispb.OutputConfig = &redispb.OutputConfig{}
+	var request = &redispb.ExportInstanceRequest{
+		Name:         formattedName,
+		OutputConfig: outputConfig,
+	}
+
+	c, err := NewCloudRedisClient(context.Background(), clientOpt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	respLRO, err := c.ExportInstance(context.Background(), request)
+	if err != nil {
+		t.Fatal(err)
+	}
+	resp, err := respLRO.Wait(context.Background())
+
+	if st, ok := gstatus.FromError(err); !ok {
+		t.Errorf("got error %v, expected grpc error", err)
+	} else if c := st.Code(); c != errCode {
+		t.Errorf("got error code %q, want %q", c, errCode)
+	}
+	_ = resp
 }
 func TestCloudRedisFailoverInstance(t *testing.T) {
 	var name2 string = "name2-1052831874"
@@ -664,19 +842,21 @@ func TestCloudRedisFailoverInstance(t *testing.T) {
 	var statusMessage string = "statusMessage-239442758"
 	var memorySizeGb int32 = 34199707
 	var authorizedNetwork string = "authorizedNetwork-1733809270"
+	var persistenceIamIdentity string = "persistenceIamIdentity1061944584"
 	var expectedResponse = &redispb.Instance{
-		Name:                  name2,
-		DisplayName:           displayName,
-		LocationId:            locationId,
-		AlternativeLocationId: alternativeLocationId,
-		RedisVersion:          redisVersion,
-		ReservedIpRange:       reservedIpRange,
-		Host:                  host,
-		Port:                  port,
-		CurrentLocationId:     currentLocationId,
-		StatusMessage:         statusMessage,
-		MemorySizeGb:          memorySizeGb,
-		AuthorizedNetwork:     authorizedNetwork,
+		Name:                   name2,
+		DisplayName:            displayName,
+		LocationId:             locationId,
+		AlternativeLocationId:  alternativeLocationId,
+		RedisVersion:           redisVersion,
+		ReservedIpRange:        reservedIpRange,
+		Host:                   host,
+		Port:                   port,
+		CurrentLocationId:      currentLocationId,
+		StatusMessage:          statusMessage,
+		MemorySizeGb:           memorySizeGb,
+		AuthorizedNetwork:      authorizedNetwork,
+		PersistenceIamIdentity: persistenceIamIdentity,
 	}
 
 	mockCloudRedis.err = nil
@@ -761,4 +941,82 @@ func TestCloudRedisFailoverInstanceError(t *testing.T) {
 		t.Errorf("got error code %q, want %q", c, errCode)
 	}
 	_ = resp
+}
+func TestCloudRedisDeleteInstance(t *testing.T) {
+	var expectedResponse *emptypb.Empty = &emptypb.Empty{}
+
+	mockCloudRedis.err = nil
+	mockCloudRedis.reqs = nil
+
+	any, err := ptypes.MarshalAny(expectedResponse)
+	if err != nil {
+		t.Fatal(err)
+	}
+	mockCloudRedis.resps = append(mockCloudRedis.resps[:0], &longrunningpb.Operation{
+		Name:   "longrunning-test",
+		Done:   true,
+		Result: &longrunningpb.Operation_Response{Response: any},
+	})
+
+	var formattedName string = fmt.Sprintf("projects/%s/locations/%s/instances/%s", "[PROJECT]", "[LOCATION]", "[INSTANCE]")
+	var request = &redispb.DeleteInstanceRequest{
+		Name: formattedName,
+	}
+
+	c, err := NewCloudRedisClient(context.Background(), clientOpt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	respLRO, err := c.DeleteInstance(context.Background(), request)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = respLRO.Wait(context.Background())
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if want, got := request, mockCloudRedis.reqs[0]; !proto.Equal(want, got) {
+		t.Errorf("wrong request %q, want %q", got, want)
+	}
+
+}
+
+func TestCloudRedisDeleteInstanceError(t *testing.T) {
+	errCode := codes.PermissionDenied
+	mockCloudRedis.err = nil
+	mockCloudRedis.resps = append(mockCloudRedis.resps[:0], &longrunningpb.Operation{
+		Name: "longrunning-test",
+		Done: true,
+		Result: &longrunningpb.Operation_Error{
+			Error: &status.Status{
+				Code:    int32(errCode),
+				Message: "test error",
+			},
+		},
+	})
+
+	var formattedName string = fmt.Sprintf("projects/%s/locations/%s/instances/%s", "[PROJECT]", "[LOCATION]", "[INSTANCE]")
+	var request = &redispb.DeleteInstanceRequest{
+		Name: formattedName,
+	}
+
+	c, err := NewCloudRedisClient(context.Background(), clientOpt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	respLRO, err := c.DeleteInstance(context.Background(), request)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = respLRO.Wait(context.Background())
+
+	if st, ok := gstatus.FromError(err); !ok {
+		t.Errorf("got error %v, expected grpc error", err)
+	} else if c := st.Code(); c != errCode {
+		t.Errorf("got error code %q, want %q", c, errCode)
+	}
 }

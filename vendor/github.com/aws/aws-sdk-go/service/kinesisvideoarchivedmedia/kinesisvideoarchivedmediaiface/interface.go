@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // Amazon Kinesis Video Streams Archived Media.
 //    func myFunc(svc kinesisvideoarchivedmediaiface.KinesisVideoArchivedMediaAPI) bool {
-//        // Make svc.GetHLSStreamingSessionURL request
+//        // Make svc.GetDASHStreamingSessionURL request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockKinesisVideoArchivedMediaClient struct {
 //        kinesisvideoarchivedmediaiface.KinesisVideoArchivedMediaAPI
 //    }
-//    func (m *mockKinesisVideoArchivedMediaClient) GetHLSStreamingSessionURL(input *kinesisvideoarchivedmedia.GetHLSStreamingSessionURLInput) (*kinesisvideoarchivedmedia.GetHLSStreamingSessionURLOutput, error) {
+//    func (m *mockKinesisVideoArchivedMediaClient) GetDASHStreamingSessionURL(input *kinesisvideoarchivedmedia.GetDASHStreamingSessionURLInput) (*kinesisvideoarchivedmedia.GetDASHStreamingSessionURLOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,10 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type KinesisVideoArchivedMediaAPI interface {
+	GetDASHStreamingSessionURL(*kinesisvideoarchivedmedia.GetDASHStreamingSessionURLInput) (*kinesisvideoarchivedmedia.GetDASHStreamingSessionURLOutput, error)
+	GetDASHStreamingSessionURLWithContext(aws.Context, *kinesisvideoarchivedmedia.GetDASHStreamingSessionURLInput, ...request.Option) (*kinesisvideoarchivedmedia.GetDASHStreamingSessionURLOutput, error)
+	GetDASHStreamingSessionURLRequest(*kinesisvideoarchivedmedia.GetDASHStreamingSessionURLInput) (*request.Request, *kinesisvideoarchivedmedia.GetDASHStreamingSessionURLOutput)
+
 	GetHLSStreamingSessionURL(*kinesisvideoarchivedmedia.GetHLSStreamingSessionURLInput) (*kinesisvideoarchivedmedia.GetHLSStreamingSessionURLOutput, error)
 	GetHLSStreamingSessionURLWithContext(aws.Context, *kinesisvideoarchivedmedia.GetHLSStreamingSessionURLInput, ...request.Option) (*kinesisvideoarchivedmedia.GetHLSStreamingSessionURLOutput, error)
 	GetHLSStreamingSessionURLRequest(*kinesisvideoarchivedmedia.GetHLSStreamingSessionURLInput) (*request.Request, *kinesisvideoarchivedmedia.GetHLSStreamingSessionURLOutput)
@@ -71,6 +75,9 @@ type KinesisVideoArchivedMediaAPI interface {
 	ListFragments(*kinesisvideoarchivedmedia.ListFragmentsInput) (*kinesisvideoarchivedmedia.ListFragmentsOutput, error)
 	ListFragmentsWithContext(aws.Context, *kinesisvideoarchivedmedia.ListFragmentsInput, ...request.Option) (*kinesisvideoarchivedmedia.ListFragmentsOutput, error)
 	ListFragmentsRequest(*kinesisvideoarchivedmedia.ListFragmentsInput) (*request.Request, *kinesisvideoarchivedmedia.ListFragmentsOutput)
+
+	ListFragmentsPages(*kinesisvideoarchivedmedia.ListFragmentsInput, func(*kinesisvideoarchivedmedia.ListFragmentsOutput, bool) bool) error
+	ListFragmentsPagesWithContext(aws.Context, *kinesisvideoarchivedmedia.ListFragmentsInput, func(*kinesisvideoarchivedmedia.ListFragmentsOutput, bool) bool, ...request.Option) error
 }
 
 var _ KinesisVideoArchivedMediaAPI = (*kinesisvideoarchivedmedia.KinesisVideoArchivedMedia)(nil)

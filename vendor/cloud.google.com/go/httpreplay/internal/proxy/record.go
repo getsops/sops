@@ -93,12 +93,6 @@ func ForRecording(filename string, port int) (*Proxy, error) {
 	return p, nil
 }
 
-type hideTransport http.Transport
-
-func (t *hideTransport) RoundTrip(req *http.Request) (*http.Response, error) {
-	return (*http.Transport)(t).RoundTrip(req)
-}
-
 var (
 	configOnce sync.Once
 	cert       *x509.Certificate
@@ -137,7 +131,7 @@ func newProxy(filename string) (*Proxy, error) {
 }
 
 func (p *Proxy) start(port int) error {
-	l, err := net.Listen("tcp4", fmt.Sprintf(":%d", port))
+	l, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {
 		return err
 	}

@@ -2181,6 +2181,7 @@
         "NodeGroupId":{"shape":"String"},
         "Status":{"shape":"String"},
         "PrimaryEndpoint":{"shape":"Endpoint"},
+        "ReaderEndpoint":{"shape":"Endpoint"},
         "Slots":{"shape":"String"},
         "NodeGroupMembers":{"shape":"NodeGroupMemberList"}
       }

@@ -18,6 +18,7 @@
 package proftest
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -129,6 +130,7 @@ type InstanceConfig struct {
 	MachineType   string
 	ImageProject  string
 	ImageFamily   string
+	Scopes        []string
 }
 
 // ClusterConfig is configuration for starting single GKE cluster for profiling
@@ -142,6 +144,15 @@ type ClusterConfig struct {
 	ImageName       string
 	Bucket          string
 	Dockerfile      string
+}
+
+// queryProfileRequest is the request format for querying the profile server.
+type queryProfileRequest struct {
+	StartTime        string            `json:"startTime"`
+	EndTime          string            `json:"endTime"`
+	ProfileType      string            `json:"profileType"`
+	Target           string            `json:"target"`
+	DeploymentLabels map[string]string `json:"deploymentLabels,omitempty"`
 }
 
 // CheckNonEmpty returns nil if the profile has a profiles and deployments
@@ -244,10 +255,8 @@ func (tr *GCETestRunner) StartInstance(ctx context.Context, inst *InstanceConfig
 			}},
 		},
 		ServiceAccounts: []*compute.ServiceAccount{{
-			Email: "default",
-			Scopes: []string{
-				monitorWriteScope,
-			},
+			Email:  "default",
+			Scopes: append(inst.Scopes, monitorWriteScope),
 		}},
 	}).Do()
 
@@ -340,12 +349,33 @@ func (tr *GCETestRunner) PollForSerialOutput(ctx context.Context, inst *Instance
 // QueryProfiles retrieves profiles of a specific type, from a specific time
 // range, associated with a particular service and project.
 func (tr *TestRunner) QueryProfiles(projectID, service, startTime, endTime, profileType string) (ProfileResponse, error) {
+	return tr.QueryProfilesWithZone(projectID, service, startTime, endTime, profileType, "")
+}
+
+// QueryProfilesWithZone retrieves profiles of a specific type, from a specific
+// time range, in a specified zone, associated with a particular service
+// and project.
+func (tr *TestRunner) QueryProfilesWithZone(projectID, service, startTime, endTime, profileType, zone string) (ProfileResponse, error) {
 	queryURL := fmt.Sprintf("https://cloudprofiler.googleapis.com/v2/projects/%s/profiles:query", projectID)
-	const queryJSONFmt = `{"endTime": "%s", "profileType": "%s","startTime": "%s", "target": "%s"}`
+	deploymentLabels := map[string]string{}
+	if zone != "" {
+		deploymentLabels["zone"] = zone
+	}
 
-	queryRequest := fmt.Sprintf(queryJSONFmt, endTime, profileType, startTime, service)
+	qpr := queryProfileRequest{
+		StartTime:        startTime,
+		EndTime:          endTime,
+		ProfileType:      profileType,
+		Target:           service,
+		DeploymentLabels: deploymentLabels,
+	}
 
-	req, err := http.NewRequest("POST", queryURL, strings.NewReader(queryRequest))
+	queryJSON, err := json.Marshal(qpr)
+	if err != nil {
+		return ProfileResponse{}, fmt.Errorf("failed to marshall request to JSON: %v", err)
+	}
+
+	req, err := http.NewRequest("POST", queryURL, bytes.NewReader(queryJSON))
 	if err != nil {
 		return ProfileResponse{}, fmt.Errorf("failed to create an API request: %v", err)
 	}

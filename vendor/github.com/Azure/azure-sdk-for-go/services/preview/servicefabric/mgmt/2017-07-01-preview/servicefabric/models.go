@@ -1139,7 +1139,7 @@ type ClusterUpgradeDeltaHealthPolicy struct {
 type ClusterUpgradePolicy struct {
 	// ForceRestart - If true, then processes are forcefully restarted during upgrade even when the code version has not changed (the upgrade only changes configuration or data).
 	ForceRestart *bool `json:"forceRestart,omitempty"`
-	// UpgradeReplicaSetCheckTimeout - The maximum amount of time to block processing of an upgrade domain and revent loss of availability when there are unexpected issues. When this timeout expires, processing of the upgrade domain will proceed regardless of availability loss issues. The timeout is reset at the start of each upgrade domain. The timeout can be in either hh:mm:ss or in d.hh:mm:ss.ms format.
+	// UpgradeReplicaSetCheckTimeout - The maximum amount of time to block processing of an upgrade domain and prevent loss of availability when there are unexpected issues. When this timeout expires, processing of the upgrade domain will proceed regardless of availability loss issues. The timeout is reset at the start of each upgrade domain. The timeout can be in either hh:mm:ss or in d.hh:mm:ss.ms format.
 	UpgradeReplicaSetCheckTimeout *string `json:"upgradeReplicaSetCheckTimeout,omitempty"`
 	// HealthCheckWaitDuration - The length of time to wait after completing an upgrade domain before performing health checks. The duration can be in either hh:mm:ss or in d.hh:mm:ss.ms format.
 	HealthCheckWaitDuration *string `json:"healthCheckWaitDuration,omitempty"`
@@ -1266,7 +1266,7 @@ type NodeTypeDescription struct {
 	DurabilityLevel DurabilityLevel `json:"durabilityLevel,omitempty"`
 	// ApplicationPorts - The range of ports from which cluster assigned port to Service Fabric applications.
 	ApplicationPorts *EndpointRangeDescription `json:"applicationPorts,omitempty"`
-	// EphemeralPorts - The range of empheral ports that nodes in this node type should be configured with.
+	// EphemeralPorts - The range of ephemeral ports that nodes in this node type should be configured with.
 	EphemeralPorts *EndpointRangeDescription `json:"ephemeralPorts,omitempty"`
 	// IsPrimary - The node type on which system services will run. Only one node type should be marked as primary. Primary node type cannot be deleted or changed for existing clusters.
 	IsPrimary *bool `json:"isPrimary,omitempty"`
@@ -2168,7 +2168,7 @@ type ServiceTypeHealthPolicy struct {
 	// The percentage is calculated by dividing the number of unhealthy replicas over the total number of replicas in the partition.
 	// The computation rounds up to tolerate one failure on small numbers of replicas. Default percentage is zero.
 	MaxPercentUnhealthyReplicasPerPartition *int32 `json:"MaxPercentUnhealthyReplicasPerPartition,omitempty"`
-	// MaxPercentUnhealthyServices - The maximum maximum allowed percentage of unhealthy services. Allowed values are Byte values from zero to 100.
+	// MaxPercentUnhealthyServices - The maximum allowed percentage of unhealthy services. Allowed values are Byte values from zero to 100.
 	// The percentage represents the maximum tolerated percentage of services that can be unhealthy before the application is considered in error.
 	// If the percentage is respected but there is at least one unhealthy service, the health is evaluated as Warning.
 	// This is calculated by dividing the number of unhealthy services of the specific service type over the total number of services of the specific service type.

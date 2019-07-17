@@ -68,21 +68,6 @@ func PossibleAuthorizationTypeValues() []AuthorizationType {
 	return []AuthorizationType{AuthorizationTypeKey, AuthorizationTypeLinkedIntegrationRuntimeProperties, AuthorizationTypeRBAC}
 }
 
-// AzureSearchIndexWriteBehaviorType enumerates the values for azure search index write behavior type.
-type AzureSearchIndexWriteBehaviorType string
-
-const (
-	// Merge ...
-	Merge AzureSearchIndexWriteBehaviorType = "Merge"
-	// Upload ...
-	Upload AzureSearchIndexWriteBehaviorType = "Upload"
-)
-
-// PossibleAzureSearchIndexWriteBehaviorTypeValues returns an array of possible values for the AzureSearchIndexWriteBehaviorType const type.
-func PossibleAzureSearchIndexWriteBehaviorTypeValues() []AzureSearchIndexWriteBehaviorType {
-	return []AzureSearchIndexWriteBehaviorType{Merge, Upload}
-}
-
 // BlobEventTypes enumerates the values for blob event types.
 type BlobEventTypes string
 
@@ -96,69 +81,6 @@ const (
 // PossibleBlobEventTypesValues returns an array of possible values for the BlobEventTypes const type.
 func PossibleBlobEventTypesValues() []BlobEventTypes {
 	return []BlobEventTypes{MicrosoftStorageBlobCreated, MicrosoftStorageBlobDeleted}
-}
-
-// CassandraSourceReadConsistencyLevels enumerates the values for cassandra source read consistency levels.
-type CassandraSourceReadConsistencyLevels string
-
-const (
-	// ALL ...
-	ALL CassandraSourceReadConsistencyLevels = "ALL"
-	// EACHQUORUM ...
-	EACHQUORUM CassandraSourceReadConsistencyLevels = "EACH_QUORUM"
-	// LOCALONE ...
-	LOCALONE CassandraSourceReadConsistencyLevels = "LOCAL_ONE"
-	// LOCALQUORUM ...
-	LOCALQUORUM CassandraSourceReadConsistencyLevels = "LOCAL_QUORUM"
-	// LOCALSERIAL ...
-	LOCALSERIAL CassandraSourceReadConsistencyLevels = "LOCAL_SERIAL"
-	// ONE ...
-	ONE CassandraSourceReadConsistencyLevels = "ONE"
-	// QUORUM ...
-	QUORUM CassandraSourceReadConsistencyLevels = "QUORUM"
-	// SERIAL ...
-	SERIAL CassandraSourceReadConsistencyLevels = "SERIAL"
-	// THREE ...
-	THREE CassandraSourceReadConsistencyLevels = "THREE"
-	// TWO ...
-	TWO CassandraSourceReadConsistencyLevels = "TWO"
-)
-
-// PossibleCassandraSourceReadConsistencyLevelsValues returns an array of possible values for the CassandraSourceReadConsistencyLevels const type.
-func PossibleCassandraSourceReadConsistencyLevelsValues() []CassandraSourceReadConsistencyLevels {
-	return []CassandraSourceReadConsistencyLevels{ALL, EACHQUORUM, LOCALONE, LOCALQUORUM, LOCALSERIAL, ONE, QUORUM, SERIAL, THREE, TWO}
-}
-
-// CopyBehaviorType enumerates the values for copy behavior type.
-type CopyBehaviorType string
-
-const (
-	// FlattenHierarchy ...
-	FlattenHierarchy CopyBehaviorType = "FlattenHierarchy"
-	// MergeFiles ...
-	MergeFiles CopyBehaviorType = "MergeFiles"
-	// PreserveHierarchy ...
-	PreserveHierarchy CopyBehaviorType = "PreserveHierarchy"
-)
-
-// PossibleCopyBehaviorTypeValues returns an array of possible values for the CopyBehaviorType const type.
-func PossibleCopyBehaviorTypeValues() []CopyBehaviorType {
-	return []CopyBehaviorType{FlattenHierarchy, MergeFiles, PreserveHierarchy}
-}
-
-// DatasetCompressionLevel enumerates the values for dataset compression level.
-type DatasetCompressionLevel string
-
-const (
-	// Fastest ...
-	Fastest DatasetCompressionLevel = "Fastest"
-	// Optimal ...
-	Optimal DatasetCompressionLevel = "Optimal"
-)
-
-// PossibleDatasetCompressionLevelValues returns an array of possible values for the DatasetCompressionLevel const type.
-func PossibleDatasetCompressionLevelValues() []DatasetCompressionLevel {
-	return []DatasetCompressionLevel{Fastest, Optimal}
 }
 
 // DayOfWeek enumerates the values for day of week.
@@ -441,6 +363,21 @@ func PossibleIntegrationRuntimeEditionValues() []IntegrationRuntimeEdition {
 	return []IntegrationRuntimeEdition{Enterprise, Standard}
 }
 
+// IntegrationRuntimeEntityReferenceType enumerates the values for integration runtime entity reference type.
+type IntegrationRuntimeEntityReferenceType string
+
+const (
+	// IntegrationRuntimeEntityReferenceTypeIntegrationRuntimeReference ...
+	IntegrationRuntimeEntityReferenceTypeIntegrationRuntimeReference IntegrationRuntimeEntityReferenceType = "IntegrationRuntimeReference"
+	// IntegrationRuntimeEntityReferenceTypeLinkedServiceReference ...
+	IntegrationRuntimeEntityReferenceTypeLinkedServiceReference IntegrationRuntimeEntityReferenceType = "LinkedServiceReference"
+)
+
+// PossibleIntegrationRuntimeEntityReferenceTypeValues returns an array of possible values for the IntegrationRuntimeEntityReferenceType const type.
+func PossibleIntegrationRuntimeEntityReferenceTypeValues() []IntegrationRuntimeEntityReferenceType {
+	return []IntegrationRuntimeEntityReferenceType{IntegrationRuntimeEntityReferenceTypeIntegrationRuntimeReference, IntegrationRuntimeEntityReferenceTypeLinkedServiceReference}
+}
+
 // IntegrationRuntimeInternalChannelEncryptionMode enumerates the values for integration runtime internal
 // channel encryption mode.
 type IntegrationRuntimeInternalChannelEncryptionMode string
@@ -707,21 +644,6 @@ func PossiblePipelineRunQueryOrderByFieldValues() []PipelineRunQueryOrderByField
 	return []PipelineRunQueryOrderByField{PipelineRunQueryOrderByFieldRunEnd, PipelineRunQueryOrderByFieldRunStart}
 }
 
-// PolybaseSettingsRejectType enumerates the values for polybase settings reject type.
-type PolybaseSettingsRejectType string
-
-const (
-	// Percentage ...
-	Percentage PolybaseSettingsRejectType = "percentage"
-	// Value ...
-	Value PolybaseSettingsRejectType = "value"
-)
-
-// PossiblePolybaseSettingsRejectTypeValues returns an array of possible values for the PolybaseSettingsRejectType const type.
-func PossiblePolybaseSettingsRejectTypeValues() []PolybaseSettingsRejectType {
-	return []PolybaseSettingsRejectType{Percentage, Value}
-}
-
 // PrestoAuthenticationType enumerates the values for presto authentication type.
 type PrestoAuthenticationType string
 
@@ -760,51 +682,6 @@ const (
 // PossibleRecurrenceFrequencyValues returns an array of possible values for the RecurrenceFrequency const type.
 func PossibleRecurrenceFrequencyValues() []RecurrenceFrequency {
 	return []RecurrenceFrequency{Day, Hour, Minute, Month, NotSpecified, Week, Year}
-}
-
-// SalesforceSinkWriteBehavior enumerates the values for salesforce sink write behavior.
-type SalesforceSinkWriteBehavior string
-
-const (
-	// Insert ...
-	Insert SalesforceSinkWriteBehavior = "Insert"
-	// Upsert ...
-	Upsert SalesforceSinkWriteBehavior = "Upsert"
-)
-
-// PossibleSalesforceSinkWriteBehaviorValues returns an array of possible values for the SalesforceSinkWriteBehavior const type.
-func PossibleSalesforceSinkWriteBehaviorValues() []SalesforceSinkWriteBehavior {
-	return []SalesforceSinkWriteBehavior{Insert, Upsert}
-}
-
-// SalesforceSourceReadBehavior enumerates the values for salesforce source read behavior.
-type SalesforceSourceReadBehavior string
-
-const (
-	// Query ...
-	Query SalesforceSourceReadBehavior = "Query"
-	// QueryAll ...
-	QueryAll SalesforceSourceReadBehavior = "QueryAll"
-)
-
-// PossibleSalesforceSourceReadBehaviorValues returns an array of possible values for the SalesforceSourceReadBehavior const type.
-func PossibleSalesforceSourceReadBehaviorValues() []SalesforceSourceReadBehavior {
-	return []SalesforceSourceReadBehavior{Query, QueryAll}
-}
-
-// SapCloudForCustomerSinkWriteBehavior enumerates the values for sap cloud for customer sink write behavior.
-type SapCloudForCustomerSinkWriteBehavior string
-
-const (
-	// SapCloudForCustomerSinkWriteBehaviorInsert ...
-	SapCloudForCustomerSinkWriteBehaviorInsert SapCloudForCustomerSinkWriteBehavior = "Insert"
-	// SapCloudForCustomerSinkWriteBehaviorUpdate ...
-	SapCloudForCustomerSinkWriteBehaviorUpdate SapCloudForCustomerSinkWriteBehavior = "Update"
-)
-
-// PossibleSapCloudForCustomerSinkWriteBehaviorValues returns an array of possible values for the SapCloudForCustomerSinkWriteBehavior const type.
-func PossibleSapCloudForCustomerSinkWriteBehaviorValues() []SapCloudForCustomerSinkWriteBehavior {
-	return []SapCloudForCustomerSinkWriteBehavior{SapCloudForCustomerSinkWriteBehaviorInsert, SapCloudForCustomerSinkWriteBehaviorUpdate}
 }
 
 // SapHanaAuthenticationType enumerates the values for sap hana authentication type.
@@ -929,29 +806,6 @@ const (
 // PossibleSparkThriftTransportProtocolValues returns an array of possible values for the SparkThriftTransportProtocol const type.
 func PossibleSparkThriftTransportProtocolValues() []SparkThriftTransportProtocol {
 	return []SparkThriftTransportProtocol{SparkThriftTransportProtocolBinary, SparkThriftTransportProtocolHTTP, SparkThriftTransportProtocolSASL}
-}
-
-// StoredProcedureParameterType enumerates the values for stored procedure parameter type.
-type StoredProcedureParameterType string
-
-const (
-	// Boolean ...
-	Boolean StoredProcedureParameterType = "Boolean"
-	// Date ...
-	Date StoredProcedureParameterType = "Date"
-	// Decimal ...
-	Decimal StoredProcedureParameterType = "Decimal"
-	// GUID ...
-	GUID StoredProcedureParameterType = "Guid"
-	// Int ...
-	Int StoredProcedureParameterType = "Int"
-	// String ...
-	String StoredProcedureParameterType = "String"
-)
-
-// PossibleStoredProcedureParameterTypeValues returns an array of possible values for the StoredProcedureParameterType const type.
-func PossibleStoredProcedureParameterTypeValues() []StoredProcedureParameterType {
-	return []StoredProcedureParameterType{Boolean, Date, Decimal, GUID, Int, String}
 }
 
 // SybaseAuthenticationType enumerates the values for sybase authentication type.
@@ -1263,21 +1117,6 @@ const (
 // PossibleTypeBasicCopySourceValues returns an array of possible values for the TypeBasicCopySource const type.
 func PossibleTypeBasicCopySourceValues() []TypeBasicCopySource {
 	return []TypeBasicCopySource{TypeAmazonMWSSource, TypeAmazonRedshiftSource, TypeAzureDataLakeStoreSource, TypeAzureMySQLSource, TypeAzurePostgreSQLSource, TypeAzureTableSource, TypeBlobSource, TypeCassandraSource, TypeConcurSource, TypeCopySource, TypeCouchbaseSource, TypeDocumentDbCollectionSource, TypeDrillSource, TypeDynamicsSource, TypeEloquaSource, TypeFileSystemSource, TypeGoogleBigQuerySource, TypeGreenplumSource, TypeHBaseSource, TypeHdfsSource, TypeHiveSource, TypeHTTPSource, TypeHubspotSource, TypeImpalaSource, TypeJiraSource, TypeMagentoSource, TypeMariaDBSource, TypeMarketoSource, TypeMongoDbSource, TypeNetezzaSource, TypeOracleSource, TypePaypalSource, TypePhoenixSource, TypePrestoSource, TypeQuickBooksSource, TypeRelationalSource, TypeResponsysSource, TypeSalesforceMarketingCloudSource, TypeSalesforceSource, TypeSapCloudForCustomerSource, TypeSapEccSource, TypeServiceNowSource, TypeShopifySource, TypeSparkSource, TypeSQLDWSource, TypeSQLSource, TypeSquareSource, TypeVerticaSource, TypeWebSource, TypeXeroSource, TypeZohoSource}
-}
-
-// TypeBasicCopyTranslator enumerates the values for type basic copy translator.
-type TypeBasicCopyTranslator string
-
-const (
-	// TypeCopyTranslator ...
-	TypeCopyTranslator TypeBasicCopyTranslator = "CopyTranslator"
-	// TypeTabularTranslator ...
-	TypeTabularTranslator TypeBasicCopyTranslator = "TabularTranslator"
-)
-
-// PossibleTypeBasicCopyTranslatorValues returns an array of possible values for the TypeBasicCopyTranslator const type.
-func PossibleTypeBasicCopyTranslatorValues() []TypeBasicCopyTranslator {
-	return []TypeBasicCopyTranslator{TypeCopyTranslator, TypeTabularTranslator}
 }
 
 // TypeBasicDataset enumerates the values for type basic dataset.
@@ -9391,8 +9230,8 @@ func (adlslstp *AzureDataLakeStoreLinkedServiceTypeProperties) UnmarshalJSON(bod
 
 // AzureDataLakeStoreSink a copy activity Azure Data Lake Store sink.
 type AzureDataLakeStoreSink struct {
-	// CopyBehavior - The type of copy behavior for copy sink. Possible values include: 'PreserveHierarchy', 'FlattenHierarchy', 'MergeFiles'
-	CopyBehavior CopyBehaviorType `json:"copyBehavior,omitempty"`
+	// CopyBehavior - The type of copy behavior for copy sink.
+	CopyBehavior interface{} `json:"copyBehavior,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
 	// WriteBatchSize - Write batch size. Type: integer (or Expression with resultType integer), minimum: 0.
@@ -9411,7 +9250,7 @@ type AzureDataLakeStoreSink struct {
 func (adlss AzureDataLakeStoreSink) MarshalJSON() ([]byte, error) {
 	adlss.Type = TypeAzureDataLakeStoreSink
 	objectMap := make(map[string]interface{})
-	if adlss.CopyBehavior != "" {
+	if adlss.CopyBehavior != nil {
 		objectMap["copyBehavior"] = adlss.CopyBehavior
 	}
 	if adlss.WriteBatchSize != nil {
@@ -9526,7 +9365,7 @@ func (adlss *AzureDataLakeStoreSink) UnmarshalJSON(body []byte) error {
 		switch k {
 		case "copyBehavior":
 			if v != nil {
-				var copyBehavior CopyBehaviorType
+				var copyBehavior interface{}
 				err = json.Unmarshal(*v, &copyBehavior)
 				if err != nil {
 					return err
@@ -14834,8 +14673,8 @@ type AzureSearchIndexDatasetTypeProperties struct {
 
 // AzureSearchIndexSink a copy activity Azure Search Index sink.
 type AzureSearchIndexSink struct {
-	// WriteBehavior - Specify the write behavior when upserting documents into Azure Search Index. Possible values include: 'Merge', 'Upload'
-	WriteBehavior AzureSearchIndexWriteBehaviorType `json:"writeBehavior,omitempty"`
+	// WriteBehavior - Specify the write behavior when upserting documents into Azure Search Index.
+	WriteBehavior interface{} `json:"writeBehavior,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
 	// WriteBatchSize - Write batch size. Type: integer (or Expression with resultType integer), minimum: 0.
@@ -14854,7 +14693,7 @@ type AzureSearchIndexSink struct {
 func (asis AzureSearchIndexSink) MarshalJSON() ([]byte, error) {
 	asis.Type = TypeAzureSearchIndexSink
 	objectMap := make(map[string]interface{})
-	if asis.WriteBehavior != "" {
+	if asis.WriteBehavior != nil {
 		objectMap["writeBehavior"] = asis.WriteBehavior
 	}
 	if asis.WriteBatchSize != nil {
@@ -14969,7 +14808,7 @@ func (asis *AzureSearchIndexSink) UnmarshalJSON(body []byte) error {
 		switch k {
 		case "writeBehavior":
 			if v != nil {
-				var writeBehavior AzureSearchIndexWriteBehaviorType
+				var writeBehavior interface{}
 				err = json.Unmarshal(*v, &writeBehavior)
 				if err != nil {
 					return err
@@ -19293,8 +19132,8 @@ type BlobSink struct {
 	BlobWriterDateTimeFormat interface{} `json:"blobWriterDateTimeFormat,omitempty"`
 	// BlobWriterAddHeader - Blob writer add header. Type: boolean (or Expression with resultType boolean).
 	BlobWriterAddHeader interface{} `json:"blobWriterAddHeader,omitempty"`
-	// CopyBehavior - The type of copy behavior for copy sink. Possible values include: 'PreserveHierarchy', 'FlattenHierarchy', 'MergeFiles'
-	CopyBehavior CopyBehaviorType `json:"copyBehavior,omitempty"`
+	// CopyBehavior - The type of copy behavior for copy sink.
+	CopyBehavior interface{} `json:"copyBehavior,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
 	// WriteBatchSize - Write batch size. Type: integer (or Expression with resultType integer), minimum: 0.
@@ -19322,7 +19161,7 @@ func (bs BlobSink) MarshalJSON() ([]byte, error) {
 	if bs.BlobWriterAddHeader != nil {
 		objectMap["blobWriterAddHeader"] = bs.BlobWriterAddHeader
 	}
-	if bs.CopyBehavior != "" {
+	if bs.CopyBehavior != nil {
 		objectMap["copyBehavior"] = bs.CopyBehavior
 	}
 	if bs.WriteBatchSize != nil {
@@ -19464,7 +19303,7 @@ func (bs *BlobSink) UnmarshalJSON(body []byte) error {
 			}
 		case "copyBehavior":
 			if v != nil {
-				var copyBehavior CopyBehaviorType
+				var copyBehavior interface{}
 				err = json.Unmarshal(*v, &copyBehavior)
 				if err != nil {
 					return err
@@ -20656,8 +20495,8 @@ func (clstp *CassandraLinkedServiceTypeProperties) UnmarshalJSON(body []byte) er
 type CassandraSource struct {
 	// Query - Database query. Should be a SQL-92 query expression or Cassandra Query Language (CQL) command. Type: string (or Expression with resultType string).
 	Query interface{} `json:"query,omitempty"`
-	// ConsistencyLevel - The consistency level specifies how many Cassandra servers must respond to a read request before returning data to the client application. Cassandra checks the specified number of Cassandra servers for data to satisfy the read request. Must be one of cassandraSourceReadConsistencyLevels. The default value is 'ONE'. It is case-insensitive. Possible values include: 'ALL', 'EACHQUORUM', 'QUORUM', 'LOCALQUORUM', 'ONE', 'TWO', 'THREE', 'LOCALONE', 'SERIAL', 'LOCALSERIAL'
-	ConsistencyLevel CassandraSourceReadConsistencyLevels `json:"consistencyLevel,omitempty"`
+	// ConsistencyLevel - The consistency level specifies how many Cassandra servers must respond to a read request before returning data to the client application. Cassandra checks the specified number of Cassandra servers for data to satisfy the read request. Must be one of cassandraSourceReadConsistencyLevels. The default value is 'ONE'. It is case-insensitive.
+	ConsistencyLevel interface{} `json:"consistencyLevel,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
 	// SourceRetryCount - Source retry count. Type: integer (or Expression with resultType integer).
@@ -20675,7 +20514,7 @@ func (cs CassandraSource) MarshalJSON() ([]byte, error) {
 	if cs.Query != nil {
 		objectMap["query"] = cs.Query
 	}
-	if cs.ConsistencyLevel != "" {
+	if cs.ConsistencyLevel != nil {
 		objectMap["consistencyLevel"] = cs.ConsistencyLevel
 	}
 	if cs.SourceRetryCount != nil {
@@ -20973,7 +20812,7 @@ func (cs *CassandraSource) UnmarshalJSON(body []byte) error {
 			}
 		case "consistencyLevel":
 			if v != nil {
-				var consistencyLevel CassandraSourceReadConsistencyLevels
+				var consistencyLevel interface{}
 				err = json.Unmarshal(*v, &consistencyLevel)
 				if err != nil {
 					return err
@@ -23415,7 +23254,7 @@ type CopyActivityTypeProperties struct {
 	// Sink - Copy activity sink.
 	Sink BasicCopySink `json:"sink,omitempty"`
 	// Translator - Copy activity translator. If not specified, tabular translator is used.
-	Translator BasicCopyTranslator `json:"translator,omitempty"`
+	Translator interface{} `json:"translator,omitempty"`
 	// EnableStaging - Specifies whether to copy data via an interim staging. Default value is false. Type: boolean (or Expression with resultType boolean).
 	EnableStaging interface{} `json:"enableStaging,omitempty"`
 	// StagingSettings - Specifies interim staging settings when EnableStaging is true.
@@ -23457,7 +23296,8 @@ func (catp *CopyActivityTypeProperties) UnmarshalJSON(body []byte) error {
 			}
 		case "translator":
 			if v != nil {
-				translator, err := unmarshalBasicCopyTranslator(*v)
+				var translator interface{}
+				err = json.Unmarshal(*v, &translator)
 				if err != nil {
 					return err
 				}
@@ -24450,121 +24290,6 @@ func (cs *CopySource) UnmarshalJSON(body []byte) error {
 					return err
 				}
 				cs.Type = typeVar
-			}
-		}
-	}
-
-	return nil
-}
-
-// BasicCopyTranslator a copy activity translator.
-type BasicCopyTranslator interface {
-	AsTabularTranslator() (*TabularTranslator, bool)
-	AsCopyTranslator() (*CopyTranslator, bool)
-}
-
-// CopyTranslator a copy activity translator.
-type CopyTranslator struct {
-	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties map[string]interface{} `json:""`
-	// Type - Possible values include: 'TypeCopyTranslator', 'TypeTabularTranslator'
-	Type TypeBasicCopyTranslator `json:"type,omitempty"`
-}
-
-func unmarshalBasicCopyTranslator(body []byte) (BasicCopyTranslator, error) {
-	var m map[string]interface{}
-	err := json.Unmarshal(body, &m)
-	if err != nil {
-		return nil, err
-	}
-
-	switch m["type"] {
-	case string(TypeTabularTranslator):
-		var tt TabularTranslator
-		err := json.Unmarshal(body, &tt)
-		return tt, err
-	default:
-		var ct CopyTranslator
-		err := json.Unmarshal(body, &ct)
-		return ct, err
-	}
-}
-func unmarshalBasicCopyTranslatorArray(body []byte) ([]BasicCopyTranslator, error) {
-	var rawMessages []*json.RawMessage
-	err := json.Unmarshal(body, &rawMessages)
-	if err != nil {
-		return nil, err
-	}
-
-	ctArray := make([]BasicCopyTranslator, len(rawMessages))
-
-	for index, rawMessage := range rawMessages {
-		ct, err := unmarshalBasicCopyTranslator(*rawMessage)
-		if err != nil {
-			return nil, err
-		}
-		ctArray[index] = ct
-	}
-	return ctArray, nil
-}
-
-// MarshalJSON is the custom marshaler for CopyTranslator.
-func (ct CopyTranslator) MarshalJSON() ([]byte, error) {
-	ct.Type = TypeCopyTranslator
-	objectMap := make(map[string]interface{})
-	if ct.Type != "" {
-		objectMap["type"] = ct.Type
-	}
-	for k, v := range ct.AdditionalProperties {
-		objectMap[k] = v
-	}
-	return json.Marshal(objectMap)
-}
-
-// AsTabularTranslator is the BasicCopyTranslator implementation for CopyTranslator.
-func (ct CopyTranslator) AsTabularTranslator() (*TabularTranslator, bool) {
-	return nil, false
-}
-
-// AsCopyTranslator is the BasicCopyTranslator implementation for CopyTranslator.
-func (ct CopyTranslator) AsCopyTranslator() (*CopyTranslator, bool) {
-	return &ct, true
-}
-
-// AsBasicCopyTranslator is the BasicCopyTranslator implementation for CopyTranslator.
-func (ct CopyTranslator) AsBasicCopyTranslator() (BasicCopyTranslator, bool) {
-	return &ct, true
-}
-
-// UnmarshalJSON is the custom unmarshaler for CopyTranslator struct.
-func (ct *CopyTranslator) UnmarshalJSON(body []byte) error {
-	var m map[string]*json.RawMessage
-	err := json.Unmarshal(body, &m)
-	if err != nil {
-		return err
-	}
-	for k, v := range m {
-		switch k {
-		default:
-			if v != nil {
-				var additionalProperties interface{}
-				err = json.Unmarshal(*v, &additionalProperties)
-				if err != nil {
-					return err
-				}
-				if ct.AdditionalProperties == nil {
-					ct.AdditionalProperties = make(map[string]interface{})
-				}
-				ct.AdditionalProperties[k] = additionalProperties
-			}
-		case "type":
-			if v != nil {
-				var typeVar TypeBasicCopyTranslator
-				err = json.Unmarshal(*v, &typeVar)
-				if err != nil {
-					return err
-				}
-				ct.Type = typeVar
 			}
 		}
 	}
@@ -29125,8 +28850,8 @@ func (dc *DatasetCompression) UnmarshalJSON(body []byte) error {
 
 // DatasetDeflateCompression the Deflate compression method used on a dataset.
 type DatasetDeflateCompression struct {
-	// Level - The Deflate compression level. Possible values include: 'Optimal', 'Fastest'
-	Level DatasetCompressionLevel `json:"level,omitempty"`
+	// Level - The Deflate compression level.
+	Level interface{} `json:"level,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
 	// Type - Possible values include: 'TypeDatasetCompression', 'TypeZipDeflate', 'TypeDeflate', 'TypeGZip', 'TypeBZip2'
@@ -29137,7 +28862,7 @@ type DatasetDeflateCompression struct {
 func (ddc DatasetDeflateCompression) MarshalJSON() ([]byte, error) {
 	ddc.Type = TypeDeflate
 	objectMap := make(map[string]interface{})
-	if ddc.Level != "" {
+	if ddc.Level != nil {
 		objectMap["level"] = ddc.Level
 	}
 	if ddc.Type != "" {
@@ -29190,7 +28915,7 @@ func (ddc *DatasetDeflateCompression) UnmarshalJSON(body []byte) error {
 		switch k {
 		case "level":
 			if v != nil {
-				var level DatasetCompressionLevel
+				var level interface{}
 				err = json.Unmarshal(*v, &level)
 				if err != nil {
 					return err
@@ -29226,8 +28951,8 @@ func (ddc *DatasetDeflateCompression) UnmarshalJSON(body []byte) error {
 
 // DatasetGZipCompression the GZip compression method used on a dataset.
 type DatasetGZipCompression struct {
-	// Level - The GZip compression level. Possible values include: 'Optimal', 'Fastest'
-	Level DatasetCompressionLevel `json:"level,omitempty"`
+	// Level - The GZip compression level.
+	Level interface{} `json:"level,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
 	// Type - Possible values include: 'TypeDatasetCompression', 'TypeZipDeflate', 'TypeDeflate', 'TypeGZip', 'TypeBZip2'
@@ -29238,7 +28963,7 @@ type DatasetGZipCompression struct {
 func (dgzc DatasetGZipCompression) MarshalJSON() ([]byte, error) {
 	dgzc.Type = TypeGZip
 	objectMap := make(map[string]interface{})
-	if dgzc.Level != "" {
+	if dgzc.Level != nil {
 		objectMap["level"] = dgzc.Level
 	}
 	if dgzc.Type != "" {
@@ -29291,7 +29016,7 @@ func (dgzc *DatasetGZipCompression) UnmarshalJSON(body []byte) error {
 		switch k {
 		case "level":
 			if v != nil {
-				var level DatasetCompressionLevel
+				var level interface{}
 				err = json.Unmarshal(*v, &level)
 				if err != nil {
 					return err
@@ -29755,8 +29480,8 @@ func (dsf *DatasetStorageFormat) UnmarshalJSON(body []byte) error {
 
 // DatasetZipDeflateCompression the ZipDeflate compression method used on a dataset.
 type DatasetZipDeflateCompression struct {
-	// Level - The ZipDeflate compression level. Possible values include: 'Optimal', 'Fastest'
-	Level DatasetCompressionLevel `json:"level,omitempty"`
+	// Level - The ZipDeflate compression level.
+	Level interface{} `json:"level,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
 	// Type - Possible values include: 'TypeDatasetCompression', 'TypeZipDeflate', 'TypeDeflate', 'TypeGZip', 'TypeBZip2'
@@ -29767,7 +29492,7 @@ type DatasetZipDeflateCompression struct {
 func (dzdc DatasetZipDeflateCompression) MarshalJSON() ([]byte, error) {
 	dzdc.Type = TypeZipDeflate
 	objectMap := make(map[string]interface{})
-	if dzdc.Level != "" {
+	if dzdc.Level != nil {
 		objectMap["level"] = dzdc.Level
 	}
 	if dzdc.Type != "" {
@@ -29820,7 +29545,7 @@ func (dzdc *DatasetZipDeflateCompression) UnmarshalJSON(body []byte) error {
 		switch k {
 		case "level":
 			if v != nil {
-				var level DatasetCompressionLevel
+				var level interface{}
 				err = json.Unmarshal(*v, &level)
 				if err != nil {
 					return err
@@ -33722,7 +33447,7 @@ func (dlstp *DynamicsLinkedServiceTypeProperties) UnmarshalJSON(body []byte) err
 // DynamicsSink a copy activity Dynamics sink.
 type DynamicsSink struct {
 	// WriteBehavior - The write behavior for the operation.
-	WriteBehavior *string `json:"writeBehavior,omitempty"`
+	WriteBehavior interface{} `json:"writeBehavior,omitempty"`
 	// IgnoreNullValues - The flag indicating whether ignore null values from input dataset (except key fields) during write operation. Default is false. Type: boolean (or Expression with resultType boolean).
 	IgnoreNullValues interface{} `json:"ignoreNullValues,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
@@ -33861,12 +33586,12 @@ func (ds *DynamicsSink) UnmarshalJSON(body []byte) error {
 		switch k {
 		case "writeBehavior":
 			if v != nil {
-				var writeBehavior string
+				var writeBehavior interface{}
 				err = json.Unmarshal(*v, &writeBehavior)
 				if err != nil {
 					return err
 				}
-				ds.WriteBehavior = &writeBehavior
+				ds.WriteBehavior = writeBehavior
 			}
 		case "ignoreNullValues":
 			if v != nil {
@@ -35640,6 +35365,14 @@ func (es *EloquaSource) UnmarshalJSON(body []byte) error {
 	}
 
 	return nil
+}
+
+// EntityReference the entity reference.
+type EntityReference struct {
+	// Type - The type of this referenced entity. Possible values include: 'IntegrationRuntimeEntityReferenceTypeIntegrationRuntimeReference', 'IntegrationRuntimeEntityReferenceTypeLinkedServiceReference'
+	Type IntegrationRuntimeEntityReferenceType `json:"type,omitempty"`
+	// ReferenceName - The name of this referenced entity.
+	ReferenceName *string `json:"referenceName,omitempty"`
 }
 
 // ErrorResponse the object that defines the structure of an Azure Data Factory response.
@@ -38058,8 +37791,8 @@ func (fsdtp *FileShareDatasetTypeProperties) UnmarshalJSON(body []byte) error {
 
 // FileSystemSink a copy activity file system sink.
 type FileSystemSink struct {
-	// CopyBehavior - The type of copy behavior for copy sink. Possible values include: 'PreserveHierarchy', 'FlattenHierarchy', 'MergeFiles'
-	CopyBehavior CopyBehaviorType `json:"copyBehavior,omitempty"`
+	// CopyBehavior - The type of copy behavior for copy sink.
+	CopyBehavior interface{} `json:"copyBehavior,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
 	// WriteBatchSize - Write batch size. Type: integer (or Expression with resultType integer), minimum: 0.
@@ -38078,7 +37811,7 @@ type FileSystemSink struct {
 func (fss FileSystemSink) MarshalJSON() ([]byte, error) {
 	fss.Type = TypeFileSystemSink
 	objectMap := make(map[string]interface{})
-	if fss.CopyBehavior != "" {
+	if fss.CopyBehavior != nil {
 		objectMap["copyBehavior"] = fss.CopyBehavior
 	}
 	if fss.WriteBatchSize != nil {
@@ -38193,7 +37926,7 @@ func (fss *FileSystemSink) UnmarshalJSON(body []byte) error {
 		switch k {
 		case "copyBehavior":
 			if v != nil {
-				var copyBehavior CopyBehaviorType
+				var copyBehavior interface{}
 				err = json.Unmarshal(*v, &copyBehavior)
 				if err != nil {
 					return err
@@ -54440,6 +54173,16 @@ type IntegrationRuntimeCustomSetupScriptProperties struct {
 	SasToken *SecureString `json:"sasToken,omitempty"`
 }
 
+// IntegrationRuntimeDataProxyProperties data proxy properties for a managed dedicated integration runtime.
+type IntegrationRuntimeDataProxyProperties struct {
+	// ConnectVia - The self-hosted integration runtime reference.
+	ConnectVia *EntityReference `json:"connectVia,omitempty"`
+	// StagingLinkedService - The staging linked service reference.
+	StagingLinkedService *EntityReference `json:"stagingLinkedService,omitempty"`
+	// Path - The path to contain the staged data in the Blob storage.
+	Path *string `json:"path,omitempty"`
+}
+
 // IntegrationRuntimeListResponse a list of integration runtime resources.
 type IntegrationRuntimeListResponse struct {
 	autorest.Response `json:"-"`
@@ -55002,6 +54745,8 @@ type IntegrationRuntimeSsisProperties struct {
 	LicenseType IntegrationRuntimeLicenseType `json:"licenseType,omitempty"`
 	// CustomSetupScriptProperties - Custom setup script properties for a managed dedicated integration runtime.
 	CustomSetupScriptProperties *IntegrationRuntimeCustomSetupScriptProperties `json:"customSetupScriptProperties,omitempty"`
+	// DataProxyProperties - Data proxy properties for a managed dedicated integration runtime.
+	DataProxyProperties *IntegrationRuntimeDataProxyProperties `json:"dataProxyProperties,omitempty"`
 	// Edition - The edition for the SSIS Integration Runtime. Possible values include: 'Standard', 'Enterprise'
 	Edition IntegrationRuntimeEdition `json:"edition,omitempty"`
 }
@@ -55017,6 +54762,9 @@ func (irsp IntegrationRuntimeSsisProperties) MarshalJSON() ([]byte, error) {
 	}
 	if irsp.CustomSetupScriptProperties != nil {
 		objectMap["customSetupScriptProperties"] = irsp.CustomSetupScriptProperties
+	}
+	if irsp.DataProxyProperties != nil {
+		objectMap["dataProxyProperties"] = irsp.DataProxyProperties
 	}
 	if irsp.Edition != "" {
 		objectMap["edition"] = irsp.Edition
@@ -55074,6 +54822,15 @@ func (irsp *IntegrationRuntimeSsisProperties) UnmarshalJSON(body []byte) error {
 					return err
 				}
 				irsp.CustomSetupScriptProperties = &customSetupScriptProperties
+			}
+		case "dataProxyProperties":
+			if v != nil {
+				var dataProxyProperties IntegrationRuntimeDataProxyProperties
+				err = json.Unmarshal(*v, &dataProxyProperties)
+				if err != nil {
+					return err
+				}
+				irsp.DataProxyProperties = &dataProxyProperties
 			}
 		case "edition":
 			if v != nil {
@@ -73145,8 +72902,8 @@ type PipelineRunQueryResponse struct {
 type PolybaseSettings struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
-	// RejectType - Reject type. Possible values include: 'Value', 'Percentage'
-	RejectType PolybaseSettingsRejectType `json:"rejectType,omitempty"`
+	// RejectType - Reject type.
+	RejectType interface{} `json:"rejectType,omitempty"`
 	// RejectValue - Specifies the value or the percentage of rows that can be rejected before the query fails. Type: number (or Expression with resultType number), minimum: 0.
 	RejectValue interface{} `json:"rejectValue,omitempty"`
 	// RejectSampleValue - Determines the number of rows to attempt to retrieve before the PolyBase recalculates the percentage of rejected rows. Type: integer (or Expression with resultType integer), minimum: 0.
@@ -73158,7 +72915,7 @@ type PolybaseSettings struct {
 // MarshalJSON is the custom marshaler for PolybaseSettings.
 func (ps PolybaseSettings) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
-	if ps.RejectType != "" {
+	if ps.RejectType != nil {
 		objectMap["rejectType"] = ps.RejectType
 	}
 	if ps.RejectValue != nil {
@@ -73199,7 +72956,7 @@ func (ps *PolybaseSettings) UnmarshalJSON(body []byte) error {
 			}
 		case "rejectType":
 			if v != nil {
-				var rejectType PolybaseSettingsRejectType
+				var rejectType interface{}
 				err = json.Unmarshal(*v, &rejectType)
 				if err != nil {
 					return err
@@ -81274,8 +81031,8 @@ type SalesforceObjectDatasetTypeProperties struct {
 
 // SalesforceSink a copy activity Salesforce sink.
 type SalesforceSink struct {
-	// WriteBehavior - The write behavior for the operation. Default is Insert. Possible values include: 'Insert', 'Upsert'
-	WriteBehavior SalesforceSinkWriteBehavior `json:"writeBehavior,omitempty"`
+	// WriteBehavior - The write behavior for the operation. Default is Insert.
+	WriteBehavior interface{} `json:"writeBehavior,omitempty"`
 	// ExternalIDFieldName - The name of the external ID field for upsert operation. Default value is 'Id' column. Type: string (or Expression with resultType string).
 	ExternalIDFieldName interface{} `json:"externalIdFieldName,omitempty"`
 	// IgnoreNullValues - The flag indicating whether or not to ignore null values from input dataset (except key fields) during write operation. Default value is false. If set it to true, it means ADF will leave the data in the destination object unchanged when doing upsert/update operation and insert defined default value when doing insert operation, versus ADF will update the data in the destination object to NULL when doing upsert/update operation and insert NULL value when doing insert operation. Type: boolean (or Expression with resultType boolean).
@@ -81298,7 +81055,7 @@ type SalesforceSink struct {
 func (ss SalesforceSink) MarshalJSON() ([]byte, error) {
 	ss.Type = TypeSalesforceSink
 	objectMap := make(map[string]interface{})
-	if ss.WriteBehavior != "" {
+	if ss.WriteBehavior != nil {
 		objectMap["writeBehavior"] = ss.WriteBehavior
 	}
 	if ss.ExternalIDFieldName != nil {
@@ -81419,7 +81176,7 @@ func (ss *SalesforceSink) UnmarshalJSON(body []byte) error {
 		switch k {
 		case "writeBehavior":
 			if v != nil {
-				var writeBehavior SalesforceSinkWriteBehavior
+				var writeBehavior interface{}
 				err = json.Unmarshal(*v, &writeBehavior)
 				if err != nil {
 					return err
@@ -81511,8 +81268,8 @@ func (ss *SalesforceSink) UnmarshalJSON(body []byte) error {
 type SalesforceSource struct {
 	// Query - Database query. Type: string (or Expression with resultType string).
 	Query interface{} `json:"query,omitempty"`
-	// ReadBehavior - The read behavior for the operation. Default is Query. Possible values include: 'Query', 'QueryAll'
-	ReadBehavior SalesforceSourceReadBehavior `json:"readBehavior,omitempty"`
+	// ReadBehavior - The read behavior for the operation. Default is Query.
+	ReadBehavior interface{} `json:"readBehavior,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
 	// SourceRetryCount - Source retry count. Type: integer (or Expression with resultType integer).
@@ -81530,7 +81287,7 @@ func (ss SalesforceSource) MarshalJSON() ([]byte, error) {
 	if ss.Query != nil {
 		objectMap["query"] = ss.Query
 	}
-	if ss.ReadBehavior != "" {
+	if ss.ReadBehavior != nil {
 		objectMap["readBehavior"] = ss.ReadBehavior
 	}
 	if ss.SourceRetryCount != nil {
@@ -81828,7 +81585,7 @@ func (ss *SalesforceSource) UnmarshalJSON(body []byte) error {
 			}
 		case "readBehavior":
 			if v != nil {
-				var readBehavior SalesforceSourceReadBehavior
+				var readBehavior interface{}
 				err = json.Unmarshal(*v, &readBehavior)
 				if err != nil {
 					return err
@@ -83425,8 +83182,8 @@ type SapCloudForCustomerResourceDatasetTypeProperties struct {
 
 // SapCloudForCustomerSink a copy activity SAP Cloud for Customer sink.
 type SapCloudForCustomerSink struct {
-	// WriteBehavior - The write behavior for the operation. Default is 'Insert'. Possible values include: 'SapCloudForCustomerSinkWriteBehaviorInsert', 'SapCloudForCustomerSinkWriteBehaviorUpdate'
-	WriteBehavior SapCloudForCustomerSinkWriteBehavior `json:"writeBehavior,omitempty"`
+	// WriteBehavior - The write behavior for the operation. Default is 'Insert'.
+	WriteBehavior interface{} `json:"writeBehavior,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
 	// WriteBatchSize - Write batch size. Type: integer (or Expression with resultType integer), minimum: 0.
@@ -83445,7 +83202,7 @@ type SapCloudForCustomerSink struct {
 func (scfcs SapCloudForCustomerSink) MarshalJSON() ([]byte, error) {
 	scfcs.Type = TypeSapCloudForCustomerSink
 	objectMap := make(map[string]interface{})
-	if scfcs.WriteBehavior != "" {
+	if scfcs.WriteBehavior != nil {
 		objectMap["writeBehavior"] = scfcs.WriteBehavior
 	}
 	if scfcs.WriteBatchSize != nil {
@@ -83560,7 +83317,7 @@ func (scfcs *SapCloudForCustomerSink) UnmarshalJSON(body []byte) error {
 		switch k {
 		case "writeBehavior":
 			if v != nil {
-				var writeBehavior SapCloudForCustomerSinkWriteBehavior
+				var writeBehavior interface{}
 				err = json.Unmarshal(*v, &writeBehavior)
 				if err != nil {
 					return err
@@ -84957,13 +84714,13 @@ func (serd *SapEccResourceDataset) UnmarshalJSON(body []byte) error {
 // SapEccResourceDatasetTypeProperties sap ECC OData resource dataset properties.
 type SapEccResourceDatasetTypeProperties struct {
 	// Path - The path of the SAP ECC OData entity. Type: string (or Expression with resultType string).
-	Path *string `json:"path,omitempty"`
+	Path interface{} `json:"path,omitempty"`
 }
 
 // SapEccSource a copy activity source for SAP ECC source.
 type SapEccSource struct {
 	// Query - SAP ECC OData query. For example, "$top=1". Type: string (or Expression with resultType string).
-	Query *string `json:"query,omitempty"`
+	Query interface{} `json:"query,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
 	AdditionalProperties map[string]interface{} `json:""`
 	// SourceRetryCount - Source retry count. Type: integer (or Expression with resultType integer).
@@ -85267,12 +85024,12 @@ func (ses *SapEccSource) UnmarshalJSON(body []byte) error {
 		switch k {
 		case "query":
 			if v != nil {
-				var query string
+				var query interface{}
 				err = json.Unmarshal(*v, &query)
 				if err != nil {
 					return err
 				}
-				ses.Query = &query
+				ses.Query = query
 			}
 		default:
 			if v != nil {
@@ -95347,8 +95104,8 @@ func (ss *StagingSettings) UnmarshalJSON(body []byte) error {
 type StoredProcedureParameter struct {
 	// Value - Stored procedure parameter value. Type: string (or Expression with resultType string).
 	Value interface{} `json:"value,omitempty"`
-	// Type - Stored procedure parameter type. Possible values include: 'String', 'Int', 'Decimal', 'GUID', 'Boolean', 'Date'
-	Type StoredProcedureParameterType `json:"type,omitempty"`
+	// Type - Stored procedure parameter type.
+	Type interface{} `json:"type,omitempty"`
 }
 
 // SubResource azure Data Factory nested resource, which belongs to a factory.
@@ -95938,106 +95695,6 @@ func (slstp *SybaseLinkedServiceTypeProperties) UnmarshalJSON(body []byte) error
 					return err
 				}
 				slstp.EncryptedCredential = encryptedCredential
-			}
-		}
-	}
-
-	return nil
-}
-
-// TabularTranslator a copy activity tabular translator.
-type TabularTranslator struct {
-	// ColumnMappings - Column mappings. Example: "UserId: MyUserId, Group: MyGroup, Name: MyName" Type: string (or Expression with resultType string).
-	ColumnMappings interface{} `json:"columnMappings,omitempty"`
-	// SchemaMapping - The schema mapping to map between tabular data and hierarchical data. Example: {"Column1": "$.Column1", "Column2": "$.Column2.Property1", "Column3": "$.Column2.Property2"}. Type: object (or Expression with resultType object).
-	SchemaMapping interface{} `json:"schemaMapping,omitempty"`
-	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties map[string]interface{} `json:""`
-	// Type - Possible values include: 'TypeCopyTranslator', 'TypeTabularTranslator'
-	Type TypeBasicCopyTranslator `json:"type,omitempty"`
-}
-
-// MarshalJSON is the custom marshaler for TabularTranslator.
-func (tt TabularTranslator) MarshalJSON() ([]byte, error) {
-	tt.Type = TypeTabularTranslator
-	objectMap := make(map[string]interface{})
-	if tt.ColumnMappings != nil {
-		objectMap["columnMappings"] = tt.ColumnMappings
-	}
-	if tt.SchemaMapping != nil {
-		objectMap["schemaMapping"] = tt.SchemaMapping
-	}
-	if tt.Type != "" {
-		objectMap["type"] = tt.Type
-	}
-	for k, v := range tt.AdditionalProperties {
-		objectMap[k] = v
-	}
-	return json.Marshal(objectMap)
-}
-
-// AsTabularTranslator is the BasicCopyTranslator implementation for TabularTranslator.
-func (tt TabularTranslator) AsTabularTranslator() (*TabularTranslator, bool) {
-	return &tt, true
-}
-
-// AsCopyTranslator is the BasicCopyTranslator implementation for TabularTranslator.
-func (tt TabularTranslator) AsCopyTranslator() (*CopyTranslator, bool) {
-	return nil, false
-}
-
-// AsBasicCopyTranslator is the BasicCopyTranslator implementation for TabularTranslator.
-func (tt TabularTranslator) AsBasicCopyTranslator() (BasicCopyTranslator, bool) {
-	return &tt, true
-}
-
-// UnmarshalJSON is the custom unmarshaler for TabularTranslator struct.
-func (tt *TabularTranslator) UnmarshalJSON(body []byte) error {
-	var m map[string]*json.RawMessage
-	err := json.Unmarshal(body, &m)
-	if err != nil {
-		return err
-	}
-	for k, v := range m {
-		switch k {
-		case "columnMappings":
-			if v != nil {
-				var columnMappings interface{}
-				err = json.Unmarshal(*v, &columnMappings)
-				if err != nil {
-					return err
-				}
-				tt.ColumnMappings = columnMappings
-			}
-		case "schemaMapping":
-			if v != nil {
-				var schemaMapping interface{}
-				err = json.Unmarshal(*v, &schemaMapping)
-				if err != nil {
-					return err
-				}
-				tt.SchemaMapping = schemaMapping
-			}
-		default:
-			if v != nil {
-				var additionalProperties interface{}
-				err = json.Unmarshal(*v, &additionalProperties)
-				if err != nil {
-					return err
-				}
-				if tt.AdditionalProperties == nil {
-					tt.AdditionalProperties = make(map[string]interface{})
-				}
-				tt.AdditionalProperties[k] = additionalProperties
-			}
-		case "type":
-			if v != nil {
-				var typeVar TypeBasicCopyTranslator
-				err = json.Unmarshal(*v, &typeVar)
-				if err != nil {
-					return err
-				}
-				tt.Type = typeVar
 			}
 		}
 	}

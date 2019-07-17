@@ -5,11 +5,11 @@
 The grpc-gateway is a plugin of the Google protocol buffers compiler
 [protoc](https://github.com/protocolbuffers/protobuf).
 It reads protobuf service definitions and generates a reverse-proxy server which
-translates a RESTful JSON API into gRPC. This server is generated according to the
+'translates a RESTful HTTP API into gRPC. This server is generated according to the
 [`google.api.http`](https://github.com/googleapis/googleapis/blob/master/google/api/http.proto#L46)
 annotations in your service definitions.
 
-It helps you provide your APIs in both gRPC and RESTful style at the same time.
+This helps you provide your APIs in both gRPC and RESTful style at the same time.
 
 ![architecture introduction diagram](https://docs.google.com/drawings/d/12hp4CPqrNPFhattL_cIoJptFvlAqm5wLQ0ggqI5mkCg/pub?w=749&amp;h=370)
 
@@ -21,7 +21,7 @@ languages, it is fast, easy-to-use, bandwidth-efficient and its design is
 combat-proven by Google. However, you might still want to provide a traditional
 RESTful JSON API as well. Reasons can range from maintaining
 backwards-compatibility, supporting languages or clients not well supported by
-gRPC to simply maintaining the aesthetics and tooling involved with a RESTful
+gRPC, to simply maintaining the aesthetics and tooling involved with a RESTful
 JSON architecture.
 
 This project aims to provide that HTTP+JSON interface to your gRPC service.
@@ -37,7 +37,7 @@ manager or by downloading one of the releases from the official repository:
 https://github.com/protocolbuffers/protobuf/releases
 
 
-Then, `go get -u` as usual the following packages:
+Then use `go get -u` to download the following packages:
 
 ```sh
 go get -u github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
@@ -48,16 +48,16 @@ go get -u github.com/golang/protobuf/protoc-gen-go
 This will place three binaries in your `$GOBIN`;
 
 * `protoc-gen-grpc-gateway`
-* `protoc-gen-grpc-swagger`
+* `protoc-gen-swagger`
 * `protoc-gen-go`
 
 Make sure that your `$GOBIN` is in your `$PATH`.
 
 ## Usage
 
-1. Define your service in gRPC
+1. Define your [gRPC](https://grpc.io/docs/) service using protocol buffers 
 
-   your_service.proto:
+   `your_service.proto`:
    ```protobuf
    syntax = "proto3";
    package example;
@@ -69,10 +69,11 @@ Make sure that your `$GOBIN` is in your `$PATH`.
      rpc Echo(StringMessage) returns (StringMessage) {}
    }
    ```
+
 2. Add a [`google.api.http`](https://github.com/googleapis/googleapis/blob/master/google/api/http.proto#L46)
 annotation to your .proto file
 
-   your_service.proto:
+   `your_service.proto`:
    ```diff
     syntax = "proto3";
     package example;
@@ -102,6 +103,7 @@ annotation to your .proto file
 
 3. Generate gRPC stub
 
+   The following generates gRPC code for Golang based on `path/to/your_service.proto`:
    ```sh
    protoc -I/usr/local/include -I. \
      -I$GOPATH/src \
@@ -111,28 +113,30 @@ annotation to your .proto file
    ```
 
    It will generate a stub file `path/to/your_service.pb.go`.
-4. Implement your service in gRPC as usual
-   1. (Optional) Generate gRPC stub in the language you want.
 
-     e.g.
+4. Implement your service in gRPC as usual
+
+   1. (Optional) Generate gRPC stub in the [other programming languages](https://grpc.io/docs/).
+
+     For example, the following generates gRPC code for Ruby based on `path/to/your_service.proto`:
      ```sh
      protoc -I/usr/local/include -I. \
        -I$GOPATH/src \
        -I$GOPATH/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
        --ruby_out=. \
-       path/to/your/service_proto
+       path/to/your_service.proto
 
      protoc -I/usr/local/include -I. \
        -I$GOPATH/src \
        -I$GOPATH/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
        --plugin=protoc-gen-grpc=grpc_ruby_plugin \
        --grpc-ruby_out=. \
-       path/to/your/service.proto
+       path/to/your_service.proto
      ```
    2. Add the googleapis-common-protos gem (or your language equivalent) as a dependency to your project.
-   3. Implement your service
+   3. Implement your gRPC service stubs
 
-5. Generate reverse-proxy
+5. Generate reverse-proxy using `protoc-gen-grpc-gateway`
 
    ```sh
    protoc -I/usr/local/include -I. \
@@ -144,54 +148,58 @@ annotation to your .proto file
 
    It will generate a reverse proxy `path/to/your_service.pb.gw.go`.
 
-6. Write an entrypoint
+6. Write an entrypoint for the HTTP reverse-proxy server
 
-   Now you need to write an entrypoint of the proxy server.
    ```go
    package main
-
+ 
    import (
+     "context"  // Use "golang.org/x/net/context" for Golang version <= 1.6
      "flag"
      "net/http"
-
+ 
      "github.com/golang/glog"
-     "golang.org/x/net/context"
      "github.com/grpc-ecosystem/grpc-gateway/runtime"
      "google.golang.org/grpc"
-
-     gw "path/to/your_service_package"
+ 
+     gw "path/to/your_service_package"  // Update
    )
-
+ 
    var (
-     echoEndpoint = flag.String("echo_endpoint", "localhost:9090", "endpoint of YourService")
+     // command-line options:
+     // gRPC server endpoint
+     grpcServerEndpoint = flag.String("grpc-server-endpoint",  "localhost:9090", "gRPC server endpoint")
    )
-
+ 
    func run() error {
      ctx := context.Background()
      ctx, cancel := context.WithCancel(ctx)
      defer cancel()
-
+ 
+     // Register gRPC server endpoint
+     // Note: Make sure the gRPC server is running properly and accessible
      mux := runtime.NewServeMux()
      opts := []grpc.DialOption{grpc.WithInsecure()}
-     err := gw.RegisterYourServiceHandlerFromEndpoint(ctx, mux, *echoEndpoint, opts)
+     err := gw.RegisterYourServiceHandlerFromEndpoint(ctx, mux,  *grpcServerEndpoint, opts)
      if err != nil {
        return err
      }
-
-     return http.ListenAndServe(":8080", mux)
+ 
+     // Start HTTP server (and proxy calls to gRPC server endpoint)
+     return http.ListenAndServe(":8081", mux)
    }
-
+ 
    func main() {
      flag.Parse()
      defer glog.Flush()
-
+ 
      if err := run(); err != nil {
        glog.Fatal(err)
      }
    }
    ```
 
-7. (Optional) Generate swagger definitions
+7. (Optional) Generate swagger definitions using `protoc-gen-swagger`
 
    ```sh
    protoc -I/usr/local/include -I. \
@@ -226,7 +234,7 @@ More examples are available under `examples` directory.
 
 To use the same port for custom HTTP handlers (e.g. serving `swagger.json`),
 gRPC-gateway, and a gRPC server, see
-[this code example by CoreOS](https://github.com/philips/grpc-gateway-example/blob/master/cmd/serve.go)
+[this example by CoreOS](https://github.com/philips/grpc-gateway-example/blob/master/cmd/serve.go)
 (and its accompanying [blog post](https://coreos.com/blog/gRPC-protobufs-swagger.html)).
 
 ## Features

@@ -3024,7 +3024,7 @@ func (r Resource) MarshalJSON() ([]byte, error) {
 type RetentionPolicy struct {
 	// Days - The number of days to retain manifest before it expires.
 	Days *int32 `json:"days,omitempty"`
-	// LastUpdatedTime - READ-ONLY; The timestamp when the the policy was last updated.
+	// LastUpdatedTime - READ-ONLY; The timestamp when the policy was last updated.
 	LastUpdatedTime *date.Time `json:"lastUpdatedTime,omitempty"`
 	// Status - The value that indicates whether the policy is enabled or not. Possible values include: 'Enabled', 'Disabled'
 	Status PolicyStatus `json:"status,omitempty"`
@@ -3315,6 +3315,8 @@ type RunProperties struct {
 	ProvisioningState ProvisioningState `json:"provisioningState,omitempty"`
 	// IsArchiveEnabled - The value that indicates whether archiving is enabled or not.
 	IsArchiveEnabled *bool `json:"isArchiveEnabled,omitempty"`
+	// TimerTrigger - The timer trigger that caused the run.
+	TimerTrigger *TimerTriggerDescriptor `json:"timerTrigger,omitempty"`
 }
 
 // BasicRunRequest the request parameters for scheduling a run.
@@ -4542,6 +4544,14 @@ type TimerTrigger struct {
 	Status TriggerStatus `json:"status,omitempty"`
 	// Name - The name of the trigger.
 	Name *string `json:"name,omitempty"`
+}
+
+// TimerTriggerDescriptor ...
+type TimerTriggerDescriptor struct {
+	// TimerTriggerName - The timer trigger name that caused the run.
+	TimerTriggerName *string `json:"timerTriggerName,omitempty"`
+	// ScheduleOccurrence - The occurrence that triggered the run.
+	ScheduleOccurrence *string `json:"scheduleOccurrence,omitempty"`
 }
 
 // TimerTriggerUpdateParameters the properties for updating a timer trigger.

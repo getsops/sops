@@ -74,6 +74,7 @@ type ServerVersion = original.ServerVersion
 const (
 	NineFullStopFive    ServerVersion = original.NineFullStopFive
 	NineFullStopSix     ServerVersion = original.NineFullStopSix
+	OneOne              ServerVersion = original.OneOne
 	OneZero             ServerVersion = original.OneZero
 	OneZeroFullStopTwo  ServerVersion = original.OneZeroFullStopTwo
 	OneZeroFullStopZero ServerVersion = original.OneZeroFullStopZero

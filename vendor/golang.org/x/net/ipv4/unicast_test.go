@@ -93,8 +93,8 @@ func TestPacketConnReadWriteUnicastICMP(t *testing.T) {
 	p := ipv4.NewPacketConn(c)
 	defer p.Close()
 	cf := ipv4.FlagDst | ipv4.FlagInterface
-	if runtime.GOOS != "solaris" {
-		// Solaris never allows to modify ICMP properties.
+	if runtime.GOOS != "illumos" && runtime.GOOS != "solaris" {
+		// Illumos and Solaris never allow modification of ICMP properties.
 		cf |= ipv4.FlagTTL
 	}
 

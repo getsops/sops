@@ -1,0 +1,13 @@
+{
+  "tests": [
+    {
+      "description": "set: Delete cannot appear unless a merge option is specified",
+      "comment": "Without a merge option, Set replaces the document with the input\ndata. A Delete sentinel in the data makes no sense in this case.",
+      "set": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "jsonData": "{\"a\": 1, \"b\": \"Delete\"}",
+        "isError": true
+      }
+    }
+  ]
+}

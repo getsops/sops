@@ -1,0 +1,53 @@
+{
+  "tests": [
+    {
+      "description": "create: nested ArrayUnion field",
+      "comment": "An ArrayUnion value can occur at any depth. In this case,\nthe transform applies to the field path \"b.c\". Since \"c\" is removed from the update,\n\"b\" becomes empty, so it is also removed from the update.",
+      "create": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "jsonData": "{\"a\": 1, \"b\": {\"c\": [\"ArrayUnion\", 1, 2, 3]}}",
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d",
+                "fields": {
+                  "a": {
+                    "integerValue": "1"
+                  }
+                }
+              },
+              "currentDocument": {
+                "exists": false
+              }
+            },
+            {
+              "transform": {
+                "document": "projects/projectID/databases/(default)/documents/C/d",
+                "fieldTransforms": [
+                  {
+                    "fieldPath": "b.c",
+                    "appendMissingElements": {
+                      "values": [
+                        {
+                          "integerValue": "1"
+                        },
+                        {
+                          "integerValue": "2"
+                        },
+                        {
+                          "integerValue": "3"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

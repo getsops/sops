@@ -436,13 +436,19 @@ func (s *GoogleCloudSaasacceleratorManagementProvidersV1Instance) MarshalJSON() 
 // user,
 // indicating published upcoming future maintenance schedule
 type GoogleCloudSaasacceleratorManagementProvidersV1MaintenanceSchedule struct {
+	// CanReschedule: Can this scheduled update be rescheduled?
+	// By default, it's true and API needs to do explicitly check whether
+	// it's
+	// set, if it's set as false explicitly, it's false
+	CanReschedule bool `json:"canReschedule,omitempty"`
+
 	// EndTime: The scheduled end time for the maintenance.
 	EndTime string `json:"endTime,omitempty"`
 
 	// StartTime: The scheduled start time for the maintenance.
 	StartTime string `json:"startTime,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "EndTime") to
+	// ForceSendFields is a list of field names (e.g. "CanReschedule") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -450,10 +456,10 @@ type GoogleCloudSaasacceleratorManagementProvidersV1MaintenanceSchedule struct {
 	// used to include empty fields in Patch requests.
 	ForceSendFields []string `json:"-"`
 
-	// NullFields is a list of field names (e.g. "EndTime") to include in
-	// API requests with the JSON null value. By default, fields with empty
-	// values are omitted from API requests. However, any field with an
-	// empty value appearing in NullFields will be sent to the server as
+	// NullFields is a list of field names (e.g. "CanReschedule") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
 	// null. It is an error if a field in this list has a non-empty value.
 	// This may be used to include null fields in Patch requests.
 	NullFields []string `json:"-"`
@@ -481,6 +487,10 @@ type GoogleCloudSaasacceleratorManagementProvidersV1NodeSloMetadata struct {
 	// period,
 	// the node level's reason will be reported by Eligibility Exporter.
 	Exclusions []*GoogleCloudSaasacceleratorManagementProvidersV1SloExclusion `json:"exclusions,omitempty"`
+
+	// Location: The location of the node, if different from instance
+	// location.
+	Location string `json:"location,omitempty"`
 
 	// NodeId: The id of the node.
 	// This should be equal to SaasInstanceNode.node_id.
@@ -631,8 +641,9 @@ func (s *GoogleCloudSaasacceleratorManagementProvidersV1RolloutMetadata) Marshal
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
-// GoogleCloudSaasacceleratorManagementProvidersV1SloExclusion: A
-// temporal SLO exclusion specification.
+// GoogleCloudSaasacceleratorManagementProvidersV1SloExclusion:
+// SloExclusion represents an excusion in SLI calculation applies to all
+// SLOs.
 type GoogleCloudSaasacceleratorManagementProvidersV1SloExclusion struct {
 	// ExclusionDuration: Exclusion duration. No restrictions on the
 	// possible values.
@@ -662,12 +673,12 @@ type GoogleCloudSaasacceleratorManagementProvidersV1SloExclusion struct {
 	// Can be left empty.
 	Reason string `json:"reason,omitempty"`
 
-	// SloName: Name of an SLI/SLO that this exclusion applies to. Can be
-	// left empty,
-	// signaling that the instance should be excluded from all SLI/SLOs
+	// SliName: Name of an SLI that this exclusion applies to. Can be left
+	// empty,
+	// signaling that the instance should be excluded from all SLIs
 	// defined
 	// in the service SLO configuration.
-	SloName string `json:"sloName,omitempty"`
+	SliName string `json:"sliName,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "ExclusionDuration")
 	// to unconditionally include in API requests. By default, fields with
@@ -763,8 +774,7 @@ func (s *GoogleCloudSaasacceleratorManagementProvidersV1SloMetadata) MarshalJSON
 
 // Instance: A Cloud Filestore instance.
 type Instance struct {
-	// CreateTime: Output only.
-	// The time when the instance was created.
+	// CreateTime: Output only. The time when the instance was created.
 	CreateTime string `json:"createTime,omitempty"`
 
 	// Description: Optional. A description of the instance (2048 characters
@@ -783,8 +793,7 @@ type Instance struct {
 	// Labels: Resource labels to represent user provided metadata.
 	Labels map[string]string `json:"labels,omitempty"`
 
-	// Name: Output only.
-	// The resource name of the instance, in the
+	// Name: Output only. The resource name of the instance, in the
 	// format
 	// projects/{project_id}/locations/{location_id}/instances/{instan
 	// ce_id}.
@@ -794,8 +803,7 @@ type Instance struct {
 	// For this version, only a single network is supported.
 	Networks []*NetworkConfig `json:"networks,omitempty"`
 
-	// State: Output only.
-	// The instance state.
+	// State: Output only. The instance state.
 	//
 	// Possible values:
 	//   "STATE_UNSPECIFIED" - State not set.
@@ -812,8 +820,8 @@ type Instance struct {
 	// resource.
 	State string `json:"state,omitempty"`
 
-	// StatusMessage: Output only.
-	// Additional information about the instance state, if available.
+	// StatusMessage: Output only. Additional information about the instance
+	// state, if available.
 	StatusMessage string `json:"statusMessage,omitempty"`
 
 	// Tier: The service tier of the instance.
@@ -1031,8 +1039,7 @@ func (s *Location) MarshalJSON() ([]byte, error) {
 
 // NetworkConfig: Network configuration for the instance.
 type NetworkConfig struct {
-	// IpAddresses: Output only.
-	// IPv4 addresses in the format
+	// IpAddresses: Output only. IPv4 addresses in the format
 	// {octet 1}.{octet 2}.{octet 3}.{octet 4} or IPv6 addresses in the
 	// format
 	// {block 1}:{block 2}:{block 3}:{block 4}:{block 5}:{block
@@ -1227,81 +1234,14 @@ func (s *OperationMetadata) MarshalJSON() ([]byte, error) {
 // suitable for
 // different programming environments, including REST APIs and RPC APIs.
 // It is
-// used by [gRPC](https://github.com/grpc). The error model is designed
-// to be:
+// used by [gRPC](https://github.com/grpc). Each `Status` message
+// contains
+// three pieces of data: error code, error message, and error
+// details.
 //
-// - Simple to use and understand for most users
-// - Flexible enough to meet unexpected needs
-//
-// # Overview
-//
-// The `Status` message contains three pieces of data: error code,
-// error
-// message, and error details. The error code should be an enum value
-// of
-// google.rpc.Code, but it may accept additional error codes if needed.
-// The
-// error message should be a developer-facing English message that
-// helps
-// developers *understand* and *resolve* the error. If a localized
-// user-facing
-// error message is needed, put the localized message in the error
-// details or
-// localize it in the client. The optional error details may contain
-// arbitrary
-// information about the error. There is a predefined set of error
-// detail types
-// in the package `google.rpc` that can be used for common error
-// conditions.
-//
-// # Language mapping
-//
-// The `Status` message is the logical representation of the error
-// model, but it
-// is not necessarily the actual wire format. When the `Status` message
-// is
-// exposed in different client libraries and different wire protocols,
-// it can be
-// mapped differently. For example, it will likely be mapped to some
-// exceptions
-// in Java, but more likely mapped to some error codes in C.
-//
-// # Other uses
-//
-// The error model and the `Status` message can be used in a variety
-// of
-// environments, either with or without APIs, to provide a
-// consistent developer experience across different
-// environments.
-//
-// Example uses of this error model include:
-//
-// - Partial errors. If a service needs to return partial errors to the
-// client,
-//     it may embed the `Status` in the normal response to indicate the
-// partial
-//     errors.
-//
-// - Workflow errors. A typical workflow has multiple steps. Each step
-// may
-//     have a `Status` message for error reporting.
-//
-// - Batch operations. If a client uses batch request and batch
-// response, the
-//     `Status` message should be used directly inside batch response,
-// one for
-//     each error sub-response.
-//
-// - Asynchronous operations. If an API call embeds asynchronous
-// operation
-//     results in its response, the status of those operations should
-// be
-//     represented directly using the `Status` message.
-//
-// - Logging. If some API errors are stored in logs, the message
-// `Status` could
-//     be used directly after any stripping needed for security/privacy
-// reasons.
+// You can find out more about this error model and how to work with it
+// in the
+// [API Design Guide](https://cloud.google.com/apis/design/errors).
 type Status struct {
 	// Code: The status code, which should be an enum value of
 	// google.rpc.Code.
@@ -2455,7 +2395,7 @@ func (c *ProjectsLocationsInstancesPatchCall) Do(opts ...googleapi.CallOption) (
 	//   ],
 	//   "parameters": {
 	//     "name": {
-	//       "description": "Output only.\nThe resource name of the instance, in the format\nprojects/{project_id}/locations/{location_id}/instances/{instance_id}.",
+	//       "description": "Output only. The resource name of the instance, in the format\nprojects/{project_id}/locations/{location_id}/instances/{instance_id}.",
 	//       "location": "path",
 	//       "pattern": "^projects/[^/]+/locations/[^/]+/instances/[^/]+$",
 	//       "required": true,

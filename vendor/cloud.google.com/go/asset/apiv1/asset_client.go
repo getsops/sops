@@ -19,6 +19,7 @@ package asset
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"time"
 
 	"cloud.google.com/go/longrunning"
@@ -143,7 +144,7 @@ func (c *Client) setGoogleClientInfo(keyval ...string) {
 // This API implements the [google.longrunning.Operation][google.longrunning.Operation] API allowing you
 // to keep track of the export.
 func (c *Client) ExportAssets(ctx context.Context, req *assetpb.ExportAssetsRequest, opts ...gax.CallOption) (*ExportAssetsOperation, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ExportAssets[0:len(c.CallOptions.ExportAssets):len(c.CallOptions.ExportAssets)], opts...)
 	var resp *longrunningpb.Operation
@@ -168,7 +169,7 @@ func (c *Client) ExportAssets(ctx context.Context, req *assetpb.ExportAssetsRequ
 // If a specified asset does not exist, this API returns an INVALID_ARGUMENT
 // error.
 func (c *Client) BatchGetAssetsHistory(ctx context.Context, req *assetpb.BatchGetAssetsHistoryRequest, opts ...gax.CallOption) (*assetpb.BatchGetAssetsHistoryResponse, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.BatchGetAssetsHistory[0:len(c.CallOptions.BatchGetAssetsHistory):len(c.CallOptions.BatchGetAssetsHistory)], opts...)
 	var resp *assetpb.BatchGetAssetsHistoryResponse

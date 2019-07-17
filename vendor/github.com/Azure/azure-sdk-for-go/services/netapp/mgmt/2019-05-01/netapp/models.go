@@ -33,19 +33,19 @@ const fqdn = "github.com/Azure/azure-sdk-for-go/services/netapp/mgmt/2019-05-01/
 type CheckNameResourceTypes string
 
 const (
-	// MicrosoftNetAppnetAppAccount ...
-	MicrosoftNetAppnetAppAccount CheckNameResourceTypes = "Microsoft.NetApp/netAppAccount"
-	// MicrosoftNetAppnetAppAccountcapacityPools ...
-	MicrosoftNetAppnetAppAccountcapacityPools CheckNameResourceTypes = "Microsoft.NetApp/netAppAccount/capacityPools"
-	// MicrosoftNetAppnetAppAccountcapacityPoolsvolumes ...
-	MicrosoftNetAppnetAppAccountcapacityPoolsvolumes CheckNameResourceTypes = "Microsoft.NetApp/netAppAccount/capacityPools/volumes"
-	// MicrosoftNetAppnetAppAccountcapacityPoolsvolumessnapshots ...
-	MicrosoftNetAppnetAppAccountcapacityPoolsvolumessnapshots CheckNameResourceTypes = "Microsoft.NetApp/netAppAccount/capacityPools/volumes/snapshots"
+	// MicrosoftNetAppnetAppAccounts ...
+	MicrosoftNetAppnetAppAccounts CheckNameResourceTypes = "Microsoft.NetApp/netAppAccounts"
+	// MicrosoftNetAppnetAppAccountscapacityPools ...
+	MicrosoftNetAppnetAppAccountscapacityPools CheckNameResourceTypes = "Microsoft.NetApp/netAppAccounts/capacityPools"
+	// MicrosoftNetAppnetAppAccountscapacityPoolsvolumes ...
+	MicrosoftNetAppnetAppAccountscapacityPoolsvolumes CheckNameResourceTypes = "Microsoft.NetApp/netAppAccounts/capacityPools/volumes"
+	// MicrosoftNetAppnetAppAccountscapacityPoolsvolumessnapshots ...
+	MicrosoftNetAppnetAppAccountscapacityPoolsvolumessnapshots CheckNameResourceTypes = "Microsoft.NetApp/netAppAccounts/capacityPools/volumes/snapshots"
 )
 
 // PossibleCheckNameResourceTypesValues returns an array of possible values for the CheckNameResourceTypes const type.
 func PossibleCheckNameResourceTypesValues() []CheckNameResourceTypes {
-	return []CheckNameResourceTypes{MicrosoftNetAppnetAppAccount, MicrosoftNetAppnetAppAccountcapacityPools, MicrosoftNetAppnetAppAccountcapacityPoolsvolumes, MicrosoftNetAppnetAppAccountcapacityPoolsvolumessnapshots}
+	return []CheckNameResourceTypes{MicrosoftNetAppnetAppAccounts, MicrosoftNetAppnetAppAccountscapacityPools, MicrosoftNetAppnetAppAccountscapacityPoolsvolumes, MicrosoftNetAppnetAppAccountscapacityPoolsvolumessnapshots}
 }
 
 // InAvailabilityReasonType enumerates the values for in availability reason type.
@@ -937,7 +937,7 @@ type ResourceNameAvailability struct {
 type ResourceNameAvailabilityRequest struct {
 	// Name - Resource name to verify.
 	Name *string `json:"name,omitempty"`
-	// Type - Resource type used for verification. Possible values include: 'MicrosoftNetAppnetAppAccount', 'MicrosoftNetAppnetAppAccountcapacityPools', 'MicrosoftNetAppnetAppAccountcapacityPoolsvolumes', 'MicrosoftNetAppnetAppAccountcapacityPoolsvolumessnapshots'
+	// Type - Resource type used for verification. Possible values include: 'MicrosoftNetAppnetAppAccounts', 'MicrosoftNetAppnetAppAccountscapacityPools', 'MicrosoftNetAppnetAppAccountscapacityPoolsvolumes', 'MicrosoftNetAppnetAppAccountscapacityPoolsvolumessnapshots'
 	Type CheckNameResourceTypes `json:"type,omitempty"`
 	// ResourceGroup - Resource group name.
 	ResourceGroup *string `json:"resourceGroup,omitempty"`
@@ -1339,7 +1339,7 @@ func (vp *VolumePatch) UnmarshalJSON(body []byte) error {
 type VolumePatchProperties struct {
 	// ServiceLevel - The service level of the file system. Possible values include: 'Standard', 'Premium', 'Ultra'
 	ServiceLevel ServiceLevel `json:"serviceLevel,omitempty"`
-	// UsageThreshold - Maximum storage quota allowed for a file system in bytes. This is a soft quota used for alerting only. Minimum size is 100 GiB. Upper limit is 100TiB.
+	// UsageThreshold - Maximum storage quota allowed for a file system in bytes. This is a soft quota used for alerting only. Minimum size is 100 GiB. Upper limit is 100TiB. Specified in bytes.
 	UsageThreshold *int64 `json:"usageThreshold,omitempty"`
 	// ExportPolicy - Set of export policy rules
 	ExportPolicy *VolumePatchPropertiesExportPolicy `json:"exportPolicy,omitempty"`
@@ -1359,10 +1359,12 @@ type VolumeProperties struct {
 	CreationToken *string `json:"creationToken,omitempty"`
 	// ServiceLevel - The service level of the file system. Possible values include: 'Standard', 'Premium', 'Ultra'
 	ServiceLevel ServiceLevel `json:"serviceLevel,omitempty"`
-	// UsageThreshold - Maximum storage quota allowed for a file system in bytes. This is a soft quota used for alerting only. Minimum size is 100 GiB. Upper limit is 100TiB.
+	// UsageThreshold - Maximum storage quota allowed for a file system in bytes. This is a soft quota used for alerting only. Minimum size is 100 GiB. Upper limit is 100TiB. Specified in bytes.
 	UsageThreshold *int64 `json:"usageThreshold,omitempty"`
 	// ExportPolicy - Set of export policy rules
 	ExportPolicy *VolumePropertiesExportPolicy `json:"exportPolicy,omitempty"`
+	// ProtocolTypes - Set of protocol types
+	ProtocolTypes *[]string `json:"protocolTypes,omitempty"`
 	// ProvisioningState - READ-ONLY; Azure lifecycle management
 	ProvisioningState *string `json:"provisioningState,omitempty"`
 	// SnapshotID - UUID v4 used to identify the Snapshot
@@ -1371,6 +1373,8 @@ type VolumeProperties struct {
 	BaremetalTenantID *string `json:"baremetalTenantId,omitempty"`
 	// SubnetID - The Azure Resource URI for a delegated subnet. Must have the delegation Microsoft.NetApp/volumes
 	SubnetID *string `json:"subnetId,omitempty"`
+	// MountTargets - List of mount targets
+	MountTargets interface{} `json:"mountTargets,omitempty"`
 }
 
 // VolumePropertiesExportPolicy set of export policy rules

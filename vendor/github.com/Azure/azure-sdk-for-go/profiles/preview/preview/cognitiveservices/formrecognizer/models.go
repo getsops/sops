@@ -45,8 +45,42 @@ const (
 	Status2Success        Status2 = original.Status2Success
 )
 
+type TextOperationStatusCodes = original.TextOperationStatusCodes
+
+const (
+	Failed     TextOperationStatusCodes = original.Failed
+	NotStarted TextOperationStatusCodes = original.NotStarted
+	Running    TextOperationStatusCodes = original.Running
+	Succeeded  TextOperationStatusCodes = original.Succeeded
+)
+
+type TextRecognitionResultConfidenceClass = original.TextRecognitionResultConfidenceClass
+
+const (
+	High TextRecognitionResultConfidenceClass = original.High
+	Low  TextRecognitionResultConfidenceClass = original.Low
+)
+
+type TextRecognitionResultDimensionUnit = original.TextRecognitionResultDimensionUnit
+
+const (
+	Inch  TextRecognitionResultDimensionUnit = original.Inch
+	Pixel TextRecognitionResultDimensionUnit = original.Pixel
+)
+
+type ValueType = original.ValueType
+
+const (
+	ValueTypeFieldValue  ValueType = original.ValueTypeFieldValue
+	ValueTypeNumberValue ValueType = original.ValueTypeNumberValue
+	ValueTypeStringValue ValueType = original.ValueTypeStringValue
+)
+
 type AnalyzeResult = original.AnalyzeResult
 type BaseClient = original.BaseClient
+type BasicFieldValue = original.BasicFieldValue
+type ComputerVisionError = original.ComputerVisionError
+type ElementReference = original.ElementReference
 type ErrorInformation = original.ErrorInformation
 type ErrorResponse = original.ErrorResponse
 type ExtractedKeyValuePair = original.ExtractedKeyValuePair
@@ -54,14 +88,24 @@ type ExtractedPage = original.ExtractedPage
 type ExtractedTable = original.ExtractedTable
 type ExtractedTableColumn = original.ExtractedTableColumn
 type ExtractedToken = original.ExtractedToken
+type FieldValue = original.FieldValue
 type FormDocumentReport = original.FormDocumentReport
 type FormOperationError = original.FormOperationError
+type ImageURL = original.ImageURL
 type InnerError = original.InnerError
 type KeysResult = original.KeysResult
+type Line = original.Line
 type ModelResult = original.ModelResult
 type ModelsResult = original.ModelsResult
+type NumberValue = original.NumberValue
+type ReadReceiptResult = original.ReadReceiptResult
+type StringValue = original.StringValue
+type TextRecognitionResult = original.TextRecognitionResult
 type TrainRequest = original.TrainRequest
 type TrainResult = original.TrainResult
+type TrainSourceFilter = original.TrainSourceFilter
+type UnderstandingResult = original.UnderstandingResult
+type Word = original.Word
 
 func New(endpoint string) BaseClient {
 	return original.New(endpoint)
@@ -77,6 +121,18 @@ func PossibleStatus2Values() []Status2 {
 }
 func PossibleStatusValues() []Status {
 	return original.PossibleStatusValues()
+}
+func PossibleTextOperationStatusCodesValues() []TextOperationStatusCodes {
+	return original.PossibleTextOperationStatusCodesValues()
+}
+func PossibleTextRecognitionResultConfidenceClassValues() []TextRecognitionResultConfidenceClass {
+	return original.PossibleTextRecognitionResultConfidenceClassValues()
+}
+func PossibleTextRecognitionResultDimensionUnitValues() []TextRecognitionResultDimensionUnit {
+	return original.PossibleTextRecognitionResultDimensionUnitValues()
+}
+func PossibleValueTypeValues() []ValueType {
+	return original.PossibleValueTypeValues()
 }
 func UserAgent() string {
 	return original.UserAgent() + " profiles/preview"

@@ -22,13 +22,14 @@ package billingapi
 import original "github.com/Azure/azure-sdk-for-go/services/preview/billing/mgmt/2018-11-01-preview/billing/billingapi"
 
 type AccountsClientAPI = original.AccountsClientAPI
-type AccountsValidateAddressClientAPI = original.AccountsValidateAddressClientAPI
+type AddressesClientAPI = original.AddressesClientAPI
 type AgreementsClientAPI = original.AgreementsClientAPI
 type AvailableBalancesClientAPI = original.AvailableBalancesClientAPI
 type DepartmentsClientAPI = original.DepartmentsClientAPI
 type EnrollmentAccountsClientAPI = original.EnrollmentAccountsClientAPI
 type InvoiceSectionsClientAPI = original.InvoiceSectionsClientAPI
 type InvoicesClientAPI = original.InvoicesClientAPI
+type LineOfCreditsClientAPI = original.LineOfCreditsClientAPI
 type OperationsClientAPI = original.OperationsClientAPI
 type PaymentMethodsClientAPI = original.PaymentMethodsClientAPI
 type PermissionsClientAPI = original.PermissionsClientAPI

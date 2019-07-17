@@ -15,7 +15,7 @@
   "description": "Accesses Android application developers' Google Play accounts.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/android-publisher",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/SlWD_44AAZzh33wX5EZhE-9oiU0\"",
+  "etag": "\"9eZ1uxVRThTDhLJCZHhqs3eQWz4/LNVDXWhUWjL42z9rVSE1bNdVBAQ\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/android-16.png",
     "x32": "https://www.google.com/images/icons/product/android-32.png"
@@ -189,7 +189,7 @@
       }
     }
   },
-  "revision": "20190120",
+  "revision": "20190618",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "InappPurchase": {
@@ -215,7 +215,7 @@
           "type": "string"
         },
         "purchaseState": {
-          "description": "The purchase state of the order. Possible values are:  \n- Purchased \n- Canceled",
+          "description": "The purchase state of the order. Possible values are:  \n- Purchased \n- Canceled \n- Pending",
           "format": "int32",
           "type": "integer"
         },

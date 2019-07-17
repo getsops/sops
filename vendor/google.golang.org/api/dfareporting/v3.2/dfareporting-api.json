@@ -20,7 +20,7 @@
   "description": "Manages your DoubleClick Campaign Manager ad campaigns and reports.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/doubleclick-advertisers/",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/Cqta-KTztcICj-6AFsrj8XKuKc4\"",
+  "etag": "\"9eZ1uxVRThTDhLJCZHhqs3eQWz4/m_e1pg763lT2azOGbaicH23tu28\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/doubleclick-16.gif",
     "x32": "https://www.google.com/images/icons/product/doubleclick-32.gif"
@@ -2190,6 +2190,7 @@
                 "OBJECT_FLOODLIGHT_ACTIVITY_GROUP",
                 "OBJECT_FLOODLIGHT_ACTVITY",
                 "OBJECT_FLOODLIGHT_CONFIGURATION",
+                "OBJECT_FLOODLIGHT_DV360_LINK",
                 "OBJECT_INSTREAM_CREATIVE",
                 "OBJECT_LANDING_PAGE",
                 "OBJECT_MEDIA_ORDER",
@@ -2210,6 +2211,7 @@
                 "OBJECT_USER_ROLE"
               ],
               "enumDescriptions": [
+                "",
                 "",
                 "",
                 "",
@@ -9530,7 +9532,7 @@
       }
     }
   },
-  "revision": "20180830",
+  "revision": "20190531",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Account": {

@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"net/url"
 	"time"
 
 	"github.com/golang/protobuf/proto"
@@ -130,7 +131,7 @@ func (c *CompanyClient) setGoogleClientInfo(keyval ...string) {
 
 // CreateCompany creates a new company entity.
 func (c *CompanyClient) CreateCompany(ctx context.Context, req *talentpb.CreateCompanyRequest, opts ...gax.CallOption) (*talentpb.Company, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.CreateCompany[0:len(c.CallOptions.CreateCompany):len(c.CallOptions.CreateCompany)], opts...)
 	var resp *talentpb.Company
@@ -147,7 +148,7 @@ func (c *CompanyClient) CreateCompany(ctx context.Context, req *talentpb.CreateC
 
 // GetCompany retrieves specified company.
 func (c *CompanyClient) GetCompany(ctx context.Context, req *talentpb.GetCompanyRequest, opts ...gax.CallOption) (*talentpb.Company, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.GetCompany[0:len(c.CallOptions.GetCompany):len(c.CallOptions.GetCompany)], opts...)
 	var resp *talentpb.Company
@@ -164,7 +165,7 @@ func (c *CompanyClient) GetCompany(ctx context.Context, req *talentpb.GetCompany
 
 // UpdateCompany updates specified company.
 func (c *CompanyClient) UpdateCompany(ctx context.Context, req *talentpb.UpdateCompanyRequest, opts ...gax.CallOption) (*talentpb.Company, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "company.name", req.GetCompany().GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "company.name", url.QueryEscape(req.GetCompany().GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.UpdateCompany[0:len(c.CallOptions.UpdateCompany):len(c.CallOptions.UpdateCompany)], opts...)
 	var resp *talentpb.Company
@@ -182,7 +183,7 @@ func (c *CompanyClient) UpdateCompany(ctx context.Context, req *talentpb.UpdateC
 // DeleteCompany deletes specified company.
 // Prerequisite: The company has no jobs associated with it.
 func (c *CompanyClient) DeleteCompany(ctx context.Context, req *talentpb.DeleteCompanyRequest, opts ...gax.CallOption) error {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.DeleteCompany[0:len(c.CallOptions.DeleteCompany):len(c.CallOptions.DeleteCompany)], opts...)
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
@@ -195,7 +196,7 @@ func (c *CompanyClient) DeleteCompany(ctx context.Context, req *talentpb.DeleteC
 
 // ListCompanies lists all companies associated with the project.
 func (c *CompanyClient) ListCompanies(ctx context.Context, req *talentpb.ListCompaniesRequest, opts ...gax.CallOption) *CompanyIterator {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ListCompanies[0:len(c.CallOptions.ListCompanies):len(c.CallOptions.ListCompanies)], opts...)
 	it := &CompanyIterator{}

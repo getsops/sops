@@ -534,6 +534,32 @@ const (
 	// The size limit of a document is 64 KB.
 	ErrCodeMaxDocumentSizeExceeded = "MaxDocumentSizeExceeded"
 
+	// ErrCodeOpsItemAlreadyExistsException for service response error code
+	// "OpsItemAlreadyExistsException".
+	//
+	// The OpsItem already exists.
+	ErrCodeOpsItemAlreadyExistsException = "OpsItemAlreadyExistsException"
+
+	// ErrCodeOpsItemInvalidParameterException for service response error code
+	// "OpsItemInvalidParameterException".
+	//
+	// A specified parameter argument isn't valid. Verify the available arguments
+	// and try again.
+	ErrCodeOpsItemInvalidParameterException = "OpsItemInvalidParameterException"
+
+	// ErrCodeOpsItemLimitExceededException for service response error code
+	// "OpsItemLimitExceededException".
+	//
+	// The request caused OpsItems to exceed one or more limits. For information
+	// about OpsItem limits, see What are the resource limits for OpsCenter? (http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-learn-more.html#OpsCenter-learn-more-limits).
+	ErrCodeOpsItemLimitExceededException = "OpsItemLimitExceededException"
+
+	// ErrCodeOpsItemNotFoundException for service response error code
+	// "OpsItemNotFoundException".
+	//
+	// The specified OpsItem ID doesn't exist. Verify the ID and try again.
+	ErrCodeOpsItemNotFoundException = "OpsItemNotFoundException"
+
 	// ErrCodeParameterAlreadyExists for service response error code
 	// "ParameterAlreadyExists".
 	//

@@ -158,7 +158,6 @@ func testStateTransitionSingleAddress(t *testing.T, want []connectivity.State, s
 
 	client, err := DialContext(ctx,
 		"",
-		WithWaitForHandshake(),
 		WithInsecure(),
 		WithBalancerName(stateRecordingBalancerName),
 		WithDialer(pl.Dialer()),
@@ -236,7 +235,7 @@ func (s) TestStateTransitions_ReadyToTransientFailure(t *testing.T) {
 		conn.Close()
 	}()
 
-	client, err := DialContext(ctx, lis.Addr().String(), WithWaitForHandshake(), WithInsecure(), WithBalancerName(stateRecordingBalancerName))
+	client, err := DialContext(ctx, lis.Addr().String(), WithInsecure(), WithBalancerName(stateRecordingBalancerName))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -322,7 +321,7 @@ func (s) TestStateTransitions_TriesAllAddrsBeforeTransientFailure(t *testing.T) 
 		{Addr: lis1.Addr().String()},
 		{Addr: lis2.Addr().String()},
 	}})
-	client, err := DialContext(ctx, "this-gets-overwritten", WithInsecure(), WithWaitForHandshake(), WithBalancerName(stateRecordingBalancerName), withResolverBuilder(rb))
+	client, err := DialContext(ctx, "this-gets-overwritten", WithInsecure(), WithBalancerName(stateRecordingBalancerName), withResolverBuilder(rb))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -418,7 +417,7 @@ func (s) TestStateTransitions_MultipleAddrsEntersReady(t *testing.T) {
 		{Addr: lis1.Addr().String()},
 		{Addr: lis2.Addr().String()},
 	}})
-	client, err := DialContext(ctx, "this-gets-overwritten", WithInsecure(), WithWaitForHandshake(), WithBalancerName(stateRecordingBalancerName), withResolverBuilder(rb))
+	client, err := DialContext(ctx, "this-gets-overwritten", WithInsecure(), WithBalancerName(stateRecordingBalancerName), withResolverBuilder(rb))
 	if err != nil {
 		t.Fatal(err)
 	}

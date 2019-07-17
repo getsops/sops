@@ -60,7 +60,7 @@ type EventHubsClientAPI interface {
 	ListAll(ctx context.Context, resourceGroupName string, namespaceName string) (result eventhub.ListResultPage, err error)
 	ListAuthorizationRules(ctx context.Context, resourceGroupName string, namespaceName string, eventHubName string) (result eventhub.SharedAccessAuthorizationRuleListResultPage, err error)
 	ListKeys(ctx context.Context, resourceGroupName string, namespaceName string, eventHubName string, authorizationRuleName string) (result eventhub.ResourceListKeys, err error)
-	PosttAuthorizationRule(ctx context.Context, resourceGroupName string, namespaceName string, eventHubName string, authorizationRuleName string) (result eventhub.SharedAccessAuthorizationRuleResource, err error)
+	PostAuthorizationRule(ctx context.Context, resourceGroupName string, namespaceName string, eventHubName string, authorizationRuleName string) (result eventhub.SharedAccessAuthorizationRuleResource, err error)
 	RegenerateKeys(ctx context.Context, resourceGroupName string, namespaceName string, eventHubName string, authorizationRuleName string, parameters eventhub.RegenerateKeysParameters) (result eventhub.ResourceListKeys, err error)
 }
 

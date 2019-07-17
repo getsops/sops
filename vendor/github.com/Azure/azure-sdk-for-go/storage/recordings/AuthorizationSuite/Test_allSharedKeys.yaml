@@ -1,67 +1,72 @@
 ---
 version: 1
-rwmutex: {}
 interactions:
 - request:
     body: ""
     form: {}
     headers:
       Authorization:
-      - SharedKey golangrocksonazure:OzZHjyBdURd4XnnjeNmV1a6eHZON1dHNwnuIIextZJg=
+      - SharedKey golangrocksonazure:aWurwEbt+cgayUDuJkrGa9uMJEE33sSszJ9J+yhp4FQ=
       User-Agent:
-      - Go/go1.9beta1 (amd64-windows) azure-storage-go/10.0.2 api-version/2016-05-31
+      - Go/go1.12.4 (amd64-windows) azure-storage-go/latest api-version/2018-03-28
         blob
       x-ms-date:
-      - Thu, 20 Jul 2017 23:33:54 GMT
+      - Tue, 28 May 2019 22:35:37 GMT
       x-ms-version:
-      - 2016-05-31
+      - "2018-03-28"
     url: https://golangrocksonazure.blob.core.windows.net/cnt-137authorizationsuitetestall?restype=container
     method: PUT
   response:
     body: ""
     headers:
+      Content-Length:
+      - "0"
       Date:
-      - Thu, 20 Jul 2017 23:33:53 GMT
+      - Tue, 28 May 2019 22:35:36 GMT
       Etag:
-      - '"0x8D4CFC7C89D83FB"'
+      - '"0x8D6E3BCCE125894"'
       Last-Modified:
-      - Thu, 20 Jul 2017 23:33:53 GMT
+      - Tue, 28 May 2019 22:35:37 GMT
       Server:
       - Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0
       X-Ms-Request-Id:
-      - 7d612ddd-0001-0009-26b0-01ca46000000
+      - 37813a2f-e01e-00b7-34a5-15d5a7000000
       X-Ms-Version:
-      - 2016-05-31
+      - "2018-03-28"
     status: 201 Created
     code: 201
+    duration: ""
 - request:
     body: ""
     form: {}
     headers:
       Authorization:
-      - SharedKey golangrocksonazure:eOi6xDQa7jIK3zStNE0trtEQzYfzP7pKJiecP4mNOZc=
+      - SharedKey golangrocksonazure:JG1+hMs52e76/txthqaQ0+QfOdZnFU+GiJhVFfDLWac=
       User-Agent:
-      - Go/go1.9beta1 (amd64-windows) azure-storage-go/10.0.2 api-version/2016-05-31
+      - Go/go1.12.4 (amd64-windows) azure-storage-go/latest api-version/2018-03-28
         blob
       x-ms-date:
-      - Thu, 20 Jul 2017 23:33:54 GMT
+      - Tue, 28 May 2019 22:35:37 GMT
       x-ms-version:
-      - 2016-05-31
+      - "2018-03-28"
     url: https://golangrocksonazure.blob.core.windows.net/cnt-137authorizationsuitetestall?restype=container
     method: DELETE
   response:
     body: ""
     headers:
+      Content-Length:
+      - "0"
       Date:
-      - Thu, 20 Jul 2017 23:33:53 GMT
+      - Tue, 28 May 2019 22:35:36 GMT
       Server:
       - Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0
       X-Ms-Request-Id:
-      - 7d612ddf-0001-0009-27b0-01ca46000000
+      - 37813a41-e01e-00b7-43a5-15d5a7000000
       X-Ms-Version:
-      - 2016-05-31
+      - "2018-03-28"
     status: 202 Accepted
     code: 202
+    duration: ""
 - request:
     body: |
       {"TableName":"table137authorizationsuitetestal"}
@@ -72,7 +77,7 @@ interactions:
       Accept-Charset:
       - UTF-8
       Authorization:
-      - SharedKey golangrocksonazure:VyGmfpovlo4aAZgyVK0UsMuJCxDx5aUMslNvvZMZ/6c=
+      - SharedKey golangrocksonazure:oFCjxkzpFBS+mpz7MBYC5RwmxF2b+86eTh5sAbkixNM=
       Content-Length:
       - "49"
       Content-Type:
@@ -80,12 +85,12 @@ interactions:
       Prefer:
       - return-no-content
       User-Agent:
-      - Go/go1.9beta1 (amd64-windows) azure-storage-go/10.0.2 api-version/2016-05-31
+      - Go/go1.12.4 (amd64-windows) azure-storage-go/latest api-version/2018-03-28
         table
       x-ms-date:
-      - Thu, 20 Jul 2017 23:33:54 GMT
+      - Tue, 28 May 2019 22:35:37 GMT
       x-ms-version:
-      - 2016-05-31
+      - "2018-03-28"
     url: https://golangrocksonazure.table.core.windows.net/Tables?timeout=30
     method: POST
   response:
@@ -98,7 +103,7 @@ interactions:
       Dataserviceid:
       - https://golangrocksonazure.table.core.windows.net/Tables('table137authorizationsuitetestal')
       Date:
-      - Thu, 20 Jul 2017 23:33:53 GMT
+      - Tue, 28 May 2019 22:35:37 GMT
       Location:
       - https://golangrocksonazure.table.core.windows.net/Tables('table137authorizationsuitetestal')
       Preference-Applied:
@@ -108,11 +113,12 @@ interactions:
       X-Content-Type-Options:
       - nosniff
       X-Ms-Request-Id:
-      - 875b7d34-0002-0036-21b0-0102e5000000
+      - ac80f9b6-6002-0062-24a5-153a2a000000
       X-Ms-Version:
-      - 2016-05-31
+      - "2018-03-28"
     status: 204 No Content
     code: 204
+    duration: ""
 - request:
     body: ""
     form: {}
@@ -120,16 +126,16 @@ interactions:
       Accept:
       - application/json;odata=nometadata
       Authorization:
-      - SharedKey golangrocksonazure:Rmtgvv4EZZRmeQof135rusnVNTui2QF7F5hPkhakDig=
+      - SharedKey golangrocksonazure:tukYpYzGN0by0DGJbe1nOI9lHjxe1T9VlIUHD5reIrg=
       Prefer:
       - return-no-content
       User-Agent:
-      - Go/go1.9beta1 (amd64-windows) azure-storage-go/10.0.2 api-version/2016-05-31
+      - Go/go1.12.4 (amd64-windows) azure-storage-go/latest api-version/2018-03-28
         table
       x-ms-date:
-      - Thu, 20 Jul 2017 23:33:54 GMT
+      - Tue, 28 May 2019 22:35:37 GMT
       x-ms-version:
-      - 2016-05-31
+      - "2018-03-28"
     url: https://golangrocksonazure.table.core.windows.net/Tables%28%27table137authorizationsuitetestal%27%29?timeout=30
     method: DELETE
   response:
@@ -140,77 +146,84 @@ interactions:
       Content-Length:
       - "0"
       Date:
-      - Thu, 20 Jul 2017 23:33:53 GMT
+      - Tue, 28 May 2019 22:35:37 GMT
       Server:
       - Windows-Azure-Table/1.0 Microsoft-HTTPAPI/2.0
       X-Content-Type-Options:
       - nosniff
       X-Ms-Request-Id:
-      - 875b7d3a-0002-0036-25b0-0102e5000000
+      - ac80f9bf-6002-0062-2ba5-153a2a000000
       X-Ms-Version:
-      - 2016-05-31
+      - "2018-03-28"
     status: 204 No Content
     code: 204
+    duration: ""
 - request:
     body: ""
     form: {}
     headers:
       Authorization:
-      - SharedKeyLite golangrocksonazure:s+3Aw0qSAZKp1tRxjPULXWQg3A9fsJLXj5pW0B0LlsA=
+      - SharedKeyLite golangrocksonazure:e2FTzTySAQo6rZS3iCzRbXAsvb9Hmbl8HvGf1vDpueU=
       User-Agent:
-      - Go/go1.9beta1 (amd64-windows) azure-storage-go/10.0.2 api-version/2016-05-31
+      - Go/go1.12.4 (amd64-windows) azure-storage-go/latest api-version/2018-03-28
         blob
       x-ms-date:
-      - Thu, 20 Jul 2017 23:33:54 GMT
+      - Tue, 28 May 2019 22:35:37 GMT
       x-ms-version:
-      - 2016-05-31
+      - "2018-03-28"
     url: https://golangrocksonazure.blob.core.windows.net/cnt-237authorizationsuitetestall?restype=container
     method: PUT
   response:
     body: ""
     headers:
+      Content-Length:
+      - "0"
       Date:
-      - Thu, 20 Jul 2017 23:33:53 GMT
+      - Tue, 28 May 2019 22:35:37 GMT
       Etag:
-      - '"0x8D4CFC7C8B444F4"'
+      - '"0x8D6E3BCCE4C5EDE"'
       Last-Modified:
-      - Thu, 20 Jul 2017 23:33:53 GMT
+      - Tue, 28 May 2019 22:35:37 GMT
       Server:
       - Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0
       X-Ms-Request-Id:
-      - 7d612de5-0001-0009-2db0-01ca46000000
+      - 37813c92-e01e-00b7-65a5-15d5a7000000
       X-Ms-Version:
-      - 2016-05-31
+      - "2018-03-28"
     status: 201 Created
     code: 201
+    duration: ""
 - request:
     body: ""
     form: {}
     headers:
       Authorization:
-      - SharedKeyLite golangrocksonazure:H9/Kb+3HgZIdKzk8zL7T735iqhdMPwZ27H/IyY8c6TU=
+      - SharedKeyLite golangrocksonazure:nmEjxRPV7qibJ3rxt9/lzllSQ+ruq9uQkL8QFh6ewfs=
       User-Agent:
-      - Go/go1.9beta1 (amd64-windows) azure-storage-go/10.0.2 api-version/2016-05-31
+      - Go/go1.12.4 (amd64-windows) azure-storage-go/latest api-version/2018-03-28
         blob
       x-ms-date:
-      - Thu, 20 Jul 2017 23:33:54 GMT
+      - Tue, 28 May 2019 22:35:37 GMT
       x-ms-version:
-      - 2016-05-31
+      - "2018-03-28"
     url: https://golangrocksonazure.blob.core.windows.net/cnt-237authorizationsuitetestall?restype=container
     method: DELETE
   response:
     body: ""
     headers:
+      Content-Length:
+      - "0"
       Date:
-      - Thu, 20 Jul 2017 23:33:53 GMT
+      - Tue, 28 May 2019 22:35:37 GMT
       Server:
       - Windows-Azure-Blob/1.0 Microsoft-HTTPAPI/2.0
       X-Ms-Request-Id:
-      - 7d612deb-0001-0009-32b0-01ca46000000
+      - 37813cae-e01e-00b7-7da5-15d5a7000000
       X-Ms-Version:
-      - 2016-05-31
+      - "2018-03-28"
     status: 202 Accepted
     code: 202
+    duration: ""
 - request:
     body: |
       {"TableName":"table237authorizationsuitetestal"}
@@ -221,7 +234,7 @@ interactions:
       Accept-Charset:
       - UTF-8
       Authorization:
-      - SharedKeyLite golangrocksonazure:IflASiOabU40iodgWdZ4pWyMFKDmRdokoEnV8UHIeJc=
+      - SharedKeyLite golangrocksonazure:9r3zRpYev5py15bJ5OcAcydFAxlaT6dzyjFd9hqw3a0=
       Content-Length:
       - "49"
       Content-Type:
@@ -229,12 +242,12 @@ interactions:
       Prefer:
       - return-no-content
       User-Agent:
-      - Go/go1.9beta1 (amd64-windows) azure-storage-go/10.0.2 api-version/2016-05-31
+      - Go/go1.12.4 (amd64-windows) azure-storage-go/latest api-version/2018-03-28
         table
       x-ms-date:
-      - Thu, 20 Jul 2017 23:33:54 GMT
+      - Tue, 28 May 2019 22:35:37 GMT
       x-ms-version:
-      - 2016-05-31
+      - "2018-03-28"
     url: https://golangrocksonazure.table.core.windows.net/Tables?timeout=30
     method: POST
   response:
@@ -247,7 +260,7 @@ interactions:
       Dataserviceid:
       - https://golangrocksonazure.table.core.windows.net/Tables('table237authorizationsuitetestal')
       Date:
-      - Thu, 20 Jul 2017 23:33:53 GMT
+      - Tue, 28 May 2019 22:35:37 GMT
       Location:
       - https://golangrocksonazure.table.core.windows.net/Tables('table237authorizationsuitetestal')
       Preference-Applied:
@@ -257,11 +270,12 @@ interactions:
       X-Content-Type-Options:
       - nosniff
       X-Ms-Request-Id:
-      - 875b7d3b-0002-0036-26b0-0102e5000000
+      - ac80f9e9-6002-0062-50a5-153a2a000000
       X-Ms-Version:
-      - 2016-05-31
+      - "2018-03-28"
     status: 204 No Content
     code: 204
+    duration: ""
 - request:
     body: ""
     form: {}
@@ -269,16 +283,16 @@ interactions:
       Accept:
       - application/json;odata=nometadata
       Authorization:
-      - SharedKeyLite golangrocksonazure:qCzKfKZucx9oXNXSxh9YWqaNoBpsVHLUazqqc+03mXY=
+      - SharedKeyLite golangrocksonazure:/upylzjhMzTkl3ZtQOd7wE5oqstTACsTBdqnxUywxbs=
       Prefer:
       - return-no-content
       User-Agent:
-      - Go/go1.9beta1 (amd64-windows) azure-storage-go/10.0.2 api-version/2016-05-31
+      - Go/go1.12.4 (amd64-windows) azure-storage-go/latest api-version/2018-03-28
         table
       x-ms-date:
-      - Thu, 20 Jul 2017 23:33:54 GMT
+      - Tue, 28 May 2019 22:35:37 GMT
       x-ms-version:
-      - 2016-05-31
+      - "2018-03-28"
     url: https://golangrocksonazure.table.core.windows.net/Tables%28%27table237authorizationsuitetestal%27%29?timeout=30
     method: DELETE
   response:
@@ -289,14 +303,15 @@ interactions:
       Content-Length:
       - "0"
       Date:
-      - Thu, 20 Jul 2017 23:33:53 GMT
+      - Tue, 28 May 2019 22:35:37 GMT
       Server:
       - Windows-Azure-Table/1.0 Microsoft-HTTPAPI/2.0
       X-Content-Type-Options:
       - nosniff
       X-Ms-Request-Id:
-      - 875b7d3d-0002-0036-27b0-0102e5000000
+      - ac80f9ee-6002-0062-54a5-153a2a000000
       X-Ms-Version:
-      - 2016-05-31
+      - "2018-03-28"
     status: 204 No Content
     code: 204
+    duration: ""

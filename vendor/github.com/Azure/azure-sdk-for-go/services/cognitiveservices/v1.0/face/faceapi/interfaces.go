@@ -27,8 +27,8 @@ import (
 
 // ClientAPI contains the set of methods on the Client type.
 type ClientAPI interface {
-	DetectWithStream(ctx context.Context, imageParameter io.ReadCloser, returnFaceID *bool, returnFaceLandmarks *bool, returnFaceAttributes []face.AttributeType, recognitionModel face.RecognitionModel, returnRecognitionModel *bool) (result face.ListDetectedFace, err error)
-	DetectWithURL(ctx context.Context, imageURL face.ImageURL, returnFaceID *bool, returnFaceLandmarks *bool, returnFaceAttributes []face.AttributeType, recognitionModel face.RecognitionModel, returnRecognitionModel *bool) (result face.ListDetectedFace, err error)
+	DetectWithStream(ctx context.Context, imageParameter io.ReadCloser, returnFaceID *bool, returnFaceLandmarks *bool, returnFaceAttributes []face.AttributeType, recognitionModel face.RecognitionModel, returnRecognitionModel *bool, detectionModel face.DetectionModel) (result face.ListDetectedFace, err error)
+	DetectWithURL(ctx context.Context, imageURL face.ImageURL, returnFaceID *bool, returnFaceLandmarks *bool, returnFaceAttributes []face.AttributeType, recognitionModel face.RecognitionModel, returnRecognitionModel *bool, detectionModel face.DetectionModel) (result face.ListDetectedFace, err error)
 	FindSimilar(ctx context.Context, body face.FindSimilarRequest) (result face.ListSimilarFace, err error)
 	Group(ctx context.Context, body face.GroupRequest) (result face.GroupResult, err error)
 	Identify(ctx context.Context, body face.IdentifyRequest) (result face.ListIdentifyResult, err error)
@@ -40,8 +40,8 @@ var _ ClientAPI = (*face.Client)(nil)
 
 // PersonGroupPersonClientAPI contains the set of methods on the PersonGroupPersonClient type.
 type PersonGroupPersonClientAPI interface {
-	AddFaceFromStream(ctx context.Context, personGroupID string, personID uuid.UUID, imageParameter io.ReadCloser, userData string, targetFace []int32) (result face.PersistedFace, err error)
-	AddFaceFromURL(ctx context.Context, personGroupID string, personID uuid.UUID, imageURL face.ImageURL, userData string, targetFace []int32) (result face.PersistedFace, err error)
+	AddFaceFromStream(ctx context.Context, personGroupID string, personID uuid.UUID, imageParameter io.ReadCloser, userData string, targetFace []int32, detectionModel face.DetectionModel) (result face.PersistedFace, err error)
+	AddFaceFromURL(ctx context.Context, personGroupID string, personID uuid.UUID, imageURL face.ImageURL, userData string, targetFace []int32, detectionModel face.DetectionModel) (result face.PersistedFace, err error)
 	Create(ctx context.Context, personGroupID string, body face.NameAndUserDataContract) (result face.Person, err error)
 	Delete(ctx context.Context, personGroupID string, personID uuid.UUID) (result autorest.Response, err error)
 	DeleteFace(ctx context.Context, personGroupID string, personID uuid.UUID, persistedFaceID uuid.UUID) (result autorest.Response, err error)
@@ -69,8 +69,8 @@ var _ PersonGroupClientAPI = (*face.PersonGroupClient)(nil)
 
 // ListClientAPI contains the set of methods on the ListClient type.
 type ListClientAPI interface {
-	AddFaceFromStream(ctx context.Context, faceListID string, imageParameter io.ReadCloser, userData string, targetFace []int32) (result face.PersistedFace, err error)
-	AddFaceFromURL(ctx context.Context, faceListID string, imageURL face.ImageURL, userData string, targetFace []int32) (result face.PersistedFace, err error)
+	AddFaceFromStream(ctx context.Context, faceListID string, imageParameter io.ReadCloser, userData string, targetFace []int32, detectionModel face.DetectionModel) (result face.PersistedFace, err error)
+	AddFaceFromURL(ctx context.Context, faceListID string, imageURL face.ImageURL, userData string, targetFace []int32, detectionModel face.DetectionModel) (result face.PersistedFace, err error)
 	Create(ctx context.Context, faceListID string, body face.MetaDataContract) (result autorest.Response, err error)
 	Delete(ctx context.Context, faceListID string) (result autorest.Response, err error)
 	DeleteFace(ctx context.Context, faceListID string, persistedFaceID uuid.UUID) (result autorest.Response, err error)
@@ -83,8 +83,8 @@ var _ ListClientAPI = (*face.ListClient)(nil)
 
 // LargePersonGroupPersonClientAPI contains the set of methods on the LargePersonGroupPersonClient type.
 type LargePersonGroupPersonClientAPI interface {
-	AddFaceFromStream(ctx context.Context, largePersonGroupID string, personID uuid.UUID, imageParameter io.ReadCloser, userData string, targetFace []int32) (result face.PersistedFace, err error)
-	AddFaceFromURL(ctx context.Context, largePersonGroupID string, personID uuid.UUID, imageURL face.ImageURL, userData string, targetFace []int32) (result face.PersistedFace, err error)
+	AddFaceFromStream(ctx context.Context, largePersonGroupID string, personID uuid.UUID, imageParameter io.ReadCloser, userData string, targetFace []int32, detectionModel face.DetectionModel) (result face.PersistedFace, err error)
+	AddFaceFromURL(ctx context.Context, largePersonGroupID string, personID uuid.UUID, imageURL face.ImageURL, userData string, targetFace []int32, detectionModel face.DetectionModel) (result face.PersistedFace, err error)
 	Create(ctx context.Context, largePersonGroupID string, body face.NameAndUserDataContract) (result face.Person, err error)
 	Delete(ctx context.Context, largePersonGroupID string, personID uuid.UUID) (result autorest.Response, err error)
 	DeleteFace(ctx context.Context, largePersonGroupID string, personID uuid.UUID, persistedFaceID uuid.UUID) (result autorest.Response, err error)
@@ -112,8 +112,8 @@ var _ LargePersonGroupClientAPI = (*face.LargePersonGroupClient)(nil)
 
 // LargeFaceListClientAPI contains the set of methods on the LargeFaceListClient type.
 type LargeFaceListClientAPI interface {
-	AddFaceFromStream(ctx context.Context, largeFaceListID string, imageParameter io.ReadCloser, userData string, targetFace []int32) (result face.PersistedFace, err error)
-	AddFaceFromURL(ctx context.Context, largeFaceListID string, imageURL face.ImageURL, userData string, targetFace []int32) (result face.PersistedFace, err error)
+	AddFaceFromStream(ctx context.Context, largeFaceListID string, imageParameter io.ReadCloser, userData string, targetFace []int32, detectionModel face.DetectionModel) (result face.PersistedFace, err error)
+	AddFaceFromURL(ctx context.Context, largeFaceListID string, imageURL face.ImageURL, userData string, targetFace []int32, detectionModel face.DetectionModel) (result face.PersistedFace, err error)
 	Create(ctx context.Context, largeFaceListID string, body face.MetaDataContract) (result autorest.Response, err error)
 	Delete(ctx context.Context, largeFaceListID string) (result autorest.Response, err error)
 	DeleteFace(ctx context.Context, largeFaceListID string, persistedFaceID uuid.UUID) (result autorest.Response, err error)

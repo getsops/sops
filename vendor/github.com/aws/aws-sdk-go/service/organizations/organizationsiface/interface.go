@@ -248,6 +248,13 @@ type OrganizationsAPI interface {
 	ListRootsPages(*organizations.ListRootsInput, func(*organizations.ListRootsOutput, bool) bool) error
 	ListRootsPagesWithContext(aws.Context, *organizations.ListRootsInput, func(*organizations.ListRootsOutput, bool) bool, ...request.Option) error
 
+	ListTagsForResource(*organizations.ListTagsForResourceInput) (*organizations.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *organizations.ListTagsForResourceInput, ...request.Option) (*organizations.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*organizations.ListTagsForResourceInput) (*request.Request, *organizations.ListTagsForResourceOutput)
+
+	ListTagsForResourcePages(*organizations.ListTagsForResourceInput, func(*organizations.ListTagsForResourceOutput, bool) bool) error
+	ListTagsForResourcePagesWithContext(aws.Context, *organizations.ListTagsForResourceInput, func(*organizations.ListTagsForResourceOutput, bool) bool, ...request.Option) error
+
 	ListTargetsForPolicy(*organizations.ListTargetsForPolicyInput) (*organizations.ListTargetsForPolicyOutput, error)
 	ListTargetsForPolicyWithContext(aws.Context, *organizations.ListTargetsForPolicyInput, ...request.Option) (*organizations.ListTargetsForPolicyOutput, error)
 	ListTargetsForPolicyRequest(*organizations.ListTargetsForPolicyInput) (*request.Request, *organizations.ListTargetsForPolicyOutput)
@@ -262,6 +269,14 @@ type OrganizationsAPI interface {
 	RemoveAccountFromOrganization(*organizations.RemoveAccountFromOrganizationInput) (*organizations.RemoveAccountFromOrganizationOutput, error)
 	RemoveAccountFromOrganizationWithContext(aws.Context, *organizations.RemoveAccountFromOrganizationInput, ...request.Option) (*organizations.RemoveAccountFromOrganizationOutput, error)
 	RemoveAccountFromOrganizationRequest(*organizations.RemoveAccountFromOrganizationInput) (*request.Request, *organizations.RemoveAccountFromOrganizationOutput)
+
+	TagResource(*organizations.TagResourceInput) (*organizations.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *organizations.TagResourceInput, ...request.Option) (*organizations.TagResourceOutput, error)
+	TagResourceRequest(*organizations.TagResourceInput) (*request.Request, *organizations.TagResourceOutput)
+
+	UntagResource(*organizations.UntagResourceInput) (*organizations.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *organizations.UntagResourceInput, ...request.Option) (*organizations.UntagResourceOutput, error)
+	UntagResourceRequest(*organizations.UntagResourceInput) (*request.Request, *organizations.UntagResourceOutput)
 
 	UpdateOrganizationalUnit(*organizations.UpdateOrganizationalUnitInput) (*organizations.UpdateOrganizationalUnitOutput, error)
 	UpdateOrganizationalUnitWithContext(aws.Context, *organizations.UpdateOrganizationalUnitInput, ...request.Option) (*organizations.UpdateOrganizationalUnitOutput, error)

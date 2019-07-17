@@ -2400,9 +2400,29 @@ type Encryption struct {
 	// Algorithm is a required field
 	Algorithm *string `locationName:"algorithm" type:"string" required:"true" enum:"Algorithm"`
 
+	// A 128-bit, 16-byte hex value represented by a 32-character string, to be
+	// used with the key for encrypting content. This parameter is not valid for
+	// static key encryption.
+	ConstantInitializationVector *string `locationName:"constantInitializationVector" type:"string"`
+
+	// The value of one of the devices that you configured with your digital rights
+	// management (DRM) platform key provider. This parameter is required for SPEKE
+	// encryption and is not valid for static key encryption.
+	DeviceId *string `locationName:"deviceId" type:"string"`
+
 	// The type of key that is used for the encryption. If no keyType is provided,
 	// the service will use the default setting (static-key).
 	KeyType *string `locationName:"keyType" type:"string" enum:"KeyType"`
+
+	// The AWS Region that the API Gateway proxy endpoint was created in. This parameter
+	// is required for SPEKE encryption and is not valid for static key encryption.
+	Region *string `locationName:"region" type:"string"`
+
+	// An identifier for the content. The service sends this value to the key server
+	// to identify the current endpoint. The resource ID is also known as the content
+	// ID. This parameter is required for SPEKE encryption and is not valid for
+	// static key encryption.
+	ResourceId *string `locationName:"resourceId" type:"string"`
 
 	// The ARN of the role that you created during setup (when you set up AWS Elemental
 	// MediaConnect as a trusted entity).
@@ -2410,11 +2430,15 @@ type Encryption struct {
 	// RoleArn is a required field
 	RoleArn *string `locationName:"roleArn" type:"string" required:"true"`
 
-	// The ARN that was assigned to the secret that you created in AWS Secrets Manager
-	// to store the encryption key.
-	//
-	// SecretArn is a required field
-	SecretArn *string `locationName:"secretArn" type:"string" required:"true"`
+	// The ARN of the secret that you created in AWS Secrets Manager to store the
+	// encryption key. This parameter is required for static key encryption and
+	// is not valid for SPEKE encryption.
+	SecretArn *string `locationName:"secretArn" type:"string"`
+
+	// The URL from the API Gateway proxy that you set up to talk to your key server.
+	// This parameter is required for SPEKE encryption and is not valid for static
+	// key encryption.
+	Url *string `locationName:"url" type:"string"`
 }
 
 // String returns the string representation
@@ -2436,9 +2460,6 @@ func (s *Encryption) Validate() error {
 	if s.RoleArn == nil {
 		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
 	}
-	if s.SecretArn == nil {
-		invalidParams.Add(request.NewErrParamRequired("SecretArn"))
-	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -2452,9 +2473,33 @@ func (s *Encryption) SetAlgorithm(v string) *Encryption {
 	return s
 }
 
+// SetConstantInitializationVector sets the ConstantInitializationVector field's value.
+func (s *Encryption) SetConstantInitializationVector(v string) *Encryption {
+	s.ConstantInitializationVector = &v
+	return s
+}
+
+// SetDeviceId sets the DeviceId field's value.
+func (s *Encryption) SetDeviceId(v string) *Encryption {
+	s.DeviceId = &v
+	return s
+}
+
 // SetKeyType sets the KeyType field's value.
 func (s *Encryption) SetKeyType(v string) *Encryption {
 	s.KeyType = &v
+	return s
+}
+
+// SetRegion sets the Region field's value.
+func (s *Encryption) SetRegion(v string) *Encryption {
+	s.Region = &v
+	return s
+}
+
+// SetResourceId sets the ResourceId field's value.
+func (s *Encryption) SetResourceId(v string) *Encryption {
+	s.ResourceId = &v
 	return s
 }
 
@@ -2467,6 +2512,12 @@ func (s *Encryption) SetRoleArn(v string) *Encryption {
 // SetSecretArn sets the SecretArn field's value.
 func (s *Encryption) SetSecretArn(v string) *Encryption {
 	s.SecretArn = &v
+	return s
+}
+
+// SetUrl sets the Url field's value.
+func (s *Encryption) SetUrl(v string) *Encryption {
+	s.Url = &v
 	return s
 }
 
@@ -4062,17 +4113,43 @@ type UpdateEncryption struct {
 	// or aes256).
 	Algorithm *string `locationName:"algorithm" type:"string" enum:"Algorithm"`
 
+	// A 128-bit, 16-byte hex value represented by a 32-character string, to be
+	// used with the key for encrypting content. This parameter is not valid for
+	// static key encryption.
+	ConstantInitializationVector *string `locationName:"constantInitializationVector" type:"string"`
+
+	// The value of one of the devices that you configured with your digital rights
+	// management (DRM) platform key provider. This parameter is required for SPEKE
+	// encryption and is not valid for static key encryption.
+	DeviceId *string `locationName:"deviceId" type:"string"`
+
 	// The type of key that is used for the encryption. If no keyType is provided,
 	// the service will use the default setting (static-key).
 	KeyType *string `locationName:"keyType" type:"string" enum:"KeyType"`
+
+	// The AWS Region that the API Gateway proxy endpoint was created in. This parameter
+	// is required for SPEKE encryption and is not valid for static key encryption.
+	Region *string `locationName:"region" type:"string"`
+
+	// An identifier for the content. The service sends this value to the key server
+	// to identify the current endpoint. The resource ID is also known as the content
+	// ID. This parameter is required for SPEKE encryption and is not valid for
+	// static key encryption.
+	ResourceId *string `locationName:"resourceId" type:"string"`
 
 	// The ARN of the role that you created during setup (when you set up AWS Elemental
 	// MediaConnect as a trusted entity).
 	RoleArn *string `locationName:"roleArn" type:"string"`
 
-	// The ARN that was assigned to the secret that you created in AWS Secrets Manager
-	// to store the encryption key.
+	// The ARN of the secret that you created in AWS Secrets Manager to store the
+	// encryption key. This parameter is required for static key encryption and
+	// is not valid for SPEKE encryption.
 	SecretArn *string `locationName:"secretArn" type:"string"`
+
+	// The URL from the API Gateway proxy that you set up to talk to your key server.
+	// This parameter is required for SPEKE encryption and is not valid for static
+	// key encryption.
+	Url *string `locationName:"url" type:"string"`
 }
 
 // String returns the string representation
@@ -4091,9 +4168,33 @@ func (s *UpdateEncryption) SetAlgorithm(v string) *UpdateEncryption {
 	return s
 }
 
+// SetConstantInitializationVector sets the ConstantInitializationVector field's value.
+func (s *UpdateEncryption) SetConstantInitializationVector(v string) *UpdateEncryption {
+	s.ConstantInitializationVector = &v
+	return s
+}
+
+// SetDeviceId sets the DeviceId field's value.
+func (s *UpdateEncryption) SetDeviceId(v string) *UpdateEncryption {
+	s.DeviceId = &v
+	return s
+}
+
 // SetKeyType sets the KeyType field's value.
 func (s *UpdateEncryption) SetKeyType(v string) *UpdateEncryption {
 	s.KeyType = &v
+	return s
+}
+
+// SetRegion sets the Region field's value.
+func (s *UpdateEncryption) SetRegion(v string) *UpdateEncryption {
+	s.Region = &v
+	return s
+}
+
+// SetResourceId sets the ResourceId field's value.
+func (s *UpdateEncryption) SetResourceId(v string) *UpdateEncryption {
+	s.ResourceId = &v
 	return s
 }
 
@@ -4106,6 +4207,12 @@ func (s *UpdateEncryption) SetRoleArn(v string) *UpdateEncryption {
 // SetSecretArn sets the SecretArn field's value.
 func (s *UpdateEncryption) SetSecretArn(v string) *UpdateEncryption {
 	s.SecretArn = &v
+	return s
+}
+
+// SetUrl sets the Url field's value.
+func (s *UpdateEncryption) SetUrl(v string) *UpdateEncryption {
+	s.Url = &v
 	return s
 }
 
@@ -4582,6 +4689,9 @@ const (
 )
 
 const (
+	// KeyTypeSpeke is a KeyType enum value
+	KeyTypeSpeke = "speke"
+
 	// KeyTypeStaticKey is a KeyType enum value
 	KeyTypeStaticKey = "static-key"
 )

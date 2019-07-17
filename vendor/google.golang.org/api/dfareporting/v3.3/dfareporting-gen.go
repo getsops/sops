@@ -3282,9 +3282,9 @@ type Conversion struct {
 
 	// EncryptedUserId: The alphanumeric encrypted user ID. When set,
 	// encryptionInfo should also be specified. This field is mutually
-	// exclusive with encryptedUserIdCandidates[], mobileDeviceId and gclid.
-	// This or encryptedUserIdCandidates[] or mobileDeviceId or gclid is a
-	// required field.
+	// exclusive with encryptedUserIdCandidates[], matchId, mobileDeviceId
+	// and gclid. This or encryptedUserIdCandidates[] or matchId or
+	// mobileDeviceId or gclid is a required field.
 	EncryptedUserId string `json:"encryptedUserId,omitempty"`
 
 	// EncryptedUserIdCandidates: A list of the alphanumeric encrypted user
@@ -3294,8 +3294,8 @@ type Conversion struct {
 	// When set, encryptionInfo should also be specified. This field may
 	// only be used when calling batchinsert; it is not supported by
 	// batchupdate. This field is mutually exclusive with encryptedUserId,
-	// mobileDeviceId and gclid. This or encryptedUserId or mobileDeviceId
-	// or gclid is a required field.
+	// matchId, mobileDeviceId and gclid. This or encryptedUserId or matchId
+	// or mobileDeviceId or gclid is a required field.
 	EncryptedUserIdCandidates []string `json:"encryptedUserIdCandidates,omitempty"`
 
 	// FloodlightActivityId: Floodlight Activity ID of this conversion. This
@@ -3307,9 +3307,10 @@ type Conversion struct {
 	FloodlightConfigurationId int64 `json:"floodlightConfigurationId,omitempty,string"`
 
 	// Gclid: The Google click ID. This field is mutually exclusive with
-	// encryptedUserId, encryptedUserIdCandidates[] and mobileDeviceId. This
-	// or encryptedUserId or encryptedUserIdCandidates[] or mobileDeviceId
-	// is a required field.
+	// encryptedUserId, encryptedUserIdCandidates[], matchId and
+	// mobileDeviceId. This or encryptedUserId or
+	// encryptedUserIdCandidates[] or matchId or mobileDeviceId is a
+	// required field.
 	Gclid string `json:"gclid,omitempty"`
 
 	// Kind: Identifies what kind of resource this is. Value: the fixed
@@ -3321,10 +3322,18 @@ type Conversion struct {
 	// This will prevent remarketing.
 	LimitAdTracking bool `json:"limitAdTracking,omitempty"`
 
-	// MobileDeviceId: The mobile device ID. This field is mutually
-	// exclusive with encryptedUserId, encryptedUserIdCandidates[] and
+	// MatchId: The match ID field. A match ID is your own first-party
+	// identifier that has been synced with Google using the match ID
+	// feature in Floodlight. This field is mutually exclusive with
+	// encryptedUserId, encryptedUserIdCandidates[],mobileDeviceId and
 	// gclid. This or encryptedUserId or encryptedUserIdCandidates[] or
-	// gclid is a required field.
+	// mobileDeviceId or gclid is a required field.
+	MatchId string `json:"matchId,omitempty"`
+
+	// MobileDeviceId: The mobile device ID. This field is mutually
+	// exclusive with encryptedUserId, encryptedUserIdCandidates[], matchId
+	// and gclid. This or encryptedUserId or encryptedUserIdCandidates[] or
+	// matchId or gclid is a required field.
 	MobileDeviceId string `json:"mobileDeviceId,omitempty"`
 
 	// NonPersonalizedAd: Whether the conversion was for a non personalized
@@ -22337,6 +22346,7 @@ func (c *ChangeLogsListCall) ObjectIds(objectIds ...int64) *ChangeLogsListCall {
 //   "OBJECT_FLOODLIGHT_ACTIVITY_GROUP"
 //   "OBJECT_FLOODLIGHT_ACTVITY"
 //   "OBJECT_FLOODLIGHT_CONFIGURATION"
+//   "OBJECT_FLOODLIGHT_DV360_LINK"
 //   "OBJECT_INSTREAM_CREATIVE"
 //   "OBJECT_LANDING_PAGE"
 //   "OBJECT_MEDIA_ORDER"
@@ -22591,6 +22601,7 @@ func (c *ChangeLogsListCall) Do(opts ...googleapi.CallOption) (*ChangeLogsListRe
 	//         "OBJECT_FLOODLIGHT_ACTIVITY_GROUP",
 	//         "OBJECT_FLOODLIGHT_ACTVITY",
 	//         "OBJECT_FLOODLIGHT_CONFIGURATION",
+	//         "OBJECT_FLOODLIGHT_DV360_LINK",
 	//         "OBJECT_INSTREAM_CREATIVE",
 	//         "OBJECT_LANDING_PAGE",
 	//         "OBJECT_MEDIA_ORDER",
@@ -22611,6 +22622,7 @@ func (c *ChangeLogsListCall) Do(opts ...googleapi.CallOption) (*ChangeLogsListRe
 	//         "OBJECT_USER_ROLE"
 	//       ],
 	//       "enumDescriptions": [
+	//         "",
 	//         "",
 	//         "",
 	//         "",

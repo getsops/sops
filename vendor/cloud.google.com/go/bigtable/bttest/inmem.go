@@ -733,7 +733,7 @@ func includeCell(f *btpb.RowFilter, fam, col string, cell cell) (bool, error) {
 }
 
 func newRegexp(pat []byte) (*binaryregexp.Regexp, error) {
-	re, err := binaryregexp.Compile("^" + string(pat) + "$") // match entire target
+	re, err := binaryregexp.Compile("^(?:" + string(pat) + ")$") // match entire target
 	if err != nil {
 		log.Printf("Bad pattern %q: %v", pat, err)
 	}
@@ -810,10 +810,11 @@ func (s *server) CheckAndMutateRow(ctx context.Context, req *btpb.CheckAndMutate
 		// TODO(dsymonds): This could be cheaper.
 		nr := r.copy()
 
-		// TODO(dsymonds, odeke-em): examine if filterRow here should be checked:
-		// with: match, err := filterRow(req.PredicateFilter, nr)
-		filterRow(req.PredicateFilter, nr)
-		whichMut = !nr.isEmpty()
+		match, err := filterRow(req.PredicateFilter, nr)
+		if err != nil {
+			return nil, err
+		}
+		whichMut = match && !nr.isEmpty()
 	}
 	res.PredicateMatched = whichMut
 	muts := req.FalseMutations

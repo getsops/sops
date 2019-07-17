@@ -22,7 +22,8 @@ func TestMuxServeHTTP(t *testing.T) {
 		verb   string
 	}
 	for _, spec := range []struct {
-		patterns []stubPattern
+		patterns    []stubPattern
+		patternOpts []runtime.PatternOpt
 
 		reqMethod string
 		reqPath   string
@@ -33,6 +34,7 @@ func TestMuxServeHTTP(t *testing.T) {
 
 		disablePathLengthFallback bool
 		errHandler                runtime.ProtoErrorHandlerFunc
+		muxOpts                   []runtime.ServeMuxOption
 	}{
 		{
 			patterns:   nil,
@@ -253,11 +255,11 @@ func TestMuxServeHTTP(t *testing.T) {
 					pool:   []string{"unimplemented"},
 				},
 			},
-			reqMethod: "GET",
-			reqPath:   "/foobar",
+			reqMethod:   "GET",
+			reqPath:     "/foobar",
 			respStatus:  http.StatusNotFound,
 			respContent: "GET /foobar",
-			errHandler: unknownPathIs404,
+			errHandler:  unknownPathIs404,
 		},
 		{
 			// server returning unimplemented results in 'Not Implemented' code
@@ -269,14 +271,72 @@ func TestMuxServeHTTP(t *testing.T) {
 					pool:   []string{"unimplemented"},
 				},
 			},
-			reqMethod: "GET",
-			reqPath:   "/unimplemented",
+			reqMethod:   "GET",
+			reqPath:     "/unimplemented",
 			respStatus:  http.StatusNotImplemented,
 			respContent: `GET /unimplemented`,
-			errHandler: unknownPathIs404,
+			errHandler:  unknownPathIs404,
+		},
+		{
+			patterns: []stubPattern{
+				{
+					method: "GET",
+					ops:    []int{int(utilities.OpLitPush), 0, int(utilities.OpPush), 0, int(utilities.OpConcatN), 1, int(utilities.OpCapture), 1},
+					pool:   []string{"foo", "id"},
+				},
+			},
+			patternOpts: []runtime.PatternOpt{runtime.AssumeColonVerbOpt(false)},
+			reqMethod:   "GET",
+			reqPath:     "/foo/bar",
+			headers: map[string]string{
+				"Content-Type": "application/json",
+			},
+			respStatus:  http.StatusOK,
+			respContent: "GET /foo/{id=*}",
+		},
+		{
+			patterns: []stubPattern{
+				{
+					method: "GET",
+					ops:    []int{int(utilities.OpLitPush), 0, int(utilities.OpPush), 0, int(utilities.OpConcatN), 1, int(utilities.OpCapture), 1},
+					pool:   []string{"foo", "id"},
+				},
+			},
+			patternOpts: []runtime.PatternOpt{runtime.AssumeColonVerbOpt(false)},
+			reqMethod:   "GET",
+			reqPath:     "/foo/bar:123",
+			headers: map[string]string{
+				"Content-Type": "application/json",
+			},
+			respStatus:  http.StatusOK,
+			respContent: "GET /foo/{id=*}",
+		},
+		{
+			patterns: []stubPattern{
+				{
+					method: "POST",
+					ops:    []int{int(utilities.OpLitPush), 0, int(utilities.OpPush), 0, int(utilities.OpConcatN), 1, int(utilities.OpCapture), 1},
+					pool:   []string{"foo", "id"},
+				},
+				{
+					method: "POST",
+					ops:    []int{int(utilities.OpLitPush), 0, int(utilities.OpPush), 0, int(utilities.OpConcatN), 1, int(utilities.OpCapture), 1},
+					pool:   []string{"foo", "id"},
+					verb:   "verb",
+				},
+			},
+			patternOpts: []runtime.PatternOpt{runtime.AssumeColonVerbOpt(false)},
+			reqMethod:   "POST",
+			reqPath:     "/foo/bar:verb",
+			headers: map[string]string{
+				"Content-Type": "application/json",
+			},
+			respStatus:  http.StatusOK,
+			respContent: "POST /foo/{id=*}:verb",
+			muxOpts:     []runtime.ServeMuxOption{runtime.WithLastMatchWins()},
 		},
 	} {
-		var opts []runtime.ServeMuxOption
+		opts := spec.muxOpts
 		if spec.disablePathLengthFallback {
 			opts = append(opts, runtime.WithDisablePathLengthFallback())
 		}
@@ -286,7 +346,7 @@ func TestMuxServeHTTP(t *testing.T) {
 		mux := runtime.NewServeMux(opts...)
 		for _, p := range spec.patterns {
 			func(p stubPattern) {
-				pat, err := runtime.NewPattern(1, p.ops, p.pool, p.verb)
+				pat, err := runtime.NewPattern(1, p.ops, p.pool, p.verb, spec.patternOpts...)
 				if err != nil {
 					t.Fatalf("runtime.NewPattern(1, %#v, %#v, %q) failed with %v; want success", p.ops, p.pool, p.verb, err)
 				}

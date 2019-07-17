@@ -20,6 +20,7 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 )
 
@@ -266,5 +267,38 @@ func TestFileClientCertificateAuthorizer(t *testing.T) {
 	if err == nil {
 		t.Log("unexpected nil error")
 		t.Fail()
+	}
+}
+
+func TestMultitenantClientCredentials(t *testing.T) {
+	setDefaultEnv()
+	os.Setenv(AuxiliaryTenantIDs, "aux-tenant-1;aux-tenant-2;aux-tenant3")
+	defer func() {
+		os.Setenv(AuxiliaryTenantIDs, "")
+	}()
+	settings, err := GetSettingsFromEnvironment()
+	if err != nil {
+		t.Fatalf("failed to get settings from environment: %v", err)
+	}
+	if settings.Values[AuxiliaryTenantIDs] == "" {
+		t.Fatal("auxiliary tenant IDs are missing in settings")
+	}
+	ccc, err := settings.GetClientCredentials()
+	if err != nil {
+		t.Fatalf("failed to get client credentials config: %v", err)
+	}
+	if len(ccc.AuxTenants) == 0 {
+		t.Fatal("auxiliary tenant IDs are missing in config")
+	}
+	expected := []string{"aux-tenant-1", "aux-tenant-2", "aux-tenant3"}
+	if !reflect.DeepEqual(ccc.AuxTenants, expected) {
+		t.Fatalf("expected auxiliary tenants '%s', got '%s'", expected, ccc.AuxTenants)
+	}
+	a, err := ccc.Authorizer()
+	if err != nil {
+		t.Fatalf("failed to create authorizer: %v", err)
+	}
+	if _, ok := a.(autorest.MultiTenantServicePrincipalTokenAuthorizer); !ok {
+		t.Fatal("authorizer doesn't implement MultiTenantServicePrincipalTokenAuthorizer")
 	}
 }

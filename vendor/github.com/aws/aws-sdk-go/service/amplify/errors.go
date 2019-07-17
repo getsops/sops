@@ -37,6 +37,12 @@ const (
 	// Exception thrown when an entity has not been found during an operation.
 	ErrCodeNotFoundException = "NotFoundException"
 
+	// ErrCodeResourceNotFoundException for service response error code
+	// "ResourceNotFoundException".
+	//
+	// Exception thrown when an operation fails due to non-existent resource.
+	ErrCodeResourceNotFoundException = "ResourceNotFoundException"
+
 	// ErrCodeUnauthorizedException for service response error code
 	// "UnauthorizedException".
 	//

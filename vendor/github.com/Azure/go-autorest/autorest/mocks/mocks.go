@@ -37,6 +37,14 @@ func NewBody(s string) *Body {
 	return (&Body{s: s}).reset()
 }
 
+// NewBodyWithBytes creates a new instance of Body.
+func NewBodyWithBytes(b []byte) *Body {
+	return &Body{
+		b:      b,
+		isOpen: true,
+	}
+}
+
 // NewBodyClose creates a new instance of Body.
 func NewBodyClose(s string) *Body {
 	return &Body{s: s}

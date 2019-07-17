@@ -1,5 +1,10 @@
 {
   "pagination": {
+    "DescribeMergeConflicts": {
+      "input_token": "nextToken",
+      "limit_key": "maxMergeHunks",
+      "output_token": "nextToken"
+    },
     "DescribePullRequestEvents": {
       "input_token": "nextToken",
       "limit_key": "maxResults",
@@ -19,6 +24,11 @@
       "input_token": "NextToken",
       "limit_key": "MaxResults",
       "output_token": "NextToken"
+    },
+    "GetMergeConflicts": {
+      "input_token": "nextToken",
+      "limit_key": "maxConflictFiles",
+      "output_token": "nextToken"
     },
     "ListBranches": {
       "input_token": "nextToken",

@@ -6779,7 +6779,7 @@ type AccountSettings struct {
 	AwsAccountNumber *string `locationName:"awsAccountNumber" min:"2" type:"string"`
 
 	// The default number of minutes (at the account level) a test run will execute
-	// before it times out. Default value is 60 minutes.
+	// before it times out. The default value is 150 minutes.
 	DefaultJobTimeoutMinutes *int64 `locationName:"defaultJobTimeoutMinutes" type:"integer"`
 
 	// The maximum number of minutes a test run will execute before it times out.
@@ -6932,7 +6932,7 @@ type Artifact struct {
 	//
 	//    * APPLICATION_CRASH_REPORT: The application crash report output type.
 	//
-	//    * XCTEST_LOG: The XCode test output type.
+	//    * XCTEST_LOG: The Xcode test output type.
 	//
 	//    * VIDEO: The Video output type.
 	//
@@ -7885,9 +7885,9 @@ type CreateUploadInput struct {
 	//
 	//    * UIAUTOMATOR_TEST_PACKAGE: A uiautomator test package upload.
 	//
-	//    * XCTEST_TEST_PACKAGE: An XCode test package upload.
+	//    * XCTEST_TEST_PACKAGE: An Xcode test package upload.
 	//
-	//    * XCTEST_UI_TEST_PACKAGE: An XCode UI test package upload.
+	//    * XCTEST_UI_TEST_PACKAGE: An Xcode UI test package upload.
 	//
 	//    * APPIUM_JAVA_JUNIT_TEST_SPEC: An Appium Java JUnit test spec upload.
 	//
@@ -7916,7 +7916,7 @@ type CreateUploadInput struct {
 	//
 	//    * INSTRUMENTATION_TEST_SPEC: An instrumentation test spec upload.
 	//
-	//    * XCTEST_UI_TEST_SPEC: An XCode UI test spec upload.
+	//    * XCTEST_UI_TEST_SPEC: An Xcode UI test spec upload.
 	//
 	// Note If you call CreateUpload with WEB_APP specified, AWS Device Farm throws
 	// an ArgumentException error.
@@ -8387,7 +8387,7 @@ func (s DeleteProjectOutput) GoString() string {
 type DeleteRemoteAccessSessionInput struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resource Name (ARN) of the sesssion for which you want to delete
+	// The Amazon Resource Name (ARN) of the session for which you want to delete
 	// remote access.
 	//
 	// Arn is a required field
@@ -9647,9 +9647,9 @@ type GetDevicePoolCompatibilityInput struct {
 	//
 	//    * UIAUTOMATOR: The uiautomator type.
 	//
-	//    * XCTEST: The XCode test type.
+	//    * XCTEST: The Xcode test type.
 	//
-	//    * XCTEST_UI: The XCode UI test type.
+	//    * XCTEST_UI: The Xcode UI test type.
 	TestType *string `locationName:"testType" type:"string" enum:"TestType"`
 }
 
@@ -10884,9 +10884,9 @@ type Job struct {
 	//
 	//    * UIAUTOMATOR: The uiautomator type.
 	//
-	//    * XCTEST: The XCode test type.
+	//    * XCTEST: The Xcode test type.
 	//
-	//    * XCTEST_UI: The XCode UI test type.
+	//    * XCTEST_UI: The Xcode UI test type.
 	Type *string `locationName:"type" type:"string" enum:"TestType"`
 
 	// This value is set to true if video capture is enabled; otherwise, it is set
@@ -11306,7 +11306,7 @@ type ListDevicesInput struct {
 	// operator, and one or more values.
 	//
 	//    * Attribute: The aspect of a device such as platform or model used as
-	//    the selction criteria in a device filter. Allowed values include: ARN:
+	//    the selection criteria in a device filter. Allowed values include: ARN:
 	//    The Amazon Resource Name (ARN) of the device. For example, "arn:aws:devicefarm:us-west-2::device:12345Example".
 	//    PLATFORM: The device platform. Valid values are "ANDROID" or "IOS". OS_VERSION:
 	//    The operating system version. For example, "10.3.2". MODEL: The device
@@ -12639,7 +12639,7 @@ type ListUploadsInput struct {
 	//
 	//    * IOS_APP: An iOS upload.
 	//
-	//    * WEB_APP: A web appliction upload.
+	//    * WEB_APP: A web application upload.
 	//
 	//    * EXTERNAL_DATA: An external data upload.
 	//
@@ -12677,9 +12677,9 @@ type ListUploadsInput struct {
 	//
 	//    * UIAUTOMATOR_TEST_PACKAGE: A uiautomator test package upload.
 	//
-	//    * XCTEST_TEST_PACKAGE: An XCode test package upload.
+	//    * XCTEST_TEST_PACKAGE: An Xcode test package upload.
 	//
-	//    * XCTEST_UI_TEST_PACKAGE: An XCode UI test package upload.
+	//    * XCTEST_UI_TEST_PACKAGE: An Xcode UI test package upload.
 	//
 	//    * APPIUM_JAVA_JUNIT_TEST_SPEC: An Appium Java JUnit test spec upload.
 	//
@@ -12708,7 +12708,7 @@ type ListUploadsInput struct {
 	//
 	//    * INSTRUMENTATION_TEST_SPEC: An instrumentation test spec upload.
 	//
-	//    * XCTEST_UI_TEST_SPEC: An XCode UI test spec upload.
+	//    * XCTEST_UI_TEST_SPEC: An Xcode UI test spec upload.
 	Type *string `locationName:"type" type:"string" enum:"UploadType"`
 }
 
@@ -13434,7 +13434,7 @@ type Project struct {
 	Created *time.Time `locationName:"created" type:"timestamp"`
 
 	// The default number of minutes (at the project level) a test run will execute
-	// before it times out. Default value is 60 minutes.
+	// before it times out. The default value is 150 minutes.
 	DefaultJobTimeoutMinutes *int64 `locationName:"defaultJobTimeoutMinutes" type:"integer"`
 
 	// The project's name.
@@ -13664,7 +13664,7 @@ type RemoteAccessSession struct {
 	// The device (phone or tablet) used in the remote access session.
 	Device *Device `locationName:"device" type:"structure"`
 
-	// The number of minutes a device is used in a remote access sesssion (including
+	// The number of minutes a device is used in a remote access session (including
 	// setup and teardown minutes).
 	DeviceMinutes *DeviceMinutes `locationName:"deviceMinutes" type:"structure"`
 
@@ -14320,9 +14320,9 @@ type Run struct {
 	//
 	//    * UIAUTOMATOR: The uiautomator type.
 	//
-	//    * XCTEST: The XCode test type.
+	//    * XCTEST: The Xcode test type.
 	//
-	//    * XCTEST_UI: The XCode UI test type.
+	//    * XCTEST_UI: The Xcode UI test type.
 	Type *string `locationName:"type" type:"string" enum:"TestType"`
 
 	// The Device Farm console URL for the recording of the run.
@@ -15005,9 +15005,9 @@ type ScheduleRunTest struct {
 	//
 	//    * UIAUTOMATOR: The uiautomator type.
 	//
-	//    * XCTEST: The XCode test type.
+	//    * XCTEST: The Xcode test type.
 	//
-	//    * XCTEST_UI: The XCode UI test type.
+	//    * XCTEST_UI: The Xcode UI test type.
 	//
 	// Type is a required field
 	Type *string `locationName:"type" type:"string" required:"true" enum:"TestType"`
@@ -15380,9 +15380,9 @@ type Suite struct {
 	//
 	//    * UIAUTOMATOR: The uiautomator type.
 	//
-	//    * XCTEST: The XCode test type.
+	//    * XCTEST: The Xcode test type.
 	//
-	//    * XCTEST_UI: The XCode UI test type.
+	//    * XCTEST_UI: The Xcode UI test type.
 	Type *string `locationName:"type" type:"string" enum:"TestType"`
 }
 
@@ -15715,9 +15715,9 @@ type Test struct {
 	//
 	//    * UIAUTOMATOR: The uiautomator type.
 	//
-	//    * XCTEST: The XCode test type.
+	//    * XCTEST: The Xcode test type.
 	//
-	//    * XCTEST_UI: The XCode UI test type.
+	//    * XCTEST_UI: The Xcode UI test type.
 	Type *string `locationName:"type" type:"string" enum:"TestType"`
 }
 
@@ -16025,7 +16025,7 @@ func (s *UpdateDeviceInstanceOutput) SetDeviceInstance(v *DeviceInstance) *Updat
 type UpdateDevicePoolInput struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon Resourc Name (ARN) of the Device Farm device pool you wish to
+	// The Amazon Resource Name (ARN) of the Device Farm device pool you wish to
 	// update.
 	//
 	// Arn is a required field
@@ -16275,7 +16275,7 @@ type UpdateNetworkProfileInput struct {
 	// Arn is a required field
 	Arn *string `locationName:"arn" min:"32" type:"string" required:"true"`
 
-	// The descriptoin of the network profile about which you are returning information.
+	// The description of the network profile about which you are returning information.
 	Description *string `locationName:"description" type:"string"`
 
 	// The data throughput rate in bits per second, as an integer from 0 to 104857600.
@@ -16769,7 +16769,7 @@ type Upload struct {
 	//
 	//    * IOS_APP: An iOS upload.
 	//
-	//    * WEB_APP: A web appliction upload.
+	//    * WEB_APP: A web application upload.
 	//
 	//    * EXTERNAL_DATA: An external data upload.
 	//
@@ -16807,9 +16807,9 @@ type Upload struct {
 	//
 	//    * UIAUTOMATOR_TEST_PACKAGE: A uiautomator test package upload.
 	//
-	//    * XCTEST_TEST_PACKAGE: An XCode test package upload.
+	//    * XCTEST_TEST_PACKAGE: An Xcode test package upload.
 	//
-	//    * XCTEST_UI_TEST_PACKAGE: An XCode UI test package upload.
+	//    * XCTEST_UI_TEST_PACKAGE: An Xcode UI test package upload.
 	//
 	//    * APPIUM_JAVA_JUNIT_TEST_SPEC: An Appium Java JUnit test spec upload.
 	//
@@ -16838,7 +16838,7 @@ type Upload struct {
 	//
 	//    * INSTRUMENTATION_TEST_SPEC: An instrumentation test spec upload.
 	//
-	//    * XCTEST_UI_TEST_SPEC: An XCode UI test spec upload.
+	//    * XCTEST_UI_TEST_SPEC: An Xcode UI test spec upload.
 	Type *string `locationName:"type" type:"string" enum:"UploadType"`
 
 	// The pre-signed Amazon S3 URL that was used to store a file through a corresponding

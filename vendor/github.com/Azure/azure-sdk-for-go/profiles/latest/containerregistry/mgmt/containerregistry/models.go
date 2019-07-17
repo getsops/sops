@@ -395,6 +395,7 @@ type TasksCreateFuture = original.TasksCreateFuture
 type TasksDeleteFuture = original.TasksDeleteFuture
 type TasksUpdateFuture = original.TasksUpdateFuture
 type TimerTrigger = original.TimerTrigger
+type TimerTriggerDescriptor = original.TimerTriggerDescriptor
 type TimerTriggerUpdateParameters = original.TimerTriggerUpdateParameters
 type TriggerProperties = original.TriggerProperties
 type TriggerUpdateParameters = original.TriggerUpdateParameters

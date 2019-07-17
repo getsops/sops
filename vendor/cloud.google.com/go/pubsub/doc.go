@@ -48,6 +48,7 @@ background. To clean up these goroutines, call Stop:
 
   topic.Stop()
 
+
 Receiving
 
 To receive messages published to a topic, clients create subscriptions
@@ -72,10 +73,10 @@ Messages are then consumed from a subscription via callback.
 The callback is invoked concurrently by multiple goroutines, maximizing
 throughput. To terminate a call to Receive, cancel its context.
 
-Once client code has processed the message, it must call Message.Ack, otherwise
-the message will eventually be redelivered. As an optimization, if the client
-cannot or doesn't want to process the message, it can call Message.Nack to
-speed redelivery. For more information and configuration options, see
+Once client code has processed the message, it must call Message.Ack or
+message.Nack, otherwise the message will eventually be redelivered. If the
+client cannot or doesn't want to process the message, it can call Message.Nack
+to speed redelivery. For more information and configuration options, see
 "Deadlines" below.
 
 Note: It is possible for Messages to be redelivered, even if Message.Ack has
@@ -85,6 +86,7 @@ Note: This uses pubsub's streaming pull feature. This feature properties that
 may be surprising. Please take a look at https://cloud.google.com/pubsub/docs/pull#streamingpull
 for more details on how streaming pull behaves compared to the synchronous
 pull method.
+
 
 Deadlines
 
@@ -127,6 +129,7 @@ subscription's AckDeadline:
 	}
 
 	sub.ReceiveSettings.MaxExtension = cfg.AckDeadline
+
 
 Slow Message Processing
 

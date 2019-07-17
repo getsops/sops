@@ -93,6 +93,95 @@ func (c *CloudWatch) DeleteAlarmsWithContext(ctx aws.Context, input *DeleteAlarm
 	return out, req.Send()
 }
 
+const opDeleteAnomalyDetector = "DeleteAnomalyDetector"
+
+// DeleteAnomalyDetectorRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteAnomalyDetector operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteAnomalyDetector for more information on using the DeleteAnomalyDetector
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteAnomalyDetectorRequest method.
+//    req, resp := client.DeleteAnomalyDetectorRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/monitoring-2010-08-01/DeleteAnomalyDetector
+func (c *CloudWatch) DeleteAnomalyDetectorRequest(input *DeleteAnomalyDetectorInput) (req *request.Request, output *DeleteAnomalyDetectorOutput) {
+	op := &request.Operation{
+		Name:       opDeleteAnomalyDetector,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteAnomalyDetectorInput{}
+	}
+
+	output = &DeleteAnomalyDetectorOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteAnomalyDetector API operation for Amazon CloudWatch.
+//
+// Deletes the specified anomaly detection model from your account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon CloudWatch's
+// API operation DeleteAnomalyDetector for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The named resource does not exist.
+//
+//   * ErrCodeInternalServiceFault "InternalServiceError"
+//   Request processing has failed due to some unknown error, exception, or failure.
+//
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValue"
+//   The value of an input parameter is bad or out-of-range.
+//
+//   * ErrCodeMissingRequiredParameterException "MissingParameter"
+//   An input parameter that is required is missing.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/monitoring-2010-08-01/DeleteAnomalyDetector
+func (c *CloudWatch) DeleteAnomalyDetector(input *DeleteAnomalyDetectorInput) (*DeleteAnomalyDetectorOutput, error) {
+	req, out := c.DeleteAnomalyDetectorRequest(input)
+	return out, req.Send()
+}
+
+// DeleteAnomalyDetectorWithContext is the same as DeleteAnomalyDetector with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteAnomalyDetector for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudWatch) DeleteAnomalyDetectorWithContext(ctx aws.Context, input *DeleteAnomalyDetectorInput, opts ...request.Option) (*DeleteAnomalyDetectorOutput, error) {
+	req, out := c.DeleteAnomalyDetectorRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteDashboards = "DeleteDashboards"
 
 // DeleteDashboardsRequest generates a "aws/request.Request" representing the
@@ -526,6 +615,93 @@ func (c *CloudWatch) DescribeAlarmsForMetric(input *DescribeAlarmsForMetricInput
 // for more information on using Contexts.
 func (c *CloudWatch) DescribeAlarmsForMetricWithContext(ctx aws.Context, input *DescribeAlarmsForMetricInput, opts ...request.Option) (*DescribeAlarmsForMetricOutput, error) {
 	req, out := c.DescribeAlarmsForMetricRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeAnomalyDetectors = "DescribeAnomalyDetectors"
+
+// DescribeAnomalyDetectorsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeAnomalyDetectors operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeAnomalyDetectors for more information on using the DescribeAnomalyDetectors
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeAnomalyDetectorsRequest method.
+//    req, resp := client.DescribeAnomalyDetectorsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/monitoring-2010-08-01/DescribeAnomalyDetectors
+func (c *CloudWatch) DescribeAnomalyDetectorsRequest(input *DescribeAnomalyDetectorsInput) (req *request.Request, output *DescribeAnomalyDetectorsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeAnomalyDetectors,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeAnomalyDetectorsInput{}
+	}
+
+	output = &DescribeAnomalyDetectorsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeAnomalyDetectors API operation for Amazon CloudWatch.
+//
+// Lists the anomaly detection models that you have created in your account.
+// You can list all models in your account or filter the results to only the
+// models that are related to a certain namespace, metric name, or metric dimension.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon CloudWatch's
+// API operation DescribeAnomalyDetectors for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidNextToken "InvalidNextToken"
+//   The next token specified is invalid.
+//
+//   * ErrCodeInternalServiceFault "InternalServiceError"
+//   Request processing has failed due to some unknown error, exception, or failure.
+//
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValue"
+//   The value of an input parameter is bad or out-of-range.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/monitoring-2010-08-01/DescribeAnomalyDetectors
+func (c *CloudWatch) DescribeAnomalyDetectors(input *DescribeAnomalyDetectorsInput) (*DescribeAnomalyDetectorsOutput, error) {
+	req, out := c.DescribeAnomalyDetectorsRequest(input)
+	return out, req.Send()
+}
+
+// DescribeAnomalyDetectorsWithContext is the same as DescribeAnomalyDetectors with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeAnomalyDetectors for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudWatch) DescribeAnomalyDetectorsWithContext(ctx aws.Context, input *DescribeAnomalyDetectorsInput, opts ...request.Option) (*DescribeAnomalyDetectorsOutput, error) {
+	req, out := c.DescribeAnomalyDetectorsRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1544,6 +1720,98 @@ func (c *CloudWatch) ListTagsForResourceWithContext(ctx aws.Context, input *List
 	return out, req.Send()
 }
 
+const opPutAnomalyDetector = "PutAnomalyDetector"
+
+// PutAnomalyDetectorRequest generates a "aws/request.Request" representing the
+// client's request for the PutAnomalyDetector operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutAnomalyDetector for more information on using the PutAnomalyDetector
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutAnomalyDetectorRequest method.
+//    req, resp := client.PutAnomalyDetectorRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/monitoring-2010-08-01/PutAnomalyDetector
+func (c *CloudWatch) PutAnomalyDetectorRequest(input *PutAnomalyDetectorInput) (req *request.Request, output *PutAnomalyDetectorOutput) {
+	op := &request.Operation{
+		Name:       opPutAnomalyDetector,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &PutAnomalyDetectorInput{}
+	}
+
+	output = &PutAnomalyDetectorOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(query.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// PutAnomalyDetector API operation for Amazon CloudWatch.
+//
+// Creates an anomaly detection model for a CloudWatch metric. You can use the
+// model to display a band of expected normal values when the metric is graphed.
+//
+// For more information, see CloudWatch Anomaly Detection (https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Anomaly_Detection.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon CloudWatch's
+// API operation PutAnomalyDetector for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeLimitExceededException "LimitExceededException"
+//   The operation exceeded one or more limits.
+//
+//   * ErrCodeInternalServiceFault "InternalServiceError"
+//   Request processing has failed due to some unknown error, exception, or failure.
+//
+//   * ErrCodeInvalidParameterValueException "InvalidParameterValue"
+//   The value of an input parameter is bad or out-of-range.
+//
+//   * ErrCodeMissingRequiredParameterException "MissingParameter"
+//   An input parameter that is required is missing.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/monitoring-2010-08-01/PutAnomalyDetector
+func (c *CloudWatch) PutAnomalyDetector(input *PutAnomalyDetectorInput) (*PutAnomalyDetectorOutput, error) {
+	req, out := c.PutAnomalyDetectorRequest(input)
+	return out, req.Send()
+}
+
+// PutAnomalyDetectorWithContext is the same as PutAnomalyDetector with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutAnomalyDetector for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudWatch) PutAnomalyDetectorWithContext(ctx aws.Context, input *PutAnomalyDetectorInput, opts ...request.Option) (*PutAnomalyDetectorOutput, error) {
+	req, out := c.PutAnomalyDetectorRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opPutDashboard = "PutDashboard"
 
 // PutDashboardRequest generates a "aws/request.Request" representing the
@@ -1592,8 +1860,7 @@ func (c *CloudWatch) PutDashboardRequest(input *PutDashboardInput) (req *request
 // dashboard. If you update a dashboard, the entire contents are replaced with
 // what you specify here.
 //
-// There is no limit to the number of dashboards in your account. All dashboards
-// in your account are global, not region-specific.
+// All dashboards in your account are global, not region-specific.
 //
 // A simple way to create a dashboard using PutDashboard is to copy an existing
 // dashboard. To copy an existing dashboard using the console, you can load
@@ -1689,8 +1956,10 @@ func (c *CloudWatch) PutMetricAlarmRequest(input *PutMetricAlarmInput) (req *req
 
 // PutMetricAlarm API operation for Amazon CloudWatch.
 //
-// Creates or updates an alarm and associates it with the specified metric or
-// metric math expression.
+// Creates or updates an alarm and associates it with the specified metric,
+// metric math expression, or anomaly detection model.
+//
+// Alarms based on anomaly detection models cannot have Auto Scaling actions.
 //
 // When this operation creates an alarm, the alarm state is immediately set
 // to INSUFFICIENT_DATA. The alarm is then evaluated and its state is set appropriately.
@@ -2234,6 +2503,133 @@ func (s *AlarmHistoryItem) SetTimestamp(v time.Time) *AlarmHistoryItem {
 	return s
 }
 
+// An anomaly detection model associated with a particular CloudWatch metric
+// athresnd statistic. You can use the model to display a band of expected normal
+// values when the metric is graphed.
+type AnomalyDetector struct {
+	_ struct{} `type:"structure"`
+
+	// The configuration specifies details about how the anomaly detection model
+	// is to be trained, including time ranges to exclude from use for training
+	// the model, and the time zone to use for the metric.
+	Configuration *AnomalyDetectorConfiguration `type:"structure"`
+
+	// The metric dimensions associated with the anomaly detection model.
+	Dimensions []*Dimension `type:"list"`
+
+	// The name of the metric associated with the anomaly detection model.
+	MetricName *string `min:"1" type:"string"`
+
+	// The namespace of the metric associated with the anomaly detection model.
+	Namespace *string `min:"1" type:"string"`
+
+	// The statistic associated with the anomaly detection model.
+	Stat *string `type:"string"`
+}
+
+// String returns the string representation
+func (s AnomalyDetector) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AnomalyDetector) GoString() string {
+	return s.String()
+}
+
+// SetConfiguration sets the Configuration field's value.
+func (s *AnomalyDetector) SetConfiguration(v *AnomalyDetectorConfiguration) *AnomalyDetector {
+	s.Configuration = v
+	return s
+}
+
+// SetDimensions sets the Dimensions field's value.
+func (s *AnomalyDetector) SetDimensions(v []*Dimension) *AnomalyDetector {
+	s.Dimensions = v
+	return s
+}
+
+// SetMetricName sets the MetricName field's value.
+func (s *AnomalyDetector) SetMetricName(v string) *AnomalyDetector {
+	s.MetricName = &v
+	return s
+}
+
+// SetNamespace sets the Namespace field's value.
+func (s *AnomalyDetector) SetNamespace(v string) *AnomalyDetector {
+	s.Namespace = &v
+	return s
+}
+
+// SetStat sets the Stat field's value.
+func (s *AnomalyDetector) SetStat(v string) *AnomalyDetector {
+	s.Stat = &v
+	return s
+}
+
+// The configuration specifies details about how the anomaly detection model
+// is to be trained, including time ranges to exclude from use for training
+// the model and the time zone to use for the metric.
+type AnomalyDetectorConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// An array of time ranges to exclude from use when the anomaly detection model
+	// is trained. Use this to make sure that events that could cause unusual values
+	// for the metric, such as deployments, aren't used when CloudWatch creates
+	// the model.
+	ExcludedTimeRanges []*Range `type:"list"`
+
+	// The time zone to use for the metric. This is useful to enable the model to
+	// automatically account for daylight savings time changes if the metric is
+	// sensitive to such time changes.
+	//
+	// To specify a time zone, use the name of the time zone as specified in the
+	// standard tz database. For more information, see tz database (https://en.wikipedia.org/wiki/Tz_database).
+	MetricTimezone *string `type:"string"`
+}
+
+// String returns the string representation
+func (s AnomalyDetectorConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AnomalyDetectorConfiguration) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AnomalyDetectorConfiguration) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AnomalyDetectorConfiguration"}
+	if s.ExcludedTimeRanges != nil {
+		for i, v := range s.ExcludedTimeRanges {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ExcludedTimeRanges", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetExcludedTimeRanges sets the ExcludedTimeRanges field's value.
+func (s *AnomalyDetectorConfiguration) SetExcludedTimeRanges(v []*Range) *AnomalyDetectorConfiguration {
+	s.ExcludedTimeRanges = v
+	return s
+}
+
+// SetMetricTimezone sets the MetricTimezone field's value.
+func (s *AnomalyDetectorConfiguration) SetMetricTimezone(v string) *AnomalyDetectorConfiguration {
+	s.MetricTimezone = &v
+	return s
+}
+
 // Represents a specific dashboard.
 type DashboardEntry struct {
 	_ struct{} `type:"structure"`
@@ -2457,6 +2853,111 @@ func (s DeleteAlarmsOutput) String() string {
 
 // GoString returns the string representation
 func (s DeleteAlarmsOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteAnomalyDetectorInput struct {
+	_ struct{} `type:"structure"`
+
+	// The metric dimensions associated with the anomaly detection model to delete.
+	Dimensions []*Dimension `type:"list"`
+
+	// The metric name associated with the anomaly detection model to delete.
+	//
+	// MetricName is a required field
+	MetricName *string `min:"1" type:"string" required:"true"`
+
+	// The namespace associated with the anomaly detection model to delete.
+	//
+	// Namespace is a required field
+	Namespace *string `min:"1" type:"string" required:"true"`
+
+	// The statistic associated with the anomaly detection model to delete.
+	//
+	// Stat is a required field
+	Stat *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteAnomalyDetectorInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteAnomalyDetectorInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteAnomalyDetectorInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteAnomalyDetectorInput"}
+	if s.MetricName == nil {
+		invalidParams.Add(request.NewErrParamRequired("MetricName"))
+	}
+	if s.MetricName != nil && len(*s.MetricName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MetricName", 1))
+	}
+	if s.Namespace == nil {
+		invalidParams.Add(request.NewErrParamRequired("Namespace"))
+	}
+	if s.Namespace != nil && len(*s.Namespace) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Namespace", 1))
+	}
+	if s.Stat == nil {
+		invalidParams.Add(request.NewErrParamRequired("Stat"))
+	}
+	if s.Dimensions != nil {
+		for i, v := range s.Dimensions {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Dimensions", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDimensions sets the Dimensions field's value.
+func (s *DeleteAnomalyDetectorInput) SetDimensions(v []*Dimension) *DeleteAnomalyDetectorInput {
+	s.Dimensions = v
+	return s
+}
+
+// SetMetricName sets the MetricName field's value.
+func (s *DeleteAnomalyDetectorInput) SetMetricName(v string) *DeleteAnomalyDetectorInput {
+	s.MetricName = &v
+	return s
+}
+
+// SetNamespace sets the Namespace field's value.
+func (s *DeleteAnomalyDetectorInput) SetNamespace(v string) *DeleteAnomalyDetectorInput {
+	s.Namespace = &v
+	return s
+}
+
+// SetStat sets the Stat field's value.
+func (s *DeleteAnomalyDetectorInput) SetStat(v string) *DeleteAnomalyDetectorInput {
+	s.Stat = &v
+	return s
+}
+
+type DeleteAnomalyDetectorOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteAnomalyDetectorOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteAnomalyDetectorOutput) GoString() string {
 	return s.String()
 }
 
@@ -2888,6 +3389,138 @@ func (s *DescribeAlarmsOutput) SetMetricAlarms(v []*MetricAlarm) *DescribeAlarms
 
 // SetNextToken sets the NextToken field's value.
 func (s *DescribeAlarmsOutput) SetNextToken(v string) *DescribeAlarmsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type DescribeAnomalyDetectorsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Limits the results to only the anomaly detection models that are associated
+	// with the specified metric dimensions. If there are multiple metrics that
+	// have these dimensions and have anomaly detection models associated, they're
+	// all returned.
+	Dimensions []*Dimension `type:"list"`
+
+	// The maximum number of results to return in one operation. The maximum value
+	// you can specify is 10.
+	//
+	// To retrieve the remaining results, make another call with the returned NextToken
+	// value.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Limits the results to only the anomaly detection models that are associated
+	// with the specified metric name. If there are multiple metrics with this name
+	// in different namespaces that have anomaly detection models, they're all returned.
+	MetricName *string `min:"1" type:"string"`
+
+	// Limits the results to only the anomaly detection models that are associated
+	// with the specified namespace.
+	Namespace *string `min:"1" type:"string"`
+
+	// Use the token returned by the previous operation to request the next page
+	// of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeAnomalyDetectorsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAnomalyDetectorsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeAnomalyDetectorsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeAnomalyDetectorsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.MetricName != nil && len(*s.MetricName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MetricName", 1))
+	}
+	if s.Namespace != nil && len(*s.Namespace) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Namespace", 1))
+	}
+	if s.Dimensions != nil {
+		for i, v := range s.Dimensions {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Dimensions", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDimensions sets the Dimensions field's value.
+func (s *DescribeAnomalyDetectorsInput) SetDimensions(v []*Dimension) *DescribeAnomalyDetectorsInput {
+	s.Dimensions = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *DescribeAnomalyDetectorsInput) SetMaxResults(v int64) *DescribeAnomalyDetectorsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetMetricName sets the MetricName field's value.
+func (s *DescribeAnomalyDetectorsInput) SetMetricName(v string) *DescribeAnomalyDetectorsInput {
+	s.MetricName = &v
+	return s
+}
+
+// SetNamespace sets the Namespace field's value.
+func (s *DescribeAnomalyDetectorsInput) SetNamespace(v string) *DescribeAnomalyDetectorsInput {
+	s.Namespace = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeAnomalyDetectorsInput) SetNextToken(v string) *DescribeAnomalyDetectorsInput {
+	s.NextToken = &v
+	return s
+}
+
+type DescribeAnomalyDetectorsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The list of anomaly detection models returned by the operation.
+	AnomalyDetectors []*AnomalyDetector `type:"list"`
+
+	// A token that you can use in a subsequent operation to retrieve the next set
+	// of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeAnomalyDetectorsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeAnomalyDetectorsOutput) GoString() string {
+	return s.String()
+}
+
+// SetAnomalyDetectors sets the AnomalyDetectors field's value.
+func (s *DescribeAnomalyDetectorsOutput) SetAnomalyDetectors(v []*AnomalyDetector) *DescribeAnomalyDetectorsOutput {
+	s.AnomalyDetectors = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeAnomalyDetectorsOutput) SetNextToken(v string) *DescribeAnomalyDetectorsOutput {
 	s.NextToken = &v
 	return s
 }
@@ -4112,9 +4745,15 @@ type MetricAlarm struct {
 	// Name (ARN).
 	InsufficientDataActions []*string `type:"list"`
 
-	// The name of the metric associated with the alarm.
+	// The name of the metric associated with the alarm, if this is an alarm based
+	// on a single metric.
 	MetricName *string `min:"1" type:"string"`
 
+	// An array of MetricDataQuery structures, used in an alarm based on a metric
+	// math expression. Each structure either retrieves a metric or performs a math
+	// expression. One item in the Metrics array is the math expression that the
+	// alarm watches. This expression by designated by having ReturnValue set to
+	// true.
 	Metrics []*MetricDataQuery `type:"list"`
 
 	// The namespace of the metric associated with the alarm.
@@ -4145,6 +4784,10 @@ type MetricAlarm struct {
 
 	// The value to compare with the specified statistic.
 	Threshold *float64 `type:"double"`
+
+	// In an alarm based on an anomaly detection model, this is the ID of the ANOMALY_DETECTION_BAND
+	// function used as the threshold for the alarm.
+	ThresholdMetricId *string `min:"1" type:"string"`
 
 	// Sets how this alarm is to handle missing data points. If this parameter is
 	// omitted, the default behavior of missing is used.
@@ -4305,6 +4948,12 @@ func (s *MetricAlarm) SetStatistic(v string) *MetricAlarm {
 // SetThreshold sets the Threshold field's value.
 func (s *MetricAlarm) SetThreshold(v float64) *MetricAlarm {
 	s.Threshold = &v
+	return s
+}
+
+// SetThresholdMetricId sets the ThresholdMetricId field's value.
+func (s *MetricAlarm) SetThresholdMetricId(v string) *MetricAlarm {
+	s.ThresholdMetricId = &v
 	return s
 }
 
@@ -4578,7 +5227,9 @@ type MetricDatum struct {
 	// since Jan 1, 1970 00:00:00 UTC.
 	Timestamp *time.Time `type:"timestamp"`
 
-	// The unit of the metric.
+	// When you are using a Put operation, this defines what unit you want to use
+	// when storing the metric. In a Get operation, this displays the unit that
+	// is used for the metric.
 	Unit *string `type:"string" enum:"StandardUnit"`
 
 	// The value for the metric.
@@ -4723,7 +5374,9 @@ type MetricStat struct {
 	// Stat is a required field
 	Stat *string `type:"string" required:"true"`
 
-	// The unit to use for the returned data points.
+	// When you are using a Put operation, this defines what unit you want to use
+	// when storing the metric. In a Get operation, this displays the unit that
+	// is used for the metric.
 	Unit *string `type:"string" enum:"StandardUnit"`
 }
 
@@ -4786,6 +5439,131 @@ func (s *MetricStat) SetStat(v string) *MetricStat {
 func (s *MetricStat) SetUnit(v string) *MetricStat {
 	s.Unit = &v
 	return s
+}
+
+type PutAnomalyDetectorInput struct {
+	_ struct{} `type:"structure"`
+
+	// The configuration specifies details about how the anomaly detection model
+	// is to be trained, including time ranges to exclude when training and updating
+	// the model. You can specify as many as 10 time ranges.
+	//
+	// The configuration can also include the time zone to use for the metric.
+	//
+	// You can in
+	Configuration *AnomalyDetectorConfiguration `type:"structure"`
+
+	// The metric dimensions to create the anomaly detection model for.
+	Dimensions []*Dimension `type:"list"`
+
+	// The name of the metric to create the anomaly detection model for.
+	//
+	// MetricName is a required field
+	MetricName *string `min:"1" type:"string" required:"true"`
+
+	// The namespace of the metric to create the anomaly detection model for.
+	//
+	// Namespace is a required field
+	Namespace *string `min:"1" type:"string" required:"true"`
+
+	// The statistic to use for the metric and the anomaly detection model.
+	//
+	// Stat is a required field
+	Stat *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s PutAnomalyDetectorInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutAnomalyDetectorInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutAnomalyDetectorInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutAnomalyDetectorInput"}
+	if s.MetricName == nil {
+		invalidParams.Add(request.NewErrParamRequired("MetricName"))
+	}
+	if s.MetricName != nil && len(*s.MetricName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("MetricName", 1))
+	}
+	if s.Namespace == nil {
+		invalidParams.Add(request.NewErrParamRequired("Namespace"))
+	}
+	if s.Namespace != nil && len(*s.Namespace) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Namespace", 1))
+	}
+	if s.Stat == nil {
+		invalidParams.Add(request.NewErrParamRequired("Stat"))
+	}
+	if s.Configuration != nil {
+		if err := s.Configuration.Validate(); err != nil {
+			invalidParams.AddNested("Configuration", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Dimensions != nil {
+		for i, v := range s.Dimensions {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Dimensions", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConfiguration sets the Configuration field's value.
+func (s *PutAnomalyDetectorInput) SetConfiguration(v *AnomalyDetectorConfiguration) *PutAnomalyDetectorInput {
+	s.Configuration = v
+	return s
+}
+
+// SetDimensions sets the Dimensions field's value.
+func (s *PutAnomalyDetectorInput) SetDimensions(v []*Dimension) *PutAnomalyDetectorInput {
+	s.Dimensions = v
+	return s
+}
+
+// SetMetricName sets the MetricName field's value.
+func (s *PutAnomalyDetectorInput) SetMetricName(v string) *PutAnomalyDetectorInput {
+	s.MetricName = &v
+	return s
+}
+
+// SetNamespace sets the Namespace field's value.
+func (s *PutAnomalyDetectorInput) SetNamespace(v string) *PutAnomalyDetectorInput {
+	s.Namespace = &v
+	return s
+}
+
+// SetStat sets the Stat field's value.
+func (s *PutAnomalyDetectorInput) SetStat(v string) *PutAnomalyDetectorInput {
+	s.Stat = &v
+	return s
+}
+
+type PutAnomalyDetectorOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutAnomalyDetectorOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutAnomalyDetectorOutput) GoString() string {
+	return s.String()
 }
 
 type PutDashboardInput struct {
@@ -4908,6 +5686,10 @@ type PutMetricAlarmInput struct {
 	// The arithmetic operation to use when comparing the specified statistic and
 	// threshold. The specified statistic value is used as the first operand.
 	//
+	// The values LessThanLowerOrGreaterThanUpperThreshold, LessThanLowerThreshold,
+	// and GreaterThanUpperThreshold are used only for alarms based on anomaly detection
+	// models.
+	//
 	// ComparisonOperator is a required field
 	ComparisonOperator *string `type:"string" required:"true" enum:"ComparisonOperator"`
 
@@ -5029,9 +5811,16 @@ type PutMetricAlarmInput struct {
 	Tags []*Tag `type:"list"`
 
 	// The value against which the specified statistic is compared.
+	Threshold *float64 `type:"double"`
+
+	// If this is an alarm based on an anomaly detection model, make this value
+	// match the ID of the ANOMALY_DETECTION_BAND function.
 	//
-	// Threshold is a required field
-	Threshold *float64 `type:"double" required:"true"`
+	// For an example of how to use this parameter, see the Anomaly Detection Model
+	// Alarm example on this page.
+	//
+	// If your alarm uses this parameter, it cannot have Auto Scaling actions.
+	ThresholdMetricId *string `min:"1" type:"string"`
 
 	// Sets how this alarm is to handle missing data points. If TreatMissingData
 	// is omitted, the default behavior of missing is used. For more information,
@@ -5095,8 +5884,8 @@ func (s *PutMetricAlarmInput) Validate() error {
 	if s.Period != nil && *s.Period < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("Period", 1))
 	}
-	if s.Threshold == nil {
-		invalidParams.Add(request.NewErrParamRequired("Threshold"))
+	if s.ThresholdMetricId != nil && len(*s.ThresholdMetricId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ThresholdMetricId", 1))
 	}
 	if s.TreatMissingData != nil && len(*s.TreatMissingData) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("TreatMissingData", 1))
@@ -5252,6 +6041,12 @@ func (s *PutMetricAlarmInput) SetThreshold(v float64) *PutMetricAlarmInput {
 	return s
 }
 
+// SetThresholdMetricId sets the ThresholdMetricId field's value.
+func (s *PutMetricAlarmInput) SetThresholdMetricId(v string) *PutMetricAlarmInput {
+	s.ThresholdMetricId = &v
+	return s
+}
+
 // SetTreatMissingData sets the TreatMissingData field's value.
 func (s *PutMetricAlarmInput) SetTreatMissingData(v string) *PutMetricAlarmInput {
 	s.TreatMissingData = &v
@@ -5359,6 +6154,62 @@ func (s PutMetricDataOutput) String() string {
 // GoString returns the string representation
 func (s PutMetricDataOutput) GoString() string {
 	return s.String()
+}
+
+// Specifies one range of days or times to exclude from use for training an
+// anomaly detection model.
+type Range struct {
+	_ struct{} `type:"structure"`
+
+	// The end time of the range to exclude. The format is yyyy-MM-dd'T'HH:mm:ss.
+	// For example, 2019-07-01T23:59:59.
+	//
+	// EndTime is a required field
+	EndTime *time.Time `type:"timestamp" required:"true"`
+
+	// The start time of the range to exclude. The format is yyyy-MM-dd'T'HH:mm:ss.
+	// For example, 2019-07-01T23:59:59.
+	//
+	// StartTime is a required field
+	StartTime *time.Time `type:"timestamp" required:"true"`
+}
+
+// String returns the string representation
+func (s Range) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Range) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Range) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Range"}
+	if s.EndTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("EndTime"))
+	}
+	if s.StartTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("StartTime"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *Range) SetEndTime(v time.Time) *Range {
+	s.EndTime = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *Range) SetStartTime(v time.Time) *Range {
+	s.StartTime = &v
+	return s
 }
 
 type SetAlarmStateInput struct {
@@ -5756,6 +6607,15 @@ const (
 
 	// ComparisonOperatorLessThanOrEqualToThreshold is a ComparisonOperator enum value
 	ComparisonOperatorLessThanOrEqualToThreshold = "LessThanOrEqualToThreshold"
+
+	// ComparisonOperatorLessThanLowerOrGreaterThanUpperThreshold is a ComparisonOperator enum value
+	ComparisonOperatorLessThanLowerOrGreaterThanUpperThreshold = "LessThanLowerOrGreaterThanUpperThreshold"
+
+	// ComparisonOperatorLessThanLowerThreshold is a ComparisonOperator enum value
+	ComparisonOperatorLessThanLowerThreshold = "LessThanLowerThreshold"
+
+	// ComparisonOperatorGreaterThanUpperThreshold is a ComparisonOperator enum value
+	ComparisonOperatorGreaterThanUpperThreshold = "GreaterThanUpperThreshold"
 )
 
 const (

@@ -46,7 +46,7 @@ func TestFile_NewSection(t *testing.T) {
 		So(sec, ShouldNotBeNil)
 		So(sec.Name(), ShouldEqual, "author")
 
-		So(f.SectionStrings(), ShouldResemble, []string{ini.DEFAULT_SECTION, "author"})
+		So(f.SectionStrings(), ShouldResemble, []string{ini.DefaultSection, "author"})
 
 		Convey("With duplicated name", func() {
 			sec, err := f.NewSection("author")
@@ -54,7 +54,7 @@ func TestFile_NewSection(t *testing.T) {
 			So(sec, ShouldNotBeNil)
 
 			// Does nothing if section already exists
-			So(f.SectionStrings(), ShouldResemble, []string{ini.DEFAULT_SECTION, "author"})
+			So(f.SectionStrings(), ShouldResemble, []string{ini.DefaultSection, "author"})
 		})
 
 		Convey("With empty string", func() {
@@ -75,7 +75,7 @@ func TestFile_NewRawSection(t *testing.T) {
 		So(sec, ShouldNotBeNil)
 		So(sec.Name(), ShouldEqual, "comments")
 
-		So(f.SectionStrings(), ShouldResemble, []string{ini.DEFAULT_SECTION, "comments"})
+		So(f.SectionStrings(), ShouldResemble, []string{ini.DefaultSection, "comments"})
 		So(f.Section("comments").Body(), ShouldEqual, `1111111111111111111000000000000000001110000
 111111111111111111100000000000111000000000`)
 
@@ -83,7 +83,7 @@ func TestFile_NewRawSection(t *testing.T) {
 			sec, err := f.NewRawSection("comments", `1111111111111111111000000000000000001110000`)
 			So(err, ShouldBeNil)
 			So(sec, ShouldNotBeNil)
-			So(f.SectionStrings(), ShouldResemble, []string{ini.DEFAULT_SECTION, "comments"})
+			So(f.SectionStrings(), ShouldResemble, []string{ini.DefaultSection, "comments"})
 
 			// Overwrite previous existed section
 			So(f.Section("comments").Body(), ShouldEqual, `1111111111111111111000000000000000001110000`)
@@ -102,13 +102,13 @@ func TestFile_NewSections(t *testing.T) {
 		So(f, ShouldNotBeNil)
 
 		So(f.NewSections("package", "author"), ShouldBeNil)
-		So(f.SectionStrings(), ShouldResemble, []string{ini.DEFAULT_SECTION, "package", "author"})
+		So(f.SectionStrings(), ShouldResemble, []string{ini.DefaultSection, "package", "author"})
 
 		Convey("With duplicated name", func() {
 			So(f.NewSections("author", "features"), ShouldBeNil)
 
 			// Ignore section already exists
-			So(f.SectionStrings(), ShouldResemble, []string{ini.DEFAULT_SECTION, "package", "author", "features"})
+			So(f.SectionStrings(), ShouldResemble, []string{ini.DefaultSection, "package", "author", "features"})
 		})
 
 		Convey("With empty string", func() {
@@ -119,7 +119,7 @@ func TestFile_NewSections(t *testing.T) {
 
 func TestFile_GetSection(t *testing.T) {
 	Convey("Get a section", t, func() {
-		f, err := ini.Load(_FULL_CONF)
+		f, err := ini.Load(fullConf)
 		So(err, ShouldBeNil)
 		So(f, ShouldNotBeNil)
 
@@ -137,7 +137,7 @@ func TestFile_GetSection(t *testing.T) {
 
 func TestFile_Section(t *testing.T) {
 	Convey("Get a section", t, func() {
-		f, err := ini.Load(_FULL_CONF)
+		f, err := ini.Load(fullConf)
 		So(err, ShouldBeNil)
 		So(f, ShouldNotBeNil)
 
@@ -167,12 +167,12 @@ VERSION = v1`))
 
 func TestFile_Sections(t *testing.T) {
 	Convey("Get all sections", t, func() {
-		f, err := ini.Load(_FULL_CONF)
+		f, err := ini.Load(fullConf)
 		So(err, ShouldBeNil)
 		So(f, ShouldNotBeNil)
 
 		secs := f.Sections()
-		names := []string{ini.DEFAULT_SECTION, "author", "package", "package.sub", "features", "types", "array", "note", "comments", "string escapes", "advance"}
+		names := []string{ini.DefaultSection, "author", "package", "package.sub", "features", "types", "array", "note", "comments", "string escapes", "advance"}
 		So(len(secs), ShouldEqual, len(names))
 		for i, name := range names {
 			So(secs[i].Name(), ShouldEqual, name)
@@ -203,11 +203,11 @@ func TestFile_ChildSections(t *testing.T) {
 
 func TestFile_SectionStrings(t *testing.T) {
 	Convey("Get all section names", t, func() {
-		f, err := ini.Load(_FULL_CONF)
+		f, err := ini.Load(fullConf)
 		So(err, ShouldBeNil)
 		So(f, ShouldNotBeNil)
 
-		So(f.SectionStrings(), ShouldResemble, []string{ini.DEFAULT_SECTION, "author", "package", "package.sub", "features", "types", "array", "note", "comments", "string escapes", "advance"})
+		So(f.SectionStrings(), ShouldResemble, []string{ini.DefaultSection, "author", "package", "package.sub", "features", "types", "array", "note", "comments", "string escapes", "advance"})
 	})
 }
 
@@ -228,20 +228,20 @@ func TestFile_Append(t *testing.T) {
 		f := ini.Empty()
 		So(f, ShouldNotBeNil)
 
-		So(f.Append(_MINIMAL_CONF, []byte(`
+		So(f.Append(minimalConf, []byte(`
 [author]
 NAME = Unknwon`)), ShouldBeNil)
 
 		Convey("With bad input", func() {
 			So(f.Append(123), ShouldNotBeNil)
-			So(f.Append(_MINIMAL_CONF, 123), ShouldNotBeNil)
+			So(f.Append(minimalConf, 123), ShouldNotBeNil)
 		})
 	})
 }
 
 func TestFile_WriteTo(t *testing.T) {
 	Convey("Write content to somewhere", t, func() {
-		f, err := ini.Load(_FULL_CONF)
+		f, err := ini.Load(fullConf)
 		So(err, ShouldBeNil)
 		So(f, ShouldNotBeNil)
 
@@ -297,7 +297,7 @@ test   =
 
 func TestFile_SaveTo(t *testing.T) {
 	Convey("Write content to somewhere", t, func() {
-		f, err := ini.Load(_FULL_CONF)
+		f, err := ini.Load(fullConf)
 		So(err, ShouldBeNil)
 		So(f, ShouldNotBeNil)
 

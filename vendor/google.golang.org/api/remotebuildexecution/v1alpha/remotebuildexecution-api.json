@@ -302,6 +302,11 @@
                     "parent"
                   ],
                   "parameters": {
+                    "filter": {
+                      "description": "Optional. A filter to constrain the pools returned. Filters have the form:\n\n\u003cfield\u003e \u003coperator\u003e \u003cvalue\u003e [[AND|OR] \u003cfield\u003e \u003coperator\u003e \u003cvalue\u003e]...\n\n\u003cfield\u003e is the path for a field or map key in the Pool proto message.\ne.g. \"configuration.disk_size_gb\" or \"configuration.labels.key\".\n\u003coperator\u003e can be one of \"\u003c\", \"\u003c=\", \"\u003e=\", \"\u003e\", \"=\", \"!=\", \":\".\n\":\" is a HAS operation for strings and repeated primitive fields.\n\u003cvalue\u003e is the value to test, case-insensitive for strings. \"*\" stands for\nany value and can be used to test for key presence.\nParenthesis determine AND/OR precedence. In space separated restrictions,\nAND is implicit, e.g. \"a = b x = y\" is equivalent to \"a = b AND x = y\".\n\nExample filter:\nconfiguration.labels.key1 = * AND (state = RUNNING OR state = UPDATING)",
+                      "location": "query",
+                      "type": "string"
+                    },
                     "parent": {
                       "description": "Resource name of the instance.\nFormat: `projects/[PROJECT_ID]/instances/[INSTANCE_ID]`.",
                       "location": "path",
@@ -382,7 +387,7 @@
       }
     }
   },
-  "revision": "20190521",
+  "revision": "20190618",
   "rootUrl": "https://admin-remotebuildexecution.googleapis.com/",
   "schemas": {
     "BuildBazelRemoteExecutionV2Action": {
@@ -394,7 +399,7 @@
           "description": "The digest of the Command\nto run, which MUST be present in the\nContentAddressableStorage."
         },
         "doNotCache": {
-          "description": "If true, then the `Action`'s result cannot be cached.",
+          "description": "If true, then the `Action`'s result cannot be cached, and in-flight\nrequests for the same `Action` may not be merged.",
           "type": "boolean"
         },
         "inputRootDigest": {
@@ -423,28 +428,28 @@
           "type": "integer"
         },
         "outputDirectories": {
-          "description": "The output directories of the action. For each output directory requested\nin the `output_directories` field of the Action, if the corresponding\ndirectory existed after the action completed, a single entry will be\npresent in the output list, which will contain the digest of a\nTree message containing the\ndirectory tree, and the path equal exactly to the corresponding Action\noutput_directories member.\n\nAs an example, suppose the Action had an output directory `a/b/dir` and the\nexecution produced the following contents in `a/b/dir`: a file named `bar`\nand a directory named `foo` with an executable file named `baz`. Then,\noutput_directory will contain (hashes shortened for readability):\n\n```json\n// OutputDirectory proto:\n{\n  path: \"a/b/dir\"\n  tree_digest: {\n    hash: \"4a73bc9d03...\",\n    size: 55\n  }\n}\n// Tree proto with hash \"4a73bc9d03...\" and size 55:\n{\n  root: {\n    files: [\n      {\n        name: \"bar\",\n        digest: {\n          hash: \"4a73bc9d03...\",\n          size: 65534\n        }\n      }\n    ],\n    directories: [\n      {\n        name: \"foo\",\n        digest: {\n          hash: \"4cf2eda940...\",\n          size: 43\n        }\n      }\n    ]\n  }\n  children : {\n    // (Directory proto with hash \"4cf2eda940...\" and size 43)\n    files: [\n      {\n        name: \"baz\",\n        digest: {\n          hash: \"b2c941073e...\",\n          size: 1294,\n        },\n        is_executable: true\n      }\n    ]\n  }\n}\n```",
+          "description": "The output directories of the action. For each output directory requested\nin the `output_directories` field of the Action, if the corresponding\ndirectory existed after the action completed, a single entry will be\npresent in the output list, which will contain the digest of a\nTree message containing the\ndirectory tree, and the path equal exactly to the corresponding Action\noutput_directories member.\n\nAs an example, suppose the Action had an output directory `a/b/dir` and the\nexecution produced the following contents in `a/b/dir`: a file named `bar`\nand a directory named `foo` with an executable file named `baz`. Then,\noutput_directory will contain (hashes shortened for readability):\n\n```json\n// OutputDirectory proto:\n{\n  path: \"a/b/dir\"\n  tree_digest: {\n    hash: \"4a73bc9d03...\",\n    size: 55\n  }\n}\n// Tree proto with hash \"4a73bc9d03...\" and size 55:\n{\n  root: {\n    files: [\n      {\n        name: \"bar\",\n        digest: {\n          hash: \"4a73bc9d03...\",\n          size: 65534\n        }\n      }\n    ],\n    directories: [\n      {\n        name: \"foo\",\n        digest: {\n          hash: \"4cf2eda940...\",\n          size: 43\n        }\n      }\n    ]\n  }\n  children : {\n    // (Directory proto with hash \"4cf2eda940...\" and size 43)\n    files: [\n      {\n        name: \"baz\",\n        digest: {\n          hash: \"b2c941073e...\",\n          size: 1294,\n        },\n        is_executable: true\n      }\n    ]\n  }\n}\n```\nIf an output of the same name was found, but was not a directory, the\nserver will return a FAILED_PRECONDITION.",
           "items": {
             "$ref": "BuildBazelRemoteExecutionV2OutputDirectory"
           },
           "type": "array"
         },
         "outputDirectorySymlinks": {
-          "description": "The output directories of the action that are symbolic links to other\ndirectories. Those may be links to other output directories, or input\ndirectories, or even absolute paths outside of the working directory,\nif the server supports\nSymlinkAbsolutePathStrategy.ALLOWED.\nFor each output directory requested in the `output_directories` field of\nthe Action, if the directory file existed after\nthe action completed, a single entry will be present either in this field,\nor in the `output_directories` field, if the directory was not a symbolic link.\n\nIf the action does not produce the requested output, or produces a\nfile where a directory is expected or vice versa, then that output\nwill be omitted from the list. The server is free to arrange the output\nlist as desired; clients MUST NOT assume that the output list is sorted.",
+          "description": "The output directories of the action that are symbolic links to other\ndirectories. Those may be links to other output directories, or input\ndirectories, or even absolute paths outside of the working directory,\nif the server supports\nSymlinkAbsolutePathStrategy.ALLOWED.\nFor each output directory requested in the `output_directories` field of\nthe Action, if the directory existed after the action completed, a\nsingle entry will be present either in this field, or in the\n`output_directories` field, if the directory was not a symbolic link.\n\nIf an output of the same name was found, but was a symbolic link to a file\ninstead of a directory, the server will return a FAILED_PRECONDITION.\nIf the action does not produce the requested output, then that output\nwill be omitted from the list. The server is free to arrange the output\nlist as desired; clients MUST NOT assume that the output list is sorted.",
           "items": {
             "$ref": "BuildBazelRemoteExecutionV2OutputSymlink"
           },
           "type": "array"
         },
         "outputFileSymlinks": {
-          "description": "The output files of the action that are symbolic links to other files. Those\nmay be links to other output files, or input files, or even absolute paths\noutside of the working directory, if the server supports\nSymlinkAbsolutePathStrategy.ALLOWED.\nFor each output file requested in the `output_files` field of the Action,\nif the corresponding file existed after\nthe action completed, a single entry will be present either in this field,\nor in the `output_files` field, if the file was not a symbolic link.\n\nIf the action does not produce the requested output, or produces a\ndirectory where a regular file is expected or vice versa, then that output\nwill be omitted from the list. The server is free to arrange the output\nlist as desired; clients MUST NOT assume that the output list is sorted.",
+          "description": "The output files of the action that are symbolic links to other files. Those\nmay be links to other output files, or input files, or even absolute paths\noutside of the working directory, if the server supports\nSymlinkAbsolutePathStrategy.ALLOWED.\nFor each output file requested in the `output_files` field of the Action,\nif the corresponding file existed after\nthe action completed, a single entry will be present either in this field,\nor in the `output_files` field, if the file was not a symbolic link.\n\nIf an output symbolic link of the same name was found, but its target\ntype was not a regular file, the server will return a FAILED_PRECONDITION.\nIf the action does not produce the requested output, then that output\nwill be omitted from the list. The server is free to arrange the output\nlist as desired; clients MUST NOT assume that the output list is sorted.",
           "items": {
             "$ref": "BuildBazelRemoteExecutionV2OutputSymlink"
           },
           "type": "array"
         },
         "outputFiles": {
-          "description": "The output files of the action. For each output file requested in the\n`output_files` field of the Action, if the corresponding file existed after\nthe action completed, a single entry will be present either in this field,\nor in the output_file_symlinks field, if the file was a symbolic link to\nanother file.\n\nIf the action does not produce the requested output, or produces a\ndirectory where a regular file is expected or vice versa, then that output\nwill be omitted from the list. The server is free to arrange the output\nlist as desired; clients MUST NOT assume that the output list is sorted.",
+          "description": "The output files of the action. For each output file requested in the\n`output_files` field of the Action, if the corresponding file existed after\nthe action completed, a single entry will be present either in this field,\nor the `output_file_symlinks` field if the file was a symbolic link to\nanother file.\n\nIf an output of the same name was found, but was a directory rather\nthan a regular file, the server will return a FAILED_PRECONDITION.\nIf the action does not produce the requested output, then that output\nwill be omitted from the list. The server is free to arrange the output\nlist as desired; clients MUST NOT assume that the output list is sorted.",
           "items": {
             "$ref": "BuildBazelRemoteExecutionV2OutputFile"
           },
@@ -452,19 +457,19 @@
         },
         "stderrDigest": {
           "$ref": "BuildBazelRemoteExecutionV2Digest",
-          "description": "The digest for a blob containing the standard error of the action, which\ncan be retrieved from the\nContentAddressableStorage.\nSee `stderr_raw` for when this will be set."
+          "description": "The digest for a blob containing the standard error of the action, which\ncan be retrieved from the\nContentAddressableStorage."
         },
         "stderrRaw": {
-          "description": "The standard error buffer of the action. The server will determine, based\non the size of the buffer, whether to return it in raw form or to return\na digest in `stderr_digest` that points to the buffer. If neither is set,\nthen the buffer is empty. The client SHOULD NOT assume it will get one of\nthe raw buffer or a digest on any given request and should be prepared to\nhandle either.",
+          "description": "The standard error buffer of the action. The server SHOULD NOT inline\nstderr unless requested by the client in the\nGetActionResultRequest\nmessage. The server MAY omit inlining, even if requested, and MUST do so if inlining\nwould cause the response to exceed message size limits.",
           "format": "byte",
           "type": "string"
         },
         "stdoutDigest": {
           "$ref": "BuildBazelRemoteExecutionV2Digest",
-          "description": "The digest for a blob containing the standard output of the action, which\ncan be retrieved from the\nContentAddressableStorage.\nSee `stdout_raw` for when this will be set."
+          "description": "The digest for a blob containing the standard output of the action, which\ncan be retrieved from the\nContentAddressableStorage."
         },
         "stdoutRaw": {
-          "description": "The standard output buffer of the action. The server will determine, based\non the size of the buffer, whether to return it in raw form or to return\na digest in `stdout_digest` that points to the buffer. If neither is set,\nthen the buffer is empty. The client SHOULD NOT assume it will get one of\nthe raw buffer or a digest on any given request and should be prepared to\nhandle either.",
+          "description": "The standard output buffer of the action. The server SHOULD NOT inline\nstdout unless requested by the client in the\nGetActionResultRequest\nmessage. The server MAY omit inlining, even if requested, and MUST do so if inlining\nwould cause the response to exceed message size limits.",
           "format": "byte",
           "type": "string"
         }
@@ -490,7 +495,7 @@
           "type": "array"
         },
         "outputDirectories": {
-          "description": "A list of the output directories that the client expects to retrieve from\nthe action. Only the listed directories will be returned (an entire\ndirectory structure will be returned as a\nTree message digest, see\nOutputDirectory), as\nwell as files listed in `output_files`. Other files or directories that\nmay be created during command execution are discarded.\n\nThe paths are relative to the working directory of the action execution.\nThe paths are specified using a single forward slash (`/`) as a path\nseparator, even if the execution platform natively uses a different\nseparator. The path MUST NOT include a trailing slash, nor a leading slash,\nbeing a relative path. The special value of empty string is allowed,\nalthough not recommended, and can be used to capture the entire working\ndirectory tree, including inputs.\n\nIn order to ensure consistent hashing of the same Action, the output paths\nMUST be sorted lexicographically by code point (or, equivalently, by UTF-8\nbytes).\n\nAn output directory cannot be duplicated or have the same path as any of\nthe listed output files.\n\nDirectories leading up to the output directories (but not the output\ndirectories themselves) are created by the worker prior to execution, even\nif they are not explicitly part of the input root.",
+          "description": "A list of the output directories that the client expects to retrieve from\nthe action. Only the listed directories will be returned (an entire\ndirectory structure will be returned as a\nTree message digest, see\nOutputDirectory), as\nwell as files listed in `output_files`. Other files or directories that\nmay be created during command execution are discarded.\n\nThe paths are relative to the working directory of the action execution.\nThe paths are specified using a single forward slash (`/`) as a path\nseparator, even if the execution platform natively uses a different\nseparator. The path MUST NOT include a trailing slash, nor a leading slash,\nbeing a relative path. The special value of empty string is allowed,\nalthough not recommended, and can be used to capture the entire working\ndirectory tree, including inputs.\n\nIn order to ensure consistent hashing of the same Action, the output paths\nMUST be sorted lexicographically by code point (or, equivalently, by UTF-8\nbytes).\n\nAn output directory cannot be duplicated or have the same path as any of\nthe listed output files. An output directory is allowed to be a parent of\nanother output directory.\n\nDirectories leading up to the output directories (but not the output\ndirectories themselves) are created by the worker prior to execution, even\nif they are not explicitly part of the input root.",
           "items": {
             "type": "string"
           },
@@ -505,7 +510,7 @@
         },
         "platform": {
           "$ref": "BuildBazelRemoteExecutionV2Platform",
-          "description": "The platform requirements for the execution environment. The server MAY\nchoose to execute the action on any worker satisfying the requirements, so\nthe client SHOULD ensure that running the action on any such worker will\nhave the same result."
+          "description": "The platform requirements for the execution environment. The server MAY\nchoose to execute the action on any worker satisfying the requirements, so\nthe client SHOULD ensure that running the action on any such worker will\nhave the same result.\nA detailed lexicon for this can be found in the accompanying platform.md."
         },
         "workingDirectory": {
           "description": "The working directory, relative to the input root, for the command to run\nin. It must be a directory which exists in the input tree. If it is left\nempty, then the action is run in the input root.",
@@ -546,7 +551,7 @@
       "type": "object"
     },
     "BuildBazelRemoteExecutionV2Directory": {
-      "description": "A `Directory` represents a directory node in a file tree, containing zero or\nmore children FileNodes,\nDirectoryNodes and\nSymlinkNodes.\nEach `Node` contains its name in the directory, either the digest of its\ncontent (either a file blob or a `Directory` proto) or a symlink target, as\nwell as possibly some metadata about the file or directory.\n\nIn order to ensure that two equivalent directory trees hash to the same\nvalue, the following restrictions MUST be obeyed when constructing a\na `Directory`:\n\n* Every child in the directory must have a path of exactly one segment.\n  Multiple levels of directory hierarchy may not be collapsed.\n* Each child in the directory must have a unique path segment (file name).\n* The files, directories and symlinks in the directory must each be sorted\n  in lexicographical order by path. The path strings must be sorted by code\n  point, equivalently, by UTF-8 bytes.\n\nA `Directory` that obeys the restrictions is said to be in canonical form.\n\nAs an example, the following could be used for a file named `bar` and a\ndirectory named `foo` with an executable file named `baz` (hashes shortened\nfor readability):\n\n```json\n// (Directory proto)\n{\n  files: [\n    {\n      name: \"bar\",\n      digest: {\n        hash: \"4a73bc9d03...\",\n        size: 65534\n      }\n    }\n  ],\n  directories: [\n    {\n      name: \"foo\",\n      digest: {\n        hash: \"4cf2eda940...\",\n        size: 43\n      }\n    }\n  ]\n}\n\n// (Directory proto with hash \"4cf2eda940...\" and size 43)\n{\n  files: [\n    {\n      name: \"baz\",\n      digest: {\n        hash: \"b2c941073e...\",\n        size: 1294,\n      },\n      is_executable: true\n    }\n  ]\n}\n```",
+      "description": "A `Directory` represents a directory node in a file tree, containing zero or\nmore children FileNodes,\nDirectoryNodes and\nSymlinkNodes.\nEach `Node` contains its name in the directory, either the digest of its\ncontent (either a file blob or a `Directory` proto) or a symlink target, as\nwell as possibly some metadata about the file or directory.\n\nIn order to ensure that two equivalent directory trees hash to the same\nvalue, the following restrictions MUST be obeyed when constructing a\na `Directory`:\n\n* Every child in the directory must have a path of exactly one segment.\n  Multiple levels of directory hierarchy may not be collapsed.\n* Each child in the directory must have a unique path segment (file name).\n  Note that while the API itself is case-sensitive, the environment where\n  the Action is executed may or may not be case-sensitive. That is, it is\n  legal to call the API with a Directory that has both \"Foo\" and \"foo\" as\n  children, but the Action may be rejected by the remote system upon\n  execution.\n* The files, directories and symlinks in the directory must each be sorted\n  in lexicographical order by path. The path strings must be sorted by code\n  point, equivalently, by UTF-8 bytes.\n\nA `Directory` that obeys the restrictions is said to be in canonical form.\n\nAs an example, the following could be used for a file named `bar` and a\ndirectory named `foo` with an executable file named `baz` (hashes shortened\nfor readability):\n\n```json\n// (Directory proto)\n{\n  files: [\n    {\n      name: \"bar\",\n      digest: {\n        hash: \"4a73bc9d03...\",\n        size: 65534\n      }\n    }\n  ],\n  directories: [\n    {\n      name: \"foo\",\n      digest: {\n        hash: \"4cf2eda940...\",\n        size: 43\n      }\n    }\n  ]\n}\n\n// (Directory proto with hash \"4cf2eda940...\" and size 43)\n{\n  files: [\n    {\n      name: \"baz\",\n      digest: {\n        hash: \"b2c941073e...\",\n        size: 1294,\n      },\n      is_executable: true\n    }\n  ]\n}\n```",
       "id": "BuildBazelRemoteExecutionV2Directory",
       "properties": {
         "directories": {
@@ -597,6 +602,7 @@
           "description": "The digest of the Action\nbeing executed."
         },
         "stage": {
+          "description": "The current stage of execution.",
           "enum": [
             "UNKNOWN",
             "CACHE_CHECK",
@@ -605,7 +611,7 @@
             "COMPLETED"
           ],
           "enumDescriptions": [
-            "",
+            "Invalid value.",
             "Checking the result against the cache.",
             "Currently idle, awaiting a free machine to execute.",
             "Currently being executed by a worker.",
@@ -760,9 +766,14 @@
       "type": "object"
     },
     "BuildBazelRemoteExecutionV2OutputFile": {
-      "description": "An `OutputFile` is similar to a\nFileNode, but it is used as an\noutput in an `ActionResult`. It allows a full file path rather than\nonly a name.\n\n`OutputFile` is binary-compatible with `FileNode`.",
+      "description": "An `OutputFile` is similar to a\nFileNode, but it is used as an\noutput in an `ActionResult`. It allows a full file path rather than\nonly a name.",
       "id": "BuildBazelRemoteExecutionV2OutputFile",
       "properties": {
+        "contents": {
+          "description": "The contents of the file if inlining was requested. The server SHOULD NOT inline\nfile contents unless requested by the client in the\nGetActionResultRequest\nmessage. The server MAY omit inlining, even if requested, and MUST do so if inlining\nwould cause the response to exceed message size limits.",
+          "format": "byte",
+          "type": "string"
+        },
         "digest": {
           "$ref": "BuildBazelRemoteExecutionV2Digest",
           "description": "The digest of the file's content."
@@ -823,7 +834,7 @@
       "type": "object"
     },
     "BuildBazelRemoteExecutionV2RequestMetadata": {
-      "description": "An optional Metadata to attach to any RPC request to tell the server about an\nexternal context of the request. The server may use this for logging or other\npurposes. To use it, the client attaches the header to the call using the\ncanonical proto serialization:\n\n* name: `build.bazel.remote.execution.v2.requestmetadata-bin`\n* contents: the base64 encoded binary `RequestMetadata` message.",
+      "description": "An optional Metadata to attach to any RPC request to tell the server about an\nexternal context of the request. The server may use this for logging or other\npurposes. To use it, the client attaches the header to the call using the\ncanonical proto serialization:\n\n* name: `build.bazel.remote.execution.v2.requestmetadata-bin`\n* contents: the base64 encoded binary `RequestMetadata` message.\nNote: the gRPC library serializes binary headers encoded in base 64 by\ndefault (https://github.com/grpc/grpc/blob/master/doc/PROTOCOL-HTTP2.md#requests).\nTherefore, if the gRPC library is used to pass/retrieve this\nmetadata, the user may ignore the base64 encoding and assume it is simply\nserialized as a binary message.",
       "id": "BuildBazelRemoteExecutionV2RequestMetadata",
       "properties": {
         "actionId": {
@@ -1163,6 +1174,10 @@
     "GoogleDevtoolsRemotebuildexecutionAdminV1alphaListWorkerPoolsRequest": {
       "id": "GoogleDevtoolsRemotebuildexecutionAdminV1alphaListWorkerPoolsRequest",
       "properties": {
+        "filter": {
+          "description": "Optional. A filter to constrain the pools returned. Filters have the form:\n\n\u003cfield\u003e \u003coperator\u003e \u003cvalue\u003e [[AND|OR] \u003cfield\u003e \u003coperator\u003e \u003cvalue\u003e]...\n\n\u003cfield\u003e is the path for a field or map key in the Pool proto message.\ne.g. \"configuration.disk_size_gb\" or \"configuration.labels.key\".\n\u003coperator\u003e can be one of \"\u003c\", \"\u003c=\", \"\u003e=\", \"\u003e\", \"=\", \"!=\", \":\".\n\":\" is a HAS operation for strings and repeated primitive fields.\n\u003cvalue\u003e is the value to test, case-insensitive for strings. \"*\" stands for\nany value and can be used to test for key presence.\nParenthesis determine AND/OR precedence. In space separated restrictions,\nAND is implicit, e.g. \"a = b x = y\" is equivalent to \"a = b AND x = y\".\n\nExample filter:\nconfiguration.labels.key1 = * AND (state = RUNNING OR state = UPDATING)",
+          "type": "string"
+        },
         "parent": {
           "description": "Resource name of the instance.\nFormat: `projects/[PROJECT_ID]/instances/[INSTANCE_ID]`.",
           "type": "string"
@@ -1211,6 +1226,13 @@
         "diskType": {
           "description": "Required. Disk Type to use for the worker.\nSee [Storage\noptions](https://cloud.google.com/compute/docs/disks/#introduction).\nCurrently only `pd-standard` is supported.",
           "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Labels associated with the workers.\nLabel keys and values can be no longer than 63 characters, can only contain\nlowercase letters, numeric characters, underscores and dashes.\nInternational letters are permitted. Keys must start with a letter but\nvalues are optional.\nThere can not be more than 64 labels per resource.",
+          "type": "object"
         },
         "machineType": {
           "description": "Required. Machine type of the worker, such as `n1-standard-2`.\nSee https://cloud.google.com/compute/docs/machine-types for a list of\nsupported machine types. Note that `f1-micro` and `g1-small` are not yet\nsupported.",
@@ -1949,7 +1971,7 @@
       "type": "object"
     },
     "GoogleRpcStatus": {
-      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error\nmessage, and error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
+      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors).",
       "id": "GoogleRpcStatus",
       "properties": {
         "code": {

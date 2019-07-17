@@ -1,0 +1,37 @@
+{
+  "tests": [
+    {
+      "description": "set-merge: If no ordinary values in Merge, no write",
+      "comment": "If all the fields in the merge option have ServerTimestamp\nvalues, then no update operation is produced, only a transform.",
+      "set": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "option": {
+          "fields": [
+            {
+              "field": [
+                "b"
+              ]
+            }
+          ]
+        },
+        "jsonData": "{\"a\": 1, \"b\": \"ServerTimestamp\"}",
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "transform": {
+                "document": "projects/projectID/databases/(default)/documents/C/d",
+                "fieldTransforms": [
+                  {
+                    "fieldPath": "b",
+                    "setToServerValue": "REQUEST_TIME"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

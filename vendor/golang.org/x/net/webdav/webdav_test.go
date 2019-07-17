@@ -298,20 +298,26 @@ func TestFilenameEscape(t *testing.T) {
 		name:            `/go<lang`,
 		wantHref:        `/go%3Clang`,
 		wantDisplayName: `go&lt;lang`,
+	}, {
+		name:            `/`,
+		wantHref:        `/`,
+		wantDisplayName: ``,
 	}}
 	ctx := context.Background()
 	fs := NewMemFS()
 	for _, tc := range testCases {
-		if strings.HasSuffix(tc.name, "/") {
-			if err := fs.Mkdir(ctx, tc.name, 0755); err != nil {
-				t.Fatalf("name=%q: Mkdir: %v", tc.name, err)
+		if tc.name != "/" {
+			if strings.HasSuffix(tc.name, "/") {
+				if err := fs.Mkdir(ctx, tc.name, 0755); err != nil {
+					t.Fatalf("name=%q: Mkdir: %v", tc.name, err)
+				}
+			} else {
+				f, err := fs.OpenFile(ctx, tc.name, os.O_CREATE, 0644)
+				if err != nil {
+					t.Fatalf("name=%q: OpenFile: %v", tc.name, err)
+				}
+				f.Close()
 			}
-		} else {
-			f, err := fs.OpenFile(ctx, tc.name, os.O_CREATE, 0644)
-			if err != nil {
-				t.Fatalf("name=%q: OpenFile: %v", tc.name, err)
-			}
-			f.Close()
 		}
 	}
 

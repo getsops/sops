@@ -1365,6 +1365,49 @@
             }
           }
         },
+        "locations": {
+          "resources": {
+            "content": {
+              "methods": {
+                "deidentify": {
+                  "description": "De-identifies potentially sensitive info from a ContentItem.\nThis method has limits on input size and output size.\nSee https://cloud.google.com/dlp/docs/deidentify-sensitive-data to\nlearn more.\n\nWhen no InfoTypes or CustomInfoTypes are specified in this request, the\nsystem will automatically choose what detectors to run. By default this may\nbe all types, but may change over time as detectors are updated.",
+                  "flatPath": "v2/projects/{projectsId}/locations/{location}/content:deidentify",
+                  "httpMethod": "POST",
+                  "id": "dlp.projects.locations.content.deidentify",
+                  "parameterOrder": [
+                    "parent",
+                    "location"
+                  ],
+                  "parameters": {
+                    "location": {
+                      "description": "The geographic location to process de-identification. Reserved for future\nextensions.",
+                      "location": "path",
+                      "required": true,
+                      "type": "string"
+                    },
+                    "parent": {
+                      "description": "The parent resource name, for example projects/my-project-id.",
+                      "location": "path",
+                      "pattern": "^projects/[^/]+$",
+                      "required": true,
+                      "type": "string"
+                    }
+                  },
+                  "path": "v2/{+parent}/locations/{location}/content:deidentify",
+                  "request": {
+                    "$ref": "GooglePrivacyDlpV2DeidentifyContentRequest"
+                  },
+                  "response": {
+                    "$ref": "GooglePrivacyDlpV2DeidentifyContentResponse"
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/cloud-platform"
+                  ]
+                }
+              }
+            }
+          }
+        },
         "storedInfoTypes": {
           "methods": {
             "create": {
@@ -1519,7 +1562,7 @@
       }
     }
   },
-  "revision": "20190526",
+  "revision": "20190629",
   "rootUrl": "https://dlp.googleapis.com/",
   "schemas": {
     "GooglePrivacyDlpV2Action": {
@@ -1533,6 +1576,10 @@
         "pubSub": {
           "$ref": "GooglePrivacyDlpV2PublishToPubSub",
           "description": "Publish a notification to a pubsub topic."
+        },
+        "publishFindingsToCloudDataCatalog": {
+          "$ref": "GooglePrivacyDlpV2PublishFindingsToCloudDataCatalog",
+          "description": "Publish findings to Cloud Datahub."
         },
         "publishSummaryToCscc": {
           "$ref": "GooglePrivacyDlpV2PublishSummaryToCscc",
@@ -1782,9 +1829,11 @@
             "IMAGE_BMP",
             "IMAGE_PNG",
             "IMAGE_SVG",
-            "TEXT_UTF8"
+            "TEXT_UTF8",
+            "AVRO"
           ],
           "enumDescriptions": [
+            "",
             "",
             "",
             "",
@@ -1953,14 +2002,16 @@
             "Includes all files.",
             "Includes all file extensions not covered by text file types.",
             "Included file extensions:\n  asc, brf, c, cc, cpp, csv, cxx, c++, cs, css, dart, eml, go, h, hh, hpp,\n  hxx, h++, hs, html, htm, shtml, shtm, xhtml, lhs, ini, java, js, json,\n  ocaml, md, mkd, markdown, m, ml, mli, pl, pm, php, phtml, pht, py, pyw,\n  rb, rbw, rs, rc, scala, sh, sql, tex, txt, text, tsv, vcard, vcs, wml,\n  xml, xsl, xsd, yml, yaml.",
-            "Included file extensions:\n  bmp, gif, jpg, jpeg, jpe, png.\nbytes_limit_per_file has no effect on image files."
+            "Included file extensions:\n  bmp, gif, jpg, jpeg, jpe, png.\nbytes_limit_per_file has no effect on image files.",
+            "Included file extensions:\n  avro"
           ],
           "items": {
             "enum": [
               "FILE_TYPE_UNSPECIFIED",
               "BINARY_FILE",
               "TEXT_FILE",
-              "IMAGE"
+              "IMAGE",
+              "AVRO"
             ],
             "type": "string"
           },
@@ -2511,6 +2562,10 @@
         "item": {
           "$ref": "GooglePrivacyDlpV2ContentItem",
           "description": "The item to de-identify. Will be treated as text."
+        },
+        "location": {
+          "description": "The geographic location to process de-identification. Reserved for future\nextensions.",
+          "type": "string"
         }
       },
       "type": "object"
@@ -2656,7 +2711,7 @@
       "type": "object"
     },
     "GooglePrivacyDlpV2DetectionRule": {
-      "description": "Rule for modifying a CustomInfoType to alter behavior under certain\ncircumstances, depending on the specific details of the rule. Not supported\nfor the `surrogate_type` custom info type.",
+      "description": "Deprecated; use `InspectionRuleSet` instead. Rule for modifying a\n`CustomInfoType` to alter behavior under certain circumstances, depending\non the specific details of the rule. Not supported for the `surrogate_type`\ncustom infoType.",
       "id": "GooglePrivacyDlpV2DetectionRule",
       "properties": {
         "hotwordRule": {
@@ -2731,8 +2786,7 @@
             "RUNNING",
             "DONE",
             "CANCELED",
-            "FAILED",
-            "WAITING_FOR_TP_CREATION"
+            "FAILED"
           ],
           "enumDescriptions": [
             "",
@@ -2740,8 +2794,7 @@
             "The job is currently running.",
             "The job is no longer running.",
             "The job was canceled before it could complete.",
-            "The job had an error and did not complete.",
-            "Job waiting on Tenant Project creation."
+            "The job had an error and did not complete."
           ],
           "type": "string"
         },
@@ -4173,6 +4226,12 @@
       },
       "type": "object"
     },
+    "GooglePrivacyDlpV2PublishFindingsToCloudDataCatalog": {
+      "description": "Publish findings of a DlpJob to Cloud Data Catalog. Labels summarizing the\nresults of the DlpJob will be applied to the entry for the resource scanned\nin Cloud Data Catalog. Any labels previously written by another DlpJob will\nbe deleted. InfoType naming patterns are strictly enforced when using this\nfeature. Note that the findings will be persisted in Cloud Data Catalog\nstorage and are governed by Data Catalog service-specific policy, see\nhttps://cloud.google.com/terms/service-terms\nOnly a single instance of this action can be specified and only allowed if\nall resources being scanned are BigQuery tables.\nCompatible with: Inspect",
+      "id": "GooglePrivacyDlpV2PublishFindingsToCloudDataCatalog",
+      "properties": {},
+      "type": "object"
+    },
     "GooglePrivacyDlpV2PublishSummaryToCscc": {
       "description": "Publish the result summary of a DlpJob to the Cloud Security\nCommand Center (CSCC Alpha).\nThis action is only available for projects which are parts of\nan organization and whitelisted for the alpha Cloud Security Command\nCenter.\nThe action will publish count of finding instances and their info types.\nThe summary of findings will be persisted in CSCC and are governed by CSCC\nservice-specific policy, see https://cloud.google.com/terms/service-terms\nOnly a single instance of this action can be specified.\nCompatible with: Inspect",
       "id": "GooglePrivacyDlpV2PublishSummaryToCscc",
@@ -5129,7 +5188,7 @@
       "type": "object"
     },
     "GoogleRpcStatus": {
-      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error\nmessage, and error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
+      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors).",
       "id": "GoogleRpcStatus",
       "properties": {
         "code": {

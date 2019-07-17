@@ -68,7 +68,30 @@ func TestTopicID(t *testing.T) {
 
 	s := c.Topic(id)
 	if got, want := s.ID(), id; got != want {
-		t.Errorf("Token.ID() = %q; want %q", got, want)
+		t.Errorf("Topic.ID() = %q; want %q", got, want)
+	}
+}
+
+func TestCreateTopicWithConfig(t *testing.T) {
+	c, srv := newFake(t)
+	defer c.Close()
+	defer srv.Close()
+
+	id := "test-topic"
+	want := TopicConfig{
+		Labels:               map[string]string{"label": "value"},
+		MessageStoragePolicy: MessageStoragePolicy{},
+		KMSKeyName:           "projects/P/locations/L/keyRings/R/cryptoKeys/K",
+	}
+
+	topic := mustCreateTopicWithConfig(t, c, id, &want)
+	got, err := topic.Config(context.Background())
+	if err != nil {
+		t.Fatalf("error getting topic config: %v", err)
+	}
+
+	if !testutil.Equal(got, want) {
+		t.Errorf("got %v, want %v", got, want)
 	}
 }
 
@@ -214,6 +237,17 @@ func (s *alwaysFailPublish) Publish(ctx context.Context, req *pubsubpb.PublishRe
 
 func mustCreateTopic(t *testing.T, c *Client, id string) *Topic {
 	topic, err := c.CreateTopic(context.Background(), id)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return topic
+}
+
+func mustCreateTopicWithConfig(t *testing.T, c *Client, id string, tc *TopicConfig) *Topic {
+	if tc == nil {
+		return mustCreateTopic(t, c, id)
+	}
+	topic, err := c.CreateTopicWithConfig(context.Background(), id, tc)
 	if err != nil {
 		t.Fatal(err)
 	}

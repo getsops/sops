@@ -1,0 +1,32 @@
+{
+  "tests": [
+    {
+      "description": "query: empty Select clause",
+      "comment": "An empty Select clause selects just the document ID.",
+      "query": {
+        "collPath": "projects/projectID/databases/(default)/documents/C",
+        "clauses": [
+          {
+            "select": {
+              "fields": []
+            }
+          }
+        ],
+        "query": {
+          "select": {
+            "fields": [
+              {
+                "fieldPath": "__name__"
+              }
+            ]
+          },
+          "from": [
+            {
+              "collectionId": "C"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

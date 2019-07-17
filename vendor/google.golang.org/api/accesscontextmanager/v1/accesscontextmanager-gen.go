@@ -2473,7 +2473,7 @@ func (r *AccessPoliciesAccessLevelsService) Patch(name string, accesslevel *Acce
 	return c
 }
 
-// UpdateMask sets the optional parameter "updateMask": Required.  Mask
+// UpdateMask sets the optional parameter "updateMask": Required. Mask
 // to control which fields get updated. Must be non-empty.
 func (c *AccessPoliciesAccessLevelsPatchCall) UpdateMask(updateMask string) *AccessPoliciesAccessLevelsPatchCall {
 	c.urlParams_.Set("updateMask", updateMask)
@@ -2586,7 +2586,7 @@ func (c *AccessPoliciesAccessLevelsPatchCall) Do(opts ...googleapi.CallOption) (
 	//       "type": "string"
 	//     },
 	//     "updateMask": {
-	//       "description": "Required.  Mask to control which fields get updated. Must be non-empty.",
+	//       "description": "Required. Mask to control which fields get updated. Must be non-empty.",
 	//       "format": "google-fieldmask",
 	//       "location": "query",
 	//       "type": "string"

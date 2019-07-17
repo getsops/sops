@@ -23,7 +23,7 @@
   "description": "Configures and serves authoritative DNS records.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/cloud-dns",
-  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/4ABTsLSkbq4OHuGpz9x2CkaFpsw\"",
+  "etag": "\"9eZ1uxVRThTDhLJCZHhqs3eQWz4/BKbDIZNgbXAxlw2_5IchD8LGs4Q\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -760,7 +760,7 @@
       }
     }
   },
-  "revision": "20190425",
+  "revision": "20190625",
   "rootUrl": "https://dns.googleapis.com/",
   "schemas": {
     "Change": {
@@ -1090,7 +1090,7 @@
       "id": "ManagedZoneDnsSecConfig",
       "properties": {
         "defaultKeySpecs": {
-          "description": "Specifies parameters that will be used for generating initial DnsKeys for this ManagedZone. Output only while state is not OFF.",
+          "description": "Specifies parameters that will be used for generating initial DnsKeys for this ManagedZone. Can only be changed while state is OFF.",
           "items": {
             "$ref": "DnsKeySpec"
           },
@@ -1102,7 +1102,7 @@
           "type": "string"
         },
         "nonExistence": {
-          "description": "Specifies the mechanism used to provide authenticated denial-of-existence responses. Output only while state is not OFF.",
+          "description": "Specifies the mechanism used to provide authenticated denial-of-existence responses. Can only be changed while state is OFF.",
           "enum": [
             "NSEC",
             "NSEC3"

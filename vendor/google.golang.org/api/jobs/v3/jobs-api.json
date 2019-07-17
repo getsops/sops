@@ -632,7 +632,7 @@
       }
     }
   },
-  "revision": "20190531",
+  "revision": "20190701",
   "rootUrl": "https://jobs.googleapis.com/",
   "schemas": {
     "ApplicationInfo": {
@@ -2171,7 +2171,7 @@
           "type": "string"
         },
         "telecommutePreference": {
-          "description": "Optional.\n\nAllows the client to return jobs without a\nset location, specifically, telecommuting jobs (telecomuting is considered\nby the service as a special location.\nJob.posting_region indicates if a job permits telecommuting.\nIf this field is set to TelecommutePreference.TELECOMMUTE_ALLOWED,\ntelecommuting jobs are searched, and address and lat_lng are\nignored. If not set or set to\nTelecommutePreference.TELECOMMUTE_EXCLUDED, telecommute job are not\nsearched.\n\nThis filter can be used by itself to search exclusively for telecommuting\njobs, or it can be combined with another location\nfilter to search for a combination of job locations,\nsuch as \"Mountain View\" or \"telecommuting\" jobs. However, when used in\ncombination with other location filters, telecommuting jobs can be\ntreated as less relevant than other jobs in the search response.",
+          "description": "Optional.\n\nAllows the client to return jobs without a\nset location, specifically, telecommuting jobs (telecommuting is considered\nby the service as a special location.\nJob.posting_region indicates if a job permits telecommuting.\nIf this field is set to TelecommutePreference.TELECOMMUTE_ALLOWED,\ntelecommuting jobs are searched, and address and lat_lng are\nignored. If not set or set to\nTelecommutePreference.TELECOMMUTE_EXCLUDED, telecommute job are not\nsearched.\n\nThis filter can be used by itself to search exclusively for telecommuting\njobs, or it can be combined with another location\nfilter to search for a combination of job locations,\nsuch as \"Mountain View\" or \"telecommuting\" jobs. However, when used in\ncombination with other location filters, telecommuting jobs can be\ntreated as less relevant than other jobs in the search response.",
           "enum": [
             "TELECOMMUTE_PREFERENCE_UNSPECIFIED",
             "TELECOMMUTE_EXCLUDED",
@@ -2411,7 +2411,7 @@
             "SIMPLE"
           ],
           "enumDescriptions": [
-            "The diversification level isn't specified.",
+            "The diversification level isn't specified. By default, jobs with this\nenum are ordered according to SIMPLE diversifying behavior.",
             "Disables diversification. Jobs that would normally be pushed to the last\npage would not have their positions altered. This may result in highly\nsimilar jobs appearing in sequence in the search results.",
             "Default diversifying behavior. The result list is ordered so that\nhighly similar results are pushed to the end of the last page of search\nresults."
           ],
@@ -2453,7 +2453,7 @@
           "type": "integer"
         },
         "orderBy": {
-          "description": "Optional.\n\nThe criteria determining how search results are sorted. Default is\n\"relevance desc\".\n\nSupported options are:\n\n* \"relevance desc\": By relevance descending, as determined by the API\nalgorithms. Relevance thresholding of query results is only available\nwith this ordering.\n* \"posting`_`publish`_`time desc\": By Job.posting_publish_time\ndescending.\n* \"posting`_`update`_`time desc\": By Job.posting_update_time\ndescending.\n* \"title\": By Job.title ascending.\n* \"title desc\": By Job.title descending.\n* \"annualized`_`base`_`compensation\": By job's\nCompensationInfo.annualized_base_compensation_range ascending. Jobs\nwhose annualized base compensation is unspecified are put at the end of\nsearch results.\n* \"annualized`_`base`_`compensation desc\": By job's\nCompensationInfo.annualized_base_compensation_range descending. Jobs\nwhose annualized base compensation is unspecified are put at the end of\nsearch results.\n* \"annualized`_`total`_`compensation\": By job's\nCompensationInfo.annualized_total_compensation_range ascending. Jobs\nwhose annualized base compensation is unspecified are put at the end of\nsearch results.\n* \"annualized`_`total`_`compensation desc\": By job's\nCompensationInfo.annualized_total_compensation_range descending. Jobs\nwhose annualized base compensation is unspecified are put at the end of\nsearch results.",
+          "description": "Optional.\n\nThe criteria determining how search results are sorted. Default is\n\"relevance desc\".\n\nSupported options are:\n\n* `\"relevance desc\"`: By relevance descending, as determined by the API\nalgorithms. Relevance thresholding of query results is only available\nwith this ordering.\n* `\"posting_publish_time desc\"`: By Job.posting_publish_time\ndescending.\n* `\"posting_update_time desc\"`: By Job.posting_update_time\ndescending.\n* `\"title\"`: By Job.title ascending.\n* `\"title desc\"`: By Job.title descending.\n* `\"annualized_base_compensation\"`: By job's\nCompensationInfo.annualized_base_compensation_range ascending. Jobs\nwhose annualized base compensation is unspecified are put at the end of\nsearch results.\n* `\"annualized_base_compensation desc\"`: By job's\nCompensationInfo.annualized_base_compensation_range descending. Jobs\nwhose annualized base compensation is unspecified are put at the end of\nsearch results.\n* `\"annualized_total_compensation\"`: By job's\nCompensationInfo.annualized_total_compensation_range ascending. Jobs\nwhose annualized base compensation is unspecified are put at the end of\nsearch results.\n* `\"annualized_total_compensation desc\"`: By job's\nCompensationInfo.annualized_total_compensation_range descending. Jobs\nwhose annualized base compensation is unspecified are put at the end of\nsearch results.",
           "type": "string"
         },
         "pageSize": {
@@ -2467,7 +2467,7 @@
         },
         "requestMetadata": {
           "$ref": "RequestMetadata",
-          "description": "Required.\n\nThe meta information collected about the job searcher, used to improve the\nsearch quality of the service.. The identifiers, (such as `user_id`) are\nprovided by users, and must be unique and consistent."
+          "description": "Required.\n\nThe meta information collected about the job searcher, used to improve the\nsearch quality of the service. The identifiers (such as `user_id`) are\nprovided by users, and must be unique and consistent."
         },
         "requirePreciseResultSize": {
           "description": "Optional.\n\nControls if the search job request requires the return of a precise\ncount of the first 300 results. Setting this to `true` ensures\nconsistency in the number of results per page. Best practice is to set this\nvalue to true if a client allows users to jump directly to a\nnon-sequential search results page.\n\nEnabling this flag may adversely impact performance.\n\nDefaults to false.",

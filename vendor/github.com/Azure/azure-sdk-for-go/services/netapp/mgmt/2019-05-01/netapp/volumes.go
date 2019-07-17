@@ -69,7 +69,7 @@ func (client VolumesClient) CreateOrUpdate(ctx context.Context, body Volume, res
 							{Target: "body.VolumeProperties.FileSystemID", Name: validation.Pattern, Rule: `^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$`, Chain: nil},
 						}},
 						{Target: "body.VolumeProperties.CreationToken", Name: validation.Null, Rule: true, Chain: nil},
-						{Target: "body.VolumeProperties.UsageThreshold", Name: validation.Null, Rule: false,
+						{Target: "body.VolumeProperties.UsageThreshold", Name: validation.Null, Rule: true,
 							Chain: []validation.Constraint{{Target: "body.VolumeProperties.UsageThreshold", Name: validation.InclusiveMaximum, Rule: int64(109951162777600), Chain: nil},
 								{Target: "body.VolumeProperties.UsageThreshold", Name: validation.InclusiveMinimum, Rule: 107374182400, Chain: nil},
 							}},
@@ -83,6 +83,7 @@ func (client VolumesClient) CreateOrUpdate(ctx context.Context, body Volume, res
 								{Target: "body.VolumeProperties.BaremetalTenantID", Name: validation.MinLength, Rule: 36, Chain: nil},
 								{Target: "body.VolumeProperties.BaremetalTenantID", Name: validation.Pattern, Rule: `^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$`, Chain: nil},
 							}},
+						{Target: "body.VolumeProperties.SubnetID", Name: validation.Null, Rule: true, Chain: nil},
 					}}}},
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -116,7 +117,7 @@ func (client VolumesClient) CreateOrUpdatePreparer(ctx context.Context, body Vol
 		"volumeName":        autorest.Encode("path", volumeName),
 	}
 
-	const APIVersion = "2017-08-15"
+	const APIVersion = "2019-05-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -210,7 +211,7 @@ func (client VolumesClient) DeletePreparer(ctx context.Context, resourceGroupNam
 		"volumeName":        autorest.Encode("path", volumeName),
 	}
 
-	const APIVersion = "2017-08-15"
+	const APIVersion = "2019-05-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -304,7 +305,7 @@ func (client VolumesClient) GetPreparer(ctx context.Context, resourceGroupName s
 		"volumeName":        autorest.Encode("path", volumeName),
 	}
 
-	const APIVersion = "2017-08-15"
+	const APIVersion = "2019-05-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -391,7 +392,7 @@ func (client VolumesClient) ListPreparer(ctx context.Context, resourceGroupName 
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2017-08-15"
+	const APIVersion = "2019-05-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -481,7 +482,7 @@ func (client VolumesClient) UpdatePreparer(ctx context.Context, body VolumePatch
 		"volumeName":        autorest.Encode("path", volumeName),
 	}
 
-	const APIVersion = "2017-08-15"
+	const APIVersion = "2019-05-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}

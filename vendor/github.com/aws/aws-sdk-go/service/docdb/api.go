@@ -160,6 +160,12 @@ func (c *DocDB) ApplyPendingMaintenanceActionRequest(input *ApplyPendingMaintena
 //   * ErrCodeResourceNotFoundFault "ResourceNotFoundFault"
 //   The specified resource ID was not found.
 //
+//   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
+//   The DB cluster isn't in a valid state.
+//
+//   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
+//   The specified DB instance isn't in the available state.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/docdb-2014-10-31/ApplyPendingMaintenanceAction
 func (c *DocDB) ApplyPendingMaintenanceAction(input *ApplyPendingMaintenanceActionInput) (*ApplyPendingMaintenanceActionOutput, error) {
 	req, out := c.ApplyPendingMaintenanceActionRequest(input)
@@ -3967,6 +3973,180 @@ func (c *DocDB) RestoreDBClusterToPointInTimeWithContext(ctx aws.Context, input 
 	return out, req.Send()
 }
 
+const opStartDBCluster = "StartDBCluster"
+
+// StartDBClusterRequest generates a "aws/request.Request" representing the
+// client's request for the StartDBCluster operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartDBCluster for more information on using the StartDBCluster
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StartDBClusterRequest method.
+//    req, resp := client.StartDBClusterRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/docdb-2014-10-31/StartDBCluster
+func (c *DocDB) StartDBClusterRequest(input *StartDBClusterInput) (req *request.Request, output *StartDBClusterOutput) {
+	op := &request.Operation{
+		Name:       opStartDBCluster,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartDBClusterInput{}
+	}
+
+	output = &StartDBClusterOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartDBCluster API operation for Amazon DocumentDB with MongoDB compatibility.
+//
+// Restarts the stopped cluster that is specified by DBClusterIdentifier. For
+// more information, see Stopping and Starting an Amazon DocumentDB Cluster
+// (https://docs.aws.amazon.com/documentdb/latest/developerguide/db-cluster-stop-start.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon DocumentDB with MongoDB compatibility's
+// API operation StartDBCluster for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
+//
+//   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
+//   The DB cluster isn't in a valid state.
+//
+//   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
+//   The specified DB instance isn't in the available state.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/docdb-2014-10-31/StartDBCluster
+func (c *DocDB) StartDBCluster(input *StartDBClusterInput) (*StartDBClusterOutput, error) {
+	req, out := c.StartDBClusterRequest(input)
+	return out, req.Send()
+}
+
+// StartDBClusterWithContext is the same as StartDBCluster with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartDBCluster for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *DocDB) StartDBClusterWithContext(ctx aws.Context, input *StartDBClusterInput, opts ...request.Option) (*StartDBClusterOutput, error) {
+	req, out := c.StartDBClusterRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opStopDBCluster = "StopDBCluster"
+
+// StopDBClusterRequest generates a "aws/request.Request" representing the
+// client's request for the StopDBCluster operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StopDBCluster for more information on using the StopDBCluster
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StopDBClusterRequest method.
+//    req, resp := client.StopDBClusterRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/docdb-2014-10-31/StopDBCluster
+func (c *DocDB) StopDBClusterRequest(input *StopDBClusterInput) (req *request.Request, output *StopDBClusterOutput) {
+	op := &request.Operation{
+		Name:       opStopDBCluster,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StopDBClusterInput{}
+	}
+
+	output = &StopDBClusterOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StopDBCluster API operation for Amazon DocumentDB with MongoDB compatibility.
+//
+// Stops the running cluster that is specified by DBClusterIdentifier. The cluster
+// must be in the available state. For more information, see Stopping and Starting
+// an Amazon DocumentDB Cluster (https://docs.aws.amazon.com/documentdb/latest/developerguide/db-cluster-stop-start.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon DocumentDB with MongoDB compatibility's
+// API operation StopDBCluster for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeDBClusterNotFoundFault "DBClusterNotFoundFault"
+//   DBClusterIdentifier doesn't refer to an existing DB cluster.
+//
+//   * ErrCodeInvalidDBClusterStateFault "InvalidDBClusterStateFault"
+//   The DB cluster isn't in a valid state.
+//
+//   * ErrCodeInvalidDBInstanceStateFault "InvalidDBInstanceState"
+//   The specified DB instance isn't in the available state.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/docdb-2014-10-31/StopDBCluster
+func (c *DocDB) StopDBCluster(input *StopDBClusterInput) (*StopDBClusterOutput, error) {
+	req, out := c.StopDBClusterRequest(input)
+	return out, req.Send()
+}
+
+// StopDBClusterWithContext is the same as StopDBCluster with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StopDBCluster for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *DocDB) StopDBClusterWithContext(ctx aws.Context, input *StopDBClusterInput, opts ...request.Option) (*StopDBClusterOutput, error) {
+	req, out := c.StopDBClusterRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 // Represents the input to AddTagsToResource.
 type AddTagsToResourceInput struct {
 	_ struct{} `type:"structure"`
@@ -4551,6 +4731,12 @@ type CreateDBClusterInput struct {
 	// Example: mySubnetgroup
 	DBSubnetGroupName *string `type:"string"`
 
+	// Specifies whether this cluster can be deleted. If DeletionProtection is enabled,
+	// the cluster cannot be deleted unless it is modified and DeletionProtection
+	// is disabled. DeletionProtection protects clusters from being accidentally
+	// deleted.
+	DeletionProtection *bool `type:"boolean"`
+
 	// A list of log types that need to be enabled for exporting to Amazon CloudWatch
 	// Logs.
 	EnableCloudwatchLogsExports []*string `type:"list"`
@@ -4591,10 +4777,13 @@ type CreateDBClusterInput struct {
 	KmsKeyId *string `type:"string"`
 
 	// The password for the master database user. This password can contain any
-	// printable ASCII character except "/", """, or "@".
+	// printable ASCII character except forward slash (/), double quote ("), or
+	// the "at" symbol (@).
 	//
 	// Constraints: Must contain from 8 to 41 characters.
-	MasterUserPassword *string `type:"string"`
+	//
+	// MasterUserPassword is a required field
+	MasterUserPassword *string `type:"string" required:"true"`
 
 	// The name of the master user for the DB cluster.
 	//
@@ -4605,7 +4794,9 @@ type CreateDBClusterInput struct {
 	//    * The first character must be a letter.
 	//
 	//    * Cannot be a reserved word for the chosen database engine.
-	MasterUsername *string `type:"string"`
+	//
+	// MasterUsername is a required field
+	MasterUsername *string `type:"string" required:"true"`
 
 	// The port number on which the instances in the DB cluster accept connections.
 	Port *int64 `type:"integer"`
@@ -4669,6 +4860,12 @@ func (s *CreateDBClusterInput) Validate() error {
 	if s.Engine == nil {
 		invalidParams.Add(request.NewErrParamRequired("Engine"))
 	}
+	if s.MasterUserPassword == nil {
+		invalidParams.Add(request.NewErrParamRequired("MasterUserPassword"))
+	}
+	if s.MasterUsername == nil {
+		invalidParams.Add(request.NewErrParamRequired("MasterUsername"))
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -4703,6 +4900,12 @@ func (s *CreateDBClusterInput) SetDBClusterParameterGroupName(v string) *CreateD
 // SetDBSubnetGroupName sets the DBSubnetGroupName field's value.
 func (s *CreateDBClusterInput) SetDBSubnetGroupName(v string) *CreateDBClusterInput {
 	s.DBSubnetGroupName = &v
+	return s
+}
+
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *CreateDBClusterInput) SetDeletionProtection(v bool) *CreateDBClusterInput {
+	s.DeletionProtection = &v
 	return s
 }
 
@@ -5036,7 +5239,7 @@ type CreateDBInstanceInput struct {
 	// DBClusterIdentifier is a required field
 	DBClusterIdentifier *string `type:"string" required:"true"`
 
-	// The compute and memory capacity of the DB instance; for example, db.m4.large.
+	// The compute and memory capacity of the DB instance; for example, db.r5.large.
 	//
 	// DBInstanceClass is a required field
 	DBInstanceClass *string `type:"string" required:"true"`
@@ -5345,6 +5548,12 @@ type DBCluster struct {
 	// cluster is accessed.
 	DbClusterResourceId *string `type:"string"`
 
+	// Specifies whether this cluster can be deleted. If DeletionProtection is enabled,
+	// the cluster cannot be deleted unless it is modified and DeletionProtection
+	// is disabled. DeletionProtection protects clusters from being accidentally
+	// deleted.
+	DeletionProtection *bool `type:"boolean"`
+
 	// The earliest time to which a database can be restored with point-in-time
 	// restore.
 	EarliestRestorableTime *time.Time `type:"timestamp"`
@@ -5485,6 +5694,12 @@ func (s *DBCluster) SetDBSubnetGroup(v string) *DBCluster {
 // SetDbClusterResourceId sets the DbClusterResourceId field's value.
 func (s *DBCluster) SetDbClusterResourceId(v string) *DBCluster {
 	s.DbClusterResourceId = &v
+	return s
+}
+
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *DBCluster) SetDeletionProtection(v bool) *DBCluster {
+	s.DeletionProtection = &v
 	return s
 }
 
@@ -8982,13 +9197,20 @@ type ModifyDBClusterInput struct {
 	// The name of the DB cluster parameter group to use for the DB cluster.
 	DBClusterParameterGroupName *string `type:"string"`
 
+	// Specifies whether this cluster can be deleted. If DeletionProtection is enabled,
+	// the cluster cannot be deleted unless it is modified and DeletionProtection
+	// is disabled. DeletionProtection protects clusters from being accidentally
+	// deleted.
+	DeletionProtection *bool `type:"boolean"`
+
 	// The version number of the database engine to which you want to upgrade. Changing
 	// this parameter results in an outage. The change is applied during the next
 	// maintenance window unless the ApplyImmediately parameter is set to true.
 	EngineVersion *string `type:"string"`
 
-	// The new password for the master database user. This password can contain
-	// any printable ASCII character except "/", """, or "@".
+	// The password for the master database user. This password can contain any
+	// printable ASCII character except forward slash (/), double quote ("), or
+	// the "at" symbol (@).
 	//
 	// Constraints: Must contain from 8 to 41 characters.
 	MasterUserPassword *string `type:"string"`
@@ -9099,6 +9321,12 @@ func (s *ModifyDBClusterInput) SetDBClusterIdentifier(v string) *ModifyDBCluster
 // SetDBClusterParameterGroupName sets the DBClusterParameterGroupName field's value.
 func (s *ModifyDBClusterInput) SetDBClusterParameterGroupName(v string) *ModifyDBClusterInput {
 	s.DBClusterParameterGroupName = &v
+	return s
+}
+
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *ModifyDBClusterInput) SetDeletionProtection(v bool) *ModifyDBClusterInput {
+	s.DeletionProtection = &v
 	return s
 }
 
@@ -9390,7 +9618,7 @@ type ModifyDBInstanceInput struct {
 	// and Amazon DocumentDB has enabled automatic patching for that engine version.
 	AutoMinorVersionUpgrade *bool `type:"boolean"`
 
-	// The new compute and memory capacity of the DB instance; for example, db.m4.large.
+	// The new compute and memory capacity of the DB instance; for example, db.r5.large.
 	// Not all DB instance classes are available in all AWS Regions.
 	//
 	// If you modify the DB instance class, an outage occurs during the change.
@@ -10379,6 +10607,12 @@ type RestoreDBClusterFromSnapshotInput struct {
 	// Example: mySubnetgroup
 	DBSubnetGroupName *string `type:"string"`
 
+	// Specifies whether this cluster can be deleted. If DeletionProtection is enabled,
+	// the cluster cannot be deleted unless it is modified and DeletionProtection
+	// is disabled. DeletionProtection protects clusters from being accidentally
+	// deleted.
+	DeletionProtection *bool `type:"boolean"`
+
 	// A list of log types that must be enabled for exporting to Amazon CloudWatch
 	// Logs.
 	EnableCloudwatchLogsExports []*string `type:"list"`
@@ -10490,6 +10724,12 @@ func (s *RestoreDBClusterFromSnapshotInput) SetDBSubnetGroupName(v string) *Rest
 	return s
 }
 
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *RestoreDBClusterFromSnapshotInput) SetDeletionProtection(v bool) *RestoreDBClusterFromSnapshotInput {
+	s.DeletionProtection = &v
+	return s
+}
+
 // SetEnableCloudwatchLogsExports sets the EnableCloudwatchLogsExports field's value.
 func (s *RestoreDBClusterFromSnapshotInput) SetEnableCloudwatchLogsExports(v []*string) *RestoreDBClusterFromSnapshotInput {
 	s.EnableCloudwatchLogsExports = v
@@ -10584,6 +10824,12 @@ type RestoreDBClusterToPointInTimeInput struct {
 	//
 	// Example: mySubnetgroup
 	DBSubnetGroupName *string `type:"string"`
+
+	// Specifies whether this cluster can be deleted. If DeletionProtection is enabled,
+	// the cluster cannot be deleted unless it is modified and DeletionProtection
+	// is disabled. DeletionProtection protects clusters from being accidentally
+	// deleted.
+	DeletionProtection *bool `type:"boolean"`
 
 	// A list of log types that must be enabled for exporting to Amazon CloudWatch
 	// Logs.
@@ -10702,6 +10948,12 @@ func (s *RestoreDBClusterToPointInTimeInput) SetDBSubnetGroupName(v string) *Res
 	return s
 }
 
+// SetDeletionProtection sets the DeletionProtection field's value.
+func (s *RestoreDBClusterToPointInTimeInput) SetDeletionProtection(v bool) *RestoreDBClusterToPointInTimeInput {
+	s.DeletionProtection = &v
+	return s
+}
+
 // SetEnableCloudwatchLogsExports sets the EnableCloudwatchLogsExports field's value.
 func (s *RestoreDBClusterToPointInTimeInput) SetEnableCloudwatchLogsExports(v []*string) *RestoreDBClusterToPointInTimeInput {
 	s.EnableCloudwatchLogsExports = v
@@ -10769,6 +11021,128 @@ func (s RestoreDBClusterToPointInTimeOutput) GoString() string {
 
 // SetDBCluster sets the DBCluster field's value.
 func (s *RestoreDBClusterToPointInTimeOutput) SetDBCluster(v *DBCluster) *RestoreDBClusterToPointInTimeOutput {
+	s.DBCluster = v
+	return s
+}
+
+type StartDBClusterInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the cluster to restart. Example: docdb-2019-05-28-15-24-52
+	//
+	// DBClusterIdentifier is a required field
+	DBClusterIdentifier *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StartDBClusterInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartDBClusterInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartDBClusterInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartDBClusterInput"}
+	if s.DBClusterIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("DBClusterIdentifier"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
+func (s *StartDBClusterInput) SetDBClusterIdentifier(v string) *StartDBClusterInput {
+	s.DBClusterIdentifier = &v
+	return s
+}
+
+type StartDBClusterOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Detailed information about a DB cluster.
+	DBCluster *DBCluster `type:"structure"`
+}
+
+// String returns the string representation
+func (s StartDBClusterOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartDBClusterOutput) GoString() string {
+	return s.String()
+}
+
+// SetDBCluster sets the DBCluster field's value.
+func (s *StartDBClusterOutput) SetDBCluster(v *DBCluster) *StartDBClusterOutput {
+	s.DBCluster = v
+	return s
+}
+
+type StopDBClusterInput struct {
+	_ struct{} `type:"structure"`
+
+	// The identifier of the cluster to stop. Example: docdb-2019-05-28-15-24-52
+	//
+	// DBClusterIdentifier is a required field
+	DBClusterIdentifier *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StopDBClusterInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopDBClusterInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopDBClusterInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StopDBClusterInput"}
+	if s.DBClusterIdentifier == nil {
+		invalidParams.Add(request.NewErrParamRequired("DBClusterIdentifier"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDBClusterIdentifier sets the DBClusterIdentifier field's value.
+func (s *StopDBClusterInput) SetDBClusterIdentifier(v string) *StopDBClusterInput {
+	s.DBClusterIdentifier = &v
+	return s
+}
+
+type StopDBClusterOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Detailed information about a DB cluster.
+	DBCluster *DBCluster `type:"structure"`
+}
+
+// String returns the string representation
+func (s StopDBClusterOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopDBClusterOutput) GoString() string {
+	return s.String()
+}
+
+// SetDBCluster sets the DBCluster field's value.
+func (s *StopDBClusterOutput) SetDBCluster(v *DBCluster) *StopDBClusterOutput {
 	s.DBCluster = v
 	return s
 }

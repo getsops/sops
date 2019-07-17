@@ -1675,7 +1675,9 @@
         "HTTP",
         "HTTPS",
         "TCP",
-        "TLS"
+        "TLS",
+        "UDP",
+        "TCP_UDP"
       ]
     },
     "QueryStringConditionConfig":{

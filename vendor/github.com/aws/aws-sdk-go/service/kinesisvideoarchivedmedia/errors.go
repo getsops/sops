@@ -34,8 +34,8 @@ const (
 	// ErrCodeNoDataRetentionException for service response error code
 	// "NoDataRetentionException".
 	//
-	// A PlaybackMode of ON_DEMAND was requested for a stream that does not retain
-	// data (that is, has a DataRetentionInHours of 0).
+	// A streaming session was requested for a stream that does not retain data
+	// (that is, has a DataRetentionInHours of 0).
 	ErrCodeNoDataRetentionException = "NoDataRetentionException"
 
 	// ErrCodeNotAuthorizedException for service response error code
@@ -51,18 +51,19 @@ const (
 	// GetMedia throws this error when Kinesis Video Streams can't find the stream
 	// that you specified.
 	//
-	// GetHLSStreamingSessionURL throws this error if a session with a PlaybackMode
-	// of ON_DEMAND is requested for a stream that has no fragments within the requested
-	// time range, or if a session with a PlaybackMode of LIVE is requested for
-	// a stream that has no fragments within the last 30 seconds.
+	// GetHLSStreamingSessionURL and GetDASHStreamingSessionURL throw this error
+	// if a session with a PlaybackMode of ON_DEMAND or LIVE_REPLAYis requested
+	// for a stream that has no fragments within the requested time range, or if
+	// a session with a PlaybackMode of LIVE is requested for a stream that has
+	// no fragments within the last 30 seconds.
 	ErrCodeResourceNotFoundException = "ResourceNotFoundException"
 
 	// ErrCodeUnsupportedStreamMediaTypeException for service response error code
 	// "UnsupportedStreamMediaTypeException".
 	//
-	// The type of the media (for example, h.264 video or ACC audio) could not be
-	// determined from the codec IDs of the tracks in the first fragment for a playback
-	// session. The codec ID for track 1 should be V_MPEG/ISO/AVC and, optionally,
-	// the codec ID for track 2 should be A_AAC.
+	// The type of the media (for example, h.264 or h.265 video or ACC or G.711
+	// audio) could not be determined from the codec IDs of the tracks in the first
+	// fragment for a playback session. The codec ID for track 1 should be V_MPEG/ISO/AVC
+	// and, optionally, the codec ID for track 2 should be A_AAC.
 	ErrCodeUnsupportedStreamMediaTypeException = "UnsupportedStreamMediaTypeException"
 )

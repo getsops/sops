@@ -159,7 +159,7 @@ func TestSaveTokenFailsNoPermission(t *testing.T) {
 }
 
 func TestSaveTokenFailsCantCreate(t *testing.T) {
-	tokenPath := "/thiswontwork"
+	tokenPath := "/usr/thiswontwork"
 	if runtime.GOOS == "windows" {
 		tokenPath = path.Join(os.Getenv("windir"), "system32")
 	}

@@ -1,0 +1,22 @@
+{
+  "tests": [
+    {
+      "description": "update-paths: ArrayRemove cannot be in an array value",
+      "comment": "ArrayRemove must be the value of a field. Firestore\ntransforms don't support array indexing.",
+      "updatePaths": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "fieldPaths": [
+          {
+            "field": [
+              "a"
+            ]
+          }
+        ],
+        "jsonValues": [
+          "[1, 2, [\"ArrayRemove\", 1, 2, 3]]"
+        ],
+        "isError": true
+      }
+    }
+  ]
+}

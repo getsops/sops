@@ -104,21 +104,3 @@ func ExampleIamCredentialsClient_SignJwt() {
 	// TODO: Use resp.
 	_ = resp
 }
-
-func ExampleIamCredentialsClient_GenerateIdentityBindingAccessToken() {
-	ctx := context.Background()
-	c, err := credentials.NewIamCredentialsClient(ctx)
-	if err != nil {
-		// TODO: Handle error.
-	}
-
-	req := &credentialspb.GenerateIdentityBindingAccessTokenRequest{
-		// TODO: Fill request struct fields.
-	}
-	resp, err := c.GenerateIdentityBindingAccessToken(ctx, req)
-	if err != nil {
-		// TODO: Handle error.
-	}
-	// TODO: Use resp.
-	_ = resp
-}

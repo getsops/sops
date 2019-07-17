@@ -428,7 +428,7 @@
     "eventArn":{
       "type":"string",
       "max":1600,
-      "pattern":"arn:aws:health:[^:]*:[^:]*:event(?:/[\\w-]+){3}"
+      "pattern":"arn:aws(-[a-z]+(-[a-z]+)?)?:health:[^:]*:[^:]*:event(?:/[\\w-]+){3}"
     },
     "eventArnList":{
       "type":"list",
@@ -466,7 +466,8 @@
       "enum":[
         "issue",
         "accountNotification",
-        "scheduledChange"
+        "scheduledChange",
+        "investigation"
       ],
       "max":255,
       "min":3

@@ -1,0 +1,13 @@
+{
+  "tests": [
+    {
+      "description": "update: no paths",
+      "comment": "It is a client-side error to call Update with empty data.",
+      "update": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "jsonData": "{}",
+        "isError": true
+      }
+    }
+  ]
+}

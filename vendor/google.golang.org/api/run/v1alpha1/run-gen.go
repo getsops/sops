@@ -357,7 +357,10 @@ type ProjectsLocationsTriggersService struct {
 
 // Addressable: Information for connecting over HTTP(s).
 type Addressable struct {
+	// Hostname: Deprecated - use url instead.
 	Hostname string `json:"hostname,omitempty"`
+
+	Url string `json:"url,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Hostname") to
 	// unconditionally include in API requests. By default, fields with
@@ -502,6 +505,13 @@ type AuditLogConfig struct {
 	// permission.
 	// Follows the same format of Binding.members.
 	ExemptedMembers []string `json:"exemptedMembers,omitempty"`
+
+	// IgnoreChildExemptions: Specifies whether principals can be exempted
+	// for the same LogType in
+	// lower-level resource policies. If true, any lower-level exemptions
+	// will
+	// be ignored.
+	IgnoreChildExemptions bool `json:"ignoreChildExemptions,omitempty"`
 
 	// LogType: The log type that this config enables.
 	//
@@ -792,7 +802,8 @@ func (s *ConfigMapVolumeSource) MarshalJSON() ([]byte, error) {
 // https://github.com/knative/serving/blob/master/docs/spec/overvie
 // w.md#configuration
 type Configuration struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "serving.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Kind: The kind of resource, in this case always "Configuration".
@@ -933,7 +944,6 @@ type ConfigurationSpec struct {
 
 	// Template: Template holds the latest specification for the Revision to
 	// be stamped out.
-	// Not currently supported by Cloud Run.
 	Template *RevisionTemplate `json:"template,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Generation") to
@@ -1327,7 +1337,8 @@ func (s *ContainerPort) MarshalJSON() ([]byte, error) {
 // DomainMapping: Resource to hold the state and status of a user's
 // domain mapping.
 type DomainMapping struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "domains.cloudrun.com/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Kind: The kind of resource, in this case "DomainMapping".
@@ -1626,7 +1637,8 @@ func (s *EnvVar) MarshalJSON() ([]byte, error) {
 }
 
 type EventType struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "eventing.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Kind: The kind of resource, in this case "EventType".
@@ -2008,7 +2020,7 @@ type IntOrString struct {
 	StrVal string `json:"strVal,omitempty"`
 
 	// Type: The type of the value.
-	Type int64 `json:"type,omitempty,string"`
+	Type int64 `json:"type,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "IntVal") to
 	// unconditionally include in API requests. By default, fields with
@@ -2176,7 +2188,8 @@ func (s *ListAuthorizedDomainsResponse) MarshalJSON() ([]byte, error) {
 // ListConfigurationsResponse: ListConfigurationsResponse is a list of
 // Configuration resources.
 type ListConfigurationsResponse struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "serving.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Items: List of Configurations.
@@ -2221,7 +2234,8 @@ func (s *ListConfigurationsResponse) MarshalJSON() ([]byte, error) {
 // ListDomainMappingsResponse: ListDomainMappingsResponse is a list of
 // DomainMapping resources.
 type ListDomainMappingsResponse struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "domains.cloudrun.com/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Items: List of DomainMappings.
@@ -2263,7 +2277,8 @@ func (s *ListDomainMappingsResponse) MarshalJSON() ([]byte, error) {
 // ListEventTypesResponse: ListEventTypesResponse is a list of EventType
 // resources.
 type ListEventTypesResponse struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "eventing.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Items: List of EventTypes.
@@ -2412,7 +2427,8 @@ func (s *ListMeta) MarshalJSON() ([]byte, error) {
 // ListRevisionsResponse: ListRevisionsResponse is a list of Revision
 // resources.
 type ListRevisionsResponse struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "serving.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Items: List of Revisions.
@@ -2456,7 +2472,8 @@ func (s *ListRevisionsResponse) MarshalJSON() ([]byte, error) {
 
 // ListRoutesResponse: ListRoutesResponse is a list of Route resources.
 type ListRoutesResponse struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "serving.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Items: List of Routes.
@@ -2500,7 +2517,8 @@ func (s *ListRoutesResponse) MarshalJSON() ([]byte, error) {
 
 // ListServicesResponse: A list of Service resources.
 type ListServicesResponse struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "serving.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Items: List of Services.
@@ -2545,7 +2563,8 @@ func (s *ListServicesResponse) MarshalJSON() ([]byte, error) {
 // ListTriggersResponse: ListTriggersResponse is a list of Trigger
 // resources.
 type ListTriggersResponse struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "eventing.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Items: List of Triggers.
@@ -3434,7 +3453,8 @@ func (s *ResourceRequirements) MarshalJSON() ([]byte, error) {
 // https://github.com/knative/serving/blob/master/docs/spec/overvie
 // w.md#revision
 type Revision struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "serving.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Kind: The kind of this resource, in this case "Revision".
@@ -3583,6 +3603,7 @@ type RevisionSpec struct {
 	// for this Revision. In the context of a Revision, we disallow a number
 	// of
 	// fields on this Container, including: name and lifecycle.
+	// In Cloud Run, only a single container may be provided.
 	Containers []*Container `json:"containers,omitempty"`
 
 	// Generation: Deprecated and not currently populated by Cloud Run.
@@ -3594,7 +3615,14 @@ type RevisionSpec struct {
 	// Read-only.
 	Generation int64 `json:"generation,omitempty"`
 
-	// ServiceAccountName: Not currently used by Cloud Run.
+	// ServiceAccountName: Email address of the IAM service account
+	// associated with the revision
+	// of the service. The service account represents the identity of
+	// the
+	// running revision, and determines what permissions the revision has.
+	// If
+	// not provided, the revision will use the project's default service
+	// account.
 	ServiceAccountName string `json:"serviceAccountName,omitempty"`
 
 	// ServingState: ServingState holds a value describing the state the
@@ -3734,6 +3762,18 @@ type RevisionTemplate struct {
 	// Metadata: Optional metadata for this Revision, including labels and
 	// annotations. Name
 	// will be generated by the Configuration.
+	// To set minimum instances for this revision, use
+	// the
+	// "autoscaling.knative.dev/minScale" annotation key. (Cloud Run on GKE
+	// only).
+	// To set maximum instances for this revision, use
+	// the
+	// "autoscaling.knative.dev/maxScale" annotation key.
+	// To set Cloud SQL connections for the revision, use
+	// the
+	// "run.googleapis.com/cloudsql-instances" annotation key. Values should
+	// be
+	// comma separated.
 	Metadata *ObjectMeta `json:"metadata,omitempty"`
 
 	// Spec: RevisionSpec holds the desired state of the Revision (from the
@@ -3783,7 +3823,8 @@ func (s *RevisionTemplate) MarshalJSON() ([]byte, error) {
 // automatically deploy the "latest ready" Revision from that
 // Configuration.
 type Route struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "serving.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Kind: The kind of this resource, in this case always "Route".
@@ -3932,7 +3973,7 @@ func (s *RouteSpec) MarshalJSON() ([]byte, error) {
 // (from the
 // controller).
 type RouteStatus struct {
-	// Address: Similar to domain, information on where the service is
+	// Address: Similar to url, information on where the service is
 	// available on HTTP.
 	Address *Addressable `json:"address,omitempty"`
 
@@ -3943,15 +3984,14 @@ type RouteStatus struct {
 	// state of the world.
 	Conditions []*RouteCondition `json:"conditions,omitempty"`
 
-	// Domain: Domain holds the top-level domain that will distribute
-	// traffic over the
-	// provided targets. It generally has the
-	// form
-	// https://{route-hash}-{project-hash}-{cluster-level-suffix}.a.run.
-	// app
+	// Domain: Deprecated - use url instead.
+	// Domain holds the top-level domain that will distribute traffic over
+	// the
+	// provided targets.
 	Domain string `json:"domain,omitempty"`
 
-	// DomainInternal: For Cloud Run, identifical to domain.
+	// DomainInternal: Deprecated - use address instead.
+	// For Cloud Run, identifical to domain.
 	DomainInternal string `json:"domainInternal,omitempty"`
 
 	// ObservedGeneration: ObservedGeneration is the 'Generation' of the
@@ -3979,6 +4019,14 @@ type RouteStatus struct {
 	// the
 	// LatestReadyRevisionName that we last observed.
 	Traffic []*TrafficTarget `json:"traffic,omitempty"`
+
+	// Url: URL holds the url that will distribute traffic over the provided
+	// traffic
+	// targets. It generally has the
+	// form
+	// https://{route-hash}-{project-hash}-{cluster-level-suffix}.a.run.
+	// app
+	Url string `json:"url,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Address") to
 	// unconditionally include in API requests. By default, fields with
@@ -4191,7 +4239,7 @@ type SecurityContext struct {
 	// PodSecurityContext, the value specified in SecurityContext
 	// takes
 	// precedence. +optional
-	RunAsGroup int64 `json:"runAsGroup,omitempty,string"`
+	RunAsGroup int64 `json:"runAsGroup,omitempty"`
 
 	// RunAsNonRoot: Indicates that the container must run as a non-root
 	// user.
@@ -4215,7 +4263,7 @@ type SecurityContext struct {
 	// PodSecurityContext, the value specified in SecurityContext
 	// takes
 	// precedence. +optional
-	RunAsUser int64 `json:"runAsUser,omitempty,string"`
+	RunAsUser int64 `json:"runAsUser,omitempty"`
 
 	// SeLinuxOptions: The SELinux context to be applied to the
 	// container.
@@ -4276,7 +4324,8 @@ func (s *SecurityContext) MarshalJSON() ([]byte, error) {
 // https://github.com/knative/serving/blob/master/docs/spec/overvie
 // w.md#service
 type Service struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "serving.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Kind: The kind of resource, in this case "Service".
@@ -4431,19 +4480,11 @@ type ServiceSpec struct {
 	// Template: Template holds the latest specification for the Revision
 	// to
 	// be stamped out.
-	//
-	// Not currently supported by Cloud Run.
 	Template *RevisionTemplate `json:"template,omitempty"`
 
 	// Traffic: Traffic specifies how to distribute traffic over a
 	// collection of Knative
-	// Revisions and Configurations. This will replace existing service
-	// specs
-	// (ServiceSpecRunLatest, ServiceSpecPinnedType, ServiceSpecReleaseType,
-	// and
-	// ServiceSpecManualType).
-	//
-	// Not currently supported by Cloud Run.
+	// Revisions and Configurations.
 	Traffic []*TrafficTarget `json:"traffic,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Generation") to
@@ -4599,7 +4640,7 @@ func (s *ServiceSpecRunLatest) MarshalJSON() ([]byte, error) {
 // ServiceStatus: The current state of the Service. Output only.
 type ServiceStatus struct {
 	// Address: From RouteStatus.
-	// Similar to domain, information on where the service is available on
+	// Similar to url, information on where the service is available on
 	// HTTP.
 	Address *Addressable `json:"address,omitempty"`
 
@@ -4655,6 +4696,15 @@ type ServiceStatus struct {
 	// the
 	// LatestReadyRevisionName that we last observed.
 	Traffic []*TrafficTarget `json:"traffic,omitempty"`
+
+	// Url: From RouteStatus.
+	// URL holds the url that will distribute traffic over the provided
+	// traffic
+	// targets. It generally has the
+	// form
+	// https://{route-hash}-{project-hash}-{cluster-level-suffix}.a.run.
+	// app
+	Url string `json:"url,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Address") to
 	// unconditionally include in API requests. By default, fields with
@@ -4890,8 +4940,6 @@ type TrafficTarget struct {
 	// target. When provided LatestRevision must be true if RevisionName
 	// is
 	// empty; it must be false when RevisionName is non-empty.
-	//
-	// Not currently supported in Cloud Run.
 	// +optional
 	LatestRevision bool `json:"latestRevision,omitempty"`
 
@@ -4965,7 +5013,8 @@ func (s *TrafficTarget) MarshalJSON() ([]byte, error) {
 }
 
 type Trigger struct {
-	// ApiVersion: The API version for this call such as "v1alpha1".
+	// ApiVersion: The API version for this call such as
+	// "eventing.knative.dev/v1alpha1".
 	ApiVersion string `json:"apiVersion,omitempty"`
 
 	// Kind: The kind of resource, in this case "Trigger".
@@ -12907,6 +12956,18 @@ func (r *ProjectsLocationsServicesService) GetIamPolicy(resource string) *Projec
 	return c
 }
 
+// OptionsRequestedPolicyVersion sets the optional parameter
+// "options.requestedPolicyVersion": The policy format version to be
+// returned.
+// Acceptable values are 0 and 1.
+// If the value is 0, or the field is omitted, policy format version 1
+// will be
+// returned.
+func (c *ProjectsLocationsServicesGetIamPolicyCall) OptionsRequestedPolicyVersion(optionsRequestedPolicyVersion int64) *ProjectsLocationsServicesGetIamPolicyCall {
+	c.urlParams_.Set("options.requestedPolicyVersion", fmt.Sprint(optionsRequestedPolicyVersion))
+	return c
+}
+
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -13013,6 +13074,12 @@ func (c *ProjectsLocationsServicesGetIamPolicyCall) Do(opts ...googleapi.CallOpt
 	//     "resource"
 	//   ],
 	//   "parameters": {
+	//     "options.requestedPolicyVersion": {
+	//       "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+	//       "format": "int32",
+	//       "location": "query",
+	//       "type": "integer"
+	//     },
 	//     "resource": {
 	//       "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",

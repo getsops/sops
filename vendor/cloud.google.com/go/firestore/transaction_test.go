@@ -28,9 +28,12 @@ import (
 
 func TestRunTransaction(t *testing.T) {
 	ctx := context.Background()
+	c, srv, cleanup := newMock(t)
+	defer cleanup()
+
 	const db = "projects/projectID/databases/(default)"
 	tid := []byte{1}
-	c, srv := newMock(t)
+
 	beginReq := &pb.BeginTransactionRequest{Database: db}
 	beginRes := &pb.BeginTransactionResponse{Transaction: tid}
 	commitReq := &pb.CommitRequest{Database: db, Transaction: tid}
@@ -150,7 +153,9 @@ func TestRunTransaction(t *testing.T) {
 func TestTransactionErrors(t *testing.T) {
 	ctx := context.Background()
 	const db = "projects/projectID/databases/(default)"
-	c, srv := newMock(t)
+	c, srv, cleanup := newMock(t)
+	defer cleanup()
+
 	var (
 		tid         = []byte{1}
 		internalErr = status.Errorf(codes.Internal, "so sad")
@@ -326,8 +331,9 @@ func TestTransactionErrors(t *testing.T) {
 }
 
 func TestTransactionGetAll(t *testing.T) {
-	c, srv := newMock(t)
-	defer c.Close()
+	c, srv, cleanup := newMock(t)
+	defer cleanup()
+
 	const dbPath = "projects/projectID/databases/(default)"
 	tid := []byte{1}
 	beginReq := &pb.BeginTransactionRequest{Database: dbPath}
@@ -358,9 +364,11 @@ func TestTransactionGetAll(t *testing.T) {
 // Each retry attempt has the same amount of commit writes.
 func TestRunTransaction_Retries(t *testing.T) {
 	ctx := context.Background()
+	c, srv, cleanup := newMock(t)
+	defer cleanup()
+
 	const db = "projects/projectID/databases/(default)"
 	tid := []byte{1}
-	c, srv := newMock(t)
 
 	srv.addRPC(
 		&pb.BeginTransactionRequest{Database: db},
@@ -433,9 +441,11 @@ func TestRunTransaction_Retries(t *testing.T) {
 // discouraged).
 func TestRunTransaction_NonTransactionalOp(t *testing.T) {
 	ctx := context.Background()
+	c, srv, cleanup := newMock(t)
+	defer cleanup()
+
 	const db = "projects/projectID/databases/(default)"
 	tid := []byte{1}
-	c, srv := newMock(t)
 
 	beginReq := &pb.BeginTransactionRequest{Database: db}
 	beginRes := &pb.BeginTransactionResponse{Transaction: tid}

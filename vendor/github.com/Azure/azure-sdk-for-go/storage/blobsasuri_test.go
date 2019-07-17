@@ -27,8 +27,11 @@ type BlobSASURISuite struct{}
 
 var _ = chk.Suite(&BlobSASURISuite{})
 
-var oldAPIVer = "2013-08-15"
-var newerAPIVer = "2015-04-05"
+const (
+	oldAPIVer    = "2013-08-15"
+	newerAPIVer  = "2015-04-05"
+	latestAPIVer = "2018-11-09"
+)
 
 func (s *BlobSASURISuite) TestGetBlobSASURI(c *chk.C) {
 	api, err := NewClient("foo", dummyMiniStorageKey, DefaultBaseURL, oldAPIVer, true)
@@ -196,17 +199,21 @@ func (s *BlobSASURISuite) TestBlobSASURICorrectness(c *chk.C) {
 }
 
 func (s *BlobSASURISuite) Test_blobSASStringToSign(c *chk.C) {
-	_, err := blobSASStringToSign("2012-02-12", "CS", "SE", "SP", "", "", "", "", OverrideHeaders{})
+	_, err := blobSASStringToSign("2012-02-12", "CS", "SE", "SP", "", "", "", "", "", "", OverrideHeaders{})
 	c.Assert(err, chk.NotNil) // not implemented SAS for versions earlier than 2013-08-15
 
-	out, err := blobSASStringToSign("SP", "", "SE", "CS", "", "", "", oldAPIVer, OverrideHeaders{})
+	out, err := blobSASStringToSign("SP", "", "SE", "CS", "", "", "", oldAPIVer, "", "", OverrideHeaders{})
 	c.Assert(err, chk.IsNil)
 	c.Assert(out, chk.Equals, "SP\n\nSE\nCS\n\n2013-08-15\n\n\n\n\n")
 
 	// check format for 2015-04-05 version
-	out, err = blobSASStringToSign("SP", "", "SE", "CS", "", "127.0.0.1", "https,http", newerAPIVer, OverrideHeaders{})
+	out, err = blobSASStringToSign("SP", "", "SE", "CS", "", "127.0.0.1", "https,http", newerAPIVer, "", "", OverrideHeaders{})
 	c.Assert(err, chk.IsNil)
 	c.Assert(out, chk.Equals, "SP\n\nSE\n/blobCS\n\n127.0.0.1\nhttps,http\n2015-04-05\n\n\n\n\n")
+
+	out, err = blobSASStringToSign("SP", "", "SE", "CS", "", "127.0.0.1", "https,http", latestAPIVer, "b", "", OverrideHeaders{})
+	c.Assert(err, chk.IsNil)
+	c.Assert(out, chk.Equals, "SP\n\nSE\n/blobCS\n\n127.0.0.1\nhttps,http\n2018-11-09\nb\n\n\n\n\n\n")
 }
 
 func (s *BlobSASURISuite) TestGetBlobSASURIStorageEmulator(c *chk.C) {
@@ -225,5 +232,5 @@ func (s *BlobSASURISuite) TestGetBlobSASURIStorageEmulator(c *chk.C) {
 	}
 	url, err := blob.GetSASURI(options)
 	c.Assert(err, chk.IsNil)
-	c.Assert(url, chk.Equals, "http://127.0.0.1:10000/devstoreaccount1/testfolder/testfile?se=2017-09-30T16%3A00%3A00Z&sig=Tyrg2ccc0RXyRz5xfkcSVDvjjoRivygrGb%2ByTLf0jJY%3D&sp=w&sr=b&sv=2016-05-31")
+	c.Assert(url, chk.Equals, "http://127.0.0.1:10000/devstoreaccount1/testfolder/testfile?se=2017-09-30T16%3A00%3A00Z&sig=rwds%2FhX%2F239%2FCtdi4VuomG8oRyoQ2SwBfL3%2BkoWpToQ%3D&sp=w&sr=b&sv=2018-03-28")
 }

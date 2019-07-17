@@ -157,6 +157,20 @@
         {"shape":"InternalServerError"}
       ]
     },
+    "ListTagsForResource":{
+      "name":"ListTagsForResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListTagsForResourceInput"},
+      "output":{"shape":"ListTagsForResourceOutput"},
+      "errors":[
+        {"shape":"ContainerInUseException"},
+        {"shape":"ContainerNotFoundException"},
+        {"shape":"InternalServerError"}
+      ]
+    },
     "PutContainerPolicy":{
       "name":"PutContainerPolicy",
       "http":{
@@ -226,6 +240,34 @@
         {"shape":"ContainerNotFoundException"},
         {"shape":"InternalServerError"}
       ]
+    },
+    "TagResource":{
+      "name":"TagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"TagResourceInput"},
+      "output":{"shape":"TagResourceOutput"},
+      "errors":[
+        {"shape":"ContainerInUseException"},
+        {"shape":"ContainerNotFoundException"},
+        {"shape":"InternalServerError"}
+      ]
+    },
+    "UntagResource":{
+      "name":"UntagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UntagResourceInput"},
+      "output":{"shape":"UntagResourceOutput"},
+      "errors":[
+        {"shape":"ContainerInUseException"},
+        {"shape":"ContainerNotFoundException"},
+        {"shape":"InternalServerError"}
+      ]
     }
   },
   "shapes":{
@@ -262,7 +304,7 @@
       "type":"string",
       "max":1024,
       "min":1,
-      "pattern":"arn:aws:mediastore:[a-z]+-[a-z]+-\\d:\\d{12}:container/\\w{1,255}"
+      "pattern":"arn:aws:mediastore:[a-z]+-[a-z]+-\\d:\\d{12}:container/[\\w-]{1,255}"
     },
     "ContainerAccessLoggingEnabled":{"type":"boolean"},
     "ContainerInUseException":{
@@ -298,7 +340,7 @@
       "type":"string",
       "max":8192,
       "min":1,
-      "pattern":"[\\u0009\\u000A\\u000D\\u0020-\\u00FF]+"
+      "pattern":"[\\x00-\\x7F]+"
     },
     "ContainerStatus":{
       "type":"string",
@@ -341,7 +383,8 @@
       "type":"structure",
       "required":["ContainerName"],
       "members":{
-        "ContainerName":{"shape":"ContainerName"}
+        "ContainerName":{"shape":"ContainerName"},
+        "Tags":{"shape":"TagList"}
       }
     },
     "CreateContainerOutput":{
@@ -512,6 +555,19 @@
         "NextToken":{"shape":"PaginationToken"}
       }
     },
+    "ListTagsForResourceInput":{
+      "type":"structure",
+      "required":["Resource"],
+      "members":{
+        "Resource":{"shape":"ContainerARN"}
+      }
+    },
+    "ListTagsForResourceOutput":{
+      "type":"structure",
+      "members":{
+        "Tags":{"shape":"TagList"}
+      }
+    },
     "MaxAgeSeconds":{
       "type":"integer",
       "max":2147483647,
@@ -617,6 +673,63 @@
       "members":{
       }
     },
-    "TimeStamp":{"type":"timestamp"}
+    "Tag":{
+      "type":"structure",
+      "members":{
+        "Key":{"shape":"TagKey"},
+        "Value":{"shape":"TagValue"}
+      }
+    },
+    "TagKey":{
+      "type":"string",
+      "max":128,
+      "min":1
+    },
+    "TagKeyList":{
+      "type":"list",
+      "member":{"shape":"TagKey"}
+    },
+    "TagList":{
+      "type":"list",
+      "member":{"shape":"Tag"}
+    },
+    "TagResourceInput":{
+      "type":"structure",
+      "required":[
+        "Resource",
+        "Tags"
+      ],
+      "members":{
+        "Resource":{"shape":"ContainerARN"},
+        "Tags":{"shape":"TagList"}
+      }
+    },
+    "TagResourceOutput":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "TagValue":{
+      "type":"string",
+      "max":256,
+      "min":0
+    },
+    "TimeStamp":{"type":"timestamp"},
+    "UntagResourceInput":{
+      "type":"structure",
+      "required":[
+        "Resource",
+        "TagKeys"
+      ],
+      "members":{
+        "Resource":{"shape":"ContainerARN"},
+        "TagKeys":{"shape":"TagKeyList"}
+      }
+    },
+    "UntagResourceOutput":{
+      "type":"structure",
+      "members":{
+      }
+    }
   }
 }

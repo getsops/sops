@@ -375,6 +375,17 @@ const (
 	ResultTypeBasicMigrateMySQLAzureDbForMySQLSyncTaskOutputResultTypeTableLevelOutput                          ResultTypeBasicMigrateMySQLAzureDbForMySQLSyncTaskOutput = original.ResultTypeBasicMigrateMySQLAzureDbForMySQLSyncTaskOutputResultTypeTableLevelOutput
 )
 
+type ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput = original.ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput
+
+const (
+	ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelErrorOutput                     ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput = original.ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelErrorOutput
+	ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelOutput                          ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput = original.ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeDatabaseLevelOutput
+	ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeErrorOutput                                  ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput = original.ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeErrorOutput
+	ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrateOracleAzureDbPostgreSQLSyncTaskOutput ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput = original.ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrateOracleAzureDbPostgreSQLSyncTaskOutput
+	ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrationLevelOutput                         ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput = original.ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeMigrationLevelOutput
+	ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeTableLevelOutput                             ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput = original.ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputResultTypeTableLevelOutput
+)
+
 type ResultTypeBasicMigratePostgreSQLAzureDbForPostgreSQLSyncTaskOutput = original.ResultTypeBasicMigratePostgreSQLAzureDbForPostgreSQLSyncTaskOutput
 
 const (
@@ -551,6 +562,7 @@ type TaskType = original.TaskType
 const (
 	TaskTypeConnectMongoDb                                     TaskType = original.TaskTypeConnectMongoDb
 	TaskTypeConnectToSourceMySQL                               TaskType = original.TaskTypeConnectToSourceMySQL
+	TaskTypeConnectToSourceOracleSync                          TaskType = original.TaskTypeConnectToSourceOracleSync
 	TaskTypeConnectToSourcePostgreSQLSync                      TaskType = original.TaskTypeConnectToSourcePostgreSQLSync
 	TaskTypeConnectToSourceSQLServer                           TaskType = original.TaskTypeConnectToSourceSQLServer
 	TaskTypeConnectToSourceSQLServerSync                       TaskType = original.TaskTypeConnectToSourceSQLServerSync
@@ -558,6 +570,7 @@ const (
 	TaskTypeConnectToTargetAzureDbForPostgreSQLSync            TaskType = original.TaskTypeConnectToTargetAzureDbForPostgreSQLSync
 	TaskTypeConnectToTargetAzureSQLDbMI                        TaskType = original.TaskTypeConnectToTargetAzureSQLDbMI
 	TaskTypeConnectToTargetAzureSQLDbMISyncLRS                 TaskType = original.TaskTypeConnectToTargetAzureSQLDbMISyncLRS
+	TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync      TaskType = original.TaskTypeConnectToTargetOracleAzureDbForPostgreSQLSync
 	TaskTypeConnectToTargetSQLDb                               TaskType = original.TaskTypeConnectToTargetSQLDb
 	TaskTypeConnectToTargetSQLDbSync                           TaskType = original.TaskTypeConnectToTargetSQLDbSync
 	TaskTypeGetTDECertificatesSQL                              TaskType = original.TaskTypeGetTDECertificatesSQL
@@ -565,17 +578,22 @@ const (
 	TaskTypeGetUserTablesSQL                                   TaskType = original.TaskTypeGetUserTablesSQL
 	TaskTypeMigrateMongoDb                                     TaskType = original.TaskTypeMigrateMongoDb
 	TaskTypeMigrateMySQLAzureDbForMySQLSync                    TaskType = original.TaskTypeMigrateMySQLAzureDbForMySQLSync
+	TaskTypeMigrateOracleSQLSync                               TaskType = original.TaskTypeMigrateOracleSQLSync
 	TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync          TaskType = original.TaskTypeMigratePostgreSQLAzureDbForPostgreSQLSync
 	TaskTypeMigrateSchemaSQLServerSQLDb                        TaskType = original.TaskTypeMigrateSchemaSQLServerSQLDb
 	TaskTypeMigrateSQLServerAzureSQLDbMI                       TaskType = original.TaskTypeMigrateSQLServerAzureSQLDbMI
 	TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS                TaskType = original.TaskTypeMigrateSQLServerAzureSQLDbMISyncLRS
 	TaskTypeMigrateSQLServerAzureSQLDbSync                     TaskType = original.TaskTypeMigrateSQLServerAzureSQLDbSync
 	TaskTypeMigrateSQLServerSQLDb                              TaskType = original.TaskTypeMigrateSQLServerSQLDb
+	TaskTypeServiceCheckOCI                                    TaskType = original.TaskTypeServiceCheckOCI
+	TaskTypeServiceInstallOCI                                  TaskType = original.TaskTypeServiceInstallOCI
+	TaskTypeServiceUploadOCI                                   TaskType = original.TaskTypeServiceUploadOCI
 	TaskTypeUnknown                                            TaskType = original.TaskTypeUnknown
 	TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI        TaskType = original.TaskTypeValidateMigrationInputSQLServerAzureSQLDbMI
 	TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS TaskType = original.TaskTypeValidateMigrationInputSQLServerAzureSQLDbMISyncLRS
 	TaskTypeValidateMigrationInputSQLServerSQLDbSync           TaskType = original.TaskTypeValidateMigrationInputSQLServerSQLDbSync
 	TaskTypeValidateMongoDb                                    TaskType = original.TaskTypeValidateMongoDb
+	TaskTypeValidateOracleAzureDbPostgreSQLSync                TaskType = original.TaskTypeValidateOracleAzureDbPostgreSQLSync
 )
 
 type Type = original.Type
@@ -584,6 +602,7 @@ const (
 	TypeMiSQLConnectionInfo      Type = original.TypeMiSQLConnectionInfo
 	TypeMongoDbConnectionInfo    Type = original.TypeMongoDbConnectionInfo
 	TypeMySQLConnectionInfo      Type = original.TypeMySQLConnectionInfo
+	TypeOracleConnectionInfo     Type = original.TypeOracleConnectionInfo
 	TypePostgreSQLConnectionInfo Type = original.TypePostgreSQLConnectionInfo
 	TypeSQLConnectionInfo        Type = original.TypeSQLConnectionInfo
 	TypeUnknown                  Type = original.TypeUnknown
@@ -622,6 +641,7 @@ type BasicCommandProperties = original.BasicCommandProperties
 type BasicConnectToSourceSQLServerTaskOutput = original.BasicConnectToSourceSQLServerTaskOutput
 type BasicConnectionInfo = original.BasicConnectionInfo
 type BasicMigrateMySQLAzureDbForMySQLSyncTaskOutput = original.BasicMigrateMySQLAzureDbForMySQLSyncTaskOutput
+type BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput = original.BasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput
 type BasicMigratePostgreSQLAzureDbForPostgreSQLSyncTaskOutput = original.BasicMigratePostgreSQLAzureDbForPostgreSQLSyncTaskOutput
 type BasicMigrateSQLServerSQLDbSyncTaskOutput = original.BasicMigrateSQLServerSQLDbSyncTaskOutput
 type BasicMigrateSQLServerSQLDbTaskOutput = original.BasicMigrateSQLServerSQLDbTaskOutput
@@ -630,12 +650,18 @@ type BasicMigrateSQLServerSQLMITaskOutput = original.BasicMigrateSQLServerSQLMIT
 type BasicMigrateSchemaSQLServerSQLDbTaskOutput = original.BasicMigrateSchemaSQLServerSQLDbTaskOutput
 type BasicProjectTaskProperties = original.BasicProjectTaskProperties
 type BlobShare = original.BlobShare
+type CheckOCIDriverTaskInput = original.CheckOCIDriverTaskInput
+type CheckOCIDriverTaskOutput = original.CheckOCIDriverTaskOutput
+type CheckOCIDriverTaskProperties = original.CheckOCIDriverTaskProperties
 type CommandProperties = original.CommandProperties
 type CommandPropertiesModel = original.CommandPropertiesModel
 type ConnectToMongoDbTaskProperties = original.ConnectToMongoDbTaskProperties
 type ConnectToSourceMySQLTaskInput = original.ConnectToSourceMySQLTaskInput
 type ConnectToSourceMySQLTaskProperties = original.ConnectToSourceMySQLTaskProperties
 type ConnectToSourceNonSQLTaskOutput = original.ConnectToSourceNonSQLTaskOutput
+type ConnectToSourceOracleSyncTaskInput = original.ConnectToSourceOracleSyncTaskInput
+type ConnectToSourceOracleSyncTaskOutput = original.ConnectToSourceOracleSyncTaskOutput
+type ConnectToSourceOracleSyncTaskProperties = original.ConnectToSourceOracleSyncTaskProperties
 type ConnectToSourcePostgreSQLSyncTaskInput = original.ConnectToSourcePostgreSQLSyncTaskInput
 type ConnectToSourcePostgreSQLSyncTaskOutput = original.ConnectToSourcePostgreSQLSyncTaskOutput
 type ConnectToSourcePostgreSQLSyncTaskProperties = original.ConnectToSourcePostgreSQLSyncTaskProperties
@@ -653,6 +679,9 @@ type ConnectToTargetAzureDbForMySQLTaskProperties = original.ConnectToTargetAzur
 type ConnectToTargetAzureDbForPostgreSQLSyncTaskInput = original.ConnectToTargetAzureDbForPostgreSQLSyncTaskInput
 type ConnectToTargetAzureDbForPostgreSQLSyncTaskOutput = original.ConnectToTargetAzureDbForPostgreSQLSyncTaskOutput
 type ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties = original.ConnectToTargetAzureDbForPostgreSQLSyncTaskProperties
+type ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskInput = original.ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskInput
+type ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskOutput = original.ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskOutput
+type ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties = original.ConnectToTargetOracleAzureDbForPostgreSQLSyncTaskProperties
 type ConnectToTargetSQLDbTaskInput = original.ConnectToTargetSQLDbTaskInput
 type ConnectToTargetSQLDbTaskOutput = original.ConnectToTargetSQLDbTaskOutput
 type ConnectToTargetSQLDbTaskProperties = original.ConnectToTargetSQLDbTaskProperties
@@ -693,6 +722,9 @@ type GetUserTablesSQLSyncTaskProperties = original.GetUserTablesSQLSyncTaskPrope
 type GetUserTablesSQLTaskInput = original.GetUserTablesSQLTaskInput
 type GetUserTablesSQLTaskOutput = original.GetUserTablesSQLTaskOutput
 type GetUserTablesSQLTaskProperties = original.GetUserTablesSQLTaskProperties
+type InstallOCIDriverTaskInput = original.InstallOCIDriverTaskInput
+type InstallOCIDriverTaskOutput = original.InstallOCIDriverTaskOutput
+type InstallOCIDriverTaskProperties = original.InstallOCIDriverTaskProperties
 type MiSQLConnectionInfo = original.MiSQLConnectionInfo
 type MigrateMISyncCompleteCommandInput = original.MigrateMISyncCompleteCommandInput
 type MigrateMISyncCompleteCommandOutput = original.MigrateMISyncCompleteCommandOutput
@@ -707,6 +739,15 @@ type MigrateMySQLAzureDbForMySQLSyncTaskOutputError = original.MigrateMySQLAzure
 type MigrateMySQLAzureDbForMySQLSyncTaskOutputMigrationLevel = original.MigrateMySQLAzureDbForMySQLSyncTaskOutputMigrationLevel
 type MigrateMySQLAzureDbForMySQLSyncTaskOutputTableLevel = original.MigrateMySQLAzureDbForMySQLSyncTaskOutputTableLevel
 type MigrateMySQLAzureDbForMySQLSyncTaskProperties = original.MigrateMySQLAzureDbForMySQLSyncTaskProperties
+type MigrateOracleAzureDbForPostgreSQLSyncTaskProperties = original.MigrateOracleAzureDbForPostgreSQLSyncTaskProperties
+type MigrateOracleAzureDbPostgreSQLSyncDatabaseInput = original.MigrateOracleAzureDbPostgreSQLSyncDatabaseInput
+type MigrateOracleAzureDbPostgreSQLSyncTaskInput = original.MigrateOracleAzureDbPostgreSQLSyncTaskInput
+type MigrateOracleAzureDbPostgreSQLSyncTaskOutput = original.MigrateOracleAzureDbPostgreSQLSyncTaskOutput
+type MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError = original.MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseError
+type MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel = original.MigrateOracleAzureDbPostgreSQLSyncTaskOutputDatabaseLevel
+type MigrateOracleAzureDbPostgreSQLSyncTaskOutputError = original.MigrateOracleAzureDbPostgreSQLSyncTaskOutputError
+type MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel = original.MigrateOracleAzureDbPostgreSQLSyncTaskOutputMigrationLevel
+type MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel = original.MigrateOracleAzureDbPostgreSQLSyncTaskOutputTableLevel
 type MigratePostgreSQLAzureDbForPostgreSQLSyncDatabaseInput = original.MigratePostgreSQLAzureDbForPostgreSQLSyncDatabaseInput
 type MigratePostgreSQLAzureDbForPostgreSQLSyncTaskInput = original.MigratePostgreSQLAzureDbForPostgreSQLSyncTaskInput
 type MigratePostgreSQLAzureDbForPostgreSQLSyncTaskOutput = original.MigratePostgreSQLAzureDbForPostgreSQLSyncTaskOutput
@@ -798,6 +839,8 @@ type NonSQLMigrationTaskInput = original.NonSQLMigrationTaskInput
 type NonSQLMigrationTaskOutput = original.NonSQLMigrationTaskOutput
 type ODataError = original.ODataError
 type OperationsClient = original.OperationsClient
+type OracleConnectionInfo = original.OracleConnectionInfo
+type OracleOCIDriverInfo = original.OracleOCIDriverInfo
 type OrphanedUserInfo = original.OrphanedUserInfo
 type PostgreSQLConnectionInfo = original.PostgreSQLConnectionInfo
 type Project = original.Project
@@ -852,6 +895,7 @@ type ServiceSkuList = original.ServiceSkuList
 type ServiceSkuListIterator = original.ServiceSkuListIterator
 type ServiceSkuListPage = original.ServiceSkuListPage
 type ServiceStatusResponse = original.ServiceStatusResponse
+type ServiceTasksClient = original.ServiceTasksClient
 type ServicesClient = original.ServicesClient
 type ServicesCreateOrUpdateFuture = original.ServicesCreateOrUpdateFuture
 type ServicesDeleteFuture = original.ServicesDeleteFuture
@@ -865,6 +909,9 @@ type TaskListIterator = original.TaskListIterator
 type TaskListPage = original.TaskListPage
 type TasksClient = original.TasksClient
 type TrackedResource = original.TrackedResource
+type UploadOCIDriverTaskInput = original.UploadOCIDriverTaskInput
+type UploadOCIDriverTaskOutput = original.UploadOCIDriverTaskOutput
+type UploadOCIDriverTaskProperties = original.UploadOCIDriverTaskProperties
 type UsagesClient = original.UsagesClient
 type ValidateMigrationInputSQLServerSQLDbSyncTaskProperties = original.ValidateMigrationInputSQLServerSQLDbSyncTaskProperties
 type ValidateMigrationInputSQLServerSQLMISyncTaskInput = original.ValidateMigrationInputSQLServerSQLMISyncTaskInput
@@ -874,6 +921,8 @@ type ValidateMigrationInputSQLServerSQLMITaskInput = original.ValidateMigrationI
 type ValidateMigrationInputSQLServerSQLMITaskOutput = original.ValidateMigrationInputSQLServerSQLMITaskOutput
 type ValidateMigrationInputSQLServerSQLMITaskProperties = original.ValidateMigrationInputSQLServerSQLMITaskProperties
 type ValidateMongoDbTaskProperties = original.ValidateMongoDbTaskProperties
+type ValidateOracleAzureDbForPostgreSQLSyncTaskProperties = original.ValidateOracleAzureDbForPostgreSQLSyncTaskProperties
+type ValidateOracleAzureDbPostgreSQLSyncTaskOutput = original.ValidateOracleAzureDbPostgreSQLSyncTaskOutput
 type ValidateSyncMigrationInputSQLServerTaskInput = original.ValidateSyncMigrationInputSQLServerTaskInput
 type ValidateSyncMigrationInputSQLServerTaskOutput = original.ValidateSyncMigrationInputSQLServerTaskOutput
 type ValidationError = original.ValidationError
@@ -947,6 +996,12 @@ func NewServiceSkuListIterator(page ServiceSkuListPage) ServiceSkuListIterator {
 }
 func NewServiceSkuListPage(getNextPage func(context.Context, ServiceSkuList) (ServiceSkuList, error)) ServiceSkuListPage {
 	return original.NewServiceSkuListPage(getNextPage)
+}
+func NewServiceTasksClient(subscriptionID string) ServiceTasksClient {
+	return original.NewServiceTasksClient(subscriptionID)
+}
+func NewServiceTasksClientWithBaseURI(baseURI string, subscriptionID string) ServiceTasksClient {
+	return original.NewServiceTasksClientWithBaseURI(baseURI, subscriptionID)
 }
 func NewServicesClient(subscriptionID string) ServicesClient {
 	return original.NewServicesClient(subscriptionID)
@@ -1073,6 +1128,9 @@ func PossibleResultTypeBasicConnectToSourceSQLServerTaskOutputValues() []ResultT
 }
 func PossibleResultTypeBasicMigrateMySQLAzureDbForMySQLSyncTaskOutputValues() []ResultTypeBasicMigrateMySQLAzureDbForMySQLSyncTaskOutput {
 	return original.PossibleResultTypeBasicMigrateMySQLAzureDbForMySQLSyncTaskOutputValues()
+}
+func PossibleResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputValues() []ResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutput {
+	return original.PossibleResultTypeBasicMigrateOracleAzureDbPostgreSQLSyncTaskOutputValues()
 }
 func PossibleResultTypeBasicMigratePostgreSQLAzureDbForPostgreSQLSyncTaskOutputValues() []ResultTypeBasicMigratePostgreSQLAzureDbForPostgreSQLSyncTaskOutput {
 	return original.PossibleResultTypeBasicMigratePostgreSQLAzureDbForPostgreSQLSyncTaskOutputValues()

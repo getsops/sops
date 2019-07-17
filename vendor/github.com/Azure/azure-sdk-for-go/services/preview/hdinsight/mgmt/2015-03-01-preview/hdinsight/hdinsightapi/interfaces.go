@@ -53,6 +53,7 @@ var _ ApplicationsClientAPI = (*hdinsight.ApplicationsClient)(nil)
 // LocationsClientAPI contains the set of methods on the LocationsClient type.
 type LocationsClientAPI interface {
 	GetCapabilities(ctx context.Context, location string) (result hdinsight.CapabilitiesResult, err error)
+	ListBillingSpecs(ctx context.Context, location string) (result hdinsight.BillingResponseListResult, err error)
 	ListUsages(ctx context.Context, location string) (result hdinsight.UsagesListResult, err error)
 }
 

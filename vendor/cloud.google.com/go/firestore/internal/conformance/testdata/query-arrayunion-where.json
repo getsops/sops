@@ -1,0 +1,25 @@
+{
+  "tests": [
+    {
+      "description": "query: ArrayUnion in Where",
+      "comment": "ArrayUnion is not permitted in queries.",
+      "query": {
+        "collPath": "projects/projectID/databases/(default)/documents/C",
+        "clauses": [
+          {
+            "where": {
+              "path": {
+                "field": [
+                  "a"
+                ]
+              },
+              "op": "==",
+              "jsonValue": "[\"ArrayUnion\", 1, 2, 3]"
+            }
+          }
+        ],
+        "isError": true
+      }
+    }
+  ]
+}

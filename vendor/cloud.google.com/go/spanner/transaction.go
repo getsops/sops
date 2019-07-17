@@ -22,7 +22,10 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/googleapis/gax-go/v2"
+
 	"cloud.google.com/go/internal/trace"
+	vkit "cloud.google.com/go/spanner/apiv1"
 	"google.golang.org/api/iterator"
 	sppb "google.golang.org/genproto/googleapis/spanner/v1"
 	"google.golang.org/grpc"
@@ -364,24 +367,22 @@ func (t *ReadOnlyTransaction) begin(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-	err = runRetryable(contextWithOutgoingMetadata(ctx, sh.getMetadata()), func(ctx context.Context) error {
-		res, e := sh.getClient().BeginTransaction(ctx, &sppb.BeginTransactionRequest{
-			Session: sh.getID(),
-			Options: &sppb.TransactionOptions{
-				Mode: &sppb.TransactionOptions_ReadOnly_{
-					ReadOnly: buildTransactionOptionsReadOnly(t.getTimestampBound(), true),
-				},
+	res, err := sh.getClient().BeginTransaction(contextWithOutgoingMetadata(ctx, sh.getMetadata()), &sppb.BeginTransactionRequest{
+		Session: sh.getID(),
+		Options: &sppb.TransactionOptions{
+			Mode: &sppb.TransactionOptions_ReadOnly_{
+				ReadOnly: buildTransactionOptionsReadOnly(t.getTimestampBound(), true),
 			},
-		})
-		if e != nil {
-			return e
-		}
+		},
+	})
+	if err == nil {
 		tx = res.Id
 		if res.ReadTimestamp != nil {
 			rts = time.Unix(res.ReadTimestamp.Seconds, int64(res.ReadTimestamp.Nanos))
 		}
-		return nil
-	})
+	} else {
+		err = toSpannerError(err)
+	}
 	t.mu.Lock()
 
 	// defer function will be executed with t.mu being held.
@@ -798,27 +799,19 @@ func (t *ReadWriteTransaction) release(err error) {
 	}
 }
 
-func beginTransaction(ctx context.Context, sid string, client sppb.SpannerClient) (transactionID, error) {
-	var tx transactionID
-	err := runRetryable(ctx, func(ctx context.Context) error {
-		res, e := client.BeginTransaction(ctx, &sppb.BeginTransactionRequest{
-			Session: sid,
-			Options: &sppb.TransactionOptions{
-				Mode: &sppb.TransactionOptions_ReadWrite_{
-					ReadWrite: &sppb.TransactionOptions_ReadWrite{},
-				},
+func beginTransaction(ctx context.Context, sid string, client *vkit.Client) (transactionID, error) {
+	res, err := client.BeginTransaction(ctx, &sppb.BeginTransactionRequest{
+		Session: sid,
+		Options: &sppb.TransactionOptions{
+			Mode: &sppb.TransactionOptions_ReadWrite_{
+				ReadWrite: &sppb.TransactionOptions_ReadWrite{},
 			},
-		})
-		if e != nil {
-			return e
-		}
-		tx = res.Id
-		return nil
+		},
 	})
 	if err != nil {
 		return nil, err
 	}
-	return tx, nil
+	return res.Id, nil
 }
 
 // begin starts a read-write transacton on Cloud Spanner, it is always called
@@ -857,23 +850,21 @@ func (t *ReadWriteTransaction) commit(ctx context.Context) (time.Time, error) {
 	if sid == "" || client == nil {
 		return ts, errSessionClosed(t.sh)
 	}
-	err = runRetryable(contextWithOutgoingMetadata(ctx, t.sh.getMetadata()), func(ctx context.Context) error {
-		var trailer metadata.MD
-		res, e := client.Commit(ctx, &sppb.CommitRequest{
-			Session: sid,
-			Transaction: &sppb.CommitRequest_TransactionId{
-				TransactionId: t.tx,
-			},
-			Mutations: mPb,
-		}, grpc.Trailer(&trailer))
-		if e != nil {
-			return toSpannerErrorWithMetadata(e, trailer)
-		}
-		if tstamp := res.GetCommitTimestamp(); tstamp != nil {
-			ts = time.Unix(tstamp.Seconds, int64(tstamp.Nanos))
-		}
-		return nil
-	})
+
+	var trailer metadata.MD
+	res, e := client.Commit(contextWithOutgoingMetadata(ctx, t.sh.getMetadata()), &sppb.CommitRequest{
+		Session: sid,
+		Transaction: &sppb.CommitRequest_TransactionId{
+			TransactionId: t.tx,
+		},
+		Mutations: mPb,
+	}, gax.WithGRPCOptions(grpc.Trailer(&trailer)))
+	if e != nil {
+		return ts, toSpannerErrorWithMetadata(e, trailer)
+	}
+	if tstamp := res.GetCommitTimestamp(); tstamp != nil {
+		ts = time.Unix(tstamp.Seconds, int64(tstamp.Nanos))
+	}
 	if shouldDropSession(err) {
 		t.sh.destroy()
 	}
@@ -893,12 +884,9 @@ func (t *ReadWriteTransaction) rollback(ctx context.Context) {
 	if sid == "" || client == nil {
 		return
 	}
-	err := runRetryable(contextWithOutgoingMetadata(ctx, t.sh.getMetadata()), func(ctx context.Context) error {
-		_, e := client.Rollback(ctx, &sppb.RollbackRequest{
-			Session:       sid,
-			TransactionId: t.tx,
-		})
-		return e
+	err := client.Rollback(contextWithOutgoingMetadata(ctx, t.sh.getMetadata()), &sppb.RollbackRequest{
+		Session:       sid,
+		TransactionId: t.tx,
 	})
 	if shouldDropSession(err) {
 		t.sh.destroy()
@@ -920,7 +908,6 @@ func (t *ReadWriteTransaction) runInTransaction(ctx context.Context, f func(cont
 			// Retry the transaction using the same session on ABORT error.
 			// Cloud Spanner will create the new transaction with the previous
 			// one's wound-wait priority.
-			err = errRetry(err)
 			return ts, err
 		}
 		// Not going to commit, according to API spec, should rollback the
@@ -956,19 +943,21 @@ func (t *writeOnlyTransaction) applyAtLeastOnce(ctx context.Context, ms ...*Muta
 		// Malformed mutation found, just return the error.
 		return ts, err
 	}
-	err = runRetryable(ctx, func(ct context.Context) error {
-		var e error
-		var trailers metadata.MD
+
+	var trailers metadata.MD
+	// Retry-loop for aborted transactions.
+	// TODO: Replace with generic retryer.
+	for {
 		if sh == nil || sh.getID() == "" || sh.getClient() == nil {
 			// No usable session for doing the commit, take one from pool.
-			sh, e = t.sp.take(ctx)
-			if e != nil {
+			sh, err = t.sp.take(ctx)
+			if err != nil {
 				// sessionPool.Take already retries for session
 				// creations/retrivals.
-				return e
+				return ts, err
 			}
 		}
-		res, e := sh.getClient().Commit(contextWithOutgoingMetadata(ctx, sh.getMetadata()), &sppb.CommitRequest{
+		res, err := sh.getClient().Commit(contextWithOutgoingMetadata(ctx, sh.getMetadata()), &sppb.CommitRequest{
 			Session: sh.getID(),
 			Transaction: &sppb.CommitRequest_SingleUseTransaction{
 				SingleUseTransaction: &sppb.TransactionOptions{
@@ -978,28 +967,24 @@ func (t *writeOnlyTransaction) applyAtLeastOnce(ctx context.Context, ms ...*Muta
 				},
 			},
 			Mutations: mPb,
-		}, grpc.Trailer(&trailers))
-		if e != nil {
-			if isAbortErr(e) {
-				// Mask ABORT error as retryable, because aborted transactions
-				// are allowed to be retried.
-				return errRetry(toSpannerErrorWithMetadata(e, trailers))
-			}
-			if shouldDropSession(e) {
+		}, gax.WithGRPCOptions(grpc.Trailer(&trailers)))
+		if err != nil && !isAbortErr(err) {
+			if shouldDropSession(err) {
 				// Discard the bad session.
 				sh.destroy()
 			}
-			return e
+			return ts, toSpannerError(err)
+		} else if err == nil {
+			if tstamp := res.GetCommitTimestamp(); tstamp != nil {
+				ts = time.Unix(tstamp.Seconds, int64(tstamp.Nanos))
+			}
+			break
 		}
-		if tstamp := res.GetCommitTimestamp(); tstamp != nil {
-			ts = time.Unix(tstamp.Seconds, int64(tstamp.Nanos))
-		}
-		return nil
-	})
+	}
 	if sh != nil {
 		sh.recycle()
 	}
-	return ts, err
+	return ts, toSpannerError(err)
 }
 
 // isAbortedErr returns true if the error indicates that an gRPC call is

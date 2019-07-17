@@ -659,8 +659,8 @@ func (s *ManagedZone) MarshalJSON() ([]byte, error) {
 
 type ManagedZoneDnsSecConfig struct {
 	// DefaultKeySpecs: Specifies parameters that will be used for
-	// generating initial DnsKeys for this ManagedZone. Output only while
-	// state is not OFF.
+	// generating initial DnsKeys for this ManagedZone. Can only be changed
+	// while state is OFF.
 	DefaultKeySpecs []*DnsKeySpec `json:"defaultKeySpecs,omitempty"`
 
 	// Kind: Identifies what kind of resource this is. Value: the fixed
@@ -668,7 +668,8 @@ type ManagedZoneDnsSecConfig struct {
 	Kind string `json:"kind,omitempty"`
 
 	// NonExistence: Specifies the mechanism used to provide authenticated
-	// denial-of-existence responses. Output only while state is not OFF.
+	// denial-of-existence responses. Can only be changed while state is
+	// OFF.
 	//
 	// Possible values:
 	//   "NSEC"

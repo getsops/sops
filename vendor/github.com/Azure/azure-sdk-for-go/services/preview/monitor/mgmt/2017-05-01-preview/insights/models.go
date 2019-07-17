@@ -1564,12 +1564,14 @@ type DiagnosticSettings struct {
 	EventHubAuthorizationRuleID *string `json:"eventHubAuthorizationRuleId,omitempty"`
 	// EventHubName - The name of the event hub. If none is specified, the default event hub will be selected.
 	EventHubName *string `json:"eventHubName,omitempty"`
-	// Metrics - the list of metric settings.
+	// Metrics - The list of metric settings.
 	Metrics *[]MetricSettings `json:"metrics,omitempty"`
-	// Logs - the list of logs settings.
+	// Logs - The list of logs settings.
 	Logs *[]LogSettings `json:"logs,omitempty"`
-	// WorkspaceID - The workspace ID (resource ID of a Log Analytics workspace) for a Log Analytics workspace to which you would like to send Diagnostic Logs. Example: /subscriptions/4b9e8510-67ab-4e9a-95a9-e2f1e570ea9c/resourceGroups/insights-integration/providers/Microsoft.OperationalInsights/workspaces/viruela2
+	// WorkspaceID - The full ARM resource ID of the Log Analytics workspace to which you would like to send Diagnostic Logs. Example: /subscriptions/4b9e8510-67ab-4e9a-95a9-e2f1e570ea9c/resourceGroups/insights-integration/providers/Microsoft.OperationalInsights/workspaces/viruela2
 	WorkspaceID *string `json:"workspaceId,omitempty"`
+	// LogAnalyticsDestinationType - A string indicating whether the export to Log Analytics should use the default destination type, i.e. AzureDiagnostics, or use a destination type constructed as follows: <normalized service identity>_<normalized category name>. Possible values are: Dedicated and null (null is default.)
+	LogAnalyticsDestinationType *string `json:"logAnalyticsDestinationType,omitempty"`
 }
 
 // DiagnosticSettingsCategory the diagnostic settings Category.

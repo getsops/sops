@@ -179,7 +179,7 @@
             "datasets": {
               "methods": {
                 "create": {
-                  "description": "Creates a new health dataset. Results are returned through the\nOperation interface which returns either an\n`Operation.response` which contains a Dataset or\n`Operation.error`. The metadata\nfield type is OperationMetadata.",
+                  "description": "Creates a new health dataset. Results are returned through the\nOperation interface which returns either an\n`Operation.response` which contains a Dataset or\n`Operation.error`. The metadata\nfield type is OperationMetadata.\nA Google Cloud Platform project can contain up to 500 datasets across all\nregions.",
                   "flatPath": "v1alpha2/projects/{projectsId}/locations/{locationsId}/datasets",
                   "httpMethod": "POST",
                   "id": "healthcare.projects.locations.datasets.create",
@@ -298,6 +298,12 @@
                     "resource"
                   ],
                   "parameters": {
+                    "options.requestedPolicyVersion": {
+                      "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+                      "format": "int32",
+                      "location": "query",
+                      "type": "integer"
+                    },
                     "resource": {
                       "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
                       "location": "path",
@@ -528,7 +534,7 @@
                       ]
                     },
                     "getIamPolicy": {
-                      "description": "Gets the access control policy for a resource. Returns NOT_FOUND error if\nthe resource does not exist. Returns an empty policy if the resource exists\nbut does not have a policy set.\n\nAuthorization requires the Google IAM permission\n`healthcare.AnnotationStores.getIamPolicy` on the specified resource",
+                      "description": "Gets the access control policy for a resource. Returns NOT_FOUND error if\nthe resource does not exist. Returns an empty policy if the resource exists\nbut does not have a policy set.\n\nAuthorization requires the Google IAM permission\n`healthcare.AnnotationStores.getIamPolicy` on the specified\nresource",
                       "flatPath": "v1alpha2/projects/{projectsId}/locations/{locationsId}/datasets/{datasetsId}/annotationStores/{annotationStoresId}:getIamPolicy",
                       "httpMethod": "POST",
                       "id": "healthcare.projects.locations.datasets.annotationStores.getIamPolicy",
@@ -631,7 +637,7 @@
                       ]
                     },
                     "setIamPolicy": {
-                      "description": "POLICIES\nSets the access control policy for a resource. Replaces any existing\npolicy.\n\nAuthorization requires the Google IAM permission\n'healthcare.annotationStores.setIamPolicy' on the specified resource",
+                      "description": "POLICIES\nSets the access control policy for a resource. Replaces any existing\npolicy.\n\nAuthorization requires the Google IAM permission\n`healthcare.annotationStores.setIamPolicy` on the specified\nresource",
                       "flatPath": "v1alpha2/projects/{projectsId}/locations/{locationsId}/datasets/{datasetsId}/annotationStores/{annotationStoresId}:setIamPolicy",
                       "httpMethod": "POST",
                       "id": "healthcare.projects.locations.datasets.annotationStores.setIamPolicy",
@@ -969,6 +975,12 @@
                         "resource"
                       ],
                       "parameters": {
+                        "options.requestedPolicyVersion": {
+                          "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+                          "format": "int32",
+                          "location": "query",
+                          "type": "integer"
+                        },
                         "resource": {
                           "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
                           "location": "path",
@@ -1159,7 +1171,7 @@
                           ],
                           "parameters": {
                             "dicomWebPath": {
-                              "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`instances`).",
+                              "description": "The path of the SearchForInstancesRequest DICOMweb request (e.g.,\n`instances` or `series/{series_uid}/instances` or\n`studies/{study_uid}/instances`).",
                               "location": "path",
                               "pattern": "^instances$",
                               "required": true,
@@ -1192,7 +1204,7 @@
                           ],
                           "parameters": {
                             "dicomWebPath": {
-                              "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`series`).",
+                              "description": "The path of the SearchForSeries DICOMweb request(e.g., `series` or\n`studies/{study_uid}/series`).",
                               "location": "path",
                               "pattern": "^series$",
                               "required": true,
@@ -1225,7 +1237,7 @@
                           ],
                           "parameters": {
                             "dicomWebPath": {
-                              "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`studies`).",
+                              "description": "The path of the SearchForStudies DICOMweb request (e.g., `studies`).",
                               "location": "path",
                               "pattern": "^studies$",
                               "required": true,
@@ -1258,7 +1270,7 @@
                           ],
                           "parameters": {
                             "dicomWebPath": {
-                              "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}`).",
+                              "description": "The path of the StoreInstances DICOMweb request (e.g.,\n`studies/[{study_id}]`). Note that the `study_uid` is optional.",
                               "location": "path",
                               "pattern": "^studies$",
                               "required": true,
@@ -1298,7 +1310,7 @@
                               ],
                               "parameters": {
                                 "dicomWebPath": {
-                                  "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}`).",
+                                  "description": "The path of the DeleteStudy request (e.g., `studies/{study_id}`).",
                                   "location": "path",
                                   "pattern": "^studies/[^/]+$",
                                   "required": true,
@@ -1331,7 +1343,7 @@
                               ],
                               "parameters": {
                                 "dicomWebPath": {
-                                  "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}/metadata`.",
+                                  "description": "The path of the RetrieveStudyMetadata DICOMweb request (e.g.,\n`studies/{study_id}/metadata`).",
                                   "location": "path",
                                   "pattern": "^studies/[^/]+/metadata$",
                                   "required": true,
@@ -1364,7 +1376,7 @@
                               ],
                               "parameters": {
                                 "dicomWebPath": {
-                                  "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}`).",
+                                  "description": "The path of the RetrieveStudy DICOMweb request (e.g.,\n`studies/{study_id}`).",
                                   "location": "path",
                                   "pattern": "^studies/[^/]+$",
                                   "required": true,
@@ -1397,7 +1409,7 @@
                               ],
                               "parameters": {
                                 "dicomWebPath": {
-                                  "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`instances`).",
+                                  "description": "The path of the SearchForInstancesRequest DICOMweb request (e.g.,\n`instances` or `series/{series_uid}/instances` or\n`studies/{study_uid}/instances`).",
                                   "location": "path",
                                   "pattern": "^studies/[^/]+/instances$",
                                   "required": true,
@@ -1430,7 +1442,7 @@
                               ],
                               "parameters": {
                                 "dicomWebPath": {
-                                  "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`series`).",
+                                  "description": "The path of the SearchForSeries DICOMweb request(e.g., `series` or\n`studies/{study_uid}/series`).",
                                   "location": "path",
                                   "pattern": "^studies/[^/]+/series$",
                                   "required": true,
@@ -1463,7 +1475,7 @@
                               ],
                               "parameters": {
                                 "dicomWebPath": {
-                                  "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}`).",
+                                  "description": "The path of the StoreInstances DICOMweb request (e.g.,\n`studies/[{study_id}]`). Note that the `study_uid` is optional.",
                                   "location": "path",
                                   "pattern": "^studies/[^/]+$",
                                   "required": true,
@@ -1503,7 +1515,7 @@
                                   ],
                                   "parameters": {
                                     "dicomWebPath": {
-                                      "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}/series/{series_id}`).",
+                                      "description": "The path of the DeleteSeries request (e.g.,\n`studies/{study_id}/series/{series_id}`).",
                                       "location": "path",
                                       "pattern": "^studies/[^/]+/series/[^/]+$",
                                       "required": true,
@@ -1536,7 +1548,7 @@
                                   ],
                                   "parameters": {
                                     "dicomWebPath": {
-                                      "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}/series/{series_id}/metadata`.",
+                                      "description": "The path of the RetrieveSeriesMetadata DICOMweb request (e.g.,\n`studies/{study_id}/series/{series_id}/metadata`).",
                                       "location": "path",
                                       "pattern": "^studies/[^/]+/series/[^/]+/metadata$",
                                       "required": true,
@@ -1569,7 +1581,7 @@
                                   ],
                                   "parameters": {
                                     "dicomWebPath": {
-                                      "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}/series/{series_id}`).",
+                                      "description": "The path of the RetrieveSeries DICOMweb request (e.g.,\n`studies/{study_id}/series/{series_id}`).",
                                       "location": "path",
                                       "pattern": "^studies/[^/]+/series/[^/]+$",
                                       "required": true,
@@ -1602,7 +1614,7 @@
                                   ],
                                   "parameters": {
                                     "dicomWebPath": {
-                                      "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`instances`).",
+                                      "description": "The path of the SearchForInstancesRequest DICOMweb request (e.g.,\n`instances` or `series/{series_uid}/instances` or\n`studies/{study_uid}/instances`).",
                                       "location": "path",
                                       "pattern": "^studies/[^/]+/series/[^/]+/instances$",
                                       "required": true,
@@ -1639,7 +1651,7 @@
                                       ],
                                       "parameters": {
                                         "dicomWebPath": {
-                                          "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}`).",
+                                          "description": "The path of the DeleteInstance request (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}`).",
                                           "location": "path",
                                           "pattern": "^studies/[^/]+/series/[^/]+/instances/[^/]+$",
                                           "required": true,
@@ -1672,7 +1684,7 @@
                                       ],
                                       "parameters": {
                                         "dicomWebPath": {
-                                          "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/metadata`).",
+                                          "description": "The path of the RetrieveInstanceMetadata DICOMweb request (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/metadata`).",
                                           "location": "path",
                                           "pattern": "^studies/[^/]+/series/[^/]+/instances/[^/]+/metadata$",
                                           "required": true,
@@ -1705,7 +1717,7 @@
                                       ],
                                       "parameters": {
                                         "dicomWebPath": {
-                                          "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/rendered`).",
+                                          "description": "The path of the RetrieveRenderedInstance DICOMweb request (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/rendered`).",
                                           "location": "path",
                                           "pattern": "^studies/[^/]+/series/[^/]+/instances/[^/]+/rendered$",
                                           "required": true,
@@ -1738,7 +1750,7 @@
                                       ],
                                       "parameters": {
                                         "dicomWebPath": {
-                                          "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}`).",
+                                          "description": "The path of the RetrieveInstance DICOMweb request (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}`).",
                                           "location": "path",
                                           "pattern": "^studies/[^/]+/series/[^/]+/instances/[^/]+$",
                                           "required": true,
@@ -1775,7 +1787,7 @@
                                           ],
                                           "parameters": {
                                             "dicomWebPath": {
-                                              "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/frames/{frame_list}/rendered`).",
+                                              "description": "The path of the RetrieveRenderedFrames DICOMweb request (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/frames/{frame_list}/rendered`).",
                                               "location": "path",
                                               "pattern": "^studies/[^/]+/series/[^/]+/instances/[^/]+/frames/[^/]+/rendered$",
                                               "required": true,
@@ -1808,7 +1820,7 @@
                                           ],
                                           "parameters": {
                                             "dicomWebPath": {
-                                              "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/frames/{frame_list}`).",
+                                              "description": "The path of the RetrieveFrames DICOMweb request (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/frames/{frame_list}`).",
                                               "location": "path",
                                               "pattern": "^studies/[^/]+/series/[^/]+/instances/[^/]+/frames/[^/]+$",
                                               "required": true,
@@ -1981,7 +1993,7 @@
                       ]
                     },
                     "getIamPolicy": {
-                      "description": "Gets the access control policy for a FHIR store or security label within a\nFHIR store. Returns NOT_FOUND error if the resource does not exist. Returns\nan empty policy if the resource exists but does not have a policy set.\n\nAuthorization requires the Google IAM permission\n'healthcare.fhirStores.getIamPolicy' for a FHIR store or\n'healthcare.securityLabels.getIamPolicy' for a security label",
+                      "description": "Gets the access control policy for a FHIR store or security label within a\nFHIR store. Returns NOT_FOUND error if the resource does not exist. Returns\nan empty policy if the resource exists but does not have a policy set.\n\nAuthorization requires the Google IAM permission\n`healthcare.fhirStores.getIamPolicy` for a FHIR store or\n`healthcare.securityLabels.getIamPolicy` for a security label",
                       "flatPath": "v1alpha2/projects/{projectsId}/locations/{locationsId}/datasets/{datasetsId}/fhirStores/{fhirStoresId}:getIamPolicy",
                       "httpMethod": "GET",
                       "id": "healthcare.projects.locations.datasets.fhirStores.getIamPolicy",
@@ -1989,6 +2001,12 @@
                         "resource"
                       ],
                       "parameters": {
+                        "options.requestedPolicyVersion": {
+                          "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+                          "format": "int32",
+                          "location": "query",
+                          "type": "integer"
+                        },
                         "resource": {
                           "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
                           "location": "path",
@@ -2109,7 +2127,7 @@
                       ]
                     },
                     "setIamPolicy": {
-                      "description": "Sets the access control policy for a FHIR store or security label within a\nFHIR store. Replaces any existing policy.\n\nAuthorization requires the Google IAM permission\n'healthcare.fhirStores.setIamPolicy' for a FHIR store or\n'healthcare.securityLabels.setIamPolicy' for a security label",
+                      "description": "Sets the access control policy for a FHIR store or security label within a\nFHIR store. Replaces any existing policy.\n\nAuthorization requires the Google IAM permission\n`healthcare.fhirStores.setIamPolicy` for a FHIR store or\n`healthcare.securityLabels.setIamPolicy` for a security label",
                       "flatPath": "v1alpha2/projects/{projectsId}/locations/{locationsId}/datasets/{datasetsId}/fhirStores/{fhirStoresId}:setIamPolicy",
                       "httpMethod": "POST",
                       "id": "healthcare.projects.locations.datasets.fhirStores.setIamPolicy",
@@ -2572,7 +2590,7 @@
                           ]
                         },
                         "search": {
-                          "description": "Searches for resources in the given FHIR store according to criteria\nspecified as query parameters.\n\nImplements the FHIR standard [search\ninteraction](http://hl7.org/implement/standards/fhir/STU3/http.html#search)\nusing the search semantics described in the [FHIR Search\nspecification](http://hl7.org/implement/standards/fhir/STU3/search.html).\n\nSupports three methods of search defined by the specification:\n\n*  `GET [base]?[parameters]` to search across all resources.\n*  `GET [base]/[type]?[parameters]` to search resources of a specified\ntype.\n*  `POST [base]/[type]/_search?[parameters]` as an alternate form having\nthe same semantics as the `GET` method.\n\nThe `GET` methods do not support compartment searches. The `POST` method\ndoes not support `application/x-www-form-urlencoded` search parameters.\n\nOn success, the response body will contain a JSON-encoded representation\nof a `Bundle` resource of type `searchset`, containing the results of the\nsearch.\nErrors generated by the FHIR store will contain a JSON-encoded\n`OperationOutcome` resource describing the reason for the error. If the\nrequest cannot be mapped to a valid API method on a FHIR store, a generic\nGCP error might be returned instead.\n\n# Search Parameters\n\nThe server's capability statement, retrieved through\ncapabilities, indicates what search parameters\nare supported on each FHIR resource. A list of all search parameters\ndefined by the specification can be found in the [FHIR Search Parameter\nRegistry](http://hl7.org/implement/standards/fhir/STU3/searchparameter-registry.html).\n\n# Search Modifiers\n\nModifier   | Supported\n----------- | ---------\n`:missing`  | Yes\n`:exact`    | Yes\n`:contains` | Yes\n`:text`     | Yes\n`:in`       | Yes\n`:not-in`   | Yes\n`:above`    | Yes\n`:below`    | Yes\n`:[type]`   | Yes\n`:not`      | Yes\n`:recurse`  | No",
+                          "description": "Searches for resources in the given FHIR store according to criteria\nspecified as query parameters.\n\nImplements the FHIR standard [search\ninteraction](http://hl7.org/implement/standards/fhir/STU3/http.html#search)\nusing the search semantics described in the [FHIR Search\nspecification](http://hl7.org/implement/standards/fhir/STU3/search.html).\n\nSupports three methods of search defined by the specification:\n\n*  `GET [base]?[parameters]` to search across all resources.\n*  `GET [base]/[type]?[parameters]` to search resources of a specified\ntype.\n*  `POST [base]/[type]/_search?[parameters]` as an alternate form having\nthe same semantics as the `GET` method.\n\nThe `GET` methods do not support compartment searches. The `POST` method\ndoes not support `application/x-www-form-urlencoded` search parameters.\n\nOn success, the response body will contain a JSON-encoded representation\nof a `Bundle` resource of type `searchset`, containing the results of the\nsearch.\nErrors generated by the FHIR store will contain a JSON-encoded\n`OperationOutcome` resource describing the reason for the error. If the\nrequest cannot be mapped to a valid API method on a FHIR store, a generic\nGCP error might be returned instead.\n\nThe server's capability statement, retrieved through\ncapabilities, indicates what search parameters\nare supported on each FHIR resource. A list of all search parameters\ndefined by the specification can be found in the [FHIR Search Parameter\nRegistry](http://hl7.org/implement/standards/fhir/STU3/searchparameter-registry.html).\n\nSupported search modifiers: `:missing`, `:exact`, `:contains`, `:text`,\n`:in`, `:not-in`, `:above`, `:below`, `:[type]`, `:not`, and `:recurse`.\n\nSupported search result parameters: `_sort`, `_count`, `_include`,\n`_revinclude`, `_summary=text`, `_summary=data`, and `_elements`.\n\nThe maximum number of search results returned defaults to 100, which can\nbe overridden by the `_count` parameter up to a maximum limit of 1000. If\nthere are additional results, the returned `Bundle` will contain\npagination links.",
                           "flatPath": "v1alpha2/projects/{projectsId}/locations/{locationsId}/datasets/{datasetsId}/fhirStores/{fhirStoresId}/fhir/_search",
                           "httpMethod": "POST",
                           "id": "healthcare.projects.locations.datasets.fhirStores.fhir.search",
@@ -2657,7 +2675,7 @@
                     "securityLabels": {
                       "methods": {
                         "getIamPolicy": {
-                          "description": "Gets the access control policy for a FHIR store or security label within a\nFHIR store. Returns NOT_FOUND error if the resource does not exist. Returns\nan empty policy if the resource exists but does not have a policy set.\n\nAuthorization requires the Google IAM permission\n'healthcare.fhirStores.getIamPolicy' for a FHIR store or\n'healthcare.securityLabels.getIamPolicy' for a security label",
+                          "description": "Gets the access control policy for a FHIR store or security label within a\nFHIR store. Returns NOT_FOUND error if the resource does not exist. Returns\nan empty policy if the resource exists but does not have a policy set.\n\nAuthorization requires the Google IAM permission\n`healthcare.fhirStores.getIamPolicy` for a FHIR store or\n`healthcare.securityLabels.getIamPolicy` for a security label",
                           "flatPath": "v1alpha2/projects/{projectsId}/locations/{locationsId}/datasets/{datasetsId}/fhirStores/{fhirStoresId}/securityLabels/{securityLabelsId}:getIamPolicy",
                           "httpMethod": "GET",
                           "id": "healthcare.projects.locations.datasets.fhirStores.securityLabels.getIamPolicy",
@@ -2665,6 +2683,12 @@
                             "resource"
                           ],
                           "parameters": {
+                            "options.requestedPolicyVersion": {
+                              "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+                              "format": "int32",
+                              "location": "query",
+                              "type": "integer"
+                            },
                             "resource": {
                               "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
                               "location": "path",
@@ -2682,7 +2706,7 @@
                           ]
                         },
                         "setIamPolicy": {
-                          "description": "Sets the access control policy for a FHIR store or security label within a\nFHIR store. Replaces any existing policy.\n\nAuthorization requires the Google IAM permission\n'healthcare.fhirStores.setIamPolicy' for a FHIR store or\n'healthcare.securityLabels.setIamPolicy' for a security label",
+                          "description": "Sets the access control policy for a FHIR store or security label within a\nFHIR store. Replaces any existing policy.\n\nAuthorization requires the Google IAM permission\n`healthcare.fhirStores.setIamPolicy` for a FHIR store or\n`healthcare.securityLabels.setIamPolicy` for a security label",
                           "flatPath": "v1alpha2/projects/{projectsId}/locations/{locationsId}/datasets/{datasetsId}/fhirStores/{fhirStoresId}/securityLabels/{securityLabelsId}:setIamPolicy",
                           "httpMethod": "POST",
                           "id": "healthcare.projects.locations.datasets.fhirStores.securityLabels.setIamPolicy",
@@ -2807,6 +2831,12 @@
                         "resource"
                       ],
                       "parameters": {
+                        "options.requestedPolicyVersion": {
+                          "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+                          "format": "int32",
+                          "location": "query",
+                          "type": "integer"
+                        },
                         "resource": {
                           "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
                           "location": "path",
@@ -3236,7 +3266,7 @@
       }
     }
   },
-  "revision": "20190527",
+  "revision": "20190708",
   "rootUrl": "https://healthcare.googleapis.com/",
   "schemas": {
     "Annotation": {
@@ -3261,7 +3291,7 @@
         },
         "textAnnotation": {
           "$ref": "SensitiveTextAnnotation",
-          "description": "Annotations for sentitive texts, e.g., range of such texts."
+          "description": "Annotations for sensitive texts, e.g., range of such texts."
         }
       },
       "type": "object"
@@ -3296,7 +3326,7 @@
       "type": "object"
     },
     "AuditConfig": {
-      "description": "Specifies the audit configuration for a service.\nThe configuration determines which permission types are logged, and what\nidentities, if any, are exempted from logging.\nAn AuditConfig must have one or more AuditLogConfigs.\n\nIf there are AuditConfigs for both `allServices` and a specific service,\nthe union of the two AuditConfigs is used for that service: the log_types\nspecified in each AuditConfig are enabled, and the exempted_members in each\nAuditLogConfig are exempted.\n\nExample Policy with multiple AuditConfigs:\n\n    {\n      \"audit_configs\": [\n        {\n          \"service\": \"allServices\"\n          \"audit_log_configs\": [\n            {\n              \"log_type\": \"DATA_READ\",\n              \"exempted_members\": [\n                \"user:foo@gmail.com\"\n              ]\n            },\n            {\n              \"log_type\": \"DATA_WRITE\",\n            },\n            {\n              \"log_type\": \"ADMIN_READ\",\n            }\n          ]\n        },\n        {\n          \"service\": \"fooservice.googleapis.com\"\n          \"audit_log_configs\": [\n            {\n              \"log_type\": \"DATA_READ\",\n            },\n            {\n              \"log_type\": \"DATA_WRITE\",\n              \"exempted_members\": [\n                \"user:bar@gmail.com\"\n              ]\n            }\n          ]\n        }\n      ]\n    }\n\nFor fooservice, this policy enables DATA_READ, DATA_WRITE and ADMIN_READ\nlogging. It also exempts foo@gmail.com from DATA_READ logging, and\nbar@gmail.com from DATA_WRITE logging.",
+      "description": "Specifies the audit configuration for a service.\nThe configuration determines which permission types are logged, and what\nidentities, if any, are exempted from logging.\nAn AuditConfig must have one or more AuditLogConfigs.\n\nIf there are AuditConfigs for both `allServices` and a specific service,\nthe union of the two AuditConfigs is used for that service: the log_types\nspecified in each AuditConfig are enabled, and the exempted_members in each\nAuditLogConfig are exempted.\n\nExample Policy with multiple AuditConfigs:\n\n    {\n      \"audit_configs\": [\n        {\n          \"service\": \"allServices\"\n          \"audit_log_configs\": [\n            {\n              \"log_type\": \"DATA_READ\",\n              \"exempted_members\": [\n                \"user:jose@example.com\"\n              ]\n            },\n            {\n              \"log_type\": \"DATA_WRITE\",\n            },\n            {\n              \"log_type\": \"ADMIN_READ\",\n            }\n          ]\n        },\n        {\n          \"service\": \"sampleservice.googleapis.com\"\n          \"audit_log_configs\": [\n            {\n              \"log_type\": \"DATA_READ\",\n            },\n            {\n              \"log_type\": \"DATA_WRITE\",\n              \"exempted_members\": [\n                \"user:aliya@example.com\"\n              ]\n            }\n          ]\n        }\n      ]\n    }\n\nFor sampleservice, this policy enables DATA_READ, DATA_WRITE and ADMIN_READ\nlogging. It also exempts jose@example.com from DATA_READ logging, and\naliya@example.com from DATA_WRITE logging.",
       "id": "AuditConfig",
       "properties": {
         "auditLogConfigs": {
@@ -3314,7 +3344,7 @@
       "type": "object"
     },
     "AuditLogConfig": {
-      "description": "Provides the configuration for logging a type of permissions.\nExample:\n\n    {\n      \"audit_log_configs\": [\n        {\n          \"log_type\": \"DATA_READ\",\n          \"exempted_members\": [\n            \"user:foo@gmail.com\"\n          ]\n        },\n        {\n          \"log_type\": \"DATA_WRITE\",\n        }\n      ]\n    }\n\nThis enables 'DATA_READ' and 'DATA_WRITE' logging, while exempting\nfoo@gmail.com from DATA_READ logging.",
+      "description": "Provides the configuration for logging a type of permissions.\nExample:\n\n    {\n      \"audit_log_configs\": [\n        {\n          \"log_type\": \"DATA_READ\",\n          \"exempted_members\": [\n            \"user:jose@example.com\"\n          ]\n        },\n        {\n          \"log_type\": \"DATA_WRITE\",\n        }\n      ]\n    }\n\nThis enables 'DATA_READ' and 'DATA_WRITE' logging, while exempting\njose@example.com from DATA_READ logging.",
       "id": "AuditLogConfig",
       "properties": {
         "exemptedMembers": {
@@ -3323,6 +3353,10 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "ignoreChildExemptions": {
+          "description": "Specifies whether principals can be exempted for the same LogType in\nlower-level resource policies. If true, any lower-level exemptions will\nbe ignored.",
+          "type": "boolean"
         },
         "logType": {
           "description": "The log type that this config enables.",
@@ -3352,7 +3386,7 @@
           "description": "The condition that is associated with this binding.\nNOTE: An unsatisfied condition will not allow user access via current\nbinding. Different bindings, including their conditions, are examined\nindependently."
         },
         "members": {
-          "description": "Specifies the identities requesting access for a Cloud Platform resource.\n`members` can have the following values:\n\n* `allUsers`: A special identifier that represents anyone who is\n   on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone\n   who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google\n   account. For example, `alice@gmail.com` .\n\n\n* `serviceAccount:{emailid}`: An email address that represents a service\n   account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group.\n   For example, `admins@example.com`.\n\n\n* `domain:{domain}`: The G Suite domain (primary) that represents all the\n   users of that domain. For example, `google.com` or `example.com`.\n\n",
+          "description": "Specifies the identities requesting access for a Cloud Platform resource.\n`members` can have the following values:\n\n* `allUsers`: A special identifier that represents anyone who is\n   on the internet; with or without a Google account.\n\n* `allAuthenticatedUsers`: A special identifier that represents anyone\n   who is authenticated with a Google account or a service account.\n\n* `user:{emailid}`: An email address that represents a specific Google\n   account. For example, `alice@example.com` .\n\n\n* `serviceAccount:{emailid}`: An email address that represents a service\n   account. For example, `my-other-app@appspot.gserviceaccount.com`.\n\n* `group:{emailid}`: An email address that represents a Google group.\n   For example, `admins@example.com`.\n\n\n* `domain:{domain}`: The G Suite domain (primary) that represents all the\n   users of that domain. For example, `google.com` or `example.com`.\n\n",
           "items": {
             "type": "string"
           },
@@ -3564,7 +3598,7 @@
           "enumDescriptions": [
             "No tag filtration profile provided. Same as KEEP_ALL_PROFILE.",
             "Keep only tags required to produce valid DICOM.",
-            "Remove tags based on DICOM Standard's Attribute Confidentiality Basic\nProfile (DICOM Standard Edition 2018e).",
+            "Remove tags based on DICOM Standard's Attribute Confidentiality Basic\nProfile (DICOM Standard Edition 2018e)\nhttp://dicom.nema.org/medical/dicom/2018e/output/chtml/part15/chapter_E.html.",
             "Keep all tags.",
             "Inspects within tag contents and replaces sensitive text. The process\ncan be configured using the TextConfig.\nApplies to all tags with the following Value Representation names:\nAE, LO, LT, PN, SH, ST, UC, UT, DA, DT, AS"
           ],
@@ -3725,6 +3759,21 @@
         "notificationConfig": {
           "$ref": "NotificationConfig",
           "description": "If non-empty, publish all resource modifications of this FHIR store to\nthis destination. The Cloud Pub/Sub message attributes will contain a map\nwith a string describing the action that has triggered the notification,\ne.g. \"action\":\"CreateResource\"."
+        },
+        "streamConfigs": {
+          "description": "A list of streaming configs that configure the destinations of streaming\nexport for every resource mutation in this FHIR store. Each store is\nallowed to have up to 10 streaming configs.\nAfter a new config is added, the next resource mutation will be streamed to\nthe new location in addition to the existing ones.\nWhen a location is removed from the list, the server will simply stop\nstreaming to that location. Before adding a new config, you must add the\nrequired\n[`bigquery.dataEditor`](https://cloud.google.com/bigquery/docs/access-control#bigquery.dataEditor)\nrole to your project's **Cloud Healthcare Service Agent**\n[service account](https://cloud.google.com/iam/docs/service-accounts).\nSome lag (typically on the order of dozens of seconds) is expected before\nthe results show up in the streaming destination.",
+          "items": {
+            "$ref": "StreamConfig"
+          },
+          "type": "array"
+        },
+        "subscriptionConfig": {
+          "$ref": "SubscriptionConfig",
+          "description": "Configuration of FHIR Subscription:\nhttps://www.hl7.org/fhir/subscription.html."
+        },
+        "validationConfig": {
+          "$ref": "ValidationConfig",
+          "description": "Configuration for how incoming FHIR resources will be validated against\nconfigured profiles."
         }
       },
       "type": "object"
@@ -3782,7 +3831,24 @@
     "GetIamPolicyRequest": {
       "description": "Request message for `GetIamPolicy` method.",
       "id": "GetIamPolicyRequest",
-      "properties": {},
+      "properties": {
+        "options": {
+          "$ref": "GetPolicyOptions",
+          "description": "OPTIONAL: A `GetPolicyOptions` object for specifying options to\n`GetIamPolicy`. This field is only used by Cloud IAM."
+        }
+      },
+      "type": "object"
+    },
+    "GetPolicyOptions": {
+      "description": "Encapsulates settings provided to GetIamPolicy.",
+      "id": "GetPolicyOptions",
+      "properties": {
+        "requestedPolicyVersion": {
+          "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+          "format": "int32",
+          "type": "integer"
+        }
+      },
       "type": "object"
     },
     "GoogleCloudHealthcareV1alpha2DicomBigQueryDestination": {
@@ -4052,16 +4118,20 @@
       "id": "ImportResourcesRequest",
       "properties": {
         "contentStructure": {
-          "description": "The content structure in the source location. The default is\nBUNDLE.",
+          "description": "The content structure in the source location. If not specified, the server\ntreats the input source files as BUNDLE.",
           "enum": [
             "CONTENT_STRUCTURE_UNSPECIFIED",
             "BUNDLE",
-            "RESOURCE"
+            "RESOURCE",
+            "BUNDLE_PRETTY",
+            "RESOURCE_PRETTY"
           ],
           "enumDescriptions": [
             "",
-            "Each line is a bundle, which contains one or more resources. Set the\nbundle type to `history` to import resource versions.",
-            "Each line is a single resource."
+            "The source file contains one or more lines of newline-delimited JSON\n(ndjson). Each line is a bundle, which contains one or more resources.\nSet the bundle type to `history` to import resource versions.",
+            "The source file contains one or more lines of newline-delimited JSON\n(ndjson). Each line is a single resource.",
+            "The entire file is one JSON bundle. The JSON can span multiple lines.",
+            "The entire file is one JSON resource. The JSON can span multiple lines."
           ],
           "type": "string"
         },
@@ -4071,7 +4141,7 @@
         },
         "gcsSource": {
           "$ref": "GoogleCloudHealthcareV1alpha2FhirRestGcsSource",
-          "description": "Cloud Storage source data location and import configuration.\n\nThe Cloud Storage location requires the `roles/storage.objectViewer`\nCloud IAM role.\n\nEach Cloud Storage object should be a text file that contains newline\ndelimited JSON structures conforming to FHIR standard.\n\nTo improve performance, use multiple Cloud Storage objects where each\nobject contains a subset of all of the newline-delimited JSON structures.\nYou can select all of the objects using the uri as the\nprefix. The maximum number of objects is 1,000."
+          "description": "Cloud Storage source data location and import configuration.\n\nThe Cloud Storage location requires the `roles/storage.objectViewer`\nCloud IAM role.\n\nEach Cloud Storage object should be a text file that contains the format\nspecified in ContentStructu."
         }
       },
       "type": "object"
@@ -4518,7 +4588,7 @@
           "type": "array"
         },
         "etag": {
-          "description": "`etag` is used for optimistic concurrency control as a way to help\nprevent simultaneous updates of a policy from overwriting each other.\nIt is strongly suggested that systems make use of the `etag` in the\nread-modify-write cycle to perform policy updates in order to avoid race\nconditions: An `etag` is returned in the response to `getIamPolicy`, and\nsystems are expected to put that etag in the request to `setIamPolicy` to\nensure that their change will be applied to the same version of the policy.\n\nIf no `etag` is provided in the call to `setIamPolicy`, then the existing\npolicy is overwritten blindly.",
+          "description": "`etag` is used for optimistic concurrency control as a way to help\nprevent simultaneous updates of a policy from overwriting each other.\nIt is strongly suggested that systems make use of the `etag` in the\nread-modify-write cycle to perform policy updates in order to avoid race\nconditions: An `etag` is returned in the response to `getIamPolicy`, and\nsystems are expected to put that etag in the request to `setIamPolicy` to\nensure that their change will be applied to the same version of the policy.\n\nIf no `etag` is provided in the call to `setIamPolicy`, then the existing\npolicy is overwritten.",
           "format": "byte",
           "type": "string"
         },
@@ -4664,7 +4734,7 @@
       "type": "object"
     },
     "Status": {
-      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error\nmessage, and error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
+      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors).",
       "id": "Status",
       "properties": {
         "code": {
@@ -4685,6 +4755,53 @@
         },
         "message": {
           "description": "A developer-facing error message, which should be in English. Any\nuser-facing error message should be localized and sent in the\ngoogle.rpc.Status.details field, or localized by the client.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "StreamConfig": {
+      "description": "This structure contains configuration for streaming FHIR export.",
+      "id": "StreamConfig",
+      "properties": {
+        "bigqueryDestination": {
+          "$ref": "GoogleCloudHealthcareV1alpha2FhirBigQueryDestination",
+          "description": "The destination BigQuery structure that contains both the dataset\nlocation and corresponding schema config.\nThe output will be organized in one table per resource type.\nThe server will inspect and potentially create new tables (if they\ndon't exist) in the given BigQuery dataset.\nResults will be appended to the corresponding BigQuery tables.\nThe views of the latest snapshot will also be automatically created in\nthe dataset."
+        },
+        "resourceTypes": {
+          "description": "Supply a FHIR resource type (such as \"Patient\" or \"Observation\").\nSee https://www.hl7.org/fhir/valueset-resource-types.html for a list of\nall FHIR resource types.\nThe server will treat an empty list as an intent to stream all the\nsupported resource types in this FHIR store.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "SubscriptionConfig": {
+      "description": "Configuration of FHIR Subscription:\nhttps://www.hl7.org/fhir/subscription.html.",
+      "id": "SubscriptionConfig",
+      "properties": {
+        "allowedRestHookEndpoints": {
+          "description": "REST hook endpoints that are allowed to receive subscription notifications.\nThe create or update operation on a FHIR Subscription resource will fail if\nthe FHIR Subscription resource contains a REST hook endpoint that is not in\nthis list.\nA subscription notification push will fail if the FHIR Subscription\nresource contains a REST hook endpoint that is not in this list.\nThe REST hook endpoint in a subscription resource will be compared with the\nendpoints in this list by exact matching.\nUsers must verify their ownership of the domain of an endpoint before\nadding it to this list. To verify domain ownership, go to\nhttps://search.google.com/search-console/welcome.",
+          "items": {
+            "$ref": "SubscriptionRestHookEndpoint"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "SubscriptionRestHookEndpoint": {
+      "description": "REST hook endpoint of FHIR Subscription.",
+      "id": "SubscriptionRestHookEndpoint",
+      "properties": {
+        "allowResourcePayload": {
+          "description": "Whether this endpoint is allowed to receive full resource payloads. If set\nto false, the subscription notificiation sending to this endpoint with full\nresource payload will be blocked.",
+          "type": "boolean"
+        },
+        "endpoint": {
+          "description": "Address of the REST hook endpoint. It must be a valid HTTPS URL with TLS\ncertificate.",
           "type": "string"
         }
       },
@@ -4743,6 +4860,24 @@
           "description": "The transformations to apply to the detected data.",
           "items": {
             "$ref": "InfoTypeTransformation"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "ValidationConfig": {
+      "description": "This structure contains the configuration for FHIR profiles and validation.",
+      "id": "ValidationConfig",
+      "properties": {
+        "disableProfileValidation": {
+          "description": "Whether profile validation should be disabled for this FHIR store. Set\nthis to true to disable checking incoming resources for conformance\nagainst StructureDefinitions in this FHIR store.",
+          "type": "boolean"
+        },
+        "enabledImplementationGuides": {
+          "description": "A list of ImplementationGuide IDs in this FHIR store that will be used to\nconfigure which profiles are used for validation. For example, to enable\nan implementation guide with ID 1 set `enabled_implementation_guides` to\n`[\"1\"]`. If `enabled_implementation_guides` is empty or omitted then\nincoming resources will only be required to conform to the base FHIR\nprofiles. Otherwise, a resource must conform to at least one profile\nlisted in the `global` property of one of the enabled\nImplementationGuides.",
+          "items": {
+            "type": "string"
           },
           "type": "array"
         }

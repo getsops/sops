@@ -19,16 +19,19 @@
 
 package networkapi
 
-import original "github.com/Azure/azure-sdk-for-go/services/network/mgmt/2019-02-01/network/networkapi"
+import original "github.com/Azure/azure-sdk-for-go/services/network/mgmt/2019-04-01/network/networkapi"
 
 type ApplicationGatewaysClientAPI = original.ApplicationGatewaysClientAPI
 type ApplicationSecurityGroupsClientAPI = original.ApplicationSecurityGroupsClientAPI
 type AvailableDelegationsClientAPI = original.AvailableDelegationsClientAPI
 type AvailableEndpointServicesClientAPI = original.AvailableEndpointServicesClientAPI
+type AvailablePrivateEndpointTypesClientAPI = original.AvailablePrivateEndpointTypesClientAPI
 type AvailableResourceGroupDelegationsClientAPI = original.AvailableResourceGroupDelegationsClientAPI
+type AvailableResourceGroupPrivateEndpointTypesClientAPI = original.AvailableResourceGroupPrivateEndpointTypesClientAPI
 type AzureFirewallFqdnTagsClientAPI = original.AzureFirewallFqdnTagsClientAPI
 type AzureFirewallsClientAPI = original.AzureFirewallsClientAPI
 type BaseClientAPI = original.BaseClientAPI
+type BastionHostsClientAPI = original.BastionHostsClientAPI
 type BgpServiceCommunitiesClientAPI = original.BgpServiceCommunitiesClientAPI
 type ConnectionMonitorsClientAPI = original.ConnectionMonitorsClientAPI
 type DdosCustomPoliciesClientAPI = original.DdosCustomPoliciesClientAPI
@@ -48,7 +51,6 @@ type ExpressRoutePortsLocationsClientAPI = original.ExpressRoutePortsLocationsCl
 type ExpressRouteServiceProvidersClientAPI = original.ExpressRouteServiceProvidersClientAPI
 type HubVirtualNetworkConnectionsClientAPI = original.HubVirtualNetworkConnectionsClientAPI
 type InboundNatRulesClientAPI = original.InboundNatRulesClientAPI
-type InterfaceEndpointsClientAPI = original.InterfaceEndpointsClientAPI
 type InterfaceIPConfigurationsClientAPI = original.InterfaceIPConfigurationsClientAPI
 type InterfaceLoadBalancersClientAPI = original.InterfaceLoadBalancersClientAPI
 type InterfaceTapConfigurationsClientAPI = original.InterfaceTapConfigurationsClientAPI
@@ -67,6 +69,8 @@ type P2sVpnGatewaysClientAPI = original.P2sVpnGatewaysClientAPI
 type P2sVpnServerConfigurationsClientAPI = original.P2sVpnServerConfigurationsClientAPI
 type PacketCapturesClientAPI = original.PacketCapturesClientAPI
 type PeerExpressRouteCircuitConnectionsClientAPI = original.PeerExpressRouteCircuitConnectionsClientAPI
+type PrivateEndpointsClientAPI = original.PrivateEndpointsClientAPI
+type PrivateLinkServicesClientAPI = original.PrivateLinkServicesClientAPI
 type ProfilesClientAPI = original.ProfilesClientAPI
 type PublicIPAddressesClientAPI = original.PublicIPAddressesClientAPI
 type PublicIPPrefixesClientAPI = original.PublicIPPrefixesClientAPI
@@ -80,6 +84,7 @@ type SecurityRulesClientAPI = original.SecurityRulesClientAPI
 type ServiceAssociationLinksClientAPI = original.ServiceAssociationLinksClientAPI
 type ServiceEndpointPoliciesClientAPI = original.ServiceEndpointPoliciesClientAPI
 type ServiceEndpointPolicyDefinitionsClientAPI = original.ServiceEndpointPolicyDefinitionsClientAPI
+type ServiceTagsClientAPI = original.ServiceTagsClientAPI
 type SubnetsClientAPI = original.SubnetsClientAPI
 type UsagesClientAPI = original.UsagesClientAPI
 type VirtualHubsClientAPI = original.VirtualHubsClientAPI

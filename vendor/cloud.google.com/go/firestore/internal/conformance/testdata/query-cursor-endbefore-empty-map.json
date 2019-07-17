@@ -1,0 +1,55 @@
+{
+  "tests": [
+    {
+      "description": "query: EndBefore with explicit empty map",
+      "comment": "Cursor methods are allowed to use empty maps with EndBefore. It should result in an empty map in the query.",
+      "query": {
+        "collPath": "projects/projectID/databases/(default)/documents/C",
+        "clauses": [
+          {
+            "orderBy": {
+              "path": {
+                "field": [
+                  "a"
+                ]
+              },
+              "direction": "asc"
+            }
+          },
+          {
+            "endBefore": {
+              "jsonValues": [
+                "{}"
+              ]
+            }
+          }
+        ],
+        "query": {
+          "from": [
+            {
+              "collectionId": "C"
+            }
+          ],
+          "orderBy": [
+            {
+              "field": {
+                "fieldPath": "a"
+              },
+              "direction": "ASCENDING"
+            }
+          ],
+          "endAt": {
+            "values": [
+              {
+                "mapValue": {
+                  "fields": {}
+                }
+              }
+            ],
+            "before": true
+          }
+        }
+      }
+    }
+  ]
+}

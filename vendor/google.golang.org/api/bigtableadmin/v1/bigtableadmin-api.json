@@ -94,77 +94,8 @@
     }
   },
   "protocol": "rest",
-  "resources": {
-    "projects": {
-      "resources": {
-        "locations": {
-          "methods": {
-            "get": {
-              "description": "Gets information about a location.",
-              "flatPath": "v1/projects/{projectsId}/locations/{locationsId}",
-              "httpMethod": "GET",
-              "id": "bigtableadmin.projects.locations.get",
-              "parameterOrder": [
-                "name"
-              ],
-              "parameters": {
-                "name": {
-                  "description": "Resource name for the location.",
-                  "location": "path",
-                  "pattern": "^projects/[^/]+/locations/[^/]+$",
-                  "required": true,
-                  "type": "string"
-                }
-              },
-              "path": "v1/{+name}",
-              "response": {
-                "$ref": "Location"
-              }
-            },
-            "list": {
-              "description": "Lists information about the supported locations for this service.",
-              "flatPath": "v1/projects/{projectsId}/locations",
-              "httpMethod": "GET",
-              "id": "bigtableadmin.projects.locations.list",
-              "parameterOrder": [
-                "name"
-              ],
-              "parameters": {
-                "filter": {
-                  "description": "The standard list filter.",
-                  "location": "query",
-                  "type": "string"
-                },
-                "name": {
-                  "description": "The resource that owns the locations collection, if applicable.",
-                  "location": "path",
-                  "pattern": "^projects/[^/]+$",
-                  "required": true,
-                  "type": "string"
-                },
-                "pageSize": {
-                  "description": "The standard list page size.",
-                  "format": "int32",
-                  "location": "query",
-                  "type": "integer"
-                },
-                "pageToken": {
-                  "description": "The standard list page token.",
-                  "location": "query",
-                  "type": "string"
-                }
-              },
-              "path": "v1/{+name}/locations",
-              "response": {
-                "$ref": "ListLocationsResponse"
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "revision": "20190328",
+  "resources": {},
+  "revision": "20190506",
   "rootUrl": "https://bigtableadmin.googleapis.com/",
   "schemas": {
     "Cluster": {
@@ -358,58 +289,6 @@
             "An instance meant for production use. `serve_nodes` must be set\non the cluster.",
             "The instance is meant for development and testing purposes only; it has\nno performance or uptime guarantees and is not covered by SLA.\nAfter a development instance is created, it can be upgraded by\nupdating the instance to type `PRODUCTION`. An instance created\nas a production instance cannot be changed to a development instance.\nWhen creating a development instance, `serve_nodes` on the cluster must\nnot be set."
           ],
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "ListLocationsResponse": {
-      "description": "The response message for Locations.ListLocations.",
-      "id": "ListLocationsResponse",
-      "properties": {
-        "locations": {
-          "description": "A list of locations that matches the specified filter in the request.",
-          "items": {
-            "$ref": "Location"
-          },
-          "type": "array"
-        },
-        "nextPageToken": {
-          "description": "The standard List next-page token.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "Location": {
-      "description": "A resource that represents Google Cloud Platform location.",
-      "id": "Location",
-      "properties": {
-        "displayName": {
-          "description": "The friendly name for this location, typically a nearby city name.\nFor example, \"Tokyo\".",
-          "type": "string"
-        },
-        "labels": {
-          "additionalProperties": {
-            "type": "string"
-          },
-          "description": "Cross-service attributes for the location. For example\n\n    {\"cloud.googleapis.com/region\": \"us-east1\"}",
-          "type": "object"
-        },
-        "locationId": {
-          "description": "The canonical id for this location. For example: `\"us-east1\"`.",
-          "type": "string"
-        },
-        "metadata": {
-          "additionalProperties": {
-            "description": "Properties of the object. Contains field @type with type URL.",
-            "type": "any"
-          },
-          "description": "Service-specific metadata. For example the available capacity at the given\nlocation.",
-          "type": "object"
-        },
-        "name": {
-          "description": "Resource name for the location, which may vary between implementations.\nFor example: `\"projects/example-project/locations/us-east1\"`",
           "type": "string"
         }
       },

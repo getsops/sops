@@ -25,7 +25,6 @@ import (
 	"reflect"
 	"sort"
 	"sync"
-	"sync/atomic"
 	"testing"
 	"time"
 
@@ -51,37 +50,47 @@ var (
 	errTest        = fmt.Errorf("test error")
 )
 
-func newRPCCountDataWithInitData(succeeded, errored, inprogress uint64) *rpcCountData {
-	return &rpcCountData{
-		succeeded:  &succeeded,
-		errored:    &errored,
-		inProgress: &inprogress,
+type rpcCountDataForTest struct {
+	succeeded   uint64
+	errored     uint64
+	inProgress  uint64
+	serverLoads map[string]float64
+}
+
+func newRPCCountDataForTest(succeeded, errored, inprogress uint64, serverLoads map[string]float64) *rpcCountDataForTest {
+	return &rpcCountDataForTest{
+		succeeded:   succeeded,
+		errored:     errored,
+		inProgress:  inprogress,
+		serverLoads: serverLoads,
 	}
 }
 
-func (rcd *rpcCountData) Equal(b *rpcCountData) bool {
-	return *rcd.inProgress == *b.inProgress && *rcd.errored == *b.errored && *rcd.succeeded == *b.succeeded
+// Equal() is needed to compare unexported fields.
+func (rcd *rpcCountDataForTest) Equal(b *rpcCountDataForTest) bool {
+	return rcd.inProgress == b.inProgress &&
+		rcd.errored == b.errored &&
+		rcd.succeeded == b.succeeded &&
+		reflect.DeepEqual(rcd.serverLoads, b.serverLoads)
 }
 
 // equalClusterStats sorts requests and clear report internal before comparing.
 func equalClusterStats(a, b []*loadreportpb.ClusterStats) bool {
-	for _, s := range a {
-		sort.Slice(s.DroppedRequests, func(i, j int) bool {
-			return s.DroppedRequests[i].Category < s.DroppedRequests[j].Category
-		})
-		sort.Slice(s.UpstreamLocalityStats, func(i, j int) bool {
-			return s.UpstreamLocalityStats[i].Locality.String() < s.UpstreamLocalityStats[j].Locality.String()
-		})
-		s.LoadReportInterval = nil
-	}
-	for _, s := range b {
-		sort.Slice(s.DroppedRequests, func(i, j int) bool {
-			return s.DroppedRequests[i].Category < s.DroppedRequests[j].Category
-		})
-		sort.Slice(s.UpstreamLocalityStats, func(i, j int) bool {
-			return s.UpstreamLocalityStats[i].Locality.String() < s.UpstreamLocalityStats[j].Locality.String()
-		})
-		s.LoadReportInterval = nil
+	for _, t := range [][]*loadreportpb.ClusterStats{a, b} {
+		for _, s := range t {
+			sort.Slice(s.DroppedRequests, func(i, j int) bool {
+				return s.DroppedRequests[i].Category < s.DroppedRequests[j].Category
+			})
+			sort.Slice(s.UpstreamLocalityStats, func(i, j int) bool {
+				return s.UpstreamLocalityStats[i].Locality.String() < s.UpstreamLocalityStats[j].Locality.String()
+			})
+			for _, us := range s.UpstreamLocalityStats {
+				sort.Slice(us.LoadMetricStats, func(i, j int) bool {
+					return us.LoadMetricStats[i].MetricName < us.LoadMetricStats[j].MetricName
+				})
+			}
+			s.LoadReportInterval = nil
+		}
 	}
 	return reflect.DeepEqual(a, b)
 }
@@ -114,7 +123,7 @@ func Test_lrsStore_buildStats_drops(t *testing.T) {
 				dropCategories[0]: 31,
 				dropCategories[1]: 41,
 			}, {
-				dropCategories[0]: 0, // This is shouldn't cause an empty report for category[0].
+				dropCategories[0]: 0, // This shouldn't cause an empty report for category[0].
 				dropCategories[1]: 26,
 			}},
 		},
@@ -172,48 +181,77 @@ func Test_lrsStore_buildStats_rpcCounts(t *testing.T) {
 		name string
 		rpcs []map[internal.Locality]struct {
 			start, success, failure uint64
+			serverData              map[string]float64 // Will be reported with successful RPCs.
 		}
 	}{
 		{
 			name: "one rpcCount report",
 			rpcs: []map[internal.Locality]struct {
 				start, success, failure uint64
+				serverData              map[string]float64
 			}{{
-				localities[0]: {8, 3, 1},
+				localities[0]: {8, 3, 1, nil},
 			}},
 		},
 		{
-			name: "two localities rpcCount reports",
+			name: "two localities one rpcCount report",
 			rpcs: []map[internal.Locality]struct {
 				start, success, failure uint64
+				serverData              map[string]float64
 			}{{
-				localities[0]: {8, 3, 1},
-				localities[1]: {15, 1, 5},
+				localities[0]: {8, 3, 1, nil},
+				localities[1]: {15, 1, 5, nil},
 			}},
 		},
 		{
-			name: "two rpcCount reports",
+			name: "three rpcCount reports",
 			rpcs: []map[internal.Locality]struct {
 				start, success, failure uint64
+				serverData              map[string]float64
 			}{{
-				localities[0]: {8, 3, 1},
-				localities[1]: {15, 1, 5},
+				localities[0]: {8, 3, 1, nil},
+				localities[1]: {15, 1, 5, nil},
 			}, {
-				localities[0]: {8, 3, 1},
+				localities[0]: {8, 3, 1, nil},
 			}, {
-				localities[1]: {15, 1, 5},
+				localities[1]: {15, 1, 5, nil},
 			}},
 		},
 		{
 			name: "no empty report",
 			rpcs: []map[internal.Locality]struct {
 				start, success, failure uint64
+				serverData              map[string]float64
 			}{{
-				localities[0]: {4, 3, 1},
-				localities[1]: {7, 1, 5},
+				localities[0]: {4, 3, 1, nil},
+				localities[1]: {7, 1, 5, nil},
 			}, {
-				localities[0]: {0, 0, 0}, // This is shouldn't cause an empty report for locality[0].
-				localities[1]: {1, 1, 0},
+				localities[0]: {0, 0, 0, nil}, // This shouldn't cause an empty report for locality[0].
+				localities[1]: {1, 1, 0, nil},
+			}},
+		},
+		{
+			name: "two localities one report with server loads",
+			rpcs: []map[internal.Locality]struct {
+				start, success, failure uint64
+				serverData              map[string]float64
+			}{{
+				localities[0]: {8, 3, 1, map[string]float64{"cpu": 15, "mem": 20}},
+				localities[1]: {15, 4, 5, map[string]float64{"net": 5, "disk": 0.8}},
+			}},
+		},
+		{
+			name: "three reports with server loads",
+			rpcs: []map[internal.Locality]struct {
+				start, success, failure uint64
+				serverData              map[string]float64
+			}{{
+				localities[0]: {8, 3, 1, map[string]float64{"cpu": 15, "mem": 20}},
+				localities[1]: {15, 4, 5, map[string]float64{"net": 5, "disk": 0.8}},
+			}, {
+				localities[0]: {8, 3, 1, map[string]float64{"cpu": 1, "mem": 2}},
+			}, {
+				localities[1]: {15, 4, 5, map[string]float64{"net": 13, "disk": 1.4}},
 			}},
 		},
 	}
@@ -234,11 +272,22 @@ func Test_lrsStore_buildStats_rpcCounts(t *testing.T) {
 					if count.success == 0 && tempInProgress == 0 && count.failure == 0 {
 						continue
 					}
+					var loadMetricStats []*loadreportpb.EndpointLoadMetricStats
+					for n, d := range count.serverData {
+						loadMetricStats = append(loadMetricStats,
+							&loadreportpb.EndpointLoadMetricStats{
+								MetricName:                    n,
+								NumRequestsFinishedWithMetric: count.success,
+								TotalMetricValue:              d * float64(count.success),
+							},
+						)
+					}
 					upstreamLocalityStats = append(upstreamLocalityStats, &loadreportpb.UpstreamLocalityStats{
 						Locality:                l.ToProto(),
 						TotalSuccessfulRequests: count.success,
 						TotalRequestsInProgress: tempInProgress,
 						TotalErrorRequests:      count.failure,
+						LoadMetricStats:         loadMetricStats,
 					})
 				}
 				// InProgress count doesn't get cleared at each buildStats, and
@@ -262,26 +311,29 @@ func Test_lrsStore_buildStats_rpcCounts(t *testing.T) {
 				for l, count := range counts {
 					for i := 0; i < int(count.success); i++ {
 						wg.Add(1)
-						go func(i int, l internal.Locality) {
+						go func(l internal.Locality, serverData map[string]float64) {
 							ls.CallStarted(l)
 							ls.CallFinished(l, nil)
+							for n, d := range serverData {
+								ls.CallServerLoad(l, n, d)
+							}
 							wg.Done()
-						}(i, l)
+						}(l, count.serverData)
 					}
 					for i := 0; i < int(count.failure); i++ {
 						wg.Add(1)
-						go func(i int, l internal.Locality) {
+						go func(l internal.Locality) {
 							ls.CallStarted(l)
 							ls.CallFinished(l, errTest)
 							wg.Done()
-						}(i, l)
+						}(l)
 					}
 					for i := 0; i < int(count.start-count.success-count.failure); i++ {
 						wg.Add(1)
-						go func(i int, l internal.Locality) {
+						go func(l internal.Locality) {
 							ls.CallStarted(l)
 							wg.Done()
-						}(i, l)
+						}(l)
 					}
 				}
 				wg.Wait()
@@ -301,7 +353,7 @@ type lrsServer struct {
 	mu        sync.Mutex
 	dropTotal uint64
 	drops     map[string]uint64
-	rpcs      map[internal.Locality]*rpcCountData
+	rpcs      map[internal.Locality]*rpcCountDataForTest
 }
 
 func (lrss *lrsServer) StreamLoadStats(stream lrsgrpc.LoadReportingService_StreamLoadStatsServer) error {
@@ -351,12 +403,18 @@ func (lrss *lrsServer) StreamLoadStats(stream lrsgrpc.LoadReportingService_Strea
 			}
 			counts, ok := lrss.rpcs[l]
 			if !ok {
-				counts = newRPCCountDataWithInitData(0, 0, 0)
+				counts = newRPCCountDataForTest(0, 0, 0, nil)
 				lrss.rpcs[l] = counts
 			}
-			atomic.AddUint64(counts.succeeded, ss.TotalSuccessfulRequests)
-			atomic.StoreUint64(counts.inProgress, ss.TotalRequestsInProgress)
-			atomic.AddUint64(counts.errored, ss.TotalErrorRequests)
+			counts.succeeded += ss.TotalSuccessfulRequests
+			counts.inProgress = ss.TotalRequestsInProgress
+			counts.errored += ss.TotalErrorRequests
+			for _, ts := range ss.LoadMetricStats {
+				if counts.serverLoads == nil {
+					counts.serverLoads = make(map[string]float64)
+				}
+				counts.serverLoads[ts.MetricName] = ts.TotalMetricValue / float64(ts.NumRequestsFinishedWithMetric)
+			}
 		}
 		lrss.mu.Unlock()
 	}
@@ -371,7 +429,7 @@ func setupServer(t *testing.T, reportingInterval *durationpb.Duration) (addr str
 	lrss = &lrsServer{
 		reportingInterval: reportingInterval,
 		drops:             make(map[string]uint64),
-		rpcs:              make(map[internal.Locality]*rpcCountData),
+		rpcs:              make(map[internal.Locality]*rpcCountDataForTest),
 	}
 	lrsgrpc.RegisterLoadReportingServiceServer(svr, lrss)
 	go svr.Serve(lis)
@@ -413,23 +471,26 @@ func Test_lrsStore_ReportTo(t *testing.T) {
 		}
 	}
 
-	rpcs := map[internal.Locality]*rpcCountData{
-		localities[0]: newRPCCountDataWithInitData(3, 1, 4),
-		localities[1]: newRPCCountDataWithInitData(1, 5, 9),
+	rpcs := map[internal.Locality]*rpcCountDataForTest{
+		localities[0]: newRPCCountDataForTest(3, 1, 4, nil),
+		localities[1]: newRPCCountDataForTest(1, 5, 9, map[string]float64{"pi": 3.14, "e": 2.71}),
 	}
 	for l, count := range rpcs {
-		for i := 0; i < int(*count.succeeded); i++ {
-			go func(i int, l internal.Locality) {
+		for i := 0; i < int(count.succeeded); i++ {
+			go func(i int, l internal.Locality, count *rpcCountDataForTest) {
 				ls.CallStarted(l)
 				ls.CallFinished(l, nil)
-			}(i, l)
+				for n, d := range count.serverLoads {
+					ls.CallServerLoad(l, n, d)
+				}
+			}(i, l, count)
 		}
-		for i := 0; i < int(*count.inProgress); i++ {
+		for i := 0; i < int(count.inProgress); i++ {
 			go func(i int, l internal.Locality) {
 				ls.CallStarted(l)
 			}(i, l)
 		}
-		for i := 0; i < int(*count.errored); i++ {
+		for i := 0; i < int(count.errored); i++ {
 			go func(i int, l internal.Locality) {
 				ls.CallStarted(l)
 				ls.CallFinished(l, errTest)

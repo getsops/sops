@@ -34,4 +34,11 @@ const (
 	// Your request parameters changed between pages. Try again with the old parameters
 	// or without a pagination token.
 	ErrCodeRequestChangedException = "RequestChangedException"
+
+	// ErrCodeUnresolvableUsageUnitException for service response error code
+	// "UnresolvableUsageUnitException".
+	//
+	// Cost Explorer was unable to identify the usage unit. Provide UsageType/UsageTypeGroup
+	// filter selections that contain matching units, for example: hours.(
+	ErrCodeUnresolvableUsageUnitException = "UnresolvableUsageUnitException"
 )

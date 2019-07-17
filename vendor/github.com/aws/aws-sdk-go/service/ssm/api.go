@@ -853,6 +853,105 @@ func (c *SSM) CreateMaintenanceWindowWithContext(ctx aws.Context, input *CreateM
 	return out, req.Send()
 }
 
+const opCreateOpsItem = "CreateOpsItem"
+
+// CreateOpsItemRequest generates a "aws/request.Request" representing the
+// client's request for the CreateOpsItem operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateOpsItem for more information on using the CreateOpsItem
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateOpsItemRequest method.
+//    req, resp := client.CreateOpsItemRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-2014-11-06/CreateOpsItem
+func (c *SSM) CreateOpsItemRequest(input *CreateOpsItemInput) (req *request.Request, output *CreateOpsItemOutput) {
+	op := &request.Operation{
+		Name:       opCreateOpsItem,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateOpsItemInput{}
+	}
+
+	output = &CreateOpsItemOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateOpsItem API operation for Amazon Simple Systems Manager (SSM).
+//
+// Creates a new OpsItem. You must have permission in AWS Identity and Access
+// Management (IAM) to create a new OpsItem. For more information, see Getting
+// Started with OpsCenter (http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html)
+// in the AWS Systems Manager User Guide.
+//
+// Operations engineers and IT professionals use OpsCenter to view, investigate,
+// and remediate operational issues impacting the performance and health of
+// their AWS resources. For more information, see AWS Systems Manager OpsCenter
+// (http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html)
+// in the AWS Systems Manager User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Systems Manager (SSM)'s
+// API operation CreateOpsItem for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInternalServerError "InternalServerError"
+//   An error occurred on the server side.
+//
+//   * ErrCodeOpsItemAlreadyExistsException "OpsItemAlreadyExistsException"
+//   The OpsItem already exists.
+//
+//   * ErrCodeOpsItemLimitExceededException "OpsItemLimitExceededException"
+//   The request caused OpsItems to exceed one or more limits. For information
+//   about OpsItem limits, see What are the resource limits for OpsCenter? (http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-learn-more.html#OpsCenter-learn-more-limits).
+//
+//   * ErrCodeOpsItemInvalidParameterException "OpsItemInvalidParameterException"
+//   A specified parameter argument isn't valid. Verify the available arguments
+//   and try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-2014-11-06/CreateOpsItem
+func (c *SSM) CreateOpsItem(input *CreateOpsItemInput) (*CreateOpsItemOutput, error) {
+	req, out := c.CreateOpsItemRequest(input)
+	return out, req.Send()
+}
+
+// CreateOpsItemWithContext is the same as CreateOpsItem with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateOpsItem for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SSM) CreateOpsItemWithContext(ctx aws.Context, input *CreateOpsItemInput, opts ...request.Option) (*CreateOpsItemOutput, error) {
+	req, out := c.CreateOpsItemRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreatePatchBaseline = "CreatePatchBaseline"
 
 // CreatePatchBaselineRequest generates a "aws/request.Request" representing the
@@ -4554,6 +4653,94 @@ func (c *SSM) DescribeMaintenanceWindowsForTargetWithContext(ctx aws.Context, in
 	return out, req.Send()
 }
 
+const opDescribeOpsItems = "DescribeOpsItems"
+
+// DescribeOpsItemsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeOpsItems operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeOpsItems for more information on using the DescribeOpsItems
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeOpsItemsRequest method.
+//    req, resp := client.DescribeOpsItemsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-2014-11-06/DescribeOpsItems
+func (c *SSM) DescribeOpsItemsRequest(input *DescribeOpsItemsInput) (req *request.Request, output *DescribeOpsItemsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeOpsItems,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeOpsItemsInput{}
+	}
+
+	output = &DescribeOpsItemsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeOpsItems API operation for Amazon Simple Systems Manager (SSM).
+//
+// Query a set of OpsItems. You must have permission in AWS Identity and Access
+// Management (IAM) to query a list of OpsItems. For more information, see Getting
+// Started with OpsCenter (http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html)
+// in the AWS Systems Manager User Guide.
+//
+// Operations engineers and IT professionals use OpsCenter to view, investigate,
+// and remediate operational issues impacting the performance and health of
+// their AWS resources. For more information, see AWS Systems Manager OpsCenter
+// (http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html)
+// in the AWS Systems Manager User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Systems Manager (SSM)'s
+// API operation DescribeOpsItems for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInternalServerError "InternalServerError"
+//   An error occurred on the server side.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-2014-11-06/DescribeOpsItems
+func (c *SSM) DescribeOpsItems(input *DescribeOpsItemsInput) (*DescribeOpsItemsOutput, error) {
+	req, out := c.DescribeOpsItemsRequest(input)
+	return out, req.Send()
+}
+
+// DescribeOpsItemsWithContext is the same as DescribeOpsItems with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeOpsItems for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SSM) DescribeOpsItemsWithContext(ctx aws.Context, input *DescribeOpsItemsInput, opts ...request.Option) (*DescribeOpsItemsOutput, error) {
+	req, out := c.DescribeOpsItemsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeParameters = "DescribeParameters"
 
 // DescribeParametersRequest generates a "aws/request.Request" representing the
@@ -6291,6 +6478,190 @@ func (c *SSM) GetMaintenanceWindowTask(input *GetMaintenanceWindowTaskInput) (*G
 // for more information on using Contexts.
 func (c *SSM) GetMaintenanceWindowTaskWithContext(ctx aws.Context, input *GetMaintenanceWindowTaskInput, opts ...request.Option) (*GetMaintenanceWindowTaskOutput, error) {
 	req, out := c.GetMaintenanceWindowTaskRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetOpsItem = "GetOpsItem"
+
+// GetOpsItemRequest generates a "aws/request.Request" representing the
+// client's request for the GetOpsItem operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetOpsItem for more information on using the GetOpsItem
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetOpsItemRequest method.
+//    req, resp := client.GetOpsItemRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-2014-11-06/GetOpsItem
+func (c *SSM) GetOpsItemRequest(input *GetOpsItemInput) (req *request.Request, output *GetOpsItemOutput) {
+	op := &request.Operation{
+		Name:       opGetOpsItem,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetOpsItemInput{}
+	}
+
+	output = &GetOpsItemOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetOpsItem API operation for Amazon Simple Systems Manager (SSM).
+//
+// Get information about an OpsItem by using the ID. You must have permission
+// in AWS Identity and Access Management (IAM) to view information about an
+// OpsItem. For more information, see Getting Started with OpsCenter (http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html)
+// in the AWS Systems Manager User Guide.
+//
+// Operations engineers and IT professionals use OpsCenter to view, investigate,
+// and remediate operational issues impacting the performance and health of
+// their AWS resources. For more information, see AWS Systems Manager OpsCenter
+// (http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html)
+// in the AWS Systems Manager User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Systems Manager (SSM)'s
+// API operation GetOpsItem for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInternalServerError "InternalServerError"
+//   An error occurred on the server side.
+//
+//   * ErrCodeOpsItemNotFoundException "OpsItemNotFoundException"
+//   The specified OpsItem ID doesn't exist. Verify the ID and try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-2014-11-06/GetOpsItem
+func (c *SSM) GetOpsItem(input *GetOpsItemInput) (*GetOpsItemOutput, error) {
+	req, out := c.GetOpsItemRequest(input)
+	return out, req.Send()
+}
+
+// GetOpsItemWithContext is the same as GetOpsItem with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetOpsItem for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SSM) GetOpsItemWithContext(ctx aws.Context, input *GetOpsItemInput, opts ...request.Option) (*GetOpsItemOutput, error) {
+	req, out := c.GetOpsItemRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetOpsSummary = "GetOpsSummary"
+
+// GetOpsSummaryRequest generates a "aws/request.Request" representing the
+// client's request for the GetOpsSummary operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetOpsSummary for more information on using the GetOpsSummary
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetOpsSummaryRequest method.
+//    req, resp := client.GetOpsSummaryRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-2014-11-06/GetOpsSummary
+func (c *SSM) GetOpsSummaryRequest(input *GetOpsSummaryInput) (req *request.Request, output *GetOpsSummaryOutput) {
+	op := &request.Operation{
+		Name:       opGetOpsSummary,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetOpsSummaryInput{}
+	}
+
+	output = &GetOpsSummaryOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetOpsSummary API operation for Amazon Simple Systems Manager (SSM).
+//
+// View a summary of OpsItems based on specified filters and aggregators.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Systems Manager (SSM)'s
+// API operation GetOpsSummary for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInternalServerError "InternalServerError"
+//   An error occurred on the server side.
+//
+//   * ErrCodeInvalidFilter "InvalidFilter"
+//   The filter name is not valid. Verify the you entered the correct name and
+//   try again.
+//
+//   * ErrCodeInvalidNextToken "InvalidNextToken"
+//   The specified token is not valid.
+//
+//   * ErrCodeInvalidTypeNameException "InvalidTypeNameException"
+//   The parameter type name is not valid.
+//
+//   * ErrCodeInvalidAggregatorException "InvalidAggregatorException"
+//   The specified aggregator is not valid for inventory groups. Verify that the
+//   aggregator uses a valid inventory type such as AWS:Application or AWS:InstanceInformation.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-2014-11-06/GetOpsSummary
+func (c *SSM) GetOpsSummary(input *GetOpsSummaryInput) (*GetOpsSummaryOutput, error) {
+	req, out := c.GetOpsSummaryRequest(input)
+	return out, req.Send()
+}
+
+// GetOpsSummaryWithContext is the same as GetOpsSummary with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetOpsSummary for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SSM) GetOpsSummaryWithContext(ctx aws.Context, input *GetOpsSummaryInput, opts ...request.Option) (*GetOpsSummaryOutput, error) {
+	req, out := c.GetOpsSummaryRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -11159,6 +11530,109 @@ func (c *SSM) UpdateManagedInstanceRoleWithContext(ctx aws.Context, input *Updat
 	return out, req.Send()
 }
 
+const opUpdateOpsItem = "UpdateOpsItem"
+
+// UpdateOpsItemRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateOpsItem operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateOpsItem for more information on using the UpdateOpsItem
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateOpsItemRequest method.
+//    req, resp := client.UpdateOpsItemRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-2014-11-06/UpdateOpsItem
+func (c *SSM) UpdateOpsItemRequest(input *UpdateOpsItemInput) (req *request.Request, output *UpdateOpsItemOutput) {
+	op := &request.Operation{
+		Name:       opUpdateOpsItem,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateOpsItemInput{}
+	}
+
+	output = &UpdateOpsItemOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateOpsItem API operation for Amazon Simple Systems Manager (SSM).
+//
+// Edit or change an OpsItem. You must have permission in AWS Identity and Access
+// Management (IAM) to update an OpsItem. For more information, see Getting
+// Started with OpsCenter (http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html)
+// in the AWS Systems Manager User Guide.
+//
+// Operations engineers and IT professionals use OpsCenter to view, investigate,
+// and remediate operational issues impacting the performance and health of
+// their AWS resources. For more information, see AWS Systems Manager OpsCenter
+// (http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html)
+// in the AWS Systems Manager User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Systems Manager (SSM)'s
+// API operation UpdateOpsItem for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInternalServerError "InternalServerError"
+//   An error occurred on the server side.
+//
+//   * ErrCodeOpsItemNotFoundException "OpsItemNotFoundException"
+//   The specified OpsItem ID doesn't exist. Verify the ID and try again.
+//
+//   * ErrCodeOpsItemAlreadyExistsException "OpsItemAlreadyExistsException"
+//   The OpsItem already exists.
+//
+//   * ErrCodeOpsItemLimitExceededException "OpsItemLimitExceededException"
+//   The request caused OpsItems to exceed one or more limits. For information
+//   about OpsItem limits, see What are the resource limits for OpsCenter? (http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-learn-more.html#OpsCenter-learn-more-limits).
+//
+//   * ErrCodeOpsItemInvalidParameterException "OpsItemInvalidParameterException"
+//   A specified parameter argument isn't valid. Verify the available arguments
+//   and try again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ssm-2014-11-06/UpdateOpsItem
+func (c *SSM) UpdateOpsItem(input *UpdateOpsItemInput) (*UpdateOpsItemOutput, error) {
+	req, out := c.UpdateOpsItemRequest(input)
+	return out, req.Send()
+}
+
+// UpdateOpsItemWithContext is the same as UpdateOpsItem with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateOpsItem for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SSM) UpdateOpsItemWithContext(ctx aws.Context, input *UpdateOpsItemInput, opts ...request.Option) (*UpdateOpsItemOutput, error) {
+	req, out := c.UpdateOpsItemRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdatePatchBaseline = "UpdatePatchBaseline"
 
 // UpdatePatchBaselineRequest generates a "aws/request.Request" representing the
@@ -15615,6 +16089,205 @@ func (s *CreateMaintenanceWindowOutput) SetWindowId(v string) *CreateMaintenance
 	return s
 }
 
+type CreateOpsItemInput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the OpsItem.
+	//
+	// Description is a required field
+	Description *string `min:"1" type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) of an SNS topic where notifications are sent
+	// when this OpsItem is edited or changed.
+	Notifications []*OpsItemNotification `type:"list"`
+
+	// Operational data is custom data that provides useful reference details about
+	// the OpsItem. For example, you can specify log files, error strings, license
+	// keys, troubleshooting tips, or other relevant data. You enter operational
+	// data as key-value pairs. The key has a maximum length of 128 characters.
+	// The value has a maximum size of 20 KB.
+	//
+	// Operational data keys can't begin with the following: amazon, aws, amzn,
+	// ssm, /amazon, /aws, /amzn, /ssm.
+	//
+	// You can choose to make the data searchable by other users in the account
+	// or you can restrict search access. Searchable data means that all users with
+	// access to the OpsItem Overview page (as provided by the DescribeOpsItems
+	// API action) can view and search on the specified data. Operational data that
+	// is not searchable is only viewable by users who have access to the OpsItem
+	// (as provided by the GetOpsItem API action).
+	//
+	// Use the /aws/resources key in OperationalData to specify a related resource
+	// in the request. Use the /aws/automations key in OperationalData to associate
+	// an Automation runbook with the OpsItem. To view AWS CLI example commands
+	// that use these keys, see Creating OpsItems Manually (http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-creating-OpsItems.html#OpsCenter-manually-create-OpsItems)
+	// in the AWS Systems Manager User Guide.
+	OperationalData map[string]*OpsItemDataValue `type:"map"`
+
+	// The importance of this OpsItem in relation to other OpsItems in the system.
+	Priority *int64 `min:"1" type:"integer"`
+
+	// One or more OpsItems that share something in common with the current OpsItems.
+	// For example, related OpsItems can include OpsItems with similar error messages,
+	// impacted resources, or statuses for the impacted resource.
+	RelatedOpsItems []*RelatedOpsItem `type:"list"`
+
+	// The origin of the OpsItem, such as Amazon EC2 or AWS Systems Manager.
+	//
+	// Source is a required field
+	Source *string `min:"1" type:"string" required:"true"`
+
+	// Optional metadata that you assign to a resource. You can restrict access
+	// to OpsItems by using an inline IAM policy that specifies tags. For more information,
+	// see Getting Started with OpsCenter (http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html#OpsCenter-getting-started-user-permissions)
+	// in the AWS Systems Manager User Guide.
+	//
+	// Tags use a key-value pair. For example:
+	//
+	// Key=Department,Value=Finance
+	//
+	// To add tags to an existing OpsItem, use the AddTagsToResource action.
+	Tags []*Tag `type:"list"`
+
+	// A short heading that describes the nature of the OpsItem and the impacted
+	// resource.
+	//
+	// Title is a required field
+	Title *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CreateOpsItemInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateOpsItemInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateOpsItemInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateOpsItemInput"}
+	if s.Description == nil {
+		invalidParams.Add(request.NewErrParamRequired("Description"))
+	}
+	if s.Description != nil && len(*s.Description) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	}
+	if s.Priority != nil && *s.Priority < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Priority", 1))
+	}
+	if s.Source == nil {
+		invalidParams.Add(request.NewErrParamRequired("Source"))
+	}
+	if s.Source != nil && len(*s.Source) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Source", 1))
+	}
+	if s.Title == nil {
+		invalidParams.Add(request.NewErrParamRequired("Title"))
+	}
+	if s.Title != nil && len(*s.Title) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Title", 1))
+	}
+	if s.RelatedOpsItems != nil {
+		for i, v := range s.RelatedOpsItems {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "RelatedOpsItems", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateOpsItemInput) SetDescription(v string) *CreateOpsItemInput {
+	s.Description = &v
+	return s
+}
+
+// SetNotifications sets the Notifications field's value.
+func (s *CreateOpsItemInput) SetNotifications(v []*OpsItemNotification) *CreateOpsItemInput {
+	s.Notifications = v
+	return s
+}
+
+// SetOperationalData sets the OperationalData field's value.
+func (s *CreateOpsItemInput) SetOperationalData(v map[string]*OpsItemDataValue) *CreateOpsItemInput {
+	s.OperationalData = v
+	return s
+}
+
+// SetPriority sets the Priority field's value.
+func (s *CreateOpsItemInput) SetPriority(v int64) *CreateOpsItemInput {
+	s.Priority = &v
+	return s
+}
+
+// SetRelatedOpsItems sets the RelatedOpsItems field's value.
+func (s *CreateOpsItemInput) SetRelatedOpsItems(v []*RelatedOpsItem) *CreateOpsItemInput {
+	s.RelatedOpsItems = v
+	return s
+}
+
+// SetSource sets the Source field's value.
+func (s *CreateOpsItemInput) SetSource(v string) *CreateOpsItemInput {
+	s.Source = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateOpsItemInput) SetTags(v []*Tag) *CreateOpsItemInput {
+	s.Tags = v
+	return s
+}
+
+// SetTitle sets the Title field's value.
+func (s *CreateOpsItemInput) SetTitle(v string) *CreateOpsItemInput {
+	s.Title = &v
+	return s
+}
+
+type CreateOpsItemOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the OpsItem.
+	OpsItemId *string `type:"string"`
+}
+
+// String returns the string representation
+func (s CreateOpsItemOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateOpsItemOutput) GoString() string {
+	return s.String()
+}
+
+// SetOpsItemId sets the OpsItemId field's value.
+func (s *CreateOpsItemOutput) SetOpsItemId(v string) *CreateOpsItemOutput {
+	s.OpsItemId = &v
+	return s
+}
+
 type CreatePatchBaselineInput struct {
 	_ struct{} `type:"structure"`
 
@@ -16045,10 +16718,18 @@ func (s DeleteAssociationOutput) GoString() string {
 type DeleteDocumentInput struct {
 	_ struct{} `type:"structure"`
 
+	// (Optional) The version of the document that you want to delete. If not provided,
+	// all versions of the document are deleted.
+	DocumentVersion *string `type:"string"`
+
 	// The name of the document.
 	//
 	// Name is a required field
 	Name *string `type:"string" required:"true"`
+
+	// (Optional) The version name of the document that you want to delete. If not
+	// provided, all versions of the document are deleted.
+	VersionName *string `type:"string"`
 }
 
 // String returns the string representation
@@ -16074,9 +16755,21 @@ func (s *DeleteDocumentInput) Validate() error {
 	return nil
 }
 
+// SetDocumentVersion sets the DocumentVersion field's value.
+func (s *DeleteDocumentInput) SetDocumentVersion(v string) *DeleteDocumentInput {
+	s.DocumentVersion = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *DeleteDocumentInput) SetName(v string) *DeleteDocumentInput {
 	s.Name = &v
+	return s
+}
+
+// SetVersionName sets the VersionName field's value.
+func (s *DeleteDocumentInput) SetVersionName(v string) *DeleteDocumentInput {
+	s.VersionName = &v
 	return s
 }
 
@@ -19652,6 +20345,134 @@ func (s *DescribeMaintenanceWindowsOutput) SetWindowIdentities(v []*MaintenanceW
 	return s
 }
 
+type DescribeOpsItemsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of items to return for this call. The call also returns
+	// a token that you can specify in a subsequent call to get the next set of
+	// results.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// A token to start the list. Use this token to get the next set of results.
+	NextToken *string `type:"string"`
+
+	// One or more filters to limit the reponse.
+	//
+	//    * Key: CreatedTime Operations: GreaterThan, LessThan
+	//
+	//    * Key: LastModifiedBy Operations: Contains, Equals
+	//
+	//    * Key: LastModifiedTime Operations: GreaterThan, LessThan
+	//
+	//    * Key: Priority Operations: Equals
+	//
+	//    * Key: Source Operations: Contains, Equals
+	//
+	//    * Key: Status Operations: Equals
+	//
+	//    * Key: Title Operations: Contains
+	//
+	//    * Key: OperationalData* Operations: Equals
+	//
+	//    * Key: OperationalDataKey Operations: Equals
+	//
+	//    * Key: OperationalDataValue Operations: Equals, Contains
+	//
+	//    * Key: OpsItemId Operations: Equals
+	//
+	//    * Key: ResourceId Operations: Contains
+	//
+	//    * Key: AutomationId Operations: Equals
+	//
+	// *If you filter the response by using the OperationalData operator, specify
+	// a key-value pair by using the following JSON format: {"key":"key_name","value":"a_value"}
+	OpsItemFilters []*OpsItemFilter `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeOpsItemsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeOpsItemsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeOpsItemsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeOpsItemsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.OpsItemFilters != nil {
+		for i, v := range s.OpsItemFilters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "OpsItemFilters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *DescribeOpsItemsInput) SetMaxResults(v int64) *DescribeOpsItemsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeOpsItemsInput) SetNextToken(v string) *DescribeOpsItemsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetOpsItemFilters sets the OpsItemFilters field's value.
+func (s *DescribeOpsItemsInput) SetOpsItemFilters(v []*OpsItemFilter) *DescribeOpsItemsInput {
+	s.OpsItemFilters = v
+	return s
+}
+
+type DescribeOpsItemsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token for the next set of items to return. Use this token to get the
+	// next set of results.
+	NextToken *string `type:"string"`
+
+	// A list of OpsItems.
+	OpsItemSummaries []*OpsItemSummary `type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeOpsItemsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeOpsItemsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeOpsItemsOutput) SetNextToken(v string) *DescribeOpsItemsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetOpsItemSummaries sets the OpsItemSummaries field's value.
+func (s *DescribeOpsItemsOutput) SetOpsItemSummaries(v []*OpsItemSummary) *DescribeOpsItemsOutput {
+	s.OpsItemSummaries = v
+	return s
+}
+
 type DescribeParametersInput struct {
 	_ struct{} `type:"structure"`
 
@@ -23066,6 +23887,197 @@ func (s *GetMaintenanceWindowTaskOutput) SetWindowId(v string) *GetMaintenanceWi
 // SetWindowTaskId sets the WindowTaskId field's value.
 func (s *GetMaintenanceWindowTaskOutput) SetWindowTaskId(v string) *GetMaintenanceWindowTaskOutput {
 	s.WindowTaskId = &v
+	return s
+}
+
+type GetOpsItemInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the OpsItem that you want to get.
+	//
+	// OpsItemId is a required field
+	OpsItemId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetOpsItemInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetOpsItemInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetOpsItemInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetOpsItemInput"}
+	if s.OpsItemId == nil {
+		invalidParams.Add(request.NewErrParamRequired("OpsItemId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetOpsItemId sets the OpsItemId field's value.
+func (s *GetOpsItemInput) SetOpsItemId(v string) *GetOpsItemInput {
+	s.OpsItemId = &v
+	return s
+}
+
+type GetOpsItemOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The OpsItem.
+	OpsItem *OpsItem `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetOpsItemOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetOpsItemOutput) GoString() string {
+	return s.String()
+}
+
+// SetOpsItem sets the OpsItem field's value.
+func (s *GetOpsItemOutput) SetOpsItem(v *OpsItem) *GetOpsItemOutput {
+	s.OpsItem = v
+	return s
+}
+
+type GetOpsSummaryInput struct {
+	_ struct{} `type:"structure"`
+
+	// Optional aggregators that return counts of OpsItems based on one or more
+	// expressions.
+	//
+	// Aggregators is a required field
+	Aggregators []*OpsAggregator `min:"1" type:"list" required:"true"`
+
+	// Optional filters used to scope down the returned OpsItems.
+	Filters []*OpsFilter `min:"1" type:"list"`
+
+	// The maximum number of items to return for this call. The call also returns
+	// a token that you can specify in a subsequent call to get the next set of
+	// results.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// A token to start the list. Use this token to get the next set of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s GetOpsSummaryInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetOpsSummaryInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetOpsSummaryInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetOpsSummaryInput"}
+	if s.Aggregators == nil {
+		invalidParams.Add(request.NewErrParamRequired("Aggregators"))
+	}
+	if s.Aggregators != nil && len(s.Aggregators) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Aggregators", 1))
+	}
+	if s.Filters != nil && len(s.Filters) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Filters", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.Aggregators != nil {
+		for i, v := range s.Aggregators {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Aggregators", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAggregators sets the Aggregators field's value.
+func (s *GetOpsSummaryInput) SetAggregators(v []*OpsAggregator) *GetOpsSummaryInput {
+	s.Aggregators = v
+	return s
+}
+
+// SetFilters sets the Filters field's value.
+func (s *GetOpsSummaryInput) SetFilters(v []*OpsFilter) *GetOpsSummaryInput {
+	s.Filters = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetOpsSummaryInput) SetMaxResults(v int64) *GetOpsSummaryInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetOpsSummaryInput) SetNextToken(v string) *GetOpsSummaryInput {
+	s.NextToken = &v
+	return s
+}
+
+type GetOpsSummaryOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The list of aggregated and filtered OpsItems.
+	Entities []*OpsEntity `type:"list"`
+
+	// The token for the next set of items to return. Use this token to get the
+	// next set of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s GetOpsSummaryOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetOpsSummaryOutput) GoString() string {
+	return s.String()
+}
+
+// SetEntities sets the Entities field's value.
+func (s *GetOpsSummaryOutput) SetEntities(v []*OpsEntity) *GetOpsSummaryOutput {
+	s.Entities = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetOpsSummaryOutput) SetNextToken(v string) *GetOpsSummaryOutput {
+	s.NextToken = &v
 	return s
 }
 
@@ -28227,6 +29239,649 @@ func (s *NotificationConfig) SetNotificationType(v string) *NotificationConfig {
 	return s
 }
 
+// One or more aggregators for viewing counts of OpsItems using different dimensions
+// such as Source, CreatedTime, or Source and CreatedTime, to name a few.
+type OpsAggregator struct {
+	_ struct{} `type:"structure"`
+
+	// Either a Range or Count aggregator for limiting an OpsItem summary.
+	AggregatorType *string `min:"1" type:"string"`
+
+	// A nested aggregator for viewing counts of OpsItems.
+	Aggregators []*OpsAggregator `min:"1" type:"list"`
+
+	// The name of an OpsItem attribute on which to limit the count of OpsItems.
+	AttributeName *string `type:"string"`
+
+	// The aggregator filters.
+	Filters []*OpsFilter `min:"1" type:"list"`
+
+	// The data type name to use for viewing counts of OpsItems.
+	TypeName *string `min:"1" type:"string"`
+
+	// The aggregator value.
+	Values map[string]*string `type:"map"`
+}
+
+// String returns the string representation
+func (s OpsAggregator) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OpsAggregator) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *OpsAggregator) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "OpsAggregator"}
+	if s.AggregatorType != nil && len(*s.AggregatorType) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AggregatorType", 1))
+	}
+	if s.Aggregators != nil && len(s.Aggregators) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Aggregators", 1))
+	}
+	if s.Filters != nil && len(s.Filters) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Filters", 1))
+	}
+	if s.TypeName != nil && len(*s.TypeName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TypeName", 1))
+	}
+	if s.Aggregators != nil {
+		for i, v := range s.Aggregators {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Aggregators", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAggregatorType sets the AggregatorType field's value.
+func (s *OpsAggregator) SetAggregatorType(v string) *OpsAggregator {
+	s.AggregatorType = &v
+	return s
+}
+
+// SetAggregators sets the Aggregators field's value.
+func (s *OpsAggregator) SetAggregators(v []*OpsAggregator) *OpsAggregator {
+	s.Aggregators = v
+	return s
+}
+
+// SetAttributeName sets the AttributeName field's value.
+func (s *OpsAggregator) SetAttributeName(v string) *OpsAggregator {
+	s.AttributeName = &v
+	return s
+}
+
+// SetFilters sets the Filters field's value.
+func (s *OpsAggregator) SetFilters(v []*OpsFilter) *OpsAggregator {
+	s.Filters = v
+	return s
+}
+
+// SetTypeName sets the TypeName field's value.
+func (s *OpsAggregator) SetTypeName(v string) *OpsAggregator {
+	s.TypeName = &v
+	return s
+}
+
+// SetValues sets the Values field's value.
+func (s *OpsAggregator) SetValues(v map[string]*string) *OpsAggregator {
+	s.Values = v
+	return s
+}
+
+// The result of the query.
+type OpsEntity struct {
+	_ struct{} `type:"structure"`
+
+	// The data returned by the query.
+	Data map[string]*OpsEntityItem `type:"map"`
+
+	// The query ID.
+	Id *string `type:"string"`
+}
+
+// String returns the string representation
+func (s OpsEntity) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OpsEntity) GoString() string {
+	return s.String()
+}
+
+// SetData sets the Data field's value.
+func (s *OpsEntity) SetData(v map[string]*OpsEntityItem) *OpsEntity {
+	s.Data = v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *OpsEntity) SetId(v string) *OpsEntity {
+	s.Id = &v
+	return s
+}
+
+// The OpsItem summaries result item.
+type OpsEntityItem struct {
+	_ struct{} `type:"structure"`
+
+	// The detailed data content for an OpsItem summaries result item.
+	Content []map[string]*string `type:"list"`
+}
+
+// String returns the string representation
+func (s OpsEntityItem) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OpsEntityItem) GoString() string {
+	return s.String()
+}
+
+// SetContent sets the Content field's value.
+func (s *OpsEntityItem) SetContent(v []map[string]*string) *OpsEntityItem {
+	s.Content = v
+	return s
+}
+
+// A filter for viewing OpsItem summaries.
+type OpsFilter struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the filter.
+	//
+	// Key is a required field
+	Key *string `min:"1" type:"string" required:"true"`
+
+	// The type of filter.
+	Type *string `type:"string" enum:"OpsFilterOperatorType"`
+
+	// The filter value.
+	//
+	// Values is a required field
+	Values []*string `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s OpsFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OpsFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *OpsFilter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "OpsFilter"}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+	if s.Values == nil {
+		invalidParams.Add(request.NewErrParamRequired("Values"))
+	}
+	if s.Values != nil && len(s.Values) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Values", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKey sets the Key field's value.
+func (s *OpsFilter) SetKey(v string) *OpsFilter {
+	s.Key = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *OpsFilter) SetType(v string) *OpsFilter {
+	s.Type = &v
+	return s
+}
+
+// SetValues sets the Values field's value.
+func (s *OpsFilter) SetValues(v []*string) *OpsFilter {
+	s.Values = v
+	return s
+}
+
+// Operations engineers and IT professionals use OpsCenter to view, investigate,
+// and remediate operational issues impacting the performance and health of
+// their AWS resources. For more information, see AWS Systems Manager OpsCenter
+// (http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html)
+// in the AWS Systems Manager User Guide.
+type OpsItem struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the AWS account that created the OpsItem.
+	CreatedBy *string `type:"string"`
+
+	// The date and time the OpsItem was created.
+	CreatedTime *time.Time `type:"timestamp"`
+
+	// The OpsItem description.
+	Description *string `min:"1" type:"string"`
+
+	// The ARN of the AWS account that last updated the OpsItem.
+	LastModifiedBy *string `type:"string"`
+
+	// The date and time the OpsItem was last updated.
+	LastModifiedTime *time.Time `type:"timestamp"`
+
+	// The Amazon Resource Name (ARN) of an SNS topic where notifications are sent
+	// when this OpsItem is edited or changed.
+	Notifications []*OpsItemNotification `type:"list"`
+
+	// Operational data is custom data that provides useful reference details about
+	// the OpsItem. For example, you can specify log files, error strings, license
+	// keys, troubleshooting tips, or other relevant data. You enter operational
+	// data as key-value pairs. The key has a maximum length of 128 characters.
+	// The value has a maximum size of 20 KB.
+	//
+	// Operational data keys can't begin with the following: amazon, aws, amzn,
+	// ssm, /amazon, /aws, /amzn, /ssm.
+	//
+	// You can choose to make the data searchable by other users in the account
+	// or you can restrict search access. Searchable data means that all users with
+	// access to the OpsItem Overview page (as provided by the DescribeOpsItems
+	// API action) can view and search on the specified data. Operational data that
+	// is not searchable is only viewable by users who have access to the OpsItem
+	// (as provided by the GetOpsItem API action).
+	//
+	// Use the /aws/resources key in OperationalData to specify a related resource
+	// in the request. Use the /aws/automations key in OperationalData to associate
+	// an Automation runbook with the OpsItem. To view AWS CLI example commands
+	// that use these keys, see Creating OpsItems Manually (http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-creating-OpsItems.html#OpsCenter-manually-create-OpsItems)
+	// in the AWS Systems Manager User Guide.
+	OperationalData map[string]*OpsItemDataValue `type:"map"`
+
+	// The ID of the OpsItem.
+	OpsItemId *string `type:"string"`
+
+	// The importance of this OpsItem in relation to other OpsItems in the system.
+	Priority *int64 `min:"1" type:"integer"`
+
+	// One or more OpsItems that share something in common with the current OpsItem.
+	// For example, related OpsItems can include OpsItems with similar error messages,
+	// impacted resources, or statuses for the impacted resource.
+	RelatedOpsItems []*RelatedOpsItem `type:"list"`
+
+	// The origin of the OpsItem, such as Amazon EC2 or AWS Systems Manager. The
+	// impacted resource is a subset of source.
+	Source *string `min:"1" type:"string"`
+
+	// The OpsItem status. Status can be Open, In Progress, or Resolved. For more
+	// information, see Editing OpsItem Details (http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-working-with-OpsItems-editing-details.html)
+	// in the AWS Systems Manager User Guide.
+	Status *string `type:"string" enum:"OpsItemStatus"`
+
+	// A short heading that describes the nature of the OpsItem and the impacted
+	// resource.
+	Title *string `min:"1" type:"string"`
+
+	// The version of this OpsItem. Each time the OpsItem is edited the version
+	// number increments by one.
+	Version *string `type:"string"`
+}
+
+// String returns the string representation
+func (s OpsItem) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OpsItem) GoString() string {
+	return s.String()
+}
+
+// SetCreatedBy sets the CreatedBy field's value.
+func (s *OpsItem) SetCreatedBy(v string) *OpsItem {
+	s.CreatedBy = &v
+	return s
+}
+
+// SetCreatedTime sets the CreatedTime field's value.
+func (s *OpsItem) SetCreatedTime(v time.Time) *OpsItem {
+	s.CreatedTime = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *OpsItem) SetDescription(v string) *OpsItem {
+	s.Description = &v
+	return s
+}
+
+// SetLastModifiedBy sets the LastModifiedBy field's value.
+func (s *OpsItem) SetLastModifiedBy(v string) *OpsItem {
+	s.LastModifiedBy = &v
+	return s
+}
+
+// SetLastModifiedTime sets the LastModifiedTime field's value.
+func (s *OpsItem) SetLastModifiedTime(v time.Time) *OpsItem {
+	s.LastModifiedTime = &v
+	return s
+}
+
+// SetNotifications sets the Notifications field's value.
+func (s *OpsItem) SetNotifications(v []*OpsItemNotification) *OpsItem {
+	s.Notifications = v
+	return s
+}
+
+// SetOperationalData sets the OperationalData field's value.
+func (s *OpsItem) SetOperationalData(v map[string]*OpsItemDataValue) *OpsItem {
+	s.OperationalData = v
+	return s
+}
+
+// SetOpsItemId sets the OpsItemId field's value.
+func (s *OpsItem) SetOpsItemId(v string) *OpsItem {
+	s.OpsItemId = &v
+	return s
+}
+
+// SetPriority sets the Priority field's value.
+func (s *OpsItem) SetPriority(v int64) *OpsItem {
+	s.Priority = &v
+	return s
+}
+
+// SetRelatedOpsItems sets the RelatedOpsItems field's value.
+func (s *OpsItem) SetRelatedOpsItems(v []*RelatedOpsItem) *OpsItem {
+	s.RelatedOpsItems = v
+	return s
+}
+
+// SetSource sets the Source field's value.
+func (s *OpsItem) SetSource(v string) *OpsItem {
+	s.Source = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *OpsItem) SetStatus(v string) *OpsItem {
+	s.Status = &v
+	return s
+}
+
+// SetTitle sets the Title field's value.
+func (s *OpsItem) SetTitle(v string) *OpsItem {
+	s.Title = &v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *OpsItem) SetVersion(v string) *OpsItem {
+	s.Version = &v
+	return s
+}
+
+// An object that defines the value of the key and its type in the OperationalData
+// map.
+type OpsItemDataValue struct {
+	_ struct{} `type:"structure"`
+
+	// The type of key-value pair. Valid types include SearchableString and String.
+	Type *string `type:"string" enum:"OpsItemDataType"`
+
+	// The value of the OperationalData key.
+	Value *string `type:"string"`
+}
+
+// String returns the string representation
+func (s OpsItemDataValue) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OpsItemDataValue) GoString() string {
+	return s.String()
+}
+
+// SetType sets the Type field's value.
+func (s *OpsItemDataValue) SetType(v string) *OpsItemDataValue {
+	s.Type = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *OpsItemDataValue) SetValue(v string) *OpsItemDataValue {
+	s.Value = &v
+	return s
+}
+
+// Describes an OpsItem filter.
+type OpsItemFilter struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the filter.
+	//
+	// Key is a required field
+	Key *string `type:"string" required:"true" enum:"OpsItemFilterKey"`
+
+	// The operator used by the filter call.
+	//
+	// Operator is a required field
+	Operator *string `type:"string" required:"true" enum:"OpsItemFilterOperator"`
+
+	// The filter value.
+	//
+	// Values is a required field
+	Values []*string `type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s OpsItemFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OpsItemFilter) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *OpsItemFilter) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "OpsItemFilter"}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
+	if s.Operator == nil {
+		invalidParams.Add(request.NewErrParamRequired("Operator"))
+	}
+	if s.Values == nil {
+		invalidParams.Add(request.NewErrParamRequired("Values"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKey sets the Key field's value.
+func (s *OpsItemFilter) SetKey(v string) *OpsItemFilter {
+	s.Key = &v
+	return s
+}
+
+// SetOperator sets the Operator field's value.
+func (s *OpsItemFilter) SetOperator(v string) *OpsItemFilter {
+	s.Operator = &v
+	return s
+}
+
+// SetValues sets the Values field's value.
+func (s *OpsItemFilter) SetValues(v []*string) *OpsItemFilter {
+	s.Values = v
+	return s
+}
+
+// A notification about the OpsItem.
+type OpsItemNotification struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of an SNS topic where notifications are sent
+	// when this OpsItem is edited or changed.
+	Arn *string `type:"string"`
+}
+
+// String returns the string representation
+func (s OpsItemNotification) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OpsItemNotification) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *OpsItemNotification) SetArn(v string) *OpsItemNotification {
+	s.Arn = &v
+	return s
+}
+
+// A count of OpsItems.
+type OpsItemSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the IAM entity that created the OpsItem.
+	CreatedBy *string `type:"string"`
+
+	// The date and time the OpsItem was created.
+	CreatedTime *time.Time `type:"timestamp"`
+
+	// The Amazon Resource Name (ARN) of the IAM entity that created the OpsItem.
+	LastModifiedBy *string `type:"string"`
+
+	// The date and time the OpsItem was last updated.
+	LastModifiedTime *time.Time `type:"timestamp"`
+
+	// Operational data is custom data that provides useful reference details about
+	// the OpsItem.
+	OperationalData map[string]*OpsItemDataValue `type:"map"`
+
+	// The ID of the OpsItem.
+	OpsItemId *string `type:"string"`
+
+	// The importance of this OpsItem in relation to other OpsItems in the system.
+	Priority *int64 `min:"1" type:"integer"`
+
+	// The impacted AWS resource.
+	Source *string `min:"1" type:"string"`
+
+	// The OpsItem status. Status can be Open, In Progress, or Resolved.
+	Status *string `type:"string" enum:"OpsItemStatus"`
+
+	// A short heading that describes the nature of the OpsItem and the impacted
+	// resource.
+	Title *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s OpsItemSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OpsItemSummary) GoString() string {
+	return s.String()
+}
+
+// SetCreatedBy sets the CreatedBy field's value.
+func (s *OpsItemSummary) SetCreatedBy(v string) *OpsItemSummary {
+	s.CreatedBy = &v
+	return s
+}
+
+// SetCreatedTime sets the CreatedTime field's value.
+func (s *OpsItemSummary) SetCreatedTime(v time.Time) *OpsItemSummary {
+	s.CreatedTime = &v
+	return s
+}
+
+// SetLastModifiedBy sets the LastModifiedBy field's value.
+func (s *OpsItemSummary) SetLastModifiedBy(v string) *OpsItemSummary {
+	s.LastModifiedBy = &v
+	return s
+}
+
+// SetLastModifiedTime sets the LastModifiedTime field's value.
+func (s *OpsItemSummary) SetLastModifiedTime(v time.Time) *OpsItemSummary {
+	s.LastModifiedTime = &v
+	return s
+}
+
+// SetOperationalData sets the OperationalData field's value.
+func (s *OpsItemSummary) SetOperationalData(v map[string]*OpsItemDataValue) *OpsItemSummary {
+	s.OperationalData = v
+	return s
+}
+
+// SetOpsItemId sets the OpsItemId field's value.
+func (s *OpsItemSummary) SetOpsItemId(v string) *OpsItemSummary {
+	s.OpsItemId = &v
+	return s
+}
+
+// SetPriority sets the Priority field's value.
+func (s *OpsItemSummary) SetPriority(v int64) *OpsItemSummary {
+	s.Priority = &v
+	return s
+}
+
+// SetSource sets the Source field's value.
+func (s *OpsItemSummary) SetSource(v string) *OpsItemSummary {
+	s.Source = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *OpsItemSummary) SetStatus(v string) *OpsItemSummary {
+	s.Status = &v
+	return s
+}
+
+// SetTitle sets the Title field's value.
+func (s *OpsItemSummary) SetTitle(v string) *OpsItemSummary {
+	s.Title = &v
+	return s
+}
+
 // Information about the source where the association execution details are
 // stored.
 type OutputSource struct {
@@ -30701,6 +32356,47 @@ func (s RegisterTaskWithMaintenanceWindowOutput) GoString() string {
 // SetWindowTaskId sets the WindowTaskId field's value.
 func (s *RegisterTaskWithMaintenanceWindowOutput) SetWindowTaskId(v string) *RegisterTaskWithMaintenanceWindowOutput {
 	s.WindowTaskId = &v
+	return s
+}
+
+// An OpsItems that shares something in common with the current OpsItem. For
+// example, related OpsItems can include OpsItems with similar error messages,
+// impacted resources, or statuses for the impacted resource.
+type RelatedOpsItem struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of an OpsItem related to the current OpsItem.
+	//
+	// OpsItemId is a required field
+	OpsItemId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s RelatedOpsItem) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RelatedOpsItem) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RelatedOpsItem) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RelatedOpsItem"}
+	if s.OpsItemId == nil {
+		invalidParams.Add(request.NewErrParamRequired("OpsItemId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetOpsItemId sets the OpsItemId field's value.
+func (s *RelatedOpsItem) SetOpsItemId(v string) *RelatedOpsItem {
+	s.OpsItemId = &v
 	return s
 }
 
@@ -34650,6 +36346,179 @@ func (s UpdateManagedInstanceRoleOutput) GoString() string {
 	return s.String()
 }
 
+type UpdateOpsItemInput struct {
+	_ struct{} `type:"structure"`
+
+	// Update the information about the OpsItem. Provide enough information so that
+	// users reading this OpsItem for the first time understand the issue.
+	Description *string `min:"1" type:"string"`
+
+	// The Amazon Resource Name (ARN) of an SNS topic where notifications are sent
+	// when this OpsItem is edited or changed.
+	Notifications []*OpsItemNotification `type:"list"`
+
+	// Add new keys or edit existing key-value pairs of the OperationalData map
+	// in the OpsItem object.
+	//
+	// Operational data is custom data that provides useful reference details about
+	// the OpsItem. For example, you can specify log files, error strings, license
+	// keys, troubleshooting tips, or other relevant data. You enter operational
+	// data as key-value pairs. The key has a maximum length of 128 characters.
+	// The value has a maximum size of 20 KB.
+	//
+	// Operational data keys can't begin with the following: amazon, aws, amzn,
+	// ssm, /amazon, /aws, /amzn, /ssm.
+	//
+	// You can choose to make the data searchable by other users in the account
+	// or you can restrict search access. Searchable data means that all users with
+	// access to the OpsItem Overview page (as provided by the DescribeOpsItems
+	// API action) can view and search on the specified data. Operational data that
+	// is not searchable is only viewable by users who have access to the OpsItem
+	// (as provided by the GetOpsItem API action).
+	//
+	// Use the /aws/resources key in OperationalData to specify a related resource
+	// in the request. Use the /aws/automations key in OperationalData to associate
+	// an Automation runbook with the OpsItem. To view AWS CLI example commands
+	// that use these keys, see Creating OpsItems Manually (http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-creating-OpsItems.html#OpsCenter-manually-create-OpsItems)
+	// in the AWS Systems Manager User Guide.
+	OperationalData map[string]*OpsItemDataValue `type:"map"`
+
+	// Keys that you want to remove from the OperationalData map.
+	OperationalDataToDelete []*string `type:"list"`
+
+	// The ID of the OpsItem.
+	//
+	// OpsItemId is a required field
+	OpsItemId *string `type:"string" required:"true"`
+
+	// The importance of this OpsItem in relation to other OpsItems in the system.
+	Priority *int64 `min:"1" type:"integer"`
+
+	// One or more OpsItems that share something in common with the current OpsItems.
+	// For example, related OpsItems can include OpsItems with similar error messages,
+	// impacted resources, or statuses for the impacted resource.
+	RelatedOpsItems []*RelatedOpsItem `type:"list"`
+
+	// The OpsItem status. Status can be Open, In Progress, or Resolved. For more
+	// information, see Editing OpsItem Details (http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-working-with-OpsItems-editing-details.html)
+	// in the AWS Systems Manager User Guide.
+	Status *string `type:"string" enum:"OpsItemStatus"`
+
+	// A short heading that describes the nature of the OpsItem and the impacted
+	// resource.
+	Title *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s UpdateOpsItemInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateOpsItemInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateOpsItemInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateOpsItemInput"}
+	if s.Description != nil && len(*s.Description) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Description", 1))
+	}
+	if s.OpsItemId == nil {
+		invalidParams.Add(request.NewErrParamRequired("OpsItemId"))
+	}
+	if s.Priority != nil && *s.Priority < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Priority", 1))
+	}
+	if s.Title != nil && len(*s.Title) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Title", 1))
+	}
+	if s.RelatedOpsItems != nil {
+		for i, v := range s.RelatedOpsItems {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "RelatedOpsItems", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateOpsItemInput) SetDescription(v string) *UpdateOpsItemInput {
+	s.Description = &v
+	return s
+}
+
+// SetNotifications sets the Notifications field's value.
+func (s *UpdateOpsItemInput) SetNotifications(v []*OpsItemNotification) *UpdateOpsItemInput {
+	s.Notifications = v
+	return s
+}
+
+// SetOperationalData sets the OperationalData field's value.
+func (s *UpdateOpsItemInput) SetOperationalData(v map[string]*OpsItemDataValue) *UpdateOpsItemInput {
+	s.OperationalData = v
+	return s
+}
+
+// SetOperationalDataToDelete sets the OperationalDataToDelete field's value.
+func (s *UpdateOpsItemInput) SetOperationalDataToDelete(v []*string) *UpdateOpsItemInput {
+	s.OperationalDataToDelete = v
+	return s
+}
+
+// SetOpsItemId sets the OpsItemId field's value.
+func (s *UpdateOpsItemInput) SetOpsItemId(v string) *UpdateOpsItemInput {
+	s.OpsItemId = &v
+	return s
+}
+
+// SetPriority sets the Priority field's value.
+func (s *UpdateOpsItemInput) SetPriority(v int64) *UpdateOpsItemInput {
+	s.Priority = &v
+	return s
+}
+
+// SetRelatedOpsItems sets the RelatedOpsItems field's value.
+func (s *UpdateOpsItemInput) SetRelatedOpsItems(v []*RelatedOpsItem) *UpdateOpsItemInput {
+	s.RelatedOpsItems = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *UpdateOpsItemInput) SetStatus(v string) *UpdateOpsItemInput {
+	s.Status = &v
+	return s
+}
+
+// SetTitle sets the Title field's value.
+func (s *UpdateOpsItemInput) SetTitle(v string) *UpdateOpsItemInput {
+	s.Title = &v
+	return s
+}
+
+type UpdateOpsItemOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateOpsItemOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateOpsItemOutput) GoString() string {
+	return s.String()
+}
+
 type UpdatePatchBaselineInput struct {
 	_ struct{} `type:"structure"`
 
@@ -35656,6 +37525,100 @@ const (
 )
 
 const (
+	// OpsFilterOperatorTypeEqual is a OpsFilterOperatorType enum value
+	OpsFilterOperatorTypeEqual = "Equal"
+
+	// OpsFilterOperatorTypeNotEqual is a OpsFilterOperatorType enum value
+	OpsFilterOperatorTypeNotEqual = "NotEqual"
+
+	// OpsFilterOperatorTypeBeginWith is a OpsFilterOperatorType enum value
+	OpsFilterOperatorTypeBeginWith = "BeginWith"
+
+	// OpsFilterOperatorTypeLessThan is a OpsFilterOperatorType enum value
+	OpsFilterOperatorTypeLessThan = "LessThan"
+
+	// OpsFilterOperatorTypeGreaterThan is a OpsFilterOperatorType enum value
+	OpsFilterOperatorTypeGreaterThan = "GreaterThan"
+
+	// OpsFilterOperatorTypeExists is a OpsFilterOperatorType enum value
+	OpsFilterOperatorTypeExists = "Exists"
+)
+
+const (
+	// OpsItemDataTypeSearchableString is a OpsItemDataType enum value
+	OpsItemDataTypeSearchableString = "SearchableString"
+
+	// OpsItemDataTypeString is a OpsItemDataType enum value
+	OpsItemDataTypeString = "String"
+)
+
+const (
+	// OpsItemFilterKeyStatus is a OpsItemFilterKey enum value
+	OpsItemFilterKeyStatus = "Status"
+
+	// OpsItemFilterKeyCreatedBy is a OpsItemFilterKey enum value
+	OpsItemFilterKeyCreatedBy = "CreatedBy"
+
+	// OpsItemFilterKeySource is a OpsItemFilterKey enum value
+	OpsItemFilterKeySource = "Source"
+
+	// OpsItemFilterKeyPriority is a OpsItemFilterKey enum value
+	OpsItemFilterKeyPriority = "Priority"
+
+	// OpsItemFilterKeyTitle is a OpsItemFilterKey enum value
+	OpsItemFilterKeyTitle = "Title"
+
+	// OpsItemFilterKeyOpsItemId is a OpsItemFilterKey enum value
+	OpsItemFilterKeyOpsItemId = "OpsItemId"
+
+	// OpsItemFilterKeyCreatedTime is a OpsItemFilterKey enum value
+	OpsItemFilterKeyCreatedTime = "CreatedTime"
+
+	// OpsItemFilterKeyLastModifiedTime is a OpsItemFilterKey enum value
+	OpsItemFilterKeyLastModifiedTime = "LastModifiedTime"
+
+	// OpsItemFilterKeyOperationalData is a OpsItemFilterKey enum value
+	OpsItemFilterKeyOperationalData = "OperationalData"
+
+	// OpsItemFilterKeyOperationalDataKey is a OpsItemFilterKey enum value
+	OpsItemFilterKeyOperationalDataKey = "OperationalDataKey"
+
+	// OpsItemFilterKeyOperationalDataValue is a OpsItemFilterKey enum value
+	OpsItemFilterKeyOperationalDataValue = "OperationalDataValue"
+
+	// OpsItemFilterKeyResourceId is a OpsItemFilterKey enum value
+	OpsItemFilterKeyResourceId = "ResourceId"
+
+	// OpsItemFilterKeyAutomationId is a OpsItemFilterKey enum value
+	OpsItemFilterKeyAutomationId = "AutomationId"
+)
+
+const (
+	// OpsItemFilterOperatorEqual is a OpsItemFilterOperator enum value
+	OpsItemFilterOperatorEqual = "Equal"
+
+	// OpsItemFilterOperatorContains is a OpsItemFilterOperator enum value
+	OpsItemFilterOperatorContains = "Contains"
+
+	// OpsItemFilterOperatorGreaterThan is a OpsItemFilterOperator enum value
+	OpsItemFilterOperatorGreaterThan = "GreaterThan"
+
+	// OpsItemFilterOperatorLessThan is a OpsItemFilterOperator enum value
+	OpsItemFilterOperatorLessThan = "LessThan"
+)
+
+const (
+	// OpsItemStatusOpen is a OpsItemStatus enum value
+	OpsItemStatusOpen = "Open"
+
+	// OpsItemStatusInProgress is a OpsItemStatus enum value
+	OpsItemStatusInProgress = "InProgress"
+
+	// OpsItemStatusResolved is a OpsItemStatus enum value
+	OpsItemStatusResolved = "Resolved"
+)
+
+const (
 	// ParameterTierStandard is a ParameterTier enum value
 	ParameterTierStandard = "Standard"
 
@@ -35862,6 +37825,9 @@ const (
 
 	// ResourceTypeForTaggingPatchBaseline is a ResourceTypeForTagging enum value
 	ResourceTypeForTaggingPatchBaseline = "PatchBaseline"
+
+	// ResourceTypeForTaggingOpsItem is a ResourceTypeForTagging enum value
+	ResourceTypeForTaggingOpsItem = "OpsItem"
 )
 
 const (

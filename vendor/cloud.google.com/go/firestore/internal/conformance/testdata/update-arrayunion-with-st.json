@@ -1,0 +1,13 @@
+{
+  "tests": [
+    {
+      "description": "update: The ServerTimestamp sentinel cannot be in an ArrayUnion",
+      "comment": "The ServerTimestamp sentinel must be the value of a field. It may\nnot appear in an ArrayUnion.",
+      "update": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "jsonData": "{\"a\": [\"ArrayUnion\", 1, \"ServerTimestamp\", 3]}",
+        "isError": true
+      }
+    }
+  ]
+}

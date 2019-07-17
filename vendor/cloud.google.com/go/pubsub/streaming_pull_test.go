@@ -129,7 +129,8 @@ func TestStreamingPullError(t *testing.T) {
 	// return only one error.
 	sub.ReceiveSettings.NumGoroutines = 1
 	callbackDone := make(chan struct{})
-	ctx, _ := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
 	err := sub.Receive(ctx, func(ctx context.Context, m *Message) {
 		defer close(callbackDone)
 		<-ctx.Done()
@@ -224,7 +225,8 @@ func TestStreamingPullConcurrent(t *testing.T) {
 		server.addStreamingPullMessages([]*pb.ReceivedMessage{newMsg(i), newMsg(i + 1)})
 	}
 	sub := client.Subscription("S")
-	ctx, _ := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
 	gotMsgs, err := pullN(ctx, sub, nMessages, func(ctx context.Context, m *Message) {
 		m.Ack()
 	})

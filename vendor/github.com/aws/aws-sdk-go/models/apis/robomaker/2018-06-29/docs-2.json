@@ -18,7 +18,7 @@
     "DeleteRobotApplication": "<p>Deletes a robot application.</p>",
     "DeleteSimulationApplication": "<p>Deletes a simulation application.</p>",
     "DeregisterRobot": "<p>Deregisters a robot.</p>",
-    "DescribeDeploymentJob": "<p>Describes a deployment job. [Does it work regardless of deployment status, e.g. Failed?]</p>",
+    "DescribeDeploymentJob": "<p>Describes a deployment job.</p>",
     "DescribeFleet": "<p>Describes a fleet.</p>",
     "DescribeRobot": "<p>Describes a robot.</p>",
     "DescribeRobotApplication": "<p>Describes a robot application.</p>",
@@ -554,9 +554,7 @@
         "DescribeSimulationJobResponse$failureReason": "<p>Details about why the simulation job failed. For more information about troubleshooting, see <a href=\"https://docs.aws.amazon.com/robomaker/latest/dg/troubleshooting.html\">Troubleshooting</a>.</p>",
         "ProgressDetail$targetResource": "<p>The Amazon Resource Name (ARN) of the deployment job.</p>",
         "RobotDeployment$failureReason": "<p>A short description of the reason why the robot deployment failed.</p>",
-        "SecurityGroups$member": null,
         "SimulationJob$failureReason": "<p>The reason why the simulation job failed.</p>",
-        "Subnets$member": null,
         "SyncDeploymentJobResponse$failureReason": "<p>The failure reason if the job fails.</p>",
         "VPCConfigResponse$vpcId": "<p>The VPC ID associated with your simulation job.</p>"
       }
@@ -753,6 +751,13 @@
         "SimulationJobSummary$name": "<p>The name of the simulation job.</p>",
         "UpdateRobotApplicationResponse$name": "<p>The name of the robot application.</p>",
         "UpdateSimulationApplicationResponse$name": "<p>The name of the simulation application.</p>"
+      }
+    },
+    "NonEmptyString": {
+      "base": null,
+      "refs": {
+        "SecurityGroups$member": null,
+        "Subnets$member": null
       }
     },
     "OutputLocation": {
@@ -1007,6 +1012,11 @@
       "refs": {
         "VPCConfig$securityGroups": "<p>A list of one or more security groups IDs in your VPC.</p>",
         "VPCConfigResponse$securityGroups": "<p>A list of security group IDs associated with the simulation job.</p>"
+      }
+    },
+    "ServiceUnavailableException": {
+      "base": "<p>The request has failed due to a temporary failure of the server.</p>",
+      "refs": {
       }
     },
     "SimulationApplicationConfig": {
@@ -1308,6 +1318,7 @@
         "LimitExceededException$message": null,
         "ResourceAlreadyExistsException$message": null,
         "ResourceNotFoundException$message": null,
+        "ServiceUnavailableException$message": null,
         "ThrottlingException$message": null
       }
     }

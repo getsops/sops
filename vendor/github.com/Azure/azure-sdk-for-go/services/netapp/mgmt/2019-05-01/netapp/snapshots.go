@@ -108,7 +108,7 @@ func (client SnapshotsClient) CreatePreparer(ctx context.Context, body Snapshot,
 		"volumeName":        autorest.Encode("path", volumeName),
 	}
 
-	const APIVersion = "2017-08-15"
+	const APIVersion = "2019-05-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -204,7 +204,7 @@ func (client SnapshotsClient) DeletePreparer(ctx context.Context, resourceGroupN
 		"volumeName":        autorest.Encode("path", volumeName),
 	}
 
-	const APIVersion = "2017-08-15"
+	const APIVersion = "2019-05-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -300,7 +300,7 @@ func (client SnapshotsClient) GetPreparer(ctx context.Context, resourceGroupName
 		"volumeName":        autorest.Encode("path", volumeName),
 	}
 
-	const APIVersion = "2017-08-15"
+	const APIVersion = "2019-05-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -389,7 +389,7 @@ func (client SnapshotsClient) ListPreparer(ctx context.Context, resourceGroupNam
 		"volumeName":        autorest.Encode("path", volumeName),
 	}
 
-	const APIVersion = "2017-08-15"
+	const APIVersion = "2019-05-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -481,7 +481,7 @@ func (client SnapshotsClient) UpdatePreparer(ctx context.Context, body SnapshotP
 		"volumeName":        autorest.Encode("path", volumeName),
 	}
 
-	const APIVersion = "2017-08-15"
+	const APIVersion = "2019-05-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}

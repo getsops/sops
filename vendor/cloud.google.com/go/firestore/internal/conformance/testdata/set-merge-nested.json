@@ -1,0 +1,48 @@
+{
+  "tests": [
+    {
+      "description": "set-merge: Merge with a nested field",
+      "comment": "A merge option where the field is not at top level.\nOnly fields mentioned in the option are present in the update operation.",
+      "set": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "option": {
+          "fields": [
+            {
+              "field": [
+                "h",
+                "g"
+              ]
+            }
+          ]
+        },
+        "jsonData": "{\"h\": {\"g\": 4, \"f\": 5}}",
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d",
+                "fields": {
+                  "h": {
+                    "mapValue": {
+                      "fields": {
+                        "g": {
+                          "integerValue": "4"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "updateMask": {
+                "fieldPaths": [
+                  "h.g"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

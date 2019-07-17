@@ -681,6 +681,93 @@ func (c *CostExplorer) GetTagsWithContext(ctx aws.Context, input *GetTagsInput, 
 	return out, req.Send()
 }
 
+const opGetUsageForecast = "GetUsageForecast"
+
+// GetUsageForecastRequest generates a "aws/request.Request" representing the
+// client's request for the GetUsageForecast operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetUsageForecast for more information on using the GetUsageForecast
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetUsageForecastRequest method.
+//    req, resp := client.GetUsageForecastRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ce-2017-10-25/GetUsageForecast
+func (c *CostExplorer) GetUsageForecastRequest(input *GetUsageForecastInput) (req *request.Request, output *GetUsageForecastOutput) {
+	op := &request.Operation{
+		Name:       opGetUsageForecast,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetUsageForecastInput{}
+	}
+
+	output = &GetUsageForecastOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetUsageForecast API operation for AWS Cost Explorer Service.
+//
+// Retrieves a forecast for how much Amazon Web Services predicts that you will
+// use over the forecast time period that you select, based on your past usage.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Cost Explorer Service's
+// API operation GetUsageForecast for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeLimitExceededException "LimitExceededException"
+//   You made too many calls in a short period of time. Try again later.
+//
+//   * ErrCodeDataUnavailableException "DataUnavailableException"
+//   The requested data is unavailable.
+//
+//   * ErrCodeUnresolvableUsageUnitException "UnresolvableUsageUnitException"
+//   Cost Explorer was unable to identify the usage unit. Provide UsageType/UsageTypeGroup
+//   filter selections that contain matching units, for example: hours.(
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ce-2017-10-25/GetUsageForecast
+func (c *CostExplorer) GetUsageForecast(input *GetUsageForecastInput) (*GetUsageForecastOutput, error) {
+	req, out := c.GetUsageForecastRequest(input)
+	return out, req.Send()
+}
+
+// GetUsageForecastWithContext is the same as GetUsageForecast with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetUsageForecast for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CostExplorer) GetUsageForecastWithContext(ctx aws.Context, input *GetUsageForecastInput, opts ...request.Option) (*GetUsageForecastOutput, error) {
+	req, out := c.GetUsageForecastRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 // The amount of instance usage that a reservation covered.
 type Coverage struct {
 	_ struct{} `type:"structure"`
@@ -1596,15 +1683,15 @@ type GetCostForecastInput struct {
 	//
 	// Valid values for a GetCostForecast call are the following:
 	//
-	//    * AmortizedCost
+	//    * AMORTIZED_COST
 	//
-	//    * BlendedCost
+	//    * BLENDED_COST
 	//
-	//    * NetAmortizedCost
+	//    * NET_AMORTIZED_COST
 	//
-	//    * NetUnblendedCost
+	//    * NET_UNBLENDED_COST
 	//
-	//    * UnblendedCost
+	//    * UNBLENDED_COST
 	//
 	// Metric is a required field
 	Metric *string `type:"string" required:"true" enum:"Metric"`
@@ -2672,6 +2759,149 @@ func (s *GetTagsOutput) SetTags(v []*string) *GetTagsOutput {
 // SetTotalSize sets the TotalSize field's value.
 func (s *GetTagsOutput) SetTotalSize(v int64) *GetTagsOutput {
 	s.TotalSize = &v
+	return s
+}
+
+type GetUsageForecastInput struct {
+	_ struct{} `type:"structure"`
+
+	// The filters that you want to use to filter your forecast. Cost Explorer API
+	// supports all of the Cost Explorer filters.
+	Filter *Expression `type:"structure"`
+
+	// How granular you want the forecast to be. You can get 3 months of DAILY forecasts
+	// or 12 months of MONTHLY forecasts.
+	//
+	// The GetUsageForecast operation supports only DAILY and MONTHLY granularities.
+	//
+	// Granularity is a required field
+	Granularity *string `type:"string" required:"true" enum:"Granularity"`
+
+	// Which metric Cost Explorer uses to create your forecast.
+	//
+	// Valid values for a GetUsageForecast call are the following:
+	//
+	//    * USAGE_QUANTITY
+	//
+	//    * NORMALIZED_USAGE_AMOUNT
+	//
+	// Metric is a required field
+	Metric *string `type:"string" required:"true" enum:"Metric"`
+
+	// Cost Explorer always returns the mean forecast as a single point. You can
+	// request a prediction interval around the mean by specifying a confidence
+	// level. The higher the confidence level, the more confident Cost Explorer
+	// is about the actual value falling in the prediction interval. Higher confidence
+	// levels result in wider prediction intervals.
+	PredictionIntervalLevel *int64 `min:"51" type:"integer"`
+
+	// The start and end dates of the period that you want to retrieve usage forecast
+	// for. The start date is inclusive, but the end date is exclusive. For example,
+	// if start is 2017-01-01 and end is 2017-05-01, then the cost and usage data
+	// is retrieved from 2017-01-01 up to and including 2017-04-30 but not including
+	// 2017-05-01.
+	//
+	// TimePeriod is a required field
+	TimePeriod *DateInterval `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s GetUsageForecastInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetUsageForecastInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetUsageForecastInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetUsageForecastInput"}
+	if s.Granularity == nil {
+		invalidParams.Add(request.NewErrParamRequired("Granularity"))
+	}
+	if s.Metric == nil {
+		invalidParams.Add(request.NewErrParamRequired("Metric"))
+	}
+	if s.PredictionIntervalLevel != nil && *s.PredictionIntervalLevel < 51 {
+		invalidParams.Add(request.NewErrParamMinValue("PredictionIntervalLevel", 51))
+	}
+	if s.TimePeriod == nil {
+		invalidParams.Add(request.NewErrParamRequired("TimePeriod"))
+	}
+	if s.TimePeriod != nil {
+		if err := s.TimePeriod.Validate(); err != nil {
+			invalidParams.AddNested("TimePeriod", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilter sets the Filter field's value.
+func (s *GetUsageForecastInput) SetFilter(v *Expression) *GetUsageForecastInput {
+	s.Filter = v
+	return s
+}
+
+// SetGranularity sets the Granularity field's value.
+func (s *GetUsageForecastInput) SetGranularity(v string) *GetUsageForecastInput {
+	s.Granularity = &v
+	return s
+}
+
+// SetMetric sets the Metric field's value.
+func (s *GetUsageForecastInput) SetMetric(v string) *GetUsageForecastInput {
+	s.Metric = &v
+	return s
+}
+
+// SetPredictionIntervalLevel sets the PredictionIntervalLevel field's value.
+func (s *GetUsageForecastInput) SetPredictionIntervalLevel(v int64) *GetUsageForecastInput {
+	s.PredictionIntervalLevel = &v
+	return s
+}
+
+// SetTimePeriod sets the TimePeriod field's value.
+func (s *GetUsageForecastInput) SetTimePeriod(v *DateInterval) *GetUsageForecastInput {
+	s.TimePeriod = v
+	return s
+}
+
+type GetUsageForecastOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The forecasts for your query, in order. For DAILY forecasts, this is a list
+	// of days. For MONTHLY forecasts, this is a list of months.
+	ForecastResultsByTime []*ForecastResult `type:"list"`
+
+	// How much you're forecasted to use over the forecast period.
+	Total *MetricValue `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetUsageForecastOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetUsageForecastOutput) GoString() string {
+	return s.String()
+}
+
+// SetForecastResultsByTime sets the ForecastResultsByTime field's value.
+func (s *GetUsageForecastOutput) SetForecastResultsByTime(v []*ForecastResult) *GetUsageForecastOutput {
+	s.ForecastResultsByTime = v
+	return s
+}
+
+// SetTotal sets the Total field's value.
+func (s *GetUsageForecastOutput) SetTotal(v *MetricValue) *GetUsageForecastOutput {
+	s.Total = v
 	return s
 }
 

@@ -168,7 +168,10 @@ type Task struct {
 	// default if False.
 	Deleted bool `json:"deleted,omitempty"`
 
-	// Due: Due date of the task (as a RFC 3339 timestamp). Optional.
+	// Due: Due date of the task (as a RFC 3339 timestamp). Optional. The
+	// due date only records date information; the time portion of the
+	// timestamp is discarded when setting the due date. It isn't possible
+	// to read or write the time that a task is due via the API.
 	Due string `json:"due,omitempty"`
 
 	// Etag: ETag of the resource.

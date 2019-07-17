@@ -1,0 +1,25 @@
+{
+  "tests": [
+    {
+      "description": "query: Delete in Where",
+      "comment": "Sentinel values are not permitted in queries.",
+      "query": {
+        "collPath": "projects/projectID/databases/(default)/documents/C",
+        "clauses": [
+          {
+            "where": {
+              "path": {
+                "field": [
+                  "a"
+                ]
+              },
+              "op": "==",
+              "jsonValue": "\"Delete\""
+            }
+          }
+        ],
+        "isError": true
+      }
+    }
+  ]
+}

@@ -1677,6 +1677,12 @@
       "min": 1,
       "max": 255
     },
+    "AwsCloudMapInstanceAttributes": {
+      "type": "list",
+      "member": {
+        "shape": "AwsCloudMapInstanceAttribute"
+      }
+    },
     "VirtualNodeRef": {
       "type": "structure",
       "required": [
@@ -1728,6 +1734,12 @@
         }
       },
       "payload": "virtualNode"
+    },
+    "AwsCloudMapName": {
+      "type": "string",
+      "min": 1,
+      "max": 1024,
+      "pattern": "((?=^.{1,127}$)^([a-zA-Z0-9_][a-zA-Z0-9-_]{0,61}[a-zA-Z0-9_]|[a-zA-Z0-9])(.([a-zA-Z0-9_][a-zA-Z0-9-_]{0,61}[a-zA-Z0-9_]|[a-zA-Z0-9]))*$)|(^.$)"
     },
     "LimitExceededException": {
       "type": "structure",
@@ -1858,6 +1870,21 @@
     "UntagResourceOutput": {
       "type": "structure",
       "members": { }
+    },
+    "AwsCloudMapInstanceAttribute": {
+      "type": "structure",
+      "required": [
+        "key",
+        "value"
+      ],
+      "members": {
+        "key": {
+          "shape": "AwsCloudMapInstanceAttributeKey"
+        },
+        "value": {
+          "shape": "AwsCloudMapInstanceAttributeValue"
+        }
+      }
     },
     "VirtualServiceSpec": {
       "type": "structure",
@@ -2150,11 +2177,14 @@
       "min": 1,
       "max": 255
     },
+    "AwsCloudMapInstanceAttributeKey": {
+      "type": "string",
+      "min": 1,
+      "max": 255,
+      "pattern": "^[a-zA-Z0-9!-~]+$"
+    },
     "VirtualRouterSpec": {
       "type": "structure",
-      "required": [
-        "listeners"
-      ],
       "members": {
         "listeners": {
           "shape": "VirtualRouterListeners"
@@ -2359,6 +2389,12 @@
           "shape": "VirtualServiceList"
         }
       }
+    },
+    "AwsCloudMapInstanceAttributeValue": {
+      "type": "string",
+      "min": 1,
+      "max": 1024,
+      "pattern": "^([a-zA-Z0-9!-~][ ta-zA-Z0-9!-~]*){0,1}[a-zA-Z0-9!-~]{0,1}$"
     },
     "WeightedTarget": {
       "type": "structure",
@@ -2719,6 +2755,24 @@
     "String": {
       "type": "string"
     },
+    "AwsCloudMapServiceDiscovery": {
+      "type": "structure",
+      "required": [
+        "namespaceName",
+        "serviceName"
+      ],
+      "members": {
+        "attributes": {
+          "shape": "AwsCloudMapInstanceAttributes"
+        },
+        "namespaceName": {
+          "shape": "AwsCloudMapName"
+        },
+        "serviceName": {
+          "shape": "AwsCloudMapName"
+        }
+      }
+    },
     "UpdateVirtualServiceOutput": {
       "type": "structure",
       "required": [
@@ -2931,6 +2985,9 @@
     "ServiceDiscovery": {
       "type": "structure",
       "members": {
+        "awsCloudMap": {
+          "shape": "AwsCloudMapServiceDiscovery"
+        },
         "dns": {
           "shape": "DnsServiceDiscovery"
         }

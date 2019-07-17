@@ -1,0 +1,46 @@
+{
+  "tests": [
+    {
+      "description": "set: ServerTimestamp beside an empty map",
+      "comment": "When a ServerTimestamp and a map both reside inside a map, the\nServerTimestamp should be stripped out but the empty map should remain.",
+      "set": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "jsonData": "{\"a\": {\"b\": {}, \"c\": \"ServerTimestamp\"}}",
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d",
+                "fields": {
+                  "a": {
+                    "mapValue": {
+                      "fields": {
+                        "b": {
+                          "mapValue": {
+                            "fields": {}
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "transform": {
+                "document": "projects/projectID/databases/(default)/documents/C/d",
+                "fieldTransforms": [
+                  {
+                    "fieldPath": "a.c",
+                    "setToServerValue": "REQUEST_TIME"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

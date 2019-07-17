@@ -66,8 +66,7 @@ func (client GroupClient) CreateOrUpdate(ctx context.Context, resourceGroupName 
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
 		{TargetValue: groupID,
 			Constraints: []validation.Constraint{{Target: "groupID", Name: validation.MaxLength, Rule: 256, Chain: nil},
-				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "groupID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
+				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil}}},
 		{TargetValue: parameters,
 			Constraints: []validation.Constraint{{Target: "parameters.GroupCreateParametersProperties", Name: validation.Null, Rule: false,
 				Chain: []validation.Constraint{{Target: "parameters.GroupCreateParametersProperties.DisplayName", Name: validation.Null, Rule: true,
@@ -172,8 +171,7 @@ func (client GroupClient) Delete(ctx context.Context, resourceGroupName string, 
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
 		{TargetValue: groupID,
 			Constraints: []validation.Constraint{{Target: "groupID", Name: validation.MaxLength, Rule: 256, Chain: nil},
-				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "groupID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
+				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.GroupClient", "Delete", err.Error())
 	}
 
@@ -263,8 +261,7 @@ func (client GroupClient) Get(ctx context.Context, resourceGroupName string, ser
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
 		{TargetValue: groupID,
 			Constraints: []validation.Constraint{{Target: "groupID", Name: validation.MaxLength, Rule: 256, Chain: nil},
-				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "groupID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
+				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.GroupClient", "Get", err.Error())
 	}
 
@@ -354,8 +351,7 @@ func (client GroupClient) GetEntityTag(ctx context.Context, resourceGroupName st
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
 		{TargetValue: groupID,
 			Constraints: []validation.Constraint{{Target: "groupID", Name: validation.MaxLength, Rule: 256, Chain: nil},
-				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "groupID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
+				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.GroupClient", "GetEntityTag", err.Error())
 	}
 
@@ -592,8 +588,7 @@ func (client GroupClient) Update(ctx context.Context, resourceGroupName string, 
 				{Target: "serviceName", Name: validation.Pattern, Rule: `^[a-zA-Z](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$`, Chain: nil}}},
 		{TargetValue: groupID,
 			Constraints: []validation.Constraint{{Target: "groupID", Name: validation.MaxLength, Rule: 256, Chain: nil},
-				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "groupID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
+				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.GroupClient", "Update", err.Error())
 	}
 

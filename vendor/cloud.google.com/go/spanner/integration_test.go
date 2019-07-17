@@ -2072,6 +2072,8 @@ func TestIntegration_PDML(t *testing.T) {
 		{1, "Umm", "Kulthum"},
 		{2, "Eduard", "Khil"},
 		{3, "Audra", "McDonald"},
+		{4, "Enrique", "Iglesias"},
+		{5, "Shakira", "Ripoll"},
 	} {
 		muts = append(muts, Insert("Singers", columns, row))
 	}
@@ -2081,13 +2083,16 @@ func TestIntegration_PDML(t *testing.T) {
 	// Identifiers in PDML statements must be fully qualified.
 	// TODO(jba): revisit the above.
 	count, err := client.PartitionedUpdate(ctx, Statement{
-		SQL: `UPDATE Singers SET Singers.FirstName = "changed" WHERE Singers.SingerId >= 1 AND Singers.SingerId <= 3`,
+		SQL: `UPDATE Singers SET Singers.FirstName = "changed" WHERE Singers.SingerId >= 1 AND Singers.SingerId <= @end`,
+		Params: map[string]interface{}{
+			"end": 3,
+		},
 	})
 	if err != nil {
 		t.Fatal(err)
 	}
 	if want := int64(3); count != want {
-		t.Errorf("got %d, want %d", count, want)
+		t.Fatalf("got %d, want %d", count, want)
 	}
 	got, err := readAll(client.Single().Read(ctx, "Singers", AllKeys(), columns))
 	if err != nil {
@@ -2097,6 +2102,8 @@ func TestIntegration_PDML(t *testing.T) {
 		{int64(1), "changed", "Kulthum"},
 		{int64(2), "changed", "Khil"},
 		{int64(3), "changed", "McDonald"},
+		{int64(4), "Enrique", "Iglesias"},
+		{int64(5), "Shakira", "Ripoll"},
 	}
 	if !testEqual(got, want) {
 		t.Errorf("\ngot %v\nwant%v", got, want)

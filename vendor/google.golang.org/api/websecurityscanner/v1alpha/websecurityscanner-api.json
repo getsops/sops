@@ -118,7 +118,7 @@
               ],
               "parameters": {
                 "parent": {
-                  "description": "Required.\nThe parent resource name where the scan is created, which should be a\nproject resource name in the format 'projects/{projectId}'.",
+                  "description": "Required. The parent resource name where the scan is created, which should be a\nproject resource name in the format 'projects/{projectId}'.",
                   "location": "path",
                   "pattern": "^projects/[^/]+$",
                   "required": true,
@@ -146,7 +146,7 @@
               ],
               "parameters": {
                 "name": {
-                  "description": "Required.\nThe resource name of the ScanConfig to be deleted. The name follows the\nformat of 'projects/{projectId}/scanConfigs/{scanConfigId}'.",
+                  "description": "Required. The resource name of the ScanConfig to be deleted. The name follows the\nformat of 'projects/{projectId}/scanConfigs/{scanConfigId}'.",
                   "location": "path",
                   "pattern": "^projects/[^/]+/scanConfigs/[^/]+$",
                   "required": true,
@@ -171,7 +171,7 @@
               ],
               "parameters": {
                 "name": {
-                  "description": "Required.\nThe resource name of the ScanConfig to be returned. The name follows the\nformat of 'projects/{projectId}/scanConfigs/{scanConfigId}'.",
+                  "description": "Required. The resource name of the ScanConfig to be returned. The name follows the\nformat of 'projects/{projectId}/scanConfigs/{scanConfigId}'.",
                   "location": "path",
                   "pattern": "^projects/[^/]+/scanConfigs/[^/]+$",
                   "required": true,
@@ -207,7 +207,7 @@
                   "type": "string"
                 },
                 "parent": {
-                  "description": "Required.\nThe parent resource name, which should be a project resource name in the\nformat 'projects/{projectId}'.",
+                  "description": "Required. The parent resource name, which should be a project resource name in the\nformat 'projects/{projectId}'.",
                   "location": "path",
                   "pattern": "^projects/[^/]+$",
                   "required": true,
@@ -239,7 +239,7 @@
                   "type": "string"
                 },
                 "updateMask": {
-                  "description": "Required.\nThe update mask applies to the resource. For the `FieldMask` definition,\nsee\nhttps://developers.google.com/protocol-buffers/docs/reference/google.protobuf#fieldmask",
+                  "description": "Required. The update mask applies to the resource. For the `FieldMask` definition,\nsee\nhttps://developers.google.com/protocol-buffers/docs/reference/google.protobuf#fieldmask",
                   "format": "google-fieldmask",
                   "location": "query",
                   "type": "string"
@@ -266,7 +266,7 @@
               ],
               "parameters": {
                 "name": {
-                  "description": "Required.\nThe resource name of the ScanConfig to be used. The name follows the\nformat of 'projects/{projectId}/scanConfigs/{scanConfigId}'.",
+                  "description": "Required. The resource name of the ScanConfig to be used. The name follows the\nformat of 'projects/{projectId}/scanConfigs/{scanConfigId}'.",
                   "location": "path",
                   "pattern": "^projects/[^/]+/scanConfigs/[^/]+$",
                   "required": true,
@@ -298,7 +298,7 @@
                   ],
                   "parameters": {
                     "name": {
-                      "description": "Required.\nThe resource name of the ScanRun to be returned. The name follows the\nformat of\n'projects/{projectId}/scanConfigs/{scanConfigId}/scanRuns/{scanRunId}'.",
+                      "description": "Required. The resource name of the ScanRun to be returned. The name follows the\nformat of\n'projects/{projectId}/scanConfigs/{scanConfigId}/scanRuns/{scanRunId}'.",
                       "location": "path",
                       "pattern": "^projects/[^/]+/scanConfigs/[^/]+/scanRuns/[^/]+$",
                       "required": true,
@@ -334,7 +334,7 @@
                       "type": "string"
                     },
                     "parent": {
-                      "description": "Required.\nThe parent resource name, which should be a scan resource name in the\nformat 'projects/{projectId}/scanConfigs/{scanConfigId}'.",
+                      "description": "Required. The parent resource name, which should be a scan resource name in the\nformat 'projects/{projectId}/scanConfigs/{scanConfigId}'.",
                       "location": "path",
                       "pattern": "^projects/[^/]+/scanConfigs/[^/]+$",
                       "required": true,
@@ -359,7 +359,7 @@
                   ],
                   "parameters": {
                     "name": {
-                      "description": "Required.\nThe resource name of the ScanRun to be stopped. The name follows the\nformat of\n'projects/{projectId}/scanConfigs/{scanConfigId}/scanRuns/{scanRunId}'.",
+                      "description": "Required. The resource name of the ScanRun to be stopped. The name follows the\nformat of\n'projects/{projectId}/scanConfigs/{scanConfigId}/scanRuns/{scanRunId}'.",
                       "location": "path",
                       "pattern": "^projects/[^/]+/scanConfigs/[^/]+/scanRuns/[^/]+$",
                       "required": true,
@@ -402,7 +402,7 @@
                           "type": "string"
                         },
                         "parent": {
-                          "description": "Required.\nThe parent resource name, which should be a scan run resource name in the\nformat\n'projects/{projectId}/scanConfigs/{scanConfigId}/scanRuns/{scanRunId}'.",
+                          "description": "Required. The parent resource name, which should be a scan run resource name in the\nformat\n'projects/{projectId}/scanConfigs/{scanConfigId}/scanRuns/{scanRunId}'.",
                           "location": "path",
                           "pattern": "^projects/[^/]+/scanConfigs/[^/]+/scanRuns/[^/]+$",
                           "required": true,
@@ -431,7 +431,7 @@
                       ],
                       "parameters": {
                         "parent": {
-                          "description": "Required.\nThe parent resource name, which should be a scan run resource name in the\nformat\n'projects/{projectId}/scanConfigs/{scanConfigId}/scanRuns/{scanRunId}'.",
+                          "description": "Required. The parent resource name, which should be a scan run resource name in the\nformat\n'projects/{projectId}/scanConfigs/{scanConfigId}/scanRuns/{scanRunId}'.",
                           "location": "path",
                           "pattern": "^projects/[^/]+/scanConfigs/[^/]+/scanRuns/[^/]+$",
                           "required": true,
@@ -460,7 +460,7 @@
                       ],
                       "parameters": {
                         "name": {
-                          "description": "Required.\nThe resource name of the Finding to be returned. The name follows the\nformat of\n'projects/{projectId}/scanConfigs/{scanConfigId}/scanRuns/{scanRunId}/findings/{findingId}'.",
+                          "description": "Required. The resource name of the Finding to be returned. The name follows the\nformat of\n'projects/{projectId}/scanConfigs/{scanConfigId}/scanRuns/{scanRunId}/findings/{findingId}'.",
                           "location": "path",
                           "pattern": "^projects/[^/]+/scanConfigs/[^/]+/scanRuns/[^/]+/findings/[^/]+$",
                           "required": true,
@@ -501,7 +501,7 @@
                           "type": "string"
                         },
                         "parent": {
-                          "description": "Required.\nThe parent resource name, which should be a scan run resource name in the\nformat\n'projects/{projectId}/scanConfigs/{scanConfigId}/scanRuns/{scanRunId}'.",
+                          "description": "Required. The parent resource name, which should be a scan run resource name in the\nformat\n'projects/{projectId}/scanConfigs/{scanConfigId}/scanRuns/{scanRunId}'.",
                           "location": "path",
                           "pattern": "^projects/[^/]+/scanConfigs/[^/]+/scanRuns/[^/]+$",
                           "required": true,
@@ -525,7 +525,7 @@
       }
     }
   },
-  "revision": "20190114",
+  "revision": "20190629",
   "rootUrl": "https://websecurityscanner.googleapis.com/",
   "schemas": {
     "Authentication": {
@@ -548,15 +548,15 @@
       "id": "CrawledUrl",
       "properties": {
         "body": {
-          "description": "Output only.\nThe body of the request that was used to visit the URL.",
+          "description": "Output only. The body of the request that was used to visit the URL.",
           "type": "string"
         },
         "httpMethod": {
-          "description": "Output only.\nThe http method of the request that was used to visit the URL, in\nuppercase.",
+          "description": "Output only. The http method of the request that was used to visit the URL, in\nuppercase.",
           "type": "string"
         },
         "url": {
-          "description": "Output only.\nThe URL that was crawled.",
+          "description": "Output only. The URL that was crawled.",
           "type": "string"
         }
       },
@@ -567,15 +567,15 @@
       "id": "CustomAccount",
       "properties": {
         "loginUrl": {
-          "description": "Required.\nThe login form URL of the website.",
+          "description": "Required. The login form URL of the website.",
           "type": "string"
         },
         "password": {
-          "description": "Input only.\nRequired.\nThe password of the custom account. The credential is stored encrypted\nand not returned in any response nor included in audit logs.",
+          "description": "Required. Input only. The password of the custom account. The credential is stored encrypted\nand not returned in any response nor included in audit logs.",
           "type": "string"
         },
         "username": {
-          "description": "Required.\nThe user name of the custom account.",
+          "description": "Required. The user name of the custom account.",
           "type": "string"
         }
       },
@@ -592,19 +592,19 @@
       "id": "Finding",
       "properties": {
         "body": {
-          "description": "Output only.\nThe body of the request that triggered the vulnerability.",
+          "description": "Output only. The body of the request that triggered the vulnerability.",
           "type": "string"
         },
         "description": {
-          "description": "Output only.\nThe description of the vulnerability.",
+          "description": "Output only. The description of the vulnerability.",
           "type": "string"
         },
         "finalUrl": {
-          "description": "Output only.\nThe URL where the browser lands when the vulnerability is detected.",
+          "description": "Output only. The URL where the browser lands when the vulnerability is detected.",
           "type": "string"
         },
         "findingType": {
-          "description": "Output only.\nThe type of the Finding.",
+          "description": "Output only. The type of the Finding.",
           "enum": [
             "FINDING_TYPE_UNSPECIFIED",
             "MIXED_CONTENT",
@@ -636,48 +636,48 @@
           "type": "string"
         },
         "frameUrl": {
-          "description": "Output only.\nIf the vulnerability was originated from nested IFrame, the immediate\nparent IFrame is reported.",
+          "description": "Output only. If the vulnerability was originated from nested IFrame, the immediate\nparent IFrame is reported.",
           "type": "string"
         },
         "fuzzedUrl": {
-          "description": "Output only.\nThe URL produced by the server-side fuzzer and used in the request that\ntriggered the vulnerability.",
+          "description": "Output only. The URL produced by the server-side fuzzer and used in the request that\ntriggered the vulnerability.",
           "type": "string"
         },
         "httpMethod": {
-          "description": "Output only.\nThe http method of the request that triggered the vulnerability, in\nuppercase.",
+          "description": "Output only. The http method of the request that triggered the vulnerability, in\nuppercase.",
           "type": "string"
         },
         "name": {
-          "description": "Output only.\nThe resource name of the Finding. The name follows the format of\n'projects/{projectId}/scanConfigs/{scanConfigId}/scanruns/{scanRunId}/findings/{findingId}'.\nThe finding IDs are generated by the system.",
+          "description": "Output only. The resource name of the Finding. The name follows the format of\n'projects/{projectId}/scanConfigs/{scanConfigId}/scanruns/{scanRunId}/findings/{findingId}'.\nThe finding IDs are generated by the system.",
           "type": "string"
         },
         "outdatedLibrary": {
           "$ref": "OutdatedLibrary",
-          "description": "Output only.\nAn addon containing information about outdated libraries."
+          "description": "Output only. An addon containing information about outdated libraries."
         },
         "reproductionUrl": {
-          "description": "Output only.\nThe URL containing human-readable payload that user can leverage to\nreproduce the vulnerability.",
+          "description": "Output only. The URL containing human-readable payload that user can leverage to\nreproduce the vulnerability.",
           "type": "string"
         },
         "trackingId": {
-          "description": "Output only.\nThe tracking ID uniquely identifies a vulnerability instance across\nmultiple ScanRuns.",
+          "description": "Output only. The tracking ID uniquely identifies a vulnerability instance across\nmultiple ScanRuns.",
           "type": "string"
         },
         "violatingResource": {
           "$ref": "ViolatingResource",
-          "description": "Output only.\nAn addon containing detailed information regarding any resource causing the\nvulnerability such as JavaScript sources, image, audio files, etc."
+          "description": "Output only. An addon containing detailed information regarding any resource causing the\nvulnerability such as JavaScript sources, image, audio files, etc."
         },
         "vulnerableHeaders": {
           "$ref": "VulnerableHeaders",
-          "description": "Output only.\nAn addon containing information about vulnerable or missing HTTP headers."
+          "description": "Output only. An addon containing information about vulnerable or missing HTTP headers."
         },
         "vulnerableParameters": {
           "$ref": "VulnerableParameters",
-          "description": "Output only.\nAn addon containing information about request parameters which were found\nto be vulnerable."
+          "description": "Output only. An addon containing information about request parameters which were found\nto be vulnerable."
         },
         "xss": {
           "$ref": "Xss",
-          "description": "Output only.\nAn addon containing information reported for an XSS, if any."
+          "description": "Output only. An addon containing information reported for an XSS, if any."
         }
       },
       "type": "object"
@@ -687,12 +687,12 @@
       "id": "FindingTypeStats",
       "properties": {
         "findingCount": {
-          "description": "Output only.\nThe count of findings belonging to this finding type.",
+          "description": "Output only. The count of findings belonging to this finding type.",
           "format": "int32",
           "type": "integer"
         },
         "findingType": {
-          "description": "Output only.\nThe finding type associated with the stats.",
+          "description": "Output only. The finding type associated with the stats.",
           "enum": [
             "FINDING_TYPE_UNSPECIFIED",
             "MIXED_CONTENT",
@@ -731,11 +731,11 @@
       "id": "GoogleAccount",
       "properties": {
         "password": {
-          "description": "Input only.\nRequired.\nThe password of the Google account. The credential is stored encrypted\nand not returned in any response nor included in audit logs.",
+          "description": "Required. Input only. The password of the Google account. The credential is stored encrypted\nand not returned in any response nor included in audit logs.",
           "type": "string"
         },
         "username": {
-          "description": "Required.\nThe user name of the Google account.",
+          "description": "Required. The user name of the Google account.",
           "type": "string"
         }
       },
@@ -880,7 +880,7 @@
           "type": "array"
         },
         "displayName": {
-          "description": "Required.\nThe user provided display name of the ScanConfig.",
+          "description": "Required. The user provided display name of the ScanConfig.",
           "type": "string"
         },
         "latestRun": {
@@ -901,7 +901,7 @@
           "description": "The schedule of the ScanConfig."
         },
         "startingUrls": {
-          "description": "Required.\nThe starting URLs from which the scanner finds site pages.",
+          "description": "Required. The starting URLs from which the scanner finds site pages.",
           "items": {
             "type": "string"
           },
@@ -948,12 +948,12 @@
       "id": "ScanRun",
       "properties": {
         "endTime": {
-          "description": "Output only.\nThe time at which the ScanRun reached termination state - that the ScanRun\nis either finished or stopped by user.",
+          "description": "Output only. The time at which the ScanRun reached termination state - that the ScanRun\nis either finished or stopped by user.",
           "format": "google-datetime",
           "type": "string"
         },
         "executionState": {
-          "description": "Output only.\nThe execution state of the ScanRun.",
+          "description": "Output only. The execution state of the ScanRun.",
           "enum": [
             "EXECUTION_STATE_UNSPECIFIED",
             "QUEUED",
@@ -969,20 +969,20 @@
           "type": "string"
         },
         "hasVulnerabilities": {
-          "description": "Output only.\nWhether the scan run has found any vulnerabilities.",
+          "description": "Output only. Whether the scan run has found any vulnerabilities.",
           "type": "boolean"
         },
         "name": {
-          "description": "Output only.\nThe resource name of the ScanRun. The name follows the format of\n'projects/{projectId}/scanConfigs/{scanConfigId}/scanRuns/{scanRunId}'.\nThe ScanRun IDs are generated by the system.",
+          "description": "Output only. The resource name of the ScanRun. The name follows the format of\n'projects/{projectId}/scanConfigs/{scanConfigId}/scanRuns/{scanRunId}'.\nThe ScanRun IDs are generated by the system.",
           "type": "string"
         },
         "progressPercent": {
-          "description": "Output only.\nThe percentage of total completion ranging from 0 to 100.\nIf the scan is in queue, the value is 0.\nIf the scan is running, the value ranges from 0 to 100.\nIf the scan is finished, the value is 100.",
+          "description": "Output only. The percentage of total completion ranging from 0 to 100.\nIf the scan is in queue, the value is 0.\nIf the scan is running, the value ranges from 0 to 100.\nIf the scan is finished, the value is 100.",
           "format": "int32",
           "type": "integer"
         },
         "resultState": {
-          "description": "Output only.\nThe result state of the ScanRun. This field is only available after the\nexecution state reaches \"FINISHED\".",
+          "description": "Output only. The result state of the ScanRun. This field is only available after the\nexecution state reaches \"FINISHED\".",
           "enum": [
             "RESULT_STATE_UNSPECIFIED",
             "SUCCESS",
@@ -998,17 +998,17 @@
           "type": "string"
         },
         "startTime": {
-          "description": "Output only.\nThe time at which the ScanRun started.",
+          "description": "Output only. The time at which the ScanRun started.",
           "format": "google-datetime",
           "type": "string"
         },
         "urlsCrawledCount": {
-          "description": "Output only.\nThe number of URLs crawled during this ScanRun. If the scan is in progress,\nthe value represents the number of URLs crawled up to now.",
+          "description": "Output only. The number of URLs crawled during this ScanRun. If the scan is in progress,\nthe value represents the number of URLs crawled up to now.",
           "format": "int64",
           "type": "string"
         },
         "urlsTestedCount": {
-          "description": "Output only.\nThe number of URLs tested during this ScanRun. If the scan is in progress,\nthe value represents the number of URLs tested up to now. The number of\nURLs tested is usually larger than the number URLS crawled because\ntypically a crawled URL is tested with multiple test payloads.",
+          "description": "Output only. The number of URLs tested during this ScanRun. If the scan is in progress,\nthe value represents the number of URLs tested up to now. The number of\nURLs tested is usually larger than the number URLS crawled because\ntypically a crawled URL is tested with multiple test payloads.",
           "format": "int64",
           "type": "string"
         }
@@ -1020,7 +1020,7 @@
       "id": "Schedule",
       "properties": {
         "intervalDurationDays": {
-          "description": "Required.\nThe duration of time between executions in days.",
+          "description": "Required. The duration of time between executions in days.",
           "format": "int32",
           "type": "integer"
         },

@@ -35,13 +35,13 @@ const fqdn = "github.com/Azure/azure-sdk-for-go/services/preview/securityinsight
 type AggregationsKind string
 
 const (
-	// CasesAggregation ...
-	CasesAggregation AggregationsKind = "CasesAggregation"
+	// AggregationsKindCasesAggregation ...
+	AggregationsKindCasesAggregation AggregationsKind = "CasesAggregation"
 )
 
 // PossibleAggregationsKindValues returns an array of possible values for the AggregationsKind const type.
 func PossibleAggregationsKindValues() []AggregationsKind {
-	return []AggregationsKind{CasesAggregation}
+	return []AggregationsKind{AggregationsKindCasesAggregation}
 }
 
 // AlertRuleKind enumerates the values for alert rule kind.
@@ -101,19 +101,19 @@ func PossibleCaseSeverityValues() []CaseSeverity {
 type CaseStatus string
 
 const (
-	// Closed A non active case
-	Closed CaseStatus = "Closed"
-	// Draft Case that wasn't promoted yet to active
-	Draft CaseStatus = "Draft"
-	// InProgress An active case which is handled
-	InProgress CaseStatus = "InProgress"
-	// Open An active case which isn't handled currently
-	Open CaseStatus = "Open"
+	// CaseStatusClosed A non active case
+	CaseStatusClosed CaseStatus = "Closed"
+	// CaseStatusDraft Case that wasn't promoted yet to active
+	CaseStatusDraft CaseStatus = "Draft"
+	// CaseStatusInProgress An active case which is handled
+	CaseStatusInProgress CaseStatus = "InProgress"
+	// CaseStatusNew An active case which isn't handled currently
+	CaseStatusNew CaseStatus = "New"
 )
 
 // PossibleCaseStatusValues returns an array of possible values for the CaseStatus const type.
 func PossibleCaseStatusValues() []CaseStatus {
-	return []CaseStatus{Closed, Draft, InProgress, Open}
+	return []CaseStatus{CaseStatusClosed, CaseStatusDraft, CaseStatusInProgress, CaseStatusNew}
 }
 
 // CloseReason enumerates the values for close reason.
@@ -207,11 +207,13 @@ type KindBasicAggregations string
 const (
 	// KindAggregations ...
 	KindAggregations KindBasicAggregations = "Aggregations"
+	// KindCasesAggregation ...
+	KindCasesAggregation KindBasicAggregations = "CasesAggregation"
 )
 
 // PossibleKindBasicAggregationsValues returns an array of possible values for the KindBasicAggregations const type.
 func PossibleKindBasicAggregationsValues() []KindBasicAggregations {
-	return []KindBasicAggregations{KindAggregations}
+	return []KindBasicAggregations{KindAggregations, KindCasesAggregation}
 }
 
 // KindBasicDataConnector enumerates the values for kind basic data connector.
@@ -271,6 +273,21 @@ const (
 // PossibleKindBasicSettingsValues returns an array of possible values for the KindBasicSettings const type.
 func PossibleKindBasicSettingsValues() []KindBasicSettings {
 	return []KindBasicSettings{KindSettings, KindToggleSettings, KindUebaSettings}
+}
+
+// LicenseStatus enumerates the values for license status.
+type LicenseStatus string
+
+const (
+	// LicenseStatusDisabled ...
+	LicenseStatusDisabled LicenseStatus = "Disabled"
+	// LicenseStatusEnabled ...
+	LicenseStatusEnabled LicenseStatus = "Enabled"
+)
+
+// PossibleLicenseStatusValues returns an array of possible values for the LicenseStatus const type.
+func PossibleLicenseStatusValues() []LicenseStatus {
+	return []LicenseStatus{LicenseStatusDisabled, LicenseStatusEnabled}
 }
 
 // OSFamily enumerates the values for os family.
@@ -860,6 +877,7 @@ func NewActionsListPage(getNextPage func(context.Context, ActionsList) (ActionsL
 
 // BasicAggregations the aggregation.
 type BasicAggregations interface {
+	AsCasesAggregation() (*CasesAggregation, bool)
 	AsAggregations() (*Aggregations, bool)
 }
 
@@ -872,7 +890,7 @@ type Aggregations struct {
 	Type *string `json:"type,omitempty"`
 	// Name - READ-ONLY; Azure resource name
 	Name *string `json:"name,omitempty"`
-	// Kind - Possible values include: 'KindAggregations'
+	// Kind - Possible values include: 'KindAggregations', 'KindCasesAggregation'
 	Kind KindBasicAggregations `json:"kind,omitempty"`
 }
 
@@ -884,6 +902,10 @@ func unmarshalBasicAggregations(body []byte) (BasicAggregations, error) {
 	}
 
 	switch m["kind"] {
+	case string(KindCasesAggregation):
+		var ca CasesAggregation
+		err := json.Unmarshal(body, &ca)
+		return ca, err
 	default:
 		var a Aggregations
 		err := json.Unmarshal(body, &a)
@@ -919,6 +941,11 @@ func (a Aggregations) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// AsCasesAggregation is the BasicAggregations implementation for Aggregations.
+func (a Aggregations) AsCasesAggregation() (*CasesAggregation, bool) {
+	return nil, false
+}
+
 // AsAggregations is the BasicAggregations implementation for Aggregations.
 func (a Aggregations) AsAggregations() (*Aggregations, bool) {
 	return &a, true
@@ -931,7 +958,7 @@ func (a Aggregations) AsBasicAggregations() (BasicAggregations, bool) {
 
 // AggregationsKind1 describes an Azure resource with kind.
 type AggregationsKind1 struct {
-	// Kind - The kind of the setting. Possible values include: 'CasesAggregation'
+	// Kind - The kind of the setting. Possible values include: 'AggregationsKindCasesAggregation'
 	Kind AggregationsKind `json:"kind,omitempty"`
 }
 
@@ -1901,10 +1928,146 @@ type CaseProperties struct {
 	AssignedTo *UserInfo `json:"assignedTo,omitempty"`
 	// Severity - The severity of the case. Possible values include: 'CaseSeverityCritical', 'CaseSeverityHigh', 'CaseSeverityMedium', 'CaseSeverityLow', 'CaseSeverityInformational'
 	Severity CaseSeverity `json:"severity,omitempty"`
-	// Status - The status of the case. Possible values include: 'Draft', 'Open', 'InProgress', 'Closed'
+	// Status - The status of the case. Possible values include: 'CaseStatusDraft', 'CaseStatusNew', 'CaseStatusInProgress', 'CaseStatusClosed'
 	Status CaseStatus `json:"status,omitempty"`
 	// CloseReason - The reason the case was closed. Possible values include: 'Resolved', 'Dismissed', 'Other'
 	CloseReason CloseReason `json:"closeReason,omitempty"`
+}
+
+// CasesAggregation represents aggregations results for cases.
+type CasesAggregation struct {
+	// CasesAggregationProperties - Properties of aggregations results of cases.
+	*CasesAggregationProperties `json:"properties,omitempty"`
+	// ID - READ-ONLY; Azure resource Id
+	ID *string `json:"id,omitempty"`
+	// Type - READ-ONLY; Azure resource type
+	Type *string `json:"type,omitempty"`
+	// Name - READ-ONLY; Azure resource name
+	Name *string `json:"name,omitempty"`
+	// Kind - Possible values include: 'KindAggregations', 'KindCasesAggregation'
+	Kind KindBasicAggregations `json:"kind,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for CasesAggregation.
+func (ca CasesAggregation) MarshalJSON() ([]byte, error) {
+	ca.Kind = KindCasesAggregation
+	objectMap := make(map[string]interface{})
+	if ca.CasesAggregationProperties != nil {
+		objectMap["properties"] = ca.CasesAggregationProperties
+	}
+	if ca.Kind != "" {
+		objectMap["kind"] = ca.Kind
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsCasesAggregation is the BasicAggregations implementation for CasesAggregation.
+func (ca CasesAggregation) AsCasesAggregation() (*CasesAggregation, bool) {
+	return &ca, true
+}
+
+// AsAggregations is the BasicAggregations implementation for CasesAggregation.
+func (ca CasesAggregation) AsAggregations() (*Aggregations, bool) {
+	return nil, false
+}
+
+// AsBasicAggregations is the BasicAggregations implementation for CasesAggregation.
+func (ca CasesAggregation) AsBasicAggregations() (BasicAggregations, bool) {
+	return &ca, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for CasesAggregation struct.
+func (ca *CasesAggregation) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var casesAggregationProperties CasesAggregationProperties
+				err = json.Unmarshal(*v, &casesAggregationProperties)
+				if err != nil {
+					return err
+				}
+				ca.CasesAggregationProperties = &casesAggregationProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				ca.ID = &ID
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ca.Type = &typeVar
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				ca.Name = &name
+			}
+		case "kind":
+			if v != nil {
+				var kind KindBasicAggregations
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				ca.Kind = kind
+			}
+		}
+	}
+
+	return nil
+}
+
+// CasesAggregationBySeverityProperties aggregative results of cases by severity property bag.
+type CasesAggregationBySeverityProperties struct {
+	// TotalCriticalSeverity - READ-ONLY; Total amount of open cases with severity Critical
+	TotalCriticalSeverity *int32 `json:"totalCriticalSeverity,omitempty"`
+	// TotalHighSeverity - READ-ONLY; Total amount of open cases with severity High
+	TotalHighSeverity *int32 `json:"totalHighSeverity,omitempty"`
+	// TotalMediumSeverity - READ-ONLY; Total amount of open cases with severity medium
+	TotalMediumSeverity *int32 `json:"totalMediumSeverity,omitempty"`
+	// TotalLowSeverity - READ-ONLY; Total amount of open cases with severity Low
+	TotalLowSeverity *int32 `json:"totalLowSeverity,omitempty"`
+	// TotalInformationalSeverity - READ-ONLY; Total amount of open cases with severity Informational
+	TotalInformationalSeverity *int32 `json:"totalInformationalSeverity,omitempty"`
+}
+
+// CasesAggregationByStatusProperties aggregative results of cases by status property bag.
+type CasesAggregationByStatusProperties struct {
+	// TotalNewStatus - READ-ONLY; Total amount of open cases with status New
+	TotalNewStatus *int32 `json:"totalNewStatus,omitempty"`
+	// TotalInProgressStatus - READ-ONLY; Total amount of open cases with status InProgress
+	TotalInProgressStatus *int32 `json:"totalInProgressStatus,omitempty"`
+	// TotalResolvedStatus - READ-ONLY; Total amount of open cases with status Resolved
+	TotalResolvedStatus *int32 `json:"totalResolvedStatus,omitempty"`
+	// TotalDismissedStatus - READ-ONLY; Total amount of open cases with status Dismissed
+	TotalDismissedStatus *int32 `json:"totalDismissedStatus,omitempty"`
+}
+
+// CasesAggregationProperties aggregative results of cases property bag.
+type CasesAggregationProperties struct {
+	// AggregationBySeverity - Aggregations results by case severity.
+	AggregationBySeverity *CasesAggregationBySeverityProperties `json:"aggregationBySeverity,omitempty"`
+	// AggregationByStatus - Aggregations results by case status.
+	AggregationByStatus *CasesAggregationByStatusProperties `json:"aggregationByStatus,omitempty"`
 }
 
 // CloudError error response structure.
@@ -2599,6 +2762,241 @@ func (em *EntityModel) UnmarshalJSON(body []byte) error {
 	em.Value = e
 
 	return nil
+}
+
+// EntityQuery specific entity query.
+type EntityQuery struct {
+	autorest.Response `json:"-"`
+	// EntityQueryProperties - Entity query properties
+	*EntityQueryProperties `json:"properties,omitempty"`
+	// ID - READ-ONLY; Azure resource Id
+	ID *string `json:"id,omitempty"`
+	// Type - READ-ONLY; Azure resource type
+	Type *string `json:"type,omitempty"`
+	// Name - READ-ONLY; Azure resource name
+	Name *string `json:"name,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for EntityQuery.
+func (eq EntityQuery) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if eq.EntityQueryProperties != nil {
+		objectMap["properties"] = eq.EntityQueryProperties
+	}
+	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for EntityQuery struct.
+func (eq *EntityQuery) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var entityQueryProperties EntityQueryProperties
+				err = json.Unmarshal(*v, &entityQueryProperties)
+				if err != nil {
+					return err
+				}
+				eq.EntityQueryProperties = &entityQueryProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				eq.ID = &ID
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				eq.Type = &typeVar
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				eq.Name = &name
+			}
+		}
+	}
+
+	return nil
+}
+
+// EntityQueryList list of all the entity queries.
+type EntityQueryList struct {
+	autorest.Response `json:"-"`
+	// NextLink - READ-ONLY; URL to fetch the next set of entity queries.
+	NextLink *string `json:"nextLink,omitempty"`
+	// Value - Array of entity queries.
+	Value *[]EntityQuery `json:"value,omitempty"`
+}
+
+// EntityQueryListIterator provides access to a complete listing of EntityQuery values.
+type EntityQueryListIterator struct {
+	i    int
+	page EntityQueryListPage
+}
+
+// NextWithContext advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+func (iter *EntityQueryListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EntityQueryListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	iter.i++
+	if iter.i < len(iter.page.Values()) {
+		return nil
+	}
+	err = iter.page.NextWithContext(ctx)
+	if err != nil {
+		iter.i--
+		return err
+	}
+	iter.i = 0
+	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *EntityQueryListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
+}
+
+// NotDone returns true if the enumeration should be started or is not yet complete.
+func (iter EntityQueryListIterator) NotDone() bool {
+	return iter.page.NotDone() && iter.i < len(iter.page.Values())
+}
+
+// Response returns the raw server response from the last page request.
+func (iter EntityQueryListIterator) Response() EntityQueryList {
+	return iter.page.Response()
+}
+
+// Value returns the current value or a zero-initialized value if the
+// iterator has advanced beyond the end of the collection.
+func (iter EntityQueryListIterator) Value() EntityQuery {
+	if !iter.page.NotDone() {
+		return EntityQuery{}
+	}
+	return iter.page.Values()[iter.i]
+}
+
+// Creates a new instance of the EntityQueryListIterator type.
+func NewEntityQueryListIterator(page EntityQueryListPage) EntityQueryListIterator {
+	return EntityQueryListIterator{page: page}
+}
+
+// IsEmpty returns true if the ListResult contains no values.
+func (eql EntityQueryList) IsEmpty() bool {
+	return eql.Value == nil || len(*eql.Value) == 0
+}
+
+// entityQueryListPreparer prepares a request to retrieve the next set of results.
+// It returns nil if no more results exist.
+func (eql EntityQueryList) entityQueryListPreparer(ctx context.Context) (*http.Request, error) {
+	if eql.NextLink == nil || len(to.String(eql.NextLink)) < 1 {
+		return nil, nil
+	}
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+		autorest.AsJSON(),
+		autorest.AsGet(),
+		autorest.WithBaseURL(to.String(eql.NextLink)))
+}
+
+// EntityQueryListPage contains a page of EntityQuery values.
+type EntityQueryListPage struct {
+	fn  func(context.Context, EntityQueryList) (EntityQueryList, error)
+	eql EntityQueryList
+}
+
+// NextWithContext advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+func (page *EntityQueryListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/EntityQueryListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.eql)
+	if err != nil {
+		return err
+	}
+	page.eql = next
+	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *EntityQueryListPage) Next() error {
+	return page.NextWithContext(context.Background())
+}
+
+// NotDone returns true if the page enumeration should be started or is not yet complete.
+func (page EntityQueryListPage) NotDone() bool {
+	return !page.eql.IsEmpty()
+}
+
+// Response returns the raw server response from the last page request.
+func (page EntityQueryListPage) Response() EntityQueryList {
+	return page.eql
+}
+
+// Values returns the slice of values for the current page or nil if there are no values.
+func (page EntityQueryListPage) Values() []EntityQuery {
+	if page.eql.IsEmpty() {
+		return nil
+	}
+	return *page.eql.Value
+}
+
+// Creates a new instance of the EntityQueryListPage type.
+func NewEntityQueryListPage(getNextPage func(context.Context, EntityQueryList) (EntityQueryList, error)) EntityQueryListPage {
+	return EntityQueryListPage{fn: getNextPage}
+}
+
+// EntityQueryProperties describes entity query properties
+type EntityQueryProperties struct {
+	// QueryTemplate - The template query string to be parsed and formatted
+	QueryTemplate *string `json:"queryTemplate,omitempty"`
+	// InputEntityType - The type of the query's source entity
+	InputEntityType *string `json:"inputEntityType,omitempty"`
+	// InputFields - List of the fields of the source entity that are required to run the query
+	InputFields *[]string `json:"inputFields,omitempty"`
+	// OutputEntityTypes - List of the desired output types to be constructed from the result
+	OutputEntityTypes *[]string `json:"outputEntityTypes,omitempty"`
+	// DataSources - List of the data sources that are required to run the query
+	DataSources *[]string `json:"dataSources,omitempty"`
+	// DisplayName - The query display name
+	DisplayName *string `json:"displayName,omitempty"`
 }
 
 // FileEntity represents a file entity.
@@ -3726,6 +4124,8 @@ type Settings struct {
 	Type *string `json:"type,omitempty"`
 	// Name - READ-ONLY; Azure resource name
 	Name *string `json:"name,omitempty"`
+	// Etag - Etag of the alert rule.
+	Etag *string `json:"etag,omitempty"`
 	// Kind - Possible values include: 'KindSettings', 'KindUebaSettings', 'KindToggleSettings'
 	Kind KindBasicSettings `json:"kind,omitempty"`
 }
@@ -3775,6 +4175,9 @@ func unmarshalBasicSettingsArray(body []byte) ([]BasicSettings, error) {
 func (s Settings) MarshalJSON() ([]byte, error) {
 	s.Kind = KindSettings
 	objectMap := make(map[string]interface{})
+	if s.Etag != nil {
+		objectMap["etag"] = s.Etag
+	}
 	if s.Kind != "" {
 		objectMap["kind"] = s.Kind
 	}
@@ -3990,6 +4393,8 @@ type ToggleSettings struct {
 	Type *string `json:"type,omitempty"`
 	// Name - READ-ONLY; Azure resource name
 	Name *string `json:"name,omitempty"`
+	// Etag - Etag of the alert rule.
+	Etag *string `json:"etag,omitempty"`
 	// Kind - Possible values include: 'KindSettings', 'KindUebaSettings', 'KindToggleSettings'
 	Kind KindBasicSettings `json:"kind,omitempty"`
 }
@@ -4000,6 +4405,9 @@ func (ts ToggleSettings) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if ts.ToggleSettingsProperties != nil {
 		objectMap["properties"] = ts.ToggleSettingsProperties
+	}
+	if ts.Etag != nil {
+		objectMap["etag"] = ts.Etag
 	}
 	if ts.Kind != "" {
 		objectMap["kind"] = ts.Kind
@@ -4072,6 +4480,15 @@ func (ts *ToggleSettings) UnmarshalJSON(body []byte) error {
 				}
 				ts.Name = &name
 			}
+		case "etag":
+			if v != nil {
+				var etag string
+				err = json.Unmarshal(*v, &etag)
+				if err != nil {
+					return err
+				}
+				ts.Etag = &etag
+			}
 		case "kind":
 			if v != nil {
 				var kind KindBasicSettings
@@ -4103,6 +4520,8 @@ type UebaSettings struct {
 	Type *string `json:"type,omitempty"`
 	// Name - READ-ONLY; Azure resource name
 	Name *string `json:"name,omitempty"`
+	// Etag - Etag of the alert rule.
+	Etag *string `json:"etag,omitempty"`
 	// Kind - Possible values include: 'KindSettings', 'KindUebaSettings', 'KindToggleSettings'
 	Kind KindBasicSettings `json:"kind,omitempty"`
 }
@@ -4113,6 +4532,9 @@ func (us UebaSettings) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if us.UebaSettingsProperties != nil {
 		objectMap["properties"] = us.UebaSettingsProperties
+	}
+	if us.Etag != nil {
+		objectMap["etag"] = us.Etag
 	}
 	if us.Kind != "" {
 		objectMap["kind"] = us.Kind
@@ -4185,6 +4607,15 @@ func (us *UebaSettings) UnmarshalJSON(body []byte) error {
 				}
 				us.Name = &name
 			}
+		case "etag":
+			if v != nil {
+				var etag string
+				err = json.Unmarshal(*v, &etag)
+				if err != nil {
+					return err
+				}
+				us.Etag = &etag
+			}
 		case "kind":
 			if v != nil {
 				var kind KindBasicSettings
@@ -4206,8 +4637,8 @@ type UebaSettingsProperties struct {
 	IsEnabled *bool `json:"isEnabled,omitempty"`
 	// StatusInMcas - READ-ONLY; Determines whether User and Entity Behavior Analytics is enabled from MCAS (Microsoft Cloud App Security). Possible values include: 'StatusInMcasEnabled', 'StatusInMcasDisabled'
 	StatusInMcas StatusInMcas `json:"statusInMcas,omitempty"`
-	// AtpLicenseStatus - READ-ONLY; Determines whether the tenant has ATP (Advanced Threat Protection) license.
-	AtpLicenseStatus *bool `json:"atpLicenseStatus,omitempty"`
+	// AtpLicenseStatus - READ-ONLY; Determines whether the tenant has ATP (Advanced Threat Protection) license. Possible values include: 'LicenseStatusEnabled', 'LicenseStatusDisabled'
+	AtpLicenseStatus LicenseStatus `json:"atpLicenseStatus,omitempty"`
 }
 
 // UserInfo user information that made some action

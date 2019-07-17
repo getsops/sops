@@ -240,7 +240,7 @@ var _ VirtualNetworkPeeringsClientAPI = (*network.VirtualNetworkPeeringsClient)(
 type VirtualNetworkGatewaysClientAPI interface {
 	CreateOrUpdate(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string, parameters network.VirtualNetworkGateway) (result network.VirtualNetworkGatewaysCreateOrUpdateFuture, err error)
 	Delete(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string) (result network.VirtualNetworkGatewaysDeleteFuture, err error)
-	Generatevpnclientpackage(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string, parameters network.VpnClientParameters) (result network.String, err error)
+	Generatevpnclientpackage(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string, parameters network.VpnClientParameters) (result network.VirtualNetworkGatewaysGeneratevpnclientpackageFuture, err error)
 	Get(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string) (result network.VirtualNetworkGateway, err error)
 	GetAdvertisedRoutes(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string, peer string) (result network.VirtualNetworkGatewaysGetAdvertisedRoutesFuture, err error)
 	GetBgpPeerStatus(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string, peer string) (result network.VirtualNetworkGatewaysGetBgpPeerStatusFuture, err error)

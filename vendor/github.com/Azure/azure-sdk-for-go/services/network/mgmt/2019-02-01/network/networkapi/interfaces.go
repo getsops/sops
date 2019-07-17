@@ -20,7 +20,6 @@ package networkapi
 import (
 	"context"
 	"github.com/Azure/azure-sdk-for-go/services/network/mgmt/2019-02-01/network"
-	"github.com/Azure/go-autorest/autorest"
 )
 
 // BaseClientAPI contains the set of methods on the BaseClient type.
@@ -401,7 +400,7 @@ var _ InterfaceTapConfigurationsClientAPI = (*network.InterfaceTapConfigurations
 // ProfilesClientAPI contains the set of methods on the ProfilesClient type.
 type ProfilesClientAPI interface {
 	CreateOrUpdate(ctx context.Context, resourceGroupName string, networkProfileName string, parameters network.Profile) (result network.Profile, err error)
-	Delete(ctx context.Context, resourceGroupName string, networkProfileName string) (result autorest.Response, err error)
+	Delete(ctx context.Context, resourceGroupName string, networkProfileName string) (result network.ProfilesDeleteFuture, err error)
 	Get(ctx context.Context, resourceGroupName string, networkProfileName string, expand string) (result network.Profile, err error)
 	List(ctx context.Context, resourceGroupName string) (result network.ProfileListResultPage, err error)
 	ListAll(ctx context.Context) (result network.ProfileListResultPage, err error)
@@ -657,8 +656,8 @@ var _ VirtualNetworkPeeringsClientAPI = (*network.VirtualNetworkPeeringsClient)(
 type VirtualNetworkGatewaysClientAPI interface {
 	CreateOrUpdate(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string, parameters network.VirtualNetworkGateway) (result network.VirtualNetworkGatewaysCreateOrUpdateFuture, err error)
 	Delete(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string) (result network.VirtualNetworkGatewaysDeleteFuture, err error)
-	Generatevpnclientpackage(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string, parameters network.VpnClientParameters) (result network.String, err error)
-	GenerateVpnProfile(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string, parameters network.VpnClientParameters) (result network.String, err error)
+	Generatevpnclientpackage(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string, parameters network.VpnClientParameters) (result network.VirtualNetworkGatewaysGeneratevpnclientpackageFuture, err error)
+	GenerateVpnProfile(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string, parameters network.VpnClientParameters) (result network.VirtualNetworkGatewaysGenerateVpnProfileFuture, err error)
 	Get(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string) (result network.VirtualNetworkGateway, err error)
 	GetAdvertisedRoutes(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string, peer string) (result network.VirtualNetworkGatewaysGetAdvertisedRoutesFuture, err error)
 	GetBgpPeerStatus(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string, peer string) (result network.VirtualNetworkGatewaysGetBgpPeerStatusFuture, err error)

@@ -99,6 +99,21 @@ func PossibleBlurLevelValues() []BlurLevel {
 	return []BlurLevel{High, Low, Medium}
 }
 
+// DetectionModel enumerates the values for detection model.
+type DetectionModel string
+
+const (
+	// Detection01 ...
+	Detection01 DetectionModel = "detection_01"
+	// Detection02 ...
+	Detection02 DetectionModel = "detection_02"
+)
+
+// PossibleDetectionModelValues returns an array of possible values for the DetectionModel const type.
+func PossibleDetectionModelValues() []DetectionModel {
+	return []DetectionModel{Detection01, Detection02}
+}
+
 // ExposureLevel enumerates the values for exposure level.
 type ExposureLevel string
 

@@ -71,6 +71,11 @@
       "limit_key": "MaxResults",
       "output_token": "NextToken"
     },
+    "GetWorkflowRuns": {
+      "input_token": "NextToken",
+      "limit_key": "MaxResults",
+      "output_token": "NextToken"
+    },
     "ListCrawlers": {
       "input_token": "NextToken",
       "limit_key": "MaxResults",
@@ -87,6 +92,11 @@
       "output_token": "NextToken"
     },
     "ListTriggers": {
+      "input_token": "NextToken",
+      "limit_key": "MaxResults",
+      "output_token": "NextToken"
+    },
+    "ListWorkflows": {
       "input_token": "NextToken",
       "limit_key": "MaxResults",
       "output_token": "NextToken"

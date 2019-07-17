@@ -48,12 +48,14 @@ package unix
 #include <sys/utsname.h>
 #include <sys/wait.h>
 #include <linux/bpf.h>
+#include <linux/capability.h>
 #include <linux/errqueue.h>
 #include <linux/fanotify.h>
 #include <linux/filter.h>
 #include <linux/icmpv6.h>
 #include <linux/if_pppox.h>
 #include <linux/keyctl.h>
+#include <linux/loop.h>
 #include <linux/netfilter/nf_tables.h>
 #include <linux/netfilter/nfnetlink.h>
 #include <linux/netfilter.h>
@@ -1991,3 +1993,27 @@ const (
 	BPF_FD_TYPE_UPROBE                  = C.BPF_FD_TYPE_UPROBE
 	BPF_FD_TYPE_URETPROBE               = C.BPF_FD_TYPE_URETPROBE
 )
+
+// Capabilities
+
+type CapUserHeader C.struct___user_cap_header_struct
+
+type CapUserData C.struct___user_cap_data_struct
+
+const (
+	LINUX_CAPABILITY_VERSION_1 = C._LINUX_CAPABILITY_VERSION_1
+	LINUX_CAPABILITY_VERSION_2 = C._LINUX_CAPABILITY_VERSION_2
+	LINUX_CAPABILITY_VERSION_3 = C._LINUX_CAPABILITY_VERSION_3
+)
+
+// Loop devices
+
+const (
+	LO_FLAGS_READ_ONLY = C.LO_FLAGS_READ_ONLY
+	LO_FLAGS_AUTOCLEAR = C.LO_FLAGS_AUTOCLEAR
+	LO_FLAGS_PARTSCAN  = C.LO_FLAGS_PARTSCAN
+	LO_FLAGS_DIRECT_IO = C.LO_FLAGS_DIRECT_IO
+)
+
+type LoopInfo C.struct_loop_info
+type LoopInfo64 C.struct_loop_info64

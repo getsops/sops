@@ -160,6 +160,20 @@
         {"shape":"InvalidInputException"}
       ]
     },
+    "BatchGetWorkflows":{
+      "name":"BatchGetWorkflows",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"BatchGetWorkflowsRequest"},
+      "output":{"shape":"BatchGetWorkflowsResponse"},
+      "errors":[
+        {"shape":"InternalServiceException"},
+        {"shape":"OperationTimeoutException"},
+        {"shape":"InvalidInputException"}
+      ]
+    },
     "BatchStopJobRun":{
       "name":"BatchStopJobRun",
       "http":{
@@ -349,6 +363,7 @@
       "output":{"shape":"CreateTriggerResponse"},
       "errors":[
         {"shape":"AlreadyExistsException"},
+        {"shape":"EntityNotFoundException"},
         {"shape":"InvalidInputException"},
         {"shape":"IdempotentParameterMismatchException"},
         {"shape":"InternalServiceException"},
@@ -373,6 +388,23 @@
         {"shape":"OperationTimeoutException"},
         {"shape":"ResourceNumberLimitExceededException"},
         {"shape":"GlueEncryptionException"}
+      ]
+    },
+    "CreateWorkflow":{
+      "name":"CreateWorkflow",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateWorkflowRequest"},
+      "output":{"shape":"CreateWorkflowResponse"},
+      "errors":[
+        {"shape":"AlreadyExistsException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"InternalServiceException"},
+        {"shape":"OperationTimeoutException"},
+        {"shape":"ResourceNumberLimitExceededException"},
+        {"shape":"ConcurrentModificationException"}
       ]
     },
     "DeleteClassifier":{
@@ -564,6 +596,21 @@
         {"shape":"InvalidInputException"},
         {"shape":"InternalServiceException"},
         {"shape":"OperationTimeoutException"}
+      ]
+    },
+    "DeleteWorkflow":{
+      "name":"DeleteWorkflow",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteWorkflowRequest"},
+      "output":{"shape":"DeleteWorkflowResponse"},
+      "errors":[
+        {"shape":"InvalidInputException"},
+        {"shape":"InternalServiceException"},
+        {"shape":"OperationTimeoutException"},
+        {"shape":"ConcurrentModificationException"}
       ]
     },
     "GetCatalogImportStatus":{
@@ -1067,6 +1114,66 @@
         {"shape":"GlueEncryptionException"}
       ]
     },
+    "GetWorkflow":{
+      "name":"GetWorkflow",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetWorkflowRequest"},
+      "output":{"shape":"GetWorkflowResponse"},
+      "errors":[
+        {"shape":"InvalidInputException"},
+        {"shape":"EntityNotFoundException"},
+        {"shape":"InternalServiceException"},
+        {"shape":"OperationTimeoutException"}
+      ]
+    },
+    "GetWorkflowRun":{
+      "name":"GetWorkflowRun",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetWorkflowRunRequest"},
+      "output":{"shape":"GetWorkflowRunResponse"},
+      "errors":[
+        {"shape":"InvalidInputException"},
+        {"shape":"EntityNotFoundException"},
+        {"shape":"InternalServiceException"},
+        {"shape":"OperationTimeoutException"}
+      ]
+    },
+    "GetWorkflowRunProperties":{
+      "name":"GetWorkflowRunProperties",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetWorkflowRunPropertiesRequest"},
+      "output":{"shape":"GetWorkflowRunPropertiesResponse"},
+      "errors":[
+        {"shape":"InvalidInputException"},
+        {"shape":"EntityNotFoundException"},
+        {"shape":"InternalServiceException"},
+        {"shape":"OperationTimeoutException"}
+      ]
+    },
+    "GetWorkflowRuns":{
+      "name":"GetWorkflowRuns",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetWorkflowRunsRequest"},
+      "output":{"shape":"GetWorkflowRunsResponse"},
+      "errors":[
+        {"shape":"InvalidInputException"},
+        {"shape":"EntityNotFoundException"},
+        {"shape":"InternalServiceException"},
+        {"shape":"OperationTimeoutException"}
+      ]
+    },
     "ImportCatalogToGlue":{
       "name":"ImportCatalogToGlue",
       "http":{
@@ -1137,6 +1244,20 @@
         {"shape":"OperationTimeoutException"}
       ]
     },
+    "ListWorkflows":{
+      "name":"ListWorkflows",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListWorkflowsRequest"},
+      "output":{"shape":"ListWorkflowsResponse"},
+      "errors":[
+        {"shape":"InvalidInputException"},
+        {"shape":"InternalServiceException"},
+        {"shape":"OperationTimeoutException"}
+      ]
+    },
     "PutDataCatalogEncryptionSettings":{
       "name":"PutDataCatalogEncryptionSettings",
       "http":{
@@ -1165,6 +1286,24 @@
         {"shape":"OperationTimeoutException"},
         {"shape":"InvalidInputException"},
         {"shape":"ConditionCheckFailureException"}
+      ]
+    },
+    "PutWorkflowRunProperties":{
+      "name":"PutWorkflowRunProperties",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"PutWorkflowRunPropertiesRequest"},
+      "output":{"shape":"PutWorkflowRunPropertiesResponse"},
+      "errors":[
+        {"shape":"AlreadyExistsException"},
+        {"shape":"EntityNotFoundException"},
+        {"shape":"InvalidInputException"},
+        {"shape":"InternalServiceException"},
+        {"shape":"OperationTimeoutException"},
+        {"shape":"ResourceNumberLimitExceededException"},
+        {"shape":"ConcurrentModificationException"}
       ]
     },
     "ResetJobBookmark":{
@@ -1241,6 +1380,23 @@
         {"shape":"InvalidInputException"},
         {"shape":"InternalServiceException"},
         {"shape":"EntityNotFoundException"},
+        {"shape":"OperationTimeoutException"},
+        {"shape":"ResourceNumberLimitExceededException"},
+        {"shape":"ConcurrentRunsExceededException"}
+      ]
+    },
+    "StartWorkflowRun":{
+      "name":"StartWorkflowRun",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"StartWorkflowRunRequest"},
+      "output":{"shape":"StartWorkflowRunResponse"},
+      "errors":[
+        {"shape":"InvalidInputException"},
+        {"shape":"EntityNotFoundException"},
+        {"shape":"InternalServiceException"},
         {"shape":"OperationTimeoutException"},
         {"shape":"ResourceNumberLimitExceededException"},
         {"shape":"ConcurrentRunsExceededException"}
@@ -1498,6 +1654,22 @@
         {"shape":"OperationTimeoutException"},
         {"shape":"GlueEncryptionException"}
       ]
+    },
+    "UpdateWorkflow":{
+      "name":"UpdateWorkflow",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateWorkflowRequest"},
+      "output":{"shape":"UpdateWorkflowResponse"},
+      "errors":[
+        {"shape":"InvalidInputException"},
+        {"shape":"EntityNotFoundException"},
+        {"shape":"InternalServiceException"},
+        {"shape":"OperationTimeoutException"},
+        {"shape":"ConcurrentModificationException"}
+      ]
     }
   },
   "shapes":{
@@ -1514,8 +1686,9 @@
         "JobName":{"shape":"NameString"},
         "Arguments":{"shape":"GenericMap"},
         "Timeout":{"shape":"Timeout"},
+        "SecurityConfiguration":{"shape":"NameString"},
         "NotificationProperty":{"shape":"NotificationProperty"},
-        "SecurityConfiguration":{"shape":"NameString"}
+        "CrawlerName":{"shape":"NameString"}
       }
     },
     "ActionList":{
@@ -1722,6 +1895,21 @@
       "members":{
         "Triggers":{"shape":"TriggerList"},
         "TriggersNotFound":{"shape":"TriggerNameList"}
+      }
+    },
+    "BatchGetWorkflowsRequest":{
+      "type":"structure",
+      "required":["Names"],
+      "members":{
+        "Names":{"shape":"WorkflowNames"},
+        "IncludeGraph":{"shape":"NullableBoolean"}
+      }
+    },
+    "BatchGetWorkflowsResponse":{
+      "type":"structure",
+      "members":{
+        "Workflows":{"shape":"Workflows"},
+        "MissingWorkflows":{"shape":"WorkflowNames"}
       }
     },
     "BatchStopJobRunError":{
@@ -1970,7 +2158,9 @@
       "members":{
         "LogicalOperator":{"shape":"LogicalOperator"},
         "JobName":{"shape":"NameString"},
-        "State":{"shape":"JobRunState"}
+        "State":{"shape":"JobRunState"},
+        "CrawlerName":{"shape":"NameString"},
+        "CrawlState":{"shape":"CrawlState"}
       }
     },
     "ConditionCheckFailureException":{
@@ -2062,8 +2252,32 @@
     "ConnectionsList":{
       "type":"structure",
       "members":{
-        "Connections":{"shape":"StringList"}
+        "Connections":{"shape":"OrchestrationStringList"}
       }
+    },
+    "Crawl":{
+      "type":"structure",
+      "members":{
+        "State":{"shape":"CrawlState"},
+        "StartedOn":{"shape":"TimestampValue"},
+        "CompletedOn":{"shape":"TimestampValue"},
+        "ErrorMessage":{"shape":"DescriptionString"},
+        "LogGroup":{"shape":"LogGroup"},
+        "LogStream":{"shape":"LogStream"}
+      }
+    },
+    "CrawlList":{
+      "type":"list",
+      "member":{"shape":"Crawl"}
+    },
+    "CrawlState":{
+      "type":"string",
+      "enum":[
+        "RUNNING",
+        "SUCCEEDED",
+        "CANCELLED",
+        "FAILED"
+      ]
     },
     "Crawler":{
       "type":"structure",
@@ -2114,6 +2328,12 @@
       "member":{"shape":"NameString"},
       "max":100,
       "min":0
+    },
+    "CrawlerNodeDetails":{
+      "type":"structure",
+      "members":{
+        "Crawls":{"shape":"CrawlList"}
+      }
     },
     "CrawlerNotRunningException":{
       "type":"structure",
@@ -2318,11 +2538,11 @@
         },
         "Timeout":{"shape":"Timeout"},
         "MaxCapacity":{"shape":"NullableDouble"},
-        "NotificationProperty":{"shape":"NotificationProperty"},
-        "WorkerType":{"shape":"WorkerType"},
-        "NumberOfWorkers":{"shape":"NullableInteger"},
         "SecurityConfiguration":{"shape":"NameString"},
-        "Tags":{"shape":"TagsMap"}
+        "Tags":{"shape":"TagsMap"},
+        "NotificationProperty":{"shape":"NotificationProperty"},
+        "NumberOfWorkers":{"shape":"NullableInteger"},
+        "WorkerType":{"shape":"NameString"}
       }
     },
     "CreateJobResponse":{
@@ -2420,6 +2640,7 @@
       ],
       "members":{
         "Name":{"shape":"NameString"},
+        "WorkflowName":{"shape":"NameString"},
         "Type":{"shape":"TriggerType"},
         "Schedule":{"shape":"GenericString"},
         "Predicate":{"shape":"Predicate"},
@@ -2450,6 +2671,22 @@
     "CreateUserDefinedFunctionResponse":{
       "type":"structure",
       "members":{
+      }
+    },
+    "CreateWorkflowRequest":{
+      "type":"structure",
+      "required":["Name"],
+      "members":{
+        "Name":{"shape":"NameString"},
+        "Description":{"shape":"GenericString"},
+        "DefaultRunProperties":{"shape":"WorkflowRunProperties"},
+        "Tags":{"shape":"TagsMap"}
+      }
+    },
+    "CreateWorkflowResponse":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"NameString"}
       }
     },
     "CreateXMLClassifierRequest":{
@@ -2749,6 +2986,19 @@
       "members":{
       }
     },
+    "DeleteWorkflowRequest":{
+      "type":"structure",
+      "required":["Name"],
+      "members":{
+        "Name":{"shape":"NameString"}
+      }
+    },
+    "DeleteWorkflowResponse":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"NameString"}
+      }
+    },
     "DescriptionString":{
       "type":"string",
       "max":2048,
@@ -2818,6 +3068,17 @@
     "DynamoDBTargetList":{
       "type":"list",
       "member":{"shape":"DynamoDBTarget"}
+    },
+    "Edge":{
+      "type":"structure",
+      "members":{
+        "SourceId":{"shape":"NameString"},
+        "DestinationId":{"shape":"NameString"}
+      }
+    },
+    "EdgeList":{
+      "type":"list",
+      "member":{"shape":"Edge"}
     },
     "EncryptionAtRest":{
       "type":"structure",
@@ -3432,6 +3693,72 @@
         "NextToken":{"shape":"Token"}
       }
     },
+    "GetWorkflowRequest":{
+      "type":"structure",
+      "required":["Name"],
+      "members":{
+        "Name":{"shape":"NameString"},
+        "IncludeGraph":{"shape":"NullableBoolean"}
+      }
+    },
+    "GetWorkflowResponse":{
+      "type":"structure",
+      "members":{
+        "Workflow":{"shape":"Workflow"}
+      }
+    },
+    "GetWorkflowRunPropertiesRequest":{
+      "type":"structure",
+      "required":[
+        "Name",
+        "RunId"
+      ],
+      "members":{
+        "Name":{"shape":"NameString"},
+        "RunId":{"shape":"IdString"}
+      }
+    },
+    "GetWorkflowRunPropertiesResponse":{
+      "type":"structure",
+      "members":{
+        "RunProperties":{"shape":"WorkflowRunProperties"}
+      }
+    },
+    "GetWorkflowRunRequest":{
+      "type":"structure",
+      "required":[
+        "Name",
+        "RunId"
+      ],
+      "members":{
+        "Name":{"shape":"NameString"},
+        "RunId":{"shape":"IdString"},
+        "IncludeGraph":{"shape":"NullableBoolean"}
+      }
+    },
+    "GetWorkflowRunResponse":{
+      "type":"structure",
+      "members":{
+        "Run":{"shape":"WorkflowRun"}
+      }
+    },
+    "GetWorkflowRunsRequest":{
+      "type":"structure",
+      "required":["Name"],
+      "members":{
+        "Name":{"shape":"NameString"},
+        "IncludeGraph":{"shape":"NullableBoolean"},
+        "NextToken":{"shape":"GenericString"},
+        "MaxResults":{"shape":"PageSize"}
+      }
+    },
+    "GetWorkflowRunsResponse":{
+      "type":"structure",
+      "members":{
+        "Runs":{"shape":"WorkflowRuns"},
+        "NextToken":{"shape":"GenericString"}
+      }
+    },
     "GlueEncryptionException":{
       "type":"structure",
       "members":{
@@ -3600,6 +3927,12 @@
       "type":"list",
       "member":{"shape":"NameString"}
     },
+    "JobNodeDetails":{
+      "type":"structure",
+      "members":{
+        "JobRuns":{"shape":"JobRunList"}
+      }
+    },
     "JobRun":{
       "type":"structure",
       "members":{
@@ -3623,11 +3956,11 @@
         "ExecutionTime":{"shape":"ExecutionTime"},
         "Timeout":{"shape":"Timeout"},
         "MaxCapacity":{"shape":"NullableDouble"},
-        "NotificationProperty":{"shape":"NotificationProperty"},
         "WorkerType":{"shape":"WorkerType"},
         "NumberOfWorkers":{"shape":"NullableInteger"},
         "SecurityConfiguration":{"shape":"NameString"},
-        "LogGroupName":{"shape":"GenericString"}
+        "LogGroupName":{"shape":"GenericString"},
+        "NotificationProperty":{"shape":"NotificationProperty"}
       }
     },
     "JobRunList":{
@@ -3783,6 +4116,20 @@
         "NextToken":{"shape":"GenericString"}
       }
     },
+    "ListWorkflowsRequest":{
+      "type":"structure",
+      "members":{
+        "NextToken":{"shape":"GenericString"},
+        "MaxResults":{"shape":"PageSize"}
+      }
+    },
+    "ListWorkflowsResponse":{
+      "type":"structure",
+      "members":{
+        "Workflows":{"shape":"WorkflowNames"},
+        "NextToken":{"shape":"GenericString"}
+      }
+    },
     "Location":{
       "type":"structure",
       "members":{
@@ -3879,6 +4226,29 @@
       },
       "exception":true
     },
+    "Node":{
+      "type":"structure",
+      "members":{
+        "Type":{"shape":"NodeType"},
+        "Name":{"shape":"NameString"},
+        "UniqueId":{"shape":"NameString"},
+        "TriggerDetails":{"shape":"TriggerNodeDetails"},
+        "JobDetails":{"shape":"JobNodeDetails"},
+        "CrawlerDetails":{"shape":"CrawlerNodeDetails"}
+      }
+    },
+    "NodeList":{
+      "type":"list",
+      "member":{"shape":"Node"}
+    },
+    "NodeType":{
+      "type":"string",
+      "enum":[
+        "CRAWLER",
+        "JOB",
+        "TRIGGER"
+      ]
+    },
     "NonNegativeDouble":{
       "type":"double",
       "min":0.0
@@ -3916,6 +4286,10 @@
         "Message":{"shape":"MessageString"}
       },
       "exception":true
+    },
+    "OrchestrationStringList":{
+      "type":"list",
+      "member":{"shape":"GenericString"}
     },
     "Order":{
       "type":"structure",
@@ -4079,6 +4453,24 @@
       "type":"structure",
       "members":{
         "PolicyHash":{"shape":"HashString"}
+      }
+    },
+    "PutWorkflowRunPropertiesRequest":{
+      "type":"structure",
+      "required":[
+        "Name",
+        "RunId",
+        "RunProperties"
+      ],
+      "members":{
+        "Name":{"shape":"NameString"},
+        "RunId":{"shape":"IdString"},
+        "RunProperties":{"shape":"WorkflowRunProperties"}
+      }
+    },
+    "PutWorkflowRunPropertiesResponse":{
+      "type":"structure",
+      "members":{
       }
     },
     "PythonScript":{"type":"string"},
@@ -4293,10 +4685,10 @@
         },
         "Timeout":{"shape":"Timeout"},
         "MaxCapacity":{"shape":"NullableDouble"},
-        "WorkerType":{"shape":"WorkerType"},
-        "NumberOfWorkers":{"shape":"NullableInteger"},
         "SecurityConfiguration":{"shape":"NameString"},
-        "NotificationProperty":{"shape":"NotificationProperty"}
+        "NotificationProperty":{"shape":"NotificationProperty"},
+        "WorkerType":{"shape":"NameString"},
+        "NumberOfWorkers":{"shape":"NullableInteger"}
       }
     },
     "StartJobRunResponse":{
@@ -4316,6 +4708,19 @@
       "type":"structure",
       "members":{
         "Name":{"shape":"NameString"}
+      }
+    },
+    "StartWorkflowRunRequest":{
+      "type":"structure",
+      "required":["Name"],
+      "members":{
+        "Name":{"shape":"NameString"}
+      }
+    },
+    "StartWorkflowRunResponse":{
+      "type":"structure",
+      "members":{
+        "RunId":{"shape":"IdString"}
       }
     },
     "StopCrawlerRequest":{
@@ -4516,6 +4921,7 @@
       "type":"structure",
       "members":{
         "Name":{"shape":"NameString"},
+        "WorkflowName":{"shape":"NameString"},
         "Id":{"shape":"IdString"},
         "Type":{"shape":"TriggerType"},
         "State":{"shape":"TriggerState"},
@@ -4532,6 +4938,12 @@
     "TriggerNameList":{
       "type":"list",
       "member":{"shape":"NameString"}
+    },
+    "TriggerNodeDetails":{
+      "type":"structure",
+      "members":{
+        "Trigger":{"shape":"Trigger"}
+      }
     },
     "TriggerState":{
       "type":"string",
@@ -4818,6 +5230,21 @@
       "members":{
       }
     },
+    "UpdateWorkflowRequest":{
+      "type":"structure",
+      "required":["Name"],
+      "members":{
+        "Name":{"shape":"NameString"},
+        "Description":{"shape":"GenericString"},
+        "DefaultRunProperties":{"shape":"WorkflowRunProperties"}
+      }
+    },
+    "UpdateWorkflowResponse":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"NameString"}
+      }
+    },
     "UpdateXMLClassifierRequest":{
       "type":"structure",
       "required":["Name"],
@@ -4893,6 +5320,79 @@
         "G.1X",
         "G.2X"
       ]
+    },
+    "Workflow":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"NameString"},
+        "Description":{"shape":"GenericString"},
+        "DefaultRunProperties":{"shape":"WorkflowRunProperties"},
+        "CreatedOn":{"shape":"TimestampValue"},
+        "LastModifiedOn":{"shape":"TimestampValue"},
+        "LastRun":{"shape":"WorkflowRun"},
+        "Graph":{"shape":"WorkflowGraph"}
+      }
+    },
+    "WorkflowGraph":{
+      "type":"structure",
+      "members":{
+        "Nodes":{"shape":"NodeList"},
+        "Edges":{"shape":"EdgeList"}
+      }
+    },
+    "WorkflowNames":{
+      "type":"list",
+      "member":{"shape":"NameString"},
+      "max":25,
+      "min":1
+    },
+    "WorkflowRun":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"NameString"},
+        "WorkflowRunId":{"shape":"IdString"},
+        "WorkflowRunProperties":{"shape":"WorkflowRunProperties"},
+        "StartedOn":{"shape":"TimestampValue"},
+        "CompletedOn":{"shape":"TimestampValue"},
+        "Status":{"shape":"WorkflowRunStatus"},
+        "Statistics":{"shape":"WorkflowRunStatistics"},
+        "Graph":{"shape":"WorkflowGraph"}
+      }
+    },
+    "WorkflowRunProperties":{
+      "type":"map",
+      "key":{"shape":"IdString"},
+      "value":{"shape":"GenericString"}
+    },
+    "WorkflowRunStatistics":{
+      "type":"structure",
+      "members":{
+        "TotalActions":{"shape":"IntegerValue"},
+        "TimeoutActions":{"shape":"IntegerValue"},
+        "FailedActions":{"shape":"IntegerValue"},
+        "StoppedActions":{"shape":"IntegerValue"},
+        "SucceededActions":{"shape":"IntegerValue"},
+        "RunningActions":{"shape":"IntegerValue"}
+      }
+    },
+    "WorkflowRunStatus":{
+      "type":"string",
+      "enum":[
+        "RUNNING",
+        "COMPLETED"
+      ]
+    },
+    "WorkflowRuns":{
+      "type":"list",
+      "member":{"shape":"WorkflowRun"},
+      "max":1000,
+      "min":1
+    },
+    "Workflows":{
+      "type":"list",
+      "member":{"shape":"Workflow"},
+      "max":25,
+      "min":1
     },
     "XMLClassifier":{
       "type":"structure",

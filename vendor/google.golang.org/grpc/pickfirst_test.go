@@ -184,7 +184,7 @@ func (s) TestOneServerDownPickfirst(t *testing.T) {
 	servers, _, scleanup := startServers(t, numServers, math.MaxInt32)
 	defer scleanup()
 
-	cc, err := Dial(r.Scheme()+":///test.server", WithInsecure(), WithCodec(testCodec{}), WithWaitForHandshake())
+	cc, err := Dial(r.Scheme()+":///test.server", WithInsecure(), WithCodec(testCodec{}))
 	if err != nil {
 		t.Fatalf("failed to dial: %v", err)
 	}
@@ -225,7 +225,7 @@ func (s) TestAllServersDownPickfirst(t *testing.T) {
 	servers, _, scleanup := startServers(t, numServers, math.MaxInt32)
 	defer scleanup()
 
-	cc, err := Dial(r.Scheme()+":///test.server", WithInsecure(), WithCodec(testCodec{}), WithWaitForHandshake())
+	cc, err := Dial(r.Scheme()+":///test.server", WithInsecure(), WithCodec(testCodec{}))
 	if err != nil {
 		t.Fatalf("failed to dial: %v", err)
 	}

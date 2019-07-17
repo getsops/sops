@@ -260,8 +260,7 @@ type GoogleCloudServicebrokerV1alpha1__Binding struct {
 	// Required.
 	BindingId string `json:"binding_id,omitempty"`
 
-	// CreateTime: Output only.
-	// Timestamp for when the binding was created.
+	// CreateTime: Output only. Timestamp for when the binding was created.
 	CreateTime string `json:"createTime,omitempty"`
 
 	// Parameters: Configuration options for the service binding.
@@ -923,13 +922,11 @@ type GoogleCloudServicebrokerV1alpha1__ServiceInstance struct {
 	// Currently only used for logging context information.
 	Context googleapi.RawMessage `json:"context,omitempty"`
 
-	// CreateTime: Output only.
-	// Timestamp for when the instance was created.
+	// CreateTime: Output only. Timestamp for when the instance was created.
 	CreateTime string `json:"createTime,omitempty"`
 
-	// DeploymentName: Output only.
-	// Name of the Deployment Manager deployment used for provisioning of
-	// this
+	// DeploymentName: Output only. Name of the Deployment Manager
+	// deployment used for provisioning of this
 	// service instance.
 	DeploymentName string `json:"deploymentName,omitempty"`
 
@@ -961,8 +958,7 @@ type GoogleCloudServicebrokerV1alpha1__ServiceInstance struct {
 	// fields.
 	PreviousValues googleapi.RawMessage `json:"previous_values,omitempty"`
 
-	// ResourceName: Output only.
-	// The resource name of the instance,
+	// ResourceName: Output only. The resource name of the instance,
 	// e.g.
 	// projects/project_id/brokers/broker_id/service_instances/instance_
 	// id
@@ -1074,7 +1070,7 @@ type GoogleIamV1__Binding struct {
 	//
 	// * `user:{emailid}`: An email address that represents a specific
 	// Google
-	//    account. For example, `alice@gmail.com` .
+	//    account. For example, `alice@example.com` .
 	//
 	//
 	// * `serviceAccount:{emailid}`: An email address that represents a
@@ -1194,7 +1190,7 @@ type GoogleIamV1__Policy struct {
 	//
 	// If no `etag` is provided in the call to `setIamPolicy`, then the
 	// existing
-	// policy is overwritten blindly.
+	// policy is overwritten.
 	Etag string `json:"etag,omitempty"`
 
 	// Version: Deprecated.
@@ -3789,6 +3785,18 @@ func (r *V1alpha1Service) GetIamPolicy(resource string) *V1alpha1GetIamPolicyCal
 	return c
 }
 
+// OptionsRequestedPolicyVersion sets the optional parameter
+// "options.requestedPolicyVersion": The policy format version to be
+// returned.
+// Acceptable values are 0 and 1.
+// If the value is 0, or the field is omitted, policy format version 1
+// will be
+// returned.
+func (c *V1alpha1GetIamPolicyCall) OptionsRequestedPolicyVersion(optionsRequestedPolicyVersion int64) *V1alpha1GetIamPolicyCall {
+	c.urlParams_.Set("options.requestedPolicyVersion", fmt.Sprint(optionsRequestedPolicyVersion))
+	return c
+}
+
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -3895,6 +3903,12 @@ func (c *V1alpha1GetIamPolicyCall) Do(opts ...googleapi.CallOption) (*GoogleIamV
 	//     "resource"
 	//   ],
 	//   "parameters": {
+	//     "options.requestedPolicyVersion": {
+	//       "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+	//       "format": "int32",
+	//       "location": "query",
+	//       "type": "integer"
+	//     },
 	//     "resource": {
 	//       "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",

@@ -27,7 +27,7 @@ import (
 	"go.opencensus.io/tag"
 )
 
-var keyAccountId, _ = tag.NewKey("account_id")
+var keyAccountId = tag.MustNewKey("account_id")
 
 func TestEndToEnd_Single(t *testing.T) {
 	view.Register(ocgrpc.DefaultClientViews...)

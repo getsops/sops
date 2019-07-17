@@ -22,7 +22,7 @@ package managedservices
 import (
 	"context"
 
-	original "github.com/Azure/azure-sdk-for-go/services/preview/managedservices/mgmt/2018-06-01/managedservices"
+	original "github.com/Azure/azure-sdk-for-go/services/preview/managedservices/mgmt/2019-04-01/managedservices"
 )
 
 const (
@@ -63,12 +63,15 @@ type RegistrationAssignmentProperties = original.RegistrationAssignmentPropertie
 type RegistrationAssignmentPropertiesRegistrationDefinition = original.RegistrationAssignmentPropertiesRegistrationDefinition
 type RegistrationAssignmentPropertiesRegistrationDefinitionProperties = original.RegistrationAssignmentPropertiesRegistrationDefinitionProperties
 type RegistrationAssignmentsClient = original.RegistrationAssignmentsClient
+type RegistrationAssignmentsCreateOrUpdateFuture = original.RegistrationAssignmentsCreateOrUpdateFuture
+type RegistrationAssignmentsDeleteFuture = original.RegistrationAssignmentsDeleteFuture
 type RegistrationDefinition = original.RegistrationDefinition
 type RegistrationDefinitionList = original.RegistrationDefinitionList
 type RegistrationDefinitionListIterator = original.RegistrationDefinitionListIterator
 type RegistrationDefinitionListPage = original.RegistrationDefinitionListPage
 type RegistrationDefinitionProperties = original.RegistrationDefinitionProperties
 type RegistrationDefinitionsClient = original.RegistrationDefinitionsClient
+type RegistrationDefinitionsCreateOrUpdateFuture = original.RegistrationDefinitionsCreateOrUpdateFuture
 
 func New() BaseClient {
 	return original.New()

@@ -23,6 +23,13 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
+// BaseClientAPI contains the set of methods on the BaseClient type.
+type BaseClientAPI interface {
+	CheckDomainAvailability(ctx context.Context, parameters cognitiveservices.CheckDomainAvailabilityParameter) (result cognitiveservices.CheckDomainAvailabilityResult, err error)
+}
+
+var _ BaseClientAPI = (*cognitiveservices.BaseClient)(nil)
+
 // AccountsClientAPI contains the set of methods on the AccountsClient type.
 type AccountsClientAPI interface {
 	Create(ctx context.Context, resourceGroupName string, accountName string, parameters cognitiveservices.AccountCreateParameters) (result cognitiveservices.Account, err error)

@@ -189,6 +189,18 @@ func TestUpdateSubscription(t *testing.T) {
 	if err == nil {
 		t.Fatal("got nil, want error")
 	}
+
+	// Check ExpirationPolicy when set to never expire.
+	got, err = sub.Update(ctx, SubscriptionConfigToUpdate{
+		ExpirationPolicy: time.Duration(0),
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	want.ExpirationPolicy = time.Duration(0)
+	if !testutil.Equal(got, want) {
+		t.Fatalf("\ngot %+v\nwant %+v", got, want)
+	}
 }
 
 func TestReceive(t *testing.T) {

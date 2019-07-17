@@ -146,6 +146,8 @@ type WebhookResponse struct {
 	OutputContexts []*Context `protobuf:"bytes,5,rep,name=output_contexts,json=outputContexts,proto3" json:"output_contexts,omitempty"`
 	// Optional. Makes the platform immediately invoke another `DetectIntent` call
 	// internally with the specified event as input.
+	// When this field is set, Dialogflow ignores the `fulfillment_text`,
+	// `fulfillment_messages`, and `payload` fields.
 	FollowupEventInput *EventInput `protobuf:"bytes,6,opt,name=followup_event_input,json=followupEventInput,proto3" json:"followup_event_input,omitempty"`
 	// Optional. Indicates that this intent ends an interaction. Some integrations
 	// (e.g., Actions on Google or Dialogflow phone gateway) use this information

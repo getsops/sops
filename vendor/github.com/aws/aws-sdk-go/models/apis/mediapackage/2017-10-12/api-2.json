@@ -471,6 +471,21 @@
       ], 
       "type": "string"
     }, 
+    "AdTriggers": {
+      "member": {
+        "shape": "__AdTriggersElement"
+      }, 
+      "type": "list"
+    }, 
+    "AdsOnDeliveryRestrictions": {
+      "enum": [
+        "NONE", 
+        "RESTRICTED", 
+        "UNRESTRICTED", 
+        "BOTH"
+      ], 
+      "type": "string"
+    }, 
     "Channel": {
       "members": {
         "Arn": {
@@ -785,6 +800,14 @@
     }, 
     "DashPackage": {
       "members": {
+        "AdTriggers": {
+          "locationName": "adTriggers", 
+          "shape": "AdTriggers"
+        }, 
+        "AdsOnDeliveryRestrictions": {
+          "locationName": "adsOnDeliveryRestrictions", 
+          "shape": "AdsOnDeliveryRestrictions"
+        }, 
         "Encryption": {
           "locationName": "encryption", 
           "shape": "DashEncryption"
@@ -1081,6 +1104,14 @@
           "locationName": "adMarkers", 
           "shape": "AdMarkers"
         }, 
+        "AdTriggers": {
+          "locationName": "adTriggers", 
+          "shape": "AdTriggers"
+        }, 
+        "AdsOnDeliveryRestrictions": {
+          "locationName": "adsOnDeliveryRestrictions", 
+          "shape": "AdsOnDeliveryRestrictions"
+        }, 
         "Id": {
           "locationName": "id", 
           "shape": "__string"
@@ -1116,6 +1147,14 @@
         "AdMarkers": {
           "locationName": "adMarkers", 
           "shape": "AdMarkers"
+        }, 
+        "AdTriggers": {
+          "locationName": "adTriggers", 
+          "shape": "AdTriggers"
+        }, 
+        "AdsOnDeliveryRestrictions": {
+          "locationName": "adsOnDeliveryRestrictions", 
+          "shape": "AdsOnDeliveryRestrictions"
         }, 
         "Encryption": {
           "locationName": "encryption", 
@@ -1601,7 +1640,7 @@
     "SegmentTemplateFormat": {
       "enum": [
         "NUMBER_WITH_TIMELINE", 
-        "TIME_WITH_TIMELINE",
+        "TIME_WITH_TIMELINE", 
         "NUMBER_WITH_DURATION"
       ], 
       "type": "string"
@@ -1910,6 +1949,19 @@
         }
       }, 
       "type": "structure"
+    }, 
+    "__AdTriggersElement": {
+      "enum": [
+        "SPLICE_INSERT", 
+        "BREAK", 
+        "PROVIDER_ADVERTISEMENT", 
+        "DISTRIBUTOR_ADVERTISEMENT", 
+        "PROVIDER_PLACEMENT_OPPORTUNITY", 
+        "DISTRIBUTOR_PLACEMENT_OPPORTUNITY", 
+        "PROVIDER_OVERLAY_PLACEMENT_OPPORTUNITY", 
+        "DISTRIBUTOR_OVERLAY_PLACEMENT_OPPORTUNITY"
+      ], 
+      "type": "string"
     }, 
     "__PeriodTriggersElement": {
       "enum": [

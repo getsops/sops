@@ -205,6 +205,18 @@ func (s *mockIncidentServer) SearchSignals(ctx context.Context, req *irmpb.Searc
 	return s.resps[0].(*irmpb.SearchSignalsResponse), nil
 }
 
+func (s *mockIncidentServer) LookupSignal(ctx context.Context, req *irmpb.LookupSignalRequest) (*irmpb.Signal, error) {
+	md, _ := metadata.FromIncomingContext(ctx)
+	if xg := md["x-goog-api-client"]; len(xg) == 0 || !strings.Contains(xg[0], "gl-go/") {
+		return nil, fmt.Errorf("x-goog-api-client = %v, expected gl-go key", xg)
+	}
+	s.reqs = append(s.reqs, req)
+	if s.err != nil {
+		return nil, s.err
+	}
+	return s.resps[0].(*irmpb.Signal), nil
+}
+
 func (s *mockIncidentServer) GetSignal(ctx context.Context, req *irmpb.GetSignalRequest) (*irmpb.Signal, error) {
 	md, _ := metadata.FromIncomingContext(ctx)
 	if xg := md["x-goog-api-client"]; len(xg) == 0 || !strings.Contains(xg[0], "gl-go/") {
@@ -808,9 +820,11 @@ func TestIncidentServiceSearchSimilarIncidentsError(t *testing.T) {
 func TestIncidentServiceCreateAnnotation(t *testing.T) {
 	var name string = "name3373707"
 	var content string = "content951530617"
+	var contentType string = "contentType831846208"
 	var expectedResponse = &irmpb.Annotation{
-		Name:    name,
-		Content: content,
+		Name:        name,
+		Content:     content,
+		ContentType: contentType,
 	}
 
 	mockIncident.err = nil
@@ -1337,6 +1351,69 @@ func TestIncidentServiceGetSignalError(t *testing.T) {
 	}
 
 	resp, err := c.GetSignal(context.Background(), request)
+
+	if st, ok := gstatus.FromError(err); !ok {
+		t.Errorf("got error %v, expected grpc error", err)
+	} else if c := st.Code(); c != errCode {
+		t.Errorf("got error code %q, want %q", c, errCode)
+	}
+	_ = resp
+}
+func TestIncidentServiceLookupSignal(t *testing.T) {
+	var name string = "name3373707"
+	var etag string = "etag3123477"
+	var incident string = "incident86983890"
+	var title string = "title110371416"
+	var contentType string = "contentType831846208"
+	var content string = "content951530617"
+	var expectedResponse = &irmpb.Signal{
+		Name:        name,
+		Etag:        etag,
+		Incident:    incident,
+		Title:       title,
+		ContentType: contentType,
+		Content:     content,
+	}
+
+	mockIncident.err = nil
+	mockIncident.reqs = nil
+
+	mockIncident.resps = append(mockIncident.resps[:0], expectedResponse)
+
+	var request *irmpb.LookupSignalRequest = &irmpb.LookupSignalRequest{}
+
+	c, err := NewIncidentClient(context.Background(), clientOpt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	resp, err := c.LookupSignal(context.Background(), request)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if want, got := request, mockIncident.reqs[0]; !proto.Equal(want, got) {
+		t.Errorf("wrong request %q, want %q", got, want)
+	}
+
+	if want, got := expectedResponse, resp; !proto.Equal(want, got) {
+		t.Errorf("wrong response %q, want %q)", got, want)
+	}
+}
+
+func TestIncidentServiceLookupSignalError(t *testing.T) {
+	errCode := codes.PermissionDenied
+	mockIncident.err = gstatus.Error(errCode, "test error")
+
+	var request *irmpb.LookupSignalRequest = &irmpb.LookupSignalRequest{}
+
+	c, err := NewIncidentClient(context.Background(), clientOpt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	resp, err := c.LookupSignal(context.Background(), request)
 
 	if st, ok := gstatus.FromError(err); !ok {
 		t.Errorf("got error %v, expected grpc error", err)

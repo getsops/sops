@@ -33,11 +33,12 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
-	"regexp"
 	"runtime"
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/Azure/azure-sdk-for-go/tools/internal/modinfo"
 
 	"golang.org/x/tools/imports"
 )
@@ -53,10 +54,8 @@ const (
 	aliasFileName   = "models.go"
 )
 
-var packageName = regexp.MustCompile(`services[/\\](?P<provider>[\w\-\.\d_\\/]+)[/\\](?:(?P<arm>` + armPathModifier + `)[/\\])?(?P<version>v?\d{4}-\d{2}-\d{2}[\w\d\.\-]*|v?\d+[\.\d+\.\d\w\-]*)[/\\](?P<group>[/\\\w\d\-\._]+)`)
-
 // BuildProfile takes a list of packages and creates a profile
-func BuildProfile(packageList ListDefinition, name, outputLocation string, outputLog, errLog *log.Logger, recursive bool) {
+func BuildProfile(packageList ListDefinition, name, outputLocation string, outputLog, errLog *log.Logger, recursive, modules bool) {
 	// limit the number of concurrent calls to parser.ParseDir()
 	semLimit := 32
 	if runtime.GOOS == "darwin" {
@@ -119,6 +118,10 @@ func BuildProfile(packageList ListDefinition, name, outputLocation string, outpu
 					var ok bool
 					if aliasPath, ok = packageList.PathOverride[importPath]; !ok {
 						var err error
+						if modules && modinfo.HasVersionSuffix(path) {
+							// strip off the major version dir so it's not included in the alias path
+							path = filepath.Dir(path)
+						}
 						aliasPath, err = getAliasPath(path)
 						if err != nil {
 							errLog.Fatalf("failed to calculate alias directory: %v", err)
@@ -153,20 +156,22 @@ func getAliasPath(packageDir string) (string, error) {
 	// into this:
 	//  compute/mgmt/compute
 	// i.e. remove everything to the left of /services along with the API version
-	packageDir = strings.TrimSuffix(packageDir, string(filepath.Separator))
-	matches := packageName.FindAllStringSubmatch(packageDir, -1)
-	if matches == nil {
-		return "", fmt.Errorf("path '%s' does not resemble a known package path", packageDir)
+	pi, err := DeconstructPath(packageDir)
+	if err != nil {
+		return "", err
 	}
 
 	output := []string{
-		matches[0][1],
+		pi.Provider,
 	}
 
-	if matches[0][2] == armPathModifier {
+	if pi.IsArm {
 		output = append(output, armPathModifier)
 	}
-	output = append(output, matches[0][4])
+	output = append(output, pi.Group)
+	if pi.APIPkg != "" {
+		output = append(output, pi.APIPkg)
+	}
 
 	return filepath.Join(output...), nil
 }

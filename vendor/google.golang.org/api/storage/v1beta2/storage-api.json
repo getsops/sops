@@ -20,7 +20,7 @@
   "description": "Lets you store and retrieve potentially-large, immutable data objects.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/storage/docs/json_api/",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/IGI-eBwDd7fi4jdIKOTuY8L_lfo\"",
+  "etag": "\"9eZ1uxVRThTDhLJCZHhqs3eQWz4/4QTlRHgtScIaSsS9RC52aKSg7JA\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/cloud_storage-16.png",
     "x32": "https://www.google.com/images/icons/product/cloud_storage-32.png"
@@ -1677,7 +1677,7 @@
       }
     }
   },
-  "revision": "20180905",
+  "revision": "20190624",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Bucket": {
@@ -2006,7 +2006,7 @@
         },
         "kind": {
           "default": "api#channel",
-          "description": "Identifies this as a notification channel used to watch for changes to a resource. Value: the fixed string \"api#channel\".",
+          "description": "Identifies this as a notification channel used to watch for changes to a resource, which is \"api#channel\".",
           "type": "string"
         },
         "params": {

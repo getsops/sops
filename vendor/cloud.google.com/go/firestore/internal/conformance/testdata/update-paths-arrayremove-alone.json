@@ -1,0 +1,52 @@
+{
+  "tests": [
+    {
+      "description": "update-paths: ArrayRemove alone",
+      "comment": "If the only values in the input are ArrayRemove, then no\nupdate operation should be produced.",
+      "updatePaths": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "fieldPaths": [
+          {
+            "field": [
+              "a"
+            ]
+          }
+        ],
+        "jsonValues": [
+          "[\"ArrayRemove\", 1, 2, 3]"
+        ],
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "transform": {
+                "document": "projects/projectID/databases/(default)/documents/C/d",
+                "fieldTransforms": [
+                  {
+                    "fieldPath": "a",
+                    "removeAllFromArray": {
+                      "values": [
+                        {
+                          "integerValue": "1"
+                        },
+                        {
+                          "integerValue": "2"
+                        },
+                        {
+                          "integerValue": "3"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              "currentDocument": {
+                "exists": true
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

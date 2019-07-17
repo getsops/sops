@@ -69,8 +69,7 @@ func (client ProductGroupClient) CheckEntityExists(ctx context.Context, resource
 				{Target: "productID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: groupID,
 			Constraints: []validation.Constraint{{Target: "groupID", Name: validation.MaxLength, Rule: 256, Chain: nil},
-				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "groupID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
+				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.ProductGroupClient", "CheckEntityExists", err.Error())
 	}
 
@@ -165,8 +164,7 @@ func (client ProductGroupClient) CreateOrUpdate(ctx context.Context, resourceGro
 				{Target: "productID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: groupID,
 			Constraints: []validation.Constraint{{Target: "groupID", Name: validation.MaxLength, Rule: 256, Chain: nil},
-				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "groupID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
+				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.ProductGroupClient", "CreateOrUpdate", err.Error())
 	}
 
@@ -262,8 +260,7 @@ func (client ProductGroupClient) Delete(ctx context.Context, resourceGroupName s
 				{Target: "productID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}},
 		{TargetValue: groupID,
 			Constraints: []validation.Constraint{{Target: "groupID", Name: validation.MaxLength, Rule: 256, Chain: nil},
-				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil},
-				{Target: "groupID", Name: validation.Pattern, Rule: `^[^*#&+:<>?]+$`, Chain: nil}}}}); err != nil {
+				{Target: "groupID", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
 		return result, validation.NewError("apimanagement.ProductGroupClient", "Delete", err.Error())
 	}
 

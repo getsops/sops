@@ -18,7 +18,7 @@
   "description": "Fetches reports for the administrators of G Suite customers about the usage, collaboration, security, and risk for their users.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/admin-sdk/reports/",
-  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/0EtCa-COsQELMrVnzWFUx1nOfgI\"",
+  "etag": "\"9eZ1uxVRThTDhLJCZHhqs3eQWz4/Tjl9ZZXM6pyNHTApQara35wGpUg\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -670,7 +670,7 @@
         },
         "kind": {
           "default": "api#channel",
-          "description": "Identifies this as a notification channel used to watch for changes to a resource. Value: the fixed string \"api#channel\".",
+          "description": "Identifies this as a notification channel used to watch for changes to a resource, which is \"api#channel\".",
           "type": "string"
         },
         "params": {

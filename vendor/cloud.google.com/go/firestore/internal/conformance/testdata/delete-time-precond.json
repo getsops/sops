@@ -1,0 +1,25 @@
+{
+  "tests": [
+    {
+      "description": "delete: delete with last-update-time precondition",
+      "comment": "Delete supports a last-update-time precondition.",
+      "delete": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "precondition": {
+          "updateTime": "1970-01-01T00:00:42Z"
+        },
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "delete": "projects/projectID/databases/(default)/documents/C/d",
+              "currentDocument": {
+                "updateTime": "1970-01-01T00:00:42Z"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

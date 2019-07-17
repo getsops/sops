@@ -47,10 +47,29 @@ const (
 	ClusterProvisioningStateSucceeded  ClusterProvisioningState = original.ClusterProvisioningStateSucceeded
 )
 
+type DaysOfWeek = original.DaysOfWeek
+
+const (
+	Friday    DaysOfWeek = original.Friday
+	Monday    DaysOfWeek = original.Monday
+	Saturday  DaysOfWeek = original.Saturday
+	Sunday    DaysOfWeek = original.Sunday
+	Thursday  DaysOfWeek = original.Thursday
+	Tuesday   DaysOfWeek = original.Tuesday
+	Wednesday DaysOfWeek = original.Wednesday
+)
+
 type DirectoryType = original.DirectoryType
 
 const (
 	ActiveDirectory DirectoryType = original.ActiveDirectory
+)
+
+type FilterMode = original.FilterMode
+
+const (
+	Exclude FilterMode = original.Exclude
+	Include FilterMode = original.Include
 )
 
 type JSONWebKeyEncryptionAlgorithm = original.JSONWebKeyEncryptionAlgorithm
@@ -94,7 +113,15 @@ type ApplicationProperties = original.ApplicationProperties
 type ApplicationsClient = original.ApplicationsClient
 type ApplicationsCreateFuture = original.ApplicationsCreateFuture
 type ApplicationsDeleteFuture = original.ApplicationsDeleteFuture
+type Autoscale = original.Autoscale
+type AutoscaleCapacity = original.AutoscaleCapacity
+type AutoscaleRecurrence = original.AutoscaleRecurrence
+type AutoscaleSchedule = original.AutoscaleSchedule
+type AutoscaleTimeAndCapacity = original.AutoscaleTimeAndCapacity
 type BaseClient = original.BaseClient
+type BillingMeters = original.BillingMeters
+type BillingResources = original.BillingResources
+type BillingResponseListResult = original.BillingResponseListResult
 type Cluster = original.Cluster
 type ClusterConfigurations = original.ClusterConfigurations
 type ClusterCreateParametersExtended = original.ClusterCreateParametersExtended
@@ -125,6 +152,7 @@ type ConfigurationsClient = original.ConfigurationsClient
 type ConfigurationsUpdateFuture = original.ConfigurationsUpdateFuture
 type ConnectivityEndpoint = original.ConnectivityEndpoint
 type DataDisksGroups = original.DataDisksGroups
+type DiskBillingMeters = original.DiskBillingMeters
 type DiskEncryptionProperties = original.DiskEncryptionProperties
 type ErrorResponse = original.ErrorResponse
 type Errors = original.Errors
@@ -175,6 +203,7 @@ type TrackedResource = original.TrackedResource
 type UpdateGatewaySettingsParameters = original.UpdateGatewaySettingsParameters
 type Usage = original.Usage
 type UsagesListResult = original.UsagesListResult
+type VMSizeCompatibilityFilterV2 = original.VMSizeCompatibilityFilterV2
 type VirtualNetworkProfile = original.VirtualNetworkProfile
 
 func New(subscriptionID string) BaseClient {
@@ -267,8 +296,14 @@ func PossibleAsyncOperationStateValues() []AsyncOperationState {
 func PossibleClusterProvisioningStateValues() []ClusterProvisioningState {
 	return original.PossibleClusterProvisioningStateValues()
 }
+func PossibleDaysOfWeekValues() []DaysOfWeek {
+	return original.PossibleDaysOfWeekValues()
+}
 func PossibleDirectoryTypeValues() []DirectoryType {
 	return original.PossibleDirectoryTypeValues()
+}
+func PossibleFilterModeValues() []FilterMode {
+	return original.PossibleFilterModeValues()
 }
 func PossibleJSONWebKeyEncryptionAlgorithmValues() []JSONWebKeyEncryptionAlgorithm {
 	return original.PossibleJSONWebKeyEncryptionAlgorithmValues()

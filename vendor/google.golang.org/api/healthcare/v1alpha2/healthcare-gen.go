@@ -350,7 +350,7 @@ type Annotation struct {
 	// tags.
 	ResourceAnnotation *ResourceAnnotation `json:"resourceAnnotation,omitempty"`
 
-	// TextAnnotation: Annotations for sentitive texts, e.g., range of such
+	// TextAnnotation: Annotations for sensitive texts, e.g., range of such
 	// texts.
 	TextAnnotation *SensitiveTextAnnotation `json:"textAnnotation,omitempty"`
 
@@ -492,7 +492,7 @@ func (s *AnnotationStore) MarshalJSON() ([]byte, error) {
 //             {
 //               "log_type": "DATA_READ",
 //               "exempted_members": [
-//                 "user:foo@gmail.com"
+//                 "user:jose@example.com"
 //               ]
 //             },
 //             {
@@ -504,7 +504,7 @@ func (s *AnnotationStore) MarshalJSON() ([]byte, error) {
 //           ]
 //         },
 //         {
-//           "service": "fooservice.googleapis.com"
+//           "service": "sampleservice.googleapis.com"
 //           "audit_log_configs": [
 //             {
 //               "log_type": "DATA_READ",
@@ -512,7 +512,7 @@ func (s *AnnotationStore) MarshalJSON() ([]byte, error) {
 //             {
 //               "log_type": "DATA_WRITE",
 //               "exempted_members": [
-//                 "user:bar@gmail.com"
+//                 "user:aliya@example.com"
 //               ]
 //             }
 //           ]
@@ -520,11 +520,11 @@ func (s *AnnotationStore) MarshalJSON() ([]byte, error) {
 //       ]
 //     }
 //
-// For fooservice, this policy enables DATA_READ, DATA_WRITE and
+// For sampleservice, this policy enables DATA_READ, DATA_WRITE and
 // ADMIN_READ
-// logging. It also exempts foo@gmail.com from DATA_READ logging,
+// logging. It also exempts jose@example.com from DATA_READ logging,
 // and
-// bar@gmail.com from DATA_WRITE logging.
+// aliya@example.com from DATA_WRITE logging.
 type AuditConfig struct {
 	// AuditLogConfigs: The configuration for logging of each type of
 	// permission.
@@ -570,7 +570,7 @@ func (s *AuditConfig) MarshalJSON() ([]byte, error) {
 //         {
 //           "log_type": "DATA_READ",
 //           "exempted_members": [
-//             "user:foo@gmail.com"
+//             "user:jose@example.com"
 //           ]
 //         },
 //         {
@@ -581,13 +581,20 @@ func (s *AuditConfig) MarshalJSON() ([]byte, error) {
 //
 // This enables 'DATA_READ' and 'DATA_WRITE' logging, while
 // exempting
-// foo@gmail.com from DATA_READ logging.
+// jose@example.com from DATA_READ logging.
 type AuditLogConfig struct {
 	// ExemptedMembers: Specifies the identities that do not cause logging
 	// for this type of
 	// permission.
 	// Follows the same format of Binding.members.
 	ExemptedMembers []string `json:"exemptedMembers,omitempty"`
+
+	// IgnoreChildExemptions: Specifies whether principals can be exempted
+	// for the same LogType in
+	// lower-level resource policies. If true, any lower-level exemptions
+	// will
+	// be ignored.
+	IgnoreChildExemptions bool `json:"ignoreChildExemptions,omitempty"`
 
 	// LogType: The log type that this config enables.
 	//
@@ -646,7 +653,7 @@ type Binding struct {
 	//
 	// * `user:{emailid}`: An email address that represents a specific
 	// Google
-	//    account. For example, `alice@gmail.com` .
+	//    account. For example, `alice@example.com` .
 	//
 	//
 	// * `serviceAccount:{emailid}`: An email address that represents a
@@ -1136,7 +1143,10 @@ type DicomConfig struct {
 	// valid DICOM.
 	//   "ATTRIBUTE_CONFIDENTIALITY_BASIC_PROFILE" - Remove tags based on
 	// DICOM Standard's Attribute Confidentiality Basic
-	// Profile (DICOM Standard Edition 2018e).
+	// Profile (DICOM Standard Edition
+	// 2018e)
+	// http://dicom.nema.org/medical/dicom/2018e/output/chtml/part15/c
+	// hapter_E.html.
 	//   "KEEP_ALL_PROFILE" - Keep all tags.
 	//   "DEIDENTIFY_TAG_CONTENTS" - Inspects within tag contents and
 	// replaces sensitive text. The process
@@ -1572,6 +1582,39 @@ type FhirStore struct {
 	// e.g. "action":"CreateResource".
 	NotificationConfig *NotificationConfig `json:"notificationConfig,omitempty"`
 
+	// StreamConfigs: A list of streaming configs that configure the
+	// destinations of streaming
+	// export for every resource mutation in this FHIR store. Each store
+	// is
+	// allowed to have up to 10 streaming configs.
+	// After a new config is added, the next resource mutation will be
+	// streamed to
+	// the new location in addition to the existing ones.
+	// When a location is removed from the list, the server will simply
+	// stop
+	// streaming to that location. Before adding a new config, you must add
+	// the
+	// required
+	// [`bigquery.dataEditor`](https://cloud.google.com/bigquery
+	// /docs/access-control#bigquery.dataEditor)
+	// role to your project's **Cloud Healthcare Service Agent**
+	// [service
+	// account](https://cloud.google.com/iam/docs/service-accounts).
+	// Some lag (typically on the order of dozens of seconds) is expected
+	// before
+	// the results show up in the streaming destination.
+	StreamConfigs []*StreamConfig `json:"streamConfigs,omitempty"`
+
+	// SubscriptionConfig: Configuration of FHIR
+	// Subscription:
+	// https://www.hl7.org/fhir/subscription.html.
+	SubscriptionConfig *SubscriptionConfig `json:"subscriptionConfig,omitempty"`
+
+	// ValidationConfig: Configuration for how incoming FHIR resources will
+	// be validated against
+	// configured profiles.
+	ValidationConfig *ValidationConfig `json:"validationConfig,omitempty"`
+
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
 	googleapi.ServerResponse `json:"-"`
@@ -1694,6 +1737,67 @@ func (s *Finding) MarshalJSON() ([]byte, error) {
 
 // GetIamPolicyRequest: Request message for `GetIamPolicy` method.
 type GetIamPolicyRequest struct {
+	// Options: OPTIONAL: A `GetPolicyOptions` object for specifying options
+	// to
+	// `GetIamPolicy`. This field is only used by Cloud IAM.
+	Options *GetPolicyOptions `json:"options,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Options") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Options") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *GetIamPolicyRequest) MarshalJSON() ([]byte, error) {
+	type NoMethod GetIamPolicyRequest
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// GetPolicyOptions: Encapsulates settings provided to GetIamPolicy.
+type GetPolicyOptions struct {
+	// RequestedPolicyVersion: Optional. The policy format version to be
+	// returned.
+	// Acceptable values are 0 and 1.
+	// If the value is 0, or the field is omitted, policy format version 1
+	// will be
+	// returned.
+	RequestedPolicyVersion int64 `json:"requestedPolicyVersion,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g.
+	// "RequestedPolicyVersion") to unconditionally include in API requests.
+	// By default, fields with empty values are omitted from API requests.
+	// However, any non-pointer, non-interface field appearing in
+	// ForceSendFields will be sent to the server regardless of whether the
+	// field is empty or not. This may be used to include empty fields in
+	// Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "RequestedPolicyVersion")
+	// to include in API requests with the JSON null value. By default,
+	// fields with empty values are omitted from API requests. However, any
+	// field with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *GetPolicyOptions) MarshalJSON() ([]byte, error) {
+	type NoMethod GetPolicyOptions
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 // GoogleCloudHealthcareV1alpha2DicomBigQueryDestination: The BigQuery
@@ -2435,16 +2539,24 @@ func (s *ImportDicomDataRequest) MarshalJSON() ([]byte, error) {
 
 // ImportResourcesRequest: Request to import resources.
 type ImportResourcesRequest struct {
-	// ContentStructure: The content structure in the source location. The
-	// default is
-	// BUNDLE.
+	// ContentStructure: The content structure in the source location. If
+	// not specified, the server
+	// treats the input source files as BUNDLE.
 	//
 	// Possible values:
 	//   "CONTENT_STRUCTURE_UNSPECIFIED"
-	//   "BUNDLE" - Each line is a bundle, which contains one or more
-	// resources. Set the
-	// bundle type to `history` to import resource versions.
-	//   "RESOURCE" - Each line is a single resource.
+	//   "BUNDLE" - The source file contains one or more lines of
+	// newline-delimited JSON
+	// (ndjson). Each line is a bundle, which contains one or more
+	// resources.
+	// Set the bundle type to `history` to import resource versions.
+	//   "RESOURCE" - The source file contains one or more lines of
+	// newline-delimited JSON
+	// (ndjson). Each line is a single resource.
+	//   "BUNDLE_PRETTY" - The entire file is one JSON bundle. The JSON can
+	// span multiple lines.
+	//   "RESOURCE_PRETTY" - The entire file is one JSON resource. The JSON
+	// can span multiple lines.
 	ContentStructure string `json:"contentStructure,omitempty"`
 
 	// GcsErrorDestination: The Cloud Storage destination to write the error
@@ -2466,16 +2578,9 @@ type ImportResourcesRequest struct {
 	// `roles/storage.objectViewer`
 	// Cloud IAM role.
 	//
-	// Each Cloud Storage object should be a text file that contains
-	// newline
-	// delimited JSON structures conforming to FHIR standard.
-	//
-	// To improve performance, use multiple Cloud Storage objects where
-	// each
-	// object contains a subset of all of the newline-delimited JSON
-	// structures.
-	// You can select all of the objects using the uri as the
-	// prefix. The maximum number of objects is 1,000.
+	// Each Cloud Storage object should be a text file that contains the
+	// format
+	// specified in ContentStructu.
 	GcsSource *GoogleCloudHealthcareV1alpha2FhirRestGcsSource `json:"gcsSource,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "ContentStructure") to
@@ -3440,7 +3545,7 @@ type Policy struct {
 	//
 	// If no `etag` is provided in the call to `setIamPolicy`, then the
 	// existing
-	// policy is overwritten blindly.
+	// policy is overwritten.
 	Etag string `json:"etag,omitempty"`
 
 	// Version: Deprecated.
@@ -3767,81 +3872,14 @@ func (s *SetIamPolicyRequest) MarshalJSON() ([]byte, error) {
 // suitable for
 // different programming environments, including REST APIs and RPC APIs.
 // It is
-// used by [gRPC](https://github.com/grpc). The error model is designed
-// to be:
+// used by [gRPC](https://github.com/grpc). Each `Status` message
+// contains
+// three pieces of data: error code, error message, and error
+// details.
 //
-// - Simple to use and understand for most users
-// - Flexible enough to meet unexpected needs
-//
-// # Overview
-//
-// The `Status` message contains three pieces of data: error code,
-// error
-// message, and error details. The error code should be an enum value
-// of
-// google.rpc.Code, but it may accept additional error codes if needed.
-// The
-// error message should be a developer-facing English message that
-// helps
-// developers *understand* and *resolve* the error. If a localized
-// user-facing
-// error message is needed, put the localized message in the error
-// details or
-// localize it in the client. The optional error details may contain
-// arbitrary
-// information about the error. There is a predefined set of error
-// detail types
-// in the package `google.rpc` that can be used for common error
-// conditions.
-//
-// # Language mapping
-//
-// The `Status` message is the logical representation of the error
-// model, but it
-// is not necessarily the actual wire format. When the `Status` message
-// is
-// exposed in different client libraries and different wire protocols,
-// it can be
-// mapped differently. For example, it will likely be mapped to some
-// exceptions
-// in Java, but more likely mapped to some error codes in C.
-//
-// # Other uses
-//
-// The error model and the `Status` message can be used in a variety
-// of
-// environments, either with or without APIs, to provide a
-// consistent developer experience across different
-// environments.
-//
-// Example uses of this error model include:
-//
-// - Partial errors. If a service needs to return partial errors to the
-// client,
-//     it may embed the `Status` in the normal response to indicate the
-// partial
-//     errors.
-//
-// - Workflow errors. A typical workflow has multiple steps. Each step
-// may
-//     have a `Status` message for error reporting.
-//
-// - Batch operations. If a client uses batch request and batch
-// response, the
-//     `Status` message should be used directly inside batch response,
-// one for
-//     each error sub-response.
-//
-// - Asynchronous operations. If an API call embeds asynchronous
-// operation
-//     results in its response, the status of those operations should
-// be
-//     represented directly using the `Status` message.
-//
-// - Logging. If some API errors are stored in logs, the message
-// `Status` could
-//     be used directly after any stripping needed for security/privacy
-// reasons.
+// You can find out more about this error model and how to work with it
+// in the
+// [API Design Guide](https://cloud.google.com/apis/design/errors).
 type Status struct {
 	// Code: The status code, which should be an enum value of
 	// google.rpc.Code.
@@ -3878,6 +3916,145 @@ type Status struct {
 
 func (s *Status) MarshalJSON() ([]byte, error) {
 	type NoMethod Status
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// StreamConfig: This structure contains configuration for streaming
+// FHIR export.
+type StreamConfig struct {
+	// BigqueryDestination: The destination BigQuery structure that contains
+	// both the dataset
+	// location and corresponding schema config.
+	// The output will be organized in one table per resource type.
+	// The server will inspect and potentially create new tables (if
+	// they
+	// don't exist) in the given BigQuery dataset.
+	// Results will be appended to the corresponding BigQuery tables.
+	// The views of the latest snapshot will also be automatically created
+	// in
+	// the dataset.
+	BigqueryDestination *GoogleCloudHealthcareV1alpha2FhirBigQueryDestination `json:"bigqueryDestination,omitempty"`
+
+	// ResourceTypes: Supply a FHIR resource type (such as "Patient" or
+	// "Observation").
+	// See https://www.hl7.org/fhir/valueset-resource-types.html for a list
+	// of
+	// all FHIR resource types.
+	// The server will treat an empty list as an intent to stream all
+	// the
+	// supported resource types in this FHIR store.
+	ResourceTypes []string `json:"resourceTypes,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "BigqueryDestination")
+	// to unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "BigqueryDestination") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *StreamConfig) MarshalJSON() ([]byte, error) {
+	type NoMethod StreamConfig
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// SubscriptionConfig: Configuration of FHIR
+// Subscription:
+// https://www.hl7.org/fhir/subscription.html.
+type SubscriptionConfig struct {
+	// AllowedRestHookEndpoints: REST hook endpoints that are allowed to
+	// receive subscription notifications.
+	// The create or update operation on a FHIR Subscription resource will
+	// fail if
+	// the FHIR Subscription resource contains a REST hook endpoint that is
+	// not in
+	// this list.
+	// A subscription notification push will fail if the FHIR
+	// Subscription
+	// resource contains a REST hook endpoint that is not in this list.
+	// The REST hook endpoint in a subscription resource will be compared
+	// with the
+	// endpoints in this list by exact matching.
+	// Users must verify their ownership of the domain of an endpoint
+	// before
+	// adding it to this list. To verify domain ownership, go
+	// to
+	// https://search.google.com/search-console/welcome.
+	AllowedRestHookEndpoints []*SubscriptionRestHookEndpoint `json:"allowedRestHookEndpoints,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g.
+	// "AllowedRestHookEndpoints") to unconditionally include in API
+	// requests. By default, fields with empty values are omitted from API
+	// requests. However, any non-pointer, non-interface field appearing in
+	// ForceSendFields will be sent to the server regardless of whether the
+	// field is empty or not. This may be used to include empty fields in
+	// Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "AllowedRestHookEndpoints")
+	// to include in API requests with the JSON null value. By default,
+	// fields with empty values are omitted from API requests. However, any
+	// field with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *SubscriptionConfig) MarshalJSON() ([]byte, error) {
+	type NoMethod SubscriptionConfig
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// SubscriptionRestHookEndpoint: REST hook endpoint of FHIR
+// Subscription.
+type SubscriptionRestHookEndpoint struct {
+	// AllowResourcePayload: Whether this endpoint is allowed to receive
+	// full resource payloads. If set
+	// to false, the subscription notificiation sending to this endpoint
+	// with full
+	// resource payload will be blocked.
+	AllowResourcePayload bool `json:"allowResourcePayload,omitempty"`
+
+	// Endpoint: Address of the REST hook endpoint. It must be a valid HTTPS
+	// URL with TLS
+	// certificate.
+	Endpoint string `json:"endpoint,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g.
+	// "AllowResourcePayload") to unconditionally include in API requests.
+	// By default, fields with empty values are omitted from API requests.
+	// However, any non-pointer, non-interface field appearing in
+	// ForceSendFields will be sent to the server regardless of whether the
+	// field is empty or not. This may be used to include empty fields in
+	// Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "AllowResourcePayload") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *SubscriptionRestHookEndpoint) MarshalJSON() ([]byte, error) {
+	type NoMethod SubscriptionRestHookEndpoint
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -4017,6 +4194,58 @@ type TextConfig struct {
 
 func (s *TextConfig) MarshalJSON() ([]byte, error) {
 	type NoMethod TextConfig
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// ValidationConfig: This structure contains the configuration for FHIR
+// profiles and validation.
+type ValidationConfig struct {
+	// DisableProfileValidation: Whether profile validation should be
+	// disabled for this FHIR store. Set
+	// this to true to disable checking incoming resources for
+	// conformance
+	// against StructureDefinitions in this FHIR store.
+	DisableProfileValidation bool `json:"disableProfileValidation,omitempty"`
+
+	// EnabledImplementationGuides: A list of ImplementationGuide IDs in
+	// this FHIR store that will be used to
+	// configure which profiles are used for validation. For example, to
+	// enable
+	// an implementation guide with ID 1 set `enabled_implementation_guides`
+	// to
+	// `["1"]`. If `enabled_implementation_guides` is empty or omitted
+	// then
+	// incoming resources will only be required to conform to the base
+	// FHIR
+	// profiles. Otherwise, a resource must conform to at least one
+	// profile
+	// listed in the `global` property of one of the
+	// enabled
+	// ImplementationGuides.
+	EnabledImplementationGuides []string `json:"enabledImplementationGuides,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g.
+	// "DisableProfileValidation") to unconditionally include in API
+	// requests. By default, fields with empty values are omitted from API
+	// requests. However, any non-pointer, non-interface field appearing in
+	// ForceSendFields will be sent to the server regardless of whether the
+	// field is empty or not. This may be used to include empty fields in
+	// Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "DisableProfileValidation")
+	// to include in API requests with the JSON null value. By default,
+	// fields with empty values are omitted from API requests. However, any
+	// field with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *ValidationConfig) MarshalJSON() ([]byte, error) {
+	type NoMethod ValidationConfig
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -4430,6 +4659,9 @@ type ProjectsLocationsDatasetsCreateCall struct {
 // `Operation.response` which contains a Dataset or
 // `Operation.error`. The metadata
 // field type is OperationMetadata.
+// A Google Cloud Platform project can contain up to 500 datasets across
+// all
+// regions.
 func (r *ProjectsLocationsDatasetsService) Create(parent string, dataset *Dataset) *ProjectsLocationsDatasetsCreateCall {
 	c := &ProjectsLocationsDatasetsCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.parent = parent
@@ -4536,7 +4768,7 @@ func (c *ProjectsLocationsDatasetsCreateCall) Do(opts ...googleapi.CallOption) (
 	}
 	return ret, nil
 	// {
-	//   "description": "Creates a new health dataset. Results are returned through the\nOperation interface which returns either an\n`Operation.response` which contains a Dataset or\n`Operation.error`. The metadata\nfield type is OperationMetadata.",
+	//   "description": "Creates a new health dataset. Results are returned through the\nOperation interface which returns either an\n`Operation.response` which contains a Dataset or\n`Operation.error`. The metadata\nfield type is OperationMetadata.\nA Google Cloud Platform project can contain up to 500 datasets across all\nregions.",
 	//   "flatPath": "v1alpha2/projects/{projectsId}/locations/{locationsId}/datasets",
 	//   "httpMethod": "POST",
 	//   "id": "healthcare.projects.locations.datasets.create",
@@ -5016,6 +5248,18 @@ func (r *ProjectsLocationsDatasetsService) GetIamPolicy(resource string) *Projec
 	return c
 }
 
+// OptionsRequestedPolicyVersion sets the optional parameter
+// "options.requestedPolicyVersion": The policy format version to be
+// returned.
+// Acceptable values are 0 and 1.
+// If the value is 0, or the field is omitted, policy format version 1
+// will be
+// returned.
+func (c *ProjectsLocationsDatasetsGetIamPolicyCall) OptionsRequestedPolicyVersion(optionsRequestedPolicyVersion int64) *ProjectsLocationsDatasetsGetIamPolicyCall {
+	c.urlParams_.Set("options.requestedPolicyVersion", fmt.Sprint(optionsRequestedPolicyVersion))
+	return c
+}
+
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -5122,6 +5366,12 @@ func (c *ProjectsLocationsDatasetsGetIamPolicyCall) Do(opts ...googleapi.CallOpt
 	//     "resource"
 	//   ],
 	//   "parameters": {
+	//     "options.requestedPolicyVersion": {
+	//       "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+	//       "format": "int32",
+	//       "location": "query",
+	//       "type": "integer"
+	//     },
 	//     "resource": {
 	//       "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",
@@ -6225,7 +6475,8 @@ type ProjectsLocationsDatasetsAnnotationStoresGetIamPolicyCall struct {
 //
 // Authorization requires the Google IAM
 // permission
-// `healthcare.AnnotationStores.getIamPolicy` on the specified resource
+// `healthcare.AnnotationStores.getIamPolicy` on the specified
+// resource
 func (r *ProjectsLocationsDatasetsAnnotationStoresService) GetIamPolicy(resource string, getiampolicyrequest *GetIamPolicyRequest) *ProjectsLocationsDatasetsAnnotationStoresGetIamPolicyCall {
 	c := &ProjectsLocationsDatasetsAnnotationStoresGetIamPolicyCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.resource = resource
@@ -6323,7 +6574,7 @@ func (c *ProjectsLocationsDatasetsAnnotationStoresGetIamPolicyCall) Do(opts ...g
 	}
 	return ret, nil
 	// {
-	//   "description": "Gets the access control policy for a resource. Returns NOT_FOUND error if\nthe resource does not exist. Returns an empty policy if the resource exists\nbut does not have a policy set.\n\nAuthorization requires the Google IAM permission\n`healthcare.AnnotationStores.getIamPolicy` on the specified resource",
+	//   "description": "Gets the access control policy for a resource. Returns NOT_FOUND error if\nthe resource does not exist. Returns an empty policy if the resource exists\nbut does not have a policy set.\n\nAuthorization requires the Google IAM permission\n`healthcare.AnnotationStores.getIamPolicy` on the specified\nresource",
 	//   "flatPath": "v1alpha2/projects/{projectsId}/locations/{locationsId}/datasets/{datasetsId}/annotationStores/{annotationStoresId}:getIamPolicy",
 	//   "httpMethod": "POST",
 	//   "id": "healthcare.projects.locations.datasets.annotationStores.getIamPolicy",
@@ -6736,7 +6987,8 @@ type ProjectsLocationsDatasetsAnnotationStoresSetIamPolicyCall struct {
 //
 // Authorization requires the Google IAM
 // permission
-// 'healthcare.annotationStores.setIamPolicy' on the specified resource
+// `healthcare.annotationStores.setIamPolicy` on the specified
+// resource
 func (r *ProjectsLocationsDatasetsAnnotationStoresService) SetIamPolicy(resource string, setiampolicyrequest *SetIamPolicyRequest) *ProjectsLocationsDatasetsAnnotationStoresSetIamPolicyCall {
 	c := &ProjectsLocationsDatasetsAnnotationStoresSetIamPolicyCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.resource = resource
@@ -6834,7 +7086,7 @@ func (c *ProjectsLocationsDatasetsAnnotationStoresSetIamPolicyCall) Do(opts ...g
 	}
 	return ret, nil
 	// {
-	//   "description": "POLICIES\nSets the access control policy for a resource. Replaces any existing\npolicy.\n\nAuthorization requires the Google IAM permission\n'healthcare.annotationStores.setIamPolicy' on the specified resource",
+	//   "description": "POLICIES\nSets the access control policy for a resource. Replaces any existing\npolicy.\n\nAuthorization requires the Google IAM permission\n`healthcare.annotationStores.setIamPolicy` on the specified\nresource",
 	//   "flatPath": "v1alpha2/projects/{projectsId}/locations/{locationsId}/datasets/{datasetsId}/annotationStores/{annotationStoresId}:setIamPolicy",
 	//   "httpMethod": "POST",
 	//   "id": "healthcare.projects.locations.datasets.annotationStores.setIamPolicy",
@@ -8380,6 +8632,18 @@ func (r *ProjectsLocationsDatasetsDicomStoresService) GetIamPolicy(resource stri
 	return c
 }
 
+// OptionsRequestedPolicyVersion sets the optional parameter
+// "options.requestedPolicyVersion": The policy format version to be
+// returned.
+// Acceptable values are 0 and 1.
+// If the value is 0, or the field is omitted, policy format version 1
+// will be
+// returned.
+func (c *ProjectsLocationsDatasetsDicomStoresGetIamPolicyCall) OptionsRequestedPolicyVersion(optionsRequestedPolicyVersion int64) *ProjectsLocationsDatasetsDicomStoresGetIamPolicyCall {
+	c.urlParams_.Set("options.requestedPolicyVersion", fmt.Sprint(optionsRequestedPolicyVersion))
+	return c
+}
+
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -8486,6 +8750,12 @@ func (c *ProjectsLocationsDatasetsDicomStoresGetIamPolicyCall) Do(opts ...google
 	//     "resource"
 	//   ],
 	//   "parameters": {
+	//     "options.requestedPolicyVersion": {
+	//       "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+	//       "format": "int32",
+	//       "location": "query",
+	//       "type": "integer"
+	//     },
 	//     "resource": {
 	//       "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",
@@ -9406,7 +9676,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresDicomWebSearchForInstancesCall) Do(
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`instances`).",
+	//       "description": "The path of the SearchForInstancesRequest DICOMweb request (e.g.,\n`instances` or `series/{series_uid}/instances` or\n`studies/{study_uid}/instances`).",
 	//       "location": "path",
 	//       "pattern": "^instances$",
 	//       "required": true,
@@ -9530,7 +9800,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresDicomWebSearchForSeriesCall) Do(opt
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`series`).",
+	//       "description": "The path of the SearchForSeries DICOMweb request(e.g., `series` or\n`studies/{study_uid}/series`).",
 	//       "location": "path",
 	//       "pattern": "^series$",
 	//       "required": true,
@@ -9655,7 +9925,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresDicomWebSearchForStudiesCall) Do(op
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`studies`).",
+	//       "description": "The path of the SearchForStudies DICOMweb request (e.g., `studies`).",
 	//       "location": "path",
 	//       "pattern": "^studies$",
 	//       "required": true,
@@ -9768,7 +10038,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresDicomWebStoreInstancesCall) Do(opts
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}`).",
+	//       "description": "The path of the StoreInstances DICOMweb request (e.g.,\n`studies/[{study_id}]`). Note that the `study_uid` is optional.",
 	//       "location": "path",
 	//       "pattern": "^studies$",
 	//       "required": true,
@@ -9913,7 +10183,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresDicomWebStudiesDeleteCall) Do(opts 
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}`).",
+	//       "description": "The path of the DeleteStudy request (e.g., `studies/{study_id}`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+$",
 	//       "required": true,
@@ -10039,7 +10309,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresDicomWebStudiesMetadataCall) Do(opt
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}/metadata`.",
+	//       "description": "The path of the RetrieveStudyMetadata DICOMweb request (e.g.,\n`studies/{study_id}/metadata`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/metadata$",
 	//       "required": true,
@@ -10164,7 +10434,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresDicomWebStudiesRetrieveStudyCall) D
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}`).",
+	//       "description": "The path of the RetrieveStudy DICOMweb request (e.g.,\n`studies/{study_id}`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+$",
 	//       "required": true,
@@ -10289,7 +10559,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresDicomWebStudiesSearchForInstancesCa
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`instances`).",
+	//       "description": "The path of the SearchForInstancesRequest DICOMweb request (e.g.,\n`instances` or `series/{series_uid}/instances` or\n`studies/{study_uid}/instances`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/instances$",
 	//       "required": true,
@@ -10413,7 +10683,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresDicomWebStudiesSearchForSeriesCall)
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`series`).",
+	//       "description": "The path of the SearchForSeries DICOMweb request(e.g., `series` or\n`studies/{study_uid}/series`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/series$",
 	//       "required": true,
@@ -10526,7 +10796,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresDicomWebStudiesStoreInstancesCall) 
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}`).",
+	//       "description": "The path of the StoreInstances DICOMweb request (e.g.,\n`studies/[{study_id}]`). Note that the `study_uid` is optional.",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+$",
 	//       "required": true,
@@ -10673,7 +10943,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresDicomWebStudiesSeriesDeleteCall) Do
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}/series/{series_id}`).",
+	//       "description": "The path of the DeleteSeries request (e.g.,\n`studies/{study_id}/series/{series_id}`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/series/[^/]+$",
 	//       "required": true,
@@ -10799,7 +11069,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresDicomWebStudiesSeriesMetadataCall) 
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}/series/{series_id}/metadata`.",
+	//       "description": "The path of the RetrieveSeriesMetadata DICOMweb request (e.g.,\n`studies/{study_id}/series/{series_id}/metadata`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/series/[^/]+/metadata$",
 	//       "required": true,
@@ -10924,7 +11194,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresDicomWebStudiesSeriesRetrieveSeries
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}/series/{series_id}`).",
+	//       "description": "The path of the RetrieveSeries DICOMweb request (e.g.,\n`studies/{study_id}/series/{series_id}`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/series/[^/]+$",
 	//       "required": true,
@@ -11049,7 +11319,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresDicomWebStudiesSeriesSearchForInsta
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`instances`).",
+	//       "description": "The path of the SearchForInstancesRequest DICOMweb request (e.g.,\n`instances` or `series/{series_uid}/instances` or\n`studies/{study_uid}/instances`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/series/[^/]+/instances$",
 	//       "required": true,
@@ -11193,7 +11463,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresDicomWebStudiesSeriesInstancesDelet
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}`).",
+	//       "description": "The path of the DeleteInstance request (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/series/[^/]+/instances/[^/]+$",
 	//       "required": true,
@@ -11321,7 +11591,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresDicomWebStudiesSeriesInstancesMetad
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/metadata`).",
+	//       "description": "The path of the RetrieveInstanceMetadata DICOMweb request (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/metadata`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/series/[^/]+/instances/[^/]+/metadata$",
 	//       "required": true,
@@ -11447,7 +11717,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresDicomWebStudiesSeriesInstancesRende
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/rendered`).",
+	//       "description": "The path of the RetrieveRenderedInstance DICOMweb request (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/rendered`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/series/[^/]+/instances/[^/]+/rendered$",
 	//       "required": true,
@@ -11573,7 +11843,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresDicomWebStudiesSeriesInstancesRetri
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}`).",
+	//       "description": "The path of the RetrieveInstance DICOMweb request (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/series/[^/]+/instances/[^/]+$",
 	//       "required": true,
@@ -11701,7 +11971,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresDicomWebStudiesSeriesInstancesFrame
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/frames/{frame_list}/rendered`).",
+	//       "description": "The path of the RetrieveRenderedFrames DICOMweb request (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/frames/{frame_list}/rendered`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/series/[^/]+/instances/[^/]+/frames/[^/]+/rendered$",
 	//       "required": true,
@@ -11827,7 +12097,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresDicomWebStudiesSeriesInstancesFrame
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/frames/{frame_list}`).",
+	//       "description": "The path of the RetrieveFrames DICOMweb request (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/frames/{frame_list}`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/series/[^/]+/instances/[^/]+/frames/[^/]+$",
 	//       "required": true,
@@ -12577,12 +12847,24 @@ type ProjectsLocationsDatasetsFhirStoresGetIamPolicyCall struct {
 //
 // Authorization requires the Google IAM
 // permission
-// 'healthcare.fhirStores.getIamPolicy' for a FHIR store
+// `healthcare.fhirStores.getIamPolicy` for a FHIR store
 // or
-// 'healthcare.securityLabels.getIamPolicy' for a security label
+// `healthcare.securityLabels.getIamPolicy` for a security label
 func (r *ProjectsLocationsDatasetsFhirStoresService) GetIamPolicy(resource string) *ProjectsLocationsDatasetsFhirStoresGetIamPolicyCall {
 	c := &ProjectsLocationsDatasetsFhirStoresGetIamPolicyCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.resource = resource
+	return c
+}
+
+// OptionsRequestedPolicyVersion sets the optional parameter
+// "options.requestedPolicyVersion": The policy format version to be
+// returned.
+// Acceptable values are 0 and 1.
+// If the value is 0, or the field is omitted, policy format version 1
+// will be
+// returned.
+func (c *ProjectsLocationsDatasetsFhirStoresGetIamPolicyCall) OptionsRequestedPolicyVersion(optionsRequestedPolicyVersion int64) *ProjectsLocationsDatasetsFhirStoresGetIamPolicyCall {
+	c.urlParams_.Set("options.requestedPolicyVersion", fmt.Sprint(optionsRequestedPolicyVersion))
 	return c
 }
 
@@ -12684,7 +12966,7 @@ func (c *ProjectsLocationsDatasetsFhirStoresGetIamPolicyCall) Do(opts ...googlea
 	}
 	return ret, nil
 	// {
-	//   "description": "Gets the access control policy for a FHIR store or security label within a\nFHIR store. Returns NOT_FOUND error if the resource does not exist. Returns\nan empty policy if the resource exists but does not have a policy set.\n\nAuthorization requires the Google IAM permission\n'healthcare.fhirStores.getIamPolicy' for a FHIR store or\n'healthcare.securityLabels.getIamPolicy' for a security label",
+	//   "description": "Gets the access control policy for a FHIR store or security label within a\nFHIR store. Returns NOT_FOUND error if the resource does not exist. Returns\nan empty policy if the resource exists but does not have a policy set.\n\nAuthorization requires the Google IAM permission\n`healthcare.fhirStores.getIamPolicy` for a FHIR store or\n`healthcare.securityLabels.getIamPolicy` for a security label",
 	//   "flatPath": "v1alpha2/projects/{projectsId}/locations/{locationsId}/datasets/{datasetsId}/fhirStores/{fhirStoresId}:getIamPolicy",
 	//   "httpMethod": "GET",
 	//   "id": "healthcare.projects.locations.datasets.fhirStores.getIamPolicy",
@@ -12692,6 +12974,12 @@ func (c *ProjectsLocationsDatasetsFhirStoresGetIamPolicyCall) Do(opts ...googlea
 	//     "resource"
 	//   ],
 	//   "parameters": {
+	//     "options.requestedPolicyVersion": {
+	//       "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+	//       "format": "int32",
+	//       "location": "query",
+	//       "type": "integer"
+	//     },
 	//     "resource": {
 	//       "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",
@@ -13269,9 +13557,9 @@ type ProjectsLocationsDatasetsFhirStoresSetIamPolicyCall struct {
 //
 // Authorization requires the Google IAM
 // permission
-// 'healthcare.fhirStores.setIamPolicy' for a FHIR store
+// `healthcare.fhirStores.setIamPolicy` for a FHIR store
 // or
-// 'healthcare.securityLabels.setIamPolicy' for a security label
+// `healthcare.securityLabels.setIamPolicy` for a security label
 func (r *ProjectsLocationsDatasetsFhirStoresService) SetIamPolicy(resource string, setiampolicyrequest *SetIamPolicyRequest) *ProjectsLocationsDatasetsFhirStoresSetIamPolicyCall {
 	c := &ProjectsLocationsDatasetsFhirStoresSetIamPolicyCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.resource = resource
@@ -13369,7 +13657,7 @@ func (c *ProjectsLocationsDatasetsFhirStoresSetIamPolicyCall) Do(opts ...googlea
 	}
 	return ret, nil
 	// {
-	//   "description": "Sets the access control policy for a FHIR store or security label within a\nFHIR store. Replaces any existing policy.\n\nAuthorization requires the Google IAM permission\n'healthcare.fhirStores.setIamPolicy' for a FHIR store or\n'healthcare.securityLabels.setIamPolicy' for a security label",
+	//   "description": "Sets the access control policy for a FHIR store or security label within a\nFHIR store. Replaces any existing policy.\n\nAuthorization requires the Google IAM permission\n`healthcare.fhirStores.setIamPolicy` for a FHIR store or\n`healthcare.securityLabels.setIamPolicy` for a security label",
 	//   "flatPath": "v1alpha2/projects/{projectsId}/locations/{locationsId}/datasets/{datasetsId}/fhirStores/{fhirStoresId}:setIamPolicy",
 	//   "httpMethod": "POST",
 	//   "id": "healthcare.projects.locations.datasets.fhirStores.setIamPolicy",
@@ -15463,8 +15751,6 @@ type ProjectsLocationsDatasetsFhirStoresFhirSearchCall struct {
 // generic
 // GCP error might be returned instead.
 //
-// # Search Parameters
-//
 // The server's capability statement, retrieved through
 // capabilities, indicates what search parameters
 // are supported on each FHIR resource. A list of all search
@@ -15474,21 +15760,23 @@ type ProjectsLocationsDatasetsFhirStoresFhirSearchCall struct {
 // Registry](http://hl7.org/implement/standards/fhir/STU3/searc
 // hparameter-registry.html).
 //
-// # Search Modifiers
+// Supported search modifiers: `:missing`, `:exact`, `:contains`,
+// `:text`,
+// `:in`, `:not-in`, `:above`, `:below`, `:[type]`, `:not`, and
+// `:recurse`.
 //
-// Modifier   | Supported
-// ----------- | ---------
-// `:missing`  | Yes
-// `:exact`    | Yes
-// `:contains` | Yes
-// `:text`     | Yes
-// `:in`       | Yes
-// `:not-in`   | Yes
-// `:above`    | Yes
-// `:below`    | Yes
-// `:[type]`   | Yes
-// `:not`      | Yes
-// `:recurse`  | No
+// Supported search result parameters: `_sort`, `_count`,
+// `_include`,
+// `_revinclude`, `_summary=text`, `_summary=data`, and
+// `_elements`.
+//
+// The maximum number of search results returned defaults to 100, which
+// can
+// be overridden by the `_count` parameter up to a maximum limit of
+// 1000. If
+// there are additional results, the returned `Bundle` will
+// contain
+// pagination links.
 func (r *ProjectsLocationsDatasetsFhirStoresFhirService) Search(parent string, searchresourcesrequest *SearchResourcesRequest) *ProjectsLocationsDatasetsFhirStoresFhirSearchCall {
 	c := &ProjectsLocationsDatasetsFhirStoresFhirSearchCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.parent = parent
@@ -15553,7 +15841,7 @@ func (c *ProjectsLocationsDatasetsFhirStoresFhirSearchCall) Do(opts ...googleapi
 	gensupport.SetOptions(c.urlParams_, opts...)
 	return c.doRequest("")
 	// {
-	//   "description": "Searches for resources in the given FHIR store according to criteria\nspecified as query parameters.\n\nImplements the FHIR standard [search\ninteraction](http://hl7.org/implement/standards/fhir/STU3/http.html#search)\nusing the search semantics described in the [FHIR Search\nspecification](http://hl7.org/implement/standards/fhir/STU3/search.html).\n\nSupports three methods of search defined by the specification:\n\n*  `GET [base]?[parameters]` to search across all resources.\n*  `GET [base]/[type]?[parameters]` to search resources of a specified\ntype.\n*  `POST [base]/[type]/_search?[parameters]` as an alternate form having\nthe same semantics as the `GET` method.\n\nThe `GET` methods do not support compartment searches. The `POST` method\ndoes not support `application/x-www-form-urlencoded` search parameters.\n\nOn success, the response body will contain a JSON-encoded representation\nof a `Bundle` resource of type `searchset`, containing the results of the\nsearch.\nErrors generated by the FHIR store will contain a JSON-encoded\n`OperationOutcome` resource describing the reason for the error. If the\nrequest cannot be mapped to a valid API method on a FHIR store, a generic\nGCP error might be returned instead.\n\n# Search Parameters\n\nThe server's capability statement, retrieved through\ncapabilities, indicates what search parameters\nare supported on each FHIR resource. A list of all search parameters\ndefined by the specification can be found in the [FHIR Search Parameter\nRegistry](http://hl7.org/implement/standards/fhir/STU3/searchparameter-registry.html).\n\n# Search Modifiers\n\nModifier   | Supported\n----------- | ---------\n`:missing`  | Yes\n`:exact`    | Yes\n`:contains` | Yes\n`:text`     | Yes\n`:in`       | Yes\n`:not-in`   | Yes\n`:above`    | Yes\n`:below`    | Yes\n`:[type]`   | Yes\n`:not`      | Yes\n`:recurse`  | No",
+	//   "description": "Searches for resources in the given FHIR store according to criteria\nspecified as query parameters.\n\nImplements the FHIR standard [search\ninteraction](http://hl7.org/implement/standards/fhir/STU3/http.html#search)\nusing the search semantics described in the [FHIR Search\nspecification](http://hl7.org/implement/standards/fhir/STU3/search.html).\n\nSupports three methods of search defined by the specification:\n\n*  `GET [base]?[parameters]` to search across all resources.\n*  `GET [base]/[type]?[parameters]` to search resources of a specified\ntype.\n*  `POST [base]/[type]/_search?[parameters]` as an alternate form having\nthe same semantics as the `GET` method.\n\nThe `GET` methods do not support compartment searches. The `POST` method\ndoes not support `application/x-www-form-urlencoded` search parameters.\n\nOn success, the response body will contain a JSON-encoded representation\nof a `Bundle` resource of type `searchset`, containing the results of the\nsearch.\nErrors generated by the FHIR store will contain a JSON-encoded\n`OperationOutcome` resource describing the reason for the error. If the\nrequest cannot be mapped to a valid API method on a FHIR store, a generic\nGCP error might be returned instead.\n\nThe server's capability statement, retrieved through\ncapabilities, indicates what search parameters\nare supported on each FHIR resource. A list of all search parameters\ndefined by the specification can be found in the [FHIR Search Parameter\nRegistry](http://hl7.org/implement/standards/fhir/STU3/searchparameter-registry.html).\n\nSupported search modifiers: `:missing`, `:exact`, `:contains`, `:text`,\n`:in`, `:not-in`, `:above`, `:below`, `:[type]`, `:not`, and `:recurse`.\n\nSupported search result parameters: `_sort`, `_count`, `_include`,\n`_revinclude`, `_summary=text`, `_summary=data`, and `_elements`.\n\nThe maximum number of search results returned defaults to 100, which can\nbe overridden by the `_count` parameter up to a maximum limit of 1000. If\nthere are additional results, the returned `Bundle` will contain\npagination links.",
 	//   "flatPath": "v1alpha2/projects/{projectsId}/locations/{locationsId}/datasets/{datasetsId}/fhirStores/{fhirStoresId}/fhir/_search",
 	//   "httpMethod": "POST",
 	//   "id": "healthcare.projects.locations.datasets.fhirStores.fhir.search",
@@ -15861,12 +16149,24 @@ type ProjectsLocationsDatasetsFhirStoresSecurityLabelsGetIamPolicyCall struct {
 //
 // Authorization requires the Google IAM
 // permission
-// 'healthcare.fhirStores.getIamPolicy' for a FHIR store
+// `healthcare.fhirStores.getIamPolicy` for a FHIR store
 // or
-// 'healthcare.securityLabels.getIamPolicy' for a security label
+// `healthcare.securityLabels.getIamPolicy` for a security label
 func (r *ProjectsLocationsDatasetsFhirStoresSecurityLabelsService) GetIamPolicy(resource string) *ProjectsLocationsDatasetsFhirStoresSecurityLabelsGetIamPolicyCall {
 	c := &ProjectsLocationsDatasetsFhirStoresSecurityLabelsGetIamPolicyCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.resource = resource
+	return c
+}
+
+// OptionsRequestedPolicyVersion sets the optional parameter
+// "options.requestedPolicyVersion": The policy format version to be
+// returned.
+// Acceptable values are 0 and 1.
+// If the value is 0, or the field is omitted, policy format version 1
+// will be
+// returned.
+func (c *ProjectsLocationsDatasetsFhirStoresSecurityLabelsGetIamPolicyCall) OptionsRequestedPolicyVersion(optionsRequestedPolicyVersion int64) *ProjectsLocationsDatasetsFhirStoresSecurityLabelsGetIamPolicyCall {
+	c.urlParams_.Set("options.requestedPolicyVersion", fmt.Sprint(optionsRequestedPolicyVersion))
 	return c
 }
 
@@ -15968,7 +16268,7 @@ func (c *ProjectsLocationsDatasetsFhirStoresSecurityLabelsGetIamPolicyCall) Do(o
 	}
 	return ret, nil
 	// {
-	//   "description": "Gets the access control policy for a FHIR store or security label within a\nFHIR store. Returns NOT_FOUND error if the resource does not exist. Returns\nan empty policy if the resource exists but does not have a policy set.\n\nAuthorization requires the Google IAM permission\n'healthcare.fhirStores.getIamPolicy' for a FHIR store or\n'healthcare.securityLabels.getIamPolicy' for a security label",
+	//   "description": "Gets the access control policy for a FHIR store or security label within a\nFHIR store. Returns NOT_FOUND error if the resource does not exist. Returns\nan empty policy if the resource exists but does not have a policy set.\n\nAuthorization requires the Google IAM permission\n`healthcare.fhirStores.getIamPolicy` for a FHIR store or\n`healthcare.securityLabels.getIamPolicy` for a security label",
 	//   "flatPath": "v1alpha2/projects/{projectsId}/locations/{locationsId}/datasets/{datasetsId}/fhirStores/{fhirStoresId}/securityLabels/{securityLabelsId}:getIamPolicy",
 	//   "httpMethod": "GET",
 	//   "id": "healthcare.projects.locations.datasets.fhirStores.securityLabels.getIamPolicy",
@@ -15976,6 +16276,12 @@ func (c *ProjectsLocationsDatasetsFhirStoresSecurityLabelsGetIamPolicyCall) Do(o
 	//     "resource"
 	//   ],
 	//   "parameters": {
+	//     "options.requestedPolicyVersion": {
+	//       "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+	//       "format": "int32",
+	//       "location": "query",
+	//       "type": "integer"
+	//     },
 	//     "resource": {
 	//       "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",
@@ -16012,9 +16318,9 @@ type ProjectsLocationsDatasetsFhirStoresSecurityLabelsSetIamPolicyCall struct {
 //
 // Authorization requires the Google IAM
 // permission
-// 'healthcare.fhirStores.setIamPolicy' for a FHIR store
+// `healthcare.fhirStores.setIamPolicy` for a FHIR store
 // or
-// 'healthcare.securityLabels.setIamPolicy' for a security label
+// `healthcare.securityLabels.setIamPolicy` for a security label
 func (r *ProjectsLocationsDatasetsFhirStoresSecurityLabelsService) SetIamPolicy(resource string, setiampolicyrequest *SetIamPolicyRequest) *ProjectsLocationsDatasetsFhirStoresSecurityLabelsSetIamPolicyCall {
 	c := &ProjectsLocationsDatasetsFhirStoresSecurityLabelsSetIamPolicyCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.resource = resource
@@ -16112,7 +16418,7 @@ func (c *ProjectsLocationsDatasetsFhirStoresSecurityLabelsSetIamPolicyCall) Do(o
 	}
 	return ret, nil
 	// {
-	//   "description": "Sets the access control policy for a FHIR store or security label within a\nFHIR store. Replaces any existing policy.\n\nAuthorization requires the Google IAM permission\n'healthcare.fhirStores.setIamPolicy' for a FHIR store or\n'healthcare.securityLabels.setIamPolicy' for a security label",
+	//   "description": "Sets the access control policy for a FHIR store or security label within a\nFHIR store. Replaces any existing policy.\n\nAuthorization requires the Google IAM permission\n`healthcare.fhirStores.setIamPolicy` for a FHIR store or\n`healthcare.securityLabels.setIamPolicy` for a security label",
 	//   "flatPath": "v1alpha2/projects/{projectsId}/locations/{locationsId}/datasets/{datasetsId}/fhirStores/{fhirStoresId}/securityLabels/{securityLabelsId}:setIamPolicy",
 	//   "httpMethod": "POST",
 	//   "id": "healthcare.projects.locations.datasets.fhirStores.securityLabels.setIamPolicy",
@@ -16590,6 +16896,18 @@ func (r *ProjectsLocationsDatasetsHl7V2StoresService) GetIamPolicy(resource stri
 	return c
 }
 
+// OptionsRequestedPolicyVersion sets the optional parameter
+// "options.requestedPolicyVersion": The policy format version to be
+// returned.
+// Acceptable values are 0 and 1.
+// If the value is 0, or the field is omitted, policy format version 1
+// will be
+// returned.
+func (c *ProjectsLocationsDatasetsHl7V2StoresGetIamPolicyCall) OptionsRequestedPolicyVersion(optionsRequestedPolicyVersion int64) *ProjectsLocationsDatasetsHl7V2StoresGetIamPolicyCall {
+	c.urlParams_.Set("options.requestedPolicyVersion", fmt.Sprint(optionsRequestedPolicyVersion))
+	return c
+}
+
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -16696,6 +17014,12 @@ func (c *ProjectsLocationsDatasetsHl7V2StoresGetIamPolicyCall) Do(opts ...google
 	//     "resource"
 	//   ],
 	//   "parameters": {
+	//     "options.requestedPolicyVersion": {
+	//       "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+	//       "format": "int32",
+	//       "location": "query",
+	//       "type": "integer"
+	//     },
 	//     "resource": {
 	//       "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",

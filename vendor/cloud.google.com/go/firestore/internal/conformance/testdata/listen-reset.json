@@ -1,0 +1,309 @@
+{
+  "tests": [
+    {
+      "description": "listen: RESET turns off CURRENT",
+      "comment": "A RESET message turns off the CURRENT state, and marks all documents as deleted.\n\nIf a document appeared on the stream but was never part of a snapshot (\"d3\" in this test), a reset\nwill make it disappear completely.\n\nFor a snapshot to happen at a NO_CHANGE reponse, we need to have both seen a CURRENT response, and\nhave a change from the previous snapshot. Here, after the reset, we see the same version of d2\nagain. That doesn't result in a snapshot.\n",
+      "listen": {
+        "responses": [
+          {
+            "documentChange": {
+              "document": {
+                "name": "projects/projectID/databases/(default)/documents/C/d1",
+                "fields": {
+                  "a": {
+                    "integerValue": "2"
+                  }
+                },
+                "createTime": "1970-01-01T00:00:01Z",
+                "updateTime": "1970-01-01T00:00:01Z"
+              },
+              "targetIds": [
+                1
+              ]
+            }
+          },
+          {
+            "documentChange": {
+              "document": {
+                "name": "projects/projectID/databases/(default)/documents/C/d2",
+                "fields": {
+                  "a": {
+                    "integerValue": "1"
+                  }
+                },
+                "createTime": "1970-01-01T00:00:01Z",
+                "updateTime": "1970-01-01T00:00:02Z"
+              },
+              "targetIds": [
+                1
+              ]
+            }
+          },
+          {
+            "targetChange": {
+              "targetChangeType": "CURRENT"
+            }
+          },
+          {
+            "targetChange": {
+              "readTime": "1970-01-01T00:00:01Z"
+            }
+          },
+          {
+            "documentChange": {
+              "document": {
+                "name": "projects/projectID/databases/(default)/documents/C/d3",
+                "fields": {
+                  "a": {
+                    "integerValue": "3"
+                  }
+                },
+                "createTime": "1970-01-01T00:00:01Z",
+                "updateTime": "1970-01-01T00:00:02Z"
+              },
+              "targetIds": [
+                1
+              ]
+            }
+          },
+          {
+            "targetChange": {
+              "targetChangeType": "RESET"
+            }
+          },
+          {
+            "targetChange": {
+              "readTime": "1970-01-01T00:00:02Z"
+            }
+          },
+          {
+            "targetChange": {
+              "targetChangeType": "CURRENT"
+            }
+          },
+          {
+            "documentChange": {
+              "document": {
+                "name": "projects/projectID/databases/(default)/documents/C/d2",
+                "fields": {
+                  "a": {
+                    "integerValue": "3"
+                  }
+                },
+                "createTime": "1970-01-01T00:00:01Z",
+                "updateTime": "1970-01-01T00:00:03Z"
+              },
+              "targetIds": [
+                1
+              ]
+            }
+          },
+          {
+            "targetChange": {
+              "readTime": "1970-01-01T00:00:03Z"
+            }
+          },
+          {
+            "targetChange": {
+              "targetChangeType": "RESET"
+            }
+          },
+          {
+            "documentChange": {
+              "document": {
+                "name": "projects/projectID/databases/(default)/documents/C/d2",
+                "fields": {
+                  "a": {
+                    "integerValue": "3"
+                  }
+                },
+                "createTime": "1970-01-01T00:00:01Z",
+                "updateTime": "1970-01-01T00:00:03Z"
+              },
+              "targetIds": [
+                1
+              ]
+            }
+          },
+          {
+            "targetChange": {
+              "targetChangeType": "CURRENT"
+            }
+          },
+          {
+            "targetChange": {
+              "readTime": "1970-01-01T00:00:04Z"
+            }
+          },
+          {
+            "documentChange": {
+              "document": {
+                "name": "projects/projectID/databases/(default)/documents/C/d3",
+                "fields": {
+                  "a": {
+                    "integerValue": "3"
+                  }
+                },
+                "createTime": "1970-01-01T00:00:01Z",
+                "updateTime": "1970-01-01T00:00:02Z"
+              },
+              "targetIds": [
+                1
+              ]
+            }
+          },
+          {
+            "targetChange": {
+              "readTime": "1970-01-01T00:00:05Z"
+            }
+          }
+        ],
+        "snapshots": [
+          {
+            "docs": [
+              {
+                "name": "projects/projectID/databases/(default)/documents/C/d2",
+                "fields": {
+                  "a": {
+                    "integerValue": "1"
+                  }
+                },
+                "createTime": "1970-01-01T00:00:01Z",
+                "updateTime": "1970-01-01T00:00:02Z"
+              },
+              {
+                "name": "projects/projectID/databases/(default)/documents/C/d1",
+                "fields": {
+                  "a": {
+                    "integerValue": "2"
+                  }
+                },
+                "createTime": "1970-01-01T00:00:01Z",
+                "updateTime": "1970-01-01T00:00:01Z"
+              }
+            ],
+            "changes": [
+              {
+                "kind": "ADDED",
+                "doc": {
+                  "name": "projects/projectID/databases/(default)/documents/C/d2",
+                  "fields": {
+                    "a": {
+                      "integerValue": "1"
+                    }
+                  },
+                  "createTime": "1970-01-01T00:00:01Z",
+                  "updateTime": "1970-01-01T00:00:02Z"
+                },
+                "oldIndex": -1
+              },
+              {
+                "kind": "ADDED",
+                "doc": {
+                  "name": "projects/projectID/databases/(default)/documents/C/d1",
+                  "fields": {
+                    "a": {
+                      "integerValue": "2"
+                    }
+                  },
+                  "createTime": "1970-01-01T00:00:01Z",
+                  "updateTime": "1970-01-01T00:00:01Z"
+                },
+                "oldIndex": -1,
+                "newIndex": 1
+              }
+            ],
+            "readTime": "1970-01-01T00:00:01Z"
+          },
+          {
+            "docs": [
+              {
+                "name": "projects/projectID/databases/(default)/documents/C/d2",
+                "fields": {
+                  "a": {
+                    "integerValue": "3"
+                  }
+                },
+                "createTime": "1970-01-01T00:00:01Z",
+                "updateTime": "1970-01-01T00:00:03Z"
+              }
+            ],
+            "changes": [
+              {
+                "kind": "REMOVED",
+                "doc": {
+                  "name": "projects/projectID/databases/(default)/documents/C/d1",
+                  "fields": {
+                    "a": {
+                      "integerValue": "2"
+                    }
+                  },
+                  "createTime": "1970-01-01T00:00:01Z",
+                  "updateTime": "1970-01-01T00:00:01Z"
+                },
+                "oldIndex": 1,
+                "newIndex": -1
+              },
+              {
+                "kind": "MODIFIED",
+                "doc": {
+                  "name": "projects/projectID/databases/(default)/documents/C/d2",
+                  "fields": {
+                    "a": {
+                      "integerValue": "3"
+                    }
+                  },
+                  "createTime": "1970-01-01T00:00:01Z",
+                  "updateTime": "1970-01-01T00:00:03Z"
+                }
+              }
+            ],
+            "readTime": "1970-01-01T00:00:03Z"
+          },
+          {
+            "docs": [
+              {
+                "name": "projects/projectID/databases/(default)/documents/C/d2",
+                "fields": {
+                  "a": {
+                    "integerValue": "3"
+                  }
+                },
+                "createTime": "1970-01-01T00:00:01Z",
+                "updateTime": "1970-01-01T00:00:03Z"
+              },
+              {
+                "name": "projects/projectID/databases/(default)/documents/C/d3",
+                "fields": {
+                  "a": {
+                    "integerValue": "3"
+                  }
+                },
+                "createTime": "1970-01-01T00:00:01Z",
+                "updateTime": "1970-01-01T00:00:02Z"
+              }
+            ],
+            "changes": [
+              {
+                "kind": "ADDED",
+                "doc": {
+                  "name": "projects/projectID/databases/(default)/documents/C/d3",
+                  "fields": {
+                    "a": {
+                      "integerValue": "3"
+                    }
+                  },
+                  "createTime": "1970-01-01T00:00:01Z",
+                  "updateTime": "1970-01-01T00:00:02Z"
+                },
+                "oldIndex": -1,
+                "newIndex": 1
+              }
+            ],
+            "readTime": "1970-01-01T00:00:05Z"
+          }
+        ]
+      }
+    }
+  ]
+}

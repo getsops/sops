@@ -5711,7 +5711,7 @@ type Webproperty struct {
 	// period of the user identifier with each new event from that user
 	// (thus setting the expiration date to current time plus retention
 	// period).
-	// Set to false to delete data associated with the user identifer
+	// Set to false to delete data associated with the user identifier
 	// automatically after the rentention period.
 	// This property cannot be set on insert.
 	DataRetentionResetOnNewActivity bool `json:"dataRetentionResetOnNewActivity,omitempty"`
@@ -10663,7 +10663,7 @@ type ManagementFiltersGetCall struct {
 	header_      http.Header
 }
 
-// Get: Returns a filters to which the user has access.
+// Get: Returns filters to which the user has access.
 func (r *ManagementFiltersService) Get(accountId string, filterId string) *ManagementFiltersGetCall {
 	c := &ManagementFiltersGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.accountId = accountId
@@ -10770,7 +10770,7 @@ func (c *ManagementFiltersGetCall) Do(opts ...googleapi.CallOption) (*Filter, er
 	}
 	return ret, nil
 	// {
-	//   "description": "Returns a filters to which the user has access.",
+	//   "description": "Returns filters to which the user has access.",
 	//   "httpMethod": "GET",
 	//   "id": "analytics.management.filters.get",
 	//   "parameterOrder": [

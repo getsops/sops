@@ -97,6 +97,20 @@ const (
 	NotStarted ProductTransferStatus = original.NotStarted
 )
 
+type ProductTransferValidationErrorCode = original.ProductTransferValidationErrorCode
+
+const (
+	CrossBillingAccountNotAllowed            ProductTransferValidationErrorCode = original.CrossBillingAccountNotAllowed
+	DestinationBillingProfilePastDue         ProductTransferValidationErrorCode = original.DestinationBillingProfilePastDue
+	InsufficientPermissionOnDestination      ProductTransferValidationErrorCode = original.InsufficientPermissionOnDestination
+	InsufficientPermissionOnSource           ProductTransferValidationErrorCode = original.InsufficientPermissionOnSource
+	InvalidSource                            ProductTransferValidationErrorCode = original.InvalidSource
+	NotAvailableForDestinationMarket         ProductTransferValidationErrorCode = original.NotAvailableForDestinationMarket
+	OneTimePurchaseProductTransferNotAllowed ProductTransferValidationErrorCode = original.OneTimePurchaseProductTransferNotAllowed
+	ProductNotActive                         ProductTransferValidationErrorCode = original.ProductNotActive
+	ProductTypeNotSupported                  ProductTransferValidationErrorCode = original.ProductTypeNotSupported
+)
+
 type ProductType = original.ProductType
 
 const (
@@ -114,10 +128,17 @@ const (
 type Status = original.Status
 
 const (
-	StatusDue     Status = original.StatusDue
-	StatusPaid    Status = original.StatusPaid
-	StatusPastDue Status = original.StatusPastDue
-	StatusVoid    Status = original.StatusVoid
+	Approved Status = original.Approved
+	Rejected Status = original.Rejected
+)
+
+type Status1 = original.Status1
+
+const (
+	Status1Due     Status1 = original.Status1Due
+	Status1Paid    Status1 = original.Status1Paid
+	Status1PastDue Status1 = original.Status1PastDue
+	Status1Void    Status1 = original.Status1Void
 )
 
 type SubscriptionStatusType = original.SubscriptionStatusType
@@ -128,6 +149,19 @@ const (
 	SubscriptionStatusTypeDeleted   SubscriptionStatusType = original.SubscriptionStatusTypeDeleted
 	SubscriptionStatusTypeInactive  SubscriptionStatusType = original.SubscriptionStatusTypeInactive
 	SubscriptionStatusTypeWarning   SubscriptionStatusType = original.SubscriptionStatusTypeWarning
+)
+
+type SubscriptionTransferValidationErrorCode = original.SubscriptionTransferValidationErrorCode
+
+const (
+	SubscriptionTransferValidationErrorCodeCrossBillingAccountNotAllowed       SubscriptionTransferValidationErrorCode = original.SubscriptionTransferValidationErrorCodeCrossBillingAccountNotAllowed
+	SubscriptionTransferValidationErrorCodeDestinationBillingProfilePastDue    SubscriptionTransferValidationErrorCode = original.SubscriptionTransferValidationErrorCodeDestinationBillingProfilePastDue
+	SubscriptionTransferValidationErrorCodeInsufficientPermissionOnDestination SubscriptionTransferValidationErrorCode = original.SubscriptionTransferValidationErrorCodeInsufficientPermissionOnDestination
+	SubscriptionTransferValidationErrorCodeInsufficientPermissionOnSource      SubscriptionTransferValidationErrorCode = original.SubscriptionTransferValidationErrorCodeInsufficientPermissionOnSource
+	SubscriptionTransferValidationErrorCodeInvalidSource                       SubscriptionTransferValidationErrorCode = original.SubscriptionTransferValidationErrorCodeInvalidSource
+	SubscriptionTransferValidationErrorCodeNotAvailableForDestinationMarket    SubscriptionTransferValidationErrorCode = original.SubscriptionTransferValidationErrorCodeNotAvailableForDestinationMarket
+	SubscriptionTransferValidationErrorCodeSubscriptionNotActive               SubscriptionTransferValidationErrorCode = original.SubscriptionTransferValidationErrorCodeSubscriptionNotActive
+	SubscriptionTransferValidationErrorCodeSubscriptionTypeNotSupported        SubscriptionTransferValidationErrorCode = original.SubscriptionTransferValidationErrorCodeSubscriptionTypeNotSupported
 )
 
 type TransactionTypeKind = original.TransactionTypeKind
@@ -161,9 +195,11 @@ type AcceptTransferRequest = original.AcceptTransferRequest
 type Account = original.Account
 type AccountListResult = original.AccountListResult
 type AccountProperties = original.AccountProperties
+type AccountUpdateProperties = original.AccountUpdateProperties
 type AccountsClient = original.AccountsClient
-type AccountsValidateAddressClient = original.AccountsValidateAddressClient
+type AccountsUpdateFuture = original.AccountsUpdateFuture
 type Address = original.Address
+type AddressesClient = original.AddressesClient
 type Agreement = original.Agreement
 type AgreementListResult = original.AgreementListResult
 type AgreementProperties = original.AgreementProperties
@@ -195,6 +231,7 @@ type InitiateTransferProperties = original.InitiateTransferProperties
 type InitiateTransferRequest = original.InitiateTransferRequest
 type InvoiceListResult = original.InvoiceListResult
 type InvoiceSection = original.InvoiceSection
+type InvoiceSectionCreationRequest = original.InvoiceSectionCreationRequest
 type InvoiceSectionListResult = original.InvoiceSectionListResult
 type InvoiceSectionProperties = original.InvoiceSectionProperties
 type InvoiceSectionsClient = original.InvoiceSectionsClient
@@ -203,6 +240,10 @@ type InvoiceSectionsUpdateFuture = original.InvoiceSectionsUpdateFuture
 type InvoiceSummary = original.InvoiceSummary
 type InvoiceSummaryProperties = original.InvoiceSummaryProperties
 type InvoicesClient = original.InvoicesClient
+type LineOfCredit = original.LineOfCredit
+type LineOfCreditProperties = original.LineOfCreditProperties
+type LineOfCreditsClient = original.LineOfCreditsClient
+type LineOfCreditsUpdateFuture = original.LineOfCreditsUpdateFuture
 type Operation = original.Operation
 type OperationDisplay = original.OperationDisplay
 type OperationListResult = original.OperationListResult
@@ -234,9 +275,11 @@ type ProductsListResult = original.ProductsListResult
 type ProductsListResultIterator = original.ProductsListResultIterator
 type ProductsListResultPage = original.ProductsListResultPage
 type Profile = original.Profile
+type ProfileCreationParameters = original.ProfileCreationParameters
 type ProfileListResult = original.ProfileListResult
 type ProfileProperties = original.ProfileProperties
 type ProfilesClient = original.ProfilesClient
+type ProfilesCreateFuture = original.ProfilesCreateFuture
 type ProfilesUpdateFuture = original.ProfilesUpdateFuture
 type Property = original.Property
 type PropertyClient = original.PropertyClient
@@ -285,6 +328,10 @@ type UpdateAutoRenewOperationSummary = original.UpdateAutoRenewOperationSummary
 type UpdateAutoRenewOperationSummaryProperties = original.UpdateAutoRenewOperationSummaryProperties
 type UpdateAutoRenewRequest = original.UpdateAutoRenewRequest
 type ValidateAddressResponse = original.ValidateAddressResponse
+type ValidateProductTransferEligibilityError = original.ValidateProductTransferEligibilityError
+type ValidateProductTransferEligibilityResult = original.ValidateProductTransferEligibilityResult
+type ValidateSubscriptionTransferEligibilityError = original.ValidateSubscriptionTransferEligibilityError
+type ValidateSubscriptionTransferEligibilityResult = original.ValidateSubscriptionTransferEligibilityResult
 
 func New(subscriptionID string) BaseClient {
 	return original.New(subscriptionID)
@@ -295,11 +342,11 @@ func NewAccountsClient(subscriptionID string) AccountsClient {
 func NewAccountsClientWithBaseURI(baseURI string, subscriptionID string) AccountsClient {
 	return original.NewAccountsClientWithBaseURI(baseURI, subscriptionID)
 }
-func NewAccountsValidateAddressClient(subscriptionID string) AccountsValidateAddressClient {
-	return original.NewAccountsValidateAddressClient(subscriptionID)
+func NewAddressesClient(subscriptionID string) AddressesClient {
+	return original.NewAddressesClient(subscriptionID)
 }
-func NewAccountsValidateAddressClientWithBaseURI(baseURI string, subscriptionID string) AccountsValidateAddressClient {
-	return original.NewAccountsValidateAddressClientWithBaseURI(baseURI, subscriptionID)
+func NewAddressesClientWithBaseURI(baseURI string, subscriptionID string) AddressesClient {
+	return original.NewAddressesClientWithBaseURI(baseURI, subscriptionID)
 }
 func NewAgreementsClient(subscriptionID string) AgreementsClient {
 	return original.NewAgreementsClient(subscriptionID)
@@ -336,6 +383,12 @@ func NewInvoicesClient(subscriptionID string) InvoicesClient {
 }
 func NewInvoicesClientWithBaseURI(baseURI string, subscriptionID string) InvoicesClient {
 	return original.NewInvoicesClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewLineOfCreditsClient(subscriptionID string) LineOfCreditsClient {
+	return original.NewLineOfCreditsClient(subscriptionID)
+}
+func NewLineOfCreditsClientWithBaseURI(baseURI string, subscriptionID string) LineOfCreditsClient {
+	return original.NewLineOfCreditsClientWithBaseURI(baseURI, subscriptionID)
 }
 func NewOperationListResultIterator(page OperationListResultPage) OperationListResultIterator {
 	return original.NewOperationListResultIterator(page)
@@ -490,17 +543,26 @@ func PossibleProductStatusTypeValues() []ProductStatusType {
 func PossibleProductTransferStatusValues() []ProductTransferStatus {
 	return original.PossibleProductTransferStatusValues()
 }
+func PossibleProductTransferValidationErrorCodeValues() []ProductTransferValidationErrorCode {
+	return original.PossibleProductTransferValidationErrorCodeValues()
+}
 func PossibleProductTypeValues() []ProductType {
 	return original.PossibleProductTypeValues()
 }
 func PossibleReservationTypeValues() []ReservationType {
 	return original.PossibleReservationTypeValues()
 }
+func PossibleStatus1Values() []Status1 {
+	return original.PossibleStatus1Values()
+}
 func PossibleStatusValues() []Status {
 	return original.PossibleStatusValues()
 }
 func PossibleSubscriptionStatusTypeValues() []SubscriptionStatusType {
 	return original.PossibleSubscriptionStatusTypeValues()
+}
+func PossibleSubscriptionTransferValidationErrorCodeValues() []SubscriptionTransferValidationErrorCode {
+	return original.PossibleSubscriptionTransferValidationErrorCodeValues()
 }
 func PossibleTransactionTypeKindValues() []TransactionTypeKind {
 	return original.PossibleTransactionTypeKindValues()

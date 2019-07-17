@@ -393,7 +393,7 @@
       }
     }
   },
-  "revision": "20190530",
+  "revision": "20190708",
   "rootUrl": "https://serviceusage.googleapis.com/",
   "schemas": {
     "Api": {
@@ -861,6 +861,10 @@
             "$ref": "DocumentationRule"
           },
           "type": "array"
+        },
+        "serviceRootUrl": {
+          "description": "Specifies the service root url if the default one (the service name\nfrom the yaml file) is not suitable. This can be seen in any fully\nspecified service urls as well as sections that show a base that other\nurls are relative to.",
+          "type": "string"
         },
         "summary": {
           "description": "A short summary of what the service does. Can only be provided by\nplain text.",

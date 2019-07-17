@@ -68,9 +68,17 @@ type AmplifyAPI interface {
 	CreateBranchWithContext(aws.Context, *amplify.CreateBranchInput, ...request.Option) (*amplify.CreateBranchOutput, error)
 	CreateBranchRequest(*amplify.CreateBranchInput) (*request.Request, *amplify.CreateBranchOutput)
 
+	CreateDeployment(*amplify.CreateDeploymentInput) (*amplify.CreateDeploymentOutput, error)
+	CreateDeploymentWithContext(aws.Context, *amplify.CreateDeploymentInput, ...request.Option) (*amplify.CreateDeploymentOutput, error)
+	CreateDeploymentRequest(*amplify.CreateDeploymentInput) (*request.Request, *amplify.CreateDeploymentOutput)
+
 	CreateDomainAssociation(*amplify.CreateDomainAssociationInput) (*amplify.CreateDomainAssociationOutput, error)
 	CreateDomainAssociationWithContext(aws.Context, *amplify.CreateDomainAssociationInput, ...request.Option) (*amplify.CreateDomainAssociationOutput, error)
 	CreateDomainAssociationRequest(*amplify.CreateDomainAssociationInput) (*request.Request, *amplify.CreateDomainAssociationOutput)
+
+	CreateWebhook(*amplify.CreateWebhookInput) (*amplify.CreateWebhookOutput, error)
+	CreateWebhookWithContext(aws.Context, *amplify.CreateWebhookInput, ...request.Option) (*amplify.CreateWebhookOutput, error)
+	CreateWebhookRequest(*amplify.CreateWebhookInput) (*request.Request, *amplify.CreateWebhookOutput)
 
 	DeleteApp(*amplify.DeleteAppInput) (*amplify.DeleteAppOutput, error)
 	DeleteAppWithContext(aws.Context, *amplify.DeleteAppInput, ...request.Option) (*amplify.DeleteAppOutput, error)
@@ -88,6 +96,10 @@ type AmplifyAPI interface {
 	DeleteJobWithContext(aws.Context, *amplify.DeleteJobInput, ...request.Option) (*amplify.DeleteJobOutput, error)
 	DeleteJobRequest(*amplify.DeleteJobInput) (*request.Request, *amplify.DeleteJobOutput)
 
+	DeleteWebhook(*amplify.DeleteWebhookInput) (*amplify.DeleteWebhookOutput, error)
+	DeleteWebhookWithContext(aws.Context, *amplify.DeleteWebhookInput, ...request.Option) (*amplify.DeleteWebhookOutput, error)
+	DeleteWebhookRequest(*amplify.DeleteWebhookInput) (*request.Request, *amplify.DeleteWebhookOutput)
+
 	GetApp(*amplify.GetAppInput) (*amplify.GetAppOutput, error)
 	GetAppWithContext(aws.Context, *amplify.GetAppInput, ...request.Option) (*amplify.GetAppOutput, error)
 	GetAppRequest(*amplify.GetAppInput) (*request.Request, *amplify.GetAppOutput)
@@ -103,6 +115,10 @@ type AmplifyAPI interface {
 	GetJob(*amplify.GetJobInput) (*amplify.GetJobOutput, error)
 	GetJobWithContext(aws.Context, *amplify.GetJobInput, ...request.Option) (*amplify.GetJobOutput, error)
 	GetJobRequest(*amplify.GetJobInput) (*request.Request, *amplify.GetJobOutput)
+
+	GetWebhook(*amplify.GetWebhookInput) (*amplify.GetWebhookOutput, error)
+	GetWebhookWithContext(aws.Context, *amplify.GetWebhookInput, ...request.Option) (*amplify.GetWebhookOutput, error)
+	GetWebhookRequest(*amplify.GetWebhookInput) (*request.Request, *amplify.GetWebhookOutput)
 
 	ListApps(*amplify.ListAppsInput) (*amplify.ListAppsOutput, error)
 	ListAppsWithContext(aws.Context, *amplify.ListAppsInput, ...request.Option) (*amplify.ListAppsOutput, error)
@@ -120,6 +136,18 @@ type AmplifyAPI interface {
 	ListJobsWithContext(aws.Context, *amplify.ListJobsInput, ...request.Option) (*amplify.ListJobsOutput, error)
 	ListJobsRequest(*amplify.ListJobsInput) (*request.Request, *amplify.ListJobsOutput)
 
+	ListTagsForResource(*amplify.ListTagsForResourceInput) (*amplify.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *amplify.ListTagsForResourceInput, ...request.Option) (*amplify.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*amplify.ListTagsForResourceInput) (*request.Request, *amplify.ListTagsForResourceOutput)
+
+	ListWebhooks(*amplify.ListWebhooksInput) (*amplify.ListWebhooksOutput, error)
+	ListWebhooksWithContext(aws.Context, *amplify.ListWebhooksInput, ...request.Option) (*amplify.ListWebhooksOutput, error)
+	ListWebhooksRequest(*amplify.ListWebhooksInput) (*request.Request, *amplify.ListWebhooksOutput)
+
+	StartDeployment(*amplify.StartDeploymentInput) (*amplify.StartDeploymentOutput, error)
+	StartDeploymentWithContext(aws.Context, *amplify.StartDeploymentInput, ...request.Option) (*amplify.StartDeploymentOutput, error)
+	StartDeploymentRequest(*amplify.StartDeploymentInput) (*request.Request, *amplify.StartDeploymentOutput)
+
 	StartJob(*amplify.StartJobInput) (*amplify.StartJobOutput, error)
 	StartJobWithContext(aws.Context, *amplify.StartJobInput, ...request.Option) (*amplify.StartJobOutput, error)
 	StartJobRequest(*amplify.StartJobInput) (*request.Request, *amplify.StartJobOutput)
@@ -127,6 +155,14 @@ type AmplifyAPI interface {
 	StopJob(*amplify.StopJobInput) (*amplify.StopJobOutput, error)
 	StopJobWithContext(aws.Context, *amplify.StopJobInput, ...request.Option) (*amplify.StopJobOutput, error)
 	StopJobRequest(*amplify.StopJobInput) (*request.Request, *amplify.StopJobOutput)
+
+	TagResource(*amplify.TagResourceInput) (*amplify.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *amplify.TagResourceInput, ...request.Option) (*amplify.TagResourceOutput, error)
+	TagResourceRequest(*amplify.TagResourceInput) (*request.Request, *amplify.TagResourceOutput)
+
+	UntagResource(*amplify.UntagResourceInput) (*amplify.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *amplify.UntagResourceInput, ...request.Option) (*amplify.UntagResourceOutput, error)
+	UntagResourceRequest(*amplify.UntagResourceInput) (*request.Request, *amplify.UntagResourceOutput)
 
 	UpdateApp(*amplify.UpdateAppInput) (*amplify.UpdateAppOutput, error)
 	UpdateAppWithContext(aws.Context, *amplify.UpdateAppInput, ...request.Option) (*amplify.UpdateAppOutput, error)
@@ -139,6 +175,10 @@ type AmplifyAPI interface {
 	UpdateDomainAssociation(*amplify.UpdateDomainAssociationInput) (*amplify.UpdateDomainAssociationOutput, error)
 	UpdateDomainAssociationWithContext(aws.Context, *amplify.UpdateDomainAssociationInput, ...request.Option) (*amplify.UpdateDomainAssociationOutput, error)
 	UpdateDomainAssociationRequest(*amplify.UpdateDomainAssociationInput) (*request.Request, *amplify.UpdateDomainAssociationOutput)
+
+	UpdateWebhook(*amplify.UpdateWebhookInput) (*amplify.UpdateWebhookOutput, error)
+	UpdateWebhookWithContext(aws.Context, *amplify.UpdateWebhookInput, ...request.Option) (*amplify.UpdateWebhookOutput, error)
+	UpdateWebhookRequest(*amplify.UpdateWebhookInput) (*request.Request, *amplify.UpdateWebhookOutput)
 }
 
 var _ AmplifyAPI = (*amplify.Amplify)(nil)

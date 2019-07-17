@@ -1047,9 +1047,9 @@ type CustomRule struct {
 	EnabledState CustomRuleEnabledState `json:"enabledState,omitempty"`
 	// RuleType - Describes type of rule. Possible values include: 'MatchRule', 'RateLimitRule'
 	RuleType RuleType `json:"ruleType,omitempty"`
-	// RateLimitDurationInMinutes - Defines rate limit duration. Default is 1 minute.
+	// RateLimitDurationInMinutes - Time window for resetting the rate limit count. Default is 1 minute.
 	RateLimitDurationInMinutes *int32 `json:"rateLimitDurationInMinutes,omitempty"`
-	// RateLimitThreshold - Defines rate limit threshold.
+	// RateLimitThreshold - Number of allowed requests per client within the time window.
 	RateLimitThreshold *int32 `json:"rateLimitThreshold,omitempty"`
 	// MatchConditions - List of match conditions.
 	MatchConditions *[]MatchCondition `json:"matchConditions,omitempty"`
@@ -2506,6 +2506,7 @@ type ManagedRuleSet struct {
 
 // ManagedRuleSetDefinition describes the a managed rule set definition.
 type ManagedRuleSetDefinition struct {
+	// ManagedRuleSetDefinitionProperties - Properties for a managed rule set definition.
 	*ManagedRuleSetDefinitionProperties `json:"properties,omitempty"`
 	// ID - READ-ONLY; Resource ID.
 	ID *string `json:"id,omitempty"`
@@ -2770,11 +2771,11 @@ type ManagedRuleSetList struct {
 
 // MatchCondition define a match condition.
 type MatchCondition struct {
-	// MatchVariable - Match variable to compare against. Possible values include: 'RemoteAddr', 'RequestMethod', 'QueryString', 'PostArgs', 'RequestURI', 'RequestHeader', 'RequestBody', 'Cookies'
+	// MatchVariable - Request variable to compare with. Possible values include: 'RemoteAddr', 'RequestMethod', 'QueryString', 'PostArgs', 'RequestURI', 'RequestHeader', 'RequestBody', 'Cookies'
 	MatchVariable MatchVariable `json:"matchVariable,omitempty"`
-	// Selector - Selector can used to match against a specific key from QueryString, PostArgs, RequestHeader or Cookies.
+	// Selector - Match against a specific key from the QueryString, PostArgs, RequestHeader or Cookies variables. Default is null.
 	Selector *string `json:"selector,omitempty"`
-	// Operator - Describes operator to be matched. Possible values include: 'Any', 'IPMatch', 'GeoMatch', 'Equal', 'Contains', 'LessThan', 'GreaterThan', 'LessThanOrEqual', 'GreaterThanOrEqual', 'BeginsWith', 'EndsWith', 'RegEx'
+	// Operator - Comparison type to use for matching with the variable value. Possible values include: 'Any', 'IPMatch', 'GeoMatch', 'Equal', 'Contains', 'LessThan', 'GreaterThan', 'LessThanOrEqual', 'GreaterThanOrEqual', 'BeginsWith', 'EndsWith', 'RegEx'
 	Operator Operator `json:"operator,omitempty"`
 	// NegateCondition - Describes if the result of this condition should be negated.
 	NegateCondition *bool `json:"negateCondition,omitempty"`

@@ -14982,6 +14982,10 @@ type CreateDBInstanceInput struct {
 	//    * Can't be a reserved word for the chosen database engine.
 	MasterUsername *string `type:"string"`
 
+	// The upper limit to which Amazon RDS can automatically scale the storage of
+	// the DB instance.
+	MaxAllocatedStorage *int64 `type:"integer"`
+
 	// The interval, in seconds, between points when Enhanced Monitoring metrics
 	// are collected for the DB instance. To disable collecting Enhanced Monitoring
 	// metrics, specify 0. The default is 0.
@@ -15383,6 +15387,12 @@ func (s *CreateDBInstanceInput) SetMasterUserPassword(v string) *CreateDBInstanc
 // SetMasterUsername sets the MasterUsername field's value.
 func (s *CreateDBInstanceInput) SetMasterUsername(v string) *CreateDBInstanceInput {
 	s.MasterUsername = &v
+	return s
+}
+
+// SetMaxAllocatedStorage sets the MaxAllocatedStorage field's value.
+func (s *CreateDBInstanceInput) SetMaxAllocatedStorage(v int64) *CreateDBInstanceInput {
+	s.MaxAllocatedStorage = &v
 	return s
 }
 
@@ -16913,6 +16923,10 @@ type DBCluster struct {
 	// DB cluster.
 	CopyTagsToSnapshot *bool `type:"boolean"`
 
+	// Specifies whether the DB cluster is a clone of a DB cluster owned by a different
+	// AWS account.
+	CrossAccountClone *bool `type:"boolean"`
+
 	// Identifies all custom endpoints associated with the cluster.
 	CustomEndpoints []*string `type:"list"`
 
@@ -17159,6 +17173,12 @@ func (s *DBCluster) SetClusterCreateTime(v time.Time) *DBCluster {
 // SetCopyTagsToSnapshot sets the CopyTagsToSnapshot field's value.
 func (s *DBCluster) SetCopyTagsToSnapshot(v bool) *DBCluster {
 	s.CopyTagsToSnapshot = &v
+	return s
+}
+
+// SetCrossAccountClone sets the CrossAccountClone field's value.
+func (s *DBCluster) SetCrossAccountClone(v bool) *DBCluster {
+	s.CrossAccountClone = &v
 	return s
 }
 
@@ -18339,6 +18359,10 @@ type DBInstance struct {
 	// Contains the master username for the DB instance.
 	MasterUsername *string `type:"string"`
 
+	// The upper limit to which Amazon RDS can automatically scale the storage of
+	// the DB instance.
+	MaxAllocatedStorage *int64 `type:"integer"`
+
 	// The interval, in seconds, between points when Enhanced Monitoring metrics
 	// are collected for the DB instance.
 	MonitoringInterval *int64 `type:"integer"`
@@ -18650,6 +18674,12 @@ func (s *DBInstance) SetListenerEndpoint(v *Endpoint) *DBInstance {
 // SetMasterUsername sets the MasterUsername field's value.
 func (s *DBInstance) SetMasterUsername(v string) *DBInstance {
 	s.MasterUsername = &v
+	return s
+}
+
+// SetMaxAllocatedStorage sets the MaxAllocatedStorage field's value.
+func (s *DBInstance) SetMaxAllocatedStorage(v int64) *DBInstance {
+	s.MaxAllocatedStorage = &v
 	return s
 }
 
@@ -21825,6 +21855,10 @@ type DescribeDBClustersInput struct {
 	//    about the DB clusters identified by these ARNs.
 	Filters []*Filter `locationNameList:"Filter" type:"list"`
 
+	// Optional Boolean parameter that specifies whether the output includes information
+	// about clusters shared from other AWS accounts.
+	IncludeShared *bool `type:"boolean"`
+
 	// An optional pagination token provided by a previous DescribeDBClusters request.
 	// If this parameter is specified, the response includes only records beyond
 	// the marker, up to the value specified by MaxRecords.
@@ -21879,6 +21913,12 @@ func (s *DescribeDBClustersInput) SetDBClusterIdentifier(v string) *DescribeDBCl
 // SetFilters sets the Filters field's value.
 func (s *DescribeDBClustersInput) SetFilters(v []*Filter) *DescribeDBClustersInput {
 	s.Filters = v
+	return s
+}
+
+// SetIncludeShared sets the IncludeShared field's value.
+func (s *DescribeDBClustersInput) SetIncludeShared(v bool) *DescribeDBClustersInput {
+	s.IncludeShared = &v
 	return s
 }
 
@@ -26533,6 +26573,13 @@ func (s *ModifyDBClusterEndpointOutput) SetStatus(v string) *ModifyDBClusterEndp
 type ModifyDBClusterInput struct {
 	_ struct{} `type:"structure"`
 
+	// A value that indicates whether major version upgrades are allowed.
+	//
+	// Constraints: You must allow major version upgrades when specifying a value
+	// for the EngineVersion parameter that is a different major version than the
+	// DB cluster's current version.
+	AllowMajorVersionUpgrade *bool `type:"boolean"`
+
 	// A value that indicates whether the modifications in this request and any
 	// pending modifications are asynchronously applied as soon as possible, regardless
 	// of the PreferredMaintenanceWindow setting for the DB cluster. If this parameter
@@ -26581,15 +26628,31 @@ type ModifyDBClusterInput struct {
 	// The DB cluster identifier for the cluster being modified. This parameter
 	// is not case-sensitive.
 	//
-	// Constraints:
-	//
-	//    * Must match the identifier of an existing DBCluster.
+	// Constraints: This identifier must match the identifier of an existing DB
+	// cluster.
 	//
 	// DBClusterIdentifier is a required field
 	DBClusterIdentifier *string `type:"string" required:"true"`
 
 	// The name of the DB cluster parameter group to use for the DB cluster.
 	DBClusterParameterGroupName *string `type:"string"`
+
+	// The name of the DB parameter group to apply to all instances of the DB cluster.
+	//
+	// When you apply a parameter group using the DBInstanceParameterGroupName parameter,
+	// the DB cluster isn't rebooted automatically. Also, parameter changes aren't
+	// applied during the next maintenance window but instead are applied immediately.
+	//
+	// Default: The existing name setting
+	//
+	// Constraints:
+	//
+	//    * The DB parameter group must be in the same DB parameter group family
+	//    as this DB cluster.
+	//
+	//    * The DBInstanceParameterGroupName parameter is only valid in combination
+	//    with the AllowMajorVersionUpgrade parameter.
+	DBInstanceParameterGroupName *string `type:"string"`
 
 	// A value that indicates whether the DB cluster has deletion protection enabled.
 	// The database can't be deleted when deletion protection is enabled. By default,
@@ -26723,6 +26786,12 @@ func (s *ModifyDBClusterInput) Validate() error {
 	return nil
 }
 
+// SetAllowMajorVersionUpgrade sets the AllowMajorVersionUpgrade field's value.
+func (s *ModifyDBClusterInput) SetAllowMajorVersionUpgrade(v bool) *ModifyDBClusterInput {
+	s.AllowMajorVersionUpgrade = &v
+	return s
+}
+
 // SetApplyImmediately sets the ApplyImmediately field's value.
 func (s *ModifyDBClusterInput) SetApplyImmediately(v bool) *ModifyDBClusterInput {
 	s.ApplyImmediately = &v
@@ -26762,6 +26831,12 @@ func (s *ModifyDBClusterInput) SetDBClusterIdentifier(v string) *ModifyDBCluster
 // SetDBClusterParameterGroupName sets the DBClusterParameterGroupName field's value.
 func (s *ModifyDBClusterInput) SetDBClusterParameterGroupName(v string) *ModifyDBClusterInput {
 	s.DBClusterParameterGroupName = &v
+	return s
+}
+
+// SetDBInstanceParameterGroupName sets the DBInstanceParameterGroupName field's value.
+func (s *ModifyDBClusterInput) SetDBInstanceParameterGroupName(v string) *ModifyDBClusterInput {
+	s.DBInstanceParameterGroupName = &v
 	return s
 }
 
@@ -27151,8 +27226,8 @@ type ModifyDBInstanceInput struct {
 	// The name of the DB parameter group to apply to the DB instance. Changing
 	// this setting doesn't result in an outage. The parameter group name itself
 	// is changed immediately, but the actual parameter changes are not applied
-	// until you reboot the instance without failover. The DB instance will NOT
-	// be rebooted automatically and the parameter changes will NOT be applied during
+	// until you reboot the instance without failover. In this case, the DB instance
+	// isn't rebooted automatically and the parameter changes isn't applied during
 	// the next maintenance window.
 	//
 	// Default: Uses existing setting
@@ -27357,6 +27432,10 @@ type ModifyDBInstanceInput struct {
 	// a way to regain access to a primary instance user if the password is lost.
 	// This includes restoring privileges that might have been accidentally revoked.
 	MasterUserPassword *string `type:"string"`
+
+	// The upper limit to which Amazon RDS can automatically scale the storage of
+	// the DB instance.
+	MaxAllocatedStorage *int64 `type:"integer"`
 
 	// The interval, in seconds, between points when Enhanced Monitoring metrics
 	// are collected for the DB instance. To disable collecting Enhanced Monitoring
@@ -27701,6 +27780,12 @@ func (s *ModifyDBInstanceInput) SetLicenseModel(v string) *ModifyDBInstanceInput
 // SetMasterUserPassword sets the MasterUserPassword field's value.
 func (s *ModifyDBInstanceInput) SetMasterUserPassword(v string) *ModifyDBInstanceInput {
 	s.MasterUserPassword = &v
+	return s
+}
+
+// SetMaxAllocatedStorage sets the MaxAllocatedStorage field's value.
+func (s *ModifyDBInstanceInput) SetMaxAllocatedStorage(v int64) *ModifyDBInstanceInput {
+	s.MaxAllocatedStorage = &v
 	return s
 }
 
@@ -29271,6 +29356,10 @@ type OrderableDBInstanceOption struct {
 	// True if a DB instance supports Performance Insights, otherwise false.
 	SupportsPerformanceInsights *bool `type:"boolean"`
 
+	// Whether or not Amazon RDS can automatically scale storage for DB instances
+	// that use the specified instance class.
+	SupportsStorageAutoscaling *bool `type:"boolean"`
+
 	// Indicates whether a DB instance supports encrypted storage.
 	SupportsStorageEncryption *bool `type:"boolean"`
 
@@ -29405,6 +29494,12 @@ func (s *OrderableDBInstanceOption) SetSupportsIops(v bool) *OrderableDBInstance
 // SetSupportsPerformanceInsights sets the SupportsPerformanceInsights field's value.
 func (s *OrderableDBInstanceOption) SetSupportsPerformanceInsights(v bool) *OrderableDBInstanceOption {
 	s.SupportsPerformanceInsights = &v
+	return s
+}
+
+// SetSupportsStorageAutoscaling sets the SupportsStorageAutoscaling field's value.
+func (s *OrderableDBInstanceOption) SetSupportsStorageAutoscaling(v bool) *OrderableDBInstanceOption {
+	s.SupportsStorageAutoscaling = &v
 	return s
 }
 
@@ -34861,6 +34956,10 @@ type ValidStorageOptions struct {
 
 	// The valid storage types for your DB instance. For example, gp2, io1.
 	StorageType *string `type:"string"`
+
+	// Whether or not Amazon RDS can automatically scale storage for DB instances
+	// that use the new instance class.
+	SupportsStorageAutoscaling *bool `type:"boolean"`
 }
 
 // String returns the string representation
@@ -34894,6 +34993,12 @@ func (s *ValidStorageOptions) SetStorageSize(v []*Range) *ValidStorageOptions {
 // SetStorageType sets the StorageType field's value.
 func (s *ValidStorageOptions) SetStorageType(v string) *ValidStorageOptions {
 	s.StorageType = &v
+	return s
+}
+
+// SetSupportsStorageAutoscaling sets the SupportsStorageAutoscaling field's value.
+func (s *ValidStorageOptions) SetSupportsStorageAutoscaling(v bool) *ValidStorageOptions {
+	s.SupportsStorageAutoscaling = &v
 	return s
 }
 

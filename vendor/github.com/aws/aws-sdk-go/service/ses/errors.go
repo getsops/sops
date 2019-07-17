@@ -101,6 +101,12 @@ const (
 	// details.
 	ErrCodeInvalidConfigurationSetException = "InvalidConfigurationSet"
 
+	// ErrCodeInvalidDeliveryOptionsException for service response error code
+	// "InvalidDeliveryOptions".
+	//
+	// Indicates that provided delivery option is invalid.
+	ErrCodeInvalidDeliveryOptionsException = "InvalidDeliveryOptions"
+
 	// ErrCodeInvalidFirehoseDestinationException for service response error code
 	// "InvalidFirehoseDestination".
 	//
@@ -114,7 +120,7 @@ const (
 	// Indicates that the provided AWS Lambda function is invalid, or that Amazon
 	// SES could not execute the provided function, possibly due to permissions
 	// issues. For information about giving permissions, see the Amazon SES Developer
-	// Guide (http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html).
+	// Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html).
 	ErrCodeInvalidLambdaFunctionException = "InvalidLambdaFunction"
 
 	// ErrCodeInvalidPolicyException for service response error code
@@ -137,7 +143,7 @@ const (
 	// Indicates that the provided Amazon S3 bucket or AWS KMS encryption key is
 	// invalid, or that Amazon SES could not publish to the bucket, possibly due
 	// to permissions issues. For information about giving permissions, see the
-	// Amazon SES Developer Guide (http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html).
+	// Amazon SES Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html).
 	ErrCodeInvalidS3ConfigurationException = "InvalidS3Configuration"
 
 	// ErrCodeInvalidSNSDestinationException for service response error code
@@ -152,7 +158,7 @@ const (
 	//
 	// Indicates that the provided Amazon SNS topic is invalid, or that Amazon SES
 	// could not publish to the topic, possibly due to permissions issues. For information
-	// about giving permissions, see the Amazon SES Developer Guide (http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html).
+	// about giving permissions, see the Amazon SES Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html).
 	ErrCodeInvalidSnsTopicException = "InvalidSnsTopic"
 
 	// ErrCodeInvalidTemplateException for service response error code
@@ -177,7 +183,7 @@ const (
 	// "LimitExceeded".
 	//
 	// Indicates that a resource could not be created because of service limits.
-	// For a list of Amazon SES limits, see the Amazon SES Developer Guide (http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html).
+	// For a list of Amazon SES limits, see the Amazon SES Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html).
 	ErrCodeLimitExceededException = "LimitExceeded"
 
 	// ErrCodeMailFromDomainNotVerifiedException for service response error code
@@ -186,7 +192,7 @@ const (
 	// Indicates that the message could not be sent because Amazon SES could not
 	// read the MX record required to use the specified MAIL FROM domain. For information
 	// about editing the custom MAIL FROM domain settings for an identity, see the
-	// Amazon SES Developer Guide (http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-edit.html).
+	// Amazon SES Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-edit.html).
 	ErrCodeMailFromDomainNotVerifiedException = "MailFromDomainNotVerifiedException"
 
 	// ErrCodeMessageRejected for service response error code

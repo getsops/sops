@@ -112,6 +112,12 @@ type CreateManagementGroupRequest = original.CreateManagementGroupRequest
 type CreateOrUpdateFuture = original.CreateOrUpdateFuture
 type CreateParentGroupInfo = original.CreateParentGroupInfo
 type DeleteFuture = original.DeleteFuture
+type DescendantInfo = original.DescendantInfo
+type DescendantInfoProperties = original.DescendantInfoProperties
+type DescendantListResult = original.DescendantListResult
+type DescendantListResultIterator = original.DescendantListResultIterator
+type DescendantListResultPage = original.DescendantListResultPage
+type DescendantParentGroupInfo = original.DescendantParentGroupInfo
 type Details = original.Details
 type EntitiesClient = original.EntitiesClient
 type EntityHierarchyItem = original.EntityHierarchyItem
@@ -153,6 +159,12 @@ func NewClient() Client {
 }
 func NewClientWithBaseURI(baseURI string) Client {
 	return original.NewClientWithBaseURI(baseURI)
+}
+func NewDescendantListResultIterator(page DescendantListResultPage) DescendantListResultIterator {
+	return original.NewDescendantListResultIterator(page)
+}
+func NewDescendantListResultPage(getNextPage func(context.Context, DescendantListResult) (DescendantListResult, error)) DescendantListResultPage {
+	return original.NewDescendantListResultPage(getNextPage)
 }
 func NewEntitiesClient() EntitiesClient {
 	return original.NewEntitiesClient()

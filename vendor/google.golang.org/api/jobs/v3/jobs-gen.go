@@ -3247,7 +3247,7 @@ type LocationFilter struct {
 	// TelecommutePreference: Optional.
 	//
 	// Allows the client to return jobs without a
-	// set location, specifically, telecommuting jobs (telecomuting is
+	// set location, specifically, telecommuting jobs (telecommuting is
 	// considered
 	// by the service as a special location.
 	// Job.posting_region indicates if a job permits telecommuting.
@@ -3939,7 +3939,8 @@ type SearchJobsRequest struct {
 	//
 	// Possible values:
 	//   "DIVERSIFICATION_LEVEL_UNSPECIFIED" - The diversification level
-	// isn't specified.
+	// isn't specified. By default, jobs with this
+	// enum are ordered according to SIMPLE diversifying behavior.
 	//   "DISABLED" - Disables diversification. Jobs that would normally be
 	// pushed to the last
 	// page would not have their positions altered. This may result in
@@ -4028,36 +4029,36 @@ type SearchJobsRequest struct {
 	// algorithms. Relevance thresholding of query results is only
 	// available
 	// with this ordering.
-	// * "posting`_`publish`_`time desc": By
+	// * "posting_publish_time desc": By
 	// Job.posting_publish_time
 	// descending.
-	// * "posting`_`update`_`time desc": By
+	// * "posting_update_time desc": By
 	// Job.posting_update_time
 	// descending.
 	// * "title": By Job.title ascending.
 	// * "title desc": By Job.title descending.
-	// * "annualized`_`base`_`compensation": By
+	// * "annualized_base_compensation": By
 	// job's
 	// CompensationInfo.annualized_base_compensation_range ascending.
 	// Jobs
 	// whose annualized base compensation is unspecified are put at the end
 	// of
 	// search results.
-	// * "annualized`_`base`_`compensation desc": By
+	// * "annualized_base_compensation desc": By
 	// job's
 	// CompensationInfo.annualized_base_compensation_range descending.
 	// Jobs
 	// whose annualized base compensation is unspecified are put at the end
 	// of
 	// search results.
-	// * "annualized`_`total`_`compensation": By
+	// * "annualized_total_compensation": By
 	// job's
 	// CompensationInfo.annualized_total_compensation_range ascending.
 	// Jobs
 	// whose annualized base compensation is unspecified are put at the end
 	// of
 	// search results.
-	// * "annualized`_`total`_`compensation desc": By
+	// * "annualized_total_compensation desc": By
 	// job's
 	// CompensationInfo.annualized_total_compensation_range descending.
 	// Jobs
@@ -4086,7 +4087,7 @@ type SearchJobsRequest struct {
 	//
 	// The meta information collected about the job searcher, used to
 	// improve the
-	// search quality of the service.. The identifiers, (such as `user_id`)
+	// search quality of the service. The identifiers (such as `user_id`)
 	// are
 	// provided by users, and must be unique and consistent.
 	RequestMetadata *RequestMetadata `json:"requestMetadata,omitempty"`

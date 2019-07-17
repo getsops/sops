@@ -75,5 +75,26 @@ https://godoc.org/google.golang.org/grpc/grpclog for more information.
 
 For HTTP logging, set the GODEBUG environment variable to "http2debug=1" or "http2debug=2".
 
+
+Client Stability
+
+Clients in this repository are considered alpha or beta unless otherwise
+marked as stable in the README.md. Semver is not used to communicate stability
+of clients.
+
+Alpha and beta clients may change or go away without notice.
+
+Clients marked stable will maintain compatibility with future versions for as
+long as we can reasonably sustain. Incompatible changes might be made in some
+situations, including:
+
+- Security bugs may prompt backwards-incompatible changes.
+
+- Situations in which components are no longer feasible to maintain without
+making breaking changes, including removal.
+
+- Parts of the client surface may be outright unstable and subject to change.
+These parts of the surface will be labeled with the note, "It is EXPERIMENTAL
+and subject to change or removal without notice."
 */
 package cloud // import "cloud.google.com/go"

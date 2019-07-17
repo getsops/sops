@@ -5863,7 +5863,7 @@ func (l Layer) AsBasicLayer() (BasicLayer, bool) {
 	return &l, true
 }
 
-// ListContainerSasInput the parameters to the list SAS requet.
+// ListContainerSasInput the parameters to the list SAS request.
 type ListContainerSasInput struct {
 	// Permissions - The permissions to set on the SAS URL. Possible values include: 'Read', 'ReadWrite', 'ReadWriteDelete'
 	Permissions AssetContainerPermission `json:"permissions,omitempty"`

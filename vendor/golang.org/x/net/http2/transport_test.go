@@ -4230,6 +4230,14 @@ func (r *errReader) Read(p []byte) (int, error) {
 }
 
 func testTransportBodyReadError(t *testing.T, body []byte) {
+	if runtime.GOOS == "windows" {
+		// So far we've only seen this be flaky on Windows,
+		// perhaps due to TCP behavior on shutdowns while
+		// unread data is in flight. This test should be
+		// fixed, but a skip is better than annoying people
+		// for now.
+		t.Skip("skipping flaky test on Windows; https://golang.org/issue/31260")
+	}
 	clientDone := make(chan struct{})
 	ct := newClientTester(t)
 	ct.client = func() error {
@@ -4276,6 +4284,7 @@ func testTransportBodyReadError(t *testing.T, body []byte) {
 		var resetCount int
 		for {
 			f, err := ct.fr.ReadFrame()
+			t.Logf("server: ReadFrame = %v, %v", f, err)
 			if err != nil {
 				select {
 				case <-clientDone:
@@ -4283,7 +4292,7 @@ func testTransportBodyReadError(t *testing.T, body []byte) {
 					// will have reported any
 					// errors on its side.
 					if bytes.Compare(receivedBody, body) != 0 {
-						return fmt.Errorf("body: %v; expected %v", receivedBody, body)
+						return fmt.Errorf("body: %q; expected %q", receivedBody, body)
 					}
 					if resetCount != 1 {
 						return fmt.Errorf("stream reset count: %v; expected: 1", resetCount)

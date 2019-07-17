@@ -23,8 +23,9 @@ const (
 	// ErrCodeDomainAlreadyExistsFault for service response error code
 	// "DomainAlreadyExistsFault".
 	//
-	// Returned if the specified domain already exists. You get this fault even
-	// if the existing domain is in deprecated status.
+	// Returned if the domain already exists. You may get this fault if you are
+	// registering a domain that is either already registered or deprecated, or
+	// if you undeprecate a domain that is currently registered.
 	ErrCodeDomainAlreadyExistsFault = "DomainAlreadyExistsFault"
 
 	// ErrCodeDomainDeprecatedFault for service response error code
@@ -48,13 +49,18 @@ const (
 	// action.
 	ErrCodeOperationNotPermittedFault = "OperationNotPermittedFault"
 
+	// ErrCodeTooManyTagsFault for service response error code
+	// "TooManyTagsFault".
+	//
+	// You've exceeded the number of tags allowed for a domain.
+	ErrCodeTooManyTagsFault = "TooManyTagsFault"
+
 	// ErrCodeTypeAlreadyExistsFault for service response error code
 	// "TypeAlreadyExistsFault".
 	//
-	// Returned if the type already exists in the specified domain. You get this
-	// fault even if the existing type is in deprecated status. You can specify
-	// another version if the intent is to create a new distinct version of the
-	// type.
+	// Returned if the type already exists in the specified domain. You may get
+	// this fault if you are registering a type that is either already registered
+	// or deprecated, or if you undeprecate a type that is currently registered.
 	ErrCodeTypeAlreadyExistsFault = "TypeAlreadyExistsFault"
 
 	// ErrCodeTypeDeprecatedFault for service response error code

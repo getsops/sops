@@ -42,6 +42,7 @@ type Config struct {
 	DisplayName      string
 	Password         string
 	Description      string
+	SidType          uint32 // one of SERVICE_SID_TYPE, the type of sid to use for the service
 }
 
 func toString(p *uint16) string {
@@ -114,12 +115,20 @@ func updateDescription(handle windows.Handle, desc string) error {
 		windows.SERVICE_CONFIG_DESCRIPTION, (*byte)(unsafe.Pointer(&d)))
 }
 
+func updateSidType(handle windows.Handle, sidType uint32) error {
+	return windows.ChangeServiceConfig2(handle, windows.SERVICE_CONFIG_SERVICE_SID_INFO, (*byte)(unsafe.Pointer(&sidType)))
+}
+
 // UpdateConfig updates service s configuration parameters.
 func (s *Service) UpdateConfig(c Config) error {
 	err := windows.ChangeServiceConfig(s.Handle, c.ServiceType, c.StartType,
 		c.ErrorControl, toPtr(c.BinaryPathName), toPtr(c.LoadOrderGroup),
 		nil, toStringBlock(c.Dependencies), toPtr(c.ServiceStartName),
 		toPtr(c.Password), toPtr(c.DisplayName))
+	if err != nil {
+		return err
+	}
+	err = updateSidType(s.Handle, c.SidType)
 	if err != nil {
 		return err
 	}

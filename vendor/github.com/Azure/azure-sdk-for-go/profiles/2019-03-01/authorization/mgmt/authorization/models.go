@@ -36,7 +36,7 @@ type ClassicAdministratorListResultIterator = original.ClassicAdministratorListR
 type ClassicAdministratorListResultPage = original.ClassicAdministratorListResultPage
 type ClassicAdministratorProperties = original.ClassicAdministratorProperties
 type ClassicAdministratorsClient = original.ClassicAdministratorsClient
-type ElevateAccessClient = original.ElevateAccessClient
+type GlobalAdministratorClient = original.GlobalAdministratorClient
 type Permission = original.Permission
 type PermissionGetResult = original.PermissionGetResult
 type PermissionGetResultIterator = original.PermissionGetResultIterator
@@ -81,11 +81,11 @@ func NewClassicAdministratorsClient(subscriptionID string) ClassicAdministrators
 func NewClassicAdministratorsClientWithBaseURI(baseURI string, subscriptionID string) ClassicAdministratorsClient {
 	return original.NewClassicAdministratorsClientWithBaseURI(baseURI, subscriptionID)
 }
-func NewElevateAccessClient(subscriptionID string) ElevateAccessClient {
-	return original.NewElevateAccessClient(subscriptionID)
+func NewGlobalAdministratorClient(subscriptionID string) GlobalAdministratorClient {
+	return original.NewGlobalAdministratorClient(subscriptionID)
 }
-func NewElevateAccessClientWithBaseURI(baseURI string, subscriptionID string) ElevateAccessClient {
-	return original.NewElevateAccessClientWithBaseURI(baseURI, subscriptionID)
+func NewGlobalAdministratorClientWithBaseURI(baseURI string, subscriptionID string) GlobalAdministratorClient {
+	return original.NewGlobalAdministratorClientWithBaseURI(baseURI, subscriptionID)
 }
 func NewPermissionGetResultIterator(page PermissionGetResultPage) PermissionGetResultIterator {
 	return original.NewPermissionGetResultIterator(page)

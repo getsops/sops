@@ -471,8 +471,8 @@
       {
         "input": {
           "ExpressionAttributeNames": {
-            "AT": "AlbumTitle",
-            "ST": "SongTitle"
+            "#AT": "AlbumTitle",
+            "#ST": "SongTitle"
           },
           "ExpressionAttributeValues": {
             ":a": {

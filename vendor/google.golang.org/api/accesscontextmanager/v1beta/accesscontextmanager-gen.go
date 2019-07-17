@@ -336,6 +336,44 @@ func (s *BasicLevel) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// BridgeServiceRestriction: Alpha. Specifies which services are granted
+// access via this Bridge Service
+// Perimeter.
+type BridgeServiceRestriction struct {
+	// AllowedServices: The list of APIs usable through the Bridge
+	// Perimeter. Must be empty
+	// unless 'enable_restriction' is True.
+	AllowedServices []string `json:"allowedServices,omitempty"`
+
+	// EnableRestriction: Whether to restrict the set of APIs callable
+	// through the Bridge Service
+	// Perimeter.
+	EnableRestriction bool `json:"enableRestriction,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "AllowedServices") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "AllowedServices") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *BridgeServiceRestriction) MarshalJSON() ([]byte, error) {
+	type NoMethod BridgeServiceRestriction
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // Condition: A condition necessary for an `AccessLevel` to be granted.
 // The Condition is an
 // AND over its fields. So a Condition is true if: 1) the request IP is
@@ -508,6 +546,44 @@ type DevicePolicy struct {
 
 func (s *DevicePolicy) MarshalJSON() ([]byte, error) {
 	type NoMethod DevicePolicy
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// IngressServiceRestriction: Alpha. Specifies how Access Levels are to
+// be used for accessing the Service
+// Perimeter.
+type IngressServiceRestriction struct {
+	// AllowedServices: The list of APIs usable with a valid Access Level.
+	// Must be empty unless
+	// 'enable_restriction' is True.
+	AllowedServices []string `json:"allowedServices,omitempty"`
+
+	// EnableRestriction: Whether to restrict the set of APIs callable
+	// outside the Service
+	// Perimeter via Access Levels.
+	EnableRestriction bool `json:"enableRestriction,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "AllowedServices") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "AllowedServices") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *IngressServiceRestriction) MarshalJSON() ([]byte, error) {
+	type NoMethod IngressServiceRestriction
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -866,6 +942,15 @@ type ServicePerimeterConfig struct {
 	// For Service Perimeter Bridge, must be empty.
 	AccessLevels []string `json:"accessLevels,omitempty"`
 
+	// BridgeServiceRestriction: Alpha. Configuration for what services are
+	// accessible via the Bridge
+	// Perimeter. Must be empty for non-Bridge Perimeters.
+	BridgeServiceRestriction *BridgeServiceRestriction `json:"bridgeServiceRestriction,omitempty"`
+
+	// IngressServiceRestriction: Alpha. Configuration for which services
+	// may be used with Access Levels.
+	IngressServiceRestriction *IngressServiceRestriction `json:"ingressServiceRestriction,omitempty"`
+
 	// Resources: A list of GCP resources that are inside of the service
 	// perimeter.
 	// Currently only projects are allowed. Format:
@@ -888,6 +973,10 @@ type ServicePerimeterConfig struct {
 	// by
 	// "restricted_services" list, any service is treated as unrestricted.
 	UnrestrictedServices []string `json:"unrestrictedServices,omitempty"`
+
+	// VpcServiceRestriction: Alpha. Configuration for within Perimeter
+	// allowed APIs.
+	VpcServiceRestriction *VpcServiceRestriction `json:"vpcServiceRestriction,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "AccessLevels") to
 	// unconditionally include in API requests. By default, fields with
@@ -960,6 +1049,44 @@ type Status struct {
 
 func (s *Status) MarshalJSON() ([]byte, error) {
 	type NoMethod Status
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// VpcServiceRestriction: Alpha. Specifies how APIs are allowed to
+// communicate within the Service
+// Perimeter.
+type VpcServiceRestriction struct {
+	// AllowedServices: The list of APIs usable within the Service
+	// Perimeter. Must be empty
+	// unless 'enable_restriction' is True.
+	AllowedServices []string `json:"allowedServices,omitempty"`
+
+	// EnableRestriction: Whether to restrict API calls within the Service
+	// Perimeter to the list of
+	// APIs specified in 'allowed_services'.
+	EnableRestriction bool `json:"enableRestriction,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "AllowedServices") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "AllowedServices") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *VpcServiceRestriction) MarshalJSON() ([]byte, error) {
+	type NoMethod VpcServiceRestriction
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -2422,7 +2549,7 @@ func (r *AccessPoliciesAccessLevelsService) Patch(name string, accesslevel *Acce
 	return c
 }
 
-// UpdateMask sets the optional parameter "updateMask": Required.  Mask
+// UpdateMask sets the optional parameter "updateMask": Required. Mask
 // to control which fields get updated. Must be non-empty.
 func (c *AccessPoliciesAccessLevelsPatchCall) UpdateMask(updateMask string) *AccessPoliciesAccessLevelsPatchCall {
 	c.urlParams_.Set("updateMask", updateMask)
@@ -2535,7 +2662,7 @@ func (c *AccessPoliciesAccessLevelsPatchCall) Do(opts ...googleapi.CallOption) (
 	//       "type": "string"
 	//     },
 	//     "updateMask": {
-	//       "description": "Required.  Mask to control which fields get updated. Must be non-empty.",
+	//       "description": "Required. Mask to control which fields get updated. Must be non-empty.",
 	//       "format": "google-fieldmask",
 	//       "location": "query",
 	//       "type": "string"

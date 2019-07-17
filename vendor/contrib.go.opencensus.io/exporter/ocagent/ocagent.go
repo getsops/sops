@@ -70,6 +70,7 @@ type Exporter struct {
 	nodeInfo           *commonpb.Node
 	grpcClientConn     *grpc.ClientConn
 	reconnectionPeriod time.Duration
+	resourceDetector   resource.Detector
 	resource           *resourcepb.Resource
 	compressor         string
 	headers            map[string]string
@@ -125,7 +126,17 @@ func NewUnstartedExporter(opts ...ExporterOption) (*Exporter, error) {
 	viewDataBundler.BundleCountThreshold = 500 // TODO: (@odeke-em) make this configurable.
 	e.viewDataBundler = viewDataBundler
 	e.nodeInfo = NodeWithStartTime(e.serviceName)
-	e.resource = resourceProtoFromEnv()
+	if e.resourceDetector != nil {
+		res, err := e.resourceDetector(context.Background())
+		if err != nil {
+			panic(fmt.Sprintf("Error detecting resource. err:%v\n", err))
+		}
+		if res != nil {
+			e.resource = resourceToResourcePb(res)
+		}
+	} else {
+		e.resource = resourceProtoFromEnv()
+	}
 
 	return e, nil
 }
@@ -512,7 +523,10 @@ func resourceProtoFromEnv() *resourcepb.Resource {
 	if rs == nil {
 		return nil
 	}
+	return resourceToResourcePb(rs)
+}
 
+func resourceToResourcePb(rs *resource.Resource) *resourcepb.Resource {
 	rprs := &resourcepb.Resource{
 		Type: rs.Type,
 	}

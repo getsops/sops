@@ -17,10 +17,6 @@
 package containeranalysis
 
 import (
-	iampb "google.golang.org/genproto/googleapis/iam/v1"
-)
-
-import (
 	"context"
 	"flag"
 	"fmt"
@@ -35,6 +31,7 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"google.golang.org/api/option"
 	containeranalysispb "google.golang.org/genproto/googleapis/devtools/containeranalysis/v1"
+	iampb "google.golang.org/genproto/googleapis/iam/v1"
 	status "google.golang.org/genproto/googleapis/rpc/status"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

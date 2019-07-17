@@ -18,12 +18,12 @@
     }
   },
   "basePath": "/dns/v1beta2/projects/",
-  "baseUrl": "https://www.googleapis.com/dns/v1beta2/projects/",
+  "baseUrl": "https://dns.googleapis.com/dns/v1beta2/projects/",
   "batchPath": "batch/dns/v1beta2",
   "description": "Configures and serves authoritative DNS records.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/cloud-dns",
-  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/5ETkYc51ldAG_lBus_hxlXlq9uQ\"",
+  "etag": "\"9eZ1uxVRThTDhLJCZHhqs3eQWz4/Khrvb7g_d0JWxRb9Yn4ZzW5VnGk\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -982,8 +982,8 @@
       }
     }
   },
-  "revision": "20190418",
-  "rootUrl": "https://www.googleapis.com/",
+  "revision": "20190625",
+  "rootUrl": "https://dns.googleapis.com/",
   "schemas": {
     "Change": {
       "description": "A Change represents a set of ResourceRecordSet additions and deletions applied atomically to a ManagedZone. ResourceRecordSets within a ManagedZone are modified by creating a new Change element in the Changes collection. In turn the Changes collection also records the past modifications to the ResourceRecordSets in a ManagedZone. The current state of the ManagedZone is the sum effect of applying all Change elements in the Changes collection in sequence.",
@@ -1320,7 +1320,7 @@
       "id": "ManagedZoneDnsSecConfig",
       "properties": {
         "defaultKeySpecs": {
-          "description": "Specifies parameters that will be used for generating initial DnsKeys for this ManagedZone. Output only while state is not OFF.",
+          "description": "Specifies parameters that will be used for generating initial DnsKeys for this ManagedZone. Can only be changed while state is OFF.",
           "items": {
             "$ref": "DnsKeySpec"
           },
@@ -1332,7 +1332,7 @@
           "type": "string"
         },
         "nonExistence": {
-          "description": "Specifies the mechanism used to provide authenticated denial-of-existence responses. Output only while state is not OFF.",
+          "description": "Specifies the mechanism used to provide authenticated denial-of-existence responses. Can only be changed while state is OFF.",
           "enum": [
             "nsec",
             "nsec3"
@@ -1437,7 +1437,7 @@
       "id": "ManagedZonePeeringConfigTargetNetwork",
       "properties": {
         "deactivateTime": {
-          "description": "If this zone has been deactivated due to a problem with the network it targeted, the time at which it was deactivated. The zone can be deactivated if, for instance, the network it targeted was deleted. If the targeted network is still present, this will be the empty string. This is in RFC3339 text format. Output only.",
+          "description": "If this zone has been deactivated (possibly because the producer network it targeted was deleted), the time at which it was deactivated. If the peering connection is still active, this will be the empty string. This is in RFC3339 text format. Output only.",
           "type": "string"
         },
         "kind": {

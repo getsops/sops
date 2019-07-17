@@ -256,7 +256,7 @@ func (c *ElastiCache) BatchApplyUpdateActionRequest(input *BatchApplyUpdateActio
 // BatchApplyUpdateAction API operation for Amazon ElastiCache.
 //
 // Apply the service update. For more information on service updates and applying
-// them, see Applying Service Updates (https://docs.aws.amazon.com/http:/docs.aws.amazon.com/Amazon/red-ug/applying-updates.html).
+// them, see Applying Service Updates (https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/applying-updates.html).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -11691,6 +11691,9 @@ type NodeGroup struct {
 	// The endpoint of the primary node in this node group (shard).
 	PrimaryEndpoint *Endpoint `type:"structure"`
 
+	// The endpoint of the replica nodes in this node group (shard).
+	ReaderEndpoint *Endpoint `type:"structure"`
+
 	// The keyspace for this node group (shard).
 	Slots *string `type:"string"`
 
@@ -11723,6 +11726,12 @@ func (s *NodeGroup) SetNodeGroupMembers(v []*NodeGroupMember) *NodeGroup {
 // SetPrimaryEndpoint sets the PrimaryEndpoint field's value.
 func (s *NodeGroup) SetPrimaryEndpoint(v *Endpoint) *NodeGroup {
 	s.PrimaryEndpoint = v
+	return s
+}
+
+// SetReaderEndpoint sets the ReaderEndpoint field's value.
+func (s *NodeGroup) SetReaderEndpoint(v *Endpoint) *NodeGroup {
+	s.ReaderEndpoint = v
 	return s
 }
 

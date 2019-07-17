@@ -15,7 +15,7 @@
   "description": "Accesses Android application developers' Google Play accounts.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/android-publisher",
-  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/8jtYocl4SBqDCwvVXpDW5TPH4G8\"",
+  "etag": "\"9eZ1uxVRThTDhLJCZHhqs3eQWz4/eA9uCYnVj_lGdL5C2QozYYgTfro\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/android-16.png",
     "x32": "https://www.google.com/images/icons/product/android-32.png"
@@ -2483,7 +2483,7 @@
       }
     }
   },
-  "revision": "20190416",
+  "revision": "20190618",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Apk": {
@@ -3145,7 +3145,7 @@
           "type": "string"
         },
         "purchaseState": {
-          "description": "The purchase state of the order. Possible values are:  \n- Purchased \n- Canceled",
+          "description": "The purchase state of the order. Possible values are:  \n- Purchased \n- Canceled \n- Pending",
           "format": "int32",
           "type": "integer"
         },
@@ -3392,7 +3392,7 @@
           "type": "string"
         },
         "profileId": {
-          "description": "The profile id of the user when the subscription was purchased. Only present for purchases made with 'Subscribe with Google'.",
+          "description": "The Google profile id of the user when the subscription was purchased. Only present for purchases made with 'Subscribe with Google'.",
           "type": "string"
         },
         "profileName": {
@@ -3442,12 +3442,14 @@
       "id": "Testers",
       "properties": {
         "googleGroups": {
+          "description": "A list of all Google Groups, as email addresses, that define testers for this track.",
           "items": {
             "type": "string"
           },
           "type": "array"
         },
         "googlePlusCommunities": {
+          "description": "A list of all Google+ Communities, as URLs, that define testers for this track.",
           "items": {
             "type": "string"
           },

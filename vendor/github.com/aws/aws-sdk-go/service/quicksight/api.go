@@ -605,7 +605,14 @@ func (c *QuickSight) DeleteUserByPrincipalIdRequest(input *DeleteUserByPrincipal
 
 // DeleteUserByPrincipalId API operation for Amazon QuickSight.
 //
-// Deletes a user after locating the user by its principal ID.
+// Deletes a user identified by its principal ID.
+//
+// The permission resource is arn:aws:quicksight:us-east-1:<aws-account-id>:user/default/<user-name> .
+//
+// CLI Sample:
+//
+// aws quicksight delete-user-by-principal-id --aws-account-id=111122223333
+// --namespace=default --principal-id=ABCDEFJA26JLI7EUUOEHS
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2779,6 +2786,20 @@ type GetDashboardEmbedUrlInput struct {
 	// Remove the undo/redo button on embedded dashboard. The default is FALSE,
 	// which enables the undo/redo button.
 	UndoRedoDisabled *bool `location:"querystring" locationName:"undo-redo-disabled" type:"boolean"`
+
+	// The Amazon QuickSight user's ARN, for use with QUICKSIGHT identity type.
+	// You can use this for any of the following:
+	//
+	//    * Amazon QuickSight users in your account (readers, authors, or admins)
+	//
+	//    * AD users
+	//
+	//    * Invited non-federated users
+	//
+	//    * Federated IAM users
+	//
+	//    * Federated IAM role-based sessions
+	UserArn *string `location:"querystring" locationName:"user-arn" type:"string"`
 }
 
 // String returns the string representation
@@ -2852,6 +2873,12 @@ func (s *GetDashboardEmbedUrlInput) SetSessionLifetimeInMinutes(v int64) *GetDas
 // SetUndoRedoDisabled sets the UndoRedoDisabled field's value.
 func (s *GetDashboardEmbedUrlInput) SetUndoRedoDisabled(v bool) *GetDashboardEmbedUrlInput {
 	s.UndoRedoDisabled = &v
+	return s
+}
+
+// SetUserArn sets the UserArn field's value.
+func (s *GetDashboardEmbedUrlInput) SetUserArn(v string) *GetDashboardEmbedUrlInput {
+	s.UserArn = &v
 	return s
 }
 
@@ -3573,10 +3600,12 @@ type RegisterUserInput struct {
 	// Namespace is a required field
 	Namespace *string `location:"uri" locationName:"Namespace" type:"string" required:"true"`
 
-	// The name of the session with the assumed IAM role. By using this parameter,
-	// you can register multiple users with the same IAM role, provided that each
-	// has a different session name. For more information on assuming IAM roles,
-	// see assume-role (https://docs.aws.amazon.com/cli/latest/reference/sts/assume-role.html)
+	// You need to use this parameter only when you register one or more users using
+	// an assumed IAM role. You don't need to provide the session name for other
+	// scenarios, for example when you are registering an IAM user or an Amazon
+	// QuickSight user. You can register multiple users using the same IAM role
+	// if each user has a different session name. For more information on assuming
+	// IAM roles, see assume-role (https://docs.aws.amazon.com/cli/latest/reference/sts/assume-role.html)
 	// in the AWS CLI Reference.
 	SessionName *string `min:"2" type:"string"`
 

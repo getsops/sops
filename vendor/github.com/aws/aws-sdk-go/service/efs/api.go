@@ -1447,17 +1447,14 @@ func (c *EFS) PutLifecycleConfigurationRequest(input *PutLifecycleConfigurationI
 // LifecyclePolicies array in the request body deletes any existing LifecycleConfiguration
 // and disables lifecycle management.
 //
-// You can enable lifecycle management only for EFS file systems created after
-// the release of EFS infrequent access.
-//
 // In the request, specify the following:
 //
-//    * The ID for the file system for which you are creating a lifecycle management
-//    configuration.
+//    * The ID for the file system for which you are enabling, disabling, or
+//    modifying lifecycle management.
 //
 //    * A LifecyclePolicies array of LifecyclePolicy objects that define when
 //    files are moved to the IA storage class. The array can contain only one
-//    "TransitionToIA": "AFTER_30_DAYS" LifecyclePolicy item.
+//    LifecyclePolicy item.
 //
 // This operation requires permissions for the elasticfilesystem:PutLifecycleConfiguration
 // operation.
@@ -2818,13 +2815,9 @@ func (s *FileSystemSize) SetValueInStandard(v int64) *FileSystemSize {
 type LifecyclePolicy struct {
 	_ struct{} `type:"structure"`
 
-	// A value that indicates how long it takes to transition files to the IA storage
-	// class. Currently, the only valid value is AFTER_30_DAYS.
-	//
-	// AFTER_30_DAYS indicates files that have not been read from or written to
-	// for 30 days are transitioned from the Standard storage class to the IA storage
-	// class. Metadata operations such as listing the contents of a directory don't
-	// count as a file access event.
+	// A value that describes the period of time that a file is not accessed, after
+	// which it transitions to the IA storage class. Metadata operations such as
+	// listing the contents of a directory don't count as file access events.
 	TransitionToIA *string `type:"string" enum:"TransitionToIARules"`
 }
 
@@ -3421,6 +3414,15 @@ const (
 )
 
 const (
+	// TransitionToIARulesAfter14Days is a TransitionToIARules enum value
+	TransitionToIARulesAfter14Days = "AFTER_14_DAYS"
+
 	// TransitionToIARulesAfter30Days is a TransitionToIARules enum value
 	TransitionToIARulesAfter30Days = "AFTER_30_DAYS"
+
+	// TransitionToIARulesAfter60Days is a TransitionToIARules enum value
+	TransitionToIARulesAfter60Days = "AFTER_60_DAYS"
+
+	// TransitionToIARulesAfter90Days is a TransitionToIARules enum value
+	TransitionToIARulesAfter90Days = "AFTER_90_DAYS"
 )

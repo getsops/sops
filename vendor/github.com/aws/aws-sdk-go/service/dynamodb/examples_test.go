@@ -555,8 +555,8 @@ func ExampleDynamoDB_Scan_shared00() {
 	svc := dynamodb.New(session.New())
 	input := &dynamodb.ScanInput{
 		ExpressionAttributeNames: map[string]*string{
-			"AT": aws.String("AlbumTitle"),
-			"ST": aws.String("SongTitle"),
+			"#AT": aws.String("AlbumTitle"),
+			"#ST": aws.String("SongTitle"),
 		},
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
 			":a": {

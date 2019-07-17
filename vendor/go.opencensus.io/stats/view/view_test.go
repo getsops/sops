@@ -29,9 +29,9 @@ import (
 )
 
 func Test_View_MeasureFloat64_AggregationDistribution(t *testing.T) {
-	k1, _ := tag.NewKey("k1")
-	k2, _ := tag.NewKey("k2")
-	k3, _ := tag.NewKey("k3")
+	k1 := tag.MustNewKey("k1")
+	k2 := tag.MustNewKey("k2")
+	k3 := tag.MustNewKey("k3")
 	agg1 := Distribution(2)
 	m := stats.Int64("Test_View_MeasureFloat64_AggregationDistribution/m1", "", stats.UnitDimensionless)
 	view1 := &View{
@@ -199,9 +199,9 @@ func Test_View_MeasureFloat64_AggregationDistribution(t *testing.T) {
 }
 
 func Test_View_MeasureFloat64_AggregationSum(t *testing.T) {
-	k1, _ := tag.NewKey("k1")
-	k2, _ := tag.NewKey("k2")
-	k3, _ := tag.NewKey("k3")
+	k1 := tag.MustNewKey("k1")
+	k2 := tag.MustNewKey("k2")
+	k3 := tag.MustNewKey("k3")
 	m := stats.Int64("Test_View_MeasureFloat64_AggregationSum/m1", "", stats.UnitDimensionless)
 	view, err := newViewInternal(&View{TagKeys: []tag.Key{k1, k2}, Measure: m, Aggregation: Sum()})
 	if err != nil {
@@ -315,8 +315,8 @@ func Test_View_MeasureFloat64_AggregationSum(t *testing.T) {
 }
 
 func TestCanonicalize(t *testing.T) {
-	k1, _ := tag.NewKey("k1")
-	k2, _ := tag.NewKey("k2")
+	k1 := tag.MustNewKey("k1")
+	k2 := tag.MustNewKey("k2")
 	m := stats.Int64("TestCanonicalize/m1", "desc desc", stats.UnitDimensionless)
 	v := &View{TagKeys: []tag.Key{k2, k1}, Measure: m, Aggregation: Sum()}
 	err := v.canonicalize()
@@ -338,9 +338,9 @@ func TestCanonicalize(t *testing.T) {
 }
 
 func TestViewSortedKeys(t *testing.T) {
-	k1, _ := tag.NewKey("a")
-	k2, _ := tag.NewKey("b")
-	k3, _ := tag.NewKey("c")
+	k1 := tag.MustNewKey("a")
+	k2 := tag.MustNewKey("b")
+	k3 := tag.MustNewKey("c")
 	ks := []tag.Key{k1, k3, k2}
 
 	m := stats.Int64("TestViewSortedKeys/m1", "", stats.UnitDimensionless)

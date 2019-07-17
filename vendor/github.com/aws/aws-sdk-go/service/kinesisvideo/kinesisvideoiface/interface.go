@@ -80,6 +80,9 @@ type KinesisVideoAPI interface {
 	ListStreamsWithContext(aws.Context, *kinesisvideo.ListStreamsInput, ...request.Option) (*kinesisvideo.ListStreamsOutput, error)
 	ListStreamsRequest(*kinesisvideo.ListStreamsInput) (*request.Request, *kinesisvideo.ListStreamsOutput)
 
+	ListStreamsPages(*kinesisvideo.ListStreamsInput, func(*kinesisvideo.ListStreamsOutput, bool) bool) error
+	ListStreamsPagesWithContext(aws.Context, *kinesisvideo.ListStreamsInput, func(*kinesisvideo.ListStreamsOutput, bool) bool, ...request.Option) error
+
 	ListTagsForStream(*kinesisvideo.ListTagsForStreamInput) (*kinesisvideo.ListTagsForStreamOutput, error)
 	ListTagsForStreamWithContext(aws.Context, *kinesisvideo.ListTagsForStreamInput, ...request.Option) (*kinesisvideo.ListTagsForStreamOutput, error)
 	ListTagsForStreamRequest(*kinesisvideo.ListTagsForStreamInput) (*request.Request, *kinesisvideo.ListTagsForStreamOutput)

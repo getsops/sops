@@ -177,6 +177,7 @@
         {"shape":"RequestFailedException"},
         {"shape":"ResourceNotFoundException"},
         {"shape":"InvalidArnException"},
+        {"shape":"InvalidRequestException"},
         {"shape":"InvalidStateException"},
         {"shape":"MalformedCertificateException"},
         {"shape":"CertificateMismatchException"}
@@ -238,7 +239,8 @@
       "output":{"shape":"ListTagsResponse"},
       "errors":[
         {"shape":"ResourceNotFoundException"},
-        {"shape":"InvalidArnException"}
+        {"shape":"InvalidArnException"},
+        {"shape":"InvalidStateException"}
       ]
     },
     "RestoreCertificateAuthority":{
@@ -264,6 +266,7 @@
       "errors":[
         {"shape":"ConcurrentModificationException"},
         {"shape":"InvalidArnException"},
+        {"shape":"InvalidRequestException"},
         {"shape":"InvalidStateException"},
         {"shape":"LimitExceededException"},
         {"shape":"ResourceNotFoundException"},
@@ -362,7 +365,7 @@
       "type":"string",
       "max":200,
       "min":5,
-      "pattern":"arn:[\\w+=/,.@-]+:[\\w+=/,.@-]+:[\\w+=/,.@-]*:[0-9]+:[\\w+=,.@-]+(/[\\w+=/,.@-]+)*"
+      "pattern":"arn:[\\w+=/,.@-]+:[\\w+=/,.@-]+:[\\w+=/,.@-]*:[0-9]*:[\\w+=,.@-]+(/[\\w+=/,.@-]+)*"
     },
     "AuditReportId":{
       "type":"string",
@@ -434,7 +437,10 @@
     },
     "CertificateAuthorityType":{
       "type":"string",
-      "enum":["SUBORDINATE"]
+      "enum":[
+        "ROOT",
+        "SUBORDINATE"
+      ]
     },
     "CertificateBody":{"type":"string"},
     "CertificateBodyBlob":{
@@ -664,8 +670,7 @@
       "type":"structure",
       "required":[
         "CertificateAuthorityArn",
-        "Certificate",
-        "CertificateChain"
+        "Certificate"
       ],
       "members":{
         "CertificateAuthorityArn":{"shape":"Arn"},
@@ -706,6 +711,13 @@
       },
       "exception":true
     },
+    "InvalidRequestException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"String"}
+      },
+      "exception":true
+    },
     "InvalidStateException":{
       "type":"structure",
       "members":{
@@ -732,6 +744,7 @@
         "CertificateAuthorityArn":{"shape":"Arn"},
         "Csr":{"shape":"CsrBlob"},
         "SigningAlgorithm":{"shape":"SigningAlgorithm"},
+        "TemplateArn":{"shape":"Arn"},
         "Validity":{"shape":"Validity"},
         "IdempotencyToken":{"shape":"IdempotencyToken"}
       }

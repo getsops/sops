@@ -1,0 +1,47 @@
+{
+  "tests": [
+    {
+      "description": "update: split on dots",
+      "comment": "The Update method splits top-level keys at dots.",
+      "update": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "jsonData": "{\"a.b.c\": 1}",
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d",
+                "fields": {
+                  "a": {
+                    "mapValue": {
+                      "fields": {
+                        "b": {
+                          "mapValue": {
+                            "fields": {
+                              "c": {
+                                "integerValue": "1"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "updateMask": {
+                "fieldPaths": [
+                  "a.b.c"
+                ]
+              },
+              "currentDocument": {
+                "exists": true
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

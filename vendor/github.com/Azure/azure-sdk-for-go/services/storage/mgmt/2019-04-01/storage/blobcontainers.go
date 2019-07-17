@@ -1020,13 +1020,13 @@ func (client BlobContainersClient) LeaseResponder(resp *http.Response) (result L
 // skipToken - optional. Continuation token for the list operation.
 // maxpagesize - optional. Specified maximum number of containers that can be included in the list.
 // filter - optional. When specified, only container names starting with the filter will be listed.
-func (client BlobContainersClient) List(ctx context.Context, resourceGroupName string, accountName string, skipToken string, maxpagesize string, filter string) (result ListContainerItems, err error) {
+func (client BlobContainersClient) List(ctx context.Context, resourceGroupName string, accountName string, skipToken string, maxpagesize string, filter string) (result ListContainerItemsPage, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/BlobContainersClient.List")
 		defer func() {
 			sc := -1
-			if result.Response.Response != nil {
-				sc = result.Response.Response.StatusCode
+			if result.lci.Response.Response != nil {
+				sc = result.lci.Response.Response.StatusCode
 			}
 			tracing.EndSpan(ctx, sc, err)
 		}()
@@ -1044,6 +1044,7 @@ func (client BlobContainersClient) List(ctx context.Context, resourceGroupName s
 		return result, validation.NewError("storage.BlobContainersClient", "List", err.Error())
 	}
 
+	result.fn = client.listNextResults
 	req, err := client.ListPreparer(ctx, resourceGroupName, accountName, skipToken, maxpagesize, filter)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "storage.BlobContainersClient", "List", nil, "Failure preparing request")
@@ -1052,12 +1053,12 @@ func (client BlobContainersClient) List(ctx context.Context, resourceGroupName s
 
 	resp, err := client.ListSender(req)
 	if err != nil {
-		result.Response = autorest.Response{Response: resp}
+		result.lci.Response = autorest.Response{Response: resp}
 		err = autorest.NewErrorWithError(err, "storage.BlobContainersClient", "List", resp, "Failure sending request")
 		return
 	}
 
-	result, err = client.ListResponder(resp)
+	result.lci, err = client.ListResponder(resp)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "storage.BlobContainersClient", "List", resp, "Failure responding to request")
 	}
@@ -1112,6 +1113,43 @@ func (client BlobContainersClient) ListResponder(resp *http.Response) (result Li
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
 	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// listNextResults retrieves the next set of results, if any.
+func (client BlobContainersClient) listNextResults(ctx context.Context, lastResults ListContainerItems) (result ListContainerItems, err error) {
+	req, err := lastResults.listContainerItemsPreparer(ctx)
+	if err != nil {
+		return result, autorest.NewErrorWithError(err, "storage.BlobContainersClient", "listNextResults", nil, "Failure preparing next results request")
+	}
+	if req == nil {
+		return
+	}
+	resp, err := client.ListSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		return result, autorest.NewErrorWithError(err, "storage.BlobContainersClient", "listNextResults", resp, "Failure sending next results request")
+	}
+	result, err = client.ListResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "storage.BlobContainersClient", "listNextResults", resp, "Failure responding to next results request")
+	}
+	return
+}
+
+// ListComplete enumerates all values, automatically crossing page boundaries as required.
+func (client BlobContainersClient) ListComplete(ctx context.Context, resourceGroupName string, accountName string, skipToken string, maxpagesize string, filter string) (result ListContainerItemsIterator, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BlobContainersClient.List")
+		defer func() {
+			sc := -1
+			if result.Response().Response.Response != nil {
+				sc = result.page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	result.page, err = client.List(ctx, resourceGroupName, accountName, skipToken, maxpagesize, filter)
 	return
 }
 

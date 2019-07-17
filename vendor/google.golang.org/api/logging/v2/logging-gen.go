@@ -1137,10 +1137,10 @@ type LogEntry struct {
 	// Logging.
 	ReceiveTimestamp string `json:"receiveTimestamp,omitempty"`
 
-	// Resource: Required. The primary monitored resource associated with
-	// this log entry.Example: a log entry that reports a database error
-	// would be associated with the monitored resource designating the
-	// particular database that reported the error.
+	// Resource: Required. The monitored resource that produced this log
+	// entry.Example: a log entry that reports a database error would be
+	// associated with the monitored resource designating the particular
+	// database that reported the error.
 	Resource *MonitoredResource `json:"resource,omitempty"`
 
 	// Severity: Optional. The severity of the log entry. The default value

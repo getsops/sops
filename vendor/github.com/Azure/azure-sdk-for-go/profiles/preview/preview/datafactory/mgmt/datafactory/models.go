@@ -46,48 +46,11 @@ const (
 	AuthorizationTypeRBAC                               AuthorizationType = original.AuthorizationTypeRBAC
 )
 
-type AzureSearchIndexWriteBehaviorType = original.AzureSearchIndexWriteBehaviorType
-
-const (
-	Merge  AzureSearchIndexWriteBehaviorType = original.Merge
-	Upload AzureSearchIndexWriteBehaviorType = original.Upload
-)
-
 type BlobEventTypes = original.BlobEventTypes
 
 const (
 	MicrosoftStorageBlobCreated BlobEventTypes = original.MicrosoftStorageBlobCreated
 	MicrosoftStorageBlobDeleted BlobEventTypes = original.MicrosoftStorageBlobDeleted
-)
-
-type CassandraSourceReadConsistencyLevels = original.CassandraSourceReadConsistencyLevels
-
-const (
-	ALL         CassandraSourceReadConsistencyLevels = original.ALL
-	EACHQUORUM  CassandraSourceReadConsistencyLevels = original.EACHQUORUM
-	LOCALONE    CassandraSourceReadConsistencyLevels = original.LOCALONE
-	LOCALQUORUM CassandraSourceReadConsistencyLevels = original.LOCALQUORUM
-	LOCALSERIAL CassandraSourceReadConsistencyLevels = original.LOCALSERIAL
-	ONE         CassandraSourceReadConsistencyLevels = original.ONE
-	QUORUM      CassandraSourceReadConsistencyLevels = original.QUORUM
-	SERIAL      CassandraSourceReadConsistencyLevels = original.SERIAL
-	THREE       CassandraSourceReadConsistencyLevels = original.THREE
-	TWO         CassandraSourceReadConsistencyLevels = original.TWO
-)
-
-type CopyBehaviorType = original.CopyBehaviorType
-
-const (
-	FlattenHierarchy  CopyBehaviorType = original.FlattenHierarchy
-	MergeFiles        CopyBehaviorType = original.MergeFiles
-	PreserveHierarchy CopyBehaviorType = original.PreserveHierarchy
-)
-
-type DatasetCompressionLevel = original.DatasetCompressionLevel
-
-const (
-	Fastest DatasetCompressionLevel = original.Fastest
-	Optimal DatasetCompressionLevel = original.Optimal
 )
 
 type DayOfWeek = original.DayOfWeek
@@ -222,6 +185,13 @@ const (
 	Standard   IntegrationRuntimeEdition = original.Standard
 )
 
+type IntegrationRuntimeEntityReferenceType = original.IntegrationRuntimeEntityReferenceType
+
+const (
+	IntegrationRuntimeEntityReferenceTypeIntegrationRuntimeReference IntegrationRuntimeEntityReferenceType = original.IntegrationRuntimeEntityReferenceTypeIntegrationRuntimeReference
+	IntegrationRuntimeEntityReferenceTypeLinkedServiceReference      IntegrationRuntimeEntityReferenceType = original.IntegrationRuntimeEntityReferenceTypeLinkedServiceReference
+)
+
 type IntegrationRuntimeInternalChannelEncryptionMode = original.IntegrationRuntimeInternalChannelEncryptionMode
 
 const (
@@ -347,13 +317,6 @@ const (
 	PipelineRunQueryOrderByFieldRunStart PipelineRunQueryOrderByField = original.PipelineRunQueryOrderByFieldRunStart
 )
 
-type PolybaseSettingsRejectType = original.PolybaseSettingsRejectType
-
-const (
-	Percentage PolybaseSettingsRejectType = original.Percentage
-	Value      PolybaseSettingsRejectType = original.Value
-)
-
 type PrestoAuthenticationType = original.PrestoAuthenticationType
 
 const (
@@ -371,27 +334,6 @@ const (
 	NotSpecified RecurrenceFrequency = original.NotSpecified
 	Week         RecurrenceFrequency = original.Week
 	Year         RecurrenceFrequency = original.Year
-)
-
-type SalesforceSinkWriteBehavior = original.SalesforceSinkWriteBehavior
-
-const (
-	Insert SalesforceSinkWriteBehavior = original.Insert
-	Upsert SalesforceSinkWriteBehavior = original.Upsert
-)
-
-type SalesforceSourceReadBehavior = original.SalesforceSourceReadBehavior
-
-const (
-	Query    SalesforceSourceReadBehavior = original.Query
-	QueryAll SalesforceSourceReadBehavior = original.QueryAll
-)
-
-type SapCloudForCustomerSinkWriteBehavior = original.SapCloudForCustomerSinkWriteBehavior
-
-const (
-	SapCloudForCustomerSinkWriteBehaviorInsert SapCloudForCustomerSinkWriteBehavior = original.SapCloudForCustomerSinkWriteBehaviorInsert
-	SapCloudForCustomerSinkWriteBehaviorUpdate SapCloudForCustomerSinkWriteBehavior = original.SapCloudForCustomerSinkWriteBehaviorUpdate
 )
 
 type SapHanaAuthenticationType = original.SapHanaAuthenticationType
@@ -450,17 +392,6 @@ const (
 	SparkThriftTransportProtocolBinary SparkThriftTransportProtocol = original.SparkThriftTransportProtocolBinary
 	SparkThriftTransportProtocolHTTP   SparkThriftTransportProtocol = original.SparkThriftTransportProtocolHTTP
 	SparkThriftTransportProtocolSASL   SparkThriftTransportProtocol = original.SparkThriftTransportProtocolSASL
-)
-
-type StoredProcedureParameterType = original.StoredProcedureParameterType
-
-const (
-	Boolean StoredProcedureParameterType = original.Boolean
-	Date    StoredProcedureParameterType = original.Date
-	Decimal StoredProcedureParameterType = original.Decimal
-	GUID    StoredProcedureParameterType = original.GUID
-	Int     StoredProcedureParameterType = original.Int
-	String  StoredProcedureParameterType = original.String
 )
 
 type SybaseAuthenticationType = original.SybaseAuthenticationType
@@ -612,13 +543,6 @@ const (
 	TypeWebSource                      TypeBasicCopySource = original.TypeWebSource
 	TypeXeroSource                     TypeBasicCopySource = original.TypeXeroSource
 	TypeZohoSource                     TypeBasicCopySource = original.TypeZohoSource
-)
-
-type TypeBasicCopyTranslator = original.TypeBasicCopyTranslator
-
-const (
-	TypeCopyTranslator    TypeBasicCopyTranslator = original.TypeCopyTranslator
-	TypeTabularTranslator TypeBasicCopyTranslator = original.TypeTabularTranslator
 )
 
 type TypeBasicDataset = original.TypeBasicDataset
@@ -891,7 +815,6 @@ type BasicActivity = original.BasicActivity
 type BasicControlActivity = original.BasicControlActivity
 type BasicCopySink = original.BasicCopySink
 type BasicCopySource = original.BasicCopySource
-type BasicCopyTranslator = original.BasicCopyTranslator
 type BasicDataset = original.BasicDataset
 type BasicDatasetCompression = original.BasicDatasetCompression
 type BasicDatasetStorageFormat = original.BasicDatasetStorageFormat
@@ -924,7 +847,6 @@ type CopyActivity = original.CopyActivity
 type CopyActivityTypeProperties = original.CopyActivityTypeProperties
 type CopySink = original.CopySink
 type CopySource = original.CopySource
-type CopyTranslator = original.CopyTranslator
 type CosmosDbLinkedService = original.CosmosDbLinkedService
 type CosmosDbLinkedServiceTypeProperties = original.CosmosDbLinkedServiceTypeProperties
 type CouchbaseLinkedService = original.CouchbaseLinkedService
@@ -975,6 +897,7 @@ type EloquaLinkedService = original.EloquaLinkedService
 type EloquaLinkedServiceTypeProperties = original.EloquaLinkedServiceTypeProperties
 type EloquaObjectDataset = original.EloquaObjectDataset
 type EloquaSource = original.EloquaSource
+type EntityReference = original.EntityReference
 type ErrorResponse = original.ErrorResponse
 type ExecutePipelineActivity = original.ExecutePipelineActivity
 type ExecutePipelineActivityTypeProperties = original.ExecutePipelineActivityTypeProperties
@@ -1059,6 +982,7 @@ type IntegrationRuntimeAuthKeys = original.IntegrationRuntimeAuthKeys
 type IntegrationRuntimeComputeProperties = original.IntegrationRuntimeComputeProperties
 type IntegrationRuntimeConnectionInfo = original.IntegrationRuntimeConnectionInfo
 type IntegrationRuntimeCustomSetupScriptProperties = original.IntegrationRuntimeCustomSetupScriptProperties
+type IntegrationRuntimeDataProxyProperties = original.IntegrationRuntimeDataProxyProperties
 type IntegrationRuntimeListResponse = original.IntegrationRuntimeListResponse
 type IntegrationRuntimeListResponseIterator = original.IntegrationRuntimeListResponseIterator
 type IntegrationRuntimeListResponsePage = original.IntegrationRuntimeListResponsePage
@@ -1271,7 +1195,6 @@ type StoredProcedureParameter = original.StoredProcedureParameter
 type SubResource = original.SubResource
 type SybaseLinkedService = original.SybaseLinkedService
 type SybaseLinkedServiceTypeProperties = original.SybaseLinkedServiceTypeProperties
-type TabularTranslator = original.TabularTranslator
 type TeradataLinkedService = original.TeradataLinkedService
 type TeradataLinkedServiceTypeProperties = original.TeradataLinkedServiceTypeProperties
 type TextFormat = original.TextFormat
@@ -1440,20 +1363,8 @@ func PossibleAuthenticationTypeValues() []AuthenticationType {
 func PossibleAuthorizationTypeValues() []AuthorizationType {
 	return original.PossibleAuthorizationTypeValues()
 }
-func PossibleAzureSearchIndexWriteBehaviorTypeValues() []AzureSearchIndexWriteBehaviorType {
-	return original.PossibleAzureSearchIndexWriteBehaviorTypeValues()
-}
 func PossibleBlobEventTypesValues() []BlobEventTypes {
 	return original.PossibleBlobEventTypesValues()
-}
-func PossibleCassandraSourceReadConsistencyLevelsValues() []CassandraSourceReadConsistencyLevels {
-	return original.PossibleCassandraSourceReadConsistencyLevelsValues()
-}
-func PossibleCopyBehaviorTypeValues() []CopyBehaviorType {
-	return original.PossibleCopyBehaviorTypeValues()
-}
-func PossibleDatasetCompressionLevelValues() []DatasetCompressionLevel {
-	return original.PossibleDatasetCompressionLevelValues()
 }
 func PossibleDayOfWeekValues() []DayOfWeek {
 	return original.PossibleDayOfWeekValues()
@@ -1503,6 +1414,9 @@ func PossibleIntegrationRuntimeAutoUpdateValues() []IntegrationRuntimeAutoUpdate
 func PossibleIntegrationRuntimeEditionValues() []IntegrationRuntimeEdition {
 	return original.PossibleIntegrationRuntimeEditionValues()
 }
+func PossibleIntegrationRuntimeEntityReferenceTypeValues() []IntegrationRuntimeEntityReferenceType {
+	return original.PossibleIntegrationRuntimeEntityReferenceTypeValues()
+}
 func PossibleIntegrationRuntimeInternalChannelEncryptionModeValues() []IntegrationRuntimeInternalChannelEncryptionMode {
 	return original.PossibleIntegrationRuntimeInternalChannelEncryptionModeValues()
 }
@@ -1548,23 +1462,11 @@ func PossiblePipelineRunQueryOrderByFieldValues() []PipelineRunQueryOrderByField
 func PossiblePipelineRunQueryOrderValues() []PipelineRunQueryOrder {
 	return original.PossiblePipelineRunQueryOrderValues()
 }
-func PossiblePolybaseSettingsRejectTypeValues() []PolybaseSettingsRejectType {
-	return original.PossiblePolybaseSettingsRejectTypeValues()
-}
 func PossiblePrestoAuthenticationTypeValues() []PrestoAuthenticationType {
 	return original.PossiblePrestoAuthenticationTypeValues()
 }
 func PossibleRecurrenceFrequencyValues() []RecurrenceFrequency {
 	return original.PossibleRecurrenceFrequencyValues()
-}
-func PossibleSalesforceSinkWriteBehaviorValues() []SalesforceSinkWriteBehavior {
-	return original.PossibleSalesforceSinkWriteBehaviorValues()
-}
-func PossibleSalesforceSourceReadBehaviorValues() []SalesforceSourceReadBehavior {
-	return original.PossibleSalesforceSourceReadBehaviorValues()
-}
-func PossibleSapCloudForCustomerSinkWriteBehaviorValues() []SapCloudForCustomerSinkWriteBehavior {
-	return original.PossibleSapCloudForCustomerSinkWriteBehaviorValues()
 }
 func PossibleSapHanaAuthenticationTypeValues() []SapHanaAuthenticationType {
 	return original.PossibleSapHanaAuthenticationTypeValues()
@@ -1586,9 +1488,6 @@ func PossibleSparkServerTypeValues() []SparkServerType {
 }
 func PossibleSparkThriftTransportProtocolValues() []SparkThriftTransportProtocol {
 	return original.PossibleSparkThriftTransportProtocolValues()
-}
-func PossibleStoredProcedureParameterTypeValues() []StoredProcedureParameterType {
-	return original.PossibleStoredProcedureParameterTypeValues()
 }
 func PossibleSybaseAuthenticationTypeValues() []SybaseAuthenticationType {
 	return original.PossibleSybaseAuthenticationTypeValues()
@@ -1613,9 +1512,6 @@ func PossibleTypeBasicCopySinkValues() []TypeBasicCopySink {
 }
 func PossibleTypeBasicCopySourceValues() []TypeBasicCopySource {
 	return original.PossibleTypeBasicCopySourceValues()
-}
-func PossibleTypeBasicCopyTranslatorValues() []TypeBasicCopyTranslator {
-	return original.PossibleTypeBasicCopyTranslatorValues()
 }
 func PossibleTypeBasicDatasetCompressionValues() []TypeBasicDatasetCompression {
 	return original.PossibleTypeBasicDatasetCompressionValues()

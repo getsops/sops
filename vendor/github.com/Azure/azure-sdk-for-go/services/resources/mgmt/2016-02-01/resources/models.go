@@ -564,9 +564,9 @@ type DeploymentValidateResult struct {
 
 // ExportTemplateRequest export resource group template request parameters.
 type ExportTemplateRequest struct {
-	// ResourcesProperty - The ids of the resources. The only supported string currently is '*' (all resources). Future api updates will support exporting specific resources.
+	// ResourcesProperty - The IDs of the resources to filter the export by. To export all resources, supply an array with single entry '*'.
 	ResourcesProperty *[]string `json:"resources,omitempty"`
-	// Options - The export template options. Supported values include 'IncludeParameterDefaultValue', 'IncludeComments' or 'IncludeParameterDefaultValue, IncludeComments
+	// Options - The export template options. A CSV-formatted list containing zero or more of the following: 'IncludeParameterDefaultValue', 'IncludeComments', 'SkipResourceNameParameterization', 'SkipAllParameterization'
 	Options *string `json:"options,omitempty"`
 }
 

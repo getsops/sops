@@ -1024,7 +1024,7 @@
       }
     }
   },
-  "revision": "20190411",
+  "revision": "20190614",
   "rootUrl": "https://vault.googleapis.com/",
   "schemas": {
     "AccountInfo": {
@@ -1203,6 +1203,10 @@
       "description": "Drive search advanced options",
       "id": "DriveOptions",
       "properties": {
+        "includeSharedDrives": {
+          "description": "Set to true to include shared drive.",
+          "type": "boolean"
+        },
         "includeTeamDrives": {
           "description": "Set to true to include Team Drive.",
           "type": "boolean"
@@ -1441,6 +1445,10 @@
       "description": "Query options for Drive holds.",
       "id": "HeldDriveQuery",
       "properties": {
+        "includeSharedDriveFiles": {
+          "description": "If true, include files in shared drives in the hold.",
+          "type": "boolean"
+        },
         "includeTeamDriveFiles": {
           "description": "If true, include files in Team Drives in the hold.",
           "type": "boolean"
@@ -1833,6 +1841,28 @@
           "$ref": "MailOptions",
           "description": "For mail search, specify more options in this field."
         },
+        "method": {
+          "description": "The search method to use. This field is similar to the search_method field\nbut is introduced to support shared drives. It supports all\nsearch method types. In case the search_method is TEAM_DRIVE the response\nof this field will be SHARED_DRIVE only.",
+          "enum": [
+            "SEARCH_METHOD_UNSPECIFIED",
+            "ACCOUNT",
+            "ORG_UNIT",
+            "TEAM_DRIVE",
+            "ENTIRE_ORG",
+            "ROOM",
+            "SHARED_DRIVE"
+          ],
+          "enumDescriptions": [
+            "A search method must be specified. If a request does not specify a\nsearch method, it will be rejected.",
+            "Will search all accounts provided in account_info.",
+            "Will search all accounts in the OU specified in org_unit_info.",
+            "Will search for all accounts in the Team Drive specified in\nteam_drive_info.",
+            "Will search for all accounts in the organization.\nNo need to set account_info or org_unit_info.",
+            "Will search in the Room specified in\nhangout_chats_info. (read-only)",
+            "Will search for all accounts in the shared drive specified in\nshared_drive_info."
+          ],
+          "type": "string"
+        },
         "orgUnitInfo": {
           "$ref": "OrgUnitInfo",
           "description": "When 'ORG_UNIT' is chosen as as search method, org_unit_info needs\nto be specified."
@@ -1845,7 +1875,8 @@
             "ORG_UNIT",
             "TEAM_DRIVE",
             "ENTIRE_ORG",
-            "ROOM"
+            "ROOM",
+            "SHARED_DRIVE"
           ],
           "enumDescriptions": [
             "A search method must be specified. If a request does not specify a\nsearch method, it will be rejected.",
@@ -1853,9 +1884,14 @@
             "Will search all accounts in the OU specified in org_unit_info.",
             "Will search for all accounts in the Team Drive specified in\nteam_drive_info.",
             "Will search for all accounts in the organization.\nNo need to set account_info or org_unit_info.",
-            "Will search in the Room specified in\nhangout_chats_info. (read-only)"
+            "Will search in the Room specified in\nhangout_chats_info. (read-only)",
+            "Will search for all accounts in the shared drive specified in\nshared_drive_info."
           ],
           "type": "string"
+        },
+        "sharedDriveInfo": {
+          "$ref": "SharedDriveInfo",
+          "description": "When 'SHARED_DRIVE' is chosen as search method, shared_drive_info needs\nto be specified."
         },
         "startTime": {
           "description": "The start time range for the search query. These timestamps are in GMT and\nrounded down to the start of the given date.",
@@ -1961,8 +1997,22 @@
       },
       "type": "object"
     },
+    "SharedDriveInfo": {
+      "description": "Shared drives to search",
+      "id": "SharedDriveInfo",
+      "properties": {
+        "sharedDriveIds": {
+          "description": "List of Shared drive ids, as provided by \u003ca\nhref=\"https://developers.google.com/drive\"\u003eDrive API\u003c/a\u003e.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
     "Status": {
-      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error\nmessage, and error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
+      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors).",
       "id": "Status",
       "properties": {
         "code": {
