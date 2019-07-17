@@ -694,7 +694,10 @@ func main() {
 		_, err = outputFile.Write(output)
 		return toExitError(err)
 	}
-	app.Run(os.Args)
+	err := app.Run(os.Args)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func toExitError(err error) error {
