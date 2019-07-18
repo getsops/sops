@@ -26,10 +26,6 @@
 	* [.env](storage_formats/dotenv.md)
 	* [INI](storage_formats/ini.md)
 	* [Arbitrary (binary) files](storage_formats/binary.md)
-* Publication targets
-	* [AWS S3](publication_targets/s3.md)
-	* [Google Cloud Storage](publication_targets/gcs.md)
-	* [Hashicorp Vault](publication_targets/vault.md)
 * Internals
 	* [Encryption protocol](internals/encryption_protocol.md)
 * [Comparison with other tools](comparison_with_other_tools.md)
