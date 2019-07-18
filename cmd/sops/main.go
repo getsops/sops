@@ -569,7 +569,8 @@ func main() {
 			for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("add-gcp-kms")) {
 				addMasterKeys = append(addMasterKeys, k)
 			}
-			azureKeys, err := azkv.MasterKeysFromURLs(c.String("add-azure-kv"))
+			var azureKeys []*azkv.MasterKey
+			azureKeys, err = azkv.MasterKeysFromURLs(c.String("add-azure-kv"))
 			if err != nil {
 				return err
 			}
