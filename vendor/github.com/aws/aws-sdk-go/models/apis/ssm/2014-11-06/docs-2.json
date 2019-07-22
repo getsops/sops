@@ -10,6 +10,7 @@
     "CreateAssociationBatch": "<p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system returns the AssociationAlreadyExists exception.</p>",
     "CreateDocument": "<p>Creates a Systems Manager document.</p> <p>After you create a document, you can use CreateAssociation to associate it with one or more running instances.</p>",
     "CreateMaintenanceWindow": "<p>Creates a new maintenance window.</p>",
+    "CreateOpsItem": "<p>Creates a new OpsItem. You must have permission in AWS Identity and Access Management (IAM) to create a new OpsItem. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html\">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html\">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>",
     "CreatePatchBaseline": "<p>Creates a patch baseline.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html\">PatchFilter</a>.</p> </note>",
     "CreateResourceDataSync": "<p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a>ListResourceDataSync</a>.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-datasync.html\">Configuring Resource Data Sync for Inventory</a> in the <i>AWS Systems Manager User Guide</i>.</p>",
     "DeleteActivation": "<p>Deletes an activation. You are not required to delete an activation. If you delete an activation, you can no longer use it to register additional managed instances. Deleting an activation does not de-register managed instances. You must manually de-register managed instances.</p>",
@@ -50,6 +51,7 @@
     "DescribeMaintenanceWindowTasks": "<p>Lists the tasks in a maintenance window.</p>",
     "DescribeMaintenanceWindows": "<p>Retrieves the maintenance windows in an AWS account.</p>",
     "DescribeMaintenanceWindowsForTarget": "<p>Retrieves information about the maintenance window targets or tasks that an instance is associated with.</p>",
+    "DescribeOpsItems": "<p>Query a set of OpsItems. You must have permission in AWS Identity and Access Management (IAM) to query a list of OpsItems. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html\">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html\">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>",
     "DescribeParameters": "<p>Get information about a parameter.</p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>",
     "DescribePatchBaselines": "<p>Lists the patch baselines in your AWS account.</p>",
     "DescribePatchGroupState": "<p>Returns high-level aggregated patch compliance state for a patch group.</p>",
@@ -69,6 +71,8 @@
     "GetMaintenanceWindowExecutionTask": "<p>Retrieves the details about a specific task run as part of a maintenance window execution.</p>",
     "GetMaintenanceWindowExecutionTaskInvocation": "<p>Retrieves a task invocation. A task invocation is a specific task running on a specific target. maintenance windows report status for all invocations. </p>",
     "GetMaintenanceWindowTask": "<p>Lists the tasks in a maintenance window.</p>",
+    "GetOpsItem": "<p>Get information about an OpsItem by using the ID. You must have permission in AWS Identity and Access Management (IAM) to view information about an OpsItem. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html\">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html\">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>",
+    "GetOpsSummary": "<p>View a summary of OpsItems based on specified filters and aggregators.</p>",
     "GetParameter": "<p>Get information about a parameter by using the parameter name. Don't confuse this API action with the <a>GetParameters</a> API action.</p>",
     "GetParameterHistory": "<p>Query a list of all parameters used by the AWS account.</p>",
     "GetParameters": "<p>Get details of a parameter. Don't confuse this API action with the <a>GetParameter</a> API action.</p>",
@@ -115,6 +119,7 @@
     "UpdateMaintenanceWindowTarget": "<p>Modifies the target of an existing maintenance window. You can't change the target type, but you can change the following:</p> <p>The target from being an ID target to a Tag target, or a Tag target to an ID target.</p> <p>IDs for an ID target.</p> <p>Tags for a Tag target.</p> <p>Owner.</p> <p>Name.</p> <p>Description.</p> <p>If a parameter is null, then the corresponding field is not modified.</p>",
     "UpdateMaintenanceWindowTask": "<p>Modifies a task assigned to a maintenance window. You can't change the task type, but you can change the following values:</p> <ul> <li> <p>TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> </li> <li> <p>ServiceRoleArn</p> </li> <li> <p>TaskInvocationParameters</p> </li> <li> <p>Priority</p> </li> <li> <p>MaxConcurrency</p> </li> <li> <p>MaxErrors</p> </li> </ul> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the <a>RegisterTaskWithMaintenanceWindow</a> action are required for this request. Optional fields that aren't specified are set to null.</p>",
     "UpdateManagedInstanceRole": "<p>Assigns or changes an Amazon Identity and Access Management (IAM) role to the managed instance.</p>",
+    "UpdateOpsItem": "<p>Edit or change an OpsItem. You must have permission in AWS Identity and Access Management (IAM) to update an OpsItem. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html\">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html\">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>",
     "UpdatePatchBaseline": "<p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html\">PatchFilter</a>.</p> </note>",
     "UpdateServiceSetting": "<p> <code>ServiceSetting</code> is an account-level setting for an AWS service. This setting defines how a user interacts with or uses a service or a feature of a service. For example, if an AWS service charges money to the account based on feature or service usage, then the AWS service team might create a default setting of \"false\". This means the user can't use this feature unless they change the setting to \"true\" and intentionally opt in for a paid feature.</p> <p>Services map a <code>SettingId</code> object to a setting value. AWS services teams define the default value for a <code>SettingId</code>. You can't create a new <code>SettingId</code>, but you can overwrite the default value if you have the <code>ssm:UpdateServiceSetting</code> permission for the setting. Use the <a>GetServiceSetting</a> API action to view the current value. Or, use the <a>ResetServiceSetting</a> to change the value back to the original value defined by the AWS service team.</p> <p>Update the service setting for the account. </p>"
   },
@@ -585,6 +590,7 @@
         "ComplianceItemDetails$key": null,
         "InventoryItemContentContext$key": null,
         "InventoryItemEntry$key": null,
+        "OpsEntityItemEntry$key": null,
         "PatchPropertyEntry$key": null
       }
     },
@@ -594,6 +600,7 @@
         "ComplianceItemDetails$value": null,
         "InventoryItemContentContext$value": null,
         "InventoryItemEntry$value": null,
+        "OpsEntityItemEntry$value": null,
         "PatchPropertyEntry$value": null
       }
     },
@@ -1290,6 +1297,16 @@
       "refs": {
       }
     },
+    "CreateOpsItemRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CreateOpsItemResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "CreatePatchBaselineRequest": {
       "base": null,
       "refs": {
@@ -1369,6 +1386,10 @@
         "MaintenanceWindowExecutionTaskIdentity$EndTime": "<p>The time the task execution finished.</p>",
         "MaintenanceWindowExecutionTaskInvocationIdentity$StartTime": "<p>The time the invocation started.</p>",
         "MaintenanceWindowExecutionTaskInvocationIdentity$EndTime": "<p>The time the invocation finished.</p>",
+        "OpsItem$CreatedTime": "<p>The date and time the OpsItem was created.</p>",
+        "OpsItem$LastModifiedTime": "<p>The date and time the OpsItem was last updated.</p>",
+        "OpsItemSummary$CreatedTime": "<p>The date and time the OpsItem was created.</p>",
+        "OpsItemSummary$LastModifiedTime": "<p>The date and time the OpsItem was last updated.</p>",
         "Parameter$LastModifiedDate": "<p>Date the parameter was last changed or updated and the parameter version was created.</p>",
         "ParameterHistory$LastModifiedDate": "<p>Date the parameter was last changed or updated.</p>",
         "ParameterMetadata$LastModifiedDate": "<p>Date the parameter was last changed or updated.</p>",
@@ -1801,6 +1822,16 @@
       "refs": {
       }
     },
+    "DescribeOpsItemsRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeOpsItemsResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
     "DescribeParametersRequest": {
       "base": null,
       "refs": {
@@ -2142,6 +2173,7 @@
         "CommandInvocation$DocumentVersion": "<p>The SSM document version.</p>",
         "CreateAssociationBatchRequestEntry$DocumentVersion": "<p>The document version.</p>",
         "CreateAssociationRequest$DocumentVersion": "<p>The document version you want to associate with the target(s). Can be a specific version or the default version.</p>",
+        "DeleteDocumentRequest$DocumentVersion": "<p>(Optional) The version of the document that you want to delete. If not provided, all versions of the document are deleted.</p>",
         "DescribeDocumentRequest$DocumentVersion": "<p>The document version for which you want information. Can be a specific version or the default version.</p>",
         "DocumentDefaultVersionDescription$DefaultVersion": "<p>The default version of the document.</p>",
         "DocumentDescription$DocumentVersion": "<p>The document version.</p>",
@@ -2181,6 +2213,7 @@
       "base": null,
       "refs": {
         "CreateDocumentRequest$VersionName": "<p>An optional field specifying the version of the artifact you are creating with the document. For example, \"Release 12, Update 6\". This value is unique across all versions of a document, and cannot be changed.</p>",
+        "DeleteDocumentRequest$VersionName": "<p>(Optional) The version name of the document that you want to delete. If not provided, all versions of the document are deleted.</p>",
         "DescribeDocumentRequest$VersionName": "<p>An optional field specifying the version of the artifact associated with the document. For example, \"Release 12, Update 6\". This value is unique across all versions of a document, and cannot be changed.</p>",
         "DocumentDefaultVersionDescription$DefaultVersionName": "<p>The default version of the artifact associated with the document.</p>",
         "DocumentDescription$VersionName": "<p>The version of the artifact associated with the document.</p>",
@@ -2429,6 +2462,26 @@
       }
     },
     "GetMaintenanceWindowTaskResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetOpsItemRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetOpsItemResponse": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetOpsSummaryRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "GetOpsSummaryResult": {
       "base": null,
       "refs": {
       }
@@ -2798,6 +2851,7 @@
         "DescribePatchGroupStateResult$InstancesWithFailedPatches": "<p>The number of instances with patches from the patch baseline that failed to install.</p>",
         "DescribePatchGroupStateResult$InstancesWithNotApplicablePatches": "<p>The number of instances with patches that aren't applicable.</p>",
         "DescribePatchGroupStateResult$InstancesWithUnreportedNotApplicablePatches": "<p>The number of instances with <code>NotApplicable</code> patches beyond the supported limit, which are not reported by name to Systems Manager Inventory.</p>",
+        "OpsItemLimitExceededException$Limit": null,
         "ProgressCounters$TotalSteps": "<p>The total number of steps run in all specified AWS Regions and accounts for the current Automation execution.</p>",
         "ProgressCounters$SuccessSteps": "<p>The total number of steps that successfully completed in all specified AWS Regions and accounts for the current Automation execution.</p>",
         "ProgressCounters$FailedSteps": "<p>The total number of steps that failed to run in all specified AWS Regions and accounts for the current Automation execution.</p>",
@@ -4163,6 +4217,7 @@
         "DescribeParametersRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "DescribePatchPropertiesRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "GetInventoryRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
+        "GetOpsSummaryRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "GetParameterHistoryRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "ListAssociationVersionsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
         "ListAssociationsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>",
@@ -4252,6 +4307,8 @@
         "GetInventoryResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
         "GetInventorySchemaRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "GetInventorySchemaResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
+        "GetOpsSummaryRequest$NextToken": "<p>A token to start the list. Use this token to get the next set of results. </p>",
+        "GetOpsSummaryResult$NextToken": "<p>The token for the next set of items to return. Use this token to get the next set of results.</p>",
         "GetParameterHistoryRequest$NextToken": "<p>The token for the next set of items to return. (You received this token from a previous call.)</p>",
         "GetParameterHistoryResult$NextToken": "<p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>",
         "GetParametersByPathRequest$NextToken": "<p>A token to start the list. Use this token to get the next set of results. </p>",
@@ -4338,6 +4395,331 @@
         "GetPatchBaselineResult$OperatingSystem": "<p>Returns the operating system specified for the patch baseline.</p>",
         "PatchBaselineIdentity$OperatingSystem": "<p>Defines the operating system the patch baseline applies to. The Default value is WINDOWS. </p>",
         "UpdatePatchBaselineResult$OperatingSystem": "<p>The operating system rule used by the updated patch baseline.</p>"
+      }
+    },
+    "OpsAggregator": {
+      "base": "<p>One or more aggregators for viewing counts of OpsItems using different dimensions such as <code>Source</code>, <code>CreatedTime</code>, or <code>Source and CreatedTime</code>, to name a few.</p>",
+      "refs": {
+        "OpsAggregatorList$member": null
+      }
+    },
+    "OpsAggregatorList": {
+      "base": null,
+      "refs": {
+        "GetOpsSummaryRequest$Aggregators": "<p>Optional aggregators that return counts of OpsItems based on one or more expressions.</p>",
+        "OpsAggregator$Aggregators": "<p>A nested aggregator for viewing counts of OpsItems.</p>"
+      }
+    },
+    "OpsAggregatorType": {
+      "base": null,
+      "refs": {
+        "OpsAggregator$AggregatorType": "<p>Either a Range or Count aggregator for limiting an OpsItem summary.</p>"
+      }
+    },
+    "OpsAggregatorValue": {
+      "base": null,
+      "refs": {
+        "OpsAggregatorValueMap$value": null
+      }
+    },
+    "OpsAggregatorValueKey": {
+      "base": null,
+      "refs": {
+        "OpsAggregatorValueMap$key": null
+      }
+    },
+    "OpsAggregatorValueMap": {
+      "base": null,
+      "refs": {
+        "OpsAggregator$Values": "<p>The aggregator value.</p>"
+      }
+    },
+    "OpsDataAttributeName": {
+      "base": null,
+      "refs": {
+        "OpsAggregator$AttributeName": "<p>The name of an OpsItem attribute on which to limit the count of OpsItems.</p>"
+      }
+    },
+    "OpsDataTypeName": {
+      "base": null,
+      "refs": {
+        "OpsAggregator$TypeName": "<p>The data type name to use for viewing counts of OpsItems.</p>"
+      }
+    },
+    "OpsEntity": {
+      "base": "<p>The result of the query.</p>",
+      "refs": {
+        "OpsEntityList$member": null
+      }
+    },
+    "OpsEntityId": {
+      "base": null,
+      "refs": {
+        "OpsEntity$Id": "<p>The query ID.</p>"
+      }
+    },
+    "OpsEntityItem": {
+      "base": "<p>The OpsItem summaries result item.</p>",
+      "refs": {
+        "OpsEntityItemMap$value": null
+      }
+    },
+    "OpsEntityItemEntry": {
+      "base": null,
+      "refs": {
+        "OpsEntityItemEntryList$member": null
+      }
+    },
+    "OpsEntityItemEntryList": {
+      "base": null,
+      "refs": {
+        "OpsEntityItem$Content": "<p>The detailed data content for an OpsItem summaries result item.</p>"
+      }
+    },
+    "OpsEntityItemKey": {
+      "base": null,
+      "refs": {
+        "OpsEntityItemMap$key": null
+      }
+    },
+    "OpsEntityItemMap": {
+      "base": null,
+      "refs": {
+        "OpsEntity$Data": "<p>The data returned by the query.</p>"
+      }
+    },
+    "OpsEntityList": {
+      "base": null,
+      "refs": {
+        "GetOpsSummaryResult$Entities": "<p>The list of aggregated and filtered OpsItems.</p>"
+      }
+    },
+    "OpsFilter": {
+      "base": "<p>A filter for viewing OpsItem summaries.</p>",
+      "refs": {
+        "OpsFilterList$member": null
+      }
+    },
+    "OpsFilterKey": {
+      "base": null,
+      "refs": {
+        "OpsFilter$Key": "<p>The name of the filter.</p>"
+      }
+    },
+    "OpsFilterList": {
+      "base": null,
+      "refs": {
+        "GetOpsSummaryRequest$Filters": "<p>Optional filters used to scope down the returned OpsItems. </p>",
+        "OpsAggregator$Filters": "<p>The aggregator filters.</p>"
+      }
+    },
+    "OpsFilterOperatorType": {
+      "base": null,
+      "refs": {
+        "OpsFilter$Type": "<p>The type of filter.</p>"
+      }
+    },
+    "OpsFilterValue": {
+      "base": null,
+      "refs": {
+        "OpsFilterValueList$member": null
+      }
+    },
+    "OpsFilterValueList": {
+      "base": null,
+      "refs": {
+        "OpsFilter$Values": "<p>The filter value.</p>"
+      }
+    },
+    "OpsItem": {
+      "base": "<p>Operations engineers and IT professionals use OpsCenter to view, investigate, and remediate operational issues impacting the performance and health of their AWS resources. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html\">AWS Systems Manager OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>. </p>",
+      "refs": {
+        "GetOpsItemResponse$OpsItem": "<p>The OpsItem.</p>"
+      }
+    },
+    "OpsItemAlreadyExistsException": {
+      "base": "<p>The OpsItem already exists.</p>",
+      "refs": {
+      }
+    },
+    "OpsItemDataKey": {
+      "base": null,
+      "refs": {
+        "OpsItemOperationalData$key": null
+      }
+    },
+    "OpsItemDataType": {
+      "base": null,
+      "refs": {
+        "OpsItemDataValue$Type": "<p>The type of key-value pair. Valid types include <code>SearchableString</code> and <code>String</code>.</p>"
+      }
+    },
+    "OpsItemDataValue": {
+      "base": "<p>An object that defines the value of the key and its type in the OperationalData map.</p>",
+      "refs": {
+        "OpsItemOperationalData$value": null
+      }
+    },
+    "OpsItemDataValueString": {
+      "base": null,
+      "refs": {
+        "OpsItemDataValue$Value": "<p>The value of the OperationalData key.</p>"
+      }
+    },
+    "OpsItemDescription": {
+      "base": null,
+      "refs": {
+        "CreateOpsItemRequest$Description": "<p>Information about the OpsItem. </p>",
+        "OpsItem$Description": "<p>The OpsItem description.</p>",
+        "UpdateOpsItemRequest$Description": "<p>Update the information about the OpsItem. Provide enough information so that users reading this OpsItem for the first time understand the issue. </p>"
+      }
+    },
+    "OpsItemFilter": {
+      "base": "<p>Describes an OpsItem filter.</p>",
+      "refs": {
+        "OpsItemFilters$member": null
+      }
+    },
+    "OpsItemFilterKey": {
+      "base": null,
+      "refs": {
+        "OpsItemFilter$Key": "<p>The name of the filter.</p>"
+      }
+    },
+    "OpsItemFilterOperator": {
+      "base": null,
+      "refs": {
+        "OpsItemFilter$Operator": "<p>The operator used by the filter call.</p>"
+      }
+    },
+    "OpsItemFilterValue": {
+      "base": null,
+      "refs": {
+        "OpsItemFilterValues$member": null
+      }
+    },
+    "OpsItemFilterValues": {
+      "base": null,
+      "refs": {
+        "OpsItemFilter$Values": "<p>The filter value.</p>"
+      }
+    },
+    "OpsItemFilters": {
+      "base": null,
+      "refs": {
+        "DescribeOpsItemsRequest$OpsItemFilters": "<p>One or more filters to limit the reponse.</p> <ul> <li> <p>Key: CreatedTime</p> <p>Operations: GreaterThan, LessThan</p> </li> <li> <p>Key: LastModifiedBy</p> <p>Operations: Contains, Equals</p> </li> <li> <p>Key: LastModifiedTime</p> <p>Operations: GreaterThan, LessThan</p> </li> <li> <p>Key: Priority</p> <p>Operations: Equals</p> </li> <li> <p>Key: Source</p> <p>Operations: Contains, Equals</p> </li> <li> <p>Key: Status</p> <p>Operations: Equals</p> </li> <li> <p>Key: Title</p> <p>Operations: Contains</p> </li> <li> <p>Key: OperationalData*</p> <p>Operations: Equals</p> </li> <li> <p>Key: OperationalDataKey</p> <p>Operations: Equals</p> </li> <li> <p>Key: OperationalDataValue</p> <p>Operations: Equals, Contains</p> </li> <li> <p>Key: OpsItemId</p> <p>Operations: Equals</p> </li> <li> <p>Key: ResourceId</p> <p>Operations: Contains</p> </li> <li> <p>Key: AutomationId</p> <p>Operations: Equals</p> </li> </ul> <p>*If you filter the response by using the OperationalData operator, specify a key-value pair by using the following JSON format: {\"key\":\"key_name\",\"value\":\"a_value\"}</p>"
+      }
+    },
+    "OpsItemId": {
+      "base": null,
+      "refs": {
+        "GetOpsItemRequest$OpsItemId": "<p>The ID of the OpsItem that you want to get.</p>",
+        "OpsItem$OpsItemId": "<p>The ID of the OpsItem.</p>",
+        "OpsItemSummary$OpsItemId": "<p>The ID of the OpsItem.</p>",
+        "UpdateOpsItemRequest$OpsItemId": "<p>The ID of the OpsItem.</p>"
+      }
+    },
+    "OpsItemInvalidParameterException": {
+      "base": "<p>A specified parameter argument isn't valid. Verify the available arguments and try again.</p>",
+      "refs": {
+      }
+    },
+    "OpsItemLimitExceededException": {
+      "base": "<p>The request caused OpsItems to exceed one or more limits. For information about OpsItem limits, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-learn-more.html#OpsCenter-learn-more-limits\">What are the resource limits for OpsCenter?</a>.</p>",
+      "refs": {
+      }
+    },
+    "OpsItemMaxResults": {
+      "base": null,
+      "refs": {
+        "DescribeOpsItemsRequest$MaxResults": "<p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>"
+      }
+    },
+    "OpsItemNotFoundException": {
+      "base": "<p>The specified OpsItem ID doesn't exist. Verify the ID and try again.</p>",
+      "refs": {
+      }
+    },
+    "OpsItemNotification": {
+      "base": "<p>A notification about the OpsItem.</p>",
+      "refs": {
+        "OpsItemNotifications$member": null
+      }
+    },
+    "OpsItemNotifications": {
+      "base": null,
+      "refs": {
+        "CreateOpsItemRequest$Notifications": "<p>The Amazon Resource Name (ARN) of an SNS topic where notifications are sent when this OpsItem is edited or changed.</p>",
+        "OpsItem$Notifications": "<p>The Amazon Resource Name (ARN) of an SNS topic where notifications are sent when this OpsItem is edited or changed.</p>",
+        "UpdateOpsItemRequest$Notifications": "<p>The Amazon Resource Name (ARN) of an SNS topic where notifications are sent when this OpsItem is edited or changed.</p>"
+      }
+    },
+    "OpsItemOperationalData": {
+      "base": null,
+      "refs": {
+        "CreateOpsItemRequest$OperationalData": "<p>Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.</p> <important> <p>Operational data keys <i>can't</i> begin with the following: amazon, aws, amzn, ssm, /amazon, /aws, /amzn, /ssm.</p> </important> <p>You can choose to make the data searchable by other users in the account or you can restrict search access. Searchable data means that all users with access to the OpsItem Overview page (as provided by the <a>DescribeOpsItems</a> API action) can view and search on the specified data. Operational data that is not searchable is only viewable by users who have access to the OpsItem (as provided by the <a>GetOpsItem</a> API action).</p> <p>Use the <code>/aws/resources</code> key in OperationalData to specify a related resource in the request. Use the <code>/aws/automations</code> key in OperationalData to associate an Automation runbook with the OpsItem. To view AWS CLI example commands that use these keys, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-creating-OpsItems.html#OpsCenter-manually-create-OpsItems\">Creating OpsItems Manually</a> in the <i>AWS Systems Manager User Guide</i>.</p>",
+        "OpsItem$OperationalData": "<p>Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.</p> <important> <p>Operational data keys <i>can't</i> begin with the following: amazon, aws, amzn, ssm, /amazon, /aws, /amzn, /ssm.</p> </important> <p>You can choose to make the data searchable by other users in the account or you can restrict search access. Searchable data means that all users with access to the OpsItem Overview page (as provided by the <a>DescribeOpsItems</a> API action) can view and search on the specified data. Operational data that is not searchable is only viewable by users who have access to the OpsItem (as provided by the <a>GetOpsItem</a> API action).</p> <p>Use the <code>/aws/resources</code> key in OperationalData to specify a related resource in the request. Use the <code>/aws/automations</code> key in OperationalData to associate an Automation runbook with the OpsItem. To view AWS CLI example commands that use these keys, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-creating-OpsItems.html#OpsCenter-manually-create-OpsItems\">Creating OpsItems Manually</a> in the <i>AWS Systems Manager User Guide</i>.</p>",
+        "OpsItemSummary$OperationalData": "<p>Operational data is custom data that provides useful reference details about the OpsItem. </p>",
+        "UpdateOpsItemRequest$OperationalData": "<p>Add new keys or edit existing key-value pairs of the OperationalData map in the OpsItem object.</p> <p>Operational data is custom data that provides useful reference details about the OpsItem. For example, you can specify log files, error strings, license keys, troubleshooting tips, or other relevant data. You enter operational data as key-value pairs. The key has a maximum length of 128 characters. The value has a maximum size of 20 KB.</p> <important> <p>Operational data keys <i>can't</i> begin with the following: amazon, aws, amzn, ssm, /amazon, /aws, /amzn, /ssm.</p> </important> <p>You can choose to make the data searchable by other users in the account or you can restrict search access. Searchable data means that all users with access to the OpsItem Overview page (as provided by the <a>DescribeOpsItems</a> API action) can view and search on the specified data. Operational data that is not searchable is only viewable by users who have access to the OpsItem (as provided by the <a>GetOpsItem</a> API action).</p> <p>Use the <code>/aws/resources</code> key in OperationalData to specify a related resource in the request. Use the <code>/aws/automations</code> key in OperationalData to associate an Automation runbook with the OpsItem. To view AWS CLI example commands that use these keys, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-creating-OpsItems.html#OpsCenter-manually-create-OpsItems\">Creating OpsItems Manually</a> in the <i>AWS Systems Manager User Guide</i>.</p>"
+      }
+    },
+    "OpsItemOpsDataKeysList": {
+      "base": null,
+      "refs": {
+        "UpdateOpsItemRequest$OperationalDataToDelete": "<p>Keys that you want to remove from the OperationalData map.</p>"
+      }
+    },
+    "OpsItemParameterNamesList": {
+      "base": null,
+      "refs": {
+        "OpsItemInvalidParameterException$ParameterNames": null,
+        "OpsItemLimitExceededException$ResourceTypes": null
+      }
+    },
+    "OpsItemPriority": {
+      "base": null,
+      "refs": {
+        "CreateOpsItemRequest$Priority": "<p>The importance of this OpsItem in relation to other OpsItems in the system.</p>",
+        "OpsItem$Priority": "<p>The importance of this OpsItem in relation to other OpsItems in the system.</p>",
+        "OpsItemSummary$Priority": "<p>The importance of this OpsItem in relation to other OpsItems in the system.</p>",
+        "UpdateOpsItemRequest$Priority": "<p>The importance of this OpsItem in relation to other OpsItems in the system.</p>"
+      }
+    },
+    "OpsItemSource": {
+      "base": null,
+      "refs": {
+        "CreateOpsItemRequest$Source": "<p>The origin of the OpsItem, such as Amazon EC2 or AWS Systems Manager.</p>",
+        "OpsItem$Source": "<p>The origin of the OpsItem, such as Amazon EC2 or AWS Systems Manager. The impacted resource is a subset of source.</p>",
+        "OpsItemSummary$Source": "<p>The impacted AWS resource.</p>"
+      }
+    },
+    "OpsItemStatus": {
+      "base": null,
+      "refs": {
+        "OpsItem$Status": "<p>The OpsItem status. Status can be <code>Open</code>, <code>In Progress</code>, or <code>Resolved</code>. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-working-with-OpsItems-editing-details.html\">Editing OpsItem Details</a> in the <i>AWS Systems Manager User Guide</i>.</p>",
+        "OpsItemSummary$Status": "<p>The OpsItem status. Status can be <code>Open</code>, <code>In Progress</code>, or <code>Resolved</code>.</p>",
+        "UpdateOpsItemRequest$Status": "<p>The OpsItem status. Status can be <code>Open</code>, <code>In Progress</code>, or <code>Resolved</code>. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-working-with-OpsItems-editing-details.html\">Editing OpsItem Details</a> in the <i>AWS Systems Manager User Guide</i>.</p>"
+      }
+    },
+    "OpsItemSummaries": {
+      "base": null,
+      "refs": {
+        "DescribeOpsItemsResponse$OpsItemSummaries": "<p>A list of OpsItems.</p>"
+      }
+    },
+    "OpsItemSummary": {
+      "base": "<p>A count of OpsItems.</p>",
+      "refs": {
+        "OpsItemSummaries$member": null
+      }
+    },
+    "OpsItemTitle": {
+      "base": null,
+      "refs": {
+        "CreateOpsItemRequest$Title": "<p>A short heading that describes the nature of the OpsItem and the impacted resource.</p>",
+        "OpsItem$Title": "<p>A short heading that describes the nature of the OpsItem and the impacted resource.</p>",
+        "OpsItemSummary$Title": "<p>A short heading that describes the nature of the OpsItem and the impacted resource.</p>",
+        "UpdateOpsItemRequest$Title": "<p>A short heading that describes the nature of the OpsItem and the impacted resource.</p>"
       }
     },
     "OutputSource": {
@@ -5223,6 +5605,20 @@
         "Activation$RegistrationsCount": "<p>The number of managed instances already registered with this activation.</p>"
       }
     },
+    "RelatedOpsItem": {
+      "base": "<p>An OpsItems that shares something in common with the current OpsItem. For example, related OpsItems can include OpsItems with similar error messages, impacted resources, or statuses for the impacted resource.</p>",
+      "refs": {
+        "RelatedOpsItems$member": null
+      }
+    },
+    "RelatedOpsItems": {
+      "base": null,
+      "refs": {
+        "CreateOpsItemRequest$RelatedOpsItems": "<p>One or more OpsItems that share something in common with the current OpsItems. For example, related OpsItems can include OpsItems with similar error messages, impacted resources, or statuses for the impacted resource.</p>",
+        "OpsItem$RelatedOpsItems": "<p>One or more OpsItems that share something in common with the current OpsItem. For example, related OpsItems can include OpsItems with similar error messages, impacted resources, or statuses for the impacted resource.</p>",
+        "UpdateOpsItemRequest$RelatedOpsItems": "<p>One or more OpsItems that share something in common with the current OpsItems. For example, related OpsItems can include OpsItems with similar error messages, impacted resources, or statuses for the impacted resource.</p>"
+      }
+    },
     "RemainingCount": {
       "base": null,
       "refs": {
@@ -5887,7 +6283,10 @@
         "AutomationExecutionNotFoundException$Message": null,
         "AutomationStepNotFoundException$Message": null,
         "ComplianceTypeCountLimitExceededException$Message": null,
+        "CreateOpsItemResponse$OpsItemId": "<p>The ID of the OpsItem.</p>",
         "CustomSchemaCountLimitExceededException$Message": null,
+        "DescribeOpsItemsRequest$NextToken": "<p>A token to start the list. Use this token to get the next set of results.</p>",
+        "DescribeOpsItemsResponse$NextToken": "<p>The token for the next set of items to return. Use this token to get the next set of results.</p>",
         "DocumentAlreadyExists$Message": null,
         "DocumentLimitExceeded$Message": null,
         "DocumentPermissionLimit$Message": null,
@@ -5950,6 +6349,20 @@
         "MaxDocumentSizeExceeded$Message": null,
         "NormalStringMap$key": null,
         "NormalStringMap$value": null,
+        "OpsItem$CreatedBy": "<p>The ARN of the AWS account that created the OpsItem.</p>",
+        "OpsItem$LastModifiedBy": "<p>The ARN of the AWS account that last updated the OpsItem.</p>",
+        "OpsItem$Version": "<p>The version of this OpsItem. Each time the OpsItem is edited the version number increments by one.</p>",
+        "OpsItemAlreadyExistsException$Message": null,
+        "OpsItemAlreadyExistsException$OpsItemId": null,
+        "OpsItemInvalidParameterException$Message": null,
+        "OpsItemLimitExceededException$LimitType": null,
+        "OpsItemLimitExceededException$Message": null,
+        "OpsItemNotFoundException$Message": null,
+        "OpsItemNotification$Arn": "<p>The Amazon Resource Name (ARN) of an SNS topic where notifications are sent when this OpsItem is edited or changed.</p>",
+        "OpsItemOpsDataKeysList$member": null,
+        "OpsItemParameterNamesList$member": null,
+        "OpsItemSummary$CreatedBy": "<p>The Amazon Resource Name (ARN) of the IAM entity that created the OpsItem.</p>",
+        "OpsItemSummary$LastModifiedBy": "<p>The Amazon Resource Name (ARN) of the IAM entity that created the OpsItem.</p>",
         "Parameter$SourceResult": "<p>Applies to parameters that reference information in other AWS services. SourceResult is the raw result or response from the source.</p>",
         "Parameter$ARN": "<p>The Amazon Resource Name (ARN) of the parameter.</p>",
         "ParameterAlreadyExists$message": null,
@@ -5965,6 +6378,7 @@
         "ParameterVersionLabelLimitExceeded$message": null,
         "ParameterVersionNotFound$message": null,
         "PoliciesLimitExceededException$message": null,
+        "RelatedOpsItem$OpsItemId": "<p>The ID of an OpsItem related to the current OpsItem.</p>",
         "ResourceDataSyncCountExceededException$Message": null,
         "ResourceDataSyncInvalidConfigurationException$Message": null,
         "ResourceInUseException$Message": null,
@@ -6034,6 +6448,7 @@
         "CreateActivationRequest$Tags": "<p>Optional metadata that you assign to a resource. Tags enable you to categorize a resource in different ways, such as by purpose, owner, or environment. For example, you might want to tag an activation to identify which servers or virtual machines (VMs) in your on-premises environment you intend to activate. In this case, you could specify the following key name/value pairs:</p> <ul> <li> <p> <code>Key=OS,Value=Windows</code> </p> </li> <li> <p> <code>Key=Environment,Value=Production</code> </p> </li> </ul> <important> <p>When you install SSM Agent on your on-premises servers and VMs, you specify an activation ID and code. When you specify the activation ID and code, tags assigned to the activation are automatically applied to the on-premises servers or VMs.</p> </important> <p>You can't add tags to or delete tags from an existing activation. You can tag your on-premises servers and VMs after they connect to Systems Manager for the first time and are assigned a managed instance ID. This means they are listed in the AWS Systems Manager console with an ID that is prefixed with \"mi-\". For information about how to add tags to your managed instances, see <a>AddTagsToResource</a>. For information about how to remove tags from your managed instances, see <a>RemoveTagsFromResource</a>.</p>",
         "CreateDocumentRequest$Tags": "<p>Optional metadata that you assign to a resource. Tags enable you to categorize a resource in different ways, such as by purpose, owner, or environment. For example, you might want to tag an SSM document to identify the types of targets or the environment where it will run. In this case, you could specify the following key name/value pairs:</p> <ul> <li> <p> <code>Key=OS,Value=Windows</code> </p> </li> <li> <p> <code>Key=Environment,Value=Production</code> </p> </li> </ul> <note> <p>To add tags to an existing SSM document, use the <a>AddTagsToResource</a> action.</p> </note>",
         "CreateMaintenanceWindowRequest$Tags": "<p>Optional metadata that you assign to a resource. Tags enable you to categorize a resource in different ways, such as by purpose, owner, or environment. For example, you might want to tag a maintenance window to identify the type of tasks it will run, the types of targets, and the environment it will run in. In this case, you could specify the following key name/value pairs:</p> <ul> <li> <p> <code>Key=TaskType,Value=AgentUpdate</code> </p> </li> <li> <p> <code>Key=OS,Value=Windows</code> </p> </li> <li> <p> <code>Key=Environment,Value=Production</code> </p> </li> </ul> <note> <p>To add tags to an existing maintenance window, use the <a>AddTagsToResource</a> action.</p> </note>",
+        "CreateOpsItemRequest$Tags": "<p>Optional metadata that you assign to a resource. You can restrict access to OpsItems by using an inline IAM policy that specifies tags. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-getting-started.html#OpsCenter-getting-started-user-permissions\">Getting Started with OpsCenter</a> in the <i>AWS Systems Manager User Guide</i>.</p> <p>Tags use a key-value pair. For example:</p> <p> <code>Key=Department,Value=Finance</code> </p> <note> <p>To add tags to an existing OpsItem, use the <a>AddTagsToResource</a> action.</p> </note>",
         "CreatePatchBaselineRequest$Tags": "<p>Optional metadata that you assign to a resource. Tags enable you to categorize a resource in different ways, such as by purpose, owner, or environment. For example, you might want to tag a patch baseline to identify the severity level of patches it specifies and the operating system family it applies to. In this case, you could specify the following key name/value pairs:</p> <ul> <li> <p> <code>Key=PatchSeverity,Value=Critical</code> </p> </li> <li> <p> <code>Key=OS,Value=Windows</code> </p> </li> </ul> <note> <p>To add tags to an existing patch baseline, use the <a>AddTagsToResource</a> action.</p> </note>",
         "DocumentDescription$Tags": "<p>The tags, or metadata, that have been applied to the document.</p>",
         "DocumentIdentifier$Tags": "<p>The tags, or metadata, that have been applied to the document.</p>",
@@ -6327,6 +6742,16 @@
       }
     },
     "UpdateManagedInstanceRoleResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateOpsItemRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "UpdateOpsItemResponse": {
       "base": null,
       "refs": {
       }

@@ -1,0 +1,47 @@
+{
+  "tests": [
+    {
+      "description": "update: non-letter starting chars are quoted, except underscore",
+      "comment": "In a field path, any component beginning with a non-letter or underscore is quoted.",
+      "update": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "jsonData": "{\"_0.1.+2\": 1}",
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d",
+                "fields": {
+                  "_0": {
+                    "mapValue": {
+                      "fields": {
+                        "1": {
+                          "mapValue": {
+                            "fields": {
+                              "+2": {
+                                "integerValue": "1"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "updateMask": {
+                "fieldPaths": [
+                  "_0.`1`.`+2`"
+                ]
+              },
+              "currentDocument": {
+                "exists": true
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

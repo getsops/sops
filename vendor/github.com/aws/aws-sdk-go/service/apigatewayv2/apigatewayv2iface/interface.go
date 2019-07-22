@@ -240,6 +240,18 @@ type ApiGatewayV2API interface {
 	GetStagesWithContext(aws.Context, *apigatewayv2.GetStagesInput, ...request.Option) (*apigatewayv2.GetStagesOutput, error)
 	GetStagesRequest(*apigatewayv2.GetStagesInput) (*request.Request, *apigatewayv2.GetStagesOutput)
 
+	GetTags(*apigatewayv2.GetTagsInput) (*apigatewayv2.GetTagsOutput, error)
+	GetTagsWithContext(aws.Context, *apigatewayv2.GetTagsInput, ...request.Option) (*apigatewayv2.GetTagsOutput, error)
+	GetTagsRequest(*apigatewayv2.GetTagsInput) (*request.Request, *apigatewayv2.GetTagsOutput)
+
+	TagResource(*apigatewayv2.TagResourceInput) (*apigatewayv2.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *apigatewayv2.TagResourceInput, ...request.Option) (*apigatewayv2.TagResourceOutput, error)
+	TagResourceRequest(*apigatewayv2.TagResourceInput) (*request.Request, *apigatewayv2.TagResourceOutput)
+
+	UntagResource(*apigatewayv2.UntagResourceInput) (*apigatewayv2.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *apigatewayv2.UntagResourceInput, ...request.Option) (*apigatewayv2.UntagResourceOutput, error)
+	UntagResourceRequest(*apigatewayv2.UntagResourceInput) (*request.Request, *apigatewayv2.UntagResourceOutput)
+
 	UpdateApi(*apigatewayv2.UpdateApiInput) (*apigatewayv2.UpdateApiOutput, error)
 	UpdateApiWithContext(aws.Context, *apigatewayv2.UpdateApiInput, ...request.Option) (*apigatewayv2.UpdateApiOutput, error)
 	UpdateApiRequest(*apigatewayv2.UpdateApiInput) (*request.Request, *apigatewayv2.UpdateApiOutput)

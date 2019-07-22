@@ -46,6 +46,8 @@ func ExampleFSx_CreateBackup_shared00() {
 			switch aerr.Code() {
 			case fsx.ErrCodeBadRequest:
 				fmt.Println(fsx.ErrCodeBadRequest, aerr.Error())
+			case fsx.ErrCodeUnsupportedOperation:
+				fmt.Println(fsx.ErrCodeUnsupportedOperation, aerr.Error())
 			case fsx.ErrCodeFileSystemNotFound:
 				fmt.Println(fsx.ErrCodeFileSystemNotFound, aerr.Error())
 			case fsx.ErrCodeBackupInProgress:
@@ -476,6 +478,8 @@ func ExampleFSx_UpdateFileSystem_shared00() {
 			switch aerr.Code() {
 			case fsx.ErrCodeBadRequest:
 				fmt.Println(fsx.ErrCodeBadRequest, aerr.Error())
+			case fsx.ErrCodeUnsupportedOperation:
+				fmt.Println(fsx.ErrCodeUnsupportedOperation, aerr.Error())
 			case fsx.ErrCodeIncompatibleParameterError:
 				fmt.Println(fsx.ErrCodeIncompatibleParameterError, aerr.Error())
 			case fsx.ErrCodeInternalServerError:

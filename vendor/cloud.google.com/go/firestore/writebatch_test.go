@@ -22,7 +22,9 @@ import (
 )
 
 func TestWriteBatch(t *testing.T) {
-	c, srv := newMock(t)
+	c, srv, cleanup := newMock(t)
+	defer cleanup()
+
 	docPrefix := c.Collection("C").Path + "/"
 	srv.addRPC(
 		&pb.CommitRequest{
@@ -91,7 +93,9 @@ func TestWriteBatch(t *testing.T) {
 
 func TestWriteBatchErrors(t *testing.T) {
 	ctx := context.Background()
-	c, _ := newMock(t)
+	c, _, cleanup := newMock(t)
+	defer cleanup()
+
 	for _, test := range []struct {
 		desc  string
 		batch *WriteBatch
@@ -109,8 +113,10 @@ func TestWriteBatchErrors(t *testing.T) {
 			c.Batch().Create(c.Doc("a/b"), 3),
 		},
 	} {
-		if _, err := test.batch.Commit(ctx); err == nil {
-			t.Errorf("%s: got nil, want error", test.desc)
-		}
+		t.Run(test.desc, func(t *testing.T) {
+			if _, err := test.batch.Commit(ctx); err == nil {
+				t.Fatal("got nil, want error")
+			}
+		})
 	}
 }

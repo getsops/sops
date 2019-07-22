@@ -111,3 +111,11 @@ type CasesAggregationsClientAPI interface {
 }
 
 var _ CasesAggregationsClientAPI = (*securityinsight.CasesAggregationsClient)(nil)
+
+// EntityQueriesClientAPI contains the set of methods on the EntityQueriesClient type.
+type EntityQueriesClientAPI interface {
+	Get(ctx context.Context, resourceGroupName string, operationalInsightsResourceProvider string, workspaceName string, entityQueryID string) (result securityinsight.EntityQuery, err error)
+	List(ctx context.Context, resourceGroupName string, operationalInsightsResourceProvider string, workspaceName string) (result securityinsight.EntityQueryListPage, err error)
+}
+
+var _ EntityQueriesClientAPI = (*securityinsight.EntityQueriesClient)(nil)

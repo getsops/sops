@@ -916,3 +916,140 @@ type SmartGroupsList struct {
 	// Value - List of alerts
 	Value *[]SmartGroup `json:"value,omitempty"`
 }
+
+// SmartGroupsListIterator provides access to a complete listing of SmartGroup values.
+type SmartGroupsListIterator struct {
+	i    int
+	page SmartGroupsListPage
+}
+
+// NextWithContext advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+func (iter *SmartGroupsListIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SmartGroupsListIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	iter.i++
+	if iter.i < len(iter.page.Values()) {
+		return nil
+	}
+	err = iter.page.NextWithContext(ctx)
+	if err != nil {
+		iter.i--
+		return err
+	}
+	iter.i = 0
+	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *SmartGroupsListIterator) Next() error {
+	return iter.NextWithContext(context.Background())
+}
+
+// NotDone returns true if the enumeration should be started or is not yet complete.
+func (iter SmartGroupsListIterator) NotDone() bool {
+	return iter.page.NotDone() && iter.i < len(iter.page.Values())
+}
+
+// Response returns the raw server response from the last page request.
+func (iter SmartGroupsListIterator) Response() SmartGroupsList {
+	return iter.page.Response()
+}
+
+// Value returns the current value or a zero-initialized value if the
+// iterator has advanced beyond the end of the collection.
+func (iter SmartGroupsListIterator) Value() SmartGroup {
+	if !iter.page.NotDone() {
+		return SmartGroup{}
+	}
+	return iter.page.Values()[iter.i]
+}
+
+// Creates a new instance of the SmartGroupsListIterator type.
+func NewSmartGroupsListIterator(page SmartGroupsListPage) SmartGroupsListIterator {
+	return SmartGroupsListIterator{page: page}
+}
+
+// IsEmpty returns true if the ListResult contains no values.
+func (sgl SmartGroupsList) IsEmpty() bool {
+	return sgl.Value == nil || len(*sgl.Value) == 0
+}
+
+// smartGroupsListPreparer prepares a request to retrieve the next set of results.
+// It returns nil if no more results exist.
+func (sgl SmartGroupsList) smartGroupsListPreparer(ctx context.Context) (*http.Request, error) {
+	if sgl.NextLink == nil || len(to.String(sgl.NextLink)) < 1 {
+		return nil, nil
+	}
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+		autorest.AsJSON(),
+		autorest.AsGet(),
+		autorest.WithBaseURL(to.String(sgl.NextLink)))
+}
+
+// SmartGroupsListPage contains a page of SmartGroup values.
+type SmartGroupsListPage struct {
+	fn  func(context.Context, SmartGroupsList) (SmartGroupsList, error)
+	sgl SmartGroupsList
+}
+
+// NextWithContext advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+func (page *SmartGroupsListPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SmartGroupsListPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.sgl)
+	if err != nil {
+		return err
+	}
+	page.sgl = next
+	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *SmartGroupsListPage) Next() error {
+	return page.NextWithContext(context.Background())
+}
+
+// NotDone returns true if the page enumeration should be started or is not yet complete.
+func (page SmartGroupsListPage) NotDone() bool {
+	return !page.sgl.IsEmpty()
+}
+
+// Response returns the raw server response from the last page request.
+func (page SmartGroupsListPage) Response() SmartGroupsList {
+	return page.sgl
+}
+
+// Values returns the slice of values for the current page or nil if there are no values.
+func (page SmartGroupsListPage) Values() []SmartGroup {
+	if page.sgl.IsEmpty() {
+		return nil
+	}
+	return *page.sgl.Value
+}
+
+// Creates a new instance of the SmartGroupsListPage type.
+func NewSmartGroupsListPage(getNextPage func(context.Context, SmartGroupsList) (SmartGroupsList, error)) SmartGroupsListPage {
+	return SmartGroupsListPage{fn: getNextPage}
+}

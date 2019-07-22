@@ -513,6 +513,15 @@ func TestDelayForBackoff(t *testing.T) {
 	}
 }
 
+func TestDelayForBackoffWithCap(t *testing.T) {
+	d := 2 * time.Second
+	start := time.Now()
+	DelayForBackoffWithCap(d, 1*time.Second, 0, nil)
+	if time.Since(start) >= d {
+		t.Fatal("autorest: DelayForBackoffWithCap delayed for too long")
+	}
+}
+
 func TestDelayForBackoff_Cancels(t *testing.T) {
 	cancel := make(chan struct{})
 	delay := 5 * time.Second
@@ -818,6 +827,33 @@ func TestDelayWithRetryAfterWithSuccess(t *testing.T) {
 	}
 }
 
+func TestDelayWithRetryAfterWithSuccessDateTime(t *testing.T) {
+	resumeAt := time.Now().Add(2 * time.Second).Round(time.Second)
+
+	client := mocks.NewSender()
+	resp := mocks.NewResponseWithStatus("503 Service temporarily unavailable", http.StatusServiceUnavailable)
+	mocks.SetResponseHeader(resp, "Retry-After", resumeAt.Format(time.RFC1123))
+	client.AppendResponse(resp)
+	client.AppendResponse(mocks.NewResponseWithStatus("200 OK", http.StatusOK))
+
+	r, _ := SendWithSender(client, mocks.NewRequest(),
+		DoRetryForStatusCodes(1, time.Duration(time.Second), http.StatusServiceUnavailable),
+	)
+
+	if time.Now().Before(resumeAt) {
+		t.Fatal("autorest: DelayWithRetryAfter failed stopped too soon")
+	}
+
+	Respond(r,
+		ByDiscardingBody(),
+		ByClosing())
+
+	if client.Attempts() != 2 {
+		t.Fatalf("autorest: Sender#DelayWithRetryAfter -- Got: StatusCode %v in %v attempts; Want: StatusCode 200 OK in 2 attempts -- ",
+			r.Status, client.Attempts()-1)
+	}
+}
+
 type temporaryError struct {
 	message string
 }
@@ -951,4 +987,27 @@ func TestDoRetryForStatusCodes_Race(t *testing.T) {
 		}()
 	}
 	wg.Wait()
+}
+
+func TestGetSendDecorators(t *testing.T) {
+	sd := GetSendDecorators(context.Background())
+	if l := len(sd); l != 0 {
+		t.Fatalf("expected zero length but got %d", l)
+	}
+	sd = GetSendDecorators(context.Background(), DoCloseIfError(), DoErrorIfStatusCode())
+	if l := len(sd); l != 2 {
+		t.Fatalf("expected length of two but got %d", l)
+	}
+}
+
+func TestWithSendDecorators(t *testing.T) {
+	ctx := WithSendDecorators(context.Background(), []SendDecorator{DoRetryForAttempts(5, 5*time.Second)})
+	sd := GetSendDecorators(ctx)
+	if l := len(sd); l != 1 {
+		t.Fatalf("expected length of one but got %d", l)
+	}
+	sd = GetSendDecorators(ctx, DoCloseIfError(), DoErrorIfStatusCode())
+	if l := len(sd); l != 1 {
+		t.Fatalf("expected length of one but got %d", l)
+	}
 }

@@ -24,7 +24,7 @@
     "DeleteConferenceProvider": "<p>Deletes a conference provider.</p>",
     "DeleteContact": "<p>Deletes a contact by the contact ARN.</p>",
     "DeleteDevice": "<p>Removes a device from Alexa For Business.</p>",
-    "DeleteDeviceUsageData": "<p>When this action is called for a specified shared device, it allows authorized users to delete the device's entire previous history of voice input data. This action can be called once every 24 hours for a specific shared device. </p>",
+    "DeleteDeviceUsageData": "<p>When this action is called for a specified shared device, it allows authorized users to delete the device's entire previous history of voice input data and associated response data. This action can be called once every 24 hours for a specific shared device.</p> <p>When this action is called for a specified shared device, it allows authorized users to delete the device's entire previous history of voice input data. This action can be called once every 24 hours for a specific shared device. </p>",
     "DeleteGatewayGroup": "<p>Deletes a gateway group.</p>",
     "DeleteNetworkProfile": "<p>Deletes a network profile by the network profile ARN.</p>",
     "DeleteProfile": "<p>Deletes a room profile by the profile ARN.</p>",
@@ -79,7 +79,7 @@
     "SearchSkillGroups": "<p>Searches skill groups and lists the ones that meet a set of filter and sort criteria.</p>",
     "SearchUsers": "<p>Searches users and lists the ones that meet a set of filter and sort criteria.</p>",
     "SendAnnouncement": "<p>Triggers an asynchronous flow to send text, SSML, or audio announcements to rooms that are identified by a search or filter. </p>",
-    "SendInvitation": "<p>Sends an enrollment invitation email with a URL to a user. The URL is valid for 72 hours or until you call this operation again, whichever comes first. </p>",
+    "SendInvitation": "<p>Sends an enrollment invitation email with a URL to a user. The URL is valid for 30 days or until you call this operation again, whichever comes first. </p>",
     "StartDeviceSync": "<p>Resets a device and its account to the known default settings. This clears all information and settings set by previous users in the following ways:</p> <ul> <li> <p>Bluetooth - This unpairs all bluetooth devices paired with your echo device.</p> </li> <li> <p>Volume - This resets the echo device's volume to the default value.</p> </li> <li> <p>Notifications - This clears all notifications from your echo device.</p> </li> <li> <p>Lists - This clears all to-do items from your echo device.</p> </li> <li> <p>Settings - This internally syncs the room's profile (if the device is assigned to a room), contacts, address books, delegation access for account linking, and communications (if enabled on the room profile).</p> </li> </ul>",
     "StartSmartHomeApplianceDiscovery": "<p>Initiates the discovery of any smart home appliances associated with the room.</p>",
     "TagResource": "<p>Adds metadata tags to a specified resource.</p>",
@@ -1118,15 +1118,6 @@
         "UpdateProfileRequest$DistanceUnit": "<p>The updated distance unit for the room profile.</p>"
       }
     },
-    "E164PhoneNumber": {
-      "base": null,
-      "refs": {
-        "Contact$PhoneNumber": "<p>The phone number of the contact.</p>",
-        "ContactData$PhoneNumber": "<p>The phone number of the contact.</p>",
-        "CreateContactRequest$PhoneNumber": "<p>The phone number of the contact in E.164 format.</p>",
-        "UpdateContactRequest$PhoneNumber": "<p>The updated phone number of the contact.</p>"
-      }
-    },
     "Email": {
       "base": null,
       "refs": {
@@ -1843,6 +1834,27 @@
         "UpdateConferenceProviderRequest$PSTNDialIn": "<p>The information for PSTN conferencing.</p>"
       }
     },
+    "PhoneNumber": {
+      "base": "<p>The phone number for the contact containing the raw number and phone number type.</p>",
+      "refs": {
+        "PhoneNumberList$member": null
+      }
+    },
+    "PhoneNumberList": {
+      "base": null,
+      "refs": {
+        "Contact$PhoneNumbers": "<p>The list of phone numbers for the contact.</p>",
+        "ContactData$PhoneNumbers": "<p>The list of phone numbers for the contact.</p>",
+        "CreateContactRequest$PhoneNumbers": "<p>The list of phone numbers for the contact.</p>",
+        "UpdateContactRequest$PhoneNumbers": "<p>The list of phone numbers for the contact.</p>"
+      }
+    },
+    "PhoneNumberType": {
+      "base": null,
+      "refs": {
+        "PhoneNumber$Type": "<p>The type of the phone number.</p>"
+      }
+    },
     "PrivacyPolicy": {
       "base": null,
       "refs": {
@@ -1936,6 +1948,16 @@
     "PutSkillAuthorizationResponse": {
       "base": null,
       "refs": {
+      }
+    },
+    "RawPhoneNumber": {
+      "base": null,
+      "refs": {
+        "Contact$PhoneNumber": "<p>The phone number of the contact. The phone number type defaults to WORK. You can either specify PhoneNumber or PhoneNumbers. We recommend that you use PhoneNumbers, which lets you specify the phone number type and multiple numbers.</p>",
+        "ContactData$PhoneNumber": "<p>The phone number of the contact. The phone number type defaults to WORK. You can specify PhoneNumber or PhoneNumbers. We recommend that you use PhoneNumbers, which lets you specify the phone number type and multiple numbers.</p>",
+        "CreateContactRequest$PhoneNumber": "<p>The phone number of the contact in E.164 format. The phone number type defaults to WORK. You can specify PhoneNumber or PhoneNumbers. We recommend that you use PhoneNumbers, which lets you specify the phone number type and multiple numbers.</p>",
+        "PhoneNumber$Number": "<p>The raw value of the phone number.</p>",
+        "UpdateContactRequest$PhoneNumber": "<p>The updated phone number of the contact. The phone number type defaults to WORK. You can either specify PhoneNumber or PhoneNumbers. We recommend that you use PhoneNumbers, which lets you specify the phone number type and multiple numbers.</p>"
       }
     },
     "RegisterAVSDeviceRequest": {
@@ -2209,6 +2231,33 @@
       "refs": {
         "GetInvitationConfigurationResponse$PrivateSkillIds": "<p>The list of private skill IDs that you want to recommend to the user to enable in the invitation.</p>",
         "PutInvitationConfigurationRequest$PrivateSkillIds": "<p>The list of private skill IDs that you want to recommend to the user to enable in the invitation.</p>"
+      }
+    },
+    "SipAddress": {
+      "base": "<p>The SIP address for the contact containing the URI and SIP address type.</p>",
+      "refs": {
+        "SipAddressList$member": null
+      }
+    },
+    "SipAddressList": {
+      "base": null,
+      "refs": {
+        "Contact$SipAddresses": "<p>The list of SIP addresses for the contact.</p>",
+        "ContactData$SipAddresses": "<p>The list of SIP addresses for the contact.</p>",
+        "CreateContactRequest$SipAddresses": "<p>The list of SIP addresses for the contact.</p>",
+        "UpdateContactRequest$SipAddresses": "<p>The list of SIP addresses for the contact.</p>"
+      }
+    },
+    "SipType": {
+      "base": null,
+      "refs": {
+        "SipAddress$Type": "<p>The type of the SIP address.</p>"
+      }
+    },
+    "SipUri": {
+      "base": null,
+      "refs": {
+        "SipAddress$Uri": "<p>The URI for the SIP address.</p>"
       }
     },
     "SkillDetails": {

@@ -1,0 +1,31 @@
+{
+  "tests": [
+    {
+      "description": "query: Delete in cursor method",
+      "comment": "Sentinel values are not permitted in queries.",
+      "query": {
+        "collPath": "projects/projectID/databases/(default)/documents/C",
+        "clauses": [
+          {
+            "orderBy": {
+              "path": {
+                "field": [
+                  "a"
+                ]
+              },
+              "direction": "asc"
+            }
+          },
+          {
+            "endBefore": {
+              "jsonValues": [
+                "\"Delete\""
+              ]
+            }
+          }
+        ],
+        "isError": true
+      }
+    }
+  ]
+}

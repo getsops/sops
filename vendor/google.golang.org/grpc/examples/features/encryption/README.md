@@ -56,6 +56,8 @@ And finally we make an RPC call over the created `grpc.ClientConn` to test the s
 connection based upon TLS is successfully up.
 
 ### ALTS
+NOTE: ALTS currently needs special early access permission on GCP. You can ask 
+about the detailed process in https://groups.google.com/forum/#!forum/grpc-io.
 
 ALTS is the Google's Application Layer Transport Security, which supports mutual
 authentication and transport encryption. Note that ALTS is currently only

@@ -4,6 +4,10 @@ package wafregional
 
 const (
 
+	// ErrCodeWAFBadRequestException for service response error code
+	// "WAFBadRequestException".
+	ErrCodeWAFBadRequestException = "WAFBadRequestException"
+
 	// ErrCodeWAFDisallowedNameException for service response error code
 	// "WAFDisallowedNameException".
 	//
@@ -197,6 +201,14 @@ const (
 	//
 	// The specified subscription does not exist.
 	ErrCodeWAFSubscriptionNotFoundException = "WAFSubscriptionNotFoundException"
+
+	// ErrCodeWAFTagOperationException for service response error code
+	// "WAFTagOperationException".
+	ErrCodeWAFTagOperationException = "WAFTagOperationException"
+
+	// ErrCodeWAFTagOperationInternalErrorException for service response error code
+	// "WAFTagOperationInternalErrorException".
+	ErrCodeWAFTagOperationInternalErrorException = "WAFTagOperationInternalErrorException"
 
 	// ErrCodeWAFUnavailableEntityException for service response error code
 	// "WAFUnavailableEntityException".

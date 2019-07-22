@@ -37,6 +37,7 @@ type ClientAPI interface {
 	CreateOrUpdate(ctx context.Context, groupID string, createManagementGroupRequest managementgroups.CreateManagementGroupRequest, cacheControl string) (result managementgroups.CreateOrUpdateFuture, err error)
 	Delete(ctx context.Context, groupID string, cacheControl string) (result managementgroups.DeleteFuture, err error)
 	Get(ctx context.Context, groupID string, expand string, recurse *bool, filter string, cacheControl string) (result managementgroups.ManagementGroup, err error)
+	GetDescendants(ctx context.Context, groupID string, skiptoken string, top *int32) (result managementgroups.DescendantListResultPage, err error)
 	List(ctx context.Context, cacheControl string, skiptoken string) (result managementgroups.ListResultPage, err error)
 	Update(ctx context.Context, groupID string, patchGroupRequest managementgroups.PatchManagementGroupRequest, cacheControl string) (result managementgroups.ManagementGroup, err error)
 }

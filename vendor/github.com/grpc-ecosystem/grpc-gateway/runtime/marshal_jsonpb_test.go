@@ -468,6 +468,25 @@ func TestJSONPbDecoderFields(t *testing.T) {
 	}
 }
 
+func TestJSONPbDecoderUnknownField(t *testing.T) {
+	var (
+		m   runtime.JSONPb
+		got examplepb.ABitOfEverything
+	)
+	data := `{
+		"uuid": "6EC2446F-7E89-4127-B3E6-5C05E6BECBA7",
+		"unknownField": "111"
+	}`
+
+	runtime.DisallowUnknownFields()
+
+	r := strings.NewReader(data)
+	dec := m.NewDecoder(r)
+	if err := dec.Decode(&got); err == nil {
+		t.Errorf("m.Unmarshal(&got) not failed; want `unknown field` error; data=%q", data)
+	}
+}
+
 var (
 	fieldFixtures = []struct {
 		data          interface{}

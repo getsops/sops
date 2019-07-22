@@ -1,0 +1,47 @@
+{
+  "tests": [
+    {
+      "description": "update: Split on dots for top-level keys only",
+      "comment": "The Update method splits only top-level keys at dots. Keys at\nother levels are taken literally.",
+      "update": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "jsonData": "{\"h.g\": {\"j.k\": 6}}",
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d",
+                "fields": {
+                  "h": {
+                    "mapValue": {
+                      "fields": {
+                        "g": {
+                          "mapValue": {
+                            "fields": {
+                              "j.k": {
+                                "integerValue": "6"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "updateMask": {
+                "fieldPaths": [
+                  "h.g"
+                ]
+              },
+              "currentDocument": {
+                "exists": true
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

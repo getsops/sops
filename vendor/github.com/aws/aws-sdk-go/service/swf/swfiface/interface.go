@@ -139,6 +139,10 @@ type SWFAPI interface {
 	ListOpenWorkflowExecutionsPages(*swf.ListOpenWorkflowExecutionsInput, func(*swf.WorkflowExecutionInfos, bool) bool) error
 	ListOpenWorkflowExecutionsPagesWithContext(aws.Context, *swf.ListOpenWorkflowExecutionsInput, func(*swf.WorkflowExecutionInfos, bool) bool, ...request.Option) error
 
+	ListTagsForResource(*swf.ListTagsForResourceInput) (*swf.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *swf.ListTagsForResourceInput, ...request.Option) (*swf.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*swf.ListTagsForResourceInput) (*request.Request, *swf.ListTagsForResourceOutput)
+
 	ListWorkflowTypes(*swf.ListWorkflowTypesInput) (*swf.ListWorkflowTypesOutput, error)
 	ListWorkflowTypesWithContext(aws.Context, *swf.ListWorkflowTypesInput, ...request.Option) (*swf.ListWorkflowTypesOutput, error)
 	ListWorkflowTypesRequest(*swf.ListWorkflowTypesInput) (*request.Request, *swf.ListWorkflowTypesOutput)
@@ -201,9 +205,29 @@ type SWFAPI interface {
 	StartWorkflowExecutionWithContext(aws.Context, *swf.StartWorkflowExecutionInput, ...request.Option) (*swf.StartWorkflowExecutionOutput, error)
 	StartWorkflowExecutionRequest(*swf.StartWorkflowExecutionInput) (*request.Request, *swf.StartWorkflowExecutionOutput)
 
+	TagResource(*swf.TagResourceInput) (*swf.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *swf.TagResourceInput, ...request.Option) (*swf.TagResourceOutput, error)
+	TagResourceRequest(*swf.TagResourceInput) (*request.Request, *swf.TagResourceOutput)
+
 	TerminateWorkflowExecution(*swf.TerminateWorkflowExecutionInput) (*swf.TerminateWorkflowExecutionOutput, error)
 	TerminateWorkflowExecutionWithContext(aws.Context, *swf.TerminateWorkflowExecutionInput, ...request.Option) (*swf.TerminateWorkflowExecutionOutput, error)
 	TerminateWorkflowExecutionRequest(*swf.TerminateWorkflowExecutionInput) (*request.Request, *swf.TerminateWorkflowExecutionOutput)
+
+	UndeprecateActivityType(*swf.UndeprecateActivityTypeInput) (*swf.UndeprecateActivityTypeOutput, error)
+	UndeprecateActivityTypeWithContext(aws.Context, *swf.UndeprecateActivityTypeInput, ...request.Option) (*swf.UndeprecateActivityTypeOutput, error)
+	UndeprecateActivityTypeRequest(*swf.UndeprecateActivityTypeInput) (*request.Request, *swf.UndeprecateActivityTypeOutput)
+
+	UndeprecateDomain(*swf.UndeprecateDomainInput) (*swf.UndeprecateDomainOutput, error)
+	UndeprecateDomainWithContext(aws.Context, *swf.UndeprecateDomainInput, ...request.Option) (*swf.UndeprecateDomainOutput, error)
+	UndeprecateDomainRequest(*swf.UndeprecateDomainInput) (*request.Request, *swf.UndeprecateDomainOutput)
+
+	UndeprecateWorkflowType(*swf.UndeprecateWorkflowTypeInput) (*swf.UndeprecateWorkflowTypeOutput, error)
+	UndeprecateWorkflowTypeWithContext(aws.Context, *swf.UndeprecateWorkflowTypeInput, ...request.Option) (*swf.UndeprecateWorkflowTypeOutput, error)
+	UndeprecateWorkflowTypeRequest(*swf.UndeprecateWorkflowTypeInput) (*request.Request, *swf.UndeprecateWorkflowTypeOutput)
+
+	UntagResource(*swf.UntagResourceInput) (*swf.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *swf.UntagResourceInput, ...request.Option) (*swf.UntagResourceOutput, error)
+	UntagResourceRequest(*swf.UntagResourceInput) (*request.Request, *swf.UntagResourceOutput)
 }
 
 var _ SWFAPI = (*swf.SWF)(nil)

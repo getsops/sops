@@ -1,0 +1,37 @@
+{
+  "tests": [
+    {
+      "description": "set-merge: Delete with merge",
+      "comment": "A Delete sentinel can appear with a merge option. If the delete\npaths are the only ones to be merged, then no document is sent, just an update mask.",
+      "set": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "option": {
+          "fields": [
+            {
+              "field": [
+                "b",
+                "c"
+              ]
+            }
+          ]
+        },
+        "jsonData": "{\"a\": 1, \"b\": {\"c\": \"Delete\"}}",
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d"
+              },
+              "updateMask": {
+                "fieldPaths": [
+                  "b.c"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

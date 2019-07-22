@@ -548,6 +548,9 @@ func (s *DriveExportOptions) MarshalJSON() ([]byte, error) {
 
 // DriveOptions: Drive search advanced options
 type DriveOptions struct {
+	// IncludeSharedDrives: Set to true to include shared drive.
+	IncludeSharedDrives bool `json:"includeSharedDrives,omitempty"`
+
 	// IncludeTeamDrives: Set to true to include Team Drive.
 	IncludeTeamDrives bool `json:"includeTeamDrives,omitempty"`
 
@@ -556,7 +559,7 @@ type DriveOptions struct {
 	// rounded down to the given date.
 	VersionDate string `json:"versionDate,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "IncludeTeamDrives")
+	// ForceSendFields is a list of field names (e.g. "IncludeSharedDrives")
 	// to unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -564,7 +567,7 @@ type DriveOptions struct {
 	// used to include empty fields in Patch requests.
 	ForceSendFields []string `json:"-"`
 
-	// NullFields is a list of field names (e.g. "IncludeTeamDrives") to
+	// NullFields is a list of field names (e.g. "IncludeSharedDrives") to
 	// include in API requests with the JSON null value. By default, fields
 	// with empty values are omitted from API requests. However, any field
 	// with an empty value appearing in NullFields will be sent to the
@@ -922,23 +925,27 @@ func (s *HeldAccount) MarshalJSON() ([]byte, error) {
 
 // HeldDriveQuery: Query options for Drive holds.
 type HeldDriveQuery struct {
+	// IncludeSharedDriveFiles: If true, include files in shared drives in
+	// the hold.
+	IncludeSharedDriveFiles bool `json:"includeSharedDriveFiles,omitempty"`
+
 	// IncludeTeamDriveFiles: If true, include files in Team Drives in the
 	// hold.
 	IncludeTeamDriveFiles bool `json:"includeTeamDriveFiles,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g.
-	// "IncludeTeamDriveFiles") to unconditionally include in API requests.
-	// By default, fields with empty values are omitted from API requests.
-	// However, any non-pointer, non-interface field appearing in
+	// "IncludeSharedDriveFiles") to unconditionally include in API
+	// requests. By default, fields with empty values are omitted from API
+	// requests. However, any non-pointer, non-interface field appearing in
 	// ForceSendFields will be sent to the server regardless of whether the
 	// field is empty or not. This may be used to include empty fields in
 	// Patch requests.
 	ForceSendFields []string `json:"-"`
 
-	// NullFields is a list of field names (e.g. "IncludeTeamDriveFiles") to
-	// include in API requests with the JSON null value. By default, fields
-	// with empty values are omitted from API requests. However, any field
-	// with an empty value appearing in NullFields will be sent to the
+	// NullFields is a list of field names (e.g. "IncludeSharedDriveFiles")
+	// to include in API requests with the JSON null value. By default,
+	// fields with empty values are omitted from API requests. However, any
+	// field with an empty value appearing in NullFields will be sent to the
 	// server as null. It is an error if a field in this list has a
 	// non-empty value. This may be used to include null fields in Patch
 	// requests.
@@ -1581,6 +1588,32 @@ type Query struct {
 	// MailOptions: For mail search, specify more options in this field.
 	MailOptions *MailOptions `json:"mailOptions,omitempty"`
 
+	// Method: The search method to use. This field is similar to the
+	// search_method field
+	// but is introduced to support shared drives. It supports all
+	// search method types. In case the search_method is TEAM_DRIVE the
+	// response
+	// of this field will be SHARED_DRIVE only.
+	//
+	// Possible values:
+	//   "SEARCH_METHOD_UNSPECIFIED" - A search method must be specified. If
+	// a request does not specify a
+	// search method, it will be rejected.
+	//   "ACCOUNT" - Will search all accounts provided in account_info.
+	//   "ORG_UNIT" - Will search all accounts in the OU specified in
+	// org_unit_info.
+	//   "TEAM_DRIVE" - Will search for all accounts in the Team Drive
+	// specified in
+	// team_drive_info.
+	//   "ENTIRE_ORG" - Will search for all accounts in the organization.
+	// No need to set account_info or org_unit_info.
+	//   "ROOM" - Will search in the Room specified in
+	// hangout_chats_info. (read-only)
+	//   "SHARED_DRIVE" - Will search for all accounts in the shared drive
+	// specified in
+	// shared_drive_info.
+	Method string `json:"method,omitempty"`
+
 	// OrgUnitInfo: When 'ORG_UNIT' is chosen as as search method,
 	// org_unit_info needs
 	// to be specified.
@@ -1602,7 +1635,15 @@ type Query struct {
 	// No need to set account_info or org_unit_info.
 	//   "ROOM" - Will search in the Room specified in
 	// hangout_chats_info. (read-only)
+	//   "SHARED_DRIVE" - Will search for all accounts in the shared drive
+	// specified in
+	// shared_drive_info.
 	SearchMethod string `json:"searchMethod,omitempty"`
+
+	// SharedDriveInfo: When 'SHARED_DRIVE' is chosen as search method,
+	// shared_drive_info needs
+	// to be specified.
+	SharedDriveInfo *SharedDriveInfo `json:"sharedDriveInfo,omitempty"`
 
 	// StartTime: The start time range for the search query. These
 	// timestamps are in GMT and
@@ -1831,85 +1872,49 @@ func (s *SavedQuery) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// SharedDriveInfo: Shared drives to search
+type SharedDriveInfo struct {
+	// SharedDriveIds: List of Shared drive ids, as provided by
+	// <a
+	// href="https://developers.google.com/drive">Drive API</a>.
+	SharedDriveIds []string `json:"sharedDriveIds,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "SharedDriveIds") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "SharedDriveIds") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *SharedDriveInfo) MarshalJSON() ([]byte, error) {
+	type NoMethod SharedDriveInfo
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // Status: The `Status` type defines a logical error model that is
 // suitable for
 // different programming environments, including REST APIs and RPC APIs.
 // It is
-// used by [gRPC](https://github.com/grpc). The error model is designed
-// to be:
+// used by [gRPC](https://github.com/grpc). Each `Status` message
+// contains
+// three pieces of data: error code, error message, and error
+// details.
 //
-// - Simple to use and understand for most users
-// - Flexible enough to meet unexpected needs
-//
-// # Overview
-//
-// The `Status` message contains three pieces of data: error code,
-// error
-// message, and error details. The error code should be an enum value
-// of
-// google.rpc.Code, but it may accept additional error codes if needed.
-// The
-// error message should be a developer-facing English message that
-// helps
-// developers *understand* and *resolve* the error. If a localized
-// user-facing
-// error message is needed, put the localized message in the error
-// details or
-// localize it in the client. The optional error details may contain
-// arbitrary
-// information about the error. There is a predefined set of error
-// detail types
-// in the package `google.rpc` that can be used for common error
-// conditions.
-//
-// # Language mapping
-//
-// The `Status` message is the logical representation of the error
-// model, but it
-// is not necessarily the actual wire format. When the `Status` message
-// is
-// exposed in different client libraries and different wire protocols,
-// it can be
-// mapped differently. For example, it will likely be mapped to some
-// exceptions
-// in Java, but more likely mapped to some error codes in C.
-//
-// # Other uses
-//
-// The error model and the `Status` message can be used in a variety
-// of
-// environments, either with or without APIs, to provide a
-// consistent developer experience across different
-// environments.
-//
-// Example uses of this error model include:
-//
-// - Partial errors. If a service needs to return partial errors to the
-// client,
-//     it may embed the `Status` in the normal response to indicate the
-// partial
-//     errors.
-//
-// - Workflow errors. A typical workflow has multiple steps. Each step
-// may
-//     have a `Status` message for error reporting.
-//
-// - Batch operations. If a client uses batch request and batch
-// response, the
-//     `Status` message should be used directly inside batch response,
-// one for
-//     each error sub-response.
-//
-// - Asynchronous operations. If an API call embeds asynchronous
-// operation
-//     results in its response, the status of those operations should
-// be
-//     represented directly using the `Status` message.
-//
-// - Logging. If some API errors are stored in logs, the message
-// `Status` could
-//     be used directly after any stripping needed for security/privacy
-// reasons.
+// You can find out more about this error model and how to work with it
+// in the
+// [API Design Guide](https://cloud.google.com/apis/design/errors).
 type Status struct {
 	// Code: The status code, which should be an enum value of
 	// google.rpc.Code.

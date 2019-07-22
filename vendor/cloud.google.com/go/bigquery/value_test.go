@@ -478,6 +478,29 @@ func TestValuesSaverConvertsToMap(t *testing.T) {
 				},
 			},
 		},
+		{ // zero-length repeated nested field
+			vs: ValuesSaver{
+				Schema: Schema{
+					{
+						Name: "records",
+						Type: RecordFieldType,
+						Schema: Schema{
+							{Name: "x", Type: IntegerFieldType},
+							{Name: "y", Type: IntegerFieldType},
+						},
+						Repeated: true,
+					},
+				},
+				InsertID: "iid",
+				Row: []Value{ // a row is a []Value
+					[]Value{}, // repeated field's value is a []Value, and non-nil
+				},
+			},
+			wantInsertID: "iid",
+			wantRow: map[string]Value{
+				"records": []Value{},
+			},
+		},
 	}
 	for _, tc := range testCases {
 		gotRow, gotInsertID, err := tc.vs.Save()

@@ -179,6 +179,7 @@
       "input":{"shape":"CreateUsageReportSubscriptionRequest"},
       "output":{"shape":"CreateUsageReportSubscriptionResult"},
       "errors":[
+        {"shape":"InvalidRoleException"},
         {"shape":"InvalidAccountStatusException"}
       ]
     },
@@ -1496,6 +1497,7 @@
         "State":{"shape":"ImageState"},
         "Visibility":{"shape":"VisibilityType"},
         "ImageBuilderSupported":{"shape":"Boolean"},
+        "ImageBuilderName":{"shape":"String"},
         "Platform":{"shape":"PlatformType"},
         "Description":{"shape":"String"},
         "StateChangeReason":{"shape":"ImageStateChangeReason"},
@@ -1523,6 +1525,7 @@
         "CreatedTime":{"shape":"Timestamp"},
         "EnableDefaultInternetAccess":{"shape":"BooleanObject"},
         "DomainJoinInfo":{"shape":"DomainJoinInfo"},
+        "NetworkAccessConfiguration":{"shape":"NetworkAccessConfiguration"},
         "ImageBuilderErrors":{"shape":"ResourceErrors"},
         "AppstreamAgentVersion":{"shape":"AppstreamAgentVersion"}
       }
@@ -1739,7 +1742,11 @@
     },
     "PlatformType":{
       "type":"string",
-      "enum":["WINDOWS"]
+      "enum":[
+        "WINDOWS",
+        "WINDOWS_SERVER_2016",
+        "WINDOWS_SERVER_2019"
+      ]
     },
     "RedirectURL":{
       "type":"string",

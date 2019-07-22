@@ -440,6 +440,93 @@ func bqToModel(mr *bq.ModelReference, c *Client) *Model {
 	}
 }
 
+// Routine creates a handle to a BigQuery routine in the dataset.
+// To determine if a routine exists, call Routine.Metadata.
+func (d *Dataset) Routine(routineID string) *Routine {
+	return &Routine{
+		ProjectID: d.ProjectID,
+		DatasetID: d.DatasetID,
+		RoutineID: routineID,
+		c:         d.c}
+}
+
+// Routines returns an iterator over the routines in the Dataset.
+func (d *Dataset) Routines(ctx context.Context) *RoutineIterator {
+	it := &RoutineIterator{
+		ctx:     ctx,
+		dataset: d,
+	}
+	it.pageInfo, it.nextFunc = iterator.NewPageInfo(
+		it.fetch,
+		func() int { return len(it.routines) },
+		func() interface{} { b := it.routines; it.routines = nil; return b })
+	return it
+}
+
+// A RoutineIterator is an iterator over Routines.
+type RoutineIterator struct {
+	ctx      context.Context
+	dataset  *Dataset
+	routines []*Routine
+	pageInfo *iterator.PageInfo
+	nextFunc func() error
+}
+
+// Next returns the next result. Its second return value is Done if there are
+// no more results. Once Next returns Done, all subsequent calls will return
+// Done.
+func (it *RoutineIterator) Next() (*Routine, error) {
+	if err := it.nextFunc(); err != nil {
+		return nil, err
+	}
+	t := it.routines[0]
+	it.routines = it.routines[1:]
+	return t, nil
+}
+
+// PageInfo supports pagination. See the google.golang.org/api/iterator package for details.
+func (it *RoutineIterator) PageInfo() *iterator.PageInfo { return it.pageInfo }
+
+// listRoutines exists to aid testing.
+var listRoutines = func(it *RoutineIterator, pageSize int, pageToken string) (*bq.ListRoutinesResponse, error) {
+	call := it.dataset.c.bqs.Routines.List(it.dataset.ProjectID, it.dataset.DatasetID).
+		PageToken(pageToken).
+		Context(it.ctx)
+	setClientHeader(call.Header())
+	if pageSize > 0 {
+		call.MaxResults(int64(pageSize))
+	}
+	var res *bq.ListRoutinesResponse
+	err := runWithRetry(it.ctx, func() (err error) {
+		res, err = call.Do()
+		return err
+	})
+	return res, err
+}
+
+func (it *RoutineIterator) fetch(pageSize int, pageToken string) (string, error) {
+	res, err := listRoutines(it, pageSize, pageToken)
+	if err != nil {
+		return "", err
+	}
+	for _, t := range res.Routines {
+		it.routines = append(it.routines, bqToRoutine(t.RoutineReference, it.dataset.c))
+	}
+	return res.NextPageToken, nil
+}
+
+func bqToRoutine(mr *bq.RoutineReference, c *Client) *Routine {
+	if mr == nil {
+		return nil
+	}
+	return &Routine{
+		ProjectID: mr.ProjectId,
+		DatasetID: mr.DatasetId,
+		RoutineID: mr.RoutineId,
+		c:         c,
+	}
+}
+
 // Datasets returns an iterator over the datasets in a project.
 // The Client's project is used by default, but that can be
 // changed by setting ProjectID on the returned iterator before calling Next.

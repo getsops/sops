@@ -28,6 +28,55 @@ The protocol buffer compiler generates camelCase JSON tags that can be used with
    mux := runtime.NewServeMux(runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{OrigName:false}))
    ```
 
+### Pretty-print JSON responses when queried with ?pretty
+
+You can have Elasticsearch-style `?pretty` support in your gateway's endpoints as follows:
+
+1. Wrap the ServeMux using a stdlib [`http.HandlerFunc`](https://golang.org/pkg/net/http/#HandlerFunc)
+   that translates the provided query parameter into a custom `Accept` header, and
+2. Register a pretty-printing marshaler for that MIME code.
+
+For example:
+
+```go
+mux := runtime.NewServeMux(
+	runtime.WithMarshalerOption("application/json+pretty", &runtime.JSONPb{Indent: "  "}),
+)
+prettier := func(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// checking Values as map[string][]string also catches ?pretty and ?pretty=
+		// r.URL.Query().Get("pretty") would not.
+		if _, ok := r.URL.Query()["pretty"]; ok {
+			r.Header.Set("Accept", "application/json+pretty")
+		}
+		h.ServeHTTP(w, r)
+	})
+}
+http.ListenAndServe(":8080", prettier(mux))
+```
+
+Note that  `runtime.JSONPb{Indent: "  "}` will do the trick for pretty-printing: it wraps
+`jsonpb.Marshaler`:
+```go
+type Marshaler struct {
+	// ...
+
+	// A string to indent each level by. The presence of this field will
+	// also cause a space to appear between the field separator and
+	// value, and for newlines to be appear between fields and array
+	// elements.
+	Indent string
+
+	// ...
+}
+```
+
+Now, either when passing the header `Accept: application/json+pretty` or appending `?pretty` to
+your HTTP endpoints, the response will be pretty-printed.
+
+Note that this will conflict with any methods having input messages with fields named `pretty`;
+also, this example code does not remove the query parameter `pretty` from further processing.
+
 ## Mapping from HTTP request headers to gRPC client metadata
 You might not like [the default mapping rule](http://godoc.org/github.com/grpc-ecosystem/grpc-gateway/runtime#DefaultHeaderMatcher) and might want to pass through all the HTTP headers, for example.
 

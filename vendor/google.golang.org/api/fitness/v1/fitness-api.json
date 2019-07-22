@@ -65,7 +65,7 @@
   "description": "Stores and accesses user data in the fitness store from apps on any platform.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/fit/rest/",
-  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/5HkIXTuow4_42nhAZgQJ4gq5QE8\"",
+  "etag": "\"9eZ1uxVRThTDhLJCZHhqs3eQWz4/2bBYAMAn3nGj2HdrbWi4LR65mIE\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -761,7 +761,7 @@
       }
     }
   },
-  "revision": "20190408",
+  "revision": "20190627",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "AggregateBucket": {
@@ -872,7 +872,7 @@
           "type": "string"
         },
         "filteredDataQualityStandard": {
-          "description": "DO NOT POPULATE THIS FIELD. As data quality standards are deprecated, filling it in will result in no data sources being returned. It will be removed in a future version entirely.",
+          "description": "DO NOT POPULATE THIS FIELD. It is ignored.",
           "items": {
             "enum": [
               "dataQualityBloodGlucoseIso151972003",

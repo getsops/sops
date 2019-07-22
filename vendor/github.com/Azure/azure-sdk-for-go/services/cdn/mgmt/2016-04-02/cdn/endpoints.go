@@ -26,9 +26,7 @@ import (
 	"net/http"
 )
 
-// EndpointsClient is the use these APIs to manage Azure CDN resources through the Azure Resource Manager. You must
-// make sure that requests made to these resources are secure. For more information, see
-// https://msdn.microsoft.com/en-us/library/azure/dn790557.aspx.
+// EndpointsClient is the cdn Management Client
 type EndpointsClient struct {
 	BaseClient
 }

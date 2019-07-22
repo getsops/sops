@@ -99,6 +99,18 @@ func (s *mockKeyManagementServer) ListCryptoKeyVersions(ctx context.Context, req
 	return s.resps[0].(*kmspb.ListCryptoKeyVersionsResponse), nil
 }
 
+func (s *mockKeyManagementServer) ListImportJobs(ctx context.Context, req *kmspb.ListImportJobsRequest) (*kmspb.ListImportJobsResponse, error) {
+	md, _ := metadata.FromIncomingContext(ctx)
+	if xg := md["x-goog-api-client"]; len(xg) == 0 || !strings.Contains(xg[0], "gl-go/") {
+		return nil, fmt.Errorf("x-goog-api-client = %v, expected gl-go key", xg)
+	}
+	s.reqs = append(s.reqs, req)
+	if s.err != nil {
+		return nil, s.err
+	}
+	return s.resps[0].(*kmspb.ListImportJobsResponse), nil
+}
+
 func (s *mockKeyManagementServer) GetKeyRing(ctx context.Context, req *kmspb.GetKeyRingRequest) (*kmspb.KeyRing, error) {
 	md, _ := metadata.FromIncomingContext(ctx)
 	if xg := md["x-goog-api-client"]; len(xg) == 0 || !strings.Contains(xg[0], "gl-go/") {
@@ -147,6 +159,18 @@ func (s *mockKeyManagementServer) GetPublicKey(ctx context.Context, req *kmspb.G
 	return s.resps[0].(*kmspb.PublicKey), nil
 }
 
+func (s *mockKeyManagementServer) GetImportJob(ctx context.Context, req *kmspb.GetImportJobRequest) (*kmspb.ImportJob, error) {
+	md, _ := metadata.FromIncomingContext(ctx)
+	if xg := md["x-goog-api-client"]; len(xg) == 0 || !strings.Contains(xg[0], "gl-go/") {
+		return nil, fmt.Errorf("x-goog-api-client = %v, expected gl-go key", xg)
+	}
+	s.reqs = append(s.reqs, req)
+	if s.err != nil {
+		return nil, s.err
+	}
+	return s.resps[0].(*kmspb.ImportJob), nil
+}
+
 func (s *mockKeyManagementServer) CreateKeyRing(ctx context.Context, req *kmspb.CreateKeyRingRequest) (*kmspb.KeyRing, error) {
 	md, _ := metadata.FromIncomingContext(ctx)
 	if xg := md["x-goog-api-client"]; len(xg) == 0 || !strings.Contains(xg[0], "gl-go/") {
@@ -181,6 +205,30 @@ func (s *mockKeyManagementServer) CreateCryptoKeyVersion(ctx context.Context, re
 		return nil, s.err
 	}
 	return s.resps[0].(*kmspb.CryptoKeyVersion), nil
+}
+
+func (s *mockKeyManagementServer) ImportCryptoKeyVersion(ctx context.Context, req *kmspb.ImportCryptoKeyVersionRequest) (*kmspb.CryptoKeyVersion, error) {
+	md, _ := metadata.FromIncomingContext(ctx)
+	if xg := md["x-goog-api-client"]; len(xg) == 0 || !strings.Contains(xg[0], "gl-go/") {
+		return nil, fmt.Errorf("x-goog-api-client = %v, expected gl-go key", xg)
+	}
+	s.reqs = append(s.reqs, req)
+	if s.err != nil {
+		return nil, s.err
+	}
+	return s.resps[0].(*kmspb.CryptoKeyVersion), nil
+}
+
+func (s *mockKeyManagementServer) CreateImportJob(ctx context.Context, req *kmspb.CreateImportJobRequest) (*kmspb.ImportJob, error) {
+	md, _ := metadata.FromIncomingContext(ctx)
+	if xg := md["x-goog-api-client"]; len(xg) == 0 || !strings.Contains(xg[0], "gl-go/") {
+		return nil, fmt.Errorf("x-goog-api-client = %v, expected gl-go key", xg)
+	}
+	s.reqs = append(s.reqs, req)
+	if s.err != nil {
+		return nil, s.err
+	}
+	return s.resps[0].(*kmspb.ImportJob), nil
 }
 
 func (s *mockKeyManagementServer) UpdateCryptoKey(ctx context.Context, req *kmspb.UpdateCryptoKeyRequest) (*kmspb.CryptoKey, error) {
@@ -386,6 +434,80 @@ func TestKeyManagementServiceListKeyRingsError(t *testing.T) {
 	}
 
 	resp, err := c.ListKeyRings(context.Background(), request).Next()
+
+	if st, ok := gstatus.FromError(err); !ok {
+		t.Errorf("got error %v, expected grpc error", err)
+	} else if c := st.Code(); c != errCode {
+		t.Errorf("got error code %q, want %q", c, errCode)
+	}
+	_ = resp
+}
+func TestKeyManagementServiceListImportJobs(t *testing.T) {
+	var nextPageToken string = ""
+	var totalSize int32 = 705419236
+	var importJobsElement *kmspb.ImportJob = &kmspb.ImportJob{}
+	var importJobs = []*kmspb.ImportJob{importJobsElement}
+	var expectedResponse = &kmspb.ListImportJobsResponse{
+		NextPageToken: nextPageToken,
+		TotalSize:     totalSize,
+		ImportJobs:    importJobs,
+	}
+
+	mockKeyManagement.err = nil
+	mockKeyManagement.reqs = nil
+
+	mockKeyManagement.resps = append(mockKeyManagement.resps[:0], expectedResponse)
+
+	var formattedParent string = fmt.Sprintf("projects/%s/locations/%s/keyRings/%s", "[PROJECT]", "[LOCATION]", "[KEY_RING]")
+	var request = &kmspb.ListImportJobsRequest{
+		Parent: formattedParent,
+	}
+
+	c, err := NewKeyManagementClient(context.Background(), clientOpt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	resp, err := c.ListImportJobs(context.Background(), request).Next()
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if want, got := request, mockKeyManagement.reqs[0]; !proto.Equal(want, got) {
+		t.Errorf("wrong request %q, want %q", got, want)
+	}
+
+	want := (interface{})(expectedResponse.ImportJobs[0])
+	got := (interface{})(resp)
+	var ok bool
+
+	switch want := (want).(type) {
+	case proto.Message:
+		ok = proto.Equal(want, got.(proto.Message))
+	default:
+		ok = want == got
+	}
+	if !ok {
+		t.Errorf("wrong response %q, want %q)", got, want)
+	}
+}
+
+func TestKeyManagementServiceListImportJobsError(t *testing.T) {
+	errCode := codes.PermissionDenied
+	mockKeyManagement.err = gstatus.Error(errCode, "test error")
+
+	var formattedParent string = fmt.Sprintf("projects/%s/locations/%s/keyRings/%s", "[PROJECT]", "[LOCATION]", "[KEY_RING]")
+	var request = &kmspb.ListImportJobsRequest{
+		Parent: formattedParent,
+	}
+
+	c, err := NewKeyManagementClient(context.Background(), clientOpt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	resp, err := c.ListImportJobs(context.Background(), request).Next()
 
 	if st, ok := gstatus.FromError(err); !ok {
 		t.Errorf("got error %v, expected grpc error", err)
@@ -601,6 +723,65 @@ func TestKeyManagementServiceGetKeyRingError(t *testing.T) {
 	}
 	_ = resp
 }
+func TestKeyManagementServiceGetImportJob(t *testing.T) {
+	var name2 string = "name2-1052831874"
+	var expectedResponse = &kmspb.ImportJob{
+		Name: name2,
+	}
+
+	mockKeyManagement.err = nil
+	mockKeyManagement.reqs = nil
+
+	mockKeyManagement.resps = append(mockKeyManagement.resps[:0], expectedResponse)
+
+	var formattedName string = fmt.Sprintf("projects/%s/locations/%s/keyRings/%s/importJobs/%s", "[PROJECT]", "[LOCATION]", "[KEY_RING]", "[IMPORT_JOB]")
+	var request = &kmspb.GetImportJobRequest{
+		Name: formattedName,
+	}
+
+	c, err := NewKeyManagementClient(context.Background(), clientOpt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	resp, err := c.GetImportJob(context.Background(), request)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if want, got := request, mockKeyManagement.reqs[0]; !proto.Equal(want, got) {
+		t.Errorf("wrong request %q, want %q", got, want)
+	}
+
+	if want, got := expectedResponse, resp; !proto.Equal(want, got) {
+		t.Errorf("wrong response %q, want %q)", got, want)
+	}
+}
+
+func TestKeyManagementServiceGetImportJobError(t *testing.T) {
+	errCode := codes.PermissionDenied
+	mockKeyManagement.err = gstatus.Error(errCode, "test error")
+
+	var formattedName string = fmt.Sprintf("projects/%s/locations/%s/keyRings/%s/importJobs/%s", "[PROJECT]", "[LOCATION]", "[KEY_RING]", "[IMPORT_JOB]")
+	var request = &kmspb.GetImportJobRequest{
+		Name: formattedName,
+	}
+
+	c, err := NewKeyManagementClient(context.Background(), clientOpt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	resp, err := c.GetImportJob(context.Background(), request)
+
+	if st, ok := gstatus.FromError(err); !ok {
+		t.Errorf("got error %v, expected grpc error", err)
+	} else if c := st.Code(); c != errCode {
+		t.Errorf("got error code %q, want %q", c, errCode)
+	}
+	_ = resp
+}
 func TestKeyManagementServiceGetCryptoKey(t *testing.T) {
 	var name2 string = "name2-1052831874"
 	var expectedResponse = &kmspb.CryptoKey{
@@ -662,8 +843,12 @@ func TestKeyManagementServiceGetCryptoKeyError(t *testing.T) {
 }
 func TestKeyManagementServiceGetCryptoKeyVersion(t *testing.T) {
 	var name2 string = "name2-1052831874"
+	var importJob string = "importJob2125587491"
+	var importFailureReason string = "importFailureReason-494073229"
 	var expectedResponse = &kmspb.CryptoKeyVersion{
-		Name: name2,
+		Name:                name2,
+		ImportJob:           importJob,
+		ImportFailureReason: importFailureReason,
 	}
 
 	mockKeyManagement.err = nil
@@ -786,6 +971,83 @@ func TestKeyManagementServiceCreateKeyRingError(t *testing.T) {
 	}
 	_ = resp
 }
+func TestKeyManagementServiceCreateImportJob(t *testing.T) {
+	var name string = "name3373707"
+	var expectedResponse = &kmspb.ImportJob{
+		Name: name,
+	}
+
+	mockKeyManagement.err = nil
+	mockKeyManagement.reqs = nil
+
+	mockKeyManagement.resps = append(mockKeyManagement.resps[:0], expectedResponse)
+
+	var formattedParent string = fmt.Sprintf("projects/%s/locations/%s/keyRings/%s", "[PROJECT]", "[LOCATION]", "[KEY_RING]")
+	var importJobId string = "my-import-job"
+	var importMethod kmspb.ImportJob_ImportMethod = kmspb.ImportJob_RSA_OAEP_3072_SHA1_AES_256
+	var protectionLevel kmspb.ProtectionLevel = kmspb.ProtectionLevel_HSM
+	var importJob = &kmspb.ImportJob{
+		ImportMethod:    importMethod,
+		ProtectionLevel: protectionLevel,
+	}
+	var request = &kmspb.CreateImportJobRequest{
+		Parent:      formattedParent,
+		ImportJobId: importJobId,
+		ImportJob:   importJob,
+	}
+
+	c, err := NewKeyManagementClient(context.Background(), clientOpt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	resp, err := c.CreateImportJob(context.Background(), request)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if want, got := request, mockKeyManagement.reqs[0]; !proto.Equal(want, got) {
+		t.Errorf("wrong request %q, want %q", got, want)
+	}
+
+	if want, got := expectedResponse, resp; !proto.Equal(want, got) {
+		t.Errorf("wrong response %q, want %q)", got, want)
+	}
+}
+
+func TestKeyManagementServiceCreateImportJobError(t *testing.T) {
+	errCode := codes.PermissionDenied
+	mockKeyManagement.err = gstatus.Error(errCode, "test error")
+
+	var formattedParent string = fmt.Sprintf("projects/%s/locations/%s/keyRings/%s", "[PROJECT]", "[LOCATION]", "[KEY_RING]")
+	var importJobId string = "my-import-job"
+	var importMethod kmspb.ImportJob_ImportMethod = kmspb.ImportJob_RSA_OAEP_3072_SHA1_AES_256
+	var protectionLevel kmspb.ProtectionLevel = kmspb.ProtectionLevel_HSM
+	var importJob = &kmspb.ImportJob{
+		ImportMethod:    importMethod,
+		ProtectionLevel: protectionLevel,
+	}
+	var request = &kmspb.CreateImportJobRequest{
+		Parent:      formattedParent,
+		ImportJobId: importJobId,
+		ImportJob:   importJob,
+	}
+
+	c, err := NewKeyManagementClient(context.Background(), clientOpt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	resp, err := c.CreateImportJob(context.Background(), request)
+
+	if st, ok := gstatus.FromError(err); !ok {
+		t.Errorf("got error %v, expected grpc error", err)
+	} else if c := st.Code(); c != errCode {
+		t.Errorf("got error code %q, want %q", c, errCode)
+	}
+	_ = resp
+}
 func TestKeyManagementServiceCreateCryptoKey(t *testing.T) {
 	var name string = "name3373707"
 	var expectedResponse = &kmspb.CryptoKey{
@@ -885,8 +1147,12 @@ func TestKeyManagementServiceCreateCryptoKeyError(t *testing.T) {
 }
 func TestKeyManagementServiceCreateCryptoKeyVersion(t *testing.T) {
 	var name string = "name3373707"
+	var importJob string = "importJob2125587491"
+	var importFailureReason string = "importFailureReason-494073229"
 	var expectedResponse = &kmspb.CryptoKeyVersion{
-		Name: name,
+		Name:                name,
+		ImportJob:           importJob,
+		ImportFailureReason: importFailureReason,
 	}
 
 	mockKeyManagement.err = nil
@@ -938,6 +1204,77 @@ func TestKeyManagementServiceCreateCryptoKeyVersionError(t *testing.T) {
 	}
 
 	resp, err := c.CreateCryptoKeyVersion(context.Background(), request)
+
+	if st, ok := gstatus.FromError(err); !ok {
+		t.Errorf("got error %v, expected grpc error", err)
+	} else if c := st.Code(); c != errCode {
+		t.Errorf("got error code %q, want %q", c, errCode)
+	}
+	_ = resp
+}
+func TestKeyManagementServiceImportCryptoKeyVersion(t *testing.T) {
+	var name string = "name3373707"
+	var importJob2 string = "importJob2-1714851050"
+	var importFailureReason string = "importFailureReason-494073229"
+	var expectedResponse = &kmspb.CryptoKeyVersion{
+		Name:                name,
+		ImportJob:           importJob2,
+		ImportFailureReason: importFailureReason,
+	}
+
+	mockKeyManagement.err = nil
+	mockKeyManagement.reqs = nil
+
+	mockKeyManagement.resps = append(mockKeyManagement.resps[:0], expectedResponse)
+
+	var formattedParent string = fmt.Sprintf("projects/%s/locations/%s/keyRings/%s/cryptoKeys/%s", "[PROJECT]", "[LOCATION]", "[KEY_RING]", "[CRYPTO_KEY]")
+	var algorithm kmspb.CryptoKeyVersion_CryptoKeyVersionAlgorithm = kmspb.CryptoKeyVersion_CRYPTO_KEY_VERSION_ALGORITHM_UNSPECIFIED
+	var importJob string = "importJob2125587491"
+	var request = &kmspb.ImportCryptoKeyVersionRequest{
+		Parent:    formattedParent,
+		Algorithm: algorithm,
+		ImportJob: importJob,
+	}
+
+	c, err := NewKeyManagementClient(context.Background(), clientOpt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	resp, err := c.ImportCryptoKeyVersion(context.Background(), request)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if want, got := request, mockKeyManagement.reqs[0]; !proto.Equal(want, got) {
+		t.Errorf("wrong request %q, want %q", got, want)
+	}
+
+	if want, got := expectedResponse, resp; !proto.Equal(want, got) {
+		t.Errorf("wrong response %q, want %q)", got, want)
+	}
+}
+
+func TestKeyManagementServiceImportCryptoKeyVersionError(t *testing.T) {
+	errCode := codes.PermissionDenied
+	mockKeyManagement.err = gstatus.Error(errCode, "test error")
+
+	var formattedParent string = fmt.Sprintf("projects/%s/locations/%s/keyRings/%s/cryptoKeys/%s", "[PROJECT]", "[LOCATION]", "[KEY_RING]", "[CRYPTO_KEY]")
+	var algorithm kmspb.CryptoKeyVersion_CryptoKeyVersionAlgorithm = kmspb.CryptoKeyVersion_CRYPTO_KEY_VERSION_ALGORITHM_UNSPECIFIED
+	var importJob string = "importJob2125587491"
+	var request = &kmspb.ImportCryptoKeyVersionRequest{
+		Parent:    formattedParent,
+		Algorithm: algorithm,
+		ImportJob: importJob,
+	}
+
+	c, err := NewKeyManagementClient(context.Background(), clientOpt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	resp, err := c.ImportCryptoKeyVersion(context.Background(), request)
 
 	if st, ok := gstatus.FromError(err); !ok {
 		t.Errorf("got error %v, expected grpc error", err)
@@ -1011,8 +1348,12 @@ func TestKeyManagementServiceUpdateCryptoKeyError(t *testing.T) {
 }
 func TestKeyManagementServiceUpdateCryptoKeyVersion(t *testing.T) {
 	var name string = "name3373707"
+	var importJob string = "importJob2125587491"
+	var importFailureReason string = "importFailureReason-494073229"
 	var expectedResponse = &kmspb.CryptoKeyVersion{
-		Name: name,
+		Name:                name,
+		ImportJob:           importJob,
+		ImportFailureReason: importFailureReason,
 	}
 
 	mockKeyManagement.err = nil
@@ -1265,8 +1606,12 @@ func TestKeyManagementServiceUpdateCryptoKeyPrimaryVersionError(t *testing.T) {
 }
 func TestKeyManagementServiceDestroyCryptoKeyVersion(t *testing.T) {
 	var name2 string = "name2-1052831874"
+	var importJob string = "importJob2125587491"
+	var importFailureReason string = "importFailureReason-494073229"
 	var expectedResponse = &kmspb.CryptoKeyVersion{
-		Name: name2,
+		Name:                name2,
+		ImportJob:           importJob,
+		ImportFailureReason: importFailureReason,
 	}
 
 	mockKeyManagement.err = nil
@@ -1324,8 +1669,12 @@ func TestKeyManagementServiceDestroyCryptoKeyVersionError(t *testing.T) {
 }
 func TestKeyManagementServiceRestoreCryptoKeyVersion(t *testing.T) {
 	var name2 string = "name2-1052831874"
+	var importJob string = "importJob2125587491"
+	var importFailureReason string = "importFailureReason-494073229"
 	var expectedResponse = &kmspb.CryptoKeyVersion{
-		Name: name2,
+		Name:                name2,
+		ImportJob:           importJob,
+		ImportFailureReason: importFailureReason,
 	}
 
 	mockKeyManagement.err = nil

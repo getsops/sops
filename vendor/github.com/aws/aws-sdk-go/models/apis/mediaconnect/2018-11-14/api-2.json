@@ -782,9 +782,25 @@
           "shape": "Algorithm",
           "locationName": "algorithm"
         },
+        "ConstantInitializationVector": {
+          "shape": "__string",
+          "locationName": "constantInitializationVector"
+        },
+        "DeviceId": {
+          "shape": "__string",
+          "locationName": "deviceId"
+        },
         "KeyType": {
           "shape": "KeyType",
           "locationName": "keyType"
+        },
+        "Region": {
+          "shape": "__string",
+          "locationName": "region"
+        },
+        "ResourceId": {
+          "shape": "__string",
+          "locationName": "resourceId"
         },
         "RoleArn": {
           "shape": "__string",
@@ -793,10 +809,13 @@
         "SecretArn": {
           "shape": "__string",
           "locationName": "secretArn"
+        },
+        "Url": {
+          "shape": "__string",
+          "locationName": "url"
         }
       },
       "required": [
-        "SecretArn",
         "Algorithm",
         "RoleArn"
       ]
@@ -987,6 +1006,7 @@
     "KeyType": {
       "type": "string",
       "enum": [
+        "speke",
         "static-key"
       ]
     },
@@ -1549,9 +1569,25 @@
           "shape": "Algorithm",
           "locationName": "algorithm"
         },
+        "ConstantInitializationVector": {
+          "shape": "__string",
+          "locationName": "constantInitializationVector"
+        },
+        "DeviceId": {
+          "shape": "__string",
+          "locationName": "deviceId"
+        },
         "KeyType": {
           "shape": "KeyType",
           "locationName": "keyType"
+        },
+        "Region": {
+          "shape": "__string",
+          "locationName": "region"
+        },
+        "ResourceId": {
+          "shape": "__string",
+          "locationName": "resourceId"
         },
         "RoleArn": {
           "shape": "__string",
@@ -1560,6 +1596,10 @@
         "SecretArn": {
           "shape": "__string",
           "locationName": "secretArn"
+        },
+        "Url": {
+          "shape": "__string",
+          "locationName": "url"
         }
       }
     },

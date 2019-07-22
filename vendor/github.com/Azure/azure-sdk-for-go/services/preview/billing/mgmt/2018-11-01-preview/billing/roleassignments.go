@@ -87,8 +87,6 @@ func (client RoleAssignmentsClient) AddByBillingAccountNamePreparer(ctx context.
 		"api-version": APIVersion,
 	}
 
-	parameters.PrincipalID = nil
-	parameters.BillingRoleDefinitionName = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPost(),
@@ -168,8 +166,6 @@ func (client RoleAssignmentsClient) AddByBillingProfileNamePreparer(ctx context.
 		"api-version": APIVersion,
 	}
 
-	parameters.PrincipalID = nil
-	parameters.BillingRoleDefinitionName = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPost(),
@@ -249,8 +245,6 @@ func (client RoleAssignmentsClient) AddByInvoiceSectionNamePreparer(ctx context.
 		"api-version": APIVersion,
 	}
 
-	parameters.PrincipalID = nil
-	parameters.BillingRoleDefinitionName = nil
 	preparer := autorest.CreatePreparer(
 		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPost(),

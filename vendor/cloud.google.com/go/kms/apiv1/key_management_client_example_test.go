@@ -58,6 +58,30 @@ func ExampleKeyManagementClient_ListKeyRings() {
 	}
 }
 
+func ExampleKeyManagementClient_ListImportJobs() {
+	ctx := context.Background()
+	c, err := kms.NewKeyManagementClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+
+	req := &kmspb.ListImportJobsRequest{
+		// TODO: Fill request struct fields.
+	}
+	it := c.ListImportJobs(ctx, req)
+	for {
+		resp, err := it.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			// TODO: Handle error.
+		}
+		// TODO: Use resp.
+		_ = resp
+	}
+}
+
 func ExampleKeyManagementClient_ListCryptoKeys() {
 	ctx := context.Background()
 	c, err := kms.NewKeyManagementClient(ctx)
@@ -124,6 +148,24 @@ func ExampleKeyManagementClient_GetKeyRing() {
 	_ = resp
 }
 
+func ExampleKeyManagementClient_GetImportJob() {
+	ctx := context.Background()
+	c, err := kms.NewKeyManagementClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+
+	req := &kmspb.GetImportJobRequest{
+		// TODO: Fill request struct fields.
+	}
+	resp, err := c.GetImportJob(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}
+
 func ExampleKeyManagementClient_GetCryptoKey() {
 	ctx := context.Background()
 	c, err := kms.NewKeyManagementClient(ctx)
@@ -178,6 +220,24 @@ func ExampleKeyManagementClient_CreateKeyRing() {
 	_ = resp
 }
 
+func ExampleKeyManagementClient_CreateImportJob() {
+	ctx := context.Background()
+	c, err := kms.NewKeyManagementClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+
+	req := &kmspb.CreateImportJobRequest{
+		// TODO: Fill request struct fields.
+	}
+	resp, err := c.CreateImportJob(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}
+
 func ExampleKeyManagementClient_CreateCryptoKey() {
 	ctx := context.Background()
 	c, err := kms.NewKeyManagementClient(ctx)
@@ -207,6 +267,24 @@ func ExampleKeyManagementClient_CreateCryptoKeyVersion() {
 		// TODO: Fill request struct fields.
 	}
 	resp, err := c.CreateCryptoKeyVersion(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}
+
+func ExampleKeyManagementClient_ImportCryptoKeyVersion() {
+	ctx := context.Background()
+	c, err := kms.NewKeyManagementClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+
+	req := &kmspb.ImportCryptoKeyVersionRequest{
+		// TODO: Fill request struct fields.
+	}
+	resp, err := c.ImportCryptoKeyVersion(ctx, req)
 	if err != nil {
 		// TODO: Handle error.
 	}

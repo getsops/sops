@@ -680,6 +680,11 @@
           "shape":"boolean",
           "location":"querystring",
           "locationName":"reset-disabled"
+        },
+        "UserArn":{
+          "shape":"Arn",
+          "location":"querystring",
+          "locationName":"user-arn"
         }
       }
     },
@@ -970,7 +975,7 @@
     },
     "MaxResults":{
       "type":"integer",
-      "max":100000,
+      "max":100,
       "min":1
     },
     "Namespace":{

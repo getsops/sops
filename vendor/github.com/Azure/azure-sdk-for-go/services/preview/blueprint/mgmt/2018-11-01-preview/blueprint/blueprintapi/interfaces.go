@@ -44,7 +44,7 @@ var _ ArtifactsClientAPI = (*blueprint.ArtifactsClient)(nil)
 
 // PublishedBlueprintsClientAPI contains the set of methods on the PublishedBlueprintsClient type.
 type PublishedBlueprintsClientAPI interface {
-	Create(ctx context.Context, scope string, blueprintName string, versionID string) (result blueprint.PublishedBlueprint, err error)
+	Create(ctx context.Context, scope string, blueprintName string, versionID string, publishedBlueprint *blueprint.PublishedBlueprint) (result blueprint.PublishedBlueprint, err error)
 	Delete(ctx context.Context, scope string, blueprintName string, versionID string) (result blueprint.PublishedBlueprint, err error)
 	Get(ctx context.Context, scope string, blueprintName string, versionID string) (result blueprint.PublishedBlueprint, err error)
 	List(ctx context.Context, scope string, blueprintName string) (result blueprint.PublishedBlueprintListPage, err error)

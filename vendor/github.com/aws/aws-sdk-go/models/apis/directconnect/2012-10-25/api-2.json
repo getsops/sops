@@ -48,6 +48,8 @@
       "input":{"shape":"AllocateHostedConnectionRequest"},
       "output":{"shape":"Connection"},
       "errors":[
+        {"shape":"DuplicateTagKeysException"},
+        {"shape":"TooManyTagsException"},
         {"shape":"DirectConnectServerException"},
         {"shape":"DirectConnectClientException"}
       ]
@@ -61,6 +63,8 @@
       "input":{"shape":"AllocatePrivateVirtualInterfaceRequest"},
       "output":{"shape":"VirtualInterface"},
       "errors":[
+        {"shape":"DuplicateTagKeysException"},
+        {"shape":"TooManyTagsException"},
         {"shape":"DirectConnectServerException"},
         {"shape":"DirectConnectClientException"}
       ]
@@ -74,6 +78,8 @@
       "input":{"shape":"AllocatePublicVirtualInterfaceRequest"},
       "output":{"shape":"VirtualInterface"},
       "errors":[
+        {"shape":"DuplicateTagKeysException"},
+        {"shape":"TooManyTagsException"},
         {"shape":"DirectConnectServerException"},
         {"shape":"DirectConnectClientException"}
       ]
@@ -87,6 +93,8 @@
       "input":{"shape":"AllocateTransitVirtualInterfaceRequest"},
       "output":{"shape":"AllocateTransitVirtualInterfaceResult"},
       "errors":[
+        {"shape":"DuplicateTagKeysException"},
+        {"shape":"TooManyTagsException"},
         {"shape":"DirectConnectServerException"},
         {"shape":"DirectConnectClientException"}
       ]
@@ -204,6 +212,8 @@
       "input":{"shape":"CreateConnectionRequest"},
       "output":{"shape":"Connection"},
       "errors":[
+        {"shape":"DuplicateTagKeysException"},
+        {"shape":"TooManyTagsException"},
         {"shape":"DirectConnectServerException"},
         {"shape":"DirectConnectClientException"}
       ]
@@ -256,6 +266,8 @@
       "input":{"shape":"CreateInterconnectRequest"},
       "output":{"shape":"Interconnect"},
       "errors":[
+        {"shape":"DuplicateTagKeysException"},
+        {"shape":"TooManyTagsException"},
         {"shape":"DirectConnectServerException"},
         {"shape":"DirectConnectClientException"}
       ]
@@ -269,6 +281,8 @@
       "input":{"shape":"CreateLagRequest"},
       "output":{"shape":"Lag"},
       "errors":[
+        {"shape":"DuplicateTagKeysException"},
+        {"shape":"TooManyTagsException"},
         {"shape":"DirectConnectServerException"},
         {"shape":"DirectConnectClientException"}
       ]
@@ -282,6 +296,8 @@
       "input":{"shape":"CreatePrivateVirtualInterfaceRequest"},
       "output":{"shape":"VirtualInterface"},
       "errors":[
+        {"shape":"DuplicateTagKeysException"},
+        {"shape":"TooManyTagsException"},
         {"shape":"DirectConnectServerException"},
         {"shape":"DirectConnectClientException"}
       ]
@@ -295,6 +311,8 @@
       "input":{"shape":"CreatePublicVirtualInterfaceRequest"},
       "output":{"shape":"VirtualInterface"},
       "errors":[
+        {"shape":"DuplicateTagKeysException"},
+        {"shape":"TooManyTagsException"},
         {"shape":"DirectConnectServerException"},
         {"shape":"DirectConnectClientException"}
       ]
@@ -308,6 +326,8 @@
       "input":{"shape":"CreateTransitVirtualInterfaceRequest"},
       "output":{"shape":"CreateTransitVirtualInterfaceResult"},
       "errors":[
+        {"shape":"DuplicateTagKeysException"},
+        {"shape":"TooManyTagsException"},
         {"shape":"DirectConnectServerException"},
         {"shape":"DirectConnectClientException"}
       ]
@@ -766,7 +786,8 @@
         "ownerAccount":{"shape":"OwnerAccount"},
         "bandwidth":{"shape":"Bandwidth"},
         "connectionName":{"shape":"ConnectionName"},
-        "vlan":{"shape":"VLAN"}
+        "vlan":{"shape":"VLAN"},
+        "tags":{"shape":"TagList"}
       }
     },
     "AllocatePrivateVirtualInterfaceRequest":{
@@ -983,7 +1004,8 @@
         "awsDevice":{"shape":"AwsDevice"},
         "jumboFrameCapable":{"shape":"JumboFrameCapable"},
         "awsDeviceV2":{"shape":"AwsDeviceV2"},
-        "hasLogicalRedundancy":{"shape":"HasLogicalRedundancy"}
+        "hasLogicalRedundancy":{"shape":"HasLogicalRedundancy"},
+        "tags":{"shape":"TagList"}
       }
     },
     "ConnectionId":{"type":"string"},
@@ -1037,7 +1059,8 @@
         "location":{"shape":"LocationCode"},
         "bandwidth":{"shape":"Bandwidth"},
         "connectionName":{"shape":"ConnectionName"},
-        "lagId":{"shape":"LagId"}
+        "lagId":{"shape":"LagId"},
+        "tags":{"shape":"TagList"}
       }
     },
     "CreateDirectConnectGatewayAssociationProposalRequest":{
@@ -1102,7 +1125,8 @@
         "interconnectName":{"shape":"InterconnectName"},
         "bandwidth":{"shape":"Bandwidth"},
         "location":{"shape":"LocationCode"},
-        "lagId":{"shape":"LagId"}
+        "lagId":{"shape":"LagId"},
+        "tags":{"shape":"TagList"}
       }
     },
     "CreateLagRequest":{
@@ -1118,7 +1142,9 @@
         "location":{"shape":"LocationCode"},
         "connectionsBandwidth":{"shape":"Bandwidth"},
         "lagName":{"shape":"LagName"},
-        "connectionId":{"shape":"ConnectionId"}
+        "connectionId":{"shape":"ConnectionId"},
+        "tags":{"shape":"TagList"},
+        "childConnectionTags":{"shape":"TagList"}
       }
     },
     "CreatePrivateVirtualInterfaceRequest":{
@@ -1589,7 +1615,8 @@
         "awsDevice":{"shape":"AwsDevice"},
         "jumboFrameCapable":{"shape":"JumboFrameCapable"},
         "awsDeviceV2":{"shape":"AwsDeviceV2"},
-        "hasLogicalRedundancy":{"shape":"HasLogicalRedundancy"}
+        "hasLogicalRedundancy":{"shape":"HasLogicalRedundancy"},
+        "tags":{"shape":"TagList"}
       }
     },
     "InterconnectId":{"type":"string"},
@@ -1634,7 +1661,8 @@
         "connections":{"shape":"ConnectionList"},
         "allowsHostedConnections":{"shape":"BooleanFlag"},
         "jumboFrameCapable":{"shape":"JumboFrameCapable"},
-        "hasLogicalRedundancy":{"shape":"HasLogicalRedundancy"}
+        "hasLogicalRedundancy":{"shape":"HasLogicalRedundancy"},
+        "tags":{"shape":"TagList"}
       }
     },
     "LagId":{"type":"string"},
@@ -1728,7 +1756,8 @@
         "customerAddress":{"shape":"CustomerAddress"},
         "addressFamily":{"shape":"AddressFamily"},
         "virtualGatewayId":{"shape":"VirtualGatewayId"},
-        "directConnectGatewayId":{"shape":"DirectConnectGatewayId"}
+        "directConnectGatewayId":{"shape":"DirectConnectGatewayId"},
+        "tags":{"shape":"TagList"}
       }
     },
     "NewPrivateVirtualInterfaceAllocation":{
@@ -1746,7 +1775,8 @@
         "authKey":{"shape":"BGPAuthKey"},
         "amazonAddress":{"shape":"AmazonAddress"},
         "addressFamily":{"shape":"AddressFamily"},
-        "customerAddress":{"shape":"CustomerAddress"}
+        "customerAddress":{"shape":"CustomerAddress"},
+        "tags":{"shape":"TagList"}
       }
     },
     "NewPublicVirtualInterface":{
@@ -1764,7 +1794,8 @@
         "amazonAddress":{"shape":"AmazonAddress"},
         "customerAddress":{"shape":"CustomerAddress"},
         "addressFamily":{"shape":"AddressFamily"},
-        "routeFilterPrefixes":{"shape":"RouteFilterPrefixList"}
+        "routeFilterPrefixes":{"shape":"RouteFilterPrefixList"},
+        "tags":{"shape":"TagList"}
       }
     },
     "NewPublicVirtualInterfaceAllocation":{
@@ -1782,7 +1813,8 @@
         "amazonAddress":{"shape":"AmazonAddress"},
         "customerAddress":{"shape":"CustomerAddress"},
         "addressFamily":{"shape":"AddressFamily"},
-        "routeFilterPrefixes":{"shape":"RouteFilterPrefixList"}
+        "routeFilterPrefixes":{"shape":"RouteFilterPrefixList"},
+        "tags":{"shape":"TagList"}
       }
     },
     "NewTransitVirtualInterface":{
@@ -1796,7 +1828,8 @@
         "amazonAddress":{"shape":"AmazonAddress"},
         "customerAddress":{"shape":"CustomerAddress"},
         "addressFamily":{"shape":"AddressFamily"},
-        "directConnectGatewayId":{"shape":"DirectConnectGatewayId"}
+        "directConnectGatewayId":{"shape":"DirectConnectGatewayId"},
+        "tags":{"shape":"TagList"}
       }
     },
     "NewTransitVirtualInterfaceAllocation":{
@@ -1809,7 +1842,8 @@
         "authKey":{"shape":"BGPAuthKey"},
         "amazonAddress":{"shape":"AmazonAddress"},
         "customerAddress":{"shape":"CustomerAddress"},
-        "addressFamily":{"shape":"AddressFamily"}
+        "addressFamily":{"shape":"AddressFamily"},
+        "tags":{"shape":"TagList"}
       }
     },
     "OwnerAccount":{"type":"string"},
@@ -1996,7 +2030,8 @@
         "routeFilterPrefixes":{"shape":"RouteFilterPrefixList"},
         "bgpPeers":{"shape":"BGPPeerList"},
         "region":{"shape":"Region"},
-        "awsDeviceV2":{"shape":"AwsDeviceV2"}
+        "awsDeviceV2":{"shape":"AwsDeviceV2"},
+        "tags":{"shape":"TagList"}
       }
     },
     "VirtualInterfaceId":{"type":"string"},

@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // Amazon CloudWatch Events.
 //    func myFunc(svc cloudwatcheventsiface.CloudWatchEventsAPI) bool {
-//        // Make svc.DeleteRule request
+//        // Make svc.ActivateEventSource request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockCloudWatchEventsClient struct {
 //        cloudwatcheventsiface.CloudWatchEventsAPI
 //    }
-//    func (m *mockCloudWatchEventsClient) DeleteRule(input *cloudwatchevents.DeleteRuleInput) (*cloudwatchevents.DeleteRuleOutput, error) {
+//    func (m *mockCloudWatchEventsClient) ActivateEventSource(input *cloudwatchevents.ActivateEventSourceInput) (*cloudwatchevents.ActivateEventSourceOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,30 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type CloudWatchEventsAPI interface {
+	ActivateEventSource(*cloudwatchevents.ActivateEventSourceInput) (*cloudwatchevents.ActivateEventSourceOutput, error)
+	ActivateEventSourceWithContext(aws.Context, *cloudwatchevents.ActivateEventSourceInput, ...request.Option) (*cloudwatchevents.ActivateEventSourceOutput, error)
+	ActivateEventSourceRequest(*cloudwatchevents.ActivateEventSourceInput) (*request.Request, *cloudwatchevents.ActivateEventSourceOutput)
+
+	CreateEventBus(*cloudwatchevents.CreateEventBusInput) (*cloudwatchevents.CreateEventBusOutput, error)
+	CreateEventBusWithContext(aws.Context, *cloudwatchevents.CreateEventBusInput, ...request.Option) (*cloudwatchevents.CreateEventBusOutput, error)
+	CreateEventBusRequest(*cloudwatchevents.CreateEventBusInput) (*request.Request, *cloudwatchevents.CreateEventBusOutput)
+
+	CreatePartnerEventSource(*cloudwatchevents.CreatePartnerEventSourceInput) (*cloudwatchevents.CreatePartnerEventSourceOutput, error)
+	CreatePartnerEventSourceWithContext(aws.Context, *cloudwatchevents.CreatePartnerEventSourceInput, ...request.Option) (*cloudwatchevents.CreatePartnerEventSourceOutput, error)
+	CreatePartnerEventSourceRequest(*cloudwatchevents.CreatePartnerEventSourceInput) (*request.Request, *cloudwatchevents.CreatePartnerEventSourceOutput)
+
+	DeactivateEventSource(*cloudwatchevents.DeactivateEventSourceInput) (*cloudwatchevents.DeactivateEventSourceOutput, error)
+	DeactivateEventSourceWithContext(aws.Context, *cloudwatchevents.DeactivateEventSourceInput, ...request.Option) (*cloudwatchevents.DeactivateEventSourceOutput, error)
+	DeactivateEventSourceRequest(*cloudwatchevents.DeactivateEventSourceInput) (*request.Request, *cloudwatchevents.DeactivateEventSourceOutput)
+
+	DeleteEventBus(*cloudwatchevents.DeleteEventBusInput) (*cloudwatchevents.DeleteEventBusOutput, error)
+	DeleteEventBusWithContext(aws.Context, *cloudwatchevents.DeleteEventBusInput, ...request.Option) (*cloudwatchevents.DeleteEventBusOutput, error)
+	DeleteEventBusRequest(*cloudwatchevents.DeleteEventBusInput) (*request.Request, *cloudwatchevents.DeleteEventBusOutput)
+
+	DeletePartnerEventSource(*cloudwatchevents.DeletePartnerEventSourceInput) (*cloudwatchevents.DeletePartnerEventSourceOutput, error)
+	DeletePartnerEventSourceWithContext(aws.Context, *cloudwatchevents.DeletePartnerEventSourceInput, ...request.Option) (*cloudwatchevents.DeletePartnerEventSourceOutput, error)
+	DeletePartnerEventSourceRequest(*cloudwatchevents.DeletePartnerEventSourceInput) (*request.Request, *cloudwatchevents.DeletePartnerEventSourceOutput)
+
 	DeleteRule(*cloudwatchevents.DeleteRuleInput) (*cloudwatchevents.DeleteRuleOutput, error)
 	DeleteRuleWithContext(aws.Context, *cloudwatchevents.DeleteRuleInput, ...request.Option) (*cloudwatchevents.DeleteRuleOutput, error)
 	DeleteRuleRequest(*cloudwatchevents.DeleteRuleInput) (*request.Request, *cloudwatchevents.DeleteRuleOutput)
@@ -67,6 +91,14 @@ type CloudWatchEventsAPI interface {
 	DescribeEventBus(*cloudwatchevents.DescribeEventBusInput) (*cloudwatchevents.DescribeEventBusOutput, error)
 	DescribeEventBusWithContext(aws.Context, *cloudwatchevents.DescribeEventBusInput, ...request.Option) (*cloudwatchevents.DescribeEventBusOutput, error)
 	DescribeEventBusRequest(*cloudwatchevents.DescribeEventBusInput) (*request.Request, *cloudwatchevents.DescribeEventBusOutput)
+
+	DescribeEventSource(*cloudwatchevents.DescribeEventSourceInput) (*cloudwatchevents.DescribeEventSourceOutput, error)
+	DescribeEventSourceWithContext(aws.Context, *cloudwatchevents.DescribeEventSourceInput, ...request.Option) (*cloudwatchevents.DescribeEventSourceOutput, error)
+	DescribeEventSourceRequest(*cloudwatchevents.DescribeEventSourceInput) (*request.Request, *cloudwatchevents.DescribeEventSourceOutput)
+
+	DescribePartnerEventSource(*cloudwatchevents.DescribePartnerEventSourceInput) (*cloudwatchevents.DescribePartnerEventSourceOutput, error)
+	DescribePartnerEventSourceWithContext(aws.Context, *cloudwatchevents.DescribePartnerEventSourceInput, ...request.Option) (*cloudwatchevents.DescribePartnerEventSourceOutput, error)
+	DescribePartnerEventSourceRequest(*cloudwatchevents.DescribePartnerEventSourceInput) (*request.Request, *cloudwatchevents.DescribePartnerEventSourceOutput)
 
 	DescribeRule(*cloudwatchevents.DescribeRuleInput) (*cloudwatchevents.DescribeRuleOutput, error)
 	DescribeRuleWithContext(aws.Context, *cloudwatchevents.DescribeRuleInput, ...request.Option) (*cloudwatchevents.DescribeRuleOutput, error)
@@ -79,6 +111,22 @@ type CloudWatchEventsAPI interface {
 	EnableRule(*cloudwatchevents.EnableRuleInput) (*cloudwatchevents.EnableRuleOutput, error)
 	EnableRuleWithContext(aws.Context, *cloudwatchevents.EnableRuleInput, ...request.Option) (*cloudwatchevents.EnableRuleOutput, error)
 	EnableRuleRequest(*cloudwatchevents.EnableRuleInput) (*request.Request, *cloudwatchevents.EnableRuleOutput)
+
+	ListEventBuses(*cloudwatchevents.ListEventBusesInput) (*cloudwatchevents.ListEventBusesOutput, error)
+	ListEventBusesWithContext(aws.Context, *cloudwatchevents.ListEventBusesInput, ...request.Option) (*cloudwatchevents.ListEventBusesOutput, error)
+	ListEventBusesRequest(*cloudwatchevents.ListEventBusesInput) (*request.Request, *cloudwatchevents.ListEventBusesOutput)
+
+	ListEventSources(*cloudwatchevents.ListEventSourcesInput) (*cloudwatchevents.ListEventSourcesOutput, error)
+	ListEventSourcesWithContext(aws.Context, *cloudwatchevents.ListEventSourcesInput, ...request.Option) (*cloudwatchevents.ListEventSourcesOutput, error)
+	ListEventSourcesRequest(*cloudwatchevents.ListEventSourcesInput) (*request.Request, *cloudwatchevents.ListEventSourcesOutput)
+
+	ListPartnerEventSourceAccounts(*cloudwatchevents.ListPartnerEventSourceAccountsInput) (*cloudwatchevents.ListPartnerEventSourceAccountsOutput, error)
+	ListPartnerEventSourceAccountsWithContext(aws.Context, *cloudwatchevents.ListPartnerEventSourceAccountsInput, ...request.Option) (*cloudwatchevents.ListPartnerEventSourceAccountsOutput, error)
+	ListPartnerEventSourceAccountsRequest(*cloudwatchevents.ListPartnerEventSourceAccountsInput) (*request.Request, *cloudwatchevents.ListPartnerEventSourceAccountsOutput)
+
+	ListPartnerEventSources(*cloudwatchevents.ListPartnerEventSourcesInput) (*cloudwatchevents.ListPartnerEventSourcesOutput, error)
+	ListPartnerEventSourcesWithContext(aws.Context, *cloudwatchevents.ListPartnerEventSourcesInput, ...request.Option) (*cloudwatchevents.ListPartnerEventSourcesOutput, error)
+	ListPartnerEventSourcesRequest(*cloudwatchevents.ListPartnerEventSourcesInput) (*request.Request, *cloudwatchevents.ListPartnerEventSourcesOutput)
 
 	ListRuleNamesByTarget(*cloudwatchevents.ListRuleNamesByTargetInput) (*cloudwatchevents.ListRuleNamesByTargetOutput, error)
 	ListRuleNamesByTargetWithContext(aws.Context, *cloudwatchevents.ListRuleNamesByTargetInput, ...request.Option) (*cloudwatchevents.ListRuleNamesByTargetOutput, error)
@@ -99,6 +147,10 @@ type CloudWatchEventsAPI interface {
 	PutEvents(*cloudwatchevents.PutEventsInput) (*cloudwatchevents.PutEventsOutput, error)
 	PutEventsWithContext(aws.Context, *cloudwatchevents.PutEventsInput, ...request.Option) (*cloudwatchevents.PutEventsOutput, error)
 	PutEventsRequest(*cloudwatchevents.PutEventsInput) (*request.Request, *cloudwatchevents.PutEventsOutput)
+
+	PutPartnerEvents(*cloudwatchevents.PutPartnerEventsInput) (*cloudwatchevents.PutPartnerEventsOutput, error)
+	PutPartnerEventsWithContext(aws.Context, *cloudwatchevents.PutPartnerEventsInput, ...request.Option) (*cloudwatchevents.PutPartnerEventsOutput, error)
+	PutPartnerEventsRequest(*cloudwatchevents.PutPartnerEventsInput) (*request.Request, *cloudwatchevents.PutPartnerEventsOutput)
 
 	PutPermission(*cloudwatchevents.PutPermissionInput) (*cloudwatchevents.PutPermissionOutput, error)
 	PutPermissionWithContext(aws.Context, *cloudwatchevents.PutPermissionInput, ...request.Option) (*cloudwatchevents.PutPermissionOutput, error)

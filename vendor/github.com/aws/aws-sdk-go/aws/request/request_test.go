@@ -43,10 +43,26 @@ func (e *tempNetworkError) Error() string {
 
 var (
 	// net.OpError accept, are always temporary
-	errAcceptConnectionResetStub = &tempNetworkError{isTemp: true, op: "accept", msg: "connection reset"}
+	errAcceptConnectionResetStub = &tempNetworkError{
+		isTemp: true, op: "accept", msg: "connection reset",
+	}
 
 	// net.OpError read for ECONNRESET is not temporary.
-	errReadConnectionResetStub = &tempNetworkError{isTemp: false, op: "read", msg: "connection reset"}
+	errReadConnectionResetStub = &tempNetworkError{
+		isTemp: false, op: "read", msg: "connection reset",
+	}
+
+	// net.OpError write for ECONNRESET may not be temporary, but is treaded as
+	// temporary by the SDK.
+	errWriteConnectionResetStub = &tempNetworkError{
+		isTemp: false, op: "write", msg: "connection reset",
+	}
+
+	// net.OpError write for broken pipe may not be temporary, but is treaded as
+	// temporary by the SDK.
+	errWriteBrokenPipeStub = &tempNetworkError{
+		isTemp: false, op: "write", msg: "broken pipe",
+	}
 
 	// Generic connection reset error
 	errConnectionResetStub = errors.New("connection reset")
@@ -1084,6 +1100,11 @@ func TestRequestNoConnection(t *testing.T) {
 	if err = r.Send(); err == nil {
 		t.Fatal("expect error, but got none")
 	}
+
+	t.Logf("Error, %v", err)
+	awsError := err.(awserr.Error)
+	origError := awsError.OrigErr()
+	t.Logf("Orig Error: %#v of type %T", origError, origError)
 
 	if e, a := 10, r.RetryCount; e != a {
 		t.Errorf("expect %v retry count, got %v", e, a)

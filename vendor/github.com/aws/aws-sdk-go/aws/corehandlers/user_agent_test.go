@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/internal/sdktesting"
 )
 
 func TestAddHostExecEnvUserAgentHander(t *testing.T) {
@@ -19,7 +20,7 @@ func TestAddHostExecEnvUserAgentHander(t *testing.T) {
 	}
 
 	for i, c := range cases {
-		os.Clearenv()
+		sdktesting.StashEnv()
 		os.Setenv(execEnvVar, c.ExecEnv)
 
 		req := &request.Request{

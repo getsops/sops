@@ -400,10 +400,8 @@ type AggregateRequest struct {
 	// since epoch, inclusive.
 	EndTimeMillis int64 `json:"endTimeMillis,omitempty,string"`
 
-	// FilteredDataQualityStandard: DO NOT POPULATE THIS FIELD. As data
-	// quality standards are deprecated, filling it in will result in no
-	// data sources being returned. It will be removed in a future version
-	// entirely.
+	// FilteredDataQualityStandard: DO NOT POPULATE THIS FIELD. It is
+	// ignored.
 	//
 	// Possible values:
 	//   "dataQualityBloodGlucoseIso151972003"

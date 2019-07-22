@@ -288,7 +288,7 @@ func (c *AppMesh) CreateVirtualNodeRequest(input *CreateVirtualNodeInput) (req *
 //
 // A virtual node acts as a logical pointer to a particular task group, such
 // as an Amazon ECS service or a Kubernetes deployment. When you create a virtual
-// node, you must specify the DNS service discovery hostname for your task group.
+// node, you can specify the service discovery information for your task group.
 //
 // Any inbound traffic that your virtual node expects should be specified as
 // a listener. Any outbound traffic that your virtual node expects to reach
@@ -3252,6 +3252,150 @@ func (s *AccessLog) Validate() error {
 // SetFile sets the File field's value.
 func (s *AccessLog) SetFile(v *FileAccessLog) *AccessLog {
 	s.File = v
+	return s
+}
+
+// An object representing the AWS Cloud Map attribute information for your virtual
+// node.
+type AwsCloudMapInstanceAttribute struct {
+	_ struct{} `type:"structure"`
+
+	// The name of an AWS Cloud Map service instance attribute key. Any AWS Cloud
+	// Map service instance that contains the specified key and value is returned.
+	//
+	// Key is a required field
+	Key *string `locationName:"key" min:"1" type:"string" required:"true"`
+
+	// The value of an AWS Cloud Map service instance attribute key. Any AWS Cloud
+	// Map service instance that contains the specified key and value is returned.
+	//
+	// Value is a required field
+	Value *string `locationName:"value" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s AwsCloudMapInstanceAttribute) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AwsCloudMapInstanceAttribute) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AwsCloudMapInstanceAttribute) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AwsCloudMapInstanceAttribute"}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+	if s.Value == nil {
+		invalidParams.Add(request.NewErrParamRequired("Value"))
+	}
+	if s.Value != nil && len(*s.Value) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Value", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKey sets the Key field's value.
+func (s *AwsCloudMapInstanceAttribute) SetKey(v string) *AwsCloudMapInstanceAttribute {
+	s.Key = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *AwsCloudMapInstanceAttribute) SetValue(v string) *AwsCloudMapInstanceAttribute {
+	s.Value = &v
+	return s
+}
+
+// An object representing the AWS Cloud Map service discovery information for
+// your virtual node.
+type AwsCloudMapServiceDiscovery struct {
+	_ struct{} `type:"structure"`
+
+	// A string map that contains attributes with values that you can use to filter
+	// instances by any custom attribute that you specified when you registered
+	// the instance. Only instances that match all of the specified key/value pairs
+	// will be returned.
+	Attributes []*AwsCloudMapInstanceAttribute `locationName:"attributes" type:"list"`
+
+	// The name of the AWS Cloud Map namespace to use.
+	//
+	// NamespaceName is a required field
+	NamespaceName *string `locationName:"namespaceName" min:"1" type:"string" required:"true"`
+
+	// The name of the AWS Cloud Map service to use.
+	//
+	// ServiceName is a required field
+	ServiceName *string `locationName:"serviceName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s AwsCloudMapServiceDiscovery) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AwsCloudMapServiceDiscovery) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AwsCloudMapServiceDiscovery) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AwsCloudMapServiceDiscovery"}
+	if s.NamespaceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("NamespaceName"))
+	}
+	if s.NamespaceName != nil && len(*s.NamespaceName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NamespaceName", 1))
+	}
+	if s.ServiceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ServiceName"))
+	}
+	if s.ServiceName != nil && len(*s.ServiceName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ServiceName", 1))
+	}
+	if s.Attributes != nil {
+		for i, v := range s.Attributes {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Attributes", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAttributes sets the Attributes field's value.
+func (s *AwsCloudMapServiceDiscovery) SetAttributes(v []*AwsCloudMapInstanceAttribute) *AwsCloudMapServiceDiscovery {
+	s.Attributes = v
+	return s
+}
+
+// SetNamespaceName sets the NamespaceName field's value.
+func (s *AwsCloudMapServiceDiscovery) SetNamespaceName(v string) *AwsCloudMapServiceDiscovery {
+	s.NamespaceName = &v
+	return s
+}
+
+// SetServiceName sets the ServiceName field's value.
+func (s *AwsCloudMapServiceDiscovery) SetServiceName(v string) *AwsCloudMapServiceDiscovery {
+	s.ServiceName = &v
 	return s
 }
 
@@ -6470,6 +6614,9 @@ func (s *RouteStatus) SetStatus(v string) *RouteStatus {
 type ServiceDiscovery struct {
 	_ struct{} `type:"structure"`
 
+	// Specifies any AWS Cloud Map information for the virtual node.
+	AwsCloudMap *AwsCloudMapServiceDiscovery `locationName:"awsCloudMap" type:"structure"`
+
 	// Specifies the DNS information for the virtual node.
 	Dns *DnsServiceDiscovery `locationName:"dns" type:"structure"`
 }
@@ -6487,6 +6634,11 @@ func (s ServiceDiscovery) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *ServiceDiscovery) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "ServiceDiscovery"}
+	if s.AwsCloudMap != nil {
+		if err := s.AwsCloudMap.Validate(); err != nil {
+			invalidParams.AddNested("AwsCloudMap", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.Dns != nil {
 		if err := s.Dns.Validate(); err != nil {
 			invalidParams.AddNested("Dns", err.(request.ErrInvalidParams))
@@ -6497,6 +6649,12 @@ func (s *ServiceDiscovery) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAwsCloudMap sets the AwsCloudMap field's value.
+func (s *ServiceDiscovery) SetAwsCloudMap(v *AwsCloudMapServiceDiscovery) *ServiceDiscovery {
+	s.AwsCloudMap = v
+	return s
 }
 
 // SetDns sets the Dns field's value.
@@ -7851,9 +8009,7 @@ type VirtualRouterSpec struct {
 
 	// The listeners that the virtual router is expected to receive inbound traffic
 	// from. Currently only one listener is supported per virtual router.
-	//
-	// Listeners is a required field
-	Listeners []*VirtualRouterListener `locationName:"listeners" min:"1" type:"list" required:"true"`
+	Listeners []*VirtualRouterListener `locationName:"listeners" min:"1" type:"list"`
 }
 
 // String returns the string representation
@@ -7869,9 +8025,6 @@ func (s VirtualRouterSpec) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *VirtualRouterSpec) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "VirtualRouterSpec"}
-	if s.Listeners == nil {
-		invalidParams.Add(request.NewErrParamRequired("Listeners"))
-	}
 	if s.Listeners != nil && len(s.Listeners) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Listeners", 1))
 	}

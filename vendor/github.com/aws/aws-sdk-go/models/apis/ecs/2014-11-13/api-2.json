@@ -534,6 +534,21 @@
         {"shape":"ClusterNotFoundException"}
       ]
     },
+    "SubmitAttachmentStateChanges":{
+      "name":"SubmitAttachmentStateChanges",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"SubmitAttachmentStateChangesRequest"},
+      "output":{"shape":"SubmitAttachmentStateChangesResponse"},
+      "errors":[
+        {"shape":"ServerException"},
+        {"shape":"ClientException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"InvalidParameterException"}
+      ]
+    },
     "SubmitContainerStateChange":{
       "name":"SubmitContainerStateChange",
       "http":{
@@ -966,6 +981,7 @@
         "remainingResources":{"shape":"Resources"},
         "registeredResources":{"shape":"Resources"},
         "status":{"shape":"String"},
+        "statusReason":{"shape":"String"},
         "agentConnected":{"shape":"Boolean"},
         "runningTasksCount":{"shape":"Integer"},
         "pendingTasksCount":{"shape":"Integer"},
@@ -988,7 +1004,10 @@
       "type":"string",
       "enum":[
         "ACTIVE",
-        "DRAINING"
+        "DRAINING",
+        "REGISTERING",
+        "DEREGISTERING",
+        "REGISTRATION_FAILED"
       ]
     },
     "ContainerInstances":{
@@ -2198,7 +2217,8 @@
       "enum":[
         "serviceLongArnFormat",
         "taskLongArnFormat",
-        "containerInstanceLongArnFormat"
+        "containerInstanceLongArnFormat",
+        "awsvpcTrunking"
       ]
     },
     "Settings":{
@@ -2273,6 +2293,20 @@
       "type":"map",
       "key":{"shape":"String"},
       "value":{"shape":"String"}
+    },
+    "SubmitAttachmentStateChangesRequest":{
+      "type":"structure",
+      "required":["attachments"],
+      "members":{
+        "cluster":{"shape":"String"},
+        "attachments":{"shape":"AttachmentStateChanges"}
+      }
+    },
+    "SubmitAttachmentStateChangesResponse":{
+      "type":"structure",
+      "members":{
+        "acknowledgment":{"shape":"String"}
+      }
     },
     "SubmitContainerStateChangeRequest":{
       "type":"structure",

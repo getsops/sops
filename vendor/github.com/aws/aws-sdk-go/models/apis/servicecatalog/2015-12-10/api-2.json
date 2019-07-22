@@ -178,7 +178,8 @@
         {"shape":"ResourceNotFoundException"},
         {"shape":"LimitExceededException"},
         {"shape":"InvalidParametersException"},
-        {"shape":"OperationNotSupportedException"}
+        {"shape":"OperationNotSupportedException"},
+        {"shape":"InvalidStateException"}
       ]
     },
     "CreateProduct":{
@@ -289,7 +290,8 @@
       "errors":[
         {"shape":"ResourceNotFoundException"},
         {"shape":"InvalidParametersException"},
-        {"shape":"OperationNotSupportedException"}
+        {"shape":"OperationNotSupportedException"},
+        {"shape":"InvalidStateException"}
       ]
     },
     "DeleteProduct":{
@@ -520,6 +522,19 @@
       "input":{"shape":"DescribeServiceActionInput"},
       "output":{"shape":"DescribeServiceActionOutput"},
       "errors":[
+        {"shape":"ResourceNotFoundException"}
+      ]
+    },
+    "DescribeServiceActionExecutionParameters":{
+      "name":"DescribeServiceActionExecutionParameters",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeServiceActionExecutionParametersInput"},
+      "output":{"shape":"DescribeServiceActionExecutionParametersOutput"},
+      "errors":[
+        {"shape":"InvalidParametersException"},
         {"shape":"ResourceNotFoundException"}
       ]
     },
@@ -1924,6 +1939,24 @@
         "NextPageToken":{"shape":"PageToken"}
       }
     },
+    "DescribeServiceActionExecutionParametersInput":{
+      "type":"structure",
+      "required":[
+        "ProvisionedProductId",
+        "ServiceActionId"
+      ],
+      "members":{
+        "ProvisionedProductId":{"shape":"Id"},
+        "ServiceActionId":{"shape":"Id"},
+        "AcceptLanguage":{"shape":"AcceptLanguage"}
+      }
+    },
+    "DescribeServiceActionExecutionParametersOutput":{
+      "type":"structure",
+      "members":{
+        "ServiceActionParameters":{"shape":"ExecutionParameters"}
+      }
+    },
     "DescribeServiceActionInput":{
       "type":"structure",
       "required":["Id"],
@@ -2109,7 +2142,8 @@
           "shape":"IdempotencyToken",
           "idempotencyToken":true
         },
-        "AcceptLanguage":{"shape":"AcceptLanguage"}
+        "AcceptLanguage":{"shape":"AcceptLanguage"},
+        "Parameters":{"shape":"ExecutionParameterMap"}
       }
     },
     "ExecuteProvisionedProductServiceActionOutput":{
@@ -2117,6 +2151,46 @@
       "members":{
         "RecordDetail":{"shape":"RecordDetail"}
       }
+    },
+    "ExecutionParameter":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"ExecutionParameterKey"},
+        "Type":{"shape":"ExecutionParameterType"},
+        "DefaultValues":{"shape":"ExecutionParameterValueList"}
+      }
+    },
+    "ExecutionParameterKey":{
+      "type":"string",
+      "max":50,
+      "min":1
+    },
+    "ExecutionParameterMap":{
+      "type":"map",
+      "key":{"shape":"ExecutionParameterKey"},
+      "value":{"shape":"ExecutionParameterValueList"},
+      "max":200,
+      "min":1
+    },
+    "ExecutionParameterType":{
+      "type":"string",
+      "max":1024,
+      "min":1
+    },
+    "ExecutionParameterValue":{
+      "type":"string",
+      "max":512,
+      "min":0
+    },
+    "ExecutionParameterValueList":{
+      "type":"list",
+      "member":{"shape":"ExecutionParameterValue"},
+      "max":25,
+      "min":0
+    },
+    "ExecutionParameters":{
+      "type":"list",
+      "member":{"shape":"ExecutionParameter"}
     },
     "FailedServiceActionAssociation":{
       "type":"structure",
@@ -2948,7 +3022,8 @@
         "Id":{"shape":"Id"},
         "Name":{"shape":"ProvisioningArtifactName"},
         "Description":{"shape":"ProvisioningArtifactDescription"},
-        "CreatedTime":{"shape":"ProvisioningArtifactCreatedTime"}
+        "CreatedTime":{"shape":"ProvisioningArtifactCreatedTime"},
+        "Guidance":{"shape":"ProvisioningArtifactGuidance"}
       }
     },
     "ProvisioningArtifactActive":{"type":"boolean"},
@@ -2962,12 +3037,20 @@
         "Description":{"shape":"ProvisioningArtifactName"},
         "Type":{"shape":"ProvisioningArtifactType"},
         "CreatedTime":{"shape":"CreationTime"},
-        "Active":{"shape":"ProvisioningArtifactActive"}
+        "Active":{"shape":"ProvisioningArtifactActive"},
+        "Guidance":{"shape":"ProvisioningArtifactGuidance"}
       }
     },
     "ProvisioningArtifactDetails":{
       "type":"list",
       "member":{"shape":"ProvisioningArtifactDetail"}
+    },
+    "ProvisioningArtifactGuidance":{
+      "type":"string",
+      "enum":[
+        "DEFAULT",
+        "DEPRECATED"
+      ]
     },
     "ProvisioningArtifactInfo":{
       "type":"map",
@@ -3806,7 +3889,8 @@
         "ProvisioningArtifactId":{"shape":"Id"},
         "Name":{"shape":"ProvisioningArtifactName"},
         "Description":{"shape":"ProvisioningArtifactDescription"},
-        "Active":{"shape":"ProvisioningArtifactActive"}
+        "Active":{"shape":"ProvisioningArtifactActive"},
+        "Guidance":{"shape":"ProvisioningArtifactGuidance"}
       }
     },
     "UpdateProvisioningArtifactOutput":{

@@ -141,7 +141,7 @@
       }
     }
   },
-  "revision": "20190524",
+  "revision": "20190711",
   "rootUrl": "https://fcm.googleapis.com/",
   "schemas": {
     "AndroidConfig": {
@@ -158,6 +158,10 @@
           },
           "description": "Arbitrary key/value payload. If present, it will override\ngoogle.firebase.fcm.v1.Message.data.",
           "type": "object"
+        },
+        "fcmOptions": {
+          "$ref": "AndroidFcmOptions",
+          "description": "Options for features provided by the FCM SDK for Android."
         },
         "notification": {
           "$ref": "AndroidNotification",
@@ -182,6 +186,17 @@
         "ttl": {
           "description": "How long (in seconds) the message should be kept in FCM storage if the\ndevice is offline. The maximum time to live supported is 4 weeks, and the\ndefault value is 4 weeks if not set. Set it to 0 if want to send the\nmessage immediately.\nIn JSON format, the Duration type is encoded as a string rather than an\nobject, where the string ends in the suffix \"s\" (indicating seconds) and\nis preceded by the number of seconds, with nanoseconds expressed as\nfractional seconds. For example, 3 seconds with 0 nanoseconds should be\nencoded in JSON format as \"3s\", while 3 seconds and 1 nanosecond should\nbe expressed in JSON format as \"3.000000001s\". The ttl will be rounded down\nto the nearest second.",
           "format": "google-duration",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "AndroidFcmOptions": {
+      "description": "Options for features provided by the FCM SDK for Android.",
+      "id": "AndroidFcmOptions",
+      "properties": {
+        "analyticsLabel": {
+          "description": "Label associated with the message's analytics data.",
           "type": "string"
         }
       },
@@ -220,6 +235,10 @@
         },
         "icon": {
           "description": "The notification's icon.\nSets the notification icon to myicon for drawable resource myicon.\nIf you don't send this key in the request, FCM displays the launcher icon\nspecified in your app manifest.",
+          "type": "string"
+        },
+        "image": {
+          "description": "Contains the URL of an image that is going to be displayed in a\nnotification. If present, it will override\ngoogle.firebase.fcm.v1.Notification.image.",
           "type": "string"
         },
         "sound": {
@@ -277,7 +296,27 @@
     "ApnsFcmOptions": {
       "description": "Options for features provided by the FCM SDK for iOS.",
       "id": "ApnsFcmOptions",
-      "properties": {},
+      "properties": {
+        "analyticsLabel": {
+          "description": "Label associated with the message's analytics data.",
+          "type": "string"
+        },
+        "image": {
+          "description": "Contains the URL of an image that is going to be displayed in a\nnotification. If present, it will override\ngoogle.firebase.fcm.v1.Notification.image.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "FcmOptions": {
+      "description": "Platform independent options for features provided by the FCM SDKs.",
+      "id": "FcmOptions",
+      "properties": {
+        "analyticsLabel": {
+          "description": "Label associated with the message's analytics data.",
+          "type": "string"
+        }
+      },
       "type": "object"
     },
     "Message": {
@@ -302,6 +341,10 @@
           },
           "description": "Input only. Arbitrary key/value payload.",
           "type": "object"
+        },
+        "fcmOptions": {
+          "$ref": "FcmOptions",
+          "description": "Input only. Template for FCM SDK feature options to use across all\nplatforms."
         },
         "name": {
           "description": "Output Only. The identifier of the message sent, in the format of\n`projects/*/messages/{message_id}`.",
@@ -332,6 +375,10 @@
       "properties": {
         "body": {
           "description": "The notification's body text.",
+          "type": "string"
+        },
+        "image": {
+          "description": "Contains the URL of an image that is going to be downloaded on the device\nand displayed in a notification.\nJPEG, PNG, BMP have full support across platforms. Animated GIF and video\nonly work on iOS. WebP and HEIF have varying levels of support across\nplatforms and platform versions.\nAndroid has 1MB image size limit.\nQuota usage and implications/costs for hosting image on Firebase Storage:\nhttps://firebase.google.com/pricing",
           "type": "string"
         },
         "title": {

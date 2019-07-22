@@ -274,13 +274,13 @@ func RegisterUnannotatedEchoServiceHandlerClient(ctx context.Context, mux *runti
 }
 
 var (
-	pattern_UnannotatedEchoService_Echo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "example", "echo", "id"}, ""))
+	pattern_UnannotatedEchoService_Echo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "example", "echo", "id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_UnannotatedEchoService_Echo_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4}, []string{"v1", "example", "echo", "id", "num"}, ""))
+	pattern_UnannotatedEchoService_Echo_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4}, []string{"v1", "example", "echo", "id", "num"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_UnannotatedEchoService_EchoBody_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "example", "echo_body"}, ""))
+	pattern_UnannotatedEchoService_EchoBody_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "example", "echo_body"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_UnannotatedEchoService_EchoDelete_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "example", "echo_delete"}, ""))
+	pattern_UnannotatedEchoService_EchoDelete_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "example", "echo_delete"}, "", runtime.AssumeColonVerbOpt(true)))
 )
 
 var (

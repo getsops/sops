@@ -214,6 +214,10 @@ type ECSAPI interface {
 	StopTaskWithContext(aws.Context, *ecs.StopTaskInput, ...request.Option) (*ecs.StopTaskOutput, error)
 	StopTaskRequest(*ecs.StopTaskInput) (*request.Request, *ecs.StopTaskOutput)
 
+	SubmitAttachmentStateChanges(*ecs.SubmitAttachmentStateChangesInput) (*ecs.SubmitAttachmentStateChangesOutput, error)
+	SubmitAttachmentStateChangesWithContext(aws.Context, *ecs.SubmitAttachmentStateChangesInput, ...request.Option) (*ecs.SubmitAttachmentStateChangesOutput, error)
+	SubmitAttachmentStateChangesRequest(*ecs.SubmitAttachmentStateChangesInput) (*request.Request, *ecs.SubmitAttachmentStateChangesOutput)
+
 	SubmitContainerStateChange(*ecs.SubmitContainerStateChangeInput) (*ecs.SubmitContainerStateChangeOutput, error)
 	SubmitContainerStateChangeWithContext(aws.Context, *ecs.SubmitContainerStateChangeInput, ...request.Option) (*ecs.SubmitContainerStateChangeOutput, error)
 	SubmitContainerStateChangeRequest(*ecs.SubmitContainerStateChangeInput) (*request.Request, *ecs.SubmitContainerStateChangeOutput)

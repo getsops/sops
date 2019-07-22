@@ -23,6 +23,7 @@ import original "github.com/Azure/azure-sdk-for-go/services/preview/authorizatio
 
 type ClassicAdministratorsClientAPI = original.ClassicAdministratorsClientAPI
 type DenyAssignmentsClientAPI = original.DenyAssignmentsClientAPI
+type GlobalAdministratorClientAPI = original.GlobalAdministratorClientAPI
 type PermissionsClientAPI = original.PermissionsClientAPI
 type ProviderOperationsMetadataClientAPI = original.ProviderOperationsMetadataClientAPI
 type RoleAssignmentsClientAPI = original.RoleAssignmentsClientAPI

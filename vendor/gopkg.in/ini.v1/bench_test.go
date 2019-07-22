@@ -21,7 +21,7 @@ import (
 )
 
 func newTestFile(block bool) *ini.File {
-	c, _ := ini.Load([]byte(_CONF_DATA))
+	c, _ := ini.Load([]byte(confData))
 	c.BlockMode = block
 	return c
 }

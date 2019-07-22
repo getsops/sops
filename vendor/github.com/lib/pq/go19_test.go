@@ -67,3 +67,25 @@ func TestPing(t *testing.T) {
 		t.Fatalf("expected error %s, instead got %s", driver.ErrBadConn, err)
 	}
 }
+
+func TestCommitInFailedTransactionWithCancelContext(t *testing.T) {
+	db := openTestConn(t)
+	defer db.Close()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	txn, err := db.BeginTx(ctx, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	rows, err := txn.Query("SELECT error")
+	if err == nil {
+		rows.Close()
+		t.Fatal("expected failure")
+	}
+	err = txn.Commit()
+	if err != ErrInFailedTransaction {
+		t.Fatalf("expected ErrInFailedTransaction; got %#v", err)
+	}
+}

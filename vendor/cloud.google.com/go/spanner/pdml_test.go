@@ -16,28 +16,23 @@ package spanner
 
 import (
 	"context"
-	"io"
 	"testing"
 
-	"cloud.google.com/go/spanner/internal/testutil"
-	sppb "google.golang.org/genproto/googleapis/spanner/v1"
 	"google.golang.org/grpc/codes"
 )
 
 func TestMockPartitionedUpdate(t *testing.T) {
 	t.Parallel()
 	ctx := context.Background()
-	ms := testutil.NewMockCloudSpanner(t, trxTs)
-	ms.Serve()
-	mc := sppb.NewSpannerClient(dialMock(t, ms))
-	client := &Client{database: "mockdb"}
-	client.clients = append(client.clients, mc)
-	stmt := NewStatement("UPDATE t SET x = 2 WHERE x = 1")
+	server, client := newSpannerInMemTestServer(t)
+	defer server.teardown(client)
+
+	stmt := NewStatement(updateBarSetFoo)
 	rowCount, err := client.PartitionedUpdate(ctx, stmt)
 	if err != nil {
 		t.Fatal(err)
 	}
-	want := int64(3)
+	want := int64(updateBarSetFooRowCount)
 	if rowCount != want {
 		t.Errorf("got %d, want %d", rowCount, want)
 	}
@@ -46,13 +41,10 @@ func TestMockPartitionedUpdate(t *testing.T) {
 func TestMockPartitionedUpdateWithQuery(t *testing.T) {
 	t.Parallel()
 	ctx := context.Background()
-	ms := testutil.NewMockCloudSpanner(t, trxTs)
-	ms.AddMsg(io.EOF, true)
-	ms.Serve()
-	mc := sppb.NewSpannerClient(dialMock(t, ms))
-	client := &Client{database: "mockdb"}
-	client.clients = append(client.clients, mc)
-	stmt := NewStatement("SELECT t.key key, t.value value FROM t_mock t")
+	server, client := newSpannerInMemTestServer(t)
+	defer server.teardown(client)
+
+	stmt := NewStatement(selectFooFromBar)
 	_, err := client.PartitionedUpdate(ctx, stmt)
 	wantCode := codes.InvalidArgument
 	if serr, ok := err.(*Error); !ok || serr.Code != wantCode {

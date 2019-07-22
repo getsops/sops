@@ -24,6 +24,7 @@ import (
 	"google.golang.org/grpc/balancer"
 	"google.golang.org/grpc/balancer/roundrobin"
 	"google.golang.org/grpc/balancer/xds/internal"
+	orcapb "google.golang.org/grpc/balancer/xds/internal/proto/udpa/data/orca/v1/orca_load_report"
 	"google.golang.org/grpc/connectivity"
 	"google.golang.org/grpc/resolver"
 )
@@ -415,14 +416,27 @@ func TestBalancerGroup_LoadReport(t *testing.T) {
 	var (
 		wantStart []internal.Locality
 		wantEnd   []internal.Locality
+		wantCost  []testServerLoad
 	)
 	for i := 0; i < 10; i++ {
 		sc, done, _ := p1.Pick(context.Background(), balancer.PickOptions{})
 		locality := backendToBalancerID[sc]
 		wantStart = append(wantStart, locality)
 		if done != nil && sc != sc1 {
-			done(balancer.DoneInfo{})
-			wantEnd = append(wantEnd, backendToBalancerID[sc])
+			done(balancer.DoneInfo{
+				ServerLoad: &orcapb.OrcaLoadReport{
+					CpuUtilization: 10,
+					MemUtilization: 5,
+					RequestCost:    map[string]float64{"pic": 3.14},
+					Utilization:    map[string]float64{"piu": 3.14},
+				},
+			})
+			wantEnd = append(wantEnd, locality)
+			wantCost = append(wantCost,
+				testServerLoad{name: serverLoadCPUName, d: 10},
+				testServerLoad{name: serverLoadMemoryName, d: 5},
+				testServerLoad{name: "pic", d: 3.14},
+				testServerLoad{name: "piu", d: 3.14})
 		}
 	}
 
@@ -431,5 +445,8 @@ func TestBalancerGroup_LoadReport(t *testing.T) {
 	}
 	if !reflect.DeepEqual(testLoadStore.callsEnded, wantEnd) {
 		t.Fatalf("want ended: %v, got: %v", testLoadStore.callsEnded, wantEnd)
+	}
+	if !reflect.DeepEqual(testLoadStore.callsCost, wantCost) {
+		t.Fatalf("want cost: %v, got: %v", testLoadStore.callsCost, wantCost)
 	}
 }

@@ -100,6 +100,13 @@ type MediaStoreAPI interface {
 	ListContainersWithContext(aws.Context, *mediastore.ListContainersInput, ...request.Option) (*mediastore.ListContainersOutput, error)
 	ListContainersRequest(*mediastore.ListContainersInput) (*request.Request, *mediastore.ListContainersOutput)
 
+	ListContainersPages(*mediastore.ListContainersInput, func(*mediastore.ListContainersOutput, bool) bool) error
+	ListContainersPagesWithContext(aws.Context, *mediastore.ListContainersInput, func(*mediastore.ListContainersOutput, bool) bool, ...request.Option) error
+
+	ListTagsForResource(*mediastore.ListTagsForResourceInput) (*mediastore.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *mediastore.ListTagsForResourceInput, ...request.Option) (*mediastore.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*mediastore.ListTagsForResourceInput) (*request.Request, *mediastore.ListTagsForResourceOutput)
+
 	PutContainerPolicy(*mediastore.PutContainerPolicyInput) (*mediastore.PutContainerPolicyOutput, error)
 	PutContainerPolicyWithContext(aws.Context, *mediastore.PutContainerPolicyInput, ...request.Option) (*mediastore.PutContainerPolicyOutput, error)
 	PutContainerPolicyRequest(*mediastore.PutContainerPolicyInput) (*request.Request, *mediastore.PutContainerPolicyOutput)
@@ -119,6 +126,14 @@ type MediaStoreAPI interface {
 	StopAccessLogging(*mediastore.StopAccessLoggingInput) (*mediastore.StopAccessLoggingOutput, error)
 	StopAccessLoggingWithContext(aws.Context, *mediastore.StopAccessLoggingInput, ...request.Option) (*mediastore.StopAccessLoggingOutput, error)
 	StopAccessLoggingRequest(*mediastore.StopAccessLoggingInput) (*request.Request, *mediastore.StopAccessLoggingOutput)
+
+	TagResource(*mediastore.TagResourceInput) (*mediastore.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *mediastore.TagResourceInput, ...request.Option) (*mediastore.TagResourceOutput, error)
+	TagResourceRequest(*mediastore.TagResourceInput) (*request.Request, *mediastore.TagResourceOutput)
+
+	UntagResource(*mediastore.UntagResourceInput) (*mediastore.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *mediastore.UntagResourceInput, ...request.Option) (*mediastore.UntagResourceOutput, error)
+	UntagResourceRequest(*mediastore.UntagResourceInput) (*request.Request, *mediastore.UntagResourceOutput)
 }
 
 var _ MediaStoreAPI = (*mediastore.MediaStore)(nil)

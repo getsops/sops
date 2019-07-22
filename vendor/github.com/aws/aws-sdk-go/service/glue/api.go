@@ -908,6 +908,94 @@ func (c *Glue) BatchGetTriggersWithContext(ctx aws.Context, input *BatchGetTrigg
 	return out, req.Send()
 }
 
+const opBatchGetWorkflows = "BatchGetWorkflows"
+
+// BatchGetWorkflowsRequest generates a "aws/request.Request" representing the
+// client's request for the BatchGetWorkflows operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See BatchGetWorkflows for more information on using the BatchGetWorkflows
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the BatchGetWorkflowsRequest method.
+//    req, resp := client.BatchGetWorkflowsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/BatchGetWorkflows
+func (c *Glue) BatchGetWorkflowsRequest(input *BatchGetWorkflowsInput) (req *request.Request, output *BatchGetWorkflowsOutput) {
+	op := &request.Operation{
+		Name:       opBatchGetWorkflows,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &BatchGetWorkflowsInput{}
+	}
+
+	output = &BatchGetWorkflowsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// BatchGetWorkflows API operation for AWS Glue.
+//
+// Returns a list of resource metadata for a given list of workflow names. After
+// calling the ListWorkflows operation, you can call this operation to access
+// the data to which you have been granted permissions. This operation supports
+// all IAM permissions, including permission conditions that uses tags.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation BatchGetWorkflows for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInternalServiceException "InternalServiceException"
+//   An internal service error occurred.
+//
+//   * ErrCodeOperationTimeoutException "OperationTimeoutException"
+//   The operation timed out.
+//
+//   * ErrCodeInvalidInputException "InvalidInputException"
+//   The input provided was not valid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/BatchGetWorkflows
+func (c *Glue) BatchGetWorkflows(input *BatchGetWorkflowsInput) (*BatchGetWorkflowsOutput, error) {
+	req, out := c.BatchGetWorkflowsRequest(input)
+	return out, req.Send()
+}
+
+// BatchGetWorkflowsWithContext is the same as BatchGetWorkflows with the addition of
+// the ability to pass a context and additional request options.
+//
+// See BatchGetWorkflows for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) BatchGetWorkflowsWithContext(ctx aws.Context, input *BatchGetWorkflowsInput, opts ...request.Option) (*BatchGetWorkflowsOutput, error) {
+	req, out := c.BatchGetWorkflowsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opBatchStopJobRun = "BatchStopJobRun"
 
 // BatchStopJobRunRequest generates a "aws/request.Request" representing the
@@ -1985,6 +2073,9 @@ func (c *Glue) CreateTriggerRequest(input *CreateTriggerInput) (req *request.Req
 //   * ErrCodeAlreadyExistsException "AlreadyExistsException"
 //   A resource to be created or added already exists.
 //
+//   * ErrCodeEntityNotFoundException "EntityNotFoundException"
+//   A specified entity does not exist
+//
 //   * ErrCodeInvalidInputException "InvalidInputException"
 //   The input provided was not valid.
 //
@@ -2118,6 +2209,100 @@ func (c *Glue) CreateUserDefinedFunction(input *CreateUserDefinedFunctionInput) 
 // for more information on using Contexts.
 func (c *Glue) CreateUserDefinedFunctionWithContext(ctx aws.Context, input *CreateUserDefinedFunctionInput, opts ...request.Option) (*CreateUserDefinedFunctionOutput, error) {
 	req, out := c.CreateUserDefinedFunctionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateWorkflow = "CreateWorkflow"
+
+// CreateWorkflowRequest generates a "aws/request.Request" representing the
+// client's request for the CreateWorkflow operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateWorkflow for more information on using the CreateWorkflow
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateWorkflowRequest method.
+//    req, resp := client.CreateWorkflowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/CreateWorkflow
+func (c *Glue) CreateWorkflowRequest(input *CreateWorkflowInput) (req *request.Request, output *CreateWorkflowOutput) {
+	op := &request.Operation{
+		Name:       opCreateWorkflow,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateWorkflowInput{}
+	}
+
+	output = &CreateWorkflowOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateWorkflow API operation for AWS Glue.
+//
+// Creates a new workflow.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation CreateWorkflow for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeAlreadyExistsException "AlreadyExistsException"
+//   A resource to be created or added already exists.
+//
+//   * ErrCodeInvalidInputException "InvalidInputException"
+//   The input provided was not valid.
+//
+//   * ErrCodeInternalServiceException "InternalServiceException"
+//   An internal service error occurred.
+//
+//   * ErrCodeOperationTimeoutException "OperationTimeoutException"
+//   The operation timed out.
+//
+//   * ErrCodeResourceNumberLimitExceededException "ResourceNumberLimitExceededException"
+//   A resource numerical limit was exceeded.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Two processes are trying to modify a resource simultaneously.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/CreateWorkflow
+func (c *Glue) CreateWorkflow(input *CreateWorkflowInput) (*CreateWorkflowOutput, error) {
+	req, out := c.CreateWorkflowRequest(input)
+	return out, req.Send()
+}
+
+// CreateWorkflowWithContext is the same as CreateWorkflow with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateWorkflow for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) CreateWorkflowWithContext(ctx aws.Context, input *CreateWorkflowInput, opts ...request.Option) (*CreateWorkflowOutput, error) {
+	req, out := c.CreateWorkflowRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -3284,6 +3469,94 @@ func (c *Glue) DeleteUserDefinedFunction(input *DeleteUserDefinedFunctionInput) 
 // for more information on using Contexts.
 func (c *Glue) DeleteUserDefinedFunctionWithContext(ctx aws.Context, input *DeleteUserDefinedFunctionInput, opts ...request.Option) (*DeleteUserDefinedFunctionOutput, error) {
 	req, out := c.DeleteUserDefinedFunctionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteWorkflow = "DeleteWorkflow"
+
+// DeleteWorkflowRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteWorkflow operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteWorkflow for more information on using the DeleteWorkflow
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteWorkflowRequest method.
+//    req, resp := client.DeleteWorkflowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/DeleteWorkflow
+func (c *Glue) DeleteWorkflowRequest(input *DeleteWorkflowInput) (req *request.Request, output *DeleteWorkflowOutput) {
+	op := &request.Operation{
+		Name:       opDeleteWorkflow,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteWorkflowInput{}
+	}
+
+	output = &DeleteWorkflowOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteWorkflow API operation for AWS Glue.
+//
+// Deletes a workflow.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation DeleteWorkflow for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidInputException "InvalidInputException"
+//   The input provided was not valid.
+//
+//   * ErrCodeInternalServiceException "InternalServiceException"
+//   An internal service error occurred.
+//
+//   * ErrCodeOperationTimeoutException "OperationTimeoutException"
+//   The operation timed out.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Two processes are trying to modify a resource simultaneously.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/DeleteWorkflow
+func (c *Glue) DeleteWorkflow(input *DeleteWorkflowInput) (*DeleteWorkflowOutput, error) {
+	req, out := c.DeleteWorkflowRequest(input)
+	return out, req.Send()
+}
+
+// DeleteWorkflowWithContext is the same as DeleteWorkflow with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteWorkflow for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) DeleteWorkflowWithContext(ctx aws.Context, input *DeleteWorkflowInput, opts ...request.Option) (*DeleteWorkflowOutput, error) {
+	req, out := c.DeleteWorkflowRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -7049,6 +7322,414 @@ func (c *Glue) GetUserDefinedFunctionsPagesWithContext(ctx aws.Context, input *G
 	return p.Err()
 }
 
+const opGetWorkflow = "GetWorkflow"
+
+// GetWorkflowRequest generates a "aws/request.Request" representing the
+// client's request for the GetWorkflow operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetWorkflow for more information on using the GetWorkflow
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetWorkflowRequest method.
+//    req, resp := client.GetWorkflowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetWorkflow
+func (c *Glue) GetWorkflowRequest(input *GetWorkflowInput) (req *request.Request, output *GetWorkflowOutput) {
+	op := &request.Operation{
+		Name:       opGetWorkflow,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetWorkflowInput{}
+	}
+
+	output = &GetWorkflowOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetWorkflow API operation for AWS Glue.
+//
+// Retrieves resource metadata for a workflow.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation GetWorkflow for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidInputException "InvalidInputException"
+//   The input provided was not valid.
+//
+//   * ErrCodeEntityNotFoundException "EntityNotFoundException"
+//   A specified entity does not exist
+//
+//   * ErrCodeInternalServiceException "InternalServiceException"
+//   An internal service error occurred.
+//
+//   * ErrCodeOperationTimeoutException "OperationTimeoutException"
+//   The operation timed out.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetWorkflow
+func (c *Glue) GetWorkflow(input *GetWorkflowInput) (*GetWorkflowOutput, error) {
+	req, out := c.GetWorkflowRequest(input)
+	return out, req.Send()
+}
+
+// GetWorkflowWithContext is the same as GetWorkflow with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetWorkflow for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) GetWorkflowWithContext(ctx aws.Context, input *GetWorkflowInput, opts ...request.Option) (*GetWorkflowOutput, error) {
+	req, out := c.GetWorkflowRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetWorkflowRun = "GetWorkflowRun"
+
+// GetWorkflowRunRequest generates a "aws/request.Request" representing the
+// client's request for the GetWorkflowRun operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetWorkflowRun for more information on using the GetWorkflowRun
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetWorkflowRunRequest method.
+//    req, resp := client.GetWorkflowRunRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetWorkflowRun
+func (c *Glue) GetWorkflowRunRequest(input *GetWorkflowRunInput) (req *request.Request, output *GetWorkflowRunOutput) {
+	op := &request.Operation{
+		Name:       opGetWorkflowRun,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetWorkflowRunInput{}
+	}
+
+	output = &GetWorkflowRunOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetWorkflowRun API operation for AWS Glue.
+//
+// Retrieves the metadata for a given workflow run.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation GetWorkflowRun for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidInputException "InvalidInputException"
+//   The input provided was not valid.
+//
+//   * ErrCodeEntityNotFoundException "EntityNotFoundException"
+//   A specified entity does not exist
+//
+//   * ErrCodeInternalServiceException "InternalServiceException"
+//   An internal service error occurred.
+//
+//   * ErrCodeOperationTimeoutException "OperationTimeoutException"
+//   The operation timed out.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetWorkflowRun
+func (c *Glue) GetWorkflowRun(input *GetWorkflowRunInput) (*GetWorkflowRunOutput, error) {
+	req, out := c.GetWorkflowRunRequest(input)
+	return out, req.Send()
+}
+
+// GetWorkflowRunWithContext is the same as GetWorkflowRun with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetWorkflowRun for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) GetWorkflowRunWithContext(ctx aws.Context, input *GetWorkflowRunInput, opts ...request.Option) (*GetWorkflowRunOutput, error) {
+	req, out := c.GetWorkflowRunRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetWorkflowRunProperties = "GetWorkflowRunProperties"
+
+// GetWorkflowRunPropertiesRequest generates a "aws/request.Request" representing the
+// client's request for the GetWorkflowRunProperties operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetWorkflowRunProperties for more information on using the GetWorkflowRunProperties
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetWorkflowRunPropertiesRequest method.
+//    req, resp := client.GetWorkflowRunPropertiesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetWorkflowRunProperties
+func (c *Glue) GetWorkflowRunPropertiesRequest(input *GetWorkflowRunPropertiesInput) (req *request.Request, output *GetWorkflowRunPropertiesOutput) {
+	op := &request.Operation{
+		Name:       opGetWorkflowRunProperties,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetWorkflowRunPropertiesInput{}
+	}
+
+	output = &GetWorkflowRunPropertiesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetWorkflowRunProperties API operation for AWS Glue.
+//
+// Retrieves the workflow run properties which were set during the run.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation GetWorkflowRunProperties for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidInputException "InvalidInputException"
+//   The input provided was not valid.
+//
+//   * ErrCodeEntityNotFoundException "EntityNotFoundException"
+//   A specified entity does not exist
+//
+//   * ErrCodeInternalServiceException "InternalServiceException"
+//   An internal service error occurred.
+//
+//   * ErrCodeOperationTimeoutException "OperationTimeoutException"
+//   The operation timed out.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetWorkflowRunProperties
+func (c *Glue) GetWorkflowRunProperties(input *GetWorkflowRunPropertiesInput) (*GetWorkflowRunPropertiesOutput, error) {
+	req, out := c.GetWorkflowRunPropertiesRequest(input)
+	return out, req.Send()
+}
+
+// GetWorkflowRunPropertiesWithContext is the same as GetWorkflowRunProperties with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetWorkflowRunProperties for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) GetWorkflowRunPropertiesWithContext(ctx aws.Context, input *GetWorkflowRunPropertiesInput, opts ...request.Option) (*GetWorkflowRunPropertiesOutput, error) {
+	req, out := c.GetWorkflowRunPropertiesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetWorkflowRuns = "GetWorkflowRuns"
+
+// GetWorkflowRunsRequest generates a "aws/request.Request" representing the
+// client's request for the GetWorkflowRuns operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetWorkflowRuns for more information on using the GetWorkflowRuns
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetWorkflowRunsRequest method.
+//    req, resp := client.GetWorkflowRunsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetWorkflowRuns
+func (c *Glue) GetWorkflowRunsRequest(input *GetWorkflowRunsInput) (req *request.Request, output *GetWorkflowRunsOutput) {
+	op := &request.Operation{
+		Name:       opGetWorkflowRuns,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &GetWorkflowRunsInput{}
+	}
+
+	output = &GetWorkflowRunsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetWorkflowRuns API operation for AWS Glue.
+//
+// Retrieves metadata for all runs of a given workflow.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation GetWorkflowRuns for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidInputException "InvalidInputException"
+//   The input provided was not valid.
+//
+//   * ErrCodeEntityNotFoundException "EntityNotFoundException"
+//   A specified entity does not exist
+//
+//   * ErrCodeInternalServiceException "InternalServiceException"
+//   An internal service error occurred.
+//
+//   * ErrCodeOperationTimeoutException "OperationTimeoutException"
+//   The operation timed out.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/GetWorkflowRuns
+func (c *Glue) GetWorkflowRuns(input *GetWorkflowRunsInput) (*GetWorkflowRunsOutput, error) {
+	req, out := c.GetWorkflowRunsRequest(input)
+	return out, req.Send()
+}
+
+// GetWorkflowRunsWithContext is the same as GetWorkflowRuns with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetWorkflowRuns for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) GetWorkflowRunsWithContext(ctx aws.Context, input *GetWorkflowRunsInput, opts ...request.Option) (*GetWorkflowRunsOutput, error) {
+	req, out := c.GetWorkflowRunsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// GetWorkflowRunsPages iterates over the pages of a GetWorkflowRuns operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See GetWorkflowRuns method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a GetWorkflowRuns operation.
+//    pageNum := 0
+//    err := client.GetWorkflowRunsPages(params,
+//        func(page *glue.GetWorkflowRunsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Glue) GetWorkflowRunsPages(input *GetWorkflowRunsInput, fn func(*GetWorkflowRunsOutput, bool) bool) error {
+	return c.GetWorkflowRunsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// GetWorkflowRunsPagesWithContext same as GetWorkflowRunsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) GetWorkflowRunsPagesWithContext(ctx aws.Context, input *GetWorkflowRunsInput, fn func(*GetWorkflowRunsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *GetWorkflowRunsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.GetWorkflowRunsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*GetWorkflowRunsOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opImportCatalogToGlue = "ImportCatalogToGlue"
 
 // ImportCatalogToGlueRequest generates a "aws/request.Request" representing the
@@ -7723,6 +8404,147 @@ func (c *Glue) ListTriggersPagesWithContext(ctx aws.Context, input *ListTriggers
 	return p.Err()
 }
 
+const opListWorkflows = "ListWorkflows"
+
+// ListWorkflowsRequest generates a "aws/request.Request" representing the
+// client's request for the ListWorkflows operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListWorkflows for more information on using the ListWorkflows
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListWorkflowsRequest method.
+//    req, resp := client.ListWorkflowsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/ListWorkflows
+func (c *Glue) ListWorkflowsRequest(input *ListWorkflowsInput) (req *request.Request, output *ListWorkflowsOutput) {
+	op := &request.Operation{
+		Name:       opListWorkflows,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListWorkflowsInput{}
+	}
+
+	output = &ListWorkflowsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListWorkflows API operation for AWS Glue.
+//
+// Lists names of workflows created in the account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation ListWorkflows for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidInputException "InvalidInputException"
+//   The input provided was not valid.
+//
+//   * ErrCodeInternalServiceException "InternalServiceException"
+//   An internal service error occurred.
+//
+//   * ErrCodeOperationTimeoutException "OperationTimeoutException"
+//   The operation timed out.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/ListWorkflows
+func (c *Glue) ListWorkflows(input *ListWorkflowsInput) (*ListWorkflowsOutput, error) {
+	req, out := c.ListWorkflowsRequest(input)
+	return out, req.Send()
+}
+
+// ListWorkflowsWithContext is the same as ListWorkflows with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListWorkflows for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) ListWorkflowsWithContext(ctx aws.Context, input *ListWorkflowsInput, opts ...request.Option) (*ListWorkflowsOutput, error) {
+	req, out := c.ListWorkflowsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListWorkflowsPages iterates over the pages of a ListWorkflows operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListWorkflows method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListWorkflows operation.
+//    pageNum := 0
+//    err := client.ListWorkflowsPages(params,
+//        func(page *glue.ListWorkflowsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *Glue) ListWorkflowsPages(input *ListWorkflowsInput, fn func(*ListWorkflowsOutput, bool) bool) error {
+	return c.ListWorkflowsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListWorkflowsPagesWithContext same as ListWorkflowsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) ListWorkflowsPagesWithContext(ctx aws.Context, input *ListWorkflowsInput, fn func(*ListWorkflowsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListWorkflowsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListWorkflowsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListWorkflowsOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
 const opPutDataCatalogEncryptionSettings = "PutDataCatalogEncryptionSettings"
 
 // PutDataCatalogEncryptionSettingsRequest generates a "aws/request.Request" representing the
@@ -7897,6 +8719,106 @@ func (c *Glue) PutResourcePolicy(input *PutResourcePolicyInput) (*PutResourcePol
 // for more information on using Contexts.
 func (c *Glue) PutResourcePolicyWithContext(ctx aws.Context, input *PutResourcePolicyInput, opts ...request.Option) (*PutResourcePolicyOutput, error) {
 	req, out := c.PutResourcePolicyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opPutWorkflowRunProperties = "PutWorkflowRunProperties"
+
+// PutWorkflowRunPropertiesRequest generates a "aws/request.Request" representing the
+// client's request for the PutWorkflowRunProperties operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutWorkflowRunProperties for more information on using the PutWorkflowRunProperties
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutWorkflowRunPropertiesRequest method.
+//    req, resp := client.PutWorkflowRunPropertiesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/PutWorkflowRunProperties
+func (c *Glue) PutWorkflowRunPropertiesRequest(input *PutWorkflowRunPropertiesInput) (req *request.Request, output *PutWorkflowRunPropertiesOutput) {
+	op := &request.Operation{
+		Name:       opPutWorkflowRunProperties,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &PutWorkflowRunPropertiesInput{}
+	}
+
+	output = &PutWorkflowRunPropertiesOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// PutWorkflowRunProperties API operation for AWS Glue.
+//
+// Puts the specified workflow run properties for the given workflow run. If
+// a property already exists for the specified run, then it overrides the value
+// otherwise adds the property to existing properties.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation PutWorkflowRunProperties for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeAlreadyExistsException "AlreadyExistsException"
+//   A resource to be created or added already exists.
+//
+//   * ErrCodeEntityNotFoundException "EntityNotFoundException"
+//   A specified entity does not exist
+//
+//   * ErrCodeInvalidInputException "InvalidInputException"
+//   The input provided was not valid.
+//
+//   * ErrCodeInternalServiceException "InternalServiceException"
+//   An internal service error occurred.
+//
+//   * ErrCodeOperationTimeoutException "OperationTimeoutException"
+//   The operation timed out.
+//
+//   * ErrCodeResourceNumberLimitExceededException "ResourceNumberLimitExceededException"
+//   A resource numerical limit was exceeded.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Two processes are trying to modify a resource simultaneously.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/PutWorkflowRunProperties
+func (c *Glue) PutWorkflowRunProperties(input *PutWorkflowRunPropertiesInput) (*PutWorkflowRunPropertiesOutput, error) {
+	req, out := c.PutWorkflowRunPropertiesRequest(input)
+	return out, req.Send()
+}
+
+// PutWorkflowRunPropertiesWithContext is the same as PutWorkflowRunProperties with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutWorkflowRunProperties for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) PutWorkflowRunPropertiesWithContext(ctx aws.Context, input *PutWorkflowRunPropertiesInput, opts ...request.Option) (*PutWorkflowRunPropertiesOutput, error) {
+	req, out := c.PutWorkflowRunPropertiesRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -8354,6 +9276,100 @@ func (c *Glue) StartTrigger(input *StartTriggerInput) (*StartTriggerOutput, erro
 // for more information on using Contexts.
 func (c *Glue) StartTriggerWithContext(ctx aws.Context, input *StartTriggerInput, opts ...request.Option) (*StartTriggerOutput, error) {
 	req, out := c.StartTriggerRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opStartWorkflowRun = "StartWorkflowRun"
+
+// StartWorkflowRunRequest generates a "aws/request.Request" representing the
+// client's request for the StartWorkflowRun operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartWorkflowRun for more information on using the StartWorkflowRun
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StartWorkflowRunRequest method.
+//    req, resp := client.StartWorkflowRunRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/StartWorkflowRun
+func (c *Glue) StartWorkflowRunRequest(input *StartWorkflowRunInput) (req *request.Request, output *StartWorkflowRunOutput) {
+	op := &request.Operation{
+		Name:       opStartWorkflowRun,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartWorkflowRunInput{}
+	}
+
+	output = &StartWorkflowRunOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartWorkflowRun API operation for AWS Glue.
+//
+// Starts a new run of the specified workflow.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation StartWorkflowRun for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidInputException "InvalidInputException"
+//   The input provided was not valid.
+//
+//   * ErrCodeEntityNotFoundException "EntityNotFoundException"
+//   A specified entity does not exist
+//
+//   * ErrCodeInternalServiceException "InternalServiceException"
+//   An internal service error occurred.
+//
+//   * ErrCodeOperationTimeoutException "OperationTimeoutException"
+//   The operation timed out.
+//
+//   * ErrCodeResourceNumberLimitExceededException "ResourceNumberLimitExceededException"
+//   A resource numerical limit was exceeded.
+//
+//   * ErrCodeConcurrentRunsExceededException "ConcurrentRunsExceededException"
+//   Too many jobs are being run concurrently.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/StartWorkflowRun
+func (c *Glue) StartWorkflowRun(input *StartWorkflowRunInput) (*StartWorkflowRunOutput, error) {
+	req, out := c.StartWorkflowRunRequest(input)
+	return out, req.Send()
+}
+
+// StartWorkflowRunWithContext is the same as StartWorkflowRun with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartWorkflowRun for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) StartWorkflowRunWithContext(ctx aws.Context, input *StartWorkflowRunInput, opts ...request.Option) (*StartWorkflowRunOutput, error) {
+	req, out := c.StartWorkflowRunRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -9824,6 +10840,97 @@ func (c *Glue) UpdateUserDefinedFunctionWithContext(ctx aws.Context, input *Upda
 	return out, req.Send()
 }
 
+const opUpdateWorkflow = "UpdateWorkflow"
+
+// UpdateWorkflowRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateWorkflow operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateWorkflow for more information on using the UpdateWorkflow
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateWorkflowRequest method.
+//    req, resp := client.UpdateWorkflowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/UpdateWorkflow
+func (c *Glue) UpdateWorkflowRequest(input *UpdateWorkflowInput) (req *request.Request, output *UpdateWorkflowOutput) {
+	op := &request.Operation{
+		Name:       opUpdateWorkflow,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateWorkflowInput{}
+	}
+
+	output = &UpdateWorkflowOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateWorkflow API operation for AWS Glue.
+//
+// Updates an existing workflow.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Glue's
+// API operation UpdateWorkflow for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidInputException "InvalidInputException"
+//   The input provided was not valid.
+//
+//   * ErrCodeEntityNotFoundException "EntityNotFoundException"
+//   A specified entity does not exist
+//
+//   * ErrCodeInternalServiceException "InternalServiceException"
+//   An internal service error occurred.
+//
+//   * ErrCodeOperationTimeoutException "OperationTimeoutException"
+//   The operation timed out.
+//
+//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   Two processes are trying to modify a resource simultaneously.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/glue-2017-03-31/UpdateWorkflow
+func (c *Glue) UpdateWorkflow(input *UpdateWorkflowInput) (*UpdateWorkflowOutput, error) {
+	req, out := c.UpdateWorkflowRequest(input)
+	return out, req.Send()
+}
+
+// UpdateWorkflowWithContext is the same as UpdateWorkflow with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateWorkflow for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Glue) UpdateWorkflowWithContext(ctx aws.Context, input *UpdateWorkflowInput, opts ...request.Option) (*UpdateWorkflowOutput, error) {
+	req, out := c.UpdateWorkflowRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 // Defines an action to be initiated by a trigger.
 type Action struct {
 	_ struct{} `type:"structure"`
@@ -9842,6 +10949,9 @@ type Action struct {
 	// your job, see the Special Parameters Used by AWS Glue (https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html)
 	// topic in the developer guide.
 	Arguments map[string]*string `type:"map"`
+
+	// The name of the crawler to be used with this action.
+	CrawlerName *string `min:"1" type:"string"`
 
 	// The name of a job to be executed.
 	JobName *string `min:"1" type:"string"`
@@ -9872,6 +10982,9 @@ func (s Action) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *Action) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "Action"}
+	if s.CrawlerName != nil && len(*s.CrawlerName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CrawlerName", 1))
+	}
 	if s.JobName != nil && len(*s.JobName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("JobName", 1))
 	}
@@ -9896,6 +11009,12 @@ func (s *Action) Validate() error {
 // SetArguments sets the Arguments field's value.
 func (s *Action) SetArguments(v map[string]*string) *Action {
 	s.Arguments = v
+	return s
+}
+
+// SetCrawlerName sets the CrawlerName field's value.
+func (s *Action) SetCrawlerName(v string) *Action {
+	s.CrawlerName = &v
 	return s
 }
 
@@ -10860,6 +11979,90 @@ func (s *BatchGetTriggersOutput) SetTriggersNotFound(v []*string) *BatchGetTrigg
 	return s
 }
 
+type BatchGetWorkflowsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies whether to include a graph when returning the workflow resource
+	// metadata.
+	IncludeGraph *bool `type:"boolean"`
+
+	// A list of workflow names, which may be the names returned from the ListWorkflows
+	// operation.
+	//
+	// Names is a required field
+	Names []*string `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s BatchGetWorkflowsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BatchGetWorkflowsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BatchGetWorkflowsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BatchGetWorkflowsInput"}
+	if s.Names == nil {
+		invalidParams.Add(request.NewErrParamRequired("Names"))
+	}
+	if s.Names != nil && len(s.Names) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Names", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIncludeGraph sets the IncludeGraph field's value.
+func (s *BatchGetWorkflowsInput) SetIncludeGraph(v bool) *BatchGetWorkflowsInput {
+	s.IncludeGraph = &v
+	return s
+}
+
+// SetNames sets the Names field's value.
+func (s *BatchGetWorkflowsInput) SetNames(v []*string) *BatchGetWorkflowsInput {
+	s.Names = v
+	return s
+}
+
+type BatchGetWorkflowsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of names of workflows not found.
+	MissingWorkflows []*string `min:"1" type:"list"`
+
+	// A list of workflow resource metadata.
+	Workflows []*Workflow `min:"1" type:"list"`
+}
+
+// String returns the string representation
+func (s BatchGetWorkflowsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BatchGetWorkflowsOutput) GoString() string {
+	return s.String()
+}
+
+// SetMissingWorkflows sets the MissingWorkflows field's value.
+func (s *BatchGetWorkflowsOutput) SetMissingWorkflows(v []*string) *BatchGetWorkflowsOutput {
+	s.MissingWorkflows = v
+	return s
+}
+
+// SetWorkflows sets the Workflows field's value.
+func (s *BatchGetWorkflowsOutput) SetWorkflows(v []*Workflow) *BatchGetWorkflowsOutput {
+	s.Workflows = v
+	return s
+}
+
 // Records an error that occurred when attempting to stop a specified job run.
 type BatchStopJobRunError struct {
 	_ struct{} `type:"structure"`
@@ -11561,6 +12764,12 @@ func (s *Column) SetType(v string) *Column {
 type Condition struct {
 	_ struct{} `type:"structure"`
 
+	// The state of the crawler to which this condition applies.
+	CrawlState *string `type:"string" enum:"CrawlState"`
+
+	// The name of the crawler to which this condition applies.
+	CrawlerName *string `min:"1" type:"string"`
+
 	// The name of the job whose JobRuns this condition applies to, and on which
 	// this trigger waits.
 	JobName *string `min:"1" type:"string"`
@@ -11586,6 +12795,9 @@ func (s Condition) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *Condition) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "Condition"}
+	if s.CrawlerName != nil && len(*s.CrawlerName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CrawlerName", 1))
+	}
 	if s.JobName != nil && len(*s.JobName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("JobName", 1))
 	}
@@ -11594,6 +12806,18 @@ func (s *Condition) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetCrawlState sets the CrawlState field's value.
+func (s *Condition) SetCrawlState(v string) *Condition {
+	s.CrawlState = &v
+	return s
+}
+
+// SetCrawlerName sets the CrawlerName field's value.
+func (s *Condition) SetCrawlerName(v string) *Condition {
+	s.CrawlerName = &v
+	return s
 }
 
 // SetJobName sets the JobName field's value.
@@ -11946,6 +13170,75 @@ func (s *ConnectionsList) SetConnections(v []*string) *ConnectionsList {
 	return s
 }
 
+// The details of a crawl in the workflow.
+type Crawl struct {
+	_ struct{} `type:"structure"`
+
+	// The date and time on which the crawl completed.
+	CompletedOn *time.Time `type:"timestamp"`
+
+	// The error message associated with the crawl.
+	ErrorMessage *string `type:"string"`
+
+	// The log group associated with the crawl.
+	LogGroup *string `min:"1" type:"string"`
+
+	// The log stream associated with the crawl.
+	LogStream *string `min:"1" type:"string"`
+
+	// The date and time on which the crawl started.
+	StartedOn *time.Time `type:"timestamp"`
+
+	// The state of the crawler.
+	State *string `type:"string" enum:"CrawlState"`
+}
+
+// String returns the string representation
+func (s Crawl) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Crawl) GoString() string {
+	return s.String()
+}
+
+// SetCompletedOn sets the CompletedOn field's value.
+func (s *Crawl) SetCompletedOn(v time.Time) *Crawl {
+	s.CompletedOn = &v
+	return s
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *Crawl) SetErrorMessage(v string) *Crawl {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetLogGroup sets the LogGroup field's value.
+func (s *Crawl) SetLogGroup(v string) *Crawl {
+	s.LogGroup = &v
+	return s
+}
+
+// SetLogStream sets the LogStream field's value.
+func (s *Crawl) SetLogStream(v string) *Crawl {
+	s.LogStream = &v
+	return s
+}
+
+// SetStartedOn sets the StartedOn field's value.
+func (s *Crawl) SetStartedOn(v time.Time) *Crawl {
+	s.StartedOn = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *Crawl) SetState(v string) *Crawl {
+	s.State = &v
+	return s
+}
+
 // Specifies a crawler program that examines a data source and uses classifiers
 // to try to determine its schema. If successful, the crawler records metadata
 // concerning the data source in the AWS Glue Data Catalog.
@@ -12207,6 +13500,30 @@ func (s *CrawlerMetrics) SetTablesUpdated(v int64) *CrawlerMetrics {
 // SetTimeLeftSeconds sets the TimeLeftSeconds field's value.
 func (s *CrawlerMetrics) SetTimeLeftSeconds(v float64) *CrawlerMetrics {
 	s.TimeLeftSeconds = &v
+	return s
+}
+
+// The details of a Crawler node present in the workflow.
+type CrawlerNodeDetails struct {
+	_ struct{} `type:"structure"`
+
+	// A list of crawls represented by the crawl node.
+	Crawls []*Crawl `type:"list"`
+}
+
+// String returns the string representation
+func (s CrawlerNodeDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CrawlerNodeDetails) GoString() string {
+	return s.String()
+}
+
+// SetCrawls sets the Crawls field's value.
+func (s *CrawlerNodeDetails) SetCrawls(v []*Crawl) *CrawlerNodeDetails {
+	s.Crawls = v
 	return s
 }
 
@@ -13318,7 +14635,7 @@ type CreateJobInput struct {
 	//    * For the G.2X worker type, each worker maps to 2 DPU (8 vCPU, 32 GB of
 	//    memory, 128 GB disk), and provides 1 executor per worker. We recommend
 	//    this worker type for memory-intensive jobs.
-	WorkerType *string `type:"string" enum:"WorkerType"`
+	WorkerType *string `min:"1" type:"string"`
 }
 
 // String returns the string representation
@@ -13351,6 +14668,9 @@ func (s *CreateJobInput) Validate() error {
 	}
 	if s.Timeout != nil && *s.Timeout < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("Timeout", 1))
+	}
+	if s.WorkerType != nil && len(*s.WorkerType) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkerType", 1))
 	}
 	if s.NotificationProperty != nil {
 		if err := s.NotificationProperty.Validate(); err != nil {
@@ -13972,6 +15292,9 @@ type CreateTriggerInput struct {
 	//
 	// Type is a required field
 	Type *string `type:"string" required:"true" enum:"TriggerType"`
+
+	// The name of the workflow associated with the trigger.
+	WorkflowName *string `min:"1" type:"string"`
 }
 
 // String returns the string representation
@@ -13998,6 +15321,9 @@ func (s *CreateTriggerInput) Validate() error {
 	}
 	if s.Type == nil {
 		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+	if s.WorkflowName != nil && len(*s.WorkflowName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkflowName", 1))
 	}
 	if s.Actions != nil {
 		for i, v := range s.Actions {
@@ -14066,6 +15392,12 @@ func (s *CreateTriggerInput) SetTags(v map[string]*string) *CreateTriggerInput {
 // SetType sets the Type field's value.
 func (s *CreateTriggerInput) SetType(v string) *CreateTriggerInput {
 	s.Type = &v
+	return s
+}
+
+// SetWorkflowName sets the WorkflowName field's value.
+func (s *CreateTriggerInput) SetWorkflowName(v string) *CreateTriggerInput {
+	s.WorkflowName = &v
 	return s
 }
 
@@ -14177,6 +15509,98 @@ func (s CreateUserDefinedFunctionOutput) String() string {
 // GoString returns the string representation
 func (s CreateUserDefinedFunctionOutput) GoString() string {
 	return s.String()
+}
+
+type CreateWorkflowInput struct {
+	_ struct{} `type:"structure"`
+
+	// A collection of properties to be used as part of each execution of the workflow.
+	DefaultRunProperties map[string]*string `type:"map"`
+
+	// A description of the workflow.
+	Description *string `type:"string"`
+
+	// The name to be assigned to the workflow. It should be unique within your
+	// account.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	// The tags to be used with this workflow.
+	Tags map[string]*string `type:"map"`
+}
+
+// String returns the string representation
+func (s CreateWorkflowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateWorkflowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateWorkflowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateWorkflowInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDefaultRunProperties sets the DefaultRunProperties field's value.
+func (s *CreateWorkflowInput) SetDefaultRunProperties(v map[string]*string) *CreateWorkflowInput {
+	s.DefaultRunProperties = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateWorkflowInput) SetDescription(v string) *CreateWorkflowInput {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateWorkflowInput) SetName(v string) *CreateWorkflowInput {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateWorkflowInput) SetTags(v map[string]*string) *CreateWorkflowInput {
+	s.Tags = v
+	return s
+}
+
+type CreateWorkflowOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the workflow which was provided as part of the request.
+	Name *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s CreateWorkflowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateWorkflowOutput) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *CreateWorkflowOutput) SetName(v string) *CreateWorkflowOutput {
+	s.Name = &v
+	return s
 }
 
 // Specifies an XML classifier for CreateClassifier to create.
@@ -15457,6 +16881,70 @@ func (s DeleteUserDefinedFunctionOutput) GoString() string {
 	return s.String()
 }
 
+type DeleteWorkflowInput struct {
+	_ struct{} `type:"structure"`
+
+	// Name of the workflow to be deleted.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteWorkflowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteWorkflowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteWorkflowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteWorkflowInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *DeleteWorkflowInput) SetName(v string) *DeleteWorkflowInput {
+	s.Name = &v
+	return s
+}
+
+type DeleteWorkflowOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Name of the workflow specified in input.
+	Name *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s DeleteWorkflowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteWorkflowOutput) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *DeleteWorkflowOutput) SetName(v string) *DeleteWorkflowOutput {
+	s.Name = &v
+	return s
+}
+
 // A development endpoint where a developer can remotely debug ETL scripts.
 type DevEndpoint struct {
 	_ struct{} `type:"structure"`
@@ -15759,6 +17247,40 @@ func (s DynamoDBTarget) GoString() string {
 // SetPath sets the Path field's value.
 func (s *DynamoDBTarget) SetPath(v string) *DynamoDBTarget {
 	s.Path = &v
+	return s
+}
+
+// An edge represents a directed connection between two AWS Glue components
+// which are part of the workflow the edge belongs to.
+type Edge struct {
+	_ struct{} `type:"structure"`
+
+	// The unique of the node within the workflow where the edge ends.
+	DestinationId *string `min:"1" type:"string"`
+
+	// The unique of the node within the workflow where the edge starts.
+	SourceId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s Edge) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Edge) GoString() string {
+	return s.String()
+}
+
+// SetDestinationId sets the DestinationId field's value.
+func (s *Edge) SetDestinationId(v string) *Edge {
+	s.DestinationId = &v
+	return s
+}
+
+// SetSourceId sets the SourceId field's value.
+func (s *Edge) SetSourceId(v string) *Edge {
+	s.SourceId = &v
 	return s
 }
 
@@ -18995,6 +20517,354 @@ func (s *GetUserDefinedFunctionsOutput) SetUserDefinedFunctions(v []*UserDefined
 	return s
 }
 
+type GetWorkflowInput struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies whether to include a graph when returning the workflow resource
+	// metadata.
+	IncludeGraph *bool `type:"boolean"`
+
+	// The name of the workflow to retrieve.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetWorkflowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetWorkflowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetWorkflowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetWorkflowInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIncludeGraph sets the IncludeGraph field's value.
+func (s *GetWorkflowInput) SetIncludeGraph(v bool) *GetWorkflowInput {
+	s.IncludeGraph = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *GetWorkflowInput) SetName(v string) *GetWorkflowInput {
+	s.Name = &v
+	return s
+}
+
+type GetWorkflowOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The resource metadata for the workflow.
+	Workflow *Workflow `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetWorkflowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetWorkflowOutput) GoString() string {
+	return s.String()
+}
+
+// SetWorkflow sets the Workflow field's value.
+func (s *GetWorkflowOutput) SetWorkflow(v *Workflow) *GetWorkflowOutput {
+	s.Workflow = v
+	return s
+}
+
+type GetWorkflowRunInput struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies whether to include the workflow graph in response or not.
+	IncludeGraph *bool `type:"boolean"`
+
+	// Name of the workflow being run.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	// The ID of the workflow run.
+	//
+	// RunId is a required field
+	RunId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetWorkflowRunInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetWorkflowRunInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetWorkflowRunInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetWorkflowRunInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.RunId == nil {
+		invalidParams.Add(request.NewErrParamRequired("RunId"))
+	}
+	if s.RunId != nil && len(*s.RunId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RunId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIncludeGraph sets the IncludeGraph field's value.
+func (s *GetWorkflowRunInput) SetIncludeGraph(v bool) *GetWorkflowRunInput {
+	s.IncludeGraph = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *GetWorkflowRunInput) SetName(v string) *GetWorkflowRunInput {
+	s.Name = &v
+	return s
+}
+
+// SetRunId sets the RunId field's value.
+func (s *GetWorkflowRunInput) SetRunId(v string) *GetWorkflowRunInput {
+	s.RunId = &v
+	return s
+}
+
+type GetWorkflowRunOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The requested workflow run metadata.
+	Run *WorkflowRun `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetWorkflowRunOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetWorkflowRunOutput) GoString() string {
+	return s.String()
+}
+
+// SetRun sets the Run field's value.
+func (s *GetWorkflowRunOutput) SetRun(v *WorkflowRun) *GetWorkflowRunOutput {
+	s.Run = v
+	return s
+}
+
+type GetWorkflowRunPropertiesInput struct {
+	_ struct{} `type:"structure"`
+
+	// Name of the workflow which was run.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	// The ID of the workflow run whose run properties should be returned.
+	//
+	// RunId is a required field
+	RunId *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetWorkflowRunPropertiesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetWorkflowRunPropertiesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetWorkflowRunPropertiesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetWorkflowRunPropertiesInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.RunId == nil {
+		invalidParams.Add(request.NewErrParamRequired("RunId"))
+	}
+	if s.RunId != nil && len(*s.RunId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RunId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *GetWorkflowRunPropertiesInput) SetName(v string) *GetWorkflowRunPropertiesInput {
+	s.Name = &v
+	return s
+}
+
+// SetRunId sets the RunId field's value.
+func (s *GetWorkflowRunPropertiesInput) SetRunId(v string) *GetWorkflowRunPropertiesInput {
+	s.RunId = &v
+	return s
+}
+
+type GetWorkflowRunPropertiesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The workflow run properties which were set during the specified run.
+	RunProperties map[string]*string `type:"map"`
+}
+
+// String returns the string representation
+func (s GetWorkflowRunPropertiesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetWorkflowRunPropertiesOutput) GoString() string {
+	return s.String()
+}
+
+// SetRunProperties sets the RunProperties field's value.
+func (s *GetWorkflowRunPropertiesOutput) SetRunProperties(v map[string]*string) *GetWorkflowRunPropertiesOutput {
+	s.RunProperties = v
+	return s
+}
+
+type GetWorkflowRunsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Specifies whether to include the workflow graph in response or not.
+	IncludeGraph *bool `type:"boolean"`
+
+	// The maximum number of workflow runs to be included in the response.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// Name of the workflow whose metadata of runs should be returned.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	// The maximum size of the response.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s GetWorkflowRunsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetWorkflowRunsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetWorkflowRunsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetWorkflowRunsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetIncludeGraph sets the IncludeGraph field's value.
+func (s *GetWorkflowRunsInput) SetIncludeGraph(v bool) *GetWorkflowRunsInput {
+	s.IncludeGraph = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetWorkflowRunsInput) SetMaxResults(v int64) *GetWorkflowRunsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *GetWorkflowRunsInput) SetName(v string) *GetWorkflowRunsInput {
+	s.Name = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetWorkflowRunsInput) SetNextToken(v string) *GetWorkflowRunsInput {
+	s.NextToken = &v
+	return s
+}
+
+type GetWorkflowRunsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A continuation token, if not all requested workflow runs have been returned.
+	NextToken *string `type:"string"`
+
+	// A list of workflow run metadata objects.
+	Runs []*WorkflowRun `min:"1" type:"list"`
+}
+
+// String returns the string representation
+func (s GetWorkflowRunsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetWorkflowRunsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetWorkflowRunsOutput) SetNextToken(v string) *GetWorkflowRunsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetRuns sets the Runs field's value.
+func (s *GetWorkflowRunsOutput) SetRuns(v []*WorkflowRun) *GetWorkflowRunsOutput {
+	s.Runs = v
+	return s
+}
+
 // A classifier that uses grok patterns.
 type GrokClassifier struct {
 	_ struct{} `type:"structure"`
@@ -19513,7 +21383,7 @@ type JobCommand struct {
 	PythonVersion *string `type:"string"`
 
 	// Specifies the Amazon Simple Storage Service (Amazon S3) path to a script
-	// that executes a job (required).
+	// that executes a job.
 	ScriptLocation *string `type:"string"`
 }
 
@@ -19542,6 +21412,30 @@ func (s *JobCommand) SetPythonVersion(v string) *JobCommand {
 // SetScriptLocation sets the ScriptLocation field's value.
 func (s *JobCommand) SetScriptLocation(v string) *JobCommand {
 	s.ScriptLocation = &v
+	return s
+}
+
+// The details of a Job node present in the workflow.
+type JobNodeDetails struct {
+	_ struct{} `type:"structure"`
+
+	// The information for the job runs represented by the job node.
+	JobRuns []*JobRun `type:"list"`
+}
+
+// String returns the string representation
+func (s JobNodeDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s JobNodeDetails) GoString() string {
+	return s.String()
+}
+
+// SetJobRuns sets the JobRuns field's value.
+func (s *JobNodeDetails) SetJobRuns(v []*JobRun) *JobNodeDetails {
+	s.JobRuns = v
 	return s
 }
 
@@ -20533,6 +22427,83 @@ func (s *ListTriggersOutput) SetTriggerNames(v []*string) *ListTriggersOutput {
 	return s
 }
 
+type ListWorkflowsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum size of a list to return.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// A continuation token, if this is a continuation request.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListWorkflowsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListWorkflowsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListWorkflowsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListWorkflowsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListWorkflowsInput) SetMaxResults(v int64) *ListWorkflowsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListWorkflowsInput) SetNextToken(v string) *ListWorkflowsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListWorkflowsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A continuation token, if not all workflow names have been returned.
+	NextToken *string `type:"string"`
+
+	// List of names of workflows in the account.
+	Workflows []*string `min:"1" type:"list"`
+}
+
+// String returns the string representation
+func (s ListWorkflowsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListWorkflowsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListWorkflowsOutput) SetNextToken(v string) *ListWorkflowsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetWorkflows sets the Workflows field's value.
+func (s *ListWorkflowsOutput) SetWorkflows(v []*string) *ListWorkflowsOutput {
+	s.Workflows = v
+	return s
+}
+
 // The location of resources.
 type Location struct {
 	_ struct{} `type:"structure"`
@@ -20681,6 +22652,76 @@ func (s *MappingEntry) SetTargetTable(v string) *MappingEntry {
 // SetTargetType sets the TargetType field's value.
 func (s *MappingEntry) SetTargetType(v string) *MappingEntry {
 	s.TargetType = &v
+	return s
+}
+
+// A node represents an AWS Glue component like Trigger, Job etc. which is part
+// of a workflow.
+type Node struct {
+	_ struct{} `type:"structure"`
+
+	// Details of the crawler when the node represents a crawler.
+	CrawlerDetails *CrawlerNodeDetails `type:"structure"`
+
+	// Details of the Job when the node represents a Job.
+	JobDetails *JobNodeDetails `type:"structure"`
+
+	// The name of the AWS Glue component represented by the node.
+	Name *string `min:"1" type:"string"`
+
+	// Details of the Trigger when the node represents a Trigger.
+	TriggerDetails *TriggerNodeDetails `type:"structure"`
+
+	// The type of AWS Glue component represented by the node.
+	Type *string `type:"string" enum:"NodeType"`
+
+	// The unique Id assigned to the node within the workflow.
+	UniqueId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s Node) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Node) GoString() string {
+	return s.String()
+}
+
+// SetCrawlerDetails sets the CrawlerDetails field's value.
+func (s *Node) SetCrawlerDetails(v *CrawlerNodeDetails) *Node {
+	s.CrawlerDetails = v
+	return s
+}
+
+// SetJobDetails sets the JobDetails field's value.
+func (s *Node) SetJobDetails(v *JobNodeDetails) *Node {
+	s.JobDetails = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *Node) SetName(v string) *Node {
+	s.Name = &v
+	return s
+}
+
+// SetTriggerDetails sets the TriggerDetails field's value.
+func (s *Node) SetTriggerDetails(v *TriggerNodeDetails) *Node {
+	s.TriggerDetails = v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *Node) SetType(v string) *Node {
+	s.Type = &v
+	return s
+}
+
+// SetUniqueId sets the UniqueId field's value.
+func (s *Node) SetUniqueId(v string) *Node {
+	s.UniqueId = &v
 	return s
 }
 
@@ -21320,6 +23361,92 @@ func (s PutResourcePolicyOutput) GoString() string {
 func (s *PutResourcePolicyOutput) SetPolicyHash(v string) *PutResourcePolicyOutput {
 	s.PolicyHash = &v
 	return s
+}
+
+type PutWorkflowRunPropertiesInput struct {
+	_ struct{} `type:"structure"`
+
+	// Name of the workflow which was run.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+
+	// The ID of the workflow run for which the run properties should be updated.
+	//
+	// RunId is a required field
+	RunId *string `min:"1" type:"string" required:"true"`
+
+	// The properties to put for the specified run.
+	//
+	// RunProperties is a required field
+	RunProperties map[string]*string `type:"map" required:"true"`
+}
+
+// String returns the string representation
+func (s PutWorkflowRunPropertiesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutWorkflowRunPropertiesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutWorkflowRunPropertiesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutWorkflowRunPropertiesInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+	if s.RunId == nil {
+		invalidParams.Add(request.NewErrParamRequired("RunId"))
+	}
+	if s.RunId != nil && len(*s.RunId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RunId", 1))
+	}
+	if s.RunProperties == nil {
+		invalidParams.Add(request.NewErrParamRequired("RunProperties"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *PutWorkflowRunPropertiesInput) SetName(v string) *PutWorkflowRunPropertiesInput {
+	s.Name = &v
+	return s
+}
+
+// SetRunId sets the RunId field's value.
+func (s *PutWorkflowRunPropertiesInput) SetRunId(v string) *PutWorkflowRunPropertiesInput {
+	s.RunId = &v
+	return s
+}
+
+// SetRunProperties sets the RunProperties field's value.
+func (s *PutWorkflowRunPropertiesInput) SetRunProperties(v map[string]*string) *PutWorkflowRunPropertiesInput {
+	s.RunProperties = v
+	return s
+}
+
+type PutWorkflowRunPropertiesOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutWorkflowRunPropertiesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutWorkflowRunPropertiesOutput) GoString() string {
+	return s.String()
 }
 
 type ResetJobBookmarkInput struct {
@@ -21964,7 +24091,7 @@ type StartJobRunInput struct {
 	//
 	//    * For the G.2X worker type, each worker provides 8 vCPU, 32 GB of memory
 	//    and a 128GB disk, and 1 executor per worker.
-	WorkerType *string `type:"string" enum:"WorkerType"`
+	WorkerType *string `min:"1" type:"string"`
 }
 
 // String returns the string representation
@@ -21994,6 +24121,9 @@ func (s *StartJobRunInput) Validate() error {
 	}
 	if s.Timeout != nil && *s.Timeout < 1 {
 		invalidParams.Add(request.NewErrParamMinValue("Timeout", 1))
+	}
+	if s.WorkerType != nil && len(*s.WorkerType) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("WorkerType", 1))
 	}
 	if s.NotificationProperty != nil {
 		if err := s.NotificationProperty.Validate(); err != nil {
@@ -22151,6 +24281,70 @@ func (s StartTriggerOutput) GoString() string {
 // SetName sets the Name field's value.
 func (s *StartTriggerOutput) SetName(v string) *StartTriggerOutput {
 	s.Name = &v
+	return s
+}
+
+type StartWorkflowRunInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the workflow to start.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StartWorkflowRunInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartWorkflowRunInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartWorkflowRunInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartWorkflowRunInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *StartWorkflowRunInput) SetName(v string) *StartWorkflowRunInput {
+	s.Name = &v
+	return s
+}
+
+type StartWorkflowRunOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An Id for the new run.
+	RunId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s StartWorkflowRunOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartWorkflowRunOutput) GoString() string {
+	return s.String()
+}
+
+// SetRunId sets the RunId field's value.
+func (s *StartWorkflowRunOutput) SetRunId(v string) *StartWorkflowRunOutput {
+	s.RunId = &v
 	return s
 }
 
@@ -23039,6 +25233,9 @@ type Trigger struct {
 
 	// The type of trigger that this is.
 	Type *string `type:"string" enum:"TriggerType"`
+
+	// The name of the workflow associated with the trigger.
+	WorkflowName *string `min:"1" type:"string"`
 }
 
 // String returns the string representation
@@ -23096,6 +25293,36 @@ func (s *Trigger) SetState(v string) *Trigger {
 // SetType sets the Type field's value.
 func (s *Trigger) SetType(v string) *Trigger {
 	s.Type = &v
+	return s
+}
+
+// SetWorkflowName sets the WorkflowName field's value.
+func (s *Trigger) SetWorkflowName(v string) *Trigger {
+	s.WorkflowName = &v
+	return s
+}
+
+// The details of a Trigger node present in the workflow.
+type TriggerNodeDetails struct {
+	_ struct{} `type:"structure"`
+
+	// The information of the trigger represented by the trigger node.
+	Trigger *Trigger `type:"structure"`
+}
+
+// String returns the string representation
+func (s TriggerNodeDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TriggerNodeDetails) GoString() string {
+	return s.String()
+}
+
+// SetTrigger sets the Trigger field's value.
+func (s *TriggerNodeDetails) SetTrigger(v *Trigger) *TriggerNodeDetails {
+	s.Trigger = v
 	return s
 }
 
@@ -24589,6 +26816,88 @@ func (s UpdateUserDefinedFunctionOutput) GoString() string {
 	return s.String()
 }
 
+type UpdateWorkflowInput struct {
+	_ struct{} `type:"structure"`
+
+	// A collection of properties to be used as part of each execution of the workflow.
+	DefaultRunProperties map[string]*string `type:"map"`
+
+	// The description of the workflow.
+	Description *string `type:"string"`
+
+	// Name of the workflow to be updated.
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s UpdateWorkflowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateWorkflowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateWorkflowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateWorkflowInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDefaultRunProperties sets the DefaultRunProperties field's value.
+func (s *UpdateWorkflowInput) SetDefaultRunProperties(v map[string]*string) *UpdateWorkflowInput {
+	s.DefaultRunProperties = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateWorkflowInput) SetDescription(v string) *UpdateWorkflowInput {
+	s.Description = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateWorkflowInput) SetName(v string) *UpdateWorkflowInput {
+	s.Name = &v
+	return s
+}
+
+type UpdateWorkflowOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the workflow which was specified in input.
+	Name *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s UpdateWorkflowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateWorkflowOutput) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateWorkflowOutput) SetName(v string) *UpdateWorkflowOutput {
+	s.Name = &v
+	return s
+}
+
 // Specifies an XML classifier to be updated.
 type UpdateXMLClassifierRequest struct {
 	_ struct{} `type:"structure"`
@@ -24811,6 +27120,280 @@ func (s *UserDefinedFunctionInput) SetResourceUris(v []*ResourceUri) *UserDefine
 	return s
 }
 
+// A workflow represents a flow in which AWS Glue components should be executed
+// to complete a logical task.
+type Workflow struct {
+	_ struct{} `type:"structure"`
+
+	// The date and time when the workflow was created.
+	CreatedOn *time.Time `type:"timestamp"`
+
+	// A collection of properties to be used as part of each execution of the workflow.
+	DefaultRunProperties map[string]*string `type:"map"`
+
+	// A description of the workflow.
+	Description *string `type:"string"`
+
+	// The graph representing all the AWS Glue components that belong to the workflow
+	// as nodes and directed connections between them as edges.
+	Graph *WorkflowGraph `type:"structure"`
+
+	// The date and time when the workflow was last modified.
+	LastModifiedOn *time.Time `type:"timestamp"`
+
+	// The information about the last execution of the workflow.
+	LastRun *WorkflowRun `type:"structure"`
+
+	// The name of the workflow representing the flow.
+	Name *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s Workflow) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Workflow) GoString() string {
+	return s.String()
+}
+
+// SetCreatedOn sets the CreatedOn field's value.
+func (s *Workflow) SetCreatedOn(v time.Time) *Workflow {
+	s.CreatedOn = &v
+	return s
+}
+
+// SetDefaultRunProperties sets the DefaultRunProperties field's value.
+func (s *Workflow) SetDefaultRunProperties(v map[string]*string) *Workflow {
+	s.DefaultRunProperties = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *Workflow) SetDescription(v string) *Workflow {
+	s.Description = &v
+	return s
+}
+
+// SetGraph sets the Graph field's value.
+func (s *Workflow) SetGraph(v *WorkflowGraph) *Workflow {
+	s.Graph = v
+	return s
+}
+
+// SetLastModifiedOn sets the LastModifiedOn field's value.
+func (s *Workflow) SetLastModifiedOn(v time.Time) *Workflow {
+	s.LastModifiedOn = &v
+	return s
+}
+
+// SetLastRun sets the LastRun field's value.
+func (s *Workflow) SetLastRun(v *WorkflowRun) *Workflow {
+	s.LastRun = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *Workflow) SetName(v string) *Workflow {
+	s.Name = &v
+	return s
+}
+
+// A workflow graph represents the complete workflow containing all the AWS
+// Glue components present in the workflow and all the directed connections
+// between them.
+type WorkflowGraph struct {
+	_ struct{} `type:"structure"`
+
+	// A list of all the directed connections between the nodes belonging to the
+	// workflow.
+	Edges []*Edge `type:"list"`
+
+	// A list of the the AWS Glue components belong to the workflow represented
+	// as nodes.
+	Nodes []*Node `type:"list"`
+}
+
+// String returns the string representation
+func (s WorkflowGraph) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s WorkflowGraph) GoString() string {
+	return s.String()
+}
+
+// SetEdges sets the Edges field's value.
+func (s *WorkflowGraph) SetEdges(v []*Edge) *WorkflowGraph {
+	s.Edges = v
+	return s
+}
+
+// SetNodes sets the Nodes field's value.
+func (s *WorkflowGraph) SetNodes(v []*Node) *WorkflowGraph {
+	s.Nodes = v
+	return s
+}
+
+// A workflow run is an execution of a workflow providing all the runtime information.
+type WorkflowRun struct {
+	_ struct{} `type:"structure"`
+
+	// The date and time when the workflow run completed.
+	CompletedOn *time.Time `type:"timestamp"`
+
+	// The graph representing all the AWS Glue components that belong to the workflow
+	// as nodes and directed connections between them as edges.
+	Graph *WorkflowGraph `type:"structure"`
+
+	// Name of the workflow which was executed.
+	Name *string `min:"1" type:"string"`
+
+	// The date and time when the workflow run was started.
+	StartedOn *time.Time `type:"timestamp"`
+
+	// The statistics of the run.
+	Statistics *WorkflowRunStatistics `type:"structure"`
+
+	// The status of the workflow run.
+	Status *string `type:"string" enum:"WorkflowRunStatus"`
+
+	// The ID of this workflow run.
+	WorkflowRunId *string `min:"1" type:"string"`
+
+	// The workflow run properties which were set during the run.
+	WorkflowRunProperties map[string]*string `type:"map"`
+}
+
+// String returns the string representation
+func (s WorkflowRun) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s WorkflowRun) GoString() string {
+	return s.String()
+}
+
+// SetCompletedOn sets the CompletedOn field's value.
+func (s *WorkflowRun) SetCompletedOn(v time.Time) *WorkflowRun {
+	s.CompletedOn = &v
+	return s
+}
+
+// SetGraph sets the Graph field's value.
+func (s *WorkflowRun) SetGraph(v *WorkflowGraph) *WorkflowRun {
+	s.Graph = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *WorkflowRun) SetName(v string) *WorkflowRun {
+	s.Name = &v
+	return s
+}
+
+// SetStartedOn sets the StartedOn field's value.
+func (s *WorkflowRun) SetStartedOn(v time.Time) *WorkflowRun {
+	s.StartedOn = &v
+	return s
+}
+
+// SetStatistics sets the Statistics field's value.
+func (s *WorkflowRun) SetStatistics(v *WorkflowRunStatistics) *WorkflowRun {
+	s.Statistics = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *WorkflowRun) SetStatus(v string) *WorkflowRun {
+	s.Status = &v
+	return s
+}
+
+// SetWorkflowRunId sets the WorkflowRunId field's value.
+func (s *WorkflowRun) SetWorkflowRunId(v string) *WorkflowRun {
+	s.WorkflowRunId = &v
+	return s
+}
+
+// SetWorkflowRunProperties sets the WorkflowRunProperties field's value.
+func (s *WorkflowRun) SetWorkflowRunProperties(v map[string]*string) *WorkflowRun {
+	s.WorkflowRunProperties = v
+	return s
+}
+
+// Workflow run statistics provides statistics about the workflow run.
+type WorkflowRunStatistics struct {
+	_ struct{} `type:"structure"`
+
+	// Total number of Actions which have failed.
+	FailedActions *int64 `type:"integer"`
+
+	// Total number Actions in running state.
+	RunningActions *int64 `type:"integer"`
+
+	// Total number of Actions which have stopped.
+	StoppedActions *int64 `type:"integer"`
+
+	// Total number of Actions which have succeeded.
+	SucceededActions *int64 `type:"integer"`
+
+	// Total number of Actions which timed out.
+	TimeoutActions *int64 `type:"integer"`
+
+	// Total number of Actions in the workflow run.
+	TotalActions *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s WorkflowRunStatistics) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s WorkflowRunStatistics) GoString() string {
+	return s.String()
+}
+
+// SetFailedActions sets the FailedActions field's value.
+func (s *WorkflowRunStatistics) SetFailedActions(v int64) *WorkflowRunStatistics {
+	s.FailedActions = &v
+	return s
+}
+
+// SetRunningActions sets the RunningActions field's value.
+func (s *WorkflowRunStatistics) SetRunningActions(v int64) *WorkflowRunStatistics {
+	s.RunningActions = &v
+	return s
+}
+
+// SetStoppedActions sets the StoppedActions field's value.
+func (s *WorkflowRunStatistics) SetStoppedActions(v int64) *WorkflowRunStatistics {
+	s.StoppedActions = &v
+	return s
+}
+
+// SetSucceededActions sets the SucceededActions field's value.
+func (s *WorkflowRunStatistics) SetSucceededActions(v int64) *WorkflowRunStatistics {
+	s.SucceededActions = &v
+	return s
+}
+
+// SetTimeoutActions sets the TimeoutActions field's value.
+func (s *WorkflowRunStatistics) SetTimeoutActions(v int64) *WorkflowRunStatistics {
+	s.TimeoutActions = &v
+	return s
+}
+
+// SetTotalActions sets the TotalActions field's value.
+func (s *WorkflowRunStatistics) SetTotalActions(v int64) *WorkflowRunStatistics {
+	s.TotalActions = &v
+	return s
+}
+
 // A classifier for XML content.
 type XMLClassifier struct {
 	_ struct{} `type:"structure"`
@@ -24954,6 +27537,20 @@ const (
 )
 
 const (
+	// CrawlStateRunning is a CrawlState enum value
+	CrawlStateRunning = "RUNNING"
+
+	// CrawlStateSucceeded is a CrawlState enum value
+	CrawlStateSucceeded = "SUCCEEDED"
+
+	// CrawlStateCancelled is a CrawlState enum value
+	CrawlStateCancelled = "CANCELLED"
+
+	// CrawlStateFailed is a CrawlState enum value
+	CrawlStateFailed = "FAILED"
+)
+
+const (
 	// CrawlerStateReady is a CrawlerState enum value
 	CrawlerStateReady = "READY"
 
@@ -25061,6 +27658,17 @@ const (
 )
 
 const (
+	// NodeTypeCrawler is a NodeType enum value
+	NodeTypeCrawler = "CRAWLER"
+
+	// NodeTypeJob is a NodeType enum value
+	NodeTypeJob = "JOB"
+
+	// NodeTypeTrigger is a NodeType enum value
+	NodeTypeTrigger = "TRIGGER"
+)
+
+const (
 	// PrincipalTypeUser is a PrincipalType enum value
 	PrincipalTypeUser = "USER"
 
@@ -25158,4 +27766,12 @@ const (
 
 	// WorkerTypeG2x is a WorkerType enum value
 	WorkerTypeG2x = "G.2X"
+)
+
+const (
+	// WorkflowRunStatusRunning is a WorkflowRunStatus enum value
+	WorkflowRunStatusRunning = "RUNNING"
+
+	// WorkflowRunStatusCompleted is a WorkflowRunStatus enum value
+	WorkflowRunStatusCompleted = "COMPLETED"
 )

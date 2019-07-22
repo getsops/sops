@@ -1,0 +1,22 @@
+{
+  "tests": [
+    {
+      "description": "update-paths: The ServerTimestamp sentinel cannot be in an ArrayUnion",
+      "comment": "The ServerTimestamp sentinel must be the value of a field. It may\nnot appear in an ArrayUnion.",
+      "updatePaths": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "fieldPaths": [
+          {
+            "field": [
+              "a"
+            ]
+          }
+        ],
+        "jsonValues": [
+          "[\"ArrayRemove\", 1, \"ServerTimestamp\", 3]"
+        ],
+        "isError": true
+      }
+    }
+  ]
+}

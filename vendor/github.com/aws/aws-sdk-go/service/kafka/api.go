@@ -2683,7 +2683,7 @@ type CreateClusterInput struct {
 	// KafkaVersion is a required field
 	KafkaVersion *string `locationName:"kafkaVersion" min:"1" type:"string" required:"true"`
 
-	// The number of broker nodes in the cluster.
+	// The number of Kafka broker nodes in the Amazon MSK cluster.
 	//
 	// NumberOfBrokerNodes is a required field
 	NumberOfBrokerNodes *int64 `locationName:"numberOfBrokerNodes" min:"1" type:"integer" required:"true"`

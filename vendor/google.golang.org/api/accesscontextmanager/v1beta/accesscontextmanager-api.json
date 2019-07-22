@@ -395,7 +395,7 @@
                   "type": "string"
                 },
                 "updateMask": {
-                  "description": "Required.  Mask to control which fields get updated. Must be non-empty.",
+                  "description": "Required. Mask to control which fields get updated. Must be non-empty.",
                   "format": "google-fieldmask",
                   "location": "query",
                   "type": "string"
@@ -598,7 +598,7 @@
       }
     }
   },
-  "revision": "20190529",
+  "revision": "20190704",
   "rootUrl": "https://accesscontextmanager.googleapis.com/",
   "schemas": {
     "AccessLevel": {
@@ -685,6 +685,24 @@
             "$ref": "Condition"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "BridgeServiceRestriction": {
+      "description": "Alpha. Specifies which services are granted access via this Bridge Service\nPerimeter.",
+      "id": "BridgeServiceRestriction",
+      "properties": {
+        "allowedServices": {
+          "description": "The list of APIs usable through the Bridge Perimeter. Must be empty\nunless 'enable_restriction' is True.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "enableRestriction": {
+          "description": "Whether to restrict the set of APIs callable through the Bridge Service\nPerimeter.",
+          "type": "boolean"
         }
       },
       "type": "object"
@@ -791,6 +809,24 @@
         },
         "requireScreenlock": {
           "description": "Whether or not screenlock is required for the DevicePolicy to be true.\nDefaults to `false`.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "IngressServiceRestriction": {
+      "description": "Alpha. Specifies how Access Levels are to be used for accessing the Service\nPerimeter.",
+      "id": "IngressServiceRestriction",
+      "properties": {
+        "allowedServices": {
+          "description": "The list of APIs usable with a valid Access Level. Must be empty unless\n'enable_restriction' is True.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "enableRestriction": {
+          "description": "Whether to restrict the set of APIs callable outside the Service\nPerimeter via Access Levels.",
           "type": "boolean"
         }
       },
@@ -974,6 +1010,14 @@
           },
           "type": "array"
         },
+        "bridgeServiceRestriction": {
+          "$ref": "BridgeServiceRestriction",
+          "description": "Alpha. Configuration for what services are accessible via the Bridge\nPerimeter. Must be empty for non-Bridge Perimeters."
+        },
+        "ingressServiceRestriction": {
+          "$ref": "IngressServiceRestriction",
+          "description": "Alpha. Configuration for which services may be used with Access Levels."
+        },
         "resources": {
           "description": "A list of GCP resources that are inside of the service perimeter.\nCurrently only projects are allowed. Format: `projects/{project_number}`",
           "items": {
@@ -994,6 +1038,10 @@
             "type": "string"
           },
           "type": "array"
+        },
+        "vpcServiceRestriction": {
+          "$ref": "VpcServiceRestriction",
+          "description": "Alpha. Configuration for within Perimeter allowed APIs."
         }
       },
       "type": "object"
@@ -1021,6 +1069,24 @@
         "message": {
           "description": "A developer-facing error message, which should be in English. Any\nuser-facing error message should be localized and sent in the\ngoogle.rpc.Status.details field, or localized by the client.",
           "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "VpcServiceRestriction": {
+      "description": "Alpha. Specifies how APIs are allowed to communicate within the Service\nPerimeter.",
+      "id": "VpcServiceRestriction",
+      "properties": {
+        "allowedServices": {
+          "description": "The list of APIs usable within the Service Perimeter. Must be empty\nunless 'enable_restriction' is True.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "enableRestriction": {
+          "description": "Whether to restrict API calls within the Service Perimeter to the list of\nAPIs specified in 'allowed_services'.",
+          "type": "boolean"
         }
       },
       "type": "object"

@@ -568,6 +568,27 @@ func (aup AccountUpdateParameters) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// CheckDomainAvailabilityParameter check Domain availability parameter.
+type CheckDomainAvailabilityParameter struct {
+	// SubdomainName - The subdomain name to use.
+	SubdomainName *string `json:"subdomainName,omitempty"`
+	// Type - The Type of the resource.
+	Type *string `json:"type,omitempty"`
+}
+
+// CheckDomainAvailabilityResult check Domain availability result.
+type CheckDomainAvailabilityResult struct {
+	autorest.Response `json:"-"`
+	// IsSubdomainAvailable - Indicates the given SKU is available or not.
+	IsSubdomainAvailable *bool `json:"isSubdomainAvailable,omitempty"`
+	// Reason - Reason why the SKU is not available.
+	Reason *string `json:"reason,omitempty"`
+	// SubdomainName - The subdomain name to use.
+	SubdomainName *string `json:"subdomainName,omitempty"`
+	// Type - The Type of the resource.
+	Type *string `json:"type,omitempty"`
+}
+
 // CheckSkuAvailabilityParameter check SKU availability parameter.
 type CheckSkuAvailabilityParameter struct {
 	// Skus - The SKU of the resource.

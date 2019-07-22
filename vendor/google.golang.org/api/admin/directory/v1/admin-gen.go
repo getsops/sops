@@ -1137,7 +1137,7 @@ type Channel struct {
 	Id string `json:"id,omitempty"`
 
 	// Kind: Identifies this as a notification channel used to watch for
-	// changes to a resource. Value: the fixed string "api#channel".
+	// changes to a resource, which is "api#channel".
 	Kind string `json:"kind,omitempty"`
 
 	// Params: Additional parameters controlling delivery channel behavior.

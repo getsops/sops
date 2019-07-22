@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"net/url"
 	"time"
 
 	"github.com/golang/protobuf/proto"
@@ -48,6 +49,7 @@ type IncidentCallOptions struct {
 	CreateSignal                 []gax.CallOption
 	SearchSignals                []gax.CallOption
 	GetSignal                    []gax.CallOption
+	LookupSignal                 []gax.CallOption
 	UpdateSignal                 []gax.CallOption
 	EscalateIncident             []gax.CallOption
 	CreateArtifact               []gax.CallOption
@@ -104,6 +106,7 @@ func defaultIncidentCallOptions() *IncidentCallOptions {
 		CreateSignal:                 retry[[2]string{"default", "non_idempotent"}],
 		SearchSignals:                retry[[2]string{"default", "idempotent"}],
 		GetSignal:                    retry[[2]string{"default", "idempotent"}],
+		LookupSignal:                 retry[[2]string{"default", "idempotent"}],
 		UpdateSignal:                 retry[[2]string{"default", "non_idempotent"}],
 		EscalateIncident:             retry[[2]string{"default", "non_idempotent"}],
 		CreateArtifact:               retry[[2]string{"default", "non_idempotent"}],
@@ -182,7 +185,7 @@ func (c *IncidentClient) setGoogleClientInfo(keyval ...string) {
 
 // CreateIncident creates a new incident.
 func (c *IncidentClient) CreateIncident(ctx context.Context, req *irmpb.CreateIncidentRequest, opts ...gax.CallOption) (*irmpb.Incident, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.CreateIncident[0:len(c.CallOptions.CreateIncident):len(c.CallOptions.CreateIncident)], opts...)
 	var resp *irmpb.Incident
@@ -199,7 +202,7 @@ func (c *IncidentClient) CreateIncident(ctx context.Context, req *irmpb.CreateIn
 
 // GetIncident returns an incident by name.
 func (c *IncidentClient) GetIncident(ctx context.Context, req *irmpb.GetIncidentRequest, opts ...gax.CallOption) (*irmpb.Incident, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.GetIncident[0:len(c.CallOptions.GetIncident):len(c.CallOptions.GetIncident)], opts...)
 	var resp *irmpb.Incident
@@ -217,7 +220,7 @@ func (c *IncidentClient) GetIncident(ctx context.Context, req *irmpb.GetIncident
 // SearchIncidents returns a list of incidents.
 // Incidents are ordered by start time, with the most recent incidents first.
 func (c *IncidentClient) SearchIncidents(ctx context.Context, req *irmpb.SearchIncidentsRequest, opts ...gax.CallOption) *IncidentIterator {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.SearchIncidents[0:len(c.CallOptions.SearchIncidents):len(c.CallOptions.SearchIncidents)], opts...)
 	it := &IncidentIterator{}
@@ -256,7 +259,7 @@ func (c *IncidentClient) SearchIncidents(ctx context.Context, req *irmpb.SearchI
 
 // UpdateIncident updates an existing incident.
 func (c *IncidentClient) UpdateIncident(ctx context.Context, req *irmpb.UpdateIncidentRequest, opts ...gax.CallOption) (*irmpb.Incident, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "incident.name", req.GetIncident().GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "incident.name", url.QueryEscape(req.GetIncident().GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.UpdateIncident[0:len(c.CallOptions.UpdateIncident):len(c.CallOptions.UpdateIncident)], opts...)
 	var resp *irmpb.Incident
@@ -275,7 +278,7 @@ func (c *IncidentClient) UpdateIncident(ctx context.Context, req *irmpb.UpdateIn
 // or signal. This functionality is provided on a best-effort basis and the
 // definition of "similar" is subject to change.
 func (c *IncidentClient) SearchSimilarIncidents(ctx context.Context, req *irmpb.SearchSimilarIncidentsRequest, opts ...gax.CallOption) *SearchSimilarIncidentsResponse_ResultIterator {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.SearchSimilarIncidents[0:len(c.CallOptions.SearchSimilarIncidents):len(c.CallOptions.SearchSimilarIncidents)], opts...)
 	it := &SearchSimilarIncidentsResponse_ResultIterator{}
@@ -315,7 +318,7 @@ func (c *IncidentClient) SearchSimilarIncidents(ctx context.Context, req *irmpb.
 // CreateAnnotation creates an annotation on an existing incident. Only 'text/plain' and
 // 'text/markdown' annotations can be created via this method.
 func (c *IncidentClient) CreateAnnotation(ctx context.Context, req *irmpb.CreateAnnotationRequest, opts ...gax.CallOption) (*irmpb.Annotation, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.CreateAnnotation[0:len(c.CallOptions.CreateAnnotation):len(c.CallOptions.CreateAnnotation)], opts...)
 	var resp *irmpb.Annotation
@@ -333,7 +336,7 @@ func (c *IncidentClient) CreateAnnotation(ctx context.Context, req *irmpb.Create
 // ListAnnotations lists annotations that are part of an incident. No assumptions should be
 // made on the content-type of the annotation returned.
 func (c *IncidentClient) ListAnnotations(ctx context.Context, req *irmpb.ListAnnotationsRequest, opts ...gax.CallOption) *AnnotationIterator {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ListAnnotations[0:len(c.CallOptions.ListAnnotations):len(c.CallOptions.ListAnnotations)], opts...)
 	it := &AnnotationIterator{}
@@ -372,7 +375,7 @@ func (c *IncidentClient) ListAnnotations(ctx context.Context, req *irmpb.ListAnn
 
 // CreateTag creates a tag on an existing incident.
 func (c *IncidentClient) CreateTag(ctx context.Context, req *irmpb.CreateTagRequest, opts ...gax.CallOption) (*irmpb.Tag, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.CreateTag[0:len(c.CallOptions.CreateTag):len(c.CallOptions.CreateTag)], opts...)
 	var resp *irmpb.Tag
@@ -389,7 +392,7 @@ func (c *IncidentClient) CreateTag(ctx context.Context, req *irmpb.CreateTagRequ
 
 // DeleteTag deletes an existing tag.
 func (c *IncidentClient) DeleteTag(ctx context.Context, req *irmpb.DeleteTagRequest, opts ...gax.CallOption) error {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.DeleteTag[0:len(c.CallOptions.DeleteTag):len(c.CallOptions.DeleteTag)], opts...)
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
@@ -402,7 +405,7 @@ func (c *IncidentClient) DeleteTag(ctx context.Context, req *irmpb.DeleteTagRequ
 
 // ListTags lists tags that are part of an incident.
 func (c *IncidentClient) ListTags(ctx context.Context, req *irmpb.ListTagsRequest, opts ...gax.CallOption) *TagIterator {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ListTags[0:len(c.CallOptions.ListTags):len(c.CallOptions.ListTags)], opts...)
 	it := &TagIterator{}
@@ -441,7 +444,7 @@ func (c *IncidentClient) ListTags(ctx context.Context, req *irmpb.ListTagsReques
 
 // CreateSignal creates a new signal.
 func (c *IncidentClient) CreateSignal(ctx context.Context, req *irmpb.CreateSignalRequest, opts ...gax.CallOption) (*irmpb.Signal, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.CreateSignal[0:len(c.CallOptions.CreateSignal):len(c.CallOptions.CreateSignal)], opts...)
 	var resp *irmpb.Signal
@@ -459,7 +462,7 @@ func (c *IncidentClient) CreateSignal(ctx context.Context, req *irmpb.CreateSign
 // SearchSignals lists signals that are part of an incident.
 // Signals are returned in reverse chronological order.
 func (c *IncidentClient) SearchSignals(ctx context.Context, req *irmpb.SearchSignalsRequest, opts ...gax.CallOption) *SignalIterator {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.SearchSignals[0:len(c.CallOptions.SearchSignals):len(c.CallOptions.SearchSignals)], opts...)
 	it := &SignalIterator{}
@@ -498,7 +501,7 @@ func (c *IncidentClient) SearchSignals(ctx context.Context, req *irmpb.SearchSig
 
 // GetSignal returns a signal by name.
 func (c *IncidentClient) GetSignal(ctx context.Context, req *irmpb.GetSignalRequest, opts ...gax.CallOption) (*irmpb.Signal, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.GetSignal[0:len(c.CallOptions.GetSignal):len(c.CallOptions.GetSignal)], opts...)
 	var resp *irmpb.Signal
@@ -513,10 +516,26 @@ func (c *IncidentClient) GetSignal(ctx context.Context, req *irmpb.GetSignalRequ
 	return resp, nil
 }
 
+// LookupSignal finds a signal by other unique IDs.
+func (c *IncidentClient) LookupSignal(ctx context.Context, req *irmpb.LookupSignalRequest, opts ...gax.CallOption) (*irmpb.Signal, error) {
+	ctx = insertMetadata(ctx, c.xGoogMetadata)
+	opts = append(c.CallOptions.LookupSignal[0:len(c.CallOptions.LookupSignal):len(c.CallOptions.LookupSignal)], opts...)
+	var resp *irmpb.Signal
+	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
+		var err error
+		resp, err = c.incidentClient.LookupSignal(ctx, req, settings.GRPC...)
+		return err
+	}, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
 // UpdateSignal updates an existing signal (for example, to assign/unassign it to an
 // incident).
 func (c *IncidentClient) UpdateSignal(ctx context.Context, req *irmpb.UpdateSignalRequest, opts ...gax.CallOption) (*irmpb.Signal, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "signal.name", req.GetSignal().GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "signal.name", url.QueryEscape(req.GetSignal().GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.UpdateSignal[0:len(c.CallOptions.UpdateSignal):len(c.CallOptions.UpdateSignal)], opts...)
 	var resp *irmpb.Signal
@@ -533,7 +552,7 @@ func (c *IncidentClient) UpdateSignal(ctx context.Context, req *irmpb.UpdateSign
 
 // EscalateIncident escalates an incident.
 func (c *IncidentClient) EscalateIncident(ctx context.Context, req *irmpb.EscalateIncidentRequest, opts ...gax.CallOption) (*irmpb.EscalateIncidentResponse, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "incident.name", req.GetIncident().GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "incident.name", url.QueryEscape(req.GetIncident().GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.EscalateIncident[0:len(c.CallOptions.EscalateIncident):len(c.CallOptions.EscalateIncident)], opts...)
 	var resp *irmpb.EscalateIncidentResponse
@@ -550,7 +569,7 @@ func (c *IncidentClient) EscalateIncident(ctx context.Context, req *irmpb.Escala
 
 // CreateArtifact creates a new artifact.
 func (c *IncidentClient) CreateArtifact(ctx context.Context, req *irmpb.CreateArtifactRequest, opts ...gax.CallOption) (*irmpb.Artifact, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.CreateArtifact[0:len(c.CallOptions.CreateArtifact):len(c.CallOptions.CreateArtifact)], opts...)
 	var resp *irmpb.Artifact
@@ -567,7 +586,7 @@ func (c *IncidentClient) CreateArtifact(ctx context.Context, req *irmpb.CreateAr
 
 // ListArtifacts returns a list of artifacts for an incident.
 func (c *IncidentClient) ListArtifacts(ctx context.Context, req *irmpb.ListArtifactsRequest, opts ...gax.CallOption) *ArtifactIterator {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ListArtifacts[0:len(c.CallOptions.ListArtifacts):len(c.CallOptions.ListArtifacts)], opts...)
 	it := &ArtifactIterator{}
@@ -606,7 +625,7 @@ func (c *IncidentClient) ListArtifacts(ctx context.Context, req *irmpb.ListArtif
 
 // UpdateArtifact updates an existing artifact.
 func (c *IncidentClient) UpdateArtifact(ctx context.Context, req *irmpb.UpdateArtifactRequest, opts ...gax.CallOption) (*irmpb.Artifact, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "artifact.name", req.GetArtifact().GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "artifact.name", url.QueryEscape(req.GetArtifact().GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.UpdateArtifact[0:len(c.CallOptions.UpdateArtifact):len(c.CallOptions.UpdateArtifact)], opts...)
 	var resp *irmpb.Artifact
@@ -623,7 +642,7 @@ func (c *IncidentClient) UpdateArtifact(ctx context.Context, req *irmpb.UpdateAr
 
 // DeleteArtifact deletes an existing artifact.
 func (c *IncidentClient) DeleteArtifact(ctx context.Context, req *irmpb.DeleteArtifactRequest, opts ...gax.CallOption) error {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.DeleteArtifact[0:len(c.CallOptions.DeleteArtifact):len(c.CallOptions.DeleteArtifact)], opts...)
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
@@ -636,7 +655,7 @@ func (c *IncidentClient) DeleteArtifact(ctx context.Context, req *irmpb.DeleteAr
 
 // SendShiftHandoff sends a summary of the shift for oncall handoff.
 func (c *IncidentClient) SendShiftHandoff(ctx context.Context, req *irmpb.SendShiftHandoffRequest, opts ...gax.CallOption) (*irmpb.SendShiftHandoffResponse, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.SendShiftHandoff[0:len(c.CallOptions.SendShiftHandoff):len(c.CallOptions.SendShiftHandoff)], opts...)
 	var resp *irmpb.SendShiftHandoffResponse
@@ -656,7 +675,7 @@ func (c *IncidentClient) SendShiftHandoff(ctx context.Context, req *irmpb.SendSh
 // a. there are too many (50) subscriptions in the incident already
 // b. a subscription using the given channel already exists
 func (c *IncidentClient) CreateSubscription(ctx context.Context, req *irmpb.CreateSubscriptionRequest, opts ...gax.CallOption) (*irmpb.Subscription, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.CreateSubscription[0:len(c.CallOptions.CreateSubscription):len(c.CallOptions.CreateSubscription)], opts...)
 	var resp *irmpb.Subscription
@@ -673,7 +692,7 @@ func (c *IncidentClient) CreateSubscription(ctx context.Context, req *irmpb.Crea
 
 // UpdateSubscription updates a subscription.
 func (c *IncidentClient) UpdateSubscription(ctx context.Context, req *irmpb.UpdateSubscriptionRequest, opts ...gax.CallOption) (*irmpb.Subscription, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "subscription.name", req.GetSubscription().GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "subscription.name", url.QueryEscape(req.GetSubscription().GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.UpdateSubscription[0:len(c.CallOptions.UpdateSubscription):len(c.CallOptions.UpdateSubscription)], opts...)
 	var resp *irmpb.Subscription
@@ -690,7 +709,7 @@ func (c *IncidentClient) UpdateSubscription(ctx context.Context, req *irmpb.Upda
 
 // ListSubscriptions returns a list of subscriptions for an incident.
 func (c *IncidentClient) ListSubscriptions(ctx context.Context, req *irmpb.ListSubscriptionsRequest, opts ...gax.CallOption) *SubscriptionIterator {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ListSubscriptions[0:len(c.CallOptions.ListSubscriptions):len(c.CallOptions.ListSubscriptions)], opts...)
 	it := &SubscriptionIterator{}
@@ -729,7 +748,7 @@ func (c *IncidentClient) ListSubscriptions(ctx context.Context, req *irmpb.ListS
 
 // DeleteSubscription deletes an existing subscription.
 func (c *IncidentClient) DeleteSubscription(ctx context.Context, req *irmpb.DeleteSubscriptionRequest, opts ...gax.CallOption) error {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.DeleteSubscription[0:len(c.CallOptions.DeleteSubscription):len(c.CallOptions.DeleteSubscription)], opts...)
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
@@ -746,7 +765,7 @@ func (c *IncidentClient) DeleteSubscription(ctx context.Context, req *irmpb.Dele
 // directly to a user other than oneself is equivalent to proposing and
 // force-assigning the role to the user.
 func (c *IncidentClient) CreateIncidentRoleAssignment(ctx context.Context, req *irmpb.CreateIncidentRoleAssignmentRequest, opts ...gax.CallOption) (*irmpb.IncidentRoleAssignment, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.CreateIncidentRoleAssignment[0:len(c.CallOptions.CreateIncidentRoleAssignment):len(c.CallOptions.CreateIncidentRoleAssignment)], opts...)
 	var resp *irmpb.IncidentRoleAssignment
@@ -763,7 +782,7 @@ func (c *IncidentClient) CreateIncidentRoleAssignment(ctx context.Context, req *
 
 // DeleteIncidentRoleAssignment deletes an existing role assignment.
 func (c *IncidentClient) DeleteIncidentRoleAssignment(ctx context.Context, req *irmpb.DeleteIncidentRoleAssignmentRequest, opts ...gax.CallOption) error {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.DeleteIncidentRoleAssignment[0:len(c.CallOptions.DeleteIncidentRoleAssignment):len(c.CallOptions.DeleteIncidentRoleAssignment)], opts...)
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
@@ -776,7 +795,7 @@ func (c *IncidentClient) DeleteIncidentRoleAssignment(ctx context.Context, req *
 
 // ListIncidentRoleAssignments lists role assignments that are part of an incident.
 func (c *IncidentClient) ListIncidentRoleAssignments(ctx context.Context, req *irmpb.ListIncidentRoleAssignmentsRequest, opts ...gax.CallOption) *IncidentRoleAssignmentIterator {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ListIncidentRoleAssignments[0:len(c.CallOptions.ListIncidentRoleAssignments):len(c.CallOptions.ListIncidentRoleAssignments)], opts...)
 	it := &IncidentRoleAssignmentIterator{}
@@ -817,7 +836,7 @@ func (c *IncidentClient) ListIncidentRoleAssignments(ctx context.Context, req *i
 // notifying them of the assignment. This will fail if a role handover is
 // already pending.
 func (c *IncidentClient) RequestIncidentRoleHandover(ctx context.Context, req *irmpb.RequestIncidentRoleHandoverRequest, opts ...gax.CallOption) (*irmpb.IncidentRoleAssignment, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.RequestIncidentRoleHandover[0:len(c.CallOptions.RequestIncidentRoleHandover):len(c.CallOptions.RequestIncidentRoleHandover)], opts...)
 	var resp *irmpb.IncidentRoleAssignment
@@ -837,7 +856,7 @@ func (c *IncidentClient) RequestIncidentRoleHandover(ctx context.Context, req *i
 // the request. If the caller is not the new_assignee,
 // ForceIncidentRoleHandover should be used instead.
 func (c *IncidentClient) ConfirmIncidentRoleHandover(ctx context.Context, req *irmpb.ConfirmIncidentRoleHandoverRequest, opts ...gax.CallOption) (*irmpb.IncidentRoleAssignment, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ConfirmIncidentRoleHandover[0:len(c.CallOptions.ConfirmIncidentRoleHandover):len(c.CallOptions.ConfirmIncidentRoleHandover)], opts...)
 	var resp *irmpb.IncidentRoleAssignment
@@ -857,7 +876,7 @@ func (c *IncidentClient) ConfirmIncidentRoleHandover(ctx context.Context, req *i
 // request. If the caller is the new_assignee, ConfirmIncidentRoleHandover
 // should be used instead.
 func (c *IncidentClient) ForceIncidentRoleHandover(ctx context.Context, req *irmpb.ForceIncidentRoleHandoverRequest, opts ...gax.CallOption) (*irmpb.IncidentRoleAssignment, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ForceIncidentRoleHandover[0:len(c.CallOptions.ForceIncidentRoleHandover):len(c.CallOptions.ForceIncidentRoleHandover)], opts...)
 	var resp *irmpb.IncidentRoleAssignment
@@ -876,7 +895,7 @@ func (c *IncidentClient) ForceIncidentRoleHandover(ctx context.Context, req *irm
 // the IncidentRoleAssignment is not equal to the 'new_assignee' field of the
 // request.
 func (c *IncidentClient) CancelIncidentRoleHandover(ctx context.Context, req *irmpb.CancelIncidentRoleHandoverRequest, opts ...gax.CallOption) (*irmpb.IncidentRoleAssignment, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.CancelIncidentRoleHandover[0:len(c.CallOptions.CancelIncidentRoleHandover):len(c.CallOptions.CancelIncidentRoleHandover)], opts...)
 	var resp *irmpb.IncidentRoleAssignment

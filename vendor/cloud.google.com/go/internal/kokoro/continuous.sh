@@ -52,7 +52,6 @@ download_deps() {
 download_deps
 go install github.com/jstemmer/go-junit-report
 ./internal/kokoro/vet.sh
-./internal/kokoro/check_incompat_changes.sh
 
 mkdir $KOKORO_ARTIFACTS_DIR/tests
 
@@ -70,6 +69,6 @@ create_junit_xml() {
 trap create_junit_xml EXIT ERR
 
 # Run tests and tee output to log file, to be pushed to GCS as artifact.
-go test -race -v -timeout 45m ./... 2>&1 \
+go test -race -v -timeout 30m ./... 2>&1 \
   | tee $KOKORO_ARTIFACTS_DIR/$KOKORO_GERRIT_CHANGE_NUMBER.txt
 

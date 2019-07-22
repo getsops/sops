@@ -1,48 +1,50 @@
 ---
 version: 1
-rwmutex: {}
 interactions:
 - request:
     body: ""
     form: {}
     headers:
       Authorization:
-      - SharedKey golangrocksonazure:LmqdjlmtmJxNNkfm+K/Zsx8eeraNq1wBRMKc5NSOfXE=
+      - SharedKey golangrocksonazure:TW2qfaxhPTxnWBGjXA7dfIPvf8zkKwbyW5QMPU/jRiM=
       User-Agent:
-      - Go/go1.9beta1 (amd64-windows) azure-storage-go/10.0.2 api-version/2016-05-31
+      - Go/go1.12.4 (amd64-windows) azure-storage-go/latest api-version/2018-03-28
         queue
       x-ms-date:
-      - Thu, 20 Jul 2017 23:34:08 GMT
+      - Tue, 28 May 2019 22:36:08 GMT
       x-ms-version:
-      - 2016-05-31
+      - "2018-03-28"
     url: https://golangrocksonazure.queue.core.windows.net/queue-45storagequeuesuitetestcreatequeuedeletequeue
     method: PUT
   response:
     body: ""
     headers:
+      Content-Length:
+      - "0"
       Date:
-      - Thu, 20 Jul 2017 23:34:08 GMT
+      - Tue, 28 May 2019 22:36:07 GMT
       Server:
       - Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
       X-Ms-Request-Id:
-      - 3fb9b21b-0003-00da-44b0-011674000000
+      - c47a9e76-a003-0042-01a5-15418d000000
       X-Ms-Version:
-      - 2016-05-31
+      - "2018-03-28"
     status: 201 Created
     code: 201
+    duration: ""
 - request:
     body: ""
     form: {}
     headers:
       Authorization:
-      - SharedKey golangrocksonazure:anhJBkMKfpfX0nhPVo08mbBWI7rKvzeWB+JUMW5ocoE=
+      - SharedKey golangrocksonazure:/bzpxegzS5/LHDe2Y9Z+bZ+gHZsDKzimJX7gz9tF0nM=
       User-Agent:
-      - Go/go1.9beta1 (amd64-windows) azure-storage-go/10.0.2 api-version/2016-05-31
+      - Go/go1.12.4 (amd64-windows) azure-storage-go/latest api-version/2018-03-28
         queue
       x-ms-date:
-      - Thu, 20 Jul 2017 23:34:09 GMT
+      - Tue, 28 May 2019 22:36:08 GMT
       x-ms-version:
-      - 2016-05-31
+      - "2018-03-28"
     url: https://golangrocksonazure.queue.core.windows.net/queue-45storagequeuesuitetestcreatequeuedeletequeue
     method: DELETE
   response:
@@ -51,12 +53,13 @@ interactions:
       Content-Length:
       - "0"
       Date:
-      - Thu, 20 Jul 2017 23:34:08 GMT
+      - Tue, 28 May 2019 22:36:07 GMT
       Server:
       - Windows-Azure-Queue/1.0 Microsoft-HTTPAPI/2.0
       X-Ms-Request-Id:
-      - 3fb9b21d-0003-00da-45b0-011674000000
+      - c47a9e7b-a003-0042-04a5-15418d000000
       X-Ms-Version:
-      - 2016-05-31
+      - "2018-03-28"
     status: 204 No Content
     code: 204
+    duration: ""

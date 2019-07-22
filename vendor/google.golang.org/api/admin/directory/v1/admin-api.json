@@ -93,7 +93,7 @@
   "description": "Manages enterprise resources such as users and groups, administrative notifications, security features, and more.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/admin-sdk/directory/",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/TsFVRmNS9ZNOmXobzjavN4k9ZAM\"",
+  "etag": "\"9eZ1uxVRThTDhLJCZHhqs3eQWz4/eWNDpeAZuk1gV8zhFqMfz4qmrho\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -4425,7 +4425,7 @@
         },
         "kind": {
           "default": "api#channel",
-          "description": "Identifies this as a notification channel used to watch for changes to a resource. Value: the fixed string \"api#channel\".",
+          "description": "Identifies this as a notification channel used to watch for changes to a resource, which is \"api#channel\".",
           "type": "string"
         },
         "params": {

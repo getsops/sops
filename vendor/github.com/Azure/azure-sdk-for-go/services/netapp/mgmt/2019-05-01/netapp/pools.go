@@ -67,7 +67,7 @@ func (client PoolsClient) CreateOrUpdate(ctx context.Context, body CapacityPool,
 							{Target: "body.PoolProperties.PoolID", Name: validation.MinLength, Rule: 36, Chain: nil},
 							{Target: "body.PoolProperties.PoolID", Name: validation.Pattern, Rule: `^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$`, Chain: nil},
 						}},
-						{Target: "body.PoolProperties.Size", Name: validation.Null, Rule: false,
+						{Target: "body.PoolProperties.Size", Name: validation.Null, Rule: true,
 							Chain: []validation.Constraint{{Target: "body.PoolProperties.Size", Name: validation.InclusiveMaximum, Rule: int64(549755813888000), Chain: nil},
 								{Target: "body.PoolProperties.Size", Name: validation.InclusiveMinimum, Rule: 4398046511104, Chain: nil},
 							}},
@@ -103,7 +103,7 @@ func (client PoolsClient) CreateOrUpdatePreparer(ctx context.Context, body Capac
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2017-08-15"
+	const APIVersion = "2019-05-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -195,7 +195,7 @@ func (client PoolsClient) DeletePreparer(ctx context.Context, resourceGroupName 
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2017-08-15"
+	const APIVersion = "2019-05-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -287,7 +287,7 @@ func (client PoolsClient) GetPreparer(ctx context.Context, resourceGroupName str
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2017-08-15"
+	const APIVersion = "2019-05-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -372,7 +372,7 @@ func (client PoolsClient) ListPreparer(ctx context.Context, resourceGroupName st
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2017-08-15"
+	const APIVersion = "2019-05-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}
@@ -460,7 +460,7 @@ func (client PoolsClient) UpdatePreparer(ctx context.Context, body CapacityPoolP
 		"subscriptionId":    autorest.Encode("path", client.SubscriptionID),
 	}
 
-	const APIVersion = "2017-08-15"
+	const APIVersion = "2019-05-01"
 	queryParameters := map[string]interface{}{
 		"api-version": APIVersion,
 	}

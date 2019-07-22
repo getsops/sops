@@ -1,0 +1,113 @@
+{
+  "tests": [
+    {
+      "description": "listen: DocumentChange with removed_target_id is like a delete.",
+      "comment": "A DocumentChange with the watch target ID in the removed_target_ids field is the\nsame as deleting a document.",
+      "listen": {
+        "responses": [
+          {
+            "documentChange": {
+              "document": {
+                "name": "projects/projectID/databases/(default)/documents/C/d1",
+                "fields": {
+                  "a": {
+                    "integerValue": "3"
+                  }
+                },
+                "createTime": "1970-01-01T00:00:01Z",
+                "updateTime": "1970-01-01T00:00:01Z"
+              },
+              "targetIds": [
+                1
+              ]
+            }
+          },
+          {
+            "targetChange": {
+              "targetChangeType": "CURRENT"
+            }
+          },
+          {
+            "targetChange": {
+              "readTime": "1970-01-01T00:00:01Z"
+            }
+          },
+          {
+            "documentChange": {
+              "document": {
+                "name": "projects/projectID/databases/(default)/documents/C/d1",
+                "fields": {
+                  "a": {
+                    "integerValue": "3"
+                  }
+                },
+                "createTime": "1970-01-01T00:00:01Z",
+                "updateTime": "1970-01-01T00:00:01Z"
+              },
+              "removedTargetIds": [
+                1
+              ]
+            }
+          },
+          {
+            "targetChange": {
+              "readTime": "1970-01-01T00:00:02Z"
+            }
+          }
+        ],
+        "snapshots": [
+          {
+            "docs": [
+              {
+                "name": "projects/projectID/databases/(default)/documents/C/d1",
+                "fields": {
+                  "a": {
+                    "integerValue": "3"
+                  }
+                },
+                "createTime": "1970-01-01T00:00:01Z",
+                "updateTime": "1970-01-01T00:00:01Z"
+              }
+            ],
+            "changes": [
+              {
+                "kind": "ADDED",
+                "doc": {
+                  "name": "projects/projectID/databases/(default)/documents/C/d1",
+                  "fields": {
+                    "a": {
+                      "integerValue": "3"
+                    }
+                  },
+                  "createTime": "1970-01-01T00:00:01Z",
+                  "updateTime": "1970-01-01T00:00:01Z"
+                },
+                "oldIndex": -1
+              }
+            ],
+            "readTime": "1970-01-01T00:00:01Z"
+          },
+          {
+            "changes": [
+              {
+                "kind": "REMOVED",
+                "doc": {
+                  "name": "projects/projectID/databases/(default)/documents/C/d1",
+                  "fields": {
+                    "a": {
+                      "integerValue": "3"
+                    }
+                  },
+                  "createTime": "1970-01-01T00:00:01Z",
+                  "updateTime": "1970-01-01T00:00:01Z"
+                },
+                "newIndex": -1
+              }
+            ],
+            "readTime": "1970-01-01T00:00:02Z"
+          }
+        ]
+      }
+    }
+  ]
+}

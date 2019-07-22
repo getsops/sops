@@ -109,7 +109,7 @@ func timesEqual(values []time.Time, expected ...time.Time) {
 
 func TestKey_Helpers(t *testing.T) {
 	Convey("Getting and setting values", t, func() {
-		f, err := ini.Load(_FULL_CONF)
+		f, err := ini.Load(fullConf)
 		So(err, ShouldBeNil)
 		So(f, ShouldNotBeNil)
 
@@ -166,7 +166,7 @@ func TestKey_Helpers(t *testing.T) {
 
 		Convey("Get sections", func() {
 			sections := f.Sections()
-			for i, name := range []string{ini.DEFAULT_SECTION, "author", "package", "package.sub", "features", "types", "array", "note", "comments", "string escapes", "advance"} {
+			for i, name := range []string{ini.DefaultSection, "author", "package", "package.sub", "features", "types", "array", "note", "comments", "string escapes", "advance"} {
 				So(sections[i].Name(), ShouldEqual, name)
 			}
 		})

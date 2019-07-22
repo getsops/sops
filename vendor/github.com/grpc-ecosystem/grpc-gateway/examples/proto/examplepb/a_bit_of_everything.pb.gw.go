@@ -1481,45 +1481,45 @@ func RegisterABitOfEverythingServiceHandlerClient(ctx context.Context, mux *runt
 }
 
 var (
-	pattern_ABitOfEverythingService_Create_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5, 2, 6, 1, 0, 4, 1, 5, 7, 1, 0, 4, 1, 5, 8, 1, 0, 4, 1, 5, 9, 1, 0, 4, 1, 5, 10, 1, 0, 4, 1, 5, 11, 2, 12, 1, 0, 4, 2, 5, 13, 1, 0, 4, 1, 5, 14, 1, 0, 4, 1, 5, 15, 1, 0, 4, 1, 5, 16, 1, 0, 4, 1, 5, 17, 1, 0, 4, 1, 5, 18, 1, 0, 4, 1, 5, 19, 1, 0, 4, 1, 5, 20, 1, 0, 4, 1, 5, 21, 1, 0, 4, 1, 5, 22, 1, 0, 4, 1, 5, 23}, []string{"v1", "example", "a_bit_of_everything", "float_value", "double_value", "int64_value", "separator", "uint64_value", "int32_value", "fixed64_value", "fixed32_value", "bool_value", "strprefix", "string_value", "uint32_value", "sfixed32_value", "sfixed64_value", "sint32_value", "sint64_value", "nonConventionalNameValue", "enum_value", "path_enum_value", "nested_path_enum_value", "enum_value_annotation"}, ""))
+	pattern_ABitOfEverythingService_Create_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5, 2, 6, 1, 0, 4, 1, 5, 7, 1, 0, 4, 1, 5, 8, 1, 0, 4, 1, 5, 9, 1, 0, 4, 1, 5, 10, 1, 0, 4, 1, 5, 11, 2, 12, 1, 0, 4, 2, 5, 13, 1, 0, 4, 1, 5, 14, 1, 0, 4, 1, 5, 15, 1, 0, 4, 1, 5, 16, 1, 0, 4, 1, 5, 17, 1, 0, 4, 1, 5, 18, 1, 0, 4, 1, 5, 19, 1, 0, 4, 1, 5, 20, 1, 0, 4, 1, 5, 21, 1, 0, 4, 1, 5, 22, 1, 0, 4, 1, 5, 23}, []string{"v1", "example", "a_bit_of_everything", "float_value", "double_value", "int64_value", "separator", "uint64_value", "int32_value", "fixed64_value", "fixed32_value", "bool_value", "strprefix", "string_value", "uint32_value", "sfixed32_value", "sfixed64_value", "sint32_value", "sint64_value", "nonConventionalNameValue", "enum_value", "path_enum_value", "nested_path_enum_value", "enum_value_annotation"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ABitOfEverythingService_CreateBody_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "example", "a_bit_of_everything"}, ""))
+	pattern_ABitOfEverythingService_CreateBody_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v1", "example", "a_bit_of_everything"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ABitOfEverythingService_Lookup_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "example", "a_bit_of_everything", "uuid"}, ""))
+	pattern_ABitOfEverythingService_Lookup_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "example", "a_bit_of_everything", "uuid"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ABitOfEverythingService_Update_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "example", "a_bit_of_everything", "uuid"}, ""))
+	pattern_ABitOfEverythingService_Update_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "example", "a_bit_of_everything", "uuid"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ABitOfEverythingService_UpdateV2_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v2", "example", "a_bit_of_everything", "abe.uuid"}, ""))
+	pattern_ABitOfEverythingService_UpdateV2_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v2", "example", "a_bit_of_everything", "abe.uuid"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ABitOfEverythingService_UpdateV2_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v2", "example", "a_bit_of_everything", "abe.uuid"}, ""))
+	pattern_ABitOfEverythingService_UpdateV2_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v2", "example", "a_bit_of_everything", "abe.uuid"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ABitOfEverythingService_PatchWithFieldMaskInBody_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v2a", "example", "a_bit_of_everything", "abe.uuid"}, ""))
+	pattern_ABitOfEverythingService_PatchWithFieldMaskInBody_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v2a", "example", "a_bit_of_everything", "abe.uuid"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ABitOfEverythingService_Delete_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "example", "a_bit_of_everything", "uuid"}, ""))
+	pattern_ABitOfEverythingService_Delete_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "example", "a_bit_of_everything", "uuid"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ABitOfEverythingService_GetQuery_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"v1", "example", "a_bit_of_everything", "query", "uuid"}, ""))
+	pattern_ABitOfEverythingService_GetQuery_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"v1", "example", "a_bit_of_everything", "query", "uuid"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ABitOfEverythingService_GetRepeatedQuery_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6, 1, 0, 4, 1, 5, 7, 1, 0, 4, 1, 5, 8, 1, 0, 4, 1, 5, 9, 1, 0, 4, 1, 5, 10, 1, 0, 4, 1, 5, 11, 1, 0, 4, 1, 5, 12, 1, 0, 4, 1, 5, 13, 1, 0, 4, 1, 5, 14, 1, 0, 4, 1, 5, 15, 1, 0, 4, 1, 5, 16, 1, 0, 4, 1, 5, 17, 1, 0, 4, 1, 5, 18}, []string{"v1", "example", "a_bit_of_everything_repeated", "path_repeated_float_value", "path_repeated_double_value", "path_repeated_int64_value", "path_repeated_uint64_value", "path_repeated_int32_value", "path_repeated_fixed64_value", "path_repeated_fixed32_value", "path_repeated_bool_value", "path_repeated_string_value", "path_repeated_bytes_value", "path_repeated_uint32_value", "path_repeated_enum_value", "path_repeated_sfixed32_value", "path_repeated_sfixed64_value", "path_repeated_sint32_value", "path_repeated_sint64_value"}, ""))
+	pattern_ABitOfEverythingService_GetRepeatedQuery_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6, 1, 0, 4, 1, 5, 7, 1, 0, 4, 1, 5, 8, 1, 0, 4, 1, 5, 9, 1, 0, 4, 1, 5, 10, 1, 0, 4, 1, 5, 11, 1, 0, 4, 1, 5, 12, 1, 0, 4, 1, 5, 13, 1, 0, 4, 1, 5, 14, 1, 0, 4, 1, 5, 15, 1, 0, 4, 1, 5, 16, 1, 0, 4, 1, 5, 17, 1, 0, 4, 1, 5, 18}, []string{"v1", "example", "a_bit_of_everything_repeated", "path_repeated_float_value", "path_repeated_double_value", "path_repeated_int64_value", "path_repeated_uint64_value", "path_repeated_int32_value", "path_repeated_fixed64_value", "path_repeated_fixed32_value", "path_repeated_bool_value", "path_repeated_string_value", "path_repeated_bytes_value", "path_repeated_uint32_value", "path_repeated_enum_value", "path_repeated_sfixed32_value", "path_repeated_sfixed64_value", "path_repeated_sint32_value", "path_repeated_sint64_value"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ABitOfEverythingService_Echo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"v1", "example", "a_bit_of_everything", "echo", "value"}, ""))
+	pattern_ABitOfEverythingService_Echo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"v1", "example", "a_bit_of_everything", "echo", "value"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ABitOfEverythingService_Echo_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v2", "example", "echo"}, ""))
+	pattern_ABitOfEverythingService_Echo_1 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v2", "example", "echo"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ABitOfEverythingService_Echo_2 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v2", "example", "echo"}, ""))
+	pattern_ABitOfEverythingService_Echo_2 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v2", "example", "echo"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ABitOfEverythingService_DeepPathEcho_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "example", "a_bit_of_everything", "single_nested.name"}, ""))
+	pattern_ABitOfEverythingService_DeepPathEcho_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v1", "example", "a_bit_of_everything", "single_nested.name"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ABitOfEverythingService_Timeout_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v2", "example", "timeout"}, ""))
+	pattern_ABitOfEverythingService_Timeout_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v2", "example", "timeout"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ABitOfEverythingService_ErrorWithDetails_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v2", "example", "errorwithdetails"}, ""))
+	pattern_ABitOfEverythingService_ErrorWithDetails_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v2", "example", "errorwithdetails"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ABitOfEverythingService_GetMessageWithBody_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v2", "example", "withbody", "id"}, ""))
+	pattern_ABitOfEverythingService_GetMessageWithBody_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v2", "example", "withbody", "id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ABitOfEverythingService_PostWithEmptyBody_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v2", "example", "postwithemptybody", "name"}, ""))
+	pattern_ABitOfEverythingService_PostWithEmptyBody_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"v2", "example", "postwithemptybody", "name"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ABitOfEverythingService_CheckGetQueryParams_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"v1", "example", "a_bit_of_everything", "params", "get", "single_nested.name"}, ""))
+	pattern_ABitOfEverythingService_CheckGetQueryParams_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"v1", "example", "a_bit_of_everything", "params", "get", "single_nested.name"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_ABitOfEverythingService_CheckPostQueryParams_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"v1", "example", "a_bit_of_everything", "params", "post", "string_value"}, ""))
+	pattern_ABitOfEverythingService_CheckPostQueryParams_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"v1", "example", "a_bit_of_everything", "params", "post", "string_value"}, "", runtime.AssumeColonVerbOpt(true)))
 )
 
 var (
@@ -1626,7 +1626,7 @@ func RegisterCamelCaseServiceNameHandlerClient(ctx context.Context, mux *runtime
 }
 
 var (
-	pattern_CamelCaseServiceName_Empty_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v2", "example", "empty"}, ""))
+	pattern_CamelCaseServiceName_Empty_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"v2", "example", "empty"}, "", runtime.AssumeColonVerbOpt(true)))
 )
 
 var (

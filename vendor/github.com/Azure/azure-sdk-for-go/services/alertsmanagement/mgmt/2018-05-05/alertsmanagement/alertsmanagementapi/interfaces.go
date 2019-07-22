@@ -43,7 +43,7 @@ var _ AlertsClientAPI = (*alertsmanagement.AlertsClient)(nil)
 // SmartGroupsClientAPI contains the set of methods on the SmartGroupsClient type.
 type SmartGroupsClientAPI interface {
 	ChangeState(ctx context.Context, smartGroupID string, newState alertsmanagement.AlertState) (result alertsmanagement.SmartGroup, err error)
-	GetAll(ctx context.Context, targetResource string, targetResourceGroup string, targetResourceType string, monitorService alertsmanagement.MonitorService, monitorCondition alertsmanagement.MonitorCondition, severity alertsmanagement.Severity, smartGroupState alertsmanagement.AlertState, timeRange alertsmanagement.TimeRange, pageCount *int32, sortBy alertsmanagement.SmartGroupsSortByFields, sortOrder string) (result alertsmanagement.SmartGroupsList, err error)
+	GetAll(ctx context.Context, targetResource string, targetResourceGroup string, targetResourceType string, monitorService alertsmanagement.MonitorService, monitorCondition alertsmanagement.MonitorCondition, severity alertsmanagement.Severity, smartGroupState alertsmanagement.AlertState, timeRange alertsmanagement.TimeRange, pageCount *int32, sortBy alertsmanagement.SmartGroupsSortByFields, sortOrder string) (result alertsmanagement.SmartGroupsListPage, err error)
 	GetByID(ctx context.Context, smartGroupID string) (result alertsmanagement.SmartGroup, err error)
 	GetHistory(ctx context.Context, smartGroupID string) (result alertsmanagement.SmartGroupModification, err error)
 }

@@ -768,6 +768,21 @@
         {"shape":"ServiceFailureException"}
       ]
     },
+    "GenerateOrganizationsAccessReport":{
+      "name":"GenerateOrganizationsAccessReport",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GenerateOrganizationsAccessReportRequest"},
+      "output":{
+        "shape":"GenerateOrganizationsAccessReportResponse",
+        "resultWrapper":"GenerateOrganizationsAccessReportResult"
+      },
+      "errors":[
+        {"shape":"ReportGenerationLimitExceededException"}
+      ]
+    },
     "GenerateServiceLastAccessedDetails":{
       "name":"GenerateServiceLastAccessedDetails",
       "http":{
@@ -794,10 +809,7 @@
       "output":{
         "shape":"GetAccessKeyLastUsedResponse",
         "resultWrapper":"GetAccessKeyLastUsedResult"
-      },
-      "errors":[
-        {"shape":"NoSuchEntityException"}
-      ]
+      }
     },
     "GetAccountAuthorizationDetails":{
       "name":"GetAccountAuthorizationDetails",
@@ -970,6 +982,21 @@
         {"shape":"InvalidInputException"},
         {"shape":"NoSuchEntityException"},
         {"shape":"ServiceFailureException"}
+      ]
+    },
+    "GetOrganizationsAccessReport":{
+      "name":"GetOrganizationsAccessReport",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetOrganizationsAccessReportRequest"},
+      "output":{
+        "shape":"GetOrganizationsAccessReportResponse",
+        "resultWrapper":"GetOrganizationsAccessReportResult"
+      },
+      "errors":[
+        {"shape":"NoSuchEntityException"}
       ]
     },
     "GetPolicy":{
@@ -2124,6 +2151,25 @@
     }
   },
   "shapes":{
+    "AccessDetail":{
+      "type":"structure",
+      "required":[
+        "ServiceName",
+        "ServiceNamespace"
+      ],
+      "members":{
+        "ServiceName":{"shape":"serviceNameType"},
+        "ServiceNamespace":{"shape":"serviceNamespaceType"},
+        "Region":{"shape":"stringType"},
+        "EntityPath":{"shape":"organizationsEntityPathType"},
+        "LastAuthenticatedTime":{"shape":"dateType"},
+        "TotalAuthenticatedEntities":{"shape":"integerType"}
+      }
+    },
+    "AccessDetails":{
+      "type":"list",
+      "member":{"shape":"AccessDetail"}
+    },
     "AccessKey":{
       "type":"structure",
       "required":[
@@ -2997,6 +3043,20 @@
         "Description":{"shape":"ReportStateDescriptionType"}
       }
     },
+    "GenerateOrganizationsAccessReportRequest":{
+      "type":"structure",
+      "required":["EntityPath"],
+      "members":{
+        "EntityPath":{"shape":"organizationsEntityPathType"},
+        "OrganizationsPolicyId":{"shape":"organizationsPolicyIdType"}
+      }
+    },
+    "GenerateOrganizationsAccessReportResponse":{
+      "type":"structure",
+      "members":{
+        "JobId":{"shape":"jobIDType"}
+      }
+    },
     "GenerateServiceLastAccessedDetailsRequest":{
       "type":"structure",
       "required":["Arn"],
@@ -3173,6 +3233,34 @@
         "ClientIDList":{"shape":"clientIDListType"},
         "ThumbprintList":{"shape":"thumbprintListType"},
         "CreateDate":{"shape":"dateType"}
+      }
+    },
+    "GetOrganizationsAccessReportRequest":{
+      "type":"structure",
+      "required":["JobId"],
+      "members":{
+        "JobId":{"shape":"jobIDType"},
+        "MaxItems":{"shape":"maxItemsType"},
+        "Marker":{"shape":"markerType"},
+        "SortKey":{"shape":"sortKeyType"}
+      }
+    },
+    "GetOrganizationsAccessReportResponse":{
+      "type":"structure",
+      "required":[
+        "JobStatus",
+        "JobCreationDate"
+      ],
+      "members":{
+        "JobStatus":{"shape":"jobStatusType"},
+        "JobCreationDate":{"shape":"dateType"},
+        "JobCompletionDate":{"shape":"dateType"},
+        "NumberOfServicesAccessible":{"shape":"integerType"},
+        "NumberOfServicesNotAccessed":{"shape":"integerType"},
+        "AccessDetails":{"shape":"AccessDetails"},
+        "IsTruncated":{"shape":"booleanType"},
+        "Marker":{"shape":"markerType"},
+        "ErrorDetails":{"shape":"ErrorDetails"}
       }
     },
     "GetPolicyRequest":{
@@ -4399,6 +4487,18 @@
       "type":"string",
       "enum":["text/csv"]
     },
+    "ReportGenerationLimitExceededException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"reportGenerationLimitExceededMessage"}
+      },
+      "error":{
+        "code":"ReportGenerationLimitExceeded",
+        "httpStatusCode":409,
+        "senderFault":true
+      },
+      "exception":true
+    },
     "ReportStateDescriptionType":{"type":"string"},
     "ReportStateType":{
       "type":"string",
@@ -5358,6 +5458,16 @@
       "min":6
     },
     "noSuchEntityMessage":{"type":"string"},
+    "organizationsEntityPathType":{
+      "type":"string",
+      "max":427,
+      "min":19,
+      "pattern":"^o-[0-9a-z]{10,32}\\/r-[0-9a-z]{4,32}[0-9a-z-\\/]*"
+    },
+    "organizationsPolicyIdType":{
+      "type":"string",
+      "pattern":"^p-[0-9a-zA-Z_]{8,128}$"
+    },
     "passwordPolicyViolationMessage":{"type":"string"},
     "passwordReusePreventionType":{
       "type":"integer",
@@ -5480,6 +5590,7 @@
       "min":1,
       "pattern":"[\\u0009\\u000A\\u000D\\u0020-\\u00FF]+"
     },
+    "reportGenerationLimitExceededMessage":{"type":"string"},
     "responseMarkerType":{"type":"string"},
     "roleDescriptionType":{
       "type":"string",
@@ -5552,6 +5663,15 @@
       "max":200,
       "min":17,
       "pattern":"[\\w+=,.@-]+"
+    },
+    "sortKeyType":{
+      "type":"string",
+      "enum":[
+        "SERVICE_NAMESPACE_ASCENDING",
+        "SERVICE_NAMESPACE_DESCENDING",
+        "LAST_AUTHENTICATED_TIME_ASCENDING",
+        "LAST_AUTHENTICATED_TIME_DESCENDING"
+      ]
     },
     "statusType":{
       "type":"string",

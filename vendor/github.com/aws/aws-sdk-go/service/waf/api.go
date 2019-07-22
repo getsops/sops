@@ -613,6 +613,12 @@ func (c *WAF) CreateRateBasedRuleRequest(input *CreateRateBasedRuleInput) (req *
 //   see Limits (https://docs.aws.amazon.com/waf/latest/developerguide/limits.html)
 //   in the AWS WAF Developer Guide.
 //
+//   * ErrCodeTagOperationException "WAFTagOperationException"
+//
+//   * ErrCodeTagOperationInternalErrorException "WAFTagOperationInternalErrorException"
+//
+//   * ErrCodeBadRequestException "WAFBadRequestException"
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/waf-2015-08-24/CreateRateBasedRule
 func (c *WAF) CreateRateBasedRule(input *CreateRateBasedRuleInput) (*CreateRateBasedRuleOutput, error) {
 	req, out := c.CreateRateBasedRuleRequest(input)
@@ -996,6 +1002,12 @@ func (c *WAF) CreateRuleRequest(input *CreateRuleInput) (req *request.Request, o
 //   see Limits (https://docs.aws.amazon.com/waf/latest/developerguide/limits.html)
 //   in the AWS WAF Developer Guide.
 //
+//   * ErrCodeTagOperationException "WAFTagOperationException"
+//
+//   * ErrCodeTagOperationInternalErrorException "WAFTagOperationInternalErrorException"
+//
+//   * ErrCodeBadRequestException "WAFBadRequestException"
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/waf-2015-08-24/CreateRule
 func (c *WAF) CreateRule(input *CreateRuleInput) (*CreateRuleOutput, error) {
 	req, out := c.CreateRuleRequest(input)
@@ -1101,6 +1113,12 @@ func (c *WAF) CreateRuleGroupRequest(input *CreateRuleGroupInput) (req *request.
 //   WebACL objects that you can create for an AWS account. For more information,
 //   see Limits (https://docs.aws.amazon.com/waf/latest/developerguide/limits.html)
 //   in the AWS WAF Developer Guide.
+//
+//   * ErrCodeTagOperationException "WAFTagOperationException"
+//
+//   * ErrCodeTagOperationInternalErrorException "WAFTagOperationInternalErrorException"
+//
+//   * ErrCodeBadRequestException "WAFBadRequestException"
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/waf-2015-08-24/CreateRuleGroup
 func (c *WAF) CreateRuleGroup(input *CreateRuleGroupInput) (*CreateRuleGroupOutput, error) {
@@ -1549,6 +1567,12 @@ func (c *WAF) CreateWebACLRequest(input *CreateWebACLInput) (req *request.Reques
 //   WebACL objects that you can create for an AWS account. For more information,
 //   see Limits (https://docs.aws.amazon.com/waf/latest/developerguide/limits.html)
 //   in the AWS WAF Developer Guide.
+//
+//   * ErrCodeTagOperationException "WAFTagOperationException"
+//
+//   * ErrCodeTagOperationInternalErrorException "WAFTagOperationInternalErrorException"
+//
+//   * ErrCodeBadRequestException "WAFBadRequestException"
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/waf-2015-08-24/CreateWebACL
 func (c *WAF) CreateWebACL(input *CreateWebACLInput) (*CreateWebACLOutput, error) {
@@ -2380,6 +2404,10 @@ func (c *WAF) DeleteRateBasedRuleRequest(input *DeleteRateBasedRuleInput) (req *
 //
 //      * You tried to delete an IPSet that references one or more IP addresses.
 //
+//   * ErrCodeTagOperationException "WAFTagOperationException"
+//
+//   * ErrCodeTagOperationInternalErrorException "WAFTagOperationInternalErrorException"
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/waf-2015-08-24/DeleteRateBasedRule
 func (c *WAF) DeleteRateBasedRule(input *DeleteRateBasedRuleInput) (*DeleteRateBasedRuleOutput, error) {
 	req, out := c.DeleteRateBasedRuleRequest(input)
@@ -2748,6 +2776,10 @@ func (c *WAF) DeleteRuleRequest(input *DeleteRuleInput) (req *request.Request, o
 //
 //      * You tried to delete an IPSet that references one or more IP addresses.
 //
+//   * ErrCodeTagOperationException "WAFTagOperationException"
+//
+//   * ErrCodeTagOperationInternalErrorException "WAFTagOperationInternalErrorException"
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/waf-2015-08-24/DeleteRule
 func (c *WAF) DeleteRule(input *DeleteRuleInput) (*DeleteRuleOutput, error) {
 	req, out := c.DeleteRuleRequest(input)
@@ -2886,6 +2918,10 @@ func (c *WAF) DeleteRuleGroupRequest(input *DeleteRuleGroupInput) (req *request.
 //
 //      * You tried to add a ByteMatchTuple to a ByteMatchSet, but the ByteMatchTuple
 //      already exists in the specified WebACL.
+//
+//   * ErrCodeTagOperationException "WAFTagOperationException"
+//
+//   * ErrCodeTagOperationInternalErrorException "WAFTagOperationInternalErrorException"
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/waf-2015-08-24/DeleteRuleGroup
 func (c *WAF) DeleteRuleGroup(input *DeleteRuleGroupInput) (*DeleteRuleGroupOutput, error) {
@@ -3264,6 +3300,10 @@ func (c *WAF) DeleteWebACLRequest(input *DeleteWebACLInput) (req *request.Reques
 //      objects.
 //
 //      * You tried to delete an IPSet that references one or more IP addresses.
+//
+//   * ErrCodeTagOperationException "WAFTagOperationException"
+//
+//   * ErrCodeTagOperationInternalErrorException "WAFTagOperationInternalErrorException"
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/waf-2015-08-24/DeleteWebACL
 func (c *WAF) DeleteWebACL(input *DeleteWebACLInput) (*DeleteWebACLOutput, error) {
@@ -6167,6 +6207,122 @@ func (c *WAF) ListSubscribedRuleGroupsWithContext(ctx aws.Context, input *ListSu
 	return out, req.Send()
 }
 
+const opListTagsForResource = "ListTagsForResource"
+
+// ListTagsForResourceRequest generates a "aws/request.Request" representing the
+// client's request for the ListTagsForResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListTagsForResource for more information on using the ListTagsForResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListTagsForResourceRequest method.
+//    req, resp := client.ListTagsForResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/waf-2015-08-24/ListTagsForResource
+func (c *WAF) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
+	op := &request.Operation{
+		Name:       opListTagsForResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListTagsForResourceInput{}
+	}
+
+	output = &ListTagsForResourceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListTagsForResource API operation for AWS WAF.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS WAF's
+// API operation ListTagsForResource for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInternalErrorException "WAFInternalErrorException"
+//   The operation failed because of a system problem, even though the request
+//   was valid. Retry your request.
+//
+//   * ErrCodeInvalidParameterException "WAFInvalidParameterException"
+//   The operation failed because AWS WAF didn't recognize a parameter in the
+//   request. For example:
+//
+//      * You specified an invalid parameter name.
+//
+//      * You specified an invalid value.
+//
+//      * You tried to update an object (ByteMatchSet, IPSet, Rule, or WebACL)
+//      using an action other than INSERT or DELETE.
+//
+//      * You tried to create a WebACL with a DefaultAction Type other than ALLOW,
+//      BLOCK, or COUNT.
+//
+//      * You tried to create a RateBasedRule with a RateKey value other than
+//      IP.
+//
+//      * You tried to update a WebACL with a WafAction Type other than ALLOW,
+//      BLOCK, or COUNT.
+//
+//      * You tried to update a ByteMatchSet with a FieldToMatch Type other than
+//      HEADER, METHOD, QUERY_STRING, URI, or BODY.
+//
+//      * You tried to update a ByteMatchSet with a Field of HEADER but no value
+//      for Data.
+//
+//      * Your request references an ARN that is malformed, or corresponds to
+//      a resource with which a web ACL cannot be associated.
+//
+//   * ErrCodeNonexistentItemException "WAFNonexistentItemException"
+//   The operation failed because the referenced object doesn't exist.
+//
+//   * ErrCodeBadRequestException "WAFBadRequestException"
+//
+//   * ErrCodeTagOperationException "WAFTagOperationException"
+//
+//   * ErrCodeTagOperationInternalErrorException "WAFTagOperationInternalErrorException"
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/waf-2015-08-24/ListTagsForResource
+func (c *WAF) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	return out, req.Send()
+}
+
+// ListTagsForResourceWithContext is the same as ListTagsForResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListTagsForResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WAF) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsForResourceInput, opts ...request.Option) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListWebACLs = "ListWebACLs"
 
 // ListWebACLsRequest generates a "aws/request.Request" representing the
@@ -6584,6 +6740,246 @@ func (c *WAF) PutPermissionPolicy(input *PutPermissionPolicyInput) (*PutPermissi
 // for more information on using Contexts.
 func (c *WAF) PutPermissionPolicyWithContext(ctx aws.Context, input *PutPermissionPolicyInput, opts ...request.Option) (*PutPermissionPolicyOutput, error) {
 	req, out := c.PutPermissionPolicyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opTagResource = "TagResource"
+
+// TagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the TagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See TagResource for more information on using the TagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the TagResourceRequest method.
+//    req, resp := client.TagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/waf-2015-08-24/TagResource
+func (c *WAF) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
+	op := &request.Operation{
+		Name:       opTagResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &TagResourceInput{}
+	}
+
+	output = &TagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// TagResource API operation for AWS WAF.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS WAF's
+// API operation TagResource for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInternalErrorException "WAFInternalErrorException"
+//   The operation failed because of a system problem, even though the request
+//   was valid. Retry your request.
+//
+//   * ErrCodeInvalidParameterException "WAFInvalidParameterException"
+//   The operation failed because AWS WAF didn't recognize a parameter in the
+//   request. For example:
+//
+//      * You specified an invalid parameter name.
+//
+//      * You specified an invalid value.
+//
+//      * You tried to update an object (ByteMatchSet, IPSet, Rule, or WebACL)
+//      using an action other than INSERT or DELETE.
+//
+//      * You tried to create a WebACL with a DefaultAction Type other than ALLOW,
+//      BLOCK, or COUNT.
+//
+//      * You tried to create a RateBasedRule with a RateKey value other than
+//      IP.
+//
+//      * You tried to update a WebACL with a WafAction Type other than ALLOW,
+//      BLOCK, or COUNT.
+//
+//      * You tried to update a ByteMatchSet with a FieldToMatch Type other than
+//      HEADER, METHOD, QUERY_STRING, URI, or BODY.
+//
+//      * You tried to update a ByteMatchSet with a Field of HEADER but no value
+//      for Data.
+//
+//      * Your request references an ARN that is malformed, or corresponds to
+//      a resource with which a web ACL cannot be associated.
+//
+//   * ErrCodeLimitsExceededException "WAFLimitsExceededException"
+//   The operation exceeds a resource limit, for example, the maximum number of
+//   WebACL objects that you can create for an AWS account. For more information,
+//   see Limits (https://docs.aws.amazon.com/waf/latest/developerguide/limits.html)
+//   in the AWS WAF Developer Guide.
+//
+//   * ErrCodeNonexistentItemException "WAFNonexistentItemException"
+//   The operation failed because the referenced object doesn't exist.
+//
+//   * ErrCodeBadRequestException "WAFBadRequestException"
+//
+//   * ErrCodeTagOperationException "WAFTagOperationException"
+//
+//   * ErrCodeTagOperationInternalErrorException "WAFTagOperationInternalErrorException"
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/waf-2015-08-24/TagResource
+func (c *WAF) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	return out, req.Send()
+}
+
+// TagResourceWithContext is the same as TagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See TagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WAF) TagResourceWithContext(ctx aws.Context, input *TagResourceInput, opts ...request.Option) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUntagResource = "UntagResource"
+
+// UntagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the UntagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UntagResource for more information on using the UntagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UntagResourceRequest method.
+//    req, resp := client.UntagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/waf-2015-08-24/UntagResource
+func (c *WAF) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
+	op := &request.Operation{
+		Name:       opUntagResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UntagResourceInput{}
+	}
+
+	output = &UntagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UntagResource API operation for AWS WAF.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS WAF's
+// API operation UntagResource for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInternalErrorException "WAFInternalErrorException"
+//   The operation failed because of a system problem, even though the request
+//   was valid. Retry your request.
+//
+//   * ErrCodeInvalidParameterException "WAFInvalidParameterException"
+//   The operation failed because AWS WAF didn't recognize a parameter in the
+//   request. For example:
+//
+//      * You specified an invalid parameter name.
+//
+//      * You specified an invalid value.
+//
+//      * You tried to update an object (ByteMatchSet, IPSet, Rule, or WebACL)
+//      using an action other than INSERT or DELETE.
+//
+//      * You tried to create a WebACL with a DefaultAction Type other than ALLOW,
+//      BLOCK, or COUNT.
+//
+//      * You tried to create a RateBasedRule with a RateKey value other than
+//      IP.
+//
+//      * You tried to update a WebACL with a WafAction Type other than ALLOW,
+//      BLOCK, or COUNT.
+//
+//      * You tried to update a ByteMatchSet with a FieldToMatch Type other than
+//      HEADER, METHOD, QUERY_STRING, URI, or BODY.
+//
+//      * You tried to update a ByteMatchSet with a Field of HEADER but no value
+//      for Data.
+//
+//      * Your request references an ARN that is malformed, or corresponds to
+//      a resource with which a web ACL cannot be associated.
+//
+//   * ErrCodeNonexistentItemException "WAFNonexistentItemException"
+//   The operation failed because the referenced object doesn't exist.
+//
+//   * ErrCodeBadRequestException "WAFBadRequestException"
+//
+//   * ErrCodeTagOperationException "WAFTagOperationException"
+//
+//   * ErrCodeTagOperationInternalErrorException "WAFTagOperationInternalErrorException"
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/waf-2015-08-24/UntagResource
+func (c *WAF) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	return out, req.Send()
+}
+
+// UntagResourceWithContext is the same as UntagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UntagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *WAF) UntagResourceWithContext(ctx aws.Context, input *UntagResourceInput, opts ...request.Option) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -9866,6 +10262,8 @@ type CreateRateBasedRuleInput struct {
 	//
 	// RateLimit is a required field
 	RateLimit *int64 `min:"2000" type:"long" required:"true"`
+
+	Tags []*Tag `min:"1" type:"list"`
 }
 
 // String returns the string representation
@@ -9905,6 +10303,19 @@ func (s *CreateRateBasedRuleInput) Validate() error {
 	if s.RateLimit != nil && *s.RateLimit < 2000 {
 		invalidParams.Add(request.NewErrParamMinValue("RateLimit", 2000))
 	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -9939,6 +10350,12 @@ func (s *CreateRateBasedRuleInput) SetRateKey(v string) *CreateRateBasedRuleInpu
 // SetRateLimit sets the RateLimit field's value.
 func (s *CreateRateBasedRuleInput) SetRateLimit(v int64) *CreateRateBasedRuleInput {
 	s.RateLimit = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateRateBasedRuleInput) SetTags(v []*Tag) *CreateRateBasedRuleInput {
+	s.Tags = v
 	return s
 }
 
@@ -10184,6 +10601,8 @@ type CreateRuleGroupInput struct {
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
+
+	Tags []*Tag `min:"1" type:"list"`
 }
 
 // String returns the string representation
@@ -10214,6 +10633,19 @@ func (s *CreateRuleGroupInput) Validate() error {
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -10236,6 +10668,12 @@ func (s *CreateRuleGroupInput) SetMetricName(v string) *CreateRuleGroupInput {
 // SetName sets the Name field's value.
 func (s *CreateRuleGroupInput) SetName(v string) *CreateRuleGroupInput {
 	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateRuleGroupInput) SetTags(v []*Tag) *CreateRuleGroupInput {
+	s.Tags = v
 	return s
 }
 
@@ -10295,6 +10733,8 @@ type CreateRuleInput struct {
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
+
+	Tags []*Tag `min:"1" type:"list"`
 }
 
 // String returns the string representation
@@ -10325,6 +10765,19 @@ func (s *CreateRuleInput) Validate() error {
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -10347,6 +10800,12 @@ func (s *CreateRuleInput) SetMetricName(v string) *CreateRuleInput {
 // SetName sets the Name field's value.
 func (s *CreateRuleInput) SetName(v string) *CreateRuleInput {
 	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateRuleInput) SetTags(v []*Tag) *CreateRuleInput {
+	s.Tags = v
 	return s
 }
 
@@ -10601,6 +11060,8 @@ type CreateWebACLInput struct {
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
+
+	Tags []*Tag `min:"1" type:"list"`
 }
 
 // String returns the string representation
@@ -10634,9 +11095,22 @@ func (s *CreateWebACLInput) Validate() error {
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
 	if s.DefaultAction != nil {
 		if err := s.DefaultAction.Validate(); err != nil {
 			invalidParams.AddNested("DefaultAction", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
 		}
 	}
 
@@ -10667,6 +11141,12 @@ func (s *CreateWebACLInput) SetMetricName(v string) *CreateWebACLInput {
 // SetName sets the Name field's value.
 func (s *CreateWebACLInput) SetName(v string) *CreateWebACLInput {
 	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateWebACLInput) SetTags(v []*Tag) *CreateWebACLInput {
+	s.Tags = v
 	return s
 }
 
@@ -15093,6 +15573,94 @@ func (s *ListSubscribedRuleGroupsOutput) SetRuleGroups(v []*SubscribedRuleGroupS
 	return s
 }
 
+type ListTagsForResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	Limit *int64 `type:"integer"`
+
+	NextMarker *string `min:"1" type:"string"`
+
+	// ResourceARN is a required field
+	ResourceARN *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ListTagsForResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListTagsForResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListTagsForResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListTagsForResourceInput"}
+	if s.NextMarker != nil && len(*s.NextMarker) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextMarker", 1))
+	}
+	if s.ResourceARN == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceARN"))
+	}
+	if s.ResourceARN != nil && len(*s.ResourceARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceARN", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetLimit sets the Limit field's value.
+func (s *ListTagsForResourceInput) SetLimit(v int64) *ListTagsForResourceInput {
+	s.Limit = &v
+	return s
+}
+
+// SetNextMarker sets the NextMarker field's value.
+func (s *ListTagsForResourceInput) SetNextMarker(v string) *ListTagsForResourceInput {
+	s.NextMarker = &v
+	return s
+}
+
+// SetResourceARN sets the ResourceARN field's value.
+func (s *ListTagsForResourceInput) SetResourceARN(v string) *ListTagsForResourceInput {
+	s.ResourceARN = &v
+	return s
+}
+
+type ListTagsForResourceOutput struct {
+	_ struct{} `type:"structure"`
+
+	NextMarker *string `min:"1" type:"string"`
+
+	TagInfoForResource *TagInfoForResource `type:"structure"`
+}
+
+// String returns the string representation
+func (s ListTagsForResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListTagsForResourceOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextMarker sets the NextMarker field's value.
+func (s *ListTagsForResourceOutput) SetNextMarker(v string) *ListTagsForResourceOutput {
+	s.NextMarker = &v
+	return s
+}
+
+// SetTagInfoForResource sets the TagInfoForResource field's value.
+func (s *ListTagsForResourceOutput) SetTagInfoForResource(v *TagInfoForResource) *ListTagsForResourceOutput {
+	s.TagInfoForResource = v
+	return s
+}
+
 type ListWebACLsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -17299,6 +17867,157 @@ func (s *SubscribedRuleGroupSummary) SetRuleGroupId(v string) *SubscribedRuleGro
 	return s
 }
 
+type Tag struct {
+	_ struct{} `type:"structure"`
+
+	Key *string `min:"1" type:"string"`
+
+	Value *string `type:"string"`
+}
+
+// String returns the string representation
+func (s Tag) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Tag) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Tag) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Tag"}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKey sets the Key field's value.
+func (s *Tag) SetKey(v string) *Tag {
+	s.Key = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *Tag) SetValue(v string) *Tag {
+	s.Value = &v
+	return s
+}
+
+type TagInfoForResource struct {
+	_ struct{} `type:"structure"`
+
+	ResourceARN *string `min:"1" type:"string"`
+
+	TagList []*Tag `min:"1" type:"list"`
+}
+
+// String returns the string representation
+func (s TagInfoForResource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagInfoForResource) GoString() string {
+	return s.String()
+}
+
+// SetResourceARN sets the ResourceARN field's value.
+func (s *TagInfoForResource) SetResourceARN(v string) *TagInfoForResource {
+	s.ResourceARN = &v
+	return s
+}
+
+// SetTagList sets the TagList field's value.
+func (s *TagInfoForResource) SetTagList(v []*Tag) *TagInfoForResource {
+	s.TagList = v
+	return s
+}
+
+type TagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// ResourceARN is a required field
+	ResourceARN *string `min:"1" type:"string" required:"true"`
+
+	// Tags is a required field
+	Tags []*Tag `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s TagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TagResourceInput"}
+	if s.ResourceARN == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceARN"))
+	}
+	if s.ResourceARN != nil && len(*s.ResourceARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceARN", 1))
+	}
+	if s.Tags == nil {
+		invalidParams.Add(request.NewErrParamRequired("Tags"))
+	}
+	if s.Tags != nil && len(s.Tags) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Tags", 1))
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceARN sets the ResourceARN field's value.
+func (s *TagResourceInput) SetResourceARN(v string) *TagResourceInput {
+	s.ResourceARN = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *TagResourceInput) SetTags(v []*Tag) *TagResourceInput {
+	s.Tags = v
+	return s
+}
+
+type TagResourceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s TagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagResourceOutput) GoString() string {
+	return s.String()
+}
+
 // In a GetSampledRequests request, the StartTime and EndTime objects specify
 // the time range for which you want AWS WAF to return a sample of web requests.
 //
@@ -17365,6 +18084,74 @@ func (s *TimeWindow) SetEndTime(v time.Time) *TimeWindow {
 func (s *TimeWindow) SetStartTime(v time.Time) *TimeWindow {
 	s.StartTime = &v
 	return s
+}
+
+type UntagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// ResourceARN is a required field
+	ResourceARN *string `min:"1" type:"string" required:"true"`
+
+	// TagKeys is a required field
+	TagKeys []*string `min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s UntagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UntagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UntagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UntagResourceInput"}
+	if s.ResourceARN == nil {
+		invalidParams.Add(request.NewErrParamRequired("ResourceARN"))
+	}
+	if s.ResourceARN != nil && len(*s.ResourceARN) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ResourceARN", 1))
+	}
+	if s.TagKeys == nil {
+		invalidParams.Add(request.NewErrParamRequired("TagKeys"))
+	}
+	if s.TagKeys != nil && len(s.TagKeys) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TagKeys", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResourceARN sets the ResourceARN field's value.
+func (s *UntagResourceInput) SetResourceARN(v string) *UntagResourceInput {
+	s.ResourceARN = &v
+	return s
+}
+
+// SetTagKeys sets the TagKeys field's value.
+func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
+	s.TagKeys = v
+	return s
+}
+
+type UntagResourceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UntagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UntagResourceOutput) GoString() string {
+	return s.String()
 }
 
 type UpdateByteMatchSetInput struct {
@@ -20256,6 +21043,12 @@ const (
 
 	// ParameterExceptionFieldResourceArn is a ParameterExceptionField enum value
 	ParameterExceptionFieldResourceArn = "RESOURCE_ARN"
+
+	// ParameterExceptionFieldTags is a ParameterExceptionField enum value
+	ParameterExceptionFieldTags = "TAGS"
+
+	// ParameterExceptionFieldTagKeys is a ParameterExceptionField enum value
+	ParameterExceptionFieldTagKeys = "TAG_KEYS"
 )
 
 const (
@@ -20267,6 +21060,9 @@ const (
 
 	// ParameterExceptionReasonIllegalArgument is a ParameterExceptionReason enum value
 	ParameterExceptionReasonIllegalArgument = "ILLEGAL_ARGUMENT"
+
+	// ParameterExceptionReasonInvalidTagKey is a ParameterExceptionReason enum value
+	ParameterExceptionReasonInvalidTagKey = "INVALID_TAG_KEY"
 )
 
 const (

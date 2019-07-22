@@ -1903,6 +1903,11 @@ func (c *AlexaForBusiness) DeleteDeviceUsageDataRequest(input *DeleteDeviceUsage
 // DeleteDeviceUsageData API operation for Alexa For Business.
 //
 // When this action is called for a specified shared device, it allows authorized
+// users to delete the device's entire previous history of voice input data
+// and associated response data. This action can be called once every 24 hours
+// for a specific shared device.
+//
+// When this action is called for a specified shared device, it allows authorized
 // users to delete the device's entire previous history of voice input data.
 // This action can be called once every 24 hours for a specific shared device.
 //
@@ -7287,7 +7292,7 @@ func (c *AlexaForBusiness) SendInvitationRequest(input *SendInvitationInput) (re
 // SendInvitation API operation for Alexa For Business.
 //
 // Sends an enrollment invitation email with a URL to a user. The URL is valid
-// for 72 hours or until you call this operation again, whichever comes first.
+// for 30 days or until you call this operation again, whichever comes first.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -9512,8 +9517,17 @@ type Contact struct {
 	// The last name of the contact, used to call the contact on the device.
 	LastName *string `min:"1" type:"string"`
 
-	// The phone number of the contact.
+	// The phone number of the contact. The phone number type defaults to WORK.
+	// You can either specify PhoneNumber or PhoneNumbers. We recommend that you
+	// use PhoneNumbers, which lets you specify the phone number type and multiple
+	// numbers.
 	PhoneNumber *string `type:"string" sensitive:"true"`
+
+	// The list of phone numbers for the contact.
+	PhoneNumbers []*PhoneNumber `type:"list"`
+
+	// The list of SIP addresses for the contact.
+	SipAddresses []*SipAddress `type:"list"`
 }
 
 // String returns the string representation
@@ -9556,6 +9570,18 @@ func (s *Contact) SetPhoneNumber(v string) *Contact {
 	return s
 }
 
+// SetPhoneNumbers sets the PhoneNumbers field's value.
+func (s *Contact) SetPhoneNumbers(v []*PhoneNumber) *Contact {
+	s.PhoneNumbers = v
+	return s
+}
+
+// SetSipAddresses sets the SipAddresses field's value.
+func (s *Contact) SetSipAddresses(v []*SipAddress) *Contact {
+	s.SipAddresses = v
+	return s
+}
+
 // Information related to a contact.
 type ContactData struct {
 	_ struct{} `type:"structure"`
@@ -9572,8 +9598,16 @@ type ContactData struct {
 	// The last name of the contact, used to call the contact on the device.
 	LastName *string `min:"1" type:"string"`
 
-	// The phone number of the contact.
+	// The phone number of the contact. The phone number type defaults to WORK.
+	// You can specify PhoneNumber or PhoneNumbers. We recommend that you use PhoneNumbers,
+	// which lets you specify the phone number type and multiple numbers.
 	PhoneNumber *string `type:"string" sensitive:"true"`
+
+	// The list of phone numbers for the contact.
+	PhoneNumbers []*PhoneNumber `type:"list"`
+
+	// The list of SIP addresses for the contact.
+	SipAddresses []*SipAddress `type:"list"`
 }
 
 // String returns the string representation
@@ -9613,6 +9647,18 @@ func (s *ContactData) SetLastName(v string) *ContactData {
 // SetPhoneNumber sets the PhoneNumber field's value.
 func (s *ContactData) SetPhoneNumber(v string) *ContactData {
 	s.PhoneNumber = &v
+	return s
+}
+
+// SetPhoneNumbers sets the PhoneNumbers field's value.
+func (s *ContactData) SetPhoneNumbers(v []*PhoneNumber) *ContactData {
+	s.PhoneNumbers = v
+	return s
+}
+
+// SetSipAddresses sets the SipAddresses field's value.
+func (s *ContactData) SetSipAddresses(v []*SipAddress) *ContactData {
+	s.SipAddresses = v
 	return s
 }
 
@@ -10067,8 +10113,17 @@ type CreateContactInput struct {
 	// The last name of the contact that is used to call the contact on the device.
 	LastName *string `min:"1" type:"string"`
 
-	// The phone number of the contact in E.164 format.
+	// The phone number of the contact in E.164 format. The phone number type defaults
+	// to WORK. You can specify PhoneNumber or PhoneNumbers. We recommend that you
+	// use PhoneNumbers, which lets you specify the phone number type and multiple
+	// numbers.
 	PhoneNumber *string `type:"string" sensitive:"true"`
+
+	// The list of phone numbers for the contact.
+	PhoneNumbers []*PhoneNumber `type:"list"`
+
+	// The list of SIP addresses for the contact.
+	SipAddresses []*SipAddress `type:"list"`
 }
 
 // String returns the string representation
@@ -10098,6 +10153,26 @@ func (s *CreateContactInput) Validate() error {
 	}
 	if s.LastName != nil && len(*s.LastName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("LastName", 1))
+	}
+	if s.PhoneNumbers != nil {
+		for i, v := range s.PhoneNumbers {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "PhoneNumbers", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.SipAddresses != nil {
+		for i, v := range s.SipAddresses {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "SipAddresses", i), err.(request.ErrInvalidParams))
+			}
+		}
 	}
 
 	if invalidParams.Len() > 0 {
@@ -10133,6 +10208,18 @@ func (s *CreateContactInput) SetLastName(v string) *CreateContactInput {
 // SetPhoneNumber sets the PhoneNumber field's value.
 func (s *CreateContactInput) SetPhoneNumber(v string) *CreateContactInput {
 	s.PhoneNumber = &v
+	return s
+}
+
+// SetPhoneNumbers sets the PhoneNumbers field's value.
+func (s *CreateContactInput) SetPhoneNumbers(v []*PhoneNumber) *CreateContactInput {
+	s.PhoneNumbers = v
+	return s
+}
+
+// SetSipAddresses sets the SipAddresses field's value.
+func (s *CreateContactInput) SetSipAddresses(v []*SipAddress) *CreateContactInput {
+	s.SipAddresses = v
 	return s
 }
 
@@ -14723,6 +14810,60 @@ func (s *PSTNDialIn) SetPhoneNumber(v string) *PSTNDialIn {
 	return s
 }
 
+// The phone number for the contact containing the raw number and phone number
+// type.
+type PhoneNumber struct {
+	_ struct{} `type:"structure"`
+
+	// The raw value of the phone number.
+	//
+	// Number is a required field
+	Number *string `type:"string" required:"true" sensitive:"true"`
+
+	// The type of the phone number.
+	//
+	// Type is a required field
+	Type *string `type:"string" required:"true" enum:"PhoneNumberType" sensitive:"true"`
+}
+
+// String returns the string representation
+func (s PhoneNumber) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PhoneNumber) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PhoneNumber) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PhoneNumber"}
+	if s.Number == nil {
+		invalidParams.Add(request.NewErrParamRequired("Number"))
+	}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetNumber sets the Number field's value.
+func (s *PhoneNumber) SetNumber(v string) *PhoneNumber {
+	s.Number = &v
+	return s
+}
+
+// SetType sets the Type field's value.
+func (s *PhoneNumber) SetType(v string) *PhoneNumber {
+	s.Type = &v
+	return s
+}
+
 // A room profile with attributes.
 type Profile struct {
 	_ struct{} `type:"structure"`
@@ -16952,6 +17093,62 @@ func (s SendInvitationOutput) GoString() string {
 	return s.String()
 }
 
+// The SIP address for the contact containing the URI and SIP address type.
+type SipAddress struct {
+	_ struct{} `type:"structure"`
+
+	// The type of the SIP address.
+	//
+	// Type is a required field
+	Type *string `type:"string" required:"true" enum:"SipType" sensitive:"true"`
+
+	// The URI for the SIP address.
+	//
+	// Uri is a required field
+	Uri *string `min:"1" type:"string" required:"true" sensitive:"true"`
+}
+
+// String returns the string representation
+func (s SipAddress) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SipAddress) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SipAddress) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SipAddress"}
+	if s.Type == nil {
+		invalidParams.Add(request.NewErrParamRequired("Type"))
+	}
+	if s.Uri == nil {
+		invalidParams.Add(request.NewErrParamRequired("Uri"))
+	}
+	if s.Uri != nil && len(*s.Uri) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Uri", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetType sets the Type field's value.
+func (s *SipAddress) SetType(v string) *SipAddress {
+	s.Type = &v
+	return s
+}
+
+// SetUri sets the Uri field's value.
+func (s *SipAddress) SetUri(v string) *SipAddress {
+	s.Uri = &v
+	return s
+}
+
 // Granular information about the skill.
 type SkillDetails struct {
 	_ struct{} `type:"structure"`
@@ -18113,8 +18310,17 @@ type UpdateContactInput struct {
 	// The updated last name of the contact.
 	LastName *string `min:"1" type:"string"`
 
-	// The updated phone number of the contact.
+	// The updated phone number of the contact. The phone number type defaults to
+	// WORK. You can either specify PhoneNumber or PhoneNumbers. We recommend that
+	// you use PhoneNumbers, which lets you specify the phone number type and multiple
+	// numbers.
 	PhoneNumber *string `type:"string" sensitive:"true"`
+
+	// The list of phone numbers for the contact.
+	PhoneNumbers []*PhoneNumber `type:"list"`
+
+	// The list of SIP addresses for the contact.
+	SipAddresses []*SipAddress `type:"list"`
 }
 
 // String returns the string representation
@@ -18141,6 +18347,26 @@ func (s *UpdateContactInput) Validate() error {
 	}
 	if s.LastName != nil && len(*s.LastName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("LastName", 1))
+	}
+	if s.PhoneNumbers != nil {
+		for i, v := range s.PhoneNumbers {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "PhoneNumbers", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.SipAddresses != nil {
+		for i, v := range s.SipAddresses {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "SipAddresses", i), err.(request.ErrInvalidParams))
+			}
+		}
 	}
 
 	if invalidParams.Len() > 0 {
@@ -18176,6 +18402,18 @@ func (s *UpdateContactInput) SetLastName(v string) *UpdateContactInput {
 // SetPhoneNumber sets the PhoneNumber field's value.
 func (s *UpdateContactInput) SetPhoneNumber(v string) *UpdateContactInput {
 	s.PhoneNumber = &v
+	return s
+}
+
+// SetPhoneNumbers sets the PhoneNumbers field's value.
+func (s *UpdateContactInput) SetPhoneNumbers(v []*PhoneNumber) *UpdateContactInput {
+	s.PhoneNumbers = v
+	return s
+}
+
+// SetSipAddresses sets the SipAddresses field's value.
+func (s *UpdateContactInput) SetSipAddresses(v []*SipAddress) *UpdateContactInput {
+	s.SipAddresses = v
 	return s
 }
 
@@ -19167,6 +19405,17 @@ const (
 )
 
 const (
+	// PhoneNumberTypeMobile is a PhoneNumberType enum value
+	PhoneNumberTypeMobile = "MOBILE"
+
+	// PhoneNumberTypeWork is a PhoneNumberType enum value
+	PhoneNumberTypeWork = "WORK"
+
+	// PhoneNumberTypeHome is a PhoneNumberType enum value
+	PhoneNumberTypeHome = "HOME"
+)
+
+const (
 	// RequirePinYes is a RequirePin enum value
 	RequirePinYes = "YES"
 
@@ -19175,6 +19424,11 @@ const (
 
 	// RequirePinOptional is a RequirePin enum value
 	RequirePinOptional = "OPTIONAL"
+)
+
+const (
+	// SipTypeWork is a SipType enum value
+	SipTypeWork = "WORK"
 )
 
 const (

@@ -150,7 +150,6 @@ type OperationsService struct {
 func NewProjectsService(s *Service) *ProjectsService {
 	rs := &ProjectsService{s: s}
 	rs.Locations = NewProjectsLocationsService(s)
-	rs.Operations = NewProjectsOperationsService(s)
 	return rs
 }
 
@@ -158,8 +157,6 @@ type ProjectsService struct {
 	s *Service
 
 	Locations *ProjectsLocationsService
-
-	Operations *ProjectsOperationsService
 }
 
 func NewProjectsLocationsService(s *Service) *ProjectsLocationsService {
@@ -180,27 +177,6 @@ func NewProjectsLocationsOperationsService(s *Service) *ProjectsLocationsOperati
 }
 
 type ProjectsLocationsOperationsService struct {
-	s *Service
-}
-
-func NewProjectsOperationsService(s *Service) *ProjectsOperationsService {
-	rs := &ProjectsOperationsService{s: s}
-	rs.ManualRecognitionTasks = NewProjectsOperationsManualRecognitionTasksService(s)
-	return rs
-}
-
-type ProjectsOperationsService struct {
-	s *Service
-
-	ManualRecognitionTasks *ProjectsOperationsManualRecognitionTasksService
-}
-
-func NewProjectsOperationsManualRecognitionTasksService(s *Service) *ProjectsOperationsManualRecognitionTasksService {
-	rs := &ProjectsOperationsManualRecognitionTasksService{s: s}
-	return rs
-}
-
-type ProjectsOperationsManualRecognitionTasksService struct {
 	s *Service
 }
 
@@ -761,25 +737,15 @@ type RecognitionConfig struct {
 	// speech recognition.
 	// If `use_enhanced` is set to true and the `model` field is not set,
 	// then
-	// an appropriate enhanced model is chosen if:
-	// 1. project is eligible for requesting enhanced models
-	// 2. an enhanced model exists for the audio
+	// an appropriate enhanced model is chosen if an enhanced model exists
+	// for
+	// the audio.
 	//
 	// If `use_enhanced` is true and an enhanced version of the specified
 	// model
 	// does not exist, then the speech is recognized using the standard
 	// version
 	// of the specified model.
-	//
-	// Enhanced speech models require that you opt-in to data logging
-	// using
-	// instructions in
-	// the
-	// [documentation](/speech-to-text/docs/enable-data-logging). If you
-	// set
-	// `use_enhanced` to true and you have not enabled audio logging, then
-	// you
-	// will receive an error.
 	UseEnhanced bool `json:"useEnhanced,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g.
@@ -1089,6 +1055,16 @@ type SpeechContext struct {
 	// to add additional words to the vocabulary of the recognizer.
 	// See
 	// [usage limits](/speech-to-text/quotas#content).
+	//
+	// List items can also be set to classes for groups of words that
+	// represent
+	// common concepts that occur in natural language. For example, rather
+	// than
+	// providing phrase hints for every month of the year, using the $MONTH
+	// class
+	// improves the likelihood of correctly transcribing audio that
+	// includes
+	// months.
 	Phrases []string `json:"phrases,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "Boost") to
@@ -1247,81 +1223,14 @@ func (s *SpeechRecognitionResult) MarshalJSON() ([]byte, error) {
 // suitable for
 // different programming environments, including REST APIs and RPC APIs.
 // It is
-// used by [gRPC](https://github.com/grpc). The error model is designed
-// to be:
+// used by [gRPC](https://github.com/grpc). Each `Status` message
+// contains
+// three pieces of data: error code, error message, and error
+// details.
 //
-// - Simple to use and understand for most users
-// - Flexible enough to meet unexpected needs
-//
-// # Overview
-//
-// The `Status` message contains three pieces of data: error code,
-// error
-// message, and error details. The error code should be an enum value
-// of
-// google.rpc.Code, but it may accept additional error codes if needed.
-// The
-// error message should be a developer-facing English message that
-// helps
-// developers *understand* and *resolve* the error. If a localized
-// user-facing
-// error message is needed, put the localized message in the error
-// details or
-// localize it in the client. The optional error details may contain
-// arbitrary
-// information about the error. There is a predefined set of error
-// detail types
-// in the package `google.rpc` that can be used for common error
-// conditions.
-//
-// # Language mapping
-//
-// The `Status` message is the logical representation of the error
-// model, but it
-// is not necessarily the actual wire format. When the `Status` message
-// is
-// exposed in different client libraries and different wire protocols,
-// it can be
-// mapped differently. For example, it will likely be mapped to some
-// exceptions
-// in Java, but more likely mapped to some error codes in C.
-//
-// # Other uses
-//
-// The error model and the `Status` message can be used in a variety
-// of
-// environments, either with or without APIs, to provide a
-// consistent developer experience across different
-// environments.
-//
-// Example uses of this error model include:
-//
-// - Partial errors. If a service needs to return partial errors to the
-// client,
-//     it may embed the `Status` in the normal response to indicate the
-// partial
-//     errors.
-//
-// - Workflow errors. A typical workflow has multiple steps. Each step
-// may
-//     have a `Status` message for error reporting.
-//
-// - Batch operations. If a client uses batch request and batch
-// response, the
-//     `Status` message should be used directly inside batch response,
-// one for
-//     each error sub-response.
-//
-// - Asynchronous operations. If an API call embeds asynchronous
-// operation
-//     results in its response, the status of those operations should
-// be
-//     represented directly using the `Status` message.
-//
-// - Logging. If some API errors are stored in logs, the message
-// `Status` could
-//     be used directly after any stripping needed for security/privacy
-// reasons.
+// You can find out more about this error model and how to work with it
+// in the
+// [API Design Guide](https://cloud.google.com/apis/design/errors).
 type Status struct {
 	// Code: The status code, which should be an enum value of
 	// google.rpc.Code.
@@ -2173,153 +2082,6 @@ func (c *ProjectsLocationsOperationsListCall) Pages(ctx context.Context, f func(
 		}
 		c.PageToken(x.NextPageToken)
 	}
-}
-
-// method id "speech.projects.operations.manualRecognitionTasks.get":
-
-type ProjectsOperationsManualRecognitionTasksGetCall struct {
-	s            *Service
-	name         string
-	urlParams_   gensupport.URLParams
-	ifNoneMatch_ string
-	ctx_         context.Context
-	header_      http.Header
-}
-
-// Get: Gets the latest state of a long-running operation.  Clients can
-// use this
-// method to poll the operation result at intervals as recommended by
-// the API
-// service.
-func (r *ProjectsOperationsManualRecognitionTasksService) Get(name string) *ProjectsOperationsManualRecognitionTasksGetCall {
-	c := &ProjectsOperationsManualRecognitionTasksGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
-	c.name = name
-	return c
-}
-
-// Fields allows partial responses to be retrieved. See
-// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
-// for more information.
-func (c *ProjectsOperationsManualRecognitionTasksGetCall) Fields(s ...googleapi.Field) *ProjectsOperationsManualRecognitionTasksGetCall {
-	c.urlParams_.Set("fields", googleapi.CombineFields(s))
-	return c
-}
-
-// IfNoneMatch sets the optional parameter which makes the operation
-// fail if the object's ETag matches the given value. This is useful for
-// getting updates only after the object has changed since the last
-// request. Use googleapi.IsNotModified to check whether the response
-// error from Do is the result of In-None-Match.
-func (c *ProjectsOperationsManualRecognitionTasksGetCall) IfNoneMatch(entityTag string) *ProjectsOperationsManualRecognitionTasksGetCall {
-	c.ifNoneMatch_ = entityTag
-	return c
-}
-
-// Context sets the context to be used in this call's Do method. Any
-// pending HTTP request will be aborted if the provided context is
-// canceled.
-func (c *ProjectsOperationsManualRecognitionTasksGetCall) Context(ctx context.Context) *ProjectsOperationsManualRecognitionTasksGetCall {
-	c.ctx_ = ctx
-	return c
-}
-
-// Header returns an http.Header that can be modified by the caller to
-// add HTTP headers to the request.
-func (c *ProjectsOperationsManualRecognitionTasksGetCall) Header() http.Header {
-	if c.header_ == nil {
-		c.header_ = make(http.Header)
-	}
-	return c.header_
-}
-
-func (c *ProjectsOperationsManualRecognitionTasksGetCall) doRequest(alt string) (*http.Response, error) {
-	reqHeaders := make(http.Header)
-	for k, v := range c.header_ {
-		reqHeaders[k] = v
-	}
-	reqHeaders.Set("User-Agent", c.s.userAgent())
-	if c.ifNoneMatch_ != "" {
-		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
-	}
-	var body io.Reader = nil
-	c.urlParams_.Set("alt", alt)
-	c.urlParams_.Set("prettyPrint", "false")
-	urls := googleapi.ResolveRelative(c.s.BasePath, "v1p1beta1/{+name}")
-	urls += "?" + c.urlParams_.Encode()
-	req, err := http.NewRequest("GET", urls, body)
-	if err != nil {
-		return nil, err
-	}
-	req.Header = reqHeaders
-	googleapi.Expand(req.URL, map[string]string{
-		"name": c.name,
-	})
-	return gensupport.SendRequest(c.ctx_, c.s.client, req)
-}
-
-// Do executes the "speech.projects.operations.manualRecognitionTasks.get" call.
-// Exactly one of *Operation or error will be non-nil. Any non-2xx
-// status code is an error. Response headers are in either
-// *Operation.ServerResponse.Header or (if a response was returned at
-// all) in error.(*googleapi.Error).Header. Use googleapi.IsNotModified
-// to check whether the returned error was because
-// http.StatusNotModified was returned.
-func (c *ProjectsOperationsManualRecognitionTasksGetCall) Do(opts ...googleapi.CallOption) (*Operation, error) {
-	gensupport.SetOptions(c.urlParams_, opts...)
-	res, err := c.doRequest("json")
-	if res != nil && res.StatusCode == http.StatusNotModified {
-		if res.Body != nil {
-			res.Body.Close()
-		}
-		return nil, &googleapi.Error{
-			Code:   res.StatusCode,
-			Header: res.Header,
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
-	defer googleapi.CloseBody(res)
-	if err := googleapi.CheckResponse(res); err != nil {
-		return nil, err
-	}
-	ret := &Operation{
-		ServerResponse: googleapi.ServerResponse{
-			Header:         res.Header,
-			HTTPStatusCode: res.StatusCode,
-		},
-	}
-	target := &ret
-	if err := gensupport.DecodeResponse(target, res); err != nil {
-		return nil, err
-	}
-	return ret, nil
-	// {
-	//   "description": "Gets the latest state of a long-running operation.  Clients can use this\nmethod to poll the operation result at intervals as recommended by the API\nservice.",
-	//   "flatPath": "v1p1beta1/projects/{projectsId}/operations/manualRecognitionTasks/{manualRecognitionTasksId}",
-	//   "httpMethod": "GET",
-	//   "id": "speech.projects.operations.manualRecognitionTasks.get",
-	//   "parameterOrder": [
-	//     "name"
-	//   ],
-	//   "parameters": {
-	//     "name": {
-	//       "description": "The name of the operation resource.",
-	//       "location": "path",
-	//       "pattern": "^projects/[^/]+/operations/manualRecognitionTasks/[^/]+$",
-	//       "required": true,
-	//       "type": "string"
-	//     }
-	//   },
-	//   "path": "v1p1beta1/{+name}",
-	//   "response": {
-	//     "$ref": "Operation"
-	//   },
-	//   "scopes": [
-	//     "https://www.googleapis.com/auth/cloud-platform"
-	//   ]
-	// }
-
 }
 
 // method id "speech.speech.longrunningrecognize":

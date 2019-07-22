@@ -56,10 +56,11 @@ func (c *IoTEventsData) BatchPutMessageRequest(input *BatchPutMessageInput) (req
 // BatchPutMessage API operation for AWS IoT Events Data.
 //
 // Sends a set of messages to the AWS IoT Events system. Each message payload
-// will be transformed into the input you specify (inputName) and ingested into
+// is transformed into the input you specify ("inputName") and ingested into
 // any detectors that monitor that input. If multiple messages are sent, the
-// order in which the messages are processed is not guaranteed--you must send
-// messages one at a time and wait for a successful response to guarantee ordering.
+// order in which the messages are processed isn't guaranteed. To guarantee
+// ordering, you must send messages one at a time and wait for a successful
+// response.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -374,7 +375,7 @@ func (c *IoTEventsData) ListDetectorsWithContext(ctx aws.Context, input *ListDet
 	return out, req.Send()
 }
 
-// Contains informations about the errors encountered.
+// Contains information about the errors encountered.
 type BatchPutMessageErrorEntry struct {
 	_ struct{} `type:"structure"`
 
@@ -385,7 +386,7 @@ type BatchPutMessageErrorEntry struct {
 	ErrorMessage *string `locationName:"errorMessage" type:"string"`
 
 	// The ID of the message that caused the error. (See the value corresponding
-	// to the messageId key in the message object.)
+	// to the "messageId" key in the "message" object.)
 	MessageId *string `locationName:"messageId" min:"1" type:"string"`
 }
 
@@ -420,8 +421,8 @@ func (s *BatchPutMessageErrorEntry) SetMessageId(v string) *BatchPutMessageError
 type BatchPutMessageInput struct {
 	_ struct{} `type:"structure"`
 
-	// The list of messages to send. Each message has format: '{ "messageId": "string",
-	// "inputName": "string", "payload": "string"}'.
+	// The list of messages to send. Each message has the following format: '{ "messageId":
+	// "string", "inputName": "string", "payload": "string"}'
 	//
 	// Messages is a required field
 	Messages []*Message `locationName:"messages" min:"1" type:"list" required:"true"`
@@ -492,7 +493,7 @@ func (s *BatchPutMessageOutput) SetBatchPutMessageErrorEntries(v []*BatchPutMess
 	return s
 }
 
-// Information about the error which occured when attempting to update a detector.
+// Information about the error that occured when attempting to update a detector.
 type BatchUpdateDetectorErrorEntry struct {
 	_ struct{} `type:"structure"`
 
@@ -503,7 +504,7 @@ type BatchUpdateDetectorErrorEntry struct {
 	ErrorMessage *string `locationName:"errorMessage" type:"string"`
 
 	// The "messageId" of the update request that caused the error. (The value of
-	// the messageId in the update request Detector object.)
+	// the "messageId" in the update request "Detector" object.)
 	MessageId *string `locationName:"messageId" min:"1" type:"string"`
 }
 
@@ -538,8 +539,7 @@ func (s *BatchUpdateDetectorErrorEntry) SetMessageId(v string) *BatchUpdateDetec
 type BatchUpdateDetectorInput struct {
 	_ struct{} `type:"structure"`
 
-	// The list of detectors (instances) to be updated, along with the values to
-	// be updated.
+	// The list of detectors (instances) to update, along with the values to update.
 	//
 	// Detectors is a required field
 	Detectors []*UpdateDetectorRequest `locationName:"detectors" min:"1" type:"list" required:"true"`
@@ -590,8 +590,8 @@ func (s *BatchUpdateDetectorInput) SetDetectors(v []*UpdateDetectorRequest) *Bat
 type BatchUpdateDetectorOutput struct {
 	_ struct{} `type:"structure"`
 
-	// A list of those detector updates which resulted in errors. (The specific
-	// update did not occur if an error is listed here.)
+	// A list of those detector updates that resulted in errors. (If an error is
+	// listed here, the specific update did not occur.)
 	BatchUpdateDetectorErrorEntries []*BatchUpdateDetectorErrorEntry `locationName:"batchUpdateDetectorErrorEntries" type:"list"`
 }
 
@@ -773,7 +773,7 @@ type DetectorState struct {
 	// Timers is a required field
 	Timers []*Timer `locationName:"timers" type:"list" required:"true"`
 
-	// The current state of the detector's variables.
+	// The current values of the detector's variables.
 	//
 	// Variables is a required field
 	Variables []*Variable `locationName:"variables" type:"list" required:"true"`
@@ -807,7 +807,7 @@ func (s *DetectorState) SetVariables(v []*Variable) *DetectorState {
 	return s
 }
 
-// The new state, variable values and timer settings of the detector (instance).
+// The new state, variable values, and timer settings of the detector (instance).
 type DetectorStateDefinition struct {
 	_ struct{} `type:"structure"`
 
@@ -816,14 +816,14 @@ type DetectorStateDefinition struct {
 	// StateName is a required field
 	StateName *string `locationName:"stateName" min:"1" type:"string" required:"true"`
 
-	// The new values of the detector's timers. Any timer whose value is not specified
-	// will be cleared and its timeout event will not occur.
+	// The new values of the detector's timers. Any timer whose value isn't specified
+	// is cleared, and its timeout event won't occur.
 	//
 	// Timers is a required field
 	Timers []*TimerDefinition `locationName:"timers" type:"list" required:"true"`
 
-	// The new values of the detector's variables. Any variable whose value is not
-	// specified will be cleared.
+	// The new values of the detector's variables. Any variable whose value isn't
+	// specified is cleared.
 	//
 	// Variables is a required field
 	Variables []*VariableDefinition `locationName:"variables" type:"list" required:"true"`
@@ -996,7 +996,7 @@ func (s *DetectorSummary) SetState(v *DetectorStateSummary) *DetectorSummary {
 type ListDetectorsInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the detector model whose instances you want to list.
+	// The name of the detector model whose detectors (instances) are listed.
 	//
 	// DetectorModelName is a required field
 	DetectorModelName *string `location:"uri" locationName:"detectorModelName" min:"1" type:"string" required:"true"`
@@ -1105,13 +1105,13 @@ func (s *ListDetectorsOutput) SetNextToken(v string) *ListDetectorsOutput {
 type Message struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the input into which the message payload will be transformed.
+	// The name of the input into which the message payload is transformed.
 	//
 	// InputName is a required field
 	InputName *string `locationName:"inputName" min:"1" type:"string" required:"true"`
 
-	// The ID you wish to assign to the message. Each "messageId" must be unique
-	// within each batch sent.
+	// The ID to assign to the message. Within each batch sent, each "messageId"
+	// must be unique.
 	//
 	// MessageId is a required field
 	MessageId *string `locationName:"messageId" min:"1" type:"string" required:"true"`
@@ -1284,8 +1284,8 @@ type UpdateDetectorRequest struct {
 	// caused the creation of this detector (instance).
 	KeyValue *string `locationName:"keyValue" min:"1" type:"string"`
 
-	// The ID you wish to assign to the detector update "message". Each "messageId"
-	// must be unique within each batch sent.
+	// The ID to assign to the detector update "message". Each "messageId" must
+	// be unique within each batch sent.
 	//
 	// MessageId is a required field
 	MessageId *string `locationName:"messageId" min:"1" type:"string" required:"true"`

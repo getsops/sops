@@ -514,13 +514,15 @@ const (
 	LiveEventEncodingTypeBasic LiveEventEncodingType = "Basic"
 	// LiveEventEncodingTypeNone ...
 	LiveEventEncodingTypeNone LiveEventEncodingType = "None"
+	// LiveEventEncodingTypePremium1080p ...
+	LiveEventEncodingTypePremium1080p LiveEventEncodingType = "Premium1080p"
 	// LiveEventEncodingTypeStandard ...
 	LiveEventEncodingTypeStandard LiveEventEncodingType = "Standard"
 )
 
 // PossibleLiveEventEncodingTypeValues returns an array of possible values for the LiveEventEncodingType const type.
 func PossibleLiveEventEncodingTypeValues() []LiveEventEncodingType {
-	return []LiveEventEncodingType{LiveEventEncodingTypeBasic, LiveEventEncodingTypeNone, LiveEventEncodingTypeStandard}
+	return []LiveEventEncodingType{LiveEventEncodingTypeBasic, LiveEventEncodingTypeNone, LiveEventEncodingTypePremium1080p, LiveEventEncodingTypeStandard}
 }
 
 // LiveEventInputProtocol enumerates the values for live event input protocol.
@@ -625,6 +627,21 @@ const (
 // PossibleOdataTypeValues returns an array of possible values for the OdataType const type.
 func PossibleOdataTypeValues() []OdataType {
 	return []OdataType{OdataTypeContentKeyPolicyPlayReadyContentKeyLocation, OdataTypeMicrosoftMediaContentKeyPolicyPlayReadyContentEncryptionKeyFromHeader, OdataTypeMicrosoftMediaContentKeyPolicyPlayReadyContentEncryptionKeyFromKeyIdentifier}
+}
+
+// OdataTypeBasicClipTime enumerates the values for odata type basic clip time.
+type OdataTypeBasicClipTime string
+
+const (
+	// OdataTypeClipTime ...
+	OdataTypeClipTime OdataTypeBasicClipTime = "ClipTime"
+	// OdataTypeMicrosoftMediaAbsoluteClipTime ...
+	OdataTypeMicrosoftMediaAbsoluteClipTime OdataTypeBasicClipTime = "#Microsoft.Media.AbsoluteClipTime"
+)
+
+// PossibleOdataTypeBasicClipTimeValues returns an array of possible values for the OdataTypeBasicClipTime const type.
+func PossibleOdataTypeBasicClipTimeValues() []OdataTypeBasicClipTime {
+	return []OdataTypeBasicClipTime{OdataTypeClipTime, OdataTypeMicrosoftMediaAbsoluteClipTime}
 }
 
 // OdataTypeBasicCodec enumerates the values for odata type basic codec.
@@ -1155,6 +1172,44 @@ func (aa AacAudio) AsCodec() (*Codec, bool) {
 // AsBasicCodec is the BasicCodec implementation for AacAudio.
 func (aa AacAudio) AsBasicCodec() (BasicCodec, bool) {
 	return &aa, true
+}
+
+// AbsoluteClipTime specifies the clip time as an absolute time position in the media file.  The absolute
+// time can point to a different position depending on whether the media file starts from a timestamp of
+// zero or not.
+type AbsoluteClipTime struct {
+	// Time - The time position on the timeline of the input media. It is usually specified as an ISO8601 period. e.g PT30S for 30 seconds.
+	Time *string `json:"time,omitempty"`
+	// OdataType - Possible values include: 'OdataTypeClipTime', 'OdataTypeMicrosoftMediaAbsoluteClipTime'
+	OdataType OdataTypeBasicClipTime `json:"@odata.type,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for AbsoluteClipTime.
+func (act AbsoluteClipTime) MarshalJSON() ([]byte, error) {
+	act.OdataType = OdataTypeMicrosoftMediaAbsoluteClipTime
+	objectMap := make(map[string]interface{})
+	if act.Time != nil {
+		objectMap["time"] = act.Time
+	}
+	if act.OdataType != "" {
+		objectMap["@odata.type"] = act.OdataType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsAbsoluteClipTime is the BasicClipTime implementation for AbsoluteClipTime.
+func (act AbsoluteClipTime) AsAbsoluteClipTime() (*AbsoluteClipTime, bool) {
+	return &act, true
+}
+
+// AsClipTime is the BasicClipTime implementation for AbsoluteClipTime.
+func (act AbsoluteClipTime) AsClipTime() (*ClipTime, bool) {
+	return nil, false
+}
+
+// AsBasicClipTime is the BasicClipTime implementation for AbsoluteClipTime.
+func (act AbsoluteClipTime) AsBasicClipTime() (BasicClipTime, bool) {
+	return &act, true
 }
 
 // AccountFilter an Account Filter.
@@ -2301,6 +2356,82 @@ type CheckNameAvailabilityInput struct {
 	Name *string `json:"name,omitempty"`
 	// Type - The account type. For a Media Services account, this should be 'MediaServices'.
 	Type *string `json:"type,omitempty"`
+}
+
+// BasicClipTime base class for specifying a clip time. Use sub classes of this class to specify the time position in
+// the media.
+type BasicClipTime interface {
+	AsAbsoluteClipTime() (*AbsoluteClipTime, bool)
+	AsClipTime() (*ClipTime, bool)
+}
+
+// ClipTime base class for specifying a clip time. Use sub classes of this class to specify the time position
+// in the media.
+type ClipTime struct {
+	// OdataType - Possible values include: 'OdataTypeClipTime', 'OdataTypeMicrosoftMediaAbsoluteClipTime'
+	OdataType OdataTypeBasicClipTime `json:"@odata.type,omitempty"`
+}
+
+func unmarshalBasicClipTime(body []byte) (BasicClipTime, error) {
+	var m map[string]interface{}
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return nil, err
+	}
+
+	switch m["@odata.type"] {
+	case string(OdataTypeMicrosoftMediaAbsoluteClipTime):
+		var act AbsoluteClipTime
+		err := json.Unmarshal(body, &act)
+		return act, err
+	default:
+		var ct ClipTime
+		err := json.Unmarshal(body, &ct)
+		return ct, err
+	}
+}
+func unmarshalBasicClipTimeArray(body []byte) ([]BasicClipTime, error) {
+	var rawMessages []*json.RawMessage
+	err := json.Unmarshal(body, &rawMessages)
+	if err != nil {
+		return nil, err
+	}
+
+	ctArray := make([]BasicClipTime, len(rawMessages))
+
+	for index, rawMessage := range rawMessages {
+		ct, err := unmarshalBasicClipTime(*rawMessage)
+		if err != nil {
+			return nil, err
+		}
+		ctArray[index] = ct
+	}
+	return ctArray, nil
+}
+
+// MarshalJSON is the custom marshaler for ClipTime.
+func (ct ClipTime) MarshalJSON() ([]byte, error) {
+	ct.OdataType = OdataTypeClipTime
+	objectMap := make(map[string]interface{})
+	if ct.OdataType != "" {
+		objectMap["@odata.type"] = ct.OdataType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsAbsoluteClipTime is the BasicClipTime implementation for ClipTime.
+func (ct ClipTime) AsAbsoluteClipTime() (*AbsoluteClipTime, bool) {
+	return nil, false
+}
+
+// AsClipTime is the BasicClipTime implementation for ClipTime.
+func (ct ClipTime) AsClipTime() (*ClipTime, bool) {
+	return &ct, true
+}
+
+// AsBasicClipTime is the BasicClipTime implementation for ClipTime.
+func (ct ClipTime) AsBasicClipTime() (BasicClipTime, bool) {
+	return &ct, true
 }
 
 // BasicCodec describes the basic properties of all codecs.
@@ -4509,7 +4640,7 @@ func (f *Filters) UnmarshalJSON(body []byte) error {
 type FilterTrackPropertyCondition struct {
 	// Property - The track property type. Possible values include: 'FilterTrackPropertyTypeUnknown', 'FilterTrackPropertyTypeType', 'FilterTrackPropertyTypeName', 'FilterTrackPropertyTypeLanguage', 'FilterTrackPropertyTypeFourCC', 'FilterTrackPropertyTypeBitrate'
 	Property FilterTrackPropertyType `json:"property,omitempty"`
-	// Value - The track proprty value.
+	// Value - The track property value.
 	Value *string `json:"value,omitempty"`
 	// Operation - The track property condition operation. Possible values include: 'Equal', 'NotEqual'
 	Operation FilterTrackPropertyCompareOperation `json:"operation,omitempty"`
@@ -5570,6 +5701,10 @@ type JobInputAsset struct {
 	AssetName *string `json:"assetName,omitempty"`
 	// Files - List of files. Required for JobInputHttp. Maximum of 4000 characters each.
 	Files *[]string `json:"files,omitempty"`
+	// Start - Defines a point on the timeline of the input media at which processing will start. Defaults to the beginning of the input media.
+	Start BasicClipTime `json:"start,omitempty"`
+	// End - Defines a point on the timeline of the input media at which processing will end. Defaults to the end of the input media.
+	End BasicClipTime `json:"end,omitempty"`
 	// Label - A label that is assigned to a JobInputClip, that is used to satisfy a reference used in the Transform. For example, a Transform can be authored so as to take an image file with the label 'xyz' and apply it as an overlay onto the input video before it is encoded. When submitting a Job, exactly one of the JobInputs should be the image file, and it should have the label 'xyz'.
 	Label *string `json:"label,omitempty"`
 	// OdataType - Possible values include: 'OdataTypeJobInput', 'OdataTypeMicrosoftMediaJobInputClip', 'OdataTypeMicrosoftMediaJobInputs', 'OdataTypeMicrosoftMediaJobInputAsset', 'OdataTypeMicrosoftMediaJobInputHTTP'
@@ -5586,6 +5721,8 @@ func (jia JobInputAsset) MarshalJSON() ([]byte, error) {
 	if jia.Files != nil {
 		objectMap["files"] = jia.Files
 	}
+	objectMap["start"] = jia.Start
+	objectMap["end"] = jia.End
 	if jia.Label != nil {
 		objectMap["label"] = jia.Label
 	}
@@ -5630,6 +5767,73 @@ func (jia JobInputAsset) AsBasicJobInput() (BasicJobInput, bool) {
 	return &jia, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for JobInputAsset struct.
+func (jia *JobInputAsset) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "assetName":
+			if v != nil {
+				var assetName string
+				err = json.Unmarshal(*v, &assetName)
+				if err != nil {
+					return err
+				}
+				jia.AssetName = &assetName
+			}
+		case "files":
+			if v != nil {
+				var files []string
+				err = json.Unmarshal(*v, &files)
+				if err != nil {
+					return err
+				}
+				jia.Files = &files
+			}
+		case "start":
+			if v != nil {
+				start, err := unmarshalBasicClipTime(*v)
+				if err != nil {
+					return err
+				}
+				jia.Start = start
+			}
+		case "end":
+			if v != nil {
+				end, err := unmarshalBasicClipTime(*v)
+				if err != nil {
+					return err
+				}
+				jia.End = end
+			}
+		case "label":
+			if v != nil {
+				var label string
+				err = json.Unmarshal(*v, &label)
+				if err != nil {
+					return err
+				}
+				jia.Label = &label
+			}
+		case "@odata.type":
+			if v != nil {
+				var odataType OdataTypeBasicJobInput
+				err = json.Unmarshal(*v, &odataType)
+				if err != nil {
+					return err
+				}
+				jia.OdataType = odataType
+			}
+		}
+	}
+
+	return nil
+}
+
 // BasicJobInputClip represents input files for a Job.
 type BasicJobInputClip interface {
 	AsJobInputAsset() (*JobInputAsset, bool)
@@ -5641,6 +5845,10 @@ type BasicJobInputClip interface {
 type JobInputClip struct {
 	// Files - List of files. Required for JobInputHttp. Maximum of 4000 characters each.
 	Files *[]string `json:"files,omitempty"`
+	// Start - Defines a point on the timeline of the input media at which processing will start. Defaults to the beginning of the input media.
+	Start BasicClipTime `json:"start,omitempty"`
+	// End - Defines a point on the timeline of the input media at which processing will end. Defaults to the end of the input media.
+	End BasicClipTime `json:"end,omitempty"`
 	// Label - A label that is assigned to a JobInputClip, that is used to satisfy a reference used in the Transform. For example, a Transform can be authored so as to take an image file with the label 'xyz' and apply it as an overlay onto the input video before it is encoded. When submitting a Job, exactly one of the JobInputs should be the image file, and it should have the label 'xyz'.
 	Label *string `json:"label,omitempty"`
 	// OdataType - Possible values include: 'OdataTypeJobInput', 'OdataTypeMicrosoftMediaJobInputClip', 'OdataTypeMicrosoftMediaJobInputs', 'OdataTypeMicrosoftMediaJobInputAsset', 'OdataTypeMicrosoftMediaJobInputHTTP'
@@ -5695,6 +5903,8 @@ func (jic JobInputClip) MarshalJSON() ([]byte, error) {
 	if jic.Files != nil {
 		objectMap["files"] = jic.Files
 	}
+	objectMap["start"] = jic.Start
+	objectMap["end"] = jic.End
 	if jic.Label != nil {
 		objectMap["label"] = jic.Label
 	}
@@ -5739,12 +5949,74 @@ func (jic JobInputClip) AsBasicJobInput() (BasicJobInput, bool) {
 	return &jic, true
 }
 
+// UnmarshalJSON is the custom unmarshaler for JobInputClip struct.
+func (jic *JobInputClip) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "files":
+			if v != nil {
+				var files []string
+				err = json.Unmarshal(*v, &files)
+				if err != nil {
+					return err
+				}
+				jic.Files = &files
+			}
+		case "start":
+			if v != nil {
+				start, err := unmarshalBasicClipTime(*v)
+				if err != nil {
+					return err
+				}
+				jic.Start = start
+			}
+		case "end":
+			if v != nil {
+				end, err := unmarshalBasicClipTime(*v)
+				if err != nil {
+					return err
+				}
+				jic.End = end
+			}
+		case "label":
+			if v != nil {
+				var label string
+				err = json.Unmarshal(*v, &label)
+				if err != nil {
+					return err
+				}
+				jic.Label = &label
+			}
+		case "@odata.type":
+			if v != nil {
+				var odataType OdataTypeBasicJobInput
+				err = json.Unmarshal(*v, &odataType)
+				if err != nil {
+					return err
+				}
+				jic.OdataType = odataType
+			}
+		}
+	}
+
+	return nil
+}
+
 // JobInputHTTP represents HTTPS job input.
 type JobInputHTTP struct {
 	// BaseURI - Base URI for HTTPS job input. It will be concatenated with provided file names. If no base uri is given, then the provided file list is assumed to be fully qualified uris. Maximum length of 4000 characters.
 	BaseURI *string `json:"baseUri,omitempty"`
 	// Files - List of files. Required for JobInputHttp. Maximum of 4000 characters each.
 	Files *[]string `json:"files,omitempty"`
+	// Start - Defines a point on the timeline of the input media at which processing will start. Defaults to the beginning of the input media.
+	Start BasicClipTime `json:"start,omitempty"`
+	// End - Defines a point on the timeline of the input media at which processing will end. Defaults to the end of the input media.
+	End BasicClipTime `json:"end,omitempty"`
 	// Label - A label that is assigned to a JobInputClip, that is used to satisfy a reference used in the Transform. For example, a Transform can be authored so as to take an image file with the label 'xyz' and apply it as an overlay onto the input video before it is encoded. When submitting a Job, exactly one of the JobInputs should be the image file, and it should have the label 'xyz'.
 	Label *string `json:"label,omitempty"`
 	// OdataType - Possible values include: 'OdataTypeJobInput', 'OdataTypeMicrosoftMediaJobInputClip', 'OdataTypeMicrosoftMediaJobInputs', 'OdataTypeMicrosoftMediaJobInputAsset', 'OdataTypeMicrosoftMediaJobInputHTTP'
@@ -5761,6 +6033,8 @@ func (jih JobInputHTTP) MarshalJSON() ([]byte, error) {
 	if jih.Files != nil {
 		objectMap["files"] = jih.Files
 	}
+	objectMap["start"] = jih.Start
+	objectMap["end"] = jih.End
 	if jih.Label != nil {
 		objectMap["label"] = jih.Label
 	}
@@ -5803,6 +6077,73 @@ func (jih JobInputHTTP) AsJobInput() (*JobInput, bool) {
 // AsBasicJobInput is the BasicJobInput implementation for JobInputHTTP.
 func (jih JobInputHTTP) AsBasicJobInput() (BasicJobInput, bool) {
 	return &jih, true
+}
+
+// UnmarshalJSON is the custom unmarshaler for JobInputHTTP struct.
+func (jih *JobInputHTTP) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "baseUri":
+			if v != nil {
+				var baseURI string
+				err = json.Unmarshal(*v, &baseURI)
+				if err != nil {
+					return err
+				}
+				jih.BaseURI = &baseURI
+			}
+		case "files":
+			if v != nil {
+				var files []string
+				err = json.Unmarshal(*v, &files)
+				if err != nil {
+					return err
+				}
+				jih.Files = &files
+			}
+		case "start":
+			if v != nil {
+				start, err := unmarshalBasicClipTime(*v)
+				if err != nil {
+					return err
+				}
+				jih.Start = start
+			}
+		case "end":
+			if v != nil {
+				end, err := unmarshalBasicClipTime(*v)
+				if err != nil {
+					return err
+				}
+				jih.End = end
+			}
+		case "label":
+			if v != nil {
+				var label string
+				err = json.Unmarshal(*v, &label)
+				if err != nil {
+					return err
+				}
+				jih.Label = &label
+			}
+		case "@odata.type":
+			if v != nil {
+				var odataType OdataTypeBasicJobInput
+				err = json.Unmarshal(*v, &odataType)
+				if err != nil {
+					return err
+				}
+				jih.OdataType = odataType
+			}
+		}
+	}
+
+	return nil
 }
 
 // JobInputs describes a list of inputs to a Job.
@@ -6681,7 +7022,7 @@ type LiveEventActionInput struct {
 
 // LiveEventEncoding the Live Event encoding.
 type LiveEventEncoding struct {
-	// EncodingType - The encoding type for Live Event.  This value is specified at creation time and cannot be updated. Possible values include: 'LiveEventEncodingTypeNone', 'LiveEventEncodingTypeBasic', 'LiveEventEncodingTypeStandard'
+	// EncodingType - The encoding type for Live Event.  This value is specified at creation time and cannot be updated. Possible values include: 'LiveEventEncodingTypeNone', 'LiveEventEncodingTypeBasic', 'LiveEventEncodingTypeStandard', 'LiveEventEncodingTypePremium1080p'
 	EncodingType LiveEventEncodingType `json:"encodingType,omitempty"`
 	// PresetName - The encoding preset name.  This value is specified at creation time and cannot be updated.
 	PresetName *string `json:"presetName,omitempty"`
@@ -8176,7 +8517,7 @@ type PresentationTimeRange struct {
 	LiveBackoffDuration *int64 `json:"liveBackoffDuration,omitempty"`
 	// Timescale - The time scale of time stamps.
 	Timescale *int64 `json:"timescale,omitempty"`
-	// ForceEndTimestamp - The indicator of forcing exsiting of end time stamp.
+	// ForceEndTimestamp - The indicator of forcing existing of end time stamp.
 	ForceEndTimestamp *bool `json:"forceEndTimestamp,omitempty"`
 }
 
@@ -10553,7 +10894,7 @@ func (vVar Video) AsBasicCodec() (BasicCodec, bool) {
 // VideoAnalyzerPreset a video analyzer preset that extracts insights (rich metadata) from both audio and
 // video, and outputs a JSON format file.
 type VideoAnalyzerPreset struct {
-	// InsightsToExtract - The type of insights to be extracted. If not set then based on the content the type will selected.  If the content is audio only then only audio insights are extracted and if it is video only. Possible values include: 'AudioInsightsOnly', 'VideoInsightsOnly', 'AllInsights'
+	// InsightsToExtract - Defines the type of insights that you want the service to generate. The allowed values are 'AudioInsightsOnly', 'VideoInsightsOnly', and 'AllInsights'. The default is AllInsights. If you set this to AllInsights and the input is audio only, then only audio insights are generated. Similarly if the input is video only, then only video insights are generated. It is recommended that you not use AudioInsightsOnly if you expect some of your inputs to be video only; or use VideoInsightsOnly if you expect some of your inputs to be audio only. Your Jobs in such conditions would error out. Possible values include: 'AudioInsightsOnly', 'VideoInsightsOnly', 'AllInsights'
 	InsightsToExtract InsightsType `json:"insightsToExtract,omitempty"`
 	// AudioLanguage - The language for the audio payload in the input using the BCP-47 format of 'language tag-region' (e.g: 'en-US').  The list of supported languages are English ('en-US' and 'en-GB'), Spanish ('es-ES' and 'es-MX'), French ('fr-FR'), Italian ('it-IT'), Japanese ('ja-JP'), Portuguese ('pt-BR'), Chinese ('zh-CN'), German ('de-DE'), Arabic ('ar-EG' and 'ar-SY'), Russian ('ru-RU'), Hindi ('hi-IN'), and Korean ('ko-KR'). If you know the language of your content, it is recommended that you specify it. If the language isn't specified or set to null, automatic language detection will choose the first language detected and process with the selected language for the duration of the file. This language detection feature currently supports English, Chinese, French, German, Italian, Japanese, Spanish, Russian, and Portuguese. It does not currently support dynamically switching between languages after the first language is detected. The automatic detection works best with audio recordings with clearly discernable speech. If automatic detection fails to find the language, transcription would fallback to 'en-US'."
 	AudioLanguage *string `json:"audioLanguage,omitempty"`

@@ -1,0 +1,81 @@
+{
+  "tests": [
+    {
+      "description": "query: cursor methods with a document snapshot, existing orderBy",
+      "comment": "When a document snapshot is used, the client appends a __name__ order-by clause\nwith the direction of the last order-by clause.",
+      "query": {
+        "collPath": "projects/projectID/databases/(default)/documents/C",
+        "clauses": [
+          {
+            "orderBy": {
+              "path": {
+                "field": [
+                  "a"
+                ]
+              },
+              "direction": "asc"
+            }
+          },
+          {
+            "orderBy": {
+              "path": {
+                "field": [
+                  "b"
+                ]
+              },
+              "direction": "desc"
+            }
+          },
+          {
+            "startAfter": {
+              "docSnapshot": {
+                "path": "projects/projectID/databases/(default)/documents/C/D",
+                "jsonData": "{\"a\": 7, \"b\": 8}"
+              }
+            }
+          }
+        ],
+        "query": {
+          "from": [
+            {
+              "collectionId": "C"
+            }
+          ],
+          "orderBy": [
+            {
+              "field": {
+                "fieldPath": "a"
+              },
+              "direction": "ASCENDING"
+            },
+            {
+              "field": {
+                "fieldPath": "b"
+              },
+              "direction": "DESCENDING"
+            },
+            {
+              "field": {
+                "fieldPath": "__name__"
+              },
+              "direction": "DESCENDING"
+            }
+          ],
+          "startAt": {
+            "values": [
+              {
+                "integerValue": "7"
+              },
+              {
+                "integerValue": "8"
+              },
+              {
+                "referenceValue": "projects/projectID/databases/(default)/documents/C/D"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

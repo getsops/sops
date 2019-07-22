@@ -14,7 +14,7 @@
   "canonicalName": "Comment Analyzer",
   "description": "The Perspective Comment Analyzer API provides information about the potential impact of a comment on a conversation (e.g. it can provide a score for the \"toxicity\" of a comment). Users can leverage the \"SuggestCommentScore\" method to submit corrections to improve Perspective over time. Users can set the \"doNotStore\" flag to ensure that all submitted comments are automatically deleted after scores are returned.",
   "discoveryVersion": "v1",
-  "documentationLink": "https://conversationai.github.io/",
+  "documentationLink": "https://github.com/conversationai/perspectiveapi/blob/master/README.md",
   "icons": {
     "x16": "http://www.google.com/images/icons/product/search-16.gif",
     "x32": "http://www.google.com/images/icons/product/search-32.gif"
@@ -144,7 +144,7 @@
       }
     }
   },
-  "revision": "20190526",
+  "revision": "20190616",
   "rootUrl": "https://commentanalyzer.googleapis.com/",
   "schemas": {
     "AnalyzeCommentRequest": {

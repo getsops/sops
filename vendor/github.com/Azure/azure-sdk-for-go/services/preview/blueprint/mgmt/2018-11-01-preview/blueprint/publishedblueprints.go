@@ -21,6 +21,7 @@ import (
 	"context"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
+	"github.com/Azure/go-autorest/autorest/validation"
 	"github.com/Azure/go-autorest/tracing"
 	"net/http"
 )
@@ -49,7 +50,8 @@ func NewPublishedBlueprintsClientWithBaseURI(baseURI string) PublishedBlueprints
 // use.
 // blueprintName - name of the blueprint definition.
 // versionID - version of the published blueprint definition.
-func (client PublishedBlueprintsClient) Create(ctx context.Context, scope string, blueprintName string, versionID string) (result PublishedBlueprint, err error) {
+// publishedBlueprint - published Blueprint to create or update.
+func (client PublishedBlueprintsClient) Create(ctx context.Context, scope string, blueprintName string, versionID string, publishedBlueprint *PublishedBlueprint) (result PublishedBlueprint, err error) {
 	if tracing.IsEnabled() {
 		ctx = tracing.StartSpan(ctx, fqdn+"/PublishedBlueprintsClient.Create")
 		defer func() {
@@ -60,7 +62,18 @@ func (client PublishedBlueprintsClient) Create(ctx context.Context, scope string
 			tracing.EndSpan(ctx, sc, err)
 		}()
 	}
-	req, err := client.CreatePreparer(ctx, scope, blueprintName, versionID)
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: publishedBlueprint,
+			Constraints: []validation.Constraint{{Target: "publishedBlueprint", Name: validation.Null, Rule: false,
+				Chain: []validation.Constraint{{Target: "publishedBlueprint.PublishedBlueprintProperties", Name: validation.Null, Rule: true,
+					Chain: []validation.Constraint{{Target: "publishedBlueprint.PublishedBlueprintProperties.ChangeNotes", Name: validation.Null, Rule: false,
+						Chain: []validation.Constraint{{Target: "publishedBlueprint.PublishedBlueprintProperties.ChangeNotes", Name: validation.MaxLength, Rule: 500, Chain: nil}}},
+					}},
+				}}}}}); err != nil {
+		return result, validation.NewError("blueprint.PublishedBlueprintsClient", "Create", err.Error())
+	}
+
+	req, err := client.CreatePreparer(ctx, scope, blueprintName, versionID, publishedBlueprint)
 	if err != nil {
 		err = autorest.NewErrorWithError(err, "blueprint.PublishedBlueprintsClient", "Create", nil, "Failure preparing request")
 		return
@@ -82,7 +95,7 @@ func (client PublishedBlueprintsClient) Create(ctx context.Context, scope string
 }
 
 // CreatePreparer prepares the Create request.
-func (client PublishedBlueprintsClient) CreatePreparer(ctx context.Context, scope string, blueprintName string, versionID string) (*http.Request, error) {
+func (client PublishedBlueprintsClient) CreatePreparer(ctx context.Context, scope string, blueprintName string, versionID string, publishedBlueprint *PublishedBlueprint) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"blueprintName": autorest.Encode("path", blueprintName),
 		"scope":         scope,
@@ -95,10 +108,15 @@ func (client PublishedBlueprintsClient) CreatePreparer(ctx context.Context, scop
 	}
 
 	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
 		autorest.AsPut(),
 		autorest.WithBaseURL(client.BaseURI),
 		autorest.WithPathParameters("/{scope}/providers/Microsoft.Blueprint/blueprints/{blueprintName}/versions/{versionId}", pathParameters),
 		autorest.WithQueryParameters(queryParameters))
+	if publishedBlueprint != nil {
+		preparer = autorest.DecoratePreparer(preparer,
+			autorest.WithJSON(publishedBlueprint))
+	}
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 

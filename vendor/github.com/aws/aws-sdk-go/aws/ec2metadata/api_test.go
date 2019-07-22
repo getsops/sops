@@ -167,8 +167,6 @@ func TestGetRegion(t *testing.T) {
 	}
 }
 
-
-
 func TestGetRegion_invalidResponse(t *testing.T) {
 	server := initTestServer(
 		"/latest/meta-data/placement/availability-zone",

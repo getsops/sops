@@ -1252,9 +1252,7 @@ type RequestMetadata struct {
 	//
 	// The maximum number of allowed characters is 255.
 	UserId string `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	// Optional.
-	//
-	// If set to `true`,
+	// Optional. If set to `true`,
 	// [domain][google.cloud.talent.v4beta1.RequestMetadata.domain],
 	// [session_id][google.cloud.talent.v4beta1.RequestMetadata.session_id] and
 	// [user_id][google.cloud.talent.v4beta1.RequestMetadata.user_id] are
@@ -1265,10 +1263,8 @@ type RequestMetadata struct {
 	// [user_id][google.cloud.talent.v4beta1.RequestMetadata.user_id] for the best
 	// service experience.
 	AllowMissingIds bool `protobuf:"varint,4,opt,name=allow_missing_ids,json=allowMissingIds,proto3" json:"allow_missing_ids,omitempty"`
-	// Optional.
-	//
-	// The type of device used by the job seeker at the time of the call to the
-	// service.
+	// Optional. The type of device used by the job seeker at the time of the call
+	// to the service.
 	DeviceInfo           *DeviceInfo `protobuf:"bytes,5,opt,name=device_info,json=deviceInfo,proto3" json:"device_info,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
 	XXX_unrecognized     []byte      `json:"-"`
@@ -1382,13 +1378,9 @@ func (m *ResponseMetadata) GetRequestId() string {
 // other entity conducting the job search. Providing this information improves
 // the quality of the search results across devices.
 type DeviceInfo struct {
-	// Optional.
-	//
-	// Type of the device.
+	// Optional. Type of the device.
 	DeviceType DeviceInfo_DeviceType `protobuf:"varint,1,opt,name=device_type,json=deviceType,proto3,enum=google.cloud.talent.v4beta1.DeviceInfo_DeviceType" json:"device_type,omitempty"`
-	// Optional.
-	//
-	// A device-specific ID. The ID must be a unique identifier that
+	// Optional. A device-specific ID. The ID must be a unique identifier that
 	// distinguishes the device from other devices.
 	Id                   string   `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -1463,10 +1455,8 @@ type CustomAttribute struct {
 	// [long_values][google.cloud.talent.v4beta1.CustomAttribute.long_values] is
 	// supported.
 	LongValues []int64 `protobuf:"varint,2,rep,packed,name=long_values,json=longValues,proto3" json:"long_values,omitempty"`
-	// Optional.
-	//
-	// If the `filterable` flag is true, custom field values are searchable.
-	// If false, values are not searchable.
+	// Optional. If the `filterable` flag is true, custom field values are
+	// searchable. If false, values are not searchable.
 	//
 	// Default is false.
 	Filterable           bool     `protobuf:"varint,3,opt,name=filterable,proto3" json:"filterable,omitempty"`
@@ -1588,9 +1578,7 @@ func (m *SpellingCorrection) GetCorrectedHtml() string {
 
 // Job compensation details.
 type CompensationInfo struct {
-	// Optional.
-	//
-	// Job compensation information.
+	// Optional. Job compensation information.
 	//
 	// At most one entry can be of type
 	// [CompensationInfo.CompensationType.BASE][google.cloud.talent.v4beta1.CompensationInfo.CompensationType.BASE],
@@ -1684,16 +1672,12 @@ func (m *CompensationInfo) GetAnnualizedTotalCompensationRange() *CompensationIn
 // times
 // [expected_units_per_year][google.cloud.talent.v4beta1.CompensationInfo.CompensationEntry.expected_units_per_year].
 type CompensationInfo_CompensationEntry struct {
-	// Optional.
-	//
-	// Compensation type.
+	// Optional. Compensation type.
 	//
 	// Default is
 	// [CompensationType.COMPENSATION_TYPE_UNSPECIFIED][google.cloud.talent.v4beta1.CompensationInfo.CompensationType.COMPENSATION_TYPE_UNSPECIFIED].
 	Type CompensationInfo_CompensationType `protobuf:"varint,1,opt,name=type,proto3,enum=google.cloud.talent.v4beta1.CompensationInfo_CompensationType" json:"type,omitempty"`
-	// Optional.
-	//
-	// Frequency of the specified amount.
+	// Optional. Frequency of the specified amount.
 	//
 	// Default is
 	// [CompensationUnit.COMPENSATION_UNIT_UNSPECIFIED][google.cloud.talent.v4beta1.CompensationInfo.CompensationUnit.COMPENSATION_UNIT_UNSPECIFIED].
@@ -1706,15 +1690,11 @@ type CompensationInfo_CompensationEntry struct {
 	//	*CompensationInfo_CompensationEntry_Amount
 	//	*CompensationInfo_CompensationEntry_Range
 	CompensationAmount isCompensationInfo_CompensationEntry_CompensationAmount `protobuf_oneof:"compensation_amount"`
-	// Optional.
-	//
-	// Compensation description.  For example, could
+	// Optional. Compensation description.  For example, could
 	// indicate equity terms or provide additional context to an estimated
 	// bonus.
 	Description string `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
-	// Optional.
-	//
-	// Expected number of units paid each year. If not specified, when
+	// Optional. Expected number of units paid each year. If not specified, when
 	// [Job.employment_types][google.cloud.talent.v4beta1.Job.employment_types]
 	// is FULLTIME, a default value is inferred based on
 	// [unit][google.cloud.talent.v4beta1.CompensationInfo.CompensationEntry.unit].
@@ -1832,18 +1812,13 @@ func (*CompensationInfo_CompensationEntry) XXX_OneofWrappers() []interface{} {
 
 // Compensation range.
 type CompensationInfo_CompensationRange struct {
-	// Optional.
-	//
-	// The maximum amount of compensation. If left empty, the value is set
-	// to a maximal compensation value and the currency code is set to
-	// match the [currency code][google.type.Money.currency_code] of
-	// min_compensation.
+	// Optional. The maximum amount of compensation. If left empty, the value is
+	// set to a maximal compensation value and the currency code is set to match
+	// the [currency code][google.type.Money.currency_code] of min_compensation.
 	MaxCompensation *money.Money `protobuf:"bytes,2,opt,name=max_compensation,json=maxCompensation,proto3" json:"max_compensation,omitempty"`
-	// Optional.
-	//
-	// The minimum amount of compensation. If left empty, the value is set
-	// to zero and the currency code is set to match the
-	// [currency code][google.type.Money.currency_code] of max_compensation.
+	// Optional. The minimum amount of compensation. If left empty, the value is
+	// set to zero and the currency code is set to match the [currency
+	// code][google.type.Money.currency_code] of max_compensation.
 	MinCompensation      *money.Money `protobuf:"bytes,1,opt,name=min_compensation,json=minCompensation,proto3" json:"min_compensation,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
 	XXX_unrecognized     []byte       `json:"-"`
@@ -1891,29 +1866,19 @@ func (m *CompensationInfo_CompensationRange) GetMinCompensation() *money.Money {
 
 // Resource that represents a license or certification.
 type Certification struct {
-	// Optional.
-	//
-	// Name of license or certification.
+	// Optional. Name of license or certification.
 	//
 	// Number of characters allowed is 100.
 	DisplayName string `protobuf:"bytes,1,opt,name=display_name,json=displayName,proto3" json:"display_name,omitempty"`
-	// Optional.
-	//
-	// Acquisition date or effective date of license or certification.
+	// Optional. Acquisition date or effective date of license or certification.
 	AcquireDate *date.Date `protobuf:"bytes,2,opt,name=acquire_date,json=acquireDate,proto3" json:"acquire_date,omitempty"`
-	// Optional.
-	//
-	// Expiration date of license of certification.
+	// Optional. Expiration date of license of certification.
 	ExpireDate *date.Date `protobuf:"bytes,3,opt,name=expire_date,json=expireDate,proto3" json:"expire_date,omitempty"`
-	// Optional.
-	//
-	// Authority of license, such as government.
+	// Optional. Authority of license, such as government.
 	//
 	// Number of characters allowed is 100.
 	Authority string `protobuf:"bytes,4,opt,name=authority,proto3" json:"authority,omitempty"`
-	// Optional.
-	//
-	// Description of license or certification.
+	// Optional. Description of license or certification.
 	//
 	// Number of characters allowed is 100,000.
 	Description          string   `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
@@ -1984,26 +1949,18 @@ func (m *Certification) GetDescription() string {
 
 // Resource that represents a skill of a candidate.
 type Skill struct {
-	// Optional.
-	//
-	// Skill display name.
+	// Optional. Skill display name.
 	//
 	// For example, "Java", "Python".
 	//
 	// Number of characters allowed is 100.
 	DisplayName string `protobuf:"bytes,1,opt,name=display_name,json=displayName,proto3" json:"display_name,omitempty"`
-	// Optional.
-	//
-	// The last time this skill was used.
+	// Optional. The last time this skill was used.
 	LastUsedDate *date.Date `protobuf:"bytes,2,opt,name=last_used_date,json=lastUsedDate,proto3" json:"last_used_date,omitempty"`
-	// Optional.
-	//
-	// Skill proficiency level which indicates how proficient the candidate is at
-	// this skill.
+	// Optional. Skill proficiency level which indicates how proficient the
+	// candidate is at this skill.
 	Level SkillProficiencyLevel `protobuf:"varint,3,opt,name=level,proto3,enum=google.cloud.talent.v4beta1.SkillProficiencyLevel" json:"level,omitempty"`
-	// Optional.
-	//
-	// A paragraph describes context of this skill.
+	// Optional. A paragraph describes context of this skill.
 	//
 	// Number of characters allowed is 100,000.
 	Context string `protobuf:"bytes,4,opt,name=context,proto3" json:"context,omitempty"`
@@ -2080,14 +2037,10 @@ func (m *Skill) GetSkillNameSnippet() string {
 
 // Details of an interview.
 type Interview struct {
-	// Optional.
-	//
-	// The rating on this interview.
+	// Optional. The rating on this interview.
 	Rating *Rating `protobuf:"bytes,6,opt,name=rating,proto3" json:"rating,omitempty"`
-	// Required.
-	//
-	// The overall decision resulting from this interview (positive, negative,
-	// nuetral).
+	// Required. The overall decision resulting from this interview (positive,
+	// negative, nuetral).
 	Outcome              Outcome  `protobuf:"varint,7,opt,name=outcome,proto3,enum=google.cloud.talent.v4beta1.Outcome" json:"outcome,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`

@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"net/url"
 	"time"
 
 	"github.com/golang/protobuf/proto"
@@ -134,7 +135,7 @@ func (c *Client) SetGoogleClientInfo(keyval ...string) {
 // and any new fields provided are merged with the existing trace data. If the
 // ID does not match, a new trace is created.
 func (c *Client) PatchTraces(ctx context.Context, req *cloudtracepb.PatchTracesRequest, opts ...gax.CallOption) error {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "project_id", req.GetProjectId()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "project_id", url.QueryEscape(req.GetProjectId())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.PatchTraces[0:len(c.CallOptions.PatchTraces):len(c.CallOptions.PatchTraces)], opts...)
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
@@ -163,7 +164,7 @@ func (c *Client) GetTrace(ctx context.Context, req *cloudtracepb.GetTraceRequest
 
 // ListTraces returns of a list of traces that match the specified filter conditions.
 func (c *Client) ListTraces(ctx context.Context, req *cloudtracepb.ListTracesRequest, opts ...gax.CallOption) *TraceIterator {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "project_id", req.GetProjectId()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "project_id", url.QueryEscape(req.GetProjectId())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ListTraces[0:len(c.CallOptions.ListTraces):len(c.CallOptions.ListTraces)], opts...)
 	it := &TraceIterator{}

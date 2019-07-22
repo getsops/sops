@@ -1,20 +1,19 @@
 ---
 version: 1
-rwmutex: {}
 interactions:
 - request:
     body: ""
     form: {}
     headers:
       Authorization:
-      - SharedKey golangrocksonazure:Lc5Iu8aQIcEM6scVM3h3Ofj4zDCUP+nHwPmsqFUJsz8=
+      - SharedKey golangrocksonazure:ijQiV//N13UBNlRkjEwqtEDhKugw9YICO1JA5jc//iI=
       User-Agent:
-      - Go/go1.9beta1 (amd64-windows) azure-storage-go/10.0.2 api-version/2016-05-31
+      - Go/go1.12.4 (amd64-windows) azure-storage-go/latest api-version/2018-03-28
         table
       x-ms-date:
-      - Thu, 20 Jul 2017 23:34:11 GMT
+      - Tue, 28 May 2019 22:36:10 GMT
       x-ms-version:
-      - 2016-05-31
+      - "2018-03-28"
     url: https://golangrocksonazure.table.core.windows.net/?comp=properties&restype=service
     method: GET
   response:
@@ -23,12 +22,13 @@ interactions:
       Content-Type:
       - application/xml
       Date:
-      - Thu, 20 Jul 2017 23:34:10 GMT
+      - Tue, 28 May 2019 22:36:10 GMT
       Server:
       - Windows-Azure-Table/1.0 Microsoft-HTTPAPI/2.0
       X-Ms-Request-Id:
-      - 875b8378-0002-0036-77b0-0102e5000000
+      - ac810fb3-6002-0062-4da5-153a2a000000
       X-Ms-Version:
-      - 2016-05-31
+      - "2018-03-28"
     status: 200 OK
     code: 200
+    duration: ""

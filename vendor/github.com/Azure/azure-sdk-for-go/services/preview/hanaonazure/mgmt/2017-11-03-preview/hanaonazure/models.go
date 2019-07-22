@@ -193,7 +193,7 @@ type HanaInstance struct {
 	Name *string `json:"name,omitempty"`
 	// Type - READ-ONLY; Resource type
 	Type *string `json:"type,omitempty"`
-	// Location - READ-ONLY; Resource location
+	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - READ-ONLY; Resource tags
 	Tags map[string]*string `json:"tags"`
@@ -204,6 +204,9 @@ func (hi HanaInstance) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if hi.HanaInstanceProperties != nil {
 		objectMap["properties"] = hi.HanaInstanceProperties
+	}
+	if hi.Location != nil {
+		objectMap["location"] = hi.Location
 	}
 	return json.Marshal(objectMap)
 }
@@ -295,7 +298,7 @@ type HanaInstanceProperties struct {
 	ProximityPlacementGroup *string `json:"proximityPlacementGroup,omitempty"`
 	// HwRevision - READ-ONLY; Hardware revision of a HANA instance
 	HwRevision *string `json:"hwRevision,omitempty"`
-	// PartnerNodeID - READ-ONLY; ARM ID of another HanaInstance that will share a network with this HanaInstance
+	// PartnerNodeID - ARM ID of another HanaInstance that will share a network with this HanaInstance
 	PartnerNodeID *string `json:"partnerNodeId,omitempty"`
 	// ProvisioningState - READ-ONLY; State of provisioning of the HanaInstance. Possible values include: 'Accepted', 'Creating', 'Updating', 'Failed', 'Succeeded', 'Deleting', 'Migrating'
 	ProvisioningState HanaProvisioningStatesEnum `json:"provisioningState,omitempty"`
@@ -327,6 +330,29 @@ func (future *HanaInstancesCreateFuture) Result(client HanaInstancesClient) (hi 
 			err = autorest.NewErrorWithError(err, "hanaonazure.HanaInstancesCreateFuture", "Result", hi.Response.Response, "Failure responding to request")
 		}
 	}
+	return
+}
+
+// HanaInstancesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
+type HanaInstancesDeleteFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *HanaInstancesDeleteFuture) Result(client HanaInstancesClient) (ar autorest.Response, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "hanaonazure.HanaInstancesDeleteFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("hanaonazure.HanaInstancesDeleteFuture")
+		return
+	}
+	ar.Response = future.Response()
 	return
 }
 
@@ -522,6 +548,52 @@ func (future *HanaInstancesRestartFuture) Result(client HanaInstancesClient) (ar
 	return
 }
 
+// HanaInstancesShutdownFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
+type HanaInstancesShutdownFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *HanaInstancesShutdownFuture) Result(client HanaInstancesClient) (ar autorest.Response, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "hanaonazure.HanaInstancesShutdownFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("hanaonazure.HanaInstancesShutdownFuture")
+		return
+	}
+	ar.Response = future.Response()
+	return
+}
+
+// HanaInstancesStartFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
+type HanaInstancesStartFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *HanaInstancesStartFuture) Result(client HanaInstancesClient) (ar autorest.Response, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "hanaonazure.HanaInstancesStartFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("hanaonazure.HanaInstancesStartFuture")
+		return
+	}
+	ar.Response = future.Response()
+	return
+}
+
 // HardwareProfile specifies the hardware settings for the HANA instance.
 type HardwareProfile struct {
 	// HardwareType - READ-ONLY; Name of the hardware type (vendor and/or their product name). Possible values include: 'CiscoUCS', 'HPE'
@@ -532,7 +604,7 @@ type HardwareProfile struct {
 
 // IPAddress specifies the IP address of the network interface.
 type IPAddress struct {
-	// IPAddress - READ-ONLY; Specifies the IP address of the network interface.
+	// IPAddress - Specifies the IP address of the network interface.
 	IPAddress *string `json:"ipAddress,omitempty"`
 }
 
@@ -577,13 +649,13 @@ type OperationList struct {
 
 // OSProfile specifies the operating system settings for the HANA instance.
 type OSProfile struct {
-	// ComputerName - READ-ONLY; Specifies the host OS name of the HANA instance.
+	// ComputerName - Specifies the host OS name of the HANA instance.
 	ComputerName *string `json:"computerName,omitempty"`
 	// OsType - READ-ONLY; This property allows you to specify the type of the OS.
 	OsType *string `json:"osType,omitempty"`
 	// Version - READ-ONLY; Specifies version of operating system.
 	Version *string `json:"version,omitempty"`
-	// SSHPublicKey - READ-ONLY; Specifies the SSH public key used to access the operating system.
+	// SSHPublicKey - Specifies the SSH public key used to access the operating system.
 	SSHPublicKey *string `json:"sshPublicKey,omitempty"`
 }
 
@@ -595,7 +667,7 @@ type Resource struct {
 	Name *string `json:"name,omitempty"`
 	// Type - READ-ONLY; Resource type
 	Type *string `json:"type,omitempty"`
-	// Location - READ-ONLY; Resource location
+	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - READ-ONLY; Resource tags
 	Tags map[string]*string `json:"tags"`
@@ -604,7 +676,324 @@ type Resource struct {
 // MarshalJSON is the custom marshaler for Resource.
 func (r Resource) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
+	if r.Location != nil {
+		objectMap["location"] = r.Location
+	}
 	return json.Marshal(objectMap)
+}
+
+// SapMonitor SAP monitor info on Azure (ARM properties and SAP monitor properties)
+type SapMonitor struct {
+	autorest.Response `json:"-"`
+	// SapMonitorProperties - SAP monitor properties
+	*SapMonitorProperties `json:"properties,omitempty"`
+	// ID - READ-ONLY; Resource ID
+	ID *string `json:"id,omitempty"`
+	// Name - READ-ONLY; Resource name
+	Name *string `json:"name,omitempty"`
+	// Type - READ-ONLY; Resource type
+	Type *string `json:"type,omitempty"`
+	// Location - Resource location
+	Location *string `json:"location,omitempty"`
+	// Tags - READ-ONLY; Resource tags
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for SapMonitor.
+func (sm SapMonitor) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if sm.SapMonitorProperties != nil {
+		objectMap["properties"] = sm.SapMonitorProperties
+	}
+	if sm.Location != nil {
+		objectMap["location"] = sm.Location
+	}
+	return json.Marshal(objectMap)
+}
+
+// UnmarshalJSON is the custom unmarshaler for SapMonitor struct.
+func (sm *SapMonitor) UnmarshalJSON(body []byte) error {
+	var m map[string]*json.RawMessage
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return err
+	}
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var sapMonitorProperties SapMonitorProperties
+				err = json.Unmarshal(*v, &sapMonitorProperties)
+				if err != nil {
+					return err
+				}
+				sm.SapMonitorProperties = &sapMonitorProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				sm.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				sm.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				sm.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				sm.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				sm.Tags = tags
+			}
+		}
+	}
+
+	return nil
+}
+
+// SapMonitorListResult the response from the List SAP monitors operation.
+type SapMonitorListResult struct {
+	autorest.Response `json:"-"`
+	// Value - The list of SAP monitors.
+	Value *[]SapMonitor `json:"value,omitempty"`
+	// NextLink - The URL to get the next set of SAP monitors.
+	NextLink *string `json:"nextLink,omitempty"`
+}
+
+// SapMonitorListResultIterator provides access to a complete listing of SapMonitor values.
+type SapMonitorListResultIterator struct {
+	i    int
+	page SapMonitorListResultPage
+}
+
+// NextWithContext advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+func (iter *SapMonitorListResultIterator) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SapMonitorListResultIterator.NextWithContext")
+		defer func() {
+			sc := -1
+			if iter.Response().Response.Response != nil {
+				sc = iter.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	iter.i++
+	if iter.i < len(iter.page.Values()) {
+		return nil
+	}
+	err = iter.page.NextWithContext(ctx)
+	if err != nil {
+		iter.i--
+		return err
+	}
+	iter.i = 0
+	return nil
+}
+
+// Next advances to the next value.  If there was an error making
+// the request the iterator does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (iter *SapMonitorListResultIterator) Next() error {
+	return iter.NextWithContext(context.Background())
+}
+
+// NotDone returns true if the enumeration should be started or is not yet complete.
+func (iter SapMonitorListResultIterator) NotDone() bool {
+	return iter.page.NotDone() && iter.i < len(iter.page.Values())
+}
+
+// Response returns the raw server response from the last page request.
+func (iter SapMonitorListResultIterator) Response() SapMonitorListResult {
+	return iter.page.Response()
+}
+
+// Value returns the current value or a zero-initialized value if the
+// iterator has advanced beyond the end of the collection.
+func (iter SapMonitorListResultIterator) Value() SapMonitor {
+	if !iter.page.NotDone() {
+		return SapMonitor{}
+	}
+	return iter.page.Values()[iter.i]
+}
+
+// Creates a new instance of the SapMonitorListResultIterator type.
+func NewSapMonitorListResultIterator(page SapMonitorListResultPage) SapMonitorListResultIterator {
+	return SapMonitorListResultIterator{page: page}
+}
+
+// IsEmpty returns true if the ListResult contains no values.
+func (smlr SapMonitorListResult) IsEmpty() bool {
+	return smlr.Value == nil || len(*smlr.Value) == 0
+}
+
+// sapMonitorListResultPreparer prepares a request to retrieve the next set of results.
+// It returns nil if no more results exist.
+func (smlr SapMonitorListResult) sapMonitorListResultPreparer(ctx context.Context) (*http.Request, error) {
+	if smlr.NextLink == nil || len(to.String(smlr.NextLink)) < 1 {
+		return nil, nil
+	}
+	return autorest.Prepare((&http.Request{}).WithContext(ctx),
+		autorest.AsJSON(),
+		autorest.AsGet(),
+		autorest.WithBaseURL(to.String(smlr.NextLink)))
+}
+
+// SapMonitorListResultPage contains a page of SapMonitor values.
+type SapMonitorListResultPage struct {
+	fn   func(context.Context, SapMonitorListResult) (SapMonitorListResult, error)
+	smlr SapMonitorListResult
+}
+
+// NextWithContext advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+func (page *SapMonitorListResultPage) NextWithContext(ctx context.Context) (err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SapMonitorListResultPage.NextWithContext")
+		defer func() {
+			sc := -1
+			if page.Response().Response.Response != nil {
+				sc = page.Response().Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	next, err := page.fn(ctx, page.smlr)
+	if err != nil {
+		return err
+	}
+	page.smlr = next
+	return nil
+}
+
+// Next advances to the next page of values.  If there was an error making
+// the request the page does not advance and the error is returned.
+// Deprecated: Use NextWithContext() instead.
+func (page *SapMonitorListResultPage) Next() error {
+	return page.NextWithContext(context.Background())
+}
+
+// NotDone returns true if the page enumeration should be started or is not yet complete.
+func (page SapMonitorListResultPage) NotDone() bool {
+	return !page.smlr.IsEmpty()
+}
+
+// Response returns the raw server response from the last page request.
+func (page SapMonitorListResultPage) Response() SapMonitorListResult {
+	return page.smlr
+}
+
+// Values returns the slice of values for the current page or nil if there are no values.
+func (page SapMonitorListResultPage) Values() []SapMonitor {
+	if page.smlr.IsEmpty() {
+		return nil
+	}
+	return *page.smlr.Value
+}
+
+// Creates a new instance of the SapMonitorListResultPage type.
+func NewSapMonitorListResultPage(getNextPage func(context.Context, SapMonitorListResult) (SapMonitorListResult, error)) SapMonitorListResultPage {
+	return SapMonitorListResultPage{fn: getNextPage}
+}
+
+// SapMonitorProperties describes the properties of a SAP monitor.
+type SapMonitorProperties struct {
+	// HanaSubnet - Specifies the SAP monitor unique ID.
+	HanaSubnet *string `json:"hanaSubnet,omitempty"`
+	// HanaHostname - Hostname of the HANA instance.
+	HanaHostname *string `json:"hanaHostname,omitempty"`
+	// HanaDbName - Database name of the HANA instance.
+	HanaDbName *string `json:"hanaDbName,omitempty"`
+	// HanaDbSQLPort - Database port of the HANA instance.
+	HanaDbSQLPort *int32 `json:"hanaDbSqlPort,omitempty"`
+	// HanaDbUsername - Database username of the HANA instance.
+	HanaDbUsername *string `json:"hanaDbUsername,omitempty"`
+	// HanaDbPassword - Database password of the HANA instance.
+	HanaDbPassword *string `json:"hanaDbPassword,omitempty"`
+	// ProvisioningState - READ-ONLY; State of provisioning of the HanaInstance. Possible values include: 'Accepted', 'Creating', 'Updating', 'Failed', 'Succeeded', 'Deleting', 'Migrating'
+	ProvisioningState HanaProvisioningStatesEnum `json:"provisioningState,omitempty"`
+}
+
+// SapMonitorsCreateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
+type SapMonitorsCreateFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *SapMonitorsCreateFuture) Result(client SapMonitorsClient) (sm SapMonitor, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "hanaonazure.SapMonitorsCreateFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("hanaonazure.SapMonitorsCreateFuture")
+		return
+	}
+	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if sm.Response.Response, err = future.GetResult(sender); err == nil && sm.Response.Response.StatusCode != http.StatusNoContent {
+		sm, err = client.CreateResponder(sm.Response.Response)
+		if err != nil {
+			err = autorest.NewErrorWithError(err, "hanaonazure.SapMonitorsCreateFuture", "Result", sm.Response.Response, "Failure responding to request")
+		}
+	}
+	return
+}
+
+// SapMonitorsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
+type SapMonitorsDeleteFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *SapMonitorsDeleteFuture) Result(client SapMonitorsClient) (ar autorest.Response, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "hanaonazure.SapMonitorsDeleteFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("hanaonazure.SapMonitorsDeleteFuture")
+		return
+	}
+	ar.Response = future.Response()
+	return
 }
 
 // StorageProfile specifies the storage settings for the HANA instance disks.

@@ -32,6 +32,7 @@ import (
 // AliasPackage is an abstraction around ast.Package to provide convenience methods for manipulating it.
 type AliasPackage ast.Package
 
+// ErrorUnexpectedToken is returned when AST parsing encounters an unexpected token, it includes the expected token.
 type ErrorUnexpectedToken struct {
 	Expected token.Token
 	Received token.Token

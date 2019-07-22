@@ -4,12 +4,13 @@
   "operations": {
     "AssociateIpGroups": "<p>Associates the specified IP access control group with the specified directory.</p>",
     "AuthorizeIpRules": "<p>Adds one or more rules to the specified IP access control group.</p> <p>This action gives users permission to access their WorkSpaces from the CIDR address ranges specified in the rules.</p>",
+    "CopyWorkspaceImage": "<p>Copies the specified image from the specified Region to the current Region.</p>",
     "CreateIpGroup": "<p>Creates an IP access control group.</p> <p>An IP access control group provides you with the ability to control the IP addresses from which users are allowed to access their WorkSpaces. To specify the CIDR address ranges, add rules to your IP access control group and then associate the group with your directory. You can add rules when you create the group or at any time using <a>AuthorizeIpRules</a>.</p> <p>There is a default IP access control group associated with your directory. If you don't associate an IP access control group with your directory, the default group is used. The default group includes a default rule that allows users to access their WorkSpaces from anywhere. You cannot modify the default IP access control group for your directory.</p>",
     "CreateTags": "<p>Creates the specified tags for the specified WorkSpaces resource.</p>",
     "CreateWorkspaces": "<p>Creates one or more WorkSpaces.</p> <p>This operation is asynchronous and returns before the WorkSpaces are created.</p>",
     "DeleteIpGroup": "<p>Deletes the specified IP access control group.</p> <p>You cannot delete an IP access control group that is associated with a directory.</p>",
     "DeleteTags": "<p>Deletes the specified tags from the specified WorkSpaces resource.</p>",
-    "DeleteWorkspaceImage": "<p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image. </p>",
+    "DeleteWorkspaceImage": "<p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image and un-share the image if it is shared with other accounts. </p>",
     "DescribeAccount": "<p>Retrieves a list that describes the configuration of bring your own license (BYOL) for the specified account.</p>",
     "DescribeAccountModifications": "<p>Retrieves a list that describes modifications to the configuration of bring your own license (BYOL) for the specified account.</p>",
     "DescribeClientProperties": "<p>Retrieves a list that describes one or more specified Amazon WorkSpaces clients.</p>",
@@ -26,7 +27,7 @@
     "ModifyAccount": "<p>Modifies the configuration of bring your own license (BYOL) for the specified account.</p>",
     "ModifyClientProperties": "<p>Modifies the properties of the specified Amazon WorkSpaces clients.</p>",
     "ModifyWorkspaceProperties": "<p>Modifies the specified WorkSpace properties.</p>",
-    "ModifyWorkspaceState": "<p>Sets the state of the specified WorkSpace.</p> <p>To maintain a WorkSpace without being interrupted, set the WorkSpace state to <code>ADMIN_MAINTENANCE</code>. WorkSpaces in this state do not respond to requests to reboot, stop, start, or rebuild. An AutoStop WorkSpace in this state is not stopped. Users can log into a WorkSpace in the <code>ADMIN_MAINTENANCE</code> state.</p>",
+    "ModifyWorkspaceState": "<p>Sets the state of the specified WorkSpace.</p> <p>To maintain a WorkSpace without being interrupted, set the WorkSpace state to <code>ADMIN_MAINTENANCE</code>. WorkSpaces in this state do not respond to requests to reboot, stop, start, rebuild, or restore. An AutoStop WorkSpace in this state is not stopped. Users cannot log into a WorkSpace in the <code>ADMIN_MAINTENANCE</code> state.</p>",
     "RebootWorkspaces": "<p>Reboots the specified WorkSpaces.</p> <p>You cannot reboot a WorkSpace unless its state is <code>AVAILABLE</code> or <code>UNHEALTHY</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p>",
     "RebuildWorkspaces": "<p>Rebuilds the specified WorkSpace.</p> <p>You cannot rebuild a WorkSpace unless its state is <code>AVAILABLE</code>, <code>ERROR</code>, or <code>UNHEALTHY</code>.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href=\"https://docs.aws.amazon.com/workspaces/latest/adminguide/reset-workspace.html\">Rebuild a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p>",
     "RevokeIpRules": "<p>Removes one or more rules from the specified IP access control group.</p>",
@@ -57,12 +58,6 @@
       "base": null,
       "refs": {
         "DescribeAccountModificationsResult$AccountModifications": "<p>The list of modifications to the configuration of BYOL.</p>"
-      }
-    },
-    "AdditionalInfo": {
-      "base": null,
-      "refs": {
-        "RebuildWorkspacesRequest$AdditionalInfo": "<p>Reserved.</p>"
       }
     },
     "Alias": {
@@ -174,6 +169,16 @@
       "base": null,
       "refs": {
         "WorkspaceConnectionStatus$ConnectionState": "<p>The connection state of the WorkSpace. The connection state is unknown if the WorkSpace is stopped.</p>"
+      }
+    },
+    "CopyWorkspaceImageRequest": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "CopyWorkspaceImageResult": {
+      "base": null,
+      "refs": {
       }
     },
     "CreateIpGroupRequest": {
@@ -821,6 +826,12 @@
         "ClientProperties$ReconnectEnabled": "<p>Specifies whether users can cache their credentials on the Amazon WorkSpaces client. When enabled, users can choose to reconnect to their WorkSpaces without re-entering their credentials. </p>"
       }
     },
+    "Region": {
+      "base": null,
+      "refs": {
+        "CopyWorkspaceImageRequest$SourceRegion": "<p>The identifier of the source Region.</p>"
+      }
+    },
     "RegistrationCode": {
       "base": null,
       "refs": {
@@ -982,6 +993,7 @@
     "TagList": {
       "base": null,
       "refs": {
+        "CopyWorkspaceImageRequest$Tags": "<p>The tags for the image.</p>",
         "CreateIpGroupRequest$Tags": "<p>The tags. Each WorkSpaces resource can have a maximum of 50 tags.</p>",
         "CreateTagsRequest$Tags": "<p>The tags. Each WorkSpaces resource can have a maximum of 50 tags.</p>",
         "DescribeTagsResult$TagList": "<p>The tags.</p>",
@@ -1155,6 +1167,7 @@
     "WorkspaceImageDescription": {
       "base": null,
       "refs": {
+        "CopyWorkspaceImageRequest$Description": "<p>A description of the image.</p>",
         "ImportWorkspaceImageRequest$ImageDescription": "<p>The description of the WorkSpace image.</p>",
         "WorkspaceImage$Description": "<p>The description of the image.</p>"
       }
@@ -1168,6 +1181,8 @@
     "WorkspaceImageId": {
       "base": null,
       "refs": {
+        "CopyWorkspaceImageRequest$SourceImageId": "<p>The identifier of the source image.</p>",
+        "CopyWorkspaceImageResult$ImageId": "<p>The identifier of the image.</p>",
         "DeleteWorkspaceImageRequest$ImageId": "<p>The identifier of the image.</p>",
         "ImportWorkspaceImageResult$ImageId": "<p>The identifier of the WorkSpace image.</p>",
         "WorkspaceImage$ImageId": "<p>The identifier of the image.</p>",
@@ -1195,6 +1210,7 @@
     "WorkspaceImageName": {
       "base": null,
       "refs": {
+        "CopyWorkspaceImageRequest$Name": "<p>The name of the image.</p>",
         "ImportWorkspaceImageRequest$ImageName": "<p>The name of the WorkSpace image.</p>",
         "WorkspaceImage$Name": "<p>The name of the image.</p>"
       }

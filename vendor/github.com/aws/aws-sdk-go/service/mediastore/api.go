@@ -857,6 +857,12 @@ func (c *MediaStore) ListContainersRequest(input *ListContainersInput) (req *req
 		Name:       opListContainers,
 		HTTPMethod: "POST",
 		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -909,6 +915,142 @@ func (c *MediaStore) ListContainers(input *ListContainersInput) (*ListContainers
 // for more information on using Contexts.
 func (c *MediaStore) ListContainersWithContext(ctx aws.Context, input *ListContainersInput, opts ...request.Option) (*ListContainersOutput, error) {
 	req, out := c.ListContainersRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListContainersPages iterates over the pages of a ListContainers operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListContainers method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListContainers operation.
+//    pageNum := 0
+//    err := client.ListContainersPages(params,
+//        func(page *mediastore.ListContainersOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *MediaStore) ListContainersPages(input *ListContainersInput, fn func(*ListContainersOutput, bool) bool) error {
+	return c.ListContainersPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListContainersPagesWithContext same as ListContainersPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaStore) ListContainersPagesWithContext(ctx aws.Context, input *ListContainersInput, fn func(*ListContainersOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListContainersInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListContainersRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListContainersOutput), !p.HasNextPage())
+	}
+	return p.Err()
+}
+
+const opListTagsForResource = "ListTagsForResource"
+
+// ListTagsForResourceRequest generates a "aws/request.Request" representing the
+// client's request for the ListTagsForResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListTagsForResource for more information on using the ListTagsForResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListTagsForResourceRequest method.
+//    req, resp := client.ListTagsForResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediastore-2017-09-01/ListTagsForResource
+func (c *MediaStore) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req *request.Request, output *ListTagsForResourceOutput) {
+	op := &request.Operation{
+		Name:       opListTagsForResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListTagsForResourceInput{}
+	}
+
+	output = &ListTagsForResourceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListTagsForResource API operation for AWS Elemental MediaStore.
+//
+// Returns a list of the tags assigned to the specified container.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaStore's
+// API operation ListTagsForResource for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeContainerInUseException "ContainerInUseException"
+//   The container that you specified in the request already exists or is being
+//   updated.
+//
+//   * ErrCodeContainerNotFoundException "ContainerNotFoundException"
+//   The container that you specified in the request does not exist.
+//
+//   * ErrCodeInternalServerError "InternalServerError"
+//   The service is temporarily unavailable.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediastore-2017-09-01/ListTagsForResource
+func (c *MediaStore) ListTagsForResource(input *ListTagsForResourceInput) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
+	return out, req.Send()
+}
+
+// ListTagsForResourceWithContext is the same as ListTagsForResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListTagsForResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaStore) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsForResourceInput, opts ...request.Option) (*ListTagsForResourceOutput, error) {
+	req, out := c.ListTagsForResourceRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1378,6 +1520,186 @@ func (c *MediaStore) StopAccessLoggingWithContext(ctx aws.Context, input *StopAc
 	return out, req.Send()
 }
 
+const opTagResource = "TagResource"
+
+// TagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the TagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See TagResource for more information on using the TagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the TagResourceRequest method.
+//    req, resp := client.TagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediastore-2017-09-01/TagResource
+func (c *MediaStore) TagResourceRequest(input *TagResourceInput) (req *request.Request, output *TagResourceOutput) {
+	op := &request.Operation{
+		Name:       opTagResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &TagResourceInput{}
+	}
+
+	output = &TagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// TagResource API operation for AWS Elemental MediaStore.
+//
+// Adds tags to the specified AWS Elemental MediaStore container. Tags are key:value
+// pairs that you can associate with AWS resources. For example, the tag key
+// might be "customer" and the tag value might be "companyA." You can specify
+// one or more tags to add to each container. You can add up to 50 tags to each
+// container. For more information about tagging, including naming and usage
+// conventions, see Tagging Resources in MediaStore (https://aws.amazon.com/documentation/mediastore/tagging).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaStore's
+// API operation TagResource for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeContainerInUseException "ContainerInUseException"
+//   The container that you specified in the request already exists or is being
+//   updated.
+//
+//   * ErrCodeContainerNotFoundException "ContainerNotFoundException"
+//   The container that you specified in the request does not exist.
+//
+//   * ErrCodeInternalServerError "InternalServerError"
+//   The service is temporarily unavailable.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediastore-2017-09-01/TagResource
+func (c *MediaStore) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	return out, req.Send()
+}
+
+// TagResourceWithContext is the same as TagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See TagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaStore) TagResourceWithContext(ctx aws.Context, input *TagResourceInput, opts ...request.Option) (*TagResourceOutput, error) {
+	req, out := c.TagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUntagResource = "UntagResource"
+
+// UntagResourceRequest generates a "aws/request.Request" representing the
+// client's request for the UntagResource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UntagResource for more information on using the UntagResource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UntagResourceRequest method.
+//    req, resp := client.UntagResourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediastore-2017-09-01/UntagResource
+func (c *MediaStore) UntagResourceRequest(input *UntagResourceInput) (req *request.Request, output *UntagResourceOutput) {
+	op := &request.Operation{
+		Name:       opUntagResource,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UntagResourceInput{}
+	}
+
+	output = &UntagResourceOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UntagResource API operation for AWS Elemental MediaStore.
+//
+// Removes tags from the specified container. You can specify one or more tags
+// to remove.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaStore's
+// API operation UntagResource for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeContainerInUseException "ContainerInUseException"
+//   The container that you specified in the request already exists or is being
+//   updated.
+//
+//   * ErrCodeContainerNotFoundException "ContainerNotFoundException"
+//   The container that you specified in the request does not exist.
+//
+//   * ErrCodeInternalServerError "InternalServerError"
+//   The service is temporarily unavailable.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediastore-2017-09-01/UntagResource
+func (c *MediaStore) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	return out, req.Send()
+}
+
+// UntagResourceWithContext is the same as UntagResource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UntagResource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaStore) UntagResourceWithContext(ctx aws.Context, input *UntagResourceInput, opts ...request.Option) (*UntagResourceOutput, error) {
+	req, out := c.UntagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 // This section describes operations that you can perform on an AWS Elemental
 // MediaStore container.
 type Container struct {
@@ -1581,6 +1903,14 @@ type CreateContainerInput struct {
 	//
 	// ContainerName is a required field
 	ContainerName *string `min:"1" type:"string" required:"true"`
+
+	// An array of key:value pairs that you define. These values can be anything
+	// that you want. Typically, the tag key represents a category (such as "environment")
+	// and the tag value represents a specific value within that category (such
+	// as "test," "development," or "production"). You can add up to 50 tags to
+	// each container. For more information about tagging, including naming and
+	// usage conventions, see Tagging Resources in MediaStore (https://aws.amazon.com/documentation/mediastore/tagging).
+	Tags []*Tag `type:"list"`
 }
 
 // String returns the string representation
@@ -1602,6 +1932,16 @@ func (s *CreateContainerInput) Validate() error {
 	if s.ContainerName != nil && len(*s.ContainerName) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("ContainerName", 1))
 	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -1612,6 +1952,12 @@ func (s *CreateContainerInput) Validate() error {
 // SetContainerName sets the ContainerName field's value.
 func (s *CreateContainerInput) SetContainerName(v string) *CreateContainerInput {
 	s.ContainerName = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateContainerInput) SetTags(v []*Tag) *CreateContainerInput {
+	s.Tags = v
 	return s
 }
 
@@ -2219,6 +2565,70 @@ func (s *ListContainersOutput) SetNextToken(v string) *ListContainersOutput {
 	return s
 }
 
+type ListTagsForResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) for the container.
+	//
+	// Resource is a required field
+	Resource *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ListTagsForResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListTagsForResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListTagsForResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListTagsForResourceInput"}
+	if s.Resource == nil {
+		invalidParams.Add(request.NewErrParamRequired("Resource"))
+	}
+	if s.Resource != nil && len(*s.Resource) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Resource", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResource sets the Resource field's value.
+func (s *ListTagsForResourceInput) SetResource(v string) *ListTagsForResourceInput {
+	s.Resource = &v
+	return s
+}
+
+type ListTagsForResourceOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of key:value pairs that are assigned to the container.
+	Tags []*Tag `type:"list"`
+}
+
+// String returns the string representation
+func (s ListTagsForResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListTagsForResourceOutput) GoString() string {
+	return s.String()
+}
+
+// SetTags sets the Tags field's value.
+func (s *ListTagsForResourceOutput) SetTags(v []*Tag) *ListTagsForResourceOutput {
+	s.Tags = v
+	return s
+}
+
 type PutContainerPolicyInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2554,6 +2964,218 @@ func (s StopAccessLoggingOutput) String() string {
 
 // GoString returns the string representation
 func (s StopAccessLoggingOutput) GoString() string {
+	return s.String()
+}
+
+// A collection of tags associated with a container. Each tag consists of a
+// key:value pair, which can be anything you define. Typically, the tag key
+// represents a category (such as "environment") and the tag value represents
+// a specific value within that category (such as "test," "development," or
+// "production"). You can add up to 50 tags to each container. For more information
+// about tagging, including naming and usage conventions, see Tagging Resources
+// in MediaStore (https://aws.amazon.com/documentation/mediastore/tagging).
+type Tag struct {
+	_ struct{} `type:"structure"`
+
+	// Part of the key:value pair that defines a tag. You can use a tag key to describe
+	// a category of information, such as "customer." Tag keys are case-sensitive.
+	Key *string `min:"1" type:"string"`
+
+	// Part of the key:value pair that defines a tag. You can use a tag value to
+	// describe a specific value within a category, such as "companyA" or "companyB."
+	// Tag values are case-sensitive.
+	Value *string `type:"string"`
+}
+
+// String returns the string representation
+func (s Tag) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Tag) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Tag) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Tag"}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetKey sets the Key field's value.
+func (s *Tag) SetKey(v string) *Tag {
+	s.Key = &v
+	return s
+}
+
+// SetValue sets the Value field's value.
+func (s *Tag) SetValue(v string) *Tag {
+	s.Value = &v
+	return s
+}
+
+type TagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) for the container.
+	//
+	// Resource is a required field
+	Resource *string `min:"1" type:"string" required:"true"`
+
+	// An array of key:value pairs that you want to add to the container. You need
+	// to specify only the tags that you want to add or update. For example, suppose
+	// a container already has two tags (customer:CompanyA and priority:High). You
+	// want to change the priority tag and also add a third tag (type:Contract).
+	// For TagResource, you specify the following tags: priority:Medium, type:Contract.
+	// The result is that your container has three tags: customer:CompanyA, priority:Medium,
+	// and type:Contract.
+	//
+	// Tags is a required field
+	Tags []*Tag `type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s TagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TagResourceInput"}
+	if s.Resource == nil {
+		invalidParams.Add(request.NewErrParamRequired("Resource"))
+	}
+	if s.Resource != nil && len(*s.Resource) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Resource", 1))
+	}
+	if s.Tags == nil {
+		invalidParams.Add(request.NewErrParamRequired("Tags"))
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResource sets the Resource field's value.
+func (s *TagResourceInput) SetResource(v string) *TagResourceInput {
+	s.Resource = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *TagResourceInput) SetTags(v []*Tag) *TagResourceInput {
+	s.Tags = v
+	return s
+}
+
+type TagResourceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s TagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TagResourceOutput) GoString() string {
+	return s.String()
+}
+
+type UntagResourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) for the container.
+	//
+	// Resource is a required field
+	Resource *string `min:"1" type:"string" required:"true"`
+
+	// A comma-separated list of keys for tags that you want to remove from the
+	// container. For example, if your container has two tags (customer:CompanyA
+	// and priority:High) and you want to remove one of the tags (priority:High),
+	// you specify the key for the tag that you want to remove (priority).
+	//
+	// TagKeys is a required field
+	TagKeys []*string `type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s UntagResourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UntagResourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UntagResourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UntagResourceInput"}
+	if s.Resource == nil {
+		invalidParams.Add(request.NewErrParamRequired("Resource"))
+	}
+	if s.Resource != nil && len(*s.Resource) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Resource", 1))
+	}
+	if s.TagKeys == nil {
+		invalidParams.Add(request.NewErrParamRequired("TagKeys"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetResource sets the Resource field's value.
+func (s *UntagResourceInput) SetResource(v string) *UntagResourceInput {
+	s.Resource = &v
+	return s
+}
+
+// SetTagKeys sets the TagKeys field's value.
+func (s *UntagResourceInput) SetTagKeys(v []*string) *UntagResourceInput {
+	s.TagKeys = v
+	return s
+}
+
+type UntagResourceOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UntagResourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
 

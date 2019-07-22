@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"net/url"
 	"time"
 
 	"github.com/golang/protobuf/proto"
@@ -111,7 +112,7 @@ type ContextsClient struct {
 //
 // For more information about contexts, see the
 // Dialogflow
-// documentation (at https://cloud.google.com/dialogflow-enterprise/docs/contexts-overview).
+// documentation (at https://cloud.google.com/dialogflow/docs/contexts-overview).
 func NewContextsClient(ctx context.Context, opts ...option.ClientOption) (*ContextsClient, error) {
 	conn, err := transport.DialGRPC(ctx, append(defaultContextsClientOptions(), opts...)...)
 	if err != nil {
@@ -149,7 +150,7 @@ func (c *ContextsClient) setGoogleClientInfo(keyval ...string) {
 
 // ListContexts returns the list of all contexts in the specified session.
 func (c *ContextsClient) ListContexts(ctx context.Context, req *dialogflowpb.ListContextsRequest, opts ...gax.CallOption) *ContextIterator {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ListContexts[0:len(c.CallOptions.ListContexts):len(c.CallOptions.ListContexts)], opts...)
 	it := &ContextIterator{}
@@ -188,7 +189,7 @@ func (c *ContextsClient) ListContexts(ctx context.Context, req *dialogflowpb.Lis
 
 // GetContext retrieves the specified context.
 func (c *ContextsClient) GetContext(ctx context.Context, req *dialogflowpb.GetContextRequest, opts ...gax.CallOption) (*dialogflowpb.Context, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.GetContext[0:len(c.CallOptions.GetContext):len(c.CallOptions.GetContext)], opts...)
 	var resp *dialogflowpb.Context
@@ -207,7 +208,7 @@ func (c *ContextsClient) GetContext(ctx context.Context, req *dialogflowpb.GetCo
 //
 // If the specified context already exists, overrides the context.
 func (c *ContextsClient) CreateContext(ctx context.Context, req *dialogflowpb.CreateContextRequest, opts ...gax.CallOption) (*dialogflowpb.Context, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.CreateContext[0:len(c.CallOptions.CreateContext):len(c.CallOptions.CreateContext)], opts...)
 	var resp *dialogflowpb.Context
@@ -224,7 +225,7 @@ func (c *ContextsClient) CreateContext(ctx context.Context, req *dialogflowpb.Cr
 
 // UpdateContext updates the specified context.
 func (c *ContextsClient) UpdateContext(ctx context.Context, req *dialogflowpb.UpdateContextRequest, opts ...gax.CallOption) (*dialogflowpb.Context, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "context.name", req.GetContext().GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "context.name", url.QueryEscape(req.GetContext().GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.UpdateContext[0:len(c.CallOptions.UpdateContext):len(c.CallOptions.UpdateContext)], opts...)
 	var resp *dialogflowpb.Context
@@ -241,7 +242,7 @@ func (c *ContextsClient) UpdateContext(ctx context.Context, req *dialogflowpb.Up
 
 // DeleteContext deletes the specified context.
 func (c *ContextsClient) DeleteContext(ctx context.Context, req *dialogflowpb.DeleteContextRequest, opts ...gax.CallOption) error {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.DeleteContext[0:len(c.CallOptions.DeleteContext):len(c.CallOptions.DeleteContext)], opts...)
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {
@@ -254,7 +255,7 @@ func (c *ContextsClient) DeleteContext(ctx context.Context, req *dialogflowpb.De
 
 // DeleteAllContexts deletes all active contexts in the specified session.
 func (c *ContextsClient) DeleteAllContexts(ctx context.Context, req *dialogflowpb.DeleteAllContextsRequest, opts ...gax.CallOption) error {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.DeleteAllContexts[0:len(c.CallOptions.DeleteAllContexts):len(c.CallOptions.DeleteAllContexts)], opts...)
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {

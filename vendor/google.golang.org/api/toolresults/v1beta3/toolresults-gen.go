@@ -1218,6 +1218,10 @@ type InconclusiveDetail struct {
 	// running.
 	AbortedByUser bool `json:"abortedByUser,omitempty"`
 
+	// HasErrorLogs: If results are being provided to the user in certain
+	// cases of infrastructure failures
+	HasErrorLogs bool `json:"hasErrorLogs,omitempty"`
+
 	// InfrastructureFailure: If the test runner could not determine success
 	// or failure because the test depends on a component other than the
 	// system under test which failed.
@@ -2619,6 +2623,7 @@ type TestCase struct {
 	// Possible values:
 	//   "error"
 	//   "failed"
+	//   "flaky"
 	//   "passed"
 	//   "skipped"
 	Status string `json:"status,omitempty"`
@@ -2807,6 +2812,7 @@ type TestIssue struct {
 	//   "availableDeepLinks"
 	//   "compatibleWithOrchestrator"
 	//   "completeRoboScriptExecution"
+	//   "crashDialogError"
 	//   "encounteredLoginScreen"
 	//   "encounteredNonAndroidUiWidgetScreen"
 	//   "failedToInstall"
@@ -2863,6 +2869,9 @@ func (s *TestIssue) MarshalJSON() ([]byte, error) {
 // is also being used in ExecutionService in a read only mode for the
 // corresponding step.
 type TestSuiteOverview struct {
+	// ElapsedTime: Elapsed time of test suite.
+	ElapsedTime *Duration `json:"elapsedTime,omitempty"`
+
 	// ErrorCount: Number of test cases in error, typically set by the
 	// service by parsing the xml_source.
 	//
@@ -2902,7 +2911,7 @@ type TestSuiteOverview struct {
 	// - In create/response: optional - In update request: never
 	XmlSource *FileReference `json:"xmlSource,omitempty"`
 
-	// ForceSendFields is a list of field names (e.g. "ErrorCount") to
+	// ForceSendFields is a list of field names (e.g. "ElapsedTime") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -2910,10 +2919,10 @@ type TestSuiteOverview struct {
 	// used to include empty fields in Patch requests.
 	ForceSendFields []string `json:"-"`
 
-	// NullFields is a list of field names (e.g. "ErrorCount") to include in
-	// API requests with the JSON null value. By default, fields with empty
-	// values are omitted from API requests. However, any field with an
-	// empty value appearing in NullFields will be sent to the server as
+	// NullFields is a list of field names (e.g. "ElapsedTime") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
 	// null. It is an error if a field in this list has a non-empty value.
 	// This may be used to include null fields in Patch requests.
 	NullFields []string `json:"-"`

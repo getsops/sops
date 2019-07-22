@@ -15,7 +15,7 @@
   "description": "Accesses your bidding-account information, submits creatives for validation, finds available direct deals, and retrieves performance reports.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/ad-exchange/buyer-rest",
-  "etag": "\"Zkyw9ACJZUvcYmlFaKGChzhmtnE/_CyndOA4AbF54FgfrNcK2tPll_k\"",
+  "etag": "\"9eZ1uxVRThTDhLJCZHhqs3eQWz4/hcIsQyAOKgIG-XNmjJJ2qekVMV8\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/doubleclick-16.gif",
     "x32": "https://www.google.com/images/icons/product/doubleclick-32.gif"
@@ -699,7 +699,7 @@
       }
     }
   },
-  "revision": "20180222",
+  "revision": "20190614",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Account": {
@@ -882,6 +882,21 @@
           "description": "Account id.",
           "format": "int32",
           "type": "integer"
+        },
+        "adTechnologyProviders": {
+          "properties": {
+            "detectedProviderIds": {
+              "items": {
+                "format": "int64",
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "hasUnidentifiedProvider": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
         },
         "advertiserId": {
           "description": "Detected advertiser id, if any. Read-only. This field should not be set in requests.",
@@ -1118,10 +1133,6 @@
               "description": "The app rating in the app store. Must be in the range [0-5].",
               "format": "double",
               "type": "number"
-            },
-            "store": {
-              "description": "The URL to the app store to purchase/download the promoted app.",
-              "type": "string"
             }
           },
           "type": "object"

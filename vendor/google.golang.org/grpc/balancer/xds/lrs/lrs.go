@@ -43,6 +43,7 @@ type Store interface {
 	CallDropped(category string)
 	CallStarted(l internal.Locality)
 	CallFinished(l internal.Locality, err error)
+	CallServerLoad(l internal.Locality, name string, d float64)
 	ReportTo(ctx context.Context, cc *grpc.ClientConn)
 }
 
@@ -51,6 +52,13 @@ type rpcCountData struct {
 	succeeded  *uint64
 	errored    *uint64
 	inProgress *uint64
+
+	// Map from load name to load data (sum+count). Loading data from map is
+	// atomic, but updating data takes a lock, which could cause contention when
+	// multiple RPCs try to report loads for the same name.
+	//
+	// To fix the contention, shard this map.
+	serverLoads sync.Map // map[string]*rpcLoadData
 }
 
 func newRPCCountData() *rpcCountData {
@@ -59,6 +67,75 @@ func newRPCCountData() *rpcCountData {
 		errored:    new(uint64),
 		inProgress: new(uint64),
 	}
+}
+
+func (rcd *rpcCountData) incrSucceeded() {
+	atomic.AddUint64(rcd.succeeded, 1)
+}
+
+func (rcd *rpcCountData) loadAndClearSucceeded() uint64 {
+	return atomic.SwapUint64(rcd.succeeded, 0)
+}
+
+func (rcd *rpcCountData) incrErrored() {
+	atomic.AddUint64(rcd.errored, 1)
+}
+
+func (rcd *rpcCountData) loadAndClearErrored() uint64 {
+	return atomic.SwapUint64(rcd.errored, 0)
+}
+
+func (rcd *rpcCountData) incrInProgress() {
+	atomic.AddUint64(rcd.inProgress, 1)
+}
+
+func (rcd *rpcCountData) decrInProgress() {
+	atomic.AddUint64(rcd.inProgress, negativeOneUInt64) // atomic.Add(x, -1)
+}
+
+func (rcd *rpcCountData) loadInProgress() uint64 {
+	return atomic.LoadUint64(rcd.inProgress) // InProgress count is not clear when reading.
+}
+
+func (rcd *rpcCountData) addServerLoad(name string, d float64) {
+	loads, ok := rcd.serverLoads.Load(name)
+	if !ok {
+		tl := newRPCLoadData()
+		loads, _ = rcd.serverLoads.LoadOrStore(name, tl)
+	}
+	loads.(*rpcLoadData).add(d)
+}
+
+// Data for server loads (from trailers or oob). Fields in this struct must be
+// updated consistently.
+//
+// The current solution is to hold a lock, which could cause contention. To fix,
+// shard serverLoads map in rpcCountData.
+type rpcLoadData struct {
+	mu    sync.Mutex
+	sum   float64
+	count uint64
+}
+
+func newRPCLoadData() *rpcLoadData {
+	return &rpcLoadData{}
+}
+
+func (rld *rpcLoadData) add(v float64) {
+	rld.mu.Lock()
+	rld.sum += v
+	rld.count++
+	rld.mu.Unlock()
+}
+
+func (rld *rpcLoadData) loadAndClear() (s float64, c uint64) {
+	rld.mu.Lock()
+	s = rld.sum
+	rld.sum = 0
+	c = rld.count
+	rld.count = 0
+	rld.mu.Unlock()
+	return
 }
 
 // lrsStore collects loads from xds balancer, and periodically sends load to the
@@ -110,7 +187,7 @@ func (ls *lrsStore) CallStarted(l internal.Locality) {
 		tp := newRPCCountData()
 		p, _ = ls.localityRPCCount.LoadOrStore(l, tp)
 	}
-	atomic.AddUint64(p.(*rpcCountData).inProgress, 1)
+	p.(*rpcCountData).incrInProgress()
 }
 
 func (ls *lrsStore) CallFinished(l internal.Locality, err error) {
@@ -120,12 +197,22 @@ func (ls *lrsStore) CallFinished(l internal.Locality, err error) {
 		// case where entry for call-finish is not found should never happen.
 		return
 	}
-	atomic.AddUint64(p.(*rpcCountData).inProgress, negativeOneUInt64) // atomic.Add(x, -1)
+	p.(*rpcCountData).decrInProgress()
 	if err == nil {
-		atomic.AddUint64(p.(*rpcCountData).succeeded, 1)
+		p.(*rpcCountData).incrSucceeded()
 	} else {
-		atomic.AddUint64(p.(*rpcCountData).errored, 1)
+		p.(*rpcCountData).incrErrored()
 	}
+}
+
+func (ls *lrsStore) CallServerLoad(l internal.Locality, name string, d float64) {
+	p, ok := ls.localityRPCCount.Load(l)
+	if !ok {
+		// The map is never cleared, only values in the map are reset. So the
+		// case where entry for CallServerLoad is not found should never happen.
+		return
+	}
+	p.(*rpcCountData).addServerLoad(name, d)
 }
 
 func (ls *lrsStore) buildStats(clusterName string) []*loadreportpb.ClusterStats {
@@ -150,12 +237,29 @@ func (ls *lrsStore) buildStats(clusterName string) []*loadreportpb.ClusterStats 
 		tempLocality := locality.(internal.Locality)
 		tempCount := countP.(*rpcCountData)
 
-		tempSucceeded := atomic.SwapUint64(tempCount.succeeded, 0)
-		tempInProgress := atomic.LoadUint64(tempCount.inProgress) // InProgress count is not clear when reading.
-		tempErrored := atomic.SwapUint64(tempCount.errored, 0)
+		tempSucceeded := tempCount.loadAndClearSucceeded()
+		tempInProgress := tempCount.loadInProgress()
+		tempErrored := tempCount.loadAndClearErrored()
 		if tempSucceeded == 0 && tempInProgress == 0 && tempErrored == 0 {
 			return true
 		}
+
+		var loadMetricStats []*loadreportpb.EndpointLoadMetricStats
+		tempCount.serverLoads.Range(func(name, data interface{}) bool {
+			tempName := name.(string)
+			tempSum, tempCount := data.(*rpcLoadData).loadAndClear()
+			if tempCount == 0 {
+				return true
+			}
+			loadMetricStats = append(loadMetricStats,
+				&loadreportpb.EndpointLoadMetricStats{
+					MetricName:                    tempName,
+					NumRequestsFinishedWithMetric: tempCount,
+					TotalMetricValue:              tempSum,
+				},
+			)
+			return true
+		})
 
 		localityStats = append(localityStats, &loadreportpb.UpstreamLocalityStats{
 			Locality: &basepb.Locality{
@@ -166,7 +270,7 @@ func (ls *lrsStore) buildStats(clusterName string) []*loadreportpb.ClusterStats 
 			TotalSuccessfulRequests: tempSucceeded,
 			TotalRequestsInProgress: tempInProgress,
 			TotalErrorRequests:      tempErrored,
-			LoadMetricStats:         nil, // TODO: populate for user loads.
+			LoadMetricStats:         loadMetricStats,
 			UpstreamEndpointStats:   nil, // TODO: populate for per endpoint loads.
 		})
 		return true

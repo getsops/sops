@@ -100,7 +100,6 @@ func (c *FakeContext) Value(key interface{}) interface{} {
 func StashEnv() []string {
 	env := os.Environ()
 	os.Clearenv()
-
 	return env
 }
 

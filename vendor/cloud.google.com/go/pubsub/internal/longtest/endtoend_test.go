@@ -77,9 +77,18 @@ func TestEndToEnd_Dupes(t *testing.T) {
 	defer cancel()
 
 	consumers := []*consumer{
-		{counts: make(map[string]int), recv: recv, durations: []time.Duration{time.Hour}},
-		{counts: make(map[string]int), recv: recv,
-			durations: []time.Duration{ackDeadline, ackDeadline, ackDeadline / 2, ackDeadline / 2, time.Hour}},
+		{
+			counts:    make(map[string]int),
+			recv:      recv,
+			durations: []time.Duration{time.Hour},
+			done:      make(chan struct{}),
+		},
+		{
+			counts:    make(map[string]int),
+			recv:      recv,
+			durations: []time.Duration{ackDeadline, ackDeadline, ackDeadline / 2, ackDeadline / 2, time.Hour},
+			done:      make(chan struct{}),
+		},
 	}
 	for i, con := range consumers {
 		con := con
@@ -137,6 +146,14 @@ loop:
 			t.Errorf("Consumer %d: Willing to accept %d dups (%v duplicated of %d messages), but got %d", i, numAcceptableDups, acceptableDupPercentage, int(nMessages), numDups)
 		}
 	}
+
+	for i, con := range consumers {
+		select {
+		case <-con.done:
+		case <-time.After(15 * time.Second):
+			t.Fatalf("timed out waiting for consumer %d to finish", i)
+		}
+	}
 }
 
 func TestEndToEnd_LongProcessingTime(t *testing.T) {
@@ -175,6 +192,7 @@ func TestEndToEnd_LongProcessingTime(t *testing.T) {
 		processingDelay: func() time.Duration {
 			return time.Duration(1+rand.Int63n(120)) * time.Second
 		},
+		done: make(chan struct{}),
 	}
 	go consumer.consume(ctx, t, sub)
 	// Wait for a while after the last message before declaring quiescence.
@@ -220,6 +238,12 @@ loop:
 	} else if numDups > numAcceptableDups {
 		t.Errorf("Willing to accept %d dups (%v duplicated of %d messages), but got %d", numAcceptableDups, acceptableDupPercentage, int(nMessages), numDups)
 	}
+
+	select {
+	case <-consumer.done:
+	case <-time.After(15 * time.Second):
+		t.Fatal("timed out waiting for consumer to finish")
+	}
 }
 
 // publish publishes n messages to topic.
@@ -254,11 +278,15 @@ type consumer struct {
 	mu         sync.Mutex
 	counts     map[string]int // msgID: recvdAmt
 	totalRecvd int
+
+	// Done consuming.
+	done chan struct{}
 }
 
 // consume reads messages from a subscription, and keeps track of what it receives in mc.
 // After consume returns, the caller should wait on wg to ensure that no more updates to mc will be made.
 func (c *consumer) consume(ctx context.Context, t *testing.T, sub *pubsub.Subscription) {
+	defer close(c.done)
 	for _, dur := range c.durations {
 		ctx2, cancel := context.WithTimeout(ctx, dur)
 		defer cancel()

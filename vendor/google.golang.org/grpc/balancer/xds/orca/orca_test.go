@@ -28,9 +28,10 @@ import (
 
 var (
 	testMessage = &orcapb.OrcaLoadReport{
-		CpuUtilization:           0.1,
-		MemUtilization:           0.2,
-		RequestCostOrUtilization: map[string]float64{"ttt": 0.4},
+		CpuUtilization: 0.1,
+		MemUtilization: 0.2,
+		RequestCost:    map[string]float64{"ccc": 3.4},
+		Utilization:    map[string]float64{"ttt": 0.4},
 	}
 	testBytes, _ = proto.Marshal(testMessage)
 )

@@ -52,6 +52,12 @@ const (
 	// The value of an input parameter is bad or out-of-range.
 	ErrCodeInvalidParameterValueException = "InvalidParameterValue"
 
+	// ErrCodeLimitExceededException for service response error code
+	// "LimitExceededException".
+	//
+	// The operation exceeded one or more limits.
+	ErrCodeLimitExceededException = "LimitExceededException"
+
 	// ErrCodeLimitExceededFault for service response error code
 	// "LimitExceeded".
 	//

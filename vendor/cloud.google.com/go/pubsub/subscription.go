@@ -153,8 +153,10 @@ type SubscriptionConfig struct {
 	// *default policy* with `ttl` of 31 days will be used. The minimum allowed
 	// value for `expiration_policy.ttl` is 1 day.
 	//
+	// Use time.Duration(0) to indicate that the subscription should never expire.
+	//
 	// It is EXPERIMENTAL and subject to change or removal without notice.
-	ExpirationPolicy time.Duration
+	ExpirationPolicy optional.Duration
 
 	// The set of labels for the subscription.
 	Labels map[string]string
@@ -335,7 +337,7 @@ type SubscriptionConfigToUpdate struct {
 	RetentionDuration time.Duration
 
 	// If non-zero, Expiration is changed.
-	ExpirationPolicy time.Duration
+	ExpirationPolicy optional.Duration
 
 	// If non-nil, the current set of labels is completely
 	// replaced by the new set.
@@ -382,7 +384,7 @@ func (s *Subscription) updateRequest(cfg *SubscriptionConfigToUpdate) *pb.Update
 		psub.MessageRetentionDuration = ptypes.DurationProto(cfg.RetentionDuration)
 		paths = append(paths, "message_retention_duration")
 	}
-	if cfg.ExpirationPolicy != 0 {
+	if cfg.ExpirationPolicy != nil {
 		psub.ExpirationPolicy = expirationPolicyToProto(cfg.ExpirationPolicy)
 		paths = append(paths, "expiration_policy")
 	}
@@ -407,21 +409,31 @@ const (
 )
 
 func (cfg *SubscriptionConfigToUpdate) validate() error {
-	if cfg == nil || cfg.ExpirationPolicy == 0 {
+	if cfg == nil || cfg.ExpirationPolicy == nil {
 		return nil
 	}
-	if policy, min := cfg.ExpirationPolicy, minExpirationPolicy; policy < min {
-		return fmt.Errorf("invalid expiration policy(%q) < minimum(%q)", policy, min)
+	policy, min := optional.ToDuration(cfg.ExpirationPolicy), minExpirationPolicy
+	if policy == 0 || policy >= min {
+		return nil
 	}
-	return nil
+	return fmt.Errorf("invalid expiration policy(%q) < minimum(%q)", policy, min)
 }
 
-func expirationPolicyToProto(expirationPolicy time.Duration) *pb.ExpirationPolicy {
-	if expirationPolicy == 0 {
+func expirationPolicyToProto(expirationPolicy optional.Duration) *pb.ExpirationPolicy {
+	if expirationPolicy == nil {
 		return nil
 	}
+
+	dur := optional.ToDuration(expirationPolicy)
+	var ttl *durpb.Duration
+	// As per:
+	//    https://godoc.org/google.golang.org/genproto/googleapis/pubsub/v1#ExpirationPolicy.Ttl
+	// if ExpirationPolicy.Ttl is set to nil, the expirationPolicy is toggled to NEVER expire.
+	if dur != 0 {
+		ttl = ptypes.DurationProto(dur)
+	}
 	return &pb.ExpirationPolicy{
-		Ttl: ptypes.DurationProto(expirationPolicy),
+		Ttl: ttl,
 	}
 }
 

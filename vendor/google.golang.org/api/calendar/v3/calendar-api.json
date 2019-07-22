@@ -26,7 +26,7 @@
   "description": "Manipulates events and other calendar data.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/google-apps/calendar/firstapp",
-  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/AciOQr9FW92aqABx-Xo_TTJaKXc\"",
+  "etag": "\"9eZ1uxVRThTDhLJCZHhqs3eQWz4/K_k45CtMfV--mlEBFlbW_LzaaUU\"",
   "icons": {
     "x16": "http://www.google.com/images/icons/product/calendar-16.png",
     "x32": "http://www.google.com/images/icons/product/calendar-32.png"
@@ -1724,7 +1724,7 @@
       }
     }
   },
-  "revision": "20190430",
+  "revision": "20190609",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Acl": {
@@ -2019,7 +2019,7 @@
         },
         "kind": {
           "default": "api#channel",
-          "description": "Identifies this as a notification channel used to watch for changes to a resource. Value: the fixed string \"api#channel\".",
+          "description": "Identifies this as a notification channel used to watch for changes to a resource, which is \"api#channel\".",
           "type": "string"
         },
         "params": {

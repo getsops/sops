@@ -3143,12 +3143,12 @@ type ResourceSkuRestrictions struct {
 	ReasonCode ResourceSkuRestrictionsReasonCode `json:"reasonCode,omitempty"`
 }
 
-// ResourceSkusResult the Compute List Skus operation response.
+// ResourceSkusResult the List Resource Skus operation response.
 type ResourceSkusResult struct {
 	autorest.Response `json:"-"`
 	// Value - The list of skus available for the subscription.
 	Value *[]ResourceSku `json:"value,omitempty"`
-	// NextLink - The uri to fetch the next page of Compute Skus. Call ListNext() with this to fetch the next page of VMSS Skus.
+	// NextLink - The URI to fetch the next page of Resource Skus. Call ListNext() with this URI to fetch the next page of Resource Skus
 	NextLink *string `json:"nextLink,omitempty"`
 }
 

@@ -36,13 +36,21 @@ func TestSerializationErrConnectionReset_accept(t *testing.T) {
 		Err            error
 		ExpectAttempts int
 	}{
-		"with temporary": {
+		"accept with temporary": {
 			Err:            errAcceptConnectionResetStub,
 			ExpectAttempts: 6,
 		},
-		"not temporary": {
+		"read not temporary": {
 			Err:            errReadConnectionResetStub,
 			ExpectAttempts: 1,
+		},
+		"write with temporary": {
+			Err:            errWriteConnectionResetStub,
+			ExpectAttempts: 6,
+		},
+		"write broken pipe with temporary": {
+			Err:            errWriteBrokenPipeStub,
+			ExpectAttempts: 6,
 		},
 		"generic connection reset": {
 			Err:            errConnectionResetStub,
@@ -86,6 +94,7 @@ func TestSerializationErrConnectionReset_accept(t *testing.T) {
 			}
 			cfg := unit.Session.Config.Copy()
 			cfg.MaxRetries = aws.Int(5)
+			cfg.SleepDelay = func(time.Duration) {}
 
 			req := request.New(
 				*cfg,

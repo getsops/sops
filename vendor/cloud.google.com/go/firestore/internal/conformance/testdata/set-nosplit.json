@@ -1,0 +1,36 @@
+{
+  "tests": [
+    {
+      "description": "set: don’t split on dots",
+      "comment": "Create and Set treat their map keys literally. They do not split on dots.",
+      "set": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "jsonData": "{ \"a.b\": { \"c.d\": 1 }, \"e\": 2 }",
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d",
+                "fields": {
+                  "a.b": {
+                    "mapValue": {
+                      "fields": {
+                        "c.d": {
+                          "integerValue": "1"
+                        }
+                      }
+                    }
+                  },
+                  "e": {
+                    "integerValue": "2"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

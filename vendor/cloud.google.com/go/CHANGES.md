@@ -1,5 +1,45 @@
 # Changes
 
+## v0.41.0
+
+- bigtable:
+  - Check results from PredicateFilter in bttest, which fixes certain false matches.
+- profiler:
+  - debugLog checks user defined logging options before logging.
+- spanner:
+  - PartitionedUpdates respect query parameters.
+  - StartInstance allows specifying cloud API access scopes.
+- bigquery:
+  - Use empty slice instead of nil for ValueSaver, fixing an issue with zero-length, repeated, nested fields causing panics.
+- firestore:
+  - Return same number of snapshots as doc refs (in the form of duplicate records) during GetAll.
+- replay:
+  - Change references to IPv4 addresses to localhost, making replay compatible with IPv6.
+
+## v0.40.0
+
+- all:
+  - Update to protobuf-golang v1.3.1.
+- datastore:
+  - Attempt to decode GAE-encoded keys if initial decoding attempt fails.
+  - Support integer time conversion.
+- pubsub:
+  - Add PublishSettings.BundlerByteLimit. If users receive pubsub.ErrOverflow,
+  this value should be adjusted higher.
+  - Use IPv6 compatible target in testutil.
+- bigtable:
+  - Fix Latin-1 regexp filters in bttest, allowing \C.
+  - Expose PassAllFilter.
+- profiler:
+  - Add log messages for slow path in start.
+  - Fix start to allow retry until success.
+- firestore:
+  - Add admin client.
+- containeranalysis:
+  - Add apiv1 client.
+- grafeas:
+  - Add apiv1 client.
+
 ## 0.39.0
 
 - bigtable:

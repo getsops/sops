@@ -159,6 +159,18 @@ func (s *mockDataTransferServer) ScheduleTransferRuns(ctx context.Context, req *
 	return s.resps[0].(*datatransferpb.ScheduleTransferRunsResponse), nil
 }
 
+func (s *mockDataTransferServer) StartManualTransferRuns(ctx context.Context, req *datatransferpb.StartManualTransferRunsRequest) (*datatransferpb.StartManualTransferRunsResponse, error) {
+	md, _ := metadata.FromIncomingContext(ctx)
+	if xg := md["x-goog-api-client"]; len(xg) == 0 || !strings.Contains(xg[0], "gl-go/") {
+		return nil, fmt.Errorf("x-goog-api-client = %v, expected gl-go key", xg)
+	}
+	s.reqs = append(s.reqs, req)
+	if s.err != nil {
+		return nil, s.err
+	}
+	return s.resps[0].(*datatransferpb.StartManualTransferRunsResponse), nil
+}
+
 func (s *mockDataTransferServer) GetTransferRun(ctx context.Context, req *datatransferpb.GetTransferRunRequest) (*datatransferpb.TransferRun, error) {
 	md, _ := metadata.FromIncomingContext(ctx)
 	if xg := md["x-goog-api-client"]; len(xg) == 0 || !strings.Contains(xg[0], "gl-go/") {
@@ -1136,6 +1148,56 @@ func TestDataTransferServiceCheckValidCredsError(t *testing.T) {
 	}
 
 	resp, err := c.CheckValidCreds(context.Background(), request)
+
+	if st, ok := gstatus.FromError(err); !ok {
+		t.Errorf("got error %v, expected grpc error", err)
+	} else if c := st.Code(); c != errCode {
+		t.Errorf("got error code %q, want %q", c, errCode)
+	}
+	_ = resp
+}
+func TestDataTransferServiceStartManualTransferRuns(t *testing.T) {
+	var expectedResponse *datatransferpb.StartManualTransferRunsResponse = &datatransferpb.StartManualTransferRunsResponse{}
+
+	mockDataTransfer.err = nil
+	mockDataTransfer.reqs = nil
+
+	mockDataTransfer.resps = append(mockDataTransfer.resps[:0], expectedResponse)
+
+	var request *datatransferpb.StartManualTransferRunsRequest = &datatransferpb.StartManualTransferRunsRequest{}
+
+	c, err := NewClient(context.Background(), clientOpt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	resp, err := c.StartManualTransferRuns(context.Background(), request)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if want, got := request, mockDataTransfer.reqs[0]; !proto.Equal(want, got) {
+		t.Errorf("wrong request %q, want %q", got, want)
+	}
+
+	if want, got := expectedResponse, resp; !proto.Equal(want, got) {
+		t.Errorf("wrong response %q, want %q)", got, want)
+	}
+}
+
+func TestDataTransferServiceStartManualTransferRunsError(t *testing.T) {
+	errCode := codes.PermissionDenied
+	mockDataTransfer.err = gstatus.Error(errCode, "test error")
+
+	var request *datatransferpb.StartManualTransferRunsRequest = &datatransferpb.StartManualTransferRunsRequest{}
+
+	c, err := NewClient(context.Background(), clientOpt)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	resp, err := c.StartManualTransferRuns(context.Background(), request)
 
 	if st, ok := gstatus.FromError(err); !ok {
 		t.Errorf("got error %v, expected grpc error", err)

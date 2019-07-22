@@ -987,6 +987,10 @@ type Distribution struct {
 	// Count: The total number of samples in the distribution. Must be >= 0.
 	Count int64 `json:"count,omitempty,string"`
 
+	// Exemplars: Example points. Must be in increasing order of `value`
+	// field.
+	Exemplars []*Exemplar `json:"exemplars,omitempty"`
+
 	// ExplicitBuckets: Buckets with arbitrary user-provided width.
 	ExplicitBuckets *ExplicitBuckets `json:"explicitBuckets,omitempty"`
 
@@ -1056,6 +1060,76 @@ func (s *Distribution) UnmarshalJSON(data []byte) error {
 	s.Mean = float64(s1.Mean)
 	s.Minimum = float64(s1.Minimum)
 	s.SumOfSquaredDeviation = float64(s1.SumOfSquaredDeviation)
+	return nil
+}
+
+// Exemplar: Exemplars are example points that may be used to annotate
+// aggregated
+// distribution values. They are metadata that gives information about
+// a
+// particular value added to a Distribution bucket, such as a trace ID
+// that
+// was active when a value was added. They may contain further
+// information,
+// such as a example values and timestamps, origin, etc.
+type Exemplar struct {
+	// Attachments: Contextual information about the example value. Examples
+	// are:
+	//
+	//   Trace: type.googleapis.com/google.monitoring.v3.SpanContext
+	//
+	//   Literal string: type.googleapis.com/google.protobuf.StringValue
+	//
+	//   Labels dropped during aggregation:
+	//     type.googleapis.com/google.monitoring.v3.DroppedLabels
+	//
+	// There may be only a single attachment of any given message type in
+	// a
+	// single exemplar, and this is enforced by the system.
+	Attachments []googleapi.RawMessage `json:"attachments,omitempty"`
+
+	// Timestamp: The observation (sampling) time of the above value.
+	Timestamp string `json:"timestamp,omitempty"`
+
+	// Value: Value of the exemplar point. This value determines to which
+	// bucket the
+	// exemplar belongs.
+	Value float64 `json:"value,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Attachments") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Attachments") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *Exemplar) MarshalJSON() ([]byte, error) {
+	type NoMethod Exemplar
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+func (s *Exemplar) UnmarshalJSON(data []byte) error {
+	type NoMethod Exemplar
+	var s1 struct {
+		Value gensupport.JSONFloat64 `json:"value"`
+		*NoMethod
+	}
+	s1.NoMethod = (*NoMethod)(s)
+	if err := json.Unmarshal(data, &s1); err != nil {
+		return err
+	}
+	s.Value = float64(s1.Value)
 	return nil
 }
 
@@ -2770,81 +2844,14 @@ func (s *ServiceAccountDelegationInfo) MarshalJSON() ([]byte, error) {
 // suitable for
 // different programming environments, including REST APIs and RPC APIs.
 // It is
-// used by [gRPC](https://github.com/grpc). The error model is designed
-// to be:
+// used by [gRPC](https://github.com/grpc). Each `Status` message
+// contains
+// three pieces of data: error code, error message, and error
+// details.
 //
-// - Simple to use and understand for most users
-// - Flexible enough to meet unexpected needs
-//
-// # Overview
-//
-// The `Status` message contains three pieces of data: error code,
-// error
-// message, and error details. The error code should be an enum value
-// of
-// google.rpc.Code, but it may accept additional error codes if needed.
-// The
-// error message should be a developer-facing English message that
-// helps
-// developers *understand* and *resolve* the error. If a localized
-// user-facing
-// error message is needed, put the localized message in the error
-// details or
-// localize it in the client. The optional error details may contain
-// arbitrary
-// information about the error. There is a predefined set of error
-// detail types
-// in the package `google.rpc` that can be used for common error
-// conditions.
-//
-// # Language mapping
-//
-// The `Status` message is the logical representation of the error
-// model, but it
-// is not necessarily the actual wire format. When the `Status` message
-// is
-// exposed in different client libraries and different wire protocols,
-// it can be
-// mapped differently. For example, it will likely be mapped to some
-// exceptions
-// in Java, but more likely mapped to some error codes in C.
-//
-// # Other uses
-//
-// The error model and the `Status` message can be used in a variety
-// of
-// environments, either with or without APIs, to provide a
-// consistent developer experience across different
-// environments.
-//
-// Example uses of this error model include:
-//
-// - Partial errors. If a service needs to return partial errors to the
-// client,
-//     it may embed the `Status` in the normal response to indicate the
-// partial
-//     errors.
-//
-// - Workflow errors. A typical workflow has multiple steps. Each step
-// may
-//     have a `Status` message for error reporting.
-//
-// - Batch operations. If a client uses batch request and batch
-// response, the
-//     `Status` message should be used directly inside batch response,
-// one for
-//     each error sub-response.
-//
-// - Asynchronous operations. If an API call embeds asynchronous
-// operation
-//     results in its response, the status of those operations should
-// be
-//     represented directly using the `Status` message.
-//
-// - Logging. If some API errors are stored in logs, the message
-// `Status` could
-//     be used directly after any stripping needed for security/privacy
-// reasons.
+// You can find out more about this error model and how to work with it
+// in the
+// [API Design Guide](https://cloud.google.com/apis/design/errors).
 type Status struct {
 	// Code: The status code, which should be an enum value of
 	// google.rpc.Code.

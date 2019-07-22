@@ -3675,7 +3675,18 @@ type PageProperties struct {
 	// is inherited from
 	// a parent page. If the page has no parent, the color scheme uses a
 	// default
-	// Slides color scheme. This field is read-only.
+	// Slides color scheme, matching the defaults in the Slides
+	// editor.
+	//
+	// Only the concrete colors of the first 12 ThemeColorTypes are
+	// editable. In addition, only
+	// the color scheme on Master
+	// pages can be updated. To update the field, a color scheme
+	// containing
+	// mappings from all the first 12 ThemeColorTypes to their concrete
+	// colors
+	// must be provided. Colors for the remaining ThemeColorTypes will be
+	// ignored.
 	ColorScheme *ColorScheme `json:"colorScheme,omitempty"`
 
 	// PageBackgroundFill: The background fill of the page. If unset, the

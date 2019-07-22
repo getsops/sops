@@ -22,7 +22,7 @@ import (
 
 func Test_Version(t *testing.T) {
 	Convey("Get version", t, func() {
-		So(Version(), ShouldEqual, _VERSION)
+		So(Version(), ShouldEqual, version)
 	})
 }
 

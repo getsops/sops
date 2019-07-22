@@ -585,6 +585,22 @@
         "resultWrapper":"ListVerifiedEmailAddressesResult"
       }
     },
+    "PutConfigurationSetDeliveryOptions":{
+      "name":"PutConfigurationSetDeliveryOptions",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"PutConfigurationSetDeliveryOptionsRequest"},
+      "output":{
+        "shape":"PutConfigurationSetDeliveryOptionsResponse",
+        "resultWrapper":"PutConfigurationSetDeliveryOptionsResult"
+      },
+      "errors":[
+        {"shape":"ConfigurationSetDoesNotExistException"},
+        {"shape":"InvalidDeliveryOptionsException"}
+      ]
+    },
     "PutIdentityPolicy":{
       "name":"PutIdentityPolicy",
       "http":{
@@ -1217,6 +1233,7 @@
       "enum":[
         "eventDestinations",
         "trackingOptions",
+        "deliveryOptions",
         "reputationOptions"
       ]
     },
@@ -1572,6 +1589,12 @@
         "EmailAddress":{"shape":"Address"}
       }
     },
+    "DeliveryOptions":{
+      "type":"structure",
+      "members":{
+        "TlsPolicy":{"shape":"TlsPolicy"}
+      }
+    },
     "DescribeActiveReceiptRuleSetRequest":{
       "type":"structure",
       "members":{
@@ -1598,6 +1621,7 @@
         "ConfigurationSet":{"shape":"ConfigurationSet"},
         "EventDestinations":{"shape":"EventDestinations"},
         "TrackingOptions":{"shape":"TrackingOptions"},
+        "DeliveryOptions":{"shape":"DeliveryOptions"},
         "ReputationOptions":{"shape":"ReputationOptions"}
       }
     },
@@ -1974,6 +1998,17 @@
       },
       "error":{
         "code":"InvalidConfigurationSet",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
+    "InvalidDeliveryOptionsException":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"InvalidDeliveryOptions",
         "httpStatusCode":400,
         "senderFault":true
       },
@@ -2360,6 +2395,19 @@
         "senderFault":true
       },
       "exception":true
+    },
+    "PutConfigurationSetDeliveryOptionsRequest":{
+      "type":"structure",
+      "required":["ConfigurationSetName"],
+      "members":{
+        "ConfigurationSetName":{"shape":"ConfigurationSetName"},
+        "DeliveryOptions":{"shape":"DeliveryOptions"}
+      }
+    },
+    "PutConfigurationSetDeliveryOptionsResponse":{
+      "type":"structure",
+      "members":{
+      }
     },
     "PutIdentityPolicyRequest":{
       "type":"structure",

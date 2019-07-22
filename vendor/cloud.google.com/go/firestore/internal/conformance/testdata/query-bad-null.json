@@ -1,0 +1,25 @@
+{
+  "tests": [
+    {
+      "description": "query: where clause with non-== comparison with Null",
+      "comment": "You can only compare Null for equality.",
+      "query": {
+        "collPath": "projects/projectID/databases/(default)/documents/C",
+        "clauses": [
+          {
+            "where": {
+              "path": {
+                "field": [
+                  "a"
+                ]
+              },
+              "op": "\u003e",
+              "jsonValue": "null"
+            }
+          }
+        ],
+        "isError": true
+      }
+    }
+  ]
+}

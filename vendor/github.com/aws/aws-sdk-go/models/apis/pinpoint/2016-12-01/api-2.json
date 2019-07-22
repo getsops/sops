@@ -2063,7 +2063,7 @@
           "shape" : "__boolean"
         }
       },
-      "required" : [ ]
+      "required" : [ "ClientSecret", "ClientId" ]
     },
     "ADMChannelResponse" : {
       "type" : "structure",
@@ -2099,7 +2099,7 @@
           "shape" : "__integer"
         }
       },
-      "required" : [ ]
+      "required" : [ "Platform" ]
     },
     "ADMMessage" : {
       "type" : "structure",
@@ -2181,8 +2181,7 @@
         "TokenKeyId" : {
           "shape" : "__string"
         }
-      },
-      "required" : [ ]
+      }
     },
     "APNSChannelResponse" : {
       "type" : "structure",
@@ -2224,7 +2223,7 @@
           "shape" : "__integer"
         }
       },
-      "required" : [ ]
+      "required" : [ "Platform" ]
     },
     "APNSMessage" : {
       "type" : "structure",
@@ -2309,8 +2308,7 @@
         "TokenKeyId" : {
           "shape" : "__string"
         }
-      },
-      "required" : [ ]
+      }
     },
     "APNSSandboxChannelResponse" : {
       "type" : "structure",
@@ -2352,7 +2350,7 @@
           "shape" : "__integer"
         }
       },
-      "required" : [ ]
+      "required" : [ "Platform" ]
     },
     "APNSVoipChannelRequest" : {
       "type" : "structure",
@@ -2381,8 +2379,7 @@
         "TokenKeyId" : {
           "shape" : "__string"
         }
-      },
-      "required" : [ ]
+      }
     },
     "APNSVoipChannelResponse" : {
       "type" : "structure",
@@ -2424,7 +2421,7 @@
           "shape" : "__integer"
         }
       },
-      "required" : [ ]
+      "required" : [ "Platform" ]
     },
     "APNSVoipSandboxChannelRequest" : {
       "type" : "structure",
@@ -2453,8 +2450,7 @@
         "TokenKeyId" : {
           "shape" : "__string"
         }
-      },
-      "required" : [ ]
+      }
     },
     "APNSVoipSandboxChannelResponse" : {
       "type" : "structure",
@@ -2496,7 +2492,7 @@
           "shape" : "__integer"
         }
       },
-      "required" : [ ]
+      "required" : [ "Platform" ]
     },
     "Action" : {
       "type" : "string",
@@ -2512,7 +2508,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "Item" ]
     },
     "ActivityResponse" : {
       "type" : "structure",
@@ -2557,7 +2553,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "CampaignId", "Id", "ApplicationId" ]
     },
     "AddressConfiguration" : {
       "type" : "structure",
@@ -2594,12 +2590,12 @@
         "Name" : {
           "shape" : "__string"
         },
-        "tags": {
+        "tags" : {
           "shape" : "MapOf__string",
           "locationName" : "tags"
         }
       },
-      "required" : [ ]
+      "required" : [ "Id", "Arn", "Name" ]
     },
     "ApplicationSettingsResource" : {
       "type" : "structure",
@@ -2620,7 +2616,7 @@
           "shape" : "QuietTime"
         }
       },
-      "required" : [ ]
+      "required" : [ "ApplicationId" ]
     },
     "ApplicationsResponse" : {
       "type" : "structure",
@@ -2643,7 +2639,7 @@
           "shape" : "ListOf__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "Values" ]
     },
     "AttributeType" : {
       "type" : "string",
@@ -2662,7 +2658,7 @@
           "shape" : "ListOf__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "AttributeType", "ApplicationId" ]
     },
     "BadRequestException" : {
       "type" : "structure",
@@ -2692,7 +2688,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "SecretKey", "ApiKey" ]
     },
     "BaiduChannelResponse" : {
       "type" : "structure",
@@ -2731,7 +2727,7 @@
           "shape" : "__integer"
         }
       },
-      "required" : [ ]
+      "required" : [ "Credential", "Platform" ]
     },
     "BaiduMessage" : {
       "type" : "structure",
@@ -2796,7 +2792,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "Title" ]
     },
     "CampaignEventFilter" : {
       "type" : "structure",
@@ -2808,7 +2804,7 @@
           "shape" : "FilterType"
         }
       },
-      "required" : [ ]
+      "required" : [ "FilterType", "Dimensions" ]
     },
     "CampaignHook" : {
       "type" : "structure",
@@ -2898,7 +2894,7 @@
         "State" : {
           "shape" : "CampaignState"
         },
-        "tags": {
+        "tags" : {
           "shape" : "MapOf__string",
           "locationName" : "tags"
         },
@@ -2912,7 +2908,7 @@
           "shape" : "__integer"
         }
       },
-      "required" : [ ]
+      "required" : [ "LastModifiedDate", "CreationDate", "SegmentId", "SegmentVersion", "Id", "Arn", "ApplicationId" ]
     },
     "CampaignSmsMessage" : {
       "type" : "structure",
@@ -2950,7 +2946,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "Item" ]
     },
     "ChannelResponse" : {
       "type" : "structure",
@@ -2995,7 +2991,7 @@
           "shape" : "MapOfChannelResponse"
         }
       },
-      "required" : [ ]
+      "required" : [ "Channels" ]
     },
     "CreateAppRequest" : {
       "type" : "structure",
@@ -3023,12 +3019,12 @@
         "Name" : {
           "shape" : "__string"
         },
-        "tags": {
+        "tags" : {
           "shape" : "MapOf__string",
           "locationName" : "tags"
         }
       },
-      "required" : [ ]
+      "required" : [ "Name" ]
     },
     "CreateCampaignRequest" : {
       "type" : "structure",
@@ -3561,8 +3557,7 @@
         "VoiceMessage" : {
           "shape" : "VoiceMessage"
         }
-      },
-      "required" : [ ]
+      }
     },
     "Duration" : {
       "type" : "string",
@@ -3587,7 +3582,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "FromAddress", "Identity" ]
     },
     "EmailChannelResponse" : {
       "type" : "structure",
@@ -3638,7 +3633,7 @@
           "shape" : "__integer"
         }
       },
-      "required" : [ ]
+      "required" : [ "Platform" ]
     },
     "EmailMessage" : {
       "type" : "structure",
@@ -3714,7 +3709,7 @@
           "shape" : "ListOfEndpointBatchItem"
         }
       },
-      "required" : [ ]
+      "required" : [ "Item" ]
     },
     "EndpointDemographic" : {
       "type" : "structure",
@@ -3801,7 +3796,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "DeliveryStatus", "StatusCode" ]
     },
     "EndpointRequest" : {
       "type" : "structure",
@@ -3929,7 +3924,7 @@
           "shape" : "ListOfEndpointResponse"
         }
       },
-      "required" : [ ]
+      "required" : [ "Item" ]
     },
     "Event" : {
       "type" : "structure",
@@ -3965,7 +3960,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "EventType", "Timestamp" ]
     },
     "EventDimensions" : {
       "type" : "structure",
@@ -4014,7 +4009,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "ApplicationId", "RoleArn", "DestinationStreamArn" ]
     },
     "EventsBatch" : {
       "type" : "structure",
@@ -4026,7 +4021,7 @@
           "shape" : "MapOfEvent"
         }
       },
-      "required" : [ ]
+      "required" : [ "Endpoint", "Events" ]
     },
     "EventsRequest" : {
       "type" : "structure",
@@ -4035,7 +4030,7 @@
           "shape" : "MapOfEventsBatch"
         }
       },
-      "required" : [ ]
+      "required" : [ "BatchItem" ]
     },
     "EventsResponse" : {
       "type" : "structure",
@@ -4061,7 +4056,7 @@
           "shape" : "__integer"
         }
       },
-      "required" : [ ]
+      "required" : [ "S3UrlPrefix", "RoleArn" ]
     },
     "ExportJobResource" : {
       "type" : "structure",
@@ -4079,7 +4074,7 @@
           "shape" : "__integer"
         }
       },
-      "required" : [ ]
+      "required" : [ "S3UrlPrefix", "RoleArn" ]
     },
     "ExportJobResponse" : {
       "type" : "structure",
@@ -4124,7 +4119,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "JobStatus", "CreationDate", "Type", "Definition", "Id", "ApplicationId" ]
     },
     "ExportJobsResponse" : {
       "type" : "structure",
@@ -4136,7 +4131,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "Item" ]
     },
     "FilterType" : {
       "type" : "string",
@@ -4175,7 +4170,7 @@
           "shape" : "__boolean"
         }
       },
-      "required" : [ ]
+      "required" : [ "ApiKey" ]
     },
     "GCMChannelResponse" : {
       "type" : "structure",
@@ -4214,7 +4209,7 @@
           "shape" : "__integer"
         }
       },
-      "required" : [ ]
+      "required" : [ "Credential", "Platform" ]
     },
     "GCMMessage" : {
       "type" : "structure",
@@ -4282,7 +4277,7 @@
           "shape" : "__double"
         }
       },
-      "required" : [ ]
+      "required" : [ "Latitude", "Longitude" ]
     },
     "GPSPointDimension" : {
       "type" : "structure",
@@ -4294,7 +4289,7 @@
           "shape" : "__double"
         }
       },
-      "required" : [ ]
+      "required" : [ "Coordinates" ]
     },
     "GetAdmChannelRequest" : {
       "type" : "structure",
@@ -5165,7 +5160,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "Format", "S3Url", "RoleArn" ]
     },
     "ImportJobResource" : {
       "type" : "structure",
@@ -5195,7 +5190,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "Format", "S3Url", "RoleArn" ]
     },
     "ImportJobResponse" : {
       "type" : "structure",
@@ -5240,7 +5235,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "JobStatus", "CreationDate", "Type", "Definition", "Id", "ApplicationId" ]
     },
     "ImportJobsResponse" : {
       "type" : "structure",
@@ -5252,7 +5247,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "Item" ]
     },
     "Include" : {
       "type" : "string",
@@ -5348,8 +5343,7 @@
         "Url" : {
           "shape" : "__string"
         }
-      },
-      "required" : [ ]
+      }
     },
     "MessageBody" : {
       "type" : "structure",
@@ -5407,7 +5401,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "MessageConfiguration" ]
     },
     "MessageResponse" : {
       "type" : "structure",
@@ -5425,7 +5419,7 @@
           "shape" : "MapOfMessageResult"
         }
       },
-      "required" : [ ]
+      "required" : [ "ApplicationId" ]
     },
     "MessageResult" : {
       "type" : "structure",
@@ -5446,7 +5440,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "DeliveryStatus", "StatusCode" ]
     },
     "MessageType" : {
       "type" : "string",
@@ -5477,7 +5471,7 @@
           "shape" : "__double"
         }
       },
-      "required" : [ ]
+      "required" : [ "ComparisonOperator", "Value" ]
     },
     "Mode" : {
       "type" : "string",
@@ -5696,7 +5690,7 @@
           "shape" : "RecencyType"
         }
       },
-      "required" : [ ]
+      "required" : [ "Duration", "RecencyType" ]
     },
     "RecencyType" : {
       "type" : "string",
@@ -5744,8 +5738,7 @@
         "ShortCode" : {
           "shape" : "__string"
         }
-      },
-      "required" : [ ]
+      }
     },
     "SMSChannelResponse" : {
       "type" : "structure",
@@ -5793,7 +5786,7 @@
           "shape" : "__integer"
         }
       },
-      "required" : [ ]
+      "required" : [ "Platform" ]
     },
     "SMSMessage" : {
       "type" : "structure",
@@ -5843,7 +5836,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "StartTime" ]
     },
     "SegmentBehaviors" : {
       "type" : "structure",
@@ -5914,8 +5907,7 @@
         "Type" : {
           "shape" : "Type"
         }
-      },
-      "required" : [ ]
+      }
     },
     "SegmentGroupList" : {
       "type" : "structure",
@@ -5926,8 +5918,7 @@
         "Include" : {
           "shape" : "Include"
         }
-      },
-      "required" : [ ]
+      }
     },
     "SegmentImportResource" : {
       "type" : "structure",
@@ -5951,7 +5942,7 @@
           "shape" : "__integer"
         }
       },
-      "required" : [ ]
+      "required" : [ "Format", "S3Url", "Size", "ExternalId", "RoleArn" ]
     },
     "SegmentLocation" : {
       "type" : "structure",
@@ -5974,7 +5965,7 @@
           "shape" : "__integer"
         }
       },
-      "required" : [ ]
+      "required" : [ "Id" ]
     },
     "SegmentResponse" : {
       "type" : "structure",
@@ -6009,7 +6000,7 @@
         "SegmentType" : {
           "shape" : "SegmentType"
         },
-        "tags": {
+        "tags" : {
           "shape" : "MapOf__string",
           "locationName" : "tags"
         },
@@ -6017,7 +6008,7 @@
           "shape" : "__integer"
         }
       },
-      "required" : [ ]
+      "required" : [ "SegmentType", "CreationDate", "Id", "Arn", "ApplicationId" ]
     },
     "SegmentType" : {
       "type" : "string",
@@ -6033,7 +6024,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "Item" ]
     },
     "SendMessagesRequest" : {
       "type" : "structure",
@@ -6076,7 +6067,7 @@
           "shape" : "MapOfEndpointSendConfiguration"
         }
       },
-      "required" : [ ]
+      "required" : [ "MessageConfiguration", "Users" ]
     },
     "SendUsersMessageResponse" : {
       "type" : "structure",
@@ -6091,7 +6082,7 @@
           "shape" : "MapOfMapOfEndpointMessageResult"
         }
       },
-      "required" : [ ]
+      "required" : [ "ApplicationId" ]
     },
     "SendUsersMessagesRequest" : {
       "type" : "structure",
@@ -6134,7 +6125,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "StartTimestamp", "Id" ]
     },
     "SetDimension" : {
       "type" : "structure",
@@ -6146,7 +6137,7 @@
           "shape" : "ListOf__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "Values" ]
     },
     "SimpleEmail" : {
       "type" : "structure",
@@ -6195,7 +6186,7 @@
     "TagsModel" : {
       "type" : "structure",
       "members" : {
-        "tags": {
+        "tags" : {
           "shape" : "MapOf__string",
           "locationName" : "tags"
         }
@@ -6242,7 +6233,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "Id", "SizePercent" ]
     },
     "Type" : {
       "type" : "string",
@@ -6668,8 +6659,7 @@
         "Enabled" : {
           "shape" : "__boolean"
         }
-      },
-      "required" : [ ]
+      }
     },
     "VoiceChannelResponse" : {
       "type" : "structure",
@@ -6705,7 +6695,7 @@
           "shape" : "__integer"
         }
       },
-      "required" : [ ]
+      "required" : [ "Platform" ]
     },
     "VoiceMessage" : {
       "type" : "structure",
@@ -6780,7 +6770,7 @@
         "SegmentVersion" : {
           "shape" : "__integer"
         },
-        "tags": {
+        "tags" : {
           "shape" : "MapOf__string",
           "locationName" : "tags"
         },
@@ -6802,7 +6792,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "RoleArn", "DestinationStreamArn" ]
     },
     "WriteSegmentRequest" : {
       "type" : "structure",
@@ -6816,12 +6806,11 @@
         "SegmentGroups" : {
           "shape" : "SegmentGroupList"
         },
-        "tags": {
+        "tags" : {
           "shape" : "MapOf__string",
           "locationName" : "tags"
         }
-      },
-      "required" : [ ]
+      }
     },
     "WriteTreatmentResource" : {
       "type" : "structure",
@@ -6842,7 +6831,7 @@
           "shape" : "__string"
         }
       },
-      "required" : [ ]
+      "required" : [ "SizePercent" ]
     },
     "__boolean" : {
       "type" : "boolean"

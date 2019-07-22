@@ -78,6 +78,72 @@ func PossibleStatus2Values() []Status2 {
 	return []Status2{Status2Failure, Status2PartialSuccess, Status2Success}
 }
 
+// TextOperationStatusCodes enumerates the values for text operation status codes.
+type TextOperationStatusCodes string
+
+const (
+	// Failed ...
+	Failed TextOperationStatusCodes = "Failed"
+	// NotStarted ...
+	NotStarted TextOperationStatusCodes = "Not Started"
+	// Running ...
+	Running TextOperationStatusCodes = "Running"
+	// Succeeded ...
+	Succeeded TextOperationStatusCodes = "Succeeded"
+)
+
+// PossibleTextOperationStatusCodesValues returns an array of possible values for the TextOperationStatusCodes const type.
+func PossibleTextOperationStatusCodesValues() []TextOperationStatusCodes {
+	return []TextOperationStatusCodes{Failed, NotStarted, Running, Succeeded}
+}
+
+// TextRecognitionResultConfidenceClass enumerates the values for text recognition result confidence class.
+type TextRecognitionResultConfidenceClass string
+
+const (
+	// High ...
+	High TextRecognitionResultConfidenceClass = "High"
+	// Low ...
+	Low TextRecognitionResultConfidenceClass = "Low"
+)
+
+// PossibleTextRecognitionResultConfidenceClassValues returns an array of possible values for the TextRecognitionResultConfidenceClass const type.
+func PossibleTextRecognitionResultConfidenceClassValues() []TextRecognitionResultConfidenceClass {
+	return []TextRecognitionResultConfidenceClass{High, Low}
+}
+
+// TextRecognitionResultDimensionUnit enumerates the values for text recognition result dimension unit.
+type TextRecognitionResultDimensionUnit string
+
+const (
+	// Inch ...
+	Inch TextRecognitionResultDimensionUnit = "inch"
+	// Pixel ...
+	Pixel TextRecognitionResultDimensionUnit = "pixel"
+)
+
+// PossibleTextRecognitionResultDimensionUnitValues returns an array of possible values for the TextRecognitionResultDimensionUnit const type.
+func PossibleTextRecognitionResultDimensionUnitValues() []TextRecognitionResultDimensionUnit {
+	return []TextRecognitionResultDimensionUnit{Inch, Pixel}
+}
+
+// ValueType enumerates the values for value type.
+type ValueType string
+
+const (
+	// ValueTypeFieldValue ...
+	ValueTypeFieldValue ValueType = "fieldValue"
+	// ValueTypeNumberValue ...
+	ValueTypeNumberValue ValueType = "numberValue"
+	// ValueTypeStringValue ...
+	ValueTypeStringValue ValueType = "stringValue"
+)
+
+// PossibleValueTypeValues returns an array of possible values for the ValueType const type.
+func PossibleValueTypeValues() []ValueType {
+	return []ValueType{ValueTypeFieldValue, ValueTypeNumberValue, ValueTypeStringValue}
+}
+
 // AnalyzeResult analyze API call result.
 type AnalyzeResult struct {
 	autorest.Response `json:"-"`
@@ -89,6 +155,21 @@ type AnalyzeResult struct {
 	// Errors - List of errors reported during the analyze
 	// operation.
 	Errors *[]FormOperationError `json:"errors,omitempty"`
+}
+
+// ComputerVisionError details about the API request error.
+type ComputerVisionError struct {
+	// Code - The error code.
+	Code interface{} `json:"code,omitempty"`
+	// Message - A message explaining the error reported by the service.
+	Message *string `json:"message,omitempty"`
+	// RequestID - A unique request identifier.
+	RequestID *string `json:"requestId,omitempty"`
+}
+
+// ElementReference reference to an OCR word.
+type ElementReference struct {
+	Ref *string `json:"$ref,omitempty"`
 }
 
 // ErrorInformation ...
@@ -162,6 +243,100 @@ type ExtractedToken struct {
 	Confidence *float64 `json:"confidence,omitempty"`
 }
 
+// BasicFieldValue base class representing a recognized field value.
+type BasicFieldValue interface {
+	AsStringValue() (*StringValue, bool)
+	AsNumberValue() (*NumberValue, bool)
+	AsFieldValue() (*FieldValue, bool)
+}
+
+// FieldValue base class representing a recognized field value.
+type FieldValue struct {
+	// Text - OCR text content of the recognized field.
+	Text *string `json:"text,omitempty"`
+	// Elements - List of references to OCR words comprising the recognized field value.
+	Elements *[]ElementReference `json:"elements,omitempty"`
+	// ValueType - Possible values include: 'ValueTypeFieldValue', 'ValueTypeStringValue', 'ValueTypeNumberValue'
+	ValueType ValueType `json:"valueType,omitempty"`
+}
+
+func unmarshalBasicFieldValue(body []byte) (BasicFieldValue, error) {
+	var m map[string]interface{}
+	err := json.Unmarshal(body, &m)
+	if err != nil {
+		return nil, err
+	}
+
+	switch m["valueType"] {
+	case string(ValueTypeStringValue):
+		var sv StringValue
+		err := json.Unmarshal(body, &sv)
+		return sv, err
+	case string(ValueTypeNumberValue):
+		var nv NumberValue
+		err := json.Unmarshal(body, &nv)
+		return nv, err
+	default:
+		var fv FieldValue
+		err := json.Unmarshal(body, &fv)
+		return fv, err
+	}
+}
+func unmarshalBasicFieldValueArray(body []byte) ([]BasicFieldValue, error) {
+	var rawMessages []*json.RawMessage
+	err := json.Unmarshal(body, &rawMessages)
+	if err != nil {
+		return nil, err
+	}
+
+	fvArray := make([]BasicFieldValue, len(rawMessages))
+
+	for index, rawMessage := range rawMessages {
+		fv, err := unmarshalBasicFieldValue(*rawMessage)
+		if err != nil {
+			return nil, err
+		}
+		fvArray[index] = fv
+	}
+	return fvArray, nil
+}
+
+// MarshalJSON is the custom marshaler for FieldValue.
+func (fv FieldValue) MarshalJSON() ([]byte, error) {
+	fv.ValueType = ValueTypeFieldValue
+	objectMap := make(map[string]interface{})
+	if fv.Text != nil {
+		objectMap["text"] = fv.Text
+	}
+	if fv.Elements != nil {
+		objectMap["elements"] = fv.Elements
+	}
+	if fv.ValueType != "" {
+		objectMap["valueType"] = fv.ValueType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsStringValue is the BasicFieldValue implementation for FieldValue.
+func (fv FieldValue) AsStringValue() (*StringValue, bool) {
+	return nil, false
+}
+
+// AsNumberValue is the BasicFieldValue implementation for FieldValue.
+func (fv FieldValue) AsNumberValue() (*NumberValue, bool) {
+	return nil, false
+}
+
+// AsFieldValue is the BasicFieldValue implementation for FieldValue.
+func (fv FieldValue) AsFieldValue() (*FieldValue, bool) {
+	return &fv, true
+}
+
+// AsBasicFieldValue is the BasicFieldValue implementation for FieldValue.
+func (fv FieldValue) AsBasicFieldValue() (BasicFieldValue, bool) {
+	return &fv, true
+}
+
 // FormDocumentReport ...
 type FormDocumentReport struct {
 	// DocumentName - Reference to the data that the report is for.
@@ -178,6 +353,12 @@ type FormDocumentReport struct {
 type FormOperationError struct {
 	// ErrorMessage - Message reported during the train operation.
 	ErrorMessage *string `json:"errorMessage,omitempty"`
+}
+
+// ImageURL ...
+type ImageURL struct {
+	// URL - Publicly reachable URL of an image.
+	URL *string `json:"url,omitempty"`
 }
 
 // InnerError ...
@@ -202,6 +383,16 @@ func (kr KeysResult) MarshalJSON() ([]byte, error) {
 	return json.Marshal(objectMap)
 }
 
+// Line an object representing a recognized text line.
+type Line struct {
+	// BoundingBox - Bounding box of a recognized line.
+	BoundingBox *[]int32 `json:"boundingBox,omitempty"`
+	// Text - The text content of the line.
+	Text *string `json:"text,omitempty"`
+	// Words - List of words in the text line.
+	Words *[]Word `json:"words,omitempty"`
+}
+
 // ModelResult result of a model status query operation.
 type ModelResult struct {
 	autorest.Response `json:"-"`
@@ -222,10 +413,142 @@ type ModelsResult struct {
 	ModelsProperty *[]ModelResult `json:"models,omitempty"`
 }
 
+// NumberValue recognized numeric field value.
+type NumberValue struct {
+	// Value - Numeric value of the recognized field.
+	Value *float64 `json:"value,omitempty"`
+	// Text - OCR text content of the recognized field.
+	Text *string `json:"text,omitempty"`
+	// Elements - List of references to OCR words comprising the recognized field value.
+	Elements *[]ElementReference `json:"elements,omitempty"`
+	// ValueType - Possible values include: 'ValueTypeFieldValue', 'ValueTypeStringValue', 'ValueTypeNumberValue'
+	ValueType ValueType `json:"valueType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for NumberValue.
+func (nv NumberValue) MarshalJSON() ([]byte, error) {
+	nv.ValueType = ValueTypeNumberValue
+	objectMap := make(map[string]interface{})
+	if nv.Value != nil {
+		objectMap["value"] = nv.Value
+	}
+	if nv.Text != nil {
+		objectMap["text"] = nv.Text
+	}
+	if nv.Elements != nil {
+		objectMap["elements"] = nv.Elements
+	}
+	if nv.ValueType != "" {
+		objectMap["valueType"] = nv.ValueType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsStringValue is the BasicFieldValue implementation for NumberValue.
+func (nv NumberValue) AsStringValue() (*StringValue, bool) {
+	return nil, false
+}
+
+// AsNumberValue is the BasicFieldValue implementation for NumberValue.
+func (nv NumberValue) AsNumberValue() (*NumberValue, bool) {
+	return &nv, true
+}
+
+// AsFieldValue is the BasicFieldValue implementation for NumberValue.
+func (nv NumberValue) AsFieldValue() (*FieldValue, bool) {
+	return nil, false
+}
+
+// AsBasicFieldValue is the BasicFieldValue implementation for NumberValue.
+func (nv NumberValue) AsBasicFieldValue() (BasicFieldValue, bool) {
+	return &nv, true
+}
+
+// ReadReceiptResult analysis result of the 'Batch Read Receipt' operation.
+type ReadReceiptResult struct {
+	autorest.Response `json:"-"`
+	// Status - Status of the read operation. Possible values include: 'NotStarted', 'Running', 'Failed', 'Succeeded'
+	Status TextOperationStatusCodes `json:"status,omitempty"`
+	// RecognitionResults - Text recognition result of the 'Batch Read Receipt' operation.
+	RecognitionResults *[]TextRecognitionResult `json:"recognitionResults,omitempty"`
+	// UnderstandingResults - Semantic understanding result of the 'Batch Read Receipt' operation.
+	UnderstandingResults *[]UnderstandingResult `json:"understandingResults,omitempty"`
+}
+
+// StringValue recognized string field value.
+type StringValue struct {
+	// Value - String value of the recognized field.
+	Value *string `json:"value,omitempty"`
+	// Text - OCR text content of the recognized field.
+	Text *string `json:"text,omitempty"`
+	// Elements - List of references to OCR words comprising the recognized field value.
+	Elements *[]ElementReference `json:"elements,omitempty"`
+	// ValueType - Possible values include: 'ValueTypeFieldValue', 'ValueTypeStringValue', 'ValueTypeNumberValue'
+	ValueType ValueType `json:"valueType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for StringValue.
+func (sv StringValue) MarshalJSON() ([]byte, error) {
+	sv.ValueType = ValueTypeStringValue
+	objectMap := make(map[string]interface{})
+	if sv.Value != nil {
+		objectMap["value"] = sv.Value
+	}
+	if sv.Text != nil {
+		objectMap["text"] = sv.Text
+	}
+	if sv.Elements != nil {
+		objectMap["elements"] = sv.Elements
+	}
+	if sv.ValueType != "" {
+		objectMap["valueType"] = sv.ValueType
+	}
+	return json.Marshal(objectMap)
+}
+
+// AsStringValue is the BasicFieldValue implementation for StringValue.
+func (sv StringValue) AsStringValue() (*StringValue, bool) {
+	return &sv, true
+}
+
+// AsNumberValue is the BasicFieldValue implementation for StringValue.
+func (sv StringValue) AsNumberValue() (*NumberValue, bool) {
+	return nil, false
+}
+
+// AsFieldValue is the BasicFieldValue implementation for StringValue.
+func (sv StringValue) AsFieldValue() (*FieldValue, bool) {
+	return nil, false
+}
+
+// AsBasicFieldValue is the BasicFieldValue implementation for StringValue.
+func (sv StringValue) AsBasicFieldValue() (BasicFieldValue, bool) {
+	return &sv, true
+}
+
+// TextRecognitionResult an object representing a recognized text region
+type TextRecognitionResult struct {
+	// Page - The 1-based page number of the recognition result.
+	Page *int32 `json:"page,omitempty"`
+	// ClockwiseOrientation - The orientation of the image in degrees in the clockwise direction. Range between [0, 360).
+	ClockwiseOrientation *float64 `json:"clockwiseOrientation,omitempty"`
+	// Width - The width of the image in pixels or the PDF in inches.
+	Width *float64 `json:"width,omitempty"`
+	// Height - The height of the image in pixels or the PDF in inches.
+	Height *float64 `json:"height,omitempty"`
+	// Unit - The unit used in the Width, Height and BoundingBox. For images, the unit is 'pixel'. For PDF, the unit is 'inch'. Possible values include: 'Pixel', 'Inch'
+	Unit TextRecognitionResultDimensionUnit `json:"unit,omitempty"`
+	// Lines - A list of recognized text lines.
+	Lines *[]Line `json:"lines,omitempty"`
+}
+
 // TrainRequest contract to initiate a train request.
 type TrainRequest struct {
 	// Source - Get or set source path.
 	Source *string `json:"source,omitempty"`
+	// SourceFilter - Get or set filter to further search the
+	// source path for content.
+	SourceFilter *TrainSourceFilter `json:"sourceFilter,omitempty"`
 }
 
 // TrainResult response of the Train API call.
@@ -238,4 +561,47 @@ type TrainResult struct {
 	TrainingDocuments *[]FormDocumentReport `json:"trainingDocuments,omitempty"`
 	// Errors - Errors returned during the training operation.
 	Errors *[]FormOperationError `json:"errors,omitempty"`
+}
+
+// TrainSourceFilter filters to be applied when traversing a data source.
+type TrainSourceFilter struct {
+	// Prefix - A case-sensitive prefix string to filter content
+	// under the source location. For e.g., when using a Azure Blob
+	// Uri use the prefix to restrict subfolders for content.
+	Prefix *string `json:"prefix,omitempty"`
+	// IncludeSubFolders - A flag to indicate if sub folders within the set of
+	// prefix folders will also need to be included when searching
+	// for content to be preprocessed.
+	IncludeSubFolders *bool `json:"includeSubFolders,omitempty"`
+}
+
+// UnderstandingResult a set of extracted fields corresponding to a semantic object, such as a receipt, in
+// the input document.
+type UnderstandingResult struct {
+	// Pages - List of pages where the document is found.
+	Pages *[]int32 `json:"pages,omitempty"`
+	// Fields - Dictionary of recognized field values.
+	Fields map[string]*FieldValue `json:"fields"`
+}
+
+// MarshalJSON is the custom marshaler for UnderstandingResult.
+func (ur UnderstandingResult) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ur.Pages != nil {
+		objectMap["pages"] = ur.Pages
+	}
+	if ur.Fields != nil {
+		objectMap["fields"] = ur.Fields
+	}
+	return json.Marshal(objectMap)
+}
+
+// Word an object representing a recognized word.
+type Word struct {
+	// BoundingBox - Bounding box of a recognized word.
+	BoundingBox *[]int32 `json:"boundingBox,omitempty"`
+	// Text - The text content of the word.
+	Text *string `json:"text,omitempty"`
+	// Confidence - Qualitative confidence measure. Possible values include: 'High', 'Low'
+	Confidence TextRecognitionResultConfidenceClass `json:"confidence,omitempty"`
 }

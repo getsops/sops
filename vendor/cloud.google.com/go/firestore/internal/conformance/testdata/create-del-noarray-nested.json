@@ -1,0 +1,13 @@
+{
+  "tests": [
+    {
+      "description": "create: Delete cannot be anywhere inside an array value",
+      "comment": "The Delete sentinel must be the value of a field. Deletes are implemented\nby turning the path to the Delete sentinel into a FieldPath, and FieldPaths do not support\narray indexing.",
+      "create": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "jsonData": "{\"a\": [1, {\"b\": \"Delete\"}]}",
+        "isError": true
+      }
+    }
+  ]
+}

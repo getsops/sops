@@ -19,7 +19,7 @@
 
 package netapp
 
-import original "github.com/Azure/azure-sdk-for-go/services/netapp/mgmt/2019-05-01/netapp"
+import original "github.com/Azure/azure-sdk-for-go/services/netapp/mgmt/2019-06-01/netapp"
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
@@ -28,10 +28,10 @@ const (
 type CheckNameResourceTypes = original.CheckNameResourceTypes
 
 const (
-	MicrosoftNetAppnetAppAccount                              CheckNameResourceTypes = original.MicrosoftNetAppnetAppAccount
-	MicrosoftNetAppnetAppAccountcapacityPools                 CheckNameResourceTypes = original.MicrosoftNetAppnetAppAccountcapacityPools
-	MicrosoftNetAppnetAppAccountcapacityPoolsvolumes          CheckNameResourceTypes = original.MicrosoftNetAppnetAppAccountcapacityPoolsvolumes
-	MicrosoftNetAppnetAppAccountcapacityPoolsvolumessnapshots CheckNameResourceTypes = original.MicrosoftNetAppnetAppAccountcapacityPoolsvolumessnapshots
+	MicrosoftNetAppnetAppAccounts                              CheckNameResourceTypes = original.MicrosoftNetAppnetAppAccounts
+	MicrosoftNetAppnetAppAccountscapacityPools                 CheckNameResourceTypes = original.MicrosoftNetAppnetAppAccountscapacityPools
+	MicrosoftNetAppnetAppAccountscapacityPoolsvolumes          CheckNameResourceTypes = original.MicrosoftNetAppnetAppAccountscapacityPoolsvolumes
+	MicrosoftNetAppnetAppAccountscapacityPoolsvolumessnapshots CheckNameResourceTypes = original.MicrosoftNetAppnetAppAccountscapacityPoolsvolumessnapshots
 )
 
 type InAvailabilityReasonType = original.InAvailabilityReasonType

@@ -47,6 +47,7 @@
     "GetRoutes" : "<p>Gets the Routes for an API.</p>",
     "GetStage" : "<p>Gets a Stage.</p>",
     "GetStages" : "<p>Gets the Stages for an API.</p>",
+    "GetTags" : "<p>Gets the Tags for a resource.</p>",
     "UpdateApi" : "<p>Updates an Api resource.</p>",
     "UpdateApiMapping" : "<p>The API mapping.</p>",
     "UpdateAuthorizer" : "<p>Updates an Authorizer.</p>",
@@ -636,6 +637,28 @@
         "UpdateRouteInput$OperationName" : "<p>The operation name for the route.</p>"
       }
     },
+    "TagResourceInput" : {
+      "base" : "<p>Represents the input parameters for a TagResource request.</p>",
+      "refs" : { }
+    },
+    "Tags" : {
+      "base" : "<p>A key value pair of string with key length between[1-128] and value length between[1-256]</p>",
+      "refs" : {
+        "Api$Tags" : "<p>Tags for the API.</p>",
+        "CreateApiInput$Tags" : "<p>Tags for the API.</p>",
+        "CreateDomainNameInput$Tags" : "<p>Tags for the DomainName.</p>",
+        "CreateStageInput$Tags" : "<p>Tags for the Stage.</p>",
+        "DomainName$Tags" : "<p>Tags for the DomainName.</p>",
+        "Stage$Tags" : "<p>Tags for the Stage.</p>",
+        "TagResourceInput$Tags" : "<p>Tags for the resource arn.</p>"
+      }
+    },
+    "StringWithLengthBetween1And1600" : {
+      "base" : "<p>A string with a length between [1-1600].</p>",
+      "refs" : {
+        "Tags$member" : "<p>A tag for the resource.</p>"
+      }
+    },
     "Template" : {
       "base" : "<p>Represents a template.</p>",
       "refs" : { }
@@ -817,6 +840,9 @@
         "Deployment$DeploymentStatusMessage" : "<p>May contain additional feedback on the status of an API deployment.</p>",
         "DomainNameConfiguration$ApiGatewayDomainName" : "<p>A domain name for the WebSocket API.</p>",
         "DomainNameConfiguration$HostedZoneId" : "<p>The Amazon Route 53 Hosted Zone ID of the endpoint.</p>",
+        "DomainNameConfiguration$SecurityPolicy" : "<p>The Transport Layer Security (TLS) version of the security policy for this domain name. The valid values are TLS_1_0 and TLS_1_2.</p>",
+        "DomainNameConfiguration$DomainNameStatus" : "<p>The status of the domain name migration. The valid values are AVAILABLE and UPDATING. If the status is UPDATING, the domain cannot be modified further until the existing operation is complete. If it is AVAILABLE, the domain can be updated.</p>",
+        "DomainNameConfiguration$DomainNameStatusMessage" : "<p>An optional text message containing detailed information about status of the domain name migration.</p>",
         "IdentitySourceList$member" : null,
         "LimitExceededException$LimitType" : "<p>The limit type.</p>",
         "LimitExceededException$Message" : "<p>Describes the error encountered.</p>",

@@ -1556,6 +1556,7 @@
         "TransformInput":{"shape":"TransformInput"},
         "TransformOutput":{"shape":"TransformOutput"},
         "TransformResources":{"shape":"TransformResources"},
+        "DataProcessing":{"shape":"DataProcessing"},
         "Tags":{"shape":"TagList"}
       }
     },
@@ -1593,6 +1594,14 @@
       "max":1024,
       "min":1,
       "pattern":"[\\S\\s]+"
+    },
+    "DataProcessing":{
+      "type":"structure",
+      "members":{
+        "InputFilter":{"shape":"JsonPath"},
+        "OutputFilter":{"shape":"JsonPath"},
+        "JoinSource":{"shape":"JoinSource"}
+      }
     },
     "DataSource":{
       "type":"structure",
@@ -2119,7 +2128,8 @@
         "CreationTime":{"shape":"Timestamp"},
         "TransformStartTime":{"shape":"Timestamp"},
         "TransformEndTime":{"shape":"Timestamp"},
-        "LabelingJobArn":{"shape":"LabelingJobArn"}
+        "LabelingJobArn":{"shape":"LabelingJobArn"},
+        "DataProcessing":{"shape":"DataProcessing"}
       }
     },
     "DescribeWorkteamRequest":{
@@ -2681,7 +2691,7 @@
     "InputDataConfig":{
       "type":"list",
       "member":{"shape":"Channel"},
-      "max":8,
+      "max":20,
       "min":1
     },
     "InputModes":{
@@ -2773,6 +2783,18 @@
       "max":255,
       "min":1,
       "pattern":".+"
+    },
+    "JoinSource":{
+      "type":"string",
+      "enum":[
+        "Input",
+        "None"
+      ]
+    },
+    "JsonPath":{
+      "type":"string",
+      "max":63,
+      "min":0
     },
     "KmsKeyId":{
       "type":"string",
@@ -4535,7 +4557,8 @@
         "rasp3b",
         "deeplens",
         "rk3399",
-        "rk3288"
+        "rk3288",
+        "sbe_c"
       ]
     },
     "TaskAvailabilityLifetimeInSeconds":{
@@ -4573,7 +4596,7 @@
     },
     "TaskTimeLimitInSeconds":{
       "type":"integer",
-      "max":3600,
+      "max":28800,
       "min":1
     },
     "TaskTitle":{

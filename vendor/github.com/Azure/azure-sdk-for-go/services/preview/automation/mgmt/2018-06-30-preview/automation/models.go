@@ -536,6 +536,8 @@ const (
 	Day ScheduleFrequency = "Day"
 	// Hour ...
 	Hour ScheduleFrequency = "Hour"
+	// Minute The minimum allowed interval for Minute schedules is 15 minutes.
+	Minute ScheduleFrequency = "Minute"
 	// Month ...
 	Month ScheduleFrequency = "Month"
 	// OneTime ...
@@ -546,7 +548,7 @@ const (
 
 // PossibleScheduleFrequencyValues returns an array of possible values for the ScheduleFrequency const type.
 func PossibleScheduleFrequencyValues() []ScheduleFrequency {
-	return []ScheduleFrequency{Day, Hour, Month, OneTime, Week}
+	return []ScheduleFrequency{Day, Hour, Minute, Month, OneTime, Week}
 }
 
 // SkuNameEnum enumerates the values for sku name enum.
@@ -7623,7 +7625,7 @@ type ScheduleCreateOrUpdateProperties struct {
 	ExpiryTime *date.Time `json:"expiryTime,omitempty"`
 	// Interval - Gets or sets the interval of the schedule.
 	Interval interface{} `json:"interval,omitempty"`
-	// Frequency - Possible values include: 'OneTime', 'Day', 'Hour', 'Week', 'Month'
+	// Frequency - Gets or sets the frequency of the schedule. Possible values include: 'OneTime', 'Day', 'Hour', 'Week', 'Month', 'Minute'
 	Frequency ScheduleFrequency `json:"frequency,omitempty"`
 	// TimeZone - Gets or sets the time zone of the schedule.
 	TimeZone *string `json:"timeZone,omitempty"`
@@ -7795,7 +7797,7 @@ type ScheduleProperties struct {
 	NextRunOffsetMinutes *float64 `json:"nextRunOffsetMinutes,omitempty"`
 	// Interval - Gets or sets the interval of the schedule.
 	Interval *int32 `json:"interval,omitempty"`
-	// Frequency - Gets or sets the frequency of the schedule. Possible values include: 'OneTime', 'Day', 'Hour', 'Week', 'Month'
+	// Frequency - Gets or sets the frequency of the schedule. Possible values include: 'OneTime', 'Day', 'Hour', 'Week', 'Month', 'Minute'
 	Frequency ScheduleFrequency `json:"frequency,omitempty"`
 	// TimeZone - Gets or sets the time zone of the schedule.
 	TimeZone *string `json:"timeZone,omitempty"`
@@ -8043,7 +8045,7 @@ func (succi *SoftwareUpdateConfigurationCollectionItem) UnmarshalJSON(body []byt
 type SoftwareUpdateConfigurationCollectionItemProperties struct {
 	// UpdateConfiguration - Update specific properties of the software update configuration.
 	UpdateConfiguration *CollectionItemUpdateConfiguration `json:"updateConfiguration,omitempty"`
-	// Frequency - execution frequency of the schedule associated with the software update configuration. Possible values include: 'OneTime', 'Day', 'Hour', 'Week', 'Month'
+	// Frequency - execution frequency of the schedule associated with the software update configuration. Possible values include: 'OneTime', 'Day', 'Hour', 'Week', 'Month', 'Minute'
 	Frequency ScheduleFrequency `json:"frequency,omitempty"`
 	// StartTime - the start time of the update.
 	StartTime *date.Time `json:"startTime,omitempty"`

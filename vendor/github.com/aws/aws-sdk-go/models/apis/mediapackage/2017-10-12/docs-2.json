@@ -27,6 +27,22 @@
         "HlsPackage$AdMarkers" : "This setting controls how ad markers are included in the packaged OriginEndpoint.\n\"NONE\" will omit all SCTE-35 ad markers from the output.\n\"PASSTHROUGH\" causes the manifest to contain a copy of the SCTE-35 ad\nmarkers (comments) taken directly from the input HTTP Live Streaming (HLS) manifest.\n\"SCTE35_ENHANCED\" generates ad markers and blackout tags based on SCTE-35\nmessages in the input source.\n"
       }
     },
+    "AdTriggers" : {
+      "base" : "A list of SCTE-35 message types that are treated as ad markers in the output.  If empty, no\nad markers are output.  Specify multiple items to create ad markers for all of the included\nmessage types.\n",
+      "refs" : {
+        "DashPackage$AdTriggers" : null,
+        "HlsManifestCreateOrUpdateParameters$AdTriggers" : null,
+        "HlsPackage$AdTriggers" : null
+      }
+    },
+    "AdsOnDeliveryRestrictions" : {
+      "base" : "This setting allows the delivery restriction flags on SCTE-35 segmentation descriptors to\ndetermine whether a message signals an ad.  Choosing \"NONE\" means no SCTE-35 messages become\nads.  Choosing \"RESTRICTED\" means SCTE-35 messages of the types specified in AdTriggers that\ncontain delivery restrictions will be treated as ads.  Choosing \"UNRESTRICTED\" means SCTE-35\nmessages of the types specified in AdTriggers that do not contain delivery restrictions will\nbe treated as ads.  Choosing \"BOTH\" means all SCTE-35 messages of the types specified in\nAdTriggers will be treated as ads.  Note that Splice Insert messages do not have these flags\nand are always treated as ads if specified in AdTriggers.\n",
+      "refs" : {
+        "DashPackage$AdsOnDeliveryRestrictions" : null,
+        "HlsManifestCreateOrUpdateParameters$AdsOnDeliveryRestrictions" : null,
+        "HlsPackage$AdsOnDeliveryRestrictions" : null
+      }
+    },
     "Channel" : {
       "base" : "A Channel resource configuration.",
       "refs" : {
@@ -218,6 +234,12 @@
     "TagsModel" : {
       "base" : null,
       "refs" : { }
+    },
+    "__AdTriggersElement" : {
+      "base" : null,
+      "refs" : {
+        "AdTriggers$member" : null
+      }
     },
     "__PeriodTriggersElement" : {
       "base" : null,

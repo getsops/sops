@@ -41,7 +41,6 @@ import (
 	"google.golang.org/grpc/keepalive"
 	"google.golang.org/grpc/resolver"
 	"google.golang.org/grpc/resolver/manual"
-	"google.golang.org/grpc/serviceconfig"
 	"google.golang.org/grpc/status"
 	testpb "google.golang.org/grpc/test/grpc_testing"
 	"google.golang.org/grpc/testdata"
@@ -50,16 +49,6 @@ import (
 func czCleanupWrapper(cleanup func() error, t *testing.T) {
 	if err := cleanup(); err != nil {
 		t.Error(err)
-	}
-}
-
-func (te *test) startServers(ts testpb.TestServiceServer, num int) {
-	for i := 0; i < num; i++ {
-		te.startServer(ts)
-		te.srvs = append(te.srvs, te.srv.(*grpc.Server))
-		te.srvAddrs = append(te.srvAddrs, te.srvAddr)
-		te.srv = nil
-		te.srvAddr = ""
 	}
 }
 
@@ -2013,12 +2002,4 @@ func (s) TestCZTraceTopChannelDeletionTraceClear(t *testing.T) {
 	}); err != nil {
 		t.Fatal(err)
 	}
-}
-
-func parseCfg(s string) serviceconfig.Config {
-	c, err := serviceconfig.Parse(s)
-	if err != nil {
-		panic(fmt.Sprintf("Error parsing config %q: %v", s, err))
-	}
-	return c
 }

@@ -109,4 +109,10 @@ const (
 	// An error indicating that a particular service limit was exceeded. You can
 	// increase some service limits by contacting AWS Support.
 	ErrCodeServiceLimitExceeded = "ServiceLimitExceeded"
+
+	// ErrCodeUnsupportedOperation for service response error code
+	// "UnsupportedOperation".
+	//
+	// An error occured.
+	ErrCodeUnsupportedOperation = "UnsupportedOperation"
 )

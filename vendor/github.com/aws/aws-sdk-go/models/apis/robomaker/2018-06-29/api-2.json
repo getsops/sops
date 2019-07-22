@@ -187,7 +187,8 @@
         {"shape":"InternalServerException"},
         {"shape":"ThrottlingException"},
         {"shape":"LimitExceededException"},
-        {"shape":"IdempotentParameterMismatchException"}
+        {"shape":"IdempotentParameterMismatchException"},
+        {"shape":"ServiceUnavailableException"}
       ]
     },
     "DeleteFleet":{
@@ -960,6 +961,7 @@
         "EnvironmentSetupError",
         "EtagMismatch",
         "FailureThresholdBreached",
+        "RobotDeploymentAborted",
         "RobotDeploymentNoResponse",
         "RobotAgentConnectionTimeout",
         "GreengrassDeploymentFailed",
@@ -1233,7 +1235,7 @@
       "type":"string",
       "max":255,
       "min":1,
-      "pattern":"arn:.*"
+      "pattern":"arn:aws:iam::\\w+:role/.*"
     },
     "Id":{
       "type":"string",
@@ -1403,6 +1405,10 @@
       "max":255,
       "min":1,
       "pattern":"[a-zA-Z0-9_\\-]*"
+    },
+    "NonEmptyString":{
+      "type":"string",
+      "min":1
     },
     "OutputLocation":{
       "type":"structure",
@@ -1602,7 +1608,10 @@
     },
     "RobotSoftwareSuiteVersionType":{
       "type":"string",
-      "enum":["Kinetic"]
+      "enum":[
+        "Kinetic",
+        "Melodic"
+      ]
     },
     "RobotStatus":{
       "type":"string",
@@ -1626,7 +1635,7 @@
       "type":"string",
       "max":63,
       "min":3,
-      "pattern":"[a-z0-9][a-z0-9\\-]*[a-z0-9]"
+      "pattern":"[a-z0-9][a-z0-9.\\-]*[a-z0-9]"
     },
     "S3Etag":{"type":"string"},
     "S3Key":{
@@ -1637,9 +1646,17 @@
     },
     "SecurityGroups":{
       "type":"list",
-      "member":{"shape":"GenericString"},
+      "member":{"shape":"NonEmptyString"},
       "max":5,
       "min":1
+    },
+    "ServiceUnavailableException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"errorMessage"}
+      },
+      "error":{"httpStatusCode":503},
+      "exception":true
     },
     "SimulationApplicationConfig":{
       "type":"structure",
@@ -1805,7 +1822,7 @@
     },
     "Subnets":{
       "type":"list",
-      "member":{"shape":"GenericString"},
+      "member":{"shape":"NonEmptyString"},
       "max":16,
       "min":1
     },

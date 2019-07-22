@@ -948,7 +948,7 @@ type NamespaceProperties struct {
 	Name *string `json:"name,omitempty"`
 	// ProvisioningState - Provisioning state of the Namespace.
 	ProvisioningState *string `json:"provisioningState,omitempty"`
-	// Region - Specifies the targeted region in which the namespace should be created. It can be any of the following values: Australia EastAustralia SoutheastCentral USEast USEast US 2West USNorth Central USSouth Central USEast AsiaSoutheast AsiaBrazil SouthJapan EastJapan WestNorth EuropeWest Europe
+	// Region - Specifies the targeted region in which the namespace should be created. It can be any of the following values: Australia East, Australia Southeast, Central US, East US, East US 2, West US, North Central US, South Central US, East Asia, Southeast Asia, Brazil South, Japan East, Japan West, North Europe, West Europe
 	Region *string `json:"region,omitempty"`
 	// Status - Status of the namespace. It can be any of these values:1 = Created/Active2 = Creating3 = Suspended4 = Deleting
 	Status *string `json:"status,omitempty"`

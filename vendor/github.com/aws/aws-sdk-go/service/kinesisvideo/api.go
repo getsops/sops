@@ -445,6 +445,12 @@ func (c *KinesisVideo) ListStreamsRequest(input *ListStreamsInput) (req *request
 		Name:       opListStreams,
 		HTTPMethod: "POST",
 		HTTPPath:   "/listStreams",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
 	}
 
 	if input == nil {
@@ -497,6 +503,56 @@ func (c *KinesisVideo) ListStreamsWithContext(ctx aws.Context, input *ListStream
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// ListStreamsPages iterates over the pages of a ListStreams operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListStreams method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListStreams operation.
+//    pageNum := 0
+//    err := client.ListStreamsPages(params,
+//        func(page *kinesisvideo.ListStreamsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *KinesisVideo) ListStreamsPages(input *ListStreamsInput, fn func(*ListStreamsOutput, bool) bool) error {
+	return c.ListStreamsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListStreamsPagesWithContext same as ListStreamsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *KinesisVideo) ListStreamsPagesWithContext(ctx aws.Context, input *ListStreamsInput, fn func(*ListStreamsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListStreamsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListStreamsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	cont := true
+	for p.Next() && cont {
+		cont = fn(p.Page().(*ListStreamsOutput), !p.HasNextPage())
+	}
+	return p.Err()
 }
 
 const opListTagsForStream = "ListTagsForStream"
@@ -2142,6 +2198,9 @@ const (
 
 	// APINameGetHlsStreamingSessionUrl is a APIName enum value
 	APINameGetHlsStreamingSessionUrl = "GET_HLS_STREAMING_SESSION_URL"
+
+	// APINameGetDashStreamingSessionUrl is a APIName enum value
+	APINameGetDashStreamingSessionUrl = "GET_DASH_STREAMING_SESSION_URL"
 )
 
 const (

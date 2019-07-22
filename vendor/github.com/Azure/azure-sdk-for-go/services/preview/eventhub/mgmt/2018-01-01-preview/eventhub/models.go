@@ -104,11 +104,17 @@ func PossibleSkuTierValues() []SkuTier {
 	return []SkuTier{SkuTierBasic, SkuTierStandard}
 }
 
+// AvailableCluster pre-provisioned and readily available Event Hubs Cluster count per region.
+type AvailableCluster struct {
+	// Location - Location fo the Available Cluster
+	Location *string `json:"location,omitempty"`
+}
+
 // AvailableClustersList the response of the List Available Clusters operation.
 type AvailableClustersList struct {
 	autorest.Response `json:"-"`
 	// Value - The count of readily available and pre-provisioned Event Hubs Clusters per region.
-	Value *[]map[string]*int32 `json:"value,omitempty"`
+	Value *[]AvailableCluster `json:"value,omitempty"`
 }
 
 // Cluster single Event Hubs Cluster resource in List or Get operations.
@@ -380,6 +386,8 @@ type ClusterProperties struct {
 	Updated *string `json:"updated,omitempty"`
 	// MetricID - READ-ONLY; The metric ID of the cluster resource. Provided by the service and not modifiable by the user.
 	MetricID *string `json:"metricId,omitempty"`
+	// Status - READ-ONLY; Status of the Cluster resource
+	Status *string `json:"status,omitempty"`
 }
 
 // ClusterQuotaConfigurationProperties contains all settings for the cluster.
@@ -603,6 +611,7 @@ func (en *EHNamespace) UnmarshalJSON(body []byte) error {
 
 // EHNamespaceIDContainer the full ARM ID of an Event Hubs Namespace
 type EHNamespaceIDContainer struct {
+	// ID - id parameter
 	ID *string `json:"id,omitempty"`
 }
 

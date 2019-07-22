@@ -1226,11 +1226,10 @@ func (c *SageMaker) CreatePresignedNotebookInstanceUrlRequest(input *CreatePresi
 // home page from the notebook instance. The console uses this API to get the
 // URL and show the page.
 //
-// You can restrict access to this API and to the URL that it returns to a list
-// of IP addresses that you specify. To restrict access, attach an IAM policy
-// that denies access to this API unless the call comes from an IP address in
-// the specified list to every AWS Identity and Access Management user, group,
-// or role used to access the notebook instance. Use the NotIpAddress condition
+// IAM authorization policies for this API are also enforced for every HTTP
+// request and WebSocket frame that attempts to connect to the notebook instance.For
+// example, you can restrict access to this API and to the URL that it returns
+// to a list of IP addresses that you specify. Use the NotIpAddress condition
 // operator and the aws:SourceIP condition context key to specify the list of
 // IP addresses that you want to have access to the notebook instance. For more
 // information, see Limit Access to a Notebook Instance by IP Address (https://docs.aws.amazon.com/sagemaker/latest/dg/nbi-ip-filter.html).
@@ -1323,9 +1322,11 @@ func (c *SageMaker) CreateTrainingJobRequest(input *CreateTrainingJobInput) (req
 //
 //    * AlgorithmSpecification - Identifies the training algorithm to use.
 //
-//    * HyperParameters - Specify these algorithm-specific parameters to influence
-//    the quality of the final model. For a list of hyperparameters for each
-//    training algorithm provided by Amazon SageMaker, see Algorithms (https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html).
+//    * HyperParameters - Specify these algorithm-specific parameters to enable
+//    the estimation of model parameters during training. Hyperparameters can
+//    be tuned to optimize this learning process. For a list of hyperparameters
+//    for each training algorithm provided by Amazon SageMaker, see Algorithms
+//    (https://docs.aws.amazon.com/sagemaker/latest/dg/algos.html).
 //
 //    * InputDataConfig - Describes the training dataset and the Amazon S3 location
 //    where it is stored.
@@ -1342,7 +1343,7 @@ func (c *SageMaker) CreateTrainingJobRequest(input *CreateTrainingJobInput) (req
 //    this role the necessary permissions so that Amazon SageMaker can successfully
 //    complete model training.
 //
-//    * StoppingCondition - Sets a duration for training. Use this parameter
+//    * StoppingCondition - Sets a time limit for training. Use this parameter
 //    to cap model training costs.
 //
 // For more information about Amazon SageMaker, see How It Works (https://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html).
@@ -8299,7 +8300,8 @@ type ContainerDefinition struct {
 	// that you provide a S3 path to the model artifacts in ModelDataUrl.
 	ModelDataUrl *string `type:"string"`
 
-	// The name of the model package to use to create the model.
+	// The name or Amazon Resource Name (ARN) of the model package to use to create
+	// the model.
 	ModelPackageName *string `min:"1" type:"string"`
 }
 
@@ -8393,7 +8395,7 @@ type ContinuousParameterRange struct {
 	//
 	// Logarithmic
 	//
-	// Hyperparemeter tuning searches the values in the hyperparameter range by
+	// Hyperparameter tuning searches the values in the hyperparameter range by
 	// using a logarithmic scale.
 	//
 	// Logarithmic scaling works only for ranges that have only values greater than
@@ -8805,7 +8807,9 @@ type CreateCompilationJobInput struct {
 	// RoleArn is a required field
 	RoleArn *string `min:"20" type:"string" required:"true"`
 
-	// The duration allowed for model compilation.
+	// Specifies a limit to how long a model compilation job can run. When the job
+	// reaches the time limit, Amazon SageMaker ends the compilation job. Use this
+	// API to cap model training costs.
 	//
 	// StoppingCondition is a required field
 	StoppingCondition *StoppingCondition `type:"structure" required:"true"`
@@ -10406,15 +10410,13 @@ type CreateTrainingJobInput struct {
 	// RoleArn is a required field
 	RoleArn *string `min:"20" type:"string" required:"true"`
 
-	// Sets a duration for training. Use this parameter to cap model training costs.
-	// To stop a job, Amazon SageMaker sends the algorithm the SIGTERM signal, which
-	// delays job termination for 120 seconds. Algorithms might use this 120-second
-	// window to save the model artifacts.
+	// Specifies a limit to how long a model training job can run. When the job
+	// reaches the time limit, Amazon SageMaker ends the training job. Use this
+	// API to cap model training costs.
 	//
-	// When Amazon SageMaker terminates a job because the stopping condition has
-	// been met, training algorithms provided by Amazon SageMaker save the intermediate
-	// results of the job. This intermediate data is a valid model artifact. You
-	// can use it to create a model using the CreateModel API.
+	// To stop a job, Amazon SageMaker sends the algorithm the SIGTERM signal, which
+	// delays job termination for 120 seconds. Algorithms can use this 120-second
+	// window to save the model artifacts, so the results of training are not lost.
 	//
 	// StoppingCondition is a required field
 	StoppingCondition *StoppingCondition `type:"structure" required:"true"`
@@ -10643,6 +10645,10 @@ type CreateTransformJobInput struct {
 	// limit, set BatchStrategy to MultiRecord and SplitType to Line.
 	BatchStrategy *string `type:"string" enum:"BatchStrategy"`
 
+	// The data structure used for combining the input data and inference in the
+	// output file. For more information, see Batch Transform I/O Join (http://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform-io-join.html).
+	DataProcessing *DataProcessing `type:"structure"`
+
 	// The environment variables to set in the Docker container. We support up to
 	// 16 key and values entries in the map.
 	Environment map[string]*string `type:"map"`
@@ -10770,6 +10776,12 @@ func (s *CreateTransformJobInput) Validate() error {
 // SetBatchStrategy sets the BatchStrategy field's value.
 func (s *CreateTransformJobInput) SetBatchStrategy(v string) *CreateTransformJobInput {
 	s.BatchStrategy = &v
+	return s
+}
+
+// SetDataProcessing sets the DataProcessing field's value.
+func (s *CreateTransformJobInput) SetDataProcessing(v *DataProcessing) *CreateTransformJobInput {
+	s.DataProcessing = v
 	return s
 }
 
@@ -10990,6 +11002,79 @@ func (s CreateWorkteamOutput) GoString() string {
 // SetWorkteamArn sets the WorkteamArn field's value.
 func (s *CreateWorkteamOutput) SetWorkteamArn(v string) *CreateWorkteamOutput {
 	s.WorkteamArn = &v
+	return s
+}
+
+// The data structure used to combine the input data and transformed data from
+// the batch transform output into a joined dataset and to store it in an output
+// file. It also contains information on how to filter the input data and the
+// joined dataset. For more information, see Batch Transform I/O Join (http://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform-io-join.html).
+type DataProcessing struct {
+	_ struct{} `type:"structure"`
+
+	// A JSONPath expression used to select a portion of the input data to pass
+	// to the algorithm. Use the InputFilter parameter to exclude fields, such as
+	// an ID column, from the input. If you want Amazon SageMaker to pass the entire
+	// input dataset to the algorithm, accept the default value $.
+	//
+	// Examples: "$", "$[1:]", "$.features"
+	InputFilter *string `type:"string"`
+
+	// Specifies the source of the data to join with the transformed data. The valid
+	// values are None and Input The default value is None which specifies not to
+	// join the input with the transformed data. If you want the batch transform
+	// job to join the original input data with the transformed data, set JoinSource
+	// to Input. To join input and output, the batch transform job must satisfy
+	// the Requirements for Using Batch Transform I/O Join (http://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform-io-join.html#batch-transform-io-join-requirements).
+	//
+	// For JSON or JSONLines objects, such as a JSON array, Amazon SageMaker adds
+	// the transformed data to the input JSON object in an attribute called SageMakerOutput.
+	// The joined result for JSON must be a key-value pair object. If the input
+	// is not a key-value pair object, Amazon SageMaker creates a new JSON file.
+	// In the new JSON file, and the input data is stored under the SageMakerInput
+	// key and the results are stored in SageMakerOutput.
+	//
+	// For CSV files, Amazon SageMaker combines the transformed data with the input
+	// data at the end of the input data and stores it in the output file. The joined
+	// data has the joined input data followed by the transformed data and the output
+	// is a CSV file.
+	JoinSource *string `type:"string" enum:"JoinSource"`
+
+	// A JSONPath expression used to select a portion of the joined dataset to save
+	// in the output file for a batch transform job. If you want Amazon SageMaker
+	// to store the entire input dataset in the output file, leave the default value,
+	// $. If you specify indexes that aren't within the dimension size of the joined
+	// dataset, you get an error.
+	//
+	// Examples: "$", "$[0,5:]", "$.['id','SageMakerOutput']"
+	OutputFilter *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DataProcessing) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DataProcessing) GoString() string {
+	return s.String()
+}
+
+// SetInputFilter sets the InputFilter field's value.
+func (s *DataProcessing) SetInputFilter(v string) *DataProcessing {
+	s.InputFilter = &v
+	return s
+}
+
+// SetJoinSource sets the JoinSource field's value.
+func (s *DataProcessing) SetJoinSource(v string) *DataProcessing {
+	s.JoinSource = &v
+	return s
+}
+
+// SetOutputFilter sets the OutputFilter field's value.
+func (s *DataProcessing) SetOutputFilter(v string) *DataProcessing {
+	s.OutputFilter = &v
 	return s
 }
 
@@ -12036,7 +12121,9 @@ type DescribeCompilationJobOutput struct {
 	// RoleArn is a required field
 	RoleArn *string `min:"20" type:"string" required:"true"`
 
-	// The duration allowed for model compilation.
+	// Specifies a limit to how long a model compilation job can run. When the job
+	// reaches the time limit, Amazon SageMaker ends the compilation job. Use this
+	// API to cap model training costs.
 	//
 	// StoppingCondition is a required field
 	StoppingCondition *StoppingCondition `type:"structure" required:"true"`
@@ -13680,7 +13767,7 @@ type DescribeTrainingJobOutput struct {
 	// training, choose True. Encryption provides greater security for distributed
 	// training, but training might take longer. How long it takes depends on the
 	// amount of communication between compute instances, especially if you use
-	// a deep learning algorithm in distributed training.
+	// a deep learning algorithms in distributed training.
 	EnableInterContainerTrafficEncryption *bool `type:"boolean"`
 
 	// If you want to allow inbound or outbound network calls, except for calls
@@ -13790,7 +13877,13 @@ type DescribeTrainingJobOutput struct {
 	// through.
 	SecondaryStatusTransitions []*SecondaryStatusTransition `type:"list"`
 
-	// The condition under which to stop the training job.
+	// Specifies a limit to how long a model training job can run. When the job
+	// reaches the time limit, Amazon SageMaker ends the training job. Use this
+	// API to cap model training costs.
+	//
+	// To stop a job, Amazon SageMaker sends the algorithm the SIGTERM signal, which
+	// delays job termination for 120 seconds. Algorithms can use this 120-second
+	// window to save the model artifacts, so the results of training are not lost.
 	//
 	// StoppingCondition is a required field
 	StoppingCondition *StoppingCondition `type:"structure" required:"true"`
@@ -14061,6 +14154,12 @@ type DescribeTransformJobOutput struct {
 	// CreationTime is a required field
 	CreationTime *time.Time `type:"timestamp" required:"true"`
 
+	// The data structure used to combine the input data and transformed data from
+	// the batch transform output into a joined dataset and to store it in an output
+	// file. It also contains information on how to filter the input data and the
+	// joined dataset. For more information, see Batch Transform I/O Join (http://docs.aws.amazon.com/sagemaker/latest/dg/batch-transform-io-join.html).
+	DataProcessing *DataProcessing `type:"structure"`
+
 	// The environment variables to set in the Docker container. We support up to
 	// 16 key and values entries in the map.
 	Environment map[string]*string `type:"map"`
@@ -14147,6 +14246,12 @@ func (s *DescribeTransformJobOutput) SetBatchStrategy(v string) *DescribeTransfo
 // SetCreationTime sets the CreationTime field's value.
 func (s *DescribeTransformJobOutput) SetCreationTime(v time.Time) *DescribeTransformJobOutput {
 	s.CreationTime = &v
+	return s
+}
+
+// SetDataProcessing sets the DataProcessing field's value.
+func (s *DescribeTransformJobOutput) SetDataProcessing(v *DataProcessing) *DescribeTransformJobOutput {
+	s.DataProcessing = v
 	return s
 }
 
@@ -14962,7 +15067,7 @@ type HumanTaskConfig struct {
 	//
 	//    * arn:aws:lambda:eu-west-1:568282634449:function:PRE-TextMultiClass
 	//
-	// Asia Pacific (Tokyo (ap-northeast-1):
+	// Asia Pacific (Tokyo) (ap-northeast-1):
 	//
 	//    * arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-BoundingBox
 	//
@@ -14972,7 +15077,7 @@ type HumanTaskConfig struct {
 	//
 	//    * arn:aws:lambda:ap-northeast-1:477331159723:function:PRE-TextMultiClass
 	//
-	// Asia Pacific (Sydney (ap-southeast-1):
+	// Asia Pacific (Sydney) (ap-southeast-1):
 	//
 	//    * arn:aws:lambda:ap-southeast-2:454466003867:function:PRE-BoundingBox
 	//
@@ -15433,16 +15538,9 @@ type HyperParameterTrainingJobDefinition struct {
 	// job.
 	StaticHyperParameters map[string]*string `type:"map"`
 
-	// Sets a maximum duration for the training jobs that the tuning job launches.
-	// Use this parameter to limit model training costs.
-	//
-	// To stop a job, Amazon SageMaker sends the algorithm the SIGTERM signal. This
-	// delays job termination for 120 seconds. Algorithms might use this 120-second
-	// window to save the model artifacts.
-	//
-	// When Amazon SageMaker terminates a job because the stopping condition has
-	// been met, training algorithms provided by Amazon SageMaker save the intermediate
-	// results of the job.
+	// Specifies a limit to how long a model hyperparameter training job can run.
+	// When the job reaches the time limit, Amazon SageMaker ends the training job.
+	// Use this API to cap model training costs.
 	//
 	// StoppingCondition is a required field
 	StoppingCondition *StoppingCondition `type:"structure" required:"true"`
@@ -16920,6 +17018,21 @@ type LabelingJobOutputConfig struct {
 
 	// The AWS Key Management Service ID of the key used to encrypt the output data,
 	// if any.
+	//
+	// If you use a KMS key ID or an alias of your master key, the Amazon SageMaker
+	// execution role must include permissions to call kms:Encrypt. If you don't
+	// provide a KMS key ID, Amazon SageMaker uses the default KMS key for Amazon
+	// S3 for your role's account. Amazon SageMaker uses server-side encryption
+	// with KMS-managed keys for LabelingJobOutputConfig. If you use a bucket policy
+	// with an s3:PutObject permission that only allows objects with server-side
+	// encryption, set the condition key of s3:x-amz-server-side-encryption to "aws:kms".
+	// For more information, see KMS-Managed Encryption Keys (https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html)
+	// in the Amazon Simple Storage Service Developer Guide.
+	//
+	// The KMS key policy must grant permission to the IAM role that you specify
+	// in your CreateLabelingJob request. For more information, see Using Key Policies
+	// in AWS KMS (http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html)
+	// in the AWS Key Management Service Developer Guide.
 	KmsKeyId *string `type:"string"`
 
 	// The Amazon S3 location to write output data.
@@ -20845,14 +20958,19 @@ type OutputDataConfig struct {
 	//
 	//    * // Amazon Resource Name (ARN) of a KMS Key Alias "arn:aws:kms:us-west-2:111122223333:alias/ExampleAlias"
 	//
-	// If you don't provide a KMS key ID, Amazon SageMaker uses the default KMS
-	// key for Amazon S3 for your role's account. For more information, see KMS-Managed
-	// Encryption Keys (https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html)
+	// If you use a KMS key ID or an alias of your master key, the Amazon SageMaker
+	// execution role must include permissions to call kms:Encrypt. If you don't
+	// provide a KMS key ID, Amazon SageMaker uses the default KMS key for Amazon
+	// S3 for your role's account. Amazon SageMaker uses server-side encryption
+	// with KMS-managed keys for OutputDataConfig. If you use a bucket policy with
+	// an s3:PutObject permission that only allows objects with server-side encryption,
+	// set the condition key of s3:x-amz-server-side-encryption to "aws:kms". For
+	// more information, see KMS-Managed Encryption Keys (https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingKMSEncryption.html)
 	// in the Amazon Simple Storage Service Developer Guide.
 	//
 	// The KMS key policy must grant permission to the IAM role that you specify
-	// in your CreateTramsformJob request. For more information, see Using Key Policies
-	// in AWS KMS (http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html)
+	// in your CreateTrainingJob, CreateTransformJob, or CreateHyperParameterTuningJob
+	// requests. For more information, see Using Key Policies in AWS KMS (http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html)
 	// in the AWS Key Management Service Developer Guide.
 	KmsKeyId *string `type:"string"`
 
@@ -22313,8 +22431,8 @@ type SecondaryStatusTransition struct {
 	// use status messages in if statements.
 	//
 	// To have an overview of your training job's progress, view TrainingJobStatus
-	// and SecondaryStatus in DescribeTrainingJobResponse, and StatusMessage together.
-	// For example, at the start of a training job, you might see the following:
+	// and SecondaryStatus in DescribeTrainingJob, and StatusMessage together. For
+	// example, at the start of a training job, you might see the following:
 	//
 	//    * TrainingJobStatus - InProgress
 	//
@@ -22898,26 +23016,31 @@ func (s StopTransformJobOutput) GoString() string {
 	return s.String()
 }
 
-// Specifies how long model training can run. When model training reaches the
-// limit, Amazon SageMaker ends the training job. Use this API to cap model
-// training cost.
+// Specifies a limit to how long a model training or compilation job can run.
+// When the job reaches the time limit, Amazon SageMaker ends the training or
+// compilation job. Use this API to cap model training costs.
 //
 // To stop a job, Amazon SageMaker sends the algorithm the SIGTERM signal, which
-// delays job termination for120 seconds. Algorithms might use this 120-second
-// window to save the model artifacts, so the results of training is not lost.
+// delays job termination for 120 seconds. Algorithms can use this 120-second
+// window to save the model artifacts, so the results of training are not lost.
 //
-// Training algorithms provided by Amazon SageMaker automatically saves the
-// intermediate results of a model training job (it is best effort case, as
-// model might not be ready to save as some stages, for example training just
-// started). This intermediate data is a valid model artifact. You can use it
-// to create a model (CreateModel).
+// The training algorithms provided by Amazon SageMaker automatically save the
+// intermediate results of a model training job when possible. This attempt
+// to save artifacts is only a best effort case as model might not be in a state
+// from which it can be saved. For example, if training has just started, the
+// model might not be ready to save. When saved, this intermediate data is a
+// valid model artifact. You can use it to create a model with CreateModel.
+//
+// The Neural Topic Model (NTM) currently does not support saving intermediate
+// model artifacts. When training NTMs, make sure that the maximum runtime is
+// sufficient for the training job to complete.
 type StoppingCondition struct {
 	_ struct{} `type:"structure"`
 
-	// The maximum length of time, in seconds, that the training job can run. If
-	// model training does not complete during this time, Amazon SageMaker ends
-	// the job. If value is not specified, default value is 1 day. Maximum value
-	// is 28 days.
+	// The maximum length of time, in seconds, that the training or compilation
+	// job can run. If job does not complete during this time, Amazon SageMaker
+	// ends the job. If value is not specified, default value is 1 day. The maximum
+	// value is 28 days.
 	MaxRuntimeInSeconds *int64 `min:"1" type:"integer"`
 }
 
@@ -23219,7 +23342,13 @@ type TrainingJob struct {
 	// through.
 	SecondaryStatusTransitions []*SecondaryStatusTransition `type:"list"`
 
-	// The condition under which to stop the training job.
+	// Specifies a limit to how long a model training job can run. When the job
+	// reaches the time limit, Amazon SageMaker ends the training job. Use this
+	// API to cap model training costs.
+	//
+	// To stop a job, Amazon SageMaker sends the algorithm the SIGTERM signal, which
+	// delays job termination for 120 seconds. Algorithms can use this 120-second
+	// window to save the model artifacts, so the results of training are not lost.
 	StoppingCondition *StoppingCondition `type:"structure"`
 
 	// An array of key-value pairs. For more information, see Using Cost Allocation
@@ -23460,10 +23589,12 @@ type TrainingJobDefinition struct {
 	// ResourceConfig is a required field
 	ResourceConfig *ResourceConfig `type:"structure" required:"true"`
 
-	// Sets a duration for training. Use this parameter to cap model training costs.
+	// Specifies a limit to how long a model training job can run. When the job
+	// reaches the time limit, Amazon SageMaker ends the training job. Use this
+	// API to cap model training costs.
 	//
 	// To stop a job, Amazon SageMaker sends the algorithm the SIGTERM signal, which
-	// delays job termination for 120 seconds. Algorithms might use this 120-second
+	// delays job termination for 120 seconds. Algorithms can use this 120-second
 	// window to save the model artifacts.
 	//
 	// StoppingCondition is a required field
@@ -24360,14 +24491,14 @@ type TransformResources struct {
 	_ struct{} `type:"structure"`
 
 	// The number of ML compute instances to use in the transform job. For distributed
-	// transform, provide a value greater than 1. The default value is 1.
+	// transform jobs, specify a value greater than 1. The default value is 1.
 	//
 	// InstanceCount is a required field
 	InstanceCount *int64 `min:"1" type:"integer" required:"true"`
 
-	// The ML compute instance type for the transform job. For using built-in algorithms
-	// to transform moderately sized datasets, ml.m4.xlarge or ml.m5.large should
-	// suffice. There is no default value for InstanceType.
+	// The ML compute instance type for the transform job. If you are using built-in
+	// algorithms to transform moderately sized datasets, we recommend using ml.m4.xlarge
+	// or ml.m5.largeinstance types.
 	//
 	// InstanceType is a required field
 	InstanceType *string `type:"string" required:"true" enum:"TransformInstanceType"`
@@ -24962,7 +25093,12 @@ type UpdateNotebookInstanceInput struct {
 	RootAccess *string `type:"string" enum:"RootAccess"`
 
 	// The size, in GB, of the ML storage volume to attach to the notebook instance.
-	// The default value is 5 GB.
+	// The default value is 5 GB. ML storage volumes are encrypted, so Amazon SageMaker
+	// can't determine the amount of available free space on the volume. Because
+	// of this, you can increase the volume size when you update a notebook instance,
+	// but you can't decrease the volume size. If you want to decrease the size
+	// of the ML storage volume in use, create a new notebook instance with the
+	// desired size.
 	VolumeSizeInGB *int64 `min:"5" type:"integer"`
 }
 
@@ -25853,6 +25989,14 @@ const (
 )
 
 const (
+	// JoinSourceInput is a JoinSource enum value
+	JoinSourceInput = "Input"
+
+	// JoinSourceNone is a JoinSource enum value
+	JoinSourceNone = "None"
+)
+
+const (
 	// LabelingJobStatusInProgress is a LabelingJobStatus enum value
 	LabelingJobStatusInProgress = "InProgress"
 
@@ -26324,6 +26468,9 @@ const (
 
 	// TargetDeviceRk3288 is a TargetDevice enum value
 	TargetDeviceRk3288 = "rk3288"
+
+	// TargetDeviceSbeC is a TargetDevice enum value
+	TargetDeviceSbeC = "sbe_c"
 )
 
 const (

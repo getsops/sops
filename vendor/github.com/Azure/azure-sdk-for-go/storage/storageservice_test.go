@@ -14,7 +14,10 @@ package storage
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-import chk "gopkg.in/check.v1"
+import (
+	"github.com/Azure/go-autorest/autorest/to"
+	chk "gopkg.in/check.v1"
+)
 
 type StorageSuite struct{}
 
@@ -33,7 +36,7 @@ func (s *StorageSuite) TestGetServiceProperties(c *chk.C) {
 }
 
 func (s *StorageSuite) TestSetServiceProperties(c *chk.C) {
-	cli := getTableClient(c)
+	cli := getBlobClient(c)
 	rec := cli.client.appendRecorder(c)
 
 	t := true
@@ -68,6 +71,15 @@ func (s *StorageSuite) TestSetServiceProperties(c *chk.C) {
 					AllowedHeaders:  "x-ms-meta-customheader,x-ms-meta-target*",
 				},
 			},
+		},
+		DeleteRetentionPolicy: &RetentionPolicy{
+			Enabled: true,
+			Days:    to.IntPtr(5),
+		},
+		StaticWebsite: &StaticWebsite{
+			Enabled:              true,
+			IndexDocument:        to.StringPtr("index.html"),
+			ErrorDocument404Path: to.StringPtr("error.html"),
 		},
 	}
 

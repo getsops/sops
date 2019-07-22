@@ -22,7 +22,7 @@ package containerservice
 import (
 	"context"
 
-	original "github.com/Azure/azure-sdk-for-go/services/containerservice/mgmt/2019-04-30/containerservice"
+	original "github.com/Azure/azure-sdk-for-go/services/containerservice/mgmt/2019-06-01/containerservice"
 )
 
 const (
@@ -131,6 +131,20 @@ type ResourceIdentityType = original.ResourceIdentityType
 const (
 	None           ResourceIdentityType = original.None
 	SystemAssigned ResourceIdentityType = original.SystemAssigned
+)
+
+type ScaleSetEvictionPolicy = original.ScaleSetEvictionPolicy
+
+const (
+	Deallocate ScaleSetEvictionPolicy = original.Deallocate
+	Delete     ScaleSetEvictionPolicy = original.Delete
+)
+
+type ScaleSetPriority = original.ScaleSetPriority
+
+const (
+	Low     ScaleSetPriority = original.Low
+	Regular ScaleSetPriority = original.Regular
 )
 
 type StorageProfileTypes = original.StorageProfileTypes
@@ -321,10 +335,16 @@ const (
 
 type AccessProfile = original.AccessProfile
 type AgentPool = original.AgentPool
+type AgentPoolAvailableVersions = original.AgentPoolAvailableVersions
+type AgentPoolAvailableVersionsProperties = original.AgentPoolAvailableVersionsProperties
+type AgentPoolAvailableVersionsPropertiesAgentPoolVersionsItem = original.AgentPoolAvailableVersionsPropertiesAgentPoolVersionsItem
 type AgentPoolListResult = original.AgentPoolListResult
 type AgentPoolListResultIterator = original.AgentPoolListResultIterator
 type AgentPoolListResultPage = original.AgentPoolListResultPage
 type AgentPoolProfile = original.AgentPoolProfile
+type AgentPoolUpgradeProfile = original.AgentPoolUpgradeProfile
+type AgentPoolUpgradeProfileProperties = original.AgentPoolUpgradeProfileProperties
+type AgentPoolUpgradeProfilePropertiesUpgradesItem = original.AgentPoolUpgradeProfilePropertiesUpgradesItem
 type AgentPoolsClient = original.AgentPoolsClient
 type AgentPoolsCreateOrUpdateFuture = original.AgentPoolsCreateOrUpdateFuture
 type AgentPoolsDeleteFuture = original.AgentPoolsDeleteFuture
@@ -496,6 +516,12 @@ func PossibleOrchestratorTypesValues() []OrchestratorTypes {
 }
 func PossibleResourceIdentityTypeValues() []ResourceIdentityType {
 	return original.PossibleResourceIdentityTypeValues()
+}
+func PossibleScaleSetEvictionPolicyValues() []ScaleSetEvictionPolicy {
+	return original.PossibleScaleSetEvictionPolicyValues()
+}
+func PossibleScaleSetPriorityValues() []ScaleSetPriority {
+	return original.PossibleScaleSetPriorityValues()
 }
 func PossibleStorageProfileTypesValues() []StorageProfileTypes {
 	return original.PossibleStorageProfileTypesValues()

@@ -1131,48 +1131,53 @@ func (s *Dimension) UnmarshalJSON(data []byte) error {
 
 // Document: A Google Docs document.
 type Document struct {
-	// Body: The main body of the document.
+	// Body: Output only. The main body of the document.
 	Body *Body `json:"body,omitempty"`
 
-	// DocumentId: The ID of the document.
+	// DocumentId: Output only. The ID of the document.
 	DocumentId string `json:"documentId,omitempty"`
 
-	// DocumentStyle: The style of the document.
+	// DocumentStyle: Output only. The style of the document.
 	DocumentStyle *DocumentStyle `json:"documentStyle,omitempty"`
 
-	// Footers: The footers in the document, keyed by footer ID.
+	// Footers: Output only. The footers in the document, keyed by footer
+	// ID.
 	Footers map[string]Footer `json:"footers,omitempty"`
 
-	// Footnotes: The footnotes in the document, keyed by footnote ID.
+	// Footnotes: Output only. The footnotes in the document, keyed by
+	// footnote ID.
 	Footnotes map[string]Footnote `json:"footnotes,omitempty"`
 
-	// Headers: The headers in the document, keyed by header ID.
+	// Headers: Output only. The headers in the document, keyed by header
+	// ID.
 	Headers map[string]Header `json:"headers,omitempty"`
 
-	// InlineObjects: The inline objects in the document, keyed by object
-	// ID.
+	// InlineObjects: Output only. The inline objects in the document, keyed
+	// by object ID.
 	InlineObjects map[string]InlineObject `json:"inlineObjects,omitempty"`
 
-	// Lists: The lists in the document, keyed by list ID.
+	// Lists: Output only. The lists in the document, keyed by list ID.
 	Lists map[string]List `json:"lists,omitempty"`
 
-	// NamedRanges: The named ranges in the document, keyed by name.
+	// NamedRanges: Output only. The named ranges in the document, keyed by
+	// name.
 	NamedRanges map[string]NamedRanges `json:"namedRanges,omitempty"`
 
-	// NamedStyles: The named styles of the document.
+	// NamedStyles: Output only. The named styles of the document.
 	NamedStyles *NamedStyles `json:"namedStyles,omitempty"`
 
-	// PositionedObjects: The positioned objects in the document, keyed by
-	// object ID.
+	// PositionedObjects: Output only. The positioned objects in the
+	// document, keyed by object ID.
 	PositionedObjects map[string]PositionedObject `json:"positionedObjects,omitempty"`
 
-	// RevisionId: The revision ID of the document. Can be used in update
-	// requests to specify
-	// which revision of a document to apply updates to and how the request
-	// should
-	// behave if the document has been edited since that revision. Only
-	// populated
-	// if the user has edit access to the document.
+	// RevisionId: Output only. The revision ID of the document. Can be used
+	// in update
+	// requests to specify which revision of a document to apply updates to
+	// and
+	// how the request should behave if the document has been edited since
+	// that
+	// revision. Only populated if the user has edit access to the
+	// document.
 	//
 	// The format of the revision ID may change over time, so it should be
 	// treated
@@ -1189,17 +1194,18 @@ type Document struct {
 	// internal factors such as ID format changes.
 	RevisionId string `json:"revisionId,omitempty"`
 
-	// SuggestedDocumentStyleChanges: The suggested changes to the style of
-	// the document, keyed by suggestion ID.
+	// SuggestedDocumentStyleChanges: Output only. The suggested changes to
+	// the style of the document, keyed by
+	// suggestion ID.
 	SuggestedDocumentStyleChanges map[string]SuggestedDocumentStyle `json:"suggestedDocumentStyleChanges,omitempty"`
 
-	// SuggestedNamedStylesChanges: The suggested changes to the named
-	// styles of the document, keyed by
-	// suggestion ID.
+	// SuggestedNamedStylesChanges: Output only. The suggested changes to
+	// the named styles of the document,
+	// keyed by suggestion ID.
 	SuggestedNamedStylesChanges map[string]SuggestedNamedStyles `json:"suggestedNamedStylesChanges,omitempty"`
 
-	// SuggestionsViewMode: The suggestions view mode applied to the
-	// document.
+	// SuggestionsViewMode: Output only. The suggestions view mode applied
+	// to the document.
 	//
 	// Note: When editing a document, changes must be based on a document
 	// with
@@ -1499,7 +1505,7 @@ type EmbeddedObject struct {
 	// MarginTop: The top margin of the embedded object.
 	MarginTop *Dimension `json:"marginTop,omitempty"`
 
-	// Size: The size of the embedded object.
+	// Size: The visible size of the image after cropping.
 	Size *Size `json:"size,omitempty"`
 
 	// Title: The title of the embedded object. The `title` and
@@ -2011,8 +2017,6 @@ type ImageProperties struct {
 	Contrast float64 `json:"contrast,omitempty"`
 
 	// CropProperties: The crop properties of the image.
-	//
-	// After cropping, the image will be stretched to fit in its container.
 	CropProperties *CropProperties `json:"cropProperties,omitempty"`
 
 	// SourceUri: The source URI is the URI used to insert the image. The
@@ -5570,14 +5574,8 @@ func (s *TableCell) MarshalJSON() ([]byte, error) {
 }
 
 // TableCellBorder: A border around a table cell.
-//
-// Table cell borders cannot be transparent. To hide a table cell
-// border, make
-// its width 0.
 type TableCellBorder struct {
 	// Color: The color of the border.
-	//
-	// This color cannot be transparent.
 	Color *OptionalColor `json:"color,omitempty"`
 
 	// DashStyle: The dash style of the border.

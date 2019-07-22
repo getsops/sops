@@ -100,6 +100,10 @@ type GlueAPI interface {
 	BatchGetTriggersWithContext(aws.Context, *glue.BatchGetTriggersInput, ...request.Option) (*glue.BatchGetTriggersOutput, error)
 	BatchGetTriggersRequest(*glue.BatchGetTriggersInput) (*request.Request, *glue.BatchGetTriggersOutput)
 
+	BatchGetWorkflows(*glue.BatchGetWorkflowsInput) (*glue.BatchGetWorkflowsOutput, error)
+	BatchGetWorkflowsWithContext(aws.Context, *glue.BatchGetWorkflowsInput, ...request.Option) (*glue.BatchGetWorkflowsOutput, error)
+	BatchGetWorkflowsRequest(*glue.BatchGetWorkflowsInput) (*request.Request, *glue.BatchGetWorkflowsOutput)
+
 	BatchStopJobRun(*glue.BatchStopJobRunInput) (*glue.BatchStopJobRunOutput, error)
 	BatchStopJobRunWithContext(aws.Context, *glue.BatchStopJobRunInput, ...request.Option) (*glue.BatchStopJobRunOutput, error)
 	BatchStopJobRunRequest(*glue.BatchStopJobRunInput) (*request.Request, *glue.BatchStopJobRunOutput)
@@ -152,6 +156,10 @@ type GlueAPI interface {
 	CreateUserDefinedFunctionWithContext(aws.Context, *glue.CreateUserDefinedFunctionInput, ...request.Option) (*glue.CreateUserDefinedFunctionOutput, error)
 	CreateUserDefinedFunctionRequest(*glue.CreateUserDefinedFunctionInput) (*request.Request, *glue.CreateUserDefinedFunctionOutput)
 
+	CreateWorkflow(*glue.CreateWorkflowInput) (*glue.CreateWorkflowOutput, error)
+	CreateWorkflowWithContext(aws.Context, *glue.CreateWorkflowInput, ...request.Option) (*glue.CreateWorkflowOutput, error)
+	CreateWorkflowRequest(*glue.CreateWorkflowInput) (*request.Request, *glue.CreateWorkflowOutput)
+
 	DeleteClassifier(*glue.DeleteClassifierInput) (*glue.DeleteClassifierOutput, error)
 	DeleteClassifierWithContext(aws.Context, *glue.DeleteClassifierInput, ...request.Option) (*glue.DeleteClassifierOutput, error)
 	DeleteClassifierRequest(*glue.DeleteClassifierInput) (*request.Request, *glue.DeleteClassifierOutput)
@@ -203,6 +211,10 @@ type GlueAPI interface {
 	DeleteUserDefinedFunction(*glue.DeleteUserDefinedFunctionInput) (*glue.DeleteUserDefinedFunctionOutput, error)
 	DeleteUserDefinedFunctionWithContext(aws.Context, *glue.DeleteUserDefinedFunctionInput, ...request.Option) (*glue.DeleteUserDefinedFunctionOutput, error)
 	DeleteUserDefinedFunctionRequest(*glue.DeleteUserDefinedFunctionInput) (*request.Request, *glue.DeleteUserDefinedFunctionOutput)
+
+	DeleteWorkflow(*glue.DeleteWorkflowInput) (*glue.DeleteWorkflowOutput, error)
+	DeleteWorkflowWithContext(aws.Context, *glue.DeleteWorkflowInput, ...request.Option) (*glue.DeleteWorkflowOutput, error)
+	DeleteWorkflowRequest(*glue.DeleteWorkflowInput) (*request.Request, *glue.DeleteWorkflowOutput)
 
 	GetCatalogImportStatus(*glue.GetCatalogImportStatusInput) (*glue.GetCatalogImportStatusOutput, error)
 	GetCatalogImportStatusWithContext(aws.Context, *glue.GetCatalogImportStatusInput, ...request.Option) (*glue.GetCatalogImportStatusOutput, error)
@@ -382,6 +394,25 @@ type GlueAPI interface {
 	GetUserDefinedFunctionsPages(*glue.GetUserDefinedFunctionsInput, func(*glue.GetUserDefinedFunctionsOutput, bool) bool) error
 	GetUserDefinedFunctionsPagesWithContext(aws.Context, *glue.GetUserDefinedFunctionsInput, func(*glue.GetUserDefinedFunctionsOutput, bool) bool, ...request.Option) error
 
+	GetWorkflow(*glue.GetWorkflowInput) (*glue.GetWorkflowOutput, error)
+	GetWorkflowWithContext(aws.Context, *glue.GetWorkflowInput, ...request.Option) (*glue.GetWorkflowOutput, error)
+	GetWorkflowRequest(*glue.GetWorkflowInput) (*request.Request, *glue.GetWorkflowOutput)
+
+	GetWorkflowRun(*glue.GetWorkflowRunInput) (*glue.GetWorkflowRunOutput, error)
+	GetWorkflowRunWithContext(aws.Context, *glue.GetWorkflowRunInput, ...request.Option) (*glue.GetWorkflowRunOutput, error)
+	GetWorkflowRunRequest(*glue.GetWorkflowRunInput) (*request.Request, *glue.GetWorkflowRunOutput)
+
+	GetWorkflowRunProperties(*glue.GetWorkflowRunPropertiesInput) (*glue.GetWorkflowRunPropertiesOutput, error)
+	GetWorkflowRunPropertiesWithContext(aws.Context, *glue.GetWorkflowRunPropertiesInput, ...request.Option) (*glue.GetWorkflowRunPropertiesOutput, error)
+	GetWorkflowRunPropertiesRequest(*glue.GetWorkflowRunPropertiesInput) (*request.Request, *glue.GetWorkflowRunPropertiesOutput)
+
+	GetWorkflowRuns(*glue.GetWorkflowRunsInput) (*glue.GetWorkflowRunsOutput, error)
+	GetWorkflowRunsWithContext(aws.Context, *glue.GetWorkflowRunsInput, ...request.Option) (*glue.GetWorkflowRunsOutput, error)
+	GetWorkflowRunsRequest(*glue.GetWorkflowRunsInput) (*request.Request, *glue.GetWorkflowRunsOutput)
+
+	GetWorkflowRunsPages(*glue.GetWorkflowRunsInput, func(*glue.GetWorkflowRunsOutput, bool) bool) error
+	GetWorkflowRunsPagesWithContext(aws.Context, *glue.GetWorkflowRunsInput, func(*glue.GetWorkflowRunsOutput, bool) bool, ...request.Option) error
+
 	ImportCatalogToGlue(*glue.ImportCatalogToGlueInput) (*glue.ImportCatalogToGlueOutput, error)
 	ImportCatalogToGlueWithContext(aws.Context, *glue.ImportCatalogToGlueInput, ...request.Option) (*glue.ImportCatalogToGlueOutput, error)
 	ImportCatalogToGlueRequest(*glue.ImportCatalogToGlueInput) (*request.Request, *glue.ImportCatalogToGlueOutput)
@@ -414,6 +445,13 @@ type GlueAPI interface {
 	ListTriggersPages(*glue.ListTriggersInput, func(*glue.ListTriggersOutput, bool) bool) error
 	ListTriggersPagesWithContext(aws.Context, *glue.ListTriggersInput, func(*glue.ListTriggersOutput, bool) bool, ...request.Option) error
 
+	ListWorkflows(*glue.ListWorkflowsInput) (*glue.ListWorkflowsOutput, error)
+	ListWorkflowsWithContext(aws.Context, *glue.ListWorkflowsInput, ...request.Option) (*glue.ListWorkflowsOutput, error)
+	ListWorkflowsRequest(*glue.ListWorkflowsInput) (*request.Request, *glue.ListWorkflowsOutput)
+
+	ListWorkflowsPages(*glue.ListWorkflowsInput, func(*glue.ListWorkflowsOutput, bool) bool) error
+	ListWorkflowsPagesWithContext(aws.Context, *glue.ListWorkflowsInput, func(*glue.ListWorkflowsOutput, bool) bool, ...request.Option) error
+
 	PutDataCatalogEncryptionSettings(*glue.PutDataCatalogEncryptionSettingsInput) (*glue.PutDataCatalogEncryptionSettingsOutput, error)
 	PutDataCatalogEncryptionSettingsWithContext(aws.Context, *glue.PutDataCatalogEncryptionSettingsInput, ...request.Option) (*glue.PutDataCatalogEncryptionSettingsOutput, error)
 	PutDataCatalogEncryptionSettingsRequest(*glue.PutDataCatalogEncryptionSettingsInput) (*request.Request, *glue.PutDataCatalogEncryptionSettingsOutput)
@@ -421,6 +459,10 @@ type GlueAPI interface {
 	PutResourcePolicy(*glue.PutResourcePolicyInput) (*glue.PutResourcePolicyOutput, error)
 	PutResourcePolicyWithContext(aws.Context, *glue.PutResourcePolicyInput, ...request.Option) (*glue.PutResourcePolicyOutput, error)
 	PutResourcePolicyRequest(*glue.PutResourcePolicyInput) (*request.Request, *glue.PutResourcePolicyOutput)
+
+	PutWorkflowRunProperties(*glue.PutWorkflowRunPropertiesInput) (*glue.PutWorkflowRunPropertiesOutput, error)
+	PutWorkflowRunPropertiesWithContext(aws.Context, *glue.PutWorkflowRunPropertiesInput, ...request.Option) (*glue.PutWorkflowRunPropertiesOutput, error)
+	PutWorkflowRunPropertiesRequest(*glue.PutWorkflowRunPropertiesInput) (*request.Request, *glue.PutWorkflowRunPropertiesOutput)
 
 	ResetJobBookmark(*glue.ResetJobBookmarkInput) (*glue.ResetJobBookmarkOutput, error)
 	ResetJobBookmarkWithContext(aws.Context, *glue.ResetJobBookmarkInput, ...request.Option) (*glue.ResetJobBookmarkOutput, error)
@@ -441,6 +483,10 @@ type GlueAPI interface {
 	StartTrigger(*glue.StartTriggerInput) (*glue.StartTriggerOutput, error)
 	StartTriggerWithContext(aws.Context, *glue.StartTriggerInput, ...request.Option) (*glue.StartTriggerOutput, error)
 	StartTriggerRequest(*glue.StartTriggerInput) (*request.Request, *glue.StartTriggerOutput)
+
+	StartWorkflowRun(*glue.StartWorkflowRunInput) (*glue.StartWorkflowRunOutput, error)
+	StartWorkflowRunWithContext(aws.Context, *glue.StartWorkflowRunInput, ...request.Option) (*glue.StartWorkflowRunOutput, error)
+	StartWorkflowRunRequest(*glue.StartWorkflowRunInput) (*request.Request, *glue.StartWorkflowRunOutput)
 
 	StopCrawler(*glue.StopCrawlerInput) (*glue.StopCrawlerOutput, error)
 	StopCrawlerWithContext(aws.Context, *glue.StopCrawlerInput, ...request.Option) (*glue.StopCrawlerOutput, error)
@@ -505,6 +551,10 @@ type GlueAPI interface {
 	UpdateUserDefinedFunction(*glue.UpdateUserDefinedFunctionInput) (*glue.UpdateUserDefinedFunctionOutput, error)
 	UpdateUserDefinedFunctionWithContext(aws.Context, *glue.UpdateUserDefinedFunctionInput, ...request.Option) (*glue.UpdateUserDefinedFunctionOutput, error)
 	UpdateUserDefinedFunctionRequest(*glue.UpdateUserDefinedFunctionInput) (*request.Request, *glue.UpdateUserDefinedFunctionOutput)
+
+	UpdateWorkflow(*glue.UpdateWorkflowInput) (*glue.UpdateWorkflowOutput, error)
+	UpdateWorkflowWithContext(aws.Context, *glue.UpdateWorkflowInput, ...request.Option) (*glue.UpdateWorkflowOutput, error)
+	UpdateWorkflowRequest(*glue.UpdateWorkflowInput) (*request.Request, *glue.UpdateWorkflowOutput)
 }
 
 var _ GlueAPI = (*glue.Glue)(nil)

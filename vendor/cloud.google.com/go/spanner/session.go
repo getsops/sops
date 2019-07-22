@@ -28,6 +28,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/internal/trace"
+	vkit "cloud.google.com/go/spanner/apiv1"
 	sppb "google.golang.org/genproto/googleapis/spanner/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
@@ -72,7 +73,7 @@ func (sh *sessionHandle) getID() string {
 
 // getClient gets the Cloud Spanner RPC client associated with the session ID
 // in sessionHandle.
-func (sh *sessionHandle) getClient() sppb.SpannerClient {
+func (sh *sessionHandle) getClient() *vkit.Client {
 	sh.mu.Lock()
 	defer sh.mu.Unlock()
 	if sh.session == nil {
@@ -121,7 +122,7 @@ func (sh *sessionHandle) destroy() {
 type session struct {
 	// client is the RPC channel to Cloud Spanner. It is set only once during
 	// session's creation.
-	client sppb.SpannerClient
+	client *vkit.Client
 	// id is the unique id of the session in Cloud Spanner. It is set only once
 	// during session's creation.
 	id string
@@ -183,11 +184,9 @@ func (s *session) String() string {
 func (s *session) ping() error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
-	return runRetryable(ctx, func(ctx context.Context) error {
-		// s.getID is safe even when s is invalid.
-		_, err := s.client.GetSession(contextWithOutgoingMetadata(ctx, s.pool.md), &sppb.GetSessionRequest{Name: s.getID()})
-		return err
-	})
+	// s.getID is safe even when s is invalid.
+	_, err := s.client.GetSession(contextWithOutgoingMetadata(ctx, s.pool.md), &sppb.GetSessionRequest{Name: s.getID()})
+	return err
 }
 
 // setHcIndex atomically sets the session's index in the healthcheck queue and
@@ -290,13 +289,9 @@ func (s *session) destroy(isExpire bool) bool {
 }
 
 func (s *session) delete(ctx context.Context) {
-	// Ignore the error returned by runRetryable because even if we fail to
-	// explicitly destroy the session, it will be eventually garbage collected
-	// by Cloud Spanner.
-	err := runRetryable(ctx, func(ctx context.Context) error {
-		_, e := s.client.DeleteSession(ctx, &sppb.DeleteSessionRequest{Name: s.getID()})
-		return e
-	})
+	// Ignore the error because even if we fail to explicitly destroy the
+	// session, it will be eventually garbage collected by Cloud Spanner.
+	err := s.client.DeleteSession(ctx, &sppb.DeleteSessionRequest{Name: s.getID()})
 	if err != nil {
 		log.Printf("Failed to delete session %v. Error: %v", s.getID(), err)
 	}
@@ -320,7 +315,7 @@ func (s *session) prepareForWrite(ctx context.Context) error {
 type SessionPoolConfig struct {
 	// getRPCClient is the caller supplied method for getting a gRPC client to
 	// Cloud Spanner, this makes session pool able to use client pooling.
-	getRPCClient func() (sppb.SpannerClient, error)
+	getRPCClient func() (*vkit.Client, error)
 
 	// MaxOpened is the maximum number of opened sessions allowed by the session
 	// pool. If the client tries to open a session and there are already
@@ -539,6 +534,9 @@ func (p *sessionPool) createSession(ctx context.Context) (*session, error) {
 		doneCreate(false)
 		// Should return error directly because of the previous retries on
 		// CreateSession RPC.
+		// If the error is a timeout, there is a chance that the session was
+		// created on the server but is not known to the session pool. This
+		// session will then be garbage collected by the server after 1 hour.
 		return nil, err
 	}
 	s.pool = p
@@ -547,23 +545,17 @@ func (p *sessionPool) createSession(ctx context.Context) (*session, error) {
 	return s, nil
 }
 
-func createSession(ctx context.Context, sc sppb.SpannerClient, db string, labels map[string]string, md metadata.MD) (*session, error) {
+func createSession(ctx context.Context, sc *vkit.Client, db string, labels map[string]string, md metadata.MD) (*session, error) {
 	var s *session
-	err := runRetryable(ctx, func(ctx context.Context) error {
-		sid, e := sc.CreateSession(ctx, &sppb.CreateSessionRequest{
-			Database: db,
-			Session:  &sppb.Session{Labels: labels},
-		})
-		if e != nil {
-			return e
-		}
-		// If no error, construct the new session.
-		s = &session{valid: true, client: sc, id: sid.Name, createTime: time.Now(), md: md}
-		return nil
+	sid, e := sc.CreateSession(ctx, &sppb.CreateSessionRequest{
+		Database: db,
+		Session:  &sppb.Session{Labels: labels},
 	})
-	if err != nil {
-		return nil, err
+	if e != nil {
+		return nil, toSpannerError(e)
 	}
+	// If no error, construct the new session.
+	s = &session{valid: true, client: sc, id: sid.Name, createTime: time.Now(), md: md}
 	return s, nil
 }
 

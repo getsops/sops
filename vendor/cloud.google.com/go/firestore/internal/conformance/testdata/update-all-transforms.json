@@ -1,0 +1,78 @@
+{
+  "tests": [
+    {
+      "description": "update: all transforms in a single call",
+      "comment": "A document can be created with any amount of transforms.",
+      "update": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "jsonData": "{\"a\": 1, \"b\": \"ServerTimestamp\", \"c\": [\"ArrayUnion\", 1, 2, 3], \"d\": [\"ArrayRemove\", 4, 5, 6]}",
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d",
+                "fields": {
+                  "a": {
+                    "integerValue": "1"
+                  }
+                }
+              },
+              "updateMask": {
+                "fieldPaths": [
+                  "a"
+                ]
+              },
+              "currentDocument": {
+                "exists": true
+              }
+            },
+            {
+              "transform": {
+                "document": "projects/projectID/databases/(default)/documents/C/d",
+                "fieldTransforms": [
+                  {
+                    "fieldPath": "b",
+                    "setToServerValue": "REQUEST_TIME"
+                  },
+                  {
+                    "fieldPath": "c",
+                    "appendMissingElements": {
+                      "values": [
+                        {
+                          "integerValue": "1"
+                        },
+                        {
+                          "integerValue": "2"
+                        },
+                        {
+                          "integerValue": "3"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "fieldPath": "d",
+                    "removeAllFromArray": {
+                      "values": [
+                        {
+                          "integerValue": "4"
+                        },
+                        {
+                          "integerValue": "5"
+                        },
+                        {
+                          "integerValue": "6"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

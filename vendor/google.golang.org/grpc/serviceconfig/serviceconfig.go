@@ -18,6 +18,8 @@
 
 // Package serviceconfig defines types and methods for operating on gRPC
 // service configs.
+//
+// This package is EXPERIMENTAL.
 package serviceconfig
 
 import (

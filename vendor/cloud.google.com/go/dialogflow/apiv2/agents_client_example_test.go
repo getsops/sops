@@ -34,6 +34,40 @@ func ExampleNewAgentsClient() {
 	_ = c
 }
 
+func ExampleAgentsClient_SetAgent() {
+	ctx := context.Background()
+	c, err := dialogflow.NewAgentsClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+
+	req := &dialogflowpb.SetAgentRequest{
+		// TODO: Fill request struct fields.
+	}
+	resp, err := c.SetAgent(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}
+
+func ExampleAgentsClient_DeleteAgent() {
+	ctx := context.Background()
+	c, err := dialogflow.NewAgentsClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+
+	req := &dialogflowpb.DeleteAgentRequest{
+		// TODO: Fill request struct fields.
+	}
+	err = c.DeleteAgent(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+}
+
 func ExampleAgentsClient_GetAgent() {
 	ctx := context.Background()
 	c, err := dialogflow.NewAgentsClient(ctx)

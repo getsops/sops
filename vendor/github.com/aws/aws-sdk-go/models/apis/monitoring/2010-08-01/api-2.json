@@ -23,6 +23,24 @@
         {"shape":"ResourceNotFound"}
       ]
     },
+    "DeleteAnomalyDetector":{
+      "name":"DeleteAnomalyDetector",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteAnomalyDetectorInput"},
+      "output":{
+        "shape":"DeleteAnomalyDetectorOutput",
+        "resultWrapper":"DeleteAnomalyDetectorResult"
+      },
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InternalServiceFault"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingRequiredParameterException"}
+      ]
+    },
     "DeleteDashboards":{
       "name":"DeleteDashboards",
       "http":{
@@ -81,6 +99,23 @@
         "shape":"DescribeAlarmsForMetricOutput",
         "resultWrapper":"DescribeAlarmsForMetricResult"
       }
+    },
+    "DescribeAnomalyDetectors":{
+      "name":"DescribeAnomalyDetectors",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeAnomalyDetectorsInput"},
+      "output":{
+        "shape":"DescribeAnomalyDetectorsOutput",
+        "resultWrapper":"DescribeAnomalyDetectorsResult"
+      },
+      "errors":[
+        {"shape":"InvalidNextToken"},
+        {"shape":"InternalServiceFault"},
+        {"shape":"InvalidParameterValueException"}
+      ]
     },
     "DisableAlarmActions":{
       "name":"DisableAlarmActions",
@@ -207,6 +242,24 @@
         {"shape":"InvalidParameterValueException"},
         {"shape":"ResourceNotFoundException"},
         {"shape":"InternalServiceFault"}
+      ]
+    },
+    "PutAnomalyDetector":{
+      "name":"PutAnomalyDetector",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"PutAnomalyDetectorInput"},
+      "output":{
+        "shape":"PutAnomalyDetectorOutput",
+        "resultWrapper":"PutAnomalyDetectorResult"
+      },
+      "errors":[
+        {"shape":"LimitExceededException"},
+        {"shape":"InternalServiceFault"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"MissingRequiredParameterException"}
       ]
     },
     "PutDashboard":{
@@ -350,6 +403,32 @@
       "max":1024,
       "min":1
     },
+    "AnomalyDetector":{
+      "type":"structure",
+      "members":{
+        "Namespace":{"shape":"Namespace"},
+        "MetricName":{"shape":"MetricName"},
+        "Dimensions":{"shape":"Dimensions"},
+        "Stat":{"shape":"Stat"},
+        "Configuration":{"shape":"AnomalyDetectorConfiguration"}
+      }
+    },
+    "AnomalyDetectorConfiguration":{
+      "type":"structure",
+      "members":{
+        "ExcludedTimeRanges":{"shape":"AnomalyDetectorExcludedTimeRanges"},
+        "MetricTimezone":{"shape":"AnomalyDetectorMetricTimezone"}
+      }
+    },
+    "AnomalyDetectorExcludedTimeRanges":{
+      "type":"list",
+      "member":{"shape":"Range"}
+    },
+    "AnomalyDetectorMetricTimezone":{"type":"string"},
+    "AnomalyDetectors":{
+      "type":"list",
+      "member":{"shape":"AnomalyDetector"}
+    },
     "AwsQueryErrorMessage":{"type":"string"},
     "ComparisonOperator":{
       "type":"string",
@@ -357,7 +436,10 @@
         "GreaterThanOrEqualToThreshold",
         "GreaterThanThreshold",
         "LessThanThreshold",
-        "LessThanOrEqualToThreshold"
+        "LessThanOrEqualToThreshold",
+        "LessThanLowerOrGreaterThanUpperThreshold",
+        "LessThanLowerThreshold",
+        "GreaterThanUpperThreshold"
       ]
     },
     "ConcurrentModificationException":{
@@ -482,6 +564,25 @@
         "AlarmNames":{"shape":"AlarmNames"}
       }
     },
+    "DeleteAnomalyDetectorInput":{
+      "type":"structure",
+      "required":[
+        "Namespace",
+        "MetricName",
+        "Stat"
+      ],
+      "members":{
+        "Namespace":{"shape":"Namespace"},
+        "MetricName":{"shape":"MetricName"},
+        "Dimensions":{"shape":"Dimensions"},
+        "Stat":{"shape":"Stat"}
+      }
+    },
+    "DeleteAnomalyDetectorOutput":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "DeleteDashboardsInput":{
       "type":"structure",
       "required":["DashboardNames"],
@@ -549,6 +650,23 @@
       "type":"structure",
       "members":{
         "MetricAlarms":{"shape":"MetricAlarms"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "DescribeAnomalyDetectorsInput":{
+      "type":"structure",
+      "members":{
+        "NextToken":{"shape":"NextToken"},
+        "MaxResults":{"shape":"MaxReturnedResultsCount"},
+        "Namespace":{"shape":"Namespace"},
+        "MetricName":{"shape":"MetricName"},
+        "Dimensions":{"shape":"Dimensions"}
+      }
+    },
+    "DescribeAnomalyDetectorsOutput":{
+      "type":"structure",
+      "members":{
+        "AnomalyDetectors":{"shape":"AnomalyDetectors"},
         "NextToken":{"shape":"NextToken"}
       }
     },
@@ -797,6 +915,17 @@
       "synthetic":true
     },
     "LastModified":{"type":"timestamp"},
+    "LimitExceededException":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"LimitExceededException",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
     "LimitExceededFault":{
       "type":"structure",
       "members":{
@@ -861,6 +990,10 @@
       "max":100,
       "min":1
     },
+    "MaxReturnedResultsCount":{
+      "type":"integer",
+      "min":1
+    },
     "Message":{"type":"string"},
     "MessageData":{
       "type":"structure",
@@ -912,7 +1045,8 @@
         "ComparisonOperator":{"shape":"ComparisonOperator"},
         "TreatMissingData":{"shape":"TreatMissingData"},
         "EvaluateLowSampleCountPercentile":{"shape":"EvaluateLowSampleCountPercentile"},
-        "Metrics":{"shape":"MetricDataQueries"}
+        "Metrics":{"shape":"MetricDataQueries"},
+        "ThresholdMetricId":{"shape":"MetricId"}
       },
       "xmlOrder":[
         "AlarmName",
@@ -940,7 +1074,8 @@
         "TreatMissingData",
         "EvaluateLowSampleCountPercentile",
         "DatapointsToAlarm",
-        "Metrics"
+        "Metrics",
+        "ThresholdMetricId"
       ]
     },
     "MetricAlarms":{
@@ -1061,6 +1196,26 @@
       "type":"integer",
       "min":1
     },
+    "PutAnomalyDetectorInput":{
+      "type":"structure",
+      "required":[
+        "Namespace",
+        "MetricName",
+        "Stat"
+      ],
+      "members":{
+        "Namespace":{"shape":"Namespace"},
+        "MetricName":{"shape":"MetricName"},
+        "Dimensions":{"shape":"Dimensions"},
+        "Stat":{"shape":"Stat"},
+        "Configuration":{"shape":"AnomalyDetectorConfiguration"}
+      }
+    },
+    "PutAnomalyDetectorOutput":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "PutDashboardInput":{
       "type":"structure",
       "required":[
@@ -1083,7 +1238,6 @@
       "required":[
         "AlarmName",
         "EvaluationPeriods",
-        "Threshold",
         "ComparisonOperator"
       ],
       "members":{
@@ -1107,7 +1261,8 @@
         "TreatMissingData":{"shape":"TreatMissingData"},
         "EvaluateLowSampleCountPercentile":{"shape":"EvaluateLowSampleCountPercentile"},
         "Metrics":{"shape":"MetricDataQueries"},
-        "Tags":{"shape":"TagList"}
+        "Tags":{"shape":"TagList"},
+        "ThresholdMetricId":{"shape":"MetricId"}
       }
     },
     "PutMetricDataInput":{
@@ -1120,6 +1275,21 @@
         "Namespace":{"shape":"Namespace"},
         "MetricData":{"shape":"MetricData"}
       }
+    },
+    "Range":{
+      "type":"structure",
+      "required":[
+        "StartTime",
+        "EndTime"
+      ],
+      "members":{
+        "StartTime":{"shape":"Timestamp"},
+        "EndTime":{"shape":"Timestamp"}
+      },
+      "xmlOrder":[
+        "StartTime",
+        "EndTime"
+      ]
     },
     "ResourceId":{"type":"string"},
     "ResourceList":{

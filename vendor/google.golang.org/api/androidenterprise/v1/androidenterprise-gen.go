@@ -759,6 +759,39 @@ func (s *AppRestrictionsSchemaRestrictionRestrictionValue) MarshalJSON() ([]byte
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// AppState: List of states set by the app.
+type AppState struct {
+	// KeyedAppState: List of keyed app states. This field will always be
+	// present.
+	KeyedAppState []*KeyedAppState `json:"keyedAppState,omitempty"`
+
+	// PackageName: The package name of the app. This field will always be
+	// present.
+	PackageName string `json:"packageName,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "KeyedAppState") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "KeyedAppState") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *AppState) MarshalJSON() ([]byte, error) {
+	type NoMethod AppState
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // AppUpdateEvent: An event generated when a new version of an app is
 // uploaded to Google Play. Notifications are sent for new public
 // versions only: alpha, beta, or canary versions do not generate this
@@ -1060,6 +1093,9 @@ type Device struct {
 	// Policy: The policy enforced on the device.
 	Policy *Policy `json:"policy,omitempty"`
 
+	// Report: The device report updated with the latest app states.
+	Report *DeviceReport `json:"report,omitempty"`
+
 	// ServerResponse contains the HTTP response code and headers from the
 	// server.
 	googleapi.ServerResponse `json:"-"`
@@ -1083,6 +1119,78 @@ type Device struct {
 
 func (s *Device) MarshalJSON() ([]byte, error) {
 	type NoMethod Device
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// DeviceReport: Device report updated with the latest app states for
+// managed apps on the device.
+type DeviceReport struct {
+	// AppState: List of app states set by managed apps on the device. App
+	// states are defined by the app's developers. This field will always be
+	// present.
+	AppState []*AppState `json:"appState,omitempty"`
+
+	// LastUpdatedTimestampMillis: The timestamp of the last report update
+	// in milliseconds since epoch. This field will always be present.
+	LastUpdatedTimestampMillis int64 `json:"lastUpdatedTimestampMillis,omitempty,string"`
+
+	// ForceSendFields is a list of field names (e.g. "AppState") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "AppState") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *DeviceReport) MarshalJSON() ([]byte, error) {
+	type NoMethod DeviceReport
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// DeviceReportUpdateEvent: An event generated when an updated device
+// report is available.
+type DeviceReportUpdateEvent struct {
+	// DeviceId: The Android ID of the device. This field will always be
+	// present.
+	DeviceId string `json:"deviceId,omitempty"`
+
+	// Report: The device report updated with the latest app states. This
+	// field will always be present.
+	Report *DeviceReport `json:"report,omitempty"`
+
+	// UserId: The ID of the user. This field will always be present.
+	UserId string `json:"userId,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "DeviceId") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "DeviceId") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *DeviceReportUpdateEvent) MarshalJSON() ([]byte, error) {
+	type NoMethod DeviceReportUpdateEvent
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -1763,6 +1871,56 @@ func (s *InstallsListResponse) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// KeyedAppState: Represents a keyed app state containing a key,
+// timestamp, severity level, optional description, and optional data.
+type KeyedAppState struct {
+	// Data: Additional field intended for machine-readable data. For
+	// example, a number or JSON object. To prevent XSS, we recommend
+	// removing any HTML from the data before displaying it.
+	Data string `json:"data,omitempty"`
+
+	// Key: Key indicating what the app is providing a state for. The
+	// content of the key is set by the app's developer. To prevent XSS, we
+	// recommend removing any HTML from the key before displaying it. This
+	// field will always be present.
+	Key string `json:"key,omitempty"`
+
+	// Message: Free-form, human-readable message describing the app state.
+	// For example, an error message. To prevent XSS, we recommend removing
+	// any HTML from the message before displaying it.
+	Message string `json:"message,omitempty"`
+
+	// Severity: Severity of the app state. This field will always be
+	// present.
+	Severity string `json:"severity,omitempty"`
+
+	// StateTimestampMillis: Timestamp of when the app set the state in
+	// milliseconds since epoch. This field will always be present.
+	StateTimestampMillis int64 `json:"stateTimestampMillis,omitempty,string"`
+
+	// ForceSendFields is a list of field names (e.g. "Data") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Data") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *KeyedAppState) MarshalJSON() ([]byte, error) {
+	type NoMethod KeyedAppState
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // LocalizedText: A localized string with its locale.
 type LocalizedText struct {
 	// Locale: The BCP47 tag for a locale. (e.g. "en-US", "de").
@@ -2223,6 +2381,9 @@ type Notification struct {
 	// AppUpdateEvent: Notifications about app updates.
 	AppUpdateEvent *AppUpdateEvent `json:"appUpdateEvent,omitempty"`
 
+	// DeviceReportUpdateEvent: Notifications about device report updates.
+	DeviceReportUpdateEvent *DeviceReportUpdateEvent `json:"deviceReportUpdateEvent,omitempty"`
+
 	// EnterpriseId: The ID of the enterprise for which the notification is
 	// sent. This will always be present.
 	EnterpriseId string `json:"enterpriseId,omitempty"`
@@ -2409,6 +2570,10 @@ type Policy struct {
 	// auto updates. "wifiOnly" enables auto updates only when the device is
 	// connected to wifi.
 	AutoUpdatePolicy string `json:"autoUpdatePolicy,omitempty"`
+
+	// DeviceReportPolicy: Whether the device reports app states to the EMM.
+	// The default value is "deviceReportDisabled".
+	DeviceReportPolicy string `json:"deviceReportPolicy,omitempty"`
 
 	// MaintenanceWindow: The maintenance window defining when apps running
 	// in the foreground should be updated.
@@ -3829,6 +3994,127 @@ func (s *WebAppsListResponse) MarshalJSON() ([]byte, error) {
 	type NoMethod WebAppsListResponse
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// method id "androidenterprise.devices.forceReportUpload":
+
+type DevicesForceReportUploadCall struct {
+	s            *Service
+	enterpriseId string
+	userId       string
+	deviceId     string
+	urlParams_   gensupport.URLParams
+	ctx_         context.Context
+	header_      http.Header
+}
+
+// ForceReportUpload: Uploads a report containing any changes in app
+// states on the device since the last report was generated. You can
+// call this method up to 3 times every 24 hours for a given device.
+func (r *DevicesService) ForceReportUpload(enterpriseId string, userId string, deviceId string) *DevicesForceReportUploadCall {
+	c := &DevicesForceReportUploadCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.enterpriseId = enterpriseId
+	c.userId = userId
+	c.deviceId = deviceId
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *DevicesForceReportUploadCall) Fields(s ...googleapi.Field) *DevicesForceReportUploadCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *DevicesForceReportUploadCall) Context(ctx context.Context) *DevicesForceReportUploadCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *DevicesForceReportUploadCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *DevicesForceReportUploadCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "enterprises/{enterpriseId}/users/{userId}/devices/{deviceId}/forceReportUpload")
+	urls += "?" + c.urlParams_.Encode()
+	req, err := http.NewRequest("POST", urls, body)
+	if err != nil {
+		return nil, err
+	}
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"enterpriseId": c.enterpriseId,
+		"userId":       c.userId,
+		"deviceId":     c.deviceId,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "androidenterprise.devices.forceReportUpload" call.
+func (c *DevicesForceReportUploadCall) Do(opts ...googleapi.CallOption) error {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if err != nil {
+		return err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return err
+	}
+	return nil
+	// {
+	//   "description": "Uploads a report containing any changes in app states on the device since the last report was generated. You can call this method up to 3 times every 24 hours for a given device.",
+	//   "httpMethod": "POST",
+	//   "id": "androidenterprise.devices.forceReportUpload",
+	//   "parameterOrder": [
+	//     "enterpriseId",
+	//     "userId",
+	//     "deviceId"
+	//   ],
+	//   "parameters": {
+	//     "deviceId": {
+	//       "description": "The ID of the device.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "enterpriseId": {
+	//       "description": "The ID of the enterprise.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "userId": {
+	//       "description": "The ID of the user.",
+	//       "location": "path",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "enterprises/{enterpriseId}/users/{userId}/devices/{deviceId}/forceReportUpload",
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/androidenterprise"
+	//   ]
+	// }
+
 }
 
 // method id "androidenterprise.devices.get":

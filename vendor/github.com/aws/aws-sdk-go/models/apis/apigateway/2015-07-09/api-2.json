@@ -2202,7 +2202,8 @@
         "regionalCertificateName":{"shape":"String"},
         "regionalCertificateArn":{"shape":"String"},
         "endpointConfiguration":{"shape":"EndpointConfiguration"},
-        "tags":{"shape":"MapOfStringToString"}
+        "tags":{"shape":"MapOfStringToString"},
+        "securityPolicy":{"shape":"SecurityPolicy"}
       }
     },
     "CreateModelRequest":{
@@ -2845,8 +2846,19 @@
         "distributionDomainName":{"shape":"String"},
         "distributionHostedZoneId":{"shape":"String"},
         "endpointConfiguration":{"shape":"EndpointConfiguration"},
+        "domainNameStatus":{"shape":"DomainNameStatus"},
+        "domainNameStatusMessage":{"shape":"String"},
+        "securityPolicy":{"shape":"SecurityPolicy"},
         "tags":{"shape":"MapOfStringToString"}
       }
+    },
+    "DomainNameStatus":{
+      "type":"string",
+      "enum":[
+        "AVAILABLE",
+        "UPDATING",
+        "PENDING"
+      ]
     },
     "DomainNames":{
       "type":"structure",
@@ -4642,6 +4654,13 @@
           "locationName":"item"
         }
       }
+    },
+    "SecurityPolicy":{
+      "type":"string",
+      "enum":[
+        "TLS_1_0",
+        "TLS_1_2"
+      ]
     },
     "ServiceUnavailableException":{
       "type":"structure",

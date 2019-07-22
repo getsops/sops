@@ -456,3 +456,78 @@ func (client SubscriptionsClient) TransferResponder(resp *http.Response) (result
 	result.Response = autorest.Response{Response: resp}
 	return
 }
+
+// ValidateTransfer validates the transfer of billing subscriptions across invoice sections.
+// Parameters:
+// billingAccountName - billing Account Id.
+// invoiceSectionName - invoiceSection Id.
+// billingSubscriptionName - billing Subscription Id.
+// parameters - parameters supplied to the Transfer Billing Subscription operation.
+func (client SubscriptionsClient) ValidateTransfer(ctx context.Context, billingAccountName string, invoiceSectionName string, billingSubscriptionName string, parameters TransferBillingSubscriptionRequestProperties) (result ValidateSubscriptionTransferEligibilityResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/SubscriptionsClient.ValidateTransfer")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	req, err := client.ValidateTransferPreparer(ctx, billingAccountName, invoiceSectionName, billingSubscriptionName, parameters)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "billing.SubscriptionsClient", "ValidateTransfer", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.ValidateTransferSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "billing.SubscriptionsClient", "ValidateTransfer", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.ValidateTransferResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "billing.SubscriptionsClient", "ValidateTransfer", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// ValidateTransferPreparer prepares the ValidateTransfer request.
+func (client SubscriptionsClient) ValidateTransferPreparer(ctx context.Context, billingAccountName string, invoiceSectionName string, billingSubscriptionName string, parameters TransferBillingSubscriptionRequestProperties) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"billingAccountName":      autorest.Encode("path", billingAccountName),
+		"billingSubscriptionName": autorest.Encode("path", billingSubscriptionName),
+		"invoiceSectionName":      autorest.Encode("path", invoiceSectionName),
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPost(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/providers/Microsoft.Billing/billingAccounts/{billingAccountName}/invoiceSections/{invoiceSectionName}/billingSubscriptions/{billingSubscriptionName}/validateTransferEligibility", pathParameters),
+		autorest.WithJSON(parameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// ValidateTransferSender sends the ValidateTransfer request. The method will close the
+// http.Response Body if it receives an error.
+func (client SubscriptionsClient) ValidateTransferSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+}
+
+// ValidateTransferResponder handles the response to the ValidateTransfer request. The method always
+// closes the http.Response Body.
+func (client SubscriptionsClient) ValidateTransferResponder(resp *http.Response) (result ValidateSubscriptionTransferEligibilityResult, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}

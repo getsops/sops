@@ -22,7 +22,7 @@ package insights
 import (
 	"context"
 
-	original "github.com/Azure/azure-sdk-for-go/services/preview/monitor/mgmt/2019-03-01/insights"
+	original "github.com/Azure/azure-sdk-for-go/services/preview/monitor/mgmt/2019-06-01/insights"
 )
 
 const (
@@ -281,12 +281,16 @@ const (
 type Unit = original.Unit
 
 const (
+	UnitBitsPerSecond  Unit = original.UnitBitsPerSecond
 	UnitBytes          Unit = original.UnitBytes
 	UnitByteSeconds    Unit = original.UnitByteSeconds
 	UnitBytesPerSecond Unit = original.UnitBytesPerSecond
+	UnitCores          Unit = original.UnitCores
 	UnitCount          Unit = original.UnitCount
 	UnitCountPerSecond Unit = original.UnitCountPerSecond
+	UnitMilliCores     Unit = original.UnitMilliCores
 	UnitMilliSeconds   Unit = original.UnitMilliSeconds
+	UnitNanoCores      Unit = original.UnitNanoCores
 	UnitPercent        Unit = original.UnitPercent
 	UnitSeconds        Unit = original.UnitSeconds
 	UnitUnspecified    Unit = original.UnitUnspecified

@@ -8144,6 +8144,12 @@ func (c *Redshift) RestoreFromClusterSnapshotRequest(input *RestoreFromClusterSn
 //   * ErrCodeSnapshotScheduleNotFoundFault "SnapshotScheduleNotFound"
 //   We could not find the specified snapshot schedule.
 //
+//   * ErrCodeTagLimitExceededFault "TagLimitExceededFault"
+//   You have exceeded the number of tags allowed.
+//
+//   * ErrCodeInvalidTagFault "InvalidTagFault"
+//   The tag is invalid.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/redshift-2012-12-01/RestoreFromClusterSnapshot
 func (c *Redshift) RestoreFromClusterSnapshot(input *RestoreFromClusterSnapshotInput) (*RestoreFromClusterSnapshotOutput, error) {
 	req, out := c.RestoreFromClusterSnapshotRequest(input)
@@ -9346,6 +9352,22 @@ type Cluster struct {
 	// The name of the Availability Zone in which the cluster is located.
 	AvailabilityZone *string `type:"string"`
 
+	// The availability status of the cluster for queries. Possible values are the
+	// following:
+	//
+	//    * Available - The cluster is available for queries.
+	//
+	//    * Unavailable - The cluster is not available for queries.
+	//
+	//    * Maintenance - The cluster is intermittently available for queries due
+	//    to maintenance activities.
+	//
+	//    * Modifying - The cluster is intermittently available for queries due
+	//    to changes that modify the cluster.
+	//
+	//    * Failed - The cluster failed and is not available for queries.
+	ClusterAvailabilityStatus *string `type:"string"`
+
 	// The date and time that the cluster was created.
 	ClusterCreateTime *time.Time `type:"timestamp"`
 
@@ -9571,6 +9593,12 @@ func (s *Cluster) SetAutomatedSnapshotRetentionPeriod(v int64) *Cluster {
 // SetAvailabilityZone sets the AvailabilityZone field's value.
 func (s *Cluster) SetAvailabilityZone(v string) *Cluster {
 	s.AvailabilityZone = &v
+	return s
+}
+
+// SetClusterAvailabilityStatus sets the ClusterAvailabilityStatus field's value.
+func (s *Cluster) SetClusterAvailabilityStatus(v string) *Cluster {
+	s.ClusterAvailabilityStatus = &v
 	return s
 }
 

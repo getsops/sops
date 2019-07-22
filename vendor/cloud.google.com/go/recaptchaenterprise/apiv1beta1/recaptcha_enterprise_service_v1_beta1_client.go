@@ -19,6 +19,7 @@ package recaptchaenterprise
 import (
 	"context"
 	"fmt"
+	"net/url"
 
 	gax "github.com/googleapis/gax-go/v2"
 	"google.golang.org/api/option"
@@ -106,7 +107,7 @@ func (c *RecaptchaEnterpriseServiceV1Beta1Client) setGoogleClientInfo(keyval ...
 
 // CreateAssessment creates an Assessment of the likelihood an event is legitimate.
 func (c *RecaptchaEnterpriseServiceV1Beta1Client) CreateAssessment(ctx context.Context, req *recaptchaenterprisepb.CreateAssessmentRequest, opts ...gax.CallOption) (*recaptchaenterprisepb.Assessment, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.CreateAssessment[0:len(c.CallOptions.CreateAssessment):len(c.CallOptions.CreateAssessment)], opts...)
 	var resp *recaptchaenterprisepb.Assessment
@@ -124,7 +125,7 @@ func (c *RecaptchaEnterpriseServiceV1Beta1Client) CreateAssessment(ctx context.C
 // AnnotateAssessment annotates a previously created Assessment to provide additional information
 // on whether the event turned out to be authentic or fradulent.
 func (c *RecaptchaEnterpriseServiceV1Beta1Client) AnnotateAssessment(ctx context.Context, req *recaptchaenterprisepb.AnnotateAssessmentRequest, opts ...gax.CallOption) (*recaptchaenterprisepb.AnnotateAssessmentResponse, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.AnnotateAssessment[0:len(c.CallOptions.AnnotateAssessment):len(c.CallOptions.AnnotateAssessment)], opts...)
 	var resp *recaptchaenterprisepb.AnnotateAssessmentResponse

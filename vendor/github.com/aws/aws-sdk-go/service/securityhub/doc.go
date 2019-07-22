@@ -3,14 +3,24 @@
 // Package securityhub provides the client and types for making API
 // requests to AWS SecurityHub.
 //
-// AWS Security Hub provides you with a comprehensive view of your security
-// state in AWS and your compliance with the security industry standards and
-// best practices. Security Hub collects security data from across AWS accounts,
-// services, and supported third-party partners and helps you analyze your security
-// trends and identify the highest priority security issues. For more information,
-// see AWS Security Hub User Guide (https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html).
+// Security Hub provides you with a comprehensive view of the security state
+// of your AWS environment and resources. It also provides you with the compliance
+// status of your environment based on CIS AWS Foundations compliance checks.
+// Security Hub collects security data from AWS accounts, services, and integrated
+// third-party products and helps you analyze security trends in your environment
+// to identify the highest priority security issues. For more information about
+// Security Hub, see the AWS Security Hub User Guide (https://docs.aws.amazon.com/securityhub/latest/userguide/what-is-securityhub.html) .
 //
-// Important: AWS Security Hub is currently in Preview release.
+// When you use operations in the Security Hub API, the requests are executed
+// only in the AWS Region that is currently active or in the specific AWS Region
+// that you specify in your request. Any configuration or settings change that
+// results from the operation is applied only to that Region. To make the same
+// change in other Regions, execute the same command for each Region to apply
+// the change to. For example, if your Region is set to us-west-2, when you
+// use CreateMembers to add a member account to Security Hub, the association
+// of the member account with the master account is created only in the us-west-2
+// Region. Security Hub must be enabled for the member account in the same Region
+// that the invite was sent from.
 //
 // See https://docs.aws.amazon.com/goto/WebAPI/securityhub-2018-10-26 for more information on this service.
 //

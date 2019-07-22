@@ -38,63 +38,43 @@ type Company struct {
 	// Tenant id is optional and the default tenant is used if unspecified, for
 	// example, "projects/api-test-project/companies/bar".
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// Required.
-	//
-	// The display name of the company, for example, "Google, LLC".
+	// Required. The display name of the company, for example, "Google, LLC".
 	DisplayName string `protobuf:"bytes,2,opt,name=display_name,json=displayName,proto3" json:"display_name,omitempty"`
-	// Required.
-	//
-	// Client side company identifier, used to uniquely identify the
+	// Required. Client side company identifier, used to uniquely identify the
 	// company.
 	//
 	// The maximum number of allowed characters is 255.
 	ExternalId string `protobuf:"bytes,3,opt,name=external_id,json=externalId,proto3" json:"external_id,omitempty"`
-	// Optional.
-	//
-	// The employer's company size.
+	// Optional. The employer's company size.
 	Size CompanySize `protobuf:"varint,4,opt,name=size,proto3,enum=google.cloud.talent.v4beta1.CompanySize" json:"size,omitempty"`
-	// Optional.
-	//
-	// The street address of the company's main headquarters, which may be
-	// different from the job location. The service attempts
-	// to geolocate the provided address, and populates a more specific
-	// location wherever possible in
+	// Optional. The street address of the company's main headquarters, which may
+	// be different from the job location. The service attempts to geolocate the
+	// provided address, and populates a more specific location wherever possible
+	// in
 	// [DerivedInfo.headquarters_location][google.cloud.talent.v4beta1.Company.DerivedInfo.headquarters_location].
 	HeadquartersAddress string `protobuf:"bytes,5,opt,name=headquarters_address,json=headquartersAddress,proto3" json:"headquarters_address,omitempty"`
-	// Optional.
-	//
-	// Set to true if it is the hiring agency that post jobs for other
+	// Optional. Set to true if it is the hiring agency that post jobs for other
 	// employers.
 	//
 	// Defaults to false if not provided.
 	HiringAgency bool `protobuf:"varint,6,opt,name=hiring_agency,json=hiringAgency,proto3" json:"hiring_agency,omitempty"`
-	// Optional.
-	//
-	// Equal Employment Opportunity legal disclaimer text to be
+	// Optional. Equal Employment Opportunity legal disclaimer text to be
 	// associated with all jobs, and typically to be displayed in all
 	// roles.
 	//
 	// The maximum number of allowed characters is 500.
 	EeoText string `protobuf:"bytes,7,opt,name=eeo_text,json=eeoText,proto3" json:"eeo_text,omitempty"`
-	// Optional.
-	//
-	// The URI representing the company's primary web site or home page,
+	// Optional. The URI representing the company's primary web site or home page,
 	// for example, "https://www.google.com".
 	//
 	// The maximum number of allowed characters is 255.
 	WebsiteUri string `protobuf:"bytes,8,opt,name=website_uri,json=websiteUri,proto3" json:"website_uri,omitempty"`
-	// Optional.
-	//
-	// The URI to employer's career site or careers page on the employer's web
-	// site, for example, "https://careers.google.com".
+	// Optional. The URI to employer's career site or careers page on the
+	// employer's web site, for example, "https://careers.google.com".
 	CareerSiteUri string `protobuf:"bytes,9,opt,name=career_site_uri,json=careerSiteUri,proto3" json:"career_site_uri,omitempty"`
-	// Optional.
-	//
-	// A URI that hosts the employer's company logo.
+	// Optional. A URI that hosts the employer's company logo.
 	ImageUri string `protobuf:"bytes,10,opt,name=image_uri,json=imageUri,proto3" json:"image_uri,omitempty"`
-	// Optional.
-	//
-	// A list of keys of filterable
+	// Optional. A list of keys of filterable
 	// [Job.custom_attributes][google.cloud.talent.v4beta1.Job.custom_attributes],
 	// whose corresponding `string_values` are used in keyword searches. Jobs with
 	// `string_values` under these specified field keys are returned if any

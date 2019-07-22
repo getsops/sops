@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"net/url"
 	"time"
 
 	"cloud.google.com/go/longrunning"
@@ -176,7 +177,7 @@ func (c *Client) setGoogleClientInfo(keyval ...string) {
 
 // CreateSource creates a source.
 func (c *Client) CreateSource(ctx context.Context, req *securitycenterpb.CreateSourceRequest, opts ...gax.CallOption) (*securitycenterpb.Source, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.CreateSource[0:len(c.CallOptions.CreateSource):len(c.CallOptions.CreateSource)], opts...)
 	var resp *securitycenterpb.Source
@@ -194,7 +195,7 @@ func (c *Client) CreateSource(ctx context.Context, req *securitycenterpb.CreateS
 // CreateFinding creates a finding. The corresponding source must exist for finding creation
 // to succeed.
 func (c *Client) CreateFinding(ctx context.Context, req *securitycenterpb.CreateFindingRequest, opts ...gax.CallOption) (*securitycenterpb.Finding, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.CreateFinding[0:len(c.CallOptions.CreateFinding):len(c.CallOptions.CreateFinding)], opts...)
 	var resp *securitycenterpb.Finding
@@ -211,7 +212,7 @@ func (c *Client) CreateFinding(ctx context.Context, req *securitycenterpb.Create
 
 // GetIamPolicy gets the access control policy on the specified Source.
 func (c *Client) GetIamPolicy(ctx context.Context, req *iampb.GetIamPolicyRequest, opts ...gax.CallOption) (*iampb.Policy, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "resource", req.GetResource()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "resource", url.QueryEscape(req.GetResource())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.GetIamPolicy[0:len(c.CallOptions.GetIamPolicy):len(c.CallOptions.GetIamPolicy)], opts...)
 	var resp *iampb.Policy
@@ -228,7 +229,7 @@ func (c *Client) GetIamPolicy(ctx context.Context, req *iampb.GetIamPolicyReques
 
 // GetOrganizationSettings gets the settings for an organization.
 func (c *Client) GetOrganizationSettings(ctx context.Context, req *securitycenterpb.GetOrganizationSettingsRequest, opts ...gax.CallOption) (*securitycenterpb.OrganizationSettings, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.GetOrganizationSettings[0:len(c.CallOptions.GetOrganizationSettings):len(c.CallOptions.GetOrganizationSettings)], opts...)
 	var resp *securitycenterpb.OrganizationSettings
@@ -245,7 +246,7 @@ func (c *Client) GetOrganizationSettings(ctx context.Context, req *securitycente
 
 // GetSource gets a source.
 func (c *Client) GetSource(ctx context.Context, req *securitycenterpb.GetSourceRequest, opts ...gax.CallOption) (*securitycenterpb.Source, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.GetSource[0:len(c.CallOptions.GetSource):len(c.CallOptions.GetSource)], opts...)
 	var resp *securitycenterpb.Source
@@ -263,7 +264,7 @@ func (c *Client) GetSource(ctx context.Context, req *securitycenterpb.GetSourceR
 // GroupAssets filters an organization's assets and  groups them by their specified
 // properties.
 func (c *Client) GroupAssets(ctx context.Context, req *securitycenterpb.GroupAssetsRequest, opts ...gax.CallOption) *GroupResultIterator {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.GroupAssets[0:len(c.CallOptions.GroupAssets):len(c.CallOptions.GroupAssets)], opts...)
 	it := &GroupResultIterator{}
@@ -306,7 +307,7 @@ func (c *Client) GroupAssets(ctx context.Context, req *securitycenterpb.GroupAss
 // To group across all sources provide a - as the source id.
 // Example: /v1beta1/organizations/123/sources/-/findings
 func (c *Client) GroupFindings(ctx context.Context, req *securitycenterpb.GroupFindingsRequest, opts ...gax.CallOption) *GroupResultIterator {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.GroupFindings[0:len(c.CallOptions.GroupFindings):len(c.CallOptions.GroupFindings)], opts...)
 	it := &GroupResultIterator{}
@@ -345,7 +346,7 @@ func (c *Client) GroupFindings(ctx context.Context, req *securitycenterpb.GroupF
 
 // ListAssets lists an organization's assets.
 func (c *Client) ListAssets(ctx context.Context, req *securitycenterpb.ListAssetsRequest, opts ...gax.CallOption) *ListAssetsResponse_ListAssetsResultIterator {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ListAssets[0:len(c.CallOptions.ListAssets):len(c.CallOptions.ListAssets)], opts...)
 	it := &ListAssetsResponse_ListAssetsResultIterator{}
@@ -387,7 +388,7 @@ func (c *Client) ListAssets(ctx context.Context, req *securitycenterpb.ListAsset
 // To list across all sources provide a - as the source id.
 // Example: /v1beta1/organizations/123/sources/-/findings
 func (c *Client) ListFindings(ctx context.Context, req *securitycenterpb.ListFindingsRequest, opts ...gax.CallOption) *FindingIterator {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ListFindings[0:len(c.CallOptions.ListFindings):len(c.CallOptions.ListFindings)], opts...)
 	it := &FindingIterator{}
@@ -426,7 +427,7 @@ func (c *Client) ListFindings(ctx context.Context, req *securitycenterpb.ListFin
 
 // ListSources lists all sources belonging to an organization.
 func (c *Client) ListSources(ctx context.Context, req *securitycenterpb.ListSourcesRequest, opts ...gax.CallOption) *SourceIterator {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ListSources[0:len(c.CallOptions.ListSources):len(c.CallOptions.ListSources)], opts...)
 	it := &SourceIterator{}
@@ -470,7 +471,7 @@ func (c *Client) ListSources(ctx context.Context, req *securitycenterpb.ListSour
 // it is called too frequently the caller will receive a TOO_MANY_REQUESTS
 // error.
 func (c *Client) RunAssetDiscovery(ctx context.Context, req *securitycenterpb.RunAssetDiscoveryRequest, opts ...gax.CallOption) (*RunAssetDiscoveryOperation, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.RunAssetDiscovery[0:len(c.CallOptions.RunAssetDiscovery):len(c.CallOptions.RunAssetDiscovery)], opts...)
 	var resp *longrunningpb.Operation
@@ -489,7 +490,7 @@ func (c *Client) RunAssetDiscovery(ctx context.Context, req *securitycenterpb.Ru
 
 // SetFindingState updates the state of a finding.
 func (c *Client) SetFindingState(ctx context.Context, req *securitycenterpb.SetFindingStateRequest, opts ...gax.CallOption) (*securitycenterpb.Finding, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.SetFindingState[0:len(c.CallOptions.SetFindingState):len(c.CallOptions.SetFindingState)], opts...)
 	var resp *securitycenterpb.Finding
@@ -506,7 +507,7 @@ func (c *Client) SetFindingState(ctx context.Context, req *securitycenterpb.SetF
 
 // SetIamPolicy sets the access control policy on the specified Source.
 func (c *Client) SetIamPolicy(ctx context.Context, req *iampb.SetIamPolicyRequest, opts ...gax.CallOption) (*iampb.Policy, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "resource", req.GetResource()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "resource", url.QueryEscape(req.GetResource())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.SetIamPolicy[0:len(c.CallOptions.SetIamPolicy):len(c.CallOptions.SetIamPolicy)], opts...)
 	var resp *iampb.Policy
@@ -523,7 +524,7 @@ func (c *Client) SetIamPolicy(ctx context.Context, req *iampb.SetIamPolicyReques
 
 // TestIamPermissions returns the permissions that a caller has on the specified source.
 func (c *Client) TestIamPermissions(ctx context.Context, req *iampb.TestIamPermissionsRequest, opts ...gax.CallOption) (*iampb.TestIamPermissionsResponse, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "resource", req.GetResource()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "resource", url.QueryEscape(req.GetResource())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.TestIamPermissions[0:len(c.CallOptions.TestIamPermissions):len(c.CallOptions.TestIamPermissions)], opts...)
 	var resp *iampb.TestIamPermissionsResponse
@@ -541,7 +542,7 @@ func (c *Client) TestIamPermissions(ctx context.Context, req *iampb.TestIamPermi
 // UpdateFinding creates or updates a finding. The corresponding source must exist for a
 // finding creation to succeed.
 func (c *Client) UpdateFinding(ctx context.Context, req *securitycenterpb.UpdateFindingRequest, opts ...gax.CallOption) (*securitycenterpb.Finding, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "finding.name", req.GetFinding().GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "finding.name", url.QueryEscape(req.GetFinding().GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.UpdateFinding[0:len(c.CallOptions.UpdateFinding):len(c.CallOptions.UpdateFinding)], opts...)
 	var resp *securitycenterpb.Finding
@@ -558,7 +559,7 @@ func (c *Client) UpdateFinding(ctx context.Context, req *securitycenterpb.Update
 
 // UpdateOrganizationSettings updates an organization's settings.
 func (c *Client) UpdateOrganizationSettings(ctx context.Context, req *securitycenterpb.UpdateOrganizationSettingsRequest, opts ...gax.CallOption) (*securitycenterpb.OrganizationSettings, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "organization_settings.name", req.GetOrganizationSettings().GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "organization_settings.name", url.QueryEscape(req.GetOrganizationSettings().GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.UpdateOrganizationSettings[0:len(c.CallOptions.UpdateOrganizationSettings):len(c.CallOptions.UpdateOrganizationSettings)], opts...)
 	var resp *securitycenterpb.OrganizationSettings
@@ -575,7 +576,7 @@ func (c *Client) UpdateOrganizationSettings(ctx context.Context, req *securityce
 
 // UpdateSource updates a source.
 func (c *Client) UpdateSource(ctx context.Context, req *securitycenterpb.UpdateSourceRequest, opts ...gax.CallOption) (*securitycenterpb.Source, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "source.name", req.GetSource().GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "source.name", url.QueryEscape(req.GetSource().GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.UpdateSource[0:len(c.CallOptions.UpdateSource):len(c.CallOptions.UpdateSource)], opts...)
 	var resp *securitycenterpb.Source
@@ -592,7 +593,7 @@ func (c *Client) UpdateSource(ctx context.Context, req *securitycenterpb.UpdateS
 
 // UpdateSecurityMarks updates security marks.
 func (c *Client) UpdateSecurityMarks(ctx context.Context, req *securitycenterpb.UpdateSecurityMarksRequest, opts ...gax.CallOption) (*securitycenterpb.SecurityMarks, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "security_marks.name", req.GetSecurityMarks().GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "security_marks.name", url.QueryEscape(req.GetSecurityMarks().GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.UpdateSecurityMarks[0:len(c.CallOptions.UpdateSecurityMarks):len(c.CallOptions.UpdateSecurityMarks)], opts...)
 	var resp *securitycenterpb.SecurityMarks

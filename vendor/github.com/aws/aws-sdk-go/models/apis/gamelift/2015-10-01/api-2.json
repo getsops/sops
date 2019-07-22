@@ -1197,6 +1197,13 @@
       },
       "sensitive":true
     },
+    "BackfillMode":{
+      "type":"string",
+      "enum":[
+        "AUTOMATIC",
+        "MANUAL"
+      ]
+    },
     "BooleanModel":{"type":"boolean"},
     "Build":{
       "type":"structure",
@@ -1367,7 +1374,8 @@
         "AdditionalPlayerCount":{"shape":"WholeNumber"},
         "CustomEventData":{"shape":"CustomEventData"},
         "GameProperties":{"shape":"GamePropertyList"},
-        "GameSessionData":{"shape":"GameSessionData"}
+        "GameSessionData":{"shape":"GameSessionData"},
+        "BackfillMode":{"shape":"BackfillMode"}
       }
     },
     "CreateMatchmakingConfigurationOutput":{
@@ -2570,7 +2578,8 @@
         "CustomEventData":{"shape":"CustomEventData"},
         "CreationTime":{"shape":"Timestamp"},
         "GameProperties":{"shape":"GamePropertyList"},
-        "GameSessionData":{"shape":"GameSessionData"}
+        "GameSessionData":{"shape":"GameSessionData"},
+        "BackfillMode":{"shape":"BackfillMode"}
       }
     },
     "MatchmakingConfigurationList":{
@@ -2597,8 +2606,7 @@
     "MatchmakingIdStringModel":{
       "type":"string",
       "max":128,
-      "min":1,
-      "pattern":"[a-zA-Z0-9-\\.]+"
+      "pattern":"[a-zA-Z0-9-\\.]*"
     },
     "MatchmakingRequestTimeoutInteger":{
       "type":"integer",
@@ -3334,7 +3342,8 @@
         "AdditionalPlayerCount":{"shape":"WholeNumber"},
         "CustomEventData":{"shape":"CustomEventData"},
         "GameProperties":{"shape":"GamePropertyList"},
-        "GameSessionData":{"shape":"GameSessionData"}
+        "GameSessionData":{"shape":"GameSessionData"},
+        "BackfillMode":{"shape":"BackfillMode"}
       }
     },
     "UpdateMatchmakingConfigurationOutput":{

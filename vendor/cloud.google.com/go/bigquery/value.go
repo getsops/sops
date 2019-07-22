@@ -544,7 +544,7 @@ func valuesToMap(vs []Value, schema Schema) (map[string]Value, error) {
 			continue
 		}
 		// A repeated nested field is converted into a slice of maps.
-		var maps []Value
+		maps := []Value{}
 		for _, v := range vals {
 			sv, ok := v.([]Value)
 			if !ok {

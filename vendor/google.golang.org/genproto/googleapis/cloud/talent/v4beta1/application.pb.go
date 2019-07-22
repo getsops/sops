@@ -140,9 +140,7 @@ type Application struct {
 	// for example,
 	// "projects/api-test-project/tenants/foo/profiles/bar/applications/baz".
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	// Required.
-	//
-	// Client side application identifier, used to uniquely identify the
+	// Required. Client side application identifier, used to uniquely identify the
 	// application.
 	//
 	// The maximum number of allowed characters is 255.
@@ -169,49 +167,32 @@ type Application struct {
 	// "projects/{project_id}/tenants/{tenant_id}/companies/{company_id}",
 	// for example, "projects/api-test-project/tenants/foo/companies/bar".
 	Company string `protobuf:"bytes,5,opt,name=company,proto3" json:"company,omitempty"`
-	// Optional.
-	//
-	// The application date.
+	// Optional. The application date.
 	ApplicationDate *date.Date `protobuf:"bytes,7,opt,name=application_date,json=applicationDate,proto3" json:"application_date,omitempty"`
-	// Required.
-	//
-	// What is the most recent stage of the application (that is, new, screen,
-	// send cv, hired, finished work)?  This field is intentionally not
+	// Required. What is the most recent stage of the application (that is, new,
+	// screen, send cv, hired, finished work)?  This field is intentionally not
 	// comprehensive of every possible status, but instead, represents statuses
 	// that would be used to indicate to the ML models good / bad matches.
 	Stage Application_ApplicationStage `protobuf:"varint,11,opt,name=stage,proto3,enum=google.cloud.talent.v4beta1.Application_ApplicationStage" json:"stage,omitempty"`
-	// Optional.
-	//
-	// The application state.
+	// Optional. The application state.
 	State Application_ApplicationState `protobuf:"varint,13,opt,name=state,proto3,enum=google.cloud.talent.v4beta1.Application_ApplicationState" json:"state,omitempty"`
-	// Optional.
-	//
-	// All interviews (screen, onsite, and so on) conducted as part of this
-	// application (includes details such as user conducting the interview,
+	// Optional. All interviews (screen, onsite, and so on) conducted as part of
+	// this application (includes details such as user conducting the interview,
 	// timestamp, feedback, and so on).
 	Interviews []*Interview `protobuf:"bytes,16,rep,name=interviews,proto3" json:"interviews,omitempty"`
-	// Optional.
-	//
-	// If the candidate is referred by a employee.
+	// Optional. If the candidate is referred by a employee.
 	Referral *wrappers.BoolValue `protobuf:"bytes,18,opt,name=referral,proto3" json:"referral,omitempty"`
-	// Required.
-	//
-	// Reflects the time that the application was created.
+	// Required. Reflects the time that the application was created.
 	CreateTime *timestamp.Timestamp `protobuf:"bytes,19,opt,name=create_time,json=createTime,proto3" json:"create_time,omitempty"`
-	// Optional.
-	//
-	// The last update timestamp.
+	// Optional. The last update timestamp.
 	UpdateTime *timestamp.Timestamp `protobuf:"bytes,20,opt,name=update_time,json=updateTime,proto3" json:"update_time,omitempty"`
-	// Optional.
-	//
-	// Free text reason behind the recruitement outcome (for example, reason for
-	// withdraw / reject, reason for an unsuccessful finish, and so on).
+	// Optional. Free text reason behind the recruitement outcome (for example,
+	// reason for withdraw / reject, reason for an unsuccessful finish, and so
+	// on).
 	//
 	// Number of characters allowed is 100.
 	OutcomeNotes string `protobuf:"bytes,21,opt,name=outcome_notes,json=outcomeNotes,proto3" json:"outcome_notes,omitempty"`
-	// Optional.
-	//
-	// Outcome positiveness shows how positive the outcome is.
+	// Optional. Outcome positiveness shows how positive the outcome is.
 	Outcome Outcome `protobuf:"varint,22,opt,name=outcome,proto3,enum=google.cloud.talent.v4beta1.Outcome" json:"outcome,omitempty"`
 	// Output only. Indicates whether this job application is a match to
 	// application related filters. This value is only applicable in profile

@@ -42,7 +42,7 @@ var _ OrderClientAPI = (*reservations.OrderClient)(nil)
 
 // ClientAPI contains the set of methods on the Client type.
 type ClientAPI interface {
-	Get(ctx context.Context, reservationID string, reservationOrderID string) (result reservations.Response, err error)
+	Get(ctx context.Context, reservationID string, reservationOrderID string, expand string) (result reservations.Response, err error)
 	List(ctx context.Context, reservationOrderID string) (result reservations.ListPage, err error)
 	ListRevisions(ctx context.Context, reservationID string, reservationOrderID string) (result reservations.ListPage, err error)
 	Merge(ctx context.Context, reservationOrderID string, body reservations.MergeRequest) (result reservations.ReservationMergeFuture, err error)

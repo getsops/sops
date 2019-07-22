@@ -87,6 +87,10 @@ type CostExplorerAPI interface {
 	GetTags(*costexplorer.GetTagsInput) (*costexplorer.GetTagsOutput, error)
 	GetTagsWithContext(aws.Context, *costexplorer.GetTagsInput, ...request.Option) (*costexplorer.GetTagsOutput, error)
 	GetTagsRequest(*costexplorer.GetTagsInput) (*request.Request, *costexplorer.GetTagsOutput)
+
+	GetUsageForecast(*costexplorer.GetUsageForecastInput) (*costexplorer.GetUsageForecastOutput, error)
+	GetUsageForecastWithContext(aws.Context, *costexplorer.GetUsageForecastInput, ...request.Option) (*costexplorer.GetUsageForecastOutput, error)
+	GetUsageForecastRequest(*costexplorer.GetUsageForecastInput) (*request.Request, *costexplorer.GetUsageForecastOutput)
 }
 
 var _ CostExplorerAPI = (*costexplorer.CostExplorer)(nil)

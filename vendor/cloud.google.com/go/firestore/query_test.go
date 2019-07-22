@@ -565,7 +565,9 @@ func TestQueryGetAll(t *testing.T) {
 	// This implicitly tests DocumentIterator as well.
 	const dbPath = "projects/projectID/databases/(default)"
 	ctx := context.Background()
-	c, srv := newMock(t)
+	c, srv, cleanup := newMock(t)
+	defer cleanup()
+
 	docNames := []string{"C/a", "C/b"}
 	wantPBDocs := []*pb.Document{
 		{

@@ -558,3 +558,78 @@ func (client ProductsClient) UpdateAutoRenewByInvoiceSectionNameResponder(resp *
 	result.Response = autorest.Response{Response: resp}
 	return
 }
+
+// ValidateTransfer validates the transfer of products across invoice sections.
+// Parameters:
+// billingAccountName - billing Account Id.
+// invoiceSectionName - invoiceSection Id.
+// productName - invoice Id.
+// parameters - parameters supplied to the Transfer Products operation.
+func (client ProductsClient) ValidateTransfer(ctx context.Context, billingAccountName string, invoiceSectionName string, productName string, parameters TransferProductRequestProperties) (result ValidateProductTransferEligibilityResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProductsClient.ValidateTransfer")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	req, err := client.ValidateTransferPreparer(ctx, billingAccountName, invoiceSectionName, productName, parameters)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "billing.ProductsClient", "ValidateTransfer", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.ValidateTransferSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "billing.ProductsClient", "ValidateTransfer", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.ValidateTransferResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "billing.ProductsClient", "ValidateTransfer", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// ValidateTransferPreparer prepares the ValidateTransfer request.
+func (client ProductsClient) ValidateTransferPreparer(ctx context.Context, billingAccountName string, invoiceSectionName string, productName string, parameters TransferProductRequestProperties) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"billingAccountName": autorest.Encode("path", billingAccountName),
+		"invoiceSectionName": autorest.Encode("path", invoiceSectionName),
+		"productName":        autorest.Encode("path", productName),
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPost(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/providers/Microsoft.Billing/billingAccounts/{billingAccountName}/invoiceSections/{invoiceSectionName}/products/{productName}/validateTransferEligibility", pathParameters),
+		autorest.WithJSON(parameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// ValidateTransferSender sends the ValidateTransfer request. The method will close the
+// http.Response Body if it receives an error.
+func (client ProductsClient) ValidateTransferSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+}
+
+// ValidateTransferResponder handles the response to the ValidateTransfer request. The method always
+// closes the http.Response Body.
+func (client ProductsClient) ValidateTransferResponder(resp *http.Response) (result ValidateProductTransferEligibilityResult, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}

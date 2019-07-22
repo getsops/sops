@@ -233,13 +233,16 @@ func TestToLogEntryTrace(t *testing.T) {
 	// Verify that we get the trace from the HTTP request if it isn't
 	// provided by the caller.
 	u := &url.URL{Scheme: "http"}
-	for _, test := range []struct {
+
+	tests := []struct {
+		name string
 		in   Entry
 		want logging.LogEntry
 	}{
-		{Entry{}, logging.LogEntry{}},
-		{Entry{Trace: "t1"}, logging.LogEntry{Trace: "t1"}},
+		{"BlankLogEntry", Entry{}, logging.LogEntry{}},
+		{"Already set Trace", Entry{Trace: "t1"}, logging.LogEntry{Trace: "t1"}},
 		{
+			"No X-Trace-Context header",
 			Entry{
 				HTTPRequest: &HTTPRequest{
 					Request: &http.Request{URL: u, Header: http.Header{"foo": {"bar"}}},
@@ -248,17 +251,57 @@ func TestToLogEntryTrace(t *testing.T) {
 			logging.LogEntry{},
 		},
 		{
+			"X-Trace-Context header with all fields",
+			Entry{
+				TraceSampled: false,
+				HTTPRequest: &HTTPRequest{
+					Request: &http.Request{
+						URL:    u,
+						Header: http.Header{"X-Cloud-Trace-Context": {"105445aa7843bc8bf206b120001000/000000000000004a;o=1"}},
+					},
+				},
+			},
+			logging.LogEntry{Trace: "projects/P/traces/105445aa7843bc8bf206b120001000", SpanId: "000000000000004a", TraceSampled: true},
+		},
+		{
+			"X-Trace-Context header with all fields; TraceSampled explicitly set",
+			Entry{
+				TraceSampled: true,
+				HTTPRequest: &HTTPRequest{
+					Request: &http.Request{
+						URL:    u,
+						Header: http.Header{"X-Cloud-Trace-Context": {"105445aa7843bc8bf206b120001000/000000000000004a;o=0"}},
+					},
+				},
+			},
+			logging.LogEntry{Trace: "projects/P/traces/105445aa7843bc8bf206b120001000", SpanId: "000000000000004a", TraceSampled: true},
+		},
+		{
+			"X-Trace-Context header with all fields; TraceSampled from Header",
 			Entry{
 				HTTPRequest: &HTTPRequest{
 					Request: &http.Request{
 						URL:    u,
-						Header: http.Header{"X-Cloud-Trace-Context": {"t2"}},
+						Header: http.Header{"X-Cloud-Trace-Context": {"105445aa7843bc8bf206b120001000/000000000000004a;o=1"}},
 					},
 				},
 			},
-			logging.LogEntry{Trace: "projects/P/traces/t2"},
+			logging.LogEntry{Trace: "projects/P/traces/105445aa7843bc8bf206b120001000", SpanId: "000000000000004a", TraceSampled: true},
 		},
 		{
+			"X-Trace-Context header with blank span",
+			Entry{
+				HTTPRequest: &HTTPRequest{
+					Request: &http.Request{
+						URL:    u,
+						Header: http.Header{"X-Cloud-Trace-Context": {"105445aa7843bc8bf206b120001000/0;o=0"}},
+					},
+				},
+			},
+			logging.LogEntry{Trace: "projects/P/traces/105445aa7843bc8bf206b120001000"},
+		},
+		{
+			"Invalid X-Trace-Context header but already set TraceID",
 			Entry{
 				HTTPRequest: &HTTPRequest{
 					Request: &http.Request{
@@ -270,18 +313,29 @@ func TestToLogEntryTrace(t *testing.T) {
 			},
 			logging.LogEntry{Trace: "t4"},
 		},
-		{Entry{Trace: "t1", SpanID: "007"}, logging.LogEntry{Trace: "t1", SpanId: "007"}},
-	} {
-		e, err := logger.toLogEntry(test.in)
-		if err != nil {
-			t.Fatalf("%+v: %v", test.in, err)
-		}
-		if got := e.Trace; got != test.want.Trace {
-			t.Errorf("%+v: got %q, want %q", test.in, got, test.want.Trace)
-		}
-		if got := e.SpanId; got != test.want.SpanId {
-			t.Errorf("%+v: got %q, want %q", test.in, got, test.want.SpanId)
-		}
+		{
+			"Already set TraceID and SpanID",
+			Entry{Trace: "t1", SpanID: "007"},
+			logging.LogEntry{Trace: "t1", SpanId: "007"},
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			e, err := logger.toLogEntry(test.in)
+			if err != nil {
+				t.Fatalf("Unexpected error:: %+v: %v", test.in, err)
+			}
+			if got := e.Trace; got != test.want.Trace {
+				t.Errorf("TraceId: %+v: got %q, want %q", test.in, got, test.want.Trace)
+			}
+			if got := e.SpanId; got != test.want.SpanId {
+				t.Errorf("SpanId: %+v: got %q, want %q", test.in, got, test.want.SpanId)
+			}
+			if got := e.TraceSampled; got != test.want.TraceSampled {
+				t.Errorf("TraceSampled: %+v: got %t, want %t", test.in, got, test.want.TraceSampled)
+			}
+		})
 	}
 }
 

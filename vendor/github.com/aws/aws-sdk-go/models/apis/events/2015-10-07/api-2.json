@@ -12,6 +12,86 @@
     "uid":"events-2015-10-07"
   },
   "operations":{
+    "ActivateEventSource":{
+      "name":"ActivateEventSource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ActivateEventSourceRequest"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidStateException"},
+        {"shape":"InternalException"}
+      ]
+    },
+    "CreateEventBus":{
+      "name":"CreateEventBus",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateEventBusRequest"},
+      "output":{"shape":"CreateEventBusResponse"},
+      "errors":[
+        {"shape":"ResourceAlreadyExistsException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidStateException"},
+        {"shape":"InternalException"},
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"LimitExceededException"}
+      ]
+    },
+    "CreatePartnerEventSource":{
+      "name":"CreatePartnerEventSource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreatePartnerEventSourceRequest"},
+      "output":{"shape":"CreatePartnerEventSourceResponse"},
+      "errors":[
+        {"shape":"ResourceAlreadyExistsException"},
+        {"shape":"InternalException"},
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"LimitExceededException"}
+      ]
+    },
+    "DeactivateEventSource":{
+      "name":"DeactivateEventSource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeactivateEventSourceRequest"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InvalidStateException"},
+        {"shape":"InternalException"}
+      ]
+    },
+    "DeleteEventBus":{
+      "name":"DeleteEventBus",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteEventBusRequest"},
+      "errors":[
+        {"shape":"InternalException"}
+      ]
+    },
+    "DeletePartnerEventSource":{
+      "name":"DeletePartnerEventSource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeletePartnerEventSourceRequest"},
+      "errors":[
+        {"shape":"InternalException"}
+      ]
+    },
     "DeleteRule":{
       "name":"DeleteRule",
       "http":{
@@ -22,7 +102,8 @@
       "errors":[
         {"shape":"ConcurrentModificationException"},
         {"shape":"ManagedRuleException"},
-        {"shape":"InternalException"}
+        {"shape":"InternalException"},
+        {"shape":"ResourceNotFoundException"}
       ]
     },
     "DescribeEventBus":{
@@ -33,6 +114,32 @@
       },
       "input":{"shape":"DescribeEventBusRequest"},
       "output":{"shape":"DescribeEventBusResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InternalException"}
+      ]
+    },
+    "DescribeEventSource":{
+      "name":"DescribeEventSource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeEventSourceRequest"},
+      "output":{"shape":"DescribeEventSourceResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InternalException"}
+      ]
+    },
+    "DescribePartnerEventSource":{
+      "name":"DescribePartnerEventSource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribePartnerEventSourceRequest"},
+      "output":{"shape":"DescribePartnerEventSourceResponse"},
       "errors":[
         {"shape":"ResourceNotFoundException"},
         {"shape":"InternalException"}
@@ -79,6 +186,55 @@
         {"shape":"InternalException"}
       ]
     },
+    "ListEventBuses":{
+      "name":"ListEventBuses",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListEventBusesRequest"},
+      "output":{"shape":"ListEventBusesResponse"},
+      "errors":[
+        {"shape":"InternalException"}
+      ]
+    },
+    "ListEventSources":{
+      "name":"ListEventSources",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListEventSourcesRequest"},
+      "output":{"shape":"ListEventSourcesResponse"},
+      "errors":[
+        {"shape":"InternalException"}
+      ]
+    },
+    "ListPartnerEventSourceAccounts":{
+      "name":"ListPartnerEventSourceAccounts",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListPartnerEventSourceAccountsRequest"},
+      "output":{"shape":"ListPartnerEventSourceAccountsResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InternalException"}
+      ]
+    },
+    "ListPartnerEventSources":{
+      "name":"ListPartnerEventSources",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListPartnerEventSourcesRequest"},
+      "output":{"shape":"ListPartnerEventSourcesResponse"},
+      "errors":[
+        {"shape":"InternalException"}
+      ]
+    },
     "ListRuleNamesByTarget":{
       "name":"ListRuleNamesByTarget",
       "http":{
@@ -88,7 +244,8 @@
       "input":{"shape":"ListRuleNamesByTargetRequest"},
       "output":{"shape":"ListRuleNamesByTargetResponse"},
       "errors":[
-        {"shape":"InternalException"}
+        {"shape":"InternalException"},
+        {"shape":"ResourceNotFoundException"}
       ]
     },
     "ListRules":{
@@ -100,7 +257,8 @@
       "input":{"shape":"ListRulesRequest"},
       "output":{"shape":"ListRulesResponse"},
       "errors":[
-        {"shape":"InternalException"}
+        {"shape":"InternalException"},
+        {"shape":"ResourceNotFoundException"}
       ]
     },
     "ListTagsForResource":{
@@ -141,6 +299,18 @@
         {"shape":"InternalException"}
       ]
     },
+    "PutPartnerEvents":{
+      "name":"PutPartnerEvents",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"PutPartnerEventsRequest"},
+      "output":{"shape":"PutPartnerEventsResponse"},
+      "errors":[
+        {"shape":"InternalException"}
+      ]
+    },
     "PutPermission":{
       "name":"PutPermission",
       "http":{
@@ -168,7 +338,8 @@
         {"shape":"LimitExceededException"},
         {"shape":"ConcurrentModificationException"},
         {"shape":"ManagedRuleException"},
-        {"shape":"InternalException"}
+        {"shape":"InternalException"},
+        {"shape":"ResourceNotFoundException"}
       ]
     },
     "PutTargets":{
@@ -260,11 +431,24 @@
     }
   },
   "shapes":{
+    "AccountId":{
+      "type":"string",
+      "max":12,
+      "min":12,
+      "pattern":"\\d{12}"
+    },
     "Action":{
       "type":"string",
       "max":64,
       "min":1,
       "pattern":"events:[a-zA-Z]+"
+    },
+    "ActivateEventSourceRequest":{
+      "type":"structure",
+      "required":["Name"],
+      "members":{
+        "Name":{"shape":"EventSourceName"}
+      }
     },
     "Arn":{
       "type":"string",
@@ -332,17 +516,75 @@
         "Value":{"shape":"String"}
       }
     },
+    "CreateEventBusRequest":{
+      "type":"structure",
+      "required":["Name"],
+      "members":{
+        "Name":{"shape":"EventBusName"},
+        "EventSourceName":{"shape":"EventSourceName"}
+      }
+    },
+    "CreateEventBusResponse":{
+      "type":"structure",
+      "members":{
+        "EventBusArn":{"shape":"String"}
+      }
+    },
+    "CreatePartnerEventSourceRequest":{
+      "type":"structure",
+      "required":[
+        "Name",
+        "Account"
+      ],
+      "members":{
+        "Name":{"shape":"EventSourceName"},
+        "Account":{"shape":"AccountId"}
+      }
+    },
+    "CreatePartnerEventSourceResponse":{
+      "type":"structure",
+      "members":{
+        "EventSourceArn":{"shape":"String"}
+      }
+    },
+    "DeactivateEventSourceRequest":{
+      "type":"structure",
+      "required":["Name"],
+      "members":{
+        "Name":{"shape":"EventSourceName"}
+      }
+    },
+    "DeleteEventBusRequest":{
+      "type":"structure",
+      "required":["Name"],
+      "members":{
+        "Name":{"shape":"EventBusName"}
+      }
+    },
+    "DeletePartnerEventSourceRequest":{
+      "type":"structure",
+      "required":[
+        "Name",
+        "Account"
+      ],
+      "members":{
+        "Name":{"shape":"EventSourceName"},
+        "Account":{"shape":"AccountId"}
+      }
+    },
     "DeleteRuleRequest":{
       "type":"structure",
       "required":["Name"],
       "members":{
         "Name":{"shape":"RuleName"},
+        "EventBusName":{"shape":"EventBusName"},
         "Force":{"shape":"Boolean"}
       }
     },
     "DescribeEventBusRequest":{
       "type":"structure",
       "members":{
+        "Name":{"shape":"EventBusName"}
       }
     },
     "DescribeEventBusResponse":{
@@ -353,11 +595,44 @@
         "Policy":{"shape":"String"}
       }
     },
+    "DescribeEventSourceRequest":{
+      "type":"structure",
+      "required":["Name"],
+      "members":{
+        "Name":{"shape":"EventSourceName"}
+      }
+    },
+    "DescribeEventSourceResponse":{
+      "type":"structure",
+      "members":{
+        "Arn":{"shape":"String"},
+        "CreatedBy":{"shape":"String"},
+        "CreationTime":{"shape":"Timestamp"},
+        "ExpirationTime":{"shape":"Timestamp"},
+        "Name":{"shape":"String"},
+        "State":{"shape":"EventSourceState"}
+      }
+    },
+    "DescribePartnerEventSourceRequest":{
+      "type":"structure",
+      "required":["Name"],
+      "members":{
+        "Name":{"shape":"EventSourceName"}
+      }
+    },
+    "DescribePartnerEventSourceResponse":{
+      "type":"structure",
+      "members":{
+        "Arn":{"shape":"String"},
+        "Name":{"shape":"String"}
+      }
+    },
     "DescribeRuleRequest":{
       "type":"structure",
       "required":["Name"],
       "members":{
-        "Name":{"shape":"RuleName"}
+        "Name":{"shape":"RuleName"},
+        "EventBusName":{"shape":"EventBusName"}
       }
     },
     "DescribeRuleResponse":{
@@ -370,14 +645,16 @@
         "State":{"shape":"RuleState"},
         "Description":{"shape":"RuleDescription"},
         "RoleArn":{"shape":"RoleArn"},
-        "ManagedBy":{"shape":"ManagedBy"}
+        "ManagedBy":{"shape":"ManagedBy"},
+        "EventBusName":{"shape":"EventBusName"}
       }
     },
     "DisableRuleRequest":{
       "type":"structure",
       "required":["Name"],
       "members":{
-        "Name":{"shape":"RuleName"}
+        "Name":{"shape":"RuleName"},
+        "EventBusName":{"shape":"EventBusName"}
       }
     },
     "EcsParameters":{
@@ -396,17 +673,71 @@
       "type":"structure",
       "required":["Name"],
       "members":{
-        "Name":{"shape":"RuleName"}
+        "Name":{"shape":"RuleName"},
+        "EventBusName":{"shape":"EventBusName"}
       }
     },
     "ErrorCode":{"type":"string"},
     "ErrorMessage":{"type":"string"},
+    "EventBus":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"String"},
+        "Arn":{"shape":"String"},
+        "Policy":{"shape":"String"}
+      }
+    },
+    "EventBusList":{
+      "type":"list",
+      "member":{"shape":"EventBus"}
+    },
+    "EventBusName":{
+      "type":"string",
+      "max":256,
+      "min":1,
+      "pattern":"[/\\.\\-_A-Za-z0-9]+"
+    },
     "EventId":{"type":"string"},
     "EventPattern":{"type":"string"},
     "EventResource":{"type":"string"},
     "EventResourceList":{
       "type":"list",
       "member":{"shape":"EventResource"}
+    },
+    "EventSource":{
+      "type":"structure",
+      "members":{
+        "Arn":{"shape":"String"},
+        "CreatedBy":{"shape":"String"},
+        "CreationTime":{"shape":"Timestamp"},
+        "ExpirationTime":{"shape":"Timestamp"},
+        "Name":{"shape":"String"},
+        "State":{"shape":"EventSourceState"}
+      }
+    },
+    "EventSourceList":{
+      "type":"list",
+      "member":{"shape":"EventSource"}
+    },
+    "EventSourceName":{
+      "type":"string",
+      "max":256,
+      "min":1,
+      "pattern":"aws\\.partner(/[\\.\\-_A-Za-z0-9]+){2,}"
+    },
+    "EventSourceNamePrefix":{
+      "type":"string",
+      "max":256,
+      "min":1,
+      "pattern":"[/\\.\\-_A-Za-z0-9]+"
+    },
+    "EventSourceState":{
+      "type":"string",
+      "enum":[
+        "PENDING",
+        "ACTIVE",
+        "DELETED"
+      ]
     },
     "EventTime":{"type":"timestamp"},
     "InputTransformer":{
@@ -432,6 +763,12 @@
       "fault":true
     },
     "InvalidEventPatternException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
+    "InvalidStateException":{
       "type":"structure",
       "members":{
       },
@@ -466,11 +803,74 @@
       "type":"integer",
       "min":1
     },
+    "ListEventBusesRequest":{
+      "type":"structure",
+      "members":{
+        "NamePrefix":{"shape":"EventBusName"},
+        "NextToken":{"shape":"NextToken"},
+        "Limit":{"shape":"LimitMax100"}
+      }
+    },
+    "ListEventBusesResponse":{
+      "type":"structure",
+      "members":{
+        "EventBuses":{"shape":"EventBusList"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "ListEventSourcesRequest":{
+      "type":"structure",
+      "members":{
+        "NamePrefix":{"shape":"EventSourceNamePrefix"},
+        "NextToken":{"shape":"NextToken"},
+        "Limit":{"shape":"LimitMax100"}
+      }
+    },
+    "ListEventSourcesResponse":{
+      "type":"structure",
+      "members":{
+        "EventSources":{"shape":"EventSourceList"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "ListPartnerEventSourceAccountsRequest":{
+      "type":"structure",
+      "required":["EventSourceName"],
+      "members":{
+        "EventSourceName":{"shape":"EventSourceName"},
+        "NextToken":{"shape":"NextToken"},
+        "Limit":{"shape":"LimitMax100"}
+      }
+    },
+    "ListPartnerEventSourceAccountsResponse":{
+      "type":"structure",
+      "members":{
+        "PartnerEventSourceAccounts":{"shape":"PartnerEventSourceAccountList"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "ListPartnerEventSourcesRequest":{
+      "type":"structure",
+      "required":["NamePrefix"],
+      "members":{
+        "NamePrefix":{"shape":"PartnerEventSourceNamePrefix"},
+        "NextToken":{"shape":"NextToken"},
+        "Limit":{"shape":"LimitMax100"}
+      }
+    },
+    "ListPartnerEventSourcesResponse":{
+      "type":"structure",
+      "members":{
+        "PartnerEventSources":{"shape":"PartnerEventSourceList"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
     "ListRuleNamesByTargetRequest":{
       "type":"structure",
       "required":["TargetArn"],
       "members":{
         "TargetArn":{"shape":"TargetArn"},
+        "EventBusName":{"shape":"EventBusName"},
         "NextToken":{"shape":"NextToken"},
         "Limit":{"shape":"LimitMax100"}
       }
@@ -486,6 +886,7 @@
       "type":"structure",
       "members":{
         "NamePrefix":{"shape":"RuleName"},
+        "EventBusName":{"shape":"EventBusName"},
         "NextToken":{"shape":"NextToken"},
         "Limit":{"shape":"LimitMax100"}
       }
@@ -515,6 +916,7 @@
       "required":["Rule"],
       "members":{
         "Rule":{"shape":"RuleName"},
+        "EventBusName":{"shape":"EventBusName"},
         "NextToken":{"shape":"NextToken"},
         "Limit":{"shape":"LimitMax100"}
       }
@@ -549,6 +951,42 @@
       "max":2048,
       "min":1
     },
+    "NonPartnerEventBusName":{
+      "type":"string",
+      "max":256,
+      "min":1,
+      "pattern":"[\\.\\-_A-Za-z0-9]+"
+    },
+    "PartnerEventSource":{
+      "type":"structure",
+      "members":{
+        "Arn":{"shape":"String"},
+        "Name":{"shape":"String"}
+      }
+    },
+    "PartnerEventSourceAccount":{
+      "type":"structure",
+      "members":{
+        "Account":{"shape":"AccountId"},
+        "CreationTime":{"shape":"Timestamp"},
+        "ExpirationTime":{"shape":"Timestamp"},
+        "State":{"shape":"EventSourceState"}
+      }
+    },
+    "PartnerEventSourceAccountList":{
+      "type":"list",
+      "member":{"shape":"PartnerEventSourceAccount"}
+    },
+    "PartnerEventSourceList":{
+      "type":"list",
+      "member":{"shape":"PartnerEventSource"}
+    },
+    "PartnerEventSourceNamePrefix":{
+      "type":"string",
+      "max":256,
+      "min":1,
+      "pattern":"aws\\.partner/[\\.\\-_A-Za-z0-9]+/[/\\.\\-_A-Za-z0-9]*"
+    },
     "PolicyLengthExceededException":{
       "type":"structure",
       "members":{
@@ -575,7 +1013,8 @@
         "Source":{"shape":"String"},
         "Resources":{"shape":"EventResourceList"},
         "DetailType":{"shape":"String"},
-        "Detail":{"shape":"String"}
+        "Detail":{"shape":"String"},
+        "EventBusName":{"shape":"NonPartnerEventBusName"}
       }
     },
     "PutEventsRequestEntryList":{
@@ -603,6 +1042,48 @@
       "type":"list",
       "member":{"shape":"PutEventsResultEntry"}
     },
+    "PutPartnerEventsRequest":{
+      "type":"structure",
+      "required":["Entries"],
+      "members":{
+        "Entries":{"shape":"PutPartnerEventsRequestEntryList"}
+      }
+    },
+    "PutPartnerEventsRequestEntry":{
+      "type":"structure",
+      "members":{
+        "Time":{"shape":"EventTime"},
+        "Source":{"shape":"String"},
+        "Resources":{"shape":"EventResourceList"},
+        "DetailType":{"shape":"String"},
+        "Detail":{"shape":"String"}
+      }
+    },
+    "PutPartnerEventsRequestEntryList":{
+      "type":"list",
+      "member":{"shape":"PutPartnerEventsRequestEntry"},
+      "max":20,
+      "min":1
+    },
+    "PutPartnerEventsResponse":{
+      "type":"structure",
+      "members":{
+        "FailedEntryCount":{"shape":"Integer"},
+        "Entries":{"shape":"PutPartnerEventsResultEntryList"}
+      }
+    },
+    "PutPartnerEventsResultEntry":{
+      "type":"structure",
+      "members":{
+        "EventId":{"shape":"EventId"},
+        "ErrorCode":{"shape":"ErrorCode"},
+        "ErrorMessage":{"shape":"ErrorMessage"}
+      }
+    },
+    "PutPartnerEventsResultEntryList":{
+      "type":"list",
+      "member":{"shape":"PutPartnerEventsResultEntry"}
+    },
     "PutPermissionRequest":{
       "type":"structure",
       "required":[
@@ -611,6 +1092,7 @@
         "StatementId"
       ],
       "members":{
+        "EventBusName":{"shape":"NonPartnerEventBusName"},
         "Action":{"shape":"Action"},
         "Principal":{"shape":"Principal"},
         "StatementId":{"shape":"StatementId"},
@@ -627,7 +1109,8 @@
         "State":{"shape":"RuleState"},
         "Description":{"shape":"RuleDescription"},
         "RoleArn":{"shape":"RoleArn"},
-        "Tags":{"shape":"TagList"}
+        "Tags":{"shape":"TagList"},
+        "EventBusName":{"shape":"EventBusName"}
       }
     },
     "PutRuleResponse":{
@@ -644,6 +1127,7 @@
       ],
       "members":{
         "Rule":{"shape":"RuleName"},
+        "EventBusName":{"shape":"EventBusName"},
         "Targets":{"shape":"TargetList"}
       }
     },
@@ -670,7 +1154,8 @@
       "type":"structure",
       "required":["StatementId"],
       "members":{
-        "StatementId":{"shape":"StatementId"}
+        "StatementId":{"shape":"StatementId"},
+        "EventBusName":{"shape":"NonPartnerEventBusName"}
       }
     },
     "RemoveTargetsRequest":{
@@ -681,6 +1166,7 @@
       ],
       "members":{
         "Rule":{"shape":"RuleName"},
+        "EventBusName":{"shape":"EventBusName"},
         "Ids":{"shape":"TargetIdList"},
         "Force":{"shape":"Boolean"}
       }
@@ -704,6 +1190,12 @@
       "type":"list",
       "member":{"shape":"RemoveTargetsResultEntry"}
     },
+    "ResourceAlreadyExistsException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
     "ResourceNotFoundException":{
       "type":"structure",
       "members":{
@@ -725,7 +1217,8 @@
         "Description":{"shape":"RuleDescription"},
         "ScheduleExpression":{"shape":"ScheduleExpression"},
         "RoleArn":{"shape":"RoleArn"},
-        "ManagedBy":{"shape":"ManagedBy"}
+        "ManagedBy":{"shape":"ManagedBy"},
+        "EventBusName":{"shape":"EventBusName"}
       }
     },
     "RuleArn":{
@@ -937,6 +1430,7 @@
         "Result":{"shape":"Boolean"}
       }
     },
+    "Timestamp":{"type":"timestamp"},
     "TransformerInput":{
       "type":"string",
       "max":8192,

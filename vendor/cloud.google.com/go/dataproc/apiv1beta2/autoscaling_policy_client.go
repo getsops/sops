@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"net/url"
 	"time"
 
 	"github.com/golang/protobuf/proto"
@@ -131,7 +132,7 @@ func (c *AutoscalingPolicyClient) setGoogleClientInfo(keyval ...string) {
 
 // CreateAutoscalingPolicy creates new autoscaling policy.
 func (c *AutoscalingPolicyClient) CreateAutoscalingPolicy(ctx context.Context, req *dataprocpb.CreateAutoscalingPolicyRequest, opts ...gax.CallOption) (*dataprocpb.AutoscalingPolicy, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.CreateAutoscalingPolicy[0:len(c.CallOptions.CreateAutoscalingPolicy):len(c.CallOptions.CreateAutoscalingPolicy)], opts...)
 	var resp *dataprocpb.AutoscalingPolicy
@@ -151,7 +152,7 @@ func (c *AutoscalingPolicyClient) CreateAutoscalingPolicy(ctx context.Context, r
 // Disabled check for update_mask, because all updates will be full
 // replacements.
 func (c *AutoscalingPolicyClient) UpdateAutoscalingPolicy(ctx context.Context, req *dataprocpb.UpdateAutoscalingPolicyRequest, opts ...gax.CallOption) (*dataprocpb.AutoscalingPolicy, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "policy.name", req.GetPolicy().GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "policy.name", url.QueryEscape(req.GetPolicy().GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.UpdateAutoscalingPolicy[0:len(c.CallOptions.UpdateAutoscalingPolicy):len(c.CallOptions.UpdateAutoscalingPolicy)], opts...)
 	var resp *dataprocpb.AutoscalingPolicy
@@ -168,7 +169,7 @@ func (c *AutoscalingPolicyClient) UpdateAutoscalingPolicy(ctx context.Context, r
 
 // GetAutoscalingPolicy retrieves autoscaling policy.
 func (c *AutoscalingPolicyClient) GetAutoscalingPolicy(ctx context.Context, req *dataprocpb.GetAutoscalingPolicyRequest, opts ...gax.CallOption) (*dataprocpb.AutoscalingPolicy, error) {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.GetAutoscalingPolicy[0:len(c.CallOptions.GetAutoscalingPolicy):len(c.CallOptions.GetAutoscalingPolicy)], opts...)
 	var resp *dataprocpb.AutoscalingPolicy
@@ -185,7 +186,7 @@ func (c *AutoscalingPolicyClient) GetAutoscalingPolicy(ctx context.Context, req 
 
 // ListAutoscalingPolicies lists autoscaling policies in the project.
 func (c *AutoscalingPolicyClient) ListAutoscalingPolicies(ctx context.Context, req *dataprocpb.ListAutoscalingPoliciesRequest, opts ...gax.CallOption) *AutoscalingPolicyIterator {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", req.GetParent()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "parent", url.QueryEscape(req.GetParent())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.ListAutoscalingPolicies[0:len(c.CallOptions.ListAutoscalingPolicies):len(c.CallOptions.ListAutoscalingPolicies)], opts...)
 	it := &AutoscalingPolicyIterator{}
@@ -225,7 +226,7 @@ func (c *AutoscalingPolicyClient) ListAutoscalingPolicies(ctx context.Context, r
 // DeleteAutoscalingPolicy deletes an autoscaling policy. It is an error to delete an autoscaling
 // policy that is in use by one or more clusters.
 func (c *AutoscalingPolicyClient) DeleteAutoscalingPolicy(ctx context.Context, req *dataprocpb.DeleteAutoscalingPolicyRequest, opts ...gax.CallOption) error {
-	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", req.GetName()))
+	md := metadata.Pairs("x-goog-request-params", fmt.Sprintf("%s=%v", "name", url.QueryEscape(req.GetName())))
 	ctx = insertMetadata(ctx, c.xGoogMetadata, md)
 	opts = append(c.CallOptions.DeleteAutoscalingPolicy[0:len(c.CallOptions.DeleteAutoscalingPolicy):len(c.CallOptions.DeleteAutoscalingPolicy)], opts...)
 	err := gax.Invoke(ctx, func(ctx context.Context, settings gax.CallSettings) error {

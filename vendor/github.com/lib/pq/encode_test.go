@@ -322,7 +322,7 @@ func TestInfinityTimestamp(t *testing.T) {
 	// try to assert []byte to time.Time
 	for _, q := range tc {
 		err = db.QueryRow(q.Query, q.Param).Scan(&resultT)
-		if !q.ExpectedErrorStrRegexp.MatchString(err.Error()) {
+		if err == nil || !q.ExpectedErrorStrRegexp.MatchString(err.Error()) {
 			t.Errorf("Scanning -/+infinity, expected error to match regexp %q, got %q",
 				q.ExpectedErrorStrRegexp, err)
 		}

@@ -196,6 +196,8 @@ func PossibleApplicationGatewaySkuNameValues() []ApplicationGatewaySkuName {
 type ApplicationGatewaySslCipherSuite string
 
 const (
+	// TLSDHEDSSWITH3DESEDECBCSHA ...
+	TLSDHEDSSWITH3DESEDECBCSHA ApplicationGatewaySslCipherSuite = "TLS_DHE_DSS_WITH_3DES_EDE_CBC_SHA"
 	// TLSDHEDSSWITHAES128CBCSHA ...
 	TLSDHEDSSWITHAES128CBCSHA ApplicationGatewaySslCipherSuite = "TLS_DHE_DSS_WITH_AES_128_CBC_SHA"
 	// TLSDHEDSSWITHAES128CBCSHA256 ...
@@ -228,10 +230,14 @@ const (
 	TLSECDHERSAWITHAES128CBCSHA ApplicationGatewaySslCipherSuite = "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA"
 	// TLSECDHERSAWITHAES128CBCSHA256 ...
 	TLSECDHERSAWITHAES128CBCSHA256 ApplicationGatewaySslCipherSuite = "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256"
+	// TLSECDHERSAWITHAES128GCMSHA256 ...
+	TLSECDHERSAWITHAES128GCMSHA256 ApplicationGatewaySslCipherSuite = "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
 	// TLSECDHERSAWITHAES256CBCSHA ...
 	TLSECDHERSAWITHAES256CBCSHA ApplicationGatewaySslCipherSuite = "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA"
 	// TLSECDHERSAWITHAES256CBCSHA384 ...
 	TLSECDHERSAWITHAES256CBCSHA384 ApplicationGatewaySslCipherSuite = "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384"
+	// TLSECDHERSAWITHAES256GCMSHA384 ...
+	TLSECDHERSAWITHAES256GCMSHA384 ApplicationGatewaySslCipherSuite = "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384"
 	// TLSRSAWITH3DESEDECBCSHA ...
 	TLSRSAWITH3DESEDECBCSHA ApplicationGatewaySslCipherSuite = "TLS_RSA_WITH_3DES_EDE_CBC_SHA"
 	// TLSRSAWITHAES128CBCSHA ...
@@ -250,7 +256,7 @@ const (
 
 // PossibleApplicationGatewaySslCipherSuiteValues returns an array of possible values for the ApplicationGatewaySslCipherSuite const type.
 func PossibleApplicationGatewaySslCipherSuiteValues() []ApplicationGatewaySslCipherSuite {
-	return []ApplicationGatewaySslCipherSuite{TLSDHEDSSWITHAES128CBCSHA, TLSDHEDSSWITHAES128CBCSHA256, TLSDHEDSSWITHAES256CBCSHA, TLSDHEDSSWITHAES256CBCSHA256, TLSDHERSAWITHAES128CBCSHA, TLSDHERSAWITHAES128GCMSHA256, TLSDHERSAWITHAES256CBCSHA, TLSDHERSAWITHAES256GCMSHA384, TLSECDHEECDSAWITHAES128CBCSHA, TLSECDHEECDSAWITHAES128CBCSHA256, TLSECDHEECDSAWITHAES128GCMSHA256, TLSECDHEECDSAWITHAES256CBCSHA, TLSECDHEECDSAWITHAES256CBCSHA384, TLSECDHEECDSAWITHAES256GCMSHA384, TLSECDHERSAWITHAES128CBCSHA, TLSECDHERSAWITHAES128CBCSHA256, TLSECDHERSAWITHAES256CBCSHA, TLSECDHERSAWITHAES256CBCSHA384, TLSRSAWITH3DESEDECBCSHA, TLSRSAWITHAES128CBCSHA, TLSRSAWITHAES128CBCSHA256, TLSRSAWITHAES128GCMSHA256, TLSRSAWITHAES256CBCSHA, TLSRSAWITHAES256CBCSHA256, TLSRSAWITHAES256GCMSHA384}
+	return []ApplicationGatewaySslCipherSuite{TLSDHEDSSWITH3DESEDECBCSHA, TLSDHEDSSWITHAES128CBCSHA, TLSDHEDSSWITHAES128CBCSHA256, TLSDHEDSSWITHAES256CBCSHA, TLSDHEDSSWITHAES256CBCSHA256, TLSDHERSAWITHAES128CBCSHA, TLSDHERSAWITHAES128GCMSHA256, TLSDHERSAWITHAES256CBCSHA, TLSDHERSAWITHAES256GCMSHA384, TLSECDHEECDSAWITHAES128CBCSHA, TLSECDHEECDSAWITHAES128CBCSHA256, TLSECDHEECDSAWITHAES128GCMSHA256, TLSECDHEECDSAWITHAES256CBCSHA, TLSECDHEECDSAWITHAES256CBCSHA384, TLSECDHEECDSAWITHAES256GCMSHA384, TLSECDHERSAWITHAES128CBCSHA, TLSECDHERSAWITHAES128CBCSHA256, TLSECDHERSAWITHAES128GCMSHA256, TLSECDHERSAWITHAES256CBCSHA, TLSECDHERSAWITHAES256CBCSHA384, TLSECDHERSAWITHAES256GCMSHA384, TLSRSAWITH3DESEDECBCSHA, TLSRSAWITHAES128CBCSHA, TLSRSAWITHAES128CBCSHA256, TLSRSAWITHAES128GCMSHA256, TLSRSAWITHAES256CBCSHA, TLSRSAWITHAES256CBCSHA256, TLSRSAWITHAES256GCMSHA384}
 }
 
 // ApplicationGatewaySslPolicyName enumerates the values for application gateway ssl policy name.
@@ -19028,6 +19034,35 @@ func (future *VirtualNetworkGatewaysGeneratevpnclientpackageFuture) Result(clien
 	return
 }
 
+// VirtualNetworkGatewaysGenerateVpnProfileFuture an abstraction for monitoring and retrieving the results
+// of a long-running operation.
+type VirtualNetworkGatewaysGenerateVpnProfileFuture struct {
+	azure.Future
+}
+
+// Result returns the result of the asynchronous operation.
+// If the operation has not completed it will return an error.
+func (future *VirtualNetworkGatewaysGenerateVpnProfileFuture) Result(client VirtualNetworkGatewaysClient) (s String, err error) {
+	var done bool
+	done, err = future.DoneWithContext(context.Background(), client)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "network.VirtualNetworkGatewaysGenerateVpnProfileFuture", "Result", future.Response(), "Polling failure")
+		return
+	}
+	if !done {
+		err = azure.NewAsyncOpIncompleteError("network.VirtualNetworkGatewaysGenerateVpnProfileFuture")
+		return
+	}
+	sender := autorest.DecorateSender(client, autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if s.Response.Response, err = future.GetResult(sender); err == nil && s.Response.Response.StatusCode != http.StatusNoContent {
+		s, err = client.GenerateVpnProfileResponder(s.Response.Response)
+		if err != nil {
+			err = autorest.NewErrorWithError(err, "network.VirtualNetworkGatewaysGenerateVpnProfileFuture", "Result", s.Response.Response, "Failure responding to request")
+		}
+	}
+	return
+}
+
 // VirtualNetworkGatewaysGetAdvertisedRoutesFuture an abstraction for monitoring and retrieving the results
 // of a long-running operation.
 type VirtualNetworkGatewaysGetAdvertisedRoutesFuture struct {
@@ -20454,18 +20489,12 @@ type VpnClientRootCertificatePropertiesFormat struct {
 type VpnConnection struct {
 	autorest.Response        `json:"-"`
 	*VpnConnectionProperties `json:"properties,omitempty"`
+	// Name - The name of the resource that is unique within a resource group. This name can be used to access the resource.
+	Name *string `json:"name,omitempty"`
 	// Etag - READ-ONLY; Gets a unique read-only string that changes whenever the resource is updated.
 	Etag *string `json:"etag,omitempty"`
 	// ID - Resource ID.
 	ID *string `json:"id,omitempty"`
-	// Name - READ-ONLY; Resource name.
-	Name *string `json:"name,omitempty"`
-	// Type - READ-ONLY; Resource type.
-	Type *string `json:"type,omitempty"`
-	// Location - Resource location.
-	Location *string `json:"location,omitempty"`
-	// Tags - Resource tags.
-	Tags map[string]*string `json:"tags"`
 }
 
 // MarshalJSON is the custom marshaler for VpnConnection.
@@ -20474,14 +20503,11 @@ func (vc VpnConnection) MarshalJSON() ([]byte, error) {
 	if vc.VpnConnectionProperties != nil {
 		objectMap["properties"] = vc.VpnConnectionProperties
 	}
+	if vc.Name != nil {
+		objectMap["name"] = vc.Name
+	}
 	if vc.ID != nil {
 		objectMap["id"] = vc.ID
-	}
-	if vc.Location != nil {
-		objectMap["location"] = vc.Location
-	}
-	if vc.Tags != nil {
-		objectMap["tags"] = vc.Tags
 	}
 	return json.Marshal(objectMap)
 }
@@ -20504,6 +20530,15 @@ func (vc *VpnConnection) UnmarshalJSON(body []byte) error {
 				}
 				vc.VpnConnectionProperties = &vpnConnectionProperties
 			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				vc.Name = &name
+			}
 		case "etag":
 			if v != nil {
 				var etag string
@@ -20521,42 +20556,6 @@ func (vc *VpnConnection) UnmarshalJSON(body []byte) error {
 					return err
 				}
 				vc.ID = &ID
-			}
-		case "name":
-			if v != nil {
-				var name string
-				err = json.Unmarshal(*v, &name)
-				if err != nil {
-					return err
-				}
-				vc.Name = &name
-			}
-		case "type":
-			if v != nil {
-				var typeVar string
-				err = json.Unmarshal(*v, &typeVar)
-				if err != nil {
-					return err
-				}
-				vc.Type = &typeVar
-			}
-		case "location":
-			if v != nil {
-				var location string
-				err = json.Unmarshal(*v, &location)
-				if err != nil {
-					return err
-				}
-				vc.Location = &location
-			}
-		case "tags":
-			if v != nil {
-				var tags map[string]*string
-				err = json.Unmarshal(*v, &tags)
-				if err != nil {
-					return err
-				}
-				vc.Tags = tags
 			}
 		}
 	}

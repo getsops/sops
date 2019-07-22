@@ -123,9 +123,15 @@ func (tcc *testClientConn) Target() string {
 	panic("not implemented")
 }
 
+type testServerLoad struct {
+	name string
+	d    float64
+}
+
 type testLoadStore struct {
 	callsStarted []internal.Locality
 	callsEnded   []internal.Locality
+	callsCost    []testServerLoad
 }
 
 func newTestLoadStore() *testLoadStore {
@@ -142,6 +148,10 @@ func (tls *testLoadStore) CallStarted(l internal.Locality) {
 
 func (tls *testLoadStore) CallFinished(l internal.Locality, err error) {
 	tls.callsEnded = append(tls.callsEnded, l)
+}
+
+func (tls *testLoadStore) CallServerLoad(l internal.Locality, name string, d float64) {
+	tls.callsCost = append(tls.callsCost, testServerLoad{name: name, d: d})
 }
 
 func (*testLoadStore) ReportTo(ctx context.Context, cc *grpc.ClientConn) {

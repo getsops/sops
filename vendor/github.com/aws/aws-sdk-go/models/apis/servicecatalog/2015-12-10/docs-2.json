@@ -40,6 +40,7 @@
     "DescribeProvisioningParameters": "<p>Gets information about the configuration required to provision the specified product using the specified provisioning artifact.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to <a>ProvisionProduct</a>, do not include conflicted TagOption keys as tags, or this causes the error \"Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>\". Tag the provisioned product with the value <code>sc-tagoption-conflict-portfolioId-productId</code>.</p>",
     "DescribeRecord": "<p>Gets information about the specified request operation.</p> <p>Use this operation after calling a request operation (for example, <a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p> <note> <p>If a provisioned product was transferred to a new owner using <a>UpdateProvisionedProductProperties</a>, the new owner will be able to describe all past records for that product. The previous owner will no longer be able to describe the records, but will be able to use <a>ListRecordHistory</a> to see the product's history from when he was the owner.</p> </note>",
     "DescribeServiceAction": "<p>Describes a self-service action.</p>",
+    "DescribeServiceActionExecutionParameters": null,
     "DescribeTagOption": "<p>Gets information about the specified TagOption.</p>",
     "DisableAWSOrganizationsAccess": "<p>Disable portfolio sharing through AWS Organizations feature. This feature will not delete your current shares but it will prevent you from creating new shares throughout your organization. Current shares will not be in sync with your organization structure if it changes after calling this API. This API can only be called by the master account in the organization.</p>",
     "DisassociateBudgetFromResource": "<p>Disassociates the specified budget from the specified resource.</p>",
@@ -121,6 +122,7 @@
         "DescribeProvisioningArtifactInput$AcceptLanguage": "<p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>",
         "DescribeProvisioningParametersInput$AcceptLanguage": "<p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>",
         "DescribeRecordInput$AcceptLanguage": "<p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>",
+        "DescribeServiceActionExecutionParametersInput$AcceptLanguage": null,
         "DescribeServiceActionInput$AcceptLanguage": "<p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>",
         "DisassociatePrincipalFromPortfolioInput$AcceptLanguage": "<p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>",
         "DisassociateProductFromPortfolioInput$AcceptLanguage": "<p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul>",
@@ -757,6 +759,16 @@
       "refs": {
       }
     },
+    "DescribeServiceActionExecutionParametersInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "DescribeServiceActionExecutionParametersOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
     "DescribeServiceActionInput": {
       "base": null,
       "refs": {
@@ -909,6 +921,50 @@
       "refs": {
       }
     },
+    "ExecutionParameter": {
+      "base": null,
+      "refs": {
+        "ExecutionParameters$member": null
+      }
+    },
+    "ExecutionParameterKey": {
+      "base": null,
+      "refs": {
+        "ExecutionParameter$Name": null,
+        "ExecutionParameterMap$key": null
+      }
+    },
+    "ExecutionParameterMap": {
+      "base": null,
+      "refs": {
+        "ExecuteProvisionedProductServiceActionInput$Parameters": null
+      }
+    },
+    "ExecutionParameterType": {
+      "base": null,
+      "refs": {
+        "ExecutionParameter$Type": null
+      }
+    },
+    "ExecutionParameterValue": {
+      "base": null,
+      "refs": {
+        "ExecutionParameterValueList$member": null
+      }
+    },
+    "ExecutionParameterValueList": {
+      "base": null,
+      "refs": {
+        "ExecutionParameter$DefaultValues": null,
+        "ExecutionParameterMap$value": null
+      }
+    },
+    "ExecutionParameters": {
+      "base": null,
+      "refs": {
+        "DescribeServiceActionExecutionParametersOutput$ServiceActionParameters": null
+      }
+    },
     "FailedServiceActionAssociation": {
       "base": "<p>An object containing information about the error, along with identifying information about the self-service action and its associations.</p>",
       "refs": {
@@ -991,6 +1047,8 @@
         "DescribeProvisioningParametersInput$ProvisioningArtifactId": "<p>The identifier of the provisioning artifact.</p>",
         "DescribeProvisioningParametersInput$PathId": "<p>The path identifier of the product. This value is optional if the product has a default path, and required if the product has more than one path. To list the paths for a product, use <a>ListLaunchPaths</a>.</p>",
         "DescribeRecordInput$Id": "<p>The record identifier of the provisioned product. This identifier is returned by the request operation.</p>",
+        "DescribeServiceActionExecutionParametersInput$ProvisionedProductId": null,
+        "DescribeServiceActionExecutionParametersInput$ServiceActionId": null,
         "DescribeServiceActionInput$Id": "<p>The self-service action identifier.</p>",
         "DisassociateBudgetFromResourceInput$ResourceId": "<p>The resource identifier you want to disassociate from. Either a portfolio-id or a product-id.</p>",
         "DisassociatePrincipalFromPortfolioInput$PortfolioId": "<p>The portfolio identifier.</p>",
@@ -1981,6 +2039,14 @@
         "ListProvisioningArtifactsOutput$ProvisioningArtifactDetails": "<p>Information about the provisioning artifacts.</p>"
       }
     },
+    "ProvisioningArtifactGuidance": {
+      "base": null,
+      "refs": {
+        "ProvisioningArtifact$Guidance": "<p>Information set by the administrator to provide guidance to end users about which provisioning artifacts to use.</p>",
+        "ProvisioningArtifactDetail$Guidance": "<p>Information set by the administrator to provide guidance to end users about which provisioning artifacts to use.</p>",
+        "UpdateProvisioningArtifactInput$Guidance": "<p>Information set by the administrator to provide guidance to end users about which provisioning artifacts to use.</p> <p>The <code>DEFAULT</code> value indicates that the product version is active.</p> <p>The administrator can set the guidance to <code>DEPRECATED</code> to inform users that the product version is deprecated. Users are able to make updates to a provisioned product of a deprecated version but cannot launch new provisioned products using a deprecated version.</p>"
+      }
+    },
     "ProvisioningArtifactInfo": {
       "base": null,
       "refs": {
@@ -2761,7 +2827,7 @@
       "refs": {
         "CreatePortfolioOutput$Tags": "<p>Information about the tags associated with the portfolio.</p>",
         "CreateProductOutput$Tags": "<p>Information about the tags associated with the product.</p>",
-        "CreateProvisionedProductPlanInput$Tags": "<p>One or more tags.</p>",
+        "CreateProvisionedProductPlanInput$Tags": "<p>One or more tags.</p> <p>If the plan is for an existing provisioned product, the product must have a <code>RESOURCE_UPDATE</code> constraint with <code>TagUpdatesOnProvisionedProduct</code> set to <code>ALLOWED</code> to allow tag updates.</p>",
         "DescribePortfolioOutput$Tags": "<p>Information about the tags associated with the portfolio.</p>",
         "DescribeProductAsAdminOutput$Tags": "<p>Information about the tags associated with the product.</p>",
         "LaunchPathSummary$Tags": "<p>The tags associated with this product path.</p>",

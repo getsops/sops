@@ -78,7 +78,7 @@ var _ = context.Canceled
 const apiId = "bigquery:v2"
 const apiName = "bigquery"
 const apiVersion = "v2"
-const basePath = "https://www.googleapis.com/bigquery/v2/"
+const basePath = "https://bigquery.googleapis.com/bigquery/v2/"
 
 // OAuth2 scopes used by this API.
 const (
@@ -145,6 +145,7 @@ func New(client *http.Client) (*Service, error) {
 	s.Jobs = NewJobsService(s)
 	s.Models = NewModelsService(s)
 	s.Projects = NewProjectsService(s)
+	s.Routines = NewRoutinesService(s)
 	s.Tabledata = NewTabledataService(s)
 	s.Tables = NewTablesService(s)
 	return s, nil
@@ -162,6 +163,8 @@ type Service struct {
 	Models *ModelsService
 
 	Projects *ProjectsService
+
+	Routines *RoutinesService
 
 	Tabledata *TabledataService
 
@@ -208,6 +211,15 @@ func NewProjectsService(s *Service) *ProjectsService {
 }
 
 type ProjectsService struct {
+	s *Service
+}
+
+func NewRoutinesService(s *Service) *RoutinesService {
+	rs := &RoutinesService{s: s}
+	return rs
+}
+
+type RoutinesService struct {
 	s *Service
 }
 
@@ -327,6 +339,62 @@ func (s *AggregateClassificationMetrics) UnmarshalJSON(data []byte) error {
 	s.RocAuc = float64(s1.RocAuc)
 	s.Threshold = float64(s1.Threshold)
 	return nil
+}
+
+// Argument: Input/output argument of a function or a stored procedure.
+type Argument struct {
+	// ArgumentKind: Optional. Defaults to FIXED_TYPE.
+	//
+	// Possible values:
+	//   "ARGUMENT_KIND_UNSPECIFIED"
+	//   "FIXED_TYPE" - The argument is a variable with fully specified
+	// type, which can be a
+	// struct or an array, but not a table.
+	//   "ANY_TYPE" - The argument is any type, including struct or array,
+	// but not a table.
+	// To be added: FIXED_TABLE, ANY_TABLE
+	ArgumentKind string `json:"argumentKind,omitempty"`
+
+	// DataType: Required unless argument_kind = ANY_TYPE.
+	DataType *StandardSqlDataType `json:"dataType,omitempty"`
+
+	// Mode: Optional. Specifies whether the argument is input or
+	// output.
+	// Can be set for procedures only.
+	//
+	// Possible values:
+	//   "MODE_UNSPECIFIED"
+	//   "IN" - The argument is input-only.
+	//   "OUT" - The argument is output-only.
+	//   "INOUT" - The argument is both an input and an output.
+	Mode string `json:"mode,omitempty"`
+
+	// Name: Optional. The name of this argument. Can be absent for function
+	// return
+	// argument.
+	Name string `json:"name,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "ArgumentKind") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "ArgumentKind") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *Argument) MarshalJSON() ([]byte, error) {
+	type NoMethod Argument
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 type BigQueryModelTraining struct {
@@ -544,6 +612,12 @@ type BinaryClassificationMetrics struct {
 	// thresholds.
 	BinaryConfusionMatrixList []*BinaryConfusionMatrix `json:"binaryConfusionMatrixList,omitempty"`
 
+	// NegativeLabel: Label representing the negative class.
+	NegativeLabel string `json:"negativeLabel,omitempty"`
+
+	// PositiveLabel: Label representing the positive class.
+	PositiveLabel string `json:"positiveLabel,omitempty"`
+
 	// ForceSendFields is a list of field names (e.g.
 	// "AggregateClassificationMetrics") to unconditionally include in API
 	// requests. By default, fields with empty values are omitted from API
@@ -572,6 +646,12 @@ func (s *BinaryClassificationMetrics) MarshalJSON() ([]byte, error) {
 // BinaryConfusionMatrix: Confusion matrix for binary classification
 // models.
 type BinaryConfusionMatrix struct {
+	// Accuracy: The fraction of predictions given the correct label.
+	Accuracy float64 `json:"accuracy,omitempty"`
+
+	// F1Score: The equally weighted average of recall and precision.
+	F1Score float64 `json:"f1Score,omitempty"`
+
 	// FalseNegatives: Number of false samples predicted as false.
 	FalseNegatives int64 `json:"falseNegatives,omitempty,string"`
 
@@ -582,10 +662,14 @@ type BinaryConfusionMatrix struct {
 	// the following metric.
 	PositiveClassThreshold float64 `json:"positiveClassThreshold,omitempty"`
 
-	// Precision: Aggregate precision.
+	// Precision: The fraction of actual positive predictions that had
+	// positive actual
+	// labels.
 	Precision float64 `json:"precision,omitempty"`
 
-	// Recall: Aggregate recall.
+	// Recall: The fraction of actual positive labels that were given a
+	// positive
+	// prediction.
 	Recall float64 `json:"recall,omitempty"`
 
 	// TrueNegatives: Number of true samples predicted as false.
@@ -594,7 +678,7 @@ type BinaryConfusionMatrix struct {
 	// TruePositives: Number of true samples predicted as true.
 	TruePositives int64 `json:"truePositives,omitempty,string"`
 
-	// ForceSendFields is a list of field names (e.g. "FalseNegatives") to
+	// ForceSendFields is a list of field names (e.g. "Accuracy") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
 	// non-interface field appearing in ForceSendFields will be sent to the
@@ -602,13 +686,12 @@ type BinaryConfusionMatrix struct {
 	// used to include empty fields in Patch requests.
 	ForceSendFields []string `json:"-"`
 
-	// NullFields is a list of field names (e.g. "FalseNegatives") to
-	// include in API requests with the JSON null value. By default, fields
-	// with empty values are omitted from API requests. However, any field
-	// with an empty value appearing in NullFields will be sent to the
-	// server as null. It is an error if a field in this list has a
-	// non-empty value. This may be used to include null fields in Patch
-	// requests.
+	// NullFields is a list of field names (e.g. "Accuracy") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
 	NullFields []string `json:"-"`
 }
 
@@ -621,6 +704,8 @@ func (s *BinaryConfusionMatrix) MarshalJSON() ([]byte, error) {
 func (s *BinaryConfusionMatrix) UnmarshalJSON(data []byte) error {
 	type NoMethod BinaryConfusionMatrix
 	var s1 struct {
+		Accuracy               gensupport.JSONFloat64 `json:"accuracy"`
+		F1Score                gensupport.JSONFloat64 `json:"f1Score"`
 		PositiveClassThreshold gensupport.JSONFloat64 `json:"positiveClassThreshold"`
 		Precision              gensupport.JSONFloat64 `json:"precision"`
 		Recall                 gensupport.JSONFloat64 `json:"recall"`
@@ -630,6 +715,8 @@ func (s *BinaryConfusionMatrix) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &s1); err != nil {
 		return err
 	}
+	s.Accuracy = float64(s1.Accuracy)
+	s.F1Score = float64(s1.F1Score)
 	s.PositiveClassThreshold = float64(s1.PositiveClassThreshold)
 	s.Precision = float64(s1.Precision)
 	s.Recall = float64(s1.Recall)
@@ -1085,6 +1172,8 @@ type Dataset struct {
 
 	// DatasetReference: [Required] A reference that identifies the dataset.
 	DatasetReference *DatasetReference `json:"datasetReference,omitempty"`
+
+	DefaultEncryptionConfiguration *EncryptionConfiguration `json:"defaultEncryptionConfiguration,omitempty"`
 
 	// DefaultPartitionExpirationMs: [Optional] The default partition
 	// expiration for all partitioned tables in the dataset, in
@@ -1766,13 +1855,19 @@ type ExternalDataConfiguration struct {
 	// set to GOOGLE_SHEETS.
 	GoogleSheetsOptions *GoogleSheetsOptions `json:"googleSheetsOptions,omitempty"`
 
-	// HivePartitioningMode: [Optional, Experimental] If hive partitioning
+	// HivePartitioningMode: [Optional, Trusted Tester] If hive partitioning
 	// is enabled, which mode to use. Two modes are supported: - AUTO:
 	// automatically infer partition key name(s) and type(s). - STRINGS:
 	// automatic infer partition key name(s). All types are strings. Not all
 	// storage formats support hive partitioning -- requesting hive
-	// partitioning on an unsupported format will lead to an error.
+	// partitioning on an unsupported format will lead to an error. Note:
+	// this setting is in the process of being deprecated in favor of
+	// hivePartitioningOptions.
 	HivePartitioningMode string `json:"hivePartitioningMode,omitempty"`
+
+	// HivePartitioningOptions: [Optional, Trusted Tester] Options to
+	// configure hive partitioning support.
+	HivePartitioningOptions *HivePartitioningOptions `json:"hivePartitioningOptions,omitempty"`
 
 	// IgnoreUnknownValues: [Optional] Indicates if BigQuery should allow
 	// extra values that are not represented in the table schema. If true,
@@ -2000,6 +2095,53 @@ type GoogleSheetsOptions struct {
 
 func (s *GoogleSheetsOptions) MarshalJSON() ([]byte, error) {
 	type NoMethod GoogleSheetsOptions
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type HivePartitioningOptions struct {
+	// Mode: [Optional, Trusted Tester] When set, what mode of hive
+	// partitioning to use when reading data. Two modes are supported. (1)
+	// AUTO: automatically infer partition key name(s) and type(s). (2)
+	// STRINGS: automatically infer partition key name(s). All types are
+	// interpreted as strings. Not all storage formats support hive
+	// partitioning. Requesting hive partitioning on an unsupported format
+	// will lead to an error. Currently supported types include: AVRO, CSV,
+	// JSON, ORC and Parquet.
+	Mode string `json:"mode,omitempty"`
+
+	// SourceUriPrefix: [Optional, Trusted Tester] When hive partition
+	// detection is requested, a common prefix for all source uris should be
+	// supplied. The prefix must end immediately before the partition key
+	// encoding begins. For example, consider files following this data
+	// layout.
+	// gs://bucket/path_to_table/dt=2019-01-01/country=BR/id=7/file.avro
+	// gs://bucket/path_to_table/dt=2018-12-31/country=CA/id=3/file.avro
+	// When hive partitioning is requested with either AUTO or STRINGS
+	// detection, the common prefix can be either of
+	// gs://bucket/path_to_table or gs://bucket/path_to_table/ (trailing
+	// slash does not matter).
+	SourceUriPrefix string `json:"sourceUriPrefix,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Mode") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Mode") to include in API
+	// requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *HivePartitioningOptions) MarshalJSON() ([]byte, error) {
+	type NoMethod HivePartitioningOptions
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -2336,13 +2478,17 @@ type JobConfigurationLoad struct {
 	// specify a tab separator. The default value is a comma (',').
 	FieldDelimiter string `json:"fieldDelimiter,omitempty"`
 
-	// HivePartitioningMode: [Optional, Experimental] If hive partitioning
+	// HivePartitioningMode: [Optional, Trusted Tester] If hive partitioning
 	// is enabled, which mode to use. Two modes are supported: - AUTO:
 	// automatically infer partition key name(s) and type(s). - STRINGS:
 	// automatic infer partition key name(s). All types are strings. Not all
 	// storage formats support hive partitioning -- requesting hive
 	// partitioning on an unsupported format will lead to an error.
 	HivePartitioningMode string `json:"hivePartitioningMode,omitempty"`
+
+	// HivePartitioningOptions: [Optional, Trusted Tester] Options to
+	// configure hive partitioning support.
+	HivePartitioningOptions *HivePartitioningOptions `json:"hivePartitioningOptions,omitempty"`
 
 	// IgnoreUnknownValues: [Optional] Indicates if BigQuery should allow
 	// extra values that are not represented in the table schema. If true,
@@ -2887,6 +3033,12 @@ type JobStatistics struct {
 	// reservation.
 	ReservationUsage []*JobStatisticsReservationUsage `json:"reservationUsage,omitempty"`
 
+	// ReservationId: [Output-only] Name of the primary reservation assigned
+	// to this job. Note that this could be different than reservations
+	// reported in the reservation usage field if parent reservations were
+	// used to execute this job.
+	ReservationId string `json:"reservation_id,omitempty"`
+
 	// StartTime: [Output-only] Start time of this job, in milliseconds
 	// since the epoch. This field will be present when the job transitions
 	// from the PENDING state to either RUNNING or DONE.
@@ -3284,6 +3436,44 @@ func (s *ListModelsResponse) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+type ListRoutinesResponse struct {
+	// NextPageToken: A token to request the next page of results.
+	NextPageToken string `json:"nextPageToken,omitempty"`
+
+	// Routines: Routines in the requested dataset. Only the following
+	// fields are populated:
+	// etag, project_id, dataset_id, routine_id, routine_type,
+	// creation_time,
+	// last_modified_time, language.
+	Routines []*Routine `json:"routines,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "NextPageToken") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "NextPageToken") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *ListRoutinesResponse) MarshalJSON() ([]byte, error) {
+	type NoMethod ListRoutinesResponse
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 // LocationMetadata: BigQuery-specific metadata about a location. This
 // will be set on
 // google.cloud.location.Location.metadata in Cloud Location
@@ -3358,9 +3548,7 @@ type Model struct {
 	// epoch.
 	CreationTime int64 `json:"creationTime,omitempty,string"`
 
-	// Description: [Optional] A user-friendly description of this
-	// model.
-	// @mutable bigquery.models.patch
+	// Description: [Optional] A user-friendly description of this model.
 	Description string `json:"description,omitempty"`
 
 	// Etag: Output only. A hash of this resource.
@@ -3375,7 +3563,6 @@ type Model struct {
 	// property of the encapsulating dataset can be used to set a
 	// default
 	// expirationTime on newly created models.
-	// @mutable bigquery.models.patch
 	ExpirationTime int64 `json:"expirationTime,omitempty,string"`
 
 	// FeatureColumns: Output only. Input feature columns that were used to
@@ -3383,7 +3570,6 @@ type Model struct {
 	FeatureColumns []*StandardSqlField `json:"featureColumns,omitempty"`
 
 	// FriendlyName: [Optional] A descriptive name for this model.
-	// @mutable bigquery.models.patch
 	FriendlyName string `json:"friendlyName,omitempty"`
 
 	// LabelColumns: Output only. Label columns that were used to train this
@@ -3403,7 +3589,6 @@ type Model struct {
 	// Label values are optional. Label keys must start with a letter and
 	// each
 	// label in the list must have a different key.
-	// @mutable bigquery.models.patch
 	Labels map[string]string `json:"labels,omitempty"`
 
 	// LastModifiedTime: Output only. The time when this model was last
@@ -4198,6 +4383,143 @@ func (s *RegressionMetrics) UnmarshalJSON(data []byte) error {
 	s.MedianAbsoluteError = float64(s1.MedianAbsoluteError)
 	s.RSquared = float64(s1.RSquared)
 	return nil
+}
+
+// Routine: A user-defined function or a stored procedure.
+type Routine struct {
+	// Arguments: Optional.
+	Arguments []*Argument `json:"arguments,omitempty"`
+
+	// CreationTime: Output only. The time when this routine was created, in
+	// milliseconds since
+	// the epoch.
+	CreationTime int64 `json:"creationTime,omitempty,string"`
+
+	// DefinitionBody: Required. The body of the routine.
+	//
+	// For functions, this is the expression in the AS clause.
+	//
+	// If language=SQL, it is the substring inside (but excluding)
+	// the
+	// parentheses. For example, for the function created with the
+	// following
+	// statement:
+	//
+	// `CREATE FUNCTION JoinLines(x string, y string) as (concat(x, "\n",
+	// y))`
+	//
+	// The definition_body is `concat(x, "\n", y)` (\n is not replaced
+	// with
+	// linebreak).
+	//
+	// If language=JAVASCRIPT, it is the evaluated string in the AS
+	// clause.
+	// For example, for the function created with the following
+	// statement:
+	//
+	// `CREATE FUNCTION f() RETURNS STRING LANGUAGE js AS 'return
+	// "\n";\n'`
+	//
+	// The definition_body is
+	//
+	// `return "\n";\n`
+	//
+	// Note that both \n are replaced with linebreaks.
+	DefinitionBody string `json:"definitionBody,omitempty"`
+
+	// Etag: Output only. A hash of this resource.
+	Etag string `json:"etag,omitempty"`
+
+	// ImportedLibraries: Optional. If language = "JAVASCRIPT", this field
+	// stores the path of the
+	// imported JAVASCRIPT libraries.
+	ImportedLibraries []string `json:"importedLibraries,omitempty"`
+
+	// Language: Optional. Defaults to "SQL".
+	//
+	// Possible values:
+	//   "LANGUAGE_UNSPECIFIED"
+	//   "SQL" - SQL language.
+	//   "JAVASCRIPT" - JavaScript language.
+	Language string `json:"language,omitempty"`
+
+	// LastModifiedTime: Output only. The time when this routine was last
+	// modified, in milliseconds
+	// since the epoch.
+	LastModifiedTime int64 `json:"lastModifiedTime,omitempty,string"`
+
+	// ReturnType: Optional if language = "SQL"; required otherwise.
+	//
+	// If absent, the return type is inferred from definition_body at query
+	// time
+	// in each query that references this routine. If present, then the
+	// evaluated
+	// result will be cast to the specified returned type at query
+	// time.
+	//
+	// For example, for the functions created with the following
+	// statements:
+	//
+	// * `CREATE FUNCTION Add(x FLOAT64, y FLOAT64) RETURNS FLOAT64 AS (x +
+	// y);`
+	//
+	// * `CREATE FUNCTION Increment(x FLOAT64) AS (Add(x, 1));`
+	//
+	// * `CREATE FUNCTION Decrement(x FLOAT64) RETURNS FLOAT64 AS (Add(x,
+	// -1));`
+	//
+	// The return_type is `{type_kind: "FLOAT64"}` for `Add` and
+	// `Decrement`, and
+	// is absent for `Increment` (inferred as FLOAT64 at query
+	// time).
+	//
+	// Suppose the function `Add` is replaced by
+	//   `CREATE OR REPLACE FUNCTION Add(x INT64, y INT64) AS (x +
+	// y);`
+	//
+	// Then the inferred return type of `Increment` is automatically changed
+	// to
+	// INT64 at query time, while the return type of `Decrement` remains
+	// FLOAT64.
+	ReturnType *StandardSqlDataType `json:"returnType,omitempty"`
+
+	// RoutineReference: Required. Reference describing the ID of this
+	// routine.
+	RoutineReference *RoutineReference `json:"routineReference,omitempty"`
+
+	// RoutineType: Required.
+	//
+	// Possible values:
+	//   "ROUTINE_TYPE_UNSPECIFIED"
+	//   "SCALAR_FUNCTION" - Non-builtin permanent scalar function.
+	//   "PROCEDURE" - Stored procedure.
+	RoutineType string `json:"routineType,omitempty"`
+
+	// ServerResponse contains the HTTP response code and headers from the
+	// server.
+	googleapi.ServerResponse `json:"-"`
+
+	// ForceSendFields is a list of field names (e.g. "Arguments") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Arguments") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *Routine) MarshalJSON() ([]byte, error) {
+	type NoMethod Routine
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
 type RoutineReference struct {
@@ -7926,7 +8248,8 @@ func (r *ModelsService) List(projectId string, datasetId string) *ModelsListCall
 }
 
 // MaxResults sets the optional parameter "maxResults": The maximum
-// number of results per page.
+// number of results to return in a single response page.
+// Leverage the page tokens to iterate through the entire collection.
 func (c *ModelsListCall) MaxResults(maxResults int64) *ModelsListCall {
 	c.urlParams_.Set("maxResults", fmt.Sprint(maxResults))
 	return c
@@ -8056,7 +8379,7 @@ func (c *ModelsListCall) Do(opts ...googleapi.CallOption) (*ListModelsResponse, 
 	//       "type": "string"
 	//     },
 	//     "maxResults": {
-	//       "description": "The maximum number of results per page.",
+	//       "description": "The maximum number of results to return in a single response page.\nLeverage the page tokens to iterate through the entire collection.",
 	//       "format": "uint32",
 	//       "location": "query",
 	//       "type": "integer"
@@ -8588,6 +8911,832 @@ func (c *ProjectsListCall) Pages(ctx context.Context, f func(*ProjectList) error
 		}
 		c.PageToken(x.NextPageToken)
 	}
+}
+
+// method id "bigquery.routines.delete":
+
+type RoutinesDeleteCall struct {
+	s          *Service
+	projectId  string
+	datasetId  string
+	routineId  string
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
+	header_    http.Header
+}
+
+// Delete: Deletes the routine specified by routineId from the dataset.
+func (r *RoutinesService) Delete(projectId string, datasetId string, routineId string) *RoutinesDeleteCall {
+	c := &RoutinesDeleteCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.projectId = projectId
+	c.datasetId = datasetId
+	c.routineId = routineId
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *RoutinesDeleteCall) Fields(s ...googleapi.Field) *RoutinesDeleteCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *RoutinesDeleteCall) Context(ctx context.Context) *RoutinesDeleteCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *RoutinesDeleteCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *RoutinesDeleteCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "projects/{+projectId}/datasets/{+datasetId}/routines/{+routineId}")
+	urls += "?" + c.urlParams_.Encode()
+	req, err := http.NewRequest("DELETE", urls, body)
+	if err != nil {
+		return nil, err
+	}
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"projectId": c.projectId,
+		"datasetId": c.datasetId,
+		"routineId": c.routineId,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "bigquery.routines.delete" call.
+func (c *RoutinesDeleteCall) Do(opts ...googleapi.CallOption) error {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if err != nil {
+		return err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return err
+	}
+	return nil
+	// {
+	//   "description": "Deletes the routine specified by routineId from the dataset.",
+	//   "flatPath": "projects/{projectsId}/datasets/{datasetsId}/routines/{routinesId}",
+	//   "httpMethod": "DELETE",
+	//   "id": "bigquery.routines.delete",
+	//   "parameterOrder": [
+	//     "projectId",
+	//     "datasetId",
+	//     "routineId"
+	//   ],
+	//   "parameters": {
+	//     "datasetId": {
+	//       "description": "Dataset ID of the routine to delete",
+	//       "location": "path",
+	//       "pattern": "^[^/]+$",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "projectId": {
+	//       "description": "Project ID of the routine to delete",
+	//       "location": "path",
+	//       "pattern": "^[^/]+$",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "routineId": {
+	//       "description": "Routine ID of the routine to delete",
+	//       "location": "path",
+	//       "pattern": "^[^/]+$",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "projects/{+projectId}/datasets/{+datasetId}/routines/{+routineId}",
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/bigquery",
+	//     "https://www.googleapis.com/auth/cloud-platform"
+	//   ]
+	// }
+
+}
+
+// method id "bigquery.routines.get":
+
+type RoutinesGetCall struct {
+	s            *Service
+	projectId    string
+	datasetId    string
+	routineId    string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
+	header_      http.Header
+}
+
+// Get: Gets the specified routine resource by routine ID.
+func (r *RoutinesService) Get(projectId string, datasetId string, routineId string) *RoutinesGetCall {
+	c := &RoutinesGetCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.projectId = projectId
+	c.datasetId = datasetId
+	c.routineId = routineId
+	return c
+}
+
+// FieldMask sets the optional parameter "fieldMask": If set, only the
+// Routine fields in the field mask are returned in the
+// response. If unset, all Routine fields are returned.
+func (c *RoutinesGetCall) FieldMask(fieldMask string) *RoutinesGetCall {
+	c.urlParams_.Set("fieldMask", fieldMask)
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *RoutinesGetCall) Fields(s ...googleapi.Field) *RoutinesGetCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *RoutinesGetCall) IfNoneMatch(entityTag string) *RoutinesGetCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *RoutinesGetCall) Context(ctx context.Context) *RoutinesGetCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *RoutinesGetCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *RoutinesGetCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "projects/{+projectId}/datasets/{+datasetId}/routines/{+routineId}")
+	urls += "?" + c.urlParams_.Encode()
+	req, err := http.NewRequest("GET", urls, body)
+	if err != nil {
+		return nil, err
+	}
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"projectId": c.projectId,
+		"datasetId": c.datasetId,
+		"routineId": c.routineId,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "bigquery.routines.get" call.
+// Exactly one of *Routine or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Routine.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *RoutinesGetCall) Do(opts ...googleapi.CallOption) (*Routine, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Routine{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Gets the specified routine resource by routine ID.",
+	//   "flatPath": "projects/{projectsId}/datasets/{datasetsId}/routines/{routinesId}",
+	//   "httpMethod": "GET",
+	//   "id": "bigquery.routines.get",
+	//   "parameterOrder": [
+	//     "projectId",
+	//     "datasetId",
+	//     "routineId"
+	//   ],
+	//   "parameters": {
+	//     "datasetId": {
+	//       "description": "Dataset ID of the requested routine",
+	//       "location": "path",
+	//       "pattern": "^[^/]+$",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "fieldMask": {
+	//       "description": "If set, only the Routine fields in the field mask are returned in the\nresponse. If unset, all Routine fields are returned.",
+	//       "format": "google-fieldmask",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "projectId": {
+	//       "description": "Project ID of the requested routine",
+	//       "location": "path",
+	//       "pattern": "^[^/]+$",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "routineId": {
+	//       "description": "Routine ID of the requested routine",
+	//       "location": "path",
+	//       "pattern": "^[^/]+$",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "projects/{+projectId}/datasets/{+datasetId}/routines/{+routineId}",
+	//   "response": {
+	//     "$ref": "Routine"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/bigquery",
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only"
+	//   ]
+	// }
+
+}
+
+// method id "bigquery.routines.insert":
+
+type RoutinesInsertCall struct {
+	s          *Service
+	projectId  string
+	datasetId  string
+	routine    *Routine
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
+	header_    http.Header
+}
+
+// Insert: Creates a new routine in the dataset.
+func (r *RoutinesService) Insert(projectId string, datasetId string, routine *Routine) *RoutinesInsertCall {
+	c := &RoutinesInsertCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.projectId = projectId
+	c.datasetId = datasetId
+	c.routine = routine
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *RoutinesInsertCall) Fields(s ...googleapi.Field) *RoutinesInsertCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *RoutinesInsertCall) Context(ctx context.Context) *RoutinesInsertCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *RoutinesInsertCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *RoutinesInsertCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.routine)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
+	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "projects/{+projectId}/datasets/{+datasetId}/routines")
+	urls += "?" + c.urlParams_.Encode()
+	req, err := http.NewRequest("POST", urls, body)
+	if err != nil {
+		return nil, err
+	}
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"projectId": c.projectId,
+		"datasetId": c.datasetId,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "bigquery.routines.insert" call.
+// Exactly one of *Routine or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Routine.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *RoutinesInsertCall) Do(opts ...googleapi.CallOption) (*Routine, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Routine{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Creates a new routine in the dataset.",
+	//   "flatPath": "projects/{projectsId}/datasets/{datasetsId}/routines",
+	//   "httpMethod": "POST",
+	//   "id": "bigquery.routines.insert",
+	//   "parameterOrder": [
+	//     "projectId",
+	//     "datasetId"
+	//   ],
+	//   "parameters": {
+	//     "datasetId": {
+	//       "description": "Dataset ID of the new routine",
+	//       "location": "path",
+	//       "pattern": "^[^/]+$",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "projectId": {
+	//       "description": "Project ID of the new routine",
+	//       "location": "path",
+	//       "pattern": "^[^/]+$",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "projects/{+projectId}/datasets/{+datasetId}/routines",
+	//   "request": {
+	//     "$ref": "Routine"
+	//   },
+	//   "response": {
+	//     "$ref": "Routine"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/bigquery",
+	//     "https://www.googleapis.com/auth/cloud-platform"
+	//   ]
+	// }
+
+}
+
+// method id "bigquery.routines.list":
+
+type RoutinesListCall struct {
+	s            *Service
+	projectId    string
+	datasetId    string
+	urlParams_   gensupport.URLParams
+	ifNoneMatch_ string
+	ctx_         context.Context
+	header_      http.Header
+}
+
+// List: Lists all routines in the specified dataset. Requires the
+// READER dataset
+// role.
+func (r *RoutinesService) List(projectId string, datasetId string) *RoutinesListCall {
+	c := &RoutinesListCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.projectId = projectId
+	c.datasetId = datasetId
+	return c
+}
+
+// MaxResults sets the optional parameter "maxResults": The maximum
+// number of results to return in a single response page.
+// Leverage the page tokens to iterate through the entire collection.
+func (c *RoutinesListCall) MaxResults(maxResults int64) *RoutinesListCall {
+	c.urlParams_.Set("maxResults", fmt.Sprint(maxResults))
+	return c
+}
+
+// PageToken sets the optional parameter "pageToken": Page token,
+// returned by a previous call, to request the next page of
+// results
+func (c *RoutinesListCall) PageToken(pageToken string) *RoutinesListCall {
+	c.urlParams_.Set("pageToken", pageToken)
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *RoutinesListCall) Fields(s ...googleapi.Field) *RoutinesListCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// IfNoneMatch sets the optional parameter which makes the operation
+// fail if the object's ETag matches the given value. This is useful for
+// getting updates only after the object has changed since the last
+// request. Use googleapi.IsNotModified to check whether the response
+// error from Do is the result of In-None-Match.
+func (c *RoutinesListCall) IfNoneMatch(entityTag string) *RoutinesListCall {
+	c.ifNoneMatch_ = entityTag
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *RoutinesListCall) Context(ctx context.Context) *RoutinesListCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *RoutinesListCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *RoutinesListCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	if c.ifNoneMatch_ != "" {
+		reqHeaders.Set("If-None-Match", c.ifNoneMatch_)
+	}
+	var body io.Reader = nil
+	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "projects/{+projectId}/datasets/{+datasetId}/routines")
+	urls += "?" + c.urlParams_.Encode()
+	req, err := http.NewRequest("GET", urls, body)
+	if err != nil {
+		return nil, err
+	}
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"projectId": c.projectId,
+		"datasetId": c.datasetId,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "bigquery.routines.list" call.
+// Exactly one of *ListRoutinesResponse or error will be non-nil. Any
+// non-2xx status code is an error. Response headers are in either
+// *ListRoutinesResponse.ServerResponse.Header or (if a response was
+// returned at all) in error.(*googleapi.Error).Header. Use
+// googleapi.IsNotModified to check whether the returned error was
+// because http.StatusNotModified was returned.
+func (c *RoutinesListCall) Do(opts ...googleapi.CallOption) (*ListRoutinesResponse, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &ListRoutinesResponse{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Lists all routines in the specified dataset. Requires the READER dataset\nrole.",
+	//   "flatPath": "projects/{projectsId}/datasets/{datasetsId}/routines",
+	//   "httpMethod": "GET",
+	//   "id": "bigquery.routines.list",
+	//   "parameterOrder": [
+	//     "projectId",
+	//     "datasetId"
+	//   ],
+	//   "parameters": {
+	//     "datasetId": {
+	//       "description": "Dataset ID of the routines to list",
+	//       "location": "path",
+	//       "pattern": "^[^/]+$",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "maxResults": {
+	//       "description": "The maximum number of results to return in a single response page.\nLeverage the page tokens to iterate through the entire collection.",
+	//       "format": "uint32",
+	//       "location": "query",
+	//       "type": "integer"
+	//     },
+	//     "pageToken": {
+	//       "description": "Page token, returned by a previous call, to request the next page of\nresults",
+	//       "location": "query",
+	//       "type": "string"
+	//     },
+	//     "projectId": {
+	//       "description": "Project ID of the routines to list",
+	//       "location": "path",
+	//       "pattern": "^[^/]+$",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "projects/{+projectId}/datasets/{+datasetId}/routines",
+	//   "response": {
+	//     "$ref": "ListRoutinesResponse"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/bigquery",
+	//     "https://www.googleapis.com/auth/cloud-platform",
+	//     "https://www.googleapis.com/auth/cloud-platform.read-only"
+	//   ]
+	// }
+
+}
+
+// Pages invokes f for each page of results.
+// A non-nil error returned from f will halt the iteration.
+// The provided context supersedes any context provided to the Context method.
+func (c *RoutinesListCall) Pages(ctx context.Context, f func(*ListRoutinesResponse) error) error {
+	c.ctx_ = ctx
+	defer c.PageToken(c.urlParams_.Get("pageToken")) // reset paging to original point
+	for {
+		x, err := c.Do()
+		if err != nil {
+			return err
+		}
+		if err := f(x); err != nil {
+			return err
+		}
+		if x.NextPageToken == "" {
+			return nil
+		}
+		c.PageToken(x.NextPageToken)
+	}
+}
+
+// method id "bigquery.routines.update":
+
+type RoutinesUpdateCall struct {
+	s          *Service
+	projectId  string
+	datasetId  string
+	routineId  string
+	routine    *Routine
+	urlParams_ gensupport.URLParams
+	ctx_       context.Context
+	header_    http.Header
+}
+
+// Update: Updates information in an existing routine. The update method
+// replaces the
+// entire Routine resource.
+func (r *RoutinesService) Update(projectId string, datasetId string, routineId string, routine *Routine) *RoutinesUpdateCall {
+	c := &RoutinesUpdateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
+	c.projectId = projectId
+	c.datasetId = datasetId
+	c.routineId = routineId
+	c.routine = routine
+	return c
+}
+
+// Fields allows partial responses to be retrieved. See
+// https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
+// for more information.
+func (c *RoutinesUpdateCall) Fields(s ...googleapi.Field) *RoutinesUpdateCall {
+	c.urlParams_.Set("fields", googleapi.CombineFields(s))
+	return c
+}
+
+// Context sets the context to be used in this call's Do method. Any
+// pending HTTP request will be aborted if the provided context is
+// canceled.
+func (c *RoutinesUpdateCall) Context(ctx context.Context) *RoutinesUpdateCall {
+	c.ctx_ = ctx
+	return c
+}
+
+// Header returns an http.Header that can be modified by the caller to
+// add HTTP headers to the request.
+func (c *RoutinesUpdateCall) Header() http.Header {
+	if c.header_ == nil {
+		c.header_ = make(http.Header)
+	}
+	return c.header_
+}
+
+func (c *RoutinesUpdateCall) doRequest(alt string) (*http.Response, error) {
+	reqHeaders := make(http.Header)
+	for k, v := range c.header_ {
+		reqHeaders[k] = v
+	}
+	reqHeaders.Set("User-Agent", c.s.userAgent())
+	var body io.Reader = nil
+	body, err := googleapi.WithoutDataWrapper.JSONReader(c.routine)
+	if err != nil {
+		return nil, err
+	}
+	reqHeaders.Set("Content-Type", "application/json")
+	c.urlParams_.Set("alt", alt)
+	c.urlParams_.Set("prettyPrint", "false")
+	urls := googleapi.ResolveRelative(c.s.BasePath, "projects/{+projectId}/datasets/{+datasetId}/routines/{+routineId}")
+	urls += "?" + c.urlParams_.Encode()
+	req, err := http.NewRequest("PUT", urls, body)
+	if err != nil {
+		return nil, err
+	}
+	req.Header = reqHeaders
+	googleapi.Expand(req.URL, map[string]string{
+		"projectId": c.projectId,
+		"datasetId": c.datasetId,
+		"routineId": c.routineId,
+	})
+	return gensupport.SendRequest(c.ctx_, c.s.client, req)
+}
+
+// Do executes the "bigquery.routines.update" call.
+// Exactly one of *Routine or error will be non-nil. Any non-2xx status
+// code is an error. Response headers are in either
+// *Routine.ServerResponse.Header or (if a response was returned at all)
+// in error.(*googleapi.Error).Header. Use googleapi.IsNotModified to
+// check whether the returned error was because http.StatusNotModified
+// was returned.
+func (c *RoutinesUpdateCall) Do(opts ...googleapi.CallOption) (*Routine, error) {
+	gensupport.SetOptions(c.urlParams_, opts...)
+	res, err := c.doRequest("json")
+	if res != nil && res.StatusCode == http.StatusNotModified {
+		if res.Body != nil {
+			res.Body.Close()
+		}
+		return nil, &googleapi.Error{
+			Code:   res.StatusCode,
+			Header: res.Header,
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer googleapi.CloseBody(res)
+	if err := googleapi.CheckResponse(res); err != nil {
+		return nil, err
+	}
+	ret := &Routine{
+		ServerResponse: googleapi.ServerResponse{
+			Header:         res.Header,
+			HTTPStatusCode: res.StatusCode,
+		},
+	}
+	target := &ret
+	if err := gensupport.DecodeResponse(target, res); err != nil {
+		return nil, err
+	}
+	return ret, nil
+	// {
+	//   "description": "Updates information in an existing routine. The update method replaces the\nentire Routine resource.",
+	//   "flatPath": "projects/{projectsId}/datasets/{datasetsId}/routines/{routinesId}",
+	//   "httpMethod": "PUT",
+	//   "id": "bigquery.routines.update",
+	//   "parameterOrder": [
+	//     "projectId",
+	//     "datasetId",
+	//     "routineId"
+	//   ],
+	//   "parameters": {
+	//     "datasetId": {
+	//       "description": "Dataset ID of the routine to update",
+	//       "location": "path",
+	//       "pattern": "^[^/]+$",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "projectId": {
+	//       "description": "Project ID of the routine to update",
+	//       "location": "path",
+	//       "pattern": "^[^/]+$",
+	//       "required": true,
+	//       "type": "string"
+	//     },
+	//     "routineId": {
+	//       "description": "Routine ID of the routine to update",
+	//       "location": "path",
+	//       "pattern": "^[^/]+$",
+	//       "required": true,
+	//       "type": "string"
+	//     }
+	//   },
+	//   "path": "projects/{+projectId}/datasets/{+datasetId}/routines/{+routineId}",
+	//   "request": {
+	//     "$ref": "Routine"
+	//   },
+	//   "response": {
+	//     "$ref": "Routine"
+	//   },
+	//   "scopes": [
+	//     "https://www.googleapis.com/auth/bigquery",
+	//     "https://www.googleapis.com/auth/cloud-platform"
+	//   ]
+	// }
+
 }
 
 // method id "bigquery.tabledata.insertAll":

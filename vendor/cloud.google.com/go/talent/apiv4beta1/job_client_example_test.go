@@ -191,3 +191,49 @@ func ExampleJobClient_SearchJobsForAlert() {
 		_ = resp
 	}
 }
+
+func ExampleJobClient_BatchCreateJobs() {
+	ctx := context.Background()
+	c, err := talent.NewJobClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+
+	req := &talentpb.BatchCreateJobsRequest{
+		// TODO: Fill request struct fields.
+	}
+	op, err := c.BatchCreateJobs(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+
+	resp, err := op.Wait(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}
+
+func ExampleJobClient_BatchUpdateJobs() {
+	ctx := context.Background()
+	c, err := talent.NewJobClient(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+
+	req := &talentpb.BatchUpdateJobsRequest{
+		// TODO: Fill request struct fields.
+	}
+	op, err := c.BatchUpdateJobs(ctx, req)
+	if err != nil {
+		// TODO: Handle error.
+	}
+
+	resp, err := op.Wait(ctx)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// TODO: Use resp.
+	_ = resp
+}

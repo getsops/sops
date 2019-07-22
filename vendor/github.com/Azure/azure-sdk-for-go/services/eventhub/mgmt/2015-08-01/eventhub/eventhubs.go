@@ -969,15 +969,15 @@ func (client EventHubsClient) ListKeysResponder(resp *http.Response) (result Res
 	return
 }
 
-// PosttAuthorizationRule gets an AuthorizationRule for an Event Hub by rule name.
+// PostAuthorizationRule gets an AuthorizationRule for an Event Hub by rule name.
 // Parameters:
 // resourceGroupName - name of the resource group within the azure subscription.
 // namespaceName - the Namespace name
 // eventHubName - the Event Hub name
 // authorizationRuleName - the authorization rule name.
-func (client EventHubsClient) PosttAuthorizationRule(ctx context.Context, resourceGroupName string, namespaceName string, eventHubName string, authorizationRuleName string) (result SharedAccessAuthorizationRuleResource, err error) {
+func (client EventHubsClient) PostAuthorizationRule(ctx context.Context, resourceGroupName string, namespaceName string, eventHubName string, authorizationRuleName string) (result SharedAccessAuthorizationRuleResource, err error) {
 	if tracing.IsEnabled() {
-		ctx = tracing.StartSpan(ctx, fqdn+"/EventHubsClient.PosttAuthorizationRule")
+		ctx = tracing.StartSpan(ctx, fqdn+"/EventHubsClient.PostAuthorizationRule")
 		defer func() {
 			sc := -1
 			if result.Response.Response != nil {
@@ -999,32 +999,32 @@ func (client EventHubsClient) PosttAuthorizationRule(ctx context.Context, resour
 		{TargetValue: authorizationRuleName,
 			Constraints: []validation.Constraint{{Target: "authorizationRuleName", Name: validation.MaxLength, Rule: 50, Chain: nil},
 				{Target: "authorizationRuleName", Name: validation.MinLength, Rule: 1, Chain: nil}}}}); err != nil {
-		return result, validation.NewError("eventhub.EventHubsClient", "PosttAuthorizationRule", err.Error())
+		return result, validation.NewError("eventhub.EventHubsClient", "PostAuthorizationRule", err.Error())
 	}
 
-	req, err := client.PosttAuthorizationRulePreparer(ctx, resourceGroupName, namespaceName, eventHubName, authorizationRuleName)
+	req, err := client.PostAuthorizationRulePreparer(ctx, resourceGroupName, namespaceName, eventHubName, authorizationRuleName)
 	if err != nil {
-		err = autorest.NewErrorWithError(err, "eventhub.EventHubsClient", "PosttAuthorizationRule", nil, "Failure preparing request")
+		err = autorest.NewErrorWithError(err, "eventhub.EventHubsClient", "PostAuthorizationRule", nil, "Failure preparing request")
 		return
 	}
 
-	resp, err := client.PosttAuthorizationRuleSender(req)
+	resp, err := client.PostAuthorizationRuleSender(req)
 	if err != nil {
 		result.Response = autorest.Response{Response: resp}
-		err = autorest.NewErrorWithError(err, "eventhub.EventHubsClient", "PosttAuthorizationRule", resp, "Failure sending request")
+		err = autorest.NewErrorWithError(err, "eventhub.EventHubsClient", "PostAuthorizationRule", resp, "Failure sending request")
 		return
 	}
 
-	result, err = client.PosttAuthorizationRuleResponder(resp)
+	result, err = client.PostAuthorizationRuleResponder(resp)
 	if err != nil {
-		err = autorest.NewErrorWithError(err, "eventhub.EventHubsClient", "PosttAuthorizationRule", resp, "Failure responding to request")
+		err = autorest.NewErrorWithError(err, "eventhub.EventHubsClient", "PostAuthorizationRule", resp, "Failure responding to request")
 	}
 
 	return
 }
 
-// PosttAuthorizationRulePreparer prepares the PosttAuthorizationRule request.
-func (client EventHubsClient) PosttAuthorizationRulePreparer(ctx context.Context, resourceGroupName string, namespaceName string, eventHubName string, authorizationRuleName string) (*http.Request, error) {
+// PostAuthorizationRulePreparer prepares the PostAuthorizationRule request.
+func (client EventHubsClient) PostAuthorizationRulePreparer(ctx context.Context, resourceGroupName string, namespaceName string, eventHubName string, authorizationRuleName string) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"authorizationRuleName": autorest.Encode("path", authorizationRuleName),
 		"eventHubName":          autorest.Encode("path", eventHubName),
@@ -1046,16 +1046,16 @@ func (client EventHubsClient) PosttAuthorizationRulePreparer(ctx context.Context
 	return preparer.Prepare((&http.Request{}).WithContext(ctx))
 }
 
-// PosttAuthorizationRuleSender sends the PosttAuthorizationRule request. The method will close the
+// PostAuthorizationRuleSender sends the PostAuthorizationRule request. The method will close the
 // http.Response Body if it receives an error.
-func (client EventHubsClient) PosttAuthorizationRuleSender(req *http.Request) (*http.Response, error) {
+func (client EventHubsClient) PostAuthorizationRuleSender(req *http.Request) (*http.Response, error) {
 	return autorest.SendWithSender(client, req,
 		azure.DoRetryWithRegistration(client.Client))
 }
 
-// PosttAuthorizationRuleResponder handles the response to the PosttAuthorizationRule request. The method always
+// PostAuthorizationRuleResponder handles the response to the PostAuthorizationRule request. The method always
 // closes the http.Response Body.
-func (client EventHubsClient) PosttAuthorizationRuleResponder(resp *http.Response) (result SharedAccessAuthorizationRuleResource, err error) {
+func (client EventHubsClient) PostAuthorizationRuleResponder(resp *http.Response) (result SharedAccessAuthorizationRuleResource, err error) {
 	err = autorest.Respond(
 		resp,
 		client.ByInspecting(),

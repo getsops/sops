@@ -19,7 +19,11 @@
 
 package storage
 
-import original "github.com/Azure/azure-sdk-for-go/services/storage/mgmt/2019-04-01/storage"
+import (
+	"context"
+
+	original "github.com/Azure/azure-sdk-for-go/services/storage/mgmt/2019-04-01/storage"
+)
 
 const (
 	DefaultBaseURI = original.DefaultBaseURI
@@ -75,6 +79,13 @@ type DefaultAction = original.DefaultAction
 const (
 	DefaultActionAllow DefaultAction = original.DefaultActionAllow
 	DefaultActionDeny  DefaultAction = original.DefaultActionDeny
+)
+
+type DirectoryServiceOptions = original.DirectoryServiceOptions
+
+const (
+	DirectoryServiceOptionsAADDS DirectoryServiceOptions = original.DirectoryServiceOptionsAADDS
+	DirectoryServiceOptionsNone  DirectoryServiceOptions = original.DirectoryServiceOptionsNone
 )
 
 type GeoReplicationStatus = original.GeoReplicationStatus
@@ -281,6 +292,7 @@ type AccountsClient = original.AccountsClient
 type AccountsCreateFuture = original.AccountsCreateFuture
 type AccountsFailoverFuture = original.AccountsFailoverFuture
 type AzureEntityResource = original.AzureEntityResource
+type AzureFilesIdentityBasedAuthentication = original.AzureFilesIdentityBasedAuthentication
 type BaseClient = original.BaseClient
 type BlobContainer = original.BlobContainer
 type BlobContainersClient = original.BlobContainersClient
@@ -314,6 +326,8 @@ type LegalHoldProperties = original.LegalHoldProperties
 type ListAccountSasResponse = original.ListAccountSasResponse
 type ListContainerItem = original.ListContainerItem
 type ListContainerItems = original.ListContainerItems
+type ListContainerItemsIterator = original.ListContainerItemsIterator
+type ListContainerItemsPage = original.ListContainerItemsPage
 type ListServiceSasResponse = original.ListServiceSasResponse
 type ManagementPoliciesClient = original.ManagementPoliciesClient
 type ManagementPolicy = original.ManagementPolicy
@@ -371,6 +385,12 @@ func NewBlobServicesClient(subscriptionID string) BlobServicesClient {
 func NewBlobServicesClientWithBaseURI(baseURI string, subscriptionID string) BlobServicesClient {
 	return original.NewBlobServicesClientWithBaseURI(baseURI, subscriptionID)
 }
+func NewListContainerItemsIterator(page ListContainerItemsPage) ListContainerItemsIterator {
+	return original.NewListContainerItemsIterator(page)
+}
+func NewListContainerItemsPage(getNextPage func(context.Context, ListContainerItems) (ListContainerItems, error)) ListContainerItemsPage {
+	return original.NewListContainerItemsPage(getNextPage)
+}
 func NewManagementPoliciesClient(subscriptionID string) ManagementPoliciesClient {
 	return original.NewManagementPoliciesClient(subscriptionID)
 }
@@ -418,6 +438,9 @@ func PossibleBypassValues() []Bypass {
 }
 func PossibleDefaultActionValues() []DefaultAction {
 	return original.PossibleDefaultActionValues()
+}
+func PossibleDirectoryServiceOptionsValues() []DirectoryServiceOptions {
+	return original.PossibleDirectoryServiceOptionsValues()
 }
 func PossibleGeoReplicationStatusValues() []GeoReplicationStatus {
 	return original.PossibleGeoReplicationStatusValues()

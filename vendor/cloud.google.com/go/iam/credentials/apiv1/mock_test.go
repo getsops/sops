@@ -108,18 +108,6 @@ func (s *mockIamCredentialsServer) SignJwt(ctx context.Context, req *credentials
 	return s.resps[0].(*credentialspb.SignJwtResponse), nil
 }
 
-func (s *mockIamCredentialsServer) GenerateIdentityBindingAccessToken(ctx context.Context, req *credentialspb.GenerateIdentityBindingAccessTokenRequest) (*credentialspb.GenerateIdentityBindingAccessTokenResponse, error) {
-	md, _ := metadata.FromIncomingContext(ctx)
-	if xg := md["x-goog-api-client"]; len(xg) == 0 || !strings.Contains(xg[0], "gl-go/") {
-		return nil, fmt.Errorf("x-goog-api-client = %v, expected gl-go key", xg)
-	}
-	s.reqs = append(s.reqs, req)
-	if s.err != nil {
-		return nil, s.err
-	}
-	return s.resps[0].(*credentialspb.GenerateIdentityBindingAccessTokenResponse), nil
-}
-
 // clientOpt is the option tests should use to connect to the test server.
 // It is initialized by TestMain.
 var clientOpt option.ClientOption
@@ -397,73 +385,6 @@ func TestIamCredentialsSignJwtError(t *testing.T) {
 	}
 
 	resp, err := c.SignJwt(context.Background(), request)
-
-	if st, ok := gstatus.FromError(err); !ok {
-		t.Errorf("got error %v, expected grpc error", err)
-	} else if c := st.Code(); c != errCode {
-		t.Errorf("got error code %q, want %q", c, errCode)
-	}
-	_ = resp
-}
-func TestIamCredentialsGenerateIdentityBindingAccessToken(t *testing.T) {
-	var accessToken string = "accessToken-1938933922"
-	var expectedResponse = &credentialspb.GenerateIdentityBindingAccessTokenResponse{
-		AccessToken: accessToken,
-	}
-
-	mockIamCredentials.err = nil
-	mockIamCredentials.reqs = nil
-
-	mockIamCredentials.resps = append(mockIamCredentials.resps[:0], expectedResponse)
-
-	var formattedName string = fmt.Sprintf("projects/%s/serviceAccounts/%s", "[PROJECT]", "[SERVICE_ACCOUNT]")
-	var scope []string = nil
-	var jwt string = "jwt105671"
-	var request = &credentialspb.GenerateIdentityBindingAccessTokenRequest{
-		Name:  formattedName,
-		Scope: scope,
-		Jwt:   jwt,
-	}
-
-	c, err := NewIamCredentialsClient(context.Background(), clientOpt)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	resp, err := c.GenerateIdentityBindingAccessToken(context.Background(), request)
-
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	if want, got := request, mockIamCredentials.reqs[0]; !proto.Equal(want, got) {
-		t.Errorf("wrong request %q, want %q", got, want)
-	}
-
-	if want, got := expectedResponse, resp; !proto.Equal(want, got) {
-		t.Errorf("wrong response %q, want %q)", got, want)
-	}
-}
-
-func TestIamCredentialsGenerateIdentityBindingAccessTokenError(t *testing.T) {
-	errCode := codes.PermissionDenied
-	mockIamCredentials.err = gstatus.Error(errCode, "test error")
-
-	var formattedName string = fmt.Sprintf("projects/%s/serviceAccounts/%s", "[PROJECT]", "[SERVICE_ACCOUNT]")
-	var scope []string = nil
-	var jwt string = "jwt105671"
-	var request = &credentialspb.GenerateIdentityBindingAccessTokenRequest{
-		Name:  formattedName,
-		Scope: scope,
-		Jwt:   jwt,
-	}
-
-	c, err := NewIamCredentialsClient(context.Background(), clientOpt)
-	if err != nil {
-		t.Fatal(err)
-	}
-
-	resp, err := c.GenerateIdentityBindingAccessToken(context.Background(), request)
 
 	if st, ok := gstatus.FromError(err); !ok {
 		t.Errorf("got error %v, expected grpc error", err)

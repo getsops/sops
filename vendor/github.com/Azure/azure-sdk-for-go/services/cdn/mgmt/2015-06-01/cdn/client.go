@@ -1,8 +1,6 @@
 // Package cdn implements the Azure ARM Cdn service API version 2015-06-01.
 //
-// Use these APIs to manage Azure CDN resources through the Azure Resource Manager. You must make sure that requests
-// made to these resources are secure. For more information, see
-// https://msdn.microsoft.com/en-us/library/azure/dn790557.aspx.
+// Cdn Management Client
 package cdn
 
 // Copyright (c) Microsoft and contributors.  All rights reserved.

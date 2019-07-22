@@ -219,8 +219,21 @@ And decrypt it using::
 
 Encrypting using Azure Key Vault
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The Azure Key Vault integration uses service principals to access secrets in
-the vault. The following environment variables are used to authenticate:
+
+The Azure Key Vault integration tries several authentication methods, in
+this order:
+
+  1. Client credentials
+  2. Client Certificate
+  3. Username Password
+  4. MSI
+  5. Azure CLI auth
+
+You can force a specific authentication method through the AZURE_AUTH_METHOD
+environment variable, which may be one of: clientcredentials, clientcertificate,
+usernamepassword, msi, or cli (default).
+
+For example, you can use service principals with the following environment variables:
 
 .. code:: bash
 

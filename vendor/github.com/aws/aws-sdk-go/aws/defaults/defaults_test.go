@@ -10,6 +10,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds"
 	"github.com/aws/aws-sdk-go/aws/credentials/endpointcreds"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/internal/sdktesting"
 	"github.com/aws/aws-sdk-go/internal/shareddefaults"
 )
 
@@ -52,7 +53,8 @@ func TestHTTPCredProvider(t *testing.T) {
 		{Host: "localhost", Fail: false, AuthToken: "Basic abc123"},
 	}
 
-	defer os.Clearenv()
+	restoreEnvFn := sdktesting.StashEnv()
+	defer restoreEnvFn()
 
 	for i, c := range cases {
 		u := fmt.Sprintf("http://%s/abc/123", c.Host)
@@ -90,7 +92,8 @@ func TestHTTPCredProvider(t *testing.T) {
 }
 
 func TestECSCredProvider(t *testing.T) {
-	defer os.Clearenv()
+	restoreEnvFn := sdktesting.StashEnv()
+	defer restoreEnvFn()
 	os.Setenv(shareddefaults.ECSCredsProviderEnvVar, "/abc/123")
 
 	provider := RemoteCredProvider(aws.Config{}, request.Handlers{})

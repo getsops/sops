@@ -124,8 +124,8 @@ func Test_Worker_RecordFloat64(t *testing.T) {
 	someError := errors.New("some error")
 	m := stats.Float64("Test_Worker_RecordFloat64/MF1", "desc MF1", "unit")
 
-	k1, _ := tag.NewKey("k1")
-	k2, _ := tag.NewKey("k2")
+	k1 := tag.MustNewKey("k1")
+	k2 := tag.MustNewKey("k2")
 	ctx, err := tag.New(context.Background(),
 		tag.Insert(k1, "v1"),
 		tag.Insert(k2, "v2"),

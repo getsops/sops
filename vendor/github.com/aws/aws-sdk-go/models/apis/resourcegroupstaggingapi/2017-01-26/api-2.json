@@ -6,6 +6,7 @@
     "jsonVersion":"1.1",
     "protocol":"json",
     "serviceFullName":"AWS Resource Groups Tagging API",
+    "serviceId":"Resource Groups Tagging API",
     "signatureVersion":"v4",
     "targetPrefix":"ResourceGroupsTaggingAPI_20170126",
     "uid":"resourcegroupstaggingapi-2017-01-26"

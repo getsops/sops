@@ -1,8 +1,8 @@
 {
   "version": "2.0",
-  "service": "<p>AWS IoT Events monitors your equipment or device fleets for failures or changes in operation, and triggers actions when such events occur.</p>",
+  "service": "<p>AWS IoT Events monitors your equipment or device fleets for failures or changes in operation, and triggers actions when such events occur. AWS IoT Events Data API commands enable you to send inputs to detectors, list detectors, and view or update a detector's status.</p>",
   "operations": {
-    "BatchPutMessage": "<p>Sends a set of messages to the AWS IoT Events system. Each message payload will be transformed into the input you specify (<code>inputName</code>) and ingested into any detectors that monitor that input. If multiple messages are sent, the order in which the messages are processed is not guaranteed--you must send messages one at a time and wait for a successful response to guarantee ordering. </p>",
+    "BatchPutMessage": "<p>Sends a set of messages to the AWS IoT Events system. Each message payload is transformed into the input you specify (<code>\"inputName\"</code>) and ingested into any detectors that monitor that input. If multiple messages are sent, the order in which the messages are processed isn't guaranteed. To guarantee ordering, you must send messages one at a time and wait for a successful response.</p>",
     "BatchUpdateDetector": "<p>Updates the state, variable values, and timer settings of one or more detectors (instances) of a specified detector model.</p>",
     "DescribeDetector": "<p>Returns information about the specified detector (instance).</p>",
     "ListDetectors": "<p>Lists detectors (the instances of a detector model).</p>"
@@ -15,7 +15,7 @@
       }
     },
     "BatchPutMessageErrorEntry": {
-      "base": "<p>Contains informations about the errors encountered.</p>",
+      "base": "<p>Contains information about the errors encountered.</p>",
       "refs": {
         "BatchPutMessageErrorEntries$member": null
       }
@@ -33,11 +33,11 @@
     "BatchUpdateDetectorErrorEntries": {
       "base": null,
       "refs": {
-        "BatchUpdateDetectorResponse$batchUpdateDetectorErrorEntries": "<p>A list of those detector updates which resulted in errors. (The specific update did not occur if an error is listed here.)</p>"
+        "BatchUpdateDetectorResponse$batchUpdateDetectorErrorEntries": "<p>A list of those detector updates that resulted in errors. (If an error is listed here, the specific update did not occur.)</p>"
       }
     },
     "BatchUpdateDetectorErrorEntry": {
-      "base": "<p>Information about the error which occured when attempting to update a detector.</p>",
+      "base": "<p>Information about the error that occured when attempting to update a detector.</p>",
       "refs": {
         "BatchUpdateDetectorErrorEntries$member": null
       }
@@ -74,7 +74,7 @@
         "DescribeDetectorRequest$detectorModelName": "<p>The name of the detector model whose detectors (instances) you want information about.</p>",
         "Detector$detectorModelName": "<p>The name of the detector model that created this detector (instance).</p>",
         "DetectorSummary$detectorModelName": "<p>The name of the detector model that created this detector (instance).</p>",
-        "ListDetectorsRequest$detectorModelName": "<p>The name of the detector model whose instances you want to list.</p>",
+        "ListDetectorsRequest$detectorModelName": "<p>The name of the detector model whose detectors (instances) are listed.</p>",
         "UpdateDetectorRequest$detectorModelName": "<p>The name of the detector model that created the detectors (instances).</p>"
       }
     },
@@ -92,7 +92,7 @@
       }
     },
     "DetectorStateDefinition": {
-      "base": "<p>The new state, variable values and timer settings of the detector (instance).</p>",
+      "base": "<p>The new state, variable values, and timer settings of the detector (instance).</p>",
       "refs": {
         "UpdateDetectorRequest$state": "<p>The new state, variable values, and timer settings of the detector (instance).</p>"
       }
@@ -132,7 +132,7 @@
     "InputName": {
       "base": null,
       "refs": {
-        "Message$inputName": "<p>The name of the input into which the message payload will be transformed.</p>"
+        "Message$inputName": "<p>The name of the input into which the message payload is transformed.</p>"
       }
     },
     "InternalFailureException": {
@@ -179,16 +179,16 @@
     "MessageId": {
       "base": null,
       "refs": {
-        "BatchPutMessageErrorEntry$messageId": "<p>The ID of the message that caused the error. (See the value corresponding to the <code>messageId</code> key in the <code>message</code> object.)</p>",
-        "BatchUpdateDetectorErrorEntry$messageId": "<p>The \"messageId\" of the update request that caused the error. (The value of the <code>messageId</code> in the update request <code>Detector</code> object.)</p>",
-        "Message$messageId": "<p>The ID you wish to assign to the message. Each \"messageId\" must be unique within each batch sent.</p>",
-        "UpdateDetectorRequest$messageId": "<p>The ID you wish to assign to the detector update \"message\". Each \"messageId\" must be unique within each batch sent.</p>"
+        "BatchPutMessageErrorEntry$messageId": "<p>The ID of the message that caused the error. (See the value corresponding to the <code>\"messageId\"</code> key in the <code>\"message\"</code> object.)</p>",
+        "BatchUpdateDetectorErrorEntry$messageId": "<p>The <code>\"messageId\"</code> of the update request that caused the error. (The value of the <code>\"messageId\"</code> in the update request <code>\"Detector\"</code> object.)</p>",
+        "Message$messageId": "<p>The ID to assign to the message. Within each batch sent, each <code>\"messageId\"</code> must be unique.</p>",
+        "UpdateDetectorRequest$messageId": "<p>The ID to assign to the detector update <code>\"message\"</code>. Each <code>\"messageId\"</code> must be unique within each batch sent.</p>"
       }
     },
     "Messages": {
       "base": null,
       "refs": {
-        "BatchPutMessageRequest$messages": "<p>The list of messages to send. Each message has format: <code>'{ \"messageId\": \"string\", \"inputName\": \"string\", \"payload\": \"string\"}'</code>.</p>"
+        "BatchPutMessageRequest$messages": "<p>The list of messages to send. Each message has the following format: <code>'{ \"messageId\": \"string\", \"inputName\": \"string\", \"payload\": \"string\"}'</code> </p>"
       }
     },
     "NextToken": {
@@ -249,7 +249,7 @@
     "TimerDefinitions": {
       "base": null,
       "refs": {
-        "DetectorStateDefinition$timers": "<p>The new values of the detector's timers. Any timer whose value is not specified will be cleared and its timeout event will not occur.</p>"
+        "DetectorStateDefinition$timers": "<p>The new values of the detector's timers. Any timer whose value isn't specified is cleared, and its timeout event won't occur.</p>"
       }
     },
     "TimerName": {
@@ -284,7 +284,7 @@
     "UpdateDetectorRequests": {
       "base": null,
       "refs": {
-        "BatchUpdateDetectorRequest$detectors": "<p>The list of detectors (instances) to be updated, along with the values to be updated.</p>"
+        "BatchUpdateDetectorRequest$detectors": "<p>The list of detectors (instances) to update, along with the values to update.</p>"
       }
     },
     "Variable": {
@@ -302,7 +302,7 @@
     "VariableDefinitions": {
       "base": null,
       "refs": {
-        "DetectorStateDefinition$variables": "<p>The new values of the detector's variables. Any variable whose value is not specified will be cleared.</p>"
+        "DetectorStateDefinition$variables": "<p>The new values of the detector's variables. Any variable whose value isn't specified is cleared.</p>"
       }
     },
     "VariableName": {
@@ -322,7 +322,7 @@
     "Variables": {
       "base": null,
       "refs": {
-        "DetectorState$variables": "<p>The current state of the detector's variables.</p>"
+        "DetectorState$variables": "<p>The current values of the detector's variables.</p>"
       }
     },
     "errorMessage": {

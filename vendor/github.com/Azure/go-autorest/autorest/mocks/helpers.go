@@ -90,6 +90,19 @@ func NewResponse() *http.Response {
 	return NewResponseWithContent("")
 }
 
+// NewResponseWithBytes instantiates a new response with the passed bytes as the body content.
+func NewResponseWithBytes(input []byte) *http.Response {
+	return &http.Response{
+		Status:     "200 OK",
+		StatusCode: 200,
+		Proto:      "HTTP/1.0",
+		ProtoMajor: 1,
+		ProtoMinor: 0,
+		Body:       NewBodyWithBytes(input),
+		Request:    NewRequest(),
+	}
+}
+
 // NewResponseWithContent instantiates a new response with the passed string as the body content.
 func NewResponseWithContent(c string) *http.Response {
 	return &http.Response{

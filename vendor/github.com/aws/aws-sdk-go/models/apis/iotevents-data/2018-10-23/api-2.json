@@ -256,7 +256,7 @@
       "type":"string",
       "max":128,
       "min":1,
-      "pattern":"^[a-zA-Z0-9\\-_]+$"
+      "pattern":"^[a-zA-Z0-9\\-_:]+$"
     },
     "ListDetectorsRequest":{
       "type":"structure",

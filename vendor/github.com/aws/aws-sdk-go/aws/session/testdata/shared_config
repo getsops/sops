@@ -63,3 +63,19 @@ aws_secret_access_key = assume_role_w_creds_secret
 [assume_role_wo_creds]
 role_arn = assume_role_wo_creds_role_arn
 source_profile = assume_role_wo_creds
+
+[assume_role_with_credential_source]
+role_arn = assume_role_with_credential_source_role_arn
+credential_source = Ec2InstanceMetadata
+
+[multiple_assume_role]
+role_arn = multiple_assume_role_role_arn
+source_profile = assume_role
+
+[multiple_assume_role_with_credential_source]
+role_arn = multiple_assume_role_with_credential_source_role_arn
+source_profile = assume_role_with_credential_source
+
+[multiple_assume_role_with_credential_source2]
+role_arn = multiple_assume_role_with_credential_source2_role_arn
+source_profile = multiple_assume_role_with_credential_source

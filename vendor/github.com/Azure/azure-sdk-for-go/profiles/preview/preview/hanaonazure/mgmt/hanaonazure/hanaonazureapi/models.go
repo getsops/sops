@@ -23,3 +23,4 @@ import original "github.com/Azure/azure-sdk-for-go/services/preview/hanaonazure/
 
 type HanaInstancesClientAPI = original.HanaInstancesClientAPI
 type OperationsClientAPI = original.OperationsClientAPI
+type SapMonitorsClientAPI = original.SapMonitorsClientAPI

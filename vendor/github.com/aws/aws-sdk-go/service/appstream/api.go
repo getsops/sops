@@ -992,6 +992,9 @@ func (c *AppStream) CreateUsageReportSubscriptionRequest(input *CreateUsageRepor
 // API operation CreateUsageReportSubscription for usage and error information.
 //
 // Returned Error Codes:
+//   * ErrCodeInvalidRoleException "InvalidRoleException"
+//   The specified role is invalid.
+//
 //   * ErrCodeInvalidAccountStatusException "InvalidAccountStatusException"
 //   The resource cannot be created because your AWS account is suspended. For
 //   assistance, contact AWS Support.
@@ -4956,7 +4959,7 @@ type CreateFleetInput struct {
 	//
 	// To prevent users from being disconnected due to inactivity, specify a value
 	// of 0. Otherwise, specify a value between 60 and 3600. The default value is
-	// 900.
+	// 0.
 	//
 	// If you enable this feature, we recommend that you specify a value that corresponds
 	// exactly to a whole number of minutes (for example, 60, 120, and 180). If
@@ -5813,10 +5816,14 @@ func (s CreateUsageReportSubscriptionInput) GoString() string {
 type CreateUsageReportSubscriptionOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The Amazon S3 bucket where generated reports are stored. When a usage report
-	// subscription is enabled for the first time for an account in an AWS Region,
-	// an S3 bucket is created. The bucket is unique to the AWS account and the
-	// Region.
+	// The Amazon S3 bucket where generated reports are stored.
+	//
+	// If you enabled on-instance session scripts and Amazon S3 logging for your
+	// session script configuration, AppStream 2.0 created an S3 bucket to store
+	// the script output. The bucket is unique to your account and Region. When
+	// you enable usage reporting in this case, AppStream 2.0 uses the same bucket
+	// to store your usage reports. If you haven't already enabled on-instance session
+	// scripts, when you enable usage reports, AppStream 2.0 creates a new S3 bucket.
 	S3BucketName *string `min:"1" type:"string"`
 
 	// The schedule for generating usage reports.
@@ -7746,7 +7753,7 @@ func (s ExpireSessionOutput) GoString() string {
 	return s.String()
 }
 
-// Describes the parameters for a fleet.
+// Describes a fleet.
 type Fleet struct {
 	_ struct{} `type:"structure"`
 
@@ -7815,7 +7822,7 @@ type Fleet struct {
 	//
 	// To prevent users from being disconnected due to inactivity, specify a value
 	// of 0. Otherwise, specify a value between 60 and 3600. The default value is
-	// 900.
+	// 0.
 	//
 	// If you enable this feature, we recommend that you specify a value that corresponds
 	// exactly to a whole number of minutes (for example, 60, 120, and 180). If
@@ -8037,6 +8044,10 @@ type Image struct {
 	// The image name to display.
 	DisplayName *string `min:"1" type:"string"`
 
+	// The name of the image builder that was used to create the private image.
+	// If the image is shared, this value is null.
+	ImageBuilderName *string `min:"1" type:"string"`
+
 	// Indicates whether an image builder can be launched from this image.
 	ImageBuilderSupported *bool `type:"boolean"`
 
@@ -8116,6 +8127,12 @@ func (s *Image) SetDescription(v string) *Image {
 // SetDisplayName sets the DisplayName field's value.
 func (s *Image) SetDisplayName(v string) *Image {
 	s.DisplayName = &v
+	return s
+}
+
+// SetImageBuilderName sets the ImageBuilderName field's value.
+func (s *Image) SetImageBuilderName(v string) *Image {
+	s.ImageBuilderName = &v
 	return s
 }
 
@@ -8208,6 +8225,9 @@ type ImageBuilder struct {
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
+	// Describes the network details of the fleet or image builder instance.
+	NetworkAccessConfiguration *NetworkAccessConfiguration `type:"structure"`
+
 	// The operating system platform of the image builder.
 	Platform *string `type:"string" enum:"PlatformType"`
 
@@ -8294,6 +8314,12 @@ func (s *ImageBuilder) SetInstanceType(v string) *ImageBuilder {
 // SetName sets the Name field's value.
 func (s *ImageBuilder) SetName(v string) *ImageBuilder {
 	s.Name = &v
+	return s
+}
+
+// SetNetworkAccessConfiguration sets the NetworkAccessConfiguration field's value.
+func (s *ImageBuilder) SetNetworkAccessConfiguration(v *NetworkAccessConfiguration) *ImageBuilder {
+	s.NetworkAccessConfiguration = v
 	return s
 }
 
@@ -8690,7 +8716,7 @@ func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForRe
 	return s
 }
 
-// Describes the network details of the fleet instance for the streaming session.
+// Describes the network details of the fleet or image builder instance.
 type NetworkAccessConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -9732,7 +9758,7 @@ type UpdateFleetInput struct {
 	//
 	// To prevent users from being disconnected due to inactivity, specify a value
 	// of 0. Otherwise, specify a value between 60 and 3600. The default value is
-	// 900.
+	// 0.
 	//
 	// If you enable this feature, we recommend that you specify a value that corresponds
 	// exactly to a whole number of minutes (for example, 60, 120, and 180). If
@@ -10223,16 +10249,20 @@ type UsageReportSubscription struct {
 	// The time when the last usage report was generated.
 	LastGeneratedReportDate *time.Time `type:"timestamp"`
 
-	// The Amazon S3 bucket where generated reports are stored. When a usage report
-	// subscription is enabled for the first time for an account in an AWS Region,
-	// an S3 bucket is created. The bucket is unique to the AWS account and the
-	// Region.
+	// The Amazon S3 bucket where generated reports are stored.
+	//
+	// If you enabled on-instance session scripts and Amazon S3 logging for your
+	// session script configuration, AppStream 2.0 created an S3 bucket to store
+	// the script output. The bucket is unique to your account and Region. When
+	// you enable usage reporting in this case, AppStream 2.0 uses the same bucket
+	// to store your usage reports. If you haven't already enabled on-instance session
+	// scripts, when you enable usage reports, AppStream 2.0 creates a new S3 bucket.
 	S3BucketName *string `min:"1" type:"string"`
 
 	// The schedule for generating usage reports.
 	Schedule *string `type:"string" enum:"UsageReportSchedule"`
 
-	// The errors that are returned when usage reports can't be generated.
+	// The errors that were returned if usage reports couldn't be generated.
 	SubscriptionErrors []*LastReportGenerationExecutionError `type:"list"`
 }
 
@@ -10565,7 +10595,7 @@ type VpcConfig struct {
 
 	// The identifiers of the subnets to which a network interface is attached from
 	// the fleet instance or image builder instance. Fleet instances use one or
-	// two subnets. Image builder instances use one subnet.
+	// more subnets. Image builder instances use one subnet.
 	SubnetIds []*string `type:"list"`
 }
 
@@ -10817,6 +10847,12 @@ const (
 const (
 	// PlatformTypeWindows is a PlatformType enum value
 	PlatformTypeWindows = "WINDOWS"
+
+	// PlatformTypeWindowsServer2016 is a PlatformType enum value
+	PlatformTypeWindowsServer2016 = "WINDOWS_SERVER_2016"
+
+	// PlatformTypeWindowsServer2019 is a PlatformType enum value
+	PlatformTypeWindowsServer2019 = "WINDOWS_SERVER_2019"
 )
 
 const (

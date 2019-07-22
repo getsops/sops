@@ -1361,6 +1361,57 @@ func (s *InternalAppSharingArtifact) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// IntroductoryPriceInfo: Contains the introductory price information
+// for a subscription.
+type IntroductoryPriceInfo struct {
+	// IntroductoryPriceAmountMicros: Introductory price of the
+	// subscription, not including tax. The currency is the same as
+	// price_currency_code. Price is expressed in micro-units, where
+	// 1,000,000 micro-units represents one unit of the currency. For
+	// example, if the subscription price is €1.99, price_amount_micros is
+	// 1990000.
+	IntroductoryPriceAmountMicros int64 `json:"introductoryPriceAmountMicros,omitempty,string"`
+
+	// IntroductoryPriceCurrencyCode: ISO 4217 currency code for the
+	// introductory subscription price. For example, if the price is
+	// specified in British pounds sterling, price_currency_code is "GBP".
+	IntroductoryPriceCurrencyCode string `json:"introductoryPriceCurrencyCode,omitempty"`
+
+	// IntroductoryPriceCycles: The number of billing period to offer
+	// introductory pricing.
+	IntroductoryPriceCycles int64 `json:"introductoryPriceCycles,omitempty"`
+
+	// IntroductoryPricePeriod: Introductory price period, specified in ISO
+	// 8601 format. Common values are (but not limited to) "P1W" (one week),
+	// "P1M" (one month), "P3M" (three months), "P6M" (six months), and
+	// "P1Y" (one year).
+	IntroductoryPricePeriod string `json:"introductoryPricePeriod,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g.
+	// "IntroductoryPriceAmountMicros") to unconditionally include in API
+	// requests. By default, fields with empty values are omitted from API
+	// requests. However, any non-pointer, non-interface field appearing in
+	// ForceSendFields will be sent to the server regardless of whether the
+	// field is empty or not. This may be used to include empty fields in
+	// Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g.
+	// "IntroductoryPriceAmountMicros") to include in API requests with the
+	// JSON null value. By default, fields with empty values are omitted
+	// from API requests. However, any field with an empty value appearing
+	// in NullFields will be sent to the server as null. It is an error if a
+	// field in this list has a non-empty value. This may be used to include
+	// null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *IntroductoryPriceInfo) MarshalJSON() ([]byte, error) {
+	type NoMethod IntroductoryPriceInfo
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
 type Listing struct {
 	// FullDescription: Full description of the app; this may be up to 4000
 	// characters in length.
@@ -1595,6 +1646,7 @@ type ProductPurchase struct {
 	//
 	// - Purchased
 	// - Canceled
+	// - Pending
 	PurchaseState int64 `json:"purchaseState,omitempty"`
 
 	// PurchaseTimeMillis: The time the product was purchased, in
@@ -2022,6 +2074,12 @@ func (s *SubscriptionPriceChange) MarshalJSON() ([]byte, error) {
 // SubscriptionPurchase: A SubscriptionPurchase resource indicates the
 // status of a user's subscription purchase.
 type SubscriptionPurchase struct {
+	// AcknowledgementState: The acknowledgement state of the subscription
+	// product. Possible values are:
+	// - Yet to be acknowledged
+	// - Acknowledged
+	AcknowledgementState int64 `json:"acknowledgementState,omitempty"`
+
 	// AutoRenewing: Whether the subscription will automatically be renewed
 	// when it reaches its current expiry time.
 	AutoRenewing bool `json:"autoRenewing,omitempty"`
@@ -2072,6 +2130,14 @@ type SubscriptionPurchase struct {
 	// Google'.
 	GivenName string `json:"givenName,omitempty"`
 
+	// IntroductoryPriceInfo: Introductory price information of the
+	// subscription. This is only present when the subscription was
+	// purchased with an introductory price.
+	//
+	// This field does not indicate the subscription is currently in
+	// introductory price period.
+	IntroductoryPriceInfo *IntroductoryPriceInfo `json:"introductoryPriceInfo,omitempty"`
+
 	// Kind: This kind represents a subscriptionPurchase object in the
 	// androidpublisher service.
 	Kind string `json:"kind,omitempty"`
@@ -2121,8 +2187,8 @@ type SubscriptionPurchase struct {
 	// price_currency_code is "GBP".
 	PriceCurrencyCode string `json:"priceCurrencyCode,omitempty"`
 
-	// ProfileId: The profile id of the user when the subscription was
-	// purchased. Only present for purchases made with 'Subscribe with
+	// ProfileId: The Google profile id of the user when the subscription
+	// was purchased. Only present for purchases made with 'Subscribe with
 	// Google'.
 	ProfileId string `json:"profileId,omitempty"`
 
@@ -2150,20 +2216,22 @@ type SubscriptionPurchase struct {
 	// server.
 	googleapi.ServerResponse `json:"-"`
 
-	// ForceSendFields is a list of field names (e.g. "AutoRenewing") to
-	// unconditionally include in API requests. By default, fields with
-	// empty values are omitted from API requests. However, any non-pointer,
-	// non-interface field appearing in ForceSendFields will be sent to the
-	// server regardless of whether the field is empty or not. This may be
-	// used to include empty fields in Patch requests.
+	// ForceSendFields is a list of field names (e.g.
+	// "AcknowledgementState") to unconditionally include in API requests.
+	// By default, fields with empty values are omitted from API requests.
+	// However, any non-pointer, non-interface field appearing in
+	// ForceSendFields will be sent to the server regardless of whether the
+	// field is empty or not. This may be used to include empty fields in
+	// Patch requests.
 	ForceSendFields []string `json:"-"`
 
-	// NullFields is a list of field names (e.g. "AutoRenewing") to include
-	// in API requests with the JSON null value. By default, fields with
-	// empty values are omitted from API requests. However, any field with
-	// an empty value appearing in NullFields will be sent to the server as
-	// null. It is an error if a field in this list has a non-empty value.
-	// This may be used to include null fields in Patch requests.
+	// NullFields is a list of field names (e.g. "AcknowledgementState") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
 	NullFields []string `json:"-"`
 }
 
@@ -2263,8 +2331,12 @@ func (s *SubscriptionPurchasesDeferResponse) MarshalJSON() ([]byte, error) {
 }
 
 type Testers struct {
+	// GoogleGroups: A list of all Google Groups, as email addresses, that
+	// define testers for this track.
 	GoogleGroups []string `json:"googleGroups,omitempty"`
 
+	// GooglePlusCommunities: A list of all Google+ Communities, as URLs,
+	// that define testers for this track.
 	GooglePlusCommunities []string `json:"googlePlusCommunities,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the

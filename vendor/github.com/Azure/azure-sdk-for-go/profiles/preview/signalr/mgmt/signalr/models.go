@@ -66,6 +66,7 @@ type CreateOrUpdateProperties = original.CreateOrUpdateProperties
 type CreateParameters = original.CreateParameters
 type DeleteFuture = original.DeleteFuture
 type Dimension = original.Dimension
+type Feature = original.Feature
 type Keys = original.Keys
 type MetricSpecification = original.MetricSpecification
 type NameAvailability = original.NameAvailability

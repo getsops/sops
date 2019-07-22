@@ -92,6 +92,10 @@ type SSMAPI interface {
 	CreateMaintenanceWindowWithContext(aws.Context, *ssm.CreateMaintenanceWindowInput, ...request.Option) (*ssm.CreateMaintenanceWindowOutput, error)
 	CreateMaintenanceWindowRequest(*ssm.CreateMaintenanceWindowInput) (*request.Request, *ssm.CreateMaintenanceWindowOutput)
 
+	CreateOpsItem(*ssm.CreateOpsItemInput) (*ssm.CreateOpsItemOutput, error)
+	CreateOpsItemWithContext(aws.Context, *ssm.CreateOpsItemInput, ...request.Option) (*ssm.CreateOpsItemOutput, error)
+	CreateOpsItemRequest(*ssm.CreateOpsItemInput) (*request.Request, *ssm.CreateOpsItemOutput)
+
 	CreatePatchBaseline(*ssm.CreatePatchBaselineInput) (*ssm.CreatePatchBaselineOutput, error)
 	CreatePatchBaselineWithContext(aws.Context, *ssm.CreatePatchBaselineInput, ...request.Option) (*ssm.CreatePatchBaselineOutput, error)
 	CreatePatchBaselineRequest(*ssm.CreatePatchBaselineInput) (*request.Request, *ssm.CreatePatchBaselineOutput)
@@ -258,6 +262,10 @@ type SSMAPI interface {
 	DescribeMaintenanceWindowsForTargetWithContext(aws.Context, *ssm.DescribeMaintenanceWindowsForTargetInput, ...request.Option) (*ssm.DescribeMaintenanceWindowsForTargetOutput, error)
 	DescribeMaintenanceWindowsForTargetRequest(*ssm.DescribeMaintenanceWindowsForTargetInput) (*request.Request, *ssm.DescribeMaintenanceWindowsForTargetOutput)
 
+	DescribeOpsItems(*ssm.DescribeOpsItemsInput) (*ssm.DescribeOpsItemsOutput, error)
+	DescribeOpsItemsWithContext(aws.Context, *ssm.DescribeOpsItemsInput, ...request.Option) (*ssm.DescribeOpsItemsOutput, error)
+	DescribeOpsItemsRequest(*ssm.DescribeOpsItemsInput) (*request.Request, *ssm.DescribeOpsItemsOutput)
+
 	DescribeParameters(*ssm.DescribeParametersInput) (*ssm.DescribeParametersOutput, error)
 	DescribeParametersWithContext(aws.Context, *ssm.DescribeParametersInput, ...request.Option) (*ssm.DescribeParametersOutput, error)
 	DescribeParametersRequest(*ssm.DescribeParametersInput) (*request.Request, *ssm.DescribeParametersOutput)
@@ -336,6 +344,14 @@ type SSMAPI interface {
 	GetMaintenanceWindowTask(*ssm.GetMaintenanceWindowTaskInput) (*ssm.GetMaintenanceWindowTaskOutput, error)
 	GetMaintenanceWindowTaskWithContext(aws.Context, *ssm.GetMaintenanceWindowTaskInput, ...request.Option) (*ssm.GetMaintenanceWindowTaskOutput, error)
 	GetMaintenanceWindowTaskRequest(*ssm.GetMaintenanceWindowTaskInput) (*request.Request, *ssm.GetMaintenanceWindowTaskOutput)
+
+	GetOpsItem(*ssm.GetOpsItemInput) (*ssm.GetOpsItemOutput, error)
+	GetOpsItemWithContext(aws.Context, *ssm.GetOpsItemInput, ...request.Option) (*ssm.GetOpsItemOutput, error)
+	GetOpsItemRequest(*ssm.GetOpsItemInput) (*request.Request, *ssm.GetOpsItemOutput)
+
+	GetOpsSummary(*ssm.GetOpsSummaryInput) (*ssm.GetOpsSummaryOutput, error)
+	GetOpsSummaryWithContext(aws.Context, *ssm.GetOpsSummaryInput, ...request.Option) (*ssm.GetOpsSummaryOutput, error)
+	GetOpsSummaryRequest(*ssm.GetOpsSummaryInput) (*request.Request, *ssm.GetOpsSummaryOutput)
 
 	GetParameter(*ssm.GetParameterInput) (*ssm.GetParameterOutput, error)
 	GetParameterWithContext(aws.Context, *ssm.GetParameterInput, ...request.Option) (*ssm.GetParameterOutput, error)
@@ -538,6 +554,10 @@ type SSMAPI interface {
 	UpdateManagedInstanceRole(*ssm.UpdateManagedInstanceRoleInput) (*ssm.UpdateManagedInstanceRoleOutput, error)
 	UpdateManagedInstanceRoleWithContext(aws.Context, *ssm.UpdateManagedInstanceRoleInput, ...request.Option) (*ssm.UpdateManagedInstanceRoleOutput, error)
 	UpdateManagedInstanceRoleRequest(*ssm.UpdateManagedInstanceRoleInput) (*request.Request, *ssm.UpdateManagedInstanceRoleOutput)
+
+	UpdateOpsItem(*ssm.UpdateOpsItemInput) (*ssm.UpdateOpsItemOutput, error)
+	UpdateOpsItemWithContext(aws.Context, *ssm.UpdateOpsItemInput, ...request.Option) (*ssm.UpdateOpsItemOutput, error)
+	UpdateOpsItemRequest(*ssm.UpdateOpsItemInput) (*request.Request, *ssm.UpdateOpsItemOutput)
 
 	UpdatePatchBaseline(*ssm.UpdatePatchBaselineInput) (*ssm.UpdatePatchBaselineOutput, error)
 	UpdatePatchBaselineWithContext(aws.Context, *ssm.UpdatePatchBaselineInput, ...request.Option) (*ssm.UpdatePatchBaselineOutput, error)

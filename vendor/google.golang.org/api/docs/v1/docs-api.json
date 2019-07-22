@@ -209,7 +209,7 @@
       }
     }
   },
-  "revision": "20190530",
+  "revision": "20190627",
   "rootUrl": "https://docs.googleapis.com/",
   "schemas": {
     "AutoText": {
@@ -652,89 +652,89 @@
       "properties": {
         "body": {
           "$ref": "Body",
-          "description": "The main body of the document."
+          "description": "Output only. The main body of the document."
         },
         "documentId": {
-          "description": "The ID of the document.",
+          "description": "Output only. The ID of the document.",
           "type": "string"
         },
         "documentStyle": {
           "$ref": "DocumentStyle",
-          "description": "The style of the document."
+          "description": "Output only. The style of the document."
         },
         "footers": {
           "additionalProperties": {
             "$ref": "Footer"
           },
-          "description": "The footers in the document, keyed by footer ID.",
+          "description": "Output only. The footers in the document, keyed by footer ID.",
           "type": "object"
         },
         "footnotes": {
           "additionalProperties": {
             "$ref": "Footnote"
           },
-          "description": "The footnotes in the document, keyed by footnote ID.",
+          "description": "Output only. The footnotes in the document, keyed by footnote ID.",
           "type": "object"
         },
         "headers": {
           "additionalProperties": {
             "$ref": "Header"
           },
-          "description": "The headers in the document, keyed by header ID.",
+          "description": "Output only. The headers in the document, keyed by header ID.",
           "type": "object"
         },
         "inlineObjects": {
           "additionalProperties": {
             "$ref": "InlineObject"
           },
-          "description": "The inline objects in the document, keyed by object ID.",
+          "description": "Output only. The inline objects in the document, keyed by object ID.",
           "type": "object"
         },
         "lists": {
           "additionalProperties": {
             "$ref": "List"
           },
-          "description": "The lists in the document, keyed by list ID.",
+          "description": "Output only. The lists in the document, keyed by list ID.",
           "type": "object"
         },
         "namedRanges": {
           "additionalProperties": {
             "$ref": "NamedRanges"
           },
-          "description": "The named ranges in the document, keyed by name.",
+          "description": "Output only. The named ranges in the document, keyed by name.",
           "type": "object"
         },
         "namedStyles": {
           "$ref": "NamedStyles",
-          "description": "The named styles of the document."
+          "description": "Output only. The named styles of the document."
         },
         "positionedObjects": {
           "additionalProperties": {
             "$ref": "PositionedObject"
           },
-          "description": "The positioned objects in the document, keyed by object ID.",
+          "description": "Output only. The positioned objects in the document, keyed by object ID.",
           "type": "object"
         },
         "revisionId": {
-          "description": "The revision ID of the document. Can be used in update requests to specify\nwhich revision of a document to apply updates to and how the request should\nbehave if the document has been edited since that revision. Only populated\nif the user has edit access to the document.\n\nThe format of the revision ID may change over time, so it should be treated\nopaquely. A returned revision ID is only guaranteed to be valid for 24\nhours after it has been returned and cannot be shared across users. If the\nrevision ID is unchanged between calls, then the document has not changed.\nConversely, a changed ID (for the same document and user) usually means the\ndocument has been updated; however, a changed ID can also be due to\ninternal factors such as ID format changes.",
+          "description": "Output only. The revision ID of the document. Can be used in update\nrequests to specify which revision of a document to apply updates to and\nhow the request should behave if the document has been edited since that\nrevision. Only populated if the user has edit access to the document.\n\nThe format of the revision ID may change over time, so it should be treated\nopaquely. A returned revision ID is only guaranteed to be valid for 24\nhours after it has been returned and cannot be shared across users. If the\nrevision ID is unchanged between calls, then the document has not changed.\nConversely, a changed ID (for the same document and user) usually means the\ndocument has been updated; however, a changed ID can also be due to\ninternal factors such as ID format changes.",
           "type": "string"
         },
         "suggestedDocumentStyleChanges": {
           "additionalProperties": {
             "$ref": "SuggestedDocumentStyle"
           },
-          "description": "The suggested changes to the style of the document, keyed by suggestion ID.",
+          "description": "Output only. The suggested changes to the style of the document, keyed by\nsuggestion ID.",
           "type": "object"
         },
         "suggestedNamedStylesChanges": {
           "additionalProperties": {
             "$ref": "SuggestedNamedStyles"
           },
-          "description": "The suggested changes to the named styles of the document, keyed by\nsuggestion ID.",
+          "description": "Output only. The suggested changes to the named styles of the document,\nkeyed by suggestion ID.",
           "type": "object"
         },
         "suggestionsViewMode": {
-          "description": "The suggestions view mode applied to the document.\n\nNote: When editing a document, changes must be based on a document with\nSUGGESTIONS_INLINE.",
+          "description": "Output only. The suggestions view mode applied to the document.\n\nNote: When editing a document, changes must be based on a document with\nSUGGESTIONS_INLINE.",
           "enum": [
             "DEFAULT_FOR_CURRENT_ACCESS",
             "SUGGESTIONS_INLINE",
@@ -945,7 +945,7 @@
         },
         "size": {
           "$ref": "Size",
-          "description": "The size of the embedded object."
+          "description": "The visible size of the image after cropping."
         },
         "title": {
           "description": "The title of the embedded object. The `title` and `description` are both\ncombined to display alt text.",
@@ -1254,7 +1254,7 @@
         },
         "cropProperties": {
           "$ref": "CropProperties",
-          "description": "The crop properties of the image.\n\nAfter cropping, the image will be stretched to fit in its container."
+          "description": "The crop properties of the image."
         },
         "sourceUri": {
           "description": "The source URI is the URI used to insert the image. The source URI can be\nempty.",
@@ -3113,12 +3113,12 @@
       "type": "object"
     },
     "TableCellBorder": {
-      "description": "A border around a table cell.\n\nTable cell borders cannot be transparent. To hide a table cell border, make\nits width 0.",
+      "description": "A border around a table cell.",
       "id": "TableCellBorder",
       "properties": {
         "color": {
           "$ref": "OptionalColor",
-          "description": "The color of the border.\n\nThis color cannot be transparent."
+          "description": "The color of the border."
         },
         "dashStyle": {
           "description": "The dash style of the border.",

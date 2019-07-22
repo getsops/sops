@@ -29,6 +29,7 @@ import (
 	"google.golang.org/grpc/balancer/roundrobin"
 	"google.golang.org/grpc/balancer/xds/internal"
 	edspb "google.golang.org/grpc/balancer/xds/internal/proto/envoy/api/v2/eds"
+	endpointpb "google.golang.org/grpc/balancer/xds/internal/proto/envoy/api/v2/endpoint/endpoint"
 	percentpb "google.golang.org/grpc/balancer/xds/internal/proto/envoy/type/percent"
 	"google.golang.org/grpc/balancer/xds/lrs"
 	"google.golang.org/grpc/codes"
@@ -187,10 +188,27 @@ func (xdsB *EDSBalancer) HandleEDSResponse(edsResp *edspb.ClusterLoadAssignment)
 
 	xdsB.updateDrops(edsResp.GetPolicy().GetDropOverloads())
 
+	// Filter out all localities with weight 0.
+	//
+	// Locality weighted load balancer can be enabled by setting an option in
+	// CDS, and the weight of each locality. Currently, without the guarantee
+	// that CDS is always sent, we assume locality weighted load balance is
+	// always enabled, and ignore all weight 0 localities.
+	//
+	// In the future, we should look at the config in CDS response and decide
+	// whether locality weight matters.
+	newEndpoints := make([]*endpointpb.LocalityLbEndpoints, 0, len(edsResp.Endpoints))
+	for _, locality := range edsResp.Endpoints {
+		if locality.GetLoadBalancingWeight().GetValue() == 0 {
+			continue
+		}
+		newEndpoints = append(newEndpoints, locality)
+	}
+
 	// newLocalitiesSet contains all names of localitis in the new EDS response.
 	// It's used to delete localities that are removed in the new EDS response.
 	newLocalitiesSet := make(map[internal.Locality]struct{})
-	for _, locality := range edsResp.Endpoints {
+	for _, locality := range newEndpoints {
 		// One balancer for each locality.
 
 		l := locality.GetLocality()
@@ -206,11 +224,6 @@ func (xdsB *EDSBalancer) HandleEDSResponse(edsResp *edspb.ClusterLoadAssignment)
 		newLocalitiesSet[lid] = struct{}{}
 
 		newWeight := locality.GetLoadBalancingWeight().GetValue()
-		if newWeight == 0 {
-			// Weight can never be 0.
-			newWeight = 1
-		}
-
 		var newAddrs []resolver.Address
 		for _, lbEndpoint := range locality.GetLbEndpoints() {
 			socketAddress := lbEndpoint.GetEndpoint().GetAddress().GetSocketAddress()

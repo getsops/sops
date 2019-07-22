@@ -1,7 +1,6 @@
 // Package formrecognizer implements the Azure ARM Formrecognizer service API version 1.0-preview.
 //
-// Extracts information from forms and images into structured data based on a model created by a set of representative
-// training forms.
+//
 package formrecognizer
 
 // Copyright (c) Microsoft and contributors.  All rights reserved.
@@ -134,6 +133,153 @@ func (client BaseClient) AnalyzeWithCustomModelResponder(resp *http.Response) (r
 		autorest.ByUnmarshallingJSON(&result),
 		autorest.ByClosing())
 	result.Response = autorest.Response{Response: resp}
+	return
+}
+
+// BatchReadReceipt batch Read Receipt operation. The response contains a field called 'Operation-Location', which
+// contains the URL that you must use for your 'Get Read Receipt Result' operation.
+// Parameters:
+// imageURL - a JSON document with a URL pointing to the image that is to be analyzed.
+func (client BaseClient) BatchReadReceipt(ctx context.Context, imageURL ImageURL) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.BatchReadReceipt")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	if err := validation.Validate([]validation.Validation{
+		{TargetValue: imageURL,
+			Constraints: []validation.Constraint{{Target: "imageURL.URL", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
+		return result, validation.NewError("formrecognizer.BaseClient", "BatchReadReceipt", err.Error())
+	}
+
+	req, err := client.BatchReadReceiptPreparer(ctx, imageURL)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "formrecognizer.BaseClient", "BatchReadReceipt", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.BatchReadReceiptSender(req)
+	if err != nil {
+		result.Response = resp
+		err = autorest.NewErrorWithError(err, "formrecognizer.BaseClient", "BatchReadReceipt", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.BatchReadReceiptResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "formrecognizer.BaseClient", "BatchReadReceipt", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// BatchReadReceiptPreparer prepares the BatchReadReceipt request.
+func (client BaseClient) BatchReadReceiptPreparer(ctx context.Context, imageURL ImageURL) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPost(),
+		autorest.WithCustomBaseURL("{Endpoint}/formrecognizer/v1.0-preview", urlParameters),
+		autorest.WithPath("/prebuilt/receipt/asyncBatchAnalyze"),
+		autorest.WithJSON(imageURL))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// BatchReadReceiptSender sends the BatchReadReceipt request. The method will close the
+// http.Response Body if it receives an error.
+func (client BaseClient) BatchReadReceiptSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+}
+
+// BatchReadReceiptResponder handles the response to the BatchReadReceipt request. The method always
+// closes the http.Response Body.
+func (client BaseClient) BatchReadReceiptResponder(resp *http.Response) (result autorest.Response, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
+		autorest.ByClosing())
+	result.Response = resp
+	return
+}
+
+// BatchReadReceiptInStream read Receipt operation. When you use the 'Batch Read Receipt' interface, the response
+// contains a field called 'Operation-Location'. The 'Operation-Location' field contains the URL that you must use for
+// your 'Get Read Receipt Result' operation.
+// Parameters:
+// imageParameter - an image stream.
+func (client BaseClient) BatchReadReceiptInStream(ctx context.Context, imageParameter io.ReadCloser) (result autorest.Response, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.BatchReadReceiptInStream")
+		defer func() {
+			sc := -1
+			if result.Response != nil {
+				sc = result.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	req, err := client.BatchReadReceiptInStreamPreparer(ctx, imageParameter)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "formrecognizer.BaseClient", "BatchReadReceiptInStream", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.BatchReadReceiptInStreamSender(req)
+	if err != nil {
+		result.Response = resp
+		err = autorest.NewErrorWithError(err, "formrecognizer.BaseClient", "BatchReadReceiptInStream", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.BatchReadReceiptInStreamResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "formrecognizer.BaseClient", "BatchReadReceiptInStream", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// BatchReadReceiptInStreamPreparer prepares the BatchReadReceiptInStream request.
+func (client BaseClient) BatchReadReceiptInStreamPreparer(ctx context.Context, imageParameter io.ReadCloser) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/octet-stream"),
+		autorest.AsPost(),
+		autorest.WithCustomBaseURL("{Endpoint}/formrecognizer/v1.0-preview", urlParameters),
+		autorest.WithPath("/prebuilt/receipt/asyncBatchAnalyze"),
+		autorest.WithFile(imageParameter))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// BatchReadReceiptInStreamSender sends the BatchReadReceiptInStream request. The method will close the
+// http.Response Body if it receives an error.
+func (client BaseClient) BatchReadReceiptInStreamSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+}
+
+// BatchReadReceiptInStreamResponder handles the response to the BatchReadReceiptInStream request. The method always
+// closes the http.Response Body.
+func (client BaseClient) BatchReadReceiptInStreamResponder(resp *http.Response) (result autorest.Response, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
+		autorest.ByClosing())
+	result.Response = resp
 	return
 }
 
@@ -419,6 +565,80 @@ func (client BaseClient) GetExtractedKeysResponder(resp *http.Response) (result 
 	return
 }
 
+// GetReadReceiptResult this interface is used for getting the analysis results of a 'Batch Read Receipt' operation.
+// The URL to this interface should be retrieved from the 'Operation-Location' field returned from the 'Batch Read
+// Receipt' operation.
+// Parameters:
+// operationID - id of read operation returned in the response of a 'Batch Read Receipt' operation.
+func (client BaseClient) GetReadReceiptResult(ctx context.Context, operationID string) (result ReadReceiptResult, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/BaseClient.GetReadReceiptResult")
+		defer func() {
+			sc := -1
+			if result.Response.Response != nil {
+				sc = result.Response.Response.StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	req, err := client.GetReadReceiptResultPreparer(ctx, operationID)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "formrecognizer.BaseClient", "GetReadReceiptResult", nil, "Failure preparing request")
+		return
+	}
+
+	resp, err := client.GetReadReceiptResultSender(req)
+	if err != nil {
+		result.Response = autorest.Response{Response: resp}
+		err = autorest.NewErrorWithError(err, "formrecognizer.BaseClient", "GetReadReceiptResult", resp, "Failure sending request")
+		return
+	}
+
+	result, err = client.GetReadReceiptResultResponder(resp)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "formrecognizer.BaseClient", "GetReadReceiptResult", resp, "Failure responding to request")
+	}
+
+	return
+}
+
+// GetReadReceiptResultPreparer prepares the GetReadReceiptResult request.
+func (client BaseClient) GetReadReceiptResultPreparer(ctx context.Context, operationID string) (*http.Request, error) {
+	urlParameters := map[string]interface{}{
+		"Endpoint": client.Endpoint,
+	}
+
+	pathParameters := map[string]interface{}{
+		"operationId": autorest.Encode("path", operationID),
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsGet(),
+		autorest.WithCustomBaseURL("{Endpoint}/formrecognizer/v1.0-preview", urlParameters),
+		autorest.WithPathParameters("/prebuilt/receipt/operations/{operationId}", pathParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// GetReadReceiptResultSender sends the GetReadReceiptResult request. The method will close the
+// http.Response Body if it receives an error.
+func (client BaseClient) GetReadReceiptResultSender(req *http.Request) (*http.Response, error) {
+	return autorest.SendWithSender(client, req,
+		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+}
+
+// GetReadReceiptResultResponder handles the response to the GetReadReceiptResult request. The method always
+// closes the http.Response Body.
+func (client BaseClient) GetReadReceiptResultResponder(resp *http.Response) (result ReadReceiptResult, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
 // TrainCustomModel create and train a custom model. The train request must include a source parameter that is either
 // an externally accessible Azure Storage blob container Uri (preferably a Shared Access Signature Uri) or valid path
 // to a data folder in a locally mounted drive. When local paths are specified, they must follow the Linux/Unix path
@@ -446,7 +666,13 @@ func (client BaseClient) TrainCustomModel(ctx context.Context, trainRequest Trai
 			Constraints: []validation.Constraint{{Target: "trainRequest.Source", Name: validation.Null, Rule: true,
 				Chain: []validation.Constraint{{Target: "trainRequest.Source", Name: validation.MaxLength, Rule: 2048, Chain: nil},
 					{Target: "trainRequest.Source", Name: validation.MinLength, Rule: 0, Chain: nil},
-				}}}}}); err != nil {
+				}},
+				{Target: "trainRequest.SourceFilter", Name: validation.Null, Rule: false,
+					Chain: []validation.Constraint{{Target: "trainRequest.SourceFilter.Prefix", Name: validation.Null, Rule: false,
+						Chain: []validation.Constraint{{Target: "trainRequest.SourceFilter.Prefix", Name: validation.MaxLength, Rule: 128, Chain: nil},
+							{Target: "trainRequest.SourceFilter.Prefix", Name: validation.MinLength, Rule: 0, Chain: nil},
+						}},
+					}}}}}); err != nil {
 		return result, validation.NewError("formrecognizer.BaseClient", "TrainCustomModel", err.Error())
 	}
 

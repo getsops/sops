@@ -17,7 +17,7 @@
   "description": "Manages your tasks and task lists.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/google-apps/tasks/firstapp",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/-WJ16QjUY6WRx8nJZkprUvgFzIU\"",
+  "etag": "\"9eZ1uxVRThTDhLJCZHhqs3eQWz4/sib0TfOU9SmOWm02eMFRVq-fFck\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/tasks-16.png",
     "x32": "https://www.google.com/images/icons/product/tasks-32.png"
@@ -515,7 +515,7 @@
       }
     }
   },
-  "revision": "20190222",
+  "revision": "20190628",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Task": {
@@ -531,7 +531,7 @@
           "type": "boolean"
         },
         "due": {
-          "description": "Due date of the task (as a RFC 3339 timestamp). Optional.",
+          "description": "Due date of the task (as a RFC 3339 timestamp). Optional. The due date only records date information; the time portion of the timestamp is discarded when setting the due date. It isn't possible to read or write the time that a task is due via the API.",
           "format": "date-time",
           "type": "string"
         },

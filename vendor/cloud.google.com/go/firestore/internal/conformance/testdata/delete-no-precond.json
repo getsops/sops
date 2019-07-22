@@ -1,0 +1,19 @@
+{
+  "tests": [
+    {
+      "description": "delete: delete without precondition",
+      "comment": "An ordinary Delete call.",
+      "delete": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "delete": "projects/projectID/databases/(default)/documents/C/d"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

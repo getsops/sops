@@ -1,4 +1,4 @@
-// Package resources implements the Azure ARM Resources service API version 2018-05-01.
+// Package resources implements the Azure ARM Resources service API version 2019-03-01.
 //
 // Provides operations for working with resources and resource groups.
 package resources

@@ -22351,6 +22351,7 @@ func (c *ChangeLogsListCall) ObjectIds(objectIds ...int64) *ChangeLogsListCall {
 //   "OBJECT_FLOODLIGHT_ACTIVITY_GROUP"
 //   "OBJECT_FLOODLIGHT_ACTVITY"
 //   "OBJECT_FLOODLIGHT_CONFIGURATION"
+//   "OBJECT_FLOODLIGHT_DV360_LINK"
 //   "OBJECT_INSTREAM_CREATIVE"
 //   "OBJECT_LANDING_PAGE"
 //   "OBJECT_MEDIA_ORDER"
@@ -22605,6 +22606,7 @@ func (c *ChangeLogsListCall) Do(opts ...googleapi.CallOption) (*ChangeLogsListRe
 	//         "OBJECT_FLOODLIGHT_ACTIVITY_GROUP",
 	//         "OBJECT_FLOODLIGHT_ACTVITY",
 	//         "OBJECT_FLOODLIGHT_CONFIGURATION",
+	//         "OBJECT_FLOODLIGHT_DV360_LINK",
 	//         "OBJECT_INSTREAM_CREATIVE",
 	//         "OBJECT_LANDING_PAGE",
 	//         "OBJECT_MEDIA_ORDER",
@@ -22625,6 +22627,7 @@ func (c *ChangeLogsListCall) Do(opts ...googleapi.CallOption) (*ChangeLogsListRe
 	//         "OBJECT_USER_ROLE"
 	//       ],
 	//       "enumDescriptions": [
+	//         "",
 	//         "",
 	//         "",
 	//         "",

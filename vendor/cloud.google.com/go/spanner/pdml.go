@@ -53,28 +53,29 @@ func (c *Client) PartitionedUpdate(ctx context.Context, statement Statement) (co
 	defer s.delete(ctx)
 	sh = &sessionHandle{session: s}
 	// Begin transaction.
-	err = runRetryable(contextWithOutgoingMetadata(ctx, sh.getMetadata()), func(ctx context.Context) error {
-		res, e := sc.BeginTransaction(ctx, &sppb.BeginTransactionRequest{
-			Session: sh.getID(),
-			Options: &sppb.TransactionOptions{
-				Mode: &sppb.TransactionOptions_PartitionedDml_{PartitionedDml: &sppb.TransactionOptions_PartitionedDml{}},
-			},
-		})
-		if e != nil {
-			return e
-		}
-		tx = res.Id
-		return nil
+	res, err := sc.BeginTransaction(contextWithOutgoingMetadata(ctx, sh.getMetadata()), &sppb.BeginTransactionRequest{
+		Session: sh.getID(),
+		Options: &sppb.TransactionOptions{
+			Mode: &sppb.TransactionOptions_PartitionedDml_{PartitionedDml: &sppb.TransactionOptions_PartitionedDml{}},
+		},
 	})
 	if err != nil {
 		return 0, toSpannerError(err)
 	}
+	params, paramTypes, err := statement.convertParams()
+	if err != nil {
+		return 0, toSpannerError(err)
+	}
+	tx = res.Id
+
 	req := &sppb.ExecuteSqlRequest{
 		Session: sh.getID(),
 		Transaction: &sppb.TransactionSelector{
 			Selector: &sppb.TransactionSelector_Id{Id: tx},
 		},
-		Sql: statement.SQL,
+		Sql:        statement.SQL,
+		Params:     params,
+		ParamTypes: paramTypes,
 	}
 	rpc := func(ctx context.Context, resumeToken []byte) (streamingReceiver, error) {
 		req.ResumeToken = resumeToken

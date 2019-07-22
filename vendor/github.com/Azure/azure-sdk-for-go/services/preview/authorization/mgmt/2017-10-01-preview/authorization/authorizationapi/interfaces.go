@@ -20,6 +20,7 @@ package authorizationapi
 import (
 	"context"
 	"github.com/Azure/azure-sdk-for-go/services/preview/authorization/mgmt/2017-10-01-preview/authorization"
+	"github.com/Azure/go-autorest/autorest"
 )
 
 // ClassicAdministratorsClientAPI contains the set of methods on the ClassicAdministratorsClient type.
@@ -37,14 +38,6 @@ type PermissionsClientAPI interface {
 
 var _ PermissionsClientAPI = (*authorization.PermissionsClient)(nil)
 
-// ProviderOperationsMetadataClientAPI contains the set of methods on the ProviderOperationsMetadataClient type.
-type ProviderOperationsMetadataClientAPI interface {
-	Get(ctx context.Context, resourceProviderNamespace string, expand string) (result authorization.ProviderOperationsMetadata, err error)
-	List(ctx context.Context, expand string) (result authorization.ProviderOperationsMetadataListResultPage, err error)
-}
-
-var _ ProviderOperationsMetadataClientAPI = (*authorization.ProviderOperationsMetadataClient)(nil)
-
 // RoleDefinitionsClientAPI contains the set of methods on the RoleDefinitionsClient type.
 type RoleDefinitionsClientAPI interface {
 	CreateOrUpdate(ctx context.Context, scope string, roleDefinitionID string, roleDefinition authorization.RoleDefinition) (result authorization.RoleDefinition, err error)
@@ -55,6 +48,21 @@ type RoleDefinitionsClientAPI interface {
 }
 
 var _ RoleDefinitionsClientAPI = (*authorization.RoleDefinitionsClient)(nil)
+
+// ProviderOperationsMetadataClientAPI contains the set of methods on the ProviderOperationsMetadataClient type.
+type ProviderOperationsMetadataClientAPI interface {
+	Get(ctx context.Context, resourceProviderNamespace string, expand string) (result authorization.ProviderOperationsMetadata, err error)
+	List(ctx context.Context, expand string) (result authorization.ProviderOperationsMetadataListResultPage, err error)
+}
+
+var _ ProviderOperationsMetadataClientAPI = (*authorization.ProviderOperationsMetadataClient)(nil)
+
+// GlobalAdministratorClientAPI contains the set of methods on the GlobalAdministratorClient type.
+type GlobalAdministratorClientAPI interface {
+	ElevateAccess(ctx context.Context) (result autorest.Response, err error)
+}
+
+var _ GlobalAdministratorClientAPI = (*authorization.GlobalAdministratorClient)(nil)
 
 // RoleAssignmentsClientAPI contains the set of methods on the RoleAssignmentsClient type.
 type RoleAssignmentsClientAPI interface {

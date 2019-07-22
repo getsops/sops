@@ -512,18 +512,26 @@ func PossibleTimeAggregationTypeValues() []TimeAggregationType {
 type Unit string
 
 const (
+	// UnitBitsPerSecond ...
+	UnitBitsPerSecond Unit = "BitsPerSecond"
 	// UnitBytes ...
 	UnitBytes Unit = "Bytes"
 	// UnitByteSeconds ...
 	UnitByteSeconds Unit = "ByteSeconds"
 	// UnitBytesPerSecond ...
 	UnitBytesPerSecond Unit = "BytesPerSecond"
+	// UnitCores ...
+	UnitCores Unit = "Cores"
 	// UnitCount ...
 	UnitCount Unit = "Count"
 	// UnitCountPerSecond ...
 	UnitCountPerSecond Unit = "CountPerSecond"
+	// UnitMilliCores ...
+	UnitMilliCores Unit = "MilliCores"
 	// UnitMilliSeconds ...
 	UnitMilliSeconds Unit = "MilliSeconds"
+	// UnitNanoCores ...
+	UnitNanoCores Unit = "NanoCores"
 	// UnitPercent ...
 	UnitPercent Unit = "Percent"
 	// UnitSeconds ...
@@ -534,7 +542,7 @@ const (
 
 // PossibleUnitValues returns an array of possible values for the Unit const type.
 func PossibleUnitValues() []Unit {
-	return []Unit{UnitBytes, UnitByteSeconds, UnitBytesPerSecond, UnitCount, UnitCountPerSecond, UnitMilliSeconds, UnitPercent, UnitSeconds, UnitUnspecified}
+	return []Unit{UnitBitsPerSecond, UnitBytes, UnitByteSeconds, UnitBytesPerSecond, UnitCores, UnitCount, UnitCountPerSecond, UnitMilliCores, UnitMilliSeconds, UnitNanoCores, UnitPercent, UnitSeconds, UnitUnspecified}
 }
 
 // BasicAction action descriptor.
@@ -1863,12 +1871,14 @@ type DiagnosticSettings struct {
 	EventHubAuthorizationRuleID *string `json:"eventHubAuthorizationRuleId,omitempty"`
 	// EventHubName - The name of the event hub. If none is specified, the default event hub will be selected.
 	EventHubName *string `json:"eventHubName,omitempty"`
-	// Metrics - the list of metric settings.
+	// Metrics - The list of metric settings.
 	Metrics *[]MetricSettings `json:"metrics,omitempty"`
-	// Logs - the list of logs settings.
+	// Logs - The list of logs settings.
 	Logs *[]LogSettings `json:"logs,omitempty"`
-	// WorkspaceID - The workspace ID (resource ID of a Log Analytics workspace) for a Log Analytics workspace to which you would like to send Diagnostic Logs. Example: /subscriptions/4b9e8510-67ab-4e9a-95a9-e2f1e570ea9c/resourceGroups/insights-integration/providers/Microsoft.OperationalInsights/workspaces/viruela2
+	// WorkspaceID - The full ARM resource ID of the Log Analytics workspace to which you would like to send Diagnostic Logs. Example: /subscriptions/4b9e8510-67ab-4e9a-95a9-e2f1e570ea9c/resourceGroups/insights-integration/providers/Microsoft.OperationalInsights/workspaces/viruela2
 	WorkspaceID *string `json:"workspaceId,omitempty"`
+	// LogAnalyticsDestinationType - A string indicating whether the export to Log Analytics should use the default destination type, i.e. AzureDiagnostics, or use a destination type constructed as follows: <normalized service identity>_<normalized category name>. Possible values are: Dedicated and null (null is default.)
+	LogAnalyticsDestinationType *string `json:"logAnalyticsDestinationType,omitempty"`
 }
 
 // DiagnosticSettingsCategory the diagnostic settings Category.
@@ -3292,7 +3302,7 @@ type Metric struct {
 	Type *string `json:"type,omitempty"`
 	// Name - the name and the display name of the metric, i.e. it is localizable string.
 	Name *LocalizableString `json:"name,omitempty"`
-	// Unit - the unit of the metric. Possible values include: 'UnitCount', 'UnitBytes', 'UnitSeconds', 'UnitCountPerSecond', 'UnitBytesPerSecond', 'UnitPercent', 'UnitMilliSeconds', 'UnitByteSeconds', 'UnitUnspecified'
+	// Unit - the unit of the metric. Possible values include: 'UnitCount', 'UnitBytes', 'UnitSeconds', 'UnitCountPerSecond', 'UnitBytesPerSecond', 'UnitPercent', 'UnitMilliSeconds', 'UnitByteSeconds', 'UnitUnspecified', 'UnitCores', 'UnitMilliCores', 'UnitNanoCores', 'UnitBitsPerSecond'
 	Unit Unit `json:"unit,omitempty"`
 	// Timeseries - the time series returned when a data query is performed.
 	Timeseries *[]TimeSeriesElement `json:"timeseries,omitempty"`
@@ -4175,7 +4185,7 @@ type MetricDefinition struct {
 	Namespace *string `json:"namespace,omitempty"`
 	// Name - the name and the display name of the metric, i.e. it is a localizable string.
 	Name *LocalizableString `json:"name,omitempty"`
-	// Unit - the unit of the metric. Possible values include: 'UnitCount', 'UnitBytes', 'UnitSeconds', 'UnitCountPerSecond', 'UnitBytesPerSecond', 'UnitPercent', 'UnitMilliSeconds', 'UnitByteSeconds', 'UnitUnspecified'
+	// Unit - the unit of the metric. Possible values include: 'UnitCount', 'UnitBytes', 'UnitSeconds', 'UnitCountPerSecond', 'UnitBytesPerSecond', 'UnitPercent', 'UnitMilliSeconds', 'UnitByteSeconds', 'UnitUnspecified', 'UnitCores', 'UnitMilliCores', 'UnitNanoCores', 'UnitBitsPerSecond'
 	Unit Unit `json:"unit,omitempty"`
 	// PrimaryAggregationType - the primary aggregation type value defining how to use the values for display. Possible values include: 'None', 'Average', 'Count', 'Minimum', 'Maximum', 'Total'
 	PrimaryAggregationType AggregationType `json:"primaryAggregationType,omitempty"`

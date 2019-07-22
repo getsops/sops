@@ -40,8 +40,8 @@ const (
 	// ErrCodeRequestTimeoutException for service response error code
 	// "RequestTimeoutException".
 	//
-	// Returned if, when uploading an archive, Amazon Glacier times out while receiving
-	// the upload.
+	// Returned if, when uploading an archive, Amazon S3 Glacier times out while
+	// receiving the upload.
 	ErrCodeRequestTimeoutException = "RequestTimeoutException"
 
 	// ErrCodeResourceNotFoundException for service response error code

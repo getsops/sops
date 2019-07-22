@@ -903,6 +903,72 @@
         "shape" : "BadRequestException"
       } ]
     },
+    "GetTags" : {
+      "name" : "GetTags",
+      "http" : {
+        "method" : "GET",
+        "requestUri" : "/v2/tags/{resource-arn}",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "GetTagsRequest"
+      },
+      "output" : {
+        "shape" : "GetTagsResponse"
+      },
+      "errors" : [ {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      }, {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "ConflictException"
+      } ]
+    },
+    "TagResource" : {
+      "name" : "TagResource",
+      "http" : {
+        "method" : "POST",
+        "requestUri" : "/v2/tags/{resource-arn}",
+        "responseCode" : 201
+      },
+      "input" : {
+        "shape" : "TagResourceRequest"
+      },
+      "output" : {
+        "shape" : "TagResourceResponse"
+      },
+      "errors" : [ {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      }, {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "ConflictException"
+      } ]
+    },
+    "UntagResource" : {
+      "name" : "UntagResource",
+      "http" : {
+        "method" : "DELETE",
+        "requestUri" : "/v2/tags/{resource-arn}",
+        "responseCode" : 204
+      },
+      "input" : {
+        "shape" : "UntagResourceRequest"
+      },
+      "errors" : [ {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      }, {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "ConflictException"
+      } ]
+    },
     "UpdateApi" : {
       "name" : "UpdateApi",
       "http" : {
@@ -1217,6 +1283,10 @@
         "Warnings" : {
           "shape" : "__listOf__string",
           "locationName" : "warnings"
+        },
+        "Tags" : {
+          "shape" : "Tags",
+          "locationName" : "tags"
         }
       },
       "required" : [ "RouteSelectionExpression", "ProtocolType", "Name" ]
@@ -1405,6 +1475,10 @@
         "Version" : {
           "shape" : "StringWithLengthBetween1And64",
           "locationName" : "version"
+        },
+        "Tags" : {
+          "shape" : "Tags",
+          "locationName" : "tags"
         }
       },
       "required" : [ "RouteSelectionExpression", "ProtocolType", "Name" ]
@@ -1743,6 +1817,10 @@
         "DomainNameConfigurations" : {
           "shape" : "DomainNameConfigurations",
           "locationName" : "domainNameConfigurations"
+        },
+        "Tags" : {
+          "shape" : "Tags",
+          "locationName" : "tags"
         }
       },
       "required" : [ "DomainName" ]
@@ -1757,6 +1835,10 @@
         "DomainNameConfigurations" : {
           "shape" : "DomainNameConfigurations",
           "locationName" : "domainNameConfigurations"
+        },
+        "Tags" : {
+          "shape" : "Tags",
+          "locationName" : "tags"
         }
       },
       "required" : [ "DomainName" ]
@@ -1775,6 +1857,10 @@
         "DomainNameConfigurations" : {
           "shape" : "DomainNameConfigurations",
           "locationName" : "domainNameConfigurations"
+        },
+        "Tags" : {
+          "shape" : "Tags",
+          "locationName" : "tags"
         }
       }
     },
@@ -2400,6 +2486,10 @@
         "StageVariables" : {
           "shape" : "StageVariablesMap",
           "locationName" : "stageVariables"
+        },
+        "Tags" : {
+          "shape" : "Tags",
+          "locationName" : "tags"
         }
       },
       "required" : [ "StageName" ]
@@ -2443,6 +2533,10 @@
         "StageVariables" : {
           "shape" : "StageVariablesMap",
           "locationName" : "stageVariables"
+        },
+        "Tags" : {
+          "shape" : "Tags",
+          "locationName" : "tags"
         }
       },
       "required" : [ "ApiId", "StageName" ]
@@ -2489,6 +2583,14 @@
         "StageVariables" : {
           "shape" : "StageVariablesMap",
           "locationName" : "stageVariables"
+        },
+        "Tags" : {
+          "shape" : "Tags",
+          "locationName" : "tags"
+        },
+        "Tags" : {
+          "shape" : "Tags",
+          "locationName" : "tags"
         }
       }
     },
@@ -2724,6 +2826,10 @@
         "DomainNameConfigurations" : {
           "shape" : "DomainNameConfigurations",
           "locationName" : "domainNameConfigurations"
+        },
+        "Tags" : {
+          "shape" : "Tags",
+          "locationName" : "tags"
         }
       },
       "required" : [ "DomainName" ]
@@ -2754,6 +2860,18 @@
         "HostedZoneId" : {
           "shape" : "__string",
           "locationName" : "hostedZoneId"
+        },
+        "SecurityPolicy" : {
+          "shape" : "SecurityPolicy",
+          "locationName" : "securityPolicy"
+        },
+        "DomainNameStatus" : {
+          "shape" : "DomainNameStatus",
+          "locationName" : "domainNameStatus"
+        },
+        "DomainNameStatusMessage" : {
+          "shape" : "__string",
+          "locationName" : "domainNameStatusMessage"
         }
       }
     },
@@ -2779,6 +2897,14 @@
     "EndpointType" : {
       "type" : "string",
       "enum" : [ "REGIONAL", "EDGE" ]
+    },
+    "SecurityPolicy" : {
+      "type" : "string",
+      "enum" : [ "TLS_1_0", "TLS_1_2" ]
+    },
+    "DomainNameStatus" : {
+      "type" : "string",
+      "enum" : [ "AVAILABLE", "UPDATING" ]
     },
     "GetApiMappingRequest" : {
       "type" : "structure",
@@ -2908,6 +3034,10 @@
         "Warnings" : {
           "shape" : "__listOf__string",
           "locationName" : "warnings"
+        },
+        "Tags" : {
+          "shape" : "Tags",
+          "locationName" : "tags"
         }
       }
     },
@@ -3130,6 +3260,10 @@
         "DomainNameConfigurations" : {
           "shape" : "DomainNameConfigurations",
           "locationName" : "domainNameConfigurations"
+        },
+        "Tags" : {
+          "shape" : "Tags",
+          "locationName" : "tags"
         }
       }
     },
@@ -3711,6 +3845,10 @@
         "StageVariables" : {
           "shape" : "StageVariablesMap",
           "locationName" : "stageVariables"
+        },
+        "Tags" : {
+          "shape" : "Tags",
+          "locationName" : "tags"
         }
       }
     },
@@ -3911,6 +4049,26 @@
         "Message" : {
           "shape" : "__string",
           "locationName" : "message"
+        }
+      }
+    },
+    "GetTagsRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ResourceArn" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "resource-arn"
+        }
+      },
+      "required" : [ "ResourceArn" ]
+    },
+    "GetTagsResponse" : {
+      "type" : "structure",
+      "members" : {
+        "Tags" : {
+          "shape" : "__mapOf__string",
+          "locationName" : "tags"
         }
       }
     },
@@ -4206,6 +4364,10 @@
         "StageVariables" : {
           "shape" : "StageVariablesMap",
           "locationName" : "stageVariables"
+        },
+        "Tags" : {
+          "shape" : "Tags",
+          "locationName" : "tags"
         }
       },
       "required" : [ "StageName" ]
@@ -4255,6 +4417,63 @@
     },
     "StringWithLengthBetween1And64" : {
       "type" : "string"
+    },
+     "StringWithLengthBetween1And1600" : {
+      "type" : "string",
+      "documentation" : "<p>A string with a length between [1-1600].</p>"
+    },
+    "TagResourceInput" : {
+      "type" : "structure",
+      "members" : {
+        "Tags" : {
+          "shape" : "Tags",
+          "locationName" : "tags"
+        }
+      }
+    },
+    "TagResourceRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ResourceArn" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "resource-arn"
+        },
+        "Tags" : {
+          "shape" : "Tags",
+          "locationName" : "tags"
+        }
+      },
+      "required" : [ "ResourceArn" ]
+    },
+    "TagResourceResponse" : {
+      "type" : "structure",
+      "members" : { }
+    },
+    "Tags" : {
+      "type" : "map",
+      "key" : {
+        "shape" : "__string"
+      },
+      "value" : {
+        "shape" : "StringWithLengthBetween1And1600"
+      }
+    },
+    "UntagResourceRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ResourceArn" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "resource-arn"
+        },
+        "TagKeys" : {
+          "shape" : "__listOf__string",
+          "location" : "querystring",
+          "locationName" : "tagKeys"
+        }
+      },
+      "required" : [ "TagKeys", "ResourceArn" ]
     },
     "Template" : {
       "type" : "structure",
@@ -4467,6 +4686,10 @@
         "Warnings" : {
           "shape" : "__listOf__string",
           "locationName" : "warnings"
+        },
+        "Tags" : {
+          "shape" : "Tags",
+          "locationName" : "tags"
         }
       }
     },
@@ -4688,6 +4911,10 @@
         "DomainNameConfigurations" : {
           "shape" : "DomainNameConfigurations",
           "locationName" : "domainNameConfigurations"
+        },
+        "Tags" : {
+          "shape" : "Tags",
+          "locationName" : "tags"
         }
       }
     },
@@ -5418,6 +5645,10 @@
         "StageVariables" : {
           "shape" : "StageVariablesMap",
           "locationName" : "stageVariables"
+        },
+        "Tags" : {
+          "shape" : "Tags",
+          "locationName" : "tags"
         }
       }
     },
@@ -5510,6 +5741,15 @@
     },
     "__string" : {
       "type" : "string"
+    },
+    "__mapOf__string" : {
+      "type" : "map",
+      "key" : {
+        "shape" : "__string"
+      },
+      "value" : {
+        "shape" : "__string"
+      }
     },
     "__timestampIso8601" : {
       "type" : "timestamp",

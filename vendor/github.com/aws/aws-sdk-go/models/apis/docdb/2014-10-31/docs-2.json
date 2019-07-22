@@ -40,7 +40,9 @@
     "RemoveTagsFromResource": "<p>Removes metadata tags from an Amazon DocumentDB resource.</p>",
     "ResetDBClusterParameterGroup": "<p> Modifies the parameters of a DB cluster parameter group to the default value. To reset specific parameters, submit a list of the following: <code>ParameterName</code> and <code>ApplyMethod</code>. To reset the entire DB cluster parameter group, specify the <code>DBClusterParameterGroupName</code> and <code>ResetAllParameters</code> parameters. </p> <p> When you reset the entire group, dynamic parameters are updated immediately and static parameters are set to <code>pending-reboot</code> to take effect on the next DB instance reboot.</p>",
     "RestoreDBClusterFromSnapshot": "<p>Creates a new DB cluster from a DB snapshot or DB cluster snapshot.</p> <p>If a DB snapshot is specified, the target DB cluster is created from the source DB snapshot with a default configuration and default security group.</p> <p>If a DB cluster snapshot is specified, the target DB cluster is created from the source DB cluster restore point with the same configuration as the original source DB cluster, except that the new DB cluster is created with the default security group.</p>",
-    "RestoreDBClusterToPointInTime": "<p>Restores a DB cluster to an arbitrary point in time. Users can restore to any point in time before <code>LatestRestorableTime</code> for up to <code>BackupRetentionPeriod</code> days. The target DB cluster is created from the source DB cluster with the same configuration as the original DB cluster, except that the new DB cluster is created with the default DB security group. </p>"
+    "RestoreDBClusterToPointInTime": "<p>Restores a DB cluster to an arbitrary point in time. Users can restore to any point in time before <code>LatestRestorableTime</code> for up to <code>BackupRetentionPeriod</code> days. The target DB cluster is created from the source DB cluster with the same configuration as the original DB cluster, except that the new DB cluster is created with the default DB security group. </p>",
+    "StartDBCluster": "<p>Restarts the stopped cluster that is specified by <code>DBClusterIdentifier</code>. For more information, see <a href=\"https://docs.aws.amazon.com/documentdb/latest/developerguide/db-cluster-stop-start.html\">Stopping and Starting an Amazon DocumentDB Cluster</a>.</p>",
+    "StopDBCluster": "<p>Stops the running cluster that is specified by <code>DBClusterIdentifier</code>. The cluster must be in the <i>available</i> state. For more information, see <a href=\"https://docs.aws.amazon.com/documentdb/latest/developerguide/db-cluster-stop-start.html\">Stopping and Starting an Amazon DocumentDB Cluster</a>.</p>"
   },
   "shapes": {
     "AddTagsToResourceMessage": {
@@ -104,6 +106,7 @@
       "refs": {
         "DBCluster$MultiAZ": "<p>Specifies whether the DB cluster has instances in multiple Availability Zones.</p>",
         "DBCluster$StorageEncrypted": "<p>Specifies whether the DB cluster is encrypted.</p>",
+        "DBCluster$DeletionProtection": "<p>Specifies whether this cluster can be deleted. If <code>DeletionProtection</code> is enabled, the cluster cannot be deleted unless it is modified and <code>DeletionProtection</code> is disabled. <code>DeletionProtection</code> protects clusters from being accidentally deleted.</p>",
         "DBClusterMember$IsClusterWriter": "<p>A value that is <code>true</code> if the cluster member is the primary instance for the DB cluster and <code>false</code> otherwise.</p>",
         "DBClusterSnapshot$StorageEncrypted": "<p>Specifies whether the DB cluster snapshot is encrypted.</p>",
         "DBEngineVersion$SupportsLogExportsToCloudwatchLogs": "<p>A value that indicates whether the engine version supports exporting the log types specified by <code>ExportableLogTypes</code> to CloudWatch Logs.</p>",
@@ -130,13 +133,17 @@
       "refs": {
         "CopyDBClusterSnapshotMessage$CopyTags": "<p>Set to <code>true</code> to copy all tags from the source DB cluster snapshot to the target DB cluster snapshot, and otherwise <code>false</code>. The default is <code>false</code>.</p>",
         "CreateDBClusterMessage$StorageEncrypted": "<p>Specifies whether the DB cluster is encrypted.</p>",
+        "CreateDBClusterMessage$DeletionProtection": "<p>Specifies whether this cluster can be deleted. If <code>DeletionProtection</code> is enabled, the cluster cannot be deleted unless it is modified and <code>DeletionProtection</code> is disabled. <code>DeletionProtection</code> protects clusters from being accidentally deleted.</p>",
         "CreateDBInstanceMessage$AutoMinorVersionUpgrade": "<p>Indicates that minor engine upgrades are applied automatically to the DB instance during the maintenance window.</p> <p>Default: <code>true</code> </p>",
         "DescribeDBEngineVersionsMessage$ListSupportedCharacterSets": "<p>If this parameter is specified and the requested engine supports the <code>CharacterSetName</code> parameter for <code>CreateDBInstance</code>, the response includes a list of supported character sets for each engine version. </p>",
         "DescribeDBEngineVersionsMessage$ListSupportedTimezones": "<p>If this parameter is specified and the requested engine supports the <code>TimeZone</code> parameter for <code>CreateDBInstance</code>, the response includes a list of supported time zones for each engine version. </p>",
         "DescribeOrderableDBInstanceOptionsMessage$Vpc": "<p>The virtual private cloud (VPC) filter value. Specify this parameter to show only the available VPC or non-VPC offerings.</p>",
+        "ModifyDBClusterMessage$DeletionProtection": "<p>Specifies whether this cluster can be deleted. If <code>DeletionProtection</code> is enabled, the cluster cannot be deleted unless it is modified and <code>DeletionProtection</code> is disabled. <code>DeletionProtection</code> protects clusters from being accidentally deleted.</p>",
         "ModifyDBInstanceMessage$AutoMinorVersionUpgrade": "<p>Indicates that minor version upgrades are applied automatically to the DB instance during the maintenance window. Changing this parameter doesn't result in an outage except in the following case, and the change is asynchronously applied as soon as possible. An outage results if this parameter is set to <code>true</code> during the maintenance window, and a newer minor version is available, and Amazon DocumentDB has enabled automatic patching for that engine version. </p>",
         "PendingModifiedValues$MultiAZ": "<p>Indicates that the Single-AZ DB instance is to change to a Multi-AZ deployment.</p>",
-        "RebootDBInstanceMessage$ForceFailover": "<p> When <code>true</code>, the reboot is conducted through a Multi-AZ failover. </p> <p>Constraint: You can't specify <code>true</code> if the instance is not configured for Multi-AZ.</p>"
+        "RebootDBInstanceMessage$ForceFailover": "<p> When <code>true</code>, the reboot is conducted through a Multi-AZ failover. </p> <p>Constraint: You can't specify <code>true</code> if the instance is not configured for Multi-AZ.</p>",
+        "RestoreDBClusterFromSnapshotMessage$DeletionProtection": "<p>Specifies whether this cluster can be deleted. If <code>DeletionProtection</code> is enabled, the cluster cannot be deleted unless it is modified and <code>DeletionProtection</code> is disabled. <code>DeletionProtection</code> protects clusters from being accidentally deleted.</p>",
+        "RestoreDBClusterToPointInTimeMessage$DeletionProtection": "<p>Specifies whether this cluster can be deleted. If <code>DeletionProtection</code> is enabled, the cluster cannot be deleted unless it is modified and <code>DeletionProtection</code> is disabled. <code>DeletionProtection</code> protects clusters from being accidentally deleted.</p>"
       }
     },
     "CertificateNotFoundFault": {
@@ -229,7 +236,9 @@
         "FailoverDBClusterResult$DBCluster": null,
         "ModifyDBClusterResult$DBCluster": null,
         "RestoreDBClusterFromSnapshotResult$DBCluster": null,
-        "RestoreDBClusterToPointInTimeResult$DBCluster": null
+        "RestoreDBClusterToPointInTimeResult$DBCluster": null,
+        "StartDBClusterResult$DBCluster": null,
+        "StopDBClusterResult$DBCluster": null
       }
     },
     "DBClusterAlreadyExistsFault": {
@@ -1043,6 +1052,26 @@
         "Event$SourceType": "<p>Specifies the source type for this event.</p>"
       }
     },
+    "StartDBClusterMessage": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "StartDBClusterResult": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "StopDBClusterMessage": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "StopDBClusterResult": {
+      "base": null,
+      "refs": {
+      }
+    },
     "StorageQuotaExceededFault": {
       "base": "<p>The request would cause you to exceed the allowed amount of storage available across all DB instances.</p>",
       "refs": {
@@ -1076,7 +1105,7 @@
         "CreateDBClusterMessage$Engine": "<p>The name of the database engine to be used for this DB cluster.</p> <p>Valid values: <code>docdb</code> </p>",
         "CreateDBClusterMessage$EngineVersion": "<p>The version number of the database engine to use.</p>",
         "CreateDBClusterMessage$MasterUsername": "<p>The name of the master user for the DB cluster.</p> <p>Constraints:</p> <ul> <li> <p>Must be from 1 to 16 letters or numbers.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot be a reserved word for the chosen database engine.</p> </li> </ul>",
-        "CreateDBClusterMessage$MasterUserPassword": "<p>The password for the master database user. This password can contain any printable ASCII character except \"/\", \"\"\", or \"@\".</p> <p>Constraints: Must contain from 8 to 41 characters.</p>",
+        "CreateDBClusterMessage$MasterUserPassword": "<p>The password for the master database user. This password can contain any printable ASCII character except forward slash (/), double quote (\"), or the \"at\" symbol (@).</p> <p>Constraints: Must contain from 8 to 41 characters.</p>",
         "CreateDBClusterMessage$PreferredBackupWindow": "<p>The daily time range during which automated backups are created if automated backups are enabled using the <code>BackupRetentionPeriod</code> parameter. </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region. </p> <p>Constraints:</p> <ul> <li> <p>Must be in the format <code>hh24:mi-hh24:mi</code>.</p> </li> <li> <p>Must be in Universal Coordinated Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul>",
         "CreateDBClusterMessage$PreferredMaintenanceWindow": "<p>The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p>Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region, occurring on a random day of the week.</p> <p>Valid days: Mon, Tue, Wed, Thu, Fri, Sat, Sun</p> <p>Constraints: Minimum 30-minute window.</p>",
         "CreateDBClusterMessage$KmsKeyId": "<p>The AWS KMS key identifier for an encrypted DB cluster.</p> <p>The AWS KMS key identifier is the Amazon Resource Name (ARN) for the AWS KMS encryption key. If you are creating a DB cluster using the same AWS account that owns the AWS KMS encryption key that is used to encrypt the new DB cluster, you can use the AWS KMS key alias instead of the ARN for the AWS KMS encryption key.</p> <p>If an encryption key is not specified in <code>KmsKeyId</code>:</p> <ul> <li> <p>If <code>ReplicationSourceIdentifier</code> identifies an encrypted source, then Amazon DocumentDB uses the encryption key that is used to encrypt the source. Otherwise, Amazon DocumentDB uses your default encryption key. </p> </li> <li> <p>If the <code>StorageEncrypted</code> parameter is <code>true</code> and <code>ReplicationSourceIdentifier</code> is not specified, Amazon DocumentDB uses your default encryption key.</p> </li> </ul> <p>AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p> <p>If you create a replica of an encrypted DB cluster in another AWS Region, you must set <code>KmsKeyId</code> to a KMS key ID that is valid in the destination AWS Region. This key is used to encrypt the replica in that AWS Region.</p>",
@@ -1086,7 +1115,7 @@
         "CreateDBClusterSnapshotMessage$DBClusterSnapshotIdentifier": "<p>The identifier of the DB cluster snapshot. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>my-cluster-snapshot1</code> </p>",
         "CreateDBClusterSnapshotMessage$DBClusterIdentifier": "<p>The identifier of the DB cluster to create a snapshot for. This parameter is not case sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing <code>DBCluster</code>.</p> </li> </ul> <p>Example: <code>my-cluster</code> </p>",
         "CreateDBInstanceMessage$DBInstanceIdentifier": "<p>The DB instance identifier. This parameter is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>mydbinstance</code> </p>",
-        "CreateDBInstanceMessage$DBInstanceClass": "<p>The compute and memory capacity of the DB instance; for example, <code>db.m4.large</code>. </p>",
+        "CreateDBInstanceMessage$DBInstanceClass": "<p>The compute and memory capacity of the DB instance; for example, <code>db.r5.large</code>. </p>",
         "CreateDBInstanceMessage$Engine": "<p>The name of the database engine to be used for this instance.</p> <p>Valid value: <code>docdb</code> </p>",
         "CreateDBInstanceMessage$AvailabilityZone": "<p> The Amazon EC2 Availability Zone that the DB instance is created in.</p> <p>Default: A random, system-chosen Availability Zone in the endpoint's AWS Region.</p> <p> Example: <code>us-east-1d</code> </p> <p> Constraint: The <code>AvailabilityZone</code> parameter can't be specified if the <code>MultiAZ</code> parameter is set to <code>true</code>. The specified Availability Zone must be in the same AWS Region as the current endpoint. </p>",
         "CreateDBInstanceMessage$PreferredMaintenanceWindow": "<p>The time range each week during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p> Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region, occurring on a random day of the week. </p> <p>Valid days: Mon, Tue, Wed, Thu, Fri, Sat, Sun</p> <p>Constraints: Minimum 30-minute window.</p>",
@@ -1221,7 +1250,7 @@
         "ModifyDBClusterMessage$DBClusterIdentifier": "<p>The DB cluster identifier for the cluster that is being modified. This parameter is not case sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing <code>DBCluster</code>.</p> </li> </ul>",
         "ModifyDBClusterMessage$NewDBClusterIdentifier": "<p>The new DB cluster identifier for the DB cluster when renaming a DB cluster. This value is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>my-cluster2</code> </p>",
         "ModifyDBClusterMessage$DBClusterParameterGroupName": "<p>The name of the DB cluster parameter group to use for the DB cluster.</p>",
-        "ModifyDBClusterMessage$MasterUserPassword": "<p>The new password for the master database user. This password can contain any printable ASCII character except \"<code>/</code>\", \"<code>\"</code>\", or \"<code>@</code>\".</p> <p>Constraints: Must contain from 8 to 41 characters.</p>",
+        "ModifyDBClusterMessage$MasterUserPassword": "<p>The password for the master database user. This password can contain any printable ASCII character except forward slash (/), double quote (\"), or the \"at\" symbol (@).</p> <p>Constraints: Must contain from 8 to 41 characters.</p>",
         "ModifyDBClusterMessage$PreferredBackupWindow": "<p>The daily time range during which automated backups are created if automated backups are enabled, using the <code>BackupRetentionPeriod</code> parameter. </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region. </p> <p>Constraints:</p> <ul> <li> <p>Must be in the format <code>hh24:mi-hh24:mi</code>.</p> </li> <li> <p>Must be in Universal Coordinated Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul>",
         "ModifyDBClusterMessage$PreferredMaintenanceWindow": "<p>The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p>Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region, occurring on a random day of the week. </p> <p>Valid days: Mon, Tue, Wed, Thu, Fri, Sat, Sun</p> <p>Constraints: Minimum 30-minute window.</p>",
         "ModifyDBClusterMessage$EngineVersion": "<p>The version number of the database engine to which you want to upgrade. Changing this parameter results in an outage. The change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is set to <code>true</code>.</p>",
@@ -1229,7 +1258,7 @@
         "ModifyDBClusterSnapshotAttributeMessage$DBClusterSnapshotIdentifier": "<p>The identifier for the DB cluster snapshot to modify the attributes for.</p>",
         "ModifyDBClusterSnapshotAttributeMessage$AttributeName": "<p>The name of the DB cluster snapshot attribute to modify.</p> <p>To manage authorization for other AWS accounts to copy or restore a manual DB cluster snapshot, set this value to <code>restore</code>.</p>",
         "ModifyDBInstanceMessage$DBInstanceIdentifier": "<p>The DB instance identifier. This value is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing <code>DBInstance</code>.</p> </li> </ul>",
-        "ModifyDBInstanceMessage$DBInstanceClass": "<p>The new compute and memory capacity of the DB instance; for example, <code>db.m4.large</code>. Not all DB instance classes are available in all AWS Regions. </p> <p>If you modify the DB instance class, an outage occurs during the change. The change is applied during the next maintenance window, unless <code>ApplyImmediately</code> is specified as <code>true</code> for this request. </p> <p>Default: Uses existing setting.</p>",
+        "ModifyDBInstanceMessage$DBInstanceClass": "<p>The new compute and memory capacity of the DB instance; for example, <code>db.r5.large</code>. Not all DB instance classes are available in all AWS Regions. </p> <p>If you modify the DB instance class, an outage occurs during the change. The change is applied during the next maintenance window, unless <code>ApplyImmediately</code> is specified as <code>true</code> for this request. </p> <p>Default: Uses existing setting.</p>",
         "ModifyDBInstanceMessage$PreferredMaintenanceWindow": "<p>The weekly time range (in UTC) during which system maintenance can occur, which might result in an outage. Changing this parameter doesn't result in an outage except in the following situation, and the change is asynchronously applied as soon as possible. If there are pending actions that cause a reboot, and the maintenance window is changed to include the current time, changing this parameter causes a reboot of the DB instance. If you are moving this window to the current time, there must be at least 30 minutes between the current time and end of the window to ensure that pending changes are applied.</p> <p>Default: Uses existing setting.</p> <p>Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>Valid days: Mon, Tue, Wed, Thu, Fri, Sat, Sun</p> <p>Constraints: Must be at least 30 minutes.</p>",
         "ModifyDBInstanceMessage$NewDBInstanceIdentifier": "<p> The new DB instance identifier for the DB instance when renaming a DB instance. When you change the DB instance identifier, an instance reboot occurs immediately if you set <code>Apply Immediately</code> to <code>true</code>. It occurs during the next maintenance window if you set <code>Apply Immediately</code> to <code>false</code>. This value is stored as a lowercase string. </p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul> <p>Example: <code>mydbinstance</code> </p>",
         "ModifyDBSubnetGroupMessage$DBSubnetGroupName": "<p>The name for the DB subnet group. This value is stored as a lowercase string. You can't modify the default subnet group. </p> <p>Constraints: Must match the name of an existing <code>DBSubnetGroup</code>. Must not be default.</p> <p>Example: <code>mySubnetgroup</code> </p>",
@@ -1273,6 +1302,8 @@
         "RestoreDBClusterToPointInTimeMessage$SourceDBClusterIdentifier": "<p>The identifier of the source DB cluster from which to restore.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing <code>DBCluster</code>.</p> </li> </ul>",
         "RestoreDBClusterToPointInTimeMessage$DBSubnetGroupName": "<p>The DB subnet group name to use for the new DB cluster.</p> <p>Constraints: If provided, must match the name of an existing <code>DBSubnetGroup</code>.</p> <p>Example: <code>mySubnetgroup</code> </p>",
         "RestoreDBClusterToPointInTimeMessage$KmsKeyId": "<p>The AWS KMS key identifier to use when restoring an encrypted DB cluster from an encrypted DB cluster.</p> <p>The AWS KMS key identifier is the Amazon Resource Name (ARN) for the AWS KMS encryption key. If you are restoring a DB cluster with the same AWS account that owns the AWS KMS encryption key used to encrypt the new DB cluster, then you can use the AWS KMS key alias instead of the ARN for the AWS KMS encryption key.</p> <p>You can restore to a new DB cluster and encrypt the new DB cluster with an AWS KMS key that is different from the AWS KMS key used to encrypt the source DB cluster. The new DB cluster is encrypted with the AWS KMS key identified by the <code>KmsKeyId</code> parameter.</p> <p>If you do not specify a value for the <code>KmsKeyId</code> parameter, then the following occurs:</p> <ul> <li> <p>If the DB cluster is encrypted, then the restored DB cluster is encrypted using the AWS KMS key that was used to encrypt the source DB cluster.</p> </li> <li> <p>If the DB cluster is not encrypted, then the restored DB cluster is not encrypted.</p> </li> </ul> <p>If <code>DBClusterIdentifier</code> refers to a DB cluster that is not encrypted, then the restore request is rejected.</p>",
+        "StartDBClusterMessage$DBClusterIdentifier": "<p>The identifier of the cluster to restart. Example: <code>docdb-2019-05-28-15-24-52</code> </p>",
+        "StopDBClusterMessage$DBClusterIdentifier": "<p>The identifier of the cluster to stop. Example: <code>docdb-2019-05-28-15-24-52</code> </p>",
         "Subnet$SubnetIdentifier": "<p>Specifies the identifier of the subnet.</p>",
         "Subnet$SubnetStatus": "<p>Specifies the status of the subnet.</p>",
         "SubnetIdentifierList$member": null,

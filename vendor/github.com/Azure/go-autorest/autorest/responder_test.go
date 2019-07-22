@@ -48,6 +48,25 @@ func ExampleWithErrorUnlessOK() {
 	// Output: GET of https://microsoft.com/a/b/c/ returned HTTP 200
 }
 
+func TestByUnmarshallingBytes(t *testing.T) {
+	expected := []byte("Lorem Ipsum Dolor")
+
+	// we'll create a fixed-sized array here, since that's the expectation
+	bytes := make([]byte, len(expected))
+
+	Respond(mocks.NewResponseWithBytes(expected),
+		ByUnmarshallingBytes(&bytes),
+		ByClosing())
+
+	if len(bytes) != len(expected) {
+		t.Fatalf("Expected Response to be %d bytes but got %d bytes", len(expected), len(bytes))
+	}
+
+	if !reflect.DeepEqual(expected, bytes) {
+		t.Fatalf("Expected Response to be %s but got %s", expected, bytes)
+	}
+}
+
 func ExampleByUnmarshallingJSON() {
 	c := `
 	{

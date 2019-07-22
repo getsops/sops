@@ -23,9 +23,10 @@ const (
 	// does not have cluster names as an internal concept so this may be
 	// set to any meaningful value within the environment. For example,
 	// GKE clusters have a name which can be used for this label.
-	K8SKeyClusterName   = "k8s.cluster.name"
-	K8SKeyNamespaceName = "k8s.namespace.name"
-	K8SKeyPodName       = "k8s.pod.name"
+	K8SKeyClusterName    = "k8s.cluster.name"
+	K8SKeyNamespaceName  = "k8s.namespace.name"
+	K8SKeyPodName        = "k8s.pod.name"
+	K8SKeyDeploymentName = "k8s.deployment.name"
 )
 
 // Constants for Container resources.

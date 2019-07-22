@@ -435,6 +435,37 @@ func TestCookies(t *testing.T) {
 	}
 }
 
+func TestResponseIsHTTPStatus(t *testing.T) {
+	r := Response{}
+	if r.IsHTTPStatus(http.StatusBadRequest) {
+		t.Fatal("autorest: expected false for nil response")
+	}
+	r.Response = &http.Response{StatusCode: http.StatusOK}
+	if r.IsHTTPStatus(http.StatusBadRequest) {
+		t.Fatal("autorest: expected false")
+	}
+	if !r.IsHTTPStatus(http.StatusOK) {
+		t.Fatal("autorest: expected true")
+	}
+}
+
+func TestResponseHasHTTPStatus(t *testing.T) {
+	r := Response{}
+	if r.HasHTTPStatus(http.StatusBadRequest, http.StatusInternalServerError) {
+		t.Fatal("autorest: expected false for nil response")
+	}
+	r.Response = &http.Response{StatusCode: http.StatusAccepted}
+	if r.HasHTTPStatus(http.StatusBadRequest, http.StatusInternalServerError) {
+		t.Fatal("autorest: expected false")
+	}
+	if !r.HasHTTPStatus(http.StatusOK, http.StatusCreated, http.StatusAccepted) {
+		t.Fatal("autorest: expected true")
+	}
+	if r.HasHTTPStatus() {
+		t.Fatal("autorest: expected false for no status codes")
+	}
+}
+
 func randomString(n int) string {
 	const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 	r := rand.New(rand.NewSource(time.Now().UTC().UnixNano()))

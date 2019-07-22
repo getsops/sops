@@ -307,7 +307,7 @@ type ProjectsLocationsDatasetsOperationsService struct {
 //             {
 //               "log_type": "DATA_READ",
 //               "exempted_members": [
-//                 "user:foo@gmail.com"
+//                 "user:jose@example.com"
 //               ]
 //             },
 //             {
@@ -319,7 +319,7 @@ type ProjectsLocationsDatasetsOperationsService struct {
 //           ]
 //         },
 //         {
-//           "service": "fooservice.googleapis.com"
+//           "service": "sampleservice.googleapis.com"
 //           "audit_log_configs": [
 //             {
 //               "log_type": "DATA_READ",
@@ -327,7 +327,7 @@ type ProjectsLocationsDatasetsOperationsService struct {
 //             {
 //               "log_type": "DATA_WRITE",
 //               "exempted_members": [
-//                 "user:bar@gmail.com"
+//                 "user:aliya@example.com"
 //               ]
 //             }
 //           ]
@@ -335,11 +335,11 @@ type ProjectsLocationsDatasetsOperationsService struct {
 //       ]
 //     }
 //
-// For fooservice, this policy enables DATA_READ, DATA_WRITE and
+// For sampleservice, this policy enables DATA_READ, DATA_WRITE and
 // ADMIN_READ
-// logging. It also exempts foo@gmail.com from DATA_READ logging,
+// logging. It also exempts jose@example.com from DATA_READ logging,
 // and
-// bar@gmail.com from DATA_WRITE logging.
+// aliya@example.com from DATA_WRITE logging.
 type AuditConfig struct {
 	// AuditLogConfigs: The configuration for logging of each type of
 	// permission.
@@ -385,7 +385,7 @@ func (s *AuditConfig) MarshalJSON() ([]byte, error) {
 //         {
 //           "log_type": "DATA_READ",
 //           "exempted_members": [
-//             "user:foo@gmail.com"
+//             "user:jose@example.com"
 //           ]
 //         },
 //         {
@@ -396,13 +396,20 @@ func (s *AuditConfig) MarshalJSON() ([]byte, error) {
 //
 // This enables 'DATA_READ' and 'DATA_WRITE' logging, while
 // exempting
-// foo@gmail.com from DATA_READ logging.
+// jose@example.com from DATA_READ logging.
 type AuditLogConfig struct {
 	// ExemptedMembers: Specifies the identities that do not cause logging
 	// for this type of
 	// permission.
 	// Follows the same format of Binding.members.
 	ExemptedMembers []string `json:"exemptedMembers,omitempty"`
+
+	// IgnoreChildExemptions: Specifies whether principals can be exempted
+	// for the same LogType in
+	// lower-level resource policies. If true, any lower-level exemptions
+	// will
+	// be ignored.
+	IgnoreChildExemptions bool `json:"ignoreChildExemptions,omitempty"`
 
 	// LogType: The log type that this config enables.
 	//
@@ -461,7 +468,7 @@ type Binding struct {
 	//
 	// * `user:{emailid}`: An email address that represents a specific
 	// Google
-	//    account. For example, `alice@gmail.com` .
+	//    account. For example, `alice@example.com` .
 	//
 	//
 	// * `serviceAccount:{emailid}`: An email address that represents a
@@ -863,7 +870,10 @@ type DicomConfig struct {
 	// valid DICOM.
 	//   "ATTRIBUTE_CONFIDENTIALITY_BASIC_PROFILE" - Remove tags based on
 	// DICOM Standard's Attribute Confidentiality Basic
-	// Profile (DICOM Standard Edition 2018e).
+	// Profile (DICOM Standard Edition
+	// 2018e)
+	// http://dicom.nema.org/medical/dicom/2018e/output/chtml/part15/c
+	// hapter_E.html.
 	//   "KEEP_ALL_PROFILE" - Keep all tags.
 	//   "DEIDENTIFY_TAG_CONTENTS" - Inspects within tag contents and
 	// replaces sensitive text. The process
@@ -2054,16 +2064,20 @@ func (s *ImportDicomDataRequest) MarshalJSON() ([]byte, error) {
 
 // ImportResourcesRequest: Request to import resources.
 type ImportResourcesRequest struct {
-	// ContentStructure: The content structure in the source location. The
-	// default is
-	// BUNDLE.
+	// ContentStructure: The content structure in the source location. If
+	// not specified, the server
+	// treats the input source files as BUNDLE.
 	//
 	// Possible values:
 	//   "CONTENT_STRUCTURE_UNSPECIFIED"
-	//   "BUNDLE" - Each line is a bundle, which contains one or more
-	// resources. Set the
-	// bundle type to `history` to import resource versions.
-	//   "RESOURCE" - Each line is a single resource.
+	//   "BUNDLE" - The source file contains one or more lines of
+	// newline-delimited JSON
+	// (ndjson). Each line is a bundle, which contains one or more
+	// resources.
+	// Set the bundle type to `history` to import resource versions.
+	//   "RESOURCE" - The source file contains one or more lines of
+	// newline-delimited JSON
+	// (ndjson). Each line is a single resource.
 	ContentStructure string `json:"contentStructure,omitempty"`
 
 	// GcsSource: Cloud Storage source data location and import
@@ -2073,16 +2087,9 @@ type ImportResourcesRequest struct {
 	// `roles/storage.objectViewer`
 	// Cloud IAM role.
 	//
-	// Each Cloud Storage object should be a text file that contains
-	// newline
-	// delimited JSON structures conforming to FHIR standard.
-	//
-	// To improve performance, use multiple Cloud Storage objects where
-	// each
-	// object contains a subset of all of the newline-delimited JSON
-	// structures.
-	// You can select all of the objects using the uri as the
-	// prefix. The maximum number of objects is 1,000.
+	// Each Cloud Storage object should be a text file that contains the
+	// format
+	// specified in ContentStructure.
 	GcsSource *GoogleCloudHealthcareV1beta1FhirRestGcsSource `json:"gcsSource,omitempty"`
 
 	// ForceSendFields is a list of field names (e.g. "ContentStructure") to
@@ -2963,7 +2970,7 @@ type Policy struct {
 	//
 	// If no `etag` is provided in the call to `setIamPolicy`, then the
 	// existing
-	// policy is overwritten blindly.
+	// policy is overwritten.
 	Etag string `json:"etag,omitempty"`
 
 	// Version: Deprecated.
@@ -3231,81 +3238,14 @@ func (s *SetIamPolicyRequest) MarshalJSON() ([]byte, error) {
 // suitable for
 // different programming environments, including REST APIs and RPC APIs.
 // It is
-// used by [gRPC](https://github.com/grpc). The error model is designed
-// to be:
+// used by [gRPC](https://github.com/grpc). Each `Status` message
+// contains
+// three pieces of data: error code, error message, and error
+// details.
 //
-// - Simple to use and understand for most users
-// - Flexible enough to meet unexpected needs
-//
-// # Overview
-//
-// The `Status` message contains three pieces of data: error code,
-// error
-// message, and error details. The error code should be an enum value
-// of
-// google.rpc.Code, but it may accept additional error codes if needed.
-// The
-// error message should be a developer-facing English message that
-// helps
-// developers *understand* and *resolve* the error. If a localized
-// user-facing
-// error message is needed, put the localized message in the error
-// details or
-// localize it in the client. The optional error details may contain
-// arbitrary
-// information about the error. There is a predefined set of error
-// detail types
-// in the package `google.rpc` that can be used for common error
-// conditions.
-//
-// # Language mapping
-//
-// The `Status` message is the logical representation of the error
-// model, but it
-// is not necessarily the actual wire format. When the `Status` message
-// is
-// exposed in different client libraries and different wire protocols,
-// it can be
-// mapped differently. For example, it will likely be mapped to some
-// exceptions
-// in Java, but more likely mapped to some error codes in C.
-//
-// # Other uses
-//
-// The error model and the `Status` message can be used in a variety
-// of
-// environments, either with or without APIs, to provide a
-// consistent developer experience across different
-// environments.
-//
-// Example uses of this error model include:
-//
-// - Partial errors. If a service needs to return partial errors to the
-// client,
-//     it may embed the `Status` in the normal response to indicate the
-// partial
-//     errors.
-//
-// - Workflow errors. A typical workflow has multiple steps. Each step
-// may
-//     have a `Status` message for error reporting.
-//
-// - Batch operations. If a client uses batch request and batch
-// response, the
-//     `Status` message should be used directly inside batch response,
-// one for
-//     each error sub-response.
-//
-// - Asynchronous operations. If an API call embeds asynchronous
-// operation
-//     results in its response, the status of those operations should
-// be
-//     represented directly using the `Status` message.
-//
-// - Logging. If some API errors are stored in logs, the message
-// `Status` could
-//     be used directly after any stripping needed for security/privacy
-// reasons.
+// You can find out more about this error model and how to work with it
+// in the
+// [API Design Guide](https://cloud.google.com/apis/design/errors).
 type Status struct {
 	// Code: The status code, which should be an enum value of
 	// google.rpc.Code.
@@ -3842,6 +3782,9 @@ type ProjectsLocationsDatasetsCreateCall struct {
 // `Operation.response` which contains a Dataset or
 // `Operation.error`. The metadata
 // field type is OperationMetadata.
+// A Google Cloud Platform project can contain up to 500 datasets across
+// all
+// regions.
 func (r *ProjectsLocationsDatasetsService) Create(parent string, dataset *Dataset) *ProjectsLocationsDatasetsCreateCall {
 	c := &ProjectsLocationsDatasetsCreateCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.parent = parent
@@ -3948,7 +3891,7 @@ func (c *ProjectsLocationsDatasetsCreateCall) Do(opts ...googleapi.CallOption) (
 	}
 	return ret, nil
 	// {
-	//   "description": "Creates a new health dataset. Results are returned through the\nOperation interface which returns either an\n`Operation.response` which contains a Dataset or\n`Operation.error`. The metadata\nfield type is OperationMetadata.",
+	//   "description": "Creates a new health dataset. Results are returned through the\nOperation interface which returns either an\n`Operation.response` which contains a Dataset or\n`Operation.error`. The metadata\nfield type is OperationMetadata.\nA Google Cloud Platform project can contain up to 500 datasets across all\nregions.",
 	//   "flatPath": "v1beta1/projects/{projectsId}/locations/{locationsId}/datasets",
 	//   "httpMethod": "POST",
 	//   "id": "healthcare.projects.locations.datasets.create",
@@ -4428,6 +4371,18 @@ func (r *ProjectsLocationsDatasetsService) GetIamPolicy(resource string) *Projec
 	return c
 }
 
+// OptionsRequestedPolicyVersion sets the optional parameter
+// "options.requestedPolicyVersion": The policy format version to be
+// returned.
+// Acceptable values are 0 and 1.
+// If the value is 0, or the field is omitted, policy format version 1
+// will be
+// returned.
+func (c *ProjectsLocationsDatasetsGetIamPolicyCall) OptionsRequestedPolicyVersion(optionsRequestedPolicyVersion int64) *ProjectsLocationsDatasetsGetIamPolicyCall {
+	c.urlParams_.Set("options.requestedPolicyVersion", fmt.Sprint(optionsRequestedPolicyVersion))
+	return c
+}
+
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -4534,6 +4489,12 @@ func (c *ProjectsLocationsDatasetsGetIamPolicyCall) Do(opts ...googleapi.CallOpt
 	//     "resource"
 	//   ],
 	//   "parameters": {
+	//     "options.requestedPolicyVersion": {
+	//       "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+	//       "format": "int32",
+	//       "location": "query",
+	//       "type": "integer"
+	//     },
 	//     "resource": {
 	//       "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",
@@ -5779,6 +5740,18 @@ func (r *ProjectsLocationsDatasetsDicomStoresService) GetIamPolicy(resource stri
 	return c
 }
 
+// OptionsRequestedPolicyVersion sets the optional parameter
+// "options.requestedPolicyVersion": The policy format version to be
+// returned.
+// Acceptable values are 0 and 1.
+// If the value is 0, or the field is omitted, policy format version 1
+// will be
+// returned.
+func (c *ProjectsLocationsDatasetsDicomStoresGetIamPolicyCall) OptionsRequestedPolicyVersion(optionsRequestedPolicyVersion int64) *ProjectsLocationsDatasetsDicomStoresGetIamPolicyCall {
+	c.urlParams_.Set("options.requestedPolicyVersion", fmt.Sprint(optionsRequestedPolicyVersion))
+	return c
+}
+
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -5885,6 +5858,12 @@ func (c *ProjectsLocationsDatasetsDicomStoresGetIamPolicyCall) Do(opts ...google
 	//     "resource"
 	//   ],
 	//   "parameters": {
+	//     "options.requestedPolicyVersion": {
+	//       "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+	//       "format": "int32",
+	//       "location": "query",
+	//       "type": "integer"
+	//     },
 	//     "resource": {
 	//       "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",
@@ -6515,7 +6494,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresSearchForInstancesCall) Do(opts ...
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`instances`).",
+	//       "description": "The path of the SearchForInstancesRequest DICOMweb request (e.g.,\n`instances` or `series/{series_uid}/instances` or\n`studies/{study_uid}/instances`).",
 	//       "location": "path",
 	//       "pattern": "^instances$",
 	//       "required": true,
@@ -6639,7 +6618,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresSearchForSeriesCall) Do(opts ...goo
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`series`).",
+	//       "description": "The path of the SearchForSeries DICOMweb request(e.g., `series` or\n`studies/{study_uid}/series`).",
 	//       "location": "path",
 	//       "pattern": "^series$",
 	//       "required": true,
@@ -6764,7 +6743,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresSearchForStudiesCall) Do(opts ...go
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`studies`).",
+	//       "description": "The path of the SearchForStudies DICOMweb request (e.g., `studies`).",
 	//       "location": "path",
 	//       "pattern": "^studies$",
 	//       "required": true,
@@ -7018,7 +6997,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresStoreInstancesCall) Do(opts ...goog
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}`).",
+	//       "description": "The path of the StoreInstances DICOMweb request (e.g.,\n`studies/[{study_id}]`). Note that the `study_uid` is optional.",
 	//       "location": "path",
 	//       "pattern": "^studies$",
 	//       "required": true,
@@ -7312,7 +7291,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresStudiesDeleteCall) Do(opts ...googl
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}`).",
+	//       "description": "The path of the DeleteStudy request (e.g., `studies/{study_id}`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+$",
 	//       "required": true,
@@ -7438,7 +7417,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresStudiesRetrieveMetadataCall) Do(opt
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}/metadata`.",
+	//       "description": "The path of the RetrieveStudyMetadata DICOMweb request (e.g.,\n`studies/{study_id}/metadata`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/metadata$",
 	//       "required": true,
@@ -7563,7 +7542,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresStudiesRetrieveStudyCall) Do(opts .
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}`).",
+	//       "description": "The path of the RetrieveStudy DICOMweb request (e.g.,\n`studies/{study_id}`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+$",
 	//       "required": true,
@@ -7688,7 +7667,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresStudiesSearchForInstancesCall) Do(o
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`instances`).",
+	//       "description": "The path of the SearchForInstancesRequest DICOMweb request (e.g.,\n`instances` or `series/{series_uid}/instances` or\n`studies/{study_uid}/instances`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/instances$",
 	//       "required": true,
@@ -7812,7 +7791,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresStudiesSearchForSeriesCall) Do(opts
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`series`).",
+	//       "description": "The path of the SearchForSeries DICOMweb request(e.g., `series` or\n`studies/{study_uid}/series`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/series$",
 	//       "required": true,
@@ -7925,7 +7904,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresStudiesStoreInstancesCall) Do(opts 
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}`).",
+	//       "description": "The path of the StoreInstances DICOMweb request (e.g.,\n`studies/[{study_id}]`). Note that the `study_uid` is optional.",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+$",
 	//       "required": true,
@@ -8072,7 +8051,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresStudiesSeriesDeleteCall) Do(opts ..
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}/series/{series_id}`).",
+	//       "description": "The path of the DeleteSeries request (e.g.,\n`studies/{study_id}/series/{series_id}`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/series/[^/]+$",
 	//       "required": true,
@@ -8198,7 +8177,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresStudiesSeriesRetrieveMetadataCall) 
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}/series/{series_id}/metadata`.",
+	//       "description": "The path of the RetrieveSeriesMetadata DICOMweb request (e.g.,\n`studies/{study_id}/series/{series_id}/metadata`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/series/[^/]+/metadata$",
 	//       "required": true,
@@ -8323,7 +8302,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresStudiesSeriesRetrieveSeriesCall) Do
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g., `studies/{study_id}/series/{series_id}`).",
+	//       "description": "The path of the RetrieveSeries DICOMweb request (e.g.,\n`studies/{study_id}/series/{series_id}`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/series/[^/]+$",
 	//       "required": true,
@@ -8448,7 +8427,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresStudiesSeriesSearchForInstancesCall
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`instances`).",
+	//       "description": "The path of the SearchForInstancesRequest DICOMweb request (e.g.,\n`instances` or `series/{series_uid}/instances` or\n`studies/{study_uid}/instances`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/series/[^/]+/instances$",
 	//       "required": true,
@@ -8592,7 +8571,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresStudiesSeriesInstancesDeleteCall) D
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}`).",
+	//       "description": "The path of the DeleteInstance request (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/series/[^/]+/instances/[^/]+$",
 	//       "required": true,
@@ -8718,7 +8697,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresStudiesSeriesInstancesRetrieveInsta
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}`).",
+	//       "description": "The path of the RetrieveInstance DICOMweb request (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/series/[^/]+/instances/[^/]+$",
 	//       "required": true,
@@ -8846,7 +8825,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresStudiesSeriesInstancesRetrieveMetad
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/metadata`).",
+	//       "description": "The path of the RetrieveInstanceMetadata DICOMweb request (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/metadata`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/series/[^/]+/instances/[^/]+/metadata$",
 	//       "required": true,
@@ -8972,7 +8951,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresStudiesSeriesInstancesRetrieveRende
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/rendered`).",
+	//       "description": "The path of the RetrieveRenderedInstance DICOMweb request (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/rendered`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/series/[^/]+/instances/[^/]+/rendered$",
 	//       "required": true,
@@ -9098,7 +9077,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresStudiesSeriesInstancesFramesRetriev
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/frames/{frame_list}`).",
+	//       "description": "The path of the RetrieveFrames DICOMweb request (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/frames/{frame_list}`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/series/[^/]+/instances/[^/]+/frames/[^/]+$",
 	//       "required": true,
@@ -9226,7 +9205,7 @@ func (c *ProjectsLocationsDatasetsDicomStoresStudiesSeriesInstancesFramesRetriev
 	//   ],
 	//   "parameters": {
 	//     "dicomWebPath": {
-	//       "description": "The path of the DICOMweb request, as specified in the STOW-RS, WADO-RS, or\nQIDO-RS standard (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/frames/{frame_list}/rendered`).",
+	//       "description": "The path of the RetrieveRenderedFrames DICOMweb request (e.g.,\n`studies/{study_id}/series/{series_id}/instances/{instance_id}/frames/{frame_list}/rendered`).",
 	//       "location": "path",
 	//       "pattern": "^studies/[^/]+/series/[^/]+/instances/[^/]+/frames/[^/]+/rendered$",
 	//       "required": true,
@@ -9852,6 +9831,18 @@ func (r *ProjectsLocationsDatasetsFhirStoresService) GetIamPolicy(resource strin
 	return c
 }
 
+// OptionsRequestedPolicyVersion sets the optional parameter
+// "options.requestedPolicyVersion": The policy format version to be
+// returned.
+// Acceptable values are 0 and 1.
+// If the value is 0, or the field is omitted, policy format version 1
+// will be
+// returned.
+func (c *ProjectsLocationsDatasetsFhirStoresGetIamPolicyCall) OptionsRequestedPolicyVersion(optionsRequestedPolicyVersion int64) *ProjectsLocationsDatasetsFhirStoresGetIamPolicyCall {
+	c.urlParams_.Set("options.requestedPolicyVersion", fmt.Sprint(optionsRequestedPolicyVersion))
+	return c
+}
+
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -9958,6 +9949,12 @@ func (c *ProjectsLocationsDatasetsFhirStoresGetIamPolicyCall) Do(opts ...googlea
 	//     "resource"
 	//   ],
 	//   "parameters": {
+	//     "options.requestedPolicyVersion": {
+	//       "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+	//       "format": "int32",
+	//       "location": "query",
+	//       "type": "integer"
+	//     },
 	//     "resource": {
 	//       "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",
@@ -12727,8 +12724,6 @@ type ProjectsLocationsDatasetsFhirStoresFhirSearchCall struct {
 // generic
 // GCP error might be returned instead.
 //
-// # Search Parameters
-//
 // The server's capability statement, retrieved through
 // capabilities, indicates what search parameters
 // are supported on each FHIR resource. A list of all search
@@ -12738,21 +12733,23 @@ type ProjectsLocationsDatasetsFhirStoresFhirSearchCall struct {
 // Registry](http://hl7.org/implement/standards/fhir/STU3/searc
 // hparameter-registry.html).
 //
-// # Search Modifiers
+// Supported search modifiers: `:missing`, `:exact`, `:contains`,
+// `:text`,
+// `:in`, `:not-in`, `:above`, `:below`, `:[type]`, `:not`, and
+// `:recurse`.
 //
-// Modifier   | Supported
-// ----------- | ---------
-// `:missing`  | Yes
-// `:exact`    | Yes
-// `:contains` | Yes
-// `:text`     | Yes
-// `:in`       | Yes
-// `:not-in`   | Yes
-// `:above`    | Yes
-// `:below`    | Yes
-// `:[type]`   | Yes
-// `:not`      | Yes
-// `:recurse`  | No
+// Supported search result parameters: `_sort`, `_count`,
+// `_include`,
+// `_revinclude`, `_summary=text`, `_summary=data`, and
+// `_elements`.
+//
+// The maximum number of search results returned defaults to 100, which
+// can
+// be overridden by the `_count` parameter up to a maximum limit of
+// 1000. If
+// there are additional results, the returned `Bundle` will
+// contain
+// pagination links.
 func (r *ProjectsLocationsDatasetsFhirStoresFhirService) Search(parent string, searchresourcesrequest *SearchResourcesRequest) *ProjectsLocationsDatasetsFhirStoresFhirSearchCall {
 	c := &ProjectsLocationsDatasetsFhirStoresFhirSearchCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	c.parent = parent
@@ -12817,7 +12814,7 @@ func (c *ProjectsLocationsDatasetsFhirStoresFhirSearchCall) Do(opts ...googleapi
 	gensupport.SetOptions(c.urlParams_, opts...)
 	return c.doRequest("")
 	// {
-	//   "description": "Searches for resources in the given FHIR store according to criteria\nspecified as query parameters.\n\nImplements the FHIR standard [search\ninteraction](http://hl7.org/implement/standards/fhir/STU3/http.html#search)\nusing the search semantics described in the [FHIR Search\nspecification](http://hl7.org/implement/standards/fhir/STU3/search.html).\n\nSupports three methods of search defined by the specification:\n\n*  `GET [base]?[parameters]` to search across all resources.\n*  `GET [base]/[type]?[parameters]` to search resources of a specified\ntype.\n*  `POST [base]/[type]/_search?[parameters]` as an alternate form having\nthe same semantics as the `GET` method.\n\nThe `GET` methods do not support compartment searches. The `POST` method\ndoes not support `application/x-www-form-urlencoded` search parameters.\n\nOn success, the response body will contain a JSON-encoded representation\nof a `Bundle` resource of type `searchset`, containing the results of the\nsearch.\nErrors generated by the FHIR store will contain a JSON-encoded\n`OperationOutcome` resource describing the reason for the error. If the\nrequest cannot be mapped to a valid API method on a FHIR store, a generic\nGCP error might be returned instead.\n\n# Search Parameters\n\nThe server's capability statement, retrieved through\ncapabilities, indicates what search parameters\nare supported on each FHIR resource. A list of all search parameters\ndefined by the specification can be found in the [FHIR Search Parameter\nRegistry](http://hl7.org/implement/standards/fhir/STU3/searchparameter-registry.html).\n\n# Search Modifiers\n\nModifier   | Supported\n----------- | ---------\n`:missing`  | Yes\n`:exact`    | Yes\n`:contains` | Yes\n`:text`     | Yes\n`:in`       | Yes\n`:not-in`   | Yes\n`:above`    | Yes\n`:below`    | Yes\n`:[type]`   | Yes\n`:not`      | Yes\n`:recurse`  | No",
+	//   "description": "Searches for resources in the given FHIR store according to criteria\nspecified as query parameters.\n\nImplements the FHIR standard [search\ninteraction](http://hl7.org/implement/standards/fhir/STU3/http.html#search)\nusing the search semantics described in the [FHIR Search\nspecification](http://hl7.org/implement/standards/fhir/STU3/search.html).\n\nSupports three methods of search defined by the specification:\n\n*  `GET [base]?[parameters]` to search across all resources.\n*  `GET [base]/[type]?[parameters]` to search resources of a specified\ntype.\n*  `POST [base]/[type]/_search?[parameters]` as an alternate form having\nthe same semantics as the `GET` method.\n\nThe `GET` methods do not support compartment searches. The `POST` method\ndoes not support `application/x-www-form-urlencoded` search parameters.\n\nOn success, the response body will contain a JSON-encoded representation\nof a `Bundle` resource of type `searchset`, containing the results of the\nsearch.\nErrors generated by the FHIR store will contain a JSON-encoded\n`OperationOutcome` resource describing the reason for the error. If the\nrequest cannot be mapped to a valid API method on a FHIR store, a generic\nGCP error might be returned instead.\n\nThe server's capability statement, retrieved through\ncapabilities, indicates what search parameters\nare supported on each FHIR resource. A list of all search parameters\ndefined by the specification can be found in the [FHIR Search Parameter\nRegistry](http://hl7.org/implement/standards/fhir/STU3/searchparameter-registry.html).\n\nSupported search modifiers: `:missing`, `:exact`, `:contains`, `:text`,\n`:in`, `:not-in`, `:above`, `:below`, `:[type]`, `:not`, and `:recurse`.\n\nSupported search result parameters: `_sort`, `_count`, `_include`,\n`_revinclude`, `_summary=text`, `_summary=data`, and `_elements`.\n\nThe maximum number of search results returned defaults to 100, which can\nbe overridden by the `_count` parameter up to a maximum limit of 1000. If\nthere are additional results, the returned `Bundle` will contain\npagination links.",
 	//   "flatPath": "v1beta1/projects/{projectsId}/locations/{locationsId}/datasets/{datasetsId}/fhirStores/{fhirStoresId}/fhir/_search",
 	//   "httpMethod": "POST",
 	//   "id": "healthcare.projects.locations.datasets.fhirStores.fhir.search",
@@ -13553,6 +13550,18 @@ func (r *ProjectsLocationsDatasetsHl7V2StoresService) GetIamPolicy(resource stri
 	return c
 }
 
+// OptionsRequestedPolicyVersion sets the optional parameter
+// "options.requestedPolicyVersion": The policy format version to be
+// returned.
+// Acceptable values are 0 and 1.
+// If the value is 0, or the field is omitted, policy format version 1
+// will be
+// returned.
+func (c *ProjectsLocationsDatasetsHl7V2StoresGetIamPolicyCall) OptionsRequestedPolicyVersion(optionsRequestedPolicyVersion int64) *ProjectsLocationsDatasetsHl7V2StoresGetIamPolicyCall {
+	c.urlParams_.Set("options.requestedPolicyVersion", fmt.Sprint(optionsRequestedPolicyVersion))
+	return c
+}
+
 // Fields allows partial responses to be retrieved. See
 // https://developers.google.com/gdata/docs/2.0/basics#PartialResponse
 // for more information.
@@ -13659,6 +13668,12 @@ func (c *ProjectsLocationsDatasetsHl7V2StoresGetIamPolicyCall) Do(opts ...google
 	//     "resource"
 	//   ],
 	//   "parameters": {
+	//     "options.requestedPolicyVersion": {
+	//       "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+	//       "format": "int32",
+	//       "location": "query",
+	//       "type": "integer"
+	//     },
 	//     "resource": {
 	//       "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
 	//       "location": "path",

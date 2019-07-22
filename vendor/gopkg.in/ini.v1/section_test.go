@@ -151,9 +151,9 @@ func TestSection_HasKey(t *testing.T) {
 		So(k, ShouldNotBeNil)
 
 		So(f.Section("").HasKey("NAME"), ShouldBeTrue)
-		So(f.Section("").Haskey("NAME"), ShouldBeTrue)
+		So(f.Section("").HasKey("NAME"), ShouldBeTrue)
 		So(f.Section("").HasKey("404"), ShouldBeFalse)
-		So(f.Section("").Haskey("404"), ShouldBeFalse)
+		So(f.Section("").HasKey("404"), ShouldBeFalse)
 	})
 }
 

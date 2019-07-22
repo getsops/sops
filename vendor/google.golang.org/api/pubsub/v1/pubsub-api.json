@@ -200,6 +200,12 @@
                 "resource"
               ],
               "parameters": {
+                "options.requestedPolicyVersion": {
+                  "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+                  "format": "int32",
+                  "location": "query",
+                  "type": "integer"
+                },
                 "resource": {
                   "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
                   "location": "path",
@@ -464,6 +470,12 @@
                 "resource"
               ],
               "parameters": {
+                "options.requestedPolicyVersion": {
+                  "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+                  "format": "int32",
+                  "location": "query",
+                  "type": "integer"
+                },
                 "resource": {
                   "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
                   "location": "path",
@@ -815,6 +827,12 @@
                 "resource"
               ],
               "parameters": {
+                "options.requestedPolicyVersion": {
+                  "description": "Optional. The policy format version to be returned.\nAcceptable values are 0 and 1.\nIf the value is 0, or the field is omitted, policy format version 1 will be\nreturned.",
+                  "format": "int32",
+                  "location": "query",
+                  "type": "integer"
+                },
                 "resource": {
                   "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
                   "location": "path",
@@ -1074,7 +1092,7 @@
       }
     }
   },
-  "revision": "20190429",
+  "revision": "20190701",
   "rootUrl": "https://pubsub.googleapis.com/",
   "schemas": {
     "AcknowledgeRequest": {
@@ -1256,6 +1274,19 @@
           "description": "The resulting topics.",
           "items": {
             "$ref": "Topic"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "MessageStoragePolicy": {
+      "id": "MessageStoragePolicy",
+      "properties": {
+        "allowedPersistenceRegions": {
+          "description": "A list of IDs of GCP regions where messages that are published to the topic\nmay be persisted in storage. Messages published by publishers running in\nnon-allowed GCP regions (or running outside of GCP altogether) will be\nrouted for storage in one of the allowed regions. An empty list means that\nno regions are allowed, and is not a valid configuration.",
+          "items": {
+            "type": "string"
           },
           "type": "array"
         }
@@ -1590,12 +1621,20 @@
       "description": "A topic resource.",
       "id": "Topic",
       "properties": {
+        "kmsKeyName": {
+          "description": "The resource name of the Cloud KMS CryptoKey to be used to protect access\nto messages published on this topic.\n\nThe expected format is `projects/*/locations/*/keyRings/*/cryptoKeys/*`.",
+          "type": "string"
+        },
         "labels": {
           "additionalProperties": {
             "type": "string"
           },
           "description": "See \u003ca href=\"https://cloud.google.com/pubsub/docs/labels\"\u003e Creating and\nmanaging labels\u003c/a\u003e.",
           "type": "object"
+        },
+        "messageStoragePolicy": {
+          "$ref": "MessageStoragePolicy",
+          "description": "Policy constraining the set of Google Cloud Platform regions where messages\npublished to the topic may be stored. If not present, then no constraints\nare in effect."
         },
         "name": {
           "description": "The name of the topic. It must have the format\n`\"projects/{project}/topics/{topic}\"`. `{topic}` must start with a letter,\nand contain only letters (`[A-Za-z]`), numbers (`[0-9]`), dashes (`-`),\nunderscores (`_`), periods (`.`), tildes (`~`), plus (`+`) or percent\nsigns (`%`). It must be between 3 and 255 characters in length, and it\nmust not start with `\"goog\"`.",

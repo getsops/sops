@@ -52,7 +52,7 @@ func (c *EKS) CreateClusterRequest(input *CreateClusterInput) (req *request.Requ
 	return
 }
 
-// CreateCluster API operation for Amazon Elastic Container Service for Kubernetes.
+// CreateCluster API operation for Amazon Elastic Kubernetes Service.
 //
 // Creates an Amazon EKS control plane.
 //
@@ -100,7 +100,7 @@ func (c *EKS) CreateClusterRequest(input *CreateClusterInput) (req *request.Requ
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
 //
-// See the AWS API reference guide for Amazon Elastic Container Service for Kubernetes's
+// See the AWS API reference guide for Amazon Elastic Kubernetes Service's
 // API operation CreateCluster for usage and error information.
 //
 // Returned Error Codes:
@@ -195,7 +195,7 @@ func (c *EKS) DeleteClusterRequest(input *DeleteClusterInput) (req *request.Requ
 	return
 }
 
-// DeleteCluster API operation for Amazon Elastic Container Service for Kubernetes.
+// DeleteCluster API operation for Amazon Elastic Kubernetes Service.
 //
 // Deletes the Amazon EKS cluster control plane.
 //
@@ -210,7 +210,7 @@ func (c *EKS) DeleteClusterRequest(input *DeleteClusterInput) (req *request.Requ
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
 //
-// See the AWS API reference guide for Amazon Elastic Container Service for Kubernetes's
+// See the AWS API reference guide for Amazon Elastic Kubernetes Service's
 // API operation DeleteCluster for usage and error information.
 //
 // Returned Error Codes:
@@ -296,7 +296,7 @@ func (c *EKS) DescribeClusterRequest(input *DescribeClusterInput) (req *request.
 	return
 }
 
-// DescribeCluster API operation for Amazon Elastic Container Service for Kubernetes.
+// DescribeCluster API operation for Amazon Elastic Kubernetes Service.
 //
 // Returns descriptive information about an Amazon EKS cluster.
 //
@@ -312,7 +312,7 @@ func (c *EKS) DescribeClusterRequest(input *DescribeClusterInput) (req *request.
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
 //
-// See the AWS API reference guide for Amazon Elastic Container Service for Kubernetes's
+// See the AWS API reference guide for Amazon Elastic Kubernetes Service's
 // API operation DescribeCluster for usage and error information.
 //
 // Returned Error Codes:
@@ -395,7 +395,7 @@ func (c *EKS) DescribeUpdateRequest(input *DescribeUpdateInput) (req *request.Re
 	return
 }
 
-// DescribeUpdate API operation for Amazon Elastic Container Service for Kubernetes.
+// DescribeUpdate API operation for Amazon Elastic Kubernetes Service.
 //
 // Returns descriptive information about an update against your Amazon EKS cluster.
 //
@@ -407,7 +407,7 @@ func (c *EKS) DescribeUpdateRequest(input *DescribeUpdateInput) (req *request.Re
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
 //
-// See the AWS API reference guide for Amazon Elastic Container Service for Kubernetes's
+// See the AWS API reference guide for Amazon Elastic Kubernetes Service's
 // API operation DescribeUpdate for usage and error information.
 //
 // Returned Error Codes:
@@ -491,7 +491,7 @@ func (c *EKS) ListClustersRequest(input *ListClustersInput) (req *request.Reques
 	return
 }
 
-// ListClusters API operation for Amazon Elastic Container Service for Kubernetes.
+// ListClusters API operation for Amazon Elastic Kubernetes Service.
 //
 // Lists the Amazon EKS clusters in your AWS account in the specified Region.
 //
@@ -499,7 +499,7 @@ func (c *EKS) ListClustersRequest(input *ListClustersInput) (req *request.Reques
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
 //
-// See the AWS API reference guide for Amazon Elastic Container Service for Kubernetes's
+// See the AWS API reference guide for Amazon Elastic Kubernetes Service's
 // API operation ListClusters for usage and error information.
 //
 // Returned Error Codes:
@@ -582,7 +582,7 @@ func (c *EKS) ListUpdatesRequest(input *ListUpdatesInput) (req *request.Request,
 	return
 }
 
-// ListUpdates API operation for Amazon Elastic Container Service for Kubernetes.
+// ListUpdates API operation for Amazon Elastic Kubernetes Service.
 //
 // Lists the updates associated with an Amazon EKS cluster in your AWS account,
 // in the specified Region.
@@ -591,7 +591,7 @@ func (c *EKS) ListUpdatesRequest(input *ListUpdatesInput) (req *request.Request,
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
 //
-// See the AWS API reference guide for Amazon Elastic Container Service for Kubernetes's
+// See the AWS API reference guide for Amazon Elastic Kubernetes Service's
 // API operation ListUpdates for usage and error information.
 //
 // Returned Error Codes:
@@ -675,7 +675,7 @@ func (c *EKS) UpdateClusterConfigRequest(input *UpdateClusterConfigInput) (req *
 	return
 }
 
-// UpdateClusterConfig API operation for Amazon Elastic Container Service for Kubernetes.
+// UpdateClusterConfig API operation for Amazon Elastic Kubernetes Service.
 //
 // Updates an Amazon EKS cluster configuration. Your cluster continues to function
 // during the update. The response output includes an update ID that you can
@@ -710,7 +710,7 @@ func (c *EKS) UpdateClusterConfigRequest(input *UpdateClusterConfigInput) (req *
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
 //
-// See the AWS API reference guide for Amazon Elastic Container Service for Kubernetes's
+// See the AWS API reference guide for Amazon Elastic Kubernetes Service's
 // API operation UpdateClusterConfig for usage and error information.
 //
 // Returned Error Codes:
@@ -801,7 +801,7 @@ func (c *EKS) UpdateClusterVersionRequest(input *UpdateClusterVersionInput) (req
 	return
 }
 
-// UpdateClusterVersion API operation for Amazon Elastic Container Service for Kubernetes.
+// UpdateClusterVersion API operation for Amazon Elastic Kubernetes Service.
 //
 // Updates an Amazon EKS cluster to the specified Kubernetes version. Your cluster
 // continues to function during the update. The response output includes an
@@ -817,7 +817,7 @@ func (c *EKS) UpdateClusterVersionRequest(input *UpdateClusterVersionInput) (req
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
 //
-// See the AWS API reference guide for Amazon Elastic Container Service for Kubernetes's
+// See the AWS API reference guide for Amazon Elastic Kubernetes Service's
 // API operation UpdateClusterVersion for usage and error information.
 //
 // Returned Error Codes:

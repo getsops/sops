@@ -23,6 +23,14 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 )
 
+// EndpointSettingsClientAPI contains the set of methods on the EndpointSettingsClient type.
+type EndpointSettingsClientAPI interface {
+	GetSettings(ctx context.Context) (result qnamaker.EndpointSettingsDTO, err error)
+	UpdateSettings(ctx context.Context, endpointSettingsPayload qnamaker.EndpointSettingsDTO) (result qnamaker.String, err error)
+}
+
+var _ EndpointSettingsClientAPI = (*qnamaker.EndpointSettingsClient)(nil)
+
 // EndpointKeysClientAPI contains the set of methods on the EndpointKeysClient type.
 type EndpointKeysClientAPI interface {
 	GetKeys(ctx context.Context) (result qnamaker.EndpointKeysDTO, err error)

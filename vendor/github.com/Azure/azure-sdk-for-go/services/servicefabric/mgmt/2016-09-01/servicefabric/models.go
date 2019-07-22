@@ -241,7 +241,7 @@ type CertificateDescription struct {
 type ClientCertificateCommonName struct {
 	// IsAdmin - Is this certificate used for admin access from the client, if false , it is used or query only access
 	IsAdmin *bool `json:"isAdmin,omitempty"`
-	// CertificateCommonName - Certificate common name to be granted access; be carefull using wild card common names
+	// CertificateCommonName - Certificate common name to be granted access; be careful using wild card common names
 	CertificateCommonName *string `json:"certificateCommonName,omitempty"`
 	// CertificateIssuerThumbprint - Certificate issuer thumbprint
 	CertificateIssuerThumbprint *string `json:"certificateIssuerThumbprint,omitempty"`
@@ -748,7 +748,7 @@ type ClusterProperties struct {
 	ClusterEndpoint *string `json:"clusterEndpoint,omitempty"`
 	// ClusterCodeVersion - The ServiceFabric code version running in your cluster
 	ClusterCodeVersion *string `json:"clusterCodeVersion,omitempty"`
-	// Certificate - This primay certificate will be used as cluster node to node security, SSL certificate for cluster management endpoint and default admin client
+	// Certificate - This primary certificate will be used as cluster node to node security, SSL certificate for cluster management endpoint and default admin client
 	Certificate *CertificateDescription `json:"certificate,omitempty"`
 	// ReliabilityLevel - Cluster reliability level indicates replica set size of system service. Possible values include: 'ReliabilityLevel1Bronze', 'ReliabilityLevel1Silver', 'ReliabilityLevel1Gold', 'ReliabilityLevel1Platinum'
 	ReliabilityLevel ReliabilityLevel1 `json:"reliabilityLevel,omitempty"`
@@ -764,7 +764,7 @@ type ClusterProperties struct {
 	ReverseProxyCertificate *CertificateDescription `json:"reverseProxyCertificate,omitempty"`
 	// ManagementEndpoint - The http management endpoint of the cluster
 	ManagementEndpoint *string `json:"managementEndpoint,omitempty"`
-	// NodeTypes - The list of nodetypes that make up the cluster
+	// NodeTypes - The list of node types that make up the cluster
 	NodeTypes *[]NodeTypeDescription `json:"nodeTypes,omitempty"`
 	// AzureActiveDirectory - The settings to enable AAD authentication on the cluster
 	AzureActiveDirectory *AzureActiveDirectory `json:"azureActiveDirectory,omitempty"`
@@ -786,7 +786,7 @@ type ClusterPropertiesUpdateParameters struct {
 	UpgradeMode UpgradeMode `json:"upgradeMode,omitempty"`
 	// ClusterCodeVersion - The ServiceFabric code version, if set it, please make sure you have set upgradeMode to Manual, otherwise ,it will fail, if you are using PUT new cluster, you can get the version by using ClusterVersions_List, if you are updating existing cluster, you can get the availableClusterVersions from Clusters_Get
 	ClusterCodeVersion *string `json:"clusterCodeVersion,omitempty"`
-	// Certificate - This primay certificate will be used as cluster node to node security, SSL certificate for cluster management endpoint and default admin client, the certificate should exist in the virtual machine scale sets or Azure key vault, before you add it. It will override original value
+	// Certificate - This primary certificate will be used as cluster node to node security, SSL certificate for cluster management endpoint and default admin client, the certificate should exist in the virtual machine scale sets or Azure key vault, before you add it. It will override original value
 	Certificate *CertificateDescription `json:"certificate,omitempty"`
 	// ClientCertificateThumbprints - The client thumbprint details, it is used for client access for cluster operation, it will override existing collection
 	ClientCertificateThumbprints *[]ClientCertificateThumbprint `json:"clientCertificateThumbprints,omitempty"`
@@ -796,7 +796,7 @@ type ClusterPropertiesUpdateParameters struct {
 	FabricSettings *[]SettingsSectionDescription `json:"fabricSettings,omitempty"`
 	// ReverseProxyCertificate - Certificate for the reverse proxy
 	ReverseProxyCertificate *CertificateDescription `json:"reverseProxyCertificate,omitempty"`
-	// NodeTypes - The list of nodetypes that make up the cluster, it will override
+	// NodeTypes - The list of node types that make up the cluster, it will override
 	NodeTypes *[]NodeTypeDescription `json:"nodeTypes,omitempty"`
 	// UpgradeDescription - The policy to use when upgrading the cluster.
 	UpgradeDescription *ClusterUpgradePolicy `json:"upgradeDescription,omitempty"`
@@ -1005,11 +1005,11 @@ type NodeTypeDescription struct {
 	ClientConnectionEndpointPort *int32 `json:"clientConnectionEndpointPort,omitempty"`
 	// HTTPGatewayEndpointPort - The HTTP cluster management endpoint port
 	HTTPGatewayEndpointPort *int32 `json:"httpGatewayEndpointPort,omitempty"`
-	// DurabilityLevel - Nodetype durability Level. Possible values include: 'Bronze', 'Silver', 'Gold'
+	// DurabilityLevel - Node type durability Level. Possible values include: 'Bronze', 'Silver', 'Gold'
 	DurabilityLevel DurabilityLevel `json:"durabilityLevel,omitempty"`
 	// ApplicationPorts - Ports used by applications
 	ApplicationPorts *EndpointRangeDescription `json:"applicationPorts,omitempty"`
-	// EphemeralPorts - System assgined application ports
+	// EphemeralPorts - System assigned application ports
 	EphemeralPorts *EndpointRangeDescription `json:"ephemeralPorts,omitempty"`
 	// IsPrimary - Mark this as the primary node type
 	IsPrimary *bool `json:"isPrimary,omitempty"`
@@ -1209,7 +1209,7 @@ func NewOperationListResultPage(getNextPage func(context.Context, OperationListR
 type OperationResult struct {
 	// Name - Result name
 	Name *string `json:"name,omitempty"`
-	// Display - Dispaly of the result
+	// Display - Display of the result
 	Display *AvailableOperationDisplay `json:"display,omitempty"`
 	// Origin - Origin result
 	Origin *string `json:"origin,omitempty"`

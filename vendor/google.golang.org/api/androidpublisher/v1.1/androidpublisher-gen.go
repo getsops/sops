@@ -176,6 +176,7 @@ type InappPurchase struct {
 	//
 	// - Purchased
 	// - Canceled
+	// - Pending
 	PurchaseState int64 `json:"purchaseState,omitempty"`
 
 	// PurchaseTime: The time the product was purchased, in milliseconds

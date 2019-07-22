@@ -95,11 +95,14 @@ type HanaInstance = original.HanaInstance
 type HanaInstanceProperties = original.HanaInstanceProperties
 type HanaInstancesClient = original.HanaInstancesClient
 type HanaInstancesCreateFuture = original.HanaInstancesCreateFuture
+type HanaInstancesDeleteFuture = original.HanaInstancesDeleteFuture
 type HanaInstancesEnableMonitoringFuture = original.HanaInstancesEnableMonitoringFuture
 type HanaInstancesListResult = original.HanaInstancesListResult
 type HanaInstancesListResultIterator = original.HanaInstancesListResultIterator
 type HanaInstancesListResultPage = original.HanaInstancesListResultPage
 type HanaInstancesRestartFuture = original.HanaInstancesRestartFuture
+type HanaInstancesShutdownFuture = original.HanaInstancesShutdownFuture
+type HanaInstancesStartFuture = original.HanaInstancesStartFuture
 type HardwareProfile = original.HardwareProfile
 type IPAddress = original.IPAddress
 type MonitoringDetails = original.MonitoringDetails
@@ -109,6 +112,14 @@ type Operation = original.Operation
 type OperationList = original.OperationList
 type OperationsClient = original.OperationsClient
 type Resource = original.Resource
+type SapMonitor = original.SapMonitor
+type SapMonitorListResult = original.SapMonitorListResult
+type SapMonitorListResultIterator = original.SapMonitorListResultIterator
+type SapMonitorListResultPage = original.SapMonitorListResultPage
+type SapMonitorProperties = original.SapMonitorProperties
+type SapMonitorsClient = original.SapMonitorsClient
+type SapMonitorsCreateFuture = original.SapMonitorsCreateFuture
+type SapMonitorsDeleteFuture = original.SapMonitorsDeleteFuture
 type StorageProfile = original.StorageProfile
 type Tags = original.Tags
 
@@ -132,6 +143,18 @@ func NewOperationsClient(subscriptionID string) OperationsClient {
 }
 func NewOperationsClientWithBaseURI(baseURI string, subscriptionID string) OperationsClient {
 	return original.NewOperationsClientWithBaseURI(baseURI, subscriptionID)
+}
+func NewSapMonitorListResultIterator(page SapMonitorListResultPage) SapMonitorListResultIterator {
+	return original.NewSapMonitorListResultIterator(page)
+}
+func NewSapMonitorListResultPage(getNextPage func(context.Context, SapMonitorListResult) (SapMonitorListResult, error)) SapMonitorListResultPage {
+	return original.NewSapMonitorListResultPage(getNextPage)
+}
+func NewSapMonitorsClient(subscriptionID string) SapMonitorsClient {
+	return original.NewSapMonitorsClient(subscriptionID)
+}
+func NewSapMonitorsClientWithBaseURI(baseURI string, subscriptionID string) SapMonitorsClient {
+	return original.NewSapMonitorsClientWithBaseURI(baseURI, subscriptionID)
 }
 func NewWithBaseURI(baseURI string, subscriptionID string) BaseClient {
 	return original.NewWithBaseURI(baseURI, subscriptionID)

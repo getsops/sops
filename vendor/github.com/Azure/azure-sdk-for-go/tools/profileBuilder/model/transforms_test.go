@@ -28,19 +28,35 @@ func Test_GetAliasPath(t *testing.T) {
 		expected string
 	}{
 		{
-			filepath.Join("services", "cdn", "mgmt", "2015-06-01", "cdn"),
+			filepath.Join("work", "src", "github.com", "Azure", "azure-sdk-for-go", "services", "cdn", "mgmt", "2015-06-01", "cdn"),
 			filepath.Join("cdn", "mgmt", "cdn"),
 		},
 		{
-			filepath.Join("services", "keyvault", "2016-10-01", "keyvault"),
+			filepath.Join("work", "src", "github.com", "Azure", "azure-sdk-for-go", "services", "cdn", "mgmt", "2015-06-01", "cdn", "cdnapi"),
+			filepath.Join("cdn", "mgmt", "cdn", "cdnapi"),
+		},
+		{
+			filepath.Join("work", "src", "github.com", "Azure", "azure-sdk-for-go", "services", "cdn", "mgmt", "2015-06-01", "cdn", "v2"),
+			filepath.Join("cdn", "mgmt", "cdn"),
+		},
+		{
+			filepath.Join("work", "src", "github.com", "Azure", "azure-sdk-for-go", "services", "keyvault", "2016-10-01", "keyvault"),
 			filepath.Join("keyvault", "keyvault"),
 		},
 		{
-			filepath.Join("services", "keyvault", "mgmt", "2016-10-01", "keyvault"),
+			filepath.Join("work", "src", "github.com", "Azure", "azure-sdk-for-go", "services", "keyvault", "2016-10-01", "keyvault", "v21"),
+			filepath.Join("keyvault", "keyvault"),
+		},
+		{
+			filepath.Join("work", "src", "github.com", "Azure", "azure-sdk-for-go", "services", "keyvault", "2016-10-01", "keyvault", "v21", "keyvaultapi"),
+			filepath.Join("keyvault", "keyvault", "keyvaultapi"),
+		},
+		{
+			filepath.Join("work", "src", "github.com", "Azure", "azure-sdk-for-go", "services", "keyvault", "mgmt", "2016-10-01", "keyvault"),
 			filepath.Join("keyvault", "mgmt", "keyvault"),
 		},
 		{
-			filepath.Join("services", "datalake", "analytics", "2016-11-01-preview", "catalog"),
+			filepath.Join("work", "src", "github.com", "Azure", "azure-sdk-for-go", "services", "datalake", "analytics", "2016-11-01-preview", "catalog"),
 			filepath.Join("datalake", "analytics", "catalog"),
 		},
 	}

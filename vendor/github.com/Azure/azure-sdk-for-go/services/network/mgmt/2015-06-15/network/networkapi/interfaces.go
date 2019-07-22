@@ -193,7 +193,7 @@ var _ SubnetsClientAPI = (*network.SubnetsClient)(nil)
 type VirtualNetworkGatewaysClientAPI interface {
 	CreateOrUpdate(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string, parameters network.VirtualNetworkGateway) (result network.VirtualNetworkGatewaysCreateOrUpdateFuture, err error)
 	Delete(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string) (result network.VirtualNetworkGatewaysDeleteFuture, err error)
-	Generatevpnclientpackage(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string, parameters network.VpnClientParameters) (result network.String, err error)
+	Generatevpnclientpackage(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string, parameters network.VpnClientParameters) (result network.VirtualNetworkGatewaysGeneratevpnclientpackageFuture, err error)
 	Get(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string) (result network.VirtualNetworkGateway, err error)
 	List(ctx context.Context, resourceGroupName string) (result network.VirtualNetworkGatewayListResultPage, err error)
 	Reset(ctx context.Context, resourceGroupName string, virtualNetworkGatewayName string, parameters network.VirtualNetworkGateway) (result network.VirtualNetworkGatewaysResetFuture, err error)

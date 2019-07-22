@@ -678,3 +678,35 @@ func ExampleStatement_regexpContains() {
 	}
 	_ = stmt // TODO: Use stmt in a query.
 }
+
+func ExampleKeySets() {
+	ctx := context.Background()
+	client, err := spanner.NewClient(ctx, myDB)
+	if err != nil {
+		// TODO: Handle error.
+	}
+	// Get some rows from the Accounts table using a secondary index. In this case we get all users who are in Georgia.
+	iter := client.Single().ReadUsingIndex(context.Background(), "Accounts", "idx_state", spanner.Key{"GA"}, []string{"state"})
+
+	// Create a empty KeySet by calling the KeySets function with no parameters.
+	ks := spanner.KeySets()
+
+	// Loop the results of a previous query iterator.
+	for {
+		row, err := iter.Next()
+		if err == iterator.Done {
+			break
+		} else if err != nil {
+			// TODO: Handle error.
+		}
+		var id string
+		err = row.ColumnByName("User", &id)
+		if err != nil {
+			// TODO: Handle error.
+		}
+		ks = spanner.KeySets(spanner.KeySets(spanner.Key{id}, ks))
+	}
+
+	_ = ks //TODO: Go use the KeySet in another query.
+
+}

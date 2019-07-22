@@ -11,3 +11,8 @@ The following will create and sign a token, then verify it and output the origin
 To simply display a token, use:
 
     echo $JWT | ./jwt -show -
+
+You can install this tool with the following command:
+
+     go install github.com/dgrijalva/jwt-go/cmd/jwt
+

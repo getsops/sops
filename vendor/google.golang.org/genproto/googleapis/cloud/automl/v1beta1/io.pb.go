@@ -27,8 +27,10 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 // The format of input depends on dataset_metadata the Dataset into which
 // the import is happening has. As input source the
 // [gcs_source][google.cloud.automl.v1beta1.InputConfig.gcs_source]
-// is expected, unless specified otherwise. If a file with identical content
-// (even if it had different GCS_FILE_PATH) is mentioned multiple times , then
+// is expected, unless specified otherwise. Additionally any input .CSV file
+// by itself must be 100MB or smaller, unless specified otherwise.
+// If an "example" file (i.e. image, video etc.) with identical content
+// (even if it had different GCS_FILE_PATH) is mentioned multiple times, then
 // its label, bounding boxes etc. are appended. The same file should be always
 // provided with the same ML_USE and GCS_FILE_PATH, if it is not then
 // these values are nondeterministically selected from the given ones.
@@ -36,19 +38,36 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 // The formats are represented in EBNF with commas being literal and with
 // non-terminal symbols defined near the end of this comment. The formats are:
 //
+//  *  For Image Classification:
+//         CSV file(s) with each line in format:
+//           ML_USE,GCS_FILE_PATH,LABEL,LABEL,...
+//           GCS_FILE_PATH leads to image of up to 30MB in size. Supported
+//           extensions: .JPEG, .GIF, .PNG, .WEBP, .BMP, .TIFF, .ICO
+//           For MULTICLASS classification type, at most one LABEL is allowed
+//           per image. If an image has not yet been labeled, then it should be
+//           mentioned just once with no LABEL.
+//         Some sample rows:
+//           TRAIN,gs://folder/image1.jpg,daisy
+//           TEST,gs://folder/image2.jpg,dandelion,tulip,rose
+//           UNASSIGNED,gs://folder/image3.jpg,daisy
+//           UNASSIGNED,gs://folder/image4.jpg
+//
 //  *  For Image Object Detection:
 //         CSV file(s) with each line in format:
-//           ML_USE,GCS_FILE_PATH,LABEL,BOUNDING_BOX
+//           ML_USE,GCS_FILE_PATH,(LABEL,BOUNDING_BOX | ,,,,,,,)
 //           GCS_FILE_PATH leads to image of up to 30MB in size. Supported
 //           extensions: .JPEG, .GIF, .PNG.
-//           Each image is assumed to be exhaustively labeled. The
-//           minimum allowed BOUNDING_BOX edge length is 0.01, and no more than
-//           500 BOUNDING_BOX-es per image are allowed.
-//         Three sample rows:
+//           Each image is assumed to be exhaustively labeled. The minimum
+//           allowed BOUNDING_BOX edge length is 0.01, and no more than 500
+//           BOUNDING_BOX-es per image are allowed (one BOUNDING_BOX is defined
+//           per line). If an image has not yet been labeled, then it should be
+//           mentioned just once with no LABEL and the ",,,,,,," in place of the
+//           BOUNDING_BOX.
+//         Four sample rows:
 //           TRAIN,gs://folder/image1.png,car,0.1,0.1,,,0.3,0.3,,
 //           TRAIN,gs://folder/image1.png,bike,.7,.6,,,.8,.9,,
-//           TEST,gs://folder/im2.png,car,0.1,0.1,0.2,0.1,0.2,0.3,0.1,0.3
-//
+//           UNASSIGNED,gs://folder/im2.png,car,0.1,0.1,0.2,0.1,0.2,0.3,0.1,0.3
+//           TEST,gs://folder/im3.png,,,,,,,,,
 //
 //  *  For Video Classification:
 //         CSV file(s) with each line in format:
@@ -56,22 +75,60 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 //           where ML_USE VALIDATE value should not be used. The GCS_FILE_PATH
 //           should lead to another .csv file which describes examples that have
 //           given ML_USE, using the following row format:
-//           GCS_FILE_PATH,LABEL,TIME_SEGMENT_START,TIME_SEGMENT_END
+//           GCS_FILE_PATH,(LABEL,TIME_SEGMENT_START,TIME_SEGMENT_END | ,,)
 //           Here GCS_FILE_PATH leads to a video of up to 50GB in size and up
 //           to 3h duration. Supported extensions: .MOV, .MPEG4, .MP4, .AVI.
 //           TIME_SEGMENT_START and TIME_SEGMENT_END must be within the
 //           length of the video, and end has to be after the start. Any segment
 //           of a video which has one or more labels on it, is considered a
 //           hard negative for all other labels. Any segment with no labels on
-//           it is considered to be unknown.
+//           it is considered to be unknown. If a whole video is unknown, then
+//           it shuold be mentioned just once with ",," in place of LABEL,
+//           TIME_SEGMENT_START,TIME_SEGMENT_END.
 //         Sample top level CSV file:
 //           TRAIN,gs://folder/train_videos.csv
 //           TEST,gs://folder/test_videos.csv
 //           UNASSIGNED,gs://folder/other_videos.csv
-//         Three sample rows of a CSV file for a particular ML_USE:
+//         Sample rows of a CSV file for a particular ML_USE:
 //           gs://folder/video1.avi,car,120,180.000021
 //           gs://folder/video1.avi,bike,150,180.000021
 //           gs://folder/vid2.avi,car,0,60.5
+//           gs://folder/vid3.avi,,,
+//
+//  *  For Video Object Tracking:
+//         CSV file(s) with each line in format:
+//           ML_USE,GCS_FILE_PATH
+//           where ML_USE VALIDATE value should not be used. The GCS_FILE_PATH
+//           should lead to another .csv file which describes examples that have
+//           given ML_USE, using one of the following row format:
+//           GCS_FILE_PATH,LABEL,[INSTANCE_ID],TIMESTAMP,BOUNDING_BOX
+//           or
+//           GCS_FILE_PATH,,,,,,,,,,
+//           Here GCS_FILE_PATH leads to a video of up to 50GB in size and up
+//           to 3h duration. Supported extensions: .MOV, .MPEG4, .MP4, .AVI.
+//           Providing INSTANCE_IDs can help to obtain a better model. When
+//           a specific labeled entity leaves the video frame, and shows up
+//           afterwards it is not required, albeit preferable, that the same
+//           INSTANCE_ID is given to it.
+//           TIMESTAMP must be within the length of the video, the
+//           BOUNDING_BOX is assumed to be drawn on the closest video's frame
+//           to the TIMESTAMP. Any mentioned by the TIMESTAMP frame is expected
+//           to be exhaustively labeled and no more than 500 BOUNDING_BOX-es per
+//           frame are allowed. If a whole video is unknown, then it should be
+//           mentioned just once with ",,,,,,,,,," in place of LABEL,
+//           [INSTANCE_ID],TIMESTAMP,BOUNDING_BOX.
+//         Sample top level CSV file:
+//           TRAIN,gs://folder/train_videos.csv
+//           TEST,gs://folder/test_videos.csv
+//           UNASSIGNED,gs://folder/other_videos.csv
+//         Seven sample rows of a CSV file for a particular ML_USE:
+//           gs://folder/video1.avi,car,1,12.10,0.8,0.8,0.9,0.8,0.9,0.9,0.8,0.9
+//           gs://folder/video1.avi,car,1,12.90,0.4,0.8,0.5,0.8,0.5,0.9,0.4,0.9
+//           gs://folder/video1.avi,car,2,12.10,.4,.2,.5,.2,.5,.3,.4,.3
+//           gs://folder/video1.avi,car,2,12.90,.8,.2,,,.9,.3,,
+//           gs://folder/video1.avi,bike,,12.50,.45,.45,,,.55,.55,,
+//           gs://folder/video2.avi,car,1,0,.1,.9,,,.9,.1,,
+//           gs://folder/video2.avi,,,,,,,,,,,
 //  *  For Text Extraction:
 //         CSV file(s) with each line in format:
 //           ML_USE,GCS_FILE_PATH
@@ -81,12 +138,11 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 //             TextSnippet proto (in json representation) followed by one or
 //             more AnnotationPayload protos (called annotations), which have
 //             display_name and text_extraction detail populated.
-//             Given text is expected to be annotated exhaustively, e.g. if you
-//             look for animals and text contains "dolphin" that is not labeled,
-//             then "dolphin" will be assumed to not be an animal.
-//             Any given text snippet content must have 30,000 characters or
-//             less, and also be UTF-8 NFC encoded (ASCII already is).
-//           The document .JSONL file contains, per line, a proto that wraps a
+//             The given text is expected to be annotated exhaustively, e.g. if
+//             you look for animals and text contains "dolphin" that is not
+//             labeled, then "dolphin" will be assumed to not be an animal. Any
+//             given text snippet content must have 30,000 characters or less,
+//             and also be UTF-8 NFC encoded (ASCII already is).           The document .JSONL file contains, per line, a proto that wraps a
 //             Document proto with input_config set. Only PDF documents are
 //             supported now, and each document may be up to 2MB large.
 //             Currently annotations on documents cannot be specified at import.
@@ -95,44 +151,44 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 //           TRAIN,gs://folder/file1.jsonl
 //           VALIDATE,gs://folder/file2.jsonl
 //           TEST,gs://folder/file3.jsonl
-//         Sample in-line JSON Lines file (presented here with artificial line
-//         breaks, but the only actual line break is denoted by \n).:
+//         Sample in-line JSON Lines file for entity extraction (presented here
+//         with artificial line breaks, but the only actual line break is
+//         denoted by \n).:
 //           {
 //             "text_snippet": {
 //               "content": "dog car cat"
-//             },
-//             "annotations": [
-//                {
-//                  "display_name": "animal",
-//                  "text_extraction": {
-//                    "text_segment": {"start_offset": 0, "end_offset": 2}
-//                  }
-//                },
-//                {
-//                  "display_name": "vehicle",
-//                  "text_extraction": {
-//                    "text_segment": {"start_offset": 4, "end_offset": 6}
-//                  }
-//                },
-//                {
-//                  "display_name": "animal",
-//                  "text_extraction": {
-//                    "text_segment": {"start_offset": 8, "end_offset": 10}
-//                  }
-//                }
-//             ]
+//             }             "annotations": [
+//               {
+//                 "display_name": "animal",
+//                 "text_extraction": {
+//                   "text_segment": {"start_offset": 0, "end_offset": 3}
+//                 }
+//               },
+//               {
+//                 "display_name": "vehicle",
+//                 "text_extraction": {
+//                   "text_segment": {"start_offset": 4, "end_offset": 7}
+//                 }
+//               },
+//               {
+//                 "display_name": "animal",
+//                 "text_extraction": {
+//                   "text_segment": {"start_offset": 8, "end_offset": 11}
+//                 }
+//               },
+//             ],
 //           }\n
 //           {
 //              "text_snippet": {
 //                "content": "This dog is good."
 //              },
 //              "annotations": [
-//                 {
-//                   "display_name": "animal",
-//                   "text_extraction": {
-//                     "text_segment": {"start_offset": 5, "end_offset": 7}
-//                   }
-//                 }
+//                {
+//                  "display_name": "animal",
+//                  "text_extraction": {
+//                    "text_segment": {"start_offset": 5, "end_offset": 8}
+//                  }
+//                }
 //              ]
 //           }
 //         Sample document JSON Lines file (presented here with artificial line
@@ -153,6 +209,45 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 //               }
 //             }
 //           }
+//
+//  *  For Text Classification:
+//         CSV file(s) with each line in format:
+//           ML_USE,(TEXT_SNIPPET | GCS_FILE_PATH),LABEL,LABEL,...
+//           TEXT_SNIPPET and GCS_FILE_PATH are distinguished by a pattern. If
+//           the column content is a valid gcs file path, i.e. prefixed by
+//           "gs://", it will be treated as a GCS_FILE_PATH, else if the content
+//           is enclosed within double quotes (""), it will
+//           be treated as a TEXT_SNIPPET. In the GCS_FILE_PATH case, the path
+//           must lead to a .txt file with UTF-8 encoding, e.g.
+//           "gs://folder/content.txt", and the content in it will be extracted
+//           as a text snippet. In TEXT_SNIPPET case, the column content
+//           excluding quotes will be treated as to be imported text snippet. In
+//           both cases, the text snippet/file size must be within 128kB.
+//           Maximum 100 unique labels are allowed per CSV row.
+//         Four sample rows:
+//         TRAIN,"They have bad food and very rude",RudeService,BadFood
+//         TRAIN,gs://folder/content.txt,SlowService
+//         TEST,"Typically always bad service there.",RudeService
+//         VALIDATE,"Stomach ache to go.",BadFood
+//
+//  *  For Text Sentiment:
+//         CSV file(s) with each line in format:
+//           ML_USE,(TEXT_SNIPPET | GCS_FILE_PATH),SENTIMENT
+//           TEXT_SNIPPET and GCS_FILE_PATH are distinguished by a pattern. If
+//           the column content is a valid gcs file path, i.e. prefixed by
+//           "gs://", it will be treated as a GCS_FILE_PATH, otherwise it will
+//           be treated as a TEXT_SNIPPET. In the GCS_FILE_PATH case, the path
+//           must lead to a .txt file with UTF-8 encoding, e.g.
+//           "gs://folder/content.txt", and the content in it will be extracted
+//           as a text snippet. In TEXT_SNIPPET case, the column content itself
+//           will be treated as to be imported text snippet. In both cases, the
+//           text snippet must be up to 500 characters long.
+//         Four sample rows:
+//         TRAIN,"@freewrytin God is way too good for Claritin",2
+//         TRAIN,"I need Claritin so bad",3
+//         TEST,"Thank god for Claritin.",4
+//         VALIDATE,gs://folder/content.txt,2
+//
 //   *  For Tables:
 //         Either
 //         [gcs_source][google.cloud.automl.v1beta1.InputConfig.gcs_source] or
@@ -162,10 +257,13 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 //
 // [primary_table][google.cloud.automl.v1beta1.TablesDatasetMetadata.primary_table_name]
 //         For gcs_source:
-//           CSV file(s), where first file must have a header containing unique
-//           column names, other files may have such header line too, and all
-//           other lines contain values for the header columns. Each line must
-//           have 1,000,000 or fewer characters.
+//           CSV file(s), where the first row of the first file is the header,
+//           containing unique column names. If the first row of a subsequent
+//           file is the same as the header, then it is also treated as a
+//           header. All other rows contain values for the corresponding
+//           columns.
+//           Each .CSV file by itself must be 10GB or smaller, and their total
+//           size must be 100GB or smaller.
 //           First three sample rows of a CSV file:
 //           "Id","First Name","Last Name","Dob","Addresses"
 //
@@ -173,18 +271,11 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 //
 // "2","Jane","Doe","1980-10-16","[{"status":"current","address":"789_Any_Avenue","city":"Albany","state":"NY","zip":"33333","numberOfYears":"2"},{"status":"previous","address":"321_Main_Street","city":"Hoboken","state":"NJ","zip":"44444","numberOfYears":"3"}]}
 //         For bigquery_source:
-//           An URI of a BigQuery table.
+//           An URI of a BigQuery table. The user data size of the BigQuery
+//           table must be 100GB or smaller.
 //         An imported table must have between 2 and 1,000 columns, inclusive,
-//         and between 1,000 and 10,000,000 rows, inclusive.
-//
-//  *  For Text Sentiment:
-//         CSV file(s) with each line in format:
-//           ML_USE,TEXT_SNIPPET,SENTIMENT
-//           TEXT_SNIPPET must have up to 500 characters.
-//         Three sample rows:
-//         TRAIN,"@freewrytin God is way too good for Claritin",2
-//         TRAIN,"I need Claritin so bad",3
-//         TEST,"Thank god for Claritin.",4
+//         and between 1000 and 100,000,000 rows, inclusive. There are at most 5
+//         import data running in parallel.
 //
 //  Definitions:
 //  ML_USE = "TRAIN" | "VALIDATE" | "TEST" | "UNASSIGNED"
@@ -221,7 +312,8 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 //                example (e.g. video). Fractions are allowed, up to a
 //                microsecond precision. "inf" is allowed, and it means the end
 //                of the example.
-//  TEXT_SNIPPET = A content of a text snippet, UTF-8 encoded.
+//  TEXT_SNIPPET = A content of a text snippet, UTF-8 encoded, enclosed within
+//                 double quotes ("").
 //  SENTIMENT = An integer between 0 and
 //              Dataset.text_sentiment_dataset_metadata.sentiment_max
 //              (inclusive). Describes the ordinal of the sentiment - higher
@@ -247,7 +339,7 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 //  Operation.metadata.partial_failures.
 //
 type InputConfig struct {
-	// Required. The source of the input.
+	// The source of the input.
 	//
 	// Types that are valid to be assigned to Source:
 	//	*InputConfig_GcsSource
@@ -353,8 +445,8 @@ func (*InputConfig) XXX_OneofWrappers() []interface{} {
 // is expected, unless specified otherwise.
 //
 // The formats are represented in EBNF with commas being literal and with
-// non-terminal symbols defined near the end of this comment. The formats are:
-//
+// non-terminal symbols defined near the end of this comment. The formats
+// are:
 //  *  For Video Classification:
 //         CSV file(s) with each line in format:
 //           GCS_FILE_PATH,TIME_SEGMENT_START,TIME_SEGMENT_END
@@ -367,16 +459,28 @@ func (*InputConfig) XXX_OneofWrappers() []interface{} {
 //           gs://folder/video1.mp4,20,60
 //           gs://folder/vid2.mov,0,inf
 //
+//  *  For Video Object Tracking:
+//         CSV file(s) with each line in format:
+//           GCS_FILE_PATH,TIME_SEGMENT_START,TIME_SEGMENT_END
+//           GCS_FILE_PATH leads to video of up to 50GB in size and up to 3h
+//           duration. Supported extensions: .MOV, .MPEG4, .MP4, .AVI.
+//           TIME_SEGMENT_START and TIME_SEGMENT_END must be within the
+//           length of the video, and end has to be after the start.
+//         Three sample rows:
+//           gs://folder/video1.mp4,10,240
+//           gs://folder/video1.mp4,300,360
+//           gs://folder/vid2.mov,0,inf
 //  * For Text Extraction
 //         .JSONL (i.e. JSON Lines) file(s) which either provide text in-line or
 //         as documents (for a single BatchPredict call only one of the these
 //         formats may be used).
 //         The in-line .JSONL file(s) contain per line a proto that
 //           wraps a temporary user-assigned TextSnippet ID (string up to 2000
-//           characters long) called "id" followed by a TextSnippet proto (in
-//           json representation). Any given text snippet content must have
-//           30,000 characters or less, and also be UTF-8 NFC encoded (ASCII
-//           already is). The IDs provided should be unique.
+//           characters long) called "id", a TextSnippet proto (in
+//           json representation) and zero or more TextFeature protos. Any given
+//           text snippet content must have 30,000 characters or less, and also
+//           be UTF-8 NFC encoded (ASCII already is). The IDs provided should be
+//           unique.
 //         The document .JSONL file(s) contain, per line, a proto that wraps a
 //           Document proto with input_config set. Only PDF documents are
 //           supported now, and each document must be up to 2MB large.
@@ -386,7 +490,21 @@ func (*InputConfig) XXX_OneofWrappers() []interface{} {
 //         breaks, but the only actual line break is denoted by \n):
 //           {
 //             "id": "my_first_id",
-//             "text_snippet": { "content": "dog car cat"}
+//             "text_snippet": { "content": "dog car cat"},
+//             "text_features": [
+//               {
+//                 "text_segment": {"start_offset": 4, "end_offset": 6},
+//                 "structural_type": PARAGRAPH,
+//                 "bounding_poly": {
+//                   "normalized_vertices": [
+//                     {"x": 0.1, "y": 0.1},
+//                     {"x": 0.1, "y": 0.3},
+//                     {"x": 0.3, "y": 0.3},
+//                     {"x": 0.3, "y": 0.1},
+//                   ]
+//                 },
+//               }
+//             ],
 //           }\n
 //           {
 //             "id": "2",
@@ -419,32 +537,103 @@ func (*InputConfig) XXX_OneofWrappers() []interface{} {
 //         [gcs_source][google.cloud.automl.v1beta1.InputConfig.gcs_source] or
 //
 // [bigquery_source][google.cloud.automl.v1beta1.InputConfig.bigquery_source].
-//         For gcs_source:
-//           CSV file(s), where first file must have a header containing
-//           column names, other files may have such header line too, and all
-//           other lines contain values for the header columns. The column
-//           names must be exactly same (order may differ) as the model's
+//         GCS case:
+//           CSV file(s), each by itself 10GB or smaller and total size must be
+//           100GB or smaller, where first file must have a header containing
+//           column names. If the first row of a subsequent file is the same as
+//           the header, then it is also treated as a header. All other rows
+//           contain values for the corresponding columns. For all
+//           CLASSIFICATION and REGRESSION
+//
+// [prediction_type-s][google.cloud.automl.v1beta1.TablesModelMetadata.prediction_type]:
+//             The column names must contain the model's
 //
 // [input_feature_column_specs'][google.cloud.automl.v1beta1.TablesModelMetadata.input_feature_column_specs]
-//           [display_names][google.cloud.automl.v1beta1.display_name], with
-//           values compatible with these column specs data types.
-//           Prediction on all the rows, i.e. the CSV lines, will be
-//           attempted.
-//           Each line must have 1,000,000 or fewer characters.
-//           First three sample rows of a CSV file:
-//           "First Name","Last Name","Dob","Addresses"
+//
+// [display_name-s][google.cloud.automl.v1beta1.ColumnSpec.display_name]
+//             (order doesn't matter). The columns corresponding to the model's
+//             input feature column specs must contain values compatible with
+//             the column spec's data types. Prediction on all the rows, i.e.
+//             the CSV lines, will be attempted. First three sample rows of a
+//             CSV file:
+//             "First Name","Last Name","Dob","Addresses"
 //
 // "John","Doe","1968-01-22","[{"status":"current","address":"123_First_Avenue","city":"Seattle","state":"WA","zip":"11111","numberOfYears":"1"},{"status":"previous","address":"456_Main_Street","city":"Portland","state":"OR","zip":"22222","numberOfYears":"5"}]"
 //
 // "Jane","Doe","1980-10-16","[{"status":"current","address":"789_Any_Avenue","city":"Albany","state":"NY","zip":"33333","numberOfYears":"2"},{"status":"previous","address":"321_Main_Street","city":"Hoboken","state":"NJ","zip":"44444","numberOfYears":"3"}]}
-//         For bigquery_source:
-//           An URI of a BigQuery table. The table's columns must be exactly
-//           same (order may differ) as all model's
+//           For FORECASTING
+//
+// [prediction_type][google.cloud.automl.v1beta1.TablesModelMetadata.prediction_type]:
+//             The column names must contain the union of the model's
 //
 // [input_feature_column_specs'][google.cloud.automl.v1beta1.TablesModelMetadata.input_feature_column_specs]
-//           [display_names][google.cloud.automl.v1beta1.display_name], with
-//           data compatible with these colum specs data types.
-//           Prediction on all the rows of the table will be attempted.
+//
+// [display_name-s][google.cloud.automl.v1beta1.ColumnSpec.display_name]
+//             and
+//
+// [target_column_specs'][google.cloud.automl.v1beta1.TablesModelMetadata.target_column_spec]
+//
+// [display_name][google.cloud.automl.v1beta1.ColumnSpec.display_name]
+//             (order doesn't matter), with values compatible with these column
+//             specs data types, except as specified below.
+//             The input rows must contain not only the to-be-predicted rows
+//             but also the historical data rows, even if they would be
+//             identical as the ones on which the model has been trained.
+//             The historical rows must have non-NULL target column
+//             values. The to-be-predicted rows must have NULL values in the
+//             target column and all columns having
+//
+// [TIME_SERIES_AVAILABLE_PAST_ONLY][google.cloud.automl.v1beta1.ColumnSpec.ForecastingMetadata.ColumnType.KEY]
+//             type, regardless if these columns are
+//             [nullable][google.cloud.automl.v1beta1.DataType.nullable].
+//             Prediction only on the to-be-predicted rows will be attempted.
+//             First four sample rows of a CSV file:
+//
+// "Year","City","OlympicsThatYear","Population","WaterUsedGigaGallons"
+//             "2000","NYC","true","8008278","452.7"
+//             "2001","NYC","false","8024963","432.2"
+//             "2002","NYC","true","",""
+//         BigQuery case:
+//           An URI of a BigQuery table. The user data size of the BigQuery
+//           table must be 100GB or smaller.
+//           For all CLASSIFICATION and REGRESSION
+//
+// [prediction_type-s][google.cloud.automl.v1beta1.TablesModelMetadata.prediction_type]:
+//             The column names must contain the model's
+//
+// [input_feature_column_specs'][google.cloud.automl.v1beta1.TablesModelMetadata.input_feature_column_specs]
+//
+// [display_name-s][google.cloud.automl.v1beta1.ColumnSpec.display_name]
+//             (order doesn't matter). The columns corresponding to the model's
+//             input feature column specs must contain values compatible with
+//             the column spec's data types. Prediction on all the rows of the
+//             table will be attempted.
+//           For FORECASTING
+//
+// [prediction_type][google.cloud.automl.v1beta1.TablesModelMetadata.prediction_type]:
+//             The column names must contain the union of the model's
+//
+// [input_feature_column_specs'][google.cloud.automl.v1beta1.TablesModelMetadata.input_feature_column_specs]
+//
+// [display_name-s][google.cloud.automl.v1beta1.ColumnSpec.display_name]
+//             and
+//
+// [target_column_specs'][google.cloud.automl.v1beta1.TablesModelMetadata.target_column_spec]
+//
+// [display_name][google.cloud.automl.v1beta1.ColumnSpec.display_name]
+//             (order doesn't matter), with values compatible with these column
+//             specs data types, except as specified below.
+//             The table's rows must contain not only the to-be-predicted rows
+//             but also the historical data rows, even if they would be
+//             identical as the ones on which the model has been trained.
+//             The historical rows must have non-NULL target column values.
+//             The to-be-predicted rows must have NULL values in the
+//             target column and all columns having
+//
+// [TIME_SERIES_AVAILABLE_PAST_ONLY][google.cloud.automl.v1beta1.ColumnSpec.ForecastingMetadata.ColumnType.KEY]
+//             type, regardless if these columns are
+//             [nullable][google.cloud.automl.v1beta1.DataType.nullable].
+//             Prediction only on the to-be-predicted rows will be attempted.
 //
 //  Definitions:
 //  GCS_FILE_PATH = A path to file on GCS, e.g. "gs://folder/video.avi".
@@ -466,7 +655,6 @@ func (*InputConfig) XXX_OneofWrappers() []interface{} {
 //  prediction does not happen. Regardless of overall success or failure the
 //  per-row failures, up to a certain count cap, will be listed in
 //  Operation.metadata.partial_failures.
-//
 type BatchPredictInputConfig struct {
 	// Required. The source of the input.
 	//
@@ -593,45 +781,13 @@ func (m *DocumentInputConfig) GetGcsSource() *GcsSource {
 	return nil
 }
 
-// Output configuration for ExportData.
-//
-// As destination the
-// [gcs_destination][google.cloud.automl.v1beta1.OutputConfig.gcs_destination]
-// must be set unless specified otherwise for a domain.
-// Only ground truth annotations are exported (not approved annotations are
-// not exported).
-//
-// The outputs correspond to how the data was imported, and may be used as
-// input to import data. The output formats are represented as EBNF with literal
-// commas and same non-terminal symbols definitions are these in import data's
-// [InputConfig][google.cloud.automl.v1beta1.InputConfig]:
-//
-//  *  For Image Object Detection:
-//         CSV file(s) `image_object_detection_1.csv`,
-//         `image_object_detection_2.csv`,...,`image_object_detection_N.csv`
-//         with each line in format:
-//         ML_USE,GCS_FILE_PATH,LABEL,BOUNDING_BOX
-//         where GCS_FILE_PATHs point at the original, source locations of the
-//         imported images.
-//
-//  *  For Video Classification:
-//         CSV file `video_classification.csv`, with each line in format:
+// *  For Translation:
+//         CSV file `translation.csv`, with each line in format:
 //         ML_USE,GCS_FILE_PATH
-//         (may have muliple lines per a single ML_USE).
-//         Each GCS_FILE_PATH leads to another .csv file which
-//         describes examples that have given ML_USE, using the following
-//         row format:
-//         GCS_FILE_PATH,LABEL,TIME_SEGMENT_START,TIME_SEGMENT_END
-//         Here GCS_FILE_PATHs point at the original, source locations of the
-//         imported videos.
-//  *  For Text Extraction:
-//         CSV file `text_extraction.csv`, with each line in format:
-//         ML_USE,GCS_FILE_PATH
-//         GCS_FILE_PATH leads to a .JSONL (i.e. JSON Lines) file which
-//         contains, per line, a proto that wraps a TextSnippet proto (in json
-//         representation) followed by AnnotationPayload protos (called
-//         annotations). If initially documents had been imported, corresponding
-//         OCR-ed representation is returned.
+//         GCS_FILE_PATH leads to a .TSV file which describes examples that have
+//         given ML_USE, using the following row format per line:
+//         TEXT_SNIPPET (in source language) \t TEXT_SNIPPET (in target
+//         language)
 //
 //   *  For Tables:
 //         Output depends on whether the dataset was imported from GCS or
@@ -748,8 +904,7 @@ func (*OutputConfig) XXX_OneofWrappers() []interface{} {
 // will be
 // "prediction-<model-display-name>-<timestamp-of-prediction-call>",
 // where timestamp is in YYYY-MM-DDThh:mm:ss.sssZ ISO-8601 format. The contents
-// of it depend on the ML problem the predictions are made for.
-//
+// of it depends on the ML problem the predictions are made for.
 //  *  For Video Classification:
 //         In the created directory a video_classification.csv file, and a .JSON
 //         file per each video classification requested in the input (i.e. each
@@ -764,9 +919,9 @@ func (*OutputConfig) XXX_OneofWrappers() []interface{} {
 //             precisely the same number of lines as the prediction input had.)
 //         JSON_FILE_NAME = Name of .JSON file in the output directory, which
 //             contains prediction responses for the video time segment.
-//         STATUS = "OK" if prediction completed successfully, or an error
-//             code and,or message otherwise. If STATUS is not "OK" then the
-//             .JSON file for that line may not exist or be empty.
+//         STATUS = "OK" if prediction completed successfully, or an error code
+//             with message otherwise. If STATUS is not "OK" then the .JSON file
+//             for that line may not exist or be empty.
 //
 //         Each .JSON file, assuming STATUS is "OK", will contain a list of
 //         AnnotationPayload protos in JSON format, which are the predictions
@@ -776,6 +931,32 @@ func (*OutputConfig) XXX_OneofWrappers() []interface{} {
 //         video_classification.type field (note that the returned types are
 //         governed by `classifaction_types` parameter in
 //         [PredictService.BatchPredictRequest.params][]).
+//
+//  *  For Video Object Tracking:
+//         In the created directory a video_object_tracking.csv file will be
+//         created, and multiple files video_object_trackinng_1.json,
+//         video_object_trackinng_2.json,..., video_object_trackinng_N.json,
+//         where N is the number of requests in the input (i.e. the number of
+//         lines in given CSV(s)).
+//
+//         The format of video_object_tracking.csv is:
+//
+// GCS_FILE_PATH,TIME_SEGMENT_START,TIME_SEGMENT_END,JSON_FILE_NAME,STATUS
+//         where:
+//         GCS_FILE_PATH,TIME_SEGMENT_START,TIME_SEGMENT_END = matches 1 to 1
+//             the prediction input lines (i.e. video_object_tracking.csv has
+//             precisely the same number of lines as the prediction input had.)
+//         JSON_FILE_NAME = Name of .JSON file in the output directory, which
+//             contains prediction responses for the video time segment.
+//         STATUS = "OK" if prediction completed successfully, or an error
+//             code with message otherwise. If STATUS is not "OK" then the .JSON
+//             file for that line may not exist or be empty.
+//
+//         Each .JSON file, assuming STATUS is "OK", will contain a list of
+//         AnnotationPayload protos in JSON format, which are the predictions
+//         for each frame of the video time segment the file is assigned to in
+//         video_object_tracking.csv. All AnnotationPayload protos will have
+//         video_object_tracking field set.
 //   *  For Text Extraction:
 //         In the created directory files `text_extraction_1.jsonl`,
 //         `text_extraction_2.jsonl`,...,`text_extraction_N.jsonl`
@@ -823,13 +1004,13 @@ func (*OutputConfig) XXX_OneofWrappers() []interface{} {
 //           In the created directory files `tables_1.csv`, `tables_2.csv`,...,
 //           `tables_N.csv` will be created, where N may be 1, and depends on
 //           the total number of the successfully predicted rows.
-//           For the classification models:
-//             Each .csv file will contain a header, listing all model's
+//           For all CLASSIFICATION
 //
-// [input_feature_column_specs'][google.cloud.automl.v1beta1.TablesModelMetadata.input_feature_column_specs]
+// [prediction_type-s][google.cloud.automl.v1beta1.TablesModelMetadata.prediction_type]:
+//             Each .csv file will contain a header, listing all columns'
 //
-// [display_names][google.cloud.automl.v1beta1.ColumnSpec.display_name]
-//             followed by M target column names in the format of
+// [display_name-s][google.cloud.automl.v1beta1.ColumnSpec.display_name]
+//             given on input followed by M target column names in the format of
 //
 // "<[target_column_specs][google.cloud.automl.v1beta1.TablesModelMetadata.target_column_spec]
 //
@@ -840,30 +1021,31 @@ func (*OutputConfig) XXX_OneofWrappers() []interface{} {
 //             respective values of successfully predicted rows, with the last,
 //             i.e. the target, columns having the corresponding prediction
 //             [scores][google.cloud.automl.v1beta1.TablesAnnotation.score].
-//           For the regression models:
-//             Each .csv file will contain a header, listing all model's
+//           For REGRESSION and FORECASTING
 //
-// [input_feature_column_specs][google.cloud.automl.v1beta1.TablesModelMetadata.input_feature_column_specs]
-//             [display_names][google.cloud.automl.v1beta1.display_name]
-//             followed by the target column with name equal to
+// [prediction_type-s][google.cloud.automl.v1beta1.TablesModelMetadata.prediction_type]:
+//             Each .csv file will contain a header, listing all columns'
+//             [display_name-s][google.cloud.automl.v1beta1.display_name] given
+//             on input followed by the predicted target column with name in the
+//             format of
 //
-// [target_column_specs'][google.cloud.automl.v1beta1.TablesModelMetadata.target_column_spec]
+// "predicted_<[target_column_specs][google.cloud.automl.v1beta1.TablesModelMetadata.target_column_spec]
 //
-// [display_name][google.cloud.automl.v1beta1.ColumnSpec.display_name].
+// [display_name][google.cloud.automl.v1beta1.ColumnSpec.display_name]>"
 //             Subsequent lines will contain the respective values of
 //             successfully predicted rows, with the last, i.e. the target,
 //             column having the predicted target value.
-//           If prediction for any rows failed, then an additional
-//           `errors_1.csv`, `errors_2.csv`,..., `errors_N.csv` will be created
-//           (N depends on total number of failed rows). These files will have
-//           analogous format as `tables_*.csv`, but always with a single target
-//           column having
+//             If prediction for any rows failed, then an additional
+//             `errors_1.csv`, `errors_2.csv`,..., `errors_N.csv` will be
+//             created (N depends on total number of failed rows). These files
+//             will have analogous format as `tables_*.csv`, but always with a
+//             single target column having
 //
 // [`google.rpc.Status`](https:
 // //github.com/googleapis/googleapis/blob/master/google/rpc/status.proto)
-//           represented as a JSON string, and containing only `code` and
-//           `message`.
-//        BigQuery case:
+//             represented as a JSON string, and containing only `code` and
+//             `message`.
+//         BigQuery case:
 //
 // [bigquery_destination][google.cloud.automl.v1beta1.OutputConfig.bigquery_destination]
 //           pointing to a BigQuery project must be set. In the given project a
@@ -874,16 +1056,14 @@ func (*OutputConfig) XXX_OneofWrappers() []interface{} {
 //           become underscores), and timestamp will be in
 //           YYYY_MM_DDThh_mm_ss_sssZ "based on ISO-8601" format. In the dataset
 //           two tables will be created, `predictions`, and `errors`.
-//           The `predictions` table's column names will be the
+//           The `predictions` table's column names will be the input columns'
 //
-// [input_feature_column_specs'][google.cloud.automl.v1beta1.TablesModelMetadata.input_feature_column_specs]
+// [display_name-s][google.cloud.automl.v1beta1.ColumnSpec.display_name]
+//           followed by the target column with name in the format of
 //
-// [display_names][google.cloud.automl.v1beta1.ColumnSpec.display_name]
-//           followed by model's
+// "predicted_<[target_column_specs][google.cloud.automl.v1beta1.TablesModelMetadata.target_column_spec]
 //
-// [target_column_specs'][google.cloud.automl.v1beta1.TablesModelMetadata.target_column_spec]
-//
-// [display_name][google.cloud.automl.v1beta1.ColumnSpec.display_name].
+// [display_name][google.cloud.automl.v1beta1.ColumnSpec.display_name]>"
 //           The input feature columns will contain the respective values of
 //           successfully predicted rows, with the target column having an
 //           ARRAY of
@@ -892,8 +1072,13 @@ func (*OutputConfig) XXX_OneofWrappers() []interface{} {
 //           represented as STRUCT-s, containing
 //           [TablesAnnotation][google.cloud.automl.v1beta1.TablesAnnotation].
 //           The `errors` table contains rows for which the prediction has
-//           failed, it has analogous input feature and target columns, but
-//           here the target column as a value has
+//           failed, it has analogous input columns while the target column name
+//           is in the format of
+//
+// "errors_<[target_column_specs][google.cloud.automl.v1beta1.TablesModelMetadata.target_column_spec]
+//
+// [display_name][google.cloud.automl.v1beta1.ColumnSpec.display_name]>",
+//           and as a value has
 //
 // [`google.rpc.Status`](https:
 // //github.com/googleapis/googleapis/blob/master/google/rpc/status.proto)
@@ -1008,7 +1193,8 @@ type ModelExportOutputConfig struct {
 	// * tf_saved_model - A tensorflow model in SavedModel format.
 	// * docker - Used for Docker containers. Use the params field to customize
 	//            the container. The container is verified to work correctly on
-	//            ubuntu 16.04 operating system.
+	//            ubuntu 16.04 operating system. See more at
+	//            [containers quickstart](https://cloud.google.com/vision/automl/docs/containers-gcs-quickstart)
 	// * core_ml - Used for iOS mobile devices.
 	ModelFormat string `protobuf:"bytes,4,opt,name=model_format,json=modelFormat,proto3" json:"model_format,omitempty"`
 	// Additional model-type and format specific parameters describing the
@@ -1125,9 +1311,8 @@ func (*ModelExportOutputConfig) XXX_OneofWrappers() []interface{} {
 //       and timestamp will be in YYYY_MM_DDThh_mm_ss_sssZ "based on ISO-8601"
 //       format. In the dataset an `evaluated_examples` table will be
 //       created. It will have all the same columns as the
-//       [primary
 //
-// table][google.cloud.automl.v1beta1.TablesDatasetMetadata.primary_table_spec_id]
+// [primary_table][google.cloud.automl.v1beta1.TablesDatasetMetadata.primary_table_spec_id]
 //       of the
 //       [dataset][google.cloud.automl.v1beta1.Model.dataset_id] from which
 //       the model was created, as they were at the moment of model's
@@ -1454,45 +1639,46 @@ func init() {
 }
 
 var fileDescriptor_6e2d768504aa30d7 = []byte{
-	// 630 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x96, 0xcf, 0x6e, 0xd3, 0x4c,
-	0x14, 0xc5, 0x3f, 0xdb, 0x1f, 0x55, 0x7d, 0x5d, 0x5a, 0x70, 0x2b, 0xd5, 0x6a, 0x41, 0x14, 0x83,
-	0x50, 0xd4, 0x0a, 0x9b, 0x96, 0x2e, 0xf8, 0xb7, 0xa0, 0x69, 0x43, 0x40, 0xa2, 0x22, 0x04, 0x35,
-	0x42, 0x28, 0x52, 0x34, 0x71, 0x26, 0xc3, 0x08, 0xdb, 0x63, 0xc6, 0xe3, 0x2a, 0xd9, 0xf3, 0x00,
-	0xec, 0x79, 0x1a, 0x24, 0x56, 0x3c, 0x03, 0x0f, 0xc0, 0x63, 0x20, 0x8f, 0x9d, 0xc4, 0x2e, 0x25,
-	0x44, 0xa8, 0x2a, 0x12, 0xbb, 0xcc, 0x9d, 0x73, 0x7e, 0xe3, 0x73, 0x3d, 0xb9, 0x09, 0xdc, 0x24,
-	0x8c, 0x11, 0x1f, 0xbb, 0x9e, 0xcf, 0x92, 0x9e, 0x8b, 0x12, 0xc1, 0x02, 0xdf, 0x3d, 0xde, 0xee,
-	0x62, 0x81, 0xb6, 0x5d, 0xca, 0x9c, 0x88, 0x33, 0xc1, 0xcc, 0xf5, 0x4c, 0xe5, 0x48, 0x95, 0x93,
-	0xa9, 0x9c, 0x5c, 0xb5, 0x76, 0x25, 0x47, 0xa0, 0x88, 0xba, 0x28, 0x0c, 0x99, 0x40, 0x82, 0xb2,
-	0x30, 0xce, 0xac, 0xf6, 0x67, 0x15, 0x8c, 0x67, 0x61, 0x94, 0x88, 0x7d, 0x16, 0xf6, 0x29, 0x31,
-	0xeb, 0x00, 0xc4, 0x8b, 0x3b, 0x31, 0x4b, 0xb8, 0x87, 0x2d, 0x65, 0x43, 0xa9, 0x18, 0x3b, 0xb7,
-	0x9c, 0x29, 0x7c, 0xa7, 0xee, 0xc5, 0xaf, 0xa4, 0xfa, 0xe9, 0x7f, 0x4d, 0x9d, 0x8c, 0x16, 0x66,
-	0x0b, 0x96, 0xba, 0x94, 0xbc, 0x4f, 0x30, 0x1f, 0x8e, 0x68, 0x9a, 0xa4, 0x6d, 0x4d, 0xa5, 0x55,
-	0x29, 0x79, 0x99, 0x7a, 0xc6, 0xc8, 0xc5, 0x11, 0x25, 0xe7, 0x3e, 0x87, 0xb9, 0x08, 0x71, 0x14,
-	0xc4, 0x96, 0xba, 0xa1, 0x55, 0x8c, 0x9d, 0xdd, 0xa9, 0xb8, 0x42, 0x34, 0xa7, 0x21, 0x6d, 0xb5,
-	0x50, 0xf0, 0x61, 0x33, 0x67, 0xac, 0xdd, 0x07, 0xa3, 0x50, 0x36, 0x2f, 0x81, 0xf6, 0x0e, 0x0f,
-	0x65, 0x6c, 0xbd, 0x99, 0x7e, 0x34, 0x57, 0xe0, 0xc2, 0x31, 0xf2, 0x13, 0x6c, 0xa9, 0xb2, 0x96,
-	0x2d, 0x1e, 0xa8, 0xf7, 0x94, 0xea, 0x3c, 0xcc, 0x65, 0xb9, 0xec, 0x2f, 0x0a, 0xac, 0x56, 0x91,
-	0xf0, 0xde, 0x36, 0x38, 0xee, 0x51, 0x4f, 0x9c, 0x57, 0x3f, 0xd5, 0x33, 0xe8, 0x67, 0x21, 0x46,
-	0x1b, 0x96, 0x0f, 0x98, 0x97, 0x04, 0x38, 0x2c, 0x25, 0xa8, 0xfd, 0x79, 0x82, 0xc2, 0xf3, 0xdb,
-	0xdf, 0x14, 0x58, 0x78, 0x91, 0x88, 0x09, 0xb7, 0x05, 0x4b, 0x29, 0xb7, 0x87, 0x63, 0x41, 0x43,
-	0x79, 0x27, 0x73, 0xf8, 0xd6, 0xef, 0xe0, 0x07, 0x13, 0x4b, 0x1a, 0x88, 0x94, 0x2a, 0x26, 0x86,
-	0x95, 0x71, 0xa3, 0x8a, 0xf0, 0xac, 0x5b, 0x77, 0x66, 0xea, 0x56, 0xf9, 0x84, 0xe5, 0x11, 0xaf,
-	0x50, 0xae, 0x5e, 0x04, 0xa3, 0x40, 0xb7, 0xbf, 0x2b, 0x60, 0x15, 0xef, 0xc0, 0x3f, 0x1c, 0xf5,
-	0xa3, 0x06, 0xab, 0x87, 0xac, 0x87, 0xfd, 0xda, 0x20, 0x62, 0xfc, 0x7c, 0x92, 0x4a, 0x2e, 0x2f,
-	0x71, 0xb5, 0x99, 0xb8, 0xfc, 0x27, 0x6e, 0xb1, 0x62, 0x5e, 0x87, 0x85, 0x20, 0x8d, 0xd2, 0xe9,
-	0x33, 0x1e, 0x20, 0x61, 0xfd, 0x2f, 0xbf, 0xe5, 0x86, 0xac, 0x3d, 0x91, 0x25, 0xf3, 0xf5, 0x89,
-	0x81, 0xf3, 0x78, 0xea, 0x89, 0xbf, 0x68, 0xcc, 0x59, 0x0f, 0x9f, 0x13, 0xaf, 0xe4, 0x93, 0x02,
-	0x37, 0xb2, 0x43, 0x6b, 0xa9, 0x06, 0x09, 0xdc, 0xab, 0x0d, 0x50, 0x10, 0xf9, 0x38, 0x2e, 0xbd,
-	0x9e, 0xbf, 0x73, 0x61, 0x36, 0x41, 0x1f, 0x8f, 0x04, 0xf3, 0x2a, 0x00, 0x4d, 0xa7, 0x4b, 0x27,
-	0xe1, 0x34, 0xb6, 0x94, 0x0d, 0xad, 0xa2, 0x37, 0x75, 0x59, 0x39, 0xe2, 0x34, 0xb6, 0x6f, 0xc3,
-	0x62, 0x79, 0x64, 0x99, 0xeb, 0xa0, 0x8f, 0x0d, 0x79, 0x73, 0xe6, 0x47, 0x7a, 0xfb, 0x11, 0x2c,
-	0x96, 0xef, 0x8e, 0xb9, 0x09, 0x97, 0x99, 0x8c, 0x9c, 0xea, 0x3b, 0x11, 0xc7, 0x7d, 0x3a, 0xc8,
-	0x6d, 0x4b, 0xd9, 0xc6, 0x11, 0xa7, 0x0d, 0x59, 0xb6, 0x77, 0x61, 0xf9, 0x94, 0x54, 0xe9, 0x23,
-	0x4e, 0x10, 0xb9, 0x57, 0x1f, 0x7b, 0x6d, 0x37, 0x3d, 0x93, 0xcf, 0x6e, 0xa8, 0x7e, 0x50, 0xe0,
-	0x9a, 0xc7, 0x82, 0x69, 0xdd, 0x6d, 0x28, 0x6f, 0xf6, 0xf2, 0x6d, 0xc2, 0x7c, 0x14, 0x12, 0x87,
-	0x71, 0xe2, 0x12, 0x1c, 0xca, 0x5f, 0x69, 0x37, 0xdb, 0x42, 0x11, 0x8d, 0x4f, 0xfd, 0x27, 0xf0,
-	0x30, 0x5b, 0x7e, 0x55, 0xd7, 0xeb, 0x52, 0xd8, 0xde, 0x4f, 0x45, 0xed, 0xbd, 0x44, 0xb0, 0x43,
-	0xbf, 0xdd, 0xca, 0x44, 0xdd, 0x39, 0xc9, 0xba, 0xfb, 0x23, 0x00, 0x00, 0xff, 0xff, 0x7b, 0x21,
-	0xf1, 0x3d, 0x54, 0x08, 0x00, 0x00,
+	// 647 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x96, 0xdf, 0x4e, 0xd4, 0x4e,
+	0x14, 0xc7, 0x7f, 0x6d, 0x7f, 0x12, 0x7a, 0x8a, 0xa0, 0x85, 0x84, 0x06, 0xfc, 0x83, 0xd5, 0x18,
+	0x02, 0xb1, 0x15, 0xe4, 0x42, 0xab, 0x17, 0xb2, 0xb0, 0xa2, 0x09, 0xc4, 0x75, 0x0d, 0xc4, 0x98,
+	0x4d, 0x36, 0x43, 0x77, 0x18, 0x27, 0xb6, 0x9d, 0x3a, 0x9d, 0x12, 0x78, 0x0b, 0xef, 0xbd, 0xf6,
+	0x41, 0x4c, 0xbc, 0xf2, 0x19, 0x7c, 0x00, 0xe3, 0x53, 0x98, 0xce, 0x74, 0x97, 0x16, 0x71, 0x25,
+	0x86, 0x60, 0xe2, 0xdd, 0xce, 0x39, 0xdf, 0xf3, 0x39, 0xfd, 0x9e, 0xce, 0x9e, 0x5d, 0xb8, 0x45,
+	0x18, 0x23, 0x11, 0xf6, 0xc3, 0x88, 0xe5, 0x3d, 0x1f, 0xe5, 0x82, 0xc5, 0x91, 0xbf, 0xbf, 0xb4,
+	0x8b, 0x05, 0x5a, 0xf2, 0x29, 0xf3, 0x52, 0xce, 0x04, 0xb3, 0x67, 0x95, 0xca, 0x93, 0x2a, 0x4f,
+	0xa9, 0xbc, 0x52, 0x35, 0x73, 0xa5, 0x44, 0xa0, 0x94, 0xfa, 0x28, 0x49, 0x98, 0x40, 0x82, 0xb2,
+	0x24, 0x53, 0xa5, 0xee, 0x27, 0x1d, 0xac, 0x67, 0x49, 0x9a, 0x8b, 0x35, 0x96, 0xec, 0x51, 0x62,
+	0x6f, 0x00, 0x90, 0x30, 0xeb, 0x66, 0x2c, 0xe7, 0x21, 0x76, 0xb4, 0x39, 0x6d, 0xde, 0x5a, 0xbe,
+	0xed, 0x0d, 0xe1, 0x7b, 0x1b, 0x61, 0xf6, 0x52, 0xaa, 0x9f, 0xfe, 0xd7, 0x36, 0x49, 0xff, 0x60,
+	0xef, 0xc0, 0xc4, 0x2e, 0x25, 0xef, 0x72, 0xcc, 0x0f, 0xfb, 0x34, 0x43, 0xd2, 0x16, 0x87, 0xd2,
+	0x1a, 0x94, 0xbc, 0x28, 0x6a, 0x06, 0xc8, 0xf1, 0x3e, 0xa5, 0xe4, 0x6e, 0xc2, 0x48, 0x8a, 0x38,
+	0x8a, 0x33, 0x47, 0x9f, 0x33, 0xe6, 0xad, 0xe5, 0x95, 0xa1, 0xb8, 0x8a, 0x35, 0xaf, 0x25, 0xcb,
+	0x9a, 0x89, 0xe0, 0x87, 0xed, 0x92, 0x31, 0xf3, 0x00, 0xac, 0x4a, 0xd8, 0xbe, 0x04, 0xc6, 0x5b,
+	0x7c, 0x28, 0x6d, 0x9b, 0xed, 0xe2, 0xa3, 0x3d, 0x05, 0x17, 0xf6, 0x51, 0x94, 0x63, 0x47, 0x97,
+	0x31, 0x75, 0x08, 0xf4, 0xfb, 0x5a, 0x63, 0x14, 0x46, 0x94, 0x2f, 0xf7, 0xb3, 0x06, 0xd3, 0x0d,
+	0x24, 0xc2, 0x37, 0x2d, 0x8e, 0x7b, 0x34, 0x14, 0xe7, 0x35, 0x4f, 0xfd, 0x0c, 0xe6, 0x59, 0xb1,
+	0xd1, 0x81, 0xc9, 0x75, 0x16, 0xe6, 0x31, 0x4e, 0x6a, 0x0e, 0x9a, 0x7f, 0xee, 0xa0, 0xf2, 0xfc,
+	0xee, 0x57, 0x0d, 0xc6, 0x9e, 0xe7, 0xe2, 0x88, 0xbb, 0x03, 0x13, 0x05, 0xb7, 0x87, 0x33, 0x41,
+	0x13, 0x79, 0x27, 0x4b, 0xf8, 0xe2, 0xef, 0xe0, 0xeb, 0x47, 0x25, 0x85, 0x21, 0x52, 0x8b, 0xd8,
+	0x18, 0xa6, 0x06, 0x83, 0xaa, 0xc2, 0xd5, 0xb4, 0xee, 0x9e, 0x6a, 0x5a, 0xf5, 0x0e, 0x93, 0x7d,
+	0x5e, 0x25, 0xdc, 0xb8, 0x08, 0x56, 0x85, 0xee, 0x7e, 0xd3, 0xc0, 0xa9, 0xde, 0x81, 0x7f, 0xd8,
+	0xea, 0x7b, 0x03, 0xa6, 0xb7, 0x58, 0x0f, 0x47, 0xcd, 0x83, 0x94, 0xf1, 0xf3, 0x71, 0x2a, 0xb9,
+	0xbc, 0xc6, 0x35, 0x4e, 0xc5, 0xe5, 0x3f, 0x71, 0xab, 0x11, 0xfb, 0x06, 0x8c, 0xc5, 0x85, 0x95,
+	0xee, 0x1e, 0xe3, 0x31, 0x12, 0xce, 0xff, 0xf2, 0x5b, 0x6e, 0xc9, 0xd8, 0x13, 0x19, 0xb2, 0x5f,
+	0x1d, 0x5b, 0x38, 0x8f, 0x87, 0x76, 0xfc, 0xc5, 0x60, 0xce, 0x7a, 0xf9, 0x1c, 0x7b, 0x25, 0x1f,
+	0x34, 0xb8, 0xa9, 0x9a, 0x36, 0x0b, 0x0d, 0x12, 0xb8, 0xd7, 0x3c, 0x40, 0x71, 0x1a, 0xe1, 0xac,
+	0xf6, 0x7a, 0xfe, 0xce, 0x85, 0x59, 0x00, 0x73, 0xb0, 0x12, 0xec, 0xab, 0x00, 0xb4, 0xd8, 0x2e,
+	0xdd, 0x9c, 0xd3, 0xcc, 0xd1, 0xe6, 0x8c, 0x79, 0xb3, 0x6d, 0xca, 0xc8, 0x36, 0xa7, 0x99, 0x7b,
+	0x07, 0xc6, 0xeb, 0x2b, 0xcb, 0x9e, 0x05, 0x73, 0x50, 0x50, 0x0e, 0x67, 0xb4, 0xaf, 0x77, 0x1f,
+	0xc1, 0x78, 0xfd, 0xee, 0xd8, 0x0b, 0x70, 0x99, 0x49, 0xcb, 0x85, 0xbe, 0x9b, 0x72, 0xbc, 0x47,
+	0x0f, 0xca, 0xb2, 0x09, 0x95, 0xd8, 0xe6, 0xb4, 0x25, 0xc3, 0xee, 0x0a, 0x4c, 0x9e, 0xe0, 0xaa,
+	0x78, 0xc4, 0x23, 0x44, 0x59, 0x6b, 0x0e, 0x6a, 0x5d, 0xbf, 0xe8, 0xc9, 0x4f, 0x5f, 0xd0, 0xf8,
+	0xa8, 0xc1, 0xf5, 0x90, 0xc5, 0xc3, 0xa6, 0xdb, 0xd2, 0x5e, 0xaf, 0x96, 0x69, 0xc2, 0x22, 0x94,
+	0x10, 0x8f, 0x71, 0xe2, 0x13, 0x9c, 0xc8, 0x5f, 0x69, 0x5f, 0xa5, 0x50, 0x4a, 0xb3, 0x13, 0xff,
+	0x09, 0x3c, 0x54, 0xc7, 0x2f, 0xfa, 0xec, 0x86, 0x14, 0x76, 0xd6, 0x0a, 0x51, 0x67, 0x35, 0x17,
+	0x6c, 0x2b, 0xea, 0xec, 0x28, 0xd1, 0x77, 0xfd, 0x9a, 0xca, 0x06, 0x81, 0x4c, 0x07, 0x81, 0xcc,
+	0x6f, 0x06, 0x41, 0x29, 0xd8, 0x1d, 0x91, 0xcd, 0xee, 0xfd, 0x08, 0x00, 0x00, 0xff, 0xff, 0xc0,
+	0x26, 0xdb, 0xd5, 0x75, 0x08, 0x00, 0x00,
 }

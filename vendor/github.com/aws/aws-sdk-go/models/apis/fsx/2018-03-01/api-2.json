@@ -22,6 +22,7 @@
       "output":{"shape":"CreateBackupResponse"},
       "errors":[
         {"shape":"BadRequest"},
+        {"shape":"UnsupportedOperation"},
         {"shape":"FileSystemNotFound"},
         {"shape":"BackupInProgress"},
         {"shape":"IncompatibleParameterError"},
@@ -193,6 +194,7 @@
       "output":{"shape":"UpdateFileSystemResponse"},
       "errors":[
         {"shape":"BadRequest"},
+        {"shape":"UnsupportedOperation"},
         {"shape":"IncompatibleParameterError"},
         {"shape":"InternalServerError"},
         {"shape":"FileSystemNotFound"},
@@ -206,6 +208,13 @@
       "max":12,
       "min":12,
       "pattern":"^\\d{12}$"
+    },
+    "ActiveDirectoryBackupAttributes":{
+      "type":"structure",
+      "members":{
+        "DomainName":{"shape":"ActiveDirectoryFullyQualifiedName"},
+        "ActiveDirectoryId":{"shape":"DirectoryId"}
+      }
     },
     "ActiveDirectoryError":{
       "type":"structure",
@@ -226,6 +235,7 @@
         "INVALID_DOMAIN_STAGE"
       ]
     },
+    "ActiveDirectoryFullyQualifiedName":{"type":"string"},
     "ArchivePath":{
       "type":"string",
       "max":900,
@@ -255,7 +265,8 @@
         "KmsKeyId":{"shape":"KmsKeyId"},
         "ResourceARN":{"shape":"ResourceARN"},
         "Tags":{"shape":"Tags"},
-        "FileSystem":{"shape":"FileSystem"}
+        "FileSystem":{"shape":"FileSystem"},
+        "DirectoryInformation":{"shape":"ActiveDirectoryBackupAttributes"}
       }
     },
     "BackupFailureDetails":{
@@ -329,7 +340,7 @@
       "type":"string",
       "max":255,
       "min":1,
-      "pattern":"[A-za-z0-9_/.-]{0,255}$"
+      "pattern":"[A-za-z0-9_.-]{0,255}$"
     },
     "CreateBackupRequest":{
       "type":"structure",
@@ -415,6 +426,7 @@
       "required":["ThroughputCapacity"],
       "members":{
         "ActiveDirectoryId":{"shape":"DirectoryId"},
+        "SelfManagedActiveDirectoryConfiguration":{"shape":"SelfManagedActiveDirectoryConfiguration"},
         "ThroughputCapacity":{"shape":"MegabytesPerSecond"},
         "WeeklyMaintenanceStartTime":{"shape":"WeeklyTime"},
         "DailyAutomaticBackupStartTime":{"shape":"DailyTime"},
@@ -532,6 +544,23 @@
       "min":12,
       "pattern":"^d-[0-9a-f]{10}$"
     },
+    "DirectoryPassword":{
+      "type":"string",
+      "max":256,
+      "min":1,
+      "sensitive":true
+    },
+    "DirectoryUserName":{
+      "type":"string",
+      "max":256,
+      "min":1
+    },
+    "DnsIps":{
+      "type":"list",
+      "member":{"shape":"IpAddress"},
+      "max":2,
+      "min":1
+    },
     "ErrorMessage":{
       "type":"string",
       "max":256,
@@ -558,6 +587,11 @@
         "LustreConfiguration":{"shape":"LustreFileSystemConfiguration"}
       }
     },
+    "FileSystemAdministratorsGroupName":{
+      "type":"string",
+      "max":256,
+      "min":1
+    },
     "FileSystemFailureDetails":{
       "type":"structure",
       "members":{
@@ -581,7 +615,9 @@
         "AVAILABLE",
         "CREATING",
         "FAILED",
-        "DELETING"
+        "DELETING",
+        "MISCONFIGURED",
+        "UPDATING"
       ]
     },
     "FileSystemMaintenanceOperation":{
@@ -686,6 +722,10 @@
       },
       "exception":true
     },
+    "IpAddress":{
+      "type":"string",
+      "pattern":"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
+    },
     "KmsKeyId":{
       "type":"string",
       "max":2048,
@@ -762,6 +802,11 @@
       },
       "exception":true
     },
+    "OrganizationalUnitDistinguishedName":{
+      "type":"string",
+      "max":2000,
+      "min":1
+    },
     "Parameter":{
       "type":"string",
       "min":1
@@ -805,6 +850,41 @@
       "type":"list",
       "member":{"shape":"SecurityGroupId"},
       "max":50
+    },
+    "SelfManagedActiveDirectoryAttributes":{
+      "type":"structure",
+      "members":{
+        "DomainName":{"shape":"ActiveDirectoryFullyQualifiedName"},
+        "OrganizationalUnitDistinguishedName":{"shape":"OrganizationalUnitDistinguishedName"},
+        "FileSystemAdministratorsGroup":{"shape":"FileSystemAdministratorsGroupName"},
+        "UserName":{"shape":"DirectoryUserName"},
+        "DnsIps":{"shape":"DnsIps"}
+      }
+    },
+    "SelfManagedActiveDirectoryConfiguration":{
+      "type":"structure",
+      "required":[
+        "DomainName",
+        "UserName",
+        "Password",
+        "DnsIps"
+      ],
+      "members":{
+        "DomainName":{"shape":"ActiveDirectoryFullyQualifiedName"},
+        "OrganizationalUnitDistinguishedName":{"shape":"OrganizationalUnitDistinguishedName"},
+        "FileSystemAdministratorsGroup":{"shape":"FileSystemAdministratorsGroupName"},
+        "UserName":{"shape":"DirectoryUserName"},
+        "Password":{"shape":"DirectoryPassword"},
+        "DnsIps":{"shape":"DnsIps"}
+      }
+    },
+    "SelfManagedActiveDirectoryConfigurationUpdates":{
+      "type":"structure",
+      "members":{
+        "UserName":{"shape":"DirectoryUserName"},
+        "Password":{"shape":"DirectoryPassword"},
+        "DnsIps":{"shape":"DnsIps"}
+      }
     },
     "ServiceLimit":{
       "type":"string",
@@ -884,6 +964,13 @@
       "max":50,
       "min":1
     },
+    "UnsupportedOperation":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ErrorMessage"}
+      },
+      "exception":true
+    },
     "UntagResourceRequest":{
       "type":"structure",
       "required":[
@@ -930,7 +1017,8 @@
       "members":{
         "WeeklyMaintenanceStartTime":{"shape":"WeeklyTime"},
         "DailyAutomaticBackupStartTime":{"shape":"DailyTime"},
-        "AutomaticBackupRetentionDays":{"shape":"AutomaticBackupRetentionDays"}
+        "AutomaticBackupRetentionDays":{"shape":"AutomaticBackupRetentionDays"},
+        "SelfManagedActiveDirectoryConfiguration":{"shape":"SelfManagedActiveDirectoryConfigurationUpdates"}
       }
     },
     "VpcId":{
@@ -949,6 +1037,7 @@
       "type":"structure",
       "members":{
         "ActiveDirectoryId":{"shape":"DirectoryId"},
+        "SelfManagedActiveDirectoryConfiguration":{"shape":"SelfManagedActiveDirectoryAttributes"},
         "ThroughputCapacity":{"shape":"MegabytesPerSecond"},
         "MaintenanceOperationsInProgress":{"shape":"FileSystemMaintenanceOperations"},
         "WeeklyMaintenanceStartTime":{"shape":"WeeklyTime"},

@@ -29,18 +29,9 @@ func TestEncodeDecodeTags(t *testing.T) {
 		want map[tag.Key][]byte
 	}
 
-	k1, err := tag.NewKey("/encodedecodetest/k1")
-	if err != nil {
-		t.Fatal(err)
-	}
-	k2, err := tag.NewKey("/encodedecodetest/k2")
-	if err != nil {
-		t.Fatal(err)
-	}
-	k3, err := tag.NewKey("/encodedecodetest/k3")
-	if err != nil {
-		t.Fatal(err)
-	}
+	k1 = tag.MustNewKey("/encodedecodetest/k1")
+	k2 = tag.MustNewKey("/encodedecodetest/k2")
+	k3 = tag.MustNewKey("/encodedecodetest/k3")
 
 	ctx1, _ := tag.New(ctx)
 	ctx2, _ := tag.New(ctx, tag.Insert(k2, "v2"))

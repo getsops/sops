@@ -17,6 +17,7 @@
 package firestore
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -29,7 +30,8 @@ import (
 	"testing"
 	"time"
 
-	pb "cloud.google.com/go/firestore/genproto"
+	pb "cloud.google.com/go/firestore/internal/conformance"
+	"github.com/golang/protobuf/jsonpb"
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes"
 	ts "github.com/golang/protobuf/ptypes/timestamp"
@@ -38,141 +40,158 @@ import (
 	fspb "google.golang.org/genproto/googleapis/firestore/v1"
 )
 
-const conformanceTestWatchTargetID = 1
-
-func TestConformanceTests(t *testing.T) {
-	const dir = "testdata"
-	fis, err := ioutil.ReadDir(dir)
+func TestConformance(t *testing.T) {
+	dir := "internal/conformance/testdata"
+	files, err := ioutil.ReadDir(dir)
 	if err != nil {
 		t.Fatal(err)
 	}
+
 	wtid := watchTargetID
-	watchTargetID = conformanceTestWatchTargetID
+	watchTargetID = 1
 	defer func() { watchTargetID = wtid }()
-	n := 0
-	for _, fi := range fis {
-		if strings.HasSuffix(fi.Name(), ".textproto") {
-			runTestFromFile(t, filepath.Join(dir, fi.Name()))
-			n++
+
+	for _, f := range files {
+		if !strings.Contains(f.Name(), ".json") {
+			continue
+		}
+
+		inBytes, err := ioutil.ReadFile(filepath.Join(dir, f.Name()))
+		if err != nil {
+			t.Fatalf("%s: %v", f.Name(), err)
+		}
+
+		var tf pb.TestFile
+		if err := jsonpb.Unmarshal(bytes.NewReader(inBytes), &tf); err != nil {
+			t.Fatalf("unmarshalling %s: %v", f.Name(), err)
+		}
+
+		for _, tc := range tf.Tests {
+			t.Run(tc.Description, func(t *testing.T) {
+				c, srv, cleanup := newMock(t)
+				defer cleanup()
+
+				if err := runTest(tc, c, srv); err != nil {
+					t.Fatal(err)
+				}
+			})
 		}
 	}
-	t.Logf("ran %d conformance tests", n)
 }
 
-func runTestFromFile(t *testing.T, filename string) {
-	bytes, err := ioutil.ReadFile(filename)
-	if err != nil {
-		t.Fatalf("%s: %v", filename, err)
-	}
-	var test pb.Test
-	if err := proto.UnmarshalText(string(bytes), &test); err != nil {
-		t.Fatalf("unmarshalling %s: %v", filename, err)
-	}
-	msg := fmt.Sprintf("%s (file %s)", test.Description, filepath.Base(filename))
-	runTest(t, msg, &test)
-}
-
-func runTest(t *testing.T, msg string, test *pb.Test) {
-	check := func(gotErr error, wantErr bool) bool {
+func runTest(test *pb.Test, c *Client, srv *mockServer) error {
+	check := func(gotErr error, wantErr bool) error {
 		if wantErr && gotErr == nil {
-			t.Fatalf("%s: got nil, want error", msg)
-			return false
-		} else if !wantErr && gotErr != nil {
-			t.Fatalf("%s: %v", msg, gotErr)
-			return false
+			return errors.New("got nil, want error")
 		}
-		return true
+		if !wantErr && gotErr != nil {
+			return gotErr
+		}
+		return nil
 	}
 
 	ctx := context.Background()
-	c, srv := newMock(t)
-	switch tt := test.Test.(type) {
+	switch typedTestcase := test.Test.(type) {
 	case *pb.Test_Get:
 		req := &fspb.BatchGetDocumentsRequest{
 			Database:  c.path(),
-			Documents: []string{tt.Get.DocRefPath},
+			Documents: []string{typedTestcase.Get.DocRefPath},
 		}
 		srv.addRPC(req, []interface{}{
 			&fspb.BatchGetDocumentsResponse{
 				Result: &fspb.BatchGetDocumentsResponse_Found{&fspb.Document{
-					Name:       tt.Get.DocRefPath,
+					Name:       typedTestcase.Get.DocRefPath,
 					CreateTime: &ts.Timestamp{},
 					UpdateTime: &ts.Timestamp{},
 				}},
 				ReadTime: &ts.Timestamp{},
 			},
 		})
-		ref := docRefFromPath(tt.Get.DocRefPath, c)
+		ref := docRefFromPath(typedTestcase.Get.DocRefPath, c)
 		_, err := ref.Get(ctx)
 		if err != nil {
-			t.Fatalf("%s: %v", msg, err)
-			return
+			return err
 		}
 		// Checking response would just be testing the function converting a Document
 		// proto to a DocumentSnapshot, hence uninteresting.
 
 	case *pb.Test_Create:
-		srv.addRPC(tt.Create.Request, commitResponseForSet)
-		ref := docRefFromPath(tt.Create.DocRefPath, c)
-		data, err := convertData(tt.Create.JsonData)
+		srv.addRPC(typedTestcase.Create.Request, commitResponseForSet)
+		ref := docRefFromPath(typedTestcase.Create.DocRefPath, c)
+		data, err := convertData(typedTestcase.Create.JsonData)
 		if err != nil {
-			t.Fatalf("%s: %v", msg, err)
-			return
+			return err
 		}
-		_, err = ref.Create(ctx, data)
-		check(err, tt.Create.IsError)
+		_, checkErr := ref.Create(ctx, data)
+		if err := check(checkErr, typedTestcase.Create.IsError); err != nil {
+			return err
+		}
 
 	case *pb.Test_Set:
-		srv.addRPC(tt.Set.Request, commitResponseForSet)
-		ref := docRefFromPath(tt.Set.DocRefPath, c)
-		data, err := convertData(tt.Set.JsonData)
+		srv.addRPC(typedTestcase.Set.Request, commitResponseForSet)
+		ref := docRefFromPath(typedTestcase.Set.DocRefPath, c)
+		data, err := convertData(typedTestcase.Set.JsonData)
 		if err != nil {
-			t.Fatalf("%s: %v", msg, err)
-			return
+			return err
 		}
 		var opts []SetOption
-		if tt.Set.Option != nil {
-			opts = []SetOption{convertSetOption(tt.Set.Option)}
+		if typedTestcase.Set.Option != nil {
+			opts = []SetOption{convertSetOption(typedTestcase.Set.Option)}
 		}
-		_, err = ref.Set(ctx, data, opts...)
-		check(err, tt.Set.IsError)
+		_, checkErr := ref.Set(ctx, data, opts...)
+		if err := check(checkErr, typedTestcase.Set.IsError); err != nil {
+			return err
+		}
 
 	case *pb.Test_Update:
 		// Ignore Update test because we only support UpdatePaths.
 		// Not to worry, every Update test has a corresponding UpdatePaths test.
 
 	case *pb.Test_UpdatePaths:
-		srv.addRPC(tt.UpdatePaths.Request, commitResponseForSet)
-		ref := docRefFromPath(tt.UpdatePaths.DocRefPath, c)
-		preconds := convertPrecondition(t, tt.UpdatePaths.Precondition)
-		paths := convertFieldPaths(tt.UpdatePaths.FieldPaths)
+		srv.addRPC(typedTestcase.UpdatePaths.Request, commitResponseForSet)
+		ref := docRefFromPath(typedTestcase.UpdatePaths.DocRefPath, c)
+		preconds, err := convertPrecondition(typedTestcase.UpdatePaths.Precondition)
+		if err != nil {
+			return err
+		}
+		paths := convertFieldPaths(typedTestcase.UpdatePaths.FieldPaths)
 		var ups []Update
-		for i, path := range paths {
-			val, err := convertJSONValue(tt.UpdatePaths.JsonValues[i])
+		for i, p := range paths {
+			val, err := convertJSONValue(typedTestcase.UpdatePaths.JsonValues[i])
 			if err != nil {
-				t.Fatalf("%s: %v", msg, err)
+				return err
 			}
 			ups = append(ups, Update{
-				FieldPath: path,
+				FieldPath: p,
 				Value:     val,
 			})
 		}
-		_, err := ref.Update(ctx, ups, preconds...)
-		check(err, tt.UpdatePaths.IsError)
+		_, checkErr := ref.Update(ctx, ups, preconds...)
+		if err := check(checkErr, typedTestcase.UpdatePaths.IsError); err != nil {
+			return err
+		}
 
 	case *pb.Test_Delete:
-		srv.addRPC(tt.Delete.Request, commitResponseForSet)
-		ref := docRefFromPath(tt.Delete.DocRefPath, c)
-		preconds := convertPrecondition(t, tt.Delete.Precondition)
-		_, err := ref.Delete(ctx, preconds...)
-		check(err, tt.Delete.IsError)
+		srv.addRPC(typedTestcase.Delete.Request, commitResponseForSet)
+		ref := docRefFromPath(typedTestcase.Delete.DocRefPath, c)
+		preconds, err := convertPrecondition(typedTestcase.Delete.Precondition)
+		if err != nil {
+			return err
+		}
+		_, checkErr := ref.Delete(ctx, preconds...)
+		if err := check(checkErr, typedTestcase.Delete.IsError); err != nil {
+			return err
+		}
 
 	case *pb.Test_Query:
-		q := convertQuery(t, tt.Query)
-		got, err := q.toProto()
-		if check(err, tt.Query.IsError) && err == nil {
-			if want := tt.Query.Query; !proto.Equal(got, want) {
-				t.Fatalf("%s\ngot:  %s\nwant: %s", msg, proto.MarshalTextString(got), proto.MarshalTextString(want))
+		q, err := convertQuery(typedTestcase.Query)
+		if err != nil {
+			return err
+		}
+		got, checkErr := q.toProto()
+		if err := check(checkErr, typedTestcase.Query.IsError); err == nil && checkErr == nil {
+			if want := typedTestcase.Query.Query; !proto.Equal(got, want) {
+				return fmt.Errorf("got:  %s\nwant: %s", proto.MarshalTextString(got), proto.MarshalTextString(want))
 			}
 		}
 
@@ -181,29 +200,31 @@ func runTest(t *testing.T, msg string, test *pb.Test) {
 		defer cancel()
 		iter := c.Collection("C").OrderBy("a", Asc).Snapshots(ctx)
 		var rs []interface{}
-		for _, r := range tt.Listen.Responses {
+		for _, r := range typedTestcase.Listen.Responses {
 			rs = append(rs, r)
 		}
 		srv.addRPC(&fspb.ListenRequest{
 			Database:     "projects/projectID/databases/(default)",
 			TargetChange: &fspb.ListenRequest_AddTarget{iter.ws.target},
 		}, rs)
-		got, err := nSnapshots(iter, len(tt.Listen.Snapshots))
+		got, err := nSnapshots(iter, len(typedTestcase.Listen.Snapshots))
 		if err != nil {
-			t.Fatalf("%s: %v", msg, err)
-		} else if diff := cmp.Diff(got, tt.Listen.Snapshots); diff != "" {
-			t.Fatalf("%s:\n%s", msg, diff)
+			return err
+		} else if diff := cmp.Diff(got, typedTestcase.Listen.Snapshots); diff != "" {
+			return errors.New(diff)
 		}
-		if tt.Listen.IsError {
+		if typedTestcase.Listen.IsError {
 			_, err := iter.Next()
 			if err == nil {
-				t.Fatalf("%s: got nil, want error", msg)
+				return fmt.Errorf("got nil, want error")
 			}
 		}
 
 	default:
-		t.Fatalf("unknown test type %T", tt)
+		return fmt.Errorf("unknown test type %T", typedTestcase)
 	}
+
+	return nil
 }
 
 func nSnapshots(iter *QuerySnapshotIterator, n int) ([]*pb.Snapshot, error) {
@@ -334,9 +355,9 @@ func convertFieldPaths(fps []*pb.FieldPath) []FieldPath {
 	return res
 }
 
-func convertPrecondition(t *testing.T, fp *fspb.Precondition) []Precondition {
+func convertPrecondition(fp *fspb.Precondition) ([]Precondition, error) {
 	if fp == nil {
-		return nil
+		return nil, nil
 	}
 	var pc Precondition
 	switch fp := fp.ConditionType.(type) {
@@ -345,16 +366,16 @@ func convertPrecondition(t *testing.T, fp *fspb.Precondition) []Precondition {
 	case *fspb.Precondition_UpdateTime:
 		tm, err := ptypes.Timestamp(fp.UpdateTime)
 		if err != nil {
-			t.Fatal(err)
+			return nil, err
 		}
 		pc = LastUpdateTime(tm)
 	default:
-		t.Fatalf("unknown precondition type %T", fp)
+		return nil, fmt.Errorf("unknown precondition type %T", fp)
 	}
-	return []Precondition{pc}
+	return []Precondition{pc}, nil
 }
 
-func convertQuery(t *testing.T, qt *pb.QueryTest) Query {
+func convertQuery(qt *pb.QueryTest) (*Query, error) {
 	parts := strings.Split(qt.CollPath, "/")
 	q := Query{
 		parentPath:   strings.Join(parts[:len(parts)-2], "/"),
@@ -373,13 +394,13 @@ func convertQuery(t *testing.T, qt *pb.QueryTest) Query {
 			case "desc":
 				dir = Desc
 			default:
-				t.Fatalf("bad direction: %q", c.OrderBy.Direction)
+				return nil, fmt.Errorf("bad direction: %q", c.OrderBy.Direction)
 			}
 			q = q.OrderByPath(FieldPath(c.OrderBy.Path.Field), dir)
 		case *pb.Clause_Where:
 			val, err := convertJSONValue(c.Where.JsonValue)
 			if err != nil {
-				t.Fatal(err)
+				return nil, err
 			}
 			q = q.WherePath(FieldPath(c.Where.Path.Field), c.Where.Op, val)
 		case *pb.Clause_Offset:
@@ -387,38 +408,54 @@ func convertQuery(t *testing.T, qt *pb.QueryTest) Query {
 		case *pb.Clause_Limit:
 			q = q.Limit(int(c.Limit))
 		case *pb.Clause_StartAt:
-			q = q.StartAt(convertCursor(t, c.StartAt)...)
+			cs, err := convertCursor(c.StartAt)
+			if err != nil {
+				return nil, err
+			}
+			q = q.StartAt(cs...)
 		case *pb.Clause_StartAfter:
-			q = q.StartAfter(convertCursor(t, c.StartAfter)...)
+			cs, err := convertCursor(c.StartAfter)
+			if err != nil {
+				return nil, err
+			}
+			q = q.StartAfter(cs...)
 		case *pb.Clause_EndAt:
-			q = q.EndAt(convertCursor(t, c.EndAt)...)
+			cs, err := convertCursor(c.EndAt)
+			if err != nil {
+				return nil, err
+			}
+			q = q.EndAt(cs...)
 		case *pb.Clause_EndBefore:
-			q = q.EndBefore(convertCursor(t, c.EndBefore)...)
+			cs, err := convertCursor(c.EndBefore)
+			if err != nil {
+				return nil, err
+			}
+			q = q.EndBefore(cs...)
 		default:
-			t.Fatalf("bad clause type %T", c)
+			return nil, fmt.Errorf("bad clause type %T", c)
 		}
 	}
-	return q
+	return &q, nil
 }
 
 // Returns args to a cursor method (StartAt, etc.).
-func convertCursor(t *testing.T, c *pb.Cursor) []interface{} {
+func convertCursor(c *pb.Cursor) ([]interface{}, error) {
 	if c.DocSnapshot != nil {
 		ds, err := convertDocSnapshot(c.DocSnapshot)
 		if err != nil {
-			t.Fatal(err)
+			return nil, err
 		}
-		return []interface{}{ds}
+		return []interface{}{ds}, nil
 	}
 	var vals []interface{}
 	for _, jv := range c.JsonValues {
 		v, err := convertJSONValue(jv)
 		if err != nil {
-			t.Fatal(err)
+			return nil, err
 		}
 		vals = append(vals, v)
 	}
-	return vals
+	return vals, nil
 }
 
 func convertDocSnapshot(ds *pb.DocSnapshot) (*DocumentSnapshot, error) {

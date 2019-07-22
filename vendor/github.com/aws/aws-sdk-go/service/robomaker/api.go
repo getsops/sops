@@ -1049,6 +1049,9 @@ func (c *RoboMaker) CreateSimulationJobRequest(input *CreateSimulationJobInput) 
 //   Do not reuse a client token with different requests, unless the requests
 //   are identical.
 //
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   The request has failed due to a temporary failure of the server.
+//
 // See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/CreateSimulationJob
 func (c *RoboMaker) CreateSimulationJob(input *CreateSimulationJobInput) (*CreateSimulationJobOutput, error) {
 	req, out := c.CreateSimulationJobRequest(input)
@@ -1557,8 +1560,7 @@ func (c *RoboMaker) DescribeDeploymentJobRequest(input *DescribeDeploymentJobInp
 
 // DescribeDeploymentJob API operation for AWS RoboMaker.
 //
-// Describes a deployment job. [Does it work regardless of deployment status,
-// e.g. Failed?]
+// Describes a deployment job.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -10102,6 +10104,9 @@ const (
 	// DeploymentJobErrorCodeFailureThresholdBreached is a DeploymentJobErrorCode enum value
 	DeploymentJobErrorCodeFailureThresholdBreached = "FailureThresholdBreached"
 
+	// DeploymentJobErrorCodeRobotDeploymentAborted is a DeploymentJobErrorCode enum value
+	DeploymentJobErrorCodeRobotDeploymentAborted = "RobotDeploymentAborted"
+
 	// DeploymentJobErrorCodeRobotDeploymentNoResponse is a DeploymentJobErrorCode enum value
 	DeploymentJobErrorCodeRobotDeploymentNoResponse = "RobotDeploymentNoResponse"
 
@@ -10200,6 +10205,9 @@ const (
 const (
 	// RobotSoftwareSuiteVersionTypeKinetic is a RobotSoftwareSuiteVersionType enum value
 	RobotSoftwareSuiteVersionTypeKinetic = "Kinetic"
+
+	// RobotSoftwareSuiteVersionTypeMelodic is a RobotSoftwareSuiteVersionType enum value
+	RobotSoftwareSuiteVersionTypeMelodic = "Melodic"
 )
 
 const (

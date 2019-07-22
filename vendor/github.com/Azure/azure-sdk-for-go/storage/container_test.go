@@ -694,8 +694,8 @@ func (s *ContainerSuite) TestGetContainerProperties(c *chk.C) {
 
 	err := cnt1.GetProperties()
 	c.Assert(err, chk.IsNil)
-	c.Assert(cnt1.Properties.Etag, chk.Equals, `"0x8D522402DA67448"`)
-	c.Assert(cnt1.Properties.PublicAccess, chk.Equals, ContainerAccessType("blob"))
+	c.Assert(cnt1.Properties.Etag, chk.Equals, `"0x8D6E3BCDC30372B"`)
+	c.Assert(cnt1.Properties.PublicAccess, chk.Equals, ContainerAccessType(""))
 }
 
 func (cli *BlobStorageClient) deleteTestContainers(c *chk.C) error {

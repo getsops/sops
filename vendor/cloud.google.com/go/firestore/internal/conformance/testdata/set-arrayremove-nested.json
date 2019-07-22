@@ -1,0 +1,50 @@
+{
+  "tests": [
+    {
+      "description": "set: nested ArrayRemove field",
+      "comment": "An ArrayRemove value can occur at any depth. In this case,\nthe transform applies to the field path \"b.c\". Since \"c\" is removed from the update,\n\"b\" becomes empty, so it is also removed from the update.",
+      "set": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "jsonData": "{\"a\": 1, \"b\": {\"c\": [\"ArrayRemove\", 1, 2, 3]}}",
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d",
+                "fields": {
+                  "a": {
+                    "integerValue": "1"
+                  }
+                }
+              }
+            },
+            {
+              "transform": {
+                "document": "projects/projectID/databases/(default)/documents/C/d",
+                "fieldTransforms": [
+                  {
+                    "fieldPath": "b.c",
+                    "removeAllFromArray": {
+                      "values": [
+                        {
+                          "integerValue": "1"
+                        },
+                        {
+                          "integerValue": "2"
+                        },
+                        {
+                          "integerValue": "3"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

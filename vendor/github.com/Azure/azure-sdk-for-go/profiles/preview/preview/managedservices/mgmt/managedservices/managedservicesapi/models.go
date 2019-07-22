@@ -19,7 +19,7 @@
 
 package managedservicesapi
 
-import original "github.com/Azure/azure-sdk-for-go/services/preview/managedservices/mgmt/2018-06-01/managedservices/managedservicesapi"
+import original "github.com/Azure/azure-sdk-for-go/services/preview/managedservices/mgmt/2019-04-01/managedservices/managedservicesapi"
 
 type OperationsClientAPI = original.OperationsClientAPI
 type RegistrationAssignmentsClientAPI = original.RegistrationAssignmentsClientAPI

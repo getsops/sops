@@ -589,7 +589,7 @@ type Channel struct {
 	Id string `json:"id,omitempty"`
 
 	// Kind: Identifies this as a notification channel used to watch for
-	// changes to a resource. Value: the fixed string "api#channel".
+	// changes to a resource, which is "api#channel".
 	Kind string `json:"kind,omitempty"`
 
 	// Params: Additional parameters controlling delivery channel behavior.
@@ -6500,7 +6500,7 @@ type FilesGenerateIdsCall struct {
 }
 
 // GenerateIds: Generates a set of file IDs which can be provided in
-// create requests.
+// create or copy requests.
 func (r *FilesService) GenerateIds() *FilesGenerateIdsCall {
 	c := &FilesGenerateIdsCall{s: r.s, urlParams_: make(gensupport.URLParams)}
 	return c
@@ -6616,7 +6616,7 @@ func (c *FilesGenerateIdsCall) Do(opts ...googleapi.CallOption) (*GeneratedIds, 
 	}
 	return ret, nil
 	// {
-	//   "description": "Generates a set of file IDs which can be provided in create requests.",
+	//   "description": "Generates a set of file IDs which can be provided in create or copy requests.",
 	//   "httpMethod": "GET",
 	//   "id": "drive.files.generateIds",
 	//   "parameters": {

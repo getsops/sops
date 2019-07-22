@@ -126,7 +126,8 @@ type maxRetrier interface {
 }
 
 // Download downloads an object in S3 and writes the payload into w using
-// concurrent GET requests.
+// concurrent GET requests. The n int64 returned is the size of the object downloaded
+// in bytes.
 //
 // Additional functional options can be provided to configure the individual
 // download. These options are copies of the Downloader instance Download is called from.
@@ -148,7 +149,8 @@ func (d Downloader) Download(w io.WriterAt, input *s3.GetObjectInput, options ..
 }
 
 // DownloadWithContext downloads an object in S3 and writes the payload into w
-// using concurrent GET requests.
+// using concurrent GET requests. The n int64 returned is the size of the object downloaded
+// in bytes.
 //
 // DownloadWithContext is the same as Download with the additional support for
 // Context input parameters. The Context must not be nil. A nil Context will

@@ -208,6 +208,23 @@ func PossibleSQLImageSkuValues() []SQLImageSku {
 	return []SQLImageSku{Developer, Enterprise, Express, Standard, Web}
 }
 
+// SQLManagementMode enumerates the values for sql management mode.
+type SQLManagementMode string
+
+const (
+	// Full ...
+	Full SQLManagementMode = "Full"
+	// LightWeight ...
+	LightWeight SQLManagementMode = "LightWeight"
+	// NoAgent ...
+	NoAgent SQLManagementMode = "NoAgent"
+)
+
+// PossibleSQLManagementModeValues returns an array of possible values for the SQLManagementMode const type.
+func PossibleSQLManagementModeValues() []SQLManagementMode {
+	return []SQLManagementMode{Full, LightWeight, NoAgent}
+}
+
 // SQLServerLicenseType enumerates the values for sql server license type.
 type SQLServerLicenseType string
 
@@ -1311,11 +1328,13 @@ type Properties struct {
 	VirtualMachineResourceID *string `json:"virtualMachineResourceId,omitempty"`
 	// ProvisioningState - READ-ONLY; Provisioning state to track the async operation status.
 	ProvisioningState *string `json:"provisioningState,omitempty"`
-	// SQLImageOffer - READ-ONLY; SQL image offer. Examples include SQL2016-WS2016, SQL2017-WS2016.
+	// SQLImageOffer - SQL image offer. Examples include SQL2016-WS2016, SQL2017-WS2016.
 	SQLImageOffer *string `json:"sqlImageOffer,omitempty"`
 	// SQLServerLicenseType - SQL Server license type. Possible values include: 'PAYG', 'AHUB'
 	SQLServerLicenseType SQLServerLicenseType `json:"sqlServerLicenseType,omitempty"`
-	// SQLImageSku - READ-ONLY; SQL image sku. Possible values include: 'Developer', 'Express', 'Standard', 'Enterprise', 'Web'
+	// SQLManagement - SQL Server Management type. Possible values include: 'Full', 'LightWeight', 'NoAgent'
+	SQLManagement SQLManagementMode `json:"sqlManagement,omitempty"`
+	// SQLImageSku - SQL Server edition type. Possible values include: 'Developer', 'Express', 'Standard', 'Enterprise', 'Web'
 	SQLImageSku SQLImageSku `json:"sqlImageSku,omitempty"`
 	// SQLVirtualMachineGroupResourceID - ARM resource id of the SQL virtual machine group this SQL virtual machine is or will be part of.
 	SQLVirtualMachineGroupResourceID *string `json:"sqlVirtualMachineGroupResourceId,omitempty"`
@@ -1389,10 +1408,10 @@ type SQLConnectivityUpdateSettings struct {
 type SQLStorageUpdateSettings struct {
 	// DiskCount - Virtual machine disk count.
 	DiskCount *int32 `json:"diskCount,omitempty"`
-	// DiskConfigurationType - Disk configuration to apply to SQL Server. Possible values include: 'NEW', 'EXTEND', 'ADD'
-	DiskConfigurationType DiskConfigurationType `json:"diskConfigurationType,omitempty"`
 	// StartingDeviceID - Device id of the first disk to be updated.
 	StartingDeviceID *int32 `json:"startingDeviceId,omitempty"`
+	// DiskConfigurationType - Disk configuration to apply to SQL Server. Possible values include: 'NEW', 'EXTEND', 'ADD'
+	DiskConfigurationType DiskConfigurationType `json:"diskConfigurationType,omitempty"`
 }
 
 // SQLVirtualMachine a SQL virtual machine.

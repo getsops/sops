@@ -3331,6 +3331,8 @@ type RunProperties struct {
 	ProvisioningState ProvisioningState `json:"provisioningState,omitempty"`
 	// IsArchiveEnabled - The value that indicates whether archiving is enabled or not.
 	IsArchiveEnabled *bool `json:"isArchiveEnabled,omitempty"`
+	// TimerTrigger - The timer trigger that caused the run.
+	TimerTrigger *TimerTriggerDescriptor `json:"timerTrigger,omitempty"`
 }
 
 // BasicRunRequest the request parameters for scheduling a run.
@@ -4558,6 +4560,14 @@ type TimerTrigger struct {
 	Status TriggerStatus `json:"status,omitempty"`
 	// Name - The name of the trigger.
 	Name *string `json:"name,omitempty"`
+}
+
+// TimerTriggerDescriptor ...
+type TimerTriggerDescriptor struct {
+	// TimerTriggerName - The timer trigger name that caused the run.
+	TimerTriggerName *string `json:"timerTriggerName,omitempty"`
+	// ScheduleOccurrence - The occurrence that triggered the run.
+	ScheduleOccurrence *string `json:"scheduleOccurrence,omitempty"`
 }
 
 // TimerTriggerUpdateParameters the properties for updating a timer trigger.

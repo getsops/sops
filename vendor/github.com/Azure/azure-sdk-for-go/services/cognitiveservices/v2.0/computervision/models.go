@@ -128,7 +128,7 @@ const (
 	// Failed ...
 	Failed TextOperationStatusCodes = "Failed"
 	// NotStarted ...
-	NotStarted TextOperationStatusCodes = "Not Started"
+	NotStarted TextOperationStatusCodes = "NotStarted"
 	// Running ...
 	Running TextOperationStatusCodes = "Running"
 	// Succeeded ...
@@ -539,7 +539,7 @@ type LandmarksModel struct {
 // Line an object representing a recognized text line.
 type Line struct {
 	// BoundingBox - Bounding box of a recognized line.
-	BoundingBox *[]int32 `json:"boundingBox,omitempty"`
+	BoundingBox *[]float64 `json:"boundingBox,omitempty"`
 	// Text - The text content of the line.
 	Text *string `json:"text,omitempty"`
 	// Words - List of words in the text line.
@@ -662,7 +662,7 @@ type TextRecognitionResult struct {
 // Word an object representing a recognized word.
 type Word struct {
 	// BoundingBox - Bounding box of a recognized word.
-	BoundingBox *[]int32 `json:"boundingBox,omitempty"`
+	BoundingBox *[]float64 `json:"boundingBox,omitempty"`
 	// Text - The text content of the word.
 	Text *string `json:"text,omitempty"`
 	// Confidence - Qualitative confidence measure. Possible values include: 'High', 'Low'

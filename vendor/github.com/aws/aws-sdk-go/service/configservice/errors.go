@@ -136,6 +136,10 @@ const (
 	// You have reached the limit of the number of delivery channels you can create.
 	ErrCodeMaxNumberOfDeliveryChannelsExceededException = "MaxNumberOfDeliveryChannelsExceededException"
 
+	// ErrCodeMaxNumberOfOrganizationConfigRulesExceededException for service response error code
+	// "MaxNumberOfOrganizationConfigRulesExceededException".
+	ErrCodeMaxNumberOfOrganizationConfigRulesExceededException = "MaxNumberOfOrganizationConfigRulesExceededException"
+
 	// ErrCodeMaxNumberOfRetentionConfigurationsExceededException for service response error code
 	// "MaxNumberOfRetentionConfigurationsExceededException".
 	//
@@ -199,6 +203,10 @@ const (
 	// You have specified a delivery channel that does not exist.
 	ErrCodeNoSuchDeliveryChannelException = "NoSuchDeliveryChannelException"
 
+	// ErrCodeNoSuchOrganizationConfigRuleException for service response error code
+	// "NoSuchOrganizationConfigRuleException".
+	ErrCodeNoSuchOrganizationConfigRuleException = "NoSuchOrganizationConfigRuleException"
+
 	// ErrCodeNoSuchRemediationConfigurationException for service response error code
 	// "NoSuchRemediationConfigurationException".
 	//
@@ -229,6 +237,10 @@ const (
 	//
 	// The configuration item size is outside the allowable range.
 	ErrCodeOversizedConfigurationItemException = "OversizedConfigurationItemException"
+
+	// ErrCodeRemediationInProgressException for service response error code
+	// "RemediationInProgressException".
+	ErrCodeRemediationInProgressException = "RemediationInProgressException"
 
 	// ErrCodeResourceInUseException for service response error code
 	// "ResourceInUseException".

@@ -40,6 +40,83 @@ func NewProfilesClientWithBaseURI(baseURI string, subscriptionID string) Profile
 	return ProfilesClient{NewWithBaseURI(baseURI, subscriptionID)}
 }
 
+// Create the operation to create a BillingProfile.
+// Parameters:
+// billingAccountName - billing Account Id.
+// parameters - parameters supplied to the Create BillingProfile operation.
+func (client ProfilesClient) Create(ctx context.Context, billingAccountName string, parameters ProfileCreationParameters) (result ProfilesCreateFuture, err error) {
+	if tracing.IsEnabled() {
+		ctx = tracing.StartSpan(ctx, fqdn+"/ProfilesClient.Create")
+		defer func() {
+			sc := -1
+			if result.Response() != nil {
+				sc = result.Response().StatusCode
+			}
+			tracing.EndSpan(ctx, sc, err)
+		}()
+	}
+	req, err := client.CreatePreparer(ctx, billingAccountName, parameters)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "billing.ProfilesClient", "Create", nil, "Failure preparing request")
+		return
+	}
+
+	result, err = client.CreateSender(req)
+	if err != nil {
+		err = autorest.NewErrorWithError(err, "billing.ProfilesClient", "Create", result.Response(), "Failure sending request")
+		return
+	}
+
+	return
+}
+
+// CreatePreparer prepares the Create request.
+func (client ProfilesClient) CreatePreparer(ctx context.Context, billingAccountName string, parameters ProfileCreationParameters) (*http.Request, error) {
+	pathParameters := map[string]interface{}{
+		"billingAccountName": autorest.Encode("path", billingAccountName),
+	}
+
+	const APIVersion = "2018-11-01-preview"
+	queryParameters := map[string]interface{}{
+		"api-version": APIVersion,
+	}
+
+	preparer := autorest.CreatePreparer(
+		autorest.AsContentType("application/json; charset=utf-8"),
+		autorest.AsPost(),
+		autorest.WithBaseURL(client.BaseURI),
+		autorest.WithPathParameters("/providers/Microsoft.Billing/billingAccounts/{billingAccountName}/billingProfiles", pathParameters),
+		autorest.WithJSON(parameters),
+		autorest.WithQueryParameters(queryParameters))
+	return preparer.Prepare((&http.Request{}).WithContext(ctx))
+}
+
+// CreateSender sends the Create request. The method will close the
+// http.Response Body if it receives an error.
+func (client ProfilesClient) CreateSender(req *http.Request) (future ProfilesCreateFuture, err error) {
+	var resp *http.Response
+	resp, err = autorest.SendWithSender(client, req,
+		autorest.DoRetryForStatusCodes(client.RetryAttempts, client.RetryDuration, autorest.StatusCodesForRetry...))
+	if err != nil {
+		return
+	}
+	future.Future, err = azure.NewFutureFromResponse(resp)
+	return
+}
+
+// CreateResponder handles the response to the Create request. The method always
+// closes the http.Response Body.
+func (client ProfilesClient) CreateResponder(resp *http.Response) (result Profile, err error) {
+	err = autorest.Respond(
+		resp,
+		client.ByInspecting(),
+		azure.WithErrorUnlessStatusCode(http.StatusOK, http.StatusAccepted),
+		autorest.ByUnmarshallingJSON(&result),
+		autorest.ByClosing())
+	result.Response = autorest.Response{Response: resp}
+	return
+}
+
 // Get get the billing profile by id.
 // Parameters:
 // billingAccountName - billing Account Id.

@@ -15,12 +15,12 @@ import (
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/credentials/processcreds"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/awstesting"
+	"github.com/aws/aws-sdk-go/internal/sdktesting"
 )
 
 func TestProcessProviderFromSessionCfg(t *testing.T) {
-	oldEnv := preserveImportantStashEnv()
-	defer awstesting.PopEnv(oldEnv)
+	restoreEnvFn := sdktesting.StashEnv()
+	defer restoreEnvFn()
 
 	os.Setenv("AWS_SDK_LOAD_CONFIG", "1")
 	if runtime.GOOS == "windows" {
@@ -57,8 +57,8 @@ func TestProcessProviderFromSessionCfg(t *testing.T) {
 }
 
 func TestProcessProviderFromSessionWithProfileCfg(t *testing.T) {
-	oldEnv := preserveImportantStashEnv()
-	defer awstesting.PopEnv(oldEnv)
+	restoreEnvFn := sdktesting.StashEnv()
+	defer restoreEnvFn()
 
 	os.Setenv("AWS_SDK_LOAD_CONFIG", "1")
 	os.Setenv("AWS_PROFILE", "non_expire")
@@ -88,8 +88,8 @@ func TestProcessProviderFromSessionWithProfileCfg(t *testing.T) {
 }
 
 func TestProcessProviderNotFromCredProcCfg(t *testing.T) {
-	oldEnv := preserveImportantStashEnv()
-	defer awstesting.PopEnv(oldEnv)
+	restoreEnvFn := sdktesting.StashEnv()
+	defer restoreEnvFn()
 
 	os.Setenv("AWS_SDK_LOAD_CONFIG", "1")
 	os.Setenv("AWS_PROFILE", "not_alone")
@@ -123,8 +123,8 @@ func TestProcessProviderNotFromCredProcCfg(t *testing.T) {
 }
 
 func TestProcessProviderFromSessionCrd(t *testing.T) {
-	oldEnv := preserveImportantStashEnv()
-	defer awstesting.PopEnv(oldEnv)
+	restoreEnvFn := sdktesting.StashEnv()
+	defer restoreEnvFn()
 
 	if runtime.GOOS == "windows" {
 		os.Setenv("AWS_SHARED_CREDENTIALS_FILE", "testdata\\shcred_win.ini")
@@ -160,8 +160,8 @@ func TestProcessProviderFromSessionCrd(t *testing.T) {
 }
 
 func TestProcessProviderFromSessionWithProfileCrd(t *testing.T) {
-	oldEnv := preserveImportantStashEnv()
-	defer awstesting.PopEnv(oldEnv)
+	restoreEnvFn := sdktesting.StashEnv()
+	defer restoreEnvFn()
 
 	os.Setenv("AWS_PROFILE", "non_expire")
 	if runtime.GOOS == "windows" {
@@ -190,8 +190,8 @@ func TestProcessProviderFromSessionWithProfileCrd(t *testing.T) {
 }
 
 func TestProcessProviderNotFromCredProcCrd(t *testing.T) {
-	oldEnv := preserveImportantStashEnv()
-	defer awstesting.PopEnv(oldEnv)
+	restoreEnvFn := sdktesting.StashEnv()
+	defer restoreEnvFn()
 
 	os.Setenv("AWS_PROFILE", "not_alone")
 	if runtime.GOOS == "windows" {
@@ -224,8 +224,8 @@ func TestProcessProviderNotFromCredProcCrd(t *testing.T) {
 }
 
 func TestProcessProviderBadCommand(t *testing.T) {
-	oldEnv := preserveImportantStashEnv()
-	defer awstesting.PopEnv(oldEnv)
+	restoreEnvFn := sdktesting.StashEnv()
+	defer restoreEnvFn()
 
 	creds := processcreds.NewCredentials("/bad/process")
 	_, err := creds.Get()
@@ -235,8 +235,8 @@ func TestProcessProviderBadCommand(t *testing.T) {
 }
 
 func TestProcessProviderMoreEmptyCommands(t *testing.T) {
-	oldEnv := preserveImportantStashEnv()
-	defer awstesting.PopEnv(oldEnv)
+	restoreEnvFn := sdktesting.StashEnv()
+	defer restoreEnvFn()
 
 	creds := processcreds.NewCredentials("")
 	_, err := creds.Get()
@@ -247,8 +247,8 @@ func TestProcessProviderMoreEmptyCommands(t *testing.T) {
 }
 
 func TestProcessProviderExpectErrors(t *testing.T) {
-	oldEnv := preserveImportantStashEnv()
-	defer awstesting.PopEnv(oldEnv)
+	restoreEnvFn := sdktesting.StashEnv()
+	defer restoreEnvFn()
 
 	creds := processcreds.NewCredentials(
 		fmt.Sprintf(
@@ -300,8 +300,8 @@ func TestProcessProviderExpectErrors(t *testing.T) {
 }
 
 func TestProcessProviderTimeout(t *testing.T) {
-	oldEnv := preserveImportantStashEnv()
-	defer awstesting.PopEnv(oldEnv)
+	restoreEnvFn := sdktesting.StashEnv()
+	defer restoreEnvFn()
 
 	command := "/bin/sleep 2"
 	if runtime.GOOS == "windows" {
@@ -319,8 +319,8 @@ func TestProcessProviderTimeout(t *testing.T) {
 }
 
 func TestProcessProviderWithLongSessionToken(t *testing.T) {
-	oldEnv := preserveImportantStashEnv()
-	defer awstesting.PopEnv(oldEnv)
+	restoreEnvFn := sdktesting.StashEnv()
+	defer restoreEnvFn()
 
 	creds := processcreds.NewCredentials(
 		fmt.Sprintf(
@@ -349,8 +349,8 @@ type credentialTest struct {
 }
 
 func TestProcessProviderStatic(t *testing.T) {
-	oldEnv := preserveImportantStashEnv()
-	defer awstesting.PopEnv(oldEnv)
+	restoreEnvFn := sdktesting.StashEnv()
+	defer restoreEnvFn()
 
 	// static
 	creds := processcreds.NewCredentials(
@@ -371,8 +371,8 @@ func TestProcessProviderStatic(t *testing.T) {
 }
 
 func TestProcessProviderNotExpired(t *testing.T) {
-	oldEnv := preserveImportantStashEnv()
-	defer awstesting.PopEnv(oldEnv)
+	restoreEnvFn := sdktesting.StashEnv()
+	defer restoreEnvFn()
 
 	// non-static, not expired
 	exp := &credentialTest{}
@@ -408,8 +408,8 @@ func TestProcessProviderNotExpired(t *testing.T) {
 }
 
 func TestProcessProviderExpired(t *testing.T) {
-	oldEnv := preserveImportantStashEnv()
-	defer awstesting.PopEnv(oldEnv)
+	restoreEnvFn := sdktesting.StashEnv()
+	defer restoreEnvFn()
 
 	// non-static, expired
 	exp := &credentialTest{}
@@ -445,8 +445,8 @@ func TestProcessProviderExpired(t *testing.T) {
 }
 
 func TestProcessProviderForceExpire(t *testing.T) {
-	oldEnv := preserveImportantStashEnv()
-	defer awstesting.PopEnv(oldEnv)
+	restoreEnvFn := sdktesting.StashEnv()
+	defer restoreEnvFn()
 
 	// non-static, not expired
 
@@ -499,8 +499,8 @@ func TestProcessProviderForceExpire(t *testing.T) {
 }
 
 func TestProcessProviderAltConstruct(t *testing.T) {
-	oldEnv := preserveImportantStashEnv()
-	defer awstesting.PopEnv(oldEnv)
+	restoreEnvFn := sdktesting.StashEnv()
+	defer restoreEnvFn()
 
 	// constructing with exec.Cmd instead of string
 	myCommand := exec.Command(
@@ -523,8 +523,8 @@ func TestProcessProviderAltConstruct(t *testing.T) {
 }
 
 func BenchmarkProcessProvider(b *testing.B) {
-	oldEnv := preserveImportantStashEnv()
-	defer awstesting.PopEnv(oldEnv)
+	restoreEnvFn := sdktesting.StashEnv()
+	defer restoreEnvFn()
 
 	creds := processcreds.NewCredentials(
 		fmt.Sprintf(
@@ -545,35 +545,6 @@ func BenchmarkProcessProvider(b *testing.B) {
 			b.Fatal(err)
 		}
 	}
-}
-
-func preserveImportantStashEnv() []string {
-	envsToKeep := []string{"PATH"}
-
-	if runtime.GOOS == "windows" {
-		envsToKeep = append(envsToKeep, "ComSpec")
-		envsToKeep = append(envsToKeep, "SYSTEM32")
-	}
-
-	extraEnv := getEnvs(envsToKeep)
-
-	oldEnv := awstesting.StashEnv() //clear env
-
-	for key, val := range extraEnv {
-		os.Setenv(key, val)
-	}
-
-	return oldEnv
-}
-
-func getEnvs(envs []string) map[string]string {
-	extraEnvs := make(map[string]string)
-	for _, env := range envs {
-		if val, ok := os.LookupEnv(env); ok && len(val) > 0 {
-			extraEnvs[env] = val
-		}
-	}
-	return extraEnvs
 }
 
 func getOSCat() string {

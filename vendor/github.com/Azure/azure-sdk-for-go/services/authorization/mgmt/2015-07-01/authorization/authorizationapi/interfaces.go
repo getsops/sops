@@ -31,6 +31,17 @@ type PermissionsClientAPI interface {
 
 var _ PermissionsClientAPI = (*authorization.PermissionsClient)(nil)
 
+// RoleDefinitionsClientAPI contains the set of methods on the RoleDefinitionsClient type.
+type RoleDefinitionsClientAPI interface {
+	CreateOrUpdate(ctx context.Context, scope string, roleDefinitionID string, roleDefinition authorization.RoleDefinition) (result authorization.RoleDefinition, err error)
+	Delete(ctx context.Context, scope string, roleDefinitionID string) (result authorization.RoleDefinition, err error)
+	Get(ctx context.Context, scope string, roleDefinitionID string) (result authorization.RoleDefinition, err error)
+	GetByID(ctx context.Context, roleDefinitionID string) (result authorization.RoleDefinition, err error)
+	List(ctx context.Context, scope string, filter string) (result authorization.RoleDefinitionListResultPage, err error)
+}
+
+var _ RoleDefinitionsClientAPI = (*authorization.RoleDefinitionsClient)(nil)
+
 // ProviderOperationsMetadataClientAPI contains the set of methods on the ProviderOperationsMetadataClient type.
 type ProviderOperationsMetadataClientAPI interface {
 	Get(ctx context.Context, resourceProviderNamespace string, expand string) (result authorization.ProviderOperationsMetadata, err error)
@@ -38,6 +49,13 @@ type ProviderOperationsMetadataClientAPI interface {
 }
 
 var _ ProviderOperationsMetadataClientAPI = (*authorization.ProviderOperationsMetadataClient)(nil)
+
+// GlobalAdministratorClientAPI contains the set of methods on the GlobalAdministratorClient type.
+type GlobalAdministratorClientAPI interface {
+	ElevateAccess(ctx context.Context) (result autorest.Response, err error)
+}
+
+var _ GlobalAdministratorClientAPI = (*authorization.GlobalAdministratorClient)(nil)
 
 // RoleAssignmentsClientAPI contains the set of methods on the RoleAssignmentsClient type.
 type RoleAssignmentsClientAPI interface {
@@ -54,24 +72,6 @@ type RoleAssignmentsClientAPI interface {
 }
 
 var _ RoleAssignmentsClientAPI = (*authorization.RoleAssignmentsClient)(nil)
-
-// RoleDefinitionsClientAPI contains the set of methods on the RoleDefinitionsClient type.
-type RoleDefinitionsClientAPI interface {
-	CreateOrUpdate(ctx context.Context, scope string, roleDefinitionID string, roleDefinition authorization.RoleDefinition) (result authorization.RoleDefinition, err error)
-	Delete(ctx context.Context, scope string, roleDefinitionID string) (result authorization.RoleDefinition, err error)
-	Get(ctx context.Context, scope string, roleDefinitionID string) (result authorization.RoleDefinition, err error)
-	GetByID(ctx context.Context, roleDefinitionID string) (result authorization.RoleDefinition, err error)
-	List(ctx context.Context, scope string, filter string) (result authorization.RoleDefinitionListResultPage, err error)
-}
-
-var _ RoleDefinitionsClientAPI = (*authorization.RoleDefinitionsClient)(nil)
-
-// ElevateAccessClientAPI contains the set of methods on the ElevateAccessClient type.
-type ElevateAccessClientAPI interface {
-	Post(ctx context.Context) (result autorest.Response, err error)
-}
-
-var _ ElevateAccessClientAPI = (*authorization.ElevateAccessClient)(nil)
 
 // ClassicAdministratorsClientAPI contains the set of methods on the ClassicAdministratorsClient type.
 type ClassicAdministratorsClientAPI interface {

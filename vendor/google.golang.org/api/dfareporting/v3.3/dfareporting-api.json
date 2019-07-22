@@ -20,7 +20,7 @@
   "description": "Manages your DoubleClick Campaign Manager ad campaigns and reports.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/doubleclick-advertisers/",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/HfgI2-QxJJ0kpvSvsSfA1DROEv8\"",
+  "etag": "\"9eZ1uxVRThTDhLJCZHhqs3eQWz4/HNMBrDps9fzMojHNMgaSQ-haG84\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/doubleclick-16.gif",
     "x32": "https://www.google.com/images/icons/product/doubleclick-32.gif"
@@ -2190,6 +2190,7 @@
                 "OBJECT_FLOODLIGHT_ACTIVITY_GROUP",
                 "OBJECT_FLOODLIGHT_ACTVITY",
                 "OBJECT_FLOODLIGHT_CONFIGURATION",
+                "OBJECT_FLOODLIGHT_DV360_LINK",
                 "OBJECT_INSTREAM_CREATIVE",
                 "OBJECT_LANDING_PAGE",
                 "OBJECT_MEDIA_ORDER",
@@ -2210,6 +2211,7 @@
                 "OBJECT_USER_ROLE"
               ],
               "enumDescriptions": [
+                "",
                 "",
                 "",
                 "",
@@ -9397,7 +9399,7 @@
       }
     }
   },
-  "revision": "20190206",
+  "revision": "20190531",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Account": {
@@ -11063,11 +11065,11 @@
           "type": "array"
         },
         "encryptedUserId": {
-          "description": "The alphanumeric encrypted user ID. When set, encryptionInfo should also be specified. This field is mutually exclusive with encryptedUserIdCandidates[], mobileDeviceId and gclid. This or encryptedUserIdCandidates[] or mobileDeviceId or gclid is a required field.",
+          "description": "The alphanumeric encrypted user ID. When set, encryptionInfo should also be specified. This field is mutually exclusive with encryptedUserIdCandidates[], matchId, mobileDeviceId and gclid. This or encryptedUserIdCandidates[] or matchId or mobileDeviceId or gclid is a required field.",
           "type": "string"
         },
         "encryptedUserIdCandidates": {
-          "description": "A list of the alphanumeric encrypted user IDs. Any user ID with exposure prior to the conversion timestamp will be used in the inserted conversion. If no such user ID is found then the conversion will be rejected with NO_COOKIE_MATCH_FOUND error. When set, encryptionInfo should also be specified. This field may only be used when calling batchinsert; it is not supported by batchupdate. This field is mutually exclusive with encryptedUserId, mobileDeviceId and gclid. This or encryptedUserId or mobileDeviceId or gclid is a required field.",
+          "description": "A list of the alphanumeric encrypted user IDs. Any user ID with exposure prior to the conversion timestamp will be used in the inserted conversion. If no such user ID is found then the conversion will be rejected with NO_COOKIE_MATCH_FOUND error. When set, encryptionInfo should also be specified. This field may only be used when calling batchinsert; it is not supported by batchupdate. This field is mutually exclusive with encryptedUserId, matchId, mobileDeviceId and gclid. This or encryptedUserId or matchId or mobileDeviceId or gclid is a required field.",
           "items": {
             "type": "string"
           },
@@ -11084,7 +11086,7 @@
           "type": "string"
         },
         "gclid": {
-          "description": "The Google click ID. This field is mutually exclusive with encryptedUserId, encryptedUserIdCandidates[] and mobileDeviceId. This or encryptedUserId or encryptedUserIdCandidates[] or mobileDeviceId is a required field.",
+          "description": "The Google click ID. This field is mutually exclusive with encryptedUserId, encryptedUserIdCandidates[], matchId and mobileDeviceId. This or encryptedUserId or encryptedUserIdCandidates[] or matchId or mobileDeviceId is a required field.",
           "type": "string"
         },
         "kind": {
@@ -11096,8 +11098,12 @@
           "description": "Whether Limit Ad Tracking is enabled. When set to true, the conversion will be used for reporting but not targeting. This will prevent remarketing.",
           "type": "boolean"
         },
+        "matchId": {
+          "description": "The match ID field. A match ID is your own first-party identifier that has been synced with Google using the match ID feature in Floodlight. This field is mutually exclusive with encryptedUserId, encryptedUserIdCandidates[],mobileDeviceId and gclid. This or encryptedUserId or encryptedUserIdCandidates[] or mobileDeviceId or gclid is a required field.",
+          "type": "string"
+        },
         "mobileDeviceId": {
-          "description": "The mobile device ID. This field is mutually exclusive with encryptedUserId, encryptedUserIdCandidates[] and gclid. This or encryptedUserId or encryptedUserIdCandidates[] or gclid is a required field.",
+          "description": "The mobile device ID. This field is mutually exclusive with encryptedUserId, encryptedUserIdCandidates[], matchId and gclid. This or encryptedUserId or encryptedUserIdCandidates[] or matchId or gclid is a required field.",
           "type": "string"
         },
         "nonPersonalizedAd": {

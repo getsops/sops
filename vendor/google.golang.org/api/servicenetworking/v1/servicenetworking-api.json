@@ -403,7 +403,7 @@
       }
     }
   },
-  "revision": "20190530",
+  "revision": "20190708",
   "rootUrl": "https://servicenetworking.googleapis.com/",
   "schemas": {
     "AddSubnetworkRequest": {
@@ -698,7 +698,7 @@
           "type": "string"
         },
         "peering": {
-          "description": "Output only.\nThe name of the VPC Network Peering connection that was created by the\nservice producer.",
+          "description": "Output only. The name of the VPC Network Peering connection that was created by the\nservice producer.",
           "type": "string"
         },
         "reservedPeeringRanges": {
@@ -709,7 +709,7 @@
           "type": "array"
         },
         "service": {
-          "description": "Output only.\nThe name of the peering service that's associated with this connection, in\nthe following format: `services/{service name}`.",
+          "description": "Output only. The name of the peering service that's associated with this connection, in\nthe following format: `services/{service name}`.",
           "type": "string"
         }
       },
@@ -855,6 +855,10 @@
             "$ref": "DocumentationRule"
           },
           "type": "array"
+        },
+        "serviceRootUrl": {
+          "description": "Specifies the service root url if the default one (the service name\nfrom the yaml file) is not suitable. This can be seen in any fully\nspecified service urls as well as sections that show a base that other\nurls are relative to.",
+          "type": "string"
         },
         "summary": {
           "description": "A short summary of what the service does. Can only be provided by\nplain text.",

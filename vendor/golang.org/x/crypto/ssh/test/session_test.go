@@ -420,6 +420,11 @@ func TestKeyExchanges(t *testing.T) {
 	var config ssh.Config
 	config.SetDefaults()
 	kexOrder := config.KeyExchanges
+	// Based on the discussion in #17230, the key exchange algorithms
+	// diffie-hellman-group-exchange-sha1 and diffie-hellman-group-exchange-sha256
+	// are not included in the default list of supported kex so we have to add them
+	// here manually.
+	kexOrder = append(kexOrder, "diffie-hellman-group-exchange-sha1", "diffie-hellman-group-exchange-sha256")
 	for _, kex := range kexOrder {
 		t.Run(kex, func(t *testing.T) {
 			server := newServer(t)

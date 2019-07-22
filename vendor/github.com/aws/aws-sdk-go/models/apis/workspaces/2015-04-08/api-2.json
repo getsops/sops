@@ -45,6 +45,24 @@
         {"shape":"AccessDeniedException"}
       ]
     },
+    "CopyWorkspaceImage":{
+      "name":"CopyWorkspaceImage",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CopyWorkspaceImageRequest"},
+      "output":{"shape":"CopyWorkspaceImageResult"},
+      "errors":[
+        {"shape":"ResourceLimitExceededException"},
+        {"shape":"ResourceAlreadyExistsException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ResourceUnavailableException"},
+        {"shape":"OperationNotSupportedException"},
+        {"shape":"AccessDeniedException"},
+        {"shape":"InvalidParameterValuesException"}
+      ]
+    },
     "CreateIpGroup":{
       "name":"CreateIpGroup",
       "http":{
@@ -465,7 +483,6 @@
       "type":"list",
       "member":{"shape":"AccountModification"}
     },
-    "AdditionalInfo":{"type":"string"},
     "Alias":{"type":"string"},
     "AssociateIpGroupsRequest":{
       "type":"structure",
@@ -558,6 +575,27 @@
         "DISCONNECTED",
         "UNKNOWN"
       ]
+    },
+    "CopyWorkspaceImageRequest":{
+      "type":"structure",
+      "required":[
+        "Name",
+        "SourceImageId",
+        "SourceRegion"
+      ],
+      "members":{
+        "Name":{"shape":"WorkspaceImageName"},
+        "Description":{"shape":"WorkspaceImageDescription"},
+        "SourceImageId":{"shape":"WorkspaceImageId"},
+        "SourceRegion":{"shape":"Region"},
+        "Tags":{"shape":"TagList"}
+      }
+    },
+    "CopyWorkspaceImageResult":{
+      "type":"structure",
+      "members":{
+        "ImageId":{"shape":"WorkspaceImageId"}
+      }
     },
     "CreateIpGroupRequest":{
       "type":"structure",
@@ -1166,8 +1204,7 @@
       "type":"structure",
       "required":["RebuildWorkspaceRequests"],
       "members":{
-        "RebuildWorkspaceRequests":{"shape":"RebuildWorkspaceRequests"},
-        "AdditionalInfo":{"shape":"AdditionalInfo"}
+        "RebuildWorkspaceRequests":{"shape":"RebuildWorkspaceRequests"}
       }
     },
     "RebuildWorkspacesResult":{
@@ -1182,6 +1219,12 @@
         "ENABLED",
         "DISABLED"
       ]
+    },
+    "Region":{
+      "type":"string",
+      "max":31,
+      "min":1,
+      "pattern":"^[-0-9a-z]{1,31}$"
     },
     "RegistrationCode":{
       "type":"string",

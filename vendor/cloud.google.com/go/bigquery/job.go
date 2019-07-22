@@ -401,7 +401,7 @@ type QueryStatistics struct {
 	// Describes a timeline of job execution.
 	Timeline []*QueryTimelineSample
 
-	// ReferencedTables: [Output-only, Experimental] Referenced tables for
+	// ReferencedTables: [Output-only] Referenced tables for
 	// the job. Queries that reference more than 50 tables will not have a
 	// complete list.
 	ReferencedTables []*Table
@@ -423,6 +423,9 @@ type QueryStatistics struct {
 	// DDL Operation performed on the target table.  Used to report how the
 	// query impacted the DDL target table.
 	DDLOperationPerformed string
+
+	// The DDL target table, present only for CREATE/DROP FUNCTION/PROCEDURE queries.
+	DDLTargetRoutine *Routine
 }
 
 // ExplainQueryStage describes one stage of a query.
@@ -754,6 +757,7 @@ func (j *Job) setStatistics(s *bq.JobStatistics, c *Client) {
 			CacheHit:                      s.Query.CacheHit,
 			DDLTargetTable:                bqToTable(s.Query.DdlTargetTable, c),
 			DDLOperationPerformed:         s.Query.DdlOperationPerformed,
+			DDLTargetRoutine:              bqToRoutine(s.Query.DdlTargetRoutine, c),
 			StatementType:                 s.Query.StatementType,
 			TotalBytesBilled:              s.Query.TotalBytesBilled,
 			TotalBytesProcessed:           s.Query.TotalBytesProcessed,

@@ -401,7 +401,11 @@ func (e *Export) UnmarshalJSON(body []byte) error {
 	return nil
 }
 
-// ExportDeliveryDestination the destination information for the delivery of the export.
+// ExportDeliveryDestination the destination information for the delivery of the export. To allow access to
+// a storage account, you must register the account's subscription with the Microsoft.CostManagementExports
+// resource provider. This is required once per subscription. When creating an export in the Azure portal,
+// it is done automatically. However, API users need to register the subscription. For more information see
+// https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-manager-supported-services .
 type ExportDeliveryDestination struct {
 	// ResourceID - The resource id of the storage account where exports will be delivered.
 	ResourceID *string `json:"resourceId,omitempty"`

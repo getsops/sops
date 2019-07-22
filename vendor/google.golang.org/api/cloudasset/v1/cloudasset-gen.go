@@ -174,6 +174,13 @@ type Asset struct {
 	// for more information.
 	Name string `json:"name,omitempty"`
 
+	// OrgPolicy: Representation of the Cloud Organization Policy set on an
+	// asset. For each
+	// asset, there could be multiple Organization policies with
+	// different
+	// constraints.
+	OrgPolicy []*GoogleCloudOrgpolicyV1Policy `json:"orgPolicy,omitempty"`
+
 	// Resource: Representation of the resource.
 	Resource *Resource `json:"resource,omitempty"`
 
@@ -224,7 +231,7 @@ func (s *Asset) MarshalJSON() ([]byte, error) {
 //             {
 //               "log_type": "DATA_READ",
 //               "exempted_members": [
-//                 "user:foo@gmail.com"
+//                 "user:jose@example.com"
 //               ]
 //             },
 //             {
@@ -236,7 +243,7 @@ func (s *Asset) MarshalJSON() ([]byte, error) {
 //           ]
 //         },
 //         {
-//           "service": "fooservice.googleapis.com"
+//           "service": "sampleservice.googleapis.com"
 //           "audit_log_configs": [
 //             {
 //               "log_type": "DATA_READ",
@@ -244,7 +251,7 @@ func (s *Asset) MarshalJSON() ([]byte, error) {
 //             {
 //               "log_type": "DATA_WRITE",
 //               "exempted_members": [
-//                 "user:bar@gmail.com"
+//                 "user:aliya@example.com"
 //               ]
 //             }
 //           ]
@@ -252,11 +259,11 @@ func (s *Asset) MarshalJSON() ([]byte, error) {
 //       ]
 //     }
 //
-// For fooservice, this policy enables DATA_READ, DATA_WRITE and
+// For sampleservice, this policy enables DATA_READ, DATA_WRITE and
 // ADMIN_READ
-// logging. It also exempts foo@gmail.com from DATA_READ logging,
+// logging. It also exempts jose@example.com from DATA_READ logging,
 // and
-// bar@gmail.com from DATA_WRITE logging.
+// aliya@example.com from DATA_WRITE logging.
 type AuditConfig struct {
 	// AuditLogConfigs: The configuration for logging of each type of
 	// permission.
@@ -302,7 +309,7 @@ func (s *AuditConfig) MarshalJSON() ([]byte, error) {
 //         {
 //           "log_type": "DATA_READ",
 //           "exempted_members": [
-//             "user:foo@gmail.com"
+//             "user:jose@example.com"
 //           ]
 //         },
 //         {
@@ -313,13 +320,20 @@ func (s *AuditConfig) MarshalJSON() ([]byte, error) {
 //
 // This enables 'DATA_READ' and 'DATA_WRITE' logging, while
 // exempting
-// foo@gmail.com from DATA_READ logging.
+// jose@example.com from DATA_READ logging.
 type AuditLogConfig struct {
 	// ExemptedMembers: Specifies the identities that do not cause logging
 	// for this type of
 	// permission.
 	// Follows the same format of Binding.members.
 	ExemptedMembers []string `json:"exemptedMembers,omitempty"`
+
+	// IgnoreChildExemptions: Specifies whether principals can be exempted
+	// for the same LogType in
+	// lower-level resource policies. If true, any lower-level exemptions
+	// will
+	// be ignored.
+	IgnoreChildExemptions bool `json:"ignoreChildExemptions,omitempty"`
 
 	// LogType: The log type that this config enables.
 	//
@@ -410,7 +424,7 @@ type Binding struct {
 	//
 	// * `user:{emailid}`: An email address that represents a specific
 	// Google
-	//    account. For example, `alice@gmail.com` .
+	//    account. For example, `alice@example.com` .
 	//
 	//
 	// * `serviceAccount:{emailid}`: An email address that represents a
@@ -479,6 +493,7 @@ type ExportAssetsRequest struct {
 	//   "CONTENT_TYPE_UNSPECIFIED" - Unspecified content type.
 	//   "RESOURCE" - Resource metadata.
 	//   "IAM_POLICY" - The actual IAM policy set on a resource.
+	//   "ORG_POLICY" - The Cloud Organization Policy set on an asset.
 	ContentType string `json:"contentType,omitempty"`
 
 	// OutputConfig: Required. Output configuration indicating where the
@@ -629,6 +644,407 @@ func (s *GcsDestination) MarshalJSON() ([]byte, error) {
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
 
+// GoogleCloudOrgpolicyV1BooleanPolicy: Used in `policy_type` to specify
+// how `boolean_policy` will behave at this
+// resource.
+type GoogleCloudOrgpolicyV1BooleanPolicy struct {
+	// Enforced: If `true`, then the `Policy` is enforced. If `false`, then
+	// any
+	// configuration is acceptable.
+	//
+	// Suppose you have a
+	// `Constraint`
+	// `constraints/compute.disableSerialPortAccess` with
+	// `constraint_default`
+	// set to `ALLOW`. A `Policy` for that `Constraint` exhibits the
+	// following
+	// behavior:
+	//   - If the `Policy` at this resource has enforced set to `false`,
+	// serial
+	//     port connection attempts will be allowed.
+	//   - If the `Policy` at this resource has enforced set to `true`,
+	// serial
+	//     port connection attempts will be refused.
+	//   - If the `Policy` at this resource is `RestoreDefault`, serial
+	// port
+	//     connection attempts will be allowed.
+	//   - If no `Policy` is set at this resource or anywhere higher in the
+	//     resource hierarchy, serial port connection attempts will be
+	// allowed.
+	//   - If no `Policy` is set at this resource, but one exists higher in
+	// the
+	//     resource hierarchy, the behavior is as if the`Policy` were set
+	// at
+	//     this resource.
+	//
+	// The following examples demonstrate the different possible
+	// layerings:
+	//
+	// Example 1 (nearest `Constraint` wins):
+	//   `organizations/foo` has a `Policy` with:
+	//     {enforced: false}
+	//   `projects/bar` has no `Policy` set.
+	// The constraint at `projects/bar` and `organizations/foo` will not
+	// be
+	// enforced.
+	//
+	// Example 2 (enforcement gets replaced):
+	//   `organizations/foo` has a `Policy` with:
+	//     {enforced: false}
+	//   `projects/bar` has a `Policy` with:
+	//     {enforced: true}
+	// The constraint at `organizations/foo` is not enforced.
+	// The constraint at `projects/bar` is enforced.
+	//
+	// Example 3 (RestoreDefault):
+	//   `organizations/foo` has a `Policy` with:
+	//     {enforced: true}
+	//   `projects/bar` has a `Policy` with:
+	//     {RestoreDefault: {}}
+	// The constraint at `organizations/foo` is enforced.
+	// The constraint at `projects/bar` is not enforced,
+	// because
+	// `constraint_default` for the `Constraint` is `ALLOW`.
+	Enforced bool `json:"enforced,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Enforced") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Enforced") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *GoogleCloudOrgpolicyV1BooleanPolicy) MarshalJSON() ([]byte, error) {
+	type NoMethod GoogleCloudOrgpolicyV1BooleanPolicy
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// GoogleCloudOrgpolicyV1ListPolicy: Used in `policy_type` to specify
+// how `list_policy` behaves at this
+// resource.
+//
+// `ListPolicy` can define specific values and subtrees of Cloud
+// Resource
+// Manager resource hierarchy (`Organizations`, `Folders`, `Projects`)
+// that
+// are allowed or denied by setting the `allowed_values` and
+// `denied_values`
+// fields. This is achieved by using the `under:` and optional `is:`
+// prefixes.
+// The `under:` prefix is used to denote resource subtree values.
+// The `is:` prefix is used to denote specific values, and is required
+// only
+// if the value contains a ":". Values prefixed with "is:" are treated
+// the
+// same as values with no prefix.
+// Ancestry subtrees must be in one of the following formats:
+//     - “projects/<project-id>”, e.g.
+// “projects/tokyo-rain-123”
+//     - “folders/<folder-id>”, e.g. “folders/1234”
+//     - “organizations/<organization-id>”, e.g.
+// “organizations/1234”
+// The `supports_under` field of the associated `Constraint`  defines
+// whether
+// ancestry prefixes can be used. You can set `allowed_values`
+// and
+// `denied_values` in the same `Policy` if `all_values`
+// is
+// `ALL_VALUES_UNSPECIFIED`. `ALLOW` or `DENY` are used to allow or deny
+// all
+// values. If `all_values` is set to either `ALLOW` or
+// `DENY`,
+// `allowed_values` and `denied_values` must be unset.
+type GoogleCloudOrgpolicyV1ListPolicy struct {
+	// AllValues: The policy all_values state.
+	//
+	// Possible values:
+	//   "ALL_VALUES_UNSPECIFIED" - Indicates that allowed_values or
+	// denied_values must be set.
+	//   "ALLOW" - A policy with this set allows all values.
+	//   "DENY" - A policy with this set denies all values.
+	AllValues string `json:"allValues,omitempty"`
+
+	// AllowedValues: List of values allowed  at this resource. Can only be
+	// set if `all_values`
+	// is set to `ALL_VALUES_UNSPECIFIED`.
+	AllowedValues []string `json:"allowedValues,omitempty"`
+
+	// DeniedValues: List of values denied at this resource. Can only be set
+	// if `all_values`
+	// is set to `ALL_VALUES_UNSPECIFIED`.
+	DeniedValues []string `json:"deniedValues,omitempty"`
+
+	// InheritFromParent: Determines the inheritance behavior for this
+	// `Policy`.
+	//
+	// By default, a `ListPolicy` set at a resource supercedes any `Policy`
+	// set
+	// anywhere up the resource hierarchy. However, if `inherit_from_parent`
+	// is
+	// set to `true`, then the values from the effective `Policy` of the
+	// parent
+	// resource are inherited, meaning the values set in this `Policy`
+	// are
+	// added to the values inherited up the hierarchy.
+	//
+	// Setting `Policy` hierarchies that inherit both allowed values and
+	// denied
+	// values isn't recommended in most circumstances to keep the
+	// configuration
+	// simple and understandable. However, it is possible to set a `Policy`
+	// with
+	// `allowed_values` set that inherits a `Policy` with `denied_values`
+	// set.
+	// In this case, the values that are allowed must be in `allowed_values`
+	// and
+	// not present in `denied_values`.
+	//
+	// For example, suppose you have a
+	// `Constraint`
+	// `constraints/serviceuser.services`, which has a `constraint_type`
+	// of
+	// `list_constraint`, and with `constraint_default` set to
+	// `ALLOW`.
+	// Suppose that at the Organization level, a `Policy` is applied
+	// that
+	// restricts the allowed API activations to {`E1`, `E2`}. Then, if
+	// a
+	// `Policy` is applied to a project below the Organization that
+	// has
+	// `inherit_from_parent` set to `false` and field all_values set to
+	// DENY,
+	// then an attempt to activate any API will be denied.
+	//
+	// The following examples demonstrate different possible layerings
+	// for
+	// `projects/bar` parented by `organizations/foo`:
+	//
+	// Example 1 (no inherited values):
+	//   `organizations/foo` has a `Policy` with values:
+	//     {allowed_values: “E1” allowed_values:”E2”}
+	//   `projects/bar` has `inherit_from_parent` `false` and values:
+	//     {allowed_values: "E3" allowed_values: "E4"}
+	// The accepted values at `organizations/foo` are `E1`, `E2`.
+	// The accepted values at `projects/bar` are `E3`, and `E4`.
+	//
+	// Example 2 (inherited values):
+	//   `organizations/foo` has a `Policy` with values:
+	//     {allowed_values: “E1” allowed_values:”E2”}
+	//   `projects/bar` has a `Policy` with values:
+	//     {value: “E3” value: ”E4” inherit_from_parent: true}
+	// The accepted values at `organizations/foo` are `E1`, `E2`.
+	// The accepted values at `projects/bar` are `E1`, `E2`, `E3`, and
+	// `E4`.
+	//
+	// Example 3 (inheriting both allowed and denied values):
+	//   `organizations/foo` has a `Policy` with values:
+	//     {allowed_values: "E1" allowed_values: "E2"}
+	//   `projects/bar` has a `Policy` with:
+	//     {denied_values: "E1"}
+	// The accepted values at `organizations/foo` are `E1`, `E2`.
+	// The value accepted at `projects/bar` is `E2`.
+	//
+	// Example 4 (RestoreDefault):
+	//   `organizations/foo` has a `Policy` with values:
+	//     {allowed_values: “E1” allowed_values:”E2”}
+	//   `projects/bar` has a `Policy` with values:
+	//     {RestoreDefault: {}}
+	// The accepted values at `organizations/foo` are `E1`, `E2`.
+	// The accepted values at `projects/bar` are either all or none
+	// depending on
+	// the value of `constraint_default` (if `ALLOW`, all; if
+	// `DENY`, none).
+	//
+	// Example 5 (no policy inherits parent policy):
+	//   `organizations/foo` has no `Policy` set.
+	//   `projects/bar` has no `Policy` set.
+	// The accepted values at both levels are either all or none depending
+	// on
+	// the value of `constraint_default` (if `ALLOW`, all; if
+	// `DENY`, none).
+	//
+	// Example 6 (ListConstraint allowing all):
+	//   `organizations/foo` has a `Policy` with values:
+	//     {allowed_values: “E1” allowed_values: ”E2”}
+	//   `projects/bar` has a `Policy` with:
+	//     {all: ALLOW}
+	// The accepted values at `organizations/foo` are `E1`, E2`.
+	// Any value is accepted at `projects/bar`.
+	//
+	// Example 7 (ListConstraint allowing none):
+	//   `organizations/foo` has a `Policy` with values:
+	//     {allowed_values: “E1” allowed_values: ”E2”}
+	//   `projects/bar` has a `Policy` with:
+	//     {all: DENY}
+	// The accepted values at `organizations/foo` are `E1`, E2`.
+	// No value is accepted at `projects/bar`.
+	//
+	// Example 10 (allowed and denied subtrees of Resource Manager
+	// hierarchy):
+	// Given the following resource hierarchy
+	//   O1->{F1, F2}; F1->{P1}; F2->{P2, P3},
+	//   `organizations/foo` has a `Policy` with values:
+	//     {allowed_values: "under:organizations/O1"}
+	//   `projects/bar` has a `Policy` with:
+	//     {allowed_values: "under:projects/P3"}
+	//     {denied_values: "under:folders/F2"}
+	// The accepted values at `organizations/foo` are `organizations/O1`,
+	//   `folders/F1`, `folders/F2`, `projects/P1`, `projects/P2`,
+	//   `projects/P3`.
+	// The accepted values at `projects/bar` are `organizations/O1`,
+	//   `folders/F1`, `projects/P1`.
+	InheritFromParent bool `json:"inheritFromParent,omitempty"`
+
+	// SuggestedValue: Optional. The Google Cloud Console will try to
+	// default to a configuration
+	// that matches the value specified in this `Policy`. If
+	// `suggested_value`
+	// is not set, it will inherit the value specified higher in the
+	// hierarchy,
+	// unless `inherit_from_parent` is `false`.
+	SuggestedValue string `json:"suggestedValue,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "AllValues") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "AllValues") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *GoogleCloudOrgpolicyV1ListPolicy) MarshalJSON() ([]byte, error) {
+	type NoMethod GoogleCloudOrgpolicyV1ListPolicy
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// GoogleCloudOrgpolicyV1Policy: Defines a Cloud Organization `Policy`
+// which is used to specify `Constraints`
+// for configurations of Cloud Platform resources.
+type GoogleCloudOrgpolicyV1Policy struct {
+	// BooleanPolicy: For boolean `Constraints`, whether to enforce the
+	// `Constraint` or not.
+	BooleanPolicy *GoogleCloudOrgpolicyV1BooleanPolicy `json:"booleanPolicy,omitempty"`
+
+	// Constraint: The name of the `Constraint` the `Policy` is configuring,
+	// for example,
+	// `constraints/serviceuser.services`.
+	//
+	// Immutable after creation.
+	Constraint string `json:"constraint,omitempty"`
+
+	// Etag: An opaque tag indicating the current version of the `Policy`,
+	// used for
+	// concurrency control.
+	//
+	// When the `Policy` is returned from either a `GetPolicy` or
+	// a
+	// `ListOrgPolicy` request, this `etag` indicates the version of the
+	// current
+	// `Policy` to use when executing a read-modify-write loop.
+	//
+	// When the `Policy` is returned from a `GetEffectivePolicy` request,
+	// the
+	// `etag` will be unset.
+	//
+	// When the `Policy` is used in a `SetOrgPolicy` method, use the `etag`
+	// value
+	// that was returned from a `GetOrgPolicy` request as part of
+	// a
+	// read-modify-write loop for concurrency control. Not setting the
+	// `etag`in a
+	// `SetOrgPolicy` request will result in an unconditional write of
+	// the
+	// `Policy`.
+	Etag string `json:"etag,omitempty"`
+
+	// ListPolicy: List of values either allowed or disallowed.
+	ListPolicy *GoogleCloudOrgpolicyV1ListPolicy `json:"listPolicy,omitempty"`
+
+	// RestoreDefault: Restores the default behavior of the constraint;
+	// independent of
+	// `Constraint` type.
+	RestoreDefault *GoogleCloudOrgpolicyV1RestoreDefault `json:"restoreDefault,omitempty"`
+
+	// UpdateTime: The time stamp the `Policy` was previously updated. This
+	// is set by the
+	// server, not specified by the caller, and represents the last time a
+	// call to
+	// `SetOrgPolicy` was made for that `Policy`. Any value set by the
+	// client will
+	// be ignored.
+	UpdateTime string `json:"updateTime,omitempty"`
+
+	// Version: Version of the `Policy`. Default version is 0;
+	Version int64 `json:"version,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "BooleanPolicy") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "BooleanPolicy") to include
+	// in API requests with the JSON null value. By default, fields with
+	// empty values are omitted from API requests. However, any field with
+	// an empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *GoogleCloudOrgpolicyV1Policy) MarshalJSON() ([]byte, error) {
+	type NoMethod GoogleCloudOrgpolicyV1Policy
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// GoogleCloudOrgpolicyV1RestoreDefault: Ignores policies set above this
+// resource and restores the
+// `constraint_default` enforcement behavior of the specific
+// `Constraint` at
+// this resource.
+//
+// Suppose that `constraint_default` is set to `ALLOW` for
+// the
+// `Constraint` `constraints/serviceuser.services`. Suppose that
+// organization
+// foo.com sets a `Policy` at their Organization resource node that
+// restricts
+// the allowed service activations to deny all service activations.
+// They
+// could then set a `Policy` with the `policy_type` `restore_default`
+// on
+// several experimental projects, restoring the
+// `constraint_default`
+// enforcement of the `Constraint` for only those projects, allowing
+// those
+// projects to have all services activated.
+type GoogleCloudOrgpolicyV1RestoreDefault struct {
+}
+
 // Operation: This resource represents a long-running operation that is
 // the result of a
 // network API call.
@@ -657,7 +1073,8 @@ type Operation struct {
 	// service that
 	// originally returns it. If you use the default HTTP mapping,
 	// the
-	// `name` should have the format of `operations/some/unique/name`.
+	// `name` should be a resource name ending with
+	// `operations/{unique_id}`.
 	Name string `json:"name,omitempty"`
 
 	// Response: The normal response of the operation in case of success.
@@ -809,7 +1226,7 @@ type Policy struct {
 	//
 	// If no `etag` is provided in the call to `setIamPolicy`, then the
 	// existing
-	// policy is overwritten blindly.
+	// policy is overwritten.
 	Etag string `json:"etag,omitempty"`
 
 	// Version: Deprecated.
@@ -922,81 +1339,14 @@ func (s *Resource) MarshalJSON() ([]byte, error) {
 // suitable for
 // different programming environments, including REST APIs and RPC APIs.
 // It is
-// used by [gRPC](https://github.com/grpc). The error model is designed
-// to be:
+// used by [gRPC](https://github.com/grpc). Each `Status` message
+// contains
+// three pieces of data: error code, error message, and error
+// details.
 //
-// - Simple to use and understand for most users
-// - Flexible enough to meet unexpected needs
-//
-// # Overview
-//
-// The `Status` message contains three pieces of data: error code,
-// error
-// message, and error details. The error code should be an enum value
-// of
-// google.rpc.Code, but it may accept additional error codes if needed.
-// The
-// error message should be a developer-facing English message that
-// helps
-// developers *understand* and *resolve* the error. If a localized
-// user-facing
-// error message is needed, put the localized message in the error
-// details or
-// localize it in the client. The optional error details may contain
-// arbitrary
-// information about the error. There is a predefined set of error
-// detail types
-// in the package `google.rpc` that can be used for common error
-// conditions.
-//
-// # Language mapping
-//
-// The `Status` message is the logical representation of the error
-// model, but it
-// is not necessarily the actual wire format. When the `Status` message
-// is
-// exposed in different client libraries and different wire protocols,
-// it can be
-// mapped differently. For example, it will likely be mapped to some
-// exceptions
-// in Java, but more likely mapped to some error codes in C.
-//
-// # Other uses
-//
-// The error model and the `Status` message can be used in a variety
-// of
-// environments, either with or without APIs, to provide a
-// consistent developer experience across different
-// environments.
-//
-// Example uses of this error model include:
-//
-// - Partial errors. If a service needs to return partial errors to the
-// client,
-//     it may embed the `Status` in the normal response to indicate the
-// partial
-//     errors.
-//
-// - Workflow errors. A typical workflow has multiple steps. Each step
-// may
-//     have a `Status` message for error reporting.
-//
-// - Batch operations. If a client uses batch request and batch
-// response, the
-//     `Status` message should be used directly inside batch response,
-// one for
-//     each error sub-response.
-//
-// - Asynchronous operations. If an API call embeds asynchronous
-// operation
-//     results in its response, the status of those operations should
-// be
-//     represented directly using the `Status` message.
-//
-// - Logging. If some API errors are stored in logs, the message
-// `Status` could
-//     be used directly after any stripping needed for security/privacy
-// reasons.
+// You can find out more about this error model and how to work with it
+// in the
+// [API Design Guide](https://cloud.google.com/apis/design/errors).
 type Status struct {
 	// Code: The status code, which should be an enum value of
 	// google.rpc.Code.
@@ -1311,6 +1661,7 @@ func (c *V1BatchGetAssetsHistoryCall) AssetNames(assetNames ...string) *V1BatchG
 //   "CONTENT_TYPE_UNSPECIFIED"
 //   "RESOURCE"
 //   "IAM_POLICY"
+//   "ORG_POLICY"
 func (c *V1BatchGetAssetsHistoryCall) ContentType(contentType string) *V1BatchGetAssetsHistoryCall {
 	c.urlParams_.Set("contentType", contentType)
 	return c
@@ -1450,7 +1801,8 @@ func (c *V1BatchGetAssetsHistoryCall) Do(opts ...googleapi.CallOption) (*BatchGe
 	//       "enum": [
 	//         "CONTENT_TYPE_UNSPECIFIED",
 	//         "RESOURCE",
-	//         "IAM_POLICY"
+	//         "IAM_POLICY",
+	//         "ORG_POLICY"
 	//       ],
 	//       "location": "query",
 	//       "type": "string"

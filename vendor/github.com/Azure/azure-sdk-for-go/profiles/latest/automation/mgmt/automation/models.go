@@ -240,6 +240,7 @@ type ScheduleFrequency = original.ScheduleFrequency
 const (
 	Day     ScheduleFrequency = original.Day
 	Hour    ScheduleFrequency = original.Hour
+	Minute  ScheduleFrequency = original.Minute
 	Month   ScheduleFrequency = original.Month
 	OneTime ScheduleFrequency = original.OneTime
 	Week    ScheduleFrequency = original.Week

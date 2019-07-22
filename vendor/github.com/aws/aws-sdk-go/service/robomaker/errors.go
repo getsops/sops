@@ -50,6 +50,12 @@ const (
 	// The specified resource does not exist.
 	ErrCodeResourceNotFoundException = "ResourceNotFoundException"
 
+	// ErrCodeServiceUnavailableException for service response error code
+	// "ServiceUnavailableException".
+	//
+	// The request has failed due to a temporary failure of the server.
+	ErrCodeServiceUnavailableException = "ServiceUnavailableException"
+
 	// ErrCodeThrottlingException for service response error code
 	// "ThrottlingException".
 	//

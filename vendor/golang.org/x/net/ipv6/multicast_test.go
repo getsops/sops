@@ -205,9 +205,9 @@ func TestPacketConnReadWriteMulticastICMP(t *testing.T) {
 			if toggle {
 				psh = nil
 				if err := p.SetChecksum(true, 2); err != nil {
-					// Solaris never allows to
-					// modify ICMP properties.
-					if runtime.GOOS != "solaris" {
+					// Illumos and Solaris never allow
+					// modification of ICMP properties.
+					if runtime.GOOS != "illumos" && runtime.GOOS != "solaris" {
 						t.Fatal(err)
 					}
 				}

@@ -210,6 +210,10 @@ type GuardDutyAPI interface {
 	ListMembersPages(*guardduty.ListMembersInput, func(*guardduty.ListMembersOutput, bool) bool) error
 	ListMembersPagesWithContext(aws.Context, *guardduty.ListMembersInput, func(*guardduty.ListMembersOutput, bool) bool, ...request.Option) error
 
+	ListTagsForResource(*guardduty.ListTagsForResourceInput) (*guardduty.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *guardduty.ListTagsForResourceInput, ...request.Option) (*guardduty.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*guardduty.ListTagsForResourceInput) (*request.Request, *guardduty.ListTagsForResourceOutput)
+
 	ListThreatIntelSets(*guardduty.ListThreatIntelSetsInput) (*guardduty.ListThreatIntelSetsOutput, error)
 	ListThreatIntelSetsWithContext(aws.Context, *guardduty.ListThreatIntelSetsInput, ...request.Option) (*guardduty.ListThreatIntelSetsOutput, error)
 	ListThreatIntelSetsRequest(*guardduty.ListThreatIntelSetsInput) (*request.Request, *guardduty.ListThreatIntelSetsOutput)
@@ -225,9 +229,17 @@ type GuardDutyAPI interface {
 	StopMonitoringMembersWithContext(aws.Context, *guardduty.StopMonitoringMembersInput, ...request.Option) (*guardduty.StopMonitoringMembersOutput, error)
 	StopMonitoringMembersRequest(*guardduty.StopMonitoringMembersInput) (*request.Request, *guardduty.StopMonitoringMembersOutput)
 
+	TagResource(*guardduty.TagResourceInput) (*guardduty.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *guardduty.TagResourceInput, ...request.Option) (*guardduty.TagResourceOutput, error)
+	TagResourceRequest(*guardduty.TagResourceInput) (*request.Request, *guardduty.TagResourceOutput)
+
 	UnarchiveFindings(*guardduty.UnarchiveFindingsInput) (*guardduty.UnarchiveFindingsOutput, error)
 	UnarchiveFindingsWithContext(aws.Context, *guardduty.UnarchiveFindingsInput, ...request.Option) (*guardduty.UnarchiveFindingsOutput, error)
 	UnarchiveFindingsRequest(*guardduty.UnarchiveFindingsInput) (*request.Request, *guardduty.UnarchiveFindingsOutput)
+
+	UntagResource(*guardduty.UntagResourceInput) (*guardduty.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *guardduty.UntagResourceInput, ...request.Option) (*guardduty.UntagResourceOutput, error)
+	UntagResourceRequest(*guardduty.UntagResourceInput) (*request.Request, *guardduty.UntagResourceOutput)
 
 	UpdateDetector(*guardduty.UpdateDetectorInput) (*guardduty.UpdateDetectorOutput, error)
 	UpdateDetectorWithContext(aws.Context, *guardduty.UpdateDetectorInput, ...request.Option) (*guardduty.UpdateDetectorOutput, error)

@@ -1,0 +1,22 @@
+{
+  "tests": [
+    {
+      "description": "update-paths: Delete cannot be anywhere inside an array value",
+      "comment": "The Delete sentinel must be the value of a field. Deletes are implemented\nby turning the path to the Delete sentinel into a FieldPath, and FieldPaths do not support\narray indexing.",
+      "updatePaths": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "fieldPaths": [
+          {
+            "field": [
+              "a"
+            ]
+          }
+        ],
+        "jsonValues": [
+          "[1, {\"b\": \"Delete\"}]"
+        ],
+        "isError": true
+      }
+    }
+  ]
+}

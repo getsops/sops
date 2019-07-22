@@ -1,0 +1,30 @@
+{
+  "tests": [
+    {
+      "description": "update: Delete alone",
+      "comment": "If the input data consists solely of Deletes, then the update\noperation has no map, just an update mask.",
+      "update": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "jsonData": "{\"a\": \"Delete\"}",
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d"
+              },
+              "updateMask": {
+                "fieldPaths": [
+                  "a"
+                ]
+              },
+              "currentDocument": {
+                "exists": true
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

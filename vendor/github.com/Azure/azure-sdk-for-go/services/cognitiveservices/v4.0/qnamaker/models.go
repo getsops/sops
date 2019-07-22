@@ -112,6 +112,12 @@ func PossibleOperationStateTypeValues() []OperationStateType {
 	return []OperationStateType{Failed, NotStarted, Running, Succeeded}
 }
 
+// ActiveLearningSettingsDTO active Learning settings of the endpoint.
+type ActiveLearningSettingsDTO struct {
+	// Enable - True/False string providing Active Learning
+	Enable *string `json:"enable,omitempty"`
+}
+
 // AlterationsDTO collection of words that are synonyms.
 type AlterationsDTO struct {
 	// Alterations - Words that are synonymous with each other.
@@ -169,6 +175,19 @@ type EndpointKeysDTO struct {
 	InstalledVersion *string `json:"installedVersion,omitempty"`
 	// LastStableVersion - Latest version of runtime.
 	LastStableVersion *string `json:"lastStableVersion,omitempty"`
+}
+
+// EndpointSettingsDTO endpoint settings.
+type EndpointSettingsDTO struct {
+	autorest.Response `json:"-"`
+	// ActiveLearning - Active Learning settings of the endpoint.
+	ActiveLearning *EndpointSettingsDTOActiveLearning `json:"activeLearning,omitempty"`
+}
+
+// EndpointSettingsDTOActiveLearning active Learning settings of the endpoint.
+type EndpointSettingsDTOActiveLearning struct {
+	// Enable - True/False string providing Active Learning
+	Enable *string `json:"enable,omitempty"`
 }
 
 // Error the error object. As per Microsoft One API guidelines -
@@ -347,6 +366,12 @@ type QnADTOContext struct {
 type ReplaceKbDTO struct {
 	// QnAList - List of Q-A (QnADTO) to be added to the knowledgebase. Q-A Ids are assigned by the service and should be omitted.
 	QnAList *[]QnADTO `json:"qnAList,omitempty"`
+}
+
+// String ...
+type String struct {
+	autorest.Response `json:"-"`
+	Value             *string `json:"value,omitempty"`
 }
 
 // UpdateContextDTO update Body schema to represent context to be updated

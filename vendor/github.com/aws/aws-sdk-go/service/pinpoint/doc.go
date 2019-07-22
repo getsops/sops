@@ -3,6 +3,8 @@
 // Package pinpoint provides the client and types for making API
 // requests to Amazon Pinpoint.
 //
+// Doc Engage API - Amazon Pinpoint API
+//
 // See https://docs.aws.amazon.com/goto/WebAPI/pinpoint-2016-12-01 for more information on this service.
 //
 // See pinpoint package documentation for more information.

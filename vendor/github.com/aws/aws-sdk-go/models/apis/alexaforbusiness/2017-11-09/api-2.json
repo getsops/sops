@@ -1514,7 +1514,9 @@
         "DisplayName":{"shape":"ContactName"},
         "FirstName":{"shape":"ContactName"},
         "LastName":{"shape":"ContactName"},
-        "PhoneNumber":{"shape":"E164PhoneNumber"}
+        "PhoneNumber":{"shape":"RawPhoneNumber"},
+        "PhoneNumbers":{"shape":"PhoneNumberList"},
+        "SipAddresses":{"shape":"SipAddressList"}
       }
     },
     "ContactData":{
@@ -1524,7 +1526,9 @@
         "DisplayName":{"shape":"ContactName"},
         "FirstName":{"shape":"ContactName"},
         "LastName":{"shape":"ContactName"},
-        "PhoneNumber":{"shape":"E164PhoneNumber"}
+        "PhoneNumber":{"shape":"RawPhoneNumber"},
+        "PhoneNumbers":{"shape":"PhoneNumberList"},
+        "SipAddresses":{"shape":"SipAddressList"}
       }
     },
     "ContactDataList":{
@@ -1624,7 +1628,9 @@
         "DisplayName":{"shape":"ContactName"},
         "FirstName":{"shape":"ContactName"},
         "LastName":{"shape":"ContactName"},
-        "PhoneNumber":{"shape":"E164PhoneNumber"},
+        "PhoneNumber":{"shape":"RawPhoneNumber"},
+        "PhoneNumbers":{"shape":"PhoneNumberList"},
+        "SipAddresses":{"shape":"SipAddressList"},
         "ClientRequestToken":{
           "shape":"ClientRequestToken",
           "idempotencyToken":true
@@ -2193,11 +2199,6 @@
         "METRIC",
         "IMPERIAL"
       ]
-    },
-    "E164PhoneNumber":{
-      "type":"string",
-      "pattern":"^\\+\\d{8,}$",
-      "sensitive":true
     },
     "Email":{
       "type":"string",
@@ -2904,6 +2905,32 @@
         "OneClickPinDelay":{"shape":"OneClickPinDelay"}
       }
     },
+    "PhoneNumber":{
+      "type":"structure",
+      "required":[
+        "Number",
+        "Type"
+      ],
+      "members":{
+        "Number":{"shape":"RawPhoneNumber"},
+        "Type":{"shape":"PhoneNumberType"}
+      }
+    },
+    "PhoneNumberList":{
+      "type":"list",
+      "member":{"shape":"PhoneNumber"},
+      "max":3,
+      "min":0
+    },
+    "PhoneNumberType":{
+      "type":"string",
+      "enum":[
+        "MOBILE",
+        "WORK",
+        "HOME"
+      ],
+      "sensitive":true
+    },
     "PrivacyPolicy":{"type":"string"},
     "ProductDescription":{"type":"string"},
     "ProductId":{
@@ -3014,6 +3041,13 @@
       "type":"structure",
       "members":{
       }
+    },
+    "RawPhoneNumber":{
+      "type":"string",
+      "max":50,
+      "min":0,
+      "pattern":"^[\\+0-9\\#\\,\\(][\\+0-9\\-\\.\\/\\(\\)\\,\\#\\s]+$",
+      "sensitive":true
     },
     "RegisterAVSDeviceRequest":{
       "type":"structure",
@@ -3360,6 +3394,35 @@
       "member":{"shape":"SkillId"},
       "max":3,
       "min":0
+    },
+    "SipAddress":{
+      "type":"structure",
+      "required":[
+        "Uri",
+        "Type"
+      ],
+      "members":{
+        "Uri":{"shape":"SipUri"},
+        "Type":{"shape":"SipType"}
+      }
+    },
+    "SipAddressList":{
+      "type":"list",
+      "member":{"shape":"SipAddress"},
+      "max":1,
+      "min":0
+    },
+    "SipType":{
+      "type":"string",
+      "enum":["WORK"],
+      "sensitive":true
+    },
+    "SipUri":{
+      "type":"string",
+      "max":256,
+      "min":1,
+      "pattern":"^sip[s]?:([^@:]+)\\@([^@]+)$",
+      "sensitive":true
     },
     "SkillDetails":{
       "type":"structure",
@@ -3751,7 +3814,9 @@
         "DisplayName":{"shape":"ContactName"},
         "FirstName":{"shape":"ContactName"},
         "LastName":{"shape":"ContactName"},
-        "PhoneNumber":{"shape":"E164PhoneNumber"}
+        "PhoneNumber":{"shape":"RawPhoneNumber"},
+        "PhoneNumbers":{"shape":"PhoneNumberList"},
+        "SipAddresses":{"shape":"SipAddressList"}
       }
     },
     "UpdateContactResponse":{

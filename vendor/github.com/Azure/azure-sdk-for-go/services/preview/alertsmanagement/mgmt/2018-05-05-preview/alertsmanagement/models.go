@@ -282,11 +282,11 @@ func PossibleTimeRangeValues() []TimeRange {
 type Alert struct {
 	autorest.Response `json:"-"`
 	*AlertProperties  `json:"properties,omitempty"`
-	// ID - Azure resource Id
+	// ID - READ-ONLY; Azure resource Id
 	ID *string `json:"id,omitempty"`
-	// Type - Azure resource type
+	// Type - READ-ONLY; Azure resource type
 	Type *string `json:"type,omitempty"`
-	// Name - Azure resource name
+	// Name - READ-ONLY; Azure resource name
 	Name *string `json:"name,omitempty"`
 }
 
@@ -295,15 +295,6 @@ func (a Alert) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if a.AlertProperties != nil {
 		objectMap["properties"] = a.AlertProperties
-	}
-	if a.ID != nil {
-		objectMap["id"] = a.ID
-	}
-	if a.Type != nil {
-		objectMap["type"] = a.Type
-	}
-	if a.Name != nil {
-		objectMap["name"] = a.Name
 	}
 	return json.Marshal(objectMap)
 }
@@ -363,11 +354,11 @@ func (a *Alert) UnmarshalJSON(body []byte) error {
 type AlertModification struct {
 	autorest.Response `json:"-"`
 	Properties        *AlertModificationProperties `json:"properties,omitempty"`
-	// ID - Azure resource Id
+	// ID - READ-ONLY; Azure resource Id
 	ID *string `json:"id,omitempty"`
-	// Type - Azure resource type
+	// Type - READ-ONLY; Azure resource type
 	Type *string `json:"type,omitempty"`
-	// Name - Azure resource name
+	// Name - READ-ONLY; Azure resource name
 	Name *string `json:"name,omitempty"`
 }
 
@@ -391,7 +382,7 @@ type AlertModificationItem struct {
 
 // AlertModificationProperties properties of the alert modification item.
 type AlertModificationProperties struct {
-	// AlertID - Unique Id of the alert for which the history is being retrieved
+	// AlertID - READ-ONLY; Unique Id of the alert for which the history is being retrieved
 	AlertID *string `json:"alertId,omitempty"`
 	// Modifications - Modification details
 	Modifications *[]AlertModificationItem `json:"modifications,omitempty"`
@@ -399,13 +390,13 @@ type AlertModificationProperties struct {
 
 // AlertProperties an alert created in alert management service.
 type AlertProperties struct {
-	// Severity - Severity of alert Sev1 being highest and Sev3 being lowest. Possible values include: 'Sev0', 'Sev1', 'Sev2', 'Sev3', 'Sev4'
+	// Severity - READ-ONLY; Severity of alert Sev1 being highest and Sev3 being lowest. Possible values include: 'Sev0', 'Sev1', 'Sev2', 'Sev3', 'Sev4'
 	Severity Severity `json:"severity,omitempty"`
-	// SignalType - Log based alert or metric based alert. Possible values include: 'Metric', 'Log', 'Unknown'
+	// SignalType - READ-ONLY; Log based alert or metric based alert. Possible values include: 'Metric', 'Log', 'Unknown'
 	SignalType SignalType `json:"signalType,omitempty"`
-	// AlertState - Alert object state. Possible values include: 'AlertStateNew', 'AlertStateAcknowledged', 'AlertStateClosed'
+	// AlertState - READ-ONLY; Alert object state. Possible values include: 'AlertStateNew', 'AlertStateAcknowledged', 'AlertStateClosed'
 	AlertState AlertState `json:"alertState,omitempty"`
-	// MonitorCondition - Condition of the rule at the monitor service. Possible values include: 'Fired', 'Resolved'
+	// MonitorCondition - READ-ONLY; Condition of the rule at the monitor service. Possible values include: 'Fired', 'Resolved'
 	MonitorCondition MonitorCondition `json:"monitorCondition,omitempty"`
 	// TargetResource - Target ARM resource, on which alert got created.
 	TargetResource *string `json:"targetResource,omitempty"`
@@ -415,21 +406,21 @@ type AlertProperties struct {
 	TargetResourceGroup *string `json:"targetResourceGroup,omitempty"`
 	// TargetResourceType - Resource type of target ARM resource
 	TargetResourceType *string `json:"targetResourceType,omitempty"`
-	// MonitorService - Monitor service which is the source of the alert object. Possible values include: 'Platform', 'ApplicationInsights', 'LogAnalytics', 'InfrastructureInsights', 'ActivityLogAdministrative', 'ActivityLogSecurity', 'ActivityLogRecommendation', 'ActivityLogPolicy', 'ActivityLogAutoscale', 'ServiceHealth', 'SmartDetector', 'Zabbix', 'SCOM', 'Nagios'
+	// MonitorService - READ-ONLY; Monitor service which is the source of the alert object. Possible values include: 'Platform', 'ApplicationInsights', 'LogAnalytics', 'InfrastructureInsights', 'ActivityLogAdministrative', 'ActivityLogSecurity', 'ActivityLogRecommendation', 'ActivityLogPolicy', 'ActivityLogAutoscale', 'ServiceHealth', 'SmartDetector', 'Zabbix', 'SCOM', 'Nagios'
 	MonitorService MonitorService `json:"monitorService,omitempty"`
-	// SourceCreatedID - Unique Id created by monitor service
+	// SourceCreatedID - READ-ONLY; Unique Id created by monitor service
 	SourceCreatedID *string `json:"sourceCreatedId,omitempty"`
-	// SmartGroupID - Unique Id of the smart group
+	// SmartGroupID - READ-ONLY; Unique Id of the smart group
 	SmartGroupID *string `json:"smartGroupId,omitempty"`
-	// SmartGroupingReason - Reason for addition to a smart group
+	// SmartGroupingReason - READ-ONLY; Reason for addition to a smart group
 	SmartGroupingReason *string `json:"smartGroupingReason,omitempty"`
-	// StartDateTime - Creation time(ISO-8601 format).
+	// StartDateTime - READ-ONLY; Creation time(ISO-8601 format).
 	StartDateTime *date.Time `json:"startDateTime,omitempty"`
-	// LastModifiedDateTime - Last modification time(ISO-8601 format).
+	// LastModifiedDateTime - READ-ONLY; Last modification time(ISO-8601 format).
 	LastModifiedDateTime *date.Time `json:"lastModifiedDateTime,omitempty"`
-	// LastModifiedUserName - User who last modified the alert.
+	// LastModifiedUserName - READ-ONLY; User who last modified the alert.
 	LastModifiedUserName *string `json:"lastModifiedUserName,omitempty"`
-	// Payload - More details which are contextual to the monitor service.
+	// Payload - READ-ONLY; More details which are contextual to the monitor service.
 	Payload interface{} `json:"payload,omitempty"`
 }
 
@@ -498,6 +489,11 @@ func (iter AlertsListIterator) Value() Alert {
 		return Alert{}
 	}
 	return iter.page.Values()[iter.i]
+}
+
+// Creates a new instance of the AlertsListIterator type.
+func NewAlertsListIterator(page AlertsListPage) AlertsListIterator {
+	return AlertsListIterator{page: page}
 }
 
 // IsEmpty returns true if the ListResult contains no values.
@@ -569,15 +565,20 @@ func (page AlertsListPage) Values() []Alert {
 	return *page.al.Value
 }
 
+// Creates a new instance of the AlertsListPage type.
+func NewAlertsListPage(getNextPage func(context.Context, AlertsList) (AlertsList, error)) AlertsListPage {
+	return AlertsListPage{fn: getNextPage}
+}
+
 // AlertsSummary summary of the alerts.
 type AlertsSummary struct {
 	autorest.Response        `json:"-"`
 	*AlertsSummaryProperties `json:"properties,omitempty"`
-	// ID - Azure resource Id
+	// ID - READ-ONLY; Azure resource Id
 	ID *string `json:"id,omitempty"`
-	// Type - Azure resource type
+	// Type - READ-ONLY; Azure resource type
 	Type *string `json:"type,omitempty"`
-	// Name - Azure resource name
+	// Name - READ-ONLY; Azure resource name
 	Name *string `json:"name,omitempty"`
 }
 
@@ -586,15 +587,6 @@ func (as AlertsSummary) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if as.AlertsSummaryProperties != nil {
 		objectMap["properties"] = as.AlertsSummaryProperties
-	}
-	if as.ID != nil {
-		objectMap["id"] = as.ID
-	}
-	if as.Type != nil {
-		objectMap["type"] = as.Type
-	}
-	if as.Name != nil {
-		objectMap["name"] = as.Name
 	}
 	return json.Marshal(objectMap)
 }
@@ -1002,6 +994,11 @@ func (iter OperationsListIterator) Value() Operation {
 	return iter.page.Values()[iter.i]
 }
 
+// Creates a new instance of the OperationsListIterator type.
+func NewOperationsListIterator(page OperationsListPage) OperationsListIterator {
+	return OperationsListIterator{page: page}
+}
+
 // IsEmpty returns true if the ListResult contains no values.
 func (ol OperationsList) IsEmpty() bool {
 	return ol.Value == nil || len(*ol.Value) == 0
@@ -1071,13 +1068,18 @@ func (page OperationsListPage) Values() []Operation {
 	return *page.ol.Value
 }
 
+// Creates a new instance of the OperationsListPage type.
+func NewOperationsListPage(getNextPage func(context.Context, OperationsList) (OperationsList, error)) OperationsListPage {
+	return OperationsListPage{fn: getNextPage}
+}
+
 // Resource an azure resource object
 type Resource struct {
-	// ID - Azure resource Id
+	// ID - READ-ONLY; Azure resource Id
 	ID *string `json:"id,omitempty"`
-	// Type - Azure resource type
+	// Type - READ-ONLY; Azure resource type
 	Type *string `json:"type,omitempty"`
-	// Name - Azure resource name
+	// Name - READ-ONLY; Azure resource name
 	Name *string `json:"name,omitempty"`
 }
 
@@ -1085,11 +1087,11 @@ type Resource struct {
 type SmartGroup struct {
 	autorest.Response     `json:"-"`
 	*SmartGroupProperties `json:"properties,omitempty"`
-	// ID - Azure resource Id
+	// ID - READ-ONLY; Azure resource Id
 	ID *string `json:"id,omitempty"`
-	// Type - Azure resource type
+	// Type - READ-ONLY; Azure resource type
 	Type *string `json:"type,omitempty"`
-	// Name - Azure resource name
+	// Name - READ-ONLY; Azure resource name
 	Name *string `json:"name,omitempty"`
 }
 
@@ -1098,15 +1100,6 @@ func (sg SmartGroup) MarshalJSON() ([]byte, error) {
 	objectMap := make(map[string]interface{})
 	if sg.SmartGroupProperties != nil {
 		objectMap["properties"] = sg.SmartGroupProperties
-	}
-	if sg.ID != nil {
-		objectMap["id"] = sg.ID
-	}
-	if sg.Type != nil {
-		objectMap["type"] = sg.Type
-	}
-	if sg.Name != nil {
-		objectMap["name"] = sg.Name
 	}
 	return json.Marshal(objectMap)
 }
@@ -1174,11 +1167,11 @@ type SmartGroupAggregatedProperty struct {
 type SmartGroupModification struct {
 	autorest.Response `json:"-"`
 	Properties        *SmartGroupModificationProperties `json:"properties,omitempty"`
-	// ID - Azure resource Id
+	// ID - READ-ONLY; Azure resource Id
 	ID *string `json:"id,omitempty"`
-	// Type - Azure resource type
+	// Type - READ-ONLY; Azure resource type
 	Type *string `json:"type,omitempty"`
-	// Name - Azure resource name
+	// Name - READ-ONLY; Azure resource name
 	Name *string `json:"name,omitempty"`
 }
 
@@ -1202,7 +1195,7 @@ type SmartGroupModificationItem struct {
 
 // SmartGroupModificationProperties properties of the smartGroup modification item.
 type SmartGroupModificationProperties struct {
-	// SmartGroupID - Unique Id of the smartGroup for which the history is being retrieved
+	// SmartGroupID - READ-ONLY; Unique Id of the smartGroup for which the history is being retrieved
 	SmartGroupID *string `json:"smartGroupId,omitempty"`
 	// Modifications - Modification details
 	Modifications *[]SmartGroupModificationItem `json:"modifications,omitempty"`
@@ -1214,15 +1207,15 @@ type SmartGroupModificationProperties struct {
 type SmartGroupProperties struct {
 	// AlertsCount - Total number of alerts in smart group
 	AlertsCount *int32 `json:"alertsCount,omitempty"`
-	// SmartGroupState - Smart group state. Possible values include: 'StateNew', 'StateAcknowledged', 'StateClosed'
+	// SmartGroupState - READ-ONLY; Smart group state. Possible values include: 'StateNew', 'StateAcknowledged', 'StateClosed'
 	SmartGroupState State `json:"smartGroupState,omitempty"`
-	// Severity - Severity of smart group is the highest(Sev0 >... > Sev4) severity of all the alerts in the group. Possible values include: 'Sev0', 'Sev1', 'Sev2', 'Sev3', 'Sev4'
+	// Severity - READ-ONLY; Severity of smart group is the highest(Sev0 >... > Sev4) severity of all the alerts in the group. Possible values include: 'Sev0', 'Sev1', 'Sev2', 'Sev3', 'Sev4'
 	Severity Severity `json:"severity,omitempty"`
-	// StartDateTime - Creation time of smart group. Date-Time in ISO-8601 format.
+	// StartDateTime - READ-ONLY; Creation time of smart group. Date-Time in ISO-8601 format.
 	StartDateTime *date.Time `json:"startDateTime,omitempty"`
-	// LastModifiedDateTime - Last updated time of smart group. Date-Time in ISO-8601 format.
+	// LastModifiedDateTime - READ-ONLY; Last updated time of smart group. Date-Time in ISO-8601 format.
 	LastModifiedDateTime *date.Time `json:"lastModifiedDateTime,omitempty"`
-	// LastModifiedUserName - Last modified by user name.
+	// LastModifiedUserName - READ-ONLY; Last modified by user name.
 	LastModifiedUserName *string `json:"lastModifiedUserName,omitempty"`
 	// Resources - Summary of target resources in the smart group
 	Resources *[]SmartGroupAggregatedProperty `json:"resources,omitempty"`

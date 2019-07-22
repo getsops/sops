@@ -3108,7 +3108,7 @@ func NewProximityPlacementGroupListResultPage(getNextPage func(context.Context, 
 
 // ProximityPlacementGroupProperties describes the properties of a Proximity Placement Group.
 type ProximityPlacementGroupProperties struct {
-	// ProximityPlacementGroupType - Specifies the type of the proximity placement group. <br><br> Possible values are: <br><br> **Standard** <br><br> **Ultra**. Possible values include: 'Standard', 'Ultra'
+	// ProximityPlacementGroupType - Specifies the type of the proximity placement group. <br><br> Possible values are: <br><br> **Standard** : Co-locate resources within an Azure region or Availability Zone. <br><br> **Ultra** : For future use. Possible values include: 'Standard', 'Ultra'
 	ProximityPlacementGroupType ProximityPlacementGroupType `json:"proximityPlacementGroupType,omitempty"`
 	// VirtualMachines - READ-ONLY; A list of references to all virtual machines in the proximity placement group.
 	VirtualMachines *[]SubResource `json:"virtualMachines,omitempty"`

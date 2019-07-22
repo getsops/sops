@@ -1,0 +1,91 @@
+{
+  "tests": [
+    {
+      "description": "query: cursor method, doc snapshot, existing orderBy __name__",
+      "comment": "If there is an existing orderBy clause on __name__,\nno changes are made to the list of orderBy clauses.",
+      "query": {
+        "collPath": "projects/projectID/databases/(default)/documents/C",
+        "clauses": [
+          {
+            "orderBy": {
+              "path": {
+                "field": [
+                  "a"
+                ]
+              },
+              "direction": "desc"
+            }
+          },
+          {
+            "orderBy": {
+              "path": {
+                "field": [
+                  "__name__"
+                ]
+              },
+              "direction": "asc"
+            }
+          },
+          {
+            "startAt": {
+              "docSnapshot": {
+                "path": "projects/projectID/databases/(default)/documents/C/D",
+                "jsonData": "{\"a\": 7, \"b\": 8}"
+              }
+            }
+          },
+          {
+            "endAt": {
+              "docSnapshot": {
+                "path": "projects/projectID/databases/(default)/documents/C/D",
+                "jsonData": "{\"a\": 7, \"b\": 8}"
+              }
+            }
+          }
+        ],
+        "query": {
+          "from": [
+            {
+              "collectionId": "C"
+            }
+          ],
+          "orderBy": [
+            {
+              "field": {
+                "fieldPath": "a"
+              },
+              "direction": "DESCENDING"
+            },
+            {
+              "field": {
+                "fieldPath": "__name__"
+              },
+              "direction": "ASCENDING"
+            }
+          ],
+          "startAt": {
+            "values": [
+              {
+                "integerValue": "7"
+              },
+              {
+                "referenceValue": "projects/projectID/databases/(default)/documents/C/D"
+              }
+            ],
+            "before": true
+          },
+          "endAt": {
+            "values": [
+              {
+                "integerValue": "7"
+              },
+              {
+                "referenceValue": "projects/projectID/databases/(default)/documents/C/D"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

@@ -694,7 +694,8 @@
                     "https://www.googleapis.com/auth/bigtable.admin.instance",
                     "https://www.googleapis.com/auth/cloud-bigtable.admin",
                     "https://www.googleapis.com/auth/cloud-bigtable.admin.cluster",
-                    "https://www.googleapis.com/auth/cloud-platform"
+                    "https://www.googleapis.com/auth/cloud-platform",
+                    "https://www.googleapis.com/auth/cloud-platform.read-only"
                   ]
                 },
                 "list": {
@@ -707,7 +708,7 @@
                   ],
                   "parameters": {
                     "pageSize": {
-                      "description": "Maximum number of results per page.\nCURRENTLY UNIMPLEMENTED AND IGNORED.",
+                      "description": "Maximum number of results per page.\n\nA page_size of zero lets the server choose the number of items to return.\nA page_size which is strictly positive will return at most that many items.\nA negative page_size will cause an error.\n\nFollowing the first request, subsequent paginated calls are not required\nto pass a page_size. If a page_size is set in subsequent calls, it must\nmatch the page_size given in the first request.",
                       "format": "int32",
                       "location": "query",
                       "type": "integer"
@@ -1157,38 +1158,6 @@
                     "https://www.googleapis.com/auth/cloud-platform.read-only"
                   ]
                 },
-                "getIamPolicy": {
-                  "description": "Gets the access control policy for an instance resource. Returns an empty\npolicy if an table exists but does not have a policy set.",
-                  "flatPath": "v2/projects/{projectsId}/instances/{instancesId}/tables/{tablesId}:getIamPolicy",
-                  "httpMethod": "POST",
-                  "id": "bigtableadmin.projects.instances.tables.getIamPolicy",
-                  "parameterOrder": [
-                    "resource"
-                  ],
-                  "parameters": {
-                    "resource": {
-                      "description": "REQUIRED: The resource for which the policy is being requested.\nSee the operation documentation for the appropriate value for this field.",
-                      "location": "path",
-                      "pattern": "^projects/[^/]+/instances/[^/]+/tables/[^/]+$",
-                      "required": true,
-                      "type": "string"
-                    }
-                  },
-                  "path": "v2/{+resource}:getIamPolicy",
-                  "request": {
-                    "$ref": "GetIamPolicyRequest"
-                  },
-                  "response": {
-                    "$ref": "Policy"
-                  },
-                  "scopes": [
-                    "https://www.googleapis.com/auth/bigtable.admin",
-                    "https://www.googleapis.com/auth/bigtable.admin.table",
-                    "https://www.googleapis.com/auth/cloud-bigtable.admin",
-                    "https://www.googleapis.com/auth/cloud-bigtable.admin.table",
-                    "https://www.googleapis.com/auth/cloud-platform"
-                  ]
-                },
                 "list": {
                   "description": "Lists all tables served from a specified instance.",
                   "flatPath": "v2/projects/{projectsId}/instances/{instancesId}/tables",
@@ -1273,79 +1242,97 @@
                     "https://www.googleapis.com/auth/cloud-bigtable.admin.table",
                     "https://www.googleapis.com/auth/cloud-platform"
                   ]
-                },
-                "setIamPolicy": {
-                  "description": "Sets the access control policy on a table resource. Replaces any existing\npolicy.",
-                  "flatPath": "v2/projects/{projectsId}/instances/{instancesId}/tables/{tablesId}:setIamPolicy",
-                  "httpMethod": "POST",
-                  "id": "bigtableadmin.projects.instances.tables.setIamPolicy",
-                  "parameterOrder": [
-                    "resource"
-                  ],
-                  "parameters": {
-                    "resource": {
-                      "description": "REQUIRED: The resource for which the policy is being specified.\nSee the operation documentation for the appropriate value for this field.",
-                      "location": "path",
-                      "pattern": "^projects/[^/]+/instances/[^/]+/tables/[^/]+$",
-                      "required": true,
-                      "type": "string"
-                    }
-                  },
-                  "path": "v2/{+resource}:setIamPolicy",
-                  "request": {
-                    "$ref": "SetIamPolicyRequest"
-                  },
-                  "response": {
-                    "$ref": "Policy"
-                  },
-                  "scopes": [
-                    "https://www.googleapis.com/auth/bigtable.admin",
-                    "https://www.googleapis.com/auth/bigtable.admin.table",
-                    "https://www.googleapis.com/auth/cloud-bigtable.admin",
-                    "https://www.googleapis.com/auth/cloud-bigtable.admin.table",
-                    "https://www.googleapis.com/auth/cloud-platform"
-                  ]
-                },
-                "testIamPermissions": {
-                  "description": "Returns permissions that the caller has on the specified table resource.",
-                  "flatPath": "v2/projects/{projectsId}/instances/{instancesId}/tables/{tablesId}:testIamPermissions",
-                  "httpMethod": "POST",
-                  "id": "bigtableadmin.projects.instances.tables.testIamPermissions",
-                  "parameterOrder": [
-                    "resource"
-                  ],
-                  "parameters": {
-                    "resource": {
-                      "description": "REQUIRED: The resource for which the policy detail is being requested.\nSee the operation documentation for the appropriate value for this field.",
-                      "location": "path",
-                      "pattern": "^projects/[^/]+/instances/[^/]+/tables/[^/]+$",
-                      "required": true,
-                      "type": "string"
-                    }
-                  },
-                  "path": "v2/{+resource}:testIamPermissions",
-                  "request": {
-                    "$ref": "TestIamPermissionsRequest"
-                  },
-                  "response": {
-                    "$ref": "TestIamPermissionsResponse"
-                  },
-                  "scopes": [
-                    "https://www.googleapis.com/auth/bigtable.admin",
-                    "https://www.googleapis.com/auth/bigtable.admin.table",
-                    "https://www.googleapis.com/auth/cloud-bigtable.admin",
-                    "https://www.googleapis.com/auth/cloud-bigtable.admin.table",
-                    "https://www.googleapis.com/auth/cloud-platform"
-                  ]
                 }
               }
+            }
+          }
+        },
+        "locations": {
+          "methods": {
+            "get": {
+              "description": "Gets information about a location.",
+              "flatPath": "v2/projects/{projectsId}/locations/{locationsId}",
+              "httpMethod": "GET",
+              "id": "bigtableadmin.projects.locations.get",
+              "parameterOrder": [
+                "name"
+              ],
+              "parameters": {
+                "name": {
+                  "description": "Resource name for the location.",
+                  "location": "path",
+                  "pattern": "^projects/[^/]+/locations/[^/]+$",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "path": "v2/{+name}",
+              "response": {
+                "$ref": "Location"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/bigtable.admin",
+                "https://www.googleapis.com/auth/bigtable.admin.cluster",
+                "https://www.googleapis.com/auth/bigtable.admin.instance",
+                "https://www.googleapis.com/auth/cloud-bigtable.admin",
+                "https://www.googleapis.com/auth/cloud-bigtable.admin.cluster",
+                "https://www.googleapis.com/auth/cloud-platform",
+                "https://www.googleapis.com/auth/cloud-platform.read-only"
+              ]
+            },
+            "list": {
+              "description": "Lists information about the supported locations for this service.",
+              "flatPath": "v2/projects/{projectsId}/locations",
+              "httpMethod": "GET",
+              "id": "bigtableadmin.projects.locations.list",
+              "parameterOrder": [
+                "name"
+              ],
+              "parameters": {
+                "filter": {
+                  "description": "The standard list filter.",
+                  "location": "query",
+                  "type": "string"
+                },
+                "name": {
+                  "description": "The resource that owns the locations collection, if applicable.",
+                  "location": "path",
+                  "pattern": "^projects/[^/]+$",
+                  "required": true,
+                  "type": "string"
+                },
+                "pageSize": {
+                  "description": "The standard list page size.",
+                  "format": "int32",
+                  "location": "query",
+                  "type": "integer"
+                },
+                "pageToken": {
+                  "description": "The standard list page token.",
+                  "location": "query",
+                  "type": "string"
+                }
+              },
+              "path": "v2/{+name}/locations",
+              "response": {
+                "$ref": "ListLocationsResponse"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/bigtable.admin",
+                "https://www.googleapis.com/auth/bigtable.admin.cluster",
+                "https://www.googleapis.com/auth/bigtable.admin.instance",
+                "https://www.googleapis.com/auth/cloud-bigtable.admin",
+                "https://www.googleapis.com/auth/cloud-bigtable.admin.cluster",
+                "https://www.googleapis.com/auth/cloud-platform",
+                "https://www.googleapis.com/auth/cloud-platform.read-only"
+              ]
             }
           }
         }
       }
     }
   },
-  "revision": "20190406",
+  "revision": "20190628",
   "rootUrl": "https://bigtableadmin.googleapis.com/",
   "schemas": {
     "AppProfile": {
@@ -1362,7 +1349,7 @@
         },
         "multiClusterRoutingUseAny": {
           "$ref": "MultiClusterRoutingUseAny",
-          "description": "Use a multi-cluster routing policy that may pick any cluster."
+          "description": "Use a multi-cluster routing policy."
         },
         "name": {
           "description": "(`OutputOnly`)\nThe unique name of the app profile. Values are of the form\n`projects/\u003cproject\u003e/instances/\u003cinstance\u003e/appProfiles/_a-zA-Z0-9*`.",
@@ -1665,7 +1652,7 @@
           "description": "The Table to create."
         },
         "tableId": {
-          "description": "The name by which the new table should be referred to within the parent\ninstance, e.g., `foobar` rather than `\u003cparent\u003e/tables/foobar`.",
+          "description": "The name by which the new table should be referred to within the parent\ninstance, e.g., `foobar` rather than `\u003cparent\u003e/tables/foobar`.\nMaximum 50 characters.",
           "type": "string"
         }
       },
@@ -1903,6 +1890,24 @@
       },
       "type": "object"
     },
+    "ListLocationsResponse": {
+      "description": "The response message for Locations.ListLocations.",
+      "id": "ListLocationsResponse",
+      "properties": {
+        "locations": {
+          "description": "A list of locations that matches the specified filter in the request.",
+          "items": {
+            "$ref": "Location"
+          },
+          "type": "array"
+        },
+        "nextPageToken": {
+          "description": "The standard List next-page token.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
     "ListOperationsResponse": {
       "description": "The response message for Operations.ListOperations.",
       "id": "ListOperationsResponse",
@@ -1935,6 +1940,40 @@
             "$ref": "Table"
           },
           "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "Location": {
+      "description": "A resource that represents Google Cloud Platform location.",
+      "id": "Location",
+      "properties": {
+        "displayName": {
+          "description": "The friendly name for this location, typically a nearby city name.\nFor example, \"Tokyo\".",
+          "type": "string"
+        },
+        "labels": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Cross-service attributes for the location. For example\n\n    {\"cloud.googleapis.com/region\": \"us-east1\"}",
+          "type": "object"
+        },
+        "locationId": {
+          "description": "The canonical id for this location. For example: `\"us-east1\"`.",
+          "type": "string"
+        },
+        "metadata": {
+          "additionalProperties": {
+            "description": "Properties of the object. Contains field @type with type URL.",
+            "type": "any"
+          },
+          "description": "Service-specific metadata. For example the available capacity at the given\nlocation.",
+          "type": "object"
+        },
+        "name": {
+          "description": "Resource name for the location, which may vary between implementations.\nFor example: `\"projects/example-project/locations/us-east1\"`",
+          "type": "string"
         }
       },
       "type": "object"
@@ -1977,7 +2016,7 @@
       "type": "object"
     },
     "MultiClusterRoutingUseAny": {
-      "description": "Read/write requests may be routed to any cluster in the instance, and will\nfail over to another cluster in the event of transient errors or delays.\nChoosing this option sacrifices read-your-writes consistency to improve\navailability.",
+      "description": "Read/write requests are routed to the nearest cluster in the instance, and\nwill fail over to the nearest cluster that is available in the event of\ntransient errors or delays. Clusters in a region are considered\nequidistant. Choosing this option sacrifices read-your-writes consistency\nto improve availability.",
       "id": "MultiClusterRoutingUseAny",
       "properties": {},
       "type": "object"
@@ -2003,7 +2042,7 @@
           "type": "object"
         },
         "name": {
-          "description": "The server-assigned name, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping, the\n`name` should have the format of `operations/some/unique/name`.",
+          "description": "The server-assigned name, which is only unique within the same service that\noriginally returns it. If you use the default HTTP mapping, the\n`name` should be a resource name ending with `operations/{unique_id}`.",
           "type": "string"
         },
         "response": {
@@ -2081,7 +2120,7 @@
       "type": "object"
     },
     "SingleClusterRouting": {
-      "description": "Unconditionally routes all read/write requests to a specific cluster.\nThis option preserves read-your-writes consistency, but does not improve\navailability.",
+      "description": "Unconditionally routes all read/write requests to a specific cluster.\nThis option preserves read-your-writes consistency but does not improve\navailability.",
       "id": "SingleClusterRouting",
       "properties": {
         "allowTransactionalWrites": {
@@ -2108,7 +2147,7 @@
       "type": "object"
     },
     "Status": {
-      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). The error model is designed to be:\n\n- Simple to use and understand for most users\n- Flexible enough to meet unexpected needs\n\n# Overview\n\nThe `Status` message contains three pieces of data: error code, error\nmessage, and error details. The error code should be an enum value of\ngoogle.rpc.Code, but it may accept additional error codes if needed.  The\nerror message should be a developer-facing English message that helps\ndevelopers *understand* and *resolve* the error. If a localized user-facing\nerror message is needed, put the localized message in the error details or\nlocalize it in the client. The optional error details may contain arbitrary\ninformation about the error. There is a predefined set of error detail types\nin the package `google.rpc` that can be used for common error conditions.\n\n# Language mapping\n\nThe `Status` message is the logical representation of the error model, but it\nis not necessarily the actual wire format. When the `Status` message is\nexposed in different client libraries and different wire protocols, it can be\nmapped differently. For example, it will likely be mapped to some exceptions\nin Java, but more likely mapped to some error codes in C.\n\n# Other uses\n\nThe error model and the `Status` message can be used in a variety of\nenvironments, either with or without APIs, to provide a\nconsistent developer experience across different environments.\n\nExample uses of this error model include:\n\n- Partial errors. If a service needs to return partial errors to the client,\n    it may embed the `Status` in the normal response to indicate the partial\n    errors.\n\n- Workflow errors. A typical workflow has multiple steps. Each step may\n    have a `Status` message for error reporting.\n\n- Batch operations. If a client uses batch request and batch response, the\n    `Status` message should be used directly inside batch response, one for\n    each error sub-response.\n\n- Asynchronous operations. If an API call embeds asynchronous operation\n    results in its response, the status of those operations should be\n    represented directly using the `Status` message.\n\n- Logging. If some API errors are stored in logs, the message `Status` could\n    be used directly after any stripping needed for security/privacy reasons.",
+      "description": "The `Status` type defines a logical error model that is suitable for\ndifferent programming environments, including REST APIs and RPC APIs. It is\nused by [gRPC](https://github.com/grpc). Each `Status` message contains\nthree pieces of data: error code, error message, and error details.\n\nYou can find out more about this error model and how to work with it in the\n[API Design Guide](https://cloud.google.com/apis/design/errors).",
       "id": "Status",
       "properties": {
         "code": {

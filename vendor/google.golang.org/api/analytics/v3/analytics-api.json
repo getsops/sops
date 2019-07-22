@@ -32,7 +32,7 @@
   "description": "Views and manages your Google Analytics data.",
   "discoveryVersion": "v1",
   "documentationLink": "https://developers.google.com/analytics/",
-  "etag": "\"J3WqvAcMk4eQjJXvfSI4Yr8VouA/EwvGv8Qj93Dt7K3RwZo3AIm1iu8\"",
+  "etag": "\"9eZ1uxVRThTDhLJCZHhqs3eQWz4/H4vWgpd1MCO4wKLGF823qtL1fw0\"",
   "icons": {
     "x16": "https://www.google.com/images/icons/product/analytics-16.png",
     "x32": "https://www.google.com/images/icons/product/analytics-32.png"
@@ -1380,7 +1380,7 @@
               ]
             },
             "get": {
-              "description": "Returns a filters to which the user has access.",
+              "description": "Returns filters to which the user has access.",
               "httpMethod": "GET",
               "id": "analytics.management.filters.get",
               "parameterOrder": [
@@ -3805,7 +3805,7 @@
       }
     }
   },
-  "revision": "20180730",
+  "revision": "20190604",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "Account": {
@@ -7351,7 +7351,7 @@
           "type": "string"
         },
         "dataRetentionResetOnNewActivity": {
-          "description": "Set to true to reset the retention period of the user identifier with each new event from that user (thus setting the expiration date to current time plus retention period).\nSet to false to delete data associated with the user identifer automatically after the rentention period.\nThis property cannot be set on insert.",
+          "description": "Set to true to reset the retention period of the user identifier with each new event from that user (thus setting the expiration date to current time plus retention period).\nSet to false to delete data associated with the user identifier automatically after the rentention period.\nThis property cannot be set on insert.",
           "type": "boolean"
         },
         "dataRetentionTtl": {

@@ -1,0 +1,36 @@
+{
+  "tests": [
+    {
+      "description": "set: Delete with MergeAll",
+      "comment": "A Delete sentinel can appear with a mergeAll option.",
+      "set": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "option": {
+          "all": true
+        },
+        "jsonData": "{\"a\": 1, \"b\": {\"c\": \"Delete\"}}",
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d",
+                "fields": {
+                  "a": {
+                    "integerValue": "1"
+                  }
+                }
+              },
+              "updateMask": {
+                "fieldPaths": [
+                  "a",
+                  "b.c"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

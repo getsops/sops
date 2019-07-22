@@ -45,15 +45,17 @@ type reqItem struct {
 	adjust  func(gotReq proto.Message)
 }
 
-func newMockServer() (*mockServer, error) {
+func newMockServer() (_ *mockServer, cleanup func(), _ error) {
 	srv, err := testutil.NewServer()
 	if err != nil {
-		return nil, err
+		return nil, func() {}, err
 	}
 	mock := &mockServer{Addr: srv.Addr}
 	pb.RegisterFirestoreServer(srv.Gsrv, mock)
 	srv.Start()
-	return mock, nil
+	return mock, func() {
+		srv.Close()
+	}, nil
 }
 
 // addRPC adds a (request, response) pair to the server's list of expected

@@ -23,11 +23,14 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 )
 
-var previewSubdir = fmt.Sprintf("%spreview%s", string(os.PathSeparator), string(os.PathSeparator))
+const previewSubdir = string(os.PathSeparator) + "preview" + string(os.PathSeparator)
+
+var previewVer = regexp.MustCompile(`(?:v?\d{4}-\d{2}-\d{2}|v?\d+[\.\d+\.\d\-]*)(?:-preview|-beta)`)
 
 // these predicates are used when walking the package directories.
 // if a predicate returns true it means to include that package.
@@ -41,67 +44,55 @@ func includePreviewPredicate(name string) bool {
 	if strings.Contains(name, previewSubdir) {
 		return false
 	}
-	matches := packageName.FindStringSubmatch(name)
-	version := matches[3]
-	return !strings.Contains(version, "-preview") && !strings.Contains(version, "-beta") // matches[2] is the `version` group
+	return !previewVer.MatchString(name)
 }
 
-func GetLatestPackages(rootDir string, includePreview bool, verboseLog *log.Logger) (ListDefinition, error) {
-	type operationGroup struct {
-		provider string
-		arm      string
-		group    string
+type operationGroup struct {
+	provider string
+	arm      bool
+	group    string
+	api      string
+}
+
+type operInfo struct {
+	version string
+	rawpath string
+	modver  string
+}
+
+type latestTracker map[operationGroup]operInfo
+
+func (tracker latestTracker) Upsert(path string, pi PathInfo) (operInfo, operationGroup, int) {
+	group := operationGroup{
+		provider: pi.Provider,
+		arm:      pi.IsArm,
+		group:    pi.Group,
+		api:      pi.APIPkg,
 	}
 
-	type operInfo struct {
-		version string
-		rawpath string
+	prev, ok := tracker[group]
+	if !ok {
+		tracker[group] = operInfo{pi.Version, path, pi.ModVer}
+		return prev, group, 1
 	}
 
-	predicate := includePreviewPredicate
-	if includePreview {
-		predicate = acceptAllPredicate
+	if le, _ := versionLE(prev.version, pi.Version); le {
+		tracker[group] = operInfo{pi.Version, path, pi.ModVer}
+		return prev, group, 0
 	}
+	return prev, group, -1
+}
 
-	maxFound := make(map[operationGroup]operInfo)
-
-	filepath.Walk(rootDir, func(currentPath string, info os.FileInfo, openErr error) (err error) {
-		pathMatches := packageName.FindStringSubmatch(currentPath)
-		if len(pathMatches) == 0 || !info.IsDir() {
-			return
-		} else if !predicate(currentPath) {
-			verboseLog.Printf("%q rejected by Predicate", currentPath)
-			return
-		}
-
-		version := pathMatches[3]
-		currentGroup := operationGroup{
-			provider: pathMatches[1],
-			arm:      pathMatches[2],
-			group:    pathMatches[4],
-		}
-
-		prev, ok := maxFound[currentGroup]
-		if !ok {
-			maxFound[currentGroup] = operInfo{version, currentPath}
-			verboseLog.Printf("New group found %q using version %q", currentGroup, version)
-			return
-		}
-
-		if le, _ := versionLE(prev.version, version); le {
-			maxFound[currentGroup] = operInfo{version, currentPath}
-			verboseLog.Printf("Updating group %q from version %q to %q", currentGroup, prev.version, version)
-		} else {
-			verboseLog.Printf("Evaluated group %q version %q decided to stay with %q", currentGroup, version, prev.version)
-		}
-
-		return
-	})
-
+// skipFileCheck is for testing purposes
+func (tracker latestTracker) ToListDefinition(skipFileCheck bool) (ListDefinition, error) {
 	listDef := ListDefinition{
 		Include: []string{},
 	}
-	for _, entry := range maxFound {
+	for _, entry := range tracker {
+		if skipFileCheck {
+			listDef.Include = append(listDef.Include, entry.rawpath)
+			continue
+		}
 		absolute, err := filepath.Abs(entry.rawpath)
 		if err != nil {
 			return listDef, err
@@ -118,7 +109,42 @@ func GetLatestPackages(rootDir string, includePreview bool, verboseLog *log.Logg
 			}
 		}
 	}
+	sort.Strings(listDef.Include)
 	return listDef, nil
+}
+
+// GetLatestPackages returns the collection of latest packages in terms of API and module version.
+func GetLatestPackages(rootDir string, includePreview bool, verboseLog *log.Logger) (ListDefinition, error) {
+	predicate := includePreviewPredicate
+	if includePreview {
+		predicate = acceptAllPredicate
+	}
+
+	tracker := latestTracker{}
+
+	filepath.Walk(rootDir, func(currentPath string, info os.FileInfo, openErr error) error {
+		pi, err := DeconstructPath(currentPath)
+		if err != nil || !info.IsDir() {
+			return nil
+		} else if !predicate(currentPath) {
+			verboseLog.Printf("%q rejected by Predicate", currentPath)
+			return nil
+		}
+
+		prev, group, result := tracker.Upsert(currentPath, pi)
+		switch result {
+		case 1:
+			verboseLog.Printf("New group found %v using version %q modver %q", group, pi.Version, pi.ModVer)
+		case 0:
+			verboseLog.Printf("Updating group %v from version %q to %q modver %q", group, prev.version, pi.Version, pi.ModVer)
+		case -1:
+			verboseLog.Printf("Evaluated group %v version %q decided to stay with %q", group, pi.Version, prev.version)
+		}
+
+		return nil
+	})
+
+	return tracker.ToListDefinition(false)
 }
 
 // versionLE takes two version strings that share a format and returns true if the one on the

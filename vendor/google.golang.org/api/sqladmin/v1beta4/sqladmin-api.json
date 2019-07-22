@@ -18,7 +18,7 @@
   "description": "Creates and manages Cloud SQL instances, which provide fully managed MySQL or PostgreSQL databases.",
   "discoveryVersion": "v1",
   "documentationLink": "https://cloud.google.com/sql/docs/reference/latest",
-  "etag": "\"VPK3KBfpaEgZ16pozGOoMYfKc0U/kwai7B3cC4eEEbSxYFHS0BuBYIc\"",
+  "etag": "\"9eZ1uxVRThTDhLJCZHhqs3eQWz4/LRkkAS7hoxkBOrIOmm_GjUTQ6v8\"",
   "icons": {
     "x16": "https://www.gstatic.com/images/branding/product/1x/googleg_16dp.png",
     "x32": "https://www.gstatic.com/images/branding/product/1x/googleg_32dp.png"
@@ -1617,7 +1617,7 @@
       }
     }
   },
-  "revision": "20190510",
+  "revision": "20190607",
   "rootUrl": "https://www.googleapis.com/",
   "schemas": {
     "AclEntry": {
@@ -2549,7 +2549,7 @@
           "type": "string"
         },
         "type": {
-          "description": "The type of this IP address. A PRIMARY address is an address that can accept incoming connections. An OUTGOING address is the source address of connections originating from the instance, if supported.",
+          "description": "The type of this IP address. A PRIMARY address is a public address that can accept incoming connections. A PRIVATE address is a private address that can accept incoming connections. An OUTGOING address is the source address of connections originating from the instance, if supported.",
           "type": "string"
         }
       },
@@ -2844,6 +2844,10 @@
         "kind": {
           "default": "sql#restoreBackupContext",
           "description": "This is always sql#restoreBackupContext.",
+          "type": "string"
+        },
+        "project": {
+          "description": "The full project ID of the source instance.",
           "type": "string"
         }
       },

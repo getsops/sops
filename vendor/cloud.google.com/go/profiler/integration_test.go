@@ -236,9 +236,9 @@ func TestAgentIntegration(t *testing.T) {
 			endTime := timeNow.Format(time.RFC3339)
 			startTime := timeNow.Add(-1 * time.Hour).Format(time.RFC3339)
 			for _, pType := range tc.wantProfileTypes {
-				pr, err := tr.QueryProfiles(tc.ProjectID, tc.name, startTime, endTime, pType)
+				pr, err := tr.QueryProfilesWithZone(tc.ProjectID, tc.name, startTime, endTime, pType, tc.Zone)
 				if err != nil {
-					t.Errorf("QueryProfiles(%s, %s, %s, %s, %s) got error: %v", tc.ProjectID, tc.name, startTime, endTime, pType, err)
+					t.Errorf("QueryProfilesWithZone(%s, %s, %s, %s, %s, %s) got error: %v", tc.ProjectID, tc.name, startTime, endTime, pType, tc.Zone, err)
 					continue
 				}
 				if err := pr.HasFunction("busywork"); err != nil {

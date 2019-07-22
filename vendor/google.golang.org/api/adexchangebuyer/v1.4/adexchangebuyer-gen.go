@@ -820,6 +820,8 @@ type Creative struct {
 	// only supported for native ads.
 	AdChoicesDestinationUrl string `json:"adChoicesDestinationUrl,omitempty"`
 
+	AdTechnologyProviders *CreativeAdTechnologyProviders `json:"adTechnologyProviders,omitempty"`
+
 	// AdvertiserId: Detected advertiser id, if any. Read-only. This field
 	// should not be set in requests.
 	AdvertiserId googleapi.Int64s `json:"advertiserId,omitempty"`
@@ -977,6 +979,35 @@ type Creative struct {
 
 func (s *Creative) MarshalJSON() ([]byte, error) {
 	type NoMethod Creative
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+type CreativeAdTechnologyProviders struct {
+	DetectedProviderIds googleapi.Int64s `json:"detectedProviderIds,omitempty"`
+
+	HasUnidentifiedProvider bool `json:"hasUnidentifiedProvider,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "DetectedProviderIds")
+	// to unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "DetectedProviderIds") to
+	// include in API requests with the JSON null value. By default, fields
+	// with empty values are omitted from API requests. However, any field
+	// with an empty value appearing in NullFields will be sent to the
+	// server as null. It is an error if a field in this list has a
+	// non-empty value. This may be used to include null fields in Patch
+	// requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *CreativeAdTechnologyProviders) MarshalJSON() ([]byte, error) {
+	type NoMethod CreativeAdTechnologyProviders
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -1164,10 +1195,6 @@ type CreativeNativeAd struct {
 	// StarRating: The app rating in the app store. Must be in the range
 	// [0-5].
 	StarRating float64 `json:"starRating,omitempty"`
-
-	// Store: The URL to the app store to purchase/download the promoted
-	// app.
-	Store string `json:"store,omitempty"`
 
 	// VideoURL: The URL of the XML VAST for a native ad. Note this is a
 	// separate field from resource.video_url.

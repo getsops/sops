@@ -73,6 +73,22 @@ type Response struct {
 	*http.Response `json:"-"`
 }
 
+// IsHTTPStatus returns true if the returned HTTP status code matches the provided status code.
+// If there was no response (i.e. the underlying http.Response is nil) the return value is false.
+func (r Response) IsHTTPStatus(statusCode int) bool {
+	if r.Response == nil {
+		return false
+	}
+	return r.Response.StatusCode == statusCode
+}
+
+// HasHTTPStatus returns true if the returned HTTP status code matches one of the provided status codes.
+// If there was no response (i.e. the underlying http.Response is nil) or not status codes are provided
+// the return value is false.
+func (r Response) HasHTTPStatus(statusCodes ...int) bool {
+	return ResponseHasStatusCode(r.Response, statusCodes...)
+}
+
 // LoggingInspector implements request and response inspectors that log the full request and
 // response to a supplied log.
 type LoggingInspector struct {

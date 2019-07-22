@@ -56,6 +56,13 @@ const (
 	Medium BlurLevel = original.Medium
 )
 
+type DetectionModel = original.DetectionModel
+
+const (
+	Detection01 DetectionModel = original.Detection01
+	Detection02 DetectionModel = original.Detection02
+)
+
 type ExposureLevel = original.ExposureLevel
 
 const (
@@ -250,6 +257,9 @@ func PossibleAttributeTypeValues() []AttributeType {
 }
 func PossibleBlurLevelValues() []BlurLevel {
 	return original.PossibleBlurLevelValues()
+}
+func PossibleDetectionModelValues() []DetectionModel {
+	return original.PossibleDetectionModelValues()
 }
 func PossibleExposureLevelValues() []ExposureLevel {
 	return original.PossibleExposureLevelValues()

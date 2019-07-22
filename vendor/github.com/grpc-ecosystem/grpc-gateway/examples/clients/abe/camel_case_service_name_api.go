@@ -37,7 +37,8 @@ func NewCamelCaseServiceNameApiWithBasePath(basePath string) *CamelCaseServiceNa
 }
 
 /**
- * 
+ * Create a new ABitOfEverything
+ * This API creates a new ABitOfEverything
  *
  * @return *interface{}
  */
