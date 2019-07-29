@@ -3,7 +3,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 PROJECT		:= go.mozilla.org/sops
-GO 		:= GO15VENDOREXPERIMENT=1 go
+GO 		:= GO15VENDOREXPERIMENT=1 GO111MODULE=on go
 GOLINT 		:= golint
 
 all: test vet generate install functional-tests
@@ -19,7 +19,8 @@ lint:
 	$(GOLINT) $(PROJECT)
 
 vendor:
-	govend -u
+	go mod tidy
+	go mod vendor
 
 vet:
 	$(GO) vet $(PROJECT)

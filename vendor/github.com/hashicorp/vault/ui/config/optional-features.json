@@ -1,3 +1,0 @@
-{
-  "jquery-integration": false
-}

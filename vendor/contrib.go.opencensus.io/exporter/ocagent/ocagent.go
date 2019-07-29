@@ -18,10 +18,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io"
 	"sync"
 	"time"
-	"unsafe"
 
 	"google.golang.org/api/support/bundler"
 	"google.golang.org/grpc"
@@ -54,12 +52,12 @@ var _ trace.Exporter = (*Exporter)(nil)
 var _ view.Exporter = (*Exporter)(nil)
 
 type Exporter struct {
+	connectionState int32
+
 	// mu protects the non-atomic and non-channel variables
 	mu sync.RWMutex
-	// senderMu protects the concurrent unsafe send on traceExporter client
-	senderMu sync.Mutex
-	// recvMu protects the concurrent unsafe recv on traceExporter client
-	recvMu             sync.Mutex
+	// senderMu protects the concurrent unsafe traceExporter client
+	senderMu           sync.RWMutex
 	started            bool
 	stopped            bool
 	agentAddress       string
@@ -70,11 +68,9 @@ type Exporter struct {
 	nodeInfo           *commonpb.Node
 	grpcClientConn     *grpc.ClientConn
 	reconnectionPeriod time.Duration
-	resourceDetector   resource.Detector
 	resource           *resourcepb.Resource
 	compressor         string
 	headers            map[string]string
-	lastConnectErrPtr  unsafe.Pointer
 
 	startOnce      sync.Once
 	stopCh         chan bool
@@ -90,8 +86,6 @@ type Exporter struct {
 	viewDataBundler *bundler.Bundler
 
 	clientTransportCredentials credentials.TransportCredentials
-
-	grpcDialOptions []grpc.DialOption
 }
 
 func NewExporter(opts ...ExporterOption) (*Exporter, error) {
@@ -126,17 +120,7 @@ func NewUnstartedExporter(opts ...ExporterOption) (*Exporter, error) {
 	viewDataBundler.BundleCountThreshold = 500 // TODO: (@odeke-em) make this configurable.
 	e.viewDataBundler = viewDataBundler
 	e.nodeInfo = NodeWithStartTime(e.serviceName)
-	if e.resourceDetector != nil {
-		res, err := e.resourceDetector(context.Background())
-		if err != nil {
-			panic(fmt.Sprintf("Error detecting resource. err:%v\n", err))
-		}
-		if res != nil {
-			e.resource = resourceToResourcePb(res)
-		}
-	} else {
-		e.resource = resourceProtoFromEnv()
-	}
+	e.resource = resourceProtoFromEnv()
 
 	return e, nil
 }
@@ -150,6 +134,7 @@ var (
 	errAlreadyStarted = errors.New("already started")
 	errNotStarted     = errors.New("not started")
 	errStopped        = errors.New("stopped")
+	errNoConnection   = errors.New("no active connection")
 )
 
 // Start dials to the agent, establishing a connection to it. It also
@@ -161,20 +146,14 @@ func (ae *Exporter) Start() error {
 	var err = errAlreadyStarted
 	ae.startOnce.Do(func() {
 		ae.mu.Lock()
+		defer ae.mu.Unlock()
+
 		ae.started = true
 		ae.disconnectedCh = make(chan bool, 1)
 		ae.stopCh = make(chan bool)
 		ae.backgroundConnectionDoneCh = make(chan bool)
-		ae.mu.Unlock()
 
-		// An optimistic first connection attempt to ensure that
-		// applications under heavy load can immediately process
-		// data. See https://github.com/census-ecosystem/opencensus-go-exporter-ocagent/pull/63
-		if err := ae.connect(); err == nil {
-			ae.setStateConnected()
-		} else {
-			ae.setStateDisconnected(err)
-		}
+		ae.setStateDisconnected()
 		go ae.indefiniteBackgroundConnection()
 
 		err = nil
@@ -291,9 +270,6 @@ func (ae *Exporter) dialToAgent() (*grpc.ClientConn, error) {
 		dialOpts = append(dialOpts, grpc.WithDefaultCallOptions(grpc.UseCompressor(ae.compressor)))
 	}
 	dialOpts = append(dialOpts, grpc.WithStatsHandler(&ocgrpc.ClientHandler{}))
-	if len(ae.grpcDialOptions) != 0 {
-		dialOpts = append(dialOpts, ae.grpcDialOptions...)
-	}
 
 	ctx := context.Background()
 	if len(ae.headers) > 0 {
@@ -392,33 +368,16 @@ func (ae *Exporter) ExportTraceServiceRequest(batch *agenttracepb.ExportTraceSer
 		return errStopped
 
 	default:
-		if lastConnectErr := ae.lastConnectError(); lastConnectErr != nil {
-			return fmt.Errorf("ExportTraceServiceRequest: no active connection, last connection error: %v", lastConnectErr)
+		if !ae.connected() {
+			return errNoConnection
 		}
 
 		ae.senderMu.Lock()
 		err := ae.traceExporter.Send(batch)
 		ae.senderMu.Unlock()
 		if err != nil {
-			if err == io.EOF {
-				ae.recvMu.Lock()
-				// Perform a .Recv to try to find out why the RPC actually ended.
-				// See:
-				//   * https://github.com/grpc/grpc-go/blob/d389f9fac68eea0dcc49957d0b4cca5b3a0a7171/stream.go#L98-L100
-				//   * https://groups.google.com/forum/#!msg/grpc-io/XcN4hA9HonI/F_UDiejTAwAJ
-				for {
-					_, err = ae.traceExporter.Recv()
-					if err != nil {
-						break
-					}
-				}
-				ae.recvMu.Unlock()
-			}
-
-			ae.setStateDisconnected(err)
-			if err != io.EOF {
-				return err
-			}
+			ae.setStateDisconnected()
+			return err
 		}
 		return nil
 	}
@@ -464,7 +423,7 @@ func (ae *Exporter) uploadTraces(sdl []*trace.SpanData) {
 		})
 		ae.senderMu.Unlock()
 		if err != nil {
-			ae.setStateDisconnected(err)
+			ae.setStateDisconnected()
 		}
 	}
 }
@@ -508,7 +467,7 @@ func (ae *Exporter) uploadViewData(vdl []*view.Data) {
 			// or better letting users of the exporter configure it.
 		})
 		if err != nil {
-			ae.setStateDisconnected(err)
+			ae.setStateDisconnected()
 		}
 	}
 }
@@ -523,10 +482,7 @@ func resourceProtoFromEnv() *resourcepb.Resource {
 	if rs == nil {
 		return nil
 	}
-	return resourceToResourcePb(rs)
-}
 
-func resourceToResourcePb(rs *resource.Resource) *resourcepb.Resource {
 	rprs := &resourcepb.Resource{
 		Type: rs.Type,
 	}
