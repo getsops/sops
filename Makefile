@@ -3,7 +3,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 PROJECT		:= go.mozilla.org/sops
-GO 		:= GO15VENDOREXPERIMENT=1 GO111MODULE=on go
+GO 		:= GO15VENDOREXPERIMENT=1 GO111MODULE=on GOPROXY=https://proxy.golang.org go
 GOLINT 		:= golint
 
 all: test vet generate install functional-tests
