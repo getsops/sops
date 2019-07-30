@@ -1,0 +1,58 @@
+{
+  "tests": [
+    {
+      "description": "set-merge: non-leaf merge field with ServerTimestamp",
+      "comment": "If a field path is in a merge option, the value at that path\nreplaces the stored value, and ServerTimestamps inside that value become transforms\nas usual.",
+      "set": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "option": {
+          "fields": [
+            {
+              "field": [
+                "h"
+              ]
+            }
+          ]
+        },
+        "jsonData": "{\"h\": {\"f\": 5, \"g\": \"ServerTimestamp\"}, \"e\": 7}",
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d",
+                "fields": {
+                  "h": {
+                    "mapValue": {
+                      "fields": {
+                        "f": {
+                          "integerValue": "5"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "updateMask": {
+                "fieldPaths": [
+                  "h"
+                ]
+              }
+            },
+            {
+              "transform": {
+                "document": "projects/projectID/databases/(default)/documents/C/d",
+                "fieldTransforms": [
+                  {
+                    "fieldPath": "h.g",
+                    "setToServerValue": "REQUEST_TIME"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

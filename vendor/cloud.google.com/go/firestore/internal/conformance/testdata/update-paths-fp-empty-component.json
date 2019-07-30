@@ -1,0 +1,23 @@
+{
+  "tests": [
+    {
+      "description": "update-paths: empty field path component",
+      "comment": "Empty fields are not allowed.",
+      "updatePaths": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "fieldPaths": [
+          {
+            "field": [
+              "*",
+              ""
+            ]
+          }
+        ],
+        "jsonValues": [
+          "1"
+        ],
+        "isError": true
+      }
+    }
+  ]
+}

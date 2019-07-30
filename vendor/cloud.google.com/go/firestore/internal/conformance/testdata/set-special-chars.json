@@ -1,0 +1,36 @@
+{
+  "tests": [
+    {
+      "description": "set: non-alpha characters in map keys",
+      "comment": "Create and Set treat their map keys literally. They do not escape special characters.",
+      "set": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "jsonData": "{ \"*\": { \".\": 1 }, \"~\": 2 }",
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d",
+                "fields": {
+                  "*": {
+                    "mapValue": {
+                      "fields": {
+                        ".": {
+                          "integerValue": "1"
+                        }
+                      }
+                    }
+                  },
+                  "~": {
+                    "integerValue": "2"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

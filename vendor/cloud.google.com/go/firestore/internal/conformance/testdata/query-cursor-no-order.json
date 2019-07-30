@@ -1,0 +1,21 @@
+{
+  "tests": [
+    {
+      "description": "query: cursor method without orderBy",
+      "comment": "If a cursor method with a list of values is provided, there must be at least as many\nexplicit orderBy clauses as values.",
+      "query": {
+        "collPath": "projects/projectID/databases/(default)/documents/C",
+        "clauses": [
+          {
+            "startAt": {
+              "jsonValues": [
+                "2"
+              ]
+            }
+          }
+        ],
+        "isError": true
+      }
+    }
+  ]
+}

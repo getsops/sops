@@ -1,0 +1,26 @@
+{{#popup-menu name="policy-menu"}}
+  <nav class="menu">
+    <ul class="menu-list">
+      <li class="action">
+        {{#link-to "vault.cluster.policy.show" "acl" policyName}}
+          View Policy
+        {{/link-to}}
+      </li>
+      <li class="action">
+        {{#link-to "vault.cluster.policy.edit" "acl" policyName}}
+          Edit Policy
+        {{/link-to}}
+      </li>
+      <li class="action">
+        <ConfirmAction
+          @buttonClasses="link is-destroy"
+          @confirmButtonText="Remove"
+          @confirmMessage="This policy may affect permissions to access Vault data."
+          @onConfirmAction={{action "performTransaction" model policyName}}
+        >
+          Remove from {{model.identityType}}
+        </ConfirmAction>
+      </li>
+    </ul>
+  </nav>
+{{/popup-menu}}

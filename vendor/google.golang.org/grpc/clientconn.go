@@ -38,7 +38,6 @@ import (
 	"google.golang.org/grpc/grpclog"
 	"google.golang.org/grpc/internal/backoff"
 	"google.golang.org/grpc/internal/channelz"
-	"google.golang.org/grpc/internal/envconfig"
 	"google.golang.org/grpc/internal/grpcsync"
 	"google.golang.org/grpc/internal/transport"
 	"google.golang.org/grpc/keepalive"
@@ -1176,20 +1175,18 @@ func (ac *addrConn) createTransport(addr resolver.Address, copts transport.Conne
 		return nil, nil, err
 	}
 
-	if ac.dopts.reqHandshake == envconfig.RequireHandshakeOn {
-		select {
-		case <-time.After(connectDeadline.Sub(time.Now())):
-			// We didn't get the preface in time.
-			newTr.Close()
-			grpclog.Warningf("grpc: addrConn.createTransport failed to connect to %v: didn't receive server preface in time. Reconnecting...", addr)
-			return nil, nil, errors.New("timed out waiting for server handshake")
-		case <-prefaceReceived:
-			// We got the preface - huzzah! things are good.
-		case <-onCloseCalled:
-			// The transport has already closed - noop.
-			return nil, nil, errors.New("connection closed")
-			// TODO(deklerk) this should bail on ac.ctx.Done(). Add a test and fix.
-		}
+	select {
+	case <-time.After(connectDeadline.Sub(time.Now())):
+		// We didn't get the preface in time.
+		newTr.Close()
+		grpclog.Warningf("grpc: addrConn.createTransport failed to connect to %v: didn't receive server preface in time. Reconnecting...", addr)
+		return nil, nil, errors.New("timed out waiting for server handshake")
+	case <-prefaceReceived:
+		// We got the preface - huzzah! things are good.
+	case <-onCloseCalled:
+		// The transport has already closed - noop.
+		return nil, nil, errors.New("connection closed")
+		// TODO(deklerk) this should bail on ac.ctx.Done(). Add a test and fix.
 	}
 	return newTr, reconnect, nil
 }

@@ -1,0 +1,42 @@
+{
+  "tests": [
+    {
+      "description": "query: Where clause",
+      "comment": "A simple Where clause.",
+      "query": {
+        "collPath": "projects/projectID/databases/(default)/documents/C",
+        "clauses": [
+          {
+            "where": {
+              "path": {
+                "field": [
+                  "a"
+                ]
+              },
+              "op": "\u003e",
+              "jsonValue": "5"
+            }
+          }
+        ],
+        "query": {
+          "from": [
+            {
+              "collectionId": "C"
+            }
+          ],
+          "where": {
+            "fieldFilter": {
+              "field": {
+                "fieldPath": "a"
+              },
+              "op": "GREATER_THAN",
+              "value": {
+                "integerValue": "5"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

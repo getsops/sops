@@ -1,0 +1,26 @@
+{
+  "tests": [
+    {
+      "description": "query: invalid path in Where clause",
+      "comment": "The path has an empty component.",
+      "query": {
+        "collPath": "projects/projectID/databases/(default)/documents/C",
+        "clauses": [
+          {
+            "select": {
+              "fields": [
+                {
+                  "field": [
+                    "*",
+                    ""
+                  ]
+                }
+              ]
+            }
+          }
+        ],
+        "isError": true
+      }
+    }
+  ]
+}

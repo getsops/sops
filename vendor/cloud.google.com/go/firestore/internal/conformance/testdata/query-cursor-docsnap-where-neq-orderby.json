@@ -1,0 +1,85 @@
+{
+  "tests": [
+    {
+      "description": "query: cursor method, doc snapshot, inequality where clause, and existing orderBy clause",
+      "comment": "If there is an OrderBy clause, the inequality Where clause does\nnot result in a new OrderBy clause. We still add a __name__ OrderBy clause",
+      "query": {
+        "collPath": "projects/projectID/databases/(default)/documents/C",
+        "clauses": [
+          {
+            "orderBy": {
+              "path": {
+                "field": [
+                  "a"
+                ]
+              },
+              "direction": "desc"
+            }
+          },
+          {
+            "where": {
+              "path": {
+                "field": [
+                  "a"
+                ]
+              },
+              "op": "\u003c",
+              "jsonValue": "4"
+            }
+          },
+          {
+            "startAt": {
+              "docSnapshot": {
+                "path": "projects/projectID/databases/(default)/documents/C/D",
+                "jsonData": "{\"a\": 7, \"b\": 8}"
+              }
+            }
+          }
+        ],
+        "query": {
+          "from": [
+            {
+              "collectionId": "C"
+            }
+          ],
+          "where": {
+            "fieldFilter": {
+              "field": {
+                "fieldPath": "a"
+              },
+              "op": "LESS_THAN",
+              "value": {
+                "integerValue": "4"
+              }
+            }
+          },
+          "orderBy": [
+            {
+              "field": {
+                "fieldPath": "a"
+              },
+              "direction": "DESCENDING"
+            },
+            {
+              "field": {
+                "fieldPath": "__name__"
+              },
+              "direction": "DESCENDING"
+            }
+          ],
+          "startAt": {
+            "values": [
+              {
+                "integerValue": "7"
+              },
+              {
+                "referenceValue": "projects/projectID/databases/(default)/documents/C/D"
+              }
+            ],
+            "before": true
+          }
+        }
+      }
+    }
+  ]
+}

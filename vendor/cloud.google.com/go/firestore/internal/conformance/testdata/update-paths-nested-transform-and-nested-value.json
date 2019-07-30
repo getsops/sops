@@ -1,0 +1,69 @@
+{
+  "tests": [
+    {
+      "description": "update-paths: Nested transforms should not affect the field mask, even\nwhen there are other values that do. Transforms should only affect the\nDocumentTransform_FieldTransform list.",
+      "comment": "For updates, top-level paths in json-like map inputs\nare split on the dot. That is, an input {\"a.b.c\": 7} results in an update to\nfield c of object b of object a with value 7. In order to specify this behavior,\nthe update must use a fieldmask \"a.b.c\". However, fieldmasks are only used for\nconcrete values - transforms are separately encoded in a\nDocumentTransform_FieldTransform array.\n\nThis test exercises a bug found in python (https://github.com/googleapis/google-cloud-python/issues/7215)\nin which nested transforms ({\"a.c\": \"ServerTimestamp\"}) next to nested values\n({\"a.b\": 7}) incorrectly caused the fieldmask \"a\" to be set, which has the\neffect of wiping out all data in \"a\" other than what was specified in the\njson-like input.\n\nInstead, as this test specifies, transforms should not affect the fieldmask.",
+      "updatePaths": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "fieldPaths": [
+          {
+            "field": [
+              "a",
+              "b"
+            ]
+          },
+          {
+            "field": [
+              "a",
+              "c"
+            ]
+          }
+        ],
+        "jsonValues": [
+          "7",
+          "\"ServerTimestamp\""
+        ],
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d",
+                "fields": {
+                  "a": {
+                    "mapValue": {
+                      "fields": {
+                        "b": {
+                          "integerValue": "7"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "updateMask": {
+                "fieldPaths": [
+                  "a.b"
+                ]
+              },
+              "currentDocument": {
+                "exists": true
+              }
+            },
+            {
+              "transform": {
+                "document": "projects/projectID/databases/(default)/documents/C/d",
+                "fieldTransforms": [
+                  {
+                    "fieldPath": "a.c",
+                    "setToServerValue": "REQUEST_TIME"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

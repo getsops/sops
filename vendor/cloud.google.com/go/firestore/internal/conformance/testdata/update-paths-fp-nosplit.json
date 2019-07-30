@@ -1,0 +1,57 @@
+{
+  "tests": [
+    {
+      "description": "update-paths: FieldPath elements are not split on dots",
+      "comment": "FieldPath components are not split on dots.",
+      "updatePaths": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "fieldPaths": [
+          {
+            "field": [
+              "a.b",
+              "f.g"
+            ]
+          }
+        ],
+        "jsonValues": [
+          "{\"n.o\": 7}"
+        ],
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d",
+                "fields": {
+                  "a.b": {
+                    "mapValue": {
+                      "fields": {
+                        "f.g": {
+                          "mapValue": {
+                            "fields": {
+                              "n.o": {
+                                "integerValue": "7"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "updateMask": {
+                "fieldPaths": [
+                  "`a.b`.`f.g`"
+                ]
+              },
+              "currentDocument": {
+                "exists": true
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

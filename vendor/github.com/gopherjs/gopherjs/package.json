@@ -1,0 +1,6 @@
+{
+  "name": "gopherjs",
+  "devDependencies": {
+    "uglify-es": "3.3.9"
+  }
+}

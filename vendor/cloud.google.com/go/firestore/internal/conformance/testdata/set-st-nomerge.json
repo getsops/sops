@@ -1,0 +1,41 @@
+{
+  "tests": [
+    {
+      "description": "set-merge: If is ServerTimestamp not in Merge, no transform",
+      "comment": "If the ServerTimestamp value is not mentioned in a merge option,\nthen it is pruned from the data but does not result in a transform.",
+      "set": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "option": {
+          "fields": [
+            {
+              "field": [
+                "a"
+              ]
+            }
+          ]
+        },
+        "jsonData": "{\"a\": 1, \"b\": \"ServerTimestamp\"}",
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d",
+                "fields": {
+                  "a": {
+                    "integerValue": "1"
+                  }
+                }
+              },
+              "updateMask": {
+                "fieldPaths": [
+                  "a"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

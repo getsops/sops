@@ -1,0 +1,39 @@
+{
+  "tests": [
+    {
+      "description": "set: MergeAll",
+      "comment": "The MergeAll option with a simple piece of data.",
+      "set": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "option": {
+          "all": true
+        },
+        "jsonData": "{\"a\": 1, \"b\": 2}",
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d",
+                "fields": {
+                  "a": {
+                    "integerValue": "1"
+                  },
+                  "b": {
+                    "integerValue": "2"
+                  }
+                }
+              },
+              "updateMask": {
+                "fieldPaths": [
+                  "a",
+                  "b"
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

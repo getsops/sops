@@ -1,0 +1,13 @@
+{
+  "tests": [
+    {
+      "description": "update: ServerTimestamp cannot be in an array value",
+      "comment": "The ServerTimestamp sentinel must be the value of a field. Firestore\ntransforms don't support array indexing.",
+      "update": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "jsonData": "{\"a\": [1, 2, \"ServerTimestamp\"]}",
+        "isError": true
+      }
+    }
+  ]
+}

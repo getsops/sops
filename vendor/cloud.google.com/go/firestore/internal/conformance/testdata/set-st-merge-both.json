@@ -1,0 +1,57 @@
+{
+  "tests": [
+    {
+      "description": "set-merge: ServerTimestamp with Merge of both fields",
+      "comment": "Just as when no merge option is specified, ServerTimestamp\nsentinel values are removed from the data in the update operation and become\ntransforms.",
+      "set": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "option": {
+          "fields": [
+            {
+              "field": [
+                "a"
+              ]
+            },
+            {
+              "field": [
+                "b"
+              ]
+            }
+          ]
+        },
+        "jsonData": "{\"a\": 1, \"b\": \"ServerTimestamp\"}",
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d",
+                "fields": {
+                  "a": {
+                    "integerValue": "1"
+                  }
+                }
+              },
+              "updateMask": {
+                "fieldPaths": [
+                  "a"
+                ]
+              }
+            },
+            {
+              "transform": {
+                "document": "projects/projectID/databases/(default)/documents/C/d",
+                "fieldTransforms": [
+                  {
+                    "fieldPath": "b",
+                    "setToServerValue": "REQUEST_TIME"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

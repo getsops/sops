@@ -525,6 +525,10 @@ type BucketIamConfiguration struct {
 	// BucketPolicyOnly: The bucket's Bucket Policy Only configuration.
 	BucketPolicyOnly *BucketIamConfigurationBucketPolicyOnly `json:"bucketPolicyOnly,omitempty"`
 
+	// UniformBucketLevelAccess: The bucket's uniform bucket-level access
+	// configuration.
+	UniformBucketLevelAccess *BucketIamConfigurationUniformBucketLevelAccess `json:"uniformBucketLevelAccess,omitempty"`
+
 	// ForceSendFields is a list of field names (e.g. "BucketPolicyOnly") to
 	// unconditionally include in API requests. By default, fields with
 	// empty values are omitted from API requests. However, any non-pointer,
@@ -552,11 +556,11 @@ func (s *BucketIamConfiguration) MarshalJSON() ([]byte, error) {
 // BucketIamConfigurationBucketPolicyOnly: The bucket's Bucket Policy
 // Only configuration.
 type BucketIamConfigurationBucketPolicyOnly struct {
-	// Enabled: If set, access checks only use bucket-level IAM policies or
-	// above.
+	// Enabled: If set, access is controlled only by bucket-level or above
+	// IAM policies.
 	Enabled bool `json:"enabled,omitempty"`
 
-	// LockedTime: The deadline time for changing
+	// LockedTime: The deadline for changing
 	// iamConfiguration.bucketPolicyOnly.enabled from true to false in RFC
 	// 3339 format. iamConfiguration.bucketPolicyOnly.enabled may be changed
 	// from true to false until the locked time, after which the field is
@@ -582,6 +586,44 @@ type BucketIamConfigurationBucketPolicyOnly struct {
 
 func (s *BucketIamConfigurationBucketPolicyOnly) MarshalJSON() ([]byte, error) {
 	type NoMethod BucketIamConfigurationBucketPolicyOnly
+	raw := NoMethod(*s)
+	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
+}
+
+// BucketIamConfigurationUniformBucketLevelAccess: The bucket's uniform
+// bucket-level access configuration.
+type BucketIamConfigurationUniformBucketLevelAccess struct {
+	// Enabled: If set, access is controlled only by bucket-level or above
+	// IAM policies.
+	Enabled bool `json:"enabled,omitempty"`
+
+	// LockedTime: The deadline for changing
+	// iamConfiguration.uniformBucketLevelAccess.enabled from true to false
+	// in RFC 3339  format.
+	// iamConfiguration.uniformBucketLevelAccess.enabled may be changed from
+	// true to false until the locked time, after which the field is
+	// immutable.
+	LockedTime string `json:"lockedTime,omitempty"`
+
+	// ForceSendFields is a list of field names (e.g. "Enabled") to
+	// unconditionally include in API requests. By default, fields with
+	// empty values are omitted from API requests. However, any non-pointer,
+	// non-interface field appearing in ForceSendFields will be sent to the
+	// server regardless of whether the field is empty or not. This may be
+	// used to include empty fields in Patch requests.
+	ForceSendFields []string `json:"-"`
+
+	// NullFields is a list of field names (e.g. "Enabled") to include in
+	// API requests with the JSON null value. By default, fields with empty
+	// values are omitted from API requests. However, any field with an
+	// empty value appearing in NullFields will be sent to the server as
+	// null. It is an error if a field in this list has a non-empty value.
+	// This may be used to include null fields in Patch requests.
+	NullFields []string `json:"-"`
+}
+
+func (s *BucketIamConfigurationUniformBucketLevelAccess) MarshalJSON() ([]byte, error) {
+	type NoMethod BucketIamConfigurationUniformBucketLevelAccess
 	raw := NoMethod(*s)
 	return gensupport.MarshalJSON(raw, s.ForceSendFields, s.NullFields)
 }
@@ -1122,7 +1164,7 @@ type Channel struct {
 	Id string `json:"id,omitempty"`
 
 	// Kind: Identifies this as a notification channel used to watch for
-	// changes to a resource. Value: the fixed string "api#channel".
+	// changes to a resource, which is "api#channel".
 	Kind string `json:"kind,omitempty"`
 
 	// Params: Additional parameters controlling delivery channel behavior.

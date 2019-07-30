@@ -1,0 +1,25 @@
+{
+  "tests": [
+    {
+      "description": "query: ArrayRemove in Where",
+      "comment": "ArrayRemove is not permitted in queries.",
+      "query": {
+        "collPath": "projects/projectID/databases/(default)/documents/C",
+        "clauses": [
+          {
+            "where": {
+              "path": {
+                "field": [
+                  "a"
+                ]
+              },
+              "op": "==",
+              "jsonValue": "[\"ArrayRemove\", 1, 2, 3]"
+            }
+          }
+        ],
+        "isError": true
+      }
+    }
+  ]
+}

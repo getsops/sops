@@ -1,0 +1,13 @@
+{
+  "tests": [
+    {
+      "description": "set: ArrayUnion cannot be in an array value",
+      "comment": "ArrayUnion must be the value of a field. Firestore\ntransforms don't support array indexing.",
+      "set": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "jsonData": "{\"a\": [1, 2, [\"ArrayRemove\", 1, 2, 3]]}",
+        "isError": true
+      }
+    }
+  ]
+}

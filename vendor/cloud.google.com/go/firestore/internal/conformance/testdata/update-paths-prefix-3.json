@@ -1,0 +1,29 @@
+{
+  "tests": [
+    {
+      "description": "update-paths: prefix #3",
+      "comment": "In the input data, one field cannot be a prefix of another, even if the values could in principle be combined.",
+      "updatePaths": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "fieldPaths": [
+          {
+            "field": [
+              "a"
+            ]
+          },
+          {
+            "field": [
+              "a",
+              "d"
+            ]
+          }
+        ],
+        "jsonValues": [
+          "{\"b\": 1}",
+          "2"
+        ],
+        "isError": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+.title:not(:last-child),
+.subtitle:not(:last-child) {
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-weight: $font-weight-bold;
+
+  > a {
+    color: $black;
+    text-decoration: none;
+  }
+}
+
+.form-section .title {
+  margin-bottom: $spacing-s;
+}

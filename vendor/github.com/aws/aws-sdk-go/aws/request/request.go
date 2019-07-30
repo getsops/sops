@@ -264,18 +264,7 @@ func (r *Request) SetStringBody(s string) {
 // SetReaderBody will set the request's body reader.
 func (r *Request) SetReaderBody(reader io.ReadSeeker) {
 	r.Body = reader
-
-	if aws.IsReaderSeekable(reader) {
-		var err error
-		// Get the Bodies current offset so retries will start from the same
-		// initial position.
-		r.BodyStart, err = reader.Seek(0, sdkio.SeekCurrent)
-		if err != nil {
-			r.Error = awserr.New(ErrCodeSerialization,
-				"failed to determine start of request body", err)
-			return
-		}
-	}
+	r.BodyStart, _ = reader.Seek(0, sdkio.SeekCurrent) // Get the Bodies current offset.
 	r.ResetBody()
 }
 
@@ -347,7 +336,9 @@ func getPresignedURL(r *Request, expire time.Duration) (string, http.Header, err
 }
 
 const (
+	willRetry   = "will retry"
 	notRetrying = "not retrying"
+	retryCount  = "retry %v/%v"
 )
 
 func debugLogReqError(r *Request, stage, retryStr string, err error) {
@@ -402,16 +393,12 @@ func (r *Request) Sign() error {
 	return r.Error
 }
 
-func (r *Request) getNextRequestBody() (body io.ReadCloser, err error) {
+func (r *Request) getNextRequestBody() (io.ReadCloser, error) {
 	if r.safeBody != nil {
 		r.safeBody.Close()
 	}
 
-	r.safeBody, err = newOffsetReader(r.Body, r.BodyStart)
-	if err != nil {
-		return nil, awserr.New(ErrCodeSerialization,
-			"failed to get next request body reader", err)
-	}
+	r.safeBody = newOffsetReader(r.Body, r.BodyStart)
 
 	// Go 1.8 tightened and clarified the rules code needs to use when building
 	// requests with the http package. Go 1.8 removed the automatic detection
@@ -428,10 +415,10 @@ func (r *Request) getNextRequestBody() (body io.ReadCloser, err error) {
 	// Related golang/go#18257
 	l, err := aws.SeekerLen(r.Body)
 	if err != nil {
-		return nil, awserr.New(ErrCodeSerialization,
-			"failed to compute request body size", err)
+		return nil, awserr.New(ErrCodeSerialization, "failed to compute request body size", err)
 	}
 
+	var body io.ReadCloser
 	if l == 0 {
 		body = NoBody
 	} else if l > 0 {
@@ -508,16 +495,13 @@ func (r *Request) Send() error {
 				return r.Error
 			}
 
-			if err := r.prepareRetry(); err != nil {
-				r.Error = err
-				return err
-			}
+			r.prepareRetry()
 			continue
 		}
 	}
 }
 
-func (r *Request) prepareRetry() error {
+func (r *Request) prepareRetry() {
 	if r.Config.LogLevel.Matches(aws.LogDebugWithRequestRetries) {
 		r.Config.Logger.Log(fmt.Sprintf("DEBUG: Retrying Request %s/%s, attempt %d",
 			r.ClientInfo.ServiceName, r.Operation.Name, r.RetryCount))
@@ -528,19 +512,12 @@ func (r *Request) prepareRetry() error {
 	// the request's body even though the Client's Do returned.
 	r.HTTPRequest = copyHTTPRequest(r.HTTPRequest, nil)
 	r.ResetBody()
-	if err := r.Error; err != nil {
-		return awserr.New(ErrCodeSerialization,
-			"failed to prepare body for retry", err)
-
-	}
 
 	// Closing response body to ensure that no response body is leaked
 	// between retry attempts.
 	if r.HTTPResponse != nil && r.HTTPResponse.Body != nil {
 		r.HTTPResponse.Body.Close()
 	}
-
-	return nil
 }
 
 func (r *Request) sendRequest() (sendErr error) {

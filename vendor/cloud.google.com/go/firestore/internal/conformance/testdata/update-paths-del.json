@@ -1,0 +1,51 @@
+{
+  "tests": [
+    {
+      "description": "update-paths: Delete",
+      "comment": "If a field's value is the Delete sentinel, then it doesn't appear\nin the update data, but does in the mask.",
+      "updatePaths": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "fieldPaths": [
+          {
+            "field": [
+              "a"
+            ]
+          },
+          {
+            "field": [
+              "b"
+            ]
+          }
+        ],
+        "jsonValues": [
+          "1",
+          "\"Delete\""
+        ],
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d",
+                "fields": {
+                  "a": {
+                    "integerValue": "1"
+                  }
+                }
+              },
+              "updateMask": {
+                "fieldPaths": [
+                  "a",
+                  "b"
+                ]
+              },
+              "currentDocument": {
+                "exists": true
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

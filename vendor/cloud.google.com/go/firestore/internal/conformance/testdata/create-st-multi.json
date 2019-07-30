@@ -1,0 +1,45 @@
+{
+  "tests": [
+    {
+      "description": "create: multiple ServerTimestamp fields",
+      "comment": "A document can have more than one ServerTimestamp field.\nSince all the ServerTimestamp fields are removed, the only field in the update is \"a\".",
+      "create": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "jsonData": "{\"a\": 1, \"b\": \"ServerTimestamp\", \"c\": {\"d\": \"ServerTimestamp\"}}",
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d",
+                "fields": {
+                  "a": {
+                    "integerValue": "1"
+                  }
+                }
+              },
+              "currentDocument": {
+                "exists": false
+              }
+            },
+            {
+              "transform": {
+                "document": "projects/projectID/databases/(default)/documents/C/d",
+                "fieldTransforms": [
+                  {
+                    "fieldPath": "b",
+                    "setToServerValue": "REQUEST_TIME"
+                  },
+                  {
+                    "fieldPath": "c.d",
+                    "setToServerValue": "REQUEST_TIME"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

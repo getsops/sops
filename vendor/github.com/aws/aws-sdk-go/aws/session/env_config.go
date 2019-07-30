@@ -104,27 +104,11 @@ type envConfig struct {
 	CSMClientID string
 	CSMHost     string
 
+	enableEndpointDiscovery string
 	// Enables endpoint discovery via environment variables.
 	//
 	//	AWS_ENABLE_ENDPOINT_DISCOVERY=true
 	EnableEndpointDiscovery *bool
-	enableEndpointDiscovery string
-
-	// Specifies the WebIdentity token the SDK should use to assume a role
-	// with.
-	//
-	//  AWS_WEB_IDENTITY_TOKEN_FILE=file_path
-	WebIdentityTokenFilePath string
-
-	// Specifies the IAM role arn to use when assuming an role.
-	//
-	//  AWS_ROLE_ARN=role_arn
-	RoleARN string
-
-	// Specifies the IAM role session name to use when assuming a role.
-	//
-	//  AWS_ROLE_SESSION_NAME=session_name
-	RoleSessionName string
 }
 
 var (
@@ -170,15 +154,6 @@ var (
 	sharedConfigFileEnvKey = []string{
 		"AWS_CONFIG_FILE",
 	}
-	webIdentityTokenFilePathEnvKey = []string{
-		"AWS_WEB_IDENTITY_TOKEN_FILE",
-	}
-	roleARNEnvKey = []string{
-		"AWS_ROLE_ARN",
-	}
-	roleSessionNameEnvKey = []string{
-		"AWS_ROLE_SESSION_NAME",
-	}
 )
 
 // loadEnvConfig retrieves the SDK's environment configuration.
@@ -207,23 +182,9 @@ func envConfigLoad(enableSharedConfig bool) envConfig {
 
 	cfg.EnableSharedConfig = enableSharedConfig
 
-	// Static environment credentials
-	var creds credentials.Value
-	setFromEnvVal(&creds.AccessKeyID, credAccessEnvKey)
-	setFromEnvVal(&creds.SecretAccessKey, credSecretEnvKey)
-	setFromEnvVal(&creds.SessionToken, credSessionEnvKey)
-	if creds.HasKeys() {
-		// Require logical grouping of credentials
-		creds.ProviderName = EnvProviderName
-		cfg.Creds = creds
-	}
-
-	// Role Metadata
-	setFromEnvVal(&cfg.RoleARN, roleARNEnvKey)
-	setFromEnvVal(&cfg.RoleSessionName, roleSessionNameEnvKey)
-
-	// Web identity environment variables
-	setFromEnvVal(&cfg.WebIdentityTokenFilePath, webIdentityTokenFilePathEnvKey)
+	setFromEnvVal(&cfg.Creds.AccessKeyID, credAccessEnvKey)
+	setFromEnvVal(&cfg.Creds.SecretAccessKey, credSecretEnvKey)
+	setFromEnvVal(&cfg.Creds.SessionToken, credSessionEnvKey)
 
 	// CSM environment variables
 	setFromEnvVal(&cfg.csmEnabled, csmEnabledEnvKey)
@@ -231,6 +192,13 @@ func envConfigLoad(enableSharedConfig bool) envConfig {
 	setFromEnvVal(&cfg.CSMPort, csmPortEnvKey)
 	setFromEnvVal(&cfg.CSMClientID, csmClientIDEnvKey)
 	cfg.CSMEnabled = len(cfg.csmEnabled) > 0
+
+	// Require logical grouping of credentials
+	if len(cfg.Creds.AccessKeyID) == 0 || len(cfg.Creds.SecretAccessKey) == 0 {
+		cfg.Creds = credentials.Value{}
+	} else {
+		cfg.Creds.ProviderName = EnvProviderName
+	}
 
 	regionKeys := regionEnvKeys
 	profileKeys := profileEnvKeys

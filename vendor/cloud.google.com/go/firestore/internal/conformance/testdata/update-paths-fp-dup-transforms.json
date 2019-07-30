@@ -1,0 +1,34 @@
+{
+  "tests": [
+    {
+      "description": "update-paths: duplicate field path with only transforms",
+      "comment": "The same field cannot occur more than once, even if all the operations are transforms.",
+      "updatePaths": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "fieldPaths": [
+          {
+            "field": [
+              "a"
+            ]
+          },
+          {
+            "field": [
+              "b"
+            ]
+          },
+          {
+            "field": [
+              "a"
+            ]
+          }
+        ],
+        "jsonValues": [
+          "[\"ArrayUnion\", 1, 2, 3]",
+          "\"ServerTimestamp\"",
+          "[\"ArrayUnion\", 4, 5, 6]"
+        ],
+        "isError": true
+      }
+    }
+  ]
+}

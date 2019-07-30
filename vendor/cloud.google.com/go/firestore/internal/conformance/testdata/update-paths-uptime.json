@@ -1,0 +1,47 @@
+{
+  "tests": [
+    {
+      "description": "update-paths: last-update-time precondition",
+      "comment": "The Update call supports a last-update-time precondition.",
+      "updatePaths": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "precondition": {
+          "updateTime": "1970-01-01T00:00:42Z"
+        },
+        "fieldPaths": [
+          {
+            "field": [
+              "a"
+            ]
+          }
+        ],
+        "jsonValues": [
+          "1"
+        ],
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "update": {
+                "name": "projects/projectID/databases/(default)/documents/C/d",
+                "fields": {
+                  "a": {
+                    "integerValue": "1"
+                  }
+                }
+              },
+              "updateMask": {
+                "fieldPaths": [
+                  "a"
+                ]
+              },
+              "currentDocument": {
+                "updateTime": "1970-01-01T00:00:42Z"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

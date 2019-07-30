@@ -1,0 +1,81 @@
+{
+  "tests": [
+    {
+      "description": "listen: TargetChange_ADD is a no-op if it has the same target ID",
+      "comment": "A TargetChange_ADD response must have the same watch target ID.",
+      "listen": {
+        "responses": [
+          {
+            "documentChange": {
+              "document": {
+                "name": "projects/projectID/databases/(default)/documents/C/d1",
+                "fields": {
+                  "a": {
+                    "integerValue": "3"
+                  }
+                },
+                "createTime": "1970-01-01T00:00:01Z",
+                "updateTime": "1970-01-01T00:00:01Z"
+              },
+              "targetIds": [
+                1
+              ]
+            }
+          },
+          {
+            "targetChange": {
+              "targetChangeType": "CURRENT"
+            }
+          },
+          {
+            "targetChange": {
+              "targetChangeType": "ADD",
+              "targetIds": [
+                1
+              ],
+              "readTime": "1970-01-01T00:00:02Z"
+            }
+          },
+          {
+            "targetChange": {
+              "readTime": "1970-01-01T00:00:01Z"
+            }
+          }
+        ],
+        "snapshots": [
+          {
+            "docs": [
+              {
+                "name": "projects/projectID/databases/(default)/documents/C/d1",
+                "fields": {
+                  "a": {
+                    "integerValue": "3"
+                  }
+                },
+                "createTime": "1970-01-01T00:00:01Z",
+                "updateTime": "1970-01-01T00:00:01Z"
+              }
+            ],
+            "changes": [
+              {
+                "kind": "ADDED",
+                "doc": {
+                  "name": "projects/projectID/databases/(default)/documents/C/d1",
+                  "fields": {
+                    "a": {
+                      "integerValue": "3"
+                    }
+                  },
+                  "createTime": "1970-01-01T00:00:01Z",
+                  "updateTime": "1970-01-01T00:00:01Z"
+                },
+                "oldIndex": -1
+              }
+            ],
+            "readTime": "1970-01-01T00:00:01Z"
+          }
+        ]
+      }
+    }
+  ]
+}

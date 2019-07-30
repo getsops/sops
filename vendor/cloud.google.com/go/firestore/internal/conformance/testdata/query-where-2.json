@@ -1,0 +1,71 @@
+{
+  "tests": [
+    {
+      "description": "query: two Where clauses",
+      "comment": "Multiple Where clauses are combined into a composite filter.",
+      "query": {
+        "collPath": "projects/projectID/databases/(default)/documents/C",
+        "clauses": [
+          {
+            "where": {
+              "path": {
+                "field": [
+                  "a"
+                ]
+              },
+              "op": "\u003e=",
+              "jsonValue": "5"
+            }
+          },
+          {
+            "where": {
+              "path": {
+                "field": [
+                  "b"
+                ]
+              },
+              "op": "\u003c",
+              "jsonValue": "\"foo\""
+            }
+          }
+        ],
+        "query": {
+          "from": [
+            {
+              "collectionId": "C"
+            }
+          ],
+          "where": {
+            "compositeFilter": {
+              "op": "AND",
+              "filters": [
+                {
+                  "fieldFilter": {
+                    "field": {
+                      "fieldPath": "a"
+                    },
+                    "op": "GREATER_THAN_OR_EQUAL",
+                    "value": {
+                      "integerValue": "5"
+                    }
+                  }
+                },
+                {
+                  "fieldFilter": {
+                    "field": {
+                      "fieldPath": "b"
+                    },
+                    "op": "LESS_THAN",
+                    "value": {
+                      "stringValue": "foo"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "tests": [
+    {
+      "description": "update: Delete cannot be nested",
+      "comment": "The Delete sentinel must be the value of a top-level key.",
+      "update": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "jsonData": "{\"a\": {\"b\": \"Delete\"}}",
+        "isError": true
+      }
+    }
+  ]
+}

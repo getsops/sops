@@ -1,0 +1,25 @@
+.navbar-brand .splash-page-logo {
+  padding: $spacing-xs $spacing-s $spacing-xs $spacing-l;
+
+  @include from($mobile) {
+    padding-left: $spacing-xs;
+  }
+
+  svg {
+    fill: $white;
+    height: 24px;
+    width: 72px;
+
+    @include from($mobile) {
+      margin-left: $spacing-xs;
+    }
+  }
+}
+
+.splash-page-container {
+  margin: $size-2 0;
+}
+
+.splash-page-header {
+  padding: $size-6 $size-5;
+}

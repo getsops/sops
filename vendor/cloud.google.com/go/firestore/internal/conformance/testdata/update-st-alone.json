@@ -1,0 +1,31 @@
+{
+  "tests": [
+    {
+      "description": "update: ServerTimestamp alone",
+      "comment": "If the only values in the input are ServerTimestamps, then no\nupdate operation should be produced.",
+      "update": {
+        "docRefPath": "projects/projectID/databases/(default)/documents/C/d",
+        "jsonData": "{\"a\": \"ServerTimestamp\"}",
+        "request": {
+          "database": "projects/projectID/databases/(default)",
+          "writes": [
+            {
+              "transform": {
+                "document": "projects/projectID/databases/(default)/documents/C/d",
+                "fieldTransforms": [
+                  {
+                    "fieldPath": "a",
+                    "setToServerValue": "REQUEST_TIME"
+                  }
+                ]
+              },
+              "currentDocument": {
+                "exists": true
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
