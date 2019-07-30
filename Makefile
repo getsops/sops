@@ -19,8 +19,8 @@ lint:
 	$(GOLINT) $(PROJECT)
 
 vendor:
-	go mod tidy
-	go mod vendor
+	$(GO) mod tidy
+	$(GO) mod vendor
 
 vet:
 	$(GO) vet $(PROJECT)
