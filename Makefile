@@ -25,7 +25,7 @@ vendor:
 vet:
 	$(GO) vet $(PROJECT)
 
-test:
+test: vendor
 	gpg --import pgp/sops_functional_tests_key.asc 2>&1 1>/dev/null || exit 0
 	./test.sh
 
