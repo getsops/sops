@@ -73,9 +73,6 @@ func (c *LRU) Add(key, value interface{}) (evicted bool) {
 func (c *LRU) Get(key interface{}) (value interface{}, ok bool) {
 	if ent, ok := c.items[key]; ok {
 		c.evictList.MoveToFront(ent)
-		if ent.Value.(*entry) == nil {
-			return nil, false
-		}
 		return ent.Value.(*entry).value, true
 	}
 	return

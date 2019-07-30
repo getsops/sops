@@ -21,7 +21,7 @@ type Key struct {
 }
 
 // NewKey creates or retrieves a string key identified by name.
-// Calling NewKey more than once with the same name returns the same key.
+// Calling NewKey consequently with the same name returns the same key.
 func NewKey(name string) (Key, error) {
 	if !checkKeyName(name) {
 		return Key{}, errInvalidKeyName
@@ -29,7 +29,8 @@ func NewKey(name string) (Key, error) {
 	return Key{name: name}, nil
 }
 
-// MustNewKey returns a key with the given name, and panics if name is an invalid key name.
+// MustNewKey creates or retrieves a string key identified by name.
+// An invalid key name raises a panic.
 func MustNewKey(name string) Key {
 	k, err := NewKey(name)
 	if err != nil {

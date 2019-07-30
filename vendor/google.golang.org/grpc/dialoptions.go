@@ -60,6 +60,7 @@ type dialOptions struct {
 	balancerBuilder balancer.Builder
 	// This is to support grpclb.
 	resolverBuilder             resolver.Builder
+	reqHandshake                envconfig.RequireHandshakeSetting
 	channelzParentID            int64
 	disableServiceConfig        bool
 	disableRetry                bool
@@ -97,6 +98,17 @@ func newFuncDialOption(f func(*dialOptions)) *funcDialOption {
 	return &funcDialOption{
 		f: f,
 	}
+}
+
+// WithWaitForHandshake blocks until the initial settings frame is received from
+// the server before assigning RPCs to the connection.
+//
+// Deprecated: this is the default behavior, and this option will be removed
+// after the 1.18 release.
+func WithWaitForHandshake() DialOption {
+	return newFuncDialOption(func(o *dialOptions) {
+		o.reqHandshake = envconfig.RequireHandshakeOn
+	})
 }
 
 // WithWriteBufferSize determines how much data can be batched before doing a
@@ -144,8 +156,7 @@ func WithInitialConnWindowSize(s int32) DialOption {
 // WithMaxMsgSize returns a DialOption which sets the maximum message size the
 // client can receive.
 //
-// Deprecated: use WithDefaultCallOptions(MaxCallRecvMsgSize(s)) instead.  Will
-// be supported throughout 1.x.
+// Deprecated: use WithDefaultCallOptions(MaxCallRecvMsgSize(s)) instead.
 func WithMaxMsgSize(s int) DialOption {
 	return WithDefaultCallOptions(MaxCallRecvMsgSize(s))
 }
@@ -161,8 +172,7 @@ func WithDefaultCallOptions(cos ...CallOption) DialOption {
 // WithCodec returns a DialOption which sets a codec for message marshaling and
 // unmarshaling.
 //
-// Deprecated: use WithDefaultCallOptions(ForceCodec(_)) instead.  Will be
-// supported throughout 1.x.
+// Deprecated: use WithDefaultCallOptions(ForceCodec(_)) instead.
 func WithCodec(c Codec) DialOption {
 	return WithDefaultCallOptions(CallCustomCodec(c))
 }
@@ -171,7 +181,7 @@ func WithCodec(c Codec) DialOption {
 // message compression. It has lower priority than the compressor set by the
 // UseCompressor CallOption.
 //
-// Deprecated: use UseCompressor instead.  Will be supported throughout 1.x.
+// Deprecated: use UseCompressor instead.
 func WithCompressor(cp Compressor) DialOption {
 	return newFuncDialOption(func(o *dialOptions) {
 		o.cp = cp
@@ -186,8 +196,7 @@ func WithCompressor(cp Compressor) DialOption {
 // message.  If no compressor is registered for the encoding, an Unimplemented
 // status error will be returned.
 //
-// Deprecated: use encoding.RegisterCompressor instead.  Will be supported
-// throughout 1.x.
+// Deprecated: use encoding.RegisterCompressor instead.
 func WithDecompressor(dc Decompressor) DialOption {
 	return newFuncDialOption(func(o *dialOptions) {
 		o.dc = dc
@@ -198,7 +207,7 @@ func WithDecompressor(dc Decompressor) DialOption {
 // Name resolver will be ignored if this DialOption is specified.
 //
 // Deprecated: use the new balancer APIs in balancer package and
-// WithBalancerName.  Will be removed in a future 1.x release.
+// WithBalancerName.
 func WithBalancer(b Balancer) DialOption {
 	return newFuncDialOption(func(o *dialOptions) {
 		o.balancerBuilder = &balancerWrapperBuilder{
@@ -214,8 +223,7 @@ func WithBalancer(b Balancer) DialOption {
 // The balancer cannot be overridden by balancer option specified by service
 // config.
 //
-// Deprecated: use WithDefaultServiceConfig and WithDisableServiceConfig
-// instead.  Will be removed in a future 1.x release.
+// This is an EXPERIMENTAL API.
 func WithBalancerName(balancerName string) DialOption {
 	builder := balancer.Get(balancerName)
 	if builder == nil {
@@ -236,10 +244,9 @@ func withResolverBuilder(b resolver.Builder) DialOption {
 // WithServiceConfig returns a DialOption which has a channel to read the
 // service configuration.
 //
-// Deprecated: service config should be received through name resolver or via
-// WithDefaultServiceConfig, as specified at
-// https://github.com/grpc/grpc/blob/master/doc/service_config.md.  Will be
-// removed in a future 1.x release.
+// Deprecated: service config should be received through name resolver, as
+// specified here.
+// https://github.com/grpc/grpc/blob/master/doc/service_config.md
 func WithServiceConfig(c <-chan ServiceConfig) DialOption {
 	return newFuncDialOption(func(o *dialOptions) {
 		o.scChan = c
@@ -322,8 +329,7 @@ func WithCredentialsBundle(b credentials.Bundle) DialOption {
 // WithTimeout returns a DialOption that configures a timeout for dialing a
 // ClientConn initially. This is valid if and only if WithBlock() is present.
 //
-// Deprecated: use DialContext and context.WithTimeout instead.  Will be
-// supported throughout 1.x.
+// Deprecated: use DialContext and context.WithTimeout instead.
 func WithTimeout(d time.Duration) DialOption {
 	return newFuncDialOption(func(o *dialOptions) {
 		o.timeout = d
@@ -350,8 +356,7 @@ func init() {
 // is returned by f, gRPC checks the error's Temporary() method to decide if it
 // should try to reconnect to the network address.
 //
-// Deprecated: use WithContextDialer instead.  Will be supported throughout
-// 1.x.
+// Deprecated: use WithContextDialer instead
 func WithDialer(f func(string, time.Duration) (net.Conn, error)) DialOption {
 	return WithContextDialer(
 		func(ctx context.Context, addr string) (net.Conn, error) {
@@ -475,10 +480,8 @@ func WithDisableServiceConfig() DialOption {
 
 // WithDefaultServiceConfig returns a DialOption that configures the default
 // service config, which will be used in cases where:
-//
-// 1. WithDisableServiceConfig is also used.
-// 2. Resolver does not return a service config or if the resolver returns an
-//    invalid service config.
+// 1. WithDisableServiceConfig is called.
+// 2. Resolver does not return service config or if the resolver gets and invalid config.
 //
 // This API is EXPERIMENTAL.
 func WithDefaultServiceConfig(s string) DialOption {
@@ -534,6 +537,7 @@ func withHealthCheckFunc(f internal.HealthChecker) DialOption {
 func defaultDialOptions() dialOptions {
 	return dialOptions{
 		disableRetry:    !envconfig.Retry,
+		reqHandshake:    envconfig.RequireHandshake,
 		healthCheckFunc: internal.HealthCheckFunc,
 		copts: transport.ConnectOptions{
 			WriteBufferSize: defaultWriteBufSize,

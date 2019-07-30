@@ -1,1 +1,0 @@
-Run `./envoy-proto-gen.sh` in __this__ directory (and fingers crossed).

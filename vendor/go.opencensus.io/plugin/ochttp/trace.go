@@ -186,8 +186,6 @@ func TraceStatus(httpStatusCode int, statusLine string) trace.Status {
 		code = trace.StatusCodeCancelled
 	case http.StatusBadRequest:
 		code = trace.StatusCodeInvalidArgument
-	case http.StatusUnprocessableEntity:
-		code = trace.StatusCodeInvalidArgument
 	case http.StatusGatewayTimeout:
 		code = trace.StatusCodeDeadlineExceeded
 	case http.StatusNotFound:

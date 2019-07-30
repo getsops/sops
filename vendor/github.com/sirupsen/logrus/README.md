@@ -187,7 +187,7 @@ func main() {
   log.Out = os.Stdout
 
   // You could set this to any `io.Writer` such as a file
-  // file, err := os.OpenFile("logrus.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+  // file, err := os.OpenFile("logrus.log", os.O_CREATE|os.O_WRONLY, 0666)
   // if err == nil {
   //  log.Out = file
   // } else {
@@ -354,7 +354,6 @@ The built-in logging formatters are:
     [github.com/mattn/go-colorable](https://github.com/mattn/go-colorable).
   * When colors are enabled, levels are truncated to 4 characters by default. To disable
     truncation set the `DisableLevelTruncation` field to `true`.
-  * When outputting to a TTY, it's often helpful to visually scan down a column where all the levels are the same width. Setting the `PadLevelText` field to `true` enables this behavior, by adding padding to the level text.
   * All options are listed in the [generated docs](https://godoc.org/github.com/sirupsen/logrus#TextFormatter).
 * `logrus.JSONFormatter`. Logs fields as JSON.
   * All options are listed in the [generated docs](https://godoc.org/github.com/sirupsen/logrus#JSONFormatter).
