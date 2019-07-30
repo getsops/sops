@@ -1,5 +1,0 @@
-{{#each log as |message|}}
-  {{#unless message.hidden}}
-    {{component (concat 'console/log-' message.type) content=message.content}}
-  {{/unless}}
-{{/each}}

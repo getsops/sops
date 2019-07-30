@@ -11,9 +11,6 @@ import (
 // Writer implements the LZ4 frame encoder.
 type Writer struct {
 	Header
-	// Handler called when a block has been successfully written out.
-	// It provides the number of bytes written.
-	OnBlockDone func(size int)
 
 	buf       [19]byte      // magic number(4) + header(flags(2)+[Size(8)+DictID(4)]+checksum(1)) does not exceed 19 bytes
 	dst       io.Writer     // Destination.
@@ -49,8 +46,8 @@ func (z *Writer) writeHeader() error {
 	if n := 2 * bSize; cap(z.zdata) < n {
 		z.zdata = make([]byte, n, n)
 	}
-	z.data = z.zdata[:bSize]
-	z.zdata = z.zdata[:cap(z.zdata)][bSize:]
+	z.zdata = z.zdata[:bSize]
+	z.data = z.zdata[:cap(z.zdata)][bSize:]
 	z.idx = 0
 
 	// Size is optional.
@@ -185,26 +182,24 @@ func (z *Writer) compressBlock(data []byte) error {
 	if err := z.writeUint32(bLen); err != nil {
 		return err
 	}
-	written, err := z.dst.Write(zdata)
-	if err != nil {
+	if _, err := z.dst.Write(zdata); err != nil {
 		return err
 	}
-	if h := z.OnBlockDone; h != nil {
-		h(written)
+
+	if z.BlockChecksum {
+		checksum := xxh32.ChecksumZero(zdata)
+		if debugFlag {
+			debug("block checksum %x", checksum)
+		}
+		if err := z.writeUint32(checksum); err != nil {
+			return err
+		}
+	}
+	if debugFlag {
+		debug("current frame checksum %x", z.checksum.Sum32())
 	}
 
-	if !z.BlockChecksum {
-		if debugFlag {
-			debug("current frame checksum %x", z.checksum.Sum32())
-		}
-		return nil
-	}
-	checksum := xxh32.ChecksumZero(zdata)
-	if debugFlag {
-		debug("block checksum %x", checksum)
-		defer func() { debug("current frame checksum %x", z.checksum.Sum32()) }()
-	}
-	return z.writeUint32(checksum)
+	return nil
 }
 
 // Flush flushes any pending compressed data to the underlying writer.
@@ -218,11 +213,7 @@ func (z *Writer) Flush() error {
 		return nil
 	}
 
-	if err := z.compressBlock(z.data[:z.idx]); err != nil {
-		return err
-	}
-	z.idx = 0
-	return nil
+	return z.compressBlock(z.data[:z.idx])
 }
 
 // Close closes the Writer, flushing any unwritten data to the underlying io.Writer, but does not close the underlying io.Writer.
@@ -232,6 +223,7 @@ func (z *Writer) Close() error {
 			return err
 		}
 	}
+
 	if err := z.Flush(); err != nil {
 		return err
 	}
@@ -242,14 +234,16 @@ func (z *Writer) Close() error {
 	if err := z.writeUint32(0); err != nil {
 		return err
 	}
-	if z.NoChecksum {
-		return nil
+	if !z.NoChecksum {
+		checksum := z.checksum.Sum32()
+		if debugFlag {
+			debug("stream checksum %x", checksum)
+		}
+		if err := z.writeUint32(checksum); err != nil {
+			return err
+		}
 	}
-	checksum := z.checksum.Sum32()
-	if debugFlag {
-		debug("stream checksum %x", checksum)
-	}
-	return z.writeUint32(checksum)
+	return nil
 }
 
 // Reset clears the state of the Writer z such that it is equivalent to its

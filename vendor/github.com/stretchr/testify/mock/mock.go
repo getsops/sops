@@ -262,21 +262,17 @@ func (m *Mock) On(methodName string, arguments ...interface{}) *Call {
 // */
 
 func (m *Mock) findExpectedCall(method string, arguments ...interface{}) (int, *Call) {
-	var expectedCall *Call
-
 	for i, call := range m.ExpectedCalls {
-		if call.Method == method {
+		if call.Method == method && call.Repeatability > -1 {
+
 			_, diffCount := call.Arguments.Diff(arguments)
 			if diffCount == 0 {
-				expectedCall = call
-				if call.Repeatability > -1 {
-					return i, call
-				}
+				return i, call
 			}
+
 		}
 	}
-
-	return -1, expectedCall
+	return -1, nil
 }
 
 func (m *Mock) findClosestCall(method string, arguments ...interface{}) (*Call, string) {
@@ -348,17 +344,13 @@ func (m *Mock) MethodCalled(methodName string, arguments ...interface{}) Argumen
 	found, call := m.findExpectedCall(methodName, arguments...)
 
 	if found < 0 {
-		// expected call found but it has already been called with repeatable times
-		if call != nil {
-			m.mutex.Unlock()
-			m.fail("\nassert: mock: The method has been called over %d times.\n\tEither do one more Mock.On(\"%s\").Return(...), or remove extra call.\n\tThis call was unexpected:\n\t\t%s\n\tat: %s", call.totalCalls, methodName, callString(methodName, arguments, true), assert.CallerInfo())
-		}
 		// we have to fail here - because we don't know what to do
 		// as the return arguments.  This is because:
 		//
 		//   a) this is a totally unexpected call to this method,
 		//   b) the arguments are not what was expected, or
 		//   c) the developer has forgotten to add an accompanying On...Return pair.
+
 		closestCall, mismatch := m.findClosestCall(methodName, arguments...)
 		m.mutex.Unlock()
 
