@@ -3,14 +3,14 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 PROJECT		:= go.mozilla.org/sops
-GO 		:= GO15VENDOREXPERIMENT=1 GO111MODULE=on go
+GO 		:= GO15VENDOREXPERIMENT=1 GO111MODULE=on GOPROXY=https://proxy.golang.org go
 GOLINT 		:= golint
 
 all: test vet generate install functional-tests
 origin-build: test vet generate install functional-tests-all
 
 install:
-	$(GO) install -mod vendor go.mozilla.org/sops/cmd/sops
+	$(GO) install go.mozilla.org/sops/cmd/sops
 
 tag: all
 	git tag -s $(TAGVER) -a -m "$(TAGMSG)"
@@ -25,7 +25,7 @@ vendor:
 vet:
 	$(GO) vet $(PROJECT)
 
-test:
+test: vendor
 	gpg --import pgp/sops_functional_tests_key.asc 2>&1 1>/dev/null || exit 0
 	./test.sh
 
@@ -39,7 +39,7 @@ generate: keyservice/keyservice.pb.go
 	protoc --go_out=plugins=grpc:. $<
 
 functional-tests:
-	$(GO) build -mod vendor -o functional-tests/sops go.mozilla.org/sops/cmd/sops
+	$(GO) build -o functional-tests/sops go.mozilla.org/sops/cmd/sops
 	cd functional-tests && cargo test
 
 # Ignored tests are ones that require external services (e.g. AWS KMS)
