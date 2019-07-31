@@ -12,6 +12,7 @@ import (
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
+	"go.mozilla.org/sops/vault"
 )
 
 // KeyFromMasterKey converts a SOPS internal MasterKey to an RPC Key that can be serialized with Protocol Buffers
@@ -30,6 +31,16 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 			KeyType: &Key_GcpKmsKey{
 				GcpKmsKey: &GcpKmsKey{
 					ResourceId: mk.ResourceID,
+				},
+			},
+		}
+	case *vault.MasterKey:
+		return Key{
+			KeyType: &Key_VaultKey{
+				VaultKey: &VaultKey{
+					VaultAddress: mk.VaultAddress,
+					BackendPath:  mk.BackendPath,
+					KeyName:      mk.KeyName,
 				},
 			},
 		}

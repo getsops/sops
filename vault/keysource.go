@@ -1,0 +1,241 @@
+package vault
+
+import (
+	"encoding/base64"
+	"fmt"
+	"net/url"
+	"path/filepath"
+	"strings"
+	"time"
+
+	"go.mozilla.org/sops/logging"
+
+	"github.com/hashicorp/vault/api"
+	"github.com/sirupsen/logrus"
+)
+
+var log *logrus.Logger
+
+func init() {
+	log = logging.NewLogger("VAULT_TRANSIT")
+}
+
+// MasterKey is a Vault Transit backend path used to encrypt and decrypt sops' data key.
+type MasterKey struct {
+	EncryptedKey string
+	KeyName      string
+	BackendPath  string
+	VaultAddress string
+	CreationDate time.Time
+}
+
+// NewMasterKeysFromURIs gets lots of keys from lots of URIs
+func NewMasterKeysFromURIs(uris string) ([]*MasterKey, error) {
+	var keys []*MasterKey
+	if uris == "" {
+		return keys, nil
+	}
+	uriList := strings.Split(uris, ",")
+	for _, uri := range uriList {
+		if uri == "" {
+			continue
+		}
+		key, err := NewMasterKeyFromURI(uri)
+		if err != nil {
+			return nil, err
+		}
+		keys = append(keys, key)
+	}
+	return keys, nil
+}
+
+// NewMasterKeyFromURI obtains the vaultAddress the transit backend path and the key name from the full URI of the key
+func NewMasterKeyFromURI(uri string) (*MasterKey, error) {
+	log.Debugln("Called NewMasterKeyFromURI with uri: ", uri)
+	var key *MasterKey
+	if uri == "" {
+		return key, nil
+	}
+	u, err := url.Parse(uri)
+	if err != nil {
+		return nil, err
+	}
+	if u.Scheme == "" {
+		return nil, fmt.Errorf("missing scheme in vault URL (should be like this: https://vault.example.com:8200/v1/transit/keys/keyName, got: %v", uri)
+	}
+	backendPath, keyName, err := getBackendAndKeyFromPath(u.EscapedPath())
+	if err != nil {
+		return nil, err
+	}
+	u.Path = ""
+	return NewMasterKey(u.String(), backendPath, keyName), nil
+
+}
+
+func getBackendAndKeyFromPath(path string) (string, string, error) {
+	path = strings.TrimPrefix(path, "/")
+	path = strings.TrimSuffix(path, "/")
+	values := strings.Split(path, "/")
+	// minimum lenght should be 4 "v1", "transit", "keys", "keyName"
+	if len(values) < 4 {
+		return "", "", fmt.Errorf("The path to the key is not long enough: (eg. https://vault.example.com:8200/v1/transit/keys/keyName")
+	}
+	log.Debugf("Path: %v \nValues: %v\n", path, values)
+	if values[0] != "v1" {
+		return "", "", fmt.Errorf("probably forgot v1 in the URI")
+	}
+	if values[len(values)-2] != "keys" {
+		return "", "", fmt.Errorf("probably forgot 'keys' in the URI")
+	}
+	return filepath.Join(values[1 : len(values)-2]...), values[len(values)-1], nil
+}
+
+// NewMasterKey creates a new MasterKey from a vault address, transit backend path and a key name and setting the creation date to the current date
+func NewMasterKey(addess, backendPath, keyName string) *MasterKey {
+	mk := &MasterKey{
+		VaultAddress: addess,
+		BackendPath:  backendPath,
+		KeyName:      keyName,
+		CreationDate: time.Now().UTC(),
+	}
+	log.Debugln("Created Vault Master Key: ", mk)
+	return mk
+}
+
+// EncryptedDataKey returns the encrypted data key this master key holds
+func (key *MasterKey) EncryptedDataKey() []byte {
+	return []byte(key.EncryptedKey)
+}
+
+// SetEncryptedDataKey sets the encrypted data key for this master key
+func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
+	key.EncryptedKey = string(enc)
+}
+
+// Encrypt takes a sops data key, encrypts it with Vault Transit and stores the result in the EncryptedKey field
+func (key *MasterKey) Encrypt(dataKey []byte) error {
+	path := filepath.Join(key.BackendPath, "encrypt", key.KeyName)
+	cfg := api.DefaultConfig()
+	cfg.Address = key.VaultAddress
+	cli, err := api.NewClient(cfg)
+	if err != nil {
+		log.WithField("Path", path).Info("Vault connections failed")
+		return fmt.Errorf("Cannot create Vault Client: %v", err)
+	}
+	encoded := base64.StdEncoding.EncodeToString(dataKey)
+	payload := make(map[string]interface{})
+	payload["plaintext"] = encoded
+	raw, err := cli.Logical().Write(path, payload)
+	if err != nil {
+		log.WithField("Path", path).Info("Encryption failed")
+		return err
+	}
+	if raw == nil || raw.Data == nil {
+		return fmt.Errorf("The transit backend %s is empty", path)
+	}
+	encrypted, ok := raw.Data["ciphertext"]
+	if ok != true {
+		return fmt.Errorf("there's not encrypted data")
+	}
+	encryptedKey, ok := encrypted.(string)
+	if ok != true {
+		return fmt.Errorf("the ciphertext cannot be casted to string")
+	}
+	key.EncryptedKey = encryptedKey
+	return nil
+}
+
+// EncryptIfNeeded encrypts the provided sops' data key and encrypts it if it hasn't been encrypted yet
+func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
+	if key.EncryptedKey == "" {
+		return key.Encrypt(dataKey)
+	}
+	return nil
+}
+
+// Decrypt decrypts the EncryptedKey field with CGP KMS and returns the result.
+func (key *MasterKey) Decrypt() ([]byte, error) {
+	path := filepath.Join(key.BackendPath, "decrypt", key.KeyName)
+	cfg := api.DefaultConfig()
+	cfg.Address = key.VaultAddress
+	cli, err := api.NewClient(cfg)
+	if err != nil {
+		log.WithField("Path", path).Info("Vault connections failed")
+		return nil, fmt.Errorf("Cannot create Vault Client: %v", err)
+	}
+	payload := make(map[string]interface{})
+	payload["ciphertext"] = key.EncryptedKey
+	raw, err := cli.Logical().Write(path, payload)
+	if err != nil {
+		log.WithField("Path", path).Info("Encryption failed")
+		return nil, err
+	}
+	if raw == nil || raw.Data == nil {
+		return nil, fmt.Errorf("The transit backend %s is empty", path)
+	}
+	decrypted, ok := raw.Data["plaintext"]
+	if ok != true {
+		return nil, fmt.Errorf("there's no decrypted data")
+	}
+	dataKey, ok := decrypted.(string)
+	if ok != true {
+		return nil, fmt.Errorf("the plaintest cannot be casted to string")
+	}
+	result, err := base64.StdEncoding.DecodeString(dataKey)
+	if err != nil {
+		return nil, fmt.Errorf("Couldn't decode base64 plaintext")
+	}
+	return result, nil
+}
+
+// NeedsRotation returns whether the data key needs to be rotated or not.
+// This is simply copied from GCPKMS
+// TODO: handle key rotation on vault side
+func (key *MasterKey) NeedsRotation() bool {
+	//TODO: manage rewrapping https://www.vaultproject.io/api/secret/transit/index.html#rewrap-data
+	return time.Since(key.CreationDate) > (time.Hour * 24 * 30 * 6)
+}
+
+// ToString converts the key to a string representation
+func (key *MasterKey) ToString() string {
+	return fmt.Sprintf("%s/v1/%s/keys/%s", key.VaultAddress, key.BackendPath, key.KeyName)
+}
+
+func (key *MasterKey) createVaultTransitAndKey() error {
+	cfg := api.DefaultConfig()
+	cfg.Address = key.VaultAddress
+	cli, err := api.NewClient(cfg)
+	if err != nil {
+		return fmt.Errorf("Cannot create Vault Client: %v", err)
+	}
+	err = cli.Sys().Mount(key.BackendPath, &api.MountInput{
+		Type:        "transit",
+		Description: "backend transit used by SOPS",
+	})
+	if err != nil {
+		return err
+	}
+	path := filepath.Join(key.BackendPath, "keys", key.KeyName)
+	payload := make(map[string]interface{})
+	payload["type"] = "rsa-4096"
+	_, err = cli.Logical().Write(path, payload)
+	if err != nil {
+		return err
+	}
+	_, err = cli.Logical().Read(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// ToMap converts the MasterKey to a map for serialization purposes
+func (key MasterKey) ToMap() map[string]interface{} {
+	out := make(map[string]interface{})
+	out["vault_address"] = key.VaultAddress
+	out["keyname"] = key.KeyName
+	out["backend_path"] = key.BackendPath
+	out["enc"] = key.EncryptedKey
+	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)
+	return out
+}

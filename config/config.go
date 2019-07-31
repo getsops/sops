@@ -19,6 +19,7 @@ import (
 	"go.mozilla.org/sops/logging"
 	"go.mozilla.org/sops/pgp"
 	"go.mozilla.org/sops/publish"
+	"go.mozilla.org/sops/vault"
 )
 
 var log *logrus.Logger
@@ -69,6 +70,7 @@ type keyGroup struct {
 	KMS     []kmsKey
 	GCPKMS  []gcpKmsKey  `yaml:"gcp_kms"`
 	AzureKV []azureKVKey `yaml:"azure_keyvault"`
+	Vault   []vaultKey   `yaml:"vault"`
 	PGP     []string
 }
 
@@ -87,6 +89,12 @@ type azureKVKey struct {
 	VaultURL string `yaml:"vaultUrl"`
 	Key      string `yaml:"key"`
 	Version  string `yaml:"version"`
+}
+
+type vaultKey struct {
+	VaultAddress string `yaml:"vault_address"`
+	BackendPath  string `yaml:"backend_path"`
+	KeyName      string `yaml:"key_name"`
 }
 
 type destinationRule struct {
@@ -109,6 +117,7 @@ type creationRule struct {
 	PGP               string
 	GCPKMS            string     `yaml:"gcp_kms"`
 	AzureKeyVault     string     `yaml:"azure_keyvault"`
+	Vault             string     `yaml:"vault_uris"`
 	KeyGroups         []keyGroup `yaml:"key_groups"`
 	ShamirThreshold   int        `yaml:"shamir_threshold"`
 	UnencryptedSuffix string     `yaml:"unencrypted_suffix"`
@@ -152,6 +161,9 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			for _, k := range group.AzureKV {
 				keyGroup = append(keyGroup, azkv.NewMasterKey(k.VaultURL, k.Key, k.Version))
 			}
+			for _, k := range group.Vault {
+				keyGroup = append(keyGroup, vault.NewMasterKey(k.VaultAddress, k.BackendPath, k.KeyName))
+			}
 			groups = append(groups, keyGroup)
 		}
 	} else {
@@ -170,6 +182,13 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			return nil, err
 		}
 		for _, k := range azureKeys {
+			keyGroup = append(keyGroup, k)
+		}
+		vaultKeys, err := vault.NewMasterKeysFromURIs(cRule.Vault)
+		if err != nil {
+			return nil, err
+		}
+		for _, k := range vaultKeys {
 			keyGroup = append(keyGroup, k)
 		}
 		groups = append(groups, keyGroup)
@@ -248,7 +267,7 @@ func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptio
 	var dest publish.Destination
 	if dRule != nil {
 		if dRule.S3Bucket != "" && dRule.GCSBucket != "" && dRule.VaultPath != "" {
-			return nil, fmt.Errorf("error loading config: more than one destinations were found in a single destination rule, you can only use one per rule.")
+			return nil, fmt.Errorf("error loading config: more than one destinations were found in a single destination rule, you can only use one per rule")
 		}
 		if dRule.S3Bucket != "" {
 			dest = publish.NewS3Destination(dRule.S3Bucket, dRule.S3Prefix)

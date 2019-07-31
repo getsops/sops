@@ -26,6 +26,8 @@ import (
 	"go.mozilla.org/sops/config"
 	"go.mozilla.org/sops/gcpkms"
 	"go.mozilla.org/sops/keys"
+	"go.mozilla.org/sops/vault"
+
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/logging"
@@ -220,6 +222,10 @@ func main() {
 							Name:  "azure-kv",
 							Usage: "the Azure Key Vault key URL the new group should contain. Can be specified more than once",
 						},
+						cli.StringSliceFlag{
+							Name:  "vault",
+							Usage: "the full vault path to the key used to encrypt/decrypt. Make you choose and configure a key with encrption/decryption enabled (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev'). Can be specified more than once",
+						},
 						cli.BoolFlag{
 							Name:  "in-place, i",
 							Usage: "write output back to the same file instead of stdout",
@@ -237,6 +243,7 @@ func main() {
 						pgpFps := c.StringSlice("pgp")
 						kmsArns := c.StringSlice("kms")
 						gcpKmses := c.StringSlice("gcp-kms")
+						vaultURIs := c.StringSlice("vault")
 						azkvs := c.StringSlice("azure-kv")
 						var group sops.KeyGroup
 						for _, fp := range pgpFps {
@@ -247,6 +254,14 @@ func main() {
 						}
 						for _, kms := range gcpKmses {
 							group = append(group, gcpkms.NewMasterKeyFromResourceID(kms))
+						}
+						for _, uri := range vaultURIs {
+							k, err := vault.NewMasterKeyFromURI(uri)
+							if err != nil {
+								log.WithError(err).Error("Failed to add key")
+								continue
+							}
+							group = append(group, k)
 						}
 						for _, url := range azkvs {
 							k, err := azkv.NewMasterKeyFromURL(url)
@@ -371,6 +386,11 @@ func main() {
 			EnvVar: "SOPS_AZURE_KEYVAULT_URLS",
 		},
 		cli.StringFlag{
+			Name:   "vault",
+			Usage:  "comma separated list of vault's key URI (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev')",
+			EnvVar: "SOPS_VAULT_URIS",
+		},
+		cli.StringFlag{
 			Name:   "pgp, p",
 			Usage:  "comma separated list of PGP fingerprints",
 			EnvVar: "SOPS_PGP_FP",
@@ -418,6 +438,14 @@ func main() {
 		cli.StringFlag{
 			Name:  "rm-kms",
 			Usage: "remove the provided comma-separated list of KMS ARNs from the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "add-vault",
+			Usage: "add the provided comma-separated list of Vault's URI key to the list of master keys on the given file ( eg. https://vault.example.org:8200/v1/transit/keys/dev)",
+		},
+		cli.StringFlag{
+			Name:  "rm-vault",
+			Usage: "remove the provided comma-separated list of Vault's URI key from the list of master keys on the given file ( eg. https://vault.example.org:8200/v1/transit/keys/dev)",
 		},
 		cli.StringFlag{
 			Name:  "add-pgp",
@@ -484,8 +512,8 @@ func main() {
 			return toExitError(err)
 		}
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
-			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-azure-kv") != "" ||
-				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-azure-kv") != "" {
+			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-vault") != "" || c.String("add-azure-kv") != "" ||
+				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-vault") != "" || c.String("rm-azure-kv") != "" {
 				return common.NewExitError("Error: cannot add or remove keys on non-existent files, use `--kms` and `--pgp` instead.", codes.CannotChangeKeysFromNonExistentFile)
 			}
 			if c.Bool("encrypt") || c.Bool("decrypt") || c.Bool("rotate") {
@@ -598,6 +626,13 @@ func main() {
 			for _, k := range azureKeys {
 				addMasterKeys = append(addMasterKeys, k)
 			}
+			vaultKeys, err := vault.NewMasterKeysFromURIs(c.String("add-vault"))
+			if err != nil {
+				return err
+			}
+			for _, k := range vaultKeys {
+				addMasterKeys = append(addMasterKeys, k)
+			}
 
 			var rmMasterKeys []keys.MasterKey
 			for _, k := range kms.MasterKeysFromArnString(c.String("rm-kms"), kmsEncryptionContext, c.String("aws-profile")) {
@@ -616,6 +651,14 @@ func main() {
 			for _, k := range azureKeys {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
+			vaultKeys, err = vault.NewMasterKeysFromURIs(c.String("rm-vault"))
+			if err != nil {
+				return err
+			}
+			for _, k := range vaultKeys {
+				rmMasterKeys = append(rmMasterKeys, k)
+			}
+
 			output, err = rotate(rotateOpts{
 				OutputStore:      outputStore,
 				InputStore:       inputStore,
@@ -833,6 +876,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	var pgpKeys []keys.MasterKey
 	var cloudKmsKeys []keys.MasterKey
 	var azkvKeys []keys.MasterKey
+	var vaultMkKeys []keys.MasterKey
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
 	if c.String("encryption-context") != "" && kmsEncryptionContext == nil {
 		return nil, common.NewExitError("Invalid KMS encryption context format", codes.ErrorInvalidKMSEncryptionContextFormat)
@@ -856,12 +900,21 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 			azkvKeys = append(azkvKeys, k)
 		}
 	}
+	if c.String("vault") != "" {
+		vaultKeys, err := vault.NewMasterKeysFromURIs(c.String("vault"))
+		if err != nil {
+			return nil, err
+		}
+		for _, k := range vaultKeys {
+			vaultMkKeys = append(vaultMkKeys, k)
+		}
+	}
 	if c.String("pgp") != "" {
 		for _, k := range pgp.MasterKeysFromFingerprintString(c.String("pgp")) {
 			pgpKeys = append(pgpKeys, k)
 		}
 	}
-	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("azure-kv") == "" {
+	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("azure-kv") == "" && c.String("vault") == "" {
 		conf, err := loadConfig(c, file, kmsEncryptionContext)
 		// config file might just not be supplied, without any error
 		if conf == nil {
@@ -878,6 +931,8 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	group = append(group, cloudKmsKeys...)
 	group = append(group, azkvKeys...)
 	group = append(group, pgpKeys...)
+	group = append(group, vaultMkKeys...)
+	log.Debugln("Master keys available: ", group)
 	return []sops.KeyGroup{group}, nil
 }
 

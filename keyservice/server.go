@@ -7,6 +7,7 @@ import (
 	"go.mozilla.org/sops/gcpkms"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/pgp"
+	"go.mozilla.org/sops/vault"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -61,6 +62,19 @@ func (ks *Server) encryptWithAzureKeyVault(key *AzureKeyVaultKey, plaintext []by
 	return []byte(azkvKey.EncryptedKey), nil
 }
 
+func (ks *Server) encryptWithVault(key *VaultKey, plaintext []byte) ([]byte, error) {
+	vaultKey := vault.MasterKey{
+		VaultAddress: key.VaultAddress,
+		BackendPath:  key.BackendPath,
+		KeyName:      key.KeyName,
+	}
+	err := vaultKey.Encrypt(plaintext)
+	if err != nil {
+		return nil, err
+	}
+	return []byte(vaultKey.EncryptedKey), nil
+}
+
 func (ks *Server) decryptWithPgp(key *PgpKey, ciphertext []byte) ([]byte, error) {
 	pgpKey := pgp.NewMasterKeyFromFingerprint(key.Fingerprint)
 	pgpKey.EncryptedKey = string(ciphertext)
@@ -92,6 +106,17 @@ func (ks *Server) decryptWithAzureKeyVault(key *AzureKeyVaultKey, ciphertext []b
 	}
 	azkvKey.EncryptedKey = string(ciphertext)
 	plaintext, err := azkvKey.Decrypt()
+	return []byte(plaintext), err
+}
+
+func (ks *Server) decryptWithVault(key *VaultKey, ciphertext []byte) ([]byte, error) {
+	vaultKey := vault.MasterKey{
+		VaultAddress: key.VaultAddress,
+		BackendPath:  key.BackendPath,
+		KeyName:      key.KeyName,
+	}
+	vaultKey.EncryptedKey = string(ciphertext)
+	plaintext, err := vaultKey.Decrypt()
 	return []byte(plaintext), err
 }
 
@@ -134,6 +159,14 @@ func (ks Server) Encrypt(ctx context.Context,
 		response = &EncryptResponse{
 			Ciphertext: ciphertext,
 		}
+	case *Key_VaultKey:
+		ciphertext, err := ks.encryptWithVault(k.VaultKey, req.Plaintext)
+		if err != nil {
+			return nil, err
+		}
+		response = &EncryptResponse{
+			Ciphertext: ciphertext,
+		}
 	case nil:
 		return nil, status.Errorf(codes.NotFound, "Must provide a key")
 	default:
@@ -158,6 +191,8 @@ func keyToString(key Key) string {
 		return fmt.Sprintf("GCP KMS key with resource ID %s", k.GcpKmsKey.ResourceId)
 	case *Key_AzureKeyvaultKey:
 		return fmt.Sprintf("Azure Key Vault key with URL %s/keys/%s/%s", k.AzureKeyvaultKey.VaultUrl, k.AzureKeyvaultKey.Name, k.AzureKeyvaultKey.Version)
+	case *Key_VaultKey:
+		return fmt.Sprintf("Hashicorp Vault key with URI %s/v1/%s/keys/%s", k.VaultKey.VaultAddress, k.VaultKey.BackendPath, k.VaultKey.KeyName)
 	default:
 		return fmt.Sprintf("Unknown key type")
 	}
@@ -212,6 +247,14 @@ func (ks Server) Decrypt(ctx context.Context,
 		}
 	case *Key_AzureKeyvaultKey:
 		plaintext, err := ks.decryptWithAzureKeyVault(k.AzureKeyvaultKey, req.Ciphertext)
+		if err != nil {
+			return nil, err
+		}
+		response = &DecryptResponse{
+			Plaintext: plaintext,
+		}
+	case *Key_VaultKey:
+		plaintext, err := ks.decryptWithVault(k.VaultKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}
