@@ -465,10 +465,10 @@ func main() {
 			Name:  "output",
 			Usage: "Save the output after encryption or decryption to the file specified",
 		},
-        cli.StringFlag{
-            Name: "exec",
-            Usage: "run a program with the decrypted data added its environment. only dotenv is supported.",
-        },
+		cli.StringFlag{
+			Name: "exec",
+			Usage: "run a program with the decrypted data added its environment. only dotenv is supported.",
+		},
 	}, keyserviceFlags...)
 
 	app.Action = func(c *cli.Context) error {
