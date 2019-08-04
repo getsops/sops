@@ -2,6 +2,7 @@ package main //import "go.mozilla.org/sops/cmd/sops"
 
 import (
 	encodingjson "encoding/json"
+	"bytes"
 	"fmt"
 	"net"
 	"net/url"
@@ -10,6 +11,7 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -463,6 +465,10 @@ func main() {
 			Name:  "output",
 			Usage: "Save the output after encryption or decryption to the file specified",
 		},
+        cli.StringFlag{
+            Name: "exec",
+            Usage: "run a program with the decrypted data added its environment. only dotenv is supported.",
+        },
 	}, keyserviceFlags...)
 
 	app.Action = func(c *cli.Context) error {
@@ -683,6 +689,31 @@ func main() {
 		}
 
 		outputFile := os.Stdout
+
+		if c.String("exec") != "" {
+			if (c.String("output-type") == "dotenv" || common.IsEnvFile(fileName) && c.String("output-type") == "") {
+				args := []string{"/bin/sh", "-c", c.String("exec")}
+				env := os.Environ()
+				lines := bytes.Split(output, []byte("\n"))
+				for _, line := range lines {
+					if len(line) == 0 {
+						continue
+					}
+					if line[0] == '#' {
+						continue
+					}
+					env = append(env, string(line))
+				}
+
+				execErr := syscall.Exec("/bin/sh", args, env)
+				if execErr != nil {
+					log.Fatalf("Failed to execute '%s': %v", c.String("exec"), execErr)
+				}
+			} else {
+				log.Fatalf("Trying to execute program with incompatible output type (must be dotenv)")
+			}
+		}
+
 		if c.String("output") != "" {
 			file, err := os.Create(c.String("output"))
 			if err != nil {
