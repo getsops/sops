@@ -79,6 +79,14 @@ func main() {
    (you need to setup google application default credentials. See
     https://developers.google.com/identity/protocols/application-default-credentials)
 
+
+   To encrypt or decrypt a document with HashiCorp Vault's Transit Secret Engine, specify the
+   Vault key URI name in the --vault flag or in the SOPS_VAULT_URIS (eg. https://vault.example.org:8200/v1/transit/keys/dev
+      where 'https://vault.example.org:8200' is the vault server, 'transit' the backendPath, and 'dev' is the name of the key )
+   environment variable.
+   (you need to enable the Transit Secrets Engine in Vault. See
+      https://www.vaultproject.io/docs/secrets/transit/index.html)
+
    To encrypt or decrypt a document with Azure Key Vault, specify the
    Azure Key Vault key URL in the --azure-kv flag or in the SOPS_AZURE_KEYVAULT_URL
    environment variable.
@@ -92,11 +100,11 @@ func main() {
    To use multiple KMS or PGP keys, separate them by commas. For example:
        $ sops -p "10F2...0A, 85D...B3F21" file.yaml
 
-   The -p, -k, --gcp-kms and --azure-kv flags are only used to encrypt new documents. Editing
+   The -p, -k, --gcp-kms, --vault and --azure-kv flags are only used to encrypt new documents. Editing
    or decrypting existing documents can be done with "sops file" or
    "sops -d file" respectively. The KMS and PGP keys listed in the encrypted
    documents are used then. To manage master keys in existing documents, use
-   the "add-{kms,pgp,gcp-kms,azure-kv}" and "rm-{kms,pgp,gcp-kms,azure-kv}" flags.
+   the "add-{kms,pgp,gcp-kms,azure-kv,vault}" and "rm-{kms,pgp,gcp-kms,azure-kv,vault}" flags.
 
    To use a different GPG binary than the one in your PATH, set SOPS_GPG_EXEC.
    To use a GPG key server other than gpg.mozilla.org, set SOPS_GPG_KEYSERVER.
@@ -1036,7 +1044,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	group = append(group, azkvKeys...)
 	group = append(group, pgpKeys...)
 	group = append(group, vaultMkKeys...)
-	log.Debugln("Master keys available: ", group)
+	log.Infof("Master keys available:  %+v", group)
 	return []sops.KeyGroup{group}, nil
 }
 

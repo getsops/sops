@@ -290,6 +290,66 @@ And decrypt it using::
 	 $ sops --decrypt test.enc.yaml
 
 
+Encrypting using Hashicorp Vault
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To understand how to deploy Vault securely this is not the place, We assume you have a instace (or more) of Vault running and you have privileged access to it. 
+
+To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!) 
+
+.. code:: bash
+
+	$ docker run -d -p8200:8200 vault:1.2.0 server -dev -dev-root-token-id=toor
+
+
+.. code:: bash
+
+	$ # Subsitute this with the address of the vault running
+	$ export VAULT_ADDR=http://127.0.0.1:8200 
+
+	$ # this may not be necessary in case you previously used `vault login` for production use
+	$ export VAULT_TOKEN=toor 
+	
+	$ # to check if Vault started correctly and configured
+	$ vault status
+	Key             Value
+	---             -----
+	Seal Type       shamir
+	Initialized     true
+	Sealed          false
+	Total Shares    1
+	Threshold       1
+	Version         1.2.0
+	Cluster Name    vault-cluster-618cc902
+	Cluster ID      e532e461-e8f0-1352-8a41-fc7c11096908
+	HA Enabled      false
+
+	$ # We need to enable a transit engine if not already done (I prefer to create a transit engine specifically for sops, in which I can have multiple keys with various permission levels)
+	$ vault secrets enable -path=sops transit
+	Success! Enabled the transit secrets engine at: sops/
+
+	$ # Then we need to create one or more keys
+	$ vault write sops/keys/firstkey type=rsa-4096
+	Success! Data written to: sops/keys/firstkey
+
+	$ vault write sops/keys/secondkey type=rsa-2048
+	Success! Data written to: sops/keys/secondkey
+
+	$ vault write sops/keys/thirdkey type=chacha20-poly1305
+	Success! Data written to: sops/keys/thirdkey
+
+	$ sops --vault $VAULT_ADDR/v1/sops/keys/firstkey vault_example.yml
+
+	$ cat <<EOF >.sops.yaml
+	creation_rules:
+		- path_regex: \.dev\.yaml$
+		vault_uris: "$VAULT_ADDR/v1/sops/keys/secondkey"
+		- \.prod\.yaml$
+		vault_uris: "$VAULT_ADDR/v1/sops/keys/thirdkey"
+	EOF
+
+	$ sops --verbose -e prod/raw.yaml > prod/encrypted.yaml
+
 Adding and removing keys
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -546,6 +606,7 @@ can manage the three sets of configurations for the three types of files:
 		- path_regex: \.prod\.yaml$
 		  kms: 'arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod,arn:aws:kms:eu-central-1:361527076523:key/cb1fab90-8d17-42a1-a9d8-334968904f94+arn:aws:iam::361527076523:role/hiera-sops-prod'
 		  pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
+		  hc_vault_uri: "http://localhost:8200/v1/sops/keys/thirdkey"
 
 		# gcp files using GCP KMS
 		- path_regex: \.gcp\.yaml$
