@@ -111,6 +111,7 @@ type creationRule struct {
 	ShamirThreshold   int        `yaml:"shamir_threshold"`
 	UnencryptedSuffix string     `yaml:"unencrypted_suffix"`
 	EncryptedSuffix   string     `yaml:"encrypted_suffix"`
+	EncryptedRegex    string     `yaml:"encrypted_regex"`
 }
 
 // Load loads a sops config file into a temporary struct
@@ -128,6 +129,7 @@ type Config struct {
 	ShamirThreshold   int
 	UnencryptedSuffix string
 	EncryptedSuffix   string
+	EncryptedRegex    string
 	Destination       publish.Destination
 }
 
@@ -187,8 +189,19 @@ func loadConfigFile(confPath string) (*configFile, error) {
 }
 
 func configFromRule(rule *creationRule, kmsEncryptionContext map[string]*string) (*Config, error) {
-	if rule.UnencryptedSuffix != "" && rule.EncryptedSuffix != "" {
-		return nil, fmt.Errorf("error loading config: cannot use both encrypted_suffix and unencrypted_suffix for the same rule")
+	cryptRuleCount := 0
+	if rule.UnencryptedSuffix != "" {
+		cryptRuleCount++
+	}
+	if rule.EncryptedSuffix != "" {
+		cryptRuleCount++
+	}
+	if rule.EncryptedRegex != "" {
+		cryptRuleCount++
+	}
+
+	if cryptRuleCount > 1 {
+		return nil, fmt.Errorf("error loading config: cannot use more than one of encrypted_suffix, unencrypted_suffix, or encrypted_regex for the same rule")
 	}
 
 	groups, err := getKeyGroupsFromCreationRule(rule, kmsEncryptionContext)
@@ -201,6 +214,7 @@ func configFromRule(rule *creationRule, kmsEncryptionContext map[string]*string)
 		ShamirThreshold:   rule.ShamirThreshold,
 		UnencryptedSuffix: rule.UnencryptedSuffix,
 		EncryptedSuffix:   rule.EncryptedSuffix,
+		EncryptedRegex:    rule.EncryptedRegex,
 	}, nil
 }
 
