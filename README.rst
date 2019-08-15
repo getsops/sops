@@ -1193,10 +1193,21 @@ The unencrypted suffix can be set to a different value using the
 Conversely, you can opt in to only encrypt some values in a YAML or JSON file,
 by adding a chosen suffix to those keys and passing it to the ``--encrypted-suffix`` option.
 
+A third method is to use the ``--encrypted-regex`` which will only encrypt values under
+keys that match the supplied regular expression.  For example, this command:
+
+.. code:: bash
+
+	$ sops --encrypt --encrypted-regex '&(data|stringData)' k8s-secrets.yaml
+
+will encrypt the values under the ``data`` and ``stringData`` keys in a YAML file
+containing kubernetes secrets.  It will not encrypt other values that help you to
+navigate the file, like ``metadata`` which contains the secrets' names.
+
 You can also specify these options in the ``.sops.yaml`` config file.
 
-Note: these two options ``--unencrypted-suffix`` and ``--encrypted-suffix`` are mutually exclusive and
-cannot both be used in the same file.
+Note: these three options ``--unencrypted-suffix``, ``--encrypted-suffix``, and ``--encrypted-regex`` are 
+mutually exclusive and cannot both be used in the same file.
 
 Encryption Protocol
 -------------------
