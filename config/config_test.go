@@ -124,10 +124,10 @@ creation_rules:
 
 var sampleConfigWithRegexParameters = []byte(`
 creation_rules:
-  - path_regex: foobar*
-	kms: "1"
-	pgp: "2"
-	encrypted_regex: ^enc:
+  - path_regex: barbar*
+    kms: "1"
+    pgp: "2"
+    encrypted_regex: "^enc:"
     `)
 
 var sampleConfigWithInvalidParameters = []byte(`
@@ -282,7 +282,7 @@ func TestLoadConfigFileWithEncryptedSuffix(t *testing.T) {
 }
 
 func TestLoadConfigFileWithEncryptedRegex(t *testing.T) {
-	conf, err := loadForFileFromBytes(sampleConfigWithRegexParameters, "barbar", nil)
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithRegexParameters, t), "barbar", nil)
 	assert.Equal(t, nil, err)
 	assert.Equal(t, "^enc:", conf.EncryptedRegex)
 }
