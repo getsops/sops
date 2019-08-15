@@ -530,7 +530,7 @@ func main() {
 
 		// only supply the default UnencryptedSuffix when EncryptedSuffix and EncryptedRegex are not provided
 		if cryptRuleCount == 0 {
-			return common.NewExitError("Error: cannot use both encrypted_suffix and unencrypted_suffix in the same file", codes.ErrorConflictingParameters)
+			unencryptedSuffix = sops.DefaultUnencryptedSuffix
 		}
 
 		inputStore := inputStore(c, fileName)
