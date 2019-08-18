@@ -2,7 +2,6 @@ package main //import "go.mozilla.org/sops/cmd/sops"
 
 import (
 	encodingjson "encoding/json"
-	"bytes"
 	"fmt"
 	"net"
 	"net/url"
@@ -11,7 +10,6 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
-	"syscall"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -21,6 +19,7 @@ import (
 	"go.mozilla.org/sops/azkv"
 	"go.mozilla.org/sops/cmd/sops/codes"
 	"go.mozilla.org/sops/cmd/sops/common"
+	"go.mozilla.org/sops/cmd/sops/subcommand/exec"
 	"go.mozilla.org/sops/cmd/sops/subcommand/groups"
 	keyservicecmd "go.mozilla.org/sops/cmd/sops/subcommand/keyservice"
 	publishcmd "go.mozilla.org/sops/cmd/sops/subcommand/publish"
@@ -108,6 +107,63 @@ func main() {
    For more information, see the README at github.com/mozilla/sops`
 	app.EnableBashCompletion = true
 	app.Commands = []cli.Command{
+		{
+			Name:	  "exec",
+			Usage:	  "execute a command with decrypted values inserted into the environment",
+			Flags: append([]cli.Flag{
+				cli.BoolFlag{
+					Name: "placeholder",
+					Usage: "pass the decrypted contents as a file to the command instead of through the environment",
+				},
+				cli.BoolFlag{
+					Name: "background",
+					Usage: "background the process and don't wait for it to complete",
+				},
+			}, keyserviceFlags...),
+			Action: func(c *cli.Context) error {
+				if len(c.Args()) != 2 {
+					return common.NewExitError(fmt.Errorf("error: missing file to decrypt"), codes.ErrorGeneric)
+				}
+
+				fileName := c.Args()[0]
+				command := c.Args()[1]
+
+				inputStore := inputStore(c, fileName)
+
+
+				svcs := keyservices(c)
+				opts := decryptOpts{
+					OutputStore: &dotenv.Store{},
+					InputStore:  inputStore,
+					InputPath:   fileName,
+					Cipher:	  aes.NewCipher(),
+					KeyServices: svcs,
+					IgnoreMAC:   c.Bool("ignore-mac"),
+				}
+
+				if c.Bool("placeholder") {
+					opts.OutputStore = outputStore(c, fileName)
+				}
+
+				output, _ := decrypt(opts)
+
+				if c.Bool("placeholder") {
+					exec.ExecWithFile(exec.ExecOpts{
+						Command: command,
+						Plaintext: output,
+						Background: c.Bool("background"),
+					})
+				} else {
+					exec.Exec(exec.ExecOpts{
+						Command: command,
+						Plaintext: output,
+						Background: c.Bool("background"),
+					})
+				}
+
+				return nil
+			},
+		},
 		{
 			Name:      "publish",
 			Usage:     "Publish sops file to a configured destination",
@@ -465,10 +521,6 @@ func main() {
 			Name:  "output",
 			Usage: "Save the output after encryption or decryption to the file specified",
 		},
-		cli.StringFlag{
-			Name: "exec",
-			Usage: "run a program with the decrypted data added its environment. only dotenv is supported.",
-		},
 	}, keyserviceFlags...)
 
 	app.Action = func(c *cli.Context) error {
@@ -689,30 +741,6 @@ func main() {
 		}
 
 		outputFile := os.Stdout
-
-		if c.String("exec") != "" {
-			if (c.String("output-type") == "dotenv" || common.IsEnvFile(fileName) && c.String("output-type") == "") {
-				args := []string{"/bin/sh", "-c", c.String("exec")}
-				env := os.Environ()
-				lines := bytes.Split(output, []byte("\n"))
-				for _, line := range lines {
-					if len(line) == 0 {
-						continue
-					}
-					if line[0] == '#' {
-						continue
-					}
-					env = append(env, string(line))
-				}
-
-				execErr := syscall.Exec("/bin/sh", args, env)
-				if execErr != nil {
-					log.Fatalf("Failed to execute '%s': %v", c.String("exec"), execErr)
-				}
-			} else {
-				log.Fatalf("Trying to execute program with incompatible output type (must be dotenv)")
-			}
-		}
 
 		if c.String("output") != "" {
 			file, err := os.Create(c.String("output"))
