@@ -108,13 +108,10 @@ func main() {
 	app.EnableBashCompletion = true
 	app.Commands = []cli.Command{
 		{
-			Name:	  "exec",
+			Name:	  "exec-env",
 			Usage:	  "execute a command with decrypted values inserted into the environment",
+			ArgsUsage: "[file to decrypt] [command to run]",
 			Flags: append([]cli.Flag{
-				cli.BoolFlag{
-					Name: "placeholder",
-					Usage: "pass the decrypted contents as a file to the command instead of through the environment",
-				},
 				cli.BoolFlag{
 					Name: "background",
 					Usage: "background the process and don't wait for it to complete",
@@ -141,25 +138,61 @@ func main() {
 					IgnoreMAC:   c.Bool("ignore-mac"),
 				}
 
-				if c.Bool("placeholder") {
-					opts.OutputStore = outputStore(c, fileName)
+				output, err := decrypt(opts)
+				if err != nil {
+					return toExitError(err)
 				}
 
-				output, _ := decrypt(opts)
+				exec.Exec(exec.ExecOpts{
+					Command: command,
+					Plaintext: output,
+					Background: c.Bool("background"),
+				})
 
-				if c.Bool("placeholder") {
-					exec.ExecWithFile(exec.ExecOpts{
-						Command: command,
-						Plaintext: output,
-						Background: c.Bool("background"),
-					})
-				} else {
-					exec.Exec(exec.ExecOpts{
-						Command: command,
-						Plaintext: output,
-						Background: c.Bool("background"),
-					})
+				return nil
+			},
+		},
+		{
+			Name:	  "exec-file",
+			Usage:	  "execute a command with the decrypted contents as a temporary file",
+			ArgsUsage: "[file to decrypt] [command to run]",
+			Flags: append([]cli.Flag{
+				cli.BoolFlag{
+					Name: "background",
+					Usage: "background the process and don't wait for it to complete",
+				},
+			}, keyserviceFlags...),
+			Action: func(c *cli.Context) error {
+				if len(c.Args()) != 2 {
+					return common.NewExitError(fmt.Errorf("error: missing file to decrypt"), codes.ErrorGeneric)
 				}
+
+				fileName := c.Args()[0]
+				command := c.Args()[1]
+
+				inputStore := inputStore(c, fileName)
+				outputStore := outputStore(c, fileName)
+
+				svcs := keyservices(c)
+				opts := decryptOpts{
+					OutputStore: outputStore,
+					InputStore:  inputStore,
+					InputPath:   fileName,
+					Cipher:	  aes.NewCipher(),
+					KeyServices: svcs,
+					IgnoreMAC:   c.Bool("ignore-mac"),
+				}
+
+				output, err := decrypt(opts)
+				if err != nil {
+					return toExitError(err)
+				}
+
+				exec.ExecWithFile(exec.ExecOpts{
+					Command: command,
+					Plaintext: output,
+					Background: c.Bool("background"),
+				})
 
 				return nil
 			},
