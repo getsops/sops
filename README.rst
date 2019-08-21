@@ -1207,7 +1207,7 @@ navigate the file, like ``metadata`` which contains the secrets' names.
 You can also specify these options in the ``.sops.yaml`` config file.
 
 Note: these three options ``--unencrypted-suffix``, ``--encrypted-suffix``, and ``--encrypted-regex`` are 
-mutually exclusive and cannot both be used in the same file.
+mutually exclusive and cannot all be used in the same file.
 
 Encryption Protocol
 -------------------
