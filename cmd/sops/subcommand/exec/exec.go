@@ -18,6 +18,7 @@ type ExecOpts struct {
 	Command string
 	Plaintext []byte
 	Background bool
+	Fifo bool
 }
 
 func WritePipe(pipe string, contents []byte) {
@@ -42,6 +43,14 @@ func GetPipe(dir string) string {
 	return tmpfn
 }
 
+func GetFile(dir string) *os.File {
+	handle, err := ioutil.TempFile(dir, "tmp-file")
+	if err != nil {
+		log.Fatal(err)
+	}
+	return handle
+}
+
 func ExecWithFile(opts ExecOpts) {
 	dir, err := ioutil.TempDir("/tmp/", ".sops")
 	if err != nil {
@@ -49,10 +58,21 @@ func ExecWithFile(opts ExecOpts) {
 	}
 	defer os.RemoveAll(dir)
 
-	pipe := GetPipe(dir)
-	placeholdered := strings.Replace(opts.Command, "{}", pipe, -1)
-	go WritePipe(pipe, []byte(opts.Plaintext))
+	var filename string
+	if opts.Fifo {
+		// fifo handling needs to be async, even opening to write
+		// will block if there is no reader present
+		filename = GetPipe(dir)
+		go WritePipe(filename, opts.Plaintext)
+	} else {
+		handle := GetFile(dir)
+		handle.Write(opts.Plaintext)
+		handle.Close()
+		filename = handle.Name()
+	}
 
+
+	placeholdered := strings.Replace(opts.Command, "{}", filename, -1)
 	cmd := exec.Command("/bin/sh", "-c", placeholdered)
 	cmd.Env = os.Environ()
 

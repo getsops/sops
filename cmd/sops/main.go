@@ -161,6 +161,10 @@ func main() {
 					Name: "background",
 					Usage: "background the process and don't wait for it to complete",
 				},
+				cli.BoolFlag{
+					Name: "no-fifo",
+					Usage: "use a regular file instead of a fifo to temporarily hold the decrypted contents",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if len(c.Args()) != 2 {
@@ -192,6 +196,7 @@ func main() {
 					Command: command,
 					Plaintext: output,
 					Background: c.Bool("background"),
+					Fifo: !c.Bool("no-fifo"),
 				})
 
 				return nil
