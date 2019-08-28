@@ -41,6 +41,7 @@ import (
 	"crypto/sha512"
 	"fmt"
 	"reflect"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -285,9 +286,10 @@ func (branch TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(
 
 // Encrypt walks over the tree and encrypts all values with the provided cipher,
 // except those whose key ends with the UnencryptedSuffix specified on the
-// Metadata struct, or those not ending with EncryptedSuffix, if EncryptedSuffix
-// is provided (by default it is not).  If encryption is successful, it returns
-// the MAC for the encrypted tree.
+// Metadata struct, those not ending with EncryptedSuffix, if EncryptedSuffix
+// is provided (by default it is not), or those not matching EncryptedRegex,
+// if EncryptedRegex is provided (by default it is not).  If encryption is
+// successful, it returns the MAC for the encrypted tree.
 func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 	audit.SubmitEvent(audit.EncryptEvent{
 		File: tree.FilePath,
@@ -321,6 +323,16 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 					}
 				}
 			}
+			if tree.Metadata.EncryptedRegex != "" {
+				encrypted = false
+				for _, p := range path {
+					matched, _ := regexp.Match(tree.Metadata.EncryptedRegex, []byte(p))
+					if matched {
+						encrypted = true
+						break
+					}
+				}
+			}
 			if encrypted {
 				var err error
 				pathString := strings.Join(path, ":") + ":"
@@ -343,7 +355,10 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 	return fmt.Sprintf("%X", hash.Sum(nil)), nil
 }
 
-// Decrypt walks over the tree and decrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct or those not ending with EncryptedSuffix, if EncryptedSuffix is provided (by default it is not).
+// Decrypt walks over the tree and decrypts all values with the provided cipher,
+// except those whose key ends with the UnencryptedSuffix specified on the Metadata struct,
+// those not ending with EncryptedSuffix, if EncryptedSuffix is provided (by default it is not),
+// or those not matching EncryptedRegex, if EncryptedRegex is provided (by default it is not).
 // If decryption is successful, it returns the MAC for the decrypted tree.
 func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 	log.Debug("Decrypting tree")
@@ -366,6 +381,16 @@ func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 				encrypted = false
 				for _, p := range path {
 					if strings.HasSuffix(p, tree.Metadata.EncryptedSuffix) {
+						encrypted = true
+						break
+					}
+				}
+			}
+			if tree.Metadata.EncryptedRegex != "" {
+				encrypted = false
+				for _, p := range path {
+					matched, _ := regexp.Match(tree.Metadata.EncryptedRegex, []byte(p))
+					if matched {
 						encrypted = true
 						break
 					}
@@ -441,6 +466,7 @@ type Metadata struct {
 	LastModified              time.Time
 	UnencryptedSuffix         string
 	EncryptedSuffix           string
+	EncryptedRegex            string
 	MessageAuthenticationCode string
 	Version                   string
 	KeyGroups                 []KeyGroup
