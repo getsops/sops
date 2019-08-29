@@ -497,12 +497,12 @@ can manage the three sets of configurations for the three types of files:
 		# KMS set A is used
 		- path_regex: \.dev\.yaml$
 		  kms: 'arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500,arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod'
-		  pgp: '1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A'
+		  pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
 
 		# prod files use KMS set B in the PROD IAM
 		- path_regex: \.prod\.yaml$
 		  kms: 'arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod,arn:aws:kms:eu-central-1:361527076523:key/cb1fab90-8d17-42a1-a9d8-334968904f94+arn:aws:iam::361527076523:role/hiera-sops-prod'
-		  pgp: '1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A'
+		  pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
 
 		# gcp files using GCP KMS
 		- path_regex: \.gcp\.yaml$
@@ -512,7 +512,7 @@ can manage the three sets of configurations for the three types of files:
 		# catchall that will encrypt the file using KMS set C
 		# The absence of a path_regex means it will match everything
 		- kms: 'arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500,arn:aws:kms:us-west-2:142069644989:key/846cfb17-373d-49b9-8baf-f36b04512e47,arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e'
-		  pgp: '1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A'
+		  pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
 
 When creating any file under **mysecretrepo**, whether at the root or under
 a subdirectory, sops will recursively look for a ``.sops.yaml`` file. If one is
@@ -535,16 +535,16 @@ The path_regex checks the full path of the encrypting file. Here is another exam
         # KMS set A is used
         - path_regex: .*/development/.*
           kms: 'arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500,arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod'
-          pgp: '1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A'
+          pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
 
         # prod files use KMS set B in the PROD IAM
         - path_regex: .*/production/.*
           kms: 'arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod,arn:aws:kms:eu-central-1:361527076523:key/cb1fab90-8d17-42a1-a9d8-334968904f94+arn:aws:iam::361527076523:role/hiera-sops-prod'
-          pgp: '1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A'
+          pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
 
         # other files use KMS set C
         - kms: 'arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500,arn:aws:kms:us-west-2:142069644989:key/846cfb17-373d-49b9-8baf-f36b04512e47,arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e'
-          pgp: '1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A'
+          pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
 
 Creating a new file with the right keys is now as simple as
 
