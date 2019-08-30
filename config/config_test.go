@@ -161,6 +161,25 @@ destination_rules:
       pgp: newpgp
 `)
 
+var sampleConfigWithVaultDestinationRules = []byte(`
+creation_rules:
+  - path_regex: foobar*
+    kms: "1"
+    pgp: "2"
+    gcp_kms: "3"
+  - path_regex: ""
+    kms: foo
+    pgp: bar
+    gcp_kms: baz
+destination_rules:
+  - vault_path: "foobar/"
+    path_regex: "vault-v2/*"
+  - vault_path: "barfoo/"
+    vault_kv_mount_name: "kv/"
+    vault_kv_version: 1
+    path_regex: "vault-v1/*"
+`)
+
 func parseConfigFile(confBytes []byte, t *testing.T) *configFile {
 	conf := &configFile{}
 	err := conf.load(confBytes)
@@ -298,4 +317,15 @@ func TestLoadConfigFileWithDestinationRule(t *testing.T) {
 	assert.Equal(t, "newpgp", conf.KeyGroups[0][0].ToString())
 	assert.NotNil(t, conf.Destination)
 	assert.Equal(t, "s3://foobar/test/barfoo", conf.Destination.Path("barfoo"))
+}
+
+func TestLoadConfigFileWithVaultDestinationRules(t *testing.T) {
+	conf, err := parseDestinationRuleForFile(parseConfigFile(sampleConfigWithVaultDestinationRules, t), "vault-v2/barfoo", nil)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf.Destination)
+	assert.Equal(t, "http://127.0.0.1:8200/v1/secret/data/foobar/barfoo", conf.Destination.Path("barfoo"))
+	conf, err = parseDestinationRuleForFile(parseConfigFile(sampleConfigWithVaultDestinationRules, t), "vault-v1/barfoo", nil)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf.Destination)
+	assert.Equal(t, "http://127.0.0.1:8200/v1/kv/barfoo/barfoo", conf.Destination.Path("barfoo"))
 }

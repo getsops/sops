@@ -823,6 +823,8 @@ This command requires a ``.sops.yaml`` configuration file. Below is an example:
         recreation_rule:
            pgp: F69E4901EDBAD2D1753F8C67A64535C4163FB307
       - vault_path: "sops/"
+        vault_kv_mount_name: "secret/" # default
+        vault_kv_version: 2 # default
         path_regex: vault/*
 
 The above configuration will place all files under ``s3/*`` into the S3 bucket ``sops-secrets``,
@@ -836,12 +838,16 @@ You would deploy a file to S3 with a command like: ``sops publish s3/app.yaml``
 Publishing to Vault
 *******************
 
-There are two settings for Vault that you can place in your destination rules. The first
-is ``vault_path``, which is required. The second is ``vault_address``, which is optional.
+There are a few settings for Vault that you can place in your destination rules. The first
+is ``vault_path``, which is required. The others are optional, and they are
+``vault_address``, ``vault_kv_mount_name``, ``vault_kv_version``.
 
 ``sops`` uses the official Vault API provided by Hashicorp, which makes use of `environment
 variables <https://www.vaultproject.io/docs/commands/#environment-variables>`_ for
 configuring the client.
+
+``vault_kv_mount_name`` is used if your Vault KV is mounted somewhere other than ``secret/``.
+``vault_kv_version`` supports ``1`` and ``2``, with ``2`` being the default.
 
 Below is an example of publishing to Vault (using token auth with a local dev instance of Vault).
 

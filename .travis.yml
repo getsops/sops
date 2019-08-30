@@ -21,6 +21,7 @@ before_install:
 
 before_script:
   - vault server -dev -dev-root-token-id="$VAULT_TOKEN" &
+  - vault secrets enable -version=1 kv
 
 script:
   - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then make; fi'
