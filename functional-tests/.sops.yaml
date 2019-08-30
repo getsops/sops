@@ -19,4 +19,10 @@ destination_rules:
       reencryption_rule:
         pgp: B611A2F9F11D0FF82568805119F9B5DAEA91FF86
     - vault_path: "functional-test/"
+      vault_kv_mount_name: "secret/"
+      vault_kv_version: 2
       path_regex: test_encrypt_publish_vault.json
+    - vault_path: "functional-test-version-1/"
+      vault_kv_mount_name: "kv/"
+      vault_kv_version: 1
+      path_regex: test_encrypt_publish_vault_version_1.json

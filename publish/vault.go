@@ -10,13 +10,24 @@ import (
 type VaultDestination struct {
 	vaultAddress string
 	vaultPath    string
+	kvMountName  string
+	kvVersion    int
 }
 
-func NewVaultDestination(vaultAddress, vaultPath string) *VaultDestination {
+func NewVaultDestination(vaultAddress, vaultPath, kvMountName string, kvVersion int) *VaultDestination {
 	if !strings.HasSuffix(vaultPath, "/") {
 		vaultPath = vaultPath + "/"
 	}
-	return &VaultDestination{vaultAddress, vaultPath}
+	if kvMountName == "" {
+		kvMountName = "secret/"
+	}
+	if !strings.HasSuffix(kvMountName, "/") {
+		kvMountName = kvMountName + "/"
+	}
+	if kvVersion != 1 && kvVersion != 2 {
+		kvVersion = 2
+	}
+	return &VaultDestination{vaultAddress, vaultPath, kvMountName, kvVersion}
 }
 
 func (vaultd *VaultDestination) getAddress() string {
@@ -31,7 +42,10 @@ func (vaultd *VaultDestination) Path(fileName string) string {
 }
 
 func (vaultd *VaultDestination) secretsPath(fileName string) string {
-	return fmt.Sprintf("secret/data/%s%s", vaultd.vaultPath, fileName)
+	if vaultd.kvVersion == 1 {
+		return fmt.Sprintf("%s%s%s", vaultd.kvMountName, vaultd.vaultPath, fileName)
+	}
+	return fmt.Sprintf("%sdata/%s%s", vaultd.kvMountName, vaultd.vaultPath, fileName)
 }
 
 // Returns NotImplementedError
@@ -52,7 +66,12 @@ func (vaultd *VaultDestination) UploadUnencrypted(data map[string]interface{}, f
 	}
 
 	secretsData := make(map[string]interface{})
-	secretsData["data"] = data
+
+	if vaultd.kvVersion == 1 {
+		secretsData = data
+	} else if vaultd.kvVersion == 2 {
+		secretsData["data"] = data
+	}
 
 	_, err = client.Logical().Write(vaultd.secretsPath(fileName), secretsData)
 	if err != nil {
