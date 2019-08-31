@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 	"os"
 	"os/exec"
+	"os/user"
+	"strconv"
 	"strings"
 )
 
@@ -19,6 +21,7 @@ type ExecOpts struct {
 	Plaintext []byte
 	Background bool
 	Fifo bool
+	User string
 }
 
 func WritePipe(pipe string, contents []byte) {
@@ -51,7 +54,40 @@ func GetFile(dir string) *os.File {
 	return handle
 }
 
+func SwitchUser(username string) {
+	user, err := user.Lookup(username)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	uid, _ := strconv.Atoi(user.Uid)
+
+	err = syscall.Setegid(uid)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = syscall.Seteuid(uid)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = syscall.Setreuid(uid, uid)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = syscall.Setregid(uid, uid)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 func ExecWithFile(opts ExecOpts) {
+	if opts.User != "" {
+		SwitchUser(opts.User)
+	}
+
 	dir, err := ioutil.TempDir("/tmp/", ".sops")
 	if err != nil {
 		log.Fatal(err)
@@ -71,7 +107,6 @@ func ExecWithFile(opts ExecOpts) {
 		filename = handle.Name()
 	}
 
-
 	placeholdered := strings.Replace(opts.Command, "{}", filename, -1)
 	cmd := exec.Command("/bin/sh", "-c", placeholdered)
 	cmd.Env = os.Environ()
@@ -86,7 +121,11 @@ func ExecWithFile(opts ExecOpts) {
 	}
 }
 
-func Exec(opts ExecOpts) {
+func ExecWithEnv(opts ExecOpts) {
+	if opts.User != "" {
+		SwitchUser(opts.User)
+	}
+
 	env := os.Environ()
 	lines := bytes.Split(opts.Plaintext, []byte("\n"))
 	for _, line := range lines {

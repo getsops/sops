@@ -116,6 +116,10 @@ func main() {
 					Name: "background",
 					Usage: "background the process and don't wait for it to complete",
 				},
+				cli.StringFlag{
+					Name: "user",
+					Usage: "the user to run the command as",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if len(c.Args()) != 2 {
@@ -143,10 +147,11 @@ func main() {
 					return toExitError(err)
 				}
 
-				exec.Exec(exec.ExecOpts{
+				exec.ExecWithEnv(exec.ExecOpts{
 					Command: command,
 					Plaintext: output,
 					Background: c.Bool("background"),
+					User: c.String("user"),
 				})
 
 				return nil
@@ -164,6 +169,10 @@ func main() {
 				cli.BoolFlag{
 					Name: "no-fifo",
 					Usage: "use a regular file instead of a fifo to temporarily hold the decrypted contents",
+				},
+				cli.StringFlag{
+					Name: "user",
+					Usage: "the user to run the command as",
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
@@ -197,6 +206,7 @@ func main() {
 					Plaintext: output,
 					Background: c.Bool("background"),
 					Fifo: !c.Bool("no-fifo"),
+					User: c.String("user"),
 				})
 
 				return nil
