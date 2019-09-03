@@ -803,8 +803,8 @@ By default ``sops`` just dumps all the output to the standard output. We can use
 ``--output`` flag followed by a filename to save the output to the file specified.
 Beware using both ``--in-place`` and ``--output`` flags will result in an error.
 
-Passing Secrets to a Other Processes
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Passing Secrets to Other Processes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 In addition to writing secrets to standard output and to files on disk, ``sops``
 has two commands for passing decrypted secrets to a new process: ``exec-env``
 and ``exec-file``. These commands will place all output into the environment of
