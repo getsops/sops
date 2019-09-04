@@ -20,14 +20,13 @@ func TestMain(m *testing.M) {
 	}
 
 	// pulls an image, creates a container based on it and runs it
-	resource, err := pool.Run("vault", "1.1.3", []string{"VAULT_DEV_ROOT_TOKEN_ID=secret"})
+	resource, err := pool.Run("vault", "1.2.2", []string{"VAULT_DEV_ROOT_TOKEN_ID=secret"})
 	if err != nil {
 		logger.Fatalf("Could not start resource: %s", err)
 	}
 
 	os.Setenv("VAULT_ADDR", fmt.Sprintf("http://127.0.0.1:%v", resource.GetPort("8200/tcp")))
 	os.Setenv("VAULT_TOKEN", "secret")
-
 	// exponential backoff-retry, because the application in the container might not be ready to accept connections yet
 	if err := pool.Retry(func() error {
 		cli, err := api.NewClient(api.DefaultConfig())

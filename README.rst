@@ -293,7 +293,7 @@ And decrypt it using::
 Encrypting using Hashicorp Vault
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To understand how to deploy Vault securely this is not the place, We assume you have a instace (or more) of Vault running and you have privileged access to it. 
+To understand how to deploy Vault securely this is not the place, we assume you have a instance (or more) of Vault running and you have privileged access to it. 
 
 To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!) 
 
@@ -338,14 +338,14 @@ To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
 	$ vault write sops/keys/thirdkey type=chacha20-poly1305
 	Success! Data written to: sops/keys/thirdkey
 
-	$ sops --vault $VAULT_ADDR/v1/sops/keys/firstkey vault_example.yml
+	$ sops --hc-vault $VAULT_ADDR/v1/sops/keys/firstkey vault_example.yml
 
 	$ cat <<EOF >.sops.yaml
 	creation_rules:
 		- path_regex: \.dev\.yaml$
-		vault_uris: "$VAULT_ADDR/v1/sops/keys/secondkey"
+		hc_vault_uris: "$VAULT_ADDR/v1/sops/keys/secondkey"
 		- \.prod\.yaml$
-		vault_uris: "$VAULT_ADDR/v1/sops/keys/thirdkey"
+		hc_vault_uris: "$VAULT_ADDR/v1/sops/keys/thirdkey"
 	EOF
 
 	$ sops --verbose -e prod/raw.yaml > prod/encrypted.yaml
@@ -563,7 +563,7 @@ can manage the three sets of configurations for the three types of files:
 		- path_regex: \.prod\.yaml$
 		  kms: 'arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod,arn:aws:kms:eu-central-1:361527076523:key/cb1fab90-8d17-42a1-a9d8-334968904f94+arn:aws:iam::361527076523:role/hiera-sops-prod'
 		  pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
-		  hc_vault_uri: "http://localhost:8200/v1/sops/keys/thirdkey"
+		  hc_vault_uris: "http://localhost:8200/v1/sops/keys/thirdkey"
 
 		# gcp files using GCP KMS
 		- path_regex: \.gcp\.yaml$

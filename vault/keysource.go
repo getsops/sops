@@ -1,17 +1,21 @@
 package vault
 
 import (
+	"bytes"
 	"encoding/base64"
 	"fmt"
+	"io"
 	"net/url"
+	"os"
+	"path"
 	"path/filepath"
 	"strings"
 	"time"
 
-	"go.mozilla.org/sops/logging"
-
 	"github.com/hashicorp/vault/api"
+	homedir "github.com/mitchellh/go-homedir"
 	"github.com/sirupsen/logrus"
+	"go.mozilla.org/sops/logging"
 )
 
 var log *logrus.Logger
@@ -72,22 +76,22 @@ func NewMasterKeyFromURI(uri string) (*MasterKey, error) {
 
 }
 
-func getBackendAndKeyFromPath(path string) (string, string, error) {
-	path = strings.TrimPrefix(path, "/")
-	path = strings.TrimSuffix(path, "/")
-	values := strings.Split(path, "/")
-	// minimum lenght should be 4 "v1", "transit", "keys", "keyName"
+func getBackendAndKeyFromPath(fullPath string) (string, string, error) {
+	fullPath = strings.TrimPrefix(fullPath, "/")
+	fullPath = strings.TrimSuffix(fullPath, "/")
+	values := strings.Split(fullPath, "/")
+	// minimum length should be 4 "v1", "transit", "keys", "keyName"
 	if len(values) < 4 {
 		return "", "", fmt.Errorf("The path to the key is not long enough: (eg. https://vault.example.com:8200/v1/transit/keys/keyName")
 	}
-	log.Debugf("Path: %v \nValues: %v\n", path, values)
+	log.Debugf("Path: %v \nValues: %v\n", fullPath, values)
 	if values[0] != "v1" {
 		return "", "", fmt.Errorf("probably forgot v1 in the URI")
 	}
 	if values[len(values)-2] != "keys" {
 		return "", "", fmt.Errorf("probably forgot 'keys' in the URI")
 	}
-	return filepath.Join(values[1 : len(values)-2]...), values[len(values)-1], nil
+	return path.Join(values[1 : len(values)-2]...), values[len(values)-1], nil
 }
 
 // NewMasterKey creates a new MasterKey from a vault address, transit backend path and a key name and setting the creation date to the current date
@@ -112,33 +116,62 @@ func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 	key.EncryptedKey = string(enc)
 }
 
-// Encrypt takes a sops data key, encrypts it with Vault Transit and stores the result in the EncryptedKey field
-func (key *MasterKey) Encrypt(dataKey []byte) error {
-	path := filepath.Join(key.BackendPath, "encrypt", key.KeyName)
+func vaultClient(address string) (*api.Client, error) {
 	cfg := api.DefaultConfig()
-	cfg.Address = key.VaultAddress
+	cfg.Address = address
 	cli, err := api.NewClient(cfg)
 	if err != nil {
-		log.WithField("Path", path).Info("Vault connections failed")
-		return fmt.Errorf("Cannot create Vault Client: %v", err)
+		return nil, fmt.Errorf("Cannot create Vault Client: %v", err)
+	}
+	if cli.Token() != "" {
+		return cli, nil
+	}
+	homePath, err := homedir.Dir()
+	if err != nil {
+		panic(fmt.Sprintf("error getting user's home directory: %v", err))
+	}
+	tokenPath := filepath.Join(homePath, ".vault-token")
+	f, err := os.Open(tokenPath)
+	if os.IsNotExist(err) {
+		return cli, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	buf := bytes.NewBuffer(nil)
+	if _, err := io.Copy(buf, f); err != nil {
+		return nil, err
+	}
+	cli.SetToken(strings.TrimSpace(buf.String()))
+	return cli, nil
+}
+
+// Encrypt takes a sops data key, encrypts it with Vault Transit and stores the result in the EncryptedKey field
+func (key *MasterKey) Encrypt(dataKey []byte) error {
+	fullPath := path.Join(key.BackendPath, "encrypt", key.KeyName)
+	cli, err := vaultClient(key.VaultAddress)
+	if err != nil {
+		return err
 	}
 	encoded := base64.StdEncoding.EncodeToString(dataKey)
 	payload := make(map[string]interface{})
 	payload["plaintext"] = encoded
-	raw, err := cli.Logical().Write(path, payload)
+	raw, err := cli.Logical().Write(fullPath, payload)
 	if err != nil {
-		log.WithField("Path", path).Info("Encryption failed")
+		log.WithField("Path", fullPath).Info("Encryption failed")
 		return err
 	}
 	if raw == nil || raw.Data == nil {
-		return fmt.Errorf("The transit backend %s is empty", path)
+		return fmt.Errorf("The transit backend %s is empty", fullPath)
 	}
 	encrypted, ok := raw.Data["ciphertext"]
-	if ok != true {
+	if !ok {
 		return fmt.Errorf("there's not encrypted data")
 	}
 	encryptedKey, ok := encrypted.(string)
-	if ok != true {
+	if !ok {
 		return fmt.Errorf("the ciphertext cannot be casted to string")
 	}
 	key.EncryptedKey = encryptedKey
@@ -153,25 +186,22 @@ func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 	return nil
 }
 
-// Decrypt decrypts the EncryptedKey field with CGP KMS and returns the result.
+// Decrypt decrypts the EncryptedKey field with Vault Transit and returns the result.
 func (key *MasterKey) Decrypt() ([]byte, error) {
-	path := filepath.Join(key.BackendPath, "decrypt", key.KeyName)
-	cfg := api.DefaultConfig()
-	cfg.Address = key.VaultAddress
-	cli, err := api.NewClient(cfg)
+	fullPath := path.Join(key.BackendPath, "decrypt", key.KeyName)
+	cli, err := vaultClient(key.VaultAddress)
 	if err != nil {
-		log.WithField("Path", path).Info("Vault connections failed")
-		return nil, fmt.Errorf("Cannot create Vault Client: %v", err)
+		return nil, err
 	}
 	payload := make(map[string]interface{})
 	payload["ciphertext"] = key.EncryptedKey
-	raw, err := cli.Logical().Write(path, payload)
+	raw, err := cli.Logical().Write(fullPath, payload)
 	if err != nil {
-		log.WithField("Path", path).Info("Encryption failed")
+		log.WithField("Path", fullPath).Info("Encryption failed")
 		return nil, err
 	}
 	if raw == nil || raw.Data == nil {
-		return nil, fmt.Errorf("The transit backend %s is empty", path)
+		return nil, fmt.Errorf("The transit backend %s is empty", fullPath)
 	}
 	decrypted, ok := raw.Data["plaintext"]
 	if ok != true {
@@ -202,9 +232,10 @@ func (key *MasterKey) ToString() string {
 }
 
 func (key *MasterKey) createVaultTransitAndKey() error {
-	cfg := api.DefaultConfig()
-	cfg.Address = key.VaultAddress
-	cli, err := api.NewClient(cfg)
+	cli, err := vaultClient(key.VaultAddress)
+	if err != nil {
+		return err
+	}
 	if err != nil {
 		return fmt.Errorf("Cannot create Vault Client: %v", err)
 	}
@@ -215,7 +246,7 @@ func (key *MasterKey) createVaultTransitAndKey() error {
 	if err != nil {
 		return err
 	}
-	path := filepath.Join(key.BackendPath, "keys", key.KeyName)
+	path := path.Join(key.BackendPath, "keys", key.KeyName)
 	payload := make(map[string]interface{})
 	payload["type"] = "rsa-4096"
 	_, err = cli.Logical().Write(path, payload)
