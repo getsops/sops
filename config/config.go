@@ -70,7 +70,7 @@ type keyGroup struct {
 	KMS     []kmsKey
 	GCPKMS  []gcpKmsKey  `yaml:"gcp_kms"`
 	AzureKV []azureKVKey `yaml:"azure_keyvault"`
-	Vault   []vaultKey   `yaml:"vault"`
+	Vault   []vaultKey   `yaml:"hc_vault"`
 	PGP     []string
 }
 
@@ -118,7 +118,7 @@ type creationRule struct {
 	PGP               string
 	GCPKMS            string     `yaml:"gcp_kms"`
 	AzureKeyVault     string     `yaml:"azure_keyvault"`
-	Vault             string     `yaml:"vault_uris"`
+	Vault             string     `yaml:"hc_vault_uris"`
 	KeyGroups         []keyGroup `yaml:"key_groups"`
 	ShamirThreshold   int        `yaml:"shamir_threshold"`
 	UnencryptedSuffix string     `yaml:"unencrypted_suffix"`

@@ -27,6 +27,7 @@ require (
 	github.com/hashicorp/vault/api v1.0.4
 	github.com/howeyc/gopass v0.0.0-20170109162249-bf9dde6d0d2c
 	github.com/lib/pq v1.2.0
+	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-wordwrap v1.0.0
 	github.com/mozilla-services/yaml v0.0.0-20191106225358-5c216288813c
 	github.com/opencontainers/go-digest v1.0.0-rc1 // indirect

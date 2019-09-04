@@ -48,12 +48,12 @@ creation_rules:
     kms: "1"
     pgp: "2"
     gcp_kms: "3"
-    vault_uris: http://4:8200/v1/4/keys/4
+    hc_vault_uris: http://4:8200/v1/4/keys/4
   - path_regex: ""
     kms: foo
     pgp: bar
     gcp_kms: baz
-    vault_uris: http://127.0.1.1/v1/baz/keys/baz
+    hc_vault_uris: http://127.0.1.1/v1/baz/keys/baz
 `)
 
 var sampleConfigWithPath = []byte(`
@@ -62,17 +62,17 @@ creation_rules:
     kms: "1"
     pgp: "2"
     gcp_kms: "3"
-    vault_uris: http://4:8200/v1/4/keys/4
+    hc_vault_uris: http://4:8200/v1/4/keys/4
   - path_regex: somefilename.yml
     kms: bilbo
     pgp: baggins
     gcp_kms: precious
-    vault_uris: https://pluto/v1/pluto/keys/pluto
+    hc_vault_uris: https://pluto/v1/pluto/keys/pluto
   - path_regex: ""
     kms: foo
     pgp: bar
     gcp_kms: baz
-    vault_uris: https://foz:443/v1/foz/keys/foz
+    hc_vault_uris: https://foz:443/v1/foz/keys/foz
 `)
 
 var sampleConfigWithGroups = []byte(`
@@ -92,7 +92,7 @@ creation_rules:
       - vaultUrl: https://foo.vault.azure.net
         key: foo-key
         version: fooversion
-      vault:
+      hc_vault:
       - vault_address: https://foo.vault:8200
         backend_path: foo
         key_name: foo-key
@@ -107,7 +107,7 @@ creation_rules:
       - vaultUrl: https://bar.vault.azure.net
         key: bar-key
         version: barversion
-      vault:
+      hc_vault:
       - vault_address: https://baz.vault:8200
         backend_path: baz
         key_name: baz-key
@@ -148,7 +148,7 @@ creation_rules:
   - path_regex: foobar*
     kms: "1"
     pgp: "2"
-    vault_uris: "http://vault.com/v1/bug/keys/pr"
+    hc_vault_uris "http://vault.com/v1/bug/keys/pr"
     unencrypted_suffix: _unencrypted
     encrypted_suffix: _enc
     `)

@@ -41,7 +41,7 @@ type Metadata struct {
 	KMSKeys                   []kmskey    `yaml:"kms" json:"kms"`
 	GCPKMSKeys                []gcpkmskey `yaml:"gcp_kms" json:"gcp_kms"`
 	AzureKeyVaultKeys         []azkvkey   `yaml:"azure_kv" json:"azure_kv"`
-	VaultKeys                 []vaultkey  `yaml:"vault" json:"vault"`
+	VaultKeys                 []vaultkey  `yaml:"hc_vault" json:"hc_vault"`
 	LastModified              string      `yaml:"lastmodified" json:"lastmodified"`
 	MessageAuthenticationCode string      `yaml:"mac" json:"mac"`
 	PGPKeys                   []pgpkey    `yaml:"pgp" json:"pgp"`
@@ -56,7 +56,7 @@ type keygroup struct {
 	KMSKeys           []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
 	GCPKMSKeys        []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
 	AzureKeyVaultKeys []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
-	VaultKeys         []vaultkey  `yaml:"vault" json:"vault"`
+	VaultKeys         []vaultkey  `yaml:"hc_vault" json:"hc_vault"`
 }
 
 type pgpkey struct {
