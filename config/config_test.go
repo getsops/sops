@@ -148,7 +148,7 @@ creation_rules:
   - path_regex: foobar*
     kms: "1"
     pgp: "2"
-    hc_vault_uris "http://vault.com/v1/bug/keys/pr"
+    hc_vault_uris: "https://vault.com/v1/bug/keys/pr"
     unencrypted_suffix: _unencrypted
     encrypted_suffix: _enc
     `)
