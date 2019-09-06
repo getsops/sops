@@ -223,6 +223,8 @@ func (branch TreeBranch) walkValue(in interface{}, path []string, onLeaves func(
 		return onLeaves(string(in), path)
 	case int:
 		return onLeaves(in, path)
+	case int64:
+		return onLeaves(in, path)
 	case bool:
 		return onLeaves(in, path)
 	case float64:
@@ -702,6 +704,8 @@ func ToBytes(in interface{}) ([]byte, error) {
 		return []byte(in), nil
 	case int:
 		return []byte(strconv.Itoa(in)), nil
+	case int64:
+		return []byte(strconv.FormatInt(in, 10)), nil
 	case float64:
 		return []byte(strconv.FormatFloat(in, 'f', -1, 64)), nil
 	case bool:

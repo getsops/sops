@@ -105,6 +105,8 @@ func (c Cipher) Decrypt(ciphertext string, key []byte, additionalData string) (p
 		plaintext = decryptedValue
 	case "int":
 		plaintext, err = strconv.Atoi(decryptedValue)
+	case "int64":
+		plaintext, err = strconv.ParseInt(decryptedValue, 10, 64)
 	case "float":
 		plaintext, err = strconv.ParseFloat(decryptedValue, 64)
 	case "bytes":
@@ -165,6 +167,9 @@ func (c Cipher) Encrypt(plaintext interface{}, key []byte, additionalData string
 	case int:
 		encryptedType = "int"
 		plainBytes = []byte(strconv.Itoa(value))
+	case int64:
+		encryptedType = "int64"
+		plainBytes = []byte(strconv.FormatInt(value, 10))
 	case float64:
 		encryptedType = "float"
 		// The Python version encodes floats without padding 0s after the decimal point.
