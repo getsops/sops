@@ -10,8 +10,10 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-const Version = "3.3.1"
+// Version represents the value of the current semantic version
+const Version = "3.4.0"
 
+// PrintVersion handles the version command for sops
 func PrintVersion(c *cli.Context) {
 	out := fmt.Sprintf("%s %s", c.App.Name, c.App.Version)
 	upstreamVersion, err := RetrieveLatestVersionFromUpstream()

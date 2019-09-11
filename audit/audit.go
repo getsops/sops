@@ -9,7 +9,9 @@ import (
 
 	"github.com/pkg/errors"
 
+	// empty import as per https://godoc.org/github.com/lib/pq
 	_ "github.com/lib/pq"
+
 	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/logging"
 	"gopkg.in/yaml.v2"
@@ -67,36 +69,52 @@ type config struct {
 
 var auditors []Auditor
 
+// SubmitEvent handles an event for all auditors
 func SubmitEvent(event interface{}) {
 	for _, auditor := range auditors {
 		auditor.Handle(event)
 	}
 }
 
+// Register registers a new Auditor in the global auditor list
 func Register(auditor Auditor) {
 	auditors = append(auditors, auditor)
 }
 
+// Auditor is notified when noteworthy events happen,
+// for example when a file is encrypted or decrypted.
 type Auditor interface {
+	// Handle() takes an audit event and attempts to persists it;
+	// how it is persisted and how errors are handled is up to the
+	// implementation of this interface.
 	Handle(event interface{})
 }
 
+// DecryptEvent contains fields relevant to a decryption event
 type DecryptEvent struct {
 	File string
 }
 
+// EncryptEvent contains fields relevant to an encryption event
 type EncryptEvent struct {
 	File string
 }
 
+// RotateEvent contains fields relevant to a key rotation event
 type RotateEvent struct {
 	File string
 }
 
+// PostgresAuditor is a Postgres SQL DB implementation of the Auditor interface.
+// It persists the audit event by writing a row to the 'audit_event' table.
+// Errors with writing to the database will output a log message and the
+// process will exit with status set to 1
 type PostgresAuditor struct {
 	DB *sql.DB
 }
 
+// NewPostgresAuditor is the constructor for a new PostgresAuditor struct
+// initialized with the given db connection string
 func NewPostgresAuditor(connStr string) (*PostgresAuditor, error) {
 	db, err := sql.Open("postgres", connStr)
 	pg := &PostgresAuditor{DB: db}
@@ -113,6 +131,8 @@ func NewPostgresAuditor(connStr string) (*PostgresAuditor, error) {
 	return pg, nil
 }
 
+// Handle persists the audit event by writing a row to the
+// 'audit_event' postgres table
 func (p *PostgresAuditor) Handle(event interface{}) {
 	u, err := user.Current()
 	if err != nil {

@@ -10,8 +10,6 @@ import (
 	"os/exec"
 	"strings"
 
-	"path"
-
 	"bufio"
 	"bytes"
 
@@ -39,6 +37,7 @@ type editExampleOpts struct {
 	editOpts
 	UnencryptedSuffix string
 	EncryptedSuffix   string
+	EncryptedRegex    string
 	KeyGroups         []sops.KeyGroup
 	GroupThreshold    int
 }
@@ -67,6 +66,7 @@ func editExample(opts editExampleOpts) ([]byte, error) {
 			KeyGroups:         opts.KeyGroups,
 			UnencryptedSuffix: opts.UnencryptedSuffix,
 			EncryptedSuffix:   opts.EncryptedSuffix,
+			EncryptedRegex:    opts.EncryptedRegex,
 			Version:           version.Version,
 			ShamirThreshold:   opts.GroupThreshold,
 		},
@@ -112,7 +112,8 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 		return nil, common.NewExitError(fmt.Sprintf("Could not create temporary directory: %s", err), codes.CouldNotWriteOutputFile)
 	}
 	defer os.RemoveAll(tmpdir)
-	tmpfile, err := os.Create(path.Join(tmpdir, path.Base(opts.InputPath)))
+
+	tmpfile, err := os.Create(filepath.Join(tmpdir, filepath.Base(opts.InputPath)))
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Could not create temporary file: %s", err), codes.CouldNotWriteOutputFile)
 	}

@@ -45,6 +45,7 @@ type Cipher struct {
 	stash map[stashKey][]byte
 }
 
+// NewCipher is the constructor for a new Cipher object
 func NewCipher() Cipher {
 	return Cipher{
 		stash: make(map[stashKey][]byte),

@@ -25,7 +25,7 @@ var BRANCH = sops.TreeBranch{
 		Value: "val2",
 	},
 	sops.TreeItem{
-		Key: sops.Comment{"comment"},
+		Key:   sops.Comment{"comment"},
 		Value: nil,
 	},
 	sops.TreeItem{

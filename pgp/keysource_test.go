@@ -9,7 +9,7 @@ import (
 )
 
 func TestPGP(t *testing.T) {
-	key := NewMasterKeyFromFingerprint("1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A")
+	key := NewMasterKeyFromFingerprint("FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4")
 	f := func(x []byte) bool {
 		if x == nil || len(x) == 0 {
 			return true
@@ -44,7 +44,7 @@ func TestPGPKeySourceFromString(t *testing.T) {
 }
 
 func TestRetrievePGPKey(t *testing.T) {
-	fingerprint := "1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A"
+	fingerprint := "FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4"
 	_, err := getKeyFromKeyServer("gpg.mozilla.org", fingerprint)
 	assert.NoError(t, err)
 }

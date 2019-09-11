@@ -76,6 +76,94 @@ mod tests {
 
     #[test]
     #[ignore]
+    fn publish_json_file_s3() {
+        let file_path = prepare_temp_file("test_encrypt_publish_s3.json",
+                                          b"{
+    \"foo\": 2,
+    \"bar\": \"baz\"
+}");
+        assert!(Command::new(SOPS_BINARY_PATH)
+            .arg("-e")
+            .arg("-i")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops")
+            .status
+            .success(),
+            "SOPS failed to encrypt a file");
+        assert!(Command::new(SOPS_BINARY_PATH)
+            .arg("publish")
+            .arg("--yes")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops")
+            .status
+            .success(),
+            "sops failed to publish a file to S3");
+
+        //TODO: Check that file exists in S3 Bucket
+    }
+
+    #[test]
+    fn publish_json_file_vault() {
+        let file_path = prepare_temp_file("test_encrypt_publish_vault.json",
+                                          b"{
+    \"foo\": 2,
+    \"bar\": \"baz\"
+}");
+        assert!(Command::new(SOPS_BINARY_PATH)
+            .arg("-e")
+            .arg("-i")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops")
+            .status
+            .success(),
+            "SOPS failed to encrypt a file");
+        assert!(Command::new(SOPS_BINARY_PATH)
+            .arg("publish")
+            .arg("--yes")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops")
+            .status
+            .success(),
+            "sops failed to publish a file to Vault");
+
+        //TODO: Check that file exists in Vault
+    }
+
+    #[test]
+    fn publish_json_file_vault_version_1() {
+        let file_path = prepare_temp_file("test_encrypt_publish_vault_version_1.json",
+                                          b"{
+    \"foo\": 2,
+    \"bar\": \"baz\"
+}");
+        assert!(Command::new(SOPS_BINARY_PATH)
+            .arg("-e")
+            .arg("-i")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops")
+            .status
+            .success(),
+            "SOPS failed to encrypt a file");
+        assert!(Command::new(SOPS_BINARY_PATH)
+            .arg("publish")
+            .arg("--yes")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops")
+            .status
+            .success(),
+            "sops failed to publish a file to Vault");
+
+        //TODO: Check that file exists in Vault
+    }
+
+    #[test]
+    #[ignore]
     fn encrypt_json_file_kms() {
         let kms_arn = env::var(KMS_KEY).expect("Expected $FUNCTIONAL_TEST_KMS_ARN env var to be set");
 
@@ -261,6 +349,46 @@ b: ba"#
         panic!("Output YAML does not have the expected structure");
     }
     
+    #[test]
+    fn set_yaml_file_string() {
+        let file_path = prepare_temp_file("test_set_string.yaml",
+                                          r#"a: 2
+b: ba"#
+                                          .as_bytes());
+        Command::new(SOPS_BINARY_PATH)
+            .arg("-e")
+            .arg("-i")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        Command::new(SOPS_BINARY_PATH)
+            .arg("-e")
+            .arg("-i")
+            .arg("--set")
+            .arg(r#"["a"] "aaa""#)
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("-d")
+            .arg("-i")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        println!("stdout: {}, stderr: {}",
+                 String::from_utf8_lossy(&output.stdout),
+                 String::from_utf8_lossy(&output.stderr));
+        let mut s = String::new();
+        File::open(file_path).unwrap().read_to_string(&mut s).unwrap();
+        let data: Value = serde_yaml::from_str(&s).expect("Error parsing sops's YAML output");
+        if let Value::Mapping(data) = data {
+            let a = data.get(&Value::String("a".to_owned())).unwrap();
+            assert_eq!(a, &Value::String("aaa".to_owned()));
+        } else {
+            panic!("Output JSON does not have the expected structure");
+        }
+    }
+
     #[test]
     fn set_yaml_file_string() {
         let file_path = prepare_temp_file("test_set_string.yaml",

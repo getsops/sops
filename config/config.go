@@ -18,6 +18,7 @@ import (
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/logging"
 	"go.mozilla.org/sops/pgp"
+	"go.mozilla.org/sops/publish"
 )
 
 var log *logrus.Logger
@@ -60,7 +61,8 @@ func FindConfigFile(start string) (string, error) {
 }
 
 type configFile struct {
-	CreationRules []creationRule `yaml:"creation_rules"`
+	CreationRules    []creationRule    `yaml:"creation_rules"`
+	DestinationRules []destinationRule `yaml:"destination_rules"`
 }
 
 type keyGroup struct {
@@ -87,8 +89,20 @@ type azureKVKey struct {
 	Version  string `yaml:"version"`
 }
 
+type destinationRule struct {
+	PathRegex        string       `yaml:"path_regex"`
+	S3Bucket         string       `yaml:"s3_bucket"`
+	S3Prefix         string       `yaml:"s3_prefix"`
+	GCSBucket        string       `yaml:"gcs_bucket"`
+	GCSPrefix        string       `yaml:"gcs_prefix"`
+	VaultPath        string       `yaml:"vault_path"`
+	VaultAddress     string       `yaml:"vault_address"`
+	VaultKVMountName string       `yaml:"vault_kv_mount_name"`
+	VaultKVVersion   int          `yaml:"vault_kv_version"`
+	RecreationRule   creationRule `yaml:"recreation_rule,omitempty"`
+}
+
 type creationRule struct {
-	FilenameRegex     string `yaml:"filename_regex"`
 	PathRegex         string `yaml:"path_regex"`
 	KMS               string
 	AwsProfile        string `yaml:"aws_profile"`
@@ -99,6 +113,7 @@ type creationRule struct {
 	ShamirThreshold   int        `yaml:"shamir_threshold"`
 	UnencryptedSuffix string     `yaml:"unencrypted_suffix"`
 	EncryptedSuffix   string     `yaml:"encrypted_suffix"`
+	EncryptedRegex    string     `yaml:"encrypted_regex"`
 }
 
 // Load loads a sops config file into a temporary struct
@@ -116,30 +131,152 @@ type Config struct {
 	ShamirThreshold   int
 	UnencryptedSuffix string
 	EncryptedSuffix   string
+	EncryptedRegex    string
+	Destination       publish.Destination
 }
 
-func loadForFileFromBytes(confBytes []byte, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
-	conf := configFile{}
-	err := conf.load(confBytes)
+func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[string]*string) ([]sops.KeyGroup, error) {
+	var groups []sops.KeyGroup
+	if len(cRule.KeyGroups) > 0 {
+		for _, group := range cRule.KeyGroups {
+			var keyGroup sops.KeyGroup
+			for _, k := range group.PGP {
+				keyGroup = append(keyGroup, pgp.NewMasterKeyFromFingerprint(k))
+			}
+			for _, k := range group.KMS {
+				keyGroup = append(keyGroup, kms.NewMasterKey(k.Arn, k.Role, k.Context))
+			}
+			for _, k := range group.GCPKMS {
+				keyGroup = append(keyGroup, gcpkms.NewMasterKeyFromResourceID(k.ResourceID))
+			}
+			for _, k := range group.AzureKV {
+				keyGroup = append(keyGroup, azkv.NewMasterKey(k.VaultURL, k.Key, k.Version))
+			}
+			groups = append(groups, keyGroup)
+		}
+	} else {
+		var keyGroup sops.KeyGroup
+		for _, k := range pgp.MasterKeysFromFingerprintString(cRule.PGP) {
+			keyGroup = append(keyGroup, k)
+		}
+		for _, k := range kms.MasterKeysFromArnString(cRule.KMS, kmsEncryptionContext, cRule.AwsProfile) {
+			keyGroup = append(keyGroup, k)
+		}
+		for _, k := range gcpkms.MasterKeysFromResourceIDString(cRule.GCPKMS) {
+			keyGroup = append(keyGroup, k)
+		}
+		azureKeys, err := azkv.MasterKeysFromURLs(cRule.AzureKeyVault)
+		if err != nil {
+			return nil, err
+		}
+		for _, k := range azureKeys {
+			keyGroup = append(keyGroup, k)
+		}
+		groups = append(groups, keyGroup)
+	}
+	return groups, nil
+}
+
+func loadConfigFile(confPath string) (*configFile, error) {
+	confBytes, err := ioutil.ReadFile(confPath)
+	if err != nil {
+		return nil, fmt.Errorf("could not read config file: %s", err)
+	}
+	conf := &configFile{}
+	err = conf.load(confBytes)
 	if err != nil {
 		return nil, fmt.Errorf("error loading config: %s", err)
 	}
+	return conf, nil
+}
+
+func configFromRule(rule *creationRule, kmsEncryptionContext map[string]*string) (*Config, error) {
+	cryptRuleCount := 0
+	if rule.UnencryptedSuffix != "" {
+		cryptRuleCount++
+	}
+	if rule.EncryptedSuffix != "" {
+		cryptRuleCount++
+	}
+	if rule.EncryptedRegex != "" {
+		cryptRuleCount++
+	}
+
+	if cryptRuleCount > 1 {
+		return nil, fmt.Errorf("error loading config: cannot use more than one of encrypted_suffix, unencrypted_suffix, or encrypted_regex for the same rule")
+	}
+
+	groups, err := getKeyGroupsFromCreationRule(rule, kmsEncryptionContext)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Config{
+		KeyGroups:         groups,
+		ShamirThreshold:   rule.ShamirThreshold,
+		UnencryptedSuffix: rule.UnencryptedSuffix,
+		EncryptedSuffix:   rule.EncryptedSuffix,
+		EncryptedRegex:    rule.EncryptedRegex,
+	}, nil
+}
+
+func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
+	var rule *creationRule
+	var dRule *destinationRule
+
+	if len(conf.DestinationRules) > 0 {
+		for _, r := range conf.DestinationRules {
+			if r.PathRegex == "" {
+				dRule = &r
+				rule = &dRule.RecreationRule
+				break
+			}
+			if r.PathRegex != "" {
+				if match, _ := regexp.MatchString(r.PathRegex, filePath); match {
+					dRule = &r
+					rule = &dRule.RecreationRule
+					break
+				}
+			}
+		}
+	}
+
+	if dRule == nil {
+		return nil, fmt.Errorf("error loading config: no matching destination found in config")
+	}
+
+	var dest publish.Destination
+	if dRule != nil {
+		if dRule.S3Bucket != "" && dRule.GCSBucket != "" && dRule.VaultPath != "" {
+			return nil, fmt.Errorf("error loading config: more than one destinations were found in a single destination rule, you can only use one per rule.")
+		}
+		if dRule.S3Bucket != "" {
+			dest = publish.NewS3Destination(dRule.S3Bucket, dRule.S3Prefix)
+		}
+		if dRule.GCSBucket != "" {
+			dest = publish.NewGCSDestination(dRule.GCSBucket, dRule.GCSPrefix)
+		}
+		if dRule.VaultPath != "" {
+			dest = publish.NewVaultDestination(dRule.VaultAddress, dRule.VaultPath, dRule.VaultKVMountName, dRule.VaultKVVersion)
+		}
+	}
+
+	config, err := configFromRule(rule, kmsEncryptionContext)
+	if err != nil {
+		return nil, err
+	}
+	config.Destination = dest
+
+	return config, nil
+}
+
+func parseCreationRuleForFile(conf *configFile, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
 	var rule *creationRule
 
 	for _, r := range conf.CreationRules {
-		if r.PathRegex == "" && r.FilenameRegex == "" {
+		if r.PathRegex == "" {
 			rule = &r
 			break
-		}
-		if r.PathRegex != "" && r.FilenameRegex != "" {
-			return nil, fmt.Errorf("error loading config: both filename_regex and path_regex were found, use only path_regex")
-		}
-		if r.FilenameRegex != "" {
-			if match, _ := regexp.MatchString(r.FilenameRegex, filePath); match {
-				log.Warn("The key: filename_regex will be removed in a future release. Instead use key: path_regex in your .sops.yaml file")
-				rule = &r
-				break
-			}
 		}
 		if r.PathRegex != "" {
 			if match, _ := regexp.MatchString(r.PathRegex, filePath); match {
@@ -153,60 +290,31 @@ func loadForFileFromBytes(confBytes []byte, filePath string, kmsEncryptionContex
 		return nil, fmt.Errorf("error loading config: no matching creation rules found")
 	}
 
-	if rule.UnencryptedSuffix != "" && rule.EncryptedSuffix != "" {
-		return nil, fmt.Errorf("error loading config: cannot use both encrypted_suffix and unencrypted_suffix for the same rule")
+	config, err := configFromRule(rule, kmsEncryptionContext)
+	if err != nil {
+		return nil, err
 	}
 
-	var groups []sops.KeyGroup
-	if len(rule.KeyGroups) > 0 {
-		for _, group := range rule.KeyGroups {
-			var keyGroup sops.KeyGroup
-			for _, k := range group.PGP {
-				keyGroup = append(keyGroup, pgp.NewMasterKeyFromFingerprint(k))
-			}
-			for _, k := range group.KMS {
-				keyGroup = append(keyGroup, kms.NewMasterKey(k.Arn, k.Role, k.Context))
-			}
-			for _, k := range group.GCPKMS {
-				keyGroup = append(keyGroup, gcpkms.NewMasterKeyFromResourceID(k.ResourceID))
-			}
-			groups = append(groups, keyGroup)
-		}
-	} else {
-		var keyGroup sops.KeyGroup
-		for _, k := range pgp.MasterKeysFromFingerprintString(rule.PGP) {
-			keyGroup = append(keyGroup, k)
-		}
-		for _, k := range kms.MasterKeysFromArnString(rule.KMS, kmsEncryptionContext, rule.AwsProfile) {
-			keyGroup = append(keyGroup, k)
-		}
-		for _, k := range gcpkms.MasterKeysFromResourceIDString(rule.GCPKMS) {
-			keyGroup = append(keyGroup, k)
-		}
-		azureKeys, err := azkv.MasterKeysFromURLs(rule.AzureKeyVault)
-		if err != nil {
-			return nil, err
-		}
-		for _, k := range azureKeys {
-			keyGroup = append(keyGroup, k)
-		}
-		groups = append(groups, keyGroup)
-	}
-	return &Config{
-		KeyGroups:         groups,
-		ShamirThreshold:   rule.ShamirThreshold,
-		UnencryptedSuffix: rule.UnencryptedSuffix,
-		EncryptedSuffix:   rule.EncryptedSuffix,
-	}, nil
+	return config, nil
 }
 
 // LoadForFile load the configuration for a given SOPS file from the config file at confPath. A kmsEncryptionContext
 // should be provided for configurations that do not contain key groups, as there's no way to specify context inside
 // a SOPS config file outside of key groups.
 func LoadForFile(confPath string, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
-	confBytes, err := ioutil.ReadFile(confPath)
+	conf, err := loadConfigFile(confPath)
 	if err != nil {
-		return nil, fmt.Errorf("could not read config file: %s", err)
+		return nil, err
 	}
-	return loadForFileFromBytes(confBytes, filePath, kmsEncryptionContext)
+	return parseCreationRuleForFile(conf, filePath, kmsEncryptionContext)
+}
+
+// LoadDestinationRuleForFile works the same as LoadForFile, but gets the "creation_rule" from the matching destination_rule's
+// "recreation_rule".
+func LoadDestinationRuleForFile(confPath string, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
+	conf, err := loadConfigFile(confPath)
+	if err != nil {
+		return nil, err
+	}
+	return parseDestinationRuleForFile(conf, filePath, kmsEncryptionContext)
 }

@@ -1,6 +1,31 @@
 Changelog
 =========
 
+3.4.0
+-----
+Features:
+
+    * `sops publish`, a new command for publishing sops encrypted secrets to S3, GCS, or Hashicorp Vault
+    * Support for multiple Azure authentication mechanisms
+    * `--exec-env` and `--exec-file` flags for utilizing sops secrets within a temporary file or env vars
+    * Azure Keyvault support to the sops config file
+    * `encrypted_regex` option to the sops config file
+
+Bug fixes:
+
+    * Return non-zero exit code for invalid CLI flags
+    * Broken path handling for sops editing on Windows
+    * `go lint/fmt` violations
+    * Check for pgp fingerprint before slicing it
+
+Project changes:
+
+    * Build container using golang 1.12
+    * Switch to using go modules
+    * Hashicorp Vault server in Travis CI build
+    * Mozilla Publice License file to repo
+    * Replaced expiring test gpg keys
+
 3.3.1
 -----
 

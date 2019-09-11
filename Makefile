@@ -3,7 +3,7 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 PROJECT		:= go.mozilla.org/sops
-GO 		:= GO15VENDOREXPERIMENT=1 go
+GO 		:= GO15VENDOREXPERIMENT=1 GO111MODULE=on GOPROXY=https://proxy.golang.org go
 GOLINT 		:= golint
 
 all: test vet generate install functional-tests
@@ -19,12 +19,13 @@ lint:
 	$(GOLINT) $(PROJECT)
 
 vendor:
-	govend -u
+	$(GO) mod tidy
+	$(GO) mod vendor
 
 vet:
 	$(GO) vet $(PROJECT)
 
-test:
+test: vendor
 	gpg --import pgp/sops_functional_tests_key.asc 2>&1 1>/dev/null || exit 0
 	./test.sh
 

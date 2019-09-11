@@ -41,6 +41,7 @@ import (
 	"crypto/sha512"
 	"fmt"
 	"reflect"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -100,6 +101,7 @@ type TreeItem struct {
 // TreeBranch is a branch inside sops's tree. It is a slice of TreeItems and is therefore ordered
 type TreeBranch []TreeItem
 
+// TreeBranches is a collection of TreeBranch
 // Trees usually have more than one branch
 type TreeBranches []TreeBranch
 
@@ -110,10 +112,9 @@ func valueFromPathAndLeaf(path []interface{}, leaf interface{}) interface{} {
 			return []interface{}{
 				leaf,
 			}
-		} else {
-			return []interface{}{
-				valueFromPathAndLeaf(path[1:], leaf),
-			}
+		}
+		return []interface{}{
+			valueFromPathAndLeaf(path[1:], leaf),
 		}
 	default:
 		if len(path) == 1 {
@@ -123,13 +124,12 @@ func valueFromPathAndLeaf(path []interface{}, leaf interface{}) interface{} {
 					Value: leaf,
 				},
 			}
-		} else {
-			return TreeBranch{
-				TreeItem{
-					Key:   component,
-					Value: valueFromPathAndLeaf(path[1:], leaf),
-				},
-			}
+		}
+		return TreeBranch{
+			TreeItem{
+				Key:   component,
+				Value: valueFromPathAndLeaf(path[1:], leaf),
+			},
 		}
 	}
 }
@@ -150,31 +150,28 @@ func set(branch interface{}, path []interface{}, value interface{}) interface{} 
 		// Not found, need to add the next path entry to the branch
 		if len(path) == 1 {
 			return append(branch, TreeItem{Key: path[0], Value: value})
-		} else {
-			return valueFromPathAndLeaf(path, value)
 		}
+		return valueFromPathAndLeaf(path, value)
 	case []interface{}:
 		position := path[0].(int)
 		if len(path) == 1 {
 			if position >= len(branch) {
 				return append(branch, value)
-			} else {
-				branch[position] = value
 			}
-			return branch
+			branch[position] = value
 		} else {
 			if position >= len(branch) {
 				branch = append(branch, valueFromPathAndLeaf(path[1:], value))
-			} else {
-				branch[position] = set(branch[position], path[1:], value)
 			}
-			return branch
+			branch[position] = set(branch[position], path[1:], value)
 		}
+		return branch
 	default:
 		return valueFromPathAndLeaf(path, value)
 	}
 }
 
+// Set sets a value on a given tree for the specified path
 func (branch TreeBranch) Set(path []interface{}, value interface{}) TreeBranch {
 	return set(branch, path, value).(TreeBranch)
 }
@@ -289,9 +286,10 @@ func (branch TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(
 
 // Encrypt walks over the tree and encrypts all values with the provided cipher,
 // except those whose key ends with the UnencryptedSuffix specified on the
-// Metadata struct, or those not ending with EncryptedSuffix, if EncryptedSuffix
-// is provided (by default it is not).  If encryption is successful, it returns
-// the MAC for the encrypted tree.
+// Metadata struct, those not ending with EncryptedSuffix, if EncryptedSuffix
+// is provided (by default it is not), or those not matching EncryptedRegex,
+// if EncryptedRegex is provided (by default it is not).  If encryption is
+// successful, it returns the MAC for the encrypted tree.
 func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 	audit.SubmitEvent(audit.EncryptEvent{
 		File: tree.FilePath,
@@ -325,6 +323,16 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 					}
 				}
 			}
+			if tree.Metadata.EncryptedRegex != "" {
+				encrypted = false
+				for _, p := range path {
+					matched, _ := regexp.Match(tree.Metadata.EncryptedRegex, []byte(p))
+					if matched {
+						encrypted = true
+						break
+					}
+				}
+			}
 			if encrypted {
 				var err error
 				pathString := strings.Join(path, ":") + ":"
@@ -347,7 +355,10 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 	return fmt.Sprintf("%X", hash.Sum(nil)), nil
 }
 
-// Decrypt walks over the tree and decrypts all values with the provided cipher, except those whose key ends with the UnencryptedSuffix specified on the Metadata struct or those not ending with EncryptedSuffix, if EncryptedSuffix is provided (by default it is not).
+// Decrypt walks over the tree and decrypts all values with the provided cipher,
+// except those whose key ends with the UnencryptedSuffix specified on the Metadata struct,
+// those not ending with EncryptedSuffix, if EncryptedSuffix is provided (by default it is not),
+// or those not matching EncryptedRegex, if EncryptedRegex is provided (by default it is not).
 // If decryption is successful, it returns the MAC for the decrypted tree.
 func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 	log.Debug("Decrypting tree")
@@ -370,6 +381,16 @@ func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 				encrypted = false
 				for _, p := range path {
 					if strings.HasSuffix(p, tree.Metadata.EncryptedSuffix) {
+						encrypted = true
+						break
+					}
+				}
+			}
+			if tree.Metadata.EncryptedRegex != "" {
+				encrypted = false
+				for _, p := range path {
+					matched, _ := regexp.Match(tree.Metadata.EncryptedRegex, []byte(p))
+					if matched {
 						encrypted = true
 						break
 					}
@@ -445,6 +466,7 @@ type Metadata struct {
 	LastModified              time.Time
 	UnencryptedSuffix         string
 	EncryptedSuffix           string
+	EncryptedRegex            string
 	MessageAuthenticationCode string
 	Version                   string
 	KeyGroups                 []KeyGroup
@@ -486,6 +508,8 @@ type PlainFileEmitter interface {
 	EmitPlainFile(TreeBranches) ([]byte, error)
 }
 
+// ValueEmitter is the interface for emitting a value. It provides a way to emit
+// values from the internal SOPS representation so that they can be shown
 type ValueEmitter interface {
 	EmitValue(interface{}) ([]byte, error)
 }
@@ -634,7 +658,7 @@ func decryptKeyGroup(group KeyGroup, svcs []keyservice.KeyServiceClient) ([]byte
 // of the key services, returning as soon as one key service succeeds.
 func decryptKey(key keys.MasterKey, svcs []keyservice.KeyServiceClient) ([]byte, error) {
 	svcKey := keyservice.KeyFromMasterKey(key)
-	var part []byte = nil
+	var part []byte
 	decryptErr := decryptKeyError{
 		keyName: key.ToString(),
 	}
@@ -688,5 +712,36 @@ func ToBytes(in interface{}) ([]byte, error) {
 		return ToBytes(in.Value)
 	default:
 		return nil, fmt.Errorf("Could not convert unknown type %T to bytes", in)
+	}
+}
+
+// EmitAsMap will emit the tree branches as a map. This is used by the publish
+// command for writing decrypted trees to various destinations. Should only be
+// used for outputting to data structures in code.
+func EmitAsMap(in TreeBranches) (map[string]interface{}, error) {
+	data := map[string]interface{}{}
+
+	for _, branch := range in {
+		for _, item := range branch {
+			if _, ok := item.Key.(Comment); ok {
+				continue
+			}
+			val, err := encodeValueForMap(item.Value)
+			if err != nil {
+				return nil, err
+			}
+			data[item.Key.(string)] = val
+		}
+	}
+
+	return data, nil
+}
+
+func encodeValueForMap(v interface{}) (interface{}, error) {
+	switch v := v.(type) {
+	case TreeBranch:
+		return EmitAsMap([]TreeBranch{v})
+	default:
+		return v, nil
 	}
 }
