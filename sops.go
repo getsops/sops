@@ -28,8 +28,8 @@ In practice, this is achieved by generating a data key for each document that is
 to encrypt all values, and encrypting the data with each master key defined. Being
 able to decrypt the data key gives access to the document.
 
-The integrity of each document is guaranteed by calculating a Message Access Control
-that is stored encrypted by the data key. When decrypting a document, the MAC should
+The integrity of each document is guaranteed by calculating a Message Authentication Code
+(MAC) that is stored encrypted by the data key. When decrypting a document, the MAC should
 be recalculated and compared with the MAC stored in the document to verify that no
 fraudulent changes have been applied. The MAC covers keys and values as well as their
 ordering.
