@@ -7,7 +7,7 @@ Features:
 
     * `sops publish`, a new command for publishing sops encrypted secrets to S3, GCS, or Hashicorp Vault
     * Support for multiple Azure authentication mechanisms
-    * `--exec-env` and `--exec-file` flags for utilizing sops secrets within a temporary file or env vars
+    * `sops exec-env` and `sops exec-file`, two new commands for utilizing sops secrets within a temporary file or env vars
     * Azure Keyvault support to the sops config file
     * `encrypted_regex` option to the sops config file
 
