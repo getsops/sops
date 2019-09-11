@@ -11,7 +11,7 @@ import (
 )
 
 // Version represents the value of the current semantic version
-const Version = "3.3.1"
+const Version = "3.4.0"
 
 // PrintVersion handles the version command for sops
 func PrintVersion(c *cli.Context) {
