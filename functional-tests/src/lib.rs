@@ -348,46 +348,6 @@ b: ba"#
         }
         panic!("Output YAML does not have the expected structure");
     }
-    
-    #[test]
-    fn set_yaml_file_string() {
-        let file_path = prepare_temp_file("test_set_string.yaml",
-                                          r#"a: 2
-b: ba"#
-                                          .as_bytes());
-        Command::new(SOPS_BINARY_PATH)
-            .arg("-e")
-            .arg("-i")
-            .arg(file_path.clone())
-            .output()
-            .expect("Error running sops");
-        Command::new(SOPS_BINARY_PATH)
-            .arg("-e")
-            .arg("-i")
-            .arg("--set")
-            .arg(r#"["a"] "aaa""#)
-            .arg(file_path.clone())
-            .output()
-            .expect("Error running sops");
-        let output = Command::new(SOPS_BINARY_PATH)
-            .arg("-d")
-            .arg("-i")
-            .arg(file_path.clone())
-            .output()
-            .expect("Error running sops");
-        println!("stdout: {}, stderr: {}",
-                 String::from_utf8_lossy(&output.stdout),
-                 String::from_utf8_lossy(&output.stderr));
-        let mut s = String::new();
-        File::open(file_path).unwrap().read_to_string(&mut s).unwrap();
-        let data: Value = serde_yaml::from_str(&s).expect("Error parsing sops's YAML output");
-        if let Value::Mapping(data) = data {
-            let a = data.get(&Value::String("a".to_owned())).unwrap();
-            assert_eq!(a, &Value::String("aaa".to_owned()));
-        } else {
-            panic!("Output JSON does not have the expected structure");
-        }
-    }
 
     #[test]
     fn set_yaml_file_string() {
