@@ -99,8 +99,8 @@ func TestFlatten(t *testing.T) {
 		},
 	}
 	expected := map[string]interface{}{
-		"foo": "bar",
-		"baz" + mapSeparator + "foo":                        2,
+		"foo":                        "bar",
+		"baz" + mapSeparator + "foo": 2,
 		"baz" + mapSeparator + "bar" + mapSeparator + "foo": 2,
 		"qux" + listSeparator + "0":                         "hello",
 		"qux" + listSeparator + "1":                         1,

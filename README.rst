@@ -219,8 +219,21 @@ And decrypt it using::
 
 Encrypting using Azure Key Vault
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The Azure Key Vault integration uses service principals to access secrets in
-the vault. The following environment variables are used to authenticate:
+
+The Azure Key Vault integration tries several authentication methods, in
+this order:
+
+  1. Client credentials
+  2. Client Certificate
+  3. Username Password
+  4. MSI
+  5. Azure CLI auth
+
+You can force a specific authentication method through the AZURE_AUTH_METHOD
+environment variable, which may be one of: clientcredentials, clientcertificate,
+usernamepassword, msi, or cli (default).
+
+For example, you can use service principals with the following environment variables:
 
 .. code:: bash
 
@@ -484,12 +497,12 @@ can manage the three sets of configurations for the three types of files:
 		# KMS set A is used
 		- path_regex: \.dev\.yaml$
 		  kms: 'arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500,arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod'
-		  pgp: '1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A'
+		  pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
 
 		# prod files use KMS set B in the PROD IAM
 		- path_regex: \.prod\.yaml$
 		  kms: 'arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod,arn:aws:kms:eu-central-1:361527076523:key/cb1fab90-8d17-42a1-a9d8-334968904f94+arn:aws:iam::361527076523:role/hiera-sops-prod'
-		  pgp: '1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A'
+		  pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
 
 		# gcp files using GCP KMS
 		- path_regex: \.gcp\.yaml$
@@ -499,7 +512,7 @@ can manage the three sets of configurations for the three types of files:
 		# catchall that will encrypt the file using KMS set C
 		# The absence of a path_regex means it will match everything
 		- kms: 'arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500,arn:aws:kms:us-west-2:142069644989:key/846cfb17-373d-49b9-8baf-f36b04512e47,arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e'
-		  pgp: '1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A'
+		  pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
 
 When creating any file under **mysecretrepo**, whether at the root or under
 a subdirectory, sops will recursively look for a ``.sops.yaml`` file. If one is
@@ -522,16 +535,16 @@ The path_regex checks the full path of the encrypting file. Here is another exam
         # KMS set A is used
         - path_regex: .*/development/.*
           kms: 'arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500,arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod'
-          pgp: '1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A'
+          pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
 
         # prod files use KMS set B in the PROD IAM
         - path_regex: .*/production/.*
           kms: 'arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod,arn:aws:kms:eu-central-1:361527076523:key/cb1fab90-8d17-42a1-a9d8-334968904f94+arn:aws:iam::361527076523:role/hiera-sops-prod'
-          pgp: '1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A'
+          pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
 
         # other files use KMS set C
         - kms: 'arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500,arn:aws:kms:us-west-2:142069644989:key/846cfb17-373d-49b9-8baf-f36b04512e47,arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e'
-          pgp: '1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A'
+          pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
 
 Creating a new file with the right keys is now as simple as
 
@@ -789,6 +802,179 @@ Saving Output to a File
 By default ``sops`` just dumps all the output to the standard output. We can use the
 ``--output`` flag followed by a filename to save the output to the file specified.
 Beware using both ``--in-place`` and ``--output`` flags will result in an error.
+
+Passing Secrets to Other Processes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In addition to writing secrets to standard output and to files on disk, ``sops``
+has two commands for passing decrypted secrets to a new process: ``exec-env``
+and ``exec-file``. These commands will place all output into the environment of
+a child process and into a temporary file, respectively. For example, if a
+program looks for credentials in its environment, ``exec-env`` can be used to
+ensure that the decrypted contents are available only to this process and never
+written to disk.
+
+.. code:: bash
+
+   # print secrets to stdout to confirm values
+   $ sops -d out.json
+   {
+           "database_password": "jf48t9wfw094gf4nhdf023r",
+           "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
+           "AWS_SECRET_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+   }
+   
+   # decrypt out.json and run a command
+   # the command prints the environment variable and runs a script that uses it
+   $ sops exec-env out.json 'echo secret: $database_password; ./database-import'
+   secret: jf48t9wfw094gf4nhdf023r
+   
+   # launch a shell with the secrets available in its environment
+   $ sops exec-env out.json 'sh'
+   sh-3.2# echo $database_password
+   jf48t9wfw094gf4nhdf023r
+   
+   # the secret is not accessible anywhere else
+   sh-3.2$ exit
+   $ echo your password: $database_password
+   your password: 
+
+
+If the command you want to run only operates on files, you can use ``exec-file``
+instead. By default ``sops`` will use a FIFO to pass the contents of the
+decrypted file to the new program. Using a FIFO, secrets are only passed in
+memory which has two benefits: the plaintext secrets never touch the disk, and
+the child process can only read the secrets once. In contexts where this won't
+work, such as platforms where FIFOs are not available or secret files need to be
+available to the child process longer term, the ``--no-fifo`` flag can be used
+to instruct ``sops`` to use a traditional temporary file that will get cleaned
+up once the process is finished executing. ``exec-file`` behaves similar to
+``find(1)`` in that ``{}`` is used as a placeholder in the command which will be
+substituted with the temporary file path (whether a FIFO or an actual file).
+
+.. code:: bash
+
+   # operating on the same file as before, but as a file this time
+   $ sops exec-file out.json 'echo your temporary file: {}; cat {}'
+   your temporary file: /tmp/.sops894650499/tmp-file
+   {
+           "database_password": "jf48t9wfw094gf4nhdf023r",
+           "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
+           "AWS_SECRET_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+   }
+   
+   # launch a shell with a variable TMPFILE pointing to the temporary file
+   $ sops exec-file --no-fifo out.json 'TMPFILE={} sh'
+   sh-3.2$ echo $TMPFILE
+   /tmp/.sops506055069/tmp-file291138648
+   sh-3.2$ cat $TMPFILE
+   {
+           "database_password": "jf48t9wfw094gf4nhdf023r",
+           "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
+           "AWS_SECRET_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+   }
+   sh-3.2$ ./program --config $TMPFILE
+   sh-3.2$ exit
+
+   # try to open the temporary file from earlier
+   $ cat /tmp/.sops506055069/tmp-file291138648
+   cat: /tmp/.sops506055069/tmp-file291138648: No such file or directory
+
+Additionally, both ``exec-env`` and ``exec-file`` support dropping privileges
+before executing the new program via the ``--user <username>`` flag. This is
+particularly useful in cases where the encrypted file is only readable by root,
+but the target program does not need root privileges to function. This flag
+should be used where possible for added security.
+
+.. code:: bash
+
+   # the encrypted file can't be read by the current user
+   $ cat out.json
+   cat: out.json: Permission denied
+   
+   # execute sops as root, decrypt secrets, then drop privileges
+   $ sudo sops exec-env --user nobody out.json 'sh'
+   sh-3.2$ echo $database_password
+   jf48t9wfw094gf4nhdf023r
+
+   # dropped privileges, still can't load the original file
+   sh-3.2$ id
+   uid=4294967294(nobody) gid=4294967294(nobody) groups=4294967294(nobody)
+   sh-3.2$ cat out.json
+   cat: out.json: Permission denied
+
+Using the publish command
+~~~~~~~~~~~~~~~~~~~~~~~~~
+``sops publish $file`` publishes a file to a pre-configured destination (this lives in the sops
+config file). Additionally, support re-encryption rules that work just like the creation rules.
+
+This command requires a ``.sops.yaml`` configuration file. Below is an example:
+
+.. code:: yaml
+
+   destination_rules:
+      - s3_bucket: "sops-secrets"
+        path_regex: s3/*
+        recreation_rule:
+           pgp: F69E4901EDBAD2D1753F8C67A64535C4163FB307
+      - gcs_bucket: "sops-secrets"
+        path_regex: gcs/*
+        recreation_rule:
+           pgp: F69E4901EDBAD2D1753F8C67A64535C4163FB307
+      - vault_path: "sops/"
+        vault_kv_mount_name: "secret/" # default
+        vault_kv_version: 2 # default
+        path_regex: vault/*
+
+The above configuration will place all files under ``s3/*`` into the S3 bucket ``sops-secrets``,
+all files under ``gcs/*`` into the GCS bucket ``sops-secrets``, and the contents of all files under
+``vault/*`` into Vault's KV store under the path ``secrets/sops/``. For the files that will be
+published to S3 and GCS, it will decrypt them and re-encrypt them using the
+``F69E4901EDBAD2D1753F8C67A64535C4163FB307`` pgp key.
+
+You would deploy a file to S3 with a command like: ``sops publish s3/app.yaml``
+
+Publishing to Vault
+*******************
+
+There are a few settings for Vault that you can place in your destination rules. The first
+is ``vault_path``, which is required. The others are optional, and they are
+``vault_address``, ``vault_kv_mount_name``, ``vault_kv_version``.
+
+``sops`` uses the official Vault API provided by Hashicorp, which makes use of `environment
+variables <https://www.vaultproject.io/docs/commands/#environment-variables>`_ for
+configuring the client.
+
+``vault_kv_mount_name`` is used if your Vault KV is mounted somewhere other than ``secret/``.
+``vault_kv_version`` supports ``1`` and ``2``, with ``2`` being the default.
+
+Below is an example of publishing to Vault (using token auth with a local dev instance of Vault).
+
+.. code:: bash
+
+   $ export VAULT_TOKEN=...
+   $ export VAULT_ADDR='http://127.0.0.1:8200'
+   $ sops -d vault/test.yaml
+   example_string: bar
+   example_number: 42
+   example_map:
+       key: value
+   $ sops publish vault/test.yaml
+   uploading /home/user/sops_directory/vault/test.yaml to http://127.0.0.1:8200/v1/secret/data/sops/test.yaml ? (y/n): y
+   $ vault kv get secret/sops/test.yaml
+   ====== Metadata ======
+   Key              Value
+   ---              -----
+   created_time     2019-07-11T03:32:17.074792017Z
+   deletion_time    n/a
+   destroyed        false
+   version          3
+
+   ========= Data =========
+   Key               Value
+   ---               -----
+   example_map       map[key:value]
+   example_number    42
+   example_string    bar
 
 
 Important information on types
@@ -1111,10 +1297,21 @@ The unencrypted suffix can be set to a different value using the
 Conversely, you can opt in to only encrypt some values in a YAML or JSON file,
 by adding a chosen suffix to those keys and passing it to the ``--encrypted-suffix`` option.
 
+A third method is to use the ``--encrypted-regex`` which will only encrypt values under
+keys that match the supplied regular expression.  For example, this command:
+
+.. code:: bash
+
+	$ sops --encrypt --encrypted-regex '&(data|stringData)' k8s-secrets.yaml
+
+will encrypt the values under the ``data`` and ``stringData`` keys in a YAML file
+containing kubernetes secrets.  It will not encrypt other values that help you to
+navigate the file, like ``metadata`` which contains the secrets' names.
+
 You can also specify these options in the ``.sops.yaml`` config file.
 
-Note: these two options ``--unencrypted-suffix`` and ``--encrypted-suffix`` are mutually exclusive and
-cannot both be used in the same file.
+Note: these three options ``--unencrypted-suffix``, ``--encrypted-suffix``, and ``--encrypted-regex`` are 
+mutually exclusive and cannot all be used in the same file.
 
 Encryption Protocol
 -------------------

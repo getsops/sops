@@ -1,14 +1,28 @@
 creation_rules:
-    - filename_regex: test_roundtrip_keygroups.yaml
+    - path_regex: test_roundtrip_keygroups.yaml
       key_groups:
       - pgp:
-        - 1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A
+        - FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4
       - pgp:
-        - 729D26A79482B5A20DEAD0A76945978B930DD7A2
-    - filename_regex: test_roundtrip_keygroups_missing_decryption_key.yaml
+        - D7229043384BCC60326C6FB9D8720D957C3D3074
+    - path_regex: test_roundtrip_keygroups_missing_decryption_key.yaml
       key_groups:
       - pgp:
-        - 1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A
+        - FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4
       - pgp:
-        - 620B9A4C96230B91E7473D20113D2B26EA0890C7
-    - pgp: 1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A
+        - B611A2F9F11D0FF82568805119F9B5DAEA91FF86
+    - pgp: FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4
+destination_rules:
+    - s3_bucket: "sops-publish-functional-tests"
+      s3_prefix: "functional-test/"
+      path_regex: test_encrypt_publish_s3.json
+      reencryption_rule:
+        pgp: B611A2F9F11D0FF82568805119F9B5DAEA91FF86
+    - vault_path: "functional-test/"
+      vault_kv_mount_name: "secret/"
+      vault_kv_version: 2
+      path_regex: test_encrypt_publish_vault.json
+    - vault_path: "functional-test-version-1/"
+      vault_kv_mount_name: "kv/"
+      vault_kv_version: 1
+      path_regex: test_encrypt_publish_vault_version_1.json

@@ -19,8 +19,10 @@ import (
 	"go.mozilla.org/sops/azkv"
 	"go.mozilla.org/sops/cmd/sops/codes"
 	"go.mozilla.org/sops/cmd/sops/common"
+	"go.mozilla.org/sops/cmd/sops/subcommand/exec"
 	"go.mozilla.org/sops/cmd/sops/subcommand/groups"
 	keyservicecmd "go.mozilla.org/sops/cmd/sops/subcommand/keyservice"
+	publishcmd "go.mozilla.org/sops/cmd/sops/subcommand/publish"
 	"go.mozilla.org/sops/cmd/sops/subcommand/updatekeys"
 	"go.mozilla.org/sops/config"
 	"go.mozilla.org/sops/gcpkms"
@@ -106,6 +108,154 @@ func main() {
 	app.EnableBashCompletion = true
 	app.Commands = []cli.Command{
 		{
+			Name:	  "exec-env",
+			Usage:	  "execute a command with decrypted values inserted into the environment",
+			ArgsUsage: "[file to decrypt] [command to run]",
+			Flags: append([]cli.Flag{
+				cli.BoolFlag{
+					Name: "background",
+					Usage: "background the process and don't wait for it to complete",
+				},
+				cli.StringFlag{
+					Name: "user",
+					Usage: "the user to run the command as",
+				},
+			}, keyserviceFlags...),
+			Action: func(c *cli.Context) error {
+				if len(c.Args()) != 2 {
+					return common.NewExitError(fmt.Errorf("error: missing file to decrypt"), codes.ErrorGeneric)
+				}
+
+				fileName := c.Args()[0]
+				command := c.Args()[1]
+
+				inputStore := inputStore(c, fileName)
+
+
+				svcs := keyservices(c)
+				opts := decryptOpts{
+					OutputStore: &dotenv.Store{},
+					InputStore:  inputStore,
+					InputPath:   fileName,
+					Cipher:	  aes.NewCipher(),
+					KeyServices: svcs,
+					IgnoreMAC:   c.Bool("ignore-mac"),
+				}
+
+				output, err := decrypt(opts)
+				if err != nil {
+					return toExitError(err)
+				}
+
+				exec.ExecWithEnv(exec.ExecOpts{
+					Command: command,
+					Plaintext: output,
+					Background: c.Bool("background"),
+					User: c.String("user"),
+				})
+
+				return nil
+			},
+		},
+		{
+			Name:	  "exec-file",
+			Usage:	  "execute a command with the decrypted contents as a temporary file",
+			ArgsUsage: "[file to decrypt] [command to run]",
+			Flags: append([]cli.Flag{
+				cli.BoolFlag{
+					Name: "background",
+					Usage: "background the process and don't wait for it to complete",
+				},
+				cli.BoolFlag{
+					Name: "no-fifo",
+					Usage: "use a regular file instead of a fifo to temporarily hold the decrypted contents",
+				},
+				cli.StringFlag{
+					Name: "user",
+					Usage: "the user to run the command as",
+				},
+			}, keyserviceFlags...),
+			Action: func(c *cli.Context) error {
+				if len(c.Args()) != 2 {
+					return common.NewExitError(fmt.Errorf("error: missing file to decrypt"), codes.ErrorGeneric)
+				}
+
+				fileName := c.Args()[0]
+				command := c.Args()[1]
+
+				inputStore := inputStore(c, fileName)
+				outputStore := outputStore(c, fileName)
+
+				svcs := keyservices(c)
+				opts := decryptOpts{
+					OutputStore: outputStore,
+					InputStore:  inputStore,
+					InputPath:   fileName,
+					Cipher:	  aes.NewCipher(),
+					KeyServices: svcs,
+					IgnoreMAC:   c.Bool("ignore-mac"),
+				}
+
+				output, err := decrypt(opts)
+				if err != nil {
+					return toExitError(err)
+				}
+
+				exec.ExecWithFile(exec.ExecOpts{
+					Command: command,
+					Plaintext: output,
+					Background: c.Bool("background"),
+					Fifo: !c.Bool("no-fifo"),
+					User: c.String("user"),
+				})
+
+				return nil
+			},
+		},
+		{
+			Name:      "publish",
+			Usage:     "Publish sops file to a configured destination",
+			ArgsUsage: `file`,
+			Flags: append([]cli.Flag{
+				cli.BoolFlag{
+					Name:  "yes, y",
+					Usage: `pre-approve all changes and run non-interactively`,
+				},
+				cli.BoolFlag{
+					Name:  "verbose",
+					Usage: "Enable verbose logging output",
+				},
+			}, keyserviceFlags...),
+			Action: func(c *cli.Context) error {
+				if c.Bool("verbose") || c.GlobalBool("verbose") {
+					logging.SetLevel(logrus.DebugLevel)
+				}
+				configPath, err := config.FindConfigFile(".")
+				if err != nil {
+					return common.NewExitError(err, codes.ErrorGeneric)
+				}
+				if c.NArg() < 1 {
+					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
+				}
+				fileName := c.Args()[0]
+				inputStore := inputStore(c, fileName)
+				err = publishcmd.Run(publishcmd.Opts{
+					ConfigPath:  configPath,
+					InputPath:   fileName,
+					InputStore:  inputStore,
+					Cipher:      aes.NewCipher(),
+					KeyServices: keyservices(c),
+					Interactive: !c.Bool("yes"),
+				})
+				if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
+					return cliErr
+				} else if err != nil {
+					return common.NewExitError(err, codes.ErrorGeneric)
+				}
+				return nil
+			},
+		},
+		{
 			Name:  "keyservice",
 			Usage: "start a SOPS key service server",
 			Flags: []cli.Flag{
@@ -129,7 +279,7 @@ func main() {
 				},
 			},
 			Action: func(c *cli.Context) error {
-				if c.Bool("verbose") {
+				if c.Bool("verbose") || c.GlobalBool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
 				err := keyservicecmd.Run(keyservicecmd.Opts{
@@ -396,6 +546,10 @@ func main() {
 			Usage: "override the encrypted key suffix. When empty, all keys will be encrypted, unless otherwise marked with unencrypted-suffix.",
 		},
 		cli.StringFlag{
+			Name:  "encrypted-regex",
+			Usage: "set the encrypted key suffix. When specified, only keys matching the regex will be encrypted.",
+		},
+		cli.StringFlag{
 			Name:  "config",
 			Usage: "path to sops' config file. If set, sops will not search for the config file recursively.",
 		},
@@ -447,6 +601,7 @@ func main() {
 
 		unencryptedSuffix := c.String("unencrypted-suffix")
 		encryptedSuffix := c.String("encrypted-suffix")
+		encryptedRegex := c.String("encrypted-regex")
 		conf, err := loadConfig(c, fileName, nil)
 		if err != nil {
 			return toExitError(err)
@@ -459,12 +614,28 @@ func main() {
 			if encryptedSuffix == "" {
 				encryptedSuffix = conf.EncryptedSuffix
 			}
+			if encryptedRegex == "" {
+				encryptedRegex = conf.EncryptedRegex
+			}
 		}
-		if unencryptedSuffix != "" && encryptedSuffix != "" {
-			return common.NewExitError("Error: cannot use both encrypted_suffix and unencrypted_suffix in the same file", codes.ErrorConflictingParameters)
+
+		cryptRuleCount := 0
+		if unencryptedSuffix != "" {
+			cryptRuleCount++
 		}
-		// only supply the default UnencryptedSuffix when EncryptedSuffix is not provided
-		if unencryptedSuffix == "" && encryptedSuffix == "" {
+		if encryptedSuffix != "" {
+			cryptRuleCount++
+		}
+		if encryptedRegex != "" {
+			cryptRuleCount++
+		}
+
+		if cryptRuleCount > 1 {
+			return common.NewExitError("Error: cannot use more than one of encrypted_suffix, unencrypted_suffix, or encrypted_regex in the same file", codes.ErrorConflictingParameters)
+		}
+
+		// only supply the default UnencryptedSuffix when EncryptedSuffix and EncryptedRegex are not provided
+		if cryptRuleCount == 0 {
 			unencryptedSuffix = sops.DefaultUnencryptedSuffix
 		}
 
@@ -491,6 +662,7 @@ func main() {
 				Cipher:            aes.NewCipher(),
 				UnencryptedSuffix: unencryptedSuffix,
 				EncryptedSuffix:   encryptedSuffix,
+				EncryptedRegex:    encryptedRegex,
 				KeyServices:       svcs,
 				KeyGroups:         groups,
 				GroupThreshold:    threshold,
@@ -612,6 +784,7 @@ func main() {
 					editOpts:          opts,
 					UnencryptedSuffix: unencryptedSuffix,
 					EncryptedSuffix:   encryptedSuffix,
+					EncryptedRegex:    encryptedRegex,
 					KeyGroups:         groups,
 					GroupThreshold:    threshold,
 				})
@@ -639,6 +812,7 @@ func main() {
 		}
 
 		outputFile := os.Stdout
+
 		if c.String("output") != "" {
 			file, err := os.Create(c.String("output"))
 			if err != nil {
@@ -650,7 +824,10 @@ func main() {
 		_, err = outputFile.Write(output)
 		return toExitError(err)
 	}
-	app.Run(os.Args)
+	err := app.Run(os.Args)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func toExitError(err error) error {
