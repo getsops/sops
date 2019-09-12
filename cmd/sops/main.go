@@ -19,7 +19,6 @@ import (
 	"go.mozilla.org/sops/azkv"
 	"go.mozilla.org/sops/cmd/sops/codes"
 	"go.mozilla.org/sops/cmd/sops/common"
-	"go.mozilla.org/sops/cmd/sops/subcommand/exec"
 	"go.mozilla.org/sops/cmd/sops/subcommand/groups"
 	keyservicecmd "go.mozilla.org/sops/cmd/sops/subcommand/keyservice"
 	publishcmd "go.mozilla.org/sops/cmd/sops/subcommand/publish"
@@ -107,111 +106,6 @@ func main() {
    For more information, see the README at github.com/mozilla/sops`
 	app.EnableBashCompletion = true
 	app.Commands = []cli.Command{
-		{
-			Name:	  "exec-env",
-			Usage:	  "execute a command with decrypted values inserted into the environment",
-			ArgsUsage: "[file to decrypt] [command to run]",
-			Flags: append([]cli.Flag{
-				cli.BoolFlag{
-					Name: "background",
-					Usage: "background the process and don't wait for it to complete",
-				},
-				cli.StringFlag{
-					Name: "user",
-					Usage: "the user to run the command as",
-				},
-			}, keyserviceFlags...),
-			Action: func(c *cli.Context) error {
-				if len(c.Args()) != 2 {
-					return common.NewExitError(fmt.Errorf("error: missing file to decrypt"), codes.ErrorGeneric)
-				}
-
-				fileName := c.Args()[0]
-				command := c.Args()[1]
-
-				inputStore := inputStore(c, fileName)
-
-
-				svcs := keyservices(c)
-				opts := decryptOpts{
-					OutputStore: &dotenv.Store{},
-					InputStore:  inputStore,
-					InputPath:   fileName,
-					Cipher:	  aes.NewCipher(),
-					KeyServices: svcs,
-					IgnoreMAC:   c.Bool("ignore-mac"),
-				}
-
-				output, err := decrypt(opts)
-				if err != nil {
-					return toExitError(err)
-				}
-
-				exec.ExecWithEnv(exec.ExecOpts{
-					Command: command,
-					Plaintext: output,
-					Background: c.Bool("background"),
-					User: c.String("user"),
-				})
-
-				return nil
-			},
-		},
-		{
-			Name:	  "exec-file",
-			Usage:	  "execute a command with the decrypted contents as a temporary file",
-			ArgsUsage: "[file to decrypt] [command to run]",
-			Flags: append([]cli.Flag{
-				cli.BoolFlag{
-					Name: "background",
-					Usage: "background the process and don't wait for it to complete",
-				},
-				cli.BoolFlag{
-					Name: "no-fifo",
-					Usage: "use a regular file instead of a fifo to temporarily hold the decrypted contents",
-				},
-				cli.StringFlag{
-					Name: "user",
-					Usage: "the user to run the command as",
-				},
-			}, keyserviceFlags...),
-			Action: func(c *cli.Context) error {
-				if len(c.Args()) != 2 {
-					return common.NewExitError(fmt.Errorf("error: missing file to decrypt"), codes.ErrorGeneric)
-				}
-
-				fileName := c.Args()[0]
-				command := c.Args()[1]
-
-				inputStore := inputStore(c, fileName)
-				outputStore := outputStore(c, fileName)
-
-				svcs := keyservices(c)
-				opts := decryptOpts{
-					OutputStore: outputStore,
-					InputStore:  inputStore,
-					InputPath:   fileName,
-					Cipher:	  aes.NewCipher(),
-					KeyServices: svcs,
-					IgnoreMAC:   c.Bool("ignore-mac"),
-				}
-
-				output, err := decrypt(opts)
-				if err != nil {
-					return toExitError(err)
-				}
-
-				exec.ExecWithFile(exec.ExecOpts{
-					Command: command,
-					Plaintext: output,
-					Background: c.Bool("background"),
-					Fifo: !c.Bool("no-fifo"),
-					User: c.String("user"),
-				})
-
-				return nil
-			},
-		},
 		{
 			Name:      "publish",
 			Usage:     "Publish sops file to a configured destination",
@@ -812,7 +706,6 @@ func main() {
 		}
 
 		outputFile := os.Stdout
-
 		if c.String("output") != "" {
 			file, err := os.Create(c.String("output"))
 			if err != nil {
