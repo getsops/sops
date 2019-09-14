@@ -33,7 +33,7 @@ For the adventurous, unstable features are available in the `develop` branch, wh
         $ git checkout develop
         $ make install
 
-(requires Go >= 1.12)
+(requires Go >= 1.13)
 
 If you don't have Go installed, set it up with:
 
@@ -66,7 +66,7 @@ For a quick presentation of Sops, check out this Youtube tutorial:
 
 .. image:: https://img.youtube.com/vi/V2PRhxphH2w/0.jpg
    :target: https://www.youtube.com/watch?v=V2PRhxphH2w
-   
+
 If you're using AWS KMS, create one or multiple master keys in the IAM console
 and export them, comma separated, in the **SOPS_KMS_ARN** env variable. It is
 recommended to use at least two master keys in different regions.
@@ -185,7 +185,7 @@ Encrypting using GCP KMS
 ~~~~~~~~~~~~~~~~~~~~~~~~
 GCP KMS uses `Application Default Credentials
 <https://developers.google.com/identity/protocols/application-default-credentials>`_.
-If you already logged in using 
+If you already logged in using
 
 .. code:: bash
 
@@ -423,7 +423,7 @@ appending it to the ARN of the master key, separated by a **+** sign::
 AWS KMS Encryption Context
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-SOPS has the ability to use `AWS KMS key policy and encryption context 
+SOPS has the ability to use `AWS KMS key policy and encryption context
 <http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html>`_
 to refine the access control of a given KMS master key.
 
@@ -1122,7 +1122,7 @@ numbering them.
 
 .. code:: bash
 
-	$ sops --set '["an_array"][1] "secretuser2"' ~/git/svc/sops/example.yaml 
+	$ sops --set '["an_array"][1] "secretuser2"' ~/git/svc/sops/example.yaml
 
 The value must be formatted as json.
 
@@ -1145,8 +1145,8 @@ You can import sops as a module and use it in your python program.
 	tree = sops.walk_and_decrypt(tree, sops_key)
 	sops.write_file(tree, path=path, filetype=pathtype)
 
-Note: this uses the previous implemenation of `sops` written in python, 
-and so doesn't support newer features such as GCP-KMS. 
+Note: this uses the previous implemenation of `sops` written in python,
+and so doesn't support newer features such as GCP-KMS.
 To use the current version, call out to `sops` using `subprocess.check_output`
 
 Showing diffs in cleartext in git
@@ -1159,7 +1159,7 @@ This is very handy for reviewing changes or visualizing history.
 To configure sops to decrypt files during diff, create a ``.gitattributes`` file
 at the root of your repository that contains a filter and a command.
 
-.. code:: 
+.. code::
 
 	*.yaml diff=sopsdiffer
 
@@ -1212,7 +1212,7 @@ navigate the file, like ``metadata`` which contains the secrets' names.
 
 You can also specify these options in the ``.sops.yaml`` config file.
 
-Note: these three options ``--unencrypted-suffix``, ``--encrypted-suffix``, and ``--encrypted-regex`` are 
+Note: these three options ``--unencrypted-suffix``, ``--encrypted-suffix``, and ``--encrypted-regex`` are
 mutually exclusive and cannot all be used in the same file.
 
 Encryption Protocol

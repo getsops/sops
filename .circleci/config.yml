@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /go/src/go.mozilla.org/sops
     docker:
-      - image: circleci/golang:1.12
+      - image: circleci/golang:1.13
     steps:
       - checkout
       - setup_remote_docker

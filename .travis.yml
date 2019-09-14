@@ -1,5 +1,5 @@
 language: go
-go: 1.12
+go: 1.13
 go_import_path: go.mozilla.org/sops/
 
 env:
