@@ -33,6 +33,7 @@ func ExecWithFile(opts ExecOpts) {
 
 	if runtime.GOOS == "windows" && opts.Fifo {
 		log.Print("no fifos on windows, use --no-fifo next time")
+		opts.Fifo = false
 	}
 
 	dir, err := ioutil.TempDir("/tmp/", ".sops")
