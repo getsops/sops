@@ -1,20 +1,14 @@
 package exec
 
 import (
-	"bytes"
 	"log"
+	"bytes"
 	"io/ioutil"
-	"syscall"
-	"path/filepath"
 	"os"
 	"os/exec"
-	"os/user"
-	"strconv"
+	"runtime"
 	"strings"
 )
-
-func init() {
-}
 
 type ExecOpts struct {
 	Command string
@@ -22,28 +16,6 @@ type ExecOpts struct {
 	Background bool
 	Fifo bool
 	User string
-}
-
-func WritePipe(pipe string, contents []byte) {
-	handle, err := os.OpenFile(pipe, os.O_WRONLY, 0600)
-
-	if err != nil {
-		os.Remove(pipe)
-		log.Fatal(err)
-	}
-
-	handle.Write(contents)
-	handle.Close()
-}
-
-func GetPipe(dir string) string {
-	tmpfn := filepath.Join(dir, "tmp-file")
-	err := syscall.Mkfifo(tmpfn, 0600)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return tmpfn
 }
 
 func GetFile(dir string) *os.File {
@@ -54,38 +26,13 @@ func GetFile(dir string) *os.File {
 	return handle
 }
 
-func SwitchUser(username string) {
-	user, err := user.Lookup(username)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	uid, _ := strconv.Atoi(user.Uid)
-
-	err = syscall.Setgid(uid)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = syscall.Setuid(uid)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = syscall.Setreuid(uid, uid)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = syscall.Setregid(uid, uid)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
 func ExecWithFile(opts ExecOpts) {
 	if opts.User != "" {
 		SwitchUser(opts.User)
+	}
+
+	if runtime.GOOS == "windows" && opts.Fifo {
+		log.Print("no fifos on windows, use --no-fifo next time")
 	}
 
 	dir, err := ioutil.TempDir("/tmp/", ".sops")
