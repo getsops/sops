@@ -61,5 +61,3 @@ func SwitchUser(username string) {
 		log.Fatal(err)
 	}
 }
-
-

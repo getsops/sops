@@ -9,12 +9,10 @@ func WritePipe(pipe string, contents []byte) {
 }
 
 func GetPipe(dir string) string {
-	log.Fatal("fifos not available on windows")
+	log.Fatal("fifos are not available on windows")
 	return ""
 }
 
 func SwitchUser(username string) {
 	log.Fatal("user switching not available on windows")
 }
-
-
