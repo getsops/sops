@@ -75,7 +75,7 @@ func printTreeItem(w io.Writer, item sops.TreeItem) error {
 			return err
 		}
 	case []interface{}:
-		// Look up type of the values without reflection.
+		// Lookup type of the values without reflection.
 		var isTreeBranch bool
 		for _, item := range v {
 			_, isTreeBranch = item.(sops.TreeBranch)

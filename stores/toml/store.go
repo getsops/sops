@@ -112,6 +112,8 @@ func (store *Store) EmitValue(value interface{}) ([]byte, error) {
 			return nil, err
 		}
 		return b.Bytes(), nil
+	case []interface{}:
+		return nil, fmt.Errorf("Error extracting array of %v items. Please, access an individual item.", len(v))
 	default:
 		if err := printTreeBranch(&b, sops.TreeBranch{sops.TreeItem{Key: "_delete", Value: v}}); err != nil {
 			return nil, err
