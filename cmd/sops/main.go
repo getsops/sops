@@ -34,6 +34,7 @@ import (
 	"go.mozilla.org/sops/stores/dotenv"
 	"go.mozilla.org/sops/stores/ini"
 	"go.mozilla.org/sops/stores/json"
+	"go.mozilla.org/sops/stores/toml"
 	yamlstores "go.mozilla.org/sops/stores/yaml"
 	"go.mozilla.org/sops/version"
 	"google.golang.org/grpc"
@@ -491,11 +492,11 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:  "input-type",
-			Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
+			Usage: "currently json, yaml, toml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
 		},
 		cli.StringFlag{
 			Name:  "output-type",
-			Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
+			Usage: "currently json, yaml, toml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
 		},
 		cli.BoolFlag{
 			Name:  "show-master-keys, s",
@@ -880,6 +881,8 @@ func inputStore(context *cli.Context, path string) common.Store {
 		return &yamlstores.Store{}
 	case "json":
 		return &json.Store{}
+	case "toml":
+		return &toml.Store{}
 	case "dotenv":
 		return &dotenv.Store{}
 	case "ini":
@@ -897,6 +900,8 @@ func outputStore(context *cli.Context, path string) common.Store {
 		return &yamlstores.Store{}
 	case "json":
 		return &json.Store{}
+	case "toml":
+		return &toml.Store{}
 	case "dotenv":
 		return &dotenv.Store{}
 	case "ini":

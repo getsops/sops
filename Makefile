@@ -53,7 +53,7 @@ deb-pkg: install
 	mkdir -p tmppkg/usr/local/bin
 	cp $$GOPATH/bin/sops tmppkg/usr/local/bin/
 	fpm -C tmppkg -n sops --license MPL2.0 --vendor mozilla \
-		--description "Sops is an editor of encrypted files that supports YAML, JSON and BINARY formats and encrypts with AWS KMS and PGP." \
+		--description "Sops is an editor of encrypted files that supports YAML, JSON, TOML and BINARY formats and encrypts with AWS KMS and PGP." \
 		-m "Julien Vehent <jvehent+sops@mozilla.com>" \
 		--url https://go.mozilla.org/sops \
 		--architecture x86_64 \
@@ -65,7 +65,7 @@ rpm-pkg: install
 	mkdir -p tmppkg/usr/local/bin
 	cp $$GOPATH/bin/sops tmppkg/usr/local/bin/
 	fpm -C tmppkg -n sops --license MPL2.0 --vendor mozilla \
-		--description "Sops is an editor of encrypted files that supports YAML, JSON and BINARY formats and encrypts with AWS KMS and PGP." \
+		--description "Sops is an editor of encrypted files that supports YAML, JSON, TOML and BINARY formats and encrypts with AWS KMS and PGP." \
 		-m "Julien Vehent <jvehent+sops@mozilla.com>" \
 		--url https://go.mozilla.org/sops \
 		--architecture x86_64 \
@@ -80,7 +80,7 @@ else
 	mkdir -p tmppkg/usr/local/bin
 	cp $$GOPATH/bin/sops tmppkg/usr/local/bin/
 	fpm -C tmppkg -n sops --license MPL2.0 --vendor mozilla \
-		--description "Sops is an editor of encrypted files that supports YAML, JSON and BINARY formats and encrypts with AWS KMS and PGP." \
+		--description "Sops is an editor of encrypted files that supports YAML, JSON, TOML and BINARY formats and encrypts with AWS KMS and PGP." \
 		-m "Julien Vehent <jvehent+sops@mozilla.com>" \
 		--url https://go.mozilla.org/sops \
 		--architecture x86_64 \

@@ -18,6 +18,7 @@ import (
 	"go.mozilla.org/sops/stores/dotenv"
 	"go.mozilla.org/sops/stores/ini"
 	"go.mozilla.org/sops/stores/json"
+	"go.mozilla.org/sops/stores/toml"
 	"go.mozilla.org/sops/stores/yaml"
 	"go.mozilla.org/sops/version"
 	"golang.org/x/crypto/ssh/terminal"
@@ -129,6 +130,11 @@ func IsJSONFile(path string) bool {
 	return strings.HasSuffix(path, ".json")
 }
 
+// IsTOMLFile returns true if a given file path corresponds to a TOML file
+func IsTOMLFile(path string) bool {
+	return strings.HasSuffix(path, ".toml")
+}
+
 // IsEnvFile returns true if a given file path corresponds to a .env file
 func IsEnvFile(path string) bool {
 	return strings.HasSuffix(path, ".env")
@@ -146,6 +152,8 @@ func DefaultStoreForPath(path string) Store {
 		return &yaml.Store{}
 	} else if IsJSONFile(path) {
 		return &json.Store{}
+	} else if IsTOMLFile(path) {
+		return &toml.Store{}
 	} else if IsEnvFile(path) {
 		return &dotenv.Store{}
 	} else if IsIniFile(path) {

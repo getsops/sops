@@ -27,7 +27,7 @@ type SopsFile struct {
 	// in the SOPS file by checking for nil. This way we can show the user a
 	// helpful error message indicating that the metadata wasn't found, instead
 	// of showing a cryptic parsing error
-	Metadata *Metadata `yaml:"sops" json:"sops" ini:"sops"`
+	Metadata *Metadata `yaml:"sops" json:"sops" toml:"sops" ini:"sops"`
 }
 
 // Metadata is stored in SOPS encrypted files, and it contains the information necessary to decrypt the file.
@@ -35,54 +35,54 @@ type SopsFile struct {
 // in order to allow the binary format to stay backwards compatible over time, but at the same time allow the internal
 // representation SOPS uses to change over time.
 type Metadata struct {
-	ShamirThreshold           int         `yaml:"shamir_threshold,omitempty" json:"shamir_threshold,omitempty"`
-	KeyGroups                 []keygroup  `yaml:"key_groups,omitempty" json:"key_groups,omitempty"`
-	KMSKeys                   []kmskey    `yaml:"kms" json:"kms"`
-	GCPKMSKeys                []gcpkmskey `yaml:"gcp_kms" json:"gcp_kms"`
-	AzureKeyVaultKeys         []azkvkey   `yaml:"azure_kv" json:"azure_kv"`
-	LastModified              string      `yaml:"lastmodified" json:"lastmodified"`
-	MessageAuthenticationCode string      `yaml:"mac" json:"mac"`
-	PGPKeys                   []pgpkey    `yaml:"pgp" json:"pgp"`
-	UnencryptedSuffix         string      `yaml:"unencrypted_suffix,omitempty" json:"unencrypted_suffix,omitempty"`
-	EncryptedSuffix           string      `yaml:"encrypted_suffix,omitempty" json:"encrypted_suffix,omitempty"`
-	EncryptedRegex            string      `yaml:"encrypted_regex,omitempty" json:"encrypted_regex,omitempty"`
-	Version                   string      `yaml:"version" json:"version"`
+	ShamirThreshold           int         `yaml:"shamir_threshold,omitempty" json:"shamir_threshold,omitempty" toml:"shamir_threshold,omitempty"`
+	KeyGroups                 []keygroup  `yaml:"key_groups,omitempty" json:"key_groups,omitempty" toml:"key_groups,omitempty"`
+	KMSKeys                   []kmskey    `yaml:"kms" json:"kms" toml:"kms"`
+	GCPKMSKeys                []gcpkmskey `yaml:"gcp_kms" json:"gcp_kms" toml:"gcp_kms"`
+	AzureKeyVaultKeys         []azkvkey   `yaml:"azure_kv" json:"azure_kv" toml:"azure_kv"`
+	LastModified              string      `yaml:"lastmodified" json:"lastmodified" toml:"lastmodified"`
+	MessageAuthenticationCode string      `yaml:"mac" json:"mac" toml:"mac"`
+	PGPKeys                   []pgpkey    `yaml:"pgp" json:"pgp" toml:"pgp"`
+	UnencryptedSuffix         string      `yaml:"unencrypted_suffix,omitempty" json:"unencrypted_suffix,omitempty" toml:"unencrypted_suffix,omitempty"`
+	EncryptedSuffix           string      `yaml:"encrypted_suffix,omitempty" json:"encrypted_suffix,omitempty" toml:"encrypted_suffix,omitempty"`
+	EncryptedRegex            string      `yaml:"encrypted_regex,omitempty" json:"encrypted_regex,omitempty" toml:"encrypted_regex,omitempty"`
+	Version                   string      `yaml:"version" json:"version" toml:"version"`
 }
 
 type keygroup struct {
-	PGPKeys           []pgpkey    `yaml:"pgp,omitempty" json:"pgp,omitempty"`
-	KMSKeys           []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
-	GCPKMSKeys        []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
-	AzureKeyVaultKeys []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
+	PGPKeys           []pgpkey    `yaml:"pgp,omitempty" json:"pgp,omitempty" toml:"pgp,omitempty"`
+	KMSKeys           []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty" toml:"kms,omitempty"`
+	GCPKMSKeys        []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty" toml:"gcp_kms,omitempty"`
+	AzureKeyVaultKeys []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty" toml:"azure_kv,omitempty"`
 }
 
 type pgpkey struct {
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
-	Fingerprint      string `yaml:"fp" json:"fp"`
+	CreatedAt        string `yaml:"created_at" json:"created_at" toml:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc" toml:"enc"`
+	Fingerprint      string `yaml:"fp" json:"fp" toml:"fp"`
 }
 
 type kmskey struct {
-	Arn              string             `yaml:"arn" json:"arn"`
-	Role             string             `yaml:"role,omitempty" json:"role,omitempty"`
-	Context          map[string]*string `yaml:"context,omitempty" json:"context,omitempty"`
-	CreatedAt        string             `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string             `yaml:"enc" json:"enc"`
-	AwsProfile       string             `yaml:"aws_profile" json:"aws_profile"`
+	Arn              string             `yaml:"arn" json:"arn" toml:"arn"`
+	Role             string             `yaml:"role,omitempty" json:"role,omitempty" toml:"role,omitempty"`
+	Context          map[string]*string `yaml:"context,omitempty" json:"context,omitempty" toml:"context,omitempty"`
+	CreatedAt        string             `yaml:"created_at" json:"created_at" toml:"created_at"`
+	EncryptedDataKey string             `yaml:"enc" json:"enc" toml:"enc"`
+	AwsProfile       string             `yaml:"aws_profile" json:"aws_profile" toml:"aws_profile"`
 }
 
 type gcpkmskey struct {
-	ResourceID       string `yaml:"resource_id" json:"resource_id"`
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	ResourceID       string `yaml:"resource_id" json:"resource_id" toml:"resource_id"`
+	CreatedAt        string `yaml:"created_at" json:"created_at" toml:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc" toml:"enc"`
 }
 
 type azkvkey struct {
-	VaultURL         string `yaml:"vault_url" json:"vault_url"`
-	Name             string `yaml:"name" json:"name"`
-	Version          string `yaml:"version" json:"version"`
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	VaultURL         string `yaml:"vault_url" json:"vault_url" toml:"vault_url"`
+	Name             string `yaml:"name" json:"name" toml:"name"`
+	Version          string `yaml:"version" json:"version" toml:"version"`
+	CreatedAt        string `yaml:"created_at" json:"created_at" toml:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc" toml:"enc"`
 }
 
 // MetadataFromInternal converts an internal SOPS metadata representation to a representation appropriate for storage

@@ -13,6 +13,7 @@ import (
 	"go.mozilla.org/sops/aes"
 	sopsdotenv "go.mozilla.org/sops/stores/dotenv"
 	sopsjson "go.mozilla.org/sops/stores/json"
+	sopstoml "go.mozilla.org/sops/stores/toml"
 	sopsyaml "go.mozilla.org/sops/stores/yaml"
 )
 
@@ -39,6 +40,8 @@ func Data(data []byte, format string) (cleartext []byte, err error) {
 		store = &sopsjson.Store{}
 	case "yaml":
 		store = &sopsyaml.Store{}
+	case "toml":
+		store = &sopstoml.Store{}
 	case "dotenv":
 		store = &sopsdotenv.Store{}
 	default:
