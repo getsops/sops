@@ -1302,7 +1302,7 @@ keys that match the supplied regular expression.  For example, this command:
 
 .. code:: bash
 
-	$ sops --encrypt --encrypted-regex '&(data|stringData)' k8s-secrets.yaml
+	$ sops --encrypt --encrypted-regex '^(data|stringData)$' k8s-secrets.yaml
 
 will encrypt the values under the ``data`` and ``stringData`` keys in a YAML file
 containing kubernetes secrets.  It will not encrypt other values that help you to
