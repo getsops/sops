@@ -1,14 +1,22 @@
 package exec
 
 import (
-	"log"
 	"bytes"
 	"io/ioutil"
 	"os"
-	"os/exec"
 	"runtime"
 	"strings"
+
+	"go.mozilla.org/sops/logging"
+
+	"github.com/sirupsen/logrus"
 )
+
+var log *logrus.Logger
+
+func init() {
+	log = logging.NewLogger("EXEC")
+}
 
 type ExecOpts struct {
 	Command string
@@ -32,11 +40,11 @@ func ExecWithFile(opts ExecOpts) {
 	}
 
 	if runtime.GOOS == "windows" && opts.Fifo {
-		log.Print("no fifos on windows, use --no-fifo next time")
+		log.Warn("no fifos on windows, use --no-fifo next time")
 		opts.Fifo = false
 	}
 
-	dir, err := ioutil.TempDir("/tmp/", ".sops")
+	dir, err := ioutil.TempDir("", ".sops")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -56,7 +64,7 @@ func ExecWithFile(opts ExecOpts) {
 	}
 
 	placeholdered := strings.Replace(opts.Command, "{}", filename, -1)
-	cmd := exec.Command("/bin/sh", "-c", placeholdered)
+	cmd := BuildCommand(placeholdered)
 	cmd.Env = os.Environ()
 
 	if opts.Background {
@@ -86,7 +94,7 @@ func ExecWithEnv(opts ExecOpts) {
 		env = append(env, string(line))
 	}
 
-	cmd := exec.Command("/bin/sh", "-c", opts.Command)
+	cmd := BuildCommand(opts.Command)
 	cmd.Env = env
 
 	if opts.Background {

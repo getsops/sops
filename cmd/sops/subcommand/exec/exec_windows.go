@@ -1,8 +1,12 @@
 package exec
 
 import (
-	"log"
+	"os/exec"
 )
+
+func BuildCommand(command string) *exec.Cmd {
+	return exec.Command("cmd.exe", "/C", command)
+}
 
 func WritePipe(pipe string, contents []byte) {
 	log.Fatal("fifos are not available on windows")
