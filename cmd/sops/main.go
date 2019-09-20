@@ -546,6 +546,10 @@ func main() {
 			Usage: "override the encrypted key suffix. When empty, all keys will be encrypted, unless otherwise marked with unencrypted-suffix.",
 		},
 		cli.StringFlag{
+			Name:  "encrypted-regex",
+			Usage: "set the encrypted key suffix. When specified, only keys matching the regex will be encrypted.",
+		},
+		cli.StringFlag{
 			Name:  "config",
 			Usage: "path to sops' config file. If set, sops will not search for the config file recursively.",
 		},
@@ -597,6 +601,7 @@ func main() {
 
 		unencryptedSuffix := c.String("unencrypted-suffix")
 		encryptedSuffix := c.String("encrypted-suffix")
+		encryptedRegex := c.String("encrypted-regex")
 		conf, err := loadConfig(c, fileName, nil)
 		if err != nil {
 			return toExitError(err)
@@ -609,12 +614,28 @@ func main() {
 			if encryptedSuffix == "" {
 				encryptedSuffix = conf.EncryptedSuffix
 			}
+			if encryptedRegex == "" {
+				encryptedRegex = conf.EncryptedRegex
+			}
 		}
-		if unencryptedSuffix != "" && encryptedSuffix != "" {
-			return common.NewExitError("Error: cannot use both encrypted_suffix and unencrypted_suffix in the same file", codes.ErrorConflictingParameters)
+
+		cryptRuleCount := 0
+		if unencryptedSuffix != "" {
+			cryptRuleCount++
 		}
-		// only supply the default UnencryptedSuffix when EncryptedSuffix is not provided
-		if unencryptedSuffix == "" && encryptedSuffix == "" {
+		if encryptedSuffix != "" {
+			cryptRuleCount++
+		}
+		if encryptedRegex != "" {
+			cryptRuleCount++
+		}
+
+		if cryptRuleCount > 1 {
+			return common.NewExitError("Error: cannot use more than one of encrypted_suffix, unencrypted_suffix, or encrypted_regex in the same file", codes.ErrorConflictingParameters)
+		}
+
+		// only supply the default UnencryptedSuffix when EncryptedSuffix and EncryptedRegex are not provided
+		if cryptRuleCount == 0 {
 			unencryptedSuffix = sops.DefaultUnencryptedSuffix
 		}
 
@@ -641,6 +662,7 @@ func main() {
 				Cipher:            aes.NewCipher(),
 				UnencryptedSuffix: unencryptedSuffix,
 				EncryptedSuffix:   encryptedSuffix,
+				EncryptedRegex:    encryptedRegex,
 				KeyServices:       svcs,
 				KeyGroups:         groups,
 				GroupThreshold:    threshold,
@@ -762,6 +784,7 @@ func main() {
 					editOpts:          opts,
 					UnencryptedSuffix: unencryptedSuffix,
 					EncryptedSuffix:   encryptedSuffix,
+					EncryptedRegex:    encryptedRegex,
 					KeyGroups:         groups,
 					GroupThreshold:    threshold,
 				})
@@ -789,6 +812,7 @@ func main() {
 		}
 
 		outputFile := os.Stdout
+
 		if c.String("output") != "" {
 			file, err := os.Create(c.String("output"))
 			if err != nil {

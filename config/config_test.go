@@ -83,6 +83,10 @@ creation_rules:
       - bar
       gcp_kms:
       - resource_id: foo
+      azure_keyvault:
+      - vaultUrl: https://foo.vault.azure.net
+        key: foo-key
+        version: fooversion
     - kms:
       - arn: baz
       pgp:
@@ -90,6 +94,10 @@ creation_rules:
       gcp_kms:
       - resource_id: bar
       - resource_id: baz
+      azure_keyvault:
+      - vaultUrl: https://bar.vault.azure.net
+        key: bar-key
+        version: barversion
 `)
 
 var sampleConfigWithSuffixParameters = []byte(`
@@ -108,6 +116,18 @@ creation_rules:
         gcp_kms:
           - resource_id: bar
           - resource_id: baz
+        azure_keyvault:
+        - vaultUrl: https://foo.vault.azure.net
+          key: foo-key
+          version: fooversion
+    `)
+
+var sampleConfigWithRegexParameters = []byte(`
+creation_rules:
+  - path_regex: barbar*
+    kms: "1"
+    pgp: "2"
+    encrypted_regex: "^enc:"
     `)
 
 var sampleConfigWithInvalidParameters = []byte(`
@@ -139,6 +159,25 @@ destination_rules:
     s3_prefix: "test/"
     recreation_rule:
       pgp: newpgp
+`)
+
+var sampleConfigWithVaultDestinationRules = []byte(`
+creation_rules:
+  - path_regex: foobar*
+    kms: "1"
+    pgp: "2"
+    gcp_kms: "3"
+  - path_regex: ""
+    kms: foo
+    pgp: bar
+    gcp_kms: baz
+destination_rules:
+  - vault_path: "foobar/"
+    path_regex: "vault-v2/*"
+  - vault_path: "barfoo/"
+    vault_kv_mount_name: "kv/"
+    vault_kv_version: 1
+    path_regex: "vault-v1/*"
 `)
 
 func parseConfigFile(confBytes []byte, t *testing.T) *configFile {
@@ -184,9 +223,10 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 				PathRegex: "",
 				KeyGroups: []keyGroup{
 					{
-						KMS:    []kmsKey{{Arn: "foo"}},
-						PGP:    []string{"bar"},
-						GCPKMS: []gcpKmsKey{{ResourceID: "foo"}},
+						KMS:     []kmsKey{{Arn: "foo"}},
+						PGP:     []string{"bar"},
+						GCPKMS:  []gcpKmsKey{{ResourceID: "foo"}},
+						AzureKV: []azureKVKey{{VaultURL: "https://foo.vault.azure.net", Key: "foo-key", Version: "fooversion"}},
 					},
 					{
 						KMS: []kmsKey{{Arn: "baz"}},
@@ -195,6 +235,7 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 							{ResourceID: "bar"},
 							{ResourceID: "baz"},
 						},
+						AzureKV: []azureKVKey{{VaultURL: "https://bar.vault.azure.net", Key: "bar-key", Version: "barversion"}},
 					},
 				},
 			},
@@ -259,6 +300,12 @@ func TestLoadConfigFileWithEncryptedSuffix(t *testing.T) {
 	assert.Equal(t, "_enc", conf.EncryptedSuffix)
 }
 
+func TestLoadConfigFileWithEncryptedRegex(t *testing.T) {
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithRegexParameters, t), "barbar", nil)
+	assert.Equal(t, nil, err)
+	assert.Equal(t, "^enc:", conf.EncryptedRegex)
+}
+
 func TestLoadConfigFileWithInvalidParameters(t *testing.T) {
 	_, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithInvalidParameters, t), "foobar", nil)
 	assert.NotNil(t, err)
@@ -270,4 +317,15 @@ func TestLoadConfigFileWithDestinationRule(t *testing.T) {
 	assert.Equal(t, "newpgp", conf.KeyGroups[0][0].ToString())
 	assert.NotNil(t, conf.Destination)
 	assert.Equal(t, "s3://foobar/test/barfoo", conf.Destination.Path("barfoo"))
+}
+
+func TestLoadConfigFileWithVaultDestinationRules(t *testing.T) {
+	conf, err := parseDestinationRuleForFile(parseConfigFile(sampleConfigWithVaultDestinationRules, t), "vault-v2/barfoo", nil)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf.Destination)
+	assert.Equal(t, "http://127.0.0.1:8200/v1/secret/data/foobar/barfoo", conf.Destination.Path("barfoo"))
+	conf, err = parseDestinationRuleForFile(parseConfigFile(sampleConfigWithVaultDestinationRules, t), "vault-v1/barfoo", nil)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf.Destination)
+	assert.Equal(t, "http://127.0.0.1:8200/v1/kv/barfoo/barfoo", conf.Destination.Path("barfoo"))
 }

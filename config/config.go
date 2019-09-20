@@ -90,14 +90,16 @@ type azureKVKey struct {
 }
 
 type destinationRule struct {
-	PathRegex      string       `yaml:"path_regex"`
-	S3Bucket       string       `yaml:"s3_bucket"`
-	S3Prefix       string       `yaml:"s3_prefix"`
-	GCSBucket      string       `yaml:"gcs_bucket"`
-	GCSPrefix      string       `yaml:"gcs_prefix"`
-	VaultPath      string       `yaml:"vault_path"`
-	VaultAddress   string       `yaml:"vault_address"`
-	RecreationRule creationRule `yaml:"recreation_rule,omitempty"`
+	PathRegex        string       `yaml:"path_regex"`
+	S3Bucket         string       `yaml:"s3_bucket"`
+	S3Prefix         string       `yaml:"s3_prefix"`
+	GCSBucket        string       `yaml:"gcs_bucket"`
+	GCSPrefix        string       `yaml:"gcs_prefix"`
+	VaultPath        string       `yaml:"vault_path"`
+	VaultAddress     string       `yaml:"vault_address"`
+	VaultKVMountName string       `yaml:"vault_kv_mount_name"`
+	VaultKVVersion   int          `yaml:"vault_kv_version"`
+	RecreationRule   creationRule `yaml:"recreation_rule,omitempty"`
 }
 
 type creationRule struct {
@@ -111,6 +113,7 @@ type creationRule struct {
 	ShamirThreshold   int        `yaml:"shamir_threshold"`
 	UnencryptedSuffix string     `yaml:"unencrypted_suffix"`
 	EncryptedSuffix   string     `yaml:"encrypted_suffix"`
+	EncryptedRegex    string     `yaml:"encrypted_regex"`
 }
 
 // Load loads a sops config file into a temporary struct
@@ -128,6 +131,7 @@ type Config struct {
 	ShamirThreshold   int
 	UnencryptedSuffix string
 	EncryptedSuffix   string
+	EncryptedRegex    string
 	Destination       publish.Destination
 }
 
@@ -144,6 +148,9 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			}
 			for _, k := range group.GCPKMS {
 				keyGroup = append(keyGroup, gcpkms.NewMasterKeyFromResourceID(k.ResourceID))
+			}
+			for _, k := range group.AzureKV {
+				keyGroup = append(keyGroup, azkv.NewMasterKey(k.VaultURL, k.Key, k.Version))
 			}
 			groups = append(groups, keyGroup)
 		}
@@ -184,8 +191,19 @@ func loadConfigFile(confPath string) (*configFile, error) {
 }
 
 func configFromRule(rule *creationRule, kmsEncryptionContext map[string]*string) (*Config, error) {
-	if rule.UnencryptedSuffix != "" && rule.EncryptedSuffix != "" {
-		return nil, fmt.Errorf("error loading config: cannot use both encrypted_suffix and unencrypted_suffix for the same rule")
+	cryptRuleCount := 0
+	if rule.UnencryptedSuffix != "" {
+		cryptRuleCount++
+	}
+	if rule.EncryptedSuffix != "" {
+		cryptRuleCount++
+	}
+	if rule.EncryptedRegex != "" {
+		cryptRuleCount++
+	}
+
+	if cryptRuleCount > 1 {
+		return nil, fmt.Errorf("error loading config: cannot use more than one of encrypted_suffix, unencrypted_suffix, or encrypted_regex for the same rule")
 	}
 
 	groups, err := getKeyGroupsFromCreationRule(rule, kmsEncryptionContext)
@@ -198,6 +216,7 @@ func configFromRule(rule *creationRule, kmsEncryptionContext map[string]*string)
 		ShamirThreshold:   rule.ShamirThreshold,
 		UnencryptedSuffix: rule.UnencryptedSuffix,
 		EncryptedSuffix:   rule.EncryptedSuffix,
+		EncryptedRegex:    rule.EncryptedRegex,
 	}, nil
 }
 
@@ -238,7 +257,7 @@ func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptio
 			dest = publish.NewGCSDestination(dRule.GCSBucket, dRule.GCSPrefix)
 		}
 		if dRule.VaultPath != "" {
-			dest = publish.NewVaultDestination(dRule.VaultAddress, dRule.VaultPath)
+			dest = publish.NewVaultDestination(dRule.VaultAddress, dRule.VaultPath, dRule.VaultKVMountName, dRule.VaultKVVersion)
 		}
 	}
 

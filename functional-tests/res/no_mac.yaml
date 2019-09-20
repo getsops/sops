@@ -1,20 +1,24 @@
-myapp1: ENC[AES256_GCM,data:QsGJGjvQOpoVCIlrYTcOQEfQzriw,iv:ShmgdRNV6UrOJ22Rgr7habB74Nd/YFxU4lDh6jy6n+8=,tag:8GT6U8lzrI27DcFc1+icgQ==,type:str]
+myapp1: ENC[AES256_GCM,data:NjYyOQ1GyFUhy25XX7cz7CZo4tLt,iv:WeWmnZCG7/pm71VMd37ua3LsZ6NnqQzLAyN8ylfYHb8=,tag:zh2hOpxHZ8ON+sJgB+OnTg==,type:str]
 sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    lastmodified: '2019-08-29T22:23:01Z'
     pgp:
-    -   fp: 1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A
-        created_at: '2015-11-25T00:32:57Z'
-        enc: |
+    -   created_at: '2019-08-29T22:23:00Z'
+        enc: |-
             -----BEGIN PGP MESSAGE-----
-            Version: GnuPG v1
 
-            hIwDEEVDpnzXnMABBACBf7lGw8B0sLbfup1Ye51FNpY6iF/4SPTdjeV4OB3uDwIJ
-            FRa6z7VR+FrtWyyNYRNB2Wm5eegnEEWwui6hFw7tvlhkN8C5hWQ0B47oYMTstZDR
-            TR3Eu7y70u3YLoQKZgDnPb6hQplGIoYVd/EMpDgKmKnmz5oCiIkEI68T3aXo5tJc
-            AZhplIlk9eSMHIW9CmGkNp5HtZlQWzVSdGdcQcIUBG4F+Vf40max9u0Jkk1Se1do
-            BJ+D4Kl5dZXBj3njvo4YdZ+FGoYPfMlX1GCw0W4caUu6tD8RjuzJA+fYo2Q=
-            =Cnu4
+            wcBMAyUpShfNkFB/AQgABuzcPMJSK+DvnPKZVyYlmDLCM9BobLz/7/F8zyX4O00T
+            UN7/0Lc+MwZWUOe7lmTVgorDLcfxLONbLg9nxXO+apbb2gRABRYdggosMFaRUn3+
+            m+maKQ4yDTIjIvblVa/olN8reD4Bt037mT52IxTZBLDAnyVw45dRTe9mzJ73eTi7
+            1Mk5s6s1ZH52SQHtbY4TSqCnOKodn3UkTjnFmDXMSAzCwBDmK/wv+fDufXSkLpeR
+            AGufxo697as2bQ8mpqgPPTvB04MgXwnTngUQ8BfagyOndgTCrU9YMA1gewJnJJj4
+            azRP9SOukqtn0c/LpewiOHHk/w00dMLEk0E8DpxMItLgAeQQGaX95PJfl3vuPeRT
+            2CA24Qbb4DbgseGimeBG4oS0oCLg4OVDd1tvVtu4+6VGKJr8YvgDk7WpDAK33LoO
+            QBWfQ5mPIeAN5GVWJ2Mk1qcSQTlO9LmM1vPiWojLjOEvZAA=
+            =5Gax
             -----END PGP MESSAGE-----
-    lastmodified: '2016-03-16T23:34:46Z'
-    version: 1.7
-    attention: This section contains key material that should only be modified with
-        extra care. See `sops -h`.
+        fp: FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4
+    unencrypted_suffix: _unencrypted
+    version: 3.3.1
