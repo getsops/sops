@@ -844,9 +844,9 @@ instead. By default ``sops`` will use a FIFO to pass the contents of the
 decrypted file to the new program. Using a FIFO, secrets are only passed in
 memory which has two benefits: the plaintext secrets never touch the disk, and
 the child process can only read the secrets once. In contexts where this won't
-work, such as platforms where FIFOs are not available or secret files need to be
-available to the child process longer term, the ``--no-fifo`` flag can be used
-to instruct ``sops`` to use a traditional temporary file that will get cleaned
+work, eg platforms like Windows where FIFOs unavailable or secret files that need
+to be available to the child process longer term, the ``--no-fifo`` flag can be
+used to instruct ``sops`` to use a traditional temporary file that will get cleaned
 up once the process is finished executing. ``exec-file`` behaves similar to
 ``find(1)`` in that ``{}`` is used as a placeholder in the command which will be
 substituted with the temporary file path (whether a FIFO or an actual file).
@@ -879,11 +879,12 @@ substituted with the temporary file path (whether a FIFO or an actual file).
    $ cat /tmp/.sops506055069/tmp-file291138648
    cat: /tmp/.sops506055069/tmp-file291138648: No such file or directory
 
-Additionally, both ``exec-env`` and ``exec-file`` support dropping privileges
-before executing the new program via the ``--user <username>`` flag. This is
-particularly useful in cases where the encrypted file is only readable by root,
-but the target program does not need root privileges to function. This flag
-should be used where possible for added security.
+Additionally, on unix-like platforms, both ``exec-env`` and ``exec-file``
+support dropping privileges before executing the new program via the
+``--user <username>`` flag. This is particularly useful in cases where the
+encrypted file is only readable by root, but the target program does not
+need root privileges to function. This flag should be used where possible
+for added security.
 
 .. code:: bash
 

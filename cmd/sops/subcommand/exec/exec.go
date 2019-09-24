@@ -2,18 +2,20 @@ package exec
 
 import (
 	"bytes"
-	"log"
 	"io/ioutil"
-	"syscall"
-	"path/filepath"
 	"os"
-	"os/exec"
-	"os/user"
-	"strconv"
+	"runtime"
 	"strings"
+
+	"go.mozilla.org/sops/logging"
+
+	"github.com/sirupsen/logrus"
 )
 
+var log *logrus.Logger
+
 func init() {
+	log = logging.NewLogger("EXEC")
 }
 
 type ExecOpts struct {
@@ -24,28 +26,6 @@ type ExecOpts struct {
 	User string
 }
 
-func WritePipe(pipe string, contents []byte) {
-	handle, err := os.OpenFile(pipe, os.O_WRONLY, 0600)
-
-	if err != nil {
-		os.Remove(pipe)
-		log.Fatal(err)
-	}
-
-	handle.Write(contents)
-	handle.Close()
-}
-
-func GetPipe(dir string) string {
-	tmpfn := filepath.Join(dir, "tmp-file")
-	err := syscall.Mkfifo(tmpfn, 0600)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return tmpfn
-}
-
 func GetFile(dir string) *os.File {
 	handle, err := ioutil.TempFile(dir, "tmp-file")
 	if err != nil {
@@ -54,41 +34,17 @@ func GetFile(dir string) *os.File {
 	return handle
 }
 
-func SwitchUser(username string) {
-	user, err := user.Lookup(username)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	uid, _ := strconv.Atoi(user.Uid)
-
-	err = syscall.Setgid(uid)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = syscall.Setuid(uid)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = syscall.Setreuid(uid, uid)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = syscall.Setregid(uid, uid)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
 func ExecWithFile(opts ExecOpts) {
 	if opts.User != "" {
 		SwitchUser(opts.User)
 	}
 
-	dir, err := ioutil.TempDir("/tmp/", ".sops")
+	if runtime.GOOS == "windows" && opts.Fifo {
+		log.Warn("no fifos on windows, use --no-fifo next time")
+		opts.Fifo = false
+	}
+
+	dir, err := ioutil.TempDir("", ".sops")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -108,7 +64,7 @@ func ExecWithFile(opts ExecOpts) {
 	}
 
 	placeholdered := strings.Replace(opts.Command, "{}", filename, -1)
-	cmd := exec.Command("/bin/sh", "-c", placeholdered)
+	cmd := BuildCommand(placeholdered)
 	cmd.Env = os.Environ()
 
 	if opts.Background {
@@ -138,7 +94,7 @@ func ExecWithEnv(opts ExecOpts) {
 		env = append(env, string(line))
 	}
 
-	cmd := exec.Command("/bin/sh", "-c", opts.Command)
+	cmd := BuildCommand(opts.Command)
 	cmd.Env = env
 
 	if opts.Background {
