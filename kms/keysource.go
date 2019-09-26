@@ -188,15 +188,15 @@ func (key MasterKey) createSession() (*session.Session, error) {
 	matches := re.FindStringSubmatch(key.Arn)
 	alias_matches := re_alias.FindStringSubmatch(key.Arn)
 
-	if matches == nil {
+	if matches != nil {
+		config := aws.Config{Region: aws.String(matches[1])}
+	} else {
 		if alias_matches == nil {
-			return nil, fmt.Errorf("No valid ARN found in %q", key.Arn)
+			config := aws.Config{Region: aws.String(alias_matches[0])}
 		} else {
-			matches = alias_matches
+			return nil, fmt.Errorf("No valid ARN found in %q", key.Arn)
 		}
 	}
-
-	config := aws.Config{Region: aws.String(matches[1])}
 
 	if key.AwsProfile != "" {
 		config.Credentials = credentials.NewSharedCredentials("", key.AwsProfile)
