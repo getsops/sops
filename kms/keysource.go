@@ -192,9 +192,9 @@ func (key MasterKey) createSession() (*session.Session, error) {
 		config := aws.Config{Region: aws.String(matches[1])}
 	} else {
 		if alias_matches == nil {
-			config := aws.Config{Region: aws.String(alias_matches[0])}
-		} else {
-			return nil, fmt.Errorf("No valid ARN found in %q", key.Arn)
+				return nil, fmt.Errorf("No valid ARN found in %q", key.Arn)
+			} else {
+				config := aws.Config{Region: aws.String(alias_matches[0])}
 		}
 	}
 
