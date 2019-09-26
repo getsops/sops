@@ -191,10 +191,12 @@ func (key MasterKey) createSession() (*session.Session, error) {
 	if matches != nil {
 		config := aws.Config{Region: aws.String(matches[1])}
 	} else {
-		if alias_matches == nil {
-				return nil, fmt.Errorf("No valid ARN found in %q", key.Arn)
-			} else {
-				config := aws.Config{Region: aws.String(alias_matches[0])}
+
+		if alias_matches != nil {
+			// its an alias the region is irrelevant
+			config := aws.Config{Region: aws.String("us-east-1")}
+		} else {
+			return nil, fmt.Errorf("No valid ARN found in %q", key.Arn)
 		}
 	}
 
