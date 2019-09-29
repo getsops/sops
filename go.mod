@@ -19,7 +19,6 @@ require (
 	github.com/howeyc/gopass v0.0.0-20170109162249-bf9dde6d0d2c
 	github.com/lib/pq v1.2.0
 	github.com/mitchellh/go-wordwrap v1.0.0
-	github.com/mozilla-services/yaml v0.0.0-20180922153656-28ffe5d0cafb
 	github.com/pkg/errors v0.8.1
 	github.com/sirupsen/logrus v1.4.2
 	github.com/smartystreets/goconvey v0.0.0-20190710185942-9d28bd7c0945 // indirect

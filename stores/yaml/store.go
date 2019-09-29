@@ -3,9 +3,9 @@ package yaml //import "go.mozilla.org/sops/stores/yaml"
 import (
 	"fmt"
 
-	"github.com/mozilla-services/yaml"
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/stores"
+	"gopkg.in/yaml.v2"
 )
 
 // Store handles storage of YAML data

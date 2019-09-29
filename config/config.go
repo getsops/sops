@@ -10,7 +10,6 @@ import (
 	"path"
 	"regexp"
 
-	"github.com/mozilla-services/yaml"
 	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/azkv"
@@ -19,6 +18,7 @@ import (
 	"go.mozilla.org/sops/logging"
 	"go.mozilla.org/sops/pgp"
 	"go.mozilla.org/sops/publish"
+	"gopkg.in/yaml.v2"
 )
 
 var log *logrus.Logger
