@@ -1007,6 +1007,12 @@ sops with the ``--input-type`` flag upon decryption. For example:
 
 	$ sops -d --input-type json myfile.json.enc
 
+When operating on stdin, use the ``--input-type`` and ``--output-type`` flags as follows:
+
+.. code:: bash
+
+    $ cat myfile.json | sops --input-type json --output-type json -d /dev/stdin
+
 YAML anchors
 ~~~~~~~~~~~~
 ``sops`` only supports a subset of ``YAML``'s many types. Encrypting YAML files that
