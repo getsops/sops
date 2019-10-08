@@ -185,21 +185,17 @@ func (key MasterKey) createSession() (*session.Session, error) {
 	re := regexp.MustCompile(`^arn:aws[\w-]*:kms:(.+):[0-9]+:(key|alias)/.+$`)
 	// hmm, have to change arn? this is ugly but we must have the region
 	// implies us-east-1:alias/my-alias-name
-	re_alias := regexp.MustCompile(`^(.+):alias/.+$`)
+	reAlias := regexp.MustCompile(`^(.+):alias/.+$`)
 
 	matches := re.FindStringSubmatch(key.Arn)
-	alias_matches := re_alias.FindStringSubmatch(key.Arn)
+	aliasMatches := reAlias.FindStringSubmatch(key.Arn)
 
 	if matches != nil {
 		config := aws.Config{Region: aws.String(matches[1])}
+	} else if aliasMatches != nil {
+		config := aws.Config{Region: aws.String(matches[0])}
 	} else {
-
-		if alias_matches != nil {
-			// its an alias the region is irrelevant
-			config := aws.Config{Region: aws.String(matches[0])}
-		} else {
-			return nil, fmt.Errorf("No valid ARN found in %q", key.Arn)
-		}
+		return nil, fmt.Errorf("No valid ARN found in %q", key.Arn)
 	}
 
 	if key.AwsProfile != "" {
