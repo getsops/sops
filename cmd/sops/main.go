@@ -3,6 +3,7 @@ package main //import "go.mozilla.org/sops/v3/cmd/sops"
 import (
 	encodingjson "encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net"
 	"net/url"
 	"os"
@@ -506,6 +507,55 @@ func main() {
 				} else if err != nil {
 					return common.NewExitError(err, codes.ErrorGeneric)
 				}
+				return nil
+			},
+		},
+		{
+			Name:      "filestatus",
+			Usage:     "check the status of the file, returning encryption status",
+			ArgsUsage: `file`,
+			Flags:     []cli.Flag{},
+			Action: func(c *cli.Context) error {
+				// _, err := config.FindConfigFile(".")
+				// if err != nil {
+				// 	return common.NewExitError(err, codes.ErrorGeneric)
+				// }
+				if c.NArg() < 1 {
+					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
+				}
+
+				fileName := c.Args()[0]
+
+				inputStore := inputStore(c, fileName)
+				outputStore := outputStore(c, fileName)
+
+				svcs := keyservices(c)
+				opts := encryptOpts{
+					Cipher:            aes.NewCipher(),
+					InputStore:        inputStore,
+					OutputStore:       outputStore,
+					InputPath:         fileName,
+					UnencryptedSuffix: "",
+					EncryptedSuffix:   "",
+					EncryptedRegex:    "",
+					KeyGroups:         []sops.KeyGroup{},
+					GroupThreshold:    0,
+					KeyServices:       svcs,
+				}
+
+				fileBytes, err := ioutil.ReadFile(opts.InputPath)
+				if err != nil {
+					return common.NewExitError(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
+				}
+				branches, err := opts.InputStore.LoadPlainFile(fileBytes)
+				if err != nil {
+					return common.NewExitError(fmt.Sprintf("Error unmarshalling file: %s", err), codes.CouldNotReadInputFile)
+				}
+				if err := ensureNoMetadata(opts, branches[0]); err != nil {
+					return common.NewExitError("File is encrypted", codes.FileAlreadyEncrypted)
+				}
+
+				fmt.Println("File is unencrypted")
 				return nil
 			},
 		},
