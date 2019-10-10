@@ -516,10 +516,6 @@ func main() {
 			ArgsUsage: `file`,
 			Flags:     []cli.Flag{},
 			Action: func(c *cli.Context) error {
-				// _, err := config.FindConfigFile(".")
-				// if err != nil {
-				// 	return common.NewExitError(err, codes.ErrorGeneric)
-				// }
 				if c.NArg() < 1 {
 					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
 				}
