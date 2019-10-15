@@ -139,6 +139,24 @@ func IsIniFile(path string) bool {
 	return strings.HasSuffix(path, ".ini")
 }
 
+// DefaultStoreForFormat returns the correct format-specific implementation
+// of the Store interface given the format string
+func DefaultStoreForFormat(format string) Store {
+	switch format {
+	case "yaml":
+		return &yaml.Store{}
+	case "json":
+		return &json.Store{}
+	case "dotenv":
+		return &dotenv.Store{}
+	case "ini":
+		return &ini.Store{}
+	case "binary":
+		return &json.BinaryStore{}
+	}
+	return &json.BinaryStore{}
+}
+
 // DefaultStoreForPath returns the correct format-specific implementation
 // of the Store interface given the path to a file
 func DefaultStoreForPath(path string) Store {
@@ -152,6 +170,20 @@ func DefaultStoreForPath(path string) Store {
 		return &ini.Store{}
 	}
 	return &json.BinaryStore{}
+}
+
+// DefaultStoreForPathOrFormat returns the correct format-specific implementation
+// of the Store interface given the format if specified, or the path to a file
+func DefaultStoreForPathOrFormat(path, format string) Store {
+	switch format {
+	case "yaml":
+	case "json":
+	case "dotenv":
+	case "ini":
+	case "binary":
+		return DefaultStoreForFormat(format)
+	}
+	return DefaultStoreForPath(path)
 }
 
 // KMS_ENC_CTX_BUG_FIXED_VERSION represents the SOPS version in which the

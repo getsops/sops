@@ -32,9 +32,7 @@ import (
 	"go.mozilla.org/sops/logging"
 	"go.mozilla.org/sops/pgp"
 	"go.mozilla.org/sops/stores/dotenv"
-	"go.mozilla.org/sops/stores/ini"
 	"go.mozilla.org/sops/stores/json"
-	yamlstores "go.mozilla.org/sops/stores/yaml"
 	"go.mozilla.org/sops/version"
 	"google.golang.org/grpc"
 	"gopkg.in/urfave/cli.v1"
@@ -875,37 +873,11 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 }
 
 func inputStore(context *cli.Context, path string) common.Store {
-	switch context.String("input-type") {
-	case "yaml":
-		return &yamlstores.Store{}
-	case "json":
-		return &json.Store{}
-	case "dotenv":
-		return &dotenv.Store{}
-	case "ini":
-		return &ini.Store{}
-	case "binary":
-		return &json.BinaryStore{}
-	default:
-		return common.DefaultStoreForPath(path)
-	}
+	return common.DefaultStoreForPathOrFormat(path, context.String("input-type"))
 }
 
 func outputStore(context *cli.Context, path string) common.Store {
-	switch context.String("output-type") {
-	case "yaml":
-		return &yamlstores.Store{}
-	case "json":
-		return &json.Store{}
-	case "dotenv":
-		return &dotenv.Store{}
-	case "ini":
-		return &ini.Store{}
-	case "binary":
-		return &json.BinaryStore{}
-	default:
-		return common.DefaultStoreForPath(path)
-	}
+	return common.DefaultStoreForPathOrFormat(path, context.String("output-type"))
 }
 
 func parseTreePath(arg string) ([]interface{}, error) {
