@@ -36,6 +36,37 @@ type Store interface {
 	ExampleFileEmitter
 }
 
+type storeConstructor = func() Store
+
+func newBinaryStore() Store {
+	return &json.BinaryStore{}
+}
+
+func newDotenvStore() Store {
+	return &dotenv.Store{}
+}
+
+func newIniStore() Store {
+	return &ini.Store{}
+}
+
+func newJsonStore() Store {
+	return &json.Store{}
+}
+
+func newYamlStore() Store {
+	return &yaml.Store{}
+}
+
+// StoreConstructors is a mapping of formats to constructors.
+var StoreConstructors = map[string]storeConstructor{
+	"binary": newBinaryStore,
+	"dotenv": newDotenvStore,
+	"ini":    newIniStore,
+	"json":   newJsonStore,
+	"yaml":   newYamlStore,
+}
+
 // DecryptTreeOpts are the options needed to decrypt a tree
 type DecryptTreeOpts struct {
 	// Tree is the tree to be decrypted
@@ -142,46 +173,35 @@ func IsIniFile(path string) bool {
 // DefaultStoreForFormat returns the correct format-specific implementation
 // of the Store interface given the format string
 func DefaultStoreForFormat(format string) Store {
-	switch format {
-	case "yaml":
-		return &yaml.Store{}
-	case "json":
-		return &json.Store{}
-	case "dotenv":
-		return &dotenv.Store{}
-	case "ini":
-		return &ini.Store{}
-	case "binary":
-		return &json.BinaryStore{}
+	storeConst, found := StoreConstructors[format]
+	if !found {
+		storeConst = StoreConstructors["binary"] // default
 	}
-	return &json.BinaryStore{}
+	return storeConst()
 }
 
 // DefaultStoreForPath returns the correct format-specific implementation
 // of the Store interface given the path to a file
 func DefaultStoreForPath(path string) Store {
+	storeConst := StoreConstructors["binary"] // default
 	if IsYAMLFile(path) {
-		return &yaml.Store{}
+		storeConst = StoreConstructors["yaml"]
 	} else if IsJSONFile(path) {
-		return &json.Store{}
+		storeConst = StoreConstructors["json"]
 	} else if IsEnvFile(path) {
-		return &dotenv.Store{}
+		storeConst = StoreConstructors["dotenv"]
 	} else if IsIniFile(path) {
-		return &ini.Store{}
+		storeConst = StoreConstructors["ini"]
 	}
-	return &json.BinaryStore{}
+	return storeConst()
 }
 
 // DefaultStoreForPathOrFormat returns the correct format-specific implementation
 // of the Store interface given the format if specified, or the path to a file
 func DefaultStoreForPathOrFormat(path, format string) Store {
-	switch format {
-	case "yaml":
-	case "json":
-	case "dotenv":
-	case "ini":
-	case "binary":
-		return DefaultStoreForFormat(format)
+	storeConst, found := StoreConstructors[format]
+	if found {
+		return storeConst()
 	}
 	return DefaultStoreForPath(path)
 }
