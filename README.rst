@@ -66,7 +66,7 @@ For a quick presentation of Sops, check out this Youtube tutorial:
 
 .. image:: https://img.youtube.com/vi/V2PRhxphH2w/0.jpg
    :target: https://www.youtube.com/watch?v=V2PRhxphH2w
-   
+
 If you're using AWS KMS, create one or multiple master keys in the IAM console
 and export them, comma separated, in the **SOPS_KMS_ARN** env variable. It is
 recommended to use at least two master keys in different regions.
@@ -185,7 +185,7 @@ Encrypting using GCP KMS
 ~~~~~~~~~~~~~~~~~~~~~~~~
 GCP KMS uses `Application Default Credentials
 <https://developers.google.com/identity/protocols/application-default-credentials>`_.
-If you already logged in using 
+If you already logged in using
 
 .. code:: bash
 
@@ -301,13 +301,52 @@ the environment variables ``SOPS_KMS_ARN``, ``SOPS_PGP_FP``, ``SOPS_GCP_KMS_IDS`
 parameters again.
 
 Master PGP and KMS keys can be added and removed from a ``sops`` file in one of
-two ways: by using command line flag, or by editing the file directly.
+three ways::
+
+1. By using a .sops.yaml file and the ``updatekeys`` command.
+
+2. By using command line flags.
+
+3. By editing the file directly.
+
+The sops team recommends the ``updatekeys`` approach.
+
+
+``updatekeys`` command
+**********************
+
+The ``updatekeys`` command uses the `.sops.yaml <#29using-sopsyaml-conf-to-select-kmspgp-for-new-files>`_
+configuration file to update (add or remove) the corresponding secrets in the
+encrypted file. Note that the example below uses the
+`Block Scalar yaml construct <https://yaml-multiline.info/>`_ to build a space
+separated list.
+
+.. code:: yaml
+
+    creation_rules:
+        - pgp: >-
+            85D77543B3D624B63CEA9E6DBC17301B491B3F21,
+            FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4
+
+.. code:: bash
+
+	$ sops updatekeys test.enc.yaml
+
+Sops will prompt you with the changes to be made. This interactivity can be
+disabled by supplying the ``-y`` flag.
+
+Command Line
+************
 
 Command line flag ``--add-kms``, ``--add-pgp``, ``--add-gcp-kms``, ``--add-azure-kv``,
 ``--rm-kms``, ``--rm-pgp``, ``--rm-gcp-kms`` and ``--rm-azure-kv`` can be used to add
 and remove keys from a file.
 These flags use the comma separated syntax as the ``--kms``, ``--pgp``, ``--gcp-kms``
 and ``--azure-kv`` arguments when creating new files.
+
+Note that ``-r`` or ``--rotate`` is mandatory in this mode. Not specifying
+rotate will ignore the ``--add-*`` options. Use ``updatekeys`` if you want to
+add a key without rotating the data key.
 
 .. code:: bash
 
@@ -316,6 +355,10 @@ and ``--azure-kv`` arguments when creating new files.
 
 	# remove a pgp key from the file and rotate the data key
 	$ sops -r -i --rm-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 example.yaml
+
+
+Direct Editing
+**************
 
 Alternatively, invoking ``sops`` with the flag **-s** will display the master keys
 while editing. This method can be used to add or remove kms or pgp keys under the
@@ -423,7 +466,7 @@ appending it to the ARN of the master key, separated by a **+** sign::
 AWS KMS Encryption Context
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-SOPS has the ability to use `AWS KMS key policy and encryption context 
+SOPS has the ability to use `AWS KMS key policy and encryption context
 <http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html>`_
 to refine the access control of a given KMS master key.
 
@@ -1227,7 +1270,7 @@ numbering them.
 
 .. code:: bash
 
-	$ sops --set '["an_array"][1] "secretuser2"' ~/git/svc/sops/example.yaml 
+	$ sops --set '["an_array"][1] "secretuser2"' ~/git/svc/sops/example.yaml
 
 The value must be formatted as json.
 
@@ -1250,8 +1293,8 @@ You can import sops as a module and use it in your python program.
 	tree = sops.walk_and_decrypt(tree, sops_key)
 	sops.write_file(tree, path=path, filetype=pathtype)
 
-Note: this uses the previous implemenation of `sops` written in python, 
-and so doesn't support newer features such as GCP-KMS. 
+Note: this uses the previous implemenation of `sops` written in python,
+and so doesn't support newer features such as GCP-KMS.
 To use the current version, call out to `sops` using `subprocess.check_output`
 
 Showing diffs in cleartext in git
@@ -1264,7 +1307,7 @@ This is very handy for reviewing changes or visualizing history.
 To configure sops to decrypt files during diff, create a ``.gitattributes`` file
 at the root of your repository that contains a filter and a command.
 
-.. code:: 
+.. code::
 
 	*.yaml diff=sopsdiffer
 
@@ -1317,7 +1360,7 @@ navigate the file, like ``metadata`` which contains the secrets' names.
 
 You can also specify these options in the ``.sops.yaml`` config file.
 
-Note: these three options ``--unencrypted-suffix``, ``--encrypted-suffix``, and ``--encrypted-regex`` are 
+Note: these three options ``--unencrypted-suffix``, ``--encrypted-suffix``, and ``--encrypted-regex`` are
 mutually exclusive and cannot all be used in the same file.
 
 Encryption Protocol
