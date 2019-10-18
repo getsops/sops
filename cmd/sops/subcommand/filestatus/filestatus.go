@@ -9,21 +9,19 @@ import (
 	"go.mozilla.org/sops/cmd/sops/common"
 )
 
-// Opts rapresent input option for FileStatus
+// Opts represent the input options for FileStatus
 type Opts struct {
 	InputStore sops.Store
-	// OutputStore       sops.Store
-	InputPath string
-	// KeyServices       []keyservice.KeyServiceClient
-	// KeyGroups         []sops.KeyGroup
-	// GroupThreshold    int
+	InputPath  string
 }
 
-// Status rapresent file status
+// Status represents the status of a file
 type Status struct {
+	// Encrypted represents whether the file provided is encrypted by SOPS
 	Encrypted bool
 }
 
+// FileStatus checks encryption status of a file
 func FileStatus(opts Opts) (Status, error) {
 	fileBytes, err := ioutil.ReadFile(opts.InputPath)
 	if err != nil {
