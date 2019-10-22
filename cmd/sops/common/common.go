@@ -5,13 +5,13 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"strings"
 	"time"
 
 	"github.com/fatih/color"
 	wordwrap "github.com/mitchellh/go-wordwrap"
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/cmd/sops/codes"
+	. "go.mozilla.org/sops/cmd/sops/formats"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/kms"
@@ -23,24 +23,6 @@ import (
 	"golang.org/x/crypto/ssh/terminal"
 	"gopkg.in/urfave/cli.v1"
 )
-
-type Format int
-
-const (
-	Binary Format = iota
-	Dotenv
-	Ini
-	Json
-	Yaml
-)
-
-var stringToFormat = map[string]Format{
-	"binary": Binary,
-	"dotenv": Dotenv,
-	"ini":    Ini,
-	"json":   Json,
-	"yaml":   Yaml,
-}
 
 // ExampleFileEmitter emits example files. This is used by the `sops` binary
 // whenever a new file is created, in order to present the user with a non-empty file
@@ -167,51 +149,6 @@ func NewExitError(i interface{}, exitCode int) *cli.ExitError {
 	return cli.NewExitError(i, exitCode)
 }
 
-// IsYAMLFile returns true if a given file path corresponds to a YAML file
-func IsYAMLFile(path string) bool {
-	return strings.HasSuffix(path, ".yaml") || strings.HasSuffix(path, ".yml")
-}
-
-// IsJSONFile returns true if a given file path corresponds to a JSON file
-func IsJSONFile(path string) bool {
-	return strings.HasSuffix(path, ".json")
-}
-
-// IsEnvFile returns true if a given file path corresponds to a .env file
-func IsEnvFile(path string) bool {
-	return strings.HasSuffix(path, ".env")
-}
-
-// IsIniFile returns true if a given file path corresponds to a INI file
-func IsIniFile(path string) bool {
-	return strings.HasSuffix(path, ".ini")
-}
-
-// FormatFromString returns a Format from a string.
-// This is used for converting string cli options.
-func FormatFromString(formatString string) Format {
-	format, found := stringToFormat[formatString]
-	if !found {
-		return Binary
-	}
-	return format
-}
-
-// FormatForPath returns the correct format given the path to a file
-func FormatForPath(path string) Format {
-	format := Binary // default
-	if IsYAMLFile(path) {
-		format = Yaml
-	} else if IsJSONFile(path) {
-		format = Json
-	} else if IsEnvFile(path) {
-		format = Dotenv
-	} else if IsIniFile(path) {
-		format = Ini
-	}
-	return format
-}
-
 // StoreForFormat returns the correct format-specific implementation
 // of the Store interface given the format.
 func StoreForFormat(format Format) Store {
@@ -232,12 +169,9 @@ func DefaultStoreForPath(path string) Store {
 // DefaultStoreForPathOrFormat returns the correct format-specific implementation
 // of the Store interface given the formatString if specified, or the path to a file.
 // This is to support the cli, where both are provided.
-func DefaultStoreForPathOrFormat(path, formatString string) Store {
-	format, found := stringToFormat[formatString]
-	if !found {
-		format = FormatForPath(path)
-	}
-	return StoreForFormat(format)
+func DefaultStoreForPathOrFormat(path, format string) Store {
+	formatFmt := FormatForPathOrString(path, format)
+	return StoreForFormat(formatFmt)
 }
 
 // KMS_ENC_CTX_BUG_FIXED_VERSION represents the SOPS version in which the

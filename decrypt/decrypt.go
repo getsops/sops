@@ -9,9 +9,9 @@ import (
 	"io/ioutil"
 	"time"
 
-	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/aes"
 	"go.mozilla.org/sops/cmd/sops/common"
+	. "go.mozilla.org/sops/cmd/sops/formats" // Re-export
 )
 
 // File is a wrapper around Data that reads a local encrypted
@@ -24,14 +24,15 @@ func File(path, format string) (cleartext []byte, err error) {
 	}
 
 	// uses same logic as cli.
-	store := common.DefaultStoreForPathOrFormat(path, format)
-
-	return DataWithStore(encryptedData, store)
+	format := FormatForPathOrString(path, format)
+	return DataWithFormat(encryptedData, format)
 }
 
-// DataWithStore is a helper that takes encrypted data, and a store,
+// DataWithFormat is a helper that takes encrypted data, and a format enum value,
 // decrypts the data and returns its cleartext in an []byte.
-func DataWithStore(data []byte, store sops.Store) (cleartext []byte, err error) {
+func DataWithFormat(data []byte, format Format) (cleartext []byte, err error) {
+
+	store := common.StoreForFormat(format)
 
 	// Load SOPS file and access the data key
 	tree, err := store.LoadEncryptedFile(data)
@@ -70,6 +71,6 @@ func DataWithStore(data []byte, store sops.Store) (cleartext []byte, err error) 
 // The format string can be `json`, `yaml`, `ini`, `dotenv` or `binary`.
 // If the format string is empty, binary format is assumed.
 func Data(data []byte, format string) (cleartext []byte, err error) {
-	store := common.StoreForFormat(common.FormatFromString(format))
-	return DataWithStore(data, store)
+	format := FormatFromString(format)
+	return DataWithFormat(data, format)
 }
