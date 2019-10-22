@@ -24,6 +24,24 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
+type Format int
+
+const (
+	Binary Format = iota
+	Dotenv
+	Ini
+	Json
+	Yaml
+)
+
+var stringToFormat = map[string]Format{
+	"binary": Binary,
+	"dotenv": Dotenv,
+	"ini":    Ini,
+	"json":   Json,
+	"yaml":   Yaml,
+}
+
 // ExampleFileEmitter emits example files. This is used by the `sops` binary
 // whenever a new file is created, in order to present the user with a non-empty file
 type ExampleFileEmitter interface {
@@ -58,13 +76,12 @@ func newYamlStore() Store {
 	return &yaml.Store{}
 }
 
-// StoreConstructors is a mapping of formats to constructors.
-var StoreConstructors = map[string]storeConstructor{
-	"binary": newBinaryStore,
-	"dotenv": newDotenvStore,
-	"ini":    newIniStore,
-	"json":   newJsonStore,
-	"yaml":   newYamlStore,
+var storeConstructors = map[Format]storeConstructor{
+	Binary: newBinaryStore,
+	Dotenv: newDotenvStore,
+	Ini:    newIniStore,
+	Json:   newJsonStore,
+	Yaml:   newYamlStore,
 }
 
 // DecryptTreeOpts are the options needed to decrypt a tree
@@ -170,12 +187,37 @@ func IsIniFile(path string) bool {
 	return strings.HasSuffix(path, ".ini")
 }
 
-// DefaultStoreForFormat returns the correct format-specific implementation
-// of the Store interface given the format string
-func DefaultStoreForFormat(format string) Store {
-	storeConst, found := StoreConstructors[format]
+// FormatFromString returns a Format from a string.
+// This is used for converting string cli options.
+func FormatFromString(formatString string) Format {
+	format, found := stringToFormat[formatString]
 	if !found {
-		storeConst = StoreConstructors["binary"] // default
+		return Binary
+	}
+	return format
+}
+
+// FormatForPath returns the correct format given the path to a file
+func FormatForPath(path string) Format {
+	format := Binary // default
+	if IsYAMLFile(path) {
+		format = Yaml
+	} else if IsJSONFile(path) {
+		format = Json
+	} else if IsEnvFile(path) {
+		format = Dotenv
+	} else if IsIniFile(path) {
+		format = Ini
+	}
+	return format
+}
+
+// StoreForFormat returns the correct format-specific implementation
+// of the Store interface given the format.
+func StoreForFormat(format Format) Store {
+	storeConst, found := storeConstructors[format]
+	if !found {
+		storeConst = storeConstructors[Binary] // default
 	}
 	return storeConst()
 }
@@ -183,27 +225,19 @@ func DefaultStoreForFormat(format string) Store {
 // DefaultStoreForPath returns the correct format-specific implementation
 // of the Store interface given the path to a file
 func DefaultStoreForPath(path string) Store {
-	storeConst := StoreConstructors["binary"] // default
-	if IsYAMLFile(path) {
-		storeConst = StoreConstructors["yaml"]
-	} else if IsJSONFile(path) {
-		storeConst = StoreConstructors["json"]
-	} else if IsEnvFile(path) {
-		storeConst = StoreConstructors["dotenv"]
-	} else if IsIniFile(path) {
-		storeConst = StoreConstructors["ini"]
-	}
-	return storeConst()
+	format := FormatForPath(path)
+	return StoreForFormat(format)
 }
 
 // DefaultStoreForPathOrFormat returns the correct format-specific implementation
-// of the Store interface given the format if specified, or the path to a file
-func DefaultStoreForPathOrFormat(path, format string) Store {
-	storeConst, found := StoreConstructors[format]
-	if found {
-		return storeConst()
+// of the Store interface given the formatString if specified, or the path to a file.
+// This is to support the cli, where both are provided.
+func DefaultStoreForPathOrFormat(path, formatString string) Store {
+	format, found := stringToFormat[formatString]
+	if !found {
+		format = FormatForPath(path)
 	}
-	return DefaultStoreForPath(path)
+	return StoreForFormat(format)
 }
 
 // KMS_ENC_CTX_BUG_FIXED_VERSION represents the SOPS version in which the

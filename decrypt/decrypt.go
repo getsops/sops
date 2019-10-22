@@ -23,7 +23,9 @@ func File(path, format string) (cleartext []byte, err error) {
 		return nil, fmt.Errorf("Failed to read %q: %v", path, err)
 	}
 
+	// uses same logic as cli.
 	store := common.DefaultStoreForPathOrFormat(path, format)
+
 	return DataWithStore(encryptedData, store)
 }
 
@@ -68,6 +70,6 @@ func DataWithStore(data []byte, store sops.Store) (cleartext []byte, err error) 
 // The format string can be `json`, `yaml`, `ini`, `dotenv` or `binary`.
 // If the format string is empty, binary format is assumed.
 func Data(data []byte, format string) (cleartext []byte, err error) {
-	store := common.DefaultStoreForFormat(format)
+	store := common.StoreForFormat(common.FormatFromString(format))
 	return DataWithStore(data, store)
 }
