@@ -24,8 +24,8 @@ func File(path, format string) (cleartext []byte, err error) {
 	}
 
 	// uses same logic as cli.
-	format := FormatForPathOrString(path, format)
-	return DataWithFormat(encryptedData, format)
+	formatFmt := FormatForPathOrString(path, format)
+	return DataWithFormat(encryptedData, formatFmt)
 }
 
 // DataWithFormat is a helper that takes encrypted data, and a format enum value,
@@ -71,6 +71,6 @@ func DataWithFormat(data []byte, format Format) (cleartext []byte, err error) {
 // The format string can be `json`, `yaml`, `ini`, `dotenv` or `binary`.
 // If the format string is empty, binary format is assumed.
 func Data(data []byte, format string) (cleartext []byte, err error) {
-	format := FormatFromString(format)
-	return DataWithFormat(data, format)
+	formatFmt := FormatFromString(format)
+	return DataWithFormat(data, formatFmt)
 }
