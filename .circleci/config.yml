@@ -17,5 +17,6 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
                 ${GOPATH}/src/go.mozilla.org/sops/bin/ci/deploy_dockerhub.sh "latest"
+                ${GOPATH}/src/go.mozilla.org/sops/bin/ci/deploy_dockerhub.sh "3.4.0"
                 ${GOPATH}/src/go.mozilla.org/sops/bin/ci/deploy_dockerhub.sh "$CIRCLE_SHA1"
             fi
