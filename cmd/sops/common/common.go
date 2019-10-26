@@ -5,13 +5,13 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"strings"
 	"time"
 
 	"github.com/fatih/color"
 	wordwrap "github.com/mitchellh/go-wordwrap"
 	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/cmd/sops/codes"
+	. "go.mozilla.org/sops/cmd/sops/formats"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/kms"
@@ -34,6 +34,36 @@ type ExampleFileEmitter interface {
 type Store interface {
 	sops.Store
 	ExampleFileEmitter
+}
+
+type storeConstructor = func() Store
+
+func newBinaryStore() Store {
+	return &json.BinaryStore{}
+}
+
+func newDotenvStore() Store {
+	return &dotenv.Store{}
+}
+
+func newIniStore() Store {
+	return &ini.Store{}
+}
+
+func newJsonStore() Store {
+	return &json.Store{}
+}
+
+func newYamlStore() Store {
+	return &yaml.Store{}
+}
+
+var storeConstructors = map[Format]storeConstructor{
+	Binary: newBinaryStore,
+	Dotenv: newDotenvStore,
+	Ini:    newIniStore,
+	Json:   newJsonStore,
+	Yaml:   newYamlStore,
 }
 
 // DecryptTreeOpts are the options needed to decrypt a tree
@@ -119,39 +149,29 @@ func NewExitError(i interface{}, exitCode int) *cli.ExitError {
 	return cli.NewExitError(i, exitCode)
 }
 
-// IsYAMLFile returns true if a given file path corresponds to a YAML file
-func IsYAMLFile(path string) bool {
-	return strings.HasSuffix(path, ".yaml") || strings.HasSuffix(path, ".yml")
-}
-
-// IsJSONFile returns true if a given file path corresponds to a JSON file
-func IsJSONFile(path string) bool {
-	return strings.HasSuffix(path, ".json")
-}
-
-// IsEnvFile returns true if a given file path corresponds to a .env file
-func IsEnvFile(path string) bool {
-	return strings.HasSuffix(path, ".env")
-}
-
-// IsIniFile returns true if a given file path corresponds to a INI file
-func IsIniFile(path string) bool {
-	return strings.HasSuffix(path, ".ini")
+// StoreForFormat returns the correct format-specific implementation
+// of the Store interface given the format.
+func StoreForFormat(format Format) Store {
+	storeConst, found := storeConstructors[format]
+	if !found {
+		storeConst = storeConstructors[Binary] // default
+	}
+	return storeConst()
 }
 
 // DefaultStoreForPath returns the correct format-specific implementation
 // of the Store interface given the path to a file
 func DefaultStoreForPath(path string) Store {
-	if IsYAMLFile(path) {
-		return &yaml.Store{}
-	} else if IsJSONFile(path) {
-		return &json.Store{}
-	} else if IsEnvFile(path) {
-		return &dotenv.Store{}
-	} else if IsIniFile(path) {
-		return &ini.Store{}
-	}
-	return &json.BinaryStore{}
+	format := FormatForPath(path)
+	return StoreForFormat(format)
+}
+
+// DefaultStoreForPathOrFormat returns the correct format-specific implementation
+// of the Store interface given the formatString if specified, or the path to a file.
+// This is to support the cli, where both are provided.
+func DefaultStoreForPathOrFormat(path, format string) Store {
+	formatFmt := FormatForPathOrString(path, format)
+	return StoreForFormat(formatFmt)
 }
 
 // KMS_ENC_CTX_BUG_FIXED_VERSION represents the SOPS version in which the

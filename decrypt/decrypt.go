@@ -9,11 +9,9 @@ import (
 	"io/ioutil"
 	"time"
 
-	"go.mozilla.org/sops"
 	"go.mozilla.org/sops/aes"
-	sopsdotenv "go.mozilla.org/sops/stores/dotenv"
-	sopsjson "go.mozilla.org/sops/stores/json"
-	sopsyaml "go.mozilla.org/sops/stores/yaml"
+	"go.mozilla.org/sops/cmd/sops/common"
+	. "go.mozilla.org/sops/cmd/sops/formats" // Re-export
 )
 
 // File is a wrapper around Data that reads a local encrypted
@@ -24,26 +22,18 @@ func File(path, format string) (cleartext []byte, err error) {
 	if err != nil {
 		return nil, fmt.Errorf("Failed to read %q: %v", path, err)
 	}
-	return Data(encryptedData, format)
+
+	// uses same logic as cli.
+	formatFmt := FormatForPathOrString(path, format)
+	return DataWithFormat(encryptedData, formatFmt)
 }
 
-// Data is a helper that takes encrypted data and a format string,
+// DataWithFormat is a helper that takes encrypted data, and a format enum value,
 // decrypts the data and returns its cleartext in an []byte.
-// The format string can be `json`, `yaml`, `dotenv` or `binary`.
-// If the format string is empty, binary format is assumed.
-func Data(data []byte, format string) (cleartext []byte, err error) {
-	// Initialize a Sops JSON store
-	var store sops.Store
-	switch format {
-	case "json":
-		store = &sopsjson.Store{}
-	case "yaml":
-		store = &sopsyaml.Store{}
-	case "dotenv":
-		store = &sopsdotenv.Store{}
-	default:
-		store = &sopsjson.BinaryStore{}
-	}
+func DataWithFormat(data []byte, format Format) (cleartext []byte, err error) {
+
+	store := common.StoreForFormat(format)
+
 	// Load SOPS file and access the data key
 	tree, err := store.LoadEncryptedFile(data)
 	if err != nil {
@@ -74,4 +64,13 @@ func Data(data []byte, format string) (cleartext []byte, err error) {
 	}
 
 	return store.EmitPlainFile(tree.Branches)
+}
+
+// Data is a helper that takes encrypted data and a format string,
+// decrypts the data and returns its cleartext in an []byte.
+// The format string can be `json`, `yaml`, `ini`, `dotenv` or `binary`.
+// If the format string is empty, binary format is assumed.
+func Data(data []byte, format string) (cleartext []byte, err error) {
+	formatFmt := FormatFromString(format)
+	return DataWithFormat(data, formatFmt)
 }
