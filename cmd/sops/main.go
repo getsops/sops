@@ -227,7 +227,7 @@ func main() {
 				if c.Bool("verbose") || c.GlobalBool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
-				configPath, err := config.FindConfigFile(".")
+				configPath, err := getConfigPath(c, ".")
 				if err != nil {
 					return common.NewExitError(err, codes.ErrorGeneric)
 				}
@@ -418,7 +418,7 @@ func main() {
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
-				configPath, err := config.FindConfigFile(".")
+				configPath, err := getConfigPath(c, ".")
 				if err != nil {
 					return common.NewExitError(err, codes.ErrorGeneric)
 				}
@@ -958,13 +958,22 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	return []sops.KeyGroup{group}, nil
 }
 
+// getConfigPath returns the config path that should be used: either one explicitly set by the 'config' command line flag, or
+// by travering up the filesystem.
+func getConfigPath(c *cli.Context, root string) (string, error) {
+	if c.GlobalString("config") != "" {
+		return c.GlobalString("config"), nil
+	}
+	return config.FindConfigFile(root)
+}
+
 // loadConfig will look for an existing config file, either provided through the command line, or using config.FindConfigFile.
 // Since a config file is not required, this function does not error when one is not found, and instead returns a nil config pointer
 func loadConfig(c *cli.Context, file string, kmsEncryptionContext map[string]*string) (*config.Config, error) {
 	var err error
 	var configPath string
-	if c.String("config") != "" {
-		configPath = c.String("config")
+	if c.GlobalString("config") != "" {
+		configPath = c.GlobalString("config")
 	} else {
 		// Ignore config not found errors returned from FindConfigFile since the config file is not mandatory
 		configPath, err = config.FindConfigFile(".")
