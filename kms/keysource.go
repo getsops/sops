@@ -165,8 +165,13 @@ func (key MasterKey) createStsSession(config aws.Config, sess *session.Session) 
 	if err != nil {
 		return nil, err
 	}
+	stsRoleSessionNameRe, err := regexp.Compile("[^a-zA-Z0-9=,.@-]+")
+	if err != nil {
+		return nil, fmt.Errorf("Failed to compile STS role session name regex: %v", err)
+	}
+	sanitizedHostname := stsRoleSessionNameRe.ReplaceAllString(hostname, "")
 	stsService := sts.New(sess)
-	name := "sops@" + hostname
+	name := "sops@" + sanitizedHostname
 	out, err := stsService.AssumeRole(&sts.AssumeRoleInput{
 		RoleArn: &key.Role, RoleSessionName: &name})
 	if err != nil {
