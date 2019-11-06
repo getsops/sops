@@ -28,12 +28,12 @@ For the adventurous, unstable features are available in the `develop` branch, wh
 
 .. code:: bash
 
-	$ go get -u go.mozilla.org/sops/cmd/sops
+	$ go get -u go.mozilla.org/sops/v3/cmd/sops
         $ cd $GOPATH/src/go.mozilla.org/sops/
         $ git checkout develop
         $ make install
 
-(requires Go >= 1.12)
+(requires Go >= 1.13)
 
 If you don't have Go installed, set it up with:
 

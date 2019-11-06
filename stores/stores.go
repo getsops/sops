@@ -14,11 +14,11 @@ import (
 
 	"fmt"
 
-	"go.mozilla.org/sops"
-	"go.mozilla.org/sops/azkv"
-	"go.mozilla.org/sops/gcpkms"
-	"go.mozilla.org/sops/kms"
-	"go.mozilla.org/sops/pgp"
+	"go.mozilla.org/sops/v3"
+	"go.mozilla.org/sops/v3/azkv"
+	"go.mozilla.org/sops/v3/gcpkms"
+	"go.mozilla.org/sops/v3/kms"
+	"go.mozilla.org/sops/v3/pgp"
 )
 
 // SopsFile is a struct used by the stores as a helper to unmarshal the SOPS metadata

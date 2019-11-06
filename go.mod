@@ -1,14 +1,14 @@
-module go.mozilla.org/sops
+module go.mozilla.org/sops/v3
 
-go 1.12
+go 1.13
 
 require (
 	cloud.google.com/go v0.43.0
 	github.com/Azure/azure-sdk-for-go v31.2.0+incompatible
-	github.com/Azure/go-autorest/autorest v0.5.0
+	github.com/Azure/go-autorest/autorest v0.9.0
 	github.com/Azure/go-autorest/autorest/azure/auth v0.1.0
-	github.com/Azure/go-autorest/autorest/to v0.2.0 // indirect
-	github.com/Azure/go-autorest/autorest/validation v0.1.0 // indirect
+	github.com/Azure/go-autorest/autorest/to v0.3.0 // indirect
+	github.com/Azure/go-autorest/autorest/validation v0.2.0 // indirect
 	github.com/aws/aws-sdk-go v1.23.13
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/fatih/color v1.7.0
@@ -19,7 +19,7 @@ require (
 	github.com/howeyc/gopass v0.0.0-20170109162249-bf9dde6d0d2c
 	github.com/lib/pq v1.2.0
 	github.com/mitchellh/go-wordwrap v1.0.0
-	github.com/mozilla-services/yaml v0.0.0-20180922153656-28ffe5d0cafb
+	github.com/mozilla-services/yaml v0.0.0-20191106225358-5c216288813c
 	github.com/pkg/errors v0.8.1
 	github.com/sirupsen/logrus v1.4.2
 	github.com/smartystreets/goconvey v0.0.0-20190710185942-9d28bd7c0945 // indirect
@@ -32,5 +32,4 @@ require (
 	google.golang.org/grpc v1.22.1
 	gopkg.in/ini.v1 v1.44.0
 	gopkg.in/urfave/cli.v1 v1.20.0
-	gopkg.in/yaml.v2 v2.2.2
 )

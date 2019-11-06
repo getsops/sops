@@ -7,11 +7,11 @@ package keyservice
 import (
 	"fmt"
 
-	"go.mozilla.org/sops/azkv"
-	"go.mozilla.org/sops/gcpkms"
-	"go.mozilla.org/sops/keys"
-	"go.mozilla.org/sops/kms"
-	"go.mozilla.org/sops/pgp"
+	"go.mozilla.org/sops/v3/azkv"
+	"go.mozilla.org/sops/v3/gcpkms"
+	"go.mozilla.org/sops/v3/keys"
+	"go.mozilla.org/sops/v3/kms"
+	"go.mozilla.org/sops/v3/pgp"
 )
 
 // KeyFromMasterKey converts a SOPS internal MasterKey to an RPC Key that can be serialized with Protocol Buffers

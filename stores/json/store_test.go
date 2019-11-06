@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"go.mozilla.org/sops"
+	"go.mozilla.org/sops/v3"
 )
 
 func TestDecodeJSON(t *testing.T) {
