@@ -6,6 +6,7 @@ import (
 	"go.mozilla.org/sops/azkv"
 	"go.mozilla.org/sops/gcpkms"
 	"go.mozilla.org/sops/kms"
+	"go.mozilla.org/sops/naclbox"
 	"go.mozilla.org/sops/pgp"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -17,6 +18,15 @@ import (
 type Server struct {
 	// Prompt indicates whether the server should prompt before decrypting or encrypting data
 	Prompt bool
+}
+
+func (ks *Server) encryptWithNaclBox(key *NaclBoxKey, plaintext []byte) ([]byte, error) {
+	ncKey := naclbox.NewMasterKeyFromPublicKey(key.Publickey)
+	err := ncKey.Encrypt(plaintext)
+	if err != nil {
+		return nil, err
+	}
+	return []byte(ncKey.EncryptedKey), nil
 }
 
 func (ks *Server) encryptWithPgp(key *PgpKey, plaintext []byte) ([]byte, error) {
@@ -61,6 +71,13 @@ func (ks *Server) encryptWithAzureKeyVault(key *AzureKeyVaultKey, plaintext []by
 	return []byte(azkvKey.EncryptedKey), nil
 }
 
+func (ks *Server) decryptWithNaclBox(key *NaclBoxKey, ciphertext []byte) ([]byte, error) {
+	nbKey := naclbox.NewMasterKeyFromPublicKey(key.Publickey)
+	nbKey.EncryptedKey = string(ciphertext)
+	plaintext, err := nbKey.Decrypt()
+	return []byte(plaintext), err
+}
+
 func (ks *Server) decryptWithPgp(key *PgpKey, ciphertext []byte) ([]byte, error) {
 	pgpKey := pgp.NewMasterKeyFromFingerprint(key.Fingerprint)
 	pgpKey.EncryptedKey = string(ciphertext)
@@ -102,6 +119,14 @@ func (ks Server) Encrypt(ctx context.Context,
 	key := *req.Key
 	var response *EncryptResponse
 	switch k := key.KeyType.(type) {
+	case *Key_NaclboxKey:
+		ciphertext, err := ks.encryptWithNaclBox(k.NaclboxKey, req.Plaintext)
+		if err != nil {
+			return nil, err
+		}
+		response = &EncryptResponse{
+			Ciphertext: ciphertext,
+		}
 	case *Key_PgpKey:
 		ciphertext, err := ks.encryptWithPgp(k.PgpKey, req.Plaintext)
 		if err != nil {
@@ -150,6 +175,8 @@ func (ks Server) Encrypt(ctx context.Context,
 
 func keyToString(key Key) string {
 	switch k := key.KeyType.(type) {
+	case *Key_NaclboxKey:
+		return fmt.Sprintf("NACL BOX public key %s", k.NaclboxKey.Publickey)
 	case *Key_PgpKey:
 		return fmt.Sprintf("PGP key with fingerprint %s", k.PgpKey.Fingerprint)
 	case *Key_KmsKey:
@@ -186,6 +213,14 @@ func (ks Server) Decrypt(ctx context.Context,
 	key := *req.Key
 	var response *DecryptResponse
 	switch k := key.KeyType.(type) {
+	case *Key_NaclboxKey:
+		plaintext, err := ks.decryptWithNaclBox(k.NaclboxKey, req.Ciphertext)
+		if err != nil {
+			return nil, err
+		}
+		response = &DecryptResponse{
+			Plaintext: plaintext,
+		}
 	case *Key_PgpKey:
 		plaintext, err := ks.decryptWithPgp(k.PgpKey, req.Ciphertext)
 		if err != nil {
@@ -242,6 +277,6 @@ func kmsKeyToMasterKey(key *KmsKey) kms.MasterKey {
 		Arn:               key.Arn,
 		Role:              key.Role,
 		EncryptionContext: ctx,
-		AwsProfile:        key.AwsProfile,
+		AwsProfile:        key.Awsprofile,
 	}
 }

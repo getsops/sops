@@ -6,6 +6,8 @@ message Key {
 		PgpKey pgp_key = 2;
 		GcpKmsKey gcp_kms_key = 3;
 		AzureKeyVaultKey azure_keyvault_key = 4;
+		NaclBoxKey naclbox_key = 5;
+
 	}
 }
 
@@ -17,6 +19,7 @@ message KmsKey {
 	string arn = 1;
 	string role = 2;
 	map<string, string> context = 3;
+	string awsprofile = 4;
 }
 
 message GcpKmsKey {
@@ -27,6 +30,12 @@ message AzureKeyVaultKey {
 	string vault_url = 1;
 	string name = 2;
 	string version = 3;
+}
+
+message NaclBoxKey {
+	string publickey = 1;
+	string nonce = 2;
+	string ephemeralpubkey = 3;
 }
 
 message EncryptRequest {

@@ -18,6 +18,7 @@ import (
 	"go.mozilla.org/sops/azkv"
 	"go.mozilla.org/sops/gcpkms"
 	"go.mozilla.org/sops/kms"
+	"go.mozilla.org/sops/naclbox"
 	"go.mozilla.org/sops/pgp"
 )
 
@@ -35,25 +36,27 @@ type SopsFile struct {
 // in order to allow the binary format to stay backwards compatible over time, but at the same time allow the internal
 // representation SOPS uses to change over time.
 type Metadata struct {
-	ShamirThreshold           int         `yaml:"shamir_threshold,omitempty" json:"shamir_threshold,omitempty"`
-	KeyGroups                 []keygroup  `yaml:"key_groups,omitempty" json:"key_groups,omitempty"`
-	KMSKeys                   []kmskey    `yaml:"kms" json:"kms"`
-	GCPKMSKeys                []gcpkmskey `yaml:"gcp_kms" json:"gcp_kms"`
-	AzureKeyVaultKeys         []azkvkey   `yaml:"azure_kv" json:"azure_kv"`
-	LastModified              string      `yaml:"lastmodified" json:"lastmodified"`
-	MessageAuthenticationCode string      `yaml:"mac" json:"mac"`
-	PGPKeys                   []pgpkey    `yaml:"pgp" json:"pgp"`
-	UnencryptedSuffix         string      `yaml:"unencrypted_suffix,omitempty" json:"unencrypted_suffix,omitempty"`
-	EncryptedSuffix           string      `yaml:"encrypted_suffix,omitempty" json:"encrypted_suffix,omitempty"`
-	EncryptedRegex            string      `yaml:"encrypted_regex,omitempty" json:"encrypted_regex,omitempty"`
-	Version                   string      `yaml:"version" json:"version"`
+	ShamirThreshold           int          `yaml:"shamir_threshold,omitempty" json:"shamir_threshold,omitempty"`
+	KeyGroups                 []keygroup   `yaml:"key_groups,omitempty" json:"key_groups,omitempty"`
+	KMSKeys                   []kmskey     `yaml:"kms" json:"kms"`
+	GCPKMSKeys                []gcpkmskey  `yaml:"gcp_kms" json:"gcp_kms"`
+	AzureKeyVaultKeys         []azkvkey    `yaml:"azure_kv" json:"azure_kv"`
+	NaclBoxKeys               []naclboxkey `yaml:"naclbox" json:"naclbox"`
+	LastModified              string       `yaml:"lastmodified" json:"lastmodified"`
+	MessageAuthenticationCode string       `yaml:"mac" json:"mac"`
+	PGPKeys                   []pgpkey     `yaml:"pgp" json:"pgp"`
+	UnencryptedSuffix         string       `yaml:"unencrypted_suffix,omitempty" json:"unencrypted_suffix,omitempty"`
+	EncryptedSuffix           string       `yaml:"encrypted_suffix,omitempty" json:"encrypted_suffix,omitempty"`
+	EncryptedRegex            string       `yaml:"encrypted_regex,omitempty" json:"encrypted_regex,omitempty"`
+	Version                   string       `yaml:"version" json:"version"`
 }
 
 type keygroup struct {
-	PGPKeys           []pgpkey    `yaml:"pgp,omitempty" json:"pgp,omitempty"`
-	KMSKeys           []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
-	GCPKMSKeys        []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
-	AzureKeyVaultKeys []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
+	PGPKeys           []pgpkey     `yaml:"pgp,omitempty" json:"pgp,omitempty"`
+	KMSKeys           []kmskey     `yaml:"kms,omitempty" json:"kms,omitempty"`
+	GCPKMSKeys        []gcpkmskey  `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
+	AzureKeyVaultKeys []azkvkey    `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
+	NaclBoxKeys       []naclboxkey `yaml:"naclbox" json:"naclbox"`
 }
 
 type pgpkey struct {
@@ -85,6 +88,14 @@ type azkvkey struct {
 	EncryptedDataKey string `yaml:"enc" json:"enc"`
 }
 
+type naclboxkey struct {
+	PublicKey        string `yaml:"publickey" json:"publickey"`
+	CreatedAt        string `yaml:"created_at" json:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	Nonce            string `yaml:"nonce" json:"nonce"`
+	EphemeralPubKey  string `yaml:"ephemeralpubkey" json:"ephemeralpubkey"`
+}
+
 // MetadataFromInternal converts an internal SOPS metadata representation to a representation appropriate for storage
 func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 	var m Metadata
@@ -101,6 +112,7 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 		m.KMSKeys = kmsKeysFromGroup(group)
 		m.GCPKMSKeys = gcpkmsKeysFromGroup(group)
 		m.AzureKeyVaultKeys = azkvKeysFromGroup(group)
+		m.NaclBoxKeys = naclboxKeysFromGroup(group)
 	} else {
 		for _, group := range sopsMetadata.KeyGroups {
 			m.KeyGroups = append(m.KeyGroups, keygroup{
@@ -108,10 +120,27 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 				PGPKeys:           pgpKeysFromGroup(group),
 				GCPKMSKeys:        gcpkmsKeysFromGroup(group),
 				AzureKeyVaultKeys: azkvKeysFromGroup(group),
+				NaclBoxKeys:       naclboxKeysFromGroup(group),
 			})
 		}
 	}
 	return m
+}
+
+func naclboxKeysFromGroup(group sops.KeyGroup) (keys []naclboxkey) {
+	for _, key := range group {
+		switch key := key.(type) {
+		case *naclbox.MasterKey:
+			keys = append(keys, naclboxkey{
+				PublicKey:        key.PublicKey,
+				EncryptedDataKey: key.EncryptedKey,
+				CreatedAt:        key.CreationDate.Format(time.RFC3339),
+				Nonce:            key.Nonce,
+				EphemeralPubKey:  key.EphemeralPubKey,
+			})
+		}
+	}
+	return
 }
 
 func pgpKeysFromGroup(group sops.KeyGroup) (keys []pgpkey) {
@@ -216,7 +245,7 @@ func (m *Metadata) ToInternal() (sops.Metadata, error) {
 	}, nil
 }
 
-func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, azkvKeys []azkvkey) (sops.KeyGroup, error) {
+func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, azkvKeys []azkvkey, naclboxKeys []naclboxkey) (sops.KeyGroup, error) {
 	var internalGroup sops.KeyGroup
 	for _, kmsKey := range kmsKeys {
 		k, err := kmsKey.toInternal()
@@ -246,13 +275,20 @@ func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmske
 		}
 		internalGroup = append(internalGroup, k)
 	}
+	for _, nbkey := range naclboxKeys {
+		k, err := nbkey.toInternal()
+		if err != nil {
+			return nil, err
+		}
+		internalGroup = append(internalGroup, k)
+	}
 	return internalGroup, nil
 }
 
 func (m *Metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 	var internalGroups []sops.KeyGroup
-	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 {
-		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.AzureKeyVaultKeys)
+	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.NaclBoxKeys) > 0 {
+		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.AzureKeyVaultKeys, m.NaclBoxKeys)
 		if err != nil {
 			return nil, err
 		}
@@ -260,7 +296,7 @@ func (m *Metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 		return internalGroups, nil
 	} else if len(m.KeyGroups) > 0 {
 		for _, group := range m.KeyGroups {
-			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.AzureKeyVaultKeys)
+			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.AzureKeyVaultKeys, group.NaclBoxKeys)
 			if err != nil {
 				return nil, err
 			}
@@ -322,6 +358,20 @@ func (pgpKey *pgpkey) toInternal() (*pgp.MasterKey, error) {
 		EncryptedKey: pgpKey.EncryptedDataKey,
 		CreationDate: creationDate,
 		Fingerprint:  pgpKey.Fingerprint,
+	}, nil
+}
+
+func (nbkey *naclboxkey) toInternal() (*naclbox.MasterKey, error) {
+	creationDate, err := time.Parse(time.RFC3339, nbkey.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+	return &naclbox.MasterKey{
+		EncryptedKey:    nbkey.EncryptedDataKey,
+		CreationDate:    creationDate,
+		PublicKey:       nbkey.PublicKey,
+		Nonce:           nbkey.Nonce,
+		EphemeralPubKey: nbkey.EphemeralPubKey,
 	}, nil
 }
 

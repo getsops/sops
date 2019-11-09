@@ -30,6 +30,7 @@ import (
 	"go.mozilla.org/sops/keyservice"
 	"go.mozilla.org/sops/kms"
 	"go.mozilla.org/sops/logging"
+	"go.mozilla.org/sops/naclbox"
 	"go.mozilla.org/sops/pgp"
 	"go.mozilla.org/sops/stores/dotenv"
 	"go.mozilla.org/sops/stores/json"
@@ -106,16 +107,16 @@ func main() {
 	app.EnableBashCompletion = true
 	app.Commands = []cli.Command{
 		{
-			Name:	  "exec-env",
-			Usage:	  "execute a command with decrypted values inserted into the environment",
+			Name:      "exec-env",
+			Usage:     "execute a command with decrypted values inserted into the environment",
 			ArgsUsage: "[file to decrypt] [command to run]",
 			Flags: append([]cli.Flag{
 				cli.BoolFlag{
-					Name: "background",
+					Name:  "background",
 					Usage: "background the process and don't wait for it to complete",
 				},
 				cli.StringFlag{
-					Name: "user",
+					Name:  "user",
 					Usage: "the user to run the command as",
 				},
 			}, keyserviceFlags...),
@@ -129,13 +130,12 @@ func main() {
 
 				inputStore := inputStore(c, fileName)
 
-
 				svcs := keyservices(c)
 				opts := decryptOpts{
 					OutputStore: &dotenv.Store{},
 					InputStore:  inputStore,
 					InputPath:   fileName,
-					Cipher:	  aes.NewCipher(),
+					Cipher:      aes.NewCipher(),
 					KeyServices: svcs,
 					IgnoreMAC:   c.Bool("ignore-mac"),
 				}
@@ -146,30 +146,30 @@ func main() {
 				}
 
 				exec.ExecWithEnv(exec.ExecOpts{
-					Command: command,
-					Plaintext: output,
+					Command:    command,
+					Plaintext:  output,
 					Background: c.Bool("background"),
-					User: c.String("user"),
+					User:       c.String("user"),
 				})
 
 				return nil
 			},
 		},
 		{
-			Name:	  "exec-file",
-			Usage:	  "execute a command with the decrypted contents as a temporary file",
+			Name:      "exec-file",
+			Usage:     "execute a command with the decrypted contents as a temporary file",
 			ArgsUsage: "[file to decrypt] [command to run]",
 			Flags: append([]cli.Flag{
 				cli.BoolFlag{
-					Name: "background",
+					Name:  "background",
 					Usage: "background the process and don't wait for it to complete",
 				},
 				cli.BoolFlag{
-					Name: "no-fifo",
+					Name:  "no-fifo",
 					Usage: "use a regular file instead of a fifo to temporarily hold the decrypted contents",
 				},
 				cli.StringFlag{
-					Name: "user",
+					Name:  "user",
 					Usage: "the user to run the command as",
 				},
 			}, keyserviceFlags...),
@@ -189,7 +189,7 @@ func main() {
 					OutputStore: outputStore,
 					InputStore:  inputStore,
 					InputPath:   fileName,
-					Cipher:	  aes.NewCipher(),
+					Cipher:      aes.NewCipher(),
 					KeyServices: svcs,
 					IgnoreMAC:   c.Bool("ignore-mac"),
 				}
@@ -200,11 +200,11 @@ func main() {
 				}
 
 				exec.ExecWithFile(exec.ExecOpts{
-					Command: command,
-					Plaintext: output,
+					Command:    command,
+					Plaintext:  output,
 					Background: c.Bool("background"),
-					Fifo: !c.Bool("no-fifo"),
-					User: c.String("user"),
+					Fifo:       !c.Bool("no-fifo"),
+					User:       c.String("user"),
 				})
 
 				return nil
@@ -324,6 +324,10 @@ func main() {
 							Name:  "azure-kv",
 							Usage: "the Azure Key Vault key URL the new group should contain. Can be specified more than once",
 						},
+						cli.StringSliceFlag{
+							Name:  "naclbox",
+							Usage: "the NACL BOX public key the new group should contain. Can be specified more than once",
+						},
 						cli.BoolFlag{
 							Name:  "in-place, i",
 							Usage: "write output back to the same file instead of stdout",
@@ -342,9 +346,13 @@ func main() {
 						kmsArns := c.StringSlice("kms")
 						gcpKmses := c.StringSlice("gcp-kms")
 						azkvs := c.StringSlice("azure-kv")
+						naclboxPubKeys := c.StringSlice("naclbox")
 						var group sops.KeyGroup
 						for _, fp := range pgpFps {
 							group = append(group, pgp.NewMasterKeyFromFingerprint(fp))
+						}
+						for _, pubkey := range naclboxPubKeys {
+							group = append(group, naclbox.NewMasterKeyFromPublicKey(pubkey))
 						}
 						for _, arn := range kmsArns {
 							group = append(group, kms.NewMasterKeyFromArn(arn, kms.ParseKMSContext(c.String("encryption-context")), c.String("aws-profile")))
@@ -479,6 +487,11 @@ func main() {
 			Usage:  "comma separated list of PGP fingerprints",
 			EnvVar: "SOPS_PGP_FP",
 		},
+		cli.StringFlag{
+			Name:   "naclbox, n",
+			Usage:  "comma separated list of NACL BOX public keys",
+			EnvVar: "SOPS_NACLBOX_PUBKEYS",
+		},
 		cli.BoolFlag{
 			Name:  "in-place, i",
 			Usage: "write output back to the same file instead of stdout",
@@ -530,6 +543,14 @@ func main() {
 		cli.StringFlag{
 			Name:  "rm-pgp",
 			Usage: "remove the provided comma-separated list of PGP fingerprints from the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "add-naclbox",
+			Usage: "add the provided comma-separated list of NACLBOX keys to the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "rm-naclbox",
+			Usage: "remove the provided comma-separated list of NACLBOX keys from the list of master keys on the given file",
 		},
 		cli.BoolFlag{
 			Name:  "ignore-mac",
@@ -588,8 +609,8 @@ func main() {
 			return toExitError(err)
 		}
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
-			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-azure-kv") != "" ||
-				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-azure-kv") != "" {
+			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-azure-kv") != "" || c.String("add-naclbox") != "" ||
+				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-azure-kv") != "" || c.String("rm-naclbox") != "" {
 				return common.NewExitError("Error: cannot add or remove keys on non-existent files, use `--kms` and `--pgp` instead.", codes.CannotChangeKeysFromNonExistentFile)
 			}
 			if c.Bool("encrypt") || c.Bool("decrypt") || c.Bool("rotate") {
@@ -692,6 +713,9 @@ func main() {
 			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("add-pgp")) {
 				addMasterKeys = append(addMasterKeys, k)
 			}
+			for _, k := range naclbox.MasterKeysFromPublicKeysString(c.String("add-naclbox")) {
+				addMasterKeys = append(addMasterKeys, k)
+			}
 			for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("add-gcp-kms")) {
 				addMasterKeys = append(addMasterKeys, k)
 			}
@@ -708,6 +732,9 @@ func main() {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
 			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("rm-pgp")) {
+				rmMasterKeys = append(rmMasterKeys, k)
+			}
+			for _, k := range naclbox.MasterKeysFromPublicKeysString(c.String("rm-naclbox")) {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
 			for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("rm-gcp-kms")) {
@@ -912,6 +939,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	var pgpKeys []keys.MasterKey
 	var cloudKmsKeys []keys.MasterKey
 	var azkvKeys []keys.MasterKey
+	var naclboxKeys []keys.MasterKey
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
 	if c.String("encryption-context") != "" && kmsEncryptionContext == nil {
 		return nil, common.NewExitError("Invalid KMS encryption context format", codes.ErrorInvalidKMSEncryptionContextFormat)
@@ -940,7 +968,12 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 			pgpKeys = append(pgpKeys, k)
 		}
 	}
-	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("azure-kv") == "" {
+	if c.String("naclbox") != "" {
+		for _, k := range naclbox.MasterKeysFromPublicKeysString(c.String("naclbox")) {
+			naclboxKeys = append(naclboxKeys, k)
+		}
+	}
+	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("azure-kv") == "" && c.String("naclbox") == "" {
 		conf, err := loadConfig(c, file, kmsEncryptionContext)
 		// config file might just not be supplied, without any error
 		if conf == nil {
@@ -957,6 +990,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	group = append(group, cloudKmsKeys...)
 	group = append(group, azkvKeys...)
 	group = append(group, pgpKeys...)
+	group = append(group, naclboxKeys...)
 	return []sops.KeyGroup{group}, nil
 }
 

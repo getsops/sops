@@ -11,6 +11,7 @@ import (
 	"go.mozilla.org/sops/gcpkms"
 	"go.mozilla.org/sops/keys"
 	"go.mozilla.org/sops/kms"
+	"go.mozilla.org/sops/naclbox"
 	"go.mozilla.org/sops/pgp"
 )
 
@@ -44,7 +45,7 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 					Arn:        mk.Arn,
 					Role:       mk.Role,
 					Context:    ctx,
-					AwsProfile: mk.AwsProfile,
+					Awsprofile: mk.AwsProfile,
 				},
 			},
 		}
@@ -55,6 +56,14 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 					VaultUrl: mk.VaultURL,
 					Name:     mk.Name,
 					Version:  mk.Version,
+				},
+			},
+		}
+	case *naclbox.MasterKey:
+		return Key{
+			KeyType: &Key_NaclboxKey{
+				NaclboxKey: &NaclBoxKey{
+					Publickey: mk.PublicKey,
 				},
 			},
 		}
