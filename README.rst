@@ -996,14 +996,14 @@ Below is an example of publishing to Vault (using token auth with a local dev in
 .. code:: bash
 
    $ export VAULT_TOKEN=...
-   $ export VAULT_ADDR='http://127.0.0.1:8200'
+   $ export VAULT_ADDR='https://127.0.0.1:8200'
    $ sops -d vault/test.yaml
    example_string: bar
    example_number: 42
    example_map:
        key: value
    $ sops publish vault/test.yaml
-   uploading /home/user/sops_directory/vault/test.yaml to http://127.0.0.1:8200/v1/secret/data/sops/test.yaml ? (y/n): y
+   uploading /home/user/sops_directory/vault/test.yaml to https://127.0.0.1:8200/v1/secret/data/sops/test.yaml ? (y/n): y
    $ vault kv get secret/sops/test.yaml
    ====== Metadata ======
    Key              Value
