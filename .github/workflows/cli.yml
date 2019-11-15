@@ -1,0 +1,79 @@
+name: SOPS CLI
+on: [push]
+jobs:
+  build:
+    name: Build ${{ matrix.os }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [linux, windows, darwin]
+    steps:
+    - name: Set up Go 1.12
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.12
+      id: go
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v1
+    - uses: actions/cache@v1
+      with:
+        path: ~/go/pkg/mod
+        key: go-${{ hashFiles('**/go.sum') }}
+    - name: Build
+      run: GOOS=${{ matrix.os }} go build -o sops-${{ matrix.os }}-${{ github.sha }} -v go.mozilla.org/sops/cmd/sops
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: sops-${{ matrix.os }}-${{ github.sha }}
+        path: sops-${{ matrix.os }}-${{ github.sha }}
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: [build]
+    env:
+      VAULT_VERSION: '1.1.3'
+      VAULT_TOKEN: 'root'
+      VAULT_ADDR: 'http://127.0.0.1:8200'
+    steps:
+      - name: rust-toolchain
+        uses: actions-rs/toolchain@v1.0.0
+        with:
+          toolchain: stable
+      - name: Check out code
+        uses: actions/checkout@v1
+      - uses: actions/download-artifact@master
+        with:
+          name: sops-linux-${{ github.sha }}
+      - name: Move SOPS binary
+        run: mv sops-linux-${{ github.sha }}/sops-linux-${{ github.sha }} ./functional-tests/sops
+      - name: Make SOPS binary executable
+        run: chmod +x ./functional-tests/sops
+      - name: Download Vault
+        run: curl -O "https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip" && sudo unzip vault_${VAULT_VERSION}_linux_amd64.zip -d /usr/local/bin/
+      - name: Start Vault server
+        run: vault server -dev -dev-root-token-id="$VAULT_TOKEN" &
+      - name: Enable Vault KV
+        run: vault secrets enable -version=1 kv
+      - name: Import test GPG keys
+        run: gpg --import pgp/sops_functional_tests_key.asc
+      - name: Run tests
+        run: cargo test
+        working-directory: ./functional-tests
+      - name: Run ignored tests
+        run: cargo test -- --ignored
+        working-directory: ./functional-tests
+        if: github.event_name == 'push'
+  build-docker:
+    name: Build and push Docker image
+    runs-on: [ubuntu-latest]
+    needs: [test]
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v1
+      - name: Publish Docker
+        uses: elgohr/Publish-Docker-Github-Action@2.4
+        with:
+          name: mozilla/sops
+          username: foo
+          password: bar
+          tag_names: true
