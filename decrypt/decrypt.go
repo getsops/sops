@@ -2,16 +2,16 @@
 Package decrypt is the external API other Go programs can use to decrypt SOPS files. It is the only package in SOPS with
 a stable API.
 */
-package decrypt // import "go.mozilla.org/sops/decrypt"
+package decrypt // import "go.mozilla.org/sops/v3/decrypt"
 
 import (
 	"fmt"
 	"io/ioutil"
 	"time"
 
-	"go.mozilla.org/sops/aes"
-	"go.mozilla.org/sops/cmd/sops/common"
-	. "go.mozilla.org/sops/cmd/sops/formats" // Re-export
+	"go.mozilla.org/sops/v3/aes"
+	"go.mozilla.org/sops/v3/cmd/sops/common"
+	. "go.mozilla.org/sops/v3/cmd/sops/formats" // Re-export
 )
 
 // File is a wrapper around Data that reads a local encrypted

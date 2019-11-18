@@ -1,8 +1,8 @@
 /*
-Package azkv contains an implementation of the go.mozilla.org/sops/keys.MasterKey interface that encrypts and decrypts the
+Package azkv contains an implementation of the go.mozilla.org/sops/v3/keys.MasterKey interface that encrypts and decrypts the
 data key using Azure Key Vault with the Azure Go SDK.
 */
-package azkv //import "go.mozilla.org/sops/azkv"
+package azkv //import "go.mozilla.org/sops/v3/azkv"
 
 import (
 	"context"
@@ -14,7 +14,7 @@ import (
 	"strings"
 	"time"
 
-	"go.mozilla.org/sops/logging"
+	"go.mozilla.org/sops/v3/logging"
 
 	"github.com/Azure/azure-sdk-for-go/services/keyvault/2016-10-01/keyvault"
 	"github.com/Azure/go-autorest/autorest"

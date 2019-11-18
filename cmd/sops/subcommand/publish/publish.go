@@ -7,14 +7,14 @@ import (
 	"os"
 	"path/filepath"
 
-	"go.mozilla.org/sops"
-	"go.mozilla.org/sops/cmd/sops/codes"
-	"go.mozilla.org/sops/cmd/sops/common"
-	"go.mozilla.org/sops/config"
-	"go.mozilla.org/sops/keyservice"
-	"go.mozilla.org/sops/logging"
-	"go.mozilla.org/sops/publish"
-	"go.mozilla.org/sops/version"
+	"go.mozilla.org/sops/v3"
+	"go.mozilla.org/sops/v3/cmd/sops/codes"
+	"go.mozilla.org/sops/v3/cmd/sops/common"
+	"go.mozilla.org/sops/v3/config"
+	"go.mozilla.org/sops/v3/keyservice"
+	"go.mozilla.org/sops/v3/logging"
+	"go.mozilla.org/sops/v3/publish"
+	"go.mozilla.org/sops/v3/version"
 
 	"github.com/sirupsen/logrus"
 )

@@ -2,10 +2,10 @@
 Package sops manages JSON, YAML and BINARY documents to be encrypted or decrypted.
 
 This package should not be used directly. Instead, Sops users should install the
-command line client via `go get -u go.mozilla.org/sops/cmd/sops`, or use the
-decryption helper provided at `go.mozilla.org/sops/decrypt`.
+command line client via `go get -u go.mozilla.org/sops/v3/cmd/sops`, or use the
+decryption helper provided at `go.mozilla.org/sops/v3/decrypt`.
 
-We do not guarantee API stability for any package other than `go.mozilla.org/sops/decrypt`.
+We do not guarantee API stability for any package other than `go.mozilla.org/sops/v3/decrypt`.
 
 A Sops document is a Tree composed of a data branch with arbitrary key/value pairs
 and a metadata branch with encryption and integrity information.
@@ -34,7 +34,7 @@ be recalculated and compared with the MAC stored in the document to verify that 
 fraudulent changes have been applied. The MAC covers keys and values as well as their
 ordering.
 */
-package sops //import "go.mozilla.org/sops"
+package sops //import "go.mozilla.org/sops/v3"
 
 import (
 	"crypto/rand"
@@ -47,11 +47,11 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
-	"go.mozilla.org/sops/audit"
-	"go.mozilla.org/sops/keys"
-	"go.mozilla.org/sops/keyservice"
-	"go.mozilla.org/sops/logging"
-	"go.mozilla.org/sops/shamir"
+	"go.mozilla.org/sops/v3/audit"
+	"go.mozilla.org/sops/v3/keys"
+	"go.mozilla.org/sops/v3/keyservice"
+	"go.mozilla.org/sops/v3/logging"
+	"go.mozilla.org/sops/v3/shamir"
 	"golang.org/x/net/context"
 )
 

@@ -1,4 +1,4 @@
-package gcpkms //import "go.mozilla.org/sops/gcpkms"
+package gcpkms //import "go.mozilla.org/sops/v3/gcpkms"
 
 import (
 	"encoding/base64"
@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"go.mozilla.org/sops/logging"
+	"go.mozilla.org/sops/v3/logging"
 
 	"golang.org/x/net/context"
 	"golang.org/x/oauth2/google"

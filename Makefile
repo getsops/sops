@@ -10,7 +10,7 @@ all: test vet generate install functional-tests
 origin-build: test vet generate install functional-tests-all
 
 install:
-	$(GO) install go.mozilla.org/sops/cmd/sops
+	$(GO) install go.mozilla.org/sops/v3/cmd/sops
 
 tag: all
 	git tag -s $(TAGVER) -a -m "$(TAGMSG)"
@@ -39,13 +39,13 @@ generate: keyservice/keyservice.pb.go
 	protoc --go_out=plugins=grpc:. $<
 
 functional-tests:
-	$(GO) build -o functional-tests/sops go.mozilla.org/sops/cmd/sops
+	$(GO) build -o functional-tests/sops go.mozilla.org/sops/v3/cmd/sops
 	cd functional-tests && cargo test
 
 # Ignored tests are ones that require external services (e.g. AWS KMS)
 # 	TODO: Once `--include-ignored` lands in rust stable, switch to that.
 functional-tests-all:
-	$(GO) build -o functional-tests/sops go.mozilla.org/sops/cmd/sops
+	$(GO) build -o functional-tests/sops go.mozilla.org/sops/v3/cmd/sops
 	cd functional-tests && cargo test && cargo test -- --ignored
 
 deb-pkg: install

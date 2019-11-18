@@ -1,5 +1,5 @@
 language: go
-go: 1.12
+go: 1.13
 go_import_path: go.mozilla.org/sops/
 
 env:
@@ -21,6 +21,7 @@ before_install:
 
 before_script:
   - vault server -dev -dev-root-token-id="$VAULT_TOKEN" &
+  - sleep 5
   - vault secrets enable -version=1 kv
 
 script:
@@ -37,7 +38,7 @@ before_deploy:
   - GOOS=linux CGO_ENABLED=0 GO111MODULE=on go build -mod vendor -o dist/sops-${TRAVIS_TAG}.linux go.mozilla.org/sops/cmd/sops
   - |
       if [ ! -z "$TRAVIS_TAG" ]; then
-        version="$(grep '^const Version' version/version.go |cut -d '"' -f 2)"
+        version="v$(grep '^const Version' version/version.go |cut -d '"' -f 2)"
         if [ "$version" != "$TRAVIS_TAG" ]; then
             echo "Git tag $TRAVIS_TAG does not match version $version, update the source!"
             exit 1

@@ -9,7 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go/service/kms"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"go.mozilla.org/sops/kms/mocks"
+	"go.mozilla.org/sops/v3/kms/mocks"
 )
 
 func TestKMS(t *testing.T) {
