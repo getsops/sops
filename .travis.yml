@@ -33,9 +33,9 @@ before_deploy:
   - mkdir dist
   - make deb-pkg rpm-pkg
   - mv *.deb *.rpm dist/
-  - GOOS=darwin CGO_ENABLED=0 GO111MODULE=on go build -mod vendor -o dist/sops-${TRAVIS_TAG}.darwin go.mozilla.org/sops/cmd/sops
-  - GOOS=windows CGO_ENABLED=0 GO111MODULE=on go build -mod vendor -o dist/sops-${TRAVIS_TAG}.exe go.mozilla.org/sops/cmd/sops
-  - GOOS=linux CGO_ENABLED=0 GO111MODULE=on go build -mod vendor -o dist/sops-${TRAVIS_TAG}.linux go.mozilla.org/sops/cmd/sops
+  - GOOS=darwin CGO_ENABLED=0 GO111MODULE=on go build -mod vendor -o dist/sops-${TRAVIS_TAG}.darwin go.mozilla.org/sops/v3/cmd/sops
+  - GOOS=windows CGO_ENABLED=0 GO111MODULE=on go build -mod vendor -o dist/sops-${TRAVIS_TAG}.exe go.mozilla.org/sops/v3/cmd/sops
+  - GOOS=linux CGO_ENABLED=0 GO111MODULE=on go build -mod vendor -o dist/sops-${TRAVIS_TAG}.linux go.mozilla.org/sops/v3/cmd/sops
   - |
       if [ ! -z "$TRAVIS_TAG" ]; then
         version="v$(grep '^const Version' version/version.go |cut -d '"' -f 2)"
