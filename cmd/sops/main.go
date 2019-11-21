@@ -106,16 +106,16 @@ func main() {
 	app.EnableBashCompletion = true
 	app.Commands = []cli.Command{
 		{
-			Name:	  "exec-env",
-			Usage:	  "execute a command with decrypted values inserted into the environment",
+			Name:      "exec-env",
+			Usage:     "execute a command with decrypted values inserted into the environment",
 			ArgsUsage: "[file to decrypt] [command to run]",
 			Flags: append([]cli.Flag{
 				cli.BoolFlag{
-					Name: "background",
+					Name:  "background",
 					Usage: "background the process and don't wait for it to complete",
 				},
 				cli.StringFlag{
-					Name: "user",
+					Name:  "user",
 					Usage: "the user to run the command as",
 				},
 			}, keyserviceFlags...),
@@ -129,13 +129,12 @@ func main() {
 
 				inputStore := inputStore(c, fileName)
 
-
 				svcs := keyservices(c)
 				opts := decryptOpts{
 					OutputStore: &dotenv.Store{},
 					InputStore:  inputStore,
 					InputPath:   fileName,
-					Cipher:	  aes.NewCipher(),
+					Cipher:      aes.NewCipher(),
 					KeyServices: svcs,
 					IgnoreMAC:   c.Bool("ignore-mac"),
 				}
@@ -146,30 +145,30 @@ func main() {
 				}
 
 				exec.ExecWithEnv(exec.ExecOpts{
-					Command: command,
-					Plaintext: output,
+					Command:    command,
+					Plaintext:  output,
 					Background: c.Bool("background"),
-					User: c.String("user"),
+					User:       c.String("user"),
 				})
 
 				return nil
 			},
 		},
 		{
-			Name:	  "exec-file",
-			Usage:	  "execute a command with the decrypted contents as a temporary file",
+			Name:      "exec-file",
+			Usage:     "execute a command with the decrypted contents as a temporary file",
 			ArgsUsage: "[file to decrypt] [command to run]",
 			Flags: append([]cli.Flag{
 				cli.BoolFlag{
-					Name: "background",
+					Name:  "background",
 					Usage: "background the process and don't wait for it to complete",
 				},
 				cli.BoolFlag{
-					Name: "no-fifo",
+					Name:  "no-fifo",
 					Usage: "use a regular file instead of a fifo to temporarily hold the decrypted contents",
 				},
 				cli.StringFlag{
-					Name: "user",
+					Name:  "user",
 					Usage: "the user to run the command as",
 				},
 			}, keyserviceFlags...),
@@ -189,7 +188,7 @@ func main() {
 					OutputStore: outputStore,
 					InputStore:  inputStore,
 					InputPath:   fileName,
-					Cipher:	  aes.NewCipher(),
+					Cipher:      aes.NewCipher(),
 					KeyServices: svcs,
 					IgnoreMAC:   c.Bool("ignore-mac"),
 				}
@@ -200,11 +199,11 @@ func main() {
 				}
 
 				exec.ExecWithFile(exec.ExecOpts{
-					Command: command,
-					Plaintext: output,
+					Command:    command,
+					Plaintext:  output,
 					Background: c.Bool("background"),
-					Fifo: !c.Bool("no-fifo"),
-					User: c.String("user"),
+					Fifo:       !c.Bool("no-fifo"),
+					User:       c.String("user"),
 				})
 
 				return nil
