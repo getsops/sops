@@ -19,11 +19,11 @@ func init() {
 }
 
 type ExecOpts struct {
-	Command string
-	Plaintext []byte
+	Command    string
+	Plaintext  []byte
 	Background bool
-	Fifo bool
-	User string
+	Fifo       bool
+	User       string
 }
 
 func GetFile(dir string) *os.File {
@@ -70,7 +70,7 @@ func ExecWithFile(opts ExecOpts) {
 	if opts.Background {
 		cmd.Start()
 	} else {
-		cmd.Stdin  = os.Stdin
+		cmd.Stdin = os.Stdin
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		cmd.Run()
@@ -100,7 +100,7 @@ func ExecWithEnv(opts ExecOpts) {
 	if opts.Background {
 		cmd.Start()
 	} else {
-		cmd.Stdin  = os.Stdin
+		cmd.Stdin = os.Stdin
 		cmd.Stdout = os.Stdout
 		cmd.Stderr = os.Stderr
 		cmd.Run()
