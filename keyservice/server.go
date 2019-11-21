@@ -3,10 +3,10 @@ package keyservice
 import (
 	"fmt"
 
-	"go.mozilla.org/sops/azkv"
-	"go.mozilla.org/sops/gcpkms"
-	"go.mozilla.org/sops/kms"
-	"go.mozilla.org/sops/pgp"
+	"go.mozilla.org/sops/v3/azkv"
+	"go.mozilla.org/sops/v3/gcpkms"
+	"go.mozilla.org/sops/v3/kms"
+	"go.mozilla.org/sops/v3/pgp"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

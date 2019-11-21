@@ -1,7 +1,7 @@
 /*
 Package aes defines a Cipher that uses 256-bit AES-GCM authenticated encryption to encrypt values the SOPS tree.
 */
-package aes //import "go.mozilla.org/sops/aes"
+package aes //import "go.mozilla.org/sops/v3/aes"
 
 import (
 	cryptoaes "crypto/aes"
@@ -14,8 +14,8 @@ import (
 	"strings"
 
 	"github.com/sirupsen/logrus"
-	"go.mozilla.org/sops"
-	"go.mozilla.org/sops/logging"
+	"go.mozilla.org/sops/v3"
+	"go.mozilla.org/sops/v3/logging"
 )
 
 var log *logrus.Logger

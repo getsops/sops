@@ -1,8 +1,8 @@
 /*
-Package pgp contains an implementation of the go.mozilla.org/sops.MasterKey interface that encrypts and decrypts the
+Package pgp contains an implementation of the go.mozilla.org/sops/v3.MasterKey interface that encrypts and decrypts the
 data key by first trying with the golang.org/x/crypto/openpgp package and if that fails, by calling the "gpg" binary.
 */
-package pgp //import "go.mozilla.org/sops/pgp"
+package pgp //import "go.mozilla.org/sops/v3/pgp"
 
 import (
 	"bytes"
@@ -21,7 +21,7 @@ import (
 	"github.com/howeyc/gopass"
 	"github.com/sirupsen/logrus"
 	gpgagent "go.mozilla.org/gopgagent"
-	"go.mozilla.org/sops/logging"
+	"go.mozilla.org/sops/v3/logging"
 	"golang.org/x/crypto/openpgp"
 	"golang.org/x/crypto/openpgp/armor"
 )

@@ -1,6 +1,25 @@
 Changelog
 =========
 
+3.5.0
+-----
+Features:
+
+    * `sops exec-env` and `sops exec-file`, two new commands for utilizing sops secrets within a temporary file or env vars
+
+Bug fixes:
+
+    * Sanitize AWS STS session name, as sops creates it based off of the machines hostname
+    * Fix for `decrypt.Data` to support `.ini` files
+    * Various package fixes related to switching to Go Modules
+    * Fixes for Vault-related tests running locally and in CI.
+
+Project changes:
+
+    * Change to proper use of go modules, changing to primary module name to `go.mozilla.org/sops/v3`
+    * Change tags to requiring a `v` prefix.
+    * Add documentation for `sops updatekeys` command
+
 3.4.0
 -----
 Features:
@@ -103,7 +122,7 @@ Project infrastructure changes:
 * Refactor Store interface to reflect operations SOPS performs
 
 3.0.3
-----
+-----
 
 * --set now works with nested data structures and not just simple
   values

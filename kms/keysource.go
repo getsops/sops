@@ -1,8 +1,8 @@
 /*
-Package kms contains an implementation of the go.mozilla.org/sops.MasterKey interface that encrypts and decrypts the
+Package kms contains an implementation of the go.mozilla.org/sops/v3.MasterKey interface that encrypts and decrypts the
 data key using AWS KMS with the AWS Go SDK.
 */
-package kms //import "go.mozilla.org/sops/kms"
+package kms //import "go.mozilla.org/sops/v3/kms"
 
 import (
 	"encoding/base64"
@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"go.mozilla.org/sops/logging"
+	"go.mozilla.org/sops/v3/logging"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -165,8 +165,13 @@ func (key MasterKey) createStsSession(config aws.Config, sess *session.Session) 
 	if err != nil {
 		return nil, err
 	}
+	stsRoleSessionNameRe, err := regexp.Compile("[^a-zA-Z0-9=,.@-]+")
+	if err != nil {
+		return nil, fmt.Errorf("Failed to compile STS role session name regex: %v", err)
+	}
+	sanitizedHostname := stsRoleSessionNameRe.ReplaceAllString(hostname, "")
 	stsService := sts.New(sess)
-	name := "sops@" + hostname
+	name := "sops@" + sanitizedHostname
 	out, err := stsService.AssumeRole(&sts.AssumeRoleInput{
 		RoleArn: &key.Role, RoleSessionName: &name})
 	if err != nil {

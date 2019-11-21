@@ -3,7 +3,7 @@ package decrypt
 import (
 	"encoding/json"
 
-	"go.mozilla.org/sops/logging"
+	"go.mozilla.org/sops/v3/logging"
 
 	"github.com/sirupsen/logrus"
 )

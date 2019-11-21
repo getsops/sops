@@ -28,12 +28,12 @@ For the adventurous, unstable features are available in the `develop` branch, wh
 
 .. code:: bash
 
-	$ go get -u go.mozilla.org/sops/cmd/sops
+	$ go get -u go.mozilla.org/sops/v3/cmd/sops
         $ cd $GOPATH/src/go.mozilla.org/sops/
         $ git checkout develop
         $ make install
 
-(requires Go >= 1.12)
+(requires Go >= 1.13)
 
 If you don't have Go installed, set it up with:
 
@@ -66,7 +66,7 @@ For a quick presentation of Sops, check out this Youtube tutorial:
 
 .. image:: https://img.youtube.com/vi/V2PRhxphH2w/0.jpg
    :target: https://www.youtube.com/watch?v=V2PRhxphH2w
-   
+
 If you're using AWS KMS, create one or multiple master keys in the IAM console
 and export them, comma separated, in the **SOPS_KMS_ARN** env variable. It is
 recommended to use at least two master keys in different regions.
@@ -185,7 +185,7 @@ Encrypting using GCP KMS
 ~~~~~~~~~~~~~~~~~~~~~~~~
 GCP KMS uses `Application Default Credentials
 <https://developers.google.com/identity/protocols/application-default-credentials>`_.
-If you already logged in using 
+If you already logged in using
 
 .. code:: bash
 
@@ -296,18 +296,57 @@ Adding and removing keys
 When creating new files, ``sops`` uses the PGP, KMS and GCP KMS defined in the
 command line arguments ``--kms``, ``--pgp``, ``--gcp-kms`` or ``--azure-kv``, or from
 the environment variables ``SOPS_KMS_ARN``, ``SOPS_PGP_FP``, ``SOPS_GCP_KMS_IDS``,
-``SOPS_AZURE_KEYVAULT_URL``. That information is stored in the file under the
+``SOPS_AZURE_KEYVAULT_URLS``. That information is stored in the file under the
 ``sops`` section, such that decrypting files does not require providing those
 parameters again.
 
 Master PGP and KMS keys can be added and removed from a ``sops`` file in one of
-two ways: by using command line flag, or by editing the file directly.
+three ways::
+
+1. By using a .sops.yaml file and the ``updatekeys`` command.
+
+2. By using command line flags.
+
+3. By editing the file directly.
+
+The sops team recommends the ``updatekeys`` approach.
+
+
+``updatekeys`` command
+**********************
+
+The ``updatekeys`` command uses the `.sops.yaml <#29using-sopsyaml-conf-to-select-kmspgp-for-new-files>`_
+configuration file to update (add or remove) the corresponding secrets in the
+encrypted file. Note that the example below uses the
+`Block Scalar yaml construct <https://yaml-multiline.info/>`_ to build a space
+separated list.
+
+.. code:: yaml
+
+    creation_rules:
+        - pgp: >-
+            85D77543B3D624B63CEA9E6DBC17301B491B3F21,
+            FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4
+
+.. code:: bash
+
+	$ sops updatekeys test.enc.yaml
+
+Sops will prompt you with the changes to be made. This interactivity can be
+disabled by supplying the ``-y`` flag.
+
+Command Line
+************
 
 Command line flag ``--add-kms``, ``--add-pgp``, ``--add-gcp-kms``, ``--add-azure-kv``,
 ``--rm-kms``, ``--rm-pgp``, ``--rm-gcp-kms`` and ``--rm-azure-kv`` can be used to add
 and remove keys from a file.
 These flags use the comma separated syntax as the ``--kms``, ``--pgp``, ``--gcp-kms``
 and ``--azure-kv`` arguments when creating new files.
+
+Note that ``-r`` or ``--rotate`` is mandatory in this mode. Not specifying
+rotate will ignore the ``--add-*`` options. Use ``updatekeys`` if you want to
+add a key without rotating the data key.
 
 .. code:: bash
 
@@ -316,6 +355,10 @@ and ``--azure-kv`` arguments when creating new files.
 
 	# remove a pgp key from the file and rotate the data key
 	$ sops -r -i --rm-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 example.yaml
+
+
+Direct Editing
+**************
 
 Alternatively, invoking ``sops`` with the flag **-s** will display the master keys
 while editing. This method can be used to add or remove kms or pgp keys under the
@@ -423,7 +466,7 @@ appending it to the ARN of the master key, separated by a **+** sign::
 AWS KMS Encryption Context
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-SOPS has the ability to use `AWS KMS key policy and encryption context 
+SOPS has the ability to use `AWS KMS key policy and encryption context
 <http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html>`_
 to refine the access control of a given KMS master key.
 
@@ -803,6 +846,105 @@ By default ``sops`` just dumps all the output to the standard output. We can use
 ``--output`` flag followed by a filename to save the output to the file specified.
 Beware using both ``--in-place`` and ``--output`` flags will result in an error.
 
+Passing Secrets to Other Processes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In addition to writing secrets to standard output and to files on disk, ``sops``
+has two commands for passing decrypted secrets to a new process: ``exec-env``
+and ``exec-file``. These commands will place all output into the environment of
+a child process and into a temporary file, respectively. For example, if a
+program looks for credentials in its environment, ``exec-env`` can be used to
+ensure that the decrypted contents are available only to this process and never
+written to disk.
+
+.. code:: bash
+
+   # print secrets to stdout to confirm values
+   $ sops -d out.json
+   {
+           "database_password": "jf48t9wfw094gf4nhdf023r",
+           "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
+           "AWS_SECRET_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+   }
+   
+   # decrypt out.json and run a command
+   # the command prints the environment variable and runs a script that uses it
+   $ sops exec-env out.json 'echo secret: $database_password; ./database-import'
+   secret: jf48t9wfw094gf4nhdf023r
+   
+   # launch a shell with the secrets available in its environment
+   $ sops exec-env out.json 'sh'
+   sh-3.2# echo $database_password
+   jf48t9wfw094gf4nhdf023r
+   
+   # the secret is not accessible anywhere else
+   sh-3.2$ exit
+   $ echo your password: $database_password
+   your password: 
+
+
+If the command you want to run only operates on files, you can use ``exec-file``
+instead. By default ``sops`` will use a FIFO to pass the contents of the
+decrypted file to the new program. Using a FIFO, secrets are only passed in
+memory which has two benefits: the plaintext secrets never touch the disk, and
+the child process can only read the secrets once. In contexts where this won't
+work, eg platforms like Windows where FIFOs unavailable or secret files that need
+to be available to the child process longer term, the ``--no-fifo`` flag can be
+used to instruct ``sops`` to use a traditional temporary file that will get cleaned
+up once the process is finished executing. ``exec-file`` behaves similar to
+``find(1)`` in that ``{}`` is used as a placeholder in the command which will be
+substituted with the temporary file path (whether a FIFO or an actual file).
+
+.. code:: bash
+
+   # operating on the same file as before, but as a file this time
+   $ sops exec-file out.json 'echo your temporary file: {}; cat {}'
+   your temporary file: /tmp/.sops894650499/tmp-file
+   {
+           "database_password": "jf48t9wfw094gf4nhdf023r",
+           "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
+           "AWS_SECRET_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+   }
+   
+   # launch a shell with a variable TMPFILE pointing to the temporary file
+   $ sops exec-file --no-fifo out.json 'TMPFILE={} sh'
+   sh-3.2$ echo $TMPFILE
+   /tmp/.sops506055069/tmp-file291138648
+   sh-3.2$ cat $TMPFILE
+   {
+           "database_password": "jf48t9wfw094gf4nhdf023r",
+           "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
+           "AWS_SECRET_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+   }
+   sh-3.2$ ./program --config $TMPFILE
+   sh-3.2$ exit
+
+   # try to open the temporary file from earlier
+   $ cat /tmp/.sops506055069/tmp-file291138648
+   cat: /tmp/.sops506055069/tmp-file291138648: No such file or directory
+
+Additionally, on unix-like platforms, both ``exec-env`` and ``exec-file``
+support dropping privileges before executing the new program via the
+``--user <username>`` flag. This is particularly useful in cases where the
+encrypted file is only readable by root, but the target program does not
+need root privileges to function. This flag should be used where possible
+for added security.
+
+.. code:: bash
+
+   # the encrypted file can't be read by the current user
+   $ cat out.json
+   cat: out.json: Permission denied
+   
+   # execute sops as root, decrypt secrets, then drop privileges
+   $ sudo sops exec-env --user nobody out.json 'sh'
+   sh-3.2$ echo $database_password
+   jf48t9wfw094gf4nhdf023r
+
+   # dropped privileges, still can't load the original file
+   sh-3.2$ id
+   uid=4294967294(nobody) gid=4294967294(nobody) groups=4294967294(nobody)
+   sh-3.2$ cat out.json
+   cat: out.json: Permission denied
 
 Using the publish command
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -907,6 +1049,12 @@ sops with the ``--input-type`` flag upon decryption. For example:
 	$ sops -e myfile.json > myfile.json.enc
 
 	$ sops -d --input-type json myfile.json.enc
+
+When operating on stdin, use the ``--input-type`` and ``--output-type`` flags as follows:
+
+.. code:: bash
+
+    $ cat myfile.json | sops --input-type json --output-type json -d /dev/stdin
 
 YAML anchors
 ~~~~~~~~~~~~
@@ -1122,7 +1270,7 @@ numbering them.
 
 .. code:: bash
 
-	$ sops --set '["an_array"][1] "secretuser2"' ~/git/svc/sops/example.yaml 
+	$ sops --set '["an_array"][1] "secretuser2"' ~/git/svc/sops/example.yaml
 
 The value must be formatted as json.
 
@@ -1145,8 +1293,8 @@ You can import sops as a module and use it in your python program.
 	tree = sops.walk_and_decrypt(tree, sops_key)
 	sops.write_file(tree, path=path, filetype=pathtype)
 
-Note: this uses the previous implemenation of `sops` written in python, 
-and so doesn't support newer features such as GCP-KMS. 
+Note: this uses the previous implemenation of `sops` written in python,
+and so doesn't support newer features such as GCP-KMS.
 To use the current version, call out to `sops` using `subprocess.check_output`
 
 Showing diffs in cleartext in git
@@ -1159,7 +1307,7 @@ This is very handy for reviewing changes or visualizing history.
 To configure sops to decrypt files during diff, create a ``.gitattributes`` file
 at the root of your repository that contains a filter and a command.
 
-.. code:: 
+.. code::
 
 	*.yaml diff=sopsdiffer
 
@@ -1204,7 +1352,7 @@ keys that match the supplied regular expression.  For example, this command:
 
 .. code:: bash
 
-	$ sops --encrypt --encrypted-regex '&(data|stringData)' k8s-secrets.yaml
+	$ sops --encrypt --encrypted-regex '^(data|stringData)$' k8s-secrets.yaml
 
 will encrypt the values under the ``data`` and ``stringData`` keys in a YAML file
 containing kubernetes secrets.  It will not encrypt other values that help you to
@@ -1212,7 +1360,7 @@ navigate the file, like ``metadata`` which contains the secrets' names.
 
 You can also specify these options in the ``.sops.yaml`` config file.
 
-Note: these three options ``--unencrypted-suffix``, ``--encrypted-suffix``, and ``--encrypted-regex`` are 
+Note: these three options ``--unencrypted-suffix``, ``--encrypted-suffix``, and ``--encrypted-regex`` are
 mutually exclusive and cannot all be used in the same file.
 
 Encryption Protocol

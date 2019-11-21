@@ -3,12 +3,12 @@ package main
 import (
 	"fmt"
 
-	"go.mozilla.org/sops"
-	"go.mozilla.org/sops/audit"
-	"go.mozilla.org/sops/cmd/sops/codes"
-	"go.mozilla.org/sops/cmd/sops/common"
-	"go.mozilla.org/sops/keys"
-	"go.mozilla.org/sops/keyservice"
+	"go.mozilla.org/sops/v3"
+	"go.mozilla.org/sops/v3/audit"
+	"go.mozilla.org/sops/v3/cmd/sops/codes"
+	"go.mozilla.org/sops/v3/cmd/sops/common"
+	"go.mozilla.org/sops/v3/keys"
+	"go.mozilla.org/sops/v3/keyservice"
 )
 
 type rotateOpts struct {
