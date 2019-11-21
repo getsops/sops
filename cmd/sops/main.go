@@ -809,7 +809,6 @@ func main() {
 		}
 
 		outputFile := os.Stdout
-
 		if c.String("output") != "" {
 			file, err := os.Create(c.String("output"))
 			if err != nil {
