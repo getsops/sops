@@ -1278,6 +1278,25 @@ The value must be formatted as json.
 
 	$ sops --set '["an_array"][1] {"uid1":null,"uid2":1000,"uid3":["bob"]}' ~/git/svc/sops/example.yaml
 
+For multiline value, you have separate each line with a literal \n.
+
+.. code:: bash
+
+	$ sops --set '["app2"]["key"] "my\nmultiline\nvalue\n"' ~/git/svc/sops/example.yaml
+	
+Using a file as input for ``--set``.
+
+.. code:: bash
+
+	$ sops --set '["app2"]["key"] "'"$(cat file)"'"' ~/git/svc/sops/example.yaml
+	
+For file containing multiline as values, you must first convert newlines to ``\n``.
+
+.. code:: bash
+
+	$ sed ':a;N;$!ba;s/\n/\\n/g' inputfile > file
+	$ sops --set '["app2"]["key"] "'"$(cat file)"'"' ~/git/svc/sops/example.yaml
+
 Using sops as a library in a python script
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
