@@ -1278,7 +1278,7 @@ The value must be formatted as json.
 
 	$ sops --set '["an_array"][1] {"uid1":null,"uid2":1000,"uid3":["bob"]}' ~/git/svc/sops/example.yaml
 
-For multiline value, you have separate each line with a literal \n.
+For multiline value, separate each line with a literal ``\n``.
 
 .. code:: bash
 
