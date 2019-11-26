@@ -1290,7 +1290,7 @@ Using a file as input for ``--set``.
 
 	$ sops --set '["app2"]["key"] "'"$(cat file)"'"' ~/git/svc/sops/example.yaml
 	
-For file containing multiline as values, you must first convert newlines to ``\n``.
+Using a file containing multiline value, convert newlines to ``\n`` first.
 
 .. code:: bash
 
