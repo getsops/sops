@@ -2,7 +2,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-PROJECT		:= go.mozilla.org/sops
+PROJECT		:= go.mozilla.org/sops/v3
 GO 		:= GO15VENDOREXPERIMENT=1 GO111MODULE=on GOPROXY=https://proxy.golang.org go
 GOLINT 		:= golint
 
@@ -57,7 +57,7 @@ deb-pkg: install
 		-m "Julien Vehent <jvehent+sops@mozilla.com>" \
 		--url https://go.mozilla.org/sops \
 		--architecture x86_64 \
-		-v "$$(git describe --abbrev=0 --tags)" \
+		-v "$$(grep '^const Version' version/version.go |cut -d \" -f 2)" \
 		-s dir -t deb .
 
 rpm-pkg: install
@@ -69,7 +69,7 @@ rpm-pkg: install
 		-m "Julien Vehent <jvehent+sops@mozilla.com>" \
 		--url https://go.mozilla.org/sops \
 		--architecture x86_64 \
-		-v "$$(git describe --abbrev=0 --tags)" \
+		-v "$$(grep '^const Version' version/version.go |cut -d \" -f 2)" \
 		-s dir -t rpm .
 
 dmg-pkg: install
@@ -84,7 +84,7 @@ else
 		-m "Julien Vehent <jvehent+sops@mozilla.com>" \
 		--url https://go.mozilla.org/sops \
 		--architecture x86_64 \
-		-v "$$(git describe --abbrev=0 --tags)" \
+		-v "$$(grep '^const Version' version/version.go |cut -d \" -f 2)" \
 		-s dir -t osxpkg \
 		--osxpkg-identifier-prefix org.mozilla.sops \
 		-p tmppkg/sops-$$(git describe --abbrev=0 --tags).pkg .
