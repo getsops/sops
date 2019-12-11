@@ -26,8 +26,9 @@ require (
 	github.com/stretchr/testify v1.3.0
 	go.mozilla.org/gopgagent v0.0.0-20170926210634-4d7ea76ff71a
 	golang.org/x/crypto v0.0.0-20190701094942-4def268fd1a4
-	golang.org/x/net v0.0.0-20190724013045-ca1201d0de80
+	golang.org/x/net v0.0.0-20191027093000-83d349e8ac1a
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
+	golang.org/x/sys v0.0.0-20191026070338-33540a1f6037 // indirect
 	google.golang.org/api v0.7.0
 	google.golang.org/grpc v1.22.1
 	gopkg.in/ini.v1 v1.44.0
