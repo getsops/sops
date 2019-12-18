@@ -278,7 +278,11 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	var branch sops.TreeBranch
 	var isComments bool
 	for _, line := range bytes.Split(in, []byte("\n")) {
-		if len(line) == 0 {
+		if len(line) < 2 {
+			branch = append(branch, sops.TreeItem{
+				Key:   string(line),
+				Value: nil,
+			})
 			continue
 		}
 
