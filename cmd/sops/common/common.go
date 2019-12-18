@@ -18,6 +18,7 @@ import (
 	"go.mozilla.org/sops/v3/stores/dotenv"
 	"go.mozilla.org/sops/v3/stores/ini"
 	"go.mozilla.org/sops/v3/stores/json"
+	"go.mozilla.org/sops/v3/stores/php"
 	"go.mozilla.org/sops/v3/stores/yaml"
 	"go.mozilla.org/sops/v3/version"
 	"golang.org/x/crypto/ssh/terminal"
@@ -54,6 +55,10 @@ func newJsonStore() Store {
 	return &json.Store{}
 }
 
+func newPhpStore() Store {
+	return &php.Store{}
+}
+
 func newYamlStore() Store {
 	return &yaml.Store{}
 }
@@ -64,6 +69,7 @@ var storeConstructors = map[Format]storeConstructor{
 	Ini:    newIniStore,
 	Json:   newJsonStore,
 	Yaml:   newYamlStore,
+	Php:    newPhpStore,
 }
 
 // DecryptTreeOpts are the options needed to decrypt a tree

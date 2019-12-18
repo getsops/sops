@@ -11,6 +11,7 @@ const (
 	Ini
 	Json
 	Yaml
+	Php
 )
 
 var stringToFormat = map[string]Format{
@@ -19,6 +20,7 @@ var stringToFormat = map[string]Format{
 	"ini":    Ini,
 	"json":   Json,
 	"yaml":   Yaml,
+	"php":	  Php,
 }
 
 // FormatFromString returns a Format from a string.
@@ -51,6 +53,11 @@ func IsIniFile(path string) bool {
 	return strings.HasSuffix(path, ".ini")
 }
 
+// IsPhpFile returns true if a given file path corresponds to a php file
+func IsPhpFile(path string) bool {
+        return strings.HasSuffix(path, ".php")
+}
+
 // FormatForPath returns the correct format given the path to a file
 func FormatForPath(path string) Format {
 	format := Binary // default
@@ -62,7 +69,10 @@ func FormatForPath(path string) Format {
 		format = Dotenv
 	} else if IsIniFile(path) {
 		format = Ini
-	}
+	} else if IsPhpFile(path) {
+                format = Php
+        }
+
 	return format
 }
 
