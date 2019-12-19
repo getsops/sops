@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
+	"strings"
 
 	"go.mozilla.org/sops/v3"
 	"go.mozilla.org/sops/v3/stores"
@@ -188,19 +190,17 @@ func (store Store) encodeTree(tree sops.TreeBranch) ([]byte, error) {
 		if err != nil {
 			return nil, fmt.Errorf("Error encoding value %s: %s", v, err)
 		}
-		k, err := json.Marshal(item.Key.(string))
-		if err != nil {
-			return nil, fmt.Errorf("Error encoding key %s: %s", k, err)
-		}
+		k := []byte(item.Key.(string))
+
 		if string(v) == "null" || v == nil || len(v) == 0 {
-			out += string(k[1:len(k)-1]) + "\n"
-		} else if string(k) == "\"syntax\"" {
-			out += string(v) + "\n"
+			out += string(k)
+		} else if string(k) == "" {
+			out += string(v)
 		} else {
-			out += string(k[1:len(k)-1]) + `=` + string(v) + "\n"
+			out += string(k) + `=` + string(v)
 		}
 		if i != len(tree)-1 {
-			//out += ","
+			out += "\n"
 		}
 	}
 	return []byte(out), nil
@@ -231,42 +231,47 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	// Because we don't know what fields the input file will have, we have to
 	// load the file in two steps.
 	// First, we load the file's metadata, the structure of which is known.
-	metadataHolder := stores.SopsFile{}
-	err := json.Unmarshal(in, &metadataHolder)
-	if err != nil {
-		if err, ok := err.(*json.UnmarshalTypeError); ok {
-			if err.Value == "number" && err.Struct == "Metadata" && err.Field == "version" {
-				return sops.Tree{},
-					fmt.Errorf("SOPS versions higher than 2.0.10 can not automatically decrypt JSON files " +
-						"created with SOPS 1.x. In order to be able to decrypt this file, you can either edit it " +
-						"manually and make sure the JSON value under `sops -> version` is a string and not a " +
-						"number, or you can rotate the file's key with any version of SOPS between 2.0 and 2.0.10 " +
-						"using `sops -r your_file.json`")
+	var resultBranch sops.TreeBranch
+	var metadata sops.Metadata
+	branches, err := store.LoadPlainFile(in)
+
+	for _, branch := range branches {
+		for _, item := range branch {
+			if item.Key == "sops" {
+				v := []byte(item.Value.(string))
+
+				m := make(map[string]interface{})
+				err = json.Unmarshal(v, &m)
+				if err != nil {
+					log.Fatal("Tampered sops information", err)
+				}
+				for k, v := range m {
+					if s, ok := v.(string); ok {
+						m[k] = strings.Replace(s, "\\n", "\n", -1)
+					}
+				}
+				m = stores.Unflatten(m)
+				var md stores.Metadata
+				inrec, err := json.Marshal(m)
+				if err != nil {
+					log.Fatal("Tampered sops information", err)
+				}
+				err = json.Unmarshal(inrec, &md)
+				if err != nil {
+					log.Fatal("Tampered sops information", err)
+				}
+				metadata, err = md.ToInternal()
+				if err != nil {
+					log.Fatal("Tampered sops information", err)
+				}
+			} else {
+				resultBranch = append(resultBranch, item)
 			}
-		}
-		return sops.Tree{}, fmt.Errorf("Error unmarshalling input json: %s", err)
-	}
-	if metadataHolder.Metadata == nil {
-		return sops.Tree{}, sops.MetadataNotFound
-	}
-	metadata, err := metadataHolder.Metadata.ToInternal()
-	if err != nil {
-		return sops.Tree{}, err
-	}
-	// After that, we load the whole file into a map.
-	branch, err := store.treeBranchFromJSON(in)
-	if err != nil {
-		return sops.Tree{}, fmt.Errorf("Could not unmarshal input data: %s", err)
-	}
-	// Discard metadata, as we already loaded it.
-	for i, item := range branch {
-		if item.Key == "sops" {
-			branch = append(branch[:i], branch[i+1:]...)
 		}
 	}
 	return sops.Tree{
 		Branches: sops.TreeBranches{
-			branch,
+			resultBranch,
 		},
 		Metadata: metadata,
 	}, nil
@@ -276,14 +281,27 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	var branches sops.TreeBranches
 	var branch sops.TreeBranch
-	var isComments bool
-	for _, line := range bytes.Split(in, []byte("\n")) {
+	var isComments, isMetadata bool
+	var metadata []byte
+	lines := bytes.Split(in, []byte("\n"))
+	for i, line := range lines {
 		if len(line) < 2 {
 			branch = append(branch, sops.TreeItem{
 				Key:   string(line),
 				Value: nil,
 			})
 			continue
+		}
+
+		if isMetadata || (len(line) > 6 && string(line[:6]) == "sops={") {
+			metadata = append(metadata, line[5:]...)
+			if i == len(lines)-1 {
+				branch = append(branch, sops.TreeItem{
+					Key:   "sops",
+					Value: string(metadata),
+				})
+			}
+			isMetadata = true
 		}
 
 		if isComments || string(line[:2]) == "/*" {
@@ -310,12 +328,15 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 				})
 			} else {
 				pos := bytes.Index(line, []byte("="))
-				key := "syntax"
-				if pos != -1 {
-					key = string(line[:pos])
+				if pos == -1 {
+					branch = append(branch, sops.TreeItem{
+						Key:   string(line[pos+1:]),
+						Value: nil,
+					})
+					continue
 				}
 				branch = append(branch, sops.TreeItem{
-					Key:   key,
+					Key:   string(line[:pos]),
 					Value: string(line[pos+1:]),
 				})
 			}

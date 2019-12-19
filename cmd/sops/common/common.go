@@ -250,7 +250,6 @@ func LoadEncryptedFileWithBugFixes(opts GenericDecryptOpts) (*sops.Tree, error) 
 			return nil, err
 		}
 	}
-
 	return tree, nil
 }
 
