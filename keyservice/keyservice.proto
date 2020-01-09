@@ -19,7 +19,7 @@ message KmsKey {
 	string arn = 1;
 	string role = 2;
 	map<string, string> context = 3;
-	string awsprofile = 4;
+	string aws_profile = 4;
 }
 
 message GcpKmsKey {

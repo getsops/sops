@@ -55,14 +55,14 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	// When used in Sops, we don't care much about the sender keypair, but it is
 	// required for the protocol to work, so we issue an ephemeral keypair instead
 	// and store its pubkey alongside the encrypted data key, so it can later
-	// be decrypted.
+	// be decrypted (the ephemeral private key is thrown away).
 	ephemeralPubKey, ephemeralPrivKey, err := box.GenerateKey(rand.Reader)
 	if err != nil {
 		return err
 	}
 	key.EphemeralPubKey = base64.StdEncoding.EncodeToString(ephemeralPubKey[:])
 
-	// We must use a different nonce for each message you encrypt with the
+	// We must use a different nonce for each message encrypted with the
 	// same key. Since the nonce here is 192 bits long, a random value
 	// provides a sufficiently small probability of repeats.
 	var nonce [24]byte
@@ -72,16 +72,16 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	}
 	key.Nonce = base64.StdEncoding.EncodeToString(nonce[:])
 
-	var pubKey *[32]byte
 	p, err := base64.StdEncoding.DecodeString(key.PublicKey)
 	if err != nil {
 		return err
 	}
-	pubKey = new([32]byte)
+	pubKey := new([32]byte)
 	copy(pubKey[:], p)
 	encrypted := box.Seal(nonce[:], dataKey, &nonce, pubKey, ephemeralPrivKey)
 	key.EncryptedKey = base64.StdEncoding.EncodeToString(encrypted)
 	log.WithField("PublicKey", key.PublicKey).Info("Encryption succeeded")
+	fmt.Printf("%+v\n", key)
 	return nil
 }
 
@@ -107,6 +107,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		log.WithField("PublicKey", key.PublicKey).Errorf("no private key found at %s", path)
 		return nil, fmt.Errorf("no private key found at %s", path)
 	}
+	log.WithField("Path", path).Info("reading private key from file")
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
 		log.WithField("PublicKey", key.PublicKey).Errorf("failed to read key file from %s: %v", path, err)
@@ -123,7 +124,8 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		log.WithField("PublicKey", key.PublicKey).Errorf("failed to decode base64 private key from %s: %v", path, err)
 		return nil, fmt.Errorf("failed to decode base64 private key from %s: %v", path, err)
 	}
-	copy(priv[:32], key.priv[:])
+	key.priv = new([32]byte)
+	copy(key.priv[:], priv)
 
 	// Get the nonce value stored in the master key metadata. This was set
 	// at encryption and must be reused to decrypt the data key.

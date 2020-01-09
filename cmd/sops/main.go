@@ -22,6 +22,7 @@ import (
 	"go.mozilla.org/sops/cmd/sops/subcommand/exec"
 	"go.mozilla.org/sops/cmd/sops/subcommand/groups"
 	keyservicecmd "go.mozilla.org/sops/cmd/sops/subcommand/keyservice"
+	"go.mozilla.org/sops/cmd/sops/subcommand/makenaclboxkey"
 	publishcmd "go.mozilla.org/sops/cmd/sops/subcommand/publish"
 	"go.mozilla.org/sops/cmd/sops/subcommand/updatekeys"
 	"go.mozilla.org/sops/config"
@@ -66,8 +67,10 @@ func main() {
 	app.Authors = []cli.Author{
 		{Name: "Julien Vehent", Email: "jvehent@mozilla.com"},
 		{Name: "Adrian Utrilla", Email: "adrianutrilla@gmail.com"},
+		{Name: "AJ Bahnken", Email: "ajvb@mozilla.com"},
 	}
-	app.UsageText = `sops is an editor of encrypted files that supports AWS KMS and PGP
+	app.UsageText = `sops is an editor of encrypted files that supports AWS & GCP KMS,
+	Azure Key Vault, Nacl Box and PGP.
 
    To encrypt or decrypt a document with AWS KMS, specify the KMS ARN
    in the -k flag or in the SOPS_KMS_ARN environment variable.
@@ -86,6 +89,9 @@ func main() {
     https://docs.microsoft.com/en-us/go/azure/azure-sdk-go-authorization#use-environment-based-authentication.
     The user/sp needs the key/encrypt and key/decrypt permissions)
 
+   To encrypt or decrypt using NACL BOX, specify the base64 encoded public key
+   in the -n flag, or in the SOPS_NACLBOX_PUBKEYS environment variable.
+   
    To encrypt or decrypt using PGP, specify the PGP fingerprint in the
    -p flag or in the SOPS_PGP_FP environment variable.
 
@@ -245,6 +251,19 @@ func main() {
 					KeyServices: keyservices(c),
 					Interactive: !c.Bool("yes"),
 				})
+				if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
+					return cliErr
+				} else if err != nil {
+					return common.NewExitError(err, codes.ErrorGeneric)
+				}
+				return nil
+			},
+		},
+		{
+			Name:  "makenaclboxkey",
+			Usage: "Make a NACL BOX key pair",
+			Action: func(c *cli.Context) error {
+				err := makenaclboxkey.Run()
 				if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
 					return cliErr
 				} else if err != nil {

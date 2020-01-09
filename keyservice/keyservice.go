@@ -45,7 +45,7 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 					Arn:        mk.Arn,
 					Role:       mk.Role,
 					Context:    ctx,
-					Awsprofile: mk.AwsProfile,
+					AwsProfile: mk.AwsProfile,
 				},
 			},
 		}

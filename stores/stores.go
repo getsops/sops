@@ -140,6 +140,7 @@ func naclboxKeysFromGroup(group sops.KeyGroup) (keys []naclboxkey) {
 			})
 		}
 	}
+	fmt.Printf("%+v\n", keys)
 	return
 }
 

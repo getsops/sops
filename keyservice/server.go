@@ -277,6 +277,6 @@ func kmsKeyToMasterKey(key *KmsKey) kms.MasterKey {
 		Arn:               key.Arn,
 		Role:              key.Role,
 		EncryptionContext: ctx,
-		AwsProfile:        key.Awsprofile,
+		AwsProfile:        key.AwsProfile,
 	}
 }
