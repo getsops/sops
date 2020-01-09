@@ -33,6 +33,7 @@ type Opts struct {
 	InputPath   string
 	KeyServices []keyservice.KeyServiceClient
 	InputStore  sops.Store
+	Recurse     bool
 }
 
 // Run publish operation
@@ -46,10 +47,26 @@ func Run(opts Opts) error {
 	if err != nil {
 		return err
 	}
-	if info.IsDir() {
+	if info.IsDir() && !opts.Recurse {
 		return fmt.Errorf("can't operate on a directory")
+	} else if info.IsDir() && opts.Recurse {
+		err = filepath.Walk(opts.InputPath, func(subPath string, info os.FileInfo, err error) error {
+			subAbsPath, _ := filepath.Abs(subPath)
+			if !info.IsDir() && subAbsPath != path {
+				subOpts := opts
+				subOpts.InputPath = subPath
+				return Run(subOpts)
+			} else {
+				return nil
+			}
+		})
+		if err != nil {
+			return err
+		}
+		return nil
 	}
-	_, fileName := filepath.Split(path)
+	opts.InputStore = common.DefaultStoreForPathOrFormat(path, filepath.Ext(path))
+	destinationPath := opts.InputPath
 
 	conf, err := config.LoadDestinationRuleForFile(opts.ConfigPath, opts.InputPath, make(map[string]*string))
 	if err != nil {
@@ -146,22 +163,28 @@ func Run(opts Opts) error {
 	if opts.Interactive {
 		var response string
 		for response != "y" && response != "n" {
-			fmt.Printf("uploading %s to %s ? (y/n): ", path, conf.Destination.Path(fileName))
+			fmt.Printf("uploading %s to %s ? (y/n): ", path, conf.Destination.Path(destinationPath))
 			_, err := fmt.Scanln(&response)
 			if err != nil {
 				return err
 			}
 		}
 		if response == "n" {
-			return errors.New("Publish canceled")
+			msg := fmt.Sprintf("Publication of %s canceled", path)
+			if opts.Recurse {
+				fmt.Println(msg)
+				return nil
+			} else {
+				return errors.New(msg)
+			}
 		}
 	}
 
 	switch dest := conf.Destination.(type) {
 	case *publish.S3Destination, *publish.GCSDestination:
-		err = dest.Upload(fileContents, fileName)
+		err = dest.Upload(fileContents, destinationPath)
 	case *publish.VaultDestination:
-		err = dest.UploadUnencrypted(data, fileName)
+		err = dest.UploadUnencrypted(data, destinationPath)
 	}
 
 	if err != nil {

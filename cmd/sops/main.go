@@ -211,12 +211,16 @@ func main() {
 		},
 		{
 			Name:      "publish",
-			Usage:     "Publish sops file to a configured destination",
+			Usage:     "Publish sops file or directory to a configured destination",
 			ArgsUsage: `file`,
 			Flags: append([]cli.Flag{
 				cli.BoolFlag{
 					Name:  "yes, y",
 					Usage: `pre-approve all changes and run non-interactively`,
+				},
+				cli.BoolFlag{
+					Name:  "recurse",
+					Usage: "If source path is directory, publish all its content recursively",
 				},
 				cli.BoolFlag{
 					Name:  "verbose",
@@ -235,14 +239,13 @@ func main() {
 					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
 				}
 				fileName := c.Args()[0]
-				inputStore := inputStore(c, fileName)
 				err = publishcmd.Run(publishcmd.Opts{
 					ConfigPath:  configPath,
 					InputPath:   fileName,
-					InputStore:  inputStore,
 					Cipher:      aes.NewCipher(),
 					KeyServices: keyservices(c),
 					Interactive: !c.Bool("yes"),
+					Recurse:     c.Bool("recurse"),
 				})
 				if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
 					return cliErr
