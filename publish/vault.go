@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/google/go-cmp/cmp"
 	vault "github.com/hashicorp/vault/api"
 )
 
@@ -62,6 +63,17 @@ func (vaultd *VaultDestination) UploadUnencrypted(data map[string]interface{}, f
 		err = client.SetAddress(vaultd.vaultAddress)
 		if err != nil {
 			return err
+		}
+	}
+
+	existingSecret, err := client.Logical().Read(vaultd.secretsPath(fileName))
+	if err != nil {
+		return err
+	}
+	if existingSecret != nil {
+		if cmp.Equal(data, existingSecret.Data["data"]) {
+			fmt.Printf("Secret in %s is already up-to-date.\n", vaultd.secretsPath(fileName))
+			return nil
 		}
 	}
 
