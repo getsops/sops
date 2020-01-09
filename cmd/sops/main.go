@@ -219,6 +219,10 @@ func main() {
 					Usage: `pre-approve all changes and run non-interactively`,
 				},
 				cli.BoolFlag{
+					Name:  "omit-extensions",
+					Usage: "Omit file extensions in destination path when publishing sops file to configured destinations",
+				},
+				cli.BoolFlag{
 					Name:  "recurse",
 					Usage: "If source path is directory, publish all its content recursively",
 				},
@@ -240,12 +244,13 @@ func main() {
 				}
 				fileName := c.Args()[0]
 				err = publishcmd.Run(publishcmd.Opts{
-					ConfigPath:  configPath,
-					InputPath:   fileName,
-					Cipher:      aes.NewCipher(),
-					KeyServices: keyservices(c),
-					Interactive: !c.Bool("yes"),
-					Recurse:     c.Bool("recurse"),
+					ConfigPath:     configPath,
+					InputPath:      fileName,
+					Cipher:         aes.NewCipher(),
+					KeyServices:    keyservices(c),
+					Interactive:    !c.Bool("yes"),
+					OmitExtensions: c.Bool("omit-extensions"),
+					Recurse:        c.Bool("recurse"),
 				})
 				if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
 					return cliErr

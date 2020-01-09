@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"go.mozilla.org/sops/v3"
 	"go.mozilla.org/sops/v3/cmd/sops/codes"
@@ -27,13 +28,14 @@ func init() {
 
 // Opts represents publish options and config
 type Opts struct {
-	Interactive bool
-	Cipher      sops.Cipher
-	ConfigPath  string
-	InputPath   string
-	KeyServices []keyservice.KeyServiceClient
-	InputStore  sops.Store
-	Recurse     bool
+	Interactive    bool
+	Cipher         sops.Cipher
+	ConfigPath     string
+	InputPath      string
+	KeyServices    []keyservice.KeyServiceClient
+	InputStore     sops.Store
+	OmitExtensions bool
+	Recurse        bool
 }
 
 // Run publish operation
@@ -65,7 +67,8 @@ func Run(opts Opts) error {
 		}
 		return nil
 	}
-	opts.InputStore = common.DefaultStoreForPathOrFormat(path, filepath.Ext(path))
+	fileSuffix := filepath.Ext(path)
+	opts.InputStore = common.DefaultStoreForPathOrFormat(path, fileSuffix)
 	destinationPath := opts.InputPath
 
 	conf, err := config.LoadDestinationRuleForFile(opts.ConfigPath, opts.InputPath, make(map[string]*string))
@@ -74,6 +77,9 @@ func Run(opts Opts) error {
 	}
 	if conf.Destination == nil {
 		return errors.New("no destination configured for this file")
+	}
+	if opts.OmitExtensions || conf.OmitExtensions {
+		destinationPath = strings.TrimSuffix(destinationPath, fileSuffix)
 	}
 
 	// Check that this is a sops-encrypted file
