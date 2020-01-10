@@ -223,7 +223,7 @@ func main() {
 					Usage: "Omit file extensions in destination path when publishing sops file to configured destinations",
 				},
 				cli.BoolFlag{
-					Name:  "recurse",
+					Name:  "recursive",
 					Usage: "If source path is directory, publish all its content recursively",
 				},
 				cli.BoolFlag{
@@ -242,20 +242,38 @@ func main() {
 				if c.NArg() < 1 {
 					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
 				}
-				fileName := c.Args()[0]
-				err = publishcmd.Run(publishcmd.Opts{
-					ConfigPath:     configPath,
-					InputPath:      fileName,
-					Cipher:         aes.NewCipher(),
-					KeyServices:    keyservices(c),
-					Interactive:    !c.Bool("yes"),
-					OmitExtensions: c.Bool("omit-extensions"),
-					Recurse:        c.Bool("recurse"),
+				path := c.Args()[0]
+				info, err := os.Stat(path)
+				if err != nil {
+					return err
+				}
+				if info.IsDir() && !c.Bool("recursive") {
+					return fmt.Errorf("can't operate on a directory without --recursive flag.")
+				}
+				err = filepath.Walk(path, func(subPath string, info os.FileInfo, err error) error {
+					if err != nil {
+						return err
+					}
+					if !info.IsDir() {
+						err = publishcmd.Run(publishcmd.Opts{
+							ConfigPath:     configPath,
+							InputPath:      subPath,
+							Cipher:         aes.NewCipher(),
+							KeyServices:    keyservices(c),
+							InputStore:     inputStore(c, subPath),
+							Interactive:    !c.Bool("yes"),
+							OmitExtensions: c.Bool("omit-extensions"),
+						})
+						if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
+							return cliErr
+						} else if err != nil {
+							return common.NewExitError(err, codes.ErrorGeneric)
+						}
+					}
+					return nil
 				})
-				if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
-					return cliErr
-				} else if err != nil {
-					return common.NewExitError(err, codes.ErrorGeneric)
+				if err != nil {
+					return err
 				}
 				return nil
 			},
