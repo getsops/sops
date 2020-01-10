@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"os"
 	"path/filepath"
 	"strings"
 
@@ -35,7 +34,6 @@ type Opts struct {
 	KeyServices    []keyservice.KeyServiceClient
 	InputStore     sops.Store
 	OmitExtensions bool
-	Recurse        bool
 }
 
 // Run publish operation
@@ -45,31 +43,6 @@ func Run(opts Opts) error {
 	if err != nil {
 		return err
 	}
-	info, err := os.Stat(path)
-	if err != nil {
-		return err
-	}
-	if info.IsDir() && !opts.Recurse {
-		return fmt.Errorf("can't operate on a directory")
-	} else if info.IsDir() && opts.Recurse {
-		err = filepath.Walk(opts.InputPath, func(subPath string, info os.FileInfo, err error) error {
-			subAbsPath, _ := filepath.Abs(subPath)
-			if !info.IsDir() && subAbsPath != path {
-				subOpts := opts
-				subOpts.InputPath = subPath
-				return Run(subOpts)
-			} else {
-				return nil
-			}
-		})
-		if err != nil {
-			return err
-		}
-		return nil
-	}
-	fileSuffix := filepath.Ext(path)
-	opts.InputStore = common.DefaultStoreForPathOrFormat(path, fileSuffix)
-	destinationPath := opts.InputPath
 
 	conf, err := config.LoadDestinationRuleForFile(opts.ConfigPath, opts.InputPath, make(map[string]*string))
 	if err != nil {
@@ -78,8 +51,9 @@ func Run(opts Opts) error {
 	if conf.Destination == nil {
 		return errors.New("no destination configured for this file")
 	}
+	destinationPath := opts.InputPath
 	if opts.OmitExtensions || conf.OmitExtensions {
-		destinationPath = strings.TrimSuffix(destinationPath, fileSuffix)
+		destinationPath = strings.TrimSuffix(destinationPath, filepath.Ext(path))
 	}
 
 	// Check that this is a sops-encrypted file
@@ -176,13 +150,7 @@ func Run(opts Opts) error {
 			}
 		}
 		if response == "n" {
-			msg := fmt.Sprintf("Publication of %s canceled", path)
-			if opts.Recurse {
-				fmt.Println(msg)
-				return nil
-			} else {
-				return errors.New(msg)
-			}
+			return errors.New("Publish canceled")
 		}
 	}
 

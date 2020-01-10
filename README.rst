@@ -978,10 +978,10 @@ published to S3 and GCS, it will decrypt them and re-encrypt them using the
 
 You would deploy a file to S3 with a command like: ``sops publish s3/app.yaml``
 
-To publish all files in selected directory recursively, you need to specify ``--recurse`` flag.
+To publish all files in selected directory recursively, you need to specify ``--recursive`` flag.
 
 If you don't want file extension to appear in destination secret path, use ``--omit-extensions``
-flag or same ``.sops.yaml`` option.
+flag or ``omit_extensions: true`` in the destination rule in ``.sops.yaml``.
 
 Publishing to Vault
 *******************
@@ -997,8 +997,8 @@ configuring the client.
 ``vault_kv_mount_name`` is used if your Vault KV is mounted somewhere other than ``secret/``.
 ``vault_kv_version`` supports ``1`` and ``2``, with ``2`` being the default.
 
-If destination secret path already exists in Vault and contains same data as source file, it will
-be skipped.
+If destination secret path already exists in Vault and contains same data as the source file, it
+will be skipped.
 
 Below is an example of publishing to Vault (using token auth with a local dev instance of Vault).
 
