@@ -34,6 +34,7 @@ type Opts struct {
 	KeyServices    []keyservice.KeyServiceClient
 	InputStore     sops.Store
 	OmitExtensions bool
+	Recursive      bool
 }
 
 // Run publish operation
@@ -51,7 +52,13 @@ func Run(opts Opts) error {
 	if conf.Destination == nil {
 		return errors.New("no destination configured for this file")
 	}
-	destinationPath := opts.InputPath
+
+	var destinationPath string
+	if opts.Recursive {
+		destinationPath = opts.InputPath
+	} else {
+		_, destinationPath = filepath.Split(path)
+	}
 	if opts.OmitExtensions || conf.OmitExtensions {
 		destinationPath = strings.TrimSuffix(destinationPath, filepath.Ext(path))
 	}
@@ -150,7 +157,13 @@ func Run(opts Opts) error {
 			}
 		}
 		if response == "n" {
-			return errors.New("Publish canceled")
+			msg := fmt.Sprintf("Publication of %s canceled", path)
+			if opts.Recursive {
+				fmt.Println(msg)
+				return nil
+			} else {
+				return errors.New(msg)
+			}
 		}
 	}
 
