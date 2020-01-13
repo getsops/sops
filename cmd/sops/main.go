@@ -263,6 +263,7 @@ func main() {
 							InputStore:     inputStore(c, subPath),
 							Interactive:    !c.Bool("yes"),
 							OmitExtensions: c.Bool("omit-extensions"),
+							Recursive:      c.Bool("recursive"),
 						})
 						if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
 							return cliErr
