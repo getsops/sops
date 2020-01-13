@@ -224,7 +224,7 @@ func main() {
 				},
 				cli.BoolFlag{
 					Name:  "recursive",
-					Usage: "If source path is directory, publish all its content recursively",
+ 					Usage: "If the source path is a directory, publish all its content recursively",
 				},
 				cli.BoolFlag{
 					Name:  "verbose",
