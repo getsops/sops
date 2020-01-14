@@ -35,6 +35,7 @@ type Opts struct {
 	InputStore     sops.Store
 	OmitExtensions bool
 	Recursive      bool
+	RootPath       string
 }
 
 // Run publish operation
@@ -55,7 +56,10 @@ func Run(opts Opts) error {
 
 	var destinationPath string
 	if opts.Recursive {
-		destinationPath = opts.InputPath
+		destinationPath, err = filepath.Rel(opts.RootPath, opts.InputPath)
+		if err != nil {
+			return err
+		}
 	} else {
 		_, destinationPath = filepath.Split(path)
 	}

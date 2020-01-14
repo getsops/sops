@@ -264,6 +264,7 @@ func main() {
 							Interactive:    !c.Bool("yes"),
 							OmitExtensions: c.Bool("omit-extensions"),
 							Recursive:      c.Bool("recursive"),
+							RootPath:       path,
 						})
 						if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
 							return cliErr
