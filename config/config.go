@@ -100,6 +100,7 @@ type destinationRule struct {
 	VaultKVMountName string       `yaml:"vault_kv_mount_name"`
 	VaultKVVersion   int          `yaml:"vault_kv_version"`
 	RecreationRule   creationRule `yaml:"recreation_rule,omitempty"`
+	OmitExtensions   bool         `yaml:"omit_extensions"`
 }
 
 type creationRule struct {
@@ -133,6 +134,7 @@ type Config struct {
 	EncryptedSuffix   string
 	EncryptedRegex    string
 	Destination       publish.Destination
+	OmitExtensions    bool
 }
 
 func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[string]*string) ([]sops.KeyGroup, error) {
@@ -266,6 +268,7 @@ func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptio
 		return nil, err
 	}
 	config.Destination = dest
+	config.OmitExtensions = dRule.OmitExtensions
 
 	return config, nil
 }

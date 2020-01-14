@@ -211,12 +211,20 @@ func main() {
 		},
 		{
 			Name:      "publish",
-			Usage:     "Publish sops file to a configured destination",
+			Usage:     "Publish sops file or directory to a configured destination",
 			ArgsUsage: `file`,
 			Flags: append([]cli.Flag{
 				cli.BoolFlag{
 					Name:  "yes, y",
 					Usage: `pre-approve all changes and run non-interactively`,
+				},
+				cli.BoolFlag{
+					Name:  "omit-extensions",
+					Usage: "Omit file extensions in destination path when publishing sops file to configured destinations",
+				},
+				cli.BoolFlag{
+					Name:  "recursive",
+ 					Usage: "If the source path is a directory, publish all its content recursively",
 				},
 				cli.BoolFlag{
 					Name:  "verbose",
@@ -234,20 +242,40 @@ func main() {
 				if c.NArg() < 1 {
 					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
 				}
-				fileName := c.Args()[0]
-				inputStore := inputStore(c, fileName)
-				err = publishcmd.Run(publishcmd.Opts{
-					ConfigPath:  configPath,
-					InputPath:   fileName,
-					InputStore:  inputStore,
-					Cipher:      aes.NewCipher(),
-					KeyServices: keyservices(c),
-					Interactive: !c.Bool("yes"),
+				path := c.Args()[0]
+				info, err := os.Stat(path)
+				if err != nil {
+					return err
+				}
+				if info.IsDir() && !c.Bool("recursive") {
+					return fmt.Errorf("can't operate on a directory without --recursive flag.")
+				}
+				err = filepath.Walk(path, func(subPath string, info os.FileInfo, err error) error {
+					if err != nil {
+						return err
+					}
+					if !info.IsDir() {
+						err = publishcmd.Run(publishcmd.Opts{
+							ConfigPath:     configPath,
+							InputPath:      subPath,
+							Cipher:         aes.NewCipher(),
+							KeyServices:    keyservices(c),
+							InputStore:     inputStore(c, subPath),
+							Interactive:    !c.Bool("yes"),
+							OmitExtensions: c.Bool("omit-extensions"),
+							Recursive:      c.Bool("recursive"),
+							RootPath:       path,
+						})
+						if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
+							return cliErr
+						} else if err != nil {
+							return common.NewExitError(err, codes.ErrorGeneric)
+						}
+					}
+					return nil
 				})
-				if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
-					return cliErr
-				} else if err != nil {
-					return common.NewExitError(err, codes.ErrorGeneric)
+				if err != nil {
+					return err
 				}
 				return nil
 			},

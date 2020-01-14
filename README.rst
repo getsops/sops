@@ -968,6 +968,7 @@ This command requires a ``.sops.yaml`` configuration file. Below is an example:
         vault_kv_mount_name: "secret/" # default
         vault_kv_version: 2 # default
         path_regex: vault/*
+        omit_extensions: true
 
 The above configuration will place all files under ``s3/*`` into the S3 bucket ``sops-secrets``,
 all files under ``gcs/*`` into the GCS bucket ``sops-secrets``, and the contents of all files under
@@ -976,6 +977,11 @@ published to S3 and GCS, it will decrypt them and re-encrypt them using the
 ``F69E4901EDBAD2D1753F8C67A64535C4163FB307`` pgp key.
 
 You would deploy a file to S3 with a command like: ``sops publish s3/app.yaml``
+
+To publish all files in selected directory recursively, you need to specify ``--recursive`` flag.
+
+If you don't want file extension to appear in destination secret path, use ``--omit-extensions``
+flag or ``omit_extensions: true`` in the destination rule in ``.sops.yaml``.
 
 Publishing to Vault
 *******************
@@ -990,6 +996,9 @@ configuring the client.
 
 ``vault_kv_mount_name`` is used if your Vault KV is mounted somewhere other than ``secret/``.
 ``vault_kv_version`` supports ``1`` and ``2``, with ``2`` being the default.
+
+If destination secret path already exists in Vault and contains same data as the source file, it
+will be skipped.
 
 Below is an example of publishing to Vault (using token auth with a local dev instance of Vault).
 
