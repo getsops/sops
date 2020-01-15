@@ -374,7 +374,7 @@ func main() {
 							group = append(group, pgp.NewMasterKeyFromFingerprint(fp))
 						}
 						for _, arn := range kmsArns {
-							group = append(group, kms.NewMasterKeyFromArn(arn, kms.ParseKMSContext(c.String("encryption-context")), c.String("aws-profile")))
+							group = append(group, kms.NewMasterKeyFromArn(arn, kms.ParseKMSContext(c.String("encryption-context")), c.String("aws-profile"), c.String("aws-endpoint")))
 						}
 						for _, kms := range gcpKmses {
 							group = append(group, gcpkms.NewMasterKeyFromResourceID(kms))
@@ -490,6 +490,10 @@ func main() {
 		cli.StringFlag{
 			Name:  "aws-profile",
 			Usage: "The AWS profile to use for requests to AWS",
+		},
+		cli.StringFlag{
+			Name:  "aws-endpoint",
+			Usage: "Override the AWS endpoint (for running against AWS KMS compatible services)",
 		},
 		cli.StringFlag{
 			Name:   "gcp-kms",
@@ -713,7 +717,7 @@ func main() {
 		if c.Bool("rotate") {
 			var addMasterKeys []keys.MasterKey
 			kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
-			for _, k := range kms.MasterKeysFromArnString(c.String("add-kms"), kmsEncryptionContext, c.String("aws-profile")) {
+			for _, k := range kms.MasterKeysFromArnString(c.String("add-kms"), kmsEncryptionContext, c.String("aws-profile"), c.String("aws-endpoint")) {
 				addMasterKeys = append(addMasterKeys, k)
 			}
 			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("add-pgp")) {
@@ -731,7 +735,7 @@ func main() {
 			}
 
 			var rmMasterKeys []keys.MasterKey
-			for _, k := range kms.MasterKeysFromArnString(c.String("rm-kms"), kmsEncryptionContext, c.String("aws-profile")) {
+			for _, k := range kms.MasterKeysFromArnString(c.String("rm-kms"), kmsEncryptionContext, c.String("aws-profile"), c.String("aws-endpoint")) {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
 			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("rm-pgp")) {
@@ -943,7 +947,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 		return nil, common.NewExitError("Invalid KMS encryption context format", codes.ErrorInvalidKMSEncryptionContextFormat)
 	}
 	if c.String("kms") != "" {
-		for _, k := range kms.MasterKeysFromArnString(c.String("kms"), kmsEncryptionContext, c.String("aws-profile")) {
+		for _, k := range kms.MasterKeysFromArnString(c.String("kms"), kmsEncryptionContext, c.String("aws-profile"), c.String("aws-endpoint")) {
 			kmsKeys = append(kmsKeys, k)
 		}
 	}

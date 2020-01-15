@@ -18,6 +18,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/aws/endpoints"
 	"github.com/aws/aws-sdk-go/service/kms"
 	"github.com/aws/aws-sdk-go/service/kms/kmsiface"
 	"github.com/aws/aws-sdk-go/service/sts"
@@ -43,6 +44,7 @@ type MasterKey struct {
 	CreationDate      time.Time
 	EncryptionContext map[string]*string
 	AwsProfile        string
+	AwsEndpoint       string
 }
 
 // EncryptedDataKey returns the encrypted data key this master key holds
@@ -132,7 +134,7 @@ func NewMasterKey(arn string, role string, context map[string]*string) *MasterKe
 }
 
 // NewMasterKeyFromArn takes an ARN string and returns a new MasterKey for that ARN
-func NewMasterKeyFromArn(arn string, context map[string]*string, awsProfile string) *MasterKey {
+func NewMasterKeyFromArn(arn string, context map[string]*string, awsProfile string, awsEndpoint string) *MasterKey {
 	k := &MasterKey{}
 	arn = strings.Replace(arn, " ", "", -1)
 	roleIndex := strings.Index(arn, "+arn:aws:iam::")
@@ -145,17 +147,18 @@ func NewMasterKeyFromArn(arn string, context map[string]*string, awsProfile stri
 	k.EncryptionContext = context
 	k.CreationDate = time.Now().UTC()
 	k.AwsProfile = awsProfile
+	k.AwsEndpoint = awsEndpoint
 	return k
 }
 
 // MasterKeysFromArnString takes a comma separated list of AWS KMS ARNs and returns a slice of new MasterKeys for those ARNs
-func MasterKeysFromArnString(arn string, context map[string]*string, awsProfile string) []*MasterKey {
+func MasterKeysFromArnString(arn string, context map[string]*string, awsProfile string, awsEndpoint string) []*MasterKey {
 	var keys []*MasterKey
 	if arn == "" {
 		return keys
 	}
 	for _, s := range strings.Split(arn, ",") {
-		keys = append(keys, NewMasterKeyFromArn(s, context, awsProfile))
+		keys = append(keys, NewMasterKeyFromArn(s, context, awsProfile, awsEndpoint))
 	}
 	return keys
 }
@@ -194,6 +197,19 @@ func (key MasterKey) createSession() (*session.Session, error) {
 	}
 
 	config := aws.Config{Region: aws.String(matches[1])}
+
+	if key.AwsEndpoint != "" {
+		awsCustomResolver := func(service, region string, optFns ...func(*endpoints.Options)) (endpoints.ResolvedEndpoint, error) {
+			if service == endpoints.S3ServiceID {
+				return endpoints.ResolvedEndpoint{
+					URL:           key.AwsEndpoint,
+					SigningRegion: "custom-signing-region",
+				}, nil
+			}
+			return endpoints.DefaultResolver().EndpointFor(service, region, optFns...)
+		}
+		config.EndpointResolver = endpoints.ResolverFunc(awsCustomResolver)
+	}
 
 	if key.AwsProfile != "" {
 		config.Credentials = credentials.NewSharedCredentials("", key.AwsProfile)
