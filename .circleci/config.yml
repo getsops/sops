@@ -1,9 +1,21 @@
-version: 2
+version: 2.1
+
+workflows:
+  build-and-deploy:
+    jobs:
+      - build
+      - push:     
+          filters:
+            tags:
+              only: /^v.*/   
+            branches:
+              ignore: /.*/
 jobs:
   build:
     working_directory: /go/src/go.mozilla.org/sops
     docker:
       - image: circleci/golang:1.13
+    resource_class: large
     steps:
       - checkout
       - setup_remote_docker
@@ -12,10 +24,65 @@ jobs:
           command: |
             docker build -t mozilla/sops .
             docker tag mozilla/sops "mozilla/sops:$CIRCLE_SHA1"
-      - run:
-          name: Push containers
+
+  push:
+    machine: true
+    resource_class: large
+    steps:
+      - checkout
+      - run: 
+          name: semver check
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                ${GOPATH}/src/go.mozilla.org/sops/bin/ci/deploy_dockerhub.sh "latest"
-                ${GOPATH}/src/go.mozilla.org/sops/bin/ci/deploy_dockerhub.sh "$CIRCLE_SHA1"
-            fi
+            curl "https://raw.githubusercontent.com/fsaintjacques/semver-tool/d66113a6803dbffca2a3830e207a6795a8516cd1/src/semver" > semver.bash
+            sudo mv semver.bash /usr/local/bin/semver
+            sudo chmod a+x  /usr/local/bin/semver
+            MAJOR=$(semver get major ${CIRCLE_TAG#v})
+            MINOR=$(semver get minor ${CIRCLE_TAG#v})
+            PATCH=$(semver get patch ${CIRCLE_TAG#v})
+            echo "export MAJOR=${MAJOR}" >> $BASH_ENV
+            echo "export MINOR=${MINOR}" >> $BASH_ENV
+            echo "export PATCH=${PATCH}" >> $BASH_ENV
+      - run:
+          when: on_fail
+          name: semver error message
+          command: |
+            cat \<< EOF
+            Failure Info:
+
+            This job uses a simple semver library to ensure the TAG is a valid version to publish.
+
+            - This should only run on workflows triggered by a tag. 
+            - The tag name should be a semver like 'v1.2.3' 
+            - The version should follow conventions documented at https://github.com/fsaintjacques/semver-tool
+            EOF
+      - run:
+          name: Build containers
+          command: |
+            docker build -t mozilla/sops .
+      - run:
+          name: Tag & Push containers
+          command: |
+            #latest
+            src/go.mozilla.org/sops/bin/ci/deploy_dockerhub.sh "latest"
+
+            # by sha
+
+            echo "Tag and push mozilla/sops:$CIRCLE_SHA1"
+            docker tag mozilla/sops "mozilla/sops:$CIRCLE_SHA1"
+            src/go.mozilla.org/sops/bin/ci/deploy_dockerhub.sh "$CIRCLE_SHA1"
+
+            # by semver
+            # v1.2.3
+            echo "Tag and Push mozilla/sops:v$MAJOR.$MINOR.$PATCH"
+            docker tag mozilla/sops "mozilla/sops:v$MAJOR.$MINOR.$PATCH"
+            src/go.mozilla.org/sops/bin/ci/deploy_dockerhub.sh "v$MAJOR.$MINOR.$PATCH"
+            # v1.2
+            echo "Tag and Push mozilla/sops:v$MAJOR.$MINOR"
+            docker tag mozilla/sops "mozilla/sops:v$MAJOR.$MINOR"
+            src/go.mozilla.org/sops/bin/ci/deploy_dockerhub.sh "v$MAJOR.$MINOR"
+            # v1
+            echo "Tag and Push mozilla/sops:v$MAJOR"
+            docker tag mozilla/sops "mozilla/sops:v$MAJOR"
+            src/go.mozilla.org/sops/bin/ci/deploy_dockerhub.sh "v$MAJOR"
+
+
