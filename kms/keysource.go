@@ -17,8 +17,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/aws/endpoints"
+	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/kms"
 	"github.com/aws/aws-sdk-go/service/kms/kmsiface"
 	"github.com/aws/aws-sdk-go/service/sts"
@@ -125,7 +125,7 @@ func (key *MasterKey) ToString() string {
 
 // NewMasterKey creates a new MasterKey from an ARN, role and context, setting the creation date to the current date
 func NewMasterKey(arn string, role string, context map[string]*string, awsEndpoint string) *MasterKey {
-	log.Error("nmk: "+awsEndpoint)
+	log.Error("nmk: " + awsEndpoint)
 	return &MasterKey{
 		Arn:               arn,
 		Role:              role,
