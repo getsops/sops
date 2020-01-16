@@ -81,6 +81,7 @@ type kmsKey struct {
 	Role       string             `yaml:"role,omitempty"`
 	Context    map[string]*string `yaml:"context"`
 	AwsProfile string             `yaml:"aws_profile"`
+	AwsEndpoint string            `yaml:"aws_endpoint"`
 }
 
 type azureKVKey struct {
@@ -147,7 +148,7 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 				keyGroup = append(keyGroup, pgp.NewMasterKeyFromFingerprint(k))
 			}
 			for _, k := range group.KMS {
-				keyGroup = append(keyGroup, kms.NewMasterKey(k.Arn, k.Role, k.Context))
+				keyGroup = append(keyGroup, kms.NewMasterKey(k.Arn, k.Role, k.Context, k.AwsEndpoint))
 			}
 			for _, k := range group.GCPKMS {
 				keyGroup = append(keyGroup, gcpkms.NewMasterKeyFromResourceID(k.ResourceID))

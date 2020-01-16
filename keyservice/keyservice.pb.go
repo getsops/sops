@@ -244,6 +244,7 @@ type KmsKey struct {
 	Role       string            `protobuf:"bytes,2,opt,name=role" json:"role,omitempty"`
 	Context    map[string]string `protobuf:"bytes,3,rep,name=context" json:"context,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	AwsProfile string            `protobuf:"bytes,4,opt,name=aws_profile" json:"aws_profile,omitempty"`
+	AwsEndpoint string            `protobuf:"bytes,5,opt,name=aws_endpoint" json:"aws_endpoint,omitempty"`
 }
 
 func (m *KmsKey) Reset()                    { *m = KmsKey{} }

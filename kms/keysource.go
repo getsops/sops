@@ -124,12 +124,14 @@ func (key *MasterKey) ToString() string {
 }
 
 // NewMasterKey creates a new MasterKey from an ARN, role and context, setting the creation date to the current date
-func NewMasterKey(arn string, role string, context map[string]*string) *MasterKey {
+func NewMasterKey(arn string, role string, context map[string]*string, awsEndpoint string) *MasterKey {
+	log.Error("nmk: "+awsEndpoint)
 	return &MasterKey{
 		Arn:               arn,
 		Role:              role,
 		EncryptionContext: context,
 		CreationDate:      time.Now().UTC(),
+		AwsEndpoint:       awsEndpoint,
 	}
 }
 
@@ -200,7 +202,7 @@ func (key MasterKey) createSession() (*session.Session, error) {
 
 	if key.AwsEndpoint != "" {
 		awsCustomResolver := func(service, region string, optFns ...func(*endpoints.Options)) (endpoints.ResolvedEndpoint, error) {
-			if service == endpoints.S3ServiceID {
+			if service == endpoints.KmsServiceID {
 				return endpoints.ResolvedEndpoint{
 					URL:           key.AwsEndpoint,
 					SigningRegion: "custom-signing-region",
