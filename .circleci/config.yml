@@ -33,7 +33,6 @@ jobs:
       - run: 
           name: semver check
           command: |
-            
             MAJOR=$(echo ${CIRCLE_TAG#v} | cut -d"." -f1)
             MINOR=$(echo ${CIRCLE_TAG#v} | cut -d"." -f2)
             PATCH=$(echo ${CIRCLE_TAG#v} | cut -d"." -f3)
@@ -53,19 +52,6 @@ jobs:
             EOF
             exit 1
             fi
-      - run:
-          when: on_fail
-          name: semver error message
-          command: |
-            cat \<< EOF
-            Failure Info:
-
-            This job uses a simple semver library to ensure the TAG is a valid version to publish.
-
-            - This should only run on workflows triggered by a tag. 
-            - The tag name should be a semver like 'v1.2.3' 
-            - The version should follow conventions documented at https://github.com/fsaintjacques/semver-tool
-            EOF
       - run:
           name: Build containers
           command: |
