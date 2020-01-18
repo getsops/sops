@@ -74,29 +74,29 @@ jobs:
           name: Tag & Push containers
           command: |
             #latest
-            src/go.mozilla.org/sops/bin/ci/deploy_dockerhub.sh "latest"
+            bin/ci/deploy_dockerhub.sh "latest"
 
             # by sha
             echo "Tag and push mozilla/sops:$CIRCLE_SHA1"
             docker tag mozilla/sops "mozilla/sops:$CIRCLE_SHA1"
-            src/go.mozilla.org/sops/bin/ci/deploy_dockerhub.sh "$CIRCLE_SHA1"
+            bin/ci/deploy_dockerhub.sh "$CIRCLE_SHA1"
 
             # by semver
             # v1.2.3
             if [ ! -z $PATCH ];then
               echo "Tag and Push mozilla/sops:v$MAJOR.$MINOR.$PATCH"
               docker tag mozilla/sops "mozilla/sops:v$MAJOR.$MINOR.$PATCH"
-              src/go.mozilla.org/sops/bin/ci/deploy_dockerhub.sh "v$MAJOR.$MINOR.$PATCH"
+              bin/ci/deploy_dockerhub.sh "v$MAJOR.$MINOR.$PATCH"
             fi
             # v1.2
             if [ ! -z $MINOR ];then
               echo "Tag and Push mozilla/sops:v$MAJOR.$MINOR"
               docker tag mozilla/sops "mozilla/sops:v$MAJOR.$MINOR"
-              src/go.mozilla.org/sops/bin/ci/deploy_dockerhub.sh "v$MAJOR.$MINOR"
+              bin/ci/deploy_dockerhub.sh "v$MAJOR.$MINOR"
             fi
             # v1
             echo "Tag and Push mozilla/sops:v$MAJOR"
             docker tag mozilla/sops "mozilla/sops:v$MAJOR"
-            src/go.mozilla.org/sops/bin/ci/deploy_dockerhub.sh "v$MAJOR"
+            bin/ci/deploy_dockerhub.sh "v$MAJOR"
 
 
