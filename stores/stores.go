@@ -403,6 +403,10 @@ var ExampleFlatTree = sops.Tree{
 				Key:   "example_key",
 				Value: "example_value",
 			},
+			sops.TreeItem{
+				Key:   "example_multiline",
+				Value: "foo\nbar\nbaz",
+			},
 		},
 	},
 }

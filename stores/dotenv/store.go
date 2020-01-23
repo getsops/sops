@@ -81,7 +81,7 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 			}
 			branch = append(branch, sops.TreeItem{
 				Key:   string(line[:pos]),
-				Value: string(line[pos+1:]),
+				Value: strings.Replace(string(line[pos+1:]), "\\n", "\n", -1),
 			})
 		}
 	}
@@ -119,7 +119,8 @@ func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 		if comment, ok := item.Key.(sops.Comment); ok {
 			line = fmt.Sprintf("#%s\n", comment.Value)
 		} else {
-			line = fmt.Sprintf("%s=%s\n", item.Key, item.Value)
+			value := strings.Replace(item.Value.(string), "\n", "\\n", -1)
+			line = fmt.Sprintf("%s=%s\n", item.Key, value)
 		}
 		buffer.WriteString(line)
 	}
