@@ -11,14 +11,16 @@ const (
 	Ini
 	Json
 	Yaml
+	CompactJson
 )
 
 var stringToFormat = map[string]Format{
-	"binary": Binary,
-	"dotenv": Dotenv,
-	"ini":    Ini,
-	"json":   Json,
-	"yaml":   Yaml,
+	"binary":       Binary,
+	"dotenv":       Dotenv,
+	"ini":          Ini,
+	"json":         Json,
+	"compact-json": CompactJson,
+	"yaml":         Yaml,
 }
 
 // FormatFromString returns a Format from a string.

@@ -12,6 +12,8 @@ import (
 
 // Store handles storage of JSON data.
 type Store struct {
+	// Compact with `true` outputs json without insignificant whitespace letters.
+	Compact bool
 }
 
 // BinaryStore handles storage of binary data in a JSON envelope.
@@ -211,7 +213,12 @@ func (store Store) treeBranchFromJSON(in []byte) (sops.TreeBranch, error) {
 
 func (store Store) reindentJSON(in []byte) ([]byte, error) {
 	var out bytes.Buffer
-	err := json.Indent(&out, in, "", "\t")
+	var err error
+	if store.Compact {
+		err = json.Compact(&out, in)
+	} else {
+		err = json.Indent(&out, in, "", "\t")
+	}
 	return out.Bytes(), err
 }
 

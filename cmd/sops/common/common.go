@@ -51,7 +51,15 @@ func newIniStore() Store {
 }
 
 func newJsonStore() Store {
-	return &json.Store{}
+	return &json.Store{
+		Compact: false,
+	}
+}
+
+func newCompactJsonStore() Store {
+	return &json.Store{
+		Compact: true,
+	}
 }
 
 func newYamlStore() Store {
@@ -59,11 +67,12 @@ func newYamlStore() Store {
 }
 
 var storeConstructors = map[Format]storeConstructor{
-	Binary: newBinaryStore,
-	Dotenv: newDotenvStore,
-	Ini:    newIniStore,
-	Json:   newJsonStore,
-	Yaml:   newYamlStore,
+	Binary:      newBinaryStore,
+	Dotenv:      newDotenvStore,
+	Ini:         newIniStore,
+	Json:        newJsonStore,
+	Yaml:        newYamlStore,
+	CompactJson: newCompactJsonStore,
 }
 
 // DecryptTreeOpts are the options needed to decrypt a tree

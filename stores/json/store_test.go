@@ -1,6 +1,7 @@
 package json
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -213,10 +214,14 @@ func TestEncodeSimpleJSON(t *testing.T) {
 			Value: false,
 		},
 	}
-	out, err := Store{}.jsonFromTreeBranch(branch)
-	assert.Nil(t, err)
-	expected, _ := Store{}.treeBranchFromJSON(out)
-	assert.Equal(t, expected, branch)
+	for _, compact := range []bool{false, true} {
+		t.Run(fmt.Sprintf("compact=%v", compact), func(t *testing.T) {
+			out, err := Store{}.jsonFromTreeBranch(branch)
+			assert.Nil(t, err)
+			expected, _ := Store{}.treeBranchFromJSON(out)
+			assert.Equal(t, expected, branch)
+		})
+	}
 }
 
 func TestEncodeJSONWithEscaping(t *testing.T) {
@@ -234,10 +239,14 @@ func TestEncodeJSONWithEscaping(t *testing.T) {
 			Value: 2.0,
 		},
 	}
-	out, err := Store{}.jsonFromTreeBranch(branch)
-	assert.Nil(t, err)
-	expected, _ := Store{}.treeBranchFromJSON(out)
-	assert.Equal(t, expected, branch)
+	for _, compact := range []bool{false, true} {
+		t.Run(fmt.Sprintf("compact=%v", compact), func(t *testing.T) {
+			out, err := Store{}.jsonFromTreeBranch(branch)
+			assert.Nil(t, err)
+			expected, _ := Store{}.treeBranchFromJSON(out)
+			assert.Equal(t, expected, branch)
+		})
+	}
 }
 
 func TestEncodeJSONArrayOfObjects(t *testing.T) {
@@ -263,7 +272,13 @@ func TestEncodeJSONArrayOfObjects(t *testing.T) {
 			},
 		},
 	}
-	expected := `{
+	for _, testcase := range []struct {
+		compact  bool
+		expected string
+	}{
+		{
+			compact: false,
+			expected: `{
 	"foo": [
 		{
 			"foo": 3,
@@ -271,11 +286,21 @@ func TestEncodeJSONArrayOfObjects(t *testing.T) {
 		},
 		2
 	]
-}`
-	store := Store{}
-	out, err := store.EmitPlainFile(tree.Branches)
-	assert.Nil(t, err)
-	assert.Equal(t, expected, string(out))
+}`,
+		},
+		{
+			compact:  true,
+			expected: `{"foo":[{"foo":3,"bar":false},2]}`,
+		},
+	} {
+		t.Run(fmt.Sprintf("compact=%v", testcase.compact), func(t *testing.T) {
+			expected := testcase.expected
+			store := Store{Compact: testcase.compact}
+			out, err := store.EmitPlainFile(tree.Branches)
+			assert.Nil(t, err)
+			assert.Equal(t, expected, string(out))
+		})
+	}
 }
 
 func TestUnmarshalMetadataFromNonSOPSFile(t *testing.T) {
@@ -296,7 +321,11 @@ func TestLoadJSONFormattedBinaryFile(t *testing.T) {
 }
 
 func TestEmitValueString(t *testing.T) {
-	bytes, err := (&Store{}).EmitValue("hello")
-	assert.Nil(t, err)
-	assert.Equal(t, []byte("\"hello\""), bytes)
+	for _, compact := range []bool{false, true} {
+		t.Run(fmt.Sprintf("compact=%v", compact), func(t *testing.T) {
+			bytes, err := (&Store{Compact: compact}).EmitValue("hello")
+			assert.Nil(t, err)
+			assert.Equal(t, []byte("\"hello\""), bytes)
+		})
+	}
 }

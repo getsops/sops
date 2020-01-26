@@ -12,6 +12,7 @@ func TestFormatFromString(t *testing.T) {
 	assert.Equal(t, Ini, FormatFromString("ini"))
 	assert.Equal(t, Yaml, FormatFromString("yaml"))
 	assert.Equal(t, Json, FormatFromString("json"))
+	assert.Equal(t, CompactJson, FormatFromString("compact-json"))
 }
 
 func TestFormatForPath(t *testing.T) {
