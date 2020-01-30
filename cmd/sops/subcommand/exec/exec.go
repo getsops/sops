@@ -91,6 +91,7 @@ func ExecWithEnv(opts ExecOpts) {
 		if line[0] == '#' {
 			continue
 		}
+		line := bytes.Replace(line, []byte("\\n"), []byte("\n"), -1)
 		env = append(env, string(line))
 	}
 
