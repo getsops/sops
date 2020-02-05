@@ -5,9 +5,9 @@ import (
 
 	"go.mozilla.org/sops/v3/azkv"
 	"go.mozilla.org/sops/v3/gcpkms"
+	"go.mozilla.org/sops/v3/hcvault"
 	"go.mozilla.org/sops/v3/kms"
 	"go.mozilla.org/sops/v3/pgp"
-	"go.mozilla.org/sops/v3/vault"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -63,7 +63,7 @@ func (ks *Server) encryptWithAzureKeyVault(key *AzureKeyVaultKey, plaintext []by
 }
 
 func (ks *Server) encryptWithVault(key *VaultKey, plaintext []byte) ([]byte, error) {
-	vaultKey := vault.MasterKey{
+	vaultKey := hcvault.MasterKey{
 		VaultAddress: key.VaultAddress,
 		BackendPath:  key.BackendPath,
 		KeyName:      key.KeyName,
@@ -110,7 +110,7 @@ func (ks *Server) decryptWithAzureKeyVault(key *AzureKeyVaultKey, ciphertext []b
 }
 
 func (ks *Server) decryptWithVault(key *VaultKey, ciphertext []byte) ([]byte, error) {
-	vaultKey := vault.MasterKey{
+	vaultKey := hcvault.MasterKey{
 		VaultAddress: key.VaultAddress,
 		BackendPath:  key.BackendPath,
 		KeyName:      key.KeyName,

@@ -26,6 +26,7 @@ import (
 	"go.mozilla.org/sops/v3/cmd/sops/subcommand/updatekeys"
 	"go.mozilla.org/sops/v3/config"
 	"go.mozilla.org/sops/v3/gcpkms"
+	"go.mozilla.org/sops/v3/hcvault"
 	"go.mozilla.org/sops/v3/keys"
 	"go.mozilla.org/sops/v3/keyservice"
 	"go.mozilla.org/sops/v3/kms"
@@ -33,7 +34,6 @@ import (
 	"go.mozilla.org/sops/v3/pgp"
 	"go.mozilla.org/sops/v3/stores/dotenv"
 	"go.mozilla.org/sops/v3/stores/json"
-	"go.mozilla.org/sops/v3/vault"
 	"go.mozilla.org/sops/v3/version"
 	"google.golang.org/grpc"
 	"gopkg.in/urfave/cli.v1"
@@ -394,7 +394,7 @@ func main() {
 							group = append(group, gcpkms.NewMasterKeyFromResourceID(kms))
 						}
 						for _, uri := range vaultURIs {
-							k, err := vault.NewMasterKeyFromURI(uri)
+							k, err := hcvault.NewMasterKeyFromURI(uri)
 							if err != nil {
 								log.WithError(err).Error("Failed to add key")
 								continue
@@ -764,7 +764,7 @@ func main() {
 			for _, k := range azureKeys {
 				addMasterKeys = append(addMasterKeys, k)
 			}
-			hcVaultKeys, err := vault.NewMasterKeysFromURIs(c.String("add-hc-vault"))
+			hcVaultKeys, err := hcvault.NewMasterKeysFromURIs(c.String("add-hc-vault"))
 			if err != nil {
 				return err
 			}
@@ -789,7 +789,7 @@ func main() {
 			for _, k := range azureKeys {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
-			hcVaultKeys, err = vault.NewMasterKeysFromURIs(c.String("rm-hc-vault"))
+			hcVaultKeys, err = hcvault.NewMasterKeysFromURIs(c.String("rm-hc-vault"))
 			if err != nil {
 				return err
 			}
@@ -1013,7 +1013,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 		}
 	}
 	if c.String("hc-vault") != "" {
-		hcVaultKeys, err := vault.NewMasterKeysFromURIs(c.String("vault"))
+		hcVaultKeys, err := hcvault.NewMasterKeysFromURIs(c.String("vault"))
 		if err != nil {
 			return nil, err
 		}

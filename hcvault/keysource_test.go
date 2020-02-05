@@ -1,4 +1,4 @@
-package vault
+package hcvault
 
 import (
 	"fmt"

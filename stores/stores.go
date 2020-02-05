@@ -17,9 +17,9 @@ import (
 	"go.mozilla.org/sops/v3"
 	"go.mozilla.org/sops/v3/azkv"
 	"go.mozilla.org/sops/v3/gcpkms"
+	"go.mozilla.org/sops/v3/hcvault"
 	"go.mozilla.org/sops/v3/kms"
 	"go.mozilla.org/sops/v3/pgp"
-	"go.mozilla.org/sops/v3/vault"
 )
 
 // SopsFile is a struct used by the stores as a helper to unmarshal the SOPS metadata
@@ -175,7 +175,7 @@ func gcpkmsKeysFromGroup(group sops.KeyGroup) (keys []gcpkmskey) {
 func vaultKeysFromGroup(group sops.KeyGroup) (keys []vaultkey) {
 	for _, key := range group {
 		switch key := key.(type) {
-		case *vault.MasterKey:
+		case *hcvault.MasterKey:
 			keys = append(keys, vaultkey{
 				VaultAddress:     key.VaultAddress,
 				BackendPath:      key.BackendPath,
@@ -349,12 +349,12 @@ func (azkvKey *azkvkey) toInternal() (*azkv.MasterKey, error) {
 	}, nil
 }
 
-func (vaultKey *vaultkey) toInternal() (*vault.MasterKey, error) {
+func (vaultKey *vaultkey) toInternal() (*hcvault.MasterKey, error) {
 	creationDate, err := time.Parse(time.RFC3339, vaultKey.CreatedAt)
 	if err != nil {
 		return nil, err
 	}
-	return &vault.MasterKey{
+	return &hcvault.MasterKey{
 		VaultAddress: vaultKey.VaultAddress,
 		BackendPath:  vaultKey.BackendPath,
 		KeyName:      vaultKey.KeyName,

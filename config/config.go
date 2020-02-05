@@ -15,11 +15,11 @@ import (
 	"go.mozilla.org/sops/v3"
 	"go.mozilla.org/sops/v3/azkv"
 	"go.mozilla.org/sops/v3/gcpkms"
+	"go.mozilla.org/sops/v3/hcvault"
 	"go.mozilla.org/sops/v3/kms"
 	"go.mozilla.org/sops/v3/logging"
 	"go.mozilla.org/sops/v3/pgp"
 	"go.mozilla.org/sops/v3/publish"
-	"go.mozilla.org/sops/v3/vault"
 )
 
 var log *logrus.Logger
@@ -164,7 +164,7 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 				keyGroup = append(keyGroup, azkv.NewMasterKey(k.VaultURL, k.Key, k.Version))
 			}
 			for _, k := range group.Vault {
-				keyGroup = append(keyGroup, vault.NewMasterKey(k.VaultAddress, k.BackendPath, k.KeyName))
+				keyGroup = append(keyGroup, hcvault.NewMasterKey(k.VaultAddress, k.BackendPath, k.KeyName))
 			}
 			groups = append(groups, keyGroup)
 		}
@@ -186,7 +186,7 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		for _, k := range azureKeys {
 			keyGroup = append(keyGroup, k)
 		}
-		vaultKeys, err := vault.NewMasterKeysFromURIs(cRule.Vault)
+		vaultKeys, err := hcvault.NewMasterKeysFromURIs(cRule.Vault)
 		if err != nil {
 			return nil, err
 		}
