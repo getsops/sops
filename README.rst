@@ -324,11 +324,11 @@ To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
 	Cluster ID      e532e461-e8f0-1352-8a41-fc7c11096908
 	HA Enabled      false
 
-	$ # We need to enable a transit engine if not already done (I prefer to create a transit engine specifically for sops, in which I can have multiple keys with various permission levels)
+	$ # It is required to enable a transit engine if not already done (It is suggested to create a transit engine specifically for sops, in which it is possible to have multiple keys with various permission levels)
 	$ vault secrets enable -path=sops transit
-	Success! Enabled the transit secrets engine at: sops/
+	Success! Enabled thˇe transit secrets engine at: sops/
 
-	$ # Then we need to create one or more keys
+	$ # Then create one or more keys
 	$ vault write sops/keys/firstkey type=rsa-4096
 	Success! Data written to: sops/keys/firstkey
 

@@ -9,16 +9,16 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"time"
-
-	
 
 	"github.com/hashicorp/vault/api"
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/v3/logging"
 )
+
 var log *logrus.Logger
 
 func init() {
@@ -66,7 +66,7 @@ func NewMasterKeyFromURI(uri string) (*MasterKey, error) {
 		return nil, err
 	}
 	if u.Scheme == "" {
-		return nil, fmt.Errorf("missing scheme in vault URL (should be like this: https://vault.example.com:8200/v1/transit/keys/keyName, got: %v", uri)
+		return nil, fmt.Errorf("missing scheme in vault URL (should be like this: https://vault.example.com:8200/v1/transit/keys/keyName), got: %v", uri)
 	}
 	backendPath, keyName, err := getBackendAndKeyFromPath(u.EscapedPath())
 	if err != nil {
@@ -78,20 +78,12 @@ func NewMasterKeyFromURI(uri string) (*MasterKey, error) {
 }
 
 func getBackendAndKeyFromPath(fullPath string) (string, string, error) {
+	if re := regexp.MustCompile(`https://*/v[\d]+/.*/.*/.*`); re.Match([]byte(fullPath)) {
+		return "", "", fmt.Errorf("Vault path does not seem to be formatted correctly: (eg. https://vault.example.com:8200/v1/transit/keys/keyName)")
+	}
 	fullPath = strings.TrimPrefix(fullPath, "/")
 	fullPath = strings.TrimSuffix(fullPath, "/")
 	values := strings.Split(fullPath, "/")
-	// minimum length should be 4 "v1", "transit", "keys", "keyName"
-	if len(values) < 4 {
-		return "", "", fmt.Errorf("The path to the key is not long enough: (eg. https://vault.example.com:8200/v1/transit/keys/keyName")
-	}
-	log.Debugf("Path: %v \nValues: %v\n", fullPath, values)
-	if values[0] != "v1" {
-		return "", "", fmt.Errorf("probably forgot v1 in the URI")
-	}
-	if values[len(values)-2] != "keys" {
-		return "", "", fmt.Errorf("probably forgot 'keys' in the URI")
-	}
 	return path.Join(values[1 : len(values)-2]...), values[len(values)-1], nil
 }
 
