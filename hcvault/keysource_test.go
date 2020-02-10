@@ -106,6 +106,7 @@ func TestNewMasterKeyFromURI(t *testing.T) {
 	uri1 := "https://vault.example.com:8200/v1/transit/keys/keyName"
 	uri2 := "https://vault.me.com/v1/super42/bestmarket/keys/slig"
 	uri3 := "http://127.0.0.1:12121/v1/transit/keys/dev"
+
 	mk1 := &MasterKey{
 		VaultAddress: "https://vault.example.com:8200",
 		BackendPath:  "transit",
@@ -126,20 +127,42 @@ func TestNewMasterKeyFromURI(t *testing.T) {
 		log.Errorln(err)
 		t.Fail()
 	}
+
 	genMk2, err := NewMasterKeyFromURI(uri2)
 	if err != nil {
 		log.Errorln(err)
 		t.Fail()
 	}
+
 	genMk3, err := NewMasterKeyFromURI(uri3)
 	if err != nil {
 		log.Errorln(err)
 		t.Fail()
 	}
-	mk1.CreationDate = genMk1.CreationDate
-	mk2.CreationDate = genMk2.CreationDate
-	mk3.CreationDate = genMk3.CreationDate
-	assert.Equal(t, mk1, genMk1)
-	assert.Equal(t, mk2, genMk2)
-	assert.Equal(t, mk3, genMk3)
+
+	if assert.NotNil(t, genMk1) {
+		mk1.CreationDate = genMk1.CreationDate
+		assert.Equal(t, mk1, genMk1)
+	}
+	if assert.NotNil(t, genMk2) {
+		mk2.CreationDate = genMk2.CreationDate
+		assert.Equal(t, mk2, genMk2)
+	}
+	if assert.NotNil(t, genMk3) {
+		mk3.CreationDate = genMk3.CreationDate
+		assert.Equal(t, mk3, genMk3)
+	}
+
+	badURIs := []string{
+		"vault.me/keys/dev/mykey",
+		"http://127.0.0.1:12121/v1/keys/dev",
+		"tcp://127.0.0.1:12121/v1/keys/dev",
+	}
+	for _, uri := range badURIs {
+		if _, err = NewMasterKeyFromURI(uri); err == nil {
+			log.Errorf("Should be a invalid uri: %s", uri)
+			t.Fail()
+		}
+	}
+
 }
