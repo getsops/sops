@@ -68,7 +68,7 @@ func NewMasterKeyFromURI(uri string) (*MasterKey, error) {
 	if u.Scheme == "" {
 		return nil, fmt.Errorf("missing scheme in vault URL (should be like this: https://vault.example.com:8200/v1/transit/keys/keyName), got: %v", uri)
 	}
-	backendPath, keyName, err := getBackendAndKeyFromPath(u.EscapedPath())
+	backendPath, keyName, err := getBackendAndKeyFromPath(u.RequestURI())
 	if err != nil {
 		return nil, err
 	}
@@ -77,14 +77,23 @@ func NewMasterKeyFromURI(uri string) (*MasterKey, error) {
 
 }
 
-func getBackendAndKeyFromPath(fullPath string) (string, string, error) {
-	if re := regexp.MustCompile(`https://*/v[\d]+/.*/.*/.*`); re.Match([]byte(fullPath)) {
+func getBackendAndKeyFromPath(fullPath string) (backendPath, keyName string, err error) {
+	// Running vault behind a reverse proxy with longer urls seems not to be supported
+	// by the vault client api so we have a separate Error for that here.
+	if re := regexp.MustCompile(`/[^/]+/v[\d]+/[^/]+/[^/]+/[^/]+`); re.Match([]byte(fullPath)) {
+		return "", "", fmt.Errorf("Running Vault with an prefixed url is not supported! (Format has to be like https://vault.example.com:8200/v1/transit/keys/keyName)")
+	} else if re := regexp.MustCompile(`/v[\d]+/[^/]+/[^/]+/[^/]+`); re.Match([]byte(fullPath)) == false {
 		return "", "", fmt.Errorf("Vault path does not seem to be formatted correctly: (eg. https://vault.example.com:8200/v1/transit/keys/keyName)")
 	}
 	fullPath = strings.TrimPrefix(fullPath, "/")
 	fullPath = strings.TrimSuffix(fullPath, "/")
-	values := strings.Split(fullPath, "/")
-	return path.Join(values[1 : len(values)-2]...), values[len(values)-1], nil
+
+	dirs := strings.Split(fullPath, "/")
+
+	keyName = dirs[len(dirs)-1]
+	backendPath = path.Join(dirs[1 : len(dirs)-2]...)
+	err = nil
+	return
 }
 
 // NewMasterKey creates a new MasterKey from a vault address, transit backend path and a key name and setting the creation date to the current date
