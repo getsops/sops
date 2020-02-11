@@ -34,7 +34,7 @@ func GetFile(dir string) *os.File {
 	return handle
 }
 
-func ExecWithFile(opts ExecOpts) {
+func ExecWithFile(opts ExecOpts) error {
 	if opts.User != "" {
 		SwitchUser(opts.User)
 	}
@@ -68,16 +68,17 @@ func ExecWithFile(opts ExecOpts) {
 	cmd.Env = os.Environ()
 
 	if opts.Background {
-		cmd.Start()
-	} else {
-		cmd.Stdin = os.Stdin
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		cmd.Run()
+		return cmd.Start()
 	}
+
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	return cmd.Run()
 }
 
-func ExecWithEnv(opts ExecOpts) {
+func ExecWithEnv(opts ExecOpts) error {
 	if opts.User != "" {
 		SwitchUser(opts.User)
 	}
@@ -98,11 +99,12 @@ func ExecWithEnv(opts ExecOpts) {
 	cmd.Env = env
 
 	if opts.Background {
-		cmd.Start()
-	} else {
-		cmd.Stdin = os.Stdin
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		cmd.Run()
+		return cmd.Start()
 	}
+
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	return cmd.Run()
 }

@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/url"
 	"os"
+	osExec "os/exec"
 	"path/filepath"
 	"reflect"
 	"strconv"
@@ -144,12 +145,14 @@ func main() {
 					return toExitError(err)
 				}
 
-				exec.ExecWithEnv(exec.ExecOpts{
+				if err := exec.ExecWithEnv(exec.ExecOpts{
 					Command:    command,
 					Plaintext:  output,
 					Background: c.Bool("background"),
 					User:       c.String("user"),
-				})
+				}); err != nil {
+					return toExitError(err)
+				}
 
 				return nil
 			},
@@ -198,13 +201,15 @@ func main() {
 					return toExitError(err)
 				}
 
-				exec.ExecWithFile(exec.ExecOpts{
+				if err := exec.ExecWithFile(exec.ExecOpts{
 					Command:    command,
 					Plaintext:  output,
 					Background: c.Bool("background"),
 					Fifo:       !c.Bool("no-fifo"),
 					User:       c.String("user"),
-				})
+				}); err != nil {
+					return toExitError(err)
+				}
 
 				return nil
 			},
@@ -224,7 +229,7 @@ func main() {
 				},
 				cli.BoolFlag{
 					Name:  "recursive",
- 					Usage: "If the source path is a directory, publish all its content recursively",
+					Usage: "If the source path is a directory, publish all its content recursively",
 				},
 				cli.BoolFlag{
 					Name:  "verbose",
@@ -857,6 +862,8 @@ func main() {
 func toExitError(err error) error {
 	if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
 		return cliErr
+	} else if execErr, ok := err.(*osExec.ExitError); ok && execErr != nil {
+		return cli.NewExitError(err, execErr.ExitCode())
 	} else if err != nil {
 		return cli.NewExitError(err, codes.ErrorGeneric)
 	}
