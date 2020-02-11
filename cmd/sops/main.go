@@ -111,10 +111,6 @@ func main() {
 			Usage:     "execute a command with decrypted values inserted into the environment",
 			ArgsUsage: "[file to decrypt] [command to run]",
 			Flags: append([]cli.Flag{
-				cli.BoolFlag{
-					Name:  "background",
-					Usage: "background the process and don't wait for it to complete",
-				},
 				cli.StringFlag{
 					Name:  "user",
 					Usage: "the user to run the command as",
@@ -146,10 +142,9 @@ func main() {
 				}
 
 				if err := exec.ExecWithEnv(exec.ExecOpts{
-					Command:    command,
-					Plaintext:  output,
-					Background: c.Bool("background"),
-					User:       c.String("user"),
+					Command:   command,
+					Plaintext: output,
+					User:      c.String("user"),
 				}); err != nil {
 					return toExitError(err)
 				}
@@ -162,10 +157,6 @@ func main() {
 			Usage:     "execute a command with the decrypted contents as a temporary file",
 			ArgsUsage: "[file to decrypt] [command to run]",
 			Flags: append([]cli.Flag{
-				cli.BoolFlag{
-					Name:  "background",
-					Usage: "background the process and don't wait for it to complete",
-				},
 				cli.BoolFlag{
 					Name:  "no-fifo",
 					Usage: "use a regular file instead of a fifo to temporarily hold the decrypted contents",
@@ -202,11 +193,10 @@ func main() {
 				}
 
 				if err := exec.ExecWithFile(exec.ExecOpts{
-					Command:    command,
-					Plaintext:  output,
-					Background: c.Bool("background"),
-					Fifo:       !c.Bool("no-fifo"),
-					User:       c.String("user"),
+					Command:   command,
+					Plaintext: output,
+					Fifo:      !c.Bool("no-fifo"),
+					User:      c.String("user"),
 				}); err != nil {
 					return toExitError(err)
 				}

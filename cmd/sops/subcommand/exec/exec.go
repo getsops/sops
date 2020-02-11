@@ -19,11 +19,10 @@ func init() {
 }
 
 type ExecOpts struct {
-	Command    string
-	Plaintext  []byte
-	Background bool
-	Fifo       bool
-	User       string
+	Command   string
+	Plaintext []byte
+	Fifo      bool
+	User      string
 }
 
 func GetFile(dir string) *os.File {
@@ -67,10 +66,6 @@ func ExecWithFile(opts ExecOpts) error {
 	cmd := BuildCommand(placeholdered)
 	cmd.Env = os.Environ()
 
-	if opts.Background {
-		return cmd.Start()
-	}
-
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -97,10 +92,6 @@ func ExecWithEnv(opts ExecOpts) error {
 
 	cmd := BuildCommand(opts.Command)
 	cmd.Env = env
-
-	if opts.Background {
-		return cmd.Start()
-	}
 
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
