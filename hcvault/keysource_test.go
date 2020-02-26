@@ -67,13 +67,13 @@ func TestKeyToMap(t *testing.T) {
 	key := MasterKey{
 		CreationDate: time.Date(2016, time.October, 31, 10, 0, 0, 0, time.UTC),
 		VaultAddress: "http://127.0.0.1:8200",
-		BackendPath:  "foo",
+		EnginePath:   "foo",
 		KeyName:      "bar",
 		EncryptedKey: "this is encrypted",
 	}
 	assert.Equal(t, map[string]interface{}{
 		"vault_address": "http://127.0.0.1:8200",
-		"backend_path":  "foo",
+		"engine_path":   "foo",
 		"key_name":      "bar",
 		"enc":           "this is encrypted",
 		"created_at":    "2016-10-31T10:00:00Z",
@@ -84,7 +84,7 @@ func TestEncryptionDecryption(t *testing.T) {
 	dataKey := []byte("super very Secret Key!!!")
 	key := MasterKey{
 		VaultAddress: os.Getenv("VAULT_ADDR"),
-		BackendPath:  "sops",
+		EnginePath:   "sops",
 		KeyName:      "main",
 	}
 	err := key.Encrypt(dataKey)
@@ -109,17 +109,17 @@ func TestNewMasterKeyFromURI(t *testing.T) {
 
 	mk1 := &MasterKey{
 		VaultAddress: "https://vault.example.com:8200",
-		BackendPath:  "transit",
+		EnginePath:   "transit",
 		KeyName:      "keyName",
 	}
 	mk2 := &MasterKey{
 		VaultAddress: "https://vault.me.com",
-		BackendPath:  "super42/bestmarket",
+		EnginePath:   "super42/bestmarket",
 		KeyName:      "slig",
 	}
 	mk3 := &MasterKey{
 		VaultAddress: "http://127.0.0.1:12121",
-		BackendPath:  "transit",
+		EnginePath:   "transit",
 		KeyName:      "dev",
 	}
 	genMk1, err := NewMasterKeyFromURI(uri1)

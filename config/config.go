@@ -93,7 +93,7 @@ type azureKVKey struct {
 
 type vaultKey struct {
 	VaultAddress string `yaml:"vault_address"`
-	BackendPath  string `yaml:"backend_path"`
+	EnginePath   string `yaml:"engine_path"`
 	KeyName      string `yaml:"key_name"`
 }
 
@@ -165,7 +165,7 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 				keyGroup = append(keyGroup, azkv.NewMasterKey(k.VaultURL, k.Key, k.Version))
 			}
 			for _, k := range group.Vault {
-				keyGroup = append(keyGroup, hcvault.NewMasterKey(k.VaultAddress, k.BackendPath, k.KeyName))
+				keyGroup = append(keyGroup, hcvault.NewMasterKey(k.VaultAddress, k.EnginePath, k.KeyName))
 			}
 			groups = append(groups, keyGroup)
 		}
@@ -195,7 +195,7 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			keyGroup = append(keyGroup, k)
 		}
 		for _, k := range cRule.Vault {
-			keyGroup = append(keyGroup, hcvault.NewMasterKey(k.VaultAddress, k.BackendPath, k.KeyName))
+			keyGroup = append(keyGroup, hcvault.NewMasterKey(k.VaultAddress, k.EnginePath, k.KeyName))
 		}
 		groups = append(groups, keyGroup)
 	}

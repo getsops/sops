@@ -6,11 +6,12 @@ package keyservice
 import (
 	context "context"
 	fmt "fmt"
+	math "math"
+
 	proto "github.com/golang/protobuf/proto"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	math "math"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -292,7 +293,7 @@ func (m *GcpKmsKey) GetResourceId() string {
 
 type VaultKey struct {
 	VaultAddress         string   `protobuf:"bytes,1,opt,name=vault_address,json=vaultAddress,proto3" json:"vault_address,omitempty"`
-	BackendPath          string   `protobuf:"bytes,2,opt,name=backend_path,json=backendPath,proto3" json:"backend_path,omitempty"`
+	EnginePath          string   `protobuf:"bytes,2,opt,name=engine_path,json=enginePath,proto3" json:"engine_path,omitempty"`
 	KeyName              string   `protobuf:"bytes,3,opt,name=key_name,json=keyName,proto3" json:"key_name,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -331,9 +332,9 @@ func (m *VaultKey) GetVaultAddress() string {
 	return ""
 }
 
-func (m *VaultKey) GetBackendPath() string {
+func (m *VaultKey) GetEnginePath() string {
 	if m != nil {
-		return m.BackendPath
+		return m.EnginePath
 	}
 	return ""
 }

@@ -27,7 +27,7 @@ message GcpKmsKey {
 
 message VaultKey {
 	string vault_address = 1;
-	string backend_path = 2;
+	string engine_path = 2;
 	string key_name = 3;
 }
 

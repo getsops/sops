@@ -29,7 +29,7 @@ func init() {
 type MasterKey struct {
 	EncryptedKey string
 	KeyName      string
-	BackendPath  string
+	EnginePath  string
 	VaultAddress string
 	CreationDate time.Time
 }
@@ -68,16 +68,16 @@ func NewMasterKeyFromURI(uri string) (*MasterKey, error) {
 	if u.Scheme == "" {
 		return nil, fmt.Errorf("missing scheme in vault URL (should be like this: https://vault.example.com:8200/v1/transit/keys/keyName), got: %v", uri)
 	}
-	backendPath, keyName, err := getBackendAndKeyFromPath(u.RequestURI())
+	enginePath, keyName, err := getBackendAndKeyFromPath(u.RequestURI())
 	if err != nil {
 		return nil, err
 	}
 	u.Path = ""
-	return NewMasterKey(u.String(), backendPath, keyName), nil
+	return NewMasterKey(u.String(), enginePath, keyName), nil
 
 }
 
-func getBackendAndKeyFromPath(fullPath string) (backendPath, keyName string, err error) {
+func getBackendAndKeyFromPath(fullPath string) (enginePath, keyName string, err error) {
 	// Running vault behind a reverse proxy with longer urls seems not to be supported
 	// by the vault client api so we have a separate Error for that here.
 	if re := regexp.MustCompile(`/[^/]+/v[\d]+/[^/]+/[^/]+/[^/]+`); re.Match([]byte(fullPath)) {
@@ -91,16 +91,16 @@ func getBackendAndKeyFromPath(fullPath string) (backendPath, keyName string, err
 	dirs := strings.Split(fullPath, "/")
 
 	keyName = dirs[len(dirs)-1]
-	backendPath = path.Join(dirs[1 : len(dirs)-2]...)
+	enginePath = path.Join(dirs[1 : len(dirs)-2]...)
 	err = nil
 	return
 }
 
 // NewMasterKey creates a new MasterKey from a vault address, transit backend path and a key name and setting the creation date to the current date
-func NewMasterKey(addess, backendPath, keyName string) *MasterKey {
+func NewMasterKey(addess, enginePath, keyName string) *MasterKey {
 	mk := &MasterKey{
 		VaultAddress: addess,
-		BackendPath:  backendPath,
+		EnginePath:  enginePath,
 		KeyName:      keyName,
 		CreationDate: time.Now().UTC(),
 	}
@@ -152,7 +152,7 @@ func vaultClient(address string) (*api.Client, error) {
 
 // Encrypt takes a sops data key, encrypts it with Vault Transit and stores the result in the EncryptedKey field
 func (key *MasterKey) Encrypt(dataKey []byte) error {
-	fullPath := path.Join(key.BackendPath, "encrypt", key.KeyName)
+	fullPath := path.Join(key.EnginePath, "encrypt", key.KeyName)
 	cli, err := vaultClient(key.VaultAddress)
 	if err != nil {
 		return err
@@ -190,7 +190,7 @@ func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 
 // Decrypt decrypts the EncryptedKey field with Vault Transit and returns the result.
 func (key *MasterKey) Decrypt() ([]byte, error) {
-	fullPath := path.Join(key.BackendPath, "decrypt", key.KeyName)
+	fullPath := path.Join(key.EnginePath, "decrypt", key.KeyName)
 	cli, err := vaultClient(key.VaultAddress)
 	if err != nil {
 		return nil, err
@@ -230,7 +230,7 @@ func (key *MasterKey) NeedsRotation() bool {
 
 // ToString converts the key to a string representation
 func (key *MasterKey) ToString() string {
-	return fmt.Sprintf("%s/v1/%s/keys/%s", key.VaultAddress, key.BackendPath, key.KeyName)
+	return fmt.Sprintf("%s/v1/%s/keys/%s", key.VaultAddress, key.EnginePath, key.KeyName)
 }
 
 func (key *MasterKey) createVaultTransitAndKey() error {
@@ -241,14 +241,14 @@ func (key *MasterKey) createVaultTransitAndKey() error {
 	if err != nil {
 		return fmt.Errorf("Cannot create Vault Client: %v", err)
 	}
-	err = cli.Sys().Mount(key.BackendPath, &api.MountInput{
+	err = cli.Sys().Mount(key.EnginePath, &api.MountInput{
 		Type:        "transit",
 		Description: "backend transit used by SOPS",
 	})
 	if err != nil {
 		return err
 	}
-	path := path.Join(key.BackendPath, "keys", key.KeyName)
+	path := path.Join(key.EnginePath, "keys", key.KeyName)
 	payload := make(map[string]interface{})
 	payload["type"] = "rsa-4096"
 	_, err = cli.Logical().Write(path, payload)
@@ -267,7 +267,7 @@ func (key MasterKey) ToMap() map[string]interface{} {
 	out := make(map[string]interface{})
 	out["vault_address"] = key.VaultAddress
 	out["key_name"] = key.KeyName
-	out["backend_path"] = key.BackendPath
+	out["engine_path"] = key.EnginePath
 	out["enc"] = key.EncryptedKey
 	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)
 	return out

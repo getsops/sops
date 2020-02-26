@@ -39,7 +39,7 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 			KeyType: &Key_VaultKey{
 				VaultKey: &VaultKey{
 					VaultAddress: mk.VaultAddress,
-					BackendPath:    mk.BackendPath,
+					EnginePath:    mk.EnginePath,
 					KeyName:        mk.KeyName,
 				},
 			},
