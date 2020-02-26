@@ -266,7 +266,7 @@ func (key *MasterKey) createVaultTransitAndKey() error {
 func (key MasterKey) ToMap() map[string]interface{} {
 	out := make(map[string]interface{})
 	out["vault_address"] = key.VaultAddress
-	out["keyname"] = key.KeyName
+	out["key_name"] = key.KeyName
 	out["backend_path"] = key.BackendPath
 	out["enc"] = key.EncryptedKey
 	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)

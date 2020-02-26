@@ -83,7 +83,7 @@ type gcpkmskey struct {
 type vaultkey struct {
 	VaultAddress     string `yaml:"vault_address" json:"vault_address"`
 	BackendPath      string `yaml:"backend_path" json:"backend_path"`
-	KeyName          string `yaml:"keyname" json:"keyname"`
+	KeyName          string `yaml:"key_name" json:"key_name"`
 	CreatedAt        string `yaml:"created_at" json:"created_at"`
 	EncryptedDataKey string `yaml:"enc" json:"enc"`
 }

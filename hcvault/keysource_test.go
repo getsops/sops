@@ -74,7 +74,7 @@ func TestKeyToMap(t *testing.T) {
 	assert.Equal(t, map[string]interface{}{
 		"vault_address": "http://127.0.0.1:8200",
 		"backend_path":  "foo",
-		"keyname":       "bar",
+		"key_name":      "bar",
 		"enc":           "this is encrypted",
 		"created_at":    "2016-10-31T10:00:00Z",
 	}, key.ToMap())
