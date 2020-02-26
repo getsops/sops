@@ -48,12 +48,20 @@ creation_rules:
     kms: "1"
     pgp: "2"
     gcp_kms: "3"
-    hc_vault_uris: http://4:8200/v1/4/keys/4
+    hc_vault_transit_uri: http://4:8200/v1/4/keys/4
   - path_regex: ""
     kms: foo
     pgp: bar
     gcp_kms: baz
-    hc_vault_uris: http://127.0.1.1/v1/baz/keys/baz
+    hc_vault_transit_uri: http://127.0.1.1/v1/baz/keys/baz
+  - path_regex: ""
+    kms: one
+    pgp: two
+    gcp_kms: three
+    hc_vault_transit:
+      - vault_address: http://127.0.1.1
+        backend_path: keys
+        key_name: baz
 `)
 
 var sampleConfigWithPath = []byte(`
@@ -209,14 +217,27 @@ func TestLoadConfigFile(t *testing.T) {
 				KMS:       "1",
 				PGP:       "2",
 				GCPKMS:    "3",
-				Vault:     "http://4:8200/v1/4/keys/4",
+				VaultURI:  "http://4:8200/v1/4/keys/4",
 			},
 			{
 				PathRegex: "",
 				KMS:       "foo",
 				PGP:       "bar",
 				GCPKMS:    "baz",
-				Vault:     "http://127.0.1.1/v1/baz/keys/baz",
+				VaultURI:  "http://127.0.1.1/v1/baz/keys/baz",
+			},
+			{
+				PathRegex: "",
+				KMS:       "one",
+				PGP:       "two",
+				GCPKMS:    "three",
+				Vault: []vaultKey{
+					vaultKey{
+						VaultAddress: "http://127.0.1.1",
+						BackendPath:  "keys",
+						KeyName:      "baz",
+					},
+				},
 			},
 		},
 	}

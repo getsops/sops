@@ -338,14 +338,14 @@ To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
 	$ vault write sops/keys/thirdkey type=chacha20-poly1305
 	Success! Data written to: sops/keys/thirdkey
 
-	$ sops --hc-vault $VAULT_ADDR/v1/sops/keys/firstkey vault_example.yml
+	$ sops --hc-vault-transit $VAULT_ADDR/v1/sops/keys/firstkey vault_example.yml
 
 	$ cat <<EOF >.sops.yaml
 	creation_rules:
 		- path_regex: \.dev\.yaml$
-		hc_vault_uris: "$VAULT_ADDR/v1/sops/keys/secondkey"
+		  hc_vault_transit_uri: "$VAULT_ADDR/v1/sops/keys/secondkey"
 		- \.prod\.yaml$
-		hc_vault_uris: "$VAULT_ADDR/v1/sops/keys/thirdkey"
+		  hc_vault_transit_uri: "$VAULT_ADDR/v1/sops/keys/thirdkey"
 	EOF
 
 	$ sops --verbose -e prod/raw.yaml > prod/encrypted.yaml

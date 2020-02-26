@@ -118,7 +118,8 @@ type creationRule struct {
 	PGP               string
 	GCPKMS            string     `yaml:"gcp_kms"`
 	AzureKeyVault     string     `yaml:"azure_keyvault"`
-	Vault             string     `yaml:"hc_vault_uris"`
+	VaultURI          string     `yaml:"hc_vault_transit_uri"`
+	Vault             []vaultKey `yaml:"hc_vault_transit"`
 	KeyGroups         []keyGroup `yaml:"key_groups"`
 	ShamirThreshold   int        `yaml:"shamir_threshold"`
 	UnencryptedSuffix string     `yaml:"unencrypted_suffix"`
@@ -186,12 +187,15 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		for _, k := range azureKeys {
 			keyGroup = append(keyGroup, k)
 		}
-		vaultKeys, err := hcvault.NewMasterKeysFromURIs(cRule.Vault)
+		vaultKeys, err := hcvault.NewMasterKeysFromURIs(cRule.VaultURI)
 		if err != nil {
 			return nil, err
 		}
 		for _, k := range vaultKeys {
 			keyGroup = append(keyGroup, k)
+		}
+		for _, k := range cRule.Vault {
+			keyGroup = append(keyGroup, hcvault.NewMasterKey(k.VaultAddress, k.BackendPath, k.KeyName))
 		}
 		groups = append(groups, keyGroup)
 	}

@@ -81,7 +81,7 @@ func main() {
 
 
    To encrypt or decrypt a document with HashiCorp Vault's Transit Secret Engine, specify the
-   Vault key URI name in the --hc-vault flag or in the SOPS_VAULT_URIS (eg. https://vault.example.org:8200/v1/transit/keys/dev
+   Vault key URI name in the --hc-vault-transit flag or in the SOPS_VAULT_URIS (eg. https://vault.example.org:8200/v1/transit/keys/dev
       where 'https://vault.example.org:8200' is the vault server, 'transit' the backendPath, and 'dev' is the name of the key )
    environment variable.
    (you need to enable the Transit Secrets Engine in Vault. See
@@ -100,11 +100,11 @@ func main() {
    To use multiple KMS or PGP keys, separate them by commas. For example:
        $ sops -p "10F2...0A, 85D...B3F21" file.yaml
 
-   The -p, -k, --gcp-kms, --hc-vault and --azure-kv flags are only used to encrypt new documents. Editing
+   The -p, -k, --gcp-kms, --hc-vault-transit and --azure-kv flags are only used to encrypt new documents. Editing
    or decrypting existing documents can be done with "sops file" or
    "sops -d file" respectively. The KMS and PGP keys listed in the encrypted
    documents are used then. To manage master keys in existing documents, use
-   the "add-{kms,pgp,gcp-kms,azure-kv,hc-vault}" and "rm-{kms,pgp,gcp-kms,azure-kv,hc-vault}" flags.
+   the "add-{kms,pgp,gcp-kms,azure-kv,hc-vault-transit}" and "rm-{kms,pgp,gcp-kms,azure-kv,hc-vault-transit}" flags.
 
    To use a different GPG binary than the one in your PATH, set SOPS_GPG_EXEC.
    To use a GPG key server other than gpg.mozilla.org, set SOPS_GPG_KEYSERVER.
@@ -524,7 +524,7 @@ func main() {
 			EnvVar: "SOPS_AZURE_KEYVAULT_URLS",
 		},
 		cli.StringFlag{
-			Name:   "hc-vault",
+			Name:   "hc-vault--transit",
 			Usage:  "comma separated list of vault's key URI (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev')",
 			EnvVar: "SOPS_VAULT_URIS",
 		},
@@ -578,11 +578,11 @@ func main() {
 			Usage: "remove the provided comma-separated list of KMS ARNs from the list of master keys on the given file",
 		},
 		cli.StringFlag{
-			Name:  "add-hc-vault",
+			Name:  "add-hc-vault-transit",
 			Usage: "add the provided comma-separated list of Vault's URI key to the list of master keys on the given file ( eg. https://vault.example.org:8200/v1/transit/keys/dev)",
 		},
 		cli.StringFlag{
-			Name:  "rm-hc-vault",
+			Name:  "rm-hc-vault-transit",
 			Usage: "remove the provided comma-separated list of Vault's URI key from the list of master keys on the given file ( eg. https://vault.example.org:8200/v1/transit/keys/dev)",
 		},
 		cli.StringFlag{
@@ -650,8 +650,8 @@ func main() {
 			return toExitError(err)
 		}
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
-			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hc-vault") != "" || c.String("add-azure-kv") != "" ||
-				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hc-vault") != "" || c.String("rm-azure-kv") != "" {
+			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" ||
+				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" {
 				return common.NewExitError("Error: cannot add or remove keys on non-existent files, use `--kms` and `--pgp` instead.", codes.CannotChangeKeysFromNonExistentFile)
 			}
 			if c.Bool("encrypt") || c.Bool("decrypt") || c.Bool("rotate") {
@@ -764,7 +764,7 @@ func main() {
 			for _, k := range azureKeys {
 				addMasterKeys = append(addMasterKeys, k)
 			}
-			hcVaultKeys, err := hcvault.NewMasterKeysFromURIs(c.String("add-hc-vault"))
+			hcVaultKeys, err := hcvault.NewMasterKeysFromURIs(c.String("add-hc-vault-transit"))
 			if err != nil {
 				return err
 			}
@@ -789,7 +789,7 @@ func main() {
 			for _, k := range azureKeys {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
-			hcVaultKeys, err = hcvault.NewMasterKeysFromURIs(c.String("rm-hc-vault"))
+			hcVaultKeys, err = hcvault.NewMasterKeysFromURIs(c.String("rm-hc-vault-transit"))
 			if err != nil {
 				return err
 			}
@@ -1012,7 +1012,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 			azkvKeys = append(azkvKeys, k)
 		}
 	}
-	if c.String("hc-vault") != "" {
+	if c.String("hc-vault-transit") != "" {
 		hcVaultKeys, err := hcvault.NewMasterKeysFromURIs(c.String("vault"))
 		if err != nil {
 			return nil, err
