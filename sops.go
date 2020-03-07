@@ -44,6 +44,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/sirupsen/logrus"
@@ -642,48 +643,170 @@ func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) 
 // any of the MasterKeys in the KeyGroup with any of the provided key services,
 // returning as soon as one key service succeeds.
 func decryptKeyGroup(group KeyGroup, svcs []keyservice.KeyServiceClient) ([]byte, error) {
-	var keyErrs []error
+	var (
+		part    []byte
+		wg      sync.WaitGroup
+		wgCount int
+		keyErrs []error
+	)
+	ctx, cancel := context.WithCancel(context.Background())
+	keyChan := make(chan []byte)
+	errChan := make(chan error)
+
 	for _, key := range group {
-		part, err := decryptKey(key, svcs)
-		if err != nil {
-			keyErrs = append(keyErrs, err)
-		} else {
-			return part, nil
-		}
+		// Run decryption inside of goroutine
+		wg.Add(1)
+		wgCount++
+		go func(ctx context.Context, wg *sync.WaitGroup, key keys.MasterKey, keyChan chan []byte, errChan chan error) {
+			var (
+				err error
+				rsp []byte
+			)
+
+			// Decrypt the key
+			rsp, err = decryptKey(ctx, key, svcs)
+
+			select {
+			// Key was already decrypted. Time to bail
+			case <-ctx.Done():
+				return
+
+			// Forward the response
+			default:
+				if err != nil {
+					errChan <- err
+				} else {
+					keyChan <- rsp
+				}
+			}
+		}(ctx, &wg, key, keyChan, errChan)
 	}
+
+	// Setup goroutine to watch for the decryption responses
+	go func(ctx context.Context, wg *sync.WaitGroup, keyChan chan []byte, cancel context.CancelFunc) {
+		for {
+			select {
+			// Bail out if the context is canceled
+			case <-ctx.Done():
+				for i := 0; i < int(wgCount); i++ {
+					wg.Done()
+				}
+				return
+
+			// Receive the key
+			case key := <-keyChan:
+				if part == nil {
+					part = key
+				}
+				cancel()
+
+			// Receive the errors
+			case err := <-errChan:
+				keyErrs = append(keyErrs, err)
+			}
+			wg.Done()
+			wgCount--
+		}
+	}(ctx, &wg, keyChan, cancel)
+
+	// Wait for the services to return a key
+	wg.Wait()
+
+	// Return the key
+	if part != nil {
+		return part, nil
+	}
+
+	// Return the errors
 	return nil, decryptKeyErrors(keyErrs)
 }
 
 // decryptKey tries to decrypt the contents of the provided MasterKey with any
 // of the key services, returning as soon as one key service succeeds.
-func decryptKey(key keys.MasterKey, svcs []keyservice.KeyServiceClient) ([]byte, error) {
+func decryptKey(ctx context.Context, key keys.MasterKey, svcs []keyservice.KeyServiceClient) ([]byte, error) {
 	svcKey := keyservice.KeyFromMasterKey(key)
 	var part []byte
+	var wgCount int
 	decryptErr := decryptKeyError{
 		keyName: key.ToString(),
 	}
+
+	// Use channels to extract the key in parallel from the services
+	var wg sync.WaitGroup
+	localCtx, cancel := context.WithCancel(ctx)
+	keyChan := make(chan []byte)
+	errChan := make(chan error)
+
 	for _, svc := range svcs {
-		// All keys in a key group encrypt the same part, so as soon
-		// as we decrypt it successfully with one key, we need to
-		// proceed with the next group
-		var err error
-		if part == nil {
-			var rsp *keyservice.DecryptResponse
+		// Run decryption inside of goroutine
+		wg.Add(1)
+		wgCount++
+		go func(ctx context.Context, wg *sync.WaitGroup, svc keyservice.KeyServiceClient, keyChan chan []byte, errChan chan error) {
+			var (
+				err error
+				rsp *keyservice.DecryptResponse
+			)
+
+			// Decrypt the key
 			rsp, err = svc.Decrypt(
-				context.Background(),
+				ctx,
 				&keyservice.DecryptRequest{
 					Ciphertext: key.EncryptedDataKey(),
 					Key:        &svcKey,
-				})
-			if err == nil {
-				part = rsp.Plaintext
+				},
+			)
+
+			select {
+			// Key was already decrypted. Time to bail
+			case <-ctx.Done():
+				return
+			// Forward the response
+			default:
+				if err != nil {
+					errChan <- err
+				} else {
+					keyChan <- rsp.Plaintext
+				}
 			}
-		}
-		decryptErr.errs = append(decryptErr.errs, err)
+		}(localCtx, &wg, svc, keyChan, errChan)
 	}
+
+	// Setup goroutine to watch for the key
+	go func(ctx context.Context, wg *sync.WaitGroup, keyChan chan []byte, cancel context.CancelFunc) {
+		for {
+			select {
+			// Bail out if the context is canceled
+			case <-ctx.Done():
+				for i := 0; i < int(wgCount); i++ {
+					wg.Done()
+				}
+				return
+
+			// Receive the key
+			case key := <-keyChan:
+				if part == nil {
+					part = key
+				}
+				cancel()
+
+			// Receive the errors
+			case err := <-errChan:
+				decryptErr.errs = append(decryptErr.errs, err)
+			}
+			wg.Done()
+			wgCount--
+		}
+	}(ctx, &wg, keyChan, cancel)
+
+	// Wait for the services to return
+	wg.Wait()
+
+	// Return the key
 	if part != nil {
 		return part, nil
 	}
+
+	// Return the errors
 	return nil, &decryptErr
 }
 

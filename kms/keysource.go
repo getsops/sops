@@ -10,6 +10,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"sync"
 	"time"
 
 	"go.mozilla.org/sops/v3/logging"
@@ -29,6 +30,9 @@ var log *logrus.Logger
 func init() {
 	log = logging.NewLogger("AWSKMS")
 }
+
+// Need a mutex to sync access to the service
+var kmsSvcMtx sync.RWMutex
 
 // this needs to be a global var for unit tests to work (mockKMS redefines
 // it in keysource_test.go)
@@ -92,17 +96,26 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		log.WithField("arn", key.Arn).Info("Decryption failed")
 		return nil, fmt.Errorf("Error base64-decoding encrypted data key: %s", err)
 	}
+
+	// Capture service locally to prevent data races
+	kmsSvcMtx.RLock()
+	svc := kmsSvc
+	kmsSvcMtx.RUnlock()
+
 	// isMocked is set by unit test to indicate that the KMS service
 	// has already been initialized. it's ugly, but it works.
-	if kmsSvc == nil || !isMocked {
+	if svc == nil || !isMocked {
 		sess, err := key.createSession()
 		if err != nil {
 			log.WithField("arn", key.Arn).Info("Decryption failed")
 			return nil, fmt.Errorf("Error creating AWS session: %v", err)
 		}
-		kmsSvc = kms.New(sess)
+		svc = kms.New(sess)
+		kmsSvcMtx.Lock()
+		kmsSvc = svc
+		kmsSvcMtx.Unlock()
 	}
-	decrypted, err := kmsSvc.Decrypt(&kms.DecryptInput{CiphertextBlob: k, EncryptionContext: key.EncryptionContext})
+	decrypted, err := svc.Decrypt(&kms.DecryptInput{CiphertextBlob: k, EncryptionContext: key.EncryptionContext})
 	if err != nil {
 		log.WithField("arn", key.Arn).Info("Decryption failed")
 		return nil, fmt.Errorf("Error decrypting key: %v", err)

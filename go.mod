@@ -13,6 +13,7 @@ require (
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/fatih/color v1.7.0
 	github.com/golang/protobuf v1.3.2
+	github.com/google/go-cmp v0.3.0
 	github.com/google/shlex v0.0.0-20181106134648-c34317bd91bf
 	github.com/goware/prefixer v0.0.0-20160118172347-395022866408
 	github.com/hashicorp/vault/api v1.0.4
