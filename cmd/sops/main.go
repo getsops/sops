@@ -64,8 +64,9 @@ func main() {
 	app.ArgsUsage = "sops [options] file"
 	app.Version = version.Version
 	app.Authors = []cli.Author{
-		{Name: "Julien Vehent", Email: "jvehent@mozilla.com"},
+		{Name: "AJ Bahnken", Email: "ajvb@mozilla.com"},
 		{Name: "Adrian Utrilla", Email: "adrianutrilla@gmail.com"},
+		{Name: "Julien Vehent", Email: "jvehent@mozilla.com"},
 	}
 	app.UsageText = `sops is an editor of encrypted files that supports AWS KMS and PGP
 
