@@ -524,7 +524,7 @@ func main() {
 			EnvVar: "SOPS_AZURE_KEYVAULT_URLS",
 		},
 		cli.StringFlag{
-			Name:   "hc-vault--transit",
+			Name:   "hc-vault-transit",
 			Usage:  "comma separated list of vault's key URI (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev')",
 			EnvVar: "SOPS_VAULT_URIS",
 		},
@@ -1013,7 +1013,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 		}
 	}
 	if c.String("hc-vault-transit") != "" {
-		hcVaultKeys, err := hcvault.NewMasterKeysFromURIs(c.String("vault"))
+		hcVaultKeys, err := hcvault.NewMasterKeysFromURIs(c.String("hc-vault-transit"))
 		if err != nil {
 			return nil, err
 		}
@@ -1026,7 +1026,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 			pgpKeys = append(pgpKeys, k)
 		}
 	}
-	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("azure-kv") == "" && c.String("vault") == "" {
+	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("azure-kv") == "" && c.String("hc-vault-transit") == "" {
 		conf, err := loadConfig(c, file, kmsEncryptionContext)
 		// config file might just not be supplied, without any error
 		if conf == nil {
