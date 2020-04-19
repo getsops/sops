@@ -4,8 +4,18 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/google/go-cmp/cmp"
 	vault "github.com/hashicorp/vault/api"
+	"go.mozilla.org/sops/v3/logging"
+
+	"github.com/sirupsen/logrus"
 )
+
+var log *logrus.Logger
+
+func init() {
+	log = logging.NewLogger("PUBLISH")
+}
 
 type VaultDestination struct {
 	vaultAddress string
@@ -65,6 +75,16 @@ func (vaultd *VaultDestination) UploadUnencrypted(data map[string]interface{}, f
 		}
 	}
 
+	secretsPath := vaultd.secretsPath(fileName)
+	existingSecret, err := client.Logical().Read(secretsPath)
+	if err != nil {
+		log.Warnf("Cannot check if destination secret already exists in %s. New version will be created even if the data has not been changed.", secretsPath)
+	}
+	if existingSecret != nil && cmp.Equal(data, existingSecret.Data["data"]) {
+		log.Infof("Secret in %s is already up-to-date.\n", secretsPath)
+		return nil
+	}
+
 	secretsData := make(map[string]interface{})
 
 	if vaultd.kvVersion == 1 {
@@ -73,7 +93,7 @@ func (vaultd *VaultDestination) UploadUnencrypted(data map[string]interface{}, f
 		secretsData["data"] = data
 	}
 
-	_, err = client.Logical().Write(vaultd.secretsPath(fileName), secretsData)
+	_, err = client.Logical().Write(secretsPath, secretsData)
 	if err != nil {
 		return err
 	}

@@ -48,10 +48,20 @@ creation_rules:
     kms: "1"
     pgp: "2"
     gcp_kms: "3"
+    hc_vault_transit_uri: http://4:8200/v1/4/keys/4
   - path_regex: ""
     kms: foo
     pgp: bar
     gcp_kms: baz
+    hc_vault_transit_uri: http://127.0.1.1/v1/baz/keys/baz
+  - path_regex: ""
+    kms: one
+    pgp: two
+    gcp_kms: three
+    hc_vault_transit:
+      - vault_address: http://127.0.1.1
+        engine_path: keys
+        key_name: baz
 `)
 
 var sampleConfigWithPath = []byte(`
@@ -60,14 +70,17 @@ creation_rules:
     kms: "1"
     pgp: "2"
     gcp_kms: "3"
+    hc_vault_uris: http://4:8200/v1/4/keys/4
   - path_regex: somefilename.yml
     kms: bilbo
     pgp: baggins
     gcp_kms: precious
+    hc_vault_uris: https://pluto/v1/pluto/keys/pluto
   - path_regex: ""
     kms: foo
     pgp: bar
     gcp_kms: baz
+    hc_vault_uris: https://foz:443/v1/foz/keys/foz
 `)
 
 var sampleConfigWithGroups = []byte(`
@@ -87,6 +100,10 @@ creation_rules:
       - vaultUrl: https://foo.vault.azure.net
         key: foo-key
         version: fooversion
+      hc_vault:
+      - vault_address: https://foo.vault:8200
+        engine_path: foo
+        key_name: foo-key
     - kms:
       - arn: baz
       pgp:
@@ -98,6 +115,10 @@ creation_rules:
       - vaultUrl: https://bar.vault.azure.net
         key: bar-key
         version: barversion
+      hc_vault:
+      - vault_address: https://baz.vault:8200
+        engine_path: baz
+        key_name: baz-key
 `)
 
 var sampleConfigWithSuffixParameters = []byte(`
@@ -135,6 +156,7 @@ creation_rules:
   - path_regex: foobar*
     kms: "1"
     pgp: "2"
+    hc_vault_uris: "https://vault.com/v1/bug/keys/pr"
     unencrypted_suffix: _unencrypted
     encrypted_suffix: _enc
     `)
@@ -195,12 +217,27 @@ func TestLoadConfigFile(t *testing.T) {
 				KMS:       "1",
 				PGP:       "2",
 				GCPKMS:    "3",
+				VaultURI:  "http://4:8200/v1/4/keys/4",
 			},
 			{
 				PathRegex: "",
 				KMS:       "foo",
 				PGP:       "bar",
 				GCPKMS:    "baz",
+				VaultURI:  "http://127.0.1.1/v1/baz/keys/baz",
+			},
+			{
+				PathRegex: "",
+				KMS:       "one",
+				PGP:       "two",
+				GCPKMS:    "three",
+				Vault: []vaultKey{
+					vaultKey{
+						VaultAddress: "http://127.0.1.1",
+						EnginePath:   "keys",
+						KeyName:      "baz",
+					},
+				},
 			},
 		},
 	}
@@ -227,6 +264,7 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 						PGP:     []string{"bar"},
 						GCPKMS:  []gcpKmsKey{{ResourceID: "foo"}},
 						AzureKV: []azureKVKey{{VaultURL: "https://foo.vault.azure.net", Key: "foo-key", Version: "fooversion"}},
+						Vault:   []vaultKey{{VaultAddress: "https://foo.vault:8200", EnginePath: "foo", KeyName: "foo-key"}},
 					},
 					{
 						KMS: []kmsKey{{Arn: "baz"}},
@@ -236,6 +274,7 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 							{ResourceID: "baz"},
 						},
 						AzureKV: []azureKVKey{{VaultURL: "https://bar.vault.azure.net", Key: "bar-key", Version: "barversion"}},
+						Vault:   []vaultKey{{VaultAddress: "https://baz.vault:8200", EnginePath: "baz", KeyName: "baz-key"}},
 					},
 				},
 			},
