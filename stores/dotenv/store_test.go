@@ -13,7 +13,6 @@ VAR1=val1
 VAR2=val2
 #comment
 VAR3_unencrypted=val3
-VAR4=val4\nval4
 `, "\n"))
 
 var BRANCH = sops.TreeBranch{
@@ -32,10 +31,6 @@ var BRANCH = sops.TreeBranch{
 	sops.TreeItem{
 		Key:   "VAR3_unencrypted",
 		Value: "val3",
-	},
-	sops.TreeItem{
-		Key:   "VAR4",
-		Value: "val4\nval4",
 	},
 }
 
