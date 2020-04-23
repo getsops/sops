@@ -178,6 +178,9 @@ destination_rules:
     vault_kv_mount_name: "kv/"
     vault_kv_version: 1
     path_regex: "vault-v1/*"
+  - vault_path: "omit/"
+    vault_path_omit_filename: true
+    path_regex: "vault-omit-filename/*"
 `)
 
 func parseConfigFile(confBytes []byte, t *testing.T) *configFile {
@@ -328,4 +331,8 @@ func TestLoadConfigFileWithVaultDestinationRules(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, conf.Destination)
 	assert.Equal(t, "http://127.0.0.1:8200/v1/kv/barfoo/barfoo", conf.Destination.Path("barfoo"))
+	conf, err = parseDestinationRuleForFile(parseConfigFile(sampleConfigWithVaultDestinationRules, t), "vault-omit-filename/barfoo", nil)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf.Destination)
+	assert.Equal(t, "http://127.0.0.1:8200/v1/secret/data/omit/", conf.Destination.Path("omit"))
 }

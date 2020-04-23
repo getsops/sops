@@ -18,13 +18,14 @@ func init() {
 }
 
 type VaultDestination struct {
-	vaultAddress string
-	vaultPath    string
-	kvMountName  string
-	kvVersion    int
+	vaultAddress          string
+	vaultPath             string
+	kvMountName           string
+	kvVersion             int
+	vaultPathOmitFilename bool
 }
 
-func NewVaultDestination(vaultAddress, vaultPath, kvMountName string, kvVersion int) *VaultDestination {
+func NewVaultDestination(vaultAddress, vaultPath, kvMountName string, kvVersion int, vaultPathOmitFilename bool) *VaultDestination {
 	if !strings.HasSuffix(vaultPath, "/") {
 		vaultPath = vaultPath + "/"
 	}
@@ -37,7 +38,7 @@ func NewVaultDestination(vaultAddress, vaultPath, kvMountName string, kvVersion 
 	if kvVersion != 1 && kvVersion != 2 {
 		kvVersion = 2
 	}
-	return &VaultDestination{vaultAddress, vaultPath, kvMountName, kvVersion}
+	return &VaultDestination{vaultAddress, vaultPath, kvMountName, kvVersion, vaultPathOmitFilename}
 }
 
 func (vaultd *VaultDestination) getAddress() string {
@@ -52,6 +53,9 @@ func (vaultd *VaultDestination) Path(fileName string) string {
 }
 
 func (vaultd *VaultDestination) secretsPath(fileName string) string {
+	if vaultd.vaultPathOmitFilename {
+		fileName = ""
+	}
 	if vaultd.kvVersion == 1 {
 		return fmt.Sprintf("%s%s%s", vaultd.kvMountName, vaultd.vaultPath, fileName)
 	}
