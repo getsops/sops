@@ -293,7 +293,7 @@ And decrypt it using::
 Encrypting using Hashicorp Vault
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To understand how to deploy Vault securely this is not the place, we assume you have a instance (or more) of Vault running and you have privileged access to it. 
+We assume you have an instance (or more) of Vault running and you have privileged access to it. For instructions on how to deploy a secure instance of Vault, refer to Hashicorp's official documentation.
 
 To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!) 
 
@@ -304,13 +304,13 @@ To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
 
 .. code:: bash
 
-	$ # Subsitute this with the address of the vault running
+	$ # Substitute this with the address Vault is running on
 	$ export VAULT_ADDR=http://127.0.0.1:8200 
 
 	$ # this may not be necessary in case you previously used `vault login` for production use
 	$ export VAULT_TOKEN=toor 
 	
-	$ # to check if Vault started correctly and configured
+	$ # to check if Vault started and is configured correctly
 	$ vault status
 	Key             Value
 	---             -----
@@ -326,7 +326,7 @@ To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
 
 	$ # It is required to enable a transit engine if not already done (It is suggested to create a transit engine specifically for sops, in which it is possible to have multiple keys with various permission levels)
 	$ vault secrets enable -path=sops transit
-	Success! Enabled thˇe transit secrets engine at: sops/
+	Success! Enabled the transit secrets engine at: sops/
 
 	$ # Then create one or more keys
 	$ vault write sops/keys/firstkey type=rsa-4096
@@ -340,11 +340,11 @@ To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
 
 	$ sops --hc-vault-transit $VAULT_ADDR/v1/sops/keys/firstkey vault_example.yml
 
-	$ cat <<EOF >.sops.yaml
+	$ cat <<EOF > .sops.yaml
 	creation_rules:
 		- path_regex: \.dev\.yaml$
 		  hc_vault_transit_uri: "$VAULT_ADDR/v1/sops/keys/secondkey"
-		- \.prod\.yaml$
+		- path_regex: \.prod\.yaml$
 		  hc_vault_transit_uri: "$VAULT_ADDR/v1/sops/keys/thirdkey"
 	EOF
 

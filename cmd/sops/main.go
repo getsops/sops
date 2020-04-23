@@ -81,7 +81,7 @@ func main() {
 
 
    To encrypt or decrypt a document with HashiCorp Vault's Transit Secret Engine, specify the
-   Vault key URI name in the --hc-vault-transit flag or in the SOPS_VAULT_URIS (eg. https://vault.example.org:8200/v1/transit/keys/dev
+   Vault key URI name in the --hc-vault-transit flag or in the SOPS_VAULT_URIS environment variable (eg. https://vault.example.org:8200/v1/transit/keys/dev
       where 'https://vault.example.org:8200' is the vault server, 'transit' the enginePath, and 'dev' is the name of the key )
    environment variable.
    (you need to enable the Transit Secrets Engine in Vault. See

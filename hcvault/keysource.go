@@ -81,9 +81,9 @@ func getBackendAndKeyFromPath(fullPath string) (enginePath, keyName string, err 
 	// Running vault behind a reverse proxy with longer urls seems not to be supported
 	// by the vault client api so we have a separate Error for that here.
 	if re := regexp.MustCompile(`/[^/]+/v[\d]+/[^/]+/[^/]+/[^/]+`); re.Match([]byte(fullPath)) {
-		return "", "", fmt.Errorf("Running Vault with an prefixed url is not supported! (Format has to be like https://vault.example.com:8200/v1/transit/keys/keyName)")
+		return "", "", fmt.Errorf("running Vault with a prefixed url is not supported! (Format has to be like https://vault.example.com:8200/v1/transit/keys/keyName)")
 	} else if re := regexp.MustCompile(`/v[\d]+/[^/]+/[^/]+/[^/]+`); re.Match([]byte(fullPath)) == false {
-		return "", "", fmt.Errorf("Vault path does not seem to be formatted correctly: (eg. https://vault.example.com:8200/v1/transit/keys/keyName)")
+		return "", "", fmt.Errorf("vault path does not seem to be formatted correctly: (eg. https://vault.example.com:8200/v1/transit/keys/keyName)")
 	}
 	fullPath = strings.TrimPrefix(fullPath, "/")
 	fullPath = strings.TrimSuffix(fullPath, "/")
