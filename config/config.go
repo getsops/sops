@@ -274,6 +274,11 @@ func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptio
 }
 
 func parseCreationRuleForFile(conf *configFile, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
+	// If config file doesn't contain CreationRules (it's empty or only contains DestionationRules), assume it does not exist
+	if conf.CreationRules == nil {
+		return nil, nil
+	}
+
 	var rule *creationRule
 
 	for _, r := range conf.CreationRules {
