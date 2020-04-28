@@ -48,9 +48,6 @@ Or whatever variation of the above fits your system and shell.
 
 To use **sops** as a library, take a look at the `decrypt package <https://godoc.org/go.mozilla.org/sops/decrypt>`_.
 
-**Questions?** ping "ulfr" and "autrilla" in ``#security`` on `irc.mozilla.org <https://wiki.mozilla.org/IRC>`_
-(use a web client like `mibbit <https://chat.mibbit.com>`_ ).
-
 **What happened to Python Sops?** We rewrote Sops in Go to solve a number of
 deployment issues, but the Python branch still exists under ``python-sops``. We
 will keep maintaining it for a while, and you can still ``pip install sops``,
@@ -865,21 +862,21 @@ written to disk.
            "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
            "AWS_SECRET_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
    }
-   
+
    # decrypt out.json and run a command
    # the command prints the environment variable and runs a script that uses it
    $ sops exec-env out.json 'echo secret: $database_password; ./database-import'
    secret: jf48t9wfw094gf4nhdf023r
-   
+
    # launch a shell with the secrets available in its environment
    $ sops exec-env out.json 'sh'
    sh-3.2# echo $database_password
    jf48t9wfw094gf4nhdf023r
-   
+
    # the secret is not accessible anywhere else
    sh-3.2$ exit
    $ echo your password: $database_password
-   your password: 
+   your password:
 
 
 If the command you want to run only operates on files, you can use ``exec-file``
@@ -904,7 +901,7 @@ substituted with the temporary file path (whether a FIFO or an actual file).
            "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
            "AWS_SECRET_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
    }
-   
+
    # launch a shell with a variable TMPFILE pointing to the temporary file
    $ sops exec-file --no-fifo out.json 'TMPFILE={} sh'
    sh-3.2$ echo $TMPFILE
@@ -934,7 +931,7 @@ for added security.
    # the encrypted file can't be read by the current user
    $ cat out.json
    cat: out.json: Permission denied
-   
+
    # execute sops as root, decrypt secrets, then drop privileges
    $ sudo sops exec-env --user nobody out.json 'sh'
    sh-3.2$ echo $database_password
