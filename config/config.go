@@ -279,23 +279,19 @@ func parseCreationRuleForFile(conf *configFile, filePath string, kmsEncryptionCo
 		return nil, nil
 	}
 
-	var rule *creationRule
+	var rule creationRule
 
 	for _, r := range conf.CreationRules {
 		if r.PathRegex == "" {
-			rule = &r
+			rule = r
 			break
 		}
 		if r.PathRegex != "" {
 			if match, _ := regexp.MatchString(r.PathRegex, filePath); match {
-				rule = &r
+				rule = r
 				break
 			}
 		}
-	}
-
-	if rule == nil {
-		return nil, fmt.Errorf("error loading config: no matching creation rules found")
 	}
 
 	config, err := configFromRule(rule, kmsEncryptionContext)
