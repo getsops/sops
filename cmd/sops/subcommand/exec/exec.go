@@ -1,13 +1,14 @@
 package exec
 
 import (
-	"bytes"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"runtime"
 	"strings"
 
 	"go.mozilla.org/sops/v3/logging"
+	"go.mozilla.org/sops/v3/stores/dotenv"
 
 	"github.com/sirupsen/logrus"
 )
@@ -34,7 +35,7 @@ func GetFile(dir string) *os.File {
 	return handle
 }
 
-func ExecWithFile(opts ExecOpts) {
+func ExecWithFile(opts ExecOpts) error {
 	if opts.User != "" {
 		SwitchUser(opts.User)
 	}
@@ -68,41 +69,46 @@ func ExecWithFile(opts ExecOpts) {
 	cmd.Env = os.Environ()
 
 	if opts.Background {
-		cmd.Start()
-	} else {
-		cmd.Stdin = os.Stdin
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		cmd.Run()
+		return cmd.Start()
 	}
+
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	return cmd.Run()
 }
 
-func ExecWithEnv(opts ExecOpts) {
+func ExecWithEnv(opts ExecOpts) error {
 	if opts.User != "" {
 		SwitchUser(opts.User)
 	}
 
 	env := os.Environ()
-	lines := bytes.Split(opts.Plaintext, []byte("\n"))
-	for _, line := range lines {
-		if len(line) == 0 {
+	store := dotenv.Store{}
+
+	branches, err := store.LoadPlainFile(opts.Plaintext)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, item := range branches[0] {
+		if item.Value == nil {
 			continue
 		}
-		if line[0] == '#' {
-			continue
-		}
-		env = append(env, string(line))
+		env = append(env, fmt.Sprintf("%s=%s", item.Key, item.Value))
 	}
 
 	cmd := BuildCommand(opts.Command)
 	cmd.Env = env
 
 	if opts.Background {
-		cmd.Start()
-	} else {
-		cmd.Stdin = os.Stdin
-		cmd.Stdout = os.Stdout
-		cmd.Stderr = os.Stderr
-		cmd.Run()
+		return cmd.Start()
 	}
+
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	return cmd.Run()
 }
