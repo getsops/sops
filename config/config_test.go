@@ -54,14 +54,6 @@ creation_rules:
     pgp: bar
     gcp_kms: baz
     hc_vault_transit_uri: http://127.0.1.1/v1/baz/keys/baz
-  - path_regex: ""
-    kms: one
-    pgp: two
-    gcp_kms: three
-    hc_vault_transit:
-      - vault_address: http://127.0.1.1
-        engine_path: keys
-        key_name: baz
 `)
 
 var sampleConfigWithPath = []byte(`
@@ -101,9 +93,7 @@ creation_rules:
         key: foo-key
         version: fooversion
       hc_vault:
-      - vault_address: https://foo.vault:8200
-        engine_path: foo
-        key_name: foo-key
+      - 'https://foo.vault:8200/v1/foo/keys/foo-key'
     - kms:
       - arn: baz
       pgp:
@@ -116,9 +106,7 @@ creation_rules:
         key: bar-key
         version: barversion
       hc_vault:
-      - vault_address: https://baz.vault:8200
-        engine_path: baz
-        key_name: baz-key
+      - 'https://baz.vault:8200/v1/baz/keys/baz-key'
 `)
 
 var sampleConfigWithSuffixParameters = []byte(`
@@ -226,19 +214,6 @@ func TestLoadConfigFile(t *testing.T) {
 				GCPKMS:    "baz",
 				VaultURI:  "http://127.0.1.1/v1/baz/keys/baz",
 			},
-			{
-				PathRegex: "",
-				KMS:       "one",
-				PGP:       "two",
-				GCPKMS:    "three",
-				Vault: []vaultKey{
-					vaultKey{
-						VaultAddress: "http://127.0.1.1",
-						EnginePath:   "keys",
-						KeyName:      "baz",
-					},
-				},
-			},
 		},
 	}
 
@@ -264,7 +239,7 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 						PGP:     []string{"bar"},
 						GCPKMS:  []gcpKmsKey{{ResourceID: "foo"}},
 						AzureKV: []azureKVKey{{VaultURL: "https://foo.vault.azure.net", Key: "foo-key", Version: "fooversion"}},
-						Vault:   []vaultKey{{VaultAddress: "https://foo.vault:8200", EnginePath: "foo", KeyName: "foo-key"}},
+						Vault:   []string{"https://foo.vault:8200/v1/foo/keys/foo-key"},
 					},
 					{
 						KMS: []kmsKey{{Arn: "baz"}},
@@ -274,7 +249,7 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 							{ResourceID: "baz"},
 						},
 						AzureKV: []azureKVKey{{VaultURL: "https://bar.vault.azure.net", Key: "bar-key", Version: "barversion"}},
-						Vault:   []vaultKey{{VaultAddress: "https://baz.vault:8200", EnginePath: "baz", KeyName: "baz-key"}},
+						Vault:   []string{"https://baz.vault:8200/v1/baz/keys/baz-key"},
 					},
 				},
 			},

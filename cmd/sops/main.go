@@ -361,7 +361,7 @@ func main() {
 							Usage: "the Azure Key Vault key URL the new group should contain. Can be specified more than once",
 						},
 						cli.StringSliceFlag{
-							Name:  "hc-vault",
+							Name:  "hc-vault-transit",
 							Usage: "the full vault path to the key used to encrypt/decrypt. Make you choose and configure a key with encrption/decryption enabled (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev'). Can be specified more than once",
 						},
 						cli.BoolFlag{
@@ -381,7 +381,7 @@ func main() {
 						pgpFps := c.StringSlice("pgp")
 						kmsArns := c.StringSlice("kms")
 						gcpKmses := c.StringSlice("gcp-kms")
-						vaultURIs := c.StringSlice("hc-vault")
+						vaultURIs := c.StringSlice("hc-vault-transit")
 						azkvs := c.StringSlice("azure-kv")
 						var group sops.KeyGroup
 						for _, fp := range pgpFps {
@@ -1044,7 +1044,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	group = append(group, azkvKeys...)
 	group = append(group, pgpKeys...)
 	group = append(group, hcVaultMkKeys...)
-	log.Infof("Master keys available:  %+v", group)
+	log.Debugf("Master keys available:  %+v", group)
 	return []sops.KeyGroup{group}, nil
 }
 

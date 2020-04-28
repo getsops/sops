@@ -70,7 +70,7 @@ type keyGroup struct {
 	KMS     []kmsKey
 	GCPKMS  []gcpKmsKey  `yaml:"gcp_kms"`
 	AzureKV []azureKVKey `yaml:"azure_keyvault"`
-	Vault   []vaultKey   `yaml:"hc_vault"`
+	Vault   []string     `yaml:"hc_vault"`
 	PGP     []string
 }
 
@@ -89,12 +89,6 @@ type azureKVKey struct {
 	VaultURL string `yaml:"vaultUrl"`
 	Key      string `yaml:"key"`
 	Version  string `yaml:"version"`
-}
-
-type vaultKey struct {
-	VaultAddress string `yaml:"vault_address"`
-	EnginePath   string `yaml:"engine_path"`
-	KeyName      string `yaml:"key_name"`
 }
 
 type destinationRule struct {
@@ -119,7 +113,6 @@ type creationRule struct {
 	GCPKMS            string     `yaml:"gcp_kms"`
 	AzureKeyVault     string     `yaml:"azure_keyvault"`
 	VaultURI          string     `yaml:"hc_vault_transit_uri"`
-	Vault             []vaultKey `yaml:"hc_vault_transit"`
 	KeyGroups         []keyGroup `yaml:"key_groups"`
 	ShamirThreshold   int        `yaml:"shamir_threshold"`
 	UnencryptedSuffix string     `yaml:"unencrypted_suffix"`
@@ -165,7 +158,11 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 				keyGroup = append(keyGroup, azkv.NewMasterKey(k.VaultURL, k.Key, k.Version))
 			}
 			for _, k := range group.Vault {
-				keyGroup = append(keyGroup, hcvault.NewMasterKey(k.VaultAddress, k.EnginePath, k.KeyName))
+				if masterKey, err := hcvault.NewMasterKeyFromURI(k); err == nil {
+					keyGroup = append(keyGroup, masterKey)
+				} else {
+					return nil, err
+				}
 			}
 			groups = append(groups, keyGroup)
 		}
@@ -193,9 +190,6 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		}
 		for _, k := range vaultKeys {
 			keyGroup = append(keyGroup, k)
-		}
-		for _, k := range cRule.Vault {
-			keyGroup = append(keyGroup, hcvault.NewMasterKey(k.VaultAddress, k.EnginePath, k.KeyName))
 		}
 		groups = append(groups, keyGroup)
 	}
