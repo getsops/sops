@@ -1071,7 +1071,7 @@ func loadConfig(c *cli.Context, file string, kmsEncryptionContext map[string]*st
 			return nil, nil
 		}
 	}
-	conf, err := config.LoadForFile(configPath, file, kmsEncryptionContext)
+	conf, err := config.LoadCreationRuleForFile(configPath, file, kmsEncryptionContext)
 	if err != nil {
 		return nil, err
 	}

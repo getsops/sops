@@ -323,10 +323,10 @@ func parseCreationRuleForFile(conf *configFile, filePath string, kmsEncryptionCo
 	return config, nil
 }
 
-// LoadForFile load the configuration for a given SOPS file from the config file at confPath. A kmsEncryptionContext
+// LoadCreationRuleForFile load the configuration for a given SOPS file from the config file at confPath. A kmsEncryptionContext
 // should be provided for configurations that do not contain key groups, as there's no way to specify context inside
 // a SOPS config file outside of key groups.
-func LoadForFile(confPath string, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
+func LoadCreationRuleForFile(confPath string, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
 	conf, err := loadConfigFile(confPath)
 	if err != nil {
 		return nil, err
@@ -334,7 +334,7 @@ func LoadForFile(confPath string, filePath string, kmsEncryptionContext map[stri
 	return parseCreationRuleForFile(conf, filePath, kmsEncryptionContext)
 }
 
-// LoadDestinationRuleForFile works the same as LoadForFile, but gets the "creation_rule" from the matching destination_rule's
+// LoadDestinationRuleForFile works the same as LoadCreationRuleForFile, but gets the "creation_rule" from the matching destination_rule's
 // "recreation_rule".
 func LoadDestinationRuleForFile(confPath string, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
 	conf, err := loadConfigFile(confPath)
