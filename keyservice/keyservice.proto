@@ -6,6 +6,7 @@ message Key {
 		PgpKey pgp_key = 2;
 		GcpKmsKey gcp_kms_key = 3;
 		AzureKeyVaultKey azure_keyvault_key = 4;
+		VaultKey vault_key = 5;
 	}
 }
 
@@ -17,10 +18,17 @@ message KmsKey {
 	string arn = 1;
 	string role = 2;
 	map<string, string> context = 3;
+	string aws_profile = 4;
 }
 
 message GcpKmsKey {
 	string resource_id = 1;
+}
+
+message VaultKey {
+	string vault_address = 1;
+	string engine_path = 2;
+	string key_name = 3;
 }
 
 message AzureKeyVaultKey {

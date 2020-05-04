@@ -15,6 +15,7 @@ import (
 	"go.mozilla.org/sops/v3"
 	"go.mozilla.org/sops/v3/azkv"
 	"go.mozilla.org/sops/v3/gcpkms"
+	"go.mozilla.org/sops/v3/hcvault"
 	"go.mozilla.org/sops/v3/kms"
 	"go.mozilla.org/sops/v3/logging"
 	"go.mozilla.org/sops/v3/pgp"
@@ -69,6 +70,7 @@ type keyGroup struct {
 	KMS     []kmsKey
 	GCPKMS  []gcpKmsKey  `yaml:"gcp_kms"`
 	AzureKV []azureKVKey `yaml:"azure_keyvault"`
+	Vault   []string     `yaml:"hc_vault"`
 	PGP     []string
 }
 
@@ -110,6 +112,7 @@ type creationRule struct {
 	PGP               string
 	GCPKMS            string     `yaml:"gcp_kms"`
 	AzureKeyVault     string     `yaml:"azure_keyvault"`
+	VaultURI          string     `yaml:"hc_vault_transit_uri"`
 	KeyGroups         []keyGroup `yaml:"key_groups"`
 	ShamirThreshold   int        `yaml:"shamir_threshold"`
 	UnencryptedSuffix string     `yaml:"unencrypted_suffix"`
@@ -154,6 +157,13 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			for _, k := range group.AzureKV {
 				keyGroup = append(keyGroup, azkv.NewMasterKey(k.VaultURL, k.Key, k.Version))
 			}
+			for _, k := range group.Vault {
+				if masterKey, err := hcvault.NewMasterKeyFromURI(k); err == nil {
+					keyGroup = append(keyGroup, masterKey)
+				} else {
+					return nil, err
+				}
+			}
 			groups = append(groups, keyGroup)
 		}
 	} else {
@@ -172,6 +182,13 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			return nil, err
 		}
 		for _, k := range azureKeys {
+			keyGroup = append(keyGroup, k)
+		}
+		vaultKeys, err := hcvault.NewMasterKeysFromURIs(cRule.VaultURI)
+		if err != nil {
+			return nil, err
+		}
+		for _, k := range vaultKeys {
 			keyGroup = append(keyGroup, k)
 		}
 		groups = append(groups, keyGroup)
@@ -250,7 +267,7 @@ func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptio
 	var dest publish.Destination
 	if dRule != nil {
 		if dRule.S3Bucket != "" && dRule.GCSBucket != "" && dRule.VaultPath != "" {
-			return nil, fmt.Errorf("error loading config: more than one destinations were found in a single destination rule, you can only use one per rule.")
+			return nil, fmt.Errorf("error loading config: more than one destinations were found in a single destination rule, you can only use one per rule")
 		}
 		if dRule.S3Bucket != "" {
 			dest = publish.NewS3Destination(dRule.S3Bucket, dRule.S3Prefix)
