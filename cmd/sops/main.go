@@ -477,8 +477,8 @@ func main() {
 				var err error
 				var configPath string
 				// Check if config is provided though the command line
-				if c.String("config") != "" {
-					configPath = c.String("config")
+				if c.GlobalString("config") != "" {
+					configPath = c.GlobalString("config")
 				} else {
 					configPath, err = config.FindConfigFile(".")
 					if err != nil {
