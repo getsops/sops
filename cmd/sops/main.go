@@ -476,7 +476,6 @@ func main() {
 			Action: func(c *cli.Context) error {
 				var err error
 				var configPath string
-				// Check if config is provided though the command line
 				if c.GlobalString("config") != "" {
 					configPath = c.GlobalString("config")
 				} else {
