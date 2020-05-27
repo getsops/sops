@@ -17,6 +17,7 @@ import (
 	"go.mozilla.org/sops/v3"
 	"go.mozilla.org/sops/v3/azkv"
 	"go.mozilla.org/sops/v3/gcpkms"
+	"go.mozilla.org/sops/v3/hcvault"
 	"go.mozilla.org/sops/v3/kms"
 	"go.mozilla.org/sops/v3/pgp"
 )
@@ -40,6 +41,7 @@ type Metadata struct {
 	KMSKeys                   []kmskey    `yaml:"kms" json:"kms"`
 	GCPKMSKeys                []gcpkmskey `yaml:"gcp_kms" json:"gcp_kms"`
 	AzureKeyVaultKeys         []azkvkey   `yaml:"azure_kv" json:"azure_kv"`
+	VaultKeys                 []vaultkey  `yaml:"hc_vault" json:"hc_vault"`
 	LastModified              string      `yaml:"lastmodified" json:"lastmodified"`
 	MessageAuthenticationCode string      `yaml:"mac" json:"mac"`
 	PGPKeys                   []pgpkey    `yaml:"pgp" json:"pgp"`
@@ -54,6 +56,7 @@ type keygroup struct {
 	KMSKeys           []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
 	GCPKMSKeys        []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
 	AzureKeyVaultKeys []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
+	VaultKeys         []vaultkey  `yaml:"hc_vault" json:"hc_vault"`
 }
 
 type pgpkey struct {
@@ -73,6 +76,14 @@ type kmskey struct {
 
 type gcpkmskey struct {
 	ResourceID       string `yaml:"resource_id" json:"resource_id"`
+	CreatedAt        string `yaml:"created_at" json:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc"`
+}
+
+type vaultkey struct {
+	VaultAddress     string `yaml:"vault_address" json:"vault_address"`
+	EnginePath       string `yaml:"engine_path" json:"engine_path"`
+	KeyName          string `yaml:"key_name" json:"key_name"`
 	CreatedAt        string `yaml:"created_at" json:"created_at"`
 	EncryptedDataKey string `yaml:"enc" json:"enc"`
 }
@@ -100,6 +111,7 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 		m.PGPKeys = pgpKeysFromGroup(group)
 		m.KMSKeys = kmsKeysFromGroup(group)
 		m.GCPKMSKeys = gcpkmsKeysFromGroup(group)
+		m.VaultKeys = vaultKeysFromGroup(group)
 		m.AzureKeyVaultKeys = azkvKeysFromGroup(group)
 	} else {
 		for _, group := range sopsMetadata.KeyGroups {
@@ -107,6 +119,7 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 				KMSKeys:           kmsKeysFromGroup(group),
 				PGPKeys:           pgpKeysFromGroup(group),
 				GCPKMSKeys:        gcpkmsKeysFromGroup(group),
+				VaultKeys:         vaultKeysFromGroup(group),
 				AzureKeyVaultKeys: azkvKeysFromGroup(group),
 			})
 		}
@@ -151,6 +164,22 @@ func gcpkmsKeysFromGroup(group sops.KeyGroup) (keys []gcpkmskey) {
 		case *gcpkms.MasterKey:
 			keys = append(keys, gcpkmskey{
 				ResourceID:       key.ResourceID,
+				CreatedAt:        key.CreationDate.Format(time.RFC3339),
+				EncryptedDataKey: key.EncryptedKey,
+			})
+		}
+	}
+	return
+}
+
+func vaultKeysFromGroup(group sops.KeyGroup) (keys []vaultkey) {
+	for _, key := range group {
+		switch key := key.(type) {
+		case *hcvault.MasterKey:
+			keys = append(keys, vaultkey{
+				VaultAddress:     key.VaultAddress,
+				EnginePath:       key.EnginePath,
+				KeyName:          key.KeyName,
 				CreatedAt:        key.CreationDate.Format(time.RFC3339),
 				EncryptedDataKey: key.EncryptedKey,
 			})
@@ -216,7 +245,7 @@ func (m *Metadata) ToInternal() (sops.Metadata, error) {
 	}, nil
 }
 
-func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, azkvKeys []azkvkey) (sops.KeyGroup, error) {
+func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, azkvKeys []azkvkey, vaultKeys []vaultkey) (sops.KeyGroup, error) {
 	var internalGroup sops.KeyGroup
 	for _, kmsKey := range kmsKeys {
 		k, err := kmsKey.toInternal()
@@ -239,6 +268,13 @@ func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmske
 		}
 		internalGroup = append(internalGroup, k)
 	}
+	for _, vaultKey := range vaultKeys {
+		k, err := vaultKey.toInternal()
+		if err != nil {
+			return nil, err
+		}
+		internalGroup = append(internalGroup, k)
+	}
 	for _, pgpKey := range pgpKeys {
 		k, err := pgpKey.toInternal()
 		if err != nil {
@@ -251,8 +287,8 @@ func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmske
 
 func (m *Metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 	var internalGroups []sops.KeyGroup
-	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 {
-		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.AzureKeyVaultKeys)
+	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 {
+		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.AzureKeyVaultKeys, m.VaultKeys)
 		if err != nil {
 			return nil, err
 		}
@@ -260,7 +296,7 @@ func (m *Metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 		return internalGroups, nil
 	} else if len(m.KeyGroups) > 0 {
 		for _, group := range m.KeyGroups {
-			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.AzureKeyVaultKeys)
+			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.AzureKeyVaultKeys, group.VaultKeys)
 			if err != nil {
 				return nil, err
 			}
@@ -310,6 +346,20 @@ func (azkvKey *azkvkey) toInternal() (*azkv.MasterKey, error) {
 		Version:      azkvKey.Version,
 		EncryptedKey: azkvKey.EncryptedDataKey,
 		CreationDate: creationDate,
+	}, nil
+}
+
+func (vaultKey *vaultkey) toInternal() (*hcvault.MasterKey, error) {
+	creationDate, err := time.Parse(time.RFC3339, vaultKey.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+	return &hcvault.MasterKey{
+		VaultAddress: vaultKey.VaultAddress,
+		EnginePath:   vaultKey.EnginePath,
+		KeyName:      vaultKey.KeyName,
+		CreationDate: creationDate,
+		EncryptedKey: vaultKey.EncryptedDataKey,
 	}, nil
 }
 
@@ -402,6 +452,10 @@ var ExampleFlatTree = sops.Tree{
 			sops.TreeItem{
 				Key:   "example_key",
 				Value: "example_value",
+			},
+			sops.TreeItem{
+				Key:   "example_multiline",
+				Value: "foo\nbar\nbaz",
 			},
 		},
 	},

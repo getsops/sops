@@ -1,9 +1,21 @@
-version: 2
+version: 2.1
+
+workflows:
+  build-and-deploy:
+    jobs:
+      - build
+      - push:     
+          filters:
+            tags:
+              only: /^v.*/   
+            branches:
+              ignore: /.*/
 jobs:
   build:
     working_directory: /go/src/go.mozilla.org/sops
     docker:
       - image: circleci/golang:1.13
+    resource_class: large
     steps:
       - checkout
       - setup_remote_docker
@@ -12,10 +24,79 @@ jobs:
           command: |
             docker build -t mozilla/sops .
             docker tag mozilla/sops "mozilla/sops:$CIRCLE_SHA1"
-      - run:
-          name: Push containers
+
+  push:
+    machine: true
+    resource_class: large
+    steps:
+      - checkout
+      - run: 
+          name: semver check
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                ${GOPATH}/src/go.mozilla.org/sops/bin/ci/deploy_dockerhub.sh "latest"
-                ${GOPATH}/src/go.mozilla.org/sops/bin/ci/deploy_dockerhub.sh "$CIRCLE_SHA1"
+            MAJOR=$(echo ${CIRCLE_TAG#v} | cut -d"." -f1)
+            MINOR=$(echo ${CIRCLE_TAG#v} | cut -d"." -f2)
+            PATCH=$(echo ${CIRCLE_TAG#v} | cut -d"." -f3)
+            echo "export MAJOR=${MAJOR}" >> $BASH_ENV
+            echo "export MINOR=${MINOR}" >> $BASH_ENV
+            echo "export PATCH=${PATCH}" >> $BASH_ENV
+
+            if [ -z $MAJOR ];then
+            cat \<< EOF
+            Failure Info:
+
+            This job uses the semver from the git TAG as the public version to publish.
+
+            - This should only run on workflows triggered by a tag. 
+            - The tag name should be a semver like 'v1.2.3' 
+            - The version should follow conventions documented at https://github.com/fsaintjacques/semver-tool
+            EOF
+            exit 1
             fi
+      - run:
+          name: Build containers
+          command: |
+            docker build -t mozilla/sops .
+            docker build -f Dockerfile.alpine -t mozilla/sops:alpine .
+      - run:
+          name: Tag & Push containers
+          command: |
+            #latest
+            bin/ci/deploy_dockerhub.sh "latest"
+            bin/ci/deploy_dockerhub.sh "alpine"
+
+            # by sha
+            echo "Tag and push mozilla/sops:$CIRCLE_SHA1"
+            docker tag mozilla/sops "mozilla/sops:$CIRCLE_SHA1"
+            bin/ci/deploy_dockerhub.sh "$CIRCLE_SHA1"
+
+            # no sha for alpine
+
+            # by semver
+            # v1.2.3
+            if [ ! -z $PATCH ];then
+              echo "Tag and Push mozilla/sops:v$MAJOR.$MINOR.$PATCH"
+              docker tag mozilla/sops "mozilla/sops:v$MAJOR.$MINOR.$PATCH"
+              bin/ci/deploy_dockerhub.sh "v$MAJOR.$MINOR.$PATCH"
+
+              echo "Tag and Push mozilla/sops:v$MAJOR.$MINOR.$PATCH-alpine"
+              docker tag mozilla/sops:alpine "mozilla/sops:v$MAJOR.$MINOR.$PATCH-alpine"
+              bin/ci/deploy_dockerhub.sh "v$MAJOR.$MINOR.$PATCH-alpine"
+            fi
+            # v1.2
+            if [ ! -z $MINOR ];then
+              echo "Tag and Push mozilla/sops:v$MAJOR.$MINOR"
+              docker tag mozilla/sops "mozilla/sops:v$MAJOR.$MINOR"
+              bin/ci/deploy_dockerhub.sh "v$MAJOR.$MINOR"
+
+              echo "Tag and Push mozilla/sops:v$MAJOR.$MINOR-alpine"
+              docker tag mozilla/sops:alpine "mozilla/sops:v$MAJOR.$MINOR-alpine"
+              bin/ci/deploy_dockerhub.sh "v$MAJOR.$MINOR-alpine"
+            fi
+            # v1
+            echo "Tag and Push mozilla/sops:v$MAJOR"
+            docker tag mozilla/sops "mozilla/sops:v$MAJOR"
+            bin/ci/deploy_dockerhub.sh "v$MAJOR"
+
+            echo "Tag and Push mozilla/sops:v$MAJOR-alpine"
+            docker tag mozilla/sops:alpine "mozilla/sops:v$MAJOR-alpine"
+            bin/ci/deploy_dockerhub.sh "v$MAJOR-alpine"
