@@ -1360,7 +1360,8 @@ You can import sops as a module and use it in your python program.
 	tree = sops.walk_and_decrypt(tree, sops_key)
 	sops.write_file(tree, path=path, filetype=pathtype)
 
-Note: this uses the previous implemenation of ``sops`` written in python,
+Note: this uses the previous implementation of `sops` written in python,
+
 and so doesn't support newer features such as GCP-KMS.
 To use the current version, call out to ``sops`` using ``subprocess.run``
 
