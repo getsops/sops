@@ -4,17 +4,17 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"os"
 	"path/filepath"
+	"strings"
 
-	"go.mozilla.org/sops"
-	"go.mozilla.org/sops/cmd/sops/codes"
-	"go.mozilla.org/sops/cmd/sops/common"
-	"go.mozilla.org/sops/config"
-	"go.mozilla.org/sops/keyservice"
-	"go.mozilla.org/sops/logging"
-	"go.mozilla.org/sops/publish"
-	"go.mozilla.org/sops/version"
+	"go.mozilla.org/sops/v3"
+	"go.mozilla.org/sops/v3/cmd/sops/codes"
+	"go.mozilla.org/sops/v3/cmd/sops/common"
+	"go.mozilla.org/sops/v3/config"
+	"go.mozilla.org/sops/v3/keyservice"
+	"go.mozilla.org/sops/v3/logging"
+	"go.mozilla.org/sops/v3/publish"
+	"go.mozilla.org/sops/v3/version"
 
 	"github.com/sirupsen/logrus"
 )
@@ -27,12 +27,15 @@ func init() {
 
 // Opts represents publish options and config
 type Opts struct {
-	Interactive bool
-	Cipher      sops.Cipher
-	ConfigPath  string
-	InputPath   string
-	KeyServices []keyservice.KeyServiceClient
-	InputStore  sops.Store
+	Interactive    bool
+	Cipher         sops.Cipher
+	ConfigPath     string
+	InputPath      string
+	KeyServices    []keyservice.KeyServiceClient
+	InputStore     sops.Store
+	OmitExtensions bool
+	Recursive      bool
+	RootPath       string
 }
 
 // Run publish operation
@@ -42,14 +45,6 @@ func Run(opts Opts) error {
 	if err != nil {
 		return err
 	}
-	info, err := os.Stat(path)
-	if err != nil {
-		return err
-	}
-	if info.IsDir() {
-		return fmt.Errorf("can't operate on a directory")
-	}
-	_, fileName := filepath.Split(path)
 
 	conf, err := config.LoadDestinationRuleForFile(opts.ConfigPath, opts.InputPath, make(map[string]*string))
 	if err != nil {
@@ -57,6 +52,19 @@ func Run(opts Opts) error {
 	}
 	if conf.Destination == nil {
 		return errors.New("no destination configured for this file")
+	}
+
+	var destinationPath string
+	if opts.Recursive {
+		destinationPath, err = filepath.Rel(opts.RootPath, opts.InputPath)
+		if err != nil {
+			return err
+		}
+	} else {
+		_, destinationPath = filepath.Split(path)
+	}
+	if opts.OmitExtensions || conf.OmitExtensions {
+		destinationPath = strings.TrimSuffix(destinationPath, filepath.Ext(path))
 	}
 
 	// Check that this is a sops-encrypted file
@@ -146,22 +154,28 @@ func Run(opts Opts) error {
 	if opts.Interactive {
 		var response string
 		for response != "y" && response != "n" {
-			fmt.Printf("uploading %s to %s ? (y/n): ", path, conf.Destination.Path(fileName))
+			fmt.Printf("uploading %s to %s ? (y/n): ", path, conf.Destination.Path(destinationPath))
 			_, err := fmt.Scanln(&response)
 			if err != nil {
 				return err
 			}
 		}
 		if response == "n" {
-			return errors.New("Publish canceled")
+			msg := fmt.Sprintf("Publication of %s canceled", path)
+			if opts.Recursive {
+				fmt.Println(msg)
+				return nil
+			} else {
+				return errors.New(msg)
+			}
 		}
 	}
 
 	switch dest := conf.Destination.(type) {
 	case *publish.S3Destination, *publish.GCSDestination:
-		err = dest.Upload(fileContents, fileName)
+		err = dest.Upload(fileContents, destinationPath)
 	case *publish.VaultDestination:
-		err = dest.UploadUnencrypted(data, fileName)
+		err = dest.UploadUnencrypted(data, destinationPath)
 	}
 
 	if err != nil {

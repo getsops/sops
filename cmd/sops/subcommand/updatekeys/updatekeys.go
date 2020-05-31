@@ -6,10 +6,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"go.mozilla.org/sops/cmd/sops/codes"
-	"go.mozilla.org/sops/cmd/sops/common"
-	"go.mozilla.org/sops/config"
-	"go.mozilla.org/sops/keyservice"
+	"go.mozilla.org/sops/v3/cmd/sops/codes"
+	"go.mozilla.org/sops/v3/cmd/sops/common"
+	"go.mozilla.org/sops/v3/config"
+	"go.mozilla.org/sops/v3/keyservice"
 )
 
 // Opts represents key operation options and config
@@ -44,7 +44,7 @@ func updateFile(opts Opts) error {
 	if err != nil {
 		return err
 	}
-	conf, err := config.LoadForFile(opts.ConfigPath, opts.InputPath, make(map[string]*string))
+	conf, err := config.LoadCreationRuleForFile(opts.ConfigPath, opts.InputPath, make(map[string]*string))
 	if err != nil {
 		return err
 	}

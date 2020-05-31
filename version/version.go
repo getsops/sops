@@ -11,7 +11,7 @@ import (
 )
 
 // Version represents the value of the current semantic version
-const Version = "3.4.0"
+const Version = "3.5.0"
 
 // PrintVersion handles the version command for sops
 func PrintVersion(c *cli.Context) {
@@ -25,7 +25,7 @@ func PrintVersion(c *cli.Context) {
 		out += fmt.Sprintf("\n[warning] failed to compare current version with latest: %v\n", err)
 	}
 	if outdated {
-		out += fmt.Sprintf("\n[info] sops %s is available, update with `go get -u go.mozilla.org/sops/cmd/sops`\n", upstreamVersion)
+		out += fmt.Sprintf("\n[info] sops %s is available, update with `go get -u go.mozilla.org/sops/v3/cmd/sops`\n", upstreamVersion)
 	} else {
 		out += " (latest)\n"
 	}

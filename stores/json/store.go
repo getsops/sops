@@ -1,4 +1,4 @@
-package json //import "go.mozilla.org/sops/stores/json"
+package json //import "go.mozilla.org/sops/v3/stores/json"
 
 import (
 	"bytes"
@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"io"
 
-	"go.mozilla.org/sops"
-	"go.mozilla.org/sops/stores"
+	"go.mozilla.org/sops/v3"
+	"go.mozilla.org/sops/v3/stores"
 )
 
 // Store handles storage of JSON data.
@@ -75,6 +75,12 @@ func (store Store) sliceFromJSONDecoder(dec *json.Decoder) ([]interface{}, error
 			return slice, nil
 		} else if ok && delim.String() == "{" {
 			item, err := store.treeBranchFromJSONDecoder(dec)
+			if err != nil {
+				return slice, err
+			}
+			slice = append(slice, item)
+		} else if ok && delim.String() == "[" {
+			item, err := store.sliceFromJSONDecoder(dec)
 			if err != nil {
 				return slice, err
 			}

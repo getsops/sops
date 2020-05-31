@@ -6,8 +6,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"go.mozilla.org/sops/keyservice"
-	"go.mozilla.org/sops/logging"
+	"go.mozilla.org/sops/v3/keyservice"
+	"go.mozilla.org/sops/v3/logging"
 
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"

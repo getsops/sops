@@ -1,8 +1,8 @@
 /*
-Package kms contains an implementation of the go.mozilla.org/sops.MasterKey interface that encrypts and decrypts the
+Package kms contains an implementation of the go.mozilla.org/sops/v3.MasterKey interface that encrypts and decrypts the
 data key using AWS KMS with the AWS Go SDK.
 */
-package kms //import "go.mozilla.org/sops/kms"
+package kms //import "go.mozilla.org/sops/v3/kms"
 
 import (
 	"encoding/base64"
@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"go.mozilla.org/sops/logging"
+	"go.mozilla.org/sops/v3/logging"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"

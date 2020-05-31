@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"go.mozilla.org/sops"
+	"go.mozilla.org/sops/v3"
 )
 
 func TestDecodeJSON(t *testing.T) {
@@ -188,6 +188,31 @@ func TestDecodeJSONArrayOfObjects(t *testing.T) {
 					sops.TreeItem{
 						Key:   "foo",
 						Value: "bar",
+					},
+				},
+			},
+		},
+	}
+	branch, err := Store{}.treeBranchFromJSON([]byte(in))
+	assert.Nil(t, err)
+	assert.Equal(t, expected, branch)
+}
+
+func TestDecodeJSONArrayOfArrays(t *testing.T) {
+	in := `{"foo": [[["foo", {"bar": "foo"}]]]}`
+	expected := sops.TreeBranch{
+		sops.TreeItem{
+			Key: "foo",
+			Value: []interface{}{
+				[]interface{}{
+					[]interface{}{
+						"foo",
+						sops.TreeBranch{
+							sops.TreeItem{
+								Key:   "bar",
+								Value: "foo",
+							},
+						},
 					},
 				},
 			},

@@ -3,12 +3,12 @@
 package exec
 
 import (
-	"syscall"
-	"path/filepath"
 	"os"
-	"os/user"
 	"os/exec"
+	"os/user"
+	"path/filepath"
 	"strconv"
+	"syscall"
 )
 
 func BuildCommand(command string) *exec.Cmd {

@@ -16,11 +16,11 @@ import (
 	"path/filepath"
 
 	"github.com/google/shlex"
-	"go.mozilla.org/sops"
-	"go.mozilla.org/sops/cmd/sops/codes"
-	"go.mozilla.org/sops/cmd/sops/common"
-	"go.mozilla.org/sops/keyservice"
-	"go.mozilla.org/sops/version"
+	"go.mozilla.org/sops/v3"
+	"go.mozilla.org/sops/v3/cmd/sops/codes"
+	"go.mozilla.org/sops/v3/cmd/sops/common"
+	"go.mozilla.org/sops/v3/keyservice"
+	"go.mozilla.org/sops/v3/version"
 )
 
 type editOpts struct {

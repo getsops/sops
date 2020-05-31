@@ -48,10 +48,12 @@ creation_rules:
     kms: "1"
     pgp: "2"
     gcp_kms: "3"
+    hc_vault_transit_uri: http://4:8200/v1/4/keys/4
   - path_regex: ""
     kms: foo
     pgp: bar
     gcp_kms: baz
+    hc_vault_transit_uri: http://127.0.1.1/v1/baz/keys/baz
 `)
 
 var sampleConfigWithPath = []byte(`
@@ -60,14 +62,17 @@ creation_rules:
     kms: "1"
     pgp: "2"
     gcp_kms: "3"
+    hc_vault_uris: http://4:8200/v1/4/keys/4
   - path_regex: somefilename.yml
     kms: bilbo
     pgp: baggins
     gcp_kms: precious
+    hc_vault_uris: https://pluto/v1/pluto/keys/pluto
   - path_regex: ""
     kms: foo
     pgp: bar
     gcp_kms: baz
+    hc_vault_uris: https://foz:443/v1/foz/keys/foz
 `)
 
 var sampleConfigWithGroups = []byte(`
@@ -87,6 +92,8 @@ creation_rules:
       - vaultUrl: https://foo.vault.azure.net
         key: foo-key
         version: fooversion
+      hc_vault:
+      - 'https://foo.vault:8200/v1/foo/keys/foo-key'
     - kms:
       - arn: baz
       pgp:
@@ -98,6 +105,8 @@ creation_rules:
       - vaultUrl: https://bar.vault.azure.net
         key: bar-key
         version: barversion
+      hc_vault:
+      - 'https://baz.vault:8200/v1/baz/keys/baz-key'
 `)
 
 var sampleConfigWithSuffixParameters = []byte(`
@@ -135,12 +144,30 @@ creation_rules:
   - path_regex: foobar*
     kms: "1"
     pgp: "2"
+    hc_vault_uris: "https://vault.com/v1/bug/keys/pr"
     unencrypted_suffix: _unencrypted
     encrypted_suffix: _enc
     `)
 
-var sampleInvalidConfig = []byte(`
+var sampleConfigWithNoMatchingRules = []byte(`
 creation_rules:
+  - path_regex: notexisting
+    pgp: bar
+`)
+
+var sampleEmptyConfig = []byte(``)
+
+var sampleConfigWithEmptyCreationRules = []byte(`
+creation_rules:
+`)
+
+var sampleConfigWithOnlyDestinationRules = []byte(`
+destination_rules:
+  - path_regex: ""
+    s3_bucket: "foobar"
+    s3_prefix: "test/"
+    recreation_rule:
+      pgp: newpgp
 `)
 
 var sampleConfigWithDestinationRule = []byte(`
@@ -195,12 +222,14 @@ func TestLoadConfigFile(t *testing.T) {
 				KMS:       "1",
 				PGP:       "2",
 				GCPKMS:    "3",
+				VaultURI:  "http://4:8200/v1/4/keys/4",
 			},
 			{
 				PathRegex: "",
 				KMS:       "foo",
 				PGP:       "bar",
 				GCPKMS:    "baz",
+				VaultURI:  "http://127.0.1.1/v1/baz/keys/baz",
 			},
 		},
 	}
@@ -227,6 +256,7 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 						PGP:     []string{"bar"},
 						GCPKMS:  []gcpKmsKey{{ResourceID: "foo"}},
 						AzureKV: []azureKVKey{{VaultURL: "https://foo.vault.azure.net", Key: "foo-key", Version: "fooversion"}},
+						Vault:   []string{"https://foo.vault:8200/v1/foo/keys/foo-key"},
 					},
 					{
 						KMS: []kmsKey{{Arn: "baz"}},
@@ -236,6 +266,7 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 							{ResourceID: "baz"},
 						},
 						AzureKV: []azureKVKey{{VaultURL: "https://bar.vault.azure.net", Key: "bar-key", Version: "barversion"}},
+						Vault:   []string{"https://baz.vault:8200/v1/baz/keys/baz-key"},
 					},
 				},
 			},
@@ -248,9 +279,27 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 	assert.Equal(t, expected, conf)
 }
 
-func TestLoadInvalidConfigFile(t *testing.T) {
-	_, err := parseCreationRuleForFile(parseConfigFile(sampleInvalidConfig, t), "foobar2000", nil)
+func TestLoadConfigFileWithNoMatchingRules(t *testing.T) {
+	_, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithNoMatchingRules, t), "foobar2000", nil)
 	assert.NotNil(t, err)
+}
+
+func TestLoadEmptyConfigFile(t *testing.T) {
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleEmptyConfig, t), "foobar2000", nil)
+	assert.Nil(t, conf)
+	assert.Nil(t, err)
+}
+
+func TestLoadConfigFileWithEmptyCreationRules(t *testing.T) {
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithEmptyCreationRules, t), "foobar2000", nil)
+	assert.Nil(t, conf)
+	assert.Nil(t, err)
+}
+
+func TestLoadConfigFileWithOnlyDestinationRules(t *testing.T) {
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithOnlyDestinationRules, t), "foobar2000", nil)
+	assert.Nil(t, conf)
+	assert.Nil(t, err)
 }
 
 func TestKeyGroupsForFile(t *testing.T) {
