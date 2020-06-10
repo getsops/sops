@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"go.mozilla.org/sops/v3/azkv"
+	"go.mozilla.org/sops/v3/barbican"
 	"go.mozilla.org/sops/v3/gcpkms"
 	"go.mozilla.org/sops/v3/hcvault"
 	"go.mozilla.org/sops/v3/kms"
@@ -75,6 +76,17 @@ func (ks *Server) encryptWithVault(key *VaultKey, plaintext []byte) ([]byte, err
 	return []byte(vaultKey.EncryptedKey), nil
 }
 
+func (ks *Server) encryptWithBarbican(key *BarbicanKey, plaintext []byte) ([]byte, error) {
+	barbicanKey := barbican.MasterKey{
+		SecretHref: key.SecretHref,
+	}
+	err := barbicanKey.Encrypt(plaintext)
+	if err != nil {
+		return nil, err
+	}
+	return []byte(barbicanKey.EncryptedKey), nil
+}
+
 func (ks *Server) decryptWithPgp(key *PgpKey, ciphertext []byte) ([]byte, error) {
 	pgpKey := pgp.NewMasterKeyFromFingerprint(key.Fingerprint)
 	pgpKey.EncryptedKey = string(ciphertext)
@@ -117,6 +129,15 @@ func (ks *Server) decryptWithVault(key *VaultKey, ciphertext []byte) ([]byte, er
 	}
 	vaultKey.EncryptedKey = string(ciphertext)
 	plaintext, err := vaultKey.Decrypt()
+	return []byte(plaintext), err
+}
+
+func (ks *Server) decryptWithBarbican(key *BarbicanKey, ciphertext []byte) ([]byte, error) {
+	barbicanKey := barbican.MasterKey{
+		SecretHref: key.SecretHref,
+	}
+	barbicanKey.EncryptedKey = string(ciphertext)
+	plaintext, err := barbicanKey.Decrypt()
 	return []byte(plaintext), err
 }
 
@@ -167,6 +188,14 @@ func (ks Server) Encrypt(ctx context.Context,
 		response = &EncryptResponse{
 			Ciphertext: ciphertext,
 		}
+	case *Key_BarbicanKey:
+		ciphertext, err := ks.encryptWithBarbican(k.BarbicanKey, req.Plaintext)
+		if err != nil {
+			return nil, err
+		}
+		response = &EncryptResponse{
+			Ciphertext: ciphertext,
+		}
 	case nil:
 		return nil, status.Errorf(codes.NotFound, "Must provide a key")
 	default:
@@ -193,6 +222,8 @@ func keyToString(key Key) string {
 		return fmt.Sprintf("Azure Key Vault key with URL %s/keys/%s/%s", k.AzureKeyvaultKey.VaultUrl, k.AzureKeyvaultKey.Name, k.AzureKeyvaultKey.Version)
 	case *Key_VaultKey:
 		return fmt.Sprintf("Hashicorp Vault key with URI %s/v1/%s/keys/%s", k.VaultKey.VaultAddress, k.VaultKey.EnginePath, k.VaultKey.KeyName)
+	case *Key_BarbicanKey:
+		return fmt.Sprintf("OpenStack Barbican key with Href %s", k.BarbicanKey.SecretHref)
 	default:
 		return fmt.Sprintf("Unknown key type")
 	}
@@ -255,6 +286,14 @@ func (ks Server) Decrypt(ctx context.Context,
 		}
 	case *Key_VaultKey:
 		plaintext, err := ks.decryptWithVault(k.VaultKey, req.Ciphertext)
+		if err != nil {
+			return nil, err
+		}
+		response = &DecryptResponse{
+			Plaintext: plaintext,
+		}
+	case *Key_BarbicanKey:
+		plaintext, err := ks.decryptWithBarbican(k.BarbicanKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}

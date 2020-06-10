@@ -2,7 +2,7 @@ SOPS: Secrets OPerationS
 ========================
 
 **sops** is an editor of encrypted files that supports YAML, JSON, ENV, INI and BINARY
-formats and encrypts with AWS KMS, GCP KMS, Azure Key Vault and PGP.
+formats and encrypts with AWS KMS, GCP KMS, Azure Key Vault, OpenStack Barbican and PGP.
 (`demo <https://www.youtube.com/watch?v=YTEVyLXFiq0>`_)
 
 .. image:: https://i.imgur.com/X0TM5NI.gif
@@ -346,6 +346,35 @@ To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
 	EOF
 
 	$ sops --verbose -e prod/raw.yaml > prod/encrypted.yaml
+
+Encrypting using OpenStack Barbican 
+~~~~~~~~~~~~~~~~~~~~~~~~
+You will need to have your OpenStack environment setup. If relying on kerberos,
+you need to generate a token for the sops client to use:
+
+.. code:: bash
+
+	export OS_TOKEN=$(openstack token issue -c id -f value)
+
+Encrypting/decrypting with GCP KMS requires a SecretHref holding the master key
+to use. You can create a master key using:
+
+.. code:: bash
+
+	export KEY="$(openssl rand -base64 32)\n$(openssl rand -base64 12)"
+ 	openstack secret store -s symmetric -p "$(echo -e $KEY)" -n testkey
+
+You can use the resulting secret href to encrypt a file using:
+
+.. code:: bash
+
+	$ sops --encrypt --barbican https://openstack.domain:9311/v1/secrets/42c1a9c0-31e6-4305-9525-33f93e0b15c7 test.yaml > test.enc.yaml
+
+And decrypt it using:
+
+.. code:: bash
+
+	 $ sops --decrypt test.enc.yaml
 
 Adding and removing keys
 ~~~~~~~~~~~~~~~~~~~~~~~~

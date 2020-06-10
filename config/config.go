@@ -14,6 +14,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/v3"
 	"go.mozilla.org/sops/v3/azkv"
+	"go.mozilla.org/sops/v3/barbican"
 	"go.mozilla.org/sops/v3/gcpkms"
 	"go.mozilla.org/sops/v3/hcvault"
 	"go.mozilla.org/sops/v3/kms"
@@ -67,11 +68,12 @@ type configFile struct {
 }
 
 type keyGroup struct {
-	KMS     []kmsKey
-	GCPKMS  []gcpKmsKey  `yaml:"gcp_kms"`
-	AzureKV []azureKVKey `yaml:"azure_keyvault"`
-	Vault   []string     `yaml:"hc_vault"`
-	PGP     []string
+	KMS      []kmsKey
+	GCPKMS   []gcpKmsKey   `yaml:"gcp_kms"`
+	AzureKV  []azureKVKey  `yaml:"azure_keyvault"`
+	Vault    []string      `yaml:"hc_vault"`
+	Barbican []barbicanKey `yaml:"barbican"`
+	PGP      []string
 }
 
 type gcpKmsKey struct {
@@ -91,6 +93,10 @@ type azureKVKey struct {
 	Version  string `yaml:"version"`
 }
 
+type barbicanKey struct {
+	SecretHref string `yaml:"secret_href"`
+}
+
 type destinationRule struct {
 	PathRegex        string       `yaml:"path_regex"`
 	S3Bucket         string       `yaml:"s3_bucket"`
@@ -106,18 +112,19 @@ type destinationRule struct {
 }
 
 type creationRule struct {
-	PathRegex         string `yaml:"path_regex"`
-	KMS               string
-	AwsProfile        string `yaml:"aws_profile"`
-	PGP               string
-	GCPKMS            string     `yaml:"gcp_kms"`
-	AzureKeyVault     string     `yaml:"azure_keyvault"`
-	VaultURI          string     `yaml:"hc_vault_transit_uri"`
-	KeyGroups         []keyGroup `yaml:"key_groups"`
-	ShamirThreshold   int        `yaml:"shamir_threshold"`
-	UnencryptedSuffix string     `yaml:"unencrypted_suffix"`
-	EncryptedSuffix   string     `yaml:"encrypted_suffix"`
-	EncryptedRegex    string     `yaml:"encrypted_regex"`
+	PathRegex          string `yaml:"path_regex"`
+	KMS                string
+	AwsProfile         string `yaml:"aws_profile"`
+	PGP                string
+	GCPKMS             string     `yaml:"gcp_kms"`
+	AzureKeyVault      string     `yaml:"azure_keyvault"`
+	VaultURI           string     `yaml:"hc_vault_transit_uri"`
+	BarbicanSecretHref string     `yaml:"barbican_secret_href"`
+	KeyGroups          []keyGroup `yaml:"key_groups"`
+	ShamirThreshold    int        `yaml:"shamir_threshold"`
+	UnencryptedSuffix  string     `yaml:"unencrypted_suffix"`
+	EncryptedSuffix    string     `yaml:"encrypted_suffix"`
+	EncryptedRegex     string     `yaml:"encrypted_regex"`
 }
 
 // Load loads a sops config file into a temporary struct
@@ -164,6 +171,9 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 					return nil, err
 				}
 			}
+			for _, k := range group.Barbican {
+				keyGroup = append(keyGroup, barbican.NewMasterKeyFromSecretHref(k.SecretHref))
+			}
 			groups = append(groups, keyGroup)
 		}
 	} else {
@@ -189,6 +199,9 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			return nil, err
 		}
 		for _, k := range vaultKeys {
+			keyGroup = append(keyGroup, k)
+		}
+		for _, k := range barbican.MasterKeysFromSecretHref(cRule.BarbicanSecretHref) {
 			keyGroup = append(keyGroup, k)
 		}
 		groups = append(groups, keyGroup)

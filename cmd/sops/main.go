@@ -18,6 +18,7 @@ import (
 	"go.mozilla.org/sops/v3/aes"
 	_ "go.mozilla.org/sops/v3/audit"
 	"go.mozilla.org/sops/v3/azkv"
+	"go.mozilla.org/sops/v3/barbican"
 	"go.mozilla.org/sops/v3/cmd/sops/codes"
 	"go.mozilla.org/sops/v3/cmd/sops/common"
 	"go.mozilla.org/sops/v3/cmd/sops/subcommand/exec"
@@ -61,7 +62,7 @@ func main() {
 		},
 	}
 	app.Name = "sops"
-	app.Usage = "sops - encrypted file editor with AWS KMS, GCP KMS, Azure Key Vault and GPG support"
+	app.Usage = "sops - encrypted file editor with AWS KMS, GCP KMS, Azure Key Vault, OpenStack Barbican and GPG support"
 	app.ArgsUsage = "sops [options] file"
 	app.Version = version.Version
 	app.Authors = []cli.Author{
@@ -96,17 +97,21 @@ func main() {
     https://docs.microsoft.com/en-us/go/azure/azure-sdk-go-authorization#use-environment-based-authentication.
     The user/sp needs the key/encrypt and key/decrypt permissions)
 
+   To encrypt or decrypt a document with OpenStack Barbican, specify the
+   Barbican Secret Href in the --barbican flag or in SOPS_BARBICAN_HREF
+   environment variable.
+
    To encrypt or decrypt using PGP, specify the PGP fingerprint in the
    -p flag or in the SOPS_PGP_FP environment variable.
 
    To use multiple KMS or PGP keys, separate them by commas. For example:
        $ sops -p "10F2...0A, 85D...B3F21" file.yaml
 
-   The -p, -k, --gcp-kms, --hc-vault-transit and --azure-kv flags are only used to encrypt new documents. Editing
+   The -p, -k, --gcp-kms, --hc-vault-transit, --barbican and --azure-kv flags are only used to encrypt new documents. Editing
    or decrypting existing documents can be done with "sops file" or
    "sops -d file" respectively. The KMS and PGP keys listed in the encrypted
    documents are used then. To manage master keys in existing documents, use
-   the "add-{kms,pgp,gcp-kms,azure-kv,hc-vault-transit}" and "rm-{kms,pgp,gcp-kms,azure-kv,hc-vault-transit}" flags.
+   the "add-{kms,pgp,gcp-kms,azure-kv,hc-vault-transit,barbican}" and "rm-{kms,pgp,gcp-kms,azure-kv,hc-vault-transit,barbican}" flags.
 
    To use a different GPG binary than the one in your PATH, set SOPS_GPG_EXEC.
    To use a GPG key server other than gpg.mozilla.org, set SOPS_GPG_KEYSERVER.
@@ -370,6 +375,10 @@ func main() {
 							Name:  "hc-vault-transit",
 							Usage: "the full vault path to the key used to encrypt/decrypt. Make you choose and configure a key with encrption/decryption enabled (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev'). Can be specified more than once",
 						},
+						cli.StringSliceFlag{
+							Name:  "barbican",
+							Usage: "the secret href to the key used to encrypt/decrypt. Can be specified more than once",
+						},
 						cli.BoolFlag{
 							Name:  "in-place, i",
 							Usage: "write output back to the same file instead of stdout",
@@ -389,6 +398,7 @@ func main() {
 						gcpKmses := c.StringSlice("gcp-kms")
 						vaultURIs := c.StringSlice("hc-vault-transit")
 						azkvs := c.StringSlice("azure-kv")
+						barbicanHrefs := c.StringSlice("barbican")
 						var group sops.KeyGroup
 						for _, fp := range pgpFps {
 							group = append(group, pgp.NewMasterKeyFromFingerprint(fp))
@@ -414,6 +424,9 @@ func main() {
 								continue
 							}
 							group = append(group, k)
+						}
+						for _, href := range barbicanHrefs {
+							group = append(group, barbican.NewMasterKeyFromSecretHref(href))
 						}
 						return groups.Add(groups.AddOpts{
 							InputPath:      c.String("file"),
@@ -526,6 +539,11 @@ func main() {
 			Usage: "The AWS profile to use for requests to AWS",
 		},
 		cli.StringFlag{
+			Name:   "barbican",
+			Usage:  "comma separated list of Barbican Secret Hrefs",
+			EnvVar: "SOPS_BARBICAN_HREFS",
+		},
+		cli.StringFlag{
 			Name:   "gcp-kms",
 			Usage:  "comma separated list of GCP KMS resource IDs",
 			EnvVar: "SOPS_GCP_KMS_IDS",
@@ -598,6 +616,14 @@ func main() {
 			Usage: "remove the provided comma-separated list of Vault's URI key from the list of master keys on the given file ( eg. https://vault.example.org:8200/v1/transit/keys/dev)",
 		},
 		cli.StringFlag{
+			Name:  "add-barbican",
+			Usage: "add the provided comma-separated list of OpenStack Barbican secret hrefs to the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "rm-barbican",
+			Usage: "remove the provided comma-separated list of OpenStack Barbican secret hrefs from the list of master keys on the given file",
+		},
+		cli.StringFlag{
 			Name:  "add-pgp",
 			Usage: "add the provided comma-separated list of PGP fingerprints to the list of master keys on the given file",
 		},
@@ -662,8 +688,7 @@ func main() {
 			return toExitError(err)
 		}
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
-			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" ||
-				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" {
+			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-barbican") != "" || c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-barbican") != "" {
 				return common.NewExitError("Error: cannot add or remove keys on non-existent files, use `--kms` and `--pgp` instead.", codes.CannotChangeKeysFromNonExistentFile)
 			}
 			if c.Bool("encrypt") || c.Bool("decrypt") || c.Bool("rotate") {
@@ -783,6 +808,9 @@ func main() {
 			for _, k := range hcVaultKeys {
 				addMasterKeys = append(addMasterKeys, k)
 			}
+			for _, k := range barbican.MasterKeysFromSecretHref(c.String("add-barbican")) {
+				addMasterKeys = append(addMasterKeys, k)
+			}
 
 			var rmMasterKeys []keys.MasterKey
 			for _, k := range kms.MasterKeysFromArnString(c.String("rm-kms"), kmsEncryptionContext, c.String("aws-profile")) {
@@ -806,6 +834,9 @@ func main() {
 				return err
 			}
 			for _, k := range hcVaultKeys {
+				rmMasterKeys = append(rmMasterKeys, k)
+			}
+			for _, k := range barbican.MasterKeysFromSecretHref(c.String("rm-barbican")) {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
 
@@ -1003,6 +1034,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	var cloudKmsKeys []keys.MasterKey
 	var azkvKeys []keys.MasterKey
 	var hcVaultMkKeys []keys.MasterKey
+	var barbicanKeys []keys.MasterKey
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
 	if c.String("encryption-context") != "" && kmsEncryptionContext == nil {
 		return nil, common.NewExitError("Invalid KMS encryption context format", codes.ErrorInvalidKMSEncryptionContextFormat)
@@ -1035,12 +1067,17 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 			hcVaultMkKeys = append(hcVaultMkKeys, k)
 		}
 	}
+	if c.String("barbican") != "" {
+		for _, k := range barbican.MasterKeysFromSecretHref(c.String("barbican")) {
+			barbicanKeys = append(barbicanKeys, k)
+		}
+	}
 	if c.String("pgp") != "" {
 		for _, k := range pgp.MasterKeysFromFingerprintString(c.String("pgp")) {
 			pgpKeys = append(pgpKeys, k)
 		}
 	}
-	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("azure-kv") == "" && c.String("hc-vault-transit") == "" {
+	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("azure-kv") == "" && c.String("hc-vault-transit") == "" && c.String("barbican") == "" {
 		conf, err := loadConfig(c, file, kmsEncryptionContext)
 		// config file might just not be supplied, without any error
 		if conf == nil {
@@ -1058,6 +1095,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	group = append(group, azkvKeys...)
 	group = append(group, pgpKeys...)
 	group = append(group, hcVaultMkKeys...)
+	group = append(group, barbicanKeys...)
 	log.Debugf("Master keys available:  %+v", group)
 	return []sops.KeyGroup{group}, nil
 }

@@ -7,6 +7,7 @@ message Key {
 		GcpKmsKey gcp_kms_key = 3;
 		AzureKeyVaultKey azure_keyvault_key = 4;
 		VaultKey vault_key = 5;
+		BarbicanKey barbican_key = 6;
 	}
 }
 
@@ -35,6 +36,10 @@ message AzureKeyVaultKey {
 	string vault_url = 1;
 	string name = 2;
 	string version = 3;
+}
+
+message BarbicanKey {
+	string secret_href = 1;
 }
 
 message EncryptRequest {
