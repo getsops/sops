@@ -195,13 +195,11 @@ func (key MasterKey) createSession() (*session.Session, error) {
 
 	config := aws.Config{Region: aws.String(matches[1])}
 
-	if key.AwsProfile != "" {
-		config.Credentials = credentials.NewSharedCredentials("", key.AwsProfile)
-	}
-
 	opts := session.Options{
+		Profile:                 key.AwsProfile,
 		Config:                  config,
 		AssumeRoleTokenProvider: stscreds.StdinTokenProvider,
+		SharedConfigState:       session.SharedConfigEnable,
 	}
 	sess, err := session.NewSessionWithOptions(opts)
 	if err != nil {
