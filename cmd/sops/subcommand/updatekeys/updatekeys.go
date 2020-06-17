@@ -34,6 +34,7 @@ func UpdateKeys(opts Opts) error {
 	if info.IsDir() {
 		return fmt.Errorf("can't operate on a directory")
 	}
+	opts.InputPath = path
 	return updateFile(opts)
 }
 
