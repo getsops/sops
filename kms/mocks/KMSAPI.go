@@ -1573,6 +1573,396 @@ func (_m *KMSAPI) GenerateDataKeyWithoutPlaintextWithContext(_a0 context.Context
 	return r0, r1
 }
 
+// GenerateDataKeyPair provides a mock function with given fields: _a0
+func (_m *KMSAPI) GenerateDataKeyPair(_a0 *kms.GenerateDataKeyPairInput) (*kms.GenerateDataKeyPairOutput, error) {
+	ret := _m.Called(_a0)
+
+	var r0 *kms.GenerateDataKeyPairOutput
+	if rf, ok := ret.Get(0).(func(*kms.GenerateDataKeyPairInput) *kms.GenerateDataKeyPairOutput); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.GenerateDataKeyPairOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(*kms.GenerateDataKeyPairInput) error); ok {
+		r1 = rf(_a0)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GenerateDataKeyPairRequest provides a mock function with given fields: _a0
+func (_m *KMSAPI) GenerateDataKeyPairRequest(_a0 *kms.GenerateDataKeyPairInput) (*request.Request, *kms.GenerateDataKeyPairOutput) {
+	ret := _m.Called(_a0)
+
+	var r0 *request.Request
+	if rf, ok := ret.Get(0).(func(*kms.GenerateDataKeyPairInput) *request.Request); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*request.Request)
+		}
+	}
+
+	var r1 *kms.GenerateDataKeyPairOutput
+	if rf, ok := ret.Get(1).(func(*kms.GenerateDataKeyPairInput) *kms.GenerateDataKeyPairOutput); ok {
+		r1 = rf(_a0)
+	} else {
+		if ret.Get(1) != nil {
+			r1 = ret.Get(1).(*kms.GenerateDataKeyPairOutput)
+		}
+	}
+
+	return r0, r1
+}
+
+// GenerateDataKeyPairWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) GenerateDataKeyPairWithContext(_a0 context.Context, _a1 *kms.GenerateDataKeyPairInput, _a2 ...request.Option) (*kms.GenerateDataKeyPairOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.GenerateDataKeyPairOutput
+	if rf, ok := ret.Get(0).(func(context.Context, *kms.GenerateDataKeyPairInput, ...request.Option) *kms.GenerateDataKeyPairOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.GenerateDataKeyPairOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, *kms.GenerateDataKeyPairInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GenerateDataKeyPairWithoutPlaintext provides a mock function with given fields: _a0
+func (_m *KMSAPI) GenerateDataKeyPairWithoutPlaintext(_a0 *kms.GenerateDataKeyPairWithoutPlaintextInput) (*kms.GenerateDataKeyPairWithoutPlaintextOutput, error) {
+	ret := _m.Called(_a0)
+
+	var r0 *kms.GenerateDataKeyPairWithoutPlaintextOutput
+	if rf, ok := ret.Get(0).(func(*kms.GenerateDataKeyPairWithoutPlaintextInput) *kms.GenerateDataKeyPairWithoutPlaintextOutput); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.GenerateDataKeyPairWithoutPlaintextOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(*kms.GenerateDataKeyPairWithoutPlaintextInput) error); ok {
+		r1 = rf(_a0)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GenerateDataKeyPairWithoutPlaintextRequest provides a mock function with given fields: _a0
+func (_m *KMSAPI) GenerateDataKeyPairWithoutPlaintextRequest(_a0 *kms.GenerateDataKeyPairWithoutPlaintextInput) (*request.Request, *kms.GenerateDataKeyPairWithoutPlaintextOutput) {
+	ret := _m.Called(_a0)
+
+	var r0 *request.Request
+	if rf, ok := ret.Get(0).(func(*kms.GenerateDataKeyPairWithoutPlaintextInput) *request.Request); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*request.Request)
+		}
+	}
+
+	var r1 *kms.GenerateDataKeyPairWithoutPlaintextOutput
+	if rf, ok := ret.Get(1).(func(*kms.GenerateDataKeyPairWithoutPlaintextInput) *kms.GenerateDataKeyPairWithoutPlaintextOutput); ok {
+		r1 = rf(_a0)
+	} else {
+		if ret.Get(1) != nil {
+			r1 = ret.Get(1).(*kms.GenerateDataKeyPairWithoutPlaintextOutput)
+		}
+	}
+
+	return r0, r1
+}
+
+// GenerateDataKeyPairWithoutPlaintextWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) GenerateDataKeyPairWithoutPlaintextWithContext(_a0 context.Context, _a1 *kms.GenerateDataKeyPairWithoutPlaintextInput, _a2 ...request.Option) (*kms.GenerateDataKeyPairWithoutPlaintextOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.GenerateDataKeyPairWithoutPlaintextOutput
+	if rf, ok := ret.Get(0).(func(context.Context, *kms.GenerateDataKeyPairWithoutPlaintextInput, ...request.Option) *kms.GenerateDataKeyPairWithoutPlaintextOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.GenerateDataKeyPairWithoutPlaintextOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, *kms.GenerateDataKeyPairWithoutPlaintextInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GetPublicKey provides a mock function with given fields: _a0
+func (_m *KMSAPI) GetPublicKey(_a0 *kms.GetPublicKeyInput) (*kms.GetPublicKeyOutput, error) {
+	ret := _m.Called(_a0)
+
+	var r0 *kms.GetPublicKeyOutput
+	if rf, ok := ret.Get(0).(func(*kms.GetPublicKeyInput) *kms.GetPublicKeyOutput); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.GetPublicKeyOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(*kms.GetPublicKeyInput) error); ok {
+		r1 = rf(_a0)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GetPublicKeyRequest provides a mock function with given fields: _a0
+func (_m *KMSAPI) GetPublicKeyRequest(_a0 *kms.GetPublicKeyInput) (*request.Request, *kms.GetPublicKeyOutput) {
+	ret := _m.Called(_a0)
+
+	var r0 *request.Request
+	if rf, ok := ret.Get(0).(func(*kms.GetPublicKeyInput) *request.Request); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*request.Request)
+		}
+	}
+
+	var r1 *kms.GetPublicKeyOutput
+	if rf, ok := ret.Get(1).(func(*kms.GetPublicKeyInput) *kms.GetPublicKeyOutput); ok {
+		r1 = rf(_a0)
+	} else {
+		if ret.Get(1) != nil {
+			r1 = ret.Get(1).(*kms.GetPublicKeyOutput)
+		}
+	}
+
+	return r0, r1
+}
+
+// GetPublicKeyWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) GetPublicKeyWithContext(_a0 context.Context, _a1 *kms.GetPublicKeyInput, _a2 ...request.Option) (*kms.GetPublicKeyOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.GetPublicKeyOutput
+	if rf, ok := ret.Get(0).(func(context.Context, *kms.GetPublicKeyInput, ...request.Option) *kms.GetPublicKeyOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.GetPublicKeyOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, *kms.GetPublicKeyInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// Sign provides a mock function with given fields: _a0
+func (_m *KMSAPI) Sign(_a0 *kms.SignInput) (*kms.SignOutput, error) {
+	ret := _m.Called(_a0)
+
+	var r0 *kms.SignOutput
+	if rf, ok := ret.Get(0).(func(*kms.SignInput) *kms.SignOutput); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.SignOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(*kms.SignInput) error); ok {
+		r1 = rf(_a0)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// SignRequest provides a mock function with given fields: _a0
+func (_m *KMSAPI) SignRequest(_a0 *kms.SignInput) (*request.Request, *kms.SignOutput) {
+	ret := _m.Called(_a0)
+
+	var r0 *request.Request
+	if rf, ok := ret.Get(0).(func(*kms.SignInput) *request.Request); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*request.Request)
+		}
+	}
+
+	var r1 *kms.SignOutput
+	if rf, ok := ret.Get(1).(func(*kms.SignInput) *kms.SignOutput); ok {
+		r1 = rf(_a0)
+	} else {
+		if ret.Get(1) != nil {
+			r1 = ret.Get(1).(*kms.SignOutput)
+		}
+	}
+
+	return r0, r1
+}
+
+// SignWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) SignWithContext(_a0 context.Context, _a1 *kms.SignInput, _a2 ...request.Option) (*kms.SignOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.SignOutput
+	if rf, ok := ret.Get(0).(func(context.Context, *kms.SignInput, ...request.Option) *kms.SignOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.SignOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, *kms.SignInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// Verify provides a mock function with given fields: _a0
+func (_m *KMSAPI) Verify(_a0 *kms.VerifyInput) (*kms.VerifyOutput, error) {
+	ret := _m.Called(_a0)
+
+	var r0 *kms.VerifyOutput
+	if rf, ok := ret.Get(0).(func(*kms.VerifyInput) *kms.VerifyOutput); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.VerifyOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(*kms.VerifyInput) error); ok {
+		r1 = rf(_a0)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// VerifyRequest provides a mock function with given fields: _a0
+func (_m *KMSAPI) VerifyRequest(_a0 *kms.VerifyInput) (*request.Request, *kms.VerifyOutput) {
+	ret := _m.Called(_a0)
+
+	var r0 *request.Request
+	if rf, ok := ret.Get(0).(func(*kms.VerifyInput) *request.Request); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*request.Request)
+		}
+	}
+
+	var r1 *kms.VerifyOutput
+	if rf, ok := ret.Get(1).(func(*kms.VerifyInput) *kms.VerifyOutput); ok {
+		r1 = rf(_a0)
+	} else {
+		if ret.Get(1) != nil {
+			r1 = ret.Get(1).(*kms.VerifyOutput)
+		}
+	}
+
+	return r0, r1
+}
+
+// VerifyWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) VerifyWithContext(_a0 context.Context, _a1 *kms.VerifyInput, _a2 ...request.Option) (*kms.VerifyOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.VerifyOutput
+	if rf, ok := ret.Get(0).(func(context.Context, *kms.VerifyInput, ...request.Option) *kms.VerifyOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.VerifyOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, *kms.VerifyInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GenerateRandom provides a mock function with given fields: _a0
 func (_m *KMSAPI) GenerateRandom(_a0 *kms.GenerateRandomInput) (*kms.GenerateRandomOutput, error) {
 	ret := _m.Called(_a0)

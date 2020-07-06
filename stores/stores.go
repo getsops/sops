@@ -66,12 +66,13 @@ type pgpkey struct {
 }
 
 type kmskey struct {
-	Arn              string             `yaml:"arn" json:"arn"`
-	Role             string             `yaml:"role,omitempty" json:"role,omitempty"`
-	Context          map[string]*string `yaml:"context,omitempty" json:"context,omitempty"`
-	CreatedAt        string             `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string             `yaml:"enc" json:"enc"`
-	AwsProfile       string             `yaml:"aws_profile" json:"aws_profile"`
+	Arn                    string             `yaml:"arn" json:"arn"`
+	Role                   string             `yaml:"role,omitempty" json:"role,omitempty"`
+	Context                map[string]*string `yaml:"context,omitempty" json:"context,omitempty"`
+	CreatedAt              string             `yaml:"created_at" json:"created_at"`
+	EncryptedDataKey       string             `yaml:"enc" json:"enc"`
+	AwsProfile             string             `yaml:"aws_profile" json:"aws_profile"`
+	AwsEncryptionAlgorithm string             `yaml:"aws_encryption_algorithm" json:"aws_encryption_algorithm"`
 }
 
 type gcpkmskey struct {
@@ -146,12 +147,13 @@ func kmsKeysFromGroup(group sops.KeyGroup) (keys []kmskey) {
 		switch key := key.(type) {
 		case *kms.MasterKey:
 			keys = append(keys, kmskey{
-				Arn:              key.Arn,
-				CreatedAt:        key.CreationDate.Format(time.RFC3339),
-				EncryptedDataKey: key.EncryptedKey,
-				Context:          key.EncryptionContext,
-				Role:             key.Role,
-				AwsProfile:       key.AwsProfile,
+				Arn:                    key.Arn,
+				CreatedAt:              key.CreationDate.Format(time.RFC3339),
+				EncryptedDataKey:       key.EncryptedKey,
+				Context:                key.EncryptionContext,
+				Role:                   key.Role,
+				AwsProfile:             key.AwsProfile,
+				AwsEncryptionAlgorithm: key.EncryptionAlgorithm,
 			})
 		}
 	}
@@ -314,12 +316,13 @@ func (kmsKey *kmskey) toInternal() (*kms.MasterKey, error) {
 		return nil, err
 	}
 	return &kms.MasterKey{
-		Role:              kmsKey.Role,
-		EncryptionContext: kmsKey.Context,
-		EncryptedKey:      kmsKey.EncryptedDataKey,
-		CreationDate:      creationDate,
-		Arn:               kmsKey.Arn,
-		AwsProfile:        kmsKey.AwsProfile,
+		Role:                kmsKey.Role,
+		EncryptionContext:   kmsKey.Context,
+		EncryptedKey:        kmsKey.EncryptedDataKey,
+		CreationDate:        creationDate,
+		Arn:                 kmsKey.Arn,
+		AwsProfile:          kmsKey.AwsProfile,
+		EncryptionAlgorithm: kmsKey.AwsEncryptionAlgorithm,
 	}, nil
 }
 

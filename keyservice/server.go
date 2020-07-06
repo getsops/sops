@@ -282,9 +282,10 @@ func kmsKeyToMasterKey(key *KmsKey) kms.MasterKey {
 		ctx[k] = &value
 	}
 	return kms.MasterKey{
-		Arn:               key.Arn,
-		Role:              key.Role,
-		EncryptionContext: ctx,
-		AwsProfile:        key.AwsProfile,
+		Arn:                 key.Arn,
+		Role:                key.Role,
+		EncryptionContext:   ctx,
+		AwsProfile:          key.AwsProfile,
+		EncryptionAlgorithm: key.AwsEncryptionAlgorithm,
 	}
 }

@@ -37,12 +37,13 @@ var isMocked bool
 
 // MasterKey is a AWS KMS key used to encrypt and decrypt sops' data key.
 type MasterKey struct {
-	Arn               string
-	Role              string
-	EncryptedKey      string
-	CreationDate      time.Time
-	EncryptionContext map[string]*string
-	AwsProfile        string
+	Arn                 string
+	Role                string
+	EncryptedKey        string
+	CreationDate        time.Time
+	EncryptionContext   map[string]*string
+	AwsProfile          string
+	EncryptionAlgorithm string
 }
 
 // EncryptedDataKey returns the encrypted data key this master key holds
@@ -67,7 +68,10 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 		}
 		kmsSvc = kms.New(sess)
 	}
-	out, err := kmsSvc.Encrypt(&kms.EncryptInput{Plaintext: dataKey, KeyId: &key.Arn, EncryptionContext: key.EncryptionContext})
+
+	log.WithField("encryptionAlgo", key.EncryptionAlgorithm).Info("Enc")
+
+	out, err := kmsSvc.Encrypt(&kms.EncryptInput{Plaintext: dataKey, KeyId: &key.Arn, EncryptionContext: key.EncryptionContext, EncryptionAlgorithm: &key.EncryptionAlgorithm})
 	if err != nil {
 		log.WithField("arn", key.Arn).Info("Encryption failed")
 		return fmt.Errorf("Failed to call KMS encryption service: %v", err)
@@ -102,7 +106,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		}
 		kmsSvc = kms.New(sess)
 	}
-	decrypted, err := kmsSvc.Decrypt(&kms.DecryptInput{CiphertextBlob: k, EncryptionContext: key.EncryptionContext})
+	decrypted, err := kmsSvc.Decrypt(&kms.DecryptInput{CiphertextBlob: k, KeyId: &key.Arn, EncryptionContext: key.EncryptionContext, EncryptionAlgorithm: &key.EncryptionAlgorithm})
 	if err != nil {
 		log.WithField("arn", key.Arn).Info("Decryption failed")
 		return nil, fmt.Errorf("Error decrypting key: %v", err)
@@ -122,17 +126,18 @@ func (key *MasterKey) ToString() string {
 }
 
 // NewMasterKey creates a new MasterKey from an ARN, role and context, setting the creation date to the current date
-func NewMasterKey(arn string, role string, context map[string]*string) *MasterKey {
+func NewMasterKey(arn string, role string, context map[string]*string, awsEncryptionAlgorithm string) *MasterKey {
 	return &MasterKey{
-		Arn:               arn,
-		Role:              role,
-		EncryptionContext: context,
-		CreationDate:      time.Now().UTC(),
+		Arn:                 arn,
+		Role:                role,
+		EncryptionContext:   context,
+		CreationDate:        time.Now().UTC(),
+		EncryptionAlgorithm: awsEncryptionAlgorithm,
 	}
 }
 
 // NewMasterKeyFromArn takes an ARN string and returns a new MasterKey for that ARN
-func NewMasterKeyFromArn(arn string, context map[string]*string, awsProfile string) *MasterKey {
+func NewMasterKeyFromArn(arn string, context map[string]*string, awsProfile string, awsEncryptionAlgorithm string) *MasterKey {
 	k := &MasterKey{}
 	arn = strings.Replace(arn, " ", "", -1)
 	roleIndex := strings.Index(arn, "+arn:aws:iam::")
@@ -145,17 +150,18 @@ func NewMasterKeyFromArn(arn string, context map[string]*string, awsProfile stri
 	k.EncryptionContext = context
 	k.CreationDate = time.Now().UTC()
 	k.AwsProfile = awsProfile
+	k.EncryptionAlgorithm = awsEncryptionAlgorithm
 	return k
 }
 
 // MasterKeysFromArnString takes a comma separated list of AWS KMS ARNs and returns a slice of new MasterKeys for those ARNs
-func MasterKeysFromArnString(arn string, context map[string]*string, awsProfile string) []*MasterKey {
+func MasterKeysFromArnString(arn string, context map[string]*string, awsProfile string, awsEncryptionAlgorithm string) []*MasterKey {
 	var keys []*MasterKey
 	if arn == "" {
 		return keys
 	}
 	for _, s := range strings.Split(arn, ",") {
-		keys = append(keys, NewMasterKeyFromArn(s, context, awsProfile))
+		keys = append(keys, NewMasterKeyFromArn(s, context, awsProfile, awsEncryptionAlgorithm))
 	}
 	return keys
 }

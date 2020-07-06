@@ -48,7 +48,7 @@ func TestKMS(t *testing.T) {
 
 func TestKMSKeySourceFromString(t *testing.T) {
 	s := "arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e+arn:aws:iam::927034868273:role/sops-dev, arn:aws:kms:ap-southeast-1:656532927350:key/9006a8aa-0fa6-4c14-930e-a2dfb916de1d"
-	ks := MasterKeysFromArnString(s, nil, "foo")
+	ks := MasterKeysFromArnString(s, nil, "foo", "SYMMETRIC_DEFAULT")
 	k1 := ks[0]
 	k2 := ks[1]
 	expectedArn1 := "arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e"

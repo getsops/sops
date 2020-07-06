@@ -559,6 +559,32 @@ roles that can only access a given context. An example policy is shown below:
       }
     }
 
+AWS KMS Asymmetric Keys
+~~~~~~~~~~~~~~~~~~~~~~~
+
+SOPS has the ability to use `AWS Asymmetric keys
+<https://docs.aws.amazon.com/kms/latest/developerguide/symm-asymm-concepts.html>`_
+for encryption and decryption.
+
+When using an asymmetric key for encryption, you must specify the encryption
+algorithm to use by specifying the correct CMK in the ``--aws-encryption-algorithm``
+flag:
+
+.. code:: bash
+  $ sops --kms arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e --aws-encryption-algorithm RSAES_OAEP_SHA_1 test.dev.yaml
+
+Accepted algorithms are ``RSAES_OAEP_SHA_1`` & ``RSAES_OAEP_SHA_256``. AWS recommends
+``RSAES_OAEP_SHA_256`` for asymmetric encryption.
+
+You can also specify the encryption algorithm in your sops configuration:
+
+.. code:: yaml
+
+	sops:
+	    kms:
+	    -	arn: arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e
+	        aws_encryption_algorithm: RSAES_OAEP_SHA_256
+
 Key Rotation
 ~~~~~~~~~~~~
 

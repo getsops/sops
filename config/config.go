@@ -79,10 +79,11 @@ type gcpKmsKey struct {
 }
 
 type kmsKey struct {
-	Arn        string             `yaml:"arn"`
-	Role       string             `yaml:"role,omitempty"`
-	Context    map[string]*string `yaml:"context"`
-	AwsProfile string             `yaml:"aws_profile"`
+	Arn                    string             `yaml:"arn"`
+	Role                   string             `yaml:"role,omitempty"`
+	Context                map[string]*string `yaml:"context"`
+	AwsProfile             string             `yaml:"aws_profile"`
+	AwsEncryptionAlgorithm string             `yaml:"aws_encryption_algorithm"`
 }
 
 type azureKVKey struct {
@@ -106,18 +107,19 @@ type destinationRule struct {
 }
 
 type creationRule struct {
-	PathRegex         string `yaml:"path_regex"`
-	KMS               string
-	AwsProfile        string `yaml:"aws_profile"`
-	PGP               string
-	GCPKMS            string     `yaml:"gcp_kms"`
-	AzureKeyVault     string     `yaml:"azure_keyvault"`
-	VaultURI          string     `yaml:"hc_vault_transit_uri"`
-	KeyGroups         []keyGroup `yaml:"key_groups"`
-	ShamirThreshold   int        `yaml:"shamir_threshold"`
-	UnencryptedSuffix string     `yaml:"unencrypted_suffix"`
-	EncryptedSuffix   string     `yaml:"encrypted_suffix"`
-	EncryptedRegex    string     `yaml:"encrypted_regex"`
+	PathRegex              string `yaml:"path_regex"`
+	KMS                    string
+	AwsProfile             string `yaml:"aws_profile"`
+	AwsEncryptionAlgorithm string `yaml:"aws_encryption_algorithm"`
+	PGP                    string
+	GCPKMS                 string     `yaml:"gcp_kms"`
+	AzureKeyVault          string     `yaml:"azure_keyvault"`
+	VaultURI               string     `yaml:"hc_vault_transit_uri"`
+	KeyGroups              []keyGroup `yaml:"key_groups"`
+	ShamirThreshold        int        `yaml:"shamir_threshold"`
+	UnencryptedSuffix      string     `yaml:"unencrypted_suffix"`
+	EncryptedSuffix        string     `yaml:"encrypted_suffix"`
+	EncryptedRegex         string     `yaml:"encrypted_regex"`
 }
 
 // Load loads a sops config file into a temporary struct
@@ -149,7 +151,7 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 				keyGroup = append(keyGroup, pgp.NewMasterKeyFromFingerprint(k))
 			}
 			for _, k := range group.KMS {
-				keyGroup = append(keyGroup, kms.NewMasterKey(k.Arn, k.Role, k.Context))
+				keyGroup = append(keyGroup, kms.NewMasterKey(k.Arn, k.Role, k.Context, k.AwsEncryptionAlgorithm))
 			}
 			for _, k := range group.GCPKMS {
 				keyGroup = append(keyGroup, gcpkms.NewMasterKeyFromResourceID(k.ResourceID))
@@ -171,7 +173,7 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		for _, k := range pgp.MasterKeysFromFingerprintString(cRule.PGP) {
 			keyGroup = append(keyGroup, k)
 		}
-		for _, k := range kms.MasterKeysFromArnString(cRule.KMS, kmsEncryptionContext, cRule.AwsProfile) {
+		for _, k := range kms.MasterKeysFromArnString(cRule.KMS, kmsEncryptionContext, cRule.AwsProfile, cRule.AwsEncryptionAlgorithm) {
 			keyGroup = append(keyGroup, k)
 		}
 		for _, k := range gcpkms.MasterKeysFromResourceIDString(cRule.GCPKMS) {

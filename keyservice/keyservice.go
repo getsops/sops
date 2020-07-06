@@ -39,8 +39,8 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 			KeyType: &Key_VaultKey{
 				VaultKey: &VaultKey{
 					VaultAddress: mk.VaultAddress,
-					EnginePath:    mk.EnginePath,
-					KeyName:        mk.KeyName,
+					EnginePath:   mk.EnginePath,
+					KeyName:      mk.KeyName,
 				},
 			},
 		}
@@ -52,10 +52,11 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 		return Key{
 			KeyType: &Key_KmsKey{
 				KmsKey: &KmsKey{
-					Arn:        mk.Arn,
-					Role:       mk.Role,
-					Context:    ctx,
-					AwsProfile: mk.AwsProfile,
+					Arn:                    mk.Arn,
+					Role:                   mk.Role,
+					Context:                ctx,
+					AwsProfile:             mk.AwsProfile,
+					AwsEncryptionAlgorithm: mk.EncryptionAlgorithm,
 				},
 			},
 		}
