@@ -134,7 +134,7 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 	}
 	
 	// Close temporary file, since Windows won't delete the file unless it's closed beforehand
-	tmpfile.Close()
+	defer tmpfile.Close()
 
 	// Compute file hash to detect if the file has been edited
 	origHash, err := hashFile(tmpfile.Name())
