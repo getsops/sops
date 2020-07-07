@@ -571,7 +571,7 @@ algorithm to use by specifying the correct CMK in the ``--aws-encryption-algorit
 flag:
 
 .. code:: bash
-  $ sops --kms arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e --aws-encryption-algorithm RSAES_OAEP_SHA_1 test.dev.yaml
+	$ sops --kms arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e --aws-encryption-algorithm RSAES_OAEP_SHA_1 test.dev.yaml
 
 Accepted algorithms are ``RSAES_OAEP_SHA_1`` & ``RSAES_OAEP_SHA_256``. AWS recommends
 ``RSAES_OAEP_SHA_256`` for asymmetric encryption.
