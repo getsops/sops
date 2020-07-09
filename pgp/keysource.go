@@ -323,7 +323,7 @@ func (key *MasterKey) passphrasePrompt() func(keys []openpgp.Key, symmetric bool
 	maxCalls := 3
 	return func(keys []openpgp.Key, symmetric bool) ([]byte, error) {
 		if callCounter >= maxCalls {
-			return nil, fmt.Errorf("function passphrasePrompt called more than once")
+			return nil, fmt.Errorf("function passphrasePrompt called too many times")
 		}
 		callCounter++
 
