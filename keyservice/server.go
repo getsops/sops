@@ -81,9 +81,7 @@ func (ks *Server) encryptWithAge(key *AgeKey, plaintext []byte) ([]byte, error) 
 		Recipient: key.Recipient,
 	}
 
-	err := ageKey.Encrypt(plaintext)
-
-	if err != nil {
+	if err := ageKey.Encrypt(plaintext); err != nil {
 		return nil, err
 	}
 
