@@ -216,7 +216,7 @@ func (key *MasterKey) decryptWithCryptoOpenpgp() ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Armor decoding failed: %s", err)
 	}
-	md, err := openpgp.ReadMessage(block.Body, ring, key.passphrasePrompt, nil)
+	md, err := openpgp.ReadMessage(block.Body, ring, key.passphrasePrompt(), nil)
 	if err != nil {
 		return nil, fmt.Errorf("Reading PGP message failed: %s", err)
 	}
@@ -318,39 +318,48 @@ func (key *MasterKey) fingerprintMap(ring openpgp.EntityList) map[string]openpgp
 	return fps
 }
 
-func (key *MasterKey) passphrasePrompt(keys []openpgp.Key, symmetric bool) ([]byte, error) {
-	conn, err := gpgagent.NewConn()
-	if err == gpgagent.ErrNoAgent {
-		log.Infof("gpg-agent not found, continuing with manual passphrase " +
-			"input...")
-		fmt.Print("Enter PGP key passphrase: ")
-		pass, err := gopass.GetPasswd()
-		if err != nil {
-			return nil, err
+func (key *MasterKey) passphrasePrompt() func(keys []openpgp.Key, symmetric bool) ([]byte, error) {
+	callCounter := 0
+	maxCalls := 3
+	return func(keys []openpgp.Key, symmetric bool) ([]byte, error) {
+		if callCounter >= maxCalls {
+			return nil, fmt.Errorf("function passphrasePrompt called too many times")
 		}
+		callCounter++
+
+		conn, err := gpgagent.NewConn()
+		if err == gpgagent.ErrNoAgent {
+			log.Infof("gpg-agent not found, continuing with manual passphrase " +
+				"input...")
+			fmt.Print("Enter PGP key passphrase: ")
+			pass, err := gopass.GetPasswd()
+			if err != nil {
+				return nil, err
+			}
+			for _, k := range keys {
+				k.PrivateKey.Decrypt(pass)
+			}
+			return pass, err
+		}
+		if err != nil {
+			return nil, fmt.Errorf("Could not establish connection with gpg-agent: %s", err)
+		}
+		defer conn.Close()
 		for _, k := range keys {
-			k.PrivateKey.Decrypt(pass)
+			req := gpgagent.PassphraseRequest{
+				CacheKey: k.PublicKey.KeyIdShortString(),
+				Prompt:   "Passphrase",
+				Desc:     fmt.Sprintf("Unlock key %s to decrypt sops's key", k.PublicKey.KeyIdShortString()),
+			}
+			pass, err := conn.GetPassphrase(&req)
+			if err != nil {
+				return nil, fmt.Errorf("gpg-agent passphrase request errored: %s", err)
+			}
+			k.PrivateKey.Decrypt([]byte(pass))
+			return []byte(pass), nil
 		}
-		return pass, err
+		return nil, fmt.Errorf("No key to unlock")
 	}
-	if err != nil {
-		return nil, fmt.Errorf("Could not establish connection with gpg-agent: %s", err)
-	}
-	defer conn.Close()
-	for _, k := range keys {
-		req := gpgagent.PassphraseRequest{
-			CacheKey: k.PublicKey.KeyIdShortString(),
-			Prompt:   "Passphrase",
-			Desc:     fmt.Sprintf("Unlock key %s to decrypt sops's key", k.PublicKey.KeyIdShortString()),
-		}
-		pass, err := conn.GetPassphrase(&req)
-		if err != nil {
-			return nil, fmt.Errorf("gpg-agent passphrase request errored: %s", err)
-		}
-		k.PrivateKey.Decrypt([]byte(pass))
-		return []byte(pass), nil
-	}
-	return nil, fmt.Errorf("No key to unlock")
 }
 
 // ToMap converts the MasterKey into a map for serialization purposes
