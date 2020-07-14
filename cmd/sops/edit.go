@@ -132,6 +132,9 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Could not write output file: %s", err), codes.CouldNotWriteOutputFile)
 	}
+	
+	// Close temporary file, since Windows won't delete the file unless it's closed beforehand
+	defer tmpfile.Close()
 
 	// Compute file hash to detect if the file has been edited
 	origHash, err := hashFile(tmpfile.Name())
