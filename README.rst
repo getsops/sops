@@ -48,9 +48,6 @@ Or whatever variation of the above fits your system and shell.
 
 To use **sops** as a library, take a look at the `decrypt package <https://godoc.org/go.mozilla.org/sops/decrypt>`_.
 
-**Questions?** ping "ulfr" and "autrilla" in ``#security`` on `irc.mozilla.org <https://wiki.mozilla.org/IRC>`_
-(use a web client like `mibbit <https://chat.mibbit.com>`_ ).
-
 **What happened to Python Sops?** We rewrote Sops in Go to solve a number of
 deployment issues, but the Python branch still exists under ``python-sops``. We
 will keep maintaining it for a while, and you can still ``pip install sops``,
@@ -289,6 +286,66 @@ And decrypt it using::
 
 	 $ sops --decrypt test.enc.yaml
 
+
+Encrypting using Hashicorp Vault
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We assume you have an instance (or more) of Vault running and you have privileged access to it. For instructions on how to deploy a secure instance of Vault, refer to Hashicorp's official documentation.
+
+To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!) 
+
+.. code:: bash
+
+	$ docker run -d -p8200:8200 vault:1.2.0 server -dev -dev-root-token-id=toor
+
+
+.. code:: bash
+
+	$ # Substitute this with the address Vault is running on
+	$ export VAULT_ADDR=http://127.0.0.1:8200 
+
+	$ # this may not be necessary in case you previously used `vault login` for production use
+	$ export VAULT_TOKEN=toor 
+	
+	$ # to check if Vault started and is configured correctly
+	$ vault status
+	Key             Value
+	---             -----
+	Seal Type       shamir
+	Initialized     true
+	Sealed          false
+	Total Shares    1
+	Threshold       1
+	Version         1.2.0
+	Cluster Name    vault-cluster-618cc902
+	Cluster ID      e532e461-e8f0-1352-8a41-fc7c11096908
+	HA Enabled      false
+
+	$ # It is required to enable a transit engine if not already done (It is suggested to create a transit engine specifically for sops, in which it is possible to have multiple keys with various permission levels)
+	$ vault secrets enable -path=sops transit
+	Success! Enabled the transit secrets engine at: sops/
+
+	$ # Then create one or more keys
+	$ vault write sops/keys/firstkey type=rsa-4096
+	Success! Data written to: sops/keys/firstkey
+
+	$ vault write sops/keys/secondkey type=rsa-2048
+	Success! Data written to: sops/keys/secondkey
+
+	$ vault write sops/keys/thirdkey type=chacha20-poly1305
+	Success! Data written to: sops/keys/thirdkey
+
+	$ sops --hc-vault-transit $VAULT_ADDR/v1/sops/keys/firstkey vault_example.yml
+
+	$ cat <<EOF > .sops.yaml
+	creation_rules:
+		- path_regex: \.dev\.yaml$
+		  hc_vault_transit_uri: "$VAULT_ADDR/v1/sops/keys/secondkey"
+		- path_regex: \.prod\.yaml$
+		  hc_vault_transit_uri: "$VAULT_ADDR/v1/sops/keys/thirdkey"
+	EOF
+
+	$ sops --verbose -e prod/raw.yaml > prod/encrypted.yaml
 
 Adding and removing keys
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -546,6 +603,7 @@ can manage the three sets of configurations for the three types of files:
 		- path_regex: \.prod\.yaml$
 		  kms: 'arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod,arn:aws:kms:eu-central-1:361527076523:key/cb1fab90-8d17-42a1-a9d8-334968904f94+arn:aws:iam::361527076523:role/hiera-sops-prod'
 		  pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
+		  hc_vault_uris: "http://localhost:8200/v1/sops/keys/thirdkey"
 
 		# gcp files using GCP KMS
 		- path_regex: \.gcp\.yaml$
@@ -865,21 +923,21 @@ written to disk.
            "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
            "AWS_SECRET_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
    }
-   
+
    # decrypt out.json and run a command
    # the command prints the environment variable and runs a script that uses it
    $ sops exec-env out.json 'echo secret: $database_password; ./database-import'
    secret: jf48t9wfw094gf4nhdf023r
-   
+
    # launch a shell with the secrets available in its environment
    $ sops exec-env out.json 'sh'
    sh-3.2# echo $database_password
    jf48t9wfw094gf4nhdf023r
-   
+
    # the secret is not accessible anywhere else
    sh-3.2$ exit
    $ echo your password: $database_password
-   your password: 
+   your password:
 
 
 If the command you want to run only operates on files, you can use ``exec-file``
@@ -904,7 +962,7 @@ substituted with the temporary file path (whether a FIFO or an actual file).
            "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
            "AWS_SECRET_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
    }
-   
+
    # launch a shell with a variable TMPFILE pointing to the temporary file
    $ sops exec-file --no-fifo out.json 'TMPFILE={} sh'
    sh-3.2$ echo $TMPFILE
@@ -934,7 +992,7 @@ for added security.
    # the encrypted file can't be read by the current user
    $ cat out.json
    cat: out.json: Permission denied
-   
+
    # execute sops as root, decrypt secrets, then drop privileges
    $ sudo sops exec-env --user nobody out.json 'sh'
    sh-3.2$ echo $database_password
@@ -968,6 +1026,7 @@ This command requires a ``.sops.yaml`` configuration file. Below is an example:
         vault_kv_mount_name: "secret/" # default
         vault_kv_version: 2 # default
         path_regex: vault/*
+        omit_extensions: true
 
 The above configuration will place all files under ``s3/*`` into the S3 bucket ``sops-secrets``,
 all files under ``gcs/*`` into the GCS bucket ``sops-secrets``, and the contents of all files under
@@ -976,6 +1035,11 @@ published to S3 and GCS, it will decrypt them and re-encrypt them using the
 ``F69E4901EDBAD2D1753F8C67A64535C4163FB307`` pgp key.
 
 You would deploy a file to S3 with a command like: ``sops publish s3/app.yaml``
+
+To publish all files in selected directory recursively, you need to specify ``--recursive`` flag.
+
+If you don't want file extension to appear in destination secret path, use ``--omit-extensions``
+flag or ``omit_extensions: true`` in the destination rule in ``.sops.yaml``.
 
 Publishing to Vault
 *******************
@@ -990,6 +1054,9 @@ configuring the client.
 
 ``vault_kv_mount_name`` is used if your Vault KV is mounted somewhere other than ``secret/``.
 ``vault_kv_version`` supports ``1`` and ``2``, with ``2`` being the default.
+
+If destination secret path already exists in Vault and contains same data as the source file, it
+will be skipped.
 
 Below is an example of publishing to Vault (using token auth with a local dev instance of Vault).
 
@@ -1293,9 +1360,10 @@ You can import sops as a module and use it in your python program.
 	tree = sops.walk_and_decrypt(tree, sops_key)
 	sops.write_file(tree, path=path, filetype=pathtype)
 
-Note: this uses the previous implemenation of `sops` written in python,
+Note: this uses the previous implementation of `sops` written in python,
+
 and so doesn't support newer features such as GCP-KMS.
-To use the current version, call out to `sops` using `subprocess.check_output`
+To use the current version, call out to ``sops`` using ``subprocess.run``
 
 Showing diffs in cleartext in git
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

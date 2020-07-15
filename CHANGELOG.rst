@@ -1,6 +1,37 @@
 Changelog
 =========
 
+3.6.0
+-----
+Features:
+
+    * Support for encrypting data through the use of Hashicorp Vault (#655)
+    * `sops publish` now supports `--recursive` flag for publishing all files in a directory (#602)
+    * `sops publish` now supports `--omit-extensions` flag for omitting the extension in the destination path (#602)
+    * sops now supports JSON arrays of arrays (#642)
+
+Improvements:
+
+    * Updates and standardization for the dotenv store (#612, #622)
+    * Close temp files after using them for edit command (#685)
+
+Bug fixes:
+
+    * AWS SDK usage now correctly resolves the `~/.aws/config` file (#680)
+    * `sops updatekeys` now correctly matches config rules (#682)
+    * `sops updatekeys` now correctly uses the config path cli flag (#672)
+    * Partially empty sops config files don't break the use of sops anymore (#662)
+    * Fix possible infinite loop in PGP's passphrase prompt call (#690)
+
+Project changes:
+
+    * Dockerfile now based off of golang version 1.14 (#649)
+    * Push alpine version of docker image to Dockerhub (#609)
+    * Push major, major.minor, and major.minor.patch tagged docker images to Dockerhub (#607)
+    * Removed out of date contact information (#668)
+    * Update authors in the cli help text (#645)
+
+
 3.5.0
 -----
 Features:

@@ -63,30 +63,11 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 // sops runtime object
 func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	var branches sops.TreeBranches
-	var branch sops.TreeBranch
-
-	for _, line := range bytes.Split(in, []byte("\n")) {
-		if len(line) == 0 {
-			continue
-		}
-		if line[0] == '#' {
-			branch = append(branch, sops.TreeItem{
-				Key:   sops.Comment{string(line[1:])},
-				Value: nil,
-			})
-		} else {
-			pos := bytes.Index(line, []byte("="))
-			if pos == -1 {
-				return nil, fmt.Errorf("invalid dotenv input line: %s", line)
-			}
-			branch = append(branch, sops.TreeItem{
-				Key:   string(line[:pos]),
-				Value: string(line[pos+1:]),
-			})
-		}
+	items, err := parse(in)
+	if err != nil {
+		return nil, err
 	}
-
-	branches = append(branches, branch)
+	branches = append(branches, items)
 	return branches, nil
 }
 
@@ -117,9 +98,10 @@ func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 		}
 		var line string
 		if comment, ok := item.Key.(sops.Comment); ok {
-			line = fmt.Sprintf("#%s\n", comment.Value)
+			line = fmt.Sprintf("# %s\n", comment.Value)
 		} else {
-			line = fmt.Sprintf("%s=%s\n", item.Key, item.Value)
+			value := strings.Replace(item.Value.(string), `'`, `\'`, -1)
+			line = fmt.Sprintf("%s='%s'\n", item.Key, value)
 		}
 		buffer.WriteString(line)
 	}

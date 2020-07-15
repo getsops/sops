@@ -6,6 +6,7 @@ import (
 	"net"
 	"net/url"
 	"os"
+	osExec "os/exec"
 	"path/filepath"
 	"reflect"
 	"strconv"
@@ -26,6 +27,7 @@ import (
 	"go.mozilla.org/sops/v3/cmd/sops/subcommand/updatekeys"
 	"go.mozilla.org/sops/v3/config"
 	"go.mozilla.org/sops/v3/gcpkms"
+	"go.mozilla.org/sops/v3/hcvault"
 	"go.mozilla.org/sops/v3/keys"
 	"go.mozilla.org/sops/v3/keyservice"
 	"go.mozilla.org/sops/v3/kms"
@@ -63,8 +65,9 @@ func main() {
 	app.ArgsUsage = "sops [options] file"
 	app.Version = version.Version
 	app.Authors = []cli.Author{
-		{Name: "Julien Vehent", Email: "jvehent@mozilla.com"},
+		{Name: "AJ Bahnken", Email: "ajvb@mozilla.com"},
 		{Name: "Adrian Utrilla", Email: "adrianutrilla@gmail.com"},
+		{Name: "Julien Vehent", Email: "jvehent@mozilla.com"},
 	}
 	app.UsageText = `sops is an editor of encrypted files that supports AWS KMS and PGP
 
@@ -77,6 +80,14 @@ func main() {
    environment variable.
    (you need to setup google application default credentials. See
     https://developers.google.com/identity/protocols/application-default-credentials)
+
+
+   To encrypt or decrypt a document with HashiCorp Vault's Transit Secret Engine, specify the
+   Vault key URI name in the --hc-vault-transit flag or in the SOPS_VAULT_URIS environment variable (eg. https://vault.example.org:8200/v1/transit/keys/dev
+      where 'https://vault.example.org:8200' is the vault server, 'transit' the enginePath, and 'dev' is the name of the key )
+   environment variable.
+   (you need to enable the Transit Secrets Engine in Vault. See
+      https://www.vaultproject.io/docs/secrets/transit/index.html)
 
    To encrypt or decrypt a document with Azure Key Vault, specify the
    Azure Key Vault key URL in the --azure-kv flag or in the SOPS_AZURE_KEYVAULT_URL
@@ -91,11 +102,11 @@ func main() {
    To use multiple KMS or PGP keys, separate them by commas. For example:
        $ sops -p "10F2...0A, 85D...B3F21" file.yaml
 
-   The -p, -k, --gcp-kms and --azure-kv flags are only used to encrypt new documents. Editing
+   The -p, -k, --gcp-kms, --hc-vault-transit and --azure-kv flags are only used to encrypt new documents. Editing
    or decrypting existing documents can be done with "sops file" or
    "sops -d file" respectively. The KMS and PGP keys listed in the encrypted
    documents are used then. To manage master keys in existing documents, use
-   the "add-{kms,pgp,gcp-kms,azure-kv}" and "rm-{kms,pgp,gcp-kms,azure-kv}" flags.
+   the "add-{kms,pgp,gcp-kms,azure-kv,hc-vault-transit}" and "rm-{kms,pgp,gcp-kms,azure-kv,hc-vault-transit}" flags.
 
    To use a different GPG binary than the one in your PATH, set SOPS_GPG_EXEC.
    To use a GPG key server other than gpg.mozilla.org, set SOPS_GPG_KEYSERVER.
@@ -144,12 +155,14 @@ func main() {
 					return toExitError(err)
 				}
 
-				exec.ExecWithEnv(exec.ExecOpts{
+				if err := exec.ExecWithEnv(exec.ExecOpts{
 					Command:    command,
 					Plaintext:  output,
 					Background: c.Bool("background"),
 					User:       c.String("user"),
-				})
+				}); err != nil {
+					return toExitError(err)
+				}
 
 				return nil
 			},
@@ -198,25 +211,35 @@ func main() {
 					return toExitError(err)
 				}
 
-				exec.ExecWithFile(exec.ExecOpts{
+				if err := exec.ExecWithFile(exec.ExecOpts{
 					Command:    command,
 					Plaintext:  output,
 					Background: c.Bool("background"),
 					Fifo:       !c.Bool("no-fifo"),
 					User:       c.String("user"),
-				})
+				}); err != nil {
+					return toExitError(err)
+				}
 
 				return nil
 			},
 		},
 		{
 			Name:      "publish",
-			Usage:     "Publish sops file to a configured destination",
+			Usage:     "Publish sops file or directory to a configured destination",
 			ArgsUsage: `file`,
 			Flags: append([]cli.Flag{
 				cli.BoolFlag{
 					Name:  "yes, y",
 					Usage: `pre-approve all changes and run non-interactively`,
+				},
+				cli.BoolFlag{
+					Name:  "omit-extensions",
+					Usage: "Omit file extensions in destination path when publishing sops file to configured destinations",
+				},
+				cli.BoolFlag{
+					Name:  "recursive",
+					Usage: "If the source path is a directory, publish all its content recursively",
 				},
 				cli.BoolFlag{
 					Name:  "verbose",
@@ -234,20 +257,40 @@ func main() {
 				if c.NArg() < 1 {
 					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
 				}
-				fileName := c.Args()[0]
-				inputStore := inputStore(c, fileName)
-				err = publishcmd.Run(publishcmd.Opts{
-					ConfigPath:  configPath,
-					InputPath:   fileName,
-					InputStore:  inputStore,
-					Cipher:      aes.NewCipher(),
-					KeyServices: keyservices(c),
-					Interactive: !c.Bool("yes"),
+				path := c.Args()[0]
+				info, err := os.Stat(path)
+				if err != nil {
+					return err
+				}
+				if info.IsDir() && !c.Bool("recursive") {
+					return fmt.Errorf("can't operate on a directory without --recursive flag.")
+				}
+				err = filepath.Walk(path, func(subPath string, info os.FileInfo, err error) error {
+					if err != nil {
+						return err
+					}
+					if !info.IsDir() {
+						err = publishcmd.Run(publishcmd.Opts{
+							ConfigPath:     configPath,
+							InputPath:      subPath,
+							Cipher:         aes.NewCipher(),
+							KeyServices:    keyservices(c),
+							InputStore:     inputStore(c, subPath),
+							Interactive:    !c.Bool("yes"),
+							OmitExtensions: c.Bool("omit-extensions"),
+							Recursive:      c.Bool("recursive"),
+							RootPath:       path,
+						})
+						if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
+							return cliErr
+						} else if err != nil {
+							return common.NewExitError(err, codes.ErrorGeneric)
+						}
+					}
+					return nil
 				})
-				if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
-					return cliErr
-				} else if err != nil {
-					return common.NewExitError(err, codes.ErrorGeneric)
+				if err != nil {
+					return err
 				}
 				return nil
 			},
@@ -323,6 +366,10 @@ func main() {
 							Name:  "azure-kv",
 							Usage: "the Azure Key Vault key URL the new group should contain. Can be specified more than once",
 						},
+						cli.StringSliceFlag{
+							Name:  "hc-vault-transit",
+							Usage: "the full vault path to the key used to encrypt/decrypt. Make you choose and configure a key with encrption/decryption enabled (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev'). Can be specified more than once",
+						},
 						cli.BoolFlag{
 							Name:  "in-place, i",
 							Usage: "write output back to the same file instead of stdout",
@@ -340,6 +387,7 @@ func main() {
 						pgpFps := c.StringSlice("pgp")
 						kmsArns := c.StringSlice("kms")
 						gcpKmses := c.StringSlice("gcp-kms")
+						vaultURIs := c.StringSlice("hc-vault-transit")
 						azkvs := c.StringSlice("azure-kv")
 						var group sops.KeyGroup
 						for _, fp := range pgpFps {
@@ -350,6 +398,14 @@ func main() {
 						}
 						for _, kms := range gcpKmses {
 							group = append(group, gcpkms.NewMasterKeyFromResourceID(kms))
+						}
+						for _, uri := range vaultURIs {
+							k, err := hcvault.NewMasterKeyFromURI(uri)
+							if err != nil {
+								log.WithError(err).Error("Failed to add key")
+								continue
+							}
+							group = append(group, k)
 						}
 						for _, url := range azkvs {
 							k, err := azkv.NewMasterKeyFromURL(url)
@@ -418,9 +474,15 @@ func main() {
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
-				configPath, err := config.FindConfigFile(".")
-				if err != nil {
-					return common.NewExitError(err, codes.ErrorGeneric)
+				var err error
+				var configPath string
+				if c.GlobalString("config") != "" {
+					configPath = c.GlobalString("config")
+				} else {
+					configPath, err = config.FindConfigFile(".")
+					if err != nil {
+						return common.NewExitError(err, codes.ErrorGeneric)
+					}
 				}
 				if c.NArg() < 1 {
 					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
@@ -474,6 +536,11 @@ func main() {
 			EnvVar: "SOPS_AZURE_KEYVAULT_URLS",
 		},
 		cli.StringFlag{
+			Name:   "hc-vault-transit",
+			Usage:  "comma separated list of vault's key URI (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev')",
+			EnvVar: "SOPS_VAULT_URIS",
+		},
+		cli.StringFlag{
 			Name:   "pgp, p",
 			Usage:  "comma separated list of PGP fingerprints",
 			EnvVar: "SOPS_PGP_FP",
@@ -521,6 +588,14 @@ func main() {
 		cli.StringFlag{
 			Name:  "rm-kms",
 			Usage: "remove the provided comma-separated list of KMS ARNs from the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "add-hc-vault-transit",
+			Usage: "add the provided comma-separated list of Vault's URI key to the list of master keys on the given file ( eg. https://vault.example.org:8200/v1/transit/keys/dev)",
+		},
+		cli.StringFlag{
+			Name:  "rm-hc-vault-transit",
+			Usage: "remove the provided comma-separated list of Vault's URI key from the list of master keys on the given file ( eg. https://vault.example.org:8200/v1/transit/keys/dev)",
 		},
 		cli.StringFlag{
 			Name:  "add-pgp",
@@ -587,8 +662,8 @@ func main() {
 			return toExitError(err)
 		}
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
-			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-azure-kv") != "" ||
-				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-azure-kv") != "" {
+			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" ||
+				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" {
 				return common.NewExitError("Error: cannot add or remove keys on non-existent files, use `--kms` and `--pgp` instead.", codes.CannotChangeKeysFromNonExistentFile)
 			}
 			if c.Bool("encrypt") || c.Bool("decrypt") || c.Bool("rotate") {
@@ -701,6 +776,13 @@ func main() {
 			for _, k := range azureKeys {
 				addMasterKeys = append(addMasterKeys, k)
 			}
+			hcVaultKeys, err := hcvault.NewMasterKeysFromURIs(c.String("add-hc-vault-transit"))
+			if err != nil {
+				return err
+			}
+			for _, k := range hcVaultKeys {
+				addMasterKeys = append(addMasterKeys, k)
+			}
 
 			var rmMasterKeys []keys.MasterKey
 			for _, k := range kms.MasterKeysFromArnString(c.String("rm-kms"), kmsEncryptionContext, c.String("aws-profile")) {
@@ -719,6 +801,14 @@ func main() {
 			for _, k := range azureKeys {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
+			hcVaultKeys, err = hcvault.NewMasterKeysFromURIs(c.String("rm-hc-vault-transit"))
+			if err != nil {
+				return err
+			}
+			for _, k := range hcVaultKeys {
+				rmMasterKeys = append(rmMasterKeys, k)
+			}
+
 			output, err = rotate(rotateOpts{
 				OutputStore:      outputStore,
 				InputStore:       inputStore,
@@ -829,6 +919,8 @@ func main() {
 func toExitError(err error) error {
 	if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
 		return cliErr
+	} else if execErr, ok := err.(*osExec.ExitError); ok && execErr != nil {
+		return cli.NewExitError(err, execErr.ExitCode())
 	} else if err != nil {
 		return cli.NewExitError(err, codes.ErrorGeneric)
 	}
@@ -910,6 +1002,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	var pgpKeys []keys.MasterKey
 	var cloudKmsKeys []keys.MasterKey
 	var azkvKeys []keys.MasterKey
+	var hcVaultMkKeys []keys.MasterKey
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
 	if c.String("encryption-context") != "" && kmsEncryptionContext == nil {
 		return nil, common.NewExitError("Invalid KMS encryption context format", codes.ErrorInvalidKMSEncryptionContextFormat)
@@ -933,12 +1026,21 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 			azkvKeys = append(azkvKeys, k)
 		}
 	}
+	if c.String("hc-vault-transit") != "" {
+		hcVaultKeys, err := hcvault.NewMasterKeysFromURIs(c.String("hc-vault-transit"))
+		if err != nil {
+			return nil, err
+		}
+		for _, k := range hcVaultKeys {
+			hcVaultMkKeys = append(hcVaultMkKeys, k)
+		}
+	}
 	if c.String("pgp") != "" {
 		for _, k := range pgp.MasterKeysFromFingerprintString(c.String("pgp")) {
 			pgpKeys = append(pgpKeys, k)
 		}
 	}
-	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("azure-kv") == "" {
+	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("azure-kv") == "" && c.String("hc-vault-transit") == "" {
 		conf, err := loadConfig(c, file, kmsEncryptionContext)
 		// config file might just not be supplied, without any error
 		if conf == nil {
@@ -955,6 +1057,8 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	group = append(group, cloudKmsKeys...)
 	group = append(group, azkvKeys...)
 	group = append(group, pgpKeys...)
+	group = append(group, hcVaultMkKeys...)
+	log.Debugf("Master keys available:  %+v", group)
 	return []sops.KeyGroup{group}, nil
 }
 
@@ -973,7 +1077,7 @@ func loadConfig(c *cli.Context, file string, kmsEncryptionContext map[string]*st
 			return nil, nil
 		}
 	}
-	conf, err := config.LoadForFile(configPath, file, kmsEncryptionContext)
+	conf, err := config.LoadCreationRuleForFile(configPath, file, kmsEncryptionContext)
 	if err != nil {
 		return nil, err
 	}

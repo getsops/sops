@@ -34,6 +34,7 @@ func UpdateKeys(opts Opts) error {
 	if info.IsDir() {
 		return fmt.Errorf("can't operate on a directory")
 	}
+	opts.InputPath = path
 	return updateFile(opts)
 }
 
@@ -44,7 +45,7 @@ func updateFile(opts Opts) error {
 	if err != nil {
 		return err
 	}
-	conf, err := config.LoadForFile(opts.ConfigPath, opts.InputPath, make(map[string]*string))
+	conf, err := config.LoadCreationRuleForFile(opts.ConfigPath, opts.InputPath, make(map[string]*string))
 	if err != nil {
 		return err
 	}

@@ -1,34 +1,36 @@
 {
-    "common": {
-        "github_username_unencrypted": "twolfson-dev", 
-        "github_password": "ENC[AES256_GCM,data:h1bhG6v0vDYf0Q==,iv:cQ3IS0D7TnC/06VkEhRcx2ClVGGQbWEXxGvlyBEXxMM=,tag:D/ADFlzJcwkx85GzgQqkfg==,type:str]"
-    }, 
-    "development": {}, 
-    "test": {
-        "github_username_unencrypted": "test-user", 
-        "github_password": "ENC[AES256_GCM,data:jFD75rp2Wwbnk0iJ8SYITwccz2Y=,iv:7nNzm1Oi9dCZDT4pbYWpUamf6lXOsleDhnJYgPBG0cI=,tag:Cwl+//B1u8LsPU43FnqIBQ==,type:str]"
-    }, 
-    "production": {
-        "github_username_unencrypted": "twolfson", 
-        "github_password": "ENC[AES256_GCM,data:lc44Ny0kelmq1s7CDLE=,iv:qmdpHMFyyu8Fx9Qy0autN5HrANIhk6fCXObPd8ojntU=,tag:Okg6Y/BqSd2Q/yU9IYOPkw==,type:str]"
-    }, 
-    "sops": {
-        "mac": "ENC[AES256_GCM,data:25YOvnWtLThQwdloh15gdgtebnLDRRFYOLgVvCKaJLSWkwInZnYNusoPOQ/zWCwWLz9dOzYq2q+CfANopnIxLw7OcQsaz1CNE3tDeE/j7D6eraFvhbqxbSBcOvMFIO5wswmcKJq60W39DovRosNmLh22u+kycIpfyykex6SIpCU=,iv:l8/149y0iQv248qDN+KFjgEDGWUej/XUIAvwN3OKewE=,tag:g6ul7ing5PlRO/Ofz3eEkQ==,type:str]", 
-        "version": 1.6, 
-        "kms": [
-            {
-                "arn": ""
-            }
-        ], 
-        "pgp": [
-            {
-                "fp": "1022470DE3F0BC54BC6AB62DE05550BC07FB1A0A", 
-                "created_at": "2016-02-12T05:14:20Z", 
-                "enc": "-----BEGIN PGP MESSAGE-----\nVersion: GnuPG v1\n\nhIwDEEVDpnzXnMABA/9hQVFyHXnNCnE0YIcXvar4YtFyRNnuV5zTaQskRqPYS14z\nPkqUpx03PVsT4c84YLx3bAu9OM0so8fsXAW7+YpX5A1ZChWpy0Qt7lg6k/4qyUSl\nMO5x+4ZdU5C866no0Q3UHrBy0oxORYUwbKsWU8IMSNWuSXGcqRsU0nyschvhb9Je\nARNsbbGsL2qeaYqjTwD3p3awkef2voVwYGTuSbvKcEfb5X1JrWrX1Igk8wwCe/uw\nlB2SXpk1bQ16ZfsT39+bOaeu6v8mREHG+KKk3k7ddFmML5TbPYqSme7BcW1IQA==\n=c6L/\n-----END PGP MESSAGE-----\n"
-            }
-        ], 
-        "lastmodified": "2016-02-12T07:08:50Z", 
-        "attention": "This section contains key material that should only be modified with extra care. See `sops -h`.", 
-        "unencrypted_suffix": "_unencrypted"
-    }
+	"common": {
+		"github_username_unencrypted": "twolfson-dev",
+		"github_password": "ENC[AES256_GCM,data:wtyRyrcYh1AaoA==,iv:lJKpAdaRjC4jAl+wIT6ozSZanSIEJwEyJkLi0aFHlGg=,tag:NrrARDWsoWqOyQ+oyALHAA==,type:str]"
+	},
+	"development": {},
+	"test": {
+		"github_username_unencrypted": "test-user",
+		"github_password": "ENC[AES256_GCM,data:To6eP3uCm+IQo6KCBalF2Q+7zc4=,iv:GZz08Kz9fjCsIk1edHVZRYgSzfF9smzGbllOU6op+z8=,tag:Zrp5RNck7DXCVffX/zmWIQ==,type:str]"
+	},
+	"production": {
+		"github_username_unencrypted": "twolfson",
+		"github_password": "ENC[AES256_GCM,data:AZ+Yef+hheVBQWtQ6Ys=,iv:RMd4iwMCiNkt2zPyLBakdA9+HaJA9hh2qUbbdNcemLo=,tag:ejPV/E3dwubZl6s1NyZnSA==,type:str]"
+	},
+	"sops": {
+		"kms": null,
+		"gcp_kms": null,
+		"azure_kv": null,
+		"lastmodified": "2019-12-10T22:47:04Z",
+		"mac": "ENC[AES256_GCM,data:rBKvMg8FroPuKB03JEzRvlnONsca7ByBqoTB18kjXHwr7mmnBYLQP4mWiYPRRRaBDaGtDXx3FH+Igyo84vPwNO2eEN94gv1NpeGqPI1vRUwAkCB3UE3hIQN22zXBEwWO4sUPKzERuG8t5dFF7xO4EyzweZlC+nwtyQUQX78ysGo=,iv:vymJO0wSb+/W4LUiZi9+ov9YVy3la+BopXiqd2X/mbA=,tag:Pm7NolfYB7ELKjHaGdbauQ==,type:str]",
+		"pgp": [
+			{
+				"created_at": "2019-12-10T22:47:04Z",
+				"enc": "-----BEGIN PGP MESSAGE-----\n\nwcBMAyUpShfNkFB/AQgAJAeWCsS3nqQ+uDy5gj7Fm7evXn/gY5DW7AWJjkXmHqwx\n+IHVERj9JsfFApoUCPu4Om/KB67uegLWk/GFmAtHcwV2GrsGt1AAIURdNSwYf8P7\nLix9fpRwAUlamXS0wDbGQQyNX3X1rIMu7PnL3KLzvfBQUHaVs3+4GpNXjzUVRGgb\nmjtCTsH3u1VYiHrRz0uoWisPDlvn60fPv0mcYdu17sVpgPnC0qmHh6UJd85dGzfy\nSOisauKYkirOfLSJyVCItFD0GwPVd3mbEcxmIokHmaIznck/Tto3sXcQO4Amc54+\nCjXhk0f/KJbKQQg4mbZMaEMISE+/s3H4mBmk2VADJNLgAeS5csP9GjYrFOAHsgGR\nrDIC4SMd4DTgmuEYSOCh4qLAvJfgmOXA0EoByddCKyrCIHDdyq+lFOQq1Hk+kfl/\nruUZSgCy9OCo5FerieGdW/fWfWsKx2CGKczi0Q/ivuFb2QA=\n=rw7+\n-----END PGP MESSAGE-----",
+				"fp": "FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4"
+			},
+			{
+				"created_at": "2019-12-10T22:47:04Z",
+				"enc": "-----BEGIN PGP MESSAGE-----\n\nwYwDXFUltYFwV4MBBACeF7HYThUNm0osc9SEASAnYLB0/qp6IdA6dc0aNHBZxM3Z\nxiOmbGOfImgwWMDGFP3GYFe3NNt/imzy0V+umVWMYxLYb9Hm3yCdVSb6ks9xJwkp\nXWD7vLXXEuVRsLp+IsmMXSRRJ/shBLIORiOMIAiSv92yluNT8PZF3Nv1hA56Y9Lg\nAeR2GEqpdbw6/tIUPMJUHWQf4XZ14DHgkOF9beAN4qqnf1zgsuVA+YmakiS7L5iY\nA/4OMVnCDJBKTD+l91ID5d4k2bQoU+Dm5AmJqm+I6sX6nViQUgyEyjvi+aeOuuG0\nDQA=\n=0KIM\n-----END PGP MESSAGE-----",
+				"fp": "D7229043384BCC60326C6FB9D8720D957C3D3074"
+			}
+		],
+		"unencrypted_suffix": "_unencrypted",
+		"version": "3.5.0"
+	}
 }

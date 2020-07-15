@@ -79,6 +79,12 @@ func (store Store) sliceFromJSONDecoder(dec *json.Decoder) ([]interface{}, error
 				return slice, err
 			}
 			slice = append(slice, item)
+		} else if ok && delim.String() == "[" {
+			item, err := store.sliceFromJSONDecoder(dec)
+			if err != nil {
+				return slice, err
+			}
+			slice = append(slice, item)
 		} else {
 			slice = append(slice, t)
 		}
