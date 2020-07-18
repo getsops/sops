@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"filippo.io/age"
@@ -75,7 +76,19 @@ func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 
 // Decrypt decrypts the EncryptedKey field with the age identity and returns the result.
 func (key *MasterKey) Decrypt() ([]byte, error) {
-	path := fmt.Sprintf("%s/.sops/age/%s.key", os.Getenv("HOME"), key.Recipient)
+	ageKeyDir, ok := os.LookupEnv("SOPS_AGE_KEY_DIR")
+
+	if !ok {
+		userHomeDir, err := os.UserHomeDir()
+
+		if err != nil {
+			return nil, fmt.Errorf("home directory could not be determined: %v", err)
+		}
+
+		ageKeyDir = filepath.Join(userHomeDir, ".sops", "age")
+	}
+
+	path := filepath.Join(ageKeyDir, fmt.Sprintf("%s.key", key.Recipient))
 
 	_, err := os.Stat(path)
 
