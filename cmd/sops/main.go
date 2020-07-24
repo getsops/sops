@@ -188,6 +188,10 @@ func main() {
                                         Name:  "input-type",
                                         Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
                                 },
+				cli.StringFlag{
+					Name:  "output-type",
+					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the binary output format",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if len(c.Args()) != 2 {
@@ -970,9 +974,8 @@ func inputStore(context *cli.Context, path string) common.Store {
 	return common.DefaultStoreForPathOrFormat(path, context.String("input-type"))
 }
 
-// SCARY! SHOULD THIS BE USING INPUT-TYPE?
 func outputStore(context *cli.Context, path string) common.Store {
-	return common.DefaultStoreForPathOrFormat(path, context.String("input-type"))
+	return common.DefaultStoreForPathOrFormat(path, context.String("output-type"))
 }
 
 func parseTreePath(arg string) ([]interface{}, error) {
