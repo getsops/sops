@@ -3,8 +3,10 @@ package config
 import (
 	"os"
 	"path"
+	"strings"
 	"testing"
 
+	vaultd "github.com/hashicorp/vault/api"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -369,12 +371,18 @@ func TestLoadConfigFileWithDestinationRule(t *testing.T) {
 }
 
 func TestLoadConfigFileWithVaultDestinationRules(t *testing.T) {
+	vaultdBaseAddress := vaultd.DefaultConfig().Address
+	// stripping / such that relative paths can be added starting with /.
+	// Done to avoid failing tests in case the vaultd lib is updated with a
+	// different url.
+	vaultdBaseAddress = strings.TrimSuffix(vaultdBaseAddress, "/")
+
 	conf, err := parseDestinationRuleForFile(parseConfigFile(sampleConfigWithVaultDestinationRules, t), "vault-v2/barfoo", nil)
 	assert.Nil(t, err)
 	assert.NotNil(t, conf.Destination)
-	assert.Equal(t, "http://127.0.0.1:8200/v1/secret/data/foobar/barfoo", conf.Destination.Path("barfoo"))
+	assert.Equal(t, vaultdBaseAddress + "/v1/secret/data/foobar/barfoo", conf.Destination.Path("barfoo"))
 	conf, err = parseDestinationRuleForFile(parseConfigFile(sampleConfigWithVaultDestinationRules, t), "vault-v1/barfoo", nil)
 	assert.Nil(t, err)
 	assert.NotNil(t, conf.Destination)
-	assert.Equal(t, "http://127.0.0.1:8200/v1/kv/barfoo/barfoo", conf.Destination.Path("barfoo"))
+	assert.Equal(t, vaultdBaseAddress + "/v1/kv/barfoo/barfoo", conf.Destination.Path("barfoo"))
 }
