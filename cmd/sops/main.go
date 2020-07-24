@@ -190,7 +190,7 @@ func main() {
                                 },
 				cli.StringFlag{
 					Name:  "output-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the binary output format",
+					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
