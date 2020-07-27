@@ -79,13 +79,13 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	ageKeyDir, ok := os.LookupEnv("SOPS_AGE_KEY_DIR")
 
 	if !ok {
-		userHomeDir, err := os.UserHomeDir()
+		userConfigDir, err := os.UserConfigDir()
 
 		if err != nil {
-			return nil, fmt.Errorf("home directory could not be determined: %v", err)
+			return nil, fmt.Errorf("user config directory could not be determined: %v", err)
 		}
 
-		ageKeyDir = filepath.Join(userHomeDir, ".sops", "age")
+		ageKeyDir = filepath.Join(userConfigDir, ".sops", "age")
 	}
 
 	path := filepath.Join(ageKeyDir, fmt.Sprintf("%s.key", key.Recipient))
