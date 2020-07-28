@@ -92,11 +92,11 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 
 	_, err := os.Stat(path)
 
-	if os.IsNotExist(err) {
-		return nil, fmt.Errorf("no private key found at %s", path)
-	}
-
 	file, err := os.Open(path)
+
+	if err != nil {
+		return nil, fmt.Errorf("no private key found at %s: %s", path, err)
+	}
 
 	defer file.Close()
 
