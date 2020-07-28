@@ -184,6 +184,14 @@ func main() {
 					Name:  "user",
 					Usage: "the user to run the command as",
 				},
+				cli.StringFlag{
+                                        Name:  "input-type",
+                                        Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
+                                },
+				cli.StringFlag{
+					Name:  "output-type",
+					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if len(c.Args()) != 2 {
