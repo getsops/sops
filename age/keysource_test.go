@@ -2,6 +2,8 @@ package age
 
 import (
 	"os"
+	"path"
+	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -20,9 +22,8 @@ func TestAge(t *testing.T) {
 	err = key.Encrypt(dataKey)
 	assert.NoError(err)
 
-	pwd, err := os.Getwd()
-	assert.NoError(err)
-	err = os.Setenv("SOPS_AGE_KEY_DIR", pwd)
+	_, filename, _, _ := runtime.Caller(0)
+	err = os.Setenv("SOPS_AGE_KEY_DIR", path.Dir(filename))
 	assert.NoError(err)
 
 	decryptedKey, err := key.Decrypt()
