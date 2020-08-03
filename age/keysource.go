@@ -27,10 +27,10 @@ func (key *MasterKey) Encrypt(datakey []byte) error {
 	buffer := &bytes.Buffer{}
 
 	if key.parsedRecipient == nil {
-		parsedRecipient, err := age.ParseX25519Recipient(key.Recipient)
+		parsedRecipient, err := parseRecipient(key.Recipient)
 
 		if err != nil {
-			return fmt.Errorf("failed to parse input as Bech32-encoded age public key: %v", err)
+			return err
 		}
 
 		key.parsedRecipient = parsedRecipient
@@ -76,7 +76,7 @@ func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 
 // Decrypt decrypts the EncryptedKey field with the age identity and returns the result.
 func (key *MasterKey) Decrypt() ([]byte, error) {
-	ageKeyDir, ok := os.LookupEnv("SOPS_AGE_KEY_DIR")
+	ageKeyFile, ok := os.LookupEnv("SOPS_AGE_KEY_FILE")
 
 	if !ok {
 		userConfigDir, err := os.UserConfigDir()
@@ -85,17 +85,19 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 			return nil, fmt.Errorf("user config directory could not be determined: %v", err)
 		}
 
-		ageKeyDir = filepath.Join(userConfigDir, ".sops", "age")
+		ageKeyFile = filepath.Join(userConfigDir, ".sops", "age", "keys.txt")
 	}
 
-	path := filepath.Join(ageKeyDir, fmt.Sprintf("%s.key", key.Recipient))
-
-	_, err := os.Stat(path)
-
-	file, err := os.Open(path)
+	_, err := os.Stat(ageKeyFile)
 
 	if err != nil {
-		return nil, fmt.Errorf("no private key found at %s: %s", path, err)
+		return nil, err
+	}
+
+	file, err := os.Open(ageKeyFile)
+
+	if err != nil {
+		return nil, fmt.Errorf("no key file found at %s: %s", ageKeyFile, err)
 	}
 
 	defer file.Close()
@@ -114,17 +116,17 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	}
 
 	if err := scanner.Err(); err != nil {
-		return nil, fmt.Errorf("error scanning lines in age private key file: %v", err)
+		return nil, fmt.Errorf("error scanning lines in age key file: %v", err)
 	}
 
 	if privateKey == "" {
-		return nil, fmt.Errorf("no age private key found in file at: %v", path)
+		return nil, fmt.Errorf("no age private key found in file at: %v", ageKeyFile)
 	}
 
 	parsedIdentity, err := age.ParseX25519Identity(string(privateKey))
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse private key as age X25519Identity at %s: %v", path, err)
+		return nil, fmt.Errorf("failed to parse private key as age X25519Identity at %s: %v", ageKeyFile, err)
 	}
 
 	buffer := &bytes.Buffer{}
@@ -183,7 +185,7 @@ func MasterKeysFromRecipients(commaSeparatedRecipients string) ([]*MasterKey, er
 
 // MasterKeyFromRecipient takes a Bech32-encoded public key and returns a new MasterKey.
 func MasterKeyFromRecipient(recipient string) (*MasterKey, error) {
-	parsedRecipient, err := age.ParseX25519Recipient(recipient)
+	parsedRecipient, err := parseRecipient(recipient)
 
 	if err != nil {
 		return nil, err
@@ -193,4 +195,15 @@ func MasterKeyFromRecipient(recipient string) (*MasterKey, error) {
 		Recipient:       recipient,
 		parsedRecipient: parsedRecipient,
 	}, nil
+}
+
+// parseRecipient attempts to parse a string containing an encoded age public key
+func parseRecipient(recipient string) (*age.X25519Recipient, error) {
+	parsedRecipient, err := age.ParseX25519Recipient(recipient)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse input as Bech32-encoded age public key: %v", err)
+	}
+
+	return parsedRecipient, nil
 }

@@ -23,7 +23,7 @@ func TestAge(t *testing.T) {
 	assert.NoError(err)
 
 	_, filename, _, _ := runtime.Caller(0)
-	err = os.Setenv("SOPS_AGE_KEY_DIR", path.Dir(filename))
+	err = os.Setenv("SOPS_AGE_KEY_FILE", path.Join(path.Dir(filename), "keys.txt"))
 	assert.NoError(err)
 
 	decryptedKey, err := key.Decrypt()
