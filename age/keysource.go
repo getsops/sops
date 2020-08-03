@@ -5,12 +5,15 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"filippo.io/age"
 )
+
+const privateKeySizeLimit = 1 << 24 // 16 MiB
 
 // MasterKey is an age key used to encrypt and decrypt sops' data key.
 type MasterKey struct {
@@ -85,64 +88,35 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 			return nil, fmt.Errorf("user config directory could not be determined: %v", err)
 		}
 
-		ageKeyFile = filepath.Join(userConfigDir, ".sops", "age", "keys.txt")
+		ageKeyFile = filepath.Join(userConfigDir, "sops", "age", "keys.txt")
 	}
 
-	_, err := os.Stat(ageKeyFile)
+	identities, err := parseIdentitiesFile(ageKeyFile)
 
 	if err != nil {
 		return nil, err
 	}
 
-	file, err := os.Open(ageKeyFile)
+	var buffer *bytes.Buffer
 
-	if err != nil {
-		return nil, fmt.Errorf("no key file found at %s: %s", ageKeyFile, err)
-	}
+	for _, identity := range identities {
+		buffer = &bytes.Buffer{}
+		reader := bytes.NewReader([]byte(key.EncryptedKey))
 
-	defer file.Close()
+		r, err := age.Decrypt(reader, identity)
 
-	scanner := bufio.NewScanner(file)
-
-	var privateKey string
-
-	for scanner.Scan() {
-		line := scanner.Text()
-
-		if strings.HasPrefix(line, "AGE-SECRET-KEY") {
-			privateKey = line
-			break
+		if err != nil {
+			continue
 		}
+
+		if _, err := io.Copy(buffer, r); err != nil {
+			continue
+		}
+
+		return buffer.Bytes(), nil
 	}
 
-	if err := scanner.Err(); err != nil {
-		return nil, fmt.Errorf("error scanning lines in age key file: %v", err)
-	}
-
-	if privateKey == "" {
-		return nil, fmt.Errorf("no age private key found in file at: %v", ageKeyFile)
-	}
-
-	parsedIdentity, err := age.ParseX25519Identity(string(privateKey))
-
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse private key as age X25519Identity at %s: %v", ageKeyFile, err)
-	}
-
-	buffer := &bytes.Buffer{}
-	reader := bytes.NewReader([]byte(key.EncryptedKey))
-
-	r, err := age.Decrypt(reader, parsedIdentity)
-
-	if err != nil {
-		return nil, fmt.Errorf("failed to open encrypted data key: %v", err)
-	}
-
-	if _, err := io.Copy(buffer, r); err != nil {
-		return nil, fmt.Errorf("failed to read encrypted data key: %v", err)
-	}
-
-	return buffer.Bytes(), nil
+	return nil, fmt.Errorf("no age identity found in %q that could decrypt the data", ageKeyFile)
 }
 
 // NeedsRotation returns whether the data key needs to be rotated or not.
@@ -206,4 +180,58 @@ func parseRecipient(recipient string) (*age.X25519Recipient, error) {
 	}
 
 	return parsedRecipient, nil
+}
+
+// parseIdentitiesFile parses a file containing age private keys. Derived from
+// https://github.com/FiloSottile/age/blob/189041b668629795593766bcb8d3f70ee248b842/cmd/age/parse.go
+// but should be replaced with a library function if a future version of the age library exposes
+// this functionality.
+func parseIdentitiesFile(name string) ([]age.Identity, error) {
+	f, err := os.Open(name)
+	if err != nil {
+		return nil, fmt.Errorf("failed to open file: %v", err)
+	}
+	defer f.Close()
+
+	contents, err := ioutil.ReadAll(io.LimitReader(f, privateKeySizeLimit))
+	if err != nil {
+		return nil, fmt.Errorf("failed to read %q: %v", name, err)
+	}
+	if len(contents) == privateKeySizeLimit {
+		return nil, fmt.Errorf("failed to read %q: file too long", name)
+	}
+
+	var ids []age.Identity
+	var ageParsingError error
+	scanner := bufio.NewScanner(bytes.NewReader(contents))
+	for scanner.Scan() {
+		line := scanner.Text()
+		if strings.HasPrefix(line, "#") || line == "" {
+			continue
+		}
+		if strings.HasPrefix(line, "-----BEGIN") {
+			ageParsingError = fmt.Errorf("sops does not yet support SSH keys via age. SSH key found in file at %q", name)
+			continue
+		}
+		if ageParsingError != nil {
+			continue
+		}
+		i, err := age.ParseX25519Identity(line)
+		if err != nil {
+			ageParsingError = fmt.Errorf("malformed secret keys file %q: %v", name, err)
+			continue
+		}
+		ids = append(ids, i)
+	}
+	if err := scanner.Err(); err != nil {
+		return nil, fmt.Errorf("failed to read %q: %v", name, err)
+	}
+	if ageParsingError != nil {
+		return nil, ageParsingError
+	}
+
+	if len(ids) == 0 {
+		return nil, fmt.Errorf("no secret keys found in %q", name)
+	}
+	return ids, nil
 }
