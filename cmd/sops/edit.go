@@ -37,6 +37,7 @@ type editExampleOpts struct {
 	editOpts
 	UnencryptedSuffix string
 	EncryptedSuffix   string
+	UnencryptedRegex  string
 	EncryptedRegex    string
 	KeyGroups         []sops.KeyGroup
 	GroupThreshold    int
@@ -66,6 +67,7 @@ func editExample(opts editExampleOpts) ([]byte, error) {
 			KeyGroups:         opts.KeyGroups,
 			UnencryptedSuffix: opts.UnencryptedSuffix,
 			EncryptedSuffix:   opts.EncryptedSuffix,
+			UnencryptedRegex:  opts.UnencryptedRegex,
 			EncryptedRegex:    opts.EncryptedRegex,
 			Version:           version.Version,
 			ShamirThreshold:   opts.GroupThreshold,
@@ -132,7 +134,7 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Could not write output file: %s", err), codes.CouldNotWriteOutputFile)
 	}
-	
+
 	// Close temporary file, since Windows won't delete the file unless it's closed beforehand
 	defer tmpfile.Close()
 

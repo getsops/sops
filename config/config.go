@@ -117,6 +117,7 @@ type creationRule struct {
 	ShamirThreshold   int        `yaml:"shamir_threshold"`
 	UnencryptedSuffix string     `yaml:"unencrypted_suffix"`
 	EncryptedSuffix   string     `yaml:"encrypted_suffix"`
+	UnencryptedRegex  string     `yaml:"unencrypted_regex"`
 	EncryptedRegex    string     `yaml:"encrypted_regex"`
 }
 
@@ -135,6 +136,7 @@ type Config struct {
 	ShamirThreshold   int
 	UnencryptedSuffix string
 	EncryptedSuffix   string
+	UnencryptedRegex  string
 	EncryptedRegex    string
 	Destination       publish.Destination
 	OmitExtensions    bool
@@ -235,6 +237,7 @@ func configFromRule(rule *creationRule, kmsEncryptionContext map[string]*string)
 		ShamirThreshold:   rule.ShamirThreshold,
 		UnencryptedSuffix: rule.UnencryptedSuffix,
 		EncryptedSuffix:   rule.EncryptedSuffix,
+		UnencryptedRegex:  rule.UnencryptedRegex,
 		EncryptedRegex:    rule.EncryptedRegex,
 	}, nil
 }

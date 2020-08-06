@@ -22,6 +22,7 @@ type encryptOpts struct {
 	KeyServices       []keyservice.KeyServiceClient
 	UnencryptedSuffix string
 	EncryptedSuffix   string
+	UnencryptedRegex  string
 	EncryptedRegex    string
 	KeyGroups         []sops.KeyGroup
 	GroupThreshold    int
@@ -77,6 +78,7 @@ func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 			KeyGroups:         opts.KeyGroups,
 			UnencryptedSuffix: opts.UnencryptedSuffix,
 			EncryptedSuffix:   opts.EncryptedSuffix,
+			UnencryptedRegex:  opts.UnencryptedRegex,
 			EncryptedRegex:    opts.EncryptedRegex,
 			Version:           version.Version,
 			ShamirThreshold:   opts.GroupThreshold,
