@@ -1439,7 +1439,7 @@ containing kubernetes secrets, while encrypting everything else.
 
 You can also specify these options in the ``.sops.yaml`` config file.
 
-Note: these fourth options ``--unencrypted-suffix``, ``--encrypted-suffix``, ``--encrypted-regex`` and ``--unencrypted-regex`` are
+Note: these four options ``--unencrypted-suffix``, ``--encrypted-suffix``, ``--encrypted-regex`` and ``--unencrypted-regex`` are
 mutually exclusive and cannot all be used in the same file.
 
 Encryption Protocol
