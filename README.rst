@@ -1025,6 +1025,7 @@ This command requires a ``.sops.yaml`` configuration file. Below is an example:
       - vault_path: "sops/"
         vault_kv_mount_name: "secret/" # default
         vault_kv_version: 2 # default
+        vault_path_omit_filename: false # default
         path_regex: vault/*
         omit_extensions: true
 
@@ -1046,7 +1047,7 @@ Publishing to Vault
 
 There are a few settings for Vault that you can place in your destination rules. The first
 is ``vault_path``, which is required. The others are optional, and they are
-``vault_address``, ``vault_kv_mount_name``, ``vault_kv_version``.
+``vault_address``, ``vault_kv_mount_name``, ``vault_kv_version``, ``vault_path_omit_filename``.
 
 ``sops`` uses the official Vault API provided by Hashicorp, which makes use of `environment
 variables <https://www.vaultproject.io/docs/commands/#environment-variables>`_ for
@@ -1054,6 +1055,7 @@ configuring the client.
 
 ``vault_kv_mount_name`` is used if your Vault KV is mounted somewhere other than ``secret/``.
 ``vault_kv_version`` supports ``1`` and ``2``, with ``2`` being the default.
+``vault_path_omit_filename`` set to ``true`` to omit filename from Vault path. ``false`` by default.
 
 If destination secret path already exists in Vault and contains same data as the source file, it
 will be skipped.
