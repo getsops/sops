@@ -11,7 +11,15 @@ import (
 	"strings"
 
 	"filippo.io/age"
+	"github.com/sirupsen/logrus"
+	"go.mozilla.org/sops/v3/logging"
 )
+
+var log *logrus.Logger
+
+func init() {
+	log = logging.NewLogger("AGE")
+}
 
 const privateKeySizeLimit = 1 << 24 // 16 MiB
 
@@ -33,6 +41,7 @@ func (key *MasterKey) Encrypt(datakey []byte) error {
 		parsedRecipient, err := parseRecipient(key.Recipient)
 
 		if err != nil {
+			log.WithField("recipient", key.parsedRecipient).Error("Encryption failed")
 			return err
 		}
 
@@ -40,20 +49,23 @@ func (key *MasterKey) Encrypt(datakey []byte) error {
 	}
 
 	w, err := age.Encrypt(buffer, key.parsedRecipient)
-
 	if err != nil {
 		return fmt.Errorf("failed to open file for encrypting sops data key with age: %v", err)
 	}
 
 	if _, err := w.Write(datakey); err != nil {
+		log.WithField("recipient", key.parsedRecipient).Error("Encryption failed")
 		return fmt.Errorf("failed to encrypt sops data key with age: %v", err)
 	}
 
 	if err := w.Close(); err != nil {
+		log.WithField("recipient", key.parsedRecipient).Error("Encryption failed")
 		return fmt.Errorf("failed to close file for encrypting sops data key with age: %v", err)
 	}
-
+	
 	key.EncryptedKey = buffer.String()
+	
+	log.WithField("recipient", key.parsedRecipient).Info("Encryption succeeded")
 
 	return nil
 }
