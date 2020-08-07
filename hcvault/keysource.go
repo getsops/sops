@@ -29,7 +29,7 @@ func init() {
 type MasterKey struct {
 	EncryptedKey string
 	KeyName      string
-	EnginePath  string
+	EnginePath   string
 	VaultAddress string
 	CreationDate time.Time
 }
@@ -100,7 +100,7 @@ func getBackendAndKeyFromPath(fullPath string) (enginePath, keyName string, err 
 func NewMasterKey(addess, enginePath, keyName string) *MasterKey {
 	mk := &MasterKey{
 		VaultAddress: addess,
-		EnginePath:  enginePath,
+		EnginePath:   enginePath,
 		KeyName:      keyName,
 		CreationDate: time.Now().UTC(),
 	}
