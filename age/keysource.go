@@ -131,10 +131,7 @@ func (key *MasterKey) ToString() string {
 
 // ToMap converts the MasterKey to a map for serialization purposes.
 func (key *MasterKey) ToMap() map[string]interface{} {
-	out := make(map[string]interface{})
-	out["recipient"] = key.Recipient
-	out["enc"] = key.EncryptedKey
-	return out
+	return map[string]interface{}{"recipient": key.Recipient, "enc": key.EncryptedKey}
 }
 
 // MasterKeysFromRecipients takes a comma-separated list of Bech32-encoded public keys and returns a
