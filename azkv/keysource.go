@@ -10,6 +10,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"net/http"
 	"regexp"
 	"strings"
 	"time"
@@ -18,6 +19,7 @@ import (
 
 	"github.com/Azure/azure-sdk-for-go/services/keyvault/2016-10-01/keyvault"
 	"github.com/Azure/go-autorest/autorest"
+	"github.com/Azure/go-autorest/autorest/adal"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/azure/auth"
 	"github.com/sirupsen/logrus"
@@ -121,15 +123,7 @@ func newAuthorizer() (autorest.Authorizer, error) {
 		return config.Authorizer()
 	}
 
-	// 4. MSI
-	if settings.authMethod == "msi" {
-		config := auth.NewMSIConfig()
-		config.Resource = settings.resource
-		config.ClientID = settings.clientID
-		return config.Authorizer()
-	}
-
-	// 5. Device Code
+	// 4. Device Code
 	if settings.authMethod == "devicecode" {
 		// TODO: Removed until we decide how to handle prompt on stdout, etc.
 		//// TODO: This will be required on every execution. Consider caching.
@@ -138,8 +132,44 @@ func newAuthorizer() (autorest.Authorizer, error) {
 		return nil, errors.New("device code flow not implemented")
 	}
 
+	// "Auto" MSI - only try MSI if the user specified 'msi',
+	// or if they didn't specify something else specifically
+	if settings.authMethod == "" || settings.authMethod == "msi" {		
+		authorizer, err := tryMSI(settings.resource, settings.clientID)
+		if err != nil && settings.authMethod == "msi" {
+			// if they requested MSI specifically and it failed, that's fatal
+			return nil, fmt.Errorf("'msi' method specified, but it failed: %q", err)
+		}
+		if err != nil {
+			log.Warnf("auth: 'msi' method attempted optimistically, but it failed: %q", err)
+		} else {
+			return authorizer, nil
+		}
+	}
+
 	// 6. CLI
+	log.Warn("auth: no method specified, trying az cli")
 	return auth.NewAuthorizerFromCLIWithResource(settings.resource)
+}
+
+func tryMSI(resource, clientID string) (autorest.Authorizer, error) {
+	msiAvail := adal.MSIAvailable(context.Background(), http.DefaultClient)
+	
+	if msiAvail {
+		config := auth.NewMSIConfig()
+		config.Resource = resource
+		config.ClientID = clientID
+		authorizer, err := config.Authorizer()
+		if err != nil {
+			log.Warnf("auth: 'msi' failed to create authorizer: %q", err)
+			return nil, err
+		} else {
+			log.Info("auth: 'msi' succeeded")
+			return authorizer, nil
+		}
+	}
+
+	return nil, fmt.Errorf("msi is not available")
 }
 
 // NewMasterKey creates a new MasterKey from an URL, key name and version, setting the creation date to the current date
