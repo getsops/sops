@@ -1,0 +1,28 @@
+> export AZURE_AUTH_METHOD="msi"
+> ~/go/bin/sops --verbose --decrypt "demo/hs_ed25519_secret_key.sops" > "demo/secret"
+[AZKV]	 ERRO[0000] Failed to create Azure authorizer             error="'msi' auth method specified, but it is not available"
+Failed to get the data key required to decrypt the SOPS file.
+
+Group 0: FAILED
+  https://sops-b5078e18c0c34221.vault.azure.net/keys/sops-key/6e538f7c6d714d138226082070d1fe99: FAILED
+    - | 'msi' auth method specified, but it is not available
+
+Recovery failed because no master key was able to decrypt the file. In
+order for SOPS to recover the file, at least one key has to be successful,
+but none were.
+
+
+> unset AZURE_AUTH_METHOD
+> ~/go/bin/sops --verbose --decrypt "demo/hs_ed25519_secret_key.sops" > "demo/secret"
+[AZKV]	 WARN[0000] auth: 'msi' method attempted optimistically, but failed: "msi is not available" 
+[AZKV]	 WARN[0000] auth: no method specified, trying az cli     
+[AZKV]	 INFO[0000] Decryption succeeded                          key=sops-key version=6e538f7c6d714d138226082070d1fe99
+[SOPS]	 INFO[0000] Data key recovered successfully              
+[SOPS]	 DEBU[0000] Decrypting tree           
+
+
+#
+# On Azure MSI Host
+#
+
+# do it here now and show test results
