@@ -132,7 +132,7 @@ func newAuthorizer() (autorest.Authorizer, error) {
 		return nil, errors.New("device code flow not implemented")
 	}
 
-	// "Auto" MSI - only try MSI if the user specified 'msi',
+	// 5. "Auto" MSI - only try MSI if the user specified 'msi',
 	// or if they didn't specify something else specifically
 	if settings.authMethod == "" || settings.authMethod == "msi" {		
 		authorizer, err := tryMSI(settings.resource, settings.clientID)
