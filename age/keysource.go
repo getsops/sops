@@ -62,9 +62,9 @@ func (key *MasterKey) Encrypt(datakey []byte) error {
 		log.WithField("recipient", key.parsedRecipient).Error("Encryption failed")
 		return fmt.Errorf("failed to close file for encrypting sops data key with age: %v", err)
 	}
-	
+
 	key.EncryptedKey = buffer.String()
-	
+
 	log.WithField("recipient", key.parsedRecipient).Info("Encryption succeeded")
 
 	return nil
@@ -149,6 +149,10 @@ func (key *MasterKey) ToMap() map[string]interface{} {
 // MasterKeysFromRecipients takes a comma-separated list of Bech32-encoded public keys and returns a
 // slice of new MasterKeys.
 func MasterKeysFromRecipients(commaSeparatedRecipients string) ([]*MasterKey, error) {
+	if commaSeparatedRecipients == "" {
+		// otherwise Split returns [""] and MasterKeyFromRecipient is unhappy
+		return make([]*MasterKey, 0), nil
+	}
 	recipients := strings.Split(commaSeparatedRecipients, ",")
 
 	var keys []*MasterKey

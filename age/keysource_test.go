@@ -9,6 +9,17 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestMasterKeysFromRecipientsEmpty(t *testing.T) {
+	assert := assert.New(t)
+
+	commaSeparatedRecipients := ""
+	recipients, err := MasterKeysFromRecipients(commaSeparatedRecipients)
+
+	assert.NoError(err)
+
+	assert.Equal(recipients, make([]*MasterKey,0))
+}
+
 func TestAge(t *testing.T) {
 	assert := assert.New(t)
 
