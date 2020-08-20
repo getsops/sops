@@ -29,7 +29,7 @@ For the adventurous, unstable features are available in the `develop` branch, wh
 .. code:: bash
 
 	$ go get -u go.mozilla.org/sops/v3/cmd/sops
-        $ cd $GOPATH/src/go.mozilla.org/sops/
+        $ cd $GOPATH/src/go.mozilla.org/sops/v3
         $ git checkout develop
         $ make install
 
