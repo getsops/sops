@@ -379,9 +379,9 @@ func TestLoadConfigFileWithVaultDestinationRules(t *testing.T) {
 	conf, err := parseDestinationRuleForFile(parseConfigFile(sampleConfigWithVaultDestinationRules, t), "vault-v2/barfoo", nil)
 	assert.Nil(t, err)
 	assert.NotNil(t, conf.Destination)
-	assert.Equal(t, "http://127.0.0.1:8200/v1/secret/data/foobar/barfoo", conf.Destination.Path("barfoo"))
+	assert.Contains(t, conf.Destination.Path("barfoo"), "/v1/secret/data/foobar/barfoo")
 	conf, err = parseDestinationRuleForFile(parseConfigFile(sampleConfigWithVaultDestinationRules, t), "vault-v1/barfoo", nil)
 	assert.Nil(t, err)
 	assert.NotNil(t, conf.Destination)
-	assert.Equal(t, "http://127.0.0.1:8200/v1/kv/barfoo/barfoo", conf.Destination.Path("barfoo"))
+	assert.Contains(t, conf.Destination.Path("barfoo"), "/v1/kv/barfoo/barfoo")
 }
