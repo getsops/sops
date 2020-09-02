@@ -1426,9 +1426,20 @@ will encrypt the values under the ``data`` and ``stringData`` keys in a YAML fil
 containing kubernetes secrets.  It will not encrypt other values that help you to
 navigate the file, like ``metadata`` which contains the secrets' names.
 
+Conversely, you can opt in to only left certain keys without encrypting by using the 
+``--unencrypted-regex`` option, which will leave the values unencrypted of those keys 
+that match the supplied regular expression. For example, this command:
+
+.. code:: bash
+
+  $ sops --encrypt --unencrypted-regex '^(description|metadata)$' k8s-secrets.yaml
+
+will not encrypt the values under the ``description`` and ``metadata`` keys in a YAML file
+containing kubernetes secrets, while encrypting everything else.
+
 You can also specify these options in the ``.sops.yaml`` config file.
 
-Note: these three options ``--unencrypted-suffix``, ``--encrypted-suffix``, and ``--encrypted-regex`` are
+Note: these four options ``--unencrypted-suffix``, ``--encrypted-suffix``, ``--encrypted-regex`` and ``--unencrypted-regex`` are
 mutually exclusive and cannot all be used in the same file.
 
 Encryption Protocol

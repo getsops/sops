@@ -137,6 +137,7 @@ creation_rules:
     kms: "1"
     pgp: "2"
     encrypted_regex: "^enc:"
+    unencrypted_regex: "^dec:"
     `)
 
 var sampleConfigWithInvalidParameters = []byte(`
@@ -347,6 +348,12 @@ func TestLoadConfigFileWithEncryptedSuffix(t *testing.T) {
 	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithSuffixParameters, t), "barfoo", nil)
 	assert.Nil(t, err)
 	assert.Equal(t, "_enc", conf.EncryptedSuffix)
+}
+
+func TestLoadConfigFileWithUnencryptedRegex(t *testing.T) {
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithRegexParameters, t), "barbar", nil)
+	assert.Equal(t, nil, err)
+	assert.Equal(t, "^dec:", conf.UnencryptedRegex)
 }
 
 func TestLoadConfigFileWithEncryptedRegex(t *testing.T) {

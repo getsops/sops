@@ -189,6 +189,59 @@ func TestEncryptedRegex(t *testing.T) {
 	}
 }
 
+func TestUnencryptedRegex(t *testing.T) {
+	branches := TreeBranches{
+		TreeBranch{
+			TreeItem{
+				Key:   "dec:foo",
+				Value: "bar",
+			},
+			TreeItem{
+				Key: "dec:bar",
+				Value: TreeBranch{
+					TreeItem{
+						Key:   "foo",
+						Value: "bar",
+					},
+				},
+			},
+		},
+	}
+	tree := Tree{Branches: branches, Metadata: Metadata{UnencryptedRegex: "^dec:"}}
+	expected := TreeBranch{
+		TreeItem{
+			Key:   "dec:foo",
+			Value: "bar",
+		},
+		TreeItem{
+			Key: "dec:bar",
+			Value: TreeBranch{
+				TreeItem{
+					Key:   "foo",
+					Value: "bar",
+				},
+			},
+		},
+	}
+	cipher := reverseCipher{}
+
+	_, err := tree.Encrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	if err != nil {
+		t.Errorf("Encrypting the tree failed: %s", err)
+	}
+	// expected[1].Value[] = "bar"
+	if !reflect.DeepEqual(tree.Branches[0], expected) {
+		t.Errorf("Trees don't match: \ngot \t\t%+v,\n expected \t\t%+v", tree.Branches[0], expected)
+	}
+	_, err = tree.Decrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	if err != nil {
+		t.Errorf("Decrypting the tree failed: %s", err)
+	}
+	if !reflect.DeepEqual(tree.Branches[0], expected) {
+		t.Errorf("Trees don't match: \ngot\t\t\t%+v,\nexpected\t\t%+v", tree.Branches[0], expected)
+	}
+}
+
 type MockCipher struct{}
 
 func (m MockCipher) Encrypt(value interface{}, key []byte, path string) (string, error) {
