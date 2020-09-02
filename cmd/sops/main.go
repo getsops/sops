@@ -109,7 +109,6 @@ func main() {
    the "add-{kms,pgp,gcp-kms,azure-kv,hc-vault-transit}" and "rm-{kms,pgp,gcp-kms,azure-kv,hc-vault-transit}" flags.
 
    To use a different GPG binary than the one in your PATH, set SOPS_GPG_EXEC.
-   To use a GPG key server other than gpg.mozilla.org, set SOPS_GPG_KEYSERVER.
 
    To select a different editor than the default (vim), set EDITOR.
 
@@ -185,9 +184,9 @@ func main() {
 					Usage: "the user to run the command as",
 				},
 				cli.StringFlag{
-                                        Name:  "input-type",
-                                        Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
-                                },
+					Name:  "input-type",
+					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
+				},
 				cli.StringFlag{
 					Name:  "output-type",
 					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
