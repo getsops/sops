@@ -86,8 +86,10 @@ func (key *MasterKey) encryptWithGPGBinary(dataKey []byte) error {
 	return nil
 }
 
-func getKeyFromKeyServer(keyserver string, fingerprint string) (openpgp.Entity, error) {
-	url := fmt.Sprintf("https://%s/pks/lookup?op=get&options=mr&search=0x%s", keyserver, fingerprint)
+func getKeyFromKeyServer(fingerprint string) (openpgp.Entity, error) {
+	log.Warn("Deprecation Warning: GPG key fetching from a keyserver witihin sops will be removed in a future version of sops. See https://github.com/mozilla/sops/issues/727 for more information.")
+
+	url := fmt.Sprintf("https://keys.openpgp.org/vks/v1/by-fingerprint/%s", fingerprint)
 	resp, err := http.Get(url)
 	if err != nil {
 		return openpgp.Entity{}, fmt.Errorf("error getting key from keyserver: %s", err)
@@ -103,14 +105,6 @@ func getKeyFromKeyServer(keyserver string, fingerprint string) (openpgp.Entity, 
 	return *ents[0], nil
 }
 
-func gpgKeyServer() string {
-	keyServer := "gpg.mozilla.org"
-	if envKeyServer := os.Getenv("SOPS_GPG_KEYSERVER"); envKeyServer != "" {
-		keyServer = envKeyServer
-	}
-	return keyServer
-}
-
 func (key *MasterKey) getPubKey() (openpgp.Entity, error) {
 	ring, err := key.pubRing()
 	if err == nil {
@@ -120,8 +114,7 @@ func (key *MasterKey) getPubKey() (openpgp.Entity, error) {
 			return entity, nil
 		}
 	}
-	keyServer := gpgKeyServer()
-	entity, err := getKeyFromKeyServer(keyServer, key.Fingerprint)
+	entity, err := getKeyFromKeyServer(key.Fingerprint)
 	if err != nil {
 		return openpgp.Entity{},
 			fmt.Errorf("key with fingerprint %s is not available "+
