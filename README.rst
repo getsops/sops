@@ -1403,7 +1403,7 @@ By default, ``sops`` encrypts all the values of a YAML or JSON file and leaves t
 keys in cleartext. In some instances, you may want to exclude some values from
 being encrypted. This can be accomplished by adding the suffix **_unencrypted**
 to any key of a file. When set, all values underneath the key that set the
-**_unencrypted** prefix will be left in cleartext.
+**_unencrypted** suffix will be left in cleartext.
 
 Note that, while in cleartext, unencrypted content is still added to the
 checksum of the file, and thus cannot be modified outside of sops without
