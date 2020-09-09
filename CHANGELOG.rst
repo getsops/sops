@@ -1,6 +1,24 @@
 Changelog
 =========
 
+3.6.1
+-----
+Features:
+
+    * Add support for --unencrypted-regex (#715)
+
+Changes:
+
+    * Use keys.openpgp.org instead of gpg.mozilla.org (#732)
+    * Upgrade AWS SDK version (#714)
+    * Support --input-type for exec-file (#699)
+
+Bug fixes:
+
+    * Fixes broken Vault tests (#731)
+    * Revert "Add standard newline/quoting behavior to dotenv store" (#706)
+
+
 3.6.0
 -----
 Features:
