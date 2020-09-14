@@ -1,14 +1,13 @@
 package exec
 
 import (
-	"fmt"
+	"bytes"
 	"io/ioutil"
 	"os"
 	"runtime"
 	"strings"
 
 	"go.mozilla.org/sops/v3/logging"
-	"go.mozilla.org/sops/v3/stores/dotenv"
 
 	"github.com/sirupsen/logrus"
 )
@@ -85,18 +84,15 @@ func ExecWithEnv(opts ExecOpts) error {
 	}
 
 	env := os.Environ()
-	store := dotenv.Store{}
-
-	branches, err := store.LoadPlainFile(opts.Plaintext)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	for _, item := range branches[0] {
-		if item.Value == nil {
+	lines := bytes.Split(opts.Plaintext, []byte("\n"))
+	for _, line := range lines {
+		if len(line) == 0 {
 			continue
 		}
-		env = append(env, fmt.Sprintf("%s=%s", item.Key, item.Value))
+		if line[0] == '#' {
+			continue
+		}
+		env = append(env, string(line))
 	}
 
 	cmd := BuildCommand(opts.Command)

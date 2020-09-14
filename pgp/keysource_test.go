@@ -45,6 +45,6 @@ func TestPGPKeySourceFromString(t *testing.T) {
 
 func TestRetrievePGPKey(t *testing.T) {
 	fingerprint := "FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4"
-	_, err := getKeyFromKeyServer("gpg.mozilla.org", fingerprint)
+	_, err := getKeyFromKeyServer(fingerprint)
 	assert.NoError(t, err)
 }

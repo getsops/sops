@@ -109,7 +109,6 @@ func main() {
    the "add-{kms,pgp,gcp-kms,azure-kv,hc-vault-transit}" and "rm-{kms,pgp,gcp-kms,azure-kv,hc-vault-transit}" flags.
 
    To use a different GPG binary than the one in your PATH, set SOPS_GPG_EXEC.
-   To use a GPG key server other than gpg.mozilla.org, set SOPS_GPG_KEYSERVER.
 
    To select a different editor than the default (vim), set EDITOR.
 
@@ -183,6 +182,14 @@ func main() {
 				cli.StringFlag{
 					Name:  "user",
 					Usage: "the user to run the command as",
+				},
+				cli.StringFlag{
+					Name:  "input-type",
+					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
+				},
+				cli.StringFlag{
+					Name:  "output-type",
+					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
@@ -618,6 +625,10 @@ func main() {
 			Usage: "override the encrypted key suffix. When empty, all keys will be encrypted, unless otherwise marked with unencrypted-suffix.",
 		},
 		cli.StringFlag{
+			Name:  "unencrypted-regex",
+			Usage: "set the unencrypted key suffix. When specified, only keys matching the regex will be left unencrypted.",
+		},
+		cli.StringFlag{
 			Name:  "encrypted-regex",
 			Usage: "set the encrypted key suffix. When specified, only keys matching the regex will be encrypted.",
 		},
@@ -674,6 +685,7 @@ func main() {
 		unencryptedSuffix := c.String("unencrypted-suffix")
 		encryptedSuffix := c.String("encrypted-suffix")
 		encryptedRegex := c.String("encrypted-regex")
+		unencryptedRegex := c.String("unencrypted-regex")
 		conf, err := loadConfig(c, fileName, nil)
 		if err != nil {
 			return toExitError(err)
@@ -689,6 +701,9 @@ func main() {
 			if encryptedRegex == "" {
 				encryptedRegex = conf.EncryptedRegex
 			}
+			if unencryptedRegex == "" {
+				unencryptedRegex = conf.UnencryptedRegex
+			}
 		}
 
 		cryptRuleCount := 0
@@ -701,9 +716,12 @@ func main() {
 		if encryptedRegex != "" {
 			cryptRuleCount++
 		}
+		if unencryptedRegex != "" {
+			cryptRuleCount++
+		}
 
 		if cryptRuleCount > 1 {
-			return common.NewExitError("Error: cannot use more than one of encrypted_suffix, unencrypted_suffix, or encrypted_regex in the same file", codes.ErrorConflictingParameters)
+			return common.NewExitError("Error: cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex or unencrypted_regex in the same file", codes.ErrorConflictingParameters)
 		}
 
 		// only supply the default UnencryptedSuffix when EncryptedSuffix and EncryptedRegex are not provided
@@ -734,6 +752,7 @@ func main() {
 				Cipher:            aes.NewCipher(),
 				UnencryptedSuffix: unencryptedSuffix,
 				EncryptedSuffix:   encryptedSuffix,
+				UnencryptedRegex:  unencryptedRegex,
 				EncryptedRegex:    encryptedRegex,
 				KeyServices:       svcs,
 				KeyGroups:         groups,
@@ -871,6 +890,7 @@ func main() {
 					editOpts:          opts,
 					UnencryptedSuffix: unencryptedSuffix,
 					EncryptedSuffix:   encryptedSuffix,
+					UnencryptedRegex:  unencryptedRegex,
 					EncryptedRegex:    encryptedRegex,
 					KeyGroups:         groups,
 					GroupThreshold:    threshold,
