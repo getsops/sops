@@ -1,11 +1,9 @@
 package age
 
 import (
-	"bufio"
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -91,7 +89,7 @@ func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 
 // Decrypt decrypts the EncryptedKey field with the age identity and returns the result.
 func (key *MasterKey) Decrypt() ([]byte, error) {
-	ageKeyFile, ok := os.LookupEnv("SOPS_AGE_KEY_FILE")
+	ageKeyFilePath, ok := os.LookupEnv("SOPS_AGE_KEY_FILE")
 
 	if !ok {
 		userConfigDir, err := os.UserConfigDir()
@@ -100,35 +98,36 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 			return nil, fmt.Errorf("user config directory could not be determined: %v", err)
 		}
 
-		ageKeyFile = filepath.Join(userConfigDir, "sops", "age", "keys.txt")
+		ageKeyFilePath = filepath.Join(userConfigDir, "sops", "age", "keys.txt")
 	}
 
-	identities, err := parseIdentitiesFile(ageKeyFile)
+	ageKeyFile, err := os.Open(ageKeyFilePath)
+
+	if err != nil {
+		return nil, fmt.Errorf("failed to open file: %v", err)
+	}
+
+	defer ageKeyFile.Close()
+
+	identities, err := age.ParseIdentities(ageKeyFile)
 
 	if err != nil {
 		return nil, err
 	}
 
-	var buffer *bytes.Buffer
+	buffer := &bytes.Buffer{}
+	reader := bytes.NewReader([]byte(key.EncryptedKey))
+	r, err := age.Decrypt(reader, identities...)
 
-	for _, identity := range identities {
-		buffer = &bytes.Buffer{}
-		reader := bytes.NewReader([]byte(key.EncryptedKey))
-
-		r, err := age.Decrypt(reader, identity)
-
-		if err != nil {
-			continue
-		}
-
-		if _, err := io.Copy(buffer, r); err != nil {
-			continue
-		}
-
-		return buffer.Bytes(), nil
+	if err != nil {
+		return nil, fmt.Errorf("no age identity found in %q that could decrypt the data", ageKeyFilePath)
 	}
 
-	return nil, fmt.Errorf("no age identity found in %q that could decrypt the data", ageKeyFile)
+	if _, err := io.Copy(buffer, r); err != nil {
+		return nil, fmt.Errorf("failed to copy decrypted data into bytes.Buffer")
+	}
+
+	return buffer.Bytes(), nil
 }
 
 // NeedsRotation returns whether the data key needs to be rotated or not.
@@ -193,58 +192,4 @@ func parseRecipient(recipient string) (*age.X25519Recipient, error) {
 	}
 
 	return parsedRecipient, nil
-}
-
-// parseIdentitiesFile parses a file containing age private keys. Derived from
-// https://github.com/FiloSottile/age/blob/189041b668629795593766bcb8d3f70ee248b842/cmd/age/parse.go
-// but should be replaced with a library function if a future version of the age library exposes
-// this functionality.
-func parseIdentitiesFile(name string) ([]age.Identity, error) {
-	f, err := os.Open(name)
-	if err != nil {
-		return nil, fmt.Errorf("failed to open file: %v", err)
-	}
-	defer f.Close()
-
-	contents, err := ioutil.ReadAll(io.LimitReader(f, privateKeySizeLimit))
-	if err != nil {
-		return nil, fmt.Errorf("failed to read %q: %v", name, err)
-	}
-	if len(contents) == privateKeySizeLimit {
-		return nil, fmt.Errorf("failed to read %q: file too long", name)
-	}
-
-	var ids []age.Identity
-	var ageParsingError error
-	scanner := bufio.NewScanner(bytes.NewReader(contents))
-	for scanner.Scan() {
-		line := scanner.Text()
-		if strings.HasPrefix(line, "#") || line == "" {
-			continue
-		}
-		if strings.HasPrefix(line, "-----BEGIN") {
-			ageParsingError = fmt.Errorf("sops does not yet support SSH keys via age. SSH key found in file at %q", name)
-			continue
-		}
-		if ageParsingError != nil {
-			continue
-		}
-		i, err := age.ParseX25519Identity(line)
-		if err != nil {
-			ageParsingError = fmt.Errorf("malformed secret keys file %q: %v", name, err)
-			continue
-		}
-		ids = append(ids, i)
-	}
-	if err := scanner.Err(); err != nil {
-		return nil, fmt.Errorf("failed to read %q: %v", name, err)
-	}
-	if ageParsingError != nil {
-		return nil, ageParsingError
-	}
-
-	if len(ids) == 0 {
-		return nil, fmt.Errorf("no secret keys found in %q", name)
-	}
-	return ids, nil
 }

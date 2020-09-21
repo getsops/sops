@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	cloud.google.com/go v0.43.0
-	filippo.io/age v1.0.0-beta4
+	filippo.io/age v1.0.0-beta5
 	github.com/Azure/azure-sdk-for-go v31.2.0+incompatible
 	github.com/Azure/go-ansiterm v0.0.0-20170929234023-d6e3b3328b78 // indirect
 	github.com/Azure/go-autorest/autorest v0.9.0
