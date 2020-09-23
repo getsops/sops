@@ -7,6 +7,7 @@ package keyservice
 import (
 	"fmt"
 
+	"go.mozilla.org/sops/v3/age"
 	"go.mozilla.org/sops/v3/azkv"
 	"go.mozilla.org/sops/v3/gcpkms"
 	"go.mozilla.org/sops/v3/hcvault"
@@ -66,6 +67,14 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 					VaultUrl: mk.VaultURL,
 					Name:     mk.Name,
 					Version:  mk.Version,
+				},
+			},
+		}
+	case *age.MasterKey:
+		return Key{
+			KeyType: &Key_AgeKey{
+				AgeKey: &AgeKey{
+					Recipient: mk.Recipient,
 				},
 			},
 		}
