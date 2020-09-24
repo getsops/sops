@@ -17,7 +17,7 @@ func TestMasterKeysFromRecipientsEmpty(t *testing.T) {
 
 	assert.NoError(err)
 
-	assert.Equal(recipients, make([]*MasterKey,0))
+	assert.Equal(recipients, make([]*MasterKey, 0))
 }
 
 func TestAge(t *testing.T) {
