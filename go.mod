@@ -46,7 +46,7 @@ require (
 	google.golang.org/api v0.7.0
 	google.golang.org/grpc v1.27.0
 	google.golang.org/protobuf v1.25.0
-	gopkg.in/ini.v1 v1.44.0
+	gopkg.in/ini.v1 v1.61.0
 	gopkg.in/urfave/cli.v1 v1.20.0
 	gotest.tools v2.2.0+incompatible // indirect
 )

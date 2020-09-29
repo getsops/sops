@@ -89,7 +89,10 @@ func (store Store) iniFromTreeBranches(branches sops.TreeBranches) ([]byte, erro
 }
 
 func (store Store) treeBranchesFromIni(in []byte) (sops.TreeBranches, error) {
-	iniFile, err := ini.Load(in)
+	iniFile, err := ini.LoadSources(ini.LoadOptions{
+		IgnoreInlineComment: true,
+		AllowPythonMultilineValues: true,
+	}, in)
 	if err != nil {
 		return nil, err
 	}
@@ -137,7 +140,10 @@ func (store Store) treeItemFromSection(section *ini.Section) (sops.TreeItem, err
 
 // LoadEncryptedFile loads encrypted INI file's bytes onto a sops.Tree runtime object
 func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
-	iniFileOuter, err := ini.Load(in)
+	iniFileOuter, err := ini.LoadSources(ini.LoadOptions{
+		IgnoreInlineComment: true,
+		AllowPythonMultilineValues: true,
+	}, in)
 	if err != nil {
 		return sops.Tree{}, err
 	}
