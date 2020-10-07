@@ -30,7 +30,7 @@ require (
 	github.com/lib/pq v1.2.0
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-wordwrap v1.0.0
-	github.com/mozilla-services/yaml v0.0.0-20201006214821-a130ed024dcf
+	github.com/mozilla-services/yaml v0.0.0-20201007153854-c369669a6625
 	github.com/opencontainers/go-digest v1.0.0-rc1 // indirect
 	github.com/opencontainers/image-spec v1.0.1 // indirect
 	github.com/opencontainers/runc v0.1.1 // indirect
