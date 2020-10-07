@@ -1,3 +1,4 @@
+# first comment in file
 lorem: ENC[AES256_GCM,data:qVz4paM=,iv:0oGsaw71i3wZKmlyDl8uDhQT9XLvJt3oIyx514X44K8=,tag:acbMS613StWo1IVnKK+5uQ==,type:str]
 # this-is-a-comment
 dolor: ENC[AES256_GCM,data:21fI,iv:01LXdHZYwLTeyUB1YWIAM6KF8cPPVsw/RuQO+Ab4pgM=,tag:o1xnCIIoccWzdWxB2kZYKg==,type:str]
