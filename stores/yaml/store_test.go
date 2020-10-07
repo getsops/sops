@@ -18,6 +18,10 @@ key2: value2`)
 var BRANCHES = sops.TreeBranches{
 	sops.TreeBranch{
 		sops.TreeItem{
+			Key:   sops.Comment{" comment 0"},
+			Value: nil,
+		},
+		sops.TreeItem{
 			Key:   "key1",
 			Value: "value",
 		},
@@ -38,7 +42,8 @@ var BRANCHES = sops.TreeBranches{
 	},
 }
 
-var COMMENT_1 = []byte(`a:
+var COMMENT_1 = []byte(`# test
+a:
     b: null
     # foo
 `)
@@ -60,7 +65,9 @@ prometheus-node-exporter:
     - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+)($|/)
     - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$
 `)
-var COMMENT_3_OUT = []byte(`prometheus-node-exporter:
+var COMMENT_3_OUT = []byte(`## Configuration for prometheus-node-exporter subchart
+##
+prometheus-node-exporter:
     podLabels:
         ## Add the 'node-exporter' label to be used by serviceMonitor to match standard common usage in rules and grafana dashboards
         ##
