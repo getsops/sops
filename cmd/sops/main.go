@@ -132,6 +132,11 @@ func main() {
 					Name:  "user",
 					Usage: "the user to run the command as",
 				},
+				cli.StringFlag{
+					Name:  "filename",
+					Usage: "filename for the temporarily file (default: tmp-file)",
+				},
+
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if len(c.Args()) != 2 {
@@ -222,12 +227,18 @@ func main() {
 					return toExitError(err)
 				}
 
+				filename := c.String("filename")
+				if filename == "" {
+					filename = "tmp-file"
+				}
+
 				if err := exec.ExecWithFile(exec.ExecOpts{
 					Command:    command,
 					Plaintext:  output,
 					Background: c.Bool("background"),
 					Fifo:       !c.Bool("no-fifo"),
 					User:       c.String("user"),
+					Filename:   c.String("filename"),
 				}); err != nil {
 					return toExitError(err)
 				}
