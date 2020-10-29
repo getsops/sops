@@ -80,7 +80,7 @@ func (key *MasterKey) encryptWithGPGBinary(dataKey []byte) error {
 	cmd.Stderr = &stderr
 	err := cmd.Run()
 	if err != nil {
-		return err
+		return fmt.Errorf("gpg binary failed with error: %s, %s", err, stderr.String())
 	}
 	key.EncryptedKey = stdout.String()
 	return nil
