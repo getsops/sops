@@ -13,6 +13,7 @@ import (
 	"github.com/mozilla-services/yaml"
 	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/v3"
+	"go.mozilla.org/sops/v3/aliyunkms"
 	"go.mozilla.org/sops/v3/azkv"
 	"go.mozilla.org/sops/v3/gcpkms"
 	"go.mozilla.org/sops/v3/hcvault"
@@ -159,6 +160,9 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			for _, k := range group.AzureKV {
 				keyGroup = append(keyGroup, azkv.NewMasterKey(k.VaultURL, k.Key, k.Version))
 			}
+			for _, k := range group.ALIYUNKMS {
+				keyGroup = append(keyGroup, aliyunkms.NewMasterKeyWithEcsRamRole(k.RegionID, k.Role))
+			}
 			for _, k := range group.Vault {
 				if masterKey, err := hcvault.NewMasterKeyFromURI(k); err == nil {
 					keyGroup = append(keyGroup, masterKey)
@@ -184,6 +188,9 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			return nil, err
 		}
 		for _, k := range azureKeys {
+			keyGroup = append(keyGroup, k)
+		}
+		for _, k := range aliyunkms.NewMasterKeyWithEcsRamRole(cRule.ALIYUNKMS) {
 			keyGroup = append(keyGroup, k)
 		}
 		vaultKeys, err := hcvault.NewMasterKeysFromURIs(cRule.VaultURI)

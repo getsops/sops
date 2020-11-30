@@ -3,6 +3,7 @@ package keyservice
 import (
 	"fmt"
 
+	"go.mozilla.org/sops/v3/aliyunkms"
 	"go.mozilla.org/sops/v3/azkv"
 	"go.mozilla.org/sops/v3/gcpkms"
 	"go.mozilla.org/sops/v3/hcvault"
@@ -62,6 +63,18 @@ func (ks *Server) encryptWithAzureKeyVault(key *AzureKeyVaultKey, plaintext []by
 	return []byte(azkvKey.EncryptedKey), nil
 }
 
+func (ks *Server) encryptWithAliyunKms(key *AliyunKmsKey, plaintext []byte) ([]byte, error) {
+	aliyunKmsKey := aliyunkms.MasterKey{
+		Role:     key.Role,
+		RegionID: key.RegionID,
+	}
+	err := aliyunKmsKey.Encrypt(plaintext)
+	if err != nil {
+		return nil, err
+	}
+	return []byte(aliyunKmsKey.EncryptedKey), nil
+}
+
 func (ks *Server) encryptWithVault(key *VaultKey, plaintext []byte) ([]byte, error) {
 	vaultKey := hcvault.MasterKey{
 		VaultAddress: key.VaultAddress,
@@ -106,6 +119,16 @@ func (ks *Server) decryptWithAzureKeyVault(key *AzureKeyVaultKey, ciphertext []b
 	}
 	azkvKey.EncryptedKey = string(ciphertext)
 	plaintext, err := azkvKey.Decrypt()
+	return []byte(plaintext), err
+}
+
+func (ks *Server) decryptWithAliyunKms(key *AliyunKmsKey, ciphertext []byte) ([]byte, error) {
+	aliyunKmsKey := aliyunkms.MasterKey{
+		Role:     key.Role,
+		RegionID: key.RegionID,
+	}
+	aliyunKmsKey.EncryptedKey = string(ciphertext)
+	plaintext, err := aliyunKmsKey.Decrypt()
 	return []byte(plaintext), err
 }
 

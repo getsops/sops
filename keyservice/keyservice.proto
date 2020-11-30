@@ -37,6 +37,13 @@ message AzureKeyVaultKey {
 	string version = 3;
 }
 
+message AliyunKmsKey {
+	string role = 1;
+	string access_key_id = 2;
+	string access_key_secret = 3;
+	string region_id = 4;
+}
+
 message EncryptRequest {
 	Key key = 1;
 	bytes plaintext = 2;
