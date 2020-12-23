@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"filippo.io/age"
+	"filippo.io/age/armor"
 	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/v3/logging"
 )
@@ -45,8 +46,9 @@ func (key *MasterKey) Encrypt(datakey []byte) error {
 
 		key.parsedRecipient = parsedRecipient
 	}
+	armorWriter := armor.NewWriter(buffer)
 
-	w, err := age.Encrypt(buffer, key.parsedRecipient)
+	w, err := age.Encrypt(armorWriter, key.parsedRecipient)
 	if err != nil {
 		return fmt.Errorf("failed to open file for encrypting sops data key with age: %v", err)
 	}
@@ -59,6 +61,11 @@ func (key *MasterKey) Encrypt(datakey []byte) error {
 	if err := w.Close(); err != nil {
 		log.WithField("recipient", key.parsedRecipient).Error("Encryption failed")
 		return fmt.Errorf("failed to close file for encrypting sops data key with age: %v", err)
+	}
+
+	if err := armorWriter.Close(); err != nil {
+		log.WithField("recipient", key.parsedRecipient).Error("Encryption failed")
+		return fmt.Errorf("failed to close armored file for encrypting sops data key with age: %v", err)
 	}
 
 	key.EncryptedKey = buffer.String()
@@ -117,7 +124,8 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 
 	buffer := &bytes.Buffer{}
 	reader := bytes.NewReader([]byte(key.EncryptedKey))
-	r, err := age.Decrypt(reader, identities...)
+	armorReader := armor.NewReader(reader)
+	r, err := age.Decrypt(armorReader, identities...)
 
 	if err != nil {
 		return nil, fmt.Errorf("no age identity found in %q that could decrypt the data", ageKeyFilePath)
