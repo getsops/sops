@@ -77,6 +77,10 @@ prometheus-node-exporter:
     - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$
 `)
 
+var COMMENT_4 = []byte(`# foo
+{}
+`)
+
 func TestUnmarshalMetadataFromNonSOPSFile(t *testing.T) {
 	data := []byte(`hello: 2`)
 	_, err := (&Store{}).LoadEncryptedFile(data)
@@ -114,4 +118,13 @@ func TestComment3(t *testing.T) {
 	bytes, err := (&Store{}).EmitPlainFile(branches)
 	assert.Nil(t, err)
 	assert.Equal(t, COMMENT_3_OUT, bytes)
+}
+
+func TestComment4(t *testing.T) {
+	// First iteration: load and store
+	branches, err := (&Store{}).LoadPlainFile(COMMENT_4)
+	assert.Nil(t, err)
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, COMMENT_4, bytes)
 }
