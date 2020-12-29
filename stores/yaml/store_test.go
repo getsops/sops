@@ -1,7 +1,6 @@
 package yaml
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -97,7 +96,6 @@ func TestUnmarshalMetadataFromNonSOPSFile(t *testing.T) {
 func TestLoadPlainFile(t *testing.T) {
 	branches, err := (&Store{}).LoadPlainFile(PLAIN)
 	assert.Nil(t, err)
-	fmt.Printf("%v\n", branches)
 	assert.Equal(t, BRANCHES, branches)
 }
 
@@ -105,7 +103,6 @@ func TestComment1(t *testing.T) {
 	// First iteration: load and store
 	branches, err := (&Store{}).LoadPlainFile(COMMENT_1)
 	assert.Nil(t, err)
-	fmt.Printf("%v\n", branches)
 	bytes, err := (&Store{}).EmitPlainFile(branches)
 	assert.Nil(t, err)
 	assert.Equal(t, string(COMMENT_1), string(bytes))
@@ -116,7 +113,6 @@ func TestComment2(t *testing.T) {
 	// First iteration: load and store
 	branches, err := (&Store{}).LoadPlainFile(COMMENT_2)
 	assert.Nil(t, err)
-	fmt.Printf("%v\n", branches)
 	bytes, err := (&Store{}).EmitPlainFile(branches)
 	assert.Nil(t, err)
 	assert.Equal(t, string(COMMENT_2), string(bytes))
@@ -127,7 +123,6 @@ func TestComment3(t *testing.T) {
 	// First iteration: load and store
 	branches, err := (&Store{}).LoadPlainFile(COMMENT_3_IN)
 	assert.Nil(t, err)
-	fmt.Printf("%v\n", branches)
 	bytes, err := (&Store{}).EmitPlainFile(branches)
 	assert.Nil(t, err)
 	assert.Equal(t, string(COMMENT_3_OUT), string(bytes))
@@ -138,7 +133,6 @@ func TestComment4(t *testing.T) {
 	// First iteration: load and store
 	branches, err := (&Store{}).LoadPlainFile(COMMENT_4)
 	assert.Nil(t, err)
-	fmt.Printf("%v\n", branches)
 	bytes, err := (&Store{}).EmitPlainFile(branches)
 	assert.Nil(t, err)
 	assert.Equal(t, string(COMMENT_4), string(bytes))
@@ -149,7 +143,6 @@ func TestEmitValue(t *testing.T) {
 	// First iteration: load and store
 	bytes, err := (&Store{}).EmitValue(BRANCHES[0])
 	assert.Nil(t, err)
-	fmt.Printf("%s\n", bytes)
 	assert.Equal(t, string(PLAIN_0), string(bytes))
 	assert.Equal(t, PLAIN_0, bytes)
 }

@@ -45,7 +45,6 @@ func (store Store) appendCommentToMap(comment string, branch sops.TreeBranch) so
 }
 
 func (store Store) nodeToTreeValue(node *yaml.Node, commentsWereHandled bool) (interface{}, error) {
-	fmt.Printf("nodeToTreeValue %v\n", node)
 	switch node.Kind {
 	case yaml.DocumentNode:
 		panic("documents should never be passed here")
@@ -56,7 +55,6 @@ func (store Store) nodeToTreeValue(node *yaml.Node, commentsWereHandled bool) (i
 			result = store.appendCommentToList(node.LineComment, result)
 		}
 		for _, item := range node.Content {
-			fmt.Printf("nodeToTreeValue []item %v\n", node)
 			result = store.appendCommentToList(item.HeadComment, result)
 			result = store.appendCommentToList(item.LineComment, result)
 			val, err := store.nodeToTreeValue(item, true)
@@ -89,7 +87,6 @@ func (store Store) appendYamlNodeToTreeBranch(node *yaml.Node, branch sops.TreeB
 		branch = store.appendCommentToMap(node.HeadComment, branch)
 		branch = store.appendCommentToMap(node.LineComment, branch)
 	}
-	fmt.Printf("appendYamlNodeToTreeBranch %v\n", node)
 	switch node.Kind {
 	case yaml.DocumentNode:
 		for _, item := range node.Content {
@@ -103,9 +100,7 @@ func (store Store) appendYamlNodeToTreeBranch(node *yaml.Node, branch sops.TreeB
 	case yaml.MappingNode:
 		for i := 0; i < len(node.Content); i += 2 {
 			key := node.Content[i]
-			fmt.Printf("appendYamlNodeToTreeBranch key %v\n", key)
 			value := node.Content[i + 1]
-			fmt.Printf("appendYamlNodeToTreeBranch value %v\n", value)
 			branch = store.appendCommentToMap(key.HeadComment, branch)
 			branch = store.appendCommentToMap(key.LineComment, branch)
 			handleValueComments := value.Kind == yaml.ScalarNode || value.Kind == yaml.AliasNode
