@@ -16,6 +16,12 @@ key1_a: value
 ---
 key2: value2`)
 
+var PLAIN_0 = []byte(`# comment 0
+key1: value
+key1_a: value
+# ^ comment 1
+`)
+
 var BRANCHES = sops.TreeBranches{
 	sops.TreeBranch{
 		sops.TreeItem{
@@ -137,4 +143,13 @@ func TestComment4(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, string(COMMENT_4), string(bytes))
 	assert.Equal(t, COMMENT_4, bytes)
+}
+
+func TestEmitValue(t *testing.T) {
+	// First iteration: load and store
+	bytes, err := (&Store{}).EmitValue(BRANCHES[0])
+	assert.Nil(t, err)
+	fmt.Printf("%s\n", bytes)
+	assert.Equal(t, string(PLAIN_0), string(bytes))
+	assert.Equal(t, PLAIN_0, bytes)
 }
