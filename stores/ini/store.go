@@ -252,56 +252,6 @@ func (store *Store) encodeMetadataToIniBranch(md stores.Metadata) (sops.TreeBran
 	return branch, nil
 }
 
-func encodeMetadataItem(prefix string, kind reflect.Kind, field reflect.Value) (map[string]interface{}, error) {
-
-	result := make(map[string]interface{}, 0)
-
-	switch kind {
-	case reflect.Slice:
-		slf := field
-		for j := 0; j < slf.Len(); j++ {
-			item := slf.Index(j)
-			p := fmt.Sprintf("%s[%d]", prefix, j)
-			r, err := encodeMetadataItem(p, item.Type().Kind(), item)
-			if err != nil {
-				return result, err
-			}
-			for k, v := range r {
-				result[k] = v
-			}
-		}
-	case reflect.Struct:
-		for i := 0; i < field.NumField(); i++ {
-			sf := field.Type().Field(i)
-			var name string
-			if prefix == "" {
-				name = sf.Name
-			} else {
-				name = fmt.Sprintf("%s.%s", prefix, sf.Name)
-			}
-			r, err := encodeMetadataItem(name, sf.Type.Kind(), field.Field(i))
-			if err != nil {
-				return result, err
-			}
-			for k, v := range r {
-				result[k] = v
-			}
-		}
-	case reflect.Int:
-		if field.Int() != 0 {
-			result[prefix] = string(field.Int())
-		}
-	case reflect.String:
-		if field.String() != "" {
-			result[prefix] = strings.Replace(field.String(), "\n", "\\n", -1)
-		}
-	default:
-		return result, fmt.Errorf("Cannot encode %s, unexpected type %s", prefix, kind)
-	}
-
-	return result, nil
-}
-
 // EmitPlainFile returns the plaintext INI file bytes corresponding to a sops.TreeBranches object
 func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 	out, err := store.iniFromTreeBranches(in)
