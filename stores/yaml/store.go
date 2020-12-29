@@ -1,6 +1,7 @@
 package yaml //import "go.mozilla.org/sops/v3/stores/yaml"
 
 import (
+	"bytes"
 	"fmt"
 	"strings"
 
@@ -178,13 +179,25 @@ func (store Store) treeBranchToYamlMap(in sops.TreeBranch) yaml.MapSlice {
 	return branch
 }
 
+// splitYAML splits a YAML file into multiple YAML documents
+func splitYAML(in []byte) [][]byte {
+	yamlDocumentSeparator := []byte("\n---\n")  // unfortunately Go does not allow byte array constants
+	var result [][]byte
+	for true {
+		startIndex := bytes.Index(in, yamlDocumentSeparator)
+		if startIndex < 0 {
+			result = append(result, in)
+			break
+		}
+		result = append(result, in[0:startIndex + 1])
+		in = in[startIndex + 1:]
+	}
+	return result
+}
+
 // LoadEncryptedFile loads the contents of an encrypted yaml file onto a
 // sops.Tree runtime object
 func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
-	var data yamlv3.Node
-	if err := yamlv3.Unmarshal(in, &data); err != nil {
-		return sops.Tree{}, fmt.Errorf("Error unmarshaling input YAML: %s", err)
-	}
 	// Because we don't know what fields the input file will have, we have to
 	// load the file in two steps.
 	// First, we load the file's metadata, the structure of which is known.
@@ -200,13 +213,22 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	if err != nil {
 		return sops.Tree{}, err
 	}
+	var data yamlv3.Node
+	if err := yamlv3.Unmarshal(in, &data); err != nil {
+		return sops.Tree{}, fmt.Errorf("Error unmarshaling input YAML: %s", err)
+	}
 	var branches sops.TreeBranches
-	// FIXME: yaml.v3 only supports one document (!)
-	{
+	for partIndex, part := range splitYAML(in) {
+		var data yamlv3.Node
+		if err := yamlv3.Unmarshal(part, &data); err != nil {
+			return sops.Tree{}, fmt.Errorf("Error unmarshaling input YAML (document %d): %s", partIndex + 1, err)
+		}
+
 		branch, err := store.yamlDocumentNodeToTreeBranch(data)
 		if err != nil {
-			return sops.Tree{}, fmt.Errorf("Error unmarshaling input YAML: %s", err)
+			return sops.Tree{}, fmt.Errorf("Error unmarshaling input YAML (document %d): %s", partIndex + 1, err)
 		}
+
 		for i, elt := range branch {
 			if elt.Key == "sops" { // Erase
 				branch = append(branch[:i], branch[i+1:]...)
@@ -223,17 +245,16 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 // LoadPlainFile loads the contents of a plaintext yaml file onto a
 // sops.Tree runtime object
 func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
-	var data yamlv3.Node
-	if err := yamlv3.Unmarshal(in, &data); err != nil {
-		return nil, fmt.Errorf("Error unmarshaling input YAML: %s", err)
-	}
-
 	var branches sops.TreeBranches
-	// FIXME: yaml.v3 only supports one document (!)
-	{
+	for partIndex, part := range splitYAML(in) {
+		var data yamlv3.Node
+		if err := yamlv3.Unmarshal(part, &data); err != nil {
+			return nil, fmt.Errorf("Error unmarshaling input YAML (document %d): %s", partIndex + 1, err)
+		}
+
 		branch, err := store.yamlDocumentNodeToTreeBranch(data)
 		if err != nil {
-			return nil, fmt.Errorf("Error unmarshaling input YAML: %s", err)
+			return nil, fmt.Errorf("Error unmarshaling input YAML (document %d): %s", partIndex + 1, err)
 		}
 		branches = append(branches, branch)
 	}
