@@ -3,6 +3,7 @@ package yaml //import "go.mozilla.org/sops/v3/stores/yaml"
 import (
 	"bytes"
 	"fmt"
+	"io"
 	"strings"
 
 	"github.com/mozilla-services/yaml"
@@ -179,22 +180,6 @@ func (store Store) treeBranchToYamlMap(in sops.TreeBranch) yaml.MapSlice {
 	return branch
 }
 
-// splitYAML splits a YAML file into multiple YAML documents
-func splitYAML(in []byte) [][]byte {
-	yamlDocumentSeparator := []byte("\n---\n")  // unfortunately Go does not allow byte array constants
-	var result [][]byte
-	for true {
-		startIndex := bytes.Index(in, yamlDocumentSeparator)
-		if startIndex < 0 {
-			result = append(result, in)
-			break
-		}
-		result = append(result, in[0:startIndex + 1])
-		in = in[startIndex + 1:]
-	}
-	return result
-}
-
 // LoadEncryptedFile loads the contents of an encrypted yaml file onto a
 // sops.Tree runtime object
 func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
@@ -218,15 +203,20 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 		return sops.Tree{}, fmt.Errorf("Error unmarshaling input YAML: %s", err)
 	}
 	var branches sops.TreeBranches
-	for partIndex, part := range splitYAML(in) {
+	d := yamlv3.NewDecoder(bytes.NewReader(in))
+	for true {
 		var data yamlv3.Node
-		if err := yamlv3.Unmarshal(part, &data); err != nil {
-			return sops.Tree{}, fmt.Errorf("Error unmarshaling input YAML (document %d): %s", partIndex + 1, err)
+		err := d.Decode(&data)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return sops.Tree{}, fmt.Errorf("Error unmarshaling input YAML: %s", err)
 		}
 
 		branch, err := store.yamlDocumentNodeToTreeBranch(data)
 		if err != nil {
-			return sops.Tree{}, fmt.Errorf("Error unmarshaling input YAML (document %d): %s", partIndex + 1, err)
+			return sops.Tree{}, fmt.Errorf("Error unmarshaling input YAML: %s", err)
 		}
 
 		for i, elt := range branch {
@@ -246,15 +236,20 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 // sops.Tree runtime object
 func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	var branches sops.TreeBranches
-	for partIndex, part := range splitYAML(in) {
+	d := yamlv3.NewDecoder(bytes.NewReader(in))
+	for true {
 		var data yamlv3.Node
-		if err := yamlv3.Unmarshal(part, &data); err != nil {
-			return nil, fmt.Errorf("Error unmarshaling input YAML (document %d): %s", partIndex + 1, err)
+		err := d.Decode(&data)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, fmt.Errorf("Error unmarshaling input YAML: %s", err)
 		}
 
 		branch, err := store.yamlDocumentNodeToTreeBranch(data)
 		if err != nil {
-			return nil, fmt.Errorf("Error unmarshaling input YAML (document %d): %s", partIndex + 1, err)
+			return nil, fmt.Errorf("Error unmarshaling input YAML: %s", err)
 		}
 		branches = append(branches, branch)
 	}
