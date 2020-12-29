@@ -132,11 +132,6 @@ func main() {
 					Name:  "user",
 					Usage: "the user to run the command as",
 				},
-				cli.StringFlag{
-					Name:  "filename",
-					Usage: "filename for the temporarily file (default: tmp-file)",
-				},
-
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if len(c.Args()) != 2 {
@@ -200,6 +195,10 @@ func main() {
 					Name:  "output-type",
 					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
 				},
+				cli.StringFlag{
+					Name:  "filename",
+					Usage: "filename for the temporarily file (default: tmp-file)",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if len(c.Args()) != 2 {
@@ -238,7 +237,7 @@ func main() {
 					Background: c.Bool("background"),
 					Fifo:       !c.Bool("no-fifo"),
 					User:       c.String("user"),
-					Filename:   c.String("filename"),
+					Filename:   filename,
 				}); err != nil {
 					return toExitError(err)
 				}

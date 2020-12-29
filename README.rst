@@ -1013,6 +1013,9 @@ encrypted file is only readable by root, but the target program does not
 need root privileges to function. This flag should be used where possible
 for added security.
 
+To overwrite the default file name (``tmp-file``) in ``exec-file`` use the
+``--filename <filename>`` parameter.
+
 .. code:: bash
 
    # the encrypted file can't be read by the current user
