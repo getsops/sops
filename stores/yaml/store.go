@@ -275,22 +275,131 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	return out, nil
 }
 
+
+func (store *Store) addCommentsHead(node *yamlv3.Node, comments []string) []string {
+	if len(comments) > 0 {
+		comment := "#" + strings.Join(comments, "\n#")
+		if len(node.HeadComment) > 0 {
+			node.HeadComment = comment + "\n" + node.HeadComment
+		} else {
+			node.HeadComment = comment
+		}
+	}
+	return nil
+}
+
+
+func (store *Store) addCommentsFoot(node *yamlv3.Node, comments []string) []string {
+	if len(comments) > 0 {
+		comment := "#" + strings.Join(comments, "\n#")
+		if len(node.FootComment) > 0 {
+			node.FootComment += "\n" + comment
+		} else {
+			node.FootComment = comment
+		}
+	}
+	return nil
+}
+
+
+func (store *Store) treeValueToNode(in interface{}) *yamlv3.Node {
+	switch in := in.(type) {
+	case sops.TreeBranch:
+		var mapping = &yamlv3.Node{}
+		mapping.Kind = yamlv3.MappingNode
+		store.appendTreeBranch(in, mapping)
+		return mapping
+	case []interface{}:
+		var sequence = &yamlv3.Node{}
+		sequence.Kind = yamlv3.SequenceNode
+		store.appendSequence(in, sequence)
+		return sequence
+	default:
+		var valueNode = &yamlv3.Node{}
+		valueNode.Encode(in)
+		return valueNode
+	}
+}
+
+
+func (store *Store) appendSequence(in []interface{}, sequence *yamlv3.Node) {
+	var comments []string
+	var beginning bool = true
+	for _, item := range in {
+		if comment, ok := item.(sops.Comment); ok {
+			comments = append(comments, comment.Value)
+		} else {
+			if beginning {
+				comments = store.addCommentsHead(sequence, comments)
+				beginning = false
+			}
+			itemNode := store.treeValueToNode(item)
+			comments = store.addCommentsHead(itemNode, comments)
+			sequence.Content = append(sequence.Content, itemNode)
+		}
+	}
+	if len(comments) > 0 {
+		if beginning {
+			comments = store.addCommentsHead(sequence, comments)
+		} else {
+			comments = store.addCommentsFoot(sequence.Content[len(sequence.Content) - 1], comments)
+		}
+	}
+}
+
+
+func (store *Store) appendTreeBranch(branch sops.TreeBranch, mapping *yamlv3.Node) {
+	var comments []string
+	var beginning bool = true
+	for _, item := range branch {
+		if comment, ok := item.Key.(sops.Comment); ok {
+			comments = append(comments, comment.Value)
+		} else {
+			if beginning {
+				comments = store.addCommentsHead(mapping, comments)
+				beginning = false
+			}
+			var keyNode = &yamlv3.Node{}
+			keyNode.Encode(item.Key)
+			comments = store.addCommentsHead(keyNode, comments)
+			valueNode := store.treeValueToNode(item.Value)
+			mapping.Content = append(mapping.Content, keyNode, valueNode)
+		}
+	}
+	if len(comments) > 0 {
+		if beginning {
+			comments = store.addCommentsHead(mapping, comments)
+		} else {
+			comments = store.addCommentsFoot(mapping.Content[len(mapping.Content) - 1], comments)
+		}
+	}
+}
+
+
 // EmitPlainFile returns the plaintext bytes of the yaml file corresponding to a
 // sops.TreeBranches runtime object
 func (store *Store) EmitPlainFile(branches sops.TreeBranches) ([]byte, error) {
-	var out []byte
-	for i, branch := range branches {
-		if i > 0 {
-			out = append(out, "---\n"...)
-		}
-		yamlMap := store.treeBranchToYamlMap(branch)
-		tmpout, err := (&yaml.YAMLMarshaler{Indent: 4}).Marshal(yamlMap)
+    var b bytes.Buffer
+	e := yamlv3.NewEncoder(io.Writer(&b))
+	e.SetIndent(4)
+	for _, branch := range branches {
+		// Document root
+		var doc = yamlv3.Node{}
+		doc.Kind = yamlv3.DocumentNode
+		// Add global mapping
+		var mapping = yamlv3.Node{}
+		mapping.Kind = yamlv3.MappingNode
+		doc.Content = append(doc.Content, &mapping)
+		// Marshal branch to global mapping node
+		store.appendTreeBranch(branch, &mapping)
+		// Encode YAML
+		err := e.Encode(&doc)
 		if err != nil {
 			return nil, fmt.Errorf("Error marshaling to yaml: %s", err)
 		}
-		out = append(out[:], tmpout[:]...)
 	}
-	return out, nil
+	e.Close()
+	return b.Bytes(), nil
 }
 
 // EmitValue returns bytes corresponding to a single encoded value
