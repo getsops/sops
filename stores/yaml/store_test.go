@@ -139,6 +139,27 @@ func TestComment4(t *testing.T) {
 	assert.Equal(t, COMMENT_4, bytes)
 }
 
+func TestEmpty(t *testing.T) {
+	// First iteration: load and store
+	branches, err := (&Store{}).LoadPlainFile([]byte(``))
+	assert.Nil(t, err)
+	assert.Equal(t, len(branches), 0)
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, ``, string(bytes))
+}
+
+func TestEmpty2(t *testing.T) {
+	// First iteration: load and store
+	branches, err := (&Store{}).LoadPlainFile([]byte(`---`))
+	assert.Nil(t, err)
+	assert.Equal(t, len(branches), 1)
+	assert.Equal(t, len(branches[0]), 0)
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, ``, string(bytes))
+}
+
 func TestEmitValue(t *testing.T) {
 	// First iteration: load and store
 	bytes, err := (&Store{}).EmitValue(BRANCHES[0])

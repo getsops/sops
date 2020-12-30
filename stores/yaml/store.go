@@ -124,6 +124,10 @@ func (store Store) appendYamlNodeToTreeBranch(node *yaml.Node, branch sops.TreeB
 			branch = store.appendCommentToMap(key.FootComment, branch)
 		}
 	case yaml.ScalarNode:
+		// A empty document with a document start marker without comments results in null
+		if node.ShortTag() == "!!null" {
+			return branch, nil
+		}
 		return nil, fmt.Errorf("YAML documents that are values are not supported")
 	case yaml.AliasNode:
 		branch, err = store.appendYamlNodeToTreeBranch(node.Alias, branch, false)
