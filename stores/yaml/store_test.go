@@ -84,7 +84,11 @@ prometheus-node-exporter:
 `)
 
 var COMMENT_4 = []byte(`# foo
+`)
 
+var COMMENT_5 = []byte(`# foo
+---
+key: value
 `)
 
 func TestUnmarshalMetadataFromNonSOPSFile(t *testing.T) {
@@ -137,6 +141,16 @@ func TestComment4(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, string(COMMENT_4), string(bytes))
 	assert.Equal(t, COMMENT_4, bytes)
+}
+
+func TestComment5(t *testing.T) {
+	// First iteration: load and store
+	branches, err := (&Store{}).LoadPlainFile(COMMENT_5)
+	assert.Nil(t, err)
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, string(COMMENT_5), string(bytes))
+	assert.Equal(t, COMMENT_5, bytes)
 }
 
 func TestEmpty(t *testing.T) {
