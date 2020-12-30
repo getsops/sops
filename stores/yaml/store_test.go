@@ -84,7 +84,7 @@ prometheus-node-exporter:
 `)
 
 var COMMENT_4 = []byte(`# foo
-{}
+
 `)
 
 func TestUnmarshalMetadataFromNonSOPSFile(t *testing.T) {
