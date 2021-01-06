@@ -45,11 +45,8 @@ jobs:
       VAULT_TOKEN: "root"
       VAULT_ADDR: "http://127.0.0.1:8200"
     steps:
-      - name: rust-toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: "1.47.0"
-          override: true
+      - name: Install rustup
+        run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y --default-toolchain 1.47.0
       - name: Check out code
         uses: actions/checkout@v2
       - uses: actions/download-artifact@v2
