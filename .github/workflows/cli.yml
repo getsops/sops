@@ -8,11 +8,15 @@ on:
 
 jobs:
   build:
-    name: Build ${{ matrix.os }}
+    name: Build and test ${{ matrix.os }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
         os: [linux, darwin, windows]
+    env:
+      VAULT_VERSION: "1.1.3"
+      VAULT_TOKEN: "root"
+      VAULT_ADDR: "http://127.0.0.1:8200"
     steps:
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install git -y
@@ -31,13 +35,17 @@ jobs:
             ${{ runner.os }}-go-
       - name: Build
         run: GOOS=${{ matrix.os }} go build -o sops-${{ matrix.os }}-${{ github.sha }} -v go.mozilla.org/sops/cmd/sops
+      - name: Import test GPG keys
+        run: for i in 1 2 3 4 5; do gpg --import pgp/sops_functional_tests_key.asc && break || sleep 15; done
+      - name: Test
+        run: make test
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
           name: sops-${{ matrix.os }}-${{ github.sha }}
           path: sops-${{ matrix.os }}-${{ github.sha }}
   test:
-    name: Test
+    name: Functional tests
     runs-on: ubuntu-latest
     needs: [build]
     env:
