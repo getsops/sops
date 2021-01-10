@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"go.mozilla.org/sops/v3/aliyunkms"
+	"go.mozilla.org/sops/v3/age"
 	"go.mozilla.org/sops/v3/azkv"
 	"go.mozilla.org/sops/v3/gcpkms"
 	"go.mozilla.org/sops/v3/hcvault"
@@ -75,6 +76,11 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 			KeyType: &Key_AliyunKey{
 				KmsKey: &KmsKey{
 					Role: mk.Role,
+	case *age.MasterKey:
+		return Key{
+			KeyType: &Key_AgeKey{
+				AgeKey: &AgeKey{
+					Recipient: mk.Recipient,
 				},
 			},
 		}

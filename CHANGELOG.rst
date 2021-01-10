@@ -1,6 +1,17 @@
 Changelog
 =========
 
+Develop branch
+--------------
+
+Changes:
+
+    * Comments at the beginning of YAML documents are now no longer discarded (#756)
+
+Bug fixes:
+
+    * Fix several problems with YAML comment handling described in #695 (#754)
+
 3.6.1
 -----
 Features:

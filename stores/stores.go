@@ -16,6 +16,7 @@ import (
 
 	"go.mozilla.org/sops/v3"
 	"go.mozilla.org/sops/v3/aliyunkms"
+	"go.mozilla.org/sops/v3/age"
 	"go.mozilla.org/sops/v3/azkv"
 	"go.mozilla.org/sops/v3/gcpkms"
 	"go.mozilla.org/sops/v3/hcvault"
@@ -44,6 +45,7 @@ type Metadata struct {
 	AzureKeyVaultKeys         []azkvkey      `yaml:"azure_kv" json:"azure_kv"`
 	ALIYUNKMSKeys             []aliyunkmskey `yaml:"gcp_kms" json:"aliyun_kms"`
 	VaultKeys                 []vaultkey     `yaml:"hc_vault" json:"hc_vault"`
+  AgeKeys                   []agekey    `yaml:"age" json:"age"`
 	LastModified              string         `yaml:"lastmodified" json:"lastmodified"`
 	MessageAuthenticationCode string         `yaml:"mac" json:"mac"`
 	PGPKeys                   []pgpkey       `yaml:"pgp" json:"pgp"`
@@ -52,15 +54,6 @@ type Metadata struct {
 	UnencryptedRegex          string         `yaml:"unencrypted_regex,omitempty" json:"unencrypted_regex,omitempty"`
 	EncryptedRegex            string         `yaml:"encrypted_regex,omitempty" json:"encrypted_regex,omitempty"`
 	Version                   string         `yaml:"version" json:"version"`
-}
-
-type keygroup struct {
-	PGPKeys           []pgpkey       `yaml:"pgp,omitempty" json:"pgp,omitempty"`
-	KMSKeys           []kmskey       `yaml:"kms,omitempty" json:"kms,omitempty"`
-	GCPKMSKeys        []gcpkmskey    `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
-	AzureKeyVaultKeys []azkvkey      `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
-	VaultKeys         []vaultkey     `yaml:"hc_vault" json:"hc_vault"`
-	ALIYUNKMSKeys     []aliyunkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
 }
 
 type pgpkey struct {
@@ -100,11 +93,15 @@ type azkvkey struct {
 	EncryptedDataKey string `yaml:"enc" json:"enc"`
 }
 
+type agekey struct {
+	Recipient        string `yaml:"recipient" json:"recipient"`
+	EncryptedDataKey string `yaml:"enc" json:"enc"`
+}
+
 type aliyunkmskey struct {
 	Role             string `yaml:"role" json:"role"`
 	RegionID         string `yaml:"region_id" json:"region_id"`
 	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
 }
 
 // MetadataFromInternal converts an internal SOPS metadata representation to a representation appropriate for storage
@@ -126,6 +123,7 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 		m.VaultKeys = vaultKeysFromGroup(group)
 		m.AzureKeyVaultKeys = azkvKeysFromGroup(group)
 		m.ALIYUNKMSKeys = aliyunkmsKeysFromGroup(group)
+		m.AgeKeys = ageKeysFromGroup(group)
 	} else {
 		for _, group := range sopsMetadata.KeyGroups {
 			m.KeyGroups = append(m.KeyGroups, keygroup{
@@ -135,6 +133,7 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 				VaultKeys:         vaultKeysFromGroup(group),
 				AzureKeyVaultKeys: azkvKeysFromGroup(group),
 				ALIYUNKMSKeys:     aliyunkmsKeysFromGroup(group),
+				AgeKeys:           ageKeysFromGroup(group),
 			})
 		}
 	}
@@ -226,6 +225,18 @@ func aliyunkmsKeysFromGroup(group sops.KeyGroup) (keys []aliyunkmskey) {
 				Role:             key.Role,
 				RegionID:         key.RegionID,
 				CreatedAt:        key.CreationDate.Format(time.RFC3339),
+        })
+		}
+	}
+	return
+}
+        
+func ageKeysFromGroup(group sops.KeyGroup) (keys []agekey) {
+	for _, key := range group {
+		switch key := key.(type) {
+		case *age.MasterKey:
+			keys = append(keys, agekey{
+				Recipient:        key.Recipient,
 				EncryptedDataKey: key.EncryptedKey,
 			})
 		}
@@ -278,7 +289,7 @@ func (m *Metadata) ToInternal() (sops.Metadata, error) {
 	}, nil
 }
 
-func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, azkvKeys []azkvkey, vaultKeys []vaultkey, aliyunKmsKeys []aliyunkmskey) (sops.KeyGroup, error) {
+func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, azkvKeys []azkvkey, vaultKeys []vaultkey, ageKeys []agekey, aliyunKmsKeys []aliyunkmskey) (sops.KeyGroup, error) {
 	var internalGroup sops.KeyGroup
 	for _, kmsKey := range kmsKeys {
 		k, err := kmsKey.toInternal()
@@ -315,8 +326,17 @@ func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmske
 		}
 		internalGroup = append(internalGroup, k)
 	}
+
 	for _, aliyunKmsKey := range aliyunKmsKeys {
 		k, err := aliyunKmsKey.toInternal()
+		if err != nil {
+			return nil, err
+		}
+		internalGroup = append(internalGroup, k)
+	}
+
+	for _, ageKey := range ageKeys {
+		k, err := ageKey.toInternal()
 		if err != nil {
 			return nil, err
 		}
@@ -327,8 +347,8 @@ func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmske
 
 func (m *Metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 	var internalGroups []sops.KeyGroup
-	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 || len(m.ALIYUNKMSKeys) > 0 {
-		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.AzureKeyVaultKeys, m.VaultKeys, m.ALIYUNKMSKeys)
+	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 || len(m.AgeKeys) > 0 || len(m.ALIYUNKMSKeys) > 0 {
+		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.AzureKeyVaultKeys, m.VaultKeys, m.AgeKeys, m.ALIYUNKMSKeys)
 		if err != nil {
 			return nil, err
 		}
@@ -336,7 +356,7 @@ func (m *Metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 		return internalGroups, nil
 	} else if len(m.KeyGroups) > 0 {
 		for _, group := range m.KeyGroups {
-			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.AzureKeyVaultKeys, group.VaultKeys, group.ALIYUNKMSKeys)
+			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.AzureKeyVaultKeys, group.VaultKeys, group.AgeKeys, group.ALIYUNKMSKeys)
 			if err != nil {
 				return nil, err
 			}
@@ -425,6 +445,13 @@ func (pgpKey *pgpkey) toInternal() (*pgp.MasterKey, error) {
 		EncryptedKey: pgpKey.EncryptedDataKey,
 		CreationDate: creationDate,
 		Fingerprint:  pgpKey.Fingerprint,
+	}, nil
+}
+
+func (ageKey *agekey) toInternal() (*age.MasterKey, error) {
+	return &age.MasterKey{
+		EncryptedKey: ageKey.EncryptedDataKey,
+		Recipient:    ageKey.Recipient,
 	}, nil
 }
 

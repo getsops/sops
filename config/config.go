@@ -14,6 +14,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/v3"
 	"go.mozilla.org/sops/v3/aliyunkms"
+	"go.mozilla.org/sops/v3/age"
 	"go.mozilla.org/sops/v3/azkv"
 	"go.mozilla.org/sops/v3/gcpkms"
 	"go.mozilla.org/sops/v3/hcvault"
@@ -72,6 +73,7 @@ type keyGroup struct {
 	GCPKMS  []gcpKmsKey  `yaml:"gcp_kms"`
 	AzureKV []azureKVKey `yaml:"azure_keyvault"`
 	Vault   []string     `yaml:"hc_vault"`
+	Age     []string     `yaml:"age"`
 	PGP     []string
 }
 
@@ -110,6 +112,7 @@ type creationRule struct {
 	PathRegex         string `yaml:"path_regex"`
 	KMS               string
 	AwsProfile        string `yaml:"aws_profile"`
+	Age               string `yaml:"age"`
 	PGP               string
 	GCPKMS            string     `yaml:"gcp_kms"`
 	AzureKeyVault     string     `yaml:"azure_keyvault"`
@@ -148,6 +151,13 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 	if len(cRule.KeyGroups) > 0 {
 		for _, group := range cRule.KeyGroups {
 			var keyGroup sops.KeyGroup
+			for _, k := range group.Age {
+				key, err := age.MasterKeyFromRecipient(k)
+				if err != nil {
+					return nil, err
+				}
+				keyGroup = append(keyGroup, key)
+			}
 			for _, k := range group.PGP {
 				keyGroup = append(keyGroup, pgp.NewMasterKeyFromFingerprint(k))
 			}
@@ -174,6 +184,16 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		}
 	} else {
 		var keyGroup sops.KeyGroup
+		if cRule.Age != "" {
+			ageKeys, err := age.MasterKeysFromRecipients(cRule.Age)
+			if err != nil {
+				return nil, err
+			} else {
+				for _, ak := range ageKeys {
+					keyGroup = append(keyGroup, ak)
+				}
+			}
+		}
 		for _, k := range pgp.MasterKeysFromFingerprintString(cRule.PGP) {
 			keyGroup = append(keyGroup, k)
 		}

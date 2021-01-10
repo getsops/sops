@@ -421,6 +421,7 @@ b: ba"#
             .output()
             .expect("Error running sops");
         assert!(output.status.success(), "SOPS didn't return successfully");
+        assert!(!String::from_utf8_lossy(&output.stdout).contains("first comment in file"), "Comment was not encrypted");
         assert!(!String::from_utf8_lossy(&output.stdout).contains("this-is-a-comment"), "Comment was not encrypted");
     }
 
@@ -446,6 +447,7 @@ b: ba"#
                     .output()
                     .expect("Error running sops");
         assert!(output.status.success(), "SOPS didn't return successfully");
+        assert!(String::from_utf8_lossy(&output.stdout).contains("first comment in file"), "Comment was not decrypted");
         assert!(String::from_utf8_lossy(&output.stdout).contains("this-is-a-comment"), "Comment was not decrypted");
     }
 
@@ -458,6 +460,7 @@ b: ba"#
                     .output()
                     .expect("Error running sops");
         assert!(output.status.success(), "SOPS didn't return successfully");
+        assert!(String::from_utf8_lossy(&output.stdout).contains("first comment in file"), "Comment was not decrypted");
         assert!(String::from_utf8_lossy(&output.stdout).contains("this-is-a-comment"), "Comment was not decrypted");
     }
 

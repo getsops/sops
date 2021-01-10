@@ -7,6 +7,7 @@ message Key {
 		GcpKmsKey gcp_kms_key = 3;
 		AzureKeyVaultKey azure_keyvault_key = 4;
 		VaultKey vault_key = 5;
+		AgeKey age_key = 6;
 	}
 }
 
@@ -42,6 +43,9 @@ message AliyunKmsKey {
 	string access_key_id = 2;
 	string access_key_secret = 3;
 	string region_id = 4;
+
+message AgeKey {
+	string recipient = 1;
 }
 
 message EncryptRequest {
