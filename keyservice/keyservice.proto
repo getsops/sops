@@ -43,6 +43,7 @@ message AliyunKmsKey {
 	string access_key_id = 2;
 	string access_key_secret = 3;
 	string region_id = 4;
+}
 
 message AgeKey {
 	string recipient = 1;
