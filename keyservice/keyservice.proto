@@ -8,6 +8,7 @@ message Key {
 		AzureKeyVaultKey azure_keyvault_key = 4;
 		VaultKey vault_key = 5;
 		AgeKey age_key = 6;
+		AliyunKmsKey aliyun_kms_key = 7;
 	}
 }
 

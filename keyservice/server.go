@@ -67,7 +67,7 @@ func (ks *Server) encryptWithAzureKeyVault(key *AzureKeyVaultKey, plaintext []by
 func (ks *Server) encryptWithAliyunKms(key *AliyunKmsKey, plaintext []byte) ([]byte, error) {
 	aliyunKmsKey := aliyunkms.MasterKey{
 		Role:     key.Role,
-		RegionID: key.RegionID,
+		RegionID: key.RegionId,
 	}
 	err := aliyunKmsKey.Encrypt(plaintext)
 	if err != nil {
@@ -138,7 +138,7 @@ func (ks *Server) decryptWithAzureKeyVault(key *AzureKeyVaultKey, ciphertext []b
 func (ks *Server) decryptWithAliyunKms(key *AliyunKmsKey, ciphertext []byte) ([]byte, error) {
 	aliyunKmsKey := aliyunkms.MasterKey{
 		Role:     key.Role,
-		RegionID: key.RegionID,
+		RegionID: key.RegionId,
 	}
 	aliyunKmsKey.EncryptedKey = string(ciphertext)
 	plaintext, err := aliyunKmsKey.Decrypt()

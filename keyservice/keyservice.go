@@ -73,9 +73,12 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 		}
 	case *aliyunkms.MasterKey:
 		return Key{
-			KeyType: &Key_AliyunKey{
-				KmsKey: &KmsKey{
+			KeyType: &Key_AliyunKmsKey{
+				AliyunKmsKey: &AliyunKmsKey{
 					Role: mk.Role,
+				},
+			},
+		}
 	case *age.MasterKey:
 		return Key{
 			KeyType: &Key_AgeKey{
