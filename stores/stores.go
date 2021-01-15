@@ -109,10 +109,11 @@ type agekey struct {
 }
 
 type aliyunkmskey struct {
-	Role      string `yaml:"role" json:"role"`
-	RegionID  string `yaml:"region_id" json:"region_id"`
-	CreatedAt string `yaml:"created_at" json:"created_at"`
+	Role             string `yaml:"role" json:"role"`
+	RegionID         string `yaml:"region_id" json:"region_id"`
+	CreatedAt        string `yaml:"created_at" json:"created_at"`
 	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	KeyID            string `yaml:"key_id" json:"key_id"`
 }
 
 // MetadataFromInternal converts an internal SOPS metadata representation to a representation appropriate for storage
@@ -443,6 +444,7 @@ func (aliyunKmsKey *aliyunkmskey) toInternal() (*aliyunkms.MasterKey, error) {
 		Role:         aliyunKmsKey.Role,
 		RegionID:     aliyunKmsKey.RegionID,
 		EncryptedKey: aliyunKmsKey.EncryptedDataKey,
+		KeyID:        aliyunKmsKey.KeyID,
 		CreationDate: creationDate,
 	}, nil
 }

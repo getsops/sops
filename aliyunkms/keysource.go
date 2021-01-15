@@ -26,15 +26,17 @@ type MasterKey struct {
 	AccessKeyID     string
 	AccessKeySecret string
 	RegionID        string
+	KeyID           string
 	EncryptedKey    string
 	CreationDate    time.Time
 }
 
 // NewMasterKeyWithEcsRamRole creates a new MasterKey from a role and regionId, setting the creation date to the current date
-func NewMasterKeyWithEcsRamRole(regionId string, roleName string) *MasterKey {
+func NewMasterKeyWithEcsRamRole(regionId string, roleName string, keyID string) *MasterKey {
 	return &MasterKey{
 		RegionID:     regionId,
 		Role:         roleName,
+		KeyID:        keyID,
 		CreationDate: time.Now().UTC(),
 	}
 }
@@ -73,7 +75,8 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 		return fmt.Errorf("Cannot create Aliyun KMS service: %v", err)
 	}
 	request := kms.CreateEncryptRequest()
-	// request.KeyId = a.kmsID
+	request.KeyId = key.KeyID
+	request.Scheme = "https"
 	request.Plaintext = string(dataKey)
 	response, err := cloudkmsService.Encrypt(request)
 	if err != nil {
@@ -94,6 +97,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	}
 
 	request := kms.CreateDecryptRequest()
+	request.Scheme = "https"
 	request.CiphertextBlob = string(key.EncryptedKey)
 	response, err := cloudkmsService.Decrypt(request)
 	if err != nil {
@@ -120,6 +124,7 @@ func (key MasterKey) ToMap() map[string]interface{} {
 	if key.Role != "" {
 		out["role"] = key.Role
 	}
+	out["key_id"] = key.KeyID
 	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)
 	out["enc"] = key.EncryptedKey
 	return out

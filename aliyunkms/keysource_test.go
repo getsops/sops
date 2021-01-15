@@ -13,10 +13,12 @@ func TestKeyToMap(t *testing.T) {
 		CreationDate: time.Date(2016, time.October, 31, 10, 0, 0, 0, time.UTC),
 		Role:         "bar",
 		EncryptedKey: "this is encrypted",
+		KeyID:        "aaaa",
 	}
 	assert.Equal(t, map[string]interface{}{
 		"role":        "bar",
 		"enc":         "this is encrypted",
 		"created_at":  "2016-10-31T10:00:00Z",
+		"key_id":      "aaaa",
 	}, key.ToMap())
 }

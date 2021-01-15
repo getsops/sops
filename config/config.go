@@ -70,12 +70,12 @@ type configFile struct {
 
 type keyGroup struct {
 	KMS       []kmsKey
-	GCPKMS    []gcpKmsKey     `yaml:"gcp_kms"`
-	AzureKV   []azureKVKey    `yaml:"azure_keyvault"`
-	Vault     []string        `yaml:"hc_vault"`
-	Age       []string        `yaml:"age"`
+	GCPKMS    []gcpKmsKey    `yaml:"gcp_kms"`
+	AzureKV   []azureKVKey   `yaml:"azure_keyvault"`
+	ALIYUNKMS []aliyunKmsKey `yaml:"aliyun_kms"`
+	Vault     []string       `yaml:"hc_vault"`
+	Age       []string       `yaml:"age"`
 	PGP       []string
-	ALIYUNKMS []aliyunKmsKey  `yaml:"aliyun_kms"`
 }
 
 type gcpKmsKey struct {
@@ -98,6 +98,7 @@ type azureKVKey struct {
 type aliyunKmsKey struct {
 	RegionID string `yaml:"region_id"`
 	Role     string `yaml:"role,omitempty"`
+	KeyID    string `yaml:"key_id"`
 }
 
 type destinationRule struct {
@@ -122,7 +123,7 @@ type creationRule struct {
 	PGP               string
 	GCPKMS            string     `yaml:"gcp_kms"`
 	AzureKeyVault     string     `yaml:"azure_keyvault"`
-	ALIYUNKMS         string     `yaml:"aliyun_kms`
+	ALIYUNKMS         string     `yaml:"aliyun_kms"`
 	VaultURI          string     `yaml:"hc_vault_transit_uri"`
 	KeyGroups         []keyGroup `yaml:"key_groups"`
 	ShamirThreshold   int        `yaml:"shamir_threshold"`
@@ -178,7 +179,7 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 				keyGroup = append(keyGroup, azkv.NewMasterKey(k.VaultURL, k.Key, k.Version))
 			}
 			for _, k := range group.ALIYUNKMS {
-				keyGroup = append(keyGroup, aliyunkms.NewMasterKeyWithEcsRamRole(k.RegionID, k.Role))
+				keyGroup = append(keyGroup, aliyunkms.NewMasterKeyWithEcsRamRole(k.RegionID, k.Role, k.KeyID))
 			}
 			for _, k := range group.Vault {
 				if masterKey, err := hcvault.NewMasterKeyFromURI(k); err == nil {

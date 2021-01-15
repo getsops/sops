@@ -76,6 +76,8 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 			KeyType: &Key_AliyunKmsKey{
 				AliyunKmsKey: &AliyunKmsKey{
 					Role: mk.Role,
+					RegionId: mk.RegionID,
+					KeyId: mk.KeyID,
 				},
 			},
 		}
