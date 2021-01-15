@@ -69,12 +69,13 @@ type configFile struct {
 }
 
 type keyGroup struct {
-	KMS     []kmsKey
-	GCPKMS  []gcpKmsKey  `yaml:"gcp_kms"`
-	AzureKV []azureKVKey `yaml:"azure_keyvault"`
-	Vault   []string     `yaml:"hc_vault"`
-	Age     []string     `yaml:"age"`
-	PGP     []string
+	KMS       []kmsKey
+	GCPKMS    []gcpKmsKey     `yaml:"gcp_kms"`
+	AzureKV   []azureKVKey    `yaml:"azure_keyvault"`
+	Vault     []string        `yaml:"hc_vault"`
+	Age       []string        `yaml:"age"`
+	PGP       []string
+	ALIYUNKMS []aliyunKmsKey  `yaml:"aliyun_kms"`
 }
 
 type gcpKmsKey struct {
@@ -94,6 +95,11 @@ type azureKVKey struct {
 	Version  string `yaml:"version"`
 }
 
+type aliyunKmsKey struct {
+	RegionID string `yaml:"region_id"`
+	Role     string `yaml:"role,omitempty"`
+}
+
 type destinationRule struct {
 	PathRegex        string       `yaml:"path_regex"`
 	S3Bucket         string       `yaml:"s3_bucket"`
@@ -109,13 +115,14 @@ type destinationRule struct {
 }
 
 type creationRule struct {
-	PathRegex         string `yaml:"path_regex"`
+	PathRegex         string     `yaml:"path_regex"`
 	KMS               string
-	AwsProfile        string `yaml:"aws_profile"`
-	Age               string `yaml:"age"`
+	AwsProfile        string     `yaml:"aws_profile"`
+	Age               string     `yaml:"age"`
 	PGP               string
 	GCPKMS            string     `yaml:"gcp_kms"`
 	AzureKeyVault     string     `yaml:"azure_keyvault"`
+	ALIYUNKMS         string     `yaml:"aliyun_kms`
 	VaultURI          string     `yaml:"hc_vault_transit_uri"`
 	KeyGroups         []keyGroup `yaml:"key_groups"`
 	ShamirThreshold   int        `yaml:"shamir_threshold"`
@@ -210,9 +217,10 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		for _, k := range azureKeys {
 			keyGroup = append(keyGroup, k)
 		}
-		for _, k := range aliyunkms.NewMasterKeyWithEcsRamRole(cRule.ALIYUNKMS) {
-			keyGroup = append(keyGroup, k)
-		}
+		// todo(nlamirault): what ?
+		// for _, k := range aliyunkms.NewMasterKeyWithEcsRamRole(cRule.ALIYUNKMS) {
+		// 	keyGroup = append(keyGroup, k)
+		// }
 		vaultKeys, err := hcvault.NewMasterKeysFromURIs(cRule.VaultURI)
 		if err != nil {
 			return nil, err

@@ -45,7 +45,7 @@ type Metadata struct {
 	AzureKeyVaultKeys         []azkvkey      `yaml:"azure_kv" json:"azure_kv"`
 	ALIYUNKMSKeys             []aliyunkmskey `yaml:"gcp_kms" json:"aliyun_kms"`
 	VaultKeys                 []vaultkey     `yaml:"hc_vault" json:"hc_vault"`
-  AgeKeys                   []agekey    `yaml:"age" json:"age"`
+    AgeKeys                   []agekey    `yaml:"age" json:"age"`
 	LastModified              string         `yaml:"lastmodified" json:"lastmodified"`
 	MessageAuthenticationCode string         `yaml:"mac" json:"mac"`
 	PGPKeys                   []pgpkey       `yaml:"pgp" json:"pgp"`
@@ -54,6 +54,16 @@ type Metadata struct {
 	UnencryptedRegex          string         `yaml:"unencrypted_regex,omitempty" json:"unencrypted_regex,omitempty"`
 	EncryptedRegex            string         `yaml:"encrypted_regex,omitempty" json:"encrypted_regex,omitempty"`
 	Version                   string         `yaml:"version" json:"version"`
+}
+
+type keygroup struct {
+	PGPKeys           []pgpkey       `yaml:"pgp,omitempty" json:"pgp,omitempty"`
+	KMSKeys           []kmskey       `yaml:"kms,omitempty" json:"kms,omitempty"`
+	GCPKMSKeys        []gcpkmskey    `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
+	AzureKeyVaultKeys []azkvkey      `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
+	VaultKeys         []vaultkey     `yaml:"hc_vault" json:"hc_vault"`
+	AgeKeys           []agekey       `yaml:"age" json:"age"`
+	ALIYUNKMSKeys     []aliyunkmskey `yaml:"aliyun_kms" json:"aliyun_kms,omitempty"`
 }
 
 type pgpkey struct {
@@ -66,7 +76,7 @@ type kmskey struct {
 	Arn              string             `yaml:"arn" json:"arn"`
 	Role             string             `yaml:"role,omitempty" json:"role,omitempty"`
 	Context          map[string]*string `yaml:"context,omitempty" json:"context,omitempty"`
-	CreatedAt        string             `yaml:"created_at" json:"created_at"`
+	CreatedAt        string             `yaml:"created_at" json :"created_at"`
 	EncryptedDataKey string             `yaml:"enc" json:"enc"`
 	AwsProfile       string             `yaml:"aws_profile" json:"aws_profile"`
 }
@@ -99,9 +109,10 @@ type agekey struct {
 }
 
 type aliyunkmskey struct {
-	Role             string `yaml:"role" json:"role"`
-	RegionID         string `yaml:"region_id" json:"region_id"`
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
+	Role      string `yaml:"role" json:"role"`
+	RegionID  string `yaml:"region_id" json:"region_id"`
+	CreatedAt string `yaml:"created_at" json:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc"`
 }
 
 // MetadataFromInternal converts an internal SOPS metadata representation to a representation appropriate for storage
@@ -221,7 +232,7 @@ func aliyunkmsKeysFromGroup(group sops.KeyGroup) (keys []aliyunkmskey) {
 	for _, key := range group {
 		switch key := key.(type) {
 		case *aliyunkms.MasterKey:
-			keys = append(keys, gcpkmskey{
+			keys = append(keys, aliyunkmskey{
 				Role:             key.Role,
 				RegionID:         key.RegionID,
 				CreatedAt:        key.CreationDate.Format(time.RFC3339),
