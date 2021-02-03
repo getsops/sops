@@ -34,6 +34,7 @@ require (
 	github.com/opencontainers/image-spec v1.0.1 // indirect
 	github.com/opencontainers/runc v0.1.1 // indirect
 	github.com/ory/dockertest v3.3.4+incompatible
+	github.com/pelletier/go-toml v1.8.2-0.20210203134853-b4f0a950bf95
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.4.2
 	github.com/smartystreets/goconvey v0.0.0-20190710185942-9d28bd7c0945 // indirect
@@ -48,6 +49,10 @@ require (
 	google.golang.org/protobuf v1.25.0
 	gopkg.in/ini.v1 v1.44.0
 	gopkg.in/urfave/cli.v1 v1.20.0
+<<<<<<< HEAD
 	gopkg.in/yaml.v3 v3.0.0-20210107172259-749611fa9fcc
 	gotest.tools v2.2.0+incompatible // indirect
+=======
+	gotest.tools v2.2.0+incompatible
+>>>>>>> cc2ee88b7 (add toml store)
 )
