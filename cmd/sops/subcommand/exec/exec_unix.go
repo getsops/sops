@@ -27,8 +27,8 @@ func WritePipe(pipe string, contents []byte) {
 	handle.Close()
 }
 
-func GetPipe(dir string) string {
-	tmpfn := filepath.Join(dir, "tmp-file")
+func GetPipe(dir, filename string) string {
+	tmpfn := filepath.Join(dir, filename)
 	err := syscall.Mkfifo(tmpfn, 0600)
 	if err != nil {
 		log.Fatal(err)

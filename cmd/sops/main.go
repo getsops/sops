@@ -195,6 +195,10 @@ func main() {
 					Name:  "output-type",
 					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
 				},
+				cli.StringFlag{
+					Name:  "filename",
+					Usage: "filename for the temporarily file (default: tmp-file)",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if len(c.Args()) != 2 {
@@ -222,12 +226,18 @@ func main() {
 					return toExitError(err)
 				}
 
+				filename := c.String("filename")
+				if filename == "" {
+					filename = "tmp-file"
+				}
+
 				if err := exec.ExecWithFile(exec.ExecOpts{
 					Command:    command,
 					Plaintext:  output,
 					Background: c.Bool("background"),
 					Fifo:       !c.Bool("no-fifo"),
 					User:       c.String("user"),
+					Filename:   filename,
 				}); err != nil {
 					return toExitError(err)
 				}
