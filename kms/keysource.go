@@ -63,14 +63,14 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 		sess, err := key.createSession()
 		if err != nil {
 			log.WithField("arn", key.Arn).Info("Encryption failed")
-			return fmt.Errorf("Failed to create session: %v", err)
+			return fmt.Errorf("Failed to create session: %w", err)
 		}
 		kmsSvc = kms.New(sess)
 	}
 	out, err := kmsSvc.Encrypt(&kms.EncryptInput{Plaintext: dataKey, KeyId: &key.Arn, EncryptionContext: key.EncryptionContext})
 	if err != nil {
 		log.WithField("arn", key.Arn).Info("Encryption failed")
-		return fmt.Errorf("Failed to call KMS encryption service: %v", err)
+		return fmt.Errorf("Failed to call KMS encryption service: %w", err)
 	}
 	key.EncryptedKey = base64.StdEncoding.EncodeToString(out.CiphertextBlob)
 	log.WithField("arn", key.Arn).Info("Encryption succeeded")
@@ -98,14 +98,14 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		sess, err := key.createSession()
 		if err != nil {
 			log.WithField("arn", key.Arn).Info("Decryption failed")
-			return nil, fmt.Errorf("Error creating AWS session: %v", err)
+			return nil, fmt.Errorf("Error creating AWS session: %w", err)
 		}
 		kmsSvc = kms.New(sess)
 	}
 	decrypted, err := kmsSvc.Decrypt(&kms.DecryptInput{CiphertextBlob: k, EncryptionContext: key.EncryptionContext})
 	if err != nil {
 		log.WithField("arn", key.Arn).Info("Decryption failed")
-		return nil, fmt.Errorf("Error decrypting key: %v", err)
+		return nil, fmt.Errorf("Error decrypting key: %w", err)
 	}
 	log.WithField("arn", key.Arn).Info("Decryption succeeded")
 	return decrypted.Plaintext, nil
@@ -167,7 +167,7 @@ func (key MasterKey) createStsSession(config aws.Config, sess *session.Session) 
 	}
 	stsRoleSessionNameRe, err := regexp.Compile("[^a-zA-Z0-9=,.@-]+")
 	if err != nil {
-		return nil, fmt.Errorf("Failed to compile STS role session name regex: %v", err)
+		return nil, fmt.Errorf("Failed to compile STS role session name regex: %w", err)
 	}
 	sanitizedHostname := stsRoleSessionNameRe.ReplaceAllString(hostname, "")
 	stsService := sts.New(sess)
@@ -175,13 +175,13 @@ func (key MasterKey) createStsSession(config aws.Config, sess *session.Session) 
 	out, err := stsService.AssumeRole(&sts.AssumeRoleInput{
 		RoleArn: &key.Role, RoleSessionName: &name})
 	if err != nil {
-		return nil, fmt.Errorf("Failed to assume role %q: %v", key.Role, err)
+		return nil, fmt.Errorf("Failed to assume role %q: %w", key.Role, err)
 	}
 	config.Credentials = credentials.NewStaticCredentials(*out.Credentials.AccessKeyId,
 		*out.Credentials.SecretAccessKey, *out.Credentials.SessionToken)
 	sess, err = session.NewSession(&config)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to create new aws session: %v", err)
+		return nil, fmt.Errorf("Failed to create new aws session: %w", err)
 	}
 	return sess, nil
 }

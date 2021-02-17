@@ -15,12 +15,12 @@ func TestPGP(t *testing.T) {
 			return true
 		}
 		if err := key.Encrypt(x); err != nil {
-			t.Errorf("Failed to encrypt: %#v err: %v", x, err)
+			t.Errorf("Failed to encrypt: %#v err: %w", x, err)
 			return false
 		}
 		k, err := key.Decrypt()
 		if err != nil {
-			t.Errorf("Failed to decrypt: %#v err: %v", x, err)
+			t.Errorf("Failed to decrypt: %#v err: %w", x, err)
 			return false
 		}
 		return bytes.Equal(x, k)
