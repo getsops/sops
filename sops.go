@@ -596,7 +596,7 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 					Plaintext: part,
 				})
 				if err != nil {
-					keyErrs = append(keyErrs, fmt.Errorf("failed to encrypt new data key with master key %q: %v", key.ToString(), err))
+					keyErrs = append(keyErrs, fmt.Errorf("failed to encrypt new data key with master key %q: %w", key.ToString(), err))
 					continue
 				}
 				key.SetEncryptedDataKey(rsp.Ciphertext)

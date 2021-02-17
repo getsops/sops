@@ -48,17 +48,17 @@ func (key *MasterKey) Encrypt(datakey []byte) error {
 
 	w, err := age.Encrypt(buffer, key.parsedRecipient)
 	if err != nil {
-		return fmt.Errorf("failed to open file for encrypting sops data key with age: %v", err)
+		return fmt.Errorf("failed to open file for encrypting sops data key with age: %w", err)
 	}
 
 	if _, err := w.Write(datakey); err != nil {
 		log.WithField("recipient", key.parsedRecipient).Error("Encryption failed")
-		return fmt.Errorf("failed to encrypt sops data key with age: %v", err)
+		return fmt.Errorf("failed to encrypt sops data key with age: %w", err)
 	}
 
 	if err := w.Close(); err != nil {
 		log.WithField("recipient", key.parsedRecipient).Error("Encryption failed")
-		return fmt.Errorf("failed to close file for encrypting sops data key with age: %v", err)
+		return fmt.Errorf("failed to close file for encrypting sops data key with age: %w", err)
 	}
 
 	key.EncryptedKey = buffer.String()
@@ -95,7 +95,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		userConfigDir, err := os.UserConfigDir()
 
 		if err != nil {
-			return nil, fmt.Errorf("user config directory could not be determined: %v", err)
+			return nil, fmt.Errorf("user config directory could not be determined: %w", err)
 		}
 
 		ageKeyFilePath = filepath.Join(userConfigDir, "sops", "age", "keys.txt")
@@ -104,7 +104,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	ageKeyFile, err := os.Open(ageKeyFilePath)
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to open file: %v", err)
+		return nil, fmt.Errorf("failed to open file: %w", err)
 	}
 
 	defer ageKeyFile.Close()
@@ -188,7 +188,7 @@ func parseRecipient(recipient string) (*age.X25519Recipient, error) {
 	parsedRecipient, err := age.ParseX25519Recipient(recipient)
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse input as Bech32-encoded age public key: %v", err)
+		return nil, fmt.Errorf("failed to parse input as Bech32-encoded age public key: %w", err)
 	}
 
 	return parsedRecipient, nil

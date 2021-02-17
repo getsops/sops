@@ -74,7 +74,7 @@ func RetrieveLatestVersionFromUpstream() (string, error) {
 			// try to parse the version as semver
 			_, err := semver.Make(comps[1])
 			if err != nil {
-				return "", fmt.Errorf("Retrieved version %q does not match semver format: %v", comps[1], err)
+				return "", fmt.Errorf("Retrieved version %q does not match semver format: %w", comps[1], err)
 			}
 			return comps[1], nil
 		}

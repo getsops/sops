@@ -31,7 +31,7 @@ func TestMain(m *testing.M) {
 	if err := pool.Retry(func() error {
 		cli, err := api.NewClient(api.DefaultConfig())
 		if err != nil {
-			return fmt.Errorf("Cannot create Vault Client: %v", err)
+			return fmt.Errorf("Cannot create Vault Client: %w", err)
 		}
 		status, err := cli.Sys().InitStatus()
 		if err != nil {
