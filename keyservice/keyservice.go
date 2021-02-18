@@ -7,6 +7,7 @@ package keyservice
 import (
 	"fmt"
 
+	"go.mozilla.org/sops/v3/aliyunkms"
 	"go.mozilla.org/sops/v3/age"
 	"go.mozilla.org/sops/v3/azkv"
 	"go.mozilla.org/sops/v3/gcpkms"
@@ -67,6 +68,16 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 					VaultUrl: mk.VaultURL,
 					Name:     mk.Name,
 					Version:  mk.Version,
+				},
+			},
+		}
+	case *aliyunkms.MasterKey:
+		return Key{
+			KeyType: &Key_AliyunKmsKey{
+				AliyunKmsKey: &AliyunKmsKey{
+					Role: mk.Role,
+					RegionId: mk.RegionID,
+					KeyId: mk.KeyID,
 				},
 			},
 		}

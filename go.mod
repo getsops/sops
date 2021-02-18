@@ -13,6 +13,7 @@ require (
 	github.com/Azure/go-autorest/autorest/validation v0.2.0 // indirect
 	github.com/Microsoft/go-winio v0.4.14 // indirect
 	github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5 // indirect
+	github.com/aliyun/alibaba-cloud-sdk-go v1.61.713
 	github.com/aws/aws-sdk-go v1.33.18
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/cenkalti/backoff v2.2.1+incompatible // indirect
@@ -20,7 +21,6 @@ require (
 	github.com/docker/go-connections v0.4.0 // indirect
 	github.com/docker/go-units v0.4.0 // indirect
 	github.com/fatih/color v1.7.0
-	github.com/golang/protobuf v1.4.1
 	github.com/google/go-cmp v0.5.0
 	github.com/google/shlex v0.0.0-20181106134648-c34317bd91bf
 	github.com/gotestyourself/gotestyourself v2.2.0+incompatible // indirect

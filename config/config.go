@@ -13,6 +13,7 @@ import (
 	"github.com/mozilla-services/yaml"
 	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/v3"
+	"go.mozilla.org/sops/v3/aliyunkms"
 	"go.mozilla.org/sops/v3/age"
 	"go.mozilla.org/sops/v3/azkv"
 	"go.mozilla.org/sops/v3/gcpkms"
@@ -68,12 +69,13 @@ type configFile struct {
 }
 
 type keyGroup struct {
-	KMS     []kmsKey
-	GCPKMS  []gcpKmsKey  `yaml:"gcp_kms"`
-	AzureKV []azureKVKey `yaml:"azure_keyvault"`
-	Vault   []string     `yaml:"hc_vault"`
-	Age     []string     `yaml:"age"`
-	PGP     []string
+	KMS       []kmsKey
+	GCPKMS    []gcpKmsKey    `yaml:"gcp_kms"`
+	AzureKV   []azureKVKey   `yaml:"azure_keyvault"`
+	ALIYUNKMS []aliyunKmsKey `yaml:"aliyun_kms"`
+	Vault     []string       `yaml:"hc_vault"`
+	Age       []string       `yaml:"age"`
+	PGP       []string
 }
 
 type gcpKmsKey struct {
@@ -93,6 +95,12 @@ type azureKVKey struct {
 	Version  string `yaml:"version"`
 }
 
+type aliyunKmsKey struct {
+	RegionID string `yaml:"region_id"`
+	Role     string `yaml:"role,omitempty"`
+	KeyID    string `yaml:"key_id"`
+}
+
 type destinationRule struct {
 	PathRegex        string       `yaml:"path_regex"`
 	S3Bucket         string       `yaml:"s3_bucket"`
@@ -108,13 +116,14 @@ type destinationRule struct {
 }
 
 type creationRule struct {
-	PathRegex         string `yaml:"path_regex"`
+	PathRegex         string     `yaml:"path_regex"`
 	KMS               string
-	AwsProfile        string `yaml:"aws_profile"`
-	Age               string `yaml:"age"`
+	AwsProfile        string     `yaml:"aws_profile"`
+	Age               string     `yaml:"age"`
 	PGP               string
 	GCPKMS            string     `yaml:"gcp_kms"`
 	AzureKeyVault     string     `yaml:"azure_keyvault"`
+	ALIYUNKMS         string     `yaml:"aliyun_kms"`
 	VaultURI          string     `yaml:"hc_vault_transit_uri"`
 	KeyGroups         []keyGroup `yaml:"key_groups"`
 	ShamirThreshold   int        `yaml:"shamir_threshold"`
@@ -169,6 +178,9 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			for _, k := range group.AzureKV {
 				keyGroup = append(keyGroup, azkv.NewMasterKey(k.VaultURL, k.Key, k.Version))
 			}
+			for _, k := range group.ALIYUNKMS {
+				keyGroup = append(keyGroup, aliyunkms.NewMasterKeyWithEcsRamRole(k.RegionID, k.Role, k.KeyID))
+			}
 			for _, k := range group.Vault {
 				if masterKey, err := hcvault.NewMasterKeyFromURI(k); err == nil {
 					keyGroup = append(keyGroup, masterKey)
@@ -206,6 +218,10 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		for _, k := range azureKeys {
 			keyGroup = append(keyGroup, k)
 		}
+		// todo(nlamirault): what ?
+		// for _, k := range aliyunkms.NewMasterKeyWithEcsRamRole(cRule.ALIYUNKMS) {
+		// 	keyGroup = append(keyGroup, k)
+		// }
 		vaultKeys, err := hcvault.NewMasterKeysFromURIs(cRule.VaultURI)
 		if err != nil {
 			return nil, err
