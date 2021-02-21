@@ -34,7 +34,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-go-
       - name: Build
-        run: GOOS=${{ matrix.os }} go build -o sops-${{ matrix.os }}-${{ github.sha }} -v go.mozilla.org/sops/cmd/sops
+        run: GOOS=${{ matrix.os }} go build -o sops-${{ matrix.os }}-${{ github.sha }} -v ./cmd/sops
       - name: Import test GPG keys
         run: for i in 1 2 3 4 5; do gpg --import pgp/sops_functional_tests_key.asc && break || sleep 15; done
       - name: Test
