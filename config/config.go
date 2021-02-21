@@ -10,7 +10,7 @@ import (
 	"path"
 	"regexp"
 
-	"github.com/mozilla-services/yaml"
+	"gopkg.in/yaml.v3"
 	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/v3"
 	"go.mozilla.org/sops/v3/age"
