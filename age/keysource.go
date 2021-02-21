@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"filippo.io/age"
+	"filippo.io/age/armor"
 	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/v3/logging"
 )
@@ -46,7 +47,8 @@ func (key *MasterKey) Encrypt(datakey []byte) error {
 		key.parsedRecipient = parsedRecipient
 	}
 
-	w, err := age.Encrypt(buffer, key.parsedRecipient)
+	aw := armor.NewWriter(buffer)
+	w, err := age.Encrypt(aw, key.parsedRecipient)
 	if err != nil {
 		return fmt.Errorf("failed to open file for encrypting sops data key with age: %w", err)
 	}
@@ -59,6 +61,11 @@ func (key *MasterKey) Encrypt(datakey []byte) error {
 	if err := w.Close(); err != nil {
 		log.WithField("recipient", key.parsedRecipient).Error("Encryption failed")
 		return fmt.Errorf("failed to close file for encrypting sops data key with age: %w", err)
+	}
+
+	if err := aw.Close(); err != nil {
+		log.WithField("recipient", key.parsedRecipient).Error("Encryption failed")
+		return fmt.Errorf("failed to close armored writer: %w", err)
 	}
 
 	key.EncryptedKey = buffer.String()
@@ -115,19 +122,20 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		return nil, err
 	}
 
-	buffer := &bytes.Buffer{}
-	reader := bytes.NewReader([]byte(key.EncryptedKey))
-	r, err := age.Decrypt(reader, identities...)
+	src := bytes.NewReader([]byte(key.EncryptedKey))
+	ar := armor.NewReader(src)
+	r, err := age.Decrypt(ar, identities...)
 
 	if err != nil {
 		return nil, fmt.Errorf("no age identity found in %q that could decrypt the data", ageKeyFilePath)
 	}
 
-	if _, err := io.Copy(buffer, r); err != nil {
-		return nil, fmt.Errorf("failed to copy decrypted data into bytes.Buffer")
+	var b bytes.Buffer
+	if _, err := io.Copy(&b, r); err != nil {
+		return nil, fmt.Errorf("failed to copy decrypted data into bytes.Buffer: %w", err)
 	}
 
-	return buffer.Bytes(), nil
+	return b.Bytes(), nil
 }
 
 // NeedsRotation returns whether the data key needs to be rotated or not.
