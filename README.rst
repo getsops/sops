@@ -372,7 +372,7 @@ The sops team recommends the ``updatekeys`` approach.
 ``updatekeys`` command
 **********************
 
-The ``updatekeys`` command uses the `.sops.yaml <#29using-sopsyaml-conf-to-select-kmspgp-for-new-files>`_
+The ``updatekeys`` command uses the `.sops.yaml <#using-sops-yaml-conf-to-select-kms-pgp-for-new-files>`_
 configuration file to update (add or remove) the corresponding secrets in the
 encrypted file. Note that the example below uses the
 `Block Scalar yaml construct <https://yaml-multiline.info/>`_ to build a space
