@@ -75,6 +75,15 @@ creation_rules:
     hc_vault_uris: https://foz:443/v1/foz/keys/foz
 `)
 
+var sampleConfigWithAmbiguousPath = []byte(`
+creation_rules:
+  - path_regex: foo/*
+    kms: "1"
+    pgp: "2"
+    gcp_kms: "3"
+    hc_vault_uris: http://4:8200/v1/4/keys/4
+`)
+
 var sampleConfigWithGroups = []byte(`
 creation_rules:
   - path_regex: foobar*
@@ -364,6 +373,15 @@ func TestLoadConfigFileWithEncryptedRegex(t *testing.T) {
 
 func TestLoadConfigFileWithInvalidParameters(t *testing.T) {
 	_, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithInvalidParameters, t), "foobar", nil)
+	assert.NotNil(t, err)
+}
+
+func TestLoadConfigFileWithAmbiguousPath(t *testing.T) {
+	config := parseConfigFile(sampleConfigWithAmbiguousPath, t)
+	config.Path = "/foo/config"
+	_, err := parseCreationRuleForFile(config, "/foo/foo/bar", nil)
+	assert.Nil(t, err)
+	_, err = parseCreationRuleForFile(config, "/foo/fuu/bar", nil)
 	assert.NotNil(t, err)
 }
 

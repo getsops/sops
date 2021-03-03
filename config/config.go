@@ -8,7 +8,9 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"path/filepath"
 	"regexp"
+	"strings"
 
 	"gopkg.in/yaml.v3"
 	"github.com/sirupsen/logrus"
@@ -65,6 +67,7 @@ func FindConfigFile(start string) (string, error) {
 type configFile struct {
 	CreationRules    []creationRule    `yaml:"creation_rules"`
 	DestinationRules []destinationRule `yaml:"destination_rules"`
+	Path             string
 }
 
 type keyGroup struct {
@@ -225,6 +228,7 @@ func loadConfigFile(confPath string) (*configFile, error) {
 	}
 	conf := &configFile{}
 	err = conf.load(confBytes)
+	conf.Path = confPath
 	if err != nil {
 		return nil, fmt.Errorf("error loading config: %s", err)
 	}
@@ -319,6 +323,14 @@ func parseCreationRuleForFile(conf *configFile, filePath string, kmsEncryptionCo
 		return nil, nil
 	}
 
+	configDir, err := filepath.Abs(filepath.Dir(conf.Path))
+	if err != nil {
+		return nil, err
+	}
+
+	// compare file path relative to path of config file
+	filePath = strings.TrimPrefix(filePath, configDir + string(filepath.Separator))
+
 	var rule *creationRule
 
 	for _, r := range conf.CreationRules {
@@ -354,6 +366,7 @@ func LoadCreationRuleForFile(confPath string, filePath string, kmsEncryptionCont
 	if err != nil {
 		return nil, err
 	}
+
 	return parseCreationRuleForFile(conf, filePath, kmsEncryptionContext)
 }
 
