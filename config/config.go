@@ -326,11 +326,9 @@ func parseCreationRuleForFile(conf *configFile, filePath string, kmsEncryptionCo
 			rule = &r
 			break
 		}
-		if r.PathRegex != "" {
-			if match, _ := regexp.MatchString(r.PathRegex, filePath); match {
-				rule = &r
-				break
-			}
+		if regexp.MustCompile(r.PathRegex).MatchString(filePath) {
+			rule = &r
+			break
 		}
 	}
 
