@@ -67,7 +67,6 @@ func FindConfigFile(start string) (string, error) {
 type configFile struct {
 	CreationRules    []creationRule    `yaml:"creation_rules"`
 	DestinationRules []destinationRule `yaml:"destination_rules"`
-	Path             string
 }
 
 type keyGroup struct {
@@ -228,7 +227,6 @@ func loadConfigFile(confPath string) (*configFile, error) {
 	}
 	conf := &configFile{}
 	err = conf.load(confBytes)
-	conf.Path = confPath
 	if err != nil {
 		return nil, fmt.Errorf("error loading config: %s", err)
 	}
@@ -317,13 +315,13 @@ func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptio
 	return config, nil
 }
 
-func parseCreationRuleForFile(conf *configFile, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
+func parseCreationRuleForFile(conf *configFile, confPath, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
 	// If config file doesn't contain CreationRules (it's empty or only contains DestionationRules), assume it does not exist
 	if conf.CreationRules == nil {
 		return nil, nil
 	}
 
-	configDir, err := filepath.Abs(filepath.Dir(conf.Path))
+	configDir, err := filepath.Abs(filepath.Dir(confPath))
 	if err != nil {
 		return nil, err
 	}
@@ -367,7 +365,7 @@ func LoadCreationRuleForFile(confPath string, filePath string, kmsEncryptionCont
 		return nil, err
 	}
 
-	return parseCreationRuleForFile(conf, filePath, kmsEncryptionContext)
+	return parseCreationRuleForFile(conf, confPath, filePath, kmsEncryptionContext)
 }
 
 // LoadDestinationRuleForFile works the same as LoadCreationRuleForFile, but gets the "creation_rule" from the matching destination_rule's
