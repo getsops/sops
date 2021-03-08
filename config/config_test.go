@@ -208,15 +208,12 @@ destination_rules:
     path_regex: "vault-v1/*"
 `)
 
-<<<<<<< HEAD
 var sampleConfigWithInvalidComplicatedRegexp = []byte(`
 creation_rules:
   - path_regex: "[ ]\\K(?<!\\d )(?="
     kms: default
 `)
 
-=======
->>>>>>> d27aed3b640e9c360b82672b5ca92747f621fe03
 var sampleConfigWithComplicatedRegexp = []byte(`
 creation_rules:
   - path_regex: "stage/dev/feature-.*"
