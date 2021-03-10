@@ -10,7 +10,6 @@ import (
 	"path"
 	"regexp"
 
-	"gopkg.in/yaml.v3"
 	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/v3"
 	"go.mozilla.org/sops/v3/age"
@@ -21,6 +20,7 @@ import (
 	"go.mozilla.org/sops/v3/logging"
 	"go.mozilla.org/sops/v3/pgp"
 	"go.mozilla.org/sops/v3/publish"
+	"gopkg.in/yaml.v3"
 )
 
 var log *logrus.Logger
@@ -326,11 +326,13 @@ func parseCreationRuleForFile(conf *configFile, filePath string, kmsEncryptionCo
 			rule = &r
 			break
 		}
-		if r.PathRegex != "" {
-			if match, _ := regexp.MatchString(r.PathRegex, filePath); match {
-				rule = &r
-				break
-			}
+		reg, err := regexp.Compile(r.PathRegex)
+		if err != nil {
+			return nil, fmt.Errorf("can not compile regexp: %w", err)
+		}
+		if reg.MatchString(filePath) {
+			rule = &r
+			break
 		}
 	}
 
