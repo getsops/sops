@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 
 	"go.mozilla.org/sops/v3"
-	"go.mozilla.org/sops/v3/cmd/sops/codes"
 	"go.mozilla.org/sops/v3/cmd/sops/common"
 )
 
@@ -23,23 +22,34 @@ type Status struct {
 
 // FileStatus checks encryption status of a file
 func FileStatus(opts Opts) (Status, error) {
-	fileBytes, err := ioutil.ReadFile(opts.InputPath)
+	encrypted, err := cfs(opts.InputPath)
 	if err != nil {
-		return Status{}, common.NewExitError(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
+		return Status{}, fmt.Errorf("cannot check file status: %w", err)
 	}
-	branches, err := opts.InputStore.LoadPlainFile(fileBytes)
-	if err != nil {
-		return Status{}, common.NewExitError(fmt.Sprintf("Error unmarshalling file: %s", err), codes.CouldNotReadInputFile)
-	}
-	hasMetadata := checkMetadata((branches[0]))
-	return Status{Encrypted: hasMetadata}, nil
+	return Status{Encrypted: encrypted}, nil
 }
 
-func checkMetadata(branch sops.TreeBranch) bool {
-	for _, b := range branch {
-		if b.Key == "sops" {
-			return true
-		}
+func cfs(inputpath string) (bool, error) {
+	fileBytes, err := ioutil.ReadFile(inputpath)
+	if err != nil {
+		return false, fmt.Errorf("cannot read input file: %w", err)
 	}
-	return false
+
+	store := common.DefaultStoreForPath(inputpath)
+	tree, err := store.LoadEncryptedFile(fileBytes)
+	if err != nil && err == sops.MetadataNotFound {
+		return false, nil
+	}
+	if err != nil {
+		return false, fmt.Errorf("cannot load encrypted file: %w", err)
+	}
+
+	if tree.Metadata.Version == "" {
+		return false, nil
+	}
+	if tree.Metadata.MessageAuthenticationCode == "" {
+		return false, nil
+	}
+
+	return true, nil
 }
