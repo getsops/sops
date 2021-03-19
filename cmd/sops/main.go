@@ -532,11 +532,13 @@ func main() {
 					return err
 				}
 
-				if status.Encrypted {
-					return common.NewExitError("File is encrypted", codes.FileAlreadyEncrypted)
-				} else {
-					fmt.Println("File is unencrypted")
+				json, err := encodingjson.Marshal(status)
+				if err != nil {
+					return common.NewExitError(err, codes.ErrorGeneric)
 				}
+
+				fmt.Println(string(json))
+
 				return nil
 			},
 		},

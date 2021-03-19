@@ -17,7 +17,7 @@ type Opts struct {
 // Status represents the status of a file
 type Status struct {
 	// Encrypted represents whether the file provided is encrypted by SOPS
-	Encrypted bool
+	Encrypted bool `json:"encrypted"`
 }
 
 // FileStatus checks encryption status of a file
