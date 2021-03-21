@@ -131,7 +131,7 @@ func (key MasterKey) createCloudKMSService() (*cloudkms.Service, error) {
 	}
 
 	ctx := context.Background()
-	client, err := google.DefaultClient(ctx, cloudkms.CloudPlatformScope)
+	client, err := google.DefaultClient(ctx, cloudkms.CloudkmsScope)
 	if err != nil {
 		return nil, err
 	}
