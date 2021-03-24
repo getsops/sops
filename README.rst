@@ -650,7 +650,7 @@ and its KMS and PGP keys are used to encrypt the file. It should be noted that
 the looking up of ``.sops.yaml`` is from the working directory (CWD) instead of
 the directory of the encrypting file (see `Issue 242 <https://github.com/mozilla/sops/issues/242>`_).
 
-The path_regex checks the path of the encrypting file relative to the .sops.yaml config file. Here is another example:
+The path_regex checks the full path of the encrypting file. Here is another example:
 
 * files located under directory **development** should use one set of KMS A
 * files located under directory **production** should use another set of KMS B

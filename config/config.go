@@ -8,9 +8,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
-	"path/filepath"
 	"regexp"
-	"strings"
 
 	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/v3"
@@ -315,19 +313,11 @@ func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptio
 	return config, nil
 }
 
-func parseCreationRuleForFile(conf *configFile, confPath, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
+func parseCreationRuleForFile(conf *configFile, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
 	// If config file doesn't contain CreationRules (it's empty or only contains DestionationRules), assume it does not exist
 	if conf.CreationRules == nil {
 		return nil, nil
 	}
-
-	configDir, err := filepath.Abs(filepath.Dir(confPath))
-	if err != nil {
-		return nil, err
-	}
-
-	// compare file path relative to path of config file
-	filePath = strings.TrimPrefix(filePath, configDir + string(filepath.Separator))
 
 	var rule *creationRule
 
@@ -366,8 +356,7 @@ func LoadCreationRuleForFile(confPath string, filePath string, kmsEncryptionCont
 	if err != nil {
 		return nil, err
 	}
-
-	return parseCreationRuleForFile(conf, confPath, filePath, kmsEncryptionContext)
+	return parseCreationRuleForFile(conf, filePath, kmsEncryptionContext)
 }
 
 // LoadDestinationRuleForFile works the same as LoadCreationRuleForFile, but gets the "creation_rule" from the matching destination_rule's
