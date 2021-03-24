@@ -10,14 +10,9 @@ Features:
 
 Changes:
 
-    * Comments at the beginning of YAML documents are now no longer discarded (#756)
     * On failed decryption with GPG, return the error returned by GPG to the sops user (#762)
     * Use yaml.v3 instead of modified yaml.v2 for handling YAML files (#791)
     * Update aws-sdk-go to version v1.37.18 (#823)
-
-Bug fixes:
-
-    * Fix several problems with YAML comment handling described in #695 (#754)
 
 Project Changes:
 
