@@ -44,7 +44,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	cloudkmsService, err := key.createCloudKMSService()
 	if err != nil {
 		log.WithField("resourceID", key.ResourceID).Info("Encryption failed")
-		return fmt.Errorf("Cannot create GCP KMS service: %v", err)
+		return fmt.Errorf("Cannot create GCP KMS service: %w", err)
 	}
 	req := &cloudkms.EncryptRequest{
 		Plaintext: base64.StdEncoding.EncodeToString(dataKey),
@@ -52,7 +52,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	resp, err := cloudkmsService.Projects.Locations.KeyRings.CryptoKeys.Encrypt(key.ResourceID, req).Do()
 	if err != nil {
 		log.WithField("resourceID", key.ResourceID).Info("Encryption failed")
-		return fmt.Errorf("Failed to call GCP KMS encryption service: %v", err)
+		return fmt.Errorf("Failed to call GCP KMS encryption service: %w", err)
 	}
 	log.WithField("resourceID", key.ResourceID).Info("Encryption succeeded")
 	key.EncryptedKey = resp.Ciphertext
@@ -72,7 +72,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	cloudkmsService, err := key.createCloudKMSService()
 	if err != nil {
 		log.WithField("resourceID", key.ResourceID).Info("Decryption failed")
-		return nil, fmt.Errorf("Cannot create GCP KMS service: %v", err)
+		return nil, fmt.Errorf("Cannot create GCP KMS service: %w", err)
 	}
 
 	req := &cloudkms.DecryptRequest{
@@ -81,7 +81,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	resp, err := cloudkmsService.Projects.Locations.KeyRings.CryptoKeys.Decrypt(key.ResourceID, req).Do()
 	if err != nil {
 		log.WithField("resourceID", key.ResourceID).Info("Decryption failed")
-		return nil, fmt.Errorf("Error decrypting key: %v", err)
+		return nil, fmt.Errorf("Error decrypting key: %w", err)
 	}
 	encryptedKey, err := base64.StdEncoding.DecodeString(resp.Plaintext)
 	if err != nil {

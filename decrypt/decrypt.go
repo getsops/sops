@@ -20,7 +20,7 @@ func File(path, format string) (cleartext []byte, err error) {
 	// Read the file into an []byte
 	encryptedData, err := ioutil.ReadFile(path)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to read %q: %v", path, err)
+		return nil, fmt.Errorf("Failed to read %q: %w", path, err)
 	}
 
 	// uses same logic as cli.

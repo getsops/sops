@@ -24,10 +24,11 @@ type ExecOpts struct {
 	Background bool
 	Fifo       bool
 	User       string
+	Filename   string
 }
 
-func GetFile(dir string) *os.File {
-	handle, err := ioutil.TempFile(dir, "tmp-file")
+func GetFile(dir, filename string) *os.File {
+	handle, err := ioutil.TempFile(dir, filename)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -54,10 +55,10 @@ func ExecWithFile(opts ExecOpts) error {
 	if opts.Fifo {
 		// fifo handling needs to be async, even opening to write
 		// will block if there is no reader present
-		filename = GetPipe(dir)
+		filename = GetPipe(dir, opts.Filename)
 		go WritePipe(filename, opts.Plaintext)
 	} else {
-		handle := GetFile(dir)
+		handle := GetFile(dir, opts.Filename)
 		handle.Write(opts.Plaintext)
 		handle.Close()
 		filename = handle.Name()

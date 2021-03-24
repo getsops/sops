@@ -208,6 +208,24 @@ destination_rules:
     path_regex: "vault-v1/*"
 `)
 
+var sampleConfigWithInvalidComplicatedRegexp = []byte(`
+creation_rules:
+  - path_regex: "[ ]\\K(?<!\\d )(?="
+    kms: default
+`)
+
+var sampleConfigWithComplicatedRegexp = []byte(`
+creation_rules:
+  - path_regex: "stage/dev/feature-.*"
+    kms: dev-feature 
+  - path_regex: "stage/dev/.*"
+    kms: dev
+  - path_regex: "stage/staging/.*"
+    kms: staging
+  - path_regex: "stage/.*/.*"
+    kms: default
+`)
+
 func parseConfigFile(confBytes []byte, t *testing.T) *configFile {
 	conf := &configFile{}
 	err := conf.load(confBytes)
@@ -283,6 +301,24 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 func TestLoadConfigFileWithNoMatchingRules(t *testing.T) {
 	_, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithNoMatchingRules, t), "foobar2000", nil)
 	assert.NotNil(t, err)
+}
+
+func TestLoadConfigFileWithInvalidComplicatedRegexp(t *testing.T) {
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithInvalidComplicatedRegexp, t), "stage/prod/api.yml", nil)
+	assert.Equal(t, "can not compile regexp: error parsing regexp: invalid escape sequence: `\\K`", err.Error())
+	assert.Nil(t, conf)
+}
+
+func TestLoadConfigFileWithComplicatedRegexp(t *testing.T) {
+	for filePath, k := range map[string]string{
+		"stage/prod/api.yml":        "default",
+		"stage/dev/feature-foo.yml": "dev-feature",
+		"stage/dev/api.yml":         "dev",
+	} {
+		conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithComplicatedRegexp, t), filePath, nil)
+		assert.Nil(t, err)
+		assert.Equal(t, k, conf.KeyGroups[0][0].ToString())
+	}
 }
 
 func TestLoadEmptyConfigFile(t *testing.T) {

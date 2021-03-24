@@ -2,7 +2,7 @@ SOPS: Secrets OPerationS
 ========================
 
 **sops** is an editor of encrypted files that supports YAML, JSON, ENV, INI and BINARY
-formats and encrypts with AWS KMS, GCP KMS, Azure Key Vault and PGP.
+formats and encrypts with AWS KMS, GCP KMS, Azure Key Vault, age, and PGP.
 (`demo <https://www.youtube.com/watch?v=YTEVyLXFiq0>`_)
 
 .. image:: https://i.imgur.com/X0TM5NI.gif
@@ -176,6 +176,33 @@ the example files and pgp key provided with the repository::
 	$ sops example.yaml
 
 This last step will decrypt ``example.yaml`` using the test private key.
+
+
+Encrypting using age
+~~~~~~~~~~~~~~~~~~~~
+
+`age <https://age-encryption.org/>`_ is a simple, modern, and secure tool for
+encrypting files. It's recommended to use age over PGP, if possible.
+
+You can encrypt a file for one or more age recipients (comma separated) using
+the ``--age`` option or the **SOPS_AGE_RECIPIENTS** environment variable:
+
+.. code:: bash
+
+   $ sops --age age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw test.yaml > test.enc.yaml
+
+When decrypting a file with the corresponding identity, sops will look for a
+text file name ``keys.txt`` located in a ``sops`` subdirectory of your user
+configuration directory. On Linux, this would be ``$XDG_CONFIG_HOME/sops/keys.txt``.
+On macOS, this would be ``$HOME/Library/Application Support/sops/keys.txt``. On
+Windows, this would be ``%AppData%\sops\keys.txt``. You can specify the location
+of this file manually by setting the environment variable **SOPS_AGE_KEY_FILE**.
+
+The contents of this key file should be a list of age X25519 identities, one
+per line. Lines beginning with ``#`` are considered comments and ignored. Each
+identity will be tried in sequence until one is able to decrypt the data.
+
+Encrypting with SSH keys via age is not yet supported by sops.
 
 
 Encrypting using GCP KMS
@@ -372,7 +399,7 @@ The sops team recommends the ``updatekeys`` approach.
 ``updatekeys`` command
 **********************
 
-The ``updatekeys`` command uses the `.sops.yaml <#29using-sopsyaml-conf-to-select-kmspgp-for-new-files>`_
+The ``updatekeys`` command uses the `.sops.yaml <#using-sops-yaml-conf-to-select-kms-pgp-for-new-files>`_
 configuration file to update (add or remove) the corresponding secrets in the
 encrypted file. Note that the example below uses the
 `Block Scalar yaml construct <https://yaml-multiline.info/>`_ to build a space
@@ -675,7 +702,7 @@ Specify a different GPG key server
 
 By default, ``sops`` uses the key server ``keys.openpgp.org`` to retrieve the GPG
 keys that are not present in the local keyring.
-This is no longer configurable. You can learn more about why from this write-up: [SKS Keyserver Network Under Attack](https://gist.github.com/rjhansen/67ab921ffb4084c865b3618d6955275f).
+This is no longer configurable. You can learn more about why from this write-up: `SKS Keyserver Network Under Attack <https://gist.github.com/rjhansen/67ab921ffb4084c865b3618d6955275f>`_.
 
 Example: place the following in your ``~/.bashrc``
 
@@ -985,6 +1012,9 @@ support dropping privileges before executing the new program via the
 encrypted file is only readable by root, but the target program does not
 need root privileges to function. This flag should be used where possible
 for added security.
+
+To overwrite the default file name (``tmp-file``) in ``exec-file`` use the
+``--filename <filename>`` parameter.
 
 .. code:: bash
 
@@ -1402,7 +1432,7 @@ By default, ``sops`` encrypts all the values of a YAML or JSON file and leaves t
 keys in cleartext. In some instances, you may want to exclude some values from
 being encrypted. This can be accomplished by adding the suffix **_unencrypted**
 to any key of a file. When set, all values underneath the key that set the
-**_unencrypted** prefix will be left in cleartext.
+**_unencrypted** suffix will be left in cleartext.
 
 Note that, while in cleartext, unencrypted content is still added to the
 checksum of the file, and thus cannot be modified outside of sops without
