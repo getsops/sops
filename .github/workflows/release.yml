@@ -37,7 +37,7 @@ jobs:
       - name: Copy already built linux binary
         run: cp tmppkg/usr/local/bin/sops dist/sops-${{ env.RELEASE_VERSION }}.linux
       - name: Create release
-        uses: "marvinpinto/action-automatic-releases@latest"
+        uses: "mozilla/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: true
