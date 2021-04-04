@@ -179,6 +179,7 @@ func MasterKeysFromRecipients(commaSeparatedRecipients string) ([]*MasterKey, er
 
 // MasterKeyFromRecipient takes a Bech32-encoded public key and returns a new MasterKey.
 func MasterKeyFromRecipient(recipient string) (*MasterKey, error) {
+	recipient = strings.TrimSpace(recipient)
 	parsedRecipient, err := parseRecipient(recipient)
 
 	if err != nil {
