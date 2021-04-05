@@ -23,6 +23,28 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+type CommaSeparatedValue []string
+
+func (a *CommaSeparatedValue) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	var multi []string
+	if err := unmarshal(&multi); err != nil {
+		var single string
+		if err := unmarshal(&single); err != nil {
+			return err
+		}
+
+		if single == "" {
+			*a = []string{}
+		} else {
+			*a = []string{single}
+		}
+	} else {
+		*a = multi
+	}
+
+	return nil
+}
+
 var log *logrus.Logger
 
 func init() {
@@ -110,9 +132,9 @@ type destinationRule struct {
 type creationRule struct {
 	PathRegex         string `yaml:"path_regex"`
 	KMS               string
-	AwsProfile        string `yaml:"aws_profile"`
-	Age               string `yaml:"age"`
-	PGP               string
+	AwsProfile        string              `yaml:"aws_profile"`
+	Age               CommaSeparatedValue `yaml:"age"`
+	PGP               CommaSeparatedValue
 	GCPKMS            string     `yaml:"gcp_kms"`
 	AzureKeyVault     string     `yaml:"azure_keyvault"`
 	VaultURI          string     `yaml:"hc_vault_transit_uri"`
@@ -180,7 +202,7 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		}
 	} else {
 		var keyGroup sops.KeyGroup
-		if cRule.Age != "" {
+		if len(cRule.Age) > 0 {
 			ageKeys, err := age.MasterKeysFromRecipients(cRule.Age)
 			if err != nil {
 				return nil, err

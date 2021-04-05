@@ -6,7 +6,6 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"filippo.io/age"
 	"filippo.io/age/armor"
@@ -155,14 +154,12 @@ func (key *MasterKey) ToMap() map[string]interface{} {
 
 // MasterKeysFromRecipients takes a comma-separated list of Bech32-encoded public keys and returns a
 // slice of new MasterKeys.
-func MasterKeysFromRecipients(commaSeparatedRecipients string) ([]*MasterKey, error) {
-	if commaSeparatedRecipients == "" {
-		// otherwise Split returns [""] and MasterKeyFromRecipient is unhappy
+func MasterKeysFromRecipients(recipients []string) ([]*MasterKey, error) {
+	var keys []*MasterKey
+
+	if len(recipients) < 1 {
 		return make([]*MasterKey, 0), nil
 	}
-	recipients := strings.Split(commaSeparatedRecipients, ",")
-
-	var keys []*MasterKey
 
 	for _, recipient := range recipients {
 		key, err := MasterKeyFromRecipient(recipient)

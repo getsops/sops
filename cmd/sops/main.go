@@ -574,7 +574,7 @@ func main() {
 			Usage:  "comma separated list of vault's key URI (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev')",
 			EnvVar: "SOPS_VAULT_URIS",
 		},
-		cli.StringFlag{
+		cli.StringSliceFlag{
 			Name:   "pgp, p",
 			Usage:  "comma separated list of PGP fingerprints",
 			EnvVar: "SOPS_PGP_FP",
@@ -822,7 +822,7 @@ func main() {
 			for _, k := range kms.MasterKeysFromArnString(c.String("add-kms"), kmsEncryptionContext, c.String("aws-profile")) {
 				addMasterKeys = append(addMasterKeys, k)
 			}
-			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("add-pgp")) {
+			for _, k := range pgp.MasterKeysFromFingerprintString(c.StringSlice("add-pgp")) {
 				addMasterKeys = append(addMasterKeys, k)
 			}
 			for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("add-gcp-kms")) {
@@ -842,7 +842,7 @@ func main() {
 			for _, k := range hcVaultKeys {
 				addMasterKeys = append(addMasterKeys, k)
 			}
-			ageKeys, err := age.MasterKeysFromRecipients(c.String("add-age"))
+			ageKeys, err := age.MasterKeysFromRecipients(c.StringSlice("add-age"))
 			if err != nil {
 				return err
 			}
@@ -854,7 +854,7 @@ func main() {
 			for _, k := range kms.MasterKeysFromArnString(c.String("rm-kms"), kmsEncryptionContext, c.String("aws-profile")) {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
-			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("rm-pgp")) {
+			for _, k := range pgp.MasterKeysFromFingerprintString(c.StringSlice("rm-pgp")) {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
 			for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("rm-gcp-kms")) {
@@ -874,7 +874,7 @@ func main() {
 			for _, k := range hcVaultKeys {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
-			ageKeys, err = age.MasterKeysFromRecipients(c.String("rm-age"))
+			ageKeys, err = age.MasterKeysFromRecipients(c.StringSlice("rm-age"))
 			if err != nil {
 				return err
 			}
@@ -1111,12 +1111,12 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 		}
 	}
 	if c.String("pgp") != "" {
-		for _, k := range pgp.MasterKeysFromFingerprintString(c.String("pgp")) {
+		for _, k := range pgp.MasterKeysFromFingerprintString(c.StringSlice("pgp")) {
 			pgpKeys = append(pgpKeys, k)
 		}
 	}
 	if c.String("age") != "" {
-		ageKeys, err := age.MasterKeysFromRecipients(c.String("age"))
+		ageKeys, err := age.MasterKeysFromRecipients(c.StringSlice("age"))
 		if err != nil {
 			return nil, err
 		}

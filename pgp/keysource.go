@@ -268,12 +268,9 @@ func NewMasterKeyFromFingerprint(fingerprint string) *MasterKey {
 }
 
 // MasterKeysFromFingerprintString takes a comma separated list of PGP fingerprints and returns a slice of new MasterKeys with those fingerprints
-func MasterKeysFromFingerprintString(fingerprint string) []*MasterKey {
+func MasterKeysFromFingerprintString(fingerprints []string) []*MasterKey {
 	var keys []*MasterKey
-	if fingerprint == "" {
-		return keys
-	}
-	for _, s := range strings.Split(fingerprint, ",") {
+	for _, s := range fingerprints {
 		keys = append(keys, NewMasterKeyFromFingerprint(s))
 	}
 	return keys

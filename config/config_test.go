@@ -239,14 +239,14 @@ func TestLoadConfigFile(t *testing.T) {
 			{
 				PathRegex: "foobar*",
 				KMS:       "1",
-				PGP:       "2",
+				PGP:       []string{"2"},
 				GCPKMS:    "3",
 				VaultURI:  "http://4:8200/v1/4/keys/4",
 			},
 			{
 				PathRegex: "",
 				KMS:       "foo",
-				PGP:       "bar",
+				PGP:       []string{"bar"},
 				GCPKMS:    "baz",
 				VaultURI:  "http://127.0.1.1/v1/baz/keys/baz",
 			},
@@ -265,7 +265,7 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 			{
 				PathRegex: "foobar*",
 				KMS:       "1",
-				PGP:       "2",
+				PGP:       []string{"2"},
 			},
 			{
 				PathRegex: "",

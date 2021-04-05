@@ -31,7 +31,7 @@ func TestPGP(t *testing.T) {
 }
 
 func TestPGPKeySourceFromString(t *testing.T) {
-	s := "C8C5 2C0A B2A4 8174 01E8  12C8 F3CC 3233 3FAD 9F1E, C8C5 2C0A B2A4 8174 01E8  12C8 F3CC 3233 3FAD 9F1E"
+	s := []string{"C8C5 2C0A B2A4 8174 01E8  12C8 F3CC 3233 3FAD 9F1E", "C8C5 2C0A B2A4 8174 01E8  12C8 F3CC 3233 3FAD 9F1E"}
 	ks := MasterKeysFromFingerprintString(s)
 	expected := "C8C52C0AB2A4817401E812C8F3CC32333FAD9F1E"
 	if ks[0].Fingerprint != expected {
