@@ -42,7 +42,7 @@ require (
 	golang.org/x/crypto v0.0.0-20210220033148-5ea612d1eb83
 	golang.org/x/net v0.0.0-20201110031124-69a78807bb2b
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
-	golang.org/x/sys v0.0.0-20210220050731-9a76102bfb43 // indirect
+	golang.org/x/sys v0.0.0-20210220050731-9a76102bfb43
 	google.golang.org/api v0.7.0
 	google.golang.org/grpc v1.27.0
 	google.golang.org/protobuf v1.25.0
