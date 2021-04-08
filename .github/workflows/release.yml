@@ -47,5 +47,5 @@ jobs:
             dist/sops-${{ env.RELEASE_VERSION }}.exe
             dist/sops-${{ env.RELEASE_VERSION }}.darwin
             dist/sops-${{ env.RELEASE_VERSION }}.linux
-            dist/sops-${{ env.RELEASE_NUMBER }}_amd64.deb
+            dist/sops_${{ env.RELEASE_NUMBER }}_amd64.deb
             dist/sops-${{ env.RELEASE_NUMBER }}-1.x86_64.rpm
