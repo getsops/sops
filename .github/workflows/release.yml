@@ -30,6 +30,8 @@ jobs:
         run: mv *.deb *.rpm dist/
       - name: Set RELEASE_VERSION
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Set RELEASE_NUMBER
+        run: echo "RELEASE_NUMBER=$(echo $RELEASE_VERSION | cut -c2-)" >> $GITHUB_ENV
       - name: Build darwin binary
         run: GOOS=darwin CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.darwin go.mozilla.org/sops/v3/cmd/sops
       - name: Build windows binary
@@ -42,8 +44,8 @@ jobs:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: true
           files: |
-            dist/sops-${{ env.RELEASE_VERSION }}.windows
+            dist/sops-${{ env.RELEASE_VERSION }}.exe
             dist/sops-${{ env.RELEASE_VERSION }}.darwin
             dist/sops-${{ env.RELEASE_VERSION }}.linux
-            dist/sops_${{ env.RELEASE_VERSION }}_amd64.deb
-            dist/sops_${{ env.RELEASE_VERSION }}-1.x86_64.rpm
+            dist/sops-${{ env.RELEASE_NUMBER }}_amd64.deb
+            dist/sops-${{ env.RELEASE_NUMBER }}-1.x86_64.rpm
