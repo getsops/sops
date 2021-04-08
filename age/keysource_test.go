@@ -20,6 +20,16 @@ func TestMasterKeysFromRecipientsEmpty(t *testing.T) {
 	assert.Equal(recipients, make([]*MasterKey, 0))
 }
 
+func TestMasterKeyFromRecipientWithLeadingAndTrailingSpaces(t *testing.T) {
+	assert := assert.New(t)
+
+	key, err := MasterKeyFromRecipient("  age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw  ")
+
+	assert.NoError(err)
+
+	assert.Equal(key.Recipient, "age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw")
+}
+
 func TestAge(t *testing.T) {
 	assert := assert.New(t)
 
