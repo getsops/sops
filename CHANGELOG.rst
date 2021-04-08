@@ -1,6 +1,15 @@
 Changelog
 =========
 
+3.7.1
+-----
+Changes:
+
+    * Security fix
+    * Add release workflow (#843)
+    * Fix issue where CI wouldn't run against master (#848)
+    * Trim extra whitespace around age keys (#846)
+
 3.7.0
 -----
 Features:
