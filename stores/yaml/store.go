@@ -70,7 +70,7 @@ func (store Store) nodeToTreeValue(node *yaml.Node, commentsWereHandled bool) (i
 		return result, nil
 	case yaml.MappingNode:
 		branch := make(sops.TreeBranch, 0)
-		return store.appendYamlNodeToTreeBranch(node, branch, false)
+		return store.appendYamlNodeToTreeBranch(node, branch, commentsWereHandled)
 	case yaml.ScalarNode:
 		var result interface{}
 		node.Decode(&result)
