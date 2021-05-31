@@ -132,6 +132,10 @@ func main() {
 					Name:  "user",
 					Usage: "the user to run the command as",
 				},
+				cli.BoolFlag{
+					Name: "same-process",
+					Usage: "run command in the current process instead of in a child process",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if len(c.Args()) != 2 {
@@ -159,10 +163,11 @@ func main() {
 				}
 
 				if err := exec.ExecWithEnv(exec.ExecOpts{
-					Command:    command,
-					Plaintext:  output,
-					Background: c.Bool("background"),
-					User:       c.String("user"),
+					Command:      command,
+					Plaintext:    output,
+					Background:   c.Bool("background"),
+					User:         c.String("user"),
+					SameProcess:  c.Bool("same-process"),
 				}); err != nil {
 					return toExitError(err)
 				}
