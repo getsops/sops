@@ -1,6 +1,32 @@
 Changelog
 =========
 
+3.7.1
+-----
+Changes:
+
+    * Security fix
+    * Add release workflow (#843)
+    * Fix issue where CI wouldn't run against master (#848)
+    * Trim extra whitespace around age keys (#846)
+
+3.7.0
+-----
+Features:
+
+    * Add support for age (#688)
+    * Add filename to exec-file (#761)
+
+Changes:
+
+    * On failed decryption with GPG, return the error returned by GPG to the sops user (#762)
+    * Use yaml.v3 instead of modified yaml.v2 for handling YAML files (#791)
+    * Update aws-sdk-go to version v1.37.18 (#823)
+
+Project Changes:
+
+    * Switch from TravisCI to Github Actions (#792)
+
 3.6.1
 -----
 Features:

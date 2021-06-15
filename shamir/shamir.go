@@ -215,7 +215,7 @@ func Split(secret []byte, parts, threshold int) ([][]byte, error) {
 		// This polynomial crosses the y axis at `val`.
 		p, err := makePolynomial(val, uint8(threshold-1))
 		if err != nil {
-			return nil, fmt.Errorf("failed to generate polynomial: %v", err)
+			return nil, fmt.Errorf("failed to generate polynomial: %w", err)
 		}
 
 		// Generate a `parts` number of (x,y) pairs
