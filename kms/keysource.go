@@ -175,7 +175,7 @@ func (key MasterKey) createStsSession(config aws.Config, sess *session.Session) 
 
 	// Make sure the name is no longer than 64 characters (role session name length limit from AWS)
 	roleSessionNameLengthLimit := 64
-	if len(name) > roleSessionNameLengthLimit {
+	if len(name) >= roleSessionNameLengthLimit {
 		name = name[:roleSessionNameLengthLimit]
 	}
 
