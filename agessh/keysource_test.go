@@ -23,7 +23,7 @@ func TestMasterKeysFromFilesEmpty(t *testing.T) {
 func TestAgeSSH(t *testing.T) {
 	assert := assert.New(t)
 
-	key, err := MasterKeyFromFile("key.pub")
+	key, err := MasterKeyFromFile("testkey.pub")
 
 	assert.NoError(err)
 	assert.Equal("ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBI1+Q+ntzANebtnicCiAY29uqLGWOaOGLEa8bUqOVmS", key.ToString())
@@ -34,7 +34,7 @@ func TestAgeSSH(t *testing.T) {
 	assert.NoError(err)
 
 	_, filename, _, _ := runtime.Caller(0)
-	err = os.Setenv(fileEnv, path.Join(path.Dir(filename), "key.priv"))
+	err = os.Setenv(fileEnv, path.Join(path.Dir(filename), "testkey.priv"))
 	assert.NoError(err)
 
 	decryptedKey, err := key.Decrypt()
@@ -45,7 +45,7 @@ func TestAgeSSH(t *testing.T) {
 func TestAgeDotEnv(t *testing.T) {
 	assert := assert.New(t)
 
-	key, err := MasterKeyFromFile("key.pub")
+	key, err := MasterKeyFromFile("testkey.pub")
 
 	assert.NoError(err)
 	assert.Equal("ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBI1+Q+ntzANebtnicCiAY29uqLGWOaOGLEa8bUqOVmS", key.ToString())
@@ -60,7 +60,7 @@ DOMAIN=files.127.0.0.1.nip.io`
 	assert.NoError(err)
 
 	_, filename, _, _ := runtime.Caller(0)
-	err = os.Setenv(fileEnv, path.Join(path.Dir(filename), "key.priv"))
+	err = os.Setenv(fileEnv, path.Join(path.Dir(filename), "testkey.priv"))
 	assert.NoError(err)
 
 	decryptedKey, err := key.Decrypt()
