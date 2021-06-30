@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"go.mozilla.org/sops/v3/age"
+	"go.mozilla.org/sops/v3/agessh"
 	"go.mozilla.org/sops/v3/azkv"
 	"go.mozilla.org/sops/v3/gcpkms"
 	"go.mozilla.org/sops/v3/hcvault"
@@ -75,6 +76,14 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 			KeyType: &Key_AgeKey{
 				AgeKey: &AgeKey{
 					Recipient: mk.Recipient,
+				},
+			},
+		}
+	case *agessh.MasterKey:
+		return Key{
+			KeyType: &Key_AgeSshKey{
+				&AgeSSHKey{
+					PublicKey: mk.PublicKey,
 				},
 			},
 		}

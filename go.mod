@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	cloud.google.com/go v0.43.0
-	filippo.io/age v1.0.0-beta7
+	filippo.io/age v1.0.0-rc.3
 	github.com/Azure/azure-sdk-for-go v31.2.0+incompatible
 	github.com/Azure/go-ansiterm v0.0.0-20170929234023-d6e3b3328b78 // indirect
 	github.com/Azure/go-autorest/autorest v0.9.0
@@ -20,7 +20,6 @@ require (
 	github.com/docker/go-connections v0.4.0 // indirect
 	github.com/docker/go-units v0.4.0 // indirect
 	github.com/fatih/color v1.7.0
-	github.com/golang/protobuf v1.4.1
 	github.com/google/go-cmp v0.5.0
 	github.com/google/shlex v0.0.0-20181106134648-c34317bd91bf
 	github.com/gotestyourself/gotestyourself v2.2.0+incompatible // indirect

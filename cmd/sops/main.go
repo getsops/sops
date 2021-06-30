@@ -17,6 +17,7 @@ import (
 	"go.mozilla.org/sops/v3"
 	"go.mozilla.org/sops/v3/aes"
 	"go.mozilla.org/sops/v3/age"
+	"go.mozilla.org/sops/v3/agessh"
 	_ "go.mozilla.org/sops/v3/audit"
 	"go.mozilla.org/sops/v3/azkv"
 	"go.mozilla.org/sops/v3/cmd/sops/codes"
@@ -99,6 +100,9 @@ func main() {
 
    To encrypt or decrypt using age, specify the recipient in the -a flag, or
    in the SOPS_AGE_RECIPIENTS environment variable.
+
+   To encrypt or decrypt using age, specify the recipient in the --ssh flag, or
+   in the SOPS_AGE_SSH_PRIVATE_KEY environment variable.
 
    To encrypt or decrypt using PGP, specify the PGP fingerprint in the
    -p flag or in the SOPS_PGP_FP environment variable.
@@ -395,6 +399,10 @@ func main() {
 							Name:  "age",
 							Usage: "the age recipient the new group should contain. Can be specified more than once",
 						},
+						cli.StringSliceFlag{
+							Name:  "ssh",
+							Usage: "the ssh recipient the new group should contain. Can be specified more than once",
+						},
 						cli.BoolFlag{
 							Name:  "in-place, i",
 							Usage: "write output back to the same file instead of stdout",
@@ -415,6 +423,7 @@ func main() {
 						vaultURIs := c.StringSlice("hc-vault-transit")
 						azkvs := c.StringSlice("azure-kv")
 						ageRecipients := c.StringSlice("age")
+						ageSSHRecipients := c.StringSlice("ssh")
 						var group sops.KeyGroup
 						for _, fp := range pgpFps {
 							group = append(group, pgp.NewMasterKeyFromFingerprint(fp))
@@ -443,6 +452,14 @@ func main() {
 						}
 						for _, recipient := range ageRecipients {
 							k, err := age.MasterKeyFromRecipient(recipient)
+							if err != nil {
+								log.WithError(err).Error("Failed to add key")
+								continue
+							}
+							group = append(group, k)
+						}
+						for _, recipient := range ageSSHRecipients {
+							k, err := agessh.MasterKeyFromFile(recipient)
 							if err != nil {
 								log.WithError(err).Error("Failed to add key")
 								continue
@@ -584,6 +601,11 @@ func main() {
 			Usage:  "comma separated list of age recipients",
 			EnvVar: "SOPS_AGE_RECIPIENTS",
 		},
+		cli.StringFlag{
+			Name:   "ssh",
+			Usage:  "comma separated list of ssh public keys",
+			EnvVar: "SOPS_AGE_SSH_PUBLIC_KEYS",
+		},
 		cli.BoolFlag{
 			Name:  "in-place, i",
 			Usage: "write output back to the same file instead of stdout",
@@ -643,6 +665,14 @@ func main() {
 		cli.StringFlag{
 			Name:  "rm-age",
 			Usage: "remove the provided comma-separated list of age recipients from the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "add-ssh",
+			Usage: "add the provided comma-separated list of ssh public keys to the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "rm-ssh",
+			Usage: "remove the provided comma-separated list of ssh public keys from the list of master keys on the given file",
 		},
 		cli.StringFlag{
 			Name:  "add-pgp",
@@ -850,6 +880,14 @@ func main() {
 				addMasterKeys = append(addMasterKeys, k)
 			}
 
+			ageSSHKeys, err := agessh.MasterKeysFromPublicKeyFiles(c.String("add-ssh"))
+			if err != nil {
+				return err
+			}
+			for _, k := range ageSSHKeys {
+				addMasterKeys = append(addMasterKeys, k)
+			}
+
 			var rmMasterKeys []keys.MasterKey
 			for _, k := range kms.MasterKeysFromArnString(c.String("rm-kms"), kmsEncryptionContext, c.String("aws-profile")) {
 				rmMasterKeys = append(rmMasterKeys, k)
@@ -879,6 +917,13 @@ func main() {
 				return err
 			}
 			for _, k := range ageKeys {
+				rmMasterKeys = append(rmMasterKeys, k)
+			}
+			ageSSHKeys, err = agessh.MasterKeysFromPublicKeyFiles(c.String("rm-ssh"))
+			if err != nil {
+				return err
+			}
+			for _, k := range ageSSHKeys {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
 
@@ -1124,7 +1169,16 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 			ageMasterKeys = append(ageMasterKeys, k)
 		}
 	}
-	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("azure-kv") == "" && c.String("hc-vault-transit") == "" && c.String("age") == "" {
+	if c.String("ssh") != "" {
+		ageSSHKeys, err := agessh.MasterKeysFromPublicKeyFiles(c.String("ssh"))
+		if err != nil {
+			return nil, err
+		}
+		for _, k := range ageSSHKeys {
+			ageMasterKeys = append(ageMasterKeys, k)
+		}
+	}
+	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("azure-kv") == "" && c.String("hc-vault-transit") == "" && c.String("age") == "" && c.String("ssh") == "" {
 		conf, err := loadConfig(c, file, kmsEncryptionContext)
 		// config file might just not be supplied, without any error
 		if conf == nil {
