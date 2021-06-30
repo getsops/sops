@@ -1,6 +1,6 @@
 module go.mozilla.org/sops/v3
 
-go 1.13
+go 1.16
 
 require (
 	cloud.google.com/go v0.43.0
