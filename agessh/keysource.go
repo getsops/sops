@@ -31,11 +31,10 @@ type MasterKey struct {
 	PublicKey    string // ssh public key
 	EncryptedKey string // a sops data key encrypted with age
 
-	parsedIdentity  age.Identity  // a parsed age identity from private key
-	parsedRecipient age.Recipient // a parsed age recipient from public key
+	parsedRecipient age.Recipient // a parsed age recipient from ssh public key
 }
 
-// Encrypt takes a sops data key, encrypts it with age and stores the result in the EncryptedKey field.
+// Encrypt takes a sops data key, encrypts it with age using the ssh public key and stores the result in the EncryptedKey field.
 func (key *MasterKey) Encrypt(datakey []byte) error {
 	buffer := &bytes.Buffer{}
 
@@ -53,7 +52,7 @@ func (key *MasterKey) Encrypt(datakey []byte) error {
 	aw := armor.NewWriter(buffer)
 	w, err := age.Encrypt(aw, key.parsedRecipient)
 	if err != nil {
-		return fmt.Errorf("failed to open file for encrypting sops data key with age: %w", err)
+		return fmt.Errorf("failed to open file for encrypting sops data key with age ssh: %w", err)
 	}
 
 	if _, err := w.Write(datakey); err != nil {
@@ -225,7 +224,7 @@ func parseRecipient(recipient string) (age.Recipient, error) {
 	parsedRecipient, err := agessh.ParseRecipient(recipient)
 
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse input as Bech32-encoded age public key: %w", err)
+		return nil, fmt.Errorf("failed to parse input as PEM encoded ssh public key: %w", err)
 	}
 
 	return parsedRecipient, nil
