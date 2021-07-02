@@ -577,6 +577,36 @@ func TestSetNewKey(t *testing.T) {
 	assert.Equal(t, "hello", set[0].Value.(TreeBranch)[0].Value.(TreeBranch)[1].Value)
 }
 
+func TestSetNewBranch(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key:   "key",
+			Value: "value",
+		},
+	}
+	set := branch.Set([]interface{}{"foo", "bar", "baz"}, "hello")
+	assert.Equal(t, TreeBranch{
+		TreeItem{
+			Key:   "key",
+			Value: "value",
+		},
+		TreeItem{
+			Key: "foo",
+			Value: TreeBranch{
+				TreeItem{
+					Key: "bar",
+					Value: TreeBranch{
+						TreeItem{
+							Key:   "baz",
+							Value: "hello",
+						},
+					},
+				},
+			},
+		},
+	}, set)
+}
+
 func TestSetArrayDeepNew(t *testing.T) {
 	branch := TreeBranch{
 		TreeItem{

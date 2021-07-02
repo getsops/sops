@@ -148,10 +148,11 @@ func set(branch interface{}, path []interface{}, value interface{}) interface{} 
 			}
 		}
 		// Not found, need to add the next path entry to the branch
-		if len(path) == 1 {
-			return append(branch, TreeItem{Key: path[0], Value: value})
+		value := valueFromPathAndLeaf(path, value)
+		if newBranch, ok := value.(TreeBranch); ok && len(newBranch) > 0 {
+			return append(branch, newBranch[0])
 		}
-		return valueFromPathAndLeaf(path, value)
+		return branch
 	case []interface{}:
 		position := path[0].(int)
 		if len(path) == 1 {
