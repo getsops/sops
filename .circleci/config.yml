@@ -24,6 +24,11 @@ jobs:
           command: |
             docker build -t mozilla/sops .
             docker tag mozilla/sops "mozilla/sops:$CIRCLE_SHA1"
+      - run:
+          name: Build containers (alpine)
+          command: |
+            # Just to ensure the container can be built.
+            docker build -f Dockerfile.alpine -t mozilla/sops:alpine .
 
   push:
     machine: true
