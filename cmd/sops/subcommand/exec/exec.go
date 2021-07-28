@@ -21,6 +21,7 @@ type ExecOpts struct {
 	Command    string
 	Plaintext  []byte
 	Background bool
+	Pristine   bool
 	Fifo       bool
 	User       string
 	Filename   string
@@ -83,7 +84,12 @@ func ExecWithEnv(opts ExecOpts) error {
 		SwitchUser(opts.User)
 	}
 
-	env := os.Environ()
+	var env []string
+
+	if !opts.Pristine {
+		env = os.Environ()
+	}
+
 	lines := bytes.Split(opts.Plaintext, []byte("\n"))
 	for _, line := range lines {
 		if len(line) == 0 {
