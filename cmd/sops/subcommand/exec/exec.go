@@ -2,8 +2,11 @@ package exec
 
 import (
 	"bytes"
+	"context"
 	"io/ioutil"
 	"os"
+	"os/exec"
+	"os/signal"
 	"runtime"
 	"strings"
 
@@ -76,7 +79,14 @@ func ExecWithFile(opts ExecOpts) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	return cmd.Run()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	if err := cmd.Start(); err != nil {
+		return err
+	}
+	redirectSignals(ctx, cmd)
+
+	return cmd.Wait()
 }
 
 func ExecWithEnv(opts ExecOpts) error {
@@ -107,5 +117,32 @@ func ExecWithEnv(opts ExecOpts) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
-	return cmd.Run()
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	if err := cmd.Start(); err != nil {
+		return err
+	}
+	redirectSignals(ctx, cmd)
+
+	return cmd.Wait()
+}
+
+func redirectSignals(ctx context.Context, cmd *exec.Cmd) {
+	sigc := make(chan os.Signal, 1)
+	signal.Notify(sigc)
+
+	go func(c chan os.Signal) {
+		for {
+			select {
+			case sig := <-c:
+				if err := cmd.Process.Signal(sig); err != nil {
+					log.Warn("Unable to send a signal to the child process")
+					continue
+				}
+			case <-ctx.Done():
+				signal.Stop(sigc)
+				return
+			}
+		}
+	}(sigc)
 }

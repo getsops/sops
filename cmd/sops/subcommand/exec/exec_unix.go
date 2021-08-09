@@ -12,7 +12,9 @@ import (
 )
 
 func BuildCommand(command string) *exec.Cmd {
-	return exec.Command("/bin/sh", "-c", command)
+	cmd := exec.Command("/bin/sh", "-c", command)
+	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true, Pgid: 0}
+	return cmd
 }
 
 func WritePipe(pipe string, contents []byte) {
