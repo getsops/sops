@@ -22,8 +22,8 @@ import (
 	"github.com/sirupsen/logrus"
 	gpgagent "go.mozilla.org/gopgagent"
 	"go.mozilla.org/sops/v3/logging"
-	"golang.org/x/crypto/openpgp"
-	"golang.org/x/crypto/openpgp/armor"
+	"github.com/ProtonMail/go-crypto/openpgp"
+	"github.com/ProtonMail/go-crypto/openpgp/armor"
 )
 
 var log *logrus.Logger
