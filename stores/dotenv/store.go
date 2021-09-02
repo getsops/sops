@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"go.mozilla.org/sops/v3"
+	"go.mozilla.org/sops/v3/config"
 	"go.mozilla.org/sops/v3/stores"
 )
 
@@ -15,6 +16,11 @@ const SopsPrefix = "sops_"
 
 // Store handles storage of dotenv data
 type Store struct {
+	config config.DotenvStoreConfig
+}
+
+func NewStore(c *config.DotenvStoreConfig) *Store {
+	return &Store{config: *c}
 }
 
 // LoadEncryptedFile loads an encrypted file's bytes onto a sops.Tree runtime object
@@ -187,4 +193,7 @@ func isComplexValue(v interface{}) bool {
 		return true
 	}
 	return false
+}
+
+func (store *Store) Configure(c *config.Config) {
 }

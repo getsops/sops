@@ -39,7 +39,11 @@ func UpdateKeys(opts Opts) error {
 }
 
 func updateFile(opts Opts) error {
-	store := common.DefaultStoreForPath(opts.InputPath)
+	sc, err := config.LoadStoresConfig(opts.ConfigPath)
+	if err != nil {
+		return err
+	}
+	store := common.DefaultStoreForPath(sc, opts.InputPath)
 	log.Printf("Syncing keys for file %s", opts.InputPath)
 	tree, err := common.LoadEncryptedFile(store, opts.InputPath)
 	if err != nil {
