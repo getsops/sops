@@ -7,12 +7,18 @@ import (
 	"strings"
 
 	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/config"
 	"github.com/getsops/sops/v3/stores"
 	"gopkg.in/yaml.v3"
 )
 
 // Store handles storage of YAML data
 type Store struct {
+	config config.YAMLStoreConfig
+}
+
+func NewStore(c *config.YAMLStoreConfig) *Store {
+	return &Store{config: *c}
 }
 
 func (store Store) appendCommentToList(comment string, list []interface{}) []interface{} {
@@ -390,4 +396,7 @@ func (store *Store) EmitExample() []byte {
 		panic(err)
 	}
 	return bytes
+}
+
+func (store *Store) Configure(c *config.Config) {
 }

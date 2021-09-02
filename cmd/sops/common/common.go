@@ -10,6 +10,7 @@ import (
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/cmd/sops/codes"
 	. "github.com/getsops/sops/v3/cmd/sops/formats"
+	"github.com/getsops/sops/v3/config"
 	"github.com/getsops/sops/v3/keys"
 	"github.com/getsops/sops/v3/keyservice"
 	"github.com/getsops/sops/v3/kms"
@@ -29,32 +30,37 @@ type ExampleFileEmitter interface {
 	EmitExample() []byte
 }
 
+type Configurable interface {
+	Configure(*config.Config)
+}
+
 // Store handles marshaling and unmarshaling from SOPS files
 type Store interface {
 	sops.Store
 	ExampleFileEmitter
+	Configurable
 }
 
-type storeConstructor = func() Store
+type storeConstructor = func(*config.StoresConfig) Store
 
-func newBinaryStore() Store {
-	return &json.BinaryStore{}
+func newBinaryStore(c *config.StoresConfig) Store {
+	return json.NewBinaryStore(&c.JSONBinary)
 }
 
-func newDotenvStore() Store {
-	return &dotenv.Store{}
+func newDotenvStore(c *config.StoresConfig) Store {
+	return dotenv.NewStore(&c.Dotenv)
 }
 
-func newIniStore() Store {
-	return &ini.Store{}
+func newIniStore(c *config.StoresConfig) Store {
+	return ini.NewStore(&c.INI)
 }
 
-func newJsonStore() Store {
-	return &json.Store{}
+func newJsonStore(c *config.StoresConfig) Store {
+	return json.NewStore(&c.JSON)
 }
 
-func newYamlStore() Store {
-	return &yaml.Store{}
+func newYamlStore(c *config.StoresConfig) Store {
+	return yaml.NewStore(&c.YAML)
 }
 
 var storeConstructors = map[Format]storeConstructor{
@@ -153,27 +159,27 @@ func NewExitError(i interface{}, exitCode int) *cli.ExitError {
 
 // StoreForFormat returns the correct format-specific implementation
 // of the Store interface given the format.
-func StoreForFormat(format Format) Store {
+func StoreForFormat(format Format, c *config.StoresConfig) Store {
 	storeConst, found := storeConstructors[format]
 	if !found {
 		storeConst = storeConstructors[Binary] // default
 	}
-	return storeConst()
+	return storeConst(c)
 }
 
 // DefaultStoreForPath returns the correct format-specific implementation
 // of the Store interface given the path to a file
-func DefaultStoreForPath(path string) Store {
+func DefaultStoreForPath(c *config.StoresConfig, path string) Store {
 	format := FormatForPath(path)
-	return StoreForFormat(format)
+	return StoreForFormat(format, c)
 }
 
 // DefaultStoreForPathOrFormat returns the correct format-specific implementation
 // of the Store interface given the formatString if specified, or the path to a file.
 // This is to support the cli, where both are provided.
-func DefaultStoreForPathOrFormat(path, format string) Store {
+func DefaultStoreForPathOrFormat(c *config.StoresConfig, path string, format string) Store {
 	formatFmt := FormatForPathOrString(path, format)
-	return StoreForFormat(formatFmt)
+	return StoreForFormat(formatFmt, c)
 }
 
 // KMS_ENC_CTX_BUG_FIXED_VERSION represents the SOPS version in which the

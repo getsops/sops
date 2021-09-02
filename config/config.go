@@ -63,9 +63,30 @@ func FindConfigFile(start string) (string, error) {
 	return "", fmt.Errorf("Config file not found")
 }
 
+type DotenvStoreConfig struct{}
+
+type INIStoreConfig struct{}
+
+type JSONStoreConfig struct{}
+
+type JSONBinaryStoreConfig struct{}
+
+type YAMLStoreConfig struct {
+	Indent int `yaml:"indent"`
+}
+
+type StoresConfig struct {
+	Dotenv     DotenvStoreConfig     `yaml:"dotenv"`
+	INI        INIStoreConfig        `yaml:"ini"`
+	JSONBinary JSONBinaryStoreConfig `yaml:"json_binary"`
+	JSON       JSONStoreConfig       `yaml:"json"`
+	YAML       YAMLStoreConfig       `yaml:"yaml"`
+}
+
 type configFile struct {
 	CreationRules    []creationRule    `yaml:"creation_rules"`
 	DestinationRules []destinationRule `yaml:"destination_rules"`
+	Stores           StoresConfig      `yaml:"stores"`
 }
 
 type keyGroup struct {
@@ -385,4 +406,12 @@ func LoadDestinationRuleForFile(confPath string, filePath string, kmsEncryptionC
 		return nil, err
 	}
 	return parseDestinationRuleForFile(conf, filePath, kmsEncryptionContext)
+}
+
+func LoadStoresConfig(confPath string) (*StoresConfig, error) {
+	conf, err := loadConfigFile(confPath)
+	if err != nil {
+		return nil, err
+	}
+	return &conf.Stores, nil
 }

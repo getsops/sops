@@ -8,16 +8,27 @@ import (
 	"io"
 
 	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/config"
 	"github.com/getsops/sops/v3/stores"
 )
 
 // Store handles storage of JSON data.
 type Store struct {
+	config config.JSONStoreConfig
+}
+
+func NewStore(c *config.JSONStoreConfig) *Store {
+	return &Store{config: *c}
 }
 
 // BinaryStore handles storage of binary data in a JSON envelope.
 type BinaryStore struct {
-	store Store
+	store  Store
+	config config.JSONBinaryStoreConfig
+}
+
+func NewBinaryStore(c *config.JSONBinaryStoreConfig) *BinaryStore {
+	return &BinaryStore{config: *c}
 }
 
 // LoadEncryptedFile loads an encrypted json file onto a sops.Tree object
@@ -336,4 +347,10 @@ func (store *Store) EmitExample() []byte {
 		panic(err)
 	}
 	return bytes
+}
+
+func (store *Store) Configure(c *config.Config) {
+}
+
+func (store *BinaryStore) Configure(c *config.Config) {
 }

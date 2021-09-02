@@ -9,12 +9,18 @@ import (
 	"strings"
 
 	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/config"
 	"github.com/getsops/sops/v3/stores"
 	"gopkg.in/ini.v1"
 )
 
 // Store handles storage of ini data.
 type Store struct {
+	config *config.INIStoreConfig
+}
+
+func NewStore(c *config.INIStoreConfig) *Store {
+	return &Store{config: c}
 }
 
 func (store Store) encodeTree(branches sops.TreeBranches) ([]byte, error) {
@@ -281,4 +287,7 @@ func (store *Store) EmitExample() []byte {
 		panic(err)
 	}
 	return bytes
+}
+
+func (store *Store) Configure(c *config.Config) {
 }

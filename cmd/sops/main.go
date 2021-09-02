@@ -1066,11 +1066,29 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 }
 
 func inputStore(context *cli.Context, path string) common.Store {
-	return common.DefaultStoreForPathOrFormat(path, context.String("input-type"))
+	var configPath string
+	if context.String("config") != "" {
+		configPath = context.String("config")
+	} else {
+		// Ignore config not found errors returned from FindConfigFile since the config file is not mandatory
+		configPath, _ = config.FindConfigFile(".")
+	}
+	storesConf, _ := config.LoadStoresConfig(configPath)
+
+	return common.DefaultStoreForPathOrFormat(storesConf, path, context.String("input-type"))
 }
 
 func outputStore(context *cli.Context, path string) common.Store {
-	return common.DefaultStoreForPathOrFormat(path, context.String("output-type"))
+	var configPath string
+	if context.String("config") != "" {
+		configPath = context.String("config")
+	} else {
+		// Ignore config not found errors returned from FindConfigFile since the config file is not mandatory
+		configPath, _ = config.FindConfigFile(".")
+	}
+	storesConf, _ := config.LoadStoresConfig(configPath)
+
+	return common.DefaultStoreForPathOrFormat(storesConf, path, context.String("output-type"))
 }
 
 func parseTreePath(arg string) ([]interface{}, error) {
