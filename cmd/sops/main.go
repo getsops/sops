@@ -673,8 +673,9 @@ func main() {
 			Usage: "set the encrypted key suffix. When specified, only keys matching the regex will be encrypted.",
 		},
 		cli.StringFlag{
-			Name:  "config",
-			Usage: "path to sops' config file. If set, sops will not search for the config file recursively.",
+			Name:   "config",
+			Usage:  "path to sops' config file. If set, sops will not search for the config file recursively.",
+			EnvVar: "SOPS_CONFIG",
 		},
 		cli.StringFlag{
 			Name:  "encryption-context",
