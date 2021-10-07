@@ -96,27 +96,36 @@ func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 
 // Decrypt decrypts the EncryptedKey field with the age identity and returns the result.
 func (key *MasterKey) Decrypt() ([]byte, error) {
-	ageKeyFilePath, ok := os.LookupEnv("SOPS_AGE_KEY_FILE")
+	var ageKeyData io.Reader
+	ageKeyText, ok := os.LookupEnv("SOPS_AGE_KEY")
+	ageKeyFilePath := "SOPS_AGE_KEY"
+	if ok {
+		ageKeyData = strings.NewReader(ageKeyText)
+	} else {
+		var ok bool
+		ageKeyFilePath, ok = os.LookupEnv("SOPS_AGE_KEY_FILE")
 
-	if !ok {
-		userConfigDir, err := os.UserConfigDir()
+		if !ok {
+			userConfigDir, err := os.UserConfigDir()
 
-		if err != nil {
-			return nil, fmt.Errorf("user config directory could not be determined: %w", err)
+			if err != nil {
+				return nil, fmt.Errorf("user config directory could not be determined: %w", err)
+			}
+
+			ageKeyFilePath = filepath.Join(userConfigDir, "sops", "age", "keys.txt")
 		}
 
-		ageKeyFilePath = filepath.Join(userConfigDir, "sops", "age", "keys.txt")
+		ageKeyFile, err := os.Open(ageKeyFilePath)
+
+		if err != nil {
+			return nil, fmt.Errorf("failed to open file: %w", err)
+		}
+
+		defer ageKeyFile.Close()
+		ageKeyData = ageKeyFile
 	}
 
-	ageKeyFile, err := os.Open(ageKeyFilePath)
-
-	if err != nil {
-		return nil, fmt.Errorf("failed to open file: %w", err)
-	}
-
-	defer ageKeyFile.Close()
-
-	identities, err := age.ParseIdentities(ageKeyFile)
+	identities, err := age.ParseIdentities(ageKeyData)
 
 	if err != nil {
 		return nil, err
