@@ -192,10 +192,10 @@ the ``--age`` option or the **SOPS_AGE_RECIPIENTS** environment variable:
    $ sops --age age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw test.yaml > test.enc.yaml
 
 When decrypting a file with the corresponding identity, sops will look for a
-text file name ``keys.txt`` located in a ``sops`` subdirectory of your user
-configuration directory. On Linux, this would be ``$XDG_CONFIG_HOME/sops/keys.txt``.
-On macOS, this would be ``$HOME/Library/Application Support/sops/keys.txt``. On
-Windows, this would be ``%AppData%\sops\keys.txt``. You can specify the location
+text file name ``keys.txt`` located in the ``sops`` and ``age`` subdirectories of your user
+configuration directory. On Linux, this would be ``$XDG_CONFIG_HOME/sops/age/keys.txt``.
+On macOS, this would be ``$HOME/Library/Application Support/sops/age/keys.txt``. On
+Windows, this would be ``%AppData%\sops\age\keys.txt``. You can specify the location
 of this file manually by setting the environment variable **SOPS_AGE_KEY_FILE**.
 
 The contents of this key file should be a list of age X25519 identities, one
