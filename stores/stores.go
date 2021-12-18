@@ -51,6 +51,7 @@ type Metadata struct {
 	EncryptedSuffix           string      `yaml:"encrypted_suffix,omitempty" json:"encrypted_suffix,omitempty"`
 	UnencryptedRegex          string      `yaml:"unencrypted_regex,omitempty" json:"unencrypted_regex,omitempty"`
 	EncryptedRegex            string      `yaml:"encrypted_regex,omitempty" json:"encrypted_regex,omitempty"`
+	MACOnlyEncrypted          bool        `yaml:"mac_only_encrypted,omitempty" json:"mac_only_encrypted,omitempty"`
 	Version                   string      `yaml:"version" json:"version"`
 }
 
@@ -114,6 +115,7 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 	m.UnencryptedRegex = sopsMetadata.UnencryptedRegex
 	m.EncryptedRegex = sopsMetadata.EncryptedRegex
 	m.MessageAuthenticationCode = sopsMetadata.MessageAuthenticationCode
+	m.MACOnlyEncrypted = sopsMetadata.MACOnlyEncrypted
 	m.Version = sopsMetadata.Version
 	m.ShamirThreshold = sopsMetadata.ShamirThreshold
 	if len(sopsMetadata.KeyGroups) == 1 {
@@ -270,6 +272,7 @@ func (m *Metadata) ToInternal() (sops.Metadata, error) {
 		EncryptedSuffix:           m.EncryptedSuffix,
 		UnencryptedRegex:          m.UnencryptedRegex,
 		EncryptedRegex:            m.EncryptedRegex,
+		MACOnlyEncrypted:          m.MACOnlyEncrypted,
 		LastModified:              lastModified,
 	}, nil
 }
