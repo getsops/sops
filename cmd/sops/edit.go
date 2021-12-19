@@ -31,12 +31,14 @@ type editOpts struct {
 
 type editExampleOpts struct {
 	editOpts
-	UnencryptedSuffix string
-	EncryptedSuffix   string
-	UnencryptedRegex  string
-	EncryptedRegex    string
-	KeyGroups         []sops.KeyGroup
-	GroupThreshold    int
+	UnencryptedSuffix       string
+	EncryptedSuffix         string
+	UnencryptedRegex        string
+	EncryptedRegex          string
+	UnencryptedCommentRegex string
+	EncryptedCommentRegex   string
+	KeyGroups               []sops.KeyGroup
+	GroupThreshold          int
 }
 
 type runEditorUntilOkOpts struct {
@@ -60,13 +62,15 @@ func editExample(opts editExampleOpts) ([]byte, error) {
 	tree := sops.Tree{
 		Branches: branches,
 		Metadata: sops.Metadata{
-			KeyGroups:         opts.KeyGroups,
-			UnencryptedSuffix: opts.UnencryptedSuffix,
-			EncryptedSuffix:   opts.EncryptedSuffix,
-			UnencryptedRegex:  opts.UnencryptedRegex,
-			EncryptedRegex:    opts.EncryptedRegex,
-			Version:           version.Version,
-			ShamirThreshold:   opts.GroupThreshold,
+			KeyGroups:               opts.KeyGroups,
+			UnencryptedSuffix:       opts.UnencryptedSuffix,
+			EncryptedSuffix:         opts.EncryptedSuffix,
+			UnencryptedRegex:        opts.UnencryptedRegex,
+			EncryptedRegex:          opts.EncryptedRegex,
+			UnencryptedCommentRegex: opts.UnencryptedCommentRegex,
+			EncryptedCommentRegex:   opts.EncryptedCommentRegex,
+			Version:                 version.Version,
+			ShamirThreshold:         opts.GroupThreshold,
 		},
 		FilePath: path,
 	}

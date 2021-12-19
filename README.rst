@@ -1438,9 +1438,18 @@ that match the supplied regular expression. For example, this command:
 will not encrypt the values under the ``description`` and ``metadata`` keys in a YAML file
 containing kubernetes secrets, while encrypting everything else.
 
+For YAML files, another method is to use ``--encrypted-comment-regex`` which will
+only encrypt comments and values which have a preceding comment matching the supplied
+regular expression.
+
+Conversely, you can opt in to only left certain keys without encrypting by using the
+``--unencrypted-comment-regex`` option, which will leave the values and comments
+unencrypted when they have a preeceding comment that matches the supplied regular expression.
+
 You can also specify these options in the ``.sops.yaml`` config file.
 
-Note: these four options ``--unencrypted-suffix``, ``--encrypted-suffix``, ``--encrypted-regex`` and ``--unencrypted-regex`` are
+Note: these six options ``--unencrypted-suffix``, ``--encrypted-suffix``, ``--encrypted-regex``,
+``--unencrypted-regex``, ``--encrypted-comment-regex``, and ``--unencrypted-comment-regex`` are
 mutually exclusive and cannot all be used in the same file.
 
 Encryption Protocol

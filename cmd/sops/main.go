@@ -685,6 +685,14 @@ func main() {
 			Usage: "set the encrypted key regex. When specified, only keys matching the regex will be encrypted.",
 		},
 		cli.StringFlag{
+			Name:  "unencrypted-comment-regex",
+			Usage: "set the unencrypted comment suffix. When specified, only keys that have comment matching the regex will be left unencrypted.",
+		},
+		cli.StringFlag{
+			Name:  "encrypted-comment-regex",
+			Usage: "set the encrypted comment suffix. When specified, only keys that have comment matching the regex will be encrypted.",
+		},
+		cli.StringFlag{
 			Name:  "config",
 			Usage: "path to sops' config file. If set, sops will not search for the config file recursively.",
 		},
@@ -738,6 +746,8 @@ func main() {
 		encryptedSuffix := c.String("encrypted-suffix")
 		encryptedRegex := c.String("encrypted-regex")
 		unencryptedRegex := c.String("unencrypted-regex")
+		encryptedCommentRegex := c.String("encrypted-comment-regex")
+		unencryptedCommentRegex := c.String("unencrypted-comment-regex")
 		conf, err := loadConfig(c, fileName, nil)
 		if err != nil {
 			return toExitError(err)
@@ -756,6 +766,12 @@ func main() {
 			if unencryptedRegex == "" {
 				unencryptedRegex = conf.UnencryptedRegex
 			}
+			if encryptedCommentRegex == "" {
+				encryptedCommentRegex = conf.EncryptedCommentRegex
+			}
+			if unencryptedCommentRegex == "" {
+				unencryptedCommentRegex = conf.UnencryptedCommentRegex
+			}
 		}
 
 		cryptRuleCount := 0
@@ -771,12 +787,18 @@ func main() {
 		if unencryptedRegex != "" {
 			cryptRuleCount++
 		}
-
-		if cryptRuleCount > 1 {
-			return common.NewExitError("Error: cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex or unencrypted_regex in the same file", codes.ErrorConflictingParameters)
+		if encryptedCommentRegex != "" {
+			cryptRuleCount++
+		}
+		if unencryptedCommentRegex != "" {
+			cryptRuleCount++
 		}
 
-		// only supply the default UnencryptedSuffix when EncryptedSuffix and EncryptedRegex are not provided
+		if cryptRuleCount > 1 {
+			return common.NewExitError("Error: cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex, unencrypted_regex, encrypted_comment_regex, or unencrypted_comment_regex in the same file", codes.ErrorConflictingParameters)
+		}
+
+		// only supply the default UnencryptedSuffix when EncryptedSuffix, EncryptedRegex, and others are not provided
 		if cryptRuleCount == 0 {
 			unencryptedSuffix = sops.DefaultUnencryptedSuffix
 		}
@@ -798,17 +820,19 @@ func main() {
 				return toExitError(err)
 			}
 			output, err = encrypt(encryptOpts{
-				OutputStore:       outputStore,
-				InputStore:        inputStore,
-				InputPath:         fileName,
-				Cipher:            aes.NewCipher(),
-				UnencryptedSuffix: unencryptedSuffix,
-				EncryptedSuffix:   encryptedSuffix,
-				UnencryptedRegex:  unencryptedRegex,
-				EncryptedRegex:    encryptedRegex,
-				KeyServices:       svcs,
-				KeyGroups:         groups,
-				GroupThreshold:    threshold,
+				OutputStore:             outputStore,
+				InputStore:              inputStore,
+				InputPath:               fileName,
+				Cipher:                  aes.NewCipher(),
+				UnencryptedSuffix:       unencryptedSuffix,
+				EncryptedSuffix:         encryptedSuffix,
+				UnencryptedRegex:        unencryptedRegex,
+				EncryptedRegex:          encryptedRegex,
+				UnencryptedCommentRegex: unencryptedCommentRegex,
+				EncryptedCommentRegex:   encryptedCommentRegex,
+				KeyServices:             svcs,
+				KeyGroups:               groups,
+				GroupThreshold:          threshold,
 			})
 		}
 
@@ -953,13 +977,15 @@ func main() {
 					return toExitError(err)
 				}
 				output, err = editExample(editExampleOpts{
-					editOpts:          opts,
-					UnencryptedSuffix: unencryptedSuffix,
-					EncryptedSuffix:   encryptedSuffix,
-					UnencryptedRegex:  unencryptedRegex,
-					EncryptedRegex:    encryptedRegex,
-					KeyGroups:         groups,
-					GroupThreshold:    threshold,
+					editOpts:                opts,
+					UnencryptedSuffix:       unencryptedSuffix,
+					EncryptedSuffix:         encryptedSuffix,
+					UnencryptedRegex:        unencryptedRegex,
+					EncryptedRegex:          encryptedRegex,
+					UnencryptedCommentRegex: unencryptedCommentRegex,
+					EncryptedCommentRegex:   encryptedCommentRegex,
+					KeyGroups:               groups,
+					GroupThreshold:          threshold,
 				})
 			}
 		}

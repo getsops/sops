@@ -242,6 +242,275 @@ func TestUnencryptedRegex(t *testing.T) {
 	}
 }
 
+func TestEncryptedCommentRegex(t *testing.T) {
+	branches := TreeBranches{
+		TreeBranch{
+			TreeItem{
+				Key:   Comment{"sops:enc"},
+				Value: nil,
+			},
+			TreeItem{
+				Key:   "foo",
+				Value: "bar",
+			},
+			TreeItem{
+				Key: "bar",
+				Value: TreeBranch{
+					TreeItem{
+						Key:   "foo",
+						Value: "bar",
+					},
+					TreeItem{
+						Key:   Comment{"before"},
+						Value: nil,
+					},
+					TreeItem{
+						Key:   Comment{"sops:enc"},
+						Value: nil,
+					},
+					TreeItem{
+						Key:   "encrypted",
+						Value: "bar",
+					},
+				},
+			},
+			TreeItem{
+				Key: "array",
+				Value: []interface{}{
+					"bar",
+					Comment{"sops:enc"},
+					"baz",
+				},
+			},
+			TreeItem{
+				Key:   Comment{"sops:enc"},
+				Value: nil,
+			},
+			TreeItem{
+				Key:   Comment{"after"},
+				Value: nil,
+			},
+			TreeItem{
+				Key: "encarray",
+				Value: []interface{}{
+					"bar",
+					"baz",
+				},
+			},
+		},
+	}
+	tree := Tree{Branches: branches, Metadata: Metadata{EncryptedCommentRegex: "sops:enc"}}
+	expected := TreeBranch{
+		TreeItem{
+			Key:   Comment{"sops:enc"},
+			Value: nil,
+		},
+		TreeItem{
+			Key:   "foo",
+			Value: "rab",
+		},
+		TreeItem{
+			Key: "bar",
+			Value: TreeBranch{
+				TreeItem{
+					Key:   "foo",
+					Value: "bar",
+				},
+				TreeItem{
+					Key:   Comment{"before"},
+					Value: nil,
+				},
+				TreeItem{
+					Key:   Comment{"sops:enc"},
+					Value: nil,
+				},
+				TreeItem{
+					Key:   "encrypted",
+					Value: "rab",
+				},
+			},
+		},
+		TreeItem{
+			Key: "array",
+			Value: []interface{}{
+				"bar",
+				Comment{"sops:enc"},
+				"zab",
+			},
+		},
+		TreeItem{
+			Key:   Comment{"sops:enc"},
+			Value: nil,
+		},
+		TreeItem{
+			Key:   Comment{"retfa"},
+			Value: nil,
+		},
+		TreeItem{
+			Key: "encarray",
+			Value: []interface{}{
+				"rab",
+				"zab",
+			},
+		},
+	}
+	cipher := reverseCipher{}
+	_, err := tree.Encrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	if err != nil {
+		t.Errorf("Encrypting the tree failed: %s", err)
+	}
+	if !reflect.DeepEqual(tree.Branches[0], expected) {
+		t.Errorf("Trees don't match: \ngot \t\t%+v,\n expected \t\t%+v", tree.Branches[0], expected)
+	}
+	_, err = tree.Decrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	if err != nil {
+		t.Errorf("Decrypting the tree failed: %s", err)
+	}
+	expected[1].Value = "bar"
+	expected[2].Value.(TreeBranch)[3].Value = "bar"
+	expected[3].Value.([]interface{})[2] = "baz"
+	expected[5].Key = Comment{"after"}
+	expected[6].Value = []interface{}{
+		"bar",
+		"baz",
+	}
+	if !reflect.DeepEqual(tree.Branches[0], expected) {
+		t.Errorf("Trees don't match: \ngot\t\t\t%+v,\nexpected\t\t%+v", tree.Branches[0], expected)
+	}
+}
+
+func TestUnencryptedCommentRegex(t *testing.T) {
+	branches := TreeBranches{
+		TreeBranch{
+			TreeItem{
+				Key:   Comment{"sops:noenc"},
+				Value: nil,
+			},
+			TreeItem{
+				Key:   "foo",
+				Value: "bar",
+			},
+			TreeItem{
+				Key: "bar",
+				Value: TreeBranch{
+					TreeItem{
+						Key:   "foo",
+						Value: "bar",
+					},
+					TreeItem{
+						Key:   Comment{"before"},
+						Value: nil,
+					},
+					TreeItem{
+						Key:   Comment{"sops:noenc"},
+						Value: nil,
+					},
+					TreeItem{
+						Key:   "notencrypted",
+						Value: "bar",
+					},
+				},
+			},
+			TreeItem{
+				Key: "array",
+				Value: []interface{}{
+					"bar",
+					Comment{"sops:noenc"},
+					"baz",
+				},
+			},
+			TreeItem{
+				Key:   Comment{"sops:noenc"},
+				Value: nil,
+			},
+			TreeItem{
+				Key:   Comment{"after"},
+				Value: nil,
+			},
+			TreeItem{
+				Key: "notencarray",
+				Value: []interface{}{
+					"bar",
+					"baz",
+				},
+			},
+		},
+	}
+	tree := Tree{Branches: branches, Metadata: Metadata{UnencryptedCommentRegex: "sops:noenc"}}
+	expected := TreeBranch{
+		TreeItem{
+			Key:   Comment{"sops:noenc"},
+			Value: nil,
+		},
+		TreeItem{
+			Key:   "foo",
+			Value: "bar",
+		},
+		TreeItem{
+			Key: "bar",
+			Value: TreeBranch{
+				TreeItem{
+					Key:   "foo",
+					Value: "rab",
+				},
+				TreeItem{
+					Key:   Comment{"erofeb"},
+					Value: nil,
+				},
+				TreeItem{
+					Key:   Comment{"sops:noenc"},
+					Value: nil,
+				},
+				TreeItem{
+					Key:   "notencrypted",
+					Value: "bar",
+				},
+			},
+		},
+		TreeItem{
+			Key: "array",
+			Value: []interface{}{
+				"rab",
+				Comment{"sops:noenc"},
+				"baz",
+			},
+		},
+		TreeItem{
+			Key:   Comment{"sops:noenc"},
+			Value: nil,
+		},
+		TreeItem{
+			Key:   Comment{"after"},
+			Value: nil,
+		},
+		TreeItem{
+			Key: "notencarray",
+			Value: []interface{}{
+				"bar",
+				"baz",
+			},
+		},
+	}
+	cipher := reverseCipher{}
+	_, err := tree.Encrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	if err != nil {
+		t.Errorf("Encrypting the tree failed: %s", err)
+	}
+	if !reflect.DeepEqual(tree.Branches[0], expected) {
+		t.Errorf("Trees don't match: \ngot \t\t%+v,\n expected \t\t%+v", tree.Branches[0], expected)
+	}
+	_, err = tree.Decrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	if err != nil {
+		t.Errorf("Decrypting the tree failed: %s", err)
+	}
+	expected[2].Value.(TreeBranch)[0].Value = "bar"
+	expected[2].Value.(TreeBranch)[1].Key = Comment{"before"}
+	expected[3].Value.([]interface{})[0] = "bar"
+	if !reflect.DeepEqual(tree.Branches[0], expected) {
+		t.Errorf("Trees don't match: \ngot\t\t\t%+v,\nexpected\t\t%+v", tree.Branches[0], expected)
+	}
+}
+
 type MockCipher struct{}
 
 func (m MockCipher) Encrypt(value interface{}, key []byte, path string) (string, error) {
