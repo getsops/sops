@@ -15,13 +15,15 @@ import (
 )
 
 type encryptConfig struct {
-	UnencryptedSuffix string
-	EncryptedSuffix   string
-	UnencryptedRegex  string
-	EncryptedRegex    string
-	MACOnlyEncrypted  bool
-	KeyGroups         []sops.KeyGroup
-	GroupThreshold    int
+	UnencryptedSuffix       string
+	EncryptedSuffix         string
+	UnencryptedRegex        string
+	EncryptedRegex          string
+	UnencryptedCommentRegex string
+	EncryptedCommentRegex   string
+	MACOnlyEncrypted        bool
+	KeyGroups               []sops.KeyGroup
+	GroupThreshold          int
 }
 
 type encryptOpts struct {
@@ -61,14 +63,16 @@ func ensureNoMetadata(opts encryptOpts, branch sops.TreeBranch) error {
 
 func metadataFromEncryptionConfig(config encryptConfig) sops.Metadata {
 	return sops.Metadata{
-		KeyGroups:         config.KeyGroups,
-		UnencryptedSuffix: config.UnencryptedSuffix,
-		EncryptedSuffix:   config.EncryptedSuffix,
-		UnencryptedRegex:  config.UnencryptedRegex,
-		EncryptedRegex:    config.EncryptedRegex,
-		MACOnlyEncrypted:  config.MACOnlyEncrypted,
-		Version:           version.Version,
-		ShamirThreshold:   config.GroupThreshold,
+		KeyGroups:               config.KeyGroups,
+		UnencryptedSuffix:       config.UnencryptedSuffix,
+		EncryptedSuffix:         config.EncryptedSuffix,
+		UnencryptedRegex:        config.UnencryptedRegex,
+		EncryptedRegex:          config.EncryptedRegex,
+		UnencryptedCommentRegex: config.UnencryptedCommentRegex,
+		EncryptedCommentRegex:   config.EncryptedCommentRegex,
+		MACOnlyEncrypted:        config.MACOnlyEncrypted,
+		Version:                 version.Version,
+		ShamirThreshold:         config.GroupThreshold,
 	}
 }
 

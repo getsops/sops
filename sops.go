@@ -285,24 +285,24 @@ func (branch TreeBranch) Truncate(path []interface{}) (interface{}, error) {
 	return current, nil
 }
 
-func (branch TreeBranch) walkValue(in interface{}, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) (interface{}, error) {
+func (branch TreeBranch) walkValue(in interface{}, path []string, commentsStack [][]string, onLeaves func(in interface{}, path []string, commentsStack [][]string) (interface{}, error)) (interface{}, error) {
 	switch in := in.(type) {
 	case string:
-		return onLeaves(in, path)
+		return onLeaves(in, path, commentsStack)
 	case []byte:
-		return onLeaves(string(in), path)
+		return onLeaves(string(in), path, commentsStack)
 	case int:
-		return onLeaves(in, path)
+		return onLeaves(in, path, commentsStack)
 	case bool:
-		return onLeaves(in, path)
+		return onLeaves(in, path, commentsStack)
 	case float64:
-		return onLeaves(in, path)
+		return onLeaves(in, path, commentsStack)
 	case Comment:
-		return onLeaves(in, path)
+		return onLeaves(in, path, commentsStack)
 	case TreeBranch:
-		return branch.walkBranch(in, path, onLeaves)
+		return branch.walkBranch(in, path, commentsStack, onLeaves)
 	case []interface{}:
-		return branch.walkSlice(in, path, onLeaves)
+		return branch.walkSlice(in, path, commentsStack, onLeaves)
 	case nil:
 		// the value returned remains the same since it doesn't make
 		// sense to encrypt or decrypt a nil value
@@ -312,21 +312,38 @@ func (branch TreeBranch) walkValue(in interface{}, path []string, onLeaves func(
 	}
 }
 
-func (branch TreeBranch) walkSlice(in []interface{}, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) ([]interface{}, error) {
+func (branch TreeBranch) walkSlice(in []interface{}, path []string, commentsStack [][]string, onLeaves func(in interface{}, path []string, commentsStack [][]string) (interface{}, error)) ([]interface{}, error) {
+	// Because append returns a new slice, the original stack is not changed.
+	commentsStack = append(commentsStack, []string{})
 	for i, v := range in {
-		newV, err := branch.walkValue(v, path, onLeaves)
+		c, vIsComment := v.(Comment)
+		if vIsComment {
+			// If v is a comment, we add it to the slice of active comments.
+			// This allows us to also encrypt comments themselves by enabling encryption in a prior comment.
+			commentsStack[len(commentsStack)-1] = append(commentsStack[len(commentsStack)-1], c.Value)
+		}
+		newV, err := branch.walkValue(v, path, commentsStack, onLeaves)
 		if err != nil {
 			return nil, err
 		}
 		in[i] = newV
+		if !vIsComment {
+			// If v is not a comment, we clear the slice of active comments.
+			commentsStack[len(commentsStack)-1] = []string{}
+		}
 	}
 	return in, nil
 }
 
-func (branch TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(in interface{}, path []string) (interface{}, error)) (TreeBranch, error) {
+func (branch TreeBranch) walkBranch(in TreeBranch, path []string, commentsStack [][]string, onLeaves func(in interface{}, path []string, commentsStack [][]string) (interface{}, error)) (TreeBranch, error) {
+	// Because append returns a new slice, the original stack is not changed.
+	commentsStack = append(commentsStack, []string{})
 	for i, item := range in {
-		if _, ok := item.Key.(Comment); ok {
-			enc, err := branch.walkValue(item.Key, path, onLeaves)
+		if c, ok := item.Key.(Comment); ok {
+			// If key is a comment, we add it to the slice of active comments.
+			// This allows us to also encrypt comments themselves by enabling encryption in a prior comment.
+			commentsStack[len(commentsStack)-1] = append(commentsStack[len(commentsStack)-1], c.Value)
+			enc, err := branch.walkValue(item.Key, path, commentsStack, onLeaves)
 			if err != nil {
 				return nil, err
 			}
@@ -340,26 +357,113 @@ func (branch TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(
 				return nil, fmt.Errorf("walkValue of Comment should be either Comment or string, was %T", enc)
 			}
 		}
+		c, valueIsComment := item.Value.(Comment)
+		if valueIsComment {
+			// If value is a comment, we add it to the slice of active comments.
+			// This allows us to also encrypt comments themselves by enabling encryption in a prior comment.
+			commentsStack[len(commentsStack)-1] = append(commentsStack[len(commentsStack)-1], c.Value)
+		}
 		key, ok := item.Key.(string)
 		if !ok {
 			return nil, fmt.Errorf("Tree contains a non-string key (type %T): %s. Only string keys are"+
 				"supported", item.Key, item.Key)
 		}
-		newV, err := branch.walkValue(item.Value, append(path, key), onLeaves)
+		newV, err := branch.walkValue(item.Value, append(path, key), commentsStack, onLeaves)
 		if err != nil {
 			return nil, err
 		}
 		in[i].Value = newV
+		if !valueIsComment {
+			// If value is not a comment, we clear the slice of active comments.
+			commentsStack[len(commentsStack)-1] = []string{}
+		}
 	}
 	return in, nil
+}
+
+func (tree Tree) shouldBeEncrypted(path []string, commentsStack [][]string, isComment bool) bool {
+	encrypted := true
+	if tree.Metadata.UnencryptedSuffix != "" {
+		for _, v := range path {
+			if strings.HasSuffix(v, tree.Metadata.UnencryptedSuffix) {
+				encrypted = false
+				break
+			}
+		}
+	}
+	if tree.Metadata.EncryptedSuffix != "" {
+		encrypted = false
+		for _, v := range path {
+			if strings.HasSuffix(v, tree.Metadata.EncryptedSuffix) {
+				encrypted = true
+				break
+			}
+		}
+	}
+	if tree.Metadata.UnencryptedRegex != "" {
+		for _, p := range path {
+			matched, _ := regexp.Match(tree.Metadata.UnencryptedRegex, []byte(p))
+			if matched {
+				encrypted = false
+				break
+			}
+		}
+	}
+	if tree.Metadata.EncryptedRegex != "" {
+		encrypted = false
+		for _, p := range path {
+			matched, _ := regexp.Match(tree.Metadata.EncryptedRegex, []byte(p))
+			if matched {
+				encrypted = true
+				break
+			}
+		}
+	}
+	if tree.Metadata.UnencryptedCommentRegex != "" {
+	unencryptedComments:
+		for _, cs := range commentsStack {
+			for _, c := range cs {
+				matched, _ := regexp.Match(tree.Metadata.UnencryptedCommentRegex, []byte(c))
+				if matched {
+					encrypted = false
+					break unencryptedComments
+				}
+			}
+		}
+	}
+	if tree.Metadata.EncryptedCommentRegex != "" {
+		lenCommentsStack := len(commentsStack)
+		lenLastCommentsStack := len(commentsStack[lenCommentsStack-1])
+		encrypted = false
+	encryptedComments:
+		for i, cs := range commentsStack {
+			for j, c := range cs {
+				// A special case. We do not encrypt the comment line itself which matches the regex.
+				// So we skip the last line of the last set of comments. Only if the matches any previous
+				// line, we encrypt this comment. Otherwise we do not.
+				if isComment && i == lenCommentsStack-1 && j == lenLastCommentsStack-1 {
+					continue
+				}
+				matched, _ := regexp.Match(tree.Metadata.EncryptedCommentRegex, []byte(c))
+				if matched {
+					encrypted = true
+					break encryptedComments
+				}
+			}
+		}
+	}
+	return encrypted
 }
 
 // Encrypt walks over the tree and encrypts all values with the provided cipher,
 // except those whose key ends with the UnencryptedSuffix specified on the
 // Metadata struct, those not ending with EncryptedSuffix, if EncryptedSuffix
 // is provided (by default it is not), those not matching EncryptedRegex,
-// if EncryptedRegex is provided (by default it is not) or those matching
-// UnencryptedRegex, if UnencryptedRegex is provided (by default it is not).
+// if EncryptedRegex is provided (by default it is not), those matching UnencryptedRegex,
+// if UnencryptedRegex is provided (by default it is not), those with their comment
+// not matching EncryptedCommentRegex, if EncryptedCommentRegex is provided (by default
+// it is not), or those with their comment matching UnencryptedCommentRegex, if
+// UnencryptedCommentRegex is provided (by default it is not).
 // If encryption is successful, it returns the MAC for the encrypted tree
 // (all values if MACOnlyEncrypted is false, or only over values which end
 // up encrypted if MACOnlyEncrypted is true).
@@ -374,47 +478,12 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 		hash.Write(MACOnlyEncryptedInitialization)
 	}
 	walk := func(branch TreeBranch) error {
-		_, err := branch.walkBranch(branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
-			encrypted := true
-			if tree.Metadata.UnencryptedSuffix != "" {
-				for _, v := range path {
-					if strings.HasSuffix(v, tree.Metadata.UnencryptedSuffix) {
-						encrypted = false
-						break
-					}
-				}
-			}
-			if tree.Metadata.EncryptedSuffix != "" {
-				encrypted = false
-				for _, v := range path {
-					if strings.HasSuffix(v, tree.Metadata.EncryptedSuffix) {
-						encrypted = true
-						break
-					}
-				}
-			}
-			if tree.Metadata.UnencryptedRegex != "" {
-				for _, p := range path {
-					matched, _ := regexp.Match(tree.Metadata.UnencryptedRegex, []byte(p))
-					if matched {
-						encrypted = false
-						break
-					}
-				}
-			}
-			if tree.Metadata.EncryptedRegex != "" {
-				encrypted = false
-				for _, p := range path {
-					matched, _ := regexp.Match(tree.Metadata.EncryptedRegex, []byte(p))
-					if matched {
-						encrypted = true
-						break
-					}
-				}
-			}
+		_, err := branch.walkBranch(branch, make([]string, 0), make([][]string, 0), func(in interface{}, path []string, commentsStack [][]string) (interface{}, error) {
+			_, ok := in.(Comment)
+			encrypted := tree.shouldBeEncrypted(path, commentsStack, ok)
 			if !tree.Metadata.MACOnlyEncrypted || encrypted {
 				// Only add to MAC if not a comment
-				if _, ok := in.(Comment); !ok {
+				if !ok {
 					bytes, err := ToBytes(in)
 					if err != nil {
 						return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
@@ -464,49 +533,14 @@ func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 		hash.Write(MACOnlyEncryptedInitialization)
 	}
 	walk := func(branch TreeBranch) error {
-		_, err := branch.walkBranch(branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
-			encrypted := true
-			if tree.Metadata.UnencryptedSuffix != "" {
-				for _, p := range path {
-					if strings.HasSuffix(p, tree.Metadata.UnencryptedSuffix) {
-						encrypted = false
-						break
-					}
-				}
-			}
-			if tree.Metadata.EncryptedSuffix != "" {
-				encrypted = false
-				for _, p := range path {
-					if strings.HasSuffix(p, tree.Metadata.EncryptedSuffix) {
-						encrypted = true
-						break
-					}
-				}
-			}
-			if tree.Metadata.UnencryptedRegex != "" {
-				for _, p := range path {
-					matched, _ := regexp.Match(tree.Metadata.UnencryptedRegex, []byte(p))
-					if matched {
-						encrypted = false
-						break
-					}
-				}
-			}
-			if tree.Metadata.EncryptedRegex != "" {
-				encrypted = false
-				for _, p := range path {
-					matched, _ := regexp.Match(tree.Metadata.EncryptedRegex, []byte(p))
-					if matched {
-						encrypted = true
-						break
-					}
-				}
-			}
+		_, err := branch.walkBranch(branch, make([]string, 0), make([][]string, 0), func(in interface{}, path []string, commentsStack [][]string) (interface{}, error) {
+			c, ok := in.(Comment)
+			encrypted := tree.shouldBeEncrypted(path, commentsStack, ok)
 			var v interface{}
 			if encrypted {
 				var err error
 				pathString := strings.Join(path, ":") + ":"
-				if c, ok := in.(Comment); ok {
+				if ok {
 					v, err = cipher.Decrypt(c.Value, key, pathString)
 					if err != nil {
 						// Assume the comment was not encrypted in the first place
@@ -576,6 +610,8 @@ type Metadata struct {
 	EncryptedSuffix           string
 	UnencryptedRegex          string
 	EncryptedRegex            string
+	UnencryptedCommentRegex   string
+	EncryptedCommentRegex     string
 	MessageAuthenticationCode string
 	MACOnlyEncrypted          bool
 	Version                   string
