@@ -51,6 +51,8 @@ type Metadata struct {
 	EncryptedSuffix           string      `yaml:"encrypted_suffix,omitempty" json:"encrypted_suffix,omitempty"`
 	UnencryptedRegex          string      `yaml:"unencrypted_regex,omitempty" json:"unencrypted_regex,omitempty"`
 	EncryptedRegex            string      `yaml:"encrypted_regex,omitempty" json:"encrypted_regex,omitempty"`
+	UnencryptedCommentRegex   string      `yaml:"unencrypted_comment_regex,omitempty" json:"unencrypted_comment_regex,omitempty"`
+	EncryptedCommentRegex     string      `yaml:"encrypted_comment_regex,omitempty" json:"encrypted_comment_regex,omitempty"`
 	MACOnlyEncrypted          bool        `yaml:"mac_only_encrypted,omitempty" json:"mac_only_encrypted,omitempty"`
 	Version                   string      `yaml:"version" json:"version"`
 }
@@ -114,6 +116,8 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 	m.EncryptedSuffix = sopsMetadata.EncryptedSuffix
 	m.UnencryptedRegex = sopsMetadata.UnencryptedRegex
 	m.EncryptedRegex = sopsMetadata.EncryptedRegex
+	m.UnencryptedCommentRegex = sopsMetadata.UnencryptedCommentRegex
+	m.EncryptedCommentRegex = sopsMetadata.EncryptedCommentRegex
 	m.MessageAuthenticationCode = sopsMetadata.MessageAuthenticationCode
 	m.MACOnlyEncrypted = sopsMetadata.MACOnlyEncrypted
 	m.Version = sopsMetadata.Version
@@ -255,9 +259,15 @@ func (m *Metadata) ToInternal() (sops.Metadata, error) {
 	if m.EncryptedRegex != "" {
 		cryptRuleCount++
 	}
+	if m.UnencryptedCommentRegex != "" {
+		cryptRuleCount++
+	}
+	if m.EncryptedCommentRegex != "" {
+		cryptRuleCount++
+	}
 
 	if cryptRuleCount > 1 {
-		return sops.Metadata{}, fmt.Errorf("Cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex or unencrypted_regex in the same file")
+		return sops.Metadata{}, fmt.Errorf("Cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex, unencrypted_regex, encrypted_comment_regex, or unencrypted_comment_regex in the same file")
 	}
 
 	if cryptRuleCount == 0 {
@@ -272,6 +282,8 @@ func (m *Metadata) ToInternal() (sops.Metadata, error) {
 		EncryptedSuffix:           m.EncryptedSuffix,
 		UnencryptedRegex:          m.UnencryptedRegex,
 		EncryptedRegex:            m.EncryptedRegex,
+		UnencryptedCommentRegex:   m.UnencryptedCommentRegex,
+		EncryptedCommentRegex:     m.EncryptedCommentRegex,
 		MACOnlyEncrypted:          m.MACOnlyEncrypted,
 		LastModified:              lastModified,
 	}, nil
