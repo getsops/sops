@@ -159,13 +159,13 @@ func (key *MasterKey) encryptWithCryptoOpenPGP(dataKey []byte) error {
 
 // Encrypt encrypts the data key with the PGP key with the same fingerprint as the MasterKey. It looks for PGP public keys in $PGPHOME/pubring.gpg.
 func (key *MasterKey) Encrypt(dataKey []byte) error {
-	openpgpErr := key.encryptWithCryptoOpenPGP(dataKey)
-	if openpgpErr == nil {
+	binaryErr := key.encryptWithGPGBinary(dataKey)
+	if binaryErr == nil {
 		log.WithField("fingerprint", key.Fingerprint).Info("Encryption succeeded")
 		return nil
 	}
-	binaryErr := key.encryptWithGPGBinary(dataKey)
-	if binaryErr == nil {
+	openpgpErr := key.encryptWithCryptoOpenPGP(dataKey)
+	if openpgpErr == nil {
 		log.WithField("fingerprint", key.Fingerprint).Info("Encryption succeeded")
 		return nil
 	}
@@ -221,13 +221,13 @@ func (key *MasterKey) decryptWithCryptoOpenpgp() ([]byte, error) {
 
 // Decrypt uses PGP to obtain the data key from the EncryptedKey store in the MasterKey and returns it
 func (key *MasterKey) Decrypt() ([]byte, error) {
-	dataKey, openpgpErr := key.decryptWithCryptoOpenpgp()
-	if openpgpErr == nil {
+	dataKey, binaryErr := key.decryptWithGPGBinary()
+	if binaryErr == nil {
 		log.WithField("fingerprint", key.Fingerprint).Info("Decryption succeeded")
 		return dataKey, nil
 	}
-	dataKey, binaryErr := key.decryptWithGPGBinary()
-	if binaryErr == nil {
+	dataKey, openpgpErr := key.decryptWithCryptoOpenpgp()
+	if openpgpErr == nil {
 		log.WithField("fingerprint", key.Fingerprint).Info("Decryption succeeded")
 		return dataKey, nil
 	}
