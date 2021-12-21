@@ -128,25 +128,29 @@ func vaultClient(address string) (*api.Client, error) {
 	if cli.Token() != "" {
 		return cli, nil
 	}
-	homePath, err := homedir.Dir()
+	// TokenHelper requires VAULT_ADDR available
+	if current, exists := os.LookupEnv("VAULT_ADDR"); exists {
+		defer func() {
+		os.Setenv("VAULT_ADDR", current)
+		}()
+	} else {
+		defer func() {
+			os.Unsetenv("VAULT_ADDR")
+		}()
+	}
+	os.Setenv("VAULT_ADDR", address)
+	// Use ~/.vault-token, or the configured token helper.
+	tokenHelper, err := config.DefaultTokenHelper()
 	if err != nil {
-		panic(fmt.Sprintf("error getting user's home directory: %v", err))
+		return "", fmt.Errorf("error getting token helper: %s", err)
 	}
-	tokenPath := filepath.Join(homePath, ".vault-token")
-	f, err := os.Open(tokenPath)
-	if os.IsNotExist(err) {
-		return cli, nil
-	}
+	token, err := tokenHelper.Get()
 	if err != nil {
-		return nil, err
+		return "", fmt.Errorf("error getting token: %s", err)
 	}
-	defer f.Close()
-
-	buf := bytes.NewBuffer(nil)
-	if _, err := io.Copy(buf, f); err != nil {
-		return nil, err
+	if token != "" {
+		cli.SetToken(strings.TrimSpace(token))
 	}
-	cli.SetToken(strings.TrimSpace(buf.String()))
 	return cli, nil
 }
 
