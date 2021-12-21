@@ -1,20 +1,16 @@
 package hcvault
 
 import (
-	"bytes"
 	"encoding/base64"
 	"fmt"
-	"io"
 	"net/url"
 	"os"
 	"path"
-	"path/filepath"
 	"regexp"
 	"strings"
 	"time"
 
 	"github.com/hashicorp/vault/api"
-	homedir "github.com/mitchellh/go-homedir"
 	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/v3/logging"
 )
@@ -128,25 +124,29 @@ func vaultClient(address string) (*api.Client, error) {
 	if cli.Token() != "" {
 		return cli, nil
 	}
-	homePath, err := homedir.Dir()
+	// TokenHelper requires VAULT_ADDR available
+	if current, exists := os.LookupEnv("VAULT_ADDR"); exists {
+		defer func() {
+		os.Setenv("VAULT_ADDR", current)
+		}()
+	} else {
+		defer func() {
+			os.Unsetenv("VAULT_ADDR")
+		}()
+	}
+	os.Setenv("VAULT_ADDR", address)
+	// Use ~/.vault-token, or the configured token helper.
+	tokenHelper, err := DefaultTokenHelper()
 	if err != nil {
-		panic(fmt.Sprintf("error getting user's home directory: %v", err))
+		return nil, fmt.Errorf("error getting token helper: %s", err)
 	}
-	tokenPath := filepath.Join(homePath, ".vault-token")
-	f, err := os.Open(tokenPath)
-	if os.IsNotExist(err) {
-		return cli, nil
-	}
+	token, err := tokenHelper.Get()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error getting token: %s", err)
 	}
-	defer f.Close()
-
-	buf := bytes.NewBuffer(nil)
-	if _, err := io.Copy(buf, f); err != nil {
-		return nil, err
+	if token != "" {
+		cli.SetToken(strings.TrimSpace(token))
 	}
-	cli.SetToken(strings.TrimSpace(buf.String()))
 	return cli, nil
 }
 

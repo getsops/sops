@@ -1,12 +1,14 @@
 package publish
 
 import (
+	"os"
 	"fmt"
 	"strings"
 
 	"github.com/google/go-cmp/cmp"
 	vault "github.com/hashicorp/vault/api"
 	"go.mozilla.org/sops/v3/logging"
+	hcvault "go.mozilla.org/sops/v3/hcvault"
 
 	"github.com/sirupsen/logrus"
 )
@@ -73,6 +75,32 @@ func (vaultd *VaultDestination) UploadUnencrypted(data map[string]interface{}, f
 		if err != nil {
 			return err
 		}
+	}
+
+        if client.Token() == "" {
+	        // TokenHelper requires VAULT_ADDR available
+	        if current, exists := os.LookupEnv("VAULT_ADDR"); exists {
+	                defer func() {
+	                os.Setenv("VAULT_ADDR", current)
+	                }()
+	        } else {
+	                defer func() {
+	                        os.Unsetenv("VAULT_ADDR")
+	                }()
+	        }
+	        os.Setenv("VAULT_ADDR", client.Address())
+	        // Use ~/.vault-token, or the configured token helper.
+	        tokenHelper, err := hcvault.DefaultTokenHelper()
+	        if err != nil {
+	                return fmt.Errorf("error getting token helper: %s", err)
+	        }
+	        token, err := tokenHelper.Get()
+	        if err != nil {
+	                return fmt.Errorf("error getting token: %s", err)
+	        }
+	        if token != "" {
+	                client.SetToken(strings.TrimSpace(token))
+	        }
 	}
 
 	secretsPath := vaultd.secretsPath(fileName)
