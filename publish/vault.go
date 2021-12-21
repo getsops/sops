@@ -88,7 +88,7 @@ func (vaultd *VaultDestination) UploadUnencrypted(data map[string]interface{}, f
 	                        os.Unsetenv("VAULT_ADDR")
 	                }()
 	        }
-	        os.Setenv("VAULT_ADDR", vaultd.vaultAddress)
+	        os.Setenv("VAULT_ADDR", client.Address())
 	        // Use ~/.vault-token, or the configured token helper.
 	        tokenHelper, err := hcvault.DefaultTokenHelper()
 	        if err != nil {
