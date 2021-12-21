@@ -1,20 +1,16 @@
 package hcvault
 
 import (
-	"bytes"
 	"encoding/base64"
 	"fmt"
-	"io"
 	"net/url"
 	"os"
 	"path"
-	"path/filepath"
 	"regexp"
 	"strings"
 	"time"
 
 	"github.com/hashicorp/vault/api"
-	homedir "github.com/mitchellh/go-homedir"
 	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/v3/logging"
 )
@@ -140,13 +136,13 @@ func vaultClient(address string) (*api.Client, error) {
 	}
 	os.Setenv("VAULT_ADDR", address)
 	// Use ~/.vault-token, or the configured token helper.
-	tokenHelper, err := config.DefaultTokenHelper()
+	tokenHelper, err := DefaultTokenHelper()
 	if err != nil {
-		return "", fmt.Errorf("error getting token helper: %s", err)
+		return nil, fmt.Errorf("error getting token helper: %s", err)
 	}
 	token, err := tokenHelper.Get()
 	if err != nil {
-		return "", fmt.Errorf("error getting token: %s", err)
+		return nil, fmt.Errorf("error getting token: %s", err)
 	}
 	if token != "" {
 		cli.SetToken(strings.TrimSpace(token))
