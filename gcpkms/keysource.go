@@ -158,7 +158,7 @@ func (key MasterKey) ToMap() map[string]interface{} {
 // Credentials as either a path to a file, or directly as an environment variable
 // in JSON format.
 func getDefaultApplicationCredentials() (token []byte, err error) {
-	var defaultCredentials = os.Getenv("GOOGLE_APPLICATION_CREDENTIALS")
+	var defaultCredentials = os.Getenv("GOOGLE_CREDENTIALS")
 
 	if _, err := os.Stat(defaultCredentials); err == nil {
 		if token, err = ioutil.ReadFile(defaultCredentials); err != nil {
