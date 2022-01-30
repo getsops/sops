@@ -4,8 +4,11 @@ import (
 	"os/exec"
 )
 
-func BuildCommand(command string) *exec.Cmd {
-	return exec.Command("cmd.exe", "/C", command)
+func BuildCommand(command string, shell string) *exec.Cmd {
+	if shell == "" {
+		return exec.Command("cmd.exe", "/C", command)
+	}
+	return exec.Command(shell, "/C", command)
 }
 
 func WritePipe(pipe string, contents []byte) {

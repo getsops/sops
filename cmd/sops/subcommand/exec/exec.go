@@ -24,6 +24,7 @@ type ExecOpts struct {
 	Background bool
 	Fifo       bool
 	User       string
+	Shell      string
 	Filename   string
 }
 
@@ -65,7 +66,7 @@ func ExecWithFile(opts ExecOpts) error {
 	}
 
 	placeholdered := strings.Replace(opts.Command, "{}", filename, -1)
-	cmd := BuildCommand(placeholdered)
+	cmd := BuildCommand(placeholdered, opts.Shell)
 	cmd.Env = os.Environ()
 
 	if opts.Background {
@@ -96,7 +97,7 @@ func ExecWithEnv(opts ExecOpts) error {
 		env = append(env, string(line))
 	}
 
-	cmd := BuildCommand(opts.Command)
+	cmd := BuildCommand(opts.Command, opts.Shell)
 	cmd.Env = env
 
 	if opts.Background {

@@ -132,6 +132,10 @@ func main() {
 					Name:  "user",
 					Usage: "the user to run the command as",
 				},
+				cli.StringFlag{
+					Name:  "shell",
+					Usage: "invoke shell to exec command",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if len(c.Args()) != 2 {
@@ -163,6 +167,7 @@ func main() {
 					Plaintext:  output,
 					Background: c.Bool("background"),
 					User:       c.String("user"),
+					Shell:      c.String("shell"),
 				}); err != nil {
 					return toExitError(err)
 				}
@@ -186,6 +191,10 @@ func main() {
 				cli.StringFlag{
 					Name:  "user",
 					Usage: "the user to run the command as",
+				},
+				cli.StringFlag{
+					Name:  "shell",
+					Usage: "invoke shell to exec command",
 				},
 				cli.StringFlag{
 					Name:  "input-type",
@@ -237,6 +246,7 @@ func main() {
 					Background: c.Bool("background"),
 					Fifo:       !c.Bool("no-fifo"),
 					User:       c.String("user"),
+					Shell:       c.String("shell"),
 					Filename:   filename,
 				}); err != nil {
 					return toExitError(err)
