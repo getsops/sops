@@ -110,7 +110,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		ageKeyFilePath = filepath.Join(userConfigDir, ".ssh", "id_ed25519")
 		_, err = os.Stat(ageKeyFilePath)
 		if err != nil {
-			if err == os.ErrNotExist {
+			if os.IsNotExist(err) {
 				// Fallback to RSA key
 				ageKeyFilePath = filepath.Join(userConfigDir, ".ssh", "id_rsa")
 			} else {
