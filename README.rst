@@ -204,6 +204,13 @@ identity will be tried in sequence until one is able to decrypt the data.
 
 Encrypting with SSH keys via age is not yet supported by sops.
 
+A list of age recipients can be added to the .sops.yaml:
+.. code:: yaml
+
+    creation_rules:
+      - age: >-
+          age1s3cqcks5genc6ru8chl0hkkd04zmxvczsvdxq99ekffe4gmvjpzsedk23c,
+          age1qe5lxzzeppw5k79vxn3872272sgy224g2nzqlzy3uljs84say3yqgvd0sw
 
 Encrypting using GCP KMS
 ~~~~~~~~~~~~~~~~~~~~~~~~
