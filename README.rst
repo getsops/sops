@@ -205,6 +205,7 @@ identity will be tried in sequence until one is able to decrypt the data.
 Encrypting with SSH keys via age is not yet supported by sops.
 
 A list of age recipients can be added to the .sops.yaml:
+
 .. code:: yaml
 
     creation_rules:
