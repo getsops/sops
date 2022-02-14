@@ -2,10 +2,10 @@ package dotenv //import "go.mozilla.org/sops/v3/stores/dotenv"
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"strings"
 
+	"github.com/mitchellh/mapstructure"
 	"go.mozilla.org/sops/v3"
 	"go.mozilla.org/sops/v3/stores"
 )
@@ -119,7 +119,7 @@ func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 		if comment, ok := item.Key.(sops.Comment); ok {
 			line = fmt.Sprintf("#%s\n", comment.Value)
 		} else {
-			value := strings.Replace(item.Value.(string), "\n", "\\n", -1)
+			value := strings.Replace(stores.ValueToString(item.Value), "\n", "\\n", -1)
 			line = fmt.Sprintf("%s=%s\n", item.Key, value)
 		}
 		buffer.WriteString(line)
@@ -145,21 +145,18 @@ func (store *Store) EmitExample() []byte {
 }
 
 func metadataToMap(md stores.Metadata) (map[string]interface{}, error) {
-	var mdMap map[string]interface{}
-	inrec, err := json.Marshal(md)
+	result, err := stores.ConvertStructToMap(md)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("convert metadata to map: %w", err)
 	}
-	err = json.Unmarshal(inrec, &mdMap)
-	if err != nil {
-		return nil, err
-	}
-	flat := stores.Flatten(mdMap)
+
+	flat := stores.Flatten(result)
 	for k, v := range flat {
 		if s, ok := v.(string); ok {
 			flat[k] = strings.Replace(s, "\n", "\\n", -1)
 		}
 	}
+
 	return flat, nil
 }
 
@@ -169,13 +166,14 @@ func mapToMetadata(m map[string]interface{}) (stores.Metadata, error) {
 			m[k] = strings.Replace(s, "\\n", "\n", -1)
 		}
 	}
+
 	m = stores.Unflatten(m)
 	var md stores.Metadata
-	inrec, err := json.Marshal(m)
+	err := mapstructure.WeakDecode(m, &md)
 	if err != nil {
 		return md, err
 	}
-	err = json.Unmarshal(inrec, &md)
+
 	return md, err
 }
 

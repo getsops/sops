@@ -10,10 +10,13 @@ of the purpose of this package is to make it easy to change the SOPS file format
 package stores
 
 import (
+	"reflect"
+	"strconv"
 	"time"
 
 	"fmt"
 
+	"github.com/mitchellh/mapstructure"
 	"go.mozilla.org/sops/v3"
 	"go.mozilla.org/sops/v3/age"
 	"go.mozilla.org/sops/v3/azkv"
@@ -37,72 +40,72 @@ type SopsFile struct {
 // in order to allow the binary format to stay backwards compatible over time, but at the same time allow the internal
 // representation SOPS uses to change over time.
 type Metadata struct {
-	ShamirThreshold           int         `yaml:"shamir_threshold,omitempty" json:"shamir_threshold,omitempty"`
-	KeyGroups                 []keygroup  `yaml:"key_groups,omitempty" json:"key_groups,omitempty"`
-	KMSKeys                   []kmskey    `yaml:"kms" json:"kms"`
-	GCPKMSKeys                []gcpkmskey `yaml:"gcp_kms" json:"gcp_kms"`
-	AzureKeyVaultKeys         []azkvkey   `yaml:"azure_kv" json:"azure_kv"`
-	VaultKeys                 []vaultkey  `yaml:"hc_vault" json:"hc_vault"`
-	AgeKeys                   []agekey    `yaml:"age" json:"age"`
-	LastModified              string      `yaml:"lastmodified" json:"lastmodified"`
-	MessageAuthenticationCode string      `yaml:"mac" json:"mac"`
-	PGPKeys                   []pgpkey    `yaml:"pgp" json:"pgp"`
-	UnencryptedSuffix         string      `yaml:"unencrypted_suffix,omitempty" json:"unencrypted_suffix,omitempty"`
-	EncryptedSuffix           string      `yaml:"encrypted_suffix,omitempty" json:"encrypted_suffix,omitempty"`
-	UnencryptedRegex          string      `yaml:"unencrypted_regex,omitempty" json:"unencrypted_regex,omitempty"`
-	EncryptedRegex            string      `yaml:"encrypted_regex,omitempty" json:"encrypted_regex,omitempty"`
-	Version                   string      `yaml:"version" json:"version"`
+	ShamirThreshold           int         `yaml:"shamir_threshold,omitempty" json:"shamir_threshold,omitempty" mapstructure:"shamir_threshold,omitempty"`
+	KeyGroups                 []keygroup  `yaml:"key_groups,omitempty" json:"key_groups,omitempty" mapstructure:"key_groups,omitempty"`
+	KMSKeys                   []kmskey    `yaml:"kms" json:"kms" mapstructure:"kms"`
+	GCPKMSKeys                []gcpkmskey `yaml:"gcp_kms" json:"gcp_kms" mapstructure:"gcp_kms"`
+	AzureKeyVaultKeys         []azkvkey   `yaml:"azure_kv" json:"azure_kv" mapstructure:"azure_kv"`
+	VaultKeys                 []vaultkey  `yaml:"hc_vault" json:"hc_vault" mapstructure:"hc_vault"`
+	AgeKeys                   []agekey    `yaml:"age" json:"age" mapstructure:"age"`
+	LastModified              string      `yaml:"lastmodified" json:"lastmodified" mapstructure:"lastmodified"`
+	MessageAuthenticationCode string      `yaml:"mac" json:"mac" mapstructure:"mac"`
+	PGPKeys                   []pgpkey    `yaml:"pgp" json:"pgp" mapstructure:"pgp"`
+	UnencryptedSuffix         string      `yaml:"unencrypted_suffix,omitempty" json:"unencrypted_suffix,omitempty" mapstructure:"unencrypted_suffix,omitempty"`
+	EncryptedSuffix           string      `yaml:"encrypted_suffix,omitempty" json:"encrypted_suffix,omitempty" mapstructure:"encrypted_suffix,omitempty"`
+	UnencryptedRegex          string      `yaml:"unencrypted_regex,omitempty" json:"unencrypted_regex,omitempty" mapstructure:"unencrypted_regex,omitempty"`
+	EncryptedRegex            string      `yaml:"encrypted_regex,omitempty" json:"encrypted_regex,omitempty" mapstructure:"encrypted_regex,omitempty"`
+	Version                   string      `yaml:"version" json:"version" mapstructure:"version"`
 }
 
 type keygroup struct {
-	PGPKeys           []pgpkey    `yaml:"pgp,omitempty" json:"pgp,omitempty"`
-	KMSKeys           []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
-	GCPKMSKeys        []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
-	AzureKeyVaultKeys []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
-	VaultKeys         []vaultkey  `yaml:"hc_vault" json:"hc_vault"`
-	AgeKeys           []agekey    `yaml:"age" json:"age"`
+	PGPKeys           []pgpkey    `yaml:"pgp,omitempty" json:"pgp,omitempty" mapstructure:"pgp,omitempty"`
+	KMSKeys           []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty" mapstructure:"kms,omitempty"`
+	GCPKMSKeys        []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty" mapstructure:"gcp_kms,omitempty"`
+	AzureKeyVaultKeys []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty" mapstructure:"azure_kv,omitempty"`
+	VaultKeys         []vaultkey  `yaml:"hc_vault" json:"hc_vault" mapstructure:"hc_vault"`
+	AgeKeys           []agekey    `yaml:"age" json:"age" mapstructure:"age"`
 }
 
 type pgpkey struct {
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
-	Fingerprint      string `yaml:"fp" json:"fp"`
+	CreatedAt        string `yaml:"created_at" json:"created_at" mapstructure:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc" mapstructure:"enc"`
+	Fingerprint      string `yaml:"fp" json:"fp" mapstructure:"fp"`
 }
 
 type kmskey struct {
-	Arn              string             `yaml:"arn" json:"arn"`
-	Role             string             `yaml:"role,omitempty" json:"role,omitempty"`
-	Context          map[string]*string `yaml:"context,omitempty" json:"context,omitempty"`
-	CreatedAt        string             `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string             `yaml:"enc" json:"enc"`
-	AwsProfile       string             `yaml:"aws_profile" json:"aws_profile"`
+	Arn              string             `yaml:"arn" json:"arn" mapstructure:"arn"`
+	Role             string             `yaml:"role,omitempty" json:"role,omitempty" mapstructure:"role,omitempty"`
+	Context          map[string]*string `yaml:"context,omitempty" json:"context,omitempty" mapstructure:"context,omitempty"`
+	CreatedAt        string             `yaml:"created_at" json:"created_at" mapstructure:"created_at"`
+	EncryptedDataKey string             `yaml:"enc" json:"enc" mapstructure:"enc"`
+	AwsProfile       string             `yaml:"aws_profile" json:"aws_profile" mapstructure:"aws_profile"`
 }
 
 type gcpkmskey struct {
-	ResourceID       string `yaml:"resource_id" json:"resource_id"`
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	ResourceID       string `yaml:"resource_id" json:"resource_id" mapstructure:"resource_id"`
+	CreatedAt        string `yaml:"created_at" json:"created_at" mapstructure:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc" mapstructure:"enc"`
 }
 
 type vaultkey struct {
-	VaultAddress     string `yaml:"vault_address" json:"vault_address"`
-	EnginePath       string `yaml:"engine_path" json:"engine_path"`
-	KeyName          string `yaml:"key_name" json:"key_name"`
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	VaultAddress     string `yaml:"vault_address" json:"vault_address" mapstructure:"vault_address"`
+	EnginePath       string `yaml:"engine_path" json:"engine_path" mapstructure:"engine_path"`
+	KeyName          string `yaml:"key_name" json:"key_name" mapstructure:"key_name"`
+	CreatedAt        string `yaml:"created_at" json:"created_at" mapstructure:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc" mapstructure:"enc"`
 }
 
 type azkvkey struct {
-	VaultURL         string `yaml:"vault_url" json:"vault_url"`
-	Name             string `yaml:"name" json:"name"`
-	Version          string `yaml:"version" json:"version"`
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	VaultURL         string `yaml:"vault_url" json:"vault_url" mapstructure:"vault_url"`
+	Name             string `yaml:"name" json:"name" mapstructure:"name"`
+	Version          string `yaml:"version" json:"version" mapstructure:"version"`
+	CreatedAt        string `yaml:"created_at" json:"created_at" mapstructure:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc" mapstructure:"enc"`
 }
 
 type agekey struct {
-	Recipient        string `yaml:"recipient" json:"recipient"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	Recipient        string `yaml:"recipient" json:"recipient" mapstructure:"recipient"`
+	EncryptedDataKey string `yaml:"enc" json:"enc" mapstructure:"enc"`
 }
 
 // MetadataFromInternal converts an internal SOPS metadata representation to a representation appropriate for storage
@@ -502,4 +505,84 @@ var ExampleFlatTree = sops.Tree{
 			},
 		},
 	},
+}
+
+// ConvertStructToMap recursively converts a structure to a map[string]interface{} representation while
+// respecting all mapstructure tags on the source structure. This is useful when converting complex structures
+// to a map suitable for use with the Flatten function.
+//
+// Note: this will only emit the public fields of a structure, private fields are ignored entirely.
+func ConvertStructToMap(input interface{}) (map[string]interface{}, error) {
+	var result map[string]interface{}
+	err := mapstructure.Decode(input, &result)
+	if err != nil {
+		return nil, fmt.Errorf("decode struct: %w", err)
+	}
+
+	// Mapstructure stops when the output interface is satisfied, in our case we need to delve further into
+	// any collections and ensure that all structures are converted to their map representations.
+	for k, v := range result {
+		val := reflect.ValueOf(v)
+		switch val.Kind() {
+		case reflect.Array:
+		case reflect.Slice:
+			elemType := val.Type().Elem()
+			// Ignore any elements that are already primitive types
+			if elemType.Kind() != reflect.Interface &&
+				elemType.Kind() != reflect.Struct {
+				continue
+			}
+
+			newList := make([]interface{}, val.Len())
+			for j := 0; j < val.Len(); j++ {
+				newVal, err := ConvertStructToMap(val.Index(j).Interface())
+				if err != nil {
+					return nil, fmt.Errorf("convert array field to map: %w", err)
+				}
+
+				newList[j] = newVal
+			}
+			result[k] = newList
+		case reflect.Map:
+			elemType := val.Type().Elem()
+			// Ignore any elements that are already primitive types
+			if elemType.Kind() != reflect.Interface &&
+				elemType.Kind() != reflect.Struct {
+				continue
+			}
+
+			// Non-string keys
+			if val.Type().Key().Kind() != reflect.String {
+				return nil, fmt.Errorf("field '%s' is invalid, only map fields with string keys are supported", k)
+			}
+
+			newMap := map[string]interface{}{}
+			for _, key := range val.MapKeys() {
+				newVal, err := ConvertStructToMap(val.MapIndex(key).Interface())
+				if err != nil {
+					return nil, fmt.Errorf("convert array field to map: %w", err)
+				}
+
+				newMap[key.String()] = newVal
+			}
+			result[k] = newMap
+		}
+	}
+
+	return result, nil
+}
+
+// ValueToString converts the input value to a string representation. This is useful when encoding data to plain
+// text formats as is done in the ini and dotenv stores.
+func ValueToString(v interface{}) string {
+	switch v := v.(type) {
+	case fmt.Stringer:
+		return v.String()
+	case float64:
+		return strconv.FormatFloat(v, 'f', 6, 64)
+	case bool:
+		return strconv.FormatBool(v)
+	default:
+		return fmt.Sprintf("%v", v)
+	}
 }
