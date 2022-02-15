@@ -11,10 +11,6 @@ func TestConvertStructToMap(t *testing.T) {
 		Val int
 	}
 
-	type InterfaceType struct {
-		Val interface{}
-	}
-
 	type NestedStruct struct {
 		A ComplexType
 		B ComplexType
