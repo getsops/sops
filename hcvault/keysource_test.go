@@ -25,7 +25,8 @@ func TestMain(m *testing.M) {
 		logger.Fatalf("Could not start resource: %s", err)
 	}
 
-	os.Setenv("VAULT_ADDR", fmt.Sprintf("http://127.0.0.1:%v", resource.GetPort("8200/tcp")))
+	vaultAddr := fmt.Sprintf("http://%s", resource.GetHostPort("8200/tcp"))
+	os.Setenv("VAULT_ADDR", vaultAddr)
 	os.Setenv("VAULT_TOKEN", "secret")
 	// exponential backoff-retry, because the application in the container might not be ready to accept connections yet
 	if err := pool.Retry(func() error {
@@ -45,7 +46,7 @@ func TestMain(m *testing.M) {
 		logger.Fatalf("Could not connect to docker: %s", err)
 	}
 
-	key := NewMasterKey(fmt.Sprintf("http://127.0.0.1:%v", resource.GetPort("8200/tcp")), "sops", "main")
+	key := NewMasterKey(vaultAddr, "sops", "main")
 	err = key.createVaultTransitAndKey()
 	if err != nil {
 		logger.Fatal(err)
