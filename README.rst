@@ -1207,7 +1207,7 @@ This file will not work in sops:
 	  - array
 	  - elements
 
-But this one will because because the ``sops`` key can be added at the same level as the
+But this one will work because the ``sops`` key can be added at the same level as the
 ``data`` key.
 
 .. code:: yaml
