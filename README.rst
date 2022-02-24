@@ -189,13 +189,13 @@ the ``--age`` option or the **SOPS_AGE_RECIPIENTS** environment variable:
 
 .. code:: bash
 
-   $ sops --age age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw test.yaml > test.enc.yaml
+   $ sops --encrypt --age age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw test.yaml > test.enc.yaml
 
 When decrypting a file with the corresponding identity, sops will look for a
 text file name ``keys.txt`` located in a ``sops`` subdirectory of your user
-configuration directory. On Linux, this would be ``$XDG_CONFIG_HOME/sops/keys.txt``.
-On macOS, this would be ``$HOME/Library/Application Support/sops/keys.txt``. On
-Windows, this would be ``%AppData%\sops\keys.txt``. You can specify the location
+configuration directory. On Linux, this would be ``$XDG_CONFIG_HOME/sops/age/keys.txt``.
+On macOS, this would be ``$HOME/Library/Application Support/sops/age/keys.txt``. On
+Windows, this would be ``%AppData%\sops\age\keys.txt``. You can specify the location
 of this file manually by setting the environment variable **SOPS_AGE_KEY_FILE**.
 Alternatively you can provide the the key(s) directly by setting the **SOPS_AGE_KEY**
 environment variable.
@@ -652,7 +652,7 @@ and its KMS and PGP keys are used to encrypt the file. It should be noted that
 the looking up of ``.sops.yaml`` is from the working directory (CWD) instead of
 the directory of the encrypting file (see `Issue 242 <https://github.com/mozilla/sops/issues/242>`_).
 
-The path_regex checks the full path of the encrypting file. Here is another example:
+The path_regex checks the path of the encrypting file relative to the .sops.yaml config file. Here is another example:
 
 * files located under directory **development** should use one set of KMS A
 * files located under directory **production** should use another set of KMS B
