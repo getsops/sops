@@ -15,10 +15,10 @@ jobs:
         run: sudo apt-get update && sudo apt-get install git ruby rpm -y
       - name: Install fpm
         run: gem install fpm || sudo gem install fpm
-      - name: Set up Go 1.15
+      - name: Set up Go 1.17
         uses: actions/setup-go@v2
         with:
-          go-version: 1.15
+          go-version: 1.17
         id: go
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
