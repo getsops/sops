@@ -21,6 +21,8 @@ func init() {
 }
 
 const privateKeySizeLimit = 1 << 24 // 16 MiB
+const SopsAgeKeyEnv = "SOPS_AGE_KEY"
+const SopsAgeKeyFileEnv = "SOPS_AGE_KEY_FILE"
 
 // MasterKey is an age key used to encrypt and decrypt sops' data key.
 type MasterKey struct {
@@ -100,7 +102,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	var ageKeyReaderName string
 
 	if ageKeyReader == nil {
-		ageKey, ok := os.LookupEnv("SOPS_AGE_KEY")
+		ageKey, ok := os.LookupEnv(SopsAgeKeyEnv)
 		if ok {
 			ageKeyReader = strings.NewReader(ageKey)
 			ageKeyReaderName = "environment variable"
@@ -108,7 +110,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	}
 
 	if ageKeyReader == nil {
-		ageKeyFilePath, ok := os.LookupEnv("SOPS_AGE_KEY_FILE")
+		ageKeyFilePath, ok := os.LookupEnv(SopsAgeKeyFileEnv)
 		if ok {
 			ageKeyFile, err := os.Open(ageKeyFilePath)
 			if err != nil {

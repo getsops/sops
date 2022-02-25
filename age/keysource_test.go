@@ -45,7 +45,7 @@ func TestAge(t *testing.T) {
 	assert.NoError(err)
 
 	_, filename, _, _ := runtime.Caller(0)
-	err = os.Setenv("SOPS_AGE_KEY_FILE", path.Join(path.Dir(filename), "keys.txt"))
+	err = os.Setenv(SopsAgeKeyFileEnv, path.Join(path.Dir(filename), "keys.txt"))
 	assert.NoError(err)
 
 	decryptedKey, err := key.Decrypt()
@@ -71,8 +71,8 @@ DOMAIN=files.127.0.0.1.nip.io`
 	assert.NoError(err)
 
 	_, filename, _, _ := runtime.Caller(0)
-	err = os.Setenv("SOPS_AGE_KEY_FILE", path.Join(path.Dir(filename), "keys.txt"))
-	defer os.Unsetenv("SOPS_AGE_KEY_FILE")
+	err = os.Setenv(SopsAgeKeyFileEnv, path.Join(path.Dir(filename), "keys.txt"))
+	defer os.Unsetenv(SopsAgeKeyFileEnv)
 	assert.NoError(err)
 
 	decryptedKey, err := key.Decrypt()
@@ -96,8 +96,8 @@ func TestAgeEnv(t *testing.T) {
 	_, filename, _, _ := runtime.Caller(0)
 	keysBytes, err := ioutil.ReadFile(path.Join(path.Dir(filename), "keys.txt"))
 	assert.NoError(err)
-	err = os.Setenv("SOPS_AGE_KEY", string(keysBytes))
-	defer os.Unsetenv("SOPS_AGE_KEY")
+	err = os.Setenv(SopsAgeKeyEnv, string(keysBytes))
+	defer os.Unsetenv(SopsAgeKeyEnv)
 	assert.NoError(err)
 
 	decryptedKey, err := key.Decrypt()
