@@ -20,7 +20,6 @@ func init() {
 	log = logging.NewLogger("AGE")
 }
 
-const privateKeySizeLimit = 1 << 24 // 16 MiB
 const SopsAgeKeyEnv = "SOPS_AGE_KEY"
 const SopsAgeKeyFileEnv = "SOPS_AGE_KEY_FILE"
 
@@ -30,7 +29,6 @@ type MasterKey struct {
 	Recipient    string // a Bech32-encoded public key
 	EncryptedKey string // a sops data key encrypted with age
 
-	parsedIdentity  *age.X25519Identity  // a parsed age private key
 	parsedRecipient *age.X25519Recipient // a parsed age public key
 }
 
