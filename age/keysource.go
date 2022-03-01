@@ -20,15 +20,12 @@ func init() {
 	log = logging.NewLogger("AGE")
 }
 
-const privateKeySizeLimit = 1 << 24 // 16 MiB
-
 // MasterKey is an age key used to encrypt and decrypt sops' data key.
 type MasterKey struct {
 	Identity     string // a Bech32-encoded private key
 	Recipient    string // a Bech32-encoded public key
 	EncryptedKey string // a sops data key encrypted with age
 
-	parsedIdentity  *age.X25519Identity  // a parsed age private key
 	parsedRecipient *age.X25519Recipient // a parsed age public key
 }
 
