@@ -704,12 +704,6 @@ By default, ``sops`` uses the key server ``keys.openpgp.org`` to retrieve the GP
 keys that are not present in the local keyring.
 This is no longer configurable. You can learn more about why from this write-up: `SKS Keyserver Network Under Attack <https://gist.github.com/rjhansen/67ab921ffb4084c865b3618d6955275f>`_.
 
-Example: place the following in your ``~/.bashrc``
-
-.. code:: bash
-
-	SOPS_GPG_KEYSERVER = 'gpg.example.com'
-
 
 Key groups
 ~~~~~~~~~~
@@ -1207,7 +1201,7 @@ This file will not work in sops:
 	  - array
 	  - elements
 
-But this one will because because the ``sops`` key can be added at the same level as the
+But this one will work because the ``sops`` key can be added at the same level as the
 ``data`` key.
 
 .. code:: yaml
