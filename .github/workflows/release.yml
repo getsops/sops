@@ -34,14 +34,18 @@ jobs:
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Set RELEASE_NUMBER
         run: echo "RELEASE_NUMBER=$(echo $RELEASE_VERSION | cut -c2-)" >> $GITHUB_ENV
+      - name: Build linux arm64 binary
+        run: GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.linux.arm64 go.mozilla.org/sops/v3/cmd/sops
       - name: Build darwin amd64 binary
         run: GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.darwin.amd64 go.mozilla.org/sops/v3/cmd/sops
+      - name: Copy darwin amd64 to have a no-architecture labeled version
+        run: cp dist/sops-${{ env.RELEASE_VERSION }}.darwin.amd64 dist/sops-${{ env.RELEASE_VERSION }}.darwin
       - name: Build darwin arm64 binary
         run: GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.darwin.arm64 go.mozilla.org/sops/v3/cmd/sops
       - name: Build windows binary
         run: GOOS=windows CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.exe go.mozilla.org/sops/v3/cmd/sops
       - name: Copy already built linux binary
-        run: cp tmppkg/usr/local/bin/sops dist/sops-${{ env.RELEASE_VERSION }}.linux
+        run: cp tmppkg/usr/local/bin/sops dist/sops-${{ env.RELEASE_VERSION }}.linux && cp tmppkg/usr/local/bin/sops dist/sops-${{ env.RELEASE_VERSION }}.linux.amd64
       - name: Create release
         uses: "mozilla/action-automatic-releases@latest"
         with:
@@ -51,6 +55,9 @@ jobs:
             dist/sops-${{ env.RELEASE_VERSION }}.exe
             dist/sops-${{ env.RELEASE_VERSION }}.darwin.amd64
             dist/sops-${{ env.RELEASE_VERSION }}.darwin.arm64
+            dist/sops-${{ env.RELEASE_VERSION }}.darwin
+            dist/sops-${{ env.RELEASE_VERSION }}.linux.amd64
+            dist/sops-${{ env.RELEASE_VERSION }}.linux.arm64
             dist/sops-${{ env.RELEASE_VERSION }}.linux
             dist/sops_${{ env.RELEASE_NUMBER }}_amd64.deb
             dist/sops-${{ env.RELEASE_NUMBER }}-1.x86_64.rpm
