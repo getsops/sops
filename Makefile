@@ -82,7 +82,7 @@ else
 	cp $$GOPATH/bin/sops tmppkg/usr/local/bin/
 	fpm -C tmppkg -n sops --license MPL2.0 --vendor mozilla \
 		--description "Sops is an editor of encrypted files that supports YAML, JSON and BINARY formats and encrypts with AWS KMS and PGP." \
-		-m "Julien Vehent <jvehent+sops@mozilla.com>" \
+		-m "Mozilla Security <security@mozilla.org>" \
 		--url https://go.mozilla.org/sops \
 		--architecture x86_64 \
 		-v "$$(grep '^const Version' version/version.go |cut -d \" -f 2)" \
