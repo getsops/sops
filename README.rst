@@ -9,11 +9,8 @@ formats and encrypts with AWS KMS, GCP KMS, Azure Key Vault, age, and PGP.
 
 ------------
 
-.. image:: https://godoc.org/go.mozilla.org/sops?status.svg
-	:target: https://godoc.org/go.mozilla.org/sops
-
-.. image:: https://travis-ci.org/mozilla/sops.svg?branch=master
-	:target: https://travis-ci.org/mozilla/sops
+.. image:: https://pkg.go.dev/badge/go.mozilla.org/sops/v3.svg
+	:target: https://pkg.go.dev/go.mozilla.org/sops/v3
 
 Download
 --------
@@ -28,12 +25,13 @@ For the adventurous, unstable features are available in the `develop` branch, wh
 
 .. code:: bash
 
-	$ go get -u go.mozilla.org/sops/v3/cmd/sops
+	$ mkdir -p $GOPATH/src/go.mozilla.org/sops/
+        $ git clone https://github.com/mozilla/sops.git $GOPATH/src/go.mozilla.org/sops/
         $ cd $GOPATH/src/go.mozilla.org/sops/
         $ git checkout develop
         $ make install
 
-(requires Go >= 1.13)
+(requires Go >= 1.17)
 
 If you don't have Go installed, set it up with:
 
@@ -46,12 +44,7 @@ If you don't have Go installed, set it up with:
 
 Or whatever variation of the above fits your system and shell.
 
-To use **sops** as a library, take a look at the `decrypt package <https://godoc.org/go.mozilla.org/sops/decrypt>`_.
-
-**What happened to Python Sops?** We rewrote Sops in Go to solve a number of
-deployment issues, but the Python branch still exists under ``python-sops``. We
-will keep maintaining it for a while, and you can still ``pip install sops``,
-but we strongly recommend you use the Go version instead.
+To use **sops** as a library, take a look at the `decrypt package <https://pkg.go.dev/go.mozilla.org/sops/v3/decrypt>`_.
 
 .. sectnum::
 .. contents:: Table of Contents
@@ -1370,26 +1363,6 @@ The value must be formatted as json.
 
 	$ sops --set '["an_array"][1] {"uid1":null,"uid2":1000,"uid3":["bob"]}' ~/git/svc/sops/example.yaml
 
-Using sops as a library in a python script
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-You can import sops as a module and use it in your python program.
-
-.. code:: python
-
-	import sops
-
-	pathtype = sops.detect_filetype(path)
-	tree = sops.load_file_into_tree(path, pathtype)
-	sops_key, tree = sops.get_key(tree)
-	tree = sops.walk_and_decrypt(tree, sops_key)
-	sops.write_file(tree, path=path, filetype=pathtype)
-
-Note: this uses the previous implementation of `sops` written in python,
-
-and so doesn't support newer features such as GCP-KMS.
-To use the current version, call out to ``sops`` using ``subprocess.run``
-
 Showing diffs in cleartext in git
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1705,8 +1678,8 @@ file format introduced in **1.0**.
 Security
 --------
 
-Please report security issues to jvehent at mozilla dot com, or by using one
-of the contact method available on keybase: `https://keybase.io/jvehent <https://keybase.io/jvehent>`_
+Please report security issues to security at mozilla dot org, or by using one
+of the contact method available here: `https://www.mozilla.org/en-US/security/#For_Developers <https://www.mozilla.org/en-US/security/#For_Developers>`_
 
 License
 -------
@@ -1717,9 +1690,12 @@ Authors
 
 The core team is composed of:
 
+* AJ Banhken @ajvb
+
+The original authors were:
+
 * Adrian Utrilla @autrilla
 * Julien Vehent @jvehent
-* AJ Banhken @ajvb
 
 And a whole bunch of `contributors <https://github.com/mozilla/sops/graphs/contributors>`_
 
