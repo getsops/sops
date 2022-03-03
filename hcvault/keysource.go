@@ -123,7 +123,7 @@ func vaultClient(address string) (*api.Client, error) {
 	cfg.Address = address
 	cli, err := api.NewClient(cfg)
 	if err != nil {
-		return nil, fmt.Errorf("Cannot create Vault Client: %v", err)
+		return nil, fmt.Errorf("Cannot create Vault Client: %w", err)
 	}
 	if cli.Token() != "" {
 		return cli, nil
@@ -239,7 +239,7 @@ func (key *MasterKey) createVaultTransitAndKey() error {
 		return err
 	}
 	if err != nil {
-		return fmt.Errorf("Cannot create Vault Client: %v", err)
+		return fmt.Errorf("Cannot create Vault Client: %w", err)
 	}
 	err = cli.Sys().Mount(key.EnginePath, &api.MountInput{
 		Type:        "transit",

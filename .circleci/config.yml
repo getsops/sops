@@ -4,10 +4,10 @@ workflows:
   build-and-deploy:
     jobs:
       - build
-      - push:     
+      - push:
           filters:
             tags:
-              only: /^v.*/   
+              only: /^v.*/
             branches:
               ignore: /.*/
 jobs:
@@ -30,7 +30,7 @@ jobs:
     resource_class: large
     steps:
       - checkout
-      - run: 
+      - run:
           name: semver check
           command: |
             MAJOR=$(echo ${CIRCLE_TAG#v} | cut -d"." -f1)
@@ -46,8 +46,8 @@ jobs:
 
             This job uses the semver from the git TAG as the public version to publish.
 
-            - This should only run on workflows triggered by a tag. 
-            - The tag name should be a semver like 'v1.2.3' 
+            - This should only run on workflows triggered by a tag.
+            - The tag name should be a semver like 'v1.2.3'
             - The version should follow conventions documented at https://github.com/fsaintjacques/semver-tool
             EOF
             exit 1

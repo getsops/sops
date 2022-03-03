@@ -11,7 +11,7 @@ import (
 )
 
 // Version represents the value of the current semantic version
-const Version = "3.6.1"
+const Version = "3.7.1"
 
 // PrintVersion handles the version command for sops
 func PrintVersion(c *cli.Context) {
@@ -74,7 +74,7 @@ func RetrieveLatestVersionFromUpstream() (string, error) {
 			// try to parse the version as semver
 			_, err := semver.Make(comps[1])
 			if err != nil {
-				return "", fmt.Errorf("Retrieved version %q does not match semver format: %v", comps[1], err)
+				return "", fmt.Errorf("Retrieved version %q does not match semver format: %w", comps[1], err)
 			}
 			return comps[1], nil
 		}

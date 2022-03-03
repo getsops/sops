@@ -12,7 +12,7 @@ func WritePipe(pipe string, contents []byte) {
 	log.Fatal("fifos are not available on windows")
 }
 
-func GetPipe(dir string) string {
+func GetPipe(dir, filename string) string {
 	log.Fatal("fifos are not available on windows")
 	return ""
 }

@@ -80,14 +80,14 @@ func (key *MasterKey) encryptWithGPGBinary(dataKey []byte) error {
 	cmd.Stderr = &stderr
 	err := cmd.Run()
 	if err != nil {
-		return err
+		return fmt.Errorf("gpg binary failed with error: %s, %s", err, stderr.String())
 	}
 	key.EncryptedKey = stdout.String()
 	return nil
 }
 
 func getKeyFromKeyServer(fingerprint string) (openpgp.Entity, error) {
-	log.Warn("Deprecation Warning: GPG key fetching from a keyserver witihin sops will be removed in a future version of sops. See https://github.com/mozilla/sops/issues/727 for more information.")
+	log.Warn("Deprecation Warning: GPG key fetching from a keyserver within sops will be removed in a future version of sops. See https://github.com/mozilla/sops/issues/727 for more information.")
 
 	url := fmt.Sprintf("https://keys.openpgp.org/vks/v1/by-fingerprint/%s", fingerprint)
 	resp, err := http.Get(url)

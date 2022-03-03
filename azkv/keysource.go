@@ -210,7 +210,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 			"key":     key.Name,
 			"version": key.Version,
 		}).Error("Encryption failed")
-		return fmt.Errorf("Failed to encrypt data: %v", err)
+		return fmt.Errorf("Failed to encrypt data: %w", err)
 	}
 
 	key.EncryptedKey = *res.Result
@@ -244,7 +244,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 			"key":     key.Name,
 			"version": key.Version,
 		}).Error("Decryption failed")
-		return nil, fmt.Errorf("Error decrypting key: %v", err)
+		return nil, fmt.Errorf("Error decrypting key: %w", err)
 	}
 
 	plaintext, err := base64.RawURLEncoding.DecodeString(*res.Result)

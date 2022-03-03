@@ -8,11 +8,13 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"path/filepath"
 	"regexp"
+	"strings"
 
-	"github.com/mozilla-services/yaml"
 	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/v3"
+	"go.mozilla.org/sops/v3/age"
 	"go.mozilla.org/sops/v3/azkv"
 	"go.mozilla.org/sops/v3/gcpkms"
 	"go.mozilla.org/sops/v3/hcvault"
@@ -20,6 +22,7 @@ import (
 	"go.mozilla.org/sops/v3/logging"
 	"go.mozilla.org/sops/v3/pgp"
 	"go.mozilla.org/sops/v3/publish"
+	"gopkg.in/yaml.v3"
 )
 
 var log *logrus.Logger
@@ -71,6 +74,7 @@ type keyGroup struct {
 	GCPKMS  []gcpKmsKey  `yaml:"gcp_kms"`
 	AzureKV []azureKVKey `yaml:"azure_keyvault"`
 	Vault   []string     `yaml:"hc_vault"`
+	Age     []string     `yaml:"age"`
 	PGP     []string
 }
 
@@ -109,6 +113,7 @@ type creationRule struct {
 	PathRegex         string `yaml:"path_regex"`
 	KMS               string
 	AwsProfile        string `yaml:"aws_profile"`
+	Age               string `yaml:"age"`
 	PGP               string
 	GCPKMS            string     `yaml:"gcp_kms"`
 	AzureKeyVault     string     `yaml:"azure_keyvault"`
@@ -147,6 +152,13 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 	if len(cRule.KeyGroups) > 0 {
 		for _, group := range cRule.KeyGroups {
 			var keyGroup sops.KeyGroup
+			for _, k := range group.Age {
+				key, err := age.MasterKeyFromRecipient(k)
+				if err != nil {
+					return nil, err
+				}
+				keyGroup = append(keyGroup, key)
+			}
 			for _, k := range group.PGP {
 				keyGroup = append(keyGroup, pgp.NewMasterKeyFromFingerprint(k))
 			}
@@ -170,6 +182,16 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		}
 	} else {
 		var keyGroup sops.KeyGroup
+		if cRule.Age != "" {
+			ageKeys, err := age.MasterKeysFromRecipients(cRule.Age)
+			if err != nil {
+				return nil, err
+			} else {
+				for _, ak := range ageKeys {
+					keyGroup = append(keyGroup, ak)
+				}
+			}
+		}
 		for _, k := range pgp.MasterKeysFromFingerprintString(cRule.PGP) {
 			keyGroup = append(keyGroup, k)
 		}
@@ -293,11 +315,19 @@ func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptio
 	return config, nil
 }
 
-func parseCreationRuleForFile(conf *configFile, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
+func parseCreationRuleForFile(conf *configFile, confPath, filePath string, kmsEncryptionContext map[string]*string) (*Config, error) {
 	// If config file doesn't contain CreationRules (it's empty or only contains DestionationRules), assume it does not exist
 	if conf.CreationRules == nil {
 		return nil, nil
 	}
+
+	configDir, err := filepath.Abs(filepath.Dir(confPath))
+	if err != nil {
+		return nil, err
+	}
+
+	// compare file path relative to path of config file
+	filePath = strings.TrimPrefix(filePath, configDir + string(filepath.Separator))
 
 	var rule *creationRule
 
@@ -306,11 +336,13 @@ func parseCreationRuleForFile(conf *configFile, filePath string, kmsEncryptionCo
 			rule = &r
 			break
 		}
-		if r.PathRegex != "" {
-			if match, _ := regexp.MatchString(r.PathRegex, filePath); match {
-				rule = &r
-				break
-			}
+		reg, err := regexp.Compile(r.PathRegex)
+		if err != nil {
+			return nil, fmt.Errorf("can not compile regexp: %w", err)
+		}
+		if reg.MatchString(filePath) {
+			rule = &r
+			break
 		}
 	}
 
@@ -334,7 +366,8 @@ func LoadCreationRuleForFile(confPath string, filePath string, kmsEncryptionCont
 	if err != nil {
 		return nil, err
 	}
-	return parseCreationRuleForFile(conf, filePath, kmsEncryptionContext)
+
+	return parseCreationRuleForFile(conf, confPath, filePath, kmsEncryptionContext)
 }
 
 // LoadDestinationRuleForFile works the same as LoadCreationRuleForFile, but gets the "creation_rule" from the matching destination_rule's

@@ -25,7 +25,7 @@ this:
 somelist_unencrypted:
 - all elements of this list
 - remain in clear text
-- because of the _encrypted suffix in the key
+- because of the _unencrypted suffix in the key
 nested_unencrypted:
     this:
         is:

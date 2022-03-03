@@ -6,8 +6,8 @@ import (
 	"os"
 
 	"crypto/md5"
+	exec "golang.org/x/sys/execabs"
 	"io"
-	"os/exec"
 	"strings"
 
 	"bufio"

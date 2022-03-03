@@ -3,6 +3,7 @@ package keyservice
 import (
 	"fmt"
 
+	"go.mozilla.org/sops/v3/age"
 	"go.mozilla.org/sops/v3/azkv"
 	"go.mozilla.org/sops/v3/gcpkms"
 	"go.mozilla.org/sops/v3/hcvault"
@@ -75,6 +76,18 @@ func (ks *Server) encryptWithVault(key *VaultKey, plaintext []byte) ([]byte, err
 	return []byte(vaultKey.EncryptedKey), nil
 }
 
+func (ks *Server) encryptWithAge(key *AgeKey, plaintext []byte) ([]byte, error) {
+	ageKey := age.MasterKey{
+		Recipient: key.Recipient,
+	}
+
+	if err := ageKey.Encrypt(plaintext); err != nil {
+		return nil, err
+	}
+
+	return []byte(ageKey.EncryptedKey), nil
+}
+
 func (ks *Server) decryptWithPgp(key *PgpKey, ciphertext []byte) ([]byte, error) {
 	pgpKey := pgp.NewMasterKeyFromFingerprint(key.Fingerprint)
 	pgpKey.EncryptedKey = string(ciphertext)
@@ -120,6 +133,15 @@ func (ks *Server) decryptWithVault(key *VaultKey, ciphertext []byte) ([]byte, er
 	return []byte(plaintext), err
 }
 
+func (ks *Server) decryptWithAge(key *AgeKey, ciphertext []byte) ([]byte, error) {
+	ageKey := age.MasterKey{
+		Recipient: key.Recipient,
+	}
+	ageKey.EncryptedKey = string(ciphertext)
+	plaintext, err := ageKey.Decrypt()
+	return []byte(plaintext), err
+}
+
 // Encrypt takes an encrypt request and encrypts the provided plaintext with the provided key, returning the encrypted
 // result
 func (ks Server) Encrypt(ctx context.Context,
@@ -161,6 +183,14 @@ func (ks Server) Encrypt(ctx context.Context,
 		}
 	case *Key_VaultKey:
 		ciphertext, err := ks.encryptWithVault(k.VaultKey, req.Plaintext)
+		if err != nil {
+			return nil, err
+		}
+		response = &EncryptResponse{
+			Ciphertext: ciphertext,
+		}
+	case *Key_AgeKey:
+		ciphertext, err := ks.encryptWithAge(k.AgeKey, req.Plaintext)
 		if err != nil {
 			return nil, err
 		}
@@ -255,6 +285,14 @@ func (ks Server) Decrypt(ctx context.Context,
 		}
 	case *Key_VaultKey:
 		plaintext, err := ks.decryptWithVault(k.VaultKey, req.Ciphertext)
+		if err != nil {
+			return nil, err
+		}
+		response = &DecryptResponse{
+			Plaintext: plaintext,
+		}
+	case *Key_AgeKey:
+		plaintext, err := ks.decryptWithAge(k.AgeKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}
