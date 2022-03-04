@@ -48,30 +48,46 @@ functional-tests-all:
 	$(GO) build -o functional-tests/sops go.mozilla.org/sops/v3/cmd/sops
 	cd functional-tests && cargo test && cargo test -- --ignored
 
-deb-pkg: vendor
+# Creates variables during target re-definition. Basically this block allows the particular variables to be used in the final target
+build-deb-%: OS = $(word 1,$(subst -, ,$*))
+build-deb-%: ARCH = $(word 2,$(subst -, ,$*))
+build-deb-%: FPM_ARCH = $(word 3,$(subst -, ,$*))
+# Poor-mans function with parameters being split out from the variable part of it's name
+build-deb-%:
 	rm -rf tmppkg
 	mkdir -p tmppkg/usr/local/bin
-	GOOS=linux CGO_ENABLED=0 go build -mod vendor -o tmppkg/usr/local/bin/sops go.mozilla.org/sops/v3/cmd/sops
+	GOOS=$(OS) GOARCH="$(ARCH)" CGO_ENABLED=0 go build -mod vendor -o tmppkg/usr/local/bin/sops go.mozilla.org/sops/v3/cmd/sops
 	fpm -C tmppkg -n sops --license MPL2.0 --vendor mozilla \
 		--description "Sops is an editor of encrypted files that supports YAML, JSON and BINARY formats and encrypts with AWS KMS and PGP." \
 		-m "AJ Bahnken <ajvb+sops@mozilla.com>" \
 		--url https://go.mozilla.org/sops \
-		--architecture x86_64 \
+		--architecture $(FPM_ARCH) \
 		-v "$$(grep '^const Version' version/version.go |cut -d \" -f 2)" \
 		-s dir -t deb .
 
-rpm-pkg: vendor
+# Create .deb packages for multiple architectures
+deb-pkg: vendor build-deb-linux-amd64-x86_64 build-deb-linux-arm64-arm64
+
+# Creates variables during target re-definition. Basically this block allows the particular variables to be used in the final target
+build-rpm-%: OS = $(word 1,$(subst -, ,$*))
+build-rpm-%: ARCH = $(word 2,$(subst -, ,$*))
+build-rpm-%: FPM_ARCH = $(word 3,$(subst -, ,$*))
+# Poor-mans function with parameters being split out from the variable part of it's name
+build-rpm-%:
 	rm -rf tmppkg
 	mkdir -p tmppkg/usr/local/bin
-	GOOS=linux CGO_ENABLED=0 go build -mod vendor -o tmppkg/usr/local/bin/sops go.mozilla.org/sops/v3/cmd/sops
+	GOOS=$(OS) GOARCH="$(ARCH)" CGO_ENABLED=0 go build -mod vendor -o tmppkg/usr/local/bin/sops go.mozilla.org/sops/v3/cmd/sops
 	fpm -C tmppkg -n sops --license MPL2.0 --vendor mozilla \
 		--description "Sops is an editor of encrypted files that supports YAML, JSON and BINARY formats and encrypts with AWS KMS and PGP." \
 		-m "AJ Bahnken <ajvb+sops@mozilla.com>" \
 		--url https://go.mozilla.org/sops \
-		--architecture x86_64 \
-		--rpm-os linux \
+		--architecture $(FPM_ARCH) \
+		--rpm-os $(OS) \
 		-v "$$(grep '^const Version' version/version.go |cut -d \" -f 2)" \
 		-s dir -t rpm .
+
+# Create .rpm packages for multiple architectures
+rpm-pkg: vendor build-rpm-linux-amd64-x86_64 build-rpm-linux-arm64-arm64
 
 dmg-pkg: install
 ifneq ($(OS),darwin)

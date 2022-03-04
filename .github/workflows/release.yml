@@ -60,4 +60,6 @@ jobs:
             dist/sops-${{ env.RELEASE_VERSION }}.linux.arm64
             dist/sops-${{ env.RELEASE_VERSION }}.linux
             dist/sops_${{ env.RELEASE_NUMBER }}_amd64.deb
+            dist/sops_${{ env.RELEASE_NUMBER }}_arm64.deb
             dist/sops-${{ env.RELEASE_NUMBER }}-1.x86_64.rpm
+            dist/sops-${{ env.RELEASE_NUMBER }}-1.aarch64.rpm
