@@ -44,7 +44,10 @@ func TestPGPKeySourceFromString(t *testing.T) {
 }
 
 func TestRetrievePGPKey(t *testing.T) {
-	fingerprint := "FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4"
+	// Requires a key available in https://keys.openpgp.org/ *with identity information* (that is, an email address).
+	// See https://keys.openpgp.org/about/faq#verify-multiple for details about identity information.
+	// We use the key of release@mozilla.com for here.
+	fingerprint := "14F26682D0916CDD81E37B6D61B7B526D98F0353"
 	_, err := getKeyFromKeyServer(fingerprint)
 	assert.NoError(t, err)
 }
