@@ -1,6 +1,21 @@
 Changelog
 =========
 
+3.7.2
+-----
+Changes:
+
+    * README updates (#861, #860)
+    * Various test fixes (#909, #906, #1008)
+    * Added Linux and Darwin arm64 releases (#911, #891)
+    * Upgrade to go v1.17 (#1012)
+    * Support SOPS_AGE_KEY environment variable (#1006)
+
+Bug fixes:
+
+    * Make sure comments in yaml files are not duplicated (#866)
+    * Make sure configuration file paths work correctly relative to the config file in us (#853)
+
 3.7.1
 -----
 Changes:
