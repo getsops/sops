@@ -19,6 +19,12 @@ organization=Acme Widgets Inc.
 server=192.0.2.62     
 port=143
 file="payroll.dat"
+
+[format]
+test = value with#hash
+pythonic = some
+           additional
+           value
 `
 	expected := sops.TreeBranches{
 		sops.TreeBranch{
@@ -61,6 +67,19 @@ file="payroll.dat"
 					sops.TreeItem{
 						Key:   "file",
 						Value: "payroll.dat",
+					},
+				},
+			},
+			sops.TreeItem{
+				Key: "format",
+				Value: sops.TreeBranch{
+					sops.TreeItem{
+						Key:   "test",
+						Value: "value with#hash",
+					},
+					sops.TreeItem{
+						Key:   "pythonic",
+						Value: "some\nadditional\nvalue",
 					},
 				},
 			},
@@ -116,6 +135,30 @@ func TestEncodeIniWithEscaping(t *testing.T) {
 					sops.TreeItem{
 						Key:   "baz\\\\foo",
 						Value: "2.0",
+					},
+				},
+			},
+		},
+	}
+	out, err := Store{}.iniFromTreeBranches(branches)
+	assert.Nil(t, err)
+	expected, _ := Store{}.treeBranchesFromIni(out)
+	assert.Equal(t, expected, branches)
+}
+
+func TestEncodeIniWithPreserving(t *testing.T) {
+	branches := sops.TreeBranches{
+		sops.TreeBranch{
+			sops.TreeItem{
+				Key: "DEFAULT",
+				Value: sops.TreeBranch{
+					sops.TreeItem{
+						Key:   "hash",
+						Value: "foo#bar",
+					},
+					sops.TreeItem{
+						Key:   "semicolon",
+						Value: "foo;bar",
 					},
 				},
 			},
