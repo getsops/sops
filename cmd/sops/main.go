@@ -22,6 +22,7 @@ import (
 	"go.mozilla.org/sops/v3/cmd/sops/codes"
 	"go.mozilla.org/sops/v3/cmd/sops/common"
 	"go.mozilla.org/sops/v3/cmd/sops/subcommand/exec"
+	filestatuscmd "go.mozilla.org/sops/v3/cmd/sops/subcommand/filestatus"
 	"go.mozilla.org/sops/v3/cmd/sops/subcommand/groups"
 	keyservicecmd "go.mozilla.org/sops/v3/cmd/sops/subcommand/keyservice"
 	publishcmd "go.mozilla.org/sops/v3/cmd/sops/subcommand/publish"
@@ -533,6 +534,38 @@ func main() {
 				} else if err != nil {
 					return common.NewExitError(err, codes.ErrorGeneric)
 				}
+				return nil
+			},
+		},
+		{
+			Name:      "filestatus",
+			Usage:     "check the status of the file, returning encryption status",
+			ArgsUsage: `file`,
+			Flags:     []cli.Flag{},
+			Action: func(c *cli.Context) error {
+				if c.NArg() < 1 {
+					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
+				}
+
+				fileName := c.Args()[0]
+				inputStore := inputStore(c, fileName)
+				opts := filestatuscmd.Opts{
+					InputStore: inputStore,
+					InputPath:  fileName,
+				}
+
+				status, err := filestatuscmd.FileStatus(opts)
+				if err != nil {
+					return err
+				}
+
+				json, err := encodingjson.Marshal(status)
+				if err != nil {
+					return common.NewExitError(err, codes.ErrorGeneric)
+				}
+
+				fmt.Println(string(json))
+
 				return nil
 			},
 		},
