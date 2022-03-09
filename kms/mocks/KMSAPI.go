@@ -2965,6 +2965,84 @@ func (_m *KMSAPI) ReEncryptWithContext(_a0 context.Context, _a1 *kms.ReEncryptIn
 	return r0, r1
 }
 
+// ReplicateKey provides a mock function with given fields: _a0
+func (_m *KMSAPI) ReplicateKey(_a0 *kms.ReplicateKeyInput) (*kms.ReplicateKeyOutput, error) {
+	ret := _m.Called(_a0)
+
+	var r0 *kms.ReplicateKeyOutput
+	if rf, ok := ret.Get(0).(func(*kms.ReplicateKeyInput) *kms.ReplicateKeyOutput); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.ReplicateKeyOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(*kms.ReplicateKeyInput) error); ok {
+		r1 = rf(_a0)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// ReplicateKeyRequest provides a mock function with given fields: _a0
+func (_m *KMSAPI) ReplicateKeyRequest(_a0 *kms.ReplicateKeyInput) (*request.Request, *kms.ReplicateKeyOutput) {
+	ret := _m.Called(_a0)
+
+	var r0 *request.Request
+	if rf, ok := ret.Get(0).(func(*kms.ReplicateKeyInput) *request.Request); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*request.Request)
+		}
+	}
+
+	var r1 *kms.ReplicateKeyOutput
+	if rf, ok := ret.Get(1).(func(*kms.ReplicateKeyInput) *kms.ReplicateKeyOutput); ok {
+		r1 = rf(_a0)
+	} else {
+		if ret.Get(1) != nil {
+			r1 = ret.Get(1).(*kms.ReplicateKeyOutput)
+		}
+	}
+
+	return r0, r1
+}
+
+// ReplicateKeyWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) ReplicateKeyWithContext(_a0 context.Context, _a1 *kms.ReplicateKeyInput, _a2 ...request.Option) (*kms.ReplicateKeyOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.ReplicateKeyOutput
+	if rf, ok := ret.Get(0).(func(context.Context, *kms.ReplicateKeyInput, ...request.Option) *kms.ReplicateKeyOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.ReplicateKeyOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, *kms.ReplicateKeyInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // RetireGrant provides a mock function with given fields: _a0
 func (_m *KMSAPI) RetireGrant(_a0 *kms.RetireGrantInput) (*kms.RetireGrantOutput, error) {
 	ret := _m.Called(_a0)
@@ -3659,6 +3737,84 @@ func (_m *KMSAPI) UpdateKeyDescriptionWithContext(_a0 context.Context, _a1 *kms.
 
 	var r1 error
 	if rf, ok := ret.Get(1).(func(context.Context, *kms.UpdateKeyDescriptionInput, ...request.Option) error); ok {
+		r1 = rf(_a0, _a1, _a2...)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// UpdatePrimaryRegion provides a mock function with given fields: _a0
+func (_m *KMSAPI) UpdatePrimaryRegion(_a0 *kms.UpdatePrimaryRegionInput) (*kms.UpdatePrimaryRegionOutput, error) {
+	ret := _m.Called(_a0)
+
+	var r0 *kms.UpdatePrimaryRegionOutput
+	if rf, ok := ret.Get(0).(func(*kms.UpdatePrimaryRegionInput) *kms.UpdatePrimaryRegionOutput); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.UpdatePrimaryRegionOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(*kms.UpdatePrimaryRegionInput) error); ok {
+		r1 = rf(_a0)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// UpdatePrimaryRegionRequest provides a mock function with given fields: _a0
+func (_m *KMSAPI) UpdatePrimaryRegionRequest(_a0 *kms.UpdatePrimaryRegionInput) (*request.Request, *kms.UpdatePrimaryRegionOutput) {
+	ret := _m.Called(_a0)
+
+	var r0 *request.Request
+	if rf, ok := ret.Get(0).(func(*kms.UpdatePrimaryRegionInput) *request.Request); ok {
+		r0 = rf(_a0)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*request.Request)
+		}
+	}
+
+	var r1 *kms.UpdatePrimaryRegionOutput
+	if rf, ok := ret.Get(1).(func(*kms.UpdatePrimaryRegionInput) *kms.UpdatePrimaryRegionOutput); ok {
+		r1 = rf(_a0)
+	} else {
+		if ret.Get(1) != nil {
+			r1 = ret.Get(1).(*kms.UpdatePrimaryRegionOutput)
+		}
+	}
+
+	return r0, r1
+}
+
+// UpdatePrimaryRegionWithContext provides a mock function with given fields: _a0, _a1, _a2
+func (_m *KMSAPI) UpdatePrimaryRegionWithContext(_a0 context.Context, _a1 *kms.UpdatePrimaryRegionInput, _a2 ...request.Option) (*kms.UpdatePrimaryRegionOutput, error) {
+	_va := make([]interface{}, len(_a2))
+	for _i := range _a2 {
+		_va[_i] = _a2[_i]
+	}
+	var _ca []interface{}
+	_ca = append(_ca, _a0, _a1)
+	_ca = append(_ca, _va...)
+	ret := _m.Called(_ca...)
+
+	var r0 *kms.UpdatePrimaryRegionOutput
+	if rf, ok := ret.Get(0).(func(context.Context, *kms.UpdatePrimaryRegionInput, ...request.Option) *kms.UpdatePrimaryRegionOutput); ok {
+		r0 = rf(_a0, _a1, _a2...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*kms.UpdatePrimaryRegionOutput)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, *kms.UpdatePrimaryRegionInput, ...request.Option) error); ok {
 		r1 = rf(_a0, _a1, _a2...)
 	} else {
 		r1 = ret.Error(1)
