@@ -20,7 +20,8 @@ func init() {
 	log = logging.NewLogger("AGE")
 }
 
-const privateKeySizeLimit = 1 << 24 // 16 MiB
+const SopsAgeKeyEnv = "SOPS_AGE_KEY"
+const SopsAgeKeyFileEnv = "SOPS_AGE_KEY_FILE"
 
 // MasterKey is an age key used to encrypt and decrypt sops' data key.
 type MasterKey struct {
@@ -28,7 +29,6 @@ type MasterKey struct {
 	Recipient    string // a Bech32-encoded public key
 	EncryptedKey string // a sops data key encrypted with age
 
-	parsedIdentity  *age.X25519Identity  // a parsed age private key
 	parsedRecipient *age.X25519Recipient // a parsed age public key
 }
 
@@ -96,27 +96,46 @@ func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 
 // Decrypt decrypts the EncryptedKey field with the age identity and returns the result.
 func (key *MasterKey) Decrypt() ([]byte, error) {
-	ageKeyFilePath, ok := os.LookupEnv("SOPS_AGE_KEY_FILE")
+	var ageKeyReader io.Reader
+	var ageKeyReaderName string
 
-	if !ok {
+	if ageKeyReader == nil {
+		ageKey, ok := os.LookupEnv(SopsAgeKeyEnv)
+		if ok {
+			ageKeyReader = strings.NewReader(ageKey)
+			ageKeyReaderName = "environment variable"
+		}
+	}
+
+	if ageKeyReader == nil {
+		ageKeyFilePath, ok := os.LookupEnv(SopsAgeKeyFileEnv)
+		if ok {
+			ageKeyFile, err := os.Open(ageKeyFilePath)
+			if err != nil {
+				return nil, fmt.Errorf("failed to open file: %w", err)
+			}
+			defer ageKeyFile.Close()
+			ageKeyReader = ageKeyFile
+			ageKeyReaderName = ageKeyFilePath
+		}
+	}
+
+	if ageKeyReader == nil {
 		userConfigDir, err := os.UserConfigDir()
-
 		if err != nil {
 			return nil, fmt.Errorf("user config directory could not be determined: %w", err)
 		}
-
-		ageKeyFilePath = filepath.Join(userConfigDir, "sops", "age", "keys.txt")
+		ageKeyFilePath := filepath.Join(userConfigDir, "sops", "age", "keys.txt")
+		ageKeyFile, err := os.Open(ageKeyFilePath)
+		if err != nil {
+			return nil, fmt.Errorf("failed to open file: %w", err)
+		}
+		defer ageKeyFile.Close()
+		ageKeyReader = ageKeyFile
+		ageKeyReaderName = ageKeyFilePath
 	}
 
-	ageKeyFile, err := os.Open(ageKeyFilePath)
-
-	if err != nil {
-		return nil, fmt.Errorf("failed to open file: %w", err)
-	}
-
-	defer ageKeyFile.Close()
-
-	identities, err := age.ParseIdentities(ageKeyFile)
+	identities, err := age.ParseIdentities(ageKeyReader)
 
 	if err != nil {
 		return nil, err
@@ -127,7 +146,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	r, err := age.Decrypt(ar, identities...)
 
 	if err != nil {
-		return nil, fmt.Errorf("no age identity found in %q that could decrypt the data", ageKeyFilePath)
+		return nil, fmt.Errorf("no age identity found in %q that could decrypt the data", ageKeyReaderName)
 	}
 
 	var b bytes.Buffer
