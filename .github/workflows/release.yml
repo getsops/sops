@@ -34,6 +34,8 @@ jobs:
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Set RELEASE_NUMBER
         run: echo "RELEASE_NUMBER=$(echo $RELEASE_VERSION | cut -c2-)" >> $GITHUB_ENV
+      - name: Build linux amd64 binary
+        run: GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.linux.amd64 go.mozilla.org/sops/v3/cmd/sops && cp dist/sops-${{ env.RELEASE_VERSION }}.linux.amd64 dist/sops-${{ env.RELEASE_VERSION }}.linux
       - name: Build linux arm64 binary
         run: GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.linux.arm64 go.mozilla.org/sops/v3/cmd/sops
       - name: Build darwin amd64 binary
@@ -44,8 +46,6 @@ jobs:
         run: GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.darwin.arm64 go.mozilla.org/sops/v3/cmd/sops
       - name: Build windows binary
         run: GOOS=windows CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.exe go.mozilla.org/sops/v3/cmd/sops
-      - name: Copy already built linux binary
-        run: cp tmppkg/usr/local/bin/sops dist/sops-${{ env.RELEASE_VERSION }}.linux && cp tmppkg/usr/local/bin/sops dist/sops-${{ env.RELEASE_VERSION }}.linux.amd64
       - name: Create release
         uses: "mozilla/action-automatic-releases@latest"
         with:
