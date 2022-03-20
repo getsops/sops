@@ -182,7 +182,23 @@ the ``--age`` option or the **SOPS_AGE_RECIPIENTS** environment variable:
 
 .. code:: bash
 
-   $ sops --encrypt --age age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw test.yaml > test.enc.yaml
+   # encrypt
+   $ sops --age age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw  -e test.yaml > test.enc.yaml
+
+   # decrypt
+   $ sops --age age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw  -d test.env.yaml > test.yaml
+
+Or, if you whish to encrypt the file in-place
+
+.. code:: bash
+
+   # encrypt
+   $ sops --age age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw  -e -i test.yaml
+
+   # decrypt
+   $ sops --age age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw  -d -i test.yaml
+
+
 
 When decrypting a file with the corresponding identity, sops will look for a
 text file name ``keys.txt`` located in a ``sops`` subdirectory of your user
@@ -198,6 +214,19 @@ per line. Lines beginning with ``#`` are considered comments and ignored. Each
 identity will be tried in sequence until one is able to decrypt the data.
 
 Encrypting with SSH keys via age is not yet supported by sops.
+
+Test with the dev AGE key
+**********************
+
+If you want to test **sops** without having to do a bunch of setup, you can use
+the example files and AGE key provided with the repository::
+
+	$ git clone https://github.com/mozilla/sops.git
+	$ cd sops
+	$ export SOPS_AGE_KEY_FILE="$(pwd)/age/keys.txt"
+	$ sops example.yaml
+
+This last step will decrypt ``example.yaml`` using the test private key.
 
 
 Encrypting using GCP KMS
