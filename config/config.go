@@ -153,11 +153,13 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		for _, group := range cRule.KeyGroups {
 			var keyGroup sops.KeyGroup
 			for _, k := range group.Age {
-				key, err := age.MasterKeyFromRecipient(k)
+				keys, err := age.MasterKeysFromRecipients(k)
 				if err != nil {
 					return nil, err
 				}
-				keyGroup = append(keyGroup, key)
+				for _, key := range keys {
+					keyGroup = append(keyGroup, key)
+				}
 			}
 			for _, k := range group.PGP {
 				keyGroup = append(keyGroup, pgp.NewMasterKeyFromFingerprint(k))

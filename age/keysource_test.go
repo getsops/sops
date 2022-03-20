@@ -31,26 +31,43 @@ func TestMasterKeyFromRecipientWithLeadingAndTrailingSpaces(t *testing.T) {
 	assert.Equal(key.Recipient, "age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw")
 }
 
+func TestMasterKeysFromRecipientsWithMultiple(t *testing.T) {
+	assert := assert.New(t)
+
+	keys, err := MasterKeysFromRecipients("age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw,age1tmaae3ld5vpevmsh5yacsauzx8jetg300mpvc4ugp5zr5l6ssq9sla97ep")
+
+	assert.NoError(err)
+
+	assert.Equal(len(keys), 2)
+	assert.Equal(keys[0].Recipient, "age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw")
+	assert.Equal(keys[1].Recipient, "age1tmaae3ld5vpevmsh5yacsauzx8jetg300mpvc4ugp5zr5l6ssq9sla97ep")
+}
+
 func TestAge(t *testing.T) {
 	assert := assert.New(t)
 
-	key, err := MasterKeyFromRecipient("age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw")
+	keys, err := MasterKeysFromRecipients("age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw,age1tmaae3ld5vpevmsh5yacsauzx8jetg300mpvc4ugp5zr5l6ssq9sla97ep")
 
 	assert.NoError(err)
-	assert.Equal("age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw", key.ToString())
+	assert.Equal(len(keys), 2)
+	assert.Equal(keys[0].Recipient, "age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw")
+	assert.Equal(keys[1].Recipient, "age1tmaae3ld5vpevmsh5yacsauzx8jetg300mpvc4ugp5zr5l6ssq9sla97ep")
 
 	dataKey := []byte("abcdefghijklmnopqrstuvwxyz123456")
 
-	err = key.Encrypt(dataKey)
-	assert.NoError(err)
+	for _, key := range keys {
+		err = key.Encrypt(dataKey)
+		assert.NoError(err)
 
-	_, filename, _, _ := runtime.Caller(0)
-	err = os.Setenv(SopsAgeKeyFileEnv, path.Join(path.Dir(filename), "keys.txt"))
-	assert.NoError(err)
+		_, filename, _, _ := runtime.Caller(0)
+		err = os.Setenv("SOPS_AGE_KEY_FILE", path.Join(path.Dir(filename), "keys.txt"))
+		assert.NoError(err)
 
-	decryptedKey, err := key.Decrypt()
-	assert.NoError(err)
-	assert.Equal(dataKey, decryptedKey)
+		decryptedKey, err := key.Decrypt()
+		assert.NoError(err)
+		assert.Equal(dataKey, decryptedKey)
+	}
+
 }
 
 func TestAgeDotEnv(t *testing.T) {

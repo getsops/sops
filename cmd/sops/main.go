@@ -442,12 +442,14 @@ func main() {
 							group = append(group, k)
 						}
 						for _, recipient := range ageRecipients {
-							k, err := age.MasterKeyFromRecipient(recipient)
+							keys, err := age.MasterKeysFromRecipients(recipient)
 							if err != nil {
 								log.WithError(err).Error("Failed to add key")
 								continue
 							}
-							group = append(group, k)
+							for _, key := range keys {
+								group = append(group, key)
+							}
 						}
 						return groups.Add(groups.AddOpts{
 							InputPath:      c.String("file"),
