@@ -24,17 +24,21 @@ func TestMasterKeysFromRecipientsEmpty(t *testing.T) {
 func TestMasterKeyFromRecipientWithLeadingAndTrailingSpaces(t *testing.T) {
 	assert := assert.New(t)
 
-	key, err := MasterKeyFromRecipient("  age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw  ")
+	commaSeparatedRecipients := "  age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw  ,  age1tmaae3ld5vpevmsh5yacsauzx8jetg300mpvc4ugp5zr5l6ssq9sla97ep  "
+	keys, err := MasterKeysFromRecipients(commaSeparatedRecipients)
 
 	assert.NoError(err)
 
-	assert.Equal(key.Recipient, "age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw")
+	assert.Equal(len(keys), 2)
+	assert.Equal(keys[0].Recipient, "age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw")
+	assert.Equal(keys[1].Recipient, "age1tmaae3ld5vpevmsh5yacsauzx8jetg300mpvc4ugp5zr5l6ssq9sla97ep")
 }
 
 func TestMasterKeysFromRecipientsWithMultiple(t *testing.T) {
 	assert := assert.New(t)
 
-	keys, err := MasterKeysFromRecipients("age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw,age1tmaae3ld5vpevmsh5yacsauzx8jetg300mpvc4ugp5zr5l6ssq9sla97ep")
+	commaSeparatedRecipients := "age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw,age1tmaae3ld5vpevmsh5yacsauzx8jetg300mpvc4ugp5zr5l6ssq9sla97ep"
+	keys, err := MasterKeysFromRecipients(commaSeparatedRecipients)
 
 	assert.NoError(err)
 
@@ -46,9 +50,11 @@ func TestMasterKeysFromRecipientsWithMultiple(t *testing.T) {
 func TestAge(t *testing.T) {
 	assert := assert.New(t)
 
-	keys, err := MasterKeysFromRecipients("age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw,age1tmaae3ld5vpevmsh5yacsauzx8jetg300mpvc4ugp5zr5l6ssq9sla97ep")
+	commaSeparatedRecipients := "age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw,age1tmaae3ld5vpevmsh5yacsauzx8jetg300mpvc4ugp5zr5l6ssq9sla97ep"
+	keys, err := MasterKeysFromRecipients(commaSeparatedRecipients)
 
 	assert.NoError(err)
+
 	assert.Equal(len(keys), 2)
 	assert.Equal(keys[0].Recipient, "age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw")
 	assert.Equal(keys[1].Recipient, "age1tmaae3ld5vpevmsh5yacsauzx8jetg300mpvc4ugp5zr5l6ssq9sla97ep")
@@ -73,10 +79,14 @@ func TestAge(t *testing.T) {
 func TestAgeDotEnv(t *testing.T) {
 	assert := assert.New(t)
 
-	key, err := MasterKeyFromRecipient("age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw")
+	commaSeparatedRecipients := "age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw,age1tmaae3ld5vpevmsh5yacsauzx8jetg300mpvc4ugp5zr5l6ssq9sla97ep"
+	keys, err := MasterKeysFromRecipients(commaSeparatedRecipients)
 
 	assert.NoError(err)
-	assert.Equal("age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw", key.ToString())
+
+	assert.Equal(len(keys), 2)
+	assert.Equal(keys[0].Recipient, "age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw")
+	assert.Equal(keys[1].Recipient, "age1tmaae3ld5vpevmsh5yacsauzx8jetg300mpvc4ugp5zr5l6ssq9sla97ep")
 
 	dotenv := `IMAGE_PREFIX=repo/service-
 APPLICATION_KEY=K6pfAWuUVND9Fz5SC7jmA6pfAWuUVND9Fz5SC7jmA
@@ -84,7 +94,7 @@ KEY_ID=003683d721f2ae683d721f2a1
 DOMAIN=files.127.0.0.1.nip.io`
 	dataKey := []byte(dotenv)
 
-	err = key.Encrypt(dataKey)
+	err = keys[0].Encrypt(dataKey)
 	assert.NoError(err)
 
 	_, filename, _, _ := runtime.Caller(0)
@@ -92,7 +102,7 @@ DOMAIN=files.127.0.0.1.nip.io`
 	defer os.Unsetenv(SopsAgeKeyFileEnv)
 	assert.NoError(err)
 
-	decryptedKey, err := key.Decrypt()
+	decryptedKey, err := keys[0].Decrypt()
 	assert.NoError(err)
 	assert.Equal(dataKey, decryptedKey)
 }
@@ -100,14 +110,18 @@ DOMAIN=files.127.0.0.1.nip.io`
 func TestAgeEnv(t *testing.T) {
 	assert := assert.New(t)
 
-	key, err := MasterKeyFromRecipient("age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw")
+	commaSeparatedRecipients := "age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw,age1tmaae3ld5vpevmsh5yacsauzx8jetg300mpvc4ugp5zr5l6ssq9sla97ep"
+	keys, err := MasterKeysFromRecipients(commaSeparatedRecipients)
 
 	assert.NoError(err)
-	assert.Equal("age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw", key.ToString())
+
+	assert.Equal(len(keys), 2)
+	assert.Equal(keys[0].Recipient, "age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw")
+	assert.Equal(keys[1].Recipient, "age1tmaae3ld5vpevmsh5yacsauzx8jetg300mpvc4ugp5zr5l6ssq9sla97ep")
 
 	dataKey := []byte("abcdefghijklmnopqrstuvwxyz123456")
 
-	err = key.Encrypt(dataKey)
+	err = keys[0].Encrypt(dataKey)
 	assert.NoError(err)
 
 	_, filename, _, _ := runtime.Caller(0)
@@ -117,7 +131,7 @@ func TestAgeEnv(t *testing.T) {
 	defer os.Unsetenv(SopsAgeKeyEnv)
 	assert.NoError(err)
 
-	decryptedKey, err := key.Decrypt()
+	decryptedKey, err := keys[0].Decrypt()
 	assert.NoError(err)
 	assert.Equal(dataKey, decryptedKey)
 }
