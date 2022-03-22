@@ -21,7 +21,19 @@ func TestMasterKeysFromRecipientsEmpty(t *testing.T) {
 	assert.Equal(recipients, make([]*MasterKey, 0))
 }
 
-func TestMasterKeyFromRecipientWithLeadingAndTrailingSpaces(t *testing.T) {
+func TestMasterKeyFromRecipientWithLeadingAndTrailingSpacesSingle(t *testing.T) {
+	assert := assert.New(t)
+
+	commaSeparatedRecipients := "  age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw  "
+	keys, err := MasterKeysFromRecipients(commaSeparatedRecipients)
+
+	assert.NoError(err)
+
+	assert.Equal(len(keys), 1)
+	assert.Equal(keys[0].Recipient, "age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw")
+}
+
+func TestMasterKeyFromRecipientWithLeadingAndTrailingSpacesMultiple(t *testing.T) {
 	assert := assert.New(t)
 
 	commaSeparatedRecipients := "  age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw  ,  age1tmaae3ld5vpevmsh5yacsauzx8jetg300mpvc4ugp5zr5l6ssq9sla97ep  "
@@ -32,6 +44,18 @@ func TestMasterKeyFromRecipientWithLeadingAndTrailingSpaces(t *testing.T) {
 	assert.Equal(len(keys), 2)
 	assert.Equal(keys[0].Recipient, "age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw")
 	assert.Equal(keys[1].Recipient, "age1tmaae3ld5vpevmsh5yacsauzx8jetg300mpvc4ugp5zr5l6ssq9sla97ep")
+}
+
+func TestMasterKeysFromRecipientsWithSingle(t *testing.T) {
+	assert := assert.New(t)
+
+	commaSeparatedRecipients := "age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw"
+	keys, err := MasterKeysFromRecipients(commaSeparatedRecipients)
+
+	assert.NoError(err)
+
+	assert.Equal(len(keys), 1)
+	assert.Equal(keys[0].Recipient, "age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw")
 }
 
 func TestMasterKeysFromRecipientsWithMultiple(t *testing.T) {
