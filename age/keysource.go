@@ -184,7 +184,7 @@ func MasterKeysFromRecipients(commaSeparatedRecipients string) ([]*MasterKey, er
 	var keys []*MasterKey
 
 	for _, recipient := range recipients {
-		key, err := MasterKeyFromRecipient(recipient)
+		key, err := masterKeyFromRecipient(recipient)
 
 		if err != nil {
 			return nil, err
@@ -196,8 +196,8 @@ func MasterKeysFromRecipients(commaSeparatedRecipients string) ([]*MasterKey, er
 	return keys, nil
 }
 
-// MasterKeyFromRecipient takes a Bech32-encoded public key and returns a new MasterKey.
-func MasterKeyFromRecipient(recipient string) (*MasterKey, error) {
+// masterKeyFromRecipient takes a Bech32-encoded public key and returns a new MasterKey.
+func masterKeyFromRecipient(recipient string) (*MasterKey, error) {
 	recipient = strings.TrimSpace(recipient)
 	parsedRecipient, err := parseRecipient(recipient)
 
