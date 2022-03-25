@@ -18,7 +18,8 @@ jobs:
     resource_class: large
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 20.10.11
       - run:
           name: Build containers
           command: |
@@ -31,7 +32,8 @@ jobs:
             docker build -f Dockerfile.alpine -t mozilla/sops:alpine .
 
   push:
-    machine: true
+    machine:
+      image: ubuntu-2004:202111-02
     resource_class: large
     steps:
       - checkout
