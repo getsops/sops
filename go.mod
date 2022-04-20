@@ -17,13 +17,13 @@ require (
 	github.com/goware/prefixer v0.0.0-20160118172347-395022866408
 	github.com/hashicorp/vault/api v1.5.0
 	github.com/howeyc/gopass v0.0.0-20210920133722-c8aef6fb66ef
-	github.com/lib/pq v1.10.4
+	github.com/lib/pq v1.10.5
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-wordwrap v1.0.1
 	github.com/ory/dockertest v3.3.5+incompatible
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.8.1
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.7.1
 	go.mozilla.org/gopgagent v0.0.0-20170926210634-4d7ea76ff71a
 	golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4
 	golang.org/x/net v0.0.0-20220420153159-1850ba15e1be
