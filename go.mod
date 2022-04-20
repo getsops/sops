@@ -8,6 +8,7 @@ require (
 	github.com/Azure/azure-sdk-for-go v63.3.0+incompatible
 	github.com/Azure/go-autorest/autorest v0.11.26
 	github.com/Azure/go-autorest/autorest/azure/auth v0.5.11
+	github.com/ProtonMail/go-crypto v0.0.0-20220407094043-a94812496cf5
 	github.com/aws/aws-sdk-go v1.43.43
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/fatih/color v1.13.0
