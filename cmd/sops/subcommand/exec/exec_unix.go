@@ -11,8 +11,12 @@ import (
 	"syscall"
 )
 
-func BuildCommand(command string) *exec.Cmd {
-	return exec.Command("/bin/sh", "-c", command)
+func BuildCommand(command string, shell string) *exec.Cmd {
+	if shell == "" {
+		return exec.Command("/bin/sh", "-c", command)
+	}
+	return exec.Command(shell, "-c", command)
+
 }
 
 func WritePipe(pipe string, contents []byte) {
