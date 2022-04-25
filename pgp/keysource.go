@@ -1,6 +1,6 @@
 /*
 Package pgp contains an implementation of the go.mozilla.org/sops/v3.MasterKey interface that encrypts and decrypts the
-data key by first trying with the golang.org/x/crypto/openpgp package and if that fails, by calling the "gpg" binary.
+data key by first trying with the github.com/ProtonMail/go-crypto/openpgp package and if that fails, by calling the "gpg" binary.
 */
 package pgp //import "go.mozilla.org/sops/v3/pgp"
 
@@ -11,19 +11,18 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"os/exec"
 	"os/user"
 	"path"
 	"strings"
 	"time"
 
-	"os/exec"
-
+	"github.com/ProtonMail/go-crypto/openpgp"
+	"github.com/ProtonMail/go-crypto/openpgp/armor"
 	"github.com/howeyc/gopass"
 	"github.com/sirupsen/logrus"
 	gpgagent "go.mozilla.org/gopgagent"
 	"go.mozilla.org/sops/v3/logging"
-	"golang.org/x/crypto/openpgp"
-	"golang.org/x/crypto/openpgp/armor"
 )
 
 var log *logrus.Logger
@@ -171,7 +170,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	}
 	log.WithField("fingerprint", key.Fingerprint).Info("Encryption failed")
 	return fmt.Errorf(
-		`could not encrypt data key with PGP key: golang.org/x/crypto/openpgp error: %v; GPG binary error: %v`,
+		`could not encrypt data key with PGP key: github.com/ProtonMail/go-crypto/openpgp error: %v; GPG binary error: %v`,
 		openpgpErr, binaryErr)
 }
 
@@ -233,7 +232,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	}
 	log.WithField("fingerprint", key.Fingerprint).Info("Decryption failed")
 	return nil, fmt.Errorf(
-		`could not decrypt data key with PGP key: golang.org/x/crypto/openpgp error: %v; GPG binary error: %v`,
+		`could not decrypt data key with PGP key: github.com/ProtonMail/go-crypto/openpgp error: %v; GPG binary error: %v`,
 		openpgpErr, binaryErr)
 }
 
