@@ -198,6 +198,15 @@ func TestEmpty2(t *testing.T) {
 }
 */
 
+func TestEmpty3(t *testing.T) {
+	branches, err := (&Store{}).LoadPlainFile([]byte("{}\n"))
+	assert.Nil(t, err)
+	assert.Equal(t, len(branches), 1)
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, "{}\n", string(bytes))
+}
+
 func TestComment6(t *testing.T) {
 	branches, err := (&Store{}).LoadPlainFile(COMMENT_6)
 	assert.Nil(t, err)

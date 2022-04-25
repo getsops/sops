@@ -361,11 +361,7 @@ func (store *Store) EmitPlainFile(branches sops.TreeBranches) ([]byte, error) {
 		mapping.Kind = yaml.MappingNode
 		// Marshal branch to global mapping node
 		store.appendTreeBranch(branch, &mapping)
-		if len(mapping.Content) == 0 {
-			doc.HeadComment = mapping.HeadComment
-		} else {
-			doc.Content = append(doc.Content, &mapping)
-		}
+		doc.Content = append(doc.Content, &mapping)
 		// Encode YAML
 		err := e.Encode(&doc)
 		if err != nil {

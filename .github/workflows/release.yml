@@ -15,13 +15,15 @@ jobs:
         run: sudo apt-get update && sudo apt-get install git ruby rpm -y
       - name: Install fpm
         run: gem install fpm || sudo gem install fpm
-      - name: Set up Go 1.15
+      - name: Set up Go 1.17
         uses: actions/setup-go@v2
         with:
-          go-version: 1.15
+          go-version: 1.17
         id: go
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
+      - name: Go vendor
+        run: go mod vendor
       - name: Make release directory
         run: mkdir dist
       - name: Build deb and rpm
@@ -32,12 +34,18 @@ jobs:
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
       - name: Set RELEASE_NUMBER
         run: echo "RELEASE_NUMBER=$(echo $RELEASE_VERSION | cut -c2-)" >> $GITHUB_ENV
-      - name: Build darwin binary
-        run: GOOS=darwin CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.darwin go.mozilla.org/sops/v3/cmd/sops
+      - name: Build linux amd64 binary
+        run: GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.linux.amd64 go.mozilla.org/sops/v3/cmd/sops && cp dist/sops-${{ env.RELEASE_VERSION }}.linux.amd64 dist/sops-${{ env.RELEASE_VERSION }}.linux
+      - name: Build linux arm64 binary
+        run: GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.linux.arm64 go.mozilla.org/sops/v3/cmd/sops
+      - name: Build darwin amd64 binary
+        run: GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.darwin.amd64 go.mozilla.org/sops/v3/cmd/sops
+      - name: Copy darwin amd64 to have a no-architecture labeled version
+        run: cp dist/sops-${{ env.RELEASE_VERSION }}.darwin.amd64 dist/sops-${{ env.RELEASE_VERSION }}.darwin
+      - name: Build darwin arm64 binary
+        run: GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.darwin.arm64 go.mozilla.org/sops/v3/cmd/sops
       - name: Build windows binary
         run: GOOS=windows CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.exe go.mozilla.org/sops/v3/cmd/sops
-      - name: Copy already built linux binary
-        run: cp tmppkg/usr/local/bin/sops dist/sops-${{ env.RELEASE_VERSION }}.linux
       - name: Create release
         uses: "mozilla/action-automatic-releases@latest"
         with:
@@ -45,7 +53,13 @@ jobs:
           prerelease: true
           files: |
             dist/sops-${{ env.RELEASE_VERSION }}.exe
+            dist/sops-${{ env.RELEASE_VERSION }}.darwin.amd64
+            dist/sops-${{ env.RELEASE_VERSION }}.darwin.arm64
             dist/sops-${{ env.RELEASE_VERSION }}.darwin
+            dist/sops-${{ env.RELEASE_VERSION }}.linux.amd64
+            dist/sops-${{ env.RELEASE_VERSION }}.linux.arm64
             dist/sops-${{ env.RELEASE_VERSION }}.linux
             dist/sops_${{ env.RELEASE_NUMBER }}_amd64.deb
+            dist/sops_${{ env.RELEASE_NUMBER }}_arm64.deb
             dist/sops-${{ env.RELEASE_NUMBER }}-1.x86_64.rpm
+            dist/sops-${{ env.RELEASE_NUMBER }}-1.aarch64.rpm
