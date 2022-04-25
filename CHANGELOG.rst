@@ -1,123 +1,138 @@
 Changelog
 =========
 
+3.7.2
+-----
+Changes:
+
+* README updates (#861, #860)
+* Various test fixes (#909, #906, #1008)
+* Added Linux and Darwin arm64 releases (#911, #891)
+* Upgrade to go v1.17 (#1012)
+* Support SOPS_AGE_KEY environment variable (#1006)
+
+Bug fixes:
+
+* Make sure comments in yaml files are not duplicated (#866)
+* Make sure configuration file paths work correctly relative to the config file in us (#853)
+
 3.7.1
 -----
 Changes:
 
-    * Security fix
-    * Add release workflow (#843)
-    * Fix issue where CI wouldn't run against master (#848)
-    * Trim extra whitespace around age keys (#846)
+* Security fix
+* Add release workflow (#843)
+* Fix issue where CI wouldn't run against master (#848)
+* Trim extra whitespace around age keys (#846)
 
 3.7.0
 -----
 Features:
 
-    * Add support for age (#688)
-    * Add filename to exec-file (#761)
+* Add support for age (#688)
+* Add filename to exec-file (#761)
 
 Changes:
 
-    * On failed decryption with GPG, return the error returned by GPG to the sops user (#762)
-    * Use yaml.v3 instead of modified yaml.v2 for handling YAML files (#791)
-    * Update aws-sdk-go to version v1.37.18 (#823)
+* On failed decryption with GPG, return the error returned by GPG to the sops user (#762)
+* Use yaml.v3 instead of modified yaml.v2 for handling YAML files (#791)
+* Update aws-sdk-go to version v1.37.18 (#823)
 
 Project Changes:
 
-    * Switch from TravisCI to Github Actions (#792)
+* Switch from TravisCI to Github Actions (#792)
 
 3.6.1
 -----
 Features:
 
-    * Add support for --unencrypted-regex (#715)
+* Add support for --unencrypted-regex (#715)
 
 Changes:
 
-    * Use keys.openpgp.org instead of gpg.mozilla.org (#732)
-    * Upgrade AWS SDK version (#714)
-    * Support --input-type for exec-file (#699)
+* Use keys.openpgp.org instead of gpg.mozilla.org (#732)
+* Upgrade AWS SDK version (#714)
+* Support --input-type for exec-file (#699)
 
 Bug fixes:
 
-    * Fixes broken Vault tests (#731)
-    * Revert "Add standard newline/quoting behavior to dotenv store" (#706)
+* Fixes broken Vault tests (#731)
+* Revert "Add standard newline/quoting behavior to dotenv store" (#706)
 
 
 3.6.0
 -----
 Features:
 
-    * Support for encrypting data through the use of Hashicorp Vault (#655)
-    * `sops publish` now supports `--recursive` flag for publishing all files in a directory (#602)
-    * `sops publish` now supports `--omit-extensions` flag for omitting the extension in the destination path (#602)
-    * sops now supports JSON arrays of arrays (#642)
+* Support for encrypting data through the use of Hashicorp Vault (#655)
+* `sops publish` now supports `--recursive` flag for publishing all files in a directory (#602)
+* `sops publish` now supports `--omit-extensions` flag for omitting the extension in the destination path (#602)
+* sops now supports JSON arrays of arrays (#642)
 
 Improvements:
 
-    * Updates and standardization for the dotenv store (#612, #622)
-    * Close temp files after using them for edit command (#685)
+* Updates and standardization for the dotenv store (#612, #622)
+* Close temp files after using them for edit command (#685)
 
 Bug fixes:
 
-    * AWS SDK usage now correctly resolves the `~/.aws/config` file (#680)
-    * `sops updatekeys` now correctly matches config rules (#682)
-    * `sops updatekeys` now correctly uses the config path cli flag (#672)
-    * Partially empty sops config files don't break the use of sops anymore (#662)
-    * Fix possible infinite loop in PGP's passphrase prompt call (#690)
+* AWS SDK usage now correctly resolves the `~/.aws/config` file (#680)
+* `sops updatekeys` now correctly matches config rules (#682)
+* `sops updatekeys` now correctly uses the config path cli flag (#672)
+* Partially empty sops config files don't break the use of sops anymore (#662)
+* Fix possible infinite loop in PGP's passphrase prompt call (#690)
 
 Project changes:
 
-    * Dockerfile now based off of golang version 1.14 (#649)
-    * Push alpine version of docker image to Dockerhub (#609)
-    * Push major, major.minor, and major.minor.patch tagged docker images to Dockerhub (#607)
-    * Removed out of date contact information (#668)
-    * Update authors in the cli help text (#645)
+* Dockerfile now based off of golang version 1.14 (#649)
+* Push alpine version of docker image to Dockerhub (#609)
+* Push major, major.minor, and major.minor.patch tagged docker images to Dockerhub (#607)
+* Removed out of date contact information (#668)
+* Update authors in the cli help text (#645)
 
 
 3.5.0
 -----
 Features:
 
-    * `sops exec-env` and `sops exec-file`, two new commands for utilizing sops secrets within a temporary file or env vars
+* `sops exec-env` and `sops exec-file`, two new commands for utilizing sops secrets within a temporary file or env vars
 
 Bug fixes:
 
-    * Sanitize AWS STS session name, as sops creates it based off of the machines hostname
-    * Fix for `decrypt.Data` to support `.ini` files
-    * Various package fixes related to switching to Go Modules
-    * Fixes for Vault-related tests running locally and in CI.
+* Sanitize AWS STS session name, as sops creates it based off of the machines hostname
+* Fix for `decrypt.Data` to support `.ini` files
+* Various package fixes related to switching to Go Modules
+* Fixes for Vault-related tests running locally and in CI.
 
 Project changes:
 
-    * Change to proper use of go modules, changing to primary module name to `go.mozilla.org/sops/v3`
-    * Change tags to requiring a `v` prefix.
-    * Add documentation for `sops updatekeys` command
+* Change to proper use of go modules, changing to primary module name to `go.mozilla.org/sops/v3`
+* Change tags to requiring a `v` prefix.
+* Add documentation for `sops updatekeys` command
 
 3.4.0
 -----
 Features:
 
-    * `sops publish`, a new command for publishing sops encrypted secrets to S3, GCS, or Hashicorp Vault
-    * Support for multiple Azure authentication mechanisms
-    * Azure Keyvault support to the sops config file
-    * `encrypted_regex` option to the sops config file
+* `sops publish`, a new command for publishing sops encrypted secrets to S3, GCS, or Hashicorp Vault
+* Support for multiple Azure authentication mechanisms
+* Azure Keyvault support to the sops config file
+* `encrypted_regex` option to the sops config file
 
 Bug fixes:
 
-    * Return non-zero exit code for invalid CLI flags
-    * Broken path handling for sops editing on Windows
-    * `go lint/fmt` violations
-    * Check for pgp fingerprint before slicing it
+* Return non-zero exit code for invalid CLI flags
+* Broken path handling for sops editing on Windows
+* `go lint/fmt` violations
+* Check for pgp fingerprint before slicing it
 
 Project changes:
 
-    * Build container using golang 1.12
-    * Switch to using go modules
-    * Hashicorp Vault server in Travis CI build
-    * Mozilla Publice License file to repo
-    * Replaced expiring test gpg keys
+* Build container using golang 1.12
+* Switch to using go modules
+* Hashicorp Vault server in Travis CI build
+* Mozilla Publice License file to repo
+* Replaced expiring test gpg keys
 
 3.3.1
 -----

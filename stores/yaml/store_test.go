@@ -91,6 +91,26 @@ var COMMENT_5 = []byte(`# foo
 key: value
 `)
 
+// The following is a regression test for https://github.com/mozilla/sops/issues/865
+var COMMENT_6 = []byte(`a:
+    - a
+    # I no longer get duplicated
+    - {}
+`)
+
+var COMMENT_6_BRANCHES = sops.TreeBranches{
+	sops.TreeBranch{
+		sops.TreeItem{
+			Key:   "a",
+			Value: []interface{}{
+				"a",
+				sops.Comment{" I no longer get duplicated"},
+				sops.TreeBranch{},
+			},
+		},
+	},
+}
+
 func TestUnmarshalMetadataFromNonSOPSFile(t *testing.T) {
 	data := []byte(`hello: 2`)
 	_, err := (&Store{}).LoadEncryptedFile(data)
@@ -177,6 +197,16 @@ func TestEmpty2(t *testing.T) {
 	assert.Equal(t, ``, string(bytes))
 }
 */
+
+func TestComment6(t *testing.T) {
+	branches, err := (&Store{}).LoadPlainFile(COMMENT_6)
+	assert.Nil(t, err)
+	assert.Equal(t, COMMENT_6_BRANCHES, branches)
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, string(COMMENT_6), string(bytes))
+	assert.Equal(t, COMMENT_6, bytes)
+}
 
 func TestEmitValue(t *testing.T) {
 	// First iteration: load and store

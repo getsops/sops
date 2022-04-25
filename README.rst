@@ -9,11 +9,8 @@ formats and encrypts with AWS KMS, GCP KMS, Azure Key Vault, age, and PGP.
 
 ------------
 
-.. image:: https://godoc.org/go.mozilla.org/sops?status.svg
-	:target: https://godoc.org/go.mozilla.org/sops
-
-.. image:: https://travis-ci.org/mozilla/sops.svg?branch=master
-	:target: https://travis-ci.org/mozilla/sops
+.. image:: https://pkg.go.dev/badge/go.mozilla.org/sops/v3.svg
+	:target: https://pkg.go.dev/go.mozilla.org/sops/v3
 
 Download
 --------
@@ -28,12 +25,13 @@ For the adventurous, unstable features are available in the `develop` branch, wh
 
 .. code:: bash
 
-	$ go get -u go.mozilla.org/sops/v3/cmd/sops
+	$ mkdir -p $GOPATH/src/go.mozilla.org/sops/
+        $ git clone https://github.com/mozilla/sops.git $GOPATH/src/go.mozilla.org/sops/
         $ cd $GOPATH/src/go.mozilla.org/sops/
         $ git checkout develop
         $ make install
 
-(requires Go >= 1.13)
+(requires Go >= 1.17)
 
 If you don't have Go installed, set it up with:
 
@@ -46,12 +44,7 @@ If you don't have Go installed, set it up with:
 
 Or whatever variation of the above fits your system and shell.
 
-To use **sops** as a library, take a look at the `decrypt package <https://godoc.org/go.mozilla.org/sops/decrypt>`_.
-
-**What happened to Python Sops?** We rewrote Sops in Go to solve a number of
-deployment issues, but the Python branch still exists under ``python-sops``. We
-will keep maintaining it for a while, and you can still ``pip install sops``,
-but we strongly recommend you use the Go version instead.
+To use **sops** as a library, take a look at the `decrypt package <https://pkg.go.dev/go.mozilla.org/sops/v3/decrypt>`_.
 
 .. sectnum::
 .. contents:: Table of Contents
@@ -189,14 +182,16 @@ the ``--age`` option or the **SOPS_AGE_RECIPIENTS** environment variable:
 
 .. code:: bash
 
-   $ sops --age age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw test.yaml > test.enc.yaml
+   $ sops --encrypt --age age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw test.yaml > test.enc.yaml
 
 When decrypting a file with the corresponding identity, sops will look for a
 text file name ``keys.txt`` located in a ``sops`` subdirectory of your user
-configuration directory. On Linux, this would be ``$XDG_CONFIG_HOME/sops/keys.txt``.
-On macOS, this would be ``$HOME/Library/Application Support/sops/keys.txt``. On
-Windows, this would be ``%AppData%\sops\keys.txt``. You can specify the location
+configuration directory. On Linux, this would be ``$XDG_CONFIG_HOME/sops/age/keys.txt``.
+On macOS, this would be ``$HOME/Library/Application Support/sops/age/keys.txt``. On
+Windows, this would be ``%AppData%\sops\age\keys.txt``. You can specify the location
 of this file manually by setting the environment variable **SOPS_AGE_KEY_FILE**.
+Alternatively you can provide the the key(s) directly by setting the **SOPS_AGE_KEY**
+environment variable.
 
 The contents of this key file should be a list of age X25519 identities, one
 per line. Lines beginning with ``#`` are considered comments and ignored. Each
@@ -650,7 +645,7 @@ and its KMS and PGP keys are used to encrypt the file. It should be noted that
 the looking up of ``.sops.yaml`` is from the working directory (CWD) instead of
 the directory of the encrypting file (see `Issue 242 <https://github.com/mozilla/sops/issues/242>`_).
 
-The path_regex checks the full path of the encrypting file. Here is another example:
+The path_regex checks the path of the encrypting file relative to the .sops.yaml config file. Here is another example:
 
 * files located under directory **development** should use one set of KMS A
 * files located under directory **production** should use another set of KMS B
@@ -703,12 +698,6 @@ Specify a different GPG key server
 By default, ``sops`` uses the key server ``keys.openpgp.org`` to retrieve the GPG
 keys that are not present in the local keyring.
 This is no longer configurable. You can learn more about why from this write-up: `SKS Keyserver Network Under Attack <https://gist.github.com/rjhansen/67ab921ffb4084c865b3618d6955275f>`_.
-
-Example: place the following in your ``~/.bashrc``
-
-.. code:: bash
-
-	SOPS_GPG_KEYSERVER = 'gpg.example.com'
 
 
 Key groups
@@ -1207,7 +1196,7 @@ This file will not work in sops:
 	  - array
 	  - elements
 
-But this one will because because the ``sops`` key can be added at the same level as the
+But this one will work because the ``sops`` key can be added at the same level as the
 ``data`` key.
 
 .. code:: yaml
@@ -1373,26 +1362,6 @@ The value must be formatted as json.
 .. code:: bash
 
 	$ sops --set '["an_array"][1] {"uid1":null,"uid2":1000,"uid3":["bob"]}' ~/git/svc/sops/example.yaml
-
-Using sops as a library in a python script
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-You can import sops as a module and use it in your python program.
-
-.. code:: python
-
-	import sops
-
-	pathtype = sops.detect_filetype(path)
-	tree = sops.load_file_into_tree(path, pathtype)
-	sops_key, tree = sops.get_key(tree)
-	tree = sops.walk_and_decrypt(tree, sops_key)
-	sops.write_file(tree, path=path, filetype=pathtype)
-
-Note: this uses the previous implementation of `sops` written in python,
-
-and so doesn't support newer features such as GCP-KMS.
-To use the current version, call out to ``sops`` using ``subprocess.run``
 
 Showing diffs in cleartext in git
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1709,8 +1678,8 @@ file format introduced in **1.0**.
 Security
 --------
 
-Please report security issues to jvehent at mozilla dot com, or by using one
-of the contact method available on keybase: `https://keybase.io/jvehent <https://keybase.io/jvehent>`_
+Please report security issues to security at mozilla dot org, or by using one
+of the contact method available here: `https://www.mozilla.org/en-US/security/#For_Developers <https://www.mozilla.org/en-US/security/#For_Developers>`_
 
 License
 -------
@@ -1721,9 +1690,12 @@ Authors
 
 The core team is composed of:
 
+* AJ Banhken @ajvb
+
+The original authors were:
+
 * Adrian Utrilla @autrilla
 * Julien Vehent @jvehent
-* AJ Banhken @ajvb
 
 And a whole bunch of `contributors <https://github.com/mozilla/sops/graphs/contributors>`_
 
