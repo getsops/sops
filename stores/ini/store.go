@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"strconv"
 	"strings"
 
+	"github.com/mitchellh/mapstructure"
 	"go.mozilla.org/sops/v3"
 	"go.mozilla.org/sops/v3/stores"
 	"gopkg.in/ini.v1"
@@ -49,7 +49,7 @@ func (store Store) encodeTree(branches sops.TreeBranches) ([]byte, error) {
 						lastItem.Comment = comment.Value
 					}
 				} else {
-					lastItem, err = section.NewKey(keyVal.Key.(string), store.valToString(keyVal.Value))
+					lastItem, err = section.NewKey(keyVal.Key.(string), stores.ValueToString(keyVal.Value))
 					if err != nil {
 						return nil, fmt.Errorf("Error encoding key: %s", err)
 					}
@@ -69,19 +69,6 @@ func (store Store) stripCommentChar(comment string) string {
 		comment = strings.TrimLeft(comment, "# ")
 	}
 	return comment
-}
-
-func (store Store) valToString(v interface{}) string {
-	switch v := v.(type) {
-	case fmt.Stringer:
-		return v.String()
-	case float64:
-		return strconv.FormatFloat(v, 'f', 6, 64)
-	case bool:
-		return strconv.FormatBool(v)
-	default:
-		return fmt.Sprintf("%s", v)
-	}
 }
 
 func (store Store) iniFromTreeBranches(branches sops.TreeBranches) ([]byte, error) {
@@ -183,13 +170,14 @@ func (store *Store) iniSectionToMetadata(sopsSection *ini.Section) (stores.Metad
 		metadataHash[k] = strings.Replace(v, "\\n", "\n", -1)
 	}
 	m := stores.Unflatten(metadataHash)
+
 	var md stores.Metadata
-	inrec, err := json.Marshal(m)
+	err := mapstructure.WeakDecode(m, &md)
 	if err != nil {
-		return md, err
+		return md, fmt.Errorf("decode metadata: %w", err)
 	}
-	err = json.Unmarshal(inrec, &md)
-	return md, err
+
+	return md, nil
 }
 
 // LoadPlainFile loads a plaintext INI file's bytes onto a sops.TreeBranches runtime object
@@ -223,15 +211,11 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 }
 
 func (store *Store) encodeMetadataToIniBranch(md stores.Metadata) (sops.TreeBranch, error) {
-	var mdMap map[string]interface{}
-	inrec, err := json.Marshal(md)
+	mdMap, err := stores.ConvertStructToMap(md)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("convert metadata to map: %w", err)
 	}
-	err = json.Unmarshal(inrec, &mdMap)
-	if err != nil {
-		return nil, err
-	}
+
 	flat := stores.Flatten(mdMap)
 	for k, v := range flat {
 		if s, ok := v.(string); ok {
