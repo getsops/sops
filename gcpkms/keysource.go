@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 	"fmt"
 	"google.golang.org/api/option"
-	"io/ioutil"
 	"os"
 	"regexp"
 	"strings"
@@ -132,13 +131,15 @@ func (key MasterKey) createCloudKMSService() (*cloudkms.Service, error) {
 	}
 
 	ctx := context.Background()
+	var options []option.ClientOption
 
-	creds, err := getDefaultApplicationCredentials()
-	if err != nil {
+	if credentials, err := getGoogleCredentials(); err != nil {
 		return nil, err
+	} else if len(credentials) > 0 {
+		options = append(options, option.WithCredentialsJSON(credentials))
 	}
 
-	cloudkmsService, err := cloudkms.NewService(ctx, option.WithCredentialsJSON(creds))
+	cloudkmsService, err := cloudkms.NewService(ctx, options...)
 	if err != nil {
 		return nil, err
 	}
@@ -154,18 +155,15 @@ func (key MasterKey) ToMap() map[string]interface{} {
 	return out
 }
 
-// getDefaultApplicationCredentials allows for passing GCP Service Account
-// Credentials as either a path to a file, or directly as an environment variable
-// in JSON format.
-func getDefaultApplicationCredentials() (token []byte, err error) {
-	var defaultCredentials = os.Getenv("GOOGLE_CREDENTIALS")
-
+// getGoogleCredentials looks for a GCP Service Account in the environment
+// variable: GOOGLE_CREDENTIALS, set as either a path to a credentials file or directly as the
+// variable's value in JSON format.
+//
+// If not set, will default to use GOOGLE_APPLICATION_CREDENTIALS
+func getGoogleCredentials() ([]byte, error) {
+	defaultCredentials := os.Getenv("GOOGLE_CREDENTIALS")
 	if _, err := os.Stat(defaultCredentials); err == nil {
-		if token, err = ioutil.ReadFile(defaultCredentials); err != nil {
-			return nil, err
-		}
-	} else {
-		token = []byte(defaultCredentials)
+		return os.ReadFile(defaultCredentials)
 	}
-	return
+	return []byte(defaultCredentials), nil
 }
