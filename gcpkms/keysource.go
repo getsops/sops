@@ -3,16 +3,16 @@ package gcpkms //import "go.mozilla.org/sops/v3/gcpkms"
 import (
 	"encoding/base64"
 	"fmt"
+	"google.golang.org/api/option"
+	"os"
 	"regexp"
 	"strings"
 	"time"
 
 	"go.mozilla.org/sops/v3/logging"
 
-	"golang.org/x/net/context"
-	"golang.org/x/oauth2/google"
-
 	"github.com/sirupsen/logrus"
+	"golang.org/x/net/context"
 	cloudkms "google.golang.org/api/cloudkms/v1"
 )
 
@@ -131,12 +131,15 @@ func (key MasterKey) createCloudKMSService() (*cloudkms.Service, error) {
 	}
 
 	ctx := context.Background()
-	client, err := google.DefaultClient(ctx, cloudkms.CloudPlatformScope)
-	if err != nil {
+	var options []option.ClientOption
+
+	if credentials, err := getGoogleCredentials(); err != nil {
 		return nil, err
+	} else if len(credentials) > 0 {
+		options = append(options, option.WithCredentialsJSON(credentials))
 	}
 
-	cloudkmsService, err := cloudkms.New(client)
+	cloudkmsService, err := cloudkms.NewService(ctx, options...)
 	if err != nil {
 		return nil, err
 	}
@@ -150,4 +153,17 @@ func (key MasterKey) ToMap() map[string]interface{} {
 	out["enc"] = key.EncryptedKey
 	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)
 	return out
+}
+
+// getGoogleCredentials looks for a GCP Service Account in the environment
+// variable: GOOGLE_CREDENTIALS, set as either a path to a credentials file or directly as the
+// variable's value in JSON format.
+//
+// If not set, will default to use GOOGLE_APPLICATION_CREDENTIALS
+func getGoogleCredentials() ([]byte, error) {
+	defaultCredentials := os.Getenv("GOOGLE_CREDENTIALS")
+	if _, err := os.Stat(defaultCredentials); err == nil {
+		return os.ReadFile(defaultCredentials)
+	}
+	return []byte(defaultCredentials), nil
 }

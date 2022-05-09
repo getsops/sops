@@ -113,7 +113,7 @@ download-index:
 	bash make_download_page.sh
 
 mock:
-	go get github.com/vektra/mockery/.../
+	go install github.com/vektra/mockery/.../
 	mockery -dir vendor/github.com/aws/aws-sdk-go/service/kms/kmsiface/ -name KMSAPI -output kms/mocks
 
 .PHONY: all test generate clean vendor functional-tests mock

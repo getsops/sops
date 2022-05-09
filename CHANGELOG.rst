@@ -1,6 +1,22 @@
 Changelog
 =========
 
+3.7.3
+-----
+Changes:
+
+* Upgrade dependencies (#1024, #1045)
+* Build alpine container in CI (#1018, #1032, #1025)
+* keyservice: accept KeyServiceServer in LocalClient (#1035)
+* Add support for GCP Service Account within `GOOGLE_CREDENTIALS` (#953)
+
+Bug fixes:
+
+* Upload the correct binary for the linux amd64 build (#1026)
+* Fix bug when specifying multiple age recipients (#966)
+* Allow for empty yaml maps (#908)
+* Limit AWS role names to 64 characters (#1037)
+
 3.7.2
 -----
 Changes:

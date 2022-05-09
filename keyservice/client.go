@@ -8,12 +8,18 @@ import (
 
 // LocalClient is a key service client that performs all operations locally
 type LocalClient struct {
-	Server Server
+	Server KeyServiceServer
 }
 
 // NewLocalClient creates a new local client
 func NewLocalClient() LocalClient {
 	return LocalClient{Server{}}
+}
+
+// NewCustomLocalClient creates a new local client with a non-default backing
+// KeyServiceServer implementation
+func NewCustomLocalClient(server KeyServiceServer) LocalClient {
+	return LocalClient{Server: server}
 }
 
 // Decrypt processes a decrypt request locally
