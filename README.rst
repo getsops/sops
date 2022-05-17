@@ -358,7 +358,7 @@ To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
 	$ vault write sops/keys/thirdkey type=chacha20-poly1305
 	Success! Data written to: sops/keys/thirdkey
 
-	$ sops --hc-vault-transit $VAULT_ADDR/v1/sops/keys/firstkey vault_example.yml
+	$ sops --encrypt --hc-vault-transit $VAULT_ADDR/v1/sops/keys/firstkey vault_example.yml
 
 	$ cat <<EOF > .sops.yaml
 	creation_rules:
