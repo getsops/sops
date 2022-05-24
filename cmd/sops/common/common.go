@@ -9,6 +9,7 @@ import (
 
 	"github.com/fatih/color"
 	wordwrap "github.com/mitchellh/go-wordwrap"
+	"github.com/urfave/cli"
 	"go.mozilla.org/sops/v3"
 	"go.mozilla.org/sops/v3/cmd/sops/codes"
 	. "go.mozilla.org/sops/v3/cmd/sops/formats"
@@ -21,7 +22,6 @@ import (
 	"go.mozilla.org/sops/v3/stores/yaml"
 	"go.mozilla.org/sops/v3/version"
 	"golang.org/x/crypto/ssh/terminal"
-	"gopkg.in/urfave/cli.v1"
 )
 
 // ExampleFileEmitter emits example files. This is used by the `sops` binary
