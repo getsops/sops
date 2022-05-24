@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
+	"github.com/urfave/cli"
 	"go.mozilla.org/sops/v3"
 	"go.mozilla.org/sops/v3/aes"
 	"go.mozilla.org/sops/v3/age"
@@ -38,7 +39,6 @@ import (
 	"go.mozilla.org/sops/v3/stores/json"
 	"go.mozilla.org/sops/v3/version"
 	"google.golang.org/grpc"
-	"gopkg.in/urfave/cli.v1"
 )
 
 var log *logrus.Logger
