@@ -62,6 +62,7 @@ func (key *MasterKey) encryptWithGPGBinary(dataKey []byte) error {
 		fingerprint = fingerprint[offset:]
 	}
 	args := []string{
+		"--rfc4880",
 		"--no-default-recipient",
 		"--yes",
 		"--encrypt",
