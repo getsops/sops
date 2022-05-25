@@ -1,6 +1,8 @@
 /*
-Package pgp contains an implementation of the go.mozilla.org/sops/v3.MasterKey interface that encrypts and decrypts the
-data key by first trying with the github.com/ProtonMail/go-crypto/openpgp package and if that fails, by calling the "gpg" binary.
+Package pgp contains an implementation of the go.mozilla.org/sops/v3.MasterKey
+interface that encrypts and decrypts the data key by first trying with the
+github.com/ProtonMail/go-crypto/openpgp package and if that fails, by calling
+the "gpg" binary.
 */
 package pgp //import "go.mozilla.org/sops/v3/pgp"
 
@@ -147,6 +149,16 @@ func (d GnuPGHome) ImportFile(path string) error {
 		return fmt.Errorf("cannot read armored key data from file: %w", err)
 	}
 	return d.Import(b)
+}
+
+// Cleanup deletes the GnuPGHome if it passes Validate.
+// It returns an error if the GnuPGHome does not pass Validate, or if the
+// removal failed.
+func (d GnuPGHome) Cleanup() error {
+	if err := d.Validate(); err != nil {
+		return err
+	}
+	return os.RemoveAll(d.String())
 }
 
 // Validate ensures the GnuPGHome is a valid GnuPG home directory path.
