@@ -77,6 +77,9 @@ type MasterKey struct {
 	// disableAgent instructs the MasterKey to not use the GnuPG agent during
 	// decryption operations.
 	disableAgent bool
+	// disableOpenPGP instructs the MasterKey to skip attempting to open any
+	// pubRing or secRing using OpenPGP.
+	disableOpenPGP bool
 	// pubRing contains the absolute path to a public keyring used by OpenPGP.
 	// When empty, defaultPubRing relative to GnuPG home is assumed.
 	pubRing string
@@ -207,6 +210,13 @@ func (d DisableAgent) ApplyToMasterKey(key *MasterKey) {
 	key.disableAgent = true
 }
 
+type DisableOpenPGP struct{}
+
+// ApplyToMasterKey configures the provided key to not use OpenPGP.
+func (d DisableOpenPGP) ApplyToMasterKey(key *MasterKey) {
+	key.disableOpenPGP = true
+}
+
 // PubRing can be used to configure the absolute path to a public keyring
 // used by OpenPGP.
 type PubRing string
@@ -225,23 +235,41 @@ func (r SecRing) ApplyToMasterKey(key *MasterKey) {
 	key.secRing = string(r)
 }
 
+// errSet is a collection of captured errors.
+type errSet []error
+
+// Error joins the errors into a "; " seperated string.
+func (e errSet) Error() string {
+	str := make([]string, len(e))
+	for i, err := range e {
+		str[i] = err.Error()
+	}
+	return strings.Join(str, "; ")
+}
+
 // Encrypt encrypts the data key with the PGP key with the same
 // fingerprint as the MasterKey.
 func (key *MasterKey) Encrypt(dataKey []byte) error {
-	openpgpErr := key.encryptWithOpenPGP(dataKey)
-	if openpgpErr == nil {
-		log.WithField("fingerprint", key.Fingerprint).Info("Encryption succeeded")
-		return nil
+	var errs errSet
+
+	if !key.disableOpenPGP {
+		openpgpErr := key.encryptWithOpenPGP(dataKey)
+		if openpgpErr == nil {
+			log.WithField("fingerprint", key.Fingerprint).Info("Encryption succeeded")
+			return nil
+		}
+		errs = append(errs, fmt.Errorf("github.com/ProtonMail/go-crypto/openpgp error: %w", openpgpErr))
 	}
+
 	binaryErr := key.encryptWithGnuPG(dataKey)
 	if binaryErr == nil {
 		log.WithField("fingerprint", key.Fingerprint).Info("Encryption succeeded")
 		return nil
 	}
+	errs = append(errs, fmt.Errorf("error: %w", binaryErr))
+
 	log.WithField("fingerprint", key.Fingerprint).Info("Encryption failed")
-	return fmt.Errorf(
-		`could not encrypt data key with PGP key: golang.org/x/crypto/openpgp error: %v; GPG binary error: %v`,
-		openpgpErr, binaryErr)
+	return fmt.Errorf("could not encrypt data key with PGP key: %w", errs)
 }
 
 // encryptWithOpenPGP attempts to encrypt the data key using OpenPGP with the
@@ -333,20 +361,26 @@ func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 // stored in the MasterKey using OpenPGP, before falling back to GnuPG.
 // When both attempts fail, an error is returned.
 func (key *MasterKey) Decrypt() ([]byte, error) {
-	dataKey, openpgpErr := key.decryptWithOpenPGP()
-	if openpgpErr == nil {
-		log.WithField("fingerprint", key.Fingerprint).Info("Decryption succeeded")
-		return dataKey, nil
+	var errs errSet
+
+	if !key.disableOpenPGP {
+		dataKey, openpgpErr := key.decryptWithOpenPGP()
+		if openpgpErr == nil {
+			log.WithField("fingerprint", key.Fingerprint).Info("Decryption succeeded")
+			return dataKey, nil
+		}
+		errs = append(errs, fmt.Errorf("github.com/ProtonMail/go-crypto/openpgp error: %w", openpgpErr))
 	}
+
 	dataKey, binaryErr := key.decryptWithGnuPG()
 	if binaryErr == nil {
 		log.WithField("fingerprint", key.Fingerprint).Info("Decryption succeeded")
 		return dataKey, nil
 	}
+	errs = append(errs, fmt.Errorf("GPG binary error: %w", binaryErr))
+
 	log.WithField("fingerprint", key.Fingerprint).Info("Decryption failed")
-	return nil, fmt.Errorf(
-		`could not decrypt data key with PGP key: github.com/ProtonMail/go-crypto/openpgp error: %v; GPG binary error: %v`,
-		openpgpErr, binaryErr)
+	return nil, fmt.Errorf("could not decrypt data key with PGP key: %w", errs)
 }
 
 // decryptWithOpenPGP attempts to obtain the data key from the EncryptedKey
