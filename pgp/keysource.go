@@ -11,7 +11,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"os/user"
@@ -210,6 +209,7 @@ func (d DisableAgent) ApplyToMasterKey(key *MasterKey) {
 	key.disableAgent = true
 }
 
+// DisableOpenPGP disables encrypt and decrypt operations using OpenPGP.
 type DisableOpenPGP struct{}
 
 // ApplyToMasterKey configures the provided key to not use OpenPGP.
@@ -266,9 +266,9 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 		log.WithField("fingerprint", key.Fingerprint).Info("Encryption succeeded")
 		return nil
 	}
-	errs = append(errs, fmt.Errorf("error: %w", binaryErr))
+	errs = append(errs, fmt.Errorf("GnuPG binary error: %w", binaryErr))
 
-	log.WithField("fingerprint", key.Fingerprint).Info("Encryption failed")
+	log.WithError(errs).WithField("fingerprint", key.Fingerprint).Error("Encryption failed")
 	return fmt.Errorf("could not encrypt data key with PGP key: %w", errs)
 }
 
@@ -303,7 +303,7 @@ func (key *MasterKey) encryptWithOpenPGP(dataKey []byte) error {
 		return err
 	}
 
-	b, err := ioutil.ReadAll(encBuf)
+	b, err := io.ReadAll(encBuf)
 	if err != nil {
 		return err
 	}
@@ -377,9 +377,9 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		log.WithField("fingerprint", key.Fingerprint).Info("Decryption succeeded")
 		return dataKey, nil
 	}
-	errs = append(errs, fmt.Errorf("GPG binary error: %w", binaryErr))
+	errs = append(errs, fmt.Errorf("GnuPG binary error: %w", binaryErr))
 
-	log.WithField("fingerprint", key.Fingerprint).Info("Decryption failed")
+	log.WithError(errs).WithField("fingerprint", key.Fingerprint).Error("Decryption failed")
 	return nil, fmt.Errorf("could not decrypt data key with PGP key: %w", errs)
 }
 
@@ -404,7 +404,7 @@ func (key *MasterKey) decryptWithOpenPGP() ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("reading PGP message failed: %s", err)
 	}
-	if b, err := ioutil.ReadAll(md.UnverifiedBody); err == nil {
+	if b, err := io.ReadAll(md.UnverifiedBody); err == nil {
 		return b, nil
 	}
 	return nil, fmt.Errorf("the key could not be decrypted with any of the PGP entries")
@@ -423,7 +423,8 @@ func (key *MasterKey) decryptWithGnuPG() ([]byte, error) {
 	}
 	err, stdout, stderr := gpgExec(key.gnuPGHome(), args, strings.NewReader(key.EncryptedKey))
 	if err != nil {
-		return nil, fmt.Errorf("failed to decrypt sops data key with pgp: %s", strings.TrimSpace(stderr.String()))
+		return nil, fmt.Errorf("failed to decrypt sops data key with pgp: %s",
+			strings.TrimSpace(stderr.String()))
 	}
 	return stdout.Bytes(), nil
 }
@@ -475,31 +476,15 @@ func (key *MasterKey) gnuPGHome() string {
 func (key *MasterKey) retrievePubKey() (openpgp.Entity, error) {
 	ring, err := key.getPubRing()
 	if err == nil {
-		fingerprints := key.fingerprintIndex(ring)
+		fingerprints := fingerprintIndex(ring)
 		entity, ok := fingerprints[key.Fingerprint]
 		if ok {
 			return entity, nil
 		}
 	}
 	return openpgp.Entity{},
-		fmt.Errorf("key with fingerprint %s is not available "+
+		fmt.Errorf("key with fingerprint '%s' is not available "+
 			"in keyring", key.Fingerprint)
-}
-
-// loadRing attempts to load the keyring from the provided path.
-// Unsupported keys are ignored as long as at least a single valid key is
-// found.
-func (key *MasterKey) loadRing(path string) (openpgp.EntityList, error) {
-	f, err := os.Open(path)
-	if err != nil {
-		return openpgp.EntityList{}, err
-	}
-	defer f.Close()
-	keyring, err := openpgp.ReadKeyRing(f)
-	if err != nil {
-		return keyring, err
-	}
-	return keyring, nil
 }
 
 // getPubRing loads the public keyring from the configured path, or falls back
@@ -510,35 +495,24 @@ func (key *MasterKey) getPubRing() (openpgp.EntityList, error) {
 	if path == "" {
 		path = filepath.Join(key.gnuPGHome(), defaultPubRing)
 	}
-	return key.loadRing(path)
+	return loadRing(path)
 }
 
 // getSecRing loads the sec keyring from the configured path, or falls back
 // to defaultSecRing relative to the GnuPG home. It returns an openpgp.EntityList
 // read from the keyring, or an error.
 func (key *MasterKey) getSecRing() (openpgp.EntityList, error) {
-	path := defaultSecRing
-	if key.secRing != "" {
-		path = key.secRing
+	path := key.secRing
+	if path == "" {
+		path = filepath.Join(key.gnuPGHome(), defaultSecRing)
 	}
-	absPath := filepath.Join(key.gnuPGHome(), path)
-	if _, err := os.Lstat(absPath); err != nil && !os.IsNotExist(err) {
+	if _, err := os.Lstat(path); err != nil {
+		if !os.IsNotExist(err) {
+			return nil, err
+		}
 		return key.getPubRing()
 	}
-	return key.loadRing(absPath)
-}
-
-// fingerprintIndex indexes the openpgp.Entity objects from the given ring
-// by their fingerprint, and returns the result.
-func (key *MasterKey) fingerprintIndex(ring openpgp.EntityList) map[string]openpgp.Entity {
-	fps := make(map[string]openpgp.Entity)
-	for _, entity := range ring {
-		fp := strings.ToUpper(hex.EncodeToString(entity.PrimaryKey.Fingerprint[:]))
-		if entity != nil {
-			fps[fp] = *entity
-		}
-	}
-	return fps
+	return loadRing(path)
 }
 
 // passphrasePrompt prompts the user for a passphrase when this is required for
@@ -569,7 +543,12 @@ func (key *MasterKey) passphrasePrompt() func(keys []openpgp.Key, symmetric bool
 		if err != nil {
 			return nil, fmt.Errorf("could not establish connection with gpg-agent: %s", err)
 		}
-		defer conn.Close()
+		defer func(conn *gpgagent.Conn) {
+			if err := conn.Close(); err != nil {
+				log.Errorf("failed to close connection with gpg-agent: %s", err)
+			}
+		}(conn)
+
 		for _, k := range keys {
 			req := gpgagent.PassphraseRequest{
 				CacheKey: k.PublicKey.KeyIdShortString(),
@@ -583,8 +562,38 @@ func (key *MasterKey) passphrasePrompt() func(keys []openpgp.Key, symmetric bool
 			k.PrivateKey.Decrypt([]byte(pass))
 			return []byte(pass), nil
 		}
+
 		return nil, fmt.Errorf("no key to unlock")
 	}
+}
+
+// loadRing attempts to load the keyring from the provided path.
+// Unsupported keys are ignored as long as at least a single valid key is
+// found.
+func loadRing(path string) (openpgp.EntityList, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	keyring, err := openpgp.ReadKeyRing(f)
+	if err != nil {
+		return nil, err
+	}
+	return keyring, nil
+}
+
+// fingerprintIndex indexes the openpgp.Entity objects from the given ring
+// by their fingerprint, and returns the result.
+func fingerprintIndex(ring openpgp.EntityList) map[string]openpgp.Entity {
+	fps := make(map[string]openpgp.Entity)
+	for _, entity := range ring {
+		fp := strings.ToUpper(hex.EncodeToString(entity.PrimaryKey.Fingerprint[:]))
+		if entity != nil {
+			fps[fp] = *entity
+		}
+	}
+	return fps
 }
 
 // gpgExec runs the provided args with the gpgBinary, while restricting it to
