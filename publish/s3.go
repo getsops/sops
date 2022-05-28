@@ -2,11 +2,13 @@ package publish
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/feature/s3/manager"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 )
 
 // S3Destination is the AWS S3 implementation of the Destination interface
@@ -27,15 +29,17 @@ func (s3d *S3Destination) Path(fileName string) string {
 
 // Upload uploads contents to a file in an S3 Destination (bucket)
 func (s3d *S3Destination) Upload(fileContents []byte, fileName string) error {
-	sess := session.Must(session.NewSession())
-	svc := s3.New(sess)
+	cfg, err := config.LoadDefaultConfig(context.TODO())
+	if err != nil {
+		return fmt.Errorf("unable to load SDK config: %w", err)
+	}
+	svc := s3.NewFromConfig(cfg)
 	input := &s3.PutObjectInput{
-		Body:   aws.ReadSeekCloser(bytes.NewReader(fileContents)),
+		Body:   manager.ReadSeekCloser(bytes.NewReader(fileContents)),
 		Bucket: aws.String(s3d.s3Bucket),
 		Key:    aws.String(s3d.s3Prefix + fileName),
 	}
-	_, err := svc.PutObject(input)
-	if err != nil {
+	if _, err = svc.PutObject(context.TODO(), input); err != nil {
 		return err
 	}
 	return nil
