@@ -1,6 +1,8 @@
 /*
-Package pgp contains an implementation of the go.mozilla.org/sops/v3.MasterKey interface that encrypts and decrypts the
-data key by first trying with the github.com/ProtonMail/go-crypto/openpgp package and if that fails, by calling the "gpg" binary.
+Package pgp contains an implementation of the go.mozilla.org/sops/v3.MasterKey
+interface that encrypts and decrypts the data key by first trying with the
+github.com/ProtonMail/go-crypto/openpgp package and if that fails, by calling
+the "gpg" binary.
 */
 package pgp //import "go.mozilla.org/sops/v3/pgp"
 
@@ -8,12 +10,11 @@ import (
 	"bytes"
 	"encoding/hex"
 	"fmt"
-	"io/ioutil"
-	"net/http"
+	"io"
 	"os"
 	"os/exec"
 	"os/user"
-	"path"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -25,240 +26,69 @@ import (
 	"go.mozilla.org/sops/v3/logging"
 )
 
+const (
+	// SopsGpgExecEnv can be set as an environment variable to overwrite the
+	// GnuPG binary used.
+	SopsGpgExecEnv = "SOPS_GPG_EXEC"
+)
+
+var (
+	// pgpTTL is the duration after which a MasterKey requires rotation.
+	pgpTTL = time.Hour * 24 * 30 * 6
+	// defaultPubRing is the relative path to the pubring in the GnuPG
+	// home.
+	// NB: This format is no longer in use since GnuPG >=2.1, which switched
+	// to .kbx for new installations, and merged secring.gpg into pubring.gpg.
+	defaultPubRing = "pubring.gpg"
+	// defaultSecRing is the relative path to the secring in the GnuPG
+	// home.
+	// NB: GnuPG >= 2.1 merged this together with pubring.gpg, see
+	// defaultPubRing.
+	defaultSecRing = "secring.gpg"
+)
+
+// log is the global logger for any PGP MasterKey.
+// TODO(hidde): this is not-so-nice for any implementation other than the CLI,
+//  as it becomes difficult to sugar the logger with data for e.g. individual
+//  processes.
 var log *logrus.Logger
 
 func init() {
 	log = logging.NewLogger("PGP")
 }
 
-// MasterKey is a PGP key used to securely store sops' data key by encrypting it and decrypting it
+// MasterKey is a PGP key used to securely store SOPS' data key by
+// encrypting it and decrypting it.
 type MasterKey struct {
-	Fingerprint  string
+	// Fingerprint contains the fingerprint of the PGP key used to Encrypt
+	// or Decrypt the data key with.
+	Fingerprint string
+	// EncryptedKey contains the SOPS data key encrypted with PGP.
 	EncryptedKey string
+	// CreationDate of the MasterKey, used to determine if the EncryptedKey
+	// needs rotation.
 	CreationDate time.Time
+
+	// gnuPGHomeDir contains the absolute path to a GnuPG home directory.
+	// It can be injected by a (local) keyservice.KeyServiceServer using
+	// GnuPGHome.ApplyToMasterKey().
+	gnuPGHomeDir string
+	// disableAgent instructs the MasterKey to not use the GnuPG agent during
+	// decryption operations.
+	disableAgent bool
+	// disableOpenPGP instructs the MasterKey to skip attempting to open any
+	// pubRing or secRing using OpenPGP.
+	disableOpenPGP bool
+	// pubRing contains the absolute path to a public keyring used by OpenPGP.
+	// When empty, defaultPubRing relative to GnuPG home is assumed.
+	pubRing string
+	// secRing contains the absolute path to a sec keyring used by OpenPGP.
+	// When empty, defaultSecRing relative to GnuPG home is assumed.
+	secRing string
 }
 
-// EncryptedDataKey returns the encrypted data key this master key holds
-func (key *MasterKey) EncryptedDataKey() []byte {
-	return []byte(key.EncryptedKey)
-}
-
-// SetEncryptedDataKey sets the encrypted data key for this master key
-func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
-	key.EncryptedKey = string(enc)
-}
-
-func gpgBinary() string {
-	binary := "gpg"
-	if envBinary := os.Getenv("SOPS_GPG_EXEC"); envBinary != "" {
-		binary = envBinary
-	}
-	return binary
-}
-
-func (key *MasterKey) encryptWithGPGBinary(dataKey []byte) error {
-	fingerprint := key.Fingerprint
-	if offset := len(fingerprint) - 16; offset > 0 {
-		fingerprint = fingerprint[offset:]
-	}
-	args := []string{
-		"--no-default-recipient",
-		"--yes",
-		"--encrypt",
-		"-a",
-		"-r",
-		key.Fingerprint,
-		"--trusted-key",
-		fingerprint,
-		"--no-encrypt-to",
-	}
-	cmd := exec.Command(gpgBinary(), args...)
-	var stdout, stderr bytes.Buffer
-	cmd.Stdin = bytes.NewReader(dataKey)
-	cmd.Stdout = &stdout
-	cmd.Stderr = &stderr
-	err := cmd.Run()
-	if err != nil {
-		return fmt.Errorf("gpg binary failed with error: %s, %s", err, stderr.String())
-	}
-	key.EncryptedKey = stdout.String()
-	return nil
-}
-
-func getKeyFromKeyServer(fingerprint string) (openpgp.Entity, error) {
-	log.Warn("Deprecation Warning: GPG key fetching from a keyserver within sops will be removed in a future version of sops. See https://github.com/mozilla/sops/issues/727 for more information.")
-
-	url := fmt.Sprintf("https://keys.openpgp.org/vks/v1/by-fingerprint/%s", fingerprint)
-	resp, err := http.Get(url)
-	if err != nil {
-		return openpgp.Entity{}, fmt.Errorf("error getting key from keyserver: %s", err)
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode != 200 {
-		return openpgp.Entity{}, fmt.Errorf("keyserver returned non-200 status code %s", resp.Status)
-	}
-	ents, err := openpgp.ReadArmoredKeyRing(resp.Body)
-	if err != nil {
-		return openpgp.Entity{}, fmt.Errorf("could not read entities: %s", err)
-	}
-	return *ents[0], nil
-}
-
-func (key *MasterKey) getPubKey() (openpgp.Entity, error) {
-	ring, err := key.pubRing()
-	if err == nil {
-		fingerprints := key.fingerprintMap(ring)
-		entity, ok := fingerprints[key.Fingerprint]
-		if ok {
-			return entity, nil
-		}
-	}
-	entity, err := getKeyFromKeyServer(key.Fingerprint)
-	if err != nil {
-		return openpgp.Entity{},
-			fmt.Errorf("key with fingerprint %s is not available "+
-				"in keyring and could not be retrieved from keyserver", key.Fingerprint)
-	}
-	return entity, nil
-}
-
-func (key *MasterKey) encryptWithCryptoOpenPGP(dataKey []byte) error {
-	entity, err := key.getPubKey()
-	if err != nil {
-		return err
-	}
-	encbuf := new(bytes.Buffer)
-	armorbuf, err := armor.Encode(encbuf, "PGP MESSAGE", nil)
-	if err != nil {
-		return err
-	}
-	plaintextbuf, err := openpgp.Encrypt(armorbuf, []*openpgp.Entity{&entity}, nil, &openpgp.FileHints{IsBinary: true}, nil)
-	if err != nil {
-		return err
-	}
-	_, err = plaintextbuf.Write(dataKey)
-	if err != nil {
-		return err
-	}
-	err = plaintextbuf.Close()
-	if err != nil {
-		return err
-	}
-	err = armorbuf.Close()
-	if err != nil {
-		return err
-	}
-	bytes, err := ioutil.ReadAll(encbuf)
-	if err != nil {
-		return err
-	}
-	key.EncryptedKey = string(bytes)
-	return nil
-}
-
-// Encrypt encrypts the data key with the PGP key with the same fingerprint as the MasterKey. It looks for PGP public keys in $PGPHOME/pubring.gpg.
-func (key *MasterKey) Encrypt(dataKey []byte) error {
-	openpgpErr := key.encryptWithCryptoOpenPGP(dataKey)
-	if openpgpErr == nil {
-		log.WithField("fingerprint", key.Fingerprint).Info("Encryption succeeded")
-		return nil
-	}
-	binaryErr := key.encryptWithGPGBinary(dataKey)
-	if binaryErr == nil {
-		log.WithField("fingerprint", key.Fingerprint).Info("Encryption succeeded")
-		return nil
-	}
-	log.WithField("fingerprint", key.Fingerprint).Info("Encryption failed")
-	return fmt.Errorf(
-		`could not encrypt data key with PGP key: github.com/ProtonMail/go-crypto/openpgp error: %v; GPG binary error: %v`,
-		openpgpErr, binaryErr)
-}
-
-// EncryptIfNeeded encrypts the data key with PGP only if it's needed, that is, if it hasn't been encrypted already
-func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
-	if key.EncryptedKey == "" {
-		return key.Encrypt(dataKey)
-	}
-	return nil
-}
-
-func (key *MasterKey) decryptWithGPGBinary() ([]byte, error) {
-	args := []string{
-		"--use-agent",
-		"-d",
-	}
-	cmd := exec.Command(gpgBinary(), args...)
-	var stdout, stderr bytes.Buffer
-	cmd.Stdin = strings.NewReader(key.EncryptedKey)
-	cmd.Stdout = &stdout
-	cmd.Stderr = &stderr
-	err := cmd.Run()
-	if err != nil {
-		return nil, err
-	}
-	return stdout.Bytes(), nil
-}
-
-func (key *MasterKey) decryptWithCryptoOpenpgp() ([]byte, error) {
-	ring, err := key.secRing()
-	if err != nil {
-		return nil, fmt.Errorf("Could not load secring: %s", err)
-	}
-	block, err := armor.Decode(strings.NewReader(key.EncryptedKey))
-	if err != nil {
-		return nil, fmt.Errorf("Armor decoding failed: %s", err)
-	}
-	md, err := openpgp.ReadMessage(block.Body, ring, key.passphrasePrompt(), nil)
-	if err != nil {
-		return nil, fmt.Errorf("Reading PGP message failed: %s", err)
-	}
-	if b, err := ioutil.ReadAll(md.UnverifiedBody); err == nil {
-		return b, nil
-	}
-	return nil, fmt.Errorf("The key could not be decrypted with any of the PGP entries")
-}
-
-// Decrypt uses PGP to obtain the data key from the EncryptedKey store in the MasterKey and returns it
-func (key *MasterKey) Decrypt() ([]byte, error) {
-	dataKey, openpgpErr := key.decryptWithCryptoOpenpgp()
-	if openpgpErr == nil {
-		log.WithField("fingerprint", key.Fingerprint).Info("Decryption succeeded")
-		return dataKey, nil
-	}
-	dataKey, binaryErr := key.decryptWithGPGBinary()
-	if binaryErr == nil {
-		log.WithField("fingerprint", key.Fingerprint).Info("Decryption succeeded")
-		return dataKey, nil
-	}
-	log.WithField("fingerprint", key.Fingerprint).Info("Decryption failed")
-	return nil, fmt.Errorf(
-		`could not decrypt data key with PGP key: github.com/ProtonMail/go-crypto/openpgp error: %v; GPG binary error: %v`,
-		openpgpErr, binaryErr)
-}
-
-// NeedsRotation returns whether the data key needs to be rotated or not
-func (key *MasterKey) NeedsRotation() bool {
-	return time.Since(key.CreationDate).Hours() > 24*30*6
-}
-
-// ToString returns the string representation of the key, i.e. its fingerprint
-func (key *MasterKey) ToString() string {
-	return key.Fingerprint
-}
-
-func (key *MasterKey) gpgHome() string {
-	dir := os.Getenv("GNUPGHOME")
-	if dir == "" {
-		usr, err := user.Current()
-		if err != nil {
-			return path.Join(os.Getenv("HOME"), "/.gnupg")
-		}
-		return path.Join(usr.HomeDir, ".gnupg")
-	}
-	return dir
-}
-
-// NewMasterKeyFromFingerprint takes a PGP fingerprint and returns a new MasterKey with that fingerprint
+// NewMasterKeyFromFingerprint takes a PGP fingerprint and returns a new
+// MasterKey with that fingerprint.
 func NewMasterKeyFromFingerprint(fingerprint string) *MasterKey {
 	return &MasterKey{
 		Fingerprint:  strings.Replace(fingerprint, " ", "", -1),
@@ -266,7 +96,8 @@ func NewMasterKeyFromFingerprint(fingerprint string) *MasterKey {
 	}
 }
 
-// MasterKeysFromFingerprintString takes a comma separated list of PGP fingerprints and returns a slice of new MasterKeys with those fingerprints
+// MasterKeysFromFingerprintString takes a comma separated list of PGP
+// fingerprints and returns a slice of new MasterKeys with those fingerprints.
 func MasterKeysFromFingerprintString(fingerprint string) []*MasterKey {
 	var keys []*MasterKey
 	if fingerprint == "" {
@@ -278,38 +109,414 @@ func MasterKeysFromFingerprintString(fingerprint string) []*MasterKey {
 	return keys
 }
 
-func (key *MasterKey) loadRing(path string) (openpgp.EntityList, error) {
-	f, err := os.Open(path)
+// GnuPGHome is the absolute path to a GnuPG home directory.
+// A new keyring can be constructed by combining the use of NewGnuPGHome() and
+// Import() or ImportFile().
+type GnuPGHome string
+
+// NewGnuPGHome initializes a new GnuPGHome in a temporary directory.
+// The caller is expected to handle the garbage collection of the created
+// directory.
+func NewGnuPGHome() (GnuPGHome, error) {
+	tmpDir, err := os.MkdirTemp("", "sops-gnupghome-")
 	if err != nil {
-		return openpgp.EntityList{}, err
+		return "", fmt.Errorf("failed to create new GnuPG home: %w", err)
 	}
-	defer f.Close()
-	keyring, err := openpgp.ReadKeyRing(f)
+	return GnuPGHome(tmpDir), nil
+}
+
+// Import attempts to import the armored key bytes into the GnuPGHome keyring.
+// It returns an error if the GnuPGHome does not pass Validate, or if the
+// import failed.
+func (d GnuPGHome) Import(armoredKey []byte) error {
+	if err := d.Validate(); err != nil {
+		return fmt.Errorf("cannot import armored key data into GnuPG keyring: %w", err)
+	}
+
+	args := []string{"--batch", "--import"}
+	err, _, stderr := gpgExec(d.String(), args, bytes.NewReader(armoredKey))
 	if err != nil {
-		return keyring, err
+		return fmt.Errorf("failed to import armored key data into GnuPG keyring: %s", strings.TrimSpace(stderr.String()))
 	}
-	return keyring, nil
+	return nil
 }
 
-func (key *MasterKey) secRing() (openpgp.EntityList, error) {
-	return key.loadRing(key.gpgHome() + "/secring.gpg")
+// ImportFile attempts to import the armored key file into the GnuPGHome
+// keyring.
+// It returns an error if the GnuPGHome does not pass Validate, or if the
+// import failed.
+func (d GnuPGHome) ImportFile(path string) error {
+	b, err := os.ReadFile(path)
+	if err != nil {
+		return fmt.Errorf("cannot read armored key data from file: %w", err)
+	}
+	return d.Import(b)
 }
 
-func (key *MasterKey) pubRing() (openpgp.EntityList, error) {
-	return key.loadRing(key.gpgHome() + "/pubring.gpg")
+// Cleanup deletes the GnuPGHome if it passes Validate.
+// It returns an error if the GnuPGHome does not pass Validate, or if the
+// removal failed.
+func (d GnuPGHome) Cleanup() error {
+	if err := d.Validate(); err != nil {
+		return err
+	}
+	return os.RemoveAll(d.String())
 }
 
-func (key *MasterKey) fingerprintMap(ring openpgp.EntityList) map[string]openpgp.Entity {
-	fps := make(map[string]openpgp.Entity)
-	for _, entity := range ring {
-		fp := strings.ToUpper(hex.EncodeToString(entity.PrimaryKey.Fingerprint[:]))
-		if entity != nil {
-			fps[fp] = *entity
+// Validate ensures the GnuPGHome is a valid GnuPG home directory path.
+// When validation fails, it returns a descriptive reason as error.
+func (d GnuPGHome) Validate() error {
+	if d == "" {
+		return fmt.Errorf("empty GNUPGHOME path")
+	}
+	if !filepath.IsAbs(d.String()) {
+		return fmt.Errorf("GNUPGHOME must be an absolute path")
+	}
+	fi, err := os.Lstat(d.String())
+	if err != nil {
+		if os.IsNotExist(err) {
+			return fmt.Errorf("GNUPGHOME does not exist")
+		}
+		return fmt.Errorf("cannot stat GNUPGHOME: %w", err)
+	}
+	if !fi.IsDir() {
+		return fmt.Errorf("GNUGPHOME is not a directory")
+	}
+	if perm := fi.Mode().Perm(); perm != 0o700 {
+		return fmt.Errorf("GNUPGHOME has invalid permissions: got %#o wanted %#o", perm, 0o700)
+	}
+	return nil
+}
+
+// String returns the GnuPGHome as a string. It does not Validate.
+func (d GnuPGHome) String() string {
+	return string(d)
+}
+
+// ApplyToMasterKey configures the GnuPGHome on the provided key if it passes
+// Validate.
+func (d GnuPGHome) ApplyToMasterKey(key *MasterKey) {
+	if err := d.Validate(); err == nil {
+		key.gnuPGHomeDir = d.String()
+	}
+}
+
+// DisableAgent disables the GnuPG agent for a MasterKey.
+type DisableAgent struct{}
+
+// ApplyToMasterKey configures the provided key to not use the GnuPG agent.
+func (d DisableAgent) ApplyToMasterKey(key *MasterKey) {
+	key.disableAgent = true
+}
+
+// DisableOpenPGP disables encrypt and decrypt operations using OpenPGP.
+type DisableOpenPGP struct{}
+
+// ApplyToMasterKey configures the provided key to not use OpenPGP.
+func (d DisableOpenPGP) ApplyToMasterKey(key *MasterKey) {
+	key.disableOpenPGP = true
+}
+
+// PubRing can be used to configure the absolute path to a public keyring
+// used by OpenPGP.
+type PubRing string
+
+// ApplyToMasterKey configures the provided key to not use the GnuPG agent.
+func (r PubRing) ApplyToMasterKey(key *MasterKey) {
+	key.pubRing = string(r)
+}
+
+// SecRing can be used to configure the absolute path to a sec keyring
+// used by OpenPGP.
+type SecRing string
+
+// ApplyToMasterKey configures the provided key to not use the GnuPG agent.
+func (r SecRing) ApplyToMasterKey(key *MasterKey) {
+	key.secRing = string(r)
+}
+
+// errSet is a collection of captured errors.
+type errSet []error
+
+// Error joins the errors into a "; " seperated string.
+func (e errSet) Error() string {
+	str := make([]string, len(e))
+	for i, err := range e {
+		str[i] = err.Error()
+	}
+	return strings.Join(str, "; ")
+}
+
+// Encrypt encrypts the data key with the PGP key with the same
+// fingerprint as the MasterKey.
+func (key *MasterKey) Encrypt(dataKey []byte) error {
+	var errs errSet
+
+	if !key.disableOpenPGP {
+		openpgpErr := key.encryptWithOpenPGP(dataKey)
+		if openpgpErr == nil {
+			log.WithField("fingerprint", key.Fingerprint).Info("Encryption succeeded")
+			return nil
+		}
+		errs = append(errs, fmt.Errorf("github.com/ProtonMail/go-crypto/openpgp error: %w", openpgpErr))
+	}
+
+	binaryErr := key.encryptWithGnuPG(dataKey)
+	if binaryErr == nil {
+		log.WithField("fingerprint", key.Fingerprint).Info("Encryption succeeded")
+		return nil
+	}
+	errs = append(errs, fmt.Errorf("GnuPG binary error: %w", binaryErr))
+
+	log.WithError(errs).WithField("fingerprint", key.Fingerprint).Error("Encryption failed")
+	return fmt.Errorf("could not encrypt data key with PGP key: %w", errs)
+}
+
+// encryptWithOpenPGP attempts to encrypt the data key using OpenPGP with the
+// PGP key that belongs to Fingerprint. It sets EncryptedDataKey, or returns
+// an error.
+func (key *MasterKey) encryptWithOpenPGP(dataKey []byte) error {
+	entity, err := key.retrievePubKey()
+	if err != nil {
+		return err
+	}
+
+	encBuf := new(bytes.Buffer)
+	armorBuf, err := armor.Encode(encBuf, "PGP MESSAGE", nil)
+	if err != nil {
+		return err
+	}
+	plainBuf, err := openpgp.Encrypt(armorBuf, []*openpgp.Entity{&entity}, nil, &openpgp.FileHints{IsBinary: true}, nil)
+	if err != nil {
+		return err
+	}
+	_, err = plainBuf.Write(dataKey)
+	if err != nil {
+		return err
+	}
+	err = plainBuf.Close()
+	if err != nil {
+		return err
+	}
+	err = armorBuf.Close()
+	if err != nil {
+		return err
+	}
+
+	b, err := io.ReadAll(encBuf)
+	if err != nil {
+		return err
+	}
+
+	key.SetEncryptedDataKey(b)
+	return nil
+}
+
+// encryptWithOpenPGP attempts to encrypt the data key using GnuPG with the
+// PGP key that belongs to Fingerprint. It sets EncryptedDataKey, or returns
+// an error.
+func (key *MasterKey) encryptWithGnuPG(dataKey []byte) error {
+	fingerprint := shortenFingerprint(key.Fingerprint)
+
+	args := []string{
+		"--no-default-recipient",
+		"--yes",
+		"--encrypt",
+		"-a",
+		"-r",
+		key.Fingerprint,
+		"--trusted-key",
+		fingerprint,
+		"--no-encrypt-to",
+	}
+	err, stdout, stderr := gpgExec(key.gnuPGHome(), args, bytes.NewReader(dataKey))
+	if err != nil {
+		return fmt.Errorf("failed to encrypt sops data key with pgp: %s", strings.TrimSpace(stderr.String()))
+	}
+
+	key.SetEncryptedDataKey(bytes.TrimSpace(stdout.Bytes()))
+	return nil
+}
+
+// EncryptIfNeeded encrypts the data key with PGP only if it's needed,
+// that is, if it hasn't been encrypted already.
+func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
+	if key.EncryptedKey == "" {
+		return key.Encrypt(dataKey)
+	}
+	return nil
+}
+
+// EncryptedDataKey returns the encrypted data key this master key holds.
+func (key *MasterKey) EncryptedDataKey() []byte {
+	return []byte(key.EncryptedKey)
+}
+
+// SetEncryptedDataKey sets the encrypted data key for this master key.
+func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
+	key.EncryptedKey = string(enc)
+}
+
+// Decrypt first attempts to obtain the data key from the EncryptedKey
+// stored in the MasterKey using OpenPGP, before falling back to GnuPG.
+// When both attempts fail, an error is returned.
+func (key *MasterKey) Decrypt() ([]byte, error) {
+	var errs errSet
+
+	if !key.disableOpenPGP {
+		dataKey, openpgpErr := key.decryptWithOpenPGP()
+		if openpgpErr == nil {
+			log.WithField("fingerprint", key.Fingerprint).Info("Decryption succeeded")
+			return dataKey, nil
+		}
+		errs = append(errs, fmt.Errorf("github.com/ProtonMail/go-crypto/openpgp error: %w", openpgpErr))
+	}
+
+	dataKey, binaryErr := key.decryptWithGnuPG()
+	if binaryErr == nil {
+		log.WithField("fingerprint", key.Fingerprint).Info("Decryption succeeded")
+		return dataKey, nil
+	}
+	errs = append(errs, fmt.Errorf("GnuPG binary error: %w", binaryErr))
+
+	log.WithError(errs).WithField("fingerprint", key.Fingerprint).Error("Decryption failed")
+	return nil, fmt.Errorf("could not decrypt data key with PGP key: %w", errs)
+}
+
+// decryptWithOpenPGP attempts to obtain the data key from the EncryptedKey
+// using OpenPGP and returns the result.
+//
+// Note: the current development of OpenPGP vs GnuPG has moved in separate
+// directions. This means that e.g. GnuPG >=2.1 works with a .kbx format which
+// can not be read by OpenPGP. Given the further assumptions around the
+// placement of the files, and the generic fallback Decrypt uses, this raises
+// the question of how widely utilized this method still is.
+func (key *MasterKey) decryptWithOpenPGP() ([]byte, error) {
+	ring, err := key.getSecRing()
+	if err != nil {
+		return nil, fmt.Errorf("could not load secring: %s", err)
+	}
+	block, err := armor.Decode(strings.NewReader(key.EncryptedKey))
+	if err != nil {
+		return nil, fmt.Errorf("armor decoding failed: %s", err)
+	}
+	md, err := openpgp.ReadMessage(block.Body, ring, key.passphrasePrompt(), nil)
+	if err != nil {
+		return nil, fmt.Errorf("reading PGP message failed: %s", err)
+	}
+	if b, err := io.ReadAll(md.UnverifiedBody); err == nil {
+		return b, nil
+	}
+	return nil, fmt.Errorf("the key could not be decrypted with any of the PGP entries")
+}
+
+// decryptWithGnuPG attempts to obtain the data key from the EncryptedKey using
+// GnuPG and returns the result. If DisableAgent is configured on the MasterKey,
+// the GnuPG agent is not enabled. When the decryption command fails, it returns
+// the error from stdout.
+func (key *MasterKey) decryptWithGnuPG() ([]byte, error) {
+	args := []string{
+		"-d",
+	}
+	if !key.disableAgent {
+		args = append([]string{"--use-agent"}, args...)
+	}
+	err, stdout, stderr := gpgExec(key.gnuPGHome(), args, strings.NewReader(key.EncryptedKey))
+	if err != nil {
+		return nil, fmt.Errorf("failed to decrypt sops data key with pgp: %s",
+			strings.TrimSpace(stderr.String()))
+	}
+	return stdout.Bytes(), nil
+}
+
+// NeedsRotation returns whether the data key needs to be rotated
+// or not.
+func (key *MasterKey) NeedsRotation() bool {
+	return time.Since(key.CreationDate) > (pgpTTL)
+}
+
+// ToString returns the string representation of the key, i.e. its
+// fingerprint.
+func (key *MasterKey) ToString() string {
+	return key.Fingerprint
+}
+
+// ToMap converts the MasterKey into a map for serialization purposes.
+func (key MasterKey) ToMap() map[string]interface{} {
+	out := make(map[string]interface{})
+	out["fp"] = key.Fingerprint
+	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)
+	out["enc"] = key.EncryptedKey
+	return out
+}
+
+// gnuPGHome determines the GnuPG home directory for the MasterKey, and returns
+// its path. In order of preference:
+//  1. MasterKey.gnuPGHomeDir
+//  2. $GNUPGHOME
+//  3. user.Current().HomeDir/.gnupg
+//  4. $HOME/.gnupg
+func (key *MasterKey) gnuPGHome() string {
+	if key.gnuPGHomeDir == "" {
+		dir := os.Getenv("GNUPGHOME")
+		if dir == "" {
+			usr, err := user.Current()
+			if err != nil {
+				return filepath.Join(os.Getenv("HOME"), ".gnupg")
+			}
+			return filepath.Join(usr.HomeDir, ".gnupg")
+		}
+		return dir
+	}
+	return key.gnuPGHomeDir
+}
+
+// retrievePubKey attempts to retrieve the public key from the public keyring
+// by Fingerprint.
+func (key *MasterKey) retrievePubKey() (openpgp.Entity, error) {
+	ring, err := key.getPubRing()
+	if err == nil {
+		fingerprints := fingerprintIndex(ring)
+		entity, ok := fingerprints[key.Fingerprint]
+		if ok {
+			return entity, nil
 		}
 	}
-	return fps
+	return openpgp.Entity{},
+		fmt.Errorf("key with fingerprint '%s' is not available "+
+			"in keyring", key.Fingerprint)
 }
 
+// getPubRing loads the public keyring from the configured path, or falls back
+// to defaultPubRing relative to the GnuPG home. It returns an openpgp.EntityList
+// read from the keyring, or an error.
+func (key *MasterKey) getPubRing() (openpgp.EntityList, error) {
+	path := key.pubRing
+	if path == "" {
+		path = filepath.Join(key.gnuPGHome(), defaultPubRing)
+	}
+	return loadRing(path)
+}
+
+// getSecRing loads the sec keyring from the configured path, or falls back
+// to defaultSecRing relative to the GnuPG home. It returns an openpgp.EntityList
+// read from the keyring, or an error.
+func (key *MasterKey) getSecRing() (openpgp.EntityList, error) {
+	path := key.secRing
+	if path == "" {
+		path = filepath.Join(key.gnuPGHome(), defaultSecRing)
+	}
+	if _, err := os.Lstat(path); err != nil {
+		if !os.IsNotExist(err) {
+			return nil, err
+		}
+		return key.getPubRing()
+	}
+	return loadRing(path)
+}
+
+// passphrasePrompt prompts the user for a passphrase when this is required for
+// encryption or decryption.
 func (key *MasterKey) passphrasePrompt() func(keys []openpgp.Key, symmetric bool) ([]byte, error) {
 	callCounter := 0
 	maxCalls := 3
@@ -334,9 +541,14 @@ func (key *MasterKey) passphrasePrompt() func(keys []openpgp.Key, symmetric bool
 			return pass, err
 		}
 		if err != nil {
-			return nil, fmt.Errorf("Could not establish connection with gpg-agent: %s", err)
+			return nil, fmt.Errorf("could not establish connection with gpg-agent: %s", err)
 		}
-		defer conn.Close()
+		defer func(conn *gpgagent.Conn) {
+			if err := conn.Close(); err != nil {
+				log.Errorf("failed to close connection with gpg-agent: %s", err)
+			}
+		}(conn)
+
 		for _, k := range keys {
 			req := gpgagent.PassphraseRequest{
 				CacheKey: k.PublicKey.KeyIdShortString(),
@@ -350,15 +562,73 @@ func (key *MasterKey) passphrasePrompt() func(keys []openpgp.Key, symmetric bool
 			k.PrivateKey.Decrypt([]byte(pass))
 			return []byte(pass), nil
 		}
-		return nil, fmt.Errorf("No key to unlock")
+
+		return nil, fmt.Errorf("no key to unlock")
 	}
 }
 
-// ToMap converts the MasterKey into a map for serialization purposes
-func (key MasterKey) ToMap() map[string]interface{} {
-	out := make(map[string]interface{})
-	out["fp"] = key.Fingerprint
-	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)
-	out["enc"] = key.EncryptedKey
-	return out
+// loadRing attempts to load the keyring from the provided path.
+// Unsupported keys are ignored as long as at least a single valid key is
+// found.
+func loadRing(path string) (openpgp.EntityList, error) {
+	f, err := os.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	keyring, err := openpgp.ReadKeyRing(f)
+	if err != nil {
+		return nil, err
+	}
+	return keyring, nil
+}
+
+// fingerprintIndex indexes the openpgp.Entity objects from the given ring
+// by their fingerprint, and returns the result.
+func fingerprintIndex(ring openpgp.EntityList) map[string]openpgp.Entity {
+	fps := make(map[string]openpgp.Entity)
+	for _, entity := range ring {
+		fp := strings.ToUpper(hex.EncodeToString(entity.PrimaryKey.Fingerprint[:]))
+		if entity != nil {
+			fps[fp] = *entity
+		}
+	}
+	return fps
+}
+
+// gpgExec runs the provided args with the gpgBinary, while restricting it to
+// gnuPGHome. Stdout and stderr can be read from the returned buffers.
+// When the command fails, an error is returned.
+func gpgExec(gnuPGHome string, args []string, stdin io.Reader) (err error, stdout bytes.Buffer, stderr bytes.Buffer) {
+	if gnuPGHome != "" {
+		args = append([]string{"--no-default-keyring", "--homedir", gnuPGHome}, args...)
+	}
+
+	cmd := exec.Command(gpgBinary(), args...)
+	cmd.Stdin = stdin
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+	err = cmd.Run()
+	return
+}
+
+// gpgBinary returns the GnuPG binary which must be used.
+// It allows for runtime modifications by setting the environment variable
+// SopsGpgExecEnv to the absolute path of the replacement binary.
+func gpgBinary() string {
+	binary := "gpg"
+	if envBinary := os.Getenv(SopsGpgExecEnv); envBinary != "" && filepath.IsAbs(envBinary) {
+		binary = envBinary
+	}
+	return binary
+}
+
+// shortenFingerprint returns the short ID of the given fingerprint.
+// This is mostly used for compatability reasons, as older versions of GnuPG
+// do not always like long IDs.
+func shortenFingerprint(fingerprint string) string {
+	if offset := len(fingerprint) - 16; offset > 0 {
+		fingerprint = fingerprint[offset:]
+	}
+	return fingerprint
 }
