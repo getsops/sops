@@ -31,7 +31,7 @@ For the adventurous, unstable features are available in the `develop` branch, wh
         $ git checkout develop
         $ make install
 
-(requires Go >= 1.17)
+(requires Go >= 1.18)
 
 If you don't have Go installed, set it up with:
 
@@ -239,20 +239,21 @@ And decrypt it using::
 Encrypting using Azure Key Vault
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Azure Key Vault integration tries several authentication methods, in
-this order:
+The Azure Key Vault integration uses the
+`default credential chain <https://pkg.go.dev/github.com/Azure/azure-sdk-for-go/sdk/azidentity#DefaultAzureCredential>`_
+which tries several authentication methods, in this order:
 
-  1. Client credentials
-  2. Client Certificate
-  3. Username Password
-  4. MSI
-  5. Azure CLI auth
+1. `Environment credentials <https://pkg.go.dev/github.com/Azure/azure-sdk-for-go/sdk/azidentity#EnvironmentCredential>`_
 
-You can force a specific authentication method through the AZURE_AUTH_METHOD
-environment variable, which may be one of: clientcredentials, clientcertificate,
-usernamepassword, msi, or cli (default).
+   i. Service Principal with Client Secret
+   ii. Service Principal with Certificate
+   iii. User with username and password
 
-For example, you can use service principals with the following environment variables:
+2. `Managed Identity credentials <https://pkg.go.dev/github.com/Azure/azure-sdk-for-go/sdk/azidentity#ManagedIdentityCredential>`_
+3. `Azure CLI credentials <https://pkg.go.dev/github.com/Azure/azure-sdk-for-go/sdk/azidentity#AzureCLICredential>`_
+
+
+For example, you can use a Service Principal with the following environment variables:
 
 .. code:: bash
 
@@ -260,7 +261,7 @@ For example, you can use service principals with the following environment varia
 	AZURE_CLIENT_ID
 	AZURE_CLIENT_SECRET
 
-You can create a service principal using the cli like this:
+You can create a Service Principal using the CLI like this:
 
 .. code:: bash
 
@@ -274,7 +275,7 @@ You can create a service principal using the cli like this:
 		"tenant": "<tenant-id>"
 	}
 
-The appId is the client id, and the password is the client secret.
+The `appId` is the client ID, and the `password` is the client secret.
 
 Encrypting/decrypting with Azure Key Vault requires the resource identifier for
 a key. This has the following form::
