@@ -1,148 +1,62 @@
 /*
-Package azkv contains an implementation of the go.mozilla.org/sops/v3/keys.MasterKey interface that encrypts and decrypts the
-data key using Azure Key Vault with the Azure Go SDK.
+Package azkv contains an implementation of the go.mozilla.org/sops/v3/keys.MasterKey
+interface that encrypts and decrypts the data key using Azure Key Vault with the
+Azure Key Vault Keys client module for Go.
 */
 package azkv //import "go.mozilla.org/sops/v3/azkv"
 
 import (
 	"context"
 	"encoding/base64"
-	"errors"
 	"fmt"
-	"os"
 	"regexp"
 	"strings"
 	"time"
 
-	"go.mozilla.org/sops/v3/logging"
-
-	"github.com/Azure/azure-sdk-for-go/services/keyvault/2016-10-01/keyvault"
-	"github.com/Azure/go-autorest/autorest"
-	"github.com/Azure/go-autorest/autorest/azure"
-	"github.com/Azure/go-autorest/autorest/azure/auth"
+	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
+	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
+	"github.com/Azure/azure-sdk-for-go/sdk/keyvault/azkeys/crypto"
 	"github.com/sirupsen/logrus"
+	"go.mozilla.org/sops/v3/logging"
 )
 
-var log *logrus.Logger
+var (
+	// log is the global logger for any Azure Key Vault MasterKey.
+	log *logrus.Logger
+	// azkvTTL is the duration after which a MasterKey requires rotation.
+	azkvTTL = time.Hour * 24 * 30 * 6
+)
 
 func init() {
 	log = logging.NewLogger("AZKV")
 }
 
-// MasterKey is a Azure Key Vault key used to encrypt and decrypt sops' data key.
+// MasterKey is an Azure Key Vault Key used to Encrypt and Decrypt SOPS'
+// data key.
 type MasterKey struct {
+	// VaultURL of the Azure Key Vault. For example:
+	// "https://myvault.vault.azure.net/".
 	VaultURL string
-	Name     string
-	Version  string
-
+	// Name of the Azure Key Vault key in the VaultURL.
+	Name string
+	// Version of the Azure Key Vault key. Can be empty.
+	Version string
+	// EncryptedKey contains the SOPS data key encrypted with the Azure Key
+	// Vault key.
 	EncryptedKey string
+	// CreationDate of the MasterKey, used to determine if the EncryptedKey
+	// needs rotation.
 	CreationDate time.Time
+
+	// tokenCredential contains the azcore.TokenCredential used by the Azure
+	// client. It can be injected by a (local) keyservice.KeyServiceServer
+	// using TokenCredential.ApplyToMasterKey.
+	// If nil, azidentity.NewDefaultAzureCredential is used.
+	tokenCredential azcore.TokenCredential
 }
 
-func newKeyVaultClient() (keyvault.BaseClient, error) {
-	var err error
-	c := keyvault.New()
-	c.Authorizer, err = newAuthorizer()
-	if err != nil {
-		log.WithError(err).Error("Failed to create Azure authorizer")
-		return c, err
-	}
-
-	return c, nil
-}
-
-// newAuthorizer returns the correct authorizer for the given settings and/or based on the value
-// of the AZURE_AUTH_METHOD environment variable, which may be one of:
-// clientcredentials, clientcertificate, usernamepassword, msi, or cli (default).
-func newAuthorizer() (autorest.Authorizer, error) {
-	settings := struct {
-		authMethod          string
-		tenantID            string
-		clientID            string
-		clientSecret        string
-		certificatePath     string
-		certificatePassword string
-		username            string
-		password            string
-		envName             string
-		resource            string
-		environment         azure.Environment
-	}{
-		authMethod:          os.Getenv("AZURE_AUTH_METHOD"),
-		tenantID:            os.Getenv("AZURE_TENANT_ID"),
-		clientID:            os.Getenv("AZURE_CLIENT_ID"),
-		clientSecret:        os.Getenv("AZURE_CLIENT_SECRET"),
-		certificatePath:     os.Getenv("AZURE_CERTIFICATE_PATH"),
-		certificatePassword: os.Getenv("AZURE_CERTIFICATE_PASSWORD"),
-		username:            os.Getenv("AZURE_USERNAME"),
-		password:            os.Getenv("AZURE_PASSWORD"),
-		envName:             os.Getenv("AZURE_ENVIRONMENT"),
-		resource:            os.Getenv("AZURE_AD_RESOURCE"),
-	}
-
-	settings.environment = azure.PublicCloud
-	if settings.envName != "" {
-		val, err := azure.EnvironmentFromName(settings.envName)
-		if err != nil {
-			return nil, err
-		}
-		settings.environment = val
-	}
-
-	if settings.resource == "" {
-		settings.resource = strings.TrimSuffix(settings.environment.KeyVaultEndpoint, "/")
-	}
-
-	if os.Getenv("MSI_ENDPOINT") != "" {
-		settings.authMethod = "msi"
-	}
-
-	// 1. Client credentials
-	if (settings.clientSecret != "") || settings.authMethod == "clientcredentials" {
-		config := auth.NewClientCredentialsConfig(settings.clientID, settings.clientSecret, settings.tenantID)
-		config.AADEndpoint = settings.environment.ActiveDirectoryEndpoint
-		config.Resource = settings.resource
-		return config.Authorizer()
-	}
-
-	// 2. Client Certificate
-	if (settings.certificatePath != "") || settings.authMethod == "clientcertificate" {
-		config := auth.NewClientCertificateConfig(settings.certificatePath, settings.certificatePassword, settings.clientID, settings.tenantID)
-		config.AADEndpoint = settings.environment.ActiveDirectoryEndpoint
-		config.Resource = settings.resource
-		return config.Authorizer()
-	}
-
-	// 3. Username Password
-	if (settings.username != "" && settings.password != "") || settings.authMethod == "usernamepassword" {
-		config := auth.NewUsernamePasswordConfig(settings.username, settings.password, settings.clientID, settings.tenantID)
-		config.AADEndpoint = settings.environment.ActiveDirectoryEndpoint
-		config.Resource = settings.resource
-		return config.Authorizer()
-	}
-
-	// 4. MSI
-	if settings.authMethod == "msi" {
-		config := auth.NewMSIConfig()
-		config.Resource = settings.resource
-		config.ClientID = settings.clientID
-		return config.Authorizer()
-	}
-
-	// 5. Device Code
-	if settings.authMethod == "devicecode" {
-		// TODO: Removed until we decide how to handle prompt on stdout, etc.
-		//// TODO: This will be required on every execution. Consider caching.
-		//config := auth.NewDeviceFlowConfig(settings.clientID, settings.tenantID)
-		//return config.Authorizer()
-		return nil, errors.New("device code flow not implemented")
-	}
-
-	// 6. CLI
-	return auth.NewAuthorizerFromCLIWithResource(settings.resource)
-}
-
-// NewMasterKey creates a new MasterKey from an URL, key name and version, setting the creation date to the current date
+// NewMasterKey creates a new MasterKey from a URL, key name and version,
+// setting the creation date to the current date.
 func NewMasterKey(vaultURL string, keyName string, keyVersion string) *MasterKey {
 	return &MasterKey{
 		VaultURL:     vaultURL,
@@ -152,7 +66,19 @@ func NewMasterKey(vaultURL string, keyName string, keyVersion string) *MasterKey
 	}
 }
 
-// MasterKeysFromURLs takes a comma separated list of Azure Key Vault URLs and returns a slice of new MasterKeys for them
+// NewMasterKeyFromURL takes an Azure Key Vault key URL, and returns a new
+// MasterKey. The URL format is {vaultUrl}/keys/{keyName}/{keyVersion}.
+func NewMasterKeyFromURL(url string) (*MasterKey, error) {
+	re := regexp.MustCompile("^(https://[^/]+)/keys/([^/]+)/([^/]+)$")
+	parts := re.FindStringSubmatch(url)
+	if parts == nil || len(parts) < 3 {
+		return nil, fmt.Errorf("could not parse %q into a valid Azure Key Vault MasterKey", url)
+	}
+	return NewMasterKey(parts[1], parts[2], parts[3]), nil
+}
+
+// MasterKeysFromURLs takes a comma separated list of Azure Key Vault URLs,
+// and returns a slice of new MasterKeys.
 func MasterKeysFromURLs(urls string) ([]*MasterKey, error) {
 	var keys []*MasterKey
 	if urls == "" {
@@ -168,61 +94,59 @@ func MasterKeysFromURLs(urls string) ([]*MasterKey, error) {
 	return keys, nil
 }
 
-// NewMasterKeyFromURL takes an Azure Key Vault key URL and returns a new MasterKey
-// URL format is {vaultUrl}/keys/{key-name}/{key-version}
-func NewMasterKeyFromURL(url string) (*MasterKey, error) {
-	k := &MasterKey{}
-	re := regexp.MustCompile("^(https://[^/]+)/keys/([^/]+)/([^/]+)$")
-	parts := re.FindStringSubmatch(url)
-	if parts == nil || len(parts) < 2 {
-		return nil, fmt.Errorf("Could not parse valid key from %q", url)
-	}
-
-	k.VaultURL = parts[1]
-	k.Name = parts[2]
-	k.Version = parts[3]
-	k.CreationDate = time.Now().UTC()
-	return k, nil
+// TokenCredential is an azcore.TokenCredential used for authenticating towards Azure Key
+// Vault.
+type TokenCredential struct {
+	token azcore.TokenCredential
 }
 
-// EncryptedDataKey returns the encrypted data key this master key holds
+// NewTokenCredential creates a new TokenCredential with the provided azcore.TokenCredential.
+func NewTokenCredential(token azcore.TokenCredential) *TokenCredential {
+	return &TokenCredential{token: token}
+}
+
+// ApplyToMasterKey configures the TokenCredential on the provided key.
+func (t TokenCredential) ApplyToMasterKey(key *MasterKey) {
+	key.tokenCredential = t.token
+}
+
+// Encrypt takes a SOPS data key, encrypts it with Azure Key Vault, and stores
+// the result in the EncryptedKey field.
+func (key *MasterKey) Encrypt(dataKey []byte) error {
+	token, err := key.getTokenCredential()
+	if err != nil {
+		log.WithError(err).WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Error("Encryption failed")
+		return fmt.Errorf("failed to get Azure token credential to encrypt data: %w", err)
+	}
+	c, err := crypto.NewClient(key.ToString(), token, nil)
+	if err != nil {
+		log.WithError(err).WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Error("Encryption failed")
+		return fmt.Errorf("failed to construct Azure Key Vault crypto client to encrypt data: %w", err)
+	}
+
+	resp, err := c.Encrypt(context.Background(), crypto.EncryptionAlgRSAOAEP256, dataKey, nil)
+	if err != nil {
+		log.WithError(err).WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Error("Encryption failed")
+		return fmt.Errorf("failed to encrypt sops data key with Azure Key Vault key '%s': %w", key.ToString(), err)
+	}
+	encodedEncryptedKey := base64.RawURLEncoding.EncodeToString(resp.Ciphertext)
+	key.SetEncryptedDataKey([]byte(encodedEncryptedKey))
+	log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Encryption succeeded")
+	return nil
+}
+
+// EncryptedDataKey returns the encrypted data key this master key holds.
 func (key *MasterKey) EncryptedDataKey() []byte {
 	return []byte(key.EncryptedKey)
 }
 
-// SetEncryptedDataKey sets the encrypted data key for this master key
+// SetEncryptedDataKey sets the encrypted data key for this master key.
 func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 	key.EncryptedKey = string(enc)
 }
 
-// Encrypt takes a sops data key, encrypts it with Key Vault and stores the result in the EncryptedKey field
-func (key *MasterKey) Encrypt(dataKey []byte) error {
-	c, err := newKeyVaultClient()
-	if err != nil {
-		return err
-	}
-	data := base64.RawURLEncoding.EncodeToString(dataKey)
-	p := keyvault.KeyOperationsParameters{Value: &data, Algorithm: keyvault.RSAOAEP256}
-
-	res, err := c.Encrypt(context.Background(), key.VaultURL, key.Name, key.Version, p)
-	if err != nil {
-		log.WithError(err).WithFields(logrus.Fields{
-			"key":     key.Name,
-			"version": key.Version,
-		}).Error("Encryption failed")
-		return fmt.Errorf("Failed to encrypt data: %w", err)
-	}
-
-	key.EncryptedKey = *res.Result
-	log.WithFields(logrus.Fields{
-		"key":     key.Name,
-		"version": key.Version,
-	}).Info("Encryption succeeded")
-
-	return nil
-}
-
-// EncryptIfNeeded encrypts the provided sops' data key and encrypts it if it hasn't been encrypted yet
+// EncryptIfNeeded encrypts the provided SOPS data key, if it has not been
+// encrypted yet.
 func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 	if key.EncryptedKey == "" {
 		return key.Encrypt(dataKey)
@@ -230,50 +154,45 @@ func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 	return nil
 }
 
-// Decrypt decrypts the EncryptedKey field with Azure Key Vault and returns the result.
+// Decrypt decrypts the EncryptedKey field with Azure Key Vault and returns
+// the result.
 func (key *MasterKey) Decrypt() ([]byte, error) {
-	c, err := newKeyVaultClient()
+	token, err := key.getTokenCredential()
 	if err != nil {
-		return nil, err
+		log.WithError(err).WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Error("Decryption failed")
+		return nil, fmt.Errorf("failed to get Azure token credential to decrypt: %w", err)
 	}
-	p := keyvault.KeyOperationsParameters{Value: &key.EncryptedKey, Algorithm: keyvault.RSAOAEP256}
-
-	res, err := c.Decrypt(context.TODO(), key.VaultURL, key.Name, key.Version, p)
+	c, err := crypto.NewClient(key.ToString(), token, nil)
 	if err != nil {
-		log.WithError(err).WithFields(logrus.Fields{
-			"key":     key.Name,
-			"version": key.Version,
-		}).Error("Decryption failed")
-		return nil, fmt.Errorf("Error decrypting key: %w", err)
+		log.WithError(err).WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Error("Decryption failed")
+		return nil, fmt.Errorf("failed to construct Azure Key Vault crypto client to decrypt data: %w", err)
 	}
 
-	plaintext, err := base64.RawURLEncoding.DecodeString(*res.Result)
+	rawEncryptedKey, err := base64.RawURLEncoding.DecodeString(key.EncryptedKey)
 	if err != nil {
-		log.WithError(err).WithFields(logrus.Fields{
-			"key":     key.Name,
-			"version": key.Version,
-		}).Error("Decryption failed")
-		return nil, err
+		log.WithError(err).WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Error("Decryption failed")
+		return nil, fmt.Errorf("failed to base64 decode Azure Key Vault encrypted key: %w", err)
 	}
-
-	log.WithFields(logrus.Fields{
-		"key":     key.Name,
-		"version": key.Version,
-	}).Info("Decryption succeeded")
-	return plaintext, nil
+	resp, err := c.Decrypt(context.Background(), crypto.EncryptionAlgRSAOAEP256, rawEncryptedKey, nil)
+	if err != nil {
+		log.WithError(err).WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Error("Decryption failed")
+		return nil, fmt.Errorf("failed to decrypt sops data key with Azure Key Vault key '%s': %w", key.ToString(), err)
+	}
+	log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Decryption succeeded")
+	return resp.Plaintext, nil
 }
 
 // NeedsRotation returns whether the data key needs to be rotated or not.
 func (key *MasterKey) NeedsRotation() bool {
-	return time.Since(key.CreationDate) > (time.Hour * 24 * 30 * 6)
+	return time.Since(key.CreationDate) > (azkvTTL)
 }
 
-// ToString converts the key to a string representation
+// ToString converts the key to a string representation.
 func (key *MasterKey) ToString() string {
 	return fmt.Sprintf("%s/keys/%s/%s", key.VaultURL, key.Name, key.Version)
 }
 
-// ToMap converts the MasterKey to a map for serialization purposes
+// ToMap converts the MasterKey to a map for serialization purposes.
 func (key MasterKey) ToMap() map[string]interface{} {
 	out := make(map[string]interface{})
 	out["vaultUrl"] = key.VaultURL
@@ -282,4 +201,13 @@ func (key MasterKey) ToMap() map[string]interface{} {
 	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)
 	out["enc"] = key.EncryptedKey
 	return out
+}
+
+// getTokenCredential returns the tokenCredential of the MasterKey, or
+// azidentity.NewDefaultAzureCredential.
+func (key *MasterKey) getTokenCredential() (azcore.TokenCredential, error) {
+	if key.tokenCredential == nil {
+		return azidentity.NewDefaultAzureCredential(nil)
+	}
+	return key.tokenCredential, nil
 }
