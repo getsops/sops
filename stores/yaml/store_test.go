@@ -111,6 +111,53 @@ var COMMENT_6_BRANCHES = sops.TreeBranches{
 	},
 }
 
+// The following is a regression test for https://github.com/mozilla/sops/issues/1068
+var COMMENT_7_IN = []byte(`a:
+    b:
+        c: d
+    # comment
+
+e:
+    - f
+`)
+
+var COMMENT_7_BRANCHES = sops.TreeBranches{
+	sops.TreeBranch{
+		sops.TreeItem{
+			Key:   "a",
+			Value: sops.TreeBranch{
+				sops.TreeItem{
+					Key:   "b",
+					Value: sops.TreeBranch{
+						sops.TreeItem{
+							Key:   "c",
+							Value: "d",
+						},
+					},
+				},
+				sops.TreeItem{
+					Key:   sops.Comment{" comment"},
+					Value: nil,
+				},
+			},
+		},
+		sops.TreeItem{
+			Key:   "e",
+			Value: []interface{}{
+				"f",
+			},
+		},
+	},
+}
+
+var COMMENT_7_OUT = []byte(`a:
+    b:
+        c: d
+    # comment
+e:
+    - f
+`)
+
 func TestUnmarshalMetadataFromNonSOPSFile(t *testing.T) {
 	data := []byte(`hello: 2`)
 	_, err := (&Store{}).LoadEncryptedFile(data)
@@ -223,4 +270,14 @@ func TestEmitValue(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, string(PLAIN_0), string(bytes))
 	assert.Equal(t, PLAIN_0, bytes)
+}
+
+func TestComment7(t *testing.T) {
+	branches, err := (&Store{}).LoadPlainFile(COMMENT_7_IN)
+	assert.Nil(t, err)
+	assert.Equal(t, COMMENT_7_BRANCHES, branches)
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, string(COMMENT_7_OUT), string(bytes))
+	assert.Equal(t, COMMENT_7_OUT, bytes)
 }

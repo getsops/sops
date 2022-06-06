@@ -233,7 +233,7 @@ func (store *Store) appendTreeBranch(branch sops.TreeBranch, mapping *yaml.Node)
 		if beginning {
 			comments = store.addCommentsHead(mapping, comments)
 		} else {
-			comments = store.addCommentsFoot(mapping.Content[len(mapping.Content) - 1], comments)
+			comments = store.addCommentsFoot(mapping.Content[len(mapping.Content) - 2], comments)
 		}
 	}
 }
