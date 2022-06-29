@@ -83,10 +83,11 @@ type gcpKmsKey struct {
 }
 
 type kmsKey struct {
-	Arn        string             `yaml:"arn"`
-	Role       string             `yaml:"role,omitempty"`
-	Context    map[string]*string `yaml:"context"`
-	AwsProfile string             `yaml:"aws_profile"`
+	Arn         string             `yaml:"arn"`
+	Role        string             `yaml:"role,omitempty"`
+	Context     map[string]*string `yaml:"context"`
+	AwsProfile  string             `yaml:"aws_profile"`
+	AwsEndpoint string             `yaml:"aws_endpoint"`
 }
 
 type azureKVKey struct {
@@ -113,6 +114,7 @@ type creationRule struct {
 	PathRegex         string `yaml:"path_regex"`
 	KMS               string
 	AwsProfile        string `yaml:"aws_profile"`
+	AwsEndpoint       string `yaml:"aws_endpoint"`
 	Age               string `yaml:"age"`
 	PGP               string
 	GCPKMS            string     `yaml:"gcp_kms"`
@@ -165,7 +167,7 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 				keyGroup = append(keyGroup, pgp.NewMasterKeyFromFingerprint(k))
 			}
 			for _, k := range group.KMS {
-				keyGroup = append(keyGroup, kms.NewMasterKey(k.Arn, k.Role, k.Context))
+				keyGroup = append(keyGroup, kms.NewMasterKey(k.Arn, k.Role, k.Context, k.AwsEndpoint))
 			}
 			for _, k := range group.GCPKMS {
 				keyGroup = append(keyGroup, gcpkms.NewMasterKeyFromResourceID(k.ResourceID))
@@ -197,7 +199,7 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		for _, k := range pgp.MasterKeysFromFingerprintString(cRule.PGP) {
 			keyGroup = append(keyGroup, k)
 		}
-		for _, k := range kms.MasterKeysFromArnString(cRule.KMS, kmsEncryptionContext, cRule.AwsProfile) {
+		for _, k := range kms.MasterKeysFromArnString(cRule.KMS, kmsEncryptionContext, cRule.AwsProfile, cRule.AwsEndpoint) {
 			keyGroup = append(keyGroup, k)
 		}
 		for _, k := range gcpkms.MasterKeysFromResourceIDString(cRule.GCPKMS) {

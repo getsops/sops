@@ -17,6 +17,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
+	"github.com/aws/aws-sdk-go/aws/endpoints"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/kms"
 	"github.com/aws/aws-sdk-go/service/kms/kmsiface"
@@ -43,6 +44,7 @@ type MasterKey struct {
 	CreationDate      time.Time
 	EncryptionContext map[string]*string
 	AwsProfile        string
+	AwsEndpoint       string
 }
 
 // EncryptedDataKey returns the encrypted data key this master key holds
@@ -128,6 +130,7 @@ func NewMasterKey(arn string, role string, context map[string]*string) *MasterKe
 		Role:              role,
 		EncryptionContext: context,
 		CreationDate:      time.Now().UTC(),
+		AwsEndpoint:       awsEndpoint,
 	}
 }
 
@@ -145,6 +148,7 @@ func NewMasterKeyFromArn(arn string, context map[string]*string, awsProfile stri
 	k.EncryptionContext = context
 	k.CreationDate = time.Now().UTC()
 	k.AwsProfile = awsProfile
+	k.AwsEndpoint = awsEndpoint
 	return k
 }
 
@@ -155,7 +159,7 @@ func MasterKeysFromArnString(arn string, context map[string]*string, awsProfile 
 		return keys
 	}
 	for _, s := range strings.Split(arn, ",") {
-		keys = append(keys, NewMasterKeyFromArn(s, context, awsProfile))
+		keys = append(keys, NewMasterKeyFromArn(s, context, awsProfile ))
 	}
 	return keys
 }
@@ -201,6 +205,23 @@ func (key MasterKey) createSession() (*session.Session, error) {
 	}
 
 	config := aws.Config{Region: aws.String(matches[1])}
+
+	if key.AwsEndpoint != "" {
+		awsCustomResolver := func(service, region string, optFns ...func(*endpoints.Options)) (endpoints.ResolvedEndpoint, error) {
+			if service == endpoints.KmsServiceID {
+				return endpoints.ResolvedEndpoint{
+					URL:           key.AwsEndpoint,
+					SigningRegion: "custom-signing-region",
+				}, nil
+			}
+			return endpoints.DefaultResolver().EndpointFor(service, region, optFns...)
+		}
+		config.EndpointResolver = endpoints.ResolverFunc(awsCustomResolver)
+	}
+
+	if key.AwsProfile != "" {
+		config.Credentials = credentials.NewSharedCredentials("", key.AwsProfile)
+	}
 
 	opts := session.Options{
 		Profile:                 key.AwsProfile,
