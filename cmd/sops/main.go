@@ -825,7 +825,7 @@ func main() {
 		if c.Bool("rotate") {
 			var addMasterKeys []keys.MasterKey
 			kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
-			for _, k := range kms.MasterKeysFromArnString(c.String("add-kms"), kmsEncryptionContext, c.String("aws-profile"), c.String("aws-endpoint")") {
+			for _, k := range kms.MasterKeysFromArnString(c.String("add-kms"), kmsEncryptionContext, c.String("aws-profile"), c.String("aws-endpoint")) {
 				addMasterKeys = append(addMasterKeys, k)
 			}
 			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("add-pgp")) {
@@ -1089,7 +1089,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 		return nil, common.NewExitError("Invalid KMS encryption context format", codes.ErrorInvalidKMSEncryptionContextFormat)
 	}
 	if c.String("kms") != "" {
-		for _, k := range kms.MasterKeysFromArnString(c.String("kms"), kmsEncryptionContext, c.String("aws-profile") c.String("aws-endpoint")) {
+		for _, k := range kms.MasterKeysFromArnString(c.String("kms"), kmsEncryptionContext, c.String("aws-profile"), c.String("aws-endpoint")) {
 			kmsKeys = append(kmsKeys, k)
 		}
 	}

@@ -12,9 +12,9 @@ import (
 	// empty import as per https://godoc.org/github.com/lib/pq
 	_ "github.com/lib/pq"
 
-	"gopkg.in/yaml.v3"
 	"github.com/sirupsen/logrus"
 	"go.mozilla.org/sops/v3/logging"
+	"gopkg.in/yaml.v3"
 )
 
 var log *logrus.Logger

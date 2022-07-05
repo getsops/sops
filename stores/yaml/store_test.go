@@ -101,7 +101,7 @@ var COMMENT_6 = []byte(`a:
 var COMMENT_6_BRANCHES = sops.TreeBranches{
 	sops.TreeBranch{
 		sops.TreeItem{
-			Key:   "a",
+			Key: "a",
 			Value: []interface{}{
 				"a",
 				sops.Comment{" I no longer get duplicated"},
