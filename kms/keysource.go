@@ -124,7 +124,7 @@ func (key *MasterKey) ToString() string {
 }
 
 // NewMasterKey creates a new MasterKey from an ARN, role and context, setting the creation date to the current date
-func NewMasterKey(arn string, role string, context map[string]*string) *MasterKey {
+func NewMasterKey(arn string, role string, context map[string]*string, awsEndpoint string) *MasterKey {
 	return &MasterKey{
 		Arn:               arn,
 		Role:              role,
@@ -135,7 +135,7 @@ func NewMasterKey(arn string, role string, context map[string]*string) *MasterKe
 }
 
 // NewMasterKeyFromArn takes an ARN string and returns a new MasterKey for that ARN
-func NewMasterKeyFromArn(arn string, context map[string]*string, awsProfile string) *MasterKey {
+func NewMasterKeyFromArn(arn string, context map[string]*string, awsProfile string, awsEndpoint string) *MasterKey {
 	k := &MasterKey{}
 	arn = strings.Replace(arn, " ", "", -1)
 	roleIndex := strings.Index(arn, "+arn:aws:iam::")
@@ -153,13 +153,13 @@ func NewMasterKeyFromArn(arn string, context map[string]*string, awsProfile stri
 }
 
 // MasterKeysFromArnString takes a comma separated list of AWS KMS ARNs and returns a slice of new MasterKeys for those ARNs
-func MasterKeysFromArnString(arn string, context map[string]*string, awsProfile string) []*MasterKey {
+func MasterKeysFromArnString(arn string, context map[string]*string, awsProfile string, awsEndpoint string) []*MasterKey {
 	var keys []*MasterKey
 	if arn == "" {
 		return keys
 	}
 	for _, s := range strings.Split(arn, ",") {
-		keys = append(keys, NewMasterKeyFromArn(s, context, awsProfile ))
+		keys = append(keys, NewMasterKeyFromArn(s, context, awsProfile, awsEndpoint))
 	}
 	return keys
 }
@@ -211,7 +211,7 @@ func (key MasterKey) createSession() (*session.Session, error) {
 			if service == endpoints.KmsServiceID {
 				return endpoints.ResolvedEndpoint{
 					URL:           key.AwsEndpoint,
-					SigningRegion: "custom-signing-region",
+					SigningRegion: region,
 				}, nil
 			}
 			return endpoints.DefaultResolver().EndpointFor(service, region, optFns...)

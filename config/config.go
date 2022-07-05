@@ -331,7 +331,7 @@ func parseCreationRuleForFile(conf *configFile, confPath, filePath string, kmsEn
 	}
 
 	// compare file path relative to path of config file
-	filePath = strings.TrimPrefix(filePath, configDir + string(filepath.Separator))
+	filePath = strings.TrimPrefix(filePath, configDir+string(filepath.Separator))
 
 	var rule *creationRule
 
