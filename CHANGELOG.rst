@@ -8,7 +8,7 @@ Changes:
 * Upgrade dependencies (#1024, #1045)
 * Build alpine container in CI (#1018, #1032, #1025)
 * keyservice: accept KeyServiceServer in LocalClient (#1035)
-* Add support for GCP Service Account within `GOOGLE_CREDENTIAL` (#953)
+* Add support for GCP Service Account within `GOOGLE_CREDENTIALS` (#953)
 
 Bug fixes:
 
