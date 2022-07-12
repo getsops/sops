@@ -4,166 +4,511 @@ import (
 	"fmt"
 	logger "log"
 	"os"
+	"path"
+	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
 	"github.com/hashicorp/vault/api"
+	"github.com/mitchellh/go-homedir"
 	"github.com/ory/dockertest"
 	"github.com/stretchr/testify/assert"
 )
 
+var (
+	// testVaultVersion is the version (image tag) of the Vault server image
+	// used to test against.
+	testVaultVersion = "1.10.0"
+	// testVaultToken is the token of the Vault server.
+	testVaultToken = "secret"
+	// testEnginePath is the path to mount the Vault Transit on.
+	testEnginePath = "sops"
+	// testVaultAddress is the HTTP/S address of the Vault server, it is set
+	// by TestMain after booting it.
+	testVaultAddress string
+)
+
+// TestMain initializes a Vault server using Docker, writes the HTTP address to
+// testVaultAddress, waits for it to become ready to serve requests, and enables
+// Vault Transit on the testEnginePath. It then runs all the tests, which can
+// make use of the various `test*` variables.
 func TestMain(m *testing.M) {
-	// uses a sensible default on windows (tcp/http) and linux/osx (socket)
+	// Uses a sensible default on Windows (TCP/HTTP) and Linux/MacOS (socket)
 	pool, err := dockertest.NewPool("")
 	if err != nil {
-		logger.Fatalf("Could not connect to docker: %s", err)
+		logger.Fatalf("could not connect to docker: %s", err)
 	}
 
-	// pulls an image, creates a container based on it and runs it
-	resource, err := pool.Run("vault", "1.2.2", []string{"VAULT_DEV_ROOT_TOKEN_ID=secret"})
+	// Pull the image, create a container based on it, and run it
+	resource, err := pool.Run("vault", testVaultVersion, []string{"VAULT_DEV_ROOT_TOKEN_ID=" + testVaultToken})
 	if err != nil {
-		logger.Fatalf("Could not start resource: %s", err)
+		logger.Fatalf("could not start resource: %s", err)
 	}
 
-	vaultAddr := fmt.Sprintf("http://%s", resource.GetHostPort("8200/tcp"))
-	os.Setenv("VAULT_ADDR", vaultAddr)
-	os.Setenv("VAULT_TOKEN", "secret")
-	// exponential backoff-retry, because the application in the container might not be ready to accept connections yet
+	purgeResource := func() {
+		if err := pool.Purge(resource); err != nil {
+			logger.Printf("could not purge resource: %s", err)
+		}
+	}
+
+	testVaultAddress = fmt.Sprintf("http://127.0.0.1:%v", resource.GetPort("8200/tcp"))
+	// Wait until Vault is ready to serve requests
 	if err := pool.Retry(func() error {
-		cli, err := api.NewClient(api.DefaultConfig())
+		cfg := api.DefaultConfig()
+		cfg.Address = testVaultAddress
+		cli, err := api.NewClient(cfg)
 		if err != nil {
-			return fmt.Errorf("Cannot create Vault Client: %w", err)
+			return fmt.Errorf("cannot create Vault client: %w", err)
 		}
 		status, err := cli.Sys().InitStatus()
 		if err != nil {
 			return err
 		}
 		if status != true {
-			return fmt.Errorf("Vault not ready yet")
+			return fmt.Errorf("waiting on Vault server to become ready")
 		}
 		return nil
 	}); err != nil {
-		logger.Fatalf("Could not connect to docker: %s", err)
+		purgeResource()
+		logger.Fatalf("could not connect to docker: %s", err)
 	}
 
-	key := NewMasterKey(vaultAddr, "sops", "main")
-	err = key.createVaultTransitAndKey()
-	if err != nil {
-		logger.Fatal(err)
+	if err = enableVaultTransit(testVaultAddress, testVaultToken, testEnginePath); err != nil {
+		purgeResource()
+		logger.Fatalf("could not enable Vault transit: %s", err)
 	}
-	code := 0
+
+	// Run the tests, but only if we succeeded in setting up the Vault server
+	var code int
 	if err == nil {
 		code = m.Run()
 	}
 
-	// You can't defer this because os.Exit doesn't care for defer
+	// This can't be deferred, as os.Exit simpy does not care
 	if err := pool.Purge(resource); err != nil {
-		logger.Fatalf("Could not purge resource: %s", err)
+		logger.Fatalf("could not purge resource: %s", err)
 	}
 
 	os.Exit(code)
 }
 
-func TestKeyToMap(t *testing.T) {
-	key := MasterKey{
-		CreationDate: time.Date(2016, time.October, 31, 10, 0, 0, 0, time.UTC),
-		VaultAddress: "http://127.0.0.1:8200",
-		EnginePath:   "foo",
-		KeyName:      "bar",
-		EncryptedKey: "this is encrypted",
-	}
-	assert.Equal(t, map[string]interface{}{
-		"vault_address": "http://127.0.0.1:8200",
-		"engine_path":   "foo",
-		"key_name":      "bar",
-		"enc":           "this is encrypted",
-		"created_at":    "2016-10-31T10:00:00Z",
-	}, key.ToMap())
-}
+func TestNewMasterKeysFromURIs(t *testing.T) {
+	t.Run("multiple URIs", func(t *testing.T) {
+		uris := []string{
+			"https://vault.example.com:8200/v1/transit/keys/keyName",
+			"", // Empty should be skipped
+			"https://vault.me.com/v1/super42/bestmarket/keys/slig",
+		}
+		keys, err := NewMasterKeysFromURIs(strings.Join(uris, ","))
+		assert.NoError(t, err)
+		assert.Len(t, keys, 2)
+	})
 
-func TestEncryptionDecryption(t *testing.T) {
-	dataKey := []byte("super very Secret Key!!!")
-	key := MasterKey{
-		VaultAddress: os.Getenv("VAULT_ADDR"),
-		EnginePath:   "sops",
-		KeyName:      "main",
-	}
-	err := key.Encrypt(dataKey)
-	if err != nil {
-		fmt.Println(err)
-		t.Fail()
-		return
-	}
-	decrypted, err := key.Decrypt()
-	if err != nil {
-		fmt.Println(err)
-		t.Fail()
-		return
-	}
-	assert.Equal(t, dataKey, decrypted)
+	t.Run("with invalid URI", func(t *testing.T) {
+		uris := []string{
+			"https://vault.example.com:8200/v1/transit/keys/keyName",
+			"vault.me/keys/dev/mykey",
+		}
+		keys, err := NewMasterKeysFromURIs(strings.Join(uris, ","))
+		assert.Error(t, err)
+		assert.Nil(t, keys)
+	})
 }
 
 func TestNewMasterKeyFromURI(t *testing.T) {
-	uri1 := "https://vault.example.com:8200/v1/transit/keys/keyName"
-	uri2 := "https://vault.me.com/v1/super42/bestmarket/keys/slig"
-	uri3 := "http://127.0.0.1:12121/v1/transit/keys/dev"
+	tests := []struct {
+		url     string
+		want    *MasterKey
+		wantErr bool
+	}{
+		{
+			url: "https://vault.example.com:8200/v1/transit/keys/keyName",
+			want: &MasterKey{
+				VaultAddress: "https://vault.example.com:8200",
+				EnginePath:   "transit",
+				KeyName:      "keyName",
+			},
+		},
+		{
+			url: "https://vault.me.com/v1/super42/bestmarket/keys/slig",
+			want: &MasterKey{
+				VaultAddress: "https://vault.me.com",
+				EnginePath:   "super42/bestmarket",
+				KeyName:      "slig",
+			},
+		},
+		{
+			url: "http://127.0.0.1:12121/v1/transit/keys/dev",
+			want: &MasterKey{
+				VaultAddress: "http://127.0.0.1:12121",
+				EnginePath:   "transit",
+				KeyName:      "dev",
+			},
+		},
+		{
+			url:     "vault.me/keys/dev/mykey",
+			want:    nil,
+			wantErr: true,
+		},
+		{
+			url:     "http://127.0.0.1:12121/v1/keys/dev",
+			want:    nil,
+			wantErr: true,
+		},
+		{
+			url:     "tcp://127.0.0.1:12121/v1/keys/dev",
+			want:    nil,
+			wantErr: true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.url, func(t *testing.T) {
+			got, err := NewMasterKeyFromURI(tt.url)
+			if tt.wantErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+			}
+			if tt.want != nil && got != nil {
+				tt.want.CreationDate = got.CreationDate
+			}
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
 
-	mk1 := &MasterKey{
-		VaultAddress: "https://vault.example.com:8200",
-		EnginePath:   "transit",
-		KeyName:      "keyName",
+func TestMasterKey_Encrypt(t *testing.T) {
+	key := NewMasterKey(testVaultAddress, testEnginePath, "encrypt")
+	(Token(testVaultToken)).ApplyToMasterKey(key)
+	assert.NoError(t, createVaultKey(key))
+
+	dataKey := []byte("the majority of your brain is fat")
+	assert.NoError(t, key.Encrypt(dataKey))
+	assert.NotEmpty(t, key.EncryptedKey)
+
+	client, err := vaultClient(key.VaultAddress, key.token)
+	assert.NoError(t, err)
+
+	payload := decryptPayload(key.EncryptedKey)
+	secret, err := client.Logical().Write(key.decryptPath(), payload)
+	assert.NoError(t, err)
+
+	decryptedData, err := dataKeyFromSecret(secret)
+	assert.NoError(t, err)
+	assert.Equal(t, dataKey, decryptedData)
+
+	key.EnginePath = "invalid"
+	assert.Error(t, key.Encrypt(dataKey))
+
+	key.EnginePath = testEnginePath
+	key.token = ""
+	assert.Error(t, key.Encrypt(dataKey))
+}
+
+func TestMasterKey_EncryptIfNeeded(t *testing.T) {
+	key := NewMasterKey(testVaultAddress, testEnginePath, "encrypt-if-needed")
+	(Token(testVaultToken)).ApplyToMasterKey(key)
+	assert.NoError(t, createVaultKey(key))
+
+	assert.NoError(t, key.EncryptIfNeeded([]byte("stingy string")))
+
+	encryptedKey := key.EncryptedKey
+	assert.NotEmpty(t, encryptedKey)
+
+	assert.NoError(t, key.EncryptIfNeeded([]byte("stringy sting")))
+	assert.Equal(t, encryptedKey, key.EncryptedKey)
+}
+
+func TestMasterKey_EncryptedDataKey(t *testing.T) {
+	key := &MasterKey{EncryptedKey: "some key"}
+	assert.EqualValues(t, key.EncryptedKey, key.EncryptedDataKey())
+}
+
+func TestMasterKey_Decrypt(t *testing.T) {
+	key := NewMasterKey(testVaultAddress, testEnginePath, "decrypt")
+	(Token(testVaultToken)).ApplyToMasterKey(key)
+	assert.NoError(t, createVaultKey(key))
+
+	client, err := vaultClient(key.VaultAddress, key.token)
+	assert.NoError(t, err)
+
+	dataKey := []byte("the heart of a shrimp is located in its head")
+	secret, err := client.Logical().Write(key.encryptPath(), encryptPayload(dataKey))
+	assert.NoError(t, err)
+
+	encryptedKey, err := encryptedKeyFromSecret(secret)
+	assert.NoError(t, err)
+
+	key.EncryptedKey = encryptedKey
+	got, err := key.Decrypt()
+	assert.NoError(t, err)
+	assert.Equal(t, dataKey, got)
+
+	key.EnginePath = "invalid"
+	assert.Error(t, key.Encrypt(dataKey))
+
+	key.EnginePath = testEnginePath
+	key.token = ""
+	assert.Error(t, key.Encrypt(dataKey))
+}
+
+func TestMasterKey_EncryptDecrypt_RoundTrip(t *testing.T) {
+	token := Token(testVaultToken)
+
+	encryptKey := NewMasterKey(testVaultAddress, testEnginePath, "roundtrip")
+	token.ApplyToMasterKey(encryptKey)
+	assert.NoError(t, createVaultKey(encryptKey))
+
+	dataKey := []byte("some people have an extra bone in their knee")
+	assert.NoError(t, encryptKey.Encrypt(dataKey))
+	assert.NotEmpty(t, encryptKey.EncryptedKey)
+
+	decryptKey := NewMasterKey(testVaultAddress, testEnginePath, "roundtrip")
+	token.ApplyToMasterKey(decryptKey)
+	decryptKey.EncryptedKey = encryptKey.EncryptedKey
+
+	decryptedData, err := decryptKey.Decrypt()
+	assert.NoError(t, err)
+	assert.Equal(t, dataKey, decryptedData)
+}
+
+func TestMasterKey_NeedsRotation(t *testing.T) {
+	key := NewMasterKey("", "", "")
+	assert.False(t, key.NeedsRotation())
+
+	key.CreationDate = key.CreationDate.Add(-(vaultTTL + time.Second))
+	assert.True(t, key.NeedsRotation())
+}
+
+func TestMasterKey_ToString(t *testing.T) {
+	key := NewMasterKey("https://example.com", "engine", "key-name")
+	assert.Equal(t, "https://example.com/v1/engine/keys/key-name", key.ToString())
+}
+
+func TestMasterKey_ToMap(t *testing.T) {
+	key := &MasterKey{
+		KeyName:      "test-key",
+		EnginePath:   "engine",
+		VaultAddress: testVaultAddress,
+		EncryptedKey: "some-encrypted-key",
 	}
-	mk2 := &MasterKey{
-		VaultAddress: "https://vault.me.com",
-		EnginePath:   "super42/bestmarket",
-		KeyName:      "slig",
+	assert.Equal(t, map[string]interface{}{
+		"vault_address": key.VaultAddress,
+		"key_name":      key.KeyName,
+		"engine_path":   key.EnginePath,
+		"enc":           key.EncryptedKey,
+		"created_at":    "0001-01-01T00:00:00Z",
+	}, key.ToMap())
+}
+
+func Test_encryptedKeyFromSecret(t *testing.T) {
+	tests := []struct {
+		name    string
+		secret  *api.Secret
+		want    string
+		wantErr bool
+	}{
+		{name: "nil secret", secret: nil, wantErr: true},
+		{name: "secret with nil data", secret: &api.Secret{Data: nil}, wantErr: true},
+		{name: "secret without ciphertext data", secret: &api.Secret{Data: map[string]interface{}{"other": true}}, wantErr: true},
+		{name: "ciphertext non string", secret: &api.Secret{Data: map[string]interface{}{"ciphertext": 123}}, wantErr: true},
+		{name: "ciphertext data", secret: &api.Secret{Data: map[string]interface{}{"ciphertext": "secret string"}}, want: "secret string"},
 	}
-	mk3 := &MasterKey{
-		VaultAddress: "http://127.0.0.1:12121",
-		EnginePath:   "transit",
-		KeyName:      "dev",
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := encryptedKeyFromSecret(tt.secret)
+			if tt.wantErr {
+				assert.Error(t, err)
+				assert.Empty(t, got)
+				return
+			}
+			assert.NoError(t, err)
+			assert.Equal(t, tt.want, got)
+		})
 	}
-	genMk1, err := NewMasterKeyFromURI(uri1)
+}
+
+func Test_dataKeyFromSecret(t *testing.T) {
+	tests := []struct {
+		name    string
+		secret  *api.Secret
+		want    []byte
+		wantErr bool
+	}{
+		{name: "nil secret", secret: nil, wantErr: true},
+		{name: "secret with nil data", secret: &api.Secret{Data: nil}, wantErr: true},
+		{name: "secret without plaintext data", secret: &api.Secret{Data: map[string]interface{}{"other": true}}, wantErr: true},
+		{name: "plaintext non string", secret: &api.Secret{Data: map[string]interface{}{"plaintext": 123}}, wantErr: true},
+		{name: "plaintext non base64", secret: &api.Secret{Data: map[string]interface{}{"plaintext": "notbase64"}}, wantErr: true},
+		{name: "plaintext base64 data", secret: &api.Secret{Data: map[string]interface{}{"plaintext": "Zm9v"}}, want: []byte("foo")},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := dataKeyFromSecret(tt.secret)
+			if tt.wantErr {
+				assert.Error(t, err)
+				assert.Empty(t, got)
+				return
+			}
+			assert.NoError(t, err)
+			assert.Equal(t, tt.want, got)
+		})
+	}
+}
+
+func Test_vaultClient(t *testing.T) {
+	t.Run("client", func(t *testing.T) {
+		t.Setenv("VAULT_TOKEN", "")
+
+		got, err := vaultClient(testVaultAddress, "")
+		assert.NoError(t, err)
+		assert.NotNil(t, got)
+		assert.Empty(t, got.Token())
+	})
+
+	t.Run("client with VAULT_TOKEN", func(t *testing.T) {
+		token := "test-token"
+		t.Setenv("VAULT_TOKEN", token)
+
+		got, err := vaultClient(testVaultAddress, "")
+		assert.NoError(t, err)
+		assert.NotNil(t, got)
+		assert.Equal(t, token, got.Token())
+	})
+
+	t.Run("client with token", func(t *testing.T) {
+		ignored := "test-token"
+		t.Setenv("VAULT_TOKEN", ignored)
+
+		got, err := vaultClient(testVaultAddress, testVaultToken)
+		assert.NoError(t, err)
+		assert.NotNil(t, got)
+		assert.Equal(t, testVaultToken, got.Token())
+	})
+
+	t.Run("client with token from file", func(t *testing.T) {
+		tmpDir := t.TempDir()
+
+		token := "test-token"
+		assert.NoError(t, os.WriteFile(filepath.Join(tmpDir, defaultTokenFile), []byte(token), 0600))
+
+		// Reset before and after to make sure the override is taken into
+		// account, and restored after the test.
+		homedir.Reset()
+		t.Cleanup(func() { homedir.Reset() })
+		t.Setenv("VAULT_TOKEN", "")
+		t.Setenv("HOME", tmpDir)
+
+		got, err := vaultClient(testVaultAddress, "")
+		assert.NoError(t, err)
+		assert.NotNil(t, got)
+		assert.Equal(t, token, got.Token())
+	})
+}
+
+func Test_userVaultToken(t *testing.T) {
+	t.Run("reads token from file", func(t *testing.T) {
+		tmpDir := t.TempDir()
+
+		token := "test-token"
+		assert.NoError(t, os.WriteFile(filepath.Join(tmpDir, defaultTokenFile), []byte(token), 0600))
+
+		// Reset before and after to make sure the override is taken into
+		// account, and restored after the test.
+		homedir.Reset()
+		t.Cleanup(func() { homedir.Reset() })
+		t.Setenv("HOME", tmpDir)
+
+		got, err := userVaultToken()
+		assert.NoError(t, err)
+		assert.Equal(t, token, got)
+	})
+
+	t.Run("ignores missing file", func(t *testing.T) {
+		tmpDir := t.TempDir()
+
+		// Reset before and after to make sure the override is taken into
+		// account, and restored after the test.
+		homedir.Reset()
+		t.Cleanup(func() { homedir.Reset() })
+		t.Setenv("HOME", tmpDir)
+
+		got, err := userVaultToken()
+		assert.NoError(t, err)
+		assert.Empty(t, got)
+	})
+
+	t.Run("trims spaces", func(t *testing.T) {
+		tmpDir := t.TempDir()
+
+		token := "  test-token  "
+		assert.NoError(t, os.WriteFile(filepath.Join(tmpDir, defaultTokenFile), []byte(token), 0600))
+
+		// Reset before and after to make sure the override is taken into
+		// account, and restored after the test.
+		homedir.Reset()
+		t.Cleanup(func() { homedir.Reset() })
+		t.Setenv("HOME", tmpDir)
+
+		got, err := userVaultToken()
+		assert.NoError(t, err)
+		assert.Equal(t, "test-token", got)
+	})
+}
+
+func Test_engineAndKeyFromPath(t *testing.T) {
+	t.Run("engine and key", func(t *testing.T) {
+		enginePath, key, err := engineAndKeyFromPath("/v1/transit/keys/keyName")
+		assert.NoError(t, err)
+		assert.Equal(t, "transit", enginePath)
+		assert.Equal(t, "keyName", key)
+	})
+
+	t.Run("long (nested) path error", func(t *testing.T) {
+		_, _, err := engineAndKeyFromPath("/nested/v1/transit/keys/bar")
+		assert.Error(t, err)
+		assert.ErrorContains(t, err, "running Vault with a prefixed URL is not supported")
+	})
+
+	t.Run("invalid format error", func(t *testing.T) {
+		_, _, err := engineAndKeyFromPath("/secret/foo/bar")
+		assert.Error(t, err)
+		assert.ErrorContains(t, err, "vault path does not seem to be formatted correctly")
+	})
+}
+
+// enableVaultTransit enables the Vault Transit backend on the given enginePath.
+func enableVaultTransit(address, token, enginePath string) error {
+	client, err := vaultClient(address, token)
 	if err != nil {
-		log.Errorln(err)
-		t.Fail()
+		return fmt.Errorf("cannot create Vault client: %w", err)
 	}
 
-	genMk2, err := NewMasterKeyFromURI(uri2)
+	if err = client.Sys().Mount(enginePath, &api.MountInput{
+		Type:        "transit",
+		Description: "backend transit used by SOPS",
+	}); err != nil {
+		return fmt.Errorf("failed to mount transit on engine path '%s': %w", enginePath, err)
+	}
+	return nil
+}
+
+// createVaultKey creates a new RSA-4096 Vault key using the data from the
+// provided MasterKey.
+func createVaultKey(key *MasterKey) error {
+	client, err := vaultClient(key.VaultAddress, key.token)
 	if err != nil {
-		log.Errorln(err)
-		t.Fail()
+		return fmt.Errorf("cannot create Vault client: %w", err)
 	}
 
-	genMk3, err := NewMasterKeyFromURI(uri3)
-	if err != nil {
-		log.Errorln(err)
-		t.Fail()
+	p := path.Join(key.EnginePath, "keys", key.KeyName)
+	payload := make(map[string]interface{})
+	payload["type"] = "rsa-4096"
+	if _, err = client.Logical().Write(p, payload); err != nil {
+		return err
 	}
 
-	if assert.NotNil(t, genMk1) {
-		mk1.CreationDate = genMk1.CreationDate
-		assert.Equal(t, mk1, genMk1)
-	}
-	if assert.NotNil(t, genMk2) {
-		mk2.CreationDate = genMk2.CreationDate
-		assert.Equal(t, mk2, genMk2)
-	}
-	if assert.NotNil(t, genMk3) {
-		mk3.CreationDate = genMk3.CreationDate
-		assert.Equal(t, mk3, genMk3)
-	}
-
-	badURIs := []string{
-		"vault.me/keys/dev/mykey",
-		"http://127.0.0.1:12121/v1/keys/dev",
-		"tcp://127.0.0.1:12121/v1/keys/dev",
-	}
-	for _, uri := range badURIs {
-		if _, err = NewMasterKeyFromURI(uri); err == nil {
-			log.Errorf("Should be a invalid uri: %s", uri)
-			t.Fail()
-		}
-	}
-
+	_, err = client.Logical().Read(p)
+	return err
 }
