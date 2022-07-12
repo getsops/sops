@@ -216,7 +216,7 @@ func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
 		if err != nil {
 			return nil, err
 		}
-		if credentials != nil {
+		if credentials != nil && len(credentials) > 0 {
 			opts = append(opts, option.WithCredentialsJSON(key.credentialJSON))
 		}
 	}
