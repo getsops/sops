@@ -1,13 +1,28 @@
 package gcpkms
 
 import (
+	"encoding/base64"
+	"fmt"
+	"net"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	kmspb "google.golang.org/genproto/googleapis/cloud/kms/v1"
+	"google.golang.org/grpc"
 )
 
-func TestGCPKMSKeySourceFromString(t *testing.T) {
+var (
+	testResourceID = "projects/test-sops/locations/global/keyRings/test-sops/cryptoKeys/sops"
+	decryptedData  = "decrypted data"
+	encryptedData  = "encrypted data"
+)
+
+var (
+	mockKeyManagement mockKeyManagementServer
+)
+
+func TestMasterKeysFromResourceIDString(t *testing.T) {
 	s := "projects/sops-testing1/locations/global/keyRings/creds/cryptoKeys/key1, projects/sops-testing2/locations/global/keyRings/creds/cryptoKeys/key2"
 	ks := MasterKeysFromResourceIDString(s)
 	k1 := ks[0]
@@ -22,15 +37,131 @@ func TestGCPKMSKeySourceFromString(t *testing.T) {
 	}
 }
 
-func TestKeyToMap(t *testing.T) {
+func TestCredentialJSON_ApplyToMasterKey(t *testing.T) {
+	key := &MasterKey{}
+	credential := CredentialJSON("mock")
+	credential.ApplyToMasterKey(key)
+	assert.EqualValues(t, credential, key.credentialJSON)
+}
+
+func TestMasterKey_Encrypt(t *testing.T) {
+	mockKeyManagement.err = nil
+	mockKeyManagement.reqs = nil
+	mockKeyManagement.resps = append(mockKeyManagement.resps[:0], &kmspb.EncryptResponse{
+		Ciphertext: []byte(encryptedData),
+	})
+
 	key := MasterKey{
-		CreationDate: time.Date(2016, time.October, 31, 10, 0, 0, 0, time.UTC),
-		ResourceID:   "foo",
-		EncryptedKey: "this is encrypted",
+		grpcConn:   newGRPCServer("0"),
+		ResourceID: testResourceID,
+	}
+	err := key.Encrypt([]byte("encrypt"))
+	assert.NoError(t, err)
+	assert.EqualValues(t, base64.StdEncoding.EncodeToString([]byte(encryptedData)), key.EncryptedDataKey())
+}
+
+func TestMasterKey_EncryptIfNeeded(t *testing.T) {
+	key := MasterKey{EncryptedKey: encryptedData}
+	assert.EqualValues(t, encryptedData, key.EncryptedDataKey())
+	assert.NoError(t, key.EncryptIfNeeded([]byte("sops data key")))
+	assert.EqualValues(t, encryptedData, key.EncryptedDataKey())
+}
+
+func TestMasterKey_EncryptedDataKey(t *testing.T) {
+	key := MasterKey{EncryptedKey: encryptedData}
+	assert.EqualValues(t, encryptedData, key.EncryptedDataKey())
+}
+
+func TestMasterKey_Decrypt(t *testing.T) {
+	mockKeyManagement.err = nil
+	mockKeyManagement.reqs = nil
+	mockKeyManagement.resps = append(mockKeyManagement.resps[:0], &kmspb.DecryptResponse{
+		Plaintext: []byte(decryptedData),
+	})
+	key := MasterKey{
+		grpcConn:     newGRPCServer("0"),
+		ResourceID:   testResourceID,
+		EncryptedKey: "encryptedKey",
+	}
+	data, err := key.Decrypt()
+	assert.NoError(t, err)
+	assert.EqualValues(t, decryptedData, data)
+}
+
+func TestMasterKey_SetEncryptedDataKey(t *testing.T) {
+	enc := "encrypted key"
+	key := &MasterKey{}
+	key.SetEncryptedDataKey([]byte(enc))
+	assert.EqualValues(t, enc, key.EncryptedDataKey())
+}
+
+func TestMasterKey_ToString(t *testing.T) {
+	rsrcId := testResourceID
+	key := NewMasterKeyFromResourceID(rsrcId)
+	assert.Equal(t, rsrcId, key.ToString())
+}
+
+func TestMasterKey_ToMap(t *testing.T) {
+	key := MasterKey{
+		credentialJSON: []byte("sensitive creds"),
+		CreationDate:   time.Date(2016, time.October, 31, 10, 0, 0, 0, time.UTC),
+		ResourceID:     testResourceID,
+		EncryptedKey:   "this is encrypted",
 	}
 	assert.Equal(t, map[string]interface{}{
-		"resource_id": "foo",
+		"resource_id": testResourceID,
 		"enc":         "this is encrypted",
 		"created_at":  "2016-10-31T10:00:00Z",
 	}, key.ToMap())
+}
+
+func TestMasterKey_createCloudKMSService(t *testing.T) {
+	tests := []struct {
+		key       MasterKey
+		errString string
+	}{
+		{
+			key: MasterKey{
+				ResourceID:     "/projects",
+				credentialJSON: []byte("some secret"),
+			},
+			errString: "no valid resource ID",
+		},
+		{
+			key: MasterKey{
+				ResourceID: testResourceID,
+				credentialJSON: []byte(`{ "client_id": "<client-id>.apps.googleusercontent.com",
+ 		"client_secret": "<secret>",
+		"type": "authorized_user"}`),
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		_, err := tt.key.newKMSClient()
+		if tt.errString != "" {
+			assert.Error(t, err)
+			assert.ErrorContains(t, err, tt.errString)
+			return
+		}
+		assert.NoError(t, err)
+	}
+}
+
+func newGRPCServer(port string) *grpc.ClientConn {
+	serv := grpc.NewServer()
+	kmspb.RegisterKeyManagementServiceServer(serv, &mockKeyManagement)
+
+	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%s", port))
+	if err != nil {
+		log.Fatal(err)
+	}
+	go serv.Serve(lis)
+
+	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithInsecure())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return conn
 }
