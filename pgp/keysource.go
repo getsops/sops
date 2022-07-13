@@ -379,7 +379,8 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	}
 	errs = append(errs, fmt.Errorf("GnuPG binary error: %w", binaryErr))
 
-	log.WithError(errs).WithField("fingerprint", key.Fingerprint).Error("Decryption failed")
+	// TODO: Should only display an error to the user if all keys have been attempted (when there are multiple keys in the pgp key group)
+	log.WithError(errs).WithField("fingerprint", key.Fingerprint).Info("Decryption failed")
 	return nil, fmt.Errorf("could not decrypt data key with PGP key: %w", errs)
 }
 
