@@ -74,8 +74,8 @@ github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.1.0 h1:QkAcEIAKbNL4KoFr4Sath
 github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.1.0/go.mod h1:bhXu1AjYL+wutSL/kpSq6s7733q2Rb0yuot9Zgfqa/0=
 github.com/Azure/azure-sdk-for-go/sdk/internal v1.0.0 h1:jp0dGvZ7ZK0mgqnTSClMxa5xuRL7NZgHameVYF6BurY=
 github.com/Azure/azure-sdk-for-go/sdk/internal v1.0.0/go.mod h1:eWRD7oawr1Mu1sLCawqVc0CUiF43ia3qQMxLscsKQ9w=
-github.com/Azure/azure-sdk-for-go/sdk/keyvault/azkeys v0.5.1 h1:AXFNQ6kLaPODEpGSMWjmbkt6iP7fa1DIEzjx6JRFC9U=
-github.com/Azure/azure-sdk-for-go/sdk/keyvault/azkeys v0.5.1/go.mod h1:yOYJv0tO0TTNcje8ahhBHQcdAiYqRIp5fsog5FPefr4=
+github.com/Azure/azure-sdk-for-go/sdk/keyvault/azkeys v0.6.0 h1:3Onh5qkCDHpIJplrRI/DbbzWPnFKHRjQV4idRwLrghQ=
+github.com/Azure/azure-sdk-for-go/sdk/keyvault/azkeys v0.6.0/go.mod h1:y8KaF8j2nkUhLFJPccRG+vCxSKF22wZEit6pMINlvEo=
 github.com/Azure/azure-sdk-for-go/sdk/keyvault/internal v0.5.0 h1:9cn6ICCGiWFNA/slKnrkf+ENyvaCRKHtuoGtnLIAgao=
 github.com/Azure/azure-sdk-for-go/sdk/keyvault/internal v0.5.0/go.mod h1:9V2j0jn9jDEkCkv8w/bKTNppX/d0FVA1ud77xCIP4KA=
 github.com/Azure/go-ansiterm v0.0.0-20210617225240-d185dfc1b5a1 h1:UQHMgLO+TxOElx5B5HZ4hJQsoJ/PvUvKRhJHDQXO8P8=

@@ -8,7 +8,7 @@ require (
 	filippo.io/age v1.0.0
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.1.1
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.1.0
-	github.com/Azure/azure-sdk-for-go/sdk/keyvault/azkeys v0.5.1
+	github.com/Azure/azure-sdk-for-go/sdk/keyvault/azkeys v0.6.0
 	github.com/ProtonMail/go-crypto v0.0.0-20220711121315-1fde58898e96
 	github.com/aws/aws-sdk-go-v2 v1.16.7
 	github.com/aws/aws-sdk-go-v2/config v1.15.14
