@@ -271,8 +271,8 @@ You can create a Service Principal using the CLI like this:
 		"appId": "<some-uuid>",
 		"displayName": "my-keyvault-sp",
 		"name": "http://my-keyvault-sp",
-		"password": "<some-uuid>",
-		"tenant": "<tenant-id>"
+		"password": "<random-string>",
+		"tenant": "<tenant-uuid>"
 	}
 
 The `appId` is the client ID, and the `password` is the client secret.
