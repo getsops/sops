@@ -124,7 +124,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	if key.parsedRecipient == nil {
 		parsedRecipient, err := parseRecipient(key.Recipient)
 		if err != nil {
-			log.WithError(err).WithField("recipient", key.parsedRecipient).Error("Encryption failed")
+			log.WithField("recipient", key.parsedRecipient).Error("Encryption failed")
 			return err
 		}
 		key.parsedRecipient = parsedRecipient
@@ -134,19 +134,19 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	aw := armor.NewWriter(&buffer)
 	w, err := age.Encrypt(aw, key.parsedRecipient)
 	if err != nil {
-		log.WithError(err).WithField("recipient", key.parsedRecipient).Error("Encryption failed")
+		log.WithField("recipient", key.parsedRecipient).Error("Encryption failed")
 		return fmt.Errorf("failed to create writer for encrypting sops data key with age: %w", err)
 	}
 	if _, err := w.Write(dataKey); err != nil {
-		log.WithError(err).WithField("recipient", key.parsedRecipient).Error("Encryption failed")
+		log.WithField("recipient", key.parsedRecipient).Error("Encryption failed")
 		return fmt.Errorf("failed to encrypt sops data key with age: %w", err)
 	}
 	if err := w.Close(); err != nil {
-		log.WithError(err).WithField("recipient", key.parsedRecipient).Error("Encryption failed")
+		log.WithField("recipient", key.parsedRecipient).Error("Encryption failed")
 		return fmt.Errorf("failed to close writer for encrypting sops data key with age: %w", err)
 	}
 	if err := aw.Close(); err != nil {
-		log.WithError(err).WithField("recipient", key.parsedRecipient).Error("Encryption failed")
+		log.WithField("recipient", key.parsedRecipient).Error("Encryption failed")
 		return fmt.Errorf("failed to close armored writer: %w", err)
 	}
 
@@ -180,7 +180,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	if len(key.parsedIdentities) == 0 {
 		ids, err := key.loadIdentities()
 		if err != nil {
-			log.WithError(err).Error("Decryption failed")
+			log.Error("Decryption failed")
 			return nil, fmt.Errorf("failed to load age identities: %w", err)
 		}
 		ids.ApplyToMasterKey(key)
@@ -190,13 +190,13 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	ar := armor.NewReader(src)
 	r, err := age.Decrypt(ar, key.parsedIdentities...)
 	if err != nil {
-		log.WithError(err).Error("Decryption failed")
+		log.Error("Decryption failed")
 		return nil, fmt.Errorf("failed to create reader for decrypting sops data key with age: %w", err)
 	}
 
 	var b bytes.Buffer
 	if _, err := io.Copy(&b, r); err != nil {
-		log.WithError(err).Error("Decryption failed")
+		log.Error("Decryption failed")
 		return nil, fmt.Errorf("failed to copy age decrypted data into bytes.Buffer: %w", err)
 	}
 
