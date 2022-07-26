@@ -19,6 +19,7 @@ import (
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/pgp"
 	"github.com/getsops/sops/v3/publish"
+	"github.com/getsops/sops/v3/yckms"
 	"gopkg.in/yaml.v3"
 )
 
@@ -89,6 +90,7 @@ type keyGroup struct {
 	Merge   []keyGroup
 	KMS     []kmsKey
 	GCPKMS  []gcpKmsKey  `yaml:"gcp_kms"`
+	YCKMS   []ycKmsKey   `yaml:"yc_kms"`
 	AzureKV []azureKVKey `yaml:"azure_keyvault"`
 	Vault   []string     `yaml:"hc_vault"`
 	Age     []string     `yaml:"age"`
@@ -97,6 +99,10 @@ type keyGroup struct {
 
 type gcpKmsKey struct {
 	ResourceID string `yaml:"resource_id"`
+}
+
+type ycKmsKey struct {
+	KeyID string `yaml:"key_id"`
 }
 
 type kmsKey struct {
@@ -133,6 +139,7 @@ type creationRule struct {
 	Age                     string `yaml:"age"`
 	PGP                     string
 	GCPKMS                  string     `yaml:"gcp_kms"`
+	YCKMS                   string     `yaml:"yc_kms"`
 	AzureKeyVault           string     `yaml:"azure_keyvault"`
 	VaultURI                string     `yaml:"hc_vault_transit_uri"`
 	KeyGroups               []keyGroup `yaml:"key_groups"`
@@ -223,7 +230,10 @@ func extractMasterKeys(group keyGroup) (sops.KeyGroup, error) {
 	for _, k := range group.GCPKMS {
 		keyGroup = append(keyGroup, gcpkms.NewMasterKeyFromResourceID(k.ResourceID))
 	}
-	for _, k := range group.AzureKV {
+	for _, k := range group.YCKMS {
+				keyGroup = append(keyGroup, yckms.NewMasterKeyFromKeyID(k.KeyID))
+			}
+			for _, k := range group.AzureKV {
 		keyGroup = append(keyGroup, azkv.NewMasterKey(k.VaultURL, k.Key, k.Version))
 	}
 	for _, k := range group.Vault {
@@ -265,6 +275,9 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			keyGroup = append(keyGroup, k)
 		}
 		for _, k := range gcpkms.MasterKeysFromResourceIDString(cRule.GCPKMS) {
+			keyGroup = append(keyGroup, k)
+		}
+		for _, k := range yckms.NewMasterKeyFromKeyIDString(cRule.YCKMS) {
 			keyGroup = append(keyGroup, k)
 		}
 		azureKeys, err := azkv.MasterKeysFromURLs(cRule.AzureKeyVault)
