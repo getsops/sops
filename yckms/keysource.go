@@ -10,6 +10,7 @@ import (
 	ycsdk "github.com/yandex-cloud/go-sdk"
 	"github.com/yandex-cloud/go-sdk/gen/kmscrypto"
 	"github.com/yandex-cloud/go-sdk/iamkey"
+	"google.golang.org/grpc"
 	"os"
 	"strings"
 	"time"
@@ -40,6 +41,13 @@ type MasterKey struct {
 	// CreationDate is the creation timestamp of the MasterKey. Used
 	// for NeedsRotation.
 	CreationDate time.Time
+
+	credentials ycsdk.Credentials
+
+	// grpcConn can be used to inject a custom YC KMS client connection.
+	// Mostly useful for testing at present, to wire the client to a mock
+	// server.
+	grpcConn *grpc.ClientConn
 }
 
 func (key *MasterKey) TypeToIdentifier() string {
@@ -47,10 +55,10 @@ func (key *MasterKey) TypeToIdentifier() string {
 }
 
 func NewMasterKeyFromKeyID(keyID string) *MasterKey {
-	k := &MasterKey{}
-	k.KeyID = keyID
-	k.CreationDate = time.Now().UTC()
-	return k
+	return &MasterKey{
+		KeyID:        keyID,
+		CreationDate: time.Now().UTC(),
+	}
 }
 
 func NewMasterKeyFromKeyIDString(keyID string) []*MasterKey {
@@ -59,18 +67,34 @@ func NewMasterKeyFromKeyIDString(keyID string) []*MasterKey {
 		return keys
 	}
 	for _, s := range strings.Split(keyID, ",") {
-		keys = append(keys, NewMasterKeyFromKeyID(s))
+		keys = append(keys, NewMasterKeyFromKeyID(strings.TrimSpace(s)))
 	}
 	return keys
 }
 
-func (key *MasterKey) Encrypt(dataKey []byte) error {
-	client, ctx, err := key.newKMSClient()
+// YCCredentials is a ycsdk.Credentials used for authenticating towards YC KMS
+type YCCredentials struct {
+	credentials ycsdk.Credentials
+}
+
+// NewYCCredentials creates a new YCCredentials with the provided ycsdk.Credentials.
+func NewYCCredentials(credentials ycsdk.Credentials) *YCCredentials {
+	return &YCCredentials{credentials: credentials}
+}
+
+// ApplyToMasterKey configures the TokenCredential on the provided key.
+func (c YCCredentials) ApplyToMasterKey(key *MasterKey) {
+	key.credentials = c.credentials
+}
+
+func (key *MasterKey) Encrypt(dataKey []byte) (err error) {
+	client, err := key.newKMSClient()
 	if err != nil {
 		log.WithError(err).WithField("keyID", key.KeyID).Error("Encryption failed")
 		return fmt.Errorf("cannot create YC KMS service: %w", err)
 	}
-	ciphertextResponse, err := client.Encrypt(ctx, &yckms.SymmetricEncryptRequest{
+
+	ciphertextResponse, err := client.Encrypt(context.Background(), &yckms.SymmetricEncryptRequest{
 		KeyId:     key.KeyID,
 		Plaintext: dataKey,
 	})
@@ -105,13 +129,14 @@ func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 // Decrypt decrypts the EncryptedKey field with YC KMS and returns
 // the result.
 func (key *MasterKey) Decrypt() ([]byte, error) {
-	client, ctx, err := key.newKMSClient()
+	client, err := key.newKMSClient()
 	if err != nil {
 		log.WithError(err).WithField("keyID", key.KeyID).Error("Decryption failed")
 		return nil, fmt.Errorf("cannot create YC KMS service: %w", err)
 	}
+
 	decodedCipher, err := base64.StdEncoding.DecodeString(string(key.EncryptedDataKey()))
-	plaintextResponse, err := client.Decrypt(ctx, &yckms.SymmetricDecryptRequest{
+	plaintextResponse, err := client.Decrypt(context.Background(), &yckms.SymmetricDecryptRequest{
 		KeyId:      key.KeyID,
 		Ciphertext: decodedCipher,
 	})
@@ -134,7 +159,7 @@ func (key *MasterKey) ToString() string {
 }
 
 // ToMap converts the MasterKey to a map for serialization purposes.
-func (key MasterKey) ToMap() map[string]interface{} {
+func (key *MasterKey) ToMap() map[string]interface{} {
 	out := make(map[string]interface{})
 	out["key_id"] = key.KeyID
 	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)
@@ -146,21 +171,36 @@ func (key MasterKey) ToMap() map[string]interface{} {
 // and/or grpcConn, falling back to environmental defaults.
 // It returns an error if the ResourceID is invalid, or if the setup of the
 // client fails.
-func (key *MasterKey) newKMSClient() (*kms.SymmetricCryptoServiceClient, context.Context, error) {
-	ctx := context.Background()
-	cred, err := getYandexCloudCredentials()
-	if err != nil {
-		return nil, nil, err
+func (key *MasterKey) newKMSClient() (*kms.SymmetricCryptoServiceClient, error) {
+	var (
+		cred ycsdk.Credentials
+		err  error
+	)
+
+	switch {
+	case key.credentials != nil:
+		cred = key.credentials
+	default:
+		cred, err = getYandexCloudCredentials()
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	client, err := ycsdk.Build(ctx, ycsdk.Config{
+	client, err := ycsdk.Build(context.Background(), ycsdk.Config{
 		Credentials: cred,
 	})
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
-	return client.KMSCrypto().SymmetricCrypto(), ctx, nil
+	if key.grpcConn != nil {
+		return kms.NewKMSCrypto(func(ctx context.Context) (*grpc.ClientConn, error) {
+			return key.grpcConn, nil
+		}).SymmetricCrypto(), nil
+	}
+
+	return client.KMSCrypto().SymmetricCrypto(), nil
 }
 
 // getYandexCloudCredentials trying to locate credentials in the following order
