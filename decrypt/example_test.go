@@ -2,6 +2,7 @@ package decrypt
 
 import (
 	"encoding/json"
+	"os"
 
 	"go.mozilla.org/sops/v3/logging"
 
@@ -37,6 +38,35 @@ func ExampleDecryptFile() {
 		cfg      configuration
 		err      error
 	)
+	confData, err := File(confPath, "json")
+	if err != nil {
+		log.Fatalf("cleartext configuration marshalling failed with error: %v", err)
+	}
+	err = json.Unmarshal(confData, &cfg)
+	if err != nil {
+		log.Fatalf("cleartext configuration unmarshalling failed with error: %v", err)
+	}
+	if cfg.FirstName != "John" ||
+		cfg.LastName != "Smith" ||
+		cfg.Age != 25.4 ||
+		cfg.PhoneNumbers[1].Number != "646 555-4567" {
+		log.Fatalf("configuration does not contain expected values: %+v", cfg)
+	}
+	log.Printf("%+v", cfg)
+}
+
+func StdinDecryptFile() {
+	var (
+		confPath string = "-"
+		cfg      configuration
+		err      error
+	)
+
+	oldStdin := os.Stdin
+	defer func() { os.Stdin = oldStdin }()
+
+	os.Stdin, _ = os.Open("./example.json")
+
 	confData, err := File(confPath, "json")
 	if err != nil {
 		log.Fatalf("cleartext configuration marshalling failed with error: %v", err)

@@ -127,7 +127,7 @@ func EncryptTree(opts EncryptTreeOpts) error {
 
 // LoadEncryptedFile loads an encrypted SOPS file, returning a SOPS tree
 func LoadEncryptedFile(loader sops.EncryptedFileLoader, inputPath string) (*sops.Tree, error) {
-	fileBytes, err := ioutil.ReadFile(inputPath)
+	fileBytes, err := ReadFile(inputPath)
 	if err != nil {
 		return nil, NewExitError(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
 	}
@@ -440,4 +440,20 @@ func PrettyPrintDiffs(diffs []Diff) {
 			color.New(color.FgRed).Printf("--- %s\n", c.ToString())
 		}
 	}
+}
+
+func ReadFile(path string) (content []byte, err error) {
+	if path == "-" {
+		content, err = ioutil.ReadAll(os.Stdin)
+		if err != nil {
+			return nil, fmt.Errorf("Failed to from stdin: %w", err)
+		}
+	} else {
+		content, err = ioutil.ReadFile(path)
+		if err != nil {
+			return nil, fmt.Errorf("Failed to read %q: %w", path, err)
+		}
+	}
+
+	return content, nil
 }

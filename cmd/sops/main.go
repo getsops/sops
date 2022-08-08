@@ -710,17 +710,21 @@ func main() {
 		if c.Bool("in-place") && c.String("output") != "" {
 			return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
 		}
-		fileName, err := filepath.Abs(c.Args()[0])
-		if err != nil {
-			return toExitError(err)
-		}
-		if _, err := os.Stat(fileName); os.IsNotExist(err) {
-			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" ||
-				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" {
-				return common.NewExitError("Error: cannot add or remove keys on non-existent files, use `--kms` and `--pgp` instead.", codes.CannotChangeKeysFromNonExistentFile)
+
+		fileName := c.Args()[0]
+		if fileName != "-" {
+			fileName, err := filepath.Abs(fileName)
+			if err != nil {
+				return toExitError(err)
 			}
-			if c.Bool("encrypt") || c.Bool("decrypt") || c.Bool("rotate") {
-				return common.NewExitError("Error: cannot operate on non-existent file", codes.NoFileSpecified)
+			if _, err := os.Stat(fileName); os.IsNotExist(err) {
+				if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" ||
+					c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" {
+					return common.NewExitError("Error: cannot add or remove keys on non-existent files, use `--kms` and `--pgp` instead.", codes.CannotChangeKeysFromNonExistentFile)
+				}
+				if c.Bool("encrypt") || c.Bool("decrypt") || c.Bool("rotate") {
+					return common.NewExitError("Error: cannot operate on non-existent file", codes.NoFileSpecified)
+				}
 			}
 		}
 

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io/ioutil"
 	"path/filepath"
 
 	"fmt"
@@ -57,7 +56,7 @@ func ensureNoMetadata(opts encryptOpts, branch sops.TreeBranch) error {
 
 func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 	// Load the file
-	fileBytes, err := ioutil.ReadFile(opts.InputPath)
+	fileBytes, err := common.ReadFile(opts.InputPath)
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
 	}

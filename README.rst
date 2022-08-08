@@ -314,7 +314,7 @@ Encrypting using Hashicorp Vault
 
 We assume you have an instance (or more) of Vault running and you have privileged access to it. For instructions on how to deploy a secure instance of Vault, refer to Hashicorp's official documentation.
 
-To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!) 
+To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
 
 .. code:: bash
 
@@ -324,11 +324,11 @@ To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
 .. code:: bash
 
 	$ # Substitute this with the address Vault is running on
-	$ export VAULT_ADDR=http://127.0.0.1:8200 
+	$ export VAULT_ADDR=http://127.0.0.1:8200
 
 	$ # this may not be necessary in case you previously used `vault login` for production use
-	$ export VAULT_TOKEN=toor 
-	
+	$ export VAULT_TOKEN=toor
+
 	$ # to check if Vault started and is configured correctly
 	$ vault status
 	Key             Value
@@ -1139,7 +1139,7 @@ When operating on stdin, use the ``--input-type`` and ``--output-type`` flags as
 
 .. code:: bash
 
-    $ cat myfile.json | sops --input-type json --output-type json -d /dev/stdin
+    $ cat myfile.json | sops --input-type json --output-type json -d -
 
 YAML anchors
 ~~~~~~~~~~~~
@@ -1424,8 +1424,8 @@ will encrypt the values under the ``data`` and ``stringData`` keys in a YAML fil
 containing kubernetes secrets.  It will not encrypt other values that help you to
 navigate the file, like ``metadata`` which contains the secrets' names.
 
-Conversely, you can opt in to only left certain keys without encrypting by using the 
-``--unencrypted-regex`` option, which will leave the values unencrypted of those keys 
+Conversely, you can opt in to only left certain keys without encrypting by using the
+``--unencrypted-regex`` option, which will leave the values unencrypted of those keys
 that match the supplied regular expression. For example, this command:
 
 .. code:: bash
