@@ -552,6 +552,10 @@ func main() {
 			Name:  "rotate, r",
 			Usage: "generate a new data encryption key and reencrypt all values with the new key",
 		},
+		cli.BoolFlag{
+			Name:  "manage, m",
+			Usage: "manage master keys without reencrypting all values with a new data key",
+		},
 		cli.StringFlag{
 			Name:   "kms, k",
 			Usage:  "comma separated list of KMS ARNs",
@@ -719,7 +723,7 @@ func main() {
 				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" {
 				return common.NewExitError("Error: cannot add or remove keys on non-existent files, use `--kms` and `--pgp` instead.", codes.CannotChangeKeysFromNonExistentFile)
 			}
-			if c.Bool("encrypt") || c.Bool("decrypt") || c.Bool("rotate") {
+			if c.Bool("encrypt") || c.Bool("decrypt") || c.Bool("rotate") || c.Bool("manage") {
 				return common.NewExitError("Error: cannot operate on non-existent file", codes.NoFileSpecified)
 			}
 		}
@@ -818,7 +822,7 @@ func main() {
 				IgnoreMAC:   c.Bool("ignore-mac"),
 			})
 		}
-		if c.Bool("rotate") {
+		if c.Bool("rotate") || c.Bool("manage") {
 			var addMasterKeys []keys.MasterKey
 			kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
 			for _, k := range kms.MasterKeysFromArnString(c.String("add-kms"), kmsEncryptionContext, c.String("aws-profile")) {
@@ -884,16 +888,31 @@ func main() {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
 
-			output, err = rotate(rotateOpts{
-				OutputStore:      outputStore,
-				InputStore:       inputStore,
-				InputPath:        fileName,
-				Cipher:           aes.NewCipher(),
-				KeyServices:      svcs,
-				IgnoreMAC:        c.Bool("ignore-mac"),
-				AddMasterKeys:    addMasterKeys,
-				RemoveMasterKeys: rmMasterKeys,
-			})
+			if c.Bool("rotate") {
+				output, err = rotate(rotateOpts{
+					OutputStore:      outputStore,
+					InputStore:       inputStore,
+					InputPath:        fileName,
+					Cipher:           aes.NewCipher(),
+					KeyServices:      svcs,
+					IgnoreMAC:        c.Bool("ignore-mac"),
+					AddMasterKeys:    addMasterKeys,
+					RemoveMasterKeys: rmMasterKeys,
+				})
+			} else if c.Bool("manage") {
+				output, err = manage(manageOpts{
+					OutputStore:      outputStore,
+					InputStore:       inputStore,
+					InputPath:        fileName,
+					Cipher:           aes.NewCipher(),
+					KeyServices:      svcs,
+					IgnoreMAC:        c.Bool("ignore-mac"),
+					AddMasterKeys:    addMasterKeys,
+					RemoveMasterKeys: rmMasterKeys,
+				})
+			} else {
+				return common.NewExitError(fmt.Errorf("unexpected command in branch"), codes.ErrorGeneric)
+			}
 		}
 
 		if c.String("set") != "" {
@@ -915,7 +934,7 @@ func main() {
 			})
 		}
 
-		isEditMode := !c.Bool("encrypt") && !c.Bool("decrypt") && !c.Bool("rotate") && c.String("set") == ""
+		isEditMode := !c.Bool("encrypt") && !c.Bool("decrypt") && !c.Bool("rotate") && c.String("set") == "" && !c.Bool("manage")
 		if isEditMode {
 			_, statErr := os.Stat(fileName)
 			fileExists := statErr == nil
