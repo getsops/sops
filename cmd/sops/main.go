@@ -900,6 +900,11 @@ func main() {
 					RemoveMasterKeys: rmMasterKeys,
 				})
 			} else if c.Bool("manage") {
+				if len(rmMasterKeys) > 0 {
+					// Assume that when removing a master key, it isn't being securely stored, so shouldn't be trusted
+					return common.NewExitError(fmt.Errorf("you must rotate the data key when removing a master key"), codes.ErrorGeneric)
+				}
+
 				output, err = manage(manageOpts{
 					OutputStore:      outputStore,
 					InputStore:       inputStore,
