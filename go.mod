@@ -24,7 +24,6 @@ require (
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510
 	github.com/goware/prefixer v0.0.0-20160118172347-395022866408
 	github.com/hashicorp/vault/api v1.7.2
-	github.com/howeyc/gopass v0.0.0-20210920133722-c8aef6fb66ef
 	github.com/lib/pq v1.10.6
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-wordwrap v1.0.1
@@ -37,6 +36,7 @@ require (
 	golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d
 	golang.org/x/net v0.0.0-20220708220712-1185a9018129
 	golang.org/x/sys v0.0.0-20220712014510-0a85c31ab51e
+	golang.org/x/term v0.0.0-20220526004731-065cf7ba2467
 	google.golang.org/api v0.87.0
 	google.golang.org/genproto v0.0.0-20220712132514-bdd2acd4974d
 	google.golang.org/grpc v1.48.0
@@ -124,7 +124,6 @@ require (
 	go.opencensus.io v0.23.0 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	golang.org/x/oauth2 v0.0.0-20220630143837-2104d58473e0 // indirect
-	golang.org/x/term v0.0.0-20220526004731-065cf7ba2467 // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/time v0.0.0-20220609170525-579cf78fd858 // indirect
 	golang.org/x/xerrors v0.0.0-20220609144429-65e65417b02f // indirect
