@@ -508,6 +508,10 @@ func main() {
 					Name:  "yes, y",
 					Usage: `pre-approve all changes and run non-interactively`,
 				},
+				cli.StringFlag{
+					Name:  "input-type",
+					Usage: "currently ini, json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				var err error
@@ -529,6 +533,7 @@ func main() {
 					KeyServices: keyservices(c),
 					Interactive: !c.Bool("yes"),
 					ConfigPath:  configPath,
+					InputType:   c.String("input-type"),
 				})
 				if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
 					return cliErr
