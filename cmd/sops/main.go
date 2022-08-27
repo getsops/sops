@@ -552,6 +552,10 @@ func main() {
 			Name:  "rotate, r",
 			Usage: "generate a new data encryption key and reencrypt all values with the new key",
 		},
+		cli.BoolFlag{
+			Name:  "disable-version-check",
+			Usage: "do not check whether the current version is latest during --version",
+		},
 		cli.StringFlag{
 			Name:   "kms, k",
 			Usage:  "comma separated list of KMS ARNs",
