@@ -19,6 +19,7 @@ type Opts struct {
 	KeyServices []keyservice.KeyServiceClient
 	Interactive bool
 	ConfigPath  string
+	InputType   string
 }
 
 // UpdateKeys update the keys for a given file
@@ -39,7 +40,7 @@ func UpdateKeys(opts Opts) error {
 }
 
 func updateFile(opts Opts) error {
-	store := common.DefaultStoreForPath(opts.InputPath)
+	store := common.DefaultStoreForPathOrFormat(opts.InputPath, opts.InputType)
 	log.Printf("Syncing keys for file %s", opts.InputPath)
 	tree, err := common.LoadEncryptedFile(store, opts.InputPath)
 	if err != nil {
