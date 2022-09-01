@@ -93,6 +93,7 @@ creation_rules:
     key_groups:
     - kms:
       - arn: foo
+        aws_profile: bar
       pgp:
       - bar
       gcp_kms:
@@ -105,6 +106,7 @@ creation_rules:
       - 'https://foo.vault:8200/v1/foo/keys/foo-key'
     - kms:
       - arn: baz
+        aws_profile: foo
       pgp:
       - qux
       gcp_kms:
@@ -287,14 +289,14 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 				PathRegex: "",
 				KeyGroups: []keyGroup{
 					{
-						KMS:     []kmsKey{{Arn: "foo"}},
+						KMS:     []kmsKey{{Arn: "foo", AwsProfile: "bar"}},
 						PGP:     []string{"bar"},
 						GCPKMS:  []gcpKmsKey{{ResourceID: "foo"}},
 						AzureKV: []azureKVKey{{VaultURL: "https://foo.vault.azure.net", Key: "foo-key", Version: "fooversion"}},
 						Vault:   []string{"https://foo.vault:8200/v1/foo/keys/foo-key"},
 					},
 					{
-						KMS: []kmsKey{{Arn: "baz"}},
+						KMS: []kmsKey{{Arn: "baz", AwsProfile: "foo"}},
 						PGP: []string{"qux"},
 						GCPKMS: []gcpKmsKey{
 							{ResourceID: "bar"},

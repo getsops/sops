@@ -164,7 +164,7 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 				keyGroup = append(keyGroup, pgp.NewMasterKeyFromFingerprint(k))
 			}
 			for _, k := range group.KMS {
-				keyGroup = append(keyGroup, kms.NewMasterKey(k.Arn, k.Role, k.Context))
+				keyGroup = append(keyGroup, kms.NewMasterKeyWithProfile(k.Arn, k.Role, k.Context, k.AwsProfile))
 			}
 			for _, k := range group.GCPKMS {
 				keyGroup = append(keyGroup, gcpkms.NewMasterKeyFromResourceID(k.ResourceID))
