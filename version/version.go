@@ -16,18 +16,22 @@ const Version = "3.7.3"
 // PrintVersion handles the version command for sops
 func PrintVersion(c *cli.Context) {
 	out := fmt.Sprintf("%s %s", c.App.Name, c.App.Version)
-	upstreamVersion, err := RetrieveLatestVersionFromUpstream()
-	if err != nil {
-		out += fmt.Sprintf("\n[warning] failed to retrieve latest version from upstream: %v\n", err)
-	}
-	outdated, err := AIsNewerThanB(upstreamVersion, Version)
-	if err != nil {
-		out += fmt.Sprintf("\n[warning] failed to compare current version with latest: %v\n", err)
-	}
-	if outdated {
-		out += fmt.Sprintf("\n[info] sops %s is available, update with `go get -u go.mozilla.org/sops/v3/cmd/sops`\n", upstreamVersion)
+	if c.Bool("disable-version-check") {
+		out += "\n"
 	} else {
-		out += " (latest)\n"
+		upstreamVersion, err := RetrieveLatestVersionFromUpstream()
+		if err != nil {
+			out += fmt.Sprintf("\n[warning] failed to retrieve latest version from upstream: %v\n", err)
+		}
+		outdated, err := AIsNewerThanB(upstreamVersion, Version)
+		if err != nil {
+			out += fmt.Sprintf("\n[warning] failed to compare current version with latest: %v\n", err)
+		}
+		if outdated {
+			out += fmt.Sprintf("\n[info] sops %s is available, update with `go get -u go.mozilla.org/sops/v3/cmd/sops`\n", upstreamVersion)
+		} else {
+			out += " (latest)\n"
+		}
 	}
 	fmt.Fprintf(c.App.Writer, "%s", out)
 }
