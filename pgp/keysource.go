@@ -20,10 +20,10 @@ import (
 
 	"github.com/ProtonMail/go-crypto/openpgp"
 	"github.com/ProtonMail/go-crypto/openpgp/armor"
-	"github.com/howeyc/gopass"
 	"github.com/sirupsen/logrus"
 	gpgagent "go.mozilla.org/gopgagent"
 	"go.mozilla.org/sops/v3/logging"
+	"golang.org/x/term"
 )
 
 const (
@@ -531,7 +531,7 @@ func (key *MasterKey) passphrasePrompt() func(keys []openpgp.Key, symmetric bool
 			log.Infof("gpg-agent not found, continuing with manual passphrase " +
 				"input...")
 			fmt.Print("Enter PGP key passphrase: ")
-			pass, err := gopass.GetPasswd()
+			pass, err := term.ReadPassword(int(os.Stdin.Fd()))
 			if err != nil {
 				return nil, err
 			}
