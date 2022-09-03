@@ -6,6 +6,9 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/getsops/sops/v3/age"
+	"github.com/getsops/sops/v3/hcvault"
+	"github.com/getsops/sops/v3/pgp"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -757,4 +760,11 @@ func TestEmitAsMap(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, expected, data)
 	}
+}
+
+func TestSortKeyGroupIndices(t *testing.T) {
+	group := KeyGroup{&hcvault.MasterKey{}, &age.MasterKey{}, &pgp.MasterKey{}}
+	expected := []int{1, 2, 0}
+	indices := sortKeyGroupIndices(group)
+	assert.Equal(t, expected, indices)
 }

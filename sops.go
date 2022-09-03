@@ -42,6 +42,7 @@ import (
 	"fmt"
 	"reflect"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -665,7 +666,11 @@ func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) 
 // returning as soon as one key service succeeds.
 func decryptKeyGroup(group KeyGroup, svcs []keyservice.KeyServiceClient) ([]byte, error) {
 	var keyErrs []error
-	for _, key := range group {
+	// Sort MasterKeys in the group so we try offline ones first
+	// Use sorted indices to avoid group slice modification
+	indices := sortKeyGroupIndices(group)
+	for _, indexVal := range indices {
+		key := group[indexVal]
 		part, err := decryptKey(key, svcs)
 		if err != nil {
 			keyErrs = append(keyErrs, err)
@@ -674,6 +679,21 @@ func decryptKeyGroup(group KeyGroup, svcs []keyservice.KeyServiceClient) ([]byte
 		}
 	}
 	return nil, decryptKeyErrors(keyErrs)
+}
+
+// sortKeyGroupIndices returns indices that would sort the KeyGroup
+func sortKeyGroupIndices(group KeyGroup) []int {
+	n := len(group)
+	indices := make([]int, n)
+	for i := 0; i < n; i++ {
+		indices[i] = i
+	}
+	sort.SliceStable(indices, func(i, j int) bool {
+		indexI := indices[i]
+		indexJ := indices[j]
+		return keyservice.IsOfflineMethod(group[indexI]) && !keyservice.IsOfflineMethod(group[indexJ])
+	})
+	return indices
 }
 
 // decryptKey tries to decrypt the contents of the provided MasterKey with any

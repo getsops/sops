@@ -82,3 +82,13 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 		panic(fmt.Sprintf("Tried to convert unknown MasterKey type %T to keyservice.Key", mk))
 	}
 }
+
+// IsOfflineMethod returns true for offline decrypt methods or false otherwise
+func IsOfflineMethod(mk keys.MasterKey) bool {
+	switch mk.(type) {
+	case *pgp.MasterKey, *age.MasterKey:
+		return true
+	default:
+		return false
+	}
+}
