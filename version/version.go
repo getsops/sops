@@ -26,11 +26,12 @@ func PrintVersion(c *cli.Context) {
 		outdated, err := AIsNewerThanB(upstreamVersion, Version)
 		if err != nil {
 			out += fmt.Sprintf("\n[warning] failed to compare current version with latest: %v\n", err)
-		}
-		if outdated {
-			out += fmt.Sprintf("\n[info] sops %s is available, update with `go get -u github.com/getsops/sops/v3/cmd/sops`\n", upstreamVersion)
 		} else {
-			out += " (latest)\n"
+			if outdated {
+				out += fmt.Sprintf("\n[info] sops %s is available, update with `go get -u github.com/getsops/sops/v3/cmd/sops`\n", upstreamVersion)
+			} else {
+				out += " (latest)\n"
+			}
 		}
 	}
 	fmt.Fprintf(c.App.Writer, "%s", out)
