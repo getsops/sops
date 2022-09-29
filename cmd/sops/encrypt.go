@@ -58,7 +58,7 @@ func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 	// Load the file
 	fileBytes, err := common.ReadFile(opts.InputPath)
 	if err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
+		return nil, err
 	}
 	branches, err := opts.InputStore.LoadPlainFile(fileBytes)
 	if err != nil {

@@ -129,7 +129,7 @@ func EncryptTree(opts EncryptTreeOpts) error {
 func LoadEncryptedFile(loader sops.EncryptedFileLoader, inputPath string) (*sops.Tree, error) {
 	fileBytes, err := ReadFile(inputPath)
 	if err != nil {
-		return nil, NewExitError(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
+		return nil, err
 	}
 	path, err := filepath.Abs(inputPath)
 	if err != nil {
