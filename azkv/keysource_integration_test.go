@@ -47,7 +47,9 @@ func TestMasterKey_Decrypt(t *testing.T) {
 
 	data := []byte("this is super secret data")
 
-	c := azkeys.NewClient(key.VaultURL, key.tokenCredential, nil)
+	c, err := azkeys.NewClient(key.VaultURL, key.tokenCredential, nil)
+	assert.NoError(t, err)
+
 	resp, err := c.Encrypt(context.Background(), key.Name, key.Version, azkeys.KeyOperationsParameters{
 		Algorithm: to.Ptr(azkeys.JSONWebKeyEncryptionAlgorithmRSAOAEP256),
 		Value:     data,
@@ -86,22 +88,29 @@ func createTestKMSKeyIfNotExists() (*MasterKey, error) {
 	}
 	NewTokenCredential(token).ApplyToMasterKey(key)
 
-	c := azkeys.NewClient(key.VaultURL, token, nil)
-
-	getResp, err := c.GetKey(context.TODO(), key.Name, key.Version, nil)
-	if err == nil {
-		key.Version = getResp.KeyBundle.Key.KID.Version()
-	}
-	if err != nil {
-		createResp, err := c.CreateKey(context.TODO(), key.Name, azkeys.CreateKeyParameters{
-			Kty:    to.Ptr(azkeys.JSONWebKeyTypeRSA),
-			KeyOps: to.SliceOfPtrs(azkeys.JSONWebKeyOperationEncrypt, azkeys.JSONWebKeyOperationDecrypt),
-		}, nil)
+	// If we have been given a version, assume it exists.
+	if key.Version == "" {
+		c, err := azkeys.NewClient(key.VaultURL, token, nil)
 		if err != nil {
 			return nil, err
 		}
-		key.Version = createResp.Key.KID.Version()
+
+		getResp, err := c.GetKey(context.TODO(), key.Name, key.Version, nil)
+		if err == nil {
+			key.Version = getResp.KeyBundle.Key.KID.Version()
+		}
+		if err != nil {
+			createResp, err := c.CreateKey(context.TODO(), key.Name, azkeys.CreateKeyParameters{
+				Kty:    to.Ptr(azkeys.JSONWebKeyTypeRSA),
+				KeyOps: to.SliceOfPtrs(azkeys.JSONWebKeyOperationEncrypt, azkeys.JSONWebKeyOperationDecrypt),
+			}, nil)
+			if err != nil {
+				return nil, err
+			}
+			key.Version = createResp.Key.KID.Version()
+		}
 	}
+
 	return key, nil
 }
 
