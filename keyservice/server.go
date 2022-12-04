@@ -3,16 +3,17 @@ package keyservice
 import (
 	"fmt"
 
+	"golang.org/x/net/context"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
 	"go.mozilla.org/sops/v3/age"
 	"go.mozilla.org/sops/v3/azkv"
 	"go.mozilla.org/sops/v3/gcpkms"
 	"go.mozilla.org/sops/v3/hcvault"
 	"go.mozilla.org/sops/v3/kms"
 	"go.mozilla.org/sops/v3/pgp"
-	"golang.org/x/net/context"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 // Server is a key service server that uses SOPS MasterKeys to fulfill requests
@@ -41,7 +42,8 @@ func (ks *Server) encryptWithKms(key *KmsKey, plaintext []byte) ([]byte, error) 
 
 func (ks *Server) encryptWithGcpKms(key *GcpKmsKey, plaintext []byte) ([]byte, error) {
 	gcpKmsKey := gcpkms.MasterKey{
-		ResourceID: key.ResourceId,
+		ResourceID:                key.ResourceId,
+		ImpersonateServiceAccount: key.GcpImpersonateServiceAccount,
 	}
 	err := gcpKmsKey.Encrypt(plaintext)
 	if err != nil {
@@ -104,7 +106,8 @@ func (ks *Server) decryptWithKms(key *KmsKey, ciphertext []byte) ([]byte, error)
 
 func (ks *Server) decryptWithGcpKms(key *GcpKmsKey, ciphertext []byte) ([]byte, error) {
 	gcpKmsKey := gcpkms.MasterKey{
-		ResourceID: key.ResourceId,
+		ResourceID:                key.ResourceId,
+		ImpersonateServiceAccount: key.GcpImpersonateServiceAccount,
 	}
 	gcpKmsKey.EncryptedKey = string(ciphertext)
 	plaintext, err := gcpKmsKey.Decrypt()

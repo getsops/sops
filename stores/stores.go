@@ -10,9 +10,8 @@ of the purpose of this package is to make it easy to change the SOPS file format
 package stores
 
 import (
-	"time"
-
 	"fmt"
+	"time"
 
 	"go.mozilla.org/sops/v3"
 	"go.mozilla.org/sops/v3/age"
@@ -79,9 +78,10 @@ type kmskey struct {
 }
 
 type gcpkmskey struct {
-	ResourceID       string `yaml:"resource_id" json:"resource_id"`
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	ResourceID                   string `yaml:"resource_id" json:"resource_id"`
+	CreatedAt                    string `yaml:"created_at" json:"created_at"`
+	EncryptedDataKey             string `yaml:"enc" json:"enc"`
+	GCPImpersonateServiceAccount string `yaml:"gcp_impersonate_service_account" json:"gcp_impersonate_service_account"`
 }
 
 type vaultkey struct {
@@ -175,9 +175,10 @@ func gcpkmsKeysFromGroup(group sops.KeyGroup) (keys []gcpkmskey) {
 		switch key := key.(type) {
 		case *gcpkms.MasterKey:
 			keys = append(keys, gcpkmskey{
-				ResourceID:       key.ResourceID,
-				CreatedAt:        key.CreationDate.Format(time.RFC3339),
-				EncryptedDataKey: key.EncryptedKey,
+				ResourceID:                   key.ResourceID,
+				CreatedAt:                    key.CreationDate.Format(time.RFC3339),
+				EncryptedDataKey:             key.EncryptedKey,
+				GCPImpersonateServiceAccount: key.ImpersonateServiceAccount,
 			})
 		}
 	}
@@ -365,9 +366,10 @@ func (gcpKmsKey *gcpkmskey) toInternal() (*gcpkms.MasterKey, error) {
 		return nil, err
 	}
 	return &gcpkms.MasterKey{
-		ResourceID:   gcpKmsKey.ResourceID,
-		EncryptedKey: gcpKmsKey.EncryptedDataKey,
-		CreationDate: creationDate,
+		ResourceID:                gcpKmsKey.ResourceID,
+		EncryptedKey:              gcpKmsKey.EncryptedDataKey,
+		CreationDate:              creationDate,
+		ImpersonateServiceAccount: gcpKmsKey.GCPImpersonateServiceAccount,
 	}, nil
 }
 

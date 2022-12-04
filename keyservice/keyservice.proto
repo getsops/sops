@@ -24,6 +24,7 @@ message KmsKey {
 
 message GcpKmsKey {
 	string resource_id = 1;
+	string gcp_impersonate_service_account = 2;
 }
 
 message VaultKey {

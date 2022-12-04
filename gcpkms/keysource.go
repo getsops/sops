@@ -1,6 +1,7 @@
 package gcpkms // import "go.mozilla.org/sops/v3/gcpkms"
 
 import (
+	"bytes"
 	"context"
 	"encoding/base64"
 	"fmt"
@@ -11,6 +12,7 @@ import (
 
 	kms "cloud.google.com/go/kms/apiv1"
 	"github.com/sirupsen/logrus"
+	"google.golang.org/api/impersonate"
 	"google.golang.org/api/option"
 	kmspb "google.golang.org/genproto/googleapis/cloud/kms/v1"
 	"google.golang.org/grpc"
@@ -55,27 +57,32 @@ type MasterKey struct {
 	// Mostly useful for testing at present, to wire the client to a mock
 	// server.
 	grpcConn *grpc.ClientConn
+
+	// ImpersonateServiceAccount is the name of the service account
+	// to impersonate with GCP KMS client
+	ImpersonateServiceAccount string
 }
 
 // NewMasterKeyFromResourceID creates a new MasterKey with the provided resource
 // ID.
-func NewMasterKeyFromResourceID(resourceID string) *MasterKey {
+func NewMasterKeyFromResourceID(resourceID, impersonateServiceAccount string) *MasterKey {
 	k := &MasterKey{}
 	resourceID = strings.Replace(resourceID, " ", "", -1)
 	k.ResourceID = resourceID
 	k.CreationDate = time.Now().UTC()
+	k.ImpersonateServiceAccount = impersonateServiceAccount
 	return k
 }
 
 // MasterKeysFromResourceIDString takes a comma separated list of GCP KMS
 // resource IDs and returns a slice of new MasterKeys for them.
-func MasterKeysFromResourceIDString(resourceID string) []*MasterKey {
+func MasterKeysFromResourceIDString(resourceID, impersonateServiceAccount string) []*MasterKey {
 	var keys []*MasterKey
 	if resourceID == "" {
 		return keys
 	}
 	for _, s := range strings.Split(resourceID, ",") {
-		keys = append(keys, NewMasterKeyFromResourceID(s))
+		keys = append(keys, NewMasterKeyFromResourceID(s, impersonateServiceAccount))
 	}
 	return keys
 }
@@ -207,16 +214,28 @@ func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
 		return nil, fmt.Errorf("no valid resource ID found in %q", key.ResourceID)
 	}
 
+	ctx := context.Background()
 	var opts []option.ClientOption
 	switch {
 	case key.credentialJSON != nil:
 		opts = append(opts, option.WithCredentialsJSON(key.credentialJSON))
+	case key.ImpersonateServiceAccount != "":
+		ts, err := impersonate.CredentialsTokenSource(ctx, impersonate.CredentialsConfig{
+			TargetPrincipal: key.ImpersonateServiceAccount,
+			// https://developers.google.com/identity/protocols/oauth2/scopes#cloudkms
+			Scopes: []string{"https://www.googleapis.com/auth/cloudkms"},
+		})
+		if err != nil {
+			return nil, fmt.Errorf("cannot impersonate service account '%s': %w", key.ImpersonateServiceAccount, err)
+		}
+
+		opts = append(opts, option.WithTokenSource(ts))
 	default:
 		credentials, err := getGoogleCredentials()
 		if err != nil {
 			return nil, err
 		}
-		if credentials != nil {
+		if bytes.Compare(credentials, nil) != 0 {
 			opts = append(opts, option.WithCredentialsJSON(key.credentialJSON))
 		}
 	}
@@ -224,7 +243,6 @@ func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
 		opts = append(opts, option.WithGRPCConn(key.grpcConn))
 	}
 
-	ctx := context.Background()
 	client, err := kms.NewKeyManagementClient(ctx, opts...)
 	if err != nil {
 		return nil, err

@@ -24,7 +24,7 @@ var (
 
 func TestMasterKeysFromResourceIDString(t *testing.T) {
 	s := "projects/sops-testing1/locations/global/keyRings/creds/cryptoKeys/key1, projects/sops-testing2/locations/global/keyRings/creds/cryptoKeys/key2"
-	ks := MasterKeysFromResourceIDString(s)
+	ks := MasterKeysFromResourceIDString(s, "")
 	k1 := ks[0]
 	k2 := ks[1]
 	expectedResourceID1 := "projects/sops-testing1/locations/global/keyRings/creds/cryptoKeys/key1"
@@ -97,7 +97,7 @@ func TestMasterKey_SetEncryptedDataKey(t *testing.T) {
 
 func TestMasterKey_ToString(t *testing.T) {
 	rsrcId := testResourceID
-	key := NewMasterKeyFromResourceID(rsrcId)
+	key := NewMasterKeyFromResourceID(rsrcId, "")
 	assert.Equal(t, rsrcId, key.ToString())
 }
 

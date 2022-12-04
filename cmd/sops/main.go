@@ -1,4 +1,4 @@
-package main //import "go.mozilla.org/sops/v3/cmd/sops"
+package main // import "go.mozilla.org/sops/v3/cmd/sops"
 
 import (
 	encodingjson "encoding/json"
@@ -15,6 +15,8 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
+	"google.golang.org/grpc"
+
 	"go.mozilla.org/sops/v3"
 	"go.mozilla.org/sops/v3/aes"
 	"go.mozilla.org/sops/v3/age"
@@ -38,7 +40,6 @@ import (
 	"go.mozilla.org/sops/v3/stores/dotenv"
 	"go.mozilla.org/sops/v3/stores/json"
 	"go.mozilla.org/sops/v3/version"
-	"google.golang.org/grpc"
 )
 
 var log *logrus.Logger
@@ -384,6 +385,10 @@ func main() {
 							Usage: "the GCP KMS Resource ID the new group should contain. Can be specified more than once",
 						},
 						cli.StringSliceFlag{
+							Name:  "gcp-impersonate-service-account",
+							Usage: "the GCP service account to use for requests to GCP",
+						},
+						cli.StringSliceFlag{
 							Name:  "azure-kv",
 							Usage: "the Azure Key Vault key URL the new group should contain. Can be specified more than once",
 						},
@@ -423,7 +428,7 @@ func main() {
 							group = append(group, kms.NewMasterKeyFromArn(arn, kms.ParseKMSContext(c.String("encryption-context")), c.String("aws-profile")))
 						}
 						for _, kms := range gcpKmses {
-							group = append(group, gcpkms.NewMasterKeyFromResourceID(kms))
+							group = append(group, gcpkms.NewMasterKeyFromResourceID(kms, c.String("gcp-impersonate-service-account")))
 						}
 						for _, uri := range vaultURIs {
 							k, err := hcvault.NewMasterKeyFromURI(uri)
@@ -574,6 +579,11 @@ func main() {
 			Name:   "gcp-kms",
 			Usage:  "comma separated list of GCP KMS resource IDs",
 			EnvVar: "SOPS_GCP_KMS_IDS",
+		},
+		cli.StringSliceFlag{
+			Name:   "gcp-impersonate-service-account",
+			Usage:  "the GCP service account to use for requests to GCP",
+			EnvVar: "SOPS_GCP_IMPERSONATE_SERVICE_ACCOUNT",
 		},
 		cli.StringFlag{
 			Name:   "azure-kv",
@@ -836,7 +846,7 @@ func main() {
 			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("add-pgp")) {
 				addMasterKeys = append(addMasterKeys, k)
 			}
-			for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("add-gcp-kms")) {
+			for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("add-gcp-kms"), c.String("gcp-impersonate-service-account")) {
 				addMasterKeys = append(addMasterKeys, k)
 			}
 			azureKeys, err := azkv.MasterKeysFromURLs(c.String("add-azure-kv"))
@@ -868,7 +878,7 @@ func main() {
 			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("rm-pgp")) {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
-			for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("rm-gcp-kms")) {
+			for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("rm-gcp-kms"), c.String("gcp-impersonate-service-account")) {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
 			azureKeys, err = azkv.MasterKeysFromURLs(c.String("rm-azure-kv"))
@@ -1099,7 +1109,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 		}
 	}
 	if c.String("gcp-kms") != "" {
-		for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("gcp-kms")) {
+		for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("gcp-kms"), c.String("gcp-impersonate-service-account")) {
 			cloudKmsKeys = append(cloudKmsKeys, k)
 		}
 	}
