@@ -214,7 +214,7 @@ you can enable application default credentials using the sdk::
 
 	$ gcloud auth application-default login
 
-If you want to `impersonate a service account <https://cloud.google.com/iam/docs/impersonating-service-accounts>`,
+If you want to `impersonate a service account <https://cloud.google.com/iam/docs/impersonating-service-accounts>`_,
 you can do so with `gcp_impersonate_service_account`:
 
 .. code:: yaml
