@@ -1,4 +1,4 @@
-package main
+package encrypt
 
 import (
 	"io/ioutil"
@@ -14,7 +14,7 @@ import (
 	"go.mozilla.org/sops/v3/version"
 )
 
-type encryptOpts struct {
+type EncryptOpts struct {
 	Cipher            sops.Cipher
 	InputStore        sops.Store
 	OutputStore       sops.Store
@@ -46,7 +46,7 @@ func (err *fileAlreadyEncryptedError) UserError() string {
 	return wordwrap.WrapString(message, 75)
 }
 
-func ensureNoMetadata(opts encryptOpts, branch sops.TreeBranch) error {
+func ensureNoMetadata(opts EncryptOpts, branch sops.TreeBranch) error {
 	for _, b := range branch {
 		if b.Key == "sops" {
 			return &fileAlreadyEncryptedError{}
@@ -55,7 +55,7 @@ func ensureNoMetadata(opts encryptOpts, branch sops.TreeBranch) error {
 	return nil
 }
 
-func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
+func Encrypt(opts EncryptOpts) (encryptedFile []byte, err error) {
 	// Load the file
 	fileBytes, err := ioutil.ReadFile(opts.InputPath)
 	if err != nil {

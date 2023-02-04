@@ -28,6 +28,7 @@ import (
 	publishcmd "go.mozilla.org/sops/v3/cmd/sops/subcommand/publish"
 	"go.mozilla.org/sops/v3/cmd/sops/subcommand/updatekeys"
 	"go.mozilla.org/sops/v3/config"
+	"go.mozilla.org/sops/v3/encrypt"
 	"go.mozilla.org/sops/v3/gcpkms"
 	"go.mozilla.org/sops/v3/hcvault"
 	"go.mozilla.org/sops/v3/keys"
@@ -796,7 +797,7 @@ func main() {
 			if err != nil {
 				return toExitError(err)
 			}
-			output, err = encrypt(encryptOpts{
+			output, err = encrypt.Encrypt(encrypt.EncryptOpts{
 				OutputStore:       outputStore,
 				InputStore:        inputStore,
 				InputPath:         fileName,
