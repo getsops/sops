@@ -28,10 +28,10 @@ jobs:
     steps:
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install git -y
-      - name: Set up Go 1.19
-        uses: actions/setup-go@v2
+      - name: Set up Go 1.20
+        uses: actions/setup-go@v3
         with:
-          go-version: 1.19
+          go-version: '1.20'
         id: go
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2

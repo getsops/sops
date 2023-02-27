@@ -1,4 +1,4 @@
-FROM golang:1.19
+FROM golang:1.20
 
 COPY . /go/src/go.mozilla.org/sops
 WORKDIR /go/src/go.mozilla.org/sops
