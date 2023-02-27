@@ -16,12 +16,12 @@ jobs:
       - name: Install fpm
         run: gem install fpm || sudo gem install fpm
       - name: Set up Go 1.20
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
           go-version: '1.20'
         id: go
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Go vendor
         run: go mod vendor
       - name: Make release directory
