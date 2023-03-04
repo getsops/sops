@@ -6,7 +6,7 @@ import (
 	"testing/quick"
 	"time"
 
-	"github.com/aws/aws-sdk-go/service/kms"
+	"github.com/aws/aws-sdk-go-v2/service/kms"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"go.mozilla.org/sops/v3/kms/mocks"

@@ -114,6 +114,6 @@ download-index:
 
 mock:
 	go install github.com/vektra/mockery/.../
-	mockery -dir vendor/github.com/aws/aws-sdk-go/service/kms/kmsiface/ -name KMSAPI -output kms/mocks
+	mockery -dir vendor/github.com/aws/aws-sdk-go-v2/service/kms/kmsiface/ -name KMSAPI -output kms/mocks
 
 .PHONY: all test generate clean vendor functional-tests mock

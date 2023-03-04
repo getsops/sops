@@ -5,26 +5,27 @@ data key using AWS KMS with the AWS Go SDK.
 package kms //import "go.mozilla.org/sops/v3/kms"
 
 import (
+	"context"
 	"encoding/base64"
 	"fmt"
-	"os"
 	"regexp"
 	"strings"
 	"time"
 
 	"go.mozilla.org/sops/v3/logging"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/kms"
-	"github.com/aws/aws-sdk-go/service/kms/kmsiface"
-	"github.com/aws/aws-sdk-go/service/sts"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/service/kms"
 	"github.com/sirupsen/logrus"
 )
 
 var log *logrus.Logger
+
+type KMSAPI interface {
+	Encrypt(ctx context.Context, params *kms.EncryptInput, optFns ...func(*kms.Options)) (*kms.EncryptOutput, error)
+	Decrypt(ctx context.Context, params *kms.DecryptInput, optFns ...func(*kms.Options)) (*kms.DecryptOutput, error)
+}
 
 func init() {
 	log = logging.NewLogger("AWSKMS")
@@ -32,7 +33,7 @@ func init() {
 
 // this needs to be a global var for unit tests to work (mockKMS redefines
 // it in keysource_test.go)
-var kmsSvc kmsiface.KMSAPI
+var kmsSvc KMSAPI
 var isMocked bool
 
 // MasterKey is a AWS KMS key used to encrypt and decrypt sops' data key.
@@ -60,14 +61,20 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	// isMocked is set by unit test to indicate that the KMS service
 	// has already been initialized. it's ugly, but it works.
 	if kmsSvc == nil || !isMocked {
-		sess, err := key.createSession()
+		config, err := key.createConfig()
 		if err != nil {
 			log.WithField("arn", key.Arn).Info("Encryption failed")
 			return fmt.Errorf("Failed to create session: %w", err)
 		}
-		kmsSvc = kms.New(sess)
+		kmsSvc = kms.NewFromConfig(*config)
 	}
-	out, err := kmsSvc.Encrypt(&kms.EncryptInput{Plaintext: dataKey, KeyId: &key.Arn, EncryptionContext: key.EncryptionContext})
+
+	ctx := make(map[string]string)
+	for k, v := range key.EncryptionContext {
+		ctx[k] = *v
+	}
+
+	out, err := kmsSvc.Encrypt(context.Background(), &kms.EncryptInput{Plaintext: dataKey, KeyId: &key.Arn, EncryptionContext: ctx})
 	if err != nil {
 		log.WithField("arn", key.Arn).Info("Encryption failed")
 		return fmt.Errorf("Failed to call KMS encryption service: %w", err)
@@ -95,14 +102,18 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	// isMocked is set by unit test to indicate that the KMS service
 	// has already been initialized. it's ugly, but it works.
 	if kmsSvc == nil || !isMocked {
-		sess, err := key.createSession()
+		config, err := key.createConfig()
 		if err != nil {
 			log.WithField("arn", key.Arn).Info("Decryption failed")
 			return nil, fmt.Errorf("Error creating AWS session: %w", err)
 		}
-		kmsSvc = kms.New(sess)
+		kmsSvc = kms.NewFromConfig(*config)
 	}
-	decrypted, err := kmsSvc.Decrypt(&kms.DecryptInput{CiphertextBlob: k, EncryptionContext: key.EncryptionContext})
+	ctx := make(map[string]string)
+	for k, v := range key.EncryptionContext {
+		ctx[k] = *v
+	}
+	decrypted, err := kmsSvc.Decrypt(context.Background(), &kms.DecryptInput{CiphertextBlob: k, EncryptionContext: ctx})
 	if err != nil {
 		log.WithField("arn", key.Arn).Info("Decryption failed")
 		return nil, fmt.Errorf("Error decrypting key: %w", err)
@@ -160,62 +171,57 @@ func MasterKeysFromArnString(arn string, context map[string]*string, awsProfile 
 	return keys
 }
 
-func (key MasterKey) createStsSession(config aws.Config, sess *session.Session) (*session.Session, error) {
-	hostname, err := os.Hostname()
-	if err != nil {
-		return nil, err
-	}
-	stsRoleSessionNameRe, err := regexp.Compile("[^a-zA-Z0-9=,.@-]+")
-	if err != nil {
-		return nil, fmt.Errorf("Failed to compile STS role session name regex: %w", err)
-	}
-	sanitizedHostname := stsRoleSessionNameRe.ReplaceAllString(hostname, "")
-	stsService := sts.New(sess)
-	name := "sops@" + sanitizedHostname
+// TODO: delete?
+// func (key MasterKey) createStsSession(config aws.Config, sess *session.Session) (*session.Session, error) {
+// 	hostname, err := os.Hostname()
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	stsRoleSessionNameRe, err := regexp.Compile("[^a-zA-Z0-9=,.@-]+")
+// 	if err != nil {
+// 		return nil, fmt.Errorf("Failed to compile STS role session name regex: %w", err)
+// 	}
+// 	sanitizedHostname := stsRoleSessionNameRe.ReplaceAllString(hostname, "")
+// 	stsService := sts.New(sess)
+// 	name := "sops@" + sanitizedHostname
 
-	// Make sure the name is no longer than 64 characters (role session name length limit from AWS)
-	roleSessionNameLengthLimit := 64
-	if len(name) >= roleSessionNameLengthLimit {
-		name = name[:roleSessionNameLengthLimit]
-	}
+// 	// Make sure the name is no longer than 64 characters (role session name length limit from AWS)
+// 	roleSessionNameLengthLimit := 64
+// 	if len(name) >= roleSessionNameLengthLimit {
+// 		name = name[:roleSessionNameLengthLimit]
+// 	}
 
-	out, err := stsService.AssumeRole(&sts.AssumeRoleInput{
-		RoleArn: &key.Role, RoleSessionName: &name})
-	if err != nil {
-		return nil, fmt.Errorf("Failed to assume role %q: %w", key.Role, err)
-	}
-	config.Credentials = credentials.NewStaticCredentials(*out.Credentials.AccessKeyId,
-		*out.Credentials.SecretAccessKey, *out.Credentials.SessionToken)
-	sess, err = session.NewSession(&config)
-	if err != nil {
-		return nil, fmt.Errorf("Failed to create new aws session: %w", err)
-	}
-	return sess, nil
-}
+// 	out, err := stsService.AssumeRole(&sts.AssumeRoleInput{
+// 		RoleArn: &key.Role, RoleSessionName: &name})
+// 	if err != nil {
+// 		return nil, fmt.Errorf("Failed to assume role %q: %w", key.Role, err)
+// 	}
+// 	config.Credentials = credentials.NewStaticCredentials(*out.Credentials.AccessKeyId,
+// 		*out.Credentials.SecretAccessKey, *out.Credentials.SessionToken)
+// 	sess, err = session.NewSession(&config)
+// 	if err != nil {
+// 		return nil, fmt.Errorf("Failed to create new aws session: %w", err)
+// 	}
+// 	return sess, nil
+// }
 
-func (key MasterKey) createSession() (*session.Session, error) {
+func (key MasterKey) createConfig() (*aws.Config, error) {
 	re := regexp.MustCompile(`^arn:aws[\w-]*:kms:(.+):[0-9]+:(key|alias)/.+$`)
 	matches := re.FindStringSubmatch(key.Arn)
 	if matches == nil {
 		return nil, fmt.Errorf("No valid ARN found in %q", key.Arn)
 	}
 
-	config := aws.Config{Region: aws.String(matches[1])}
+	// TODO: Use anything else from `key`?
+	config, err := config.LoadDefaultConfig(context.Background(),
+		config.WithSharedConfigProfile(key.AwsProfile),
+	)
 
-	opts := session.Options{
-		Profile:                 key.AwsProfile,
-		Config:                  config,
-		AssumeRoleTokenProvider: stscreds.StdinTokenProvider,
-		SharedConfigState:       session.SharedConfigEnable,
-	}
-	sess, err := session.NewSessionWithOptions(opts)
 	if err != nil {
 		return nil, err
 	}
-	if key.Role != "" {
-		return key.createStsSession(config, sess)
-	}
-	return sess, nil
+
+	return &config, nil
 }
 
 // ToMap converts the MasterKey to a map for serialization purposes

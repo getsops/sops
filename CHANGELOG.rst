@@ -52,7 +52,7 @@ Changes:
 
 * On failed decryption with GPG, return the error returned by GPG to the sops user (#762)
 * Use yaml.v3 instead of modified yaml.v2 for handling YAML files (#791)
-* Update aws-sdk-go to version v1.37.18 (#823)
+* Update aws-sdk-go-v2 to version v1.37.18 (#823)
 
 Project Changes:
 

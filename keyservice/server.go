@@ -319,6 +319,7 @@ func kmsKeyToMasterKey(key *KmsKey) kms.MasterKey {
 		value := v // Allocate a new string to prevent the pointer below from referring to only the last iteration value
 		ctx[k] = &value
 	}
+
 	return kms.MasterKey{
 		Arn:               key.Arn,
 		Role:              key.Role,
