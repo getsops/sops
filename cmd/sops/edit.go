@@ -44,7 +44,7 @@ type editExampleOpts struct {
 }
 
 type runEditorUntilOkOpts struct {
-	TmpFile        *os.File
+	TmpFileName    string
 	OriginalHash   []byte
 	InputStore     sops.Store
 	ShowMasterKeys bool
@@ -135,18 +135,20 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 		return nil, common.NewExitError(fmt.Sprintf("Could not write output file: %s", err), codes.CouldNotWriteOutputFile)
 	}
 
-	// Close temporary file, since Windows won't delete the file unless it's closed beforehand
-	defer tmpfile.Close()
+	// Close the temporary file immediately
+	// On Windows, the standard library opens files in a way that prevents certain editors from writing to them.
+	tmpfile.Close()
+	var tmpfileName = tmpfile.Name()
 
 	// Compute file hash to detect if the file has been edited
-	origHash, err := hashFile(tmpfile.Name())
+	origHash, err := hashFile(tmpfileName)
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Could not hash file: %s", err), codes.CouldNotReadInputFile)
 	}
 
 	// Let the user edit the file
 	err = runEditorUntilOk(runEditorUntilOkOpts{
-		InputStore: opts.InputStore, OriginalHash: origHash, TmpFile: tmpfile,
+		InputStore: opts.InputStore, OriginalHash: origHash, TmpFileName: tmpfileName,
 		ShowMasterKeys: opts.ShowMasterKeys, Tree: tree})
 	if err != nil {
 		return nil, err
@@ -170,18 +172,18 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 
 func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 	for {
-		err := runEditor(opts.TmpFile.Name())
+		err := runEditor(opts.TmpFileName)
 		if err != nil {
 			return common.NewExitError(fmt.Sprintf("Could not run editor: %s", err), codes.NoEditorFound)
 		}
-		newHash, err := hashFile(opts.TmpFile.Name())
+		newHash, err := hashFile(opts.TmpFileName)
 		if err != nil {
 			return common.NewExitError(fmt.Sprintf("Could not hash file: %s", err), codes.CouldNotReadInputFile)
 		}
 		if bytes.Equal(newHash, opts.OriginalHash) {
 			return common.NewExitError("File has not changed, exiting.", codes.FileHasNotBeenModified)
 		}
-		edited, err := ioutil.ReadFile(opts.TmpFile.Name())
+		edited, err := ioutil.ReadFile(opts.TmpFileName)
 		if err != nil {
 			return common.NewExitError(fmt.Sprintf("Could not read edited file: %s", err), codes.CouldNotReadInputFile)
 		}
