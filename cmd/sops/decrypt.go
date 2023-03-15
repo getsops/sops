@@ -9,7 +9,7 @@ import (
 	"go.mozilla.org/sops/v3/keyservice"
 )
 
-type decryptOpts struct {
+type DecryptOpts struct {
 	Cipher      sops.Cipher
 	InputStore  sops.Store
 	OutputStore sops.Store
@@ -19,7 +19,7 @@ type decryptOpts struct {
 	KeyServices []keyservice.KeyServiceClient
 }
 
-func decrypt(opts decryptOpts) (decryptedFile []byte, err error) {
+func Decrypt(opts DecryptOpts) (decryptedFile []byte, err error) {
 	tree, err := common.LoadEncryptedFileWithBugFixes(common.GenericDecryptOpts{
 		Cipher:      opts.Cipher,
 		InputStore:  opts.InputStore,
