@@ -16,13 +16,15 @@ import (
 	"google.golang.org/grpc"
 
 	"go.mozilla.org/sops/v3/logging"
+	"golang.org/x/oauth2"
 )
 
+// SopsGoogleCredentialsEnv or SopsGoogleCredentialsOAuthEnv can be set as an
+// environment variable as either a path to a credentials file, or directly
+// as the variable's value in JSON format.
 const (
-	// SopsGoogleCredentialsEnv can be set as an environment variable as either
-	// a path to a credentials file, or directly as the variable's value in JSON
-	// format.
-	SopsGoogleCredentialsEnv = "GOOGLE_CREDENTIALS"
+	SopsGoogleCredentialsEnv      = "GOOGLE_CREDENTIALS"
+	SopsGoogleCredentialsOAuthEnv = "CLOUDSDK_AUTH_ACCESS_TOKEN"
 )
 
 var (
@@ -212,18 +214,17 @@ func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
 	case key.credentialJSON != nil:
 		opts = append(opts, option.WithCredentialsJSON(key.credentialJSON))
 	default:
-		credentials, err := getGoogleCredentials()
+		credOpts, err := getGoogleCredentials()
 		if err != nil {
 			return nil, err
 		}
-		if credentials != nil {
-			opts = append(opts, option.WithCredentialsJSON(key.credentialJSON))
+		if credOpts != nil {
+			opts = append(opts, credOpts)
 		}
 	}
 	if key.grpcConn != nil {
 		opts = append(opts, option.WithGRPCConn(key.grpcConn))
 	}
-
 	ctx := context.Background()
 	client, err := kms.NewKeyManagementClient(ctx, opts...)
 	if err != nil {
@@ -233,14 +234,32 @@ func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
 	return client, nil
 }
 
-// getGoogleCredentials returns the SopsGoogleCredentialsEnv variable, as
+// getGoogleCredentials returns the connection options taken from the
+// SopsGoogleCredentialsEnv or SopsGoogleCredentialsOAuthEnv variables, as
 // either the file contents of the path of a credentials file, or as value in
-// JSON format. It returns an error if the file cannot be read, and may return
-// a nil byte slice if no value is set.
-func getGoogleCredentials() ([]byte, error) {
-	defaultCredentials := os.Getenv(SopsGoogleCredentialsEnv)
-	if _, err := os.Stat(defaultCredentials); err == nil {
-		return os.ReadFile(defaultCredentials)
+// JSON format. It returns an error if the file cannot be read, and will return
+// a nil value if neither environment variables are set.
+func getGoogleCredentials() (option.ClientOption, error) {
+	if envCredentials, isSet := os.LookupEnv(SopsGoogleCredentialsEnv); isSet {
+		credentials := []byte(envCredentials)
+		if _, err := os.Stat(envCredentials); err == nil {
+			if credentials, err = os.ReadFile(envCredentials); err != nil {
+				return nil, err
+			}
+		}
+		return option.WithCredentialsJSON(credentials), nil
 	}
-	return []byte(defaultCredentials), nil
+	if envToken, isSet := os.LookupEnv(SopsGoogleCredentialsOAuthEnv); isSet {
+		token := []byte(envToken)
+		if _, err := os.Stat(envToken); err == nil {
+			if token, err = os.ReadFile(envToken); err != nil {
+				return nil, err
+			}
+		}
+		tokenSource := oauth2.StaticTokenSource(
+			&oauth2.Token{AccessToken: string(token)},
+		)
+		return option.WithTokenSource(tokenSource), nil
+	}
+	return nil, nil
 }
