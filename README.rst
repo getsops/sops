@@ -594,19 +594,19 @@ KMS and PGP master keys defined in the file.
 
 	sops -r example.yaml
 
-Using .sops.yaml conf to select KMS/PGP for new files
+Using .sops.yaml conf to select KMS, PGP and age for new files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-It is often tedious to specify the ``--kms`` ``--gcp-kms`` and ``--pgp`` parameters for creation
+It is often tedious to specify the ``--kms`` ``--gcp-kms`` ``--pgp`` and ``--age`` parameters for creation
 of all new files. If your secrets are stored under a specific directory, like a
 ``git`` repository, you can create a ``.sops.yaml`` configuration file at the root
 directory to define which keys are used for which filename.
 
 Let's take an example:
 
-* file named **something.dev.yaml** should use one set of KMS A
-* file named **something.prod.yaml** should use another set of KMS B
-* other files use a third set of KMS C
+* file named **something.dev.yaml** should use one set of KMS A, PGP and age
+* file named **something.prod.yaml** should use another set of KMS B, PGP and age
+* other files use a third set of KMS C and PGP
 * all live under **mysecretrepo/something.{dev,prod,gcp}.yaml**
 
 Under those circumstances, a file placed at **mysecretrepo/.sops.yaml**
@@ -617,15 +617,17 @@ can manage the three sets of configurations for the three types of files:
 	# creation rules are evaluated sequentially, the first match wins
 	creation_rules:
 		# upon creation of a file that matches the pattern *.dev.yaml,
-		# KMS set A is used
+		# KMS set A as well as PGP and age is used
 		- path_regex: \.dev\.yaml$
 		  kms: 'arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500,arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod'
 		  pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
+		  age: 'age129h70qwx39k7h5x6l9hg566nwm53527zvamre8vep9e3plsm44uqgy8gla'
 
-		# prod files use KMS set B in the PROD IAM
+		# prod files use KMS set B in the PROD IAM, PGP and age
 		- path_regex: \.prod\.yaml$
 		  kms: 'arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod,arn:aws:kms:eu-central-1:361527076523:key/cb1fab90-8d17-42a1-a9d8-334968904f94+arn:aws:iam::361527076523:role/hiera-sops-prod'
 		  pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
+		  age: 'age129h70qwx39k7h5x6l9hg566nwm53527zvamre8vep9e3plsm44uqgy8gla'
 		  hc_vault_uris: "http://localhost:8200/v1/sops/keys/thirdkey"
 
 		# gcp files using GCP KMS
@@ -633,7 +635,7 @@ can manage the three sets of configurations for the three types of files:
 		  gcp_kms: projects/mygcproject/locations/global/keyRings/mykeyring/cryptoKeys/thekey
 
 		# Finally, if the rules above have not matched, this one is a
-		# catchall that will encrypt the file using KMS set C
+		# catchall that will encrypt the file using KMS set C as well as PGP
 		# The absence of a path_regex means it will match everything
 		- kms: 'arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500,arn:aws:kms:us-west-2:142069644989:key/846cfb17-373d-49b9-8baf-f36b04512e47,arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e'
 		  pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
