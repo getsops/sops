@@ -281,3 +281,34 @@ func TestComment7(t *testing.T) {
 	assert.Equal(t, string(COMMENT_7_OUT), string(bytes))
 	assert.Equal(t, COMMENT_7_OUT, bytes)
 }
+func TestDuplicateAttributes(t *testing.T) {
+	// Duplicate keys are _not_ valid yaml.
+	//
+	// See https://yaml.org/spec/1.2.2/#mapping
+	// > The content of a mapping node is an unordered set of key/value node pairs,
+	// > with the restriction that each of the keys is unique.
+	//
+	data := `
+hello: Sops config file
+hello: Duplicates are not ok
+rootunique:
+  key2: "value"
+  key2: "foo"
+`
+	s := new(Store)
+	_, err := s.LoadPlainFile([]byte(data))
+	assert.NotNil(t, err)
+	assert.Equal(t, `yaml: unmarshal errors:
+  line 3: mapping key "hello" already defined at line 2`, err.Error())
+}
+
+func TestReservedAttributes(t *testing.T) {
+	data := `
+hello: Sops config file
+sops: The attribute 'sops' must be rejected, otherwise the file cannot be opened later on 
+`
+	s := new(Store)
+	_, err := s.LoadPlainFile([]byte(data))
+	assert.NotNil(t, err)
+	assert.Equal(t, `YAML doc used reserved word 'sops'`, err.Error())
+}
