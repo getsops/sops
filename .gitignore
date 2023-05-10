@@ -3,3 +3,4 @@ Cargo.lock
 vendor/
 coverage.txt
 profile.out
+Notes.md
