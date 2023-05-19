@@ -3,3 +3,6 @@ Cargo.lock
 vendor/
 coverage.txt
 profile.out
+*tmp*
+*.deb
+*.rpm
