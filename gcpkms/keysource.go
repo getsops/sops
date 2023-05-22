@@ -217,7 +217,7 @@ func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
 			return nil, err
 		}
 		if credentials != nil {
-			opts = append(opts, option.WithCredentialsJSON(key.credentialJSON))
+			opts = append(opts, option.WithCredentialsJSON(credentials))
 		}
 	}
 	if key.grpcConn != nil {
