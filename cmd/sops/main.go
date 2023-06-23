@@ -33,6 +33,7 @@ import (
 	"go.mozilla.org/sops/v3/keyservice"
 	"go.mozilla.org/sops/v3/kms"
 	"go.mozilla.org/sops/v3/logging"
+	"go.mozilla.org/sops/v3/ocikms"
 	"go.mozilla.org/sops/v3/pgp"
 	"go.mozilla.org/sops/v3/stores/dotenv"
 	"go.mozilla.org/sops/v3/stores/json"
@@ -582,6 +583,11 @@ func main() {
 			EnvVar: "SOPS_PGP_FP",
 		},
 		cli.StringFlag{
+			Name:   "oci-kms",
+			Usage:  "comma separated list of OCI KMS OCIDs",
+			EnvVar: "SOPS_OCI_KMS_OCIDS",
+		},
+		cli.StringFlag{
 			Name:   "age, a",
 			Usage:  "comma separated list of age recipients",
 			EnvVar: "SOPS_AGE_RECIPIENTS",
@@ -645,6 +651,14 @@ func main() {
 		cli.StringFlag{
 			Name:  "rm-age",
 			Usage: "remove the provided comma-separated list of age recipients from the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "add-oci-kms",
+			Usage: "add the provided comma-separated list of OCI KMS keys OCIDs to the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "rm-oci-kms",
+			Usage: "remove the provided comma-separated list of OCI KMS keys OCIDs from the list of master keys on the given file",
 		},
 		cli.StringFlag{
 			Name:  "add-pgp",
@@ -851,7 +865,9 @@ func main() {
 			for _, k := range ageKeys {
 				addMasterKeys = append(addMasterKeys, k)
 			}
-
+			for _, k := range ocikms.MasterKeysFromOCIDString(c.String("add-oci-kms")) {
+				addMasterKeys = append(addMasterKeys, k)
+			}
 			var rmMasterKeys []keys.MasterKey
 			for _, k := range kms.MasterKeysFromArnString(c.String("rm-kms"), kmsEncryptionContext, c.String("aws-profile")) {
 				rmMasterKeys = append(rmMasterKeys, k)
@@ -881,6 +897,9 @@ func main() {
 				return err
 			}
 			for _, k := range ageKeys {
+				rmMasterKeys = append(rmMasterKeys, k)
+			}
+			for _, k := range ocikms.MasterKeysFromOCIDString(c.String("rm-oci-kms")) {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
 
@@ -1080,6 +1099,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	var azkvKeys []keys.MasterKey
 	var hcVaultMkKeys []keys.MasterKey
 	var ageMasterKeys []keys.MasterKey
+	var ociMasterKeys []keys.MasterKey
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
 	if c.String("encryption-context") != "" && kmsEncryptionContext == nil {
 		return nil, common.NewExitError("Invalid KMS encryption context format", codes.ErrorInvalidKMSEncryptionContextFormat)
@@ -1126,7 +1146,12 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 			ageMasterKeys = append(ageMasterKeys, k)
 		}
 	}
-	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("azure-kv") == "" && c.String("hc-vault-transit") == "" && c.String("age") == "" {
+	if c.String("oci-kms") != "" {
+		for _, k := range ocikms.MasterKeysFromOCIDString(c.String("oci-kms")) {
+			ociMasterKeys = append(ociMasterKeys, k)
+		}
+	}
+	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("azure-kv") == "" && c.String("hc-vault-transit") == "" && c.String("age") == "" && c.String("oci-kms") == "" {
 		conf, err := loadConfig(c, file, kmsEncryptionContext)
 		// config file might just not be supplied, without any error
 		if conf == nil {
@@ -1145,6 +1170,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	group = append(group, pgpKeys...)
 	group = append(group, hcVaultMkKeys...)
 	group = append(group, ageMasterKeys...)
+	group = append(group, ociMasterKeys...)
 	log.Debugf("Master keys available:  %+v", group)
 	return []sops.KeyGroup{group}, nil
 }

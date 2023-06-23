@@ -13,6 +13,7 @@ import (
 	"go.mozilla.org/sops/v3/hcvault"
 	"go.mozilla.org/sops/v3/keys"
 	"go.mozilla.org/sops/v3/kms"
+	"go.mozilla.org/sops/v3/ocikms"
 	"go.mozilla.org/sops/v3/pgp"
 )
 
@@ -78,6 +79,15 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 				},
 			},
 		}
+	case *ocikms.MasterKey:
+		return Key{
+			KeyType: &Key_OciKey{
+				OciKey: &OciKey{
+					Ocid: mk.Ocid,
+				},
+			},
+		}
+
 	default:
 		panic(fmt.Sprintf("Tried to convert unknown MasterKey type %T to keyservice.Key", mk))
 	}
