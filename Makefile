@@ -36,7 +36,7 @@ generate: keyservice/keyservice.pb.go
 	$(GO) generate
 
 %.pb.go: %.proto
-	protoc --go_out=plugins=grpc:. $<
+	protoc --go_out=. --go-grpc_out=require_unimplemented_servers=false:.  $<
 
 functional-tests:
 	$(GO) build -o functional-tests/sops go.mozilla.org/sops/v3/cmd/sops
