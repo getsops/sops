@@ -20,6 +20,7 @@ import (
 	"go.mozilla.org/sops/v3/hcvault"
 	"go.mozilla.org/sops/v3/kms"
 	"go.mozilla.org/sops/v3/logging"
+	"go.mozilla.org/sops/v3/ocikms"
 	"go.mozilla.org/sops/v3/pgp"
 	"go.mozilla.org/sops/v3/publish"
 	"gopkg.in/yaml.v3"
@@ -75,6 +76,7 @@ type keyGroup struct {
 	AzureKV []azureKVKey `yaml:"azure_keyvault"`
 	Vault   []string     `yaml:"hc_vault"`
 	Age     []string     `yaml:"age"`
+	OCIKMS  []string     `yaml:"oci_kms"`
 	PGP     []string
 }
 
@@ -114,6 +116,7 @@ type creationRule struct {
 	KMS               string
 	AwsProfile        string `yaml:"aws_profile"`
 	Age               string `yaml:"age"`
+	OCIKMS            string `yaml:"oci_kms"`
 	PGP               string
 	GCPKMS            string     `yaml:"gcp_kms"`
 	AzureKeyVault     string     `yaml:"azure_keyvault"`
@@ -180,6 +183,9 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 					return nil, err
 				}
 			}
+			for _, k := range group.OCIKMS {
+				keyGroup = append(keyGroup, ocikms.NewMasterKeyFromOCID(k))
+			}
 			groups = append(groups, keyGroup)
 		}
 	} else {
@@ -201,6 +207,9 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			keyGroup = append(keyGroup, k)
 		}
 		for _, k := range gcpkms.MasterKeysFromResourceIDString(cRule.GCPKMS) {
+			keyGroup = append(keyGroup, k)
+		}
+		for _, k := range ocikms.MasterKeysFromOCIDString(cRule.OCIKMS) {
 			keyGroup = append(keyGroup, k)
 		}
 		azureKeys, err := azkv.MasterKeysFromURLs(cRule.AzureKeyVault)
@@ -329,7 +338,7 @@ func parseCreationRuleForFile(conf *configFile, confPath, filePath string, kmsEn
 	}
 
 	// compare file path relative to path of config file
-	filePath = strings.TrimPrefix(filePath, configDir + string(filepath.Separator))
+	filePath = strings.TrimPrefix(filePath, configDir+string(filepath.Separator))
 
 	var rule *creationRule
 
