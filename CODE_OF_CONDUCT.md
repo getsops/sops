@@ -1,8 +1,5 @@
-# Community Participation Guidelines
+# Code of Conduct
 
-This repository is governed by Mozilla's code of conduct and etiquette guidelines. 
-For more details, please read the
-[Mozilla Community Participation Guidelines](https://www.mozilla.org/about/governance/policies/participation/). 
+This project adheres to the [CNCF Code of Conduct](https://github.com/cncf/foundation/blob/main/code-of-conduct.md).
 
-## How to Report
-For more information on how to report violations of the Community Participation Guidelines, please read our '[How to Report](https://www.mozilla.org/about/governance/policies/participation/reporting/)' page.
+By participating, you are expected to honor this code.
