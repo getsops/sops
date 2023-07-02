@@ -1,6 +1,6 @@
 module go.mozilla.org/sops/v3
 
-go 1.18
+go 1.19
 
 require (
 	cloud.google.com/go/kms v1.4.0
