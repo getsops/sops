@@ -624,7 +624,7 @@ b: ba"#
         assert!(output.status
                     .success(),
                 "SOPS failed to decrypt a binary file");
-        assert_eq!(output.stdout, &[]);
+        assert_eq!(output.stdout, <&[u8]>::default());
         let mut f = File::open(&output_path).expect("output file not found");
 
         let mut contents = String::new();
