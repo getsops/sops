@@ -1,7 +1,7 @@
 /*
 Package config provides a way to find and load SOPS configuration files
 */
-package config //import "go.mozilla.org/sops/v3/config"
+package config // import "go.mozilla.org/sops/v3/config"
 
 import (
 	"fmt"
@@ -13,6 +13,8 @@ import (
 	"strings"
 
 	"github.com/sirupsen/logrus"
+	"gopkg.in/yaml.v3"
+
 	"go.mozilla.org/sops/v3"
 	"go.mozilla.org/sops/v3/age"
 	"go.mozilla.org/sops/v3/azkv"
@@ -22,7 +24,6 @@ import (
 	"go.mozilla.org/sops/v3/logging"
 	"go.mozilla.org/sops/v3/pgp"
 	"go.mozilla.org/sops/v3/publish"
-	"gopkg.in/yaml.v3"
 )
 
 var log *logrus.Logger
@@ -79,7 +80,8 @@ type keyGroup struct {
 }
 
 type gcpKmsKey struct {
-	ResourceID string `yaml:"resource_id"`
+	ResourceID                string `yaml:"resource_id"`
+	ImpersonateServiceAccount string `yaml:"gcp_impersonate_service_account"`
 }
 
 type kmsKey struct {
@@ -110,20 +112,21 @@ type destinationRule struct {
 }
 
 type creationRule struct {
-	PathRegex         string `yaml:"path_regex"`
-	KMS               string
-	AwsProfile        string `yaml:"aws_profile"`
-	Age               string `yaml:"age"`
-	PGP               string
-	GCPKMS            string     `yaml:"gcp_kms"`
-	AzureKeyVault     string     `yaml:"azure_keyvault"`
-	VaultURI          string     `yaml:"hc_vault_transit_uri"`
-	KeyGroups         []keyGroup `yaml:"key_groups"`
-	ShamirThreshold   int        `yaml:"shamir_threshold"`
-	UnencryptedSuffix string     `yaml:"unencrypted_suffix"`
-	EncryptedSuffix   string     `yaml:"encrypted_suffix"`
-	UnencryptedRegex  string     `yaml:"unencrypted_regex"`
-	EncryptedRegex    string     `yaml:"encrypted_regex"`
+	PathRegex                    string `yaml:"path_regex"`
+	KMS                          string
+	AwsProfile                   string `yaml:"aws_profile"`
+	Age                          string `yaml:"age"`
+	PGP                          string
+	GCPKMS                       string     `yaml:"gcp_kms"`
+	GCPImpersonateServiceAccount string     `yaml:"gcp_impersonate_service_account"`
+	AzureKeyVault                string     `yaml:"azure_keyvault"`
+	VaultURI                     string     `yaml:"hc_vault_transit_uri"`
+	KeyGroups                    []keyGroup `yaml:"key_groups"`
+	ShamirThreshold              int        `yaml:"shamir_threshold"`
+	UnencryptedSuffix            string     `yaml:"unencrypted_suffix"`
+	EncryptedSuffix              string     `yaml:"encrypted_suffix"`
+	UnencryptedRegex             string     `yaml:"unencrypted_regex"`
+	EncryptedRegex               string     `yaml:"encrypted_regex"`
 }
 
 // Load loads a sops config file into a temporary struct
@@ -168,7 +171,7 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 				keyGroup = append(keyGroup, kms.NewMasterKey(k.Arn, k.Role, k.Context))
 			}
 			for _, k := range group.GCPKMS {
-				keyGroup = append(keyGroup, gcpkms.NewMasterKeyFromResourceID(k.ResourceID))
+				keyGroup = append(keyGroup, gcpkms.NewMasterKeyFromResourceID(k.ResourceID, k.ImpersonateServiceAccount))
 			}
 			for _, k := range group.AzureKV {
 				keyGroup = append(keyGroup, azkv.NewMasterKey(k.VaultURL, k.Key, k.Version))
@@ -200,7 +203,7 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		for _, k := range kms.MasterKeysFromArnString(cRule.KMS, kmsEncryptionContext, cRule.AwsProfile) {
 			keyGroup = append(keyGroup, k)
 		}
-		for _, k := range gcpkms.MasterKeysFromResourceIDString(cRule.GCPKMS) {
+		for _, k := range gcpkms.MasterKeysFromResourceIDString(cRule.GCPKMS, cRule.GCPImpersonateServiceAccount) {
 			keyGroup = append(keyGroup, k)
 		}
 		azureKeys, err := azkv.MasterKeysFromURLs(cRule.AzureKeyVault)
@@ -329,7 +332,7 @@ func parseCreationRuleForFile(conf *configFile, confPath, filePath string, kmsEn
 	}
 
 	// compare file path relative to path of config file
-	filePath = strings.TrimPrefix(filePath, configDir + string(filepath.Separator))
+	filePath = strings.TrimPrefix(filePath, configDir+string(filepath.Separator))
 
 	var rule *creationRule
 

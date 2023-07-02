@@ -31,7 +31,8 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 		return Key{
 			KeyType: &Key_GcpKmsKey{
 				GcpKmsKey: &GcpKmsKey{
-					ResourceId: mk.ResourceID,
+					ResourceId:                   mk.ResourceID,
+					GcpImpersonateServiceAccount: mk.ImpersonateServiceAccount,
 				},
 			},
 		}

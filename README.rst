@@ -214,6 +214,18 @@ you can enable application default credentials using the sdk::
 
 	$ gcloud auth application-default login
 
+If you want to `impersonate a service account <https://cloud.google.com/iam/docs/impersonating-service-accounts>`_,
+you can do so with `gcp_impersonate_service_account`:
+
+.. code:: yaml
+
+	sops:
+	    kms:
+	    -	gcp_kms: projects/my-project/locations/global/keyRings/sops/cryptoKeys/sops-key
+	        gcp_impersonate_service_account: foo@my-project.iam.gserviceaccount.com
+
+Similarly the `--gcp-impersonate-service-account` flag can be set with the command line with any of the GCP KMS commands.
+
 Encrypting/decrypting with GCP KMS requires a KMS ResourceID. You can use the
 cloud console the get the ResourceID or you can create one using the gcloud
 sdk:

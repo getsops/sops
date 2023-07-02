@@ -40,7 +40,7 @@ require (
 	google.golang.org/api v0.87.0
 	google.golang.org/genproto v0.0.0-20220712132514-bdd2acd4974d
 	google.golang.org/grpc v1.48.0
-	google.golang.org/protobuf v1.28.0
+	google.golang.org/protobuf v1.28.1
 	gopkg.in/ini.v1 v1.66.4
 	gopkg.in/yaml.v3 v3.0.1
 )
