@@ -21,6 +21,7 @@ import (
 	"go.mozilla.org/sops/v3/hcvault"
 	"go.mozilla.org/sops/v3/kms"
 	"go.mozilla.org/sops/v3/pgp"
+	"go.mozilla.org/sops/v3/yckms"
 )
 
 // SopsFile is a struct used by the stores as a helper to unmarshal the SOPS metadata
@@ -41,6 +42,7 @@ type Metadata struct {
 	KeyGroups                 []keygroup  `yaml:"key_groups,omitempty" json:"key_groups,omitempty"`
 	KMSKeys                   []kmskey    `yaml:"kms" json:"kms"`
 	GCPKMSKeys                []gcpkmskey `yaml:"gcp_kms" json:"gcp_kms"`
+	YCKMSKeys                 []yckmskey  `yaml:"yc_kms" json:"yc_kms"`
 	AzureKeyVaultKeys         []azkvkey   `yaml:"azure_kv" json:"azure_kv"`
 	VaultKeys                 []vaultkey  `yaml:"hc_vault" json:"hc_vault"`
 	AgeKeys                   []agekey    `yaml:"age" json:"age"`
@@ -58,6 +60,7 @@ type keygroup struct {
 	PGPKeys           []pgpkey    `yaml:"pgp,omitempty" json:"pgp,omitempty"`
 	KMSKeys           []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
 	GCPKMSKeys        []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
+	YCKMSKeys         []yckmskey  `yaml:"yc_kms,omitempty" json:"yc_kms,omitempty"`
 	AzureKeyVaultKeys []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
 	VaultKeys         []vaultkey  `yaml:"hc_vault" json:"hc_vault"`
 	AgeKeys           []agekey    `yaml:"age" json:"age"`
@@ -80,6 +83,12 @@ type kmskey struct {
 
 type gcpkmskey struct {
 	ResourceID       string `yaml:"resource_id" json:"resource_id"`
+	CreatedAt        string `yaml:"created_at" json:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc"`
+}
+
+type yckmskey struct {
+	KeyID            string `yaml:"key_id" json:"key_id"`
 	CreatedAt        string `yaml:"created_at" json:"created_at"`
 	EncryptedDataKey string `yaml:"enc" json:"enc"`
 }
@@ -121,6 +130,7 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 		m.PGPKeys = pgpKeysFromGroup(group)
 		m.KMSKeys = kmsKeysFromGroup(group)
 		m.GCPKMSKeys = gcpkmsKeysFromGroup(group)
+		m.YCKMSKeys = yckmsKeysFromGroup(group)
 		m.VaultKeys = vaultKeysFromGroup(group)
 		m.AzureKeyVaultKeys = azkvKeysFromGroup(group)
 		m.AgeKeys = ageKeysFromGroup(group)
@@ -130,6 +140,7 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 				KMSKeys:           kmsKeysFromGroup(group),
 				PGPKeys:           pgpKeysFromGroup(group),
 				GCPKMSKeys:        gcpkmsKeysFromGroup(group),
+				YCKMSKeys:         yckmsKeysFromGroup(group),
 				VaultKeys:         vaultKeysFromGroup(group),
 				AzureKeyVaultKeys: azkvKeysFromGroup(group),
 				AgeKeys:           ageKeysFromGroup(group),
@@ -176,6 +187,20 @@ func gcpkmsKeysFromGroup(group sops.KeyGroup) (keys []gcpkmskey) {
 		case *gcpkms.MasterKey:
 			keys = append(keys, gcpkmskey{
 				ResourceID:       key.ResourceID,
+				CreatedAt:        key.CreationDate.Format(time.RFC3339),
+				EncryptedDataKey: key.EncryptedKey,
+			})
+		}
+	}
+	return
+}
+
+func yckmsKeysFromGroup(group sops.KeyGroup) (keys []yckmskey) {
+	for _, key := range group {
+		switch key := key.(type) {
+		case *yckms.MasterKey:
+			keys = append(keys, yckmskey{
+				KeyID:            key.KeyID,
 				CreatedAt:        key.CreationDate.Format(time.RFC3339),
 				EncryptedDataKey: key.EncryptedKey,
 			})
@@ -274,7 +299,7 @@ func (m *Metadata) ToInternal() (sops.Metadata, error) {
 	}, nil
 }
 
-func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, azkvKeys []azkvkey, vaultKeys []vaultkey, ageKeys []agekey) (sops.KeyGroup, error) {
+func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, ycKmsKeys []yckmskey, azkvKeys []azkvkey, vaultKeys []vaultkey, ageKeys []agekey) (sops.KeyGroup, error) {
 	var internalGroup sops.KeyGroup
 	for _, kmsKey := range kmsKeys {
 		k, err := kmsKey.toInternal()
@@ -285,6 +310,13 @@ func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmske
 	}
 	for _, gcpKmsKey := range gcpKmsKeys {
 		k, err := gcpKmsKey.toInternal()
+		if err != nil {
+			return nil, err
+		}
+		internalGroup = append(internalGroup, k)
+	}
+	for _, ycKmsKey := range ycKmsKeys {
+		k, err := ycKmsKey.toInternal()
 		if err != nil {
 			return nil, err
 		}
@@ -323,8 +355,8 @@ func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmske
 
 func (m *Metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 	var internalGroups []sops.KeyGroup
-	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 || len(m.AgeKeys) > 0 {
-		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.AzureKeyVaultKeys, m.VaultKeys, m.AgeKeys)
+	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.YCKMSKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 || len(m.AgeKeys) > 0 {
+		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.YCKMSKeys, m.AzureKeyVaultKeys, m.VaultKeys, m.AgeKeys)
 		if err != nil {
 			return nil, err
 		}
@@ -332,7 +364,7 @@ func (m *Metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 		return internalGroups, nil
 	} else if len(m.KeyGroups) > 0 {
 		for _, group := range m.KeyGroups {
-			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.AzureKeyVaultKeys, group.VaultKeys, group.AgeKeys)
+			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.YCKMSKeys, group.AzureKeyVaultKeys, group.VaultKeys, group.AgeKeys)
 			if err != nil {
 				return nil, err
 			}
@@ -367,6 +399,18 @@ func (gcpKmsKey *gcpkmskey) toInternal() (*gcpkms.MasterKey, error) {
 	return &gcpkms.MasterKey{
 		ResourceID:   gcpKmsKey.ResourceID,
 		EncryptedKey: gcpKmsKey.EncryptedDataKey,
+		CreationDate: creationDate,
+	}, nil
+}
+
+func (ycKmsKey *yckmskey) toInternal() (*yckms.MasterKey, error) {
+	creationDate, err := time.Parse(time.RFC3339, ycKmsKey.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+	return &yckms.MasterKey{
+		KeyID:        ycKmsKey.KeyID,
+		EncryptedKey: ycKmsKey.EncryptedDataKey,
 		CreationDate: creationDate,
 	}, nil
 }
