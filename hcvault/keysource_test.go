@@ -12,7 +12,7 @@ import (
 
 	"github.com/hashicorp/vault/api"
 	"github.com/mitchellh/go-homedir"
-	"github.com/ory/dockertest"
+	"github.com/ory/dockertest/v3"
 	"github.com/stretchr/testify/assert"
 )
 
