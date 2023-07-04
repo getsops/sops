@@ -12,7 +12,6 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/Azure/azure-sdk-for-go/sdk/keyvault/azkeys"
-	"github.com/Azure/azure-sdk-for-go/sdk/keyvault/azkeys/crypto"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -47,12 +46,16 @@ func TestMasterKey_Decrypt(t *testing.T) {
 	assert.NoError(t, err)
 
 	data := []byte("this is super secret data")
-	c, err := crypto.NewClient(key.ToString(), key.tokenCredential, nil)
+
+	c, err := azkeys.NewClient(key.VaultURL, key.tokenCredential, nil)
 	assert.NoError(t, err)
 
-	resp, err := c.Encrypt(context.Background(), crypto.EncryptionAlgRSAOAEP256, data, nil)
+	resp, err := c.Encrypt(context.Background(), key.Name, key.Version, azkeys.KeyOperationsParameters{
+		Algorithm: to.Ptr(azkeys.JSONWebKeyEncryptionAlgorithmRSAOAEP256),
+		Value:     data,
+	}, nil)
 	assert.NoError(t, err)
-	key.EncryptedKey = base64.RawURLEncoding.EncodeToString(resp.Ciphertext)
+	key.EncryptedKey = base64.RawURLEncoding.EncodeToString(resp.KeyOperationResult.Result)
 
 	got, err := key.Decrypt()
 	assert.NoError(t, err)
@@ -85,28 +88,29 @@ func createTestKMSKeyIfNotExists() (*MasterKey, error) {
 	}
 	NewTokenCredential(token).ApplyToMasterKey(key)
 
-	c, err := azkeys.NewClient(key.VaultURL, token, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	getResp, err := c.GetKey(context.TODO(), key.Name, &azkeys.GetKeyOptions{Version: key.Version})
-	if err == nil {
-		key.Version = *getResp.Properties.Version
-	}
-	if err != nil {
-		createResp, err := c.CreateKey(context.TODO(), key.Name, azkeys.KeyTypeRSA, &azkeys.CreateKeyOptions{
-			Operations: []*azkeys.Operation{
-				to.Ptr(azkeys.OperationEncrypt),
-				to.Ptr(azkeys.OperationDecrypt),
-			},
-			Properties: &azkeys.Properties{Version: to.Ptr(key.Version)},
-		})
+	// If we have been given a version, assume it exists.
+	if key.Version == "" {
+		c, err := azkeys.NewClient(key.VaultURL, token, nil)
 		if err != nil {
 			return nil, err
 		}
-		key.Version = *createResp.Properties.Version
+
+		getResp, err := c.GetKey(context.TODO(), key.Name, key.Version, nil)
+		if err == nil {
+			key.Version = getResp.KeyBundle.Key.KID.Version()
+		}
+		if err != nil {
+			createResp, err := c.CreateKey(context.TODO(), key.Name, azkeys.CreateKeyParameters{
+				Kty:    to.Ptr(azkeys.JSONWebKeyTypeRSA),
+				KeyOps: to.SliceOfPtrs(azkeys.JSONWebKeyOperationEncrypt, azkeys.JSONWebKeyOperationDecrypt),
+			}, nil)
+			if err != nil {
+				return nil, err
+			}
+			key.Version = createResp.Key.KID.Version()
+		}
 	}
+
 	return key, nil
 }
 
