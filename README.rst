@@ -1106,6 +1106,21 @@ Below is an example of publishing to Vault (using token auth with a local dev in
    example_number    42
    example_string    bar
 
+Publishing to Azure Key Vault
+*******************
+
+There are a few settings for Azure Key Vault that you can place in your destination rules. The first
+is ``azure_keyvault_url``, which is required. The other one is optional:
+``azure_publish_suffix``.
+
+The Azure Key Vault publish integration uses the
+`default credential chain <https://pkg.go.dev/github.com/Azure/azure-sdk-for-go/sdk/azidentity#DefaultAzureCredential>`_
+which tries several authentication methods - see "Encrypting using Azure Key Vault" for more details.
+
+``azure_publish_suffix`` is used if you only want to publish secrets with a specific suffix
+
+Note that Azure Secret Names get sanitzied before being put into Azure Key Vault. The following rules apply:
+- Underscores `_` get replaced with dashes `-`
 
 Important information on types
 ------------------------------
