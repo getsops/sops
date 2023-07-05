@@ -266,6 +266,10 @@ func main() {
 					Name:  "verbose",
 					Usage: "Enable verbose logging output",
 				},
+				cli.StringFlag{
+					Name:  "input-type",
+					Usage: "currently ini, json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if c.Bool("verbose") || c.GlobalBool("verbose") {
