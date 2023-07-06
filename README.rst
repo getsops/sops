@@ -30,7 +30,7 @@ For the adventurous, unstable features are available in the `main` branch, which
 	$ cd $GOPATH/src/github.com/getsops/sops/
 	$ make install
 
-(requires Go >= 1.18)
+(requires Go >= 1.19)
 
 If you don't have Go installed, set it up with:
 
