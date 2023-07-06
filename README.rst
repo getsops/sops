@@ -1679,8 +1679,7 @@ file format introduced in **1.0**.
 Security
 --------
 
-Please report security issues to security at mozilla dot org, or by using one
-of the contact method available here: `https://www.mozilla.org/en-US/security/#For_Developers <https://www.mozilla.org/en-US/security/#For_Developers>`_
+Please report any security issues privately using `GitHub's advisory form <https://github.com/getsops/sops/security/advisories>`_.
 
 License
 -------
