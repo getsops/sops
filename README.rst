@@ -1689,16 +1689,17 @@ Mozilla Public License Version 2.0
 Authors
 -------
 
-The core team is composed of:
+SOPS was initially launched as a project at Mozilla in 2015 and has been
+graciously donated to the CNCF as a Sandbox project in 2023, now under the
+stewardship of a `new group of maintainers <https://github.com/getsops/community/blob/main/MAINTAINERS.md>`_.
 
-* AJ Banhken @ajvb
-
-The original authors were:
+The original authors of the project were:
 
 * Adrian Utrilla @autrilla
 * Julien Vehent @jvehent
 
-And a whole bunch of `contributors <https://github.com/getsops/sops/graphs/contributors>`_
+Furthermore, the project has been carried for a long time by AJ Bahnken @ajvb,
+and had not been possible without the contributions of numerous `contributors <https://github.com/getsops/sops/graphs/contributors>`_.
 
 Credits
 -------
