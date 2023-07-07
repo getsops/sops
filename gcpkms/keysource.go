@@ -2,8 +2,18 @@ package gcpkms // import "go.mozilla.org/sops/v3/gcpkms"
 
 import (
 	"context"
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/sha1"
+	"crypto/sha256"
+	"crypto/sha512"
+	"crypto/x509"
 	"encoding/base64"
+	"encoding/pem"
+	"errors"
 	"fmt"
+	"hash"
+	"hash/crc32"
 	"os"
 	"regexp"
 	"strings"
@@ -14,6 +24,7 @@ import (
 	"google.golang.org/api/option"
 	kmspb "google.golang.org/genproto/googleapis/cloud/kms/v1"
 	"google.golang.org/grpc"
+	"google.golang.org/protobuf/types/known/wrapperspb"
 
 	"go.mozilla.org/sops/v3/logging"
 )
@@ -103,11 +114,53 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 		}
 	}()
 
+	ctx := context.Background()
+	purpose, err := key.purpose(ctx, service)
+	if err != nil {
+		return err
+	}
+
+	switch purpose {
+	case kmspb.CryptoKey_ENCRYPT_DECRYPT:
+		return key.encryptSymmetric(ctx, service, dataKey)
+	case kmspb.CryptoKey_ASYMMETRIC_DECRYPT:
+		return key.encryptAsymmetric(ctx, service, dataKey)
+	default:
+		log.WithField("resourceID", key.ResourceID).WithField("purpose", purpose.String()).Error("This key is not for encryption")
+		return fmt.Errorf("this key is not for encryption, purpose: %v", purpose.String())
+	}
+}
+
+func (key *MasterKey) purpose(ctx context.Context, service *kms.KeyManagementClient) (kmspb.CryptoKey_CryptoKeyPurpose, error) {
+	req := &kmspb.GetCryptoKeyRequest{
+		Name: key.resourceIDWithoutVersion(),
+	}
+	cryptoKey, err := service.GetCryptoKey(ctx, req)
+	if err != nil {
+		log.WithError(err).WithField("resourceID", key.ResourceID).Error("Get key metadata failed")
+		return kmspb.CryptoKey_CRYPTO_KEY_PURPOSE_UNSPECIFIED, fmt.Errorf("failed to get key metadata from GCP KMS service: %w", err)
+	}
+
+	return cryptoKey.GetPurpose(), nil
+}
+
+// assume key.ResourceID is in following format
+//   - `projects/project-id/locations/location/keyRings/keyring/cryptoKeys/key`
+//   - `projects/project-id/locations/location/keyRings/keyring/cryptoKeys/key/cryptoKeyVersions/version`
+func (key MasterKey) resourceIDWithoutVersion() string {
+	re := regexp.MustCompile(`^(projects/[^/]+/locations/[^/]+/keyRings/[^/]+/cryptoKeys/[^/]+)(?:/cryptoKeyVersions/[^/]+)?$`)
+	matches := re.FindStringSubmatch(key.ResourceID)
+	if len(matches) < 2 {
+		return ""
+	}
+	return matches[1]
+}
+
+func (key *MasterKey) encryptSymmetric(ctx context.Context, service *kms.KeyManagementClient, dataKey []byte) error {
 	req := &kmspb.EncryptRequest{
 		Name:      key.ResourceID,
 		Plaintext: dataKey,
 	}
-	ctx := context.Background()
 	resp, err := service.Encrypt(ctx, req)
 	if err != nil {
 		log.WithError(err).WithField("resourceID", key.ResourceID).Error("Encryption failed")
@@ -117,7 +170,70 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	// The previous GCP KMS client used to work with base64 encoded
 	// strings.
 	key.EncryptedKey = base64.StdEncoding.EncodeToString(resp.Ciphertext)
-	log.WithField("resourceID", key.ResourceID).Info("Encryption succeeded")
+	log.WithField("resourceID", key.ResourceID).Info("Symmetric encryption succeeded")
+	return nil
+}
+
+func (key *MasterKey) encryptAsymmetric(ctx context.Context, service *kms.KeyManagementClient, dataKey []byte) error {
+	req := &kmspb.GetPublicKeyRequest{
+		Name: key.ResourceID,
+	}
+	resp, err := service.GetPublicKey(ctx, req)
+	if err != nil {
+		log.WithError(err).WithField("resourceID", key.ResourceID).Error("Get public key failed")
+		return fmt.Errorf("failed to get public key from GCP KMS service: %w", err)
+	}
+
+	if resp.GetPemCrc32C().GetValue() != wrapperspb.Int64(int64(crc32c([]byte(resp.GetPem())))).Value {
+		log.WithField("resourceID", key.ResourceID).Error("Get public key response corrupted in-transit")
+		return errors.New("get public key response corrupted in-transit")
+	}
+
+	block, _ := pem.Decode([]byte(resp.Pem))
+	publicKey, err := x509.ParsePKIXPublicKey(block.Bytes)
+	if err != nil {
+		log.WithError(err).WithField("resourceID", key.ResourceID).Info("Failed to parse public key")
+		return fmt.Errorf("Failed to parse public key: %w", err)
+	}
+	rsaKey, ok := publicKey.(*rsa.PublicKey)
+	if !ok {
+		log.WithField("resourceID", key.ResourceID).Info("Public key is not RSA")
+		return errors.New("public key is not RSA")
+	}
+
+	var hash hash.Hash
+
+	switch resp.GetAlgorithm() {
+	case kmspb.CryptoKeyVersion_RSA_DECRYPT_OAEP_2048_SHA256:
+		hash = sha256.New()
+	case kmspb.CryptoKeyVersion_RSA_DECRYPT_OAEP_3072_SHA256:
+		hash = sha256.New()
+	case kmspb.CryptoKeyVersion_RSA_DECRYPT_OAEP_4096_SHA256:
+		hash = sha256.New()
+	case kmspb.CryptoKeyVersion_RSA_DECRYPT_OAEP_4096_SHA512:
+		hash = sha512.New()
+	case kmspb.CryptoKeyVersion_RSA_DECRYPT_OAEP_2048_SHA1:
+		hash = sha1.New()
+	case kmspb.CryptoKeyVersion_RSA_DECRYPT_OAEP_3072_SHA1:
+		hash = sha1.New()
+	case kmspb.CryptoKeyVersion_RSA_DECRYPT_OAEP_4096_SHA1:
+		hash = sha1.New()
+	default:
+		log.WithField("resourceID", key.ResourceID).WithField("algorithm", resp.GetAlgorithm().String()).Error("Unsupported algorithm")
+		return fmt.Errorf("Key with unsupported algorithm: %s", resp.GetAlgorithm().String())
+	}
+
+	ciphertext, err := rsa.EncryptOAEP(hash, rand.Reader, rsaKey, dataKey, nil)
+	if err != nil {
+		log.WithError(err).WithField("resourceID", key.ResourceID).Error("rsa.EncryptOAEP() error")
+		return fmt.Errorf("rsa.EncryptOAEP: %w", err)
+	}
+
+	// NB: base64 encoding is for compatibility with SOPS <=3.8.x.
+	// The previous GCP KMS client used to work with base64 encoded
+	// strings.
+	key.EncryptedKey = base64.StdEncoding.EncodeToString(ciphertext)
+	log.WithField("resourceID", key.ResourceID).Info("Asymmetric encryption succeeded")
 	return nil
 }
 
@@ -162,18 +278,51 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		return nil, err
 	}
 
+	ctx := context.Background()
+
+	purpose, err := key.purpose(ctx, service)
+	if err != nil {
+		return nil, err
+	}
+
+	switch purpose {
+	case kmspb.CryptoKey_ENCRYPT_DECRYPT:
+		return key.decryptSymmetric(ctx, service, decodedCipher)
+	case kmspb.CryptoKey_ASYMMETRIC_DECRYPT:
+		return key.decryptAsymmetric(ctx, service, decodedCipher)
+	default:
+		log.WithField("resourceID", key.ResourceID).WithField("purpose", purpose.String()).Info("This key cannot be used for decryption")
+		return nil, fmt.Errorf("This key cannot be used for decryption, purpose: %s", purpose.String())
+	}
+}
+
+func (key *MasterKey) decryptSymmetric(ctx context.Context, service *kms.KeyManagementClient, decodedCipher []byte) ([]byte, error) {
 	req := &kmspb.DecryptRequest{
 		Name:       key.ResourceID,
 		Ciphertext: decodedCipher,
 	}
-	ctx := context.Background()
 	resp, err := service.Decrypt(ctx, req)
 	if err != nil {
-		log.WithError(err).WithField("resourceID", key.ResourceID).Error("Decryption failed")
+		log.WithError(err).WithField("resourceID", key.ResourceID).Error("Symmetric decryption failed")
 		return nil, fmt.Errorf("failed to decrypt sops data key with GCP KMS key: %w", err)
 	}
 
-	log.WithField("resourceID", key.ResourceID).Info("Decryption succeeded")
+	log.WithField("resourceID", key.ResourceID).Info("Symmetric decryption succeeded")
+	return resp.Plaintext, nil
+}
+
+func (key *MasterKey) decryptAsymmetric(ctx context.Context, service *kms.KeyManagementClient, decodedCipher []byte) ([]byte, error) {
+	req := &kmspb.AsymmetricDecryptRequest{
+		Name:       key.ResourceID,
+		Ciphertext: decodedCipher,
+	}
+	resp, err := service.AsymmetricDecrypt(ctx, req)
+	if err != nil {
+		log.WithError(err).WithField("resourceID", key.ResourceID).Error("Asymmetric decryption failed")
+		return nil, fmt.Errorf("failed to decrypt sops data key with GCP KMS key: %w", err)
+	}
+
+	log.WithField("resourceID", key.ResourceID).Info("Asymmetric decryption succeeded")
 	return resp.Plaintext, nil
 }
 
@@ -201,7 +350,7 @@ func (key MasterKey) ToMap() map[string]interface{} {
 // It returns an error if the ResourceID is invalid, or if the setup of the
 // client fails.
 func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
-	re := regexp.MustCompile(`^projects/[^/]+/locations/[^/]+/keyRings/[^/]+/cryptoKeys/[^/]+$`)
+	re := regexp.MustCompile(`^projects/[^/]+/locations/[^/]+/keyRings/[^/]+/cryptoKeys/[^/]+(?:/cryptoKeyVersions/[^/]+)?$`)
 	matches := re.FindStringSubmatch(key.ResourceID)
 	if matches == nil {
 		return nil, fmt.Errorf("no valid resource ID found in %q", key.ResourceID)
@@ -216,8 +365,8 @@ func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
 		if err != nil {
 			return nil, err
 		}
-		if credentials != nil {
-			opts = append(opts, option.WithCredentialsJSON(key.credentialJSON))
+		if len(credentials) > 0 {
+			opts = append(opts, option.WithCredentialsJSON(credentials))
 		}
 	}
 	if key.grpcConn != nil {
@@ -243,4 +392,9 @@ func getGoogleCredentials() ([]byte, error) {
 		return os.ReadFile(defaultCredentials)
 	}
 	return []byte(defaultCredentials), nil
+}
+
+func crc32c(data []byte) uint32 {
+	t := crc32.MakeTable(crc32.Castagnoli)
+	return crc32.Checksum(data, t)
 }
