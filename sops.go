@@ -58,17 +58,24 @@ import (
 // DefaultUnencryptedSuffix is the default suffix a TreeItem key has to end with for sops to leave its Value unencrypted
 const DefaultUnencryptedSuffix = "_unencrypted"
 
-type sopsError string
+type SopsError struct {
+	exitCode int
+	message  string
+}
 
-func (e sopsError) Error() string {
-	return string(e)
+func (e SopsError) ExitCode() int {
+	return e.exitCode
+}
+
+func (e SopsError) Error() string {
+	return e.message
 }
 
 // MacMismatch occurs when the computed MAC does not match the expected ones
-const MacMismatch = sopsError("MAC mismatch")
+var MacMismatch = &SopsError{10, "MAC mismatch"}
 
 // MetadataNotFound occurs when the input file is malformed and doesn't have sops metadata in it
-const MetadataNotFound = sopsError("sops metadata not found")
+var MetadataNotFound = &SopsError{11, "sops metadata not found"}
 
 var log *logrus.Logger
 
