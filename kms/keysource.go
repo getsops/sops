@@ -194,7 +194,7 @@ func (c CredentialsProvider) ApplyToMasterKey(key *MasterKey) {
 func (key *MasterKey) Encrypt(dataKey []byte) error {
 	cfg, err := key.createKMSConfig()
 	if err != nil {
-		log.WithError(err).WithField("arn", key.Arn).Error("Encryption failed")
+		log.WithField("arn", key.Arn).Error("Encryption failed")
 		return err
 	}
 	client := kms.NewFromConfig(*cfg)
@@ -205,7 +205,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	}
 	out, err := client.Encrypt(context.TODO(), input)
 	if err != nil {
-		log.WithError(err).WithField("arn", key.Arn).Error("Encryption failed")
+		log.WithField("arn", key.Arn).Error("Encryption failed")
 		return fmt.Errorf("failed to encrypt sops data key with AWS KMS: %w", err)
 	}
 	key.EncryptedKey = base64.StdEncoding.EncodeToString(out.CiphertextBlob)
@@ -237,12 +237,12 @@ func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 func (key *MasterKey) Decrypt() ([]byte, error) {
 	k, err := base64.StdEncoding.DecodeString(key.EncryptedKey)
 	if err != nil {
-		log.WithError(err).WithField("arn", key.Arn).Error("Decryption failed")
+		log.WithField("arn", key.Arn).Error("Decryption failed")
 		return nil, fmt.Errorf("error base64-decoding encrypted data key: %s", err)
 	}
 	cfg, err := key.createKMSConfig()
 	if err != nil {
-		log.WithError(err).WithField("arn", key.Arn).Error("Decryption failed")
+		log.WithField("arn", key.Arn).Error("Decryption failed")
 		return nil, err
 	}
 	client := kms.NewFromConfig(*cfg)
@@ -253,7 +253,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	}
 	decrypted, err := client.Decrypt(context.TODO(), input)
 	if err != nil {
-		log.WithError(err).WithField("arn", key.Arn).Error("Decryption failed")
+		log.WithField("arn", key.Arn).Error("Decryption failed")
 		return nil, fmt.Errorf("failed to decrypt sops data key with AWS KMS: %w", err)
 	}
 	log.WithField("arn", key.Arn).Info("Decryption succeeded")
