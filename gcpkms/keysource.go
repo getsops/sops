@@ -217,7 +217,7 @@ func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
 			return nil, err
 		}
 		if credentials != nil {
-			opts = append(opts, option.WithCredentialsJSON(key.credentialJSON))
+			opts = append(opts, option.WithCredentialsJSON(credentials))
 		}
 	}
 	if key.grpcConn != nil {
@@ -238,9 +238,11 @@ func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
 // JSON format. It returns an error if the file cannot be read, and may return
 // a nil byte slice if no value is set.
 func getGoogleCredentials() ([]byte, error) {
-	defaultCredentials := os.Getenv(SopsGoogleCredentialsEnv)
-	if _, err := os.Stat(defaultCredentials); err == nil {
-		return os.ReadFile(defaultCredentials)
+	if defaultCredentials, ok := os.LookupEnv(SopsGoogleCredentialsEnv); ok && len(defaultCredentials) > 0 {
+		if _, err := os.Stat(defaultCredentials); err == nil {
+			return os.ReadFile(defaultCredentials)
+		}
+		return []byte(defaultCredentials), nil
 	}
-	return []byte(defaultCredentials), nil
+	return nil, nil
 }
