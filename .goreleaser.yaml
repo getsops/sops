@@ -1,0 +1,114 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+
+project_name: sops
+
+# xref: https://goreleaser.com/customization/build/
+builds:
+  - id: binary-linux
+    main: ./cmd/sops
+    # Specially crafted to ensure compatibility with release artifacts < v3.8.0.
+    binary: "{{ .ProjectName }}-{{ .Version }}.{{ .Os }}.{{ .Arch }}"
+    flags:
+      - -v
+      - -trimpath
+    ldflags:
+      - -s
+      - -w
+      - -X "go.mozilla.org/sops/v3/version.Version={{ .Version }}"
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    # Modified timestamp on the binary, set to ensure reproducible builds.
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+  - id: binary-darwin
+    main: ./cmd/sops
+    # Specially crafted to ensure compatibility with release artifacts < v3.8.0.
+    binary: "{{ .ProjectName }}-{{ .Version }}.{{ .Os }}.{{ .Arch }}"
+    flags:
+      - -v
+      - -trimpath
+    ldflags:
+      - -s
+      - -w
+      - -X "go.mozilla.org/sops/v3/version.Version={{ .Version }}"
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    # Modified timestamp on the binary, set to ensure reproducible builds.
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+  - id: binary-windows
+    main: ./cmd/sops
+    # Specially crafted to ensure compatibility with release artifacts < v3.8.0.
+    binary: "{{ .ProjectName }}-{{ .Version }}"
+    flags:
+      - -v
+      - -trimpath
+    ldflags:
+      - -s
+      - -w
+      - -X "go.mozilla.org/sops/v3/version.Version={{ .Version }}"
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - windows
+    goarch:
+      - amd64
+    # Modified timestamp on the binary, set to ensure reproducible builds.
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+# xref: https://goreleaser.com/customization/universalbinaries/
+universal_binaries:
+  - ids:
+      - binary-darwin
+    # Specially crafted to ensure compatibility with release artifacts < v3.8.0.
+    # Before v3.8.0, this used to be _just_ the AMD64 binary.
+    name_template: '{{ .ProjectName }}-{{ .Version }}.darwin'
+    replace: false
+
+# xref: https://goreleaser.com/customization/nfpm/
+nfpms:
+  - id: deb
+    package_name: '{{ .ProjectName }}'
+    file_name_template: '{{ .ConventionalFileName }}'
+    vendor: SOPS (Secret OPerationS) project
+    homepage: https://github.com/getsops/sops
+    maintainer: SOPS maintainers <cncf-SOPS-maintainers@lists.cncf.io>
+    description: Simple and flexible tool for managing secrets
+    license: MPL-2.0
+    formats:
+      - deb
+      - rpm
+
+# xref: https://goreleaser.com/customization/checksum/
+checksum:
+  name_template: "{{ .ProjectName }}-{{ .Version }}.checksums.txt"
+  algorithm: sha256
+  ids:
+    - binary-linux
+    - binary-darwin
+    - binary-windows
+
+# xref: https://goreleaser.com/customization/snapshots/
+snapshot:
+  name_template: "{{ incpatch .Version }}-dev-{{ .ShortCommit }}"
+
+# xref: https://goreleaser.com/customization/archive/#disable-archiving
+archives:
+  - format: binary
+
+# xref: https://goreleaser.com/customization/sbom/
+sboms:
+  - id: binary-sbom
+    artifacts: binary
+    documents:
+      - "${artifact}.spdx.sbom.json"
