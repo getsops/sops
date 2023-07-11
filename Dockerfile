@@ -1,7 +1,7 @@
 FROM golang:1.20
 
-COPY . /go/src/go.mozilla.org/sops
-WORKDIR /go/src/go.mozilla.org/sops
+COPY . /go/src/github.com/getsops/sops/v3
+WORKDIR /go/src/github.com/getsops/sops/v3
 
 RUN CGO_ENABLED=1 make install
 RUN apt-get update

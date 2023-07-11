@@ -12,7 +12,7 @@ import (
 	"filippo.io/age"
 	"filippo.io/age/armor"
 	"github.com/sirupsen/logrus"
-	"go.mozilla.org/sops/v3/logging"
+	"github.com/getsops/sops/v3/logging"
 )
 
 const (

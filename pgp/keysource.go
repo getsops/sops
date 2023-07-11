@@ -1,10 +1,10 @@
 /*
-Package pgp contains an implementation of the go.mozilla.org/sops/v3.MasterKey
+Package pgp contains an implementation of the github.com/getsops/sops/v3.MasterKey
 interface that encrypts and decrypts the data key by first trying with the
 github.com/ProtonMail/go-crypto/openpgp package and if that fails, by calling
 the "gpg" binary.
 */
-package pgp //import "go.mozilla.org/sops/v3/pgp"
+package pgp //import "github.com/getsops/sops/v3/pgp"
 
 import (
 	"bytes"
@@ -22,7 +22,7 @@ import (
 	"github.com/ProtonMail/go-crypto/openpgp/armor"
 	"github.com/sirupsen/logrus"
 	gpgagent "go.mozilla.org/gopgagent"
-	"go.mozilla.org/sops/v3/logging"
+	"github.com/getsops/sops/v3/logging"
 	"golang.org/x/term"
 )
 
