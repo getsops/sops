@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"go.mozilla.org/sops/v3"
+	"github.com/getsops/sops/v3"
 )
 
 var PLAIN = []byte(`---
