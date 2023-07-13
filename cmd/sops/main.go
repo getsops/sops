@@ -28,6 +28,7 @@ import (
 	publishcmd "go.mozilla.org/sops/v3/cmd/sops/subcommand/publish"
 	"go.mozilla.org/sops/v3/cmd/sops/subcommand/updatekeys"
 	"go.mozilla.org/sops/v3/config"
+	"go.mozilla.org/sops/v3/encrypt"
 	"go.mozilla.org/sops/v3/gcpkms"
 	"go.mozilla.org/sops/v3/hcvault"
 	"go.mozilla.org/sops/v3/keys"
@@ -144,7 +145,7 @@ func main() {
 				inputStore := inputStore(c, fileName)
 
 				svcs := keyservices(c)
-				opts := decryptOpts{
+				opts := DecryptOpts{
 					OutputStore: &dotenv.Store{},
 					InputStore:  inputStore,
 					InputPath:   fileName,
@@ -153,7 +154,7 @@ func main() {
 					IgnoreMAC:   c.Bool("ignore-mac"),
 				}
 
-				output, err := decrypt(opts)
+				output, err := Decrypt(opts)
 				if err != nil {
 					return toExitError(err)
 				}
@@ -212,7 +213,7 @@ func main() {
 				outputStore := outputStore(c, fileName)
 
 				svcs := keyservices(c)
-				opts := decryptOpts{
+				opts := DecryptOpts{
 					OutputStore: outputStore,
 					InputStore:  inputStore,
 					InputPath:   fileName,
@@ -221,7 +222,7 @@ func main() {
 					IgnoreMAC:   c.Bool("ignore-mac"),
 				}
 
-				output, err := decrypt(opts)
+				output, err := Decrypt(opts)
 				if err != nil {
 					return toExitError(err)
 				}
@@ -796,7 +797,7 @@ func main() {
 			if err != nil {
 				return toExitError(err)
 			}
-			output, err = encrypt(encryptOpts{
+			output, err = encrypt.Encrypt(encrypt.EncryptOpts{
 				OutputStore:       outputStore,
 				InputStore:        inputStore,
 				InputPath:         fileName,
@@ -817,7 +818,7 @@ func main() {
 			if err != nil {
 				return common.NewExitError(fmt.Errorf("error parsing --extract path: %s", err), codes.InvalidTreePathFormat)
 			}
-			output, err = decrypt(decryptOpts{
+			output, err = Decrypt(DecryptOpts{
 				OutputStore: outputStore,
 				InputStore:  inputStore,
 				InputPath:   fileName,
