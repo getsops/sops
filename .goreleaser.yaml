@@ -12,9 +12,9 @@ builds:
       - -v
       - -trimpath
     ldflags:
-      - -s
-      - -w
-      - -X "go.mozilla.org/sops/v3/version.Version={{ .Version }}"
+      - >
+        -extldflags "-static" -s -w
+        -X "go.mozilla.org/sops/v3/version.Version={{ .Version }}"
     env:
       - CGO_ENABLED=0
     goos:
@@ -33,9 +33,9 @@ builds:
       - -v
       - -trimpath
     ldflags:
-      - -s
-      - -w
-      - -X "go.mozilla.org/sops/v3/version.Version={{ .Version }}"
+      - >
+        -extldflags "-static" -s -w
+        -X "go.mozilla.org/sops/v3/version.Version={{ .Version }}"
     env:
       - CGO_ENABLED=0
     goos:
@@ -54,9 +54,9 @@ builds:
       - -v
       - -trimpath
     ldflags:
-      - -s
-      - -w
-      - -X "go.mozilla.org/sops/v3/version.Version={{ .Version }}"
+      - >
+        -extldflags "-static" -s -w
+        -X "go.mozilla.org/sops/v3/version.Version={{ .Version }}"
     env:
       - CGO_ENABLED=0
     goos:
@@ -112,3 +112,85 @@ sboms:
     artifacts: binary
     documents:
       - "${artifact}.spdx.sbom.json"
+
+# xref: https://goreleaser.com/customization/docker/
+dockers:
+  - image_templates:
+      - 'getsops/sops:{{ .Version }}-amd64'
+    use: buildx
+    goos: linux
+    goarch: amd64
+    ids:
+      - binary-linux
+    dockerfile: .release/Dockerfile
+    build_flag_templates:
+      - "--pull"
+      - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.name={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.source={{ .GitURL }}"
+
+  - image_templates:
+      - 'getsops/sops:{{ .Version }}-arm64'
+    use: buildx
+    goos: linux
+    goarch: arm64
+    ids:
+      - binary-linux
+    dockerfile: .release/Dockerfile
+    build_flag_templates:
+      - "--pull"
+      - "--platform=linux/arm64"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.name={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.source={{ .GitURL }}"
+
+  - image_templates:
+      - 'getsops/sops:{{ .Version }}-alpine-amd64'
+    use: buildx
+    goos: linux
+    goarch: amd64
+    ids:
+      - binary-linux
+    dockerfile: .release/alpine.Dockerfile
+    build_flag_templates:
+      - "--pull"
+      - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.name={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.source={{ .GitURL }}"
+
+  - image_templates:
+      - 'getsops/sops:{{ .Version }}-alpine-arm64'
+    use: buildx
+    goos: linux
+    goarch: arm64
+    ids:
+      - binary-linux
+    dockerfile: .release/alpine.Dockerfile
+    build_flag_templates:
+      - "--pull"
+      - "--platform=linux/arm64"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.name={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.source={{ .GitURL }}"
+
+# xref: https://goreleaser.com/customization/docker_manifest/
+docker_manifests:
+  - name_template: 'getsops/sops:{{ .Version }}'
+    image_templates:
+      - 'getsops/sops:{{ .Version }}-amd64'
+      - 'getsops/sops:{{ .Version }}-arm64'
+
+  - name_template: 'getsops/sops:{{ .Version }}-alpine'
+    image_templates:
+      - 'getsops/sops:{{ .Version }}-alpine-amd64'
+      - 'getsops/sops:{{ .Version }}-alpine-arm64'
