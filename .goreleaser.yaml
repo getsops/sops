@@ -113,6 +113,18 @@ sboms:
     documents:
       - "${artifact}.spdx.sbom.json"
 
+# xref: https://goreleaser.com/customization/sign/
+signs:
+  - cmd: cosign
+    certificate: "${artifact}.pem"
+    artifacts: checksum
+    args:
+      - "sign-blob"
+      - "--output-certificate=${certificate}"
+      - "--output-signature=${signature}"
+      - '${artifact}'
+      - "--yes"
+
 # xref: https://goreleaser.com/customization/docker/
 dockers:
   - image_templates:
@@ -194,3 +206,13 @@ docker_manifests:
     image_templates:
       - 'getsops/sops:{{ .Version }}-alpine-amd64'
       - 'getsops/sops:{{ .Version }}-alpine-arm64'
+
+# xref: https://goreleaser.com/customization/docker_sign/
+docker_signs:
+  - cmd: cosign
+    artifacts: all
+    output: true
+    args:
+      - "sign"
+      - "${artifact}@${digest}"
+      - "--yes"
