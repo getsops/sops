@@ -216,3 +216,9 @@ docker_signs:
       - "sign"
       - "${artifact}@${digest}"
       - "--yes"
+
+# xref: https://goreleaser.com/customization/changelog/
+changelog:
+  # xref: https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes#configuration-options
+  # xref: https://docs.github.com/en/free-pro-team@latest/rest/releases/releases?apiVersion=2022-11-28#generate-release-notes-content-for-a-release
+  use: github-native
