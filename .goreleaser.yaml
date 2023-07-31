@@ -2,6 +2,19 @@
 
 project_name: sops
 
+# xref: https://goreleaser.com/customization/hooks/
+before:
+  hooks:
+    - go mod download
+    - /usr/bin/env bash -c 'if [ -n "$(git --no-pager diff --exit-code go.mod go.sum)" ]; then exit 1; fi'
+
+# xref: https://goreleaser.com/customization/env/
+env:
+  - COSIGN_YES=true
+
+# xref: https://goreleaser.com/customization/reportsizes/
+report_sizes: true
+
 # xref: https://goreleaser.com/customization/build/
 builds:
   - id: binary-linux
@@ -123,7 +136,6 @@ signs:
       - "--output-certificate=${certificate}"
       - "--output-signature=${signature}"
       - '${artifact}'
-      - "--yes"
 
 # xref: https://goreleaser.com/customization/docker/
 dockers:
@@ -229,7 +241,6 @@ docker_signs:
     args:
       - "sign"
       - "${artifact}@${digest}"
-      - "--yes"
 
 # xref: https://goreleaser.com/customization/changelog/
 changelog:
