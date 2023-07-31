@@ -2,64 +2,65 @@ name: Release
 
 on:
   push:
-    tags:
-      - "v*"
+    tags: [ 'v*' ]
+
+permissions:
+  contents: read
 
 jobs:
-  tagged-release:
-    name: "Tagged Release"
+  release:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write # for creating the GitHub release.
+      id-token: write # for creating OIDC tokens for signing.
+      packages: write # for pushing and signing container images.
+
     steps:
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install git ruby rpm -y
-      - name: Install fpm
-        run: gem install fpm || sudo gem install fpm
-      - name: Set up Go 1.20
-        uses: actions/setup-go@v3
+      - name: Checkout
+        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+
+      - name: Unshallow clone for tags
+        run: git fetch --prune --unshallow --tags
+
+      - name: Setup Go
+        uses: actions/setup-go@fac708d6674e30b6ba41289acaab6d4b75aa0753 # v4.0.1
         with:
-          go-version: '1.20'
-        id: go
-      - name: Check out code into the Go module directory
-        uses: actions/checkout@v3
-      - name: Go vendor
-        run: go mod vendor
-      - name: Make release directory
-        run: mkdir dist
-      - name: Build deb and rpm
-        run: make deb-pkg rpm-pkg
-      - name: Move deb and rpm into release directory
-        run: mv *.deb *.rpm dist/
-      - name: Set RELEASE_VERSION
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-      - name: Set RELEASE_NUMBER
-        run: echo "RELEASE_NUMBER=$(echo $RELEASE_VERSION | cut -c2-)" >> $GITHUB_ENV
-      - name: Build linux amd64 binary
-        run: GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.linux.amd64 github.com/getsops/sops/v3/cmd/sops && cp dist/sops-${{ env.RELEASE_VERSION }}.linux.amd64 dist/sops-${{ env.RELEASE_VERSION }}.linux
-      - name: Build linux arm64 binary
-        run: GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.linux.arm64 github.com/getsops/sops/v3/cmd/sops
-      - name: Build darwin amd64 binary
-        run: GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.darwin.amd64 github.com/getsops/sops/v3/cmd/sops
-      - name: Copy darwin amd64 to have a no-architecture labeled version
-        run: cp dist/sops-${{ env.RELEASE_VERSION }}.darwin.amd64 dist/sops-${{ env.RELEASE_VERSION }}.darwin
-      - name: Build darwin arm64 binary
-        run: GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.darwin.arm64 github.com/getsops/sops/v3/cmd/sops
-      - name: Build windows binary
-        run: GOOS=windows CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.exe github.com/getsops/sops/v3/cmd/sops
-      - name: Create release
-        uses: "mozilla/action-automatic-releases@latest"
+          go-version: 1.20.x
+          cache-dependency-path: |
+            **/go.sum
+            **/go.mod
+
+      - name: Setup Syft
+        uses: anchore/sbom-action/download-syft@78fc58e266e87a38d4194b2137a3d4e9bcaf7ca1 # v0.14.3
+
+      - name: Setup Cosign
+        uses: sigstore/cosign-installer@6e04d228eb30da1757ee4e1dd75a0ec73a653e06 # v3.1.1
+
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@2b82ce82d56a2a04d2637cd93a637ae1b359c0a7 # v2.2.0
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@4c0219f9ac95b02789c1075625400b2acbff50b1 # v2.9.1
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@465a07811f14bebb1938fbed4728c6a1ff8901fc # v2.2.0
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: true
-          files: |
-            dist/sops-${{ env.RELEASE_VERSION }}.exe
-            dist/sops-${{ env.RELEASE_VERSION }}.darwin.amd64
-            dist/sops-${{ env.RELEASE_VERSION }}.darwin.arm64
-            dist/sops-${{ env.RELEASE_VERSION }}.darwin
-            dist/sops-${{ env.RELEASE_VERSION }}.linux.amd64
-            dist/sops-${{ env.RELEASE_VERSION }}.linux.arm64
-            dist/sops-${{ env.RELEASE_VERSION }}.linux
-            dist/sops_${{ env.RELEASE_NUMBER }}_amd64.deb
-            dist/sops_${{ env.RELEASE_NUMBER }}_arm64.deb
-            dist/sops-${{ env.RELEASE_NUMBER }}-1.x86_64.rpm
-            dist/sops-${{ env.RELEASE_NUMBER }}-1.aarch64.rpm
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Login to Quay.io
+        uses: docker/login-action@465a07811f14bebb1938fbed4728c6a1ff8901fc # v2.2.0
+        with:
+          registry: quay.io
+          username: ${{ secrets.QUAY_BOT_USERNAME }}
+          password: ${{ secrets.QUAY_BOT_TOKEN }}
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@336e29918d653399e599bfca99fadc1d7ffbc9f7 # v4.3.0
+        with:
+          version: latest
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
