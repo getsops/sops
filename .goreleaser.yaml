@@ -80,7 +80,7 @@ nfpms:
   - id: deb
     package_name: '{{ .ProjectName }}'
     file_name_template: '{{ .ConventionalFileName }}'
-    vendor: SOPS (Secret OPerationS) project
+    vendor: CNCF SOPS
     homepage: https://github.com/getsops/sops
     maintainer: SOPS maintainers <cncf-SOPS-maintainers@lists.cncf.io>
     description: Simple and flexible tool for managing secrets
@@ -128,7 +128,8 @@ signs:
 # xref: https://goreleaser.com/customization/docker/
 dockers:
   - image_templates:
-      - 'getsops/sops:{{ .Version }}-amd64'
+      - 'ghcr.io/getsops/sops:{{ .Version }}-amd64'
+      - 'quay.io/getsops/sops:{{ .Version }}-amd64'
     use: buildx
     goos: linux
     goarch: amd64
@@ -145,7 +146,8 @@ dockers:
       - "--label=org.opencontainers.image.source={{ .GitURL }}"
 
   - image_templates:
-      - 'getsops/sops:{{ .Version }}-arm64'
+      - 'ghcr.io/getsops/sops:{{ .Version }}-arm64'
+      - 'quay.io/getsops/sops:{{ .Version }}-arm64'
     use: buildx
     goos: linux
     goarch: arm64
@@ -162,7 +164,8 @@ dockers:
       - "--label=org.opencontainers.image.source={{ .GitURL }}"
 
   - image_templates:
-      - 'getsops/sops:{{ .Version }}-alpine-amd64'
+      - 'ghcr.io/getsops/sops:{{ .Version }}-alpine-amd64'
+      - 'quay.io/getsops/sops:{{ .Version }}-alpine-amd64'
     use: buildx
     goos: linux
     goarch: amd64
@@ -179,7 +182,8 @@ dockers:
       - "--label=org.opencontainers.image.source={{ .GitURL }}"
 
   - image_templates:
-      - 'getsops/sops:{{ .Version }}-alpine-arm64'
+      - 'ghcr.io/getsops/sops:{{ .Version }}-alpine-arm64'
+      - 'quay.io/getsops/sops:{{ .Version }}-alpine-arm64'
     use: buildx
     goos: linux
     goarch: arm64
@@ -197,15 +201,25 @@ dockers:
 
 # xref: https://goreleaser.com/customization/docker_manifest/
 docker_manifests:
-  - name_template: 'getsops/sops:{{ .Version }}'
+  - name_template: 'ghcr.io/getsops/sops:{{ .Version }}'
     image_templates:
-      - 'getsops/sops:{{ .Version }}-amd64'
-      - 'getsops/sops:{{ .Version }}-arm64'
+      - 'ghcr.io/getsops/sops:{{ .Version }}-amd64'
+      - 'ghcr.io/getsops/sops:{{ .Version }}-arm64'
 
-  - name_template: 'getsops/sops:{{ .Version }}-alpine'
+  - name_template: 'ghcr.io/getsops/sops:{{ .Version }}-alpine'
     image_templates:
-      - 'getsops/sops:{{ .Version }}-alpine-amd64'
-      - 'getsops/sops:{{ .Version }}-alpine-arm64'
+      - 'ghcr.io/getsops/sops:{{ .Version }}-alpine-amd64'
+      - 'ghcr.io/getsops/sops:{{ .Version }}-alpine-arm64'
+
+  - name_template: 'quay.io/getsops/sops:{{ .Version }}'
+    image_templates:
+      - 'quay.io/getsops/sops:{{ .Version }}-amd64'
+      - 'quay.io/getsops/sops:{{ .Version }}-arm64'
+
+  - name_template: 'quay.io/getsops/sops:{{ .Version }}-alpine'
+    image_templates:
+      - 'quay.io/getsops/sops:{{ .Version }}-alpine-amd64'
+      - 'quay.io/getsops/sops:{{ .Version }}-alpine-arm64'
 
 # xref: https://goreleaser.com/customization/docker_sign/
 docker_signs:
