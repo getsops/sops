@@ -22,7 +22,7 @@ builds:
   - id: binary-linux
     main: ./cmd/sops
     # Specially crafted to ensure compatibility with release artifacts < v3.8.0.
-    binary: "{{ .ProjectName }}-{{ .Version }}.{{ .Os }}.{{ .Arch }}"
+    binary: "{{ .ProjectName }}"
     flags:
       - -v
       - -trimpath
@@ -43,7 +43,7 @@ builds:
   - id: binary-darwin
     main: ./cmd/sops
     # Specially crafted to ensure compatibility with release artifacts < v3.8.0.
-    binary: "{{ .ProjectName }}-{{ .Version }}.{{ .Os }}.{{ .Arch }}"
+    binary: "{{ .ProjectName }}"
     flags:
       - -v
       - -trimpath
@@ -62,7 +62,7 @@ builds:
   - id: binary-windows
     main: ./cmd/sops
     # Specially crafted to ensure compatibility with release artifacts < v3.8.0.
-    binary: "{{ .ProjectName }}-{{ .Version }}"
+    binary: "{{ .ProjectName }}"
     flags:
       - -v
       - -trimpath
@@ -79,12 +79,16 @@ builds:
 
 # xref: https://goreleaser.com/customization/universalbinaries/
 universal_binaries:
-  - ids:
+  - id: binary-darwin-universal
+    ids:
       - binary-darwin
-    # Specially crafted to ensure compatibility with release artifacts < v3.8.0.
-    # Before v3.8.0, this used to be _just_ the AMD64 binary.
-    name_template: '{{ .ProjectName }}-{{ .Version }}.darwin'
+    name_template: '{{ .ProjectName }}'
+    # We want to continue to ship individual binaries for darwin/amd64 and
+    # darwin/arm64.
     replace: false
+    # Modified timestamp on the binary, set to ensure reproducible builds.
+    # NB: Available in (unreleased) GoReleaser >=1.20.0.
+    # mod_timestamp: "{{ .CommitTimestamp }}"
 
 # xref: https://goreleaser.com/customization/nfpm/
 nfpms:
@@ -106,29 +110,43 @@ snapshot:
 
 # xref: https://goreleaser.com/customization/archive/#disable-archiving
 archives:
-  - id: binaries
+  - id: archive-unix
     format: binary
     builds:
       - binary-linux
       - binary-darwin
+    # NB: specifically crafted to ensure compatibility with release artifacts < v3.8.0.
+    name_template: '{{ .ProjectName }}-{{ .Version }}.{{ .Os }}.{{ .Arch }}'
+  - id: archive-windows
+    format: binary
+    builds:
       - binary-windows
-    # NB: Binaries already have unique names to ensure compatibility with
-    # release artifacts < v3.8.0.
-    name_template: "{{ .Binary }}"
+    # NB: specifically crafted to ensure compatibility with release artifacts < v3.8.0.
+    name_template: '{{ .ProjectName }}-{{ .Version }}'
+  - id: archive-darwin-universal
+    format: binary
+    builds:
+      - binary-darwin-universal
+    # NB: specifically crafted to ensure compatibility with release artifacts < v3.8.0.
+    # We can't bundle this with the other unix archive, because .Arch becomes "all".
+    # Before v3.8.0, this used to be _just_ the AMD64 binary.
+    name_template: '{{ .ProjectName }}-{{ .Version }}.darwin'
 
 # xref: https://goreleaser.com/customization/checksum/
 checksum:
   name_template: "{{ .ProjectName }}-{{ .Version }}.checksums.txt"
   algorithm: sha256
   ids:
-    - binaries
+    - archive-unix
+    - archive-windows
+    - archive-darwin-universal
 
 # xref: https://goreleaser.com/customization/sbom/
 sboms:
   - id: binary-sbom
     artifacts: binary
     documents:
-      - "${artifact}.spdx.sbom.json"
+      - "{{ .ArtifactName }}.spdx.sbom.json"
 
 # xref: https://goreleaser.com/customization/sign/
 signs:
