@@ -10,6 +10,8 @@ before:
 
 # xref: https://goreleaser.com/customization/env/
 env:
+  - CGO_ENABLED=0
+  - PKG=github.com/getsops/sops/v3/version
   - COSIGN_YES=true
 
 # xref: https://goreleaser.com/customization/reportsizes/
@@ -27,7 +29,7 @@ builds:
     ldflags:
       - >
         -extldflags "-static" -s -w
-        -X "go.mozilla.org/sops/v3/version.Version={{ .Version }}"
+        -X {{ .Env.PKG }}.Version={{ .Version }}"
     env:
       - CGO_ENABLED=0
     goos:
@@ -48,9 +50,7 @@ builds:
     ldflags:
       - >
         -extldflags "-static" -s -w
-        -X "go.mozilla.org/sops/v3/version.Version={{ .Version }}"
-    env:
-      - CGO_ENABLED=0
+        -X {{ .Env.PKG }}.Version={{ .Version }}
     goos:
       - darwin
     goarch:
@@ -69,9 +69,7 @@ builds:
     ldflags:
       - >
         -extldflags "-static" -s -w
-        -X "go.mozilla.org/sops/v3/version.Version={{ .Version }}"
-    env:
-      - CGO_ENABLED=0
+        -X {{ .Env.PKG }}.Version={{ .Version }}
     goos:
       - windows
     goarch:
@@ -94,7 +92,7 @@ nfpms:
     package_name: '{{ .ProjectName }}'
     file_name_template: '{{ .ConventionalFileName }}'
     vendor: CNCF SOPS
-    homepage: https://github.com/getsops/sops
+    homepage: https://github.com/{{ .Env.GITHUB_REPOSITORY }}
     maintainer: SOPS maintainers <cncf-SOPS-maintainers@lists.cncf.io>
     description: Simple and flexible tool for managing secrets
     license: MPL-2.0
@@ -102,22 +100,28 @@ nfpms:
       - deb
       - rpm
 
-# xref: https://goreleaser.com/customization/checksum/
-checksum:
-  name_template: "{{ .ProjectName }}-{{ .Version }}.checksums.txt"
-  algorithm: sha256
-  ids:
-    - binary-linux
-    - binary-darwin
-    - binary-windows
-
 # xref: https://goreleaser.com/customization/snapshots/
 snapshot:
   name_template: "{{ incpatch .Version }}-dev-{{ .ShortCommit }}"
 
 # xref: https://goreleaser.com/customization/archive/#disable-archiving
 archives:
-  - format: binary
+  - id: binaries
+    format: binary
+    builds:
+      - binary-linux
+      - binary-darwin
+      - binary-windows
+    # NB: Binaries already have unique names to ensure compatibility with
+    # release artifacts < v3.8.0.
+    name_template: "{{ .Binary }}"
+
+# xref: https://goreleaser.com/customization/checksum/
+checksum:
+  name_template: "{{ .ProjectName }}-{{ .Version }}.checksums.txt"
+  algorithm: sha256
+  ids:
+    - binaries
 
 # xref: https://goreleaser.com/customization/sbom/
 sboms:
@@ -129,19 +133,23 @@ sboms:
 # xref: https://goreleaser.com/customization/sign/
 signs:
   - cmd: cosign
-    certificate: "${artifact}.pem"
     artifacts: checksum
+    signature: "${artifact}.sig"
+    certificate: "${artifact}.pem"
     args:
       - "sign-blob"
-      - "--output-certificate=${certificate}"
-      - "--output-signature=${signature}"
-      - '${artifact}'
+      - "--output-signature"
+      - "${artifact}.sig"
+      - "--output-certificate"
+      - "${artifact}.pem"
+      - "${artifact}"
+    output: true
 
 # xref: https://goreleaser.com/customization/docker/
 dockers:
   - image_templates:
-      - 'ghcr.io/getsops/sops:{{ .Version }}-amd64'
-      - 'quay.io/getsops/sops:{{ .Version }}-amd64'
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:{{ .Version }}-amd64'
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:{{ .Version }}-amd64'
     use: buildx
     goos: linux
     goarch: amd64
@@ -158,8 +166,8 @@ dockers:
       - "--label=org.opencontainers.image.source={{ .GitURL }}"
 
   - image_templates:
-      - 'ghcr.io/getsops/sops:{{ .Version }}-arm64'
-      - 'quay.io/getsops/sops:{{ .Version }}-arm64'
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:{{ .Version }}-arm64'
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:{{ .Version }}-arm64'
     use: buildx
     goos: linux
     goarch: arm64
@@ -176,8 +184,8 @@ dockers:
       - "--label=org.opencontainers.image.source={{ .GitURL }}"
 
   - image_templates:
-      - 'ghcr.io/getsops/sops:{{ .Version }}-alpine-amd64'
-      - 'quay.io/getsops/sops:{{ .Version }}-alpine-amd64'
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:{{ .Version }}-alpine-amd64'
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:{{ .Version }}-alpine-amd64'
     use: buildx
     goos: linux
     goarch: amd64
@@ -194,8 +202,8 @@ dockers:
       - "--label=org.opencontainers.image.source={{ .GitURL }}"
 
   - image_templates:
-      - 'ghcr.io/getsops/sops:{{ .Version }}-alpine-arm64'
-      - 'quay.io/getsops/sops:{{ .Version }}-alpine-arm64'
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:{{ .Version }}-alpine-arm64'
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:{{ .Version }}-alpine-arm64'
     use: buildx
     goos: linux
     goarch: arm64
@@ -213,25 +221,25 @@ dockers:
 
 # xref: https://goreleaser.com/customization/docker_manifest/
 docker_manifests:
-  - name_template: 'ghcr.io/getsops/sops:{{ .Version }}'
+  - name_template: 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:{{ .Version }}'
     image_templates:
-      - 'ghcr.io/getsops/sops:{{ .Version }}-amd64'
-      - 'ghcr.io/getsops/sops:{{ .Version }}-arm64'
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:{{ .Version }}-amd64'
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:{{ .Version }}-arm64'
 
-  - name_template: 'ghcr.io/getsops/sops:{{ .Version }}-alpine'
+  - name_template: 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:{{ .Version }}-alpine'
     image_templates:
-      - 'ghcr.io/getsops/sops:{{ .Version }}-alpine-amd64'
-      - 'ghcr.io/getsops/sops:{{ .Version }}-alpine-arm64'
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:{{ .Version }}-alpine-amd64'
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:{{ .Version }}-alpine-arm64'
 
-  - name_template: 'quay.io/getsops/sops:{{ .Version }}'
+  - name_template: 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:{{ .Version }}'
     image_templates:
-      - 'quay.io/getsops/sops:{{ .Version }}-amd64'
-      - 'quay.io/getsops/sops:{{ .Version }}-arm64'
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:{{ .Version }}-amd64'
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:{{ .Version }}-arm64'
 
-  - name_template: 'quay.io/getsops/sops:{{ .Version }}-alpine'
+  - name_template: 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:{{ .Version }}-alpine'
     image_templates:
-      - 'quay.io/getsops/sops:{{ .Version }}-alpine-amd64'
-      - 'quay.io/getsops/sops:{{ .Version }}-alpine-arm64'
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:{{ .Version }}-alpine-amd64'
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:{{ .Version }}-alpine-arm64'
 
 # xref: https://goreleaser.com/customization/docker_sign/
 docker_signs:
@@ -240,6 +248,10 @@ docker_signs:
     output: true
     args:
       - "sign"
+      - "-a"
+      - "GIT_SHA={{ .FullCommit }}"
+      - "-a"
+      - "GIT_TAG={{ .Tag }}"
       - "${artifact}@${digest}"
 
 # xref: https://goreleaser.com/customization/changelog/
