@@ -6,7 +6,6 @@ project_name: sops
 before:
   hooks:
     - go mod download
-    - /usr/bin/env bash -c 'if [ -n "$(git --no-pager diff --exit-code go.mod go.sum)" ]; then exit 1; fi'
 
 # xref: https://goreleaser.com/customization/env/
 env:
@@ -21,17 +20,14 @@ report_sizes: true
 builds:
   - id: binary-linux
     main: ./cmd/sops
-    # Specially crafted to ensure compatibility with release artifacts < v3.8.0.
     binary: "{{ .ProjectName }}"
     flags:
-      - -v
       - -trimpath
+      - -mod=readonly
     ldflags:
       - >
-        -extldflags "-static" -s -w
+        -s -w
         -X {{ .Env.PKG }}.Version={{ .Version }}"
-    env:
-      - CGO_ENABLED=0
     goos:
       - linux
     goarch:
@@ -42,14 +38,13 @@ builds:
 
   - id: binary-darwin
     main: ./cmd/sops
-    # Specially crafted to ensure compatibility with release artifacts < v3.8.0.
     binary: "{{ .ProjectName }}"
     flags:
-      - -v
       - -trimpath
+      - -mod=readonly
     ldflags:
       - >
-        -extldflags "-static" -s -w
+        -s -w
         -X {{ .Env.PKG }}.Version={{ .Version }}
     goos:
       - darwin
@@ -61,14 +56,14 @@ builds:
 
   - id: binary-windows
     main: ./cmd/sops
-    # Specially crafted to ensure compatibility with release artifacts < v3.8.0.
     binary: "{{ .ProjectName }}"
     flags:
-      - -v
       - -trimpath
+      - -buildmode=pie
+      - -mod=readonly
     ldflags:
       - >
-        -extldflags "-static" -s -w
+        -s -w
         -X {{ .Env.PKG }}.Version={{ .Version }}
     goos:
       - windows
@@ -117,12 +112,14 @@ archives:
       - binary-darwin
     # NB: specifically crafted to ensure compatibility with release artifacts < v3.8.0.
     name_template: '{{ .ProjectName }}-{{ .Version }}.{{ .Os }}.{{ .Arch }}'
+
   - id: archive-windows
     format: binary
     builds:
       - binary-windows
     # NB: specifically crafted to ensure compatibility with release artifacts < v3.8.0.
     name_template: '{{ .ProjectName }}-{{ .Version }}'
+
   - id: archive-darwin-universal
     format: binary
     builds:
