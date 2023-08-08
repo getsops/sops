@@ -111,14 +111,14 @@ archives:
       - binary-linux
       - binary-darwin
     # NB: specifically crafted to ensure compatibility with release artifacts < v3.8.0.
-    name_template: '{{ .ProjectName }}-{{ .Version }}.{{ .Os }}.{{ .Arch }}'
+    name_template: '{{ .ProjectName }}-v{{ .Version }}.{{ .Os }}.{{ .Arch }}'
 
   - id: archive-windows
     format: binary
     builds:
       - binary-windows
     # NB: specifically crafted to ensure compatibility with release artifacts < v3.8.0.
-    name_template: '{{ .ProjectName }}-{{ .Version }}'
+    name_template: '{{ .ProjectName }}-v{{ .Version }}'
 
   - id: archive-darwin-universal
     format: binary
@@ -127,11 +127,11 @@ archives:
     # NB: specifically crafted to ensure compatibility with release artifacts < v3.8.0.
     # We can't bundle this with the other unix archive, because .Arch becomes "all".
     # Before v3.8.0, this used to be _just_ the AMD64 binary.
-    name_template: '{{ .ProjectName }}-{{ .Version }}.darwin'
+    name_template: '{{ .ProjectName }}-v{{ .Version }}.darwin'
 
 # xref: https://goreleaser.com/customization/checksum/
 checksum:
-  name_template: "{{ .ProjectName }}-{{ .Version }}.checksums.txt"
+  name_template: "{{ .ProjectName }}-v{{ .Version }}.checksums.txt"
   algorithm: sha256
   ids:
     - archive-unix
