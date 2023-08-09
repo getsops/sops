@@ -32,9 +32,7 @@ jobs:
         uses: actions/setup-go@fac708d6674e30b6ba41289acaab6d4b75aa0753 # v4.0.1
         with:
           go-version: 1.20.x
-          cache-dependency-path: |
-            **/go.sum
-            **/go.mod
+          cache: false
 
       - name: Setup Syft
         uses: anchore/sbom-action/download-syft@78fc58e266e87a38d4194b2137a3d4e9bcaf7ca1 # v0.14.3
