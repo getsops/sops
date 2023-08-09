@@ -149,14 +149,14 @@ sboms:
 signs:
   - cmd: cosign
     artifacts: checksum
-    signature: "${artifact}.sig"
-    certificate: "${artifact}.pem"
+    signature: '{{ trimsuffix .Env.artifact ".txt" }}.sig'
+    certificate: '{{ trimsuffix .Env.artifact ".txt" }}.pem'
     args:
       - "sign-blob"
       - "--output-signature"
-      - "${artifact}.sig"
+      - "${signature}"
       - "--output-certificate"
-      - "${artifact}.pem"
+      - "${certificate}"
       - "${artifact}"
     output: true
 
