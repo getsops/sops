@@ -6,7 +6,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	vault "github.com/hashicorp/vault/api"
-	"go.mozilla.org/sops/v3/logging"
+	"github.com/getsops/sops/v3/logging"
 
 	"github.com/sirupsen/logrus"
 )

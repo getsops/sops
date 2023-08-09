@@ -1,4 +1,4 @@
-package json //import "go.mozilla.org/sops/v3/stores/json"
+package json //import "github.com/getsops/sops/v3/stores/json"
 
 import (
 	"bytes"
@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"io"
 
-	"go.mozilla.org/sops/v3"
-	"go.mozilla.org/sops/v3/stores"
+	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/stores"
 )
 
 // Store handles storage of JSON data.

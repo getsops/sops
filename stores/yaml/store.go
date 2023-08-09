@@ -1,4 +1,4 @@
-package yaml //import "go.mozilla.org/sops/v3/stores/yaml"
+package yaml //import "github.com/getsops/sops/v3/stores/yaml"
 
 import (
 	"bytes"
@@ -7,8 +7,8 @@ import (
 	"strings"
 
 	"gopkg.in/yaml.v3"
-	"go.mozilla.org/sops/v3"
-	"go.mozilla.org/sops/v3/stores"
+	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/stores"
 )
 
 // Store handles storage of YAML data

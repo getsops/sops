@@ -35,17 +35,17 @@ jobs:
       - name: Set RELEASE_NUMBER
         run: echo "RELEASE_NUMBER=$(echo $RELEASE_VERSION | cut -c2-)" >> $GITHUB_ENV
       - name: Build linux amd64 binary
-        run: GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.linux.amd64 go.mozilla.org/sops/v3/cmd/sops && cp dist/sops-${{ env.RELEASE_VERSION }}.linux.amd64 dist/sops-${{ env.RELEASE_VERSION }}.linux
+        run: GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.linux.amd64 github.com/getsops/sops/v3/cmd/sops && cp dist/sops-${{ env.RELEASE_VERSION }}.linux.amd64 dist/sops-${{ env.RELEASE_VERSION }}.linux
       - name: Build linux arm64 binary
-        run: GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.linux.arm64 go.mozilla.org/sops/v3/cmd/sops
+        run: GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.linux.arm64 github.com/getsops/sops/v3/cmd/sops
       - name: Build darwin amd64 binary
-        run: GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.darwin.amd64 go.mozilla.org/sops/v3/cmd/sops
+        run: GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.darwin.amd64 github.com/getsops/sops/v3/cmd/sops
       - name: Copy darwin amd64 to have a no-architecture labeled version
         run: cp dist/sops-${{ env.RELEASE_VERSION }}.darwin.amd64 dist/sops-${{ env.RELEASE_VERSION }}.darwin
       - name: Build darwin arm64 binary
-        run: GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.darwin.arm64 go.mozilla.org/sops/v3/cmd/sops
+        run: GOOS=darwin GOARCH=arm64 CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.darwin.arm64 github.com/getsops/sops/v3/cmd/sops
       - name: Build windows binary
-        run: GOOS=windows CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.exe go.mozilla.org/sops/v3/cmd/sops
+        run: GOOS=windows CGO_ENABLED=0 go build -mod vendor -o dist/sops-${{ env.RELEASE_VERSION }}.exe github.com/getsops/sops/v3/cmd/sops
       - name: Create release
         uses: "mozilla/action-automatic-releases@latest"
         with:

@@ -2,8 +2,8 @@ FROM golang:1.20-alpine3.18 AS builder
 
 RUN apk --no-cache add make
 
-COPY . /go/src/go.mozilla.org/sops
-WORKDIR /go/src/go.mozilla.org/sops
+COPY . /go/src/github.com/getsops/sops/v3
+WORKDIR /go/src/github.com/getsops/sops/v3
 
 RUN CGO_ENABLED=1 make install
 

@@ -1,4 +1,4 @@
-package gcpkms // import "go.mozilla.org/sops/v3/gcpkms"
+package gcpkms // import "github.com/getsops/sops/v3/gcpkms"
 
 import (
 	"context"
@@ -15,7 +15,7 @@ import (
 	kmspb "google.golang.org/genproto/googleapis/cloud/kms/v1"
 	"google.golang.org/grpc"
 
-	"go.mozilla.org/sops/v3/logging"
+	"github.com/getsops/sops/v3/logging"
 )
 
 const (

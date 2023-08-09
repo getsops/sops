@@ -5,9 +5,9 @@ import (
 
 	"fmt"
 
-	"go.mozilla.org/sops/v3"
-	"go.mozilla.org/sops/v3/cmd/sops/common"
-	"go.mozilla.org/sops/v3/keyservice"
+	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/cmd/sops/common"
+	"github.com/getsops/sops/v3/keyservice"
 )
 
 // DeleteOpts are the options for deleting a key group from a SOPS file

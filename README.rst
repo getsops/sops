@@ -9,8 +9,8 @@ formats and encrypts with AWS KMS, GCP KMS, Azure Key Vault, age, and PGP.
 
 ------------
 
-.. image:: https://pkg.go.dev/badge/go.mozilla.org/sops/v3.svg
-	:target: https://pkg.go.dev/go.mozilla.org/sops/v3
+.. image:: https://pkg.go.dev/badge/github.com/getsops/sops/v3.svg
+	:target: https://pkg.go.dev/github.com/getsops/sops/v3
 
 Download
 --------
@@ -25,9 +25,9 @@ For the adventurous, unstable features are available in the `develop` branch, wh
 
 .. code:: bash
 
-	$ mkdir -p $GOPATH/src/go.mozilla.org/sops/
-        $ git clone https://github.com/mozilla/sops.git $GOPATH/src/go.mozilla.org/sops/
-        $ cd $GOPATH/src/go.mozilla.org/sops/
+	$ mkdir -p $GOPATH/src/github.com/getsops/sops/v3/
+        $ git clone https://github.com/mozilla/sops.git $GOPATH/src/github.com/getsops/sops/v3/
+        $ cd $GOPATH/src/github.com/getsops/sops/v3/
         $ git checkout develop
         $ make install
 
@@ -44,7 +44,7 @@ If you don't have Go installed, set it up with:
 
 Or whatever variation of the above fits your system and shell.
 
-To use **sops** as a library, take a look at the `decrypt package <https://pkg.go.dev/go.mozilla.org/sops/v3/decrypt>`_.
+To use **sops** as a library, take a look at the `decrypt package <https://pkg.go.dev/github.com/getsops/sops/v3/decrypt>`_.
 
 .. sectnum::
 .. contents:: Table of Contents
