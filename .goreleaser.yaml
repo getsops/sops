@@ -275,9 +275,68 @@ changelog:
 release:
   prerelease: auto
   header: |
-    ## Container images
+    ## Installation
 
-    Supported architectures: `linux/amd64` and `linux/arm64`.
+    To install `{{ .ProjectName }}`, download one of the pre-built binaries provided for your platform from the artifacts attached to this release.
+
+    For instance, if you are using Linux on an AMD64 architecture:
+
+    ```shell
+    # Download the binary
+    curl -LO https://github.com/{{ .Env.GITHUB_REPOSITORY }}/releases/download/{{ .Tag }}/{{ .ProjectName }}-v{{ .Version }}.linux.amd64
+
+    # Move the binary in to your PATH
+    mv {{ .ProjectName }}-v{{ .Version }}.linux.amd64 /usr/local/bin/{{ .ProjectName }}
+
+    # Make the binary executable
+    chmod +x /usr/local/bin/{{ .ProjectName }}
+    ```
+
+    ### Verify checksums file signature
+
+    The checksums file provided within the artifacts attached to this release is signed using [Cosign](https://docs.sigstore.dev/cosign/overview/) with GitHub OIDC. To validate the signature of this file, run the following commands:
+
+    ```shell
+    # Download the checksums file, certificate and signature
+    curl -LO https://github.com/{{ .Env.GITHUB_REPOSITORY }}/releases/download/{{ .Tag }}/{{ .ProjectName }}-v{{ .Version }}.checksums.txt
+    curl -LO https://github.com/{{ .Env.GITHUB_REPOSITORY }}/releases/download/{{ .Tag }}/{{ .ProjectName }}-v{{ .Version }}.checksums.pem
+    curl -LO https://github.com/{{ .Env.GITHUB_REPOSITORY }}/releases/download/{{ .Tag }}/{{ .ProjectName }}-v{{ .Version }}.checksums.sig
+
+    # Verify the checksums file
+    cosign verify-blob {{ .ProjectName }}-v{{ .Version }}.checksums.txt \
+      --certificate {{ .ProjectName }}-v{{ .Version }}.checksums.pem \
+      --signature {{ .ProjectName }}-v{{ .Version }}.checksums.sig \
+      --certificate-identity-regexp=https://github.com/{{ .Env.GITHUB_REPOSITORY_OWNER }} \
+      --certificate-oidc-issuer=https://token.actions.githubusercontent.com
+    ```
+
+    ### Verify binary integrity
+
+    To verify the integrity of the downloaded binary, you can utilize the checksums file after having validated its signature:
+
+    ```shell
+    # Verify the binary using the checksums file
+    sha256sum -c {{ .ProjectName }}-v{{ .Version }}.checksums.txt --ignore-missing
+    ```
+
+    ### Verify artifact provenance
+
+    The [SLSA provenance](https://slsa.dev/provenance/v0.2) of the binaries, packages, and SBOMs can be found within the artifacts associated with this release. It is presented through an [in-toto](https://in-toto.io/) link metadata file named `provenance.intoto.jsonl`. To verify the provenance of an artifact, you can utilize the [`slsa-verifier`](https://github.com/slsa-framework/slsa-verifier#artifacts) tool:
+
+    ```shell
+    # Download the metadata file
+    curl -LO  https://github.com/{{ .Env.GITHUB_REPOSITORY }}/releases/download/{{ .Tag }}/provenance.intoto.jsonl
+
+    # Verify the provenance of the artifact
+    slsa-verifier <artifact> \
+      --provenance-path provenance.intoto.jsonl \
+      --source-uri github.com/{{ .Env.GITHUB_REPOSITORY }} \
+      --source-tag {{ .Tag }}
+    ```
+
+    ## Container Images
+
+    These container images are available for the following architectures: `linux/amd64` and `linux/arm64`.
 
     ### GitHub Container Registry
 
@@ -291,7 +350,7 @@ release:
 
     ### Verify container image signature
 
-    The container images are signed with [Cosign](https://docs.sigstore.dev/cosign/overview/) using GitHub OIDC. To verify the signature of an image, run:
+    The container images are signed using [Cosign](https://docs.sigstore.dev/cosign/overview/) with GitHub OIDC. To validate the signature of an image, run the following command:
 
     ```shell
     cosign verify ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }} \
@@ -302,3 +361,7 @@ release:
     ### Verify container image provenance
 
     The container images include [SLSA provenance](https://slsa.dev/provenance/v0.2) attestations. For more information around the verification of this, please refer to the [`slsa-verifier` documentation](https://github.com/slsa-framework/slsa-verifier#containers).
+
+    ## Software Bill of Materials
+
+    The Software Bill of Materials (SBOM) for each binary is accessible within the artifacts enclosed with this release. It is presented as an [SPDX](https://spdx.dev/) JSON file, formatted as `<binary>.spdx.sbom.json`.
