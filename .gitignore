@@ -1,5 +1,5 @@
+bin/
 dist/
-target/
 Cargo.lock
 vendor/
 coverage.txt
