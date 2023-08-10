@@ -64,7 +64,7 @@ jobs:
         id: goreleaser
         uses: goreleaser/goreleaser-action@336e29918d653399e599bfca99fadc1d7ffbc9f7 # v4.3.0
         with:
-          version: 1.19.x
+          version: 1.20.x
           args: release --clean --timeout 1h
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

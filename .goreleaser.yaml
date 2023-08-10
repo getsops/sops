@@ -82,8 +82,8 @@ universal_binaries:
     # darwin/arm64.
     replace: false
     # Modified timestamp on the binary, set to ensure reproducible builds.
-    # NB: Available in (unreleased) GoReleaser >=1.20.0.
-    # mod_timestamp: "{{ .CommitTimestamp }}"
+    # NB: Available in GoReleaser >=1.20.0.
+    mod_timestamp: "{{ .CommitTimestamp }}"
 
 # xref: https://goreleaser.com/customization/nfpm/
 nfpms:
