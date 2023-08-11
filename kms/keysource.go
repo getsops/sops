@@ -19,8 +19,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/kms"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
-	"github.com/sirupsen/logrus"
 	"github.com/getsops/sops/v3/logging"
+	"github.com/sirupsen/logrus"
 )
 
 const (
