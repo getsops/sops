@@ -33,7 +33,7 @@ vendor:
 	$(GO) mod vendor
 
 vet:
-	$(GO) vet $(PROJECT)
+	$(GO) vet ./...
 
 .PHONY: test
 test: vendor
