@@ -1523,6 +1523,14 @@ the data key under tree->`sops`->`mac`.
 Motivation
 ----------
 
+   📝 **A note from the maintainers**
+
+   This section was written by the original authors of SOPS while they were
+   working at Mozilla. It is kept here for historical reasons and to provide
+   technical background on the project. It is not necessarily representative
+   of the views of the current maintainers, nor are they currently affiliated
+   with Mozilla.
+
 Automating the distribution of secrets and credentials to components of an
 infrastructure is a hard problem. We know how to encrypt secrets and share them
 between humans, but extending that trust to systems is difficult. Particularly
