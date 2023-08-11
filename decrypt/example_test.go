@@ -31,7 +31,7 @@ type configuration struct {
 	AnEmptyValue string `json:"anEmptyValue"`
 }
 
-func ExampleDecryptFile() {
+func ExampleFile() {
 	var (
 		confPath string = "./example.json"
 		cfg      configuration

@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/getsops/sops/v3"
+	"github.com/stretchr/testify/assert"
 )
 
 var PLAIN = []byte(strings.TrimLeft(`
@@ -26,7 +26,7 @@ var BRANCH = sops.TreeBranch{
 		Value: "val2",
 	},
 	sops.TreeItem{
-		Key:   sops.Comment{"comment"},
+		Key:   sops.Comment{Value: "comment"},
 		Value: nil,
 	},
 	sops.TreeItem{
