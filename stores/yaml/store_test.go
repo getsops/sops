@@ -3,8 +3,8 @@ package yaml
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/getsops/sops/v3"
+	"github.com/stretchr/testify/assert"
 )
 
 var PLAIN = []byte(`---
@@ -24,7 +24,7 @@ key1_a: value
 var BRANCHES = sops.TreeBranches{
 	sops.TreeBranch{
 		sops.TreeItem{
-			Key:   sops.Comment{" comment 0"},
+			Key:   sops.Comment{Value: " comment 0"},
 			Value: nil,
 		},
 		sops.TreeItem{
@@ -36,7 +36,7 @@ var BRANCHES = sops.TreeBranches{
 			Value: "value",
 		},
 		sops.TreeItem{
-			Key:   sops.Comment{" ^ comment 1"},
+			Key:   sops.Comment{Value: " ^ comment 1"},
 			Value: nil,
 		},
 	},
@@ -101,10 +101,10 @@ var COMMENT_6 = []byte(`a:
 var COMMENT_6_BRANCHES = sops.TreeBranches{
 	sops.TreeBranch{
 		sops.TreeItem{
-			Key:   "a",
+			Key: "a",
 			Value: []interface{}{
 				"a",
-				sops.Comment{" I no longer get duplicated"},
+				sops.Comment{Value: " I no longer get duplicated"},
 				sops.TreeBranch{},
 			},
 		},
@@ -124,10 +124,10 @@ e:
 var COMMENT_7_BRANCHES = sops.TreeBranches{
 	sops.TreeBranch{
 		sops.TreeItem{
-			Key:   "a",
+			Key: "a",
 			Value: sops.TreeBranch{
 				sops.TreeItem{
-					Key:   "b",
+					Key: "b",
 					Value: sops.TreeBranch{
 						sops.TreeItem{
 							Key:   "c",
@@ -136,13 +136,13 @@ var COMMENT_7_BRANCHES = sops.TreeBranches{
 					},
 				},
 				sops.TreeItem{
-					Key:   sops.Comment{" comment"},
+					Key:   sops.Comment{Value: " comment"},
 					Value: nil,
 				},
 			},
 		},
 		sops.TreeItem{
-			Key:   "e",
+			Key: "e",
 			Value: []interface{}{
 				"f",
 			},
