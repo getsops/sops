@@ -175,7 +175,7 @@ dockers:
       - "--pull"
       - "--platform=linux/amd64"
       - "--label=org.opencontainers.image.created={{ .Date }}"
-      - "--label=org.opencontainers.image.name={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
       - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
       - "--label=org.opencontainers.image.version={{ .Version }}"
       - "--label=org.opencontainers.image.source={{ .GitURL }}"
@@ -193,7 +193,7 @@ dockers:
       - "--pull"
       - "--platform=linux/arm64"
       - "--label=org.opencontainers.image.created={{ .Date }}"
-      - "--label=org.opencontainers.image.name={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
       - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
       - "--label=org.opencontainers.image.version={{ .Version }}"
       - "--label=org.opencontainers.image.source={{ .GitURL }}"
@@ -211,7 +211,7 @@ dockers:
       - "--pull"
       - "--platform=linux/amd64"
       - "--label=org.opencontainers.image.created={{ .Date }}"
-      - "--label=org.opencontainers.image.name={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
       - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
       - "--label=org.opencontainers.image.version={{ .Version }}"
       - "--label=org.opencontainers.image.source={{ .GitURL }}"
@@ -229,7 +229,7 @@ dockers:
       - "--pull"
       - "--platform=linux/arm64"
       - "--label=org.opencontainers.image.created={{ .Date }}"
-      - "--label=org.opencontainers.image.name={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
       - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
       - "--label=org.opencontainers.image.version={{ .Version }}"
       - "--label=org.opencontainers.image.source={{ .GitURL }}"
@@ -328,19 +328,21 @@ release:
     curl -LO  https://github.com/{{ .Env.GITHUB_REPOSITORY }}/releases/download/{{ .Tag }}/provenance.intoto.jsonl
 
     # Verify the provenance of the artifact
-    slsa-verifier <artifact> \
+    slsa-verifier verify-artifact <artifact> \
       --provenance-path provenance.intoto.jsonl \
       --source-uri github.com/{{ .Env.GITHUB_REPOSITORY }} \
       --source-tag {{ .Tag }}
     ```
 
     ## Container Images
+    
+    The `{{ .ProjectName }}` binaries are also available as container images, based on Debian (slim) and Alpine Linux. The Debian-based container images include any dependencies which may be required to make use of certain key services, such as GnuPG, AWS KMS, Azure Key Vault, and Google Cloud KMS. The Alpine-based container images are smaller in size, but do not include these dependencies.
 
     These container images are available for the following architectures: `linux/amd64` and `linux/arm64`.
 
     ### GitHub Container Registry
 
-    - `ghrc.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}`
+    - `ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}`
     - `ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-alpine`
 
     ### Quay.io
@@ -355,7 +357,8 @@ release:
     ```shell
     cosign verify ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }} \
       --certificate-identity-regexp=https://github.com/{{ .Env.GITHUB_REPOSITORY_OWNER }} \
-      --certificate-oidc-issuer=https://token.actions.githubusercontent.com
+      --certificate-oidc-issuer=https://token.actions.githubusercontent.com \
+      -o text
     ```
 
     ### Verify container image provenance
