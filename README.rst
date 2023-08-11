@@ -1708,3 +1708,11 @@ Credits
 `sneaker <https://github.com/codahale/sneaker>`_,
 `password store <http://www.passwordstore.org/>`_ and too many years managing
 PGP encrypted files by hand...
+
+-----
+
+.. image:: docs/images/cncf-color-bg.svg
+   :width: 400
+   :alt: CNCF Sandbox Project
+
+**We are a** `Cloud Native Computing Foundation <https://cncf.io>`_ **sandbox project.**
