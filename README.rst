@@ -248,10 +248,11 @@ which tries several authentication methods, in this order:
    i. Service Principal with Client Secret
    ii. Service Principal with Certificate
    iii. User with username and password
+   iv. Configuration for multi-tenant applications
 
-2. `Managed Identity credentials <https://pkg.go.dev/github.com/Azure/azure-sdk-for-go/sdk/azidentity#ManagedIdentityCredential>`_
-3. `Azure CLI credentials <https://pkg.go.dev/github.com/Azure/azure-sdk-for-go/sdk/azidentity#AzureCLICredential>`_
-
+2. `Workload Identity credentials <https://pkg.go.dev/github.com/Azure/azure-sdk-for-go/sdk/azidentity#WorkloadIdentityCredential>`_
+3. `Managed Identity credentials <https://pkg.go.dev/github.com/Azure/azure-sdk-for-go/sdk/azidentity#ManagedIdentityCredential>`_
+4. `Azure CLI credentials <https://pkg.go.dev/github.com/Azure/azure-sdk-for-go/sdk/azidentity#AzureCLICredential>`_
 
 For example, you can use a Service Principal with the following environment variables:
 

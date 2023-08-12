@@ -11,7 +11,7 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
-	"github.com/Azure/azure-sdk-for-go/sdk/keyvault/azkeys"
+	"github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -50,8 +50,8 @@ func TestMasterKey_Decrypt(t *testing.T) {
 	c, err := azkeys.NewClient(key.VaultURL, key.tokenCredential, nil)
 	assert.NoError(t, err)
 
-	resp, err := c.Encrypt(context.Background(), key.Name, key.Version, azkeys.KeyOperationsParameters{
-		Algorithm: to.Ptr(azkeys.JSONWebKeyEncryptionAlgorithmRSAOAEP256),
+	resp, err := c.Encrypt(context.Background(), key.Name, key.Version, azkeys.KeyOperationParameters{
+		Algorithm: to.Ptr(azkeys.EncryptionAlgorithmRSAOAEP256),
 		Value:     data,
 	}, nil)
 	assert.NoError(t, err)
@@ -101,8 +101,8 @@ func createTestKMSKeyIfNotExists() (*MasterKey, error) {
 		}
 		if err != nil {
 			createResp, err := c.CreateKey(context.TODO(), key.Name, azkeys.CreateKeyParameters{
-				Kty:    to.Ptr(azkeys.JSONWebKeyTypeRSA),
-				KeyOps: to.SliceOfPtrs(azkeys.JSONWebKeyOperationEncrypt, azkeys.JSONWebKeyOperationDecrypt),
+				Kty:    to.Ptr(azkeys.KeyTypeRSA),
+				KeyOps: to.SliceOfPtrs(azkeys.KeyOperationEncrypt, azkeys.KeyOperationDecrypt),
 			}, nil)
 			if err != nil {
 				return nil, err
