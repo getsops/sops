@@ -2,5 +2,4 @@ bin/
 dist/
 Cargo.lock
 vendor/
-coverage.txt
 profile.out
