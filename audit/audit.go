@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"flag"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"os/user"
 
 	"github.com/pkg/errors"
@@ -12,16 +12,16 @@ import (
 	// empty import as per https://godoc.org/github.com/lib/pq
 	_ "github.com/lib/pq"
 
-	"gopkg.in/yaml.v3"
-	"github.com/sirupsen/logrus"
 	"github.com/getsops/sops/v3/logging"
+	"github.com/sirupsen/logrus"
+	"gopkg.in/yaml.v3"
 )
 
 var log *logrus.Logger
 
 func init() {
 	log = logging.NewLogger("AUDIT")
-	confBytes, err := ioutil.ReadFile(configFile)
+	confBytes, err := os.ReadFile(configFile)
 	if err != nil {
 		log.WithField("error", err).Debugf("Error reading config")
 		return

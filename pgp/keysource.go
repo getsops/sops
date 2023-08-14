@@ -20,9 +20,9 @@ import (
 
 	"github.com/ProtonMail/go-crypto/openpgp"
 	"github.com/ProtonMail/go-crypto/openpgp/armor"
+	"github.com/getsops/sops/v3/logging"
 	"github.com/sirupsen/logrus"
 	gpgagent "github.com/getsops/gopgagent"
-	"github.com/getsops/sops/v3/logging"
 	"golang.org/x/term"
 )
 
@@ -49,8 +49,8 @@ var (
 
 // log is the global logger for any PGP MasterKey.
 // TODO(hidde): this is not-so-nice for any implementation other than the CLI,
-//  as it becomes difficult to sugar the logger with data for e.g. individual
-//  processes.
+// as it becomes difficult to sugar the logger with data for e.g. individual
+// processes.
 var log *logrus.Logger
 
 func init() {
@@ -588,8 +588,8 @@ func loadRing(path string) (openpgp.EntityList, error) {
 func fingerprintIndex(ring openpgp.EntityList) map[string]openpgp.Entity {
 	fps := make(map[string]openpgp.Entity)
 	for _, entity := range ring {
-		fp := strings.ToUpper(hex.EncodeToString(entity.PrimaryKey.Fingerprint[:]))
 		if entity != nil {
+			fp := strings.ToUpper(hex.EncodeToString(entity.PrimaryKey.Fingerprint[:]))
 			fps[fp] = *entity
 		}
 	}
