@@ -4,7 +4,9 @@
 
 PROJECT             := github.com/getsops/sops/v3
 PROJECT_DIR         := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
+
 GO                  := GOPROXY=https://proxy.golang.org go
+GO_TEST_FLAGS       ?= -race -coverprofile=profile.out -covermode=atomic
 
 GITHUB_REPOSITORY   ?= github.com/getsops/sops
 
@@ -41,7 +43,7 @@ vet:
 .PHONY: test
 test: vendor
 	gpg --import pgp/sops_functional_tests_key.asc 2>&1 1>/dev/null || exit 0
-	./test.sh
+	$(GO) test $(GO_TEST_FLAGS) ./...
 
 showcoverage: test
 	$(GO) tool cover -html=coverage.out
