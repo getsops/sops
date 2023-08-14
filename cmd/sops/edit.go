@@ -1,26 +1,22 @@
 package main
 
 import (
-	"fmt"
-	"io/ioutil"
-	"os"
-
-	"crypto/md5"
-	exec "golang.org/x/sys/execabs"
-	"io"
-	"strings"
-
 	"bufio"
 	"bytes"
-
+	"crypto/md5"
+	"fmt"
+	"io"
+	"os"
 	"path/filepath"
+	"strings"
 
-	"github.com/google/shlex"
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/cmd/sops/codes"
 	"github.com/getsops/sops/v3/cmd/sops/common"
 	"github.com/getsops/sops/v3/keyservice"
 	"github.com/getsops/sops/v3/version"
+	"github.com/google/shlex"
+	exec "golang.org/x/sys/execabs"
 )
 
 type editOpts struct {
@@ -109,7 +105,7 @@ func edit(opts editOpts) ([]byte, error) {
 
 func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 	// Create temporary file for editing
-	tmpdir, err := ioutil.TempDir("", "")
+	tmpdir, err := os.MkdirTemp("", "")
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Could not create temporary directory: %s", err), codes.CouldNotWriteOutputFile)
 	}
@@ -181,7 +177,7 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 		if bytes.Equal(newHash, opts.OriginalHash) {
 			return common.NewExitError("File has not changed, exiting.", codes.FileHasNotBeenModified)
 		}
-		edited, err := ioutil.ReadFile(opts.TmpFile.Name())
+		edited, err := os.ReadFile(opts.TmpFile.Name())
 		if err != nil {
 			return common.NewExitError(fmt.Sprintf("Could not read edited file: %s", err), codes.CouldNotReadInputFile)
 		}

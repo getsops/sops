@@ -224,7 +224,7 @@ func keyToString(key *Key) string {
 	case *Key_VaultKey:
 		return fmt.Sprintf("Hashicorp Vault key with URI %s/v1/%s/keys/%s", k.VaultKey.VaultAddress, k.VaultKey.EnginePath, k.VaultKey.KeyName)
 	default:
-		return fmt.Sprintf("Unknown key type")
+		return "Unknown key type"
 	}
 }
 

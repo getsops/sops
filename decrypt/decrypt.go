@@ -6,7 +6,7 @@ package decrypt // import "github.com/getsops/sops/v3/decrypt"
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"time"
 
 	"github.com/getsops/sops/v3/aes"
@@ -18,7 +18,7 @@ import (
 // file and returns its cleartext data in an []byte
 func File(path, format string) (cleartext []byte, err error) {
 	// Read the file into an []byte
-	encryptedData, err := ioutil.ReadFile(path)
+	encryptedData, err := os.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to read %q: %w", path, err)
 	}

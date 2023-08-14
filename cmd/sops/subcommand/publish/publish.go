@@ -3,7 +3,7 @@ package publish
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -130,7 +130,7 @@ func Run(opts Opts) error {
 				return common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
 			}
 		} else {
-			fileContents, err = ioutil.ReadFile(path)
+			fileContents, err = os.ReadFile(path)
 			if err != nil {
 				return fmt.Errorf("could not read file: %s", err)
 			}
@@ -183,11 +183,4 @@ func Run(opts Opts) error {
 	}
 
 	return nil
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
 }
