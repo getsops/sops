@@ -17,21 +17,20 @@ Download
 
 Stable release
 ~~~~~~~~~~~~~~
-Binaries and packages of the latest stable release are available at `https://github.com/mozilla/sops/releases <https://github.com/mozilla/sops/releases>`_.
+Binaries and packages of the latest stable release are available at `https://github.com/getsops/sops/releases <https://github.com/getsops/sops/releases>`_.
 
 Development branch
 ~~~~~~~~~~~~~~~~~~
-For the adventurous, unstable features are available in the `develop` branch, which you can install from source:
+For the adventurous, unstable features are available in the `main` branch, which you can install from source:
 
 .. code:: bash
 
-	$ mkdir -p $GOPATH/src/github.com/getsops/sops/v3/
-        $ git clone https://github.com/mozilla/sops.git $GOPATH/src/github.com/getsops/sops/v3/
-        $ cd $GOPATH/src/github.com/getsops/sops/v3/
-        $ git checkout develop
-        $ make install
+	$ mkdir -p $GOPATH/src/github.com/getsops/sops/
+	$ git clone https://github.com/getsops/sops.git $GOPATH/src/github.com/getsops/sops/
+	$ cd $GOPATH/src/github.com/getsops/sops/
+	$ make install
 
-(requires Go >= 1.18)
+(requires Go >= 1.19)
 
 If you don't have Go installed, set it up with:
 
@@ -97,7 +96,7 @@ Editing will happen in whatever ``$EDITOR`` is set to, or, if it's not set, in v
 Keep in mind that sops will wait for the editor to exit, and then try to reencrypt
 the file. Some GUI editors (atom, sublime) spawn a child process and then exit
 immediately. They usually have an option to wait for the main editor window to be
-closed before exiting. See `#127 <https://github.com/mozilla/sops/issues/127>`_ for
+closed before exiting. See `#127 <https://github.com/getsops/sops/issues/127>`_ for
 more information.
 
 The resulting encrypted file looks like this:
@@ -163,7 +162,7 @@ Test with the dev PGP key
 If you want to test **sops** without having to do a bunch of setup, you can use
 the example files and pgp key provided with the repository::
 
-	$ git clone https://github.com/mozilla/sops.git
+	$ git clone https://github.com/getsops/sops.git
 	$ cd sops
 	$ gpg --import pgp/sops_functional_tests_key.asc
 	$ sops example.yaml
@@ -645,7 +644,7 @@ found, the filename of the file being created is compared with the filename
 regexes of the configuration file. The first regex that matches is selected,
 and its KMS and PGP keys are used to encrypt the file. It should be noted that
 the looking up of ``.sops.yaml`` is from the working directory (CWD) instead of
-the directory of the encrypting file (see `Issue 242 <https://github.com/mozilla/sops/issues/242>`_).
+the directory of the encrypting file (see `Issue 242 <https://github.com/getsops/sops/issues/242>`_).
 
 The path_regex checks the path of the encrypting file relative to the .sops.yaml config file. Here is another example:
 
@@ -1235,7 +1234,7 @@ But this one will work just fine:
 Examples
 --------
 
-Take a look into the `examples <https://github.com/mozilla/sops/tree/master/examples>`_ folder for detailed use cases of sops in a CI environment. The section below describes specific tips for common use cases.
+Take a look into the `examples <https://github.com/getsops/sops/tree/master/examples>`_ folder for detailed use cases of sops in a CI environment. The section below describes specific tips for common use cases.
 
 Creating a new file
 ~~~~~~~~~~~~~~~~~~~
@@ -1524,6 +1523,14 @@ the data key under tree->`sops`->`mac`.
 Motivation
 ----------
 
+   📝 **A note from the maintainers**
+
+   This section was written by the original authors of SOPS while they were
+   working at Mozilla. It is kept here for historical reasons and to provide
+   technical background on the project. It is not necessarily representative
+   of the views of the current maintainers, nor are they currently affiliated
+   with Mozilla.
+
 Automating the distribution of secrets and credentials to components of an
 infrastructure is a hard problem. We know how to encrypt secrets and share them
 between humans, but extending that trust to systems is difficult. Particularly
@@ -1680,8 +1687,7 @@ file format introduced in **1.0**.
 Security
 --------
 
-Please report security issues to security at mozilla dot org, or by using one
-of the contact method available here: `https://www.mozilla.org/en-US/security/#For_Developers <https://www.mozilla.org/en-US/security/#For_Developers>`_
+Please report any security issues privately using `GitHub's advisory form <https://github.com/getsops/sops/security/advisories>`_.
 
 License
 -------
@@ -1690,16 +1696,17 @@ Mozilla Public License Version 2.0
 Authors
 -------
 
-The core team is composed of:
+SOPS was initially launched as a project at Mozilla in 2015 and has been
+graciously donated to the CNCF as a Sandbox project in 2023, now under the
+stewardship of a `new group of maintainers <https://github.com/getsops/community/blob/main/MAINTAINERS.md>`_.
 
-* AJ Banhken @ajvb
-
-The original authors were:
+The original authors of the project were:
 
 * Adrian Utrilla @autrilla
 * Julien Vehent @jvehent
 
-And a whole bunch of `contributors <https://github.com/mozilla/sops/graphs/contributors>`_
+Furthermore, the project has been carried for a long time by AJ Bahnken @ajvb,
+and had not been possible without the contributions of numerous `contributors <https://github.com/getsops/sops/graphs/contributors>`_.
 
 Credits
 -------
@@ -1709,3 +1716,11 @@ Credits
 `sneaker <https://github.com/codahale/sneaker>`_,
 `password store <http://www.passwordstore.org/>`_ and too many years managing
 PGP encrypted files by hand...
+
+-----
+
+.. image:: docs/images/cncf-color-bg.svg
+   :width: 400
+   :alt: CNCF Sandbox Project
+
+**We are a** `Cloud Native Computing Foundation <https://cncf.io>`_ **sandbox project.**
