@@ -2,15 +2,17 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-PROJECT            := github.com/getsops/sops/v3
-PROJECT_DIR        := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
-GO                 := GOPROXY=https://proxy.golang.org go
-GOLINT             := golint
+PROJECT             := github.com/getsops/sops/v3
+PROJECT_DIR         := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
+GO                  := GOPROXY=https://proxy.golang.org go
 
-GITHUB_REPOSITORY  ?= github.com/getsops/sops
+GITHUB_REPOSITORY   ?= github.com/getsops/sops
 
-GORELEASER         := $(PROJECT_DIR)/bin/goreleaser
-GORELEASER_VERSION ?= v1.20.0
+STATICCHECK         := $(PROJECT_DIR)/bin/staticcheck
+STATICCHECK_VERSION := latest
+
+GORELEASER          := $(PROJECT_DIR)/bin/goreleaser
+GORELEASER_VERSION  ?= v1.20.0
 
 .PHONY: all
 all: test vet generate install functional-tests
@@ -24,8 +26,9 @@ install:
 tag: all
 	git tag -s $(TAGVER) -a -m "$(TAGMSG)"
 
-lint:
-	$(GOLINT) $(PROJECT)
+.PHONY: staticcheck
+staticcheck: install-staticcheck
+	$(STATICCHECK) ./...
 
 .PHONY: vendor
 vendor:
@@ -65,6 +68,10 @@ functional-tests-all:
 .PHONY: release-snapshot
 release-snapshot: install-goreleaser
 	GITHUB_REPOSITORY=$(GITHUB_REPOSITORY) $(GORELEASER) release --clean --snapshot --skip-sign
+
+.PHONY: install-staticcheck
+install-staticcheck:
+	$(call go-install-tool,$(STATICCHECK),honnef.co/go/tools/cmd/staticcheck@$(STATICCHECK_VERSION),$(STATICCHECK_VERSION))
 
 .PHONY: install-goreleaser
 install-goreleaser:
