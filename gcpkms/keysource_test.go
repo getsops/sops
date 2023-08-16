@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
+	"cloud.google.com/go/kms/apiv1/kmspb"
 	"github.com/stretchr/testify/assert"
-	kmspb "google.golang.org/genproto/googleapis/cloud/kms/v1"
 	"google.golang.org/grpc"
 )
 
