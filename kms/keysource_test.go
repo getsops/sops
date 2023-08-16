@@ -549,7 +549,7 @@ func createTestMasterKey(arn string) MasterKey {
 	return MasterKey{
 		Arn:                 arn,
 		credentialsProvider: credentials.NewStaticCredentialsProvider("id", "secret", ""),
-		epResolver:          epResolver{},
+		baseEndpoint:        testKMSServerURL,
 	}
 }
 
@@ -560,16 +560,7 @@ func createTestKMSClient(key MasterKey) (*kms.Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	cfg.EndpointResolverWithOptions = epResolver{}
-	return kms.NewFromConfig(*cfg), nil
-}
-
-// epResolver is a dummy resolver that points to the local test KMS server.
-type epResolver struct{}
-
-// ResolveEndpoint always resolves to testKMSServerURL.
-func (e epResolver) ResolveEndpoint(_, _ string, _ ...interface{}) (aws.Endpoint, error) {
-	return aws.Endpoint{
-		URL: testKMSServerURL,
-	}, nil
+	return kms.NewFromConfig(*cfg, func(options *kms.Options) {
+		options.BaseEndpoint = aws.String(testKMSServerURL)
+	}), nil
 }
