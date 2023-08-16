@@ -19,6 +19,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sts v1.21.2
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/fatih/color v1.15.0
+	github.com/getsops/gopgagent v0.0.0-20170926210634-4d7ea76ff71a
 	github.com/golang/protobuf v1.5.3
 	github.com/google/go-cmp v0.5.9
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510
@@ -32,7 +33,6 @@ require (
 	github.com/sirupsen/logrus v1.9.3
 	github.com/stretchr/testify v1.8.4
 	github.com/urfave/cli v1.22.14
-	go.mozilla.org/gopgagent v0.0.0-20170926210634-4d7ea76ff71a
 	golang.org/x/crypto v0.12.0
 	golang.org/x/net v0.14.0
 	golang.org/x/sys v0.11.0
