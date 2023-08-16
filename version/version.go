@@ -63,7 +63,7 @@ func AIsNewerThanB(A, B string) (bool, error) {
 
 // RetrieveLatestVersionFromUpstream gets the latest version from the source code at Github
 func RetrieveLatestVersionFromUpstream() (string, error) {
-	resp, err := http.Get("https://raw.githubusercontent.com/mozilla/sops/master/version/version.go")
+	resp, err := http.Get("https://raw.githubusercontent.com/getsops/sops/master/version/version.go")
 	if err != nil {
 		return "", err
 	}

@@ -21,7 +21,7 @@ import (
 	"github.com/ProtonMail/go-crypto/openpgp"
 	"github.com/ProtonMail/go-crypto/openpgp/armor"
 	"github.com/sirupsen/logrus"
-	gpgagent "go.mozilla.org/gopgagent"
+	gpgagent "github.com/getsops/gopgagent"
 	"github.com/getsops/sops/v3/logging"
 	"golang.org/x/term"
 )
