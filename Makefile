@@ -28,11 +28,9 @@ all: test vet generate install functional-tests
 .PHONY: origin-build
 origin-build: test vet generate install functional-tests-all
 
+.PHONY: install
 install:
 	$(GO) install github.com/getsops/sops/v3/cmd/sops
-
-tag: all
-	git tag -s $(TAGVER) -a -m "$(TAGMSG)"
 
 .PHONY: staticcheck
 staticcheck: install-staticcheck
@@ -43,6 +41,7 @@ vendor:
 	$(GO) mod tidy
 	$(GO) mod vendor
 
+.PHONY: vet
 vet:
 	$(GO) vet ./...
 
@@ -51,8 +50,9 @@ test: vendor
 	gpg --import pgp/sops_functional_tests_key.asc 2>&1 1>/dev/null || exit 0
 	$(GO) test $(GO_TEST_FLAGS) ./...
 
+.PHONY: showcoverage
 showcoverage: test
-	$(GO) tool cover -html=coverage.out
+	$(GO) tool cover -html=profile.out
 
 .PHONY: generate
 generate: keyservice/keyservice.pb.go
@@ -76,6 +76,10 @@ functional-tests-all:
 .PHONY: release-snapshot
 release-snapshot: install-goreleaser install-syft
 	GITHUB_REPOSITORY=$(GITHUB_REPOSITORY) $(GORELEASER) release --clean --snapshot --skip-sign
+
+.PHONY: clean
+clean:
+	rm -rf $(BIN_DIR) profile.out functional-tests/sops
 
 .PHONY: install-staticcheck
 install-staticcheck:
