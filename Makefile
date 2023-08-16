@@ -4,17 +4,23 @@
 
 PROJECT             := github.com/getsops/sops/v3
 PROJECT_DIR         := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
+BIN_DIR             := $(PROJECT_DIR)/bin
 
 GO                  := GOPROXY=https://proxy.golang.org go
 GO_TEST_FLAGS       ?= -race -coverprofile=profile.out -covermode=atomic
 
 GITHUB_REPOSITORY   ?= github.com/getsops/sops
 
-STATICCHECK         := $(PROJECT_DIR)/bin/staticcheck
+STATICCHECK         := $(BIN_DIR)/staticcheck
 STATICCHECK_VERSION := latest
 
-GORELEASER          := $(PROJECT_DIR)/bin/goreleaser
+SYFT                := $(BIN_DIR)/syft
+SYFT_VERSION        ?= v0.87.0
+
+GORELEASER          := $(BIN_DIR)/goreleaser
 GORELEASER_VERSION  ?= v1.20.0
+
+export PATH := $(BIN_DIR):$(PATH)
 
 .PHONY: all
 all: test vet generate install functional-tests
@@ -68,7 +74,7 @@ functional-tests-all:
 	cd functional-tests && cargo test && cargo test -- --ignored
 
 .PHONY: release-snapshot
-release-snapshot: install-goreleaser
+release-snapshot: install-goreleaser install-syft
 	GITHUB_REPOSITORY=$(GITHUB_REPOSITORY) $(GORELEASER) release --clean --snapshot --skip-sign
 
 .PHONY: install-staticcheck
@@ -78,6 +84,10 @@ install-staticcheck:
 .PHONY: install-goreleaser
 install-goreleaser:
 	$(call go-install-tool,$(GORELEASER),github.com/goreleaser/goreleaser@$(GORELEASER_VERSION),$(GORELEASER_VERSION))
+
+.PHONY: install-syft
+install-syft:
+	$(call go-install-tool,$(SYFT),github.com/anchore/syft/cmd/syft@$(SYFT_VERSION),$(SYFT_VERSION))
 
 # go-install-tool will 'go install' any package $2 and install it to $1.
 define go-install-tool
