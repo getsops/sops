@@ -1,6 +1,7 @@
 package main //import "github.com/getsops/sops/v3/cmd/sops"
 
 import (
+	"context"
 	encodingjson "encoding/json"
 	"fmt"
 	"net"
@@ -11,10 +12,7 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
-	"time"
 
-	"github.com/sirupsen/logrus"
-	"github.com/urfave/cli"
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/aes"
 	"github.com/getsops/sops/v3/age"
@@ -38,7 +36,10 @@ import (
 	"github.com/getsops/sops/v3/stores/dotenv"
 	"github.com/getsops/sops/v3/stores/json"
 	"github.com/getsops/sops/v3/version"
+	"github.com/sirupsen/logrus"
+	"github.com/urfave/cli"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 var log *logrus.Logger
@@ -1029,10 +1030,12 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 			addr = url.Path
 		}
 		opts := []grpc.DialOption{
-			grpc.WithInsecure(),
-			grpc.WithDialer(func(addr string, timeout time.Duration) (net.Conn, error) {
-				return net.DialTimeout(url.Scheme, addr, timeout)
-			}),
+			grpc.WithTransportCredentials(insecure.NewCredentials()),
+			grpc.WithContextDialer(
+				func(ctx context.Context, addr string) (net.Conn, error) {
+					return (&net.Dialer{}).DialContext(ctx, url.Scheme, addr)
+				},
+			),
 		}
 		log.WithField(
 			"address",
