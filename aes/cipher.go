@@ -11,11 +11,10 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
-	"strings"
 
-	"github.com/sirupsen/logrus"
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/logging"
+	"github.com/sirupsen/logrus"
 )
 
 var log *logrus.Logger
@@ -172,7 +171,11 @@ func (c Cipher) Encrypt(plaintext interface{}, key []byte, additionalData string
 	case bool:
 		encryptedType = "bool"
 		// The Python version encodes booleans with Titlecase
-		plainBytes = []byte(strings.Title(strconv.FormatBool(value)))
+		if value {
+			plainBytes = []byte("True")
+		} else {
+			plainBytes = []byte("False")
+		}
 	case sops.Comment:
 		encryptedType = "comment"
 		plainBytes = []byte(value.Value)
