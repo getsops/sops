@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/getsops/sops/v3"
@@ -98,7 +99,14 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	for key, value := range mdItems {
+	var keys []string
+	for k := range mdItems {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, key := range keys {
+		var value = mdItems[key]
 		if value == nil {
 			continue
 		}
