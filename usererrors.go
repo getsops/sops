@@ -2,12 +2,12 @@ package sops
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"strings"
 
 	"github.com/fatih/color"
 	"github.com/goware/prefixer"
-	wordwrap "github.com/mitchellh/go-wordwrap"
+	"github.com/mitchellh/go-wordwrap"
 )
 
 // UserError is a well-formatted error for the purpose of being displayed to
@@ -97,7 +97,7 @@ func (r *decryptGroupError) UserError() string {
 	}
 	reader := prefixer.New(strings.NewReader(message), "  ")
 	// Safe to ignore this error, as reading from a strings.Reader can't fail
-	errMsg, _ := ioutil.ReadAll(reader)
+	errMsg, _ := io.ReadAll(reader)
 	return fmt.Sprintf("%s\n%s", header, string(errMsg))
 }
 
@@ -153,12 +153,12 @@ func (e *decryptKeyError) UserError() string {
 		wrappedErr := wordwrap.WrapString(err.Error(), 60)
 		reader := prefixer.New(strings.NewReader(wrappedErr), "  | ")
 		// Safe to ignore this error, as reading from a strings.Reader can't fail
-		errMsg, _ := ioutil.ReadAll(reader)
+		errMsg, _ := io.ReadAll(reader)
 		errMsg[0] = '-'
 		errMessages = append(errMessages, string(errMsg))
 	}
 	joinedMsgs := strings.Join(errMessages, "\n\n")
 	reader := prefixer.New(strings.NewReader(joinedMsgs), "  ")
-	errMsg, _ := ioutil.ReadAll(reader)
+	errMsg, _ := io.ReadAll(reader)
 	return fmt.Sprintf("%s\n%s", header, string(errMsg))
 }

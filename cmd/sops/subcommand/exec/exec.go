@@ -2,7 +2,6 @@ package exec
 
 import (
 	"bytes"
-	"io/ioutil"
 	"os"
 	"runtime"
 	"strings"
@@ -28,7 +27,7 @@ type ExecOpts struct {
 }
 
 func GetFile(dir, filename string) *os.File {
-	handle, err := ioutil.TempFile(dir, filename)
+	handle, err := os.CreateTemp(dir, filename)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -45,7 +44,7 @@ func ExecWithFile(opts ExecOpts) error {
 		opts.Fifo = false
 	}
 
-	dir, err := ioutil.TempDir("", ".sops")
+	dir, err := os.MkdirTemp("", ".sops")
 	if err != nil {
 		log.Fatal(err)
 	}

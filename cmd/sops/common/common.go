@@ -2,14 +2,11 @@ package common
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"time"
 
 	"github.com/fatih/color"
-	wordwrap "github.com/mitchellh/go-wordwrap"
-	"github.com/urfave/cli"
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/cmd/sops/codes"
 	. "github.com/getsops/sops/v3/cmd/sops/formats"
@@ -21,7 +18,9 @@ import (
 	"github.com/getsops/sops/v3/stores/json"
 	"github.com/getsops/sops/v3/stores/yaml"
 	"github.com/getsops/sops/v3/version"
-	"golang.org/x/crypto/ssh/terminal"
+	"github.com/mitchellh/go-wordwrap"
+	"github.com/urfave/cli"
+	"golang.org/x/term"
 )
 
 // ExampleFileEmitter emits example files. This is used by the `sops` binary
@@ -127,7 +126,7 @@ func EncryptTree(opts EncryptTreeOpts) error {
 
 // LoadEncryptedFile loads an encrypted SOPS file, returning a SOPS tree
 func LoadEncryptedFile(loader sops.EncryptedFileLoader, inputPath string) (*sops.Tree, error) {
-	fileBytes, err := ioutil.ReadFile(inputPath)
+	fileBytes, err := os.ReadFile(inputPath)
 	if err != nil {
 		return nil, NewExitError(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
 	}
@@ -262,7 +261,7 @@ func FixAWSKMSEncryptionContextBug(opts GenericDecryptOpts, tree *sops.Tree) (*s
 
 	persistFix := false
 
-	if terminal.IsTerminal(int(os.Stdout.Fd())) {
+	if term.IsTerminal(int(os.Stdout.Fd())) {
 		var response string
 		for response != "y" && response != "n" {
 			fmt.Println("Would you like sops to automatically fix this issue? (y/n): ")

@@ -146,7 +146,7 @@ func (ks *Server) decryptWithAge(key *AgeKey, ciphertext []byte) ([]byte, error)
 // result
 func (ks Server) Encrypt(ctx context.Context,
 	req *EncryptRequest) (*EncryptResponse, error) {
-	key := *req.Key
+	key := req.Key
 	var response *EncryptResponse
 	switch k := key.KeyType.(type) {
 	case *Key_PgpKey:
@@ -211,7 +211,7 @@ func (ks Server) Encrypt(ctx context.Context,
 	return response, nil
 }
 
-func keyToString(key Key) string {
+func keyToString(key *Key) string {
 	switch k := key.KeyType.(type) {
 	case *Key_PgpKey:
 		return fmt.Sprintf("PGP key with fingerprint %s", k.PgpKey.Fingerprint)
@@ -224,11 +224,11 @@ func keyToString(key Key) string {
 	case *Key_VaultKey:
 		return fmt.Sprintf("Hashicorp Vault key with URI %s/v1/%s/keys/%s", k.VaultKey.VaultAddress, k.VaultKey.EnginePath, k.VaultKey.KeyName)
 	default:
-		return fmt.Sprintf("Unknown key type")
+		return "Unknown key type"
 	}
 }
 
-func (ks Server) prompt(key Key, requestType string) error {
+func (ks Server) prompt(key *Key, requestType string) error {
 	keyString := keyToString(key)
 	var response string
 	for response != "y" && response != "n" {
@@ -248,7 +248,7 @@ func (ks Server) prompt(key Key, requestType string) error {
 // result
 func (ks Server) Decrypt(ctx context.Context,
 	req *DecryptRequest) (*DecryptResponse, error) {
-	key := *req.Key
+	key := req.Key
 	var response *DecryptResponse
 	switch k := key.KeyType.(type) {
 	case *Key_PgpKey:

@@ -5,14 +5,12 @@ package config //import "github.com/getsops/sops/v3/config"
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
 	"regexp"
 	"strings"
 
-	"github.com/sirupsen/logrus"
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/azkv"
@@ -22,6 +20,7 @@ import (
 	"github.com/getsops/sops/v3/logging"
 	"github.com/getsops/sops/v3/pgp"
 	"github.com/getsops/sops/v3/publish"
+	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v3"
 )
 
@@ -223,7 +222,7 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 }
 
 func loadConfigFile(confPath string) (*configFile, error) {
-	confBytes, err := ioutil.ReadFile(confPath)
+	confBytes, err := os.ReadFile(confPath)
 	if err != nil {
 		return nil, fmt.Errorf("could not read config file: %s", err)
 	}
@@ -329,7 +328,7 @@ func parseCreationRuleForFile(conf *configFile, confPath, filePath string, kmsEn
 	}
 
 	// compare file path relative to path of config file
-	filePath = strings.TrimPrefix(filePath, configDir + string(filepath.Separator))
+	filePath = strings.TrimPrefix(filePath, configDir+string(filepath.Separator))
 
 	var rule *creationRule
 

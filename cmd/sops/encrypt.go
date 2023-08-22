@@ -1,17 +1,16 @@
 package main
 
 import (
-	"io/ioutil"
+	"fmt"
+	"os"
 	"path/filepath"
 
-	"fmt"
-
-	wordwrap "github.com/mitchellh/go-wordwrap"
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/cmd/sops/codes"
 	"github.com/getsops/sops/v3/cmd/sops/common"
 	"github.com/getsops/sops/v3/keyservice"
 	"github.com/getsops/sops/v3/version"
+	"github.com/mitchellh/go-wordwrap"
 )
 
 type encryptOpts struct {
@@ -57,7 +56,7 @@ func ensureNoMetadata(opts encryptOpts, branch sops.TreeBranch) error {
 
 func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 	// Load the file
-	fileBytes, err := ioutil.ReadFile(opts.InputPath)
+	fileBytes, err := os.ReadFile(opts.InputPath)
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
 	}

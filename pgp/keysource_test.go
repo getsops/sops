@@ -689,7 +689,7 @@ func Test_shortenFingerprint(t *testing.T) {
 func TestPGP(t *testing.T) {
 	key := NewMasterKeyFromFingerprint("FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4")
 	f := func(x []byte) bool {
-		if x == nil || len(x) == 0 {
+		if len(x) == 0 {
 			return true
 		}
 		if err := key.Encrypt(x); err != nil {
