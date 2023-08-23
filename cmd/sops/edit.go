@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"bytes"
-	"crypto/md5"
+	"crypto/sha256"
 	"fmt"
 	"io"
 	"os"
@@ -245,7 +245,7 @@ func hashFile(filePath string) ([]byte, error) {
 		return result, err
 	}
 	defer file.Close()
-	hash := md5.New()
+	hash := sha256.New()
 	if _, err := io.Copy(hash, file); err != nil {
 		return result, err
 	}
