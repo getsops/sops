@@ -27,7 +27,7 @@ builds:
     ldflags:
       - >
         -s -w
-        -X {{ .Env.PKG }}.Version={{ .Version }}"
+        -X "{{ .Env.PKG }}.Version={{ .Version }}"
     goos:
       - linux
     goarch:
