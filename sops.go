@@ -46,12 +46,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/sirupsen/logrus"
 	"github.com/getsops/sops/v3/audit"
 	"github.com/getsops/sops/v3/keys"
 	"github.com/getsops/sops/v3/keyservice"
 	"github.com/getsops/sops/v3/logging"
 	"github.com/getsops/sops/v3/shamir"
+	"github.com/sirupsen/logrus"
 	"golang.org/x/net/context"
 )
 
@@ -727,7 +727,11 @@ func ToBytes(in interface{}) ([]byte, error) {
 	case float64:
 		return []byte(strconv.FormatFloat(in, 'f', -1, 64)), nil
 	case bool:
-		return []byte(strings.Title(strconv.FormatBool(in))), nil
+		boolB := []byte("True")
+		if !in {
+			boolB = []byte("False")
+		}
+		return boolB, nil
 	case []byte:
 		return in, nil
 	case Comment:

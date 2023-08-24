@@ -10,7 +10,6 @@ import (
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/pgp"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -239,7 +238,7 @@ func (ks Server) prompt(key *Key, requestType string) error {
 		}
 	}
 	if response == "n" {
-		return grpc.Errorf(codes.PermissionDenied, "Request rejected by user")
+		return status.Errorf(codes.PermissionDenied, "Request rejected by user")
 	}
 	return nil
 }
@@ -300,9 +299,9 @@ func (ks Server) Decrypt(ctx context.Context,
 			Plaintext: plaintext,
 		}
 	case nil:
-		return nil, grpc.Errorf(codes.NotFound, "Must provide a key")
+		return nil, status.Errorf(codes.NotFound, "Must provide a key")
 	default:
-		return nil, grpc.Errorf(codes.NotFound, "Unknown key type")
+		return nil, status.Errorf(codes.NotFound, "Unknown key type")
 	}
 	if ks.Prompt {
 		err := ks.prompt(key, "decrypt")

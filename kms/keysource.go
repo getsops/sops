@@ -70,11 +70,11 @@ type MasterKey struct {
 	// using CredentialsProvider.ApplyToMasterKey. If nil, the default client is used
 	// which utilizes runtime environmental values.
 	credentialsProvider aws.CredentialsProvider
-	// epResolver can be used to override the endpoint the AWS client resolves
+	// baseEndpoint can be used to override the endpoint the AWS client resolves
 	// to by default. This is mostly used for testing purposes as it can not be
 	// injected using e.g. an environment variable. The field is not publicly
 	// exposed, nor configurable.
-	epResolver aws.EndpointResolverWithOptions
+	baseEndpoint string
 }
 
 // NewMasterKey creates a new MasterKey from an ARN, role and context, setting
@@ -197,7 +197,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 		log.WithField("arn", key.Arn).Error("Encryption failed")
 		return err
 	}
-	client := kms.NewFromConfig(*cfg)
+	client := key.createClient(cfg)
 	input := &kms.EncryptInput{
 		KeyId:             &key.Arn,
 		Plaintext:         dataKey,
@@ -245,7 +245,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		log.WithField("arn", key.Arn).Error("Decryption failed")
 		return nil, err
 	}
-	client := kms.NewFromConfig(*cfg)
+	client := key.createClient(cfg)
 	input := &kms.DecryptInput{
 		KeyId:             &key.Arn,
 		CiphertextBlob:    k,
@@ -309,11 +309,6 @@ func (key MasterKey) createKMSConfig() (*aws.Config, error) {
 			lo.SharedConfigProfile = key.AwsProfile
 		}
 		lo.Region = region
-
-		// Set the epResolver, if present. Used ONLY for tests.
-		if key.epResolver != nil {
-			lo.EndpointResolverWithOptions = key.epResolver
-		}
 		return nil
 	})
 	if err != nil {
@@ -324,6 +319,15 @@ func (key MasterKey) createKMSConfig() (*aws.Config, error) {
 		return key.createSTSConfig(&cfg)
 	}
 	return &cfg, nil
+}
+
+// createClient creates a new AWS KMS client with the provided config.
+func (key MasterKey) createClient(config *aws.Config) *kms.Client {
+	return kms.NewFromConfig(*config, func(o *kms.Options) {
+		if key.baseEndpoint != "" {
+			o.BaseEndpoint = aws.String(key.baseEndpoint)
+		}
+	})
 }
 
 // createSTSConfig uses AWS STS to assume a role and returns a config
