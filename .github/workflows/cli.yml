@@ -39,6 +39,10 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
+      - name: Vendor Go Modules
+        run: make vendor
+      - name: Ensure clean working tree
+        run: git diff --exit-code
       - name: Build Linux and Darwin
         if: matrix.os != 'windows'
         run: GOOS=${{ matrix.os }} GOARCH=${{ matrix.arch }} go build -o sops-${{ matrix.os }}-${{ matrix.arch }}-${{ github.sha }} -v ./cmd/sops
