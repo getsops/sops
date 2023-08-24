@@ -1,6 +1,51 @@
 Changelog
 =========
 
+3.8.0-rc.1
+----------
+Features:
+
+* Support ``--version`` without network requests using ``--disable-version-check`` (#1115)
+* Support ``--input-type`` for updatekeys command (#1116)
+
+Improvements:
+
+* pgp: modernize and improve, and add tests (#1054)
+* azkv: update SDK to latest, add tests, tidy (#1067, #1092, #1256)
+* age: improve identity loading, add tests, tidy (#1064)
+* kms: AWS SDK V2, allow creds config, add tests (#1065, #1257)
+* gcpkms: update SDK to latest, add tests, tidy (#1072, #1255)
+* hcvault: update API, add tests, tidy (#1085)
+* Do not report version when upstream ``--version`` check fails (#1124)
+* Use GitHub endpoints in ``--version`` command (#1261)
+* Close temporary file before invoking editor to widen support on Windows (#1265)
+* Update dependencies (#1063, #1091, #1147, #1242, #1260, #1264)
+* Deal with various deprecations of dependencies (#1113, #1262)
+
+Bug fixes:
+
+* Ensure YAML comments are not displaced (#1069)
+* Ensure default Google credentials can be used again after introduction of ``GOOGLE_CREDENTIALS`` (#1249)
+* Avoid duplicate logging of errors in some key sources (#1146)
+* Using `--set` on a root level key does no longer truncate existing values (#899)
+* Ensure stable order of SOPS parameters in dotenv file (#1101)
+
+Project changes:
+
+* Update Go to 1.20 (#1148)
+* Update rustc functional tests to v1.70.0 (#1234)
+* Remove remaining CircleCI workflow (#1237)
+* Run CLI workflow on main (#1243)
+* Delete obsolete ``validation/`` artifact (#1248)
+* Rename Go module to ``github.com/getsops/sops/v3`` (#1247)
+* Revamp release automation, including (Cosign) signed container images and checksums file, SLSA3 provenance and SBOMs (#1250)
+* Update various bits of documentation (#1244)
+* Add missing ``--encrypt`` flag from Vault example (#1060)
+* Add documentation on how to use age in ``.sops.yaml`` (#1192)
+* Improve Make targets and address various issues (#1258)
+* Ensure clean working tree in CI (#1267)
+* Fix CHANGELOG.rst formatting (#1269)
+
 3.7.3
 -----
 Changes:
