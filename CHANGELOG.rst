@@ -8,7 +8,7 @@ Changes:
 * Upgrade dependencies (#1024, #1045)
 * Build alpine container in CI (#1018, #1032, #1025)
 * keyservice: accept KeyServiceServer in LocalClient (#1035)
-* Add support for GCP Service Account within `GOOGLE_CREDENTIALS` (#953)
+* Add support for GCP Service Account within ``GOOGLE_CREDENTIALS`` (#953)
 
 Bug fixes:
 
@@ -81,8 +81,8 @@ Bug fixes:
 Features:
 
 * Support for encrypting data through the use of Hashicorp Vault (#655)
-* `sops publish` now supports `--recursive` flag for publishing all files in a directory (#602)
-* `sops publish` now supports `--omit-extensions` flag for omitting the extension in the destination path (#602)
+* ``sops publish`` now supports ``--recursive`` flag for publishing all files in a directory (#602)
+* ``sops publish`` now supports ``--omit-extensions`` flag for omitting the extension in the destination path (#602)
 * sops now supports JSON arrays of arrays (#642)
 
 Improvements:
@@ -92,9 +92,9 @@ Improvements:
 
 Bug fixes:
 
-* AWS SDK usage now correctly resolves the `~/.aws/config` file (#680)
-* `sops updatekeys` now correctly matches config rules (#682)
-* `sops updatekeys` now correctly uses the config path cli flag (#672)
+* AWS SDK usage now correctly resolves the ``~/.aws/config`` file (#680)
+* ``sops updatekeys`` now correctly matches config rules (#682)
+* ``sops updatekeys`` now correctly uses the config path cli flag (#672)
 * Partially empty sops config files don't break the use of sops anymore (#662)
 * Fix possible infinite loop in PGP's passphrase prompt call (#690)
 
@@ -111,35 +111,35 @@ Project changes:
 -----
 Features:
 
-* `sops exec-env` and `sops exec-file`, two new commands for utilizing sops secrets within a temporary file or env vars
+* ``sops exec-env`` and ``sops exec-file``, two new commands for utilizing sops secrets within a temporary file or env vars
 
 Bug fixes:
 
 * Sanitize AWS STS session name, as sops creates it based off of the machines hostname
-* Fix for `decrypt.Data` to support `.ini` files
+* Fix for ``decrypt.Data`` to support ``.ini`` files
 * Various package fixes related to switching to Go Modules
 * Fixes for Vault-related tests running locally and in CI.
 
 Project changes:
 
-* Change to proper use of go modules, changing to primary module name to `go.mozilla.org/sops/v3`
-* Change tags to requiring a `v` prefix.
-* Add documentation for `sops updatekeys` command
+* Change to proper use of go modules, changing to primary module name to ``go.mozilla.org/sops/v3``
+* Change tags to requiring a ``v`` prefix.
+* Add documentation for ``sops updatekeys`` command
 
 3.4.0
 -----
 Features:
 
-* `sops publish`, a new command for publishing sops encrypted secrets to S3, GCS, or Hashicorp Vault
+* ``sops publish``, a new command for publishing sops encrypted secrets to S3, GCS, or Hashicorp Vault
 * Support for multiple Azure authentication mechanisms
 * Azure Keyvault support to the sops config file
-* `encrypted_regex` option to the sops config file
+* ``encrypted_regex`` option to the sops config file
 
 Bug fixes:
 
 * Return non-zero exit code for invalid CLI flags
 * Broken path handling for sops editing on Windows
-* `go lint/fmt` violations
+* ``go lint/fmt`` violations
 * Check for pgp fingerprint before slicing it
 
 Project changes:
@@ -157,12 +157,12 @@ Bug fixes:
 
 * Make sure the pgp key fingerprint is longer than 16 characters before
   slicing it. (#463)
-* Allow for `--set` value to be a string. (#461)
+* Allow for ``--set`` value to be a string. (#461)
 
 Project changes:
 
-* Using `develop` as a staging branch to create releases off of. What
-  is in `master` is now the current stable release.
+* Using ``develop`` as a staging branch to create releases off of. What
+  is in ``master`` is now the current stable release.
 * Upgrade to using Go 1.12 to build sops
 * Updated all vendored packages
 
@@ -270,11 +270,11 @@ Project infrastructure changes:
 -----
 
 * Shamir secret sharing scheme support allows SOPS to require multiple master
-  keys to access a data key and decrypt a file. See `sops groups -help` and the
+  keys to access a data key and decrypt a file. See ``sops groups -help`` and the
   documentation in README.
 
 * Keyservice to forward access to a local master key on a socket, similar to
-  gpg-agent. See `sops keyservice --help` and the documentation in README.
+  gpg-agent. See ``sops keyservice --help`` and the documentation in README.
 
 * Encrypt comments by default
 
