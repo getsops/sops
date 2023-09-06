@@ -64,7 +64,10 @@ recommended to use at least two master keys in different regions.
 
 	export SOPS_KMS_ARN="arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e,arn:aws:kms:ap-southeast-1:656532927350:key/9006a8aa-0fa6-4c14-930e-a2dfb916de1d"
 
-Your AWS credentials must be present in ``~/.aws/credentials``. sops uses aws-sdk-go.
+SOPS uses `aws-sdk-go-v2 <https://github.com/aws/aws-sdk-go-v2>`_ to communicate with AWS KMS. It will automatically
+read the credentials from the ``~/.aws/credentials`` file which can be created with the ``aws configure`` command.
+
+An example of the ``~/.aws/credentials`` file is shown below:
 
 .. code::
 
@@ -72,6 +75,17 @@ Your AWS credentials must be present in ``~/.aws/credentials``. sops uses aws-sd
 	[default]
 	aws_access_key_id = AKI.....
 	aws_secret_access_key = mw......
+
+In addition to the ``~/.aws/credentials`` file, you can also use the ``AWS_ACCESS_KEY_ID`` and ``AWS_SECRET_ACCESS_KEY``
+environment variables to specify your credentials:
+
+.. code:: bash
+
+	export AWS_ACCESS_KEY_ID="AKI......"
+	export AWS_SECRET_ACCESS_KEY="mw......"
+
+For more information and additional environment variables, see
+`specifying credentials <https://aws.github.io/aws-sdk-go-v2/docs/configuring-sdk/#specifying-credentials>`_.
 
 If you want to use PGP, export the fingerprints of the public keys, comma
 separated, in the **SOPS_PGP_FP** env variable.
