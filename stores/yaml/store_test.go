@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/config"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -211,6 +212,32 @@ e:
     - f
 `)
 
+var INDENT_1_IN = []byte(`## Configuration for prometheus-node-exporter subchart
+##
+prometheus-node-exporter:
+  podLabels:
+    ## Add the 'node-exporter' label to be used by serviceMonitor to match standard common usage in rules and grafana dashboards
+    ##
+
+    jobLabel: node-exporter
+  extraArgs:
+    - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+)($|/)
+    - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$
+`)
+
+var INDENT_1_OUT = []byte(`## Configuration for prometheus-node-exporter subchart
+##
+prometheus-node-exporter:
+  podLabels:
+    ## Add the 'node-exporter' label to be used by serviceMonitor to match standard common usage in rules and grafana dashboards
+    ##
+    jobLabel: node-exporter
+  extraArgs:
+    - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+)($|/)
+    - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$
+`)
+
+
 func TestUnmarshalMetadataFromNonSOPSFile(t *testing.T) {
 	data := []byte(`hello: 2`)
 	_, err := (&Store{}).LoadEncryptedFile(data)
@@ -339,4 +366,18 @@ func TestComment7(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, string(COMMENT_7_OUT), string(bytes))
 	assert.Equal(t, COMMENT_7_OUT, bytes)
+}
+
+func TestIndent1(t *testing.T) {
+	// First iteration: load and store
+	branches, err := (&Store{}).LoadPlainFile(INDENT_1_IN)
+	assert.Nil(t, err)
+	bytes, err := (&Store{
+		config: config.YAMLStoreConfig{
+			Indent: 2,
+		},
+	}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, string(INDENT_1_OUT), string(bytes))
+	assert.Equal(t, INDENT_1_OUT, bytes)
 }

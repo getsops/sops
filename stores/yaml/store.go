@@ -12,6 +12,8 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+const IndentDefault = 4
+
 // Store handles storage of YAML data
 type Store struct {
 	config config.YAMLStoreConfig
@@ -329,7 +331,11 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	var b bytes.Buffer
 	e := yaml.NewEncoder(io.Writer(&b))
-	e.SetIndent(4)
+	indent := IndentDefault
+	if store.config.Indent != 0 {
+		indent = store.config.Indent
+	}
+	e.SetIndent(indent)
 	for _, branch := range in.Branches {
 		// Document root
 		var doc = yaml.Node{}
@@ -361,7 +367,11 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 func (store *Store) EmitPlainFile(branches sops.TreeBranches) ([]byte, error) {
 	var b bytes.Buffer
 	e := yaml.NewEncoder(io.Writer(&b))
-	e.SetIndent(4)
+	indent := IndentDefault
+	if store.config.Indent != 0 {
+		indent = store.config.Indent
+	}
+	e.SetIndent(indent)
 	for _, branch := range branches {
 		// Document root
 		var doc = yaml.Node{}

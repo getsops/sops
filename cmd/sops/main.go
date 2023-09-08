@@ -704,6 +704,10 @@ func main() {
 			Name:  "shamir-secret-sharing-threshold",
 			Usage: "the number of master keys required to retrieve the data key with shamir",
 		},
+		cli.IntFlag{
+			Name:  "indent",
+			Usage: "the number of space to indent yaml encoded file for encryption",
+		},
 		cli.BoolFlag{
 			Name:  "verbose",
 			Usage: "Enable verbose logging output",
@@ -1087,6 +1091,9 @@ func outputStore(context *cli.Context, path string) common.Store {
 		configPath, _ = config.FindConfigFile(".")
 	}
 	storesConf, _ := config.LoadStoresConfig(configPath)
+	if context.Int("indent") != 0 {
+		storesConf.YAML.Indent = context.Int("indent")
+	}
 
 	return common.DefaultStoreForPathOrFormat(storesConf, path, context.String("output-type"))
 }

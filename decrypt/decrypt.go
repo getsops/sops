@@ -12,6 +12,7 @@ import (
 	"github.com/getsops/sops/v3/aes"
 	"github.com/getsops/sops/v3/cmd/sops/common"
 	. "github.com/getsops/sops/v3/cmd/sops/formats" // Re-export
+	"github.com/getsops/sops/v3/config"
 )
 
 // File is a wrapper around Data that reads a local encrypted
@@ -32,7 +33,7 @@ func File(path, format string) (cleartext []byte, err error) {
 // decrypts the data and returns its cleartext in an []byte.
 func DataWithFormat(data []byte, format Format) (cleartext []byte, err error) {
 
-	store := common.StoreForFormat(format)
+	store := common.StoreForFormat(format, &config.StoresConfig{})
 
 	// Load SOPS file and access the data key
 	tree, err := store.LoadEncryptedFile(data)
