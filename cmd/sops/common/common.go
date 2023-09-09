@@ -30,15 +30,10 @@ type ExampleFileEmitter interface {
 	EmitExample() []byte
 }
 
-type Configurable interface {
-	Configure(*config.Config)
-}
-
 // Store handles marshaling and unmarshaling from SOPS files
 type Store interface {
 	sops.Store
 	ExampleFileEmitter
-	Configurable
 }
 
 type storeConstructor = func(*config.StoresConfig) Store

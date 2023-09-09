@@ -202,6 +202,3 @@ func isComplexValue(v interface{}) bool {
 	}
 	return false
 }
-
-func (store *Store) Configure(c *config.Config) {
-}

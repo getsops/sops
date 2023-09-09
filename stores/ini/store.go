@@ -288,6 +288,3 @@ func (store *Store) EmitExample() []byte {
 	}
 	return bytes
 }
-
-func (store *Store) Configure(c *config.Config) {
-}

@@ -706,7 +706,7 @@ func main() {
 		},
 		cli.IntFlag{
 			Name:  "indent",
-			Usage: "the number of space to indent yaml encoded file for encryption",
+			Usage: "the number of space to indent YAML encoded file for encryption",
 		},
 		cli.BoolFlag{
 			Name:  "verbose",
@@ -1069,7 +1069,7 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 	return
 }
 
-func inputStore(context *cli.Context, path string) common.Store {
+func loadStoresConfig(context *cli.Context, path string) (*config.StoresConfig, error) {
 	var configPath string
 	if context.String("config") != "" {
 		configPath = context.String("config")
@@ -1077,20 +1077,16 @@ func inputStore(context *cli.Context, path string) common.Store {
 		// Ignore config not found errors returned from FindConfigFile since the config file is not mandatory
 		configPath, _ = config.FindConfigFile(".")
 	}
-	storesConf, _ := config.LoadStoresConfig(configPath)
+	return config.LoadStoresConfig(configPath)
+}
 
+func inputStore(context *cli.Context, path string) common.Store {
+	storesConf, _ := loadStoresConfig(context, path)
 	return common.DefaultStoreForPathOrFormat(storesConf, path, context.String("input-type"))
 }
 
 func outputStore(context *cli.Context, path string) common.Store {
-	var configPath string
-	if context.String("config") != "" {
-		configPath = context.String("config")
-	} else {
-		// Ignore config not found errors returned from FindConfigFile since the config file is not mandatory
-		configPath, _ = config.FindConfigFile(".")
-	}
-	storesConf, _ := config.LoadStoresConfig(configPath)
+	storesConf, _ := loadStoresConfig(context, path)
 	if context.Int("indent") != 0 {
 		storesConf.YAML.Indent = context.Int("indent")
 	}
