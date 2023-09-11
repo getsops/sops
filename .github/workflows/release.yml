@@ -17,6 +17,7 @@ jobs:
       packages: write # For pushing and signing container images.
 
     outputs:
+      version: "${{ steps.release-metadata.outputs.version }}"
       artifact-subjects: "${{ steps.artifact-hashes.outputs.subjects }}"
       package-subjects: "${{ steps.package-hashes.outputs.subjects }}"
       sbom-subjects: "${{ steps.sbom-hashes.outputs.subjects }}"
@@ -68,6 +69,14 @@ jobs:
           args: release --clean --timeout 1h
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract release metadata
+        id: release-metadata
+        env:
+          METADATA: "${{ steps.goreleaser.outputs.metadata }}"
+        run: |
+          set -euo pipefail
+          echo "version=$(echo -E $METADATA | jq -r '.version')" >> "$GITHUB_OUTPUT"
 
       - name: Extract artifact subjects
         id: artifact-hashes
@@ -149,7 +158,7 @@ jobs:
           echo "subjects=$(echo "$all_subjects" | base64 -w0)" >> "$GITHUB_OUTPUT"
 
   assets-provenance:
-    needs: [ combine-subjects ]
+    needs: [ release, combine-subjects ]
 
     permissions:
       actions: read # For detecting the GitHub Actions environment.
@@ -160,7 +169,7 @@ jobs:
     with:
       base64-subjects: "${{ needs.combine-subjects.outputs.all-subjects }}"
       upload-assets: true
-      provenance-name: "provenance.intoto.jsonl"
+      provenance-name: "sops-v${{ needs.release.outputs.version }}.intoto.jsonl"
 
   ghcr-container-provenance:
     needs: [ release ]
