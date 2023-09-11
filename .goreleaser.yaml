@@ -321,15 +321,15 @@ release:
 
     ### Verify artifact provenance
 
-    The [SLSA provenance](https://slsa.dev/provenance/v0.2) of the binaries, packages, and SBOMs can be found within the artifacts associated with this release. It is presented through an [in-toto](https://in-toto.io/) link metadata file named `provenance.intoto.jsonl`. To verify the provenance of an artifact, you can utilize the [`slsa-verifier`](https://github.com/slsa-framework/slsa-verifier#artifacts) tool:
+    The [SLSA provenance](https://slsa.dev/provenance/v0.2) of the binaries, packages, and SBOMs can be found within the artifacts associated with this release. It is presented through an [in-toto](https://in-toto.io/) link metadata file named `sops-v{{ .Version }}.intoto.jsonl`. To verify the provenance of an artifact, you can utilize the [`slsa-verifier`](https://github.com/slsa-framework/slsa-verifier#artifacts) tool:
 
     ```shell
     # Download the metadata file
-    curl -LO  https://github.com/{{ .Env.GITHUB_REPOSITORY }}/releases/download/{{ .Tag }}/provenance.intoto.jsonl
+    curl -LO  https://github.com/{{ .Env.GITHUB_REPOSITORY }}/releases/download/{{ .Tag }}/sops-v{{ .Version }}.intoto.jsonl
 
     # Verify the provenance of the artifact
     slsa-verifier verify-artifact <artifact> \
-      --provenance-path provenance.intoto.jsonl \
+      --provenance-path sops-v{{ .Version }}.intoto.jsonl \
       --source-uri github.com/{{ .Env.GITHUB_REPOSITORY }} \
       --source-tag {{ .Tag }}
     ```
