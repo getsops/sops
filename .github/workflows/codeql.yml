@@ -1,0 +1,53 @@
+name: "CodeQL"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    # Ignore changes to common non-code files.
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.rst'
+      - '**/*.txt'
+      - '**/*.yml'
+      - '**/*.yaml'
+      - '**/*.json'
+      - '**/*.ini'
+      - '**/*.env'
+  schedule:
+    - cron: '25 6 * * 3'
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+
+      # Initializes the CodeQL tools for scanning.
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@cdcdbb579706841c47f7063dda365e292e5cad7a # v2.13.4
+        with:
+          languages: go
+          # xref: https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
+          # xref: https://codeql.github.com/codeql-query-help/go/
+          queries: security-and-quality
+
+      # Build the project, and run CodeQL analysis.
+      # We do not make use of autobuild as this would run the first Make
+      # target, which includes a lot more than just the Go files we want to
+      # scan.
+      - name: Build
+        run: make install
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@cdcdbb579706841c47f7063dda365e292e5cad7a # v2.13.4
+        with:
+          category: "/language:go"
