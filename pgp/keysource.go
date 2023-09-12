@@ -257,7 +257,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	}
 	errs = append(errs, fmt.Errorf("GnuPG binary error: %w", binaryErr))
 
-	log.WithField("fingerprint", key.Fingerprint).Error("Encryption failed")
+	log.WithField("fingerprint", key.Fingerprint).Info("Encryption failed")
 	return fmt.Errorf("could not encrypt data key with PGP key: %w", errs)
 }
 
@@ -368,7 +368,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	}
 	errs = append(errs, fmt.Errorf("GnuPG binary error: %w", binaryErr))
 
-	log.WithField("fingerprint", key.Fingerprint).Error("Decryption failed")
+	log.WithField("fingerprint", key.Fingerprint).Info("Decryption failed")
 	return nil, fmt.Errorf("could not decrypt data key with PGP key: %w", errs)
 }
 
