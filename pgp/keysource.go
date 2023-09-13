@@ -20,9 +20,9 @@ import (
 
 	"github.com/ProtonMail/go-crypto/openpgp"
 	"github.com/ProtonMail/go-crypto/openpgp/armor"
+	gpgagent "github.com/getsops/gopgagent"
 	"github.com/getsops/sops/v3/logging"
 	"github.com/sirupsen/logrus"
-	gpgagent "github.com/getsops/gopgagent"
 	"golang.org/x/term"
 )
 
@@ -73,9 +73,6 @@ type MasterKey struct {
 	// It can be injected by a (local) keyservice.KeyServiceServer using
 	// GnuPGHome.ApplyToMasterKey().
 	gnuPGHomeDir string
-	// disableAgent instructs the MasterKey to not use the GnuPG agent during
-	// decryption operations.
-	disableAgent bool
 	// disableOpenPGP instructs the MasterKey to skip attempting to open any
 	// pubRing or secRing using OpenPGP.
 	disableOpenPGP bool
@@ -199,14 +196,6 @@ func (d GnuPGHome) ApplyToMasterKey(key *MasterKey) {
 	if err := d.Validate(); err == nil {
 		key.gnuPGHomeDir = d.String()
 	}
-}
-
-// DisableAgent disables the GnuPG agent for a MasterKey.
-type DisableAgent struct{}
-
-// ApplyToMasterKey configures the provided key to not use the GnuPG agent.
-func (d DisableAgent) ApplyToMasterKey(key *MasterKey) {
-	key.disableAgent = true
 }
 
 // DisableOpenPGP disables encrypt and decrypt operations using OpenPGP.
@@ -417,9 +406,6 @@ func (key *MasterKey) decryptWithOpenPGP() ([]byte, error) {
 func (key *MasterKey) decryptWithGnuPG() ([]byte, error) {
 	args := []string{
 		"-d",
-	}
-	if !key.disableAgent {
-		args = append([]string{"--use-agent"}, args...)
 	}
 	err, stdout, stderr := gpgExec(key.gnuPGHome(), args, strings.NewReader(key.EncryptedKey))
 	if err != nil {

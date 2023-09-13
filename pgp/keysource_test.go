@@ -148,12 +148,6 @@ func TestGnuPGHome_ApplyToMasterKey(t *testing.T) {
 	assert.NotEqual(t, gnuPGHome.String(), key.gnuPGHomeDir)
 }
 
-func TestDisableAgent_ApplyToMasterKey(t *testing.T) {
-	key := NewMasterKeyFromFingerprint(mockFingerprint)
-	DisableAgent{}.ApplyToMasterKey(key)
-	assert.True(t, key.disableAgent)
-}
-
 func TestDisableOpenPGP_ApplyToMasterKey(t *testing.T) {
 	key := NewMasterKeyFromFingerprint(mockFingerprint)
 	DisableOpenPGP{}.ApplyToMasterKey(key)
