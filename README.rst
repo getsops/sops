@@ -1162,8 +1162,22 @@ When operating on stdin, use the ``--input-type`` and ``--output-type`` flags as
 
     $ cat myfile.json | sops --input-type json --output-type json -d /dev/stdin
 
+YAML indentation
+~~~~~~~~~~~~~~~~
+
+``sops`` indent ``YAML`` files by default using 4 spaces. However, you can change
+this default behaviour be either using the additional ``--indent=2`` cli option or
+by configuring ``.sops.yaml`` with :
+
+.. code:: yaml
+  stores:
+      yaml:
+          indent: 2
+
+
 YAML anchors
 ~~~~~~~~~~~~
+
 SOPS only supports a subset of ``YAML``'s many types. Encrypting YAML files that
 contain strings, numbers and booleans will work fine, but files that contain anchors
 will not work, because the anchors redefine the structure of the file at load time.
