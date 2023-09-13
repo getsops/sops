@@ -326,16 +326,19 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	return branches, nil
 }
 
+func (store *Store) getIndentation() int {
+	if store.config.Indent != 0 {
+		return store.config.Indent
+	}
+	return IndentDefault
+}
+
 // EmitEncryptedFile returns the encrypted bytes of the yaml file corresponding to a
 // sops.Tree runtime object
 func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	var b bytes.Buffer
 	e := yaml.NewEncoder(io.Writer(&b))
-	indent := IndentDefault
-	if store.config.Indent != 0 {
-		indent = store.config.Indent
-	}
-	e.SetIndent(indent)
+	e.SetIndent(store.getIndentation())
 	for _, branch := range in.Branches {
 		// Document root
 		var doc = yaml.Node{}
@@ -367,11 +370,7 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 func (store *Store) EmitPlainFile(branches sops.TreeBranches) ([]byte, error) {
 	var b bytes.Buffer
 	e := yaml.NewEncoder(io.Writer(&b))
-	indent := IndentDefault
-	if store.config.Indent != 0 {
-		indent = store.config.Indent
-	}
-	e.SetIndent(indent)
+	e.SetIndent(store.getIndentation())
 	for _, branch := range branches {
 		// Document root
 		var doc = yaml.Node{}
