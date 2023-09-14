@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"strings"
 
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/config"
@@ -248,7 +249,11 @@ func (store Store) treeBranchFromJSON(in []byte) (sops.TreeBranch, error) {
 
 func (store Store) reindentJSON(in []byte) ([]byte, error) {
 	var out bytes.Buffer
-	err := json.Indent(&out, in, "", "\t")
+	indent := "\t"
+	if store.config.Indent != 0 {
+		indent = strings.Repeat(" ", store.config.Indent)
+	}
+	err := json.Indent(&out, in, "", indent)
 	return out.Bytes(), err
 }
 

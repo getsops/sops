@@ -1088,7 +1088,9 @@ func inputStore(context *cli.Context, path string) common.Store {
 func outputStore(context *cli.Context, path string) common.Store {
 	storesConf, _ := loadStoresConfig(context, path)
 	if context.Int("indent") != 0 {
-		storesConf.YAML.Indent = context.Int("indent")
+		indent := context.Int("indent")
+		storesConf.YAML.Indent = indent
+		storesConf.JSON.Indent = indent
 	}
 
 	return common.DefaultStoreForPathOrFormat(storesConf, path, context.String("output-type"))

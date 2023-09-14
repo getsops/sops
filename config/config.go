@@ -67,7 +67,9 @@ type DotenvStoreConfig struct{}
 
 type INIStoreConfig struct{}
 
-type JSONStoreConfig struct{}
+type JSONStoreConfig struct{
+	Indent int `yaml:"indent"`
+}
 
 type JSONBinaryStoreConfig struct{}
 

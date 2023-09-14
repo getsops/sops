@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/config"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -408,4 +409,84 @@ func TestEmitValueString(t *testing.T) {
 	bytes, err := (&Store{}).EmitValue("hello")
 	assert.Nil(t, err)
 	assert.Equal(t, []byte("\"hello\""), bytes)
+}
+
+func TestIndentTwoSpaces(t *testing.T) {
+	tree := sops.Tree{
+		Branches: sops.TreeBranches{
+			sops.TreeBranch{
+				sops.TreeItem{
+					Key: "foo",
+					Value: []interface{}{
+						sops.TreeBranch{
+							sops.TreeItem{
+								Key:   "foo",
+								Value: 3,
+							},
+							sops.TreeItem{
+								Key:   "bar",
+								Value: false,
+							},
+						},
+						2,
+					},
+				},
+			},
+		},
+	}
+	expected := `{
+  "foo": [
+    {
+      "foo": 3,
+      "bar": false
+    },
+    2
+  ]
+}`
+	store := Store{
+		config: config.JSONStoreConfig{
+			Indent: 2,
+		},
+	}
+	out, err := store.EmitPlainFile(tree.Branches)
+	assert.Nil(t, err)
+	assert.Equal(t, expected, string(out))
+}
+
+func TestIndentDefault(t *testing.T) {
+	tree := sops.Tree{
+		Branches: sops.TreeBranches{
+			sops.TreeBranch{
+				sops.TreeItem{
+					Key: "foo",
+					Value: []interface{}{
+						sops.TreeBranch{
+							sops.TreeItem{
+								Key:   "foo",
+								Value: 3,
+							},
+							sops.TreeItem{
+								Key:   "bar",
+								Value: false,
+							},
+						},
+						2,
+					},
+				},
+			},
+		},
+	}
+	expected := `{
+	"foo": [
+		{
+			"foo": 3,
+			"bar": false
+		},
+		2
+	]
+}`
+	store := Store{}
+	out, err := store.EmitPlainFile(tree.Branches)
+	assert.Nil(t, err)
+	assert.Equal(t, expected, string(out))
 }
