@@ -1166,8 +1166,8 @@ JSON indentation
 ~~~~~~~~~~~~~~~~
 
 ``sops`` indent ``SOPS`` files by default using one ``tab``. However, you can change
-this default behaviour to use spaces be either using the additional ``--indent=2`` cli option or
-by configuring ``.sops.yaml`` with :
+this default behaviour to use spaces by either using the additional ``--indent=2`` cli option or
+by configuring ``.sops.yaml`` with the code below. (value ``0`` is no indentation)
 
 .. code:: yaml
   stores:
@@ -1178,7 +1178,7 @@ YAML indentation
 ~~~~~~~~~~~~~~~~
 
 ``sops`` indent ``YAML`` files by default using 4 spaces. However, you can change
-this default behaviour be either using the additional ``--indent=2`` cli option or
+this default behaviour by either using the additional ``--indent=2`` cli option or
 by configuring ``.sops.yaml`` with :
 
 .. code:: yaml

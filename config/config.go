@@ -149,6 +149,12 @@ type creationRule struct {
 	MACOnlyEncrypted  bool       `yaml:"mac_only_encrypted"`
 }
 
+func NewStoresConfig() *StoresConfig{
+	storesConfig := &StoresConfig{}	
+	storesConfig.JSON.Indent = -1
+	return storesConfig
+}
+
 // Load loads a sops config file into a temporary struct
 func (f *configFile) load(bytes []byte) error {
 	err := yaml.Unmarshal(bytes, f)
@@ -252,6 +258,7 @@ func loadConfigFile(confPath string) (*configFile, error) {
 		return nil, fmt.Errorf("could not read config file: %s", err)
 	}
 	conf := &configFile{}
+	conf.Stores = *NewStoresConfig()
 	err = conf.load(confBytes)
 	if err != nil {
 		return nil, fmt.Errorf("error loading config: %s", err)

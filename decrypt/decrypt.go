@@ -33,7 +33,7 @@ func File(path, format string) (cleartext []byte, err error) {
 // decrypts the data and returns its cleartext in an []byte.
 func DataWithFormat(data []byte, format Format) (cleartext []byte, err error) {
 
-	store := common.StoreForFormat(format, &config.StoresConfig{})
+	store := common.StoreForFormat(format, config.NewStoresConfig())
 
 	// Load SOPS file and access the data key
 	tree, err := store.LoadEncryptedFile(data)
