@@ -37,9 +37,9 @@ require (
 	golang.org/x/net v0.15.0
 	golang.org/x/sys v0.12.0
 	golang.org/x/term v0.12.0
-	google.golang.org/api v0.140.0
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20230911183012-2d3300fd4832
-	google.golang.org/grpc v1.58.0
+	google.golang.org/api v0.141.0
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20230913181813-007df8e322eb
+	google.golang.org/grpc v1.58.1
 	google.golang.org/protobuf v1.31.0
 	gopkg.in/ini.v1 v1.67.0
 	gopkg.in/yaml.v3 v3.0.1
