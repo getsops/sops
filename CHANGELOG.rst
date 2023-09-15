@@ -1,8 +1,8 @@
 Changelog
 =========
 
-3.8.0-rc.1
-----------
+3.8.0
+-----
 Features:
 
 * Support ``--version`` without network requests using ``--disable-version-check`` (#1115)
@@ -10,7 +10,7 @@ Features:
 
 Improvements:
 
-* pgp: modernize and improve, and add tests (#1054)
+* pgp: modernize and improve, and add tests (#1054, #1282)
 * azkv: update SDK to latest, add tests, tidy (#1067, #1092, #1256)
 * age: improve identity loading, add tests, tidy (#1064)
 * kms: AWS SDK V2, allow creds config, add tests (#1065, #1257)
@@ -19,15 +19,15 @@ Improvements:
 * Do not report version when upstream ``--version`` check fails (#1124)
 * Use GitHub endpoints in ``--version`` command (#1261)
 * Close temporary file before invoking editor to widen support on Windows (#1265)
-* Update dependencies (#1063, #1091, #1147, #1242, #1260, #1264)
+* Update dependencies (#1063, #1091, #1147, #1242, #1260, #1264, #1275, #1280, #1283)
 * Deal with various deprecations of dependencies (#1113, #1262)
 
 Bug fixes:
 
 * Ensure YAML comments are not displaced (#1069)
 * Ensure default Google credentials can be used again after introduction of ``GOOGLE_CREDENTIALS`` (#1249)
-* Avoid duplicate logging of errors in some key sources (#1146)
-* Using `--set` on a root level key does no longer truncate existing values (#899)
+* Avoid duplicate logging of errors in some key sources (#1146, #1281)
+* Using ``--set`` on a root level key does no longer truncate existing values (#899)
 * Ensure stable order of SOPS parameters in dotenv file (#1101)
 
 Project changes:
@@ -45,6 +45,10 @@ Project changes:
 * Improve Make targets and address various issues (#1258)
 * Ensure clean working tree in CI (#1267)
 * Fix CHANGELOG.rst formatting (#1269)
+* Pin GitHub Actions to full length commit SHA and add CodeQL (#1276)
+* Enable Dependabot for Docker, GitHub Actions and Go Mod (#1277)
+* Generate versioned ``.intoto.jsonl`` (#1278)
+* Update CI dependencies (#1279)
 
 3.7.3
 -----
