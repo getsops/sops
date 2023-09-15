@@ -66,8 +66,25 @@ func TestGnuPGHome_Import(t *testing.T) {
 	_, stderr, err = gpgExec(gnuPGHome.String(), []string{"--list-secret-keys", mockFingerprint}, nil)
 	assert.NoErrorf(t, err, stderr.String())
 
-	assert.Error(t, gnuPGHome.Import([]byte("invalid armored data")))
+	err = gnuPGHome.Import([]byte("invalid armored data"))
+	assert.Error(t, err)
+	assert.ErrorContains(t, err, "gpg: no valid OpenPGP data found.\ngpg: Total number processed: 0\n: exit status 2")
 	assert.Error(t, GnuPGHome("").Import(b))
+}
+
+func TestGnuPGHome_Import_With_Missing_Binary(t *testing.T) {
+	t.Setenv(SopsGpgExecEnv, "/does/not/exist")
+
+	gnuPGHome, err := NewGnuPGHome()
+	assert.NoError(t, err)
+	t.Cleanup(func() {
+		_ = os.RemoveAll(gnuPGHome.String())
+	})
+
+	b, err := os.ReadFile(mockPublicKey)
+	assert.NoError(t, err)
+	err = gnuPGHome.Import(b)
+	assert.ErrorContains(t, err, "failed to import armored key data into GnuPG keyring: fork/exec /does/not/exist: no such file or directory")
 }
 
 func TestGnuPGHome_ImportFile(t *testing.T) {
