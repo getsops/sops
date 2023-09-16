@@ -10,7 +10,7 @@ formats and encrypts with AWS KMS, GCP KMS, Azure Key Vault, age, and PGP.
 ------------
 
 .. image:: https://pkg.go.dev/badge/github.com/getsops/sops/v3.svg
-	:target: https://pkg.go.dev/github.com/getsops/sops/v3
+    :target: https://pkg.go.dev/github.com/getsops/sops/v3
 
 Download
 --------
@@ -25,10 +25,10 @@ For the adventurous, unstable features are available in the `main` branch, which
 
 .. code:: bash
 
-	$ mkdir -p $GOPATH/src/github.com/getsops/sops/
-	$ git clone https://github.com/getsops/sops.git $GOPATH/src/github.com/getsops/sops/
-	$ cd $GOPATH/src/github.com/getsops/sops/
-	$ make install
+    $ mkdir -p $GOPATH/src/github.com/getsops/sops/
+    $ git clone https://github.com/getsops/sops.git $GOPATH/src/github.com/getsops/sops/
+    $ cd $GOPATH/src/github.com/getsops/sops/
+    $ make install
 
 (requires Go >= 1.19)
 
@@ -36,10 +36,10 @@ If you don't have Go installed, set it up with:
 
 .. code:: bash
 
-	$ {apt,yum,brew} install golang
-	$ echo 'export GOPATH=~/go' >> ~/.bashrc
-	$ source ~/.bashrc
-	$ mkdir $GOPATH
+    $ {apt,yum,brew} install golang
+    $ echo 'export GOPATH=~/go' >> ~/.bashrc
+    $ source ~/.bashrc
+    $ mkdir $GOPATH
 
 Or whatever variation of the above fits your system and shell.
 
@@ -62,7 +62,7 @@ recommended to use at least two master keys in different regions.
 
 .. code:: bash
 
-	export SOPS_KMS_ARN="arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e,arn:aws:kms:ap-southeast-1:656532927350:key/9006a8aa-0fa6-4c14-930e-a2dfb916de1d"
+    export SOPS_KMS_ARN="arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e,arn:aws:kms:ap-southeast-1:656532927350:key/9006a8aa-0fa6-4c14-930e-a2dfb916de1d"
 
 SOPS uses `aws-sdk-go-v2 <https://github.com/aws/aws-sdk-go-v2>`_ to communicate with AWS KMS. It will automatically
 read the credentials from the ``~/.aws/credentials`` file which can be created with the ``aws configure`` command.
@@ -71,18 +71,18 @@ An example of the ``~/.aws/credentials`` file is shown below:
 
 .. code:: sh
 
-	$ cat ~/.aws/credentials
-	[default]
-	aws_access_key_id = AKI.....
-	aws_secret_access_key = mw......
+    $ cat ~/.aws/credentials
+    [default]
+    aws_access_key_id = AKI.....
+    aws_secret_access_key = mw......
 
 In addition to the ``~/.aws/credentials`` file, you can also use the ``AWS_ACCESS_KEY_ID`` and ``AWS_SECRET_ACCESS_KEY``
 environment variables to specify your credentials:
 
 .. code:: bash
 
-	export AWS_ACCESS_KEY_ID="AKI......"
-	export AWS_SECRET_ACCESS_KEY="mw......"
+    export AWS_ACCESS_KEY_ID="AKI......"
+    export AWS_SECRET_ACCESS_KEY="mw......"
 
 For more information and additional environment variables, see
 `specifying credentials <https://aws.github.io/aws-sdk-go-v2/docs/configuring-sdk/#specifying-credentials>`_.
@@ -92,7 +92,7 @@ separated, in the **SOPS_PGP_FP** env variable.
 
 .. code:: bash
 
-	export SOPS_PGP_FP="85D77543B3D624B63CEA9E6DBC17301B491B3F21,E60892BB9BD89A69F759A1A0A3D652173B763E8F"
+    export SOPS_PGP_FP="85D77543B3D624B63CEA9E6DBC17301B491B3F21,E60892BB9BD89A69F759A1A0A3D652173B763E8F"
 
 Note: you can use both PGP and KMS simultaneously.
 
@@ -101,10 +101,10 @@ encryption/decryption transparently and open the cleartext file in an editor
 
 .. code:: sh
 
-	$ sops mynewtestfile.yaml
-	mynewtestfile.yaml doesn't exist, creating it.
-	please wait while an encryption key is being generated and stored in a secure fashion
-	file written to mynewtestfile.yaml
+    $ sops mynewtestfile.yaml
+    mynewtestfile.yaml doesn't exist, creating it.
+    please wait while an encryption key is being generated and stored in a secure fashion
+    file written to mynewtestfile.yaml
 
 Editing will happen in whatever ``$EDITOR`` is set to, or, if it's not set, in vim.
 Keep in mind that sops will wait for the editor to exit, and then try to reencrypt
@@ -126,25 +126,25 @@ The resulting encrypted file looks like this:
         key: |-
             ENC[AES256_GCM,data:Ea3kL5O5U8=,iv:DM=,aad:FKA=,tag:EA==]
     an_array:
-    - ENC[AES256_GCM,data:v8jQ=,iv:HBE=,aad:21c=,tag:gA==]
-    - ENC[AES256_GCM,data:X10=,iv:o8=,aad:CQ=,tag:Hw==]
-    - ENC[AES256_GCM,data:KN=,iv:160=,aad:fI4=,tag:tNw==]
+        - ENC[AES256_GCM,data:v8jQ=,iv:HBE=,aad:21c=,tag:gA==]
+        - ENC[AES256_GCM,data:X10=,iv:o8=,aad:CQ=,tag:Hw==]
+        - ENC[AES256_GCM,data:KN=,iv:160=,aad:fI4=,tag:tNw==]
     sops:
         kms:
-        -   created_at: 1441570389.775376
-            enc: CiC....Pm1Hm
-            arn: arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e
-        -   created_at: 1441570391.925734
-            enc: Ci...awNx
-            arn: arn:aws:kms:ap-southeast-1:656532927350:key/9006a8aa-0fa6-4c14-930e-a2dfb916de1d
+            - created_at: 1441570389.775376
+              enc: CiC....Pm1Hm
+              arn: arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e
+            - created_at: 1441570391.925734
+              enc: Ci...awNx
+              arn: arn:aws:kms:ap-southeast-1:656532927350:key/9006a8aa-0fa6-4c14-930e-a2dfb916de1d
         pgp:
-        -   fp: 85D77543B3D624B63CEA9E6DBC17301B491B3F21
-            created_at: 1441570391.930042
-            enc: |
-                -----BEGIN PGP MESSAGE-----
-                hQIMA0t4uZHfl9qgAQ//UvGAwGePyHuf2/zayWcloGaDs0MzI+zw6CmXvMRNPUsA
-				...=oJgS
-                -----END PGP MESSAGE-----
+            - fp: 85D77543B3D624B63CEA9E6DBC17301B491B3F21
+              created_at: 1441570391.930042
+              enc: |
+                  -----BEGIN PGP MESSAGE-----
+                  hQIMA0t4uZHfl9qgAQ//UvGAwGePyHuf2/zayWcloGaDs0MzI+zw6CmXvMRNPUsA
+                  ...=oJgS
+                  -----END PGP MESSAGE-----
 
 A copy of the encryption/decryption key is stored securely in each KMS and PGP
 block. As long as one of the KMS or PGP method is still usable, you will be able
@@ -154,7 +154,7 @@ To decrypt a file in a ``cat`` fashion, use the ``-d`` flag:
 
 .. code:: sh
 
-	$ sops -d mynewtestfile.yaml
+    $ sops -d mynewtestfile.yaml
 
 ``sops`` encrypted files contain the necessary information to decrypt their content.
 All a user of ``sops`` needs is valid AWS credentials and the necessary
@@ -164,7 +164,7 @@ Given that, the only command a ``sops`` user needs is:
 
 .. code:: sh
 
-	$ sops <file>
+    $ sops <file>
 
 `<file>` will be opened, decrypted, passed to a text editor (vim by default),
 encrypted if modified, and saved back to its original location. All of these
@@ -176,10 +176,10 @@ Test with the dev PGP key
 If you want to test **sops** without having to do a bunch of setup, you can use
 the example files and pgp key provided with the repository::
 
-	$ git clone https://github.com/getsops/sops.git
-	$ cd sops
-	$ gpg --import pgp/sops_functional_tests_key.asc
-	$ sops example.yaml
+    $ git clone https://github.com/getsops/sops.git
+    $ cd sops
+    $ gpg --import pgp/sops_functional_tests_key.asc
+    $ sops example.yaml
 
 This last step will decrypt ``example.yaml`` using the test private key.
 
@@ -195,7 +195,7 @@ the ``--age`` option or the **SOPS_AGE_RECIPIENTS** environment variable:
 
 .. code:: sh
 
-   $ sops --encrypt --age age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw test.yaml > test.enc.yaml
+    $ sops --encrypt --age age1yt3tfqlfrwdwx0z0ynwplcr6qxcxfaqycuprpmy89nr83ltx74tqdpszlw test.yaml > test.enc.yaml
 
 When decrypting a file with the corresponding identity, sops will look for a
 text file name ``keys.txt`` located in a ``sops`` subdirectory of your user
@@ -221,13 +221,13 @@ If you already logged in using
 
 .. code:: sh
 
-	$ gcloud auth login
+    $ gcloud auth login
 
 you can enable application default credentials using the sdk:
 
 .. code:: sh
 
-	$ gcloud auth application-default login
+    $ gcloud auth application-default login
 
 Encrypting/decrypting with GCP KMS requires a KMS ResourceID. You can use the
 cloud console the get the ResourceID or you can create one using the gcloud
@@ -235,21 +235,21 @@ sdk:
 
 .. code:: sh
 
-	$ gcloud kms keyrings create sops --location global
-	$ gcloud kms keys create sops-key --location global --keyring sops --purpose encryption
-	$ gcloud kms keys list --location global --keyring sops
+    $ gcloud kms keyrings create sops --location global
+    $ gcloud kms keys create sops-key --location global --keyring sops --purpose encryption
+    $ gcloud kms keys list --location global --keyring sops
 
-	# you should see
-	NAME                                                                   PURPOSE          PRIMARY_STATE
-	projects/my-project/locations/global/keyRings/sops/cryptoKeys/sops-key ENCRYPT_DECRYPT  ENABLED
+    # you should see
+    NAME                                                                   PURPOSE          PRIMARY_STATE
+    projects/my-project/locations/global/keyRings/sops/cryptoKeys/sops-key ENCRYPT_DECRYPT  ENABLED
 
 Now you can encrypt a file using::
 
-	$ sops --encrypt --gcp-kms projects/my-project/locations/global/keyRings/sops/cryptoKeys/sops-key test.yaml > test.enc.yaml
+    $ sops --encrypt --gcp-kms projects/my-project/locations/global/keyRings/sops/cryptoKeys/sops-key test.yaml > test.enc.yaml
 
 And decrypt it using::
 
-	 $ sops --decrypt test.enc.yaml
+     $ sops --decrypt test.enc.yaml
 
 Encrypting using Azure Key Vault
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -273,57 +273,57 @@ For example, you can use a Service Principal with the following environment vari
 
 .. code:: bash
 
-	AZURE_TENANT_ID
-	AZURE_CLIENT_ID
-	AZURE_CLIENT_SECRET
+    AZURE_TENANT_ID
+    AZURE_CLIENT_ID
+    AZURE_CLIENT_SECRET
 
 You can create a Service Principal using the CLI like this:
 
 .. code:: sh
 
-	$ az ad sp create-for-rbac -n my-keyvault-sp
+    $ az ad sp create-for-rbac -n my-keyvault-sp
 
-	{
-		"appId": "<some-uuid>",
-		"displayName": "my-keyvault-sp",
-		"name": "http://my-keyvault-sp",
-		"password": "<random-string>",
-		"tenant": "<tenant-uuid>"
-	}
+    {
+        "appId": "<some-uuid>",
+        "displayName": "my-keyvault-sp",
+        "name": "http://my-keyvault-sp",
+        "password": "<random-string>",
+        "tenant": "<tenant-uuid>"
+    }
 
 The `appId` is the client ID, and the `password` is the client secret.
 
 Encrypting/decrypting with Azure Key Vault requires the resource identifier for
 a key. This has the following form::
 
-	https://${VAULT_URL}/keys/${KEY_NAME}/${KEY_VERSION}
+    https://${VAULT_URL}/keys/${KEY_NAME}/${KEY_VERSION}
 
 To create a Key Vault and assign your service principal permissions on it
 from the commandline:
 
 .. code:: sh
 
-	# Create a resource group if you do not have one:
-	$ az group create --name sops-rg --location westeurope
-	# Key Vault names are globally unique, so generate one:
-	$ keyvault_name=sops-$(uuidgen | tr -d - | head -c 16)
-	# Create a Vault, a key, and give the service principal access:
-	$ az keyvault create --name $keyvault_name --resource-group sops-rg --location westeurope
-	$ az keyvault key create --name sops-key --vault-name $keyvault_name --protection software --ops encrypt decrypt
-	$ az keyvault set-policy --name $keyvault_name --resource-group sops-rg --spn $AZURE_CLIENT_ID \
-		--key-permissions encrypt decrypt
-	# Read the key id:
-	$ az keyvault key show --name sops-key --vault-name $keyvault_name --query key.kid
+    # Create a resource group if you do not have one:
+    $ az group create --name sops-rg --location westeurope
+    # Key Vault names are globally unique, so generate one:
+    $ keyvault_name=sops-$(uuidgen | tr -d - | head -c 16)
+    # Create a Vault, a key, and give the service principal access:
+    $ az keyvault create --name $keyvault_name --resource-group sops-rg --location westeurope
+    $ az keyvault key create --name sops-key --vault-name $keyvault_name --protection software --ops encrypt decrypt
+    $ az keyvault set-policy --name $keyvault_name --resource-group sops-rg --spn $AZURE_CLIENT_ID \
+        --key-permissions encrypt decrypt
+    # Read the key id:
+    $ az keyvault key show --name sops-key --vault-name $keyvault_name --query key.kid
 
-	https://sops.vault.azure.net/keys/sops-key/some-string
+    https://sops.vault.azure.net/keys/sops-key/some-string
 
 Now you can encrypt a file using::
 
-	$ sops --encrypt --azure-kv https://sops.vault.azure.net/keys/sops-key/some-string test.yaml > test.enc.yaml
+    $ sops --encrypt --azure-kv https://sops.vault.azure.net/keys/sops-key/some-string test.yaml > test.enc.yaml
 
 And decrypt it using::
 
-	 $ sops --decrypt test.enc.yaml
+     $ sops --decrypt test.enc.yaml
 
 
 Encrypting using Hashicorp Vault
@@ -335,56 +335,56 @@ To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
 
 .. code:: sh
 
-	$ docker run -d -p8200:8200 vault:1.2.0 server -dev -dev-root-token-id=toor
+    $ docker run -d -p8200:8200 vault:1.2.0 server -dev -dev-root-token-id=toor
 
 
 .. code:: sh
 
-	$ # Substitute this with the address Vault is running on
-	$ export VAULT_ADDR=http://127.0.0.1:8200 
+    $ # Substitute this with the address Vault is running on
+    $ export VAULT_ADDR=http://127.0.0.1:8200 
 
-	$ # this may not be necessary in case you previously used `vault login` for production use
-	$ export VAULT_TOKEN=toor 
-	
-	$ # to check if Vault started and is configured correctly
-	$ vault status
-	Key             Value
-	---             -----
-	Seal Type       shamir
-	Initialized     true
-	Sealed          false
-	Total Shares    1
-	Threshold       1
-	Version         1.2.0
-	Cluster Name    vault-cluster-618cc902
-	Cluster ID      e532e461-e8f0-1352-8a41-fc7c11096908
-	HA Enabled      false
+    $ # this may not be necessary in case you previously used `vault login` for production use
+    $ export VAULT_TOKEN=toor 
+    
+    $ # to check if Vault started and is configured correctly
+    $ vault status
+    Key             Value
+    ---             -----
+    Seal Type       shamir
+    Initialized     true
+    Sealed          false
+    Total Shares    1
+    Threshold       1
+    Version         1.2.0
+    Cluster Name    vault-cluster-618cc902
+    Cluster ID      e532e461-e8f0-1352-8a41-fc7c11096908
+    HA Enabled      false
 
-	$ # It is required to enable a transit engine if not already done (It is suggested to create a transit engine specifically for sops, in which it is possible to have multiple keys with various permission levels)
-	$ vault secrets enable -path=sops transit
-	Success! Enabled the transit secrets engine at: sops/
+    $ # It is required to enable a transit engine if not already done (It is suggested to create a transit engine specifically for sops, in which it is possible to have multiple keys with various permission levels)
+    $ vault secrets enable -path=sops transit
+    Success! Enabled the transit secrets engine at: sops/
 
-	$ # Then create one or more keys
-	$ vault write sops/keys/firstkey type=rsa-4096
-	Success! Data written to: sops/keys/firstkey
+    $ # Then create one or more keys
+    $ vault write sops/keys/firstkey type=rsa-4096
+    Success! Data written to: sops/keys/firstkey
 
-	$ vault write sops/keys/secondkey type=rsa-2048
-	Success! Data written to: sops/keys/secondkey
+    $ vault write sops/keys/secondkey type=rsa-2048
+    Success! Data written to: sops/keys/secondkey
 
-	$ vault write sops/keys/thirdkey type=chacha20-poly1305
-	Success! Data written to: sops/keys/thirdkey
+    $ vault write sops/keys/thirdkey type=chacha20-poly1305
+    Success! Data written to: sops/keys/thirdkey
 
-	$ sops --encrypt --hc-vault-transit $VAULT_ADDR/v1/sops/keys/firstkey vault_example.yml
+    $ sops --encrypt --hc-vault-transit $VAULT_ADDR/v1/sops/keys/firstkey vault_example.yml
 
-	$ cat <<EOF > .sops.yaml
-	creation_rules:
-		- path_regex: \.dev\.yaml$
-		  hc_vault_transit_uri: "$VAULT_ADDR/v1/sops/keys/secondkey"
-		- path_regex: \.prod\.yaml$
-		  hc_vault_transit_uri: "$VAULT_ADDR/v1/sops/keys/thirdkey"
-	EOF
+    $ cat <<EOF > .sops.yaml
+    creation_rules:
+        - path_regex: \.dev\.yaml$
+          hc_vault_transit_uri: "$VAULT_ADDR/v1/sops/keys/secondkey"
+        - path_regex: \.prod\.yaml$
+          hc_vault_transit_uri: "$VAULT_ADDR/v1/sops/keys/thirdkey"
+    EOF
 
-	$ sops --verbose -e prod/raw.yaml > prod/encrypted.yaml
+    $ sops --verbose -e prod/raw.yaml > prod/encrypted.yaml
 
 Adding and removing keys
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -426,7 +426,7 @@ separated list.
 
 .. code:: sh
 
-	$ sops updatekeys test.enc.yaml
+    $ sops updatekeys test.enc.yaml
 
 Sops will prompt you with the changes to be made. This interactivity can be
 disabled by supplying the ``-y`` flag.
@@ -446,11 +446,11 @@ add a key without rotating the data key.
 
 .. code:: sh
 
-	# add a new pgp key to the file and rotate the data key
-	$ sops -r -i --add-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 example.yaml
+    # add a new pgp key to the file and rotate the data key
+    $ sops -r -i --add-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 example.yaml
 
-	# remove a pgp key from the file and rotate the data key
-	$ sops -r -i --rm-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 example.yaml
+    # remove a pgp key from the file and rotate the data key
+    $ sops -r -i --rm-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 example.yaml
 
 
 Direct Editing
@@ -466,17 +466,17 @@ editing:
 
 .. code:: yaml
 
-	sops:
-	    kms:
-	    - arn: arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e
+    sops:
+        kms:
+            - arn: arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e
 
 And, similarly, to add a PGP master key, we add its fingerprint:
 
 .. code:: yaml
 
-	sops:
-	    pgp:
-	    - fp: 85D77543B3D624B63CEA9E6DBC17301B491B3F21
+    sops:
+        pgp:
+            - fp: 85D77543B3D624B63CEA9E6DBC17301B491B3F21
 
 When the file is saved, ``sops`` will update its metadata and encrypt the data key
 with the freshly added master keys. The removed entries are simply deleted from
@@ -493,10 +493,10 @@ If you want to use a specific profile, you can do so with `aws_profile`:
 
 .. code:: yaml
 
-	sops:
-	    kms:
-	    -	arn: arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e
-	        aws_profile: foo
+    sops:
+        kms:
+            - arn: arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e
+              aws_profile: foo
 
 If no AWS profile is set, default credentials will be used.
 
@@ -525,39 +525,39 @@ must assume alongside its ARN, as follows:
 
 .. code:: yaml
 
-	sops:
-	    kms:
-	    -	arn: arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e
-	        role: arn:aws:iam::927034868273:role/sops-dev-xyz
+    sops:
+        kms:
+            - arn: arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e
+              role: arn:aws:iam::927034868273:role/sops-dev-xyz
 
 The role must have permission to call Encrypt and Decrypt using KMS. An example
 policy is shown below.
 
 .. code:: json
 
-	{
-	  "Sid": "Allow use of the key",
-	  "Effect": "Allow",
-	  "Action": [
-		"kms:Encrypt",
-		"kms:Decrypt",
-		"kms:ReEncrypt*",
-		"kms:GenerateDataKey*",
-		"kms:DescribeKey"
-	  ],
-	  "Resource": "*",
-	  "Principal": {
-		"AWS": [
-		  "arn:aws:iam::927034868273:role/sops-dev-xyz"
-		]
-	  }
-	}
+    {
+      "Sid": "Allow use of the key",
+      "Effect": "Allow",
+      "Action": [
+        "kms:Encrypt",
+        "kms:Decrypt",
+        "kms:ReEncrypt*",
+        "kms:GenerateDataKey*",
+        "kms:DescribeKey"
+      ],
+      "Resource": "*",
+      "Principal": {
+        "AWS": [
+          "arn:aws:iam::927034868273:role/sops-dev-xyz"
+        ]
+      }
+    }
 
 You can specify a role in the ``--kms`` flag and ``SOPS_KMS_ARN`` variable by
 appending it to the ARN of the master key, separated by a **+** sign::
 
-	<KMS ARN>+<ROLE ARN>
-	arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500+arn:aws:iam::927034868273:role/sops-dev-xyz
+    <KMS ARN>+<ROLE ARN>
+    arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500+arn:aws:iam::927034868273:role/sops-dev-xyz
 
 AWS KMS Encryption Context
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -571,7 +571,7 @@ When creating a new file, you can specify encryption context in the
 
 .. code:: sh
 
-	$ sops --encryption-context Environment:production,Role:web-server test.dev.yaml
+    $ sops --encryption-context Environment:production,Role:web-server test.dev.yaml
 
 The format of the Encrypt Context string is ``<EncryptionContext Key>:<EncryptionContext Value>,<EncryptionContext Key>:<EncryptionContext Value>,...``
 
@@ -608,7 +608,7 @@ KMS and PGP master keys defined in the file.
 
 .. code:: sh
 
-	$ sops -r example.yaml
+    $ sops -r example.yaml
 
 Using .sops.yaml conf to select KMS, PGP and age for new files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -630,31 +630,31 @@ can manage the three sets of configurations for the three types of files:
 
 .. code:: yaml
 
-	# creation rules are evaluated sequentially, the first match wins
-	creation_rules:
-		# upon creation of a file that matches the pattern *.dev.yaml,
-		# KMS set A as well as PGP and age is used
-		- path_regex: \.dev\.yaml$
-		  kms: 'arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500,arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod'
-		  pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
-		  age: 'age129h70qwx39k7h5x6l9hg566nwm53527zvamre8vep9e3plsm44uqgy8gla'
+    # creation rules are evaluated sequentially, the first match wins
+    creation_rules:
+        # upon creation of a file that matches the pattern *.dev.yaml,
+        # KMS set A as well as PGP and age is used
+        - path_regex: \.dev\.yaml$
+          kms: 'arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500,arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod'
+          pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
+          age: 'age129h70qwx39k7h5x6l9hg566nwm53527zvamre8vep9e3plsm44uqgy8gla'
 
-		# prod files use KMS set B in the PROD IAM, PGP and age
-		- path_regex: \.prod\.yaml$
-		  kms: 'arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod,arn:aws:kms:eu-central-1:361527076523:key/cb1fab90-8d17-42a1-a9d8-334968904f94+arn:aws:iam::361527076523:role/hiera-sops-prod'
-		  pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
-		  age: 'age129h70qwx39k7h5x6l9hg566nwm53527zvamre8vep9e3plsm44uqgy8gla'
-		  hc_vault_uris: "http://localhost:8200/v1/sops/keys/thirdkey"
+        # prod files use KMS set B in the PROD IAM, PGP and age
+        - path_regex: \.prod\.yaml$
+          kms: 'arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e+arn:aws:iam::361527076523:role/hiera-sops-prod,arn:aws:kms:eu-central-1:361527076523:key/cb1fab90-8d17-42a1-a9d8-334968904f94+arn:aws:iam::361527076523:role/hiera-sops-prod'
+          pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
+          age: 'age129h70qwx39k7h5x6l9hg566nwm53527zvamre8vep9e3plsm44uqgy8gla'
+          hc_vault_uris: "http://localhost:8200/v1/sops/keys/thirdkey"
 
-		# gcp files using GCP KMS
-		- path_regex: \.gcp\.yaml$
-		  gcp_kms: projects/mygcproject/locations/global/keyRings/mykeyring/cryptoKeys/thekey
+        # gcp files using GCP KMS
+        - path_regex: \.gcp\.yaml$
+          gcp_kms: projects/mygcproject/locations/global/keyRings/mykeyring/cryptoKeys/thekey
 
-		# Finally, if the rules above have not matched, this one is a
-		# catchall that will encrypt the file using KMS set C as well as PGP
-		# The absence of a path_regex means it will match everything
-		- kms: 'arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500,arn:aws:kms:us-west-2:142069644989:key/846cfb17-373d-49b9-8baf-f36b04512e47,arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e'
-		  pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
+        # Finally, if the rules above have not matched, this one is a
+        # catchall that will encrypt the file using KMS set C as well as PGP
+        # The absence of a path_regex means it will match everything
+        - kms: 'arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500,arn:aws:kms:us-west-2:142069644989:key/846cfb17-373d-49b9-8baf-f36b04512e47,arn:aws:kms:us-west-2:361527076523:key/5052f06a-5d3f-489e-b86c-57201e06f31e'
+          pgp: 'FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4'
 
 When creating any file under **mysecretrepo**, whether at the root or under
 a subdirectory, sops will recursively look for a ``.sops.yaml`` file. If one is
@@ -692,7 +692,7 @@ Creating a new file with the right keys is now as simple as
 
 .. code:: sh
 
-	$ sops <newfile>.prod.yaml
+    $ sops <newfile>.prod.yaml
 
 Note that the configuration file is ignored when KMS or PGP parameters are
 passed on the sops command line or in environment variables.
@@ -708,7 +708,7 @@ Example: place the following in your ``~/.bashrc``
 
 .. code:: bash
 
-	SOPS_GPG_EXEC = 'your_gpg_client_wrapper'
+    SOPS_GPG_EXEC = 'your_gpg_client_wrapper'
 
 
 Specify a different GPG key server
@@ -766,26 +766,26 @@ like so:
     creation_rules:
         - path_regex: .*keygroups.*
           key_groups:
-          # First key group
-          - pgp:
-            - fingerprint1
-            - fingerprint2
-            kms:
-            - arn: arn1
-              role: role1
-              context:
-                foo: bar
-            - arn: arn2
-          # Second key group
-          - pgp:
-            - fingerprint3
-            - fingerprint4
-            kms:
-            - arn: arn3
-            - arn: arn4
-          # Third key group
-          - pgp:
-            - fingerprint5
+              # First key group
+              - pgp:
+                    - fingerprint1
+                    - fingerprint2
+                kms:
+                    - arn: arn1
+                      role: role1
+                      context:
+                          foo: bar
+                    - arn: arn2
+              # Second key group
+              - pgp:
+                    - fingerprint3
+                    - fingerprint4
+                kms:
+                    - arn: arn3
+                    - arn: arn4
+              # Third key group
+              - pgp:
+                    - fingerprint5
 
 Given this configuration, we can create a new encrypted file like we normally
 would, and optionally provide the ``--shamir-secret-sharing-threshold`` command line
@@ -808,26 +808,26 @@ with ``shamir_threshold``:
         - path_regex: .*keygroups.*
           shamir_threshold: 2
           key_groups:
-          # First key group
-          - pgp:
-            - fingerprint1
-            - fingerprint2
-            kms:
-            - arn: arn1
-              role: role1
-              context:
-                foo: bar
-            - arn: arn2
-          # Second key group
-          - pgp:
-            - fingerprint3
-            - fingerprint4
-            kms:
-            - arn: arn3
-            - arn: arn4
-          # Third key group
-          - pgp:
-            - fingerprint5
+              # First key group
+              - pgp:
+                    - fingerprint1
+                    - fingerprint2
+                kms:
+                    - arn: arn1
+                      role: role1
+                      context:
+                          foo: bar
+                    - arn: arn2
+              # Second key group
+              - pgp:
+                    - fingerprint3
+                    - fingerprint4
+                kms:
+                    - arn: arn3
+                    - arn: arn4
+              # Third key group
+              - pgp:
+                    - fingerprint5
 
 And then run ``sops example.json``.
 
@@ -950,28 +950,28 @@ written to disk.
 
 .. code:: sh
 
-   # print secrets to stdout to confirm values
-   $ sops -d out.json
-   {
-           "database_password": "jf48t9wfw094gf4nhdf023r",
-           "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
-           "AWS_SECRET_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
-   }
+    # print secrets to stdout to confirm values
+    $ sops -d out.json
+    {
+            "database_password": "jf48t9wfw094gf4nhdf023r",
+            "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
+            "AWS_SECRET_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    }
 
-   # decrypt out.json and run a command
-   # the command prints the environment variable and runs a script that uses it
-   $ sops exec-env out.json 'echo secret: $database_password; ./database-import'
-   secret: jf48t9wfw094gf4nhdf023r
+    # decrypt out.json and run a command
+    # the command prints the environment variable and runs a script that uses it
+    $ sops exec-env out.json 'echo secret: $database_password; ./database-import'
+    secret: jf48t9wfw094gf4nhdf023r
 
-   # launch a shell with the secrets available in its environment
-   $ sops exec-env out.json 'sh'
-   sh-3.2# echo $database_password
-   jf48t9wfw094gf4nhdf023r
+    # launch a shell with the secrets available in its environment
+    $ sops exec-env out.json 'sh'
+    sh-3.2# echo $database_password
+    jf48t9wfw094gf4nhdf023r
 
-   # the secret is not accessible anywhere else
-   sh-3.2$ exit
-   $ echo your password: $database_password
-   your password:
+    # the secret is not accessible anywhere else
+    sh-3.2$ exit
+    $ echo your password: $database_password
+    your password:
 
 
 If the command you want to run only operates on files, you can use ``exec-file``
@@ -988,31 +988,31 @@ substituted with the temporary file path (whether a FIFO or an actual file).
 
 .. code:: sh
 
-   # operating on the same file as before, but as a file this time
-   $ sops exec-file out.json 'echo your temporary file: {}; cat {}'
-   your temporary file: /tmp/.sops894650499/tmp-file
-   {
-           "database_password": "jf48t9wfw094gf4nhdf023r",
-           "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
-           "AWS_SECRET_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
-   }
+    # operating on the same file as before, but as a file this time
+    $ sops exec-file out.json 'echo your temporary file: {}; cat {}'
+    your temporary file: /tmp/.sops894650499/tmp-file
+    {
+            "database_password": "jf48t9wfw094gf4nhdf023r",
+            "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
+            "AWS_SECRET_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    }
 
-   # launch a shell with a variable TMPFILE pointing to the temporary file
-   $ sops exec-file --no-fifo out.json 'TMPFILE={} sh'
-   sh-3.2$ echo $TMPFILE
-   /tmp/.sops506055069/tmp-file291138648
-   sh-3.2$ cat $TMPFILE
-   {
-           "database_password": "jf48t9wfw094gf4nhdf023r",
-           "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
-           "AWS_SECRET_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
-   }
-   sh-3.2$ ./program --config $TMPFILE
-   sh-3.2$ exit
+    # launch a shell with a variable TMPFILE pointing to the temporary file
+    $ sops exec-file --no-fifo out.json 'TMPFILE={} sh'
+    sh-3.2$ echo $TMPFILE
+    /tmp/.sops506055069/tmp-file291138648
+    sh-3.2$ cat $TMPFILE
+    {
+            "database_password": "jf48t9wfw094gf4nhdf023r",
+            "AWS_ACCESS_KEY_ID": "AKIAIOSFODNN7EXAMPLE",
+            "AWS_SECRET_KEY": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+    }
+    sh-3.2$ ./program --config $TMPFILE
+    sh-3.2$ exit
 
-   # try to open the temporary file from earlier
-   $ cat /tmp/.sops506055069/tmp-file291138648
-   cat: /tmp/.sops506055069/tmp-file291138648: No such file or directory
+    # try to open the temporary file from earlier
+    $ cat /tmp/.sops506055069/tmp-file291138648
+    cat: /tmp/.sops506055069/tmp-file291138648: No such file or directory
 
 Additionally, on unix-like platforms, both ``exec-env`` and ``exec-file``
 support dropping privileges before executing the new program via the
@@ -1026,20 +1026,20 @@ To overwrite the default file name (``tmp-file``) in ``exec-file`` use the
 
 .. code:: sh
 
-   # the encrypted file can't be read by the current user
-   $ cat out.json
-   cat: out.json: Permission denied
+    # the encrypted file can't be read by the current user
+    $ cat out.json
+    cat: out.json: Permission denied
 
-   # execute sops as root, decrypt secrets, then drop privileges
-   $ sudo sops exec-env --user nobody out.json 'sh'
-   sh-3.2$ echo $database_password
-   jf48t9wfw094gf4nhdf023r
+    # execute sops as root, decrypt secrets, then drop privileges
+    $ sudo sops exec-env --user nobody out.json 'sh'
+    sh-3.2$ echo $database_password
+    jf48t9wfw094gf4nhdf023r
 
-   # dropped privileges, still can't load the original file
-   sh-3.2$ id
-   uid=4294967294(nobody) gid=4294967294(nobody) groups=4294967294(nobody)
-   sh-3.2$ cat out.json
-   cat: out.json: Permission denied
+    # dropped privileges, still can't load the original file
+    sh-3.2$ id
+    uid=4294967294(nobody) gid=4294967294(nobody) groups=4294967294(nobody)
+    sh-3.2$ cat out.json
+    cat: out.json: Permission denied
 
 Using the publish command
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1050,20 +1050,20 @@ This command requires a ``.sops.yaml`` configuration file. Below is an example:
 
 .. code:: yaml
 
-   destination_rules:
-      - s3_bucket: "sops-secrets"
-        path_regex: s3/*
-        recreation_rule:
-           pgp: F69E4901EDBAD2D1753F8C67A64535C4163FB307
-      - gcs_bucket: "sops-secrets"
-        path_regex: gcs/*
-        recreation_rule:
-           pgp: F69E4901EDBAD2D1753F8C67A64535C4163FB307
-      - vault_path: "sops/"
-        vault_kv_mount_name: "secret/" # default
-        vault_kv_version: 2 # default
-        path_regex: vault/*
-        omit_extensions: true
+    destination_rules:
+        - s3_bucket: "sops-secrets"
+          path_regex: s3/*
+          recreation_rule:
+              pgp: F69E4901EDBAD2D1753F8C67A64535C4163FB307
+        - gcs_bucket: "sops-secrets"
+          path_regex: gcs/*
+          recreation_rule:
+              pgp: F69E4901EDBAD2D1753F8C67A64535C4163FB307
+        - vault_path: "sops/"
+          vault_kv_mount_name: "secret/" # default
+          vault_kv_version: 2 # default
+          path_regex: vault/*
+          omit_extensions: true
 
 The above configuration will place all files under ``s3/*`` into the S3 bucket ``sops-secrets``,
 all files under ``gcs/*`` into the GCS bucket ``sops-secrets``, and the contents of all files under
@@ -1099,30 +1099,30 @@ Below is an example of publishing to Vault (using token auth with a local dev in
 
 .. code:: sh
 
-   $ export VAULT_TOKEN=...
-   $ export VAULT_ADDR='http://127.0.0.1:8200'
-   $ sops -d vault/test.yaml
-   example_string: bar
-   example_number: 42
-   example_map:
-       key: value
-   $ sops publish vault/test.yaml
-   uploading /home/user/sops_directory/vault/test.yaml to http://127.0.0.1:8200/v1/secret/data/sops/test.yaml ? (y/n): y
-   $ vault kv get secret/sops/test.yaml
-   ====== Metadata ======
-   Key              Value
-   ---              -----
-   created_time     2019-07-11T03:32:17.074792017Z
-   deletion_time    n/a
-   destroyed        false
-   version          3
+    $ export VAULT_TOKEN=...
+    $ export VAULT_ADDR='http://127.0.0.1:8200'
+    $ sops -d vault/test.yaml
+    example_string: bar
+    example_number: 42
+    example_map:
+        key: value
+    $ sops publish vault/test.yaml
+    uploading /home/user/sops_directory/vault/test.yaml to http://127.0.0.1:8200/v1/secret/data/sops/test.yaml ? (y/n): y
+    $ vault kv get secret/sops/test.yaml
+    ====== Metadata ======
+    Key              Value
+    ---              -----
+    created_time     2019-07-11T03:32:17.074792017Z
+    deletion_time    n/a
+    destroyed        false
+    version          3
 
-   ========= Data =========
-   Key               Value
-   ---               -----
-   example_map       map[key:value]
-   example_number    42
-   example_string    bar
+    ========= Data =========
+    Key               Value
+    ---               -----
+    example_map       map[key:value]
+    example_number    42
+    example_string    bar
 
 
 Important information on types
@@ -1142,17 +1142,17 @@ extension after encrypting a file. For example:
 
 .. code:: sh
 
-	$ sops -e -i myfile.json
-	$ sops -d myfile.json
+    $ sops -e -i myfile.json
+    $ sops -d myfile.json
 
 If you want to change the extension of the file once encrypted, you need to provide
 sops with the ``--input-type`` flag upon decryption. For example:
 
 .. code:: sh
 
-	$ sops -e myfile.json > myfile.json.enc
+    $ sops -e myfile.json > myfile.json.enc
 
-	$ sops -d --input-type json myfile.json.enc
+    $ sops -d --input-type json myfile.json.enc
 
 When operating on stdin, use the ``--input-type`` and ``--output-type`` flags as follows:
 
@@ -1170,14 +1170,14 @@ This file will not work in ``sops``:
 
 .. code:: yaml
 
-	bill-to:  &id001
-	    street: |
-	        123 Tornado Alley
-	        Suite 16
-	    city:   East Centerville
-	    state:  KS
+    bill-to:  &id001
+        street: |
+            123 Tornado Alley
+            Suite 16
+        city:   East Centerville
+        state:  KS
 
-	ship-to:  *id001
+    ship-to:  *id001
 
 ``sops`` uses the path to a value as additional data in the AEAD encryption, and thus
 dynamic paths generated by anchors break the authentication step.
@@ -1193,10 +1193,10 @@ following multi-document will be encrypted as expected:
 
 .. code:: yaml
 
-	---
-	data: foo
-	---
-	data: bar
+    ---
+    data: foo
+    ---
+    data: bar
 
 Note that the ``sops`` metadata, i.e. the hash, etc, is computed for the physical
 file rather than each internal "document".
@@ -1210,43 +1210,43 @@ This file will not work in sops:
 
 .. code:: yaml
 
-	---
-	  - some
-	  - array
-	  - elements
+    ---
+      - some
+      - array
+      - elements
 
 But this one will work because the ``sops`` key can be added at the same level as the
 ``data`` key.
 
 .. code:: yaml
 
-	data:
-	  - some
-	  - array
-	  - elements
+    data:
+        - some
+        - array
+        - elements
 
 Similarly, with ``JSON`` arrays, this document will not work:
 
 .. code:: json
 
-	[
-	  "some",
-	  "array",
-	  "elements"
-	]
+    [
+      "some",
+      "array",
+      "elements"
+    ]
 
 
 But this one will work just fine:
 
 .. code:: json
 
-	{
-	  "data": [
-	    "some",
-	    "array",
-	    "elements"
-	  ]
-	}
+    {
+      "data": [
+        "some",
+        "array",
+        "elements"
+      ]
+    }
 
 
 Examples
@@ -1261,7 +1261,7 @@ The command below creates a new file with a data key encrypted by KMS and PGP.
 
 .. code:: sh
 
-	$ sops --kms "arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500" --pgp C9CAB0AF1165060DB58D6D6B2653B624D620786D /path/to/new/file.yaml
+    $ sops --kms "arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500" --pgp C9CAB0AF1165060DB58D6D6B2653B624D620786D /path/to/new/file.yaml
 
 Encrypting an existing file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1272,15 +1272,15 @@ encrypt the file, and redirect the output to a destination file.
 
 .. code:: sh
 
-	$ export SOPS_KMS_ARN="arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500"
-	$ export SOPS_PGP_FP="C9CAB0AF1165060DB58D6D6B2653B624D620786D"
-	$ sops -e /path/to/existing/file.yaml > /path/to/new/encrypted/file.yaml
+    $ export SOPS_KMS_ARN="arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500"
+    $ export SOPS_PGP_FP="C9CAB0AF1165060DB58D6D6B2653B624D620786D"
+    $ sops -e /path/to/existing/file.yaml > /path/to/new/encrypted/file.yaml
 
 Decrypt the file with ``-d``.
 
 .. code:: sh
 
-	$ sops -d /path/to/new/encrypted/file.yaml
+    $ sops -d /path/to/new/encrypted/file.yaml
 
 Encrypt or decrypt a file in place
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1290,11 +1290,11 @@ original file after encrypting or decrypting it.
 
 .. code:: sh
 
-	# file.yaml is in cleartext
-	$ sops -e -i /path/to/existing/file.yaml
-	# file.yaml is now encrypted
-	$ sops -d -i /path/to/existing/file.yaml
-	# file.yaml is back in cleartext
+    # file.yaml is in cleartext
+    $ sops -e -i /path/to/existing/file.yaml
+    # file.yaml is now encrypted
+    $ sops -d -i /path/to/existing/file.yaml
+    # file.yaml is back in cleartext
 
 Encrypting binary files
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -1311,22 +1311,22 @@ In-place encryption/decryption also works on binary files.
 
 .. code:: sh
 
-	$ dd if=/dev/urandom of=/tmp/somerandom bs=1024
-	count=512
-	512+0 records in
-	512+0 records out
-	524288 bytes (524 kB) copied, 0.0466158 s, 11.2 MB/s
+    $ dd if=/dev/urandom of=/tmp/somerandom bs=1024
+    count=512
+    512+0 records in
+    512+0 records out
+    524288 bytes (524 kB) copied, 0.0466158 s, 11.2 MB/s
 
-	$ sha512sum /tmp/somerandom
-	9589bb20280e9d381f7a192000498c994e921b3cdb11d2ef5a986578dc2239a340b25ef30691bac72bdb14028270828dad7e8bd31e274af9828c40d216e60cbe /tmp/somerandom
+    $ sha512sum /tmp/somerandom
+    9589bb20280e9d381f7a192000498c994e921b3cdb11d2ef5a986578dc2239a340b25ef30691bac72bdb14028270828dad7e8bd31e274af9828c40d216e60cbe /tmp/somerandom
 
-	$ sops -e -i /tmp/somerandom
-	please wait while a data encryption key is being generated and stored securely
+    $ sops -e -i /tmp/somerandom
+    please wait while a data encryption key is being generated and stored securely
 
-	$ sops -d -i /tmp/somerandom
+    $ sops -d -i /tmp/somerandom
 
-	$ sha512sum /tmp/somerandom
-	9589bb20280e9d381f7a192000498c994e921b3cdb11d2ef5a986578dc2239a340b25ef30691bac72bdb14028270828dad7e8bd31e274af9828c40d216e60cbe /tmp/somerandom
+    $ sha512sum /tmp/somerandom
+    9589bb20280e9d381f7a192000498c994e921b3cdb11d2ef5a986578dc2239a340b25ef30691bac72bdb14028270828dad7e8bd31e274af9828c40d216e60cbe /tmp/somerandom
 
 Extract a sub-part of a document tree
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1337,16 +1337,16 @@ values, like keys, without needing an extra parser.
 
 .. code:: sh
 
-	$ sops -d --extract '["app2"]["key"]' ~/git/svc/sops/example.yaml
-	-----BEGIN RSA PRIVATE KEY-----
-	MIIBPAIBAAJBAPTMNIyHuZtpLYc7VsHQtwOkWYobkUblmHWRmbXzlAX6K8tMf3Wf
-	ImcbNkqAKnELzFAPSBeEMhrBN0PyOC9lYlMCAwEAAQJBALXD4sjuBn1E7Y9aGiMz
-	bJEBuZJ4wbhYxomVoQKfaCu+kH80uLFZKoSz85/ySauWE8LgZcMLIBoiXNhDKfQL
-	vHECIQD6tCG9NMFWor69kgbX8vK5Y+QL+kRq+9HK6yZ9a+hsLQIhAPn4Ie6HGTjw
-	fHSTXWZpGSan7NwTkIu4U5q2SlLjcZh/AiEA78NYRRBwGwAYNUqzutGBqyXKUl4u
-	Erb0xAEyVV7e8J0CIQC8VBY8f8yg+Y7Kxbw4zDYGyb3KkXL10YorpeuZR4LuQQIg
-	bKGPkMM4w5blyE1tqGN0T7sJwEx+EUOgacRNqM2ljVA=
-	-----END RSA PRIVATE KEY-----
+    $ sops -d --extract '["app2"]["key"]' ~/git/svc/sops/example.yaml
+    -----BEGIN RSA PRIVATE KEY-----
+    MIIBPAIBAAJBAPTMNIyHuZtpLYc7VsHQtwOkWYobkUblmHWRmbXzlAX6K8tMf3Wf
+    ImcbNkqAKnELzFAPSBeEMhrBN0PyOC9lYlMCAwEAAQJBALXD4sjuBn1E7Y9aGiMz
+    bJEBuZJ4wbhYxomVoQKfaCu+kH80uLFZKoSz85/ySauWE8LgZcMLIBoiXNhDKfQL
+    vHECIQD6tCG9NMFWor69kgbX8vK5Y+QL+kRq+9HK6yZ9a+hsLQIhAPn4Ie6HGTjw
+    fHSTXWZpGSan7NwTkIu4U5q2SlLjcZh/AiEA78NYRRBwGwAYNUqzutGBqyXKUl4u
+    Erb0xAEyVV7e8J0CIQC8VBY8f8yg+Y7Kxbw4zDYGyb3KkXL10YorpeuZR4LuQQIg
+    bKGPkMM4w5blyE1tqGN0T7sJwEx+EUOgacRNqM2ljVA=
+    -----END RSA PRIVATE KEY-----
 
 The tree path syntax uses regular python dictionary syntax, without the
 variable name. Extract keys by naming them, and array elements by numbering
@@ -1354,8 +1354,8 @@ them.
 
 .. code:: sh
 
-	$ sops -d --extract '["an_array"][1]' ~/git/svc/sops/example.yaml
-	secretuser2
+    $ sops -d --extract '["an_array"][1]' ~/git/svc/sops/example.yaml
+    secretuser2
 
 Set a sub-part in a document tree
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1366,7 +1366,7 @@ set specific values, like keys, without needing an editor.
 
 .. code:: sh
 
-	$ sops --set '["app2"]["key"] "app2keystringvalue"'  ~/git/svc/sops/example.yaml
+    $ sops --set '["app2"]["key"] "app2keystringvalue"'  ~/git/svc/sops/example.yaml
 
 The tree path syntax uses regular python dictionary syntax, without the
 variable name. Set to keys by naming them, and array elements by
@@ -1374,13 +1374,13 @@ numbering them.
 
 .. code:: sh
 
-	$ sops --set '["an_array"][1] "secretuser2"' ~/git/svc/sops/example.yaml
+    $ sops --set '["an_array"][1] "secretuser2"' ~/git/svc/sops/example.yaml
 
 The value must be formatted as json.
 
 .. code:: sh
 
-	$ sops --set '["an_array"][1] {"uid1":null,"uid2":1000,"uid3":["bob"]}' ~/git/svc/sops/example.yaml
+    $ sops --set '["an_array"][1] {"uid1":null,"uid2":1000,"uid3":["bob"]}' ~/git/svc/sops/example.yaml
 
 Showing diffs in cleartext in git
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1394,18 +1394,18 @@ at the root of your repository that contains a filter and a command.
 
 .. code:: text
 
-	*.yaml diff=sopsdiffer
+    *.yaml diff=sopsdiffer
 
 Here we only care about YAML files. ``sopsdiffer`` is an arbitrary name that we map
 to a sops command in the git configuration file of the repository.
 
 .. code:: sh
 
-	$ git config diff.sopsdiffer.textconv "sops -d"
+    $ git config diff.sopsdiffer.textconv "sops -d"
 
-	$ grep -A 1 sopsdiffer .git/config
-	[diff "sopsdiffer"]
-		textconv = "sops -d"
+    $ grep -A 1 sopsdiffer .git/config
+    [diff "sopsdiffer"]
+        textconv = "sops -d"
 
 With this in place, calls to ``git diff`` will decrypt both previous and current
 versions of the target file prior to displaying the diff. And it even works with
@@ -1437,7 +1437,7 @@ keys that match the supplied regular expression.  For example, this command:
 
 .. code:: sh
 
-	$ sops --encrypt --encrypted-regex '^(data|stringData)$' k8s-secrets.yaml
+    $ sops --encrypt --encrypted-regex '^(data|stringData)$' k8s-secrets.yaml
 
 will encrypt the values under the ``data`` and ``stringData`` keys in a YAML file
 containing kubernetes secrets.  It will not encrypt other values that help you to
@@ -1449,7 +1449,7 @@ that match the supplied regular expression. For example, this command:
 
 .. code:: sh
 
-  $ sops --encrypt --unencrypted-regex '^(description|metadata)$' k8s-secrets.yaml
+    $ sops --encrypt --unencrypted-regex '^(description|metadata)$' k8s-secrets.yaml
 
 will not encrypt the values under the ``description`` and ``metadata`` keys in a YAML file
 containing kubernetes secrets, while encrypting everything else.
@@ -1472,9 +1472,9 @@ For KMS:
 
     sops:
         kms:
-        -   enc: CiC6yCOtzsnFhkfdIslYZ0bAf//gYLYCmIu87B3sy/5yYxKnAQEBAQB4usgjrc7JxYZH3SLJWGdGwH//4GC2ApiLvOwd7Mv+cmMAAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyGdRODuYMHbA8Ozj8CARCAO7opMolPJUmBXd39Zlp0L2H9fzMKidHm1vvaF6nNFq0ClRY7FlIZmTm4JfnOebPseffiXFn9tG8cq7oi
-            enc_ts: 1439568549.245995
-            arn: arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e
+            - enc: CiC6yCOtzsnFhkfdIslYZ0bAf//gYLYCmIu87B3sy/5yYxKnAQEBAQB4usgjrc7JxYZH3SLJWGdGwH//4GC2ApiLvOwd7Mv+cmMAAAB+MHwGCSqGSIb3DQEHBqBvMG0CAQAwaAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAyGdRODuYMHbA8Ozj8CARCAO7opMolPJUmBXd39Zlp0L2H9fzMKidHm1vvaF6nNFq0ClRY7FlIZmTm4JfnOebPseffiXFn9tG8cq7oi
+              enc_ts: 1439568549.245995
+              arn: arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e
 
 For PGP:
 
@@ -1482,27 +1482,27 @@ For PGP:
 
     sops:
         pgp:
-        -   fp: 85D77543B3D624B63CEA9E6DBC17301B491B3F21
-            created_at: 1441570391.930042
-            enc: |
-                -----BEGIN PGP MESSAGE-----
-                Version: GnuPG v1
+            - fp: 85D77543B3D624B63CEA9E6DBC17301B491B3F21
+              created_at: 1441570391.930042
+              enc: |
+                  -----BEGIN PGP MESSAGE-----
+                  Version: GnuPG v1
 
-                hQIMA0t4uZHfl9qgAQ//UvGAwGePyHuf2/zayWcloGaDs0MzI+zw6CmXvMRNPUsA
-                pAgRKczJmDu4+XzN+cxX5Iq9xEWIbny9B5rOjwTXT3qcUYZ4Gkzbq4MWkjuPp/Iv
-                qO4MJaYzoH5YxC4YORQ2LvzhA2YGsCzYnljmatGEUNg01yJ6r5mwFwDxl4Nc80Cn
-                RwnHuGExK8j1jYJZu/juK1qRbuBOAuruIPPWVdFB845PA7waacG1IdUW3ZtBkOy3
-                O0BIfG2ekRg0Nik6sTOhDUA+l2bewCcECI8FYCEjwHm9Sg5cxmP2V5m1mby+uKAm
-                kewaoOyjbmV1Mh3iI1b/AQMr+/6ZE9MT2KnsoWosYamFyjxV5r1ZZM7cWKnOT+tu
-                KOvGhTV1TeOfVpajNTNwtV/Oyh3mMLQ0F0HgCTqomQVqw5+sj7OWAASuD3CU/dyo
-                pcmY5Qe0TNL1JsMNEH8LJDqSh+E0hsUxdY1ouVsg3ysf6mdM8ciWb3WRGxih1Vmf
-                unfLy8Ly3V7ZIC8EHV8aLJqh32jIZV4i2zXIoO4ZBKrudKcECY1C2+zb/TziVAL8
-                qyPe47q8gi1rIyEv5uirLZjgpP+JkDUgoMnzlX334FZ9pWtQMYW4Y67urAI4xUq6
-                /q1zBAeHoeeeQK+YKDB7Ak/Y22YsiqQbNp2n4CKSKAE4erZLWVtDvSp+49SWmS/S
-                XgGi+13MaXIp0ecPKyNTBjF+NOw/I3muyKr8EbDHrd2XgIT06QXqjYLsCb1TZ0zm
-                xgXsOTY3b+ONQ2zjhcovanDp7/k77B+gFitLYKg4BLZsl7gJB12T8MQnpfSmRT4=
-                =oJgS
-                -----END PGP MESSAGE-----
+                  hQIMA0t4uZHfl9qgAQ//UvGAwGePyHuf2/zayWcloGaDs0MzI+zw6CmXvMRNPUsA
+                  pAgRKczJmDu4+XzN+cxX5Iq9xEWIbny9B5rOjwTXT3qcUYZ4Gkzbq4MWkjuPp/Iv
+                  qO4MJaYzoH5YxC4YORQ2LvzhA2YGsCzYnljmatGEUNg01yJ6r5mwFwDxl4Nc80Cn
+                  RwnHuGExK8j1jYJZu/juK1qRbuBOAuruIPPWVdFB845PA7waacG1IdUW3ZtBkOy3
+                  O0BIfG2ekRg0Nik6sTOhDUA+l2bewCcECI8FYCEjwHm9Sg5cxmP2V5m1mby+uKAm
+                  kewaoOyjbmV1Mh3iI1b/AQMr+/6ZE9MT2KnsoWosYamFyjxV5r1ZZM7cWKnOT+tu
+                  KOvGhTV1TeOfVpajNTNwtV/Oyh3mMLQ0F0HgCTqomQVqw5+sj7OWAASuD3CU/dyo
+                  pcmY5Qe0TNL1JsMNEH8LJDqSh+E0hsUxdY1ouVsg3ysf6mdM8ciWb3WRGxih1Vmf
+                  unfLy8Ly3V7ZIC8EHV8aLJqh32jIZV4i2zXIoO4ZBKrudKcECY1C2+zb/TziVAL8
+                  qyPe47q8gi1rIyEv5uirLZjgpP+JkDUgoMnzlX334FZ9pWtQMYW4Y67urAI4xUq6
+                  /q1zBAeHoeeeQK+YKDB7Ak/Y22YsiqQbNp2n4CKSKAE4erZLWVtDvSp+49SWmS/S
+                  XgGi+13MaXIp0ecPKyNTBjF+NOw/I3muyKr8EbDHrd2XgIT06QXqjYLsCb1TZ0zm
+                  xgXsOTY3b+ONQ2zjhcovanDp7/k77B+gFitLYKg4BLZsl7gJB12T8MQnpfSmRT4=
+                  =oJgS
+                  -----END PGP MESSAGE-----
 
 ``sops`` then opens a text editor on the newly created file. The user adds data to the
 file and saves it when done.
@@ -1649,7 +1649,7 @@ when creating a new file:
 
 .. code:: sh
 
-	$ sops --pgp "E60892BB9BD89A69F759A1A0A3D652173B763E8F,84050F1D61AF7C230A12217687DF65059EF093D3,85D77543B3D624B63CEA9E6DBC17301B491B3F21" mynewfile.yaml
+    $ sops --pgp "E60892BB9BD89A69F759A1A0A3D652173B763E8F,84050F1D61AF7C230A12217687DF65059EF093D3,85D77543B3D624B63CEA9E6DBC17301B491B3F21" mynewfile.yaml
 
 Threat Model
 ------------
@@ -1730,7 +1730,7 @@ Credits
 -------
 
 `sops` was inspired by `hiera-eyaml <https://github.com/TomPoulton/hiera-eyaml>`_,
-`credstash <https://github.com/LuminalOSS/credstash>`_ ,
+`credstash <https://github.com/LuminalOSS/credstash>`_,
 `sneaker <https://github.com/codahale/sneaker>`_,
 `password store <http://www.passwordstore.org/>`_ and too many years managing
 PGP encrypted files by hand...
