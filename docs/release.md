@@ -54,6 +54,7 @@ This configuration is quite sophisticated, and ensures at least the following:
   git checkout main
   git pull
   ```
+
 - [ ] Create a **signed tag** for the release, using the following command:
 
   ```sh
