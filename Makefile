@@ -20,6 +20,9 @@ SYFT_VERSION        ?= v0.87.0
 GORELEASER          := $(BIN_DIR)/goreleaser
 GORELEASER_VERSION  ?= v1.20.0
 
+RSTCHECK            := $(shell command -v rstcheck)
+MARKDOWNLINT        := $(shell command -v mdl)
+
 export PATH := $(BIN_DIR):$(PATH)
 
 .PHONY: all
@@ -44,6 +47,22 @@ vendor:
 .PHONY: vet
 vet:
 	$(GO) vet ./...
+
+
+.PHONY: checkdocs
+checkdocs: checkrst checkmd
+
+.PHONY: checkrst
+RST_FILES=$(shell find . -name '*.rst' | grep -v /vendor/ | sort)
+checkrst: $(RST_FILES)
+	@if [ "$(RSTCHECK)" == "" ]; then echo "Need rstcheck to lint RST files. Install rstcheck from your system package repository or from PyPI (https://pypi.org/project/rstcheck/)."; exit 1; fi
+	$(RSTCHECK) --report-level warning $^
+
+.PHONY: checkmd
+MD_FILES=$(shell find . -name '*.md' | grep -v /vendor/ | sort)
+checkmd: $(MD_FILES)
+	@if [ "$(MARKDOWNLINT)" == "" ]; then echo "Need markdownlint to lint RST files. Install markdownlint from your system package repository or from https://github.com/markdownlint/markdownlint."; exit 1; fi
+	$(MARKDOWNLINT) $^
 
 .PHONY: test
 test: vendor
