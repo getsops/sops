@@ -1,0 +1,38 @@
+name: "Docs"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    # Only consider changes to documentation
+    paths:
+      - '**/*.md'
+      - '**/*.rst'
+      - '**/*.txt'
+  schedule:
+    - cron: '25 6 * * 3'
+
+permissions:
+  contents: read
+
+jobs:
+  documentation:
+    name: Lint RST and MD files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4.0.0
+
+      - name: Install rstcheck
+        run: pip install rstcheck
+
+      - name: Run rstcheck on all RST files
+        run: rstcheck $(find -name '*.rst')
+
+      - name: Install markdownlint
+        run: sudo gem install mdl
+
+      - name: Run mdl on all MD files
+        run: mdl $(find -name '*.md')
