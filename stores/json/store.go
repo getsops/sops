@@ -3,6 +3,7 @@ package json //import "github.com/getsops/sops/v3/stores/json"
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 
@@ -42,15 +43,24 @@ func (store BinaryStore) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	return store.store.EmitEncryptedFile(in)
 }
 
+var BinaryStoreEmitPlainError = errors.New("error emitting binary store")
+
 // EmitPlainFile produces plaintext json file's bytes from its corresponding sops.TreeBranches object
 func (store BinaryStore) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
+	if len(in) != 1 {
+		return nil, fmt.Errorf("%w: there must be exactly one tree branch", BinaryStoreEmitPlainError)
+	}
 	// JSON stores a single object per file
 	for _, item := range in[0] {
 		if item.Key == "data" {
-			return []byte(item.Value.(string)), nil
+			if value, ok := item.Value.(string); ok {
+				return []byte(value), nil
+			} else {
+				return nil, fmt.Errorf("%w: 'data' key in tree does not have a string value", BinaryStoreEmitPlainError)
+			}
 		}
 	}
-	return nil, fmt.Errorf("No binary data found in tree")
+	return nil, fmt.Errorf("%w: no binary data found in tree", BinaryStoreEmitPlainError)
 }
 
 // EmitValue extracts a value from a generic interface{} object representing a structured set
