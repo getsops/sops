@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"filippo.io/age"
@@ -23,8 +24,10 @@ const (
 	// age keys file.
 	SopsAgeKeyFileEnv = "SOPS_AGE_KEY_FILE"
 	// SopsAgeKeyUserConfigPath is the default age keys file path in
-	// os.UserConfigDir.
+	// getUserConfigDir().
 	SopsAgeKeyUserConfigPath = "sops/age/keys.txt"
+	// On macOS, os.UserConfigDir() ignores XDG_CONFIG_HOME. So we handle that manually.
+	xdgConfigHome = "XDG_CONFIG_HOME"
 )
 
 // log is the global logger for any age MasterKey.
@@ -222,6 +225,15 @@ func (key *MasterKey) ToMap() map[string]interface{} {
 	return out
 }
 
+func getUserConfigDir() (string, error) {
+	if runtime.GOOS == "darwin" {
+		if userConfigDir, ok := os.LookupEnv(xdgConfigHome); ok && userConfigDir != "" {
+			return userConfigDir, nil
+		}
+	}
+	return os.UserConfigDir()
+}
+
 // loadIdentities attempts to load the age identities based on runtime
 // environment configurations (e.g. SopsAgeKeyEnv, SopsAgeKeyFileEnv,
 // SopsAgeKeyUserConfigPath). It will load all found references, and expects
@@ -242,7 +254,7 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, error) {
 		readers[SopsAgeKeyFileEnv] = f
 	}
 
-	userConfigDir, err := os.UserConfigDir()
+	userConfigDir, err := getUserConfigDir()
 	if err != nil && len(readers) == 0 {
 		return nil, fmt.Errorf("user config directory could not be determined: %w", err)
 	}
