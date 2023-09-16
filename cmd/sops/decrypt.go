@@ -1,13 +1,18 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/cmd/sops/codes"
 	"github.com/getsops/sops/v3/cmd/sops/common"
 	"github.com/getsops/sops/v3/keyservice"
+	"github.com/getsops/sops/v3/stores/json"
 )
+
+const notBinaryHint = ("This is likely not an encrypted binary file?" +
+	" If not, use --output-type to select the correct output type.")
 
 type decryptOpts struct {
 	Cipher      sops.Cipher
@@ -45,6 +50,9 @@ func decrypt(opts decryptOpts) (decryptedFile []byte, err error) {
 		return extract(tree, opts.Extract, opts.OutputStore)
 	}
 	decryptedFile, err = opts.OutputStore.EmitPlainFile(tree.Branches)
+	if errors.Is(err, json.BinaryStoreEmitPlainError) {
+		err = fmt.Errorf("%s\n\n%s", err.Error(), notBinaryHint)
+	}
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Error dumping file: %s", err), codes.ErrorDumpingTree)
 	}
@@ -59,6 +67,9 @@ func extract(tree *sops.Tree, path []interface{}, outputStore sops.Store) (outpu
 	if newBranch, ok := v.(sops.TreeBranch); ok {
 		tree.Branches[0] = newBranch
 		decrypted, err := outputStore.EmitPlainFile(tree.Branches)
+		if errors.Is(err, json.BinaryStoreEmitPlainError) {
+			err = fmt.Errorf("%s\n\n%s", err.Error(), notBinaryHint)
+		}
 		if err != nil {
 			return nil, common.NewExitError(fmt.Sprintf("Error dumping file: %s", err), codes.ErrorDumpingTree)
 		}
