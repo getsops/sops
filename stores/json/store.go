@@ -149,6 +149,16 @@ func (store Store) treeBranchFromJSONDecoder(dec *json.Decoder) (sops.TreeBranch
 	}
 }
 
+// Encoder to disable escaping html symbols
+// See: https://github.com/getsops/sops/issues/881
+func jsonMarshal(v interface{}) ([]byte, error) {
+	buffer := &bytes.Buffer{}
+	encoder := json.NewEncoder(buffer)
+	encoder.SetEscapeHTML(false)
+	err := encoder.Encode(v)
+	return buffer.Bytes(), err
+}
+
 func (store Store) encodeValue(v interface{}) ([]byte, error) {
 	switch v := v.(type) {
 	case sops.TreeBranch:
@@ -156,7 +166,7 @@ func (store Store) encodeValue(v interface{}) ([]byte, error) {
 	case []interface{}:
 		return store.encodeArray(v)
 	default:
-		return json.Marshal(v)
+		return jsonMarshal(v)
 	}
 }
 
