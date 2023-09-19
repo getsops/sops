@@ -271,7 +271,7 @@ func TestMasterKey_encryptWithGnuPG(t *testing.T) {
 		args := []string{
 			"-d",
 		}
-		err, stdout, stderr := gpgExec(key.gnuPGHome(), args, strings.NewReader(key.EncryptedKey))
+		err, stdout, stderr := gpgExec(key.gnuPGHomeDir, args, strings.NewReader(key.EncryptedKey))
 		assert.NoError(t, err, stderr.String())
 		assert.Equal(t, data, stdout.Bytes())
 	})
@@ -529,24 +529,6 @@ func TestMasterKey_ToMap(t *testing.T) {
 	}, key.ToMap())
 }
 
-func TestMasterKey_gnuPGHome(t *testing.T) {
-	key := &MasterKey{}
-
-	usr, err := user.Current()
-	if err == nil {
-		assert.Equal(t, filepath.Join(usr.HomeDir, ".gnupg"), key.gnuPGHome())
-	} else {
-		assert.Equal(t, filepath.Join(os.Getenv("HOME"), ".gnupg"), key.gnuPGHome())
-	}
-
-	gnupgHome := "/overwrite/home"
-	t.Setenv("GNUPGHOME", gnupgHome)
-	assert.Equal(t, gnupgHome, key.gnuPGHome())
-
-	key.gnuPGHomeDir = "/home/dir/overwrite"
-	assert.Equal(t, key.gnuPGHomeDir, key.gnuPGHome())
-}
-
 func TestMasterKey_retrievePubKey(t *testing.T) {
 	t.Run("existing fingerprint", func(t *testing.T) {
 		key := NewMasterKeyFromFingerprint(mockFingerprint)
@@ -669,6 +651,22 @@ func Test_gpgBinary(t *testing.T) {
 	overwrite := "/some/other/gpg"
 	t.Setenv(SopsGpgExecEnv, overwrite)
 	assert.Equal(t, overwrite, gpgBinary())
+}
+
+func Test_gnuPGHome(t *testing.T) {
+	usr, err := user.Current()
+	if err == nil {
+		assert.Equal(t, filepath.Join(usr.HomeDir, ".gnupg"), gnuPGHome(""))
+	} else {
+		assert.Equal(t, filepath.Join(os.Getenv("HOME"), ".gnupg"), gnuPGHome(""))
+	}
+
+	gnupgHome := "/overwrite/home"
+	t.Setenv("GNUPGHOME", gnupgHome)
+	assert.Equal(t, gnupgHome, gnuPGHome(""))
+
+	customP := "/home/dir/overwrite"
+	assert.Equal(t, customP, gnuPGHome(customP))
 }
 
 func Test_shortenFingerprint(t *testing.T) {

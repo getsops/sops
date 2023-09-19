@@ -318,7 +318,7 @@ func (key *MasterKey) encryptWithGnuPG(dataKey []byte) error {
 		fingerprint,
 		"--no-encrypt-to",
 	}
-	err, stdout, stderr := gpgExec(key.gnuPGHome(), args, bytes.NewReader(dataKey))
+	err, stdout, stderr := gpgExec(key.gnuPGHomeDir, args, bytes.NewReader(dataKey))
 	if err != nil {
 		return fmt.Errorf("failed to encrypt sops data key with pgp: %s", strings.TrimSpace(stderr.String()))
 	}
@@ -407,7 +407,7 @@ func (key *MasterKey) decryptWithGnuPG() ([]byte, error) {
 	args := []string{
 		"-d",
 	}
-	err, stdout, stderr := gpgExec(key.gnuPGHome(), args, strings.NewReader(key.EncryptedKey))
+	err, stdout, stderr := gpgExec(key.gnuPGHomeDir, args, strings.NewReader(key.EncryptedKey))
 	if err != nil {
 		return nil, fmt.Errorf("failed to decrypt sops data key with pgp: %s",
 			strings.TrimSpace(stderr.String()))
@@ -436,27 +436,6 @@ func (key MasterKey) ToMap() map[string]interface{} {
 	return out
 }
 
-// gnuPGHome determines the GnuPG home directory for the MasterKey, and returns
-// its path. In order of preference:
-//  1. MasterKey.gnuPGHomeDir
-//  2. $GNUPGHOME
-//  3. user.Current().HomeDir/.gnupg
-//  4. $HOME/.gnupg
-func (key *MasterKey) gnuPGHome() string {
-	if key.gnuPGHomeDir == "" {
-		dir := os.Getenv("GNUPGHOME")
-		if dir == "" {
-			usr, err := user.Current()
-			if err != nil {
-				return filepath.Join(os.Getenv("HOME"), ".gnupg")
-			}
-			return filepath.Join(usr.HomeDir, ".gnupg")
-		}
-		return dir
-	}
-	return key.gnuPGHomeDir
-}
-
 // retrievePubKey attempts to retrieve the public key from the public keyring
 // by Fingerprint.
 func (key *MasterKey) retrievePubKey() (openpgp.Entity, error) {
@@ -479,7 +458,7 @@ func (key *MasterKey) retrievePubKey() (openpgp.Entity, error) {
 func (key *MasterKey) getPubRing() (openpgp.EntityList, error) {
 	path := key.pubRing
 	if path == "" {
-		path = filepath.Join(key.gnuPGHome(), defaultPubRing)
+		path = filepath.Join(gnuPGHome(key.gnuPGHomeDir), defaultPubRing)
 	}
 	return loadRing(path)
 }
@@ -490,7 +469,7 @@ func (key *MasterKey) getPubRing() (openpgp.EntityList, error) {
 func (key *MasterKey) getSecRing() (openpgp.EntityList, error) {
 	path := key.secRing
 	if path == "" {
-		path = filepath.Join(key.gnuPGHome(), defaultSecRing)
+		path = filepath.Join(gnuPGHome(key.gnuPGHomeDir), defaultSecRing)
 	}
 	if _, err := os.Lstat(path); err != nil {
 		if !os.IsNotExist(err) {
@@ -583,11 +562,11 @@ func fingerprintIndex(ring openpgp.EntityList) map[string]openpgp.Entity {
 }
 
 // gpgExec runs the provided args with the gpgBinary, while restricting it to
-// gnuPGHome. Stdout and stderr can be read from the returned buffers.
-// When the command fails, an error is returned.
-func gpgExec(gnuPGHome string, args []string, stdin io.Reader) (err error, stdout bytes.Buffer, stderr bytes.Buffer) {
-	if gnuPGHome != "" {
-		args = append([]string{"--no-default-keyring", "--homedir", gnuPGHome}, args...)
+// homeDir when provided. Stdout and stderr can be read from the returned
+// buffers. When the command fails, an error is returned.
+func gpgExec(homeDir string, args []string, stdin io.Reader) (err error, stdout bytes.Buffer, stderr bytes.Buffer) {
+	if homeDir != "" {
+		args = append([]string{"--homedir", homeDir}, args...)
 	}
 
 	cmd := exec.Command(gpgBinary(), args...)
@@ -607,6 +586,28 @@ func gpgBinary() string {
 		binary = envBinary
 	}
 	return binary
+}
+
+// gnuPGHome determines the GnuPG home directory, and returns its path.
+// In order of preference:
+//  1. customPath
+//  2. $GNUPGHOME
+//  3. user.Current().HomeDir/.gnupg
+//  4. $HOME/.gnupg
+func gnuPGHome(customPath string) string {
+	if customPath != "" {
+		return customPath
+	}
+
+	dir := os.Getenv("GNUPGHOME")
+	if dir == "" {
+		usr, err := user.Current()
+		if err != nil {
+			return filepath.Join(os.Getenv("HOME"), ".gnupg")
+		}
+		return filepath.Join(usr.HomeDir, ".gnupg")
+	}
+	return dir
 }
 
 // shortenFingerprint returns the short ID of the given fingerprint.
