@@ -562,11 +562,11 @@ func fingerprintIndex(ring openpgp.EntityList) map[string]openpgp.Entity {
 }
 
 // gpgExec runs the provided args with the gpgBinary, while restricting it to
-// gnuPGHome. Stdout and stderr can be read from the returned buffers.
-// When the command fails, an error is returned.
-func gpgExec(gnuPGHome string, args []string, stdin io.Reader) (err error, stdout bytes.Buffer, stderr bytes.Buffer) {
-	if gnuPGHome != "" {
-		args = append([]string{"--no-default-keyring", "--homedir", gnuPGHome}, args...)
+// homeDir when provided. Stdout and stderr can be read from the returned
+// buffers. When the command fails, an error is returned.
+func gpgExec(homeDir string, args []string, stdin io.Reader) (err error, stdout bytes.Buffer, stderr bytes.Buffer) {
+	if homeDir != "" {
+		args = append([]string{"--homedir", homeDir}, args...)
 	}
 
 	cmd := exec.Command(gpgBinary(), args...)
