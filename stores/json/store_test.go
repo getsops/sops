@@ -3,8 +3,8 @@ package json
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/getsops/sops/v3"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDecodeJSON(t *testing.T) {
@@ -318,6 +318,75 @@ func TestLoadJSONFormattedBinaryFile(t *testing.T) {
 	branches, err := store.LoadPlainFile(data)
 	assert.Nil(t, err)
 	assert.Equal(t, "data", branches[0][0].Key)
+}
+
+func TestEmitBinaryFile(t *testing.T) {
+	store := BinaryStore{}
+	data, err := store.EmitPlainFile(sops.TreeBranches{
+		sops.TreeBranch{
+			sops.TreeItem{
+				Key:   "data",
+				Value: "foo",
+			},
+		},
+	})
+	assert.Nil(t, err)
+	assert.Equal(t, []byte("foo"), data)
+}
+
+func TestEmitBinaryFileWrongBranches(t *testing.T) {
+	store := BinaryStore{}
+	data, err := store.EmitPlainFile(sops.TreeBranches{
+		sops.TreeBranch{
+			sops.TreeItem{
+				Key:   "data",
+				Value: "bar",
+			},
+		},
+		sops.TreeBranch{
+			sops.TreeItem{
+				Key:   "data",
+				Value: "bar",
+			},
+		},
+	})
+	assert.Nil(t, data)
+	assert.Contains(t, err.Error(), "there must be exactly one tree branch")
+
+	data, err = store.EmitPlainFile(sops.TreeBranches{})
+	assert.Nil(t, data)
+	assert.Contains(t, err.Error(), "there must be exactly one tree branch")
+}
+
+func TestEmitBinaryFileNoData(t *testing.T) {
+	store := BinaryStore{}
+	data, err := store.EmitPlainFile(sops.TreeBranches{
+		sops.TreeBranch{
+			sops.TreeItem{
+				Key:   "foo",
+				Value: "bar",
+			},
+		},
+	})
+	assert.Nil(t, data)
+	assert.Contains(t, err.Error(), "no binary data found in tree")
+}
+
+func TestEmitBinaryFileWrongDataType(t *testing.T) {
+	store := BinaryStore{}
+	data, err := store.EmitPlainFile(sops.TreeBranches{
+		sops.TreeBranch{
+			sops.TreeItem{
+				Key: "data",
+				Value: sops.TreeItem{
+					Key:   "foo",
+					Value: "bar",
+				},
+			},
+		},
+	})
+	assert.Nil(t, data)
+	assert.Contains(t, err.Error(), "'data' key in tree does not have a string value")
 }
 
 func TestEmitValueString(t *testing.T) {
