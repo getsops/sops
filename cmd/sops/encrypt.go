@@ -64,6 +64,9 @@ func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Error unmarshalling file: %s", err), codes.CouldNotReadInputFile)
 	}
+	if len(branches) < 1 {
+		return nil, common.NewExitError("File cannot be completely empty, it must contain at least one document", codes.NeedAtLeastOneDocument)
+	}
 	if err := ensureNoMetadata(opts, branches[0]); err != nil {
 		return nil, common.NewExitError(err, codes.FileAlreadyEncrypted)
 	}

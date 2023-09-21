@@ -21,6 +21,7 @@ const (
 	ConfigFileNotFound                     int = 61
 	KeyboardInterrupt                      int = 85
 	InvalidTreePathFormat                  int = 91
+	NeedAtLeastOneDocument                 int = 92
 	NoFileSpecified                        int = 100
 	CouldNotRetrieveKey                    int = 128
 	NoEncryptionKeyFound                   int = 111
