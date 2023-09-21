@@ -380,11 +380,23 @@ func overwriteUserConfigDir(t *testing.T, path string) {
 	switch runtime.GOOS {
 	case "windows":
 		t.Setenv("AppData", path)
-	case "darwin", "ios": // This adds "/Library/Application Support" as a suffix to $HOME
-		t.Setenv("HOME", path)
 	case "plan9": // This adds "/lib" as a suffix to $home
 		t.Setenv("home", path)
 	default: // Unix
 		t.Setenv("XDG_CONFIG_HOME", path)
+	}
+}
+
+// Make sure that on all supported platforms but Windows, XDG_CONFIG_HOME
+// can be used to specify the user's home directory. For most platforms
+// this is handled by Go's os.UserConfigDir(), but for Darwin our code
+// in getUserConfigDir() handles this explicitly.
+func TestUserConfigDir(t *testing.T) {
+	if runtime.GOOS != "windows" {
+		const dir = "/test/home/dir"
+		t.Setenv("XDG_CONFIG_HOME", dir)
+		home, err := getUserConfigDir()
+		assert.Nil(t, err)
+		assert.Equal(t, home, dir)
 	}
 }
