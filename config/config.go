@@ -242,12 +242,15 @@ func configFromRule(rule *creationRule, kmsEncryptionContext map[string]*string)
 	if rule.EncryptedSuffix != "" {
 		cryptRuleCount++
 	}
+	if rule.UnencryptedRegex != "" {
+		cryptRuleCount++
+	}
 	if rule.EncryptedRegex != "" {
 		cryptRuleCount++
 	}
 
 	if cryptRuleCount > 1 {
-		return nil, fmt.Errorf("error loading config: cannot use more than one of encrypted_suffix, unencrypted_suffix, or encrypted_regex for the same rule")
+		return nil, fmt.Errorf("error loading config: cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex, or unencrypted_regex for the same rule")
 	}
 
 	groups, err := getKeyGroupsFromCreationRule(rule, kmsEncryptionContext)
