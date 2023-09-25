@@ -678,11 +678,11 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:  "unencrypted-regex",
-			Usage: "set the unencrypted key suffix. When specified, only keys matching the regex will be left unencrypted.",
+			Usage: "set the unencrypted key regex. When specified, only keys matching the regex will be left unencrypted.",
 		},
 		cli.StringFlag{
 			Name:  "encrypted-regex",
-			Usage: "set the encrypted key suffix. When specified, only keys matching the regex will be encrypted.",
+			Usage: "set the encrypted key regex. When specified, only keys matching the regex will be encrypted.",
 		},
 		cli.StringFlag{
 			Name:  "config",
