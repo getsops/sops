@@ -130,6 +130,21 @@ func TestDecodeNumber(t *testing.T) {
 	in := `42`
 	_, err := Store{}.treeBranchFromJSON([]byte(in))
 	assert.NotNil(t, err)
+	assert.Equal(t, "Expected JSON object start, got 42 of type float64 instead", err.Error())
+}
+
+func TestDecodeArray(t *testing.T) {
+	in := ` [42] `
+	_, err := Store{}.treeBranchFromJSON([]byte(in))
+	assert.NotNil(t, err)
+	assert.Equal(t, "Expected JSON object start, got delimiter [ instead", err.Error())
+}
+
+func TestDecodeEmpty(t *testing.T) {
+	in := ``
+	_, err := Store{}.treeBranchFromJSON([]byte(in))
+	assert.NotNil(t, err)
+	assert.Equal(t, "EOF", err.Error())
 }
 
 func TestDecodeNestedJSONObject(t *testing.T) {
