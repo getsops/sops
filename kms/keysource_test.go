@@ -446,6 +446,7 @@ func TestMasterKey_createKMSConfig(t *testing.T) {
 				assert.NoError(t, err)
 
 				creds, err := cfg.Credentials.Retrieve(context.TODO())
+				assert.Nil(t, err)
 				assert.Equal(t, "id", creds.AccessKeyID)
 				assert.Equal(t, "secret", creds.SecretAccessKey)
 				assert.Equal(t, "token", creds.SessionToken)
