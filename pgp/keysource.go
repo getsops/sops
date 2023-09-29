@@ -131,7 +131,7 @@ func (d GnuPGHome) Import(armoredKey []byte) error {
 	}
 
 	args := []string{"--batch", "--import"}
-	err, _, stderr := gpgExec(d.String(), args, bytes.NewReader(armoredKey))
+	_, stderr, err := gpgExec(d.String(), args, bytes.NewReader(armoredKey))
 	if err != nil {
 		return fmt.Errorf("failed to import armored key data into GnuPG keyring: %s", strings.TrimSpace(stderr.String()))
 	}
@@ -318,7 +318,7 @@ func (key *MasterKey) encryptWithGnuPG(dataKey []byte) error {
 		fingerprint,
 		"--no-encrypt-to",
 	}
-	err, stdout, stderr := gpgExec(key.gnuPGHomeDir, args, bytes.NewReader(dataKey))
+	stdout, stderr, err := gpgExec(key.gnuPGHomeDir, args, bytes.NewReader(dataKey))
 	if err != nil {
 		return fmt.Errorf("failed to encrypt sops data key with pgp: %s", strings.TrimSpace(stderr.String()))
 	}
@@ -407,7 +407,7 @@ func (key *MasterKey) decryptWithGnuPG() ([]byte, error) {
 	args := []string{
 		"-d",
 	}
-	err, stdout, stderr := gpgExec(key.gnuPGHomeDir, args, strings.NewReader(key.EncryptedKey))
+	stdout, stderr, err := gpgExec(key.gnuPGHomeDir, args, strings.NewReader(key.EncryptedKey))
 	if err != nil {
 		return nil, fmt.Errorf("failed to decrypt sops data key with pgp: %s",
 			strings.TrimSpace(stderr.String()))
@@ -564,7 +564,7 @@ func fingerprintIndex(ring openpgp.EntityList) map[string]openpgp.Entity {
 // gpgExec runs the provided args with the gpgBinary, while restricting it to
 // homeDir when provided. Stdout and stderr can be read from the returned
 // buffers. When the command fails, an error is returned.
-func gpgExec(homeDir string, args []string, stdin io.Reader) (err error, stdout bytes.Buffer, stderr bytes.Buffer) {
+func gpgExec(homeDir string, args []string, stdin io.Reader) (stdout bytes.Buffer, stderr bytes.Buffer, err error) {
 	if homeDir != "" {
 		args = append([]string{"--homedir", homeDir}, args...)
 	}
