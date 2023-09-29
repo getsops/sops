@@ -221,7 +221,17 @@ func (store Store) jsonFromTreeBranch(branch sops.TreeBranch) ([]byte, error) {
 
 func (store Store) treeBranchFromJSON(in []byte) (sops.TreeBranch, error) {
 	dec := json.NewDecoder(bytes.NewReader(in))
-	dec.Token()
+	value, err := dec.Token()
+	if err != nil {
+		return nil, err
+	}
+	if delim, ok := value.(json.Delim); ok {
+		if delim.String() != "{" {
+			return nil, fmt.Errorf("Expected JSON object start, got delimiter %s instead", value)
+		}
+	} else {
+		return nil, fmt.Errorf("Expected JSON object start, got %#v of type %T instead", value, value)
+	}
 	return store.treeBranchFromJSONDecoder(dec)
 }
 
