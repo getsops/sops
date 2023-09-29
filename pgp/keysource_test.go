@@ -56,14 +56,14 @@ func TestGnuPGHome_Import(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NoError(t, gnuPGHome.Import(b))
 
-	err, _, stderr := gpgExec(gnuPGHome.String(), []string{"--list-keys", mockFingerprint}, nil)
+	_, stderr, err := gpgExec(gnuPGHome.String(), []string{"--list-keys", mockFingerprint}, nil)
 	assert.NoErrorf(t, err, stderr.String())
 
 	b, err = os.ReadFile(mockPrivateKey)
 	assert.NoError(t, err)
 	assert.NoError(t, gnuPGHome.Import(b))
 
-	err, _, stderr = gpgExec(gnuPGHome.String(), []string{"--list-secret-keys", mockFingerprint}, nil)
+	_, stderr, err = gpgExec(gnuPGHome.String(), []string{"--list-secret-keys", mockFingerprint}, nil)
 	assert.NoErrorf(t, err, stderr.String())
 
 	assert.Error(t, gnuPGHome.Import([]byte("invalid armored data")))
@@ -271,7 +271,7 @@ func TestMasterKey_encryptWithGnuPG(t *testing.T) {
 		args := []string{
 			"-d",
 		}
-		err, stdout, stderr := gpgExec(key.gnuPGHomeDir, args, strings.NewReader(key.EncryptedKey))
+		stdout, stderr, err := gpgExec(key.gnuPGHomeDir, args, strings.NewReader(key.EncryptedKey))
 		assert.NoError(t, err, stderr.String())
 		assert.Equal(t, data, stdout.Bytes())
 	})
@@ -321,7 +321,7 @@ func TestMasterKey_Decrypt(t *testing.T) {
 	fingerprint := shortenFingerprint(mockFingerprint)
 
 	data := []byte("this data is absolutely top secret")
-	err, stdout, stderr := gpgExec(gnuPGHome.String(), []string{
+	stdout, stderr, err := gpgExec(gnuPGHome.String(), []string{
 		"--no-default-recipient",
 		"--yes",
 		"--encrypt",
@@ -403,7 +403,7 @@ func TestMasterKey_decryptWithOpenPGP(t *testing.T) {
 		fingerprint := shortenFingerprint(mockFingerprint)
 
 		data := []byte("this data is absolutely top secret")
-		err, stdout, stderr := gpgExec(gnuPGHome.String(), []string{
+		stdout, stderr, err := gpgExec(gnuPGHome.String(), []string{
 			"--no-default-recipient",
 			"--yes",
 			"--encrypt",
@@ -451,7 +451,7 @@ func TestMasterKey_decryptWithGnuPG(t *testing.T) {
 		fingerprint := shortenFingerprint(mockFingerprint)
 
 		data := []byte("this data is absolutely top secret")
-		err, stdout, stderr := gpgExec(gnuPGHome.String(), []string{
+		stdout, stderr, err := gpgExec(gnuPGHome.String(), []string{
 			"--no-default-recipient",
 			"--yes",
 			"--encrypt",
