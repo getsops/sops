@@ -578,14 +578,13 @@ func gpgExec(homeDir string, args []string, stdin io.Reader) (stdout bytes.Buffe
 }
 
 // gpgBinary returns the GnuPG binary which must be used.
-// It allows for runtime modifications by setting the environment variable
-// SopsGpgExecEnv to the absolute path of the replacement binary.
+// It allows for runtime modifications by setting the replacement binary
+// via the environment variable SopsGpgExecEnv.
 func gpgBinary() string {
-	binary := "gpg"
-	if envBinary := os.Getenv(SopsGpgExecEnv); envBinary != "" && filepath.IsAbs(envBinary) {
-		binary = envBinary
+	if envBinary := os.Getenv(SopsGpgExecEnv); envBinary != "" {
+		return envBinary
 	}
-	return binary
+	return "gpg"
 }
 
 // gnuPGHome determines the GnuPG home directory, and returns its path.
