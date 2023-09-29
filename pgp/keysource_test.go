@@ -651,6 +651,10 @@ func Test_gpgBinary(t *testing.T) {
 	overwrite := "/some/other/gpg"
 	t.Setenv(SopsGpgExecEnv, overwrite)
 	assert.Equal(t, overwrite, gpgBinary())
+
+	overwrite = "not_abs_path"
+	t.Setenv(SopsGpgExecEnv, overwrite)
+	assert.Equal(t, overwrite, gpgBinary())
 }
 
 func Test_gnuPGHome(t *testing.T) {
