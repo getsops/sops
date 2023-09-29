@@ -48,6 +48,59 @@ var BRANCHES = sops.TreeBranches{
 	},
 }
 
+var ALIASES = []byte(`---
+key1: &foo
+  - foo
+key2: *foo
+key3: &bar
+  foo: bar
+  baz: bam
+key4: *bar
+`)
+
+var ALIASES_BRANCHES = sops.TreeBranches{
+	sops.TreeBranch{
+		sops.TreeItem{
+			Key:   "key1",
+			Value: []interface{}{
+				"foo",
+			},
+		},
+		sops.TreeItem{
+			Key:   "key2",
+			Value: []interface{}{
+				"foo",
+			},
+		},
+		sops.TreeItem{
+			Key:   "key3",
+			Value: sops.TreeBranch{
+				sops.TreeItem{
+					Key:   "foo",
+					Value: "bar",
+				},
+				sops.TreeItem{
+					Key:   "baz",
+					Value: "bam",
+				},
+			},
+		},
+		sops.TreeItem{
+			Key:   "key4",
+			Value: sops.TreeBranch{
+				sops.TreeItem{
+					Key:   "foo",
+					Value: "bar",
+				},
+				sops.TreeItem{
+					Key:   "baz",
+					Value: "bam",
+				},
+			},
+		},
+	},
+}
+
 var COMMENT_1 = []byte(`# test
 a:
     b: null
@@ -168,6 +221,12 @@ func TestLoadPlainFile(t *testing.T) {
 	branches, err := (&Store{}).LoadPlainFile(PLAIN)
 	assert.Nil(t, err)
 	assert.Equal(t, BRANCHES, branches)
+}
+
+func TestLoadAliasesPlainFile(t *testing.T) {
+	branches, err := (&Store{}).LoadPlainFile(ALIASES)
+	assert.Nil(t, err)
+	assert.Equal(t, ALIASES_BRANCHES, branches)
 }
 
 func TestComment1(t *testing.T) {

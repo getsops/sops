@@ -89,6 +89,9 @@ func DecryptTree(opts DecryptTreeOpts) (dataKey []byte, err error) {
 	}
 	fileMac, err := opts.Cipher.Decrypt(opts.Tree.Metadata.MessageAuthenticationCode, dataKey, opts.Tree.Metadata.LastModified.Format(time.RFC3339))
 	if !opts.IgnoreMac {
+		if err != nil {
+			return nil, NewExitError(fmt.Sprintf("Cannot decrypt MAC: %s", err), codes.MacMismatch)
+		}
 		if fileMac != computedMac {
 			// If the file has an empty MAC, display "no MAC" instead of not displaying anything
 			if fileMac == "" {

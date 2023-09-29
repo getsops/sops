@@ -131,6 +131,10 @@ func (store Store) appendYamlNodeToTreeBranch(node *yaml.Node, branch sops.TreeB
 		return nil, fmt.Errorf("YAML documents that are values are not supported")
 	case yaml.AliasNode:
 		branch, err = store.appendYamlNodeToTreeBranch(node.Alias, branch, false)
+		if err != nil {
+			// This should never happen since node.Alias was already successfully decoded before
+			return nil, err
+		}
 	}
 	if !commentsWereHandled {
 		branch = store.appendCommentToMap(node.FootComment, branch)
