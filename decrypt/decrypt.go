@@ -59,6 +59,9 @@ func DataWithFormat(data []byte, format Format) (cleartext []byte, err error) {
 		key,
 		tree.Metadata.LastModified.Format(time.RFC3339),
 	)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to decrypt original mac: %w", err)
+	}
 	if originalMac != mac {
 		return nil, fmt.Errorf("Failed to verify data integrity. expected mac %q, got %q", originalMac, mac)
 	}
