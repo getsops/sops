@@ -1234,6 +1234,11 @@ func extractSetArguments(set string) (path []interface{}, valueToInsert interfac
 	fullPath := strings.TrimRight(pathValuePair[0], " ")
 	jsonValue := pathValuePair[1]
 	valueToInsert, err = jsonValueToTreeInsertableValue(jsonValue)
+	if err != nil {
+		// All errors returned by jsonValueToTreeInsertableValue are created by common.NewExitError(),
+		// so we can simply pass them on
+		return nil, nil, err
+	}
 
 	path, err = parseTreePath(fullPath)
 	if err != nil {

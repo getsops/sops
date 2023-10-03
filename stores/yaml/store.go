@@ -131,6 +131,10 @@ func (store Store) appendYamlNodeToTreeBranch(node *yaml.Node, branch sops.TreeB
 		return nil, fmt.Errorf("YAML documents that are values are not supported")
 	case yaml.AliasNode:
 		branch, err = store.appendYamlNodeToTreeBranch(node.Alias, branch, false)
+		if err != nil {
+			// This should never happen since node.Alias was already successfully decoded before
+			return nil, err
+		}
 	}
 	if !commentsWereHandled {
 		branch = store.appendCommentToMap(node.FootComment, branch)
@@ -204,9 +208,9 @@ func (store *Store) appendSequence(in []interface{}, sequence *yaml.Node) {
 	}
 	if len(comments) > 0 {
 		if beginning {
-			comments = store.addCommentsHead(sequence, comments)
+			store.addCommentsHead(sequence, comments)
 		} else {
-			comments = store.addCommentsFoot(sequence.Content[len(sequence.Content)-1], comments)
+			store.addCommentsFoot(sequence.Content[len(sequence.Content)-1], comments)
 		}
 	}
 }
@@ -231,9 +235,9 @@ func (store *Store) appendTreeBranch(branch sops.TreeBranch, mapping *yaml.Node)
 	}
 	if len(comments) > 0 {
 		if beginning {
-			comments = store.addCommentsHead(mapping, comments)
+			store.addCommentsHead(mapping, comments)
 		} else {
-			comments = store.addCommentsFoot(mapping.Content[len(mapping.Content)-2], comments)
+			store.addCommentsFoot(mapping.Content[len(mapping.Content)-2], comments)
 		}
 	}
 }

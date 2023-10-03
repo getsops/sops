@@ -332,6 +332,7 @@ func TestMasterKey_Decrypt(t *testing.T) {
 		fingerprint,
 		"--no-encrypt-to",
 	}, bytes.NewReader(data))
+	assert.Nil(t, err)
 	assert.NoErrorf(t, gnuPGHome.ImportFile(mockPrivateKey), stderr.String())
 
 	encryptedData := stdout.String()
@@ -414,6 +415,7 @@ func TestMasterKey_decryptWithOpenPGP(t *testing.T) {
 			fingerprint,
 			"--no-encrypt-to",
 		}, bytes.NewReader(data))
+		assert.Nil(t, err)
 		assert.NoErrorf(t, gnuPGHome.ImportFile(mockPrivateKey), stderr.String())
 
 		encryptedData := stdout.String()
@@ -462,6 +464,7 @@ func TestMasterKey_decryptWithGnuPG(t *testing.T) {
 			fingerprint,
 			"--no-encrypt-to",
 		}, bytes.NewReader(data))
+		assert.Nil(t, err)
 		assert.NoErrorf(t, gnuPGHome.ImportFile(mockPrivateKey), stderr.String())
 
 		encryptedData := stdout.String()
