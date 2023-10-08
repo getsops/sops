@@ -282,14 +282,14 @@ func main() {
 				path := c.Args()[0]
 				info, err := os.Stat(path)
 				if err != nil {
-					return err
+					return toExitError(err)
 				}
 				if info.IsDir() && !c.Bool("recursive") {
 					return fmt.Errorf("can't operate on a directory without --recursive flag.")
 				}
 				err = filepath.Walk(path, func(subPath string, info os.FileInfo, err error) error {
 					if err != nil {
-						return err
+						return toExitError(err)
 					}
 					if !info.IsDir() {
 						err = publishcmd.Run(publishcmd.Opts{
@@ -312,7 +312,7 @@ func main() {
 					return nil
 				})
 				if err != nil {
-					return err
+					return toExitError(err)
 				}
 				return nil
 			},
@@ -842,21 +842,21 @@ func main() {
 			}
 			azureKeys, err := azkv.MasterKeysFromURLs(c.String("add-azure-kv"))
 			if err != nil {
-				return err
+				return toExitError(err)
 			}
 			for _, k := range azureKeys {
 				addMasterKeys = append(addMasterKeys, k)
 			}
 			hcVaultKeys, err := hcvault.NewMasterKeysFromURIs(c.String("add-hc-vault-transit"))
 			if err != nil {
-				return err
+				return toExitError(err)
 			}
 			for _, k := range hcVaultKeys {
 				addMasterKeys = append(addMasterKeys, k)
 			}
 			ageKeys, err := age.MasterKeysFromRecipients(c.String("add-age"))
 			if err != nil {
-				return err
+				return toExitError(err)
 			}
 			for _, k := range ageKeys {
 				addMasterKeys = append(addMasterKeys, k)
@@ -874,21 +874,21 @@ func main() {
 			}
 			azureKeys, err = azkv.MasterKeysFromURLs(c.String("rm-azure-kv"))
 			if err != nil {
-				return err
+				return toExitError(err)
 			}
 			for _, k := range azureKeys {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
 			hcVaultKeys, err = hcvault.NewMasterKeysFromURIs(c.String("rm-hc-vault-transit"))
 			if err != nil {
-				return err
+				return toExitError(err)
 			}
 			for _, k := range hcVaultKeys {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
 			ageKeys, err = age.MasterKeysFromRecipients(c.String("rm-age"))
 			if err != nil {
-				return err
+				return toExitError(err)
 			}
 			for _, k := range ageKeys {
 				rmMasterKeys = append(rmMasterKeys, k)
