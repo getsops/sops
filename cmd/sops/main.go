@@ -904,6 +904,11 @@ func main() {
 				AddMasterKeys:    addMasterKeys,
 				RemoveMasterKeys: rmMasterKeys,
 			})
+			// While this check is also done below, the `err` in this scope shadows
+			// the `err` in the outer scope
+			if err != nil {
+				return toExitError(err)
+			}
 		}
 
 		if c.String("set") != "" {
