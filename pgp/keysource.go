@@ -132,17 +132,17 @@ func (d GnuPGHome) Import(armoredKey []byte) error {
 	}
 
 	args := []string{"--batch", "--import"}
-	_, stderrBuf, err := gpgExec(d.String(), args, bytes.NewReader(armoredKey))
+	_, stderr, err := gpgExec(d.String(), args, bytes.NewReader(armoredKey))
 	if err != nil {
-		stderr := stderrBuf.String()
+		stderrStr := strings.TrimSpace(stderr.String())
 		errStr := err.Error()
 		var sb strings.Builder
 		sb.WriteString("failed to import armored key data into GnuPG keyring")
-		if len(stderr) > 0 {
-			fmt.Fprintf(&sb, ": %s", stderr)
+		if len(stderrStr) > 0 {
 			if len(errStr) > 0 {
-				fmt.Fprintf(&sb, ": %s", errStr)
+				fmt.Fprintf(&sb, " (%s)", errStr)
 			}
+			fmt.Fprintf(&sb, ": %s", stderrStr)
 		} else if len(errStr) > 0 {
 			fmt.Fprintf(&sb, ": %s", errStr)
 		}

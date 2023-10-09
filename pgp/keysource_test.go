@@ -68,7 +68,7 @@ func TestGnuPGHome_Import(t *testing.T) {
 
 	err = gnuPGHome.Import([]byte("invalid armored data"))
 	assert.Error(t, err)
-	assert.ErrorContains(t, err, "gpg: no valid OpenPGP data found.\ngpg: Total number processed: 0\n: exit status 2")
+	assert.ErrorContains(t, err, "(exit status 2): gpg: no valid OpenPGP data found.\ngpg: Total number processed: 0")
 	assert.Error(t, GnuPGHome("").Import(b))
 }
 
