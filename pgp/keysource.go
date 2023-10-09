@@ -9,6 +9,7 @@ package pgp //import "github.com/getsops/sops/v3/pgp"
 import (
 	"bytes"
 	"encoding/hex"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -133,7 +134,19 @@ func (d GnuPGHome) Import(armoredKey []byte) error {
 	args := []string{"--batch", "--import"}
 	_, stderr, err := gpgExec(d.String(), args, bytes.NewReader(armoredKey))
 	if err != nil {
-		return fmt.Errorf("failed to import armored key data into GnuPG keyring: %s", strings.TrimSpace(stderr.String()))
+		stderrStr := strings.TrimSpace(stderr.String())
+		errStr := err.Error()
+		var sb strings.Builder
+		sb.WriteString("failed to import armored key data into GnuPG keyring")
+		if len(stderrStr) > 0 {
+			if len(errStr) > 0 {
+				fmt.Fprintf(&sb, " (%s)", errStr)
+			}
+			fmt.Fprintf(&sb, ": %s", stderrStr)
+		} else if len(errStr) > 0 {
+			fmt.Fprintf(&sb, ": %s", errStr)
+		}
+		return errors.New(sb.String())
 	}
 	return nil
 }
