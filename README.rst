@@ -96,7 +96,7 @@ separated, in the **SOPS_PGP_FP** env variable.
 
 Note: you can use both PGP and KMS simultaneously.
 
-Then simply call SOPS with a file path as argument. It will handle the
+Then simply call ``sops`` with a file path as argument. It will handle the
 encryption/decryption transparently and open the cleartext file in an editor
 
 .. code:: sh
@@ -389,7 +389,7 @@ To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
 Adding and removing keys
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-When creating new files, SOPS uses the PGP, KMS and GCP KMS defined in the
+When creating new files, ``sops`` uses the PGP, KMS and GCP KMS defined in the
 command line arguments ``--kms``, ``--pgp``, ``--gcp-kms`` or ``--azure-kv``, or from
 the environment variables ``SOPS_KMS_ARN``, ``SOPS_PGP_FP``, ``SOPS_GCP_KMS_IDS``,
 ``SOPS_AZURE_KEYVAULT_URLS``. That information is stored in the file under the
@@ -601,8 +601,8 @@ roles that can only access a given context. An example policy is shown below:
 Key Rotation
 ~~~~~~~~~~~~
 
-It is recommended to renew the data key on a regular basis. SOPS supports key
-rotation via the ``-r`` flag. Invoking it on an existing file causes SOPS to
+It is recommended to renew the data key on a regular basis. ``sops`` supports key
+rotation via the ``-r`` flag. Invoking it on an existing file causes ``sops`` to
 reencrypt the file with a new data key, which is then encrypted with the various
 KMS and PGP master keys defined in the file.
 
@@ -1146,7 +1146,7 @@ extension after encrypting a file. For example:
     $ sops -d myfile.json
 
 If you want to change the extension of the file once encrypted, you need to provide
-SOPS with the ``--input-type`` flag upon decryption. For example:
+``sops`` with the ``--input-type`` flag upon decryption. For example:
 
 .. code:: sh
 
@@ -1267,7 +1267,7 @@ Encrypting an existing file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Similar to the previous command, we tell SOPS to use one KMS and one PGP key.
-The path points to an existing cleartext file, so we give SOPS flag ``-e`` to
+The path points to an existing cleartext file, so we give ``sops`` the flag ``-e`` to
 encrypt the file, and redirect the output to a destination file.
 
 .. code:: sh
@@ -1285,7 +1285,7 @@ Decrypt the file with ``-d``.
 Encrypt or decrypt a file in place
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Rather than redirecting the output of ``-e`` or ``-d``, SOPS can replace the
+Rather than redirecting the output of ``-e`` or ``-d``, ``sops`` can replace the
 original file after encrypting or decrypting it.
 
 .. code:: sh
