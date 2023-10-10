@@ -1,3 +1,5 @@
+# Shamir's secret sharing
+
 Forked from [Vault](https://github.com/hashicorp/vault/tree/master/shamir)
 
 ## How it works
@@ -101,7 +103,6 @@ L(x) =
 ```
 
 So the polynomial we were looking for is `y = x^2`.
-
 
 ## Splitting a secret
 
