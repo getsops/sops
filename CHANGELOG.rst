@@ -1,6 +1,35 @@
 Changelog
 =========
 
+3.8.1
+-----
+Improvements:
+
+* Improve handling of errors when binary store handles bad data (#1289)
+* On macOS, prefer ``XDG_CONFIG_HOME`` over os.UserConfigDir() (#1291)
+* Dependency updates (#1306, #1319, #1325)
+* pgp: better error reporting for missing GPG binary during import of keys (#1286)
+* Fix descriptions of unencrypted-regex and encrypted-regex flags, and ensure unencrypted_regex is considered in config validation (#1300)
+* stores/json: improve error messages when parsing invalid JSON (#1307)
+
+Bug fixes:
+
+* pgp: improve handling of GnuPG home dir (#1298)
+* Do not crash if an empty YAML file is encrypted (#1290)
+* Handling of various ignored errors (#1304, #1311)
+* pgp: do not require abs path for ``SOPS_GPG_EXEC`` (#1309)
+* Report key rotation errors (#1317)
+* Ensure wrapping of errors in main package (#1318)
+
+Project changes:
+
+* Enrich AWS authentication documentation (#1272)
+* Add linting for RST and MD files (#1287)
+* Delete SOPS encrypted file we don't have keys for (#1288)
+* CI dependency updates (#1295, #1301)
+* pgp: make error the last return value (#1310)
+* Improve documentation files (#1320)
+
 3.8.0
 -----
 Features:
