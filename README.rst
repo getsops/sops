@@ -776,6 +776,7 @@ like so:
                       context:
                           foo: bar
                     - arn: arn2
+                      aws_profile: myprofile
               # Second key group
               - pgp:
                     - fingerprint3
@@ -818,6 +819,7 @@ with ``shamir_threshold``:
                       context:
                           foo: bar
                     - arn: arn2
+                      aws_profile: myprofile
               # Second key group
               - pgp:
                     - fingerprint3
