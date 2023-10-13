@@ -122,6 +122,22 @@ func TestNewMasterKey(t *testing.T) {
 	assert.NotNil(t, key.CreationDate)
 }
 
+func TestNewMasterKeyWithProfile(t *testing.T) {
+	var (
+		dummyRole              = "a-role"
+		dummyEncryptionContext = map[string]*string{
+			"foo": aws.String("bar"),
+		}
+		dummyProfile = "a-profile"
+	)
+	key := NewMasterKeyWithProfile(dummyARN, dummyRole, dummyEncryptionContext, dummyProfile)
+	assert.Equal(t, dummyARN, key.Arn)
+	assert.Equal(t, dummyRole, key.Role)
+	assert.Equal(t, dummyEncryptionContext, key.EncryptionContext)
+	assert.Equal(t, dummyProfile, key.AwsProfile)
+	assert.NotNil(t, key.CreationDate)
+}
+
 func TestNewMasterKeyFromArn(t *testing.T) {
 	t.Run("arn", func(t *testing.T) {
 		var (
