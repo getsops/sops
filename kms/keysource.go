@@ -88,6 +88,14 @@ func NewMasterKey(arn string, role string, context map[string]*string) *MasterKe
 	}
 }
 
+// NewMasterKeyWithProfile creates a new MasterKey from an ARN, role, context
+// and awsProfile, setting the creation date to the current date.
+func NewMasterKeyWithProfile(arn string, role string, context map[string]*string, awsProfile string) *MasterKey {
+	k := NewMasterKey(arn, role, context)
+	k.AwsProfile = awsProfile
+	return k
+}
+
 // NewMasterKeyFromArn takes an ARN string and returns a new MasterKey for that
 // ARN.
 func NewMasterKeyFromArn(arn string, context map[string]*string, awsProfile string) *MasterKey {
