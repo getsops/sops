@@ -6,6 +6,7 @@ import (
 	"fmt"
 	logger "log"
 	"os"
+	"path/filepath"
 	"testing"
 	"time"
 
@@ -399,14 +400,14 @@ func TestMasterKey_createKMSConfig(t *testing.T) {
 	tests := []struct {
 		name       string
 		key        MasterKey
+		envFunc    func(t *testing.T)
 		assertFunc func(t *testing.T, cfg *aws.Config, err error)
 		fallback   bool
 	}{
 		{
-			name: "valid config",
+			name: "valid config with credentials provider",
 			key: MasterKey{
 				credentialsProvider: credentials.NewStaticCredentialsProvider("test-id", "test-secret", "test-token"),
-				AwsProfile:          "test-profile",
 				Arn:                 "arn:aws:kms:us-west-2:107501996527:key/612d5f0p-p1l3-45e6-aca6-a5b005693a48",
 			},
 			assertFunc: func(t *testing.T, cfg *aws.Config, err error) {
@@ -418,6 +419,30 @@ func TestMasterKey_createKMSConfig(t *testing.T) {
 				assert.Equal(t, "test-id", creds.AccessKeyID)
 				assert.Equal(t, "test-secret", creds.SecretAccessKey)
 				assert.Equal(t, "test-token", creds.SessionToken)
+			},
+		},
+		{
+			name: "valid config with profile",
+			key: MasterKey{
+				AwsProfile: "test-profile",
+				Arn:        "arn:aws:kms:us-west-2:107501996527:key/612d5f0p-p1l3-45e6-aca6-a5b005693a48",
+			},
+			envFunc: func(t *testing.T) {
+				credentialsFile := filepath.Join(t.TempDir(), ".aws", "credentials")
+				assert.NoError(t, os.MkdirAll(filepath.Dir(credentialsFile), 0o700))
+				assert.NoError(t, os.WriteFile(credentialsFile, []byte(`[test-profile]
+aws_access_key_id = test-id
+aws_secret_access_key = test-secret`), 0600))
+
+				t.Setenv("AWS_SHARED_CREDENTIALS_FILE", credentialsFile)
+			},
+			assertFunc: func(t *testing.T, cfg *aws.Config, err error) {
+				assert.NoError(t, err)
+
+				creds, err := cfg.Credentials.Retrieve(context.TODO())
+				assert.NoError(t, err)
+				assert.Equal(t, "test-id", creds.AccessKeyID)
+				assert.Equal(t, "test-secret", creds.SecretAccessKey)
 
 				// ConfigSources is a slice of config.Config, which in turn is an interface.
 				// Since we use a LoadOptions object, we assert the type of cfgSrc and then
@@ -457,7 +482,11 @@ func TestMasterKey_createKMSConfig(t *testing.T) {
 			key: MasterKey{
 				Arn: "arn:aws:kms:us-west-2:107501996527:key/612d5f0p-p1l3-45e6-aca6-a5b005693a48",
 			},
-			fallback: true,
+			envFunc: func(t *testing.T) {
+				t.Setenv("AWS_ACCESS_KEY_ID", "id")
+				t.Setenv("AWS_SECRET_ACCESS_KEY", "secret")
+				t.Setenv("AWS_SESSION_TOKEN", "token")
+			},
 			assertFunc: func(t *testing.T, cfg *aws.Config, err error) {
 				assert.NoError(t, err)
 
@@ -473,11 +502,8 @@ func TestMasterKey_createKMSConfig(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			tt := tt
-			// Set the environment variables if we want to fallback
-			if tt.fallback {
-				t.Setenv("AWS_ACCESS_KEY_ID", "id")
-				t.Setenv("AWS_SECRET_ACCESS_KEY", "secret")
-				t.Setenv("AWS_SESSION_TOKEN", "token")
+			if tt.envFunc != nil {
+				tt.envFunc(t)
 			}
 			cfg, err := tt.key.createKMSConfig()
 			tt.assertFunc(t, cfg, err)
