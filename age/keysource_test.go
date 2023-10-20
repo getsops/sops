@@ -134,7 +134,7 @@ func TestMasterKey_Encrypt(t *testing.T) {
 		}
 		err := key.Encrypt([]byte(mockEncryptedKeyPlain))
 		assert.Error(t, err)
-		assert.ErrorContains(t, err, "failed to parse input as Bech32-encoded age public key")
+		assert.ErrorContains(t, err, "unknown recipient type:")
 		assert.Empty(t, key.EncryptedKey)
 	})
 

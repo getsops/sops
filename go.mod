@@ -5,7 +5,7 @@ go 1.19
 require (
 	cloud.google.com/go/kms v1.15.7
 	cloud.google.com/go/storage v1.38.0
-	filippo.io/age v1.1.1
+	filippo.io/age v1.1.2-0.20240110114017-29b68c20fc24
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.9.2
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.5.1
 	github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys v1.1.0
