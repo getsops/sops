@@ -508,7 +508,7 @@ b: ba"#
             .expect("Error running sops");
         assert!(!output.status
                     .success(),
-                "SOPS succeeded decrypting a file with a missing decrytion key");
+                "SOPS succeeded decrypting a file with a missing decryption key");
     }
 
     #[test]

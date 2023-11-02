@@ -390,7 +390,7 @@ func main() {
 						},
 						cli.StringSliceFlag{
 							Name:  "hc-vault-transit",
-							Usage: "the full vault path to the key used to encrypt/decrypt. Make you choose and configure a key with encrption/decryption enabled (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev'). Can be specified more than once",
+							Usage: "the full vault path to the key used to encrypt/decrypt. Make you choose and configure a key with encryption/decryption enabled (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev'). Can be specified more than once",
 						},
 						cli.StringSliceFlag{
 							Name:  "age",
