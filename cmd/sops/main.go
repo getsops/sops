@@ -706,7 +706,7 @@ func main() {
 		},
 		cli.IntFlag{
 			Name:  "indent",
-			Usage: "the number of space to indent YAML encoded file for encryption",
+			Usage: "the number of spaces to indent YAML or JSON encoded file for encryption",
 		},
 		cli.BoolFlag{
 			Name:  "verbose",
@@ -1087,7 +1087,7 @@ func inputStore(context *cli.Context, path string) common.Store {
 
 func outputStore(context *cli.Context, path string) common.Store {
 	storesConf, _ := loadStoresConfig(context, path)
-	if context.Int("indent") != 0 {
+	if context.IsSet("indent") {
 		indent := context.Int("indent")
 		storesConf.YAML.Indent = indent
 		storesConf.JSON.Indent = indent
