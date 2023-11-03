@@ -85,7 +85,7 @@ func TestMain(m *testing.M) {
 		code = m.Run()
 	}
 
-	// This can't be deferred, as os.Exit simpy does not care
+	// This can't be deferred, as os.Exit simply does not care
 	if err := pool.Purge(resource); err != nil {
 		logger.Fatalf("could not purge resource: %s", err)
 	}

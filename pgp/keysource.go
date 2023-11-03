@@ -240,7 +240,7 @@ func (r SecRing) ApplyToMasterKey(key *MasterKey) {
 // errSet is a collection of captured errors.
 type errSet []error
 
-// Error joins the errors into a "; " seperated string.
+// Error joins the errors into a "; " separated string.
 func (e errSet) Error() string {
 	str := make([]string, len(e))
 	for i, err := range e {
@@ -623,7 +623,7 @@ func gnuPGHome(customPath string) string {
 }
 
 // shortenFingerprint returns the short ID of the given fingerprint.
-// This is mostly used for compatability reasons, as older versions of GnuPG
+// This is mostly used for compatibility reasons, as older versions of GnuPG
 // do not always like long IDs.
 func shortenFingerprint(fingerprint string) string {
 	if offset := len(fingerprint) - 16; offset > 0 {
