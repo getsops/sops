@@ -203,7 +203,7 @@ configuration directory. On Linux, this would be ``$XDG_CONFIG_HOME/sops/age/key
 On macOS, this would be ``$HOME/Library/Application Support/sops/age/keys.txt``. On
 Windows, this would be ``%AppData%\sops\age\keys.txt``. You can specify the location
 of this file manually by setting the environment variable **SOPS_AGE_KEY_FILE**.
-Alternatively you can provide the the key(s) directly by setting the **SOPS_AGE_KEY**
+Alternatively, you can provide the key(s) directly by setting the **SOPS_AGE_KEY**
 environment variable.
 
 The contents of this key file should be a list of age X25519 identities, one
@@ -483,7 +483,7 @@ with the freshly added master keys. The removed entries are simply deleted from
 the file.
 
 When removing keys, it is recommended to rotate the data key using ``-r``,
-otherwise owners of the removed key may have add access to the data key in the
+otherwise, owners of the removed key may have add access to the data key in the
 past.
 
 KMS AWS Profiles
@@ -566,7 +566,7 @@ SOPS has the ability to use `AWS KMS key policy and encryption context
 <http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html>`_
 to refine the access control of a given KMS master key.
 
-When creating a new file, you can specify encryption context in the
+When creating a new file, you can specify the encryption context in the
 ``--encryption-context`` flag by comma separated list of key-value pairs:
 
 .. code:: sh
@@ -977,7 +977,7 @@ written to disk.
 
 
 If the command you want to run only operates on files, you can use ``exec-file``
-instead. By default SOPS will use a FIFO to pass the contents of the
+instead. By default, SOPS will use a FIFO to pass the contents of the
 decrypted file to the new program. Using a FIFO, secrets are only passed in
 memory which has two benefits: the plaintext secrets never touch the disk, and
 the child process can only read the secrets once. In contexts where this won't
@@ -1094,8 +1094,8 @@ configuring the client.
 ``vault_kv_mount_name`` is used if your Vault KV is mounted somewhere other than ``secret/``.
 ``vault_kv_version`` supports ``1`` and ``2``, with ``2`` being the default.
 
-If destination secret path already exists in Vault and contains same data as the source file, it
-will be skipped.
+If the destination secret path already exists in Vault and contains the same data as the source
+file, it will be skipped.
 
 Below is an example of publishing to Vault (using token auth with a local dev instance of Vault).
 
@@ -1445,7 +1445,7 @@ will encrypt the values under the ``data`` and ``stringData`` keys in a YAML fil
 containing kubernetes secrets.  It will not encrypt other values that help you to
 navigate the file, like ``metadata`` which contains the secrets' names.
 
-Conversely, you can opt in to only left certain keys without encrypting by using the 
+Conversely, you can opt in to only leave certain keys without encrypting by using the 
 ``--unencrypted-regex`` option, which will leave the values unencrypted of those keys 
 that match the supplied regular expression. For example, this command:
 
