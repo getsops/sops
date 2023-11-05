@@ -228,9 +228,10 @@ bar: baz");
             .output()
             .expect("Error running sops");
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("--set")
-            .arg(r#"["a"] {"aa": "aaa"}"#)
+            .arg("set")
             .arg(file_path.clone())
+            .arg(r#"["a"]"#)
+            .arg(r#"{"aa": "aaa"}"#)
             .output()
             .expect("Error running sops");
         println!("stdout: {}, stderr: {}",
@@ -259,9 +260,10 @@ bar: baz");
             .output()
             .expect("Error running sops");
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("--set")
-            .arg(r#"["c"] {"cc": "ccc"}"#)
+            .arg("set")
             .arg(file_path.clone())
+            .arg(r#"["c"]"#)
+            .arg(r#"{"cc": "ccc"}"#)
             .output()
             .expect("Error running sops");
         println!("stdout: {}, stderr: {}",
@@ -294,9 +296,10 @@ b: ba"#
             .output()
             .expect("Error running sops");
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("--set")
-            .arg(r#"["a"] {"aa": "aaa"}"#)
+            .arg("set")
             .arg(file_path.clone())
+            .arg(r#"["a"]"#)
+            .arg(r#"{"aa": "aaa"}"#)
             .output()
             .expect("Error running sops");
         println!("stdout: {}, stderr: {}",
@@ -328,9 +331,10 @@ b: ba"#
             .output()
             .expect("Error running sops");
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("--set")
-            .arg(r#"["c"] {"cc": "ccc"}"#)
+            .arg("set")
             .arg(file_path.clone())
+            .arg(r#"["c"]"#)
+            .arg(r#"{"cc": "ccc"}"#)
             .output()
             .expect("Error running sops");
         println!("stdout: {}, stderr: {}",
@@ -362,10 +366,10 @@ b: ba"#
             .output()
             .expect("Error running sops");
         Command::new(SOPS_BINARY_PATH)
-            .arg("-i")
-            .arg("--set")
-            .arg(r#"["a"] "aaa""#)
+            .arg("set")
             .arg(file_path.clone())
+            .arg(r#"["a"]"#)
+            .arg(r#""aaa""#)
             .output()
             .expect("Error running sops");
         let output = Command::new(SOPS_BINARY_PATH)
