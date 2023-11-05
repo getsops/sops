@@ -63,6 +63,14 @@ func warnMoreThanOnePositionalArgument(c *cli.Context) {
 	}
 }
 
+func concatFlags(slicesOfFlags [][]cli.Flag) []cli.Flag {
+	var result []cli.Flag
+	for _, flags := range slicesOfFlags {
+		result = append(result, flags...)
+	}
+	return result
+}
+
 func main() {
 	cli.VersionPrinter = version.PrintVersion
 	app := cli.NewApp()
@@ -76,6 +84,157 @@ func main() {
 			Name:  "keyservice",
 			Usage: "Specify the key services to use in addition to the local one. Can be specified more than once. Syntax: protocol://address. Example: tcp://myserver.com:5000",
 		},
+	}
+	inplaceFlag := cli.BoolFlag{
+		Name:  "in-place, i",
+		Usage: "write output back to the same file instead of stdout",
+	}
+	outputflag := cli.StringFlag{
+		Name:  "output",
+		Usage: "Save the output after decryption to the file specified",
+	}
+	inputTypeFlag := cli.StringFlag{
+		Name:  "input-type",
+		Usage: "currently ini, json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
+	}
+	inputOutputTypeFlags := []cli.Flag{
+		inputTypeFlag,
+		cli.StringFlag{
+			Name:  "output-type",
+			Usage: "currently ini, json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
+		},
+		cli.IntFlag{
+			Name:  "indent",
+			Usage: "the number of spaces to indent YAML or JSON encoded file",
+		},
+	}
+	ignoreMacFlag := cli.BoolFlag{
+		Name:  "ignore-mac",
+		Usage: "ignore Message Authentication Code during decryption",
+	}
+	encryptFlags := []cli.Flag{
+		cli.StringFlag{
+			Name:   "kms, k",
+			Usage:  "comma separated list of KMS ARNs",
+			EnvVar: "SOPS_KMS_ARN",
+		},
+		cli.StringFlag{
+			Name:  "aws-profile",
+			Usage: "The AWS profile to use for requests to AWS",
+		},
+		cli.StringFlag{
+			Name:   "gcp-kms",
+			Usage:  "comma separated list of GCP KMS resource IDs",
+			EnvVar: "SOPS_GCP_KMS_IDS",
+		},
+		cli.StringFlag{
+			Name:   "azure-kv",
+			Usage:  "comma separated list of Azure Key Vault URLs",
+			EnvVar: "SOPS_AZURE_KEYVAULT_URLS",
+		},
+		cli.StringFlag{
+			Name:   "hc-vault-transit",
+			Usage:  "comma separated list of vault's key URI (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev')",
+			EnvVar: "SOPS_VAULT_URIS",
+		},
+		cli.StringFlag{
+			Name:   "pgp, p",
+			Usage:  "comma separated list of PGP fingerprints",
+			EnvVar: "SOPS_PGP_FP",
+		},
+		cli.StringFlag{
+			Name:   "age, a",
+			Usage:  "comma separated list of age recipients",
+			EnvVar: "SOPS_AGE_RECIPIENTS",
+		},
+	}
+	showMasterKeysFlag := cli.BoolFlag{
+		Name:  "show-master-keys, s",
+		Usage: "display master encryption keys in the file during editing",
+	}
+	addRemoveKeys := []cli.Flag{
+		cli.StringFlag{
+			Name:  "add-gcp-kms",
+			Usage: "add the provided comma-separated list of GCP KMS key resource IDs to the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "rm-gcp-kms",
+			Usage: "remove the provided comma-separated list of GCP KMS key resource IDs from the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "add-azure-kv",
+			Usage: "add the provided comma-separated list of Azure Key Vault key URLs to the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "rm-azure-kv",
+			Usage: "remove the provided comma-separated list of Azure Key Vault key URLs from the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "add-kms",
+			Usage: "add the provided comma-separated list of KMS ARNs to the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "rm-kms",
+			Usage: "remove the provided comma-separated list of KMS ARNs from the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "add-hc-vault-transit",
+			Usage: "add the provided comma-separated list of Vault's URI key to the list of master keys on the given file ( eg. https://vault.example.org:8200/v1/transit/keys/dev)",
+		},
+		cli.StringFlag{
+			Name:  "rm-hc-vault-transit",
+			Usage: "remove the provided comma-separated list of Vault's URI key from the list of master keys on the given file ( eg. https://vault.example.org:8200/v1/transit/keys/dev)",
+		},
+		cli.StringFlag{
+			Name:  "add-age",
+			Usage: "add the provided comma-separated list of age recipients fingerprints to the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "rm-age",
+			Usage: "remove the provided comma-separated list of age recipients from the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "add-pgp",
+			Usage: "add the provided comma-separated list of PGP fingerprints to the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "rm-pgp",
+			Usage: "remove the provided comma-separated list of PGP fingerprints from the list of master keys on the given file",
+		},
+	}
+	encryptFlags2 := []cli.Flag{
+		cli.StringFlag{
+			Name:  "unencrypted-suffix",
+			Usage: "override the unencrypted key suffix.",
+		},
+		cli.StringFlag{
+			Name:  "encrypted-suffix",
+			Usage: "override the encrypted key suffix. When empty, all keys will be encrypted, unless otherwise marked with unencrypted-suffix.",
+		},
+		cli.StringFlag{
+			Name:  "unencrypted-regex",
+			Usage: "set the unencrypted key regex. When specified, only keys matching the regex will be left unencrypted.",
+		},
+		cli.StringFlag{
+			Name:  "encrypted-regex",
+			Usage: "set the encrypted key regex. When specified, only keys matching the regex will be encrypted.",
+		},
+		cli.BoolFlag{
+			Name:  "mac-only-encrypted",
+			Usage: "compute MAC only over values which end up encrypted",
+		},
+	}
+	extractFlag := cli.StringFlag{
+		Name:  "extract",
+		Usage: "extract a specific key or branch from the input document. Example: --extract '[\"somekey\"][0]'",
+	}
+	encryptionContextFlag := cli.StringFlag{
+		Name:  "encryption-context",
+		Usage: "comma separated list of KMS encryption context key:value pairs",
+	}
+	shamirSecretSharingThresholdFlag := cli.IntFlag{
+		Name:  "shamir-secret-sharing-threshold",
+		Usage: "the number of master keys required to retrieve the data key with shamir",
 	}
 	app.Name = "sops"
 	app.Usage = "sops - encrypted file editor with AWS KMS, GCP KMS, Azure Key Vault, age, and GPG support"
@@ -139,16 +298,19 @@ func main() {
 			Name:      "exec-env",
 			Usage:     "execute a command with decrypted values inserted into the environment",
 			ArgsUsage: "[file to decrypt] [command to run]",
-			Flags: append([]cli.Flag{
-				cli.BoolFlag{
-					Name:  "background",
-					Usage: "background the process and don't wait for it to complete",
+			Flags: concatFlags([][]cli.Flag{
+				[]cli.Flag{
+					cli.BoolFlag{
+						Name:  "background",
+						Usage: "background the process and don't wait for it to complete",
+					},
+					cli.StringFlag{
+						Name:  "user",
+						Usage: "the user to run the command as",
+					},
 				},
-				cli.StringFlag{
-					Name:  "user",
-					Usage: "the user to run the command as",
-				},
-			}, keyserviceFlags...),
+				keyserviceFlags,
+			}),
 			Action: func(c *cli.Context) error {
 				if c.NArg() != 2 {
 					return common.NewExitError(fmt.Errorf("error: missing file to decrypt"), codes.ErrorGeneric)
@@ -190,32 +352,30 @@ func main() {
 			Name:      "exec-file",
 			Usage:     "execute a command with the decrypted contents as a temporary file",
 			ArgsUsage: "[file to decrypt] [command to run]",
-			Flags: append([]cli.Flag{
-				cli.BoolFlag{
-					Name:  "background",
-					Usage: "background the process and don't wait for it to complete",
+			Flags: concatFlags([][]cli.Flag{
+				[]cli.Flag{
+					cli.BoolFlag{
+						Name:  "background",
+						Usage: "background the process and don't wait for it to complete",
+					},
+					cli.BoolFlag{
+						Name:  "no-fifo",
+						Usage: "use a regular file instead of a fifo to temporarily hold the decrypted contents",
+					},
+					cli.StringFlag{
+						Name:  "user",
+						Usage: "the user to run the command as",
+					},
 				},
-				cli.BoolFlag{
-					Name:  "no-fifo",
-					Usage: "use a regular file instead of a fifo to temporarily hold the decrypted contents",
+				inputOutputTypeFlags,
+				[]cli.Flag{
+					cli.StringFlag{
+						Name:  "filename",
+						Usage: "filename for the temporarily file (default: tmp-file)",
+					},
 				},
-				cli.StringFlag{
-					Name:  "user",
-					Usage: "the user to run the command as",
-				},
-				cli.StringFlag{
-					Name:  "input-type",
-					Usage: "currently ini, json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
-				},
-				cli.StringFlag{
-					Name:  "output-type",
-					Usage: "currently ini, json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
-				},
-				cli.StringFlag{
-					Name:  "filename",
-					Usage: "filename for the temporarily file (default: tmp-file)",
-				},
-			}, keyserviceFlags...),
+				keyserviceFlags,
+			}),
 			Action: func(c *cli.Context) error {
 				if c.NArg() != 2 {
 					return common.NewExitError(fmt.Errorf("error: missing file to decrypt"), codes.ErrorGeneric)
@@ -265,24 +425,27 @@ func main() {
 			Name:      "publish",
 			Usage:     "Publish sops file or directory to a configured destination",
 			ArgsUsage: `file`,
-			Flags: append([]cli.Flag{
-				cli.BoolFlag{
-					Name:  "yes, y",
-					Usage: `pre-approve all changes and run non-interactively`,
+			Flags: concatFlags([][]cli.Flag{
+				[]cli.Flag{
+					cli.BoolFlag{
+						Name:  "yes, y",
+						Usage: `pre-approve all changes and run non-interactively`,
+					},
+					cli.BoolFlag{
+						Name:  "omit-extensions",
+						Usage: "Omit file extensions in destination path when publishing sops file to configured destinations",
+					},
+					cli.BoolFlag{
+						Name:  "recursive",
+						Usage: "If the source path is a directory, publish all its content recursively",
+					},
+					cli.BoolFlag{
+						Name:  "verbose",
+						Usage: "Enable verbose logging output",
+					},
 				},
-				cli.BoolFlag{
-					Name:  "omit-extensions",
-					Usage: "Omit file extensions in destination path when publishing sops file to configured destinations",
-				},
-				cli.BoolFlag{
-					Name:  "recursive",
-					Usage: "If the source path is a directory, publish all its content recursively",
-				},
-				cli.BoolFlag{
-					Name:  "verbose",
-					Usage: "Enable verbose logging output",
-				},
-			}, keyserviceFlags...),
+				keyserviceFlags,
+			}),
 			Action: func(c *cli.Context) error {
 				if c.Bool("verbose") || c.GlobalBool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
@@ -379,52 +542,46 @@ func main() {
 				{
 					Name:  "add",
 					Usage: "add a new group to a SOPS file",
-					Flags: append([]cli.Flag{
-						cli.StringFlag{
-							Name:  "file, f",
-							Usage: "the file to add the group to",
+					Flags: concatFlags([][]cli.Flag{
+						[]cli.Flag{
+							cli.StringFlag{
+								Name:  "file, f",
+								Usage: "the file to add the group to",
+							},
+							cli.StringSliceFlag{
+								Name:  "pgp",
+								Usage: "the PGP fingerprints the new group should contain. Can be specified more than once",
+							},
+							cli.StringSliceFlag{
+								Name:  "kms",
+								Usage: "the KMS ARNs the new group should contain. Can be specified more than once",
+							},
+							cli.StringFlag{
+								Name:  "aws-profile",
+								Usage: "The AWS profile to use for requests to AWS",
+							},
+							cli.StringSliceFlag{
+								Name:  "gcp-kms",
+								Usage: "the GCP KMS Resource ID the new group should contain. Can be specified more than once",
+							},
+							cli.StringSliceFlag{
+								Name:  "azure-kv",
+								Usage: "the Azure Key Vault key URL the new group should contain. Can be specified more than once",
+							},
+							cli.StringSliceFlag{
+								Name:  "hc-vault-transit",
+								Usage: "the full vault path to the key used to encrypt/decrypt. Make you choose and configure a key with encryption/decryption enabled (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev'). Can be specified more than once",
+							},
+							cli.StringSliceFlag{
+								Name:  "age",
+								Usage: "the age recipient the new group should contain. Can be specified more than once",
+							},
+							inplaceFlag,
+							shamirSecretSharingThresholdFlag,
+							encryptionContextFlag,
 						},
-						cli.StringSliceFlag{
-							Name:  "pgp",
-							Usage: "the PGP fingerprints the new group should contain. Can be specified more than once",
-						},
-						cli.StringSliceFlag{
-							Name:  "kms",
-							Usage: "the KMS ARNs the new group should contain. Can be specified more than once",
-						},
-						cli.StringFlag{
-							Name:  "aws-profile",
-							Usage: "The AWS profile to use for requests to AWS",
-						},
-						cli.StringSliceFlag{
-							Name:  "gcp-kms",
-							Usage: "the GCP KMS Resource ID the new group should contain. Can be specified more than once",
-						},
-						cli.StringSliceFlag{
-							Name:  "azure-kv",
-							Usage: "the Azure Key Vault key URL the new group should contain. Can be specified more than once",
-						},
-						cli.StringSliceFlag{
-							Name:  "hc-vault-transit",
-							Usage: "the full vault path to the key used to encrypt/decrypt. Make you choose and configure a key with encryption/decryption enabled (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev'). Can be specified more than once",
-						},
-						cli.StringSliceFlag{
-							Name:  "age",
-							Usage: "the age recipient the new group should contain. Can be specified more than once",
-						},
-						cli.BoolFlag{
-							Name:  "in-place, i",
-							Usage: "write output back to the same file instead of stdout",
-						},
-						cli.IntFlag{
-							Name:  "shamir-secret-sharing-threshold",
-							Usage: "the number of master keys required to retrieve the data key with shamir",
-						},
-						cli.StringFlag{
-							Name:  "encryption-context",
-							Usage: "comma separated list of KMS encryption context key:value pairs",
-						},
-					}, keyserviceFlags...),
+						keyserviceFlags,
+					}),
 					Action: func(c *cli.Context) error {
 						pgpFps := c.StringSlice("pgp")
 						kmsArns := c.StringSlice("kms")
@@ -485,20 +642,17 @@ func main() {
 				{
 					Name:  "delete",
 					Usage: "delete a key group from a SOPS file",
-					Flags: append([]cli.Flag{
-						cli.StringFlag{
-							Name:  "file, f",
-							Usage: "the file to add the group to",
+					Flags: concatFlags([][]cli.Flag{
+						[]cli.Flag{
+							cli.StringFlag{
+								Name:  "file, f",
+								Usage: "the file to add the group to",
+							},
+							inplaceFlag,
+							shamirSecretSharingThresholdFlag,
 						},
-						cli.BoolFlag{
-							Name:  "in-place, i",
-							Usage: "write output back to the same file instead of stdout",
-						},
-						cli.IntFlag{
-							Name:  "shamir-secret-sharing-threshold",
-							Usage: "the number of master keys required to retrieve the data key with shamir",
-						},
-					}, keyserviceFlags...),
+						keyserviceFlags,
+					}),
 					ArgsUsage: `[index]`,
 
 					Action: func(c *cli.Context) error {
@@ -527,16 +681,16 @@ func main() {
 			Name:      "updatekeys",
 			Usage:     "update the keys of a SOPS file using the config file",
 			ArgsUsage: `file`,
-			Flags: append([]cli.Flag{
-				cli.BoolFlag{
-					Name:  "yes, y",
-					Usage: `pre-approve all changes and run non-interactively`,
+			Flags: concatFlags([][]cli.Flag{
+				[]cli.Flag{
+					cli.BoolFlag{
+						Name:  "yes, y",
+						Usage: `pre-approve all changes and run non-interactively`,
+					},
+					inputTypeFlag,
 				},
-				cli.StringFlag{
-					Name:  "input-type",
-					Usage: "currently ini, json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
-				},
-			}, keyserviceFlags...),
+				keyserviceFlags,
+			}),
 			Action: func(c *cli.Context) error {
 				var err error
 				var configPath string
@@ -572,32 +726,18 @@ func main() {
 			Name:      "decrypt",
 			Usage:     "decrypt a file, and output the results to stdout",
 			ArgsUsage: `file`,
-			Flags: append([]cli.Flag{
-				cli.BoolFlag{
-					Name:  "in-place, i",
-					Usage: "write output back to the same file instead of stdout",
+			Flags: concatFlags([][]cli.Flag{
+				[]cli.Flag{
+					inplaceFlag,
+					extractFlag,
+					outputflag,
 				},
-				cli.StringFlag{
-					Name:  "extract",
-					Usage: "extract a specific key or branch from the input document. Example: --extract '[\"somekey\"][0]'",
+				inputOutputTypeFlags,
+				[]cli.Flag{
+					ignoreMacFlag,
 				},
-				cli.StringFlag{
-					Name:  "output",
-					Usage: "Save the output after decryption to the file specified",
-				},
-				cli.StringFlag{
-					Name:  "input-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
-				},
-				cli.StringFlag{
-					Name:  "output-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
-				},
-				cli.BoolFlag{
-					Name:  "ignore-mac",
-					Usage: "ignore Message Authentication Code during decryption",
-				},
-			}, keyserviceFlags...),
+				keyserviceFlags,
+			}),
 			Action: func(c *cli.Context) error {
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
@@ -673,82 +813,20 @@ func main() {
 			Name:      "encrypt",
 			Usage:     "encrypt a file, and output the results to stdout",
 			ArgsUsage: `file`,
-			Flags: append([]cli.Flag{
-				cli.BoolFlag{
-					Name:  "in-place, i",
-					Usage: "write output back to the same file instead of stdout",
+			Flags: concatFlags([][]cli.Flag{
+				[]cli.Flag{
+					inplaceFlag,
+					outputflag,
 				},
-				cli.StringFlag{
-					Name:  "output",
-					Usage: "Save the output after decryption to the file specified",
+				encryptFlags,
+				inputOutputTypeFlags,
+				encryptFlags2,
+				[]cli.Flag{
+					encryptionContextFlag,
+					shamirSecretSharingThresholdFlag,
 				},
-				cli.StringFlag{
-					Name:   "kms, k",
-					Usage:  "comma separated list of KMS ARNs",
-					EnvVar: "SOPS_KMS_ARN",
-				},
-				cli.StringFlag{
-					Name:  "aws-profile",
-					Usage: "The AWS profile to use for requests to AWS",
-				},
-				cli.StringFlag{
-					Name:   "gcp-kms",
-					Usage:  "comma separated list of GCP KMS resource IDs",
-					EnvVar: "SOPS_GCP_KMS_IDS",
-				},
-				cli.StringFlag{
-					Name:   "azure-kv",
-					Usage:  "comma separated list of Azure Key Vault URLs",
-					EnvVar: "SOPS_AZURE_KEYVAULT_URLS",
-				},
-				cli.StringFlag{
-					Name:   "hc-vault-transit",
-					Usage:  "comma separated list of vault's key URI (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev')",
-					EnvVar: "SOPS_VAULT_URIS",
-				},
-				cli.StringFlag{
-					Name:   "pgp, p",
-					Usage:  "comma separated list of PGP fingerprints",
-					EnvVar: "SOPS_PGP_FP",
-				},
-				cli.StringFlag{
-					Name:   "age, a",
-					Usage:  "comma separated list of age recipients",
-					EnvVar: "SOPS_AGE_RECIPIENTS",
-				},
-				cli.StringFlag{
-					Name:  "input-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
-				},
-				cli.StringFlag{
-					Name:  "output-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
-				},
-				cli.StringFlag{
-					Name:  "unencrypted-suffix",
-					Usage: "override the unencrypted key suffix.",
-				},
-				cli.StringFlag{
-					Name:  "encrypted-suffix",
-					Usage: "override the encrypted key suffix. When empty, all keys will be encrypted, unless otherwise marked with unencrypted-suffix.",
-				},
-				cli.StringFlag{
-					Name:  "unencrypted-regex",
-					Usage: "set the unencrypted key regex. When specified, only keys matching the regex will be left unencrypted.",
-				},
-				cli.StringFlag{
-					Name:  "encrypted-regex",
-					Usage: "set the encrypted key regex. When specified, only keys matching the regex will be encrypted.",
-				},
-				cli.StringFlag{
-					Name:  "encryption-context",
-					Usage: "comma separated list of KMS encryption context key:value pairs",
-				},
-				cli.IntFlag{
-					Name:  "shamir-secret-sharing-threshold",
-					Usage: "the number of master keys required to retrieve the data key with shamir",
-				},
-			}, keyserviceFlags...),
+				keyserviceFlags,
+			}),
 			Action: func(c *cli.Context) error {
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
@@ -772,6 +850,7 @@ func main() {
 				encryptedSuffix := c.String("encrypted-suffix")
 				encryptedRegex := c.String("encrypted-regex")
 				unencryptedRegex := c.String("unencrypted-regex")
+				macOnlyEncrypted := c.Bool("mac-only-encrypted")
 				conf, err := loadConfig(c, fileName, nil)
 				if err != nil {
 					return toExitError(err)
@@ -789,6 +868,9 @@ func main() {
 					}
 					if unencryptedRegex == "" {
 						unencryptedRegex = conf.UnencryptedRegex
+					}
+					if !macOnlyEncrypted {
+						macOnlyEncrypted = conf.MACOnlyEncrypted
 					}
 				}
 
@@ -878,76 +960,19 @@ func main() {
 			Name:      "rotate",
 			Usage:     "generate a new data encryption key and reencrypt all values with the new key",
 			ArgsUsage: `file`,
-			Flags: append([]cli.Flag{
-				cli.BoolFlag{
-					Name:  "in-place, i",
-					Usage: "write output back to the same file instead of stdout",
+			Flags: concatFlags([][]cli.Flag{
+				[]cli.Flag{
+					inplaceFlag,
+					outputflag,
 				},
-				cli.StringFlag{
-					Name:  "output",
-					Usage: "Save the output after decryption to the file specified",
+				inputOutputTypeFlags,
+				[]cli.Flag{
+					encryptionContextFlag,
+					shamirSecretSharingThresholdFlag,
 				},
-				cli.StringFlag{
-					Name:  "input-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
-				},
-				cli.StringFlag{
-					Name:  "output-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
-				},
-				cli.StringFlag{
-					Name:  "encryption-context",
-					Usage: "comma separated list of KMS encryption context key:value pairs",
-				},
-				cli.StringFlag{
-					Name:  "add-gcp-kms",
-					Usage: "add the provided comma-separated list of GCP KMS key resource IDs to the list of master keys on the given file",
-				},
-				cli.StringFlag{
-					Name:  "rm-gcp-kms",
-					Usage: "remove the provided comma-separated list of GCP KMS key resource IDs from the list of master keys on the given file",
-				},
-				cli.StringFlag{
-					Name:  "add-azure-kv",
-					Usage: "add the provided comma-separated list of Azure Key Vault key URLs to the list of master keys on the given file",
-				},
-				cli.StringFlag{
-					Name:  "rm-azure-kv",
-					Usage: "remove the provided comma-separated list of Azure Key Vault key URLs from the list of master keys on the given file",
-				},
-				cli.StringFlag{
-					Name:  "add-kms",
-					Usage: "add the provided comma-separated list of KMS ARNs to the list of master keys on the given file",
-				},
-				cli.StringFlag{
-					Name:  "rm-kms",
-					Usage: "remove the provided comma-separated list of KMS ARNs from the list of master keys on the given file",
-				},
-				cli.StringFlag{
-					Name:  "add-hc-vault-transit",
-					Usage: "add the provided comma-separated list of Vault's URI key to the list of master keys on the given file ( eg. https://vault.example.org:8200/v1/transit/keys/dev)",
-				},
-				cli.StringFlag{
-					Name:  "rm-hc-vault-transit",
-					Usage: "remove the provided comma-separated list of Vault's URI key from the list of master keys on the given file ( eg. https://vault.example.org:8200/v1/transit/keys/dev)",
-				},
-				cli.StringFlag{
-					Name:  "add-age",
-					Usage: "add the provided comma-separated list of age recipients fingerprints to the list of master keys on the given file",
-				},
-				cli.StringFlag{
-					Name:  "rm-age",
-					Usage: "remove the provided comma-separated list of age recipients from the list of master keys on the given file",
-				},
-				cli.StringFlag{
-					Name:  "add-pgp",
-					Usage: "add the provided comma-separated list of PGP fingerprints to the list of master keys on the given file",
-				},
-				cli.StringFlag{
-					Name:  "rm-pgp",
-					Usage: "remove the provided comma-separated list of PGP fingerprints from the list of master keys on the given file",
-				},
-			}, keyserviceFlags...),
+				addRemoveKeys,
+				keyserviceFlags,
+			}),
 			Action: func(c *cli.Context) error {
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
@@ -1084,82 +1109,18 @@ func main() {
 			Name:      "edit",
 			Usage:     "edit an encrypted file",
 			ArgsUsage: `file`,
-			Flags: append([]cli.Flag{
-				cli.StringFlag{
-					Name:   "kms, k",
-					Usage:  "comma separated list of KMS ARNs",
-					EnvVar: "SOPS_KMS_ARN",
+			Flags: concatFlags([][]cli.Flag{
+				encryptFlags,
+				inputOutputTypeFlags,
+				encryptFlags2,
+				[]cli.Flag{
+					encryptionContextFlag,
+					shamirSecretSharingThresholdFlag,
+					showMasterKeysFlag,
+					ignoreMacFlag,
 				},
-				cli.StringFlag{
-					Name:  "aws-profile",
-					Usage: "The AWS profile to use for requests to AWS",
-				},
-				cli.StringFlag{
-					Name:   "gcp-kms",
-					Usage:  "comma separated list of GCP KMS resource IDs",
-					EnvVar: "SOPS_GCP_KMS_IDS",
-				},
-				cli.StringFlag{
-					Name:   "azure-kv",
-					Usage:  "comma separated list of Azure Key Vault URLs",
-					EnvVar: "SOPS_AZURE_KEYVAULT_URLS",
-				},
-				cli.StringFlag{
-					Name:   "hc-vault-transit",
-					Usage:  "comma separated list of vault's key URI (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev')",
-					EnvVar: "SOPS_VAULT_URIS",
-				},
-				cli.StringFlag{
-					Name:   "pgp, p",
-					Usage:  "comma separated list of PGP fingerprints",
-					EnvVar: "SOPS_PGP_FP",
-				},
-				cli.StringFlag{
-					Name:   "age, a",
-					Usage:  "comma separated list of age recipients",
-					EnvVar: "SOPS_AGE_RECIPIENTS",
-				},
-				cli.StringFlag{
-					Name:  "input-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
-				},
-				cli.StringFlag{
-					Name:  "output-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
-				},
-				cli.StringFlag{
-					Name:  "unencrypted-suffix",
-					Usage: "override the unencrypted key suffix.",
-				},
-				cli.StringFlag{
-					Name:  "encrypted-suffix",
-					Usage: "override the encrypted key suffix. When empty, all keys will be encrypted, unless otherwise marked with unencrypted-suffix.",
-				},
-				cli.StringFlag{
-					Name:  "unencrypted-regex",
-					Usage: "set the unencrypted key regex. When specified, only keys matching the regex will be left unencrypted.",
-				},
-				cli.StringFlag{
-					Name:  "encrypted-regex",
-					Usage: "set the encrypted key regex. When specified, only keys matching the regex will be encrypted.",
-				},
-				cli.StringFlag{
-					Name:  "encryption-context",
-					Usage: "comma separated list of KMS encryption context key:value pairs",
-				},
-				cli.IntFlag{
-					Name:  "shamir-secret-sharing-threshold",
-					Usage: "the number of master keys required to retrieve the data key with shamir",
-				},
-				cli.BoolFlag{
-					Name:  "show-master-keys, s",
-					Usage: "display master encryption keys in the file during editing",
-				},
-				cli.BoolFlag{
-					Name:  "ignore-mac",
-					Usage: "ignore Message Authentication Code during decryption",
-				},
-			}, keyserviceFlags...),
+				keyserviceFlags,
+			}),
 			Action: func(c *cli.Context) error {
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
@@ -1180,6 +1141,7 @@ func main() {
 				encryptedSuffix := c.String("encrypted-suffix")
 				encryptedRegex := c.String("encrypted-regex")
 				unencryptedRegex := c.String("unencrypted-regex")
+				macOnlyEncrypted := c.Bool("mac-only-encrypted")
 				conf, err := loadConfig(c, fileName, nil)
 				if err != nil {
 					return toExitError(err)
@@ -1197,6 +1159,9 @@ func main() {
 					}
 					if unencryptedRegex == "" {
 						unencryptedRegex = conf.UnencryptedRegex
+					}
+					if !macOnlyEncrypted {
+						macOnlyEncrypted = conf.MACOnlyEncrypted
 					}
 				}
 
@@ -1288,24 +1253,14 @@ func main() {
 			Name:      "set",
 			Usage:     `set a specific key or branch in the input document. value must be a json encoded string. eg. '/path/to/file ["somekey"][0] {"somevalue":true}'`,
 			ArgsUsage: `file index value`,
-			Flags: append([]cli.Flag{
-				cli.StringFlag{
-					Name:  "input-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
+			Flags: concatFlags([][]cli.Flag{
+				inputOutputTypeFlags,
+				[]cli.Flag{
+					shamirSecretSharingThresholdFlag,
+					ignoreMacFlag,
 				},
-				cli.StringFlag{
-					Name:  "output-type",
-					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
-				},
-				cli.IntFlag{
-					Name:  "shamir-secret-sharing-threshold",
-					Usage: "the number of master keys required to retrieve the data key with shamir",
-				},
-				cli.BoolFlag{
-					Name:  "ignore-mac",
-					Usage: "ignore Message Authentication Code during decryption",
-				},
-			}, keyserviceFlags...),
+				keyserviceFlags,
+			}),
 			Action: func(c *cli.Context) error {
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
@@ -1363,178 +1318,58 @@ func main() {
 			},
 		},
 	}
-	app.Flags = append([]cli.Flag{
-		cli.BoolFlag{
-			Name:  "decrypt, d",
-			Usage: "decrypt a file and output the result to stdout",
+	app.Flags = concatFlags([][]cli.Flag{
+		[]cli.Flag{
+			cli.BoolFlag{
+				Name:  "decrypt, d",
+				Usage: "decrypt a file and output the result to stdout",
+			},
+			cli.BoolFlag{
+				Name:  "encrypt, e",
+				Usage: "encrypt a file and output the result to stdout",
+			},
+			cli.BoolFlag{
+				Name:  "rotate, r",
+				Usage: "generate a new data encryption key and reencrypt all values with the new key",
+			},
+			cli.BoolFlag{
+				Name:  "disable-version-check",
+				Usage: "do not check whether the current version is latest during --version",
+			},
 		},
-		cli.BoolFlag{
-			Name:  "encrypt, e",
-			Usage: "encrypt a file and output the result to stdout",
+		encryptFlags,
+		[]cli.Flag{
+			inplaceFlag,
+			extractFlag,
 		},
-		cli.BoolFlag{
-			Name:  "rotate, r",
-			Usage: "generate a new data encryption key and reencrypt all values with the new key",
+		inputOutputTypeFlags,
+		[]cli.Flag{
+			showMasterKeysFlag,
 		},
-		cli.BoolFlag{
-			Name:  "disable-version-check",
-			Usage: "do not check whether the current version is latest during --version",
+		addRemoveKeys,
+		[]cli.Flag{
+			ignoreMacFlag,
 		},
-		cli.StringFlag{
-			Name:   "kms, k",
-			Usage:  "comma separated list of KMS ARNs",
-			EnvVar: "SOPS_KMS_ARN",
+		encryptFlags2,
+		[]cli.Flag{
+			cli.StringFlag{
+				Name:  "config",
+				Usage: "path to sops' config file. If set, sops will not search for the config file recursively.",
+			},
+			encryptionContextFlag,
+			cli.StringFlag{
+				Name:  "set",
+				Usage: `set a specific key or branch in the input document. value must be a json encoded string. (edit mode only). eg. --set '["somekey"][0] {"somevalue":true}'`,
+			},
+			shamirSecretSharingThresholdFlag,
+			cli.BoolFlag{
+				Name:  "verbose",
+				Usage: "Enable verbose logging output",
+			},
+			outputflag,
 		},
-		cli.StringFlag{
-			Name:  "aws-profile",
-			Usage: "The AWS profile to use for requests to AWS",
-		},
-		cli.StringFlag{
-			Name:   "gcp-kms",
-			Usage:  "comma separated list of GCP KMS resource IDs",
-			EnvVar: "SOPS_GCP_KMS_IDS",
-		},
-		cli.StringFlag{
-			Name:   "azure-kv",
-			Usage:  "comma separated list of Azure Key Vault URLs",
-			EnvVar: "SOPS_AZURE_KEYVAULT_URLS",
-		},
-		cli.StringFlag{
-			Name:   "hc-vault-transit",
-			Usage:  "comma separated list of vault's key URI (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev')",
-			EnvVar: "SOPS_VAULT_URIS",
-		},
-		cli.StringFlag{
-			Name:   "pgp, p",
-			Usage:  "comma separated list of PGP fingerprints",
-			EnvVar: "SOPS_PGP_FP",
-		},
-		cli.StringFlag{
-			Name:   "age, a",
-			Usage:  "comma separated list of age recipients",
-			EnvVar: "SOPS_AGE_RECIPIENTS",
-		},
-		cli.BoolFlag{
-			Name:  "in-place, i",
-			Usage: "write output back to the same file instead of stdout",
-		},
-		cli.StringFlag{
-			Name:  "extract",
-			Usage: "extract a specific key or branch from the input document. Decrypt mode only. Example: --extract '[\"somekey\"][0]'",
-		},
-		cli.StringFlag{
-			Name:  "input-type",
-			Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
-		},
-		cli.StringFlag{
-			Name:  "output-type",
-			Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
-		},
-		cli.BoolFlag{
-			Name:  "show-master-keys, s",
-			Usage: "display master encryption keys in the file during editing",
-		},
-		cli.StringFlag{
-			Name:  "add-gcp-kms",
-			Usage: "add the provided comma-separated list of GCP KMS key resource IDs to the list of master keys on the given file",
-		},
-		cli.StringFlag{
-			Name:  "rm-gcp-kms",
-			Usage: "remove the provided comma-separated list of GCP KMS key resource IDs from the list of master keys on the given file",
-		},
-		cli.StringFlag{
-			Name:  "add-azure-kv",
-			Usage: "add the provided comma-separated list of Azure Key Vault key URLs to the list of master keys on the given file",
-		},
-		cli.StringFlag{
-			Name:  "rm-azure-kv",
-			Usage: "remove the provided comma-separated list of Azure Key Vault key URLs from the list of master keys on the given file",
-		},
-		cli.StringFlag{
-			Name:  "add-kms",
-			Usage: "add the provided comma-separated list of KMS ARNs to the list of master keys on the given file",
-		},
-		cli.StringFlag{
-			Name:  "rm-kms",
-			Usage: "remove the provided comma-separated list of KMS ARNs from the list of master keys on the given file",
-		},
-		cli.StringFlag{
-			Name:  "add-hc-vault-transit",
-			Usage: "add the provided comma-separated list of Vault's URI key to the list of master keys on the given file ( eg. https://vault.example.org:8200/v1/transit/keys/dev)",
-		},
-		cli.StringFlag{
-			Name:  "rm-hc-vault-transit",
-			Usage: "remove the provided comma-separated list of Vault's URI key from the list of master keys on the given file ( eg. https://vault.example.org:8200/v1/transit/keys/dev)",
-		},
-		cli.StringFlag{
-			Name:  "add-age",
-			Usage: "add the provided comma-separated list of age recipients fingerprints to the list of master keys on the given file",
-		},
-		cli.StringFlag{
-			Name:  "rm-age",
-			Usage: "remove the provided comma-separated list of age recipients from the list of master keys on the given file",
-		},
-		cli.StringFlag{
-			Name:  "add-pgp",
-			Usage: "add the provided comma-separated list of PGP fingerprints to the list of master keys on the given file",
-		},
-		cli.StringFlag{
-			Name:  "rm-pgp",
-			Usage: "remove the provided comma-separated list of PGP fingerprints from the list of master keys on the given file",
-		},
-		cli.BoolFlag{
-			Name:  "ignore-mac",
-			Usage: "ignore Message Authentication Code during decryption",
-		},
-		cli.BoolFlag{
-			Name:  "mac-only-encrypted",
-			Usage: "compute MAC only over values which end up encrypted",
-		},
-		cli.StringFlag{
-			Name:  "unencrypted-suffix",
-			Usage: "override the unencrypted key suffix.",
-		},
-		cli.StringFlag{
-			Name:  "encrypted-suffix",
-			Usage: "override the encrypted key suffix. When empty, all keys will be encrypted, unless otherwise marked with unencrypted-suffix.",
-		},
-		cli.StringFlag{
-			Name:  "unencrypted-regex",
-			Usage: "set the unencrypted key regex. When specified, only keys matching the regex will be left unencrypted.",
-		},
-		cli.StringFlag{
-			Name:  "encrypted-regex",
-			Usage: "set the encrypted key regex. When specified, only keys matching the regex will be encrypted.",
-		},
-		cli.StringFlag{
-			Name:  "config",
-			Usage: "path to sops' config file. If set, sops will not search for the config file recursively.",
-		},
-		cli.StringFlag{
-			Name:  "encryption-context",
-			Usage: "comma separated list of KMS encryption context key:value pairs",
-		},
-		cli.StringFlag{
-			Name:  "set",
-			Usage: `set a specific key or branch in the input document. value must be a json encoded string. (edit mode only). eg. --set '["somekey"][0] {"somevalue":true}'`,
-		},
-		cli.IntFlag{
-			Name:  "shamir-secret-sharing-threshold",
-			Usage: "the number of master keys required to retrieve the data key with shamir",
-		},
-		cli.IntFlag{
-			Name:  "indent",
-			Usage: "the number of spaces to indent YAML or JSON encoded file",
-		},
-		cli.BoolFlag{
-			Name:  "verbose",
-			Usage: "Enable verbose logging output",
-		},
-		cli.StringFlag{
-			Name:  "output",
-			Usage: "Save the output after encryption or decryption to the file specified",
-		},
-	}, keyserviceFlags...)
+		keyserviceFlags,
+	})
 
 	app.Action = func(c *cli.Context) error {
 		if c.Bool("verbose") {
