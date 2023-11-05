@@ -568,6 +568,312 @@ func main() {
 				return nil
 			},
 		},
+		{
+			Name:      "decrypt",
+			Usage:     "decrypt a file, and output the results to stdout",
+			ArgsUsage: `file`,
+			Flags: append([]cli.Flag{
+				cli.BoolFlag{
+					Name:  "in-place, i",
+					Usage: "write output back to the same file instead of stdout",
+				},
+				cli.StringFlag{
+					Name:  "extract",
+					Usage: "extract a specific key or branch from the input document. Example: --extract '[\"somekey\"][0]'",
+				},
+				cli.StringFlag{
+					Name:  "output",
+					Usage: "Save the output after decryption to the file specified",
+				},
+				cli.StringFlag{
+					Name:  "input-type",
+					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
+				},
+				cli.StringFlag{
+					Name:  "output-type",
+					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
+				},
+				cli.BoolFlag{
+					Name:  "ignore-mac",
+					Usage: "ignore Message Authentication Code during decryption",
+				},
+			}, keyserviceFlags...),
+			Action: func(c *cli.Context) error {
+				if c.Bool("verbose") {
+					logging.SetLevel(logrus.DebugLevel)
+				}
+				if c.NArg() < 1 {
+					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
+				}
+				warnMoreThanOnePositionalArgument(c)
+				if c.Bool("in-place") && c.String("output") != "" {
+					return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
+				}
+				fileName, err := filepath.Abs(c.Args()[0])
+				if err != nil {
+					return toExitError(err)
+				}
+				if _, err := os.Stat(fileName); os.IsNotExist(err) {
+					return common.NewExitError("Error: cannot operate on non-existent file", codes.NoFileSpecified)
+				}
+
+				inputStore := inputStore(c, fileName)
+				outputStore := outputStore(c, fileName)
+				svcs := keyservices(c)
+
+				var extract []interface{}
+				extract, err = parseTreePath(c.String("extract"))
+				if err != nil {
+					return common.NewExitError(fmt.Errorf("error parsing --extract path: %s", err), codes.InvalidTreePathFormat)
+				}
+
+				output, err := decrypt(decryptOpts{
+					OutputStore: outputStore,
+					InputStore:  inputStore,
+					InputPath:   fileName,
+					Cipher:      aes.NewCipher(),
+					Extract:     extract,
+					KeyServices: svcs,
+					IgnoreMAC:   c.Bool("ignore-mac"),
+				})
+				if err != nil {
+					return toExitError(err)
+				}
+
+				// We open the file *after* the operations on the tree have been
+				// executed to avoid truncating it when there's errors
+				if c.Bool("in-place") {
+					file, err := os.Create(fileName)
+					if err != nil {
+						return common.NewExitError(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
+					}
+					defer file.Close()
+					_, err = file.Write(output)
+					if err != nil {
+						return toExitError(err)
+					}
+					log.Info("File written successfully")
+					return nil
+				}
+
+				outputFile := os.Stdout
+				if c.String("output") != "" {
+					file, err := os.Create(c.String("output"))
+					if err != nil {
+						return common.NewExitError(fmt.Sprintf("Could not open output file for writing: %s", err), codes.CouldNotWriteOutputFile)
+					}
+					defer file.Close()
+					outputFile = file
+				}
+				_, err = outputFile.Write(output)
+				return toExitError(err)
+			},
+		},
+		{
+			Name:      "encrypt",
+			Usage:     "encrypt a file, and output the results to stdout",
+			ArgsUsage: `file`,
+			Flags: append([]cli.Flag{
+				cli.BoolFlag{
+					Name:  "in-place, i",
+					Usage: "write output back to the same file instead of stdout",
+				},
+				cli.StringFlag{
+					Name:  "output",
+					Usage: "Save the output after decryption to the file specified",
+				},
+				cli.StringFlag{
+					Name:   "kms, k",
+					Usage:  "comma separated list of KMS ARNs",
+					EnvVar: "SOPS_KMS_ARN",
+				},
+				cli.StringFlag{
+					Name:  "aws-profile",
+					Usage: "The AWS profile to use for requests to AWS",
+				},
+				cli.StringFlag{
+					Name:   "gcp-kms",
+					Usage:  "comma separated list of GCP KMS resource IDs",
+					EnvVar: "SOPS_GCP_KMS_IDS",
+				},
+				cli.StringFlag{
+					Name:   "azure-kv",
+					Usage:  "comma separated list of Azure Key Vault URLs",
+					EnvVar: "SOPS_AZURE_KEYVAULT_URLS",
+				},
+				cli.StringFlag{
+					Name:   "hc-vault-transit",
+					Usage:  "comma separated list of vault's key URI (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev')",
+					EnvVar: "SOPS_VAULT_URIS",
+				},
+				cli.StringFlag{
+					Name:   "pgp, p",
+					Usage:  "comma separated list of PGP fingerprints",
+					EnvVar: "SOPS_PGP_FP",
+				},
+				cli.StringFlag{
+					Name:   "age, a",
+					Usage:  "comma separated list of age recipients",
+					EnvVar: "SOPS_AGE_RECIPIENTS",
+				},
+				cli.StringFlag{
+					Name:  "input-type",
+					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
+				},
+				cli.StringFlag{
+					Name:  "output-type",
+					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
+				},
+				cli.StringFlag{
+					Name:  "unencrypted-suffix",
+					Usage: "override the unencrypted key suffix.",
+				},
+				cli.StringFlag{
+					Name:  "encrypted-suffix",
+					Usage: "override the encrypted key suffix. When empty, all keys will be encrypted, unless otherwise marked with unencrypted-suffix.",
+				},
+				cli.StringFlag{
+					Name:  "unencrypted-regex",
+					Usage: "set the unencrypted key regex. When specified, only keys matching the regex will be left unencrypted.",
+				},
+				cli.StringFlag{
+					Name:  "encrypted-regex",
+					Usage: "set the encrypted key regex. When specified, only keys matching the regex will be encrypted.",
+				},
+				cli.StringFlag{
+					Name:  "encryption-context",
+					Usage: "comma separated list of KMS encryption context key:value pairs",
+				},
+				cli.IntFlag{
+					Name:  "shamir-secret-sharing-threshold",
+					Usage: "the number of master keys required to retrieve the data key with shamir",
+				},
+			}, keyserviceFlags...),
+			Action: func(c *cli.Context) error {
+				if c.Bool("verbose") {
+					logging.SetLevel(logrus.DebugLevel)
+				}
+				if c.NArg() < 1 {
+					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
+				}
+				warnMoreThanOnePositionalArgument(c)
+				if c.Bool("in-place") && c.String("output") != "" {
+					return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
+				}
+				fileName, err := filepath.Abs(c.Args()[0])
+				if err != nil {
+					return toExitError(err)
+				}
+				if _, err := os.Stat(fileName); os.IsNotExist(err) {
+					return common.NewExitError("Error: cannot operate on non-existent file", codes.NoFileSpecified)
+				}
+
+				unencryptedSuffix := c.String("unencrypted-suffix")
+				encryptedSuffix := c.String("encrypted-suffix")
+				encryptedRegex := c.String("encrypted-regex")
+				unencryptedRegex := c.String("unencrypted-regex")
+				conf, err := loadConfig(c, fileName, nil)
+				if err != nil {
+					return toExitError(err)
+				}
+				if conf != nil {
+					// command line options have precedence
+					if unencryptedSuffix == "" {
+						unencryptedSuffix = conf.UnencryptedSuffix
+					}
+					if encryptedSuffix == "" {
+						encryptedSuffix = conf.EncryptedSuffix
+					}
+					if encryptedRegex == "" {
+						encryptedRegex = conf.EncryptedRegex
+					}
+					if unencryptedRegex == "" {
+						unencryptedRegex = conf.UnencryptedRegex
+					}
+				}
+
+				cryptRuleCount := 0
+				if unencryptedSuffix != "" {
+					cryptRuleCount++
+				}
+				if encryptedSuffix != "" {
+					cryptRuleCount++
+				}
+				if encryptedRegex != "" {
+					cryptRuleCount++
+				}
+				if unencryptedRegex != "" {
+					cryptRuleCount++
+				}
+
+				if cryptRuleCount > 1 {
+					return common.NewExitError("Error: cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex or unencrypted_regex in the same file", codes.ErrorConflictingParameters)
+				}
+
+				// only supply the default UnencryptedSuffix when EncryptedSuffix and EncryptedRegex are not provided
+				if cryptRuleCount == 0 {
+					unencryptedSuffix = sops.DefaultUnencryptedSuffix
+				}
+
+				inputStore := inputStore(c, fileName)
+				outputStore := outputStore(c, fileName)
+				svcs := keyservices(c)
+
+				groups, err := keyGroups(c, fileName)
+				if err != nil {
+					return toExitError(err)
+				}
+				threshold, err := shamirThreshold(c, fileName)
+				if err != nil {
+					return toExitError(err)
+				}
+				output, err := encrypt(encryptOpts{
+					OutputStore:       outputStore,
+					InputStore:        inputStore,
+					InputPath:         fileName,
+					Cipher:            aes.NewCipher(),
+					UnencryptedSuffix: unencryptedSuffix,
+					EncryptedSuffix:   encryptedSuffix,
+					UnencryptedRegex:  unencryptedRegex,
+					EncryptedRegex:    encryptedRegex,
+					MACOnlyEncrypted:  macOnlyEncrypted,
+					KeyServices:       svcs,
+					KeyGroups:         groups,
+					GroupThreshold:    threshold,
+				})
+				if err != nil {
+					return toExitError(err)
+				}
+
+				// We open the file *after* the operations on the tree have been
+				// executed to avoid truncating it when there's errors
+				if c.Bool("in-place") {
+					file, err := os.Create(fileName)
+					if err != nil {
+						return common.NewExitError(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
+					}
+					defer file.Close()
+					_, err = file.Write(output)
+					if err != nil {
+						return toExitError(err)
+					}
+					log.Info("File written successfully")
+					return nil
+				}
+
+				outputFile := os.Stdout
+				if c.String("output") != "" {
+					file, err := os.Create(c.String("output"))
+					if err != nil {
+						return common.NewExitError(fmt.Sprintf("Could not open output file for writing: %s", err), codes.CouldNotWriteOutputFile)
+					}
+					defer file.Close()
+					outputFile = file
+				}
+				_, err = outputFile.Write(output)
+				return toExitError(err)
+			},
+		},
 	}
 	app.Flags = append([]cli.Flag{
 		cli.BoolFlag{
