@@ -48,6 +48,21 @@ func init() {
 	log = logging.NewLogger("CMD")
 }
 
+func warnMoreThanOnePositionalArgument(c *cli.Context) {
+	if c.NArg() > 1 {
+		log.Warn("More than one positional argument provided. Only the first one will be used!")
+		potentialFlag := ""
+		for i, value := range c.Args() {
+			if i > 0 && strings.HasPrefix(value, "-") {
+				potentialFlag = value
+			}
+		}
+		if potentialFlag != "" {
+			log.Warn(fmt.Sprintf("Note that one of the ignored positional argument is %q, which looks like a flag. Flags must always be provied before the first positional argument!", potentialFlag))
+		}
+	}
+}
+
 func main() {
 	cli.VersionPrinter = version.PrintVersion
 	app := cli.NewApp()
@@ -147,7 +162,7 @@ func main() {
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
-				if len(c.Args()) != 2 {
+				if c.NArg() != 2 {
 					return common.NewExitError(fmt.Errorf("error: missing file to decrypt"), codes.ErrorGeneric)
 				}
 
@@ -215,7 +230,7 @@ func main() {
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
-				if len(c.Args()) != 2 {
+				if c.NArg() != 2 {
 					return common.NewExitError(fmt.Errorf("error: missing file to decrypt"), codes.ErrorGeneric)
 				}
 
@@ -292,6 +307,7 @@ func main() {
 				if c.NArg() < 1 {
 					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
 				}
+				warnMoreThanOnePositionalArgument(c)
 				path := c.Args()[0]
 				info, err := os.Stat(path)
 				if err != nil {
@@ -429,6 +445,9 @@ func main() {
 						vaultURIs := c.StringSlice("hc-vault-transit")
 						azkvs := c.StringSlice("azure-kv")
 						ageRecipients := c.StringSlice("age")
+						if c.NArg() != 0 {
+							return common.NewExitError(fmt.Errorf("error: no positional arguments allowed"), codes.ErrorGeneric)
+						}
 						var group sops.KeyGroup
 						for _, fp := range pgpFps {
 							group = append(group, pgp.NewMasterKeyFromFingerprint(fp))
@@ -494,7 +513,11 @@ func main() {
 						},
 					}, keyserviceFlags...),
 					ArgsUsage: `[index]`,
+
 					Action: func(c *cli.Context) error {
+						if c.NArg() != 1 {
+							return common.NewExitError(fmt.Errorf("error: exactly one positional argument (index) required"), codes.ErrorGeneric)
+						}
 						group, err := strconv.ParseUint(c.Args().First(), 10, 32)
 						if err != nil {
 							return fmt.Errorf("failed to parse [index] argument: %s", err)
@@ -755,6 +778,7 @@ func main() {
 		if c.NArg() < 1 {
 			return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
 		}
+		warnMoreThanOnePositionalArgument(c)
 		if c.Bool("in-place") && c.String("output") != "" {
 			return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
 		}
