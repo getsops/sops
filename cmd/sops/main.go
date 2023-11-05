@@ -124,7 +124,7 @@ func main() {
 
    The -p, -k, --gcp-kms, --hc-vault-transit and --azure-kv flags are only used to encrypt new documents. Editing
    or decrypting existing documents can be done with "sops file" or
-   "sops -d file" respectively. The KMS and PGP keys listed in the encrypted
+   "sops decrypt file" respectively. The KMS and PGP keys listed in the encrypted
    documents are used then. To manage master keys in existing documents, use
    the "add-{kms,pgp,gcp-kms,azure-kv,hc-vault-transit}" and "rm-{kms,pgp,gcp-kms,azure-kv,hc-vault-transit}" flags.
 
