@@ -96,12 +96,12 @@ separated, in the **SOPS_PGP_FP** env variable.
 
 Note: you can use both PGP and KMS simultaneously.
 
-Then simply call ``sops`` with a file path as argument. It will handle the
+Then simply call ``sops edit`` with a file path as argument. It will handle the
 encryption/decryption transparently and open the cleartext file in an editor
 
 .. code:: sh
 
-    $ sops mynewtestfile.yaml
+    $ sops edit mynewtestfile.yaml
     mynewtestfile.yaml doesn't exist, creating it.
     please wait while an encryption key is being generated and stored in a secure fashion
     file written to mynewtestfile.yaml
@@ -164,7 +164,7 @@ Given that, the only command a SOPS user needs is:
 
 .. code:: sh
 
-    $ sops <file>
+    $ sops edit <file>
 
 `<file>` will be opened, decrypted, passed to a text editor (vim by default),
 encrypted if modified, and saved back to its original location. All of these
@@ -184,7 +184,7 @@ the example files and pgp key provided with the repository::
     $ git clone https://github.com/getsops/sops.git
     $ cd sops
     $ gpg --import pgp/sops_functional_tests_key.asc
-    $ sops example.yaml
+    $ sops edit example.yaml
 
 This last step will decrypt ``example.yaml`` using the test private key.
 
@@ -480,35 +480,33 @@ separated list.
 SOPS will prompt you with the changes to be made. This interactivity can be
 disabled by supplying the ``-y`` flag.
 
-Command Line
-************
+``rotate`` command
+******************
 
-Command line flag ``--add-kms``, ``--add-pgp``, ``--add-gcp-kms``, ``--add-azure-kv``,
-``--rm-kms``, ``--rm-pgp``, ``--rm-gcp-kms`` and ``--rm-azure-kv`` can be used to add
-and remove keys from a file.
-These flags use the comma separated syntax as the ``--kms``, ``--pgp``, ``--gcp-kms``
-and ``--azure-kv`` arguments when creating new files.
+The ``rotate`` command generates a new data encryption key and reencrypt all values
+with the new key. At te same time, the command line flag ``--add-kms``, ``--add-pgp``,
+``--add-gcp-kms``, ``--add-azure-kv``, ``--rm-kms``, ``--rm-pgp``, ``--rm-gcp-kms``
+and ``--rm-azure-kv`` can be used to add and remove keys from a file. These flags use
+the comma separated syntax as the ``--kms``, ``--pgp``, ``--gcp-kms`` and ``--azure-kv``
+arguments when creating new files.
 
-Note that ``-r`` or ``--rotate`` is mandatory in this mode. Not specifying
-rotate will ignore the ``--add-*`` options. Use ``updatekeys`` if you want to
-add a key without rotating the data key.
+Use ``updatekeys`` if you want to add a key without rotating the data key.
 
 .. code:: sh
 
     # add a new pgp key to the file and rotate the data key
-    $ sops -r -i --add-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 example.yaml
+    $ sops rotate -i --add-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 example.yaml
 
     # remove a pgp key from the file and rotate the data key
-    $ sops -r -i --rm-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 example.yaml
+    $ sops rotate -i --rm-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 example.yaml
 
 
 Direct Editing
 **************
 
-Alternatively, invoking ``sops`` with the flag **-s** will display the master keys
+Alternatively, invoking ``sops edit`` with the flag **-s** will display the master keys
 while editing. This method can be used to add or remove ``kms`` or ``pgp`` keys under the
-``sops`` section. Invoking ``sops`` with the **-i** flag will perform an in-place edit
-instead of redirecting output to ``stdout``.
+``sops`` section.
 
 For example, to add a KMS master key to a file, add the following entry while
 editing:
@@ -620,7 +618,7 @@ When creating a new file, you can specify the encryption context in the
 
 .. code:: sh
 
-    $ sops --encryption-context Environment:production,Role:web-server test.dev.yaml
+    $ sops edit --encryption-context Environment:production,Role:web-server test.dev.yaml
 
 The format of the Encrypt Context string is ``<EncryptionContext Key>:<EncryptionContext Value>,<EncryptionContext Key>:<EncryptionContext Value>,...``
 
@@ -651,13 +649,16 @@ Key Rotation
 ~~~~~~~~~~~~
 
 It is recommended to renew the data key on a regular basis. ``sops`` supports key
-rotation via the ``-r`` flag. Invoking it on an existing file causes ``sops`` to
-reencrypt the file with a new data key, which is then encrypted with the various
+rotation via the ``rotate`` command. Invoking it on an existing file causes ``sops``
+to reencrypt the file with a new data key, which is then encrypted with the various
 KMS and PGP master keys defined in the file.
+
+Add the ``-i`` option to write the rotated file back, instead of printing it to
+stdout.
 
 .. code:: sh
 
-    $ sops -r example.yaml
+    $ sops rotate example.yaml
 
 Using .sops.yaml conf to select KMS, PGP and age for new files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -741,7 +742,7 @@ Creating a new file with the right keys is now as simple as
 
 .. code:: sh
 
-    $ sops <newfile>.prod.yaml
+    $ sops edit <newfile>.prod.yaml
 
 Note that the configuration file is ignored when KMS or PGP parameters are
 passed on the SOPS command line or in environment variables.
@@ -847,7 +848,7 @@ For example:
 
 .. code:: sh
 
-    $ sops --shamir-secret-sharing-threshold 2 example.json
+    $ sops edit --shamir-secret-sharing-threshold 2 example.json
 
 Alternatively, you can configure the Shamir threshold for each creation rule in the ``.sops.yaml`` config
 with ``shamir_threshold``:
@@ -880,7 +881,7 @@ with ``shamir_threshold``:
               - pgp:
                     - fingerprint5
 
-And then run ``sops example.json``.
+And then run ``sops edit example.json``.
 
 The threshold (``shamir_threshold``) is set to 2, so this configuration will require
 master keys from two of the three different key groups in order to decrypt the file.
@@ -1348,7 +1349,7 @@ The command below creates a new file with a data key encrypted by KMS and PGP.
 
 .. code:: sh
 
-    $ sops --kms "arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500" --pgp C9CAB0AF1165060DB58D6D6B2653B624D620786D /path/to/new/file.yaml
+    $ sops edit --kms "arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500" --pgp C9CAB0AF1165060DB58D6D6B2653B624D620786D /path/to/new/file.yaml
 
 Encrypting an existing file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1448,12 +1449,12 @@ Set a sub-part in a document tree
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 SOPS can set a specific part of a YAML or JSON document, by providing
-the path and value in the ``--set`` command line flag. This is useful to
-set specific values, like keys, without needing an editor.
+the path and value in the ``set`` command. This is useful to set specific
+values, like keys, without needing an editor.
 
 .. code:: sh
 
-    $ sops --set '["app2"]["key"] "app2keystringvalue"'  ~/git/svc/sops/example.yaml
+    $ sops set ~/git/svc/sops/example.yaml '["app2"]["key"]' '"app2keystringvalue"'
 
 The tree path syntax uses regular python dictionary syntax, without the
 variable name. Set to keys by naming them, and array elements by
@@ -1461,13 +1462,13 @@ numbering them.
 
 .. code:: sh
 
-    $ sops --set '["an_array"][1] "secretuser2"' ~/git/svc/sops/example.yaml
+    $ sops set ~/git/svc/sops/example.yaml '["an_array"][1]' '"secretuser2"'
 
 The value must be formatted as json.
 
 .. code:: sh
 
-    $ sops --set '["an_array"][1] {"uid1":null,"uid2":1000,"uid3":["bob"]}' ~/git/svc/sops/example.yaml
+    $ sops set ~/git/svc/sops/example.yaml '["an_array"][1]' '{"uid1":null,"uid2":1000,"uid3":["bob"]}'
 
 Showing diffs in cleartext in git
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1742,7 +1743,7 @@ when creating a new file:
 
 .. code:: sh
 
-    $ sops --pgp "E60892BB9BD89A69F759A1A0A3D652173B763E8F,84050F1D61AF7C230A12217687DF65059EF093D3,85D77543B3D624B63CEA9E6DBC17301B491B3F21" mynewfile.yaml
+    $ sops edit --pgp "E60892BB9BD89A69F759A1A0A3D652173B763E8F,84050F1D61AF7C230A12217687DF65059EF093D3,85D77543B3D624B63CEA9E6DBC17301B491B3F21" mynewfile.yaml
 
 Threat Model
 ------------

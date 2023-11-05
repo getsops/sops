@@ -267,9 +267,10 @@ bar: baz",
             "sops didn't exit successfully"
         );
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("--set")
-            .arg(r#"["a"] {"aa": "aaa"}"#)
+            .arg("set")
             .arg(file_path.clone())
+            .arg(r#"["a"]"#)
+            .arg(r#"{"aa": "aaa"}"#)
             .output()
             .expect("Error running sops");
         assert!(output.status.success(), "sops didn't exit successfully");
@@ -310,9 +311,10 @@ bar: baz",
             "sops didn't exit successfully"
         );
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("--set")
-            .arg(r#"["c"] {"cc": "ccc"}"#)
+            .arg("set")
             .arg(file_path.clone())
+            .arg(r#"["c"]"#)
+            .arg(r#"{"cc": "ccc"}"#)
             .output()
             .expect("Error running sops");
         assert!(output.status.success(), "sops didn't exit successfully");
@@ -357,9 +359,10 @@ b: ba"#
             "sops didn't exit successfully"
         );
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("--set")
-            .arg(r#"["a"] {"aa": "aaa"}"#)
+            .arg("set")
             .arg(file_path.clone())
+            .arg(r#"["a"]"#)
+            .arg(r#"{"aa": "aaa"}"#)
             .output()
             .expect("Error running sops");
         assert!(output.status.success(), "sops didn't exit successfully");
@@ -404,9 +407,10 @@ b: ba"#
             "sops didn't exit successfully"
         );
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("--set")
-            .arg(r#"["c"] {"cc": "ccc"}"#)
+            .arg("set")
             .arg(file_path.clone())
+            .arg(r#"["c"]"#)
+            .arg(r#"{"cc": "ccc"}"#)
             .output()
             .expect("Error running sops");
         assert!(output.status.success(), "sops didn't exit successfully");
@@ -452,10 +456,10 @@ b: ba"#
         );
         assert!(
             Command::new(SOPS_BINARY_PATH)
-                .arg("--set")
-                .arg(r#"["a"] "aaa""#)
-                .arg("-i")
+                .arg("set")
                 .arg(file_path.clone())
+                .arg(r#"["a"]"#)
+                .arg(r#""aaa""#)
                 .output()
                 .expect("Error running sops")
                 .status
