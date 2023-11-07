@@ -23,6 +23,8 @@ const (
 	// a path to a credentials file, or directly as the variable's value in JSON
 	// format.
 	SopsGoogleCredentialsEnv = "GOOGLE_CREDENTIALS"
+	// KeyTypeIdentifier is the string used to identify a GCP KMS MasterKey.
+	KeyTypeIdentifier = "gcp_kms"
 )
 
 var (
@@ -194,6 +196,11 @@ func (key MasterKey) ToMap() map[string]interface{} {
 	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)
 	out["enc"] = key.EncryptedKey
 	return out
+}
+
+// TypeToIdentifier returns the string identifier for the MasterKey type.
+func (key *MasterKey) TypeToIdentifier() string {
+	return KeyTypeIdentifier
 }
 
 // newKMSClient returns a GCP KMS client configured with the credentialJSON

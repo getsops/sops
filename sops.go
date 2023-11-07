@@ -34,7 +34,7 @@ be recalculated and compared with the MAC stored in the document to verify that 
 fraudulent changes have been applied. The MAC covers keys and values as well as their
 ordering.
 */
-package sops //import "github.com/getsops/sops/v3"
+package sops // import "github.com/getsops/sops/v3"
 
 import (
 	"crypto/rand"
@@ -42,21 +42,27 @@ import (
 	"fmt"
 	"reflect"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/sirupsen/logrus"
+	"golang.org/x/net/context"
+
+	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/audit"
 	"github.com/getsops/sops/v3/keys"
 	"github.com/getsops/sops/v3/keyservice"
 	"github.com/getsops/sops/v3/logging"
+	"github.com/getsops/sops/v3/pgp"
 	"github.com/getsops/sops/v3/shamir"
-	"github.com/sirupsen/logrus"
-	"golang.org/x/net/context"
 )
 
 // DefaultUnencryptedSuffix is the default suffix a TreeItem key has to end with for sops to leave its Value unencrypted
 const DefaultUnencryptedSuffix = "_unencrypted"
+
+var DefaultDecryptionOrder = []string{age.KeyTypeIdentifier, pgp.KeyTypeIdentifier}
 
 type sopsError string
 
@@ -648,7 +654,7 @@ func (m *Metadata) UpdateMasterKeys(dataKey []byte) (errs []error) {
 
 // GetDataKeyWithKeyServices retrieves the data key, asking KeyServices to decrypt it with each
 // MasterKey in the Metadata's KeySources until one of them succeeds.
-func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) ([]byte, error) {
+func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient, decryptionOrder []string) ([]byte, error) {
 	if m.DataKey != nil {
 		return m.DataKey, nil
 	}
@@ -658,7 +664,7 @@ func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) 
 	}
 	var parts [][]byte
 	for i, group := range m.KeyGroups {
-		part, err := decryptKeyGroup(group, svcs)
+		part, err := decryptKeyGroup(group, svcs, decryptionOrder)
 		if err == nil {
 			parts = append(parts, part)
 		}
@@ -688,9 +694,13 @@ func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) 
 // decryptKeyGroup tries to decrypt the contents of the provided KeyGroup with
 // any of the MasterKeys in the KeyGroup with any of the provided key services,
 // returning as soon as one key service succeeds.
-func decryptKeyGroup(group KeyGroup, svcs []keyservice.KeyServiceClient) ([]byte, error) {
+func decryptKeyGroup(group KeyGroup, svcs []keyservice.KeyServiceClient, decryptionOrder []string) ([]byte, error) {
 	var keyErrs []error
-	for _, key := range group {
+	// Sort MasterKeys in the group so we try them in specific order
+	// Use sorted indices to avoid group slice modification
+	indices := sortKeyGroupIndices(group, decryptionOrder)
+	for _, indexVal := range indices {
+		key := group[indexVal]
 		part, err := decryptKey(key, svcs)
 		if err != nil {
 			keyErrs = append(keyErrs, err)
@@ -699,6 +709,37 @@ func decryptKeyGroup(group KeyGroup, svcs []keyservice.KeyServiceClient) ([]byte
 		}
 	}
 	return nil, decryptKeyErrors(keyErrs)
+}
+
+// sortKeyGroupIndices returns indices that would sort the KeyGroup
+// according to decryptionOrder
+func sortKeyGroupIndices(group KeyGroup, decryptionOrder []string) []int {
+	priorities := make(map[string]int)
+	// give ordered weights
+	for i, v := range decryptionOrder {
+		priorities[v] = i
+	}
+	maxPriority := len(decryptionOrder)
+	// initialize indices
+	n := len(group)
+	indices := make([]int, n)
+	for i := 0; i < n; i++ {
+		indices[i] = i
+	}
+	sort.SliceStable(indices, func(i, j int) bool {
+		keyTypeI := group[indices[i]].TypeToIdentifier()
+		keyTypeJ := group[indices[j]].TypeToIdentifier()
+		priorityI, ok := priorities[keyTypeI]
+		if !ok {
+			priorityI = maxPriority
+		}
+		priorityJ, ok := priorities[keyTypeJ]
+		if !ok {
+			priorityJ = maxPriority
+		}
+		return priorityI < priorityJ
+	})
+	return indices
 }
 
 // decryptKey tries to decrypt the contents of the provided MasterKey with any
@@ -739,7 +780,7 @@ func decryptKey(key keys.MasterKey, svcs []keyservice.KeyServiceClient) ([]byte,
 func (m Metadata) GetDataKey() ([]byte, error) {
 	return m.GetDataKeyWithKeyServices([]keyservice.KeyServiceClient{
 		keyservice.NewLocalClient(),
-	})
+	}, nil)
 }
 
 // ToBytes converts a string, int, float or bool to a byte representation.

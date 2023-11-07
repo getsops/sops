@@ -21,6 +21,11 @@ import (
 	"github.com/getsops/sops/v3/logging"
 )
 
+const (
+	// KeyTypeIdentifier is the string used to identify a Vault MasterKey.
+	KeyTypeIdentifier = "hc_vault"
+)
+
 func init() {
 	log = logging.NewLogger("VAULT_TRANSIT")
 }
@@ -214,6 +219,11 @@ func (key MasterKey) ToMap() map[string]interface{} {
 	out["enc"] = key.EncryptedKey
 	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)
 	return out
+}
+
+// TypeToIdentifier returns the string identifier for the MasterKey type.
+func (key *MasterKey) TypeToIdentifier() string {
+	return KeyTypeIdentifier
 }
 
 // encryptPath returns the path for Encrypt requests.

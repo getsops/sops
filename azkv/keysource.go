@@ -22,6 +22,11 @@ import (
 	"github.com/getsops/sops/v3/logging"
 )
 
+const (
+	// KeyTypeIdentifier is the string used to identify an Azure Key Vault MasterKey.
+	KeyTypeIdentifier = "azure_kv"
+)
+
 var (
 	// log is the global logger for any Azure Key Vault MasterKey.
 	log *logrus.Logger
@@ -213,6 +218,11 @@ func (key MasterKey) ToMap() map[string]interface{} {
 	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)
 	out["enc"] = key.EncryptedKey
 	return out
+}
+
+// TypeToIdentifier returns the string identifier for the MasterKey type.
+func (key *MasterKey) TypeToIdentifier() string {
+	return KeyTypeIdentifier
 }
 
 // getTokenCredential returns the tokenCredential of the MasterKey, or

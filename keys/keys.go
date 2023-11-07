@@ -10,4 +10,5 @@ type MasterKey interface {
 	NeedsRotation() bool
 	ToString() string
 	ToMap() map[string]interface{}
+	TypeToIdentifier() string
 }

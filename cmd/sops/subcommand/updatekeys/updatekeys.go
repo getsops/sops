@@ -14,12 +14,13 @@ import (
 
 // Opts represents key operation options and config
 type Opts struct {
-	InputPath   string
-	GroupQuorum int
-	KeyServices []keyservice.KeyServiceClient
-	Interactive bool
-	ConfigPath  string
-	InputType   string
+	InputPath       string
+	GroupQuorum     int
+	KeyServices     []keyservice.KeyServiceClient
+	DecryptionOrder []string
+	Interactive     bool
+	ConfigPath      string
+	InputType       string
 }
 
 // UpdateKeys update the keys for a given file
@@ -83,7 +84,7 @@ func updateFile(opts Opts) error {
 			return nil
 		}
 	}
-	key, err := tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices)
+	key, err := tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices, opts.DecryptionOrder)
 	if err != nil {
 		return common.NewExitError(err, codes.CouldNotRetrieveKey)
 	}

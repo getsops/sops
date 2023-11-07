@@ -170,6 +170,11 @@ Given that, the only command a SOPS user needs is:
 encrypted if modified, and saved back to its original location. All of these
 steps, apart from the actual editing, are transparent to the user.
 
+The order in which available decryption methods are tried can be specified with
+``--decryption-order`` option or **SOPS_DECRYPTION_ORDER** environment variable
+as a comma separated list. The default order is ``age,pgp``. Offline methods are
+tried first and then the remaining ones.
+
 Test with the dev PGP key
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
