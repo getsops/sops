@@ -668,6 +668,10 @@ func main() {
 			Name:  "ignore-mac",
 			Usage: "ignore Message Authentication Code during decryption",
 		},
+		cli.BoolFlag{
+			Name:  "mac-only-encrypted",
+			Usage: "compute MAC only over values which end up encrypted",
+		},
 		cli.StringFlag{
 			Name:  "unencrypted-suffix",
 			Usage: "override the unencrypted key suffix.",
@@ -738,6 +742,7 @@ func main() {
 		encryptedSuffix := c.String("encrypted-suffix")
 		encryptedRegex := c.String("encrypted-regex")
 		unencryptedRegex := c.String("unencrypted-regex")
+		macOnlyEncrypted := c.Bool("mac-only-encrypted")
 		conf, err := loadConfig(c, fileName, nil)
 		if err != nil {
 			return toExitError(err)
@@ -755,6 +760,9 @@ func main() {
 			}
 			if unencryptedRegex == "" {
 				unencryptedRegex = conf.UnencryptedRegex
+			}
+			if !macOnlyEncrypted {
+				macOnlyEncrypted = conf.MACOnlyEncrypted
 			}
 		}
 
@@ -806,6 +814,7 @@ func main() {
 				EncryptedSuffix:   encryptedSuffix,
 				UnencryptedRegex:  unencryptedRegex,
 				EncryptedRegex:    encryptedRegex,
+				MACOnlyEncrypted:  macOnlyEncrypted,
 				KeyServices:       svcs,
 				KeyGroups:         groups,
 				GroupThreshold:    threshold,
@@ -963,6 +972,7 @@ func main() {
 					EncryptedSuffix:   encryptedSuffix,
 					UnencryptedRegex:  unencryptedRegex,
 					EncryptedRegex:    encryptedRegex,
+					MACOnlyEncrypted:  macOnlyEncrypted,
 					KeyGroups:         groups,
 					GroupThreshold:    threshold,
 				})

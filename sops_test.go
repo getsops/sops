@@ -242,6 +242,90 @@ func TestUnencryptedRegex(t *testing.T) {
 	}
 }
 
+func TestMACOnlyEncrypted(t *testing.T) {
+	branches := TreeBranches{
+		TreeBranch{
+			TreeItem{
+				Key:   "foo_encrypted",
+				Value: "bar",
+			},
+			TreeItem{
+				Key: "bar",
+				Value: TreeBranch{
+					TreeItem{
+						Key:   "foo",
+						Value: "bar",
+					},
+				},
+			},
+		},
+	}
+	tree := Tree{Branches: branches, Metadata: Metadata{EncryptedSuffix: "_encrypted", MACOnlyEncrypted: true}}
+	onlyEncrypted := TreeBranches{
+		TreeBranch{
+			TreeItem{
+				Key:   "foo_encrypted",
+				Value: "bar",
+			},
+		},
+	}
+	treeOnlyEncrypted := Tree{Branches: onlyEncrypted, Metadata: Metadata{EncryptedSuffix: "_encrypted", MACOnlyEncrypted: true}}
+	cipher := reverseCipher{}
+	mac, err := tree.Encrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	if err != nil {
+		t.Errorf("Encrypting the tree failed: %s", err)
+	}
+	macOnlyEncrypted, err := treeOnlyEncrypted.Encrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	if err != nil {
+		t.Errorf("Encrypting the treeOnlyEncrypted failed: %s", err)
+	}
+	if mac != macOnlyEncrypted {
+		t.Errorf("MACs don't match:\ngot \t\t%+v,\nexpected \t\t%+v", mac, macOnlyEncrypted)
+	}
+}
+
+func TestMACOnlyEncryptedNoConfusion(t *testing.T) {
+	branches := TreeBranches{
+		TreeBranch{
+			TreeItem{
+				Key:   "foo_encrypted",
+				Value: "bar",
+			},
+			TreeItem{
+				Key: "bar",
+				Value: TreeBranch{
+					TreeItem{
+						Key:   "foo",
+						Value: "bar",
+					},
+				},
+			},
+		},
+	}
+	tree := Tree{Branches: branches, Metadata: Metadata{EncryptedSuffix: "_encrypted", MACOnlyEncrypted: true}}
+	onlyEncrypted := TreeBranches{
+		TreeBranch{
+			TreeItem{
+				Key:   "foo_encrypted",
+				Value: "bar",
+			},
+		},
+	}
+	treeOnlyEncrypted := Tree{Branches: onlyEncrypted, Metadata: Metadata{EncryptedSuffix: "_encrypted"}}
+	cipher := reverseCipher{}
+	mac, err := tree.Encrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	if err != nil {
+		t.Errorf("Encrypting the tree failed: %s", err)
+	}
+	macOnlyEncrypted, err := treeOnlyEncrypted.Encrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	if err != nil {
+		t.Errorf("Encrypting the treeOnlyEncrypted failed: %s", err)
+	}
+	if mac == macOnlyEncrypted {
+		t.Errorf("MACs match but they should not")
+	}
+}
+
 type MockCipher struct{}
 
 func (m MockCipher) Encrypt(value interface{}, key []byte, path string) (string, error) {

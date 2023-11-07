@@ -158,6 +158,14 @@ creation_rules:
     unencrypted_regex: "^dec:"
     `)
 
+var sampleConfigWithMACOnlyEncrypted = []byte(`
+creation_rules:
+  - path_regex: barbar*
+    kms: "1"
+    pgp: "2"
+    mac_only_encrypted: true
+    `)
+
 var sampleConfigWithInvalidParameters = []byte(`
 creation_rules:
   - path_regex: foobar*
@@ -414,6 +422,12 @@ func TestLoadConfigFileWithEncryptedRegex(t *testing.T) {
 	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithEncryptedRegexParameters, t), "/conf/path", "barbar", nil)
 	assert.Equal(t, nil, err)
 	assert.Equal(t, "^enc:", conf.EncryptedRegex)
+}
+
+func TestLoadConfigFileWithMACOnlyEncrypted(t *testing.T) {
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithMACOnlyEncrypted, t), "/conf/path", "barbar", nil)
+	assert.Equal(t, nil, err)
+	assert.Equal(t, true, conf.MACOnlyEncrypted)
 }
 
 func TestLoadConfigFileWithInvalidParameters(t *testing.T) {
