@@ -313,8 +313,8 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		tmpDir := t.TempDir()
 		overwriteUserConfigDir(t, tmpDir)
 
-		// We need to use os.UserConfigDir and not tmpDir as it may add a suffix
-		cfgDir, err := os.UserConfigDir()
+		// We need to use getUserConfigDir and not tmpDir as it may add a suffix
+		cfgDir, err := getUserConfigDir()
 		assert.NoError(t, err)
 		keyPath := filepath.Join(cfgDir, SopsAgeKeyUserConfigPath)
 		assert.True(t, strings.HasPrefix(keyPath, cfgDir))
@@ -341,8 +341,8 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		tmpDir := t.TempDir()
 		overwriteUserConfigDir(t, tmpDir)
 
-		// We need to use os.UserConfigDir and not tmpDir as it may add a suffix
-		cfgDir, err := os.UserConfigDir()
+		// We need to use getUserConfigDir and not tmpDir as it may add a suffix
+		cfgDir, err := getUserConfigDir()
 		assert.NoError(t, err)
 		keyPath1 := filepath.Join(cfgDir, SopsAgeKeyUserConfigPath)
 		assert.True(t, strings.HasPrefix(keyPath1, cfgDir))
