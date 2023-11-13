@@ -2,6 +2,7 @@ package yaml //import "github.com/getsops/sops/v3/stores/yaml"
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"strings"
@@ -326,11 +327,13 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	return branches, nil
 }
 
-func (store *Store) getIndentation() int {
-	if store.config.Indent != 0 {
-		return store.config.Indent
+func (store *Store) getIndentation() (int, error) {
+	if store.config.Indent > 0 {
+		return store.config.Indent, nil
+	} else if store.config.Indent < 0 {
+		return 0, errors.New("YAML Negative indentation not accepted")
 	}
-	return IndentDefault
+	return IndentDefault, nil
 }
 
 // EmitEncryptedFile returns the encrypted bytes of the yaml file corresponding to a
@@ -338,7 +341,11 @@ func (store *Store) getIndentation() int {
 func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	var b bytes.Buffer
 	e := yaml.NewEncoder(io.Writer(&b))
-	e.SetIndent(store.getIndentation())
+	indent, err := store.getIndentation()
+	if err != nil {
+		return nil, err
+	}
+	e.SetIndent(indent)
 	for _, branch := range in.Branches {
 		// Document root
 		var doc = yaml.Node{}
@@ -370,7 +377,11 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 func (store *Store) EmitPlainFile(branches sops.TreeBranches) ([]byte, error) {
 	var b bytes.Buffer
 	e := yaml.NewEncoder(io.Writer(&b))
-	e.SetIndent(store.getIndentation())
+	indent, err := store.getIndentation()
+	if err != nil {
+		return nil, err
+	}
+	e.SetIndent(indent)
 	for _, branch := range branches {
 		// Document root
 		var doc = yaml.Node{}

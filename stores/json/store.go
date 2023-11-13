@@ -250,8 +250,10 @@ func (store Store) treeBranchFromJSON(in []byte) (sops.TreeBranch, error) {
 func (store Store) reindentJSON(in []byte) ([]byte, error) {
 	var out bytes.Buffer
 	indent := "\t"
-	if store.config.Indent != -1 {
+	if store.config.Indent > -1 {
 		indent = strings.Repeat(" ", store.config.Indent)
+	} else if store.config.Indent < -1 {
+		return nil, errors.New("JSON Indentation parameter smaller than -1 is not accepted")
 	}
 	err := json.Indent(&out, in, "", indent)
 	return out.Bytes(), err
