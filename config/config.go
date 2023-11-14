@@ -67,11 +67,13 @@ type DotenvStoreConfig struct{}
 
 type INIStoreConfig struct{}
 
-type JSONStoreConfig struct{
+type JSONStoreConfig struct {
 	Indent int `yaml:"indent"`
 }
 
-type JSONBinaryStoreConfig struct{}
+type JSONBinaryStoreConfig struct {
+	Indent int `yaml:"indent"`
+}
 
 type YAMLStoreConfig struct {
 	Indent int `yaml:"indent"`
@@ -149,9 +151,10 @@ type creationRule struct {
 	MACOnlyEncrypted  bool       `yaml:"mac_only_encrypted"`
 }
 
-func NewStoresConfig() *StoresConfig{
-	storesConfig := &StoresConfig{}	
+func NewStoresConfig() *StoresConfig {
+	storesConfig := &StoresConfig{}
 	storesConfig.JSON.Indent = -1
+	storesConfig.JSONBinary.Indent = -1
 	return storesConfig
 }
 

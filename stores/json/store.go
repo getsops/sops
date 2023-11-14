@@ -29,7 +29,9 @@ type BinaryStore struct {
 }
 
 func NewBinaryStore(c *config.JSONBinaryStoreConfig) *BinaryStore {
-	return &BinaryStore{config: *c}
+	return &BinaryStore{config: *c, store: *NewStore(&config.JSONStoreConfig{
+		Indent: c.Indent,
+	})}
 }
 
 // LoadEncryptedFile loads an encrypted json file onto a sops.Tree object

@@ -1162,8 +1162,8 @@ When operating on stdin, use the ``--input-type`` and ``--output-type`` flags as
 
     $ cat myfile.json | sops --input-type json --output-type json -d /dev/stdin
 
-JSON indentation
-~~~~~~~~~~~~~~~~
+JSON and JSON_binary indentation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 SOPS indents ``JSON`` files by default using one ``tab``. However, you can change
 this default behaviour to use ``spaces`` by either using the additional ``--indent=2`` CLI option or
@@ -1175,6 +1175,8 @@ The special value ``0`` disables indentation, and ``-1`` uses a single tab.
 
   stores:
       json:
+          indent: 2
+      json_binary:
           indent: 2
 
 YAML indentation

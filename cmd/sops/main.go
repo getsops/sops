@@ -1091,6 +1091,7 @@ func outputStore(context *cli.Context, path string) common.Store {
 		indent := context.Int("indent")
 		storesConf.YAML.Indent = indent
 		storesConf.JSON.Indent = indent
+		storesConf.JSONBinary.Indent = indent
 	}
 
 	return common.DefaultStoreForPathOrFormat(storesConf, path, context.String("output-type"))
