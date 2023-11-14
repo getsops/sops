@@ -1193,7 +1193,7 @@ YAML Streams
 formats like ``JSON`` do not. SOPS is able to handle both. This means the
 following multi-document will be encrypted as expected:
 
-.. code:: yaml
+.. code:: yaml-stream
 
     ---
     data: foo
