@@ -47,6 +47,7 @@ import (
 	"time"
 
 	"github.com/getsops/sops/v3/audit"
+	"github.com/getsops/sops/v3/cmd/sops/codes"
 	"github.com/getsops/sops/v3/keys"
 	"github.com/getsops/sops/v3/keyservice"
 	"github.com/getsops/sops/v3/logging"
@@ -72,10 +73,10 @@ func (e SopsError) Error() string {
 }
 
 // MacMismatch occurs when the computed MAC does not match the expected ones
-var MacMismatch = &SopsError{10, "MAC mismatch"}
+var MacMismatch = &SopsError{codes.MacMismatch, "MAC mismatch"}
 
 // MetadataNotFound occurs when the input file is malformed and doesn't have sops metadata in it
-var MetadataNotFound = &SopsError{11, "sops metadata not found"}
+var MetadataNotFound = &SopsError{codes.NoMetadataFound, "sops metadata not found"}
 
 // MACOnlyEncryptedInitialization is a constant and known sequence of 32 bytes used to initialize
 // MAC which is computed only over values which end up encrypted. That assures that a MAC with the
