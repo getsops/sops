@@ -163,6 +163,7 @@ func metadataToMap(md stores.Metadata) (map[string]interface{}, error) {
 		return nil, err
 	}
 	flat := stores.Flatten(mdMap)
+	stores.MacOnlyEncryptedToString(flat)
 	for k, v := range flat {
 		if s, ok := v.(string); ok {
 			flat[k] = strings.Replace(s, "\n", "\\n", -1)
@@ -178,6 +179,7 @@ func mapToMetadata(m map[string]interface{}) (stores.Metadata, error) {
 		}
 	}
 	m = stores.Unflatten(m)
+	stores.MacOnlyEncryptedToBool(m)
 	var md stores.Metadata
 	inrec, err := json.Marshal(m)
 	if err != nil {

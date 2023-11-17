@@ -183,6 +183,7 @@ func (store *Store) iniSectionToMetadata(sopsSection *ini.Section) (stores.Metad
 		metadataHash[k] = strings.Replace(v, "\\n", "\n", -1)
 	}
 	m := stores.Unflatten(metadataHash)
+	stores.MacOnlyEncryptedToBool(m)
 	var md stores.Metadata
 	inrec, err := json.Marshal(m)
 	if err != nil {
@@ -233,6 +234,7 @@ func (store *Store) encodeMetadataToIniBranch(md stores.Metadata) (sops.TreeBran
 		return nil, err
 	}
 	flat := stores.Flatten(mdMap)
+	stores.MacOnlyEncryptedToString(flat)
 	for k, v := range flat {
 		if s, ok := v.(string); ok {
 			flat[k] = strings.Replace(s, "\n", "\\n", -1)

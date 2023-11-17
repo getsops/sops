@@ -139,3 +139,34 @@ func TestTokenizeNested(t *testing.T) {
 	tokenized := tokenize(input)
 	assert.Equal(t, expected, tokenized)
 }
+
+func TestMacOnlyEncryptedToBool(t *testing.T) {
+	tests := []struct {
+		input map[string]interface{}
+		want  map[string]interface{}
+	}{
+		{map[string]interface{}{"mac_only_encrypted": "false"}, map[string]interface{}{"mac_only_encrypted": false}},
+		{map[string]interface{}{"mac_only_encrypted": "true"}, map[string]interface{}{"mac_only_encrypted": true}},
+		{map[string]interface{}{"mac_only_encrypted": "something-else"}, map[string]interface{}{"mac_only_encrypted": false}},
+	}
+
+	for _, tt := range tests {
+		MacOnlyEncryptedToBool(tt.input)
+		assert.Equal(t, tt.want, tt.input)
+	}
+}
+
+func TestMacOnlyEncryptedToString(t *testing.T) {
+	tests := []struct {
+		input map[string]interface{}
+		want  map[string]interface{}
+	}{
+		{map[string]interface{}{"mac_only_encrypted": false}, map[string]interface{}{"mac_only_encrypted": "false"}},
+		{map[string]interface{}{"mac_only_encrypted": true}, map[string]interface{}{"mac_only_encrypted": "true"}},
+	}
+
+	for _, tt := range tests {
+		MacOnlyEncryptedToString(tt.input)
+		assert.Equal(t, tt.want, tt.input)
+	}
+}

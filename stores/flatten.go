@@ -185,3 +185,23 @@ func Unflatten(in map[string]interface{}) map[string]interface{} {
 	}
 	return newMap
 }
+
+func MacOnlyEncryptedToBool(m map[string]interface{}) {
+	if v, ok := m["mac_only_encrypted"]; ok {
+		m["mac_only_encrypted"] = false
+		if v == "true" {
+			m["mac_only_encrypted"] = true
+		}
+	}
+}
+
+func MacOnlyEncryptedToString(m map[string]interface{}) {
+	if v, found := m["mac_only_encrypted"]; found {
+		if vBool, ok := v.(bool); ok {
+			m["mac_only_encrypted"] = "false"
+			if vBool {
+				m["mac_only_encrypted"] = "true"
+			}
+		}
+	}
+}
