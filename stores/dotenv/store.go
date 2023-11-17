@@ -2,7 +2,6 @@ package dotenv //import "github.com/getsops/sops/v3/stores/dotenv"
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"sort"
 	"strings"
@@ -49,7 +48,7 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 		}
 	}
 
-	metadata, err := mapToMetadata(mdMap)
+	metadata, err := stores.Unflatten(mdMap)
 	if err != nil {
 		return sops.Tree{}, err
 	}
@@ -101,7 +100,7 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 // runtime object
 func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	metadata := stores.MetadataFromInternal(in.Metadata)
-	mdItems, err := metadataToMap(metadata)
+	mdItems, err := stores.Flatten(metadata)
 	if err != nil {
 		return nil, err
 	}
@@ -156,41 +155,6 @@ func (store *Store) EmitExample() []byte {
 		panic(err)
 	}
 	return bytes
-}
-
-func metadataToMap(md stores.Metadata) (map[string]interface{}, error) {
-	var mdMap map[string]interface{}
-	inrec, err := json.Marshal(md)
-	if err != nil {
-		return nil, err
-	}
-	err = json.Unmarshal(inrec, &mdMap)
-	if err != nil {
-		return nil, err
-	}
-	flat := stores.Flatten(mdMap)
-	for k, v := range flat {
-		if s, ok := v.(string); ok {
-			flat[k] = strings.Replace(s, "\n", "\\n", -1)
-		}
-	}
-	return flat, nil
-}
-
-func mapToMetadata(m map[string]interface{}) (stores.Metadata, error) {
-	for k, v := range m {
-		if s, ok := v.(string); ok {
-			m[k] = strings.Replace(s, "\\n", "\n", -1)
-		}
-	}
-	m = stores.Unflatten(m)
-	var md stores.Metadata
-	inrec, err := json.Marshal(m)
-	if err != nil {
-		return md, err
-	}
-	err = json.Unmarshal(inrec, &md)
-	return md, err
 }
 
 func isComplexValue(v interface{}) bool {

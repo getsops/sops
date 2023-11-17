@@ -183,19 +183,11 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 }
 
 func (store *Store) iniSectionToMetadata(sopsSection *ini.Section) (stores.Metadata, error) {
-
 	metadataHash := make(map[string]interface{})
 	for k, v := range sopsSection.KeysHash() {
-		metadataHash[k] = strings.Replace(v, "\\n", "\n", -1)
+		metadataHash[k] = v
 	}
-	m := stores.Unflatten(metadataHash)
-	var md stores.Metadata
-	inrec, err := json.Marshal(m)
-	if err != nil {
-		return md, err
-	}
-	err = json.Unmarshal(inrec, &md)
-	return md, err
+	return stores.Unflatten(metadataHash)
 }
 
 // LoadPlainFile loads a plaintext INI file's bytes onto a sops.TreeBranches runtime object
@@ -229,24 +221,11 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 }
 
 func (store *Store) encodeMetadataToIniBranch(md stores.Metadata) (sops.TreeBranch, error) {
-	var mdMap map[string]interface{}
-	inrec, err := json.Marshal(md)
+	flat, err := stores.Flatten(md)
 	if err != nil {
 		return nil, err
 	}
-	err = json.Unmarshal(inrec, &mdMap)
-	if err != nil {
-		return nil, err
-	}
-	flat := stores.Flatten(mdMap)
-	for k, v := range flat {
-		if s, ok := v.(string); ok {
-			flat[k] = strings.Replace(s, "\n", "\\n", -1)
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
+
 	branch := sops.TreeBranch{}
 	for key, value := range flat {
 		if value == nil {
