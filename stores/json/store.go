@@ -6,18 +6,32 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"strings"
 
 	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/config"
 	"github.com/getsops/sops/v3/stores"
 )
 
 // Store handles storage of JSON data.
 type Store struct {
+	config config.JSONStoreConfig
+}
+
+func NewStore(c *config.JSONStoreConfig) *Store {
+	return &Store{config: *c}
 }
 
 // BinaryStore handles storage of binary data in a JSON envelope.
 type BinaryStore struct {
-	store Store
+	store  Store
+	config config.JSONBinaryStoreConfig
+}
+
+func NewBinaryStore(c *config.JSONBinaryStoreConfig) *BinaryStore {
+	return &BinaryStore{config: *c, store: *NewStore(&config.JSONStoreConfig{
+		Indent: c.Indent,
+	})}
 }
 
 // LoadEncryptedFile loads an encrypted json file onto a sops.Tree object
@@ -237,7 +251,13 @@ func (store Store) treeBranchFromJSON(in []byte) (sops.TreeBranch, error) {
 
 func (store Store) reindentJSON(in []byte) ([]byte, error) {
 	var out bytes.Buffer
-	err := json.Indent(&out, in, "", "\t")
+	indent := "\t"
+	if store.config.Indent > -1 {
+		indent = strings.Repeat(" ", store.config.Indent)
+	} else if store.config.Indent < -1 {
+		return nil, errors.New("JSON Indentation parameter smaller than -1 is not accepted")
+	}
+	err := json.Indent(&out, in, "", indent)
 	return out.Bytes(), err
 }
 

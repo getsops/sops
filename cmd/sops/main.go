@@ -704,6 +704,10 @@ func main() {
 			Name:  "shamir-secret-sharing-threshold",
 			Usage: "the number of master keys required to retrieve the data key with shamir",
 		},
+		cli.IntFlag{
+			Name:  "indent",
+			Usage: "the number of spaces to indent YAML or JSON encoded file for encryption",
+		},
 		cli.BoolFlag{
 			Name:  "verbose",
 			Usage: "Enable verbose logging output",
@@ -1065,12 +1069,32 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 	return
 }
 
+func loadStoresConfig(context *cli.Context, path string) (*config.StoresConfig, error) {
+	var configPath string
+	if context.String("config") != "" {
+		configPath = context.String("config")
+	} else {
+		// Ignore config not found errors returned from FindConfigFile since the config file is not mandatory
+		configPath, _ = config.FindConfigFile(".")
+	}
+	return config.LoadStoresConfig(configPath)
+}
+
 func inputStore(context *cli.Context, path string) common.Store {
-	return common.DefaultStoreForPathOrFormat(path, context.String("input-type"))
+	storesConf, _ := loadStoresConfig(context, path)
+	return common.DefaultStoreForPathOrFormat(storesConf, path, context.String("input-type"))
 }
 
 func outputStore(context *cli.Context, path string) common.Store {
-	return common.DefaultStoreForPathOrFormat(path, context.String("output-type"))
+	storesConf, _ := loadStoresConfig(context, path)
+	if context.IsSet("indent") {
+		indent := context.Int("indent")
+		storesConf.YAML.Indent = indent
+		storesConf.JSON.Indent = indent
+		storesConf.JSONBinary.Indent = indent
+	}
+
+	return common.DefaultStoreForPathOrFormat(storesConf, path, context.String("output-type"))
 }
 
 func parseTreePath(arg string) ([]interface{}, error) {

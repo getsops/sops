@@ -1130,15 +1130,15 @@ Below is an example of publishing to Vault (using token auth with a local dev in
 Important information on types
 ------------------------------
 
-YAML and JSON type extensions
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+YAML, JSON, ENV and INI type extensions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 SOPS uses the file extension to decide which encryption method to use on the file
 content. ``YAML``, ``JSON``, ``ENV``, and ``INI`` files are treated as trees of data, and key/values are
 extracted from the files to only encrypt the leaf values. The tree structure is also
 used to check the integrity of the file.
 
-Therefore, if a file is encrypted using a specific format, it need to be decrypted
+Therefore, if a file is encrypted using a specific format, it needs to be decrypted
 in the same format. The easiest way to achieve this is to conserve the original file
 extension after encrypting a file. For example:
 
@@ -1162,8 +1162,39 @@ When operating on stdin, use the ``--input-type`` and ``--output-type`` flags as
 
     $ cat myfile.json | sops --input-type json --output-type json -d /dev/stdin
 
+JSON and JSON_binary indentation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+SOPS indents ``JSON`` files by default using one ``tab``. However, you can change
+this default behaviour to use ``spaces`` by either using the additional ``--indent=2`` CLI option or
+by configuring ``.sops.yaml`` with the code below.
+
+The special value ``0`` disables indentation, and ``-1`` uses a single tab.
+
+.. code:: yaml
+
+  stores:
+      json:
+          indent: 2
+      json_binary:
+          indent: 2
+
+YAML indentation
+~~~~~~~~~~~~~~~~
+
+SOPS indents ``YAML`` files by default using 4 spaces. However, you can change
+this default behaviour by either using the additional ``--indent=2`` CLI option or
+by configuring ``.sops.yaml`` with:
+
+.. code:: yaml
+
+  stores:
+      yaml:
+          indent: 2
+
 YAML anchors
 ~~~~~~~~~~~~
+
 SOPS only supports a subset of ``YAML``'s many types. Encrypting YAML files that
 contain strings, numbers and booleans will work fine, but files that contain anchors
 will not work, because the anchors redefine the structure of the file at load time.
