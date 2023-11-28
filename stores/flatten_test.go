@@ -13,9 +13,9 @@ func TestFlat(t *testing.T) {
 	expected := map[string]interface{}{
 		"foo": "bar",
 	}
-	flattened := flattenMap(input)
+	flattened := Flatten(input)
 	assert.Equal(t, expected, flattened)
-	unflattened := unflattenMap(flattened)
+	unflattened := Unflatten(flattened)
 	assert.Equal(t, input, unflattened)
 }
 
@@ -30,9 +30,9 @@ func TestMap(t *testing.T) {
 		"foo" + mapSeparator + "bar": 0,
 		"foo" + mapSeparator + "baz": 0,
 	}
-	flattened := flattenMap(input)
+	flattened := Flatten(input)
 	assert.Equal(t, expected, flattened)
-	unflattened := unflattenMap(flattened)
+	unflattened := Unflatten(flattened)
 	assert.Equal(t, input, unflattened)
 }
 
@@ -47,9 +47,9 @@ func TestFlattenMapMoreNesting(t *testing.T) {
 	expected := map[string]interface{}{
 		"foo" + mapSeparator + "bar" + mapSeparator + "baz": 0,
 	}
-	flattened := flattenMap(input)
+	flattened := Flatten(input)
 	assert.Equal(t, expected, flattened)
-	unflattened := unflattenMap(flattened)
+	unflattened := Unflatten(flattened)
 	assert.Equal(t, input, unflattened)
 }
 
@@ -62,9 +62,9 @@ func TestFlattenList(t *testing.T) {
 	expected := map[string]interface{}{
 		"foo" + listSeparator + "0": 0,
 	}
-	flattened := flattenMap(input)
+	flattened := Flatten(input)
 	assert.Equal(t, expected, flattened)
-	unflattened := unflattenMap(flattened)
+	unflattened := Unflatten(flattened)
 	assert.Equal(t, input, unflattened)
 }
 
@@ -79,13 +79,13 @@ func TestFlattenListWithMap(t *testing.T) {
 	expected := map[string]interface{}{
 		"foo" + listSeparator + "0" + mapSeparator + "bar": 0,
 	}
-	flattened := flattenMap(input)
+	flattened := Flatten(input)
 	assert.Equal(t, expected, flattened)
-	unflattened := unflattenMap(flattened)
+	unflattened := Unflatten(flattened)
 	assert.Equal(t, input, unflattened)
 }
 
-func TestFlattenMap(t *testing.T) {
+func TestFlatten(t *testing.T) {
 	input := map[string]interface{}{
 		"foo": "bar",
 		"baz": map[string]interface{}{
@@ -106,9 +106,9 @@ func TestFlattenMap(t *testing.T) {
 		"qux" + listSeparator + "1":                         1,
 		"qux" + listSeparator + "2":                         2,
 	}
-	flattened := flattenMap(input)
+	flattened := Flatten(input)
 	assert.Equal(t, expected, flattened)
-	unflattened := unflattenMap(flattened)
+	unflattened := Unflatten(flattened)
 	assert.Equal(t, input, unflattened)
 }
 
@@ -140,38 +140,7 @@ func TestTokenizeNested(t *testing.T) {
 	assert.Equal(t, expected, tokenized)
 }
 
-func TestMacOnlyEncryptedToBool(t *testing.T) {
-	tests := []struct {
-		input map[string]interface{}
-		want  map[string]interface{}
-	}{
-		{map[string]interface{}{"mac_only_encrypted": "false"}, map[string]interface{}{"mac_only_encrypted": false}},
-		{map[string]interface{}{"mac_only_encrypted": "true"}, map[string]interface{}{"mac_only_encrypted": true}},
-		{map[string]interface{}{"mac_only_encrypted": "something-else"}, map[string]interface{}{"mac_only_encrypted": false}},
-	}
-
-	for _, tt := range tests {
-		macOnlyEncryptedToBool(tt.input)
-		assert.Equal(t, tt.want, tt.input)
-	}
-}
-
-func TestMacOnlyEncryptedToString(t *testing.T) {
-	tests := []struct {
-		input map[string]interface{}
-		want  map[string]interface{}
-	}{
-		{map[string]interface{}{"mac_only_encrypted": false}, map[string]interface{}{"mac_only_encrypted": "false"}},
-		{map[string]interface{}{"mac_only_encrypted": true}, map[string]interface{}{"mac_only_encrypted": "true"}},
-	}
-
-	for _, tt := range tests {
-		macOnlyEncryptedToString(tt.input)
-		assert.Equal(t, tt.want, tt.input)
-	}
-}
-
-func TestFlatten(t *testing.T) {
+func TestFlattenMetadata(t *testing.T) {
 	tests := []struct {
 		input Metadata
 		want  map[string]interface{}
@@ -183,7 +152,7 @@ func TestFlatten(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		got, err := Flatten(tt.input)
+		got, err := FlattenMetadata(tt.input)
 		assert.NoError(t, err)
 		for k, v := range tt.want {
 			assert.Equal(t, v, got[k])
@@ -191,7 +160,7 @@ func TestFlatten(t *testing.T) {
 	}
 }
 
-func TestFlattenToUnflatten(t *testing.T) {
+func TestFlattenMetadataToUnflattenMetadata(t *testing.T) {
 	tests := []struct {
 		input Metadata
 	}{
@@ -203,10 +172,75 @@ func TestFlattenToUnflatten(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		flat, err := Flatten(tt.input)
+		flat, err := FlattenMetadata(tt.input)
 		assert.NoError(t, err)
-		md, err := Unflatten(flat)
+		md, err := UnflattenMetadata(flat)
 		assert.NoError(t, err)
 		assert.Equal(t, tt.input, md)
+	}
+}
+
+func TestDecodeNewLines(t *testing.T) {
+	tests := []struct {
+		input map[string]interface{}
+		want  map[string]interface{}
+	}{
+		{map[string]interface{}{"mac": "line1\\nline2"}, map[string]interface{}{"mac": "line1\nline2"}},
+		{map[string]interface{}{"mac": "line1\\n\\n\\nline2\\n\\nline3"}, map[string]interface{}{"mac": "line1\n\n\nline2\n\nline3"}},
+	}
+
+	for _, tt := range tests {
+		decodeNewLines(tt.input)
+		for k, v := range tt.want {
+			assert.Equal(t, v, tt.input[k])
+		}
+	}
+}
+
+func TestEncodeNewLines(t *testing.T) {
+	tests := []struct {
+		input map[string]interface{}
+		want  map[string]interface{}
+	}{
+		{map[string]interface{}{"mac": "line1\nline2"}, map[string]interface{}{"mac": "line1\\nline2"}},
+		{map[string]interface{}{"mac": "line1\n\n\nline2\n\nline3"}, map[string]interface{}{"mac": "line1\\n\\n\\nline2\\n\\nline3"}},
+	}
+
+	for _, tt := range tests {
+		encodeNewLines(tt.input)
+		for k, v := range tt.want {
+			assert.Equal(t, v, tt.input[k])
+		}
+	}
+}
+
+func TestDecodeNonStrings(t *testing.T) {
+	tests := []struct {
+		input map[string]interface{}
+		want  map[string]interface{}
+	}{
+		{map[string]interface{}{"mac_only_encrypted": "false"}, map[string]interface{}{"mac_only_encrypted": false}},
+		{map[string]interface{}{"mac_only_encrypted": "true"}, map[string]interface{}{"mac_only_encrypted": true}},
+		{map[string]interface{}{"mac_only_encrypted": "something-else"}, map[string]interface{}{"mac_only_encrypted": false}},
+	}
+
+	for _, tt := range tests {
+		decodeNonStrings(tt.input)
+		assert.Equal(t, tt.want, tt.input)
+	}
+}
+
+func TestEncodeNonStrings(t *testing.T) {
+	tests := []struct {
+		input map[string]interface{}
+		want  map[string]interface{}
+	}{
+		{map[string]interface{}{"mac_only_encrypted": false}, map[string]interface{}{"mac_only_encrypted": "false"}},
+		{map[string]interface{}{"mac_only_encrypted": true}, map[string]interface{}{"mac_only_encrypted": "true"}},
+	}
+
+	for _, tt := range tests {
+		encodeNonStrings(tt.input)
+		assert.Equal(t, tt.want, tt.input)
 	}
 }

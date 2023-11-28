@@ -48,7 +48,7 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 		}
 	}
 
-	metadata, err := stores.Unflatten(mdMap)
+	metadata, err := stores.UnflattenMetadata(mdMap)
 	if err != nil {
 		return sops.Tree{}, err
 	}
@@ -100,7 +100,7 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 // runtime object
 func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	metadata := stores.MetadataFromInternal(in.Metadata)
-	mdItems, err := stores.Flatten(metadata)
+	mdItems, err := stores.FlattenMetadata(metadata)
 	if err != nil {
 		return nil, err
 	}

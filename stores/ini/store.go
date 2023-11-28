@@ -187,7 +187,7 @@ func (store *Store) iniSectionToMetadata(sopsSection *ini.Section) (stores.Metad
 	for k, v := range sopsSection.KeysHash() {
 		metadataHash[k] = v
 	}
-	return stores.Unflatten(metadataHash)
+	return stores.UnflattenMetadata(metadataHash)
 }
 
 // LoadPlainFile loads a plaintext INI file's bytes onto a sops.TreeBranches runtime object
@@ -221,7 +221,7 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 }
 
 func (store *Store) encodeMetadataToIniBranch(md stores.Metadata) (sops.TreeBranch, error) {
-	flat, err := stores.Flatten(md)
+	flat, err := stores.FlattenMetadata(md)
 	if err != nil {
 		return nil, err
 	}
