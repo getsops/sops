@@ -129,8 +129,11 @@ func TestGnuPGHome_Validate(t *testing.T) {
 	})
 
 	t.Run("wrong permissions", func(t *testing.T) {
-		// Is created with 0755
 		tmpDir := t.TempDir()
+
+		err := os.Chmod(tmpDir, 0o755)
+		assert.NoError(t, err)
+
 		assert.Error(t, GnuPGHome(tmpDir).Validate())
 	})
 
