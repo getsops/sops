@@ -1075,7 +1075,11 @@ func loadStoresConfig(context *cli.Context, path string) (*config.StoresConfig, 
 		configPath = context.String("config")
 	} else {
 		// Ignore config not found errors returned from FindConfigFile since the config file is not mandatory
-		configPath, _ = config.FindConfigFile(".")
+		foundPath, err := config.FindConfigFile(".")
+		if err != nil {
+			return config.NewStoresConfig(), nil
+		}
+		configPath = foundPath
 	}
 	return config.LoadStoresConfig(configPath)
 }
