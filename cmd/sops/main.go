@@ -23,6 +23,7 @@ import (
 	"github.com/getsops/sops/v3/cmd/sops/subcommand/exec"
 	"github.com/getsops/sops/v3/cmd/sops/subcommand/groups"
 	keyservicecmd "github.com/getsops/sops/v3/cmd/sops/subcommand/keyservice"
+	"github.com/getsops/sops/v3/cmd/sops/subcommand/mergetool"
 	publishcmd "github.com/getsops/sops/v3/cmd/sops/subcommand/publish"
 	"github.com/getsops/sops/v3/cmd/sops/subcommand/updatekeys"
 	"github.com/getsops/sops/v3/config"
@@ -541,6 +542,79 @@ func main() {
 				} else if err != nil {
 					return common.NewExitError(err, codes.ErrorGeneric)
 				}
+				return nil
+			},
+		},
+		{
+			Name:      "mergetool",
+			Usage:     "execute a git mergetool",
+			ArgsUsage: "",
+			Flags:     append([]cli.Flag{}, keyserviceFlags...),
+			Action: func(c *cli.Context) error {
+				gitEnv := mergetool.MergePathsFromEnv()
+
+				tempDir, err := os.MkdirTemp("", ".sops")
+				if err != nil {
+					return toExitError(err)
+				}
+
+				//defer os.RemoveAll(tempDir)
+
+				svcs := keyservices(c)
+
+				tempDecrypt := func(dir string, input string, output string) (string, error) {
+					outputPath := fmt.Sprintf("%s/%s", dir, output)
+
+					inputStore := inputStore(c, input)
+					outputStore := outputStore(c, outputPath)
+
+					opts := decryptOpts{
+						InputStore:  inputStore,
+						OutputStore: outputStore,
+						InputPath:   input,
+						Cipher:      aes.NewCipher(),
+						KeyServices: svcs,
+						IgnoreMAC:   false,
+					}
+
+					decryptedBytes, err := decrypt(opts)
+					if err != nil {
+						return "", err
+					}
+
+					err = os.WriteFile(outputPath, decryptedBytes, 0o600)
+					if err != nil {
+						return "", err
+					}
+
+					return outputPath, nil
+				}
+
+				editorEnv := mergetool.MergePaths{}
+
+				// $BASE is not guaranteed to be set by git
+				if gitEnv.Base != "" {
+					editorEnv.Base, err = tempDecrypt(tempDir, gitEnv.Base, "base")
+					if err != nil {
+						return toExitError(err)
+					}
+				}
+
+				editorEnv.Local, err = tempDecrypt(tempDir, gitEnv.Base, "local")
+				if err != nil {
+					return toExitError(err)
+				}
+
+				editorEnv.Remote, err = tempDecrypt(tempDir, gitEnv.Base, "remote")
+				if err != nil {
+					return toExitError(err)
+				}
+
+				editorEnv.Merged, err = tempDecrypt(tempDir, gitEnv.Base, "merged")
+				if err != nil {
+					return toExitError(err)
+				}
+
 				return nil
 			},
 		},
