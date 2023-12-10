@@ -706,7 +706,7 @@ func main() {
 		},
 		cli.IntFlag{
 			Name:  "indent",
-			Usage: "the number of spaces to indent YAML or JSON encoded file for encryption",
+			Usage: "the number of spaces to indent YAML or JSON encoded file",
 		},
 		cli.BoolFlag{
 			Name:  "verbose",
