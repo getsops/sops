@@ -2,23 +2,24 @@
 Package decrypt is the external API other Go programs can use to decrypt SOPS files. It is the only package in SOPS with
 a stable API.
 */
-package decrypt // import "go.mozilla.org/sops/v3/decrypt"
+package decrypt // import "github.com/getsops/sops/v3/decrypt"
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"time"
 
-	"go.mozilla.org/sops/v3/aes"
-	"go.mozilla.org/sops/v3/cmd/sops/common"
-	. "go.mozilla.org/sops/v3/cmd/sops/formats" // Re-export
+	"github.com/getsops/sops/v3/aes"
+	"github.com/getsops/sops/v3/cmd/sops/common"
+	. "github.com/getsops/sops/v3/cmd/sops/formats" // Re-export
+	"github.com/getsops/sops/v3/config"
 )
 
 // File is a wrapper around Data that reads a local encrypted
 // file and returns its cleartext data in an []byte
 func File(path, format string) (cleartext []byte, err error) {
 	// Read the file into an []byte
-	encryptedData, err := ioutil.ReadFile(path)
+	encryptedData, err := os.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to read %q: %w", path, err)
 	}
@@ -32,7 +33,7 @@ func File(path, format string) (cleartext []byte, err error) {
 // decrypts the data and returns its cleartext in an []byte.
 func DataWithFormat(data []byte, format Format) (cleartext []byte, err error) {
 
-	store := common.StoreForFormat(format)
+	store := common.StoreForFormat(format, config.NewStoresConfig())
 
 	// Load SOPS file and access the data key
 	tree, err := store.LoadEncryptedFile(data)
@@ -59,6 +60,9 @@ func DataWithFormat(data []byte, format Format) (cleartext []byte, err error) {
 		key,
 		tree.Metadata.LastModified.Format(time.RFC3339),
 	)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to decrypt original mac: %w", err)
+	}
 	if originalMac != mac {
 		return nil, fmt.Errorf("Failed to verify data integrity. expected mac %q, got %q", originalMac, mac)
 	}

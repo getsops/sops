@@ -1,4 +1,4 @@
-package gcpkms // import "go.mozilla.org/sops/v3/gcpkms"
+package gcpkms // import "github.com/getsops/sops/v3/gcpkms"
 
 import (
 	"context"
@@ -10,12 +10,12 @@ import (
 	"time"
 
 	kms "cloud.google.com/go/kms/apiv1"
+	"cloud.google.com/go/kms/apiv1/kmspb"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/api/option"
-	kmspb "google.golang.org/genproto/googleapis/cloud/kms/v1"
 	"google.golang.org/grpc"
 
-	"go.mozilla.org/sops/v3/logging"
+	"github.com/getsops/sops/v3/logging"
 )
 
 const (
@@ -94,12 +94,12 @@ func (c CredentialJSON) ApplyToMasterKey(key *MasterKey) {
 func (key *MasterKey) Encrypt(dataKey []byte) error {
 	service, err := key.newKMSClient()
 	if err != nil {
-		log.WithError(err).WithField("resourceID", key.ResourceID).Error("Encryption failed")
+		log.WithField("resourceID", key.ResourceID).Info("Encryption failed")
 		return fmt.Errorf("cannot create GCP KMS service: %w", err)
 	}
 	defer func() {
 		if err := service.Close(); err != nil {
-			log.WithError(err).Error("failed to close GCP KMS client connection")
+			log.Error("failed to close GCP KMS client connection")
 		}
 	}()
 
@@ -110,7 +110,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	ctx := context.Background()
 	resp, err := service.Encrypt(ctx, req)
 	if err != nil {
-		log.WithError(err).WithField("resourceID", key.ResourceID).Error("Encryption failed")
+		log.WithField("resourceID", key.ResourceID).Info("Encryption failed")
 		return fmt.Errorf("failed to encrypt sops data key with GCP KMS key: %w", err)
 	}
 	// NB: base64 encoding is for compatibility with SOPS <=3.8.x.
@@ -145,12 +145,12 @@ func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 func (key *MasterKey) Decrypt() ([]byte, error) {
 	service, err := key.newKMSClient()
 	if err != nil {
-		log.WithError(err).WithField("resourceID", key.ResourceID).Error("Decryption failed")
+		log.WithField("resourceID", key.ResourceID).Info("Decryption failed")
 		return nil, fmt.Errorf("cannot create GCP KMS service: %w", err)
 	}
 	defer func() {
 		if err := service.Close(); err != nil {
-			log.WithError(err).Error("failed to close GCP KMS client connection")
+			log.Error("failed to close GCP KMS client connection")
 		}
 	}()
 
@@ -158,7 +158,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	// client used to work with base64 encoded strings.
 	decodedCipher, err := base64.StdEncoding.DecodeString(string(key.EncryptedDataKey()))
 	if err != nil {
-		log.WithError(err).WithField("resourceID", key.ResourceID).Error("Decryption failed")
+		log.WithField("resourceID", key.ResourceID).Info("Decryption failed")
 		return nil, err
 	}
 
@@ -169,7 +169,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	ctx := context.Background()
 	resp, err := service.Decrypt(ctx, req)
 	if err != nil {
-		log.WithError(err).WithField("resourceID", key.ResourceID).Error("Decryption failed")
+		log.WithField("resourceID", key.ResourceID).Info("Decryption failed")
 		return nil, fmt.Errorf("failed to decrypt sops data key with GCP KMS key: %w", err)
 	}
 
@@ -217,7 +217,7 @@ func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
 			return nil, err
 		}
 		if credentials != nil {
-			opts = append(opts, option.WithCredentialsJSON(key.credentialJSON))
+			opts = append(opts, option.WithCredentialsJSON(credentials))
 		}
 	}
 	if key.grpcConn != nil {
@@ -238,9 +238,11 @@ func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
 // JSON format. It returns an error if the file cannot be read, and may return
 // a nil byte slice if no value is set.
 func getGoogleCredentials() ([]byte, error) {
-	defaultCredentials := os.Getenv(SopsGoogleCredentialsEnv)
-	if _, err := os.Stat(defaultCredentials); err == nil {
-		return os.ReadFile(defaultCredentials)
+	if defaultCredentials, ok := os.LookupEnv(SopsGoogleCredentialsEnv); ok && len(defaultCredentials) > 0 {
+		if _, err := os.Stat(defaultCredentials); err == nil {
+			return os.ReadFile(defaultCredentials)
+		}
+		return []byte(defaultCredentials), nil
 	}
-	return []byte(defaultCredentials), nil
+	return nil, nil
 }

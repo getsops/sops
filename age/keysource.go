@@ -7,12 +7,13 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 
 	"filippo.io/age"
 	"filippo.io/age/armor"
+	"github.com/getsops/sops/v3/logging"
 	"github.com/sirupsen/logrus"
-	"go.mozilla.org/sops/v3/logging"
 )
 
 const (
@@ -23,8 +24,10 @@ const (
 	// age keys file.
 	SopsAgeKeyFileEnv = "SOPS_AGE_KEY_FILE"
 	// SopsAgeKeyUserConfigPath is the default age keys file path in
-	// os.UserConfigDir.
+	// getUserConfigDir().
 	SopsAgeKeyUserConfigPath = "sops/age/keys.txt"
+	// On macOS, os.UserConfigDir() ignores XDG_CONFIG_HOME. So we handle that manually.
+	xdgConfigHome = "XDG_CONFIG_HOME"
 )
 
 // log is the global logger for any age MasterKey.
@@ -124,7 +127,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	if key.parsedRecipient == nil {
 		parsedRecipient, err := parseRecipient(key.Recipient)
 		if err != nil {
-			log.WithError(err).WithField("recipient", key.parsedRecipient).Error("Encryption failed")
+			log.WithField("recipient", key.parsedRecipient).Info("Encryption failed")
 			return err
 		}
 		key.parsedRecipient = parsedRecipient
@@ -134,19 +137,19 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	aw := armor.NewWriter(&buffer)
 	w, err := age.Encrypt(aw, key.parsedRecipient)
 	if err != nil {
-		log.WithError(err).WithField("recipient", key.parsedRecipient).Error("Encryption failed")
+		log.WithField("recipient", key.parsedRecipient).Info("Encryption failed")
 		return fmt.Errorf("failed to create writer for encrypting sops data key with age: %w", err)
 	}
 	if _, err := w.Write(dataKey); err != nil {
-		log.WithError(err).WithField("recipient", key.parsedRecipient).Error("Encryption failed")
+		log.WithField("recipient", key.parsedRecipient).Info("Encryption failed")
 		return fmt.Errorf("failed to encrypt sops data key with age: %w", err)
 	}
 	if err := w.Close(); err != nil {
-		log.WithError(err).WithField("recipient", key.parsedRecipient).Error("Encryption failed")
+		log.WithField("recipient", key.parsedRecipient).Info("Encryption failed")
 		return fmt.Errorf("failed to close writer for encrypting sops data key with age: %w", err)
 	}
 	if err := aw.Close(); err != nil {
-		log.WithError(err).WithField("recipient", key.parsedRecipient).Error("Encryption failed")
+		log.WithField("recipient", key.parsedRecipient).Info("Encryption failed")
 		return fmt.Errorf("failed to close armored writer: %w", err)
 	}
 
@@ -180,7 +183,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	if len(key.parsedIdentities) == 0 {
 		ids, err := key.loadIdentities()
 		if err != nil {
-			log.WithError(err).Error("Decryption failed")
+			log.Info("Decryption failed")
 			return nil, fmt.Errorf("failed to load age identities: %w", err)
 		}
 		ids.ApplyToMasterKey(key)
@@ -190,13 +193,13 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	ar := armor.NewReader(src)
 	r, err := age.Decrypt(ar, key.parsedIdentities...)
 	if err != nil {
-		log.WithError(err).Error("Decryption failed")
+		log.Info("Decryption failed")
 		return nil, fmt.Errorf("failed to create reader for decrypting sops data key with age: %w", err)
 	}
 
 	var b bytes.Buffer
 	if _, err := io.Copy(&b, r); err != nil {
-		log.WithError(err).Error("Decryption failed")
+		log.Info("Decryption failed")
 		return nil, fmt.Errorf("failed to copy age decrypted data into bytes.Buffer: %w", err)
 	}
 
@@ -222,6 +225,15 @@ func (key *MasterKey) ToMap() map[string]interface{} {
 	return out
 }
 
+func getUserConfigDir() (string, error) {
+	if runtime.GOOS == "darwin" {
+		if userConfigDir, ok := os.LookupEnv(xdgConfigHome); ok && userConfigDir != "" {
+			return userConfigDir, nil
+		}
+	}
+	return os.UserConfigDir()
+}
+
 // loadIdentities attempts to load the age identities based on runtime
 // environment configurations (e.g. SopsAgeKeyEnv, SopsAgeKeyFileEnv,
 // SopsAgeKeyUserConfigPath). It will load all found references, and expects
@@ -242,7 +254,7 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, error) {
 		readers[SopsAgeKeyFileEnv] = f
 	}
 
-	userConfigDir, err := os.UserConfigDir()
+	userConfigDir, err := getUserConfigDir()
 	if err != nil && len(readers) == 0 {
 		return nil, fmt.Errorf("user config directory could not be determined: %w", err)
 	}

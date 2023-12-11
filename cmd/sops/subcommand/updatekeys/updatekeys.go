@@ -6,10 +6,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"go.mozilla.org/sops/v3/cmd/sops/codes"
-	"go.mozilla.org/sops/v3/cmd/sops/common"
-	"go.mozilla.org/sops/v3/config"
-	"go.mozilla.org/sops/v3/keyservice"
+	"github.com/getsops/sops/v3/cmd/sops/codes"
+	"github.com/getsops/sops/v3/cmd/sops/common"
+	"github.com/getsops/sops/v3/config"
+	"github.com/getsops/sops/v3/keyservice"
 )
 
 // Opts represents key operation options and config
@@ -40,7 +40,11 @@ func UpdateKeys(opts Opts) error {
 }
 
 func updateFile(opts Opts) error {
-	store := common.DefaultStoreForPathOrFormat(opts.InputPath, opts.InputType)
+	sc, err := config.LoadStoresConfig(opts.ConfigPath)
+	if err != nil {
+		return err
+	}
+	store := common.DefaultStoreForPath(sc, opts.InputPath)
 	log.Printf("Syncing keys for file %s", opts.InputPath)
 	tree, err := common.LoadEncryptedFile(store, opts.InputPath)
 	if err != nil {

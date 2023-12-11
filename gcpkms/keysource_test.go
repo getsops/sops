@@ -7,9 +7,10 @@ import (
 	"testing"
 	"time"
 
+	"cloud.google.com/go/kms/apiv1/kmspb"
 	"github.com/stretchr/testify/assert"
-	kmspb "google.golang.org/genproto/googleapis/cloud/kms/v1"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 var (
@@ -158,7 +159,7 @@ func newGRPCServer(port string) *grpc.ClientConn {
 	}
 	go serv.Serve(lis)
 
-	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithInsecure())
+	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -2,10 +2,10 @@
 Package sops manages JSON, YAML and BINARY documents to be encrypted or decrypted.
 
 This package should not be used directly. Instead, Sops users should install the
-command line client via `go get -u go.mozilla.org/sops/v3/cmd/sops`, or use the
-decryption helper provided at `go.mozilla.org/sops/v3/decrypt`.
+command line client via `go get -u github.com/getsops/sops/v3/cmd/sops`, or use the
+decryption helper provided at `github.com/getsops/sops/v3/decrypt`.
 
-We do not guarantee API stability for any package other than `go.mozilla.org/sops/v3/decrypt`.
+We do not guarantee API stability for any package other than `github.com/getsops/sops/v3/decrypt`.
 
 A Sops document is a Tree composed of a data branch with arbitrary key/value pairs
 and a metadata branch with encryption and integrity information.
@@ -34,7 +34,7 @@ be recalculated and compared with the MAC stored in the document to verify that 
 fraudulent changes have been applied. The MAC covers keys and values as well as their
 ordering.
 */
-package sops //import "go.mozilla.org/sops/v3"
+package sops //import "github.com/getsops/sops/v3"
 
 import (
 	"crypto/rand"
@@ -46,12 +46,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/getsops/sops/v3/audit"
+	"github.com/getsops/sops/v3/keys"
+	"github.com/getsops/sops/v3/keyservice"
+	"github.com/getsops/sops/v3/logging"
+	"github.com/getsops/sops/v3/shamir"
 	"github.com/sirupsen/logrus"
-	"go.mozilla.org/sops/v3/audit"
-	"go.mozilla.org/sops/v3/keys"
-	"go.mozilla.org/sops/v3/keyservice"
-	"go.mozilla.org/sops/v3/logging"
-	"go.mozilla.org/sops/v3/shamir"
 	"golang.org/x/net/context"
 )
 
@@ -69,6 +69,12 @@ const MacMismatch = sopsError("MAC mismatch")
 
 // MetadataNotFound occurs when the input file is malformed and doesn't have sops metadata in it
 const MetadataNotFound = sopsError("sops metadata not found")
+
+// MACOnlyEncryptedInitialization is a constant and known sequence of 32 bytes used to initialize
+// MAC which is computed only over values which end up encrypted. That assures that a MAC with the
+// setting enabled is always different from a MAC with this setting disabled.
+// The following numbers are taken from the output of `echo -n sops | sha256sum` (shell) or `hashlib.sha256(b'sops').hexdigest()` (Python).
+var MACOnlyEncryptedInitialization = []byte{0x8a, 0x3f, 0xd2, 0xad, 0x54, 0xce, 0x66, 0x52, 0x7b, 0x10, 0x34, 0xf3, 0xd1, 0x47, 0xbe, 0xb, 0xb, 0x97, 0x5b, 0x3b, 0xf4, 0x4f, 0x72, 0xc6, 0xfd, 0xad, 0xec, 0x81, 0x76, 0xf2, 0x7d, 0x69}
 
 var log *logrus.Logger
 
@@ -148,10 +154,11 @@ func set(branch interface{}, path []interface{}, value interface{}) interface{} 
 			}
 		}
 		// Not found, need to add the next path entry to the branch
-		if len(path) == 1 {
-			return append(branch, TreeItem{Key: path[0], Value: value})
+		value := valueFromPathAndLeaf(path, value)
+		if newBranch, ok := value.(TreeBranch); ok && len(newBranch) > 0 {
+			return append(branch, newBranch[0])
 		}
-		return valueFromPathAndLeaf(path, value)
+		return branch
 	case []interface{}:
 		position := path[0].(int)
 		if len(path) == 1 {
@@ -290,22 +297,21 @@ func (branch TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(
 // is provided (by default it is not), those not matching EncryptedRegex,
 // if EncryptedRegex is provided (by default it is not) or those matching
 // UnencryptedRegex, if UnencryptedRegex is provided (by default it is not).
-// If encryption is successful, it returns the MAC for the encrypted tree.
+// If encryption is successful, it returns the MAC for the encrypted tree
+// (all values if MACOnlyEncrypted is false, or only over values which end
+// up encrypted if MACOnlyEncrypted is true).
 func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 	audit.SubmitEvent(audit.EncryptEvent{
 		File: tree.FilePath,
 	})
 	hash := sha512.New()
+	if tree.Metadata.MACOnlyEncrypted {
+		// We initialize with known set of bytes so that a MAC with this setting
+		// enabled is always different from a MAC with this setting disabled.
+		hash.Write(MACOnlyEncryptedInitialization)
+	}
 	walk := func(branch TreeBranch) error {
 		_, err := branch.walkBranch(branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
-			// Only add to MAC if not a comment
-			if _, ok := in.(Comment); !ok {
-				bytes, err := ToBytes(in)
-				if err != nil {
-					return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
-				}
-				hash.Write(bytes)
-			}
 			encrypted := true
 			if tree.Metadata.UnencryptedSuffix != "" {
 				for _, v := range path {
@@ -343,6 +349,16 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 					}
 				}
 			}
+			if !tree.Metadata.MACOnlyEncrypted || encrypted {
+				// Only add to MAC if not a comment
+				if _, ok := in.(Comment); !ok {
+					bytes, err := ToBytes(in)
+					if err != nil {
+						return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
+					}
+					hash.Write(bytes)
+				}
+			}
 			if encrypted {
 				var err error
 				pathString := strings.Join(path, ":") + ":"
@@ -370,13 +386,20 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 // those not ending with EncryptedSuffix, if EncryptedSuffix is provided (by default it is not),
 // those not matching EncryptedRegex, if EncryptedRegex is provided (by default it is not),
 // or those matching UnencryptedRegex, if UnencryptedRegex is provided (by default it is not).
-// If decryption is successful, it returns the MAC for the decrypted tree.
+// If decryption is successful, it returns the MAC for the decrypted tree
+// (all values if MACOnlyEncrypted is false, or only over values which end
+// up decrypted if MACOnlyEncrypted is true).
 func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 	log.Debug("Decrypting tree")
 	audit.SubmitEvent(audit.DecryptEvent{
 		File: tree.FilePath,
 	})
 	hash := sha512.New()
+	if tree.Metadata.MACOnlyEncrypted {
+		// We initialize with known set of bytes so that a MAC with this setting
+		// enabled is always different from a MAC with this setting disabled.
+		hash.Write(MACOnlyEncryptedInitialization)
+	}
 	walk := func(branch TreeBranch) error {
 		_, err := branch.walkBranch(branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
 			encrypted := true
@@ -440,13 +463,15 @@ func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 			} else {
 				v = in
 			}
-			// Only add to MAC if not a comment
-			if _, ok := v.(Comment); !ok {
-				bytes, err := ToBytes(v)
-				if err != nil {
-					return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
+			if !tree.Metadata.MACOnlyEncrypted || encrypted {
+				// Only add to MAC if not a comment
+				if _, ok := v.(Comment); !ok {
+					bytes, err := ToBytes(v)
+					if err != nil {
+						return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
+					}
+					hash.Write(bytes)
 				}
-				hash.Write(bytes)
 			}
 			return v, nil
 		})
@@ -489,6 +514,7 @@ type Metadata struct {
 	UnencryptedRegex          string
 	EncryptedRegex            string
 	MessageAuthenticationCode string
+	MACOnlyEncrypted          bool
 	Version                   string
 	KeyGroups                 []KeyGroup
 	// ShamirThreshold is the number of key groups required to recover the
@@ -726,7 +752,11 @@ func ToBytes(in interface{}) ([]byte, error) {
 	case float64:
 		return []byte(strconv.FormatFloat(in, 'f', -1, 64)), nil
 	case bool:
-		return []byte(strings.Title(strconv.FormatBool(in))), nil
+		boolB := []byte("True")
+		if !in {
+			boolB = []byte("False")
+		}
+		return boolB, nil
 	case []byte:
 		return in, nil
 	case Comment:

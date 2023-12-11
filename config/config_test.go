@@ -93,6 +93,7 @@ creation_rules:
     key_groups:
     - kms:
       - arn: foo
+        aws_profile: bar
       pgp:
       - bar
       gcp_kms:
@@ -105,6 +106,7 @@ creation_rules:
       - 'https://foo.vault:8200/v1/foo/keys/foo-key'
     - kms:
       - arn: baz
+        aws_profile: foo
       pgp:
       - qux
       gcp_kms:
@@ -140,13 +142,28 @@ creation_rules:
           version: fooversion
     `)
 
-var sampleConfigWithRegexParameters = []byte(`
+var sampleConfigWithEncryptedRegexParameters = []byte(`
 creation_rules:
   - path_regex: barbar*
     kms: "1"
     pgp: "2"
     encrypted_regex: "^enc:"
+    `)
+
+var sampleConfigWithUnencryptedRegexParameters = []byte(`
+creation_rules:
+  - path_regex: barbar*
+    kms: "1"
+    pgp: "2"
     unencrypted_regex: "^dec:"
+    `)
+
+var sampleConfigWithMACOnlyEncrypted = []byte(`
+creation_rules:
+  - path_regex: barbar*
+    kms: "1"
+    pgp: "2"
+    mac_only_encrypted: true
     `)
 
 var sampleConfigWithInvalidParameters = []byte(`
@@ -226,7 +243,7 @@ creation_rules:
 var sampleConfigWithComplicatedRegexp = []byte(`
 creation_rules:
   - path_regex: "stage/dev/feature-.*"
-    kms: dev-feature 
+    kms: dev-feature
   - path_regex: "stage/dev/.*"
     kms: dev
   - path_regex: "stage/staging/.*"
@@ -280,14 +297,14 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 				PathRegex: "",
 				KeyGroups: []keyGroup{
 					{
-						KMS:     []kmsKey{{Arn: "foo"}},
+						KMS:     []kmsKey{{Arn: "foo", AwsProfile: "bar"}},
 						PGP:     []string{"bar"},
 						GCPKMS:  []gcpKmsKey{{ResourceID: "foo"}},
 						AzureKV: []azureKVKey{{VaultURL: "https://foo.vault.azure.net", Key: "foo-key", Version: "fooversion"}},
 						Vault:   []string{"https://foo.vault:8200/v1/foo/keys/foo-key"},
 					},
 					{
-						KMS: []kmsKey{{Arn: "baz"}},
+						KMS: []kmsKey{{Arn: "baz", AwsProfile: "foo"}},
 						PGP: []string{"qux"},
 						GCPKMS: []gcpKmsKey{
 							{ResourceID: "bar"},
@@ -396,15 +413,21 @@ func TestLoadConfigFileWithEncryptedSuffix(t *testing.T) {
 }
 
 func TestLoadConfigFileWithUnencryptedRegex(t *testing.T) {
-	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithRegexParameters, t), "/conf/path", "barbar", nil)
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithUnencryptedRegexParameters, t), "/conf/path", "barbar", nil)
 	assert.Equal(t, nil, err)
 	assert.Equal(t, "^dec:", conf.UnencryptedRegex)
 }
 
 func TestLoadConfigFileWithEncryptedRegex(t *testing.T) {
-	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithRegexParameters, t), "/conf/path", "barbar", nil)
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithEncryptedRegexParameters, t), "/conf/path", "barbar", nil)
 	assert.Equal(t, nil, err)
 	assert.Equal(t, "^enc:", conf.EncryptedRegex)
+}
+
+func TestLoadConfigFileWithMACOnlyEncrypted(t *testing.T) {
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithMACOnlyEncrypted, t), "/conf/path", "barbar", nil)
+	assert.Equal(t, nil, err)
+	assert.Equal(t, true, conf.MACOnlyEncrypted)
 }
 
 func TestLoadConfigFileWithInvalidParameters(t *testing.T) {

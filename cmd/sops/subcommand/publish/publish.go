@@ -3,18 +3,18 @@ package publish
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 
-	"go.mozilla.org/sops/v3"
-	"go.mozilla.org/sops/v3/cmd/sops/codes"
-	"go.mozilla.org/sops/v3/cmd/sops/common"
-	"go.mozilla.org/sops/v3/config"
-	"go.mozilla.org/sops/v3/keyservice"
-	"go.mozilla.org/sops/v3/logging"
-	"go.mozilla.org/sops/v3/publish"
-	"go.mozilla.org/sops/v3/version"
+	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/cmd/sops/codes"
+	"github.com/getsops/sops/v3/cmd/sops/common"
+	"github.com/getsops/sops/v3/config"
+	"github.com/getsops/sops/v3/keyservice"
+	"github.com/getsops/sops/v3/logging"
+	"github.com/getsops/sops/v3/publish"
+	"github.com/getsops/sops/v3/version"
 
 	"github.com/sirupsen/logrus"
 )
@@ -130,7 +130,7 @@ func Run(opts Opts) error {
 				return common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
 			}
 		} else {
-			fileContents, err = ioutil.ReadFile(path)
+			fileContents, err = os.ReadFile(path)
 			if err != nil {
 				return fmt.Errorf("could not read file: %s", err)
 			}
@@ -183,11 +183,4 @@ func Run(opts Opts) error {
 	}
 
 	return nil
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
 }

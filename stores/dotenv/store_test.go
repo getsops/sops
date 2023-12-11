@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/getsops/sops/v3"
 	"github.com/stretchr/testify/assert"
-	"go.mozilla.org/sops/v3"
 )
 
 var PLAIN = []byte(strings.TrimLeft(`
@@ -26,7 +26,7 @@ var BRANCH = sops.TreeBranch{
 		Value: "val2",
 	},
 	sops.TreeItem{
-		Key:   sops.Comment{"comment"},
+		Key:   sops.Comment{Value: "comment"},
 		Value: nil,
 	},
 	sops.TreeItem{
@@ -62,4 +62,21 @@ func TestEmitValueString(t *testing.T) {
 func TestEmitValueNonstring(t *testing.T) {
 	_, err := (&Store{}).EmitValue(BRANCH)
 	assert.NotNil(t, err)
+}
+
+func TestEmitEncryptedFileStability(t *testing.T) {
+	// emit the same tree multiple times to ensure the output is stable
+	// i.e. emitting the same tree always yields exactly the same output
+	var previous []byte
+	for i := 0; i < 10; i += 1 {
+		bytes, err := (&Store{}).EmitEncryptedFile(sops.Tree{
+			Branches: []sops.TreeBranch{{}},
+		})
+		assert.Nil(t, err)
+		assert.NotEmpty(t, bytes)
+		if previous != nil {
+			assert.Equal(t, previous, bytes)
+		}
+		previous = bytes
+	}
 }

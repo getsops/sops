@@ -3,14 +3,13 @@ package keyservice
 import (
 	"fmt"
 
-	"go.mozilla.org/sops/v3/age"
-	"go.mozilla.org/sops/v3/azkv"
-	"go.mozilla.org/sops/v3/gcpkms"
-	"go.mozilla.org/sops/v3/hcvault"
-	"go.mozilla.org/sops/v3/kms"
-	"go.mozilla.org/sops/v3/pgp"
+	"github.com/getsops/sops/v3/age"
+	"github.com/getsops/sops/v3/azkv"
+	"github.com/getsops/sops/v3/gcpkms"
+	"github.com/getsops/sops/v3/hcvault"
+	"github.com/getsops/sops/v3/kms"
+	"github.com/getsops/sops/v3/pgp"
 	"golang.org/x/net/context"
-	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -146,7 +145,7 @@ func (ks *Server) decryptWithAge(key *AgeKey, ciphertext []byte) ([]byte, error)
 // result
 func (ks Server) Encrypt(ctx context.Context,
 	req *EncryptRequest) (*EncryptResponse, error) {
-	key := *req.Key
+	key := req.Key
 	var response *EncryptResponse
 	switch k := key.KeyType.(type) {
 	case *Key_PgpKey:
@@ -211,7 +210,7 @@ func (ks Server) Encrypt(ctx context.Context,
 	return response, nil
 }
 
-func keyToString(key Key) string {
+func keyToString(key *Key) string {
 	switch k := key.KeyType.(type) {
 	case *Key_PgpKey:
 		return fmt.Sprintf("PGP key with fingerprint %s", k.PgpKey.Fingerprint)
@@ -224,11 +223,11 @@ func keyToString(key Key) string {
 	case *Key_VaultKey:
 		return fmt.Sprintf("Hashicorp Vault key with URI %s/v1/%s/keys/%s", k.VaultKey.VaultAddress, k.VaultKey.EnginePath, k.VaultKey.KeyName)
 	default:
-		return fmt.Sprintf("Unknown key type")
+		return "Unknown key type"
 	}
 }
 
-func (ks Server) prompt(key Key, requestType string) error {
+func (ks Server) prompt(key *Key, requestType string) error {
 	keyString := keyToString(key)
 	var response string
 	for response != "y" && response != "n" {
@@ -239,7 +238,7 @@ func (ks Server) prompt(key Key, requestType string) error {
 		}
 	}
 	if response == "n" {
-		return grpc.Errorf(codes.PermissionDenied, "Request rejected by user")
+		return status.Errorf(codes.PermissionDenied, "Request rejected by user")
 	}
 	return nil
 }
@@ -248,7 +247,7 @@ func (ks Server) prompt(key Key, requestType string) error {
 // result
 func (ks Server) Decrypt(ctx context.Context,
 	req *DecryptRequest) (*DecryptResponse, error) {
-	key := *req.Key
+	key := req.Key
 	var response *DecryptResponse
 	switch k := key.KeyType.(type) {
 	case *Key_PgpKey:
@@ -300,9 +299,9 @@ func (ks Server) Decrypt(ctx context.Context,
 			Plaintext: plaintext,
 		}
 	case nil:
-		return nil, grpc.Errorf(codes.NotFound, "Must provide a key")
+		return nil, status.Errorf(codes.NotFound, "Must provide a key")
 	default:
-		return nil, grpc.Errorf(codes.NotFound, "Unknown key type")
+		return nil, status.Errorf(codes.NotFound, "Unknown key type")
 	}
 	if ks.Prompt {
 		err := ks.prompt(key, "decrypt")

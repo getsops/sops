@@ -1,0 +1,41 @@
+version: 2
+
+updates:
+  - package-ecosystem: "docker"
+    directory: "/"
+    labels: ["dependencies"]
+    schedule:
+      # By default, this will be on a Monday.
+      interval: "weekly"
+    groups:
+      # Group all updates together, so that they are all applied in a single PR.
+      # xref: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#groups
+      docker:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    labels: ["area/CI", "dependencies"]
+    schedule:
+      # By default, this will be on a Monday.
+      interval: "weekly"
+    groups:
+      # Group all updates together, so that they are all applied in a single PR.
+      # xref: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#groups
+      ci:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "gomod"
+    directory: "/"
+    labels: ["dependencies"]
+    schedule:
+      # By default, this will be on a Monday.
+      interval: "weekly"
+    groups:
+      # Group all updates together, so that they are all applied in a single PR.
+      # xref: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#groups
+      go:
+        patterns:
+          - "*"

@@ -1,22 +1,37 @@
-package json //import "go.mozilla.org/sops/v3/stores/json"
+package json //import "github.com/getsops/sops/v3/stores/json"
 
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
+	"strings"
 
-	"go.mozilla.org/sops/v3"
-	"go.mozilla.org/sops/v3/stores"
+	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/config"
+	"github.com/getsops/sops/v3/stores"
 )
 
 // Store handles storage of JSON data.
 type Store struct {
+	config config.JSONStoreConfig
+}
+
+func NewStore(c *config.JSONStoreConfig) *Store {
+	return &Store{config: *c}
 }
 
 // BinaryStore handles storage of binary data in a JSON envelope.
 type BinaryStore struct {
-	store Store
+	store  Store
+	config config.JSONBinaryStoreConfig
+}
+
+func NewBinaryStore(c *config.JSONBinaryStoreConfig) *BinaryStore {
+	return &BinaryStore{config: *c, store: *NewStore(&config.JSONStoreConfig{
+		Indent: c.Indent,
+	})}
 }
 
 // LoadEncryptedFile loads an encrypted json file onto a sops.Tree object
@@ -42,15 +57,24 @@ func (store BinaryStore) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	return store.store.EmitEncryptedFile(in)
 }
 
+var BinaryStoreEmitPlainError = errors.New("error emitting binary store")
+
 // EmitPlainFile produces plaintext json file's bytes from its corresponding sops.TreeBranches object
 func (store BinaryStore) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
+	if len(in) != 1 {
+		return nil, fmt.Errorf("%w: there must be exactly one tree branch", BinaryStoreEmitPlainError)
+	}
 	// JSON stores a single object per file
 	for _, item := range in[0] {
 		if item.Key == "data" {
-			return []byte(item.Value.(string)), nil
+			if value, ok := item.Value.(string); ok {
+				return []byte(value), nil
+			} else {
+				return nil, fmt.Errorf("%w: 'data' key in tree does not have a string value", BinaryStoreEmitPlainError)
+			}
 		}
 	}
-	return nil, fmt.Errorf("No binary data found in tree")
+	return nil, fmt.Errorf("%w: no binary data found in tree", BinaryStoreEmitPlainError)
 }
 
 // EmitValue extracts a value from a generic interface{} object representing a structured set
@@ -211,13 +235,29 @@ func (store Store) jsonFromTreeBranch(branch sops.TreeBranch) ([]byte, error) {
 
 func (store Store) treeBranchFromJSON(in []byte) (sops.TreeBranch, error) {
 	dec := json.NewDecoder(bytes.NewReader(in))
-	dec.Token()
+	value, err := dec.Token()
+	if err != nil {
+		return nil, err
+	}
+	if delim, ok := value.(json.Delim); ok {
+		if delim.String() != "{" {
+			return nil, fmt.Errorf("Expected JSON object start, got delimiter %s instead", value)
+		}
+	} else {
+		return nil, fmt.Errorf("Expected JSON object start, got %#v of type %T instead", value, value)
+	}
 	return store.treeBranchFromJSONDecoder(dec)
 }
 
 func (store Store) reindentJSON(in []byte) ([]byte, error) {
 	var out bytes.Buffer
-	err := json.Indent(&out, in, "", "\t")
+	indent := "\t"
+	if store.config.Indent > -1 {
+		indent = strings.Repeat(" ", store.config.Indent)
+	} else if store.config.Indent < -1 {
+		return nil, errors.New("JSON Indentation parameter smaller than -1 is not accepted")
+	}
+	err := json.Indent(&out, in, "", indent)
 	return out.Bytes(), err
 }
 

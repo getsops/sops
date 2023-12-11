@@ -1,9 +1,9 @@
 /*
-Package kms contains an implementation of the go.mozilla.org/sops/v3.MasterKey
+Package kms contains an implementation of the github.com/getsops/sops/v3.MasterKey
 interface that encrypts and decrypts the data key using AWS KMS with the SDK
 for Go V2.
 */
-package kms //import "go.mozilla.org/sops/v3/kms"
+package kms //import "github.com/getsops/sops/v3/kms"
 
 import (
 	"context"
@@ -19,8 +19,8 @@ import (
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/kms"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
+	"github.com/getsops/sops/v3/logging"
 	"github.com/sirupsen/logrus"
-	"go.mozilla.org/sops/v3/logging"
 )
 
 const (
@@ -70,11 +70,11 @@ type MasterKey struct {
 	// using CredentialsProvider.ApplyToMasterKey. If nil, the default client is used
 	// which utilizes runtime environmental values.
 	credentialsProvider aws.CredentialsProvider
-	// epResolver can be used to override the endpoint the AWS client resolves
+	// baseEndpoint can be used to override the endpoint the AWS client resolves
 	// to by default. This is mostly used for testing purposes as it can not be
 	// injected using e.g. an environment variable. The field is not publicly
 	// exposed, nor configurable.
-	epResolver aws.EndpointResolverWithOptions
+	baseEndpoint string
 }
 
 // NewMasterKey creates a new MasterKey from an ARN, role and context, setting
@@ -86,6 +86,14 @@ func NewMasterKey(arn string, role string, context map[string]*string) *MasterKe
 		EncryptionContext: context,
 		CreationDate:      time.Now().UTC(),
 	}
+}
+
+// NewMasterKeyWithProfile creates a new MasterKey from an ARN, role, context
+// and awsProfile, setting the creation date to the current date.
+func NewMasterKeyWithProfile(arn string, role string, context map[string]*string, awsProfile string) *MasterKey {
+	k := NewMasterKey(arn, role, context)
+	k.AwsProfile = awsProfile
+	return k
 }
 
 // NewMasterKeyFromArn takes an ARN string and returns a new MasterKey for that
@@ -194,10 +202,10 @@ func (c CredentialsProvider) ApplyToMasterKey(key *MasterKey) {
 func (key *MasterKey) Encrypt(dataKey []byte) error {
 	cfg, err := key.createKMSConfig()
 	if err != nil {
-		log.WithError(err).WithField("arn", key.Arn).Error("Encryption failed")
+		log.WithField("arn", key.Arn).Info("Encryption failed")
 		return err
 	}
-	client := kms.NewFromConfig(*cfg)
+	client := key.createClient(cfg)
 	input := &kms.EncryptInput{
 		KeyId:             &key.Arn,
 		Plaintext:         dataKey,
@@ -205,7 +213,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	}
 	out, err := client.Encrypt(context.TODO(), input)
 	if err != nil {
-		log.WithError(err).WithField("arn", key.Arn).Error("Encryption failed")
+		log.WithField("arn", key.Arn).Info("Encryption failed")
 		return fmt.Errorf("failed to encrypt sops data key with AWS KMS: %w", err)
 	}
 	key.EncryptedKey = base64.StdEncoding.EncodeToString(out.CiphertextBlob)
@@ -237,15 +245,15 @@ func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 func (key *MasterKey) Decrypt() ([]byte, error) {
 	k, err := base64.StdEncoding.DecodeString(key.EncryptedKey)
 	if err != nil {
-		log.WithError(err).WithField("arn", key.Arn).Error("Decryption failed")
+		log.WithField("arn", key.Arn).Info("Decryption failed")
 		return nil, fmt.Errorf("error base64-decoding encrypted data key: %s", err)
 	}
 	cfg, err := key.createKMSConfig()
 	if err != nil {
-		log.WithError(err).WithField("arn", key.Arn).Error("Decryption failed")
+		log.WithField("arn", key.Arn).Info("Decryption failed")
 		return nil, err
 	}
-	client := kms.NewFromConfig(*cfg)
+	client := key.createClient(cfg)
 	input := &kms.DecryptInput{
 		KeyId:             &key.Arn,
 		CiphertextBlob:    k,
@@ -253,7 +261,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	}
 	decrypted, err := client.Decrypt(context.TODO(), input)
 	if err != nil {
-		log.WithError(err).WithField("arn", key.Arn).Error("Decryption failed")
+		log.WithField("arn", key.Arn).Info("Decryption failed")
 		return nil, fmt.Errorf("failed to decrypt sops data key with AWS KMS: %w", err)
 	}
 	log.WithField("arn", key.Arn).Info("Decryption succeeded")
@@ -309,11 +317,6 @@ func (key MasterKey) createKMSConfig() (*aws.Config, error) {
 			lo.SharedConfigProfile = key.AwsProfile
 		}
 		lo.Region = region
-
-		// Set the epResolver, if present. Used ONLY for tests.
-		if key.epResolver != nil {
-			lo.EndpointResolverWithOptions = key.epResolver
-		}
 		return nil
 	})
 	if err != nil {
@@ -324,6 +327,15 @@ func (key MasterKey) createKMSConfig() (*aws.Config, error) {
 		return key.createSTSConfig(&cfg)
 	}
 	return &cfg, nil
+}
+
+// createClient creates a new AWS KMS client with the provided config.
+func (key MasterKey) createClient(config *aws.Config) *kms.Client {
+	return kms.NewFromConfig(*config, func(o *kms.Options) {
+		if key.baseEndpoint != "" {
+			o.BaseEndpoint = aws.String(key.baseEndpoint)
+		}
+	})
 }
 
 // createSTSConfig uses AWS STS to assume a role and returns a config

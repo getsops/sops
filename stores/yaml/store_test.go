@@ -3,8 +3,9 @@ package yaml
 import (
 	"testing"
 
+	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/config"
 	"github.com/stretchr/testify/assert"
-	"go.mozilla.org/sops/v3"
 )
 
 var PLAIN = []byte(`---
@@ -24,7 +25,7 @@ key1_a: value
 var BRANCHES = sops.TreeBranches{
 	sops.TreeBranch{
 		sops.TreeItem{
-			Key:   sops.Comment{" comment 0"},
+			Key:   sops.Comment{Value: " comment 0"},
 			Value: nil,
 		},
 		sops.TreeItem{
@@ -36,7 +37,7 @@ var BRANCHES = sops.TreeBranches{
 			Value: "value",
 		},
 		sops.TreeItem{
-			Key:   sops.Comment{" ^ comment 1"},
+			Key:   sops.Comment{Value: " ^ comment 1"},
 			Value: nil,
 		},
 	},
@@ -44,6 +45,59 @@ var BRANCHES = sops.TreeBranches{
 		sops.TreeItem{
 			Key:   "key2",
 			Value: "value2",
+		},
+	},
+}
+
+var ALIASES = []byte(`---
+key1: &foo
+  - foo
+key2: *foo
+key3: &bar
+  foo: bar
+  baz: bam
+key4: *bar
+`)
+
+var ALIASES_BRANCHES = sops.TreeBranches{
+	sops.TreeBranch{
+		sops.TreeItem{
+			Key:   "key1",
+			Value: []interface{}{
+				"foo",
+			},
+		},
+		sops.TreeItem{
+			Key:   "key2",
+			Value: []interface{}{
+				"foo",
+			},
+		},
+		sops.TreeItem{
+			Key:   "key3",
+			Value: sops.TreeBranch{
+				sops.TreeItem{
+					Key:   "foo",
+					Value: "bar",
+				},
+				sops.TreeItem{
+					Key:   "baz",
+					Value: "bam",
+				},
+			},
+		},
+		sops.TreeItem{
+			Key:   "key4",
+			Value: sops.TreeBranch{
+				sops.TreeItem{
+					Key:   "foo",
+					Value: "bar",
+				},
+				sops.TreeItem{
+					Key:   "baz",
+					Value: "bam",
+				},
+			},
 		},
 	},
 }
@@ -101,10 +155,10 @@ var COMMENT_6 = []byte(`a:
 var COMMENT_6_BRANCHES = sops.TreeBranches{
 	sops.TreeBranch{
 		sops.TreeItem{
-			Key:   "a",
+			Key: "a",
 			Value: []interface{}{
 				"a",
-				sops.Comment{" I no longer get duplicated"},
+				sops.Comment{Value: " I no longer get duplicated"},
 				sops.TreeBranch{},
 			},
 		},
@@ -124,10 +178,10 @@ e:
 var COMMENT_7_BRANCHES = sops.TreeBranches{
 	sops.TreeBranch{
 		sops.TreeItem{
-			Key:   "a",
+			Key: "a",
 			Value: sops.TreeBranch{
 				sops.TreeItem{
-					Key:   "b",
+					Key: "b",
 					Value: sops.TreeBranch{
 						sops.TreeItem{
 							Key:   "c",
@@ -136,13 +190,13 @@ var COMMENT_7_BRANCHES = sops.TreeBranches{
 					},
 				},
 				sops.TreeItem{
-					Key:   sops.Comment{" comment"},
+					Key:   sops.Comment{Value: " comment"},
 					Value: nil,
 				},
 			},
 		},
 		sops.TreeItem{
-			Key:   "e",
+			Key: "e",
 			Value: []interface{}{
 				"f",
 			},
@@ -158,6 +212,32 @@ e:
     - f
 `)
 
+var INDENT_1_IN = []byte(`## Configuration for prometheus-node-exporter subchart
+##
+prometheus-node-exporter:
+  podLabels:
+    ## Add the 'node-exporter' label to be used by serviceMonitor to match standard common usage in rules and grafana dashboards
+    ##
+
+    jobLabel: node-exporter
+  extraArgs:
+    - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+)($|/)
+    - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$
+`)
+
+var INDENT_1_OUT = []byte(`## Configuration for prometheus-node-exporter subchart
+##
+prometheus-node-exporter:
+  podLabels:
+    ## Add the 'node-exporter' label to be used by serviceMonitor to match standard common usage in rules and grafana dashboards
+    ##
+    jobLabel: node-exporter
+  extraArgs:
+    - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+)($|/)
+    - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$
+`)
+
+
 func TestUnmarshalMetadataFromNonSOPSFile(t *testing.T) {
 	data := []byte(`hello: 2`)
 	_, err := (&Store{}).LoadEncryptedFile(data)
@@ -168,6 +248,12 @@ func TestLoadPlainFile(t *testing.T) {
 	branches, err := (&Store{}).LoadPlainFile(PLAIN)
 	assert.Nil(t, err)
 	assert.Equal(t, BRANCHES, branches)
+}
+
+func TestLoadAliasesPlainFile(t *testing.T) {
+	branches, err := (&Store{}).LoadPlainFile(ALIASES)
+	assert.Nil(t, err)
+	assert.Equal(t, ALIASES_BRANCHES, branches)
 }
 
 func TestComment1(t *testing.T) {
@@ -280,4 +366,18 @@ func TestComment7(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, string(COMMENT_7_OUT), string(bytes))
 	assert.Equal(t, COMMENT_7_OUT, bytes)
+}
+
+func TestIndent1(t *testing.T) {
+	// First iteration: load and store
+	branches, err := (&Store{}).LoadPlainFile(INDENT_1_IN)
+	assert.Nil(t, err)
+	bytes, err := (&Store{
+		config: config.YAMLStoreConfig{
+			Indent: 2,
+		},
+	}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, string(INDENT_1_OUT), string(bytes))
+	assert.Equal(t, INDENT_1_OUT, bytes)
 }

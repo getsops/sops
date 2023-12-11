@@ -3,7 +3,7 @@ package decrypt
 import (
 	"encoding/json"
 
-	"go.mozilla.org/sops/v3/logging"
+	"github.com/getsops/sops/v3/logging"
 
 	"github.com/sirupsen/logrus"
 )
@@ -31,7 +31,7 @@ type configuration struct {
 	AnEmptyValue string `json:"anEmptyValue"`
 }
 
-func ExampleDecryptFile() {
+func ExampleFile() {
 	var (
 		confPath string = "./example.json"
 		cfg      configuration

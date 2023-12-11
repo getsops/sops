@@ -3,8 +3,9 @@ package json
 import (
 	"testing"
 
+	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/config"
 	"github.com/stretchr/testify/assert"
-	"go.mozilla.org/sops/v3"
 )
 
 func TestDecodeJSON(t *testing.T) {
@@ -130,6 +131,21 @@ func TestDecodeNumber(t *testing.T) {
 	in := `42`
 	_, err := Store{}.treeBranchFromJSON([]byte(in))
 	assert.NotNil(t, err)
+	assert.Equal(t, "Expected JSON object start, got 42 of type float64 instead", err.Error())
+}
+
+func TestDecodeArray(t *testing.T) {
+	in := ` [42] `
+	_, err := Store{}.treeBranchFromJSON([]byte(in))
+	assert.NotNil(t, err)
+	assert.Equal(t, "Expected JSON object start, got delimiter [ instead", err.Error())
+}
+
+func TestDecodeEmpty(t *testing.T) {
+	in := ``
+	_, err := Store{}.treeBranchFromJSON([]byte(in))
+	assert.NotNil(t, err)
+	assert.Equal(t, "EOF", err.Error())
 }
 
 func TestDecodeNestedJSONObject(t *testing.T) {
@@ -297,7 +313,11 @@ func TestEncodeJSONArrayOfObjects(t *testing.T) {
 		2
 	]
 }`
-	store := Store{}
+	store := Store{
+		config: config.JSONStoreConfig{
+			Indent: -1,
+		},
+	}
 	out, err := store.EmitPlainFile(tree.Branches)
 	assert.Nil(t, err)
 	assert.Equal(t, expected, string(out))
@@ -320,8 +340,203 @@ func TestLoadJSONFormattedBinaryFile(t *testing.T) {
 	assert.Equal(t, "data", branches[0][0].Key)
 }
 
+func TestEmitBinaryFile(t *testing.T) {
+	store := BinaryStore{}
+	data, err := store.EmitPlainFile(sops.TreeBranches{
+		sops.TreeBranch{
+			sops.TreeItem{
+				Key:   "data",
+				Value: "foo",
+			},
+		},
+	})
+	assert.Nil(t, err)
+	assert.Equal(t, []byte("foo"), data)
+}
+
+func TestEmitBinaryFileWrongBranches(t *testing.T) {
+	store := BinaryStore{}
+	data, err := store.EmitPlainFile(sops.TreeBranches{
+		sops.TreeBranch{
+			sops.TreeItem{
+				Key:   "data",
+				Value: "bar",
+			},
+		},
+		sops.TreeBranch{
+			sops.TreeItem{
+				Key:   "data",
+				Value: "bar",
+			},
+		},
+	})
+	assert.Nil(t, data)
+	assert.Contains(t, err.Error(), "there must be exactly one tree branch")
+
+	data, err = store.EmitPlainFile(sops.TreeBranches{})
+	assert.Nil(t, data)
+	assert.Contains(t, err.Error(), "there must be exactly one tree branch")
+}
+
+func TestEmitBinaryFileNoData(t *testing.T) {
+	store := BinaryStore{}
+	data, err := store.EmitPlainFile(sops.TreeBranches{
+		sops.TreeBranch{
+			sops.TreeItem{
+				Key:   "foo",
+				Value: "bar",
+			},
+		},
+	})
+	assert.Nil(t, data)
+	assert.Contains(t, err.Error(), "no binary data found in tree")
+}
+
+func TestEmitBinaryFileWrongDataType(t *testing.T) {
+	store := BinaryStore{}
+	data, err := store.EmitPlainFile(sops.TreeBranches{
+		sops.TreeBranch{
+			sops.TreeItem{
+				Key: "data",
+				Value: sops.TreeItem{
+					Key:   "foo",
+					Value: "bar",
+				},
+			},
+		},
+	})
+	assert.Nil(t, data)
+	assert.Contains(t, err.Error(), "'data' key in tree does not have a string value")
+}
+
 func TestEmitValueString(t *testing.T) {
 	bytes, err := (&Store{}).EmitValue("hello")
 	assert.Nil(t, err)
 	assert.Equal(t, []byte("\"hello\""), bytes)
+}
+
+func TestIndentTwoSpaces(t *testing.T) {
+	tree := sops.Tree{
+		Branches: sops.TreeBranches{
+			sops.TreeBranch{
+				sops.TreeItem{
+					Key: "foo",
+					Value: []interface{}{
+						sops.TreeBranch{
+							sops.TreeItem{
+								Key:   "foo",
+								Value: 3,
+							},
+							sops.TreeItem{
+								Key:   "bar",
+								Value: false,
+							},
+						},
+						2,
+					},
+				},
+			},
+		},
+	}
+	expected := `{
+  "foo": [
+    {
+      "foo": 3,
+      "bar": false
+    },
+    2
+  ]
+}`
+	store := Store{
+		config: config.JSONStoreConfig{
+			Indent: 2,
+		},
+	}
+	out, err := store.EmitPlainFile(tree.Branches)
+	assert.Nil(t, err)
+	assert.Equal(t, expected, string(out))
+}
+
+func TestIndentDefault(t *testing.T) {
+	tree := sops.Tree{
+		Branches: sops.TreeBranches{
+			sops.TreeBranch{
+				sops.TreeItem{
+					Key: "foo",
+					Value: []interface{}{
+						sops.TreeBranch{
+							sops.TreeItem{
+								Key:   "foo",
+								Value: 3,
+							},
+							sops.TreeItem{
+								Key:   "bar",
+								Value: false,
+							},
+						},
+						2,
+					},
+				},
+			},
+		},
+	}
+	expected := `{
+	"foo": [
+		{
+			"foo": 3,
+			"bar": false
+		},
+		2
+	]
+}`
+	store := Store{
+		config: config.JSONStoreConfig{
+			Indent: -1,
+		},
+	}
+	out, err := store.EmitPlainFile(tree.Branches)
+	assert.Nil(t, err)
+	assert.Equal(t, expected, string(out))
+}
+
+func TestNoIndent(t *testing.T) {
+	tree := sops.Tree{
+		Branches: sops.TreeBranches{
+			sops.TreeBranch{
+				sops.TreeItem{
+					Key: "foo",
+					Value: []interface{}{
+						sops.TreeBranch{
+							sops.TreeItem{
+								Key:   "foo",
+								Value: 3,
+							},
+							sops.TreeItem{
+								Key:   "bar",
+								Value: false,
+							},
+						},
+						2,
+					},
+				},
+			},
+		},
+	}
+	expected := `{
+"foo": [
+{
+"foo": 3,
+"bar": false
+},
+2
+]
+}`
+	store := Store{
+		config: config.JSONStoreConfig{
+			Indent: 0,
+		},
+	}
+	out, err := store.EmitPlainFile(tree.Branches)
+	assert.Nil(t, err)
+	assert.Equal(t, expected, string(out))
 }

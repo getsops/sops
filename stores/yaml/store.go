@@ -1,18 +1,27 @@
-package yaml //import "go.mozilla.org/sops/v3/stores/yaml"
+package yaml //import "github.com/getsops/sops/v3/stores/yaml"
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"strings"
 
+	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/config"
+	"github.com/getsops/sops/v3/stores"
 	"gopkg.in/yaml.v3"
-	"go.mozilla.org/sops/v3"
-	"go.mozilla.org/sops/v3/stores"
 )
+
+const IndentDefault = 4
 
 // Store handles storage of YAML data
 type Store struct {
+	config config.YAMLStoreConfig
+}
+
+func NewStore(c *config.YAMLStoreConfig) *Store {
+	return &Store{config: *c}
 }
 
 func (store Store) appendCommentToList(comment string, list []interface{}) []interface{} {
@@ -76,7 +85,7 @@ func (store Store) nodeToTreeValue(node *yaml.Node, commentsWereHandled bool) (i
 		node.Decode(&result)
 		return result, nil
 	case yaml.AliasNode:
-		return store.nodeToTreeValue(node.Alias, false);
+		return store.nodeToTreeValue(node.Alias, false)
 	}
 	return nil, nil
 }
@@ -100,7 +109,7 @@ func (store Store) appendYamlNodeToTreeBranch(node *yaml.Node, branch sops.TreeB
 	case yaml.MappingNode:
 		for i := 0; i < len(node.Content); i += 2 {
 			key := node.Content[i]
-			value := node.Content[i + 1]
+			value := node.Content[i+1]
 			branch = store.appendCommentToMap(key.HeadComment, branch)
 			branch = store.appendCommentToMap(key.LineComment, branch)
 			handleValueComments := value.Kind == yaml.ScalarNode || value.Kind == yaml.AliasNode
@@ -131,6 +140,10 @@ func (store Store) appendYamlNodeToTreeBranch(node *yaml.Node, branch sops.TreeB
 		return nil, fmt.Errorf("YAML documents that are values are not supported")
 	case yaml.AliasNode:
 		branch, err = store.appendYamlNodeToTreeBranch(node.Alias, branch, false)
+		if err != nil {
+			// This should never happen since node.Alias was already successfully decoded before
+			return nil, err
+		}
 	}
 	if !commentsWereHandled {
 		branch = store.appendCommentToMap(node.FootComment, branch)
@@ -204,9 +217,9 @@ func (store *Store) appendSequence(in []interface{}, sequence *yaml.Node) {
 	}
 	if len(comments) > 0 {
 		if beginning {
-			comments = store.addCommentsHead(sequence, comments)
+			store.addCommentsHead(sequence, comments)
 		} else {
-			comments = store.addCommentsFoot(sequence.Content[len(sequence.Content) - 1], comments)
+			store.addCommentsFoot(sequence.Content[len(sequence.Content)-1], comments)
 		}
 	}
 }
@@ -231,9 +244,9 @@ func (store *Store) appendTreeBranch(branch sops.TreeBranch, mapping *yaml.Node)
 	}
 	if len(comments) > 0 {
 		if beginning {
-			comments = store.addCommentsHead(mapping, comments)
+			store.addCommentsHead(mapping, comments)
 		} else {
-			comments = store.addCommentsFoot(mapping.Content[len(mapping.Content) - 2], comments)
+			store.addCommentsFoot(mapping.Content[len(mapping.Content)-2], comments)
 		}
 	}
 }
@@ -262,7 +275,7 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	}
 	var branches sops.TreeBranches
 	d := yaml.NewDecoder(bytes.NewReader(in))
-	for true {
+	for {
 		var data yaml.Node
 		err := d.Decode(&data)
 		if err == io.EOF {
@@ -295,7 +308,7 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	var branches sops.TreeBranches
 	d := yaml.NewDecoder(bytes.NewReader(in))
-	for true {
+	for {
 		var data yaml.Node
 		err := d.Decode(&data)
 		if err == io.EOF {
@@ -314,12 +327,25 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	return branches, nil
 }
 
+func (store *Store) getIndentation() (int, error) {
+	if store.config.Indent > 0 {
+		return store.config.Indent, nil
+	} else if store.config.Indent < 0 {
+		return 0, errors.New("YAML Negative indentation not accepted")
+	}
+	return IndentDefault, nil
+}
+
 // EmitEncryptedFile returns the encrypted bytes of the yaml file corresponding to a
 // sops.Tree runtime object
 func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
-    var b bytes.Buffer
+	var b bytes.Buffer
 	e := yaml.NewEncoder(io.Writer(&b))
-	e.SetIndent(4)
+	indent, err := store.getIndentation()
+	if err != nil {
+		return nil, err
+	}
+	e.SetIndent(indent)
 	for _, branch := range in.Branches {
 		// Document root
 		var doc = yaml.Node{}
@@ -331,7 +357,7 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 		// Create copy of branch with metadata appended
 		branch = append(sops.TreeBranch(nil), branch...)
 		branch = append(branch, sops.TreeItem{
-			Key: "sops",
+			Key:   "sops",
 			Value: stores.MetadataFromInternal(in.Metadata),
 		})
 		// Marshal branch to global mapping node
@@ -349,9 +375,13 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 // EmitPlainFile returns the plaintext bytes of the yaml file corresponding to a
 // sops.TreeBranches runtime object
 func (store *Store) EmitPlainFile(branches sops.TreeBranches) ([]byte, error) {
-    var b bytes.Buffer
+	var b bytes.Buffer
 	e := yaml.NewEncoder(io.Writer(&b))
-	e.SetIndent(4)
+	indent, err := store.getIndentation()
+	if err != nil {
+		return nil, err
+	}
+	e.SetIndent(indent)
 	for _, branch := range branches {
 		// Document root
 		var doc = yaml.Node{}

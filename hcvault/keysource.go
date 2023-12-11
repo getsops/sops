@@ -18,7 +18,7 @@ import (
 	"github.com/mitchellh/go-homedir"
 	"github.com/sirupsen/logrus"
 
-	"go.mozilla.org/sops/v3/logging"
+	"github.com/getsops/sops/v3/logging"
 )
 
 func init() {
@@ -130,18 +130,18 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 
 	client, err := vaultClient(key.VaultAddress, key.token)
 	if err != nil {
-		log.WithError(err).WithField("Path", fullPath).Error("Encryption failed")
+		log.WithField("Path", fullPath).Info("Encryption failed")
 		return err
 	}
 
 	secret, err := client.Logical().Write(fullPath, encryptPayload(dataKey))
 	if err != nil {
-		log.WithError(err).WithField("Path", fullPath).Error("Encryption failed")
+		log.WithField("Path", fullPath).Info("Encryption failed")
 		return fmt.Errorf("failed to encrypt sops data key to Vault transit backend '%s': %w", fullPath, err)
 	}
 	encryptedKey, err := encryptedKeyFromSecret(secret)
 	if err != nil {
-		log.WithError(err).WithField("Path", fullPath).Error("Encryption failed")
+		log.WithField("Path", fullPath).Info("Encryption failed")
 		return fmt.Errorf("failed to encrypt sops data key to Vault transit backend '%s': %w", fullPath, err)
 	}
 
@@ -175,18 +175,18 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 
 	client, err := vaultClient(key.VaultAddress, key.token)
 	if err != nil {
-		log.WithError(err).WithField("Path", fullPath).Error("Decryption failed")
+		log.WithField("Path", fullPath).Info("Decryption failed")
 		return nil, err
 	}
 
 	secret, err := client.Logical().Write(fullPath, decryptPayload(key.EncryptedKey))
 	if err != nil {
-		log.WithError(err).WithField("Path", fullPath).Error("Decryption failed")
+		log.WithField("Path", fullPath).Info("Decryption failed")
 		return nil, fmt.Errorf("failed to decrypt sops data key from Vault transit backend '%s': %w", fullPath, err)
 	}
 	dataKey, err := dataKeyFromSecret(secret)
 	if err != nil {
-		log.WithError(err).WithField("Path", fullPath).Error("Decryption failed")
+		log.WithField("Path", fullPath).Info("Decryption failed")
 		return nil, fmt.Errorf("failed to decrypt sops data key from Vault transit backend '%s': %w", fullPath, err)
 	}
 

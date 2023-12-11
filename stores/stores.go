@@ -14,13 +14,13 @@ import (
 
 	"fmt"
 
-	"go.mozilla.org/sops/v3"
-	"go.mozilla.org/sops/v3/age"
-	"go.mozilla.org/sops/v3/azkv"
-	"go.mozilla.org/sops/v3/gcpkms"
-	"go.mozilla.org/sops/v3/hcvault"
-	"go.mozilla.org/sops/v3/kms"
-	"go.mozilla.org/sops/v3/pgp"
+	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/age"
+	"github.com/getsops/sops/v3/azkv"
+	"github.com/getsops/sops/v3/gcpkms"
+	"github.com/getsops/sops/v3/hcvault"
+	"github.com/getsops/sops/v3/kms"
+	"github.com/getsops/sops/v3/pgp"
 )
 
 // SopsFile is a struct used by the stores as a helper to unmarshal the SOPS metadata
@@ -51,6 +51,7 @@ type Metadata struct {
 	EncryptedSuffix           string      `yaml:"encrypted_suffix,omitempty" json:"encrypted_suffix,omitempty"`
 	UnencryptedRegex          string      `yaml:"unencrypted_regex,omitempty" json:"unencrypted_regex,omitempty"`
 	EncryptedRegex            string      `yaml:"encrypted_regex,omitempty" json:"encrypted_regex,omitempty"`
+	MACOnlyEncrypted          bool        `yaml:"mac_only_encrypted,omitempty" json:"mac_only_encrypted,omitempty"`
 	Version                   string      `yaml:"version" json:"version"`
 }
 
@@ -114,6 +115,7 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 	m.UnencryptedRegex = sopsMetadata.UnencryptedRegex
 	m.EncryptedRegex = sopsMetadata.EncryptedRegex
 	m.MessageAuthenticationCode = sopsMetadata.MessageAuthenticationCode
+	m.MACOnlyEncrypted = sopsMetadata.MACOnlyEncrypted
 	m.Version = sopsMetadata.Version
 	m.ShamirThreshold = sopsMetadata.ShamirThreshold
 	if len(sopsMetadata.KeyGroups) == 1 {
@@ -270,6 +272,7 @@ func (m *Metadata) ToInternal() (sops.Metadata, error) {
 		EncryptedSuffix:           m.EncryptedSuffix,
 		UnencryptedRegex:          m.UnencryptedRegex,
 		EncryptedRegex:            m.EncryptedRegex,
+		MACOnlyEncrypted:          m.MACOnlyEncrypted,
 		LastModified:              lastModified,
 	}, nil
 }

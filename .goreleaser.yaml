@@ -1,0 +1,370 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+
+project_name: sops
+
+# xref: https://goreleaser.com/customization/hooks/
+before:
+  hooks:
+    - go mod download
+
+# xref: https://goreleaser.com/customization/env/
+env:
+  - CGO_ENABLED=0
+  - PKG=github.com/getsops/sops/v3/version
+  - COSIGN_YES=true
+
+# xref: https://goreleaser.com/customization/reportsizes/
+report_sizes: true
+
+# xref: https://goreleaser.com/customization/build/
+builds:
+  - id: binary-linux
+    main: ./cmd/sops
+    binary: "{{ .ProjectName }}"
+    flags:
+      - -trimpath
+      - -mod=readonly
+    ldflags:
+      - >
+        -s -w
+        -X "{{ .Env.PKG }}.Version={{ .Version }}"
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    # Modified timestamp on the binary, set to ensure reproducible builds.
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+  - id: binary-darwin
+    main: ./cmd/sops
+    binary: "{{ .ProjectName }}"
+    flags:
+      - -trimpath
+      - -mod=readonly
+    ldflags:
+      - >
+        -s -w
+        -X {{ .Env.PKG }}.Version={{ .Version }}
+    goos:
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    # Modified timestamp on the binary, set to ensure reproducible builds.
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+  - id: binary-windows
+    main: ./cmd/sops
+    binary: "{{ .ProjectName }}"
+    flags:
+      - -trimpath
+      - -buildmode=pie
+      - -mod=readonly
+    ldflags:
+      - >
+        -s -w
+        -X {{ .Env.PKG }}.Version={{ .Version }}
+    goos:
+      - windows
+    goarch:
+      - amd64
+    # Modified timestamp on the binary, set to ensure reproducible builds.
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+# xref: https://goreleaser.com/customization/universalbinaries/
+universal_binaries:
+  - id: binary-darwin-universal
+    ids:
+      - binary-darwin
+    name_template: '{{ .ProjectName }}'
+    # We want to continue to ship individual binaries for darwin/amd64 and
+    # darwin/arm64.
+    replace: false
+    # Modified timestamp on the binary, set to ensure reproducible builds.
+    # NB: Available in GoReleaser >=1.20.0.
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+# xref: https://goreleaser.com/customization/nfpm/
+nfpms:
+  - id: deb
+    package_name: '{{ .ProjectName }}'
+    file_name_template: '{{ .ConventionalFileName }}'
+    vendor: CNCF SOPS
+    homepage: https://github.com/{{ .Env.GITHUB_REPOSITORY }}
+    maintainer: SOPS maintainers <cncf-SOPS-maintainers@lists.cncf.io>
+    description: Simple and flexible tool for managing secrets
+    license: MPL-2.0
+    formats:
+      - deb
+      - rpm
+
+# xref: https://goreleaser.com/customization/snapshots/
+snapshot:
+  name_template: "{{ incpatch .Version }}-dev-{{ .ShortCommit }}"
+
+# xref: https://goreleaser.com/customization/archive/#disable-archiving
+archives:
+  - id: archive-unix
+    format: binary
+    builds:
+      - binary-linux
+      - binary-darwin
+    # NB: specifically crafted to ensure compatibility with release artifacts < v3.8.0.
+    name_template: '{{ .ProjectName }}-v{{ .Version }}.{{ .Os }}.{{ .Arch }}'
+
+  - id: archive-windows
+    format: binary
+    builds:
+      - binary-windows
+    # NB: specifically crafted to ensure compatibility with release artifacts < v3.8.0.
+    name_template: '{{ .ProjectName }}-v{{ .Version }}'
+
+  - id: archive-darwin-universal
+    format: binary
+    builds:
+      - binary-darwin-universal
+    # NB: specifically crafted to ensure compatibility with release artifacts < v3.8.0.
+    # We can't bundle this with the other unix archive, because .Arch becomes "all".
+    # Before v3.8.0, this used to be _just_ the AMD64 binary.
+    name_template: '{{ .ProjectName }}-v{{ .Version }}.darwin'
+
+# xref: https://goreleaser.com/customization/checksum/
+checksum:
+  name_template: "{{ .ProjectName }}-v{{ .Version }}.checksums.txt"
+  algorithm: sha256
+  ids:
+    - archive-unix
+    - archive-windows
+    - archive-darwin-universal
+
+# xref: https://goreleaser.com/customization/sbom/
+sboms:
+  - id: binary-sbom
+    artifacts: binary
+    documents:
+      - "{{ .ArtifactName }}.spdx.sbom.json"
+
+# xref: https://goreleaser.com/customization/sign/
+signs:
+  - cmd: cosign
+    artifacts: checksum
+    signature: '{{ trimsuffix .Env.artifact ".txt" }}.sig'
+    certificate: '{{ trimsuffix .Env.artifact ".txt" }}.pem'
+    args:
+      - "sign-blob"
+      - "--output-signature"
+      - "${signature}"
+      - "--output-certificate"
+      - "${certificate}"
+      - "${artifact}"
+    output: true
+
+# xref: https://goreleaser.com/customization/docker/
+dockers:
+  - image_templates:
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-amd64'
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-amd64'
+    use: buildx
+    goos: linux
+    goarch: amd64
+    ids:
+      - binary-linux
+    dockerfile: .release/Dockerfile
+    build_flag_templates:
+      - "--pull"
+      - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.source={{ .GitURL }}"
+
+  - image_templates:
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-arm64'
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-arm64'
+    use: buildx
+    goos: linux
+    goarch: arm64
+    ids:
+      - binary-linux
+    dockerfile: .release/Dockerfile
+    build_flag_templates:
+      - "--pull"
+      - "--platform=linux/arm64"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.source={{ .GitURL }}"
+
+  - image_templates:
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-alpine-amd64'
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-alpine-amd64'
+    use: buildx
+    goos: linux
+    goarch: amd64
+    ids:
+      - binary-linux
+    dockerfile: .release/alpine.Dockerfile
+    build_flag_templates:
+      - "--pull"
+      - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.source={{ .GitURL }}"
+
+  - image_templates:
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-alpine-arm64'
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-alpine-arm64'
+    use: buildx
+    goos: linux
+    goarch: arm64
+    ids:
+      - binary-linux
+    dockerfile: .release/alpine.Dockerfile
+    build_flag_templates:
+      - "--pull"
+      - "--platform=linux/arm64"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.source={{ .GitURL }}"
+
+# xref: https://goreleaser.com/customization/docker_manifest/
+docker_manifests:
+  - name_template: 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}'
+    image_templates:
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-amd64'
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-arm64'
+
+  - name_template: 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-alpine'
+    image_templates:
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-alpine-amd64'
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-alpine-arm64'
+
+  - name_template: 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}'
+    image_templates:
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-amd64'
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-arm64'
+
+  - name_template: 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-alpine'
+    image_templates:
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-alpine-amd64'
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-alpine-arm64'
+
+# xref: https://goreleaser.com/customization/docker_sign/
+docker_signs:
+  - cmd: cosign
+    artifacts: all
+    output: true
+    args:
+      - "sign"
+      - "${artifact}@${digest}"
+
+# xref: https://goreleaser.com/customization/changelog/
+changelog:
+  # xref: https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes#configuration-options
+  # xref: https://docs.github.com/en/free-pro-team@latest/rest/releases/releases?apiVersion=2022-11-28#generate-release-notes-content-for-a-release
+  use: github-native
+
+# xref: https://goreleaser.com/customization/release/
+release:
+  prerelease: auto
+  header: |
+    ## Installation
+
+    To install `{{ .ProjectName }}`, download one of the pre-built binaries provided for your platform from the artifacts attached to this release.
+
+    For instance, if you are using Linux on an AMD64 architecture:
+
+    ```shell
+    # Download the binary
+    curl -LO https://github.com/{{ .Env.GITHUB_REPOSITORY }}/releases/download/{{ .Tag }}/{{ .ProjectName }}-v{{ .Version }}.linux.amd64
+
+    # Move the binary in to your PATH
+    mv {{ .ProjectName }}-v{{ .Version }}.linux.amd64 /usr/local/bin/{{ .ProjectName }}
+
+    # Make the binary executable
+    chmod +x /usr/local/bin/{{ .ProjectName }}
+    ```
+
+    ### Verify checksums file signature
+
+    The checksums file provided within the artifacts attached to this release is signed using [Cosign](https://docs.sigstore.dev/cosign/overview/) with GitHub OIDC. To validate the signature of this file, run the following commands:
+
+    ```shell
+    # Download the checksums file, certificate and signature
+    curl -LO https://github.com/{{ .Env.GITHUB_REPOSITORY }}/releases/download/{{ .Tag }}/{{ .ProjectName }}-v{{ .Version }}.checksums.txt
+    curl -LO https://github.com/{{ .Env.GITHUB_REPOSITORY }}/releases/download/{{ .Tag }}/{{ .ProjectName }}-v{{ .Version }}.checksums.pem
+    curl -LO https://github.com/{{ .Env.GITHUB_REPOSITORY }}/releases/download/{{ .Tag }}/{{ .ProjectName }}-v{{ .Version }}.checksums.sig
+
+    # Verify the checksums file
+    cosign verify-blob {{ .ProjectName }}-v{{ .Version }}.checksums.txt \
+      --certificate {{ .ProjectName }}-v{{ .Version }}.checksums.pem \
+      --signature {{ .ProjectName }}-v{{ .Version }}.checksums.sig \
+      --certificate-identity-regexp=https://github.com/{{ .Env.GITHUB_REPOSITORY_OWNER }} \
+      --certificate-oidc-issuer=https://token.actions.githubusercontent.com
+    ```
+
+    ### Verify binary integrity
+
+    To verify the integrity of the downloaded binary, you can utilize the checksums file after having validated its signature:
+
+    ```shell
+    # Verify the binary using the checksums file
+    sha256sum -c {{ .ProjectName }}-v{{ .Version }}.checksums.txt --ignore-missing
+    ```
+
+    ### Verify artifact provenance
+
+    The [SLSA provenance](https://slsa.dev/provenance/v0.2) of the binaries, packages, and SBOMs can be found within the artifacts associated with this release. It is presented through an [in-toto](https://in-toto.io/) link metadata file named `sops-v{{ .Version }}.intoto.jsonl`. To verify the provenance of an artifact, you can utilize the [`slsa-verifier`](https://github.com/slsa-framework/slsa-verifier#artifacts) tool:
+
+    ```shell
+    # Download the metadata file
+    curl -LO  https://github.com/{{ .Env.GITHUB_REPOSITORY }}/releases/download/{{ .Tag }}/sops-v{{ .Version }}.intoto.jsonl
+
+    # Verify the provenance of the artifact
+    slsa-verifier verify-artifact <artifact> \
+      --provenance-path sops-v{{ .Version }}.intoto.jsonl \
+      --source-uri github.com/{{ .Env.GITHUB_REPOSITORY }} \
+      --source-tag {{ .Tag }}
+    ```
+
+    ## Container Images
+    
+    The `{{ .ProjectName }}` binaries are also available as container images, based on Debian (slim) and Alpine Linux. The Debian-based container images include any dependencies which may be required to make use of certain key services, such as GnuPG, AWS KMS, Azure Key Vault, and Google Cloud KMS. The Alpine-based container images are smaller in size, but do not include these dependencies.
+
+    These container images are available for the following architectures: `linux/amd64` and `linux/arm64`.
+
+    ### GitHub Container Registry
+
+    - `ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}`
+    - `ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-alpine`
+
+    ### Quay.io
+
+    - `quay.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}`
+    - `quay.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-alpine`
+
+    ### Verify container image signature
+
+    The container images are signed using [Cosign](https://docs.sigstore.dev/cosign/overview/) with GitHub OIDC. To validate the signature of an image, run the following command:
+
+    ```shell
+    cosign verify ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }} \
+      --certificate-identity-regexp=https://github.com/{{ .Env.GITHUB_REPOSITORY_OWNER }} \
+      --certificate-oidc-issuer=https://token.actions.githubusercontent.com \
+      -o text
+    ```
+
+    ### Verify container image provenance
+
+    The container images include [SLSA provenance](https://slsa.dev/provenance/v0.2) attestations. For more information around the verification of this, please refer to the [`slsa-verifier` documentation](https://github.com/slsa-framework/slsa-verifier#containers).
+
+    ## Software Bill of Materials
+
+    The Software Bill of Materials (SBOM) for each binary is accessible within the artifacts enclosed with this release. It is presented as an [SPDX](https://spdx.dev/) JSON file, formatted as `<binary>.spdx.sbom.json`.

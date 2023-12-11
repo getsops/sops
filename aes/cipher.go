@@ -1,7 +1,7 @@
 /*
 Package aes defines a Cipher that uses 256-bit AES-GCM authenticated encryption to encrypt values the SOPS tree.
 */
-package aes //import "go.mozilla.org/sops/v3/aes"
+package aes //import "github.com/getsops/sops/v3/aes"
 
 import (
 	cryptoaes "crypto/aes"
@@ -11,11 +11,10 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
-	"strings"
 
+	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/logging"
 	"github.com/sirupsen/logrus"
-	"go.mozilla.org/sops/v3"
-	"go.mozilla.org/sops/v3/logging"
 )
 
 var log *logrus.Logger
@@ -172,7 +171,11 @@ func (c Cipher) Encrypt(plaintext interface{}, key []byte, additionalData string
 	case bool:
 		encryptedType = "bool"
 		// The Python version encodes booleans with Titlecase
-		plainBytes = []byte(strings.Title(strconv.FormatBool(value)))
+		if value {
+			plainBytes = []byte("True")
+		} else {
+			plainBytes = []byte("False")
+		}
 	case sops.Comment:
 		encryptedType = "comment"
 		plainBytes = []byte(value.Value)

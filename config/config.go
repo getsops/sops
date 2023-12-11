@@ -1,27 +1,26 @@
 /*
 Package config provides a way to find and load SOPS configuration files
 */
-package config //import "go.mozilla.org/sops/v3/config"
+package config //import "github.com/getsops/sops/v3/config"
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
 	"regexp"
 	"strings"
 
+	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/age"
+	"github.com/getsops/sops/v3/azkv"
+	"github.com/getsops/sops/v3/gcpkms"
+	"github.com/getsops/sops/v3/hcvault"
+	"github.com/getsops/sops/v3/kms"
+	"github.com/getsops/sops/v3/logging"
+	"github.com/getsops/sops/v3/pgp"
+	"github.com/getsops/sops/v3/publish"
 	"github.com/sirupsen/logrus"
-	"go.mozilla.org/sops/v3"
-	"go.mozilla.org/sops/v3/age"
-	"go.mozilla.org/sops/v3/azkv"
-	"go.mozilla.org/sops/v3/gcpkms"
-	"go.mozilla.org/sops/v3/hcvault"
-	"go.mozilla.org/sops/v3/kms"
-	"go.mozilla.org/sops/v3/logging"
-	"go.mozilla.org/sops/v3/pgp"
-	"go.mozilla.org/sops/v3/publish"
 	"gopkg.in/yaml.v3"
 )
 
@@ -64,9 +63,34 @@ func FindConfigFile(start string) (string, error) {
 	return "", fmt.Errorf("Config file not found")
 }
 
+type DotenvStoreConfig struct{}
+
+type INIStoreConfig struct{}
+
+type JSONStoreConfig struct {
+	Indent int `yaml:"indent"`
+}
+
+type JSONBinaryStoreConfig struct {
+	Indent int `yaml:"indent"`
+}
+
+type YAMLStoreConfig struct {
+	Indent int `yaml:"indent"`
+}
+
+type StoresConfig struct {
+	Dotenv     DotenvStoreConfig     `yaml:"dotenv"`
+	INI        INIStoreConfig        `yaml:"ini"`
+	JSONBinary JSONBinaryStoreConfig `yaml:"json_binary"`
+	JSON       JSONStoreConfig       `yaml:"json"`
+	YAML       YAMLStoreConfig       `yaml:"yaml"`
+}
+
 type configFile struct {
 	CreationRules    []creationRule    `yaml:"creation_rules"`
 	DestinationRules []destinationRule `yaml:"destination_rules"`
+	Stores           StoresConfig      `yaml:"stores"`
 }
 
 type keyGroup struct {
@@ -126,6 +150,14 @@ type creationRule struct {
 	EncryptedSuffix   string     `yaml:"encrypted_suffix"`
 	UnencryptedRegex  string     `yaml:"unencrypted_regex"`
 	EncryptedRegex    string     `yaml:"encrypted_regex"`
+	MACOnlyEncrypted  bool       `yaml:"mac_only_encrypted"`
+}
+
+func NewStoresConfig() *StoresConfig {
+	storesConfig := &StoresConfig{}
+	storesConfig.JSON.Indent = -1
+	storesConfig.JSONBinary.Indent = -1
+	return storesConfig
 }
 
 // Load loads a sops config file into a temporary struct
@@ -145,6 +177,7 @@ type Config struct {
 	EncryptedSuffix   string
 	UnencryptedRegex  string
 	EncryptedRegex    string
+	MACOnlyEncrypted  bool
 	Destination       publish.Destination
 	OmitExtensions    bool
 }
@@ -167,7 +200,7 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 				keyGroup = append(keyGroup, pgp.NewMasterKeyFromFingerprint(k))
 			}
 			for _, k := range group.KMS {
-				keyGroup = append(keyGroup, kms.NewMasterKey(k.Arn, k.Role, k.Context))
+				keyGroup = append(keyGroup, kms.NewMasterKeyWithProfile(k.Arn, k.Role, k.Context, k.AwsProfile))
 			}
 			for _, k := range group.GCPKMS {
 				keyGroup = append(keyGroup, gcpkms.NewMasterKeyFromResourceID(k.ResourceID))
@@ -225,11 +258,12 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 }
 
 func loadConfigFile(confPath string) (*configFile, error) {
-	confBytes, err := ioutil.ReadFile(confPath)
+	confBytes, err := os.ReadFile(confPath)
 	if err != nil {
 		return nil, fmt.Errorf("could not read config file: %s", err)
 	}
 	conf := &configFile{}
+	conf.Stores = *NewStoresConfig()
 	err = conf.load(confBytes)
 	if err != nil {
 		return nil, fmt.Errorf("error loading config: %s", err)
@@ -245,12 +279,15 @@ func configFromRule(rule *creationRule, kmsEncryptionContext map[string]*string)
 	if rule.EncryptedSuffix != "" {
 		cryptRuleCount++
 	}
+	if rule.UnencryptedRegex != "" {
+		cryptRuleCount++
+	}
 	if rule.EncryptedRegex != "" {
 		cryptRuleCount++
 	}
 
 	if cryptRuleCount > 1 {
-		return nil, fmt.Errorf("error loading config: cannot use more than one of encrypted_suffix, unencrypted_suffix, or encrypted_regex for the same rule")
+		return nil, fmt.Errorf("error loading config: cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex, or unencrypted_regex for the same rule")
 	}
 
 	groups, err := getKeyGroupsFromCreationRule(rule, kmsEncryptionContext)
@@ -265,6 +302,7 @@ func configFromRule(rule *creationRule, kmsEncryptionContext map[string]*string)
 		EncryptedSuffix:   rule.EncryptedSuffix,
 		UnencryptedRegex:  rule.UnencryptedRegex,
 		EncryptedRegex:    rule.EncryptedRegex,
+		MACOnlyEncrypted:  rule.MACOnlyEncrypted,
 	}, nil
 }
 
@@ -334,7 +372,7 @@ func parseCreationRuleForFile(conf *configFile, confPath, filePath string, kmsEn
 	}
 
 	// compare file path relative to path of config file
-	filePath = strings.TrimPrefix(filePath, configDir + string(filepath.Separator))
+	filePath = strings.TrimPrefix(filePath, configDir+string(filepath.Separator))
 
 	var rule *creationRule
 
@@ -385,4 +423,12 @@ func LoadDestinationRuleForFile(confPath string, filePath string, kmsEncryptionC
 		return nil, err
 	}
 	return parseDestinationRuleForFile(conf, filePath, kmsEncryptionContext)
+}
+
+func LoadStoresConfig(confPath string) (*StoresConfig, error) {
+	conf, err := loadConfigFile(confPath)
+	if err != nil {
+		return nil, err
+	}
+	return &conf.Stores, nil
 }

@@ -2,114 +2,121 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-PROJECT		:= go.mozilla.org/sops/v3
-GO 		:= GOPROXY=https://proxy.golang.org go
-GOLINT 		:= golint
+PROJECT             := github.com/getsops/sops/v3
+PROJECT_DIR         := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))
+BIN_DIR             := $(PROJECT_DIR)/bin
 
+GO                  := GOPROXY=https://proxy.golang.org go
+GO_TEST_FLAGS       ?= -race -coverprofile=profile.out -covermode=atomic
+
+GITHUB_REPOSITORY   ?= github.com/getsops/sops
+
+STATICCHECK         := $(BIN_DIR)/staticcheck
+STATICCHECK_VERSION := latest
+
+SYFT                := $(BIN_DIR)/syft
+SYFT_VERSION        ?= v0.87.0
+
+GORELEASER          := $(BIN_DIR)/goreleaser
+GORELEASER_VERSION  ?= v1.20.0
+
+RSTCHECK            := $(shell command -v rstcheck)
+MARKDOWNLINT        := $(shell command -v mdl)
+
+export PATH := $(BIN_DIR):$(PATH)
+
+.PHONY: all
 all: test vet generate install functional-tests
+
+.PHONY: origin-build
 origin-build: test vet generate install functional-tests-all
 
+.PHONY: install
 install:
-	$(GO) install go.mozilla.org/sops/v3/cmd/sops
+	$(GO) install github.com/getsops/sops/v3/cmd/sops
 
-tag: all
-	git tag -s $(TAGVER) -a -m "$(TAGMSG)"
+.PHONY: staticcheck
+staticcheck: install-staticcheck
+	$(STATICCHECK) ./...
 
-lint:
-	$(GOLINT) $(PROJECT)
-
+.PHONY: vendor
 vendor:
 	$(GO) mod tidy
 	$(GO) mod vendor
 
+.PHONY: vet
 vet:
-	$(GO) vet $(PROJECT)
+	$(GO) vet ./...
 
+
+.PHONY: checkdocs
+checkdocs: checkrst checkmd
+
+.PHONY: checkrst
+RST_FILES=$(shell find . -name '*.rst' | grep -v /vendor/ | sort)
+checkrst: $(RST_FILES)
+	@if [ "$(RSTCHECK)" == "" ]; then echo "Need rstcheck to lint RST files. Install rstcheck from your system package repository or from PyPI (https://pypi.org/project/rstcheck/)."; exit 1; fi
+	$(RSTCHECK) --report-level warning $^
+
+.PHONY: checkmd
+MD_FILES=$(shell find . -name '*.md' | grep -v /vendor/ | sort)
+checkmd: $(MD_FILES)
+	@if [ "$(MARKDOWNLINT)" == "" ]; then echo "Need markdownlint to lint RST files. Install markdownlint from your system package repository or from https://github.com/markdownlint/markdownlint."; exit 1; fi
+	$(MARKDOWNLINT) $^
+
+.PHONY: test
 test: vendor
 	gpg --import pgp/sops_functional_tests_key.asc 2>&1 1>/dev/null || exit 0
-	./test.sh
+	$(GO) test $(GO_TEST_FLAGS) ./...
 
+.PHONY: showcoverage
 showcoverage: test
-	$(GO) tool cover -html=coverage.out
+	$(GO) tool cover -html=profile.out
 
+.PHONY: generate
 generate: keyservice/keyservice.pb.go
 	$(GO) generate
 
 %.pb.go: %.proto
 	protoc --go_out=plugins=grpc:. $<
 
+.PHONY: functional-tests
 functional-tests:
-	$(GO) build -o functional-tests/sops go.mozilla.org/sops/v3/cmd/sops
+	$(GO) build -o functional-tests/sops github.com/getsops/sops/v3/cmd/sops
 	cd functional-tests && cargo test
 
-# Ignored tests are ones that require external services (e.g. AWS KMS)
-# 	TODO: Once `--include-ignored` lands in rust stable, switch to that.
+.PHONY: functional-tests-all
 functional-tests-all:
-	$(GO) build -o functional-tests/sops go.mozilla.org/sops/v3/cmd/sops
+	$(GO) build -o functional-tests/sops github.com/getsops/sops/v3/cmd/sops
+	# Ignored tests are ones that require external services (e.g. AWS KMS)
+	# 	TODO: Once `--include-ignored` lands in rust stable, switch to that.
 	cd functional-tests && cargo test && cargo test -- --ignored
 
-# Creates variables during target re-definition. Basically this block allows the particular variables to be used in the final target
-build-deb-%: OS = $(word 1,$(subst -, ,$*))
-build-deb-%: ARCH = $(word 2,$(subst -, ,$*))
-build-deb-%: FPM_ARCH = $(word 3,$(subst -, ,$*))
-# Poor-mans function with parameters being split out from the variable part of it's name
-build-deb-%:
-	rm -rf tmppkg
-	mkdir -p tmppkg/usr/local/bin
-	GOOS=$(OS) GOARCH="$(ARCH)" CGO_ENABLED=0 go build -mod vendor -o tmppkg/usr/local/bin/sops go.mozilla.org/sops/v3/cmd/sops
-	fpm -C tmppkg -n sops --license MPL2.0 --vendor mozilla \
-		--description "Sops is an editor of encrypted files that supports YAML, JSON and BINARY formats and encrypts with AWS KMS and PGP." \
-		-m "AJ Bahnken <ajvb+sops@mozilla.com>" \
-		--url https://go.mozilla.org/sops \
-		--architecture $(FPM_ARCH) \
-		-v "$$(grep '^const Version' version/version.go |cut -d \" -f 2)" \
-		-s dir -t deb .
+.PHONY: release-snapshot
+release-snapshot: install-goreleaser install-syft
+	GITHUB_REPOSITORY=$(GITHUB_REPOSITORY) $(GORELEASER) release --clean --snapshot --skip-sign
 
-# Create .deb packages for multiple architectures
-deb-pkg: vendor build-deb-linux-amd64-x86_64 build-deb-linux-arm64-arm64
+.PHONY: clean
+clean:
+	rm -rf $(BIN_DIR) profile.out functional-tests/sops
 
-# Creates variables during target re-definition. Basically this block allows the particular variables to be used in the final target
-build-rpm-%: OS = $(word 1,$(subst -, ,$*))
-build-rpm-%: ARCH = $(word 2,$(subst -, ,$*))
-build-rpm-%: FPM_ARCH = $(word 3,$(subst -, ,$*))
-# Poor-mans function with parameters being split out from the variable part of it's name
-build-rpm-%:
-	rm -rf tmppkg
-	mkdir -p tmppkg/usr/local/bin
-	GOOS=$(OS) GOARCH="$(ARCH)" CGO_ENABLED=0 go build -mod vendor -o tmppkg/usr/local/bin/sops go.mozilla.org/sops/v3/cmd/sops
-	fpm -C tmppkg -n sops --license MPL2.0 --vendor mozilla \
-		--description "Sops is an editor of encrypted files that supports YAML, JSON and BINARY formats and encrypts with AWS KMS and PGP." \
-		-m "AJ Bahnken <ajvb+sops@mozilla.com>" \
-		--url https://go.mozilla.org/sops \
-		--architecture $(FPM_ARCH) \
-		--rpm-os $(OS) \
-		-v "$$(grep '^const Version' version/version.go |cut -d \" -f 2)" \
-		-s dir -t rpm .
+.PHONY: install-staticcheck
+install-staticcheck:
+	$(call go-install-tool,$(STATICCHECK),honnef.co/go/tools/cmd/staticcheck@$(STATICCHECK_VERSION),$(STATICCHECK_VERSION))
 
-# Create .rpm packages for multiple architectures
-rpm-pkg: vendor build-rpm-linux-amd64-x86_64 build-rpm-linux-arm64-arm64
+.PHONY: install-goreleaser
+install-goreleaser:
+	$(call go-install-tool,$(GORELEASER),github.com/goreleaser/goreleaser@$(GORELEASER_VERSION),$(GORELEASER_VERSION))
 
-dmg-pkg: install
-ifneq ($(OS),darwin)
-		echo 'you must be on MacOS and set OS=darwin on the make command line to build an OSX package'
-else
-	rm -rf tmppkg
-	mkdir -p tmppkg/usr/local/bin
-	cp $$GOPATH/bin/sops tmppkg/usr/local/bin/
-	fpm -C tmppkg -n sops --license MPL2.0 --vendor mozilla \
-		--description "Sops is an editor of encrypted files that supports YAML, JSON and BINARY formats and encrypts with AWS KMS and PGP." \
-		-m "Mozilla Security <security@mozilla.org>" \
-		--url https://go.mozilla.org/sops \
-		--architecture x86_64 \
-		-v "$$(grep '^const Version' version/version.go |cut -d \" -f 2)" \
-		-s dir -t osxpkg \
-		--osxpkg-identifier-prefix org.mozilla.sops \
-		-p tmppkg/sops-$$(git describe --abbrev=0 --tags).pkg .
-	hdiutil makehybrid -hfs -hfs-volume-name "Mozilla Sops" \
-		-o tmppkg/sops-$$(git describe --abbrev=0 --tags).dmg tmpdmg
-endif
+.PHONY: install-syft
+install-syft:
+	$(call go-install-tool,$(SYFT),github.com/anchore/syft/cmd/syft@$(SYFT_VERSION),$(SYFT_VERSION))
 
-download-index:
-	bash make_download_page.sh
-
-.PHONY: all test generate clean vendor functional-tests
+# go-install-tool will 'go install' any package $2 and install it to $1.
+define go-install-tool
+@[ -f $(1)-$(3) ] || { \
+set -e ;\
+GOBIN=$$(dirname $(1)) go install $(2) ;\
+touch $(1)-$(3) ;\
+}
+endef

@@ -1,5 +1,6 @@
-target
+bin/
+dist/
+functional-tests/sops
 Cargo.lock
 vendor/
-coverage.txt
 profile.out

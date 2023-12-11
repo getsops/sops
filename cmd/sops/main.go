@@ -1,6 +1,7 @@
-package main //import "go.mozilla.org/sops/v3/cmd/sops"
+package main //import "github.com/getsops/sops/v3/cmd/sops"
 
 import (
+	"context"
 	encodingjson "encoding/json"
 	"fmt"
 	"net"
@@ -11,34 +12,34 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
-	"time"
 
+	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/aes"
+	"github.com/getsops/sops/v3/age"
+	_ "github.com/getsops/sops/v3/audit"
+	"github.com/getsops/sops/v3/azkv"
+	"github.com/getsops/sops/v3/cmd/sops/codes"
+	"github.com/getsops/sops/v3/cmd/sops/common"
+	"github.com/getsops/sops/v3/cmd/sops/subcommand/exec"
+	"github.com/getsops/sops/v3/cmd/sops/subcommand/groups"
+	keyservicecmd "github.com/getsops/sops/v3/cmd/sops/subcommand/keyservice"
+	publishcmd "github.com/getsops/sops/v3/cmd/sops/subcommand/publish"
+	"github.com/getsops/sops/v3/cmd/sops/subcommand/updatekeys"
+	"github.com/getsops/sops/v3/config"
+	"github.com/getsops/sops/v3/gcpkms"
+	"github.com/getsops/sops/v3/hcvault"
+	"github.com/getsops/sops/v3/keys"
+	"github.com/getsops/sops/v3/keyservice"
+	"github.com/getsops/sops/v3/kms"
+	"github.com/getsops/sops/v3/logging"
+	"github.com/getsops/sops/v3/pgp"
+	"github.com/getsops/sops/v3/stores/dotenv"
+	"github.com/getsops/sops/v3/stores/json"
+	"github.com/getsops/sops/v3/version"
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
-	"go.mozilla.org/sops/v3"
-	"go.mozilla.org/sops/v3/aes"
-	"go.mozilla.org/sops/v3/age"
-	_ "go.mozilla.org/sops/v3/audit"
-	"go.mozilla.org/sops/v3/azkv"
-	"go.mozilla.org/sops/v3/cmd/sops/codes"
-	"go.mozilla.org/sops/v3/cmd/sops/common"
-	"go.mozilla.org/sops/v3/cmd/sops/subcommand/exec"
-	"go.mozilla.org/sops/v3/cmd/sops/subcommand/groups"
-	keyservicecmd "go.mozilla.org/sops/v3/cmd/sops/subcommand/keyservice"
-	publishcmd "go.mozilla.org/sops/v3/cmd/sops/subcommand/publish"
-	"go.mozilla.org/sops/v3/cmd/sops/subcommand/updatekeys"
-	"go.mozilla.org/sops/v3/config"
-	"go.mozilla.org/sops/v3/gcpkms"
-	"go.mozilla.org/sops/v3/hcvault"
-	"go.mozilla.org/sops/v3/keys"
-	"go.mozilla.org/sops/v3/keyservice"
-	"go.mozilla.org/sops/v3/kms"
-	"go.mozilla.org/sops/v3/logging"
-	"go.mozilla.org/sops/v3/pgp"
-	"go.mozilla.org/sops/v3/stores/dotenv"
-	"go.mozilla.org/sops/v3/stores/json"
-	"go.mozilla.org/sops/v3/version"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 var log *logrus.Logger
@@ -285,14 +286,14 @@ func main() {
 				path := c.Args()[0]
 				info, err := os.Stat(path)
 				if err != nil {
-					return err
+					return toExitError(err)
 				}
 				if info.IsDir() && !c.Bool("recursive") {
 					return fmt.Errorf("can't operate on a directory without --recursive flag.")
 				}
 				err = filepath.Walk(path, func(subPath string, info os.FileInfo, err error) error {
 					if err != nil {
-						return err
+						return toExitError(err)
 					}
 					if !info.IsDir() {
 						err = publishcmd.Run(publishcmd.Opts{
@@ -315,7 +316,7 @@ func main() {
 					return nil
 				})
 				if err != nil {
-					return err
+					return toExitError(err)
 				}
 				return nil
 			},
@@ -393,7 +394,7 @@ func main() {
 						},
 						cli.StringSliceFlag{
 							Name:  "hc-vault-transit",
-							Usage: "the full vault path to the key used to encrypt/decrypt. Make you choose and configure a key with encrption/decryption enabled (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev'). Can be specified more than once",
+							Usage: "the full vault path to the key used to encrypt/decrypt. Make you choose and configure a key with encryption/decryption enabled (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev'). Can be specified more than once",
 						},
 						cli.StringSliceFlag{
 							Name:  "age",
@@ -671,6 +672,10 @@ func main() {
 			Name:  "ignore-mac",
 			Usage: "ignore Message Authentication Code during decryption",
 		},
+		cli.BoolFlag{
+			Name:  "mac-only-encrypted",
+			Usage: "compute MAC only over values which end up encrypted",
+		},
 		cli.StringFlag{
 			Name:  "unencrypted-suffix",
 			Usage: "override the unencrypted key suffix.",
@@ -681,11 +686,11 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:  "unencrypted-regex",
-			Usage: "set the unencrypted key suffix. When specified, only keys matching the regex will be left unencrypted.",
+			Usage: "set the unencrypted key regex. When specified, only keys matching the regex will be left unencrypted.",
 		},
 		cli.StringFlag{
 			Name:  "encrypted-regex",
-			Usage: "set the encrypted key suffix. When specified, only keys matching the regex will be encrypted.",
+			Usage: "set the encrypted key regex. When specified, only keys matching the regex will be encrypted.",
 		},
 		cli.StringFlag{
 			Name:  "config",
@@ -702,6 +707,10 @@ func main() {
 		cli.IntFlag{
 			Name:  "shamir-secret-sharing-threshold",
 			Usage: "the number of master keys required to retrieve the data key with shamir",
+		},
+		cli.IntFlag{
+			Name:  "indent",
+			Usage: "the number of spaces to indent YAML or JSON encoded file for encryption",
 		},
 		cli.BoolFlag{
 			Name:  "verbose",
@@ -741,6 +750,7 @@ func main() {
 		encryptedSuffix := c.String("encrypted-suffix")
 		encryptedRegex := c.String("encrypted-regex")
 		unencryptedRegex := c.String("unencrypted-regex")
+		macOnlyEncrypted := c.Bool("mac-only-encrypted")
 		conf, err := loadConfig(c, fileName, nil)
 		if err != nil {
 			return toExitError(err)
@@ -758,6 +768,9 @@ func main() {
 			}
 			if unencryptedRegex == "" {
 				unencryptedRegex = conf.UnencryptedRegex
+			}
+			if !macOnlyEncrypted {
+				macOnlyEncrypted = conf.MACOnlyEncrypted
 			}
 		}
 
@@ -809,6 +822,7 @@ func main() {
 				EncryptedSuffix:   encryptedSuffix,
 				UnencryptedRegex:  unencryptedRegex,
 				EncryptedRegex:    encryptedRegex,
+				MACOnlyEncrypted:  macOnlyEncrypted,
 				KeyServices:       svcs,
 				KeyGroups:         groups,
 				GroupThreshold:    threshold,
@@ -845,21 +859,21 @@ func main() {
 			}
 			azureKeys, err := azkv.MasterKeysFromURLs(c.String("add-azure-kv"))
 			if err != nil {
-				return err
+				return toExitError(err)
 			}
 			for _, k := range azureKeys {
 				addMasterKeys = append(addMasterKeys, k)
 			}
 			hcVaultKeys, err := hcvault.NewMasterKeysFromURIs(c.String("add-hc-vault-transit"))
 			if err != nil {
-				return err
+				return toExitError(err)
 			}
 			for _, k := range hcVaultKeys {
 				addMasterKeys = append(addMasterKeys, k)
 			}
 			ageKeys, err := age.MasterKeysFromRecipients(c.String("add-age"))
 			if err != nil {
-				return err
+				return toExitError(err)
 			}
 			for _, k := range ageKeys {
 				addMasterKeys = append(addMasterKeys, k)
@@ -877,21 +891,21 @@ func main() {
 			}
 			azureKeys, err = azkv.MasterKeysFromURLs(c.String("rm-azure-kv"))
 			if err != nil {
-				return err
+				return toExitError(err)
 			}
 			for _, k := range azureKeys {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
 			hcVaultKeys, err = hcvault.NewMasterKeysFromURIs(c.String("rm-hc-vault-transit"))
 			if err != nil {
-				return err
+				return toExitError(err)
 			}
 			for _, k := range hcVaultKeys {
 				rmMasterKeys = append(rmMasterKeys, k)
 			}
 			ageKeys, err = age.MasterKeysFromRecipients(c.String("rm-age"))
 			if err != nil {
-				return err
+				return toExitError(err)
 			}
 			for _, k := range ageKeys {
 				rmMasterKeys = append(rmMasterKeys, k)
@@ -907,6 +921,11 @@ func main() {
 				AddMasterKeys:    addMasterKeys,
 				RemoveMasterKeys: rmMasterKeys,
 			})
+			// While this check is also done below, the `err` in this scope shadows
+			// the `err` in the outer scope
+			if err != nil {
+				return toExitError(err)
+			}
 		}
 
 		if c.String("set") != "" {
@@ -961,6 +980,7 @@ func main() {
 					EncryptedSuffix:   encryptedSuffix,
 					UnencryptedRegex:  unencryptedRegex,
 					EncryptedRegex:    encryptedRegex,
+					MACOnlyEncrypted:  macOnlyEncrypted,
 					KeyGroups:         groups,
 					GroupThreshold:    threshold,
 				})
@@ -1033,10 +1053,12 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 			addr = url.Path
 		}
 		opts := []grpc.DialOption{
-			grpc.WithInsecure(),
-			grpc.WithDialer(func(addr string, timeout time.Duration) (net.Conn, error) {
-				return net.DialTimeout(url.Scheme, addr, timeout)
-			}),
+			grpc.WithTransportCredentials(insecure.NewCredentials()),
+			grpc.WithContextDialer(
+				func(ctx context.Context, addr string) (net.Conn, error) {
+					return (&net.Dialer{}).DialContext(ctx, url.Scheme, addr)
+				},
+			),
 		}
 		log.WithField(
 			"address",
@@ -1051,12 +1073,32 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 	return
 }
 
+func loadStoresConfig(context *cli.Context, path string) (*config.StoresConfig, error) {
+	var configPath string
+	if context.String("config") != "" {
+		configPath = context.String("config")
+	} else {
+		// Ignore config not found errors returned from FindConfigFile since the config file is not mandatory
+		configPath, _ = config.FindConfigFile(".")
+	}
+	return config.LoadStoresConfig(configPath)
+}
+
 func inputStore(context *cli.Context, path string) common.Store {
-	return common.DefaultStoreForPathOrFormat(path, context.String("input-type"))
+	storesConf, _ := loadStoresConfig(context, path)
+	return common.DefaultStoreForPathOrFormat(storesConf, path, context.String("input-type"))
 }
 
 func outputStore(context *cli.Context, path string) common.Store {
-	return common.DefaultStoreForPathOrFormat(path, context.String("output-type"))
+	storesConf, _ := loadStoresConfig(context, path)
+	if context.IsSet("indent") {
+		indent := context.Int("indent")
+		storesConf.YAML.Indent = indent
+		storesConf.JSON.Indent = indent
+		storesConf.JSONBinary.Indent = indent
+	}
+
+	return common.DefaultStoreForPathOrFormat(storesConf, path, context.String("output-type"))
 }
 
 func parseTreePath(arg string) ([]interface{}, error) {
@@ -1235,6 +1277,11 @@ func extractSetArguments(set string) (path []interface{}, valueToInsert interfac
 	fullPath := strings.TrimRight(pathValuePair[0], " ")
 	jsonValue := pathValuePair[1]
 	valueToInsert, err = jsonValueToTreeInsertableValue(jsonValue)
+	if err != nil {
+		// All errors returned by jsonValueToTreeInsertableValue are created by common.NewExitError(),
+		// so we can simply pass them on
+		return nil, nil, err
+	}
 
 	path, err = parseTreePath(fullPath)
 	if err != nil {

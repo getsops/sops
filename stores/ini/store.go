@@ -1,4 +1,4 @@
-package ini //import "go.mozilla.org/sops/v3/stores/ini"
+package ini //import "github.com/getsops/sops/v3/stores/ini"
 
 import (
 	"bytes"
@@ -8,13 +8,19 @@ import (
 	"strconv"
 	"strings"
 
-	"go.mozilla.org/sops/v3"
-	"go.mozilla.org/sops/v3/stores"
+	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/config"
+	"github.com/getsops/sops/v3/stores"
 	"gopkg.in/ini.v1"
 )
 
 // Store handles storage of ini data.
 type Store struct {
+	config *config.INIStoreConfig
+}
+
+func NewStore(c *config.INIStoreConfig) *Store {
+	return &Store{config: c}
 }
 
 func (store Store) encodeTree(branches sops.TreeBranches) ([]byte, error) {

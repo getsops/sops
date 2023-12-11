@@ -1,6 +1,84 @@
 Changelog
 =========
 
+3.8.1
+-----
+Improvements:
+
+* Improve handling of errors when binary store handles bad data (#1289)
+* On macOS, prefer ``XDG_CONFIG_HOME`` over os.UserConfigDir() (#1291)
+* Dependency updates (#1306, #1319, #1325)
+* pgp: better error reporting for missing GPG binary during import of keys (#1286)
+* Fix descriptions of unencrypted-regex and encrypted-regex flags, and ensure unencrypted_regex is considered in config validation (#1300)
+* stores/json: improve error messages when parsing invalid JSON (#1307)
+
+Bug fixes:
+
+* pgp: improve handling of GnuPG home dir (#1298)
+* Do not crash if an empty YAML file is encrypted (#1290)
+* Handling of various ignored errors (#1304, #1311)
+* pgp: do not require abs path for ``SOPS_GPG_EXEC`` (#1309)
+* Report key rotation errors (#1317)
+* Ensure wrapping of errors in main package (#1318)
+
+Project changes:
+
+* Enrich AWS authentication documentation (#1272)
+* Add linting for RST and MD files (#1287)
+* Delete SOPS encrypted file we don't have keys for (#1288)
+* CI dependency updates (#1295, #1301)
+* pgp: make error the last return value (#1310)
+* Improve documentation files (#1320)
+
+3.8.0
+-----
+Features:
+
+* Support ``--version`` without network requests using ``--disable-version-check`` (#1115)
+* Support ``--input-type`` for updatekeys command (#1116)
+
+Improvements:
+
+* pgp: modernize and improve, and add tests (#1054, #1282)
+* azkv: update SDK to latest, add tests, tidy (#1067, #1092, #1256)
+* age: improve identity loading, add tests, tidy (#1064)
+* kms: AWS SDK V2, allow creds config, add tests (#1065, #1257)
+* gcpkms: update SDK to latest, add tests, tidy (#1072, #1255)
+* hcvault: update API, add tests, tidy (#1085)
+* Do not report version when upstream ``--version`` check fails (#1124)
+* Use GitHub endpoints in ``--version`` command (#1261)
+* Close temporary file before invoking editor to widen support on Windows (#1265)
+* Update dependencies (#1063, #1091, #1147, #1242, #1260, #1264, #1275, #1280, #1283)
+* Deal with various deprecations of dependencies (#1113, #1262)
+
+Bug fixes:
+
+* Ensure YAML comments are not displaced (#1069)
+* Ensure default Google credentials can be used again after introduction of ``GOOGLE_CREDENTIALS`` (#1249)
+* Avoid duplicate logging of errors in some key sources (#1146, #1281)
+* Using ``--set`` on a root level key does no longer truncate existing values (#899)
+* Ensure stable order of SOPS parameters in dotenv file (#1101)
+
+Project changes:
+
+* Update Go to 1.20 (#1148)
+* Update rustc functional tests to v1.70.0 (#1234)
+* Remove remaining CircleCI workflow (#1237)
+* Run CLI workflow on main (#1243)
+* Delete obsolete ``validation/`` artifact (#1248)
+* Rename Go module to ``github.com/getsops/sops/v3`` (#1247)
+* Revamp release automation, including (Cosign) signed container images and checksums file, SLSA3 provenance and SBOMs (#1250)
+* Update various bits of documentation (#1244)
+* Add missing ``--encrypt`` flag from Vault example (#1060)
+* Add documentation on how to use age in ``.sops.yaml`` (#1192)
+* Improve Make targets and address various issues (#1258)
+* Ensure clean working tree in CI (#1267)
+* Fix CHANGELOG.rst formatting (#1269)
+* Pin GitHub Actions to full length commit SHA and add CodeQL (#1276)
+* Enable Dependabot for Docker, GitHub Actions and Go Mod (#1277)
+* Generate versioned ``.intoto.jsonl`` (#1278)
+* Update CI dependencies (#1279)
+
 3.7.3
 -----
 Changes:
@@ -8,7 +86,7 @@ Changes:
 * Upgrade dependencies (#1024, #1045)
 * Build alpine container in CI (#1018, #1032, #1025)
 * keyservice: accept KeyServiceServer in LocalClient (#1035)
-* Add support for GCP Service Account within `GOOGLE_CREDENTIALS` (#953)
+* Add support for GCP Service Account within ``GOOGLE_CREDENTIALS`` (#953)
 
 Bug fixes:
 
@@ -81,8 +159,8 @@ Bug fixes:
 Features:
 
 * Support for encrypting data through the use of Hashicorp Vault (#655)
-* `sops publish` now supports `--recursive` flag for publishing all files in a directory (#602)
-* `sops publish` now supports `--omit-extensions` flag for omitting the extension in the destination path (#602)
+* ``sops publish`` now supports ``--recursive`` flag for publishing all files in a directory (#602)
+* ``sops publish`` now supports ``--omit-extensions`` flag for omitting the extension in the destination path (#602)
 * sops now supports JSON arrays of arrays (#642)
 
 Improvements:
@@ -92,9 +170,9 @@ Improvements:
 
 Bug fixes:
 
-* AWS SDK usage now correctly resolves the `~/.aws/config` file (#680)
-* `sops updatekeys` now correctly matches config rules (#682)
-* `sops updatekeys` now correctly uses the config path cli flag (#672)
+* AWS SDK usage now correctly resolves the ``~/.aws/config`` file (#680)
+* ``sops updatekeys`` now correctly matches config rules (#682)
+* ``sops updatekeys`` now correctly uses the config path cli flag (#672)
 * Partially empty sops config files don't break the use of sops anymore (#662)
 * Fix possible infinite loop in PGP's passphrase prompt call (#690)
 
@@ -111,35 +189,35 @@ Project changes:
 -----
 Features:
 
-* `sops exec-env` and `sops exec-file`, two new commands for utilizing sops secrets within a temporary file or env vars
+* ``sops exec-env`` and ``sops exec-file``, two new commands for utilizing sops secrets within a temporary file or env vars
 
 Bug fixes:
 
 * Sanitize AWS STS session name, as sops creates it based off of the machines hostname
-* Fix for `decrypt.Data` to support `.ini` files
+* Fix for ``decrypt.Data`` to support ``.ini`` files
 * Various package fixes related to switching to Go Modules
 * Fixes for Vault-related tests running locally and in CI.
 
 Project changes:
 
-* Change to proper use of go modules, changing to primary module name to `go.mozilla.org/sops/v3`
-* Change tags to requiring a `v` prefix.
-* Add documentation for `sops updatekeys` command
+* Change to proper use of go modules, changing to primary module name to ``go.mozilla.org/sops/v3``
+* Change tags to requiring a ``v`` prefix.
+* Add documentation for ``sops updatekeys`` command
 
 3.4.0
 -----
 Features:
 
-* `sops publish`, a new command for publishing sops encrypted secrets to S3, GCS, or Hashicorp Vault
+* ``sops publish``, a new command for publishing sops encrypted secrets to S3, GCS, or Hashicorp Vault
 * Support for multiple Azure authentication mechanisms
 * Azure Keyvault support to the sops config file
-* `encrypted_regex` option to the sops config file
+* ``encrypted_regex`` option to the sops config file
 
 Bug fixes:
 
 * Return non-zero exit code for invalid CLI flags
 * Broken path handling for sops editing on Windows
-* `go lint/fmt` violations
+* ``go lint/fmt`` violations
 * Check for pgp fingerprint before slicing it
 
 Project changes:
@@ -157,12 +235,12 @@ Bug fixes:
 
 * Make sure the pgp key fingerprint is longer than 16 characters before
   slicing it. (#463)
-* Allow for `--set` value to be a string. (#461)
+* Allow for ``--set`` value to be a string. (#461)
 
 Project changes:
 
-* Using `develop` as a staging branch to create releases off of. What
-  is in `master` is now the current stable release.
+* Using ``develop`` as a staging branch to create releases off of. What
+  is in ``master`` is now the current stable release.
 * Upgrade to using Go 1.12 to build sops
 * Updated all vendored packages
 
@@ -270,11 +348,11 @@ Project infrastructure changes:
 -----
 
 * Shamir secret sharing scheme support allows SOPS to require multiple master
-  keys to access a data key and decrypt a file. See `sops groups -help` and the
+  keys to access a data key and decrypt a file. See ``sops groups -help`` and the
   documentation in README.
 
 * Keyservice to forward access to a local master key on a socket, similar to
-  gpg-agent. See `sops keyservice --help` and the documentation in README.
+  gpg-agent. See ``sops keyservice --help`` and the documentation in README.
 
 * Encrypt comments by default
 

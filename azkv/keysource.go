@@ -1,9 +1,9 @@
 /*
-Package azkv contains an implementation of the go.mozilla.org/sops/v3/keys.MasterKey
+Package azkv contains an implementation of the github.com/getsops/sops/v3/keys.MasterKey
 interface that encrypts and decrypts the data key using Azure Key Vault with the
 Azure Key Vault Keys client module for Go.
 */
-package azkv // import "go.mozilla.org/sops/v3/azkv"
+package azkv // import "github.com/getsops/sops/v3/azkv"
 
 import (
 	"context"
@@ -16,10 +16,10 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
-	"github.com/Azure/azure-sdk-for-go/sdk/keyvault/azkeys"
+	"github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys"
 	"github.com/sirupsen/logrus"
 
-	"go.mozilla.org/sops/v3/logging"
+	"github.com/getsops/sops/v3/logging"
 )
 
 var (
@@ -117,22 +117,22 @@ func (t TokenCredential) ApplyToMasterKey(key *MasterKey) {
 func (key *MasterKey) Encrypt(dataKey []byte) error {
 	token, err := key.getTokenCredential()
 	if err != nil {
-		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Error("Encryption failed")
+		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Encryption failed")
 		return fmt.Errorf("failed to get Azure token credential to encrypt data: %w", err)
 	}
 
 	c, err := azkeys.NewClient(key.VaultURL, token, nil)
 	if err != nil {
-		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Error("Encryption failed")
+		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Encryption failed")
 		return fmt.Errorf("failed to construct Azure Key Vault client to encrypt data: %w", err)
 	}
 
-	resp, err := c.Encrypt(context.Background(), key.Name, key.Version, azkeys.KeyOperationsParameters{
-		Algorithm: to.Ptr(azkeys.JSONWebKeyEncryptionAlgorithmRSAOAEP256),
+	resp, err := c.Encrypt(context.Background(), key.Name, key.Version, azkeys.KeyOperationParameters{
+		Algorithm: to.Ptr(azkeys.EncryptionAlgorithmRSAOAEP256),
 		Value:     dataKey,
 	}, nil)
 	if err != nil {
-		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Error("Encryption failed")
+		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Encryption failed")
 		return fmt.Errorf("failed to encrypt sops data key with Azure Key Vault key '%s': %w", key.ToString(), err)
 	}
 
@@ -166,28 +166,28 @@ func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 func (key *MasterKey) Decrypt() ([]byte, error) {
 	token, err := key.getTokenCredential()
 	if err != nil {
-		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Error("Decryption failed")
+		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Decryption failed")
 		return nil, fmt.Errorf("failed to get Azure token credential to decrypt: %w", err)
 	}
 
 	rawEncryptedKey, err := base64.RawURLEncoding.DecodeString(key.EncryptedKey)
 	if err != nil {
-		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Error("Decryption failed")
+		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Decryption failed")
 		return nil, fmt.Errorf("failed to base64 decode Azure Key Vault encrypted key: %w", err)
 	}
 
 	c, err := azkeys.NewClient(key.VaultURL, token, nil)
 	if err != nil {
-		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Error("Decryption failed")
+		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Decryption failed")
 		return nil, fmt.Errorf("failed to construct Azure Key Vault client to decrypt data: %w", err)
 	}
 
-	resp, err := c.Decrypt(context.Background(), key.Name, key.Version, azkeys.KeyOperationsParameters{
-		Algorithm: to.Ptr(azkeys.JSONWebKeyEncryptionAlgorithmRSAOAEP256),
+	resp, err := c.Decrypt(context.Background(), key.Name, key.Version, azkeys.KeyOperationParameters{
+		Algorithm: to.Ptr(azkeys.EncryptionAlgorithmRSAOAEP256),
 		Value:     rawEncryptedKey,
 	}, nil)
 	if err != nil {
-		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Error("Decryption failed")
+		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Decryption failed")
 		return nil, fmt.Errorf("failed to decrypt sops data key with Azure Key Vault key '%s': %w", key.ToString(), err)
 	}
 	log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Decryption succeeded")

@@ -2,26 +2,26 @@ package common
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"time"
 
 	"github.com/fatih/color"
-	wordwrap "github.com/mitchellh/go-wordwrap"
+	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/cmd/sops/codes"
+	. "github.com/getsops/sops/v3/cmd/sops/formats"
+	"github.com/getsops/sops/v3/config"
+	"github.com/getsops/sops/v3/keys"
+	"github.com/getsops/sops/v3/keyservice"
+	"github.com/getsops/sops/v3/kms"
+	"github.com/getsops/sops/v3/stores/dotenv"
+	"github.com/getsops/sops/v3/stores/ini"
+	"github.com/getsops/sops/v3/stores/json"
+	"github.com/getsops/sops/v3/stores/yaml"
+	"github.com/getsops/sops/v3/version"
+	"github.com/mitchellh/go-wordwrap"
 	"github.com/urfave/cli"
-	"go.mozilla.org/sops/v3"
-	"go.mozilla.org/sops/v3/cmd/sops/codes"
-	. "go.mozilla.org/sops/v3/cmd/sops/formats"
-	"go.mozilla.org/sops/v3/keys"
-	"go.mozilla.org/sops/v3/keyservice"
-	"go.mozilla.org/sops/v3/kms"
-	"go.mozilla.org/sops/v3/stores/dotenv"
-	"go.mozilla.org/sops/v3/stores/ini"
-	"go.mozilla.org/sops/v3/stores/json"
-	"go.mozilla.org/sops/v3/stores/yaml"
-	"go.mozilla.org/sops/v3/version"
-	"golang.org/x/crypto/ssh/terminal"
+	"golang.org/x/term"
 )
 
 // ExampleFileEmitter emits example files. This is used by the `sops` binary
@@ -36,26 +36,26 @@ type Store interface {
 	ExampleFileEmitter
 }
 
-type storeConstructor = func() Store
+type storeConstructor = func(*config.StoresConfig) Store
 
-func newBinaryStore() Store {
-	return &json.BinaryStore{}
+func newBinaryStore(c *config.StoresConfig) Store {
+	return json.NewBinaryStore(&c.JSONBinary)
 }
 
-func newDotenvStore() Store {
-	return &dotenv.Store{}
+func newDotenvStore(c *config.StoresConfig) Store {
+	return dotenv.NewStore(&c.Dotenv)
 }
 
-func newIniStore() Store {
-	return &ini.Store{}
+func newIniStore(c *config.StoresConfig) Store {
+	return ini.NewStore(&c.INI)
 }
 
-func newJsonStore() Store {
-	return &json.Store{}
+func newJsonStore(c *config.StoresConfig) Store {
+	return json.NewStore(&c.JSON)
 }
 
-func newYamlStore() Store {
-	return &yaml.Store{}
+func newYamlStore(c *config.StoresConfig) Store {
+	return yaml.NewStore(&c.YAML)
 }
 
 var storeConstructors = map[Format]storeConstructor{
@@ -90,6 +90,9 @@ func DecryptTree(opts DecryptTreeOpts) (dataKey []byte, err error) {
 	}
 	fileMac, err := opts.Cipher.Decrypt(opts.Tree.Metadata.MessageAuthenticationCode, dataKey, opts.Tree.Metadata.LastModified.Format(time.RFC3339))
 	if !opts.IgnoreMac {
+		if err != nil {
+			return nil, NewExitError(fmt.Sprintf("Cannot decrypt MAC: %s", err), codes.MacMismatch)
+		}
 		if fileMac != computedMac {
 			// If the file has an empty MAC, display "no MAC" instead of not displaying anything
 			if fileMac == "" {
@@ -127,7 +130,7 @@ func EncryptTree(opts EncryptTreeOpts) error {
 
 // LoadEncryptedFile loads an encrypted SOPS file, returning a SOPS tree
 func LoadEncryptedFile(loader sops.EncryptedFileLoader, inputPath string) (*sops.Tree, error) {
-	fileBytes, err := ioutil.ReadFile(inputPath)
+	fileBytes, err := os.ReadFile(inputPath)
 	if err != nil {
 		return nil, NewExitError(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
 	}
@@ -151,27 +154,27 @@ func NewExitError(i interface{}, exitCode int) *cli.ExitError {
 
 // StoreForFormat returns the correct format-specific implementation
 // of the Store interface given the format.
-func StoreForFormat(format Format) Store {
+func StoreForFormat(format Format, c *config.StoresConfig) Store {
 	storeConst, found := storeConstructors[format]
 	if !found {
 		storeConst = storeConstructors[Binary] // default
 	}
-	return storeConst()
+	return storeConst(c)
 }
 
 // DefaultStoreForPath returns the correct format-specific implementation
 // of the Store interface given the path to a file
-func DefaultStoreForPath(path string) Store {
+func DefaultStoreForPath(c *config.StoresConfig, path string) Store {
 	format := FormatForPath(path)
-	return StoreForFormat(format)
+	return StoreForFormat(format, c)
 }
 
 // DefaultStoreForPathOrFormat returns the correct format-specific implementation
 // of the Store interface given the formatString if specified, or the path to a file.
 // This is to support the cli, where both are provided.
-func DefaultStoreForPathOrFormat(path, format string) Store {
+func DefaultStoreForPathOrFormat(c *config.StoresConfig, path string, format string) Store {
 	formatFmt := FormatForPathOrString(path, format)
-	return StoreForFormat(formatFmt)
+	return StoreForFormat(formatFmt, c)
 }
 
 // KMS_ENC_CTX_BUG_FIXED_VERSION represents the SOPS version in which the
@@ -262,7 +265,7 @@ func FixAWSKMSEncryptionContextBug(opts GenericDecryptOpts, tree *sops.Tree) (*s
 
 	persistFix := false
 
-	if terminal.IsTerminal(int(os.Stdout.Fd())) {
+	if term.IsTerminal(int(os.Stdout.Fd())) {
 		var response string
 		for response != "y" && response != "n" {
 			fmt.Println("Would you like sops to automatically fix this issue? (y/n): ")
@@ -319,10 +322,10 @@ func FixAWSKMSEncryptionContextBug(opts GenericDecryptOpts, tree *sops.Tree) (*s
 	}
 
 	file, err := os.Create(opts.InputPath)
-	defer file.Close()
 	if err != nil {
 		return nil, NewExitError(fmt.Sprintf("Could not open file for writing: %s", err), codes.CouldNotWriteOutputFile)
 	}
+	defer file.Close()
 	_, err = file.Write(encryptedFile)
 	if err != nil {
 		return nil, err

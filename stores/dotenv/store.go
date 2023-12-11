@@ -1,13 +1,15 @@
-package dotenv //import "go.mozilla.org/sops/v3/stores/dotenv"
+package dotenv //import "github.com/getsops/sops/v3/stores/dotenv"
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"sort"
 	"strings"
 
-	"go.mozilla.org/sops/v3"
-	"go.mozilla.org/sops/v3/stores"
+	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/config"
+	"github.com/getsops/sops/v3/stores"
 )
 
 // SopsPrefix is the prefix for all metadatada entry keys
@@ -15,6 +17,11 @@ const SopsPrefix = "sops_"
 
 // Store handles storage of dotenv data
 type Store struct {
+	config config.DotenvStoreConfig
+}
+
+func NewStore(c *config.DotenvStoreConfig) *Store {
+	return &Store{config: *c}
 }
 
 // LoadEncryptedFile loads an encrypted file's bytes onto a sops.Tree runtime object
@@ -71,7 +78,7 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 		}
 		if line[0] == '#' {
 			branch = append(branch, sops.TreeItem{
-				Key:   sops.Comment{string(line[1:])},
+				Key:   sops.Comment{Value: string(line[1:])},
 				Value: nil,
 			})
 		} else {
@@ -98,7 +105,14 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	for key, value := range mdItems {
+	var keys []string
+	for k := range mdItems {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	for _, key := range keys {
+		var value = mdItems[key]
 		if value == nil {
 			continue
 		}

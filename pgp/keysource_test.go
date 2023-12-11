@@ -56,18 +56,35 @@ func TestGnuPGHome_Import(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NoError(t, gnuPGHome.Import(b))
 
-	err, _, stderr := gpgExec(gnuPGHome.String(), []string{"--list-keys", mockFingerprint}, nil)
+	_, stderr, err := gpgExec(gnuPGHome.String(), []string{"--list-keys", mockFingerprint}, nil)
 	assert.NoErrorf(t, err, stderr.String())
 
 	b, err = os.ReadFile(mockPrivateKey)
 	assert.NoError(t, err)
 	assert.NoError(t, gnuPGHome.Import(b))
 
-	err, _, stderr = gpgExec(gnuPGHome.String(), []string{"--list-secret-keys", mockFingerprint}, nil)
+	_, stderr, err = gpgExec(gnuPGHome.String(), []string{"--list-secret-keys", mockFingerprint}, nil)
 	assert.NoErrorf(t, err, stderr.String())
 
-	assert.Error(t, gnuPGHome.Import([]byte("invalid armored data")))
+	err = gnuPGHome.Import([]byte("invalid armored data"))
+	assert.Error(t, err)
+	assert.ErrorContains(t, err, "(exit status 2): gpg: no valid OpenPGP data found.\ngpg: Total number processed: 0")
 	assert.Error(t, GnuPGHome("").Import(b))
+}
+
+func TestGnuPGHome_Import_With_Missing_Binary(t *testing.T) {
+	t.Setenv(SopsGpgExecEnv, "/does/not/exist")
+
+	gnuPGHome, err := NewGnuPGHome()
+	assert.NoError(t, err)
+	t.Cleanup(func() {
+		_ = os.RemoveAll(gnuPGHome.String())
+	})
+
+	b, err := os.ReadFile(mockPublicKey)
+	assert.NoError(t, err)
+	err = gnuPGHome.Import(b)
+	assert.ErrorContains(t, err, "failed to import armored key data into GnuPG keyring: fork/exec /does/not/exist: no such file or directory")
 }
 
 func TestGnuPGHome_ImportFile(t *testing.T) {
@@ -112,8 +129,11 @@ func TestGnuPGHome_Validate(t *testing.T) {
 	})
 
 	t.Run("wrong permissions", func(t *testing.T) {
-		// Is created with 0755
 		tmpDir := t.TempDir()
+
+		err := os.Chmod(tmpDir, 0o755)
+		assert.NoError(t, err)
+
 		assert.Error(t, GnuPGHome(tmpDir).Validate())
 	})
 
@@ -146,12 +166,6 @@ func TestGnuPGHome_ApplyToMasterKey(t *testing.T) {
 	gnuPGHome = "/non/existing/absolute/path/fails/validate"
 	gnuPGHome.ApplyToMasterKey(key)
 	assert.NotEqual(t, gnuPGHome.String(), key.gnuPGHomeDir)
-}
-
-func TestDisableAgent_ApplyToMasterKey(t *testing.T) {
-	key := NewMasterKeyFromFingerprint(mockFingerprint)
-	DisableAgent{}.ApplyToMasterKey(key)
-	assert.True(t, key.disableAgent)
 }
 
 func TestDisableOpenPGP_ApplyToMasterKey(t *testing.T) {
@@ -277,7 +291,7 @@ func TestMasterKey_encryptWithGnuPG(t *testing.T) {
 		args := []string{
 			"-d",
 		}
-		err, stdout, stderr := gpgExec(key.gnuPGHome(), args, strings.NewReader(key.EncryptedKey))
+		stdout, stderr, err := gpgExec(key.gnuPGHomeDir, args, strings.NewReader(key.EncryptedKey))
 		assert.NoError(t, err, stderr.String())
 		assert.Equal(t, data, stdout.Bytes())
 	})
@@ -327,7 +341,7 @@ func TestMasterKey_Decrypt(t *testing.T) {
 	fingerprint := shortenFingerprint(mockFingerprint)
 
 	data := []byte("this data is absolutely top secret")
-	err, stdout, stderr := gpgExec(gnuPGHome.String(), []string{
+	stdout, stderr, err := gpgExec(gnuPGHome.String(), []string{
 		"--no-default-recipient",
 		"--yes",
 		"--encrypt",
@@ -338,6 +352,7 @@ func TestMasterKey_Decrypt(t *testing.T) {
 		fingerprint,
 		"--no-encrypt-to",
 	}, bytes.NewReader(data))
+	assert.Nil(t, err)
 	assert.NoErrorf(t, gnuPGHome.ImportFile(mockPrivateKey), stderr.String())
 
 	encryptedData := stdout.String()
@@ -409,7 +424,7 @@ func TestMasterKey_decryptWithOpenPGP(t *testing.T) {
 		fingerprint := shortenFingerprint(mockFingerprint)
 
 		data := []byte("this data is absolutely top secret")
-		err, stdout, stderr := gpgExec(gnuPGHome.String(), []string{
+		stdout, stderr, err := gpgExec(gnuPGHome.String(), []string{
 			"--no-default-recipient",
 			"--yes",
 			"--encrypt",
@@ -420,6 +435,7 @@ func TestMasterKey_decryptWithOpenPGP(t *testing.T) {
 			fingerprint,
 			"--no-encrypt-to",
 		}, bytes.NewReader(data))
+		assert.Nil(t, err)
 		assert.NoErrorf(t, gnuPGHome.ImportFile(mockPrivateKey), stderr.String())
 
 		encryptedData := stdout.String()
@@ -457,7 +473,7 @@ func TestMasterKey_decryptWithGnuPG(t *testing.T) {
 		fingerprint := shortenFingerprint(mockFingerprint)
 
 		data := []byte("this data is absolutely top secret")
-		err, stdout, stderr := gpgExec(gnuPGHome.String(), []string{
+		stdout, stderr, err := gpgExec(gnuPGHome.String(), []string{
 			"--no-default-recipient",
 			"--yes",
 			"--encrypt",
@@ -468,6 +484,7 @@ func TestMasterKey_decryptWithGnuPG(t *testing.T) {
 			fingerprint,
 			"--no-encrypt-to",
 		}, bytes.NewReader(data))
+		assert.Nil(t, err)
 		assert.NoErrorf(t, gnuPGHome.ImportFile(mockPrivateKey), stderr.String())
 
 		encryptedData := stdout.String()
@@ -533,24 +550,6 @@ func TestMasterKey_ToMap(t *testing.T) {
 		"created_at": key.CreationDate.UTC().Format(time.RFC3339),
 		"enc":        key.EncryptedKey,
 	}, key.ToMap())
-}
-
-func TestMasterKey_gnuPGHome(t *testing.T) {
-	key := &MasterKey{}
-
-	usr, err := user.Current()
-	if err == nil {
-		assert.Equal(t, filepath.Join(usr.HomeDir, ".gnupg"), key.gnuPGHome())
-	} else {
-		assert.Equal(t, filepath.Join(os.Getenv("HOME"), ".gnupg"), key.gnuPGHome())
-	}
-
-	gnupgHome := "/overwrite/home"
-	t.Setenv("GNUPGHOME", gnupgHome)
-	assert.Equal(t, gnupgHome, key.gnuPGHome())
-
-	key.gnuPGHomeDir = "/home/dir/overwrite"
-	assert.Equal(t, key.gnuPGHomeDir, key.gnuPGHome())
 }
 
 func TestMasterKey_retrievePubKey(t *testing.T) {
@@ -675,6 +674,26 @@ func Test_gpgBinary(t *testing.T) {
 	overwrite := "/some/other/gpg"
 	t.Setenv(SopsGpgExecEnv, overwrite)
 	assert.Equal(t, overwrite, gpgBinary())
+
+	overwrite = "not_abs_path"
+	t.Setenv(SopsGpgExecEnv, overwrite)
+	assert.Equal(t, overwrite, gpgBinary())
+}
+
+func Test_gnuPGHome(t *testing.T) {
+	usr, err := user.Current()
+	if err == nil {
+		assert.Equal(t, filepath.Join(usr.HomeDir, ".gnupg"), gnuPGHome(""))
+	} else {
+		assert.Equal(t, filepath.Join(os.Getenv("HOME"), ".gnupg"), gnuPGHome(""))
+	}
+
+	gnupgHome := "/overwrite/home"
+	t.Setenv("GNUPGHOME", gnupgHome)
+	assert.Equal(t, gnupgHome, gnuPGHome(""))
+
+	customP := "/home/dir/overwrite"
+	assert.Equal(t, customP, gnuPGHome(customP))
 }
 
 func Test_shortenFingerprint(t *testing.T) {
@@ -689,7 +708,7 @@ func Test_shortenFingerprint(t *testing.T) {
 func TestPGP(t *testing.T) {
 	key := NewMasterKeyFromFingerprint("FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4")
 	f := func(x []byte) bool {
-		if x == nil || len(x) == 0 {
+		if len(x) == 0 {
 			return true
 		}
 		if err := key.Encrypt(x); err != nil {

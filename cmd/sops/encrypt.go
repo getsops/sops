@@ -1,17 +1,16 @@
 package main
 
 import (
-	"io/ioutil"
+	"fmt"
+	"os"
 	"path/filepath"
 
-	"fmt"
-
-	wordwrap "github.com/mitchellh/go-wordwrap"
-	"go.mozilla.org/sops/v3"
-	"go.mozilla.org/sops/v3/cmd/sops/codes"
-	"go.mozilla.org/sops/v3/cmd/sops/common"
-	"go.mozilla.org/sops/v3/keyservice"
-	"go.mozilla.org/sops/v3/version"
+	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/cmd/sops/codes"
+	"github.com/getsops/sops/v3/cmd/sops/common"
+	"github.com/getsops/sops/v3/keyservice"
+	"github.com/getsops/sops/v3/version"
+	"github.com/mitchellh/go-wordwrap"
 )
 
 type encryptOpts struct {
@@ -24,6 +23,7 @@ type encryptOpts struct {
 	EncryptedSuffix   string
 	UnencryptedRegex  string
 	EncryptedRegex    string
+	MACOnlyEncrypted  bool
 	KeyGroups         []sops.KeyGroup
 	GroupThreshold    int
 }
@@ -57,13 +57,16 @@ func ensureNoMetadata(opts encryptOpts, branch sops.TreeBranch) error {
 
 func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 	// Load the file
-	fileBytes, err := ioutil.ReadFile(opts.InputPath)
+	fileBytes, err := os.ReadFile(opts.InputPath)
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
 	}
 	branches, err := opts.InputStore.LoadPlainFile(fileBytes)
 	if err != nil {
 		return nil, common.NewExitError(fmt.Sprintf("Error unmarshalling file: %s", err), codes.CouldNotReadInputFile)
+	}
+	if len(branches) < 1 {
+		return nil, common.NewExitError("File cannot be completely empty, it must contain at least one document", codes.NeedAtLeastOneDocument)
 	}
 	if err := ensureNoMetadata(opts, branches[0]); err != nil {
 		return nil, common.NewExitError(err, codes.FileAlreadyEncrypted)
@@ -80,6 +83,7 @@ func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 			EncryptedSuffix:   opts.EncryptedSuffix,
 			UnencryptedRegex:  opts.UnencryptedRegex,
 			EncryptedRegex:    opts.EncryptedRegex,
+			MACOnlyEncrypted:  opts.MACOnlyEncrypted,
 			Version:           version.Version,
 			ShamirThreshold:   opts.GroupThreshold,
 		},
