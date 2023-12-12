@@ -18,12 +18,13 @@ func init() {
 }
 
 type ExecOpts struct {
-	Command    string
-	Plaintext  []byte
-	Background bool
-	Fifo       bool
-	User       string
-	Filename   string
+	Command      string
+	Plaintext    []byte
+	Background   bool
+	SameProcess  bool
+	Fifo         bool
+	User         string
+	Filename     string
 }
 
 func GetFile(dir, filename string) *os.File {
@@ -93,6 +94,14 @@ func ExecWithEnv(opts ExecOpts) error {
 			continue
 		}
 		env = append(env, string(line))
+	}
+
+	if opts.SameProcess {
+		if opts.Background {
+			log.Fatal("background is not supported for same-process")
+		}
+
+		return ExecSyscall(opts.Command, env)
 	}
 
 	cmd := BuildCommand(opts.Command)
