@@ -230,7 +230,7 @@ func EncodeNewLines(m map[string]interface{}) {
 	}
 }
 
-// DecodeNonStrings will look for known keys that are not strings and decode to the appropriate type
+// DecodeNonStrings will look for known metadata keys that are not strings and decode to the appropriate type
 func DecodeNonStrings(m map[string]interface{}) {
 	if v, ok := m["mac_only_encrypted"]; ok {
 		m["mac_only_encrypted"] = false
@@ -240,7 +240,7 @@ func DecodeNonStrings(m map[string]interface{}) {
 	}
 }
 
-// EncodeNonStrings will look for known keys that are not strings and will encode it to strings
+// EncodeNonStrings will look for known metadata keys that are not strings and will encode it to strings
 func EncodeNonStrings(m map[string]interface{}) {
 	if v, found := m["mac_only_encrypted"]; found {
 		if vBool, ok := v.(bool); ok {
