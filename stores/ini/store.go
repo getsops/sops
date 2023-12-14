@@ -187,6 +187,8 @@ func (store *Store) iniSectionToMetadata(sopsSection *ini.Section) (stores.Metad
 	for k, v := range sopsSection.KeysHash() {
 		metadataHash[k] = v
 	}
+	stores.DecodeNewLines(metadataHash)
+	stores.DecodeNonStrings(metadataHash)
 	return stores.UnflattenMetadata(metadataHash)
 }
 
@@ -225,6 +227,8 @@ func (store *Store) encodeMetadataToIniBranch(md stores.Metadata) (sops.TreeBran
 	if err != nil {
 		return nil, err
 	}
+	stores.EncodeNonStrings(flat)
+	stores.EncodeNewLines(flat)
 
 	branch := sops.TreeBranch{}
 	for key, value := range flat {

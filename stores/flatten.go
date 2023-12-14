@@ -73,8 +73,6 @@ func FlattenMetadata(md Metadata) (map[string]interface{}, error) {
 	}
 
 	flat := Flatten(mdMap)
-	encodeNonStrings(flat)
-	encodeNewLines(flat)
 	return flat, nil
 }
 
@@ -206,8 +204,6 @@ func Unflatten(in map[string]interface{}) map[string]interface{} {
 
 // UnflattenMetadata unflattens a map flattened by FlattenMetadata into Metadata
 func UnflattenMetadata(in map[string]interface{}) (Metadata, error) {
-	decodeNewLines(in)
-	decodeNonStrings(in)
 	m := Unflatten(in)
 	var md Metadata
 	jsonBytes, err := json.Marshal(m)
@@ -218,7 +214,7 @@ func UnflattenMetadata(in map[string]interface{}) (Metadata, error) {
 	return md, err
 }
 
-func decodeNewLines(m map[string]interface{}) {
+func DecodeNewLines(m map[string]interface{}) {
 	for k, v := range m {
 		if s, ok := v.(string); ok {
 			m[k] = strings.Replace(s, "\\n", "\n", -1)
@@ -226,7 +222,7 @@ func decodeNewLines(m map[string]interface{}) {
 	}
 }
 
-func encodeNewLines(m map[string]interface{}) {
+func EncodeNewLines(m map[string]interface{}) {
 	for k, v := range m {
 		if s, ok := v.(string); ok {
 			m[k] = strings.Replace(s, "\n", "\\n", -1)
@@ -234,8 +230,8 @@ func encodeNewLines(m map[string]interface{}) {
 	}
 }
 
-// decodeNonStrings will look for known keys that are not strings and decode to the appropriate type
-func decodeNonStrings(m map[string]interface{}) {
+// DecodeNonStrings will look for known keys that are not strings and decode to the appropriate type
+func DecodeNonStrings(m map[string]interface{}) {
 	if v, ok := m["mac_only_encrypted"]; ok {
 		m["mac_only_encrypted"] = false
 		if v == "true" {
@@ -244,8 +240,8 @@ func decodeNonStrings(m map[string]interface{}) {
 	}
 }
 
-// encodeNonStrings will look for known keys that are not strings and will encode it to strings
-func encodeNonStrings(m map[string]interface{}) {
+// EncodeNonStrings will look for known keys that are not strings and will encode it to strings
+func EncodeNonStrings(m map[string]interface{}) {
 	if v, found := m["mac_only_encrypted"]; found {
 		if vBool, ok := v.(bool); ok {
 			m["mac_only_encrypted"] = "false"

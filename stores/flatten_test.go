@@ -146,9 +146,9 @@ func TestFlattenMetadata(t *testing.T) {
 		want  map[string]interface{}
 	}{
 		{Metadata{MACOnlyEncrypted: false}, map[string]interface{}{"mac_only_encrypted": nil}},
-		{Metadata{MACOnlyEncrypted: true}, map[string]interface{}{"mac_only_encrypted": "true"}},
-		{Metadata{MessageAuthenticationCode: "line1\nline2"}, map[string]interface{}{"mac": "line1\\nline2"}},
-		{Metadata{MessageAuthenticationCode: "line1\n\n\nline2\n\nline3"}, map[string]interface{}{"mac": "line1\\n\\n\\nline2\\n\\nline3"}},
+		{Metadata{MACOnlyEncrypted: true}, map[string]interface{}{"mac_only_encrypted": true}},
+		{Metadata{MessageAuthenticationCode: "line1\nline2"}, map[string]interface{}{"mac": "line1\nline2"}},
+		{Metadata{MessageAuthenticationCode: "line1\n\n\nline2\n\nline3"}, map[string]interface{}{"mac": "line1\n\n\nline2\n\nline3"}},
 	}
 
 	for _, tt := range tests {
@@ -190,7 +190,7 @@ func TestDecodeNewLines(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		decodeNewLines(tt.input)
+		DecodeNewLines(tt.input)
 		for k, v := range tt.want {
 			assert.Equal(t, v, tt.input[k])
 		}
@@ -207,7 +207,7 @@ func TestEncodeNewLines(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		encodeNewLines(tt.input)
+		EncodeNewLines(tt.input)
 		for k, v := range tt.want {
 			assert.Equal(t, v, tt.input[k])
 		}
@@ -225,7 +225,7 @@ func TestDecodeNonStrings(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		decodeNonStrings(tt.input)
+		DecodeNonStrings(tt.input)
 		assert.Equal(t, tt.want, tt.input)
 	}
 }
@@ -240,7 +240,7 @@ func TestEncodeNonStrings(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		encodeNonStrings(tt.input)
+		EncodeNonStrings(tt.input)
 		assert.Equal(t, tt.want, tt.input)
 	}
 }

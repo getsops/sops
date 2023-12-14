@@ -48,6 +48,8 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 		}
 	}
 
+	stores.DecodeNewLines(mdMap)
+	stores.DecodeNonStrings(mdMap)
 	metadata, err := stores.UnflattenMetadata(mdMap)
 	if err != nil {
 		return sops.Tree{}, err
@@ -104,6 +106,10 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	stores.EncodeNonStrings(mdItems)
+	stores.EncodeNewLines(mdItems)
+
 	var keys []string
 	for k := range mdItems {
 		keys = append(keys, k)
