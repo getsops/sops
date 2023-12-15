@@ -515,7 +515,7 @@ func main() {
 		},
 		{
 			Name:      "updatekeys",
-			Usage:     "update the keys of a SOPS file using the config file",
+			Usage:     "update the keys of SOPS files using the config file",
 			ArgsUsage: `file`,
 			Flags: append([]cli.Flag{
 				cli.BoolFlag{
@@ -541,18 +541,35 @@ func main() {
 				if c.NArg() < 1 {
 					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
 				}
-				err = updatekeys.UpdateKeys(updatekeys.Opts{
-					InputPath:   c.Args()[0],
-					GroupQuorum: c.Int("shamir-secret-sharing-quorum"),
-					KeyServices: keyservices(c),
-					Interactive: !c.Bool("yes"),
-					ConfigPath:  configPath,
-					InputType:   c.String("input-type"),
-				})
-				if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
-					return cliErr
-				} else if err != nil {
-					return common.NewExitError(err, codes.ErrorGeneric)
+				failedCounter := 0
+				for _, path := range c.Args() {
+					err := updatekeys.UpdateKeys(updatekeys.Opts{
+						InputPath:   path,
+						GroupQuorum: c.Int("shamir-secret-sharing-quorum"),
+						KeyServices: keyservices(c),
+						Interactive: !c.Bool("yes"),
+						ConfigPath:  configPath,
+						InputType:   c.String("input-type"),
+					})
+
+					if c.NArg() == 1 {
+						// a single argument was given, keep compatibility of the error
+						if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
+							return cliErr
+						} else if err != nil {
+							return common.NewExitError(err, codes.ErrorGeneric)
+						}
+					}
+
+					// multiple arguments given (patched functionality),
+					// finish updating of remaining files and fail afterwards
+					if err != nil {
+						failedCounter++
+						log.Error(err)
+					}
+				}
+				if failedCounter > 0 {
+					return common.NewExitError(fmt.Errorf("failed updating %d key(s)", failedCounter), codes.ErrorGeneric)
 				}
 				return nil
 			},
