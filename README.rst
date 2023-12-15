@@ -1192,6 +1192,11 @@ by configuring ``.sops.yaml`` with:
       yaml:
           indent: 2
 
+.. note::
+
+  The YAML emitter used by sops only supports values between 2 and 9. If you specify 1,
+  or 10 and larger, the indent will be 2.
+
 YAML anchors
 ~~~~~~~~~~~~
 
