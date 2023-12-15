@@ -137,6 +137,10 @@ func main() {
 					Name:  "background",
 					Usage: "background the process and don't wait for it to complete",
 				},
+				cli.BoolFlag{
+					Name:  "pristine",
+					Usage: "insert only the decrypted values into the environment without forwarding existing environment variables",
+				},
 				cli.StringFlag{
 					Name:  "user",
 					Usage: "the user to run the command as",
@@ -171,6 +175,7 @@ func main() {
 					Command:    command,
 					Plaintext:  output,
 					Background: c.Bool("background"),
+					Pristine:   c.Bool("pristine"),
 					User:       c.String("user"),
 				}); err != nil {
 					return toExitError(err)
