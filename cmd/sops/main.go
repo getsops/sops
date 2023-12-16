@@ -769,6 +769,10 @@ func main() {
 			Name:  "output",
 			Usage: "Save the output after encryption or decryption to the file specified",
 		},
+		cli.StringFlag{
+			Name:  "filename-override",
+			Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type",
+		},
 	}, keyserviceFlags...)
 
 	app.Action = func(c *cli.Context) error {
@@ -795,13 +799,17 @@ func main() {
 				return common.NewExitError("Error: cannot operate on non-existent file", codes.NoFileSpecified)
 			}
 		}
+		fileNameOverride := c.String("filename-override")
+		if fileNameOverride == "" {
+			fileNameOverride = fileName
+		}
 
 		unencryptedSuffix := c.String("unencrypted-suffix")
 		encryptedSuffix := c.String("encrypted-suffix")
 		encryptedRegex := c.String("encrypted-regex")
 		unencryptedRegex := c.String("unencrypted-regex")
 		macOnlyEncrypted := c.Bool("mac-only-encrypted")
-		conf, err := loadConfig(c, fileName, nil)
+		conf, err := loadConfig(c, fileNameOverride, nil)
 		if err != nil {
 			return toExitError(err)
 		}
@@ -847,19 +855,19 @@ func main() {
 			unencryptedSuffix = sops.DefaultUnencryptedSuffix
 		}
 
-		inputStore := inputStore(c, fileName)
-		outputStore := outputStore(c, fileName)
+		inputStore := inputStore(c, fileNameOverride)
+		outputStore := outputStore(c, fileNameOverride)
 		svcs := keyservices(c)
 
 		var output []byte
 		if c.Bool("encrypt") {
 			var groups []sops.KeyGroup
-			groups, err = keyGroups(c, fileName)
+			groups, err = keyGroups(c, fileNameOverride)
 			if err != nil {
 				return toExitError(err)
 			}
 			var threshold int
-			threshold, err = shamirThreshold(c, fileName)
+			threshold, err = shamirThreshold(c, fileNameOverride)
 			if err != nil {
 				return toExitError(err)
 			}
@@ -1015,12 +1023,12 @@ func main() {
 			} else {
 				// File doesn't exist, edit the example file instead
 				var groups []sops.KeyGroup
-				groups, err = keyGroups(c, fileName)
+				groups, err = keyGroups(c, fileNameOverride)
 				if err != nil {
 					return toExitError(err)
 				}
 				var threshold int
-				threshold, err = shamirThreshold(c, fileName)
+				threshold, err = shamirThreshold(c, fileNameOverride)
 				if err != nil {
 					return toExitError(err)
 				}
