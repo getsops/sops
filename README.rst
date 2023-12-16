@@ -329,7 +329,11 @@ And decrypt it using::
 Encrypting and decrypting from other programs
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When using ``sops`` in scripts or from other programs, there are often situations where you do not want to write encrypted or decrypted data to disk. The best way to avoid this is to pass data to SOPS via stdin, and to let SOPS write data to stdout. By default, the encrypt and decrypt operations write data to stdout already. To pass data via stdin, you need to pass ``/dev/stdin`` as the input filename. Please note that this only works on Unix-like operating systems such as macOS and Linux. On Windows, you have to use named pipes.
+When using ``sops`` in scripts or from other programs, there are often situations where you do not want to write
+encrypted or decrypted data to disk. The best way to avoid this is to pass data to SOPS via stdin, and to let
+SOPS write data to stdout. By default, the encrypt and decrypt operations write data to stdout already. To pass
+data via stdin, you need to pass ``/dev/stdin`` as the input filename. Please note that this only works on
+Unix-like operating systems such as macOS and Linux. On Windows, you have to use named pipes.
 
 To decrypt data, you can simply do:
 
@@ -337,7 +341,9 @@ To decrypt data, you can simply do:
 
 	$ cat encrypted-data | sops --decrypt /dev/stdin > decrypted-data
 
-To control the input and output format, pass ``--input-type`` and ``--output-type`` as appropriate. By default, ``sops`` determines the input and output format from the provided filename, which is ``/dev/stdin`` here, and thus will use the binary store which expects JSON input and outputs binary data on decryption.
+To control the input and output format, pass ``--input-type`` and ``--output-type`` as appropriate. By default,
+``sops`` determines the input and output format from the provided filename, which is ``/dev/stdin`` here, and
+thus will use the binary store which expects JSON input and outputs binary data on decryption.
 
 For example, to decrypt YAML data and obtain the decrypted result as YAML, use:
 
@@ -345,13 +351,19 @@ For example, to decrypt YAML data and obtain the decrypted result as YAML, use:
 
 	$ cat encrypted-data | sops --input-type yaml --output-type yaml --decrypt /dev/stdin > decrypted-data
 
-To encrypt, it is important to note that SOPS also uses the filename to look up the correct creation rule from ``.sops.yaml``. Likely ``/dev/stdin`` will not match a creation rule, or only match the fallback rule without ``path_regex``, which is usually not what you want. For that, ``sops`` provides the ``--filename-override`` parameter which allows you to tell SOPS which filename to use to match creation rules:
+To encrypt, it is important to note that SOPS also uses the filename to look up the correct creation rule from
+``.sops.yaml``. Likely ``/dev/stdin`` will not match a creation rule, or only match the fallback rule without
+``path_regex``, which is usually not what you want. For that, ``sops`` provides the ``--filename-override``
+parameter which allows you to tell SOPS which filename to use to match creation rules:
 
 .. code:: sh
 
 	$ echo 'foo: bar' | sops --filename-override path/filename.sops.yaml --encrypt /dev/stdin > encrypted-data
 
-SOPS will find a matching creation rule for ``path/filename.sops.yaml`` in ``.sops.yaml`` and use that one to encrypt the data from stdin. This filename will also be used to determine the input and output store. As always, the input store type can be adjusted by passing ``--input-type``, and the output store type by passing ``--output-type``:
+SOPS will find a matching creation rule for ``path/filename.sops.yaml`` in ``.sops.yaml`` and use that one to
+encrypt the data from stdin. This filename will also be used to determine the input and output store. As always,
+the input store type can be adjusted by passing ``--input-type``, and the output store type by passing
+``--output-type``:
 
 .. code:: sh
 
