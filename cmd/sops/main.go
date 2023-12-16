@@ -58,7 +58,7 @@ func warnMoreThanOnePositionalArgument(c *cli.Context) {
 			}
 		}
 		if potentialFlag != "" {
-			log.Warn(fmt.Sprintf("Note that one of the ignored positional argument is %q, which looks like a flag. Flags must always be provied before the first positional argument!", potentialFlag))
+			log.Warn(fmt.Sprintf("Note that one of the ignored positional argument is %q, which looks like a flag. Flags must always be provided before the first positional argument!", potentialFlag))
 		}
 	}
 }
