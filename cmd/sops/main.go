@@ -20,9 +20,10 @@ import (
 	"github.com/getsops/sops/v3/azkv"
 	"github.com/getsops/sops/v3/cmd/sops/codes"
 	"github.com/getsops/sops/v3/cmd/sops/common"
-	"github.com/getsops/sops/v3/cmd/sops/subcommand/exec"
+	execcmd "github.com/getsops/sops/v3/cmd/sops/subcommand/exec"
 	"github.com/getsops/sops/v3/cmd/sops/subcommand/groups"
 	keyservicecmd "github.com/getsops/sops/v3/cmd/sops/subcommand/keyservice"
+	"github.com/getsops/sops/v3/cmd/sops/subcommand/mergetool"
 	publishcmd "github.com/getsops/sops/v3/cmd/sops/subcommand/publish"
 	"github.com/getsops/sops/v3/cmd/sops/subcommand/updatekeys"
 	"github.com/getsops/sops/v3/config"
@@ -38,6 +39,7 @@ import (
 	"github.com/getsops/sops/v3/version"
 	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli"
+	exec "golang.org/x/sys/execabs"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -186,7 +188,7 @@ func main() {
 					return toExitError(err)
 				}
 
-				if err := exec.ExecWithEnv(exec.ExecOpts{
+				if err := execcmd.ExecWithEnv(execcmd.ExecOpts{
 					Command:    command,
 					Plaintext:  output,
 					Background: c.Bool("background"),
@@ -260,7 +262,7 @@ func main() {
 					filename = "tmp-file"
 				}
 
-				if err := exec.ExecWithFile(exec.ExecOpts{
+				if err := execcmd.ExecWithFile(execcmd.ExecOpts{
 					Command:    command,
 					Plaintext:  output,
 					Background: c.Bool("background"),
@@ -594,6 +596,175 @@ func main() {
 				if failedCounter > 0 {
 					return common.NewExitError(fmt.Errorf("failed updating %d key(s)", failedCounter), codes.ErrorGeneric)
 				}
+				return nil
+			},
+		},
+		{
+			Name:      "mergetool",
+			Usage:     "execute a git mergetool",
+			ArgsUsage: "",
+			Flags: append([]cli.Flag{
+				cli.StringFlag{
+					Name:  "base",
+					Usage: "the merge's common base file",
+				},
+				cli.StringFlag{
+					Name:  "remote",
+					Usage: "the merge's remote file",
+				},
+				cli.StringFlag{
+					Name:  "local",
+					Usage: "the merge's local file",
+				},
+				cli.StringFlag{
+					Name:  "merged",
+					Usage: "the merged file",
+				},
+			}, keyserviceFlags...),
+			Action: func(c *cli.Context) error {
+				gitEnv := mergetool.MergePaths{
+					Base:   c.String("base"),
+					Remote: c.String("remote"),
+					Local:  c.String("local"),
+					Merged: c.String("merged"),
+				}
+
+				tempDir, err := os.MkdirTemp("", ".sops")
+				if err != nil {
+					return toExitError(err)
+				}
+
+				fmt.Println(tempDir)
+
+				//defer os.RemoveAll(tempDir)
+
+				svcs := keyservices(c)
+
+				tempDecrypt := func(dir string, inputPath string, output string) (string, error) {
+					outputPath := fmt.Sprintf("%s/%s", dir, output)
+
+					inputStore := inputStore(c, inputPath)
+					outputStore := outputStore(c, inputPath)
+
+					opts := decryptOpts{
+						InputStore:  inputStore,
+						OutputStore: outputStore,
+						InputPath:   inputPath,
+						Cipher:      aes.NewCipher(),
+						KeyServices: svcs,
+						IgnoreMAC:   false,
+					}
+
+					decryptedBytes, err := decrypt(opts)
+					if err != nil {
+						return "", err
+					}
+
+					err = os.WriteFile(outputPath, decryptedBytes, 0o600)
+					if err != nil {
+						return "", err
+					}
+
+					return outputPath, nil
+				}
+
+				editorEnv := mergetool.MergePaths{}
+
+				// $BASE is not guaranteed to be set by git
+				if gitEnv.Base != "" {
+					editorEnv.Base, err = tempDecrypt(tempDir, gitEnv.Base, "base")
+					if err != nil {
+						return toExitError(err)
+					}
+				}
+
+				editorEnv.Local, err = tempDecrypt(tempDir, gitEnv.Local, "local")
+				if err != nil {
+					return toExitError(err)
+				}
+
+				editorEnv.Remote, err = tempDecrypt(tempDir, gitEnv.Remote, "remote")
+				if err != nil {
+					return toExitError(err)
+				}
+
+				mergedPath := fmt.Sprintf("%s/%s", tempDir, "merged")
+				editorEnv.Merged = mergedPath
+
+				/*
+					mergedBytes, err := os.ReadFile(gitEnv.Merged)
+					if err != nil {
+						return toExitError(err)
+					}
+
+					if err = os.WriteFile(mergedPath, mergedBytes, 0o600); err != nil {
+						return toExitError(err)
+					}
+				*/
+
+				args := make([]string, 0)
+
+				if len(c.Args()) == 0 {
+					args = append(args, "/bin/vim")
+					args = append(args, "-f")
+					args = append(args, "-c")
+					//args = append(args, "set hidden diffopt-=hiddenoff | echo | leftabove split | leftabove vertical split | 1b | wincmd l | leftabove vertical split | 2b | wincmd l | 3b | wincmd j | 4b | execute 'tabdo windo diffthis' | tabfirst")
+					args = append(args, "set hidden diffopt-=hiddenoff | echo | leftabove split | leftabove vertical split | 1b | wincmd l | leftabove vertical split | 2b | wincmd l | 3b | execute 'tabdo windo diffthis' | wincmd j | 4b | tabfirst")
+					args = append(args, editorEnv.Base)
+					args = append(args, editorEnv.Local)
+					args = append(args, editorEnv.Remote)
+					args = append(args, editorEnv.Merged)
+				} else {
+					for _, v := range args {
+						v = strings.ReplaceAll(v, "{base}", editorEnv.Base)
+						v = strings.ReplaceAll(v, "{local}", editorEnv.Local)
+						v = strings.ReplaceAll(v, "{remote}", editorEnv.Remote)
+						v = strings.ReplaceAll(v, "{merged}", editorEnv.Merged)
+						args = append(args, v)
+					}
+				}
+
+				fmt.Printf("[%s]", strings.Join(args, ","))
+
+				cmd := exec.Command(args[0], args[1:]...)
+
+				cmd.Stdin = os.Stdin
+				cmd.Stdout = os.Stdout
+				cmd.Stderr = os.Stderr
+
+				if err = cmd.Run(); err != nil {
+					return toExitError(err)
+				}
+
+				var groups []sops.KeyGroup
+				groups, err = keyGroups(c, gitEnv.Local)
+				if err != nil {
+					return toExitError(err)
+				}
+
+				var threshold int
+				threshold, err = shamirThreshold(c, gitEnv.Local)
+				if err != nil {
+					return toExitError(err)
+				}
+
+				mergedBytes, err := encrypt(encryptOpts{
+					OutputStore:    outputStore(c, gitEnv.Local),
+					InputStore:     inputStore(c, gitEnv.Local),
+					InputPath:      editorEnv.Merged,
+					Cipher:         aes.NewCipher(),
+					KeyServices:    svcs,
+					KeyGroups:      groups,
+					GroupThreshold: threshold,
+				})
+				if err != nil {
+					return toExitError(err)
+				}
+
+				if err = os.WriteFile(gitEnv.Merged, mergedBytes, 0o600); err != nil {
+					return toExitError(err)
+				}
+
 				return nil
 			},
 		},
