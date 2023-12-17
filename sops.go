@@ -47,6 +47,7 @@ import (
 	"time"
 
 	"github.com/getsops/sops/v3/audit"
+	"github.com/getsops/sops/v3/cmd/sops/codes"
 	"github.com/getsops/sops/v3/keys"
 	"github.com/getsops/sops/v3/keyservice"
 	"github.com/getsops/sops/v3/logging"
@@ -58,17 +59,30 @@ import (
 // DefaultUnencryptedSuffix is the default suffix a TreeItem key has to end with for sops to leave its Value unencrypted
 const DefaultUnencryptedSuffix = "_unencrypted"
 
-type sopsError string
+type SopsError struct {
+	exitCode int
+	message  string
+}
 
-func (e sopsError) Error() string {
-	return string(e)
+func (e SopsError) ExitCode() int {
+	return e.exitCode
+}
+
+func (e SopsError) Error() string {
+	return e.message
 }
 
 // MacMismatch occurs when the computed MAC does not match the expected ones
-const MacMismatch = sopsError("MAC mismatch")
+var MacMismatch = &SopsError{codes.MacMismatch, "MAC mismatch"}
 
 // MetadataNotFound occurs when the input file is malformed and doesn't have sops metadata in it
-const MetadataNotFound = sopsError("sops metadata not found")
+var MetadataNotFound = &SopsError{codes.NoMetadataFound, "sops metadata not found"}
+
+// MACOnlyEncryptedInitialization is a constant and known sequence of 32 bytes used to initialize
+// MAC which is computed only over values which end up encrypted. That assures that a MAC with the
+// setting enabled is always different from a MAC with this setting disabled.
+// The following numbers are taken from the output of `echo -n sops | sha256sum` (shell) or `hashlib.sha256(b'sops').hexdigest()` (Python).
+var MACOnlyEncryptedInitialization = []byte{0x8a, 0x3f, 0xd2, 0xad, 0x54, 0xce, 0x66, 0x52, 0x7b, 0x10, 0x34, 0xf3, 0xd1, 0x47, 0xbe, 0xb, 0xb, 0x97, 0x5b, 0x3b, 0xf4, 0x4f, 0x72, 0xc6, 0xfd, 0xad, 0xec, 0x81, 0x76, 0xf2, 0x7d, 0x69}
 
 // MACOnlyEncryptedInitialization is a constant and known sequence of 32 bytes used to initialize
 // MAC which is computed only over values which end up encrypted. That assures that a MAC with the

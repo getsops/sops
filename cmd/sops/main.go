@@ -1088,6 +1088,8 @@ func toExitError(err error) error {
 		return cliErr
 	} else if execErr, ok := err.(*osExec.ExitError); ok && execErr != nil {
 		return cli.NewExitError(err, execErr.ExitCode())
+	} else if sopsErr, ok := err.(*sops.SopsError); ok && sopsErr != nil {
+		return cli.NewExitError(err, sopsErr.ExitCode())
 	} else if err != nil {
 		return cli.NewExitError(err, codes.ErrorGeneric)
 	}
