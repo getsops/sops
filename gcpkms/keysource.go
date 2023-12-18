@@ -3,7 +3,9 @@ package gcpkms // import "github.com/getsops/sops/v3/gcpkms"
 import (
 	"context"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
+	"golang.org/x/oauth2"
 	"os"
 	"regexp"
 	"strings"
@@ -215,16 +217,26 @@ func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
 	}
 
 	var opts []option.ClientOption
-	switch {
-	case key.credentialJSON != nil:
-		opts = append(opts, option.WithCredentialsJSON(key.credentialJSON))
-	default:
+	credentialJSON := key.credentialJSON
+
+	if credentialJSON == nil {
 		credentials, err := getGoogleCredentials()
 		if err != nil {
 			return nil, err
 		}
-		if credentials != nil {
-			opts = append(opts, option.WithCredentialsJSON(credentials))
+
+		credentialJSON = credentials
+	}
+
+	if credentialJSON != nil {
+		token := oauth2.Token{}
+
+		if err := json.Unmarshal(credentialJSON, &token); err != nil {
+			return nil, err
+		} else if token.AccessToken != "" {
+			opts = append(opts, option.WithTokenSource(oauth2.StaticTokenSource(&token)))
+		} else {
+			opts = append(opts, option.WithCredentialsJSON(credentialJSON))
 		}
 	}
 	if key.grpcConn != nil {

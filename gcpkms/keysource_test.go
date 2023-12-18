@@ -3,7 +3,9 @@ package gcpkms
 import (
 	"encoding/base64"
 	"fmt"
+	"io"
 	"net"
+	"os"
 	"testing"
 	"time"
 
@@ -118,34 +120,93 @@ func TestMasterKey_ToMap(t *testing.T) {
 
 func TestMasterKey_createCloudKMSService(t *testing.T) {
 	tests := []struct {
-		key       MasterKey
-		errString string
+		key         MasterKey
+		credentials string
+		errString   string
+		description string
 	}{
 		{
 			key: MasterKey{
-				ResourceID:     "/projects",
-				credentialJSON: []byte("some secret"),
+				ResourceID: "/projects",
 			},
-			errString: "no valid resource ID",
+			credentials: "some secret",
+			errString:   "no valid resource ID",
+			description: "invalid resource ID",
 		},
 		{
 			key: MasterKey{
 				ResourceID: testResourceID,
-				credentialJSON: []byte(`{ "client_id": "<client-id>.apps.googleusercontent.com",
- 		"client_secret": "<secret>",
-		"type": "authorized_user"}`),
 			},
+			credentials: `{ "client_id": "<client-id>.apps.googleusercontent.com",
+ 		"client_secret": "<secret>",
+		"type": "authorized_user"}`,
+			description: "valid user credentials",
+		},
+		{
+			key: MasterKey{
+				ResourceID: testResourceID,
+			},
+			credentials: `{ "access_token": "access_token"}`,
+			description: "valid access token credentials",
+		},
+		{
+			key: MasterKey{
+				ResourceID: testResourceID,
+			},
+			credentials: `{ invalid_json }`,
+			errString:   "invalid character 'i' looking for beginning of object key string",
+			description: "invalid json",
+		},
+		{
+			key: MasterKey{
+				ResourceID: testResourceID,
+			},
+			credentials: `{}`,
+			errString:   "missing 'type' field in credentials",
+			description: "invalid credentials",
 		},
 	}
 
 	for _, tt := range tests {
-		_, err := tt.key.newKMSClient()
-		if tt.errString != "" {
-			assert.Error(t, err)
-			assert.ErrorContains(t, err, tt.errString)
-			return
+		r := func(t *testing.T) {
+			_, err := tt.key.newKMSClient()
+			if tt.errString != "" {
+				assert.Error(t, err)
+				assert.ErrorContains(t, err, tt.errString)
+				return
+			}
+			assert.NoError(t, err)
 		}
-		assert.NoError(t, err)
+
+		t.Run(tt.description+"  credentials from var", func(t *testing.T) {
+			tt.key.credentialJSON = []byte(tt.credentials)
+			r(t)
+		})
+
+		t.Run(tt.description+"  credentials from env json", func(t *testing.T) {
+			t.Setenv("GOOGLE_CREDENTIALS", tt.credentials)
+			tt.key.credentialJSON = nil
+			r(t)
+		})
+
+		t.Run(tt.description+"  credentials from env file", func(t *testing.T) {
+			file, err := os.CreateTemp(t.TempDir(), "gcp_creds.*.json")
+			assert.NoError(t, err)
+
+			_, err = io.WriteString(file, tt.credentials)
+			assert.NoError(t, err)
+
+			t.Setenv("GOOGLE_CREDENTIALS", file.Name())
+			tt.key.credentialJSON = nil
+			r(t)
+
+			// Test file permissions
+			err = os.Chmod(file.Name(), 200)
+			assert.NoError(t, err)
+
+			_, err = tt.key.newKMSClient()
+			assert.Error(t, err)
+		})
 	}
 }
 
