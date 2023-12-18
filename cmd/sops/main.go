@@ -151,7 +151,7 @@ func main() {
 			Flags: append([]cli.Flag{
 				cli.BoolFlag{
 					Name:  "background",
-					Usage: "background the process and don't wait for it to complete",
+					Usage: "background the process and don't wait for it to complete (DEPRECATED)",
 				},
 				cli.BoolFlag{
 					Name:  "pristine",
@@ -188,6 +188,10 @@ func main() {
 					IgnoreMAC:       c.Bool("ignore-mac"),
 				}
 
+				if c.Bool("background") {
+					log.Warn("exec-env's --background option is deprecated and will be removed in a future version of sops")
+				}
+
 				output, err := decrypt(opts)
 				if err != nil {
 					return toExitError(err)
@@ -213,7 +217,7 @@ func main() {
 			Flags: append([]cli.Flag{
 				cli.BoolFlag{
 					Name:  "background",
-					Usage: "background the process and don't wait for it to complete",
+					Usage: "background the process and don't wait for it to complete (DEPRECATED)",
 				},
 				cli.BoolFlag{
 					Name:  "no-fifo",
@@ -271,6 +275,10 @@ func main() {
 				filename := c.String("filename")
 				if filename == "" {
 					filename = "tmp-file"
+				}
+
+				if c.Bool("background") {
+					log.Warn("exec-file's --background option is deprecated and will be removed in a future version of sops")
 				}
 
 				if err := exec.ExecWithFile(exec.ExecOpts{
