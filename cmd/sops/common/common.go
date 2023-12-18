@@ -72,6 +72,8 @@ type DecryptTreeOpts struct {
 	Tree *sops.Tree
 	// KeyServices are the key services to be used for decryption of the data key
 	KeyServices []keyservice.KeyServiceClient
+	// DecryptionOrder is the order in which available decryption methods are tried
+	DecryptionOrder []string
 	// IgnoreMac is whether or not to ignore the Message Authentication Code included in the SOPS tree
 	IgnoreMac bool
 	// Cipher is the cryptographic cipher to use to decrypt the values inside the tree
@@ -80,7 +82,7 @@ type DecryptTreeOpts struct {
 
 // DecryptTree decrypts the tree passed in through the DecryptTreeOpts and additionally returns the decrypted data key
 func DecryptTree(opts DecryptTreeOpts) (dataKey []byte, err error) {
-	dataKey, err = opts.Tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices)
+	dataKey, err = opts.Tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices, opts.DecryptionOrder)
 	if err != nil {
 		return nil, NewExitError(err, codes.CouldNotRetrieveKey)
 	}
@@ -222,11 +224,12 @@ func GetKMSKeyWithEncryptionCtx(tree *sops.Tree) (keyGroupIndex int, keyIndex in
 
 // GenericDecryptOpts represents decryption options and config
 type GenericDecryptOpts struct {
-	Cipher      sops.Cipher
-	InputStore  sops.Store
-	InputPath   string
-	IgnoreMAC   bool
-	KeyServices []keyservice.KeyServiceClient
+	Cipher          sops.Cipher
+	InputStore      sops.Store
+	InputPath       string
+	IgnoreMAC       bool
+	KeyServices     []keyservice.KeyServiceClient
+	DecryptionOrder []string
 }
 
 // LoadEncryptedFileWithBugFixes is a wrapper around LoadEncryptedFile which includes

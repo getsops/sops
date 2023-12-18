@@ -1,4 +1,4 @@
-package main //import "github.com/getsops/sops/v3/cmd/sops"
+package main // import "github.com/getsops/sops/v3/cmd/sops"
 
 import (
 	"context"
@@ -12,6 +12,11 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+
+	"github.com/sirupsen/logrus"
+	"github.com/urfave/cli"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/aes"
@@ -36,10 +41,6 @@ import (
 	"github.com/getsops/sops/v3/stores/dotenv"
 	"github.com/getsops/sops/v3/stores/json"
 	"github.com/getsops/sops/v3/version"
-	"github.com/sirupsen/logrus"
-	"github.com/urfave/cli"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
 var log *logrus.Logger
@@ -172,13 +173,19 @@ func main() {
 				inputStore := inputStore(c, fileName)
 
 				svcs := keyservices(c)
+
+				order, err := decryptionOrder(c.String("decryption-order"))
+				if err != nil {
+					return toExitError(err)
+				}
 				opts := decryptOpts{
-					OutputStore: &dotenv.Store{},
-					InputStore:  inputStore,
-					InputPath:   fileName,
-					Cipher:      aes.NewCipher(),
-					KeyServices: svcs,
-					IgnoreMAC:   c.Bool("ignore-mac"),
+					OutputStore:     &dotenv.Store{},
+					InputStore:      inputStore,
+					InputPath:       fileName,
+					Cipher:          aes.NewCipher(),
+					KeyServices:     svcs,
+					DecryptionOrder: order,
+					IgnoreMAC:       c.Bool("ignore-mac"),
 				}
 
 				output, err := decrypt(opts)
@@ -241,13 +248,19 @@ func main() {
 				outputStore := outputStore(c, fileName)
 
 				svcs := keyservices(c)
+
+				order, err := decryptionOrder(c.String("decryption-order"))
+				if err != nil {
+					return toExitError(err)
+				}
 				opts := decryptOpts{
-					OutputStore: outputStore,
-					InputStore:  inputStore,
-					InputPath:   fileName,
-					Cipher:      aes.NewCipher(),
-					KeyServices: svcs,
-					IgnoreMAC:   c.Bool("ignore-mac"),
+					OutputStore:     outputStore,
+					InputStore:      inputStore,
+					InputPath:       fileName,
+					Cipher:          aes.NewCipher(),
+					KeyServices:     svcs,
+					DecryptionOrder: order,
+					IgnoreMAC:       c.Bool("ignore-mac"),
 				}
 
 				output, err := decrypt(opts)
@@ -316,21 +329,25 @@ func main() {
 				if info.IsDir() && !c.Bool("recursive") {
 					return fmt.Errorf("can't operate on a directory without --recursive flag.")
 				}
+				order, err := decryptionOrder(c.String("decryption-order"))
+				if err != nil {
+					return toExitError(err)
+				}
 				err = filepath.Walk(path, func(subPath string, info os.FileInfo, err error) error {
 					if err != nil {
 						return toExitError(err)
 					}
 					if !info.IsDir() {
 						err = publishcmd.Run(publishcmd.Opts{
-							ConfigPath:     configPath,
-							InputPath:      subPath,
-							Cipher:         aes.NewCipher(),
-							KeyServices:    keyservices(c),
-							InputStore:     inputStore(c, subPath),
-							Interactive:    !c.Bool("yes"),
-							OmitExtensions: c.Bool("omit-extensions"),
-							Recursive:      c.Bool("recursive"),
-							RootPath:       path,
+							ConfigPath:      configPath,
+							InputPath:       subPath,
+							Cipher:          aes.NewCipher(),
+							KeyServices:     keyservices(c),
+							DecryptionOrder: order,
+							InputStore:      inputStore(c, subPath),
+							Interactive:     !c.Bool("yes"),
+							OmitExtensions:  c.Bool("omit-extensions"),
+							Recursive:       c.Bool("recursive"),
 						})
 						if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
 							return cliErr
@@ -773,6 +790,11 @@ func main() {
 			Name:  "filename-override",
 			Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type",
 		},
+		cli.StringFlag{
+			Name:   "decryption-order",
+			Usage:  "comma separated list of decryption key types",
+			EnvVar: "SOPS_DECRYPTION_ORDER",
+		},
 	}, keyserviceFlags...)
 
 	app.Action = func(c *cli.Context) error {
@@ -859,6 +881,10 @@ func main() {
 		outputStore := outputStore(c, fileNameOverride)
 		svcs := keyservices(c)
 
+		order, err := decryptionOrder(c.String("decryption-order"))
+		if err != nil {
+			return toExitError(err)
+		}
 		var output []byte
 		if c.Bool("encrypt") {
 			var groups []sops.KeyGroup
@@ -894,13 +920,14 @@ func main() {
 				return common.NewExitError(fmt.Errorf("error parsing --extract path: %s", err), codes.InvalidTreePathFormat)
 			}
 			output, err = decrypt(decryptOpts{
-				OutputStore: outputStore,
-				InputStore:  inputStore,
-				InputPath:   fileName,
-				Cipher:      aes.NewCipher(),
-				Extract:     extract,
-				KeyServices: svcs,
-				IgnoreMAC:   c.Bool("ignore-mac"),
+				OutputStore:     outputStore,
+				InputStore:      inputStore,
+				InputPath:       fileName,
+				Cipher:          aes.NewCipher(),
+				Extract:         extract,
+				KeyServices:     svcs,
+				DecryptionOrder: order,
+				IgnoreMAC:       c.Bool("ignore-mac"),
 			})
 		}
 		if c.Bool("rotate") {
@@ -975,6 +1002,7 @@ func main() {
 				InputPath:        fileName,
 				Cipher:           aes.NewCipher(),
 				KeyServices:      svcs,
+				DecryptionOrder:  order,
 				IgnoreMAC:        c.Bool("ignore-mac"),
 				AddMasterKeys:    addMasterKeys,
 				RemoveMasterKeys: rmMasterKeys,
@@ -994,14 +1022,15 @@ func main() {
 				return toExitError(err)
 			}
 			output, err = set(setOpts{
-				OutputStore: outputStore,
-				InputStore:  inputStore,
-				InputPath:   fileName,
-				Cipher:      aes.NewCipher(),
-				KeyServices: svcs,
-				IgnoreMAC:   c.Bool("ignore-mac"),
-				Value:       value,
-				TreePath:    path,
+				OutputStore:     outputStore,
+				InputStore:      inputStore,
+				InputPath:       fileName,
+				Cipher:          aes.NewCipher(),
+				KeyServices:     svcs,
+				DecryptionOrder: order,
+				IgnoreMAC:       c.Bool("ignore-mac"),
+				Value:           value,
+				TreePath:        path,
 			})
 		}
 
@@ -1010,13 +1039,14 @@ func main() {
 			_, statErr := os.Stat(fileName)
 			fileExists := statErr == nil
 			opts := editOpts{
-				OutputStore:    outputStore,
-				InputStore:     inputStore,
-				InputPath:      fileName,
-				Cipher:         aes.NewCipher(),
-				KeyServices:    svcs,
-				IgnoreMAC:      c.Bool("ignore-mac"),
-				ShowMasterKeys: c.Bool("show-master-keys"),
+				OutputStore:     outputStore,
+				InputStore:      inputStore,
+				InputPath:       fileName,
+				Cipher:          aes.NewCipher(),
+				KeyServices:     svcs,
+				DecryptionOrder: order,
+				IgnoreMAC:       c.Bool("ignore-mac"),
+				ShowMasterKeys:  c.Bool("show-master-keys"),
 			}
 			if fileExists {
 				output, err = edit(opts)
@@ -1350,4 +1380,19 @@ func extractSetArguments(set string) (path []interface{}, valueToInsert interfac
 		return nil, nil, common.NewExitError("Invalid --set format", codes.ErrorInvalidSetFormat)
 	}
 	return path, valueToInsert, nil
+}
+
+func decryptionOrder(decryptionOrder string) ([]string, error) {
+	if decryptionOrder == "" {
+		return sops.DefaultDecryptionOrder, nil
+	}
+	orderList := strings.Split(decryptionOrder, ",")
+	unique := make(map[string]struct{})
+	for _, v := range orderList {
+		if _, ok := unique[v]; ok {
+			return nil, common.NewExitError(fmt.Sprintf("Duplicate decryption key type: %s", v), codes.DuplicateDecryptionKeyType)
+		}
+		unique[v] = struct{}{}
+	}
+	return orderList, nil
 }

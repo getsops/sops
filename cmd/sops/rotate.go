@@ -20,15 +20,17 @@ type rotateOpts struct {
 	AddMasterKeys    []keys.MasterKey
 	RemoveMasterKeys []keys.MasterKey
 	KeyServices      []keyservice.KeyServiceClient
+	DecryptionOrder  []string
 }
 
 func rotate(opts rotateOpts) ([]byte, error) {
 	tree, err := common.LoadEncryptedFileWithBugFixes(common.GenericDecryptOpts{
-		Cipher:      opts.Cipher,
-		InputStore:  opts.InputStore,
-		InputPath:   opts.InputPath,
-		IgnoreMAC:   opts.IgnoreMAC,
-		KeyServices: opts.KeyServices,
+		Cipher:          opts.Cipher,
+		InputStore:      opts.InputStore,
+		InputPath:       opts.InputPath,
+		IgnoreMAC:       opts.IgnoreMAC,
+		KeyServices:     opts.KeyServices,
+		DecryptionOrder: opts.DecryptionOrder,
 	})
 	if err != nil {
 		return nil, err
@@ -39,8 +41,11 @@ func rotate(opts rotateOpts) ([]byte, error) {
 	})
 
 	_, err = common.DecryptTree(common.DecryptTreeOpts{
-		Cipher: opts.Cipher, IgnoreMac: opts.IgnoreMAC, Tree: tree,
-		KeyServices: opts.KeyServices,
+		Cipher:          opts.Cipher,
+		IgnoreMac:       opts.IgnoreMAC,
+		Tree:            tree,
+		KeyServices:     opts.KeyServices,
+		DecryptionOrder: opts.DecryptionOrder,
 	})
 	if err != nil {
 		return nil, err

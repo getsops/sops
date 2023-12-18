@@ -4,7 +4,7 @@ interface that encrypts and decrypts the data key by first trying with the
 github.com/ProtonMail/go-crypto/openpgp package and if that fails, by calling
 the "gpg" binary.
 */
-package pgp //import "github.com/getsops/sops/v3/pgp"
+package pgp // import "github.com/getsops/sops/v3/pgp"
 
 import (
 	"bytes"
@@ -22,12 +22,15 @@ import (
 	"github.com/ProtonMail/go-crypto/openpgp"
 	"github.com/ProtonMail/go-crypto/openpgp/armor"
 	gpgagent "github.com/getsops/gopgagent"
-	"github.com/getsops/sops/v3/logging"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/term"
+
+	"github.com/getsops/sops/v3/logging"
 )
 
 const (
+	// KeyTypeIdentifier is the string used to identify a PGP MasterKey.
+	KeyTypeIdentifier = "pgp"
 	// SopsGpgExecEnv can be set as an environment variable to overwrite the
 	// GnuPG binary used.
 	SopsGpgExecEnv = "SOPS_GPG_EXEC"
@@ -447,6 +450,11 @@ func (key MasterKey) ToMap() map[string]interface{} {
 	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)
 	out["enc"] = key.EncryptedKey
 	return out
+}
+
+// TypeToIdentifier returns the string identifier for the MasterKey type.
+func (key *MasterKey) TypeToIdentifier() string {
+	return KeyTypeIdentifier
 }
 
 // retrievePubKey attempts to retrieve the public key from the public keyring
