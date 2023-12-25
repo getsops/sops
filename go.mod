@@ -11,12 +11,12 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys v1.0.1
 	github.com/ProtonMail/go-crypto v0.0.0-20230923063757-afb1ddc0824c
 	github.com/aws/aws-sdk-go-v2 v1.24.0
-	github.com/aws/aws-sdk-go-v2/config v1.26.1
-	github.com/aws/aws-sdk-go-v2/credentials v1.16.12
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.15.7
-	github.com/aws/aws-sdk-go-v2/service/kms v1.27.6
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.47.5
-	github.com/aws/aws-sdk-go-v2/service/sts v1.26.5
+	github.com/aws/aws-sdk-go-v2/config v1.26.2
+	github.com/aws/aws-sdk-go-v2/credentials v1.16.13
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.15.9
+	github.com/aws/aws-sdk-go-v2/service/kms v1.27.7
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.47.7
+	github.com/aws/aws-sdk-go-v2/service/sts v1.26.6
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/fatih/color v1.16.0
 	github.com/getsops/gopgagent v0.0.0-20170926210634-4d7ea76ff71a
@@ -39,8 +39,8 @@ require (
 	golang.org/x/term v0.15.0
 	google.golang.org/api v0.154.0
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20231127180814-3a041ad873d4
-	google.golang.org/grpc v1.60.0
-	google.golang.org/protobuf v1.31.0
+	google.golang.org/grpc v1.60.1
+	google.golang.org/protobuf v1.32.0
 	gopkg.in/ini.v1 v1.67.0
 	gopkg.in/yaml.v3 v3.0.1
 )
