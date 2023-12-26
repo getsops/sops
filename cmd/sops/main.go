@@ -905,82 +905,12 @@ func main() {
 			})
 		}
 		if c.Bool("rotate") {
-			var addMasterKeys []keys.MasterKey
-			kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
-			for _, k := range kms.MasterKeysFromArnString(c.String("add-kms"), kmsEncryptionContext, c.String("aws-profile")) {
-				addMasterKeys = append(addMasterKeys, k)
-			}
-			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("add-pgp")) {
-				addMasterKeys = append(addMasterKeys, k)
-			}
-			for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("add-gcp-kms")) {
-				addMasterKeys = append(addMasterKeys, k)
-			}
-			azureKeys, err := azkv.MasterKeysFromURLs(c.String("add-azure-kv"))
+			rotateOpts, err := getRotateOpts(c, fileName, inputStore, outputStore, svcs, order)
 			if err != nil {
 				return toExitError(err)
-			}
-			for _, k := range azureKeys {
-				addMasterKeys = append(addMasterKeys, k)
-			}
-			hcVaultKeys, err := hcvault.NewMasterKeysFromURIs(c.String("add-hc-vault-transit"))
-			if err != nil {
-				return toExitError(err)
-			}
-			for _, k := range hcVaultKeys {
-				addMasterKeys = append(addMasterKeys, k)
-			}
-			ageKeys, err := age.MasterKeysFromRecipients(c.String("add-age"))
-			if err != nil {
-				return toExitError(err)
-			}
-			for _, k := range ageKeys {
-				addMasterKeys = append(addMasterKeys, k)
 			}
 
-			var rmMasterKeys []keys.MasterKey
-			for _, k := range kms.MasterKeysFromArnString(c.String("rm-kms"), kmsEncryptionContext, c.String("aws-profile")) {
-				rmMasterKeys = append(rmMasterKeys, k)
-			}
-			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("rm-pgp")) {
-				rmMasterKeys = append(rmMasterKeys, k)
-			}
-			for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("rm-gcp-kms")) {
-				rmMasterKeys = append(rmMasterKeys, k)
-			}
-			azureKeys, err = azkv.MasterKeysFromURLs(c.String("rm-azure-kv"))
-			if err != nil {
-				return toExitError(err)
-			}
-			for _, k := range azureKeys {
-				rmMasterKeys = append(rmMasterKeys, k)
-			}
-			hcVaultKeys, err = hcvault.NewMasterKeysFromURIs(c.String("rm-hc-vault-transit"))
-			if err != nil {
-				return toExitError(err)
-			}
-			for _, k := range hcVaultKeys {
-				rmMasterKeys = append(rmMasterKeys, k)
-			}
-			ageKeys, err = age.MasterKeysFromRecipients(c.String("rm-age"))
-			if err != nil {
-				return toExitError(err)
-			}
-			for _, k := range ageKeys {
-				rmMasterKeys = append(rmMasterKeys, k)
-			}
-
-			output, err = rotate(rotateOpts{
-				OutputStore:      outputStore,
-				InputStore:       inputStore,
-				InputPath:        fileName,
-				Cipher:           aes.NewCipher(),
-				KeyServices:      svcs,
-				DecryptionOrder:  order,
-				IgnoreMAC:        c.Bool("ignore-mac"),
-				AddMasterKeys:    addMasterKeys,
-				RemoveMasterKeys: rmMasterKeys,
-			})
+			output, err = rotate(rotateOpts)
 			// While this check is also done below, the `err` in this scope shadows
 			// the `err` in the outer scope
 			if err != nil {
@@ -1152,6 +1082,85 @@ func getEncryptConfig(c *cli.Context, fileName string) (encryptConfig, error) {
 		MACOnlyEncrypted:  macOnlyEncrypted,
 		KeyGroups:         groups,
 		GroupThreshold:    threshold,
+	}, nil
+}
+
+func getRotateOpts(c *cli.Context, fileName string, inputStore common.Store, outputStore common.Store, svcs []keyservice.KeyServiceClient, decryptionOrder []string) (rotateOpts, error) {
+	var addMasterKeys []keys.MasterKey
+	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
+	for _, k := range kms.MasterKeysFromArnString(c.String("add-kms"), kmsEncryptionContext, c.String("aws-profile")) {
+		addMasterKeys = append(addMasterKeys, k)
+	}
+	for _, k := range pgp.MasterKeysFromFingerprintString(c.String("add-pgp")) {
+		addMasterKeys = append(addMasterKeys, k)
+	}
+	for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("add-gcp-kms")) {
+		addMasterKeys = append(addMasterKeys, k)
+	}
+	azureKeys, err := azkv.MasterKeysFromURLs(c.String("add-azure-kv"))
+	if err != nil {
+		return rotateOpts{}, err
+	}
+	for _, k := range azureKeys {
+		addMasterKeys = append(addMasterKeys, k)
+	}
+	hcVaultKeys, err := hcvault.NewMasterKeysFromURIs(c.String("add-hc-vault-transit"))
+	if err != nil {
+		return rotateOpts{}, err
+	}
+	for _, k := range hcVaultKeys {
+		addMasterKeys = append(addMasterKeys, k)
+	}
+	ageKeys, err := age.MasterKeysFromRecipients(c.String("add-age"))
+	if err != nil {
+		return rotateOpts{}, err
+	}
+	for _, k := range ageKeys {
+		addMasterKeys = append(addMasterKeys, k)
+	}
+
+	var rmMasterKeys []keys.MasterKey
+	for _, k := range kms.MasterKeysFromArnString(c.String("rm-kms"), kmsEncryptionContext, c.String("aws-profile")) {
+		rmMasterKeys = append(rmMasterKeys, k)
+	}
+	for _, k := range pgp.MasterKeysFromFingerprintString(c.String("rm-pgp")) {
+		rmMasterKeys = append(rmMasterKeys, k)
+	}
+	for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("rm-gcp-kms")) {
+		rmMasterKeys = append(rmMasterKeys, k)
+	}
+	azureKeys, err = azkv.MasterKeysFromURLs(c.String("rm-azure-kv"))
+	if err != nil {
+		return rotateOpts{}, err
+	}
+	for _, k := range azureKeys {
+		rmMasterKeys = append(rmMasterKeys, k)
+	}
+	hcVaultKeys, err = hcvault.NewMasterKeysFromURIs(c.String("rm-hc-vault-transit"))
+	if err != nil {
+		return rotateOpts{}, err
+	}
+	for _, k := range hcVaultKeys {
+		rmMasterKeys = append(rmMasterKeys, k)
+	}
+	ageKeys, err = age.MasterKeysFromRecipients(c.String("rm-age"))
+	if err != nil {
+		return rotateOpts{}, err
+	}
+	for _, k := range ageKeys {
+		rmMasterKeys = append(rmMasterKeys, k)
+	}
+
+	return rotateOpts{
+		OutputStore:      outputStore,
+		InputStore:       inputStore,
+		InputPath:        fileName,
+		Cipher:           aes.NewCipher(),
+		KeyServices:      svcs,
+		DecryptionOrder:  decryptionOrder,
+		IgnoreMAC:        c.Bool("ignore-mac"),
+		AddMasterKeys:    addMasterKeys,
+		RemoveMasterKeys: rmMasterKeys,
 	}, nil
 }
 
