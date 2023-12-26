@@ -255,18 +255,24 @@ bar: baz",
     fn set_json_file_update() {
         let file_path =
             prepare_temp_file("test_set_update.json", r#"{"a": 2, "b": "ba"}"#.as_bytes());
-        Command::new(SOPS_BINARY_PATH)
-            .arg("-e")
-            .arg("-i")
-            .arg(file_path.clone())
-            .output()
-            .expect("Error running sops");
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("-e")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
         let output = Command::new(SOPS_BINARY_PATH)
             .arg("--set")
             .arg(r#"["a"] {"aa": "aaa"}"#)
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
@@ -292,18 +298,24 @@ bar: baz",
     fn set_json_file_insert() {
         let file_path =
             prepare_temp_file("test_set_insert.json", r#"{"a": 2, "b": "ba"}"#.as_bytes());
-        Command::new(SOPS_BINARY_PATH)
-            .arg("-e")
-            .arg("-i")
-            .arg(file_path.clone())
-            .output()
-            .expect("Error running sops");
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("-e")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
         let output = Command::new(SOPS_BINARY_PATH)
             .arg("--set")
             .arg(r#"["c"] {"cc": "ccc"}"#)
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
@@ -333,18 +345,24 @@ bar: baz",
 b: ba"#
                 .as_bytes(),
         );
-        Command::new(SOPS_BINARY_PATH)
-            .arg("-e")
-            .arg("-i")
-            .arg(file_path.clone())
-            .output()
-            .expect("Error running sops");
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("-e")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
         let output = Command::new(SOPS_BINARY_PATH)
             .arg("--set")
             .arg(r#"["a"] {"aa": "aaa"}"#)
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
@@ -374,18 +392,24 @@ b: ba"#
 b: ba"#
                 .as_bytes(),
         );
-        Command::new(SOPS_BINARY_PATH)
-            .arg("-e")
-            .arg("-i")
-            .arg(file_path.clone())
-            .output()
-            .expect("Error running sops");
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("-e")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
         let output = Command::new(SOPS_BINARY_PATH)
             .arg("--set")
             .arg(r#"["c"] {"cc": "ccc"}"#)
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
@@ -415,26 +439,37 @@ b: ba"#
 b: ba"#
                 .as_bytes(),
         );
-        Command::new(SOPS_BINARY_PATH)
-            .arg("-e")
-            .arg("-i")
-            .arg(file_path.clone())
-            .output()
-            .expect("Error running sops");
-        Command::new(SOPS_BINARY_PATH)
-            .arg("-e")
-            .arg("-i")
-            .arg("--set")
-            .arg(r#"["a"] "aaa""#)
-            .arg(file_path.clone())
-            .output()
-            .expect("Error running sops");
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("-e")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("-e")
+                .arg("-i")
+                .arg("--set")
+                .arg(r#"["a"] "aaa""#)
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
         let output = Command::new(SOPS_BINARY_PATH)
             .arg("-d")
             .arg("-i")
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
