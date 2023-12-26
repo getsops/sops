@@ -61,6 +61,7 @@ func Flatten(in map[string]interface{}) map[string]interface{} {
 	return newMap
 }
 
+// FlattenMetadata flattens a Metadata struct into a flat map.
 func FlattenMetadata(md Metadata) (map[string]interface{}, error) {
 	var mdMap map[string]interface{}
 	jsonBytes, err := json.Marshal(md)
@@ -214,6 +215,8 @@ func UnflattenMetadata(in map[string]interface{}) (Metadata, error) {
 	return md, err
 }
 
+// DecodeNewLines replaces \\n with \n for all string values in the map.
+// Used by config stores that do not handle multi-line values (ini, dotenv).
 func DecodeNewLines(m map[string]interface{}) {
 	for k, v := range m {
 		if s, ok := v.(string); ok {
@@ -222,6 +225,8 @@ func DecodeNewLines(m map[string]interface{}) {
 	}
 }
 
+// EncodeNewLines replaces \n with \\n for all string values in the map.
+// Used by config stores that do not handle multi-line values (ini, dotenv).
 func EncodeNewLines(m map[string]interface{}) {
 	for k, v := range m {
 		if s, ok := v.(string); ok {
