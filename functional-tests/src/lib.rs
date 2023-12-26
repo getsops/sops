@@ -452,10 +452,9 @@ b: ba"#
         );
         assert!(
             Command::new(SOPS_BINARY_PATH)
-                .arg("-e")
-                .arg("-i")
                 .arg("--set")
                 .arg(r#"["a"] "aaa""#)
+                .arg("-i")
                 .arg(file_path.clone())
                 .output()
                 .expect("Error running sops")
