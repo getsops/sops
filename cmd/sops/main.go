@@ -871,8 +871,9 @@ func main() {
 				encryptConfig: encConfig,
 			})
 			// While this check is also done below, the `err` in this scope shadows
-			// the `err` in the outer scope
-			if err != nil {
+			// the `err` in the outer scope.  **Only** do this in case --decrypt,
+			// --rotate-, and --set are not specified, though, to keep old behavior.
+			if err != nil && !c.Bool("decrypt") && !c.Bool("rotate") && c.String("set") == "" {
 				return toExitError(err)
 			}
 		}
@@ -902,7 +903,7 @@ func main() {
 
 			output, err = rotate(rotateOpts)
 			// While this check is also done below, the `err` in this scope shadows
-			// the `err` in the outer scope
+			// the `err` in the outer scope.
 			if err != nil {
 				return toExitError(err)
 			}
