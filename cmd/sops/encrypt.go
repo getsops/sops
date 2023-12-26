@@ -13,12 +13,7 @@ import (
 	"github.com/mitchellh/go-wordwrap"
 )
 
-type encryptOpts struct {
-	Cipher                  sops.Cipher
-	InputStore              sops.Store
-	OutputStore             sops.Store
-	InputPath               string
-	KeyServices             []keyservice.KeyServiceClient
+type encryptConfig struct {
 	UnencryptedSuffix       string
 	EncryptedSuffix         string
 	UnencryptedRegex        string
@@ -28,6 +23,15 @@ type encryptOpts struct {
 	MACOnlyEncrypted        bool
 	KeyGroups               []sops.KeyGroup
 	GroupThreshold          int
+}
+
+type encryptOpts struct {
+	Cipher                  sops.Cipher
+	InputStore              sops.Store
+	OutputStore             sops.Store
+	InputPath               string
+	KeyServices             []keyservice.KeyServiceClient
+	encryptConfig
 }
 
 type fileAlreadyEncryptedError struct{}
@@ -57,6 +61,21 @@ func ensureNoMetadata(opts encryptOpts, branch sops.TreeBranch) error {
 	return nil
 }
 
+func metadataFromEncryptionConfig(config encryptConfig) sops.Metadata {
+	return sops.Metadata{
+		KeyGroups:               config.KeyGroups,
+		UnencryptedSuffix:       config.UnencryptedSuffix,
+		EncryptedSuffix:         config.EncryptedSuffix,
+		UnencryptedRegex:        config.UnencryptedRegex,
+		EncryptedRegex:          config.EncryptedRegex,
+		UnencryptedCommentRegex: config.UnencryptedCommentRegex,
+		EncryptedCommentRegex:   config.EncryptedCommentRegex,
+		MACOnlyEncrypted:        config.MACOnlyEncrypted,
+		Version:                 version.Version,
+		ShamirThreshold:         config.GroupThreshold,
+	};
+}
+
 func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 	// Load the file
 	fileBytes, err := os.ReadFile(opts.InputPath)
@@ -79,18 +98,7 @@ func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 	}
 	tree := sops.Tree{
 		Branches: branches,
-		Metadata: sops.Metadata{
-			KeyGroups:               opts.KeyGroups,
-			UnencryptedSuffix:       opts.UnencryptedSuffix,
-			EncryptedSuffix:         opts.EncryptedSuffix,
-			UnencryptedRegex:        opts.UnencryptedRegex,
-			EncryptedRegex:          opts.EncryptedRegex,
-			UnencryptedCommentRegex: opts.UnencryptedCommentRegex,
-			EncryptedCommentRegex:   opts.EncryptedCommentRegex,
-			MACOnlyEncrypted:        opts.MACOnlyEncrypted,
-			Version:                 version.Version,
-			ShamirThreshold:         opts.GroupThreshold,
-		},
+		Metadata: metadataFromEncryptionConfig(opts.encryptConfig),
 		FilePath: path,
 	}
 	dataKey, errs := tree.GenerateDataKeyWithKeyServices(opts.KeyServices)
