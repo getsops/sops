@@ -851,55 +851,10 @@ func main() {
 			log.Warn("More than one command (--encrypt, --decrypt, --rotate, --set) has been specified. Only the changes made by the last one will be visible. Note that this behavior is deprecated and will cause an error eventually.")
 		}
 
-		unencryptedSuffix := c.String("unencrypted-suffix")
-		encryptedSuffix := c.String("encrypted-suffix")
-		encryptedRegex := c.String("encrypted-regex")
-		unencryptedRegex := c.String("unencrypted-regex")
-		macOnlyEncrypted := c.Bool("mac-only-encrypted")
-		conf, err := loadConfig(c, fileNameOverride, nil)
+		// Load configuration here for backwards compatibility (error out in case of bad config files)
+		_, err = loadConfig(c, fileNameOverride, nil)
 		if err != nil {
 			return toExitError(err)
-		}
-		if conf != nil {
-			// command line options have precedence
-			if unencryptedSuffix == "" {
-				unencryptedSuffix = conf.UnencryptedSuffix
-			}
-			if encryptedSuffix == "" {
-				encryptedSuffix = conf.EncryptedSuffix
-			}
-			if encryptedRegex == "" {
-				encryptedRegex = conf.EncryptedRegex
-			}
-			if unencryptedRegex == "" {
-				unencryptedRegex = conf.UnencryptedRegex
-			}
-			if !macOnlyEncrypted {
-				macOnlyEncrypted = conf.MACOnlyEncrypted
-			}
-		}
-
-		cryptRuleCount := 0
-		if unencryptedSuffix != "" {
-			cryptRuleCount++
-		}
-		if encryptedSuffix != "" {
-			cryptRuleCount++
-		}
-		if encryptedRegex != "" {
-			cryptRuleCount++
-		}
-		if unencryptedRegex != "" {
-			cryptRuleCount++
-		}
-
-		if cryptRuleCount > 1 {
-			return common.NewExitError("Error: cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex or unencrypted_regex in the same file", codes.ErrorConflictingParameters)
-		}
-
-		// only supply the default UnencryptedSuffix when EncryptedSuffix and EncryptedRegex are not provided
-		if cryptRuleCount == 0 {
-			unencryptedSuffix = sops.DefaultUnencryptedSuffix
 		}
 
 		inputStore := inputStore(c, fileNameOverride)
@@ -912,30 +867,24 @@ func main() {
 		}
 		var output []byte
 		if c.Bool("encrypt") {
-			var groups []sops.KeyGroup
-			groups, err = keyGroups(c, fileNameOverride)
-			if err != nil {
-				return toExitError(err)
-			}
-			var threshold int
-			threshold, err = shamirThreshold(c, fileNameOverride)
+			encConfig, err := getEncryptConfig(c, fileNameOverride)
 			if err != nil {
 				return toExitError(err)
 			}
 			output, err = encrypt(encryptOpts{
-				OutputStore:       outputStore,
-				InputStore:        inputStore,
-				InputPath:         fileName,
-				Cipher:            aes.NewCipher(),
-				UnencryptedSuffix: unencryptedSuffix,
-				EncryptedSuffix:   encryptedSuffix,
-				UnencryptedRegex:  unencryptedRegex,
-				EncryptedRegex:    encryptedRegex,
-				MACOnlyEncrypted:  macOnlyEncrypted,
-				KeyServices:       svcs,
-				KeyGroups:         groups,
-				GroupThreshold:    threshold,
+				OutputStore:   outputStore,
+				InputStore:    inputStore,
+				InputPath:     fileName,
+				Cipher:        aes.NewCipher(),
+				KeyServices:   svcs,
+				encryptConfig: encConfig,
 			})
+			// While this check is also done below, the `err` in this scope shadows
+			// the `err` in the outer scope.  **Only** do this in case --decrypt,
+			// --rotate-, and --set are not specified, though, to keep old behavior.
+			if err != nil && !c.Bool("decrypt") && !c.Bool("rotate") && c.String("set") == "" {
+				return toExitError(err)
+			}
 		}
 
 		if c.Bool("decrypt") {
@@ -1077,26 +1026,19 @@ func main() {
 				output, err = edit(opts)
 			} else {
 				// File doesn't exist, edit the example file instead
-				var groups []sops.KeyGroup
-				groups, err = keyGroups(c, fileNameOverride)
-				if err != nil {
-					return toExitError(err)
-				}
-				var threshold int
-				threshold, err = shamirThreshold(c, fileNameOverride)
+				encConfig, err := getEncryptConfig(c, fileNameOverride)
 				if err != nil {
 					return toExitError(err)
 				}
 				output, err = editExample(editExampleOpts{
-					editOpts:          opts,
-					UnencryptedSuffix: unencryptedSuffix,
-					EncryptedSuffix:   encryptedSuffix,
-					UnencryptedRegex:  unencryptedRegex,
-					EncryptedRegex:    encryptedRegex,
-					MACOnlyEncrypted:  macOnlyEncrypted,
-					KeyGroups:         groups,
-					GroupThreshold:    threshold,
+					editOpts:      opts,
+					encryptConfig: encConfig,
 				})
+				// While this check is also done below, the `err` in this scope shadows
+				// the `err` in the outer scope
+				if err != nil {
+					return toExitError(err)
+				}
 			}
 		}
 
@@ -1136,6 +1078,81 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func getEncryptConfig(c *cli.Context, fileName string) (encryptConfig, error) {
+	unencryptedSuffix := c.String("unencrypted-suffix")
+	encryptedSuffix := c.String("encrypted-suffix")
+	encryptedRegex := c.String("encrypted-regex")
+	unencryptedRegex := c.String("unencrypted-regex")
+	macOnlyEncrypted := c.Bool("mac-only-encrypted")
+	conf, err := loadConfig(c, fileName, nil)
+	if err != nil {
+		return encryptConfig{}, toExitError(err)
+	}
+	if conf != nil {
+		// command line options have precedence
+		if unencryptedSuffix == "" {
+			unencryptedSuffix = conf.UnencryptedSuffix
+		}
+		if encryptedSuffix == "" {
+			encryptedSuffix = conf.EncryptedSuffix
+		}
+		if encryptedRegex == "" {
+			encryptedRegex = conf.EncryptedRegex
+		}
+		if unencryptedRegex == "" {
+			unencryptedRegex = conf.UnencryptedRegex
+		}
+		if !macOnlyEncrypted {
+			macOnlyEncrypted = conf.MACOnlyEncrypted
+		}
+	}
+
+	cryptRuleCount := 0
+	if unencryptedSuffix != "" {
+		cryptRuleCount++
+	}
+	if encryptedSuffix != "" {
+		cryptRuleCount++
+	}
+	if encryptedRegex != "" {
+		cryptRuleCount++
+	}
+	if unencryptedRegex != "" {
+		cryptRuleCount++
+	}
+
+	if cryptRuleCount > 1 {
+		return encryptConfig{}, common.NewExitError("Error: cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex, or unencrypted_regex in the same file", codes.ErrorConflictingParameters)
+	}
+
+	// only supply the default UnencryptedSuffix when EncryptedSuffix, EncryptedRegex, and others are not provided
+	if cryptRuleCount == 0 {
+		unencryptedSuffix = sops.DefaultUnencryptedSuffix
+	}
+
+	var groups []sops.KeyGroup
+	groups, err = keyGroups(c, fileName)
+	if err != nil {
+		return encryptConfig{}, err
+	}
+
+	var threshold int
+	threshold, err = shamirThreshold(c, fileName)
+	if err != nil {
+		return encryptConfig{}, err
+	}
+
+	return encryptConfig{
+		UnencryptedSuffix: unencryptedSuffix,
+		EncryptedSuffix:   encryptedSuffix,
+		UnencryptedRegex:  unencryptedRegex,
+		EncryptedRegex:    encryptedRegex,
+		MACOnlyEncrypted:  macOnlyEncrypted,
+		KeyGroups:         groups,
+		GroupThreshold:    threshold,
+	}, nil
 }
 
 func toExitError(err error) error {
