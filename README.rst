@@ -1571,7 +1571,8 @@ regular expression.
 
 Conversely, you can opt in to only left certain keys without encrypting by using the
 ``--unencrypted-comment-regex`` option, which will leave the values and comments
-unencrypted when they have a preeceding comment that matches the supplied regular expression.
+unencrypted when they have a preeceding comment, or a trailing comment on the same line,
+that matches the supplied regular expression.
 
 You can also specify these options in the ``.sops.yaml`` config file.
 
