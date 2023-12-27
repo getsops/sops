@@ -498,6 +498,14 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 				if err != nil {
 					return nil, fmt.Errorf("Could not encrypt value: %s", err)
 				}
+				if ok && tree.Metadata.UnencryptedCommentRegex != "" {
+					// If an encrypted comment matches tree.Metadata.UnencryptedCommentRegex, decryption will fail
+					// as the MAC does not match, and the commented value will not be decrypted.
+					matched, _ := regexp.Match(tree.Metadata.UnencryptedCommentRegex, []byte(in.(string)))
+					if matched {
+						return nil, fmt.Errorf("Encrypted comment %q matches UnencryptedCommentRegex! Make sure that UnencryptedCommentRegex cannot match an encrypted comment.", in)
+					}
+				}
 			}
 			return in, nil
 		})
