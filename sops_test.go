@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"reflect"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -36,6 +37,23 @@ func (c reverseCipher) Decrypt(value string, key []byte, path string) (plaintext
 		return nil, fmt.Errorf("Error")
 	}
 	return reverse(value), nil
+}
+
+type encPrefixCipher struct{}
+
+func (c encPrefixCipher) Encrypt(value interface{}, key []byte, path string) (string, error) {
+	b, err := ToBytes(value)
+	if err != nil {
+		return "", err
+	}
+	return "ENC:" + string(b), nil
+}
+func (c encPrefixCipher) Decrypt(value string, key []byte, path string) (plaintext interface{}, err error) {
+	v, ok := strings.CutPrefix(value, "ENC:")
+	if !ok {
+		return nil, fmt.Errorf("String not prefixed with 'ENC:'")
+	}
+	return v, nil
 }
 
 func TestUnencryptedSuffix(t *testing.T) {
@@ -597,6 +615,26 @@ func TestUnencryptedCommentRegex(t *testing.T) {
 	if !reflect.DeepEqual(tree.Branches[0], expected) {
 		t.Errorf("Trees don't match: \ngot\t\t\t%+v,\nexpected\t\t%+v", tree.Branches[0], expected)
 	}
+}
+
+func TestUnencryptedCommentRegexFail(t *testing.T) {
+	branches := TreeBranches{
+		TreeBranch{
+			TreeItem{
+				Key:   Comment{"sops:noenc"},
+				Value: nil,
+			},
+			TreeItem{
+				Key:   "foo",
+				Value: "bar",
+			},
+		},
+	}
+	tree := Tree{Branches: branches, Metadata: Metadata{UnencryptedCommentRegex: "ENC"}}
+	cipher := encPrefixCipher{}
+	_, err := tree.Encrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	assert.NotNil(t, err)
+	assert.Contains(t, err.Error(), "Encrypted comment \"ENC:sops:noenc\" matches UnencryptedCommentRegex!")
 }
 
 type MockCipher struct{}
