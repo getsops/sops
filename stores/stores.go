@@ -506,3 +506,13 @@ var ExampleFlatTree = sops.Tree{
 		},
 	},
 }
+
+// HasSopsTopLevelKey returns true if the given branch has a top-level key called "sops".
+func HasSopsTopLevelKey(branch sops.TreeBranch) bool {
+	for _, b := range branch {
+		if b.Key == "sops" {
+			return true
+		}
+	}
+	return false
+}

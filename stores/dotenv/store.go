@@ -175,3 +175,15 @@ func isComplexValue(v interface{}) bool {
 	}
 	return false
 }
+
+// HasSopsTopLevelKey checks whether a top-level "sops" key exists.
+func (store *Store) HasSopsTopLevelKey(branch sops.TreeBranch) bool {
+	for _, b := range branch {
+		if key, ok := b.Key.(string); ok {
+			if strings.HasPrefix(key, SopsPrefix) {
+				return true
+			}
+		}
+	}
+	return false
+}
