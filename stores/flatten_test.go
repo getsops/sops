@@ -222,11 +222,32 @@ func TestDecodeNonStrings(t *testing.T) {
 		{map[string]interface{}{"mac_only_encrypted": "false"}, map[string]interface{}{"mac_only_encrypted": false}},
 		{map[string]interface{}{"mac_only_encrypted": "true"}, map[string]interface{}{"mac_only_encrypted": true}},
 		{map[string]interface{}{"mac_only_encrypted": "something-else"}, map[string]interface{}{"mac_only_encrypted": false}},
+		{map[string]interface{}{"shamir_threshold": "2"}, map[string]interface{}{"shamir_threshold": 2}},
+		{map[string]interface{}{"shamir_threshold": "002"}, map[string]interface{}{"shamir_threshold": 2}},
+		{map[string]interface{}{"shamir_threshold": "123"}, map[string]interface{}{"shamir_threshold": 123}},
+		{map[string]interface{}{"shamir_threshold": 123}, map[string]interface{}{"shamir_threshold": 123}},
 	}
 
 	for _, tt := range tests {
-		DecodeNonStrings(tt.input)
+		err := DecodeNonStrings(tt.input)
+		assert.Nil(t, err)
 		assert.Equal(t, tt.want, tt.input)
+	}
+}
+
+func TestDecodeNonStringsErrors(t *testing.T) {
+	tests := []struct {
+		input map[string]interface{}
+		want  string
+	}{
+		{map[string]interface{}{"shamir_threshold": "foo"}, "shamir_threshold is not an integer: strconv.Atoi: parsing \"foo\": invalid syntax"},
+		{map[string]interface{}{"shamir_threshold": true}, "shamir_threshold is neither a string nor an integer, but bool"},
+	}
+
+	for _, tt := range tests {
+		err := DecodeNonStrings(tt.input)
+		assert.NotNil(t, err)
+		assert.Equal(t, tt.want, err.Error())
 	}
 }
 
@@ -237,6 +258,8 @@ func TestEncodeNonStrings(t *testing.T) {
 	}{
 		{map[string]interface{}{"mac_only_encrypted": false}, map[string]interface{}{"mac_only_encrypted": "false"}},
 		{map[string]interface{}{"mac_only_encrypted": true}, map[string]interface{}{"mac_only_encrypted": "true"}},
+		{map[string]interface{}{"shamir_threshold": 2}, map[string]interface{}{"shamir_threshold": "2"}},
+		{map[string]interface{}{"shamir_threshold": 123}, map[string]interface{}{"shamir_threshold": "123"}},
 	}
 
 	for _, tt := range tests {
