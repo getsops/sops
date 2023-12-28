@@ -1,6 +1,7 @@
 package stores
 
 import (
+	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
@@ -58,6 +59,22 @@ func Flatten(in map[string]interface{}) map[string]interface{} {
 		}
 	}
 	return newMap
+}
+
+// FlattenMetadata flattens a Metadata struct into a flat map.
+func FlattenMetadata(md Metadata) (map[string]interface{}, error) {
+	var mdMap map[string]interface{}
+	jsonBytes, err := json.Marshal(md)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(jsonBytes, &mdMap)
+	if err != nil {
+		return nil, err
+	}
+
+	flat := Flatten(mdMap)
+	return flat, nil
 }
 
 type token interface{}
@@ -184,4 +201,58 @@ func Unflatten(in map[string]interface{}) map[string]interface{} {
 		}
 	}
 	return newMap
+}
+
+// UnflattenMetadata unflattens a map flattened by FlattenMetadata into Metadata
+func UnflattenMetadata(in map[string]interface{}) (Metadata, error) {
+	m := Unflatten(in)
+	var md Metadata
+	jsonBytes, err := json.Marshal(m)
+	if err != nil {
+		return md, err
+	}
+	err = json.Unmarshal(jsonBytes, &md)
+	return md, err
+}
+
+// DecodeNewLines replaces \\n with \n for all string values in the map.
+// Used by config stores that do not handle multi-line values (ini, dotenv).
+func DecodeNewLines(m map[string]interface{}) {
+	for k, v := range m {
+		if s, ok := v.(string); ok {
+			m[k] = strings.Replace(s, "\\n", "\n", -1)
+		}
+	}
+}
+
+// EncodeNewLines replaces \n with \\n for all string values in the map.
+// Used by config stores that do not handle multi-line values (ini, dotenv).
+func EncodeNewLines(m map[string]interface{}) {
+	for k, v := range m {
+		if s, ok := v.(string); ok {
+			m[k] = strings.Replace(s, "\n", "\\n", -1)
+		}
+	}
+}
+
+// DecodeNonStrings will look for known metadata keys that are not strings and decode to the appropriate type
+func DecodeNonStrings(m map[string]interface{}) {
+	if v, ok := m["mac_only_encrypted"]; ok {
+		m["mac_only_encrypted"] = false
+		if v == "true" {
+			m["mac_only_encrypted"] = true
+		}
+	}
+}
+
+// EncodeNonStrings will look for known metadata keys that are not strings and will encode it to strings
+func EncodeNonStrings(m map[string]interface{}) {
+	if v, found := m["mac_only_encrypted"]; found {
+		if vBool, ok := v.(bool); ok {
+			m["mac_only_encrypted"] = "false"
+			if vBool {
+				m["mac_only_encrypted"] = "true"
+			}
+		}
+	}
 }

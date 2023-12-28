@@ -139,3 +139,108 @@ func TestTokenizeNested(t *testing.T) {
 	tokenized := tokenize(input)
 	assert.Equal(t, expected, tokenized)
 }
+
+func TestFlattenMetadata(t *testing.T) {
+	tests := []struct {
+		input Metadata
+		want  map[string]interface{}
+	}{
+		{Metadata{MACOnlyEncrypted: false}, map[string]interface{}{"mac_only_encrypted": nil}},
+		{Metadata{MACOnlyEncrypted: true}, map[string]interface{}{"mac_only_encrypted": true}},
+		{Metadata{MessageAuthenticationCode: "line1\nline2"}, map[string]interface{}{"mac": "line1\nline2"}},
+		{Metadata{MessageAuthenticationCode: "line1\n\n\nline2\n\nline3"}, map[string]interface{}{"mac": "line1\n\n\nline2\n\nline3"}},
+	}
+
+	for _, tt := range tests {
+		got, err := FlattenMetadata(tt.input)
+		assert.NoError(t, err)
+		for k, v := range tt.want {
+			assert.Equal(t, v, got[k])
+		}
+	}
+}
+
+func TestFlattenMetadataToUnflattenMetadata(t *testing.T) {
+	tests := []struct {
+		input Metadata
+	}{
+		{Metadata{MACOnlyEncrypted: true}},
+		{Metadata{MACOnlyEncrypted: false}},
+		{Metadata{ShamirThreshold: 3}},
+		{Metadata{MessageAuthenticationCode: "line1\nline2"}},
+		{Metadata{MessageAuthenticationCode: "line1\n\n\nline2\n\nline3"}},
+	}
+
+	for _, tt := range tests {
+		flat, err := FlattenMetadata(tt.input)
+		assert.NoError(t, err)
+		md, err := UnflattenMetadata(flat)
+		assert.NoError(t, err)
+		assert.Equal(t, tt.input, md)
+	}
+}
+
+func TestDecodeNewLines(t *testing.T) {
+	tests := []struct {
+		input map[string]interface{}
+		want  map[string]interface{}
+	}{
+		{map[string]interface{}{"mac": "line1\\nline2"}, map[string]interface{}{"mac": "line1\nline2"}},
+		{map[string]interface{}{"mac": "line1\\n\\n\\nline2\\n\\nline3"}, map[string]interface{}{"mac": "line1\n\n\nline2\n\nline3"}},
+	}
+
+	for _, tt := range tests {
+		DecodeNewLines(tt.input)
+		for k, v := range tt.want {
+			assert.Equal(t, v, tt.input[k])
+		}
+	}
+}
+
+func TestEncodeNewLines(t *testing.T) {
+	tests := []struct {
+		input map[string]interface{}
+		want  map[string]interface{}
+	}{
+		{map[string]interface{}{"mac": "line1\nline2"}, map[string]interface{}{"mac": "line1\\nline2"}},
+		{map[string]interface{}{"mac": "line1\n\n\nline2\n\nline3"}, map[string]interface{}{"mac": "line1\\n\\n\\nline2\\n\\nline3"}},
+	}
+
+	for _, tt := range tests {
+		EncodeNewLines(tt.input)
+		for k, v := range tt.want {
+			assert.Equal(t, v, tt.input[k])
+		}
+	}
+}
+
+func TestDecodeNonStrings(t *testing.T) {
+	tests := []struct {
+		input map[string]interface{}
+		want  map[string]interface{}
+	}{
+		{map[string]interface{}{"mac_only_encrypted": "false"}, map[string]interface{}{"mac_only_encrypted": false}},
+		{map[string]interface{}{"mac_only_encrypted": "true"}, map[string]interface{}{"mac_only_encrypted": true}},
+		{map[string]interface{}{"mac_only_encrypted": "something-else"}, map[string]interface{}{"mac_only_encrypted": false}},
+	}
+
+	for _, tt := range tests {
+		DecodeNonStrings(tt.input)
+		assert.Equal(t, tt.want, tt.input)
+	}
+}
+
+func TestEncodeNonStrings(t *testing.T) {
+	tests := []struct {
+		input map[string]interface{}
+		want  map[string]interface{}
+	}{
+		{map[string]interface{}{"mac_only_encrypted": false}, map[string]interface{}{"mac_only_encrypted": "false"}},
+		{map[string]interface{}{"mac_only_encrypted": true}, map[string]interface{}{"mac_only_encrypted": "true"}},
+	}
+
+	for _, tt := range tests {
+		EncodeNonStrings(tt.input)
+		assert.Equal(t, tt.want, tt.input)
+	}
+}
