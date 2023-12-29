@@ -357,3 +357,13 @@ func (store *Store) EmitExample() []byte {
 	}
 	return bytes
 }
+
+// HasSopsTopLevelKey checks whether a top-level "sops" key exists.
+func (store *Store) HasSopsTopLevelKey(branch sops.TreeBranch) bool {
+	return stores.HasSopsTopLevelKey(branch)
+}
+
+// HasSopsTopLevelKey checks whether a top-level "sops" key exists.
+func (store *BinaryStore) HasSopsTopLevelKey(branch sops.TreeBranch) bool {
+	return stores.HasSopsTopLevelKey(branch)
+}

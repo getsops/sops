@@ -36,7 +36,8 @@ func (err *fileAlreadyEncryptedError) Error() string {
 
 func (err *fileAlreadyEncryptedError) UserError() string {
 	message := "The file you have provided contains a top-level entry called " +
-		"'sops'. This is generally due to the file already being encrypted. " +
+		"'sops', or for flat file formats top-level entries starting with " +
+		"'sops_'. This is generally due to the file already being encrypted. " +
 		"SOPS uses a top-level entry called 'sops' to store the metadata " +
 		"required to decrypt the file. For this reason, SOPS can not " +
 		"encrypt files that already contain such an entry.\n\n" +
@@ -47,10 +48,8 @@ func (err *fileAlreadyEncryptedError) UserError() string {
 }
 
 func ensureNoMetadata(opts encryptOpts, branch sops.TreeBranch) error {
-	for _, b := range branch {
-		if b.Key == "sops" {
-			return &fileAlreadyEncryptedError{}
-		}
+	if opts.OutputStore.HasSopsTopLevelKey(branch) {
+		return &fileAlreadyEncryptedError{}
 	}
 	return nil
 }

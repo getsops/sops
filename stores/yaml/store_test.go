@@ -381,3 +381,20 @@ func TestIndent1(t *testing.T) {
 	assert.Equal(t, string(INDENT_1_OUT), string(bytes))
 	assert.Equal(t, INDENT_1_OUT, bytes)
 }
+
+func TestHasSopsTopLevelKey(t *testing.T) {
+	ok := (&Store{}).HasSopsTopLevelKey(sops.TreeBranch{
+		sops.TreeItem{
+			Key:   "sops",
+			Value: "value",
+		},
+	})
+	assert.Equal(t, ok, true)
+	ok = (&Store{}).HasSopsTopLevelKey(sops.TreeBranch{
+		sops.TreeItem{
+			Key:   "sops_",
+			Value: "value",
+		},
+	})
+	assert.Equal(t, ok, false)
+}
