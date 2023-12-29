@@ -24,7 +24,7 @@ import (
 )
 
 const (
-	// The key used to store SOPS metadata at in SOPS encrypted files.
+	// SopsMetadataKey is the key used to store SOPS metadata at in SOPS encrypted files.
 	SopsMetadataKey = "sops"
 )
 
