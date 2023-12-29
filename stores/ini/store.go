@@ -188,7 +188,10 @@ func (store *Store) iniSectionToMetadata(sopsSection *ini.Section) (stores.Metad
 		metadataHash[k] = v
 	}
 	stores.DecodeNewLines(metadataHash)
-	stores.DecodeNonStrings(metadataHash)
+	err := stores.DecodeNonStrings(metadataHash)
+	if err != nil {
+		return stores.Metadata{}, err
+	}
 	return stores.UnflattenMetadata(metadataHash)
 }
 

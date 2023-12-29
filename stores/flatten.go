@@ -236,13 +236,28 @@ func EncodeNewLines(m map[string]interface{}) {
 }
 
 // DecodeNonStrings will look for known metadata keys that are not strings and decode to the appropriate type
-func DecodeNonStrings(m map[string]interface{}) {
+func DecodeNonStrings(m map[string]interface{}) error {
 	if v, ok := m["mac_only_encrypted"]; ok {
 		m["mac_only_encrypted"] = false
 		if v == "true" {
 			m["mac_only_encrypted"] = true
 		}
 	}
+	if v, ok := m["shamir_threshold"]; ok {
+		switch val := v.(type) {
+			case string:
+				vInt, err := strconv.Atoi(val)
+				if err != nil {
+					return fmt.Errorf("shamir_threshold is not an integer: %s", err.Error())
+				}
+				m["shamir_threshold"] = vInt
+			case int:
+				m["shamir_threshold"] = val
+			default:
+				return fmt.Errorf("shamir_threshold is neither a string nor an integer, but %T", val)
+		}
+	}
+	return nil
 }
 
 // EncodeNonStrings will look for known metadata keys that are not strings and will encode it to strings
@@ -253,6 +268,11 @@ func EncodeNonStrings(m map[string]interface{}) {
 			if vBool {
 				m["mac_only_encrypted"] = "true"
 			}
+		}
+	}
+	if v, found := m["shamir_threshold"]; found {
+		if vInt, ok := v.(int); ok {
+			m["shamir_threshold"] = fmt.Sprintf("%d", vInt)
 		}
 	}
 }
