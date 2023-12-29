@@ -291,7 +291,7 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 		}
 
 		for i, elt := range branch {
-			if elt.Key == "sops" { // Erase
+			if elt.Key == stores.SopsMetadataKey { // Erase
 				branch = append(branch[:i], branch[i+1:]...)
 			}
 		}
@@ -357,7 +357,7 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 		// Create copy of branch with metadata appended
 		branch = append(sops.TreeBranch(nil), branch...)
 		branch = append(branch, sops.TreeItem{
-			Key:   "sops",
+			Key:   stores.SopsMetadataKey,
 			Value: stores.MetadataFromInternal(in.Metadata),
 		})
 		// Marshal branch to global mapping node
