@@ -840,4 +840,113 @@ b: ba"#
             .expect("couldn't read output file contents");
         assert_ne!(contents, "", "Output file is empty");
     }
+
+    #[test]
+    fn exec_env() {
+        let file_path = prepare_temp_file(
+            "test_exec_env.yaml",
+            r#"foo: bar
+bar: |-
+  baz
+  bam
+"#
+            .as_bytes(),
+        );
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("encrypt")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
+        let print_foo = prepare_temp_file(
+            "print_foo.sh",
+            r#"#!/bin/bash
+echo -E "${foo}"
+"#
+            .as_bytes(),
+        );
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("exec-env")
+            .arg(file_path.clone())
+            .arg(format!("/bin/bash {}", print_foo))
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert_eq!(String::from_utf8_lossy(&output.stdout), "bar\n");
+        let print_bar = prepare_temp_file(
+            "print_bar.sh",
+            r#"#!/bin/bash
+echo -E "${bar}"
+"#
+            .as_bytes(),
+        );
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("exec-env")
+            .arg(file_path.clone())
+            .arg(format!("/bin/bash {}", print_bar))
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert_eq!(String::from_utf8_lossy(&output.stdout), "baz\\nbam\n");
+    }
+
+    #[test]
+    fn exec_file() {
+        let file_path = prepare_temp_file(
+            "test_exec_file.yaml",
+            r#"foo: bar
+bar: |-
+  baz
+  bam
+"#
+            .as_bytes(),
+        );
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("-e")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("exec-file")
+            .arg("--output-type")
+            .arg("json")
+            .arg(file_path.clone())
+            .arg("cat {}")
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert_eq!(
+            String::from_utf8_lossy(&output.stdout),
+            r#"{
+	"foo": "bar",
+	"bar": "baz\nbam"
+}"#
+        );
+    }
 }
