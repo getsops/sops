@@ -12,7 +12,7 @@ import (
 )
 
 // SopsPrefix is the prefix for all metadatada entry keys
-const SopsPrefix = "sops_"
+const SopsPrefix = stores.SopsMetadataKey + "_"
 
 // Store handles storage of dotenv data
 type Store struct {
