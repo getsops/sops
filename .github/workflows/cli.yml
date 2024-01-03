@@ -117,6 +117,6 @@ jobs:
         run: cargo test
         working-directory: ./functional-tests
 
-      - name: Run Formatting
-        run: cargo fmt
+      - name: Run Formatting Check
+        run: cargo fmt --check
         working-directory: ./functional-tests
