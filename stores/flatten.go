@@ -1,10 +1,11 @@
 package stores
 
 import (
-	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/mitchellh/mapstructure"
 )
 
 const mapSeparator = "__map_"
@@ -63,17 +64,12 @@ func Flatten(in map[string]interface{}) map[string]interface{} {
 
 // FlattenMetadata flattens a Metadata struct into a flat map.
 func FlattenMetadata(md Metadata) (map[string]interface{}, error) {
-	var mdMap map[string]interface{}
-	jsonBytes, err := json.Marshal(md)
+	result, err := ConvertStructToMap(md)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("convert metadata to map: %w", err)
 	}
-	err = json.Unmarshal(jsonBytes, &mdMap)
-	if err != nil {
-		return nil, err
-	}
+	flat := Flatten(result)
 
-	flat := Flatten(mdMap)
 	return flat, nil
 }
 
@@ -207,11 +203,11 @@ func Unflatten(in map[string]interface{}) map[string]interface{} {
 func UnflattenMetadata(in map[string]interface{}) (Metadata, error) {
 	m := Unflatten(in)
 	var md Metadata
-	jsonBytes, err := json.Marshal(m)
+	err := mapstructure.WeakDecode(m, &md)
 	if err != nil {
 		return md, err
 	}
-	err = json.Unmarshal(jsonBytes, &md)
+
 	return md, err
 }
 
