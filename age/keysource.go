@@ -18,7 +18,6 @@ import (
 )
 
 const (
-	privateKeySizeLimit = 1 << 24 // 16 MiB
 	// SopsAgeKeyEnv can be set as an environment variable with a string list
 	// of age keys as value.
 	SopsAgeKeyEnv = "SOPS_AGE_KEY"

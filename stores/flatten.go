@@ -258,17 +258,9 @@ func DecodeNonStrings(m map[string]interface{}) error {
 
 // EncodeNonStrings will look for known metadata keys that are not strings and will encode it to strings
 func EncodeNonStrings(m map[string]interface{}) {
-	if v, found := m["mac_only_encrypted"]; found {
-		if vBool, ok := v.(bool); ok {
-			m["mac_only_encrypted"] = "false"
-			if vBool {
-				m["mac_only_encrypted"] = "true"
-			}
-		}
-	}
-	if v, found := m["shamir_threshold"]; found {
-		if vInt, ok := v.(int); ok {
-			m["shamir_threshold"] = fmt.Sprintf("%d", vInt)
+	for k, v := range m {
+		if _, ok := v.(string); !ok {
+			m[k] = ValueToString(v)
 		}
 	}
 }
