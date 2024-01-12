@@ -28,6 +28,23 @@ EylloI7MNGbadPGb
 -----END AGE ENCRYPTED FILE-----`
 	// mockEncryptedKeyPlain is the plain value of mockEncryptedKey.
 	mockEncryptedKeyPlain string = "data"
+	// mockSshRecipient is a mock age ssh recipient, it matches mockSshIdentity
+	mockSshRecipient string = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID+Wi8WZw2bXfBpcs/WECttCzP39OkenS6pHWHWGFJvN Test"
+	// mockSshIdentity is a mock age identity based on an OpenSSH private key (ed25519)
+	mockSshIdentity string = `-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+QyNTUxOQAAACA/lovFmcNm13waXLP1hArbQsz9/TpHp0uqR1h1hhSbzQAAAIgCXDMIAlwz
+CAAAAAtzc2gtZWQyNTUxOQAAACA/lovFmcNm13waXLP1hArbQsz9/TpHp0uqR1h1hhSbzQ
+AAAEBJdWTJ8dC0OnMcwy4gQ96sp6KG8GE9EiyhFGhKldKiST+Wi8WZw2bXfBpcs/WECttC
+zP39OkenS6pHWHWGFJvNAAAABFRlc3QB
+-----END OPENSSH PRIVATE KEY-----`
+	mockEncryptedSshKey string = `-----BEGIN AGE ENCRYPTED FILE-----
+YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNzaC1lZDI1NTE5IDJjd0R4dyB2R3Ns
+VUNHaXBiTEJaNU5BMFFQZUpCYWJqODFyTTZ4WWZoRVpUd2M2aTBFCkduUFJHb1U2
+K3RqWVQrLzE4anZKZ3h2T3c2MFpZTHlGaHprcElXenByWTAKLS0tIG56MHFSZERl
+em9PWmRMMTY4aytYTnVZN04yeER5Z2E3TWxWT3JTZWR2ekUKp/HZLy4MzQqoszGk
++P0hSPPNhOhvFwv4AqCw1+A+WyeHGQPq
+-----END AGE ENCRYPTED FILE-----`
 )
 
 func TestMasterKeysFromRecipients(t *testing.T) {
@@ -41,22 +58,32 @@ func TestMasterKeysFromRecipients(t *testing.T) {
 		assert.Equal(t, got[0].Recipient, mockRecipient)
 	})
 
-	t.Run("recipients", func(t *testing.T) {
-		got, err := MasterKeysFromRecipients(mockRecipient + "," + otherRecipient)
+	t.Run("recipient-ssh", func(t *testing.T) {
+		got, err := MasterKeysFromRecipients(mockSshRecipient)
 		assert.NoError(t, err)
 
-		assert.Len(t, got, 2)
+		assert.Len(t, got, 1)
+		assert.Equal(t, got[0].Recipient, mockSshRecipient)
+	})
+
+	t.Run("recipients", func(t *testing.T) {
+		got, err := MasterKeysFromRecipients(mockRecipient + "," + otherRecipient + "," + mockSshRecipient)
+		assert.NoError(t, err)
+
+		assert.Len(t, got, 3)
 		assert.Equal(t, got[0].Recipient, mockRecipient)
 		assert.Equal(t, got[1].Recipient, otherRecipient)
+		assert.Equal(t, got[2].Recipient, mockSshRecipient)
 	})
 
 	t.Run("leading and trailing spaces", func(t *testing.T) {
-		got, err := MasterKeysFromRecipients("   " + mockRecipient + "   ,   " + otherRecipient + "   ")
+		got, err := MasterKeysFromRecipients("   " + mockRecipient + "   ,   " + otherRecipient + " ,  " + mockSshRecipient + "     ")
 		assert.NoError(t, err)
 
-		assert.Len(t, got, 2)
+		assert.Len(t, got, 3)
 		assert.Equal(t, got[0].Recipient, mockRecipient)
 		assert.Equal(t, got[1].Recipient, otherRecipient)
+		assert.Equal(t, got[2].Recipient, mockSshRecipient)
 	})
 
 	t.Run("empty", func(t *testing.T) {
@@ -75,10 +102,26 @@ func TestMasterKeyFromRecipient(t *testing.T) {
 		assert.Nil(t, got.parsedIdentities)
 	})
 
+	t.Run("recipient-ssh", func(t *testing.T) {
+		got, err := MasterKeyFromRecipient(mockSshRecipient)
+		assert.NoError(t, err)
+		assert.EqualValues(t, mockSshRecipient, got.Recipient)
+		assert.NotNil(t, got.parsedRecipient)
+		assert.Nil(t, got.parsedIdentities)
+	})
+
 	t.Run("leading and trailing spaces", func(t *testing.T) {
 		got, err := MasterKeyFromRecipient("   " + mockRecipient + "   ")
 		assert.NoError(t, err)
 		assert.EqualValues(t, mockRecipient, got.Recipient)
+		assert.NotNil(t, got.parsedRecipient)
+		assert.Nil(t, got.parsedIdentities)
+	})
+
+	t.Run("leading and trailing spaces - ssh", func(t *testing.T) {
+		got, err := MasterKeyFromRecipient("   " + mockSshRecipient + "   ")
+		assert.NoError(t, err)
+		assert.EqualValues(t, mockSshRecipient, got.Recipient)
 		assert.NotNil(t, got.parsedRecipient)
 		assert.Nil(t, got.parsedIdentities)
 	})
@@ -111,10 +154,20 @@ func TestParsedIdentities_ApplyToMasterKey(t *testing.T) {
 func TestMasterKey_Encrypt(t *testing.T) {
 	mockParsedRecipient, err := parseRecipient(mockRecipient)
 	assert.NoError(t, err)
+	mockSshParsedRecipient, err := parseRecipient(mockSshRecipient)
+	assert.NoError(t, err)
 
 	t.Run("recipient", func(t *testing.T) {
 		key := &MasterKey{
 			Recipient: mockRecipient,
+		}
+		assert.NoError(t, key.Encrypt([]byte(mockEncryptedKeyPlain)))
+		assert.NotEmpty(t, key.EncryptedKey)
+	})
+
+	t.Run("recipient ssh", func(t *testing.T) {
+		key := &MasterKey{
+			Recipient: mockSshRecipient,
 		}
 		assert.NoError(t, key.Encrypt([]byte(mockEncryptedKeyPlain)))
 		assert.NotEmpty(t, key.EncryptedKey)
@@ -128,13 +181,21 @@ func TestMasterKey_Encrypt(t *testing.T) {
 		assert.NotEmpty(t, key.EncryptedKey)
 	})
 
+	t.Run("parsed recipient ssh", func(t *testing.T) {
+		key := &MasterKey{
+			parsedRecipient: mockSshParsedRecipient,
+		}
+		assert.NoError(t, key.Encrypt([]byte(mockEncryptedKeyPlain)))
+		assert.NotEmpty(t, key.EncryptedKey)
+	})
+
 	t.Run("invalid recipient", func(t *testing.T) {
 		key := &MasterKey{
 			Recipient: "invalid",
 		}
 		err := key.Encrypt([]byte(mockEncryptedKeyPlain))
 		assert.Error(t, err)
-		assert.ErrorContains(t, err, "failed to parse input as Bech32-encoded age public key")
+		assert.ErrorContains(t, err, "failed to parse input, unknown recipient type:")
 		assert.Empty(t, key.EncryptedKey)
 	})
 
@@ -182,6 +243,25 @@ func TestMasterKey_Decrypt(t *testing.T) {
 	t.Run("loaded identities", func(t *testing.T) {
 		key := &MasterKey{EncryptedKey: mockEncryptedKey}
 		t.Setenv(SopsAgeKeyEnv, mockIdentity)
+
+		got, err := key.Decrypt()
+		assert.NoError(t, err)
+		assert.EqualValues(t, mockEncryptedKeyPlain, got)
+	})
+
+	t.Run("loaded identities ssh", func(t *testing.T) {
+		key := &MasterKey{EncryptedKey: mockEncryptedSshKey}
+		tmp := t.TempDir()
+		overwriteUserConfigDir(t, tmp)
+
+		homeDir, err := os.UserHomeDir()
+		assert.NoError(t, err)
+		keyPath := filepath.Join(homeDir, ".ssh/id_25519")
+		assert.True(t, strings.HasPrefix(keyPath, homeDir))
+
+		assert.NoError(t, os.MkdirAll(filepath.Dir(keyPath), 0o700))
+		assert.NoError(t, os.WriteFile(keyPath, []byte(mockSshIdentity), 0o644))
+		t.Setenv(SopsAgeSshPrivateKeyEnv, keyPath)
 
 		got, err := key.Decrypt()
 		assert.NoError(t, err)
@@ -327,6 +407,25 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		assert.Len(t, got, 1)
 	})
 
+	t.Run(SopsAgeSshPrivateKeyEnv, func(t *testing.T) {
+		tmpDir := t.TempDir()
+		overwriteUserConfigDir(t, tmpDir)
+
+		homeDir, err := os.UserHomeDir()
+		assert.NoError(t, err)
+		keyPath := filepath.Join(homeDir, ".ssh/id_25519")
+		assert.True(t, strings.HasPrefix(keyPath, homeDir))
+
+		assert.NoError(t, os.MkdirAll(filepath.Dir(keyPath), 0o700))
+		assert.NoError(t, os.WriteFile(keyPath, []byte(mockSshIdentity), 0o644))
+		t.Setenv(SopsAgeSshPrivateKeyEnv, keyPath)
+
+		key := &MasterKey{}
+		got, err := key.loadIdentities()
+		assert.NoError(t, err)
+		assert.Len(t, got, 1)
+	})
+
 	t.Run("no identity", func(t *testing.T) {
 		tmpDir := t.TempDir()
 		overwriteUserConfigDir(t, tmpDir)
@@ -374,8 +473,8 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 	})
 }
 
-// overwriteUserConfigDir sets the user config directory based on the
-// os.UserConfigDir logic.
+// overwriteUserConfigDir sets the user config directory and the user home directory
+// based on the os.UserConfigDir logic.
 func overwriteUserConfigDir(t *testing.T, path string) {
 	switch runtime.GOOS {
 	case "windows":
@@ -384,6 +483,7 @@ func overwriteUserConfigDir(t *testing.T, path string) {
 		t.Setenv("home", path)
 	default: // Unix
 		t.Setenv("XDG_CONFIG_HOME", path)
+		t.Setenv("HOME", path)
 	}
 }
 
