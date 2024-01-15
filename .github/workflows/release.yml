@@ -36,7 +36,7 @@ jobs:
           cache: false
 
       - name: Setup Syft
-        uses: anchore/sbom-action/download-syft@5ecf649a417b8ae17dc8383dc32d46c03f2312df # v0.15.1
+        uses: anchore/sbom-action/download-syft@c7f031d9249a826a082ea14c79d3b686a51d485a # v0.15.3
 
       - name: Setup Cosign
         uses: sigstore/cosign-installer@9614fae9e5c5eddabb09f90a270fcb487c9f7149 # v3.3.0
