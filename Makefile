@@ -59,7 +59,7 @@ checkrst: $(RST_FILES)
 	$(RSTCHECK) --report-level warning $^
 
 .PHONY: checkmd
-MD_FILES=$(shell find . -name '*.md' | grep -v /vendor/ | sort)
+MD_FILES=$(shell find . -name '*.md' | grep -v /vendor/ | grep -v ^\\.*/README.md$ | sort)
 checkmd: $(MD_FILES)
 	@if [ "$(MARKDOWNLINT)" == "" ]; then echo "Need markdownlint to lint RST files. Install markdownlint from your system package repository or from https://github.com/markdownlint/markdownlint."; exit 1; fi
 	$(MARKDOWNLINT) $^
