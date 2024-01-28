@@ -114,7 +114,8 @@ install-syft:
 
 .PHONY: _convert-readme
 _convert-readme:
-	pandoc README.rst -o README.md
+	# Requires install of https://github.com/ansible-community/antsibull-changelog/pull/139 to work!
+	python3 convert-readme.py
 
 # go-install-tool will 'go install' any package $2 and install it to $1.
 define go-install-tool
