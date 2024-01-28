@@ -112,6 +112,10 @@ install-goreleaser:
 install-syft:
 	$(call go-install-tool,$(SYFT),github.com/anchore/syft/cmd/syft@$(SYFT_VERSION),$(SYFT_VERSION))
 
+.PHONY: _convert-readme
+_convert-readme:
+	pandoc README.rst -o README.md
+
 # go-install-tool will 'go install' any package $2 and install it to $1.
 define go-install-tool
 @[ -f $(1)-$(3) ] || { \
