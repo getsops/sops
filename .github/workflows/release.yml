@@ -32,7 +32,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@0c52d547c9bc32b1aa3301fd7a9cb496313a4491 # v4.0.1
         with:
-          go-version: 1.20.x
+          go-version: 1.21.x
           cache: false
 
       - name: Setup Syft
@@ -65,7 +65,7 @@ jobs:
         id: goreleaser
         uses: goreleaser/goreleaser-action@7ec5c2b0c6cdda6e8bbb49444bc797dd33d74dd8 # v5.0.0
         with:
-          version: 1.20.x
+          version: 1.21.x
           args: release --clean --timeout 1h
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
