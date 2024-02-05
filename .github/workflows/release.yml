@@ -36,10 +36,10 @@ jobs:
           cache: false
 
       - name: Setup Syft
-        uses: anchore/sbom-action/download-syft@24b0d5238516480139aa8bc6f92eeb7b54a9eb0a # v0.15.5
+        uses: anchore/sbom-action/download-syft@b6a39da80722a2cb0ef5d197531764a89b5d48c3 # v0.15.8
 
       - name: Setup Cosign
-        uses: sigstore/cosign-installer@9614fae9e5c5eddabb09f90a270fcb487c9f7149 # v3.3.0
+        uses: sigstore/cosign-installer@e1523de7571e31dbe865fd2e80c5c7c23ae71eb4 # v3.4.0
 
       - name: Setup QEMU
         uses: docker/setup-qemu-action@68827325e0b33c7199eb31dd4e31fbe9023e06e3 # v3.0.0
