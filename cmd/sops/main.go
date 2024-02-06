@@ -834,6 +834,23 @@ func main() {
 			fileNameOverride = fileName
 		}
 
+		commandCount := 0
+		if c.Bool("encrypt") {
+			commandCount++
+		}
+		if c.Bool("decrypt") {
+			commandCount++
+		}
+		if c.Bool("rotate") {
+			commandCount++
+		}
+		if c.String("set") != "" {
+			commandCount++
+		}
+		if commandCount > 1 {
+			log.Warn("More than one command (--encrypt, --decrypt, --rotate, --set) has been specified. Only the changes made by the last one will be visible. Note that this behavior is deprecated and will cause an error eventually.")
+		}
+
 		unencryptedSuffix := c.String("unencrypted-suffix")
 		encryptedSuffix := c.String("encrypted-suffix")
 		encryptedRegex := c.String("encrypted-regex")
