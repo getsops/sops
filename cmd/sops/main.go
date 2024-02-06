@@ -851,55 +851,10 @@ func main() {
 			log.Warn("More than one command (--encrypt, --decrypt, --rotate, --set) has been specified. Only the changes made by the last one will be visible. Note that this behavior is deprecated and will cause an error eventually.")
 		}
 
-		unencryptedSuffix := c.String("unencrypted-suffix")
-		encryptedSuffix := c.String("encrypted-suffix")
-		encryptedRegex := c.String("encrypted-regex")
-		unencryptedRegex := c.String("unencrypted-regex")
-		macOnlyEncrypted := c.Bool("mac-only-encrypted")
-		conf, err := loadConfig(c, fileNameOverride, nil)
+		// Load configuration here for backwards compatibility (error out in case of bad config files)
+		_, err = loadConfig(c, fileNameOverride, nil)
 		if err != nil {
 			return toExitError(err)
-		}
-		if conf != nil {
-			// command line options have precedence
-			if unencryptedSuffix == "" {
-				unencryptedSuffix = conf.UnencryptedSuffix
-			}
-			if encryptedSuffix == "" {
-				encryptedSuffix = conf.EncryptedSuffix
-			}
-			if encryptedRegex == "" {
-				encryptedRegex = conf.EncryptedRegex
-			}
-			if unencryptedRegex == "" {
-				unencryptedRegex = conf.UnencryptedRegex
-			}
-			if !macOnlyEncrypted {
-				macOnlyEncrypted = conf.MACOnlyEncrypted
-			}
-		}
-
-		cryptRuleCount := 0
-		if unencryptedSuffix != "" {
-			cryptRuleCount++
-		}
-		if encryptedSuffix != "" {
-			cryptRuleCount++
-		}
-		if encryptedRegex != "" {
-			cryptRuleCount++
-		}
-		if unencryptedRegex != "" {
-			cryptRuleCount++
-		}
-
-		if cryptRuleCount > 1 {
-			return common.NewExitError("Error: cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex or unencrypted_regex in the same file", codes.ErrorConflictingParameters)
-		}
-
-		// only supply the default UnencryptedSuffix when EncryptedSuffix and EncryptedRegex are not provided
-		if cryptRuleCount == 0 {
-			unencryptedSuffix = sops.DefaultUnencryptedSuffix
 		}
 
 		inputStore := inputStore(c, fileNameOverride)
@@ -912,30 +867,24 @@ func main() {
 		}
 		var output []byte
 		if c.Bool("encrypt") {
-			var groups []sops.KeyGroup
-			groups, err = keyGroups(c, fileNameOverride)
-			if err != nil {
-				return toExitError(err)
-			}
-			var threshold int
-			threshold, err = shamirThreshold(c, fileNameOverride)
+			encConfig, err := getEncryptConfig(c, fileNameOverride)
 			if err != nil {
 				return toExitError(err)
 			}
 			output, err = encrypt(encryptOpts{
-				OutputStore:       outputStore,
-				InputStore:        inputStore,
-				InputPath:         fileName,
-				Cipher:            aes.NewCipher(),
-				UnencryptedSuffix: unencryptedSuffix,
-				EncryptedSuffix:   encryptedSuffix,
-				UnencryptedRegex:  unencryptedRegex,
-				EncryptedRegex:    encryptedRegex,
-				MACOnlyEncrypted:  macOnlyEncrypted,
-				KeyServices:       svcs,
-				KeyGroups:         groups,
-				GroupThreshold:    threshold,
+				OutputStore:   outputStore,
+				InputStore:    inputStore,
+				InputPath:     fileName,
+				Cipher:        aes.NewCipher(),
+				KeyServices:   svcs,
+				encryptConfig: encConfig,
 			})
+			// While this check is also done below, the `err` in this scope shadows
+			// the `err` in the outer scope.  **Only** do this in case --decrypt,
+			// --rotate-, and --set are not specified, though, to keep old behavior.
+			if err != nil && !c.Bool("decrypt") && !c.Bool("rotate") && c.String("set") == "" {
+				return toExitError(err)
+			}
 		}
 
 		if c.Bool("decrypt") {
@@ -956,82 +905,12 @@ func main() {
 			})
 		}
 		if c.Bool("rotate") {
-			var addMasterKeys []keys.MasterKey
-			kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
-			for _, k := range kms.MasterKeysFromArnString(c.String("add-kms"), kmsEncryptionContext, c.String("aws-profile")) {
-				addMasterKeys = append(addMasterKeys, k)
-			}
-			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("add-pgp")) {
-				addMasterKeys = append(addMasterKeys, k)
-			}
-			for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("add-gcp-kms")) {
-				addMasterKeys = append(addMasterKeys, k)
-			}
-			azureKeys, err := azkv.MasterKeysFromURLs(c.String("add-azure-kv"))
+			rotateOpts, err := getRotateOpts(c, fileName, inputStore, outputStore, svcs, order)
 			if err != nil {
 				return toExitError(err)
-			}
-			for _, k := range azureKeys {
-				addMasterKeys = append(addMasterKeys, k)
-			}
-			hcVaultKeys, err := hcvault.NewMasterKeysFromURIs(c.String("add-hc-vault-transit"))
-			if err != nil {
-				return toExitError(err)
-			}
-			for _, k := range hcVaultKeys {
-				addMasterKeys = append(addMasterKeys, k)
-			}
-			ageKeys, err := age.MasterKeysFromRecipients(c.String("add-age"))
-			if err != nil {
-				return toExitError(err)
-			}
-			for _, k := range ageKeys {
-				addMasterKeys = append(addMasterKeys, k)
 			}
 
-			var rmMasterKeys []keys.MasterKey
-			for _, k := range kms.MasterKeysFromArnString(c.String("rm-kms"), kmsEncryptionContext, c.String("aws-profile")) {
-				rmMasterKeys = append(rmMasterKeys, k)
-			}
-			for _, k := range pgp.MasterKeysFromFingerprintString(c.String("rm-pgp")) {
-				rmMasterKeys = append(rmMasterKeys, k)
-			}
-			for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("rm-gcp-kms")) {
-				rmMasterKeys = append(rmMasterKeys, k)
-			}
-			azureKeys, err = azkv.MasterKeysFromURLs(c.String("rm-azure-kv"))
-			if err != nil {
-				return toExitError(err)
-			}
-			for _, k := range azureKeys {
-				rmMasterKeys = append(rmMasterKeys, k)
-			}
-			hcVaultKeys, err = hcvault.NewMasterKeysFromURIs(c.String("rm-hc-vault-transit"))
-			if err != nil {
-				return toExitError(err)
-			}
-			for _, k := range hcVaultKeys {
-				rmMasterKeys = append(rmMasterKeys, k)
-			}
-			ageKeys, err = age.MasterKeysFromRecipients(c.String("rm-age"))
-			if err != nil {
-				return toExitError(err)
-			}
-			for _, k := range ageKeys {
-				rmMasterKeys = append(rmMasterKeys, k)
-			}
-
-			output, err = rotate(rotateOpts{
-				OutputStore:      outputStore,
-				InputStore:       inputStore,
-				InputPath:        fileName,
-				Cipher:           aes.NewCipher(),
-				KeyServices:      svcs,
-				DecryptionOrder:  order,
-				IgnoreMAC:        c.Bool("ignore-mac"),
-				AddMasterKeys:    addMasterKeys,
-				RemoveMasterKeys: rmMasterKeys,
-			})
+			output, err = rotate(rotateOpts)
 			// While this check is also done below, the `err` in this scope shadows
 			// the `err` in the outer scope
 			if err != nil {
@@ -1077,26 +956,19 @@ func main() {
 				output, err = edit(opts)
 			} else {
 				// File doesn't exist, edit the example file instead
-				var groups []sops.KeyGroup
-				groups, err = keyGroups(c, fileNameOverride)
-				if err != nil {
-					return toExitError(err)
-				}
-				var threshold int
-				threshold, err = shamirThreshold(c, fileNameOverride)
+				encConfig, err := getEncryptConfig(c, fileNameOverride)
 				if err != nil {
 					return toExitError(err)
 				}
 				output, err = editExample(editExampleOpts{
-					editOpts:          opts,
-					UnencryptedSuffix: unencryptedSuffix,
-					EncryptedSuffix:   encryptedSuffix,
-					UnencryptedRegex:  unencryptedRegex,
-					EncryptedRegex:    encryptedRegex,
-					MACOnlyEncrypted:  macOnlyEncrypted,
-					KeyGroups:         groups,
-					GroupThreshold:    threshold,
+					editOpts:      opts,
+					encryptConfig: encConfig,
 				})
+				// While this check is also done below, the `err` in this scope shadows
+				// the `err` in the outer scope
+				if err != nil {
+					return toExitError(err)
+				}
 			}
 		}
 
@@ -1136,6 +1008,139 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func getEncryptConfig(c *cli.Context, fileName string) (encryptConfig, error) {
+	unencryptedSuffix := c.String("unencrypted-suffix")
+	encryptedSuffix := c.String("encrypted-suffix")
+	encryptedRegex := c.String("encrypted-regex")
+	unencryptedRegex := c.String("unencrypted-regex")
+	macOnlyEncrypted := c.Bool("mac-only-encrypted")
+	conf, err := loadConfig(c, fileName, nil)
+	if err != nil {
+		return encryptConfig{}, toExitError(err)
+	}
+	if conf != nil {
+		// command line options have precedence
+		if unencryptedSuffix == "" {
+			unencryptedSuffix = conf.UnencryptedSuffix
+		}
+		if encryptedSuffix == "" {
+			encryptedSuffix = conf.EncryptedSuffix
+		}
+		if encryptedRegex == "" {
+			encryptedRegex = conf.EncryptedRegex
+		}
+		if unencryptedRegex == "" {
+			unencryptedRegex = conf.UnencryptedRegex
+		}
+		if !macOnlyEncrypted {
+			macOnlyEncrypted = conf.MACOnlyEncrypted
+		}
+	}
+
+	cryptRuleCount := 0
+	if unencryptedSuffix != "" {
+		cryptRuleCount++
+	}
+	if encryptedSuffix != "" {
+		cryptRuleCount++
+	}
+	if encryptedRegex != "" {
+		cryptRuleCount++
+	}
+	if unencryptedRegex != "" {
+		cryptRuleCount++
+	}
+
+	if cryptRuleCount > 1 {
+		return encryptConfig{}, common.NewExitError("Error: cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex, or unencrypted_regex in the same file", codes.ErrorConflictingParameters)
+	}
+
+	// only supply the default UnencryptedSuffix when EncryptedSuffix, EncryptedRegex, and others are not provided
+	if cryptRuleCount == 0 {
+		unencryptedSuffix = sops.DefaultUnencryptedSuffix
+	}
+
+	var groups []sops.KeyGroup
+	groups, err = keyGroups(c, fileName)
+	if err != nil {
+		return encryptConfig{}, err
+	}
+
+	var threshold int
+	threshold, err = shamirThreshold(c, fileName)
+	if err != nil {
+		return encryptConfig{}, err
+	}
+
+	return encryptConfig{
+		UnencryptedSuffix: unencryptedSuffix,
+		EncryptedSuffix:   encryptedSuffix,
+		UnencryptedRegex:  unencryptedRegex,
+		EncryptedRegex:    encryptedRegex,
+		MACOnlyEncrypted:  macOnlyEncrypted,
+		KeyGroups:         groups,
+		GroupThreshold:    threshold,
+	}, nil
+}
+
+func getMasterKeys(c *cli.Context, kmsEncryptionContext map[string]*string, kmsOptionName string, pgpOptionName string, gcpKmsOptionName string, azureKvOptionName string, hcVaultTransitOptionName string, ageOptionName string) ([]keys.MasterKey, error) {
+	var masterKeys []keys.MasterKey
+	for _, k := range kms.MasterKeysFromArnString(c.String(kmsOptionName), kmsEncryptionContext, c.String("aws-profile")) {
+		masterKeys = append(masterKeys, k)
+	}
+	for _, k := range pgp.MasterKeysFromFingerprintString(c.String(pgpOptionName)) {
+		masterKeys = append(masterKeys, k)
+	}
+	for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String(gcpKmsOptionName)) {
+		masterKeys = append(masterKeys, k)
+	}
+	azureKeys, err := azkv.MasterKeysFromURLs(c.String(azureKvOptionName))
+	if err != nil {
+		return nil, err
+	}
+	for _, k := range azureKeys {
+		masterKeys = append(masterKeys, k)
+	}
+	hcVaultKeys, err := hcvault.NewMasterKeysFromURIs(c.String(hcVaultTransitOptionName))
+	if err != nil {
+		return nil, err
+	}
+	for _, k := range hcVaultKeys {
+		masterKeys = append(masterKeys, k)
+	}
+	ageKeys, err := age.MasterKeysFromRecipients(c.String(ageOptionName))
+	if err != nil {
+		return nil, err
+	}
+	for _, k := range ageKeys {
+		masterKeys = append(masterKeys, k)
+	}
+	return masterKeys, nil
+}
+
+func getRotateOpts(c *cli.Context, fileName string, inputStore common.Store, outputStore common.Store, svcs []keyservice.KeyServiceClient, decryptionOrder []string) (rotateOpts, error) {
+	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
+	addMasterKeys, err := getMasterKeys(c, kmsEncryptionContext, "add-kms", "add-pgp", "add-gcp-kms", "add-azure-kv", "add-hc-vault-transit", "add-age")
+	if err != nil {
+		return rotateOpts{}, err
+	}
+	rmMasterKeys, err := getMasterKeys(c, kmsEncryptionContext, "rm-kms", "rm-pgp", "rm-gcp-kms", "rm-azure-kv", "rm-hc-vault-transit", "rm-age")
+	if err != nil {
+		return rotateOpts{}, err
+	}
+	return rotateOpts{
+		OutputStore:      outputStore,
+		InputStore:       inputStore,
+		InputPath:        fileName,
+		Cipher:           aes.NewCipher(),
+		KeyServices:      svcs,
+		DecryptionOrder:  decryptionOrder,
+		IgnoreMAC:        c.Bool("ignore-mac"),
+		AddMasterKeys:    addMasterKeys,
+		RemoveMasterKeys: rmMasterKeys,
+	}, nil
 }
 
 func toExitError(err error) error {
