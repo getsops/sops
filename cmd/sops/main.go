@@ -1085,72 +1085,51 @@ func getEncryptConfig(c *cli.Context, fileName string) (encryptConfig, error) {
 	}, nil
 }
 
+func getMasterKeys(c *cli.Context, kmsEncryptionContext map[string]*string, kmsOptionName string, pgpOptionName string, gcpKmsOptionName string, azureKvOptionName string, hcVaultTransitOptionName string, ageOptionName string) ([]keys.MasterKey, error) {
+	var masterKeys []keys.MasterKey
+	for _, k := range kms.MasterKeysFromArnString(c.String(kmsOptionName), kmsEncryptionContext, c.String("aws-profile")) {
+		masterKeys = append(masterKeys, k)
+	}
+	for _, k := range pgp.MasterKeysFromFingerprintString(c.String(pgpOptionName)) {
+		masterKeys = append(masterKeys, k)
+	}
+	for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String(gcpKmsOptionName)) {
+		masterKeys = append(masterKeys, k)
+	}
+	azureKeys, err := azkv.MasterKeysFromURLs(c.String(azureKvOptionName))
+	if err != nil {
+		return nil, err
+	}
+	for _, k := range azureKeys {
+		masterKeys = append(masterKeys, k)
+	}
+	hcVaultKeys, err := hcvault.NewMasterKeysFromURIs(c.String(hcVaultTransitOptionName))
+	if err != nil {
+		return nil, err
+	}
+	for _, k := range hcVaultKeys {
+		masterKeys = append(masterKeys, k)
+	}
+	ageKeys, err := age.MasterKeysFromRecipients(c.String(ageOptionName))
+	if err != nil {
+		return nil, err
+	}
+	for _, k := range ageKeys {
+		masterKeys = append(masterKeys, k)
+	}
+	return masterKeys, nil
+}
+
 func getRotateOpts(c *cli.Context, fileName string, inputStore common.Store, outputStore common.Store, svcs []keyservice.KeyServiceClient, decryptionOrder []string) (rotateOpts, error) {
-	var addMasterKeys []keys.MasterKey
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
-	for _, k := range kms.MasterKeysFromArnString(c.String("add-kms"), kmsEncryptionContext, c.String("aws-profile")) {
-		addMasterKeys = append(addMasterKeys, k)
-	}
-	for _, k := range pgp.MasterKeysFromFingerprintString(c.String("add-pgp")) {
-		addMasterKeys = append(addMasterKeys, k)
-	}
-	for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("add-gcp-kms")) {
-		addMasterKeys = append(addMasterKeys, k)
-	}
-	azureKeys, err := azkv.MasterKeysFromURLs(c.String("add-azure-kv"))
+	addMasterKeys, err := getMasterKeys(c, kmsEncryptionContext, "add-kms", "add-pgp", "add-gcp-kms", "add-azure-kv", "add-hc-vault-transit", "add-age")
 	if err != nil {
 		return rotateOpts{}, err
 	}
-	for _, k := range azureKeys {
-		addMasterKeys = append(addMasterKeys, k)
-	}
-	hcVaultKeys, err := hcvault.NewMasterKeysFromURIs(c.String("add-hc-vault-transit"))
+	rmMasterKeys, err := getMasterKeys(c, kmsEncryptionContext, "rm-kms", "rm-pgp", "rm-gcp-kms", "rm-azure-kv", "rm-hc-vault-transit", "rm-age")
 	if err != nil {
 		return rotateOpts{}, err
 	}
-	for _, k := range hcVaultKeys {
-		addMasterKeys = append(addMasterKeys, k)
-	}
-	ageKeys, err := age.MasterKeysFromRecipients(c.String("add-age"))
-	if err != nil {
-		return rotateOpts{}, err
-	}
-	for _, k := range ageKeys {
-		addMasterKeys = append(addMasterKeys, k)
-	}
-
-	var rmMasterKeys []keys.MasterKey
-	for _, k := range kms.MasterKeysFromArnString(c.String("rm-kms"), kmsEncryptionContext, c.String("aws-profile")) {
-		rmMasterKeys = append(rmMasterKeys, k)
-	}
-	for _, k := range pgp.MasterKeysFromFingerprintString(c.String("rm-pgp")) {
-		rmMasterKeys = append(rmMasterKeys, k)
-	}
-	for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("rm-gcp-kms")) {
-		rmMasterKeys = append(rmMasterKeys, k)
-	}
-	azureKeys, err = azkv.MasterKeysFromURLs(c.String("rm-azure-kv"))
-	if err != nil {
-		return rotateOpts{}, err
-	}
-	for _, k := range azureKeys {
-		rmMasterKeys = append(rmMasterKeys, k)
-	}
-	hcVaultKeys, err = hcvault.NewMasterKeysFromURIs(c.String("rm-hc-vault-transit"))
-	if err != nil {
-		return rotateOpts{}, err
-	}
-	for _, k := range hcVaultKeys {
-		rmMasterKeys = append(rmMasterKeys, k)
-	}
-	ageKeys, err = age.MasterKeysFromRecipients(c.String("rm-age"))
-	if err != nil {
-		return rotateOpts{}, err
-	}
-	for _, k := range ageKeys {
-		rmMasterKeys = append(rmMasterKeys, k)
-	}
-
 	return rotateOpts{
 		OutputStore:      outputStore,
 		InputStore:       inputStore,
