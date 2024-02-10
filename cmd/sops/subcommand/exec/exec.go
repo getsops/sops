@@ -30,6 +30,7 @@ type ExecOpts struct {
 	Fifo       bool
 	User       string
 	Filename   string
+	Env        []string
 }
 
 func GetFile(dir, filename string) *os.File {
@@ -88,9 +89,15 @@ func ExecWithFile(opts ExecOpts) error {
 		filename = handle.Name()
 	}
 
+	var env []string
+	if !opts.Pristine {
+		env = os.Environ()
+	}
+	env = append(env, opts.Env...)
+
 	placeholdered := strings.Replace(opts.Command, "{}", filename, -1)
 	cmd := BuildCommand(placeholdered)
-	cmd.Env = os.Environ()
+	cmd.Env = env
 
 	if opts.Background {
 		return cmd.Start()
@@ -124,6 +131,8 @@ func ExecWithEnv(opts ExecOpts) error {
 		}
 		env = append(env, string(line))
 	}
+
+	env = append(env, opts.Env...)
 
 	cmd := BuildCommand(opts.Command)
 	cmd.Env = env
