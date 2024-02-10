@@ -25,8 +25,8 @@ type decryptOpts struct {
 	DecryptionOrder []string
 }
 
-func decrypt(opts decryptOpts) (decryptedFile []byte, err error) {
-	tree, err := common.LoadEncryptedFileWithBugFixes(common.GenericDecryptOpts{
+func decryptTree(opts decryptOpts) (tree *sops.Tree, err error) {
+	tree, err = common.LoadEncryptedFileWithBugFixes(common.GenericDecryptOpts{
 		Cipher:      opts.Cipher,
 		InputStore:  opts.InputStore,
 		InputPath:   opts.InputPath,
@@ -44,6 +44,15 @@ func decrypt(opts decryptOpts) (decryptedFile []byte, err error) {
 		KeyServices:     opts.KeyServices,
 		DecryptionOrder: opts.DecryptionOrder,
 	})
+	if err != nil {
+		return nil, err
+	}
+
+	return tree, nil
+}
+
+func decrypt(opts decryptOpts) (decryptedFile []byte, err error) {
+	tree, err := decryptTree(opts)
 	if err != nil {
 		return nil, err
 	}

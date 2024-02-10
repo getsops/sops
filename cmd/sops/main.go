@@ -192,17 +192,40 @@ func main() {
 					log.Warn("exec-env's --background option is deprecated and will be removed in a future version of sops")
 				}
 
-				output, err := decrypt(opts)
+				tree, err := decryptTree(opts)
 				if err != nil {
 					return toExitError(err)
 				}
 
+				var env []string
+				for _, item := range tree.Branches[0] {
+					if dotenv.IsComplexValue(item.Value) {
+						return cli.NewExitError(fmt.Errorf("cannot use complex value in environment: %s", item.Value), codes.ErrorGeneric)
+					}
+					if _, ok := item.Key.(sops.Comment); ok {
+						continue
+					}
+					key, ok := item.Key.(string)
+					if !ok {
+						return cli.NewExitError(fmt.Errorf("cannot use non-string keys in environment, got %T", item.Key), codes.ErrorGeneric)
+					}
+					if strings.Contains(key, "=") {
+						return cli.NewExitError(fmt.Errorf("cannot use keys with '=' in environment: %s", key), codes.ErrorGeneric)
+					}
+					value, ok := item.Value.(string)
+					if !ok {
+						return cli.NewExitError(fmt.Errorf("cannot use non-string values in environment, got %T", item.Value), codes.ErrorGeneric)
+					}
+					env = append(env, fmt.Sprintf("%s=%s", key, value))
+				}
+
 				if err := exec.ExecWithEnv(exec.ExecOpts{
 					Command:    command,
-					Plaintext:  output,
+					Plaintext:  []byte{},
 					Background: c.Bool("background"),
 					Pristine:   c.Bool("pristine"),
 					User:       c.String("user"),
+					Env:        env,
 				}); err != nil {
 					return toExitError(err)
 				}
