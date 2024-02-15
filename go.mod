@@ -8,13 +8,13 @@ require (
 	filippo.io/age v1.1.1
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.9.2
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.5.1
-	github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys v1.0.1
+	github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys v1.1.0
 	github.com/ProtonMail/go-crypto v1.1.0-alpha.0-proton
 	github.com/aws/aws-sdk-go-v2 v1.25.0
 	github.com/aws/aws-sdk-go-v2/config v1.27.0
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.0
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.16.0
-	github.com/aws/aws-sdk-go-v2/service/kms v1.28.0
+	github.com/aws/aws-sdk-go-v2/service/kms v1.28.1
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.49.0
 	github.com/aws/aws-sdk-go-v2/service/sts v1.27.0
 	github.com/blang/semver v3.5.1+incompatible
@@ -37,9 +37,9 @@ require (
 	golang.org/x/net v0.21.0
 	golang.org/x/sys v0.17.0
 	golang.org/x/term v0.17.0
-	google.golang.org/api v0.164.0
+	google.golang.org/api v0.165.0
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240213162025-012b6fc9bca9
-	google.golang.org/grpc v1.61.0
+	google.golang.org/grpc v1.61.1
 	google.golang.org/protobuf v1.32.0
 	gopkg.in/ini.v1 v1.67.0
 	gopkg.in/yaml.v3 v3.0.1
