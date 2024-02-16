@@ -902,7 +902,7 @@ echo -E "${bar}"
             String::from_utf8_lossy(&output.stdout),
             String::from_utf8_lossy(&output.stderr)
         );
-        assert_eq!(String::from_utf8_lossy(&output.stdout), "baz\\nbam\n");
+        assert_eq!(String::from_utf8_lossy(&output.stdout), "baz\nbam\n");
     }
 
     #[test]
