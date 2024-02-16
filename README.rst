@@ -205,6 +205,7 @@ the ``--age`` option or the **SOPS_AGE_RECIPIENTS** environment variable:
 When decrypting a file with the corresponding identity, SOPS will look for a
 text file name ``keys.txt`` located in a ``sops`` subdirectory of your user
 configuration directory. On Linux, this would be ``$XDG_CONFIG_HOME/sops/age/keys.txt``.
+If ``$XDG_CONFIG_HOME`` is not set ``$HOME/.config/sops/age/keys.txt`` is used instead.
 On macOS, this would be ``$HOME/Library/Application Support/sops/age/keys.txt``. On
 Windows, this would be ``%AppData%\sops\age\keys.txt``. You can specify the location
 of this file manually by setting the environment variable **SOPS_AGE_KEY_FILE**.
