@@ -134,21 +134,23 @@ type destinationRule struct {
 }
 
 type creationRule struct {
-	PathRegex         string `yaml:"path_regex"`
-	KMS               string
-	AwsProfile        string `yaml:"aws_profile"`
-	Age               string `yaml:"age"`
-	PGP               string
-	GCPKMS            string     `yaml:"gcp_kms"`
-	AzureKeyVault     string     `yaml:"azure_keyvault"`
-	VaultURI          string     `yaml:"hc_vault_transit_uri"`
-	KeyGroups         []keyGroup `yaml:"key_groups"`
-	ShamirThreshold   int        `yaml:"shamir_threshold"`
-	UnencryptedSuffix string     `yaml:"unencrypted_suffix"`
-	EncryptedSuffix   string     `yaml:"encrypted_suffix"`
-	UnencryptedRegex  string     `yaml:"unencrypted_regex"`
-	EncryptedRegex    string     `yaml:"encrypted_regex"`
-	MACOnlyEncrypted  bool       `yaml:"mac_only_encrypted"`
+	PathRegex               string `yaml:"path_regex"`
+	KMS                     string
+	AwsProfile              string `yaml:"aws_profile"`
+	Age                     string `yaml:"age"`
+	PGP                     string
+	GCPKMS                  string     `yaml:"gcp_kms"`
+	AzureKeyVault           string     `yaml:"azure_keyvault"`
+	VaultURI                string     `yaml:"hc_vault_transit_uri"`
+	KeyGroups               []keyGroup `yaml:"key_groups"`
+	ShamirThreshold         int        `yaml:"shamir_threshold"`
+	UnencryptedSuffix       string     `yaml:"unencrypted_suffix"`
+	EncryptedSuffix         string     `yaml:"encrypted_suffix"`
+	UnencryptedRegex        string     `yaml:"unencrypted_regex"`
+	EncryptedRegex          string     `yaml:"encrypted_regex"`
+	UnencryptedCommentRegex string     `yaml:"unencrypted_comment_regex"`
+	EncryptedCommentRegex   string     `yaml:"encrypted_comment_regex"`
+	MACOnlyEncrypted        bool       `yaml:"mac_only_encrypted"`
 }
 
 func NewStoresConfig() *StoresConfig {
@@ -169,15 +171,17 @@ func (f *configFile) load(bytes []byte) error {
 
 // Config is the configuration for a given SOPS file
 type Config struct {
-	KeyGroups         []sops.KeyGroup
-	ShamirThreshold   int
-	UnencryptedSuffix string
-	EncryptedSuffix   string
-	UnencryptedRegex  string
-	EncryptedRegex    string
-	MACOnlyEncrypted  bool
-	Destination       publish.Destination
-	OmitExtensions    bool
+	KeyGroups               []sops.KeyGroup
+	ShamirThreshold         int
+	UnencryptedSuffix       string
+	EncryptedSuffix         string
+	UnencryptedRegex        string
+	EncryptedRegex          string
+	UnencryptedCommentRegex string
+	EncryptedCommentRegex   string
+	MACOnlyEncrypted        bool
+	Destination             publish.Destination
+	OmitExtensions          bool
 }
 
 func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[string]*string) ([]sops.KeyGroup, error) {
@@ -283,9 +287,15 @@ func configFromRule(rule *creationRule, kmsEncryptionContext map[string]*string)
 	if rule.EncryptedRegex != "" {
 		cryptRuleCount++
 	}
+	if rule.UnencryptedCommentRegex != "" {
+		cryptRuleCount++
+	}
+	if rule.EncryptedCommentRegex != "" {
+		cryptRuleCount++
+	}
 
 	if cryptRuleCount > 1 {
-		return nil, fmt.Errorf("error loading config: cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex, or unencrypted_regex for the same rule")
+		return nil, fmt.Errorf("error loading config: cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex, unencrypted_regex, encrypted_comment_regex, or unencrypted_comment_regex for the same rule")
 	}
 
 	groups, err := getKeyGroupsFromCreationRule(rule, kmsEncryptionContext)
@@ -294,13 +304,15 @@ func configFromRule(rule *creationRule, kmsEncryptionContext map[string]*string)
 	}
 
 	return &Config{
-		KeyGroups:         groups,
-		ShamirThreshold:   rule.ShamirThreshold,
-		UnencryptedSuffix: rule.UnencryptedSuffix,
-		EncryptedSuffix:   rule.EncryptedSuffix,
-		UnencryptedRegex:  rule.UnencryptedRegex,
-		EncryptedRegex:    rule.EncryptedRegex,
-		MACOnlyEncrypted:  rule.MACOnlyEncrypted,
+		KeyGroups:               groups,
+		ShamirThreshold:         rule.ShamirThreshold,
+		UnencryptedSuffix:       rule.UnencryptedSuffix,
+		EncryptedSuffix:         rule.EncryptedSuffix,
+		UnencryptedRegex:        rule.UnencryptedRegex,
+		EncryptedRegex:          rule.EncryptedRegex,
+		UnencryptedCommentRegex: rule.UnencryptedCommentRegex,
+		EncryptedCommentRegex:   rule.EncryptedCommentRegex,
+		MACOnlyEncrypted:        rule.MACOnlyEncrypted,
 	}, nil
 }
 
