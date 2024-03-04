@@ -1,6 +1,9 @@
 package formats
 
-import "strings"
+import (
+	"path/filepath"
+	"strings"
+)
 
 // Format is an enum type
 type Format int
@@ -53,17 +56,21 @@ func IsIniFile(path string) bool {
 
 // FormatForPath returns the correct format given the path to a file
 func FormatForPath(path string) Format {
-	format := Binary // default
-	if IsYAMLFile(path) {
-		format = Yaml
-	} else if IsJSONFile(path) {
-		format = Json
-	} else if IsEnvFile(path) {
-		format = Dotenv
-	} else if IsIniFile(path) {
-		format = Ini
+	if filepath.Ext(path) == "" {
+		return Binary // default to binary
 	}
-	return format
+	switch {
+	case IsYAMLFile(path):
+		return Yaml
+	case IsJSONFile(path):
+		return Json
+	case IsEnvFile(path):
+		return Dotenv
+	case IsIniFile(path):
+		return Ini
+	default:
+		return FormatForPath(strings.TrimSuffix(path, filepath.Ext(path)))
+	}
 }
 
 // FormatForPathOrString returns the correct format-specific implementation
