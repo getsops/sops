@@ -44,13 +44,6 @@ Or whatever variation of the above fits your system and shell.
 To use **SOPS** as a library, take a look at the [decrypt
 package](https://pkg.go.dev/github.com/getsops/sops/v3/decrypt).
 
-::: sectnum
-:::
-
-::: contents
-Table of Contents
-:::
-
 # Usage
 
 For a quick presentation of SOPS, check out this Youtube tutorial:
@@ -1278,14 +1271,8 @@ stores:
         indent: 2
 ```
 
-:::: note
-::: title
-Note
-:::
-
 The YAML emitter used by sops only supports values between 2 and 9. If
 you specify 1, or 10 and larger, the indent will be 2.
-::::
 
 ## YAML anchors
 
