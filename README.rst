@@ -5,6 +5,8 @@ SOPS: Secrets OPerationS
 formats and encrypts with AWS KMS, GCP KMS, Azure Key Vault, age, and PGP.
 (`demo <https://www.youtube.com/watch?v=YTEVyLXFiq0>`_)
 
+.. image:: https://i.imgur.com/X0TM5NI.gif
+
 ------------
 
 .. image:: https://pkg.go.dev/badge/github.com/getsops/sops/v3.svg
@@ -378,7 +380,7 @@ Encrypting using Hashicorp Vault
 
 We assume you have an instance (or more) of Vault running and you have privileged access to it. For instructions on how to deploy a secure instance of Vault, refer to Hashicorp's official documentation.
 
-To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!) 
+To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
 
 .. code:: sh
 
@@ -388,11 +390,11 @@ To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
 .. code:: sh
 
     $ # Substitute this with the address Vault is running on
-    $ export VAULT_ADDR=http://127.0.0.1:8200 
+    $ export VAULT_ADDR=http://127.0.0.1:8200
 
     $ # this may not be necessary in case you previously used `vault login` for production use
-    $ export VAULT_TOKEN=toor 
-    
+    $ export VAULT_TOKEN=toor
+
     $ # to check if Vault started and is configured correctly
     $ vault status
     Key             Value
@@ -1532,8 +1534,8 @@ will encrypt the values under the ``data`` and ``stringData`` keys in a YAML fil
 containing kubernetes secrets.  It will not encrypt other values that help you to
 navigate the file, like ``metadata`` which contains the secrets' names.
 
-Conversely, you can opt in to only leave certain keys without encrypting by using the 
-``--unencrypted-regex`` option, which will leave the values unencrypted of those keys 
+Conversely, you can opt in to only leave certain keys without encrypting by using the
+``--unencrypted-regex`` option, which will leave the values unencrypted of those keys
 that match the supplied regular expression. For example, this command:
 
 .. code:: sh

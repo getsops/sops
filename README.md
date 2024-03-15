@@ -5,6 +5,8 @@ INI and BINARY formats and encrypts with AWS KMS, GCP KMS, Azure Key
 Vault, age, and PGP.
 ([demo](https://www.youtube.com/watch?v=YTEVyLXFiq0))
 
+![image](https://i.imgur.com/X0TM5NI.gif)
+
 ------------------------------------------------------------------------
 
 [![image](https://pkg.go.dev/badge/github.com/getsops/sops/v3.svg)](https://pkg.go.dev/github.com/getsops/sops/v3)
