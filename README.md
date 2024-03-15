@@ -1,6 +1,4 @@
----
-title: "SOPS: Secrets OPerationS"
----
+# SOPS: Secrets OPerationS
 
 **SOPS** is an editor of encrypted files that supports YAML, JSON, ENV,
 INI and BINARY formats and encrypts with AWS KMS, GCP KMS, Azure Key
@@ -409,10 +407,10 @@ $ docker run -d -p8200:8200 vault:1.2.0 server -dev -dev-root-token-id=toor
 
 ``` sh
 $ # Substitute this with the address Vault is running on
-$ export VAULT_ADDR=http://127.0.0.1:8200 
+$ export VAULT_ADDR=http://127.0.0.1:8200
 
 $ # this may not be necessary in case you previously used `vault login` for production use
-$ export VAULT_TOKEN=toor 
+$ export VAULT_TOKEN=toor
 
 $ # to check if Vault started and is configured correctly
 $ vault status
