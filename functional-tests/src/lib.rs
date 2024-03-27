@@ -949,4 +949,47 @@ bar: |-
 }"#
         );
     }
+
+    #[test]
+    fn exec_file_filename() {
+        let file_path = prepare_temp_file(
+            "test_exec_file_filename.yaml",
+            r#"foo: bar
+bar: |-
+  baz
+  bam
+"#
+            .as_bytes(),
+        );
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("-e")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("exec-file")
+            .arg("--no-fifo")
+            .arg("--filename")
+            .arg("foobar")
+            .arg(file_path.clone())
+            .arg("echo {}")
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(
+            String::from_utf8_lossy(&output.stdout).ends_with("foobar\n"),
+            "filename did not end with 'foobar'"
+        );
+    }
 }

@@ -237,7 +237,7 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:  "filename",
-					Usage: "filename for the temporarily file (default: tmp-file)",
+					Usage: fmt.Sprintf("filename for the temporarily file (default: %s)", exec.FallbackFilename),
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
@@ -272,11 +272,6 @@ func main() {
 					return toExitError(err)
 				}
 
-				filename := c.String("filename")
-				if filename == "" {
-					filename = "tmp-file"
-				}
-
 				if c.Bool("background") {
 					log.Warn("exec-file's --background option is deprecated and will be removed in a future version of sops")
 				}
@@ -287,7 +282,7 @@ func main() {
 					Background: c.Bool("background"),
 					Fifo:       !c.Bool("no-fifo"),
 					User:       c.String("user"),
-					Filename:   filename,
+					Filename:   c.String("filename"),
 				}); err != nil {
 					return toExitError(err)
 				}
