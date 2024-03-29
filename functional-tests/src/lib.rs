@@ -550,6 +550,140 @@ b: ba"#
     }
 
     #[test]
+    fn unset_json_file() {
+        // Test removal of tree branch
+        let file_path =
+            prepare_temp_file("test_unset.json", r#"{"a": 2, "b": "ba", "c": [1,2]}"#.as_bytes());
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("encrypt")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("unset")
+            .arg(file_path.clone())
+            .arg(r#"["a"]"#)
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        let mut s = String::new();
+        File::open(file_path.clone())
+            .unwrap()
+            .read_to_string(&mut s)
+            .unwrap();
+        let data: Value = serde_json::from_str(&s).expect("Error parsing sops's JSON output");
+        if let Value::Mapping(data) = data {
+            assert!(!data.contains_key(&Value::String("a".to_owned())));
+            assert!(data.contains_key(&Value::String("b".to_owned())));
+        } else {
+            panic!("Output JSON does not have the expected structure");
+        }
+
+        // Test removal of list item
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("unset")
+            .arg(file_path.clone())
+            .arg(r#"["c"][0]"#)
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        let mut s = String::new();
+        File::open(file_path)
+            .unwrap()
+            .read_to_string(&mut s)
+            .unwrap();
+        let data: Value = serde_json::from_str(&s).expect("Error parsing sops's JSON output");
+        if let Value::Mapping(data) = data {
+            assert_eq!(data["c"].as_sequence().unwrap().len(), 1);
+        } else {
+            panic!("Output JSON does not have the expected structure");
+        }
+    }
+
+    #[test]
+    fn unset_yaml_file() {
+        // Test removal of tree branch
+        let file_path =
+            prepare_temp_file("test_unset.yaml", r#"{"a": 2, "b": "ba", "c": [1,2]}"#.as_bytes());
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("encrypt")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("unset")
+            .arg(file_path.clone())
+            .arg(r#"["a"]"#)
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        let mut s = String::new();
+        File::open(file_path.clone())
+            .unwrap()
+            .read_to_string(&mut s)
+            .unwrap();
+        let data: Value = serde_yaml::from_str(&s).expect("Error parsing sops's YAML output");
+        if let Value::Mapping(data) = data {
+            assert!(!data.contains_key(&Value::String("a".to_owned())));
+            assert!(data.contains_key(&Value::String("b".to_owned())));
+        } else {
+            panic!("Output YAML does not have the expected structure");
+        }
+
+        // Test removal of list item
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("unset")
+            .arg(file_path.clone())
+            .arg(r#"["c"][0]"#)
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        let mut s = String::new();
+        File::open(file_path)
+            .unwrap()
+            .read_to_string(&mut s)
+            .unwrap();
+        let data: Value = serde_yaml::from_str(&s).expect("Error parsing sops's YAML output");
+        if let Value::Mapping(data) = data {
+            assert_eq!(data["c"].as_sequence().unwrap().len(), 1);
+        } else {
+            panic!("Output YAML does not have the expected structure");
+        }
+    }
+
+    #[test]
     fn decrypt_file_no_mac() {
         let file_path = prepare_temp_file(
             "test_decrypt_no_mac.yaml",

@@ -42,6 +42,7 @@ import (
 	"fmt"
 	"reflect"
 	"regexp"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -187,6 +188,53 @@ func set(branch interface{}, path []interface{}, value interface{}) interface{} 
 // Set sets a value on a given tree for the specified path
 func (branch TreeBranch) Set(path []interface{}, value interface{}) TreeBranch {
 	return set(branch, path, value).(TreeBranch)
+}
+
+func unset(branch interface{}, path []interface{}) (interface{}, error) {
+	switch branch := branch.(type) {
+	case TreeBranch:
+		for i, item := range branch {
+			if item.Key == path[0] {
+				if len(path) == 1 {
+					branch = slices.Delete(branch, i, i+1)
+				} else {
+					v, err := unset(item.Value, path[1:])
+					if err != nil {
+						return nil, err
+					}
+					branch[i].Value = v
+				}
+				return branch, nil
+			}
+		}
+		return nil, fmt.Errorf("Key not found: %s", path[0])
+	case []interface{}:
+		position := path[0].(int)
+		if position >= len(branch) {
+			return nil, fmt.Errorf("Index %d out of bounds (maximum: %d)", position, len(branch))
+		}
+		if len(path) == 1 {
+			branch = slices.Delete(branch, position, position+1)
+		} else {
+			v, err := unset(branch[position], path[1:])
+			if err != nil {
+				return nil, err
+			}
+			branch[position] = v
+		}
+		return branch, nil
+	default:
+		panic(fmt.Sprintf("Unsupported type: %T", branch))
+	}
+}
+
+// Unset removes a value on a given tree from the specified path
+func (branch TreeBranch) Unset(path []interface{}) (TreeBranch, error) {
+	v, err := unset(branch, path)
+	if err != nil {
+		return nil, err
+	}
+	return v.(TreeBranch), nil
 }
 
 // Tree is the data structure used by sops to represent documents internally
