@@ -1375,6 +1375,10 @@ func main() {
 					Usage:  "comma separated list of decryption key types",
 					EnvVar: "SOPS_DECRYPTION_ORDER",
 				},
+				cli.BoolFlag{
+					Name:   "idempotent",
+					Usage:  "do nothing if the given index does not exist",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if c.Bool("verbose") {
@@ -1412,6 +1416,9 @@ func main() {
 					TreePath:        path,
 				})
 				if err != nil {
+					if _, ok := err.(*sops.SopsKeyNotFound); ok && c.Bool("idempotent") {
+						return nil
+					}
 					return toExitError(err)
 				}
 

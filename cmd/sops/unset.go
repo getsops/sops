@@ -22,7 +22,6 @@ type unsetOpts struct {
 
 func unset(opts unsetOpts) ([]byte, error) {
 	// Load the file
-	// TODO: Issue #173: if the file does not exist, create it with the contents passed in as opts.Value
 	tree, err := common.LoadEncryptedFileWithBugFixes(common.GenericDecryptOpts{
 		Cipher:      opts.Cipher,
 		InputStore:  opts.InputStore,

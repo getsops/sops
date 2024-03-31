@@ -577,12 +577,12 @@ b: ba"#
             String::from_utf8_lossy(&output.stdout),
             String::from_utf8_lossy(&output.stderr)
         );
-        let mut s = String::new();
+        let mut content = String::new();
         File::open(file_path.clone())
             .unwrap()
-            .read_to_string(&mut s)
+            .read_to_string(&mut content)
             .unwrap();
-        let data: Value = serde_json::from_str(&s).expect("Error parsing sops's JSON output");
+        let data: Value = serde_json::from_str(&content).expect("Error parsing sops's JSON output");
         if let Value::Mapping(data) = data {
             assert!(!data.contains_key(&Value::String("a".to_owned())));
             assert!(data.contains_key(&Value::String("b".to_owned())));
@@ -590,11 +590,12 @@ b: ba"#
             panic!("Output JSON does not have the expected structure");
         }
 
-        // Test removal of list item
+        // Test idempotent unset
         let output = Command::new(SOPS_BINARY_PATH)
             .arg("unset")
+            .arg("--idempotent")
             .arg(file_path.clone())
-            .arg(r#"["c"][0]"#)
+            .arg(r#"["a"]"#)
             .output()
             .expect("Error running sops");
         assert!(output.status.success(), "sops didn't exit successfully");
@@ -603,17 +604,58 @@ b: ba"#
             String::from_utf8_lossy(&output.stdout),
             String::from_utf8_lossy(&output.stderr)
         );
-        let mut s = String::new();
-        File::open(file_path)
+        let mut idempotent_content = String::new();
+        File::open(file_path.clone())
             .unwrap()
-            .read_to_string(&mut s)
+            .read_to_string(&mut idempotent_content)
             .unwrap();
-        let data: Value = serde_json::from_str(&s).expect("Error parsing sops's JSON output");
+        assert!(idempotent_content == content);
+
+        // Test removal of list item
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("unset")
+            .arg(file_path.clone())
+            .arg(r#"["c"][1]"#)
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        let mut content = String::new();
+        File::open(file_path.clone())
+            .unwrap()
+            .read_to_string(&mut content)
+            .unwrap();
+        let data: Value = serde_json::from_str(&content).expect("Error parsing sops's JSON output");
         if let Value::Mapping(data) = data {
             assert_eq!(data["c"].as_sequence().unwrap().len(), 1);
         } else {
             panic!("Output JSON does not have the expected structure");
         }
+
+        // Test idempotent unset list item
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("unset")
+            .arg("--idempotent")
+            .arg(file_path.clone())
+            .arg(r#"["c"][1]"#)
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        let mut idempotent_content = String::new();
+        File::open(file_path.clone())
+            .unwrap()
+            .read_to_string(&mut idempotent_content)
+            .unwrap();
+        assert!(idempotent_content == content);
     }
 
     #[test]
@@ -644,18 +686,39 @@ b: ba"#
             String::from_utf8_lossy(&output.stdout),
             String::from_utf8_lossy(&output.stderr)
         );
-        let mut s = String::new();
+        let mut content = String::new();
         File::open(file_path.clone())
             .unwrap()
-            .read_to_string(&mut s)
+            .read_to_string(&mut content)
             .unwrap();
-        let data: Value = serde_yaml::from_str(&s).expect("Error parsing sops's YAML output");
+        let data: Value = serde_yaml::from_str(&content).expect("Error parsing sops's YAML output");
         if let Value::Mapping(data) = data {
             assert!(!data.contains_key(&Value::String("a".to_owned())));
             assert!(data.contains_key(&Value::String("b".to_owned())));
         } else {
             panic!("Output YAML does not have the expected structure");
         }
+
+        // Test idempotent unset
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("unset")
+            .arg("--idempotent")
+            .arg(file_path.clone())
+            .arg(r#"["a"]"#)
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        let mut idempotent_content = String::new();
+        File::open(file_path.clone())
+            .unwrap()
+            .read_to_string(&mut idempotent_content)
+            .unwrap();
+        assert!(idempotent_content == content);
 
         // Test removal of list item
         let output = Command::new(SOPS_BINARY_PATH)
@@ -670,17 +733,38 @@ b: ba"#
             String::from_utf8_lossy(&output.stdout),
             String::from_utf8_lossy(&output.stderr)
         );
-        let mut s = String::new();
-        File::open(file_path)
+        let mut content = String::new();
+        File::open(file_path.clone())
             .unwrap()
-            .read_to_string(&mut s)
+            .read_to_string(&mut content)
             .unwrap();
-        let data: Value = serde_yaml::from_str(&s).expect("Error parsing sops's YAML output");
+        let data: Value = serde_yaml::from_str(&content).expect("Error parsing sops's YAML output");
         if let Value::Mapping(data) = data {
             assert_eq!(data["c"].as_sequence().unwrap().len(), 1);
         } else {
             panic!("Output YAML does not have the expected structure");
         }
+
+        // Test idempotent unset list item
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("unset")
+            .arg("--idempotent")
+            .arg(file_path.clone())
+            .arg(r#"["c"][1]"#)
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        let mut idempotent_content = String::new();
+        File::open(file_path.clone())
+            .unwrap()
+            .read_to_string(&mut idempotent_content)
+            .unwrap();
+        assert!(idempotent_content == content);
     }
 
     #[test]

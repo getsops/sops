@@ -77,6 +77,15 @@ const MacMismatch = sopsError("MAC mismatch")
 // MetadataNotFound occurs when the input file is malformed and doesn't have sops metadata in it
 const MetadataNotFound = sopsError("sops metadata not found")
 
+type SopsKeyNotFound struct {
+	Key interface{}
+	Msg string
+}
+
+func (e *SopsKeyNotFound) Error() string {
+	return fmt.Sprintf(e.Msg, e.Key)
+}
+
 // MACOnlyEncryptedInitialization is a constant and known sequence of 32 bytes used to initialize
 // MAC which is computed only over values which end up encrypted. That assures that a MAC with the
 // setting enabled is always different from a MAC with this setting disabled.
@@ -207,11 +216,11 @@ func unset(branch interface{}, path []interface{}) (interface{}, error) {
 				return branch, nil
 			}
 		}
-		return nil, fmt.Errorf("Key not found: %s", path[0])
+		return nil, &SopsKeyNotFound{Msg: "Key not found: %s", Key: path[0]}
 	case []interface{}:
 		position := path[0].(int)
 		if position >= len(branch) {
-			return nil, fmt.Errorf("Index %d out of bounds (maximum: %d)", position, len(branch))
+			return nil, &SopsKeyNotFound{Msg: "Index %d out of bounds", Key: path[0]}
 		}
 		if len(path) == 1 {
 			branch = slices.Delete(branch, position, position+1)
@@ -224,7 +233,7 @@ func unset(branch interface{}, path []interface{}) (interface{}, error) {
 		}
 		return branch, nil
 	default:
-		panic(fmt.Sprintf("Unsupported type: %T", branch))
+		return nil, fmt.Errorf("Unsupported type: %T for item '%s'", branch, path[0])
 	}
 }
 
