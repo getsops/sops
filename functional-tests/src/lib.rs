@@ -273,12 +273,12 @@ bar: baz",
             .arg(r#"{"aa": "aaa"}"#)
             .output()
             .expect("Error running sops");
-        assert!(output.status.success(), "sops didn't exit successfully");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
             String::from_utf8_lossy(&output.stderr)
         );
+        assert!(output.status.success(), "sops didn't exit successfully");
         let mut s = String::new();
         File::open(file_path)
             .unwrap()
@@ -317,12 +317,12 @@ bar: baz",
             .arg(r#"{"cc": "ccc"}"#)
             .output()
             .expect("Error running sops");
-        assert!(output.status.success(), "sops didn't exit successfully");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
             String::from_utf8_lossy(&output.stderr)
         );
+        assert!(output.status.success(), "sops didn't exit successfully");
         let mut s = String::new();
         File::open(file_path)
             .unwrap()
@@ -365,12 +365,12 @@ b: ba"#
             .arg(r#"{"aa": "aaa"}"#)
             .output()
             .expect("Error running sops");
-        assert!(output.status.success(), "sops didn't exit successfully");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
             String::from_utf8_lossy(&output.stderr)
         );
+        assert!(output.status.success(), "sops didn't exit successfully");
         let mut s = String::new();
         File::open(file_path)
             .unwrap()
@@ -413,12 +413,12 @@ b: ba"#
             .arg(r#"{"cc": "ccc"}"#)
             .output()
             .expect("Error running sops");
-        assert!(output.status.success(), "sops didn't exit successfully");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
             String::from_utf8_lossy(&output.stderr)
         );
+        assert!(output.status.success(), "sops didn't exit successfully");
         let mut s = String::new();
         File::open(file_path)
             .unwrap()
@@ -472,12 +472,12 @@ b: ba"#
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
-        assert!(output.status.success(), "sops didn't exit successfully");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
             String::from_utf8_lossy(&output.stderr)
         );
+        assert!(output.status.success(), "sops didn't exit successfully");
         let mut s = String::new();
         File::open(file_path)
             .unwrap()
@@ -529,12 +529,12 @@ b: ba"#
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
-        assert!(output.status.success(), "sops didn't exit successfully");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
             String::from_utf8_lossy(&output.stderr)
         );
+        assert!(output.status.success(), "sops didn't exit successfully");
         let mut s = String::new();
         File::open(file_path)
             .unwrap()
@@ -571,12 +571,12 @@ b: ba"#
             .arg(r#"["a"]"#)
             .output()
             .expect("Error running sops");
-        assert!(output.status.success(), "sops didn't exit successfully");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
             String::from_utf8_lossy(&output.stderr)
         );
+        assert!(output.status.success(), "sops didn't exit successfully");
         let mut content = String::new();
         File::open(file_path.clone())
             .unwrap()
@@ -598,12 +598,12 @@ b: ba"#
             .arg(r#"["a"]"#)
             .output()
             .expect("Error running sops");
-        assert!(output.status.success(), "sops didn't exit successfully");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
             String::from_utf8_lossy(&output.stderr)
         );
+        assert!(output.status.success(), "sops didn't exit successfully");
         let mut idempotent_content = String::new();
         File::open(file_path.clone())
             .unwrap()
@@ -618,12 +618,12 @@ b: ba"#
             .arg(r#"["c"][1]"#)
             .output()
             .expect("Error running sops");
-        assert!(output.status.success(), "sops didn't exit successfully");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
             String::from_utf8_lossy(&output.stderr)
         );
+        assert!(output.status.success(), "sops didn't exit successfully");
         let mut content = String::new();
         File::open(file_path.clone())
             .unwrap()
@@ -644,12 +644,12 @@ b: ba"#
             .arg(r#"["c"][1]"#)
             .output()
             .expect("Error running sops");
-        assert!(output.status.success(), "sops didn't exit successfully");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
             String::from_utf8_lossy(&output.stderr)
         );
+        assert!(output.status.success(), "sops didn't exit successfully");
         let mut idempotent_content = String::new();
         File::open(file_path.clone())
             .unwrap()
@@ -680,12 +680,12 @@ b: ba"#
             .arg(r#"["a"]"#)
             .output()
             .expect("Error running sops");
-        assert!(output.status.success(), "sops didn't exit successfully");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
             String::from_utf8_lossy(&output.stderr)
         );
+        assert!(output.status.success(), "sops didn't exit successfully");
         let mut content = String::new();
         File::open(file_path.clone())
             .unwrap()
@@ -707,12 +707,12 @@ b: ba"#
             .arg(r#"["a"]"#)
             .output()
             .expect("Error running sops");
-        assert!(output.status.success(), "sops didn't exit successfully");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
             String::from_utf8_lossy(&output.stderr)
         );
+        assert!(output.status.success(), "sops didn't exit successfully");
         let mut idempotent_content = String::new();
         File::open(file_path.clone())
             .unwrap()
@@ -727,12 +727,12 @@ b: ba"#
             .arg(r#"["c"][0]"#)
             .output()
             .expect("Error running sops");
-        assert!(output.status.success(), "sops didn't exit successfully");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
             String::from_utf8_lossy(&output.stderr)
         );
+        assert!(output.status.success(), "sops didn't exit successfully");
         let mut content = String::new();
         File::open(file_path.clone())
             .unwrap()
@@ -753,12 +753,12 @@ b: ba"#
             .arg(r#"["c"][1]"#)
             .output()
             .expect("Error running sops");
-        assert!(output.status.success(), "sops didn't exit successfully");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
             String::from_utf8_lossy(&output.stderr)
         );
+        assert!(output.status.success(), "sops didn't exit successfully");
         let mut idempotent_content = String::new();
         File::open(file_path.clone())
             .unwrap()
@@ -1094,12 +1094,12 @@ echo -E "${foo}"
             .arg(format!("/bin/bash {}", print_foo))
             .output()
             .expect("Error running sops");
-        assert!(output.status.success(), "sops didn't exit successfully");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
             String::from_utf8_lossy(&output.stderr)
         );
+        assert!(output.status.success(), "sops didn't exit successfully");
         assert_eq!(String::from_utf8_lossy(&output.stdout), "bar\n");
         let print_bar = prepare_temp_file(
             "print_bar.sh",
@@ -1114,12 +1114,12 @@ echo -E "${bar}"
             .arg(format!("/bin/bash {}", print_bar))
             .output()
             .expect("Error running sops");
-        assert!(output.status.success(), "sops didn't exit successfully");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
             String::from_utf8_lossy(&output.stderr)
         );
+        assert!(output.status.success(), "sops didn't exit successfully");
         assert_eq!(String::from_utf8_lossy(&output.stdout), "baz\nbam\n");
     }
 
@@ -1153,12 +1153,12 @@ bar: |-
             .arg("cat {}")
             .output()
             .expect("Error running sops");
-        assert!(output.status.success(), "sops didn't exit successfully");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
             String::from_utf8_lossy(&output.stderr)
         );
+        assert!(output.status.success(), "sops didn't exit successfully");
         assert_eq!(
             String::from_utf8_lossy(&output.stdout),
             r#"{
