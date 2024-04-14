@@ -317,7 +317,7 @@ func vaultClient(address, token string) (*api.Client, error) {
 	return client, nil
 }
 
-// userVaultsToken returns the token from `$HOME/.vault-token` if the file
+// userVaultToken returns the token from `$HOME/.vault-token` if the file
 // exists. It returns an error if the file exists but cannot be read from.
 // If the file does not exist, it returns an empty string.
 func userVaultToken() (string, error) {
