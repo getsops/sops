@@ -120,6 +120,125 @@ creation_rules:
       - 'https://baz.vault:8200/v1/baz/keys/baz-key'
 `)
 
+var sampleConfigWithMergeType = []byte(`
+creation_rules:
+  - path_regex: ""
+    key_groups:
+    # key00
+    - hc_vault:
+      - 'https://foo.vault:8200/v1/foo/keys/foo-key'
+    - merge:
+      - merge:
+        - kms:
+          # key01
+          - arn: foo
+            aws_profile: foo
+          pgp:
+          # key02
+          - foo
+          gcp_kms:
+          # key03
+          - resource_id: foo
+          azure_keyvault:
+          # key04
+          - vaultUrl: https://foo.vault.azure.net
+            key: foo-key
+            version: fooversion
+          hc_vault:
+          # key05
+          - 'https://bar.vault:8200/v1/bar/keys/bar-key'
+        - kms:
+          # key06
+          - arn: bar
+            aws_profile: bar
+          pgp:
+          # key07
+          - bar
+          gcp_kms:
+          # key08
+          - resource_id: bar
+          # key09
+          - resource_id: baz
+          azure_keyvault:
+          # key10
+          - vaultUrl: https://bar.vault.azure.net
+            key: bar-key
+            version: barversion
+          hc_vault:
+          # key01 - duplicate#1
+          - 'https://baz.vault:8200/v1/baz/keys/baz-key'
+        kms:
+        # key11
+        - arn: baz
+          aws_profile: baz
+        pgp:
+        # key12
+        - baz
+        gcp_kms:
+        # key03 - duplicate#2
+        # --> should be removed when loading config
+        - resource_id: bar
+        azure_keyvault:
+        # key04 - duplicate#3
+        - vaultUrl: https://foo.vault.azure.net
+          key: foo-key
+          version: fooversion
+        hc_vault:
+        # key13 - duplicate#4 - but from different key_group
+        # --> should stay
+        - 'https://foo.vault:8200/v1/foo/keys/foo-key'
+      - kms:
+        # key14
+        - arn: qux
+          aws_profile: qux
+        # key14 - duplicate#5
+        - arn: baz
+          aws_profile: bar
+        pgp:
+        # key15
+        - qux
+        gcp_kms:
+        # key16
+        - resource_id: qux
+        # key17
+        - resource_id: fnord
+        azure_keyvault:
+        # key18
+        - vaultUrl: https://baz.vault.azure.net
+          key: baz-key
+          version: bazversion
+        hc_vault:
+        # key19
+        - 'https://qux.vault:8200/v1/qux/keys/qux-key'
+      # everything below this should be loaded,
+      # since it is not in a merge block
+      kms:
+      # duplicated key06
+      - arn: bar
+        aws_profile: bar
+      # key20
+      - arn: fnord
+        aws_profile: fnord
+      pgp:
+      # duplicated key07
+      - bar
+      gcp_kms:
+      # duplicated key08
+      - resource_id: bar
+      # key21
+      - resource_id: fnord
+      azure_keyvault:
+      # duplicated key10
+      - vaultUrl: https://bar.vault.azure.net
+        key: bar-key
+        version: barversion
+      hc_vault:
+      # duplicated 'key01 - duplicate#2'
+      - 'https://baz.vault:8200/v1/baz/keys/baz-key'
+      # key22
+      - 'https://fnord.vault:8200/v1/fnord/keys/fnord-key'
+`)
+
 var sampleConfigWithSuffixParameters = []byte(`
 creation_rules:
   - path_regex: foobar*
@@ -338,6 +457,14 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 	err := conf.load(sampleConfigWithGroups)
 	assert.Nil(t, err)
 	assert.Equal(t, expected, conf)
+}
+
+func TestLoadConfigFileWithMerge(t *testing.T) {
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithMergeType, t), "/conf/path", "whatever", nil)
+	assert.Nil(t, err)
+	assert.Equal(t, 2, len(conf.KeyGroups))
+	assert.Equal(t, 1, len(conf.KeyGroups[0]))
+	assert.Equal(t, 22, len(conf.KeyGroups[1]))
 }
 
 func TestLoadConfigFileWithNoMatchingRules(t *testing.T) {
