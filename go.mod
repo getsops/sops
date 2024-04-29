@@ -34,9 +34,9 @@ require (
 	github.com/sirupsen/logrus v1.9.3
 	github.com/stretchr/testify v1.8.4
 	github.com/urfave/cli v1.22.14
-	golang.org/x/net v0.21.0
-	golang.org/x/sys v0.17.0
-	golang.org/x/term v0.17.0
+	golang.org/x/net v0.23.0
+	golang.org/x/sys v0.18.0
+	golang.org/x/term v0.18.0
 	google.golang.org/api v0.165.0
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240213162025-012b6fc9bca9
 	google.golang.org/grpc v1.61.1
@@ -124,7 +124,7 @@ require (
 	go.opentelemetry.io/otel v1.23.1 // indirect
 	go.opentelemetry.io/otel/metric v1.23.1 // indirect
 	go.opentelemetry.io/otel/trace v1.23.1 // indirect
-	golang.org/x/crypto v0.19.0 // indirect
+	golang.org/x/crypto v0.21.0 // indirect
 	golang.org/x/mod v0.9.0 // indirect
 	golang.org/x/oauth2 v0.17.0 // indirect
 	golang.org/x/sync v0.6.0 // indirect
