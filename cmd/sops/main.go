@@ -1983,7 +1983,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 		conf, err := loadConfig(c, file, kmsEncryptionContext)
 		// config file might just not be supplied, without any error
 		if conf == nil {
-			errMsg := "config file not found and no keys provided through command line options"
+			errMsg := "config file not found, or has no creation rules, and no keys provided through command line options"
 			if err != nil {
 				errMsg = fmt.Sprintf("%s: %s", errMsg, err)
 			}
@@ -2031,7 +2031,7 @@ func shamirThreshold(c *cli.Context, file string) (int, error) {
 	conf, err := loadConfig(c, file, nil)
 	if conf == nil {
 		// This takes care of the following two case:
-		// 1. No config was provided. Err will be nil and ShamirThreshold will be the default value of 0.
+		// 1. No config was provided, or contains no creation rules. Err will be nil and ShamirThreshold will be the default value of 0.
 		// 2. We did find a config file, but failed to load it. In that case the calling function will print the error and exit.
 		return 0, err
 	}
