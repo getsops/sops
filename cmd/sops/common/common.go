@@ -397,6 +397,13 @@ func max(a, b int) int {
 	return b
 }
 
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
 // DiffKeyGroups returns the list of diffs found in two sops.keyGroup slices
 func DiffKeyGroups(ours, theirs []sops.KeyGroup) []Diff {
 	var diffs []Diff
@@ -444,6 +451,37 @@ func PrettyPrintDiffs(diffs []Diff) {
 		}
 		for _, c := range diff.Removed {
 			color.New(color.FgRed).Printf("--- %s\n", c.ToString())
+		}
+	}
+}
+
+type ShamirThresholdDiff struct {
+	Old int
+	New int
+}
+
+// DiffShamirThreshold Use config (limited to number of key groups) if there are two or more groups
+func DiffShamirThreshold(metadata sops.Metadata, conf *config.Config) ShamirThresholdDiff {
+	var diff = ShamirThresholdDiff{}
+	diff.Old = metadata.ShamirThreshold
+	if conf.ShamirThreshold > 0 && len(conf.KeyGroups) > 1 {
+		diff.New = min(conf.ShamirThreshold, len(conf.KeyGroups))
+	} else if len(conf.KeyGroups) > 1 {
+		diff.New = len(conf.KeyGroups)
+	}
+
+	return diff
+}
+
+func PrettyPrintShamirThresholdDiffs(diff ShamirThresholdDiff) {
+	if diff.Old > 0 && diff.Old == diff.New {
+		fmt.Printf("    shamir_threshold: %d\n", diff.New)
+	} else {
+		if diff.New > 0 {
+			color.New(color.FgGreen).Printf("+++ shamir_threshold: %d\n", diff.New)
+		}
+		if diff.Old > 0 {
+			color.New(color.FgRed).Printf("--- shamir_threshold: %d\n", diff.Old)
 		}
 	}
 }

@@ -15,7 +15,6 @@ import (
 // Opts represents key operation options and config
 type Opts struct {
 	InputPath       string
-	GroupQuorum     int
 	KeyServices     []keyservice.KeyServiceClient
 	DecryptionOrder []string
 	Interactive     bool
@@ -59,6 +58,9 @@ func updateFile(opts Opts) error {
 		return fmt.Errorf("The config file %s does not contain any creation rule", opts.ConfigPath)
 	}
 
+	shamirThresholdDiff := common.DiffShamirThreshold(tree.Metadata, conf)
+	shamirThresholdWillChange := shamirThresholdDiff.Old != shamirThresholdDiff.New
+
 	diffs := common.DiffKeyGroups(tree.Metadata.KeyGroups, conf.KeyGroups)
 	keysWillChange := false
 	for _, diff := range diffs {
@@ -66,11 +68,12 @@ func updateFile(opts Opts) error {
 			keysWillChange = true
 		}
 	}
-	if !keysWillChange {
+	if !keysWillChange && !shamirThresholdWillChange {
 		log.Printf("File %s already up to date", opts.InputPath)
 		return nil
 	}
 	fmt.Printf("The following changes will be made to the file's groups:\n")
+	common.PrettyPrintShamirThresholdDiffs(shamirThresholdDiff)
 	common.PrettyPrintDiffs(diffs)
 
 	if opts.Interactive {
@@ -92,10 +95,7 @@ func updateFile(opts Opts) error {
 		return common.NewExitError(err, codes.CouldNotRetrieveKey)
 	}
 	tree.Metadata.KeyGroups = conf.KeyGroups
-	if opts.GroupQuorum != 0 {
-		tree.Metadata.ShamirThreshold = opts.GroupQuorum
-	}
-	tree.Metadata.ShamirThreshold = min(tree.Metadata.ShamirThreshold, len(tree.Metadata.KeyGroups))
+	tree.Metadata.ShamirThreshold = shamirThresholdDiff.New
 	errs := tree.Metadata.UpdateMasterKeysWithKeyServices(key, opts.KeyServices)
 	if len(errs) > 0 {
 		return fmt.Errorf("error updating one or more master keys: %s", errs)
@@ -115,11 +115,4 @@ func updateFile(opts Opts) error {
 	}
 	log.Printf("File %s synced with new keys", opts.InputPath)
 	return nil
-}
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
 }

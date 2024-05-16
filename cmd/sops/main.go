@@ -593,7 +593,6 @@ func main() {
 				for _, path := range c.Args() {
 					err := updatekeys.UpdateKeys(updatekeys.Opts{
 						InputPath:   path,
-						GroupQuorum: c.Int("shamir-secret-sharing-quorum"),
 						KeyServices: keyservices(c),
 						Interactive: !c.Bool("yes"),
 						ConfigPath:  configPath,
