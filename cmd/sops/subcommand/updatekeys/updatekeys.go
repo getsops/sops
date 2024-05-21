@@ -14,12 +14,13 @@ import (
 
 // Opts represents key operation options and config
 type Opts struct {
-	InputPath   string
-	GroupQuorum int
-	KeyServices []keyservice.KeyServiceClient
-	Interactive bool
-	ConfigPath  string
-	InputType   string
+	InputPath       string
+	GroupQuorum     int
+	KeyServices     []keyservice.KeyServiceClient
+	DecryptionOrder []string
+	Interactive     bool
+	ConfigPath      string
+	InputType       string
 }
 
 // UpdateKeys update the keys for a given file
@@ -40,7 +41,11 @@ func UpdateKeys(opts Opts) error {
 }
 
 func updateFile(opts Opts) error {
-	store := common.DefaultStoreForPathOrFormat(opts.InputPath, opts.InputType)
+	sc, err := config.LoadStoresConfig(opts.ConfigPath)
+	if err != nil {
+		return err
+	}
+	store := common.DefaultStoreForPath(sc, opts.InputPath)
 	log.Printf("Syncing keys for file %s", opts.InputPath)
 	tree, err := common.LoadEncryptedFile(store, opts.InputPath)
 	if err != nil {
@@ -49,6 +54,9 @@ func updateFile(opts Opts) error {
 	conf, err := config.LoadCreationRuleForFile(opts.ConfigPath, opts.InputPath, make(map[string]*string))
 	if err != nil {
 		return err
+	}
+	if conf == nil {
+		return fmt.Errorf("The config file %s does not contain any creation rule", opts.ConfigPath)
 	}
 
 	diffs := common.DiffKeyGroups(tree.Metadata.KeyGroups, conf.KeyGroups)
@@ -79,7 +87,7 @@ func updateFile(opts Opts) error {
 			return nil
 		}
 	}
-	key, err := tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices)
+	key, err := tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices, opts.DecryptionOrder)
 	if err != nil {
 		return common.NewExitError(err, codes.CouldNotRetrieveKey)
 	}

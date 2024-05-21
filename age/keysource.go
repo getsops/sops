@@ -12,8 +12,9 @@ import (
 
 	"filippo.io/age"
 	"filippo.io/age/armor"
-	"github.com/getsops/sops/v3/logging"
 	"github.com/sirupsen/logrus"
+
+	"github.com/getsops/sops/v3/logging"
 )
 
 const (
@@ -28,6 +29,8 @@ const (
 	SopsAgeKeyUserConfigPath = "sops/age/keys.txt"
 	// On macOS, os.UserConfigDir() ignores XDG_CONFIG_HOME. So we handle that manually.
 	xdgConfigHome = "XDG_CONFIG_HOME"
+	// KeyTypeIdentifier is the string used to identify an age MasterKey.
+	KeyTypeIdentifier = "age"
 )
 
 // log is the global logger for any age MasterKey.
@@ -223,6 +226,11 @@ func (key *MasterKey) ToMap() map[string]interface{} {
 	out["recipient"] = key.Recipient
 	out["enc"] = key.EncryptedKey
 	return out
+}
+
+// TypeToIdentifier returns the string identifier for the MasterKey type.
+func (key *MasterKey) TypeToIdentifier() string {
+	return KeyTypeIdentifier
 }
 
 func getUserConfigDir() (string, error) {

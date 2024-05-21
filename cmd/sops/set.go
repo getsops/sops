@@ -10,14 +10,15 @@ import (
 )
 
 type setOpts struct {
-	Cipher      sops.Cipher
-	InputStore  sops.Store
-	OutputStore sops.Store
-	InputPath   string
-	IgnoreMAC   bool
-	TreePath    []interface{}
-	Value       interface{}
-	KeyServices []keyservice.KeyServiceClient
+	Cipher          sops.Cipher
+	InputStore      sops.Store
+	OutputStore     sops.Store
+	InputPath       string
+	IgnoreMAC       bool
+	TreePath        []interface{}
+	Value           interface{}
+	KeyServices     []keyservice.KeyServiceClient
+	DecryptionOrder []string
 }
 
 func set(opts setOpts) ([]byte, error) {
@@ -36,10 +37,11 @@ func set(opts setOpts) ([]byte, error) {
 
 	// Decrypt the file
 	dataKey, err := common.DecryptTree(common.DecryptTreeOpts{
-		Cipher:      opts.Cipher,
-		IgnoreMac:   opts.IgnoreMAC,
-		Tree:        tree,
-		KeyServices: opts.KeyServices,
+		Cipher:          opts.Cipher,
+		IgnoreMac:       opts.IgnoreMAC,
+		Tree:            tree,
+		KeyServices:     opts.KeyServices,
+		DecryptionOrder: opts.DecryptionOrder,
 	})
 	if err != nil {
 		return nil, err

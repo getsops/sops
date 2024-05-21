@@ -6,18 +6,32 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"strings"
 
 	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/config"
 	"github.com/getsops/sops/v3/stores"
 )
 
 // Store handles storage of JSON data.
 type Store struct {
+	config config.JSONStoreConfig
+}
+
+func NewStore(c *config.JSONStoreConfig) *Store {
+	return &Store{config: *c}
 }
 
 // BinaryStore handles storage of binary data in a JSON envelope.
 type BinaryStore struct {
-	store Store
+	store  Store
+	config config.JSONBinaryStoreConfig
+}
+
+func NewBinaryStore(c *config.JSONBinaryStoreConfig) *BinaryStore {
+	return &BinaryStore{config: *c, store: *NewStore(&config.JSONStoreConfig{
+		Indent: c.Indent,
+	})}
 }
 
 // LoadEncryptedFile loads an encrypted json file onto a sops.Tree object
@@ -237,7 +251,13 @@ func (store Store) treeBranchFromJSON(in []byte) (sops.TreeBranch, error) {
 
 func (store Store) reindentJSON(in []byte) ([]byte, error) {
 	var out bytes.Buffer
-	err := json.Indent(&out, in, "", "\t")
+	indent := "\t"
+	if store.config.Indent > -1 {
+		indent = strings.Repeat(" ", store.config.Indent)
+	} else if store.config.Indent < -1 {
+		return nil, errors.New("JSON Indentation parameter smaller than -1 is not accepted")
+	}
+	err := json.Indent(&out, in, "", indent)
 	return out.Bytes(), err
 }
 
@@ -275,7 +295,7 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	}
 	// Discard metadata, as we already loaded it.
 	for i, item := range branch {
-		if item.Key == "sops" {
+		if item.Key == stores.SopsMetadataKey {
 			branch = append(branch[:i], branch[i+1:]...)
 		}
 	}
@@ -301,7 +321,7 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 // EmitEncryptedFile returns the encrypted bytes of the json file corresponding to a
 // sops.Tree runtime object
 func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
-	tree := append(in.Branches[0], sops.TreeItem{Key: "sops", Value: stores.MetadataFromInternal(in.Metadata)})
+	tree := append(in.Branches[0], sops.TreeItem{Key: stores.SopsMetadataKey, Value: stores.MetadataFromInternal(in.Metadata)})
 	out, err := store.jsonFromTreeBranch(tree)
 	if err != nil {
 		return nil, fmt.Errorf("Error marshaling to json: %s", err)
@@ -336,4 +356,14 @@ func (store *Store) EmitExample() []byte {
 		panic(err)
 	}
 	return bytes
+}
+
+// HasSopsTopLevelKey checks whether a top-level "sops" key exists.
+func (store *Store) HasSopsTopLevelKey(branch sops.TreeBranch) bool {
+	return stores.HasSopsTopLevelKey(branch)
+}
+
+// HasSopsTopLevelKey checks whether a top-level "sops" key exists.
+func (store *BinaryStore) HasSopsTopLevelKey(branch sops.TreeBranch) bool {
+	return stores.HasSopsTopLevelKey(branch)
 }

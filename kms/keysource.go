@@ -3,7 +3,7 @@ Package kms contains an implementation of the github.com/getsops/sops/v3.MasterK
 interface that encrypts and decrypts the data key using AWS KMS with the SDK
 for Go V2.
 */
-package kms //import "github.com/getsops/sops/v3/kms"
+package kms // import "github.com/getsops/sops/v3/kms"
 
 import (
 	"context"
@@ -19,8 +19,9 @@ import (
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/kms"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
-	"github.com/getsops/sops/v3/logging"
 	"github.com/sirupsen/logrus"
+
+	"github.com/getsops/sops/v3/logging"
 )
 
 const (
@@ -34,6 +35,8 @@ const (
 	roleSessionNameLengthLimit = 64
 	// kmsTTL is the duration after which a MasterKey requires rotation.
 	kmsTTL = time.Hour * 24 * 30 * 6
+	// KeyTypeIdentifier is the string used to identify an AWS KMS MasterKey.
+	KeyTypeIdentifier = "kms"
 )
 
 var (
@@ -295,6 +298,11 @@ func (key MasterKey) ToMap() map[string]interface{} {
 		out["context"] = outcontext
 	}
 	return out
+}
+
+// TypeToIdentifier returns the string identifier for the MasterKey type.
+func (key *MasterKey) TypeToIdentifier() string {
+	return KeyTypeIdentifier
 }
 
 // createKMSConfig returns an AWS config with the credentialsProvider of the

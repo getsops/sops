@@ -85,7 +85,7 @@ func TestMain(m *testing.M) {
 		code = m.Run()
 	}
 
-	// This can't be deferred, as os.Exit simpy does not care
+	// This can't be deferred, as os.Exit simply does not care
 	if err := pool.Purge(resource); err != nil {
 		logger.Fatalf("could not purge resource: %s", err)
 	}
@@ -359,7 +359,14 @@ func Test_dataKeyFromSecret(t *testing.T) {
 
 func Test_vaultClient(t *testing.T) {
 	t.Run("client", func(t *testing.T) {
+		tmpDir := t.TempDir()
+
+		// Reset before and after to make sure the override is taken into
+		// account, and restored after the test.
+		homedir.Reset()
+		t.Cleanup(func() { homedir.Reset() })
 		t.Setenv("VAULT_TOKEN", "")
+		t.Setenv("HOME", tmpDir)
 
 		got, err := vaultClient(testVaultAddress, "")
 		assert.NoError(t, err)

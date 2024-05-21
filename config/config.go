@@ -63,9 +63,34 @@ func FindConfigFile(start string) (string, error) {
 	return "", fmt.Errorf("Config file not found")
 }
 
+type DotenvStoreConfig struct{}
+
+type INIStoreConfig struct{}
+
+type JSONStoreConfig struct {
+	Indent int `yaml:"indent"`
+}
+
+type JSONBinaryStoreConfig struct {
+	Indent int `yaml:"indent"`
+}
+
+type YAMLStoreConfig struct {
+	Indent int `yaml:"indent"`
+}
+
+type StoresConfig struct {
+	Dotenv     DotenvStoreConfig     `yaml:"dotenv"`
+	INI        INIStoreConfig        `yaml:"ini"`
+	JSONBinary JSONBinaryStoreConfig `yaml:"json_binary"`
+	JSON       JSONStoreConfig       `yaml:"json"`
+	YAML       YAMLStoreConfig       `yaml:"yaml"`
+}
+
 type configFile struct {
 	CreationRules    []creationRule    `yaml:"creation_rules"`
 	DestinationRules []destinationRule `yaml:"destination_rules"`
+	Stores           StoresConfig      `yaml:"stores"`
 }
 
 type keyGroup struct {
@@ -123,6 +148,14 @@ type creationRule struct {
 	EncryptedSuffix   string     `yaml:"encrypted_suffix"`
 	UnencryptedRegex  string     `yaml:"unencrypted_regex"`
 	EncryptedRegex    string     `yaml:"encrypted_regex"`
+	MACOnlyEncrypted  bool       `yaml:"mac_only_encrypted"`
+}
+
+func NewStoresConfig() *StoresConfig {
+	storesConfig := &StoresConfig{}
+	storesConfig.JSON.Indent = -1
+	storesConfig.JSONBinary.Indent = -1
+	return storesConfig
 }
 
 // Load loads a sops config file into a temporary struct
@@ -142,6 +175,7 @@ type Config struct {
 	EncryptedSuffix   string
 	UnencryptedRegex  string
 	EncryptedRegex    string
+	MACOnlyEncrypted  bool
 	Destination       publish.Destination
 	OmitExtensions    bool
 }
@@ -227,6 +261,7 @@ func loadConfigFile(confPath string) (*configFile, error) {
 		return nil, fmt.Errorf("could not read config file: %s", err)
 	}
 	conf := &configFile{}
+	conf.Stores = *NewStoresConfig()
 	err = conf.load(confBytes)
 	if err != nil {
 		return nil, fmt.Errorf("error loading config: %s", err)
@@ -265,6 +300,7 @@ func configFromRule(rule *creationRule, kmsEncryptionContext map[string]*string)
 		EncryptedSuffix:   rule.EncryptedSuffix,
 		UnencryptedRegex:  rule.UnencryptedRegex,
 		EncryptedRegex:    rule.EncryptedRegex,
+		MACOnlyEncrypted:  rule.MACOnlyEncrypted,
 	}, nil
 }
 
@@ -382,4 +418,12 @@ func LoadDestinationRuleForFile(confPath string, filePath string, kmsEncryptionC
 		return nil, err
 	}
 	return parseDestinationRuleForFile(conf, filePath, kmsEncryptionContext)
+}
+
+func LoadStoresConfig(confPath string) (*StoresConfig, error) {
+	conf, err := loadConfigFile(confPath)
+	if err != nil {
+		return nil, err
+	}
+	return &conf.Stores, nil
 }

@@ -21,6 +21,11 @@ import (
 	"github.com/getsops/sops/v3/logging"
 )
 
+const (
+	// KeyTypeIdentifier is the string used to identify a Vault MasterKey.
+	KeyTypeIdentifier = "hc_vault"
+)
+
 func init() {
 	log = logging.NewLogger("VAULT_TRANSIT")
 }
@@ -216,6 +221,11 @@ func (key MasterKey) ToMap() map[string]interface{} {
 	return out
 }
 
+// TypeToIdentifier returns the string identifier for the MasterKey type.
+func (key *MasterKey) TypeToIdentifier() string {
+	return KeyTypeIdentifier
+}
+
 // encryptPath returns the path for Encrypt requests.
 func (key *MasterKey) encryptPath() string {
 	return path.Join(key.EnginePath, "encrypt", key.KeyName)
@@ -307,7 +317,7 @@ func vaultClient(address, token string) (*api.Client, error) {
 	return client, nil
 }
 
-// userVaultsToken returns the token from `$HOME/.vault-token` if the file
+// userVaultToken returns the token from `$HOME/.vault-token` if the file
 // exists. It returns an error if the file exists but cannot be read from.
 // If the file does not exist, it returns an empty string.
 func userVaultToken() (string, error) {

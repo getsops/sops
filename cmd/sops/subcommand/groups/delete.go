@@ -12,13 +12,14 @@ import (
 
 // DeleteOpts are the options for deleting a key group from a SOPS file
 type DeleteOpts struct {
-	InputPath      string
-	InputStore     sops.Store
-	OutputStore    sops.Store
-	Group          uint
-	GroupThreshold int
-	InPlace        bool
-	KeyServices    []keyservice.KeyServiceClient
+	InputPath       string
+	InputStore      sops.Store
+	OutputStore     sops.Store
+	Group           uint
+	GroupThreshold  int
+	InPlace         bool
+	KeyServices     []keyservice.KeyServiceClient
+	DecryptionOrder []string
 }
 
 // Delete deletes a key group from a SOPS file
@@ -27,7 +28,7 @@ func Delete(opts DeleteOpts) error {
 	if err != nil {
 		return err
 	}
-	dataKey, err := tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices)
+	dataKey, err := tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices, opts.DecryptionOrder)
 	if err != nil {
 		return err
 	}

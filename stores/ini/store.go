@@ -9,12 +9,18 @@ import (
 	"strings"
 
 	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/config"
 	"github.com/getsops/sops/v3/stores"
 	"gopkg.in/ini.v1"
 )
 
 // Store handles storage of ini data.
 type Store struct {
+	config *config.INIStoreConfig
+}
+
+func NewStore(c *config.INIStoreConfig) *Store {
+	return &Store{config: c}
 }
 
 func (store Store) encodeTree(branches sops.TreeBranches) ([]byte, error) {
@@ -142,7 +148,7 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 		return sops.Tree{}, err
 	}
 
-	sopsSection, err := iniFileOuter.GetSection("sops")
+	sopsSection, err := iniFileOuter.GetSection(stores.SopsMetadataKey)
 	if err != nil {
 		return sops.Tree{}, sops.MetadataNotFound
 	}
@@ -164,7 +170,7 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	// Discard metadata, as we already loaded it.
 	for bi, branch := range branches {
 		for s, sectionBranch := range branch {
-			if sectionBranch.Key == "sops" {
+			if sectionBranch.Key == stores.SopsMetadataKey {
 				branch = append(branch[:s], branch[s+1:]...)
 				branches[bi] = branch
 			}
@@ -177,19 +183,16 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 }
 
 func (store *Store) iniSectionToMetadata(sopsSection *ini.Section) (stores.Metadata, error) {
-
 	metadataHash := make(map[string]interface{})
 	for k, v := range sopsSection.KeysHash() {
-		metadataHash[k] = strings.Replace(v, "\\n", "\n", -1)
+		metadataHash[k] = v
 	}
-	m := stores.Unflatten(metadataHash)
-	var md stores.Metadata
-	inrec, err := json.Marshal(m)
+	stores.DecodeNewLines(metadataHash)
+	err := stores.DecodeNonStrings(metadataHash)
 	if err != nil {
-		return md, err
+		return stores.Metadata{}, err
 	}
-	err = json.Unmarshal(inrec, &md)
-	return md, err
+	return stores.UnflattenMetadata(metadataHash)
 }
 
 // LoadPlainFile loads a plaintext INI file's bytes onto a sops.TreeBranches runtime object
@@ -210,7 +213,7 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	sectionItem := sops.TreeItem{Key: "sops", Value: newBranch}
+	sectionItem := sops.TreeItem{Key: stores.SopsMetadataKey, Value: newBranch}
 	branch := sops.TreeBranch{sectionItem}
 
 	in.Branches = append(in.Branches, branch)
@@ -223,24 +226,13 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 }
 
 func (store *Store) encodeMetadataToIniBranch(md stores.Metadata) (sops.TreeBranch, error) {
-	var mdMap map[string]interface{}
-	inrec, err := json.Marshal(md)
+	flat, err := stores.FlattenMetadata(md)
 	if err != nil {
 		return nil, err
 	}
-	err = json.Unmarshal(inrec, &mdMap)
-	if err != nil {
-		return nil, err
-	}
-	flat := stores.Flatten(mdMap)
-	for k, v := range flat {
-		if s, ok := v.(string); ok {
-			flat[k] = strings.Replace(s, "\n", "\\n", -1)
-		}
-	}
-	if err != nil {
-		return nil, err
-	}
+	stores.EncodeNonStrings(flat)
+	stores.EncodeNewLines(flat)
+
 	branch := sops.TreeBranch{}
 	for key, value := range flat {
 		if value == nil {
@@ -281,4 +273,9 @@ func (store *Store) EmitExample() []byte {
 		panic(err)
 	}
 	return bytes
+}
+
+// HasSopsTopLevelKey checks whether a top-level "sops" key exists.
+func (store *Store) HasSopsTopLevelKey(branch sops.TreeBranch) bool {
+	return stores.HasSopsTopLevelKey(branch)
 }

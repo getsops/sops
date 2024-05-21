@@ -20,23 +20,19 @@ import (
 )
 
 type editOpts struct {
-	Cipher         sops.Cipher
-	InputStore     common.Store
-	OutputStore    common.Store
-	InputPath      string
-	IgnoreMAC      bool
-	KeyServices    []keyservice.KeyServiceClient
-	ShowMasterKeys bool
+	Cipher          sops.Cipher
+	InputStore      common.Store
+	OutputStore     common.Store
+	InputPath       string
+	IgnoreMAC       bool
+	KeyServices     []keyservice.KeyServiceClient
+	DecryptionOrder []string
+	ShowMasterKeys  bool
 }
 
 type editExampleOpts struct {
 	editOpts
-	UnencryptedSuffix string
-	EncryptedSuffix   string
-	UnencryptedRegex  string
-	EncryptedRegex    string
-	KeyGroups         []sops.KeyGroup
-	GroupThreshold    int
+	encryptConfig
 }
 
 type runEditorUntilOkOpts struct {
@@ -59,15 +55,7 @@ func editExample(opts editExampleOpts) ([]byte, error) {
 	}
 	tree := sops.Tree{
 		Branches: branches,
-		Metadata: sops.Metadata{
-			KeyGroups:         opts.KeyGroups,
-			UnencryptedSuffix: opts.UnencryptedSuffix,
-			EncryptedSuffix:   opts.EncryptedSuffix,
-			UnencryptedRegex:  opts.UnencryptedRegex,
-			EncryptedRegex:    opts.EncryptedRegex,
-			Version:           version.Version,
-			ShamirThreshold:   opts.GroupThreshold,
-		},
+		Metadata: metadataFromEncryptionConfig(opts.encryptConfig),
 		FilePath: path,
 	}
 
@@ -94,7 +82,11 @@ func edit(opts editOpts) ([]byte, error) {
 	}
 	// Decrypt the file
 	dataKey, err := common.DecryptTree(common.DecryptTreeOpts{
-		Cipher: opts.Cipher, IgnoreMac: opts.IgnoreMAC, Tree: tree, KeyServices: opts.KeyServices,
+		Cipher:          opts.Cipher,
+		IgnoreMac:       opts.IgnoreMAC,
+		Tree:            tree,
+		KeyServices:     opts.KeyServices,
+		DecryptionOrder: opts.DecryptionOrder,
 	})
 	if err != nil {
 		return nil, err

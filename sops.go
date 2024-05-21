@@ -34,7 +34,7 @@ be recalculated and compared with the MAC stored in the document to verify that 
 fraudulent changes have been applied. The MAC covers keys and values as well as their
 ordering.
 */
-package sops //import "github.com/getsops/sops/v3"
+package sops // import "github.com/getsops/sops/v3"
 
 import (
 	"crypto/rand"
@@ -42,21 +42,27 @@ import (
 	"fmt"
 	"reflect"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/sirupsen/logrus"
+	"golang.org/x/net/context"
+
+	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/audit"
 	"github.com/getsops/sops/v3/keys"
 	"github.com/getsops/sops/v3/keyservice"
 	"github.com/getsops/sops/v3/logging"
+	"github.com/getsops/sops/v3/pgp"
 	"github.com/getsops/sops/v3/shamir"
-	"github.com/sirupsen/logrus"
-	"golang.org/x/net/context"
 )
 
 // DefaultUnencryptedSuffix is the default suffix a TreeItem key has to end with for sops to leave its Value unencrypted
 const DefaultUnencryptedSuffix = "_unencrypted"
+
+var DefaultDecryptionOrder = []string{age.KeyTypeIdentifier, pgp.KeyTypeIdentifier}
 
 type sopsError string
 
@@ -69,6 +75,12 @@ const MacMismatch = sopsError("MAC mismatch")
 
 // MetadataNotFound occurs when the input file is malformed and doesn't have sops metadata in it
 const MetadataNotFound = sopsError("sops metadata not found")
+
+// MACOnlyEncryptedInitialization is a constant and known sequence of 32 bytes used to initialize
+// MAC which is computed only over values which end up encrypted. That assures that a MAC with the
+// setting enabled is always different from a MAC with this setting disabled.
+// The following numbers are taken from the output of `echo -n sops | sha256sum` (shell) or `hashlib.sha256(b'sops').hexdigest()` (Python).
+var MACOnlyEncryptedInitialization = []byte{0x8a, 0x3f, 0xd2, 0xad, 0x54, 0xce, 0x66, 0x52, 0x7b, 0x10, 0x34, 0xf3, 0xd1, 0x47, 0xbe, 0xb, 0xb, 0x97, 0x5b, 0x3b, 0xf4, 0x4f, 0x72, 0xc6, 0xfd, 0xad, 0xec, 0x81, 0x76, 0xf2, 0x7d, 0x69}
 
 var log *logrus.Logger
 
@@ -291,22 +303,21 @@ func (branch TreeBranch) walkBranch(in TreeBranch, path []string, onLeaves func(
 // is provided (by default it is not), those not matching EncryptedRegex,
 // if EncryptedRegex is provided (by default it is not) or those matching
 // UnencryptedRegex, if UnencryptedRegex is provided (by default it is not).
-// If encryption is successful, it returns the MAC for the encrypted tree.
+// If encryption is successful, it returns the MAC for the encrypted tree
+// (all values if MACOnlyEncrypted is false, or only over values which end
+// up encrypted if MACOnlyEncrypted is true).
 func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 	audit.SubmitEvent(audit.EncryptEvent{
 		File: tree.FilePath,
 	})
 	hash := sha512.New()
+	if tree.Metadata.MACOnlyEncrypted {
+		// We initialize with known set of bytes so that a MAC with this setting
+		// enabled is always different from a MAC with this setting disabled.
+		hash.Write(MACOnlyEncryptedInitialization)
+	}
 	walk := func(branch TreeBranch) error {
 		_, err := branch.walkBranch(branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
-			// Only add to MAC if not a comment
-			if _, ok := in.(Comment); !ok {
-				bytes, err := ToBytes(in)
-				if err != nil {
-					return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
-				}
-				hash.Write(bytes)
-			}
 			encrypted := true
 			if tree.Metadata.UnencryptedSuffix != "" {
 				for _, v := range path {
@@ -344,6 +355,16 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 					}
 				}
 			}
+			if !tree.Metadata.MACOnlyEncrypted || encrypted {
+				// Only add to MAC if not a comment
+				if _, ok := in.(Comment); !ok {
+					bytes, err := ToBytes(in)
+					if err != nil {
+						return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
+					}
+					hash.Write(bytes)
+				}
+			}
 			if encrypted {
 				var err error
 				pathString := strings.Join(path, ":") + ":"
@@ -371,13 +392,20 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 // those not ending with EncryptedSuffix, if EncryptedSuffix is provided (by default it is not),
 // those not matching EncryptedRegex, if EncryptedRegex is provided (by default it is not),
 // or those matching UnencryptedRegex, if UnencryptedRegex is provided (by default it is not).
-// If decryption is successful, it returns the MAC for the decrypted tree.
+// If decryption is successful, it returns the MAC for the decrypted tree
+// (all values if MACOnlyEncrypted is false, or only over values which end
+// up decrypted if MACOnlyEncrypted is true).
 func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 	log.Debug("Decrypting tree")
 	audit.SubmitEvent(audit.DecryptEvent{
 		File: tree.FilePath,
 	})
 	hash := sha512.New()
+	if tree.Metadata.MACOnlyEncrypted {
+		// We initialize with known set of bytes so that a MAC with this setting
+		// enabled is always different from a MAC with this setting disabled.
+		hash.Write(MACOnlyEncryptedInitialization)
+	}
 	walk := func(branch TreeBranch) error {
 		_, err := branch.walkBranch(branch, make([]string, 0), func(in interface{}, path []string) (interface{}, error) {
 			encrypted := true
@@ -441,13 +469,15 @@ func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 			} else {
 				v = in
 			}
-			// Only add to MAC if not a comment
-			if _, ok := v.(Comment); !ok {
-				bytes, err := ToBytes(v)
-				if err != nil {
-					return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
+			if !tree.Metadata.MACOnlyEncrypted || encrypted {
+				// Only add to MAC if not a comment
+				if _, ok := v.(Comment); !ok {
+					bytes, err := ToBytes(v)
+					if err != nil {
+						return nil, fmt.Errorf("Could not convert %s to bytes: %s", in, err)
+					}
+					hash.Write(bytes)
 				}
-				hash.Write(bytes)
 			}
 			return v, nil
 		})
@@ -490,6 +520,7 @@ type Metadata struct {
 	UnencryptedRegex          string
 	EncryptedRegex            string
 	MessageAuthenticationCode string
+	MACOnlyEncrypted          bool
 	Version                   string
 	KeyGroups                 []KeyGroup
 	// ShamirThreshold is the number of key groups required to recover the
@@ -536,6 +567,12 @@ type ValueEmitter interface {
 	EmitValue(interface{}) ([]byte, error)
 }
 
+// CheckEncrypted is the interface for testing whether a branch contains sops
+// metadata. This is used to check whether a file is already encrypted or not.
+type CheckEncrypted interface {
+	HasSopsTopLevelKey(TreeBranch) bool
+}
+
 // Store is used to interact with files, both encrypted and unencrypted.
 type Store interface {
 	EncryptedFileLoader
@@ -543,6 +580,7 @@ type Store interface {
 	EncryptedFileEmitter
 	PlainFileEmitter
 	ValueEmitter
+	CheckEncrypted
 }
 
 // MasterKeyCount returns the number of master keys available
@@ -623,7 +661,7 @@ func (m *Metadata) UpdateMasterKeys(dataKey []byte) (errs []error) {
 
 // GetDataKeyWithKeyServices retrieves the data key, asking KeyServices to decrypt it with each
 // MasterKey in the Metadata's KeySources until one of them succeeds.
-func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) ([]byte, error) {
+func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient, decryptionOrder []string) ([]byte, error) {
 	if m.DataKey != nil {
 		return m.DataKey, nil
 	}
@@ -633,7 +671,7 @@ func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) 
 	}
 	var parts [][]byte
 	for i, group := range m.KeyGroups {
-		part, err := decryptKeyGroup(group, svcs)
+		part, err := decryptKeyGroup(group, svcs, decryptionOrder)
 		if err == nil {
 			parts = append(parts, part)
 		}
@@ -663,9 +701,13 @@ func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient) 
 // decryptKeyGroup tries to decrypt the contents of the provided KeyGroup with
 // any of the MasterKeys in the KeyGroup with any of the provided key services,
 // returning as soon as one key service succeeds.
-func decryptKeyGroup(group KeyGroup, svcs []keyservice.KeyServiceClient) ([]byte, error) {
+func decryptKeyGroup(group KeyGroup, svcs []keyservice.KeyServiceClient, decryptionOrder []string) ([]byte, error) {
 	var keyErrs []error
-	for _, key := range group {
+	// Sort MasterKeys in the group so we try them in specific order
+	// Use sorted indices to avoid group slice modification
+	indices := sortKeyGroupIndices(group, decryptionOrder)
+	for _, indexVal := range indices {
+		key := group[indexVal]
 		part, err := decryptKey(key, svcs)
 		if err != nil {
 			keyErrs = append(keyErrs, err)
@@ -674,6 +716,37 @@ func decryptKeyGroup(group KeyGroup, svcs []keyservice.KeyServiceClient) ([]byte
 		}
 	}
 	return nil, decryptKeyErrors(keyErrs)
+}
+
+// sortKeyGroupIndices returns indices that would sort the KeyGroup
+// according to decryptionOrder
+func sortKeyGroupIndices(group KeyGroup, decryptionOrder []string) []int {
+	priorities := make(map[string]int)
+	// give ordered weights
+	for i, v := range decryptionOrder {
+		priorities[v] = i
+	}
+	maxPriority := len(decryptionOrder)
+	// initialize indices
+	n := len(group)
+	indices := make([]int, n)
+	for i := 0; i < n; i++ {
+		indices[i] = i
+	}
+	sort.SliceStable(indices, func(i, j int) bool {
+		keyTypeI := group[indices[i]].TypeToIdentifier()
+		keyTypeJ := group[indices[j]].TypeToIdentifier()
+		priorityI, ok := priorities[keyTypeI]
+		if !ok {
+			priorityI = maxPriority
+		}
+		priorityJ, ok := priorities[keyTypeJ]
+		if !ok {
+			priorityJ = maxPriority
+		}
+		return priorityI < priorityJ
+	})
+	return indices
 }
 
 // decryptKey tries to decrypt the contents of the provided MasterKey with any
@@ -714,7 +787,7 @@ func decryptKey(key keys.MasterKey, svcs []keyservice.KeyServiceClient) ([]byte,
 func (m Metadata) GetDataKey() ([]byte, error) {
 	return m.GetDataKeyWithKeyServices([]keyservice.KeyServiceClient{
 		keyservice.NewLocalClient(),
-	})
+	}, nil)
 }
 
 // ToBytes converts a string, int, float or bool to a byte representation.

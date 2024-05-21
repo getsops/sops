@@ -7,6 +7,10 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/getsops/sops/v3/age"
+	"github.com/getsops/sops/v3/hcvault"
+	"github.com/getsops/sops/v3/pgp"
 )
 
 type reverseCipher struct{}
@@ -239,6 +243,90 @@ func TestUnencryptedRegex(t *testing.T) {
 	}
 	if !reflect.DeepEqual(tree.Branches[0], expected) {
 		t.Errorf("Trees don't match: \ngot\t\t\t%+v,\nexpected\t\t%+v", tree.Branches[0], expected)
+	}
+}
+
+func TestMACOnlyEncrypted(t *testing.T) {
+	branches := TreeBranches{
+		TreeBranch{
+			TreeItem{
+				Key:   "foo_encrypted",
+				Value: "bar",
+			},
+			TreeItem{
+				Key: "bar",
+				Value: TreeBranch{
+					TreeItem{
+						Key:   "foo",
+						Value: "bar",
+					},
+				},
+			},
+		},
+	}
+	tree := Tree{Branches: branches, Metadata: Metadata{EncryptedSuffix: "_encrypted", MACOnlyEncrypted: true}}
+	onlyEncrypted := TreeBranches{
+		TreeBranch{
+			TreeItem{
+				Key:   "foo_encrypted",
+				Value: "bar",
+			},
+		},
+	}
+	treeOnlyEncrypted := Tree{Branches: onlyEncrypted, Metadata: Metadata{EncryptedSuffix: "_encrypted", MACOnlyEncrypted: true}}
+	cipher := reverseCipher{}
+	mac, err := tree.Encrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	if err != nil {
+		t.Errorf("Encrypting the tree failed: %s", err)
+	}
+	macOnlyEncrypted, err := treeOnlyEncrypted.Encrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	if err != nil {
+		t.Errorf("Encrypting the treeOnlyEncrypted failed: %s", err)
+	}
+	if mac != macOnlyEncrypted {
+		t.Errorf("MACs don't match:\ngot \t\t%+v,\nexpected \t\t%+v", mac, macOnlyEncrypted)
+	}
+}
+
+func TestMACOnlyEncryptedNoConfusion(t *testing.T) {
+	branches := TreeBranches{
+		TreeBranch{
+			TreeItem{
+				Key:   "foo_encrypted",
+				Value: "bar",
+			},
+			TreeItem{
+				Key: "bar",
+				Value: TreeBranch{
+					TreeItem{
+						Key:   "foo",
+						Value: "bar",
+					},
+				},
+			},
+		},
+	}
+	tree := Tree{Branches: branches, Metadata: Metadata{EncryptedSuffix: "_encrypted", MACOnlyEncrypted: true}}
+	onlyEncrypted := TreeBranches{
+		TreeBranch{
+			TreeItem{
+				Key:   "foo_encrypted",
+				Value: "bar",
+			},
+		},
+	}
+	treeOnlyEncrypted := Tree{Branches: onlyEncrypted, Metadata: Metadata{EncryptedSuffix: "_encrypted"}}
+	cipher := reverseCipher{}
+	mac, err := tree.Encrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	if err != nil {
+		t.Errorf("Encrypting the tree failed: %s", err)
+	}
+	macOnlyEncrypted, err := treeOnlyEncrypted.Encrypt(bytes.Repeat([]byte("f"), 32), cipher)
+	if err != nil {
+		t.Errorf("Encrypting the treeOnlyEncrypted failed: %s", err)
+	}
+	if mac == macOnlyEncrypted {
+		t.Errorf("MACs match but they should not")
 	}
 }
 
@@ -757,4 +845,62 @@ func TestEmitAsMap(t *testing.T) {
 	if assert.NoError(t, err) {
 		assert.Equal(t, expected, data)
 	}
+}
+
+func TestSortKeyGroupIndices(t *testing.T) {
+	t.Run("default order", func(t *testing.T) {
+		group := KeyGroup{&hcvault.MasterKey{}, &age.MasterKey{}, &pgp.MasterKey{}}
+		expected := []int{1, 2, 0}
+		indices := sortKeyGroupIndices(group, DefaultDecryptionOrder)
+		assert.Equal(t, expected, indices)
+	})
+
+	t.Run("different keygroup", func(t *testing.T) {
+		group := KeyGroup{&hcvault.MasterKey{}, &pgp.MasterKey{}, &age.MasterKey{}}
+		expected := []int{2, 1, 0}
+		indices := sortKeyGroupIndices(group, DefaultDecryptionOrder)
+		assert.Equal(t, expected, indices)
+	})
+
+	t.Run("repeated key", func(t *testing.T) {
+		group := KeyGroup{&pgp.MasterKey{}, &hcvault.MasterKey{}, &pgp.MasterKey{}, &age.MasterKey{}}
+		expected := []int{3, 0, 2, 1}
+		indices := sortKeyGroupIndices(group, DefaultDecryptionOrder)
+		assert.Equal(t, expected, indices)
+	})
+
+	t.Run("full order", func(t *testing.T) {
+		group := KeyGroup{&hcvault.MasterKey{}, &pgp.MasterKey{}, &age.MasterKey{}}
+		expected := []int{1, 2, 0}
+		indices := sortKeyGroupIndices(group, []string{"pgp", "age", "hc_vault"})
+		assert.Equal(t, expected, indices)
+	})
+
+	t.Run("empty order", func(t *testing.T) {
+		group := KeyGroup{&hcvault.MasterKey{}, &pgp.MasterKey{}, &age.MasterKey{}}
+		expected := []int{0, 1, 2}
+		indices := sortKeyGroupIndices(group, []string{})
+		assert.Equal(t, expected, indices)
+	})
+
+	t.Run("one match", func(t *testing.T) {
+		group := KeyGroup{&hcvault.MasterKey{}, &pgp.MasterKey{}, &age.MasterKey{}}
+		expected := []int{2, 0, 1}
+		indices := sortKeyGroupIndices(group, []string{"azure_kv", "age"})
+		assert.Equal(t, expected, indices)
+	})
+
+	t.Run("nonmatching order", func(t *testing.T) {
+		group := KeyGroup{&pgp.MasterKey{}, &hcvault.MasterKey{}, &age.MasterKey{}}
+		expected := []int{0, 1, 2}
+		indices := sortKeyGroupIndices(group, []string{"azure_kv"})
+		assert.Equal(t, expected, indices)
+	})
+
+	t.Run("nonexistent keys", func(t *testing.T) {
+		group := KeyGroup{&hcvault.MasterKey{}, &pgp.MasterKey{}, &age.MasterKey{}}
+		expected := []int{2, 1, 0}
+		indices := sortKeyGroupIndices(group, []string{"dummy1", "age", "dummy2", "pgp", "dummy3"})
+		assert.Equal(t, expected, indices)
+	})
 }

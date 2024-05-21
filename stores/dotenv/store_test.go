@@ -80,3 +80,20 @@ func TestEmitEncryptedFileStability(t *testing.T) {
 		previous = bytes
 	}
 }
+
+func TestHasSopsTopLevelKey(t *testing.T) {
+	ok := (&Store{}).HasSopsTopLevelKey(sops.TreeBranch{
+		sops.TreeItem{
+			Key:   "sops",
+			Value: "value",
+		},
+	})
+	assert.Equal(t, ok, false)
+	ok = (&Store{}).HasSopsTopLevelKey(sops.TreeBranch{
+		sops.TreeItem{
+			Key:   "sops_",
+			Value: "value",
+		},
+	})
+	assert.Equal(t, ok, true)
+}

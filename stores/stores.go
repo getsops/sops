@@ -23,6 +23,11 @@ import (
 	"github.com/getsops/sops/v3/pgp"
 )
 
+const (
+	// SopsMetadataKey is the key used to store SOPS metadata at in SOPS encrypted files.
+	SopsMetadataKey = "sops"
+)
+
 // SopsFile is a struct used by the stores as a helper to unmarshal the SOPS metadata
 type SopsFile struct {
 	// Metadata is a pointer so we can easily tell when the field is not present
@@ -51,6 +56,7 @@ type Metadata struct {
 	EncryptedSuffix           string      `yaml:"encrypted_suffix,omitempty" json:"encrypted_suffix,omitempty"`
 	UnencryptedRegex          string      `yaml:"unencrypted_regex,omitempty" json:"unencrypted_regex,omitempty"`
 	EncryptedRegex            string      `yaml:"encrypted_regex,omitempty" json:"encrypted_regex,omitempty"`
+	MACOnlyEncrypted          bool        `yaml:"mac_only_encrypted,omitempty" json:"mac_only_encrypted,omitempty"`
 	Version                   string      `yaml:"version" json:"version"`
 }
 
@@ -114,6 +120,7 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 	m.UnencryptedRegex = sopsMetadata.UnencryptedRegex
 	m.EncryptedRegex = sopsMetadata.EncryptedRegex
 	m.MessageAuthenticationCode = sopsMetadata.MessageAuthenticationCode
+	m.MACOnlyEncrypted = sopsMetadata.MACOnlyEncrypted
 	m.Version = sopsMetadata.Version
 	m.ShamirThreshold = sopsMetadata.ShamirThreshold
 	if len(sopsMetadata.KeyGroups) == 1 {
@@ -270,6 +277,7 @@ func (m *Metadata) ToInternal() (sops.Metadata, error) {
 		EncryptedSuffix:           m.EncryptedSuffix,
 		UnencryptedRegex:          m.UnencryptedRegex,
 		EncryptedRegex:            m.EncryptedRegex,
+		MACOnlyEncrypted:          m.MACOnlyEncrypted,
 		LastModified:              lastModified,
 	}, nil
 }
@@ -502,4 +510,14 @@ var ExampleFlatTree = sops.Tree{
 			},
 		},
 	},
+}
+
+// HasSopsTopLevelKey returns true if the given branch has a top-level key called "sops".
+func HasSopsTopLevelKey(branch sops.TreeBranch) bool {
+	for _, b := range branch {
+		if b.Key == SopsMetadataKey {
+			return true
+		}
+	}
+	return false
 }

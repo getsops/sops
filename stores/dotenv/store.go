@@ -2,20 +2,25 @@ package dotenv //import "github.com/getsops/sops/v3/stores/dotenv"
 
 import (
 	"bytes"
-	"encoding/json"
 	"fmt"
 	"sort"
 	"strings"
 
 	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/config"
 	"github.com/getsops/sops/v3/stores"
 )
 
 // SopsPrefix is the prefix for all metadatada entry keys
-const SopsPrefix = "sops_"
+const SopsPrefix = stores.SopsMetadataKey + "_"
 
 // Store handles storage of dotenv data
 type Store struct {
+	config config.DotenvStoreConfig
+}
+
+func NewStore(c *config.DotenvStoreConfig) *Store {
+	return &Store{config: *c}
 }
 
 // LoadEncryptedFile loads an encrypted file's bytes onto a sops.Tree runtime object
@@ -43,7 +48,12 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 		}
 	}
 
-	metadata, err := mapToMetadata(mdMap)
+	stores.DecodeNewLines(mdMap)
+	err = stores.DecodeNonStrings(mdMap)
+	if err != nil {
+		return sops.Tree{}, err
+	}
+	metadata, err := stores.UnflattenMetadata(mdMap)
 	if err != nil {
 		return sops.Tree{}, err
 	}
@@ -95,10 +105,14 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 // runtime object
 func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	metadata := stores.MetadataFromInternal(in.Metadata)
-	mdItems, err := metadataToMap(metadata)
+	mdItems, err := stores.FlattenMetadata(metadata)
 	if err != nil {
 		return nil, err
 	}
+
+	stores.EncodeNonStrings(mdItems)
+	stores.EncodeNewLines(mdItems)
+
 	var keys []string
 	for k := range mdItems {
 		keys = append(keys, k)
@@ -152,47 +166,24 @@ func (store *Store) EmitExample() []byte {
 	return bytes
 }
 
-func metadataToMap(md stores.Metadata) (map[string]interface{}, error) {
-	var mdMap map[string]interface{}
-	inrec, err := json.Marshal(md)
-	if err != nil {
-		return nil, err
-	}
-	err = json.Unmarshal(inrec, &mdMap)
-	if err != nil {
-		return nil, err
-	}
-	flat := stores.Flatten(mdMap)
-	for k, v := range flat {
-		if s, ok := v.(string); ok {
-			flat[k] = strings.Replace(s, "\n", "\\n", -1)
-		}
-	}
-	return flat, nil
-}
-
-func mapToMetadata(m map[string]interface{}) (stores.Metadata, error) {
-	for k, v := range m {
-		if s, ok := v.(string); ok {
-			m[k] = strings.Replace(s, "\\n", "\n", -1)
-		}
-	}
-	m = stores.Unflatten(m)
-	var md stores.Metadata
-	inrec, err := json.Marshal(m)
-	if err != nil {
-		return md, err
-	}
-	err = json.Unmarshal(inrec, &md)
-	return md, err
-}
-
 func isComplexValue(v interface{}) bool {
 	switch v.(type) {
 	case []interface{}:
 		return true
 	case sops.TreeBranch:
 		return true
+	}
+	return false
+}
+
+// HasSopsTopLevelKey checks whether a top-level "sops" key exists.
+func (store *Store) HasSopsTopLevelKey(branch sops.TreeBranch) bool {
+	for _, b := range branch {
+		if key, ok := b.Key.(string); ok {
+			if strings.HasPrefix(key, SopsPrefix) {
+				return true
+			}
+		}
 	}
 	return false
 }

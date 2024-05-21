@@ -4,7 +4,7 @@ interface that encrypts and decrypts the data key by first trying with the
 github.com/ProtonMail/go-crypto/openpgp package and if that fails, by calling
 the "gpg" binary.
 */
-package pgp //import "github.com/getsops/sops/v3/pgp"
+package pgp // import "github.com/getsops/sops/v3/pgp"
 
 import (
 	"bytes"
@@ -22,12 +22,15 @@ import (
 	"github.com/ProtonMail/go-crypto/openpgp"
 	"github.com/ProtonMail/go-crypto/openpgp/armor"
 	gpgagent "github.com/getsops/gopgagent"
-	"github.com/getsops/sops/v3/logging"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/term"
+
+	"github.com/getsops/sops/v3/logging"
 )
 
 const (
+	// KeyTypeIdentifier is the string used to identify a PGP MasterKey.
+	KeyTypeIdentifier = "pgp"
 	// SopsGpgExecEnv can be set as an environment variable to overwrite the
 	// GnuPG binary used.
 	SopsGpgExecEnv = "SOPS_GPG_EXEC"
@@ -240,7 +243,7 @@ func (r SecRing) ApplyToMasterKey(key *MasterKey) {
 // errSet is a collection of captured errors.
 type errSet []error
 
-// Error joins the errors into a "; " seperated string.
+// Error joins the errors into a "; " separated string.
 func (e errSet) Error() string {
 	str := make([]string, len(e))
 	for i, err := range e {
@@ -449,6 +452,11 @@ func (key MasterKey) ToMap() map[string]interface{} {
 	return out
 }
 
+// TypeToIdentifier returns the string identifier for the MasterKey type.
+func (key *MasterKey) TypeToIdentifier() string {
+	return KeyTypeIdentifier
+}
+
 // retrievePubKey attempts to retrieve the public key from the public keyring
 // by Fingerprint.
 func (key *MasterKey) retrievePubKey() (openpgp.Entity, error) {
@@ -623,7 +631,7 @@ func gnuPGHome(customPath string) string {
 }
 
 // shortenFingerprint returns the short ID of the given fingerprint.
-// This is mostly used for compatability reasons, as older versions of GnuPG
+// This is mostly used for compatibility reasons, as older versions of GnuPG
 // do not always like long IDs.
 func shortenFingerprint(fingerprint string) string {
 	if offset := len(fingerprint) - 16; offset > 0 {
