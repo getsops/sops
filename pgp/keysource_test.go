@@ -338,8 +338,6 @@ func TestMasterKey_Decrypt(t *testing.T) {
 	})
 	assert.NoError(t, gnuPGHome.ImportFile(mockPrivateKey))
 
-	fingerprint := shortenFingerprint(mockFingerprint)
-
 	data := []byte("this data is absolutely top secret")
 	stdout, stderr, err := gpgExec(gnuPGHome.String(), []string{
 		"--no-default-recipient",
@@ -347,9 +345,9 @@ func TestMasterKey_Decrypt(t *testing.T) {
 		"--encrypt",
 		"-a",
 		"-r",
-		fingerprint,
+		mockFingerprint,
 		"--trusted-key",
-		fingerprint,
+		mockFingerprint,
 		"--no-encrypt-to",
 	}, bytes.NewReader(data))
 	assert.Nil(t, err)
@@ -421,8 +419,6 @@ func TestMasterKey_decryptWithOpenPGP(t *testing.T) {
 		})
 		assert.NoError(t, gnuPGHome.ImportFile(mockPrivateKey))
 
-		fingerprint := shortenFingerprint(mockFingerprint)
-
 		data := []byte("this data is absolutely top secret")
 		stdout, stderr, err := gpgExec(gnuPGHome.String(), []string{
 			"--no-default-recipient",
@@ -430,9 +426,9 @@ func TestMasterKey_decryptWithOpenPGP(t *testing.T) {
 			"--encrypt",
 			"-a",
 			"-r",
-			fingerprint,
+			mockFingerprint,
 			"--trusted-key",
-			fingerprint,
+			mockFingerprint,
 			"--no-encrypt-to",
 		}, bytes.NewReader(data))
 		assert.Nil(t, err)
@@ -470,8 +466,6 @@ func TestMasterKey_decryptWithGnuPG(t *testing.T) {
 		})
 		assert.NoError(t, gnuPGHome.ImportFile(mockPrivateKey))
 
-		fingerprint := shortenFingerprint(mockFingerprint)
-
 		data := []byte("this data is absolutely top secret")
 		stdout, stderr, err := gpgExec(gnuPGHome.String(), []string{
 			"--no-default-recipient",
@@ -479,9 +473,9 @@ func TestMasterKey_decryptWithGnuPG(t *testing.T) {
 			"--encrypt",
 			"-a",
 			"-r",
-			fingerprint,
+			mockFingerprint,
 			"--trusted-key",
-			fingerprint,
+			mockFingerprint,
 			"--no-encrypt-to",
 		}, bytes.NewReader(data))
 		assert.Nil(t, err)
@@ -694,13 +688,6 @@ func Test_gnuPGHome(t *testing.T) {
 
 	customP := "/home/dir/overwrite"
 	assert.Equal(t, customP, gnuPGHome(customP))
-}
-
-func Test_shortenFingerprint(t *testing.T) {
-	shortId := shortenFingerprint(mockFingerprint)
-	assert.Equal(t, "9732075EA221A7EA", shortId)
-
-	assert.Equal(t, shortId, shortenFingerprint(shortId))
 }
 
 // TODO(hidde): previous tests kept around for now.
