@@ -365,6 +365,13 @@ func TestLoadConfigFileWithOnlyDestinationRules(t *testing.T) {
 	assert.Nil(t, err)
 }
 
+func TestLoadConfigFileWithBackslashInPath(t *testing.T) {
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithPath, t), "/conf/path", "foo\\bar2000", nil)
+	assert.Nil(t, err)
+	assert.Equal(t, "2", conf.KeyGroups[0][0].ToString())
+	assert.Equal(t, "1", conf.KeyGroups[0][1].ToString())
+}
+
 func TestKeyGroupsForFile(t *testing.T) {
 	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfig, t), "/conf/path", "foobar2000", nil)
 	assert.Nil(t, err)
