@@ -67,7 +67,7 @@ checkmd: $(MD_FILES)
 .PHONY: test
 test: vendor
 	gpg --import pgp/sops_functional_tests_key.asc 2>&1 1>/dev/null || exit 0
-	$(GO) test $(GO_TEST_FLAGS) ./...
+	LANG=en_US.UTF-8 $(GO) test $(GO_TEST_FLAGS) ./...
 
 .PHONY: showcoverage
 showcoverage: test
@@ -94,7 +94,7 @@ functional-tests-all:
 
 .PHONY: release-snapshot
 release-snapshot: install-goreleaser install-syft
-	GITHUB_REPOSITORY=$(GITHUB_REPOSITORY) $(GORELEASER) release --clean --snapshot --skip-sign
+	GITHUB_REPOSITORY=$(GITHUB_REPOSITORY) $(GORELEASER) release --clean --snapshot --skip=sign
 
 .PHONY: clean
 clean:

@@ -17,6 +17,6 @@ for file in $secret_files; do
     cp "$src_file" "$target_file"
   # Otherwise, decrypt it
   else
-    sops --decrypt "$src_file" > "$target_file"
+    sops decrypt "$src_file" > "$target_file"
   fi
 done

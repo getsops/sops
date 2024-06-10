@@ -55,6 +55,9 @@ func updateFile(opts Opts) error {
 	if err != nil {
 		return err
 	}
+	if conf == nil {
+		return fmt.Errorf("The config file %s does not contain any creation rule", opts.ConfigPath)
+	}
 
 	diffs := common.DiffKeyGroups(tree.Metadata.KeyGroups, conf.KeyGroups)
 	keysWillChange := false

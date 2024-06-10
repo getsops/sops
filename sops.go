@@ -567,9 +567,9 @@ type ValueEmitter interface {
 	EmitValue(interface{}) ([]byte, error)
 }
 
-// CheckEncryped is the interface for testing whether a branch contains sops
+// CheckEncrypted is the interface for testing whether a branch contains sops
 // metadata. This is used to check whether a file is already encrypted or not.
-type CheckEncryped interface {
+type CheckEncrypted interface {
 	HasSopsTopLevelKey(TreeBranch) bool
 }
 
@@ -580,7 +580,7 @@ type Store interface {
 	EncryptedFileEmitter
 	PlainFileEmitter
 	ValueEmitter
-	CheckEncryped
+	CheckEncrypted
 }
 
 // MasterKeyCount returns the number of master keys available

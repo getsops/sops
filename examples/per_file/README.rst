@@ -47,7 +47,7 @@ In both development and production, we will be storing the secrets file unencryp
 
 As peace of mind, think about this:
 
-- Unencrypted on disk is fine because if the attacker ever gains access to the server, then they can run ``sops --decrypt`` as well.
+- Unencrypted on disk is fine because if the attacker ever gains access to the server, then they can run ``sops decrypt`` as well.
 
 Files
 -----
@@ -78,7 +78,7 @@ For testing in a public CI, we can copy ``config.enc`` to ``config``. The secret
 
 ..
 
-    For convenience, we can run ``CONFIG_COPY_ONLY=TRUE bin/decrypt-config.sh`` which will use ``ln -s`` rather than ``sops --decrypt``.
+    For convenience, we can run ``CONFIG_COPY_ONLY=TRUE bin/decrypt-config.sh`` which will use ``ln -s`` rather than ``sops decrypt``.
 
 For testing in a private CI where we need private information, see the `Production instructions <#production>`_.
 

@@ -60,7 +60,7 @@ mod tests {
 }",
         );
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("-e")
+            .arg("encrypt")
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
@@ -92,7 +92,7 @@ mod tests {
         );
         assert!(
             Command::new(SOPS_BINARY_PATH)
-                .arg("-e")
+                .arg("encrypt")
                 .arg("-i")
                 .arg(file_path.clone())
                 .output()
@@ -127,7 +127,7 @@ mod tests {
         );
         assert!(
             Command::new(SOPS_BINARY_PATH)
-                .arg("-e")
+                .arg("encrypt")
                 .arg("-i")
                 .arg(file_path.clone())
                 .output()
@@ -162,7 +162,7 @@ mod tests {
         );
         assert!(
             Command::new(SOPS_BINARY_PATH)
-                .arg("-e")
+                .arg("encrypt")
                 .arg("-i")
                 .arg(file_path.clone())
                 .output()
@@ -201,9 +201,9 @@ mod tests {
         );
 
         let output = Command::new(SOPS_BINARY_PATH)
+            .arg("encrypt")
             .arg("--kms")
             .arg(kms_arn)
-            .arg("-e")
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
@@ -231,7 +231,7 @@ mod tests {
 bar: baz",
         );
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("-e")
+            .arg("encrypt")
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
@@ -257,7 +257,7 @@ bar: baz",
             prepare_temp_file("test_set_update.json", r#"{"a": 2, "b": "ba"}"#.as_bytes());
         assert!(
             Command::new(SOPS_BINARY_PATH)
-                .arg("-e")
+                .arg("encrypt")
                 .arg("-i")
                 .arg(file_path.clone())
                 .output()
@@ -267,9 +267,10 @@ bar: baz",
             "sops didn't exit successfully"
         );
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("--set")
-            .arg(r#"["a"] {"aa": "aaa"}"#)
+            .arg("set")
             .arg(file_path.clone())
+            .arg(r#"["a"]"#)
+            .arg(r#"{"aa": "aaa"}"#)
             .output()
             .expect("Error running sops");
         assert!(output.status.success(), "sops didn't exit successfully");
@@ -300,7 +301,7 @@ bar: baz",
             prepare_temp_file("test_set_insert.json", r#"{"a": 2, "b": "ba"}"#.as_bytes());
         assert!(
             Command::new(SOPS_BINARY_PATH)
-                .arg("-e")
+                .arg("encrypt")
                 .arg("-i")
                 .arg(file_path.clone())
                 .output()
@@ -310,9 +311,10 @@ bar: baz",
             "sops didn't exit successfully"
         );
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("--set")
-            .arg(r#"["c"] {"cc": "ccc"}"#)
+            .arg("set")
             .arg(file_path.clone())
+            .arg(r#"["c"]"#)
+            .arg(r#"{"cc": "ccc"}"#)
             .output()
             .expect("Error running sops");
         assert!(output.status.success(), "sops didn't exit successfully");
@@ -347,7 +349,7 @@ b: ba"#
         );
         assert!(
             Command::new(SOPS_BINARY_PATH)
-                .arg("-e")
+                .arg("encrypt")
                 .arg("-i")
                 .arg(file_path.clone())
                 .output()
@@ -357,9 +359,10 @@ b: ba"#
             "sops didn't exit successfully"
         );
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("--set")
-            .arg(r#"["a"] {"aa": "aaa"}"#)
+            .arg("set")
             .arg(file_path.clone())
+            .arg(r#"["a"]"#)
+            .arg(r#"{"aa": "aaa"}"#)
             .output()
             .expect("Error running sops");
         assert!(output.status.success(), "sops didn't exit successfully");
@@ -394,7 +397,7 @@ b: ba"#
         );
         assert!(
             Command::new(SOPS_BINARY_PATH)
-                .arg("-e")
+                .arg("encrypt")
                 .arg("-i")
                 .arg(file_path.clone())
                 .output()
@@ -404,9 +407,10 @@ b: ba"#
             "sops didn't exit successfully"
         );
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("--set")
-            .arg(r#"["c"] {"cc": "ccc"}"#)
+            .arg("set")
             .arg(file_path.clone())
+            .arg(r#"["c"]"#)
+            .arg(r#"{"cc": "ccc"}"#)
             .output()
             .expect("Error running sops");
         assert!(output.status.success(), "sops didn't exit successfully");
@@ -435,6 +439,63 @@ b: ba"#
     fn set_yaml_file_string() {
         let file_path = prepare_temp_file(
             "test_set_string.yaml",
+            r#"a: 2
+b: ba"#
+                .as_bytes(),
+        );
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("encrypt")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("set")
+                .arg(file_path.clone())
+                .arg(r#"["a"]"#)
+                .arg(r#""aaa""#)
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("decrypt")
+            .arg("-i")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        let mut s = String::new();
+        File::open(file_path)
+            .unwrap()
+            .read_to_string(&mut s)
+            .unwrap();
+        let data: Value = serde_yaml::from_str(&s).expect("Error parsing sops's YAML output");
+        if let Value::Mapping(data) = data {
+            let a = data.get(&Value::String("a".to_owned())).unwrap();
+            assert_eq!(a, &Value::String("aaa".to_owned()));
+        } else {
+            panic!("Output JSON does not have the expected structure");
+        }
+    }
+
+    #[test]
+    fn set_yaml_file_string_compat() {
+        let file_path = prepare_temp_file(
+            "test_set_string_compat.yaml",
             r#"a: 2
 b: ba"#
                 .as_bytes(),
@@ -496,7 +557,7 @@ b: ba"#
         );
         assert!(
             !Command::new(SOPS_BINARY_PATH)
-                .arg("-d")
+                .arg("decrypt")
                 .arg(file_path.clone())
                 .output()
                 .expect("Error running sops")
@@ -507,7 +568,7 @@ b: ba"#
 
         assert!(
             Command::new(SOPS_BINARY_PATH)
-                .arg("-d")
+                .arg("decrypt")
                 .arg("--ignore-mac")
                 .arg(file_path.clone())
                 .output()
@@ -522,7 +583,7 @@ b: ba"#
     fn encrypt_comments() {
         let file_path = "res/comments.yaml";
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("-e")
+            .arg("encrypt")
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
@@ -541,7 +602,7 @@ b: ba"#
     fn encrypt_comments_list() {
         let file_path = "res/comments_list.yaml";
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("-e")
+            .arg("encrypt")
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
@@ -560,7 +621,7 @@ b: ba"#
     fn decrypt_comments() {
         let file_path = "res/comments.enc.yaml";
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("-d")
+            .arg("decrypt")
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
@@ -579,7 +640,7 @@ b: ba"#
     fn decrypt_comments_unencrypted_comments() {
         let file_path = "res/comments_unencrypted_comments.yaml";
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("-d")
+            .arg("decrypt")
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
@@ -599,8 +660,8 @@ b: ba"#
         // The .sops.yaml file ensures this file is encrypted with two key groups, each with one GPG key
         let file_path = prepare_temp_file("test_roundtrip_keygroups.yaml", "a: secret".as_bytes());
         let output = Command::new(SOPS_BINARY_PATH)
+            .arg("encrypt")
             .arg("-i")
-            .arg("-e")
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
@@ -609,7 +670,7 @@ b: ba"#
             "SOPS failed to encrypt a file with Shamir Secret Sharing"
         );
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("-d")
+            .arg("decrypt")
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
@@ -629,8 +690,8 @@ b: ba"#
             "a: secret".as_bytes(),
         );
         let output = Command::new(SOPS_BINARY_PATH)
+            .arg("encrypt")
             .arg("-i")
-            .arg("-e")
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
@@ -639,7 +700,7 @@ b: ba"#
             "SOPS failed to encrypt a file with Shamir Secret Sharing"
         );
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("-d")
+            .arg("decrypt")
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
@@ -656,7 +717,7 @@ b: ba"#
             include_bytes!("../res/multiple_keys.yaml"),
         );
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("-d")
+            .arg("decrypt")
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
@@ -673,16 +734,16 @@ b: ba"#
             "multiline: |\n  multi\n  line".as_bytes(),
         );
         let output = Command::new(SOPS_BINARY_PATH)
+            .arg("encrypt")
             .arg("-i")
-            .arg("-e")
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
         assert!(output.status.success(), "SOPS failed to encrypt a file");
         let output = Command::new(SOPS_BINARY_PATH)
+            .arg("decrypt")
             .arg("--extract")
             .arg("[\"multiline\"]")
-            .arg("-d")
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
@@ -696,8 +757,8 @@ b: ba"#
         let data = b"\"\"{}this_is_binary_data";
         let file_path = prepare_temp_file("test.binary", data);
         let output = Command::new(SOPS_BINARY_PATH)
+            .arg("encrypt")
             .arg("-i")
-            .arg("-e")
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
@@ -706,7 +767,7 @@ b: ba"#
             "SOPS failed to encrypt a binary file"
         );
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("-d")
+            .arg("decrypt")
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
@@ -732,19 +793,19 @@ b: ba"#
         );
 
         let output = Command::new(SOPS_BINARY_PATH)
+            .arg("encrypt")
             .arg("--kms")
             .arg(kms_arn)
             .arg("--encryption-context")
             .arg("foo:bar,one:two")
             .arg("-i")
-            .arg("-e")
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
         assert!(output.status.success(), "sops didn't exit successfully");
 
         let output = Command::new(SOPS_BINARY_PATH)
-            .arg("-d")
+            .arg("decrypt")
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
@@ -761,9 +822,9 @@ b: ba"#
         let input_path = prepare_temp_file("test_output_flag.binary", b"foo");
         let output_path = Path::join(TMP_DIR.path(), "output_flag.txt");
         let output = Command::new(SOPS_BINARY_PATH)
+            .arg("encrypt")
             .arg("--output")
             .arg(&output_path)
-            .arg("-e")
             .arg(input_path.clone())
             .output()
             .expect("Error running sops");
@@ -778,5 +839,114 @@ b: ba"#
         f.read_to_string(&mut contents)
             .expect("couldn't read output file contents");
         assert_ne!(contents, "", "Output file is empty");
+    }
+
+    #[test]
+    fn exec_env() {
+        let file_path = prepare_temp_file(
+            "test_exec_env.yaml",
+            r#"foo: bar
+bar: |-
+  baz
+  bam
+"#
+            .as_bytes(),
+        );
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("encrypt")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
+        let print_foo = prepare_temp_file(
+            "print_foo.sh",
+            r#"#!/bin/bash
+echo -E "${foo}"
+"#
+            .as_bytes(),
+        );
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("exec-env")
+            .arg(file_path.clone())
+            .arg(format!("/bin/bash {}", print_foo))
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert_eq!(String::from_utf8_lossy(&output.stdout), "bar\n");
+        let print_bar = prepare_temp_file(
+            "print_bar.sh",
+            r#"#!/bin/bash
+echo -E "${bar}"
+"#
+            .as_bytes(),
+        );
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("exec-env")
+            .arg(file_path.clone())
+            .arg(format!("/bin/bash {}", print_bar))
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert_eq!(String::from_utf8_lossy(&output.stdout), "baz\\nbam\n");
+    }
+
+    #[test]
+    fn exec_file() {
+        let file_path = prepare_temp_file(
+            "test_exec_file.yaml",
+            r#"foo: bar
+bar: |-
+  baz
+  bam
+"#
+            .as_bytes(),
+        );
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("-e")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("exec-file")
+            .arg("--output-type")
+            .arg("json")
+            .arg(file_path.clone())
+            .arg("cat {}")
+            .output()
+            .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert_eq!(
+            String::from_utf8_lossy(&output.stdout),
+            r#"{
+	"foo": "bar",
+	"bar": "baz\nbam"
+}"#
+        );
     }
 }
