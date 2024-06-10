@@ -94,7 +94,7 @@ functional-tests-all:
 
 .PHONY: release-snapshot
 release-snapshot: install-goreleaser install-syft
-	GITHUB_REPOSITORY=$(GITHUB_REPOSITORY) $(GORELEASER) release --clean --snapshot --skip-sign
+	GITHUB_REPOSITORY=$(GITHUB_REPOSITORY) $(GORELEASER) release --clean --snapshot --skip=sign
 
 .PHONY: clean
 clean:
