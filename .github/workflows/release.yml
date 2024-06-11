@@ -32,7 +32,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v4.0.1
         with:
-          go-version: 1.21.x
+          go-version: 1.22.x
           cache: false
 
       - name: Setup Syft
@@ -68,7 +68,7 @@ jobs:
           # Note that the following is the version of goreleaser, and NOT a Go version!
           # When bumping it, make sure to check out goreleaser's changelog first!
           # (https://github.com/goreleaser/goreleaser/releases)
-          version: 1.21.x
+          version: 1.26.x
           args: release --clean --timeout 1h
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
