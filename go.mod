@@ -7,7 +7,7 @@ require (
 	cloud.google.com/go/storage v1.39.1
 	filippo.io/age v1.1.1
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.12.0
-	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.5.2
+	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.6.0
 	github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys v1.1.0
 	github.com/ProtonMail/go-crypto v1.1.0-alpha.2
 	github.com/aws/aws-sdk-go-v2 v1.27.2
