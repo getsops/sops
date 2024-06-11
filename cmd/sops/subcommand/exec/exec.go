@@ -3,12 +3,17 @@ package exec
 import (
 	"bytes"
 	"os"
+	"path/filepath"
 	"runtime"
 	"strings"
 
 	"github.com/getsops/sops/v3/logging"
 
 	"github.com/sirupsen/logrus"
+)
+
+const (
+	FallbackFilename = "tmp-file"
 )
 
 var log *logrus.Logger
@@ -28,8 +33,21 @@ type ExecOpts struct {
 }
 
 func GetFile(dir, filename string) *os.File {
-	handle, err := os.CreateTemp(dir, filename)
+	// If no filename is provided, create a random one based on FallbackFilename
+	if filename == "" {
+		handle, err := os.CreateTemp(dir, FallbackFilename)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return handle
+	}
+	// If a filename is provided, use that one
+	handle, err := os.Create(filepath.Join(dir, filename))
 	if err != nil {
+		log.Fatal(err)
+	}
+	// read+write for owner only
+	if err = handle.Chmod(0600); err != nil {
 		log.Fatal(err)
 	}
 	return handle
@@ -55,9 +73,15 @@ func ExecWithFile(opts ExecOpts) error {
 	if opts.Fifo {
 		// fifo handling needs to be async, even opening to write
 		// will block if there is no reader present
-		filename = GetPipe(dir, opts.Filename)
+		filename = opts.Filename
+		if filename == "" {
+			filename = FallbackFilename
+		}
+		filename = GetPipe(dir, filename)
 		go WritePipe(filename, opts.Plaintext)
 	} else {
+		// GetFile handles opts.Filename == "" specially, that's why we have
+		// to pass in opts.Filename without handling the fallback here
 		handle := GetFile(dir, opts.Filename)
 		handle.Write(opts.Plaintext)
 		handle.Close()
