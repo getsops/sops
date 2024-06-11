@@ -3,7 +3,7 @@ module github.com/getsops/sops/v3
 go 1.21
 
 require (
-	cloud.google.com/go/kms v1.18.1
+	cloud.google.com/go/kms v1.18.2
 	cloud.google.com/go/storage v1.42.0
 	filippo.io/age v1.2.0
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.12.0
@@ -13,9 +13,9 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.30.1
 	github.com/aws/aws-sdk-go-v2/config v1.27.23
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.23
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.17.3
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.17.4
 	github.com/aws/aws-sdk-go-v2/service/kms v1.35.1
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.57.1
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.58.0
 	github.com/aws/aws-sdk-go-v2/service/sts v1.30.1
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/fatih/color v1.17.0
@@ -37,9 +37,9 @@ require (
 	golang.org/x/net v0.26.0
 	golang.org/x/sys v0.21.0
 	golang.org/x/term v0.21.0
-	google.golang.org/api v0.186.0
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240624140628-dc46fd24d27d
-	google.golang.org/grpc v1.64.0
+	google.golang.org/api v0.187.0
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240701130421-f6361c86f094
+	google.golang.org/grpc v1.65.0
 	google.golang.org/protobuf v1.34.2
 	gopkg.in/ini.v1 v1.67.0
 	gopkg.in/yaml.v3 v3.0.1
@@ -47,7 +47,7 @@ require (
 
 require (
 	cloud.google.com/go v0.115.0 // indirect
-	cloud.google.com/go/auth v0.6.0 // indirect
+	cloud.google.com/go/auth v0.6.1 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.2 // indirect
 	cloud.google.com/go/compute/metadata v0.3.0 // indirect
 	cloud.google.com/go/iam v1.1.8 // indirect
