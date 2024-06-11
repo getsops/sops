@@ -1,11 +1,9 @@
 extern crate serde;
 extern crate serde_json;
 extern crate serde_yaml;
-extern crate tempdir;
-#[macro_use]
+extern crate tempfile;
+#[cfg_attr(test, macro_use)]
 extern crate lazy_static;
-#[macro_use]
-extern crate serde_derive;
 
 #[cfg(test)]
 mod tests {
@@ -19,7 +17,8 @@ mod tests {
     use std::io::{Read, Write};
     use std::path::Path;
     use std::process::Command;
-    use tempdir::TempDir;
+    use tempfile::Builder;
+    use tempfile::TempDir;
     const SOPS_BINARY_PATH: &'static str = "./sops";
     const KMS_KEY: &'static str = "FUNCTIONAL_TEST_KMS_ARN";
 
@@ -37,7 +36,7 @@ mod tests {
 
     lazy_static! {
         static ref TMP_DIR: TempDir =
-            TempDir::new("sops-functional-tests").expect("Unable to create temporary directory");
+            Builder::new().prefix("sops-functional-tests").tempdir().expect("Unable to create temporary directory");
     }
 
     fn prepare_temp_file(name: &str, contents: &[u8]) -> String {
@@ -584,7 +583,7 @@ b: ba"#
         let file_path = "res/comments.yaml";
         let output = Command::new(SOPS_BINARY_PATH)
             .arg("encrypt")
-            .arg(file_path.clone())
+            .arg(file_path)
             .output()
             .expect("Error running sops");
         assert!(output.status.success(), "SOPS didn't return successfully");
@@ -603,7 +602,7 @@ b: ba"#
         let file_path = "res/comments_list.yaml";
         let output = Command::new(SOPS_BINARY_PATH)
             .arg("encrypt")
-            .arg(file_path.clone())
+            .arg(file_path)
             .output()
             .expect("Error running sops");
         assert!(output.status.success(), "SOPS didn't return successfully");
@@ -622,7 +621,7 @@ b: ba"#
         let file_path = "res/comments.enc.yaml";
         let output = Command::new(SOPS_BINARY_PATH)
             .arg("decrypt")
-            .arg(file_path.clone())
+            .arg(file_path)
             .output()
             .expect("Error running sops");
         assert!(output.status.success(), "SOPS didn't return successfully");
@@ -641,7 +640,7 @@ b: ba"#
         let file_path = "res/comments_unencrypted_comments.yaml";
         let output = Command::new(SOPS_BINARY_PATH)
             .arg("decrypt")
-            .arg(file_path.clone())
+            .arg(file_path)
             .output()
             .expect("Error running sops");
         assert!(output.status.success(), "SOPS didn't return successfully");
