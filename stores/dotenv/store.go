@@ -134,7 +134,7 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 	buffer := bytes.Buffer{}
 	for _, item := range in[0] {
-		if isComplexValue(item.Value) {
+		if IsComplexValue(item.Value) {
 			return nil, fmt.Errorf("cannot use complex value in dotenv file: %s", item.Value)
 		}
 		var line string
@@ -166,7 +166,7 @@ func (store *Store) EmitExample() []byte {
 	return bytes
 }
 
-func isComplexValue(v interface{}) bool {
+func IsComplexValue(v interface{}) bool {
 	switch v.(type) {
 	case []interface{}:
 		return true
