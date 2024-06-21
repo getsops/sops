@@ -209,6 +209,53 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 		return err
 	}
 	client := key.createClient(cfg)
+
+	if !strings.HasPrefix(string(key.Arn), "arn:aws:kms") {
+		input := &kms.ListAliasesInput{}
+
+		paginator := kms.NewListAliasesPaginator(client, input)
+		found := false
+		for paginator.HasMorePages() && !found {
+			output, err := paginator.NextPage(context.Background())
+			if err != nil {
+				log.WithField("dataKey", dataKey).Info("Error listing aliases")
+				break
+			}
+
+			for _, alias := range output.Aliases {
+				if strings.HasSuffix(*alias.AliasArn, key.Arn) {
+
+					describeInput := &kms.DescribeKeyInput{
+						KeyId: aws.String(*alias.TargetKeyId),
+					}
+
+					describeOutput, err := client.DescribeKey(context.Background(), describeInput)
+
+					if err != nil {
+						return fmt.Errorf("failed to describe key: %w", err)
+					}
+
+					key.Arn = *describeOutput.KeyMetadata.Arn
+					found = true
+				}
+			}
+		}
+
+		encryptInput := &kms.EncryptInput{
+			KeyId:             &key.Arn,
+			Plaintext:         dataKey,
+			EncryptionContext: stringPointerToStringMap(key.EncryptionContext),
+		}
+		out, err := client.Encrypt(context.TODO(), encryptInput)
+		if err != nil {
+			log.WithField("arn", key.Arn).Info("Encryption failed")
+			return fmt.Errorf("failed to encrypt sops data key with AWS KMS 222: %s", key.Arn)
+		}
+		key.EncryptedKey = base64.StdEncoding.EncodeToString(out.CiphertextBlob)
+		log.WithField("arn", key.Arn).Info("Encryption succeeded")
+		return nil
+	}
+
 	input := &kms.EncryptInput{
 		KeyId:             &key.Arn,
 		Plaintext:         dataKey,
@@ -257,6 +304,52 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		return nil, err
 	}
 	client := key.createClient(cfg)
+
+	if !strings.HasPrefix(string(key.Arn), "arn:aws:kms") {
+		input := &kms.ListAliasesInput{}
+
+		paginator := kms.NewListAliasesPaginator(client, input)
+		found := false
+		for paginator.HasMorePages() && !found {
+			output, err := paginator.NextPage(context.Background())
+			if err != nil {
+				log.WithField("arn", key.Arn).Info("Error listing aliases")
+				break
+			}
+
+			for _, alias := range output.Aliases {
+				if strings.HasSuffix(*alias.AliasArn, key.Arn) {
+
+					describeInput := &kms.DescribeKeyInput{
+						KeyId: aws.String(*alias.TargetKeyId),
+					}
+
+					describeOutput, err := client.DescribeKey(context.Background(), describeInput)
+
+					if err != nil {
+						return nil, fmt.Errorf("failed to describe key: %w", err)
+					}
+
+					key.Arn = *describeOutput.KeyMetadata.Arn
+					found = true
+				}
+			}
+		}
+
+		decryptedInput := &kms.DecryptInput{
+			KeyId:             &key.Arn,
+			CiphertextBlob:    k,
+			EncryptionContext: stringPointerToStringMap(key.EncryptionContext),
+		}
+		decrypted, err := client.Decrypt(context.TODO(), decryptedInput)
+		if err != nil {
+			log.WithField("arn", key.Arn).Info("Decryption failed")
+			return nil, fmt.Errorf("failed to decrypt sops data key with AWS KMS: %w", err)
+		}
+		log.WithField("arn", key.Arn).Info("Decryption succeeded")
+		return decrypted.Plaintext, nil
+	}
+
 	input := &kms.DecryptInput{
 		KeyId:             &key.Arn,
 		CiphertextBlob:    k,
@@ -308,12 +401,30 @@ func (key *MasterKey) TypeToIdentifier() string {
 // createKMSConfig returns an AWS config with the credentialsProvider of the
 // MasterKey, or the default configuration sources.
 func (key MasterKey) createKMSConfig() (*aws.Config, error) {
-	re := regexp.MustCompile(arnRegex)
-	matches := re.FindStringSubmatch(key.Arn)
-	if matches == nil {
-		return nil, fmt.Errorf("no valid ARN found in '%s'", key.Arn)
-	}
-	region := matches[1]
+	// re := regexp.MustCompile(arnRegex)
+	// matches := re.FindStringSubmatch(key.Arn)
+	// if matches == nil {
+	// 	input := &kms.ListAliasesInput{}
+
+	// 	paginator := kms.NewListAliasesPaginator(client, input)
+	// 	found := false
+	// 	for paginator.HasMorePages() && !found {
+	// 		output, err := paginator.NextPage(context.Background())
+	// 		if err != nil {
+	// 			log.WithField("dataKey", key.Arn).Info("Error listing aliases")
+	// 			break
+	// 		}
+	// 		for _, alias := range output.Aliases {
+	// 			if *alias.AliasName == string(key.Arn) {
+	// 				key.Arn = *alias.TargetKeyId
+	// 				found = true
+	// 				break
+	// 			}
+	// 		}
+	// 	}
+	// 	return nil, fmt.Errorf("no valid ARN found in '%s'", key.Arn)
+	// }
+	region := "ap-northeast-2"
 
 	cfg, err := config.LoadDefaultConfig(context.TODO(), func(lo *config.LoadOptions) error {
 		// Use the credentialsProvider if present, otherwise default to reading credentials
