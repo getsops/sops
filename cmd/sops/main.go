@@ -26,6 +26,7 @@ import (
 	"github.com/getsops/sops/v3/cmd/sops/codes"
 	"github.com/getsops/sops/v3/cmd/sops/common"
 	"github.com/getsops/sops/v3/cmd/sops/subcommand/exec"
+	filestatuscmd "github.com/getsops/sops/v3/cmd/sops/subcommand/filestatus"
 	"github.com/getsops/sops/v3/cmd/sops/subcommand/groups"
 	keyservicecmd "github.com/getsops/sops/v3/cmd/sops/subcommand/keyservice"
 	publishcmd "github.com/getsops/sops/v3/cmd/sops/subcommand/publish"
@@ -425,6 +426,38 @@ func main() {
 					log.Errorf("Error running keyservice: %s", err)
 					return err
 				}
+				return nil
+			},
+		},
+		{
+			Name:      "filestatus",
+			Usage:     "check the status of the file, returning encryption status",
+			ArgsUsage: `file`,
+			Flags:     []cli.Flag{},
+			Action: func(c *cli.Context) error {
+				if c.NArg() < 1 {
+					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
+				}
+
+				fileName := c.Args()[0]
+				inputStore := inputStore(c, fileName)
+				opts := filestatuscmd.Opts{
+					InputStore: inputStore,
+					InputPath:  fileName,
+				}
+
+				status, err := filestatuscmd.FileStatus(opts)
+				if err != nil {
+					return err
+				}
+
+				json, err := encodingjson.Marshal(status)
+				if err != nil {
+					return common.NewExitError(err, codes.ErrorGeneric)
+				}
+
+				fmt.Println(string(json))
+
 				return nil
 			},
 		},
