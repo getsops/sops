@@ -141,7 +141,7 @@ func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 		if comment, ok := item.Key.(sops.Comment); ok {
 			line = fmt.Sprintf("#%s\n", comment.Value)
 		} else {
-			value := strings.Replace(item.Value.(string), "\n", "\\n", -1)
+			value := strings.Replace(stores.ValueToString(item.Value), "\n", "\\n", -1)
 			line = fmt.Sprintf("%s=%s\n", item.Key, value)
 		}
 		buffer.WriteString(line)
