@@ -42,6 +42,7 @@ import (
 	"fmt"
 	"reflect"
 	"regexp"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -75,6 +76,15 @@ const MacMismatch = sopsError("MAC mismatch")
 
 // MetadataNotFound occurs when the input file is malformed and doesn't have sops metadata in it
 const MetadataNotFound = sopsError("sops metadata not found")
+
+type SopsKeyNotFound struct {
+	Key interface{}
+	Msg string
+}
+
+func (e *SopsKeyNotFound) Error() string {
+	return fmt.Sprintf(e.Msg, e.Key)
+}
 
 // MACOnlyEncryptedInitialization is a constant and known sequence of 32 bytes used to initialize
 // MAC which is computed only over values which end up encrypted. That assures that a MAC with the
@@ -187,6 +197,53 @@ func set(branch interface{}, path []interface{}, value interface{}) interface{} 
 // Set sets a value on a given tree for the specified path
 func (branch TreeBranch) Set(path []interface{}, value interface{}) TreeBranch {
 	return set(branch, path, value).(TreeBranch)
+}
+
+func unset(branch interface{}, path []interface{}) (interface{}, error) {
+	switch branch := branch.(type) {
+	case TreeBranch:
+		for i, item := range branch {
+			if item.Key == path[0] {
+				if len(path) == 1 {
+					branch = slices.Delete(branch, i, i+1)
+				} else {
+					v, err := unset(item.Value, path[1:])
+					if err != nil {
+						return nil, err
+					}
+					branch[i].Value = v
+				}
+				return branch, nil
+			}
+		}
+		return nil, &SopsKeyNotFound{Msg: "Key not found: %s", Key: path[0]}
+	case []interface{}:
+		position := path[0].(int)
+		if position >= len(branch) {
+			return nil, &SopsKeyNotFound{Msg: "Index %d out of bounds", Key: path[0]}
+		}
+		if len(path) == 1 {
+			branch = slices.Delete(branch, position, position+1)
+		} else {
+			v, err := unset(branch[position], path[1:])
+			if err != nil {
+				return nil, err
+			}
+			branch[position] = v
+		}
+		return branch, nil
+	default:
+		return nil, fmt.Errorf("Unsupported type: %T for item '%s'", branch, path[0])
+	}
+}
+
+// Unset removes a value on a given tree from the specified path
+func (branch TreeBranch) Unset(path []interface{}) (TreeBranch, error) {
+	v, err := unset(branch, path)
+	if err != nil {
+		return nil, err
+	}
+	return v.(TreeBranch), nil
 }
 
 // Tree is the data structure used by sops to represent documents internally
