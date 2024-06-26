@@ -11,7 +11,7 @@ A Sops document is a Tree composed of a data branch with arbitrary key/value pai
 and a metadata branch with encryption and integrity information.
 
 In JSON and YAML formats, the structure of the cleartext tree is preserved, keys are
-stored in cleartext and only values are encrypted. Keeping the values in cleartext
+stored in cleartext and only values are encrypted. Keeping the keys in cleartext
 provides better readability when storing Sops documents in version controls, and allows
 for merging competing changes on documents. This is a major difference between Sops
 and other encryption tools that store documents as encrypted blobs.
