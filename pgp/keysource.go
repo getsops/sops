@@ -321,8 +321,6 @@ func (key *MasterKey) encryptWithOpenPGP(dataKey []byte) error {
 // PGP key that belongs to Fingerprint. It sets EncryptedDataKey, or returns
 // an error.
 func (key *MasterKey) encryptWithGnuPG(dataKey []byte) error {
-	fingerprint := shortenFingerprint(key.Fingerprint)
-
 	args := []string{
 		"--no-default-recipient",
 		"--yes",
@@ -331,7 +329,7 @@ func (key *MasterKey) encryptWithGnuPG(dataKey []byte) error {
 		"-r",
 		key.Fingerprint,
 		"--trusted-key",
-		fingerprint,
+		key.Fingerprint,
 		"--no-encrypt-to",
 	}
 	stdout, stderr, err := gpgExec(key.gnuPGHomeDir, args, bytes.NewReader(dataKey))
@@ -628,14 +626,4 @@ func gnuPGHome(customPath string) string {
 		return filepath.Join(usr.HomeDir, ".gnupg")
 	}
 	return dir
-}
-
-// shortenFingerprint returns the short ID of the given fingerprint.
-// This is mostly used for compatibility reasons, as older versions of GnuPG
-// do not always like long IDs.
-func shortenFingerprint(fingerprint string) string {
-	if offset := len(fingerprint) - 16; offset > 0 {
-		fingerprint = fingerprint[offset:]
-	}
-	return fingerprint
 }
