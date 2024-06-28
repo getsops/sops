@@ -65,6 +65,9 @@ jobs:
         id: goreleaser
         uses: goreleaser/goreleaser-action@286f3b13b1b49da4ac219696163fb8c1c93e1200 # v6.0.0
         with:
+          # Note that the following is the version of goreleaser, and NOT a Go version!
+          # When bumping it, make sure to check out goreleaser's changelog first!
+          # (https://github.com/goreleaser/goreleaser/releases)
           version: 1.21.x
           args: release --clean --timeout 1h
         env:
