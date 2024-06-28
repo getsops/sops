@@ -162,6 +162,10 @@ func main() {
 					Name:  "user",
 					Usage: "the user to run the command as",
 				},
+				cli.StringFlag{
+					Name:  "extract",
+					Usage: "extract a specific key or branch from the input document. Example: --extract '[\"somekey\"][0]'",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if c.NArg() != 2 {
@@ -179,6 +183,12 @@ func main() {
 				if err != nil {
 					return toExitError(err)
 				}
+
+				extract, err := parseTreePath(c.String("extract"))
+				if err != nil {
+					return common.NewExitError(fmt.Errorf("error parsing --extract path: %s", err), codes.InvalidTreePathFormat)
+				}
+
 				opts := decryptOpts{
 					OutputStore:     &dotenv.Store{},
 					InputStore:      inputStore,
@@ -187,6 +197,7 @@ func main() {
 					KeyServices:     svcs,
 					DecryptionOrder: order,
 					IgnoreMAC:       c.Bool("ignore-mac"),
+					Extract:         extract,
 				}
 
 				if c.Bool("background") {
@@ -263,6 +274,10 @@ func main() {
 					Name:  "filename",
 					Usage: fmt.Sprintf("filename for the temporarily file (default: %s)", exec.FallbackFilename),
 				},
+				cli.StringFlag{
+					Name:  "extract",
+					Usage: "extract a specific key or branch from the input document. Example: --extract '[\"somekey\"][0]'",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if c.NArg() != 2 {
@@ -274,6 +289,11 @@ func main() {
 
 				inputStore := inputStore(c, fileName)
 				outputStore := outputStore(c, fileName)
+
+				extract, err := parseTreePath(c.String("extract"))
+				if err != nil {
+					return common.NewExitError(fmt.Errorf("error parsing --extract path: %s", err), codes.InvalidTreePathFormat)
+				}
 
 				svcs := keyservices(c)
 
@@ -289,6 +309,7 @@ func main() {
 					KeyServices:     svcs,
 					DecryptionOrder: order,
 					IgnoreMAC:       c.Bool("ignore-mac"),
+					Extract:         extract,
 				}
 
 				output, err := decrypt(opts)
@@ -1495,7 +1516,7 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:  "extract",
-			Usage: "extract a specific key or branch from the input document. Decrypt mode only. Example: --extract '[\"somekey\"][0]'",
+			Usage: "extract a specific key or branch from the input document. Example: --extract '[\"somekey\"][0]'",
 		},
 		cli.StringFlag{
 			Name:  "input-type",
