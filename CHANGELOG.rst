@@ -1,6 +1,56 @@
 Changelog
 =========
 
+3.9.0
+-----
+Features:
+
+* Add ``--mac-only-encrypted`` to compute MAC only over values which end up encrypted (#973)
+* Allow configuration of indentation for YAML and JSON stores (#1273, #1372)
+* Introduce a ``--pristine`` flag to ``sops exec-env`` (#912)
+* Allow to pass multiple paths to ``sops updatekeys`` (#1274)
+* Allow to override ``fileName`` with different value (#1332)
+* Sort masterkeys according to ``--decryption-order`` (#1345)
+* Add separate subcommands for encryption, decryption, rotating, editing, and setting values (#1391)
+* Add ``filestatus`` command (#545)
+* Add command ``unset`` (#1475)
+* Merge key for key groups and make keys unique (#1493)
+* Support using comments to select parts to encrypt (#974, #1392)
+
+Deprecations:
+
+* Deprecate the ``--background`` option to ``exec-env`` and ``exec-file`` (#1379)
+
+Improvements:
+
+* Warn/fail if the wrong number of arguments is provided (#1342)
+* Warn if more than one command is used (#1388)
+* Dependency updates (#1327, #1328, #1330, #1336, #1334, #1344, #1348, #1354, #1357, #1360, #1373, #1381, #1383, #1385, #1408, #1428, #1429, #1427, #1439, #1454, #1460, #1466, #1489, #1519, #1525, #1528, #1540, #1543, #1545)
+* Build with Go 1.21 (#1427)
+* Improve README.rst (#1339, #1399, #1350)
+* Fix typos (#1337, #1477, #1484)
+* Polish the ``sops help`` output a bit (#1341, #1544)
+* Improve and fix tests (#1346, #1349, #1370, #1390, #1396, #1492)
+* Create a constant for the ``sops`` metadata key (#1398)
+* Refactoring: move extraction of encryption and rotation options to separate functions (#1389)
+
+Bug fixes:
+
+* Respect ``aws_profile`` from keygroup config (#1049)
+* Fix a bug where not having a config results in a panic (#1371)
+* Consolidate Flatten/Unflatten pre/post processing (#1356)
+* INI and DotEnv stores: ``shamir_threshold`` is an integer (#1394)
+* Make check whether file contains invalid keys for encryption dependent on output store (#1393)
+* Do not panic if ``updatekeys`` is used with a config that has no creation rules defined (#1506)
+* ``exec-file``: if ``--filename`` is used, use the provided filename without random suffix (#1474)
+* Do not use DotEnv store for ``exec-env``, but specialized environment serializing code (#1436)
+* Decryption: do not fail if no matching ``creation_rule`` is present in config file (#1434)
+
+Project changes:
+
+* CI dependency updates (#1347, #1359, #1376, #1382, #1386, #1425, #1432, #1498, #1503, #1508, #1510, #1516, #1521, #1492, #1534)
+* Adjust Makefile to new goreleaser 6.0.0 release (#1526)
+
 3.8.1
 -----
 Improvements:
