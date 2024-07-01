@@ -182,6 +182,41 @@ func ParseKMSContext(in interface{}) map[string]*string {
 	return out
 }
 
+// GetArnByAlias takes a AWS KMS Client, key.
+// When argument comes with alias, convert it to arn
+func GetArnByAlias(client *kms.Client, key *MasterKey) error {
+	input := &kms.ListAliasesInput{}
+
+	paginator := kms.NewListAliasesPaginator(client, input)
+	found := false
+	for paginator.HasMorePages() && !found {
+		output, err := paginator.NextPage(context.Background())
+		if err != nil {
+			return fmt.Errorf("failed to get kms key: %w", err)
+		}
+
+		for _, alias := range output.Aliases {
+			if strings.HasSuffix(*alias.AliasArn, key.Arn) {
+
+				describeInput := &kms.DescribeKeyInput{
+					KeyId: aws.String(*alias.TargetKeyId),
+				}
+
+				describeOutput, err := client.DescribeKey(context.Background(), describeInput)
+
+				if err != nil {
+					return fmt.Errorf("failed to describe key: %w", err)
+				}
+
+				key.Arn = *describeOutput.KeyMetadata.Arn
+				found = true
+			}
+		}
+	}
+
+	return nil
+}
+
 // CredentialsProvider is a wrapper around aws.CredentialsProvider used for
 // authentication towards AWS KMS.
 type CredentialsProvider struct {
