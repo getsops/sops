@@ -55,6 +55,7 @@ func init() {
 type MasterKey struct {
 	// Arn associated with the AWS KMS key.
 	Arn string
+	// TODO - add alias property
 	// Role ARN used to assume a role through AWS STS.
 	Role string
 	// EncryptedKey stores the data key in it's encrypted form.
@@ -401,6 +402,8 @@ func (key *MasterKey) TypeToIdentifier() string {
 // createKMSConfig returns an AWS config with the credentialsProvider of the
 // MasterKey, or the default configuration sources.
 func (key MasterKey) createKMSConfig() (*aws.Config, error) {
+
+	// TODO - divide arn & alias case with regex
 	// re := regexp.MustCompile(arnRegex)
 	// matches := re.FindStringSubmatch(key.Arn)
 	// if matches == nil {
