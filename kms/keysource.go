@@ -55,7 +55,6 @@ func init() {
 type MasterKey struct {
 	// Arn associated with the AWS KMS key.
 	Arn string
-	// TODO - add alias property
 	// Role ARN used to assume a role through AWS STS.
 	Role string
 	// EncryptedKey stores the data key in it's encrypted form.
@@ -246,35 +245,13 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	}
 	client := key.createClient(cfg)
 
+	// condition that input is an alias
 	if !strings.HasPrefix(string(key.Arn), "arn:aws:kms") {
-		input := &kms.ListAliasesInput{}
 
-		paginator := kms.NewListAliasesPaginator(client, input)
-		found := false
-		for paginator.HasMorePages() && !found {
-			output, err := paginator.NextPage(context.Background())
-			if err != nil {
-				log.WithField("dataKey", dataKey).Info("Error listing aliases")
-				break
-			}
+		err = GetArnByAlias(client, key)
 
-			for _, alias := range output.Aliases {
-				if strings.HasSuffix(*alias.AliasArn, key.Arn) {
-
-					describeInput := &kms.DescribeKeyInput{
-						KeyId: aws.String(*alias.TargetKeyId),
-					}
-
-					describeOutput, err := client.DescribeKey(context.Background(), describeInput)
-
-					if err != nil {
-						return fmt.Errorf("failed to describe key: %w", err)
-					}
-
-					key.Arn = *describeOutput.KeyMetadata.Arn
-					found = true
-				}
-			}
+		if err != nil {
+			return err
 		}
 
 		encryptInput := &kms.EncryptInput{
@@ -436,33 +413,7 @@ func (key *MasterKey) TypeToIdentifier() string {
 
 // createKMSConfig returns an AWS config with the credentialsProvider of the
 // MasterKey, or the default configuration sources.
-func (key MasterKey) createKMSConfig() (*aws.Config, error) {
-
-	// TODO - divide arn & alias case with regex
-	// re := regexp.MustCompile(arnRegex)
-	// matches := re.FindStringSubmatch(key.Arn)
-	// if matches == nil {
-	// 	input := &kms.ListAliasesInput{}
-
-	// 	paginator := kms.NewListAliasesPaginator(client, input)
-	// 	found := false
-	// 	for paginator.HasMorePages() && !found {
-	// 		output, err := paginator.NextPage(context.Background())
-	// 		if err != nil {
-	// 			log.WithField("dataKey", key.Arn).Info("Error listing aliases")
-	// 			break
-	// 		}
-	// 		for _, alias := range output.Aliases {
-	// 			if *alias.AliasName == string(key.Arn) {
-	// 				key.Arn = *alias.TargetKeyId
-	// 				found = true
-	// 				break
-	// 			}
-	// 		}
-	// 	}
-	// 	return nil, fmt.Errorf("no valid ARN found in '%s'", key.Arn)
-	// }
-	region := "ap-northeast-2"
+func (key *MasterKey) createKMSConfig() (*aws.Config, error) {
 
 	cfg, err := config.LoadDefaultConfig(context.TODO(), func(lo *config.LoadOptions) error {
 		// Use the credentialsProvider if present, otherwise default to reading credentials
@@ -473,11 +424,26 @@ func (key MasterKey) createKMSConfig() (*aws.Config, error) {
 		if key.AwsProfile != "" {
 			lo.SharedConfigProfile = key.AwsProfile
 		}
-		lo.Region = region
 		return nil
 	})
+
 	if err != nil {
 		return nil, fmt.Errorf("could not load AWS config: %w", err)
+	}
+
+	re := regexp.MustCompile(arnRegex)
+	matches := re.FindStringSubmatch(key.Arn)
+
+	if matches == nil {
+		client := key.createClient(&cfg)
+		err = GetArnByAlias(client, key)
+
+		if err != nil {
+			return nil, err
+		}
+
+		matches = re.FindStringSubmatch(key.Arn)
+		cfg.Region = matches[1]
 	}
 
 	if key.Role != "" {
