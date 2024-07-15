@@ -3,20 +3,20 @@ module github.com/getsops/sops/v3
 go 1.21
 
 require (
-	cloud.google.com/go/kms v1.18.2
+	cloud.google.com/go/kms v1.18.3
 	cloud.google.com/go/storage v1.43.0
 	filippo.io/age v1.2.0
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.12.0
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.7.0
 	github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys v1.1.0
 	github.com/ProtonMail/go-crypto v1.1.0-alpha.3-proton
-	github.com/aws/aws-sdk-go-v2 v1.30.1
-	github.com/aws/aws-sdk-go-v2/config v1.27.24
-	github.com/aws/aws-sdk-go-v2/credentials v1.17.24
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.17.5
-	github.com/aws/aws-sdk-go-v2/service/kms v1.35.1
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.58.0
-	github.com/aws/aws-sdk-go-v2/service/sts v1.30.1
+	github.com/aws/aws-sdk-go-v2 v1.30.3
+	github.com/aws/aws-sdk-go-v2/config v1.27.26
+	github.com/aws/aws-sdk-go-v2/credentials v1.17.26
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.17.7
+	github.com/aws/aws-sdk-go-v2/service/kms v1.35.3
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.58.2
+	github.com/aws/aws-sdk-go-v2/service/sts v1.30.3
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/fatih/color v1.17.0
 	github.com/getsops/gopgagent v0.0.0-20240527072608-0c14999532fe
@@ -37,8 +37,8 @@ require (
 	golang.org/x/net v0.27.0
 	golang.org/x/sys v0.22.0
 	golang.org/x/term v0.22.0
-	google.golang.org/api v0.187.0
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240624140628-dc46fd24d27d
+	google.golang.org/api v0.188.0
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240708141625-4ad9e859172b
 	google.golang.org/grpc v1.65.0
 	google.golang.org/protobuf v1.34.2
 	gopkg.in/ini.v1 v1.67.0
@@ -47,11 +47,11 @@ require (
 
 require (
 	cloud.google.com/go v0.115.0 // indirect
-	cloud.google.com/go/auth v0.6.1 // indirect
+	cloud.google.com/go/auth v0.7.0 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.2 // indirect
-	cloud.google.com/go/compute/metadata v0.3.0 // indirect
-	cloud.google.com/go/iam v1.1.8 // indirect
-	cloud.google.com/go/longrunning v0.5.7 // indirect
+	cloud.google.com/go/compute/metadata v0.4.0 // indirect
+	cloud.google.com/go/iam v1.1.10 // indirect
+	cloud.google.com/go/longrunning v0.5.9 // indirect
 	dario.cat/mergo v1.0.0 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.9.0 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/internal v1.0.1 // indirect
@@ -60,17 +60,17 @@ require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5 // indirect
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.6.3 // indirect
-	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.16.9 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.3.13 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.6.13 // indirect
+	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.16.11 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.3.15 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.6.15 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.8.0 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/v4a v1.3.13 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/v4a v1.3.15 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.11.3 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.3.15 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.11.15 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.17.13 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.22.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.26.2 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.3.17 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.11.17 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.17.15 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.22.3 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.26.4 // indirect
 	github.com/aws/smithy-go v1.20.3 // indirect
 	github.com/cenkalti/backoff/v3 v3.2.2 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
@@ -102,7 +102,6 @@ require (
 	github.com/hashicorp/go-secure-stdlib/strutil v0.1.2 // indirect
 	github.com/hashicorp/go-sockaddr v1.0.6 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
-	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
@@ -130,7 +129,7 @@ require (
 	golang.org/x/sync v0.7.0 // indirect
 	golang.org/x/text v0.16.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
-	google.golang.org/genproto v0.0.0-20240624140628-dc46fd24d27d // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20240624140628-dc46fd24d27d // indirect
+	google.golang.org/genproto v0.0.0-20240708141625-4ad9e859172b // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20240701130421-f6361c86f094 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
