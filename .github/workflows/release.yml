@@ -30,13 +30,13 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Go
-        uses: actions/setup-go@cdcb36043654635271a94b9a6d1392de5bb323a7 # v4.0.1
+        uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v4.0.1
         with:
           go-version: 1.21.x
           cache: false
 
       - name: Setup Syft
-        uses: anchore/sbom-action/download-syft@e8d2a6937ecead383dfe75190d104edd1f9c5751 # v0.16.0
+        uses: anchore/sbom-action/download-syft@95b086ac308035dc0850b3853be5b7ab108236a8 # v0.16.1
 
       - name: Setup Cosign
         uses: sigstore/cosign-installer@59acb6260d9c0ba8f4a2f9d9b48431a222b68e20 # v3.5.0
