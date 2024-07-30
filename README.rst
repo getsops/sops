@@ -669,6 +669,9 @@ of all new files. If your secrets are stored under a specific directory, like a
 ``git`` repository, you can create a ``.sops.yaml`` configuration file at the root
 directory to define which keys are used for which filename.
 
+Note: The file needs to be named ``.sops.yaml``. Other names (i.e. ``.sops.yml``) won't be automatically
+discovered by sops. You'll need to pass the ``--config .sops.yml`` option for it to be picked up.
+
 Let's take an example:
 
 * file named **something.dev.yaml** should use one set of KMS A, PGP and age
