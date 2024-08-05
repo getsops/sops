@@ -78,7 +78,7 @@ generate: keyservice/keyservice.pb.go
 	$(GO) generate
 
 %.pb.go: %.proto
-	protoc --go_out=plugins=grpc:. $<
+	protoc --go_grpc_opt=require_unimplemented_servers=false --go_grpc_out=. --go_out=. $<
 
 .PHONY: functional-tests
 functional-tests:
