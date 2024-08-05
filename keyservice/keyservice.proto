@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option go_package = "./keyservice";
+
 message Key {
 	oneof key_type {
 		KmsKey kms_key = 1;
