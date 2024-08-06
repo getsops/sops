@@ -12,6 +12,7 @@ import (
 	kms "cloud.google.com/go/kms/apiv1"
 	"cloud.google.com/go/kms/apiv1/kmspb"
 	"github.com/sirupsen/logrus"
+	"golang.org/x/oauth2"
 	"google.golang.org/api/option"
 	"google.golang.org/grpc"
 
@@ -22,7 +23,8 @@ const (
 	// SopsGoogleCredentialsEnv can be set as an environment variable as either
 	// a path to a credentials file, or directly as the variable's value in JSON
 	// format.
-	SopsGoogleCredentialsEnv = "GOOGLE_CREDENTIALS"
+	SopsGoogleCredentialsEnv         = "GOOGLE_CREDENTIALS"
+	SopsGoogleCredentialsAccessToken = "CLOUDSDK_AUTH_ACCESS_TOKEN"
 	// KeyTypeIdentifier is the string used to identify a GCP KMS MasterKey.
 	KeyTypeIdentifier = "gcp_kms"
 )
@@ -220,11 +222,17 @@ func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
 		opts = append(opts, option.WithCredentialsJSON(key.credentialJSON))
 	default:
 		credentials, err := getGoogleCredentials()
-		if err != nil {
-			return nil, err
-		}
 		if credentials != nil {
 			opts = append(opts, option.WithCredentialsJSON(credentials))
+		}
+
+		at_credentials, at_err := getGoogleAccessToken()
+		if at_credentials != nil {
+			opts = append(opts, option.WithTokenSource(at_credentials))
+		}
+
+		if err != nil && at_err != nil {
+			return nil, err
 		}
 	}
 	if key.grpcConn != nil {
@@ -251,5 +259,22 @@ func getGoogleCredentials() ([]byte, error) {
 		}
 		return []byte(defaultCredentials), nil
 	}
+	return nil, nil
+}
+
+func getGoogleAccessToken() (oauth2.TokenSource, error) {
+	if envToken, isSet := os.LookupEnv(SopsGoogleCredentialsAccessToken); isSet {
+		token := []byte(envToken)
+		if _, err := os.Stat(envToken); err == nil {
+			if token, err = os.ReadFile(envToken); err != nil {
+				return nil, err
+			}
+		}
+		tokenSource := oauth2.StaticTokenSource(
+			&oauth2.Token{AccessToken: string(token)},
+		)
+		return tokenSource, nil
+	}
+
 	return nil, nil
 }
