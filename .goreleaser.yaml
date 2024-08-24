@@ -133,10 +133,6 @@ archives:
 checksum:
   name_template: "{{ .ProjectName }}-v{{ .Version }}.checksums.txt"
   algorithm: sha256
-  ids:
-    - archive-unix
-    - archive-windows
-    - archive-darwin-universal
 
 # xref: https://goreleaser.com/customization/sbom/
 sboms:
