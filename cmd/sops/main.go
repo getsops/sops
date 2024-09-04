@@ -1202,9 +1202,6 @@ func main() {
 				if err != nil {
 					return toExitError(err)
 				}
-				if _, err := os.Stat(fileName); os.IsNotExist(err) {
-					return common.NewExitError(fmt.Sprintf("Error: cannot operate on non-existent file %q", fileName), codes.NoFileSpecified)
-				}
 
 				inputStore := inputStore(c, fileName)
 				outputStore := outputStore(c, fileName)
