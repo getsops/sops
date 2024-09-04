@@ -67,7 +67,7 @@ checkmd: $(MD_FILES)
 .PHONY: test
 test: vendor
 	gpg --import pgp/sops_functional_tests_key.asc 2>&1 1>/dev/null || exit 0
-	LANG=en_US.UTF-8 $(GO) test $(GO_TEST_FLAGS) ./...
+	unset SOPS_AGE_KEY_FILE; LANG=en_US.UTF-8 $(GO) test $(GO_TEST_FLAGS) ./...
 
 .PHONY: showcoverage
 showcoverage: test
