@@ -4,12 +4,15 @@ import (
 	"context"
 	encodingjson "encoding/json"
 	"fmt"
+	"io/fs"
 	"net"
 	"net/url"
 	"os"
 	osExec "os/exec"
 	"path/filepath"
 	"reflect"
+	"regexp"
+	"slices"
 	"strconv"
 	"strings"
 
@@ -1376,8 +1379,8 @@ func main() {
 					EnvVar: "SOPS_DECRYPTION_ORDER",
 				},
 				cli.BoolFlag{
-					Name:   "idempotent",
-					Usage:  "do nothing if the given index does not exist",
+					Name:  "idempotent",
+					Usage: "do nothing if the given index does not exist",
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
@@ -1626,6 +1629,10 @@ func main() {
 			Usage:  "comma separated list of decryption key types",
 			EnvVar: "SOPS_DECRYPTION_ORDER",
 		},
+		cli.BoolFlag{
+			Name:  "recursive",
+			Usage: "traverse all sub-directories and encrypt all files matching path_regex",
+		},
 	}, keyserviceFlags...)
 
 	app.Action = func(c *cli.Context) error {
@@ -1661,6 +1668,8 @@ func main() {
 		fileNameOverride := c.String("filename-override")
 		if fileNameOverride == "" {
 			fileNameOverride = fileName
+		} else if c.Bool("recursive") {
+			return common.NewExitError("Error: cannot operate on both --filename-override and --recursive", codes.ErrorConflictingParameters)
 		}
 
 		commandCount := 0
@@ -1683,163 +1692,202 @@ func main() {
 		// Load configuration here for backwards compatibility (error out in case of bad config files),
 		// but only when not just decrypting (https://github.com/getsops/sops/issues/868)
 		needsCreationRule := isEncryptMode || isRotateMode || isSetMode || isEditMode
-		if needsCreationRule {
+		if needsCreationRule && !c.Bool("recursive") {
 			_, err = loadConfig(c, fileNameOverride, nil)
 			if err != nil {
 				return toExitError(err)
 			}
 		}
 
-		inputStore := inputStore(c, fileNameOverride)
-		outputStore := outputStore(c, fileNameOverride)
 		svcs := keyservices(c)
 
 		order, err := decryptionOrder(c.String("decryption-order"))
 		if err != nil {
 			return toExitError(err)
 		}
-		var output []byte
-		if isEncryptMode {
+
+		if c.Bool("recursive") {
+			return performActionRecursive(fileName, c, isEncryptMode, isEditMode, isDecryptMode, isRotateMode, isSetMode, svcs, order)
+		} else {
+			inputStore := inputStore(c, fileNameOverride)
+			outputStore := outputStore(c, fileNameOverride)
+			return performAction(isEncryptMode, isEditMode, isDecryptMode, isRotateMode, isSetMode, c, fileNameOverride, outputStore, inputStore, fileName, svcs, order)
+		}
+	}
+	err := app.Run(os.Args)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func performActionRecursive(fileName string, c *cli.Context, isEncryptMode bool, isEditMode bool, isDecryptMode bool, isRotateMode bool, isSetMode bool, svcs []keyservice.KeyServiceClient, order []string) error {
+	foundPath, err := config.FindConfigFile(".")
+	if err != nil {
+		return toExitError(err)
+	}
+	regs, err := config.LoadPathRegex(foundPath)
+	if err != nil {
+		return toExitError(err)
+	}
+	return filepath.Walk(fileName, func(path string, info fs.FileInfo, pathErr error) error {
+		checkMatch := func(r *regexp.Regexp) bool { return r.MatchString(path) }
+		if info.IsDir() || !slices.ContainsFunc(regs, checkMatch) {
+			return nil
+		}
+		inputStore := inputStore(c, path)
+		outputStore := outputStore(c, path)
+		err := performAction(isEncryptMode, isEditMode, isDecryptMode, isRotateMode, isSetMode, c, path, outputStore, inputStore, path, svcs, order)
+		if err != nil {
+			log.Errorln(err)
+		}
+		return nil
+	})
+}
+
+func performAction(isEncryptMode bool, isEditMode bool, isDecryptMode bool, isRotateMode bool, isSetMode bool, c *cli.Context, fileNameOverride string, outputStore common.Store, inputStore common.Store, fileName string, svcs []keyservice.KeyServiceClient, order []string) error {
+	var output []byte
+	if isEncryptMode {
+		encConfig, err := getEncryptConfig(c, fileNameOverride)
+		if err != nil {
+			return toExitError(err)
+		}
+		output, err = encrypt(encryptOpts{
+			OutputStore:   outputStore,
+			InputStore:    inputStore,
+			InputPath:     fileName,
+			Cipher:        aes.NewCipher(),
+			KeyServices:   svcs,
+			encryptConfig: encConfig,
+		})
+		// While this check is also done below, the `err` in this scope shadows
+		// the `err` in the outer scope.  **Only** do this in case --decrypt,
+		// --rotate-, and --set are not specified, though, to keep old behavior.
+		if err != nil && !isDecryptMode && !isRotateMode && !isSetMode {
+			return toExitError(err)
+		}
+	}
+
+	if isDecryptMode {
+		var extract []interface{}
+		extract, err := parseTreePath(c.String("extract"))
+		if err != nil {
+			return common.NewExitError(fmt.Errorf("error parsing --extract path: %s", err), codes.InvalidTreePathFormat)
+		}
+		output, err = decrypt(decryptOpts{
+			OutputStore:     outputStore,
+			InputStore:      inputStore,
+			InputPath:       fileName,
+			Cipher:          aes.NewCipher(),
+			Extract:         extract,
+			KeyServices:     svcs,
+			DecryptionOrder: order,
+			IgnoreMAC:       c.Bool("ignore-mac"),
+		})
+		if err != nil {
+			return toExitError(err)
+		}
+	}
+	if isRotateMode {
+		rotateOpts, err := getRotateOpts(c, fileName, inputStore, outputStore, svcs, order)
+		if err != nil {
+			return toExitError(err)
+		}
+
+		output, err = rotate(rotateOpts)
+		// While this check is also done below, the `err` in this scope shadows
+		// the `err` in the outer scope
+		if err != nil {
+			return toExitError(err)
+		}
+	}
+
+	if isSetMode {
+		var path []interface{}
+		var value interface{}
+		path, value, err := extractSetArguments(c.String("set"))
+		if err != nil {
+			return toExitError(err)
+		}
+		output, err = set(setOpts{
+			OutputStore:     outputStore,
+			InputStore:      inputStore,
+			InputPath:       fileName,
+			Cipher:          aes.NewCipher(),
+			KeyServices:     svcs,
+			DecryptionOrder: order,
+			IgnoreMAC:       c.Bool("ignore-mac"),
+			Value:           value,
+			TreePath:        path,
+		})
+		if err != nil {
+			return toExitError(err)
+		}
+	}
+
+	if isEditMode {
+		_, statErr := os.Stat(fileName)
+		fileExists := statErr == nil
+		opts := editOpts{
+			OutputStore:     outputStore,
+			InputStore:      inputStore,
+			InputPath:       fileName,
+			Cipher:          aes.NewCipher(),
+			KeyServices:     svcs,
+			DecryptionOrder: order,
+			IgnoreMAC:       c.Bool("ignore-mac"),
+			ShowMasterKeys:  c.Bool("show-master-keys"),
+		}
+		if fileExists {
+			var err error
+			output, err = edit(opts)
+			if err != nil {
+				return toExitError(err)
+			}
+		} else {
+			// File doesn't exist, edit the example file instead
 			encConfig, err := getEncryptConfig(c, fileNameOverride)
 			if err != nil {
 				return toExitError(err)
 			}
-			output, err = encrypt(encryptOpts{
-				OutputStore:   outputStore,
-				InputStore:    inputStore,
-				InputPath:     fileName,
-				Cipher:        aes.NewCipher(),
-				KeyServices:   svcs,
+			output, err = editExample(editExampleOpts{
+				editOpts:      opts,
 				encryptConfig: encConfig,
 			})
-			// While this check is also done below, the `err` in this scope shadows
-			// the `err` in the outer scope.  **Only** do this in case --decrypt,
-			// --rotate-, and --set are not specified, though, to keep old behavior.
-			if err != nil && !isDecryptMode && !isRotateMode && !isSetMode {
-				return toExitError(err)
-			}
-		}
-
-		if isDecryptMode {
-			var extract []interface{}
-			extract, err = parseTreePath(c.String("extract"))
-			if err != nil {
-				return common.NewExitError(fmt.Errorf("error parsing --extract path: %s", err), codes.InvalidTreePathFormat)
-			}
-			output, err = decrypt(decryptOpts{
-				OutputStore:     outputStore,
-				InputStore:      inputStore,
-				InputPath:       fileName,
-				Cipher:          aes.NewCipher(),
-				Extract:         extract,
-				KeyServices:     svcs,
-				DecryptionOrder: order,
-				IgnoreMAC:       c.Bool("ignore-mac"),
-			})
-		}
-		if isRotateMode {
-			rotateOpts, err := getRotateOpts(c, fileName, inputStore, outputStore, svcs, order)
-			if err != nil {
-				return toExitError(err)
-			}
-
-			output, err = rotate(rotateOpts)
 			// While this check is also done below, the `err` in this scope shadows
 			// the `err` in the outer scope
 			if err != nil {
 				return toExitError(err)
 			}
 		}
+	}
 
-		if isSetMode {
-			var path []interface{}
-			var value interface{}
-			path, value, err = extractSetArguments(c.String("set"))
-			if err != nil {
-				return toExitError(err)
-			}
-			output, err = set(setOpts{
-				OutputStore:     outputStore,
-				InputStore:      inputStore,
-				InputPath:       fileName,
-				Cipher:          aes.NewCipher(),
-				KeyServices:     svcs,
-				DecryptionOrder: order,
-				IgnoreMAC:       c.Bool("ignore-mac"),
-				Value:           value,
-				TreePath:        path,
-			})
+	// We open the file *after* the operations on the tree have been
+	// executed to avoid truncating it when there's errors
+	if c.Bool("in-place") || isEditMode || isSetMode {
+		file, err := os.Create(fileName)
+		if err != nil {
+			return common.NewExitError(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
 		}
-
-		if isEditMode {
-			_, statErr := os.Stat(fileName)
-			fileExists := statErr == nil
-			opts := editOpts{
-				OutputStore:     outputStore,
-				InputStore:      inputStore,
-				InputPath:       fileName,
-				Cipher:          aes.NewCipher(),
-				KeyServices:     svcs,
-				DecryptionOrder: order,
-				IgnoreMAC:       c.Bool("ignore-mac"),
-				ShowMasterKeys:  c.Bool("show-master-keys"),
-			}
-			if fileExists {
-				output, err = edit(opts)
-			} else {
-				// File doesn't exist, edit the example file instead
-				encConfig, err := getEncryptConfig(c, fileNameOverride)
-				if err != nil {
-					return toExitError(err)
-				}
-				output, err = editExample(editExampleOpts{
-					editOpts:      opts,
-					encryptConfig: encConfig,
-				})
-				// While this check is also done below, the `err` in this scope shadows
-				// the `err` in the outer scope
-				if err != nil {
-					return toExitError(err)
-				}
-			}
-		}
-
+		defer file.Close()
+		_, err = file.Write(output)
 		if err != nil {
 			return toExitError(err)
 		}
-
-		// We open the file *after* the operations on the tree have been
-		// executed to avoid truncating it when there's errors
-		if c.Bool("in-place") || isEditMode || isSetMode {
-			file, err := os.Create(fileName)
-			if err != nil {
-				return common.NewExitError(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
-			}
-			defer file.Close()
-			_, err = file.Write(output)
-			if err != nil {
-				return toExitError(err)
-			}
-			log.Info("File written successfully")
-			return nil
-		}
-
-		outputFile := os.Stdout
-		if c.String("output") != "" {
-			file, err := os.Create(c.String("output"))
-			if err != nil {
-				return common.NewExitError(fmt.Sprintf("Could not open output file for writing: %s", err), codes.CouldNotWriteOutputFile)
-			}
-			defer file.Close()
-			outputFile = file
-		}
-		_, err = outputFile.Write(output)
-		return toExitError(err)
+		log.Info("File written successfully")
+		return nil
 	}
-	err := app.Run(os.Args)
-	if err != nil {
-		log.Fatal(err)
+
+	outputFile := os.Stdout
+	if c.String("output") != "" {
+		file, err := os.Create(c.String("output"))
+		if err != nil {
+			return common.NewExitError(fmt.Sprintf("Could not open output file for writing: %s", err), codes.CouldNotWriteOutputFile)
+		}
+		defer file.Close()
+		outputFile = file
 	}
+	_, err := outputFile.Write(output)
+	return toExitError(err)
 }
 
 func getEncryptConfig(c *cli.Context, fileName string) (encryptConfig, error) {
@@ -2030,7 +2078,7 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 			"address",
 			fmt.Sprintf("%s://%s", url.Scheme, addr),
 		).Infof("Connecting to key service")
-		conn, err := grpc.Dial(addr, opts...)
+		conn, err := grpc.NewClient(addr, opts...)
 		if err != nil {
 			log.Fatalf("failed to listen: %v", err)
 		}
@@ -2159,7 +2207,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 			if err != nil {
 				errMsg = fmt.Sprintf("%s: %s", errMsg, err)
 			}
-			return nil, fmt.Errorf(errMsg)
+			return nil, fmt.Errorf("%s", errMsg)
 		}
 		return conf.KeyGroups, err
 	}
