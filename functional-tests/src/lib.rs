@@ -950,6 +950,66 @@ b: ba"#
     }
 
     #[test]
+    fn test_no_keygroups() {
+        // The .sops.yaml file ensures this file is encrypted by zero keygroups
+        let file_path = prepare_temp_file("test_no_keygroups.yaml", "a: secret".as_bytes());
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("encrypt")
+            .arg("-i")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(
+            !output.status.success(),
+            "SOPS succeeded encrypting a file without a key group"
+        );
+        assert_eq!(
+            std::str::from_utf8(&output.stderr).unwrap(),
+            "Could not generate data key: [empty key group provided]\n"
+        );
+    }
+
+    #[test]
+    fn test_zero_keygroups() {
+        // The .sops.yaml file ensures this file is encrypted by zero keygroups
+        let file_path = prepare_temp_file("test_zero_keygroups.yaml", "a: secret".as_bytes());
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("encrypt")
+            .arg("-i")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(
+            !output.status.success(),
+            "SOPS succeeded encrypting a file without a key group"
+        );
+        assert_eq!(
+            std::str::from_utf8(&output.stderr).unwrap(),
+            "Could not generate data key: [empty key group provided]\n"
+        );
+    }
+
+    #[test]
+    fn test_empty_keygroup() {
+        // The .sops.yaml file ensures this file is encrypted by zero keygroups
+        let file_path = prepare_temp_file("test_empty_keygroup.yaml", "a: secret".as_bytes());
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("encrypt")
+            .arg("-i")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        assert!(
+            !output.status.success(),
+            "SOPS succeeded encrypting a file without a key group"
+        );
+        assert_eq!(
+            std::str::from_utf8(&output.stderr).unwrap(),
+            "Could not generate data key: [empty key group provided]\n"
+        );
+    }
+
+    #[test]
     fn extract_string() {
         let file_path = prepare_temp_file(
             "test_extract_string.yaml",
