@@ -1,0 +1,27 @@
+name: Linters
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    # Only run when linted files change
+    paths:
+      - 'functional-tests/**/*.rs'
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint Rust source files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
+
+      - name: Run Formatting Check
+        run: cargo fmt --check
+        working-directory: ./functional-tests
