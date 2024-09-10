@@ -552,8 +552,10 @@ b: ba"#
     #[test]
     fn unset_json_file() {
         // Test removal of tree branch
-        let file_path =
-            prepare_temp_file("test_unset.json", r#"{"a": 2, "b": "ba", "c": [1,2]}"#.as_bytes());
+        let file_path = prepare_temp_file(
+            "test_unset.json",
+            r#"{"a": 2, "b": "ba", "c": [1,2]}"#.as_bytes(),
+        );
         assert!(
             Command::new(SOPS_BINARY_PATH)
                 .arg("encrypt")
@@ -661,8 +663,10 @@ b: ba"#
     #[test]
     fn unset_yaml_file() {
         // Test removal of tree branch
-        let file_path =
-            prepare_temp_file("test_unset.yaml", r#"{"a": 2, "b": "ba", "c": [1,2]}"#.as_bytes());
+        let file_path = prepare_temp_file(
+            "test_unset.yaml",
+            r#"{"a": 2, "b": "ba", "c": [1,2]}"#.as_bytes(),
+        );
         assert!(
             Command::new(SOPS_BINARY_PATH)
                 .arg("encrypt")
