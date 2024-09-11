@@ -137,7 +137,8 @@ func main() {
 
    To use a different GPG binary than the one in your PATH, set SOPS_GPG_EXEC.
 
-   To select a different editor than the default (vim), set EDITOR.
+   To select a different editor than the default (vim), set SOPS_EDITOR or
+   EDITOR.
 
    Note that flags must always be provided before the filename to operate on.
    Otherwise, they will be ignored.
