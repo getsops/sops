@@ -218,7 +218,28 @@ identity will be tried in sequence until one is able to decrypt the data.
 
 Encrypting with SSH keys via age is not yet supported by SOPS.
 
+A list of age recipients can be added to the ``.sops.yaml``:
 
+.. code:: yaml
+
+    creation_rules:
+        - age: >-
+            age1s3cqcks5genc6ru8chl0hkkd04zmxvczsvdxq99ekffe4gmvjpzsedk23c,
+            age1qe5lxzzeppw5k79vxn3872272sgy224g2nzqlzy3uljs84say3yqgvd0sw
+
+It is also possible to use ``updatekeys``, when adding or removing age recipients. For example:
+
+.. code:: sh
+
+  $ sops updatekeys secret.enc.yaml
+  2022/02/09 16:32:02 Syncing keys for file /iac/solution1/secret.enc.yaml
+  The following changes will be made to the file's groups:
+  Group 1
+      age1s3cqcks5genc6ru8chl0hkkd04zmxvczsvdxq99ekffe4gmvjpzsedk23c
+  +++ age1qe5lxzzeppw5k79vxn3872272sgy224g2nzqlzy3uljs84say3yqgvd0sw
+  Is this okay? (y/n):y
+  2022/02/09 16:32:04 File /iac/solution1/secret.enc.yaml synced with new keys
+  
 Encrypting using GCP KMS
 ~~~~~~~~~~~~~~~~~~~~~~~~
 GCP KMS uses `Application Default Credentials
