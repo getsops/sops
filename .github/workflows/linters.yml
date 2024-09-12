@@ -22,6 +22,9 @@ jobs:
       - name: Check out code
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
+      - name: Install rustup
+        run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y --default-toolchain 1.70.0
+
       - name: Run Formatting Check
         run: cargo fmt --check
         working-directory: ./functional-tests
