@@ -7,8 +7,9 @@ on:
   pull_request:
     branches:
       - main
-    # Only run when linted files change
+    # Only run when Rust version or linted files change
     paths:
+      - 'rust-toolchain.toml'
       - 'functional-tests/**/*.rs'
 
 permissions:
@@ -22,8 +23,14 @@ jobs:
       - name: Check out code
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
-      - name: Install rustup
-        run: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y --default-toolchain 1.70.0
+      # Rustup will detect toolchain version and profile from rust-toolchain.toml
+      # It will download and install the toolchain and components automatically
+      # and make them available for subsequent commands
+      - name: Install Rust toolchain and additional components
+        run: rustup component add rustfmt
+
+      - name: Show Rust version
+        run: cargo --version
 
       - name: Run Formatting Check
         run: cargo fmt --check
