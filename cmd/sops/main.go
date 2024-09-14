@@ -2040,10 +2040,8 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 }
 
 func loadStoresConfig(context *cli.Context, path string) (*config.StoresConfig, error) {
-	var configPath string
-	if context.String("config") != "" {
-		configPath = context.String("config")
-	} else {
+	configPath := context.GlobalString("config")
+	if configPath == "" {
 		// Ignore config not found errors returned from FindConfigFile since the config file is not mandatory
 		foundPath, err := config.FindConfigFile(".")
 		if err != nil {
@@ -2178,10 +2176,8 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 // Since a config file is not required, this function does not error when one is not found, and instead returns a nil config pointer
 func loadConfig(c *cli.Context, file string, kmsEncryptionContext map[string]*string) (*config.Config, error) {
 	var err error
-	var configPath string
-	if c.String("config") != "" {
-		configPath = c.String("config")
-	} else {
+	configPath := c.GlobalString("config")
+	if configPath == "" {
 		// Ignore config not found errors returned from FindConfigFile since the config file is not mandatory
 		configPath, err = config.FindConfigFile(".")
 		if err != nil {
