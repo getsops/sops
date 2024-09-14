@@ -81,6 +81,9 @@ jobs:
     name: Functional tests
     runs-on: ubuntu-latest
     needs: [build]
+    strategy:
+      matrix:
+        go-version: ['1.22']
     env:
       VAULT_VERSION: "1.14.0"
       VAULT_TOKEN: "root"
@@ -100,10 +103,10 @@ jobs:
 
       - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         with:
-          name: sops-1.22-linux-amd64-${{ github.sha }}
+          name: sops-${{ matrix.go-version }}-linux-amd64-${{ github.sha }}
 
       - name: Move SOPS binary
-        run: mv sops-1.22-linux-amd64-${{ github.sha }} ./functional-tests/sops
+        run: mv sops-${{ matrix.go-version }}-linux-amd64-${{ github.sha }} ./functional-tests/sops
 
       - name: Make SOPS binary executable
         run: chmod +x ./functional-tests/sops
