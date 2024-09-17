@@ -1108,6 +1108,314 @@ func TestSetArrayNonLeaf(t *testing.T) {
 	}, set)
 }
 
+func TestUnsetKeyRootLeaf(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: "foo",
+		},
+		TreeItem{
+			Key: "foofoo",
+			Value: "foofoo",
+		},
+	}
+	unset, err := branch.Unset([]interface{}{"foofoo"})
+	assert.Nil(t, err)
+	assert.Equal(t, TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: "foo",
+		},
+	}, unset)
+}
+
+func TestUnsetKeyBranchLeaf(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: TreeBranch{
+				TreeItem{
+					Key: "bar",
+					Value: "bar",
+				},
+				TreeItem{
+					Key: "barbar",
+					Value: "barbar",
+				},
+			},
+		},
+	}
+	unset, err := branch.Unset([]interface{}{"foo", "barbar"})
+	assert.Nil(t, err)
+	assert.Equal(t, TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: TreeBranch{
+				TreeItem{
+					Key: "bar",
+					Value: "bar",
+				},
+			},
+		},
+	}, unset)
+}
+
+func TestUnsetKeyBranch(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: "foo",
+		},
+		TreeItem{
+			Key: "foofoo",
+			Value: TreeBranch{
+				TreeItem{
+					Key: "bar",
+					Value: "bar",
+				},
+			},
+		},
+	}
+	unset, err := branch.Unset([]interface{}{"foofoo"})
+	assert.Nil(t, err)
+	assert.Equal(t, TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: "foo",
+		},
+	}, unset)
+}
+
+func TestUnsetKeyRootLastLeaf(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: "foo",
+		},
+	}
+	unset, err := branch.Unset([]interface{}{"foo"})
+	assert.Nil(t, err)
+	assert.Equal(t, TreeBranch{
+	}, unset)
+}
+
+func TestUnsetKeyBranchLastLeaf(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: TreeBranch{
+				TreeItem{
+					Key: "bar",
+					Value: "bar",
+				},
+			},
+		},
+	}
+	unset, err := branch.Unset([]interface{}{"foo", "bar"})
+	assert.Nil(t, err)
+	assert.Equal(t, TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: TreeBranch{
+			},
+		},
+	}, unset)
+}
+
+func TestUnsetKeyArray(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: TreeBranch{
+				TreeItem{
+					Key: "bar",
+					Value: []interface{}{
+						TreeBranch{
+							TreeItem{
+								Key: "baz",
+								Value: "baz",
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+	unset, err := branch.Unset([]interface{}{"foo", "bar"})
+	assert.Nil(t, err)
+	assert.Equal(t, TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: TreeBranch{
+			},
+		},
+	}, unset)
+}
+
+func TestUnsetArrayItem(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: []interface{}{
+				TreeBranch{
+					TreeItem{
+						Key: "bar",
+						Value: "bar",
+					},
+				},
+				TreeBranch{
+					TreeItem{
+						Key: "barbar",
+						Value: "barbar",
+					},
+				},
+			},
+		},
+	}
+	unset, err := branch.Unset([]interface{}{"foo", 1})
+	assert.Nil(t, err)
+	assert.Equal(t, TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: []interface{}{
+				TreeBranch{
+					TreeItem{
+						Key: "bar",
+						Value: "bar",
+					},
+				},
+			},
+		},
+	}, unset)
+}
+
+func TestUnsetKeyInArrayItem(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: []interface{}{
+				TreeBranch{
+					TreeItem{
+						Key: "bar",
+						Value: "bar",
+					},
+					TreeItem{
+						Key: "barbar",
+						Value: "barbar",
+					},
+				},
+			},
+		},
+	}
+	unset, err := branch.Unset([]interface{}{"foo", 0, "barbar"})
+	assert.Nil(t, err)
+	assert.Equal(t, TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: []interface{}{
+				TreeBranch{
+					TreeItem{
+						Key: "bar",
+						Value: "bar",
+					},
+				},
+			},
+		},
+	}, unset)
+}
+
+func TestUnsetArrayLastItem(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: []interface{}{
+				TreeBranch{
+					TreeItem{
+						Key: "bar",
+						Value: "bar",
+					},
+				},
+			},
+		},
+	}
+	unset, err := branch.Unset([]interface{}{"foo", 0})
+	assert.Nil(t, err)
+	assert.Equal(t, TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: []interface{}{
+			},
+		},
+	}, unset)
+}
+
+func TestUnsetKeyNotFound(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: TreeBranch{
+				TreeItem{
+					Key: "bar",
+					Value: "bar",
+				},
+			},
+		},
+	}
+	unset, err := branch.Unset([]interface{}{"foo", "unknown"})
+	assert.Equal(t, err.(*SopsKeyNotFound).Key, "unknown")
+	assert.Nil(t, unset, "Unset result was not nil upon %s", err)
+}
+
+func TestUnsetKeyInArrayNotFound(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: []interface{}{
+				TreeBranch{
+					TreeItem{
+						Key: "bar",
+						Value: "bar",
+					},
+				},
+			},
+		},
+	}
+	unset, err := branch.Unset([]interface{}{"foo", 0, "unknown"})
+	assert.Equal(t, err.(*SopsKeyNotFound).Key, "unknown")
+	assert.Nil(t, unset, "Unset result was not nil upon %s", err)
+}
+
+func TestUnsetArrayItemOutOfBounds(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: []interface{}{
+				TreeBranch{
+					TreeItem{
+						Key: "bar",
+						Value: "bar",
+					},
+				},
+			},
+		},
+	}
+	unset, err := branch.Unset([]interface{}{"foo", 99})
+	assert.Equal(t, err.(*SopsKeyNotFound).Key, 99)
+	assert.Nil(t, unset, "Unset result was not nil upon %s", err)
+}
+
+func TestUnsetKeyNotABranch(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: 99,
+		},
+	}
+	unset, err := branch.Unset([]interface{}{"foo", "bar"})
+	assert.Contains(t, err.Error(), "Unsupported type")
+	assert.Nil(t, unset, "Unset result was not nil upon %s", err)
+}
+
 func TestEmitAsMap(t *testing.T) {
 	expected := map[string]interface{}{
 		"foobar": "barfoo",
