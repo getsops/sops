@@ -633,8 +633,7 @@ func TestUnencryptedCommentRegexFail(t *testing.T) {
 	tree := Tree{Branches: branches, Metadata: Metadata{UnencryptedCommentRegex: "ENC"}}
 	cipher := encPrefixCipher{}
 	_, err := tree.Encrypt(bytes.Repeat([]byte("f"), 32), cipher)
-	assert.NotNil(t, err)
-	assert.Contains(t, err.Error(), "Encrypted comment \"ENC:sops:noenc\" matches UnencryptedCommentRegex!")
+	assert.ErrorContains(t, err, "Encrypted comment \"ENC:sops:noenc\" matches UnencryptedCommentRegex!")
 }
 
 type MockCipher struct{}
@@ -872,7 +871,7 @@ func TestTruncateTree(t *testing.T) {
 		"foobar",
 		2,
 	})
-	assert.Equal(t, nil, err)
+	assert.NoError(t, err)
 	assert.Equal(t, expected, result)
 }
 
@@ -1120,7 +1119,7 @@ func TestUnsetKeyRootLeaf(t *testing.T) {
 		},
 	}
 	unset, err := branch.Unset([]interface{}{"foofoo"})
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
 			Key: "foo",
@@ -1146,7 +1145,7 @@ func TestUnsetKeyBranchLeaf(t *testing.T) {
 		},
 	}
 	unset, err := branch.Unset([]interface{}{"foo", "barbar"})
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
 			Key: "foo",
@@ -1177,7 +1176,7 @@ func TestUnsetKeyBranch(t *testing.T) {
 		},
 	}
 	unset, err := branch.Unset([]interface{}{"foofoo"})
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
 			Key: "foo",
@@ -1194,7 +1193,7 @@ func TestUnsetKeyRootLastLeaf(t *testing.T) {
 		},
 	}
 	unset, err := branch.Unset([]interface{}{"foo"})
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{
 	}, unset)
 }
@@ -1212,7 +1211,7 @@ func TestUnsetKeyBranchLastLeaf(t *testing.T) {
 		},
 	}
 	unset, err := branch.Unset([]interface{}{"foo", "bar"})
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
 			Key: "foo",
@@ -1242,7 +1241,7 @@ func TestUnsetKeyArray(t *testing.T) {
 		},
 	}
 	unset, err := branch.Unset([]interface{}{"foo", "bar"})
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
 			Key: "foo",
@@ -1273,7 +1272,7 @@ func TestUnsetArrayItem(t *testing.T) {
 		},
 	}
 	unset, err := branch.Unset([]interface{}{"foo", 1})
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
 			Key: "foo",
@@ -1308,7 +1307,7 @@ func TestUnsetKeyInArrayItem(t *testing.T) {
 		},
 	}
 	unset, err := branch.Unset([]interface{}{"foo", 0, "barbar"})
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
 			Key: "foo",
@@ -1339,7 +1338,7 @@ func TestUnsetArrayLastItem(t *testing.T) {
 		},
 	}
 	unset, err := branch.Unset([]interface{}{"foo", 0})
-	assert.Nil(t, err)
+	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
 			Key: "foo",
@@ -1412,7 +1411,7 @@ func TestUnsetKeyNotABranch(t *testing.T) {
 		},
 	}
 	unset, err := branch.Unset([]interface{}{"foo", "bar"})
-	assert.Contains(t, err.Error(), "Unsupported type")
+	assert.ErrorContains(t, err, "Unsupported type")
 	assert.Nil(t, unset, "Unset result was not nil upon %s", err)
 }
 
@@ -1457,9 +1456,8 @@ func TestEmitAsMap(t *testing.T) {
 
 	data, err := EmitAsMap(branches)
 
-	if assert.NoError(t, err) {
-		assert.Equal(t, expected, data)
-	}
+	assert.NoError(t, err)
+	assert.Equal(t, expected, data)
 }
 
 func TestSortKeyGroupIndices(t *testing.T) {
