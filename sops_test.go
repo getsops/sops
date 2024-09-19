@@ -844,6 +844,23 @@ func TestDecrypt(t *testing.T) {
 	}
 }
 
+type WrongType struct{}
+
+func TestEncryptWrongType(t *testing.T) {
+	branches := TreeBranches{
+		TreeBranch{
+			TreeItem{
+				Key:   "foo",
+				Value: WrongType{},
+			},
+		},
+	}
+	tree := Tree{Branches: branches, Metadata: Metadata{UnencryptedSuffix: DefaultUnencryptedSuffix}}
+	result, err := tree.Encrypt(bytes.Repeat([]byte{'f'}, 32), MockCipher{})
+	assert.Equal(t, "", result)
+	assert.ErrorContains(t, err, "unknown type: sops.WrongType")
+}
+
 func TestTruncateTree(t *testing.T) {
 	tree := TreeBranch{
 		TreeItem{
@@ -873,6 +890,45 @@ func TestTruncateTree(t *testing.T) {
 	})
 	assert.NoError(t, err)
 	assert.Equal(t, expected, result)
+}
+
+func TestTruncateTreeNotFound(t *testing.T) {
+	tree := TreeBranch{
+		TreeItem{
+			Key:   "foo",
+			Value: 2,
+		},
+	}
+	result, err := tree.Truncate([]interface{}{"baz"})
+	assert.ErrorContains(t, err, "baz")
+	assert.Nil(t, result, "Truncate result was not nil upon %s", err)
+}
+
+func TestTruncateTreeNotArray(t *testing.T) {
+	tree := TreeBranch{
+		TreeItem{
+			Key:   "foo",
+			Value: 2,
+		},
+	}
+	result, err := tree.Truncate([]interface{}{"foo", 99})
+	assert.ErrorContains(t, err, "99")
+	assert.Nil(t, result, "Truncate result was not nil upon %s", err)
+}
+
+func TestTruncateTreeArrayOutOfBounds(t *testing.T) {
+	tree := TreeBranch{
+		TreeItem{
+			Key:   "foo",
+			Value: []interface{}{
+				"one",
+				"two",
+			},
+		},
+	}
+	result, err := tree.Truncate([]interface{}{"foo", 99})
+	assert.ErrorContains(t, err, "99")
+	assert.Nil(t, result, "Truncate result was not nil upon %s", err)
 }
 
 func TestEncryptComments(t *testing.T) {
@@ -1360,8 +1416,9 @@ func TestUnsetKeyNotFound(t *testing.T) {
 			},
 		},
 	}
-	unset, err := branch.Unset([]interface{}{"foo", "unknown"})
-	assert.Equal(t, err.(*SopsKeyNotFound).Key, "unknown")
+	unset, err := branch.Unset([]interface{}{"foo", "unknown-value"})
+	assert.Equal(t, err.(*SopsKeyNotFound).Key, "unknown-value")
+	assert.ErrorContains(t, err, "unknown-value")
 	assert.Nil(t, unset, "Unset result was not nil upon %s", err)
 }
 
@@ -1434,6 +1491,10 @@ func TestEmitAsMap(t *testing.T) {
 			TreeItem{
 				Key:   "number",
 				Value: 42,
+			},
+			TreeItem{
+				Key:   Comment{"comment"},
+				Value: nil,
 			},
 		},
 		TreeBranch{
