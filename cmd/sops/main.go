@@ -728,7 +728,7 @@ func main() {
 					return toExitError(err)
 				}
 				if _, err := os.Stat(fileName); os.IsNotExist(err) {
-					return common.NewExitError("Error: cannot operate on non-existent file", codes.NoFileSpecified)
+					return common.NewExitError(fmt.Sprintf("Error: cannot operate on non-existent file %q", fileName), codes.NoFileSpecified)
 				}
 				fileNameOverride := c.String("filename-override")
 				if fileNameOverride == "" {
@@ -892,7 +892,7 @@ func main() {
 					return toExitError(err)
 				}
 				if _, err := os.Stat(fileName); os.IsNotExist(err) {
-					return common.NewExitError("Error: cannot operate on non-existent file", codes.NoFileSpecified)
+					return common.NewExitError(fmt.Sprintf("Error: cannot operate on non-existent file %q", fileName), codes.NoFileSpecified)
 				}
 				fileNameOverride := c.String("filename-override")
 				if fileNameOverride == "" {
@@ -1050,7 +1050,7 @@ func main() {
 				if _, err := os.Stat(fileName); os.IsNotExist(err) {
 					if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" ||
 						c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" {
-						return common.NewExitError("Error: cannot add or remove keys on non-existent files, use the `edit` subcommand instead.", codes.CannotChangeKeysFromNonExistentFile)
+						return common.NewExitError(fmt.Sprintf("Error: cannot add or remove keys on non-existent file %q, use the `edit` subcommand instead.", fileName), codes.CannotChangeKeysFromNonExistentFile)
 					}
 				}
 				fileNameOverride := c.String("filename-override")
@@ -1203,7 +1203,7 @@ func main() {
 					return toExitError(err)
 				}
 				if _, err := os.Stat(fileName); os.IsNotExist(err) {
-					return common.NewExitError("Error: cannot operate on non-existent file", codes.NoFileSpecified)
+					return common.NewExitError(fmt.Sprintf("Error: cannot operate on non-existent file %q", fileName), codes.NoFileSpecified)
 				}
 
 				inputStore := inputStore(c, fileName)
@@ -1376,8 +1376,8 @@ func main() {
 					EnvVar: "SOPS_DECRYPTION_ORDER",
 				},
 				cli.BoolFlag{
-					Name:   "idempotent",
-					Usage:  "do nothing if the given index does not exist",
+					Name:  "idempotent",
+					Usage: "do nothing if the given index does not exist",
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
@@ -1652,10 +1652,10 @@ func main() {
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
 			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" ||
 				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" {
-				return common.NewExitError("Error: cannot add or remove keys on non-existent files, use `--kms` and `--pgp` instead.", codes.CannotChangeKeysFromNonExistentFile)
+				return common.NewExitError(fmt.Sprintf("Error: cannot add or remove keys on non-existent file %q, use `--kms` and `--pgp` instead.", fileName), codes.CannotChangeKeysFromNonExistentFile)
 			}
 			if isEncryptMode || isDecryptMode || isRotateMode {
-				return common.NewExitError("Error: cannot operate on non-existent file", codes.NoFileSpecified)
+				return common.NewExitError(fmt.Sprintf("Error: cannot operate on non-existent file %q", fileName), codes.NoFileSpecified)
 			}
 		}
 		fileNameOverride := c.String("filename-override")
