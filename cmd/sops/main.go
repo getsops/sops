@@ -696,12 +696,12 @@ func main() {
 				failedCounter := 0
 				for _, path := range c.Args() {
 					err := updatekeys.UpdateKeys(updatekeys.Opts{
-						InputPath:   path,
-						GroupQuorum: c.Int("shamir-secret-sharing-threshold"),
-						KeyServices: keyservices(c),
-						Interactive: !c.Bool("yes"),
-						ConfigPath:  configPath,
-						InputType:   c.String("input-type"),
+						InputPath:       path,
+						ShamirThreshold: c.Int("shamir-secret-sharing-threshold"),
+						KeyServices:     keyservices(c),
+						Interactive:     !c.Bool("yes"),
+						ConfigPath:      configPath,
+						InputType:       c.String("input-type"),
 					})
 
 					if c.NArg() == 1 {
