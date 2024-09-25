@@ -700,6 +700,11 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 			fmt.Errorf("no key services provided, cannot update master keys"),
 		}
 	}
+	if len(m.KeyGroups) == 0 {
+		return []error{
+			fmt.Errorf("no key groups provided"),
+		}
+	}
 	var parts [][]byte
 	if len(m.KeyGroups) == 1 {
 		// If there's only one key group, we can't do Shamir. All keys
@@ -726,6 +731,11 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 	}
 	for i, group := range m.KeyGroups {
 		part := parts[i]
+		if len(group) == 0 {
+			return []error{
+				fmt.Errorf("empty key group provided"),
+			}
+		}
 		for _, key := range group {
 			svcKey := keyservice.KeyFromMasterKey(key)
 			var keyErrs []error
