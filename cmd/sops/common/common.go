@@ -447,3 +447,17 @@ func PrettyPrintDiffs(diffs []Diff) {
 		}
 	}
 }
+
+// PrettyPrintShamirDiff prints changes in shamir_threshold to stdout
+func PrettyPrintShamirDiff(oldValue, newValue int) {
+	if oldValue > 0 && oldValue == newValue {
+		fmt.Printf("shamir_threshold: %d\n", newValue)
+	} else {
+		if newValue > 0 {
+			color.New(color.FgGreen).Printf("+++ shamir_threshold: %d\n", newValue)
+		}
+		if oldValue > 0 {
+			color.New(color.FgRed).Printf("--- shamir_threshold: %d\n", oldValue)
+		}
+	}
+}
