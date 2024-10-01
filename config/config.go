@@ -467,6 +467,24 @@ func LoadDestinationRuleForFile(confPath string, filePath string, kmsEncryptionC
 	return parseDestinationRuleForFile(conf, filePath, kmsEncryptionContext)
 }
 
+func LoadPathRegex(confPath string) ([]*regexp.Regexp, error) {
+	conf, err := loadConfigFile(confPath)
+	if err != nil {
+		return nil, err
+	}
+
+	regs := make([]*regexp.Regexp, len(conf.CreationRules))
+	
+	for i, v := range conf.CreationRules {
+		reg, err := regexp.Compile(v.PathRegex)
+		if err != nil {
+			return regs, err
+		}
+		regs[i] = reg
+	}
+	return regs, nil
+}
+
 func LoadStoresConfig(confPath string) (*StoresConfig, error) {
 	conf, err := loadConfigFile(confPath)
 	if err != nil {
