@@ -1,8 +1,10 @@
 package age
 
 import (
+	"bufio"
 	"bytes"
 	"errors"
+	"filippo.io/age/plugin"
 	"fmt"
 	"io"
 	"os"
@@ -115,7 +117,10 @@ type ParsedIdentities []age.Identity
 // parsing (using age.ParseIdentities) and appending to the slice yourself, in
 // combination with e.g. a sync.Mutex.
 func (i *ParsedIdentities) Import(identity ...string) error {
-	identities, err := parseIdentities(identity...)
+	// one identity per line
+	r := strings.NewReader(strings.Join(identity, "\n"))
+
+	identities, err := parseIdentities(r)
 	if err != nil {
 		return fmt.Errorf("failed to parse and add to age identities: %w", err)
 	}
@@ -339,6 +344,12 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, error) {
 // key or a public ssh key.
 func parseRecipient(recipient string) (age.Recipient, error) {
 	switch {
+	case strings.HasPrefix(recipient, "age1") && strings.Count(recipient, "1") > 1:
+		parsedRecipient, err := plugin.NewRecipient(recipient, pluginTerminalUI)
+		if err != nil {
+			return nil, fmt.Errorf("failed to parse input as age key from age plugin: %w", err)
+		}
+		return parsedRecipient, nil
 	case strings.HasPrefix(recipient, "age1"):
 		parsedRecipient, err := age.ParseX25519Recipient(recipient)
 		if err != nil {
@@ -357,17 +368,39 @@ func parseRecipient(recipient string) (age.Recipient, error) {
 	return nil, fmt.Errorf("failed to parse input, unknown recipient type: %q", recipient)
 }
 
-// parseIdentities attempts to parse the string set of encoded age identities.
-// A single identity argument is allowed to be a multiline string containing
-// multiple identities. Empty lines and lines starting with "#" are ignored.
-func parseIdentities(identity ...string) (ParsedIdentities, error) {
-	var identities []age.Identity
-	for _, i := range identity {
-		parsed, err := age.ParseIdentities(strings.NewReader(i))
+// parseIdentities attempts to parse one or more age identities from the provided reader.
+// One identity per line.
+// Empty lines and lines starting with "#" are ignored.
+func parseIdentities(r io.Reader) (ParsedIdentities, error) {
+	var identities ParsedIdentities
+
+	scanner := bufio.NewScanner(r)
+
+	for scanner.Scan() {
+		line := scanner.Text()
+
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+
+		parsed, err := parseIdentity(line)
 		if err != nil {
 			return nil, err
 		}
-		identities = append(identities, parsed...)
+
+		identities = append(identities, parsed)
 	}
+
 	return identities, nil
+}
+
+func parseIdentity(s string) (age.Identity, error) {
+	switch {
+	case strings.HasPrefix(s, "AGE-PLUGIN-"):
+		return plugin.NewIdentity(s, pluginTerminalUI)
+	case strings.HasPrefix(s, "AGE-SECRET-KEY-1"):
+		return age.ParseX25519Identity(s)
+	default:
+		return nil, fmt.Errorf("unknown identity type")
+	}
 }
