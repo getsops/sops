@@ -149,3 +149,5 @@ require (
 	google.golang.org/grpc/stats/opentelemetry v0.0.0-20240907200651-3ffb98b2c93a // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
+
+replace filippo.io/age => github.com/brianmcgee/age v0.0.0-20241002093043-152b6edfe56a
