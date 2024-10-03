@@ -1,6 +1,41 @@
 Changelog
 =========
 
+3.9.1
+-----
+
+Improvements:
+* Dependency updates (#1550, #1554, #1558, #1562, #1565, #1568, #1575, #1581, #1589, #1593, #1602, #1603, #1618, #1629, #1635, #1639, #1640).
+* Clarify naming of the configuration file in the documentation (#1569).
+* Build with Go 1.22 (#1589).
+* Specify filename of missing file in error messages (#1625).
+* ``updatekeys`` subcommand: show changes in ``shamir_threshold`` (#1609).
+
+Bugfixes:
+* Fix the URL used for determining the latest SOPS version (#1553).
+* ``updatekeys`` subcommand: actually use option ``--shamir-secret-sharing-threshold`` (#1608).
+* Fix ``--config`` being ignored in subcommands by ``loadConfig`` (#1613).
+* Allow ``edit`` subcommand to create files (#1596).
+* Do not encrypt if a key group is empty, or there are no key groups (#1600).
+* Do not ignore config errors when trying to parse a config file (#1614).
+
+Project changes:
+
+* CI dependency updates (#1551, #1555, #1559, #1564, #1566, #1574, #1584, #1586, #1590, #1592, #1619, #1628, #1634).
+* Improve CI workflows (#1548, #1630).
+* Ignore user-set environment variable ``SOPS_AGE_KEY_FILE`` in tests (#1595).
+* Add example of using Age recipients in ``.sops.yaml`` (#1607).
+* Add linting check for Rust code formatting (#1604).
+* Set Rust version globally via ``rust-toolchain.toml`` for functional tests (#1612).
+* Improve test coverage (#1617).
+* Improve tests (#1622, #1624).
+* Simplify branch rules to check DCO and ``check`` task instead of an explicit list of tasks in the CLI workflow (#1621).
+* Build with Go 1.22 and 1.23 in CI and update Vault to 1.14 (#1531).
+* Build release with Go 1.22 (#1615).
+* Fix Dependabot config for Docker; add Dependabot config for Rust (#1632).
+* Lock Rust package versions for functional tests for improved reproducibility (#1637).
+* Rust dependency updates (#1638).
+
 3.9.0
 -----
 Features:
