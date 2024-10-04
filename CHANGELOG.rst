@@ -5,6 +5,7 @@ Changelog
 -----
 
 Improvements:
+
 * Dependency updates (#1550, #1554, #1558, #1562, #1565, #1568, #1575, #1581, #1589, #1593, #1602, #1603, #1618, #1629, #1635, #1639, #1640).
 * Clarify naming of the configuration file in the documentation (#1569).
 * Build with Go 1.22 (#1589).
@@ -12,6 +13,7 @@ Improvements:
 * ``updatekeys`` subcommand: show changes in ``shamir_threshold`` (#1609).
 
 Bugfixes:
+
 * Fix the URL used for determining the latest SOPS version (#1553).
 * ``updatekeys`` subcommand: actually use option ``--shamir-secret-sharing-threshold`` (#1608).
 * Fix ``--config`` being ignored in subcommands by ``loadConfig`` (#1613).
