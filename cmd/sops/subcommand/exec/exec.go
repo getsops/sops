@@ -3,6 +3,7 @@ package exec
 import (
 	"bytes"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -23,7 +24,7 @@ func init() {
 }
 
 type ExecOpts struct {
-	Command    string
+	Command    []string
 	Plaintext  []byte
 	Background bool
 	Pristine   bool
@@ -95,8 +96,11 @@ func ExecWithFile(opts ExecOpts) error {
 	}
 	env = append(env, opts.Env...)
 
-	placeholdered := strings.Replace(opts.Command, "{}", filename, -1)
-	cmd := BuildCommand(placeholdered)
+	args := opts.Command[1:]
+	for i, arg := range args {
+		args[i] = strings.Replace(arg, "{}", filename, -1)
+	}
+	cmd := exec.Command(opts.Command[0], args...)
 	cmd.Env = env
 
 	if opts.Background {
@@ -134,7 +138,7 @@ func ExecWithEnv(opts ExecOpts) error {
 
 	env = append(env, opts.Env...)
 
-	cmd := BuildCommand(opts.Command)
+	cmd := exec.Command(opts.Command[0], opts.Command[1:]...)
 	cmd.Env = env
 
 	if opts.Background {
