@@ -25,7 +25,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
         with:
           fetch-depth: 0
 
@@ -36,7 +36,7 @@ jobs:
           cache: false
 
       - name: Setup Syft
-        uses: anchore/sbom-action/download-syft@61119d458adab75f756bc0b9e4bde25725f86a7a # v0.17.2
+        uses: anchore/sbom-action/download-syft@f5e124a5e5e1d497a692818ae907d3c45829d033 # v0.17.3
 
       - name: Setup Cosign
         uses: sigstore/cosign-installer@dc72c7d5c4d10cd6bcb8cf6e3fd625a9e5e537da # v3.7.0
