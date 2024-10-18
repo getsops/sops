@@ -307,6 +307,13 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 // sops.Tree runtime object
 func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	var branches sops.TreeBranches
+	if len(in) > 0 {
+		// This is needed to make the yaml-decoder check for uniqueness of keys
+		// Can probably be removed when https://github.com/go-yaml/yaml/issues/814 is merged.
+		if err := yaml.NewDecoder(bytes.NewReader(in)).Decode(make(map[string]interface{})); err != nil {
+			return nil, err
+		}
+	}
 	d := yaml.NewDecoder(bytes.NewReader(in))
 	for {
 		var data yaml.Node
@@ -321,6 +328,12 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 		branch, err := store.yamlDocumentNodeToTreeBranch(data)
 		if err != nil {
 			return nil, fmt.Errorf("Error unmarshaling input YAML: %s", err)
+		}
+		// Prevent use of reserved keywords
+		for _, item := range branch {
+			if item.Key == stores.SopsMetadataKey {
+				return nil, fmt.Errorf("YAML doc used reserved word '%v'", item.Key)
+			}
 		}
 		branches = append(branches, branch)
 	}
