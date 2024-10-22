@@ -89,6 +89,23 @@ func TestMasterKeysFromURLs(t *testing.T) {
 			},
 		},
 		{
+			name:           "multiple URLs with leading and trailing spaces",
+			urls:           " https://test.vault.azure.net/keys/test-key/a2a690a4fcc04166b739da342a912c90 ,  https://test2.vault.azure.net/keys/another-test-key/cf0021e8b743453bae758e7fbf71b60e  ",
+			expectKeyCount: 2,
+			expectKeys: []MasterKey{
+				{
+					VaultURL: "https://test.vault.azure.net",
+					Name:     "test-key",
+					Version:  "a2a690a4fcc04166b739da342a912c90",
+				},
+				{
+					VaultURL: "https://test2.vault.azure.net",
+					Name:     "another-test-key",
+					Version:  "cf0021e8b743453bae758e7fbf71b60e",
+				},
+			},
+		},
+		{
 			name:      "multiple URLs, one malformed",
 			urls:      "https://test.vault.azure.net/keys/test-key/a2a690a4fcc04166b739da342a912c90,https://test.vault.azure.net/no-keys-here/test-key/a2a690a4fcc04166b739da342a912c90",
 			expectErr: true,

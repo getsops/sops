@@ -76,6 +76,7 @@ func NewMasterKey(vaultURL string, keyName string, keyVersion string) *MasterKey
 // NewMasterKeyFromURL takes an Azure Key Vault key URL, and returns a new
 // MasterKey. The URL format is {vaultUrl}/keys/{keyName}/{keyVersion}.
 func NewMasterKeyFromURL(url string) (*MasterKey, error) {
+	url = strings.TrimSpace(url)
 	re := regexp.MustCompile("^(https://[^/]+)/keys/([^/]+)/([^/]+)$")
 	parts := re.FindStringSubmatch(url)
 	if parts == nil || len(parts) < 3 {
