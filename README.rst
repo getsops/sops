@@ -106,7 +106,8 @@ encryption/decryption transparently and open the cleartext file in an editor
     please wait while an encryption key is being generated and stored in a secure fashion
     file written to mynewtestfile.yaml
 
-Editing will happen in whatever ``$EDITOR`` is set to, or, if it's not set, in vim.
+Editing will happen in whatever ``$SOPS_EDITOR`` or ``$EDITOR`` is set to, or, if it's
+not set, in vim, nano, or vi.
 Keep in mind that SOPS will wait for the editor to exit, and then try to reencrypt
 the file. Some GUI editors (atom, sublime) spawn a child process and then exit
 immediately. They usually have an option to wait for the main editor window to be

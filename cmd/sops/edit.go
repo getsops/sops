@@ -245,7 +245,12 @@ func hashFile(filePath string) ([]byte, error) {
 }
 
 func runEditor(path string) error {
-	editor := os.Getenv("EDITOR")
+	envVar := "SOPS_EDITOR"
+	editor := os.Getenv(envVar)
+	if editor == "" {
+		envVar = "EDITOR"
+		editor = os.Getenv(envVar)
+	}
 	var cmd *exec.Cmd
 	if editor == "" {
 		editor, err := lookupAnyEditor("vim", "nano", "vi")
@@ -256,7 +261,7 @@ func runEditor(path string) error {
 	} else {
 		parts, err := shlex.Split(editor)
 		if err != nil {
-			return fmt.Errorf("invalid $EDITOR: %s", editor)
+			return fmt.Errorf("invalid $%s: %s", envVar, editor)
 		}
 		parts = append(parts, path)
 		cmd = exec.Command(parts[0], parts[1:]...)
@@ -275,5 +280,5 @@ func lookupAnyEditor(editorNames ...string) (editorPath string, err error) {
 			return editorPath, nil
 		}
 	}
-	return "", fmt.Errorf("no editor available: sops attempts to use the editor defined in the EDITOR environment variable, and if that's not set defaults to any of %s, but none of them could be found", strings.Join(editorNames, ", "))
+	return "", fmt.Errorf("no editor available: sops attempts to use the editor defined in the SOPS_EDITOR or EDITOR environment variables, and if that's not set defaults to any of %s, but none of them could be found", strings.Join(editorNames, ", "))
 }
