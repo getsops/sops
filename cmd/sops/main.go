@@ -743,6 +743,10 @@ func main() {
 					Usage:  "comma separated list of decryption key types",
 					EnvVar: "SOPS_DECRYPTION_ORDER",
 				},
+				cli.StringFlag{
+					Name:  "aws-profile",
+					Usage: "The AWS profile to use for requests to AWS",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if c.Bool("verbose") {
@@ -796,6 +800,7 @@ func main() {
 					KeyServices:     svcs,
 					DecryptionOrder: order,
 					IgnoreMAC:       c.Bool("ignore-mac"),
+					UseAwsProfile:   c.String("aws-profile"),
 				})
 				if err != nil {
 					return toExitError(err)
