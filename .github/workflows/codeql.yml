@@ -45,7 +45,9 @@ jobs:
       # target, which includes a lot more than just the Go files we want to
       # scan.
       - name: Build
-        run: make install
+        run: |
+          make vendor
+          make install
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@f09c1c0a94de965c15400f5634aa42fac8fb8f88 # v3.27.5
