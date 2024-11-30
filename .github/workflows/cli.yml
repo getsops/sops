@@ -48,7 +48,7 @@ jobs:
         run: make vendor
 
       - name: Restore go/toolchain lines of go.mod
-        run: python3 patch-go.mod.py
+        run: python3 .github/utils/patch-go.mod.py
 
       - name: Ensure clean working tree
         run: git diff --exit-code
