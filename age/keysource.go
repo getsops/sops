@@ -26,9 +26,9 @@ const (
 	// SopsAgeKeyFileEnv can be set as an environment variable pointing to an
 	// age keys file.
 	SopsAgeKeyFileEnv = "SOPS_AGE_KEY_FILE"
-	// SopsAgeSshPrivateKeyEnv can be set as an environment variable pointing to
+	// SopsAgeSshPrivateKeyFileEnv can be set as an environment variable pointing to
 	// a private SSH key file.
-	SopsAgeSshPrivateKeyEnv = "SOPS_AGE_SSH_PRIVATE_KEY"
+	SopsAgeSshPrivateKeyFileEnv = "SOPS_AGE_SSH_PRIVATE_KEY_FILE"
 	// SopsAgeKeyUserConfigPath is the default age keys file path in
 	// getUserConfigDir().
 	SopsAgeKeyUserConfigPath = "sops/age/keys.txt"
@@ -306,7 +306,7 @@ func parseSSHIdentityFromPrivateKeyFile(keyPath string) (age.Identity, error) {
 // environment variable is not present, it will fall back to `~/.ssh/id_ed25519`
 // or `~/.ssh/id_rsa`. If no age SSH identity is found, it will return nil.
 func loadAgeSSHIdentity() (age.Identity, error) {
-	sshKeyFilePath, ok := os.LookupEnv(SopsAgeSshPrivateKeyEnv)
+	sshKeyFilePath, ok := os.LookupEnv(SopsAgeSshPrivateKeyFileEnv)
 	if ok {
 		return parseSSHIdentityFromPrivateKeyFile(sshKeyFilePath)
 	}
