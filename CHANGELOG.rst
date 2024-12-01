@@ -1,6 +1,27 @@
 Changelog
 =========
 
+3.9.2
+-----
+
+Improvements:
+
+* Dependency updates (#1645, #1649, #1653, #1662, #1686, #1693).
+* Update compiled Protobuf definitions (#1688).
+* Remove unused variables and simplify conditional (##1687).
+
+Bugfixes:
+
+* Handle whitespace in Azure Key Vault URLs (#1652).
+* Correctly handle comments during JSON serialization (#1647).
+
+Project changes:
+
+* CI dependency updates (#1644, #1648, #1654, #1664, #1673, #1677, #1685).
+* Rust dependency updates (#1655, #1663, #1670, #1676, #1689).
+* Update and improve Protobuf code generation (#1688).
+
+
 3.9.1
 -----
 
