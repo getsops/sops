@@ -21,7 +21,6 @@ require (
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/fatih/color v1.18.0
 	github.com/getsops/gopgagent v0.0.0-20240527072608-0c14999532fe
-	github.com/golang/protobuf v1.5.4
 	github.com/google/go-cmp v0.6.0
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510
 	github.com/goware/prefixer v0.0.0-20160118172347-395022866408
