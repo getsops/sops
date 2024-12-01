@@ -9,18 +9,22 @@ import (
 func TestKmsKeyToMasterKey(t *testing.T) {
 
 	cases := []struct {
-		description        string
-		expectedArn        string
-		expectedRole       string
-		expectedCtx        map[string]string
-		expectedAwsProfile string
+		description            string
+		expectedArn            string
+		expectedRole           string
+		expectedCtx            map[string]string
+		expectedAwsProfile     string
+		expectedAwsKmsEndpoint string
+		expectedAwsStsEndpoint string
 	}{
 		{
-			description:        "empty context",
-			expectedArn:        "arn:aws:kms:eu-west-1:123456789012:key/d5c90a06-f824-4628-922b-12424571ed4d",
-			expectedRole:       "ExampleRole",
-			expectedCtx:        map[string]string{},
-			expectedAwsProfile: "",
+			description:            "empty context",
+			expectedArn:            "arn:aws:kms:eu-west-1:123456789012:key/d5c90a06-f824-4628-922b-12424571ed4d",
+			expectedRole:           "ExampleRole",
+			expectedCtx:            map[string]string{},
+			expectedAwsProfile:     "",
+			expectedAwsKmsEndpoint: "",
+			expectedAwsStsEndpoint: "",
 		},
 		{
 			description:  "context with one key-value pair",
@@ -29,7 +33,9 @@ func TestKmsKeyToMasterKey(t *testing.T) {
 			expectedCtx: map[string]string{
 				"firstKey": "first value",
 			},
-			expectedAwsProfile: "ExampleProfile",
+			expectedAwsProfile:     "ExampleProfile",
+			expectedAwsKmsEndpoint: "Example AWS KMS Endpoint",
+			expectedAwsStsEndpoint: "Example AWS STS Endpoint",
 		},
 		{
 			description:  "context with three key-value pairs",
@@ -40,7 +46,9 @@ func TestKmsKeyToMasterKey(t *testing.T) {
 				"secondKey": "second value",
 				"thirdKey":  "third value",
 			},
-			expectedAwsProfile: "",
+			expectedAwsProfile:     "",
+			expectedAwsKmsEndpoint: "",
+			expectedAwsStsEndpoint: "",
 		},
 	}
 
@@ -54,10 +62,12 @@ func TestKmsKeyToMasterKey(t *testing.T) {
 			}
 
 			key := &KmsKey{
-				Arn:        c.expectedArn,
-				Role:       c.expectedRole,
-				Context:    inputCtx,
-				AwsProfile: c.expectedAwsProfile,
+				Arn:            c.expectedArn,
+				Role:           c.expectedRole,
+				Context:        inputCtx,
+				AwsProfile:     c.expectedAwsProfile,
+				AwsKmsEndpoint: c.expectedAwsKmsEndpoint,
+				AwsStsEndpoint: c.expectedAwsStsEndpoint,
 			}
 
 			masterKey := kmsKeyToMasterKey(key)
