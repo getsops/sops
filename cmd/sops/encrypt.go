@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 
@@ -27,11 +28,12 @@ type encryptConfig struct {
 }
 
 type encryptOpts struct {
-	Cipher      sops.Cipher
-	InputStore  sops.Store
-	OutputStore sops.Store
-	InputPath   string
-	KeyServices []keyservice.KeyServiceClient
+	Cipher        sops.Cipher
+	InputStore    sops.Store
+	OutputStore   sops.Store
+	InputPath     string
+	ReadFromStdin bool
+	KeyServices   []keyservice.KeyServiceClient
 	encryptConfig
 }
 
@@ -78,9 +80,17 @@ func metadataFromEncryptionConfig(config encryptConfig) sops.Metadata {
 
 func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 	// Load the file
-	fileBytes, err := os.ReadFile(opts.InputPath)
-	if err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
+	var fileBytes []byte
+	if opts.ReadFromStdin {
+		fileBytes, err = io.ReadAll(os.Stdin)
+		if err != nil {
+			return nil, common.NewExitError(fmt.Sprintf("Error reading from stdin: %s", err), codes.CouldNotReadInputFile)
+		}
+	} else {
+		fileBytes, err = os.ReadFile(opts.InputPath)
+		if err != nil {
+			return nil, common.NewExitError(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
+		}
 	}
 	branches, err := opts.InputStore.LoadPlainFile(fileBytes)
 	if err != nil {
