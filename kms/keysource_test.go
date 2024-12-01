@@ -592,7 +592,7 @@ func createTestMasterKey(arn string) MasterKey {
 	return MasterKey{
 		Arn:                 arn,
 		credentialsProvider: credentials.NewStaticCredentialsProvider("id", "secret", ""),
-		AwsKmsEndpoint:        testKMSServerURL,
+		AwsKmsEndpoint:      testKMSServerURL,
 	}
 }
 

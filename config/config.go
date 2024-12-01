@@ -108,12 +108,12 @@ type gcpKmsKey struct {
 }
 
 type kmsKey struct {
-	Arn        string             `yaml:"arn"`
-	Role       string             `yaml:"role,omitempty"`
-	Context    map[string]*string `yaml:"context"`
-	AwsProfile string             `yaml:"aws_profile"`
-	AwsKmsEndpoint string `yaml:"aws_kms_endpoint"`
-	AwsStsEndpoint string `yaml:"aws_sts_endpoint"`
+	Arn            string             `yaml:"arn"`
+	Role           string             `yaml:"role,omitempty"`
+	Context        map[string]*string `yaml:"context"`
+	AwsProfile     string             `yaml:"aws_profile"`
+	AwsKmsEndpoint string             `yaml:"aws_kms_endpoint"`
+	AwsStsEndpoint string             `yaml:"aws_sts_endpoint"`
 }
 
 type azureKVKey struct {
@@ -140,8 +140,8 @@ type creationRule struct {
 	PathRegex               string `yaml:"path_regex"`
 	KMS                     string
 	AwsProfile              string `yaml:"aws_profile"`
-	AwsKmsEndpoint 			string `yaml:"aws_kms_endpoint"`
-	AwsStsEndpoint 			string `yaml:"aws_sts_endpoint"`
+	AwsKmsEndpoint          string `yaml:"aws_kms_endpoint"`
+	AwsStsEndpoint          string `yaml:"aws_sts_endpoint"`
 	Age                     string `yaml:"age"`
 	PGP                     string
 	GCPKMS                  string     `yaml:"gcp_kms"`

@@ -89,8 +89,8 @@ func NewMasterKey(arn string, role string, context map[string]*string, awsKmsEnd
 		Role:              role,
 		EncryptionContext: context,
 		CreationDate:      time.Now().UTC(),
-		AwsKmsEndpoint: awsKmsEndpoint,
-		AwsStsEndpoint: awsStsEndpoint,
+		AwsKmsEndpoint:    awsKmsEndpoint,
+		AwsStsEndpoint:    awsStsEndpoint,
 	}
 }
 
