@@ -261,7 +261,7 @@ func TestMasterKey_Decrypt(t *testing.T) {
 
 		assert.NoError(t, os.MkdirAll(filepath.Dir(keyPath), 0o700))
 		assert.NoError(t, os.WriteFile(keyPath, []byte(mockSshIdentity), 0o644))
-		t.Setenv(SopsAgeSshPrivateKeyEnv, keyPath)
+		t.Setenv(SopsAgeSshPrivateKeyFileEnv, keyPath)
 
 		got, err := key.Decrypt()
 		assert.NoError(t, err)
@@ -407,7 +407,7 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		assert.Len(t, got, 1)
 	})
 
-	t.Run(SopsAgeSshPrivateKeyEnv, func(t *testing.T) {
+	t.Run(SopsAgeSshPrivateKeyFileEnv, func(t *testing.T) {
 		tmpDir := t.TempDir()
 		overwriteUserConfigDir(t, tmpDir)
 
@@ -418,7 +418,7 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 
 		assert.NoError(t, os.MkdirAll(filepath.Dir(keyPath), 0o700))
 		assert.NoError(t, os.WriteFile(keyPath, []byte(mockSshIdentity), 0o644))
-		t.Setenv(SopsAgeSshPrivateKeyEnv, keyPath)
+		t.Setenv(SopsAgeSshPrivateKeyFileEnv, keyPath)
 
 		key := &MasterKey{}
 		got, err := key.loadIdentities()
