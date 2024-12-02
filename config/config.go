@@ -17,18 +17,10 @@ import (
 	"github.com/getsops/sops/v3/gcpkms"
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
-	"github.com/getsops/sops/v3/logging"
 	"github.com/getsops/sops/v3/pgp"
 	"github.com/getsops/sops/v3/publish"
-	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v3"
 )
-
-var log *logrus.Logger
-
-func init() {
-	log = logging.NewLogger("CONFIG")
-}
 
 type fileSystem interface {
 	Stat(name string) (os.FileInfo, error)
@@ -377,19 +369,17 @@ func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptio
 	}
 
 	var dest publish.Destination
-	if dRule != nil {
-		if dRule.S3Bucket != "" && dRule.GCSBucket != "" && dRule.VaultPath != "" {
-			return nil, fmt.Errorf("error loading config: more than one destinations were found in a single destination rule, you can only use one per rule")
-		}
-		if dRule.S3Bucket != "" {
-			dest = publish.NewS3Destination(dRule.S3Bucket, dRule.S3Prefix)
-		}
-		if dRule.GCSBucket != "" {
-			dest = publish.NewGCSDestination(dRule.GCSBucket, dRule.GCSPrefix)
-		}
-		if dRule.VaultPath != "" {
-			dest = publish.NewVaultDestination(dRule.VaultAddress, dRule.VaultPath, dRule.VaultKVMountName, dRule.VaultKVVersion)
-		}
+	if dRule.S3Bucket != "" && dRule.GCSBucket != "" && dRule.VaultPath != "" {
+		return nil, fmt.Errorf("error loading config: more than one destinations were found in a single destination rule, you can only use one per rule")
+	}
+	if dRule.S3Bucket != "" {
+		dest = publish.NewS3Destination(dRule.S3Bucket, dRule.S3Prefix)
+	}
+	if dRule.GCSBucket != "" {
+		dest = publish.NewGCSDestination(dRule.GCSBucket, dRule.GCSPrefix)
+	}
+	if dRule.VaultPath != "" {
+		dest = publish.NewVaultDestination(dRule.VaultAddress, dRule.VaultPath, dRule.VaultKVMountName, dRule.VaultKVVersion)
 	}
 
 	config, err := configFromRule(rule, kmsEncryptionContext)
