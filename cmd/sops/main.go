@@ -164,12 +164,12 @@ func main() {
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
-				if c.NArg() != 2 {
+				if c.NArg() < 2 {
 					return common.NewExitError(fmt.Errorf("error: missing file to decrypt"), codes.ErrorGeneric)
 				}
 
 				fileName := c.Args()[0]
-				command := c.Args()[1]
+				command := c.Args()[1:]
 
 				inputStore, err := inputStore(c, fileName)
 				if err != nil {
@@ -268,12 +268,12 @@ func main() {
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
-				if c.NArg() != 2 {
+				if c.NArg() < 2 {
 					return common.NewExitError(fmt.Errorf("error: missing file to decrypt"), codes.ErrorGeneric)
 				}
 
 				fileName := c.Args()[0]
-				command := c.Args()[1]
+				command := c.Args()[1:]
 
 				inputStore, err := inputStore(c, fileName)
 				if err != nil {
