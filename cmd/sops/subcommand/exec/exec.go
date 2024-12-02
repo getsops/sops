@@ -2,6 +2,7 @@ package exec
 
 import (
 	"bytes"
+	"fmt"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -114,6 +115,10 @@ func ExecWithFile(opts ExecOpts) error {
 func ExecWithEnv(opts ExecOpts) error {
 	if opts.User != "" {
 		SwitchUser(opts.User)
+	}
+
+	if runtime.GOOS == "windows" && opts.SameProcess {
+		return fmt.Errorf("The --same-process flag is not supported on Windows")
 	}
 
 	var env []string

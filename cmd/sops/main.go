@@ -198,6 +198,10 @@ func main() {
 
 				if c.Bool("background") {
 					log.Warn("exec-env's --background option is deprecated and will be removed in a future version of sops")
+
+					if c.Bool("same-process") {
+						return common.NewExitError("Error: The --same-process flag cannot be used with --background", codes.ErrorConflictingParameters)
+					}
 				}
 
 				tree, err := decryptTree(opts)
