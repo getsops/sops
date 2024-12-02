@@ -919,7 +919,7 @@ func TestTruncateTreeNotArray(t *testing.T) {
 func TestTruncateTreeArrayOutOfBounds(t *testing.T) {
 	tree := TreeBranch{
 		TreeItem{
-			Key:   "foo",
+			Key: "foo",
 			Value: []interface{}{
 				"one",
 				"two",
@@ -1166,11 +1166,11 @@ func TestSetArrayNonLeaf(t *testing.T) {
 func TestUnsetKeyRootLeaf(t *testing.T) {
 	branch := TreeBranch{
 		TreeItem{
-			Key: "foo",
+			Key:   "foo",
 			Value: "foo",
 		},
 		TreeItem{
-			Key: "foofoo",
+			Key:   "foofoo",
 			Value: "foofoo",
 		},
 	}
@@ -1178,7 +1178,7 @@ func TestUnsetKeyRootLeaf(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
-			Key: "foo",
+			Key:   "foo",
 			Value: "foo",
 		},
 	}, unset)
@@ -1190,11 +1190,11 @@ func TestUnsetKeyBranchLeaf(t *testing.T) {
 			Key: "foo",
 			Value: TreeBranch{
 				TreeItem{
-					Key: "bar",
+					Key:   "bar",
 					Value: "bar",
 				},
 				TreeItem{
-					Key: "barbar",
+					Key:   "barbar",
 					Value: "barbar",
 				},
 			},
@@ -1207,7 +1207,7 @@ func TestUnsetKeyBranchLeaf(t *testing.T) {
 			Key: "foo",
 			Value: TreeBranch{
 				TreeItem{
-					Key: "bar",
+					Key:   "bar",
 					Value: "bar",
 				},
 			},
@@ -1218,14 +1218,14 @@ func TestUnsetKeyBranchLeaf(t *testing.T) {
 func TestUnsetKeyBranch(t *testing.T) {
 	branch := TreeBranch{
 		TreeItem{
-			Key: "foo",
+			Key:   "foo",
 			Value: "foo",
 		},
 		TreeItem{
 			Key: "foofoo",
 			Value: TreeBranch{
 				TreeItem{
-					Key: "bar",
+					Key:   "bar",
 					Value: "bar",
 				},
 			},
@@ -1235,7 +1235,7 @@ func TestUnsetKeyBranch(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
-			Key: "foo",
+			Key:   "foo",
 			Value: "foo",
 		},
 	}, unset)
@@ -1244,14 +1244,13 @@ func TestUnsetKeyBranch(t *testing.T) {
 func TestUnsetKeyRootLastLeaf(t *testing.T) {
 	branch := TreeBranch{
 		TreeItem{
-			Key: "foo",
+			Key:   "foo",
 			Value: "foo",
 		},
 	}
 	unset, err := branch.Unset([]interface{}{"foo"})
 	assert.NoError(t, err)
-	assert.Equal(t, TreeBranch{
-	}, unset)
+	assert.Equal(t, TreeBranch{}, unset)
 }
 
 func TestUnsetKeyBranchLastLeaf(t *testing.T) {
@@ -1260,7 +1259,7 @@ func TestUnsetKeyBranchLastLeaf(t *testing.T) {
 			Key: "foo",
 			Value: TreeBranch{
 				TreeItem{
-					Key: "bar",
+					Key:   "bar",
 					Value: "bar",
 				},
 			},
@@ -1270,9 +1269,8 @@ func TestUnsetKeyBranchLastLeaf(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
-			Key: "foo",
-			Value: TreeBranch{
-			},
+			Key:   "foo",
+			Value: TreeBranch{},
 		},
 	}, unset)
 }
@@ -1287,7 +1285,7 @@ func TestUnsetKeyArray(t *testing.T) {
 					Value: []interface{}{
 						TreeBranch{
 							TreeItem{
-								Key: "baz",
+								Key:   "baz",
 								Value: "baz",
 							},
 						},
@@ -1300,9 +1298,8 @@ func TestUnsetKeyArray(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
-			Key: "foo",
-			Value: TreeBranch{
-			},
+			Key:   "foo",
+			Value: TreeBranch{},
 		},
 	}, unset)
 }
@@ -1314,13 +1311,13 @@ func TestUnsetArrayItem(t *testing.T) {
 			Value: []interface{}{
 				TreeBranch{
 					TreeItem{
-						Key: "bar",
+						Key:   "bar",
 						Value: "bar",
 					},
 				},
 				TreeBranch{
 					TreeItem{
-						Key: "barbar",
+						Key:   "barbar",
 						Value: "barbar",
 					},
 				},
@@ -1335,7 +1332,7 @@ func TestUnsetArrayItem(t *testing.T) {
 			Value: []interface{}{
 				TreeBranch{
 					TreeItem{
-						Key: "bar",
+						Key:   "bar",
 						Value: "bar",
 					},
 				},
@@ -1351,11 +1348,11 @@ func TestUnsetKeyInArrayItem(t *testing.T) {
 			Value: []interface{}{
 				TreeBranch{
 					TreeItem{
-						Key: "bar",
+						Key:   "bar",
 						Value: "bar",
 					},
 					TreeItem{
-						Key: "barbar",
+						Key:   "barbar",
 						Value: "barbar",
 					},
 				},
@@ -1370,7 +1367,7 @@ func TestUnsetKeyInArrayItem(t *testing.T) {
 			Value: []interface{}{
 				TreeBranch{
 					TreeItem{
-						Key: "bar",
+						Key:   "bar",
 						Value: "bar",
 					},
 				},
@@ -1386,7 +1383,7 @@ func TestUnsetArrayLastItem(t *testing.T) {
 			Value: []interface{}{
 				TreeBranch{
 					TreeItem{
-						Key: "bar",
+						Key:   "bar",
 						Value: "bar",
 					},
 				},
@@ -1397,9 +1394,8 @@ func TestUnsetArrayLastItem(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
-			Key: "foo",
-			Value: []interface{}{
-			},
+			Key:   "foo",
+			Value: []interface{}{},
 		},
 	}, unset)
 }
@@ -1410,7 +1406,7 @@ func TestUnsetKeyNotFound(t *testing.T) {
 			Key: "foo",
 			Value: TreeBranch{
 				TreeItem{
-					Key: "bar",
+					Key:   "bar",
 					Value: "bar",
 				},
 			},
@@ -1429,7 +1425,7 @@ func TestUnsetKeyInArrayNotFound(t *testing.T) {
 			Value: []interface{}{
 				TreeBranch{
 					TreeItem{
-						Key: "bar",
+						Key:   "bar",
 						Value: "bar",
 					},
 				},
@@ -1448,7 +1444,7 @@ func TestUnsetArrayItemOutOfBounds(t *testing.T) {
 			Value: []interface{}{
 				TreeBranch{
 					TreeItem{
-						Key: "bar",
+						Key:   "bar",
 						Value: "bar",
 					},
 				},
@@ -1463,7 +1459,7 @@ func TestUnsetArrayItemOutOfBounds(t *testing.T) {
 func TestUnsetKeyNotABranch(t *testing.T) {
 	branch := TreeBranch{
 		TreeItem{
-			Key: "foo",
+			Key:   "foo",
 			Value: 99,
 		},
 	}

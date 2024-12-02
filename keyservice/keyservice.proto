@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option go_package = "./keyservice";
+
 message Key {
 	oneof key_type {
 		KmsKey kms_key = 1;
@@ -20,6 +22,8 @@ message KmsKey {
 	string role = 2;
 	map<string, string> context = 3;
 	string aws_profile = 4;
+	string aws_kms_endpoint = 5;
+	string aws_sts_endpoint = 6;
 }
 
 message GcpKmsKey {
