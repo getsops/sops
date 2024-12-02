@@ -140,6 +140,7 @@ func ExecWithEnv(opts ExecOpts) error {
 			log.Fatal("background is not supported for same-process")
 		}
 
+		// Note that the call does NOT return, unless an error happens.
 		return ExecSyscall(opts.Command, env)
 	}
 
