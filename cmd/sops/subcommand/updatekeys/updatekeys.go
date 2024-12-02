@@ -15,7 +15,7 @@ import (
 // Opts represents key operation options and config
 type Opts struct {
 	InputPath       string
-	GroupQuorum     int
+	ShamirThreshold int
 	KeyServices     []keyservice.KeyServiceClient
 	DecryptionOrder []string
 	Interactive     bool
@@ -70,8 +70,8 @@ func updateFile(opts Opts) error {
 	// TODO: use conf.ShamirThreshold instead of tree.Metadata.ShamirThreshold in the next line?
 	//       Or make this configurable?
 	var shamirThreshold = tree.Metadata.ShamirThreshold
-	if opts.GroupQuorum != 0 {
-		shamirThreshold = opts.GroupQuorum
+	if opts.ShamirThreshold != 0 {
+		shamirThreshold = opts.ShamirThreshold
 	}
 	shamirThreshold = min(shamirThreshold, len(conf.KeyGroups))
 	var shamirThresholdWillChange = tree.Metadata.ShamirThreshold != shamirThreshold
