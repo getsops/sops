@@ -2,6 +2,7 @@ package age
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -28,6 +29,18 @@ EylloI7MNGbadPGb
 -----END AGE ENCRYPTED FILE-----`
 	// mockEncryptedKeyPlain is the plain value of mockEncryptedKey.
 	mockEncryptedKeyPlain string = "data"
+	// passphrase used to encrypt age identity.
+	mockIdentityPassphrase string = "passphrase"
+	mockEncryptedIdentity  string = `-----BEGIN AGE ENCRYPTED FILE-----
+YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNjcnlwdCBMN2FXZW9xSFViYjdNeW5D
+dy9iSHFnIDE4Ck9zV0ZoNldmci9rL3VXd3BtZmQvK3VZWEpBQjdhZ0UrcmhqR2lF
+YThFMzAKLS0tIGVEQ0xwODI1TlNYeHNHaHZKWHoyLzYwMTMvTGhaZG1oa203cSs0
+VUpBL1kKsaTnt+H/z8mkL21UYKIt3YMpWSV/oYqTm1cSSUnF9InZEYU9HndK9rc8
+ni+MTJCmYf4mgvvGPMf7oIQvs6ijaTdlQb+zeQsL4eif20w+CWgvPNrS6iXUIs8W
+w5/fHsxwmrkG96nDkMErJKhmjmLpC+YdbiMe6P/KIpas09m08RTIqcz7ua0Xm3ey
+ndU+8ILJOhcnWV55W43nTw/UUFse7f+qY61n7kcd1sGd7ZfSEdEIqS3K2vEtA3ER
+fn0s3cyXVEBxL9OZqcAk45bCFVOl13Fp/DBfquHEjvAyeg0=
+-----END AGE ENCRYPTED FILE-----`
 )
 
 func TestMasterKeysFromRecipients(t *testing.T) {
@@ -399,4 +412,93 @@ func TestUserConfigDir(t *testing.T) {
 		assert.Nil(t, err)
 		assert.Equal(t, home, dir)
 	}
+}
+
+func TestMasterKey_Identities_Passphrase(t *testing.T) {
+	t.Run(SopsAgeKeyEnv, func(t *testing.T) {
+		key := &MasterKey{EncryptedKey: mockEncryptedKey}
+		t.Setenv(SopsAgeKeyEnv, mockEncryptedIdentity)
+		//blocks calling gpg-agent
+		os.Unsetenv("XDG_RUNTIME_DIR")
+
+		funcDefer, _ := mockStdin(t, mockIdentityPassphrase)
+		defer funcDefer()
+
+		got, err := key.Decrypt()
+
+		assert.NoError(t, err)
+		assert.EqualValues(t, mockEncryptedKeyPlain, got)
+	})
+
+	t.Run(SopsAgeKeyFileEnv, func(t *testing.T) {
+		tmpDir := t.TempDir()
+		// Overwrite to ensure local config is not picked up by tests
+		overwriteUserConfigDir(t, tmpDir)
+
+		keyPath := filepath.Join(tmpDir, "keys.txt")
+		assert.NoError(t, os.WriteFile(keyPath, []byte(mockEncryptedIdentity), 0o644))
+
+		key := &MasterKey{EncryptedKey: mockEncryptedKey}
+		t.Setenv(SopsAgeKeyFileEnv, keyPath)
+		//blocks calling gpg-agent
+		os.Unsetenv("XDG_RUNTIME_DIR")
+
+		funcDefer, _ := mockStdin(t, mockIdentityPassphrase)
+		defer funcDefer()
+
+		got, err := key.Decrypt()
+		assert.NoError(t, err)
+		assert.EqualValues(t, mockEncryptedKeyPlain, got)
+	})
+
+	t.Run("invalid encrypted key", func(t *testing.T) {
+		key := &MasterKey{EncryptedKey: "invalid"}
+		t.Setenv(SopsAgeKeyEnv, mockEncryptedIdentity)
+		//blocks calling gpg-agent
+		os.Unsetenv("XDG_RUNTIME_DIR")
+
+		funcDefer, _ := mockStdin(t, mockIdentityPassphrase)
+		defer funcDefer()
+
+		got, err := key.Decrypt()
+		assert.Error(t, err)
+		assert.ErrorContains(t, err, "failed to create reader for decrypting sops data key with age")
+		assert.Nil(t, got)
+	})
+}
+
+// mockStdin is a helper function that lets the test pretend dummyInput as os.Stdin.
+// It will return a function for `defer` to clean up after the test.
+//
+// Note: `ioutil.TempFile` should be replaced to `os.CreateTemp` for Go v1.16 or higher.
+func mockStdin(t *testing.T, dummyInput string) (funcDefer func(), err error) {
+	t.Helper()
+
+	oldOsStdin := os.Stdin
+
+	fmt.Println(t.TempDir(), t.Name())
+
+	tmpfile, err := ioutil.TempFile(t.TempDir(), strings.Replace(t.Name(), "/", "_", -1))
+	if err != nil {
+		return nil, err
+	}
+
+	content := []byte(dummyInput)
+
+	if _, err := tmpfile.Write(content); err != nil {
+		return nil, err
+	}
+
+	if _, err := tmpfile.Seek(0, 0); err != nil {
+		return nil, err
+	}
+
+	// Set stdin to the temp file
+	os.Stdin = tmpfile
+
+	return func() {
+		// clean up
+		os.Stdin = oldOsStdin
+		os.Remove(tmpfile.Name())
+	}, nil
 }
