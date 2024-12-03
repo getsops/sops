@@ -3,8 +3,8 @@ package ini
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/getsops/sops/v3"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDecodeIni(t *testing.T) {
@@ -116,6 +116,55 @@ func TestEncodeIniWithEscaping(t *testing.T) {
 					sops.TreeItem{
 						Key:   "baz\\\\foo",
 						Value: "2.0",
+					},
+				},
+			},
+		},
+	}
+	out, err := Store{}.iniFromTreeBranches(branches)
+	assert.Nil(t, err)
+	expected, _ := Store{}.treeBranchesFromIni(out)
+	assert.Equal(t, expected, branches)
+}
+
+func TestEncodeIniWithDuplicateSections(t *testing.T) {
+	branches := sops.TreeBranches{
+		sops.TreeBranch{
+			sops.TreeItem{
+				Key:   "DEFAULT",
+				Value: interface{}(sops.TreeBranch(nil)),
+			},
+			sops.TreeItem{
+				Key: "foo",
+				Value: sops.TreeBranch{
+					sops.TreeItem{
+						Key:   "foo",
+						Value: "bar",
+					},
+					sops.TreeItem{
+						Key:   "baz",
+						Value: "3.0",
+					},
+					sops.TreeItem{
+						Key:   "qux",
+						Value: "false",
+					},
+				},
+			},
+			sops.TreeItem{
+				Key: "foo",
+				Value: sops.TreeBranch{
+					sops.TreeItem{
+						Key:   "foo",
+						Value: "bar",
+					},
+					sops.TreeItem{
+						Key:   "baz",
+						Value: "3.0",
+					},
+					sops.TreeItem{
+						Key:   "qux",
+						Value: "false",
 					},
 				},
 			},
