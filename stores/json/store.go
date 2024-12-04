@@ -330,6 +330,7 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Error marshaling to json: %s", err)
 	}
+	out = append(out, '\n')
 	return out, nil
 }
 
@@ -340,6 +341,7 @@ func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Error marshaling to json: %s", err)
 	}
+	out = append(out, '\n')
 	return out, nil
 }
 
