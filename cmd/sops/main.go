@@ -1682,6 +1682,7 @@ func main() {
 		cli.StringFlag{
 			Name:  "config",
 			Usage: "path to sops' config file. If set, sops will not search for the config file recursively.",
+			EnvVar: "SOPS_CONFIG",
 		},
 		cli.StringFlag{
 			Name:  "encryption-context",
