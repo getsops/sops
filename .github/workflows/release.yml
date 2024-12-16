@@ -28,6 +28,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Setup Go
         uses: actions/setup-go@3041bf56c941b39c61721a86cd11f3bb1338122a # v4.0.1
