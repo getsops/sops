@@ -1068,7 +1068,7 @@ substituted with the temporary file path (whether a FIFO or an actual file).
 .. code:: sh
 
     # operating on the same file as before, but as a file this time
-    $ sops exec-file out.json 'echo your temporary file: {}; cat {}'
+    $ sops exec-file out.json -- sh -c "echo your temporary file: {}; cat {}"
     your temporary file: /tmp/.sops894650499/tmp-file
     {
             "database_password": "jf48t9wfw094gf4nhdf023r",
@@ -1077,7 +1077,7 @@ substituted with the temporary file path (whether a FIFO or an actual file).
     }
 
     # launch a shell with a variable TMPFILE pointing to the temporary file
-    $ sops exec-file --no-fifo out.json 'TMPFILE={} sh'
+    $ sops exec-file --no-fifo out.json -- sh -c 'TMPFILE={} sh'
     sh-3.2$ echo $TMPFILE
     /tmp/.sops506055069/tmp-file291138648
     sh-3.2$ cat $TMPFILE
