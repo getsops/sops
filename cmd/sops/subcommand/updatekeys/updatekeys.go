@@ -8,6 +8,7 @@ import (
 
 	"github.com/getsops/sops/v3/cmd/sops/codes"
 	"github.com/getsops/sops/v3/cmd/sops/common"
+	"github.com/getsops/sops/v3/cmd/sops/formats"
 	"github.com/getsops/sops/v3/config"
 	"github.com/getsops/sops/v3/keyservice"
 )
@@ -45,12 +46,23 @@ func updateFile(opts Opts) error {
 	if err != nil {
 		return err
 	}
-	store := common.DefaultStoreForPath(sc, opts.InputPath)
+
+	var store common.Store
+
+	if opts.InputType == "" {
+		store = common.DefaultStoreForPath(sc, opts.InputPath)
+	} else {
+		format := formats.FormatFromString(opts.InputType)
+		store = common.StoreForFormat(format, sc)
+	}
+
 	log.Printf("Syncing keys for file %s", opts.InputPath)
+
 	tree, err := common.LoadEncryptedFile(store, opts.InputPath)
 	if err != nil {
 		return err
 	}
+
 	conf, err := config.LoadCreationRuleForFile(opts.ConfigPath, opts.InputPath, make(map[string]*string))
 	if err != nil {
 		return err
