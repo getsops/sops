@@ -7,7 +7,7 @@ toolchain go1.22.9
 require (
 	cloud.google.com/go/kms v1.20.2
 	cloud.google.com/go/storage v1.48.0
-	filippo.io/age v1.2.0
+	filippo.io/age v1.2.1
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.16.0
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.8.0
 	github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys v1.3.0
