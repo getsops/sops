@@ -501,6 +501,14 @@ func main() {
 							Name:  "aws-profile",
 							Usage: "The AWS profile to use for requests to AWS",
 						},
+						cli.StringFlag{
+							Name:  "aws-kms-endpoint",
+							Usage: "The AWS KMS Endpoint to use for requests to AWS. Ex: https://kms.ap-southeast-2.amazonaws.com",
+						},
+						cli.StringFlag{
+							Name:  "aws-sts-endpoint",
+							Usage: "The AWS STS Endpoint to use for requests to AWS. Ex: https://sts.ap-southeast-2.amazonaws.com",
+						},
 						cli.StringSliceFlag{
 							Name:  "gcp-kms",
 							Usage: "the GCP KMS Resource ID the new group should contain. Can be specified more than once",
@@ -545,7 +553,7 @@ func main() {
 							group = append(group, pgp.NewMasterKeyFromFingerprint(fp))
 						}
 						for _, arn := range kmsArns {
-							group = append(group, kms.NewMasterKeyFromArn(arn, kms.ParseKMSContext(c.String("encryption-context")), c.String("aws-profile")))
+							group = append(group, kms.NewMasterKeyFromArn(arn, kms.ParseKMSContext(c.String("encryption-context")), c.String("aws-profile"), c.String("aws-kms-endpoint"), c.String("aws-sts-endpoint")))
 						}
 						for _, kms := range gcpKmses {
 							group = append(group, gcpkms.NewMasterKeyFromResourceID(kms))
@@ -851,6 +859,14 @@ func main() {
 				cli.StringFlag{
 					Name:  "aws-profile",
 					Usage: "The AWS profile to use for requests to AWS",
+				},
+				cli.StringFlag{
+					Name:  "aws-kms-endpoint",
+					Usage: "The AWS KMS Endpoint to use for requests to AWS",
+				},
+				cli.StringFlag{
+					Name:  "aws-sts-endpoint",
+					Usage: "The AWS STS Endpoint to use for requests to AWS",
 				},
 				cli.StringFlag{
 					Name:   "gcp-kms",
@@ -1168,6 +1184,14 @@ func main() {
 				cli.StringFlag{
 					Name:  "aws-profile",
 					Usage: "The AWS profile to use for requests to AWS",
+				},
+				cli.StringFlag{
+					Name:  "aws-kms-endpoint",
+					Usage: "The AWS KMS Endpoint to use for requests to AWS",
+				},
+				cli.StringFlag{
+					Name:  "aws-sts-endpoint",
+					Usage: "The AWS STS Endpoint to use for requests to AWS",
 				},
 				cli.StringFlag{
 					Name:   "gcp-kms",
@@ -1528,6 +1552,14 @@ func main() {
 		cli.StringFlag{
 			Name:  "aws-profile",
 			Usage: "The AWS profile to use for requests to AWS",
+		},
+		cli.StringFlag{
+			Name:  "aws-kms-endpoint",
+			Usage: "The AWS KMS Endpoint to use for requests to AWS",
+		},
+		cli.StringFlag{
+			Name:  "aws-sts-endpoint",
+			Usage: "The AWS STS Endpoint to use for requests to AWS",
 		},
 		cli.StringFlag{
 			Name:   "gcp-kms",
@@ -2006,7 +2038,7 @@ func getEncryptConfig(c *cli.Context, fileName string) (encryptConfig, error) {
 
 func getMasterKeys(c *cli.Context, kmsEncryptionContext map[string]*string, kmsOptionName string, pgpOptionName string, gcpKmsOptionName string, azureKvOptionName string, hcVaultTransitOptionName string, ageOptionName string) ([]keys.MasterKey, error) {
 	var masterKeys []keys.MasterKey
-	for _, k := range kms.MasterKeysFromArnString(c.String(kmsOptionName), kmsEncryptionContext, c.String("aws-profile")) {
+	for _, k := range kms.MasterKeysFromArnString(c.String(kmsOptionName), kmsEncryptionContext, c.String("aws-profile"), c.String("aws-kms-endpoint"), c.String("aws-sts-endpoint")) {
 		masterKeys = append(masterKeys, k)
 	}
 	for _, k := range pgp.MasterKeysFromFingerprintString(c.String(pgpOptionName)) {
@@ -2185,7 +2217,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 		return nil, common.NewExitError("Invalid KMS encryption context format", codes.ErrorInvalidKMSEncryptionContextFormat)
 	}
 	if c.String("kms") != "" {
-		for _, k := range kms.MasterKeysFromArnString(c.String("kms"), kmsEncryptionContext, c.String("aws-profile")) {
+		for _, k := range kms.MasterKeysFromArnString(c.String("kms"), kmsEncryptionContext, c.String("aws-profile"), c.String("aws-kms-endpoint"), c.String("aws-sts-endpoint")) {
 			kmsKeys = append(kmsKeys, k)
 		}
 	}

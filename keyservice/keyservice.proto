@@ -22,6 +22,8 @@ message KmsKey {
 	string role = 2;
 	map<string, string> context = 3;
 	string aws_profile = 4;
+	string aws_kms_endpoint = 5;
+	string aws_sts_endpoint = 6;
 }
 
 message GcpKmsKey {
