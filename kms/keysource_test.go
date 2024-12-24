@@ -33,9 +33,9 @@ const (
 	// testLocalKMSImage is a container image repository reference to a mock
 	// version of AWS' Key Management Service.
 	// Ref: https://github.com/nsmithuk/local-kms
-	testLocalKMSImage = "docker.io/nsmithuk/local-kms"
+	testLocalKMSImage = "public.ecr.aws/nsmithuk/local-kms"
 	// testLocalKMSImage is the container image tag to use.
-	testLocalKMSTag = "3.11.1"
+	testLocalKMSTag = "3.11.7"
 )
 
 // TestMain initializes an AWS KMS server using Docker, writes the HTTP address
