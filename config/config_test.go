@@ -387,16 +387,16 @@ creation_rules:
     kms: default
 `)
 
-func parseConfigFile(confBytes []byte, t *testing.T) *configFile {
-	conf := &configFile{}
+func parseConfigFile(confBytes []byte, t *testing.T) *ConfigFile {
+	conf := &ConfigFile{}
 	err := conf.load(confBytes)
 	assert.Nil(t, err)
 	return conf
 }
 
 func TestLoadConfigFile(t *testing.T) {
-	expected := configFile{
-		CreationRules: []creationRule{
+	expected := ConfigFile{
+		CreationRules: []CreationRule{
 			{
 				PathRegex: "foobar*",
 				KMS:       "1",
@@ -414,15 +414,15 @@ func TestLoadConfigFile(t *testing.T) {
 		},
 	}
 
-	conf := configFile{}
+	conf := ConfigFile{}
 	err := conf.load(sampleConfig)
 	assert.Nil(t, err)
 	assert.Equal(t, expected, conf)
 }
 
 func TestLoadConfigFileWithGroups(t *testing.T) {
-	expected := configFile{
-		CreationRules: []creationRule{
+	expected := ConfigFile{
+		CreationRules: []CreationRule{
 			{
 				PathRegex: "foobar*",
 				KMS:       "1",
@@ -430,22 +430,22 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 			},
 			{
 				PathRegex: "",
-				KeyGroups: []keyGroup{
+				KeyGroups: []KeyGroup{
 					{
-						KMS:     []kmsKey{{Arn: "foo", AwsProfile: "bar"}},
+						KMS:     []KmsKey{{Arn: "foo", AwsProfile: "bar"}},
 						PGP:     []string{"bar"},
-						GCPKMS:  []gcpKmsKey{{ResourceID: "foo"}},
-						AzureKV: []azureKVKey{{VaultURL: "https://foo.vault.azure.net", Key: "foo-key", Version: "fooversion"}},
+						GCPKMS:  []GcpKmsKey{{ResourceID: "foo"}},
+						AzureKV: []AzureKVKey{{VaultURL: "https://foo.vault.azure.net", Key: "foo-key", Version: "fooversion"}},
 						Vault:   []string{"https://foo.vault:8200/v1/foo/keys/foo-key"},
 					},
 					{
-						KMS: []kmsKey{{Arn: "baz", AwsProfile: "foo"}},
+						KMS: []KmsKey{{Arn: "baz", AwsProfile: "foo"}},
 						PGP: []string{"qux"},
-						GCPKMS: []gcpKmsKey{
+						GCPKMS: []GcpKmsKey{
 							{ResourceID: "bar"},
 							{ResourceID: "baz"},
 						},
-						AzureKV: []azureKVKey{{VaultURL: "https://bar.vault.azure.net", Key: "bar-key", Version: "barversion"}},
+						AzureKV: []AzureKVKey{{VaultURL: "https://bar.vault.azure.net", Key: "bar-key", Version: "barversion"}},
 						Vault:   []string{"https://baz.vault:8200/v1/baz/keys/baz-key"},
 					},
 				},
@@ -453,7 +453,7 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 		},
 	}
 
-	conf := configFile{}
+	conf := ConfigFile{}
 	err := conf.load(sampleConfigWithGroups)
 	assert.Nil(t, err)
 	assert.Equal(t, expected, conf)
