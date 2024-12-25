@@ -23,6 +23,7 @@ import (
 	"github.com/getsops/sops/v3/age"
 	_ "github.com/getsops/sops/v3/audit"
 	"github.com/getsops/sops/v3/azkv"
+	"github.com/getsops/sops/v3/cloudru"
 	"github.com/getsops/sops/v3/cmd/sops/codes"
 	"github.com/getsops/sops/v3/cmd/sops/common"
 	"github.com/getsops/sops/v3/cmd/sops/subcommand/exec"
@@ -80,7 +81,7 @@ func main() {
 		},
 	}
 	app.Name = "sops"
-	app.Usage = "sops - encrypted file editor with AWS KMS, GCP KMS, Azure Key Vault, age, and GPG support"
+	app.Usage = "sops - encrypted file editor with AWS KMS, GCP KMS, Azure Key Vault, Cloudru KMS, age, and GPG support"
 	app.ArgsUsage = "sops [options] file"
 	app.Version = version.Version
 	app.Authors = []cli.Author{
@@ -89,7 +90,7 @@ func main() {
 		{Name: "Julien Vehent", Email: "jvehent@mozilla.com"},
 	}
 	app.UsageText = `sops is an editor of encrypted files that supports AWS KMS, GCP, AZKV,
-	PGP, and Age
+	CKMS, PGP, and Age
 
    To encrypt or decrypt a document with AWS KMS, specify the KMS ARN
    in the -k flag or in the SOPS_KMS_ARN environment variable.
@@ -117,6 +118,17 @@ func main() {
    (Authentication is based on environment variables, see
     https://docs.microsoft.com/en-us/go/azure/azure-sdk-go-authorization#use-environment-based-authentication.
     The user/sp needs the key/encrypt and key/decrypt permissions.)
+
+	To encrypt or decrypt a document with Cloudru KMS, specify the
+	Cloud.ru key URL in the --cloudru-kms flag or in the
+	CLOUDRU_KMS_KEY_ID environment variable in format "key_id:version" or "key_id".
+	If the version is not specified, the latest version will be used.
+	Authentication is based on environment variables, these variables are required:
+	- CLOUDRU_ACCESS_KEY_ID: Cloudru API access key identifier.
+	- CLOUDRU_ACCESS_KEY_SECRET: Cloudru API access key secret.
+	See the Authentication guide for more information:
+	https://cloud.ru/docs/console_api/ug/topics/guides__auth_api.html
+	The subject of the key must have the "encrypt" and "decrypt" permissions.
 
    To encrypt or decrypt using age, specify the recipient in the -a flag,
    or in the SOPS_AGE_RECIPIENTS environment variable.
@@ -535,6 +547,10 @@ func main() {
 							Usage: "the full vault path to the key used to encrypt/decrypt. Make you choose and configure a key with encryption/decryption enabled (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev'). Can be specified more than once",
 						},
 						cli.StringSliceFlag{
+							Name:  "cloudru-kms",
+							Usage: "the Cloudru KMS key ID the new group should contain. Can be specified more than once",
+						},
+						cli.StringSliceFlag{
 							Name:  "age",
 							Usage: "the age recipient the new group should contain. Can be specified more than once",
 						},
@@ -557,6 +573,7 @@ func main() {
 						gcpKmses := c.StringSlice("gcp-kms")
 						vaultURIs := c.StringSlice("hc-vault-transit")
 						azkvs := c.StringSlice("azure-kv")
+						ckms := c.StringSlice("cloudru-kms")
 						ageRecipients := c.StringSlice("age")
 						if c.NArg() != 0 {
 							return common.NewExitError(fmt.Errorf("error: no positional arguments allowed"), codes.ErrorGeneric)
@@ -585,6 +602,15 @@ func main() {
 								log.WithError(err).Error("Failed to add key")
 								continue
 							}
+							group = append(group, k)
+						}
+						for _, kid := range ckms {
+							k, err := cloudru.NewMasterKeyFromKeyID(kid)
+							if err != nil {
+								log.WithError(err).Error("Failed to add key")
+								continue
+							}
+
 							group = append(group, k)
 						}
 						for _, recipient := range ageRecipients {
@@ -905,6 +931,11 @@ func main() {
 					EnvVar: "SOPS_PGP_FP",
 				},
 				cli.StringFlag{
+					Name:   "cloudru-kms",
+					Usage:  "comma separated list of Cloudru KMS key IDs",
+					EnvVar: "CLOUDRU_KMS_KEY_ID",
+				},
+				cli.StringFlag{
 					Name:   "age, a",
 					Usage:  "comma separated list of age recipients",
 					EnvVar: "SOPS_AGE_RECIPIENTS",
@@ -1099,6 +1130,14 @@ func main() {
 					Usage: "remove the provided comma-separated list of Vault's URI key from the list of master keys on the given file ( eg. https://vault.example.org:8200/v1/transit/keys/dev)",
 				},
 				cli.StringFlag{
+					Name:  "add-cloudru-kms",
+					Usage: "add the provided comma-separated list of Cloudru KMS key resource IDs to the list of master keys on the given file",
+				},
+				cli.StringFlag{
+					Name:  "rm-cloudru-kms",
+					Usage: "remove the provided comma-separated list of Cloudru KMS key resource IDs from the list of master keys on the given file",
+				},
+				cli.StringFlag{
 					Name:  "add-age",
 					Usage: "add the provided comma-separated list of age recipients fingerprints to the list of master keys on the given file",
 				},
@@ -1140,8 +1179,8 @@ func main() {
 					return toExitError(err)
 				}
 				if _, err := os.Stat(fileName); os.IsNotExist(err) {
-					if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" ||
-						c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" {
+					if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-cloudru-kms") != "" || c.String("add-age") != "" ||
+						c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-cloudru-kms") != "" || c.String("rm-age") != "" {
 						return common.NewExitError(fmt.Sprintf("Error: cannot add or remove keys on non-existent file %q, use the `edit` subcommand instead.", fileName), codes.CannotChangeKeysFromNonExistentFile)
 					}
 				}
@@ -1236,6 +1275,11 @@ func main() {
 					Name:   "hc-vault-transit",
 					Usage:  "comma separated list of vault's key URI (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev')",
 					EnvVar: "SOPS_VAULT_URIS",
+				},
+				cli.StringFlag{
+					Name:   "cloudru-kms",
+					Usage:  "comma separated list of Cloudru KMS key IDs",
+					EnvVar: "SOPS_CLOUDRU_KMS_IDS",
 				},
 				cli.StringFlag{
 					Name:   "pgp, p",
@@ -1612,6 +1656,11 @@ func main() {
 			EnvVar: "SOPS_VAULT_URIS",
 		},
 		cli.StringFlag{
+			Name:   "cloudru-kms",
+			Usage:  "comma separated list of Cloudru KMS resource IDs",
+			EnvVar: "SOPS_CLOUDRU_KMS_IDS",
+		},
+		cli.StringFlag{
 			Name:   "pgp, p",
 			Usage:  "comma separated list of PGP fingerprints",
 			EnvVar: "SOPS_PGP_FP",
@@ -1672,6 +1721,14 @@ func main() {
 		cli.StringFlag{
 			Name:  "rm-hc-vault-transit",
 			Usage: "remove the provided comma-separated list of Vault's URI key from the list of master keys on the given file ( eg. https://vault.example.org:8200/v1/transit/keys/dev)",
+		},
+		cli.StringFlag{
+			Name:  "add-cloudru-kms",
+			Usage: "add the provided comma-separated list of Cloudru KMS key IDs to the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "rm-cloudru-kms",
+			Usage: "remove the provided comma-separated list of Cloudru KMS key IDs from the list of master keys on the given file",
 		},
 		cli.StringFlag{
 			Name:  "add-age",
@@ -1783,8 +1840,8 @@ func main() {
 			return toExitError(err)
 		}
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
-			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" ||
-				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" {
+			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-cloudru-kms") != "" || c.String("add-age") != "" ||
+				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-cloudru-kms") != "" || c.String("rm-age") != "" {
 				return common.NewExitError(fmt.Sprintf("Error: cannot add or remove keys on non-existent file %q, use `--kms` and `--pgp` instead.", fileName), codes.CannotChangeKeysFromNonExistentFile)
 			}
 			if isEncryptMode || isDecryptMode || isRotateMode {
@@ -2077,7 +2134,7 @@ func getEncryptConfig(c *cli.Context, fileName string) (encryptConfig, error) {
 	}, nil
 }
 
-func getMasterKeys(c *cli.Context, kmsEncryptionContext map[string]*string, kmsOptionName string, pgpOptionName string, gcpKmsOptionName string, azureKvOptionName string, hcVaultTransitOptionName string, ageOptionName string) ([]keys.MasterKey, error) {
+func getMasterKeys(c *cli.Context, kmsEncryptionContext map[string]*string, kmsOptionName string, pgpOptionName string, gcpKmsOptionName string, azureKvOptionName string, hcVaultTransitOptionName string, ckmsOptionName string, ageOptionName string) ([]keys.MasterKey, error) {
 	var masterKeys []keys.MasterKey
 	for _, k := range kms.MasterKeysFromArnString(c.String(kmsOptionName), kmsEncryptionContext, c.String("aws-profile")) {
 		masterKeys = append(masterKeys, k)
@@ -2102,6 +2159,13 @@ func getMasterKeys(c *cli.Context, kmsEncryptionContext map[string]*string, kmsO
 	for _, k := range hcVaultKeys {
 		masterKeys = append(masterKeys, k)
 	}
+	ckmsKeys, err := cloudru.NewMasterKeysFromKeyIDs(c.String(ckmsOptionName))
+	if err != nil {
+		return nil, err
+	}
+	for _, k := range ckmsKeys {
+		masterKeys = append(masterKeys, k)
+	}
 	ageKeys, err := age.MasterKeysFromRecipients(c.String(ageOptionName))
 	if err != nil {
 		return nil, err
@@ -2114,11 +2178,11 @@ func getMasterKeys(c *cli.Context, kmsEncryptionContext map[string]*string, kmsO
 
 func getRotateOpts(c *cli.Context, fileName string, inputStore common.Store, outputStore common.Store, svcs []keyservice.KeyServiceClient, decryptionOrder []string) (rotateOpts, error) {
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
-	addMasterKeys, err := getMasterKeys(c, kmsEncryptionContext, "add-kms", "add-pgp", "add-gcp-kms", "add-azure-kv", "add-hc-vault-transit", "add-age")
+	addMasterKeys, err := getMasterKeys(c, kmsEncryptionContext, "add-kms", "add-pgp", "add-gcp-kms", "add-azure-kv", "add-hc-vault-transit", "add-cloudru-kms", "add-age")
 	if err != nil {
 		return rotateOpts{}, err
 	}
-	rmMasterKeys, err := getMasterKeys(c, kmsEncryptionContext, "rm-kms", "rm-pgp", "rm-gcp-kms", "rm-azure-kv", "rm-hc-vault-transit", "rm-age")
+	rmMasterKeys, err := getMasterKeys(c, kmsEncryptionContext, "rm-kms", "rm-pgp", "rm-gcp-kms", "rm-azure-kv", "rm-hc-vault-transit", "rm-cloudru-kms", "rm-age")
 	if err != nil {
 		return rotateOpts{}, err
 	}
@@ -2252,6 +2316,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	var cloudKmsKeys []keys.MasterKey
 	var azkvKeys []keys.MasterKey
 	var hcVaultMkKeys []keys.MasterKey
+	var ckmsKeys []keys.MasterKey
 	var ageMasterKeys []keys.MasterKey
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
 	if c.String("encryption-context") != "" && kmsEncryptionContext == nil {
@@ -2285,6 +2350,16 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 			hcVaultMkKeys = append(hcVaultMkKeys, k)
 		}
 	}
+	if c.String("cloudru-kms") != "" {
+		mk, err := cloudru.NewMasterKeysFromKeyIDs(c.String("cloudru-kms"))
+		if err != nil {
+			return nil, err
+		}
+
+		for _, k := range mk {
+			ckmsKeys = append(ckmsKeys, k)
+		}
+	}
 	if c.String("pgp") != "" {
 		for _, k := range pgp.MasterKeysFromFingerprintString(c.String("pgp")) {
 			pgpKeys = append(pgpKeys, k)
@@ -2299,7 +2374,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 			ageMasterKeys = append(ageMasterKeys, k)
 		}
 	}
-	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("azure-kv") == "" && c.String("hc-vault-transit") == "" && c.String("age") == "" {
+	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("azure-kv") == "" && c.String("hc-vault-transit") == "" && c.String("cloudru-kms") == "" && c.String("age") == "" {
 		conf, err := loadConfig(c, file, kmsEncryptionContext)
 		// config file might just not be supplied, without any error
 		if conf == nil {
@@ -2317,6 +2392,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	group = append(group, azkvKeys...)
 	group = append(group, pgpKeys...)
 	group = append(group, hcVaultMkKeys...)
+	group = append(group, ckmsKeys...)
 	group = append(group, ageMasterKeys...)
 	log.Debugf("Master keys available:  %+v", group)
 	return []sops.KeyGroup{group}, nil
