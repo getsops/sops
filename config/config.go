@@ -14,6 +14,7 @@ import (
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/azkv"
+	"github.com/getsops/sops/v3/cloudru"
 	"github.com/getsops/sops/v3/gcpkms"
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
@@ -86,13 +87,14 @@ type configFile struct {
 }
 
 type keyGroup struct {
-	Merge   []keyGroup
-	KMS     []kmsKey
-	GCPKMS  []gcpKmsKey  `yaml:"gcp_kms"`
-	AzureKV []azureKVKey `yaml:"azure_keyvault"`
-	Vault   []string     `yaml:"hc_vault"`
-	Age     []string     `yaml:"age"`
-	PGP     []string
+	Merge      []keyGroup
+	KMS        []kmsKey
+	GCPKMS     []gcpKmsKey  `yaml:"gcp_kms"`
+	AzureKV    []azureKVKey `yaml:"azure_keyvault"`
+	Vault      []string     `yaml:"hc_vault"`
+	CloudruKMS []string     `yaml:"cloudru_kms"`
+	Age        []string     `yaml:"age"`
+	PGP        []string
 }
 
 type gcpKmsKey struct {
@@ -136,6 +138,7 @@ type creationRule struct {
 	AzureKeyVault           string     `yaml:"azure_keyvault"`
 	VaultURI                string     `yaml:"hc_vault_transit_uri"`
 	KeyGroups               []keyGroup `yaml:"key_groups"`
+	CloudruKMS              string     `yaml:"cloudru_kms"`
 	ShamirThreshold         int        `yaml:"shamir_threshold"`
 	UnencryptedSuffix       string     `yaml:"unencrypted_suffix"`
 	EncryptedSuffix         string     `yaml:"encrypted_suffix"`
@@ -244,6 +247,13 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			if err != nil {
 				return nil, err
 			}
+			for _, k := range group.CloudruKMS {
+				mk, err := cloudru.NewMasterKeyFromKeyID(k)
+				if err != nil {
+					return nil, err
+				}
+				keyGroup = append(keyGroup, mk)
+			}
 			groups = append(groups, keyGroup)
 		}
 	} else {
@@ -281,6 +291,14 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		for _, k := range vaultKeys {
 			keyGroup = append(keyGroup, k)
 		}
+		ckmsKeys, err := cloudru.NewMasterKeysFromKeyIDs(cRule.CloudruKMS)
+		if err != nil {
+			return nil, err
+		}
+		for _, k := range ckmsKeys {
+			keyGroup = append(keyGroup, k)
+		}
+
 		groups = append(groups, keyGroup)
 	}
 	return groups, nil
