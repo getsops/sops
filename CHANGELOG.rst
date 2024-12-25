@@ -1,6 +1,26 @@
 Changelog
 =========
 
+3.9.3
+-----
+
+Improvements:
+
+* Dependency updates (#1699, #1703, #1710, #1714, #1715, #1723).
+* Add ``persist-credentials: false`` to checkouts in GitHub workflows (#1704).
+* Tests: use container images from https://github.com/getsops/ci-container-images (#1722).
+
+Bugfixes:
+
+* GnuPG: do not incorrectly trim fingerprint in presence of exclamation marks for specfic subkey selection (#1720).
+* ``updatekeys`` subcommand: fix ``--input-type`` CLI flag being ignored (#1721).
+
+Project changes:
+
+* CI dependency updates (#1698, #1708, #1717).
+* Rust dependency updates (#1707, #1716, #1725).
+
+
 3.9.2
 -----
 
