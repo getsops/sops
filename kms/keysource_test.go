@@ -33,7 +33,7 @@ const (
 	// testLocalKMSImage is a container image repository reference to a mock
 	// version of AWS' Key Management Service.
 	// Ref: https://github.com/nsmithuk/local-kms
-	testLocalKMSImage = "docker.io/nsmithuk/local-kms"
+	testLocalKMSImage = "ghcr.io/getsops/ci-container-images/local-kms"
 	// testLocalKMSImage is the container image tag to use.
 	testLocalKMSTag = "3.11.1"
 )
