@@ -255,7 +255,7 @@ It is also possible to use ``updatekeys``, when adding or removing age recipient
   +++ age1qe5lxzzeppw5k79vxn3872272sgy224g2nzqlzy3uljs84say3yqgvd0sw
   Is this okay? (y/n):y
   2022/02/09 16:32:04 File /iac/solution1/secret.enc.yaml synced with new keys
-  
+
 Encrypting using GCP KMS
 ~~~~~~~~~~~~~~~~~~~~~~~~
 GCP KMS uses `Application Default Credentials
@@ -418,7 +418,7 @@ Encrypting using Hashicorp Vault
 
 We assume you have an instance (or more) of Vault running and you have privileged access to it. For instructions on how to deploy a secure instance of Vault, refer to Hashicorp's official documentation.
 
-To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!) 
+To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
 
 .. code:: sh
 
@@ -428,11 +428,11 @@ To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
 .. code:: sh
 
     $ # Substitute this with the address Vault is running on
-    $ export VAULT_ADDR=http://127.0.0.1:8200 
+    $ export VAULT_ADDR=http://127.0.0.1:8200
 
     $ # this may not be necessary in case you previously used `vault login` for production use
-    $ export VAULT_TOKEN=toor 
-    
+    $ export VAULT_TOKEN=toor
+
     $ # to check if Vault started and is configured correctly
     $ vault status
     Key             Value
@@ -471,7 +471,62 @@ To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
           hc_vault_transit_uri: "$VAULT_ADDR/v1/sops/keys/thirdkey"
     EOF
 
-    $ sops encrypt --verbose prod/raw.yaml > prod/encrypted.yaml
+	$ sops --verbose -e prod/raw.yaml > prod/encrypted.yaml
+
+Encrypting using OCI KMS
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+OCI KMS uses the `DefaultConfigProvider <https://github.com/oracle/oci-go-sdk/blob/master/README.md#configuring>`_.
+It will look for the `DEFAULT` profile in the `~/.oci/config` file.
+
+Make sure to authenticate and to have a valid session via:
+
+.. code:: bash
+
+	$ oci session authenticate
+
+Encrypting/decrypting with OCI KMS requires a KMS OCID. You can use the
+cloud console the get the OCID of an existing key or you can create one using the `oci`
+CLI:
+
+.. code:: bash
+
+  $ export compartment_id=<substitute-value-of-compartment_id>
+  $ export display_name=<substitute-value-of-display_name>
+  $ export vault_type=<substitute-value-of-vault_type>
+  $ OCI_CLI_AUTH=security_token oci kms management vault create --compartment-id $compartment_id --display-name $display_name --vault-type $vault_type
+  # you should see a JSON summarizing the created resource
+  # for help: https://docs.cloud.oracle.com/en-us/iaas/tools/oci-cli/latest/oci_cli_docs/cmdref/kms/management/vault/create.html
+
+Now we need to create a key. First of all we need to define a shape for it with:
+
+.. code:: bash
+
+  $ cat << EOF > key-shape.json
+  {
+    "algorithm": "AES",
+    "length": 32
+  }
+  EOF
+
+Now we can create the key with
+
+.. code:: bash
+
+  $ export compartment_id=<substitute-value-of-compartment_id>
+  $ export display_name=<substitute-value-of-display_name>
+  # you can grab the endpoint from the vault page on the portal, it should be something like: https://asdadsasdagz5aacmg-management.kms.<region>.oraclecloud.com
+  $ OCI_CLI_AUTH=security_token oci kms management key create --compartment-id $compartment_id --display-name $display_name --endpoint <endpoint> --key-shape file://key-shape.json
+  # you should see a JSON summarizing the created resource, we need to grab the OCID of the key from it
+  # for help: https://docs.cloud.oracle.com/en-us/iaas/tools/oci-cli/latest/oci_cli_docs/cmdref/kms/management/key/create.html
+
+Now you can encrypt a file using::
+
+	 $ sops --encrypt --oci-kms ocid1.key.oc1.<region>.asdadsasdagz5aacmg.abwgiljtjasdasdasdagugpfe7wrtngukihgkybqxcoozz7sbh6lq test.yaml > test.enc.yaml
+
+And decrypt it using::
+
+	 $ sops --decrypt test.enc.yaml
 
 Adding and removing keys
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1596,8 +1651,8 @@ will encrypt the values under the ``data`` and ``stringData`` keys in a YAML fil
 containing kubernetes secrets.  It will not encrypt other values that help you to
 navigate the file, like ``metadata`` which contains the secrets' names.
 
-Conversely, you can opt in to only leave certain keys without encrypting by using the 
-``--unencrypted-regex`` option, which will leave the values unencrypted of those keys 
+Conversely, you can opt in to only leave certain keys without encrypting by using the
+``--unencrypted-regex`` option, which will leave the values unencrypted of those keys
 that match the supplied regular expression. For example, this command:
 
 .. code:: sh

@@ -8,6 +8,7 @@ import (
 	"github.com/getsops/sops/v3/gcpkms"
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
+	"github.com/getsops/sops/v3/ocikms"
 	"github.com/getsops/sops/v3/pgp"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/codes"
@@ -87,6 +88,17 @@ func (ks *Server) encryptWithAge(key *AgeKey, plaintext []byte) ([]byte, error) 
 	return []byte(ageKey.EncryptedKey), nil
 }
 
+func (ks *Server) encryptWithOciKms(key *OciKey, plaintext []byte) ([]byte, error) {
+	ociKmsKey := ocikms.MasterKey{
+		Ocid: key.Ocid,
+	}
+	err := ociKmsKey.Encrypt(plaintext)
+	if err != nil {
+		return nil, err
+	}
+	return []byte(ociKmsKey.EncryptedKey), nil
+}
+
 func (ks *Server) decryptWithPgp(key *PgpKey, ciphertext []byte) ([]byte, error) {
 	pgpKey := pgp.NewMasterKeyFromFingerprint(key.Fingerprint)
 	pgpKey.EncryptedKey = string(ciphertext)
@@ -138,6 +150,15 @@ func (ks *Server) decryptWithAge(key *AgeKey, ciphertext []byte) ([]byte, error)
 	}
 	ageKey.EncryptedKey = string(ciphertext)
 	plaintext, err := ageKey.Decrypt()
+	return []byte(plaintext), err
+}
+
+func (ks *Server) decryptWithOciKms(key *OciKey, ciphertext []byte) ([]byte, error) {
+	ociKmsKey := ocikms.MasterKey{
+		Ocid: key.Ocid,
+	}
+	ociKmsKey.EncryptedKey = string(ciphertext)
+	plaintext, err := ociKmsKey.Decrypt()
 	return []byte(plaintext), err
 }
 
@@ -196,6 +217,14 @@ func (ks Server) Encrypt(ctx context.Context,
 		response = &EncryptResponse{
 			Ciphertext: ciphertext,
 		}
+	case *Key_OciKey:
+		ciphertext, err := ks.encryptWithOciKms(k.OciKey, req.Plaintext)
+		if err != nil {
+			return nil, err
+		}
+		response = &EncryptResponse{
+			Ciphertext: ciphertext,
+		}
 	case nil:
 		return nil, status.Errorf(codes.NotFound, "Must provide a key")
 	default:
@@ -222,6 +251,8 @@ func keyToString(key *Key) string {
 		return fmt.Sprintf("Azure Key Vault key with URL %s/keys/%s/%s", k.AzureKeyvaultKey.VaultUrl, k.AzureKeyvaultKey.Name, k.AzureKeyvaultKey.Version)
 	case *Key_VaultKey:
 		return fmt.Sprintf("Hashicorp Vault key with URI %s/v1/%s/keys/%s", k.VaultKey.VaultAddress, k.VaultKey.EnginePath, k.VaultKey.KeyName)
+	case *Key_OciKey:
+		return fmt.Sprintf("OCI KMS key with OCID %s", k.OciKey.Ocid)
 	default:
 		return "Unknown key type"
 	}
@@ -292,6 +323,14 @@ func (ks Server) Decrypt(ctx context.Context,
 		}
 	case *Key_AgeKey:
 		plaintext, err := ks.decryptWithAge(k.AgeKey, req.Ciphertext)
+		if err != nil {
+			return nil, err
+		}
+		response = &DecryptResponse{
+			Plaintext: plaintext,
+		}
+	case *Key_OciKey:
+		plaintext, err := ks.decryptWithOciKms(k.OciKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}

@@ -17,6 +17,7 @@ import (
 	"github.com/getsops/sops/v3/gcpkms"
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
+	"github.com/getsops/sops/v3/ocikms"
 	"github.com/getsops/sops/v3/pgp"
 	"github.com/getsops/sops/v3/publish"
 	"gopkg.in/yaml.v3"
@@ -92,6 +93,7 @@ type keyGroup struct {
 	AzureKV []azureKVKey `yaml:"azure_keyvault"`
 	Vault   []string     `yaml:"hc_vault"`
 	Age     []string     `yaml:"age"`
+	OCIKMS  []string     `yaml:"oci_kms"`
 	PGP     []string
 }
 
@@ -131,6 +133,7 @@ type creationRule struct {
 	KMS                     string
 	AwsProfile              string `yaml:"aws_profile"`
 	Age                     string `yaml:"age"`
+	OCIKMS                  string `yaml:"oci_kms"`
 	PGP                     string
 	GCPKMS                  string     `yaml:"gcp_kms"`
 	AzureKeyVault           string     `yaml:"azure_keyvault"`
@@ -214,6 +217,9 @@ func extractMasterKeys(group keyGroup) (sops.KeyGroup, error) {
 			keyGroup = append(keyGroup, key)
 		}
 	}
+	for _, k := range group.OCIKMS {
+		keyGroup = append(keyGroup, ocikms.NewMasterKeyFromOCID(k))
+	}
 	for _, k := range group.PGP {
 		keyGroup = append(keyGroup, pgp.NewMasterKeyFromFingerprint(k))
 	}
@@ -244,6 +250,9 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			if err != nil {
 				return nil, err
 			}
+			for _, k := range group.OCIKMS {
+				keyGroup = append(keyGroup, ocikms.NewMasterKeyFromOCID(k))
+			}
 			groups = append(groups, keyGroup)
 		}
 	} else {
@@ -265,6 +274,9 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			keyGroup = append(keyGroup, k)
 		}
 		for _, k := range gcpkms.MasterKeysFromResourceIDString(cRule.GCPKMS) {
+			keyGroup = append(keyGroup, k)
+		}
+		for _, k := range ocikms.MasterKeysFromOCIDString(cRule.OCIKMS) {
 			keyGroup = append(keyGroup, k)
 		}
 		azureKeys, err := azkv.MasterKeysFromURLs(cRule.AzureKeyVault)
