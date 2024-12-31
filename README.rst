@@ -481,7 +481,7 @@ It will look for the `DEFAULT` profile in the `~/.oci/config` file.
 
 Make sure to authenticate and to have a valid session via:
 
-.. code:: bash
+.. code:: sh
 
 	$ oci session authenticate
 
@@ -489,7 +489,7 @@ Encrypting/decrypting with OCI KMS requires a KMS OCID. You can use the
 cloud console the get the OCID of an existing key or you can create one using the `oci`
 CLI:
 
-.. code:: bash
+.. code:: sh
 
   $ export compartment_id=<substitute-value-of-compartment_id>
   $ export display_name=<substitute-value-of-display_name>
@@ -511,7 +511,7 @@ Now we need to create a key. First of all we need to define a shape for it with:
 
 Now we can create the key with
 
-.. code:: bash
+.. code:: sh
 
   $ export compartment_id=<substitute-value-of-compartment_id>
   $ export display_name=<substitute-value-of-display_name>
