@@ -13,6 +13,7 @@ import (
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/keys"
 	"github.com/getsops/sops/v3/kms"
+	"github.com/getsops/sops/v3/ocikms"
 	"github.com/getsops/sops/v3/pgp"
 )
 
@@ -78,6 +79,15 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 				},
 			},
 		}
+	case *ocikms.MasterKey:
+		return Key{
+			KeyType: &Key_OciKey{
+				OciKey: &OciKey{
+					Ocid: mk.Ocid,
+				},
+			},
+		}
+
 	default:
 		panic(fmt.Sprintf("Tried to convert unknown MasterKey type %T to keyservice.Key", mk))
 	}
