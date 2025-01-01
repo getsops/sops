@@ -5,7 +5,7 @@ SOPS: Secrets OPerationS
 formats and encrypts with AWS KMS, GCP KMS, Azure Key Vault, age, and PGP.
 (`demo <https://www.youtube.com/watch?v=YTEVyLXFiq0>`_)
 
-.. image:: https://i.imgur.com/X0TM5NI.gif
+.. image:: docs/images/demo.gif
 
 ------------
 
