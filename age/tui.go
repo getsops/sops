@@ -2,7 +2,10 @@
 // https://github.com/FiloSottile/age/blob/v1.0.0/cmd/age/encrypted_keys.go
 // Copyright 2021 The age Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
+// license that can be found in age's LICENSE file at
+// https://github.com/FiloSottile/age/blob/v1.0.0/LICENSE
+//
+// SPDX-License-Identifier: BSD-3-Clause
 
 package age
 
