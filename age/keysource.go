@@ -302,7 +302,7 @@ func parseSSHIdentityFromPrivateKeyFile(keyPath string) (age.Identity, error) {
 }
 
 // loadAgeSSHIdentity attempts to load the age SSH identity based on an SSH
-// private key from the SopsAgeSshPrivateKeyEnv environment variable. If the
+// private key from the SopsAgeSshPrivateKeyFileEnv environment variable. If the
 // environment variable is not present, it will fall back to `~/.ssh/id_ed25519`
 // or `~/.ssh/id_rsa`. If no age SSH identity is found, it will return nil.
 func loadAgeSSHIdentity() (age.Identity, error) {
@@ -341,7 +341,7 @@ func getUserConfigDir() (string, error) {
 
 // loadIdentities attempts to load the age identities based on runtime
 // environment configurations (e.g. SopsAgeKeyEnv, SopsAgeKeyFileEnv,
-// SopsAgeSshPrivateKeyEnv, SopsAgeKeyUserConfigPath). It will load all
+// SopsAgeSshPrivateKeyFileEnv, SopsAgeKeyUserConfigPath). It will load all
 // found references, and expects at least one configuration to be present.
 func (key *MasterKey) loadIdentities() (ParsedIdentities, error) {
 	var identities ParsedIdentities
