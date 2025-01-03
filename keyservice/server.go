@@ -9,6 +9,7 @@ import (
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/pgp"
+	"github.com/getsops/sops/v3/yckms"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -36,6 +37,17 @@ func (ks *Server) encryptWithKms(key *KmsKey, plaintext []byte) ([]byte, error) 
 		return nil, err
 	}
 	return []byte(kmsKey.EncryptedKey), nil
+}
+
+func (ks *Server) encryptWithYcKms(key *YcKmsKey, plaintext []byte) ([]byte, error) {
+	ycKmsKey := yckms.MasterKey{
+		KeyID: key.KeyId,
+	}
+	err := ycKmsKey.Encrypt(plaintext)
+	if err != nil {
+		return nil, err
+	}
+	return []byte(ycKmsKey.EncryptedKey), nil
 }
 
 func (ks *Server) encryptWithGcpKms(key *GcpKmsKey, plaintext []byte) ([]byte, error) {
@@ -98,6 +110,15 @@ func (ks *Server) decryptWithKms(key *KmsKey, ciphertext []byte) ([]byte, error)
 	kmsKey := kmsKeyToMasterKey(key)
 	kmsKey.EncryptedKey = string(ciphertext)
 	plaintext, err := kmsKey.Decrypt()
+	return []byte(plaintext), err
+}
+
+func (ks *Server) decryptWithYcKms(key *YcKmsKey, ciphertext []byte) ([]byte, error) {
+	ycKmsKey := yckms.MasterKey{
+		KeyID: key.KeyId,
+	}
+	ycKmsKey.EncryptedKey = string(ciphertext)
+	plaintext, err := ycKmsKey.Decrypt()
 	return []byte(plaintext), err
 }
 
@@ -172,6 +193,14 @@ func (ks Server) Encrypt(ctx context.Context,
 		response = &EncryptResponse{
 			Ciphertext: ciphertext,
 		}
+	case *Key_YcKmsKey:
+		ciphertext, err := ks.encryptWithYcKms(k.YcKmsKey, req.Plaintext)
+		if err != nil {
+			return nil, err
+		}
+		response = &EncryptResponse{
+			Ciphertext: ciphertext,
+		}
 	case *Key_AzureKeyvaultKey:
 		ciphertext, err := ks.encryptWithAzureKeyVault(k.AzureKeyvaultKey, req.Plaintext)
 		if err != nil {
@@ -218,6 +247,8 @@ func keyToString(key *Key) string {
 		return fmt.Sprintf("AWS KMS key with ARN %s", k.KmsKey.Arn)
 	case *Key_GcpKmsKey:
 		return fmt.Sprintf("GCP KMS key with resource ID %s", k.GcpKmsKey.ResourceId)
+	case *Key_YcKmsKey:
+		return fmt.Sprintf("YC KMS key with key ID %s", k.YcKmsKey.KeyId)
 	case *Key_AzureKeyvaultKey:
 		return fmt.Sprintf("Azure Key Vault key with URL %s/keys/%s/%s", k.AzureKeyvaultKey.VaultUrl, k.AzureKeyvaultKey.Name, k.AzureKeyvaultKey.Version)
 	case *Key_VaultKey:
@@ -268,6 +299,14 @@ func (ks Server) Decrypt(ctx context.Context,
 		}
 	case *Key_GcpKmsKey:
 		plaintext, err := ks.decryptWithGcpKms(k.GcpKmsKey, req.Ciphertext)
+		if err != nil {
+			return nil, err
+		}
+		response = &DecryptResponse{
+			Plaintext: plaintext,
+		}
+	case *Key_YcKmsKey:
+		plaintext, err := ks.decryptWithYcKms(k.YcKmsKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}

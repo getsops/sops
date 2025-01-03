@@ -42,6 +42,7 @@ import (
 	"github.com/getsops/sops/v3/stores/dotenv"
 	"github.com/getsops/sops/v3/stores/json"
 	"github.com/getsops/sops/v3/version"
+	"github.com/getsops/sops/v3/yckms"
 )
 
 var log *logrus.Logger
@@ -506,6 +507,10 @@ func main() {
 							Usage: "the GCP KMS Resource ID the new group should contain. Can be specified more than once",
 						},
 						cli.StringSliceFlag{
+							Name:  "yc-kms",
+							Usage: "the YC KMS Key ID the new group should contain. Can be specified more than once",
+						},
+						cli.StringSliceFlag{
 							Name:  "azure-kv",
 							Usage: "the Azure Key Vault key URL the new group should contain. Can be specified more than once",
 						},
@@ -534,6 +539,7 @@ func main() {
 						pgpFps := c.StringSlice("pgp")
 						kmsArns := c.StringSlice("kms")
 						gcpKmses := c.StringSlice("gcp-kms")
+						ycKmses := c.StringSlice("yc-kms")
 						vaultURIs := c.StringSlice("hc-vault-transit")
 						azkvs := c.StringSlice("azure-kv")
 						ageRecipients := c.StringSlice("age")
@@ -549,6 +555,9 @@ func main() {
 						}
 						for _, kms := range gcpKmses {
 							group = append(group, gcpkms.NewMasterKeyFromResourceID(kms))
+						}
+						for _, kms := range ycKmses {
+							group = append(group, yckms.NewMasterKeyFromKeyID(kms))
 						}
 						for _, uri := range vaultURIs {
 							k, err := hcvault.NewMasterKeyFromURI(uri)
@@ -2177,6 +2186,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	var kmsKeys []keys.MasterKey
 	var pgpKeys []keys.MasterKey
 	var cloudKmsKeys []keys.MasterKey
+	var ycKmsKeys []keys.MasterKey
 	var azkvKeys []keys.MasterKey
 	var hcVaultMkKeys []keys.MasterKey
 	var ageMasterKeys []keys.MasterKey
@@ -2192,6 +2202,11 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	if c.String("gcp-kms") != "" {
 		for _, k := range gcpkms.MasterKeysFromResourceIDString(c.String("gcp-kms")) {
 			cloudKmsKeys = append(cloudKmsKeys, k)
+		}
+	}
+	if c.String("yc-kms") != "" {
+		for _, k := range yckms.NewMasterKeyFromKeyIDString(c.String("yc-kms")) {
+			ycKmsKeys = append(ycKmsKeys, k)
 		}
 	}
 	if c.String("azure-kv") != "" {

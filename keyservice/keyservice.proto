@@ -10,6 +10,7 @@ message Key {
 		AzureKeyVaultKey azure_keyvault_key = 4;
 		VaultKey vault_key = 5;
 		AgeKey age_key = 6;
+		YcKmsKey yc_kms_key = 7;
 	}
 }
 
@@ -26,6 +27,10 @@ message KmsKey {
 
 message GcpKmsKey {
 	string resource_id = 1;
+}
+
+message YcKmsKey {
+	string key_id = 1;
 }
 
 message VaultKey {
