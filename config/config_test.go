@@ -94,6 +94,9 @@ creation_rules:
     - kms:
       - arn: foo
         aws_profile: bar
+      - arn: foo
+        context:
+          baz: bam
       pgp:
       - bar
       gcp_kms:
@@ -421,6 +424,7 @@ func TestLoadConfigFile(t *testing.T) {
 }
 
 func TestLoadConfigFileWithGroups(t *testing.T) {
+	bam := "bam"
 	expected := configFile{
 		CreationRules: []creationRule{
 			{
@@ -432,7 +436,18 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 				PathRegex: "",
 				KeyGroups: []keyGroup{
 					{
-						KMS:     []kmsKey{{Arn: "foo", AwsProfile: "bar"}},
+						KMS: []kmsKey{
+							{
+								Arn:        "foo",
+								AwsProfile: "bar",
+							},
+							{
+								Arn: "foo",
+								Context: map[string]*string{
+									"baz": &bam,
+								},
+							},
+						},
 						PGP:     []string{"bar"},
 						GCPKMS:  []gcpKmsKey{{ResourceID: "foo"}},
 						AzureKV: []azureKVKey{{VaultURL: "https://foo.vault.azure.net", Key: "foo-key", Version: "fooversion"}},
@@ -464,7 +479,7 @@ func TestLoadConfigFileWithMerge(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, 2, len(conf.KeyGroups))
 	assert.Equal(t, 1, len(conf.KeyGroups[0]))
-	assert.Equal(t, 22, len(conf.KeyGroups[1]))
+	assert.Equal(t, 23, len(conf.KeyGroups[1]))
 }
 
 func TestLoadConfigFileWithNoMatchingRules(t *testing.T) {
@@ -538,9 +553,10 @@ func TestKeyGroupsForFileWithGroups(t *testing.T) {
 	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithGroups, t), "/conf/path", "whatever", nil)
 	assert.Nil(t, err)
 	assert.Equal(t, "bar", conf.KeyGroups[0][0].ToString())
-	assert.Equal(t, "foo", conf.KeyGroups[0][1].ToString())
+	assert.Equal(t, "foo||bar", conf.KeyGroups[0][1].ToString())
+	assert.Equal(t, "foo|baz:bam", conf.KeyGroups[0][2].ToString())
 	assert.Equal(t, "qux", conf.KeyGroups[1][0].ToString())
-	assert.Equal(t, "baz", conf.KeyGroups[1][1].ToString())
+	assert.Equal(t, "baz||foo", conf.KeyGroups[1][1].ToString())
 }
 
 func TestLoadConfigFileWithUnencryptedSuffix(t *testing.T) {

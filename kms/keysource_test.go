@@ -367,8 +367,38 @@ func TestMasterKey_NeedsRotation(t *testing.T) {
 }
 
 func TestMasterKey_ToString(t *testing.T) {
+	dummyARNWithRole := fmt.Sprintf("%s+arn:aws:iam::my-role", dummyARN)
+
+	bar := "bar"
+	bam := "bam"
+	context := map[string]*string{
+		"foo": &bar,
+		"baz": &bam,
+	}
+
 	key := NewMasterKeyFromArn(dummyARN, nil, "")
 	assert.Equal(t, dummyARN, key.ToString())
+
+	key = NewMasterKeyFromArn(dummyARNWithRole, nil, "")
+	assert.Equal(t, dummyARNWithRole, key.ToString())
+
+	key = NewMasterKeyFromArn(dummyARN, nil, "profile")
+	assert.Equal(t, fmt.Sprintf("%s||profile", dummyARN), key.ToString())
+
+	key = NewMasterKeyFromArn(dummyARNWithRole, nil, "profile")
+	assert.Equal(t, fmt.Sprintf("%s||profile", dummyARNWithRole), key.ToString())
+
+	key = NewMasterKeyFromArn(dummyARN, context, "")
+	assert.Equal(t, fmt.Sprintf("%s|baz:bam,foo:bar", dummyARN), key.ToString())
+
+	key = NewMasterKeyFromArn(dummyARNWithRole, context, "")
+	assert.Equal(t, fmt.Sprintf("%s|baz:bam,foo:bar", dummyARNWithRole), key.ToString())
+
+	key = NewMasterKeyFromArn(dummyARN, context, "profile")
+	assert.Equal(t, fmt.Sprintf("%s|baz:bam,foo:bar|profile", dummyARN), key.ToString())
+
+	key = NewMasterKeyFromArn(dummyARNWithRole, context, "profile")
+	assert.Equal(t, fmt.Sprintf("%s|baz:bam,foo:bar|profile", dummyARNWithRole), key.ToString())
 }
 
 func TestMasterKey_ToMap(t *testing.T) {
