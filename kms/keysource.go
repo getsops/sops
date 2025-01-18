@@ -319,7 +319,7 @@ func (key *MasterKey) ToString() string {
 	if key.AwsProfile != "" {
 		return fmt.Sprintf("%s|%s|%s", arnRole, context, key.AwsProfile)
 	}
-	if len(key.EncryptionContext) > 0 {
+	if context != "" {
 		return fmt.Sprintf("%s|%s", arnRole, context)
 	}
 	return arnRole
