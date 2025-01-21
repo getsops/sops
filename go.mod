@@ -147,3 +147,5 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20241223144023-3abc09e42ca8 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
+
+replace filippo.io/age => github.com/brianmcgee/age v0.0.0-20241218154423-266c0940916d
