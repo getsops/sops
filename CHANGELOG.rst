@@ -1,6 +1,24 @@
 Changelog
 =========
 
+3.9.4
+-----
+
+Improvements:
+
+* Dependency updates (#1727, #1732, #1734, #1739).
+
+Bugfixes:
+
+* Prevent key deduplication to identify different AWS KMS keys that only differ by role, context, or profile (#1733).
+* Update part of Azure SDK which prevented decryption in some cases (#1695, #1734).
+
+Project changes:
+
+* CI dependency updates (#1730, #1738).
+* Rust dependency updates (#1728, #1731, #1735).
+
+
 3.9.3
 -----
 
