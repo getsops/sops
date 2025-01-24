@@ -4,16 +4,11 @@ package exec
 
 import (
 	"os"
-	"os/exec"
 	"os/user"
 	"path/filepath"
 	"strconv"
 	"syscall"
 )
-
-func BuildCommand(command string) *exec.Cmd {
-	return exec.Command("/bin/sh", "-c", command)
-}
 
 func WritePipe(pipe string, contents []byte) {
 	handle, err := os.OpenFile(pipe, os.O_WRONLY, 0600)
