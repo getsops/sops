@@ -707,8 +707,8 @@ func main() {
 		},
 		{
 			Name:      "decrypt",
-			Usage:     "decrypt a file, and output the results to stdout",
-			ArgsUsage: `file`,
+			Usage:     "decrypt a file, and output the results to stdout. If no filename is provided, stdin will be used.",
+			ArgsUsage: `[file]`,
 			Flags: append([]cli.Flag{
 				cli.BoolFlag{
 					Name:  "in-place, i",
@@ -736,7 +736,7 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:  "filename-override",
-					Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type",
+					Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type. Required when reading from stdin.",
 				},
 				cli.StringFlag{
 					Name:   "decryption-order",
@@ -748,19 +748,24 @@ func main() {
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
-				if c.NArg() < 1 {
-					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
+				if c.NArg() == 0 && c.Bool("in-place") {
+					return common.NewExitError("Error: cannot use --in-place when reading from stdin", codes.ErrorConflictingParameters)
 				}
 				warnMoreThanOnePositionalArgument(c)
 				if c.Bool("in-place") && c.String("output") != "" {
 					return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
 				}
-				fileName, err := filepath.Abs(c.Args()[0])
-				if err != nil {
-					return toExitError(err)
-				}
-				if _, err := os.Stat(fileName); os.IsNotExist(err) {
-					return common.NewExitError(fmt.Sprintf("Error: cannot operate on non-existent file %q", fileName), codes.NoFileSpecified)
+				readFromStdin := c.NArg() == 0
+				var fileName string
+				var err error
+				if !readFromStdin {
+					fileName, err = filepath.Abs(c.Args()[0])
+					if err != nil {
+						return toExitError(err)
+					}
+					if _, err := os.Stat(fileName); os.IsNotExist(err) {
+						return common.NewExitError(fmt.Sprintf("Error: cannot operate on non-existent file %q", fileName), codes.NoFileSpecified)
+					}
 				}
 				fileNameOverride := c.String("filename-override")
 				if fileNameOverride == "" {
@@ -791,6 +796,7 @@ func main() {
 					OutputStore:     outputStore,
 					InputStore:      inputStore,
 					InputPath:       fileName,
+					ReadFromStdin:   readFromStdin,
 					Cipher:          aes.NewCipher(),
 					Extract:         extract,
 					KeyServices:     svcs,
@@ -832,8 +838,8 @@ func main() {
 		},
 		{
 			Name:      "encrypt",
-			Usage:     "encrypt a file, and output the results to stdout",
-			ArgsUsage: `file`,
+			Usage:     "encrypt a file, and output the results to stdout. If no filename is provided, stdin will be used.",
+			ArgsUsage: `[file]`,
 			Flags: append([]cli.Flag{
 				cli.BoolFlag{
 					Name:  "in-place, i",
@@ -911,26 +917,36 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:  "filename-override",
-					Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type",
+					Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type. Required when reading from stdin.",
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
-				if c.NArg() < 1 {
-					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
+				if c.NArg() == 0 {
+					if c.Bool("in-place") {
+						return common.NewExitError("Error: cannot use --in-place when reading from stdin", codes.ErrorConflictingParameters)
+					}
+					if c.String("filename-override") == "" {
+						return common.NewExitError("Error: must specify --filename-override when reading from stdin", codes.ErrorConflictingParameters)
+					}
 				}
 				warnMoreThanOnePositionalArgument(c)
 				if c.Bool("in-place") && c.String("output") != "" {
 					return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
 				}
-				fileName, err := filepath.Abs(c.Args()[0])
-				if err != nil {
-					return toExitError(err)
-				}
-				if _, err := os.Stat(fileName); os.IsNotExist(err) {
-					return common.NewExitError(fmt.Sprintf("Error: cannot operate on non-existent file %q", fileName), codes.NoFileSpecified)
+				readFromStdin := c.NArg() == 0
+				var fileName string
+				var err error
+				if !readFromStdin {
+					fileName, err = filepath.Abs(c.Args()[0])
+					if err != nil {
+						return toExitError(err)
+					}
+					if _, err := os.Stat(fileName); os.IsNotExist(err) {
+						return common.NewExitError(fmt.Sprintf("Error: cannot operate on non-existent file %q", fileName), codes.NoFileSpecified)
+					}
 				}
 				fileNameOverride := c.String("filename-override")
 				if fileNameOverride == "" {
@@ -955,6 +971,7 @@ func main() {
 					OutputStore:   outputStore,
 					InputStore:    inputStore,
 					InputPath:     fileName,
+					ReadFromStdin: readFromStdin,
 					Cipher:        aes.NewCipher(),
 					KeyServices:   svcs,
 					encryptConfig: encConfig,
