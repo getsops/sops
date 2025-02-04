@@ -23,15 +23,17 @@ type decryptOpts struct {
 	Extract         []interface{}
 	KeyServices     []keyservice.KeyServiceClient
 	DecryptionOrder []string
+	UseAwsProfile   string
 }
 
 func decryptTree(opts decryptOpts) (tree *sops.Tree, err error) {
 	tree, err = common.LoadEncryptedFileWithBugFixes(common.GenericDecryptOpts{
-		Cipher:      opts.Cipher,
-		InputStore:  opts.InputStore,
-		InputPath:   opts.InputPath,
-		IgnoreMAC:   opts.IgnoreMAC,
-		KeyServices: opts.KeyServices,
+		Cipher:        opts.Cipher,
+		InputStore:    opts.InputStore,
+		InputPath:     opts.InputPath,
+		IgnoreMAC:     opts.IgnoreMAC,
+		KeyServices:   opts.KeyServices,
+		UseAwsProfile: opts.UseAwsProfile,
 	})
 	if err != nil {
 		return nil, err
