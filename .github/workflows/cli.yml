@@ -14,7 +14,7 @@ permissions:
 jobs:
   build:
     name: Build and test ${{ matrix.os }} ${{ matrix.arch }} ${{ matrix.go-version }}
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     strategy:
       matrix:
         os: [linux, darwin, windows]
@@ -66,6 +66,9 @@ jobs:
       - name: Import test GPG keys
         run: for i in 1 2 3 4 5; do gpg --import pgp/sops_functional_tests_key.asc && break || sleep 15; done
 
+      - name: Show docker contexts
+        run: docker context ls --format json
+
       - name: Test
         run: make test
 
@@ -84,11 +87,12 @@ jobs:
           path: sops-${{ matrix.go-version }}-${{ matrix.os }}-${{ github.sha }}
   test:
     name: Functional tests
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.arch == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     needs: [build]
     strategy:
       matrix:
         go-version: ['1.22']
+        arch: [amd64, arm64]
     env:
       VAULT_VERSION: "1.14.0"
       VAULT_TOKEN: "root"
@@ -110,16 +114,16 @@ jobs:
 
       - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
         with:
-          name: sops-${{ matrix.go-version }}-linux-amd64-${{ github.sha }}
+          name: sops-${{ matrix.go-version }}-linux-${{ matrix.arch }}-${{ github.sha }}
 
       - name: Move SOPS binary
-        run: mv sops-${{ matrix.go-version }}-linux-amd64-${{ github.sha }} ./functional-tests/sops
+        run: mv sops-${{ matrix.go-version }}-linux-${{ matrix.arch }}-${{ github.sha }} ./functional-tests/sops
 
       - name: Make SOPS binary executable
         run: chmod +x ./functional-tests/sops
 
       - name: Download Vault
-        run: curl -O "https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip" && sudo unzip vault_${VAULT_VERSION}_linux_amd64.zip -d /usr/local/bin/
+        run: curl -O "https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_${{ matrix.arch }}.zip" && sudo unzip vault_${VAULT_VERSION}_linux_${{ matrix.arch }}.zip -d /usr/local/bin/
 
       - name: Start Vault server
         run: vault server -dev -dev-root-token-id="$VAULT_TOKEN" &
