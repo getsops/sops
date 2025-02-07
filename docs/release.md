@@ -37,7 +37,7 @@ This configuration is quite sophisticated, and ensures at least the following:
   `main` branch. At present, this means that all pull requests attached to the
   milestone for the release are merged. If there are any pull requests that
   should not be included in the release, move them to a different milestone.
-- [ ] Create a pull request to update the [`CHANGELOG.rst`](../CHANGELOG.rst)
+- [ ] Create a pull request to update the [`CHANGELOG.md`](../CHANGELOG.md)
   file. This should include a summary of all changes since the last release,
   including references to any relevant pull requests.
 - [ ] In this same pull request, update the version number in `version/version.go`
