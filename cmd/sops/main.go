@@ -137,7 +137,8 @@ func main() {
 
    To use a different GPG binary than the one in your PATH, set SOPS_GPG_EXEC.
 
-   To select a different editor than the default (vim), set EDITOR.
+   To select a different editor than the default (vim), set SOPS_EDITOR or
+   EDITOR.
 
    Note that flags must always be provided before the filename to operate on.
    Otherwise, they will be ignored.
@@ -455,7 +456,12 @@ func main() {
 			Name:      "filestatus",
 			Usage:     "check the status of the file, returning encryption status",
 			ArgsUsage: `file`,
-			Flags:     []cli.Flag{},
+			Flags:     []cli.Flag{
+				cli.StringFlag{
+					Name:  "input-type",
+					Usage: "currently ini, json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
+				},
+			},
 			Action: func(c *cli.Context) error {
 				if c.NArg() < 1 {
 					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
@@ -1526,8 +1532,9 @@ func main() {
 			Usage: "generate a new data encryption key and reencrypt all values with the new key",
 		},
 		cli.BoolFlag{
-			Name:  "disable-version-check",
-			Usage: "do not check whether the current version is latest during --version",
+			Name:   "disable-version-check",
+			Usage:  "do not check whether the current version is latest during --version",
+			EnvVar: "SOPS_DISABLE_VERSION_CHECK",
 		},
 		cli.StringFlag{
 			Name:   "kms, k",

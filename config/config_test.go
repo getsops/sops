@@ -1,10 +1,12 @@
 package config
 
 import (
+	"fmt"
 	"os"
 	"path"
 	"testing"
 
+	"github.com/getsops/sops/v3/keys"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -94,6 +96,20 @@ creation_rules:
     - kms:
       - arn: foo
         aws_profile: bar
+      - arn: foo
+        context:
+          baz: bam
+      - arn: foo
+        aws_profile: bar
+        context:
+          baz: bam
+      - arn: foo
+        role: '123'
+      - arn: foo
+        aws_profile: bar
+        context:
+          baz: bam
+        role: '123'
       pgp:
       - bar
       gcp_kms:
@@ -129,113 +145,124 @@ creation_rules:
       - 'https://foo.vault:8200/v1/foo/keys/foo-key'
     - merge:
       - merge:
-        - kms:
+        - pgp:
           # key01
+          - foo
+          kms:
+          # key02
           - arn: foo
             aws_profile: foo
-          pgp:
-          # key02
-          - foo
-          gcp_kms:
           # key03
+          - arn: foo
+            aws_profile: bar
+            context:
+              baz: bam
+            role: '123'
+          gcp_kms:
+          # key04
           - resource_id: foo
           azure_keyvault:
-          # key04
+          # key05
           - vaultUrl: https://foo.vault.azure.net
             key: foo-key
             version: fooversion
           hc_vault:
-          # key05
-          - 'https://bar.vault:8200/v1/bar/keys/bar-key'
-        - kms:
           # key06
-          - arn: bar
-            aws_profile: bar
-          pgp:
+          - 'https://bar.vault:8200/v1/bar/keys/bar-key'
+        - pgp:
           # key07
           - bar
-          gcp_kms:
+          kms:
           # key08
-          - resource_id: bar
+          - arn: bar
+            aws_profile: bar
+          gcp_kms:
           # key09
+          - resource_id: bar
+          # key10
           - resource_id: baz
           azure_keyvault:
-          # key10
+          # key11
           - vaultUrl: https://bar.vault.azure.net
             key: bar-key
             version: barversion
           hc_vault:
-          # key01 - duplicate#1
+          # key12
           - 'https://baz.vault:8200/v1/baz/keys/baz-key'
+        pgp:
+        # key13
+        - baz
         kms:
-        # key11
+        # key14
         - arn: baz
           aws_profile: baz
-        pgp:
-        # key12
-        - baz
         gcp_kms:
-        # key03 - duplicate#2
-        # --> should be removed when loading config
+        # duplicate of key09
         - resource_id: bar
         azure_keyvault:
-        # key04 - duplicate#3
+        # duplicate of key05
         - vaultUrl: https://foo.vault.azure.net
           key: foo-key
           version: fooversion
         hc_vault:
-        # key13 - duplicate#4 - but from different key_group
-        # --> should stay
+        # key15 (duplicate of key00, but that's in a different key_group)
         - 'https://foo.vault:8200/v1/foo/keys/foo-key'
-      - kms:
-        # key14
+      - pgp:
+        # key16
+        - qux
+        kms:
+        # key17
         - arn: qux
           aws_profile: qux
-        # key14 - duplicate#5
+        # key18
         - arn: baz
           aws_profile: bar
-        pgp:
-        # key15
-        - qux
+        # key19
+        - arn: baz
+          role: '123'
         gcp_kms:
-        # key16
+        # key20
         - resource_id: qux
-        # key17
+        # key21
         - resource_id: fnord
         azure_keyvault:
-        # key18
+        # key22
         - vaultUrl: https://baz.vault.azure.net
           key: baz-key
           version: bazversion
         hc_vault:
-        # key19
+        # key23
         - 'https://qux.vault:8200/v1/qux/keys/qux-key'
-      # everything below this should be loaded,
-      # since it is not in a merge block
+      pgp:
+      # duplicate of key07
+      - bar
       kms:
-      # duplicated key06
+      # duplicate of key08
       - arn: bar
         aws_profile: bar
-      # key20
+      # key24
       - arn: fnord
         aws_profile: fnord
-      pgp:
-      # duplicated key07
-      - bar
+      # duplicate of key03
+      - arn: foo
+        aws_profile: bar
+        context:
+          baz: bam
+        role: '123'
       gcp_kms:
-      # duplicated key08
+      # duplicate of key09
       - resource_id: bar
-      # key21
+      # duplicate of key21
       - resource_id: fnord
       azure_keyvault:
-      # duplicated key10
+      # duplicate of key11
       - vaultUrl: https://bar.vault.azure.net
         key: bar-key
         version: barversion
       hc_vault:
-      # duplicated 'key01 - duplicate#2'
+      # duplicate of key12
       - 'https://baz.vault:8200/v1/baz/keys/baz-key'
-      # key22
+      # key25
       - 'https://fnord.vault:8200/v1/fnord/keys/fnord-key'
 `)
 
@@ -421,6 +448,7 @@ func TestLoadConfigFile(t *testing.T) {
 }
 
 func TestLoadConfigFileWithGroups(t *testing.T) {
+	bam := "bam"
 	expected := configFile{
 		CreationRules: []creationRule{
 			{
@@ -432,7 +460,37 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 				PathRegex: "",
 				KeyGroups: []keyGroup{
 					{
-						KMS:     []kmsKey{{Arn: "foo", AwsProfile: "bar"}},
+						KMS: []kmsKey{
+							{
+								Arn:        "foo",
+								AwsProfile: "bar",
+							},
+							{
+								Arn: "foo",
+								Context: map[string]*string{
+									"baz": &bam,
+								},
+							},
+							{
+								Arn:        "foo",
+								AwsProfile: "bar",
+								Context: map[string]*string{
+									"baz": &bam,
+								},
+							},
+							{
+								Arn:  "foo",
+								Role: "123",
+							},
+							{
+								Arn:        "foo",
+								AwsProfile: "bar",
+								Context: map[string]*string{
+									"baz": &bam,
+								},
+								Role: "123",
+							},
+						},
 						PGP:     []string{"bar"},
 						GCPKMS:  []gcpKmsKey{{ResourceID: "foo"}},
 						AzureKV: []azureKVKey{{VaultURL: "https://foo.vault.azure.net", Key: "foo-key", Version: "fooversion"}},
@@ -459,12 +517,52 @@ func TestLoadConfigFileWithGroups(t *testing.T) {
 	assert.Equal(t, expected, conf)
 }
 
+func id(key keys.MasterKey) string {
+	return fmt.Sprintf("%s: %s", key.TypeToIdentifier(), key.ToString())
+}
+
+func ids(keys []keys.MasterKey) []string {
+	result := make([]string, 0, len(keys))
+	for _, key := range keys {
+		result = append(result, id(key))
+	}
+	return result
+}
+
 func TestLoadConfigFileWithMerge(t *testing.T) {
 	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithMergeType, t), "/conf/path", "whatever", nil)
 	assert.Nil(t, err)
 	assert.Equal(t, 2, len(conf.KeyGroups))
-	assert.Equal(t, 1, len(conf.KeyGroups[0]))
-	assert.Equal(t, 22, len(conf.KeyGroups[1]))
+	assert.Equal(t, []string{
+		"hc_vault: https://foo.vault:8200/v1/foo/keys/foo-key",
+	}, ids(conf.KeyGroups[0]))
+	assert.Equal(t, []string{
+		"pgp: foo", // key01
+		"kms: foo||foo", //key02
+		"kms: foo+123|baz:bam|bar", //key03
+		"gcp_kms: foo", //key04
+		"azure_kv: https://foo.vault.azure.net/keys/foo-key/fooversion", //key05
+		"hc_vault: https://bar.vault:8200/v1/bar/keys/bar-key", //key06
+		"pgp: bar", //key07
+		"kms: bar||bar", //key08
+		"gcp_kms: bar", //key09
+		"gcp_kms: baz", //key10
+		"azure_kv: https://bar.vault.azure.net/keys/bar-key/barversion", //key11
+		"hc_vault: https://baz.vault:8200/v1/baz/keys/baz-key", //key12
+		"pgp: baz", //key13
+		"kms: baz||baz", //key14
+		"hc_vault: https://foo.vault:8200/v1/foo/keys/foo-key", //key15
+		"pgp: qux", //key16
+		"kms: qux||qux", //key17
+		"kms: baz||bar", //key18
+		"kms: baz+123", //key19
+		"gcp_kms: qux", //key20
+		"gcp_kms: fnord", //key21
+		"azure_kv: https://baz.vault.azure.net/keys/baz-key/bazversion", //key22
+		"hc_vault: https://qux.vault:8200/v1/qux/keys/qux-key", //key23
+		"kms: fnord||fnord", //key24
+		"hc_vault: https://fnord.vault:8200/v1/fnord/keys/fnord-key", //key25
+	}, ids(conf.KeyGroups[1]))
 }
 
 func TestLoadConfigFileWithNoMatchingRules(t *testing.T) {
@@ -538,9 +636,13 @@ func TestKeyGroupsForFileWithGroups(t *testing.T) {
 	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithGroups, t), "/conf/path", "whatever", nil)
 	assert.Nil(t, err)
 	assert.Equal(t, "bar", conf.KeyGroups[0][0].ToString())
-	assert.Equal(t, "foo", conf.KeyGroups[0][1].ToString())
+	assert.Equal(t, "foo||bar", conf.KeyGroups[0][1].ToString())
+	assert.Equal(t, "foo|baz:bam", conf.KeyGroups[0][2].ToString())
+	assert.Equal(t, "foo|baz:bam|bar", conf.KeyGroups[0][3].ToString())
+	assert.Equal(t, "foo+123", conf.KeyGroups[0][4].ToString())
+	assert.Equal(t, "foo+123|baz:bam|bar", conf.KeyGroups[0][5].ToString())
 	assert.Equal(t, "qux", conf.KeyGroups[1][0].ToString())
-	assert.Equal(t, "baz", conf.KeyGroups[1][1].ToString())
+	assert.Equal(t, "baz||foo", conf.KeyGroups[1][1].ToString())
 }
 
 func TestLoadConfigFileWithUnencryptedSuffix(t *testing.T) {
