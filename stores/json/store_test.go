@@ -624,7 +624,8 @@ func TestComments(t *testing.T) {
     },
     2
   ]
-}`
+}
+`
 	store := Store{
 		config: config.JSONStoreConfig{
 			Indent: 2,
