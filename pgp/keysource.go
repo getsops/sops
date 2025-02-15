@@ -634,7 +634,13 @@ func gnuPGHome(customPath string) string {
 // This is mostly used for compatibility reasons, as older versions of GnuPG
 // do not always like long IDs.
 func shortenFingerprint(fingerprint string) string {
-	if offset := len(fingerprint) - 16; offset > 0 {
+	offset := len(fingerprint) - 16
+	// If the fingerprint ends with '!', we must include '!' in the ID *and* the
+	// 16 hex digits before it. See https://github.com/getsops/sops/issues/1365.
+	if strings.HasSuffix(fingerprint, "!") {
+		offset -= 1
+	}
+	if offset > 0 {
 		fingerprint = fingerprint[offset:]
 	}
 	return fingerprint

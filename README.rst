@@ -106,7 +106,8 @@ encryption/decryption transparently and open the cleartext file in an editor
     please wait while an encryption key is being generated and stored in a secure fashion
     file written to mynewtestfile.yaml
 
-Editing will happen in whatever ``$EDITOR`` is set to, or, if it's not set, in vim.
+Editing will happen in whatever ``$SOPS_EDITOR`` or ``$EDITOR`` is set to, or, if it's
+not set, in vim, nano, or vi.
 Keep in mind that SOPS will wait for the editor to exit, and then try to reencrypt
 the file. Some GUI editors (atom, sublime) spawn a child process and then exit
 immediately. They usually have an option to wait for the main editor window to be
@@ -188,6 +189,22 @@ the example files and pgp key provided with the repository::
 
 This last step will decrypt ``example.yaml`` using the test private key.
 
+Encrypting with GnuPG subkeys
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you want to encrypt with specific GnuPG subkeys, it does not suffice to provide the
+exact key ID of the subkey to SOPS, since GnuPG might use *another* subkey instead
+to encrypt the file key with. To force GnuPG to use a specific subkey, you need to
+append ``!`` to the key's fingerprint.
+
+.. code:: yaml
+
+    creation_rules:
+        - pgp: >-
+            85D77543B3D624B63CEA9E6DBC17301B491B3F21!,
+            E60892BB9BD89A69F759A1A0A3D652173B763E8F!
+
+Please note that this is only passed on correctly to GnuPG since SOPS 3.9.3.
 
 Encrypting using age
 ~~~~~~~~~~~~~~~~~~~~

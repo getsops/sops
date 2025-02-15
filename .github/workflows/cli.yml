@@ -29,15 +29,17 @@ jobs:
       VAULT_ADDR: "http://127.0.0.1:8200"
     steps:
       - name: Set up Go ${{ matrix.go-version }}
-        uses: actions/setup-go@0a12ed9d6a96ab950c8f026ed9f722fe0da7ef32 # v5.0.2
+        uses: actions/setup-go@f111f3307d8850f501ac008e886eec1fd1932a34 # v5.3.0
         with:
           go-version: ${{ matrix.go-version }}
         id: go
 
       - name: Check out code into the Go module directory
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
 
-      - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+      - uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
@@ -46,6 +48,9 @@ jobs:
 
       - name: Vendor Go Modules
         run: make vendor
+
+      - name: Restore go/toolchain lines of go.mod
+        run: python3 .github/utils/patch-go.mod.py
 
       - name: Ensure clean working tree
         run: git diff --exit-code
@@ -66,14 +71,14 @@ jobs:
 
       - name: Upload artifact for ${{ matrix.os }}
         if: matrix.os != 'windows'
-        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           name: sops-${{ matrix.go-version }}-${{ matrix.os }}-${{ matrix.arch }}-${{ github.sha }}
           path: sops-${{ matrix.go-version }}-${{ matrix.os }}-${{ matrix.arch }}-${{ github.sha }}
 
       - name: Upload artifact for ${{ matrix.os }}
         if: matrix.os == 'windows'
-        uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4.4.0
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
         with:
           name: sops-${{ matrix.go-version }}-${{ matrix.os }}-${{ github.sha }}
           path: sops-${{ matrix.go-version }}-${{ matrix.os }}-${{ github.sha }}
@@ -90,7 +95,9 @@ jobs:
       VAULT_ADDR: "http://127.0.0.1:8200"
     steps:
       - name: Check out code
-        uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
 
       # Rustup will detect toolchain version and profile from rust-toolchain.toml
       # It will download and install the toolchain and components automatically

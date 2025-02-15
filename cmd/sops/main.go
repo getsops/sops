@@ -137,7 +137,8 @@ func main() {
 
    To use a different GPG binary than the one in your PATH, set SOPS_GPG_EXEC.
 
-   To select a different editor than the default (vim), set EDITOR.
+   To select a different editor than the default (vim), set SOPS_EDITOR or
+   EDITOR.
 
    Note that flags must always be provided before the filename to operate on.
    Otherwise, they will be ignored.
@@ -171,7 +172,10 @@ func main() {
 				fileName := c.Args()[0]
 				command := c.Args()[1]
 
-				inputStore := inputStore(c, fileName)
+				inputStore, err := inputStore(c, fileName)
+				if err != nil {
+					return toExitError(err)
+				}
 
 				svcs := keyservices(c)
 
@@ -272,8 +276,14 @@ func main() {
 				fileName := c.Args()[0]
 				command := c.Args()[1]
 
-				inputStore := inputStore(c, fileName)
-				outputStore := outputStore(c, fileName)
+				inputStore, err := inputStore(c, fileName)
+				if err != nil {
+					return toExitError(err)
+				}
+				outputStore, err := outputStore(c, fileName)
+				if err != nil {
+					return toExitError(err)
+				}
 
 				svcs := keyservices(c)
 
@@ -365,13 +375,17 @@ func main() {
 						return toExitError(err)
 					}
 					if !info.IsDir() {
+						inputStore, err := inputStore(c, subPath)
+						if err != nil {
+							return toExitError(err)
+						}
 						err = publishcmd.Run(publishcmd.Opts{
 							ConfigPath:      configPath,
 							InputPath:       subPath,
 							Cipher:          aes.NewCipher(),
 							KeyServices:     keyservices(c),
 							DecryptionOrder: order,
-							InputStore:      inputStore(c, subPath),
+							InputStore:      inputStore,
 							Interactive:     !c.Bool("yes"),
 							OmitExtensions:  c.Bool("omit-extensions"),
 							Recursive:       c.Bool("recursive"),
@@ -433,14 +447,22 @@ func main() {
 			Name:      "filestatus",
 			Usage:     "check the status of the file, returning encryption status",
 			ArgsUsage: `file`,
-			Flags:     []cli.Flag{},
+			Flags:     []cli.Flag{
+				cli.StringFlag{
+					Name:  "input-type",
+					Usage: "currently ini, json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
+				},
+			},
 			Action: func(c *cli.Context) error {
 				if c.NArg() < 1 {
 					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
 				}
 
 				fileName := c.Args()[0]
-				inputStore := inputStore(c, fileName)
+				inputStore, err := inputStore(c, fileName)
+				if err != nil {
+					return toExitError(err)
+				}
 				opts := filestatuscmd.Opts{
 					InputStore: inputStore,
 					InputPath:  fileName,
@@ -560,11 +582,19 @@ func main() {
 								group = append(group, key)
 							}
 						}
+						inputStore, err := inputStore(c, c.String("file"))
+						if err != nil {
+							return toExitError(err)
+						}
+						outputStore, err := outputStore(c, c.String("file"))
+						if err != nil {
+							return toExitError(err)
+						}
 						return groups.Add(groups.AddOpts{
 							InputPath:      c.String("file"),
 							InPlace:        c.Bool("in-place"),
-							InputStore:     inputStore(c, c.String("file")),
-							OutputStore:    outputStore(c, c.String("file")),
+							InputStore:     inputStore,
+							OutputStore:    outputStore,
 							Group:          group,
 							GroupThreshold: c.Int("shamir-secret-sharing-threshold"),
 							KeyServices:    keyservices(c),
@@ -599,11 +629,19 @@ func main() {
 							return fmt.Errorf("failed to parse [index] argument: %s", err)
 						}
 
+						inputStore, err := inputStore(c, c.String("file"))
+						if err != nil {
+							return toExitError(err)
+						}
+						outputStore, err := outputStore(c, c.String("file"))
+						if err != nil {
+							return toExitError(err)
+						}
 						return groups.Delete(groups.DeleteOpts{
 							InputPath:      c.String("file"),
 							InPlace:        c.Bool("in-place"),
-							InputStore:     inputStore(c, c.String("file")),
-							OutputStore:    outputStore(c, c.String("file")),
+							InputStore:     inputStore,
+							OutputStore:    outputStore,
 							Group:          uint(group),
 							GroupThreshold: c.Int("shamir-secret-sharing-threshold"),
 							KeyServices:    keyservices(c),
@@ -735,8 +773,14 @@ func main() {
 					fileNameOverride = fileName
 				}
 
-				inputStore := inputStore(c, fileNameOverride)
-				outputStore := outputStore(c, fileNameOverride)
+				inputStore, err := inputStore(c, fileNameOverride)
+				if err != nil {
+					return toExitError(err)
+				}
+				outputStore, err := outputStore(c, fileNameOverride)
+				if err != nil {
+					return toExitError(err)
+				}
 				svcs := keyservices(c)
 
 				order, err := decryptionOrder(c.String("decryption-order"))
@@ -899,8 +943,14 @@ func main() {
 					fileNameOverride = fileName
 				}
 
-				inputStore := inputStore(c, fileNameOverride)
-				outputStore := outputStore(c, fileNameOverride)
+				inputStore, err := inputStore(c, fileNameOverride)
+				if err != nil {
+					return toExitError(err)
+				}
+				outputStore, err := outputStore(c, fileNameOverride)
+				if err != nil {
+					return toExitError(err)
+				}
 				svcs := keyservices(c)
 
 				encConfig, err := getEncryptConfig(c, fileNameOverride)
@@ -1058,8 +1108,14 @@ func main() {
 					fileNameOverride = fileName
 				}
 
-				inputStore := inputStore(c, fileNameOverride)
-				outputStore := outputStore(c, fileNameOverride)
+				inputStore, err := inputStore(c, fileNameOverride)
+				if err != nil {
+					return toExitError(err)
+				}
+				outputStore, err := outputStore(c, fileNameOverride)
+				if err != nil {
+					return toExitError(err)
+				}
 				svcs := keyservices(c)
 
 				order, err := decryptionOrder(c.String("decryption-order"))
@@ -1203,8 +1259,14 @@ func main() {
 					return toExitError(err)
 				}
 
-				inputStore := inputStore(c, fileName)
-				outputStore := outputStore(c, fileName)
+				inputStore, err := inputStore(c, fileName)
+				if err != nil {
+					return toExitError(err)
+				}
+				outputStore, err := outputStore(c, fileName)
+				if err != nil {
+					return toExitError(err)
+				}
 				svcs := keyservices(c)
 
 				order, err := decryptionOrder(c.String("decryption-order"))
@@ -1298,8 +1360,14 @@ func main() {
 					return toExitError(err)
 				}
 
-				inputStore := inputStore(c, fileName)
-				outputStore := outputStore(c, fileName)
+				inputStore, err := inputStore(c, fileName)
+				if err != nil {
+					return toExitError(err)
+				}
+				outputStore, err := outputStore(c, fileName)
+				if err != nil {
+					return toExitError(err)
+				}
 				svcs := keyservices(c)
 
 				path, err := parseTreePath(c.Args()[1])
@@ -1389,8 +1457,14 @@ func main() {
 					return toExitError(err)
 				}
 
-				inputStore := inputStore(c, fileName)
-				outputStore := outputStore(c, fileName)
+				inputStore, err := inputStore(c, fileName)
+				if err != nil {
+					return toExitError(err)
+				}
+				outputStore, err := outputStore(c, fileName)
+				if err != nil {
+					return toExitError(err)
+				}
 				svcs := keyservices(c)
 
 				path, err := parseTreePath(c.Args()[1])
@@ -1449,8 +1523,9 @@ func main() {
 			Usage: "generate a new data encryption key and reencrypt all values with the new key",
 		},
 		cli.BoolFlag{
-			Name:  "disable-version-check",
-			Usage: "do not check whether the current version is latest during --version",
+			Name:   "disable-version-check",
+			Usage:  "do not check whether the current version is latest during --version",
+			EnvVar: "SOPS_DISABLE_VERSION_CHECK",
 		},
 		cli.StringFlag{
 			Name:   "kms, k",
@@ -1687,8 +1762,14 @@ func main() {
 			}
 		}
 
-		inputStore := inputStore(c, fileNameOverride)
-		outputStore := outputStore(c, fileNameOverride)
+		inputStore, err := inputStore(c, fileNameOverride)
+		if err != nil {
+			return toExitError(err)
+		}
+		outputStore, err := outputStore(c, fileNameOverride)
+		if err != nil {
+			return toExitError(err)
+		}
 		svcs := keyservices(c)
 
 		order, err := decryptionOrder(c.String("decryption-order"))
@@ -2049,13 +2130,19 @@ func loadStoresConfig(context *cli.Context, path string) (*config.StoresConfig, 
 	return config.LoadStoresConfig(configPath)
 }
 
-func inputStore(context *cli.Context, path string) common.Store {
-	storesConf, _ := loadStoresConfig(context, path)
-	return common.DefaultStoreForPathOrFormat(storesConf, path, context.String("input-type"))
+func inputStore(context *cli.Context, path string) (common.Store, error) {
+	storesConf, err := loadStoresConfig(context, path)
+	if err != nil {
+		return nil, err
+	}
+	return common.DefaultStoreForPathOrFormat(storesConf, path, context.String("input-type")), nil
 }
 
-func outputStore(context *cli.Context, path string) common.Store {
-	storesConf, _ := loadStoresConfig(context, path)
+func outputStore(context *cli.Context, path string) (common.Store, error) {
+	storesConf, err := loadStoresConfig(context, path)
+	if err != nil {
+		return nil, err
+	}
 	if context.IsSet("indent") {
 		indent := context.Int("indent")
 		storesConf.YAML.Indent = indent
@@ -2063,7 +2150,7 @@ func outputStore(context *cli.Context, path string) common.Store {
 		storesConf.JSONBinary.Indent = indent
 	}
 
-	return common.DefaultStoreForPathOrFormat(storesConf, path, context.String("output-type"))
+	return common.DefaultStoreForPathOrFormat(storesConf, path, context.String("output-type")), nil
 }
 
 func parseTreePath(arg string) ([]interface{}, error) {

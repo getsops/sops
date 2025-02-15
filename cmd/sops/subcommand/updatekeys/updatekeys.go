@@ -45,7 +45,7 @@ func updateFile(opts Opts) error {
 	if err != nil {
 		return err
 	}
-	store := common.DefaultStoreForPath(sc, opts.InputPath)
+	store := common.DefaultStoreForPathOrFormat(sc, opts.InputPath, opts.InputType)
 	log.Printf("Syncing keys for file %s", opts.InputPath)
 	tree, err := common.LoadEncryptedFile(store, opts.InputPath)
 	if err != nil {

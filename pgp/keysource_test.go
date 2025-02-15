@@ -697,10 +697,23 @@ func Test_gnuPGHome(t *testing.T) {
 }
 
 func Test_shortenFingerprint(t *testing.T) {
+	// Test with regular fingerprint
 	shortId := shortenFingerprint(mockFingerprint)
 	assert.Equal(t, "9732075EA221A7EA", shortId)
 
 	assert.Equal(t, shortId, shortenFingerprint(shortId))
+
+	// Test with forced subkey
+	shortId = shortenFingerprint(mockFingerprint + "!")
+	assert.Equal(t, "9732075EA221A7EA!", shortId)
+
+	assert.Equal(t, shortId, shortenFingerprint(shortId))
+
+	// Make sure that too short IDs are kept
+	for _, tooShort := range []string{"012345679abcdef", "012345679abcdef!", "123", "123!"} {
+		shortId = shortenFingerprint(tooShort)
+		assert.Equal(t, tooShort, shortId)
+	}
 }
 
 // TODO(hidde): previous tests kept around for now.
