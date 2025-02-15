@@ -270,6 +270,7 @@ func runEditor(path string) error {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
+	cmd.Env = append(cmd.Environ(), "SOPS_IS_EDITING=true")
 	return cmd.Run()
 }
 
