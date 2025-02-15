@@ -255,6 +255,13 @@ func TestLoadAliasesPlainFile(t *testing.T) {
 	assert.Equal(t, ALIASES_BRANCHES, branches)
 }
 
+func TestLoadPlainFileTime(t *testing.T) {
+	branches, err := (&Store{}).LoadPlainFile([]byte("foo: 2025-02-15"))
+	assert.NotNil(t, err)
+	assert.Nil(t, branches)
+	assert.Equal(t, `Error unmarshaling input YAML: Unsupported time element found: "2025-02-15 00:00:00 +0000 UTC"`, err.Error())
+}
+
 func TestComment1(t *testing.T) {
 	// First iteration: load and store
 	branches, err := (&Store{}).LoadPlainFile(COMMENT_1)

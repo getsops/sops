@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"strings"
+	"time"
 
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/config"
@@ -83,6 +84,9 @@ func (store Store) nodeToTreeValue(node *yaml.Node, commentsWereHandled bool) (i
 	case yaml.ScalarNode:
 		var result interface{}
 		node.Decode(&result)
+		if time, ok := result.(time.Time); ok {
+			return nil, fmt.Errorf("Unsupported time element found: %q", time)
+		}
 		return result, nil
 	case yaml.AliasNode:
 		return store.nodeToTreeValue(node.Alias, false)
