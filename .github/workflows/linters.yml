@@ -1,0 +1,39 @@
+name: Linters
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    # Only run when Rust version or linted files change
+    paths:
+      - 'rust-toolchain.toml'
+      - 'functional-tests/**/*.rs'
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint Rust source files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      # Rustup will detect toolchain version and profile from rust-toolchain.toml
+      # It will download and install the toolchain and components automatically
+      # and make them available for subsequent commands
+      - name: Install Rust toolchain and additional components
+        run: rustup component add rustfmt
+
+      - name: Show Rust version
+        run: cargo --version
+
+      - name: Run Formatting Check
+        run: cargo fmt --check
+        working-directory: ./functional-tests
