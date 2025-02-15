@@ -34,7 +34,8 @@ func TestDecodeJSON(t *testing.T) {
          }
       }
    }
-}`
+}
+`
 	expected := sops.TreeBranch{
 		sops.TreeItem{
 			Key: "glossary",
@@ -312,7 +313,8 @@ func TestEncodeJSONArrayOfObjects(t *testing.T) {
 		},
 		2
 	]
-}`
+}
+`
 	store := Store{
 		config: config.JSONStoreConfig{
 			Indent: -1,
@@ -446,7 +448,8 @@ func TestIndentTwoSpaces(t *testing.T) {
     },
     2
   ]
-}`
+}
+`
 	store := Store{
 		config: config.JSONStoreConfig{
 			Indent: 2,
@@ -488,7 +491,8 @@ func TestIndentDefault(t *testing.T) {
 		},
 		2
 	]
-}`
+}
+`
 	store := Store{
 		config: config.JSONStoreConfig{
 			Indent: -1,
@@ -530,7 +534,8 @@ func TestNoIndent(t *testing.T) {
 },
 2
 ]
-}`
+}
+`
 	store := Store{
 		config: config.JSONStoreConfig{
 			Indent: 0,
@@ -619,7 +624,8 @@ func TestComments(t *testing.T) {
     },
     2
   ]
-}`
+}
+`
 	store := Store{
 		config: config.JSONStoreConfig{
 			Indent: 2,
