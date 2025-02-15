@@ -1069,6 +1069,11 @@ written to disk.
     $ echo your password: $database_password
     your password:
 
+If you want process signals to be sent to the command, for example if you are
+running ``exec-env`` to launch a server and your server handles SIGTERM, then the
+``--same-process`` flag can be used to instruct ``sops`` to start your command in
+the same process instead of a child process. This uses the ``execve`` system call
+and is supported on Unix-like systems.
 
 If the command you want to run only operates on files, you can use ``exec-file``
 instead. By default, SOPS will use a FIFO to pass the contents of the
