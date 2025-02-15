@@ -28,6 +28,9 @@ func (store Store) encodeTree(branches sops.TreeBranches) ([]byte, error) {
 	iniFile.DeleteSection(ini.DefaultSection)
 	for _, branch := range branches {
 		for _, item := range branch {
+			if _, ok := item.Key.(sops.EmptyLines); ok {
+				continue
+			}
 			if _, ok := item.Key.(sops.Comment); ok {
 				continue
 			}
