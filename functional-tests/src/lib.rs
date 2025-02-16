@@ -297,6 +297,115 @@ bar: baz",
     }
 
     #[test]
+    fn set_json_file_update_idempotent_write() {
+        let file_path = prepare_temp_file(
+            "test_set_update_idempotent_write.json",
+            r#"{"a": 2, "b": "ba"}"#.as_bytes(),
+        );
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("encrypt")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
+        let mut before = String::new();
+        File::open(file_path.clone())
+            .unwrap()
+            .read_to_string(&mut before)
+            .unwrap();
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("set")
+            .arg("--output-type")
+            .arg("yaml")
+            .arg(file_path.clone())
+            .arg(r#"["b"]"#)
+            .arg(r#""ba""#)
+            .output()
+            .expect("Error running sops");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(output.status.success(), "sops didn't exit successfully");
+        let mut after = String::new();
+        File::open(file_path.clone())
+            .unwrap()
+            .read_to_string(&mut after)
+            .unwrap();
+        assert!(before != after);
+        assert!(after.starts_with("a: "));
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("decrypt")
+            .arg("--input-type")
+            .arg("yaml")
+            .arg("--output-type")
+            .arg("yaml")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        let data = &String::from_utf8_lossy(&output.stdout);
+        assert!(data == "a: 2\nb: ba\n");
+    }
+
+    #[test]
+    fn set_json_file_update_idempotent_nowrite() {
+        let file_path = prepare_temp_file(
+            "test_set_update_idempotent_nowrite.json",
+            r#"{"a": 2, "b": "ba"}"#.as_bytes(),
+        );
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("encrypt")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
+        let mut before = String::new();
+        File::open(file_path.clone())
+            .unwrap()
+            .read_to_string(&mut before)
+            .unwrap();
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("set")
+            .arg("--output-type")
+            .arg("yaml")
+            .arg("--idempotent")
+            .arg(file_path.clone())
+            .arg(r#"["b"]"#)
+            .arg(r#""ba""#)
+            .output()
+            .expect("Error running sops");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(output.status.success(), "sops didn't exit successfully");
+        let mut after = String::new();
+        File::open(file_path.clone())
+            .unwrap()
+            .read_to_string(&mut after)
+            .unwrap();
+        println!("before: {}\nafter: {}", &before, &after,);
+        assert!(before == after);
+    }
+
+    #[test]
     fn set_json_file_insert() {
         let file_path =
             prepare_temp_file("test_set_insert.json", r#"{"a": 2, "b": "ba"}"#.as_bytes());

@@ -1356,6 +1356,10 @@ func main() {
 					Usage:  "comma separated list of decryption key types",
 					EnvVar: "SOPS_DECRYPTION_ORDER",
 				},
+				cli.BoolFlag{
+					Name:  "idempotent",
+					Usage: "do nothing if the given index already has the given value",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if c.Bool("verbose") {
@@ -1393,7 +1397,7 @@ func main() {
 				if err != nil {
 					return toExitError(err)
 				}
-				output, err := set(setOpts{
+				output, changed, err := set(setOpts{
 					OutputStore:     outputStore,
 					InputStore:      inputStore,
 					InputPath:       fileName,
@@ -1406,6 +1410,11 @@ func main() {
 				})
 				if err != nil {
 					return toExitError(err)
+				}
+
+				if !changed && c.Bool("idempotent") {
+					log.Info("File not written due to no change")
+					return nil
 				}
 
 				// We open the file *after* the operations on the tree have been
@@ -1845,7 +1854,7 @@ func main() {
 			if err != nil {
 				return toExitError(err)
 			}
-			output, err = set(setOpts{
+			output, _, err = set(setOpts{
 				OutputStore:     outputStore,
 				InputStore:      inputStore,
 				InputPath:       fileName,
