@@ -660,6 +660,50 @@ b: ba"#
     }
 
     #[test]
+    fn test_yaml_time() {
+        let file_path = prepare_temp_file(
+            "test_time.yaml",
+            r#"a: 2024-01-01
+b: 2006-01-02T15:04:05+07:06"#
+                .as_bytes(),
+        );
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("encrypt")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("decrypt")
+            .arg("-i")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(output.status.success(), "sops didn't exit successfully");
+        let mut s = String::new();
+        File::open(file_path)
+            .unwrap()
+            .read_to_string(&mut s)
+            .unwrap();
+        assert_eq!(
+            s,
+            r#"a: 2024-01-01T00:00:00Z
+b: 2006-01-02T15:04:05+07:06
+"#
+        );
+    }
+
+    #[test]
     fn unset_json_file() {
         // Test removal of tree branch
         let file_path = prepare_temp_file(

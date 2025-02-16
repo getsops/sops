@@ -347,6 +347,8 @@ func (branch TreeBranch) walkValue(in interface{}, path []string, commentsStack 
 		return onLeaves(in, path, commentsStack)
 	case float64:
 		return onLeaves(in, path, commentsStack)
+	case time.Time:
+		return onLeaves(in, path, commentsStack)
 	case Comment:
 		return onLeaves(in, path, commentsStack)
 	case TreeBranch:
@@ -968,6 +970,8 @@ func ToBytes(in interface{}) ([]byte, error) {
 		return boolB, nil
 	case []byte:
 		return in, nil
+	case time.Time:
+		return in.MarshalText()
 	case Comment:
 		return ToBytes(in.Value)
 	default:
