@@ -235,11 +235,11 @@ identity will be tried in sequence until one is able to decrypt the data.
 
 Encrypting with SSH keys via age is also supported by SOPS. You can use SSH public keys
 ("ssh-ed25519 AAAA...", "ssh-rsa AAAA...") as age recipients when encrypting a file.
-When decrypting a file, SOPS will look for `~/.ssh/id_ed25519` and fallbacks to
-`~/.ssh/id_rsa`. You can specify the location of the private key manually by setting
+When decrypting a file, SOPS will look for ``~/.ssh/id_ed25519`` and falls back to
+``~/.ssh/id_rsa``. You can specify the location of the private key manually by setting
 the environment variableuse **SOPS_AGE_SSH_PRIVATE_KEY_FILE**.
 
-Note that only `ssh-rsa` and `ssh-ed25519` are supported.
+Note that only ``ssh-rsa`` and ``ssh-ed25519`` are supported.
 
 A list of age recipients can be added to the ``.sops.yaml``:
 
