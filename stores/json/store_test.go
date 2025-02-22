@@ -34,7 +34,8 @@ func TestDecodeJSON(t *testing.T) {
          }
       }
    }
-}`
+}
+`
 	expected := sops.TreeBranch{
 		sops.TreeItem{
 			Key: "glossary",
@@ -312,7 +313,8 @@ func TestEncodeJSONArrayOfObjects(t *testing.T) {
 		},
 		2
 	]
-}`
+}
+`
 	store := Store{
 		config: config.JSONStoreConfig{
 			Indent: -1,
@@ -446,7 +448,8 @@ func TestIndentTwoSpaces(t *testing.T) {
     },
     2
   ]
-}`
+}
+`
 	store := Store{
 		config: config.JSONStoreConfig{
 			Indent: 2,
@@ -488,7 +491,8 @@ func TestIndentDefault(t *testing.T) {
 		},
 		2
 	]
-}`
+}
+`
 	store := Store{
 		config: config.JSONStoreConfig{
 			Indent: -1,
@@ -530,7 +534,8 @@ func TestNoIndent(t *testing.T) {
 },
 2
 ]
-}`
+}
+`
 	store := Store{
 		config: config.JSONStoreConfig{
 			Indent: 0,
@@ -539,6 +544,28 @@ func TestNoIndent(t *testing.T) {
 	out, err := store.EmitPlainFile(tree.Branches)
 	assert.Nil(t, err)
 	assert.Equal(t, expected, string(out))
+
+}
+
+func TestConflictingAttributes(t *testing.T) {
+	// See https://stackoverflow.com/a/23195243
+	// Duplicate keys in json is technically valid, but discouraged.
+	// Implementations may handle them differently. ECMA-262 says
+	//
+	// > In the case where there are duplicate name Strings within an object,
+	// > lexically preceding values for the same key shall be overwritten.
+
+	data := `
+{
+  "hello": "Sops config file", 
+  "hello": "Doubles are ok", 
+  "hello": ["repeatedly"],
+  "hello": 3.14
+}
+`
+	s := new(Store)
+	_, err := s.LoadPlainFile([]byte(data))
+	assert.Nil(t, err)
 }
 
 func TestComments(t *testing.T) {
@@ -597,7 +624,8 @@ func TestComments(t *testing.T) {
     },
     2
   ]
-}`
+}
+`
 	store := Store{
 		config: config.JSONStoreConfig{
 			Indent: 2,
