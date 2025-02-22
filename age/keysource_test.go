@@ -241,6 +241,7 @@ func TestMasterKey_Decrypt(t *testing.T) {
 	})
 
 	t.Run("loaded identities", func(t *testing.T) {
+		overwriteUserConfigDir(t, t.TempDir())
 		key := &MasterKey{EncryptedKey: mockEncryptedKey}
 		t.Setenv(SopsAgeKeyEnv, mockIdentity)
 
@@ -295,6 +296,7 @@ func TestMasterKey_Decrypt(t *testing.T) {
 	})
 
 	t.Run("invalid encrypted key", func(t *testing.T) {
+		overwriteUserConfigDir(t, t.TempDir())
 		key := &MasterKey{EncryptedKey: "invalid"}
 		t.Setenv(SopsAgeKeyEnv, mockIdentity)
 
