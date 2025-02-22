@@ -15,7 +15,6 @@ import (
 	"filippo.io/age/agessh"
 	"filippo.io/age/armor"
 	"github.com/sirupsen/logrus"
-	"golang.org/x/term"
 
 	gpgagent "github.com/getsops/gopgagent"
 	"github.com/getsops/sops/v3/logging"
@@ -370,28 +369,11 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, error) {
 				Passphrase: func() (string, error) {
 					conn, err := gpgagent.NewConn()
 					if err != nil {
-						fmt.Fprintf(os.Stderr, "Enter passphrase for identity '%s':", n)
-
-						var pass string
-						if term.IsTerminal(int(os.Stdout.Fd())) {
-							p, err = term.ReadPassword(int(os.Stdout.Fd()))
-							if err == nil {
-								pass = string(p)
-							}
-						} else {
-							reader := bufio.NewReader(os.Stdin)
-							pass, err = reader.ReadString('\n')
-							if err == io.EOF {
-								err = nil
-							}
-						}
+						passphrase, err := readPassphrase("Enter passphrase for identity " + n + ":")
 						if err != nil {
-							return "", fmt.Errorf("could not read passphrase: %v", err)
+							return "", err
 						}
-
-						fmt.Fprintln(os.Stderr)
-
-						return pass, nil
+						return string(passphrase), nil
 					}
 					defer func(conn *gpgagent.Conn) {
 						if err := conn.Close(); err != nil {

@@ -2,7 +2,6 @@ package age
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -520,10 +519,7 @@ func TestMasterKey_Identities_Passphrase(t *testing.T) {
 		t.Setenv(SopsAgeKeyEnv, mockEncryptedIdentity)
 		//blocks calling gpg-agent
 		os.Unsetenv("XDG_RUNTIME_DIR")
-
-		funcDefer, _ := mockStdin(t, mockIdentityPassphrase)
-		defer funcDefer()
-
+		t.Setenv(SopsAgePasswordEnv, mockIdentityPassphrase)
 		got, err := key.Decrypt()
 
 		assert.NoError(t, err)
@@ -542,9 +538,7 @@ func TestMasterKey_Identities_Passphrase(t *testing.T) {
 		t.Setenv(SopsAgeKeyFileEnv, keyPath)
 		//blocks calling gpg-agent
 		os.Unsetenv("XDG_RUNTIME_DIR")
-
-		funcDefer, _ := mockStdin(t, mockIdentityPassphrase)
-		defer funcDefer()
+		t.Setenv(SopsAgePasswordEnv, mockIdentityPassphrase)
 
 		got, err := key.Decrypt()
 		assert.NoError(t, err)
@@ -556,49 +550,11 @@ func TestMasterKey_Identities_Passphrase(t *testing.T) {
 		t.Setenv(SopsAgeKeyEnv, mockEncryptedIdentity)
 		//blocks calling gpg-agent
 		os.Unsetenv("XDG_RUNTIME_DIR")
-
-		funcDefer, _ := mockStdin(t, mockIdentityPassphrase)
-		defer funcDefer()
+		t.Setenv(SopsAgePasswordEnv, mockIdentityPassphrase)
 
 		got, err := key.Decrypt()
 		assert.Error(t, err)
 		assert.ErrorContains(t, err, "failed to create reader for decrypting sops data key with age")
 		assert.Nil(t, got)
 	})
-}
-
-// mockStdin is a helper function that lets the test pretend dummyInput as os.Stdin.
-// It will return a function for `defer` to clean up after the test.
-//
-// Note: `ioutil.TempFile` should be replaced to `os.CreateTemp` for Go v1.16 or higher.
-func mockStdin(t *testing.T, dummyInput string) (funcDefer func(), err error) {
-	t.Helper()
-
-	oldOsStdin := os.Stdin
-
-	fmt.Println(t.TempDir(), t.Name())
-
-	tmpfile, err := ioutil.TempFile(t.TempDir(), strings.Replace(t.Name(), "/", "_", -1))
-	if err != nil {
-		return nil, err
-	}
-
-	content := []byte(dummyInput)
-
-	if _, err := tmpfile.Write(content); err != nil {
-		return nil, err
-	}
-
-	if _, err := tmpfile.Seek(0, 0); err != nil {
-		return nil, err
-	}
-
-	// Set stdin to the temp file
-	os.Stdin = tmpfile
-
-	return func() {
-		// clean up
-		os.Stdin = oldOsStdin
-		os.Remove(tmpfile.Name())
-	}, nil
 }
