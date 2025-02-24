@@ -326,9 +326,9 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, error) {
 	}
 
 	for n, r := range readers {
-		ids, err := age.ParseIdentities(r)
+		ids, err := unwrapIdentities(n, r)
 		if err != nil {
-			return nil, fmt.Errorf("failed to parse '%s' age identities: %w", n, err)
+			return nil, err
 		}
 		identities = append(identities, ids...)
 	}

@@ -14,13 +14,25 @@ import (
 	"fmt"
 	"os"
 	"runtime"
+	"testing"
 
 	"golang.org/x/term"
+)
+
+const (
+	SopsAgePasswordEnv = "SOPS_AGE_PASSWORD"
 )
 
 // readPassphrase reads a passphrase from the terminal. It does not read from a
 // non-terminal stdin, so it does not check stdinInUse.
 func readPassphrase(prompt string) ([]byte, error) {
+	if testing.Testing() {
+		password := os.Getenv(SopsAgePasswordEnv)
+		if password != "" {
+			return []byte(password), nil
+		}
+	}
+
 	var in, out *os.File
 	if runtime.GOOS == "windows" {
 		var err error

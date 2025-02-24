@@ -28,6 +28,18 @@ EylloI7MNGbadPGb
 -----END AGE ENCRYPTED FILE-----`
 	// mockEncryptedKeyPlain is the plain value of mockEncryptedKey.
 	mockEncryptedKeyPlain string = "data"
+	// passphrase used to encrypt age identity.
+	mockIdentityPassphrase string = "passphrase"
+	mockEncryptedIdentity  string = `-----BEGIN AGE ENCRYPTED FILE-----
+YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IHNjcnlwdCBMN2FXZW9xSFViYjdNeW5D
+dy9iSHFnIDE4Ck9zV0ZoNldmci9rL3VXd3BtZmQvK3VZWEpBQjdhZ0UrcmhqR2lF
+YThFMzAKLS0tIGVEQ0xwODI1TlNYeHNHaHZKWHoyLzYwMTMvTGhaZG1oa203cSs0
+VUpBL1kKsaTnt+H/z8mkL21UYKIt3YMpWSV/oYqTm1cSSUnF9InZEYU9HndK9rc8
+ni+MTJCmYf4mgvvGPMf7oIQvs6ijaTdlQb+zeQsL4eif20w+CWgvPNrS6iXUIs8W
+w5/fHsxwmrkG96nDkMErJKhmjmLpC+YdbiMe6P/KIpas09m08RTIqcz7ua0Xm3ey
+ndU+8ILJOhcnWV55W43nTw/UUFse7f+qY61n7kcd1sGd7ZfSEdEIqS3K2vEtA3ER
+fn0s3cyXVEBxL9OZqcAk45bCFVOl13Fp/DBfquHEjvAyeg0=
+-----END AGE ENCRYPTED FILE-----`
 	// mockSshRecipient is a mock age ssh recipient, it matches mockSshIdentity
 	mockSshRecipient string = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID+Wi8WZw2bXfBpcs/WECttCzP39OkenS6pHWHWGFJvN Test"
 	// mockSshIdentity is a mock age identity based on an OpenSSH private key (ed25519)
@@ -501,4 +513,50 @@ func TestUserConfigDir(t *testing.T) {
 		assert.Nil(t, err)
 		assert.Equal(t, home, dir)
 	}
+}
+
+func TestMasterKey_Identities_Passphrase(t *testing.T) {
+	t.Run(SopsAgeKeyEnv, func(t *testing.T) {
+		key := &MasterKey{EncryptedKey: mockEncryptedKey}
+		t.Setenv(SopsAgeKeyEnv, mockEncryptedIdentity)
+		//blocks calling gpg-agent
+		os.Unsetenv("XDG_RUNTIME_DIR")
+		t.Setenv(SopsAgePasswordEnv, mockIdentityPassphrase)
+		got, err := key.Decrypt()
+
+		assert.NoError(t, err)
+		assert.EqualValues(t, mockEncryptedKeyPlain, got)
+	})
+
+	t.Run(SopsAgeKeyFileEnv, func(t *testing.T) {
+		tmpDir := t.TempDir()
+		// Overwrite to ensure local config is not picked up by tests
+		overwriteUserConfigDir(t, tmpDir)
+
+		keyPath := filepath.Join(tmpDir, "keys.txt")
+		assert.NoError(t, os.WriteFile(keyPath, []byte(mockEncryptedIdentity), 0o644))
+
+		key := &MasterKey{EncryptedKey: mockEncryptedKey}
+		t.Setenv(SopsAgeKeyFileEnv, keyPath)
+		//blocks calling gpg-agent
+		os.Unsetenv("XDG_RUNTIME_DIR")
+		t.Setenv(SopsAgePasswordEnv, mockIdentityPassphrase)
+
+		got, err := key.Decrypt()
+		assert.NoError(t, err)
+		assert.EqualValues(t, mockEncryptedKeyPlain, got)
+	})
+
+	t.Run("invalid encrypted key", func(t *testing.T) {
+		key := &MasterKey{EncryptedKey: "invalid"}
+		t.Setenv(SopsAgeKeyEnv, mockEncryptedIdentity)
+		//blocks calling gpg-agent
+		os.Unsetenv("XDG_RUNTIME_DIR")
+		t.Setenv(SopsAgePasswordEnv, mockIdentityPassphrase)
+
+		got, err := key.Decrypt()
+		assert.Error(t, err)
+		assert.ErrorContains(t, err, "failed to create reader for decrypting sops data key with age")
+		assert.Nil(t, got)
+	})
 }
