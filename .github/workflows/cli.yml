@@ -39,7 +39,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+      - uses: actions/cache@0c907a75c2c80ebcb7f088228285e798b750cf8f # v4.2.1
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
@@ -71,14 +71,14 @@ jobs:
 
       - name: Upload artifact for ${{ matrix.os }}
         if: matrix.os != 'windows'
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: sops-${{ matrix.go-version }}-${{ matrix.os }}-${{ matrix.arch }}-${{ github.sha }}
           path: sops-${{ matrix.go-version }}-${{ matrix.os }}-${{ matrix.arch }}-${{ github.sha }}
 
       - name: Upload artifact for ${{ matrix.os }}
         if: matrix.os == 'windows'
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd19549f0f0fb45cf08 # v4.6.0
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: sops-${{ matrix.go-version }}-${{ matrix.os }}-${{ github.sha }}
           path: sops-${{ matrix.go-version }}-${{ matrix.os }}-${{ github.sha }}
