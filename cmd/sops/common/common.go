@@ -230,6 +230,7 @@ type GenericDecryptOpts struct {
 	IgnoreMAC       bool
 	KeyServices     []keyservice.KeyServiceClient
 	DecryptionOrder []string
+	UseAwsProfile   string
 }
 
 // LoadEncryptedFileWithBugFixes is a wrapper around LoadEncryptedFile which includes
@@ -248,6 +249,22 @@ func LoadEncryptedFileWithBugFixes(opts GenericDecryptOpts) (*sops.Tree, error) 
 		tree, err = FixAWSKMSEncryptionContextBug(opts, tree)
 		if err != nil {
 			return nil, err
+		}
+	}
+
+	awsProfile := os.Getenv("AWS_PROFILE")
+	if opts.UseAwsProfile != "" {
+		awsProfile = opts.UseAwsProfile
+	}
+
+	if awsProfile != "" {
+		for _, keyGroup := range tree.Metadata.KeyGroups {
+			for _, masterKey := range keyGroup {
+				kmsMasterKey, ok := (masterKey).(*kms.MasterKey)
+				if ok {
+					kmsMasterKey.AwsProfile = awsProfile
+				}
+			}
 		}
 	}
 
