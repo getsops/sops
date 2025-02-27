@@ -428,7 +428,17 @@ func (key *MasterKey) decryptWithGnuPG() ([]byte, error) {
 		return nil, fmt.Errorf("failed to decrypt sops data key with pgp: %s",
 			strings.TrimSpace(stderr.String()))
 	}
-	return stdout.Bytes(), nil
+	result := stdout.Bytes()
+	if len(result) == 0 {
+		// This can happen if an older GnuPG version is used to decrypt a key encrypted with a
+		// newer GnuPG version that used an AEAD cipher, which the old version does not support.
+		// Apparently some GnuPG versions drop the unspuported packets, which results in a decrypted
+		// data of 0 bytes, and returns nothing with exit code 0.
+		//
+		// (See https://github.com/getsops/sops/issues/896#issuecomment-2688079300 for more infos.)
+		return nil, fmt.Errorf("failed to decrypt sops data key with pgp: zero bytes returned")
+	}
+	return result, nil
 }
 
 // NeedsRotation returns whether the data key needs to be rotated
