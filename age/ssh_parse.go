@@ -65,7 +65,7 @@ func parseSSHIdentityFromPrivateKeyFile(keyPath string) (age.Identity, error) {
 			}
 		}
 		passphrasePrompt := func() ([]byte, error) {
-			pass, err := readPassphrase(fmt.Sprintf("Enter passphrase for %q:", keyPath))
+			pass, err := readSecret(fmt.Sprintf("Enter passphrase for %q:", keyPath))
 			if err != nil {
 				return nil, fmt.Errorf("could not read passphrase for %q: %v", keyPath, err)
 			}

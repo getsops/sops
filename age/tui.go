@@ -1,5 +1,4 @@
 // These functions have been copied from the age project
-// https://github.com/FiloSottile/age/blob/v1.0.0/cmd/age/encrypted_keys.go
 // https://github.com/FiloSottile/age/blob/3d91014ea095e8d70f7c6c4833f89b53a96e0832/cmd/age/tui.go
 //
 // Copyright 2021 The age Authors. All rights reserved.
@@ -26,43 +25,6 @@ import (
 const (
 	SopsAgePasswordEnv = "SOPS_AGE_PASSWORD"
 )
-
-// readPassphrase reads a passphrase from the terminal. It does not read from a
-// non-terminal stdin, so it does not check stdinInUse.
-func readPassphrase(prompt string) ([]byte, error) {
-	if testing.Testing() {
-		password := os.Getenv(SopsAgePasswordEnv)
-		if password != "" {
-			return []byte(password), nil
-		}
-	}
-
-	var (
-		err        error
-		passphrase []byte
-	)
-
-	err = withTerminal(func(in, out *os.File) error {
-		_, err := fmt.Fprintf(out, "%s ", prompt)
-		if err != nil {
-			return fmt.Errorf("could not write prompt: %v", err)
-		}
-
-		// Use CRLF to work around an apparent bug in WSL2's handling of CONOUT$.
-		// Only when running a Windows binary from WSL2, the cursor would not go
-		// back to the start of the line with a simple LF. Honestly, it's impressive
-		// CONIN$ and CONOUT$ even work at all inside WSL2.
-		defer fmt.Fprintf(out, "\r\n")
-
-		if passphrase, err = term.ReadPassword(int(in.Fd())); err != nil {
-			return fmt.Errorf("could not read passphrase: %v", err)
-		}
-
-		return nil
-	})
-
-	return passphrase, err
-}
 
 func printf(format string, v ...interface{}) {
 	log.Printf("age: "+format, v...)
@@ -133,6 +95,13 @@ func withTerminal(f func(in, out *os.File) error) error {
 
 // readSecret reads a value from the terminal with no echo. The prompt is ephemeral.
 func readSecret(prompt string) (s []byte, err error) {
+	if testing.Testing() {
+		password := os.Getenv(SopsAgePasswordEnv)
+		if password != "" {
+			return []byte(password), nil
+		}
+	}
+
 	err = withTerminal(func(in, out *os.File) error {
 		fmt.Fprintf(out, "%s ", prompt)
 		defer clearLine(out)
