@@ -145,7 +145,7 @@ func unwrapIdentities(key string, reader io.Reader) (ParsedIdentities, error) {
 			Passphrase: func() (string, error) {
 				conn, err := gpgagent.NewConn()
 				if err != nil {
-					passphrase, err := readPassphrase("Enter passphrase for identity " + key + ":")
+					passphrase, err := readSecret("Enter passphrase for identity " + key + ":")
 					if err != nil {
 						return "", err
 					}
