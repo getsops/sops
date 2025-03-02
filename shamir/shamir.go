@@ -99,42 +99,90 @@ func div(a, b uint8) uint8 {
 		panic("divide by zero")
 	}
 
+	// a divided by b is the same as a multiplied by the inverse of b:
 	return mult(a, inverse(b))
 }
 
 // inverse calculates the inverse of a number in GF(2^8)
+// Note that a must be non-zero; otherwise 0 is returned
 func inverse(a uint8) uint8 {
-	b := mult(a, a)
-	c := mult(a, b)
-	b = mult(c, c)
-	b = mult(b, b)
-	c = mult(b, c)
-	b = mult(b, b)
-	b = mult(b, b)
-	b = mult(b, c)
-	b = mult(b, b)
-	b = mult(a, b)
+	// This makes use of Fermat's Little Theorem for finite groups:
+	// If G is a finite group with n elements, and a any element of G,
+	// then a raised to the power of n equals the neutral element of G.
+	// (See https://en.wikipedia.org/wiki/Fermat%27s_little_theorem;
+	// the generalization to finite groups follows from Lagrange's theorem:
+	// https://en.wikipedia.org/wiki/Lagrange%27s_theorem_(group_theory))
+	//
+	// Here we use the multiplicative group of GF(2^8), which has
+	// n = 2^8 - 1 elements (every element but zero). Thus raising a to
+	// the (n - 1)th = 254th power gives a number x so that a*x = 1.
+	//
+	// If a happens to be 0, which is not part of the multiplicative group,
+	// then a raised to the power of 254 is still 0.
 
-	return mult(b, b)
+	// (See also https://github.com/openbao/openbao/commit/a209a052024b70bc563d9674cde21a20b5106570)
+
+	// In the comments, we use ^ to denote raising to the power:
+	b := mult(a, a)  // b is now a^2
+	c := mult(a, b)  // c is now a^3
+	b = mult(c, c)  // b is now a^6
+	b = mult(b, b)  // b is now a^12
+	c = mult(b, c)  // c is now a^15
+	b = mult(b, b)  // b is now a^24
+	b = mult(b, b)  // b is now a^48
+	b = mult(b, c)  // b is now a^63
+	b = mult(b, b)  // b is now a^126
+	b = mult(a, b)  // b is now a^127
+	return mult(b, b)  // result is a^254
 }
 
 // mult multiplies two numbers in GF(2^8)
 // GF(2^8) multiplication using log/exp tables
 func mult(a, b uint8) (out uint8) {
-	var r uint8 = 0
+	// This computes a * b in GF(2^8), which is defined as GF(2)[X] / <X^8 + X^4 + X^3 + X + 1>.
+	// This finite field is known as Rijndael's finite field. (Rijndael is the algorithm that
+	// was standardized as AES.)
+	// (See https://en.wikipedia.org/wiki/Finite_field_arithmetic#Rijndael's_(AES)_finite_field)
+	//
+	// We identify elements in GF(2^8) with polynomials of degree < 8. The i-th bit of a field
+	// element is the coefficient of X^i in that polynomial.
+	//
+	// To multiply a and b in this finite field, we use something similar to Russian peasant
+	// multiplication. We iterate over b's bits, starting from the highest to the lowest.
+	// i denotes the bit we're currently processing (7, 6, 5, 4, 3, 2, 1, 0).
+	// The accumulator is set to 0; every iteration, we multiply the accumulator
+	// by X modulo X^8+X^4+X^3+X+1, and then add a to the accumulator in case b's i-th bit is 1.
+	var accumulator uint8 = 0
 	var i uint8 = 8
 
 	for i > 0 {
 		i--
-		r = (-(b >> i & 1) & a) ^ (-(r >> 7) & 0x1B) ^ (r + r)
+		// Get the i-th bit of b; bitOfB is either 0 or 1.
+		bitOfB := b >> i & 1
+		// aOrZero is 0 if the i-th bit of b is 0, and a if the i-th bit of b is 1. This is
+		// what we later add to the accumulator.
+		aOrZero := -bitOfB & a
+		// zeroOr1B is 0 if the 7th bit of the accumulator is 0, and 0x1B = 11011_2 if the
+		// 7th bit of accumulator is 1
+		zeroOr1B := -(accumulator >> 7) & 0x1B
+		// accumulatorMultipliedByX equals accumulator multiplied by X modulo X^8+X^4+X^3+X+1
+		// In the expression, accumulator + accumulator equals accumulator << 1, which would be
+		// the accumulator multiplied by X modulo X^8.
+		// By XORing (addition and subtraction in GF(2^8)) with zeroOr1B, we turn this into
+		// accumulator multiplied by X modulo X^8 + X^4 + X^3 + X + 1.
+		accumulatorMultipliedByX := zeroOr1B ^ (accumulator + accumulator)
+		// We can now compute the next value of the accumulator as the sum (in GF(2^8)) of aOrZero
+		// and accumulatorMultipliedByX.
+		accumulator = aOrZero ^ accumulatorMultipliedByX
 	}
 
-	return r
+	return accumulator
 }
 
 // add combines two numbers in GF(2^8)
 // This can also be used for subtraction since it is symmetric.
 func add(a, b uint8) uint8 {
+	// Addition in GF(2^8) equals XOR:
 	return a ^ b
 }
 
