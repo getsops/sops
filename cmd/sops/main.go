@@ -359,9 +359,15 @@ func main() {
 				if c.Bool("verbose") || c.GlobalBool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
-				configPath, err := config.FindConfigFile(".")
-				if err != nil {
-					return common.NewExitError(err, codes.ErrorGeneric)
+				var configPath string
+				var err error
+				if c.GlobalString("config") != "" {
+					configPath = c.GlobalString("config")
+				} else {
+					configPath, err = config.FindConfigFile(".")
+					if err != nil {
+						return common.NewExitError(err, codes.ErrorGeneric)
+					}
 				}
 				if c.NArg() < 1 {
 					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
