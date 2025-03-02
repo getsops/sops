@@ -22,9 +22,7 @@ import (
 	"golang.org/x/term"
 )
 
-const (
-	SopsAgePasswordEnv = "SOPS_AGE_PASSWORD"
-)
+var testOnlyAgePassword string
 
 func printf(format string, v ...interface{}) {
 	log.Printf("age: "+format, v...)
@@ -96,9 +94,8 @@ func withTerminal(f func(in, out *os.File) error) error {
 // readSecret reads a value from the terminal with no echo. The prompt is ephemeral.
 func readSecret(prompt string) (s []byte, err error) {
 	if testing.Testing() {
-		password := os.Getenv(SopsAgePasswordEnv)
-		if password != "" {
-			return []byte(password), nil
+		if testOnlyAgePassword != "" {
+			return []byte(testOnlyAgePassword), nil
 		}
 	}
 
