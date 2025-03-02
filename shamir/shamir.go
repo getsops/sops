@@ -14,7 +14,6 @@ import (
 	"crypto/rand"
 	"crypto/subtle"
 	"fmt"
-	mathrand "math/rand"
 )
 
 const (
@@ -184,16 +183,6 @@ func Split(secret []byte, parts, threshold int) ([][]byte, error) {
 		return nil, fmt.Errorf("cannot split an empty secret")
 	}
 
-	// Generate random x coordinates for computing points.
-	// The randomness was implemented for Vault to avoid leaking
-	// information on the number of splits used, see
-	// https://github.com/hashicorp/vault/issues/2608.
-	// This is not an issue for SOPS since the number of key groups
-	// is part of the encrypted file, so we could also not use
-	// random x coordinates.
-
-	xCoordinates := mathrand.Perm(255)
-
 	// Allocate the output array, initialize the final byte
 	// of the output with the offset. The representation of each
 	// output is {y1, y2, .., yN, x}.
@@ -204,7 +193,7 @@ func Split(secret []byte, parts, threshold int) ([][]byte, error) {
 		// then the result of evaluating the polynomial at that point
 		// will be our secret
 		out[idx] = make([]byte, len(secret)+1)
-		out[idx][len(secret)] = uint8(xCoordinates[idx]) + 1
+		out[idx][len(secret)] = uint8(idx) + 1
 	}
 
 	// Construct a random polynomial for each byte of the secret.
@@ -225,7 +214,7 @@ func Split(secret []byte, parts, threshold int) ([][]byte, error) {
 		for i := 0; i < parts; i++ {
 			// Add 1 to the xCoordinate because if it's 0,
 			// then the result of p.evaluate(x) will be our secret
-			x := uint8(xCoordinates[i]) + 1
+			x := uint8(i) + 1
 			// Evaluate the polynomial at x
 			y := p.evaluate(x)
 			out[i][idx] = y
