@@ -32,20 +32,6 @@ func warningf(format string, v ...interface{}) {
 	log.Printf("age: warning: "+format, v...)
 }
 
-// If testOnlyPanicInsteadOfExit is true, exit will set testOnlyDidExit and
-// panic instead of calling os.Exit. This way, the wrapper in TestMain can
-// recover the panic and return the exit code only if it was originated in exit.
-var testOnlyPanicInsteadOfExit bool
-var testOnlyDidExit bool
-
-func exit(code int) {
-	if testOnlyPanicInsteadOfExit {
-		testOnlyDidExit = true
-		panic(code)
-	}
-	os.Exit(code)
-}
-
 // clearLine clears the current line on the terminal, or opens a new line if
 // terminal escape codes don't work.
 func clearLine(out io.Writer) {
