@@ -751,7 +751,7 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:  "filename-override",
-					Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type. Required when reading from stdin.",
+					Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type. Should be provided when reading from stdin.",
 				},
 				cli.StringFlag{
 					Name:   "decryption-order",
@@ -763,14 +763,14 @@ func main() {
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
-				if c.NArg() == 0 && c.Bool("in-place") {
+				readFromStdin := c.NArg() == 0
+				if readFromStdin && c.Bool("in-place") {
 					return common.NewExitError("Error: cannot use --in-place when reading from stdin", codes.ErrorConflictingParameters)
 				}
 				warnMoreThanOnePositionalArgument(c)
 				if c.Bool("in-place") && c.String("output") != "" {
 					return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
 				}
-				readFromStdin := c.NArg() == 0
 				var fileName string
 				var err error
 				if !readFromStdin {
@@ -939,7 +939,8 @@ func main() {
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
-				if c.NArg() == 0 {
+				readFromStdin := c.NArg() == 0
+				if readFromStdin {
 					if c.Bool("in-place") {
 						return common.NewExitError("Error: cannot use --in-place when reading from stdin", codes.ErrorConflictingParameters)
 					}
@@ -951,7 +952,6 @@ func main() {
 				if c.Bool("in-place") && c.String("output") != "" {
 					return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
 				}
-				readFromStdin := c.NArg() == 0
 				var fileName string
 				var err error
 				if !readFromStdin {
