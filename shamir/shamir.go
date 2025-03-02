@@ -12,7 +12,6 @@ package shamir
 
 import (
 	"crypto/rand"
-	"crypto/subtle"
 	"fmt"
 )
 
@@ -100,11 +99,7 @@ func div(a, b uint8) uint8 {
 		panic("divide by zero")
 	}
 
-	ret := int(mult(a, inverse(b)))
-
-	// Ensure we return zero if a is zero but aren't subject to timing attacks
-	ret = subtle.ConstantTimeSelect(subtle.ConstantTimeByteEq(a, 0), 0, ret)
-	return uint8(ret)
+	return mult(a, inverse(b))
 }
 
 // inverse calculates the inverse of a number in GF(2^8)
