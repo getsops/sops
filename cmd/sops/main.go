@@ -2283,7 +2283,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 			if err != nil {
 				errMsg = fmt.Sprintf("%s: %s", errMsg, err)
 			}
-			return nil, fmt.Errorf(errMsg)
+			return nil, fmt.Errorf("%s", errMsg)
 		}
 		return conf.KeyGroups, err
 	}
