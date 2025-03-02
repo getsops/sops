@@ -222,7 +222,7 @@ func GetKMSKeyWithEncryptionCtx(tree *sops.Tree) (keyGroupIndex int, keyIndex in
 		for n, k := range kg {
 			kmsKey, ok := k.(*kms.MasterKey)
 			if ok {
-				if kmsKey.EncryptionContext != nil && len(kmsKey.EncryptionContext) >= 2 {
+				if len(kmsKey.EncryptionContext) >= 2 {
 					duplicateValues := map[string]int{}
 					for _, v := range kmsKey.EncryptionContext {
 						duplicateValues[*v] = duplicateValues[*v] + 1
