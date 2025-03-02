@@ -14,9 +14,9 @@ mod tests {
     use serde_yaml::Value;
     use std::env;
     use std::fs::File;
-    use std::io::{Read, Write};
+    use std::io::{BufWriter, Read, Write};
     use std::path::Path;
-    use std::process::Command;
+    use std::process::{Child, Command, Stdio};
     use tempfile::Builder;
     use tempfile::TempDir;
     const SOPS_BINARY_PATH: &'static str = "./sops";
@@ -65,6 +65,47 @@ mod tests {
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
+        let json = &String::from_utf8_lossy(&output.stdout);
+        let data: Value = serde_json::from_str(json).expect("Error parsing sops's JSON output");
+        match data.into() {
+            Value::Mapping(m) => {
+                assert!(
+                    m.get(&Value::String("sops".to_owned())).is_some(),
+                    "sops metadata branch not found"
+                );
+                assert_encrypted!(&m, Value::String("foo".to_owned()));
+                assert_encrypted!(&m, Value::String("bar".to_owned()));
+            }
+            _ => panic!("sops's JSON output is not an object"),
+        }
+    }
+
+    fn write_to_stdin(process: &Child, content: &[u8]) {
+        let mut outstdin = process.stdin.as_ref().unwrap();
+        let mut writer = BufWriter::new(&mut outstdin);
+        writer.write_all(content).expect("Cannot write to stdin");
+    }
+
+    #[test]
+    fn encrypt_from_stdin() {
+        let process = Command::new(SOPS_BINARY_PATH)
+            .arg("encrypt")
+            .arg("--filename-override")
+            .arg("test_encrypt.yaml")
+            .arg("--output-type")
+            .arg("json")
+            .stdin(Stdio::piped())
+            .stdout(Stdio::piped())
+            .spawn()
+            .expect("Error running sops");
+        write_to_stdin(
+            &process,
+            b"foo: 2
+bar: baz
+",
+        );
+        let output = process.wait_with_output().expect("Failed to wait on sops");
         assert!(output.status.success(), "sops didn't exit successfully");
         let json = &String::from_utf8_lossy(&output.stdout);
         let data: Value = serde_json::from_str(json).expect("Error parsing sops's JSON output");
@@ -953,6 +994,36 @@ b: 2006-01-02T15:04:05+07:06
                 .success(),
             "SOPS failed to decrypt a file with no MAC with --ignore-mac passed in"
         );
+    }
+
+    #[test]
+    fn decrypt_from_stdin() {
+        let process = Command::new(SOPS_BINARY_PATH)
+            .arg("decrypt")
+            .arg("--input-type")
+            .arg("yaml")
+            .arg("--output-type")
+            .arg("yaml")
+            .stdin(Stdio::piped())
+            .stdout(Stdio::piped())
+            .spawn()
+            .expect("Error running sops");
+        write_to_stdin(&process, include_bytes!("../res/comments.enc.yaml"));
+        let output = process.wait_with_output().expect("Failed to wait on sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
+        let yaml = &String::from_utf8_lossy(&output.stdout);
+        let data: Value = serde_yaml::from_str(&yaml).expect("Error parsing sops's YAML output");
+        match data.into() {
+            Value::Mapping(m) => {
+                assert!(
+                    m.get(&Value::String("sops".to_owned())).is_none(),
+                    "sops metadata branch found"
+                );
+                assert_eq!(m["lorem"], Value::String("ipsum".to_owned()));
+                assert_eq!(m["dolor"], Value::String("sit".to_owned()));
+            }
+            _ => panic!("sops's JSON output is not an object"),
+        }
     }
 
     #[test]
