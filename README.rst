@@ -382,7 +382,7 @@ Encrypting and decrypting from other programs
 When using ``sops`` in scripts or from other programs, there are often situations where you do not want to write
 encrypted or decrypted data to disk. The best way to avoid this is to pass data to SOPS via stdin, and to let
 SOPS write data to stdout. By default, the encrypt and decrypt operations write data to stdout already. To pass
-data via stdin, you need to not provide an input filename. For encrpytion, you also must provide the
+data via stdin, you need to not provide an input filename. For encryption, you also must provide the
 ``--filename-override`` option with the file's filename. The filename will be used to determine the input and output
 types, and to select the correct creation rule.
 
