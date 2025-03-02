@@ -184,10 +184,13 @@ func Split(secret []byte, parts, threshold int) ([][]byte, error) {
 		return nil, fmt.Errorf("cannot split an empty secret")
 	}
 
-	// Generate random x coordinates for computing points. I don't know
-	// why random x coordinates are used, and I also don't know why
-	// a non-cryptographically secure source of randomness is used.
-	// As far as I know the x coordinates do not need to be random.
+	// Generate random x coordinates for computing points.
+	// The randomness was implemented for Vault to avoid leaking
+	// information on the number of splits used, see
+	// https://github.com/hashicorp/vault/issues/2608.
+	// This is not an issue for SOPS since the number of key groups
+	// is part of the encrypted file, so we could also not use
+	// random x coordinates.
 
 	xCoordinates := mathrand.Perm(255)
 
