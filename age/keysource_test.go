@@ -521,8 +521,9 @@ func TestMasterKey_Identities_Passphrase(t *testing.T) {
 		t.Setenv(SopsAgeKeyEnv, mockEncryptedIdentity)
 		//blocks calling gpg-agent
 		os.Unsetenv("XDG_RUNTIME_DIR")
-		t.Setenv(SopsAgePasswordEnv, mockIdentityPassphrase)
+		testOnlyAgePassword = mockIdentityPassphrase
 		got, err := key.Decrypt()
+		testOnlyAgePassword = ""
 
 		assert.NoError(t, err)
 		assert.EqualValues(t, mockEncryptedKeyPlain, got)
@@ -540,9 +541,11 @@ func TestMasterKey_Identities_Passphrase(t *testing.T) {
 		t.Setenv(SopsAgeKeyFileEnv, keyPath)
 		//blocks calling gpg-agent
 		os.Unsetenv("XDG_RUNTIME_DIR")
-		t.Setenv(SopsAgePasswordEnv, mockIdentityPassphrase)
+		testOnlyAgePassword = mockIdentityPassphrase
 
 		got, err := key.Decrypt()
+		testOnlyAgePassword = ""
+
 		assert.NoError(t, err)
 		assert.EqualValues(t, mockEncryptedKeyPlain, got)
 	})
@@ -552,9 +555,11 @@ func TestMasterKey_Identities_Passphrase(t *testing.T) {
 		t.Setenv(SopsAgeKeyEnv, mockEncryptedIdentity)
 		//blocks calling gpg-agent
 		os.Unsetenv("XDG_RUNTIME_DIR")
-		t.Setenv(SopsAgePasswordEnv, mockIdentityPassphrase)
+		testOnlyAgePassword = mockIdentityPassphrase
 
 		got, err := key.Decrypt()
+		testOnlyAgePassword = ""
+
 		assert.Error(t, err)
 		assert.ErrorContains(t, err, "failed to create reader for decrypting sops data key with age")
 		assert.Nil(t, got)
