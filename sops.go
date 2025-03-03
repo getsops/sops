@@ -824,7 +824,7 @@ func (m *Metadata) UpdateMasterKeys(dataKey []byte) (errs []error) {
 
 // GetDataKeyWithKeyServices retrieves the data key, asking KeyServices to decrypt it with each
 // MasterKey in the Metadata's KeySources until one of them succeeds.
-func (m Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient, decryptionOrder []string) ([]byte, error) {
+func (m *Metadata) GetDataKeyWithKeyServices(svcs []keyservice.KeyServiceClient, decryptionOrder []string) ([]byte, error) {
 	if m.DataKey != nil {
 		return m.DataKey, nil
 	}
