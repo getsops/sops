@@ -10,14 +10,14 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.17.0
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.8.2
 	github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys v1.3.1
-	github.com/ProtonMail/go-crypto v1.1.5
-	github.com/aws/aws-sdk-go-v2 v1.36.2
-	github.com/aws/aws-sdk-go-v2/config v1.29.7
-	github.com/aws/aws-sdk-go-v2/credentials v1.17.60
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.17.63
-	github.com/aws/aws-sdk-go-v2/service/kms v1.37.19
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.77.1
-	github.com/aws/aws-sdk-go-v2/service/sts v1.33.15
+	github.com/ProtonMail/go-crypto v1.1.6
+	github.com/aws/aws-sdk-go-v2 v1.36.3
+	github.com/aws/aws-sdk-go-v2/config v1.29.8
+	github.com/aws/aws-sdk-go-v2/credentials v1.17.61
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.17.64
+	github.com/aws/aws-sdk-go-v2/service/kms v1.38.0
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.78.0
+	github.com/aws/aws-sdk-go-v2/service/sts v1.33.16
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/fatih/color v1.18.0
 	github.com/getsops/gopgagent v0.0.0-20241224165529-7044f28e491e
@@ -34,12 +34,12 @@ require (
 	github.com/sirupsen/logrus v1.9.3
 	github.com/stretchr/testify v1.10.0
 	github.com/urfave/cli v1.22.16
-	golang.org/x/crypto v0.34.0
+	golang.org/x/crypto v0.35.0
 	golang.org/x/net v0.35.0
 	golang.org/x/sys v0.30.0
 	golang.org/x/term v0.29.0
-	google.golang.org/api v0.222.0
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20250212204824-5a70512c5d8b
+	google.golang.org/api v0.223.0
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20250219182151-9fdb1cabc7b2
 	google.golang.org/grpc v1.70.0
 	google.golang.org/protobuf v1.36.5
 	gopkg.in/ini.v1 v1.67.0
@@ -49,7 +49,7 @@ require (
 require (
 	cel.dev/expr v0.19.1 // indirect
 	cloud.google.com/go v0.118.2 // indirect
-	cloud.google.com/go/auth v0.14.1 // indirect
+	cloud.google.com/go/auth v0.15.0 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.7 // indirect
 	cloud.google.com/go/compute/metadata v0.6.0 // indirect
 	cloud.google.com/go/iam v1.4.0 // indirect
@@ -67,17 +67,17 @@ require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5 // indirect
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.6.10 // indirect
-	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.16.29 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/configsources v1.3.33 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.6.33 // indirect
+	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.16.30 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/configsources v1.3.34 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.6.34 // indirect
 	github.com/aws/aws-sdk-go-v2/internal/ini v1.8.3 // indirect
-	github.com/aws/aws-sdk-go-v2/internal/v4a v1.3.33 // indirect
+	github.com/aws/aws-sdk-go-v2/internal/v4a v1.3.34 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/accept-encoding v1.12.3 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.6.1 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.12.14 // indirect
-	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.18.14 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.24.16 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.28.15 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.6.2 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.12.15 // indirect
+	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.18.15 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.25.0 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.29.0 // indirect
 	github.com/aws/smithy-go v1.22.2 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/census-instrumentation/opencensus-proto v0.4.1 // indirect
@@ -132,8 +132,8 @@ require (
 	github.com/xeipuuv/gojsonschema v1.2.0 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
 	go.opentelemetry.io/contrib/detectors/gcp v1.33.0 // indirect
-	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.58.0 // indirect
-	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.58.0 // indirect
+	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.59.0 // indirect
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.59.0 // indirect
 	go.opentelemetry.io/otel v1.34.0 // indirect
 	go.opentelemetry.io/otel/metric v1.34.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.34.0 // indirect
