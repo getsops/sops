@@ -22,9 +22,7 @@ import (
 	"golang.org/x/term"
 )
 
-const (
-	SopsAgePasswordEnv = "SOPS_AGE_PASSWORD"
-)
+var testOnlyAgePassword string
 
 func printf(format string, v ...interface{}) {
 	log.Printf("age: "+format, v...)
@@ -32,20 +30,6 @@ func printf(format string, v ...interface{}) {
 
 func warningf(format string, v ...interface{}) {
 	log.Printf("age: warning: "+format, v...)
-}
-
-// If testOnlyPanicInsteadOfExit is true, exit will set testOnlyDidExit and
-// panic instead of calling os.Exit. This way, the wrapper in TestMain can
-// recover the panic and return the exit code only if it was originated in exit.
-var testOnlyPanicInsteadOfExit bool
-var testOnlyDidExit bool
-
-func exit(code int) {
-	if testOnlyPanicInsteadOfExit {
-		testOnlyDidExit = true
-		panic(code)
-	}
-	os.Exit(code)
 }
 
 // clearLine clears the current line on the terminal, or opens a new line if
@@ -96,9 +80,8 @@ func withTerminal(f func(in, out *os.File) error) error {
 // readSecret reads a value from the terminal with no echo. The prompt is ephemeral.
 func readSecret(prompt string) (s []byte, err error) {
 	if testing.Testing() {
-		password := os.Getenv(SopsAgePasswordEnv)
-		if password != "" {
-			return []byte(password), nil
+		if testOnlyAgePassword != "" {
+			return []byte(testOnlyAgePassword), nil
 		}
 	}
 
