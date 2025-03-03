@@ -9,13 +9,19 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	"path/filepath"
 	"regexp"
 	"strings"
 	"time"
 
+	"encoding/json"
+	"os"
+
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore"
+	"github.com/Azure/azure-sdk-for-go/sdk/azcore/policy"
 	"github.com/Azure/azure-sdk-for-go/sdk/azcore/to"
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
+	azidentitycache "github.com/Azure/azure-sdk-for-go/sdk/azidentity/cache"
 	"github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys"
 	"github.com/sirupsen/logrus"
 
@@ -25,6 +31,8 @@ import (
 const (
 	// KeyTypeIdentifier is the string used to identify an Azure Key Vault MasterKey.
 	KeyTypeIdentifier = "azure_kv"
+
+	sopsAzureAuthMethod = "SOPS_AZURE_AUTH_METHOD"
 )
 
 var (
@@ -230,7 +238,132 @@ func (key *MasterKey) TypeToIdentifier() string {
 // azidentity.NewDefaultAzureCredential.
 func (key *MasterKey) getTokenCredential() (azcore.TokenCredential, error) {
 	if key.tokenCredential == nil {
-		return azidentity.NewDefaultAzureCredential(nil)
+
+		authMethod := strings.ToUpper(os.Getenv(sopsAzureAuthMethod))
+		switch authMethod {
+		case "BROWSER":
+
+			return cachedInteractiveBrowserCredentials()
+
+		case "DEVICE_CODE":
+			return cachedDeviceCodeCredentials()
+		case "AZURE_CLI":
+			return azidentity.NewAzureCLICredential(nil)
+		case "MSI":
+			return azidentity.NewManagedIdentityCredential(nil)
+		// If "DEFAULT" or not explicitly specified then use the default authentication chain.
+		case "", "DEFAULT":
+			return azidentity.NewDefaultAzureCredential(nil)
+		default:
+			return nil, fmt.Errorf("Value `%s` is unsupported for `%s`, to resolve this either leave it unset or use one of DEFAULT/MSI/BROWSER/DEVICE_CODE", authMethod, sopsAzureAuthMethod)
+		}
 	}
 	return key.tokenCredential, nil
+}
+
+func sopsCacheDir() (string, error) {
+	userCacheDir, err := os.UserCacheDir()
+	if err != nil {
+		return "", err
+	}
+
+	cacheDir := filepath.Join(userCacheDir, "/sops")
+
+	if err = os.MkdirAll(cacheDir, 0o700); err != nil {
+		return "", err
+	}
+
+	return cacheDir, nil
+}
+
+type CachableTokenCredential interface {
+	Authenticate(ctx context.Context, opts *policy.TokenRequestOptions) (azidentity.AuthenticationRecord, error)
+	GetToken(ctx context.Context, opts policy.TokenRequestOptions) (azcore.AccessToken, error)
+}
+
+func cacheStoreRecord(cachePath string, record azidentity.AuthenticationRecord) error {
+	b, err := json.Marshal(record)
+	if err != nil {
+		return err
+	}
+
+	return os.WriteFile(cachePath, b, 0600)
+}
+
+func cacheLoadRecord(cachePath string) (azidentity.AuthenticationRecord, error) {
+	var record azidentity.AuthenticationRecord
+
+	b, err := os.ReadFile(cachePath)
+	if err != nil {
+		return record, err
+	}
+
+	err = json.Unmarshal(b, &record)
+	if err != nil {
+		return record, err
+	}
+
+	return record, nil
+}
+
+func cacheTokenCredential(cachePath string, tokenCredentialFn func(cache azidentity.Cache, record azidentity.AuthenticationRecord) (CachableTokenCredential, error)) (azcore.TokenCredential, error) {
+	cache, err := azidentitycache.New(nil)
+	// Errors if persistent caching is not supported by the current runtime
+	if err != nil {
+		return nil, err
+	}
+
+	cachedRecord, cacheLoadErr := cacheLoadRecord(cachePath)
+
+	credential, err := tokenCredentialFn(cache, cachedRecord)
+	if err != nil {
+		return nil, err
+	}
+
+	// If loading the authenticationRecord from the cachePath failed for any reason (validation, file doesn't exist, not encoded using json, etc.)
+	if cacheLoadErr != nil {
+		record, err := credential.Authenticate(context.Background(), nil)
+		if err != nil {
+			return nil, err
+		}
+
+		if err = cacheStoreRecord(cachePath, record); err != nil {
+			return nil, err
+		}
+	}
+
+	return credential, nil
+}
+
+func cachedInteractiveBrowserCredentials() (azcore.TokenCredential, error) {
+	cacheDir, err := sopsCacheDir()
+	if err != nil {
+		return nil, err
+	}
+	return cacheTokenCredential(
+		filepath.Join(cacheDir, "azure_auth_record_browser.json"),
+		func(cache azidentity.Cache, record azidentity.AuthenticationRecord) (CachableTokenCredential, error) {
+			return azidentity.NewInteractiveBrowserCredential(&azidentity.InteractiveBrowserCredentialOptions{
+				AuthenticationRecord: record,
+				Cache:                cache,
+			})
+		},
+	)
+}
+
+func cachedDeviceCodeCredentials() (azcore.TokenCredential, error) {
+	cacheDir, err := sopsCacheDir()
+	if err != nil {
+		return nil, err
+	}
+
+	return cacheTokenCredential(
+		filepath.Join(cacheDir, "azure_auth_record_device_code.json"),
+		func(cache azidentity.Cache, record azidentity.AuthenticationRecord) (CachableTokenCredential, error) {
+			return azidentity.NewDeviceCodeCredential(&azidentity.DeviceCodeCredentialOptions{
+				AuthenticationRecord: record,
+				Cache:                cache,
+			})
+		},
+	)
 }
