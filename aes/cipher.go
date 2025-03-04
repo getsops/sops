@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
+	"time"
 
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/logging"
@@ -110,6 +111,10 @@ func (c Cipher) Decrypt(ciphertext string, key []byte, additionalData string) (p
 		plaintext = decryptedBytes
 	case "bool":
 		plaintext, err = strconv.ParseBool(decryptedValue)
+	case "time":
+		var value time.Time
+		err = value.UnmarshalText(decryptedBytes)
+		plaintext = value
 	case "comment":
 		plaintext = sops.Comment{Value: decryptedValue}
 	default:
@@ -175,6 +180,12 @@ func (c Cipher) Encrypt(plaintext interface{}, key []byte, additionalData string
 			plainBytes = []byte("True")
 		} else {
 			plainBytes = []byte("False")
+		}
+	case time.Time:
+		encryptedType = "time"
+		plainBytes, err = value.MarshalText()
+		if err != nil {
+			return "", fmt.Errorf("Error marshaling timestamp %q: %w", value, err)
 		}
 	case sops.Comment:
 		encryptedType = "comment"

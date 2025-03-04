@@ -21,7 +21,7 @@ type setOpts struct {
 	DecryptionOrder []string
 }
 
-func set(opts setOpts) ([]byte, error) {
+func set(opts setOpts) ([]byte, bool, error) {
 	// Load the file
 	// TODO: Issue #173: if the file does not exist, create it with the contents passed in as opts.Value
 	tree, err := common.LoadEncryptedFileWithBugFixes(common.GenericDecryptOpts{
@@ -32,7 +32,7 @@ func set(opts setOpts) ([]byte, error) {
 		KeyServices: opts.KeyServices,
 	})
 	if err != nil {
-		return nil, err
+		return nil, false, err
 	}
 
 	// Decrypt the file
@@ -44,22 +44,23 @@ func set(opts setOpts) ([]byte, error) {
 		DecryptionOrder: opts.DecryptionOrder,
 	})
 	if err != nil {
-		return nil, err
+		return nil, false, err
 	}
 
 	// Set the value
-	tree.Branches[0] = tree.Branches[0].Set(opts.TreePath, opts.Value)
+	var changed bool
+	tree.Branches[0], changed = tree.Branches[0].Set(opts.TreePath, opts.Value)
 
 	err = common.EncryptTree(common.EncryptTreeOpts{
 		DataKey: dataKey, Tree: tree, Cipher: opts.Cipher,
 	})
 	if err != nil {
-		return nil, err
+		return nil, false, err
 	}
 
 	encryptedFile, err := opts.OutputStore.EmitEncryptedFile(*tree)
 	if err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
+		return nil, false, common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
 	}
-	return encryptedFile, err
+	return encryptedFile, changed, err
 }

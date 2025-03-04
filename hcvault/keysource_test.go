@@ -41,7 +41,7 @@ func TestMain(m *testing.M) {
 	}
 
 	// Pull the image, create a container based on it, and run it
-	resource, err := pool.Run("vault", testVaultVersion, []string{"VAULT_DEV_ROOT_TOKEN_ID=" + testVaultToken})
+	resource, err := pool.Run("ghcr.io/getsops/ci-container-images/vault", testVaultVersion, []string{"VAULT_DEV_ROOT_TOKEN_ID=" + testVaultToken})
 	if err != nil {
 		logger.Fatalf("could not start resource: %s", err)
 	}

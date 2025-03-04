@@ -62,19 +62,19 @@ key4: *bar
 var ALIASES_BRANCHES = sops.TreeBranches{
 	sops.TreeBranch{
 		sops.TreeItem{
-			Key:   "key1",
+			Key: "key1",
 			Value: []interface{}{
 				"foo",
 			},
 		},
 		sops.TreeItem{
-			Key:   "key2",
+			Key: "key2",
 			Value: []interface{}{
 				"foo",
 			},
 		},
 		sops.TreeItem{
-			Key:   "key3",
+			Key: "key3",
 			Value: sops.TreeBranch{
 				sops.TreeItem{
 					Key:   "foo",
@@ -87,7 +87,7 @@ var ALIASES_BRANCHES = sops.TreeBranches{
 			},
 		},
 		sops.TreeItem{
-			Key:   "key4",
+			Key: "key4",
 			Value: sops.TreeBranch{
 				sops.TreeItem{
 					Key:   "foo",
@@ -236,7 +236,6 @@ prometheus-node-exporter:
     - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+)($|/)
     - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$
 `)
-
 
 func TestUnmarshalMetadataFromNonSOPSFile(t *testing.T) {
 	data := []byte(`hello: 2`)
@@ -397,4 +396,36 @@ func TestHasSopsTopLevelKey(t *testing.T) {
 		},
 	})
 	assert.Equal(t, ok, false)
+}
+
+func TestDuplicateAttributes(t *testing.T) {
+	// Duplicate keys are _not_ valid yaml.
+	//
+	// See https://yaml.org/spec/1.2.2/#mapping
+	// > The content of a mapping node is an unordered set of key/value node pairs,
+	// > with the restriction that each of the keys is unique.
+	//
+	data := `
+hello: Sops config file
+hello: Duplicates are not ok
+rootunique:
+  key2: "value"
+  key2: "foo"
+`
+	s := new(Store)
+	_, err := s.LoadPlainFile([]byte(data))
+	assert.NotNil(t, err)
+	assert.Equal(t, `yaml: unmarshal errors:
+  line 3: mapping key "hello" already defined at line 2`, err.Error())
+}
+
+func TestReservedAttributes(t *testing.T) {
+	data := `
+hello: Sops config file
+sops: The attribute 'sops' must be rejected, otherwise the file cannot be opened later on 
+`
+	s := new(Store)
+	_, err := s.LoadPlainFile([]byte(data))
+	assert.NotNil(t, err)
+	assert.Equal(t, `YAML doc used reserved word 'sops'`, err.Error())
 }

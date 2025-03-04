@@ -127,6 +127,48 @@ type TreeBranch []TreeItem
 // Trees usually have more than one branch
 type TreeBranches []TreeBranch
 
+func equals(oneBranch interface{}, otherBranch interface{}) bool {
+	switch oneBranch := oneBranch.(type) {
+	case TreeBranch:
+		otherBranch, ok := otherBranch.(TreeBranch)
+		if !ok || len(oneBranch) != len(otherBranch) {
+			return false
+		}
+		for i, item := range oneBranch {
+			otherItem := otherBranch[i]
+			if !equals(item.Key, otherItem.Key) || !equals(item.Value, otherItem.Value) {
+				return false
+			}
+		}
+		return true
+	case []interface{}:
+		otherBranch, ok := otherBranch.([]interface{})
+		if !ok || len(oneBranch) != len(otherBranch) {
+			return false
+		}
+		for i, item := range oneBranch {
+			if !equals(item, otherBranch[i]) {
+				return false
+			}
+		}
+		return true
+	case Comment:
+		otherBranch, ok := otherBranch.(Comment)
+		if !ok {
+			return false
+		}
+		return oneBranch.Value == otherBranch.Value
+	default:
+		// Unexpected type
+		return oneBranch == otherBranch
+	}
+}
+
+// Compare a branch with another one
+func (branch TreeBranch) Equals(other TreeBranch) bool {
+	return equals(branch, other)
+}
+
 func valueFromPathAndLeaf(path []interface{}, leaf interface{}) interface{} {
 	switch component := path[0].(type) {
 	case int:
@@ -156,47 +198,55 @@ func valueFromPathAndLeaf(path []interface{}, leaf interface{}) interface{} {
 	}
 }
 
-func set(branch interface{}, path []interface{}, value interface{}) interface{} {
+func set(branch interface{}, path []interface{}, value interface{}) (interface{}, bool) {
 	switch branch := branch.(type) {
 	case TreeBranch:
 		for i, item := range branch {
 			if item.Key == path[0] {
+				var changed bool
 				if len(path) == 1 {
+					changed = !equals(branch[i].Value, value)
 					branch[i].Value = value
 				} else {
-					branch[i].Value = set(item.Value, path[1:], value)
+					branch[i].Value, changed = set(item.Value, path[1:], value)
 				}
-				return branch
+				return branch, changed
 			}
 		}
 		// Not found, need to add the next path entry to the branch
 		value := valueFromPathAndLeaf(path, value)
 		if newBranch, ok := value.(TreeBranch); ok && len(newBranch) > 0 {
-			return append(branch, newBranch[0])
+			return append(branch, newBranch[0]), true
 		}
-		return branch
+		return branch, true
 	case []interface{}:
 		position := path[0].(int)
+		var changed bool
 		if len(path) == 1 {
 			if position >= len(branch) {
-				return append(branch, value)
+				return append(branch, value), true
 			}
+			changed = !equals(branch[position], value)
 			branch[position] = value
 		} else {
 			if position >= len(branch) {
 				branch = append(branch, valueFromPathAndLeaf(path[1:], value))
+				changed = true
+			} else {
+				branch[position], changed = set(branch[position], path[1:], value)
 			}
-			branch[position] = set(branch[position], path[1:], value)
 		}
-		return branch
+		return branch, changed
 	default:
-		return valueFromPathAndLeaf(path, value)
+		newValue := valueFromPathAndLeaf(path, value)
+		return newValue, !equals(branch, newValue)
 	}
 }
 
 // Set sets a value on a given tree for the specified path
-func (branch TreeBranch) Set(path []interface{}, value interface{}) TreeBranch {
-	return set(branch, path, value).(TreeBranch)
+func (branch TreeBranch) Set(path []interface{}, value interface{}) (TreeBranch, bool) {
+	v, changed := set(branch, path, value)
+	return v.(TreeBranch), changed
 }
 
 func unset(branch interface{}, path []interface{}) (interface{}, error) {
@@ -296,6 +346,8 @@ func (branch TreeBranch) walkValue(in interface{}, path []string, commentsStack 
 	case bool:
 		return onLeaves(in, path, commentsStack)
 	case float64:
+		return onLeaves(in, path, commentsStack)
+	case time.Time:
 		return onLeaves(in, path, commentsStack)
 	case Comment:
 		return onLeaves(in, path, commentsStack)
@@ -700,6 +752,11 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 			fmt.Errorf("no key services provided, cannot update master keys"),
 		}
 	}
+	if len(m.KeyGroups) == 0 {
+		return []error{
+			fmt.Errorf("no key groups provided"),
+		}
+	}
 	var parts [][]byte
 	if len(m.KeyGroups) == 1 {
 		// If there's only one key group, we can't do Shamir. All keys
@@ -726,6 +783,11 @@ func (m *Metadata) UpdateMasterKeysWithKeyServices(dataKey []byte, svcs []keyser
 	}
 	for i, group := range m.KeyGroups {
 		part := parts[i]
+		if len(group) == 0 {
+			return []error{
+				fmt.Errorf("empty key group provided"),
+			}
+		}
 		for _, key := range group {
 			svcKey := keyservice.KeyFromMasterKey(key)
 			var keyErrs []error
@@ -908,6 +970,8 @@ func ToBytes(in interface{}) ([]byte, error) {
 		return boolB, nil
 	case []byte:
 		return in, nil
+	case time.Time:
+		return in.MarshalText()
 	case Comment:
 		return ToBytes(in.Value)
 	default:

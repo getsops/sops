@@ -186,18 +186,20 @@ func (store Store) encodeValue(v interface{}) ([]byte, error) {
 
 func (store Store) encodeArray(array []interface{}) ([]byte, error) {
 	out := "["
-	for i, item := range array {
+	empty := true
+	for _, item := range array {
 		if _, ok := item.(sops.Comment); ok {
 			continue
+		}
+		if !empty {
+			out += ","
 		}
 		v, err := store.encodeValue(item)
 		if err != nil {
 			return nil, err
 		}
 		out += string(v)
-		if i != len(array)-1 {
-			out += ","
-		}
+		empty = false
 	}
 	out += "]"
 	return []byte(out), nil
@@ -205,9 +207,13 @@ func (store Store) encodeArray(array []interface{}) ([]byte, error) {
 
 func (store Store) encodeTree(tree sops.TreeBranch) ([]byte, error) {
 	out := "{"
-	for i, item := range tree {
+	empty := true
+	for _, item := range tree {
 		if _, ok := item.Key.(sops.Comment); ok {
 			continue
+		}
+		if !empty {
+			out += ","
 		}
 		v, err := store.encodeValue(item.Value)
 		if err != nil {
@@ -218,9 +224,7 @@ func (store Store) encodeTree(tree sops.TreeBranch) ([]byte, error) {
 			return nil, fmt.Errorf("Error encoding key %s: %s", k, err)
 		}
 		out += string(k) + `: ` + string(v)
-		if i != len(tree)-1 {
-			out += ","
-		}
+		empty = false
 	}
 	return []byte(out + "}"), nil
 }
@@ -326,6 +330,7 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Error marshaling to json: %s", err)
 	}
+	out = append(out, '\n')
 	return out, nil
 }
 
@@ -336,6 +341,7 @@ func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Error marshaling to json: %s", err)
 	}
+	out = append(out, '\n')
 	return out, nil
 }
 

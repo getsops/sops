@@ -33,7 +33,7 @@ const (
 	// testLocalKMSImage is a container image repository reference to a mock
 	// version of AWS' Key Management Service.
 	// Ref: https://github.com/nsmithuk/local-kms
-	testLocalKMSImage = "docker.io/nsmithuk/local-kms"
+	testLocalKMSImage = "ghcr.io/getsops/ci-container-images/local-kms"
 	// testLocalKMSImage is the container image tag to use.
 	testLocalKMSTag = "3.11.1"
 )
@@ -367,8 +367,38 @@ func TestMasterKey_NeedsRotation(t *testing.T) {
 }
 
 func TestMasterKey_ToString(t *testing.T) {
+	dummyARNWithRole := fmt.Sprintf("%s+arn:aws:iam::my-role", dummyARN)
+
+	bar := "bar"
+	bam := "bam"
+	context := map[string]*string{
+		"foo": &bar,
+		"baz": &bam,
+	}
+
 	key := NewMasterKeyFromArn(dummyARN, nil, "")
 	assert.Equal(t, dummyARN, key.ToString())
+
+	key = NewMasterKeyFromArn(dummyARNWithRole, nil, "")
+	assert.Equal(t, dummyARNWithRole, key.ToString())
+
+	key = NewMasterKeyFromArn(dummyARN, nil, "profile")
+	assert.Equal(t, fmt.Sprintf("%s||profile", dummyARN), key.ToString())
+
+	key = NewMasterKeyFromArn(dummyARNWithRole, nil, "profile")
+	assert.Equal(t, fmt.Sprintf("%s||profile", dummyARNWithRole), key.ToString())
+
+	key = NewMasterKeyFromArn(dummyARN, context, "")
+	assert.Equal(t, fmt.Sprintf("%s|baz:bam,foo:bar", dummyARN), key.ToString())
+
+	key = NewMasterKeyFromArn(dummyARNWithRole, context, "")
+	assert.Equal(t, fmt.Sprintf("%s|baz:bam,foo:bar", dummyARNWithRole), key.ToString())
+
+	key = NewMasterKeyFromArn(dummyARN, context, "profile")
+	assert.Equal(t, fmt.Sprintf("%s|baz:bam,foo:bar|profile", dummyARN), key.ToString())
+
+	key = NewMasterKeyFromArn(dummyARNWithRole, context, "profile")
+	assert.Equal(t, fmt.Sprintf("%s|baz:bam,foo:bar|profile", dummyARNWithRole), key.ToString())
 }
 
 func TestMasterKey_ToMap(t *testing.T) {

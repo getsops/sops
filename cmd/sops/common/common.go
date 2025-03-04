@@ -2,6 +2,7 @@ package common
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"time"
@@ -130,11 +131,20 @@ func EncryptTree(opts EncryptTreeOpts) error {
 	return nil
 }
 
-// LoadEncryptedFile loads an encrypted SOPS file, returning a SOPS tree
-func LoadEncryptedFile(loader sops.EncryptedFileLoader, inputPath string) (*sops.Tree, error) {
-	fileBytes, err := os.ReadFile(inputPath)
-	if err != nil {
-		return nil, NewExitError(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
+// LoadEncryptedFileEx loads an encrypted SOPS file from a file or stdin, returning a SOPS tree
+func LoadEncryptedFileEx(loader sops.EncryptedFileLoader, inputPath string, readFromStdin bool) (*sops.Tree, error) {
+	var fileBytes []byte
+	var err error
+	if readFromStdin {
+		fileBytes, err = io.ReadAll(os.Stdin)
+		if err != nil {
+			return nil, NewExitError(fmt.Sprintf("Error reading from stdin: %s", err), codes.CouldNotReadInputFile)
+		}
+	} else {
+		fileBytes, err = os.ReadFile(inputPath)
+		if err != nil {
+			return nil, NewExitError(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
+		}
 	}
 	path, err := filepath.Abs(inputPath)
 	if err != nil {
@@ -143,6 +153,11 @@ func LoadEncryptedFile(loader sops.EncryptedFileLoader, inputPath string) (*sops
 	tree, err := loader.LoadEncryptedFile(fileBytes)
 	tree.FilePath = path
 	return &tree, err
+}
+
+// LoadEncryptedFile loads an encrypted SOPS file, returning a SOPS tree
+func LoadEncryptedFile(loader sops.EncryptedFileLoader, inputPath string) (*sops.Tree, error) {
+	return LoadEncryptedFileEx(loader, inputPath, false)
 }
 
 // NewExitError returns a cli.ExitError given an error (wrapped in a generic interface{})
@@ -227,6 +242,7 @@ type GenericDecryptOpts struct {
 	Cipher          sops.Cipher
 	InputStore      sops.Store
 	InputPath       string
+	ReadFromStdin   bool
 	IgnoreMAC       bool
 	KeyServices     []keyservice.KeyServiceClient
 	DecryptionOrder []string
@@ -235,7 +251,7 @@ type GenericDecryptOpts struct {
 // LoadEncryptedFileWithBugFixes is a wrapper around LoadEncryptedFile which includes
 // check for the issue described in https://github.com/mozilla/sops/pull/435
 func LoadEncryptedFileWithBugFixes(opts GenericDecryptOpts) (*sops.Tree, error) {
-	tree, err := LoadEncryptedFile(opts.InputStore, opts.InputPath)
+	tree, err := LoadEncryptedFileEx(opts.InputStore, opts.InputPath, opts.ReadFromStdin)
 	if err != nil {
 		return nil, err
 	}
@@ -444,6 +460,20 @@ func PrettyPrintDiffs(diffs []Diff) {
 		}
 		for _, c := range diff.Removed {
 			color.New(color.FgRed).Printf("--- %s\n", c.ToString())
+		}
+	}
+}
+
+// PrettyPrintShamirDiff prints changes in shamir_threshold to stdout
+func PrettyPrintShamirDiff(oldValue, newValue int) {
+	if oldValue > 0 && oldValue == newValue {
+		fmt.Printf("shamir_threshold: %d\n", newValue)
+	} else {
+		if newValue > 0 {
+			color.New(color.FgGreen).Printf("+++ shamir_threshold: %d\n", newValue)
+		}
+		if oldValue > 0 {
+			color.New(color.FgRed).Printf("--- shamir_threshold: %d\n", oldValue)
 		}
 	}
 }

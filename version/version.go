@@ -12,11 +12,13 @@ import (
 )
 
 // Version represents the value of the current semantic version.
-var Version = "3.9.0"
+var Version = "3.9.4"
 
 // PrintVersion prints the current version of sops. If the flag
-// `--disable-version-check` is set, the function will not attempt
-// to retrieve the latest version from the GitHub API.
+// `--disable-version-check` is set or if the environment variable
+// SOPS_DISABLE_VERSION_CHECK is set to a value that is considered
+// true by https://pkg.go.dev/strconv#ParseBool, the function will
+// not attempt to retrieve the latest version from the GitHub API.
 //
 // If the flag is not set, the function will attempt to retrieve
 // the latest version from the GitHub API and compare it to the
