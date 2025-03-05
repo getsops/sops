@@ -53,8 +53,9 @@ func TestMasterKey_Encrypt(t *testing.T) {
 	})
 
 	key := MasterKey{
-		grpcConn:   newGRPCServer("0"),
-		ResourceID: testResourceID,
+		grpcConn:       newGRPCServer("0"),
+		ResourceID:     testResourceID,
+		credentialJSON: []byte("arbitrary credentials"),
 	}
 	err := key.Encrypt([]byte("encrypt"))
 	assert.NoError(t, err)
@@ -80,9 +81,10 @@ func TestMasterKey_Decrypt(t *testing.T) {
 		Plaintext: []byte(decryptedData),
 	})
 	key := MasterKey{
-		grpcConn:     newGRPCServer("0"),
-		ResourceID:   testResourceID,
-		EncryptedKey: "encryptedKey",
+		grpcConn:       newGRPCServer("0"),
+		ResourceID:     testResourceID,
+		EncryptedKey:   "encryptedKey",
+		credentialJSON: []byte("arbitrary credentials"),
 	}
 	data, err := key.Decrypt()
 	assert.NoError(t, err)
@@ -116,7 +118,7 @@ func TestMasterKey_ToMap(t *testing.T) {
 	}, key.ToMap())
 }
 
-func TestMasterKey_createCloudKMSService(t *testing.T) {
+func TestMasterKey_createCloudKMSService_withCredentialsFile(t *testing.T) {
 	tests := []struct {
 		key       MasterKey
 		errString string
@@ -136,6 +138,12 @@ func TestMasterKey_createCloudKMSService(t *testing.T) {
 		"type": "authorized_user"}`),
 			},
 		},
+		{
+			key: MasterKey{
+				ResourceID: testResourceID,
+			},
+			errString: "credentials: failed to get credentials",
+		},
 	}
 
 	for _, tt := range tests {
@@ -147,6 +155,29 @@ func TestMasterKey_createCloudKMSService(t *testing.T) {
 		}
 		assert.NoError(t, err)
 	}
+}
+
+func TestMasterKey_createCloudKMSService_withOauthToken(t *testing.T) {
+	t.Setenv(SopsGoogleCredentialsOAuthToken, "token")
+
+	masterKey := MasterKey{
+		ResourceID: testResourceID,
+	}
+
+	_, err := masterKey.newKMSClient()
+
+	assert.NoError(t, err)
+}
+
+func TestMasterKey_createCloudKMSService_withoutCredentials(t *testing.T) {
+	masterKey := MasterKey{
+		ResourceID: testResourceID,
+	}
+
+	_, err := masterKey.newKMSClient()
+
+	assert.Error(t, err)
+	assert.ErrorContains(t, err, "credentials: failed to get credentials")
 }
 
 func newGRPCServer(port string) *grpc.ClientConn {
