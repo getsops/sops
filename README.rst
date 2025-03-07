@@ -319,6 +319,14 @@ which tries several authentication methods, in this order:
 3. `Managed Identity credentials <https://pkg.go.dev/github.com/Azure/azure-sdk-for-go/sdk/azidentity#ManagedIdentityCredential>`_
 4. `Azure CLI credentials <https://pkg.go.dev/github.com/Azure/azure-sdk-for-go/sdk/azidentity#AzureCLICredential>`_
 
+
+If you want to force a specific method you can override this with the enviornment variable `SOPS_AZURE_AUTH_METHOD`
+- ``default`` (same as not setting this variable)
+- ``msi``
+- ``azure-cli``
+- ``cached-device-code`` (device code authentication which caches the token in the os keyring)
+- ``cached-browser`` (interactive browser authentication which caches the token in the os keyring)
+
 For example, you can use a Service Principal with the following environment variables:
 
 .. code:: bash

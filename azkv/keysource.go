@@ -32,7 +32,10 @@ const (
 	// KeyTypeIdentifier is the string used to identify an Azure Key Vault MasterKey.
 	KeyTypeIdentifier = "azure_kv"
 
-	sopsAzureAuthMethod = "SOPS_AZURE_AUTH_METHOD"
+	SopsAzureAuthMethodEnv = "SOPS_AZURE_AUTH_METHOD"
+
+	cachedBrowserAuthRecordFileName    = "azure-auth-record-browser.json"
+	cachedDeviceCodeAuthRecordFileName = "azure-auth-record-device-code.json"
 )
 
 var (
@@ -239,23 +242,21 @@ func (key *MasterKey) TypeToIdentifier() string {
 func (key *MasterKey) getTokenCredential() (azcore.TokenCredential, error) {
 	if key.tokenCredential == nil {
 
-		authMethod := strings.ToUpper(os.Getenv(sopsAzureAuthMethod))
+		authMethod := strings.ToLower(os.Getenv(SopsAzureAuthMethodEnv))
 		switch authMethod {
-		case "BROWSER":
-
+		case "cached-browser":
 			return cachedInteractiveBrowserCredentials()
-
-		case "DEVICE_CODE":
+		case "cached-device-code":
 			return cachedDeviceCodeCredentials()
-		case "AZURE_CLI":
+		case "azure-cli":
 			return azidentity.NewAzureCLICredential(nil)
-		case "MSI":
+		case "msi":
 			return azidentity.NewManagedIdentityCredential(nil)
 		// If "DEFAULT" or not explicitly specified then use the default authentication chain.
-		case "", "DEFAULT":
+		case "", "default":
 			return azidentity.NewDefaultAzureCredential(nil)
 		default:
-			return nil, fmt.Errorf("Value `%s` is unsupported for `%s`, to resolve this either leave it unset or use one of DEFAULT/MSI/BROWSER/DEVICE_CODE", authMethod, sopsAzureAuthMethod)
+			return nil, fmt.Errorf("Value `%s` is unsupported for environment variable `%s`, to resolve this either leave it unset or use one of `default`/`msi`/`azure-cli`/`cached-browser`/`cached-device-code`", authMethod, SopsAzureAuthMethodEnv)
 		}
 	}
 	return key.tokenCredential, nil
@@ -341,7 +342,7 @@ func cachedInteractiveBrowserCredentials() (azcore.TokenCredential, error) {
 		return nil, err
 	}
 	return cacheTokenCredential(
-		filepath.Join(cacheDir, "azure_auth_record_browser.json"),
+		filepath.Join(cacheDir, cachedBrowserAuthRecordFileName),
 		func(cache azidentity.Cache, record azidentity.AuthenticationRecord) (CachableTokenCredential, error) {
 			return azidentity.NewInteractiveBrowserCredential(&azidentity.InteractiveBrowserCredentialOptions{
 				AuthenticationRecord: record,
@@ -358,7 +359,7 @@ func cachedDeviceCodeCredentials() (azcore.TokenCredential, error) {
 	}
 
 	return cacheTokenCredential(
-		filepath.Join(cacheDir, "azure_auth_record_device_code.json"),
+		filepath.Join(cacheDir, cachedDeviceCodeAuthRecordFileName),
 		func(cache azidentity.Cache, record azidentity.AuthenticationRecord) (CachableTokenCredential, error) {
 			return azidentity.NewDeviceCodeCredential(&azidentity.DeviceCodeCredentialOptions{
 				AuthenticationRecord: record,
