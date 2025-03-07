@@ -1,6 +1,7 @@
 module github.com/getsops/sops/v3
 
 go 1.22
+
 toolchain go1.23.6
 
 require (
@@ -9,6 +10,7 @@ require (
 	filippo.io/age v1.2.1
 	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.17.0
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.8.2
+	github.com/Azure/azure-sdk-for-go/sdk/azidentity/cache v0.3.2
 	github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys v1.3.1
 	github.com/ProtonMail/go-crypto v1.1.6
 	github.com/aws/aws-sdk-go-v2 v1.36.3
@@ -60,6 +62,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.10.0 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/internal v1.1.1 // indirect
 	github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161 // indirect
+	github.com/AzureAD/microsoft-authentication-extensions-for-go/cache v0.1.1 // indirect
 	github.com/AzureAD/microsoft-authentication-library-for-go v1.3.3 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/detectors/gcp v1.25.0 // indirect
 	github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/metric v0.49.0 // indirect
@@ -112,6 +115,7 @@ require (
 	github.com/hashicorp/go-secure-stdlib/strutil v0.1.2 // indirect
 	github.com/hashicorp/go-sockaddr v1.0.7 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/keybase/go-keychain v0.0.0-20231219164618-57a3676c3af6 // indirect
 	github.com/kylelemons/godebug v1.1.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
