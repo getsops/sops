@@ -69,6 +69,7 @@ builds:
       - windows
     goarch:
       - amd64
+      - arm64
     # Modified timestamp on the binary, set to ensure reproducible builds.
     mod_timestamp: "{{ .CommitTimestamp }}"
 
