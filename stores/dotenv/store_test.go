@@ -14,6 +14,15 @@ VAR2=val2
 #comment
 VAR3_unencrypted=val3
 VAR4=val4\nval4
+VAR5="val5quoted"
+VAR6="val6
+quoted
+multiline"
+VAR7='val7
+multiline'
+VAR8='val8"
+mixing
+"quotes'
 `, "\n"))
 
 var BRANCH = sops.TreeBranch{
@@ -36,6 +45,22 @@ var BRANCH = sops.TreeBranch{
 	sops.TreeItem{
 		Key:   "VAR4",
 		Value: "val4\nval4",
+	},
+	sops.TreeItem{
+		Key:   "VAR5",
+		Value: "\"val5quoted\"",
+	},
+	sops.TreeItem{
+		Key:   "VAR6",
+		Value: "\"val6\nquoted\nmultiline\"",
+	},
+	sops.TreeItem{
+		Key:   "VAR7",
+		Value: "'val7\nmultiline'",
+	},
+	sops.TreeItem{
+		Key:   "VAR8",
+		Value: "'val8\"\nmixing\n\"quotes'",
 	},
 }
 
