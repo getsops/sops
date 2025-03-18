@@ -39,23 +39,30 @@ var fs fileSystem = osFS{stat: os.Stat}
 const (
 	maxDepth       = 100
 	configFileName = ".sops.yaml"
-	configFileNameAlternative = ".sops.yml"
 )
 
 // FindConfigFile looks for a sops config file in the current working directory and on parent directories, up to the limit defined by the maxDepth constant.
 func FindConfigFile(start string) (string, error) {
 	filepath := path.Dir(start)
 	for i := 0; i < maxDepth; i++ {
-		for _, configFileName := range []string{configFileName, configFileNameAlternative} {
-			_, err := fs.Stat(path.Join(filepath, configFileName))
-			if err != nil {
-				filepath = path.Join(filepath, "..")
-			} else {
-				return path.Join(filepath, configFileName), nil
-			}
+		_, err := fs.Stat(path.Join(filepath, configFileName))
+		if err != nil {
+			// Check if user mispelled '.sops.yaml'
+			warnWrongConfigFileExtension(filepath)
+			filepath = path.Join(filepath, "..")
+		} else {
+			return path.Join(filepath, configFileName), nil
 		}
 	}
 	return "", fmt.Errorf("Config file not found")
+}
+
+func warnWrongConfigFileExtension(filepath string) {
+	_, err :=
+		fs.Stat(path.Join(filepath, ".sops.yml"))
+	if err == nil {
+		log.Printf("warning: Found unsupported '.sops.yml' config file. Rename it to '.sops.yaml' or use '--config .sops.yml' flag")
+	}
 }
 
 type DotenvStoreConfig struct{}
