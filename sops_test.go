@@ -1023,8 +1023,31 @@ func TestSetNewKey(t *testing.T) {
 			},
 		},
 	}
-	set := branch.Set([]interface{}{"foo", "bar", "foo"}, "hello")
+	set, changed := branch.Set([]interface{}{"foo", "bar", "foo"}, "hello")
+	assert.Equal(t, true, changed)
 	assert.Equal(t, "hello", set[0].Value.(TreeBranch)[0].Value.(TreeBranch)[1].Value)
+}
+
+func TestSetNewKeyUnchanged(t *testing.T) {
+	branch := TreeBranch{
+		TreeItem{
+			Key: "foo",
+			Value: TreeBranch{
+				TreeItem{
+					Key: "bar",
+					Value: TreeBranch{
+						TreeItem{
+							Key:   "baz",
+							Value: "foobar",
+						},
+					},
+				},
+			},
+		},
+	}
+	set, changed := branch.Set([]interface{}{"foo", "bar", "baz"}, "foobar")
+	assert.Equal(t, false, changed)
+	assert.Equal(t, "foobar", set[0].Value.(TreeBranch)[0].Value.(TreeBranch)[0].Value)
 }
 
 func TestSetNewBranch(t *testing.T) {
@@ -1034,7 +1057,8 @@ func TestSetNewBranch(t *testing.T) {
 			Value: "value",
 		},
 	}
-	set := branch.Set([]interface{}{"foo", "bar", "baz"}, "hello")
+	set, changed := branch.Set([]interface{}{"foo", "bar", "baz"}, "hello")
+	assert.Equal(t, true, changed)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
 			Key:   "key",
@@ -1067,7 +1091,8 @@ func TestSetArrayDeepNew(t *testing.T) {
 			},
 		},
 	}
-	set := branch.Set([]interface{}{"foo", 2, "bar"}, "hello")
+	set, changed := branch.Set([]interface{}{"foo", 2, "bar"}, "hello")
+	assert.Equal(t, true, changed)
 	assert.Equal(t, "hello", set[0].Value.([]interface{})[2].(TreeBranch)[0].Value)
 }
 
@@ -1078,13 +1103,15 @@ func TestSetNewKeyDeep(t *testing.T) {
 			Value: "bar",
 		},
 	}
-	set := branch.Set([]interface{}{"foo", "bar", "baz"}, "hello")
+	set, changed := branch.Set([]interface{}{"foo", "bar", "baz"}, "hello")
+	assert.Equal(t, true, changed)
 	assert.Equal(t, "hello", set[0].Value.(TreeBranch)[0].Value.(TreeBranch)[0].Value)
 }
 
 func TestSetNewKeyOnEmptyBranch(t *testing.T) {
 	branch := TreeBranch{}
-	set := branch.Set([]interface{}{"foo", "bar", "baz"}, "hello")
+	set, changed := branch.Set([]interface{}{"foo", "bar", "baz"}, "hello")
+	assert.Equal(t, true, changed)
 	assert.Equal(t, "hello", set[0].Value.(TreeBranch)[0].Value.(TreeBranch)[0].Value)
 }
 
@@ -1099,13 +1126,15 @@ func TestSetArray(t *testing.T) {
 			},
 		},
 	}
-	set := branch.Set([]interface{}{"foo", 0}, "uno")
+	set, changed := branch.Set([]interface{}{"foo", 0}, "uno")
+	assert.Equal(t, true, changed)
 	assert.Equal(t, "uno", set[0].Value.([]interface{})[0])
 }
 
 func TestSetArrayNew(t *testing.T) {
 	branch := TreeBranch{}
-	set := branch.Set([]interface{}{"foo", 0, 0}, "uno")
+	set, changed := branch.Set([]interface{}{"foo", 0, 0}, "uno")
+	assert.Equal(t, true, changed)
 	assert.Equal(t, "uno", set[0].Value.([]interface{})[0].([]interface{})[0])
 }
 
@@ -1116,7 +1145,8 @@ func TestSetExisting(t *testing.T) {
 			Value: "foobar",
 		},
 	}
-	set := branch.Set([]interface{}{"foo"}, "bar")
+	set, changed := branch.Set([]interface{}{"foo"}, "bar")
+	assert.Equal(t, true, changed)
 	assert.Equal(t, "bar", set[0].Value)
 }
 
@@ -1127,7 +1157,8 @@ func TestSetArrayLeafNewItem(t *testing.T) {
 			Value: []interface{}{},
 		},
 	}
-	set := branch.Set([]interface{}{"array", 2}, "hello")
+	set, changed := branch.Set([]interface{}{"array", 2}, "hello")
+	assert.Equal(t, true, changed)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
 			Key: "array",
@@ -1147,7 +1178,8 @@ func TestSetArrayNonLeaf(t *testing.T) {
 			},
 		},
 	}
-	set := branch.Set([]interface{}{"array", 0, "hello"}, "hello")
+	set, changed := branch.Set([]interface{}{"array", 0, "hello"}, "hello")
+	assert.Equal(t, true, changed)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
 			Key: "array",

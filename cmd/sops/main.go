@@ -137,7 +137,8 @@ func main() {
 
    To use a different GPG binary than the one in your PATH, set SOPS_GPG_EXEC.
 
-   To select a different editor than the default (vim), set EDITOR.
+   To select a different editor than the default (vim), set SOPS_EDITOR or
+   EDITOR.
 
    Note that flags must always be provided before the filename to operate on.
    Otherwise, they will be ignored.
@@ -161,6 +162,10 @@ func main() {
 				cli.StringFlag{
 					Name:  "user",
 					Usage: "the user to run the command as",
+				},
+				cli.BoolFlag{
+					Name:  "same-process",
+					Usage: "run command in the current process instead of in a child process",
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
@@ -194,6 +199,10 @@ func main() {
 
 				if c.Bool("background") {
 					log.Warn("exec-env's --background option is deprecated and will be removed in a future version of sops")
+
+					if c.Bool("same-process") {
+						return common.NewExitError("Error: The --same-process flag cannot be used with --background", codes.ErrorConflictingParameters)
+					}
 				}
 
 				tree, err := decryptTree(opts)
@@ -224,12 +233,13 @@ func main() {
 				}
 
 				if err := exec.ExecWithEnv(exec.ExecOpts{
-					Command:    command,
-					Plaintext:  []byte{},
-					Background: c.Bool("background"),
-					Pristine:   c.Bool("pristine"),
-					User:       c.String("user"),
-					Env:        env,
+					Command:     command,
+					Plaintext:   []byte{},
+					Background:  c.Bool("background"),
+					Pristine:    c.Bool("pristine"),
+					User:        c.String("user"),
+					SameProcess: c.Bool("same-process"),
+					Env:         env,
 				}); err != nil {
 					return toExitError(err)
 				}
@@ -446,7 +456,12 @@ func main() {
 			Name:      "filestatus",
 			Usage:     "check the status of the file, returning encryption status",
 			ArgsUsage: `file`,
-			Flags:     []cli.Flag{},
+			Flags:     []cli.Flag{
+				cli.StringFlag{
+					Name:  "input-type",
+					Usage: "currently ini, json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
+				},
+			},
 			Action: func(c *cli.Context) error {
 				if c.NArg() < 1 {
 					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
@@ -707,8 +722,8 @@ func main() {
 		},
 		{
 			Name:      "decrypt",
-			Usage:     "decrypt a file, and output the results to stdout",
-			ArgsUsage: `file`,
+			Usage:     "decrypt a file, and output the results to stdout. If no filename is provided, stdin will be used.",
+			ArgsUsage: `[file]`,
 			Flags: append([]cli.Flag{
 				cli.BoolFlag{
 					Name:  "in-place, i",
@@ -736,7 +751,7 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:  "filename-override",
-					Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type",
+					Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type. Should be provided when reading from stdin.",
 				},
 				cli.StringFlag{
 					Name:   "decryption-order",
@@ -748,19 +763,24 @@ func main() {
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
-				if c.NArg() < 1 {
-					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
+				readFromStdin := c.NArg() == 0
+				if readFromStdin && c.Bool("in-place") {
+					return common.NewExitError("Error: cannot use --in-place when reading from stdin", codes.ErrorConflictingParameters)
 				}
 				warnMoreThanOnePositionalArgument(c)
 				if c.Bool("in-place") && c.String("output") != "" {
 					return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
 				}
-				fileName, err := filepath.Abs(c.Args()[0])
-				if err != nil {
-					return toExitError(err)
-				}
-				if _, err := os.Stat(fileName); os.IsNotExist(err) {
-					return common.NewExitError(fmt.Sprintf("Error: cannot operate on non-existent file %q", fileName), codes.NoFileSpecified)
+				var fileName string
+				var err error
+				if !readFromStdin {
+					fileName, err = filepath.Abs(c.Args()[0])
+					if err != nil {
+						return toExitError(err)
+					}
+					if _, err := os.Stat(fileName); os.IsNotExist(err) {
+						return common.NewExitError(fmt.Sprintf("Error: cannot operate on non-existent file %q", fileName), codes.NoFileSpecified)
+					}
 				}
 				fileNameOverride := c.String("filename-override")
 				if fileNameOverride == "" {
@@ -791,6 +811,7 @@ func main() {
 					OutputStore:     outputStore,
 					InputStore:      inputStore,
 					InputPath:       fileName,
+					ReadFromStdin:   readFromStdin,
 					Cipher:          aes.NewCipher(),
 					Extract:         extract,
 					KeyServices:     svcs,
@@ -832,8 +853,8 @@ func main() {
 		},
 		{
 			Name:      "encrypt",
-			Usage:     "encrypt a file, and output the results to stdout",
-			ArgsUsage: `file`,
+			Usage:     "encrypt a file, and output the results to stdout. If no filename is provided, stdin will be used.",
+			ArgsUsage: `[file]`,
 			Flags: append([]cli.Flag{
 				cli.BoolFlag{
 					Name:  "in-place, i",
@@ -911,26 +932,36 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:  "filename-override",
-					Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type",
+					Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type. Required when reading from stdin.",
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
-				if c.NArg() < 1 {
-					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
+				readFromStdin := c.NArg() == 0
+				if readFromStdin {
+					if c.Bool("in-place") {
+						return common.NewExitError("Error: cannot use --in-place when reading from stdin", codes.ErrorConflictingParameters)
+					}
+					if c.String("filename-override") == "" {
+						return common.NewExitError("Error: must specify --filename-override when reading from stdin", codes.ErrorConflictingParameters)
+					}
 				}
 				warnMoreThanOnePositionalArgument(c)
 				if c.Bool("in-place") && c.String("output") != "" {
 					return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
 				}
-				fileName, err := filepath.Abs(c.Args()[0])
-				if err != nil {
-					return toExitError(err)
-				}
-				if _, err := os.Stat(fileName); os.IsNotExist(err) {
-					return common.NewExitError(fmt.Sprintf("Error: cannot operate on non-existent file %q", fileName), codes.NoFileSpecified)
+				var fileName string
+				var err error
+				if !readFromStdin {
+					fileName, err = filepath.Abs(c.Args()[0])
+					if err != nil {
+						return toExitError(err)
+					}
+					if _, err := os.Stat(fileName); os.IsNotExist(err) {
+						return common.NewExitError(fmt.Sprintf("Error: cannot operate on non-existent file %q", fileName), codes.NoFileSpecified)
+					}
 				}
 				fileNameOverride := c.String("filename-override")
 				if fileNameOverride == "" {
@@ -955,6 +986,7 @@ func main() {
 					OutputStore:   outputStore,
 					InputStore:    inputStore,
 					InputPath:     fileName,
+					ReadFromStdin: readFromStdin,
 					Cipher:        aes.NewCipher(),
 					KeyServices:   svcs,
 					encryptConfig: encConfig,
@@ -1341,6 +1373,10 @@ func main() {
 					Usage:  "comma separated list of decryption key types",
 					EnvVar: "SOPS_DECRYPTION_ORDER",
 				},
+				cli.BoolFlag{
+					Name:  "idempotent",
+					Usage: "do nothing if the given index already has the given value",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if c.Bool("verbose") {
@@ -1378,7 +1414,7 @@ func main() {
 				if err != nil {
 					return toExitError(err)
 				}
-				output, err := set(setOpts{
+				output, changed, err := set(setOpts{
 					OutputStore:     outputStore,
 					InputStore:      inputStore,
 					InputPath:       fileName,
@@ -1391,6 +1427,11 @@ func main() {
 				})
 				if err != nil {
 					return toExitError(err)
+				}
+
+				if !changed && c.Bool("idempotent") {
+					log.Info("File not written due to no change")
+					return nil
 				}
 
 				// We open the file *after* the operations on the tree have been
@@ -1517,8 +1558,9 @@ func main() {
 			Usage: "generate a new data encryption key and reencrypt all values with the new key",
 		},
 		cli.BoolFlag{
-			Name:  "disable-version-check",
-			Usage: "do not check whether the current version is latest during --version",
+			Name:   "disable-version-check",
+			Usage:  "do not check whether the current version is latest during --version",
+			EnvVar: "SOPS_DISABLE_VERSION_CHECK",
 		},
 		cli.StringFlag{
 			Name:   "kms, k",
@@ -1830,7 +1872,7 @@ func main() {
 			if err != nil {
 				return toExitError(err)
 			}
-			output, err = set(setOpts{
+			output, _, err = set(setOpts{
 				OutputStore:     outputStore,
 				InputStore:      inputStore,
 				InputPath:       fileName,

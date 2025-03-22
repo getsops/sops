@@ -29,15 +29,17 @@ jobs:
       VAULT_ADDR: "http://127.0.0.1:8200"
     steps:
       - name: Set up Go ${{ matrix.go-version }}
-        uses: actions/setup-go@41dfa10bad2bb2ae585af6ee5bb4d7d973ad74ed # v5.1.0
+        uses: actions/setup-go@f111f3307d8850f501ac008e886eec1fd1932a34 # v5.3.0
         with:
           go-version: ${{ matrix.go-version }}
         id: go
 
       - name: Check out code into the Go module directory
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
 
-      - uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+      - uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
@@ -69,14 +71,14 @@ jobs:
 
       - name: Upload artifact for ${{ matrix.os }}
         if: matrix.os != 'windows'
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: sops-${{ matrix.go-version }}-${{ matrix.os }}-${{ matrix.arch }}-${{ github.sha }}
           path: sops-${{ matrix.go-version }}-${{ matrix.os }}-${{ matrix.arch }}-${{ github.sha }}
 
       - name: Upload artifact for ${{ matrix.os }}
         if: matrix.os == 'windows'
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: sops-${{ matrix.go-version }}-${{ matrix.os }}-${{ github.sha }}
           path: sops-${{ matrix.go-version }}-${{ matrix.os }}-${{ github.sha }}
@@ -94,6 +96,8 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
 
       # Rustup will detect toolchain version and profile from rust-toolchain.toml
       # It will download and install the toolchain and components automatically
@@ -104,7 +108,7 @@ jobs:
       - name: Show Rust version
         run: cargo --version
 
-      - uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+      - uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
         with:
           name: sops-${{ matrix.go-version }}-linux-amd64-${{ github.sha }}
 

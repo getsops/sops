@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"os"
 	"regexp"
+	"sort"
 	"strings"
 	"time"
 
@@ -181,6 +182,38 @@ func ParseKMSContext(in interface{}) map[string]*string {
 	return out
 }
 
+// kmsContextToString converts a dictionary into a string that can be parsed
+// again with ParseKMSContext().
+func kmsContextToString(in map[string]*string) string {
+	if len(in) == 0 {
+		return ""
+	}
+
+	// Collect the keys in a slice and compute the expected length
+	keys := make([]string, 0, len(in))
+	length := 0
+	for key := range in {
+		keys = append(keys, key)
+		length += len(key) + len(*in[key]) + 2
+	}
+
+	// Sort the keys
+	sort.Strings(keys)
+
+	// Compose a comma-separated string of key-vale pairs
+	var builder strings.Builder
+	builder.Grow(length)
+	for index, key := range keys {
+		if index > 0 {
+			builder.WriteString(",")
+		}
+		builder.WriteString(key)
+		builder.WriteByte(':')
+		builder.WriteString(*in[key])
+	}
+	return builder.String()
+}
+
 // CredentialsProvider is a wrapper around aws.CredentialsProvider used for
 // authentication towards AWS KMS.
 type CredentialsProvider struct {
@@ -278,7 +311,18 @@ func (key *MasterKey) NeedsRotation() bool {
 
 // ToString converts the key to a string representation.
 func (key *MasterKey) ToString() string {
-	return key.Arn
+	arnRole := key.Arn
+	if key.Role != "" {
+		arnRole = fmt.Sprintf("%s+%s", key.Arn, key.Role)
+	}
+	context := kmsContextToString(key.EncryptionContext)
+	if key.AwsProfile != "" {
+		return fmt.Sprintf("%s|%s|%s", arnRole, context, key.AwsProfile)
+	}
+	if context != "" {
+		return fmt.Sprintf("%s|%s", arnRole, context)
+	}
+	return arnRole
 }
 
 // ToMap converts the MasterKey to a map for serialization purposes.

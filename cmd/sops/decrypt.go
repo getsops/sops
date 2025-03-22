@@ -19,6 +19,7 @@ type decryptOpts struct {
 	InputStore      sops.Store
 	OutputStore     sops.Store
 	InputPath       string
+	ReadFromStdin   bool
 	IgnoreMAC       bool
 	Extract         []interface{}
 	KeyServices     []keyservice.KeyServiceClient
@@ -27,11 +28,12 @@ type decryptOpts struct {
 
 func decryptTree(opts decryptOpts) (tree *sops.Tree, err error) {
 	tree, err = common.LoadEncryptedFileWithBugFixes(common.GenericDecryptOpts{
-		Cipher:      opts.Cipher,
-		InputStore:  opts.InputStore,
-		InputPath:   opts.InputPath,
-		IgnoreMAC:   opts.IgnoreMAC,
-		KeyServices: opts.KeyServices,
+		Cipher:        opts.Cipher,
+		InputStore:    opts.InputStore,
+		InputPath:     opts.InputPath,
+		ReadFromStdin: opts.ReadFromStdin,
+		IgnoreMAC:     opts.IgnoreMAC,
+		KeyServices:   opts.KeyServices,
 	})
 	if err != nil {
 		return nil, err

@@ -428,7 +428,17 @@ func (key *MasterKey) decryptWithGnuPG() ([]byte, error) {
 		return nil, fmt.Errorf("failed to decrypt sops data key with pgp: %s",
 			strings.TrimSpace(stderr.String()))
 	}
-	return stdout.Bytes(), nil
+	result := stdout.Bytes()
+	if len(result) == 0 {
+		// This can happen if an older GnuPG version is used to decrypt a key encrypted with a
+		// newer GnuPG version that used an AEAD cipher, which the old version does not support.
+		// Apparently some GnuPG versions drop the unspuported packets, which results in a decrypted
+		// data of 0 bytes, and returns nothing with exit code 0.
+		//
+		// (See https://github.com/getsops/sops/issues/896#issuecomment-2688079300 for more infos.)
+		return nil, fmt.Errorf("failed to decrypt sops data key with pgp: zero bytes returned")
+	}
+	return result, nil
 }
 
 // NeedsRotation returns whether the data key needs to be rotated
@@ -634,7 +644,13 @@ func gnuPGHome(customPath string) string {
 // This is mostly used for compatibility reasons, as older versions of GnuPG
 // do not always like long IDs.
 func shortenFingerprint(fingerprint string) string {
-	if offset := len(fingerprint) - 16; offset > 0 {
+	offset := len(fingerprint) - 16
+	// If the fingerprint ends with '!', we must include '!' in the ID *and* the
+	// 16 hex digits before it. See https://github.com/getsops/sops/issues/1365.
+	if strings.HasSuffix(fingerprint, "!") {
+		offset -= 1
+	}
+	if offset > 0 {
 		fingerprint = fingerprint[offset:]
 	}
 	return fingerprint
