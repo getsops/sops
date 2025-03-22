@@ -114,6 +114,11 @@ type Comment struct {
 	Value string
 }
 
+// EmptyLines represents empty lines in the sops tree
+type EmptyLines struct {
+	Count int  // Must be positive
+}
+
 // TreeItem is an item inside sops's tree
 type TreeItem struct {
 	Key   interface{}
@@ -368,6 +373,9 @@ func (branch TreeBranch) walkSlice(in []interface{}, path []string, commentsStac
 	// Because append returns a new slice, the original stack is not changed.
 	commentsStack = append(commentsStack, []string{})
 	for i, v := range in {
+		if _, ok := v.(EmptyLines); ok {
+			continue
+		}
 		c, vIsComment := v.(Comment)
 		if vIsComment {
 			// If v is a comment, we add it to the slice of active comments.
@@ -391,6 +399,9 @@ func (branch TreeBranch) walkBranch(in TreeBranch, path []string, commentsStack 
 	// Because append returns a new slice, the original stack is not changed.
 	commentsStack = append(commentsStack, []string{})
 	for i, item := range in {
+		if _, ok := item.Key.(EmptyLines); ok {
+			continue
+		}
 		if c, ok := item.Key.(Comment); ok {
 			// If key is a comment, we add it to the slice of active comments.
 			// This allows us to also encrypt comments themselves by enabling encryption in a prior comment.
