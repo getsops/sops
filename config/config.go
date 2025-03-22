@@ -47,12 +47,22 @@ func FindConfigFile(start string) (string, error) {
 	for i := 0; i < maxDepth; i++ {
 		_, err := fs.Stat(path.Join(filepath, configFileName))
 		if err != nil {
+			// Check if user mispelled '.sops.yaml'
+			warnWrongConfigFileExtension(filepath)
 			filepath = path.Join(filepath, "..")
 		} else {
 			return path.Join(filepath, configFileName), nil
 		}
 	}
 	return "", fmt.Errorf("Config file not found")
+}
+
+func warnWrongConfigFileExtension(filepath string) {
+	_, err :=
+		fs.Stat(path.Join(filepath, ".sops.yml"))
+	if err == nil {
+		log.Printf("warning: Found unsupported '.sops.yml' config file. Rename it to '.sops.yaml' or use '--config .sops.yml' flag")
+	}
 }
 
 type DotenvStoreConfig struct{}
