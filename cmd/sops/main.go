@@ -785,6 +785,11 @@ func main() {
 				fileNameOverride := c.String("filename-override")
 				if fileNameOverride == "" {
 					fileNameOverride = fileName
+				} else {
+					fileNameOverride, err = filepath.Abs(fileNameOverride)
+					if err != nil {
+						return toExitError(err)
+					}
 				}
 
 				inputStore, err := inputStore(c, fileNameOverride)
@@ -966,6 +971,11 @@ func main() {
 				fileNameOverride := c.String("filename-override")
 				if fileNameOverride == "" {
 					fileNameOverride = fileName
+				} else {
+					fileNameOverride, err = filepath.Abs(fileNameOverride)
+					if err != nil {
+						return toExitError(err)
+					}
 				}
 
 				inputStore, err := inputStore(c, fileNameOverride)
@@ -1132,6 +1142,11 @@ func main() {
 				fileNameOverride := c.String("filename-override")
 				if fileNameOverride == "" {
 					fileNameOverride = fileName
+				} else {
+					fileNameOverride, err = filepath.Abs(fileNameOverride)
+					if err != nil {
+						return toExitError(err)
+					}
 				}
 
 				inputStore, err := inputStore(c, fileNameOverride)
@@ -1769,6 +1784,11 @@ func main() {
 		fileNameOverride := c.String("filename-override")
 		if fileNameOverride == "" {
 			fileNameOverride = fileName
+		} else {
+			fileNameOverride, err = filepath.Abs(fileNameOverride)
+			if err != nil {
+				return toExitError(err)
+			}
 		}
 
 		commandCount := 0
