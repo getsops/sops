@@ -2143,7 +2143,7 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 			"address",
 			fmt.Sprintf("%s://%s", url.Scheme, addr),
 		).Infof("Connecting to key service")
-		conn, err := grpc.Dial(addr, opts...)
+		conn, err := grpc.NewClient(addr, opts...)
 		if err != nil {
 			log.Fatalf("failed to listen: %v", err)
 		}
@@ -2276,7 +2276,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 			if err != nil {
 				errMsg = fmt.Sprintf("%s: %s", errMsg, err)
 			}
-			return nil, fmt.Errorf(errMsg)
+			return nil, fmt.Errorf("%s", errMsg)
 		}
 		return conf.KeyGroups, err
 	}
