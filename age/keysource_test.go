@@ -485,6 +485,33 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		assert.ErrorContains(t, err, fmt.Sprintf("failed to parse '%s' age identities", SopsAgeKeyEnv))
 		assert.Nil(t, got)
 	})
+
+	t.Run(SopsAgeKeyCmdEnv, func(t *testing.T) {
+		tmpDir := t.TempDir()
+		// Overwrite to ensure local config is not picked up by tests
+		overwriteUserConfigDir(t, tmpDir)
+
+		t.Setenv(SopsAgeKeyCmdEnv, "echo '"+mockIdentity+"'")
+
+		key := &MasterKey{}
+		got, err := key.loadIdentities()
+		assert.NoError(t, err)
+		assert.Len(t, got, 1)
+	})
+
+	t.Run("cmd error", func(t *testing.T) {
+		tmpDir := t.TempDir()
+		// Overwrite to ensure local config is not picked up by tests
+		overwriteUserConfigDir(t, tmpDir)
+
+		t.Setenv(SopsAgeKeyCmdEnv, "meow")
+
+		key := &MasterKey{}
+		got, err := key.loadIdentities()
+		assert.Error(t, err)
+		assert.ErrorContains(t, err, "failed to execute command meow")
+		assert.Nil(t, got)
+	})
 }
 
 // overwriteUserConfigDir sets the user config directory and the user home directory
