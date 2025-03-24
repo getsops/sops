@@ -19,7 +19,7 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/getsops/sops/v3/logging"
-	"github.com/kballard/go-shellquote"
+	"github.com/google/shlex"
 )
 
 const (
@@ -316,13 +316,13 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, error) {
 	}
 
 	if ageKeyCmd, ok := os.LookupEnv(SopsAgeKeyCmdEnv); ok {
-		args, err := shellquote.Split(ageKeyCmd)
+		args, err := shlex.Split(ageKeyCmd)
 		if err != nil {
-			return nil, fmt.Errorf("failed to parse command %s: %w", ageKeyCmd, err)
+			return nil, fmt.Errorf("failed to parse command %s from %s: %w", ageKeyCmd, SopsAgeKeyCmdEnv, err)
 		}
 		out, err := exec.Command(args[0], args[1:]...).Output()
 		if err != nil {
-			return nil, fmt.Errorf("failed to execute command %s: %w", ageKeyCmd, err)
+			return nil, fmt.Errorf("failed to execute command %s from %s: %w", ageKeyCmd, SopsAgeKeyCmdEnv, err)
 		}
 		readers[SopsAgeKeyCmdEnv] = bytes.NewReader(out)
 	}

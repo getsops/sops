@@ -26,7 +26,6 @@ require (
 	github.com/goware/prefixer v0.0.0-20160118172347-395022866408
 	github.com/hashicorp/go-cleanhttp v0.5.2
 	github.com/hashicorp/vault/api v1.16.0
-	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51
 	github.com/lib/pq v1.10.9
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-wordwrap v1.0.1
