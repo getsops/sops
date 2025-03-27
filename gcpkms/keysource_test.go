@@ -9,6 +9,7 @@ import (
 
 	"cloud.google.com/go/kms/apiv1/kmspb"
 	"github.com/stretchr/testify/assert"
+	"golang.org/x/oauth2"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -36,6 +37,13 @@ func TestMasterKeysFromResourceIDString(t *testing.T) {
 	if k2.ResourceID != expectedResourceID2 {
 		t.Errorf("ResourceID mismatch. Expected %s, found %s", expectedResourceID2, k2.ResourceID)
 	}
+}
+
+func TestTokenSource_ApplyToMasterKey(t *testing.T) {
+	src := NewTokenSource(oauth2.StaticTokenSource(&oauth2.Token{AccessToken: "some-token"}))
+	key := &MasterKey{}
+	src.ApplyToMasterKey(key)
+	assert.Equal(t, src.source, key.tokenSource)
 }
 
 func TestCredentialJSON_ApplyToMasterKey(t *testing.T) {
