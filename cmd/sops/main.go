@@ -1583,6 +1583,10 @@ func main() {
 			Usage:  "do not check whether the current version is latest during --version",
 			EnvVar: "SOPS_DISABLE_VERSION_CHECK",
 		},
+		cli.BoolFlag{
+			Name:  "check-for-updates",
+			Usage: "do check whether the current version is latest during --version",
+		},
 		cli.StringFlag{
 			Name:   "kms, k",
 			Usage:  "comma separated list of KMS ARNs",
