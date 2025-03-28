@@ -4,10 +4,10 @@ import (
 	"bufio"
 	"bytes"
 	"errors"
-	"filippo.io/age/plugin"
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -15,9 +15,11 @@ import (
 	"filippo.io/age"
 	"filippo.io/age/agessh"
 	"filippo.io/age/armor"
+	"filippo.io/age/plugin"
 	"github.com/sirupsen/logrus"
 
 	"github.com/getsops/sops/v3/logging"
+	"github.com/google/shlex"
 )
 
 const (
@@ -27,6 +29,9 @@ const (
 	// SopsAgeKeyFileEnv can be set as an environment variable pointing to an
 	// age keys file.
 	SopsAgeKeyFileEnv = "SOPS_AGE_KEY_FILE"
+	// SopsAgeKeyCmdEnv can be set as an environment variable with a command
+	// to execute that returns the age keys.
+	SopsAgeKeyCmdEnv = "SOPS_AGE_KEY_CMD"
 	// SopsAgeSshPrivateKeyFileEnv can be set as an environment variable pointing to
 	// a private SSH key file.
 	SopsAgeSshPrivateKeyFileEnv = "SOPS_AGE_SSH_PRIVATE_KEY_FILE"
@@ -308,6 +313,18 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, error) {
 		}
 		defer f.Close()
 		readers[SopsAgeKeyFileEnv] = f
+	}
+
+	if ageKeyCmd, ok := os.LookupEnv(SopsAgeKeyCmdEnv); ok {
+		args, err := shlex.Split(ageKeyCmd)
+		if err != nil {
+			return nil, fmt.Errorf("failed to parse command %s from %s: %w", ageKeyCmd, SopsAgeKeyCmdEnv, err)
+		}
+		out, err := exec.Command(args[0], args[1:]...).Output()
+		if err != nil {
+			return nil, fmt.Errorf("failed to execute command %s from %s: %w", ageKeyCmd, SopsAgeKeyCmdEnv, err)
+		}
+		readers[SopsAgeKeyCmdEnv] = bytes.NewReader(out)
 	}
 
 	userConfigDir, err := getUserConfigDir()
