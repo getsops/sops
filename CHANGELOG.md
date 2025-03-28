@@ -1,5 +1,102 @@
 # Changelog
 
+## 3.10.0
+
+Security fixes:
+
+* Cherry-pick a fix for a timing vulnerability in the Shamir Secret Sharing code.
+  The code was vendored from HashiCorp's Vault project, and the issue was fixed
+  there two years ago; see [GHSA-vq4h-9ghm-qmrr](https://github.com/advisories/GHSA-vq4h-9ghm-qmrr)
+  for details ([#1813](https://github.com/getsops/sops/pull/1813)).
+
+Features:
+
+* Add `--input-type` option for `sops filestatus` subcommand ([#1601](https://github.com/getsops/sops/pull/1601)).
+* Allow to set the editor `sops` should use with the `SOPS_EDITOR` environment variable.
+  If not set, `sops` falls back to `EDITOR` as before ([#1611](https://github.com/getsops/sops/pull/1611)).
+* Allow users to disable the latest version check with the environment variable `SOPS_DISABLE_VERSION_CHECK`.
+  Setting it to `1`, `t`, `T`, `TRUE`, `true`, or `True` explicitly
+  disables the check ([#1684](https://github.com/getsops/sops/pull/1684)).
+* Allow users to explicitly enable the latest version check with the `--check-for-updates`
+  option ([#1816](https://github.com/getsops/sops/pull/1816)).
+* Add duplicate section support for INI store ([#1452](https://github.com/getsops/sops/pull/1452)).
+* Add check to prevent duplicate keys in YAML files ([#1203](https://github.com/getsops/sops/pull/1203)).
+* Add `--same-process` option for the `sops exec-env` to use the `execve` syscall
+  instead of starting the command in a child process ([#880](https://github.com/getsops/sops/pull/880)).
+* Add `--idempotent` option for the `sops set` subcommand that will only
+  write the file if a change happened ([#1754](https://github.com/getsops/sops/pull/1754)).
+* Encrypt and decrypt `time.Time` objects that can appear in YAML files
+  when using dates and timestamps ([#1759](https://github.com/getsops/sops/pull/1759)).
+* Allow to encrypt and decrypt from `stdin` without having to provide
+  platform-specific device names. This only works when using the
+  `sops encrypt` and `sops decrypt` subcommands ([#1690](https://github.com/getsops/sops/pull/1690)).
+* Allow to set the SOPS config location with the environment variable
+  `SOPS_CONFIG` ([#1701](https://github.com/getsops/sops/pull/1701)).
+* Support the `--config` option in the `sops publish` subcommand ([#1779](https://github.com/getsops/sops/pull/1779)).
+* Omit empty master key metadata from encrypted files ([#1571](https://github.com/getsops/sops/pull/1571)).
+* Add SSH support for Age ([#1692](https://github.com/getsops/sops/pull/1692)).
+* Support Age identities with passphrases ([#1400](https://github.com/getsops/sops/pull/1400)).
+* Add Age plugin support ([#1641](https://github.com/getsops/sops/pull/1641)).
+* Allow to set the `SOPS_AGE_KEY_CMD` environment variable to an executable that
+  returns Age keys ([#1811](https://github.com/getsops/sops/pull/1811)).
+* Add support for `oauth2.TokenSource` injection from key service clients in
+  GCP KMS ([#1794](https://github.com/getsops/sops/pull/1794)).
+* Support `GOOGLE_OAUTH_ACCESS_TOKEN` for GCP KMS ([#1578](https://github.com/getsops/sops/pull/1578)).
+
+Improvements:
+
+* Dependency updates ([#1743](https://github.com/getsops/sops/pull/1743), [#1745](https://github.com/getsops/sops/pull/1745),
+  [#1751](https://github.com/getsops/sops/pull/1751), [#1763](https://github.com/getsops/sops/pull/1763),
+  [#1769](https://github.com/getsops/sops/pull/1769), [#1773](https://github.com/getsops/sops/pull/1773),
+  [#1784](https://github.com/getsops/sops/pull/1784), [#1797](https://github.com/getsops/sops/pull/1797),
+  [#1802](https://github.com/getsops/sops/pull/1802), [#1806](https://github.com/getsops/sops/pull/1806),
+  [#1809](https://github.com/getsops/sops/pull/1809), [#1814](https://github.com/getsops/sops/pull/1814)).
+* Fix typos ([#1765](https://github.com/getsops/sops/pull/1765)).
+* Make sure that tests do not pick up `keys.txt` from user's `$HOME` dir ([#1766](https://github.com/getsops/sops/pull/1766)).
+* Consolidate passphrase reading functionality in Age code ([#1775](https://github.com/getsops/sops/pull/1775)).
+* Fix some problems reported by the `staticcheck` linter ([#1780](https://github.com/getsops/sops/pull/1780)).
+* Improve documentation of Shamir Secret Sharing code to ease maintenance ([#1813](https://github.com/getsops/sops/pull/1813)).
+* Make sure all files are properly formatted ([#1817](https://github.com/getsops/sops/pull/1817)).
+* `sops` now warns if it finds a `.sops.yml` file while searching for a
+  `.sops.yaml` config file ([#1820](https://github.com/getsops/sops/pull/1820)).
+
+Bugfixes:
+
+* Add trailing newline at the end of JSON files ([#1476](https://github.com/getsops/sops/pull/1476)).
+* Check GnuPG decryption result for non-empty size. Certain older versions return
+  an empty result with a successful return code when a AEAD cipher from a newer
+  version was used ([#1776](https://github.com/getsops/sops/pull/1776)).
+* Fix caching of `Metadata.DataKey` ([#1781](https://github.com/getsops/sops/pull/1781)).
+* If `--filename-override` is specified, convert it to an absolute path same as regular
+  filenames ([#1793](https://github.com/getsops/sops/pull/1793)).
+
+Deprecations:
+
+* The current behavior that `sops --version` always checks whether the current
+  version is the latest is deprecated and will no longer be the default eventually.
+  It is best to right now always specify `--disable-version-check` or `--check-for-updates`
+  to `sops --version`, or alternatively set the environment variable `SOPS_DISABLE_VERSION_CHECK=true`
+  to already get the planned default behavior today. ([#1816](https://github.com/getsops/sops/pull/1816)).
+
+Project changes:
+
+* Go 1.22 is no longer support; CI now also builds with Go 1.24 ([#1819](https://github.com/getsops/sops/pull/1819)).
+* CI dependency updates ([#1746](https://github.com/getsops/sops/pull/1746),
+  [#1750](https://github.com/getsops/sops/pull/1750), [#1770](https://github.com/getsops/sops/pull/1770),
+  [#1782](https://github.com/getsops/sops/pull/1782), [#1795](https://github.com/getsops/sops/pull/1795),
+  [#1801](https://github.com/getsops/sops/pull/1801), [#1808](https://github.com/getsops/sops/pull/1808)).
+* Rust dependency updates for functional tests ([#1744](https://github.com/getsops/sops/pull/1744),
+  [#1762](https://github.com/getsops/sops/pull/1762), [#1768](https://github.com/getsops/sops/pull/1768),
+  [#1783](https://github.com/getsops/sops/pull/1783), [#1796](https://github.com/getsops/sops/pull/1796),
+  [#1800](https://github.com/getsops/sops/pull/1800), [#1807](https://github.com/getsops/sops/pull/1807)).
+* Bump Rust version for functional tests to 1.85 ([#1783](https://github.com/getsops/sops/pull/1783)).
+* Release environment updates ([#1700](https://github.com/getsops/sops/pull/1700),
+  [#1761](https://github.com/getsops/sops/pull/1761)).
+* The changelog is now a MarkDown document ([#1741](https://github.com/getsops/sops/pull/1741)).
+* We now also build a Windows ARM64 binary ([#1791](https://github.com/getsops/sops/pull/1791)).
+* In the `updatekey.Opts` structure, `GroupQuorum` was renamed to `ShamirThreshold`
+  ([#1631](https://github.com/getsops/sops/pull/1631)).
+
 ## 3.9.4
 
 Improvements:
