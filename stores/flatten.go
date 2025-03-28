@@ -245,16 +245,16 @@ func DecodeNonStrings(m map[string]interface{}) error {
 	}
 	if v, ok := m["shamir_threshold"]; ok {
 		switch val := v.(type) {
-			case string:
-				vInt, err := strconv.Atoi(val)
-				if err != nil {
-					return fmt.Errorf("shamir_threshold is not an integer: %s", err.Error())
-				}
-				m["shamir_threshold"] = vInt
-			case int:
-				m["shamir_threshold"] = val
-			default:
-				return fmt.Errorf("shamir_threshold is neither a string nor an integer, but %T", val)
+		case string:
+			vInt, err := strconv.Atoi(val)
+			if err != nil {
+				return fmt.Errorf("shamir_threshold is not an integer: %s", err.Error())
+			}
+			m["shamir_threshold"] = vInt
+		case int:
+			m["shamir_threshold"] = val
+		default:
+			return fmt.Errorf("shamir_threshold is neither a string nor an integer, but %T", val)
 		}
 	}
 	return nil
