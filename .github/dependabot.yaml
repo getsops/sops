@@ -2,7 +2,7 @@ version: 2
 
 updates:
   - package-ecosystem: "docker"
-    directory: "/"
+    directory: "/.release"
     labels: ["dependencies"]
     schedule:
       # By default, this will be on a Monday.
@@ -37,5 +37,18 @@ updates:
       # Group all updates together, so that they are all applied in a single PR.
       # xref: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#groups
       go:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "cargo"
+    directory: "/functional-tests"
+    labels: ["area/CI", "dependencies"]
+    schedule:
+      # By default, this will be on a Monday.
+      interval: "weekly"
+    groups:
+      # Group all updates together, so that they are all applied in a single PR.
+      # xref: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file#groups
+      rust:
         patterns:
           - "*"

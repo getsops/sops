@@ -137,7 +137,8 @@ func main() {
 
    To use a different GPG binary than the one in your PATH, set SOPS_GPG_EXEC.
 
-   To select a different editor than the default (vim), set EDITOR.
+   To select a different editor than the default (vim), set SOPS_EDITOR or
+   EDITOR.
 
    Note that flags must always be provided before the filename to operate on.
    Otherwise, they will be ignored.
@@ -162,6 +163,10 @@ func main() {
 					Name:  "user",
 					Usage: "the user to run the command as",
 				},
+				cli.BoolFlag{
+					Name:  "same-process",
+					Usage: "run command in the current process instead of in a child process",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if c.NArg() != 2 {
@@ -171,7 +176,10 @@ func main() {
 				fileName := c.Args()[0]
 				command := c.Args()[1]
 
-				inputStore := inputStore(c, fileName)
+				inputStore, err := inputStore(c, fileName)
+				if err != nil {
+					return toExitError(err)
+				}
 
 				svcs := keyservices(c)
 
@@ -191,6 +199,10 @@ func main() {
 
 				if c.Bool("background") {
 					log.Warn("exec-env's --background option is deprecated and will be removed in a future version of sops")
+
+					if c.Bool("same-process") {
+						return common.NewExitError("Error: The --same-process flag cannot be used with --background", codes.ErrorConflictingParameters)
+					}
 				}
 
 				tree, err := decryptTree(opts)
@@ -221,12 +233,13 @@ func main() {
 				}
 
 				if err := exec.ExecWithEnv(exec.ExecOpts{
-					Command:    command,
-					Plaintext:  []byte{},
-					Background: c.Bool("background"),
-					Pristine:   c.Bool("pristine"),
-					User:       c.String("user"),
-					Env:        env,
+					Command:     command,
+					Plaintext:   []byte{},
+					Background:  c.Bool("background"),
+					Pristine:    c.Bool("pristine"),
+					User:        c.String("user"),
+					SameProcess: c.Bool("same-process"),
+					Env:         env,
 				}); err != nil {
 					return toExitError(err)
 				}
@@ -272,8 +285,14 @@ func main() {
 				fileName := c.Args()[0]
 				command := c.Args()[1]
 
-				inputStore := inputStore(c, fileName)
-				outputStore := outputStore(c, fileName)
+				inputStore, err := inputStore(c, fileName)
+				if err != nil {
+					return toExitError(err)
+				}
+				outputStore, err := outputStore(c, fileName)
+				if err != nil {
+					return toExitError(err)
+				}
 
 				svcs := keyservices(c)
 
@@ -340,9 +359,15 @@ func main() {
 				if c.Bool("verbose") || c.GlobalBool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
-				configPath, err := config.FindConfigFile(".")
-				if err != nil {
-					return common.NewExitError(err, codes.ErrorGeneric)
+				var configPath string
+				var err error
+				if c.GlobalString("config") != "" {
+					configPath = c.GlobalString("config")
+				} else {
+					configPath, err = config.FindConfigFile(".")
+					if err != nil {
+						return common.NewExitError(err, codes.ErrorGeneric)
+					}
 				}
 				if c.NArg() < 1 {
 					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
@@ -365,13 +390,17 @@ func main() {
 						return toExitError(err)
 					}
 					if !info.IsDir() {
+						inputStore, err := inputStore(c, subPath)
+						if err != nil {
+							return toExitError(err)
+						}
 						err = publishcmd.Run(publishcmd.Opts{
 							ConfigPath:      configPath,
 							InputPath:       subPath,
 							Cipher:          aes.NewCipher(),
 							KeyServices:     keyservices(c),
 							DecryptionOrder: order,
-							InputStore:      inputStore(c, subPath),
+							InputStore:      inputStore,
 							Interactive:     !c.Bool("yes"),
 							OmitExtensions:  c.Bool("omit-extensions"),
 							Recursive:       c.Bool("recursive"),
@@ -433,14 +462,22 @@ func main() {
 			Name:      "filestatus",
 			Usage:     "check the status of the file, returning encryption status",
 			ArgsUsage: `file`,
-			Flags:     []cli.Flag{},
+			Flags:     []cli.Flag{
+				cli.StringFlag{
+					Name:  "input-type",
+					Usage: "currently ini, json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
+				},
+			},
 			Action: func(c *cli.Context) error {
 				if c.NArg() < 1 {
 					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
 				}
 
 				fileName := c.Args()[0]
-				inputStore := inputStore(c, fileName)
+				inputStore, err := inputStore(c, fileName)
+				if err != nil {
+					return toExitError(err)
+				}
 				opts := filestatuscmd.Opts{
 					InputStore: inputStore,
 					InputPath:  fileName,
@@ -560,11 +597,19 @@ func main() {
 								group = append(group, key)
 							}
 						}
+						inputStore, err := inputStore(c, c.String("file"))
+						if err != nil {
+							return toExitError(err)
+						}
+						outputStore, err := outputStore(c, c.String("file"))
+						if err != nil {
+							return toExitError(err)
+						}
 						return groups.Add(groups.AddOpts{
 							InputPath:      c.String("file"),
 							InPlace:        c.Bool("in-place"),
-							InputStore:     inputStore(c, c.String("file")),
-							OutputStore:    outputStore(c, c.String("file")),
+							InputStore:     inputStore,
+							OutputStore:    outputStore,
 							Group:          group,
 							GroupThreshold: c.Int("shamir-secret-sharing-threshold"),
 							KeyServices:    keyservices(c),
@@ -599,11 +644,19 @@ func main() {
 							return fmt.Errorf("failed to parse [index] argument: %s", err)
 						}
 
+						inputStore, err := inputStore(c, c.String("file"))
+						if err != nil {
+							return toExitError(err)
+						}
+						outputStore, err := outputStore(c, c.String("file"))
+						if err != nil {
+							return toExitError(err)
+						}
 						return groups.Delete(groups.DeleteOpts{
 							InputPath:      c.String("file"),
 							InPlace:        c.Bool("in-place"),
-							InputStore:     inputStore(c, c.String("file")),
-							OutputStore:    outputStore(c, c.String("file")),
+							InputStore:     inputStore,
+							OutputStore:    outputStore,
 							Group:          uint(group),
 							GroupThreshold: c.Int("shamir-secret-sharing-threshold"),
 							KeyServices:    keyservices(c),
@@ -643,12 +696,12 @@ func main() {
 				failedCounter := 0
 				for _, path := range c.Args() {
 					err := updatekeys.UpdateKeys(updatekeys.Opts{
-						InputPath:   path,
-						GroupQuorum: c.Int("shamir-secret-sharing-quorum"),
-						KeyServices: keyservices(c),
-						Interactive: !c.Bool("yes"),
-						ConfigPath:  configPath,
-						InputType:   c.String("input-type"),
+						InputPath:       path,
+						ShamirThreshold: c.Int("shamir-secret-sharing-threshold"),
+						KeyServices:     keyservices(c),
+						Interactive:     !c.Bool("yes"),
+						ConfigPath:      configPath,
+						InputType:       c.String("input-type"),
 					})
 
 					if c.NArg() == 1 {
@@ -675,8 +728,8 @@ func main() {
 		},
 		{
 			Name:      "decrypt",
-			Usage:     "decrypt a file, and output the results to stdout",
-			ArgsUsage: `file`,
+			Usage:     "decrypt a file, and output the results to stdout. If no filename is provided, stdin will be used.",
+			ArgsUsage: `[file]`,
 			Flags: append([]cli.Flag{
 				cli.BoolFlag{
 					Name:  "in-place, i",
@@ -704,7 +757,7 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:  "filename-override",
-					Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type",
+					Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type. Should be provided when reading from stdin.",
 				},
 				cli.StringFlag{
 					Name:   "decryption-order",
@@ -716,27 +769,43 @@ func main() {
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
-				if c.NArg() < 1 {
-					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
+				readFromStdin := c.NArg() == 0
+				if readFromStdin && c.Bool("in-place") {
+					return common.NewExitError("Error: cannot use --in-place when reading from stdin", codes.ErrorConflictingParameters)
 				}
 				warnMoreThanOnePositionalArgument(c)
 				if c.Bool("in-place") && c.String("output") != "" {
 					return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
 				}
-				fileName, err := filepath.Abs(c.Args()[0])
-				if err != nil {
-					return toExitError(err)
-				}
-				if _, err := os.Stat(fileName); os.IsNotExist(err) {
-					return common.NewExitError("Error: cannot operate on non-existent file", codes.NoFileSpecified)
+				var fileName string
+				var err error
+				if !readFromStdin {
+					fileName, err = filepath.Abs(c.Args()[0])
+					if err != nil {
+						return toExitError(err)
+					}
+					if _, err := os.Stat(fileName); os.IsNotExist(err) {
+						return common.NewExitError(fmt.Sprintf("Error: cannot operate on non-existent file %q", fileName), codes.NoFileSpecified)
+					}
 				}
 				fileNameOverride := c.String("filename-override")
 				if fileNameOverride == "" {
 					fileNameOverride = fileName
+				} else {
+					fileNameOverride, err = filepath.Abs(fileNameOverride)
+					if err != nil {
+						return toExitError(err)
+					}
 				}
 
-				inputStore := inputStore(c, fileNameOverride)
-				outputStore := outputStore(c, fileNameOverride)
+				inputStore, err := inputStore(c, fileNameOverride)
+				if err != nil {
+					return toExitError(err)
+				}
+				outputStore, err := outputStore(c, fileNameOverride)
+				if err != nil {
+					return toExitError(err)
+				}
 				svcs := keyservices(c)
 
 				order, err := decryptionOrder(c.String("decryption-order"))
@@ -753,6 +822,7 @@ func main() {
 					OutputStore:     outputStore,
 					InputStore:      inputStore,
 					InputPath:       fileName,
+					ReadFromStdin:   readFromStdin,
 					Cipher:          aes.NewCipher(),
 					Extract:         extract,
 					KeyServices:     svcs,
@@ -794,8 +864,8 @@ func main() {
 		},
 		{
 			Name:      "encrypt",
-			Usage:     "encrypt a file, and output the results to stdout",
-			ArgsUsage: `file`,
+			Usage:     "encrypt a file, and output the results to stdout. If no filename is provided, stdin will be used.",
+			ArgsUsage: `[file]`,
 			Flags: append([]cli.Flag{
 				cli.BoolFlag{
 					Name:  "in-place, i",
@@ -873,34 +943,55 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:  "filename-override",
-					Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type",
+					Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type. Required when reading from stdin.",
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
-				if c.NArg() < 1 {
-					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
+				readFromStdin := c.NArg() == 0
+				if readFromStdin {
+					if c.Bool("in-place") {
+						return common.NewExitError("Error: cannot use --in-place when reading from stdin", codes.ErrorConflictingParameters)
+					}
+					if c.String("filename-override") == "" {
+						return common.NewExitError("Error: must specify --filename-override when reading from stdin", codes.ErrorConflictingParameters)
+					}
 				}
 				warnMoreThanOnePositionalArgument(c)
 				if c.Bool("in-place") && c.String("output") != "" {
 					return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
 				}
-				fileName, err := filepath.Abs(c.Args()[0])
-				if err != nil {
-					return toExitError(err)
-				}
-				if _, err := os.Stat(fileName); os.IsNotExist(err) {
-					return common.NewExitError("Error: cannot operate on non-existent file", codes.NoFileSpecified)
+				var fileName string
+				var err error
+				if !readFromStdin {
+					fileName, err = filepath.Abs(c.Args()[0])
+					if err != nil {
+						return toExitError(err)
+					}
+					if _, err := os.Stat(fileName); os.IsNotExist(err) {
+						return common.NewExitError(fmt.Sprintf("Error: cannot operate on non-existent file %q", fileName), codes.NoFileSpecified)
+					}
 				}
 				fileNameOverride := c.String("filename-override")
 				if fileNameOverride == "" {
 					fileNameOverride = fileName
+				} else {
+					fileNameOverride, err = filepath.Abs(fileNameOverride)
+					if err != nil {
+						return toExitError(err)
+					}
 				}
 
-				inputStore := inputStore(c, fileNameOverride)
-				outputStore := outputStore(c, fileNameOverride)
+				inputStore, err := inputStore(c, fileNameOverride)
+				if err != nil {
+					return toExitError(err)
+				}
+				outputStore, err := outputStore(c, fileNameOverride)
+				if err != nil {
+					return toExitError(err)
+				}
 				svcs := keyservices(c)
 
 				encConfig, err := getEncryptConfig(c, fileNameOverride)
@@ -911,6 +1002,7 @@ func main() {
 					OutputStore:   outputStore,
 					InputStore:    inputStore,
 					InputPath:     fileName,
+					ReadFromStdin: readFromStdin,
 					Cipher:        aes.NewCipher(),
 					KeyServices:   svcs,
 					encryptConfig: encConfig,
@@ -1050,16 +1142,27 @@ func main() {
 				if _, err := os.Stat(fileName); os.IsNotExist(err) {
 					if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" ||
 						c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" {
-						return common.NewExitError("Error: cannot add or remove keys on non-existent files, use the `edit` subcommand instead.", codes.CannotChangeKeysFromNonExistentFile)
+						return common.NewExitError(fmt.Sprintf("Error: cannot add or remove keys on non-existent file %q, use the `edit` subcommand instead.", fileName), codes.CannotChangeKeysFromNonExistentFile)
 					}
 				}
 				fileNameOverride := c.String("filename-override")
 				if fileNameOverride == "" {
 					fileNameOverride = fileName
+				} else {
+					fileNameOverride, err = filepath.Abs(fileNameOverride)
+					if err != nil {
+						return toExitError(err)
+					}
 				}
 
-				inputStore := inputStore(c, fileNameOverride)
-				outputStore := outputStore(c, fileNameOverride)
+				inputStore, err := inputStore(c, fileNameOverride)
+				if err != nil {
+					return toExitError(err)
+				}
+				outputStore, err := outputStore(c, fileNameOverride)
+				if err != nil {
+					return toExitError(err)
+				}
 				svcs := keyservices(c)
 
 				order, err := decryptionOrder(c.String("decryption-order"))
@@ -1202,12 +1305,15 @@ func main() {
 				if err != nil {
 					return toExitError(err)
 				}
-				if _, err := os.Stat(fileName); os.IsNotExist(err) {
-					return common.NewExitError("Error: cannot operate on non-existent file", codes.NoFileSpecified)
-				}
 
-				inputStore := inputStore(c, fileName)
-				outputStore := outputStore(c, fileName)
+				inputStore, err := inputStore(c, fileName)
+				if err != nil {
+					return toExitError(err)
+				}
+				outputStore, err := outputStore(c, fileName)
+				if err != nil {
+					return toExitError(err)
+				}
 				svcs := keyservices(c)
 
 				order, err := decryptionOrder(c.String("decryption-order"))
@@ -1288,6 +1394,10 @@ func main() {
 					Usage:  "comma separated list of decryption key types",
 					EnvVar: "SOPS_DECRYPTION_ORDER",
 				},
+				cli.BoolFlag{
+					Name:  "idempotent",
+					Usage: "do nothing if the given index already has the given value",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if c.Bool("verbose") {
@@ -1301,8 +1411,14 @@ func main() {
 					return toExitError(err)
 				}
 
-				inputStore := inputStore(c, fileName)
-				outputStore := outputStore(c, fileName)
+				inputStore, err := inputStore(c, fileName)
+				if err != nil {
+					return toExitError(err)
+				}
+				outputStore, err := outputStore(c, fileName)
+				if err != nil {
+					return toExitError(err)
+				}
 				svcs := keyservices(c)
 
 				path, err := parseTreePath(c.Args()[1])
@@ -1319,7 +1435,7 @@ func main() {
 				if err != nil {
 					return toExitError(err)
 				}
-				output, err := set(setOpts{
+				output, changed, err := set(setOpts{
 					OutputStore:     outputStore,
 					InputStore:      inputStore,
 					InputPath:       fileName,
@@ -1332,6 +1448,11 @@ func main() {
 				})
 				if err != nil {
 					return toExitError(err)
+				}
+
+				if !changed && c.Bool("idempotent") {
+					log.Info("File not written due to no change")
+					return nil
 				}
 
 				// We open the file *after* the operations on the tree have been
@@ -1376,8 +1497,8 @@ func main() {
 					EnvVar: "SOPS_DECRYPTION_ORDER",
 				},
 				cli.BoolFlag{
-					Name:   "idempotent",
-					Usage:  "do nothing if the given index does not exist",
+					Name:  "idempotent",
+					Usage: "do nothing if the given index does not exist",
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
@@ -1392,8 +1513,14 @@ func main() {
 					return toExitError(err)
 				}
 
-				inputStore := inputStore(c, fileName)
-				outputStore := outputStore(c, fileName)
+				inputStore, err := inputStore(c, fileName)
+				if err != nil {
+					return toExitError(err)
+				}
+				outputStore, err := outputStore(c, fileName)
+				if err != nil {
+					return toExitError(err)
+				}
 				svcs := keyservices(c)
 
 				path, err := parseTreePath(c.Args()[1])
@@ -1452,8 +1579,9 @@ func main() {
 			Usage: "generate a new data encryption key and reencrypt all values with the new key",
 		},
 		cli.BoolFlag{
-			Name:  "disable-version-check",
-			Usage: "do not check whether the current version is latest during --version",
+			Name:   "disable-version-check",
+			Usage:  "do not check whether the current version is latest during --version",
+			EnvVar: "SOPS_DISABLE_VERSION_CHECK",
 		},
 		cli.StringFlag{
 			Name:   "kms, k",
@@ -1592,6 +1720,7 @@ func main() {
 		cli.StringFlag{
 			Name:  "config",
 			Usage: "path to sops' config file. If set, sops will not search for the config file recursively.",
+			EnvVar: "SOPS_CONFIG",
 		},
 		cli.StringFlag{
 			Name:  "encryption-context",
@@ -1652,15 +1781,20 @@ func main() {
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
 			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" ||
 				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" {
-				return common.NewExitError("Error: cannot add or remove keys on non-existent files, use `--kms` and `--pgp` instead.", codes.CannotChangeKeysFromNonExistentFile)
+				return common.NewExitError(fmt.Sprintf("Error: cannot add or remove keys on non-existent file %q, use `--kms` and `--pgp` instead.", fileName), codes.CannotChangeKeysFromNonExistentFile)
 			}
 			if isEncryptMode || isDecryptMode || isRotateMode {
-				return common.NewExitError("Error: cannot operate on non-existent file", codes.NoFileSpecified)
+				return common.NewExitError(fmt.Sprintf("Error: cannot operate on non-existent file %q", fileName), codes.NoFileSpecified)
 			}
 		}
 		fileNameOverride := c.String("filename-override")
 		if fileNameOverride == "" {
 			fileNameOverride = fileName
+		} else {
+			fileNameOverride, err = filepath.Abs(fileNameOverride)
+			if err != nil {
+				return toExitError(err)
+			}
 		}
 
 		commandCount := 0
@@ -1690,8 +1824,14 @@ func main() {
 			}
 		}
 
-		inputStore := inputStore(c, fileNameOverride)
-		outputStore := outputStore(c, fileNameOverride)
+		inputStore, err := inputStore(c, fileNameOverride)
+		if err != nil {
+			return toExitError(err)
+		}
+		outputStore, err := outputStore(c, fileNameOverride)
+		if err != nil {
+			return toExitError(err)
+		}
 		svcs := keyservices(c)
 
 		order, err := decryptionOrder(c.String("decryption-order"))
@@ -1758,7 +1898,7 @@ func main() {
 			if err != nil {
 				return toExitError(err)
 			}
-			output, err = set(setOpts{
+			output, _, err = set(setOpts{
 				OutputStore:     outputStore,
 				InputStore:      inputStore,
 				InputPath:       fileName,
@@ -2030,7 +2170,7 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 			"address",
 			fmt.Sprintf("%s://%s", url.Scheme, addr),
 		).Infof("Connecting to key service")
-		conn, err := grpc.Dial(addr, opts...)
+		conn, err := grpc.NewClient(addr, opts...)
 		if err != nil {
 			log.Fatalf("failed to listen: %v", err)
 		}
@@ -2040,10 +2180,8 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 }
 
 func loadStoresConfig(context *cli.Context, path string) (*config.StoresConfig, error) {
-	var configPath string
-	if context.String("config") != "" {
-		configPath = context.String("config")
-	} else {
+	configPath := context.GlobalString("config")
+	if configPath == "" {
 		// Ignore config not found errors returned from FindConfigFile since the config file is not mandatory
 		foundPath, err := config.FindConfigFile(".")
 		if err != nil {
@@ -2054,13 +2192,19 @@ func loadStoresConfig(context *cli.Context, path string) (*config.StoresConfig, 
 	return config.LoadStoresConfig(configPath)
 }
 
-func inputStore(context *cli.Context, path string) common.Store {
-	storesConf, _ := loadStoresConfig(context, path)
-	return common.DefaultStoreForPathOrFormat(storesConf, path, context.String("input-type"))
+func inputStore(context *cli.Context, path string) (common.Store, error) {
+	storesConf, err := loadStoresConfig(context, path)
+	if err != nil {
+		return nil, err
+	}
+	return common.DefaultStoreForPathOrFormat(storesConf, path, context.String("input-type")), nil
 }
 
-func outputStore(context *cli.Context, path string) common.Store {
-	storesConf, _ := loadStoresConfig(context, path)
+func outputStore(context *cli.Context, path string) (common.Store, error) {
+	storesConf, err := loadStoresConfig(context, path)
+	if err != nil {
+		return nil, err
+	}
 	if context.IsSet("indent") {
 		indent := context.Int("indent")
 		storesConf.YAML.Indent = indent
@@ -2068,7 +2212,7 @@ func outputStore(context *cli.Context, path string) common.Store {
 		storesConf.JSONBinary.Indent = indent
 	}
 
-	return common.DefaultStoreForPathOrFormat(storesConf, path, context.String("output-type"))
+	return common.DefaultStoreForPathOrFormat(storesConf, path, context.String("output-type")), nil
 }
 
 func parseTreePath(arg string) ([]interface{}, error) {
@@ -2159,7 +2303,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 			if err != nil {
 				errMsg = fmt.Sprintf("%s: %s", errMsg, err)
 			}
-			return nil, fmt.Errorf(errMsg)
+			return nil, fmt.Errorf("%s", errMsg)
 		}
 		return conf.KeyGroups, err
 	}
@@ -2178,10 +2322,8 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 // Since a config file is not required, this function does not error when one is not found, and instead returns a nil config pointer
 func loadConfig(c *cli.Context, file string, kmsEncryptionContext map[string]*string) (*config.Config, error) {
 	var err error
-	var configPath string
-	if c.String("config") != "" {
-		configPath = c.String("config")
-	} else {
+	configPath := c.GlobalString("config")
+	if configPath == "" {
 		// Ignore config not found errors returned from FindConfigFile since the config file is not mandatory
 		configPath, err = config.FindConfigFile(".")
 		if err != nil {
