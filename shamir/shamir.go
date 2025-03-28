@@ -123,17 +123,17 @@ func inverse(a uint8) uint8 {
 	// (See also https://github.com/openbao/openbao/commit/a209a052024b70bc563d9674cde21a20b5106570)
 
 	// In the comments, we use ^ to denote raising to the power:
-	b := mult(a, a)  // b is now a^2
-	c := mult(a, b)  // c is now a^3
-	b = mult(c, c)  // b is now a^6
-	b = mult(b, b)  // b is now a^12
-	c = mult(b, c)  // c is now a^15
-	b = mult(b, b)  // b is now a^24
-	b = mult(b, b)  // b is now a^48
-	b = mult(b, c)  // b is now a^63
-	b = mult(b, b)  // b is now a^126
-	b = mult(a, b)  // b is now a^127
-	return mult(b, b)  // result is a^254
+	b := mult(a, a)   // b is now a^2
+	c := mult(a, b)   // c is now a^3
+	b = mult(c, c)    // b is now a^6
+	b = mult(b, b)    // b is now a^12
+	c = mult(b, c)    // c is now a^15
+	b = mult(b, b)    // b is now a^24
+	b = mult(b, b)    // b is now a^48
+	b = mult(b, c)    // b is now a^63
+	b = mult(b, b)    // b is now a^126
+	b = mult(a, b)    // b is now a^127
+	return mult(b, b) // result is a^254
 }
 
 // mult multiplies two numbers in GF(2^8)
