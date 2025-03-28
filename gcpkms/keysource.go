@@ -267,9 +267,9 @@ func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
 	}
 
 	ctx := context.Background()
-	client, errCredentials := kms.NewKeyManagementClient(ctx, opts...)
-	if errCredentials != nil {
-		return nil, errCredentials
+	client, err := kms.NewKeyManagementClient(ctx, opts...)
+	if err != nil {
+		return nil, err
 	}
 
 	return client, nil
@@ -295,7 +295,7 @@ func getGoogleCredentials() ([]byte, error) {
 // as the OAauth 2.0 token.
 // It returns an error and a nil byte slice if the envrionment variable is not set.
 func getGoogleOAuthTokenFromEnv() (oauth2.TokenSource, error) {
-	if token, isSet := os.LookupEnv(SopsGoogleCredentialsOAuthTokenEnv); isSet {
+	if token, isSet := os.LookupEnv(SopsGoogleCredentialsOAuthTokenEnv); isSet && len(token) > 0 {
 		tokenSource := oauth2.StaticTokenSource(
 			&oauth2.Token{AccessToken: token},
 		)
