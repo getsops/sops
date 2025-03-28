@@ -359,9 +359,15 @@ func main() {
 				if c.Bool("verbose") || c.GlobalBool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
-				configPath, err := config.FindConfigFile(".")
-				if err != nil {
-					return common.NewExitError(err, codes.ErrorGeneric)
+				var configPath string
+				var err error
+				if c.GlobalString("config") != "" {
+					configPath = c.GlobalString("config")
+				} else {
+					configPath, err = config.FindConfigFile(".")
+					if err != nil {
+						return common.NewExitError(err, codes.ErrorGeneric)
+					}
 				}
 				if c.NArg() < 1 {
 					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
@@ -690,12 +696,12 @@ func main() {
 				failedCounter := 0
 				for _, path := range c.Args() {
 					err := updatekeys.UpdateKeys(updatekeys.Opts{
-						InputPath:   path,
-						GroupQuorum: c.Int("shamir-secret-sharing-threshold"),
-						KeyServices: keyservices(c),
-						Interactive: !c.Bool("yes"),
-						ConfigPath:  configPath,
-						InputType:   c.String("input-type"),
+						InputPath:       path,
+						ShamirThreshold: c.Int("shamir-secret-sharing-threshold"),
+						KeyServices:     keyservices(c),
+						Interactive:     !c.Bool("yes"),
+						ConfigPath:      configPath,
+						InputType:       c.String("input-type"),
 					})
 
 					if c.NArg() == 1 {
@@ -785,6 +791,11 @@ func main() {
 				fileNameOverride := c.String("filename-override")
 				if fileNameOverride == "" {
 					fileNameOverride = fileName
+				} else {
+					fileNameOverride, err = filepath.Abs(fileNameOverride)
+					if err != nil {
+						return toExitError(err)
+					}
 				}
 
 				inputStore, err := inputStore(c, fileNameOverride)
@@ -966,6 +977,11 @@ func main() {
 				fileNameOverride := c.String("filename-override")
 				if fileNameOverride == "" {
 					fileNameOverride = fileName
+				} else {
+					fileNameOverride, err = filepath.Abs(fileNameOverride)
+					if err != nil {
+						return toExitError(err)
+					}
 				}
 
 				inputStore, err := inputStore(c, fileNameOverride)
@@ -1132,6 +1148,11 @@ func main() {
 				fileNameOverride := c.String("filename-override")
 				if fileNameOverride == "" {
 					fileNameOverride = fileName
+				} else {
+					fileNameOverride, err = filepath.Abs(fileNameOverride)
+					if err != nil {
+						return toExitError(err)
+					}
 				}
 
 				inputStore, err := inputStore(c, fileNameOverride)
@@ -1769,6 +1790,11 @@ func main() {
 		fileNameOverride := c.String("filename-override")
 		if fileNameOverride == "" {
 			fileNameOverride = fileName
+		} else {
+			fileNameOverride, err = filepath.Abs(fileNameOverride)
+			if err != nil {
+				return toExitError(err)
+			}
 		}
 
 		commandCount := 0
@@ -2144,7 +2170,7 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 			"address",
 			fmt.Sprintf("%s://%s", url.Scheme, addr),
 		).Infof("Connecting to key service")
-		conn, err := grpc.Dial(addr, opts...)
+		conn, err := grpc.NewClient(addr, opts...)
 		if err != nil {
 			log.Fatalf("failed to listen: %v", err)
 		}
@@ -2277,7 +2303,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 			if err != nil {
 				errMsg = fmt.Sprintf("%s: %s", errMsg, err)
 			}
-			return nil, fmt.Errorf(errMsg)
+			return nil, fmt.Errorf("%s", errMsg)
 		}
 		return conf.KeyGroups, err
 	}
