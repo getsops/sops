@@ -295,7 +295,7 @@ func getGoogleCredentials() ([]byte, error) {
 // as the oauth token.
 // It returns an error and a nil byte slice if the envrionment variable is not set.
 func getGoogleOAuthTokenFromEnv() (oauth2.TokenSource, error) {
-	if token, isSet := os.LookupEnv(SopsGoogleCredentialsOAuthToken); isSet {
+	if token, isSet := os.LookupEnv(SopsGoogleCredentialsOAuthTokenEnv); isSet {
 		tokenSource := oauth2.StaticTokenSource(
 			&oauth2.Token{AccessToken: token},
 		)
