@@ -115,6 +115,22 @@ func TestCombine(t *testing.T) {
 	}
 }
 
+func TestField_MulDivSmoke(t *testing.T) {
+	for a := range 256 {
+		for b := range 256 {
+			if b == 0 {
+				if out := mult(uint8(a), uint8(b)); out != 0 {
+					t.Fatalf("Bad: %v * %v = %v 0", a, b, out)
+				}
+			} else {
+				if out := div(mult(uint8(a), uint8(b)), uint8(b)); out != uint8(a) {
+					t.Fatalf("Bad: (%v * %v) / %v = %v %v", a, b, b, out, a)
+				}
+			}
+		}
+	}
+}
+
 func TestField_Add(t *testing.T) {
 	if out := add(16, 16); out != 0 {
 		t.Fatalf("Bad: %v 16", out)

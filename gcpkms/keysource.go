@@ -54,6 +54,11 @@ type MasterKey struct {
 	// for NeedsRotation.
 	CreationDate time.Time
 
+	// tokenSource contains the oauth2.TokenSource used by the GCP client.
+	// It can be injected by a (local) keyservice.KeyServiceServer using
+	// TokenSource.ApplyToMasterKey.
+	// If nil, the remaining authentication methods are attempted.
+	tokenSource oauth2.TokenSource
 	// credentialJSON is the Service Account credentials JSON used for
 	// authenticating towards the GCP KMS service.
 	credentialJSON []byte
@@ -84,6 +89,22 @@ func MasterKeysFromResourceIDString(resourceID string) []*MasterKey {
 		keys = append(keys, NewMasterKeyFromResourceID(s))
 	}
 	return keys
+}
+
+// TokenSource is an oauth2.TokenSource used for authenticating towards the
+// GCP KMS service.
+type TokenSource struct {
+	source oauth2.TokenSource
+}
+
+// NewTokenSource creates a new TokenSource from the provided oauth2.TokenSource.
+func NewTokenSource(source oauth2.TokenSource) TokenSource {
+	return TokenSource{source: source}
+}
+
+// ApplyToMasterKey configures the TokenSource on the provided key.
+func (t TokenSource) ApplyToMasterKey(key *MasterKey) {
+	key.tokenSource = t.source
 }
 
 // CredentialJSON is the Service Account credentials JSON used for authenticating
@@ -207,8 +228,8 @@ func (key *MasterKey) TypeToIdentifier() string {
 	return KeyTypeIdentifier
 }
 
-// newKMSClient returns a GCP KMS client configured with the credentialJSON,
-// tokenSource and/or grpcConn, falling back to environmental defaults.
+// newKMSClient returns a GCP KMS client configured with the tokenSource
+// or credentialJSON, and/or grpcConn, falling back to environmental defaults.
 // It returns an error if the ResourceID is invalid, or if the setup of the
 // client fails.
 func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
@@ -220,6 +241,8 @@ func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
 
 	var opts []option.ClientOption
 	switch {
+	case key.tokenSource != nil:
+		opts = append(opts, option.WithTokenSource(key.tokenSource))
 	case key.credentialJSON != nil:
 		opts = append(opts, option.WithCredentialsJSON(key.credentialJSON))
 	default:
