@@ -26,12 +26,26 @@ func NewStore(c *config.YAMLStoreConfig) *Store {
 
 func (store Store) appendCommentToList(comment string, list []interface{}) []interface{} {
 	if comment != "" {
+		emptyLines := 0
 		for _, commentLine := range strings.Split(comment, "\n") {
 			if commentLine != "" {
+				if emptyLines > 0 {
+					list = append(list, sops.EmptyLines{
+						Count: emptyLines,
+					})
+					emptyLines = 0
+				}
 				list = append(list, sops.Comment{
 					Value: commentLine[1:],
 				})
+			} else {
+				emptyLines += 1
 			}
+		}
+		if emptyLines > 0 {
+			list = append(list, sops.EmptyLines{
+				Count: emptyLines,
+			})
 		}
 	}
 	return list
@@ -39,15 +53,35 @@ func (store Store) appendCommentToList(comment string, list []interface{}) []int
 
 func (store Store) appendCommentToMap(comment string, branch sops.TreeBranch) sops.TreeBranch {
 	if comment != "" {
+		emptyLines := 0
 		for _, commentLine := range strings.Split(comment, "\n") {
 			if commentLine != "" {
+				if emptyLines > 0 {
+					branch = append(branch, sops.TreeItem{
+						Key: sops.EmptyLines{
+							Count: emptyLines,
+						},
+						Value: nil,
+					})
+					emptyLines = 0
+				}
 				branch = append(branch, sops.TreeItem{
 					Key: sops.Comment{
 						Value: commentLine[1:],
 					},
 					Value: nil,
 				})
+			} else {
+				emptyLines += 1
 			}
+		}
+		if emptyLines > 0 {
+			branch = append(branch, sops.TreeItem{
+				Key: sops.EmptyLines{
+					Count: emptyLines,
+				},
+				Value: nil,
+			})
 		}
 	}
 	return branch
@@ -158,7 +192,7 @@ func (store Store) yamlDocumentNodeToTreeBranch(in yaml.Node) (sops.TreeBranch, 
 
 func (store *Store) addCommentsHead(node *yaml.Node, comments []string) []string {
 	if len(comments) > 0 {
-		comment := "#" + strings.Join(comments, "\n#")
+		comment := strings.Join(comments, "\n")
 		if len(node.HeadComment) > 0 {
 			node.HeadComment = comment + "\n" + node.HeadComment
 		} else {
@@ -170,7 +204,7 @@ func (store *Store) addCommentsHead(node *yaml.Node, comments []string) []string
 
 func (store *Store) addCommentsFoot(node *yaml.Node, comments []string) []string {
 	if len(comments) > 0 {
-		comment := "#" + strings.Join(comments, "\n#")
+		comment := strings.Join(comments, "\n")
 		if len(node.FootComment) > 0 {
 			node.FootComment += "\n" + comment
 		} else {
@@ -203,8 +237,12 @@ func (store *Store) appendSequence(in []interface{}, sequence *yaml.Node) {
 	var comments []string
 	var beginning bool = true
 	for _, item := range in {
-		if comment, ok := item.(sops.Comment); ok {
-			comments = append(comments, comment.Value)
+		if emptyLines, ok := item.(sops.EmptyLines); ok {
+			for _ = range emptyLines.Count {
+				comments = append(comments, "")
+			}
+		} else if comment, ok := item.(sops.Comment); ok {
+			comments = append(comments, "#" + comment.Value)
 		} else {
 			if beginning {
 				comments = store.addCommentsHead(sequence, comments)
@@ -228,8 +266,12 @@ func (store *Store) appendTreeBranch(branch sops.TreeBranch, mapping *yaml.Node)
 	var comments []string
 	var beginning bool = true
 	for _, item := range branch {
-		if comment, ok := item.Key.(sops.Comment); ok {
-			comments = append(comments, comment.Value)
+		if emptyLines, ok := item.Key.(sops.EmptyLines); ok {
+			for _ = range emptyLines.Count {
+				comments = append(comments, "")
+			}
+		} else if comment, ok := item.Key.(sops.Comment); ok {
+			comments = append(comments, "#" + comment.Value)
 		} else {
 			if beginning {
 				comments = store.addCommentsHead(mapping, comments)
