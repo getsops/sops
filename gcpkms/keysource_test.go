@@ -166,7 +166,7 @@ func TestMasterKey_createCloudKMSService_withCredentialsFile(t *testing.T) {
 }
 
 func TestMasterKey_createCloudKMSService_withOauthToken(t *testing.T) {
-	t.Setenv(SopsGoogleCredentialsOAuthToken, "token")
+	t.Setenv(SopsGoogleCredentialsOAuthTokenEnv, "token")
 
 	masterKey := MasterKey{
 		ResourceID: testResourceID,
