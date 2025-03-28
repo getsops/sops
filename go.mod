@@ -144,5 +144,4 @@ require (
 	golang.org/x/time v0.11.0 // indirect
 	google.golang.org/genproto v0.0.0-20250324211829-b45e905df463 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20250324211829-b45e905df463 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
