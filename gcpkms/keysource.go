@@ -25,7 +25,7 @@ const (
 	// format.
 	SopsGoogleCredentialsEnv = "GOOGLE_CREDENTIALS"
 	// SopsGoogleCredentialsOAuthTokenEnv is the environment variable used for the
-	// GCP Oauth2 Token.
+	// GCP OAuth 2.0 Token.
 	SopsGoogleCredentialsOAuthTokenEnv = "GOOGLE_OAUTH_ACCESS_TOKEN"
 	// KeyTypeIdentifier is the string used to identify a GCP KMS MasterKey.
 	KeyTypeIdentifier = "gcp_kms"
@@ -292,7 +292,7 @@ func getGoogleCredentials() ([]byte, error) {
 }
 
 // getGoogleOAuthTokenFromEnv returns the SopsGoogleCredentialsOauthTokenEnv variable,
-// as the oauth token.
+// as the OAauth 2.0 token.
 // It returns an error and a nil byte slice if the envrionment variable is not set.
 func getGoogleOAuthTokenFromEnv() (oauth2.TokenSource, error) {
 	if token, isSet := os.LookupEnv(SopsGoogleCredentialsOAuthTokenEnv); isSet {

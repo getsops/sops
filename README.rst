@@ -267,7 +267,7 @@ It is also possible to use ``updatekeys``, when adding or removing age recipient
 Encrypting using GCP KMS
 ~~~~~~~~~~~~~~~~~~~~~~~~
 GCP KMS has support for authorization with the use of `Application Default Credentials
-<https://developers.google.com/identity/protocols/application-default-credentials>`_ and using an oauth2 token.
+<https://developers.google.com/identity/protocols/application-default-credentials>`_ and using an OAuth 2.0 token.
 Application default credentials precedes the use of access token.
 
 Using Application Default Credentials you can authorize by doing this:
@@ -284,7 +284,7 @@ you can enable application default credentials using the sdk:
 
     $ gcloud auth application-default login
 
-Using oauth tokens you can authorize by doing this:
+Using OAauth tokens you can authorize by doing this:
 
 .. code:: sh
     
