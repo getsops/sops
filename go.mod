@@ -1,7 +1,6 @@
 module github.com/getsops/sops/v3
 
 go 1.22
-
 toolchain go1.23.6
 
 require (

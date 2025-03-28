@@ -24,9 +24,9 @@ const (
 	// a path to a credentials file, or directly as the variable's value in JSON
 	// format.
 	SopsGoogleCredentialsEnv = "GOOGLE_CREDENTIALS"
-	// SopsGoogleCredentialsOAuthToken is the environment variable used for the
+	// SopsGoogleCredentialsOAuthTokenEnv is the environment variable used for the
 	// GCP Oauth2 Token.
-	SopsGoogleCredentialsOAuthToken = "GOOGLE_OAUTH_ACCESS_TOKEN"
+	SopsGoogleCredentialsOAuthTokenEnv = "GOOGLE_OAUTH_ACCESS_TOKEN"
 	// KeyTypeIdentifier is the string used to identify a GCP KMS MasterKey.
 	KeyTypeIdentifier = "gcp_kms"
 )
@@ -223,19 +223,19 @@ func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
 	case key.credentialJSON != nil:
 		opts = append(opts, option.WithCredentialsJSON(key.credentialJSON))
 	default:
-		credentials, err_credentials_file := getGoogleCredentials()
+		credentials, errCredentialsFile := getGoogleCredentials()
 		if credentials != nil {
 			opts = append(opts, option.WithCredentialsJSON(credentials))
 			break
 		}
 
-		at_credentials, err_credentials_token := getGoogleOAuthToken()
-		if at_credentials != nil {
-			opts = append(opts, option.WithTokenSource(at_credentials))
+		atCredentials, errCredentialsToken := getGoogleOAuthTokenFromEnv()
+		if atCredentials != nil {
+			opts = append(opts, option.WithTokenSource(atCredentials))
 		}
 
-		if err_credentials_file != nil && err_credentials_token != nil {
-			return nil, fmt.Errorf("credentials: failed to get credentials for gcp kms, add default credentials or oauth access token")
+		if errCredentialsFile != nil && errCredentialsToken != nil {
+			return nil, fmt.Errorf("credentials: failed to get credentials for gcp kms, add default credentials or oauth access token from env")
 		}
 	}
 
@@ -244,9 +244,9 @@ func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
 	}
 
 	ctx := context.Background()
-	client, err_credentials := kms.NewKeyManagementClient(ctx, opts...)
-	if err_credentials != nil {
-		return nil, err_credentials
+	client, errCredentials := kms.NewKeyManagementClient(ctx, opts...)
+	if errCredentials != nil {
+		return nil, errCredentials
 	}
 
 	return client, nil
@@ -268,10 +268,10 @@ func getGoogleCredentials() ([]byte, error) {
 	return nil, fmt.Errorf("could not find Google credential file")
 }
 
-// getGoogleOAuthToken returns the SopsGoogleCredentialsOauthToken variable,
+// getGoogleOAuthTokenFromEnv returns the SopsGoogleCredentialsOauthTokenEnv variable,
 // as the oauth token.
 // It returns an error and a nil byte slice if the envrionment variable is not set.
-func getGoogleOAuthToken() (oauth2.TokenSource, error) {
+func getGoogleOAuthTokenFromEnv() (oauth2.TokenSource, error) {
 	if token, isSet := os.LookupEnv(SopsGoogleCredentialsOAuthToken); isSet {
 		tokenSource := oauth2.StaticTokenSource(
 			&oauth2.Token{AccessToken: token},
