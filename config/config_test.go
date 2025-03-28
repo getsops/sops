@@ -537,29 +537,29 @@ func TestLoadConfigFileWithMerge(t *testing.T) {
 		"hc_vault: https://foo.vault:8200/v1/foo/keys/foo-key",
 	}, ids(conf.KeyGroups[0]))
 	assert.Equal(t, []string{
-		"pgp: foo", // key01
-		"kms: foo||foo", //key02
+		"pgp: foo",                 // key01
+		"kms: foo||foo",            //key02
 		"kms: foo+123|baz:bam|bar", //key03
-		"gcp_kms: foo", //key04
+		"gcp_kms: foo",             //key04
 		"azure_kv: https://foo.vault.azure.net/keys/foo-key/fooversion", //key05
-		"hc_vault: https://bar.vault:8200/v1/bar/keys/bar-key", //key06
-		"pgp: bar", //key07
+		"hc_vault: https://bar.vault:8200/v1/bar/keys/bar-key",          //key06
+		"pgp: bar",      //key07
 		"kms: bar||bar", //key08
-		"gcp_kms: bar", //key09
-		"gcp_kms: baz", //key10
+		"gcp_kms: bar",  //key09
+		"gcp_kms: baz",  //key10
 		"azure_kv: https://bar.vault.azure.net/keys/bar-key/barversion", //key11
-		"hc_vault: https://baz.vault:8200/v1/baz/keys/baz-key", //key12
-		"pgp: baz", //key13
+		"hc_vault: https://baz.vault:8200/v1/baz/keys/baz-key",          //key12
+		"pgp: baz",      //key13
 		"kms: baz||baz", //key14
 		"hc_vault: https://foo.vault:8200/v1/foo/keys/foo-key", //key15
-		"pgp: qux", //key16
-		"kms: qux||qux", //key17
-		"kms: baz||bar", //key18
-		"kms: baz+123", //key19
-		"gcp_kms: qux", //key20
+		"pgp: qux",       //key16
+		"kms: qux||qux",  //key17
+		"kms: baz||bar",  //key18
+		"kms: baz+123",   //key19
+		"gcp_kms: qux",   //key20
 		"gcp_kms: fnord", //key21
 		"azure_kv: https://baz.vault.azure.net/keys/baz-key/bazversion", //key22
-		"hc_vault: https://qux.vault:8200/v1/qux/keys/qux-key", //key23
+		"hc_vault: https://qux.vault:8200/v1/qux/keys/qux-key",          //key23
 		"kms: fnord||fnord", //key24
 		"hc_vault: https://fnord.vault:8200/v1/fnord/keys/fnord-key", //key25
 	}, ids(conf.KeyGroups[1]))
