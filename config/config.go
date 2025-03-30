@@ -37,22 +37,65 @@ func (fs osFS) Stat(name string) (os.FileInfo, error) {
 var fs fileSystem = osFS{stat: os.Stat}
 
 const (
-	maxDepth       = 100
-	configFileName = ".sops.yaml"
+	maxDepth            = 100
+	configFileName      = ".sops.yaml"
+	alternateConfigName = ".sops.yml"
 )
+
+// ConfigFileResult contains the path to a config file and any warnings
+type ConfigFileResult struct {
+	Path    string
+	Warning string
+}
+
+// LookupConfigFile looks for a sops config file in the current working directory
+// and on parent directories, up to the maxDepth limit.
+// It returns a result containing the file path and any warnings.
+func LookupConfigFile(start string) (ConfigFileResult, error) {
+	filepath := path.Dir(start)
+	var foundAlternatePath string
+
+	for i := 0; i < maxDepth; i++ {
+		configPath := path.Join(filepath, configFileName)
+		_, err := fs.Stat(configPath)
+		if err == nil {
+			result := ConfigFileResult{Path: configPath}
+
+			if foundAlternatePath != "" {
+				result.Warning = fmt.Sprintf(
+					"ignoring %q when searching for config file; the config file must be called %q; using %q instead",
+					foundAlternatePath, configFileName, configPath)
+			}
+			return result, nil
+		}
+
+		// Check for alternate filename if we haven't found one yet
+		if foundAlternatePath == "" {
+			alternatePath := path.Join(filepath, alternateConfigName)
+			_, altErr := fs.Stat(alternatePath)
+			if altErr == nil {
+				foundAlternatePath = alternatePath
+			}
+		}
+
+		filepath = path.Join(filepath, "..")
+	}
+
+	// No config file found
+	result := ConfigFileResult{}
+	if foundAlternatePath != "" {
+		result.Warning = fmt.Sprintf(
+			"ignoring %q when searching for config file; the config file must be called %q",
+			foundAlternatePath, configFileName)
+	}
+
+	return result, fmt.Errorf("config file not found")
+}
 
 // FindConfigFile looks for a sops config file in the current working directory and on parent directories, up to the limit defined by the maxDepth constant.
 func FindConfigFile(start string) (string, error) {
-	filepath := path.Dir(start)
-	for i := 0; i < maxDepth; i++ {
-		_, err := fs.Stat(path.Join(filepath, configFileName))
-		if err != nil {
-			filepath = path.Join(filepath, "..")
-		} else {
-			return path.Join(filepath, configFileName), nil
-		}
-	}
-	return "", fmt.Errorf("Config file not found")
+	result, err := LookupConfigFile(start)
+	return result.Path, err
 }
 
 type DotenvStoreConfig struct{}
