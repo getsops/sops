@@ -2189,14 +2189,14 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 	return
 }
 
-// Wrapper of config.FindConfigFileEx that takes care of handling the returned wraning.
+// Wrapper of config.LookupConfigFile that takes care of handling the returned warning.
 func findConfigFile() (string, error) {
-	configPath, err, warn := config.FindConfigFileEx(".")
-	if len(warn) > 0 && !showedConfigFileWarning {
+	result, err := config.LookupConfigFile(".")
+	if len(result.Warning) > 0 && !showedConfigFileWarning {
 		showedConfigFileWarning = true
-		log.Warn(warn)
+		log.Warn(result.Warning)
 	}
-	return configPath, err
+	return result.Path, err
 }
 
 func loadStoresConfig(context *cli.Context, path string) (*config.StoresConfig, error) {
