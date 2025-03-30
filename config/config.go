@@ -37,48 +37,65 @@ func (fs osFS) Stat(name string) (os.FileInfo, error) {
 var fs fileSystem = osFS{stat: os.Stat}
 
 const (
-	maxDepth                 = 100
-	configFileName           = ".sops.yaml"
-	misspelledConfigFilename = ".sops.yml"
+	maxDepth            = 100
+	configFileName      = ".sops.yaml"
+	alternateConfigName = ".sops.yml"
 )
 
-// FindConfigFileEx looks for a sops config file in the current working directory and on parent directories, up to the limit defined by the maxDepth constant.
-// The third return value is a warning in case misspelled config files were found.
-func FindConfigFileEx(start string) (string, error, string) {
+// ConfigFileResult contains the path to a config file and any warnings
+type ConfigFileResult struct {
+	Path    string
+	Warning string
+}
+
+// LookupConfigFile looks for a sops config file in the current working directory
+// and on parent directories, up to the maxDepth limit.
+// It returns a result containing the file path and any warnings.
+func LookupConfigFile(start string) (ConfigFileResult, error) {
 	filepath := path.Dir(start)
-	var foundMisspelledPath string
-	var warning string
+	var foundAlternatePath string
+
 	for i := 0; i < maxDepth; i++ {
 		configPath := path.Join(filepath, configFileName)
 		_, err := fs.Stat(configPath)
-		if err != nil {
-			misspelledPath := path.Join(filepath, misspelledConfigFilename)
-			_, err = fs.Stat(misspelledPath)
-			if err == nil && len(foundMisspelledPath) == 0 {
-				foundMisspelledPath = misspelledPath
+		if err == nil {
+			result := ConfigFileResult{Path: configPath}
+
+			if foundAlternatePath != "" {
+				result.Warning = fmt.Sprintf(
+					"ignoring %q when searching for config file; the config file must be called %q; using %q instead",
+					foundAlternatePath, configFileName, configPath)
 			}
-			filepath = path.Join(filepath, "..")
-		} else {
-			if len(foundMisspelledPath) > 0 {
-				warning = fmt.Sprintf(
-					"Ignoring %q when searching for config file. The config file must be called %q."+
-						" Found and using %q further up the directory tree instead.",
-					foundMisspelledPath, configFileName, configPath)
-			}
-			return configPath, nil, warning
+			return result, nil
 		}
+
+		// Check for alternate filename if we haven't found one yet
+		if foundAlternatePath == "" {
+			alternatePath := path.Join(filepath, alternateConfigName)
+			_, altErr := fs.Stat(alternatePath)
+			if altErr == nil {
+				foundAlternatePath = alternatePath
+			}
+		}
+
+		filepath = path.Join(filepath, "..")
 	}
-	err := fmt.Errorf("Config file not found")
-	if len(foundMisspelledPath) > 0 {
-		warning = fmt.Sprintf("Ignoring %q when searching for config file. The config file must be called %q.", foundMisspelledPath, configFileName)
+
+	// No config file found
+	result := ConfigFileResult{}
+	if foundAlternatePath != "" {
+		result.Warning = fmt.Sprintf(
+			"ignoring %q when searching for config file; the config file must be called %q",
+			foundAlternatePath, configFileName)
 	}
-	return "", err, warning
+
+	return result, fmt.Errorf("config file not found")
 }
 
 // FindConfigFile looks for a sops config file in the current working directory and on parent directories, up to the limit defined by the maxDepth constant.
 func FindConfigFile(start string) (string, error) {
-	config, err, _ := FindConfigFileEx(start)
-	return config, err
+	result, err := LookupConfigFile(start)
+	return result.Path, err
 }
 
 type DotenvStoreConfig struct{}
