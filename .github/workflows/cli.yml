@@ -19,7 +19,7 @@ jobs:
       matrix:
         os: [linux, darwin, windows]
         arch: [amd64, arm64]
-        go-version: ['1.22', '1.23']
+        go-version: ['1.23', '1.24']
         exclude:
           - os: windows
             arch: arm64
@@ -48,9 +48,6 @@ jobs:
 
       - name: Vendor Go Modules
         run: make vendor
-
-      - name: Restore go/toolchain lines of go.mod
-        run: python3 .github/utils/patch-go.mod.py
 
       - name: Ensure clean working tree
         run: git diff --exit-code
@@ -88,7 +85,7 @@ jobs:
     needs: [build]
     strategy:
       matrix:
-        go-version: ['1.22']
+        go-version: ['1.24']
     env:
       VAULT_VERSION: "1.14.0"
       VAULT_TOKEN: "root"
