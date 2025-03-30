@@ -1,7 +1,6 @@
 module github.com/getsops/sops/v3
 
-go 1.22
-toolchain go1.24.1
+go 1.23.0
 
 require (
 	cloud.google.com/go/kms v1.21.1
