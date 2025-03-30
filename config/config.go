@@ -37,22 +37,48 @@ func (fs osFS) Stat(name string) (os.FileInfo, error) {
 var fs fileSystem = osFS{stat: os.Stat}
 
 const (
-	maxDepth       = 100
-	configFileName = ".sops.yaml"
+	maxDepth                 = 100
+	configFileName           = ".sops.yaml"
+	misspelledConfigFilename = ".sops.yml"
 )
+
+// FindConfigFileEx looks for a sops config file in the current working directory and on parent directories, up to the limit defined by the maxDepth constant.
+// The third return value is a warning in case misspelled config files were found.
+func FindConfigFileEx(start string) (string, error, string) {
+	filepath := path.Dir(start)
+	var foundMisspelledPath string
+	var warning string
+	for i := 0; i < maxDepth; i++ {
+		configPath := path.Join(filepath, configFileName)
+		_, err := fs.Stat(configPath)
+		if err != nil {
+			misspelledPath := path.Join(filepath, misspelledConfigFilename)
+			_, err = fs.Stat(misspelledPath)
+			if err == nil && len(foundMisspelledPath) == 0 {
+				foundMisspelledPath = misspelledPath
+			}
+			filepath = path.Join(filepath, "..")
+		} else {
+			if len(foundMisspelledPath) > 0 {
+				warning = fmt.Sprintf(
+					"Ignoring %q when searching for config file. The config file must be called %q."+
+						" Found and using %q further up the directory tree instead.",
+					foundMisspelledPath, configFileName, configPath)
+			}
+			return configPath, nil, warning
+		}
+	}
+	err := fmt.Errorf("Config file not found")
+	if len(foundMisspelledPath) > 0 {
+		warning = fmt.Sprintf("Ignoring %q when searching for config file. The config file must be called %q.", foundMisspelledPath, configFileName)
+	}
+	return "", err, warning
+}
 
 // FindConfigFile looks for a sops config file in the current working directory and on parent directories, up to the limit defined by the maxDepth constant.
 func FindConfigFile(start string) (string, error) {
-	filepath := path.Dir(start)
-	for i := 0; i < maxDepth; i++ {
-		_, err := fs.Stat(path.Join(filepath, configFileName))
-		if err != nil {
-			filepath = path.Join(filepath, "..")
-		} else {
-			return path.Join(filepath, configFileName), nil
-		}
-	}
-	return "", fmt.Errorf("Config file not found")
+	config, err, _ := FindConfigFileEx(start)
+	return config, err
 }
 
 type DotenvStoreConfig struct{}
