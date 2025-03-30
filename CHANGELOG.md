@@ -96,6 +96,7 @@ Project changes:
 * We now also build a Windows ARM64 binary ([#1791](https://github.com/getsops/sops/pull/1791)).
 * In the `updatekey.Opts` structure, `GroupQuorum` was renamed to `ShamirThreshold`
   ([#1631](https://github.com/getsops/sops/pull/1631)).
+* Produce multiple Windows binaries ([#1823](https://github.com/getsops/sops/pull/1823)).
 
 ## 3.9.4
 
