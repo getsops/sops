@@ -1,5 +1,20 @@
 # Changelog
 
+## 3.10.1
+
+This is a re-release of 3.10.0 with no code changes.
+
+Due to a failure during the 3.10.0 release, the
+[commit cached by the Go infrastructure for 3.10.0](https://github.com/getsops/sops/commit/200bb6d8ab4063330bc99697255b3583501b3877)
+is different from
+[the commit tagged in the repository](https://github.com/getsops/sops/commit/4ed7060298fbcd00cafa359121ca62091b85bb6f).
+To avoid confusion, we decided to push another release where the tag in the repository
+will coincide with the commit cached by Go.
+
+Project changes:
+
+* CI dependency updates ([#1826](https://github.com/getsops/sops/pull/1826)).
+
 ## 3.10.0
 
 Security fixes:
