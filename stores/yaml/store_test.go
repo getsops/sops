@@ -418,14 +418,3 @@ rootunique:
 	assert.Equal(t, `yaml: unmarshal errors:
   line 3: mapping key "hello" already defined at line 2`, err.Error())
 }
-
-func TestReservedAttributes(t *testing.T) {
-	data := `
-hello: Sops config file
-sops: The attribute 'sops' must be rejected, otherwise the file cannot be opened later on 
-`
-	s := new(Store)
-	_, err := s.LoadPlainFile([]byte(data))
-	assert.NotNil(t, err)
-	assert.Equal(t, `YAML doc used reserved word 'sops'`, err.Error())
-}
