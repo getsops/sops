@@ -329,12 +329,6 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 		if err != nil {
 			return nil, fmt.Errorf("Error unmarshaling input YAML: %s", err)
 		}
-		// Prevent use of reserved keywords
-		for _, item := range branch {
-			if item.Key == stores.SopsMetadataKey {
-				return nil, fmt.Errorf("YAML doc used reserved word '%v'", item.Key)
-			}
-		}
 		branches = append(branches, branch)
 	}
 	return branches, nil
