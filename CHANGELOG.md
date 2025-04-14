@@ -1,5 +1,20 @@
 # Changelog
 
+## 3.10.2
+
+Bugfixes:
+
+* Remove reserved keyword check from YAML store, which hid a better check ([#1829](https://github.com/getsops/sops/pull/1829)).
+
+Improvements:
+
+* Dependency updates ([#1834](https://github.com/getsops/sops/pull/1834), [#1839](https://github.com/getsops/sops/pull/1839)).
+* Use latest 1.24 Go version for release build ([#1836](https://github.com/getsops/sops/pull/1836)).
+
+Project changes:
+
+* CI dependency updates ([#1840](https://github.com/getsops/sops/pull/1840)).
+
 ## 3.10.1
 
 This is a re-release of 3.10.0 with no code changes.
