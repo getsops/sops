@@ -66,6 +66,8 @@ type MasterKey struct {
 	// Mostly useful for testing at present, to wire the client to a mock
 	// server.
 	grpcConn *grpc.ClientConn
+	// grpcDialOpts are the gRPC dial options used to create the gRPC connection.
+	grpcDialOpts []grpc.DialOption
 }
 
 // NewMasterKeyFromResourceID creates a new MasterKey with the provided resource
@@ -114,6 +116,14 @@ type CredentialJSON []byte
 // ApplyToMasterKey configures the CredentialJSON on the provided key.
 func (c CredentialJSON) ApplyToMasterKey(key *MasterKey) {
 	key.credentialJSON = c
+}
+
+// DialOptions are the gRPC dial options used to create the gRPC connection.
+type DialOptions []grpc.DialOption
+
+// ApplyToMasterKey configures the DialOptions on the provided key.
+func (d DialOptions) ApplyToMasterKey(key *MasterKey) {
+	key.grpcDialOpts = d
 }
 
 // Encrypt takes a SOPS data key, encrypts it with GCP KMS, and stores the
@@ -261,8 +271,13 @@ func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
 		}
 	}
 
-	if key.grpcConn != nil {
+	switch {
+	case key.grpcConn != nil:
 		opts = append(opts, option.WithGRPCConn(key.grpcConn))
+	case len(key.grpcDialOpts) > 0:
+		for _, opt := range key.grpcDialOpts {
+			opts = append(opts, option.WithGRPCDialOption(opt))
+		}
 	}
 
 	ctx := context.Background()

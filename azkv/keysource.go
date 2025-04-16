@@ -60,6 +60,8 @@ type MasterKey struct {
 	// using TokenCredential.ApplyToMasterKey.
 	// If nil, azidentity.NewDefaultAzureCredential is used.
 	tokenCredential azcore.TokenCredential
+	// clientOptions contains the azkeys.ClientOptions used by the Azure client.
+	clientOptions *azkeys.ClientOptions
 }
 
 // NewMasterKey creates a new MasterKey from a URL, key name and version,
@@ -116,6 +118,17 @@ func NewTokenCredential(token azcore.TokenCredential) *TokenCredential {
 // ApplyToMasterKey configures the TokenCredential on the provided key.
 func (t TokenCredential) ApplyToMasterKey(key *MasterKey) {
 	key.tokenCredential = t.token
+}
+
+// ClientOptions is a wrapper around azkeys.ClientOptions to allow
+// configuration of the Azure Key Vault client.
+type ClientOptions struct {
+	o *azkeys.ClientOptions
+}
+
+// ApplyToMasterKey configures the ClientOptions on the provided key.
+func (c ClientOptions) ApplyToMasterKey(key *MasterKey) {
+	key.clientOptions = c.o
 }
 
 // Encrypt takes a SOPS data key, encrypts it with Azure Key Vault, and stores
@@ -182,7 +195,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		return nil, fmt.Errorf("failed to base64 decode Azure Key Vault encrypted key: %w", err)
 	}
 
-	c, err := azkeys.NewClient(key.VaultURL, token, nil)
+	c, err := azkeys.NewClient(key.VaultURL, token, key.clientOptions)
 	if err != nil {
 		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Decryption failed")
 		return nil, fmt.Errorf("failed to construct Azure Key Vault client to decrypt data: %w", err)

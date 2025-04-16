@@ -9,6 +9,7 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	"net/http"
 	"os"
 	"regexp"
 	"sort"
@@ -79,6 +80,8 @@ type MasterKey struct {
 	// injected using e.g. an environment variable. The field is not publicly
 	// exposed, nor configurable.
 	baseEndpoint string
+	// httpClient is used to override the default HTTP client used by the AWS client.
+	httpClient *http.Client
 }
 
 // NewMasterKey creates a new MasterKey from an ARN, role and context, setting
@@ -233,6 +236,17 @@ func (c CredentialsProvider) ApplyToMasterKey(key *MasterKey) {
 	key.credentialsProvider = c.provider
 }
 
+// HTTPClient is a wrapper around http.Client used for configuring the
+// AWS KMS client.
+type HTTPClient struct {
+	hc *http.Client
+}
+
+// ApplyToMasterKey configures the HTTP client on the provided key.
+func (h HTTPClient) ApplyToMasterKey(key *MasterKey) {
+	key.httpClient = h.hc
+}
+
 // Encrypt takes a SOPS data key, encrypts it with KMS and stores the result
 // in the EncryptedKey field.
 func (key *MasterKey) Encrypt(dataKey []byte) error {
@@ -369,6 +383,9 @@ func (key MasterKey) createKMSConfig() (*aws.Config, error) {
 			lo.SharedConfigProfile = key.AwsProfile
 		}
 		lo.Region = region
+		if key.httpClient != nil {
+			lo.HTTPClient = key.httpClient
+		}
 		return nil
 	})
 	if err != nil {
