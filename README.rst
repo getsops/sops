@@ -237,6 +237,7 @@ configuration directory.
   - Looks for `keys.txt` in `%AppData%\sops\age\keys.txt` 
 
 You can override the default lookup by:
+
 - setting the environment variable **SOPS_AGE_KEY_FILE**
 - setting the **SOPS_AGE_KEY** environment variable
 - providing a command to output the age keys by setting the **SOPS_AGE_KEY_CMD** environment variable.
