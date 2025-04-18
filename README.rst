@@ -221,7 +221,7 @@ the ``--age`` option or the **SOPS_AGE_RECIPIENTS** environment variable:
 
 When decrypting a file with the corresponding identity, SOPS will look for a
 text file name ``keys.txt`` located in a ``sops`` subdirectory of your user
-configuration directory. 
+configuration directory.
 
 - **Linux**
 
@@ -1058,7 +1058,7 @@ service exposed on the unix socket located in ``/tmp/sops.sock``, you can run:
 
 .. code:: sh
 
-    $ sops decrypt --keyservice unix:///tmp/sops.sock file.yaml
+    $ sops decrypt --keyservice unix:///tmp/sops.sock file.yaml`
 
 And if you only want to use the key service exposed on the unix socket located
 in ``/tmp/sops.sock`` and not the local key service, you can run:
