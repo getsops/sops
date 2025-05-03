@@ -8,6 +8,7 @@ package pgp // import "github.com/getsops/sops/v3/pgp"
 
 import (
 	"bytes"
+	"context"
 	"encoding/hex"
 	"errors"
 	"fmt"
@@ -129,13 +130,22 @@ func NewGnuPGHome() (GnuPGHome, error) {
 // Import attempts to import the armored key bytes into the GnuPGHome keyring.
 // It returns an error if the GnuPGHome does not pass Validate, or if the
 // import failed.
+//
+// Consider using ImportContext instead.
 func (d GnuPGHome) Import(armoredKey []byte) error {
+	return d.ImportContext(context.Background(), armoredKey)
+}
+
+// ImportContext attempts to import the armored key bytes into the GnuPGHome keyring.
+// It returns an error if the GnuPGHome does not pass Validate, or if the
+// import failed.
+func (d GnuPGHome) ImportContext(ctx context.Context, armoredKey []byte) error {
 	if err := d.Validate(); err != nil {
 		return fmt.Errorf("cannot import armored key data into GnuPG keyring: %w", err)
 	}
 
 	args := []string{"--batch", "--import"}
-	_, stderr, err := gpgExec(d.String(), args, bytes.NewReader(armoredKey))
+	_, stderr, err := gpgExec(ctx, d.String(), args, bytes.NewReader(armoredKey))
 	if err != nil {
 		stderrStr := strings.TrimSpace(stderr.String())
 		errStr := err.Error()
@@ -254,7 +264,15 @@ func (e errSet) Error() string {
 
 // Encrypt encrypts the data key with the PGP key with the same
 // fingerprint as the MasterKey.
+//
+// Consider using EncryptContext instead.
 func (key *MasterKey) Encrypt(dataKey []byte) error {
+	return key.EncryptContext(context.Background(), dataKey)
+}
+
+// EncryptContext encrypts the data key with the PGP key with the same
+// fingerprint as the MasterKey.
+func (key *MasterKey) EncryptContext(ctx context.Context, dataKey []byte) error {
 	var errs errSet
 
 	if !key.disableOpenPGP {
@@ -266,7 +284,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 		errs = append(errs, fmt.Errorf("github.com/ProtonMail/go-crypto/openpgp error: %w", openpgpErr))
 	}
 
-	binaryErr := key.encryptWithGnuPG(dataKey)
+	binaryErr := key.encryptWithGnuPG(ctx, dataKey)
 	if binaryErr == nil {
 		log.WithField("fingerprint", key.Fingerprint).Info("Encryption succeeded")
 		return nil
@@ -320,7 +338,7 @@ func (key *MasterKey) encryptWithOpenPGP(dataKey []byte) error {
 // encryptWithOpenPGP attempts to encrypt the data key using GnuPG with the
 // PGP key that belongs to Fingerprint. It sets EncryptedDataKey, or returns
 // an error.
-func (key *MasterKey) encryptWithGnuPG(dataKey []byte) error {
+func (key *MasterKey) encryptWithGnuPG(ctx context.Context, dataKey []byte) error {
 	fingerprint := shortenFingerprint(key.Fingerprint)
 
 	args := []string{
@@ -334,7 +352,7 @@ func (key *MasterKey) encryptWithGnuPG(dataKey []byte) error {
 		fingerprint,
 		"--no-encrypt-to",
 	}
-	stdout, stderr, err := gpgExec(key.gnuPGHomeDir, args, bytes.NewReader(dataKey))
+	stdout, stderr, err := gpgExec(ctx, key.gnuPGHomeDir, args, bytes.NewReader(dataKey))
 	if err != nil {
 		return fmt.Errorf("failed to encrypt sops data key with pgp: %s", strings.TrimSpace(stderr.String()))
 	}
@@ -365,7 +383,16 @@ func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 // Decrypt first attempts to obtain the data key from the EncryptedKey
 // stored in the MasterKey using OpenPGP, before falling back to GnuPG.
 // When both attempts fail, an error is returned.
+//
+// Consider using DecryptContext instead.
 func (key *MasterKey) Decrypt() ([]byte, error) {
+	return key.DecryptContext(context.Background())
+}
+
+// DecryptContext first attempts to obtain the data key from the EncryptedKey
+// stored in the MasterKey using OpenPGP, before falling back to GnuPG.
+// When both attempts fail, an error is returned.
+func (key *MasterKey) DecryptContext(ctx context.Context) ([]byte, error) {
 	var errs errSet
 
 	if !key.disableOpenPGP {
@@ -377,7 +404,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		errs = append(errs, fmt.Errorf("github.com/ProtonMail/go-crypto/openpgp error: %w", openpgpErr))
 	}
 
-	dataKey, binaryErr := key.decryptWithGnuPG()
+	dataKey, binaryErr := key.decryptWithGnuPG(ctx)
 	if binaryErr == nil {
 		log.WithField("fingerprint", key.Fingerprint).Info("Decryption succeeded")
 		return dataKey, nil
@@ -419,11 +446,11 @@ func (key *MasterKey) decryptWithOpenPGP() ([]byte, error) {
 // GnuPG and returns the result. If DisableAgent is configured on the MasterKey,
 // the GnuPG agent is not enabled. When the decryption command fails, it returns
 // the error from stdout.
-func (key *MasterKey) decryptWithGnuPG() ([]byte, error) {
+func (key *MasterKey) decryptWithGnuPG(ctx context.Context) ([]byte, error) {
 	args := []string{
 		"-d",
 	}
-	stdout, stderr, err := gpgExec(key.gnuPGHomeDir, args, strings.NewReader(key.EncryptedKey))
+	stdout, stderr, err := gpgExec(ctx, key.gnuPGHomeDir, args, strings.NewReader(key.EncryptedKey))
 	if err != nil {
 		return nil, fmt.Errorf("failed to decrypt sops data key with pgp: %s",
 			strings.TrimSpace(stderr.String()))
@@ -595,12 +622,12 @@ func fingerprintIndex(ring openpgp.EntityList) map[string]openpgp.Entity {
 // gpgExec runs the provided args with the gpgBinary, while restricting it to
 // homeDir when provided. Stdout and stderr can be read from the returned
 // buffers. When the command fails, an error is returned.
-func gpgExec(homeDir string, args []string, stdin io.Reader) (stdout bytes.Buffer, stderr bytes.Buffer, err error) {
+func gpgExec(ctx context.Context, homeDir string, args []string, stdin io.Reader) (stdout bytes.Buffer, stderr bytes.Buffer, err error) {
 	if homeDir != "" {
 		args = append([]string{"--homedir", homeDir}, args...)
 	}
 
-	cmd := exec.Command(gpgBinary(), args...)
+	cmd := exec.CommandContext(ctx, gpgBinary(), args...)
 	cmd.Stdin = stdin
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr

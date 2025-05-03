@@ -118,8 +118,16 @@ func (c CredentialJSON) ApplyToMasterKey(key *MasterKey) {
 
 // Encrypt takes a SOPS data key, encrypts it with GCP KMS, and stores the
 // result in the EncryptedKey field.
+//
+// Consider using EncryptContext instead.
 func (key *MasterKey) Encrypt(dataKey []byte) error {
-	service, err := key.newKMSClient()
+	return key.EncryptContext(context.Background(), dataKey)
+}
+
+// EncryptContext takes a SOPS data key, encrypts it with GCP KMS, and stores the
+// result in the EncryptedKey field.
+func (key *MasterKey) EncryptContext(ctx context.Context, dataKey []byte) error {
+	service, err := key.newKMSClient(ctx)
 	if err != nil {
 		log.WithField("resourceID", key.ResourceID).Info("Encryption failed")
 		return fmt.Errorf("cannot create GCP KMS service: %w", err)
@@ -134,7 +142,6 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 		Name:      key.ResourceID,
 		Plaintext: dataKey,
 	}
-	ctx := context.Background()
 	resp, err := service.Encrypt(ctx, req)
 	if err != nil {
 		log.WithField("resourceID", key.ResourceID).Info("Encryption failed")
@@ -169,8 +176,16 @@ func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 
 // Decrypt decrypts the EncryptedKey field with GCP KMS and returns
 // the result.
+//
+// Consider using DecryptContext instead.
 func (key *MasterKey) Decrypt() ([]byte, error) {
-	service, err := key.newKMSClient()
+	return key.DecryptContext(context.Background())
+}
+
+// DecryptContext decrypts the EncryptedKey field with GCP KMS and returns
+// the result.
+func (key *MasterKey) DecryptContext(ctx context.Context) ([]byte, error) {
+	service, err := key.newKMSClient(ctx)
 	if err != nil {
 		log.WithField("resourceID", key.ResourceID).Info("Decryption failed")
 		return nil, fmt.Errorf("cannot create GCP KMS service: %w", err)
@@ -193,7 +208,6 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		Name:       key.ResourceID,
 		Ciphertext: decodedCipher,
 	}
-	ctx := context.Background()
 	resp, err := service.Decrypt(ctx, req)
 	if err != nil {
 		log.WithField("resourceID", key.ResourceID).Info("Decryption failed")
@@ -232,7 +246,7 @@ func (key *MasterKey) TypeToIdentifier() string {
 // or credentialJSON, and/or grpcConn, falling back to environmental defaults.
 // It returns an error if the ResourceID is invalid, or if the setup of the
 // client fails.
-func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
+func (key *MasterKey) newKMSClient(ctx context.Context) (*kms.KeyManagementClient, error) {
 	re := regexp.MustCompile(`^projects/[^/]+/locations/[^/]+/keyRings/[^/]+/cryptoKeys/[^/]+$`)
 	matches := re.FindStringSubmatch(key.ResourceID)
 	if matches == nil {
@@ -265,7 +279,6 @@ func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
 		opts = append(opts, option.WithGRPCConn(key.grpcConn))
 	}
 
-	ctx := context.Background()
 	client, err := kms.NewKeyManagementClient(ctx, opts...)
 	if err != nil {
 		return nil, err
