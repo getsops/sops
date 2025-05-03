@@ -120,7 +120,15 @@ func (t TokenCredential) ApplyToMasterKey(key *MasterKey) {
 
 // Encrypt takes a SOPS data key, encrypts it with Azure Key Vault, and stores
 // the result in the EncryptedKey field.
+//
+// Consider using EncryptContext instead.
 func (key *MasterKey) Encrypt(dataKey []byte) error {
+	return key.EncryptContext(context.Background(), dataKey)
+}
+
+// EncryptContext takes a SOPS data key, encrypts it with Azure Key Vault, and stores
+// the result in the EncryptedKey field.
+func (key *MasterKey) EncryptContext(ctx context.Context, dataKey []byte) error {
 	token, err := key.getTokenCredential()
 	if err != nil {
 		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Encryption failed")
@@ -133,7 +141,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 		return fmt.Errorf("failed to construct Azure Key Vault client to encrypt data: %w", err)
 	}
 
-	resp, err := c.Encrypt(context.Background(), key.Name, key.Version, azkeys.KeyOperationParameters{
+	resp, err := c.Encrypt(ctx, key.Name, key.Version, azkeys.KeyOperationParameters{
 		Algorithm: to.Ptr(azkeys.EncryptionAlgorithmRSAOAEP256),
 		Value:     dataKey,
 	}, nil)
@@ -169,7 +177,15 @@ func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 
 // Decrypt decrypts the EncryptedKey field with Azure Key Vault and returns
 // the result.
+//
+// Consider using DecryptContext instead.
 func (key *MasterKey) Decrypt() ([]byte, error) {
+	return key.DecryptContext(context.Background())
+}
+
+// DecryptContext decrypts the EncryptedKey field with Azure Key Vault and returns
+// the result.
+func (key *MasterKey) DecryptContext(ctx context.Context) ([]byte, error) {
 	token, err := key.getTokenCredential()
 	if err != nil {
 		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Decryption failed")
@@ -188,7 +204,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		return nil, fmt.Errorf("failed to construct Azure Key Vault client to decrypt data: %w", err)
 	}
 
-	resp, err := c.Decrypt(context.Background(), key.Name, key.Version, azkeys.KeyOperationParameters{
+	resp, err := c.Decrypt(ctx, key.Name, key.Version, azkeys.KeyOperationParameters{
 		Algorithm: to.Ptr(azkeys.EncryptionAlgorithmRSAOAEP256),
 		Value:     rawEncryptedKey,
 	}, nil)

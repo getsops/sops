@@ -1,6 +1,7 @@
 package gcpkms
 
 import (
+	"context"
 	"encoding/base64"
 	"fmt"
 	"net"
@@ -155,7 +156,7 @@ func TestMasterKey_createCloudKMSService_withCredentialsFile(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		_, err := tt.key.newKMSClient()
+		_, err := tt.key.newKMSClient(context.Background())
 		if tt.errString != "" {
 			assert.Error(t, err)
 			assert.ErrorContains(t, err, tt.errString)
@@ -172,7 +173,7 @@ func TestMasterKey_createCloudKMSService_withOauthToken(t *testing.T) {
 		ResourceID: testResourceID,
 	}
 
-	_, err := masterKey.newKMSClient()
+	_, err := masterKey.newKMSClient(context.Background())
 
 	assert.NoError(t, err)
 }
@@ -182,7 +183,7 @@ func TestMasterKey_createCloudKMSService_withoutCredentials(t *testing.T) {
 		ResourceID: testResourceID,
 	}
 
-	_, err := masterKey.newKMSClient()
+	_, err := masterKey.newKMSClient(context.Background())
 
 	assert.Error(t, err)
 	assert.ErrorContains(t, err, "credentials: could not find default credentials")
