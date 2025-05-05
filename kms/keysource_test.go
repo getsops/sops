@@ -116,7 +116,7 @@ func TestNewMasterKey(t *testing.T) {
 			"foo": aws.String("bar"),
 		}
 	)
-	key := NewMasterKey(dummyARN, dummyRole, dummyEncryptionContext)
+	key := NewMasterKey(dummyARN, dummyRole, dummyEncryptionContext, "", "")
 	assert.Equal(t, dummyARN, key.Arn)
 	assert.Equal(t, dummyRole, key.Role)
 	assert.Equal(t, dummyEncryptionContext, key.EncryptionContext)
@@ -131,7 +131,7 @@ func TestNewMasterKeyWithProfile(t *testing.T) {
 		}
 		dummyProfile = "a-profile"
 	)
-	key := NewMasterKeyWithProfile(dummyARN, dummyRole, dummyEncryptionContext, dummyProfile)
+	key := NewMasterKeyWithProfile(dummyARN, dummyRole, dummyEncryptionContext, dummyProfile, "", "")
 	assert.Equal(t, dummyARN, key.Arn)
 	assert.Equal(t, dummyRole, key.Role)
 	assert.Equal(t, dummyEncryptionContext, key.EncryptionContext)
@@ -147,7 +147,7 @@ func TestNewMasterKeyFromArn(t *testing.T) {
 			}
 			dummyProfile = "a-profile"
 		)
-		key := NewMasterKeyFromArn(dummyARN, dummyEncryptionContext, dummyProfile)
+		key := NewMasterKeyFromArn(dummyARN, dummyEncryptionContext, dummyProfile, "", "")
 		assert.Equal(t, dummyARN, key.Arn)
 		assert.Equal(t, dummyEncryptionContext, key.EncryptionContext)
 		assert.Equal(t, dummyProfile, key.AwsProfile)
@@ -156,12 +156,12 @@ func TestNewMasterKeyFromArn(t *testing.T) {
 	})
 
 	t.Run("arn with spaces", func(t *testing.T) {
-		key := NewMasterKeyFromArn(" arn:aws:kms:us-west-2 :107501996527:key/612d5f 0p-p1l3-45e6-aca6-a5b00569 3a48 ", nil, "")
+		key := NewMasterKeyFromArn(" arn:aws:kms:us-west-2 :107501996527:key/612d5f 0p-p1l3-45e6-aca6-a5b00569 3a48 ", nil, "", "", "")
 		assert.Equal(t, "arn:aws:kms:us-west-2:107501996527:key/612d5f0p-p1l3-45e6-aca6-a5b005693a48", key.Arn)
 	})
 
 	t.Run("arn with role", func(t *testing.T) {
-		key := NewMasterKeyFromArn("arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500+arn:aws:iam::927034868273:role/sops-dev-xyz", nil, "")
+		key := NewMasterKeyFromArn("arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500+arn:aws:iam::927034868273:role/sops-dev-xyz", nil, "", "", "")
 		assert.Equal(t, "arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500", key.Arn)
 		assert.Equal(t, "arn:aws:iam::927034868273:role/sops-dev-xyz", key.Role)
 	})
@@ -169,7 +169,7 @@ func TestNewMasterKeyFromArn(t *testing.T) {
 
 func TestMasterKeysFromArnString(t *testing.T) {
 	s := "arn:aws:kms:us-east-1:656532927350:key/920aff2e-c5f1-4040-943a-047fa387b27e+arn:aws:iam::927034868273:role/sops-dev, arn:aws:kms:ap-southeast-1:656532927350:key/9006a8aa-0fa6-4c14-930e-a2dfb916de1d"
-	ks := MasterKeysFromArnString(s, nil, "foo")
+	ks := MasterKeysFromArnString(s, nil, "foo", "", "")
 	k1 := ks[0]
 	k2 := ks[1]
 
@@ -359,7 +359,7 @@ func TestMasterKey_EncryptDecrypt_RoundTrip(t *testing.T) {
 }
 
 func TestMasterKey_NeedsRotation(t *testing.T) {
-	key := NewMasterKeyFromArn(dummyARN, nil, "")
+	key := NewMasterKeyFromArn(dummyARN, nil, "", "", "")
 	assert.False(t, key.NeedsRotation())
 
 	key.CreationDate = key.CreationDate.Add(-(kmsTTL + time.Second))
@@ -376,28 +376,28 @@ func TestMasterKey_ToString(t *testing.T) {
 		"baz": &bam,
 	}
 
-	key := NewMasterKeyFromArn(dummyARN, nil, "")
+	key := NewMasterKeyFromArn(dummyARN, nil, "", "", "")
 	assert.Equal(t, dummyARN, key.ToString())
 
-	key = NewMasterKeyFromArn(dummyARNWithRole, nil, "")
+	key = NewMasterKeyFromArn(dummyARNWithRole, nil, "", "", "")
 	assert.Equal(t, dummyARNWithRole, key.ToString())
 
-	key = NewMasterKeyFromArn(dummyARN, nil, "profile")
+	key = NewMasterKeyFromArn(dummyARN, nil, "profile", "", "")
 	assert.Equal(t, fmt.Sprintf("%s||profile", dummyARN), key.ToString())
 
-	key = NewMasterKeyFromArn(dummyARNWithRole, nil, "profile")
+	key = NewMasterKeyFromArn(dummyARNWithRole, nil, "profile", "", "")
 	assert.Equal(t, fmt.Sprintf("%s||profile", dummyARNWithRole), key.ToString())
 
-	key = NewMasterKeyFromArn(dummyARN, context, "")
+	key = NewMasterKeyFromArn(dummyARN, context, "", "", "")
 	assert.Equal(t, fmt.Sprintf("%s|baz:bam,foo:bar", dummyARN), key.ToString())
 
-	key = NewMasterKeyFromArn(dummyARNWithRole, context, "")
+	key = NewMasterKeyFromArn(dummyARNWithRole, context, "", "", "")
 	assert.Equal(t, fmt.Sprintf("%s|baz:bam,foo:bar", dummyARNWithRole), key.ToString())
 
-	key = NewMasterKeyFromArn(dummyARN, context, "profile")
+	key = NewMasterKeyFromArn(dummyARN, context, "profile", "", "")
 	assert.Equal(t, fmt.Sprintf("%s|baz:bam,foo:bar|profile", dummyARN), key.ToString())
 
-	key = NewMasterKeyFromArn(dummyARNWithRole, context, "profile")
+	key = NewMasterKeyFromArn(dummyARNWithRole, context, "profile", "", "")
 	assert.Equal(t, fmt.Sprintf("%s|baz:bam,foo:bar|profile", dummyARNWithRole), key.ToString())
 }
 
@@ -548,7 +548,7 @@ func TestMasterKey_createSTSConfig(t *testing.T) {
 			err = fmt.Errorf("an error")
 			return
 		}
-		key := NewMasterKeyFromArn(dummyARN, nil, "")
+		key := NewMasterKeyFromArn(dummyARN, nil, "", "", "")
 		cfg, err := key.createSTSConfig(nil)
 		assert.Error(t, err)
 		assert.ErrorContains(t, err, "failed to construct STS session name")
@@ -556,7 +556,7 @@ func TestMasterKey_createSTSConfig(t *testing.T) {
 	})
 
 	t.Run("role assumption error", func(t *testing.T) {
-		key := NewMasterKeyFromArn(dummyARN, nil, "")
+		key := NewMasterKeyFromArn(dummyARN, nil, "", "", "")
 		key.Role = "role"
 		got, err := key.createSTSConfig(&aws.Config{})
 		assert.Error(t, err)
@@ -622,7 +622,7 @@ func createTestMasterKey(arn string) MasterKey {
 	return MasterKey{
 		Arn:                 arn,
 		credentialsProvider: credentials.NewStaticCredentialsProvider("id", "secret", ""),
-		baseEndpoint:        testKMSServerURL,
+		AwsKmsEndpoint:      testKMSServerURL,
 	}
 }
 
