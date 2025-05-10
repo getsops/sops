@@ -2,6 +2,7 @@ package pgp
 
 import (
 	"bytes"
+	"context"
 	"io"
 	"os"
 	"os/user"
@@ -56,14 +57,14 @@ func TestGnuPGHome_Import(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NoError(t, gnuPGHome.Import(b))
 
-	_, stderr, err := gpgExec(gnuPGHome.String(), []string{"--list-keys", mockFingerprint}, nil)
+	_, stderr, err := gpgExec(context.Background(), gnuPGHome.String(), []string{"--list-keys", mockFingerprint}, nil)
 	assert.NoErrorf(t, err, stderr.String())
 
 	b, err = os.ReadFile(mockPrivateKey)
 	assert.NoError(t, err)
 	assert.NoError(t, gnuPGHome.Import(b))
 
-	_, stderr, err = gpgExec(gnuPGHome.String(), []string{"--list-secret-keys", mockFingerprint}, nil)
+	_, stderr, err = gpgExec(context.Background(), gnuPGHome.String(), []string{"--list-secret-keys", mockFingerprint}, nil)
 	assert.NoErrorf(t, err, stderr.String())
 
 	err = gnuPGHome.Import([]byte("invalid armored data"))
@@ -281,7 +282,7 @@ func TestMasterKey_encryptWithGnuPG(t *testing.T) {
 		key := NewMasterKeyFromFingerprint(mockFingerprint)
 		gnuPGHome.ApplyToMasterKey(key)
 		data := []byte("oh no, my darkest secret")
-		assert.NoError(t, key.encryptWithGnuPG(data))
+		assert.NoError(t, key.encryptWithGnuPG(context.Background(), data))
 
 		assert.NotEmpty(t, key.EncryptedKey)
 		assert.NotEqual(t, data, key.EncryptedKey)
@@ -291,14 +292,14 @@ func TestMasterKey_encryptWithGnuPG(t *testing.T) {
 		args := []string{
 			"-d",
 		}
-		stdout, stderr, err := gpgExec(key.gnuPGHomeDir, args, strings.NewReader(key.EncryptedKey))
+		stdout, stderr, err := gpgExec(context.Background(), key.gnuPGHomeDir, args, strings.NewReader(key.EncryptedKey))
 		assert.NoError(t, err, stderr.String())
 		assert.Equal(t, data, stdout.Bytes())
 	})
 
 	t.Run("invalid fingerprint error", func(t *testing.T) {
 		key := NewMasterKeyFromFingerprint("invalid")
-		err := key.encryptWithGnuPG([]byte("invalid"))
+		err := key.encryptWithGnuPG(context.Background(), []byte("invalid"))
 		assert.Error(t, err)
 		assert.ErrorContains(t, err, "failed to encrypt sops data key with pgp: gpg: 'invalid' is not a valid long keyID")
 	})
@@ -341,7 +342,7 @@ func TestMasterKey_Decrypt(t *testing.T) {
 	fingerprint := shortenFingerprint(mockFingerprint)
 
 	data := []byte("this data is absolutely top secret")
-	stdout, stderr, err := gpgExec(gnuPGHome.String(), []string{
+	stdout, stderr, err := gpgExec(context.Background(), gnuPGHome.String(), []string{
 		"--no-default-recipient",
 		"--yes",
 		"--encrypt",
@@ -424,7 +425,7 @@ func TestMasterKey_decryptWithOpenPGP(t *testing.T) {
 		fingerprint := shortenFingerprint(mockFingerprint)
 
 		data := []byte("this data is absolutely top secret")
-		stdout, stderr, err := gpgExec(gnuPGHome.String(), []string{
+		stdout, stderr, err := gpgExec(context.Background(), gnuPGHome.String(), []string{
 			"--no-default-recipient",
 			"--yes",
 			"--encrypt",
@@ -473,7 +474,7 @@ func TestMasterKey_decryptWithGnuPG(t *testing.T) {
 		fingerprint := shortenFingerprint(mockFingerprint)
 
 		data := []byte("this data is absolutely top secret")
-		stdout, stderr, err := gpgExec(gnuPGHome.String(), []string{
+		stdout, stderr, err := gpgExec(context.Background(), gnuPGHome.String(), []string{
 			"--no-default-recipient",
 			"--yes",
 			"--encrypt",
@@ -494,7 +495,7 @@ func TestMasterKey_decryptWithGnuPG(t *testing.T) {
 		gnuPGHome.ApplyToMasterKey(key)
 		key.EncryptedKey = encryptedData
 
-		got, err := key.decryptWithGnuPG()
+		got, err := key.decryptWithGnuPG(context.Background())
 		assert.NoError(t, err)
 		assert.Equal(t, data, got)
 	})
@@ -502,7 +503,7 @@ func TestMasterKey_decryptWithGnuPG(t *testing.T) {
 	t.Run("invalid data error", func(t *testing.T) {
 		key := NewMasterKeyFromFingerprint(mockFingerprint)
 		key.EncryptedKey = "absolute invalid"
-		got, err := key.decryptWithGnuPG()
+		got, err := key.decryptWithGnuPG(context.Background())
 		assert.Error(t, err)
 		assert.ErrorContains(t, err, "gpg: no valid OpenPGP data found")
 		assert.Nil(t, got)
