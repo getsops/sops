@@ -74,35 +74,38 @@ type MasterKey struct {
 	// using CredentialsProvider.ApplyToMasterKey. If nil, the default client is used
 	// which utilizes runtime environmental values.
 	credentialsProvider aws.CredentialsProvider
-	// baseEndpoint can be used to override the endpoint the AWS client resolves
-	// to by default. This is mostly used for testing purposes as it can not be
-	// injected using e.g. an environment variable. The field is not publicly
-	// exposed, nor configurable.
-	baseEndpoint string
+	// AwsKmsEndpoint can be used to override the endpoint the AWS client resolves
+	// to by default. This is mostly used for custom AWS that has custom endpoint.
+	AwsKmsEndpoint string
+	// AwsStsEndpoint can be used to override the endpoint the AWS client resolves
+	// to by default. This is mostly used for custom AWS that has custom endpoint.
+	AwsStsEndpoint string
 }
 
 // NewMasterKey creates a new MasterKey from an ARN, role and context, setting
 // the creation date to the current date.
-func NewMasterKey(arn string, role string, context map[string]*string) *MasterKey {
+func NewMasterKey(arn string, role string, context map[string]*string, awsKmsEndpoint string, awsStsEndpoint string) *MasterKey {
 	return &MasterKey{
 		Arn:               arn,
 		Role:              role,
 		EncryptionContext: context,
 		CreationDate:      time.Now().UTC(),
+		AwsKmsEndpoint:    awsKmsEndpoint,
+		AwsStsEndpoint:    awsStsEndpoint,
 	}
 }
 
 // NewMasterKeyWithProfile creates a new MasterKey from an ARN, role, context
 // and awsProfile, setting the creation date to the current date.
-func NewMasterKeyWithProfile(arn string, role string, context map[string]*string, awsProfile string) *MasterKey {
-	k := NewMasterKey(arn, role, context)
+func NewMasterKeyWithProfile(arn string, role string, context map[string]*string, awsProfile string, awsKmsEndpoint string, awsStsEndpoint string) *MasterKey {
+	k := NewMasterKey(arn, role, context, awsKmsEndpoint, awsStsEndpoint)
 	k.AwsProfile = awsProfile
 	return k
 }
 
 // NewMasterKeyFromArn takes an ARN string and returns a new MasterKey for that
 // ARN.
-func NewMasterKeyFromArn(arn string, context map[string]*string, awsProfile string) *MasterKey {
+func NewMasterKeyFromArn(arn string, context map[string]*string, awsProfile string, awsKmsEndpoint string, awsStsEndpoint string) *MasterKey {
 	key := &MasterKey{}
 	arn = strings.Replace(arn, " ", "", -1)
 	key.Arn = arn
@@ -115,18 +118,20 @@ func NewMasterKeyFromArn(arn string, context map[string]*string, awsProfile stri
 	key.EncryptionContext = context
 	key.CreationDate = time.Now().UTC()
 	key.AwsProfile = awsProfile
+	key.AwsKmsEndpoint = awsKmsEndpoint
+	key.AwsStsEndpoint = awsStsEndpoint
 	return key
 }
 
 // MasterKeysFromArnString takes a comma separated list of AWS KMS ARNs, and
 // returns a slice of new MasterKeys for those ARNs.
-func MasterKeysFromArnString(arn string, context map[string]*string, awsProfile string) []*MasterKey {
+func MasterKeysFromArnString(arn string, context map[string]*string, awsProfile string, awsKmsEndpoint string, awsStsEndpoint string) []*MasterKey {
 	var keys []*MasterKey
 	if arn == "" {
 		return keys
 	}
 	for _, s := range strings.Split(arn, ",") {
-		keys = append(keys, NewMasterKeyFromArn(s, context, awsProfile))
+		keys = append(keys, NewMasterKeyFromArn(s, context, awsProfile, awsKmsEndpoint, awsStsEndpoint))
 	}
 	return keys
 }
@@ -384,8 +389,8 @@ func (key MasterKey) createKMSConfig() (*aws.Config, error) {
 // createClient creates a new AWS KMS client with the provided config.
 func (key MasterKey) createClient(config *aws.Config) *kms.Client {
 	return kms.NewFromConfig(*config, func(o *kms.Options) {
-		if key.baseEndpoint != "" {
-			o.BaseEndpoint = aws.String(key.baseEndpoint)
+		if key.AwsKmsEndpoint != "" {
+			o.BaseEndpoint = aws.String(key.AwsKmsEndpoint)
 		}
 	})
 }
@@ -403,7 +408,11 @@ func (key MasterKey) createSTSConfig(config *aws.Config) (*aws.Config, error) {
 		RoleSessionName: &name,
 	}
 
-	client := sts.NewFromConfig(*config)
+	client := sts.NewFromConfig(*config, func(o *sts.Options) {
+		if key.AwsStsEndpoint != "" {
+			o.BaseEndpoint = aws.String(key.AwsStsEndpoint)
+		}
+	})
 	out, err := client.AssumeRole(context.TODO(), input)
 	if err != nil {
 		return nil, fmt.Errorf("failed to assume role '%s': %w", key.Role, err)
