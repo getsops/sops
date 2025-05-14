@@ -187,7 +187,7 @@ func TestMasterKey_Encrypt(t *testing.T) {
 	assert.NoError(t, key.Encrypt(dataKey))
 	assert.NotEmpty(t, key.EncryptedKey)
 
-	client, err := vaultClient(key.VaultAddress, key.token)
+	client, err := vaultClient(key.VaultAddress, key.token, nil)
 	assert.NoError(t, err)
 
 	payload := decryptPayload(key.EncryptedKey)
@@ -230,7 +230,7 @@ func TestMasterKey_Decrypt(t *testing.T) {
 	(Token(testVaultToken)).ApplyToMasterKey(key)
 	assert.NoError(t, createVaultKey(key))
 
-	client, err := vaultClient(key.VaultAddress, key.token)
+	client, err := vaultClient(key.VaultAddress, key.token, nil)
 	assert.NoError(t, err)
 
 	dataKey := []byte("the heart of a shrimp is located in its head")
@@ -368,7 +368,7 @@ func Test_vaultClient(t *testing.T) {
 		t.Setenv("VAULT_TOKEN", "")
 		t.Setenv("HOME", tmpDir)
 
-		got, err := vaultClient(testVaultAddress, "")
+		got, err := vaultClient(testVaultAddress, "", nil)
 		assert.NoError(t, err)
 		assert.NotNil(t, got)
 		assert.Empty(t, got.Token())
@@ -378,7 +378,7 @@ func Test_vaultClient(t *testing.T) {
 		token := "test-token"
 		t.Setenv("VAULT_TOKEN", token)
 
-		got, err := vaultClient(testVaultAddress, "")
+		got, err := vaultClient(testVaultAddress, "", nil)
 		assert.NoError(t, err)
 		assert.NotNil(t, got)
 		assert.Equal(t, token, got.Token())
@@ -388,7 +388,7 @@ func Test_vaultClient(t *testing.T) {
 		ignored := "test-token"
 		t.Setenv("VAULT_TOKEN", ignored)
 
-		got, err := vaultClient(testVaultAddress, testVaultToken)
+		got, err := vaultClient(testVaultAddress, testVaultToken, nil)
 		assert.NoError(t, err)
 		assert.NotNil(t, got)
 		assert.Equal(t, testVaultToken, got.Token())
@@ -407,7 +407,7 @@ func Test_vaultClient(t *testing.T) {
 		t.Setenv("VAULT_TOKEN", "")
 		t.Setenv("HOME", tmpDir)
 
-		got, err := vaultClient(testVaultAddress, "")
+		got, err := vaultClient(testVaultAddress, "", nil)
 		assert.NoError(t, err)
 		assert.NotNil(t, got)
 		assert.Equal(t, token, got.Token())
@@ -487,7 +487,7 @@ func Test_engineAndKeyFromPath(t *testing.T) {
 
 // enableVaultTransit enables the Vault Transit backend on the given enginePath.
 func enableVaultTransit(address, token, enginePath string) error {
-	client, err := vaultClient(address, token)
+	client, err := vaultClient(address, token, nil)
 	if err != nil {
 		return fmt.Errorf("cannot create Vault client: %w", err)
 	}
@@ -504,7 +504,7 @@ func enableVaultTransit(address, token, enginePath string) error {
 // createVaultKey creates a new RSA-4096 Vault key using the data from the
 // provided MasterKey.
 func createVaultKey(key *MasterKey) error {
-	client, err := vaultClient(key.VaultAddress, key.token)
+	client, err := vaultClient(key.VaultAddress, key.token, nil)
 	if err != nil {
 		return fmt.Errorf("cannot create Vault client: %w", err)
 	}
