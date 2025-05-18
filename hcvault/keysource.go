@@ -2,6 +2,7 @@ package hcvault
 
 import (
 	"bytes"
+	"context"
 	"encoding/base64"
 	"errors"
 	"fmt"
@@ -130,7 +131,15 @@ func NewMasterKey(address, enginePath, keyName string) *MasterKey {
 
 // Encrypt takes a SOPS data key, encrypts it with Vault Transit, and stores
 // the result in the EncryptedKey field.
+//
+// Consider using EncryptContext instead.
 func (key *MasterKey) Encrypt(dataKey []byte) error {
+	return key.EncryptContext(context.Background(), dataKey)
+}
+
+// EncryptContext takes a SOPS data key, encrypts it with Vault Transit, and stores
+// the result in the EncryptedKey field.
+func (key *MasterKey) EncryptContext(ctx context.Context, dataKey []byte) error {
 	fullPath := key.encryptPath()
 
 	client, err := vaultClient(key.VaultAddress, key.token)
@@ -139,7 +148,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 		return err
 	}
 
-	secret, err := client.Logical().Write(fullPath, encryptPayload(dataKey))
+	secret, err := client.Logical().WriteWithContext(ctx, fullPath, encryptPayload(dataKey))
 	if err != nil {
 		log.WithField("Path", fullPath).Info("Encryption failed")
 		return fmt.Errorf("failed to encrypt sops data key to Vault transit backend '%s': %w", fullPath, err)
@@ -175,7 +184,14 @@ func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 }
 
 // Decrypt decrypts the EncryptedKey field with Vault Transit and returns the result.
+//
+// Consider using DecryptContext instead.
 func (key *MasterKey) Decrypt() ([]byte, error) {
+	return key.DecryptContext(context.Background())
+}
+
+// DecryptContext decrypts the EncryptedKey field with Vault Transit and returns the result.
+func (key *MasterKey) DecryptContext(ctx context.Context) ([]byte, error) {
 	fullPath := key.decryptPath()
 
 	client, err := vaultClient(key.VaultAddress, key.token)
@@ -184,7 +200,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		return nil, err
 	}
 
-	secret, err := client.Logical().Write(fullPath, decryptPayload(key.EncryptedKey))
+	secret, err := client.Logical().WriteWithContext(ctx, fullPath, decryptPayload(key.EncryptedKey))
 	if err != nil {
 		log.WithField("Path", fullPath).Info("Decryption failed")
 		return nil, fmt.Errorf("failed to decrypt sops data key from Vault transit backend '%s': %w", fullPath, err)
