@@ -60,6 +60,8 @@ type MasterKey struct {
 	// using TokenCredential.ApplyToMasterKey.
 	// If nil, azidentity.NewDefaultAzureCredential is used.
 	tokenCredential azcore.TokenCredential
+	// clientOptions contains the azkeys.ClientOptions used by the Azure client.
+	clientOptions *azkeys.ClientOptions
 }
 
 // NewMasterKey creates a new MasterKey from a URL, key name and version,
@@ -118,6 +120,23 @@ func (t TokenCredential) ApplyToMasterKey(key *MasterKey) {
 	key.tokenCredential = t.token
 }
 
+// ClientOptions is a wrapper around azkeys.ClientOptions to allow
+// configuration of the Azure Key Vault client.
+type ClientOptions struct {
+	o *azkeys.ClientOptions
+}
+
+// NewClientOptions creates a new ClientOptions with the provided
+// azkeys.ClientOptions.
+func NewClientOptions(o *azkeys.ClientOptions) *ClientOptions {
+	return &ClientOptions{o: o}
+}
+
+// ApplyToMasterKey configures the ClientOptions on the provided key.
+func (c ClientOptions) ApplyToMasterKey(key *MasterKey) {
+	key.clientOptions = c.o
+}
+
 // Encrypt takes a SOPS data key, encrypts it with Azure Key Vault, and stores
 // the result in the EncryptedKey field.
 //
@@ -135,7 +154,7 @@ func (key *MasterKey) EncryptContext(ctx context.Context, dataKey []byte) error 
 		return fmt.Errorf("failed to get Azure token credential to encrypt data: %w", err)
 	}
 
-	c, err := azkeys.NewClient(key.VaultURL, token, nil)
+	c, err := azkeys.NewClient(key.VaultURL, token, key.clientOptions)
 	if err != nil {
 		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Encryption failed")
 		return fmt.Errorf("failed to construct Azure Key Vault client to encrypt data: %w", err)
@@ -198,7 +217,7 @@ func (key *MasterKey) DecryptContext(ctx context.Context) ([]byte, error) {
 		return nil, fmt.Errorf("failed to base64 decode Azure Key Vault encrypted key: %w", err)
 	}
 
-	c, err := azkeys.NewClient(key.VaultURL, token, nil)
+	c, err := azkeys.NewClient(key.VaultURL, token, key.clientOptions)
 	if err != nil {
 		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Decryption failed")
 		return nil, fmt.Errorf("failed to construct Azure Key Vault client to decrypt data: %w", err)
