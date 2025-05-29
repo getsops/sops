@@ -1013,7 +1013,7 @@ service exposed on the unix socket located in ``/tmp/sops.sock``, you can run:
 
 .. code:: sh
 
-    $ sops decrypt --keyservice unix:///tmp/sops.sock file.yaml`
+    $ sops decrypt --keyservice unix:///tmp/sops.sock file.yaml
 
 And if you only want to use the key service exposed on the unix socket located
 in ``/tmp/sops.sock`` and not the local key service, you can run:
