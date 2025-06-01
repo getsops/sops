@@ -10,9 +10,8 @@ of the purpose of this package is to make it easy to change the SOPS file format
 package stores
 
 import (
-	"time"
-
 	"fmt"
+	"time"
 
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/age"
@@ -20,6 +19,7 @@ import (
 	"github.com/getsops/sops/v3/gcpkms"
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
+	"github.com/getsops/sops/v3/ocikms"
 	"github.com/getsops/sops/v3/pgp"
 )
 
@@ -47,6 +47,7 @@ type Metadata struct {
 	KMSKeys                   []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
 	GCPKMSKeys                []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
 	AzureKeyVaultKeys         []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
+	OCIKMSKeys                []ocikmskey `yaml:"oci_kms,omitempty" json:"oci_kms,omitempty"`
 	VaultKeys                 []vaultkey  `yaml:"hc_vault,omitempty" json:"hc_vault,omitempty"`
 	AgeKeys                   []agekey    `yaml:"age,omitempty" json:"age,omitempty"`
 	LastModified              string      `yaml:"lastmodified" json:"lastmodified"`
@@ -67,6 +68,7 @@ type keygroup struct {
 	KMSKeys           []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
 	GCPKMSKeys        []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
 	AzureKeyVaultKeys []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
+	OCIKMSKeys        []ocikmskey `yaml:"oci_kms,omitempty" json:"oci_kms,omitempty"`
 	VaultKeys         []vaultkey  `yaml:"hc_vault" json:"hc_vault"`
 	AgeKeys           []agekey    `yaml:"age" json:"age"`
 }
@@ -108,6 +110,14 @@ type azkvkey struct {
 	EncryptedDataKey string `yaml:"enc" json:"enc"`
 }
 
+type ocikmskey struct {
+	Id               string `yaml:"id" json:"id"`
+	CrpytoEndpoint   string `yaml:"crypto_endpoint" json:"crypto_endpoint"`
+	KeyVersion       string `yaml:"key_version" json:"key_version"`
+	CreatedAt        string `yaml:"created_at" json:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc"`
+}
+
 type agekey struct {
 	Recipient        string `yaml:"recipient" json:"recipient"`
 	EncryptedDataKey string `yaml:"enc" json:"enc"`
@@ -132,6 +142,7 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 		m.PGPKeys = pgpKeysFromGroup(group)
 		m.KMSKeys = kmsKeysFromGroup(group)
 		m.GCPKMSKeys = gcpkmsKeysFromGroup(group)
+		m.OCIKMSKeys = ocikmsKeysFromGroup(group)
 		m.VaultKeys = vaultKeysFromGroup(group)
 		m.AzureKeyVaultKeys = azkvKeysFromGroup(group)
 		m.AgeKeys = ageKeysFromGroup(group)
@@ -141,6 +152,7 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 				KMSKeys:           kmsKeysFromGroup(group),
 				PGPKeys:           pgpKeysFromGroup(group),
 				GCPKMSKeys:        gcpkmsKeysFromGroup(group),
+				OCIKMSKeys:        ocikmsKeysFromGroup(group),
 				VaultKeys:         vaultKeysFromGroup(group),
 				AzureKeyVaultKeys: azkvKeysFromGroup(group),
 				AgeKeys:           ageKeysFromGroup(group),
@@ -189,6 +201,22 @@ func gcpkmsKeysFromGroup(group sops.KeyGroup) (keys []gcpkmskey) {
 				ResourceID:       key.ResourceID,
 				CreatedAt:        key.CreationDate.Format(time.RFC3339),
 				EncryptedDataKey: key.EncryptedKey,
+			})
+		}
+	}
+	return
+}
+
+func ocikmsKeysFromGroup(group sops.KeyGroup) (keys []ocikmskey) {
+	for _, key := range group {
+		switch key := key.(type) {
+		case *ocikms.MasterKey:
+			keys = append(keys, ocikmskey{
+				Id:               key.Id,
+				CreatedAt:        key.CreationDate.Format(time.RFC3339),
+				EncryptedDataKey: key.EncryptedKey,
+				CrpytoEndpoint:   key.CryptoEndpoint,
+				KeyVersion:       key.KeyVersionId,
 			})
 		}
 	}
@@ -294,7 +322,7 @@ func (m *Metadata) ToInternal() (sops.Metadata, error) {
 	}, nil
 }
 
-func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, azkvKeys []azkvkey, vaultKeys []vaultkey, ageKeys []agekey) (sops.KeyGroup, error) {
+func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, azkvKeys []azkvkey, ociKmsKeys []ocikmskey, vaultKeys []vaultkey, ageKeys []agekey) (sops.KeyGroup, error) {
 	var internalGroup sops.KeyGroup
 	for _, kmsKey := range kmsKeys {
 		k, err := kmsKey.toInternal()
@@ -312,6 +340,13 @@ func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmske
 	}
 	for _, azkvKey := range azkvKeys {
 		k, err := azkvKey.toInternal()
+		if err != nil {
+			return nil, err
+		}
+		internalGroup = append(internalGroup, k)
+	}
+	for _, ociKmsKey := range ociKmsKeys {
+		k, err := ociKmsKey.toInternal()
 		if err != nil {
 			return nil, err
 		}
@@ -343,8 +378,8 @@ func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmske
 
 func (m *Metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 	var internalGroups []sops.KeyGroup
-	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 || len(m.AgeKeys) > 0 {
-		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.AzureKeyVaultKeys, m.VaultKeys, m.AgeKeys)
+	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.OCIKMSKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 || len(m.AgeKeys) > 0 {
+		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.AzureKeyVaultKeys, m.OCIKMSKeys, m.VaultKeys, m.AgeKeys)
 		if err != nil {
 			return nil, err
 		}
@@ -352,7 +387,7 @@ func (m *Metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 		return internalGroups, nil
 	} else if len(m.KeyGroups) > 0 {
 		for _, group := range m.KeyGroups {
-			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.AzureKeyVaultKeys, group.VaultKeys, group.AgeKeys)
+			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.AzureKeyVaultKeys, group.OCIKMSKeys, group.VaultKeys, group.AgeKeys)
 			if err != nil {
 				return nil, err
 			}
@@ -402,6 +437,20 @@ func (azkvKey *azkvkey) toInternal() (*azkv.MasterKey, error) {
 		Version:      azkvKey.Version,
 		EncryptedKey: azkvKey.EncryptedDataKey,
 		CreationDate: creationDate,
+	}, nil
+}
+
+func (ociKmsKey *ocikmskey) toInternal() (*ocikms.MasterKey, error) {
+	creationDate, err := time.Parse(time.RFC3339, ociKmsKey.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+	return &ocikms.MasterKey{
+		EncryptedKey:   ociKmsKey.EncryptedDataKey,
+		CreationDate:   creationDate,
+		Id:             ociKmsKey.Id,
+		CryptoEndpoint: ociKmsKey.CrpytoEndpoint,
+		KeyVersionId:   ociKmsKey.KeyVersion,
 	}, nil
 }
 

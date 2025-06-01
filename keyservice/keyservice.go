@@ -13,6 +13,7 @@ import (
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/keys"
 	"github.com/getsops/sops/v3/kms"
+	"github.com/getsops/sops/v3/ocikms"
 	"github.com/getsops/sops/v3/pgp"
 )
 
@@ -75,6 +76,16 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 			KeyType: &Key_AgeKey{
 				AgeKey: &AgeKey{
 					Recipient: mk.Recipient,
+				},
+			},
+		}
+	case *ocikms.MasterKey:
+		return Key{
+			KeyType: &Key_OciKmsKey{
+				&OciKmsKey{
+					Ocid:           mk.Id,
+					CryptoEndpoint: mk.CryptoEndpoint,
+					Version:        mk.KeyVersionId,
 				},
 			},
 		}

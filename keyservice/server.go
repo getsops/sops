@@ -8,6 +8,7 @@ import (
 	"github.com/getsops/sops/v3/gcpkms"
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
+	"github.com/getsops/sops/v3/ocikms"
 	"github.com/getsops/sops/v3/pgp"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/codes"
@@ -60,6 +61,19 @@ func (ks *Server) encryptWithAzureKeyVault(key *AzureKeyVaultKey, plaintext []by
 		return nil, err
 	}
 	return []byte(azkvKey.EncryptedKey), nil
+}
+
+func (ks *Server) encryptWithOciKms(key *OciKmsKey, plaintext []byte) ([]byte, error) {
+	ociKmsKey := ocikms.MasterKey{
+		CryptoEndpoint: key.CryptoEndpoint,
+		Id:             key.Ocid,
+		KeyVersionId:   key.Version,
+	}
+	err := ociKmsKey.Encrypt(plaintext)
+	if err != nil {
+		return nil, err
+	}
+	return []byte(ociKmsKey.EncryptedKey), nil
 }
 
 func (ks *Server) encryptWithVault(key *VaultKey, plaintext []byte) ([]byte, error) {
@@ -121,6 +135,17 @@ func (ks *Server) decryptWithAzureKeyVault(key *AzureKeyVaultKey, ciphertext []b
 	return []byte(plaintext), err
 }
 
+func (ks *Server) decryptWithOciKms(key *OciKmsKey, ciphertext []byte) ([]byte, error) {
+	ociKmsKey := ocikms.MasterKey{
+		Id:             key.Ocid,
+		KeyVersionId:   key.Version,
+		CryptoEndpoint: key.CryptoEndpoint,
+	}
+	ociKmsKey.EncryptedKey = string(ciphertext)
+	plaintext, err := ociKmsKey.Decrypt()
+	return []byte(plaintext), err
+}
+
 func (ks *Server) decryptWithVault(key *VaultKey, ciphertext []byte) ([]byte, error) {
 	vaultKey := hcvault.MasterKey{
 		VaultAddress: key.VaultAddress,
@@ -144,7 +169,8 @@ func (ks *Server) decryptWithAge(key *AgeKey, ciphertext []byte) ([]byte, error)
 // Encrypt takes an encrypt request and encrypts the provided plaintext with the provided key, returning the encrypted
 // result
 func (ks Server) Encrypt(ctx context.Context,
-	req *EncryptRequest) (*EncryptResponse, error) {
+	req *EncryptRequest,
+) (*EncryptResponse, error) {
 	key := req.Key
 	var response *EncryptResponse
 	switch k := key.KeyType.(type) {
@@ -174,6 +200,14 @@ func (ks Server) Encrypt(ctx context.Context,
 		}
 	case *Key_AzureKeyvaultKey:
 		ciphertext, err := ks.encryptWithAzureKeyVault(k.AzureKeyvaultKey, req.Plaintext)
+		if err != nil {
+			return nil, err
+		}
+		response = &EncryptResponse{
+			Ciphertext: ciphertext,
+		}
+	case *Key_OciKmsKey:
+		ciphertext, err := ks.encryptWithOciKms(k.OciKmsKey, req.Plaintext)
 		if err != nil {
 			return nil, err
 		}
@@ -246,7 +280,8 @@ func (ks Server) prompt(key *Key, requestType string) error {
 // Decrypt takes a decrypt request and decrypts the provided ciphertext with the provided key, returning the decrypted
 // result
 func (ks Server) Decrypt(ctx context.Context,
-	req *DecryptRequest) (*DecryptResponse, error) {
+	req *DecryptRequest,
+) (*DecryptResponse, error) {
 	key := req.Key
 	var response *DecryptResponse
 	switch k := key.KeyType.(type) {
@@ -284,6 +319,14 @@ func (ks Server) Decrypt(ctx context.Context,
 		}
 	case *Key_VaultKey:
 		plaintext, err := ks.decryptWithVault(k.VaultKey, req.Ciphertext)
+		if err != nil {
+			return nil, err
+		}
+		response = &DecryptResponse{
+			Plaintext: plaintext,
+		}
+	case *Key_OciKmsKey:
+		plaintext, err := ks.decryptWithOciKms(k.OciKmsKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}

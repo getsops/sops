@@ -10,6 +10,7 @@ message Key {
 		AzureKeyVaultKey azure_keyvault_key = 4;
 		VaultKey vault_key = 5;
 		AgeKey age_key = 6;
+		OciKmsKey oci_kms_key = 7;
 	}
 }
 
@@ -42,6 +43,12 @@ message AzureKeyVaultKey {
 
 message AgeKey {
 	string recipient = 1;
+}
+
+message OciKmsKey {
+  string ocid = 1;
+  string crypto_endpoint = 2;
+  string version = 3;
 }
 
 message EncryptRequest {
