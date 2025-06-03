@@ -514,6 +514,22 @@ To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
 
     $ sops encrypt --verbose prod/raw.yaml > prod/encrypted.yaml
 
+Encrypting using OCI KMS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We assume you are already have authentication profile set-up, ~/.oci/config exists and DEFAULT profile will be used to access OCI KMS. For details follow official OCI documentation. 
+
+.. code:: sh
+
+    $ # CRYPTO_ENDPOINT is diffrenet for different types of KMS and Regions, correct endpoint can be found in OCI console
+    $ export CRYPTO_ENDPOINT=https://crypto.kms.eu-frankfurt-1.oraclecloud.com
+
+    $ export KEY_OCID=ocid1.key.xxxx 
+    $ export KEY_VERSION=ocid1.keyversion.xxxx
+
+    $ sops encrypt --oci-kms $CRYPTO_ENDPOINT/$KEY_OCID/$KEY_VERSION example.yaml
+
+
 Adding and removing keys
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
