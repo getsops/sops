@@ -3,15 +3,17 @@ package keyservice
 import (
 	"fmt"
 
+	"golang.org/x/net/context"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
+
 	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/azkv"
+	"github.com/getsops/sops/v3/cloudru"
 	"github.com/getsops/sops/v3/gcpkms"
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/pgp"
-	"golang.org/x/net/context"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 )
 
 // Server is a key service server that uses SOPS MasterKeys to fulfill requests
@@ -85,6 +87,28 @@ func (ks *Server) encryptWithAge(key *AgeKey, plaintext []byte) ([]byte, error) 
 	}
 
 	return []byte(ageKey.EncryptedKey), nil
+}
+
+func (ks *Server) encryptWithCloudruKMS(key *CloudruKmsKey, plaintext []byte) ([]byte, error) {
+	mk := cloudru.MasterKey{
+		KeyID: key.KeyId,
+	}
+
+	if err := mk.Encrypt(plaintext); err != nil {
+		return nil, err
+	}
+
+	return mk.Cipher, nil
+}
+
+func (km *Server) decryptWithCloudruKMS(key *CloudruKmsKey, ciphertext []byte) ([]byte, error) {
+	mk := cloudru.MasterKey{
+		KeyID:  key.KeyId,
+		Cipher: ciphertext,
+	}
+
+	plaintext, err := mk.Decrypt()
+	return plaintext, err
 }
 
 func (ks *Server) decryptWithPgp(key *PgpKey, ciphertext []byte) ([]byte, error) {
@@ -196,6 +220,14 @@ func (ks Server) Encrypt(ctx context.Context,
 		response = &EncryptResponse{
 			Ciphertext: ciphertext,
 		}
+	case *Key_CloudruKmsKey:
+		ciphertext, err := ks.encryptWithCloudruKMS(k.CloudruKmsKey, req.Plaintext)
+		if err != nil {
+			return nil, err
+		}
+		response = &EncryptResponse{
+			Ciphertext: ciphertext,
+		}
 	case nil:
 		return nil, status.Errorf(codes.NotFound, "Must provide a key")
 	default:
@@ -292,6 +324,14 @@ func (ks Server) Decrypt(ctx context.Context,
 		}
 	case *Key_AgeKey:
 		plaintext, err := ks.decryptWithAge(k.AgeKey, req.Ciphertext)
+		if err != nil {
+			return nil, err
+		}
+		response = &DecryptResponse{
+			Plaintext: plaintext,
+		}
+	case *Key_CloudruKmsKey:
+		plaintext, err := ks.decryptWithCloudruKMS(k.CloudruKmsKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}
