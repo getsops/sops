@@ -491,6 +491,54 @@ bar: baz",
     }
 
     #[test]
+    fn set_json_file_insert_with_value_file() {
+        let file_path = prepare_temp_file(
+            "test_set_json_file_insert_with_value_file.json",
+            r#"{"a": 2, "b": "ba"}"#.as_bytes(),
+        );
+        let value_file = prepare_temp_file("insert_value_file.json", r#"{"cc": "ccc"}"#.as_bytes());
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("encrypt")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("set")
+            .arg("--value-file")
+            .arg(file_path.clone())
+            .arg(r#"["c"]"#)
+            .arg(value_file.clone())
+            .output()
+            .expect("Error running sops");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(output.status.success(), "sops didn't exit successfully");
+        let mut s = String::new();
+        File::open(file_path)
+            .unwrap()
+            .read_to_string(&mut s)
+            .unwrap();
+        let data: Value = serde_json::from_str(&s).expect("Error parsing sops's JSON output");
+        if let Value::Mapping(data) = data {
+            let a = data.get(&Value::String("c".to_owned())).unwrap();
+            if let &Value::Mapping(ref a) = a {
+                assert_encrypted!(&a, Value::String("cc".to_owned()));
+                return;
+            }
+        }
+        panic!("Output JSON does not have the expected structure");
+    }
+
+    #[test]
     fn set_yaml_file_update() {
         let file_path = prepare_temp_file(
             "test_set_update.yaml",
