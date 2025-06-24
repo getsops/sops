@@ -190,36 +190,36 @@ type creationRule struct {
 }
 
 // Helper methods to safely extract keys as []string
-func (c *creationRule) GetKMSKeys() []string {
+func (c *creationRule) GetKMSKeys() ([]string, error) {
 	return parseKeyField(c.KMS)
 }
 
-func (c *creationRule) GetAgeKeys() []string {
+func (c *creationRule) GetAgeKeys() ([]string, error) {
 	return parseKeyField(c.Age)
 }
 
-func (c *creationRule) GetPGPKeys() []string {
+func (c *creationRule) GetPGPKeys() ([]string, error) {
 	return parseKeyField(c.PGP)
 }
 
-func (c *creationRule) GetGCPKMSKeys() []string {
+func (c *creationRule) GetGCPKMSKeys() ([]string, error) {
 	return parseKeyField(c.GCPKMS)
 }
 
-func (c *creationRule) GetAzureKeyVaultKeys() []string {
+func (c *creationRule) GetAzureKeyVaultKeys() ([]string, error) {
 	return parseKeyField(c.AzureKeyVault)
 }
 
-func (c *creationRule) GetVaultURIs() []string {
+func (c *creationRule) GetVaultURIs() ([]string, error) {
 	return parseKeyField(c.VaultURI)
 }
 
 // Utility function to handle both string and []string
-func parseKeyField(field interface{}) []string {
+func parseKeyField(field interface{}) ([]string, error) {
 	switch v := field.(type) {
 	case string:
 		if v == "" {
-			return []string{}
+			return []string{}, nil
 		}
 		// Existing CSV parsing logic
 		keys := strings.Split(v, ",")
@@ -230,17 +230,17 @@ func parseKeyField(field interface{}) []string {
 				result = append(result, trimmed)
 			}
 		}
-		return result
+		return result, nil
 	case []interface{}:
 		result := make([]string, len(v))
 		for i, item := range v {
 			result[i] = fmt.Sprintf("%v", item)
 		}
-		return result
+		return result, nil
 	case []string:
-		return v
+		return v, nil
 	default:
-		return []string{}
+		return nil, fmt.Errorf("invalid key field type: expected string, []string, or nil, got %T", field)
 	}
 }
 
@@ -334,6 +334,14 @@ func extractMasterKeys(group keyGroup) (sops.KeyGroup, error) {
 	return deduplicateKeygroup(keyGroup), nil
 }
 
+func getKeysWithValidation(getKeysFunc func() ([]string, error), keyType string) ([]string, error) {
+	keys, err := getKeysFunc()
+	if err != nil {
+		return nil, fmt.Errorf("invalid %s key configuration: %w", keyType, err)
+	}
+	return keys, nil
+}
+
 func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[string]*string) ([]sops.KeyGroup, error) {
 	var groups []sops.KeyGroup
 	if len(cRule.KeyGroups) > 0 {
@@ -346,8 +354,13 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		}
 	} else {
 		var keyGroup sops.KeyGroup
+		ageKeys, err := getKeysWithValidation(cRule.GetAgeKeys, "age")
+		if err != nil {
+			return nil, err
+		}
+
 		if cRule.Age != "" {
-			ageKeys, err := age.MasterKeysFromRecipients(strings.Join(cRule.GetAgeKeys(), ","))
+			ageKeys, err := age.MasterKeysFromRecipients(strings.Join(ageKeys, ","))
 			if err != nil {
 				return nil, err
 			} else {
@@ -356,23 +369,43 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 				}
 			}
 		}
-		for _, k := range pgp.MasterKeysFromFingerprintString(strings.Join(cRule.GetPGPKeys(), ",")) {
+		pgpKeys, err := getKeysWithValidation(cRule.GetPGPKeys, "pgp")
+		if err != nil {
+			return nil, err
+		}
+		for _, k := range pgp.MasterKeysFromFingerprintString(strings.Join(pgpKeys, ",")) {
 			keyGroup = append(keyGroup, k)
 		}
-		for _, k := range kms.MasterKeysFromArnString(strings.Join(cRule.GetKMSKeys(), ","), kmsEncryptionContext, cRule.AwsProfile) {
+		kmsKeys, err := getKeysWithValidation(cRule.GetKMSKeys, "kms")
+		if err != nil {
+			return nil, err
+		}
+		for _, k := range kms.MasterKeysFromArnString(strings.Join(kmsKeys, ","), kmsEncryptionContext, cRule.AwsProfile) {
 			keyGroup = append(keyGroup, k)
 		}
-		for _, k := range gcpkms.MasterKeysFromResourceIDString(strings.Join(cRule.GetGCPKMSKeys(), ",")) {
+		gcpkmsKeys, err := getKeysWithValidation(cRule.GetGCPKMSKeys, "gcpkms")
+		if err != nil {
+			return nil, err
+		}
+		for _, k := range gcpkms.MasterKeysFromResourceIDString(strings.Join(gcpkmsKeys, ",")) {
 			keyGroup = append(keyGroup, k)
 		}
-		azureKeys, err := azkv.MasterKeysFromURLs(strings.Join(cRule.GetAzureKeyVaultKeys(), ","))
+		azKeys, err := getKeysWithValidation(cRule.GetAzureKeyVaultKeys, "axkeyvault")
+		if err != nil {
+			return nil, err
+		}
+		azureKeys, err := azkv.MasterKeysFromURLs(strings.Join(azKeys, ","))
 		if err != nil {
 			return nil, err
 		}
 		for _, k := range azureKeys {
 			keyGroup = append(keyGroup, k)
 		}
-		vaultKeys, err := hcvault.NewMasterKeysFromURIs(strings.Join(cRule.GetVaultURIs(), ","))
+		vaultKeyUris, err := getKeysWithValidation(cRule.GetVaultURIs, "vault")
+		if err != nil {
+			return nil, err
+		}
+		vaultKeys, err := hcvault.NewMasterKeysFromURIs(strings.Join(vaultKeyUris, ","))
 		if err != nil {
 			return nil, err
 		}
