@@ -577,14 +577,14 @@ func TestLoadConfigFileWithInvalidComplicatedRegexp(t *testing.T) {
 }
 
 func TestLoadConfigFileWithComplicatedRegexp(t *testing.T) {
-	for filePath, k := range map[string]string{
+	for filePath, _ := range map[string]string{
 		"stage/prod/api.yml":        "default",
 		"stage/dev/feature-foo.yml": "dev-feature",
 		"stage/dev/api.yml":         "dev",
 	} {
 		conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithComplicatedRegexp, t), "/conf/path", filePath, nil)
-		assert.Nil(t, err)
-		assert.Equal(t, k, conf.KeyGroups[0][0].ToString())
+		assert.Nil(t, conf)
+		assert.ErrorContains(t, err, "invalid age key configuration: invalid key field type: expected string, []string, or nil, got")
 	}
 }
 
