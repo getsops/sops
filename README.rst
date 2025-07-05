@@ -234,7 +234,7 @@ configuration directory.
 
 - **Windows**
 
-  - Looks for `keys.txt` in `%AppData%\sops\age\keys.txt`.
+  - Looks for `keys.txt` in `%AppData%\\sops\\age\\keys.txt`.
 
 You can override the default lookup by:
 
