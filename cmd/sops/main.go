@@ -4,6 +4,7 @@ import (
 	"context"
 	encodingjson "encoding/json"
 	"fmt"
+	"io"
 	"net"
 	"net/url"
 	"os"
@@ -1387,7 +1388,7 @@ func main() {
 				},
 				cli.BoolFlag{
 					Name:  "value-file",
-					Usage: "treat 'value' as a file to read the actual value from (avoids leaking secrets in process listings)",
+					Usage: "treat 'value' as a file to read the actual value from (avoids leaking secrets in process listings). The special value '-' means read from stdin",
 				},
 				cli.IntFlag{
 					Name:  "shamir-secret-sharing-threshold",
@@ -1437,7 +1438,12 @@ func main() {
 				var data string
 				if c.Bool("value-file") {
 					filename := c.Args()[2]
-					content, err := os.ReadFile(filename)
+					var content []byte
+					if filename == "-" {
+						content, err = io.ReadAll(os.Stdin)
+					} else {
+						content, err = os.ReadFile(filename)
+					}
 					if err != nil {
 						return toExitError(err)
 					}
