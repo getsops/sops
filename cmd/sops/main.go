@@ -4,6 +4,7 @@ import (
 	"context"
 	encodingjson "encoding/json"
 	"fmt"
+	"io"
 	"net"
 	"net/url"
 	"os"
@@ -1385,6 +1386,10 @@ func main() {
 					Name:  "output-type",
 					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
 				},
+				cli.BoolFlag{
+					Name:  "value-file",
+					Usage: "treat 'value' as a file to read the actual value from (avoids leaking secrets in process listings). The special value '-' means read from stdin",
+				},
 				cli.IntFlag{
 					Name:  "shamir-secret-sharing-threshold",
 					Usage: "the number of master keys required to retrieve the data key with shamir",
@@ -1430,7 +1435,23 @@ func main() {
 					return common.NewExitError("Invalid set index format", codes.ErrorInvalidSetFormat)
 				}
 
-				value, err := jsonValueToTreeInsertableValue(c.Args()[2])
+				var data string
+				if c.Bool("value-file") {
+					filename := c.Args()[2]
+					var content []byte
+					if filename == "-" {
+						content, err = io.ReadAll(os.Stdin)
+					} else {
+						content, err = os.ReadFile(filename)
+					}
+					if err != nil {
+						return toExitError(err)
+					}
+					data = string(content)
+				} else {
+					data = c.Args()[2]
+				}
+				value, err := jsonValueToTreeInsertableValue(data)
 				if err != nil {
 					return toExitError(err)
 				}
