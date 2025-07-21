@@ -191,31 +191,35 @@ type creationRule struct {
 
 // Helper methods to safely extract keys as []string
 func (c *creationRule) GetKMSKeys() ([]string, error) {
-	return parseKeyField(c.KMS)
+	return parseKeyField(c.KMS, "kms")
 }
 
 func (c *creationRule) GetAgeKeys() ([]string, error) {
-	return parseKeyField(c.Age)
+	return parseKeyField(c.Age, "age")
 }
 
 func (c *creationRule) GetPGPKeys() ([]string, error) {
-	return parseKeyField(c.PGP)
+	return parseKeyField(c.PGP, "pgp")
 }
 
 func (c *creationRule) GetGCPKMSKeys() ([]string, error) {
-	return parseKeyField(c.GCPKMS)
+	return parseKeyField(c.GCPKMS, "gcp_kms")
 }
 
 func (c *creationRule) GetAzureKeyVaultKeys() ([]string, error) {
-	return parseKeyField(c.AzureKeyVault)
+	return parseKeyField(c.AzureKeyVault, "azure_keyvault")
 }
 
 func (c *creationRule) GetVaultURIs() ([]string, error) {
-	return parseKeyField(c.VaultURI)
+	return parseKeyField(c.VaultURI, "hc_vault_transit_uri")
 }
 
 // Utility function to handle both string and []string
-func parseKeyField(field interface{}) ([]string, error) {
+func parseKeyField(field interface{}, fieldName string) ([]string, error) {
+	if field == nil {
+		return []string{}, nil
+	}
+
 	switch v := field.(type) {
 	case string:
 		if v == "" {
@@ -234,13 +238,17 @@ func parseKeyField(field interface{}) ([]string, error) {
 	case []interface{}:
 		result := make([]string, len(v))
 		for i, item := range v {
-			result[i] = fmt.Sprintf("%v", item)
+			if str, ok := item.(string); ok {
+				result[i] = str
+			} else {
+				return nil, fmt.Errorf("invalid %s key configuration: expected string in list, got %T", fieldName, item)
+			}
 		}
 		return result, nil
 	case []string:
 		return v, nil
 	default:
-		return nil, fmt.Errorf("invalid key field type: expected string, []string, or nil, got %T", field)
+		return nil, fmt.Errorf("invalid %s key configuration: expected string, []string, or nil, got %T", fieldName, field)
 	}
 }
 
@@ -359,7 +367,7 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			return nil, err
 		}
 
-		if cRule.Age != "" {
+		if len(ageKeys) > 0 {
 			ageKeys, err := age.MasterKeysFromRecipients(strings.Join(ageKeys, ","))
 			if err != nil {
 				return nil, err
@@ -390,7 +398,7 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		for _, k := range gcpkms.MasterKeysFromResourceIDString(strings.Join(gcpkmsKeys, ",")) {
 			keyGroup = append(keyGroup, k)
 		}
-		azKeys, err := getKeysWithValidation(cRule.GetAzureKeyVaultKeys, "axkeyvault")
+		azKeys, err := getKeysWithValidation(cRule.GetAzureKeyVaultKeys, "azure_keyvault")
 		if err != nil {
 			return nil, err
 		}
