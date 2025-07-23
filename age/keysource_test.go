@@ -369,8 +369,8 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeKeyEnv, mockIdentity)
 
 		key := &MasterKey{}
-		got, err := key.loadIdentities()
-		assert.NoError(t, err)
+		got, errs := key.loadIdentities()
+		assert.Len(t, errs, 0)
 		assert.Len(t, got, 1)
 	})
 
@@ -382,8 +382,8 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeKeyEnv, mockIdentity+"\n"+mockOtherIdentity)
 
 		key := &MasterKey{}
-		got, err := key.loadIdentities()
-		assert.NoError(t, err)
+		got, errs := key.loadIdentities()
+		assert.Len(t, errs, 0)
 		assert.Len(t, got, 2)
 	})
 
@@ -398,8 +398,8 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeKeyFileEnv, keyPath)
 
 		key := &MasterKey{}
-		got, err := key.loadIdentities()
-		assert.NoError(t, err)
+		got, errs := key.loadIdentities()
+		assert.Len(t, errs, 0)
 		assert.Len(t, got, 1)
 	})
 
@@ -416,8 +416,8 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		assert.NoError(t, os.MkdirAll(filepath.Dir(keyPath), 0o700))
 		assert.NoError(t, os.WriteFile(keyPath, []byte(mockIdentity), 0o644))
 
-		got, err := (&MasterKey{}).loadIdentities()
-		assert.NoError(t, err)
+		got, errs := (&MasterKey{}).loadIdentities()
+		assert.Len(t, errs, 0)
 		assert.Len(t, got, 1)
 	})
 
@@ -435,8 +435,8 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeSshPrivateKeyFileEnv, keyPath)
 
 		key := &MasterKey{}
-		got, err := key.loadIdentities()
-		assert.NoError(t, err)
+		got, errs := key.loadIdentities()
+		assert.Len(t, errs, 0)
 		assert.Len(t, got, 1)
 	})
 
@@ -444,9 +444,10 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		tmpDir := t.TempDir()
 		overwriteUserConfigDir(t, tmpDir)
 
-		got, err := (&MasterKey{}).loadIdentities()
-		assert.Error(t, err)
-		assert.ErrorContains(t, err, "failed to open file")
+		got, errs := (&MasterKey{}).loadIdentities()
+		assert.Len(t, errs, 1)
+		assert.Error(t, errs[0])
+		assert.ErrorContains(t, errs[0], "failed to open file")
 		assert.Nil(t, got)
 	})
 
@@ -467,8 +468,8 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		assert.NoError(t, os.WriteFile(keyPath2, []byte(mockOtherIdentity), 0o644))
 		t.Setenv(SopsAgeKeyFileEnv, keyPath2)
 
-		got, err := (&MasterKey{}).loadIdentities()
-		assert.NoError(t, err)
+		got, errs := (&MasterKey{}).loadIdentities()
+		assert.Len(t, errs, 0)
 		assert.Len(t, got, 2)
 	})
 
@@ -480,9 +481,10 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeKeyEnv, "invalid")
 
 		key := &MasterKey{}
-		got, err := key.loadIdentities()
-		assert.Error(t, err)
-		assert.ErrorContains(t, err, fmt.Sprintf("failed to parse '%s' age identities", SopsAgeKeyEnv))
+		got, errs := key.loadIdentities()
+		assert.Len(t, errs, 1)
+		assert.Error(t, errs[0])
+		assert.ErrorContains(t, errs[0], fmt.Sprintf("failed to parse '%s' age identities", SopsAgeKeyEnv))
 		assert.Nil(t, got)
 	})
 
@@ -494,8 +496,8 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeKeyCmdEnv, "echo '"+mockIdentity+"'")
 
 		key := &MasterKey{}
-		got, err := key.loadIdentities()
-		assert.NoError(t, err)
+		got, errs := key.loadIdentities()
+		assert.Len(t, errs, 0)
 		assert.Len(t, got, 1)
 	})
 
@@ -507,9 +509,10 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeKeyCmdEnv, "meow")
 
 		key := &MasterKey{}
-		got, err := key.loadIdentities()
-		assert.Error(t, err)
-		assert.ErrorContains(t, err, "failed to execute command meow")
+		got, errs := key.loadIdentities()
+		assert.Len(t, errs, 2)
+		assert.Error(t, errs[0])
+		assert.ErrorContains(t, errs[0], "failed to execute command meow")
 		assert.Nil(t, got)
 	})
 }

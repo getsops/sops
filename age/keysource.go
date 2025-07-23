@@ -94,6 +94,18 @@ func MasterKeysFromRecipients(commaSeparatedRecipients string) ([]*MasterKey, er
 	return keys, nil
 }
 
+// errSet is a collection of captured errors.
+type errSet []error
+
+// Error joins the errors into a "; " separated string.
+func (e errSet) Error() string {
+	str := make([]string, len(e))
+	for i, err := range e {
+		str[i] = err.Error()
+	}
+	return strings.Join(str, "; ")
+}
+
 // MasterKeyFromRecipient takes a Bech32-encoded age public key, parses it, and
 // returns a new MasterKey.
 func MasterKeyFromRecipient(recipient string) (*MasterKey, error) {
@@ -197,11 +209,13 @@ func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 // Decrypt decrypts the EncryptedKey with the parsed or loaded identities, and
 // returns the result.
 func (key *MasterKey) Decrypt() ([]byte, error) {
+	var errs errSet
 	if len(key.parsedIdentities) == 0 {
-		ids, err := key.loadIdentities()
-		if err != nil {
+		var ids ParsedIdentities
+		ids, errs = key.loadIdentities()
+		if len(ids) == 0 {
 			log.Info("Decryption failed")
-			return nil, fmt.Errorf("failed to load age identities: %w", err)
+			return nil, fmt.Errorf("failed to load age identities: %w", errs)
 		}
 		ids.ApplyToMasterKey(key)
 	}
@@ -211,7 +225,11 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	r, err := age.Decrypt(ar, key.parsedIdentities...)
 	if err != nil {
 		log.Info("Decryption failed")
-		return nil, fmt.Errorf("failed to create reader for decrypting sops data key with age: %w", err)
+		var loadErrors string
+		if len(errs) > 0 {
+			loadErrors = fmt.Sprintf(". Errors while loading age identities: %s", errs.Error())
+		}
+		return nil, fmt.Errorf("failed to create reader for decrypting sops data key with age: %w%s", err, loadErrors)
 	}
 
 	var b bytes.Buffer
@@ -289,14 +307,15 @@ func getUserConfigDir() (string, error) {
 // environment configurations (e.g. SopsAgeKeyEnv, SopsAgeKeyFileEnv,
 // SopsAgeSshPrivateKeyFileEnv, SopsAgeKeyUserConfigPath). It will load all
 // found references, and expects at least one configuration to be present.
-func (key *MasterKey) loadIdentities() (ParsedIdentities, error) {
+func (key *MasterKey) loadIdentities() (ParsedIdentities, errSet) {
 	var identities ParsedIdentities
+
+	var errs errSet
 
 	sshIdentity, err := loadAgeSSHIdentity()
 	if err != nil {
-		return nil, fmt.Errorf("failed to get SSH identity: %w", err)
-	}
-	if sshIdentity != nil {
+		errs = append(errs, fmt.Errorf("failed to get SSH identity: %w", err))
+	} else if sshIdentity != nil {
 		identities = append(identities, sshIdentity)
 	}
 
@@ -309,39 +328,39 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, error) {
 	if ageKeyFile, ok := os.LookupEnv(SopsAgeKeyFileEnv); ok {
 		f, err := os.Open(ageKeyFile)
 		if err != nil {
-			return nil, fmt.Errorf("failed to open %s file: %w", SopsAgeKeyFileEnv, err)
+			errs = append(errs, fmt.Errorf("failed to open %s file: %w", SopsAgeKeyFileEnv, err))
+		} else {
+			defer f.Close()
+			readers[SopsAgeKeyFileEnv] = f
 		}
-		defer f.Close()
-		readers[SopsAgeKeyFileEnv] = f
 	}
 
 	if ageKeyCmd, ok := os.LookupEnv(SopsAgeKeyCmdEnv); ok {
 		args, err := shlex.Split(ageKeyCmd)
 		if err != nil {
-			return nil, fmt.Errorf("failed to parse command %s from %s: %w", ageKeyCmd, SopsAgeKeyCmdEnv, err)
+			errs = append(errs, fmt.Errorf("failed to parse command %s from %s: %w", ageKeyCmd, SopsAgeKeyCmdEnv, err))
+		} else {
+			out, err := exec.Command(args[0], args[1:]...).Output()
+			if err != nil {
+				errs = append(errs, fmt.Errorf("failed to execute command %s from %s: %w", ageKeyCmd, SopsAgeKeyCmdEnv, err))
+			} else {
+				readers[SopsAgeKeyCmdEnv] = bytes.NewReader(out)
+			}
 		}
-		out, err := exec.Command(args[0], args[1:]...).Output()
-		if err != nil {
-			return nil, fmt.Errorf("failed to execute command %s from %s: %w", ageKeyCmd, SopsAgeKeyCmdEnv, err)
-		}
-		readers[SopsAgeKeyCmdEnv] = bytes.NewReader(out)
 	}
 
 	userConfigDir, err := getUserConfigDir()
 	if err != nil && len(readers) == 0 && len(identities) == 0 {
-		return nil, fmt.Errorf("user config directory could not be determined: %w", err)
-	}
-	if userConfigDir != "" {
+		errs = append(errs, fmt.Errorf("user config directory could not be determined: %w", err))
+	} else if userConfigDir != "" {
 		ageKeyFilePath := filepath.Join(userConfigDir, filepath.FromSlash(SopsAgeKeyUserConfigPath))
 		f, err := os.Open(ageKeyFilePath)
 		if err != nil && !errors.Is(err, os.ErrNotExist) {
-			return nil, fmt.Errorf("failed to open file: %w", err)
-		}
-		if errors.Is(err, os.ErrNotExist) && len(readers) == 0 && len(identities) == 0 {
+			errs = append(errs, fmt.Errorf("failed to open file: %w", err))
+		} else if errors.Is(err, os.ErrNotExist) && len(readers) == 0 && len(identities) == 0 {
 			// If we have no other readers, presence of the file is required.
-			return nil, fmt.Errorf("failed to open file: %w", err)
-		}
-		if err == nil {
+			errs = append(errs, fmt.Errorf("failed to open file: %w", err))
+		} else if err == nil {
 			defer f.Close()
 			readers[ageKeyFilePath] = f
 		}
@@ -350,11 +369,12 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, error) {
 	for n, r := range readers {
 		ids, err := unwrapIdentities(n, r)
 		if err != nil {
-			return nil, err
+			errs = append(errs, err)
+		} else {
+			identities = append(identities, ids...)
 		}
-		identities = append(identities, ids...)
 	}
-	return identities, nil
+	return identities, errs
 }
 
 // parseRecipient attempts to parse a string containing an encoded age public
