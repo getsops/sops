@@ -225,8 +225,8 @@ configuration directory.
 
 - **Linux**
 
-  - Looks for `keys.txt` in `$XDG_CONFIG_HOME/sops/age/keys.txt`;
-  - Falls back to `$HOME/.config/sops/age/keys.txt` if `$XDG_CONFIG_HOME` isn’t set.
+  - Looks for ``keys.txt`` in ``$XDG_CONFIG_HOME/sops/age/keys.txt``;
+  - Falls back to ``$HOME/.config/sops/age/keys.txt`` if ``$XDG_CONFIG_HOME`` isn’t set.
 
 - **macOS**
 
@@ -235,7 +235,7 @@ configuration directory.
 
 - **Windows**
 
-  - Looks for `keys.txt` in `%AppData%\\sops\\age\\keys.txt`.
+  - Looks for ``keys.txt`` in `%AppData%\\sops\\age\\keys.txt``.
 
 You can override the default lookup by:
 
