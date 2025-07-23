@@ -230,7 +230,8 @@ configuration directory.
 
 - **macOS**
 
-  - Looks for `keys.txt` in `$HOME/Library/Application Support/sops/age/keys.txt`.
+  - Looks for `keys.txt` in `$XDG_CONFIG_HOME/sops/age/keys.txt`;
+  - Falls back to `$HOME/Library/Application Support/sops/age/keys.txt`.
 
 - **Windows**
 
