@@ -274,5 +274,11 @@ func EncodeNonStrings(m map[string]interface{}) {
 		if vInt, ok := v.(int); ok {
 			m["shamir_threshold"] = fmt.Sprintf("%d", vInt)
 		}
+		// FlattenMetadata serializes the input as JSON and then deserializes it.
+		// The JSON unserializer treats every number as a float, so the above 'if'
+		// never applies in that situation.
+		if vFloat, ok := v.(float64); ok {
+			m["shamir_threshold"] = fmt.Sprintf("%g", vFloat)
+		}
 	}
 }
