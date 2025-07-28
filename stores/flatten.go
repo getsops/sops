@@ -248,7 +248,14 @@ func DecodeNonStrings(m map[string]interface{}) error {
 		case string:
 			vInt, err := strconv.Atoi(val)
 			if err != nil {
-				return fmt.Errorf("shamir_threshold is not an integer: %s", err.Error())
+				// Older versions of SOPS stored shamir_threshold as a floating point representation
+				// of the actual integer. Try to parse a floating point number and see whether it
+				// can be converted without loss to an integer.
+				vFloat, floatErr := strconv.ParseFloat(val, 64)
+				vInt = int(vFloat)
+				if floatErr != nil || float64(vInt) != vFloat {
+					return fmt.Errorf("shamir_threshold is not an integer: %s", err.Error())
+				}
 			}
 			m["shamir_threshold"] = vInt
 		case int:
