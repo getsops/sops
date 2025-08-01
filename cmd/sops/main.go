@@ -151,6 +151,27 @@ func main() {
 	app.EnableBashCompletion = true
 	app.Commands = []cli.Command{
 		{
+			Name:  "completion",
+			Usage: "Generate completion script",
+			Subcommands: []cli.Command{
+				{
+					Name:  "bash",
+					Usage: fmt.Sprintf("Generate bash completions. To load completions: `$ source <(%s completion bash)`", app.Name),
+					Action: func(c *cli.Context) error {
+						fmt.Fprint(c.App.Writer, GenBashCompletion(app.Name))
+						return nil
+					},
+				},
+				{
+					Name:  "zsh",
+					Usage: fmt.Sprintf("Generate zsh completions. To load completions: `$ source <(%s completion zsh)`", app.Name),
+					Action: func(c *cli.Context) error {
+						fmt.Fprint(c.App.Writer, GenZshCompletion(app.Name))
+						return nil
+					},
+				}},
+		},
+		{
 			Name:      "exec-env",
 			Usage:     "execute a command with decrypted values inserted into the environment",
 			ArgsUsage: "[file to decrypt] [command to run]",
