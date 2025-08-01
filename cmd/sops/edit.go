@@ -109,6 +109,10 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 	}
 	// Ensure that in any case, the temporary file is always closed.
 	defer tmpfile.Close()
+	// Ensure that the file is read+write for owner only.
+	if err = tmpfile.Chmod(0600); err != nil {
+		return nil, common.NewExitError(fmt.Sprintf("Could not change permissions of temporary file to read-write for owner only: %s", err), codes.CouldNotWriteOutputFile)
+	}
 
 	tmpfileName := tmpfile.Name()
 
