@@ -515,6 +515,49 @@ To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
 
     $ sops encrypt --verbose prod/raw.yaml > prod/encrypted.yaml
 
+Encrypting using OVH Key Management Service
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To use OVH KMS with SOPS, you need to:
+
+1. Have an OVH account with KMS service enabled
+2. Create a key in OVH KMS that will be used for encryption/decryption
+3. Obtain an access certificate and private key for authentication
+
+You can use OVH KMS in your `.sops.yaml` file like this:
+
+```yaml
+creation_rules:
+  - path_regex: path/to/files/*.yaml
+    ovh_kms: <kms-rest-endpoint>/<your-key-id>
+```
+
+Or with key groups:
+
+```yaml
+creation_rules:
+  - path_regex: path/to/files/*.yaml
+    key_groups:
+      - ovh_kms:
+        - key_id: <kms-rest-endpoint>/<your-key-id>
+```
+
+Usage
+
+After configuration, you can use SOPS normally and it will automatically use OVH KMS for encryption/decryption:
+
+```bash
+# Set required environment variables
+export OVH_CERTIFICATE_PATH=/path/to/certificate.pem
+export OVH_CERTIFICATE_KEY_PATH=/path/to/private-key.pem
+
+# Encrypt a file
+sops -e -i secrets.yaml
+
+# Decrypt a file
+sops -d secrets.yaml
+```
+
 Adding and removing keys
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
