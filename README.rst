@@ -527,10 +527,9 @@ To use OVH KMS with SOPS, you need to:
 You can use OVH KMS in your `.sops.yaml` file like this:
 
 .. code:: yaml
-
-  creation_rules:
-    - path_regex: path/to/files/*.yaml
-      ovh_kms: <kms-rest-endpoint>/<your-key-id>
+creation_rules:
+  - path_regex: path/to/files/*.yaml
+    ovh_kms: <kms-rest-endpoint>/<your-key-id>
 
 Or with key groups:
 
