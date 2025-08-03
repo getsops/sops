@@ -526,27 +526,25 @@ To use OVH KMS with SOPS, you need to:
 
 You can use OVH KMS in your `.sops.yaml` file like this:
 
-```yaml
+.. code:: yaml
 creation_rules:
   - path_regex: path/to/files/*.yaml
     ovh_kms: <kms-rest-endpoint>/<your-key-id>
-```
 
 Or with key groups:
 
-```yaml
+.. code:: yaml
 creation_rules:
   - path_regex: path/to/files/*.yaml
     key_groups:
       - ovh_kms:
         - key_id: <kms-rest-endpoint>/<your-key-id>
-```
 
 Usage
 
 After configuration, you can use SOPS normally and it will automatically use OVH KMS for encryption/decryption:
 
-```bash
+.. code:: bash
 # Set required environment variables
 export OVH_CERTIFICATE_PATH=/path/to/certificate.pem
 export OVH_CERTIFICATE_KEY_PATH=/path/to/private-key.pem
@@ -556,7 +554,7 @@ sops -e -i secrets.yaml
 
 # Decrypt a file
 sops -d secrets.yaml
-```
+
 
 Adding and removing keys
 ~~~~~~~~~~~~~~~~~~~~~~~~
