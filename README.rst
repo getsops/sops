@@ -221,7 +221,7 @@ the ``--age`` option or the **SOPS_AGE_RECIPIENTS** environment variable:
 
 When decrypting a file with the corresponding identity, SOPS will look for a
 text file name ``keys.txt`` located in a ``sops`` subdirectory of your user
-configuration directory.
+configuration directory. 
 
 - **Linux**
 
