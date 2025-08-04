@@ -2172,17 +2172,6 @@ func getRotateOpts(c *cli.Context, fileName string, inputStore common.Store, out
 	if err != nil {
 		return rotateOpts{}, err
 	}
-	var masterKeys []keys.MasterKey
-	masterKeys = append(masterKeys, addMasterKeys...)
-	if err != nil {
-		return rotateOpts{}, err
-	}
-	rmMasterKeys, err = getMasterKeys(c, kmsEncryptionContext, "rm-kms", "rm-pgp", "rm-gcp-kms", "rm-azure-kv", "rm-hc-vault-transit", "rm-age", "rm-ovh-kms")
-	if err != nil {
-	}
-	if err != nil {
-		return rotateOpts{}, err
-	}
 	return rotateOpts{
 		OutputStore:      outputStore,
 		InputStore:       inputStore,
