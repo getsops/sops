@@ -2,7 +2,10 @@ package main
 
 import "fmt"
 
-var Zshcompletion = `#compdef %s
+// https://github.com/urfave/cli/blob/v1-maint/autocomplete/zsh_autocomplete
+var Zshcompletion = `
+#compdef %s
+
 _cli_zsh_autocomplete() {
 
   local -a opts
@@ -23,11 +26,12 @@ _cli_zsh_autocomplete() {
   return
 }
 
-compdef _cli_zsh_autocomplete %s`
+compdef _cli_zsh_autocomplete %s
+`
 
-var Bashcompletion = `#! /bin/bash
-
-PROG=%s
+// https://github.com/urfave/cli/blob/v1-maint/autocomplete/bash_autocomplete
+var Bashcompletion = `
+#! /bin/bash
 
 _cli_bash_autocomplete() {
   if [[ "${COMP_WORDS[0]}" != "source" ]]; then
@@ -43,9 +47,8 @@ _cli_bash_autocomplete() {
     return 0
   fi
 }
-
-complete -o bashdefault -o default -o nospace -F _cli_bash_autocomplete $PROG
-unset PROG`
+complete -o bashdefault -o default -o nospace -F _cli_bash_autocomplete %s
+`
 
 func GenBashCompletion(name string) string {
 	return fmt.Sprintf(Bashcompletion, name)
