@@ -152,7 +152,7 @@ func main() {
 	app.Commands = []cli.Command{
 		{
 			Name:  "completion",
-			Usage: "Generate completion script",
+			Usage: "Generate shell completion scripts",
 			Subcommands: []cli.Command{
 				{
 					Name:  "bash",
