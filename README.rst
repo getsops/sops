@@ -516,7 +516,7 @@ To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
     $ sops encrypt --verbose prod/raw.yaml > prod/encrypted.yaml
 
 Encrypting using OVH Key Management Service
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To use OVH KMS with SOPS, you need to:
 
