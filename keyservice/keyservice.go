@@ -6,6 +6,7 @@ package keyservice
 
 import (
 	"fmt"
+	"github.com/getsops/sops/v3/ovhkms"
 
 	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/azkv"
@@ -32,6 +33,15 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 			KeyType: &Key_GcpKmsKey{
 				GcpKmsKey: &GcpKmsKey{
 					ResourceId: mk.ResourceID,
+				},
+			},
+		}
+	case *ovhkms.MasterKey:
+		return Key{
+			KeyType: &Key_OvhKmsKey{
+				OvhKmsKey: &OvhKmsKey{
+					Endpoint: mk.Endpoint,
+					KeyId:    mk.KeyID,
 				},
 			},
 		}

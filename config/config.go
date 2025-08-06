@@ -17,6 +17,7 @@ import (
 	"github.com/getsops/sops/v3/gcpkms"
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
+	"github.com/getsops/sops/v3/ovhkms"
 	"github.com/getsops/sops/v3/pgp"
 	"github.com/getsops/sops/v3/publish"
 	"gopkg.in/yaml.v3"
@@ -133,6 +134,7 @@ type keyGroup struct {
 	KMS     []kmsKey
 	GCPKMS  []gcpKmsKey  `yaml:"gcp_kms"`
 	AzureKV []azureKVKey `yaml:"azure_keyvault"`
+	OVHKMS  []ovhKmsKey  `yaml:"ovh_kms"`
 	Vault   []string     `yaml:"hc_vault"`
 	Age     []string     `yaml:"age"`
 	PGP     []string
@@ -140,6 +142,10 @@ type keyGroup struct {
 
 type gcpKmsKey struct {
 	ResourceID string `yaml:"resource_id"`
+}
+
+type ovhKmsKey struct {
+	KeyID string `yaml:"key_id"`
 }
 
 type kmsKey struct {
@@ -176,6 +182,7 @@ type creationRule struct {
 	Age                     string `yaml:"age"`
 	PGP                     string
 	GCPKMS                  string     `yaml:"gcp_kms"`
+	OVHKMS                  string     `yaml:"ovh_kms"`
 	AzureKeyVault           string     `yaml:"azure_keyvault"`
 	VaultURI                string     `yaml:"hc_vault_transit_uri"`
 	KeyGroups               []keyGroup `yaml:"key_groups"`
@@ -269,6 +276,13 @@ func extractMasterKeys(group keyGroup) (sops.KeyGroup, error) {
 	for _, k := range group.AzureKV {
 		keyGroup = append(keyGroup, azkv.NewMasterKey(k.VaultURL, k.Key, k.Version))
 	}
+	for _, k := range group.OVHKMS {
+		if masterKey, err := ovhkms.NewMasterKeyFromKeyID(k.KeyID); err == nil {
+			keyGroup = append(keyGroup, masterKey)
+		} else {
+			return nil, err
+		}
+	}
 	for _, k := range group.Vault {
 		if masterKey, err := hcvault.NewMasterKeyFromURI(k); err == nil {
 			keyGroup = append(keyGroup, masterKey)
@@ -308,6 +322,13 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			keyGroup = append(keyGroup, k)
 		}
 		for _, k := range gcpkms.MasterKeysFromResourceIDString(cRule.GCPKMS) {
+			keyGroup = append(keyGroup, k)
+		}
+		ovhKeys, err := ovhkms.MasterKeysFromResourceIDString(cRule.OVHKMS)
+		if err != nil {
+			return nil, err
+		}
+		for _, k := range ovhKeys {
 			keyGroup = append(keyGroup, k)
 		}
 		azureKeys, err := azkv.MasterKeysFromURLs(cRule.AzureKeyVault)

@@ -20,6 +20,7 @@ import (
 	"github.com/getsops/sops/v3/gcpkms"
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
+	"github.com/getsops/sops/v3/ovhkms"
 	"github.com/getsops/sops/v3/pgp"
 )
 
@@ -46,6 +47,7 @@ type Metadata struct {
 	KeyGroups                 []keygroup  `yaml:"key_groups,omitempty" json:"key_groups,omitempty"`
 	KMSKeys                   []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
 	GCPKMSKeys                []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
+	OVHKMSKeys                []ovhkmskey `yaml:"ovh_kms,omitempty" json:"ovh_kms,omitempty"`
 	AzureKeyVaultKeys         []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
 	VaultKeys                 []vaultkey  `yaml:"hc_vault,omitempty" json:"hc_vault,omitempty"`
 	AgeKeys                   []agekey    `yaml:"age,omitempty" json:"age,omitempty"`
@@ -66,6 +68,7 @@ type keygroup struct {
 	PGPKeys           []pgpkey    `yaml:"pgp,omitempty" json:"pgp,omitempty"`
 	KMSKeys           []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
 	GCPKMSKeys        []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
+	OVHKMSKeys        []ovhkmskey `yaml:"ovh_kms,omitempty" json:"ovh_kms,omitempty"`
 	AzureKeyVaultKeys []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
 	VaultKeys         []vaultkey  `yaml:"hc_vault" json:"hc_vault"`
 	AgeKeys           []agekey    `yaml:"age" json:"age"`
@@ -88,6 +91,13 @@ type kmskey struct {
 
 type gcpkmskey struct {
 	ResourceID       string `yaml:"resource_id" json:"resource_id"`
+	CreatedAt        string `yaml:"created_at" json:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc"`
+}
+
+type ovhkmskey struct {
+	Endpoint         string `yaml:"endpoint" json:"endpoint"`
+	KeyID            string `yaml:"key_id" json:"key_id"`
 	CreatedAt        string `yaml:"created_at" json:"created_at"`
 	EncryptedDataKey string `yaml:"enc" json:"enc"`
 }
@@ -132,6 +142,7 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 		m.PGPKeys = pgpKeysFromGroup(group)
 		m.KMSKeys = kmsKeysFromGroup(group)
 		m.GCPKMSKeys = gcpkmsKeysFromGroup(group)
+		m.OVHKMSKeys = ovhkmsKeysFromGroup(group)
 		m.VaultKeys = vaultKeysFromGroup(group)
 		m.AzureKeyVaultKeys = azkvKeysFromGroup(group)
 		m.AgeKeys = ageKeysFromGroup(group)
@@ -141,6 +152,7 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 				KMSKeys:           kmsKeysFromGroup(group),
 				PGPKeys:           pgpKeysFromGroup(group),
 				GCPKMSKeys:        gcpkmsKeysFromGroup(group),
+				OVHKMSKeys:        ovhkmsKeysFromGroup(group),
 				VaultKeys:         vaultKeysFromGroup(group),
 				AzureKeyVaultKeys: azkvKeysFromGroup(group),
 				AgeKeys:           ageKeysFromGroup(group),
@@ -187,6 +199,21 @@ func gcpkmsKeysFromGroup(group sops.KeyGroup) (keys []gcpkmskey) {
 		case *gcpkms.MasterKey:
 			keys = append(keys, gcpkmskey{
 				ResourceID:       key.ResourceID,
+				CreatedAt:        key.CreationDate.Format(time.RFC3339),
+				EncryptedDataKey: key.EncryptedKey,
+			})
+		}
+	}
+	return
+}
+
+func ovhkmsKeysFromGroup(group sops.KeyGroup) (keys []ovhkmskey) {
+	for _, key := range group {
+		switch key := key.(type) {
+		case *ovhkms.MasterKey:
+			keys = append(keys, ovhkmskey{
+				Endpoint:         key.Endpoint,
+				KeyID:            key.KeyID,
 				CreatedAt:        key.CreationDate.Format(time.RFC3339),
 				EncryptedDataKey: key.EncryptedKey,
 			})
@@ -294,7 +321,7 @@ func (m *Metadata) ToInternal() (sops.Metadata, error) {
 	}, nil
 }
 
-func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, azkvKeys []azkvkey, vaultKeys []vaultkey, ageKeys []agekey) (sops.KeyGroup, error) {
+func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, azkvKeys []azkvkey, vaultKeys []vaultkey, ageKeys []agekey, ovhKmsKeys []ovhkmskey) (sops.KeyGroup, error) {
 	var internalGroup sops.KeyGroup
 	for _, kmsKey := range kmsKeys {
 		k, err := kmsKey.toInternal()
@@ -338,13 +365,20 @@ func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmske
 		}
 		internalGroup = append(internalGroup, k)
 	}
+	for _, ovhKmsKey := range ovhKmsKeys {
+		k, err := ovhKmsKey.toInternal()
+		if err != nil {
+			return nil, err
+		}
+		internalGroup = append(internalGroup, k)
+	}
 	return internalGroup, nil
 }
 
 func (m *Metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 	var internalGroups []sops.KeyGroup
-	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 || len(m.AgeKeys) > 0 {
-		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.AzureKeyVaultKeys, m.VaultKeys, m.AgeKeys)
+	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 || len(m.AgeKeys) > 0 || len(m.OVHKMSKeys) > 0 {
+		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.AzureKeyVaultKeys, m.VaultKeys, m.AgeKeys, m.OVHKMSKeys)
 		if err != nil {
 			return nil, err
 		}
@@ -352,7 +386,7 @@ func (m *Metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 		return internalGroups, nil
 	} else if len(m.KeyGroups) > 0 {
 		for _, group := range m.KeyGroups {
-			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.AzureKeyVaultKeys, group.VaultKeys, group.AgeKeys)
+			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.AzureKeyVaultKeys, group.VaultKeys, group.AgeKeys, group.OVHKMSKeys)
 			if err != nil {
 				return nil, err
 			}
@@ -387,6 +421,19 @@ func (gcpKmsKey *gcpkmskey) toInternal() (*gcpkms.MasterKey, error) {
 	return &gcpkms.MasterKey{
 		ResourceID:   gcpKmsKey.ResourceID,
 		EncryptedKey: gcpKmsKey.EncryptedDataKey,
+		CreationDate: creationDate,
+	}, nil
+}
+
+func (ovhKmsKey *ovhkmskey) toInternal() (*ovhkms.MasterKey, error) {
+	creationDate, err := time.Parse(time.RFC3339, ovhKmsKey.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+	return &ovhkms.MasterKey{
+		Endpoint:     ovhKmsKey.Endpoint,
+		KeyID:        ovhKmsKey.KeyID,
+		EncryptedKey: ovhKmsKey.EncryptedDataKey,
 		CreationDate: creationDate,
 	}, nil
 }
