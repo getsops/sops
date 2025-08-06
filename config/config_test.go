@@ -718,3 +718,40 @@ func TestLoadConfigFileWithVaultDestinationRules(t *testing.T) {
 	assert.NotNil(t, conf.Destination)
 	assert.Contains(t, conf.Destination.Path("barfoo"), "/v1/kv/barfoo/barfoo")
 }
+
+func TestCreationRuleNativeKeyLists(t *testing.T) {
+	var sampleConfigWithNativeKeyLists = []byte(`
+creation_rules:
+  - path_regex: native_list*
+    pgp:
+      - "85D77543B3D624B63CEA9E6DBC17301B491B3F21"  # name@email.com
+      - "FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4"  # server_XYZ
+    kms:
+      - "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012"
+    age:
+      - "age1ql3z7hjy54pw3hyww5ayyfg7zqgvc7w3j2elw8zmrj2kg5sfn9aqmcac8p"
+    gcp_kms:
+      - "projects/test-project/locations/global/keyRings/test-ring/cryptoKeys/test-key"
+    hc_vault_transit_uri:
+      - "https://vault.example.com:8200/v1/transit/keys/key1"
+`)
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithNativeKeyLists, t), "/conf/path", "native_list_test", nil)
+	assert.Nil(t, err)
+	if conf == nil {
+		t.Fatal("Expected configuration but got nil")
+	}
+
+	assert.True(t, len(conf.KeyGroups) == 1)
+	assert.True(t, len(conf.KeyGroups[0]) == 6)
+
+	keyTypeCounts := make(map[string]int)
+	for _, key := range conf.KeyGroups[0] {
+		keyTypeCounts[key.TypeToIdentifier()]++
+	}
+
+	assert.Equal(t, 2, keyTypeCounts["pgp"])
+	assert.Equal(t, 1, keyTypeCounts["kms"])
+	assert.Equal(t, 1, keyTypeCounts["age"])
+	assert.Equal(t, 1, keyTypeCounts["gcp_kms"])
+	assert.Equal(t, 1, keyTypeCounts["hc_vault"])
+}

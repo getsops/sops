@@ -4,7 +4,7 @@ import (
 	"context"
 	encodingjson "encoding/json"
 	"fmt"
-
+	"io"
 	"net"
 	"net/url"
 	"os"
@@ -152,6 +152,27 @@ func main() {
    For more information, see the README at https://github.com/getsops/sops`
 	app.EnableBashCompletion = true
 	app.Commands = []cli.Command{
+		{
+			Name:  "completion",
+			Usage: "Generate shell completion scripts",
+			Subcommands: []cli.Command{
+				{
+					Name:  "bash",
+					Usage: fmt.Sprintf("Generate bash completions. To load completions: `$ source <(%s completion bash)`", app.Name),
+					Action: func(c *cli.Context) error {
+						fmt.Fprint(c.App.Writer, GenBashCompletion(app.Name))
+						return nil
+					},
+				},
+				{
+					Name:  "zsh",
+					Usage: fmt.Sprintf("Generate zsh completions. To load completions: `$ source <(%s completion zsh)`", app.Name),
+					Action: func(c *cli.Context) error {
+						fmt.Fprint(c.App.Writer, GenZshCompletion(app.Name))
+						return nil
+					},
+				}},
+		},
 		{
 			Name:      "exec-env",
 			Usage:     "execute a command with decrypted values inserted into the environment",
@@ -561,7 +582,6 @@ func main() {
 						pgpFps := c.StringSlice("pgp")
 						kmsArns := c.StringSlice("kms")
 						gcpKmses := c.StringSlice("gcp-kms")
-						ovhKmses := c.StringSlice("ovh-kms")
 						vaultURIs := c.StringSlice("hc-vault-transit")
 						azkvs := c.StringSlice("azure-kv")
 						ageRecipients := c.StringSlice("age")
@@ -1130,14 +1150,6 @@ func main() {
 					Usage: "remove the provided comma-separated list of PGP fingerprints from the list of master keys on the given file",
 				},
 				cli.StringFlag{
-					Name:  "add-ovh-kms",
-					Usage: "add the provided comma-separated list of OVH KMS key resource IDs from the list of master keys on the given file",
-				},
-				cli.StringFlag{
-					Name:  "rm-ovh-kms",
-					Usage: "remove the provided comma-separated list of OVH KMS key resource IDs from the list of master keys on the given file",
-				},
-				cli.StringFlag{
 					Name:  "filename-override",
 					Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type",
 				},
@@ -1393,8 +1405,8 @@ func main() {
 		},
 		{
 			Name:      "set",
-			Usage:     `set a specific key or branch in the input document. value must be a json encoded string. eg. '/path/to/file ["somekey"][0] {"somevalue":true}'`,
-			ArgsUsage: `file index value`,
+			Usage:     `set a specific key or branch in the input document. value must be a JSON encoded string, for example '/path/to/file ["somekey"][0] {"somevalue":true}', or a path if --value-file is used, or omitted if --value-stdin is used`,
+			ArgsUsage: `file index [ value ]`,
 			Flags: append([]cli.Flag{
 				cli.StringFlag{
 					Name:  "input-type",
@@ -1406,7 +1418,11 @@ func main() {
 				},
 				cli.BoolFlag{
 					Name:  "value-file",
-					Usage: "treat 'value' as a file to read the actual value from (avoids leaking secrets in process listings)",
+					Usage: "treat 'value' as a file to read the actual value from (avoids leaking secrets in process listings). Mutually exclusive with --value-stdin",
+				},
+				cli.BoolFlag{
+					Name:  "value-stdin",
+					Usage: "treat 'value' as a file to read the actual value from (avoids leaking secrets in process listings). Mutually exclusive with --value-file",
 				},
 				cli.IntFlag{
 					Name:  "shamir-secret-sharing-threshold",
@@ -1430,8 +1446,17 @@ func main() {
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
-				if c.NArg() != 3 {
-					return common.NewExitError("Error: no file specified, or index and value are missing", codes.NoFileSpecified)
+				if c.Bool("value-file") && c.Bool("value-stdin") {
+					return common.NewExitError("Error: cannot use both --value-file and --value-stdin", codes.ErrorGeneric)
+				}
+				if c.Bool("value-stdin") {
+					if c.NArg() != 2 {
+						return common.NewExitError("Error: file specified, or index and value are missing. Need precisely 2 positional arguments since --value-stdin is used.", codes.NoFileSpecified)
+					}
+				} else {
+					if c.NArg() != 3 {
+						return common.NewExitError("Error: no file specified, or index and value are missing. Need precisely 3 positional arguments.", codes.NoFileSpecified)
+					}
 				}
 				fileName, err := filepath.Abs(c.Args()[0])
 				if err != nil {
@@ -1454,7 +1479,13 @@ func main() {
 				}
 
 				var data string
-				if c.Bool("value-file") {
+				if c.Bool("value-stdin") {
+					content, err := io.ReadAll(os.Stdin)
+					if err != nil {
+						return toExitError(err)
+					}
+					data = string(content)
+				} else if c.Bool("value-file") {
 					filename := c.Args()[2]
 					content, err := os.ReadFile(filename)
 					if err != nil {
