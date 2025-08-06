@@ -4,6 +4,7 @@ import (
 	"context"
 	encodingjson "encoding/json"
 	"fmt"
+	"io"
 	"net"
 	"net/url"
 	"os"
@@ -1395,8 +1396,8 @@ func main() {
 		},
 		{
 			Name:      "set",
-			Usage:     `set a specific key or branch in the input document. value must be a json encoded string. eg. '/path/to/file ["somekey"][0] {"somevalue":true}'`,
-			ArgsUsage: `file index value`,
+			Usage:     `set a specific key or branch in the input document. value must be a JSON encoded string, for example '/path/to/file ["somekey"][0] {"somevalue":true}', or a path if --value-file is used, or omitted if --value-stdin is used`,
+			ArgsUsage: `file index [ value ]`,
 			Flags: append([]cli.Flag{
 				cli.StringFlag{
 					Name:  "input-type",
@@ -1405,6 +1406,14 @@ func main() {
 				cli.StringFlag{
 					Name:  "output-type",
 					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
+				},
+				cli.BoolFlag{
+					Name:  "value-file",
+					Usage: "treat 'value' as a file to read the actual value from (avoids leaking secrets in process listings). Mutually exclusive with --value-stdin",
+				},
+				cli.BoolFlag{
+					Name:  "value-stdin",
+					Usage: "treat 'value' as a file to read the actual value from (avoids leaking secrets in process listings). Mutually exclusive with --value-file",
 				},
 				cli.IntFlag{
 					Name:  "shamir-secret-sharing-threshold",
@@ -1428,8 +1437,17 @@ func main() {
 				if c.Bool("verbose") {
 					logging.SetLevel(logrus.DebugLevel)
 				}
-				if c.NArg() != 3 {
-					return common.NewExitError("Error: no file specified, or index and value are missing", codes.NoFileSpecified)
+				if c.Bool("value-file") && c.Bool("value-stdin") {
+					return common.NewExitError("Error: cannot use both --value-file and --value-stdin", codes.ErrorGeneric)
+				}
+				if c.Bool("value-stdin") {
+					if c.NArg() != 2 {
+						return common.NewExitError("Error: file specified, or index and value are missing. Need precisely 2 positional arguments since --value-stdin is used.", codes.NoFileSpecified)
+					}
+				} else {
+					if c.NArg() != 3 {
+						return common.NewExitError("Error: no file specified, or index and value are missing. Need precisely 3 positional arguments.", codes.NoFileSpecified)
+					}
 				}
 				fileName, err := filepath.Abs(c.Args()[0])
 				if err != nil {
@@ -1451,7 +1469,24 @@ func main() {
 					return common.NewExitError("Invalid set index format", codes.ErrorInvalidSetFormat)
 				}
 
-				value, err := jsonValueToTreeInsertableValue(c.Args()[2])
+				var data string
+				if c.Bool("value-stdin") {
+					content, err := io.ReadAll(os.Stdin)
+					if err != nil {
+						return toExitError(err)
+					}
+					data = string(content)
+				} else if c.Bool("value-file") {
+					filename := c.Args()[2]
+					content, err := os.ReadFile(filename)
+					if err != nil {
+						return toExitError(err)
+					}
+					data = string(content)
+				} else {
+					data = c.Args()[2]
+				}
+				value, err := jsonValueToTreeInsertableValue(data)
 				if err != nil {
 					return toExitError(err)
 				}

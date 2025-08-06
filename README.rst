@@ -225,16 +225,17 @@ configuration directory.
 
 - **Linux**
 
-  - Looks for `keys.txt` in `$XDG_CONFIG_HOME/sops/age/keys.txt`;
-  - Falls back to `$HOME/.config/sops/age/keys.txt` if `$XDG_CONFIG_HOME` isn’t set.
+  - Looks for ``keys.txt`` in ``$XDG_CONFIG_HOME/sops/age/keys.txt``;
+  - Falls back to ``$HOME/.config/sops/age/keys.txt`` if ``$XDG_CONFIG_HOME`` isn’t set.
 
 - **macOS**
 
-  - Looks for `keys.txt` in `$HOME/Library/Application Support/sops/age/keys.txt`.
+  - Looks for ``keys.txt`` in ``$XDG_CONFIG_HOME/sops/age/keys.txt``;
+  - Falls back to ``$HOME/Library/Application Support/sops/age/keys.txt``.
 
 - **Windows**
 
-  - Looks for `keys.txt` in `%AppData%\\sops\\age\\keys.txt`.
+  - Looks for ``keys.txt`` in `%AppData%\\sops\\age\\keys.txt``.
 
 You can override the default lookup by:
 
@@ -1476,7 +1477,7 @@ original file after encrypting or decrypting it.
 Encrypting binary files
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-SOPS primary use case is encrypting YAML and JSON configuration files, but it
+SOPS primary use case is encrypting YAML, JSON, ENV, and INI configuration files, but it
 also has the ability to manage binary files. When encrypting a binary, SOPS will
 read the data as bytes, encrypt it, store the encrypted base64 under
 ``tree['data']`` and write the result as JSON.
@@ -1559,6 +1560,17 @@ The value must be formatted as json.
 
     $ sops set ~/git/svc/sops/example.yaml '["an_array"][1]' '{"uid1":null,"uid2":1000,"uid3":["bob"]}'
 
+You can also provide the value from a file or stdin:
+
+.. code:: sh
+
+    # Provide the value from a file
+    $ echo '{"uid1":null,"uid2":1000,"uid3":["bob"]}' > /tmp/example-value
+    $ sops set ~/git/svc/sops/example.yaml --value-file '["an_array"][1]' /tmp/example-value
+
+    # Provide the value from stdin
+    $ echo '{"uid1":null,"uid2":1000,"uid3":["bob"]}' | sops set ~/git/svc/sops/example.yaml --value-stdin '["an_array"][1]'
+
 Unset a sub-part in a document tree
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1610,9 +1622,9 @@ git client interfaces, because they call git diff under the hood!
 Encrypting only parts of a file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Note: this only works on YAML and JSON files, not on BINARY files.
+Note: this only works on YAML, JSON, ENV, and INI files, not on BINARY files.
 
-By default, SOPS encrypts all the values of a YAML or JSON file and leaves the
+By default, SOPS encrypts all the values of a YAML, JSON, ENV, or INI file and leaves the
 keys in cleartext. In some instances, you may want to exclude some values from
 being encrypted. This can be accomplished by adding the suffix **_unencrypted**
 to any key of a file. When set, all values underneath the key that set the
@@ -1823,9 +1835,9 @@ automation, we found this to be a hard problem with a number of prerequisites:
    git repo, jenkins and S3) and only be decrypted on the target
    systems
 
-SOPS can be used to encrypt YAML, JSON and BINARY files. In BINARY mode, the
+SOPS can be used to encrypt YAML, JSON, ENV, INI, and BINARY files. In BINARY mode, the
 content of the file is treated as a blob, the same way PGP would encrypt an
-entire file. In YAML and JSON modes, however, the content of the file is
+entire file. In YAML, JSON, ENV, and INI modes, however, the content of the file is
 manipulated as a tree where keys are stored in cleartext, and values are
 encrypted. hiera-eyaml does something similar, and over the years we learned
 to appreciate its benefits, namely:
