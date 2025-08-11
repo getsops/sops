@@ -585,6 +585,7 @@ func main() {
 						vaultURIs := c.StringSlice("hc-vault-transit")
 						azkvs := c.StringSlice("azure-kv")
 						ageRecipients := c.StringSlice("age")
+						ovhKmses := c.StringSlice("ovh-kms")
 						if c.NArg() != 0 {
 							return common.NewExitError(fmt.Errorf("error: no positional arguments allowed"), codes.ErrorGeneric)
 						}
@@ -923,6 +924,11 @@ func main() {
 					Name:   "gcp-kms",
 					Usage:  "comma separated list of GCP KMS resource IDs",
 					EnvVar: "SOPS_GCP_KMS_IDS",
+				},
+				cli.StringFlag{
+					Name:   "ovh-kms",
+					Usage:  "comma separated list of OVH KMS key IDs",
+					EnvVar: "SOPS_OVH_KMS_IDS",
 				},
 				cli.StringFlag{
 					Name:   "azure-kv",

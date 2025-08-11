@@ -434,6 +434,13 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		for _, k := range vaultKeys {
 			keyGroup = append(keyGroup, k)
 		}
+		ovhKeys, err := ovhkms.MasterKeysFromResourceIDString(cRule.OVHKMS)
+		if err != nil {
+			return nil, err
+		}
+		for _, k := range ovhKeys {
+			keyGroup = append(keyGroup, k)
+		}
 		groups = append(groups, keyGroup)
 	}
 	return groups, nil
