@@ -3,6 +3,7 @@ package dotenv //import "github.com/getsops/sops/v3/stores/dotenv"
 import (
 	"bytes"
 	"fmt"
+	"slices"
 	"sort"
 	"strings"
 
@@ -76,7 +77,32 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	var branches sops.TreeBranches
 	var branch sops.TreeBranch
 
-	for _, line := range bytes.Split(in, []byte("\n")) {
+	var lines [][]byte
+	var inQuotes = false
+	var currentQuoteChar byte = '"'
+	var lastSplit = -1
+
+	for pos, char := range in {
+		switch char {
+		case '"', '\'', '`':
+			if inQuotes {
+				if currentQuoteChar == char {
+					inQuotes = false
+				}
+			} else {
+				inQuotes = true
+				currentQuoteChar = char
+			}
+		case '\n':
+			if !inQuotes {
+				var line = in[lastSplit+1 : pos]
+				lines = append(lines, line)
+				lastSplit = pos
+			}
+		}
+	}
+
+	for _, line := range lines {
 		if len(line) == 0 {
 			continue
 		}
@@ -141,8 +167,15 @@ func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 		if comment, ok := item.Key.(sops.Comment); ok {
 			line = fmt.Sprintf("#%s\n", comment.Value)
 		} else {
-			value := strings.Replace(item.Value.(string), "\n", "\\n", -1)
+			stringValue := item.Value.(string)
+			var value string
+			if len(stringValue) == 0 || !slices.Contains([]byte{'"', '\'', '`'}, stringValue[0]) {
+				value = strings.Replace(stringValue, "\n", "\\n", -1)
+			} else {
+				value = item.Value.(string)
+			}
 			line = fmt.Sprintf("%s=%s\n", item.Key, value)
+
 		}
 		buffer.WriteString(line)
 	}
