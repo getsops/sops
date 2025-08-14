@@ -39,6 +39,7 @@ import (
 	"github.com/getsops/sops/v3/keyservice"
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/logging"
+	"github.com/getsops/sops/v3/ovhkms"
 	"github.com/getsops/sops/v3/pgp"
 	"github.com/getsops/sops/v3/stores/dotenv"
 	"github.com/getsops/sops/v3/stores/json"
@@ -584,6 +585,7 @@ func main() {
 						vaultURIs := c.StringSlice("hc-vault-transit")
 						azkvs := c.StringSlice("azure-kv")
 						ageRecipients := c.StringSlice("age")
+						ovhKmses := c.StringSlice("ovh-kms")
 						if c.NArg() != 0 {
 							return common.NewExitError(fmt.Errorf("error: no positional arguments allowed"), codes.ErrorGeneric)
 						}
@@ -596,6 +598,14 @@ func main() {
 						}
 						for _, kms := range gcpKmses {
 							group = append(group, gcpkms.NewMasterKeyFromResourceID(kms))
+						}
+						for _, kms := range ovhKmses {
+							k, err := ovhkms.NewMasterKeyFromKeyID(kms)
+							if err != nil {
+								log.WithError(err).Error("Failed to add key")
+								continue
+							}
+							group = append(group, k)
 						}
 						for _, uri := range vaultURIs {
 							k, err := hcvault.NewMasterKeyFromURI(uri)
@@ -916,6 +926,11 @@ func main() {
 					EnvVar: "SOPS_GCP_KMS_IDS",
 				},
 				cli.StringFlag{
+					Name:   "ovh-kms",
+					Usage:  "comma separated list of OVH KMS key IDs",
+					EnvVar: "SOPS_OVH_KMS_IDS",
+				},
+				cli.StringFlag{
 					Name:   "azure-kv",
 					Usage:  "comma separated list of Azure Key Vault URLs",
 					EnvVar: "SOPS_AZURE_KEYVAULT_URLS",
@@ -1166,8 +1181,8 @@ func main() {
 					return toExitError(err)
 				}
 				if _, err := os.Stat(fileName); os.IsNotExist(err) {
-					if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" ||
-						c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" {
+					if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" || c.String("add-ovh-kms") != "" ||
+						c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" || c.String("rm-ovh-kms") != "" {
 						return common.NewExitError(fmt.Sprintf("Error: cannot add or remove keys on non-existent file %q, use the `edit` subcommand instead.", fileName), codes.CannotChangeKeysFromNonExistentFile)
 					}
 				}
@@ -1662,6 +1677,11 @@ func main() {
 			EnvVar: "SOPS_GCP_KMS_IDS",
 		},
 		cli.StringFlag{
+			Name:   "ovh-kms",
+			Usage:  "comma separated list of OVH KMS Key IDs with endpoint (egs: eu-west-sbg.okms.ovh.net/12345678-1234-1234-1234-123456789012)",
+			EnvVar: "SOPS_OVH_KMS_IDS",
+		},
+		cli.StringFlag{
 			Name:   "azure-kv",
 			Usage:  "comma separated list of Azure Key Vault URLs",
 			EnvVar: "SOPS_AZURE_KEYVAULT_URLS",
@@ -1843,8 +1863,8 @@ func main() {
 			return toExitError(err)
 		}
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
-			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" ||
-				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" {
+			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" || c.String("add-ovh-kms") != "" ||
+				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" || c.String("rm-ovh-kms") != "" {
 				return common.NewExitError(fmt.Sprintf("Error: cannot add or remove keys on non-existent file %q, use `--kms` and `--pgp` instead.", fileName), codes.CannotChangeKeysFromNonExistentFile)
 			}
 			if isEncryptMode || isDecryptMode || isRotateMode {
@@ -2137,7 +2157,7 @@ func getEncryptConfig(c *cli.Context, fileName string) (encryptConfig, error) {
 	}, nil
 }
 
-func getMasterKeys(c *cli.Context, kmsEncryptionContext map[string]*string, kmsOptionName string, pgpOptionName string, gcpKmsOptionName string, azureKvOptionName string, hcVaultTransitOptionName string, ageOptionName string) ([]keys.MasterKey, error) {
+func getMasterKeys(c *cli.Context, kmsEncryptionContext map[string]*string, kmsOptionName string, pgpOptionName string, gcpKmsOptionName string, azureKvOptionName string, hcVaultTransitOptionName string, ageOptionName string, ovhKmsOptionName string) ([]keys.MasterKey, error) {
 	var masterKeys []keys.MasterKey
 	for _, k := range kms.MasterKeysFromArnString(c.String(kmsOptionName), kmsEncryptionContext, c.String("aws-profile")) {
 		masterKeys = append(masterKeys, k)
@@ -2169,16 +2189,23 @@ func getMasterKeys(c *cli.Context, kmsEncryptionContext map[string]*string, kmsO
 	for _, k := range ageKeys {
 		masterKeys = append(masterKeys, k)
 	}
+	ovhKeys, err := ovhkms.MasterKeysFromResourceIDString(c.String(ovhKmsOptionName))
+	if err != nil {
+		return nil, err
+	}
+	for _, k := range ovhKeys {
+		masterKeys = append(masterKeys, k)
+	}
 	return masterKeys, nil
 }
 
 func getRotateOpts(c *cli.Context, fileName string, inputStore common.Store, outputStore common.Store, svcs []keyservice.KeyServiceClient, decryptionOrder []string) (rotateOpts, error) {
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
-	addMasterKeys, err := getMasterKeys(c, kmsEncryptionContext, "add-kms", "add-pgp", "add-gcp-kms", "add-azure-kv", "add-hc-vault-transit", "add-age")
+	addMasterKeys, err := getMasterKeys(c, kmsEncryptionContext, "add-kms", "add-pgp", "add-gcp-kms", "add-azure-kv", "add-hc-vault-transit", "add-age", "add-ovh-kms")
 	if err != nil {
 		return rotateOpts{}, err
 	}
-	rmMasterKeys, err := getMasterKeys(c, kmsEncryptionContext, "rm-kms", "rm-pgp", "rm-gcp-kms", "rm-azure-kv", "rm-hc-vault-transit", "rm-age")
+	rmMasterKeys, err := getMasterKeys(c, kmsEncryptionContext, "rm-kms", "rm-pgp", "rm-gcp-kms", "rm-azure-kv", "rm-hc-vault-transit", "rm-age", "rm-ovh-kms")
 	if err != nil {
 		return rotateOpts{}, err
 	}
@@ -2323,6 +2350,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	var azkvKeys []keys.MasterKey
 	var hcVaultMkKeys []keys.MasterKey
 	var ageMasterKeys []keys.MasterKey
+	var ovhKmsKeys []keys.MasterKey
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
 	if c.String("encryption-context") != "" && kmsEncryptionContext == nil {
 		return nil, common.NewExitError("Invalid KMS encryption context format", codes.ErrorInvalidKMSEncryptionContextFormat)
@@ -2369,6 +2397,15 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 			ageMasterKeys = append(ageMasterKeys, k)
 		}
 	}
+	if c.String("ovh-kms") != "" {
+		ovhKeys, err := ovhkms.MasterKeysFromResourceIDString(c.String("ovh-kms"))
+		if err != nil {
+			return nil, err
+		}
+		for _, k := range ovhKeys {
+			pgpKeys = append(pgpKeys, k)
+		}
+	}
 	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("azure-kv") == "" && c.String("hc-vault-transit") == "" && c.String("age") == "" {
 		conf, err := loadConfig(c, file, kmsEncryptionContext)
 		// config file might just not be supplied, without any error
@@ -2388,6 +2425,7 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 	group = append(group, pgpKeys...)
 	group = append(group, hcVaultMkKeys...)
 	group = append(group, ageMasterKeys...)
+	group = append(group, ovhKmsKeys...)
 	log.Debugf("Master keys available:  %+v", group)
 	return []sops.KeyGroup{group}, nil
 }
