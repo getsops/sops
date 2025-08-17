@@ -251,10 +251,13 @@ func main() {
 					if strings.Contains(key, "=") {
 						return cli.NewExitError(fmt.Errorf("cannot use keys with '=' in environment: %s", key), codes.ErrorGeneric)
 					}
+
 					value, ok := item.Value.(string)
 					if !ok {
-						return cli.NewExitError(fmt.Errorf("cannot use non-string values in environment, got %T", item.Value), codes.ErrorGeneric)
+						value = fmt.Sprintf("%v", item.Value)
 					}
+
+					value = strings.ReplaceAll(value, "\n", "\\n")
 					env = append(env, fmt.Sprintf("%s=%s", key, value))
 				}
 
