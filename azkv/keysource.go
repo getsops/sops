@@ -79,12 +79,21 @@ func NewMasterKey(vaultURL string, keyName string, keyVersion string) *MasterKey
 // MasterKey. The URL format is {vaultUrl}/keys/{keyName}/{keyVersion}.
 func NewMasterKeyFromURL(url string) (*MasterKey, error) {
 	url = strings.TrimSpace(url)
-	re := regexp.MustCompile("^(https://[^/]+)/keys/([^/]+)/([^/]+)$")
+	re := regexp.MustCompile("^(https://[^/]+)/keys/([^/]+)(/[^/]+)?$")
 	parts := re.FindStringSubmatch(url)
 	if len(parts) < 3 {
-		return nil, fmt.Errorf("could not parse %q into a valid Azure Key Vault MasterKey", url)
+		return nil, fmt.Errorf("could not parse %q into a valid Azure Key Vault MasterKey %v", url, parts)
 	}
-	return NewMasterKey(parts[1], parts[2], parts[3]), nil
+	// Blank key versions are supported in Azure Key Vault, as they default to the latest
+	// version of the key. We need to put the actual version in the sops metadata block though
+	var key *MasterKey
+	if len(parts[3]) > 1 {
+		key = NewMasterKey(parts[1], parts[2], parts[3][1:])
+	} else {
+		key = NewMasterKey(parts[1], parts[2], "")
+	}
+	err := key.ensureKeyHasVersion(context.Background())
+	return key, err
 }
 
 // MasterKeysFromURLs takes a comma separated list of Azure Key Vault URLs,
@@ -143,6 +152,36 @@ func (c ClientOptions) ApplyToMasterKey(key *MasterKey) {
 // Consider using EncryptContext instead.
 func (key *MasterKey) Encrypt(dataKey []byte) error {
 	return key.EncryptContext(context.Background(), dataKey)
+}
+
+func (key *MasterKey) ensureKeyHasVersion(ctx context.Context) error {
+	if (key.Version != "") {
+		// Nothing to do
+		return nil
+	}
+
+	token, err := key.getTokenCredential()
+
+	if err != nil {
+		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Encryption failed")
+		return fmt.Errorf("failed to get Azure token credential to retrieve key version: %w", err)
+	}
+
+	c, err := azkeys.NewClient(key.VaultURL, token, key.clientOptions)
+	if err != nil {
+		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Encryption failed")
+		return fmt.Errorf("failed to construct Azure Key Vault client to retrieve key version: %w", err)
+	}
+
+	kdetail, err := c.GetKey(ctx, key.Name, key.Version, nil)
+	if err != nil {
+		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Encryption failed")
+		return fmt.Errorf("failed to fetch Azure Key to retrieve key version: %w", err)
+	}
+	key.Version = kdetail.Key.KID.Version()
+
+	log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Version fetch succeeded")
+	return nil
 }
 
 // EncryptContext takes a SOPS data key, encrypts it with Azure Key Vault, and stores
