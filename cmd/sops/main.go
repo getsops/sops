@@ -2219,22 +2219,26 @@ func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 			continue
 		}
 		addr := url.Host
-		if url.Scheme == "unix" {
-			addr = url.Path
-		}
+		addrToUse := addr
 		opts := []grpc.DialOption{
 			grpc.WithTransportCredentials(insecure.NewCredentials()),
-			grpc.WithContextDialer(
-				func(ctx context.Context, addr string) (net.Conn, error) {
-					return (&net.Dialer{}).DialContext(ctx, url.Scheme, addr)
-				},
-			),
+		}
+		if url.Scheme == "unix" {
+			addr = url.Path
+			addrToUse = uri
+		} else {
+			opts = append(opts,
+				grpc.WithContextDialer(
+					func(ctx context.Context, addr string) (net.Conn, error) {
+						return (&net.Dialer{}).DialContext(ctx, url.Scheme, addr)
+					},
+				))
 		}
 		log.WithField(
 			"address",
 			fmt.Sprintf("%s://%s", url.Scheme, addr),
 		).Infof("Connecting to key service")
-		conn, err := grpc.NewClient(addr, opts...)
+		conn, err := grpc.NewClient(addrToUse, opts...)
 		if err != nil {
 			log.Fatalf("failed to listen: %v", err)
 		}
