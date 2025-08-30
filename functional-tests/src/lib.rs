@@ -306,7 +306,7 @@ bar: baz
         assert!(
             data == "[the_section]
 int           = 123
-float         = 1.230000
+float         = 1.23
 bool          = true
 date          = 2025-01-02T00:00:00Z
 timestamp     = 2025-01-02T03:04:05Z

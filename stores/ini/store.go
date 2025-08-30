@@ -82,7 +82,12 @@ func (store Store) stripCommentChar(comment string) string {
 func (store Store) valToString(v interface{}) string {
 	switch v := v.(type) {
 	case float64:
-		return strconv.FormatFloat(v, 'f', 6, 64)
+		result := strconv.FormatFloat(v, 'G', -1, 64)
+		// If the result can be confused with an integer, make sure we have at least one decimal digit
+		if !strings.ContainsRune(result, '.') && !strings.ContainsRune(result, 'E') {
+			result = strconv.FormatFloat(v, 'f', 1, 64)
+		}
+		return result
 	case bool:
 		return strconv.FormatBool(v)
 	case time.Time:
