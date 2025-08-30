@@ -1020,7 +1020,7 @@ func main() {
 				}
 				svcs := keyservices(c)
 
-				encConfig, err := getEncryptConfig(c, fileNameOverride)
+				encConfig, err := getEncryptConfig(c, fileNameOverride, inputStore)
 				if err != nil {
 					return toExitError(err)
 				}
@@ -1366,7 +1366,7 @@ func main() {
 					}
 				} else {
 					// File doesn't exist, edit the example file instead
-					encConfig, err := getEncryptConfig(c, fileName)
+					encConfig, err := getEncryptConfig(c, fileName, inputStore)
 					if err != nil {
 						return toExitError(err)
 					}
@@ -1904,7 +1904,7 @@ func main() {
 		}
 		var output []byte
 		if isEncryptMode {
-			encConfig, err := getEncryptConfig(c, fileNameOverride)
+			encConfig, err := getEncryptConfig(c, fileNameOverride, inputStore)
 			if err != nil {
 				return toExitError(err)
 			}
@@ -1992,7 +1992,7 @@ func main() {
 				output, err = edit(opts)
 			} else {
 				// File doesn't exist, edit the example file instead
-				encConfig, err := getEncryptConfig(c, fileNameOverride)
+				encConfig, err := getEncryptConfig(c, fileNameOverride, inputStore)
 				if err != nil {
 					return toExitError(err)
 				}
@@ -2046,7 +2046,7 @@ func main() {
 	}
 }
 
-func getEncryptConfig(c *cli.Context, fileName string) (encryptConfig, error) {
+func getEncryptConfig(c *cli.Context, fileName string, inputStore common.Store) (encryptConfig, error) {
 	unencryptedSuffix := c.String("unencrypted-suffix")
 	encryptedSuffix := c.String("encrypted-suffix")
 	encryptedRegex := c.String("encrypted-regex")
@@ -2083,6 +2083,33 @@ func getEncryptConfig(c *cli.Context, fileName string) (encryptConfig, error) {
 		}
 	}
 
+	if inputStore.IsSingleValueStore() {
+		// Warn about settings that potentially disable encryption of the single key.
+		if unencryptedSuffix != "" {
+			log.Warn(fmt.Sprintf("Using an unencrypted suffix does not make sense with the input store (the %s store produces one key that should always be encrypted) and will be ignored.", inputStore.Name()))
+		}
+		if encryptedSuffix != "" {
+			log.Warn(fmt.Sprintf("Using an encrypted suffix does not make sense with the input store (the %s store produces one key that should always be encrypted) and will be ignored.", inputStore.Name()))
+		}
+		if encryptedRegex != "" {
+			log.Warn(fmt.Sprintf("Using an encrypted regex does not make sense with the input store (the %s store produces one key that should always be encrypted) and will be ignored.", inputStore.Name()))
+		}
+		if unencryptedRegex != "" {
+			log.Warn(fmt.Sprintf("Using an unencrypted regex does not make sense with the input store (the %s store produces one key that should always be encrypted) and will be ignored.", inputStore.Name()))
+		}
+		if encryptedCommentRegex != "" {
+			log.Warn(fmt.Sprintf("Using an encrypted comment regex does not make sense with the input store (the %s store never produces comments) and will be ignored.", inputStore.Name()))
+		}
+		// Do not warn about unencryptedCommentRegex and macOnlyEncrypted since they cannot have any effect.
+		unencryptedSuffix = ""
+		encryptedSuffix = ""
+		encryptedRegex = ""
+		unencryptedRegex = ""
+		encryptedCommentRegex = ""
+		unencryptedCommentRegex = ""
+		macOnlyEncrypted = false
+	}
+
 	cryptRuleCount := 0
 	if unencryptedSuffix != "" {
 		cryptRuleCount++
@@ -2108,7 +2135,7 @@ func getEncryptConfig(c *cli.Context, fileName string) (encryptConfig, error) {
 	}
 
 	// only supply the default UnencryptedSuffix when EncryptedSuffix, EncryptedRegex, and others are not provided
-	if cryptRuleCount == 0 {
+	if cryptRuleCount == 0 && !inputStore.IsSingleValueStore() {
 		unencryptedSuffix = sops.DefaultUnencryptedSuffix
 	}
 
