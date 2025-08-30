@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"strconv"
 	"strings"
@@ -80,14 +81,16 @@ func (store Store) stripCommentChar(comment string) string {
 
 func (store Store) valToString(v interface{}) string {
 	switch v := v.(type) {
-	case fmt.Stringer:
-		return v.String()
 	case float64:
 		return strconv.FormatFloat(v, 'f', 6, 64)
 	case bool:
 		return strconv.FormatBool(v)
+	case time.Time:
+		return v.Format(time.RFC3339)
+	case fmt.Stringer:
+		return v.String()
 	default:
-		return fmt.Sprintf("%s", v)
+		return fmt.Sprintf("%v", v)
 	}
 }
 
