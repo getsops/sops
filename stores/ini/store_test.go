@@ -2,7 +2,6 @@ package ini
 
 import (
 	"testing"
-	"time"
 
 	"github.com/getsops/sops/v3"
 	"github.com/stretchr/testify/assert"
@@ -182,23 +181,4 @@ func TestUnmarshalMetadataFromNonSOPSFile(t *testing.T) {
 	store := Store{}
 	_, err := store.LoadEncryptedFile(data)
 	assert.Equal(t, sops.MetadataNotFound, err)
-}
-
-func TestValToString(t *testing.T) {
-	store := Store{}
-	assert.Equal(t, "1", store.valToString(1))
-	assert.Equal(t, "1.0", store.valToString(1.0))
-	assert.Equal(t, "1.1", store.valToString(1.10))
-	assert.Equal(t, "1.23", store.valToString(1.23))
-	assert.Equal(t, "1.2345678901234567", store.valToString(1.234567890123456789))
-	assert.Equal(t, "200000.0", store.valToString(2E5))
-	assert.Equal(t, "-2E+10", store.valToString(-2E10))
-	assert.Equal(t, "2E-10", store.valToString(2E-10))
-	assert.Equal(t, "1.2345E+100", store.valToString(1.2345E100))
-	assert.Equal(t, "1.2345E-100", store.valToString(1.2345E-100))
-	assert.Equal(t, "true", store.valToString(true))
-	assert.Equal(t, "false", store.valToString(false))
-	ts, _ := time.Parse(time.RFC3339, "2025-01-02T03:04:05Z")
-	assert.Equal(t, "2025-01-02T03:04:05Z", store.valToString(ts))
-	assert.Equal(t, "a string", store.valToString("a string"))
 }
