@@ -369,9 +369,10 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeKeyEnv, mockIdentity)
 
 		key := &MasterKey{}
-		got, errs := key.loadIdentities()
+		got, unusedLocations, errs := key.loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 1)
+		assert.Len(t, unusedLocations, 5)
 	})
 
 	t.Run(SopsAgeKeyEnv+" multiple", func(t *testing.T) {
@@ -382,9 +383,10 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeKeyEnv, mockIdentity+"\n"+mockOtherIdentity)
 
 		key := &MasterKey{}
-		got, errs := key.loadIdentities()
+		got, unusedLocations, errs := key.loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 2)
+		assert.Len(t, unusedLocations, 5)
 	})
 
 	t.Run(SopsAgeKeyFileEnv, func(t *testing.T) {
@@ -398,9 +400,10 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeKeyFileEnv, keyPath)
 
 		key := &MasterKey{}
-		got, errs := key.loadIdentities()
+		got, unusedLocations, errs := key.loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 1)
+		assert.Len(t, unusedLocations, 5)
 	})
 
 	t.Run(SopsAgeKeyUserConfigPath, func(t *testing.T) {
@@ -416,9 +419,10 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		assert.NoError(t, os.MkdirAll(filepath.Dir(keyPath), 0o700))
 		assert.NoError(t, os.WriteFile(keyPath, []byte(mockIdentity), 0o644))
 
-		got, errs := (&MasterKey{}).loadIdentities()
+		got, unusedLocations, errs := (&MasterKey{}).loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 1)
+		assert.Len(t, unusedLocations, 6)
 	})
 
 	t.Run(SopsAgeSshPrivateKeyFileEnv, func(t *testing.T) {
@@ -435,20 +439,20 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeSshPrivateKeyFileEnv, keyPath)
 
 		key := &MasterKey{}
-		got, errs := key.loadIdentities()
+		got, unusedLocations, errs := key.loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 1)
+		assert.Len(t, unusedLocations, 5)
 	})
 
 	t.Run("no identity", func(t *testing.T) {
 		tmpDir := t.TempDir()
 		overwriteUserConfigDir(t, tmpDir)
 
-		got, errs := (&MasterKey{}).loadIdentities()
-		assert.Len(t, errs, 1)
-		assert.Error(t, errs[0])
-		assert.ErrorContains(t, errs[0], "failed to open file")
+		got, unusedLocations, errs := (&MasterKey{}).loadIdentities()
+		assert.Len(t, errs, 0)
 		assert.Nil(t, got)
+		assert.Len(t, unusedLocations, 7)
 	})
 
 	t.Run("multiple identities", func(t *testing.T) {
@@ -468,9 +472,10 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		assert.NoError(t, os.WriteFile(keyPath2, []byte(mockOtherIdentity), 0o644))
 		t.Setenv(SopsAgeKeyFileEnv, keyPath2)
 
-		got, errs := (&MasterKey{}).loadIdentities()
+		got, unusedLocations, errs := (&MasterKey{}).loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 2)
+		assert.Len(t, unusedLocations, 5)
 	})
 
 	t.Run("parsing error", func(t *testing.T) {
@@ -481,11 +486,12 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeKeyEnv, "invalid")
 
 		key := &MasterKey{}
-		got, errs := key.loadIdentities()
+		got, unusedLocations, errs := key.loadIdentities()
 		assert.Len(t, errs, 1)
 		assert.Error(t, errs[0])
 		assert.ErrorContains(t, errs[0], fmt.Sprintf("failed to parse '%s' age identities", SopsAgeKeyEnv))
 		assert.Nil(t, got)
+		assert.Len(t, unusedLocations, 5)
 	})
 
 	t.Run(SopsAgeKeyCmdEnv, func(t *testing.T) {
@@ -496,9 +502,10 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeKeyCmdEnv, "echo '"+mockIdentity+"'")
 
 		key := &MasterKey{}
-		got, errs := key.loadIdentities()
+		got, unusedLocations, errs := key.loadIdentities()
 		assert.Len(t, errs, 0)
 		assert.Len(t, got, 1)
+		assert.Len(t, unusedLocations, 5)
 	})
 
 	t.Run("cmd error", func(t *testing.T) {
@@ -509,11 +516,12 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		t.Setenv(SopsAgeKeyCmdEnv, "meow")
 
 		key := &MasterKey{}
-		got, errs := key.loadIdentities()
-		assert.Len(t, errs, 2)
+		got, unusedLocations, errs := key.loadIdentities()
+		assert.Len(t, errs, 1)
 		assert.Error(t, errs[0])
 		assert.ErrorContains(t, errs[0], "failed to execute command meow")
 		assert.Nil(t, got)
+		assert.Len(t, unusedLocations, 6)
 	})
 }
 

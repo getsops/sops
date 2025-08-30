@@ -104,7 +104,7 @@ func (i *LazyScryptIdentity) Unwrap(stanzas []*age.Stanza) (fileKey []byte, err 
 	return fileKey, err
 }
 
-func unwrapIdentities(key string, reader io.Reader) (ParsedIdentities, error) {
+func unwrapIdentities(location string, reader io.Reader) (ParsedIdentities, error) {
 	b := bufio.NewReader(reader)
 	p, _ := b.Peek(14) // length of "age-encryption" and "-----BEGIN AGE"
 	peeked := string(p)
@@ -119,10 +119,10 @@ func unwrapIdentities(key string, reader io.Reader) (ParsedIdentities, error) {
 		const privateKeySizeLimit = 1 << 24 // 16 MiB
 		contents, err := io.ReadAll(io.LimitReader(r, privateKeySizeLimit))
 		if err != nil {
-			return nil, fmt.Errorf("failed to read '%s': %w", key, err)
+			return nil, fmt.Errorf("failed to read '%s': %w", location, err)
 		}
 		if len(contents) == privateKeySizeLimit {
-			return nil, fmt.Errorf("failed to read '%s': file too long", key)
+			return nil, fmt.Errorf("failed to read '%s': file too long", location)
 		}
 		IncorrectPassphrase := func() {
 			conn, err := gpgagent.NewConn()
@@ -134,7 +134,7 @@ func unwrapIdentities(key string, reader io.Reader) (ParsedIdentities, error) {
 					log.Errorf("failed to close connection with gpg-agent: %s", err)
 				}
 			}(conn)
-			err = conn.RemoveFromCache(key)
+			err = conn.RemoveFromCache(location)
 			if err != nil {
 				log.Warnf("gpg-agent remove cache request errored: %s", err)
 				return
@@ -145,7 +145,7 @@ func unwrapIdentities(key string, reader io.Reader) (ParsedIdentities, error) {
 			Passphrase: func() (string, error) {
 				conn, err := gpgagent.NewConn()
 				if err != nil {
-					passphrase, err := readSecret("Enter passphrase for identity " + key + ":")
+					passphrase, err := readSecret(fmt.Sprintf("Enter passphrase for identity '%s':", location))
 					if err != nil {
 						return "", err
 					}
@@ -159,9 +159,9 @@ func unwrapIdentities(key string, reader io.Reader) (ParsedIdentities, error) {
 
 				req := gpgagent.PassphraseRequest{
 					// TODO is the cachekey good enough?
-					CacheKey: key,
+					CacheKey: location,
 					Prompt:   "Passphrase",
-					Desc:     fmt.Sprintf("Enter passphrase for identity '%s':", key),
+					Desc:     fmt.Sprintf("Enter passphrase for identity '%s':", location),
 				}
 				pass, err := conn.GetPassphrase(&req)
 				if err != nil {
@@ -175,7 +175,7 @@ func unwrapIdentities(key string, reader io.Reader) (ParsedIdentities, error) {
 			},
 			IncorrectPassphrase: IncorrectPassphrase,
 			NoMatchWarning: func() {
-				log.Warnf("encrypted identity '%s' didn't match file's recipients", key)
+				log.Warnf("encrypted identity '%s' didn't match file's recipients", location)
 			},
 		}}
 		return ids, nil
@@ -183,7 +183,7 @@ func unwrapIdentities(key string, reader io.Reader) (ParsedIdentities, error) {
 	default:
 		ids, err := parseIdentities(b)
 		if err != nil {
-			return nil, fmt.Errorf("failed to parse '%s' age identities: %w", key, err)
+			return nil, fmt.Errorf("failed to parse '%s' age identities: %w", location, err)
 		}
 		return ids, nil
 	}
