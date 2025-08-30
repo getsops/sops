@@ -2,6 +2,7 @@ package ini
 
 import (
 	"testing"
+	"time"
 
 	"github.com/getsops/sops/v3"
 	"github.com/stretchr/testify/assert"
@@ -181,4 +182,19 @@ func TestUnmarshalMetadataFromNonSOPSFile(t *testing.T) {
 	store := Store{}
 	_, err := store.LoadEncryptedFile(data)
 	assert.Equal(t, sops.MetadataNotFound, err)
+}
+
+func TestValToString(t *testing.T) {
+	store := Store{}
+	assert.Equal(t, "1", store.valToString(1))
+	assert.Equal(t, "1.000000", store.valToString(1.0))
+	assert.Equal(t, "-20000000000.000000", store.valToString(-2e10))
+	assert.Equal(t, "0.000000", store.valToString(2e-10))
+	assert.Equal(t, "12345000000000000583883634749019137936624068583482471750845213260941541453980911162485633595979333632.000000", store.valToString(1.2345e100))
+	assert.Equal(t, "0.000000", store.valToString(1.2345e-100))
+	assert.Equal(t, "true", store.valToString(true))
+	assert.Equal(t, "false", store.valToString(false))
+	ts, _ := time.Parse(time.RFC3339, "2025-01-02T03:04:05Z")
+	assert.Equal(t, "2025-01-02T03:04:05Z", store.valToString(ts))
+	assert.Equal(t, "a string", store.valToString("a string"))
 }
