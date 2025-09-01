@@ -78,12 +78,14 @@ func main() {
 
 	keyserviceFlags := []cli.Flag{
 		cli.BoolTFlag{
-			Name:  "enable-local-keyservice",
-			Usage: "use local key service",
+			Name:   "enable-local-keyservice",
+			Usage:  "use local key service",
+			EnvVar: "SOPS_ENABLE_LOCAL_KEYSERVICE",
 		},
 		cli.StringSliceFlag{
-			Name:  "keyservice",
-			Usage: "Specify the key services to use in addition to the local one. Can be specified more than once. Syntax: protocol://address. Example: tcp://myserver.com:5000",
+			Name:   "keyservice",
+			Usage:  "Specify the key services to use in addition to the local one. Can be specified more than once. Syntax: protocol://address. Example: tcp://myserver.com:5000",
+			EnvVar: "SOPS_KEYSERVICE",
 		},
 	}
 	app.Name = "sops"
