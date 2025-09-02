@@ -266,6 +266,57 @@ bar: baz
     }
 
     #[test]
+    fn test_ini_values_as_strings() {
+        let file_path = prepare_temp_file(
+            "test_ini_values_as_strings.yaml",
+            b"the_section:
+  int: 123
+  float: 1.23
+  bool: true
+  date: 2025-01-02
+  timestamp: 2025-01-02 03:04:05
+  utc_timestamp: 2025-01-02T03:04:05Z
+  string: this is a string",
+        );
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("encrypt")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("decrypt")
+            .arg("--output-type")
+            .arg("ini")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(output.status.success(), "sops didn't exit successfully");
+        let data = &String::from_utf8_lossy(&output.stdout);
+        assert!(
+            data == "[the_section]
+int           = 123
+float         = 1.23
+bool          = true
+date          = 2025-01-02T00:00:00Z
+timestamp     = 2025-01-02T03:04:05Z
+utc_timestamp = 2025-01-02T03:04:05Z
+string        = this is a string
+"
+        );
+    }
+
+    #[test]
     fn encrypt_yaml_file() {
         let file_path = prepare_temp_file(
             "test_encrypt.yaml",

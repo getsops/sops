@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-
-	"strconv"
 	"strings"
 
 	"github.com/getsops/sops/v3"
@@ -56,7 +54,7 @@ func (store Store) encodeTree(branches sops.TreeBranches) ([]byte, error) {
 						lastItem.Comment = comment.Value
 					}
 				} else {
-					lastItem, err = section.NewKey(keyVal.Key.(string), store.valToString(keyVal.Value))
+					lastItem, err = section.NewKey(keyVal.Key.(string), stores.ValToString(keyVal.Value))
 					if err != nil {
 						return nil, fmt.Errorf("Error encoding key: %s", err)
 					}
@@ -76,19 +74,6 @@ func (store Store) stripCommentChar(comment string) string {
 		comment = strings.TrimLeft(comment, "# ")
 	}
 	return comment
-}
-
-func (store Store) valToString(v interface{}) string {
-	switch v := v.(type) {
-	case fmt.Stringer:
-		return v.String()
-	case float64:
-		return strconv.FormatFloat(v, 'f', 6, 64)
-	case bool:
-		return strconv.FormatBool(v)
-	default:
-		return fmt.Sprintf("%s", v)
-	}
 }
 
 func (store Store) iniFromTreeBranches(branches sops.TreeBranches) ([]byte, error) {
