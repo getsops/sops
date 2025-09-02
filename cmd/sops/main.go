@@ -40,6 +40,7 @@ import (
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/logging"
 	"github.com/getsops/sops/v3/pgp"
+	"github.com/getsops/sops/v3/stores"
 	"github.com/getsops/sops/v3/stores/dotenv"
 	"github.com/getsops/sops/v3/stores/json"
 	"github.com/getsops/sops/v3/version"
@@ -255,7 +256,7 @@ func main() {
 					}
 					value, ok := item.Value.(string)
 					if !ok {
-						return cli.NewExitError(fmt.Errorf("cannot use non-string values in environment, got %T", item.Value), codes.ErrorGeneric)
+						value = stores.ValToString(item.Value)
 					}
 					env = append(env, fmt.Sprintf("%s=%s", key, value))
 				}
