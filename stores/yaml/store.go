@@ -10,7 +10,7 @@ import (
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/config"
 	"github.com/getsops/sops/v3/stores"
-	"gopkg.in/yaml.v3"
+	"go.yaml.in/yaml/v3"
 )
 
 const IndentDefault = 4
