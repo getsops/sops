@@ -137,7 +137,8 @@ func Run(opts Opts) error {
 				return fmt.Errorf("could not read file: %s", err)
 			}
 		}
-	case *publish.VaultDestination:
+	case *publish.VaultDestination, *publish.AWSSecretsManagerDestination:
+		// Decrypt for JSON-based storage
 		_, err = common.DecryptTree(common.DecryptTreeOpts{
 			Cipher:          opts.Cipher,
 			IgnoreMac:       false,
@@ -151,6 +152,13 @@ func Run(opts Opts) error {
 		data, err = sops.EmitAsMap(tree.Branches)
 		if err != nil {
 			return err
+		}
+	case *publish.AWSParameterStoreDestination:
+		// AWS Parameter Store can store encrypted files as-is or as JSON
+		// For now, default to storing as encrypted file (can be extended)
+		fileContents, err = os.ReadFile(path)
+		if err != nil {
+			return fmt.Errorf("could not read file: %s", err)
 		}
 	}
 
@@ -175,9 +183,9 @@ func Run(opts Opts) error {
 	}
 
 	switch dest := conf.Destination.(type) {
-	case *publish.S3Destination, *publish.GCSDestination:
+	case *publish.S3Destination, *publish.GCSDestination, *publish.AWSParameterStoreDestination:
 		err = dest.Upload(fileContents, destinationPath)
-	case *publish.VaultDestination:
+	case *publish.VaultDestination, *publish.AWSSecretsManagerDestination:
 		err = dest.UploadUnencrypted(data, destinationPath)
 	}
 

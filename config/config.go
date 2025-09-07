@@ -156,17 +156,22 @@ type azureKVKey struct {
 }
 
 type destinationRule struct {
-	PathRegex        string       `yaml:"path_regex"`
-	S3Bucket         string       `yaml:"s3_bucket"`
-	S3Prefix         string       `yaml:"s3_prefix"`
-	GCSBucket        string       `yaml:"gcs_bucket"`
-	GCSPrefix        string       `yaml:"gcs_prefix"`
-	VaultPath        string       `yaml:"vault_path"`
-	VaultAddress     string       `yaml:"vault_address"`
-	VaultKVMountName string       `yaml:"vault_kv_mount_name"`
-	VaultKVVersion   int          `yaml:"vault_kv_version"`
-	RecreationRule   creationRule `yaml:"recreation_rule,omitempty"`
-	OmitExtensions   bool         `yaml:"omit_extensions"`
+	PathRegex                   string       `yaml:"path_regex"`
+	S3Bucket                    string       `yaml:"s3_bucket"`
+	S3Prefix                    string       `yaml:"s3_prefix"`
+	GCSBucket                   string       `yaml:"gcs_bucket"`
+	GCSPrefix                   string       `yaml:"gcs_prefix"`
+	VaultPath                   string       `yaml:"vault_path"`
+	VaultAddress                string       `yaml:"vault_address"`
+	VaultKVMountName            string       `yaml:"vault_kv_mount_name"`
+	VaultKVVersion              int          `yaml:"vault_kv_version"`
+	RecreationRule              creationRule `yaml:"recreation_rule,omitempty"`
+	OmitExtensions              bool         `yaml:"omit_extensions"`
+	AWSSecretsManagerRegion     string       `yaml:"aws_secrets_manager_region"`
+	AWSSecretsManagerSecretName string       `yaml:"aws_secrets_manager_secret_name"`
+	AWSParameterStoreRegion     string       `yaml:"aws_parameter_store_region"`
+	AWSParameterStorePath       string       `yaml:"aws_parameter_store_path"`
+	AWSParameterStoreType       string       `yaml:"aws_parameter_store_type"`
 }
 
 type creationRule struct {
@@ -519,6 +524,13 @@ func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptio
 		destinationCount++
 	}
 
+	if dRule.AWSSecretsManagerRegion != "" {
+		destinationCount++
+	}
+	if dRule.AWSParameterStoreRegion != "" {
+		destinationCount++
+	}
+
 	if destinationCount > 1 {
 		return nil, fmt.Errorf("error loading config: more than one destinations were found in a single destination rule, you can only use one per rule")
 	}
@@ -530,6 +542,12 @@ func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptio
 	}
 	if dRule.VaultPath != "" {
 		dest = publish.NewVaultDestination(dRule.VaultAddress, dRule.VaultPath, dRule.VaultKVMountName, dRule.VaultKVVersion)
+	}
+	if dRule.AWSSecretsManagerRegion != "" {
+		dest = publish.NewAWSSecretsManagerDestination(dRule.AWSSecretsManagerRegion, dRule.AWSSecretsManagerSecretName)
+	}
+	if dRule.AWSParameterStoreRegion != "" {
+		dest = publish.NewAWSParameterStoreDestination(dRule.AWSParameterStoreRegion, dRule.AWSParameterStorePath, dRule.AWSParameterStoreType)
 	}
 
 	config, err := configFromRule(rule, kmsEncryptionContext)
