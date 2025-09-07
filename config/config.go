@@ -508,7 +508,18 @@ func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptio
 	}
 
 	var dest publish.Destination
-	if dRule.S3Bucket != "" && dRule.GCSBucket != "" && dRule.VaultPath != "" {
+	destinationCount := 0
+	if dRule.S3Bucket != "" {
+		destinationCount++
+	}
+	if dRule.GCSBucket != "" {
+		destinationCount++
+	}
+	if dRule.VaultPath != "" {
+		destinationCount++
+	}
+
+	if destinationCount > 1 {
 		return nil, fmt.Errorf("error loading config: more than one destinations were found in a single destination rule, you can only use one per rule")
 	}
 	if dRule.S3Bucket != "" {
