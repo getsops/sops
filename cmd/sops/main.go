@@ -1022,7 +1022,7 @@ func main() {
 				}
 				svcs := keyservices(c)
 
-				encConfig, err := getEncryptConfig(c, fileNameOverride)
+				encConfig, err := getEncryptConfig(c, fileNameOverride, nil)
 				if err != nil {
 					return toExitError(err)
 				}
@@ -1368,7 +1368,7 @@ func main() {
 					}
 				} else {
 					// File doesn't exist, edit the example file instead
-					encConfig, err := getEncryptConfig(c, fileName)
+					encConfig, err := getEncryptConfig(c, fileName, nil)
 					if err != nil {
 						return toExitError(err)
 					}
@@ -1883,8 +1883,9 @@ func main() {
 		// Load configuration here for backwards compatibility (error out in case of bad config files),
 		// but only when not just decrypting (https://github.com/getsops/sops/issues/868)
 		needsCreationRule := isEncryptMode || isRotateMode || isSetMode || isEditMode
+		var config *config.Config
 		if needsCreationRule {
-			_, err = loadConfig(c, fileNameOverride, nil)
+			config, err = loadConfig(c, fileNameOverride, nil)
 			if err != nil {
 				return toExitError(err)
 			}
@@ -1906,7 +1907,7 @@ func main() {
 		}
 		var output []byte
 		if isEncryptMode {
-			encConfig, err := getEncryptConfig(c, fileNameOverride)
+			encConfig, err := getEncryptConfig(c, fileNameOverride, config)
 			if err != nil {
 				return toExitError(err)
 			}
@@ -1994,7 +1995,7 @@ func main() {
 				output, err = edit(opts)
 			} else {
 				// File doesn't exist, edit the example file instead
-				encConfig, err := getEncryptConfig(c, fileNameOverride)
+				encConfig, err := getEncryptConfig(c, fileNameOverride, config)
 				if err != nil {
 					return toExitError(err)
 				}
@@ -2048,7 +2049,7 @@ func main() {
 	}
 }
 
-func getEncryptConfig(c *cli.Context, fileName string) (encryptConfig, error) {
+func getEncryptConfig(c *cli.Context, fileName string, optionalConfig *config.Config) (encryptConfig, error) {
 	unencryptedSuffix := c.String("unencrypted-suffix")
 	encryptedSuffix := c.String("encrypted-suffix")
 	encryptedRegex := c.String("encrypted-regex")
@@ -2056,9 +2057,13 @@ func getEncryptConfig(c *cli.Context, fileName string) (encryptConfig, error) {
 	encryptedCommentRegex := c.String("encrypted-comment-regex")
 	unencryptedCommentRegex := c.String("unencrypted-comment-regex")
 	macOnlyEncrypted := c.Bool("mac-only-encrypted")
-	conf, err := loadConfig(c, fileName, nil)
-	if err != nil {
-		return encryptConfig{}, toExitError(err)
+	var err error
+	conf := optionalConfig
+	if conf == nil {
+		conf, err = loadConfig(c, fileName, nil)
+		if err != nil {
+			return encryptConfig{}, toExitError(err)
+		}
 	}
 	if conf != nil {
 		// command line options have precedence
@@ -2115,13 +2120,13 @@ func getEncryptConfig(c *cli.Context, fileName string) (encryptConfig, error) {
 	}
 
 	var groups []sops.KeyGroup
-	groups, err = keyGroups(c, fileName)
+	groups, err = keyGroups(c, fileName, conf)
 	if err != nil {
 		return encryptConfig{}, err
 	}
 
 	var threshold int
-	threshold, err = shamirThreshold(c, fileName)
+	threshold, err = shamirThreshold(c, fileName, conf)
 	if err != nil {
 		return encryptConfig{}, err
 	}
@@ -2318,7 +2323,7 @@ func parseTreePath(arg string) ([]interface{}, error) {
 	return path, nil
 }
 
-func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
+func keyGroups(c *cli.Context, file string, optionalConfig *config.Config) ([]sops.KeyGroup, error) {
 	var kmsKeys []keys.MasterKey
 	var pgpKeys []keys.MasterKey
 	var cloudKmsKeys []keys.MasterKey
@@ -2372,7 +2377,11 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 		}
 	}
 	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("azure-kv") == "" && c.String("hc-vault-transit") == "" && c.String("age") == "" {
-		conf, err := loadConfig(c, file, kmsEncryptionContext)
+		conf := optionalConfig
+		var err error
+		if conf == nil {
+			conf, err = loadConfig(c, file, kmsEncryptionContext)
+		}
 		// config file might just not be supplied, without any error
 		if conf == nil {
 			errMsg := "config file not found, or has no creation rules, and no keys provided through command line options"
@@ -2414,11 +2423,15 @@ func loadConfig(c *cli.Context, file string, kmsEncryptionContext map[string]*st
 	return conf, nil
 }
 
-func shamirThreshold(c *cli.Context, file string) (int, error) {
+func shamirThreshold(c *cli.Context, file string, optionalConfig *config.Config) (int, error) {
 	if c.Int("shamir-secret-sharing-threshold") != 0 {
 		return c.Int("shamir-secret-sharing-threshold"), nil
 	}
-	conf, err := loadConfig(c, file, nil)
+	var err error
+	conf := optionalConfig
+	if conf == nil {
+		conf, err = loadConfig(c, file, nil)
+	}
 	if conf == nil {
 		// This takes care of the following two case:
 		// 1. No config was provided, or contains no creation rules. Err will be nil and ShamirThreshold will be the default value of 0.
