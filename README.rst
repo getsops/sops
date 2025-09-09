@@ -378,6 +378,11 @@ a key. This has the following form::
 
     https://${VAULT_URL}/keys/${KEY_NAME}/${KEY_VERSION}
 
+You can omit the version, and have just a trailing slash, and this will use
+whatever the latest version of the key is::
+
+    https://${VAULT_URL}/keys/${KEY_NAME}/
+
 To create a Key Vault and assign your service principal permissions on it
 from the commandline:
 
@@ -400,6 +405,10 @@ from the commandline:
 Now you can encrypt a file using::
 
     $ sops encrypt --azure-kv https://sops.vault.azure.net/keys/sops-key/some-string test.yaml > test.enc.yaml
+
+or, without the version::
+
+    $ sops encrypt --azure-kv https://sops.vault.azure.net/keys/sops-key/ test.yaml > test.enc.yaml
 
 And decrypt it using::
 
@@ -844,14 +853,6 @@ Example: place the following in your ``~/.bashrc``
 .. code:: bash
 
     SOPS_GPG_EXEC = 'your_gpg_client_wrapper'
-
-
-Specify a different GPG key server
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-By default, SOPS uses the key server ``keys.openpgp.org`` to retrieve the GPG
-keys that are not present in the local keyring.
-This is no longer configurable. You can learn more about why from this write-up: `SKS Keyserver Network Under Attack <https://gist.github.com/rjhansen/67ab921ffb4084c865b3618d6955275f>`_.
 
 
 Key groups

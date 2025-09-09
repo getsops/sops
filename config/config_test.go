@@ -755,3 +755,127 @@ creation_rules:
 	assert.Equal(t, 1, keyTypeCounts["gcp_kms"])
 	assert.Equal(t, 1, keyTypeCounts["hc_vault"])
 }
+
+// Test configurations with multiple destinations should fail
+var sampleConfigWithS3GCSConflict = []byte(`
+destination_rules:
+  - path_regex: '^test/.*'
+    s3_bucket: 'my-s3-bucket'
+    s3_prefix: 'sops/'
+    gcs_bucket: 'my-gcs-bucket'
+    gcs_prefix: 'sops/'
+    recreation_rule:
+      kms: 'arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012'
+`)
+
+var sampleConfigWithS3VaultConflict = []byte(`
+destination_rules:
+  - path_regex: '^test/.*'
+    s3_bucket: 'my-s3-bucket'
+    s3_prefix: 'sops/'
+    vault_path: 'secret/sops'
+    vault_address: 'https://vault.example.com'
+    recreation_rule:
+      kms: 'arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012'
+`)
+
+var sampleConfigWithGCSVaultConflict = []byte(`
+destination_rules:
+  - path_regex: '^test/.*'
+    gcs_bucket: 'my-gcs-bucket'
+    gcs_prefix: 'sops/'
+    vault_path: 'secret/sops'
+    vault_address: 'https://vault.example.com'
+    recreation_rule:
+      kms: 'arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012'
+`)
+
+var sampleConfigWithAllThreeDestinations = []byte(`
+destination_rules:
+  - path_regex: '^test/.*'
+    s3_bucket: 'my-s3-bucket'
+    s3_prefix: 'sops/'
+    gcs_bucket: 'my-gcs-bucket'
+    gcs_prefix: 'sops/'
+    vault_path: 'secret/sops'
+    vault_address: 'https://vault.example.com'
+    recreation_rule:
+      kms: 'arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012'
+`)
+
+func TestDestinationValidationS3GCSConflict(t *testing.T) {
+	_, err := parseDestinationRuleForFile(parseConfigFile(sampleConfigWithS3GCSConflict, t), "test/secrets.yaml", nil)
+	assert.NotNil(t, err, "Expected error when both S3 and GCS destinations are specified")
+	if err != nil {
+		assert.Contains(t, err.Error(), "more than one destinations were found")
+	}
+}
+
+func TestDestinationValidationS3VaultConflict(t *testing.T) {
+	_, err := parseDestinationRuleForFile(parseConfigFile(sampleConfigWithS3VaultConflict, t), "test/secrets.yaml", nil)
+	assert.NotNil(t, err, "Expected error when both S3 and Vault destinations are specified")
+	if err != nil {
+		assert.Contains(t, err.Error(), "more than one destinations were found")
+	}
+}
+
+func TestDestinationValidationGCSVaultConflict(t *testing.T) {
+	_, err := parseDestinationRuleForFile(parseConfigFile(sampleConfigWithGCSVaultConflict, t), "test/secrets.yaml", nil)
+	assert.NotNil(t, err, "Expected error when both GCS and Vault destinations are specified")
+	if err != nil {
+		assert.Contains(t, err.Error(), "more than one destinations were found")
+	}
+}
+
+func TestDestinationValidationAllThreeDestinationsConflict(t *testing.T) {
+	_, err := parseDestinationRuleForFile(parseConfigFile(sampleConfigWithAllThreeDestinations, t), "test/secrets.yaml", nil)
+	assert.NotNil(t, err, "Expected error when all three destinations are specified")
+	if err != nil {
+		assert.Contains(t, err.Error(), "more than one destinations were found")
+	}
+}
+
+func TestDestinationValidationSingleS3Destination(t *testing.T) {
+	validS3Config := []byte(`
+destination_rules:
+  - path_regex: '^test/.*'
+    s3_bucket: 'my-s3-bucket'
+    s3_prefix: 'sops/'
+    recreation_rule:
+      kms: 'arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012'
+`)
+	conf, err := parseDestinationRuleForFile(parseConfigFile(validS3Config, t), "test/secrets.yaml", nil)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf.Destination)
+	assert.Contains(t, conf.Destination.Path("secrets.yaml"), "s3://my-s3-bucket/sops/secrets.yaml")
+}
+
+func TestDestinationValidationSingleGCSDestination(t *testing.T) {
+	validGCSConfig := []byte(`
+destination_rules:
+  - path_regex: '^test/.*'
+    gcs_bucket: 'my-gcs-bucket'
+    gcs_prefix: 'sops/'
+    recreation_rule:
+      kms: 'arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012'
+`)
+	conf, err := parseDestinationRuleForFile(parseConfigFile(validGCSConfig, t), "test/secrets.yaml", nil)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf.Destination)
+	assert.Contains(t, conf.Destination.Path("secrets.yaml"), "gcs://my-gcs-bucket/sops/secrets.yaml")
+}
+
+func TestDestinationValidationSingleVaultDestination(t *testing.T) {
+	validVaultConfig := []byte(`
+destination_rules:
+  - path_regex: '^test/.*'
+    vault_path: 'secret/sops'
+    vault_address: 'https://vault.example.com'
+    recreation_rule:
+      kms: 'arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012'
+`)
+	conf, err := parseDestinationRuleForFile(parseConfigFile(validVaultConfig, t), "test/secrets.yaml", nil)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf.Destination)
+	assert.Contains(t, conf.Destination.Path("secrets.yaml"), "https://vault.example.com/v1/secret/data/secret/sops/secrets.yaml")
+}

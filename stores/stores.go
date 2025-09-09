@@ -10,9 +10,10 @@ of the purpose of this package is to make it easy to change the SOPS file format
 package stores
 
 import (
-	"time"
-
 	"fmt"
+	"strconv"
+	"strings"
+	"time"
 
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/age"
@@ -532,4 +533,26 @@ func HasSopsTopLevelKey(branch sops.TreeBranch) bool {
 		}
 	}
 	return false
+}
+
+// ValToString converts a simple value to a string.
+// It does not handle complex values (arrays and mappings).
+func ValToString(v interface{}) string {
+	switch v := v.(type) {
+	case float64:
+		result := strconv.FormatFloat(v, 'G', -1, 64)
+		// If the result can be confused with an integer, make sure we have at least one decimal digit
+		if !strings.ContainsRune(result, '.') && !strings.ContainsRune(result, 'E') {
+			result = strconv.FormatFloat(v, 'f', 1, 64)
+		}
+		return result
+	case bool:
+		return strconv.FormatBool(v)
+	case time.Time:
+		return v.Format(time.RFC3339)
+	case fmt.Stringer:
+		return v.String()
+	default:
+		return fmt.Sprintf("%v", v)
+	}
 }
