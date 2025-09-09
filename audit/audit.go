@@ -14,7 +14,7 @@ import (
 
 	"github.com/getsops/sops/v3/logging"
 	"github.com/sirupsen/logrus"
-	"gopkg.in/yaml.v3"
+	"go.yaml.in/yaml/v3"
 )
 
 var log *logrus.Logger
