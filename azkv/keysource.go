@@ -79,7 +79,7 @@ func NewMasterKey(vaultURL string, keyName string, keyVersion string) *MasterKey
 // MasterKey. The URL format is {vaultUrl}/keys/{keyName}/{keyVersion}.
 func NewMasterKeyFromURL(url string) (*MasterKey, error) {
 	url = strings.TrimSpace(url)
-	re := regexp.MustCompile("^(https://[^/]+)/keys/([^/]+)(/[^/]+)?$")
+	re := regexp.MustCompile("^(https://[^/]+)/keys/([^/]+)(/[^/]*)?$")
 	parts := re.FindStringSubmatch(url)
 	if len(parts) < 3 {
 		return nil, fmt.Errorf("could not parse %q into a valid Azure Key Vault MasterKey %v", url, parts)
