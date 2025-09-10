@@ -221,7 +221,7 @@ func formatError(msg string, err error, errs errSet, unusedLocations []string) e
 		} else {
 			unusedSuffix = fmt.Sprintf("s '%s', and '%s'", strings.Join(unusedLocations[:count - 1], "', '"), unusedLocations[count - 1])
 		}
-		unusedSuffix = fmt.Sprintf(". Did not found keys in location%s.", unusedSuffix)
+		unusedSuffix = fmt.Sprintf(". Did not find keys in location%s.", unusedSuffix)
 	}
 	if err != nil {
 		return fmt.Errorf("%s: %w%s%s", msg, err, loadSuffix, unusedSuffix)
