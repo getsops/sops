@@ -1567,10 +1567,10 @@ You can also provide the value from a file or stdin:
 
     # Provide the value from a file
     $ echo '{"uid1":null,"uid2":1000,"uid3":["bob"]}' > /tmp/example-value
-    $ sops set ~/git/svc/sops/example.yaml --value-file '["an_array"][1]' /tmp/example-value
+    $ sops set --value-file ~/git/svc/sops/example.yaml '["an_array"][1]' /tmp/example-value
 
     # Provide the value from stdin
-    $ echo '{"uid1":null,"uid2":1000,"uid3":["bob"]}' | sops set ~/git/svc/sops/example.yaml --value-stdin '["an_array"][1]'
+    $ echo '{"uid1":null,"uid2":1000,"uid3":["bob"]}' | sops set --value-stdin ~/git/svc/sops/example.yaml '["an_array"][1]'
 
 Unset a sub-part in a document tree
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
