@@ -33,7 +33,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v4.0.1
         with:
-          go-version: 1.24
+          go-version: 1.25
           cache: false
 
       - name: Setup Syft
