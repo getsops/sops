@@ -206,16 +206,41 @@ func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 	key.EncryptedKey = string(enc)
 }
 
+func formatError(msg string, err error, errs errSet, unusedLocations []string) error {
+	var loadSuffix string
+	if len(errs) > 0 {
+		loadSuffix = fmt.Sprintf(". Errors while loading age identities: %s", errs.Error())
+	}
+	var unusedSuffix string
+	if len(unusedLocations) > 0 {
+		count := len(unusedLocations)
+		if count == 1 {
+			unusedSuffix = fmt.Sprintf(" '%s'", unusedLocations[0])
+		} else if count == 2 {
+			unusedSuffix = fmt.Sprintf("s '%s' and '%s'", unusedLocations[0], unusedLocations[1])
+		} else {
+			unusedSuffix = fmt.Sprintf("s '%s', and '%s'", strings.Join(unusedLocations[:count - 1], "', '"), unusedLocations[count - 1])
+		}
+		unusedSuffix = fmt.Sprintf(". Did not find keys in location%s.", unusedSuffix)
+	}
+	if err != nil {
+		return fmt.Errorf("%s: %w%s%s", msg, err, loadSuffix, unusedSuffix)
+	} else {
+		return fmt.Errorf("%s%s%s", msg, loadSuffix, unusedSuffix)
+	}
+}
+
 // Decrypt decrypts the EncryptedKey with the parsed or loaded identities, and
 // returns the result.
 func (key *MasterKey) Decrypt() ([]byte, error) {
 	var errs errSet
+	var unusedLocations []string
 	if len(key.parsedIdentities) == 0 {
 		var ids ParsedIdentities
-		ids, errs = key.loadIdentities()
+		ids, unusedLocations, errs = key.loadIdentities()
 		if len(ids) == 0 {
 			log.Info("Decryption failed")
-			return nil, fmt.Errorf("failed to load age identities: %w", errs)
+			return nil, formatError("failed to load age identities", nil, errs, unusedLocations)
 		}
 		ids.ApplyToMasterKey(key)
 	}
@@ -225,11 +250,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	r, err := age.Decrypt(ar, key.parsedIdentities...)
 	if err != nil {
 		log.Info("Decryption failed")
-		var loadErrors string
-		if len(errs) > 0 {
-			loadErrors = fmt.Sprintf(". Errors while loading age identities: %s", errs.Error())
-		}
-		return nil, fmt.Errorf("failed to create reader for decrypting sops data key with age: %w%s", err, loadErrors)
+		return nil, formatError("failed to create reader for decrypting sops data key with age", err, errs, unusedLocations)
 	}
 
 	var b bytes.Buffer
@@ -269,29 +290,55 @@ func (key *MasterKey) TypeToIdentifier() string {
 // private key from the SopsAgeSshPrivateKeyFileEnv environment variable. If the
 // environment variable is not present, it will fall back to `~/.ssh/id_ed25519`
 // or `~/.ssh/id_rsa`. If no age SSH identity is found, it will return nil.
-func loadAgeSSHIdentity() (age.Identity, error) {
+func loadAgeSSHIdentities() ([]age.Identity, []string, errSet) {
+	var identities []age.Identity
+	var unusedLocations []string
+	var errs errSet
+
 	sshKeyFilePath, ok := os.LookupEnv(SopsAgeSshPrivateKeyFileEnv)
 	if ok {
-		return parseSSHIdentityFromPrivateKeyFile(sshKeyFilePath)
+		identity, err := parseSSHIdentityFromPrivateKeyFile(sshKeyFilePath)
+		if err != nil {
+			errs = append(errs, err)
+		} else {
+			identities = append(identities, identity)
+		}
+	} else {
+		unusedLocations = append(unusedLocations, SopsAgeSshPrivateKeyFileEnv)
 	}
 
 	userHomeDir, err := os.UserHomeDir()
-	if err != nil || userHomeDir == "" {
+	if err != nil {
+		errs = append(errs, err)
+	} else if userHomeDir == "" {
 		log.Warnf("could not determine the user home directory: %v", err)
-		return nil, nil
+	} else {
+		sshEd25519PrivateKeyPath := filepath.Join(userHomeDir, ".ssh", "id_ed25519")
+		if _, err := os.Stat(sshEd25519PrivateKeyPath); err == nil {
+			identity, err := parseSSHIdentityFromPrivateKeyFile(sshEd25519PrivateKeyPath)
+			if err != nil {
+				errs = append(errs, err)
+			} else {
+				identities = append(identities, identity)
+			}
+		} else {
+			unusedLocations = append(unusedLocations, sshEd25519PrivateKeyPath)
+		}
+
+		sshRsaPrivateKeyPath := filepath.Join(userHomeDir, ".ssh", "id_rsa")
+		if _, err := os.Stat(sshRsaPrivateKeyPath); err == nil {
+			identity, err := parseSSHIdentityFromPrivateKeyFile(sshRsaPrivateKeyPath)
+			if err != nil {
+				errs = append(errs, err)
+			} else {
+				identities = append(identities, identity)
+			}
+		} else {
+			unusedLocations = append(unusedLocations, sshRsaPrivateKeyPath)
+		}
 	}
 
-	sshEd25519PrivateKeyPath := filepath.Join(userHomeDir, ".ssh", "id_ed25519")
-	if _, err := os.Stat(sshEd25519PrivateKeyPath); err == nil {
-		return parseSSHIdentityFromPrivateKeyFile(sshEd25519PrivateKeyPath)
-	}
-
-	sshRsaPrivateKeyPath := filepath.Join(userHomeDir, ".ssh", "id_rsa")
-	if _, err := os.Stat(sshRsaPrivateKeyPath); err == nil {
-		return parseSSHIdentityFromPrivateKeyFile(sshRsaPrivateKeyPath)
-	}
-
-	return nil, nil
+	return identities, unusedLocations, errs
 }
 
 func getUserConfigDir() (string, error) {
@@ -307,22 +354,15 @@ func getUserConfigDir() (string, error) {
 // environment configurations (e.g. SopsAgeKeyEnv, SopsAgeKeyFileEnv,
 // SopsAgeSshPrivateKeyFileEnv, SopsAgeKeyUserConfigPath). It will load all
 // found references, and expects at least one configuration to be present.
-func (key *MasterKey) loadIdentities() (ParsedIdentities, errSet) {
-	var identities ParsedIdentities
-
-	var errs errSet
-
-	sshIdentity, err := loadAgeSSHIdentity()
-	if err != nil {
-		errs = append(errs, fmt.Errorf("failed to get SSH identity: %w", err))
-	} else if sshIdentity != nil {
-		identities = append(identities, sshIdentity)
-	}
+func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
+	identities, unusedLocations, errs := loadAgeSSHIdentities()
 
 	var readers = make(map[string]io.Reader, 0)
 
 	if ageKey, ok := os.LookupEnv(SopsAgeKeyEnv); ok {
 		readers[SopsAgeKeyEnv] = strings.NewReader(ageKey)
+	} else {
+		unusedLocations = append(unusedLocations, SopsAgeKeyEnv)
 	}
 
 	if ageKeyFile, ok := os.LookupEnv(SopsAgeKeyFileEnv); ok {
@@ -333,6 +373,8 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, errSet) {
 			defer f.Close()
 			readers[SopsAgeKeyFileEnv] = f
 		}
+	} else {
+		unusedLocations = append(unusedLocations, SopsAgeKeyFileEnv)
 	}
 
 	if ageKeyCmd, ok := os.LookupEnv(SopsAgeKeyCmdEnv); ok {
@@ -347,6 +389,8 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, errSet) {
 				readers[SopsAgeKeyCmdEnv] = bytes.NewReader(out)
 			}
 		}
+	} else {
+		unusedLocations = append(unusedLocations, SopsAgeKeyCmdEnv)
 	}
 
 	userConfigDir, err := getUserConfigDir()
@@ -358,23 +402,25 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, errSet) {
 		if err != nil && !errors.Is(err, os.ErrNotExist) {
 			errs = append(errs, fmt.Errorf("failed to open file: %w", err))
 		} else if errors.Is(err, os.ErrNotExist) && len(readers) == 0 && len(identities) == 0 {
-			// If we have no other readers, presence of the file is required.
-			errs = append(errs, fmt.Errorf("failed to open file: %w", err))
+			unusedLocations = append(unusedLocations, ageKeyFilePath)
 		} else if err == nil {
 			defer f.Close()
 			readers[ageKeyFilePath] = f
 		}
 	}
 
-	for n, r := range readers {
-		ids, err := unwrapIdentities(n, r)
+	for location, r := range readers {
+		ids, err := unwrapIdentities(location, r)
 		if err != nil {
 			errs = append(errs, err)
 		} else {
 			identities = append(identities, ids...)
+			if len(ids) == 0 {
+				unusedLocations = append(unusedLocations, location)
+			}
 		}
 	}
-	return identities, errs
+	return identities, unusedLocations, errs
 }
 
 // parseRecipient attempts to parse a string containing an encoded age public
