@@ -429,7 +429,7 @@ The simplest way to decrypt data from stdin is as follows:
 
 .. code:: sh
 
-	$ cat encrypted-data | sops decrypt > decrypted-data
+    $ cat encrypted-data | sops decrypt > decrypted-data
 
 By default, ``sops`` determines the input and output format from the provided filename. Since in this case,
 no filename is provided, ``sops`` will use the binary store which expects JSON input and outputs binary data
@@ -440,8 +440,8 @@ the input and output formats by passing ``--input-type`` and ``--output-type`` a
 
 .. code:: sh
 
-	$ cat encrypted-data | sops decrypt --filename-override filename.yaml > decrypted-data
-	$ cat encrypted-data | sops decrypt --input-type yaml --output-type yaml > decrypted-data
+    $ cat encrypted-data | sops decrypt --filename-override filename.yaml > decrypted-data
+    $ cat encrypted-data | sops decrypt --input-type yaml --output-type yaml > decrypted-data
 
 In both cases, ``sops`` will assume that the data you provide is in YAML format, and will encode the decrypted
 data in YAML as well. The second form allows to use different formats for input and output.
@@ -452,7 +452,7 @@ SOPS which filename to use to match creation rules:
 
 .. code:: sh
 
-	$ echo 'foo: bar' | sops encrypt --filename-override path/filename.sops.yaml > encrypted-data
+    $ echo 'foo: bar' | sops encrypt --filename-override path/filename.sops.yaml > encrypted-data
 
 SOPS will find a matching creation rule for ``path/filename.sops.yaml`` in ``.sops.yaml`` and use that one to
 encrypt the data from stdin. This filename will also be used to determine the input and output store. As always,
@@ -461,7 +461,7 @@ the input store type can be adjusted by passing ``--input-type``, and the output
 
 .. code:: sh
 
-	$ echo foo=bar | sops encrypt --filename-override path/filename.sops.yaml --input-type dotenv > encrypted-data
+    $ echo foo=bar | sops encrypt --filename-override path/filename.sops.yaml --input-type dotenv > encrypted-data
 
 
 Encrypting using Hashicorp Vault
