@@ -129,13 +129,13 @@ type configFile struct {
 }
 
 type keyGroup struct {
-	Merge   []keyGroup
-	KMS     []kmsKey
+	Merge   []keyGroup   `yaml:"merge"`
+	KMS     []kmsKey     `yaml:"kms"`
 	GCPKMS  []gcpKmsKey  `yaml:"gcp_kms"`
 	AzureKV []azureKVKey `yaml:"azure_keyvault"`
 	Vault   []string     `yaml:"hc_vault"`
 	Age     []string     `yaml:"age"`
-	PGP     []string
+	PGP     []string     `yaml:"pgp"`
 }
 
 type gcpKmsKey struct {
