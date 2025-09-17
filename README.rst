@@ -1700,15 +1700,15 @@ The following top-level keys are supported:
 * ``destination_rules``: a list of destination rule objects.
 * ``stores``: configuration object for the stores.
 
-See the next subsections for how these objects look like.
+The following subsections describe how these properties are used.
 
 Creation rule object
 ~~~~~~~~~~~~~~~~~~~~
 
-A creation rule object has three kind of keys:
+A creation rule object has three types of keys:
 
-#. Keys that determine whether the creation rule matches;
-#. Keys that determine the (groups of) identities (keys) to encrypt with;
+#. Keys that determine whether the creation rule matches.
+#. Keys that determine the (groups of) identities (keys) to encrypt with.
 #. Keys that determine which parts of and how a file is encrypted.
 
 Matching
@@ -1790,7 +1790,7 @@ To directly specify a single key group, you can use the following keys:
 To specify a list of key groups, you can use the following key:
 
 * ``key_groups`` (list of key group objects): a list of key group objects.
-  See below for how such an object looks like.
+  See below for how such a resource should be represented.
   Example:
 
   .. code:: yaml
@@ -1829,8 +1829,8 @@ Key group object
 ++++++++++++++++
 
 A key group contains multiple identities (keys), similar to a creation rule object.
-Having more than one key group allows to use `Shamir's secret sharing <https://en.wikipedia.org/wiki/Shamir%27s_secret_sharing>`__
-to split the file's encryption key up into multiple parts,
+Having more than one key group allows for the use of `Shamir's secret sharing <https://en.wikipedia.org/wiki/Shamir%27s_secret_sharing>`__
+which splits the file's encryption key up into multiple parts,
 requiring more than one identity to access the file.
 
 A key group supports the following keys:
@@ -1857,7 +1857,7 @@ A key group supports the following keys:
         Role: web-server
       aws_profile: foo
 
-* ``gcp_kms`` (list of objects): list of GCP KMS ResourceIDs.
+* ``gcp_kms`` (list of objects): list of GCP KMS resource IDs.
   Every object must have the following key:
 
   * ``resource_id`` (string): the resource ID.
@@ -1897,7 +1897,7 @@ A key group supports the following keys:
 
 * ``merge``: a list of key group objects.
   These will be merged (by concatenating the keys of the same type) into this key group.
-  This key is only there to allow concatenation of key groups using YAML anchors, aliases, and overrides.
+  This property allows for the concatenation of key groups using YAML anchors, aliases, and overrides.
 
 Settings
 ********
@@ -1905,13 +1905,13 @@ Settings
 The following keys configure encryption settings:
 
 * ``shamir_threshold`` (integer, default ``0``): Must be ``0`` (disabled) or an integer greater or equal to 2.
-  Determines the number of key groups from whose one key must be present each to decrypt the file's key.
+  Determines the number of key groups that must be present each to decrypt the file's key.
 
 * ``mac_only_encrypted`` (boolean, default ``false``): If set to ``true``, only encrypted strings will count towards the file's MAC.
-  If set to ``false``, also unencrypted values will be part of the MAC computation.
+  If set to ``false``, unencrypted values will also be part of the MAC computation.
 
-The following keys configure which values in a file are encrypted.
-Note that at most one of these keys can be used.
+The following keys configure the specific values in a file that should be encrypted.
+Note that at most, one of these keys can be used.
 
 * ``unencrypted_suffix`` (string): A value is encrypted if its key **does not** end with this suffix.
   All other values are **encrypted**.
