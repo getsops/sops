@@ -60,80 +60,10 @@ func (awspsd *AWSParameterStoreDestination) Path(fileName string) string {
 	return fileName
 }
 
-// Upload uploads raw file contents to AWS Parameter Store
-// This stores the entire file content as a parameter value
-// Note: The publish command now uses UploadUnencrypted for decrypted JSON storage
+// Upload uploads encrypted file contents to AWS Parameter Store
+// This is not the typical use case for Parameter Store, but follows SOPS pattern
 func (awspsd *AWSParameterStoreDestination) Upload(fileContents []byte, fileName string) error {
-	ctx := context.TODO()
-
-	// Load AWS config
-	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion(awspsd.region))
-	if err != nil {
-		return fmt.Errorf("unable to load AWS SDK config: %w", err)
-	}
-
-	client := ssm.NewFromConfig(cfg)
-	parameterName := awspsd.Path(fileName)
-
-	// Check if parameter already exists and compare content
-	getParamOutput, err := client.GetParameter(ctx, &ssm.GetParameterInput{
-		Name:           aws.String(parameterName),
-		WithDecryption: aws.Bool(true), // Decrypt for comparison if it's a SecureString
-	})
-
-	parameterExists := true
-	if err != nil {
-		var apiErr smithy.APIError
-		if errors.As(err, &apiErr) && apiErr.ErrorCode() == "ParameterNotFound" {
-			parameterExists = false
-			parameterLog.Infof("Parameter %s does not exist, will create new parameter", parameterName)
-		} else {
-			parameterLog.Warnf("Cannot check if destination parameter already exists in %s. New version will be created even if the data has not been changed.", parameterName)
-		}
-	}
-
-	// If parameter exists, check if content is identical
-	currentValue := string(fileContents)
-	if parameterExists && getParamOutput.Parameter.Value != nil {
-		if *getParamOutput.Parameter.Value == currentValue {
-			parameterLog.Infof("Parameter %s is already up-to-date.", parameterName)
-			return nil
-		}
-	}
-
-	// Determine parameter type
-	var paramType types.ParameterType
-	switch strings.ToLower(awspsd.parameterType) {
-	case "string":
-		paramType = types.ParameterTypeString
-	case "stringlist":
-		paramType = types.ParameterTypeStringList
-	case "securestring":
-		paramType = types.ParameterTypeSecureString
-	default:
-		paramType = types.ParameterTypeSecureString 
-	}
-
-	// Put parameter (creates or updates)
-	_, err = client.PutParameter(ctx, &ssm.PutParameterInput{
-		Name:        aws.String(parameterName),
-		Value:       aws.String(currentValue),
-		Type:        paramType,
-		Overwrite:   aws.Bool(true),
-		Description: aws.String("Parameter created/updated by SOPS publish command"),
-	})
-
-	if err != nil {
-		return fmt.Errorf("failed to put parameter %s: %w", parameterName, err)
-	}
-
-	if parameterExists {
-		parameterLog.Infof("Successfully updated parameter %s", parameterName)
-	} else {
-		parameterLog.Infof("Successfully created parameter %s", parameterName)
-	}
-
-	return nil
+	return &NotImplementedError{"AWS Parameter Store does not support uploading encrypted sops files directly. Use UploadUnencrypted instead."}
 }
 
 // UploadUnencrypted uploads unencrypted data to AWS Parameter Store as JSON

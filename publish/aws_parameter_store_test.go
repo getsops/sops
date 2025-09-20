@@ -43,3 +43,12 @@ func TestAWSParameterStoreDestination_Path(t *testing.T) {
 	path = dest.Path("/already-prefixed.yaml")
 	assert.Equal(t, "/already-prefixed.yaml", path)
 }
+
+func TestAWSParameterStoreDestination_Upload(t *testing.T) {
+	dest := NewAWSParameterStoreDestination("us-east-1", "/test-parameter", "SecureString")
+	err := dest.Upload([]byte("test content"), "test.yaml")
+
+	assert.NotNil(t, err)
+	assert.IsType(t, &NotImplementedError{}, err)
+	assert.Contains(t, err.Error(), "AWS Parameter Store does not support uploading encrypted sops files directly")
+}
