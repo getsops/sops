@@ -211,11 +211,10 @@ func TestAWSParameterStoreDestination_EncryptedFile_Integration(t *testing.T) {
 		t.Skip("Skipping integration test: SOPS_TEST_AWS_PARAMETER_NAME not set")
 	}
 
-	ctx := context.Background()
 	dest := NewAWSParameterStoreDestination(testAWSRegion, testParameterName+"-file", testParameterType)
 
-	// Test encrypted file content (testing Upload method directly)
-	// Note: The publish command now uses UploadUnencrypted for decrypted JSON
+	// Test that Upload method returns NotImplementedError (consistent with Vault/Secrets Manager)
+	// The publish command uses UploadUnencrypted for Parameter Store, not Upload
 	encryptedContent := []byte(`# SOPS encrypted file
 database:
     host: ENC[AES256_GCM,data:xyz123,type:str]
@@ -225,20 +224,9 @@ sops:
     - arn: arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
     version: 3.8.1`)
 
-	// Upload encrypted file content
+	// Upload should return NotImplementedError
 	err := dest.Upload(encryptedContent, "encrypted-test")
-	require.NoError(t, err, "Failed to upload encrypted file to Parameter Store")
-
-	// Verify the file was stored as-is
-	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion(testAWSRegion))
-	require.NoError(t, err, "Failed to load AWS config")
-
-	client := ssm.NewFromConfig(cfg)
-	result, err := client.GetParameter(ctx, &ssm.GetParameterInput{
-		Name:           aws.String(testParameterName + "-file"),
-		WithDecryption: aws.Bool(true),
-	})
-	require.NoError(t, err, "Failed to retrieve parameter from Parameter Store")
-
-	assert.Equal(t, string(encryptedContent), *result.Parameter.Value, "Stored file content doesn't match original")
+	require.NotNil(t, err, "Upload should return an error")
+	assert.IsType(t, &NotImplementedError{}, err, "Should return NotImplementedError")
+	assert.Contains(t, err.Error(), "AWS Parameter Store does not support uploading encrypted sops files directly")
 }
