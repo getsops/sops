@@ -138,7 +138,6 @@ func Run(opts Opts) error {
 			}
 		}
 	case *publish.VaultDestination, *publish.AWSSecretsManagerDestination, *publish.AWSParameterStoreDestination:
-		// Decrypt for JSON-based storage
 		_, err = common.DecryptTree(common.DecryptTreeOpts{
 			Cipher:          opts.Cipher,
 			IgnoreMac:       false,
