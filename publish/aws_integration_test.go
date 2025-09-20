@@ -213,8 +213,6 @@ func TestAWSParameterStoreDestination_EncryptedFile_Integration(t *testing.T) {
 
 	dest := NewAWSParameterStoreDestination(testAWSRegion, testParameterName+"-file", testParameterType)
 
-	// Test that Upload method returns NotImplementedError (consistent with Vault/Secrets Manager)
-	// The publish command uses UploadUnencrypted for Parameter Store, not Upload
 	encryptedContent := []byte(`# SOPS encrypted file
 database:
     host: ENC[AES256_GCM,data:xyz123,type:str]
