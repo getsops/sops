@@ -39,8 +39,7 @@ func (awssmsd *AWSSecretsManagerDestination) Path(fileName string) string {
 	return fmt.Sprintf("arn:aws:secretsmanager:%s:*:secret:%s", awssmsd.region, fileName)
 }
 
-// Upload uploads encrypted file contents to AWS Secrets Manager
-// This is not the typical use case for Secrets Manager, but follows SOPS pattern
+// Returns NotImplementedError
 func (awssmsd *AWSSecretsManagerDestination) Upload(fileContents []byte, fileName string) error {
 	return &NotImplementedError{"AWS Secrets Manager does not support uploading encrypted sops files directly. Use UploadUnencrypted instead."}
 }

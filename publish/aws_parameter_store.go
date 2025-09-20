@@ -60,8 +60,7 @@ func (awspsd *AWSParameterStoreDestination) Path(fileName string) string {
 	return fileName
 }
 
-// Upload uploads encrypted file contents to AWS Parameter Store
-// This is not the typical use case for Parameter Store, but follows SOPS pattern
+// Returns NotImplementedError
 func (awspsd *AWSParameterStoreDestination) Upload(fileContents []byte, fileName string) error {
 	return &NotImplementedError{"AWS Parameter Store does not support uploading encrypted sops files directly. Use UploadUnencrypted instead."}
 }
