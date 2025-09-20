@@ -172,7 +172,7 @@ func TestAWSParameterStoreDestination_Integration(t *testing.T) {
 		},
 	}
 
-	// Upload test data
+	// Upload test data (this is the method used by the publish command)
 	err := dest.UploadUnencrypted(testData, "test-config")
 	require.NoError(t, err, "Failed to upload parameter to Parameter Store")
 
@@ -214,7 +214,8 @@ func TestAWSParameterStoreDestination_EncryptedFile_Integration(t *testing.T) {
 	ctx := context.Background()
 	dest := NewAWSParameterStoreDestination(testAWSRegion, testParameterName+"-file", testParameterType)
 
-	// Test encrypted file content (simulating what SOPS would pass)
+	// Test encrypted file content (testing Upload method directly)
+	// Note: The publish command now uses UploadUnencrypted for decrypted JSON
 	encryptedContent := []byte(`# SOPS encrypted file
 database:
     host: ENC[AES256_GCM,data:xyz123,type:str]

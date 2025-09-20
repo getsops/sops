@@ -60,8 +60,9 @@ func (awspsd *AWSParameterStoreDestination) Path(fileName string) string {
 	return fileName
 }
 
-// Upload uploads encrypted file contents to AWS Parameter Store
-// This stores the entire encrypted file as a parameter value
+// Upload uploads raw file contents to AWS Parameter Store
+// This stores the entire file content as a parameter value
+// Note: The publish command now uses UploadUnencrypted for decrypted JSON storage
 func (awspsd *AWSParameterStoreDestination) Upload(fileContents []byte, fileName string) error {
 	ctx := context.TODO()
 
@@ -110,7 +111,7 @@ func (awspsd *AWSParameterStoreDestination) Upload(fileContents []byte, fileName
 	case "securestring":
 		paramType = types.ParameterTypeSecureString
 	default:
-		paramType = types.ParameterTypeSecureString // Default to SecureString for security
+		paramType = types.ParameterTypeSecureString 
 	}
 
 	// Put parameter (creates or updates)
@@ -190,7 +191,7 @@ func (awspsd *AWSParameterStoreDestination) UploadUnencrypted(data map[string]in
 	case "securestring":
 		paramType = types.ParameterTypeSecureString
 	default:
-		paramType = types.ParameterTypeSecureString // Default to SecureString for security
+		paramType = types.ParameterTypeSecureString
 	}
 
 	// Put parameter (creates or updates)
