@@ -1211,7 +1211,6 @@ This command requires a ``.sops.yaml`` configuration file. Below is an example:
           aws_region: "us-west-2"
           path_regex: aws-secrets/*
         - aws_parameter_store_path: "/sops/"
-          aws_parameter_store_type: "SecureString" # default
           aws_region: "us-west-2"
           path_regex: aws-params/*
 
@@ -1220,8 +1219,9 @@ all files under ``gcs/*`` into the GCS bucket ``sops-secrets``, the contents of 
 ``vault/*`` into Vault's KV store under the path ``secrets/sops/``, files under ``aws-secrets/*``
 into AWS Secrets Manager as JSON secrets, and files under ``aws-params/*`` into AWS Parameter Store
 as SecureString parameters. For the files that will be published to S3 and GCS, it will decrypt them 
-and re-encrypt them using the ``F69E4901EDBAD2D1753F8C67A64535C4163FB307`` pgp key. Files published to Vault,
-AWS Secrets Manager, and AWS Parameter Store will be decrypted and stored as plaintext JSON data.
+and re-encrypt them using the ``F69E4901EDBAD2D1753F8C67A64535C4163FB307`` pgp key. Files published to Vault
+will be decrypted and stored as plaintext JSON data. Files published to AWS Secrets Manager and AWS Parameter Store 
+will be decrypted and stored as JSON data encrypted by AWS KMS.
 
 You would deploy a file to S3 with a command like: ``sops publish s3/app.yaml``
 
@@ -1319,13 +1319,14 @@ Publishing to AWS Parameter Store
 **********************************
 
 AWS Systems Manager Parameter Store provides secure, hierarchical storage for configuration data
-and secrets management. SOPS can publish decrypted data directly to Parameter Store as JSON parameters.
+and secrets management. SOPS can publish decrypted data directly to Parameter Store as JSON parameters encrypted by AWS KMS.
 
 There are a few settings for AWS Parameter Store that you can place in your destination rules:
 
 * ``aws_parameter_store_path`` - The parameter path in AWS Parameter Store. If it ends with ``/``, the filename will be appended. If not specified, the filename will be used as the parameter name with a leading ``/``.
-* ``aws_parameter_store_type`` - The parameter type. Can be ``String``, ``StringList``, or ``SecureString``. Defaults to ``SecureString``.
 * ``aws_region`` - The AWS region where the parameter should be stored. This is required.
+
+All parameters are stored as ``SecureString`` type for security, since SOPS files may contain sensitive data.
 
 SOPS uses the AWS SDK for Go v2, which automatically uses your configured AWS credentials from the AWS CLI,
 environment variables, or IAM roles.
@@ -1334,7 +1335,7 @@ If the destination parameter already exists in AWS Parameter Store and contains 
 file, it will be skipped to avoid creating unnecessary versions.
 
 Note: Recreation rules (re-encryption with different keys) are not supported for AWS Parameter Store.
-The data is decrypted from the source file and stored as JSON in the parameter.
+The data is decrypted from the source file and stored as JSON in the SecureString parameter, encrypted by AWS KMS.
 
 Below is an example of publishing to AWS Parameter Store:
 

@@ -547,7 +547,7 @@ func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptio
 		dest = publish.NewAWSSecretsManagerDestination(dRule.AWSSecretsManagerRegion, dRule.AWSSecretsManagerSecretName)
 	}
 	if dRule.AWSParameterStoreRegion != "" {
-		dest = publish.NewAWSParameterStoreDestination(dRule.AWSParameterStoreRegion, dRule.AWSParameterStorePath, dRule.AWSParameterStoreType)
+		dest = publish.NewAWSParameterStoreDestination(dRule.AWSParameterStoreRegion, dRule.AWSParameterStorePath)
 	}
 
 	config, err := configFromRule(rule, kmsEncryptionContext)

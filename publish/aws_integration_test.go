@@ -35,7 +35,6 @@ var (
 	testAWSRegion     = getEnvOrDefault("SOPS_TEST_AWS_REGION", "us-east-1")
 	testSecretName    = os.Getenv("SOPS_TEST_AWS_SECRET_NAME")    // e.g., "sops-test-secret"
 	testParameterName = os.Getenv("SOPS_TEST_AWS_PARAMETER_NAME") // e.g., "/sops-test/parameter"
-	testParameterType = getEnvOrDefault("SOPS_TEST_AWS_PARAMETER_TYPE", "SecureString")
 )
 
 func getEnvOrDefault(key, defaultValue string) string {
@@ -157,7 +156,7 @@ func TestAWSParameterStoreDestination_Integration(t *testing.T) {
 	}
 
 	ctx := context.Background()
-	dest := NewAWSParameterStoreDestination(testAWSRegion, testParameterName, testParameterType)
+	dest := NewAWSParameterStoreDestination(testAWSRegion, testParameterName)
 
 	// Test data
 	testData := map[string]interface{}{
@@ -194,12 +193,8 @@ func TestAWSParameterStoreDestination_Integration(t *testing.T) {
 
 	assert.Equal(t, testData, storedData, "Stored data doesn't match original")
 
-	// Verify parameter type
-	expectedType := testParameterType
-	if expectedType == "" {
-		expectedType = "SecureString"
-	}
-	assert.Equal(t, expectedType, string(result.Parameter.Type), "Parameter type mismatch")
+	// Verify parameter type is always SecureString
+	assert.Equal(t, "SecureString", string(result.Parameter.Type), "Parameter type should always be SecureString")
 
 	// Test no-op behavior (upload same data again)
 	err = dest.UploadUnencrypted(testData, "test-config")
@@ -211,7 +206,7 @@ func TestAWSParameterStoreDestination_EncryptedFile_Integration(t *testing.T) {
 		t.Skip("Skipping integration test: SOPS_TEST_AWS_PARAMETER_NAME not set")
 	}
 
-	dest := NewAWSParameterStoreDestination(testAWSRegion, testParameterName+"-file", testParameterType)
+	dest := NewAWSParameterStoreDestination(testAWSRegion, testParameterName+"-file")
 
 	encryptedContent := []byte(`# SOPS encrypted file
 database:

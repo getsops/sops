@@ -22,29 +22,23 @@ func init() {
 	parameterLog = logging.NewLogger("PUBLISH")
 }
 
-// AWSParameterStoreDestination is the AWS Parameter Store implementation of the Destination interface
+// AWSParameterStoreDestination is the AWS Parameter Store implementation of the Destination interface.
 type AWSParameterStoreDestination struct {
 	region        string
 	parameterPath string
-	parameterType string
 }
 
-// NewAWSParameterStoreDestination is the constructor for an AWS Parameter Store Destination
-func NewAWSParameterStoreDestination(region, parameterPath, parameterType string) *AWSParameterStoreDestination {
-	// Default to SecureString if not specified
-	if parameterType == "" {
-		parameterType = "SecureString"
-	}
-
+// NewAWSParameterStoreDestination creates a new AWS Parameter Store destination.
+func NewAWSParameterStoreDestination(region, parameterPath string) *AWSParameterStoreDestination {
 	// Ensure parameter path starts with /
 	if parameterPath != "" && !strings.HasPrefix(parameterPath, "/") {
 		parameterPath = "/" + parameterPath
 	}
 
-	return &AWSParameterStoreDestination{region, parameterPath, parameterType}
+	return &AWSParameterStoreDestination{region, parameterPath}
 }
 
-// Path returns the AWS Parameter Store path
+// Path returns the AWS Parameter Store path for the given fileName.
 func (awspsd *AWSParameterStoreDestination) Path(fileName string) string {
 	if awspsd.parameterPath != "" {
 		// If path ends with /, append filename; otherwise use path as-is
@@ -60,12 +54,12 @@ func (awspsd *AWSParameterStoreDestination) Path(fileName string) string {
 	return fileName
 }
 
-// Returns NotImplementedError
+// Upload returns NotImplementedError as AWS Parameter Store does not support uploading encrypted files directly.
 func (awspsd *AWSParameterStoreDestination) Upload(fileContents []byte, fileName string) error {
 	return &NotImplementedError{"AWS Parameter Store does not support uploading encrypted sops files directly. Use UploadUnencrypted instead."}
 }
 
-// UploadUnencrypted uploads unencrypted data to AWS Parameter Store as JSON
+// UploadUnencrypted uploads unencrypted data to AWS Parameter Store as JSON.
 func (awspsd *AWSParameterStoreDestination) UploadUnencrypted(data map[string]interface{}, fileName string) error {
 	ctx := context.TODO()
 
@@ -110,18 +104,8 @@ func (awspsd *AWSParameterStoreDestination) UploadUnencrypted(data map[string]in
 		}
 	}
 
-	// Determine parameter type
-	var paramType types.ParameterType
-	switch strings.ToLower(awspsd.parameterType) {
-	case "string":
-		paramType = types.ParameterTypeString
-	case "stringlist":
-		paramType = types.ParameterTypeStringList
-	case "securestring":
-		paramType = types.ParameterTypeSecureString
-	default:
-		paramType = types.ParameterTypeSecureString
-	}
+	// Always use SecureString for security - SOPS files may contain secrets
+	paramType := types.ParameterTypeSecureString
 
 	// Put parameter (creates or updates)
 	_, err = client.PutParameter(ctx, &ssm.PutParameterInput{
