@@ -1220,7 +1220,7 @@ all files under ``gcs/*`` into the GCS bucket ``sops-secrets``, the contents of 
 into AWS Secrets Manager as JSON secrets, and files under ``aws-params/*`` into AWS Parameter Store
 as SecureString parameters. For the files that will be published to S3 and GCS, it will decrypt them 
 and re-encrypt them using the ``F69E4901EDBAD2D1753F8C67A64535C4163FB307`` pgp key. Files published to Vault
-will be decrypted and stored as plaintext JSON data. Files published to AWS Secrets Manager and AWS Parameter Store 
+will be decrypted and stored as JSON data encrypted by Vault. Files published to AWS Secrets Manager and AWS Parameter Store 
 will be decrypted and stored as JSON data encrypted by AWS KMS.
 
 You would deploy a file to S3 with a command like: ``sops publish s3/app.yaml``
