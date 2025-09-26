@@ -12,6 +12,7 @@ import (
 	kms "cloud.google.com/go/kms/apiv1"
 	"cloud.google.com/go/kms/apiv1/kmspb"
 	"github.com/sirupsen/logrus"
+	"golang.org/x/oauth2"
 	"google.golang.org/api/option"
 	"google.golang.org/grpc"
 
@@ -23,6 +24,9 @@ const (
 	// a path to a credentials file, or directly as the variable's value in JSON
 	// format.
 	SopsGoogleCredentialsEnv = "GOOGLE_CREDENTIALS"
+	// SopsGoogleCredentialsOAuthTokenEnv is the environment variable used for the
+	// GCP OAuth 2.0 Token.
+	SopsGoogleCredentialsOAuthTokenEnv = "GOOGLE_OAUTH_ACCESS_TOKEN"
 	// KeyTypeIdentifier is the string used to identify a GCP KMS MasterKey.
 	KeyTypeIdentifier = "gcp_kms"
 )
@@ -50,6 +54,11 @@ type MasterKey struct {
 	// for NeedsRotation.
 	CreationDate time.Time
 
+	// tokenSource contains the oauth2.TokenSource used by the GCP client.
+	// It can be injected by a (local) keyservice.KeyServiceServer using
+	// TokenSource.ApplyToMasterKey.
+	// If nil, the remaining authentication methods are attempted.
+	tokenSource oauth2.TokenSource
 	// credentialJSON is the Service Account credentials JSON used for
 	// authenticating towards the GCP KMS service.
 	credentialJSON []byte
@@ -57,6 +66,8 @@ type MasterKey struct {
 	// Mostly useful for testing at present, to wire the client to a mock
 	// server.
 	grpcConn *grpc.ClientConn
+	// grpcDialOpts are the gRPC dial options used to create the gRPC connection.
+	grpcDialOpts []grpc.DialOption
 }
 
 // NewMasterKeyFromResourceID creates a new MasterKey with the provided resource
@@ -82,6 +93,22 @@ func MasterKeysFromResourceIDString(resourceID string) []*MasterKey {
 	return keys
 }
 
+// TokenSource is an oauth2.TokenSource used for authenticating towards the
+// GCP KMS service.
+type TokenSource struct {
+	source oauth2.TokenSource
+}
+
+// NewTokenSource creates a new TokenSource from the provided oauth2.TokenSource.
+func NewTokenSource(source oauth2.TokenSource) TokenSource {
+	return TokenSource{source: source}
+}
+
+// ApplyToMasterKey configures the TokenSource on the provided key.
+func (t TokenSource) ApplyToMasterKey(key *MasterKey) {
+	key.tokenSource = t.source
+}
+
 // CredentialJSON is the Service Account credentials JSON used for authenticating
 // towards the GCP KMS service.
 type CredentialJSON []byte
@@ -91,10 +118,26 @@ func (c CredentialJSON) ApplyToMasterKey(key *MasterKey) {
 	key.credentialJSON = c
 }
 
+// DialOptions are the gRPC dial options used to create the gRPC connection.
+type DialOptions []grpc.DialOption
+
+// ApplyToMasterKey configures the DialOptions on the provided key.
+func (d DialOptions) ApplyToMasterKey(key *MasterKey) {
+	key.grpcDialOpts = d
+}
+
 // Encrypt takes a SOPS data key, encrypts it with GCP KMS, and stores the
 // result in the EncryptedKey field.
+//
+// Consider using EncryptContext instead.
 func (key *MasterKey) Encrypt(dataKey []byte) error {
-	service, err := key.newKMSClient()
+	return key.EncryptContext(context.Background(), dataKey)
+}
+
+// EncryptContext takes a SOPS data key, encrypts it with GCP KMS, and stores the
+// result in the EncryptedKey field.
+func (key *MasterKey) EncryptContext(ctx context.Context, dataKey []byte) error {
+	service, err := key.newKMSClient(ctx)
 	if err != nil {
 		log.WithField("resourceID", key.ResourceID).Info("Encryption failed")
 		return fmt.Errorf("cannot create GCP KMS service: %w", err)
@@ -109,7 +152,6 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 		Name:      key.ResourceID,
 		Plaintext: dataKey,
 	}
-	ctx := context.Background()
 	resp, err := service.Encrypt(ctx, req)
 	if err != nil {
 		log.WithField("resourceID", key.ResourceID).Info("Encryption failed")
@@ -144,8 +186,16 @@ func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 
 // Decrypt decrypts the EncryptedKey field with GCP KMS and returns
 // the result.
+//
+// Consider using DecryptContext instead.
 func (key *MasterKey) Decrypt() ([]byte, error) {
-	service, err := key.newKMSClient()
+	return key.DecryptContext(context.Background())
+}
+
+// DecryptContext decrypts the EncryptedKey field with GCP KMS and returns
+// the result.
+func (key *MasterKey) DecryptContext(ctx context.Context) ([]byte, error) {
+	service, err := key.newKMSClient(ctx)
 	if err != nil {
 		log.WithField("resourceID", key.ResourceID).Info("Decryption failed")
 		return nil, fmt.Errorf("cannot create GCP KMS service: %w", err)
@@ -168,7 +218,6 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		Name:       key.ResourceID,
 		Ciphertext: decodedCipher,
 	}
-	ctx := context.Background()
 	resp, err := service.Decrypt(ctx, req)
 	if err != nil {
 		log.WithField("resourceID", key.ResourceID).Info("Decryption failed")
@@ -203,11 +252,11 @@ func (key *MasterKey) TypeToIdentifier() string {
 	return KeyTypeIdentifier
 }
 
-// newKMSClient returns a GCP KMS client configured with the credentialJSON
-// and/or grpcConn, falling back to environmental defaults.
+// newKMSClient returns a GCP KMS client configured with the tokenSource
+// or credentialJSON, and/or grpcConn, falling back to environmental defaults.
 // It returns an error if the ResourceID is invalid, or if the setup of the
 // client fails.
-func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
+func (key *MasterKey) newKMSClient(ctx context.Context) (*kms.KeyManagementClient, error) {
 	re := regexp.MustCompile(`^projects/[^/]+/locations/[^/]+/keyRings/[^/]+/cryptoKeys/[^/]+$`)
 	matches := re.FindStringSubmatch(key.ResourceID)
 	if matches == nil {
@@ -216,22 +265,35 @@ func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
 
 	var opts []option.ClientOption
 	switch {
+	case key.tokenSource != nil:
+		opts = append(opts, option.WithTokenSource(key.tokenSource))
 	case key.credentialJSON != nil:
 		opts = append(opts, option.WithCredentialsJSON(key.credentialJSON))
 	default:
 		credentials, err := getGoogleCredentials()
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("credentials: failed to obtain credentials from %q: %w", SopsGoogleCredentialsEnv, err)
 		}
 		if credentials != nil {
 			opts = append(opts, option.WithCredentialsJSON(credentials))
+			break
+		}
+
+		if atCredentials := getGoogleOAuthTokenFromEnv(); atCredentials != nil {
+			opts = append(opts, option.WithTokenSource(atCredentials))
+			break
 		}
 	}
-	if key.grpcConn != nil {
+
+	switch {
+	case key.grpcConn != nil:
 		opts = append(opts, option.WithGRPCConn(key.grpcConn))
+	case len(key.grpcDialOpts) > 0:
+		for _, opt := range key.grpcDialOpts {
+			opts = append(opts, option.WithGRPCDialOption(opt))
+		}
 	}
 
-	ctx := context.Background()
 	client, err := kms.NewKeyManagementClient(ctx, opts...)
 	if err != nil {
 		return nil, err
@@ -242,8 +304,8 @@ func (key *MasterKey) newKMSClient() (*kms.KeyManagementClient, error) {
 
 // getGoogleCredentials returns the SopsGoogleCredentialsEnv variable, as
 // either the file contents of the path of a credentials file, or as value in
-// JSON format. It returns an error if the file cannot be read, and may return
-// a nil byte slice if no value is set.
+// JSON format.
+// It returns an error and a nil byte slice if the file cannot be read.
 func getGoogleCredentials() ([]byte, error) {
 	if defaultCredentials, ok := os.LookupEnv(SopsGoogleCredentialsEnv); ok && len(defaultCredentials) > 0 {
 		if _, err := os.Stat(defaultCredentials); err == nil {
@@ -252,4 +314,17 @@ func getGoogleCredentials() ([]byte, error) {
 		return []byte(defaultCredentials), nil
 	}
 	return nil, nil
+}
+
+// getGoogleOAuthTokenFromEnv returns the SopsGoogleCredentialsOauthTokenEnv variable,
+// as the OAauth 2.0 token.
+// It returns an error and a nil byte slice if the envrionment variable is not set.
+func getGoogleOAuthTokenFromEnv() oauth2.TokenSource {
+	if token, ok := os.LookupEnv(SopsGoogleCredentialsOAuthTokenEnv); ok && len(token) > 0 {
+		tokenSource := oauth2.StaticTokenSource(
+			&oauth2.Token{AccessToken: token},
+		)
+		return tokenSource
+	}
+	return nil
 }

@@ -537,29 +537,29 @@ func TestLoadConfigFileWithMerge(t *testing.T) {
 		"hc_vault: https://foo.vault:8200/v1/foo/keys/foo-key",
 	}, ids(conf.KeyGroups[0]))
 	assert.Equal(t, []string{
-		"pgp: foo", // key01
-		"kms: foo||foo", //key02
+		"pgp: foo",                 // key01
+		"kms: foo||foo",            //key02
 		"kms: foo+123|baz:bam|bar", //key03
-		"gcp_kms: foo", //key04
+		"gcp_kms: foo",             //key04
 		"azure_kv: https://foo.vault.azure.net/keys/foo-key/fooversion", //key05
-		"hc_vault: https://bar.vault:8200/v1/bar/keys/bar-key", //key06
-		"pgp: bar", //key07
+		"hc_vault: https://bar.vault:8200/v1/bar/keys/bar-key",          //key06
+		"pgp: bar",      //key07
 		"kms: bar||bar", //key08
-		"gcp_kms: bar", //key09
-		"gcp_kms: baz", //key10
+		"gcp_kms: bar",  //key09
+		"gcp_kms: baz",  //key10
 		"azure_kv: https://bar.vault.azure.net/keys/bar-key/barversion", //key11
-		"hc_vault: https://baz.vault:8200/v1/baz/keys/baz-key", //key12
-		"pgp: baz", //key13
+		"hc_vault: https://baz.vault:8200/v1/baz/keys/baz-key",          //key12
+		"pgp: baz",      //key13
 		"kms: baz||baz", //key14
 		"hc_vault: https://foo.vault:8200/v1/foo/keys/foo-key", //key15
-		"pgp: qux", //key16
-		"kms: qux||qux", //key17
-		"kms: baz||bar", //key18
-		"kms: baz+123", //key19
-		"gcp_kms: qux", //key20
+		"pgp: qux",       //key16
+		"kms: qux||qux",  //key17
+		"kms: baz||bar",  //key18
+		"kms: baz+123",   //key19
+		"gcp_kms: qux",   //key20
 		"gcp_kms: fnord", //key21
 		"azure_kv: https://baz.vault.azure.net/keys/baz-key/bazversion", //key22
-		"hc_vault: https://qux.vault:8200/v1/qux/keys/qux-key", //key23
+		"hc_vault: https://qux.vault:8200/v1/qux/keys/qux-key",          //key23
 		"kms: fnord||fnord", //key24
 		"hc_vault: https://fnord.vault:8200/v1/fnord/keys/fnord-key", //key25
 	}, ids(conf.KeyGroups[1]))
@@ -717,4 +717,165 @@ func TestLoadConfigFileWithVaultDestinationRules(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, conf.Destination)
 	assert.Contains(t, conf.Destination.Path("barfoo"), "/v1/kv/barfoo/barfoo")
+}
+
+func TestCreationRuleNativeKeyLists(t *testing.T) {
+	var sampleConfigWithNativeKeyLists = []byte(`
+creation_rules:
+  - path_regex: native_list*
+    pgp:
+      - "85D77543B3D624B63CEA9E6DBC17301B491B3F21"  # name@email.com
+      - "FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4"  # server_XYZ
+    kms:
+      - "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012"
+    age:
+      - "age1ql3z7hjy54pw3hyww5ayyfg7zqgvc7w3j2elw8zmrj2kg5sfn9aqmcac8p"
+    gcp_kms:
+      - "projects/test-project/locations/global/keyRings/test-ring/cryptoKeys/test-key"
+    hc_vault_transit_uri:
+      - "https://vault.example.com:8200/v1/transit/keys/key1"
+`)
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithNativeKeyLists, t), "/conf/path", "native_list_test", nil)
+	assert.Nil(t, err)
+	if conf == nil {
+		t.Fatal("Expected configuration but got nil")
+	}
+
+	assert.True(t, len(conf.KeyGroups) == 1)
+	assert.True(t, len(conf.KeyGroups[0]) == 6)
+
+	keyTypeCounts := make(map[string]int)
+	for _, key := range conf.KeyGroups[0] {
+		keyTypeCounts[key.TypeToIdentifier()]++
+	}
+
+	assert.Equal(t, 2, keyTypeCounts["pgp"])
+	assert.Equal(t, 1, keyTypeCounts["kms"])
+	assert.Equal(t, 1, keyTypeCounts["age"])
+	assert.Equal(t, 1, keyTypeCounts["gcp_kms"])
+	assert.Equal(t, 1, keyTypeCounts["hc_vault"])
+}
+
+// Test configurations with multiple destinations should fail
+var sampleConfigWithS3GCSConflict = []byte(`
+destination_rules:
+  - path_regex: '^test/.*'
+    s3_bucket: 'my-s3-bucket'
+    s3_prefix: 'sops/'
+    gcs_bucket: 'my-gcs-bucket'
+    gcs_prefix: 'sops/'
+    recreation_rule:
+      kms: 'arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012'
+`)
+
+var sampleConfigWithS3VaultConflict = []byte(`
+destination_rules:
+  - path_regex: '^test/.*'
+    s3_bucket: 'my-s3-bucket'
+    s3_prefix: 'sops/'
+    vault_path: 'secret/sops'
+    vault_address: 'https://vault.example.com'
+    recreation_rule:
+      kms: 'arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012'
+`)
+
+var sampleConfigWithGCSVaultConflict = []byte(`
+destination_rules:
+  - path_regex: '^test/.*'
+    gcs_bucket: 'my-gcs-bucket'
+    gcs_prefix: 'sops/'
+    vault_path: 'secret/sops'
+    vault_address: 'https://vault.example.com'
+    recreation_rule:
+      kms: 'arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012'
+`)
+
+var sampleConfigWithAllThreeDestinations = []byte(`
+destination_rules:
+  - path_regex: '^test/.*'
+    s3_bucket: 'my-s3-bucket'
+    s3_prefix: 'sops/'
+    gcs_bucket: 'my-gcs-bucket'
+    gcs_prefix: 'sops/'
+    vault_path: 'secret/sops'
+    vault_address: 'https://vault.example.com'
+    recreation_rule:
+      kms: 'arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012'
+`)
+
+func TestDestinationValidationS3GCSConflict(t *testing.T) {
+	_, err := parseDestinationRuleForFile(parseConfigFile(sampleConfigWithS3GCSConflict, t), "test/secrets.yaml", nil)
+	assert.NotNil(t, err, "Expected error when both S3 and GCS destinations are specified")
+	if err != nil {
+		assert.Contains(t, err.Error(), "more than one destinations were found")
+	}
+}
+
+func TestDestinationValidationS3VaultConflict(t *testing.T) {
+	_, err := parseDestinationRuleForFile(parseConfigFile(sampleConfigWithS3VaultConflict, t), "test/secrets.yaml", nil)
+	assert.NotNil(t, err, "Expected error when both S3 and Vault destinations are specified")
+	if err != nil {
+		assert.Contains(t, err.Error(), "more than one destinations were found")
+	}
+}
+
+func TestDestinationValidationGCSVaultConflict(t *testing.T) {
+	_, err := parseDestinationRuleForFile(parseConfigFile(sampleConfigWithGCSVaultConflict, t), "test/secrets.yaml", nil)
+	assert.NotNil(t, err, "Expected error when both GCS and Vault destinations are specified")
+	if err != nil {
+		assert.Contains(t, err.Error(), "more than one destinations were found")
+	}
+}
+
+func TestDestinationValidationAllThreeDestinationsConflict(t *testing.T) {
+	_, err := parseDestinationRuleForFile(parseConfigFile(sampleConfigWithAllThreeDestinations, t), "test/secrets.yaml", nil)
+	assert.NotNil(t, err, "Expected error when all three destinations are specified")
+	if err != nil {
+		assert.Contains(t, err.Error(), "more than one destinations were found")
+	}
+}
+
+func TestDestinationValidationSingleS3Destination(t *testing.T) {
+	validS3Config := []byte(`
+destination_rules:
+  - path_regex: '^test/.*'
+    s3_bucket: 'my-s3-bucket'
+    s3_prefix: 'sops/'
+    recreation_rule:
+      kms: 'arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012'
+`)
+	conf, err := parseDestinationRuleForFile(parseConfigFile(validS3Config, t), "test/secrets.yaml", nil)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf.Destination)
+	assert.Contains(t, conf.Destination.Path("secrets.yaml"), "s3://my-s3-bucket/sops/secrets.yaml")
+}
+
+func TestDestinationValidationSingleGCSDestination(t *testing.T) {
+	validGCSConfig := []byte(`
+destination_rules:
+  - path_regex: '^test/.*'
+    gcs_bucket: 'my-gcs-bucket'
+    gcs_prefix: 'sops/'
+    recreation_rule:
+      kms: 'arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012'
+`)
+	conf, err := parseDestinationRuleForFile(parseConfigFile(validGCSConfig, t), "test/secrets.yaml", nil)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf.Destination)
+	assert.Contains(t, conf.Destination.Path("secrets.yaml"), "gcs://my-gcs-bucket/sops/secrets.yaml")
+}
+
+func TestDestinationValidationSingleVaultDestination(t *testing.T) {
+	validVaultConfig := []byte(`
+destination_rules:
+  - path_regex: '^test/.*'
+    vault_path: 'secret/sops'
+    vault_address: 'https://vault.example.com'
+    recreation_rule:
+      kms: 'arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012'
+`)
+	conf, err := parseDestinationRuleForFile(parseConfigFile(validVaultConfig, t), "test/secrets.yaml", nil)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf.Destination)
+	assert.Contains(t, conf.Destination.Path("secrets.yaml"), "https://vault.example.com/v1/secret/data/secret/sops/secrets.yaml")
 }

@@ -7,13 +7,13 @@ app2:
     key: ENC[AES256_GCM,data:xRjmLiX4BCoSUElToUs5twDq1WNWQNvNMi8yitXly43iGQiwltIs0FsY5u+7fzLepS66oLTGdL0NfWwCGxksYYzUKz5OXRLEatacZP40D71861zu+njmGdXepY0q0q5VOG7ObgIAMMMElVKRIFdjpVgmgUa+/h6R77mEbDztk6lqb28r15XyR6GmdubierTE7aialFzNoC+XO/yk7bnMi0XA/aomj1H5RdZ37LBR2k+rhqXmhkPdGTdJ39t4Ou1Q2Oc4RHRGvgs/EeFqQHcq0AilqXsFIv/PE0bQP564LaOcXK33B+PnoV1D+lXZ7mLOjKlq04c+UojwXjpZeXBr6Ip4H3dAGkPAoQKMtyGwHYzuLCNesxwPv2tPqbxkbVev0AKezGhnPjvCNvRN3S1Y0LPf1atfwzOCBQBhdUTpmXtxCdTNG0cUUZjeIKAyJXDWJooYHlstzDti/dSGMEedOnKq6648Yp7tLNDjAg5CGbDEWjTWehtqgvixUoRdYc2/r/ie3t09XB9h70BzLFDnbNdTNHhg0/aivHeDf8LJ2Co8YvIjLTwlm7GV0mSwzJIoY/2YxXFtw+XFqt+BCt1G8wq3R6OdXZK/+6fUKH/D4EVym5nrGkZIuOCiTB+wpzy09QmZ80Fo+ba0x/1g9ZTMKHk=,iv:ZtzvrO7QSHEOCnKCrIYcaesKnyScV8KaHZr22tUMLlU=,tag:2A3nJBIPF2Q3FlwMYLvG2w==,type:str]
 number: ENC[AES256_GCM,data:DX0qiTOWhQvG/w==,iv:ouWsby8JoFwCRj/mLVCnNcYhP2sdyf4h6nwZuGksE7Q=,tag:lPU6AId2JrlquHnYRw+E8Q==,type:float]
 an_array:
-- ENC[AES256_GCM,data:vyczE8EQr9qHkaM=,iv:sT5jKk3LZ61Zq/neTli5tcnDFxCxY5RuGr2k5oGQWJQ=,tag:1HgaHWfyh6EJLkI1V2kOrw==,type:str]
-- ENC[AES256_GCM,data:XtBinnYXR7bx1GY=,iv:KvT9smKVmgMNrab+RzfuWscyvJav2r8j1P08ucNmhgQ=,tag:IllAEvIPPeKOfqi1XbmT8w==,type:str]
-- ENC[AES256_GCM,data:gpZ7nwWTGaI+Ti+lk+CPQOoM0ypwK7UMMBUiZAniQHDNJelipqc8hyhNeV+tpJLNaRt74OHs04EX8g==,iv:mKcwVelqLvwVDPjR8NeyMZ7AhsjRgmnYmyEuwPNPrQ8=,tag:vrkoccUfJs105yLCmXYYCw==,type:str]
-- ENC[AES256_GCM,data:L9jPh+7+XsdqEpUnFcD4nA==,iv:xyfKjOXVrBDCIQG5786pSu5yvHdl/PK8eVxkIUWoCIw=,tag:Q0wlTV2e2vZeU6eTF5Oacg==,type:str]
+    - ENC[AES256_GCM,data:vyczE8EQr9qHkaM=,iv:sT5jKk3LZ61Zq/neTli5tcnDFxCxY5RuGr2k5oGQWJQ=,tag:1HgaHWfyh6EJLkI1V2kOrw==,type:str]
+    - ENC[AES256_GCM,data:XtBinnYXR7bx1GY=,iv:KvT9smKVmgMNrab+RzfuWscyvJav2r8j1P08ucNmhgQ=,tag:IllAEvIPPeKOfqi1XbmT8w==,type:str]
+    - ENC[AES256_GCM,data:gpZ7nwWTGaI+Ti+lk+CPQOoM0ypwK7UMMBUiZAniQHDNJelipqc8hyhNeV+tpJLNaRt74OHs04EX8g==,iv:mKcwVelqLvwVDPjR8NeyMZ7AhsjRgmnYmyEuwPNPrQ8=,tag:vrkoccUfJs105yLCmXYYCw==,type:str]
+    - ENC[AES256_GCM,data:L9jPh+7+XsdqEpUnFcD4nA==,iv:xyfKjOXVrBDCIQG5786pSu5yvHdl/PK8eVxkIUWoCIw=,tag:Q0wlTV2e2vZeU6eTF5Oacg==,type:str]
 somebooleans:
-- ENC[AES256_GCM,data:ExiXxg==,iv:K7FUwomqdA7o9lzvNoAMH/wbXs08FextTGGeJKnaatU=,tag:A9UntgvPIcappmeM3jsbdA==,type:bool]
-- ENC[AES256_GCM,data:3I0AVdM=,iv:q4YKnRIKufREPmwT4sz8plcsOD6iem/tY3NMUV0STBE=,tag:0w4OMKClWTzjKhqsJZT8JA==,type:bool]
+    - ENC[AES256_GCM,data:ExiXxg==,iv:K7FUwomqdA7o9lzvNoAMH/wbXs08FextTGGeJKnaatU=,tag:A9UntgvPIcappmeM3jsbdA==,type:bool]
+    - ENC[AES256_GCM,data:3I0AVdM=,iv:q4YKnRIKufREPmwT4sz8plcsOD6iem/tY3NMUV0STBE=,tag:0w4OMKClWTzjKhqsJZT8JA==,type:bool]
 this:
     is:
         a:
@@ -23,22 +23,19 @@ this:
                 #ENC[AES256_GCM,data:eYRaxgs3vGeS96+ZDV8GYrwbvsrMtnWHOtsT2045tD2mlfOD,iv:/RVNEWuBlxhhY8OlJPbS/81QJukXZu1EWnPUQwrcin4=,tag:DybgrXKGWxoRyIQOlc+UMA==,type:comment]
                 #ENC[AES256_GCM,data:JXKEWGBg4eeCdeQ=,iv:K5keuEjyekf7a3q7WBOKwljsHGXRdQteJcXeeKvHo28=,tag:60VtIdsy13qSKPIEWHUUNg==,type:comment]
 somelist_unencrypted:
-- all elements of this list
-- remain in clear text
-- because of the _unencrypted suffix in the key
+    - all elements of this list
+    - remain in clear text
+    - because of the _unencrypted suffix in the key
 nested_unencrypted:
     this:
         is:
             all: going to remain in clear text
 sops:
-    kms: []
-    gcp_kms: []
-    azure_kv: []
-    lastmodified: '2019-12-10T22:45:53Z'
-    mac: ENC[AES256_GCM,data:WDjMv0eWcyPQzZlr3MppeAMQavN88xv5LzI/9wOlg+WPhRoTdrvgFpWowyWvTdUC/i0ybRQRg2u/Wam0kaqzMDpl/E806Gp9hgJcSneqydDJqPiMh+HpXkXWpc70xbYg8/gc1l7eIfSG7rS1dC2t2je60OAIfC/5zAXrL9KH4Ho=,iv:h0hWhb+46upix6K7hZfNNQoiX7WCapiMTv5I/keZsm4=,tag:v7mVbTN3HWmekol5iaO8FA==,type:str]
+    lastmodified: "2025-08-06T18:55:05Z"
+    mac: ENC[AES256_GCM,data:GCWOyMJo56xAfC4he5zJUuQr+uYXpSPX61twiGf+bi6E9Mb6JNEWGz8GhnxtlXDNinTPrTrmjeep0H1B9EzhSjxkjXuvTGrIUZmO3paGqpkyszU9pm4APyPtoq6ggCo+rqIMG+EDYFN4wMKPU+Nyn2EjmrorAg1uHq2ORKN40vk=,iv:V1kH6xaXDIb8NHYNm4A5ilTInizW7gw8nWhINZh9OJs=,tag:u+JwZ5osXC6FHdytwvRwvw==,type:str]
     pgp:
-    -   created_at: '2019-12-10T22:45:53Z'
-        enc: |-
+        - created_at: "2019-12-10T22:45:53Z"
+          enc: |-
             -----BEGIN PGP MESSAGE-----
 
             wcBMAyUpShfNkFB/AQgAE0MaWAQGbTKY7Xg3fDNtzlvnVBkkQRHsLt5kUTu2nAy4
@@ -51,9 +48,9 @@ sops:
             Z5/vXKOseeBk5JWCnIHC/MtjOkuPt53nvGzi3lYvW+F0FQA=
             =RDyn
             -----END PGP MESSAGE-----
-        fp: FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4
-    -   created_at: '2019-12-10T22:45:53Z'
-        enc: |-
+          fp: FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4
+        - created_at: "2019-12-10T22:45:53Z"
+          enc: |-
             -----BEGIN PGP MESSAGE-----
 
             wYwDXFUltYFwV4MBBABpm+tFhFhv3A7A/L/p6nL3HXKKhONrgguYgXA/hhSg4/bD
@@ -64,6 +61,6 @@ sops:
             ZAA=
             =mqGc
             -----END PGP MESSAGE-----
-        fp: D7229043384BCC60326C6FB9D8720D957C3D3074
+          fp: D7229043384BCC60326C6FB9D8720D957C3D3074
     unencrypted_suffix: _unencrypted
-    version: 3.5.0
+    version: 3.10.2

@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-
-	"strconv"
 	"strings"
 
 	"github.com/getsops/sops/v3"
@@ -24,7 +22,8 @@ func NewStore(c *config.INIStoreConfig) *Store {
 }
 
 func (store Store) encodeTree(branches sops.TreeBranches) ([]byte, error) {
-	iniFile := ini.Empty()
+	iniFile := ini.Empty(ini.LoadOptions{AllowNonUniqueSections: true})
+	iniFile.DeleteSection(ini.DefaultSection)
 	for _, branch := range branches {
 		for _, item := range branch {
 			if _, ok := item.Key.(sops.Comment); ok {
@@ -55,7 +54,7 @@ func (store Store) encodeTree(branches sops.TreeBranches) ([]byte, error) {
 						lastItem.Comment = comment.Value
 					}
 				} else {
-					lastItem, err = section.NewKey(keyVal.Key.(string), store.valToString(keyVal.Value))
+					lastItem, err = section.NewKey(keyVal.Key.(string), stores.ValToString(keyVal.Value))
 					if err != nil {
 						return nil, fmt.Errorf("Error encoding key: %s", err)
 					}
@@ -77,25 +76,12 @@ func (store Store) stripCommentChar(comment string) string {
 	return comment
 }
 
-func (store Store) valToString(v interface{}) string {
-	switch v := v.(type) {
-	case fmt.Stringer:
-		return v.String()
-	case float64:
-		return strconv.FormatFloat(v, 'f', 6, 64)
-	case bool:
-		return strconv.FormatBool(v)
-	default:
-		return fmt.Sprintf("%s", v)
-	}
-}
-
 func (store Store) iniFromTreeBranches(branches sops.TreeBranches) ([]byte, error) {
 	return store.encodeTree(branches)
 }
 
 func (store Store) treeBranchesFromIni(in []byte) (sops.TreeBranches, error) {
-	iniFile, err := ini.Load(in)
+	iniFile, err := ini.LoadSources(ini.LoadOptions{AllowNonUniqueSections: true}, in)
 	if err != nil {
 		return nil, err
 	}
@@ -143,7 +129,7 @@ func (store Store) treeItemFromSection(section *ini.Section) (sops.TreeItem, err
 
 // LoadEncryptedFile loads encrypted INI file's bytes onto a sops.Tree runtime object
 func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
-	iniFileOuter, err := ini.Load(in)
+	iniFileOuter, err := ini.LoadSources(ini.LoadOptions{AllowNonUniqueSections: true}, in)
 	if err != nil {
 		return sops.Tree{}, err
 	}

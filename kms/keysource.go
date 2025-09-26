@@ -9,6 +9,7 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	"net/http"
 	"os"
 	"regexp"
 	"sort"
@@ -79,6 +80,8 @@ type MasterKey struct {
 	// injected using e.g. an environment variable. The field is not publicly
 	// exposed, nor configurable.
 	baseEndpoint string
+	// httpClient is used to override the default HTTP client used by the AWS client.
+	httpClient *http.Client
 }
 
 // NewMasterKey creates a new MasterKey from an ARN, role and context, setting
@@ -233,10 +236,34 @@ func (c CredentialsProvider) ApplyToMasterKey(key *MasterKey) {
 	key.credentialsProvider = c.provider
 }
 
+// HTTPClient is a wrapper around http.Client used for configuring the
+// AWS KMS client.
+type HTTPClient struct {
+	hc *http.Client
+}
+
+// NewHTTPClient creates a new HTTPClient with the provided http.Client.
+func NewHTTPClient(hc *http.Client) *HTTPClient {
+	return &HTTPClient{hc: hc}
+}
+
+// ApplyToMasterKey configures the HTTP client on the provided key.
+func (h HTTPClient) ApplyToMasterKey(key *MasterKey) {
+	key.httpClient = h.hc
+}
+
 // Encrypt takes a SOPS data key, encrypts it with KMS and stores the result
 // in the EncryptedKey field.
+//
+// Consider using EncryptContext instead.
 func (key *MasterKey) Encrypt(dataKey []byte) error {
-	cfg, err := key.createKMSConfig()
+	return key.EncryptContext(context.Background(), dataKey)
+}
+
+// EncryptContext takes a SOPS data key, encrypts it with KMS and stores the result
+// in the EncryptedKey field.
+func (key *MasterKey) EncryptContext(ctx context.Context, dataKey []byte) error {
+	cfg, err := key.createKMSConfig(ctx)
 	if err != nil {
 		log.WithField("arn", key.Arn).Info("Encryption failed")
 		return err
@@ -247,7 +274,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 		Plaintext:         dataKey,
 		EncryptionContext: stringPointerToStringMap(key.EncryptionContext),
 	}
-	out, err := client.Encrypt(context.TODO(), input)
+	out, err := client.Encrypt(ctx, input)
 	if err != nil {
 		log.WithField("arn", key.Arn).Info("Encryption failed")
 		return fmt.Errorf("failed to encrypt sops data key with AWS KMS: %w", err)
@@ -278,13 +305,21 @@ func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 
 // Decrypt decrypts the EncryptedKey with a newly created AWS KMS config, and
 // returns the result.
+//
+// Consider using DecryptContext instead.
 func (key *MasterKey) Decrypt() ([]byte, error) {
+	return key.DecryptContext(context.Background())
+}
+
+// DecryptContext decrypts the EncryptedKey with a newly created AWS KMS config, and
+// returns the result.
+func (key *MasterKey) DecryptContext(ctx context.Context) ([]byte, error) {
 	k, err := base64.StdEncoding.DecodeString(key.EncryptedKey)
 	if err != nil {
 		log.WithField("arn", key.Arn).Info("Decryption failed")
 		return nil, fmt.Errorf("error base64-decoding encrypted data key: %s", err)
 	}
-	cfg, err := key.createKMSConfig()
+	cfg, err := key.createKMSConfig(ctx)
 	if err != nil {
 		log.WithField("arn", key.Arn).Info("Decryption failed")
 		return nil, err
@@ -295,7 +330,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		CiphertextBlob:    k,
 		EncryptionContext: stringPointerToStringMap(key.EncryptionContext),
 	}
-	decrypted, err := client.Decrypt(context.TODO(), input)
+	decrypted, err := client.Decrypt(ctx, input)
 	if err != nil {
 		log.WithField("arn", key.Arn).Info("Decryption failed")
 		return nil, fmt.Errorf("failed to decrypt sops data key with AWS KMS: %w", err)
@@ -351,7 +386,7 @@ func (key *MasterKey) TypeToIdentifier() string {
 
 // createKMSConfig returns an AWS config with the credentialsProvider of the
 // MasterKey, or the default configuration sources.
-func (key MasterKey) createKMSConfig() (*aws.Config, error) {
+func (key MasterKey) createKMSConfig(ctx context.Context) (*aws.Config, error) {
 	re := regexp.MustCompile(arnRegex)
 	matches := re.FindStringSubmatch(key.Arn)
 	if matches == nil {
@@ -359,7 +394,7 @@ func (key MasterKey) createKMSConfig() (*aws.Config, error) {
 	}
 	region := matches[1]
 
-	cfg, err := config.LoadDefaultConfig(context.TODO(), func(lo *config.LoadOptions) error {
+	cfg, err := config.LoadDefaultConfig(ctx, func(lo *config.LoadOptions) error {
 		// Use the credentialsProvider if present, otherwise default to reading credentials
 		// from the environment.
 		if key.credentialsProvider != nil {
@@ -369,6 +404,9 @@ func (key MasterKey) createKMSConfig() (*aws.Config, error) {
 			lo.SharedConfigProfile = key.AwsProfile
 		}
 		lo.Region = region
+		if key.httpClient != nil {
+			lo.HTTPClient = key.httpClient
+		}
 		return nil
 	})
 	if err != nil {
@@ -376,7 +414,7 @@ func (key MasterKey) createKMSConfig() (*aws.Config, error) {
 	}
 
 	if key.Role != "" {
-		return key.createSTSConfig(&cfg)
+		return key.createSTSConfig(ctx, &cfg)
 	}
 	return &cfg, nil
 }
@@ -393,7 +431,7 @@ func (key MasterKey) createClient(config *aws.Config) *kms.Client {
 // createSTSConfig uses AWS STS to assume a role and returns a config
 // configured with that role's credentials. It returns an error if
 // it fails to construct a session name, or assume the role.
-func (key MasterKey) createSTSConfig(config *aws.Config) (*aws.Config, error) {
+func (key MasterKey) createSTSConfig(ctx context.Context, config *aws.Config) (*aws.Config, error) {
 	name, err := stsSessionName()
 	if err != nil {
 		return nil, err
@@ -404,7 +442,7 @@ func (key MasterKey) createSTSConfig(config *aws.Config) (*aws.Config, error) {
 	}
 
 	client := sts.NewFromConfig(*config)
-	out, err := client.AssumeRole(context.TODO(), input)
+	out, err := client.AssumeRole(ctx, input)
 	if err != nil {
 		return nil, fmt.Errorf("failed to assume role '%s': %w", key.Role, err)
 	}

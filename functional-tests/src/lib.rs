@@ -14,9 +14,9 @@ mod tests {
     use serde_yaml::Value;
     use std::env;
     use std::fs::File;
-    use std::io::{Read, Write};
+    use std::io::{BufWriter, Read, Write};
     use std::path::Path;
-    use std::process::Command;
+    use std::process::{Child, Command, Stdio};
     use tempfile::Builder;
     use tempfile::TempDir;
     const SOPS_BINARY_PATH: &'static str = "./sops";
@@ -65,6 +65,47 @@ mod tests {
             .arg(file_path.clone())
             .output()
             .expect("Error running sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
+        let json = &String::from_utf8_lossy(&output.stdout);
+        let data: Value = serde_json::from_str(json).expect("Error parsing sops's JSON output");
+        match data.into() {
+            Value::Mapping(m) => {
+                assert!(
+                    m.get(&Value::String("sops".to_owned())).is_some(),
+                    "sops metadata branch not found"
+                );
+                assert_encrypted!(&m, Value::String("foo".to_owned()));
+                assert_encrypted!(&m, Value::String("bar".to_owned()));
+            }
+            _ => panic!("sops's JSON output is not an object"),
+        }
+    }
+
+    fn write_to_stdin(process: &Child, content: &[u8]) {
+        let mut outstdin = process.stdin.as_ref().unwrap();
+        let mut writer = BufWriter::new(&mut outstdin);
+        writer.write_all(content).expect("Cannot write to stdin");
+    }
+
+    #[test]
+    fn encrypt_from_stdin() {
+        let process = Command::new(SOPS_BINARY_PATH)
+            .arg("encrypt")
+            .arg("--filename-override")
+            .arg("test_encrypt.yaml")
+            .arg("--output-type")
+            .arg("json")
+            .stdin(Stdio::piped())
+            .stdout(Stdio::piped())
+            .spawn()
+            .expect("Error running sops");
+        write_to_stdin(
+            &process,
+            b"foo: 2
+bar: baz
+",
+        );
+        let output = process.wait_with_output().expect("Failed to wait on sops");
         assert!(output.status.success(), "sops didn't exit successfully");
         let json = &String::from_utf8_lossy(&output.stdout);
         let data: Value = serde_json::from_str(json).expect("Error parsing sops's JSON output");
@@ -225,6 +266,57 @@ mod tests {
     }
 
     #[test]
+    fn test_ini_values_as_strings() {
+        let file_path = prepare_temp_file(
+            "test_ini_values_as_strings.yaml",
+            b"the_section:
+  int: 123
+  float: 1.23
+  bool: true
+  date: 2025-01-02
+  timestamp: 2025-01-02 03:04:05
+  utc_timestamp: 2025-01-02T03:04:05Z
+  string: this is a string",
+        );
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("encrypt")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("decrypt")
+            .arg("--output-type")
+            .arg("ini")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(output.status.success(), "sops didn't exit successfully");
+        let data = &String::from_utf8_lossy(&output.stdout);
+        assert!(
+            data == "[the_section]
+int           = 123
+float         = 1.23
+bool          = true
+date          = 2025-01-02T00:00:00Z
+timestamp     = 2025-01-02T03:04:05Z
+utc_timestamp = 2025-01-02T03:04:05Z
+string        = this is a string
+"
+        );
+    }
+
+    #[test]
     fn encrypt_yaml_file() {
         let file_path = prepare_temp_file(
             "test_encrypt.yaml",
@@ -297,6 +389,115 @@ bar: baz",
     }
 
     #[test]
+    fn set_json_file_update_idempotent_write() {
+        let file_path = prepare_temp_file(
+            "test_set_update_idempotent_write.json",
+            r#"{"a": 2, "b": "ba"}"#.as_bytes(),
+        );
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("encrypt")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
+        let mut before = String::new();
+        File::open(file_path.clone())
+            .unwrap()
+            .read_to_string(&mut before)
+            .unwrap();
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("set")
+            .arg("--output-type")
+            .arg("yaml")
+            .arg(file_path.clone())
+            .arg(r#"["b"]"#)
+            .arg(r#""ba""#)
+            .output()
+            .expect("Error running sops");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(output.status.success(), "sops didn't exit successfully");
+        let mut after = String::new();
+        File::open(file_path.clone())
+            .unwrap()
+            .read_to_string(&mut after)
+            .unwrap();
+        assert!(before != after);
+        assert!(after.starts_with("a: "));
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("decrypt")
+            .arg("--input-type")
+            .arg("yaml")
+            .arg("--output-type")
+            .arg("yaml")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        let data = &String::from_utf8_lossy(&output.stdout);
+        assert!(data == "a: 2\nb: ba\n");
+    }
+
+    #[test]
+    fn set_json_file_update_idempotent_nowrite() {
+        let file_path = prepare_temp_file(
+            "test_set_update_idempotent_nowrite.json",
+            r#"{"a": 2, "b": "ba"}"#.as_bytes(),
+        );
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("encrypt")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
+        let mut before = String::new();
+        File::open(file_path.clone())
+            .unwrap()
+            .read_to_string(&mut before)
+            .unwrap();
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("set")
+            .arg("--output-type")
+            .arg("yaml")
+            .arg("--idempotent")
+            .arg(file_path.clone())
+            .arg(r#"["b"]"#)
+            .arg(r#""ba""#)
+            .output()
+            .expect("Error running sops");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(output.status.success(), "sops didn't exit successfully");
+        let mut after = String::new();
+        File::open(file_path.clone())
+            .unwrap()
+            .read_to_string(&mut after)
+            .unwrap();
+        println!("before: {}\nafter: {}", &before, &after,);
+        assert!(before == after);
+    }
+
+    #[test]
     fn set_json_file_insert() {
         let file_path =
             prepare_temp_file("test_set_insert.json", r#"{"a": 2, "b": "ba"}"#.as_bytes());
@@ -318,6 +519,105 @@ bar: baz",
             .arg(r#"{"cc": "ccc"}"#)
             .output()
             .expect("Error running sops");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(output.status.success(), "sops didn't exit successfully");
+        let mut s = String::new();
+        File::open(file_path)
+            .unwrap()
+            .read_to_string(&mut s)
+            .unwrap();
+        let data: Value = serde_json::from_str(&s).expect("Error parsing sops's JSON output");
+        if let Value::Mapping(data) = data {
+            let a = data.get(&Value::String("c".to_owned())).unwrap();
+            if let &Value::Mapping(ref a) = a {
+                assert_encrypted!(&a, Value::String("cc".to_owned()));
+                return;
+            }
+        }
+        panic!("Output JSON does not have the expected structure");
+    }
+
+    #[test]
+    fn set_json_file_insert_with_value_file() {
+        let file_path = prepare_temp_file(
+            "test_set_json_file_insert_with_value_file.json",
+            r#"{"a": 2, "b": "ba"}"#.as_bytes(),
+        );
+        let value_file = prepare_temp_file("insert_value_file.json", r#"{"cc": "ccc"}"#.as_bytes());
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("encrypt")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("set")
+            .arg("--value-file")
+            .arg(file_path.clone())
+            .arg(r#"["c"]"#)
+            .arg(value_file.clone())
+            .output()
+            .expect("Error running sops");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(output.status.success(), "sops didn't exit successfully");
+        let mut s = String::new();
+        File::open(file_path)
+            .unwrap()
+            .read_to_string(&mut s)
+            .unwrap();
+        let data: Value = serde_json::from_str(&s).expect("Error parsing sops's JSON output");
+        if let Value::Mapping(data) = data {
+            let a = data.get(&Value::String("c".to_owned())).unwrap();
+            if let &Value::Mapping(ref a) = a {
+                assert_encrypted!(&a, Value::String("cc".to_owned()));
+                return;
+            }
+        }
+        panic!("Output JSON does not have the expected structure");
+    }
+
+    #[test]
+    fn set_json_file_insert_with_value_stdin() {
+        let file_path = prepare_temp_file(
+            "test_set_json_file_insert_with_value_stdin.json",
+            r#"{"a": 2, "b": "ba"}"#.as_bytes(),
+        );
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("encrypt")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
+        // let value_file = prepare_temp_file("insert_value_file.json", r#"{"cc": "ccc"}"#.as_bytes());
+        let process = Command::new(SOPS_BINARY_PATH)
+            .arg("set")
+            .arg("--value-stdin")
+            .arg(file_path.clone())
+            .arg(r#"["c"]"#)
+            .stdin(Stdio::piped())
+            .stdout(Stdio::piped())
+            .spawn()
+            .expect("Error running sops");
+        write_to_stdin(&process, b"{\"cc\": \"ccc\"}");
+        let output = process.wait_with_output().expect("Failed to wait on sops");
         println!(
             "stdout: {}, stderr: {}",
             String::from_utf8_lossy(&output.stdout),
@@ -548,6 +848,50 @@ b: ba"#
         } else {
             panic!("Output JSON does not have the expected structure");
         }
+    }
+
+    #[test]
+    fn test_yaml_time() {
+        let file_path = prepare_temp_file(
+            "test_time.yaml",
+            r#"a: 2024-01-01
+b: 2006-01-02T15:04:05+07:06"#
+                .as_bytes(),
+        );
+        assert!(
+            Command::new(SOPS_BINARY_PATH)
+                .arg("encrypt")
+                .arg("-i")
+                .arg(file_path.clone())
+                .output()
+                .expect("Error running sops")
+                .status
+                .success(),
+            "sops didn't exit successfully"
+        );
+        let output = Command::new(SOPS_BINARY_PATH)
+            .arg("decrypt")
+            .arg("-i")
+            .arg(file_path.clone())
+            .output()
+            .expect("Error running sops");
+        println!(
+            "stdout: {}, stderr: {}",
+            String::from_utf8_lossy(&output.stdout),
+            String::from_utf8_lossy(&output.stderr)
+        );
+        assert!(output.status.success(), "sops didn't exit successfully");
+        let mut s = String::new();
+        File::open(file_path)
+            .unwrap()
+            .read_to_string(&mut s)
+            .unwrap();
+        assert_eq!(
+            s,
+            r#"a: 2024-01-01T00:00:00Z
+b: 2006-01-02T15:04:05+07:06
+"#
+        );
     }
 
     #[test]
@@ -800,6 +1144,36 @@ b: ba"#
                 .success(),
             "SOPS failed to decrypt a file with no MAC with --ignore-mac passed in"
         );
+    }
+
+    #[test]
+    fn decrypt_from_stdin() {
+        let process = Command::new(SOPS_BINARY_PATH)
+            .arg("decrypt")
+            .arg("--input-type")
+            .arg("yaml")
+            .arg("--output-type")
+            .arg("yaml")
+            .stdin(Stdio::piped())
+            .stdout(Stdio::piped())
+            .spawn()
+            .expect("Error running sops");
+        write_to_stdin(&process, include_bytes!("../res/comments.enc.yaml"));
+        let output = process.wait_with_output().expect("Failed to wait on sops");
+        assert!(output.status.success(), "sops didn't exit successfully");
+        let yaml = &String::from_utf8_lossy(&output.stdout);
+        let data: Value = serde_yaml::from_str(&yaml).expect("Error parsing sops's YAML output");
+        match data.into() {
+            Value::Mapping(m) => {
+                assert!(
+                    m.get(&Value::String("sops".to_owned())).is_none(),
+                    "sops metadata branch found"
+                );
+                assert_eq!(m["lorem"], Value::String("ipsum".to_owned()));
+                assert_eq!(m["dolor"], Value::String("sit".to_owned()));
+            }
+            _ => panic!("sops's JSON output is not an object"),
+        }
     }
 
     #[test]
@@ -1229,7 +1603,8 @@ bar: |-
             r#"{
 	"foo": "bar",
 	"bar": "baz\nbam"
-}"#
+}
+"#
         );
     }
 

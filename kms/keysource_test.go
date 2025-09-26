@@ -535,7 +535,7 @@ aws_secret_access_key = test-secret`), 0600))
 			if tt.envFunc != nil {
 				tt.envFunc(t)
 			}
-			cfg, err := tt.key.createKMSConfig()
+			cfg, err := tt.key.createKMSConfig(context.Background())
 			tt.assertFunc(t, cfg, err)
 		})
 	}
@@ -549,7 +549,7 @@ func TestMasterKey_createSTSConfig(t *testing.T) {
 			return
 		}
 		key := NewMasterKeyFromArn(dummyARN, nil, "")
-		cfg, err := key.createSTSConfig(nil)
+		cfg, err := key.createSTSConfig(context.Background(), nil)
 		assert.Error(t, err)
 		assert.ErrorContains(t, err, "failed to construct STS session name")
 		assert.Nil(t, cfg)
@@ -558,7 +558,7 @@ func TestMasterKey_createSTSConfig(t *testing.T) {
 	t.Run("role assumption error", func(t *testing.T) {
 		key := NewMasterKeyFromArn(dummyARN, nil, "")
 		key.Role = "role"
-		got, err := key.createSTSConfig(&aws.Config{})
+		got, err := key.createSTSConfig(context.Background(), &aws.Config{})
 		assert.Error(t, err)
 		assert.ErrorContains(t, err, "failed to assume role 'role'")
 		assert.Nil(t, got)
@@ -629,7 +629,7 @@ func createTestMasterKey(arn string) MasterKey {
 // createTestKMSClient creates a new client with the
 // aws.EndpointResolverWithOptions set to epResolver.
 func createTestKMSClient(key MasterKey) (*kms.Client, error) {
-	cfg, err := key.createKMSConfig()
+	cfg, err := key.createKMSConfig(context.Background())
 	if err != nil {
 		return nil, err
 	}

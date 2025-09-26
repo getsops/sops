@@ -1,6 +1,7 @@
 package gcpkms
 
 import (
+	"context"
 	"encoding/base64"
 	"fmt"
 	"net"
@@ -9,6 +10,7 @@ import (
 
 	"cloud.google.com/go/kms/apiv1/kmspb"
 	"github.com/stretchr/testify/assert"
+	"golang.org/x/oauth2"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -38,6 +40,13 @@ func TestMasterKeysFromResourceIDString(t *testing.T) {
 	}
 }
 
+func TestTokenSource_ApplyToMasterKey(t *testing.T) {
+	src := NewTokenSource(oauth2.StaticTokenSource(&oauth2.Token{AccessToken: "some-token"}))
+	key := &MasterKey{}
+	src.ApplyToMasterKey(key)
+	assert.Equal(t, src.source, key.tokenSource)
+}
+
 func TestCredentialJSON_ApplyToMasterKey(t *testing.T) {
 	key := &MasterKey{}
 	credential := CredentialJSON("mock")
@@ -53,8 +62,9 @@ func TestMasterKey_Encrypt(t *testing.T) {
 	})
 
 	key := MasterKey{
-		grpcConn:   newGRPCServer("0"),
-		ResourceID: testResourceID,
+		grpcConn:       newGRPCServer("0"),
+		ResourceID:     testResourceID,
+		credentialJSON: []byte("arbitrary credentials"),
 	}
 	err := key.Encrypt([]byte("encrypt"))
 	assert.NoError(t, err)
@@ -80,9 +90,10 @@ func TestMasterKey_Decrypt(t *testing.T) {
 		Plaintext: []byte(decryptedData),
 	})
 	key := MasterKey{
-		grpcConn:     newGRPCServer("0"),
-		ResourceID:   testResourceID,
-		EncryptedKey: "encryptedKey",
+		grpcConn:       newGRPCServer("0"),
+		ResourceID:     testResourceID,
+		EncryptedKey:   "encryptedKey",
+		credentialJSON: []byte("arbitrary credentials"),
 	}
 	data, err := key.Decrypt()
 	assert.NoError(t, err)
@@ -116,7 +127,7 @@ func TestMasterKey_ToMap(t *testing.T) {
 	}, key.ToMap())
 }
 
-func TestMasterKey_createCloudKMSService(t *testing.T) {
+func TestMasterKey_createCloudKMSService_withCredentialsFile(t *testing.T) {
 	tests := []struct {
 		key       MasterKey
 		errString string
@@ -136,10 +147,16 @@ func TestMasterKey_createCloudKMSService(t *testing.T) {
 		"type": "authorized_user"}`),
 			},
 		},
+		{
+			key: MasterKey{
+				ResourceID: testResourceID,
+			},
+			errString: `credentials: failed to obtain credentials from "SOPS_GOOGLE_CREDENTIALS"`,
+		},
 	}
 
 	for _, tt := range tests {
-		_, err := tt.key.newKMSClient()
+		_, err := tt.key.newKMSClient(context.Background())
 		if tt.errString != "" {
 			assert.Error(t, err)
 			assert.ErrorContains(t, err, tt.errString)
@@ -147,6 +164,29 @@ func TestMasterKey_createCloudKMSService(t *testing.T) {
 		}
 		assert.NoError(t, err)
 	}
+}
+
+func TestMasterKey_createCloudKMSService_withOauthToken(t *testing.T) {
+	t.Setenv(SopsGoogleCredentialsOAuthTokenEnv, "token")
+
+	masterKey := MasterKey{
+		ResourceID: testResourceID,
+	}
+
+	_, err := masterKey.newKMSClient(context.Background())
+
+	assert.NoError(t, err)
+}
+
+func TestMasterKey_createCloudKMSService_withoutCredentials(t *testing.T) {
+	masterKey := MasterKey{
+		ResourceID: testResourceID,
+	}
+
+	_, err := masterKey.newKMSClient(context.Background())
+
+	assert.Error(t, err)
+	assert.ErrorContains(t, err, "credentials: could not find default credentials")
 }
 
 func newGRPCServer(port string) *grpc.ClientConn {
@@ -159,7 +199,7 @@ func newGRPCServer(port string) *grpc.ClientConn {
 	}
 	go serv.Serve(lis)
 
-	conn, err := grpc.Dial(lis.Addr().String(), grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(lis.Addr().String(), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatal(err)
 	}

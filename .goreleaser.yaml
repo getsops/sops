@@ -69,6 +69,7 @@ builds:
       - windows
     goarch:
       - amd64
+      - arm64
     # Modified timestamp on the binary, set to ensure reproducible builds.
     mod_timestamp: "{{ .CommitTimestamp }}"
 
@@ -118,7 +119,7 @@ archives:
     builds:
       - binary-windows
     # NB: specifically crafted to ensure compatibility with release artifacts < v3.8.0.
-    name_template: '{{ .ProjectName }}-v{{ .Version }}'
+    name_template: '{{ .ProjectName }}-v{{ .Version }}.{{ .Arch }}'
 
   - id: archive-darwin-universal
     format: binary

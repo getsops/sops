@@ -1,3 +1,4 @@
+//go:build !windows
 // +build !windows
 
 package exec
@@ -10,6 +11,10 @@ import (
 	"strconv"
 	"syscall"
 )
+
+func ExecSyscall(command string, env []string) error {
+	return syscall.Exec("/bin/sh", []string{"/bin/sh", "-c", command}, env)
+}
 
 func BuildCommand(command string) *exec.Cmd {
 	return exec.Command("/bin/sh", "-c", command)

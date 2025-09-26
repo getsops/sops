@@ -10,7 +10,7 @@ import (
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/config"
 	"github.com/getsops/sops/v3/stores"
-	"gopkg.in/yaml.v3"
+	"go.yaml.in/yaml/v3"
 )
 
 const IndentDefault = 4
@@ -307,6 +307,13 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 // sops.Tree runtime object
 func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	var branches sops.TreeBranches
+	if len(in) > 0 {
+		// This is needed to make the yaml-decoder check for uniqueness of keys
+		// Can probably be removed when https://github.com/go-yaml/yaml/issues/814 is merged.
+		if err := yaml.NewDecoder(bytes.NewReader(in)).Decode(make(map[string]interface{})); err != nil {
+			return nil, err
+		}
+	}
 	d := yaml.NewDecoder(bytes.NewReader(in))
 	for {
 		var data yaml.Node

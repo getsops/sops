@@ -60,6 +60,8 @@ type MasterKey struct {
 	// using TokenCredential.ApplyToMasterKey.
 	// If nil, azidentity.NewDefaultAzureCredential is used.
 	tokenCredential azcore.TokenCredential
+	// clientOptions contains the azkeys.ClientOptions used by the Azure client.
+	clientOptions *azkeys.ClientOptions
 }
 
 // NewMasterKey creates a new MasterKey from a URL, key name and version,
@@ -77,12 +79,21 @@ func NewMasterKey(vaultURL string, keyName string, keyVersion string) *MasterKey
 // MasterKey. The URL format is {vaultUrl}/keys/{keyName}/{keyVersion}.
 func NewMasterKeyFromURL(url string) (*MasterKey, error) {
 	url = strings.TrimSpace(url)
-	re := regexp.MustCompile("^(https://[^/]+)/keys/([^/]+)/([^/]+)$")
+	re := regexp.MustCompile("^(https://[^/]+)/keys/([^/]+)(/[^/]*)?$")
 	parts := re.FindStringSubmatch(url)
-	if parts == nil || len(parts) < 3 {
-		return nil, fmt.Errorf("could not parse %q into a valid Azure Key Vault MasterKey", url)
+	if len(parts) < 3 {
+		return nil, fmt.Errorf("could not parse %q into a valid Azure Key Vault MasterKey %v", url, parts)
 	}
-	return NewMasterKey(parts[1], parts[2], parts[3]), nil
+	// Blank key versions are supported in Azure Key Vault, as they default to the latest
+	// version of the key. We need to put the actual version in the sops metadata block though
+	var key *MasterKey
+	if len(parts[3]) > 1 {
+		key = NewMasterKey(parts[1], parts[2], parts[3][1:])
+	} else {
+		key = NewMasterKey(parts[1], parts[2], "")
+	}
+	err := key.ensureKeyHasVersion(context.Background())
+	return key, err
 }
 
 // MasterKeysFromURLs takes a comma separated list of Azure Key Vault URLs,
@@ -118,22 +129,77 @@ func (t TokenCredential) ApplyToMasterKey(key *MasterKey) {
 	key.tokenCredential = t.token
 }
 
+// ClientOptions is a wrapper around azkeys.ClientOptions to allow
+// configuration of the Azure Key Vault client.
+type ClientOptions struct {
+	o *azkeys.ClientOptions
+}
+
+// NewClientOptions creates a new ClientOptions with the provided
+// azkeys.ClientOptions.
+func NewClientOptions(o *azkeys.ClientOptions) *ClientOptions {
+	return &ClientOptions{o: o}
+}
+
+// ApplyToMasterKey configures the ClientOptions on the provided key.
+func (c ClientOptions) ApplyToMasterKey(key *MasterKey) {
+	key.clientOptions = c.o
+}
+
 // Encrypt takes a SOPS data key, encrypts it with Azure Key Vault, and stores
 // the result in the EncryptedKey field.
+//
+// Consider using EncryptContext instead.
 func (key *MasterKey) Encrypt(dataKey []byte) error {
+	return key.EncryptContext(context.Background(), dataKey)
+}
+
+func (key *MasterKey) ensureKeyHasVersion(ctx context.Context) error {
+	if (key.Version != "") {
+		// Nothing to do
+		return nil
+	}
+
+	token, err := key.getTokenCredential()
+
+	if err != nil {
+		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Encryption failed")
+		return fmt.Errorf("failed to get Azure token credential to retrieve key version: %w", err)
+	}
+
+	c, err := azkeys.NewClient(key.VaultURL, token, key.clientOptions)
+	if err != nil {
+		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Encryption failed")
+		return fmt.Errorf("failed to construct Azure Key Vault client to retrieve key version: %w", err)
+	}
+
+	kdetail, err := c.GetKey(ctx, key.Name, key.Version, nil)
+	if err != nil {
+		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Encryption failed")
+		return fmt.Errorf("failed to fetch Azure Key to retrieve key version: %w", err)
+	}
+	key.Version = kdetail.Key.KID.Version()
+
+	log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Version fetch succeeded")
+	return nil
+}
+
+// EncryptContext takes a SOPS data key, encrypts it with Azure Key Vault, and stores
+// the result in the EncryptedKey field.
+func (key *MasterKey) EncryptContext(ctx context.Context, dataKey []byte) error {
 	token, err := key.getTokenCredential()
 	if err != nil {
 		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Encryption failed")
 		return fmt.Errorf("failed to get Azure token credential to encrypt data: %w", err)
 	}
 
-	c, err := azkeys.NewClient(key.VaultURL, token, nil)
+	c, err := azkeys.NewClient(key.VaultURL, token, key.clientOptions)
 	if err != nil {
 		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Encryption failed")
 		return fmt.Errorf("failed to construct Azure Key Vault client to encrypt data: %w", err)
 	}
 
-	resp, err := c.Encrypt(context.Background(), key.Name, key.Version, azkeys.KeyOperationParameters{
+	resp, err := c.Encrypt(ctx, key.Name, key.Version, azkeys.KeyOperationParameters{
 		Algorithm: to.Ptr(azkeys.EncryptionAlgorithmRSAOAEP256),
 		Value:     dataKey,
 	}, nil)
@@ -169,7 +235,15 @@ func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 
 // Decrypt decrypts the EncryptedKey field with Azure Key Vault and returns
 // the result.
+//
+// Consider using DecryptContext instead.
 func (key *MasterKey) Decrypt() ([]byte, error) {
+	return key.DecryptContext(context.Background())
+}
+
+// DecryptContext decrypts the EncryptedKey field with Azure Key Vault and returns
+// the result.
+func (key *MasterKey) DecryptContext(ctx context.Context) ([]byte, error) {
 	token, err := key.getTokenCredential()
 	if err != nil {
 		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Decryption failed")
@@ -182,13 +256,13 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		return nil, fmt.Errorf("failed to base64 decode Azure Key Vault encrypted key: %w", err)
 	}
 
-	c, err := azkeys.NewClient(key.VaultURL, token, nil)
+	c, err := azkeys.NewClient(key.VaultURL, token, key.clientOptions)
 	if err != nil {
 		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Decryption failed")
 		return nil, fmt.Errorf("failed to construct Azure Key Vault client to decrypt data: %w", err)
 	}
 
-	resp, err := c.Decrypt(context.Background(), key.Name, key.Version, azkeys.KeyOperationParameters{
+	resp, err := c.Decrypt(ctx, key.Name, key.Version, azkeys.KeyOperationParameters{
 		Algorithm: to.Ptr(azkeys.EncryptionAlgorithmRSAOAEP256),
 		Value:     rawEncryptedKey,
 	}, nil)

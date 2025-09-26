@@ -2,10 +2,12 @@ package hcvault
 
 import (
 	"bytes"
+	"context"
 	"encoding/base64"
 	"errors"
 	"fmt"
 	"io"
+	"net/http"
 	"net/url"
 	"os"
 	"path"
@@ -70,6 +72,8 @@ type MasterKey struct {
 	// Token.ApplyToMasterKey. If empty, the default client configuration
 	// is used, before falling back to the token stored in defaultTokenFile.
 	token string
+	// httpClient is used to override the default HTTP client used by the Vault client.
+	httpClient *http.Client
 }
 
 // NewMasterKeysFromURIs creates a list of MasterKeys from a list of Vault
@@ -128,18 +132,42 @@ func NewMasterKey(address, enginePath, keyName string) *MasterKey {
 	return key
 }
 
+// HTTPClient is a wrapper around http.Client used for configuring the
+// Vault client.
+type HTTPClient struct {
+	hc *http.Client
+}
+
+// NewHTTPClient creates a new HTTPClient with the provided http.Client.
+func NewHTTPClient(hc *http.Client) *HTTPClient {
+	return &HTTPClient{hc: hc}
+}
+
+// ApplyToMasterKey configures the HTTP client on the provided key.
+func (h HTTPClient) ApplyToMasterKey(key *MasterKey) {
+	key.httpClient = h.hc
+}
+
 // Encrypt takes a SOPS data key, encrypts it with Vault Transit, and stores
 // the result in the EncryptedKey field.
+//
+// Consider using EncryptContext instead.
 func (key *MasterKey) Encrypt(dataKey []byte) error {
+	return key.EncryptContext(context.Background(), dataKey)
+}
+
+// EncryptContext takes a SOPS data key, encrypts it with Vault Transit, and stores
+// the result in the EncryptedKey field.
+func (key *MasterKey) EncryptContext(ctx context.Context, dataKey []byte) error {
 	fullPath := key.encryptPath()
 
-	client, err := vaultClient(key.VaultAddress, key.token)
+	client, err := vaultClient(key.VaultAddress, key.token, key.httpClient)
 	if err != nil {
 		log.WithField("Path", fullPath).Info("Encryption failed")
 		return err
 	}
 
-	secret, err := client.Logical().Write(fullPath, encryptPayload(dataKey))
+	secret, err := client.Logical().WriteWithContext(ctx, fullPath, encryptPayload(dataKey))
 	if err != nil {
 		log.WithField("Path", fullPath).Info("Encryption failed")
 		return fmt.Errorf("failed to encrypt sops data key to Vault transit backend '%s': %w", fullPath, err)
@@ -175,16 +203,23 @@ func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 }
 
 // Decrypt decrypts the EncryptedKey field with Vault Transit and returns the result.
+//
+// Consider using DecryptContext instead.
 func (key *MasterKey) Decrypt() ([]byte, error) {
+	return key.DecryptContext(context.Background())
+}
+
+// DecryptContext decrypts the EncryptedKey field with Vault Transit and returns the result.
+func (key *MasterKey) DecryptContext(ctx context.Context) ([]byte, error) {
 	fullPath := key.decryptPath()
 
-	client, err := vaultClient(key.VaultAddress, key.token)
+	client, err := vaultClient(key.VaultAddress, key.token, key.httpClient)
 	if err != nil {
 		log.WithField("Path", fullPath).Info("Decryption failed")
 		return nil, err
 	}
 
-	secret, err := client.Logical().Write(fullPath, decryptPayload(key.EncryptedKey))
+	secret, err := client.Logical().WriteWithContext(ctx, fullPath, decryptPayload(key.EncryptedKey))
 	if err != nil {
 		log.WithField("Path", fullPath).Info("Decryption failed")
 		return nil, fmt.Errorf("failed to decrypt sops data key from Vault transit backend '%s': %w", fullPath, err)
@@ -292,9 +327,13 @@ func dataKeyFromSecret(secret *api.Secret) ([]byte, error) {
 
 // vaultClient returns a new Vault client, configured with the given address
 // and token.
-func vaultClient(address, token string) (*api.Client, error) {
+func vaultClient(address, token string, hc *http.Client) (*api.Client, error) {
 	cfg := api.DefaultConfig()
 	cfg.Address = address
+
+	if hc != nil {
+		cfg.HttpClient = hc
+	}
 
 	client, err := api.NewClient(cfg)
 	if err != nil {

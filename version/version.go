@@ -12,11 +12,13 @@ import (
 )
 
 // Version represents the value of the current semantic version.
-var Version = "3.9.4"
+var Version = "3.10.2"
 
 // PrintVersion prints the current version of sops. If the flag
-// `--disable-version-check` is set, the function will not attempt
-// to retrieve the latest version from the GitHub API.
+// `--disable-version-check` is set or if the environment variable
+// SOPS_DISABLE_VERSION_CHECK is set to a value that is considered
+// true by https://pkg.go.dev/strconv#ParseBool, the function will
+// not attempt to retrieve the latest version from the GitHub API.
 //
 // If the flag is not set, the function will attempt to retrieve
 // the latest version from the GitHub API and compare it to the
@@ -27,7 +29,7 @@ func PrintVersion(c *cli.Context) {
 
 	out.WriteString(fmt.Sprintf("%s %s", c.App.Name, c.App.Version))
 
-	if c.Bool("disable-version-check") {
+	if c.Bool("disable-version-check") && !c.Bool("check-for-updates") {
 		out.WriteString("\n")
 	} else {
 		upstreamVersion, upstreamURL, err := RetrieveLatestReleaseVersion()
@@ -44,6 +46,12 @@ func PrintVersion(c *cli.Context) {
 					out.WriteString(" (latest)\n")
 				}
 			}
+		}
+		if !c.Bool("check-for-updates") {
+			out.WriteString(
+				"\n[warning] Note that in a future version, sops will no longer check whether the current version is the latest when asking for sops' version." +
+					" If you want to explicitly check for the latest version, add the `--check-for-updates` option to `sops --version`." +
+					" This will hide this deprecation warning and will always check, even if the default behavior changes in the future.\n")
 		}
 	}
 	fmt.Fprintf(c.App.Writer, "%s", out.String())

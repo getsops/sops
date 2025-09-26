@@ -2,6 +2,7 @@ package common
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"time"
@@ -130,11 +131,20 @@ func EncryptTree(opts EncryptTreeOpts) error {
 	return nil
 }
 
-// LoadEncryptedFile loads an encrypted SOPS file, returning a SOPS tree
-func LoadEncryptedFile(loader sops.EncryptedFileLoader, inputPath string) (*sops.Tree, error) {
-	fileBytes, err := os.ReadFile(inputPath)
-	if err != nil {
-		return nil, NewExitError(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
+// LoadEncryptedFileEx loads an encrypted SOPS file from a file or stdin, returning a SOPS tree
+func LoadEncryptedFileEx(loader sops.EncryptedFileLoader, inputPath string, readFromStdin bool) (*sops.Tree, error) {
+	var fileBytes []byte
+	var err error
+	if readFromStdin {
+		fileBytes, err = io.ReadAll(os.Stdin)
+		if err != nil {
+			return nil, NewExitError(fmt.Sprintf("Error reading from stdin: %s", err), codes.CouldNotReadInputFile)
+		}
+	} else {
+		fileBytes, err = os.ReadFile(inputPath)
+		if err != nil {
+			return nil, NewExitError(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
+		}
 	}
 	path, err := filepath.Abs(inputPath)
 	if err != nil {
@@ -143,6 +153,11 @@ func LoadEncryptedFile(loader sops.EncryptedFileLoader, inputPath string) (*sops
 	tree, err := loader.LoadEncryptedFile(fileBytes)
 	tree.FilePath = path
 	return &tree, err
+}
+
+// LoadEncryptedFile loads an encrypted SOPS file, returning a SOPS tree
+func LoadEncryptedFile(loader sops.EncryptedFileLoader, inputPath string) (*sops.Tree, error) {
+	return LoadEncryptedFileEx(loader, inputPath, false)
 }
 
 // NewExitError returns a cli.ExitError given an error (wrapped in a generic interface{})
@@ -207,7 +222,7 @@ func GetKMSKeyWithEncryptionCtx(tree *sops.Tree) (keyGroupIndex int, keyIndex in
 		for n, k := range kg {
 			kmsKey, ok := k.(*kms.MasterKey)
 			if ok {
-				if kmsKey.EncryptionContext != nil && len(kmsKey.EncryptionContext) >= 2 {
+				if len(kmsKey.EncryptionContext) >= 2 {
 					duplicateValues := map[string]int{}
 					for _, v := range kmsKey.EncryptionContext {
 						duplicateValues[*v] = duplicateValues[*v] + 1
@@ -227,6 +242,7 @@ type GenericDecryptOpts struct {
 	Cipher          sops.Cipher
 	InputStore      sops.Store
 	InputPath       string
+	ReadFromStdin   bool
 	IgnoreMAC       bool
 	KeyServices     []keyservice.KeyServiceClient
 	DecryptionOrder []string
@@ -235,7 +251,7 @@ type GenericDecryptOpts struct {
 // LoadEncryptedFileWithBugFixes is a wrapper around LoadEncryptedFile which includes
 // check for the issue described in https://github.com/mozilla/sops/pull/435
 func LoadEncryptedFileWithBugFixes(opts GenericDecryptOpts) (*sops.Tree, error) {
-	tree, err := LoadEncryptedFile(opts.InputStore, opts.InputPath)
+	tree, err := LoadEncryptedFileEx(opts.InputStore, opts.InputPath, opts.ReadFromStdin)
 	if err != nil {
 		return nil, err
 	}

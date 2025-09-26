@@ -106,7 +106,8 @@ encryption/decryption transparently and open the cleartext file in an editor
     please wait while an encryption key is being generated and stored in a secure fashion
     file written to mynewtestfile.yaml
 
-Editing will happen in whatever ``$EDITOR`` is set to, or, if it's not set, in vim.
+Editing will happen in whatever ``$SOPS_EDITOR`` or ``$EDITOR`` is set to, or, if it's
+not set, in vim, nano, or vi.
 Keep in mind that SOPS will wait for the editor to exit, and then try to reencrypt
 the file. Some GUI editors (atom, sublime) spawn a child process and then exit
 immediately. They usually have an option to wait for the main editor window to be
@@ -220,19 +221,39 @@ the ``--age`` option or the **SOPS_AGE_RECIPIENTS** environment variable:
 
 When decrypting a file with the corresponding identity, SOPS will look for a
 text file name ``keys.txt`` located in a ``sops`` subdirectory of your user
-configuration directory. On Linux, this would be ``$XDG_CONFIG_HOME/sops/age/keys.txt``.
-If ``$XDG_CONFIG_HOME`` is not set ``$HOME/.config/sops/age/keys.txt`` is used instead.
-On macOS, this would be ``$HOME/Library/Application Support/sops/age/keys.txt``. On
-Windows, this would be ``%AppData%\sops\age\keys.txt``. You can specify the location
-of this file manually by setting the environment variable **SOPS_AGE_KEY_FILE**.
-Alternatively, you can provide the key(s) directly by setting the **SOPS_AGE_KEY**
-environment variable.
+configuration directory. 
+
+- **Linux**
+
+  - Looks for ``keys.txt`` in ``$XDG_CONFIG_HOME/sops/age/keys.txt``;
+  - Falls back to ``$HOME/.config/sops/age/keys.txt`` if ``$XDG_CONFIG_HOME`` isn’t set.
+
+- **macOS**
+
+  - Looks for ``keys.txt`` in ``$XDG_CONFIG_HOME/sops/age/keys.txt``;
+  - Falls back to ``$HOME/Library/Application Support/sops/age/keys.txt`` if ``$XDG_CONFIG_HOME`` isn’t set.
+
+- **Windows**
+
+  - Looks for ``keys.txt`` in `%AppData%\\sops\\age\\keys.txt``.
+
+You can override the default lookup by:
+
+- setting the environment variable **SOPS_AGE_KEY_FILE**;
+- setting the **SOPS_AGE_KEY** environment variable;
+- providing a command to output the age keys by setting the **SOPS_AGE_KEY_CMD** environment variable..
 
 The contents of this key file should be a list of age X25519 identities, one
 per line. Lines beginning with ``#`` are considered comments and ignored. Each
 identity will be tried in sequence until one is able to decrypt the data.
 
-Encrypting with SSH keys via age is not yet supported by SOPS.
+Encrypting with SSH keys via age is also supported by SOPS. You can use SSH public keys
+("ssh-ed25519 AAAA...", "ssh-rsa AAAA...") as age recipients when encrypting a file.
+When decrypting a file, SOPS will look for ``~/.ssh/id_ed25519`` and falls back to
+``~/.ssh/id_rsa``. You can specify the location of the private key manually by setting
+the environment variable **SOPS_AGE_SSH_PRIVATE_KEY_FILE**.
+
+Note that only ``ssh-rsa`` and ``ssh-ed25519`` are supported.
 
 A list of age recipients can be added to the ``.sops.yaml``:
 
@@ -258,8 +279,12 @@ It is also possible to use ``updatekeys``, when adding or removing age recipient
 
 Encrypting using GCP KMS
 ~~~~~~~~~~~~~~~~~~~~~~~~
-GCP KMS uses `Application Default Credentials
-<https://developers.google.com/identity/protocols/application-default-credentials>`_.
+GCP KMS has support for authorization with the use of `Application Default Credentials
+<https://developers.google.com/identity/protocols/application-default-credentials>`_ and using an OAuth 2.0 token.
+Application default credentials precedes the use of access token.
+
+Using Application Default Credentials you can authorize by doing this:
+
 If you already logged in using
 
 .. code:: sh
@@ -271,6 +296,18 @@ you can enable application default credentials using the sdk:
 .. code:: sh
 
     $ gcloud auth application-default login
+
+Using OAauth tokens you can authorize by doing this:
+
+.. code:: sh
+    
+    $ export GOOGLE_OAUTH_ACCESS_TOKEN=<your access token>
+
+Or if you are logged in you can authorize by generating an access token:
+
+.. code:: sh
+
+    $ export GOOGLE_OAUTH_ACCESS_TOKEN="$(gcloud auth print-access-token)"
 
 Encrypting/decrypting with GCP KMS requires a KMS ResourceID. You can use the
 cloud console the get the ResourceID or you can create one using the gcloud
@@ -341,6 +378,11 @@ a key. This has the following form::
 
     https://${VAULT_URL}/keys/${KEY_NAME}/${KEY_VERSION}
 
+You can omit the version, and have just a trailing slash, and this will use
+whatever the latest version of the key is::
+
+    https://${VAULT_URL}/keys/${KEY_NAME}/
+
 To create a Key Vault and assign your service principal permissions on it
 from the commandline:
 
@@ -364,6 +406,10 @@ Now you can encrypt a file using::
 
     $ sops encrypt --azure-kv https://sops.vault.azure.net/keys/sops-key/some-string test.yaml > test.enc.yaml
 
+or, without the version::
+
+    $ sops encrypt --azure-kv https://sops.vault.azure.net/keys/sops-key/ test.yaml > test.enc.yaml
+
 And decrypt it using::
 
     $ sops decrypt test.enc.yaml
@@ -375,33 +421,38 @@ Encrypting and decrypting from other programs
 When using ``sops`` in scripts or from other programs, there are often situations where you do not want to write
 encrypted or decrypted data to disk. The best way to avoid this is to pass data to SOPS via stdin, and to let
 SOPS write data to stdout. By default, the encrypt and decrypt operations write data to stdout already. To pass
-data via stdin, you need to pass ``/dev/stdin`` as the input filename. Please note that this only works on
-Unix-like operating systems such as macOS and Linux. On Windows, you have to use named pipes.
+data via stdin, you need to not provide an input filename. For encryption, you also must provide the
+``--filename-override`` option with the file's filename. The filename will be used to determine the input and output
+types, and to select the correct creation rule.
 
-To decrypt data, you can simply do:
-
-.. code:: sh
-
-	$ cat encrypted-data | sops decrypt /dev/stdin > decrypted-data
-
-To control the input and output format, pass ``--input-type`` and ``--output-type`` as appropriate. By default,
-``sops`` determines the input and output format from the provided filename, which is ``/dev/stdin`` here, and
-thus will use the binary store which expects JSON input and outputs binary data on decryption.
-
-For example, to decrypt YAML data and obtain the decrypted result as YAML, use:
+The simplest way to decrypt data from stdin is as follows:
 
 .. code:: sh
 
-	$ cat encrypted-data | sops decrypt --input-type yaml --output-type yaml /dev/stdin > decrypted-data
+	$ cat encrypted-data | sops decrypt > decrypted-data
+
+By default, ``sops`` determines the input and output format from the provided filename. Since in this case,
+no filename is provided, ``sops`` will use the binary store which expects JSON input and outputs binary data
+on decryption. This is often not what you want.
+
+To avoid this, you can either provide a filename with ``--filename-override``, or explicitly control
+the input and output formats by passing ``--input-type`` and ``--output-type`` as appropriate:
+
+.. code:: sh
+
+	$ cat encrypted-data | sops decrypt --filename-override filename.yaml > decrypted-data
+	$ cat encrypted-data | sops decrypt --input-type yaml --output-type yaml > decrypted-data
+
+In both cases, ``sops`` will assume that the data you provide is in YAML format, and will encode the decrypted
+data in YAML as well. The second form allows to use different formats for input and output.
 
 To encrypt, it is important to note that SOPS also uses the filename to look up the correct creation rule from
-``.sops.yaml``. Likely ``/dev/stdin`` will not match a creation rule, or only match the fallback rule without
-``path_regex``, which is usually not what you want. For that, ``sops`` provides the ``--filename-override``
-parameter which allows you to tell SOPS which filename to use to match creation rules:
+``.sops.yaml``. Therefore, you must provide the ``--filename-override`` parameter which allows you to tell
+SOPS which filename to use to match creation rules:
 
 .. code:: sh
 
-	$ echo 'foo: bar' | sops encrypt --filename-override path/filename.sops.yaml /dev/stdin > encrypted-data
+	$ echo 'foo: bar' | sops encrypt --filename-override path/filename.sops.yaml > encrypted-data
 
 SOPS will find a matching creation rule for ``path/filename.sops.yaml`` in ``.sops.yaml`` and use that one to
 encrypt the data from stdin. This filename will also be used to determine the input and output store. As always,
@@ -410,7 +461,7 @@ the input store type can be adjusted by passing ``--input-type``, and the output
 
 .. code:: sh
 
-	$ echo foo=bar | sops encrypt --filename-override path/filename.sops.yaml --input-type dotenv /dev/stdin > encrypted-data
+	$ echo foo=bar | sops encrypt --filename-override path/filename.sops.yaml --input-type dotenv > encrypted-data
 
 
 Encrypting using Hashicorp Vault
@@ -577,7 +628,7 @@ disabled by supplying the ``-y`` flag.
 ******************
 
 The ``rotate`` command generates a new data encryption key and reencrypt all values
-with the new key. At te same time, the command line flag ``--add-kms``, ``--add-pgp``,
+with the new key. At the same time, the command line flag ``--add-kms``, ``--add-pgp``,
 ``--add-gcp-kms``, ``--add-azure-kv``, ``--rm-kms``, ``--rm-pgp``, ``--rm-gcp-kms``
 and ``--rm-azure-kv`` can be used to add and remove keys from a file. These flags use
 the comma separated syntax as the ``--kms``, ``--pgp``, ``--gcp-kms`` and ``--azure-kv``
@@ -859,14 +910,6 @@ Example: place the following in your ``~/.bashrc``
     SOPS_GPG_EXEC = 'your_gpg_client_wrapper'
 
 
-Specify a different GPG key server
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-By default, SOPS uses the key server ``keys.openpgp.org`` to retrieve the GPG
-keys that are not present in the local keyring.
-This is no longer configurable. You can learn more about why from this write-up: `SKS Keyserver Network Under Attack <https://gist.github.com/rjhansen/67ab921ffb4084c865b3618d6955275f>`_.
-
-
 Key groups
 ~~~~~~~~~~
 
@@ -1027,7 +1070,7 @@ service exposed on the unix socket located in ``/tmp/sops.sock``, you can run:
 
 .. code:: sh
 
-    $ sops decrypt --keyservice unix:///tmp/sops.sock file.yaml`
+    $ sops decrypt --keyservice unix:///tmp/sops.sock file.yaml
 
 And if you only want to use the key service exposed on the unix socket located
 in ``/tmp/sops.sock`` and not the local key service, you can run:
@@ -1123,6 +1166,11 @@ written to disk.
     $ echo your password: $database_password
     your password:
 
+If you want process signals to be sent to the command, for example if you are
+running ``exec-env`` to launch a server and your server handles SIGTERM, then the
+``--same-process`` flag can be used to instruct ``sops`` to start your command in
+the same process instead of a child process. This uses the ``execve`` system call
+and is supported on Unix-like systems.
 
 If the command you want to run only operates on files, you can use ``exec-file``
 instead. By default, SOPS will use a FIFO to pass the contents of the
@@ -1308,7 +1356,7 @@ When operating on stdin, use the ``--input-type`` and ``--output-type`` flags as
 
 .. code:: sh
 
-    $ cat myfile.json | sops decrypt --input-type json --output-type json /dev/stdin
+    $ cat myfile.json | sops decrypt --input-type json --output-type json
 
 JSON and JSON_binary indentation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1485,7 +1533,7 @@ original file after encrypting or decrypting it.
 Encrypting binary files
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-SOPS primary use case is encrypting YAML and JSON configuration files, but it
+SOPS primary use case is encrypting YAML, JSON, ENV, and INI configuration files, but it
 also has the ability to manage binary files. When encrypting a binary, SOPS will
 read the data as bytes, encrypt it, store the encrypted base64 under
 ``tree['data']`` and write the result as JSON.
@@ -1568,6 +1616,17 @@ The value must be formatted as json.
 
     $ sops set ~/git/svc/sops/example.yaml '["an_array"][1]' '{"uid1":null,"uid2":1000,"uid3":["bob"]}'
 
+You can also provide the value from a file or stdin:
+
+.. code:: sh
+
+    # Provide the value from a file
+    $ echo '{"uid1":null,"uid2":1000,"uid3":["bob"]}' > /tmp/example-value
+    $ sops set --value-file ~/git/svc/sops/example.yaml '["an_array"][1]' /tmp/example-value
+
+    # Provide the value from stdin
+    $ echo '{"uid1":null,"uid2":1000,"uid3":["bob"]}' | sops set --value-stdin ~/git/svc/sops/example.yaml '["an_array"][1]'
+
 Unset a sub-part in a document tree
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1619,9 +1678,9 @@ git client interfaces, because they call git diff under the hood!
 Encrypting only parts of a file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Note: this only works on YAML and JSON files, not on BINARY files.
+Note: this only works on YAML, JSON, ENV, and INI files, not on BINARY files.
 
-By default, SOPS encrypts all the values of a YAML or JSON file and leaves the
+By default, SOPS encrypts all the values of a YAML, JSON, ENV, or INI file and leaves the
 keys in cleartext. In some instances, you may want to exclude some values from
 being encrypted. This can be accomplished by adding the suffix **_unencrypted**
 to any key of a file. When set, all values underneath the key that set the
@@ -1832,9 +1891,9 @@ automation, we found this to be a hard problem with a number of prerequisites:
    git repo, jenkins and S3) and only be decrypted on the target
    systems
 
-SOPS can be used to encrypt YAML, JSON and BINARY files. In BINARY mode, the
+SOPS can be used to encrypt YAML, JSON, ENV, INI, and BINARY files. In BINARY mode, the
 content of the file is treated as a blob, the same way PGP would encrypt an
-entire file. In YAML and JSON modes, however, the content of the file is
+entire file. In YAML, JSON, ENV, and INI modes, however, the content of the file is
 manipulated as a tree where keys are stored in cleartext, and values are
 encrypted. hiera-eyaml does something similar, and over the years we learned
 to appreciate its benefits, namely:

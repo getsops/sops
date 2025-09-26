@@ -10,9 +10,10 @@ of the purpose of this package is to make it easy to change the SOPS file format
 package stores
 
 import (
-	"time"
-
 	"fmt"
+	"strconv"
+	"strings"
+	"time"
 
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/age"
@@ -45,15 +46,15 @@ type SopsFile struct {
 type Metadata struct {
 	ShamirThreshold           int         `yaml:"shamir_threshold,omitempty" json:"shamir_threshold,omitempty"`
 	KeyGroups                 []keygroup  `yaml:"key_groups,omitempty" json:"key_groups,omitempty"`
-	KMSKeys                   []kmskey    `yaml:"kms" json:"kms"`
-	GCPKMSKeys                []gcpkmskey `yaml:"gcp_kms" json:"gcp_kms"`
-	AzureKeyVaultKeys         []azkvkey   `yaml:"azure_kv" json:"azure_kv"`
-	VaultKeys                 []vaultkey  `yaml:"hc_vault" json:"hc_vault"`
-	AgeKeys                   []agekey    `yaml:"age" json:"age"`
+	KMSKeys                   []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
+	GCPKMSKeys                []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
+	AzureKeyVaultKeys         []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
+	VaultKeys                 []vaultkey  `yaml:"hc_vault,omitempty" json:"hc_vault,omitempty"`
+	AgeKeys                   []agekey    `yaml:"age,omitempty" json:"age,omitempty"`
 	OCIKMSKeys                []ocikmskey `yaml:"oci_kms" json:"oci_kms"`
 	LastModified              string      `yaml:"lastmodified" json:"lastmodified"`
 	MessageAuthenticationCode string      `yaml:"mac" json:"mac"`
-	PGPKeys                   []pgpkey    `yaml:"pgp" json:"pgp"`
+	PGPKeys                   []pgpkey    `yaml:"pgp,omitempty" json:"pgp,omitempty"`
 	UnencryptedSuffix         string      `yaml:"unencrypted_suffix,omitempty" json:"unencrypted_suffix,omitempty"`
 	EncryptedSuffix           string      `yaml:"encrypted_suffix,omitempty" json:"encrypted_suffix,omitempty"`
 	UnencryptedRegex          string      `yaml:"unencrypted_regex,omitempty" json:"unencrypted_regex,omitempty"`
@@ -576,4 +577,26 @@ func HasSopsTopLevelKey(branch sops.TreeBranch) bool {
 		}
 	}
 	return false
+}
+
+// ValToString converts a simple value to a string.
+// It does not handle complex values (arrays and mappings).
+func ValToString(v interface{}) string {
+	switch v := v.(type) {
+	case float64:
+		result := strconv.FormatFloat(v, 'G', -1, 64)
+		// If the result can be confused with an integer, make sure we have at least one decimal digit
+		if !strings.ContainsRune(result, '.') && !strings.ContainsRune(result, 'E') {
+			result = strconv.FormatFloat(v, 'f', 1, 64)
+		}
+		return result
+	case bool:
+		return strconv.FormatBool(v)
+	case time.Time:
+		return v.Format(time.RFC3339)
+	case fmt.Stringer:
+		return v.String()
+	default:
+		return fmt.Sprintf("%v", v)
+	}
 }

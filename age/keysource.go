@@ -1,20 +1,25 @@
 package age
 
 import (
+	"bufio"
 	"bytes"
 	"errors"
 	"fmt"
 	"io"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
 
 	"filippo.io/age"
+	"filippo.io/age/agessh"
 	"filippo.io/age/armor"
+	"filippo.io/age/plugin"
 	"github.com/sirupsen/logrus"
 
 	"github.com/getsops/sops/v3/logging"
+	"github.com/google/shlex"
 )
 
 const (
@@ -24,6 +29,12 @@ const (
 	// SopsAgeKeyFileEnv can be set as an environment variable pointing to an
 	// age keys file.
 	SopsAgeKeyFileEnv = "SOPS_AGE_KEY_FILE"
+	// SopsAgeKeyCmdEnv can be set as an environment variable with a command
+	// to execute that returns the age keys.
+	SopsAgeKeyCmdEnv = "SOPS_AGE_KEY_CMD"
+	// SopsAgeSshPrivateKeyFileEnv can be set as an environment variable pointing to
+	// a private SSH key file.
+	SopsAgeSshPrivateKeyFileEnv = "SOPS_AGE_SSH_PRIVATE_KEY_FILE"
 	// SopsAgeKeyUserConfigPath is the default age keys file path in
 	// getUserConfigDir().
 	SopsAgeKeyUserConfigPath = "sops/age/keys.txt"
@@ -60,7 +71,7 @@ type MasterKey struct {
 	parsedIdentities []age.Identity
 	// parsedRecipient contains a parsed age public key.
 	// It is used to lazy-load the Recipient at-most once.
-	parsedRecipient *age.X25519Recipient
+	parsedRecipient age.Recipient
 }
 
 // MasterKeysFromRecipients takes a comma-separated list of Bech32-encoded
@@ -81,6 +92,18 @@ func MasterKeysFromRecipients(commaSeparatedRecipients string) ([]*MasterKey, er
 		keys = append(keys, key)
 	}
 	return keys, nil
+}
+
+// errSet is a collection of captured errors.
+type errSet []error
+
+// Error joins the errors into a "; " separated string.
+func (e errSet) Error() string {
+	str := make([]string, len(e))
+	for i, err := range e {
+		str[i] = err.Error()
+	}
+	return strings.Join(str, "; ")
 }
 
 // MasterKeyFromRecipient takes a Bech32-encoded age public key, parses it, and
@@ -111,7 +134,10 @@ type ParsedIdentities []age.Identity
 // parsing (using age.ParseIdentities) and appending to the slice yourself, in
 // combination with e.g. a sync.Mutex.
 func (i *ParsedIdentities) Import(identity ...string) error {
-	identities, err := parseIdentities(identity...)
+	// one identity per line
+	r := strings.NewReader(strings.Join(identity, "\n"))
+
+	identities, err := parseIdentities(r)
 	if err != nil {
 		return fmt.Errorf("failed to parse and add to age identities: %w", err)
 	}
@@ -180,14 +206,41 @@ func (key *MasterKey) SetEncryptedDataKey(enc []byte) {
 	key.EncryptedKey = string(enc)
 }
 
+func formatError(msg string, err error, errs errSet, unusedLocations []string) error {
+	var loadSuffix string
+	if len(errs) > 0 {
+		loadSuffix = fmt.Sprintf(". Errors while loading age identities: %s", errs.Error())
+	}
+	var unusedSuffix string
+	if len(unusedLocations) > 0 {
+		count := len(unusedLocations)
+		if count == 1 {
+			unusedSuffix = fmt.Sprintf(" '%s'", unusedLocations[0])
+		} else if count == 2 {
+			unusedSuffix = fmt.Sprintf("s '%s' and '%s'", unusedLocations[0], unusedLocations[1])
+		} else {
+			unusedSuffix = fmt.Sprintf("s '%s', and '%s'", strings.Join(unusedLocations[:count - 1], "', '"), unusedLocations[count - 1])
+		}
+		unusedSuffix = fmt.Sprintf(". Did not find keys in location%s.", unusedSuffix)
+	}
+	if err != nil {
+		return fmt.Errorf("%s: %w%s%s", msg, err, loadSuffix, unusedSuffix)
+	} else {
+		return fmt.Errorf("%s%s%s", msg, loadSuffix, unusedSuffix)
+	}
+}
+
 // Decrypt decrypts the EncryptedKey with the parsed or loaded identities, and
 // returns the result.
 func (key *MasterKey) Decrypt() ([]byte, error) {
+	var errs errSet
+	var unusedLocations []string
 	if len(key.parsedIdentities) == 0 {
-		ids, err := key.loadIdentities()
-		if err != nil {
+		var ids ParsedIdentities
+		ids, unusedLocations, errs = key.loadIdentities()
+		if len(ids) == 0 {
 			log.Info("Decryption failed")
-			return nil, fmt.Errorf("failed to load age identities: %w", err)
+			return nil, formatError("failed to load age identities", nil, errs, unusedLocations)
 		}
 		ids.ApplyToMasterKey(key)
 	}
@@ -197,7 +250,7 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 	r, err := age.Decrypt(ar, key.parsedIdentities...)
 	if err != nil {
 		log.Info("Decryption failed")
-		return nil, fmt.Errorf("failed to create reader for decrypting sops data key with age: %w", err)
+		return nil, formatError("failed to create reader for decrypting sops data key with age", err, errs, unusedLocations)
 	}
 
 	var b bytes.Buffer
@@ -233,6 +286,61 @@ func (key *MasterKey) TypeToIdentifier() string {
 	return KeyTypeIdentifier
 }
 
+// loadAgeSSHIdentity attempts to load the age SSH identity based on an SSH
+// private key from the SopsAgeSshPrivateKeyFileEnv environment variable. If the
+// environment variable is not present, it will fall back to `~/.ssh/id_ed25519`
+// or `~/.ssh/id_rsa`. If no age SSH identity is found, it will return nil.
+func loadAgeSSHIdentities() ([]age.Identity, []string, errSet) {
+	var identities []age.Identity
+	var unusedLocations []string
+	var errs errSet
+
+	sshKeyFilePath, ok := os.LookupEnv(SopsAgeSshPrivateKeyFileEnv)
+	if ok {
+		identity, err := parseSSHIdentityFromPrivateKeyFile(sshKeyFilePath)
+		if err != nil {
+			errs = append(errs, err)
+		} else {
+			identities = append(identities, identity)
+		}
+	} else {
+		unusedLocations = append(unusedLocations, SopsAgeSshPrivateKeyFileEnv)
+	}
+
+	userHomeDir, err := os.UserHomeDir()
+	if err != nil {
+		errs = append(errs, err)
+	} else if userHomeDir == "" {
+		log.Warnf("could not determine the user home directory: %v", err)
+	} else {
+		sshEd25519PrivateKeyPath := filepath.Join(userHomeDir, ".ssh", "id_ed25519")
+		if _, err := os.Stat(sshEd25519PrivateKeyPath); err == nil {
+			identity, err := parseSSHIdentityFromPrivateKeyFile(sshEd25519PrivateKeyPath)
+			if err != nil {
+				errs = append(errs, err)
+			} else {
+				identities = append(identities, identity)
+			}
+		} else {
+			unusedLocations = append(unusedLocations, sshEd25519PrivateKeyPath)
+		}
+
+		sshRsaPrivateKeyPath := filepath.Join(userHomeDir, ".ssh", "id_rsa")
+		if _, err := os.Stat(sshRsaPrivateKeyPath); err == nil {
+			identity, err := parseSSHIdentityFromPrivateKeyFile(sshRsaPrivateKeyPath)
+			if err != nil {
+				errs = append(errs, err)
+			} else {
+				identities = append(identities, identity)
+			}
+		} else {
+			unusedLocations = append(unusedLocations, sshRsaPrivateKeyPath)
+		}
+	}
+
+	return identities, unusedLocations, errs
+}
+
 func getUserConfigDir() (string, error) {
 	if runtime.GOOS == "darwin" {
 		if userConfigDir, ok := os.LookupEnv(xdgConfigHome); ok && userConfigDir != "" {
@@ -244,76 +352,138 @@ func getUserConfigDir() (string, error) {
 
 // loadIdentities attempts to load the age identities based on runtime
 // environment configurations (e.g. SopsAgeKeyEnv, SopsAgeKeyFileEnv,
-// SopsAgeKeyUserConfigPath). It will load all found references, and expects
-// at least one configuration to be present.
-func (key *MasterKey) loadIdentities() (ParsedIdentities, error) {
+// SopsAgeSshPrivateKeyFileEnv, SopsAgeKeyUserConfigPath). It will load all
+// found references, and expects at least one configuration to be present.
+func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
+	identities, unusedLocations, errs := loadAgeSSHIdentities()
+
 	var readers = make(map[string]io.Reader, 0)
 
 	if ageKey, ok := os.LookupEnv(SopsAgeKeyEnv); ok {
 		readers[SopsAgeKeyEnv] = strings.NewReader(ageKey)
+	} else {
+		unusedLocations = append(unusedLocations, SopsAgeKeyEnv)
 	}
 
 	if ageKeyFile, ok := os.LookupEnv(SopsAgeKeyFileEnv); ok {
 		f, err := os.Open(ageKeyFile)
 		if err != nil {
-			return nil, fmt.Errorf("failed to open %s file: %w", SopsAgeKeyFileEnv, err)
+			errs = append(errs, fmt.Errorf("failed to open %s file: %w", SopsAgeKeyFileEnv, err))
+		} else {
+			defer f.Close()
+			readers[SopsAgeKeyFileEnv] = f
 		}
-		defer f.Close()
-		readers[SopsAgeKeyFileEnv] = f
+	} else {
+		unusedLocations = append(unusedLocations, SopsAgeKeyFileEnv)
+	}
+
+	if ageKeyCmd, ok := os.LookupEnv(SopsAgeKeyCmdEnv); ok {
+		args, err := shlex.Split(ageKeyCmd)
+		if err != nil {
+			errs = append(errs, fmt.Errorf("failed to parse command %s from %s: %w", ageKeyCmd, SopsAgeKeyCmdEnv, err))
+		} else {
+			out, err := exec.Command(args[0], args[1:]...).Output()
+			if err != nil {
+				errs = append(errs, fmt.Errorf("failed to execute command %s from %s: %w", ageKeyCmd, SopsAgeKeyCmdEnv, err))
+			} else {
+				readers[SopsAgeKeyCmdEnv] = bytes.NewReader(out)
+			}
+		}
+	} else {
+		unusedLocations = append(unusedLocations, SopsAgeKeyCmdEnv)
 	}
 
 	userConfigDir, err := getUserConfigDir()
-	if err != nil && len(readers) == 0 {
-		return nil, fmt.Errorf("user config directory could not be determined: %w", err)
-	}
-	if userConfigDir != "" {
+	if err != nil && len(readers) == 0 && len(identities) == 0 {
+		errs = append(errs, fmt.Errorf("user config directory could not be determined: %w", err))
+	} else if userConfigDir != "" {
 		ageKeyFilePath := filepath.Join(userConfigDir, filepath.FromSlash(SopsAgeKeyUserConfigPath))
 		f, err := os.Open(ageKeyFilePath)
 		if err != nil && !errors.Is(err, os.ErrNotExist) {
-			return nil, fmt.Errorf("failed to open file: %w", err)
-		}
-		if errors.Is(err, os.ErrNotExist) && len(readers) == 0 {
-			// If we have no other readers, presence of the file is required.
-			return nil, fmt.Errorf("failed to open file: %w", err)
-		}
-		if err == nil {
+			errs = append(errs, fmt.Errorf("failed to open file: %w", err))
+		} else if errors.Is(err, os.ErrNotExist) && len(readers) == 0 && len(identities) == 0 {
+			unusedLocations = append(unusedLocations, ageKeyFilePath)
+		} else if err == nil {
 			defer f.Close()
 			readers[ageKeyFilePath] = f
 		}
 	}
 
-	var identities ParsedIdentities
-	for n, r := range readers {
-		ids, err := age.ParseIdentities(r)
+	for location, r := range readers {
+		ids, err := unwrapIdentities(location, r)
 		if err != nil {
-			return nil, fmt.Errorf("failed to parse '%s' age identities: %w", n, err)
+			errs = append(errs, err)
+		} else {
+			identities = append(identities, ids...)
+			if len(ids) == 0 {
+				unusedLocations = append(unusedLocations, location)
+			}
 		}
-		identities = append(identities, ids...)
 	}
-	return identities, nil
+	return identities, unusedLocations, errs
 }
 
 // parseRecipient attempts to parse a string containing an encoded age public
-// key.
-func parseRecipient(recipient string) (*age.X25519Recipient, error) {
-	parsedRecipient, err := age.ParseX25519Recipient(recipient)
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse input as Bech32-encoded age public key: %w", err)
+// key or a public ssh key.
+func parseRecipient(recipient string) (age.Recipient, error) {
+	switch {
+	case strings.HasPrefix(recipient, "age1") && strings.Count(recipient, "1") > 1:
+		parsedRecipient, err := plugin.NewRecipient(recipient, pluginTerminalUI)
+		if err != nil {
+			return nil, fmt.Errorf("failed to parse input as age key from age plugin: %w", err)
+		}
+		return parsedRecipient, nil
+	case strings.HasPrefix(recipient, "age1"):
+		parsedRecipient, err := age.ParseX25519Recipient(recipient)
+		if err != nil {
+			return nil, fmt.Errorf("failed to parse input as Bech32-encoded age public key: %w", err)
+		}
+
+		return parsedRecipient, nil
+	case strings.HasPrefix(recipient, "ssh-"):
+		parsedRecipient, err := agessh.ParseRecipient(recipient)
+		if err != nil {
+			return nil, fmt.Errorf("failed to parse input as age-ssh public key: %w", err)
+		}
+		return parsedRecipient, nil
 	}
-	return parsedRecipient, nil
+
+	return nil, fmt.Errorf("failed to parse input, unknown recipient type: %q", recipient)
 }
 
-// parseIdentities attempts to parse the string set of encoded age identities.
-// A single identity argument is allowed to be a multiline string containing
-// multiple identities. Empty lines and lines starting with "#" are ignored.
-func parseIdentities(identity ...string) (ParsedIdentities, error) {
-	var identities []age.Identity
-	for _, i := range identity {
-		parsed, err := age.ParseIdentities(strings.NewReader(i))
+// parseIdentities attempts to parse one or more age identities from the provided reader.
+// One identity per line.
+// Empty lines and lines starting with "#" are ignored.
+func parseIdentities(r io.Reader) (ParsedIdentities, error) {
+	var identities ParsedIdentities
+
+	scanner := bufio.NewScanner(r)
+
+	for scanner.Scan() {
+		line := scanner.Text()
+
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+
+		parsed, err := parseIdentity(line)
 		if err != nil {
 			return nil, err
 		}
-		identities = append(identities, parsed...)
+
+		identities = append(identities, parsed)
 	}
+
 	return identities, nil
+}
+
+func parseIdentity(s string) (age.Identity, error) {
+	switch {
+	case strings.HasPrefix(s, "AGE-PLUGIN-"):
+		return plugin.NewIdentity(s, pluginTerminalUI)
+	case strings.HasPrefix(s, "AGE-SECRET-KEY-1"):
+		return age.ParseX25519Identity(s)
+	default:
+		return nil, fmt.Errorf("unknown identity type")
+	}
 }
