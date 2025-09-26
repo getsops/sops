@@ -221,7 +221,7 @@ the ``--age`` option or the **SOPS_AGE_RECIPIENTS** environment variable:
 
 When decrypting a file with the corresponding identity, SOPS will look for a
 text file name ``keys.txt`` located in a ``sops`` subdirectory of your user
-configuration directory. 
+configuration directory.
 
 - **Linux**
 
@@ -300,7 +300,7 @@ you can enable application default credentials using the sdk:
 Using OAauth tokens you can authorize by doing this:
 
 .. code:: sh
-    
+
     $ export GOOGLE_OAUTH_ACCESS_TOKEN=<your access token>
 
 Or if you are logged in you can authorize by generating an access token:
@@ -527,14 +527,55 @@ To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
 Encrypting using OCI KMS
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-OCI KMS uses the `DefaultConfigProvider <https://github.com/oracle/oci-go-sdk/blob/master/README.md#configuring>`_.
-It will look for the `DEFAULT` profile in the `~/.oci/config` file.
+OCI KMS authentication is resolved in the following order (env-first, then cloud identity, then local fallbacks):
 
-Make sure to authenticate and to have a valid session via:
+1. OCI CLI environment variables (OCI_CLI_*)
+2. SDK environment variables (OCI_*), e.g. `OCI_tenancy_ocid`
+3. Config file only when explicitly pointed by `OCI_CLI_CONFIG_FILE`/`OCI_CLI_PROFILE`
+4. Instance Principals (when running on OCI Compute with appropriate IAM policies)
+5. SDK DefaultConfigProvider as a last resort (e.g. `~/.oci/config`, TF_VAR_*)
 
-.. code:: sh
+Examples
+~~~~~~~~
 
-	$ oci session authenticate
+- Using OCI CLI-style env (API key):
+
+.. code:: bash
+
+    export OCI_CLI_TENANCY=ocid1.tenancy.oc1..xxxx
+    export OCI_CLI_USER=ocid1.user.oc1..xxxx
+    export OCI_CLI_REGION=us-ashburn-1
+    export OCI_CLI_FINGERPRINT=aa:bb:cc:dd:...
+    export OCI_CLI_KEY_FILE=$HOME/.oci/oci_api_key.pem
+
+- Using OCI CLI-style env (SSO/security token):
+
+.. code:: bash
+
+    # Create a session with the OCI CLI, then point SOPS to the token file
+    oci session authenticate
+    export OCI_CLI_AUTH=security_token
+    export OCI_CLI_SECURITY_TOKEN_FILE="$HOME/.oci/sessions/<session>/token"
+
+- Using SDK env (API key):
+
+.. code:: bash
+
+    export OCI_tenancy_ocid=ocid1.tenancy.oc1..xxxx
+    export OCI_user_ocid=ocid1.user.oc1..xxxx
+    export OCI_region=eu-frankfurt-1
+    export OCI_fingerprint=aa:bb:cc:dd:...
+    export OCI_private_key_path=$HOME/.oci/oci_api_key.pem
+
+- Using a config file via env:
+
+.. code:: bash
+
+    export OCI_CLI_CONFIG_FILE=$HOME/.oci/config
+    export OCI_CLI_PROFILE=DEFAULT
+
+- Running on OCI Compute (Instance Principals):
+  No env required; ensure the instance has IAM permissions for KMS operations.
 
 Encrypting/decrypting with OCI KMS requires a KMS OCID. You can use the
 cloud console the get the OCID of an existing key or you can create one using the `oci`
