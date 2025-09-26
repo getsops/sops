@@ -21,12 +21,10 @@ const (
 	cryptoEndpointTemplate = "https://%s-crypto.kms.%s.oraclecloud.com"
 	// ocidParts is the number of parts in an OCID, separated by ".", eg: "ocid1.key.oc1.uk-london-1.aaaalgz5aacmg.aaaailjtjbkbc5ufsorrihgv2agugpfe7wrtngukihgkybqxcoozz7sbh6lq"
 	ocidParts = 6
-	// KeyTypeIdentifier is the string used to identify an OCI KMS MasterKey.
-	KeyTypeIdentifier = "oci_kms"
 )
 
 func init() {
-	log = logging.NewLogger("OCIKMS")
+	log = logging.NewLogger(LoggerName)
 }
 
 // MasterKey is an Oracle Cloud KMS key used to encrypt and decrypt sops' data key.
@@ -63,18 +61,16 @@ func (key *MasterKey) createCryptoClient() (client keymanagement.KmsCryptoClient
 
 	endpoint := fmt.Sprintf(cryptoEndpointTemplate, vault_ref, region)
 	log.WithField("endpoint", endpoint).Info("Creating OCI KMS client")
-	// The client is created using the default OCI config provider, using the default profile in the default config file (~/.oci/config)
-	// There is currently no straightforward way to pass a custom config provider to the client.
-	// The oci-go-sdk provides a way to pass a custom config provider to the client, but there's no environment variable to feature-flag it.
-	// Related: https://github.com/oracle/oci-go-sdk/issues/318
 
-	// In order to use a custom provider, the client would need to be created like this:
-	// client, err := keymanagement.NewKmsCryptoClientWithConfigurationProvider(common.CustomProfileConfigProvider("/home/<user>/.oci/config", "<profile>"), endpoint)
-	// Sticking with the defaults for now.
+	// Build a flexible configuration provider (12 factor app-ish)
+	cfg, cfgErr := configurationProvider()
+	if cfgErr != nil {
+		return client, fmt.Errorf("cannot build OCI configuration provider: %w", cfgErr)
+	}
 
-	client, err = keymanagement.NewKmsCryptoClientWithConfigurationProvider(common.DefaultConfigProvider(), endpoint)
+	client, err = keymanagement.NewKmsCryptoClientWithConfigurationProvider(cfg, endpoint)
 	if err != nil {
-		return client, fmt.Errorf("Cannot create OCI KMS client: %w", err)
+		return client, fmt.Errorf("cannot create OCI KMS client: %w", err)
 	}
 	return client, nil
 }
