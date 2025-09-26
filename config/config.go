@@ -175,8 +175,8 @@ type creationRule struct {
 	PathRegex               string      `yaml:"path_regex"`
 	KMS                     interface{} `yaml:"kms"` // string or []string
 	AwsProfile              string      `yaml:"aws_profile"`
-	Age                     interface{} `yaml:"age"` // string or []string
 	OCIKMS                  string      `yaml:"oci_kms"`
+	Age                     interface{} `yaml:"age"`                  // string or []string
 	PGP                     interface{} `yaml:"pgp"`                  // string or []string
 	GCPKMS                  interface{} `yaml:"gcp_kms"`              // string or []string
 	AzureKeyVault           interface{} `yaml:"azure_keyvault"`       // string or []string
