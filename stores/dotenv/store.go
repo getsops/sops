@@ -139,7 +139,7 @@ func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 	buffer := bytes.Buffer{}
 	for _, item := range in[0] {
 		if IsComplexValue(item.Value) {
-			return nil, fmt.Errorf("cannot use complex value in dotenv file: %s", item.Value)
+			return nil, fmt.Errorf("cannot use complex value in dotenv file; key is %s", item.Key)
 		}
 		var line string
 		if comment, ok := item.Key.(sops.Comment); ok {
