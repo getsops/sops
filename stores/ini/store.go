@@ -21,6 +21,10 @@ func NewStore(c *config.INIStoreConfig) *Store {
 	return &Store{config: c}
 }
 
+func (store *Store) Name() string {
+	return "ini"
+}
+
 func (store Store) encodeTree(branches sops.TreeBranches) ([]byte, error) {
 	iniFile := ini.Empty(ini.LoadOptions{AllowNonUniqueSections: true})
 	iniFile.DeleteSection(ini.DefaultSection)
