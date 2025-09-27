@@ -21,10 +21,6 @@ func NewStore(c *config.INIStoreConfig) *Store {
 	return &Store{config: c}
 }
 
-func (store *Store) IsSingleValueStore() bool {
-	return false
-}
-
 func (store *Store) Name() string {
 	return "ini"
 }

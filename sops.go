@@ -726,12 +726,6 @@ type CheckEncrypted interface {
 	HasSopsTopLevelKey(TreeBranch) bool
 }
 
-// SingleValueStore is the interface for determining whether a store uses only
-// one single key and no comments. This is basically identifying the binary store.
-type SingleValueStore interface {
-	IsSingleValueStore() bool
-}
-
 // Store is used to interact with files, both encrypted and unencrypted.
 type Store interface {
 	EncryptedFileLoader
@@ -740,8 +734,14 @@ type Store interface {
 	PlainFileEmitter
 	ValueEmitter
 	CheckEncrypted
-	SingleValueStore
 	Name() string
+}
+
+// SingleValueStore is the interface for determining whether a store uses only
+// one single key and no comments. This is basically identifying the binary store.
+type SingleValueStore interface {
+	Store
+	IsSingleValueStore() bool
 }
 
 // MasterKeyCount returns the number of master keys available

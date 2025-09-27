@@ -22,10 +22,6 @@ func NewStore(c *config.JSONStoreConfig) *Store {
 	return &Store{config: *c}
 }
 
-func (store *Store) IsSingleValueStore() bool {
-	return false
-}
-
 func (store *Store) Name() string {
 	return "json"
 }

@@ -2090,7 +2090,12 @@ func getEncryptConfig(c *cli.Context, fileName string, inputStore common.Store, 
 		}
 	}
 
-	if inputStore.IsSingleValueStore() {
+	isSingleValueStore := false
+	if svs, ok := inputStore.(sops.SingleValueStore); ok {
+		isSingleValueStore = svs.IsSingleValueStore()
+	}
+
+	if isSingleValueStore {
 		// Warn about settings that potentially disable encryption of the single key.
 		if unencryptedSuffix != "" {
 			log.Warn(fmt.Sprintf("Using an unencrypted suffix does not make sense with the input store (the %s store produces one key that should always be encrypted) and will be ignored.", inputStore.Name()))
@@ -2142,7 +2147,7 @@ func getEncryptConfig(c *cli.Context, fileName string, inputStore common.Store, 
 	}
 
 	// only supply the default UnencryptedSuffix when EncryptedSuffix, EncryptedRegex, and others are not provided
-	if cryptRuleCount == 0 && !inputStore.IsSingleValueStore() {
+	if cryptRuleCount == 0 && !isSingleValueStore {
 		unencryptedSuffix = sops.DefaultUnencryptedSuffix
 	}
 
