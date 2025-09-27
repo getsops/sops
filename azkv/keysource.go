@@ -64,15 +64,31 @@ type MasterKey struct {
 	clientOptions *azkeys.ClientOptions
 }
 
-// NewMasterKey creates a new MasterKey from a URL, key name and version,
+// newMasterKey creates a new MasterKey from a URL, key name and version,
 // setting the creation date to the current date.
-func NewMasterKey(vaultURL string, keyName string, keyVersion string) *MasterKey {
+func newMasterKey(vaultURL string, keyName string, keyVersion string) *MasterKey {
 	return &MasterKey{
 		VaultURL:     vaultURL,
 		Name:         keyName,
 		Version:      keyVersion,
 		CreationDate: time.Now().UTC(),
 	}
+}
+
+// NewMasterKey creates a new MasterKey from a URL, key name and (mandatory) version,
+// setting the creation date to the current date.
+func NewMasterKey(vaultURL string, keyName string, keyVersion string) *MasterKey {
+	return newMasterKey(vaultURL, keyName, keyVersion)
+}
+
+// NewMasterKey creates a new MasterKey from a URL, key name and (optional) version,
+// setting the creation date to the current date.
+func NewMasterKeyWithOptionalVersion(vaultURL string, keyName string, keyVersion string) (*MasterKey, error) {
+	key := newMasterKey(vaultURL, keyName, keyVersion)
+	if err := key.ensureKeyHasVersion(context.Background()); err != nil {
+		return nil, err
+	}
+	return key, nil
 }
 
 // NewMasterKeyFromURL takes an Azure Key Vault key URL, and returns a new
@@ -88,9 +104,9 @@ func NewMasterKeyFromURL(url string) (*MasterKey, error) {
 	// version of the key. We need to put the actual version in the sops metadata block though
 	var key *MasterKey
 	if len(parts[3]) > 1 {
-		key = NewMasterKey(parts[1], parts[2], parts[3][1:])
+		key = newMasterKey(parts[1], parts[2], parts[3][1:])
 	} else {
-		key = NewMasterKey(parts[1], parts[2], "")
+		key = newMasterKey(parts[1], parts[2], "")
 	}
 	err := key.ensureKeyHasVersion(context.Background())
 	return key, err
