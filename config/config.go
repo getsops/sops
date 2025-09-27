@@ -330,7 +330,7 @@ func extractMasterKeys(group keyGroup) (sops.KeyGroup, error) {
 		keyGroup = append(keyGroup, gcpkms.NewMasterKeyFromResourceID(k.ResourceID))
 	}
 	for _, k := range group.AzureKV {
-		if key, err := azkv.NewMasterKey(k.VaultURL, k.Key, k.Version); err == nil {
+		if key, err := azkv.NewMasterKeyWithOptionalVersion(k.VaultURL, k.Key, k.Version); err == nil {
 			keyGroup = append(keyGroup, key)
 		} else {
 			return nil, err

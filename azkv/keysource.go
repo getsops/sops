@@ -75,12 +75,20 @@ func newMasterKey(vaultURL string, keyName string, keyVersion string) *MasterKey
 	}
 }
 
+// NewMasterKey creates a new MasterKey from a URL, key name and (mandatory) version,
+// setting the creation date to the current date.
+func NewMasterKey(vaultURL string, keyName string, keyVersion string) *MasterKey {
+	return newMasterKey(vaultURL, keyName, keyVersion)
+}
+
 // NewMasterKey creates a new MasterKey from a URL, key name and (optional) version,
 // setting the creation date to the current date.
-func NewMasterKey(vaultURL string, keyName string, keyVersion string) (*MasterKey, error) {
+func NewMasterKeyWithOptionalVersion(vaultURL string, keyName string, keyVersion string) (*MasterKey, error) {
 	key := newMasterKey(vaultURL, keyName, keyVersion)
-	err := key.ensureKeyHasVersion(context.Background())
-	return key, err
+	if err := key.ensureKeyHasVersion(context.Background()); err != nil {
+		return nil, err
+	}
+	return key, nil
 }
 
 // NewMasterKeyFromURL takes an Azure Key Vault key URL, and returns a new
