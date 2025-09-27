@@ -2059,35 +2059,34 @@ func getEncryptConfig(c *cli.Context, fileName string, optionalConfig *config.Co
 	unencryptedCommentRegex := c.String("unencrypted-comment-regex")
 	macOnlyEncrypted := c.Bool("mac-only-encrypted")
 	var err error
-	conf := optionalConfig
-	if conf == nil {
-		conf, err = loadConfig(c, fileName, nil)
+	if optionalConfig == nil {
+		optionalConfig, err = loadConfig(c, fileName, nil)
 		if err != nil {
 			return encryptConfig{}, toExitError(err)
 		}
 	}
-	if conf != nil {
+	if optionalConfig != nil {
 		// command line options have precedence
 		if unencryptedSuffix == "" {
-			unencryptedSuffix = conf.UnencryptedSuffix
+			unencryptedSuffix = optionalConfig.UnencryptedSuffix
 		}
 		if encryptedSuffix == "" {
-			encryptedSuffix = conf.EncryptedSuffix
+			encryptedSuffix = optionalConfig.EncryptedSuffix
 		}
 		if encryptedRegex == "" {
-			encryptedRegex = conf.EncryptedRegex
+			encryptedRegex = optionalConfig.EncryptedRegex
 		}
 		if unencryptedRegex == "" {
-			unencryptedRegex = conf.UnencryptedRegex
+			unencryptedRegex = optionalConfig.UnencryptedRegex
 		}
 		if encryptedCommentRegex == "" {
-			encryptedCommentRegex = conf.EncryptedCommentRegex
+			encryptedCommentRegex = optionalConfig.EncryptedCommentRegex
 		}
 		if unencryptedCommentRegex == "" {
-			unencryptedCommentRegex = conf.UnencryptedCommentRegex
+			unencryptedCommentRegex = optionalConfig.UnencryptedCommentRegex
 		}
 		if !macOnlyEncrypted {
-			macOnlyEncrypted = conf.MACOnlyEncrypted
+			macOnlyEncrypted = optionalConfig.MACOnlyEncrypted
 		}
 	}
 
@@ -2121,13 +2120,13 @@ func getEncryptConfig(c *cli.Context, fileName string, optionalConfig *config.Co
 	}
 
 	var groups []sops.KeyGroup
-	groups, err = keyGroups(c, fileName, conf)
+	groups, err = keyGroups(c, fileName, optionalConfig)
 	if err != nil {
 		return encryptConfig{}, err
 	}
 
 	var threshold int
-	threshold, err = shamirThreshold(c, fileName, conf)
+	threshold, err = shamirThreshold(c, fileName, optionalConfig)
 	if err != nil {
 		return encryptConfig{}, err
 	}
