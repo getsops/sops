@@ -241,8 +241,8 @@ func main() {
 
 				var env []string
 				for _, item := range tree.Branches[0] {
-					if dotenv.IsComplexValue(item.Value) {
-						return cli.NewExitError(fmt.Errorf("cannot use complex value in environment: %s", item.Value), codes.ErrorGeneric)
+					if stores.IsComplexValue(item.Value) {
+						return cli.NewExitError(fmt.Errorf("cannot use complex value in environment; offending key %s", item.Key), codes.ErrorGeneric)
 					}
 					if _, ok := item.Key.(sops.Comment); ok {
 						continue
