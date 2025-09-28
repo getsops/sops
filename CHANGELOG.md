@@ -1,5 +1,86 @@
 # Changelog
 
+## 3.11.0
+
+Security fixes:
+
+* Ensure temporary file for editing is only read-writable by owner.
+  This was already the case for the directory containing the file ([#1903](https://github.com/getsops/sops/pull/1903)).
+* Ignore encryption selection options for binary store, and warn when they are used.
+  In previous versions, these could have prevented the data to be encrypted ([#1927](https://github.com/getsops/sops/pull/1927)).
+* Do not print sensitive values in error messages when trying to encrypt
+  complex values in DotEnv and exec-env ([#1959](https://github.com/getsops/sops/pull/1959)).
+
+Features:
+
+* Allow to set values from file with `sops set --value-file` ([#1876](https://github.com/getsops/sops/pull/1876),
+  [#1940](https://github.com/getsops/sops/pull/1940)).
+* Allow to set values from stdin with `sops set --value-stdin` ([#1894](https://github.com/getsops/sops/pull/1894)).
+* Add subcommands to create shell completion scripts ([#1892](https://github.com/getsops/sops/pull/1892)).
+* Allow to provide keys as YAML lists instead of comma-separated strings ([#1880](https://github.com/getsops/sops/pull/1880)).
+* Allow to configure `--enable-local-keyservice` and `--keyservice` through
+  environment variables ([#1930](https://github.com/getsops/sops/pull/1930)).
+* Allow to omit AZKV key version in `.sops.yaml` ([#1919](https://github.com/getsops/sops/pull/1919),
+  [#1947](https://github.com/getsops/sops/pull/1947)).
+* Allow non-complex non-string values in DotEnv and `sops exec-env` ([#1933](https://github.com/getsops/sops/pull/1933)).
+
+Improvements:
+
+* Dependency updates ([#1845](https://github.com/getsops/sops/pull/1845),
+  [#1850](https://github.com/getsops/sops/pull/1850), [#1854](https://github.com/getsops/sops/pull/1854),
+  [#1856](https://github.com/getsops/sops/pull/1856), [#1861](https://github.com/getsops/sops/pull/1861),
+  [#1867](https://github.com/getsops/sops/pull/1867), [#1870](https://github.com/getsops/sops/pull/1870),
+  [#1871](https://github.com/getsops/sops/pull/1871), [#1872](https://github.com/getsops/sops/pull/1872),
+  [#1878](https://github.com/getsops/sops/pull/1878), [#1882](https://github.com/getsops/sops/pull/1882),
+  [#1884](https://github.com/getsops/sops/pull/1884), [#1888](https://github.com/getsops/sops/pull/1888),
+  [#1893](https://github.com/getsops/sops/pull/1893), [#1908](https://github.com/getsops/sops/pull/1908),
+  [#1912](https://github.com/getsops/sops/pull/1912), [#1917](https://github.com/getsops/sops/pull/1917),
+  [#1920](https://github.com/getsops/sops/pull/1920), [#1923](https://github.com/getsops/sops/pull/1923),
+  [#1956](https://github.com/getsops/sops/pull/1956), [#1958](https://github.com/getsops/sops/pull/1958)).
+* Docs improvements ([#1844](https://github.com/getsops/sops/pull/1844),
+  [#1863](https://github.com/getsops/sops/pull/1863), [#1881](https://github.com/getsops/sops/pull/1881),
+  [#1885](https://github.com/getsops/sops/pull/1885), [#1897](https://github.com/getsops/sops/pull/1897),
+  [#1895](https://github.com/getsops/sops/pull/1895), [#1909](https://github.com/getsops/sops/pull/1909),
+  [#1928](https://github.com/getsops/sops/pull/1928), [#1944](https://github.com/getsops/sops/pull/1944),
+  [#1946](https://github.com/getsops/sops/pull/1946)).
+* Collect age identity loading errors and only report if decryption failed
+  ([#1898](https://github.com/getsops/sops/pull/1898)).
+* Improve age identity loading so that age identities are loaded from all locations
+  ([#1931](https://github.com/getsops/sops/pull/1931)).
+* When encrypting, parse `.sops.yaml` creation rule keys once ([#1939](https://github.com/getsops/sops/pull/1939)).
+* Replace deprecated Go dependency gopkg.in/yaml.v3 with go.yaml.in/yaml/v3 ([#1934](https://github.com/getsops/sops/pull/1934)).
+* Improve `float` and `time.Time` formatting when converting to strings
+  for DotEnv and INI files ([#1929](https://github.com/getsops/sops/pull/1929)).
+
+<!--
+Allow to encrypt and decrypt with context ([#1848](https://github.com/getsops/sops/pull/1848)).
+Allow to inject custom HTTP client for AWS, Azure, GCP, and HashiCorp ([#1838](https://github.com/getsops/sops/pull/1838)).
+-->
+
+Bugfixes:
+
+* Fix Shamir threshold encoding for INI and ENV files ([#1899](https://github.com/getsops/sops/pull/1899)).
+* Fix detection logic for destination rules to detect all conflicts ([#1936](https://github.com/getsops/sops/pull/1936)).
+* Fix converting integers to strings ([#1929](https://github.com/getsops/sops/pull/1929)).
+* Fix keyservice client for Unix domain sockets ([#1910](https://github.com/getsops/sops/pull/1910)).
+
+Project changes:
+
+* Go 1.23 is no longer support; CI now also builds with Go 1.25 ([#1945](https://github.com/getsops/sops/pull/1945)).
+* CI dependency updates ([#1849](https://github.com/getsops/sops/pull/1849),
+  [#1852](https://github.com/getsops/sops/pull/1852), [#1857](https://github.com/getsops/sops/pull/1857),
+  [#1866](https://github.com/getsops/sops/pull/1866), [#1869](https://github.com/getsops/sops/pull/1869),
+  [#1874](https://github.com/getsops/sops/pull/1874), [#1879](https://github.com/getsops/sops/pull/1879),
+  [#1883](https://github.com/getsops/sops/pull/1883), [#1889](https://github.com/getsops/sops/pull/1889),
+  [#1905](https://github.com/getsops/sops/pull/1905), [#1911](https://github.com/getsops/sops/pull/1911),
+  [#1916](https://github.com/getsops/sops/pull/1916), [#1922](https://github.com/getsops/sops/pull/1922),
+  [#1937](https://github.com/getsops/sops/pull/1937), [#1949](https://github.com/getsops/sops/pull/1949),
+  [#1955](https://github.com/getsops/sops/pull/1955)).
+* Rust dependency updates for functional tests ([#1853](https://github.com/getsops/sops/pull/1853),
+  [#1907](https://github.com/getsops/sops/pull/1907), [#1921](https://github.com/getsops/sops/pull/1921),
+  [#1948](https://github.com/getsops/sops/pull/1948), [#1954](https://github.com/getsops/sops/pull/1954)).
+* Update authors in main.go ([#1860](https://github.com/getsops/sops/pull/1860)).
+
 ## 3.10.2
 
 Bugfixes:
