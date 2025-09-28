@@ -24,6 +24,10 @@ func NewStore(c *config.YAMLStoreConfig) *Store {
 	return &Store{config: *c}
 }
 
+func (store *Store) Name() string {
+	return "yaml"
+}
+
 func (store Store) appendCommentToList(comment string, list []interface{}) []interface{} {
 	if comment != "" {
 		for _, commentLine := range strings.Split(comment, "\n") {

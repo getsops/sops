@@ -1024,7 +1024,7 @@ func main() {
 				}
 				svcs := keyservices(c)
 
-				encConfig, err := getEncryptConfig(c, fileNameOverride)
+				encConfig, err := getEncryptConfig(c, fileNameOverride, inputStore, nil)
 				if err != nil {
 					return toExitError(err)
 				}
@@ -1370,7 +1370,7 @@ func main() {
 					}
 				} else {
 					// File doesn't exist, edit the example file instead
-					encConfig, err := getEncryptConfig(c, fileName)
+					encConfig, err := getEncryptConfig(c, fileName, inputStore, nil)
 					if err != nil {
 						return toExitError(err)
 					}
@@ -1898,8 +1898,9 @@ func main() {
 		// Load configuration here for backwards compatibility (error out in case of bad config files),
 		// but only when not just decrypting (https://github.com/getsops/sops/issues/868)
 		needsCreationRule := isEncryptMode || isRotateMode || isSetMode || isEditMode
+		var config *config.Config
 		if needsCreationRule {
-			_, err = loadConfig(c, fileNameOverride, nil)
+			config, err = loadConfig(c, fileNameOverride, nil)
 			if err != nil {
 				return toExitError(err)
 			}
@@ -1921,7 +1922,7 @@ func main() {
 		}
 		var output []byte
 		if isEncryptMode {
-			encConfig, err := getEncryptConfig(c, fileNameOverride)
+			encConfig, err := getEncryptConfig(c, fileNameOverride, inputStore, config)
 			if err != nil {
 				return toExitError(err)
 			}
@@ -2009,7 +2010,7 @@ func main() {
 				output, err = edit(opts)
 			} else {
 				// File doesn't exist, edit the example file instead
-				encConfig, err := getEncryptConfig(c, fileNameOverride)
+				encConfig, err := getEncryptConfig(c, fileNameOverride, inputStore, config)
 				if err != nil {
 					return toExitError(err)
 				}
@@ -2063,7 +2064,7 @@ func main() {
 	}
 }
 
-func getEncryptConfig(c *cli.Context, fileName string) (encryptConfig, error) {
+func getEncryptConfig(c *cli.Context, fileName string, inputStore common.Store, optionalConfig *config.Config) (encryptConfig, error) {
 	unencryptedSuffix := c.String("unencrypted-suffix")
 	encryptedSuffix := c.String("encrypted-suffix")
 	encryptedRegex := c.String("encrypted-regex")
@@ -2071,33 +2072,68 @@ func getEncryptConfig(c *cli.Context, fileName string) (encryptConfig, error) {
 	encryptedCommentRegex := c.String("encrypted-comment-regex")
 	unencryptedCommentRegex := c.String("unencrypted-comment-regex")
 	macOnlyEncrypted := c.Bool("mac-only-encrypted")
-	conf, err := loadConfig(c, fileName, nil)
-	if err != nil {
-		return encryptConfig{}, toExitError(err)
+	var err error
+	if optionalConfig == nil {
+		optionalConfig, err = loadConfig(c, fileName, nil)
+		if err != nil {
+			return encryptConfig{}, toExitError(err)
+		}
 	}
-	if conf != nil {
+	if optionalConfig != nil {
 		// command line options have precedence
 		if unencryptedSuffix == "" {
-			unencryptedSuffix = conf.UnencryptedSuffix
+			unencryptedSuffix = optionalConfig.UnencryptedSuffix
 		}
 		if encryptedSuffix == "" {
-			encryptedSuffix = conf.EncryptedSuffix
+			encryptedSuffix = optionalConfig.EncryptedSuffix
 		}
 		if encryptedRegex == "" {
-			encryptedRegex = conf.EncryptedRegex
+			encryptedRegex = optionalConfig.EncryptedRegex
 		}
 		if unencryptedRegex == "" {
-			unencryptedRegex = conf.UnencryptedRegex
+			unencryptedRegex = optionalConfig.UnencryptedRegex
 		}
 		if encryptedCommentRegex == "" {
-			encryptedCommentRegex = conf.EncryptedCommentRegex
+			encryptedCommentRegex = optionalConfig.EncryptedCommentRegex
 		}
 		if unencryptedCommentRegex == "" {
-			unencryptedCommentRegex = conf.UnencryptedCommentRegex
+			unencryptedCommentRegex = optionalConfig.UnencryptedCommentRegex
 		}
 		if !macOnlyEncrypted {
-			macOnlyEncrypted = conf.MACOnlyEncrypted
+			macOnlyEncrypted = optionalConfig.MACOnlyEncrypted
 		}
+	}
+
+	isSingleValueStore := false
+	if svs, ok := inputStore.(sops.SingleValueStore); ok {
+		isSingleValueStore = svs.IsSingleValueStore()
+	}
+
+	if isSingleValueStore {
+		// Warn about settings that potentially disable encryption of the single key.
+		if unencryptedSuffix != "" {
+			log.Warn(fmt.Sprintf("Using an unencrypted suffix does not make sense with the input store (the %s store produces one key that should always be encrypted) and will be ignored.", inputStore.Name()))
+		}
+		if encryptedSuffix != "" {
+			log.Warn(fmt.Sprintf("Using an encrypted suffix does not make sense with the input store (the %s store produces one key that should always be encrypted) and will be ignored.", inputStore.Name()))
+		}
+		if encryptedRegex != "" {
+			log.Warn(fmt.Sprintf("Using an encrypted regex does not make sense with the input store (the %s store produces one key that should always be encrypted) and will be ignored.", inputStore.Name()))
+		}
+		if unencryptedRegex != "" {
+			log.Warn(fmt.Sprintf("Using an unencrypted regex does not make sense with the input store (the %s store produces one key that should always be encrypted) and will be ignored.", inputStore.Name()))
+		}
+		if encryptedCommentRegex != "" {
+			log.Warn(fmt.Sprintf("Using an encrypted comment regex does not make sense with the input store (the %s store never produces comments) and will be ignored.", inputStore.Name()))
+		}
+		// Do not warn about unencryptedCommentRegex and macOnlyEncrypted since they cannot have any effect.
+		unencryptedSuffix = ""
+		encryptedSuffix = ""
+		encryptedRegex = ""
+		unencryptedRegex = ""
+		encryptedCommentRegex = ""
+		unencryptedCommentRegex = ""
+		macOnlyEncrypted = false
 	}
 
 	cryptRuleCount := 0
@@ -2125,18 +2161,18 @@ func getEncryptConfig(c *cli.Context, fileName string) (encryptConfig, error) {
 	}
 
 	// only supply the default UnencryptedSuffix when EncryptedSuffix, EncryptedRegex, and others are not provided
-	if cryptRuleCount == 0 {
+	if cryptRuleCount == 0 && !isSingleValueStore {
 		unencryptedSuffix = sops.DefaultUnencryptedSuffix
 	}
 
 	var groups []sops.KeyGroup
-	groups, err = keyGroups(c, fileName)
+	groups, err = keyGroups(c, fileName, optionalConfig)
 	if err != nil {
 		return encryptConfig{}, err
 	}
 
 	var threshold int
-	threshold, err = shamirThreshold(c, fileName)
+	threshold, err = shamirThreshold(c, fileName, optionalConfig)
 	if err != nil {
 		return encryptConfig{}, err
 	}
@@ -2337,7 +2373,7 @@ func parseTreePath(arg string) ([]interface{}, error) {
 	return path, nil
 }
 
-func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
+func keyGroups(c *cli.Context, file string, optionalConfig *config.Config) ([]sops.KeyGroup, error) {
 	var kmsKeys []keys.MasterKey
 	var pgpKeys []keys.MasterKey
 	var cloudKmsKeys []keys.MasterKey
@@ -2397,7 +2433,11 @@ func keyGroups(c *cli.Context, file string) ([]sops.KeyGroup, error) {
 		}
 	}
 	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("azure-kv") == "" && c.String("hc-vault-transit") == "" && c.String("age") == "" && c.String("oci-kms") == "" {
-		conf, err := loadConfig(c, file, kmsEncryptionContext)
+		conf := optionalConfig
+		var err error
+		if conf == nil {
+			conf, err = loadConfig(c, file, kmsEncryptionContext)
+		}
 		// config file might just not be supplied, without any error
 		if conf == nil {
 			errMsg := "config file not found, or has no creation rules, and no keys provided through command line options"
@@ -2440,11 +2480,15 @@ func loadConfig(c *cli.Context, file string, kmsEncryptionContext map[string]*st
 	return conf, nil
 }
 
-func shamirThreshold(c *cli.Context, file string) (int, error) {
+func shamirThreshold(c *cli.Context, file string, optionalConfig *config.Config) (int, error) {
 	if c.Int("shamir-secret-sharing-threshold") != 0 {
 		return c.Int("shamir-secret-sharing-threshold"), nil
 	}
-	conf, err := loadConfig(c, file, nil)
+	var err error
+	conf := optionalConfig
+	if conf == nil {
+		conf, err = loadConfig(c, file, nil)
+	}
 	if conf == nil {
 		// This takes care of the following two case:
 		// 1. No config was provided, or contains no creation rules. Err will be nil and ShamirThreshold will be the default value of 0.

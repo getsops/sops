@@ -23,6 +23,10 @@ func NewStore(c *config.DotenvStoreConfig) *Store {
 	return &Store{config: *c}
 }
 
+func (store *Store) Name() string {
+	return "dotenv"
+}
+
 // LoadEncryptedFile loads an encrypted file's bytes onto a sops.Tree runtime object
 func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	branches, err := store.LoadPlainFile(in)
