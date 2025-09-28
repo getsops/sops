@@ -16,10 +16,10 @@ require (
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.19.9
 	github.com/aws/aws-sdk-go-v2/service/kms v1.45.6
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.88.3
- 	github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.39.2
+	github.com/aws/aws-sdk-go-v2/service/secretsmanager v1.39.2
 	github.com/aws/aws-sdk-go-v2/service/ssm v1.64.2
 	github.com/aws/aws-sdk-go-v2/service/sts v1.38.6
- 	github.com/aws/smithy-go v1.23.0
+	github.com/aws/smithy-go v1.23.0
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/fatih/color v1.18.0
 	github.com/getsops/gopgagent v0.0.0-20241224165529-7044f28e491e
@@ -81,7 +81,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.9 // indirect
 	github.com/aws/aws-sdk-go-v2/service/sso v1.29.5 // indirect
 	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.35.1 // indirect
-	github.com/aws/smithy-go v1.23.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/cloudflare/circl v1.6.1 // indirect
