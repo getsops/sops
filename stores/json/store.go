@@ -22,10 +22,23 @@ func NewStore(c *config.JSONStoreConfig) *Store {
 	return &Store{config: *c}
 }
 
+func (store *Store) Name() string {
+	return "json"
+}
+
 // BinaryStore handles storage of binary data in a JSON envelope.
 type BinaryStore struct {
 	store  Store
 	config config.JSONBinaryStoreConfig
+}
+
+// The binary store uses a single key ("data") to store everything.
+func (store *BinaryStore) IsSingleValueStore() bool {
+	return true
+}
+
+func (store *BinaryStore) Name() string {
+	return "binary"
 }
 
 func NewBinaryStore(c *config.JSONBinaryStoreConfig) *BinaryStore {

@@ -23,6 +23,10 @@ func NewStore(c *config.DotenvStoreConfig) *Store {
 	return &Store{config: *c}
 }
 
+func (store *Store) Name() string {
+	return "dotenv"
+}
+
 // LoadEncryptedFile loads an encrypted file's bytes onto a sops.Tree runtime object
 func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	branches, err := store.LoadPlainFile(in)
@@ -134,8 +138,8 @@ func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 	buffer := bytes.Buffer{}
 	for _, item := range in[0] {
-		if IsComplexValue(item.Value) {
-			return nil, fmt.Errorf("cannot use complex value in dotenv file: %s", item.Value)
+		if stores.IsComplexValue(item.Value) {
+			return nil, fmt.Errorf("cannot use complex value in dotenv file; offending key %s", item.Key)
 		}
 		var line string
 		if comment, ok := item.Key.(sops.Comment); ok {
@@ -172,14 +176,9 @@ func (store *Store) EmitExample() []byte {
 	return bytes
 }
 
+// Deprecated: use stores.IsComplexValue() instead!
 func IsComplexValue(v interface{}) bool {
-	switch v.(type) {
-	case []interface{}:
-		return true
-	case sops.TreeBranch:
-		return true
-	}
-	return false
+	return stores.IsComplexValue(v)
 }
 
 // HasSopsTopLevelKey checks whether a top-level "sops" key exists.

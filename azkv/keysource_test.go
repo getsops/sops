@@ -181,7 +181,7 @@ func TestMasterKey_EncryptIfNeeded(t *testing.T) {
 }
 
 func TestMasterKey_NeedsRotation(t *testing.T) {
-	key := NewMasterKey("", "", "")
+	key := newMasterKey("", "", "")
 	assert.False(t, key.NeedsRotation())
 
 	key.CreationDate = key.CreationDate.Add(-(azkvTTL + time.Second))
@@ -189,7 +189,7 @@ func TestMasterKey_NeedsRotation(t *testing.T) {
 }
 
 func TestMasterKey_ToString(t *testing.T) {
-	key := NewMasterKey("https://test.vault.azure.net", "key-name", "key-version")
+	key := newMasterKey("https://test.vault.azure.net", "key-name", "key-version")
 	assert.Equal(t, "https://test.vault.azure.net/keys/key-name/key-version", key.ToString())
 }
 
