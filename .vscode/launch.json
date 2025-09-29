@@ -1,0 +1,49 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Decrypt with config file",
+      "type": "go",
+      "request": "launch",
+      "mode": "debug",
+      "program": "${workspaceFolder}/cmd/sops",
+      "args": [
+        "--verbose",
+        "--config",
+        "/Users/mich7902/Documents/repos/github-ArcGISOnlineDev/ago-azure-secrets/.sops.yaml",
+        "--azure-kv-skip-uri-validation",
+        "/Users/mich7902/Documents/repos/github-ArcGISOnlineDev/ago-azure-secrets/BicepSecrets/devdeploy/management/serviceprincipal.enc.json"
+      ]
+    },
+    {
+      "name": "Decrypt without config file",
+      "type": "go",
+      "request": "launch",
+      "mode": "debug",
+      "program": "${workspaceFolder}/cmd/sops",
+      "args": [
+        "--verbose",
+        "--azure-kv-skip-uri-validation",
+        "--azure-kv",
+        "https://arcgisazuredev.az-dev.arcgis.com/keys/sops-secrets-key/348d49aba5474974b41bae497e867c4f",
+        "--decrypt",
+        "/Users/mich7902/Documents/repos/github-ArcGISOnlineDev/ago-azure-secrets/BicepSecrets/devdeploy/management/serviceprincipal.enc.json"
+      ]
+    },
+    {
+      "name": "Encrypt without config file",
+      "type": "go",
+      "request": "launch",
+      "mode": "debug",
+      "program": "${workspaceFolder}/cmd/sops",
+      "args": [
+        "--verbose",
+        "--azure-kv-skip-uri-validation",
+        "--azure-kv",
+        "https://arcgisazuredev.az-dev.arcgis.com/keys/sops-secrets-key/348d49aba5474974b41bae497e867c4f",
+        "--encrypt",
+        "/Users/mich7902/Documents/repos/sops/test.json",
+      ]
+    }
+  ]
+}
