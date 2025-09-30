@@ -5,7 +5,7 @@ edition = "2021"
 authors = ["Adrian Utrilla <adrianutrilla@gmail.com>"]
 
 [dependencies]
-tempfile = "3.22.0"
+tempfile = "3.23.0"
 serde = "1.0"
 serde_json = "1.0.145"
 serde_yaml = "0.9.34"
