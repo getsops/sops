@@ -17,8 +17,6 @@ import (
 var log *logrus.Logger
 
 const (
-	// cryptoEndpointTemplate is the template for the OCI KMS crypto endpoint that is constructed using parts of the key OCID
-	cryptoEndpointTemplate = "https://%s-crypto.kms.%s.oraclecloud.com"
 	// ocidParts is the number of parts in an OCID, separated by ".", eg: "ocid1.key.oc1.uk-london-1.aaaalgz5aacmg.aaaailjtjbkbc5ufsorrihgv2agugpfe7wrtngukihgkybqxcoozz7sbh6lq"
 	ocidParts = 6
 )
@@ -54,13 +52,14 @@ func MasterKeysFromOCIDString(ocids string) []*MasterKey {
 
 // createKeyManagementClient creates a new OCI KMS client
 func (key *MasterKey) createCryptoClient() (client keymanagement.KmsCryptoClient, err error) {
-	region, vault_ref, err := extractRefs(key)
+	region, vaultExt, err := extractRefs(key)
 	if err != nil {
 		log.WithField("ocid", key.Ocid).Errorf("Cannot extract region and vault_ref from OCID: %s", err)
 	}
 
-	endpoint := fmt.Sprintf(cryptoEndpointTemplate, vault_ref, region)
-	log.WithField("endpoint", endpoint).Info("Creating OCI KMS client")
+	cryptoEndpointTemplate := fmt.Sprintf("https://%s-crypto.kms.{region}.{secondLevelDomain}", vaultExt)
+	cryptoEndpoint := common.StringToRegion(region).EndpointForTemplate("kms", cryptoEndpointTemplate)
+	log.WithField("endpoint", cryptoEndpoint).Info("Creating OCI KMS client")
 
 	// Build a flexible configuration provider (12 factor app-ish)
 	cfg, cfgErr := configurationProvider()
@@ -68,7 +67,7 @@ func (key *MasterKey) createCryptoClient() (client keymanagement.KmsCryptoClient
 		return client, fmt.Errorf("cannot build OCI configuration provider: %w", cfgErr)
 	}
 
-	client, err = keymanagement.NewKmsCryptoClientWithConfigurationProvider(cfg, endpoint)
+	client, err = keymanagement.NewKmsCryptoClientWithConfigurationProvider(cfg, cryptoEndpoint)
 	if err != nil {
 		return client, fmt.Errorf("cannot create OCI KMS client: %w", err)
 	}
@@ -81,8 +80,8 @@ func extractRefs(key *MasterKey) (string, string, error) {
 		return "", "", fmt.Errorf("OCID length is %s, expected %d", key.Ocid, ocidParts)
 	}
 	region := parts[3]
-	vault_ref := parts[4]
-	return region, vault_ref, nil
+	vaultExt := parts[4]
+	return region, vaultExt, nil
 }
 
 // EncryptedDataKey returns the encrypted data key this master key holds
