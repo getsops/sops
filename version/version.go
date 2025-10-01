@@ -12,7 +12,7 @@ import (
 )
 
 // Version represents the value of the current semantic version.
-var Version = "3.10.2"
+var Version = "3.11.0"
 
 // PrintVersion prints the current version of sops. If the flag
 // `--disable-version-check` is set or if the environment variable

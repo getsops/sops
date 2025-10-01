@@ -579,6 +579,17 @@ func HasSopsTopLevelKey(branch sops.TreeBranch) bool {
 	return false
 }
 
+// IsComplexValue returns true if the given value is an array or dictionary/hash.
+func IsComplexValue(v interface{}) bool {
+	switch v.(type) {
+	case []interface{}:
+		return true
+	case sops.TreeBranch:
+		return true
+	}
+	return false
+}
+
 // ValToString converts a simple value to a string.
 // It does not handle complex values (arrays and mappings).
 func ValToString(v interface{}) string {
