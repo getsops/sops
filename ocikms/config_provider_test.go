@@ -301,3 +301,79 @@ func TestConfigurationProvider_InstancePrincipal_Stubbed(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, "ip:stub:fp", fp)
 }
+
+// TestConfigurationProvider_EarlyExit_SkipsInstancePrincipal verifies that
+// when environment variables provide valid credentials, Instance Principal
+// is NOT attempted (performance optimization).
+func TestConfigurationProvider_EarlyExit_SkipsInstancePrincipal(t *testing.T) {
+	// Track whether Instance Principal provider was called
+	ipCalled := false
+	old := newIPProvider
+	t.Cleanup(func() { newIPProvider = old })
+	newIPProvider = func() (common.ConfigurationProvider, error) {
+		ipCalled = true
+		// Return an error - if this is called, we want to know
+		return nil, fmt.Errorf("Instance Principal should not be called when env vars work")
+	}
+
+	// Isolate HOME
+	t.Setenv(HomeEnv, t.TempDir())
+
+	// Generate key for env var auth
+	keyDir := t.TempDir()
+	keyPath := writeTempRSAKey(t, keyDir)
+
+	// Set OCI_CLI_* env vars (highest priority)
+	t.Setenv(OCICLITenancy, "ocid1.tenancy.oc1..envtest")
+	t.Setenv(OCICLIUser, "ocid1.user.oc1..envtest")
+	t.Setenv(OCICLIRegion, "us-phoenix-1")
+	t.Setenv(OCICLIFingerprint, "aa:bb:cc:dd:ee:ff:00:11:22:33:44:55:66:77:88:99")
+	t.Setenv(OCICLIKeyFile, keyPath)
+
+	prov, err := configurationProvider()
+	require.NoError(t, err)
+
+	// Verify we got credentials from env vars
+	tenancy, err := prov.TenancyOCID()
+	require.NoError(t, err)
+	require.Equal(t, "ocid1.tenancy.oc1..envtest", tenancy)
+
+	region, err := prov.Region()
+	require.NoError(t, err)
+	require.Equal(t, "us-phoenix-1", region)
+
+	// CRITICAL: Instance Principal should NOT have been called
+	require.False(t, ipCalled, "Instance Principal provider should NOT be called when env vars provide valid credentials (early exit optimization)")
+}
+
+// TestConfigurationProvider_EarlyExit_FallsBackToInstancePrincipal verifies that
+// when environment variables are missing or invalid, Instance Principal IS attempted.
+func TestConfigurationProvider_EarlyExit_FallsBackToInstancePrincipal(t *testing.T) {
+	// Track whether Instance Principal provider was called
+	ipCalled := false
+	old := newIPProvider
+	t.Cleanup(func() { newIPProvider = old })
+	newIPProvider = func() (common.ConfigurationProvider, error) {
+		ipCalled = true
+		return ipStubProvider{}, nil
+	}
+
+	// Isolate environment - NO valid env vars or config files
+	t.Setenv(HomeEnv, t.TempDir())
+	os.Unsetenv(OCICLIConfigFile)
+	os.Unsetenv(OCICLIProfile)
+	clearCLIOCIEnv()
+	clearOCIEnv(t)
+
+	prov, err := configurationProvider()
+	require.NoError(t, err)
+
+	tenancy, err := prov.TenancyOCID()
+	require.NoError(t, err)
+
+	// Should have gotten Instance Principal credentials
+	require.Equal(t, "ocid1.tenancy.oc1..ipstub", tenancy)
+
+	// CRITICAL: Instance Principal SHOULD have been called as fallback
+	require.True(t, ipCalled, "Instance Principal provider SHOULD be called when env vars don't provide credentials")
+}

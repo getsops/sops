@@ -17,7 +17,7 @@ var newIPProvider = auth.InstancePrincipalConfigurationProvider
 // 1) OCI_CLI_* environment variables (via ontariosystems/oci-cli-env-provider)
 // 2) OCI_* environment variables (native SDK env provider)
 // 3) Config file providers (OCI_CLI_CONFIG_FILE/PROFILE if set)
-// 4) Instance Principals (when running on OCI compute)
+// 4) Instance Principals (when running on OCI compute) - only if env vars don't work
 // 5) Default config provider (~/.oci/config, TF_VAR_*), as a last resort
 func configurationProvider() (common.ConfigurationProvider, error) {
 	var providers []common.ConfigurationProvider
@@ -40,7 +40,20 @@ func configurationProvider() (common.ConfigurationProvider, error) {
 			}
 		}
 	}
-	// 4) Instance principals for compute instances (ignore error here; composition will try next)
+
+	// EARLY EXIT: If we have working credentials from env vars or config files, use them
+	// and skip Instance Principal (which can be slow when not on OCI compute).
+	if len(providers) > 0 {
+		if p, err := common.ComposingConfigurationProvider(providers); err == nil {
+			// Test if the provider actually has valid credentials by checking TenancyOCID
+			if _, err := p.TenancyOCID(); err == nil {
+				// Valid credentials found, return early without trying Instance Principal
+				return p, nil
+			}
+		}
+	}
+
+	// 4) Instance principals for compute instances (only if env vars/config didn't work)
 	if ip, err := newIPProvider(); err == nil {
 		providers = append(providers, ip)
 	}
