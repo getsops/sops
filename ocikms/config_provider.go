@@ -1,7 +1,9 @@
 package ocikms
 
 import (
+	"crypto/rsa"
 	"os"
+	"sync"
 
 	ocep "github.com/ontariosystems/oci-cli-env-provider"
 	"github.com/oracle/oci-go-sdk/v65/common"
@@ -13,12 +15,12 @@ var newIPProvider = auth.InstancePrincipalConfigurationProvider
 
 // configurationProvider composes multiple OCI configuration providers to make
 // authentication work seamlessly across environments.
-// Order of precedence:
+// Order of precedence (composing provider will try each in order until one works):
 // 1) OCI_CLI_* environment variables (via ontariosystems/oci-cli-env-provider)
 // 2) OCI_* environment variables (native SDK env provider)
 // 3) Config file providers (OCI_CLI_CONFIG_FILE/PROFILE if set)
-// 4) Instance Principals (when running on OCI compute) - only if env vars don't work
-// 5) Default config provider (~/.oci/config, TF_VAR_*), as a last resort
+// 4) Default config provider (~/.oci/config, TF_VAR_*)
+// 5) Instance Principals (when running on OCI compute) - lazily evaluated as last resort
 func configurationProvider() (common.ConfigurationProvider, error) {
 	var providers []common.ConfigurationProvider
 
@@ -41,25 +43,83 @@ func configurationProvider() (common.ConfigurationProvider, error) {
 		}
 	}
 
-	// EARLY EXIT: If we have working credentials from env vars or config files, use them
-	// and skip Instance Principal (which can be slow when not on OCI compute).
-	if len(providers) > 0 {
-		if p, err := common.ComposingConfigurationProvider(providers); err == nil {
-			// Test if the provider actually has valid credentials by checking TenancyOCID
-			if _, err := p.TenancyOCID(); err == nil {
-				// Valid credentials found, return early without trying Instance Principal
-				return p, nil
-			}
-		}
-	}
-
-	// 4) Instance principals for compute instances (only if env vars/config didn't work)
-	if ip, err := newIPProvider(); err == nil {
-		providers = append(providers, ip)
-	}
-
-	// 5) Always keep a last-resort default config provider at the end
+	// 4) Default config provider (~/.oci/config, TF_VAR_*)
 	providers = append(providers, common.DefaultConfigProvider())
 
+	// 5) Instance principals for compute instances (lazy, only called if nothing else works)
+	providers = append(providers, &lazyConfigurationProvider{factory: newIPProvider})
+
 	return common.ComposingConfigurationProvider(providers)
+}
+
+// lazyConfigurationProvider wraps a ConfigurationProvider factory function and defers its
+// creation until the first method call. This is useful for expensive providers
+// like Instance Principal that may timeout or fail in non-OCI environments.
+type lazyConfigurationProvider struct {
+	factory  func() (common.ConfigurationProvider, error)
+	provider common.ConfigurationProvider
+	once     sync.Once
+	err      error
+}
+
+var _ common.ConfigurationProvider = (*lazyConfigurationProvider)(nil)
+
+func (l *lazyConfigurationProvider) init() {
+	l.provider, l.err = l.factory()
+}
+
+func (l *lazyConfigurationProvider) TenancyOCID() (string, error) {
+	l.once.Do(l.init)
+	if l.err != nil {
+		return "", l.err
+	}
+	return l.provider.TenancyOCID()
+}
+
+func (l *lazyConfigurationProvider) UserOCID() (string, error) {
+	l.once.Do(l.init)
+	if l.err != nil {
+		return "", l.err
+	}
+	return l.provider.UserOCID()
+}
+
+func (l *lazyConfigurationProvider) KeyFingerprint() (string, error) {
+	l.once.Do(l.init)
+	if l.err != nil {
+		return "", l.err
+	}
+	return l.provider.KeyFingerprint()
+}
+
+func (l *lazyConfigurationProvider) Region() (string, error) {
+	l.once.Do(l.init)
+	if l.err != nil {
+		return "", l.err
+	}
+	return l.provider.Region()
+}
+
+func (l *lazyConfigurationProvider) KeyID() (string, error) {
+	l.once.Do(l.init)
+	if l.err != nil {
+		return "", l.err
+	}
+	return l.provider.KeyID()
+}
+
+func (l *lazyConfigurationProvider) PrivateRSAKey() (*rsa.PrivateKey, error) {
+	l.once.Do(l.init)
+	if l.err != nil {
+		return nil, l.err
+	}
+	return l.provider.PrivateRSAKey()
+}
+
+func (l *lazyConfigurationProvider) AuthType() (common.AuthConfig, error) {
+	l.once.Do(l.init)
+	if l.err != nil {
+		return common.AuthConfig{}, l.err
+	}
+	return l.provider.AuthType()
 }

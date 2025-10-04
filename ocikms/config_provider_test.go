@@ -377,3 +377,127 @@ func TestConfigurationProvider_EarlyExit_FallsBackToInstancePrincipal(t *testing
 	// CRITICAL: Instance Principal SHOULD have been called as fallback
 	require.True(t, ipCalled, "Instance Principal provider SHOULD be called when env vars don't provide credentials")
 }
+
+// Test suite for lazyConfigurationProvider
+func TestLazyProvider_FactoryNotCalledUntilFirstUse(t *testing.T) {
+	factoryCalled := false
+	factory := func() (common.ConfigurationProvider, error) {
+		factoryCalled = true
+		return ipStubProvider{}, nil
+	}
+
+	lp := &lazyConfigurationProvider{factory: factory}
+
+	// Factory should NOT be called just by creating the lazy provider
+	require.False(t, factoryCalled, "Factory should not be called on lazy provider creation")
+
+	// Call a method - this should trigger factory
+	_, err := lp.TenancyOCID()
+	require.NoError(t, err)
+	require.True(t, factoryCalled, "Factory should be called on first method invocation")
+}
+
+func TestLazyProvider_FactoryCalledOnlyOnce(t *testing.T) {
+	callCount := 0
+	factory := func() (common.ConfigurationProvider, error) {
+		callCount++
+		return ipStubProvider{}, nil
+	}
+
+	lp := &lazyConfigurationProvider{factory: factory}
+
+	// Call multiple methods
+	_, _ = lp.TenancyOCID()
+	_, _ = lp.Region()
+	_, _ = lp.KeyFingerprint()
+	_, _ = lp.UserOCID()
+	_, _ = lp.KeyID()
+	_, _ = lp.PrivateRSAKey()
+	_, _ = lp.AuthType()
+
+	// Factory should only be called once despite 7 method calls
+	require.Equal(t, 1, callCount, "Factory should only be called once via sync.Once")
+}
+
+func TestLazyProvider_PropagatesFactoryError(t *testing.T) {
+	expectedErr := fmt.Errorf("factory initialization failed")
+	factory := func() (common.ConfigurationProvider, error) {
+		return nil, expectedErr
+	}
+
+	lp := &lazyConfigurationProvider{factory: factory}
+
+	// All methods should return the factory error
+	_, err := lp.TenancyOCID()
+	require.ErrorIs(t, err, expectedErr)
+
+	_, err = lp.Region()
+	require.ErrorIs(t, err, expectedErr)
+
+	_, err = lp.KeyFingerprint()
+	require.ErrorIs(t, err, expectedErr)
+}
+
+func TestLazyProvider_AllMethodsWorkAfterInit(t *testing.T) {
+	factory := func() (common.ConfigurationProvider, error) {
+		return ipStubProvider{}, nil
+	}
+
+	lp := &lazyConfigurationProvider{factory: factory}
+
+	// Test all ConfigurationProvider methods work correctly
+	tenancy, err := lp.TenancyOCID()
+	require.NoError(t, err)
+	require.Equal(t, "ocid1.tenancy.oc1..ipstub", tenancy)
+
+	region, err := lp.Region()
+	require.NoError(t, err)
+	require.Equal(t, "me-dubai-1", region)
+
+	fp, err := lp.KeyFingerprint()
+	require.NoError(t, err)
+	require.Equal(t, "ip:stub:fp", fp)
+
+	keyID, err := lp.KeyID()
+	require.NoError(t, err)
+	require.Equal(t, "ST$ipstub", keyID)
+
+	user, err := lp.UserOCID()
+	require.NoError(t, err)
+	require.Equal(t, "", user)
+
+	key, err := lp.PrivateRSAKey()
+	require.NoError(t, err)
+	require.NotNil(t, key)
+
+	authType, err := lp.AuthType()
+	require.NoError(t, err)
+	require.Equal(t, common.AuthConfig{}, authType)
+}
+
+func TestLazyProvider_ConcurrentAccess(t *testing.T) {
+	callCount := 0
+	factory := func() (common.ConfigurationProvider, error) {
+		callCount++
+		return ipStubProvider{}, nil
+	}
+
+	lp := &lazyConfigurationProvider{factory: factory}
+
+	// Simulate concurrent access from multiple goroutines
+	done := make(chan bool, 10)
+	for i := 0; i < 10; i++ {
+		go func() {
+			_, _ = lp.TenancyOCID()
+			done <- true
+		}()
+	}
+
+	// Wait for all goroutines
+	for i := 0; i < 10; i++ {
+		<-done
+	}
+
+	// Factory should still only be called once (sync.Once is thread-safe)
+	require.Equal(t, 1, callCount, "Factory should only be called once even with concurrent access")
+}
