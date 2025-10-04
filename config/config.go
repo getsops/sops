@@ -17,6 +17,7 @@ import (
 	"github.com/getsops/sops/v3/gcpkms"
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
+	"github.com/getsops/sops/v3/ocikms"
 	"github.com/getsops/sops/v3/pgp"
 	"github.com/getsops/sops/v3/publish"
 	"go.yaml.in/yaml/v3"
@@ -135,6 +136,7 @@ type keyGroup struct {
 	AzureKV []azureKVKey `yaml:"azure_keyvault"`
 	Vault   []string     `yaml:"hc_vault"`
 	Age     []string     `yaml:"age"`
+	OCIKMS  []string     `yaml:"oci_kms"`
 	PGP     []string     `yaml:"pgp"`
 }
 
@@ -173,6 +175,7 @@ type creationRule struct {
 	PathRegex               string      `yaml:"path_regex"`
 	KMS                     interface{} `yaml:"kms"` // string or []string
 	AwsProfile              string      `yaml:"aws_profile"`
+	OCIKMS                  string      `yaml:"oci_kms"`
 	Age                     interface{} `yaml:"age"`                  // string or []string
 	PGP                     interface{} `yaml:"pgp"`                  // string or []string
 	GCPKMS                  interface{} `yaml:"gcp_kms"`              // string or []string
@@ -320,6 +323,9 @@ func extractMasterKeys(group keyGroup) (sops.KeyGroup, error) {
 			keyGroup = append(keyGroup, key)
 		}
 	}
+	for _, k := range group.OCIKMS {
+		keyGroup = append(keyGroup, ocikms.NewMasterKeyFromOCID(k))
+	}
 	for _, k := range group.PGP {
 		keyGroup = append(keyGroup, pgp.NewMasterKeyFromFingerprint(k))
 	}
@@ -362,6 +368,9 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			if err != nil {
 				return nil, err
 			}
+			for _, k := range group.OCIKMS {
+				keyGroup = append(keyGroup, ocikms.NewMasterKeyFromOCID(k))
+			}
 			groups = append(groups, keyGroup)
 		}
 	} else {
@@ -400,6 +409,9 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			return nil, err
 		}
 		for _, k := range gcpkms.MasterKeysFromResourceIDString(strings.Join(gcpkmsKeys, ",")) {
+			keyGroup = append(keyGroup, k)
+		}
+		for _, k := range ocikms.MasterKeysFromOCIDString(cRule.OCIKMS) {
 			keyGroup = append(keyGroup, k)
 		}
 		azKeys, err := getKeysWithValidation(cRule.GetAzureKeyVaultKeys, "azure_keyvault")
