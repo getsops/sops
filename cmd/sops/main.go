@@ -197,6 +197,11 @@ func main() {
 					Name:  "same-process",
 					Usage: "run command in the current process instead of in a child process",
 				},
+				cli.StringFlag{
+					Name:   "decryption-order",
+					Usage:  "comma separated list of decryption key types",
+					EnvVar: "SOPS_DECRYPTION_ORDER",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if c.NArg() != 2 {
@@ -306,6 +311,11 @@ func main() {
 					Name:  "filename",
 					Usage: fmt.Sprintf("filename for the temporarily file (default: %s)", exec.FallbackFilename),
 				},
+				cli.StringFlag{
+					Name:   "decryption-order",
+					Usage:  "comma separated list of decryption key types",
+					EnvVar: "SOPS_DECRYPTION_ORDER",
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				if c.NArg() != 2 {
@@ -383,6 +393,11 @@ func main() {
 				cli.BoolFlag{
 					Name:  "verbose",
 					Usage: "Enable verbose logging output",
+				},
+				cli.StringFlag{
+					Name:   "decryption-order",
+					Usage:  "comma separated list of decryption key types",
+					EnvVar: "SOPS_DECRYPTION_ORDER",
 				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
