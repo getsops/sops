@@ -21,7 +21,7 @@ import (
 	"github.com/getsops/sops/v3/stores/yaml"
 	"github.com/getsops/sops/v3/version"
 	"github.com/mitchellh/go-wordwrap"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v3"
 	"golang.org/x/term"
 )
 
@@ -160,13 +160,13 @@ func LoadEncryptedFile(loader sops.EncryptedFileLoader, inputPath string) (*sops
 	return LoadEncryptedFileEx(loader, inputPath, false)
 }
 
-// NewExitError returns a cli.ExitError given an error (wrapped in a generic interface{})
+// NewExitError returns a cli.ExitCoder given an error (wrapped in a generic interface{})
 // and an exit code to represent the failure
-func NewExitError(i interface{}, exitCode int) *cli.ExitError {
+func NewExitError(i interface{}, exitCode int) cli.ExitCoder {
 	if userErr, ok := i.(sops.UserError); ok {
 		return NewExitError(userErr.UserError(), exitCode)
 	}
-	return cli.NewExitError(i, exitCode)
+	return cli.Exit(i, exitCode)
 }
 
 // StoreForFormat returns the correct format-specific implementation
