@@ -67,7 +67,7 @@ func decrypt(opts decryptOpts) (decryptedFile []byte, err error) {
 		err = fmt.Errorf("%s\n\n%s", err.Error(), notBinaryHint)
 	}
 	if err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Error dumping file: %s", err), codes.ErrorDumpingTree)
+		return nil, common.Exit(fmt.Sprintf("Error dumping file: %s", err), codes.ErrorDumpingTree)
 	}
 	return decryptedFile, err
 }
@@ -84,7 +84,7 @@ func extract(tree *sops.Tree, path []interface{}, outputStore sops.Store) (outpu
 			err = fmt.Errorf("%s\n\n%s", err.Error(), notBinaryHint)
 		}
 		if err != nil {
-			return nil, common.NewExitError(fmt.Sprintf("Error dumping file: %s", err), codes.ErrorDumpingTree)
+			return nil, common.Exit(fmt.Sprintf("Error dumping file: %s", err), codes.ErrorDumpingTree)
 		}
 		return decrypted, err
 	} else if str, ok := v.(string); ok {
@@ -92,7 +92,7 @@ func extract(tree *sops.Tree, path []interface{}, outputStore sops.Store) (outpu
 	}
 	bytes, err := outputStore.EmitValue(v)
 	if err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Error dumping tree: %s", err), codes.ErrorDumpingTree)
+		return nil, common.Exit(fmt.Sprintf("Error dumping tree: %s", err), codes.ErrorDumpingTree)
 	}
 	return bytes, nil
 }
