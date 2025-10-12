@@ -2364,7 +2364,7 @@ func findConfigFile() (string, error) {
 	return result.Path, err
 }
 
-func loadStoresConfig(c *cli.Command, path string) (*config.StoresConfig, error) {
+func loadStoresConfig(c *cli.Command) (*config.StoresConfig, error) {
 	configPath := c.String("config")
 	if configPath == "" {
 		// Ignore config not found errors returned from findConfigFile since the config file is not mandatory
@@ -2378,7 +2378,7 @@ func loadStoresConfig(c *cli.Command, path string) (*config.StoresConfig, error)
 }
 
 func inputStore(c *cli.Command, path string) (common.Store, error) {
-	storesConf, err := loadStoresConfig(c, path)
+	storesConf, err := loadStoresConfig(c)
 	if err != nil {
 		return nil, err
 	}
@@ -2386,7 +2386,7 @@ func inputStore(c *cli.Command, path string) (common.Store, error) {
 }
 
 func outputStore(c *cli.Command, path string) (common.Store, error) {
-	storesConf, err := loadStoresConfig(c, path)
+	storesConf, err := loadStoresConfig(c)
 	if err != nil {
 		return nil, err
 	}
