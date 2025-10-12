@@ -15,6 +15,7 @@ import (
 	"strings"
 
 	"github.com/sirupsen/logrus"
+	"github.com/urfave/cli-docs/v3"
 	"github.com/urfave/cli/v3"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -182,6 +183,24 @@ For more information, see the README at https://github.com/getsops/sops`,
 		EnableShellCompletion: true,
 
 		Commands: []*cli.Command{
+			{
+				Name:   "manpage",
+				Usage:  "Output man page for sops command",
+				Hidden: true,
+				Action: func(ctx context.Context, c *cli.Command) error {
+					man, err := docs.ToManWithSection(c.Root(), 1)
+					if err != nil {
+						return cli.Exit(err, 1)
+					}
+
+					_, err = c.Writer.Write([]byte(man))
+					if err != nil {
+						return cli.Exit(err, 1)
+					}
+
+					return nil
+				},
+			},
 			{
 				Name:      "exec-env",
 				Usage:     "execute a command with decrypted values inserted into the environment",
