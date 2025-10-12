@@ -203,7 +203,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 				}, keyserviceFlags...),
 				Action: func(ctx context.Context, c *cli.Command) error {
 					if c.NArg() != 2 {
-						return common.NewExitError(fmt.Errorf("error: missing file to decrypt"), codes.ErrorGeneric)
+						return common.Exit(fmt.Errorf("error: missing file to decrypt"), codes.ErrorGeneric)
 					}
 
 					fileName := c.Args().First()
@@ -234,7 +234,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 						log.Warn("exec-env's --background option is deprecated and will be removed in a future version of sops")
 
 						if c.Bool("same-process") {
-							return common.NewExitError("Error: The --same-process flag cannot be used with --background", codes.ErrorConflictingParameters)
+							return common.Exit("Error: The --same-process flag cannot be used with --background", codes.ErrorConflictingParameters)
 						}
 					}
 
@@ -317,7 +317,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 				}, keyserviceFlags...),
 				Action: func(ctx context.Context, c *cli.Command) error {
 					if c.NArg() != 2 {
-						return common.NewExitError(fmt.Errorf("error: missing file to decrypt"), codes.ErrorGeneric)
+						return common.Exit(fmt.Errorf("error: missing file to decrypt"), codes.ErrorGeneric)
 					}
 
 					fileName := c.Args().First()
@@ -409,11 +409,11 @@ For more information, see the README at https://github.com/getsops/sops`,
 					} else {
 						configPath, err = findConfigFile()
 						if err != nil {
-							return common.NewExitError(err, codes.ErrorGeneric)
+							return common.Exit(err, codes.ErrorGeneric)
 						}
 					}
 					if c.NArg() < 1 {
-						return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
+						return common.Exit("Error: no file specified", codes.NoFileSpecified)
 					}
 					warnMoreThanOnePositionalArgument(c)
 					path := c.Args().First()
@@ -451,7 +451,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 							if cliErr, ok := err.(cli.ExitCoder); ok && cliErr != nil {
 								return cliErr
 							} else if err != nil {
-								return common.NewExitError(err, codes.ErrorGeneric)
+								return common.Exit(err, codes.ErrorGeneric)
 							}
 						}
 						return nil
@@ -513,7 +513,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 				},
 				Action: func(ctx context.Context, c *cli.Command) error {
 					if c.NArg() < 1 {
-						return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
+						return common.Exit("Error: no file specified", codes.NoFileSpecified)
 					}
 
 					fileName := c.Args().First()
@@ -533,7 +533,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 
 					json, err := encodingjson.Marshal(status)
 					if err != nil {
-						return common.NewExitError(err, codes.ErrorGeneric)
+						return common.Exit(err, codes.ErrorGeneric)
 					}
 
 					fmt.Println(string(json))
@@ -602,7 +602,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 							azkvs := c.StringSlice("azure-kv")
 							ageRecipients := c.StringSlice("age")
 							if c.NArg() != 0 {
-								return common.NewExitError(fmt.Errorf("error: no positional arguments allowed"), codes.ErrorGeneric)
+								return common.Exit(fmt.Errorf("error: no positional arguments allowed"), codes.ErrorGeneric)
 							}
 							var group sops.KeyGroup
 							for _, fp := range pgpFps {
@@ -680,7 +680,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 
 						Action: func(ctx context.Context, c *cli.Command) error {
 							if c.NArg() != 1 {
-								return common.NewExitError(fmt.Errorf("error: exactly one positional argument (index) required"), codes.ErrorGeneric)
+								return common.Exit(fmt.Errorf("error: exactly one positional argument (index) required"), codes.ErrorGeneric)
 							}
 							group, err := strconv.ParseUint(c.Args().First(), 10, 32)
 							if err != nil {
@@ -730,11 +730,11 @@ For more information, see the README at https://github.com/getsops/sops`,
 					} else {
 						configPath, err = findConfigFile()
 						if err != nil {
-							return common.NewExitError(err, codes.ErrorGeneric)
+							return common.Exit(err, codes.ErrorGeneric)
 						}
 					}
 					if c.NArg() < 1 {
-						return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
+						return common.Exit("Error: no file specified", codes.NoFileSpecified)
 					}
 					failedCounter := 0
 					for _, path := range c.Args().Slice() {
@@ -752,7 +752,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 							if cliErr, ok := err.(cli.ExitCoder); ok && cliErr != nil {
 								return cliErr
 							} else if err != nil {
-								return common.NewExitError(err, codes.ErrorGeneric)
+								return common.Exit(err, codes.ErrorGeneric)
 							}
 						}
 
@@ -764,7 +764,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 						}
 					}
 					if failedCounter > 0 {
-						return common.NewExitError(fmt.Errorf("failed updating %d key(s)", failedCounter), codes.ErrorGeneric)
+						return common.Exit(fmt.Errorf("failed updating %d key(s)", failedCounter), codes.ErrorGeneric)
 					}
 					return nil
 				},
@@ -814,11 +814,11 @@ For more information, see the README at https://github.com/getsops/sops`,
 					}
 					readFromStdin := c.NArg() == 0
 					if readFromStdin && c.Bool("in-place") {
-						return common.NewExitError("Error: cannot use --in-place when reading from stdin", codes.ErrorConflictingParameters)
+						return common.Exit("Error: cannot use --in-place when reading from stdin", codes.ErrorConflictingParameters)
 					}
 					warnMoreThanOnePositionalArgument(c)
 					if c.Bool("in-place") && c.String("output") != "" {
-						return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
+						return common.Exit("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
 					}
 					var fileName string
 					var err error
@@ -828,7 +828,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 							return toExitError(err)
 						}
 						if _, err := os.Stat(fileName); os.IsNotExist(err) {
-							return common.NewExitError(fmt.Sprintf("Error: cannot operate on non-existent file %q", fileName), codes.NoFileSpecified)
+							return common.Exit(fmt.Sprintf("Error: cannot operate on non-existent file %q", fileName), codes.NoFileSpecified)
 						}
 					}
 					fileNameOverride := c.String("filename-override")
@@ -859,7 +859,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 					var extract []interface{}
 					extract, err = parseTreePath(c.String("extract"))
 					if err != nil {
-						return common.NewExitError(fmt.Errorf("error parsing --extract path: %s", err), codes.InvalidTreePathFormat)
+						return common.Exit(fmt.Errorf("error parsing --extract path: %s", err), codes.InvalidTreePathFormat)
 					}
 					output, err := decrypt(decryptOpts{
 						OutputStore:     outputStore,
@@ -881,7 +881,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 					if c.Bool("in-place") {
 						file, err := os.Create(fileName)
 						if err != nil {
-							return common.NewExitError(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
+							return common.Exit(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
 						}
 						defer file.Close()
 						_, err = file.Write(output)
@@ -896,7 +896,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 					if c.String("output") != "" {
 						file, err := os.Create(c.String("output"))
 						if err != nil {
-							return common.NewExitError(fmt.Sprintf("Could not open output file for writing: %s", err), codes.CouldNotWriteOutputFile)
+							return common.Exit(fmt.Sprintf("Could not open output file for writing: %s", err), codes.CouldNotWriteOutputFile)
 						}
 						defer file.Close()
 						outputFile = file
@@ -996,15 +996,15 @@ For more information, see the README at https://github.com/getsops/sops`,
 					readFromStdin := c.NArg() == 0
 					if readFromStdin {
 						if c.Bool("in-place") {
-							return common.NewExitError("Error: cannot use --in-place when reading from stdin", codes.ErrorConflictingParameters)
+							return common.Exit("Error: cannot use --in-place when reading from stdin", codes.ErrorConflictingParameters)
 						}
 						if c.String("filename-override") == "" {
-							return common.NewExitError("Error: must specify --filename-override when reading from stdin", codes.ErrorConflictingParameters)
+							return common.Exit("Error: must specify --filename-override when reading from stdin", codes.ErrorConflictingParameters)
 						}
 					}
 					warnMoreThanOnePositionalArgument(c)
 					if c.Bool("in-place") && c.String("output") != "" {
-						return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
+						return common.Exit("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
 					}
 					var fileName string
 					var err error
@@ -1014,7 +1014,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 							return toExitError(err)
 						}
 						if _, err := os.Stat(fileName); os.IsNotExist(err) {
-							return common.NewExitError(fmt.Sprintf("Error: cannot operate on non-existent file %q", fileName), codes.NoFileSpecified)
+							return common.Exit(fmt.Sprintf("Error: cannot operate on non-existent file %q", fileName), codes.NoFileSpecified)
 						}
 					}
 					fileNameOverride := c.String("filename-override")
@@ -1059,7 +1059,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 					if c.Bool("in-place") {
 						file, err := os.Create(fileName)
 						if err != nil {
-							return common.NewExitError(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
+							return common.Exit(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
 						}
 						defer file.Close()
 						_, err = file.Write(output)
@@ -1074,7 +1074,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 					if c.String("output") != "" {
 						file, err := os.Create(c.String("output"))
 						if err != nil {
-							return common.NewExitError(fmt.Sprintf("Could not open output file for writing: %s", err), codes.CouldNotWriteOutputFile)
+							return common.Exit(fmt.Sprintf("Could not open output file for writing: %s", err), codes.CouldNotWriteOutputFile)
 						}
 						defer file.Close()
 						outputFile = file
@@ -1171,11 +1171,11 @@ For more information, see the README at https://github.com/getsops/sops`,
 						logging.SetLevel(logrus.DebugLevel)
 					}
 					if c.NArg() < 1 {
-						return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
+						return common.Exit("Error: no file specified", codes.NoFileSpecified)
 					}
 					warnMoreThanOnePositionalArgument(c)
 					if c.Bool("in-place") && c.String("output") != "" {
-						return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
+						return common.Exit("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
 					}
 					fileName, err := filepath.Abs(c.Args().First())
 					if err != nil {
@@ -1184,7 +1184,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 					if _, err := os.Stat(fileName); os.IsNotExist(err) {
 						if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" ||
 							c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" {
-							return common.NewExitError(fmt.Sprintf("Error: cannot add or remove keys on non-existent file %q, use the `edit` subcommand instead.", fileName), codes.CannotChangeKeysFromNonExistentFile)
+							return common.Exit(fmt.Sprintf("Error: cannot add or remove keys on non-existent file %q, use the `edit` subcommand instead.", fileName), codes.CannotChangeKeysFromNonExistentFile)
 						}
 					}
 					fileNameOverride := c.String("filename-override")
@@ -1226,7 +1226,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 					if c.Bool("in-place") {
 						file, err := os.Create(fileName)
 						if err != nil {
-							return common.NewExitError(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
+							return common.Exit(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
 						}
 						defer file.Close()
 						_, err = file.Write(output)
@@ -1241,7 +1241,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 					if c.String("output") != "" {
 						file, err := os.Create(c.String("output"))
 						if err != nil {
-							return common.NewExitError(fmt.Sprintf("Could not open output file for writing: %s", err), codes.CouldNotWriteOutputFile)
+							return common.Exit(fmt.Sprintf("Could not open output file for writing: %s", err), codes.CouldNotWriteOutputFile)
 						}
 						defer file.Close()
 						outputFile = file
@@ -1340,7 +1340,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 						logging.SetLevel(logrus.DebugLevel)
 					}
 					if c.NArg() < 1 {
-						return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
+						return common.Exit("Error: no file specified", codes.NoFileSpecified)
 					}
 					warnMoreThanOnePositionalArgument(c)
 					fileName, err := filepath.Abs(c.Args().First())
@@ -1399,7 +1399,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 					// executed to avoid truncating it when there's errors
 					file, err := os.Create(fileName)
 					if err != nil {
-						return common.NewExitError(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
+						return common.Exit(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
 					}
 					defer file.Close()
 					_, err = file.Write(output)
@@ -1454,15 +1454,15 @@ For more information, see the README at https://github.com/getsops/sops`,
 						logging.SetLevel(logrus.DebugLevel)
 					}
 					if c.Bool("value-file") && c.Bool("value-stdin") {
-						return common.NewExitError("Error: cannot use both --value-file and --value-stdin", codes.ErrorGeneric)
+						return common.Exit("Error: cannot use both --value-file and --value-stdin", codes.ErrorGeneric)
 					}
 					if c.Bool("value-stdin") {
 						if c.NArg() != 2 {
-							return common.NewExitError("Error: file specified, or index and value are missing. Need precisely 2 positional arguments since --value-stdin is used.", codes.NoFileSpecified)
+							return common.Exit("Error: file specified, or index and value are missing. Need precisely 2 positional arguments since --value-stdin is used.", codes.NoFileSpecified)
 						}
 					} else {
 						if c.NArg() != 3 {
-							return common.NewExitError("Error: no file specified, or index and value are missing. Need precisely 3 positional arguments.", codes.NoFileSpecified)
+							return common.Exit("Error: no file specified, or index and value are missing. Need precisely 3 positional arguments.", codes.NoFileSpecified)
 						}
 					}
 					fileName, err := filepath.Abs(c.Args().First())
@@ -1482,7 +1482,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 
 					path, err := parseTreePath(c.Args().Get(1))
 					if err != nil {
-						return common.NewExitError("Invalid set index format", codes.ErrorInvalidSetFormat)
+						return common.Exit("Invalid set index format", codes.ErrorInvalidSetFormat)
 					}
 
 					var data string
@@ -1535,7 +1535,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 					// executed to avoid truncating it when there's errors
 					file, err := os.Create(fileName)
 					if err != nil {
-						return common.NewExitError(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
+						return common.Exit(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
 					}
 					defer file.Close()
 					_, err = file.Write(output)
@@ -1582,7 +1582,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 						logging.SetLevel(logrus.DebugLevel)
 					}
 					if c.NArg() != 2 {
-						return common.NewExitError("Error: no file specified, or index is missing", codes.NoFileSpecified)
+						return common.Exit("Error: no file specified, or index is missing", codes.NoFileSpecified)
 					}
 					fileName, err := filepath.Abs(c.Args().First())
 					if err != nil {
@@ -1601,7 +1601,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 
 					path, err := parseTreePath(c.Args().Get(1))
 					if err != nil {
-						return common.NewExitError("Invalid unset index format", codes.ErrorInvalidSetFormat)
+						return common.Exit("Invalid unset index format", codes.ErrorInvalidSetFormat)
 					}
 
 					order, err := decryptionOrder(c.String("decryption-order"))
@@ -1629,7 +1629,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 					// executed to avoid truncating it when there's errors
 					file, err := os.Create(fileName)
 					if err != nil {
-						return common.NewExitError(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
+						return common.Exit(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
 					}
 					defer file.Close()
 					_, err = file.Write(output)
@@ -1849,11 +1849,11 @@ For more information, see the README at https://github.com/getsops/sops`,
 				logging.SetLevel(logrus.DebugLevel)
 			}
 			if c.NArg() < 1 {
-				return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
+				return common.Exit("Error: no file specified", codes.NoFileSpecified)
 			}
 			warnMoreThanOnePositionalArgument(c)
 			if c.Bool("in-place") && c.String("output") != "" {
-				return common.NewExitError("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
+				return common.Exit("Error: cannot operate on both --output and --in-place", codes.ErrorConflictingParameters)
 			}
 			fileName, err := filepath.Abs(c.Args().First())
 			if err != nil {
@@ -1862,10 +1862,10 @@ For more information, see the README at https://github.com/getsops/sops`,
 			if _, err := os.Stat(fileName); os.IsNotExist(err) {
 				if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" ||
 					c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" {
-					return common.NewExitError(fmt.Sprintf("Error: cannot add or remove keys on non-existent file %q, use `--kms` and `--pgp` instead.", fileName), codes.CannotChangeKeysFromNonExistentFile)
+					return common.Exit(fmt.Sprintf("Error: cannot add or remove keys on non-existent file %q, use `--kms` and `--pgp` instead.", fileName), codes.CannotChangeKeysFromNonExistentFile)
 				}
 				if isEncryptMode || isDecryptMode || isRotateMode {
-					return common.NewExitError(fmt.Sprintf("Error: cannot operate on non-existent file %q", fileName), codes.NoFileSpecified)
+					return common.Exit(fmt.Sprintf("Error: cannot operate on non-existent file %q", fileName), codes.NoFileSpecified)
 				}
 			}
 			fileNameOverride := c.String("filename-override")
@@ -1946,7 +1946,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 				var extract []interface{}
 				extract, err = parseTreePath(c.String("extract"))
 				if err != nil {
-					return common.NewExitError(fmt.Errorf("error parsing --extract path: %s", err), codes.InvalidTreePathFormat)
+					return common.Exit(fmt.Errorf("error parsing --extract path: %s", err), codes.InvalidTreePathFormat)
 				}
 				output, err = decrypt(decryptOpts{
 					OutputStore:     outputStore,
@@ -2035,7 +2035,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 			if c.Bool("in-place") || isEditMode || isSetMode {
 				file, err := os.Create(fileName)
 				if err != nil {
-					return common.NewExitError(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
+					return common.Exit(fmt.Sprintf("Could not open in-place file for writing: %s", err), codes.CouldNotWriteOutputFile)
 				}
 				defer file.Close()
 				_, err = file.Write(output)
@@ -2050,7 +2050,7 @@ For more information, see the README at https://github.com/getsops/sops`,
 			if c.String("output") != "" {
 				file, err := os.Create(c.String("output"))
 				if err != nil {
-					return common.NewExitError(fmt.Sprintf("Could not open output file for writing: %s", err), codes.CouldNotWriteOutputFile)
+					return common.Exit(fmt.Sprintf("Could not open output file for writing: %s", err), codes.CouldNotWriteOutputFile)
 				}
 				defer file.Close()
 				outputFile = file
@@ -2159,7 +2159,7 @@ func getEncryptConfig(c *cli.Command, fileName string, inputStore common.Store, 
 	}
 
 	if cryptRuleCount > 1 {
-		return encryptConfig{}, common.NewExitError("Error: cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex, unencrypted_regex, encrypted_comment_regex, or unencrypted_comment_regex in the same file", codes.ErrorConflictingParameters)
+		return encryptConfig{}, common.Exit("Error: cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex, unencrypted_regex, encrypted_comment_regex, or unencrypted_comment_regex in the same file", codes.ErrorConflictingParameters)
 	}
 
 	// only supply the default UnencryptedSuffix when EncryptedSuffix, EncryptedRegex, and others are not provided
@@ -2384,7 +2384,7 @@ func keyGroups(c *cli.Command, file string, optionalConfig *config.Config) ([]so
 	var ageMasterKeys []keys.MasterKey
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
 	if c.String("encryption-context") != "" && kmsEncryptionContext == nil {
-		return nil, common.NewExitError("Invalid KMS encryption context format", codes.ErrorInvalidKMSEncryptionContextFormat)
+		return nil, common.Exit("Invalid KMS encryption context format", codes.ErrorInvalidKMSEncryptionContextFormat)
 	}
 	if c.String("kms") != "" {
 		for _, k := range kms.MasterKeysFromArnString(c.String("kms"), kmsEncryptionContext, c.String("aws-profile")) {
@@ -2497,7 +2497,7 @@ func jsonValueToTreeInsertableValue(jsonValue string) (interface{}, error) {
 	var valueToInsert interface{}
 	err := encodingjson.Unmarshal([]byte(jsonValue), &valueToInsert)
 	if err != nil {
-		return nil, common.NewExitError("Value for --set is not valid JSON", codes.ErrorInvalidSetFormat)
+		return nil, common.Exit("Value for --set is not valid JSON", codes.ErrorInvalidSetFormat)
 	}
 	// Check if decoding it as json we find a single value
 	// and not a map or slice, in which case we can't marshal
@@ -2507,7 +2507,7 @@ func jsonValueToTreeInsertableValue(jsonValue string) (interface{}, error) {
 		var err error
 		valueToInsert, err = (&json.Store{}).LoadPlainFile([]byte(jsonValue))
 		if err != nil {
-			return nil, common.NewExitError("Invalid --set value format", codes.ErrorInvalidSetFormat)
+			return nil, common.Exit("Invalid --set value format", codes.ErrorInvalidSetFormat)
 		}
 	}
 	// Fix for #461
@@ -2525,7 +2525,7 @@ func extractSetArguments(set string) (path []interface{}, valueToInsert interfac
 	// Since python-dict-index has to end with ], we split at "] " to get the two parts
 	pathValuePair := strings.SplitAfterN(set, "] ", 2)
 	if len(pathValuePair) < 2 {
-		return nil, nil, common.NewExitError("Invalid --set format", codes.ErrorInvalidSetFormat)
+		return nil, nil, common.Exit("Invalid --set format", codes.ErrorInvalidSetFormat)
 	}
 	fullPath := strings.TrimRight(pathValuePair[0], " ")
 	jsonValue := pathValuePair[1]
@@ -2538,7 +2538,7 @@ func extractSetArguments(set string) (path []interface{}, valueToInsert interfac
 
 	path, err = parseTreePath(fullPath)
 	if err != nil {
-		return nil, nil, common.NewExitError("Invalid --set format", codes.ErrorInvalidSetFormat)
+		return nil, nil, common.Exit("Invalid --set format", codes.ErrorInvalidSetFormat)
 	}
 	return path, valueToInsert, nil
 }
@@ -2551,7 +2551,7 @@ func decryptionOrder(decryptionOrder string) ([]string, error) {
 	unique := make(map[string]struct{})
 	for _, v := range orderList {
 		if _, ok := unique[v]; ok {
-			return nil, common.NewExitError(fmt.Sprintf("Duplicate decryption key type: %s", v), codes.DuplicateDecryptionKeyType)
+			return nil, common.Exit(fmt.Sprintf("Duplicate decryption key type: %s", v), codes.DuplicateDecryptionKeyType)
 		}
 		unique[v] = struct{}{}
 	}
