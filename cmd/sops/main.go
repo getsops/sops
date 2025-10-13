@@ -416,10 +416,6 @@ For more information, see the README at https://github.com/getsops/sops`,
 						Name:  "recursive",
 						Usage: "If the source path is a directory, publish all its content recursively",
 					},
-					&cli.BoolFlag{
-						Name:  "verbose",
-						Usage: "Enable verbose logging output",
-					},
 					&cli.StringFlag{
 						Name:    "decryption-order",
 						Usage:   "comma separated list of decryption key types",
@@ -510,10 +506,6 @@ For more information, see the README at https://github.com/getsops/sops`,
 					&cli.BoolFlag{
 						Name:  "prompt",
 						Usage: "Prompt user to confirm every incoming request",
-					},
-					&cli.BoolFlag{
-						Name:  "verbose",
-						Usage: "Enable verbose logging output",
 					},
 				},
 				Action: func(ctx context.Context, c *cli.Command) error {
