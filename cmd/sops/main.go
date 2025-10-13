@@ -78,24 +78,6 @@ func warnMoreThanOnePositionalArgument(c *cli.Command) {
 func main() {
 	cli.VersionPrinter = version.PrintVersion
 
-	// Remove GLOBAL OPTIONS from the help text of subcommands
-	cli.CommandHelpTemplate = `NAME:
-   {{template "helpNameTemplate" .}}
-
-USAGE:
-   {{template "usageTemplate" .}}{{if .Category}}
-
-CATEGORY:
-   {{.Category}}{{end}}{{if .Description}}
-
-DESCRIPTION:
-   {{template "descriptionTemplate" .}}{{end}}{{if .VisibleFlagCategories}}
-
-OPTIONS:{{template "visibleFlagCategoryTemplate" .}}{{else if .VisibleFlags}}
-
-OPTIONS:{{template "visibleFlagTemplate" .}}{{end}}
-`
-
 	keyserviceFlags := []cli.Flag{
 		&cli.BoolFlag{
 			Name:    "enable-local-keyservice",
@@ -1702,222 +1684,285 @@ For more information, see the README at https://github.com/getsops/sops`,
 			},
 		},
 
-		Flags: append([]cli.Flag{
+		Flags: []cli.Flag{
 			&cli.BoolFlag{
 				Name:    "decrypt",
 				Aliases: []string{"d"},
+				Local:   true,
 				Usage:   "decrypt a file and output the result to stdout",
 			},
 			&cli.BoolFlag{
 				Name:    "encrypt",
 				Aliases: []string{"e"},
+				Local:   true,
 				Usage:   "encrypt a file and output the result to stdout",
 			},
 			&cli.BoolFlag{
 				Name:    "rotate",
 				Aliases: []string{"r"},
+				Local:   true,
 				Usage:   "generate a new data encryption key and reencrypt all values with the new key",
 			},
 			&cli.BoolFlag{
 				Name:    "disable-version-check",
+				Local:   true,
 				Usage:   "do not check whether the current version is latest during --version",
 				Sources: cli.EnvVars("SOPS_DISABLE_VERSION_CHECK"),
 			},
 			&cli.BoolFlag{
 				Name:  "check-for-updates",
+				Local: true,
 				Usage: "do check whether the current version is latest during --version",
 			},
 			&cli.StringFlag{
 				Name:    "kms",
 				Aliases: []string{"k"},
+				Local:   true,
 				Usage:   "comma separated list of KMS ARNs",
 				Sources: cli.EnvVars("SOPS_KMS_ARN"),
 			},
 			&cli.StringFlag{
 				Name:  "aws-profile",
+				Local: true,
 				Usage: "The AWS profile to use for requests to AWS",
 			},
 			&cli.StringFlag{
 				Name:    "gcp-kms",
+				Local:   true,
 				Usage:   "comma separated list of GCP KMS resource IDs",
 				Sources: cli.EnvVars("SOPS_GCP_KMS_IDS"),
 			},
 			&cli.StringFlag{
 				Name:    "hckms",
+				Local:   true,
 				Usage:   "comma separated list of HuaweiCloud KMS key IDs (format: region:key-uuid)",
 				Sources: cli.EnvVars("SOPS_HUAWEICLOUD_KMS_IDS"),
 			},
 			&cli.StringFlag{
 				Name:    "azure-kv",
+				Local:   true,
 				Usage:   "comma separated list of Azure Key Vault URLs",
 				Sources: cli.EnvVars("SOPS_AZURE_KEYVAULT_URLS"),
 			},
 			&cli.StringFlag{
 				Name:    "hc-vault-transit",
+				Local:   true,
 				Usage:   "comma separated list of vault's key URI (e.g. 'https://vault.example.org:8200/v1/transit/keys/dev')",
 				Sources: cli.EnvVars("SOPS_VAULT_URIS"),
 			},
 			&cli.StringFlag{
 				Name:    "pgp",
 				Aliases: []string{"p"},
+				Local:   true,
 				Usage:   "comma separated list of PGP fingerprints",
 				Sources: cli.EnvVars("SOPS_PGP_FP"),
 			},
 			&cli.StringFlag{
 				Name:    "age",
 				Aliases: []string{"a"},
+				Local:   true,
 				Usage:   "comma separated list of age recipients",
 				Sources: cli.EnvVars("SOPS_AGE_RECIPIENTS"),
 			},
 			&cli.BoolFlag{
 				Name:    "in-place",
 				Aliases: []string{"i"},
+				Local:   true,
 				Usage:   "write output back to the same file instead of stdout",
 			},
 			&cli.StringFlag{
 				Name:  "extract",
+				Local: true,
 				Usage: "extract a specific key or branch from the input document. Decrypt mode only. Example: --extract '[\"somekey\"][0]'",
 			},
 			&cli.StringFlag{
 				Name:  "input-type",
+				Local: true,
 				Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
 			},
 			&cli.StringFlag{
 				Name:  "output-type",
+				Local: true,
 				Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the input file's extension to determine the output format",
 			},
 			&cli.BoolFlag{
 				Name:    "show-master-keys",
 				Aliases: []string{"s"},
+				Local:   true,
 				Usage:   "display master encryption keys in the file during editing",
 			},
 			&cli.StringFlag{
 				Name:  "add-gcp-kms",
+				Local: true,
 				Usage: "add the provided comma-separated list of GCP KMS key resource IDs to the list of master keys on the given file",
 			},
 			&cli.StringFlag{
 				Name:  "rm-gcp-kms",
+				Local: true,
 				Usage: "remove the provided comma-separated list of GCP KMS key resource IDs from the list of master keys on the given file",
 			},
 			&cli.StringFlag{
 				Name:  "add-hckms",
+				Local: true,
 				Usage: "add the provided comma-separated list of HuaweiCloud KMS key IDs (format: region:key-uuid) to the list of master keys on the given file",
 			},
 			&cli.StringFlag{
 				Name:  "rm-hckms",
+				Local: true,
 				Usage: "remove the provided comma-separated list of HuaweiCloud KMS key IDs (format: region:key-uuid) from the list of master keys on the given file",
 			},
 			&cli.StringFlag{
 				Name:  "add-azure-kv",
+				Local: true,
 				Usage: "add the provided comma-separated list of Azure Key Vault key URLs to the list of master keys on the given file",
 			},
 			&cli.StringFlag{
 				Name:  "rm-azure-kv",
+				Local: true,
 				Usage: "remove the provided comma-separated list of Azure Key Vault key URLs from the list of master keys on the given file",
 			},
 			&cli.StringFlag{
 				Name:  "add-kms",
+				Local: true,
 				Usage: "add the provided comma-separated list of KMS ARNs to the list of master keys on the given file",
 			},
 			&cli.StringFlag{
 				Name:  "rm-kms",
+				Local: true,
 				Usage: "remove the provided comma-separated list of KMS ARNs from the list of master keys on the given file",
 			},
 			&cli.StringFlag{
 				Name:  "add-hc-vault-transit",
+				Local: true,
 				Usage: "add the provided comma-separated list of Vault's URI key to the list of master keys on the given file ( eg. https://vault.example.org:8200/v1/transit/keys/dev)",
 			},
 			&cli.StringFlag{
 				Name:  "rm-hc-vault-transit",
+				Local: true,
 				Usage: "remove the provided comma-separated list of Vault's URI key from the list of master keys on the given file ( eg. https://vault.example.org:8200/v1/transit/keys/dev)",
 			},
 			&cli.StringFlag{
 				Name:  "add-age",
+				Local: true,
 				Usage: "add the provided comma-separated list of age recipients fingerprints to the list of master keys on the given file",
 			},
 			&cli.StringFlag{
 				Name:  "rm-age",
+				Local: true,
 				Usage: "remove the provided comma-separated list of age recipients from the list of master keys on the given file",
 			},
 			&cli.StringFlag{
 				Name:  "add-pgp",
+				Local: true,
 				Usage: "add the provided comma-separated list of PGP fingerprints to the list of master keys on the given file",
 			},
 			&cli.StringFlag{
 				Name:  "rm-pgp",
+				Local: true,
 				Usage: "remove the provided comma-separated list of PGP fingerprints from the list of master keys on the given file",
 			},
 			&cli.BoolFlag{
 				Name:  "ignore-mac",
+				Local: true,
 				Usage: "ignore Message Authentication Code during decryption",
 			},
 			&cli.BoolFlag{
 				Name:  "mac-only-encrypted",
+				Local: true,
 				Usage: "compute MAC only over values which end up encrypted",
 			},
 			&cli.StringFlag{
 				Name:  "unencrypted-suffix",
+				Local: true,
 				Usage: "override the unencrypted key suffix.",
 			},
 			&cli.StringFlag{
 				Name:  "encrypted-suffix",
+				Local: true,
 				Usage: "override the encrypted key suffix. When empty, all keys will be encrypted, unless otherwise marked with unencrypted-suffix.",
 			},
 			&cli.StringFlag{
 				Name:  "unencrypted-regex",
+				Local: true,
 				Usage: "set the unencrypted key regex. When specified, only keys matching the regex will be left unencrypted.",
 			},
 			&cli.StringFlag{
 				Name:  "encrypted-regex",
+				Local: true,
 				Usage: "set the encrypted key regex. When specified, only keys matching the regex will be encrypted.",
 			},
 			&cli.StringFlag{
 				Name:  "unencrypted-comment-regex",
+				Local: true,
 				Usage: "set the unencrypted comment suffix. When specified, only keys that have comment matching the regex will be left unencrypted.",
 			},
 			&cli.StringFlag{
 				Name:  "encrypted-comment-regex",
+				Local: true,
 				Usage: "set the encrypted comment suffix. When specified, only keys that have comment matching the regex will be encrypted.",
 			},
 			&cli.StringFlag{
 				Name:    "config",
+				Local:   true,
 				Usage:   "path to sops' config file. If set, sops will not search for the config file recursively.",
 				Sources: cli.EnvVars("SOPS_CONFIG"),
 			},
 			&cli.StringFlag{
 				Name:  "encryption-context",
+				Local: true,
 				Usage: "comma separated list of KMS encryption context key:value pairs",
 			},
 			&cli.StringFlag{
 				Name:  "set",
+				Local: true,
 				Usage: `set a specific key or branch in the input document. value must be a json encoded string. (edit mode only). eg. --set '["somekey"][0] {"somevalue":true}'`,
 			},
 			&cli.IntFlag{
 				Name:  "shamir-secret-sharing-threshold",
+				Local: true,
 				Usage: "the number of master keys required to retrieve the data key with shamir",
 			},
 			&cli.IntFlag{
 				Name:  "indent",
+				Local: true,
 				Usage: "the number of spaces to indent YAML or JSON encoded file",
 			},
 			&cli.BoolFlag{
 				Name:  "verbose",
+				Local: true,
 				Usage: "Enable verbose logging output",
 			},
 			&cli.StringFlag{
 				Name:  "output",
+				Local: true,
 				Usage: "Save the output after encryption or decryption to the file specified",
 			},
 			&cli.StringFlag{
 				Name:  "filename-override",
+				Local: true,
 				Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type",
 			},
 			&cli.StringFlag{
 				Name:    "decryption-order",
+				Local:   true,
 				Usage:   "comma separated list of decryption key types",
 				Sources: cli.EnvVars("SOPS_DECRYPTION_ORDER"),
 			},
-		}, keyserviceFlags...),
+			// Repeat keyserviceFlags, with Local value set to true
+			&cli.BoolFlag{
+				Name:    "enable-local-keyservice",
+				Value:   true,
+				Local:   true,
+				Usage:   "use local key service",
+				Sources: cli.EnvVars("SOPS_ENABLE_LOCAL_KEYSERVICE"),
+			},
+			&cli.StringSliceFlag{
+				Name:    "keyservice",
+				Local:   true,
+				Usage:   "Specify the key services to use in addition to the local one. Can be specified more than once. Syntax: protocol://address. Example: tcp://myserver.com:5000",
+				Sources: cli.EnvVars("SOPS_KEYSERVICE"),
+			},
+		},
 
 		Action: func(ctx context.Context, c *cli.Command) error {
 			isDecryptMode := c.Bool("decrypt")
