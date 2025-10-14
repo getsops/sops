@@ -27,6 +27,9 @@ const (
 	// SopsGoogleCredentialsOAuthTokenEnv is the environment variable used for the
 	// GCP OAuth 2.0 Token.
 	SopsGoogleCredentialsOAuthTokenEnv = "GOOGLE_OAUTH_ACCESS_TOKEN"
+	// SopsGCPKMSClientTypeEnv is the environment variable used to specify the
+	// GCP KMS client type. Valid values are "grpc" (default) and "rest".
+	SopsGCPKMSClientTypeEnv = "SOPS_GCP_KMS_CLIENT_TYPE"
 	// KeyTypeIdentifier is the string used to identify a GCP KMS MasterKey.
 	KeyTypeIdentifier = "gcp_kms"
 )
@@ -294,7 +297,21 @@ func (key *MasterKey) newKMSClient(ctx context.Context) (*kms.KeyManagementClien
 		}
 	}
 
-	client, err := kms.NewKeyManagementClient(ctx, opts...)
+	// Select client type based on environment variable
+	clientType := os.Getenv(SopsGCPKMSClientTypeEnv)
+	var client *kms.KeyManagementClient
+	var err error
+
+	switch strings.ToLower(clientType) {
+	case "rest":
+		client, err = kms.NewKeyManagementRESTClient(ctx, opts...)
+	case "grpc", "":
+		// Default to gRPC client when not specified or explicitly set to "grpc"
+		client, err = kms.NewKeyManagementClient(ctx, opts...)
+	default:
+		return nil, fmt.Errorf("invalid client type %q specified in %s environment variable: valid values are 'grpc' or 'rest'", clientType, SopsGCPKMSClientTypeEnv)
+	}
+
 	if err != nil {
 		return nil, err
 	}
