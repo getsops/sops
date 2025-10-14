@@ -917,7 +917,7 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:  "output",
-					Usage: "Save the output after decryption to the file specified",
+					Usage: "Save the output after encryption to the file specified",
 				},
 				cli.StringFlag{
 					Name:   "kms, k",
