@@ -309,6 +309,14 @@ Or if you are logged in you can authorize by generating an access token:
 
     $ export GOOGLE_OAUTH_ACCESS_TOKEN="$(gcloud auth print-access-token)"
 
+By default, SOPS uses the gRPC client to communicate with GCP KMS. You can optionally
+switch to the REST client by setting the ``SOPS_GCP_KMS_CLIENT_TYPE`` environment variable:
+
+.. code:: sh
+
+    $ export SOPS_GCP_KMS_CLIENT_TYPE=rest  # Use REST client
+    $ export SOPS_GCP_KMS_CLIENT_TYPE=grpc  # Use gRPC client (default)
+
 Encrypting/decrypting with GCP KMS requires a KMS ResourceID. You can use the
 cloud console the get the ResourceID or you can create one using the gcloud
 sdk:
