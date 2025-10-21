@@ -3,6 +3,7 @@ package keyservice
 import (
 	"fmt"
 
+	"github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys"
 	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/azkv"
 	"github.com/getsops/sops/v3/gcpkms"
@@ -14,10 +15,20 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+var (
+	// testHookCaptureAzureKey, when set by tests, receives the Azure KV MasterKey after client options are applied.
+	testHookCaptureAzureKey func(*azkv.MasterKey)
+
+	// testHookSkipAzureNetwork, when true, causes Azure encrypt/decrypt helpers to skip real network calls.
+	testHookSkipAzureNetwork bool
+)
+
 // Server is a key service server that uses SOPS MasterKeys to fulfill requests
 type Server struct {
 	// Prompt indicates whether the server should prompt before decrypting or encrypting data
 	Prompt bool
+	// SkipAzureKvUriValidation indicates whether Azure Key Vault URI/challenge resource validation should be skipped
+	SkipAzureKvUriValidation bool
 }
 
 func (ks *Server) encryptWithPgp(key *PgpKey, plaintext []byte) ([]byte, error) {
@@ -55,6 +66,18 @@ func (ks *Server) encryptWithAzureKeyVault(key *AzureKeyVaultKey, plaintext []by
 		Name:     key.Name,
 		Version:  key.Version,
 	}
+
+	// only disable challenge resource (URI) verification if flag was provided.
+	if ks.SkipAzureKvUriValidation {
+		azkv.NewClientOptions(&azkeys.ClientOptions{DisableChallengeResourceVerification: true}).ApplyToMasterKey(&azkvKey)
+	}
+	if testHookCaptureAzureKey != nil {
+		testHookCaptureAzureKey(&azkvKey)
+	}
+	if testHookSkipAzureNetwork {
+		return []byte("dummy"), nil
+	}
+
 	err := azkvKey.Encrypt(plaintext)
 	if err != nil {
 		return nil, err
@@ -115,6 +138,17 @@ func (ks *Server) decryptWithAzureKeyVault(key *AzureKeyVaultKey, ciphertext []b
 		VaultURL: key.VaultUrl,
 		Name:     key.Name,
 		Version:  key.Version,
+	}
+
+	// only disable challenge resource (URI) verification if flag was provided.
+	if ks.SkipAzureKvUriValidation {
+		azkv.NewClientOptions(&azkeys.ClientOptions{DisableChallengeResourceVerification: true}).ApplyToMasterKey(&azkvKey)
+	}
+	if testHookCaptureAzureKey != nil {
+		testHookCaptureAzureKey(&azkvKey)
+	}
+	if testHookSkipAzureNetwork {
+		return []byte("dummy"), nil
 	}
 	azkvKey.EncryptedKey = string(ciphertext)
 	plaintext, err := azkvKey.Decrypt()

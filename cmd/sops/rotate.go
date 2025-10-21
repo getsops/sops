@@ -69,7 +69,7 @@ func rotate(opts rotateOpts) ([]byte, error) {
 	// Create a new data key
 	dataKey, errs := tree.GenerateDataKeyWithKeyServices(opts.KeyServices)
 	if len(errs) > 0 {
-		err = fmt.Errorf("Could not generate data key: %s", errs)
+		err = fmt.Errorf("could not generate data key: %s", errs)
 		return nil, err
 	}
 

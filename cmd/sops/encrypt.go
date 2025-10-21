@@ -113,7 +113,7 @@ func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 	}
 	dataKey, errs := tree.GenerateDataKeyWithKeyServices(opts.KeyServices)
 	if len(errs) > 0 {
-		err = fmt.Errorf("Could not generate data key: %s", errs)
+		err = fmt.Errorf("could not generate data key: %s", errs)
 		return nil, err
 	}
 

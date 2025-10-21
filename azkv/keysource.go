@@ -162,6 +162,11 @@ func (c ClientOptions) ApplyToMasterKey(key *MasterKey) {
 	key.clientOptions = c.o
 }
 
+// ClientOptions returns the azkeys.ClientOptions configured on the MasterKey (may be nil).
+func (key *MasterKey) ClientOptions() *azkeys.ClientOptions {
+	return key.clientOptions
+}
+
 // Encrypt takes a SOPS data key, encrypts it with Azure Key Vault, and stores
 // the result in the EncryptedKey field.
 //
