@@ -162,6 +162,12 @@ func (c ClientOptions) ApplyToMasterKey(key *MasterKey) {
 	key.clientOptions = c.o
 }
 
+// ApplyDisableChallengeResourceVerification configures the MasterKey to disable challenge resource verification.
+// This helper allows callers to avoid importing azkeys directly.
+func ApplyDisableChallengeResourceVerification(key *MasterKey) {
+	NewClientOptions(&azkeys.ClientOptions{DisableChallengeResourceVerification: true}).ApplyToMasterKey(key)
+}
+
 // ClientOptions returns the azkeys.ClientOptions configured on the MasterKey (may be nil).
 func (key *MasterKey) ClientOptions() *azkeys.ClientOptions {
 	return key.clientOptions

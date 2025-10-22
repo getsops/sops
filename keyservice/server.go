@@ -3,7 +3,6 @@ package keyservice
 import (
 	"fmt"
 
-	"github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys"
 	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/azkv"
 	"github.com/getsops/sops/v3/gcpkms"
@@ -69,7 +68,7 @@ func (ks *Server) encryptWithAzureKeyVault(key *AzureKeyVaultKey, plaintext []by
 
 	// only disable challenge resource (URI) verification if flag was provided.
 	if ks.SkipAzureKvUriValidation {
-		azkv.NewClientOptions(&azkeys.ClientOptions{DisableChallengeResourceVerification: true}).ApplyToMasterKey(&azkvKey)
+		azkv.ApplyDisableChallengeResourceVerification(&azkvKey)
 	}
 	if testHookCaptureAzureKey != nil {
 		testHookCaptureAzureKey(&azkvKey)
@@ -142,7 +141,7 @@ func (ks *Server) decryptWithAzureKeyVault(key *AzureKeyVaultKey, ciphertext []b
 
 	// only disable challenge resource (URI) verification if flag was provided.
 	if ks.SkipAzureKvUriValidation {
-		azkv.NewClientOptions(&azkeys.ClientOptions{DisableChallengeResourceVerification: true}).ApplyToMasterKey(&azkvKey)
+		azkv.ApplyDisableChallengeResourceVerification(&azkvKey)
 	}
 	if testHookCaptureAzureKey != nil {
 		testHookCaptureAzureKey(&azkvKey)
