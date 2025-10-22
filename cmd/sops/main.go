@@ -2267,7 +2267,8 @@ func toExitError(err error) error {
 func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 	if c.Bool("enable-local-keyservice") {
 		// propagate azure-kv-skip-uri-validation flag to local keyservice server instance
-		local := keyservice.NewCustomLocalClient(keyservice.Server{Prompt: false, SkipAzureKvUriValidation: c.Bool("azure-kv-skip-uri-validation")})
+		skipAzureKvUriValidation := c.Bool("azure-kv-skip-uri-validation") || c.GlobalBool("azure-kv-skip-uri-validation")
+		local := keyservice.NewCustomLocalClient(keyservice.Server{Prompt: false, SkipAzureKvUriValidation: skipAzureKvUriValidation})
 		svcs = append(svcs, local)
 	}
 	uris := c.StringSlice("keyservice")
