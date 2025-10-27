@@ -19,6 +19,7 @@ import (
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/pgp"
 	"github.com/getsops/sops/v3/publish"
+	"github.com/getsops/sops/v3/tencentkms"
 	"go.yaml.in/yaml/v3"
 )
 
@@ -129,13 +130,14 @@ type configFile struct {
 }
 
 type keyGroup struct {
-	Merge   []keyGroup   `yaml:"merge"`
-	KMS     []kmsKey     `yaml:"kms"`
-	GCPKMS  []gcpKmsKey  `yaml:"gcp_kms"`
-	AzureKV []azureKVKey `yaml:"azure_keyvault"`
-	Vault   []string     `yaml:"hc_vault"`
-	Age     []string     `yaml:"age"`
-	PGP     []string     `yaml:"pgp"`
+	Merge      []keyGroup      `yaml:"merge"`
+	KMS        []kmsKey        `yaml:"kms"`
+	GCPKMS     []gcpKmsKey     `yaml:"gcp_kms"`
+	AzureKV    []azureKVKey    `yaml:"azure_keyvault"`
+	Vault      []string        `yaml:"hc_vault"`
+	Age        []string        `yaml:"age"`
+	PGP        []string        `yaml:"pgp"`
+	TencentKMS []tencentKmsKey `yaml:"tencent_kms"`
 }
 
 type gcpKmsKey struct {
@@ -153,6 +155,10 @@ type azureKVKey struct {
 	VaultURL string `yaml:"vaultUrl"`
 	Key      string `yaml:"key"`
 	Version  string `yaml:"version"`
+}
+
+type tencentKmsKey struct {
+	KeyID string `yaml:"key_id"`
 }
 
 type destinationRule struct {
@@ -178,6 +184,7 @@ type creationRule struct {
 	GCPKMS                  interface{} `yaml:"gcp_kms"`              // string or []string
 	AzureKeyVault           interface{} `yaml:"azure_keyvault"`       // string or []string
 	VaultURI                interface{} `yaml:"hc_vault_transit_uri"` // string or []string
+	TencentKMS              interface{} `yaml:"tencent_kms"`          // string or []string
 	KeyGroups               []keyGroup  `yaml:"key_groups"`
 	ShamirThreshold         int         `yaml:"shamir_threshold"`
 	UnencryptedSuffix       string      `yaml:"unencrypted_suffix"`
@@ -196,6 +203,10 @@ func (c *creationRule) GetKMSKeys() ([]string, error) {
 
 func (c *creationRule) GetAgeKeys() ([]string, error) {
 	return parseKeyField(c.Age, "age")
+}
+
+func (c *creationRule) GetTencentKMSKeys() ([]string, error) {
+	return parseKeyField(c.TencentKMS, "tencent_kms")
 }
 
 func (c *creationRule) GetPGPKeys() ([]string, error) {
@@ -343,6 +354,9 @@ func extractMasterKeys(group keyGroup) (sops.KeyGroup, error) {
 			return nil, err
 		}
 	}
+	for _, k := range group.TencentKMS {
+		keyGroup = append(keyGroup, tencentkms.NewMasterKeyFromKeyID(k.KeyID))
+	}
 	return deduplicateKeygroup(keyGroup), nil
 }
 
@@ -423,6 +437,13 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		}
 		for _, k := range vaultKeys {
 			keyGroup = append(keyGroup, k)
+		}
+		tencentKMSKeys, err := getKeysWithValidation(cRule.GetTencentKMSKeys, "tencent_kms")
+		if err != nil {
+			return nil, err
+		}
+		for _, k := range tencentKMSKeys {
+			keyGroup = append(keyGroup, tencentkms.NewMasterKeyFromKeyID(k))
 		}
 		groups = append(groups, keyGroup)
 	}
