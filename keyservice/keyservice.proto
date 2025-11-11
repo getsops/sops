@@ -10,6 +10,7 @@ message Key {
 		AzureKeyVaultKey azure_keyvault_key = 4;
 		VaultKey vault_key = 5;
 		AgeKey age_key = 6;
+		TencentKmsKey tencent_kms_key = 7;
 	}
 }
 
@@ -42,6 +43,10 @@ message AzureKeyVaultKey {
 
 message AgeKey {
 	string recipient = 1;
+}
+
+message TencentKmsKey {
+	string key_id = 1;
 }
 
 message EncryptRequest {
