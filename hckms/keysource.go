@@ -43,7 +43,7 @@ func init() {
 type MasterKey struct {
 	// KeyID is the full key identifier in format "region:key-uuid"
 	KeyID string
-	// Region is the HuaweiCloud region (e.g., "cn-north-1")
+	// Region is the HuaweiCloud region (e.g., "tr-west-1")
 	Region string
 	// KeyUUID is the UUID of the KMS key
 	KeyUUID string
