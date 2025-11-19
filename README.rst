@@ -1014,8 +1014,8 @@ try all other remote key services until one succeeds.
 You can start a key service server by running ``sops keyservice``.
 
 You can specify the key services the ``sops`` binary uses with the
-``--keyservice`` option (this flag can be specified more than once, so you can
-use multiple key services); alternatively, a single key service can be specified
+``--keyservice`` option. This flag can be specified more than once, so you can
+use multiple key services. Alternatively, a single key service can be specified
 by setting the ``SOPS_KEYSERVICE`` environment variable. The local key service
 can be disabled with ``--enable-local-keyservice=false`` or by setting the
 ``SOPS_ENABLE_LOCAL_KEYSERVICE`` environment variable to ``false``.
