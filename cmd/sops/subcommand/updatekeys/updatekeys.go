@@ -100,7 +100,7 @@ func updateFile(opts Opts) error {
 	}
 	key, err := tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices, opts.DecryptionOrder)
 	if err != nil {
-		return common.NewExitError(err, codes.CouldNotRetrieveKey)
+		return common.Exit(err, codes.CouldNotRetrieveKey)
 	}
 	tree.Metadata.KeyGroups = conf.KeyGroups
 	tree.Metadata.ShamirThreshold = shamirThreshold
@@ -110,7 +110,7 @@ func updateFile(opts Opts) error {
 	}
 	output, err := store.EmitEncryptedFile(*tree)
 	if err != nil {
-		return common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
+		return common.Exit(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
 	}
 	outputFile, err := os.Create(opts.InputPath)
 	if err != nil {
