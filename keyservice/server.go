@@ -9,6 +9,7 @@ import (
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/pgp"
+	"github.com/getsops/sops/v3/tencentkms"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -18,6 +19,8 @@ import (
 type Server struct {
 	// Prompt indicates whether the server should prompt before decrypting or encrypting data
 	Prompt bool
+	// Embed UnimplementedKeyServiceServer for forward compatibility
+	UnimplementedKeyServiceServer
 }
 
 func (ks *Server) encryptWithPgp(key *PgpKey, plaintext []byte) ([]byte, error) {
@@ -87,6 +90,17 @@ func (ks *Server) encryptWithAge(key *AgeKey, plaintext []byte) ([]byte, error) 
 	return []byte(ageKey.EncryptedKey), nil
 }
 
+func (ks *Server) encryptWithTencentKms(key *TencentKmsKey, plaintext []byte) ([]byte, error) {
+	tencentKmsKey := tencentkms.MasterKey{
+		KeyID: key.KeyId,
+	}
+	err := tencentKmsKey.Encrypt(plaintext)
+	if err != nil {
+		return nil, err
+	}
+	return []byte(tencentKmsKey.EncryptedKey), nil
+}
+
 func (ks *Server) decryptWithPgp(key *PgpKey, ciphertext []byte) ([]byte, error) {
 	pgpKey := pgp.NewMasterKeyFromFingerprint(key.Fingerprint)
 	pgpKey.EncryptedKey = string(ciphertext)
@@ -138,6 +152,15 @@ func (ks *Server) decryptWithAge(key *AgeKey, ciphertext []byte) ([]byte, error)
 	}
 	ageKey.EncryptedKey = string(ciphertext)
 	plaintext, err := ageKey.Decrypt()
+	return []byte(plaintext), err
+}
+
+func (ks *Server) decryptWithTencentKms(key *TencentKmsKey, ciphertext []byte) ([]byte, error) {
+	tencentKmsKey := tencentkms.MasterKey{
+		KeyID: key.KeyId,
+	}
+	tencentKmsKey.EncryptedKey = string(ciphertext)
+	plaintext, err := tencentKmsKey.Decrypt()
 	return []byte(plaintext), err
 }
 
@@ -196,6 +219,14 @@ func (ks Server) Encrypt(ctx context.Context,
 		response = &EncryptResponse{
 			Ciphertext: ciphertext,
 		}
+	case *Key_TencentKmsKey:
+		ciphertext, err := ks.encryptWithTencentKms(k.TencentKmsKey, req.Plaintext)
+		if err != nil {
+			return nil, err
+		}
+		response = &EncryptResponse{
+			Ciphertext: ciphertext,
+		}
 	case nil:
 		return nil, status.Errorf(codes.NotFound, "Must provide a key")
 	default:
@@ -222,6 +253,10 @@ func keyToString(key *Key) string {
 		return fmt.Sprintf("Azure Key Vault key with URL %s/keys/%s/%s", k.AzureKeyvaultKey.VaultUrl, k.AzureKeyvaultKey.Name, k.AzureKeyvaultKey.Version)
 	case *Key_VaultKey:
 		return fmt.Sprintf("Hashicorp Vault key with URI %s/v1/%s/keys/%s", k.VaultKey.VaultAddress, k.VaultKey.EnginePath, k.VaultKey.KeyName)
+	case *Key_AgeKey:
+		return fmt.Sprintf("Age key with recipient %s", k.AgeKey.Recipient)
+	case *Key_TencentKmsKey:
+		return fmt.Sprintf("Tencent Cloud KMS key with ID %s", k.TencentKmsKey.KeyId)
 	default:
 		return "Unknown key type"
 	}
@@ -292,6 +327,14 @@ func (ks Server) Decrypt(ctx context.Context,
 		}
 	case *Key_AgeKey:
 		plaintext, err := ks.decryptWithAge(k.AgeKey, req.Ciphertext)
+		if err != nil {
+			return nil, err
+		}
+		response = &DecryptResponse{
+			Plaintext: plaintext,
+		}
+	case *Key_TencentKmsKey:
+		plaintext, err := ks.decryptWithTencentKms(k.TencentKmsKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}
