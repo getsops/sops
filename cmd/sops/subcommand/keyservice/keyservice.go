@@ -36,6 +36,8 @@ func Run(opts Opts) error {
 	grpcServer := grpc.NewServer()
 	keyservice.RegisterKeyServiceServer(grpcServer, keyservice.Server{
 		Prompt: opts.Prompt,
+		// remote keyservice currently does not receive CLI flags; default to false.
+		SkipAzureKvUriValidation: false,
 	})
 	log.Infof("Listening on %s://%s", opts.Network, opts.Address)
 
