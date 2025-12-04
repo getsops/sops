@@ -1837,6 +1837,10 @@ func main() {
 			Usage:  "comma separated list of decryption key types",
 			EnvVar: "SOPS_DECRYPTION_ORDER",
 		},
+		cli.BoolFlag{
+			Name:  "azure-kv-skip-uri-validation",
+			Usage: "skip Azure Key Vault URI validation",
+		},
 	}, keyserviceFlags...)
 
 	app.Action = func(c *cli.Context) error {
@@ -2262,7 +2266,10 @@ func toExitError(err error) error {
 
 func keyservices(c *cli.Context) (svcs []keyservice.KeyServiceClient) {
 	if c.Bool("enable-local-keyservice") {
-		svcs = append(svcs, keyservice.NewLocalClient())
+		// propagate azure-kv-skip-uri-validation flag to local keyservice server instance
+		skipAzureKvUriValidation := c.Bool("azure-kv-skip-uri-validation") || c.GlobalBool("azure-kv-skip-uri-validation")
+		local := keyservice.NewCustomLocalClient(keyservice.Server{Prompt: false, SkipAzureKvUriValidation: skipAzureKvUriValidation})
+		svcs = append(svcs, local)
 	}
 	uris := c.StringSlice("keyservice")
 	for _, uri := range uris {
