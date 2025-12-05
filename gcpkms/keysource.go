@@ -280,13 +280,14 @@ func (key *MasterKey) TypeToIdentifier() string {
 // It returns an error if the ResourceID is invalid, or if the setup of the
 // client fails.
 func (key *MasterKey) newKMSClient(ctx context.Context) (*kms.KeyManagementClient, error) {
-	re := regexp.MustCompile(`^projects/[^/]+/locations/[^/]+/keyRings/[^/]+/cryptoKeys/[^/]+$`)
+	re := regexp.MustCompile(`^projects/(?P<project>[^/]+)/locations/[^/]+/keyRings/[^/]+/cryptoKeys/[^/]+$`)
 	matches := re.FindStringSubmatch(key.ResourceID)
 	if matches == nil {
 		return nil, fmt.Errorf("no valid resource ID found in %q", key.ResourceID)
 	}
 
 	var opts []option.ClientOption
+	opts = append(opts, option.WithQuotaProject(matches[1]))
 	switch {
 	case key.tokenSource != nil:
 		opts = append(opts, option.WithTokenSource(key.tokenSource))
