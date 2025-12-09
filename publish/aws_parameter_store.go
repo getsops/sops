@@ -63,8 +63,14 @@ func (awspsd *AWSParameterStoreDestination) Upload(fileContents []byte, fileName
 func (awspsd *AWSParameterStoreDestination) UploadUnencrypted(data map[string]interface{}, fileName string) error {
 	ctx := context.TODO()
 
-	// Load AWS config
-	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion(awspsd.region))
+	// Load AWS config - use explicit region if provided, otherwise rely on SDK defaults
+	var cfg aws.Config
+	var err error
+	if awspsd.region != "" {
+		cfg, err = config.LoadDefaultConfig(ctx, config.WithRegion(awspsd.region))
+	} else {
+		cfg, err = config.LoadDefaultConfig(ctx)
+	}
 	if err != nil {
 		return fmt.Errorf("unable to load AWS SDK config: %w", err)
 	}

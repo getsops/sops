@@ -48,8 +48,14 @@ func (awssmsd *AWSSecretsManagerDestination) Upload(fileContents []byte, fileNam
 func (awssmsd *AWSSecretsManagerDestination) UploadUnencrypted(data map[string]interface{}, fileName string) error {
 	ctx := context.TODO()
 
-	// Load AWS config
-	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion(awssmsd.region))
+	// Load AWS config - use explicit region if provided, otherwise rely on SDK defaults
+	var cfg aws.Config
+	var err error
+	if awssmsd.region != "" {
+		cfg, err = config.LoadDefaultConfig(ctx, config.WithRegion(awssmsd.region))
+	} else {
+		cfg, err = config.LoadDefaultConfig(ctx)
+	}
 	if err != nil {
 		return fmt.Errorf("unable to load AWS SDK config: %w", err)
 	}

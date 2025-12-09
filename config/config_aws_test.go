@@ -11,10 +11,11 @@ creation_rules:
   - path_regex: foobar*
     kms: "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012"
 destination_rules:
-  - aws_secrets_manager_region: "us-east-1"
+  - aws_region: "us-east-1"
     aws_secrets_manager_secret_name: "myapp/database"
     path_regex: "^secrets/.*"
-  - aws_secrets_manager_region: "us-west-2"
+  - aws_region: "us-west-2"
+    aws_secrets_manager_secret_name: "api"
     path_regex: "^west-secrets/.*"
 `)
 
@@ -23,13 +24,11 @@ creation_rules:
   - path_regex: foobar*
     kms: "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012"
 destination_rules:
-  - aws_parameter_store_region: "us-east-1"
+  - aws_region: "us-east-1"
     aws_parameter_store_path: "/myapp/config"
-    aws_parameter_store_type: "SecureString"
     path_regex: "^parameters/.*"
-  - aws_parameter_store_region: "us-west-2"
+  - aws_region: "us-west-2"
     aws_parameter_store_path: "/myapp/west/"
-    aws_parameter_store_type: "String"
     path_regex: "^west-parameters/.*"
 `)
 
@@ -38,10 +37,10 @@ creation_rules:
   - path_regex: foobar*
     kms: "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012"
 destination_rules:
-  - aws_secrets_manager_region: "us-east-1"
+  - aws_region: "us-east-1"
     aws_secrets_manager_secret_name: "myapp/database"
     path_regex: "^secrets/.*"
-  - aws_parameter_store_region: "us-east-1"
+  - aws_region: "us-east-1"
     aws_parameter_store_path: "/myapp/config"
     path_regex: "^parameters/.*"
   - s3_bucket: "mybucket"
@@ -55,12 +54,12 @@ func TestLoadConfigFileWithAWSSecretsManagerDestinationRules(t *testing.T) {
 	path := conf.Destination.Path("database.yaml")
 	assert.Contains(t, path, "arn:aws:secretsmanager:us-east-1:*:secret:myapp/database")
 
-	// Test with region but no specific secret name - this should match the second rule
+	// Test second rule with different region
 	conf, err = parseDestinationRuleForFile(parseConfigFile(sampleConfigWithAWSSecretsManagerDestinationRules, t), "west-secrets/api.yaml", nil)
 	assert.Nil(t, err)
 	assert.NotNil(t, conf.Destination)
 	path = conf.Destination.Path("api.yaml")
-	assert.Contains(t, path, "arn:aws:secretsmanager:us-west-2:*:secret:api.yaml")
+	assert.Contains(t, path, "arn:aws:secretsmanager:us-west-2:*:secret:api")
 }
 
 func TestLoadConfigFileWithAWSParameterStoreDestinationRules(t *testing.T) {
@@ -99,8 +98,8 @@ func TestLoadConfigFileWithMixedAWSDestinationRules(t *testing.T) {
 func TestValidateMultipleDestinationsInRule(t *testing.T) {
 	invalidConfig := []byte(`
 destination_rules:
-  - aws_secrets_manager_region: "us-east-1"
-    aws_parameter_store_region: "us-east-1"
+  - aws_secrets_manager_secret_name: "my-secret"
+    aws_parameter_store_path: "/my/path"
     path_regex: "^invalid/.*"
 `)
 
@@ -112,7 +111,7 @@ destination_rules:
 func TestValidateConflictingAWSDestinations(t *testing.T) {
 	invalidConfig := []byte(`
 destination_rules:
-  - aws_secrets_manager_region: "us-east-1"
+  - aws_secrets_manager_secret_name: "my-secret"
     s3_bucket: "mybucket"
     path_regex: "^invalid/.*"
 `)

@@ -167,11 +167,9 @@ type destinationRule struct {
 	VaultKVVersion              int          `yaml:"vault_kv_version"`
 	RecreationRule              creationRule `yaml:"recreation_rule,omitempty"`
 	OmitExtensions              bool         `yaml:"omit_extensions"`
-	AWSSecretsManagerRegion     string       `yaml:"aws_secrets_manager_region"`
+	AWSRegion                   string       `yaml:"aws_region"`
 	AWSSecretsManagerSecretName string       `yaml:"aws_secrets_manager_secret_name"`
-	AWSParameterStoreRegion     string       `yaml:"aws_parameter_store_region"`
 	AWSParameterStorePath       string       `yaml:"aws_parameter_store_path"`
-	AWSParameterStoreType       string       `yaml:"aws_parameter_store_type"`
 }
 
 type creationRule struct {
@@ -527,11 +525,10 @@ func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptio
 	if dRule.VaultPath != "" {
 		destinationCount++
 	}
-
-	if dRule.AWSSecretsManagerRegion != "" {
+	if dRule.AWSSecretsManagerSecretName != "" {
 		destinationCount++
 	}
-	if dRule.AWSParameterStoreRegion != "" {
+	if dRule.AWSParameterStorePath != "" {
 		destinationCount++
 	}
 
@@ -547,11 +544,11 @@ func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptio
 	if dRule.VaultPath != "" {
 		dest = publish.NewVaultDestination(dRule.VaultAddress, dRule.VaultPath, dRule.VaultKVMountName, dRule.VaultKVVersion)
 	}
-	if dRule.AWSSecretsManagerRegion != "" {
-		dest = publish.NewAWSSecretsManagerDestination(dRule.AWSSecretsManagerRegion, dRule.AWSSecretsManagerSecretName)
+	if dRule.AWSSecretsManagerSecretName != "" {
+		dest = publish.NewAWSSecretsManagerDestination(dRule.AWSRegion, dRule.AWSSecretsManagerSecretName)
 	}
-	if dRule.AWSParameterStoreRegion != "" {
-		dest = publish.NewAWSParameterStoreDestination(dRule.AWSParameterStoreRegion, dRule.AWSParameterStorePath)
+	if dRule.AWSParameterStorePath != "" {
+		dest = publish.NewAWSParameterStoreDestination(dRule.AWSRegion, dRule.AWSParameterStorePath)
 	}
 
 	config, err := configFromRule(rule, kmsEncryptionContext)

@@ -1298,8 +1298,8 @@ services, and IT resources. SOPS can publish decrypted data directly to AWS Secr
 
 There are a few settings for AWS Secrets Manager that you can place in your destination rules:
 
-* ``aws_secrets_manager_secret_name`` - The name of the secret in AWS Secrets Manager. If not specified, the filename will be used as the secret name.
-* ``aws_region`` - The AWS region where the secret should be stored. This is required.
+* ``aws_secrets_manager_secret_name`` - The name of the secret in AWS Secrets Manager. This is required.
+* ``aws_region`` - The AWS region where the secret should be stored. If not specified, SOPS will use the region from the AWS SDK's default credential chain (environment variables, AWS config file, or IAM role).
 
 SOPS uses the AWS SDK for Go v2, which automatically uses your configured AWS credentials from the AWS CLI,
 environment variables, or IAM roles.
@@ -1333,8 +1333,8 @@ and secrets management. SOPS can publish decrypted data directly to Parameter St
 
 There are a few settings for AWS Parameter Store that you can place in your destination rules:
 
-* ``aws_parameter_store_path`` - The parameter path in AWS Parameter Store. If it ends with ``/``, the filename will be appended. If not specified, the filename will be used as the parameter name with a leading ``/``.
-* ``aws_region`` - The AWS region where the parameter should be stored. This is required.
+* ``aws_parameter_store_path`` - The parameter path in AWS Parameter Store. This is required. If it ends with ``/``, the filename will be appended.
+* ``aws_region`` - The AWS region where the parameter should be stored. If not specified, SOPS will use the region from the AWS SDK's default credential chain (environment variables, AWS config file, or IAM role).
 
 All parameters are stored as ``SecureString`` type for security, since SOPS files may contain sensitive data.
 

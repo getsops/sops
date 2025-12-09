@@ -36,3 +36,11 @@ func TestAWSSecretsManagerDestination_Upload(t *testing.T) {
 	assert.IsType(t, &NotImplementedError{}, err)
 	assert.Contains(t, err.Error(), "AWS Secrets Manager does not support uploading encrypted sops files directly")
 }
+
+func TestNewAWSSecretsManagerDestination_EmptyRegion(t *testing.T) {
+	// Test that empty region is allowed (will use SDK defaults)
+	dest := NewAWSSecretsManagerDestination("", "myapp/database")
+	assert.NotNil(t, dest)
+	assert.Equal(t, "", dest.region)
+	assert.Equal(t, "myapp/database", dest.secretName)
+}

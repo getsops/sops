@@ -889,7 +889,7 @@ func TestDestinationValidationAWSSecretsManagerConflicts(t *testing.T) {
 			name: "AWS Secrets Manager + GCS conflict",
 			config: []byte(`
 destination_rules:
-  - aws_secrets_manager_region: "us-east-1"
+  - aws_secrets_manager_secret_name: "my-secret"
     gcs_bucket: "my-gcs-bucket"
     path_regex: "^test/.*"
 `),
@@ -898,7 +898,7 @@ destination_rules:
 			name: "AWS Secrets Manager + Vault conflict",
 			config: []byte(`
 destination_rules:
-  - aws_secrets_manager_region: "us-east-1"
+  - aws_secrets_manager_secret_name: "my-secret"
     vault_path: "secret/sops"
     vault_address: "https://vault.example.com"
     path_regex: "^test/.*"
@@ -908,8 +908,8 @@ destination_rules:
 			name: "AWS Secrets Manager + AWS Parameter Store conflict",
 			config: []byte(`
 destination_rules:
-  - aws_secrets_manager_region: "us-east-1"
-    aws_parameter_store_region: "us-east-1"
+  - aws_secrets_manager_secret_name: "my-secret"
+    aws_parameter_store_path: "/my/path"
     path_regex: "^test/.*"
 `),
 		},
@@ -935,7 +935,7 @@ func TestDestinationValidationAWSParameterStoreConflicts(t *testing.T) {
 			name: "AWS Parameter Store + S3 conflict",
 			config: []byte(`
 destination_rules:
-  - aws_parameter_store_region: "us-east-1"
+  - aws_parameter_store_path: "/my/path"
     s3_bucket: "my-s3-bucket"
     path_regex: "^test/.*"
 `),
@@ -944,7 +944,7 @@ destination_rules:
 			name: "AWS Parameter Store + GCS conflict",
 			config: []byte(`
 destination_rules:
-  - aws_parameter_store_region: "us-east-1"
+  - aws_parameter_store_path: "/my/path"
     gcs_bucket: "my-gcs-bucket"
     path_regex: "^test/.*"
 `),
@@ -953,7 +953,7 @@ destination_rules:
 			name: "AWS Parameter Store + Vault conflict",
 			config: []byte(`
 destination_rules:
-  - aws_parameter_store_region: "us-east-1"
+  - aws_parameter_store_path: "/my/path"
     vault_path: "secret/sops"
     vault_address: "https://vault.example.com"
     path_regex: "^test/.*"
@@ -975,8 +975,8 @@ destination_rules:
 func TestDestinationValidationAllFiveDestinationsConflict(t *testing.T) {
 	invalidConfig := []byte(`
 destination_rules:
-  - aws_secrets_manager_region: "us-east-1"
-    aws_parameter_store_region: "us-east-1"
+  - aws_secrets_manager_secret_name: "my-secret"
+    aws_parameter_store_path: "/my/path"
     s3_bucket: "my-s3-bucket"
     gcs_bucket: "my-gcs-bucket"
     vault_path: "secret/sops"
