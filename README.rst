@@ -1013,10 +1013,12 @@ try all other remote key services until one succeeds.
 
 You can start a key service server by running ``sops keyservice``.
 
-You can specify the key services the ``sops`` binary uses with ``--keyservice``.
-This flag can be specified more than once, so you can use multiple key
-services. The local key service can be disabled with
-``enable-local-keyservice=false``.
+You can specify the key services the ``sops`` binary uses with the
+``--keyservice`` option. This flag can be specified more than once, so you can
+use multiple key services. Alternatively, a single key service can be specified
+by setting the ``SOPS_KEYSERVICE`` environment variable. The local key service
+can be disabled with ``--enable-local-keyservice=false`` or by setting the
+``SOPS_ENABLE_LOCAL_KEYSERVICE`` environment variable to ``false``.
 
 For example, to decrypt a file using both the local key service and the key
 service exposed on the unix socket located in ``/tmp/sops.sock``, you can run:
