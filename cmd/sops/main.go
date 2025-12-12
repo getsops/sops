@@ -1460,7 +1460,7 @@ func main() {
 				},
 				cli.BoolFlag{
 					Name:  "value-stdin",
-					Usage: "treat 'value' as a file to read the actual value from (avoids leaking secrets in process listings). Mutually exclusive with --value-file",
+					Usage: "read the value from stdin; the 'value' argument to 'set' is not needed in this case (avoids leaking secrets in process listings). Mutually exclusive with --value-file",
 				},
 				cli.IntFlag{
 					Name:  "shamir-secret-sharing-threshold",
