@@ -179,9 +179,9 @@ type creationRule struct {
 	PathRegex               string      `yaml:"path_regex"`
 	KMS                     interface{} `yaml:"kms"` // string or []string
 	AwsProfile              string      `yaml:"aws_profile"`
-	Age                     interface{} `yaml:"age"`                  // string or []string
-	PGP                     interface{} `yaml:"pgp"`                  // string or []string
-	GCPKMS                  interface{} `yaml:"gcp_kms"`              // string or []string
+	Age                     interface{} `yaml:"age"`     // string or []string
+	PGP                     interface{} `yaml:"pgp"`     // string or []string
+	GCPKMS                  interface{} `yaml:"gcp_kms"` // string or []string
 	HCKms                   []string    `yaml:"hckms"`
 	AzureKeyVault           interface{} `yaml:"azure_keyvault"`       // string or []string
 	VaultURI                interface{} `yaml:"hc_vault_transit_uri"` // string or []string
@@ -219,10 +219,6 @@ func (c *creationRule) GetAzureKeyVaultKeys() ([]string, error) {
 
 func (c *creationRule) GetVaultURIs() ([]string, error) {
 	return parseKeyField(c.VaultURI, "hc_vault_transit_uri")
-}
-
-func (c *creationRule) GetHckmsKeys() ([]string, error) {
-	return c.HCKms, nil
 }
 
 // Utility function to handle both string and []string
@@ -420,11 +416,7 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		for _, k := range gcpkms.MasterKeysFromResourceIDString(strings.Join(gcpkmsKeys, ",")) {
 			keyGroup = append(keyGroup, k)
 		}
-		hckmsKeys, err := getKeysWithValidation(cRule.GetHckmsKeys, "hckms")
-		if err != nil {
-			return nil, err
-		}
-		hckmsMasterKeys, err := hckms.NewMasterKeyFromKeyIDString(strings.Join(hckmsKeys, ","))
+		hckmsMasterKeys, err := hckms.NewMasterKeyFromKeyIDString(strings.Join(cRule.HCKms, ","))
 		if err != nil {
 			return nil, err
 		}
