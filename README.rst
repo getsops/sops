@@ -1865,7 +1865,7 @@ To directly specify a single key group, you can use the following keys:
       - hc_vault_transit_uri:
           - http://my.vault/v1/sops/keys/secondkey
 
-* ``hckms`` (comma-separated string, or list of strings): list of HuaweiCloud KMS key IDs (format: region:key-uuid).
+* ``hckms`` (list of strings): list of HuaweiCloud KMS key IDs (format: ``<region>:<key-uuid>``).
   Example:
 
   .. code:: yaml
