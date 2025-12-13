@@ -574,7 +574,9 @@ Now you can encrypt a file using:
 
     $ sops encrypt --hckms tr-west-1:abc12345-6789-0123-4567-890123456789 test.yaml > test.enc.yaml
 
-Or using the environment variable::
+Or using the environment variable:
+
+.. code:: sh
 
     $ export SOPS_HUAWEICLOUD_KMS_IDS="tr-west-1:abc12345-6789-0123-4567-890123456789"
     $ sops encrypt test.yaml > test.enc.yaml
