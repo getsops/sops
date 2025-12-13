@@ -564,6 +564,7 @@ Alternatively, you can create a credentials file at ``~/.huaweicloud/credentials
 Encrypting/decrypting with HuaweiCloud KMS requires a KMS key ID in the format
 ``region:key-uuid``. You can get the key ID from the HuaweiCloud console or using
 the HuaweiCloud API. The key ID format is ``region:key-uuid`` where:
+
 - ``region`` is the HuaweiCloud region (e.g., ``tr-west-1``, ``cn-north-1``)
 - ``key-uuid`` is the UUID of the KMS key (e.g., ``abc12345-6789-0123-4567-890123456789``)
 
