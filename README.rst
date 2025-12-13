@@ -2,7 +2,7 @@ SOPS: Secrets OPerationS
 ========================
 
 **SOPS** is an editor of encrypted files that supports YAML, JSON, ENV, INI and BINARY
-formats and encrypts with AWS KMS, GCP KMS, Azure Key Vault, age, and PGP.
+formats and encrypts with AWS KMS, GCP KMS, Azure Key Vault, HuaweiCloud KMS, age, and PGP.
 (`demo <https://www.youtube.com/watch?v=YTEVyLXFiq0>`_)
 
 .. image:: https://i.imgur.com/X0TM5NI.gif
@@ -532,13 +532,69 @@ To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
 
     $ sops encrypt --verbose prod/raw.yaml > prod/encrypted.yaml
 
+Encrypting using HuaweiCloud KMS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The HuaweiCloud KMS integration uses the
+`default credential provider chain <https://github.com/huaweicloud/huaweicloud-sdk-go-v3/blob/master/core/auth/provider/provider.go>`_
+which tries several authentication methods, in this order:
+
+1. Environment variables: ``HUAWEICLOUD_SDK_AK``, ``HUAWEICLOUD_SDK_SK``, ``HUAWEICLOUD_SDK_PROJECT_ID``
+2. Credentials file at ``~/.huaweicloud/credentials``
+3. Instance metadata (when running on HuaweiCloud instances)
+
+For example, you can use environment variables:
+
+.. code:: bash
+
+    export HUAWEICLOUD_SDK_AK="your-access-key"
+    export HUAWEICLOUD_SDK_SK="your-secret-key"
+    export HUAWEICLOUD_SDK_PROJECT_ID="your-project-id"
+
+Alternatively, you can create a credentials file at ``~/.huaweicloud/credentials``:
+
+.. code:: sh
+
+    $ cat ~/.huaweicloud/credentials
+    [default]
+    ak = your-access-key
+    sk = your-secret-key
+    project_id = your-project-id
+
+Encrypting/decrypting with HuaweiCloud KMS requires a KMS key ID in the format
+``region:key-uuid``. You can get the key ID from the HuaweiCloud console or using
+the HuaweiCloud API. The key ID format is ``region:key-uuid`` where:
+- ``region`` is the HuaweiCloud region (e.g., ``tr-west-1``, ``cn-north-1``)
+- ``key-uuid`` is the UUID of the KMS key (e.g., ``abc12345-6789-0123-4567-890123456789``)
+
+Now you can encrypt a file using::
+
+    $ sops encrypt --hckms tr-west-1:abc12345-6789-0123-4567-890123456789 test.yaml > test.enc.yaml
+
+Or using the environment variable::
+
+    $ export SOPS_HUAWEICLOUD_KMS_IDS="tr-west-1:abc12345-6789-0123-4567-890123456789"
+    $ sops encrypt test.yaml > test.enc.yaml
+
+And decrypt it using::
+
+    $ sops decrypt test.enc.yaml
+
+You can also configure HuaweiCloud KMS keys in the ``.sops.yaml`` config file:
+
+.. code:: yaml
+
+    creation_rules:
+        - path_regex: \.hckms\.yaml$
+          hckms: tr-west-1:abc12345-6789-0123-4567-890123456789,tr-west-2:def67890-1234-5678-9012-345678901234
+
 Adding and removing keys
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 When creating new files, ``sops`` uses the PGP, KMS and GCP KMS defined in the
-command line arguments ``--kms``, ``--pgp``, ``--gcp-kms`` or ``--azure-kv``, or from
+command line arguments ``--kms``, ``--pgp``, ``--gcp-kms``, ``--hckms`` or ``--azure-kv``, or from
 the environment variables ``SOPS_KMS_ARN``, ``SOPS_PGP_FP``, ``SOPS_GCP_KMS_IDS``,
-``SOPS_AZURE_KEYVAULT_URLS``. That information is stored in the file under the
+``SOPS_HUAWEICLOUD_KMS_IDS``, ``SOPS_AZURE_KEYVAULT_URLS``. That information is stored in the file under the
 ``sops`` section, such that decrypting files does not require providing those
 parameters again.
 
@@ -582,9 +638,9 @@ disabled by supplying the ``-y`` flag.
 
 The ``rotate`` command generates a new data encryption key and reencrypt all values
 with the new key. At the same time, the command line flag ``--add-kms``, ``--add-pgp``,
-``--add-gcp-kms``, ``--add-azure-kv``, ``--rm-kms``, ``--rm-pgp``, ``--rm-gcp-kms``
-and ``--rm-azure-kv`` can be used to add and remove keys from a file. These flags use
-the comma separated syntax as the ``--kms``, ``--pgp``, ``--gcp-kms`` and ``--azure-kv``
+``--add-gcp-kms``, ``--add-hckms``, ``--add-azure-kv``, ``--rm-kms``, ``--rm-pgp``, ``--rm-gcp-kms``,
+``--rm-hckms`` and ``--rm-azure-kv`` can be used to add and remove keys from a file. These flags use
+the comma separated syntax as the ``--kms``, ``--pgp``, ``--gcp-kms``, ``--hckms`` and ``--azure-kv``
 arguments when creating new files.
 
 Use ``updatekeys`` if you want to add a key without rotating the data key.
@@ -760,7 +816,7 @@ stdout.
 Using .sops.yaml conf to select KMS, PGP and age for new files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-It is often tedious to specify the ``--kms`` ``--gcp-kms`` ``--pgp`` and ``--age`` parameters for creation
+It is often tedious to specify the ``--kms`` ``--gcp-kms`` ``--hckms`` ``--pgp`` and ``--age`` parameters for creation
 of all new files. If your secrets are stored under a specific directory, like a
 ``git`` repository, you can create a ``.sops.yaml`` configuration file at the root
 directory to define which keys are used for which filename.
@@ -801,6 +857,10 @@ can manage the three sets of configurations for the three types of files:
         # gcp files using GCP KMS
         - path_regex: \.gcp\.yaml$
           gcp_kms: projects/mygcproject/locations/global/keyRings/mykeyring/cryptoKeys/thekey
+
+        # hckms files using HuaweiCloud KMS
+        - path_regex: \.hckms\.yaml$
+          hckms: tr-west-1:abc12345-6789-0123-4567-890123456789,tr-west-2:def67890-1234-5678-9012-345678901234
 
         # Finally, if the rules above have not matched, this one is a
         # catchall that will encrypt the file using KMS set C as well as PGP
@@ -1797,6 +1857,16 @@ To directly specify a single key group, you can use the following keys:
       - hc_vault_transit_uri:
           - http://my.vault/v1/sops/keys/secondkey
 
+* ``hckms`` (comma-separated string, or list of strings): list of HuaweiCloud KMS key IDs (format: region:key-uuid).
+  Example:
+
+  .. code:: yaml
+
+    creation_rules:
+      - hckms:
+          - tr-west-1:abc12345-6789-0123-4567-890123456789
+          - tr-west-1:def67890-1234-5678-9012-345678901234
+
 To specify a list of key groups, you can use the following key:
 
 * ``key_groups`` (list of key group objects): a list of key group objects.
@@ -1824,6 +1894,8 @@ To specify a list of key groups, you can use the following key:
               - https://vault.url/keys/key-name/             # key without version, the latest will be used
             hc_vault_transit_uri:
               - http://my.vault/v1/sops/keys/secondkey
+            hckms:
+              - tr-west-1:abc12345-6789-0123-4567-890123456789
 
             merge:
               - pgp:
@@ -1900,6 +1972,17 @@ A key group supports the following keys:
       version: ""
 
 * ``hc_vault`` (list of strings): list of HashiCorp Vault transit URIs.
+
+* ``hckms`` (list of objects): list of HuaweiCloud KMS key IDs.
+  Every object must have the following key:
+
+  * ``key_id`` (string): the key ID in format "region:key-uuid".
+
+  Example:
+
+  .. code:: yaml
+
+    - key_id: tr-west-1:abc12345-6789-0123-4567-890123456789
 
 * ``age`` (list of strings): list of Age public keys.
 
