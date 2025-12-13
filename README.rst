@@ -849,6 +849,22 @@ Creating a new file with the right keys is now as simple as
 Note that the configuration file is ignored when KMS or PGP parameters are
 passed on the SOPS command line or in environment variables.
 
+Validating .sops.yaml with JSON Schema
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+SOPS provides a JSON Schema for validating ``.sops.yaml`` configuration files.
+The schema is located at ``schema/sops.json`` in the repository and can be used
+with editors and validation tools to catch configuration errors early.
+
+**Using with YAML Language Server:**
+
+You can add a schema reference directly in your ``.sops.yaml`` file:
+
+.. code:: yaml
+
+    # yaml-language-server: $schema=https://raw.githubusercontent.com/getsops/sops/main/schema/sops.json
+
+
 Specify a different GPG executable
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
