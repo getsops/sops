@@ -50,13 +50,15 @@ creation_rules:
     kms: "1"
     pgp: "2"
     gcp_kms: "3"
-    hckms: "tr-west-1:test-key-1"
+    hckms:
+      - "tr-west-1:test-key-1"
     hc_vault_transit_uri: http://4:8200/v1/4/keys/4
   - path_regex: ""
     kms: foo
     pgp: bar
     gcp_kms: baz
-    hckms: "tr-west-1:test-key-2"
+    hckms:
+      - "tr-west-1:test-key-2"
     hc_vault_transit_uri: http://127.0.1.1/v1/baz/keys/baz
 `)
 
@@ -435,7 +437,7 @@ func TestLoadConfigFile(t *testing.T) {
 				KMS:       "1",
 				PGP:       "2",
 				GCPKMS:    "3",
-				HCKms:     "tr-west-1:test-key-1",
+				HCKms:     []string{"tr-west-1:test-key-1"},
 				VaultURI:  "http://4:8200/v1/4/keys/4",
 			},
 			{
@@ -443,7 +445,7 @@ func TestLoadConfigFile(t *testing.T) {
 				KMS:       "foo",
 				PGP:       "bar",
 				GCPKMS:    "baz",
-				HCKms:     "tr-west-1:test-key-2",
+				HCKms:     []string{"tr-west-1:test-key-2"},
 				VaultURI:  "http://127.0.1.1/v1/baz/keys/baz",
 			},
 		},
