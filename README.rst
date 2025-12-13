@@ -1984,7 +1984,7 @@ A key group supports the following keys:
 * ``hckms`` (list of objects): list of HuaweiCloud KMS key IDs.
   Every object must have the following key:
 
-  * ``key_id`` (string): the key ID in format "region:key-uuid".
+  * ``key_id`` (string): the key ID in format ``<region>:<key-uuid>``.
 
   Example:
 
