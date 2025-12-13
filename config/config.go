@@ -182,7 +182,7 @@ type creationRule struct {
 	Age                     interface{} `yaml:"age"`                  // string or []string
 	PGP                     interface{} `yaml:"pgp"`                  // string or []string
 	GCPKMS                  interface{} `yaml:"gcp_kms"`              // string or []string
-	HCKms                   interface{} `yaml:"hckms"`                // string or []string
+	HCKms                   []string `yaml:"hckms"`                // string or []string
 	AzureKeyVault           interface{} `yaml:"azure_keyvault"`       // string or []string
 	VaultURI                interface{} `yaml:"hc_vault_transit_uri"` // string or []string
 	KeyGroups               []keyGroup  `yaml:"key_groups"`
