@@ -593,7 +593,8 @@ You can also configure HuaweiCloud KMS keys in the ``.sops.yaml`` config file:
 
     creation_rules:
         - path_regex: \.hckms\.yaml$
-          hckms: tr-west-1:abc12345-6789-0123-4567-890123456789,tr-west-2:def67890-1234-5678-9012-345678901234
+          hckms:
+            - tr-west-1:abc12345-6789-0123-4567-890123456789,tr-west-2:def67890-1234-5678-9012-345678901234
 
 Adding and removing keys
 ~~~~~~~~~~~~~~~~~~~~~~~~
