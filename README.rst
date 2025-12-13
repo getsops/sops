@@ -568,7 +568,9 @@ the HuaweiCloud API. The key ID format is ``region:key-uuid`` where:
 - ``region`` is the HuaweiCloud region (e.g., ``tr-west-1``, ``cn-north-1``)
 - ``key-uuid`` is the UUID of the KMS key (e.g., ``abc12345-6789-0123-4567-890123456789``)
 
-Now you can encrypt a file using::
+Now you can encrypt a file using:
+
+.. code:: sh
 
     $ sops encrypt --hckms tr-west-1:abc12345-6789-0123-4567-890123456789 test.yaml > test.enc.yaml
 
