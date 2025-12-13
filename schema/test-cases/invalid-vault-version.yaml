@@ -1,0 +1,5 @@
+# Invalid: vault_kv_version must be 1 or 2
+# This should fail validation because only KV version 1 and 2 are supported
+destination_rules:
+  - vault_path: secrets/app
+    vault_kv_version: 3

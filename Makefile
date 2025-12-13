@@ -75,6 +75,10 @@ test: vendor
 	gpg --import pgp/sops_functional_tests_key.asc 2>&1 1>/dev/null || exit 0
 	unset SOPS_AGE_KEY_FILE; unset SOPS_AGE_KEY_CMD; LANG=en_US.UTF-8 $(GO) test $(GO_TEST_FLAGS) ./...
 
+.PHONY: test-schema
+test-schema: vendor
+	$(GO) test -v -run TestSchema ./config
+
 .PHONY: showcoverage
 showcoverage: test
 	$(GO) tool cover -html=profile.out

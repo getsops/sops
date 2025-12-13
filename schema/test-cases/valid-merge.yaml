@@ -1,0 +1,19 @@
+# Valid configuration: Using merge in key_groups
+# Demonstrates the merge feature which allows combining multiple key groups
+# This is useful for complex hierarchical key management scenarios
+creation_rules:
+  - path_regex: \.prod\.yaml$
+    key_groups:
+      - merge:
+          - pgp:
+              - FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4
+            kms:
+              - arn: arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
+                aws_profile: prod-profile
+          - age:
+              - age1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+            gcp_kms:
+              - resource_id: projects/my-project/locations/global/keyRings/sops/cryptoKeys/prod-key
+        pgp:
+          - D7229043384BCC60326C6FB9D8720D957C3D3074
+    shamir_threshold: 1

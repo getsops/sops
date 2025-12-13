@@ -1,0 +1,24 @@
+# Valid configuration: Complete example
+# This demonstrates all major configuration sections:
+# - creation_rules with key_groups and encrypted_regex
+# - destination_rules for publishing secrets
+# - stores configuration for formatting
+creation_rules:
+  - path_regex: \.dev\.yaml$
+    key_groups:
+      - age:
+          - age1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+        pgp:
+          - FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4
+    encrypted_regex: ^(password|secret|key)
+
+destination_rules:
+  - path_regex: \.prod\.yaml$
+    vault_path: secrets/myapp
+    vault_address: https://vault.example.com
+    vault_kv_version: 2
+    vault_kv_mount_name: secret
+
+stores:
+  yaml:
+    indent: 2

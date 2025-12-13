@@ -1,0 +1,6 @@
+# Invalid: Azure Key Vault entry missing required 'key' field
+# This should fail validation because Azure KV requires both 'vaultUrl' and 'key'
+creation_rules:
+  - key_groups:
+      - azure_keyvault:
+          - vaultUrl: https://my-vault.vault.azure.net

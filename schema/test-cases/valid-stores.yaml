@@ -1,0 +1,9 @@
+# Valid configuration: Store-specific formatting settings
+# Configures indentation for different file formats
+stores:
+  yaml:
+    indent: 2
+  json:
+    indent: 4
+  json_binary:
+    indent: 2

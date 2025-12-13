@@ -1,0 +1,6 @@
+# Valid configuration: Basic creation_rules
+# This demonstrates the simplest form of SOPS configuration with PGP and age keys
+creation_rules:
+  - path_regex: \.dev\.yaml$
+    pgp: FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4
+    age: age1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
