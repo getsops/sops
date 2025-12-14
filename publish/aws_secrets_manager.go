@@ -135,7 +135,6 @@ func (awssmsd *AWSSecretsManagerDestination) UploadUnencrypted(data map[string]i
 		_, err = client.CreateSecret(ctx, &secretsmanager.CreateSecretInput{
 			Name:         aws.String(secretName),
 			SecretString: aws.String(secretString),
-			Description:  aws.String("Secret created by SOPS publish command"),
 		})
 		if err != nil {
 			return fmt.Errorf("failed to create secret %s: %w", secretName, err)

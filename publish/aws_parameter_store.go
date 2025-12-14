@@ -115,11 +115,10 @@ func (awspsd *AWSParameterStoreDestination) UploadUnencrypted(data map[string]in
 
 	// Put parameter (creates or updates)
 	_, err = client.PutParameter(ctx, &ssm.PutParameterInput{
-		Name:        aws.String(parameterName),
-		Value:       aws.String(parameterValue),
-		Type:        paramType,
-		Overwrite:   aws.Bool(true),
-		Description: aws.String("Parameter created/updated by SOPS publish command"),
+		Name:      aws.String(parameterName),
+		Value:     aws.String(parameterValue),
+		Type:      paramType,
+		Overwrite: aws.Bool(true),
 	})
 
 	if err != nil {
