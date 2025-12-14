@@ -1217,14 +1217,27 @@ This command requires a ``.sops.yaml`` configuration file. Below is an example:
           vault_kv_version: 2 # default
           path_regex: vault/*
           omit_extensions: true
+        - aws_secrets_manager_secret_name: "my-secret"
+          aws_region: "us-west-2"
+          path_regex: aws-secrets/*
+        - aws_parameter_store_path: "/sops/"
+          aws_region: "us-west-2"
+          path_regex: aws-params/*
 
 The above configuration will place all files under ``s3/*`` into the S3 bucket ``sops-secrets``,
-all files under ``gcs/*`` into the GCS bucket ``sops-secrets``, and the contents of all files under
-``vault/*`` into Vault's KV store under the path ``secrets/sops/``. For the files that will be
-published to S3 and GCS, it will decrypt them and re-encrypt them using the
-``F69E4901EDBAD2D1753F8C67A64535C4163FB307`` pgp key.
+all files under ``gcs/*`` into the GCS bucket ``sops-secrets``, the contents of all files under
+``vault/*`` into Vault's KV store under the path ``secrets/sops/``, files under ``aws-secrets/*``
+into AWS Secrets Manager as JSON secrets, and files under ``aws-params/*`` into AWS Parameter Store
+as SecureString parameters. For the files that will be published to S3 and GCS, it will decrypt them 
+and re-encrypt them using the ``F69E4901EDBAD2D1753F8C67A64535C4163FB307`` pgp key. Files published to Vault
+will be decrypted and stored as JSON data encrypted by Vault. Files published to AWS Secrets Manager and AWS Parameter Store 
+will be decrypted and stored as JSON data encrypted by AWS KMS.
 
 You would deploy a file to S3 with a command like: ``sops publish s3/app.yaml``
+
+Similarly, you can publish to AWS Secrets Manager: ``sops publish aws-secrets/database-config.yaml``
+
+Or to AWS Parameter Store: ``sops publish aws-params/app-config.yaml``
 
 To publish all files in selected directory recursively, you need to specify ``--recursive`` flag.
 
@@ -1276,6 +1289,77 @@ Below is an example of publishing to Vault (using token auth with a local dev in
     example_map       map[key:value]
     example_number    42
     example_string    bar
+
+Publishing to AWS Secrets Manager
+**********************************
+
+AWS Secrets Manager is a service that helps you protect secrets needed to access your applications,
+services, and IT resources. SOPS can publish decrypted data directly to AWS Secrets Manager as JSON secrets.
+
+There are a few settings for AWS Secrets Manager that you can place in your destination rules:
+
+* ``aws_secrets_manager_secret_name`` - The name of the secret in AWS Secrets Manager. This is required.
+* ``aws_region`` - The AWS region where the secret should be stored. If not specified, SOPS will use the region from the AWS SDK's default credential chain (environment variables, AWS config file, or IAM role).
+
+SOPS uses the AWS SDK for Go v2, which automatically uses your configured AWS credentials from the AWS CLI,
+environment variables, or IAM roles.
+
+If the destination secret already exists in AWS Secrets Manager and contains the same data as the source
+file, it will be skipped to avoid creating unnecessary versions.
+
+Note: Recreation rules (re-encryption with different keys) are not supported for AWS Secrets Manager.
+The data is decrypted from the source file and stored as plaintext JSON in the secret.
+
+Below is an example of publishing to AWS Secrets Manager:
+
+.. code:: sh
+
+    $ export AWS_REGION=us-west-2
+    $ sops decrypt aws-secrets/database-config.yaml
+    database:
+        host: db.example.com
+        port: 5432
+        username: myuser
+        password: mypassword
+    $ sops publish aws-secrets/database-config.yaml
+    uploading /home/user/sops_directory/aws-secrets/database-config.yaml to AWS Secrets Manager secret database-config in us-west-2 ? (y/n): y
+    Successfully created secret database-config
+
+Publishing to AWS Parameter Store
+**********************************
+
+AWS Systems Manager Parameter Store provides secure, hierarchical storage for configuration data
+and secrets management. SOPS can publish decrypted data directly to Parameter Store as JSON parameters encrypted by AWS KMS.
+
+There are a few settings for AWS Parameter Store that you can place in your destination rules:
+
+* ``aws_parameter_store_path`` - The parameter path in AWS Parameter Store. This is required. If it ends with ``/``, the filename will be appended.
+* ``aws_region`` - The AWS region where the parameter should be stored. If not specified, SOPS will use the region from the AWS SDK's default credential chain (environment variables, AWS config file, or IAM role).
+
+All parameters are stored as ``SecureString`` type for security, since SOPS files may contain sensitive data.
+
+SOPS uses the AWS SDK for Go v2, which automatically uses your configured AWS credentials from the AWS CLI,
+environment variables, or IAM roles.
+
+If the destination parameter already exists in AWS Parameter Store and contains the same data as the source
+file, it will be skipped to avoid creating unnecessary versions.
+
+Note: Recreation rules (re-encryption with different keys) are not supported for AWS Parameter Store.
+The data is decrypted from the source file and stored as JSON in the SecureString parameter, encrypted by AWS KMS.
+
+Below is an example of publishing to AWS Parameter Store:
+
+.. code:: sh
+
+    $ export AWS_REGION=us-west-2
+    $ sops decrypt aws-params/app-config.yaml
+    app:
+        debug: false
+        database_url: postgres://user:pass@localhost/db
+        api_key: secret-api-key
+    $ sops publish aws-params/app-config.yaml
+    uploading /home/user/sops_directory/aws-params/app-config.yaml to AWS Parameter Store parameter /app-config in us-west-2 ? (y/n): y
+    Successfully created parameter /app-config
 
 
 Important information on types

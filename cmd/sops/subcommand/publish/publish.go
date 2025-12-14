@@ -137,7 +137,7 @@ func Run(opts Opts) error {
 				return fmt.Errorf("could not read file: %s", err)
 			}
 		}
-	case *publish.VaultDestination:
+	case *publish.VaultDestination, *publish.AWSSecretsManagerDestination, *publish.AWSParameterStoreDestination:
 		_, err = common.DecryptTree(common.DecryptTreeOpts{
 			Cipher:          opts.Cipher,
 			IgnoreMac:       false,
@@ -177,7 +177,7 @@ func Run(opts Opts) error {
 	switch dest := conf.Destination.(type) {
 	case *publish.S3Destination, *publish.GCSDestination:
 		err = dest.Upload(fileContents, destinationPath)
-	case *publish.VaultDestination:
+	case *publish.VaultDestination, *publish.AWSSecretsManagerDestination, *publish.AWSParameterStoreDestination:
 		err = dest.UploadUnencrypted(data, destinationPath)
 	}
 

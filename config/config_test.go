@@ -879,3 +879,114 @@ destination_rules:
 	assert.NotNil(t, conf.Destination)
 	assert.Contains(t, conf.Destination.Path("secrets.yaml"), "https://vault.example.com/v1/secret/data/secret/sops/secrets.yaml")
 }
+
+func TestDestinationValidationAWSSecretsManagerConflicts(t *testing.T) {
+	testCases := []struct {
+		name   string
+		config []byte
+	}{
+		{
+			name: "AWS Secrets Manager + GCS conflict",
+			config: []byte(`
+destination_rules:
+  - aws_secrets_manager_secret_name: "my-secret"
+    gcs_bucket: "my-gcs-bucket"
+    path_regex: "^test/.*"
+`),
+		},
+		{
+			name: "AWS Secrets Manager + Vault conflict",
+			config: []byte(`
+destination_rules:
+  - aws_secrets_manager_secret_name: "my-secret"
+    vault_path: "secret/sops"
+    vault_address: "https://vault.example.com"
+    path_regex: "^test/.*"
+`),
+		},
+		{
+			name: "AWS Secrets Manager + AWS Parameter Store conflict",
+			config: []byte(`
+destination_rules:
+  - aws_secrets_manager_secret_name: "my-secret"
+    aws_parameter_store_path: "/my/path"
+    path_regex: "^test/.*"
+`),
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := parseDestinationRuleForFile(parseConfigFile(tc.config, t), "test/secrets.yaml", nil)
+			assert.NotNil(t, err, "Expected error for %s", tc.name)
+			if err != nil {
+				assert.Contains(t, err.Error(), "more than one destinations were found")
+			}
+		})
+	}
+}
+
+func TestDestinationValidationAWSParameterStoreConflicts(t *testing.T) {
+	testCases := []struct {
+		name   string
+		config []byte
+	}{
+		{
+			name: "AWS Parameter Store + S3 conflict",
+			config: []byte(`
+destination_rules:
+  - aws_parameter_store_path: "/my/path"
+    s3_bucket: "my-s3-bucket"
+    path_regex: "^test/.*"
+`),
+		},
+		{
+			name: "AWS Parameter Store + GCS conflict",
+			config: []byte(`
+destination_rules:
+  - aws_parameter_store_path: "/my/path"
+    gcs_bucket: "my-gcs-bucket"
+    path_regex: "^test/.*"
+`),
+		},
+		{
+			name: "AWS Parameter Store + Vault conflict",
+			config: []byte(`
+destination_rules:
+  - aws_parameter_store_path: "/my/path"
+    vault_path: "secret/sops"
+    vault_address: "https://vault.example.com"
+    path_regex: "^test/.*"
+`),
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := parseDestinationRuleForFile(parseConfigFile(tc.config, t), "test/secrets.yaml", nil)
+			assert.NotNil(t, err, "Expected error for %s", tc.name)
+			if err != nil {
+				assert.Contains(t, err.Error(), "more than one destinations were found")
+			}
+		})
+	}
+}
+
+func TestDestinationValidationAllFiveDestinationsConflict(t *testing.T) {
+	invalidConfig := []byte(`
+destination_rules:
+  - aws_secrets_manager_secret_name: "my-secret"
+    aws_parameter_store_path: "/my/path"
+    s3_bucket: "my-s3-bucket"
+    gcs_bucket: "my-gcs-bucket"
+    vault_path: "secret/sops"
+    vault_address: "https://vault.example.com"
+    path_regex: "^test/.*"
+`)
+
+	_, err := parseDestinationRuleForFile(parseConfigFile(invalidConfig, t), "test/secrets.yaml", nil)
+	assert.NotNil(t, err, "Expected error when all five destinations are specified")
+	if err != nil {
+		assert.Contains(t, err.Error(), "more than one destinations were found")
+	}
+}
