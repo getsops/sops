@@ -1,0 +1,7 @@
+# Invalid: shamir_threshold must be >= 1
+# This should fail validation because shamir_threshold of 0 is not allowed
+creation_rules:
+  - key_groups:
+      - pgp:
+          - FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4
+    shamir_threshold: 0

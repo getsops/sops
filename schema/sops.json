@@ -1,0 +1,489 @@
+{
+  "$id": "https://github.com/getsops/sops/schema/sops.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SOPS Configuration",
+  "description": "JSON Schema for SOPS .sops.yaml configuration files.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "creation_rules": {
+      "description": "Rules for encrypting new files. The first matching rule (by path_regex) is used to determine which master keys encrypt the file.",
+      "items": {
+        "additionalProperties": false,
+        "description": "Rule for encrypting new files",
+        "properties": {
+          "age": {
+            "description": "age public key(s) - comma-separated string or array",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            ]
+          },
+          "aws_profile": {
+            "description": "AWS profile to use (works with kms field)",
+            "type": "string"
+          },
+          "azure_keyvault": {
+            "description": "Azure Key Vault URL(s) - comma-separated string or array",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            ]
+          },
+          "encrypted_comment_regex": {
+            "description": "Only encrypt keys with comments matching this regex",
+            "type": "string"
+          },
+          "encrypted_regex": {
+            "description": "Only encrypt keys matching this regex",
+            "type": "string"
+          },
+          "encrypted_suffix": {
+            "description": "Only encrypt keys ending with this suffix",
+            "type": "string"
+          },
+          "gcp_kms": {
+            "description": "GCP KMS resource ID(s) - comma-separated string or array",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            ]
+          },
+          "hc_vault_transit_uri": {
+            "description": "HashiCorp Vault transit URI(s) - comma-separated string or array",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            ]
+          },
+          "key_groups": {
+            "description": "Groups of master keys (recommended over simple kms/pgp/age fields)",
+            "items": {
+              "additionalProperties": false,
+              "description": "A group of master keys. At least one key from this group can decrypt the data key fragment.",
+              "properties": {
+                "age": {
+                  "description": "age public keys or SSH public keys",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "azure_keyvault": {
+                  "description": "Azure Key Vault keys",
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "key": {
+                        "description": "Key name in Azure Key Vault",
+                        "type": "string"
+                      },
+                      "vaultUrl": {
+                        "description": "Azure Key Vault URL",
+                        "type": "string"
+                      },
+                      "version": {
+                        "description": "Key version (optional, uses latest if omitted)",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "vaultUrl",
+                      "key"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "gcp_kms": {
+                  "description": "GCP KMS keys",
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "resource_id": {
+                        "description": "GCP KMS resource ID",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "resource_id"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "hc_vault": {
+                  "description": "HashiCorp Vault transit URIs (short form)",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                },
+                "kms": {
+                  "description": "AWS KMS keys",
+                  "items": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "arn": {
+                        "description": "AWS KMS key ARN",
+                        "type": "string"
+                      },
+                      "aws_profile": {
+                        "description": "AWS profile to use (optional)",
+                        "type": "string"
+                      },
+                      "context": {
+                        "additionalProperties": {
+                          "type": "string"
+                        },
+                        "description": "KMS encryption context key-value pairs (optional)",
+                        "type": "object"
+                      },
+                      "role": {
+                        "description": "AWS IAM role to assume (optional)",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "arn"
+                    ],
+                    "type": "object"
+                  },
+                  "type": "array"
+                },
+                "merge": {
+                  "description": "Merge multiple key groups together (recursive)",
+                  "items": {
+                    "$ref": "#/properties/creation_rules/items/properties/key_groups/items"
+                  },
+                  "type": "array"
+                },
+                "pgp": {
+                  "description": "PGP key fingerprints",
+                  "items": {
+                    "type": "string"
+                  },
+                  "type": "array"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "kms": {
+            "description": "AWS KMS key ARN(s) - comma-separated string or array",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            ]
+          },
+          "mac_only_encrypted": {
+            "description": "Only include encrypted values in MAC calculation",
+            "type": "boolean"
+          },
+          "path_regex": {
+            "description": "Regular expression to match file paths relative to .sops.yaml",
+            "type": "string"
+          },
+          "pgp": {
+            "description": "PGP fingerprint(s) - comma-separated string or array",
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              }
+            ]
+          },
+          "shamir_threshold": {
+            "description": "Number of key groups required to decrypt (default: number of key groups)",
+            "minimum": 1,
+            "type": "integer"
+          },
+          "unencrypted_comment_regex": {
+            "description": "Don't encrypt keys with comments matching this regex",
+            "type": "string"
+          },
+          "unencrypted_regex": {
+            "description": "Don't encrypt keys matching this regex",
+            "type": "string"
+          },
+          "unencrypted_suffix": {
+            "description": "Don't encrypt keys ending with this suffix",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "destination_rules": {
+      "description": "Rules for publishing decrypted files. Used by 'sops publish' command.",
+      "items": {
+        "additionalProperties": false,
+        "description": "Rule for publishing decrypted files to a destination",
+        "properties": {
+          "gcs_bucket": {
+            "description": "GCS bucket name",
+            "type": "string"
+          },
+          "gcs_prefix": {
+            "description": "GCS object prefix",
+            "type": "string"
+          },
+          "omit_extensions": {
+            "description": "Omit file extensions in destination path",
+            "type": "boolean"
+          },
+          "path_regex": {
+            "description": "Regular expression to match file paths",
+            "type": "string"
+          },
+          "recreation_rule": {
+            "additionalProperties": false,
+            "description": "Re-encryption rule when publishing (same structure as creation_rule)",
+            "properties": {
+              "age": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                ]
+              },
+              "aws_profile": {
+                "description": "AWS profile to use (works with kms field)",
+                "type": "string"
+              },
+              "azure_keyvault": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                ]
+              },
+              "encrypted_comment_regex": {
+                "description": "Only encrypt keys with comments matching this regex",
+                "type": "string"
+              },
+              "encrypted_regex": {
+                "description": "Only encrypt keys matching this regex",
+                "type": "string"
+              },
+              "encrypted_suffix": {
+                "description": "Only encrypt keys ending with this suffix",
+                "type": "string"
+              },
+              "gcp_kms": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                ]
+              },
+              "hc_vault_transit_uri": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                ]
+              },
+              "key_groups": {
+                "description": "Groups of master keys",
+                "items": {
+                  "$ref": "#/properties/creation_rules/items/properties/key_groups/items"
+                },
+                "type": "array"
+              },
+              "kms": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                ]
+              },
+              "mac_only_encrypted": {
+                "description": "Only include encrypted values in MAC calculation",
+                "type": "boolean"
+              },
+              "pgp": {
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  }
+                ]
+              },
+              "shamir_threshold": {
+                "description": "Number of key groups required to decrypt",
+                "minimum": 1,
+                "type": "integer"
+              },
+              "unencrypted_comment_regex": {
+                "description": "Don't encrypt keys with comments matching this regex",
+                "type": "string"
+              },
+              "unencrypted_regex": {
+                "description": "Don't encrypt keys matching this regex",
+                "type": "string"
+              },
+              "unencrypted_suffix": {
+                "description": "Don't encrypt keys ending with this suffix",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "s3_bucket": {
+            "description": "S3 bucket name",
+            "type": "string"
+          },
+          "s3_prefix": {
+            "description": "S3 key prefix",
+            "type": "string"
+          },
+          "vault_address": {
+            "description": "Vault server address",
+            "type": "string"
+          },
+          "vault_kv_mount_name": {
+            "description": "Vault KV mount name (default: secret)",
+            "type": "string"
+          },
+          "vault_kv_version": {
+            "description": "Vault KV version (1 or 2)",
+            "enum": [
+              1,
+              2
+            ],
+            "type": "integer"
+          },
+          "vault_path": {
+            "description": "Vault secret path",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "stores": {
+      "additionalProperties": false,
+      "description": "Store-specific configuration for different file formats",
+      "properties": {
+        "dotenv": {
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "ini": {
+          "additionalProperties": false,
+          "type": "object"
+        },
+        "json": {
+          "additionalProperties": false,
+          "properties": {
+            "indent": {
+              "description": "Number of spaces for JSON indentation (default: determined by input file)",
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "json_binary": {
+          "additionalProperties": false,
+          "properties": {
+            "indent": {
+              "description": "Number of spaces for binary JSON indentation (default: determined by input file)",
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        },
+        "yaml": {
+          "additionalProperties": false,
+          "properties": {
+            "indent": {
+              "description": "Number of spaces for YAML indentation (default: determined by input file)",
+              "type": "integer"
+            }
+          },
+          "type": "object"
+        }
+      },
+      "type": "object"
+    }
+  }
+}

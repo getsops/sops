@@ -1,0 +1,10 @@
+# Valid configuration: Destination rules for publishing
+# Demonstrates S3 publishing with recreation_rule for re-encryption
+destination_rules:
+  - path_regex: \.prod\.yaml$
+    s3_bucket: my-secrets
+    s3_prefix: production/
+    omit_extensions: true
+    recreation_rule:
+      kms: arn:aws:kms:us-west-2:999999999999:key/publish-key
+      pgp: ABCD1234

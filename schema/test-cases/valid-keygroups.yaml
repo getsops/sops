@@ -1,0 +1,17 @@
+# Valid configuration: Using key_groups
+# Demonstrates advanced key_groups with AWS KMS (including role and context),
+# PGP keys, age keys, shamir_threshold, and encrypted_regex pattern
+creation_rules:
+  - path_regex: \.prod\.yaml$
+    key_groups:
+      - kms:
+          - arn: arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012
+            role: arn:aws:iam::123456789012:role/sops-role
+            context:
+              environment: production
+        pgp:
+          - FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4
+      - age:
+          - age1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    shamir_threshold: 2
+    encrypted_regex: ^(password|secret)

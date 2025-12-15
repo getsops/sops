@@ -1,0 +1,9 @@
+# Valid configuration: Using Azure Key Vault
+# Demonstrates Azure Key Vault URLs with version and without version,
+# plus unencrypted_suffix to skip encryption of matching keys
+creation_rules:
+  - path_regex: \.azure\.yaml$
+    azure_keyvault:
+      - https://my-vault.vault.azure.net/keys/my-key/abc123
+      - https://backup-vault.vault.azure.net/keys/backup-key
+    unencrypted_suffix: _public

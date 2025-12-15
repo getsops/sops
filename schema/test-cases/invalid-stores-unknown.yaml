@@ -1,0 +1,6 @@
+# Invalid: Unknown field in stores configuration
+# This should fail validation because 'unknown_option' is not valid for yaml store
+stores:
+  yaml:
+    indent: 2
+    unknown_option: true

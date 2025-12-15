@@ -1,0 +1,6 @@
+# Invalid: KMS entry missing required 'arn' field
+# This should fail validation because KMS keys require an 'arn' property
+creation_rules:
+  - key_groups:
+      - kms:
+          - role: arn:aws:iam::123456789012:role/sops-role
