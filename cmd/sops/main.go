@@ -448,6 +448,7 @@ func main() {
 						err = publishcmd.Run(publishcmd.Opts{
 							ConfigPath:      configPath,
 							InputPath:       subPath,
+							RootPath:        path,
 							Cipher:          aes.NewCipher(),
 							KeyServices:     keyservices(c),
 							DecryptionOrder: order,
