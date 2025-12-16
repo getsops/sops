@@ -891,3 +891,31 @@ destination_rules:
 	assert.NotNil(t, conf.Destination)
 	assert.Contains(t, conf.Destination.Path("secrets.yaml"), "https://vault.example.com/v1/secret/data/secret/sops/secrets.yaml")
 }
+
+// TestKeyGroupsForFileWithExternalEncryptionContext tests that when kmsEncryptionContext
+// is passed to parseCreationRuleForFile, the resulting KMS keys have the encryption context set.
+// This is a regression test for https://github.com/getsops/sops/issues/1972
+func TestKeyGroupsForFileWithExternalEncryptionContext(t *testing.T) {
+	// Config with flat KMS format (not key_groups) - this is where external context applies
+	var sampleConfigWithFlatKMS = []byte(`
+creation_rules:
+  - path_regex: ""
+    kms: "arn:aws:kms:us-west-2:123456789012:key/12345678-1234-1234-1234-123456789012"
+`)
+
+	// External encryption context passed via --encryption-context flag
+	appName := "myapp"
+	kmsEncryptionContext := map[string]*string{
+		"AppName": &appName,
+	}
+
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithFlatKMS, t), "/conf/path", "secrets.yaml", kmsEncryptionContext)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf)
+	assert.Equal(t, 1, len(conf.KeyGroups))
+	assert.Equal(t, 1, len(conf.KeyGroups[0]))
+
+	// The KMS key should have the encryption context applied
+	// Format: ARN|context where context is "AppName:myapp"
+	assert.Equal(t, "arn:aws:kms:us-west-2:123456789012:key/12345678-1234-1234-1234-123456789012|AppName:myapp", conf.KeyGroups[0][0].ToString())
+}
