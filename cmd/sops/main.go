@@ -1901,7 +1901,8 @@ func main() {
 		needsCreationRule := isEncryptMode || isRotateMode || isSetMode || isEditMode
 		var config *config.Config
 		if needsCreationRule {
-			config, err = loadConfig(c, fileNameOverride, nil)
+			kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
+			config, err = loadConfig(c, fileNameOverride, kmsEncryptionContext)
 			if err != nil {
 				return toExitError(err)
 			}
