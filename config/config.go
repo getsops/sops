@@ -15,6 +15,7 @@ import (
 	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/azkv"
 	"github.com/getsops/sops/v3/gcpkms"
+	"github.com/getsops/sops/v3/hckms"
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/pgp"
@@ -132,6 +133,7 @@ type keyGroup struct {
 	Merge   []keyGroup   `yaml:"merge"`
 	KMS     []kmsKey     `yaml:"kms"`
 	GCPKMS  []gcpKmsKey  `yaml:"gcp_kms"`
+	HCKms   []hckmsKey   `yaml:"hckms"`
 	AzureKV []azureKVKey `yaml:"azure_keyvault"`
 	Vault   []string     `yaml:"hc_vault"`
 	Age     []string     `yaml:"age"`
@@ -155,6 +157,10 @@ type azureKVKey struct {
 	Version  string `yaml:"version"`
 }
 
+type hckmsKey struct {
+	KeyID string `yaml:"key_id"`
+}
+
 type destinationRule struct {
 	PathRegex        string       `yaml:"path_regex"`
 	S3Bucket         string       `yaml:"s3_bucket"`
@@ -173,9 +179,10 @@ type creationRule struct {
 	PathRegex               string      `yaml:"path_regex"`
 	KMS                     interface{} `yaml:"kms"` // string or []string
 	AwsProfile              string      `yaml:"aws_profile"`
-	Age                     interface{} `yaml:"age"`                  // string or []string
-	PGP                     interface{} `yaml:"pgp"`                  // string or []string
-	GCPKMS                  interface{} `yaml:"gcp_kms"`              // string or []string
+	Age                     interface{} `yaml:"age"`     // string or []string
+	PGP                     interface{} `yaml:"pgp"`     // string or []string
+	GCPKMS                  interface{} `yaml:"gcp_kms"` // string or []string
+	HCKms                   []string    `yaml:"hckms"`
 	AzureKeyVault           interface{} `yaml:"azure_keyvault"`       // string or []string
 	VaultURI                interface{} `yaml:"hc_vault_transit_uri"` // string or []string
 	KeyGroups               []keyGroup  `yaml:"key_groups"`
@@ -329,6 +336,13 @@ func extractMasterKeys(group keyGroup) (sops.KeyGroup, error) {
 	for _, k := range group.GCPKMS {
 		keyGroup = append(keyGroup, gcpkms.NewMasterKeyFromResourceID(k.ResourceID))
 	}
+	for _, k := range group.HCKms {
+		key, err := hckms.NewMasterKey(k.KeyID)
+		if err != nil {
+			return nil, err
+		}
+		keyGroup = append(keyGroup, key)
+	}
 	for _, k := range group.AzureKV {
 		if key, err := azkv.NewMasterKeyWithOptionalVersion(k.VaultURL, k.Key, k.Version); err == nil {
 			keyGroup = append(keyGroup, key)
@@ -400,6 +414,13 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			return nil, err
 		}
 		for _, k := range gcpkms.MasterKeysFromResourceIDString(strings.Join(gcpkmsKeys, ",")) {
+			keyGroup = append(keyGroup, k)
+		}
+		hckmsMasterKeys, err := hckms.NewMasterKeyFromKeyIDString(strings.Join(cRule.HCKms, ","))
+		if err != nil {
+			return nil, err
+		}
+		for _, k := range hckmsMasterKeys {
 			keyGroup = append(keyGroup, k)
 		}
 		azKeys, err := getKeysWithValidation(cRule.GetAzureKeyVaultKeys, "azure_keyvault")
