@@ -303,7 +303,7 @@ func TestMasterKey_Decrypt(t *testing.T) {
 
 		got, err := key.Decrypt()
 		assert.Error(t, err)
-		assert.ErrorContains(t, err, "no identity matched any of the recipients")
+		assert.ErrorContains(t, err, "incorrect identity for recipient block")
 		assert.Nil(t, got)
 	})
 
