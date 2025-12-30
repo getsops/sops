@@ -9,6 +9,7 @@ import (
 
 	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/azkv"
+	"github.com/getsops/sops/v3/barbican"
 	"github.com/getsops/sops/v3/gcpkms"
 	"github.com/getsops/sops/v3/hckms"
 	"github.com/getsops/sops/v3/hcvault"
@@ -84,6 +85,14 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 			KeyType: &Key_HckmsKey{
 				HckmsKey: &HckmsKey{
 					KeyId: mk.KeyID,
+				},
+			},
+		}
+	case *barbican.MasterKey:
+		return Key{
+			KeyType: &Key_BarbicanKey{
+				BarbicanKey: &BarbicanKey{
+					SecretRef: mk.SecretRef,
 				},
 			},
 		}
