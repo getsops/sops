@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/getsops/sops/v3"
+	"github.com/pelletier/go-toml/v2"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -106,7 +107,7 @@ func testTreeBranches() sops.TreeBranches {
 					// },
 					sops.TreeItem{
 						Key: "21",
-						Value: []interface{}{
+						Value: []any{
 							21.1,
 							21.2,
 						},
@@ -124,7 +125,7 @@ func testTreeBranches() sops.TreeBranches {
 							},
 							sops.TreeItem{
 								Key: "1",
-								Value: []interface{}{
+								Value: []any{
 									sops.TreeBranch{
 										sops.TreeItem{
 											Key:   "2111",
@@ -145,7 +146,7 @@ func testTreeBranches() sops.TreeBranches {
 			},
 			sops.TreeItem{
 				Key: "3",
-				Value: []interface{}{
+				Value: []any{
 					sops.TreeBranch{
 						sops.TreeItem{
 							Key:   "31",
@@ -162,7 +163,7 @@ func testTreeBranches() sops.TreeBranches {
 						// 	Key: sops.Comment{
 						// 		Value: " 4 comment",
 						// 	},
-						// 	Value: interface{}(nil),
+						// 	Value: any(nil),
 						// },
 					},
 				},
@@ -172,7 +173,7 @@ func testTreeBranches() sops.TreeBranches {
 			// 	Key: sops.Comment{
 			// 		Value: " 41 comment",
 			// 	},
-			// 	Value: interface{}(nil),
+			// 	Value: any(nil),
 			// },
 			sops.TreeItem{
 				Key: "4",
@@ -231,4 +232,284 @@ func TestEmitValueString(t *testing.T) {
 	bytes, err := (&Store{}).EmitValue("hello")
 	assert.Nil(t, err)
 	assert.Equal(t, []byte("\"hello\""), bytes)
+}
+
+func TestUnmarshalMetadataFromNonSOPSFile(t *testing.T) {
+	t.Parallel()
+
+	data := []byte(`hello = 2`)
+	_, err := (&Store{}).LoadEncryptedFile(data)
+	assert.Equal(t, sops.MetadataNotFound, err)
+}
+
+func TestLoadPlainFileRoundTrip(t *testing.T) {
+	t.Parallel()
+
+	// Load the plain file
+	branches, err := (&Store{}).LoadPlainFile(testPlain())
+	assert.Nil(t, err)
+
+	// Emit it back
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+
+	// Load again to verify round-trip works
+	branches2, err := (&Store{}).LoadPlainFile(bytes)
+	assert.Nil(t, err)
+
+	// Should match the original loaded data
+	assert.Equal(t, branches, branches2)
+}
+
+func TestEmitValueTreeBranch(t *testing.T) {
+	t.Parallel()
+
+	branch := sops.TreeBranch{
+		sops.TreeItem{
+			Key:   "key1",
+			Value: "value1",
+		},
+		sops.TreeItem{
+			Key:   "key2",
+			Value: int64(42),
+		},
+	}
+
+	bytes, err := (&Store{}).EmitValue(branch)
+	assert.Nil(t, err)
+
+	// Should be valid TOML
+	var result map[string]any
+	err = toml.Unmarshal(bytes, &result)
+	assert.Nil(t, err)
+	assert.Equal(t, "value1", result["key1"])
+	assert.Equal(t, int64(42), result["key2"])
+}
+
+func TestEmitValueNumber(t *testing.T) {
+	t.Parallel()
+
+	bytes, err := (&Store{}).EmitValue(42)
+	assert.Nil(t, err)
+	assert.Equal(t, []byte("42"), bytes)
+}
+
+func TestEmitValueBool(t *testing.T) {
+	t.Parallel()
+
+	bytes, err := (&Store{}).EmitValue(true)
+	assert.Nil(t, err)
+	assert.Equal(t, []byte("true"), bytes)
+}
+
+func TestEmpty(t *testing.T) {
+	t.Parallel()
+
+	// Empty TOML file - TOML treats empty input as an empty map (one branch with no items)
+	branches, err := (&Store{}).LoadPlainFile([]byte(``))
+	assert.Nil(t, err)
+	assert.Equal(t, 1, len(branches))
+	assert.Equal(t, 0, len(branches[0]))
+
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, ``, string(bytes))
+}
+
+func TestEmptyTable(t *testing.T) {
+	t.Parallel()
+
+	data := []byte(`[empty]
+`)
+
+	branches, err := (&Store{}).LoadPlainFile(data)
+	assert.Nil(t, err)
+	assert.Equal(t, 1, len(branches))
+	assert.Equal(t, 1, len(branches[0]))
+
+	// Re-emit and verify
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+
+	// Should contain the empty table
+	var result map[string]any
+	err = toml.Unmarshal(bytes, &result)
+	assert.Nil(t, err)
+	assert.Contains(t, result, "empty")
+}
+
+func TestHasSopsTopLevelKey(t *testing.T) {
+	t.Parallel()
+
+	ok := (&Store{}).HasSopsTopLevelKey(sops.TreeBranch{
+		sops.TreeItem{
+			Key:   "sops",
+			Value: "value",
+		},
+	})
+	assert.True(t, ok)
+
+	ok = (&Store{}).HasSopsTopLevelKey(sops.TreeBranch{
+		sops.TreeItem{
+			Key:   "sops_",
+			Value: "value",
+		},
+	})
+	assert.False(t, ok)
+
+	ok = (&Store{}).HasSopsTopLevelKey(sops.TreeBranch{
+		sops.TreeItem{
+			Key:   "other",
+			Value: "value",
+		},
+	})
+	assert.False(t, ok)
+}
+
+func TestLoadEncryptedFile(t *testing.T) {
+	t.Parallel()
+
+	// Create a sample encrypted TOML with metadata
+	data := []byte(`key1 = "value1"
+key2 = 42
+
+[sops]
+  version = "3.7.0"
+  mac = "ENC[AES256_GCM,data:abc123,iv:def456,tag:ghi789,type:str]"
+  lastmodified = "2023-01-01T00:00:00Z"
+
+  [[sops.kms]]
+    arn = "arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012"
+    created_at = "2023-01-01T00:00:00Z"
+    enc = "encrypted-data-key"
+`)
+
+	tree, err := (&Store{}).LoadEncryptedFile(data)
+	assert.Nil(t, err)
+
+	// Verify metadata was loaded
+	assert.NotNil(t, tree.Metadata)
+	assert.Equal(t, "3.7.0", tree.Metadata.Version)
+	assert.Equal(t, "ENC[AES256_GCM,data:abc123,iv:def456,tag:ghi789,type:str]", tree.Metadata.MessageAuthenticationCode)
+
+	// Verify data was loaded
+	assert.Equal(t, 1, len(tree.Branches))
+	// The branch should contain key1, key2, and sops
+	assert.GreaterOrEqual(t, len(tree.Branches[0]), 2)
+}
+
+func TestEmitEncryptedFile(t *testing.T) {
+	t.Parallel()
+
+	// Create a simple tree with metadata
+	tree := sops.Tree{
+		Branches: sops.TreeBranches{
+			sops.TreeBranch{
+				sops.TreeItem{
+					Key:   "key1",
+					Value: "value1",
+				},
+				sops.TreeItem{
+					Key:   "key2",
+					Value: int64(42),
+				},
+			},
+		},
+		Metadata: sops.Metadata{
+			Version:                   "3.7.0",
+			MessageAuthenticationCode: "test-mac",
+		},
+	}
+
+	bytes, err := (&Store{}).EmitEncryptedFile(tree)
+	assert.Nil(t, err)
+
+	// Should be valid TOML
+	var result map[string]any
+	err = toml.Unmarshal(bytes, &result)
+	assert.Nil(t, err)
+
+	// Should contain data
+	assert.Equal(t, "value1", result["key1"])
+	assert.Equal(t, int64(42), result["key2"])
+
+	// Should contain sops metadata
+	assert.Contains(t, result, "sops")
+	sopsMap := result["sops"].(map[string]any)
+	assert.Equal(t, "3.7.0", sopsMap["version"])
+	assert.Equal(t, "test-mac", sopsMap["mac"])
+}
+
+func TestNestedStructures(t *testing.T) {
+	t.Parallel()
+
+	data := []byte(`[server]
+  host = "localhost"
+  port = 8080
+
+  [server.database]
+    name = "mydb"
+    user = "admin"
+
+[[users]]
+  name = "Alice"
+  role = "admin"
+
+[[users]]
+  name = "Bob"
+  role = "user"
+`)
+
+	branches, err := (&Store{}).LoadPlainFile(data)
+	assert.Nil(t, err)
+	assert.Equal(t, 1, len(branches))
+
+	// Re-emit and verify structure is preserved
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+
+	var result map[string]any
+	err = toml.Unmarshal(bytes, &result)
+	assert.Nil(t, err)
+
+	// Verify nested table
+	assert.Contains(t, result, "server")
+	server := result["server"].(map[string]any)
+	assert.Equal(t, "localhost", server["host"])
+	assert.Equal(t, int64(8080), server["port"])
+
+	db := server["database"].(map[string]any)
+	assert.Equal(t, "mydb", db["name"])
+	assert.Equal(t, "admin", db["user"])
+
+	// Verify array of tables
+	assert.Contains(t, result, "users")
+	users := result["users"].([]any)
+	assert.Equal(t, 2, len(users))
+
+	user1 := users[0].(map[string]any)
+	assert.Equal(t, "Alice", user1["name"])
+	assert.Equal(t, "admin", user1["role"])
+
+	user2 := users[1].(map[string]any)
+	assert.Equal(t, "Bob", user2["name"])
+	assert.Equal(t, "user", user2["role"])
+}
+
+func TestErrorOnMultipleBranches(t *testing.T) {
+	t.Parallel()
+
+	branches := sops.TreeBranches{
+		sops.TreeBranch{
+			sops.TreeItem{Key: "key1", Value: "value1"},
+		},
+		sops.TreeBranch{
+			sops.TreeItem{Key: "key2", Value: "value2"},
+		},
+	}
+
+	// TOML can only contain one document
+	_, err := (&Store{}).EmitPlainFile(branches)
+	assert.NotNil(t, err)
+	assert.Equal(t, errTOMLUniqueDocument, err)
 }
