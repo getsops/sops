@@ -18,6 +18,7 @@ import (
 	"github.com/getsops/sops/v3/stores/dotenv"
 	"github.com/getsops/sops/v3/stores/ini"
 	"github.com/getsops/sops/v3/stores/json"
+	"github.com/getsops/sops/v3/stores/toml"
 	"github.com/getsops/sops/v3/stores/yaml"
 	"github.com/getsops/sops/v3/version"
 	"github.com/mitchellh/go-wordwrap"
@@ -59,12 +60,17 @@ func newYamlStore(c *config.StoresConfig) Store {
 	return yaml.NewStore(&c.YAML)
 }
 
+func newTomlStore(c *config.StoresConfig) Store {
+	return toml.NewStore(&c.TOML)
+}
+
 var storeConstructors = map[Format]storeConstructor{
 	Binary: newBinaryStore,
 	Dotenv: newDotenvStore,
 	Ini:    newIniStore,
 	Json:   newJsonStore,
 	Yaml:   newYamlStore,
+	Toml:   newTomlStore,
 }
 
 // DecryptTreeOpts are the options needed to decrypt a tree

@@ -36,7 +36,7 @@ type SopsFile struct {
 	// in the SOPS file by checking for nil. This way we can show the user a
 	// helpful error message indicating that the metadata wasn't found, instead
 	// of showing a cryptic parsing error
-	Metadata *Metadata `yaml:"sops" json:"sops" ini:"sops"`
+	Metadata *Metadata `yaml:"sops" json:"sops" ini:"sops" toml:"sops"`
 }
 
 // Metadata is stored in SOPS encrypted files, and it contains the information necessary to decrypt the file.
@@ -44,83 +44,83 @@ type SopsFile struct {
 // in order to allow the binary format to stay backwards compatible over time, but at the same time allow the internal
 // representation SOPS uses to change over time.
 type Metadata struct {
-	ShamirThreshold           int         `yaml:"shamir_threshold,omitempty" json:"shamir_threshold,omitempty"`
-	KeyGroups                 []keygroup  `yaml:"key_groups,omitempty" json:"key_groups,omitempty"`
-	KMSKeys                   []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
-	GCPKMSKeys                []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
-	HCKmsKeys                 []hckmskey  `yaml:"hckms,omitempty" json:"hckms,omitempty"`
-	AzureKeyVaultKeys         []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
-	VaultKeys                 []vaultkey  `yaml:"hc_vault,omitempty" json:"hc_vault,omitempty"`
-	AgeKeys                   []agekey    `yaml:"age,omitempty" json:"age,omitempty"`
-	LastModified              string      `yaml:"lastmodified" json:"lastmodified"`
-	MessageAuthenticationCode string      `yaml:"mac" json:"mac"`
-	PGPKeys                   []pgpkey    `yaml:"pgp,omitempty" json:"pgp,omitempty"`
-	UnencryptedSuffix         string      `yaml:"unencrypted_suffix,omitempty" json:"unencrypted_suffix,omitempty"`
-	EncryptedSuffix           string      `yaml:"encrypted_suffix,omitempty" json:"encrypted_suffix,omitempty"`
-	UnencryptedRegex          string      `yaml:"unencrypted_regex,omitempty" json:"unencrypted_regex,omitempty"`
-	EncryptedRegex            string      `yaml:"encrypted_regex,omitempty" json:"encrypted_regex,omitempty"`
-	UnencryptedCommentRegex   string      `yaml:"unencrypted_comment_regex,omitempty" json:"unencrypted_comment_regex,omitempty"`
-	EncryptedCommentRegex     string      `yaml:"encrypted_comment_regex,omitempty" json:"encrypted_comment_regex,omitempty"`
-	MACOnlyEncrypted          bool        `yaml:"mac_only_encrypted,omitempty" json:"mac_only_encrypted,omitempty"`
-	Version                   string      `yaml:"version" json:"version"`
+	ShamirThreshold           int         `yaml:"shamir_threshold,omitempty" json:"shamir_threshold,omitempty" toml:"shamir_threshold,omitempty"`
+	KeyGroups                 []keygroup  `yaml:"key_groups,omitempty" json:"key_groups,omitempty" toml:"key_groups,omitempty"`
+	KMSKeys                   []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty" toml:"kms,omitempty"`
+	GCPKMSKeys                []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty" toml:"gcp_kms,omitempty"`
+	HCKmsKeys                 []hckmskey  `yaml:"hckms,omitempty" json:"hckms,omitempty" toml:"hckms,omitempty"`
+	AzureKeyVaultKeys         []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty" toml:"azure_kv,omitempty"`
+	VaultKeys                 []vaultkey  `yaml:"hc_vault,omitempty" json:"hc_vault,omitempty" toml:"hc_vault,omitempty"`
+	AgeKeys                   []agekey    `yaml:"age,omitempty" json:"age,omitempty" toml:"age,omitempty"`
+	LastModified              string      `yaml:"lastmodified" json:"lastmodified" toml:"lastmodified"`
+	MessageAuthenticationCode string      `yaml:"mac" json:"mac" toml:"mac"`
+	PGPKeys                   []pgpkey    `yaml:"pgp,omitempty" json:"pgp,omitempty" toml:"pgp,omitempty"`
+	UnencryptedSuffix         string      `yaml:"unencrypted_suffix,omitempty" json:"unencrypted_suffix,omitempty" toml:"unencrypted_suffix,omitempty"`
+	EncryptedSuffix           string      `yaml:"encrypted_suffix,omitempty" json:"encrypted_suffix,omitempty" toml:"encrypted_suffix,omitempty"`
+	UnencryptedRegex          string      `yaml:"unencrypted_regex,omitempty" json:"unencrypted_regex,omitempty" toml:"unencrypted_regex,omitempty"`
+	EncryptedRegex            string      `yaml:"encrypted_regex,omitempty" json:"encrypted_regex,omitempty" toml:"encrypted_regex,omitempty"`
+	UnencryptedCommentRegex   string      `yaml:"unencrypted_comment_regex,omitempty" json:"unencrypted_comment_regex,omitempty" toml:"unencrypted_comment_regex,omitempty"`
+	EncryptedCommentRegex     string      `yaml:"encrypted_comment_regex,omitempty" json:"encrypted_comment_regex,omitempty" toml:"encrypted_comment_regex,omitempty"`
+	MACOnlyEncrypted          bool        `yaml:"mac_only_encrypted,omitempty" json:"mac_only_encrypted,omitempty" toml:"mac_only_encrypted,omitempty"`
+	Version                   string      `yaml:"version" json:"version" toml:"version"`
 }
 
 type keygroup struct {
-	PGPKeys           []pgpkey    `yaml:"pgp,omitempty" json:"pgp,omitempty"`
-	KMSKeys           []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
-	GCPKMSKeys        []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
-	HCKmsKeys         []hckmskey  `yaml:"hckms,omitempty" json:"hckms,omitempty"`
-	AzureKeyVaultKeys []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
-	VaultKeys         []vaultkey  `yaml:"hc_vault" json:"hc_vault"`
-	AgeKeys           []agekey    `yaml:"age" json:"age"`
+	PGPKeys           []pgpkey    `yaml:"pgp,omitempty" json:"pgp,omitempty" toml:"pgp,omitempty"`
+	KMSKeys           []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty" toml:"kms,omitempty"`
+	GCPKMSKeys        []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty" toml:"gcp_kms,omitempty"`
+	HCKmsKeys         []hckmskey  `yaml:"hckms,omitempty" json:"hckms,omitempty" toml:"hckms,omitempty"`
+	AzureKeyVaultKeys []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty" toml:"azure_kv,omitempty"`
+	VaultKeys         []vaultkey  `yaml:"hc_vault" json:"hc_vault" toml:"hc_vault"`
+	AgeKeys           []agekey    `yaml:"age" json:"age" toml:"age"`
 }
 
 type pgpkey struct {
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
-	Fingerprint      string `yaml:"fp" json:"fp"`
+	CreatedAt        string `yaml:"created_at" json:"created_at" toml:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc" toml:"enc"`
+	Fingerprint      string `yaml:"fp" json:"fp" toml:"fp"`
 }
 
 type kmskey struct {
-	Arn              string             `yaml:"arn" json:"arn"`
-	Role             string             `yaml:"role,omitempty" json:"role,omitempty"`
-	Context          map[string]*string `yaml:"context,omitempty" json:"context,omitempty"`
-	CreatedAt        string             `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string             `yaml:"enc" json:"enc"`
-	AwsProfile       string             `yaml:"aws_profile" json:"aws_profile"`
+	Arn              string             `yaml:"arn" json:"arn" toml:"arn"`
+	Role             string             `yaml:"role,omitempty" json:"role,omitempty" toml:"role,omitempty"`
+	Context          map[string]*string `yaml:"context,omitempty" json:"context,omitempty" toml:"context,omitempty"`
+	CreatedAt        string             `yaml:"created_at" json:"created_at" toml:"created_at"`
+	EncryptedDataKey string             `yaml:"enc" json:"enc" toml:"enc"`
+	AwsProfile       string             `yaml:"aws_profile" json:"aws_profile" toml:"aws_profile"`
 }
 
 type gcpkmskey struct {
-	ResourceID       string `yaml:"resource_id" json:"resource_id"`
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	ResourceID       string `yaml:"resource_id" json:"resource_id" toml:"resource_id"`
+	CreatedAt        string `yaml:"created_at" json:"created_at" toml:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc" toml:"enc"`
 }
 
 type vaultkey struct {
-	VaultAddress     string `yaml:"vault_address" json:"vault_address"`
-	EnginePath       string `yaml:"engine_path" json:"engine_path"`
-	KeyName          string `yaml:"key_name" json:"key_name"`
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	VaultAddress     string `yaml:"vault_address" json:"vault_address" toml:"vault_address"`
+	EnginePath       string `yaml:"engine_path" json:"engine_path" toml:"engine_path"`
+	KeyName          string `yaml:"key_name" json:"key_name" toml:"key_name"`
+	CreatedAt        string `yaml:"created_at" json:"created_at" toml:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc" toml:"enc"`
 }
 
 type azkvkey struct {
-	VaultURL         string `yaml:"vault_url" json:"vault_url"`
-	Name             string `yaml:"name" json:"name"`
-	Version          string `yaml:"version" json:"version"`
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	VaultURL         string `yaml:"vault_url" json:"vault_url" toml:"vault_url"`
+	Name             string `yaml:"name" json:"name" toml:"name"`
+	Version          string `yaml:"version" json:"version" toml:"version"`
+	CreatedAt        string `yaml:"created_at" json:"created_at" toml:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc" toml:"enc"`
 }
 
 type agekey struct {
-	Recipient        string `yaml:"recipient" json:"recipient"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	Recipient        string `yaml:"recipient" json:"recipient" toml:"recipient"`
+	EncryptedDataKey string `yaml:"enc" json:"enc" toml:"enc"`
 }
 
 type hckmskey struct {
-	KeyID            string `yaml:"key_id" json:"key_id"`
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	KeyID            string `yaml:"key_id" json:"key_id" toml:"key_id"`
+	CreatedAt        string `yaml:"created_at" json:"created_at" toml:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc" toml:"enc"`
 }
 
 // MetadataFromInternal converts an internal SOPS metadata representation to a representation appropriate for storage

@@ -11,6 +11,7 @@ const (
 	Ini
 	Json
 	Yaml
+	Toml
 )
 
 var stringToFormat = map[string]Format{
@@ -19,6 +20,7 @@ var stringToFormat = map[string]Format{
 	"ini":    Ini,
 	"json":   Json,
 	"yaml":   Yaml,
+	"toml":   Toml,
 }
 
 // FormatFromString returns a Format from a string.
