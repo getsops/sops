@@ -1,14 +1,16 @@
 package toml //import "github.com/getsops/sops/v3/stores/toml"
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
+	"sort"
+
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/config"
 	"github.com/getsops/sops/v3/stores"
-	"sort"
 
-	"github.com/pelletier/go-toml"
+	"github.com/pelletier/go-toml/v2"
 )
 
 // Store handles storage of TOML data.
@@ -24,133 +26,137 @@ func (store *Store) Name() string {
 	return "toml"
 }
 
-// positionKey is necessary to keep the order when we append in branches.
-type positionKey struct {
-	position int
-	key      string
-}
-
-type byPosition []positionKey
-
-func (b byPosition) Less(i, j int) bool { return b[i].position < b[j].position }
-func (b byPosition) Swap(i, j int)      { b[i], b[j] = b[j], b[i] }
-func (b byPosition) Len() int           { return len(b) }
-
 var errUnexpectedValue = errors.New("unexpected value")
 
-func tomlTreeToTreeBranch(tr *toml.Tree) (sops.TreeBranch, error) {
-	treeItems := make(map[string]sops.TreeItem)
-	pks := []positionKey{}
-
-	for k, v := range tr.Values() {
-		switch node := v.(type) {
-		case []*toml.Tree:
-			maxPosition := 0
-
-			var treeBranches []interface{}
-
-			for _, item := range node {
-				if item.Position().Line > maxPosition {
-					maxPosition = item.Position().Line
+// mapToTreeBranch converts a map[string]any to a sops.TreeBranch.
+func mapToTreeBranch(m map[string]any) (sops.TreeBranch, error) {
+	// Separate keys by type: simple values first, then complex types
+	// (tables/arrays).
+	var simpleKeys, complexKeys []string
+	for k, v := range m {
+		switch v.(type) {
+		case map[string]any:
+			complexKeys = append(complexKeys, k)
+		case []any:
+			// Check if it's an array of tables
+			if arr, ok := v.([]any); ok && len(arr) > 0 {
+				if _, isMap := arr[0].(map[string]any); isMap {
+					complexKeys = append(complexKeys, k)
+				} else {
+					simpleKeys = append(simpleKeys, k)
 				}
-
-				branch, errT := tomlTreeToTreeBranch(item)
-				if errT != nil {
-					return nil, fmt.Errorf("tomlTreeToTreeBranch: %w - %v, %s", errUnexpectedValue, v, k)
-				}
-
-				treeBranches = append(treeBranches, branch)
-			}
-
-			pks = append(pks, positionKey{position: maxPosition, key: k})
-			treeItems[k] = sops.TreeItem{
-				Key:   k,
-				Value: treeBranches,
-			}
-		case *toml.Tree:
-			pks = append(pks, positionKey{position: node.Position().Line, key: k})
-
-			branch, errT := tomlTreeToTreeBranch(node)
-			if errT != nil {
-				return nil, fmt.Errorf("tomlTreeToTreeBranch: %w - %v, %s", errUnexpectedValue, v, k)
-			}
-
-			treeItems[k] = sops.TreeItem{
-				Key:   k,
-				Value: branch,
-			}
-		case *toml.PubTOMLValue:
-			pks = append(pks, positionKey{position: node.Position().Line, key: k})
-			treeItems[k] = sops.TreeItem{
-				Key:   k,
-				Value: node.Value(),
+			} else {
+				simpleKeys = append(simpleKeys, k)
 			}
 		default:
-			return nil, fmt.Errorf("tomlTreeToTreeBranch: %w - %v, %s", errUnexpectedValue, v, k)
+			simpleKeys = append(simpleKeys, k)
 		}
 	}
 
-	sort.Sort(byPosition(pks))
+	// Sort each group independently.
+	sortKeysNaturally(simpleKeys)
+	sortKeysNaturally(complexKeys)
 
-	var br sops.TreeBranch
-	for _, pk := range pks {
-		br = append(br, treeItems[pk.key])
-	}
+	// Combine: simple values first, then complex types.
+	keys := append(simpleKeys, complexKeys...)
 
-	return br, nil
-}
-
-func treeBranchToTOMLTree(stree sops.TreeBranch) (*toml.Tree, error) {
-	ttree := &toml.PubTree{}
-	values := make(map[string]interface{})
-
-	for _, treeItem := range stree {
-		var errT error
-
-		values[treeItem.Key.(string)], errT = treeItemValueToTOML(treeItem.Value)
-		if errT != nil {
-			return nil, errT
+	var branch sops.TreeBranch
+	for _, k := range keys {
+		v := m[k]
+		value, err := anyToTreeItemValue(v)
+		if err != nil {
+			return nil, fmt.Errorf("mapToTreeBranch: %w - %v, %s", errUnexpectedValue, v, k)
 		}
+		branch = append(branch, sops.TreeItem{
+			Key:   k,
+			Value: value,
+		})
 	}
-
-	ttree.SetValues(values)
-
-	return ttree, nil
+	return branch, nil
 }
 
-func treeItemValueToTOML(treeItemValue interface{}) (interface{}, error) {
-	switch treeItemValueTyped := treeItemValue.(type) {
-	case sops.TreeBranch:
-		return treeBranchToTOMLTree(treeItemValueTyped)
+// sortKeysNaturally sorts keys lexicographically for deterministic output.
+func sortKeysNaturally(keys []string) {
+	sort.Strings(keys)
+}
 
-	case []interface{}:
-		switch treeItemValueTyped[0].(type) {
-		case sops.TreeBranch:
-			var array []*toml.Tree
-
-			for _, itm := range treeItemValueTyped {
-				tb := itm.(sops.TreeBranch)
-
-				tr, errT := treeBranchToTOMLTree(tb)
-				if errT != nil {
-					return nil, errT
+// anyToTreeItemValue converts an any value from TOML unmarshaling
+// to a sops TreeItem value.
+func anyToTreeItemValue(v any) (any, error) {
+	switch val := v.(type) {
+	case map[string]any:
+		return mapToTreeBranch(val)
+	case []any:
+		// Check if it's an array of maps (array of tables in TOML).
+		if len(val) > 0 {
+			if _, ok := val[0].(map[string]any); ok {
+				// Yes, it's an array of tables.
+				var branches []any
+				for _, item := range val {
+					if m, ok := item.(map[string]any); ok {
+						branch, err := mapToTreeBranch(m)
+						if err != nil {
+							return nil, err
+						}
+						branches = append(branches, branch)
+					} else {
+						return nil, fmt.Errorf("anyToTreeItemValue: expected map in array, got %T", item)
+					}
 				}
-
-				array = append(array, tr)
+				return branches, nil
 			}
-
-			return array, nil
-		default:
-			val := &toml.PubTOMLValue{}
-			val.SetValue(treeItemValueTyped)
-
-			return val, nil
 		}
-
+		return val, nil
 	default:
-		val := &toml.PubTOMLValue{}
-		val.SetValue(treeItemValueTyped)
+		return val, nil
+	}
+}
 
+// treeBranchToMap converts a sops.TreeBranch to a map[string]any.
+func treeBranchToMap(branch sops.TreeBranch) (map[string]any, error) {
+	m := make(map[string]any)
+	for _, item := range branch {
+		key, ok := item.Key.(string)
+		if !ok {
+			// Skip non-string keys (like comments).
+			continue
+		}
+		value, err := treeItemValueToInterface(item.Value)
+		if err != nil {
+			return nil, err
+		}
+		m[key] = value
+	}
+	return m, nil
+}
+
+// treeItemValueToInterface converts a sops TreeItem value to an any
+// suitable for TOML marshaling.
+func treeItemValueToInterface(value any) (any, error) {
+	switch val := value.(type) {
+	case sops.TreeBranch:
+		return treeBranchToMap(val)
+	case []any:
+		// Check if it's an array of TreeBranches.
+		if len(val) > 0 {
+			if _, ok := val[0].(sops.TreeBranch); ok {
+				var result []any
+				for _, item := range val {
+					if branch, ok := item.(sops.TreeBranch); ok {
+						m, err := treeBranchToMap(branch)
+						if err != nil {
+							return nil, err
+						}
+						result = append(result, m)
+					} else {
+						return nil, fmt.Errorf("treeItemValueToInterface: expected TreeBranch in array, got %T", item)
+					}
+				}
+				return result, nil
+			}
+		}
+		return val, nil
+	default:
 		return val, nil
 	}
 }
@@ -158,16 +164,17 @@ func treeItemValueToTOML(treeItemValue interface{}) (interface{}, error) {
 // LoadEncryptedFile loads the contents of an encrypted toml file onto a
 // sops.Tree runtime object.
 func (s *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
-	data, err := toml.LoadBytes(in)
-	if err != nil {
+	var data map[string]any
+	if err := toml.Unmarshal(in, &data); err != nil {
 		return sops.Tree{}, fmt.Errorf("error unmarshalling input toml: %w", err)
 	}
 
 	// Because we don't know what fields the input file will have, we have to
 	// load the file in two steps.
+	//
 	// First, we load the file's metadata, the structure of which is known.
 	metadataHolder := stores.SopsFile{}
-	if err := data.Unmarshal(&metadataHolder); err != nil {
+	if err := toml.Unmarshal(in, &metadataHolder); err != nil {
 		return sops.Tree{}, fmt.Errorf("error unmarshalling input toml: %w", err)
 	}
 
@@ -180,9 +187,11 @@ func (s *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 		return sops.Tree{}, fmt.Errorf("error unmarshalling input toml: %w", err)
 	}
 
-	branch, errT := tomlTreeToTreeBranch(data)
-	if errT != nil {
-		return sops.Tree{}, fmt.Errorf("error transforming toml Tree: %w", err)
+	// Second, we load the rest of the file's contents into a generic tree
+	// structure.
+	branch, err := mapToTreeBranch(data)
+	if err != nil {
+		return sops.Tree{}, fmt.Errorf("error transforming toml data: %w", err)
 	}
 
 	return sops.Tree{
@@ -194,14 +203,14 @@ func (s *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 // LoadPlainFile loads the contents of a plaintext toml file onto a
 // sops.Tree runtime object.
 func (s *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
-	tomlTree, err := toml.LoadBytes(in)
-	if err != nil {
+	var data map[string]any
+	if err := toml.Unmarshal(in, &data); err != nil {
 		return nil, fmt.Errorf("error unmarshalling input toml: %w", err)
 	}
 
-	branch, errT := tomlTreeToTreeBranch(tomlTree)
-	if errT != nil {
-		return nil, fmt.Errorf("error transforming toml Tree: %w", err)
+	branch, err := mapToTreeBranch(data)
+	if err != nil {
+		return nil, fmt.Errorf("error transforming toml data: %w", err)
 	}
 
 	return sops.TreeBranches{branch}, nil
@@ -216,16 +225,14 @@ func (s *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
 		return nil, errTOMLUniqueDocument
 	}
 
-	tomlTree, err := treeBranchToTOMLTree(in.Branches[0])
+	data, err := treeBranchToMap(in.Branches[0])
 	if err != nil {
-		return nil, errTOMLUniqueDocument
+		return nil, fmt.Errorf("error converting tree branch: %w", err)
 	}
 
-	values := tomlTree.Values()
-	values["sops"] = stores.MetadataFromInternal(in.Metadata)
-	tomlTree.SetValues(values)
+	data["sops"] = stores.MetadataFromInternal(in.Metadata)
 
-	return []byte(tomlTree.String()), nil
+	return s.marshalTOML(data)
 }
 
 // EmitPlainFile returns the plaintext bytes of the toml file corresponding to a
@@ -235,33 +242,46 @@ func (s *Store) EmitPlainFile(branches sops.TreeBranches) ([]byte, error) {
 		return nil, errTOMLUniqueDocument
 	}
 
-	tomlTree, err := treeBranchToTOMLTree(branches[0])
+	data, err := treeBranchToMap(branches[0])
 	if err != nil {
 		return nil, fmt.Errorf("emit plain file: %w", err)
 	}
 
-	return tomlTree.Marshal()
+	return s.marshalTOML(data)
+}
+
+// marshalTOML marshals data to TOML with custom formatting
+func (s *Store) marshalTOML(data any) ([]byte, error) {
+	buf := bytes.Buffer{}
+	encoder := toml.NewEncoder(&buf)
+	encoder.SetIndentTables(true)
+	if err := encoder.Encode(data); err != nil {
+		return nil, fmt.Errorf("error marshalling toml: %w", err)
+	}
+
+	// Replace single quotes with double quotes for string values.
+	result := bytes.ReplaceAll(buf.Bytes(), []byte("'"), []byte("\""))
+	return result, nil
 }
 
 // EmitValue returns bytes corresponding to a single encoded value
-// in a generic interface{} object.
-func (s *Store) EmitValue(v interface{}) ([]byte, error) {
-	switch v := v.(type) {
+// in a generic any object.
+func (s *Store) EmitValue(v any) ([]byte, error) {
+	switch val := v.(type) {
 	case sops.TreeBranch:
-		tomlTree, err := treeBranchToTOMLTree(v)
+		data, err := treeBranchToMap(val)
 		if err != nil {
-			return nil, fmt.Errorf("emit plain file: %w", err)
+			return nil, fmt.Errorf("emit value: %w", err)
 		}
 
-		return tomlTree.Marshal()
+		return s.marshalTOML(data)
+	case string:
+		// For strings, return quoted value.
+		return []byte(fmt.Sprintf("%q", val)), nil
 	default:
-		str, err := toml.ValueStringRepresentation(v, "", "", toml.OrderPreserve, false)
-		if err != nil {
-			return nil, fmt.Errorf("emit plain file: %w", err)
-		}
-		return []byte(str), nil
+		// For simple values, format them appropriately.
+		return []byte(fmt.Sprintf("%v", val)), nil
 	}
-
 }
 
 // EmitExample returns the bytes corresponding to an example complex tree.
