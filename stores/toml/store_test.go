@@ -513,3 +513,214 @@ func TestErrorOnMultipleBranches(t *testing.T) {
 	assert.NotNil(t, err)
 	assert.Equal(t, errTOMLUniqueDocument, err)
 }
+
+func TestArraysOfArrays(t *testing.T) {
+	t.Parallel()
+
+	data := []byte(`arrays = [[["foo", "bar"], ["baz"]], [["qux"]]]
+`)
+
+	branches, err := (&Store{}).LoadPlainFile(data)
+	assert.Nil(t, err)
+	assert.Equal(t, 1, len(branches))
+
+	// Re-emit and verify structure is preserved
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+
+	var result map[string]any
+	err = toml.Unmarshal(bytes, &result)
+	assert.Nil(t, err)
+
+	arrays := result["arrays"].([]any)
+	assert.Equal(t, 2, len(arrays))
+
+	// First nested array
+	arr0 := arrays[0].([]any)
+	assert.Equal(t, 2, len(arr0))
+	arr00 := arr0[0].([]any)
+	assert.Equal(t, []any{"foo", "bar"}, arr00)
+	arr01 := arr0[1].([]any)
+	assert.Equal(t, []any{"baz"}, arr01)
+
+	// Second nested array
+	arr1 := arrays[1].([]any)
+	assert.Equal(t, 1, len(arr1))
+	arr10 := arr1[0].([]any)
+	assert.Equal(t, []any{"qux"}, arr10)
+}
+
+func TestSpecialCharacters(t *testing.T) {
+	t.Parallel()
+
+	// Test that TOML handles various special characters
+	data := []byte(`simple = "hello world"
+with_space = "hello world"
+number = 42
+`)
+
+	// Load the TOML
+	branches, err := (&Store{}).LoadPlainFile(data)
+	assert.Nil(t, err)
+	assert.Equal(t, 1, len(branches))
+
+	// Emit and verify round-trip works
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+
+	// Re-load to verify round-trip
+	branches2, err := (&Store{}).LoadPlainFile(bytes)
+	assert.Nil(t, err)
+
+	// Should be equal after round-trip
+	assert.Equal(t, branches, branches2)
+}
+
+func TestEmitValueNonString(t *testing.T) {
+	t.Parallel()
+
+	// TreeBranch should work
+	branch := sops.TreeBranch{
+		sops.TreeItem{Key: "key", Value: "value"},
+	}
+	_, err := (&Store{}).EmitValue(branch)
+	assert.Nil(t, err)
+
+	// Other complex types should also work
+	_, err = (&Store{}).EmitValue(42)
+	assert.Nil(t, err)
+
+	_, err = (&Store{}).EmitValue(true)
+	assert.Nil(t, err)
+}
+
+func TestMixedArrayTypes(t *testing.T) {
+	t.Parallel()
+
+	// TOML requires arrays to have consistent types
+	// Test that we can handle arrays with mixed simple types
+	data := []byte(`mixed_numbers = [1, 2.5, 3]
+strings = ["hello", "world"]
+`)
+
+	branches, err := (&Store{}).LoadPlainFile(data)
+	assert.Nil(t, err)
+
+	// Re-emit and verify
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+
+	var result map[string]any
+	err = toml.Unmarshal(bytes, &result)
+	assert.Nil(t, err)
+
+	// Verify mixed_numbers array
+	nums := result["mixed_numbers"].([]any)
+	assert.Equal(t, 3, len(nums))
+
+	// Verify strings array
+	strs := result["strings"].([]any)
+	assert.Equal(t, 2, len(strs))
+	assert.Equal(t, "hello", strs[0])
+	assert.Equal(t, "world", strs[1])
+}
+
+func TestDateTimeValues(t *testing.T) {
+	t.Parallel()
+
+	// TOML has native datetime support
+	data := []byte(`datetime = 1979-05-27T07:32:00Z
+date = 1979-05-27
+`)
+
+	branches, err := (&Store{}).LoadPlainFile(data)
+	assert.Nil(t, err)
+	assert.Equal(t, 1, len(branches))
+
+	// Re-emit and verify structure is preserved
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+
+	var result map[string]any
+	err = toml.Unmarshal(bytes, &result)
+	assert.Nil(t, err)
+
+	// Should contain datetime fields
+	assert.Contains(t, result, "datetime")
+	assert.Contains(t, result, "date")
+}
+
+func TestInlineTable(t *testing.T) {
+	t.Parallel()
+
+	data := []byte(`name = { first = "Tom", last = "Preston-Werner" }
+point = { x = 1, y = 2 }
+`)
+
+	branches, err := (&Store{}).LoadPlainFile(data)
+	assert.Nil(t, err)
+	assert.Equal(t, 1, len(branches))
+
+	// Re-emit and verify structure is preserved
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+
+	var result map[string]any
+	err = toml.Unmarshal(bytes, &result)
+	assert.Nil(t, err)
+
+	// Verify inline tables are loaded correctly
+	name := result["name"].(map[string]any)
+	assert.Equal(t, "Tom", name["first"])
+	assert.Equal(t, "Preston-Werner", name["last"])
+
+	point := result["point"].(map[string]any)
+	assert.Equal(t, int64(1), point["x"])
+	assert.Equal(t, int64(2), point["y"])
+}
+
+func TestBooleanValues(t *testing.T) {
+	t.Parallel()
+
+	data := []byte(`enabled = true
+disabled = false
+`)
+
+	branches, err := (&Store{}).LoadPlainFile(data)
+	assert.Nil(t, err)
+
+	// Verify boolean values are preserved
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+
+	var result map[string]any
+	err = toml.Unmarshal(bytes, &result)
+	assert.Nil(t, err)
+
+	assert.Equal(t, true, result["enabled"])
+	assert.Equal(t, false, result["disabled"])
+}
+
+func TestFloatValues(t *testing.T) {
+	t.Parallel()
+
+	data := []byte(`pi = 3.14159
+negative = -0.01
+exponent = 5e+22
+`)
+
+	branches, err := (&Store{}).LoadPlainFile(data)
+	assert.Nil(t, err)
+
+	// Re-emit and verify
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+
+	var result map[string]any
+	err = toml.Unmarshal(bytes, &result)
+	assert.Nil(t, err)
+
+	assert.Equal(t, 3.14159, result["pi"])
+	assert.Equal(t, -0.01, result["negative"])
+	assert.Equal(t, 5e+22, result["exponent"])
+}
