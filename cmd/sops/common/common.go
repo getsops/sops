@@ -56,12 +56,12 @@ func newJsonStore(c *config.StoresConfig) Store {
 	return json.NewStore(&c.JSON)
 }
 
-func newYamlStore(c *config.StoresConfig) Store {
-	return yaml.NewStore(&c.YAML)
-}
-
 func newTomlStore(c *config.StoresConfig) Store {
 	return toml.NewStore(&c.TOML)
+}
+
+func newYamlStore(c *config.StoresConfig) Store {
+	return yaml.NewStore(&c.YAML)
 }
 
 var storeConstructors = map[Format]storeConstructor{
@@ -69,8 +69,8 @@ var storeConstructors = map[Format]storeConstructor{
 	Dotenv: newDotenvStore,
 	Ini:    newIniStore,
 	Json:   newJsonStore,
-	Yaml:   newYamlStore,
 	Toml:   newTomlStore,
+	Yaml:   newYamlStore,
 }
 
 // DecryptTreeOpts are the options needed to decrypt a tree

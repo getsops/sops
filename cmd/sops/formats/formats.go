@@ -10,8 +10,8 @@ const (
 	Dotenv
 	Ini
 	Json
-	Yaml
 	Toml
+	Yaml
 )
 
 var stringToFormat = map[string]Format{
@@ -19,8 +19,8 @@ var stringToFormat = map[string]Format{
 	"dotenv": Dotenv,
 	"ini":    Ini,
 	"json":   Json,
-	"yaml":   Yaml,
 	"toml":   Toml,
+	"yaml":   Yaml,
 }
 
 // FormatFromString returns a Format from a string.

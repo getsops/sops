@@ -111,19 +111,19 @@ type JSONBinaryStoreConfig struct {
 	Indent int `yaml:"indent"`
 }
 
+type TOMLStoreConfig struct{}
+
 type YAMLStoreConfig struct {
 	Indent int `yaml:"indent"`
 }
-
-type TOMLStoreConfig struct{}
 
 type StoresConfig struct {
 	Dotenv     DotenvStoreConfig     `yaml:"dotenv"`
 	INI        INIStoreConfig        `yaml:"ini"`
 	JSONBinary JSONBinaryStoreConfig `yaml:"json_binary"`
 	JSON       JSONStoreConfig       `yaml:"json"`
-	YAML       YAMLStoreConfig       `yaml:"yaml"`
 	TOML       TOMLStoreConfig       `yaml:"toml"`
+	YAML       YAMLStoreConfig       `yaml:"yaml"`
 }
 
 type configFile struct {
