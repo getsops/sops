@@ -1,6 +1,7 @@
 package age
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -8,7 +9,10 @@ import (
 	"strings"
 	"testing"
 
+	"filippo.io/age"
+	"filippo.io/age/armor"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 const (
@@ -281,6 +285,60 @@ func TestMasterKey_Decrypt(t *testing.T) {
 		assert.EqualValues(t, mockEncryptedKeyPlain, got)
 	})
 
+	// Regression test for https://github.com/getsops/sops/issues/1999
+	// Verifies that SSH keys can decrypt data encrypted to age recipients
+	// derived from the same SSH key (via ssh-to-age or similar tools)
+	t.Run("ssh key decrypts age recipient", func(t *testing.T) {
+		tmp := t.TempDir()
+		overwriteUserConfigDir(t, tmp)
+
+		homeDir, err := os.UserHomeDir()
+		require.NoError(t, err)
+		keyPath := filepath.Join(homeDir, ".ssh/id_ed25519_test")
+		require.True(t, strings.HasPrefix(keyPath, homeDir))
+
+		require.NoError(t, os.MkdirAll(filepath.Dir(keyPath), 0o700))
+		require.NoError(t, os.WriteFile(keyPath, []byte(mockSshIdentity), 0o644))
+		t.Setenv(SopsAgeSshPrivateKeyFileEnv, keyPath)
+
+		// Should return both SSH and age identities for ed25519
+		identities, _, errs := loadAgeSSHIdentities()
+		require.Empty(t, errs)
+		require.GreaterOrEqual(t, len(identities), 2, "ed25519 SSH key should produce both SSH and age identities")
+
+		// Find the X25519 identity
+		var x25519Identity *age.X25519Identity
+		for _, id := range identities {
+			if xi, ok := id.(*age.X25519Identity); ok {
+				x25519Identity = xi
+				break
+			}
+		}
+		require.NotNil(t, x25519Identity, "should have X25519 identity derived from SSH key")
+
+		recipient := x25519Identity.Recipient()
+
+		// Encrypt data to the age recipient
+		plaintext := []byte("test data for issue #1999")
+		var encryptedBuf bytes.Buffer
+		armorWriter := armor.NewWriter(&encryptedBuf)
+		encWriter, err := age.Encrypt(armorWriter, recipient)
+		require.NoError(t, err)
+		_, err = encWriter.Write(plaintext)
+		require.NoError(t, err)
+		require.NoError(t, encWriter.Close())
+		require.NoError(t, armorWriter.Close())
+
+		// Decrypt using MasterKey
+		key := &MasterKey{
+			Recipient:    recipient.String(),
+			EncryptedKey: encryptedBuf.String(),
+		}
+		got, err := key.Decrypt()
+		require.NoError(t, err, "SSH key should decrypt data encrypted to age recipient derived from same key")
+		assert.EqualValues(t, plaintext, got)
+	})
+
 	t.Run("no identities", func(t *testing.T) {
 		tmpDir := t.TempDir()
 		overwriteUserConfigDir(t, tmpDir)
@@ -441,7 +499,8 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		key := &MasterKey{}
 		got, unusedLocations, errs := key.loadIdentities()
 		assert.Len(t, errs, 0)
-		assert.Len(t, got, 1)
+		// ed25519 SSH keys return 2 identities: SSH identity + age X25519 identity
+		assert.Len(t, got, 2)
 		assert.Len(t, unusedLocations, 5)
 	})
 
