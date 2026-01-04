@@ -1,4 +1,35 @@
+## Unreleased
+
+Features:
+
+* Add Tencent Cloud KMS support for encryption and decryption.
+  The integration supports environment variable authentication
+  (``TENCENTCLOUD_SECRET_ID``, ``TENCENTCLOUD_SECRET_KEY``),
+  optional STS token (``TENCENTCLOUD_TOKEN``),
+  configurable region and custom endpoint.
+  New CLI flags: ``--tencent-kms``, ``--add-tencent-kms``,
+  ``--rm-tencent-kms``.
+  Environment variable: ``SOPS_TENCENT_KMS_IDS``.
+  Configuration file key: ``tencent_kms``.
+>>>>>>> 4cdbc7e1a (docs: add Tencent Cloud KMS documentation)
+
+## 3.11.0
+=======
 # Changelog
+
+## Unreleased
+
+Features:
+
+* Add Tencent Cloud KMS support for encryption and decryption.
+  The integration supports environment variable authentication
+  (``TENCENTCLOUD_SECRET_ID``, ``TENCENTCLOUD_SECRET_KEY``),
+  optional STS token (``TENCENTCLOUD_TOKEN``),
+  configurable region and custom endpoint.
+  New CLI flags: ``--tencent-kms``, ``--add-tencent-kms``,
+  ``--rm-tencent-kms``.
+  Environment variable: ``SOPS_TENCENT_KMS_IDS``.
+  Configuration file key: ``tencent_kms``.
 
 ## 3.13.0
 
@@ -145,6 +176,23 @@ Project changes:
 * Rust dependency updates for functional tests ([#1962](https://github.com/getsops/sops/pull/1962),
   [#2027](https://github.com/getsops/sops/pull/2027), [#2035](https://github.com/getsops/sops/pull/2035),
   [#2073](https://github.com/getsops/sops/pull/2073)).
+
+## 3.11.0
+=======
+## Unreleased
+
+Features:
+
+* Add Tencent Cloud KMS support for encryption and decryption.
+  The integration supports environment variable authentication
+  (``TENCENTCLOUD_SECRET_ID``, ``TENCENTCLOUD_SECRET_KEY``),
+  optional STS token (``TENCENTCLOUD_TOKEN``),
+  configurable region and custom endpoint.
+  New CLI flags: ``--tencent-kms``, ``--add-tencent-kms``,
+  ``--rm-tencent-kms``.
+  Environment variable: ``SOPS_TENCENT_KMS_IDS``.
+  Configuration file key: ``tencent_kms``.
+>>>>>>> 4cdbc7e1a (docs: add Tencent Cloud KMS documentation)
 
 ## 3.11.0
 
