@@ -7,7 +7,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-
 func TestValToString(t *testing.T) {
 	assert.Equal(t, "1", ValToString(1))
 	assert.Equal(t, "1.0", ValToString(1.0))
