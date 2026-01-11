@@ -56,7 +56,7 @@ type lazyEd25519AgeIdentity struct {
 	expectedRecip string // age recipient derived from SSH public key
 	getPassphrase func() ([]byte, error)
 
-	mu      sync.Mutex
+	mutex   sync.Mutex
 	wrapped age.Identity // nil until successfully initialized
 }
 
@@ -88,8 +88,8 @@ func (l *lazyEd25519AgeIdentity) Unwrap(stanzas []*age.Stanza) ([]byte, error) {
 // getOrInitWrapped lazily initializes the wrapped age identity, prompting for
 // passphrase if needed. Returns the cached identity on subsequent calls.
 func (l *lazyEd25519AgeIdentity) getOrInitWrapped() (age.Identity, error) {
-	l.mu.Lock()
-	defer l.mu.Unlock()
+	l.mutex.Lock()
+	defer l.mutex.Unlock()
 
 	if l.wrapped != nil {
 		return l.wrapped, nil
