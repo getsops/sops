@@ -230,6 +230,12 @@ func formatError(msg string, err error, errs errSet, unusedLocations []string) e
 	}
 }
 
+// recipientMatcher is implemented by identities that can pre-filter by recipient
+// to avoid unnecessary passphrase prompts or expensive operations.
+type recipientMatcher interface {
+	matchesRecipient(recipient string) bool
+}
+
 // Decrypt decrypts the EncryptedKey with the parsed or loaded identities, and
 // returns the result.
 func (key *MasterKey) Decrypt() ([]byte, error) {

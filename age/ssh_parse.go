@@ -49,12 +49,6 @@ func readPublicKeyFile(privateKeyPath string) (ssh.PublicKey, error) {
 	return pubKey, nil
 }
 
-// recipientMatcher is implemented by identities that can pre-filter by recipient
-// to avoid unnecessary passphrase prompts or expensive operations.
-type recipientMatcher interface {
-	matchesRecipient(recipient string) bool
-}
-
 // lazyEd25519AgeIdentity wraps an encrypted SSH ed25519 key and lazily converts
 // it to an age X25519 identity only when decryption is attempted.
 type lazyEd25519AgeIdentity struct {
