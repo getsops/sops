@@ -164,7 +164,7 @@ func parseSSHIdentitiesFromPrivateKeyFile(keyPath string) ([]age.Identity, error
 			pubKeyBytes := ssh.MarshalAuthorizedKey(pubKey)
 			ageRecip, err := agesshconv.SSHPublicKeyToAge(pubKeyBytes)
 			if err != nil {
-				log.WithField("path", keyPath).Debug("Failed to derive age recipient from SSH public key, skipping age identity: " + err.Error())
+				log.WithField("path", keyPath).Debugf("Failed to derive age recipient from SSH public key, skipping age identity: %v", err)
 			} else if ageRecip != nil {
 				identities = append(identities, &lazyEd25519AgeIdentity{
 					contents:      contents,
@@ -186,11 +186,11 @@ func parseSSHIdentitiesFromPrivateKeyFile(keyPath string) ([]age.Identity, error
 	// data encrypted to age recipients derived from this SSH key (via ssh-to-age).
 	ageIdentityStr, _, err := agesshconv.SSHPrivateKeyToAge(contents, nil)
 	if err != nil {
-		log.WithField("path", keyPath).Debug("Failed to convert SSH key to age identity, skipping: " + err.Error())
+		log.WithField("path", keyPath).Debugf("Failed to convert SSH key to age identity, skipping: %v", err)
 	} else if ageIdentityStr != nil {
 		ageIdentity, err := age.ParseX25519Identity(*ageIdentityStr)
 		if err != nil {
-			log.WithField("path", keyPath).Debug("Failed to parse age identity from converted SSH key: " + err.Error())
+			log.WithField("path", keyPath).Debugf("Failed to parse age identity from converted SSH key: %v", err)
 		} else {
 			identities = append(identities, ageIdentity)
 		}
