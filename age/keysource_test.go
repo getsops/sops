@@ -16,6 +16,8 @@ const (
 	mockRecipient string = "age1lzd99uklcjnc0e7d860axevet2cz99ce9pq6tzuzd05l5nr28ams36nvun"
 	// mockIdentity is a mock age identity.
 	mockIdentity string = "AGE-SECRET-KEY-1G0Q5K9TV4REQ3ZSQRMTMG8NSWQGYT0T7TZ33RAZEE0GZYVZN0APSU24RK7"
+	// mockHybridIdentity is a mock post-quantum age identity using a hybrid ML-KEM-768 KEM.
+	mockHybridIdentity string = "AGE-SECRET-KEY-PQ-1JPDDEMSK6G9MG0VNJRSA0QKZ05CF4H6TK50YZGDKZKTRGC5Z7KEQUDUPG6"
 	// mockOtherIdentity is another mock age identity.
 	mockOtherIdentity string = "AGE-SECRET-KEY-1432K5YRNSC44GC4986NXMX6GVZ52WTMT9C79CLUVWYY4DKDHD5JSNDP4MC"
 	// mockEncryptedKey equals to mockEncryptedKeyPlain when decrypted with mockIdentity.
@@ -147,11 +149,11 @@ func TestMasterKeyFromRecipient(t *testing.T) {
 
 func TestParsedIdentities_Import(t *testing.T) {
 	i := make(ParsedIdentities, 0)
-	assert.NoError(t, i.Import(mockIdentity, mockOtherIdentity))
-	assert.Len(t, i, 2)
+	assert.NoError(t, i.Import(mockIdentity, mockOtherIdentity, mockHybridIdentity))
+	assert.Len(t, i, 3)
 
 	assert.Error(t, i.Import("invalid"))
-	assert.Len(t, i, 2)
+	assert.Len(t, i, 3)
 }
 
 func TestParsedIdentities_ApplyToMasterKey(t *testing.T) {
