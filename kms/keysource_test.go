@@ -165,6 +165,12 @@ func TestNewMasterKeyFromArn(t *testing.T) {
 		assert.Equal(t, "arn:aws:kms:us-west-2:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500", key.Arn)
 		assert.Equal(t, "arn:aws:iam::927034868273:role/sops-dev-xyz", key.Role)
 	})
+
+	t.Run("arn with role in another partition", func(t *testing.T) {
+		key := NewMasterKeyFromArn("arn:aws-foobar:kms:bazbam:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500+arn:aws-foobar:iam::927034868273:role/sops-dev-xyz", nil, "")
+		assert.Equal(t, "arn:aws-foobar:kms:bazbam:927034868273:key/fe86dd69-4132-404c-ab86-4269956b4500", key.Arn)
+		assert.Equal(t, "arn:aws-foobar:iam::927034868273:role/sops-dev-xyz", key.Role)
+	})
 }
 
 func TestMasterKeysFromArnString(t *testing.T) {
