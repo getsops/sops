@@ -241,7 +241,8 @@ You can override the default lookup by:
 
 - setting the environment variable **SOPS_AGE_KEY_FILE**;
 - setting the **SOPS_AGE_KEY** environment variable;
-- providing a command to output the age keys by setting the **SOPS_AGE_KEY_CMD** environment variable..
+- providing a command to output the age keys by setting the **SOPS_AGE_KEY_CMD** environment variable.
+  This command can read the age recipient for which to return the private key from the **SOPS_AGE_RECIPIENT** environment variable.
 
 The contents of this key file should be a list of age X25519 identities, one
 per line. Lines beginning with ``#`` are considered comments and ignored. Each
