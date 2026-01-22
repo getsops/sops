@@ -2,7 +2,7 @@ SOPS: Secrets OPerationS
 ========================
 
 **SOPS** is an editor of encrypted files that supports YAML, JSON, ENV, INI and BINARY
-formats and encrypts with AWS KMS, GCP KMS, Azure Key Vault, HuaweiCloud KMS, age, and PGP.
+formats and encrypts with AWS KMS, GCP KMS, Azure Key Vault, HuaweiCloud KMS, OpenStack Barbican, age, and PGP.
 (`demo <https://www.youtube.com/watch?v=YTEVyLXFiq0>`_)
 
 .. image:: https://i.imgur.com/X0TM5NI.gif
@@ -95,6 +95,30 @@ separated, in the **SOPS_PGP_FP** env variable.
     export SOPS_PGP_FP="85D77543B3D624B63CEA9E6DBC17301B491B3F21,E60892BB9BD89A69F759A1A0A3D652173B763E8F"
 
 Note: you can use both PGP and KMS simultaneously.
+
+If you want to use OpenStack Barbican, export the Barbican secret references, comma
+separated, in the **SOPS_BARBICAN_SECRETS** env variable. You'll also need to set
+OpenStack authentication environment variables.
+
+.. code:: bash
+
+    export SOPS_BARBICAN_SECRETS="550e8400-e29b-41d4-a716-446655440000,region:us-west-1:660e8400-e29b-41d4-a716-446655440001"
+    export OS_AUTH_URL="https://keystone.example.com:5000/v3"
+    export OS_USERNAME="sops-user"
+    export OS_PASSWORD="secret"
+    export OS_PROJECT_ID="abc123"
+    export OS_DOMAIN_NAME="default"
+
+Alternatively, you can use OpenStack application credentials (recommended):
+
+.. code:: bash
+
+    export SOPS_BARBICAN_SECRETS="550e8400-e29b-41d4-a716-446655440000"
+    export OS_AUTH_URL="https://keystone.example.com:5000/v3"
+    export OS_APPLICATION_CREDENTIAL_ID="app-cred-id"
+    export OS_APPLICATION_CREDENTIAL_SECRET="app-cred-secret"
+
+Note: you can use Barbican with other key management services simultaneously.
 
 Then simply call ``sops edit`` with a file path as argument. It will handle the
 encryption/decryption transparently and open the cleartext file in an editor
@@ -596,13 +620,138 @@ You can also configure HuaweiCloud KMS keys in the ``.sops.yaml`` config file:
           hckms:
             - tr-west-1:abc12345-6789-0123-4567-890123456789,tr-west-2:def67890-1234-5678-9012-345678901234
 
+Encrypting using OpenStack Barbican
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+OpenStack Barbican is a key management service that provides secure storage, provisioning and management of secrets. SOPS integrates with Barbican to encrypt and decrypt files using secrets stored in Barbican.
+
+Authentication
+**************
+
+SOPS supports standard OpenStack authentication methods for Barbican:
+
+**Password Authentication:**
+
+.. code:: bash
+
+    export OS_AUTH_URL="https://keystone.example.com:5000/v3"
+    export OS_USERNAME="sops-user"
+    export OS_PASSWORD="secret"
+    export OS_PROJECT_ID="abc123"
+    export OS_DOMAIN_NAME="default"
+
+**Application Credentials (Recommended):**
+
+.. code:: bash
+
+    export OS_AUTH_URL="https://keystone.example.com:5000/v3"
+    export OS_APPLICATION_CREDENTIAL_ID="app-cred-id"
+    export OS_APPLICATION_CREDENTIAL_SECRET="app-cred-secret"
+
+**Token Authentication:**
+
+.. code:: bash
+
+    export OS_AUTH_URL="https://keystone.example.com:5000/v3"
+    export OS_TOKEN="existing-token"
+
+Secret Reference Formats
+************************
+
+Barbican secrets can be referenced in multiple formats:
+
+- **UUID format:** ``550e8400-e29b-41d4-a716-446655440000``
+- **Regional format:** ``region:sjc3:550e8400-e29b-41d4-a716-446655440000``
+- **Full URI format:** ``https://barbican.example.com:9311/v1/secrets/550e8400-e29b-41d4-a716-446655440000``
+
+Basic Usage
+***********
+
+You can encrypt a file using the ``--barbican`` flag:
+
+.. code:: sh
+
+    $ sops encrypt --barbican 550e8400-e29b-41d4-a716-446655440000 test.yaml > test.enc.yaml
+
+Or using the environment variable:
+
+.. code:: sh
+
+    $ export SOPS_BARBICAN_SECRETS="550e8400-e29b-41d4-a716-446655440000"
+    $ sops encrypt test.yaml > test.enc.yaml
+
+And decrypt it using:
+
+.. code:: sh
+
+    $ sops decrypt test.enc.yaml
+
+Multi-Region Support
+********************
+
+For high availability, you can use secrets from multiple regions:
+
+.. code:: sh
+
+    $ export SOPS_BARBICAN_SECRETS="region:sjc3:550e8400-e29b-41d4-a716-446655440000,region:dfw3:660e8400-e29b-41d4-a716-446655440001"
+    $ sops encrypt test.yaml > test.enc.yaml
+
+SOPS will automatically try secrets in order during decryption, providing failover capability if one region becomes unavailable.
+
+Configuration File Support
+**************************
+
+You can configure Barbican secrets in the ``.sops.yaml`` config file:
+
+.. code:: yaml
+
+    creation_rules:
+        - path_regex: \.prod\.yaml$
+          barbican: "550e8400-e29b-41d4-a716-446655440000"
+          barbican_auth_url: "https://keystone.example.com:5000/v3"
+          barbican_region: "sjc3"
+
+For multiple secrets:
+
+.. code:: yaml
+
+    creation_rules:
+        - path_regex: \.prod\.yaml$
+          barbican:
+            - "550e8400-e29b-41d4-a716-446655440000"
+            - "region:dfw3:660e8400-e29b-41d4-a716-446655440001"
+          barbican_auth_url: "https://keystone.example.com:5000/v3"
+
+Mixed Key Management
+*******************
+
+Barbican can be used alongside other key management services:
+
+.. code:: sh
+
+    $ sops encrypt \
+        --barbican 550e8400-e29b-41d4-a716-446655440000 \
+        --kms arn:aws:kms:us-west-2:123456789012:key/12345678-1234-1234-1234-123456789012 \
+        --pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 \
+        test.yaml > test.enc.yaml
+
+Security Considerations
+**********************
+
+- **Use Application Credentials:** More secure than username/password authentication
+- **Enable HTTPS:** Always use HTTPS endpoints in production
+- **Rotate Credentials:** Regularly rotate application credentials
+- **Network Security:** Use proper firewall rules and network segmentation
+
+For comprehensive usage examples, troubleshooting, and best practices, see the detailed documentation in ``barbican/README.rst``.
+
 Adding and removing keys
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 When creating new files, ``sops`` uses the PGP, KMS and GCP KMS defined in the
-command line arguments ``--kms``, ``--pgp``, ``--gcp-kms``, ``--hckms`` or ``--azure-kv``, or from
+command line arguments ``--kms``, ``--pgp``, ``--gcp-kms``, ``--hckms``, ``--azure-kv``, or ``--barbican``, or from
 the environment variables ``SOPS_KMS_ARN``, ``SOPS_PGP_FP``, ``SOPS_GCP_KMS_IDS``,
-``SOPS_HUAWEICLOUD_KMS_IDS``, ``SOPS_AZURE_KEYVAULT_URLS``. That information is stored in the file under the
+``SOPS_HUAWEICLOUD_KMS_IDS``, ``SOPS_AZURE_KEYVAULT_URLS``, ``SOPS_BARBICAN_SECRETS``. That information is stored in the file under the
 ``sops`` section, such that decrypting files does not require providing those
 parameters again.
 
@@ -646,9 +795,9 @@ disabled by supplying the ``-y`` flag.
 
 The ``rotate`` command generates a new data encryption key and reencrypt all values
 with the new key. At the same time, the command line flag ``--add-kms``, ``--add-pgp``,
-``--add-gcp-kms``, ``--add-hckms``, ``--add-azure-kv``, ``--rm-kms``, ``--rm-pgp``, ``--rm-gcp-kms``,
-``--rm-hckms`` and ``--rm-azure-kv`` can be used to add and remove keys from a file. These flags use
-the comma separated syntax as the ``--kms``, ``--pgp``, ``--gcp-kms``, ``--hckms`` and ``--azure-kv``
+``--add-gcp-kms``, ``--add-hckms``, ``--add-azure-kv``, ``--add-barbican``, ``--rm-kms``, ``--rm-pgp``, ``--rm-gcp-kms``,
+``--rm-hckms``, ``--rm-azure-kv`` and ``--rm-barbican`` can be used to add and remove keys from a file. These flags use
+the comma separated syntax as the ``--kms``, ``--pgp``, ``--gcp-kms``, ``--hckms``, ``--azure-kv`` and ``--barbican``
 arguments when creating new files.
 
 Use ``updatekeys`` if you want to add a key without rotating the data key.
@@ -660,6 +809,12 @@ Use ``updatekeys`` if you want to add a key without rotating the data key.
 
     # remove a pgp key from the file and rotate the data key
     $ sops rotate -i --rm-pgp 85D77543B3D624B63CEA9E6DBC17301B491B3F21 example.yaml
+
+    # add a new barbican secret to the file and rotate the data key
+    $ sops rotate -i --add-barbican 550e8400-e29b-41d4-a716-446655440000 example.yaml
+
+    # remove a barbican secret from the file and rotate the data key
+    $ sops rotate -i --rm-barbican 550e8400-e29b-41d4-a716-446655440000 example.yaml
 
 
 Direct Editing
@@ -685,6 +840,14 @@ And, similarly, to add a PGP master key, we add its fingerprint:
     sops:
         pgp:
             - fp: 85D77543B3D624B63CEA9E6DBC17301B491B3F21
+
+To add a Barbican secret, we add its secret reference:
+
+.. code:: yaml
+
+    sops:
+        barbican:
+            - secret_ref: 550e8400-e29b-41d4-a716-446655440000
 
 When the file is saved, SOPS will update its metadata and encrypt the data key
 with the freshly added master keys. The removed entries are simply deleted from
@@ -869,6 +1032,10 @@ can manage the three sets of configurations for the three types of files:
         # hckms files using HuaweiCloud KMS
         - path_regex: \.hckms\.yaml$
           hckms: tr-west-1:abc12345-6789-0123-4567-890123456789,tr-west-2:def67890-1234-5678-9012-345678901234
+
+        # barbican files using OpenStack Barbican
+        - path_regex: \.barbican\.yaml$
+          barbican: 550e8400-e29b-41d4-a716-446655440000,region:dfw3:660e8400-e29b-41d4-a716-446655440001
 
         # Finally, if the rules above have not matched, this one is a
         # catchall that will encrypt the file using KMS set C as well as PGP
@@ -1875,6 +2042,17 @@ To directly specify a single key group, you can use the following keys:
           - tr-west-1:abc12345-6789-0123-4567-890123456789
           - tr-west-1:def67890-1234-5678-9012-345678901234
 
+* ``barbican`` (comma-separated string, or list of strings): list of OpenStack Barbican secret references.
+  Secret references can be UUIDs, regional format (``region:<region>:<uuid>``), or full URIs.
+  Example:
+
+  .. code:: yaml
+
+    creation_rules:
+      - barbican:
+          - 550e8400-e29b-41d4-a716-446655440000
+          - region:sjc3:660e8400-e29b-41d4-a716-446655440001
+
 To specify a list of key groups, you can use the following key:
 
 * ``key_groups`` (list of key group objects): a list of key group objects.
@@ -1904,6 +2082,9 @@ To specify a list of key groups, you can use the following key:
               - http://my.vault/v1/sops/keys/secondkey
             hckms:
               - tr-west-1:abc12345-6789-0123-4567-890123456789
+            barbican:
+              - 550e8400-e29b-41d4-a716-446655440000
+              - region:sjc3:660e8400-e29b-41d4-a716-446655440001
 
             merge:
               - pgp:
@@ -1991,6 +2172,18 @@ A key group supports the following keys:
   .. code:: yaml
 
     - key_id: tr-west-1:abc12345-6789-0123-4567-890123456789
+
+* ``barbican`` (list of objects): list of OpenStack Barbican secret references.
+  Every object must have the following key:
+
+  * ``secret_ref`` (string): the secret reference (UUID, regional format, or full URI).
+
+  Example:
+
+  .. code:: yaml
+
+    - secret_ref: 550e8400-e29b-41d4-a716-446655440000
+    - secret_ref: region:sjc3:660e8400-e29b-41d4-a716-446655440001
 
 * ``age`` (list of strings): list of Age public keys.
 
