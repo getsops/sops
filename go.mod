@@ -3,10 +3,10 @@ module github.com/getsops/sops/v3
 go 1.24.0
 
 require (
-	cloud.google.com/go/kms v1.23.2
-	cloud.google.com/go/storage v1.59.0
+	cloud.google.com/go/kms v1.24.0
+	cloud.google.com/go/storage v1.59.1
 	filippo.io/age v1.3.1
-	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.20.0
+	github.com/Azure/azure-sdk-for-go/sdk/azcore v1.21.0
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.13.1
 	github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azkeys v1.4.0
 	github.com/ProtonMail/go-crypto v1.3.0
@@ -25,22 +25,22 @@ require (
 	github.com/goware/prefixer v0.0.0-20160118172347-395022866408
 	github.com/hashicorp/go-cleanhttp v0.5.2
 	github.com/hashicorp/vault/api v1.22.0
-	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.1.183
+	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.1.184
 	github.com/lib/pq v1.10.9
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-wordwrap v1.0.1
 	github.com/ory/dockertest/v3 v3.12.0
 	github.com/pkg/errors v0.9.1
-	github.com/sirupsen/logrus v1.9.3
+	github.com/sirupsen/logrus v1.9.4
 	github.com/stretchr/testify v1.11.1
 	github.com/urfave/cli v1.22.17
 	go.yaml.in/yaml/v3 v3.0.4
-	golang.org/x/crypto v0.46.0
-	golang.org/x/net v0.48.0
+	golang.org/x/crypto v0.47.0
+	golang.org/x/net v0.49.0
 	golang.org/x/oauth2 v0.34.0
 	golang.org/x/sys v0.40.0
 	golang.org/x/term v0.39.0
-	google.golang.org/api v0.259.0
+	google.golang.org/api v0.260.0
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20251222181119-0a764e51fe1b
 	google.golang.org/grpc v1.78.0
 	google.golang.org/protobuf v1.36.11
@@ -105,7 +105,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.3.0 // indirect
 	github.com/google/s2a-go v0.1.9 // indirect
 	github.com/google/uuid v1.6.0 // indirect
-	github.com/googleapis/enterprise-certificate-proxy v0.3.7 // indirect
+	github.com/googleapis/enterprise-certificate-proxy v0.3.9 // indirect
 	github.com/googleapis/gax-go/v2 v2.16.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
@@ -149,7 +149,7 @@ require (
 	go.opentelemetry.io/otel/sdk/metric v1.38.0 // indirect
 	go.opentelemetry.io/otel/trace v1.38.0 // indirect
 	golang.org/x/sync v0.19.0 // indirect
-	golang.org/x/text v0.32.0 // indirect
+	golang.org/x/text v0.33.0 // indirect
 	golang.org/x/time v0.14.0 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/genproto v0.0.0-20251202230838-ff82c1b0f217 // indirect
