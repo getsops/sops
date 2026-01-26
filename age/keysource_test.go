@@ -510,6 +510,26 @@ func TestMasterKey_loadIdentities(t *testing.T) {
 		assert.Len(t, unusedLocations, 5)
 	})
 
+	t.Run(SopsAgeRecipientEnv, func(t *testing.T) {
+		tmpDir := t.TempDir()
+		// Overwrite to ensure local config is not picked up by tests
+		overwriteUserConfigDir(t, tmpDir)
+
+		t.Setenv(SopsAgeKeyCmdEnv, fmt.Sprintf("bash -c 'if [[ $SOPS_AGE_RECIPIENT = %s ]]; then echo %s; fi'", mockRecipient, mockIdentity))
+
+		key := &MasterKey{Recipient: mockRecipient}
+		got, unusedLocations, errs := key.loadIdentities()
+		assert.Len(t, errs, 0)
+		assert.Len(t, got, 1)
+		assert.Len(t, unusedLocations, 5)
+
+		key = &MasterKey{Recipient: mockRecipient + "abc"}
+		got, unusedLocations, errs = key.loadIdentities()
+		assert.Len(t, errs, 0)
+		assert.Len(t, got, 0)
+		assert.Len(t, unusedLocations, 6)
+	})
+
 	t.Run("cmd error", func(t *testing.T) {
 		tmpDir := t.TempDir()
 		// Overwrite to ensure local config is not picked up by tests

@@ -32,6 +32,10 @@ const (
 	// SopsAgeKeyCmdEnv can be set as an environment variable with a command
 	// to execute that returns the age keys.
 	SopsAgeKeyCmdEnv = "SOPS_AGE_KEY_CMD"
+	// SopsAgeRecipientEnv is passed as an environment variable to the command
+	// set in SopsAgeKeyCmdEnv and contains the Bech32-encoded age public key
+	// for which the private key should be returned.
+	SopsAgeRecipientEnv = "SOPS_AGE_RECIPIENT"
 	// SopsAgeSshPrivateKeyFileEnv can be set as an environment variable pointing to
 	// a private SSH key file.
 	SopsAgeSshPrivateKeyFileEnv = "SOPS_AGE_SSH_PRIVATE_KEY_FILE"
@@ -382,7 +386,9 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 		if err != nil {
 			errs = append(errs, fmt.Errorf("failed to parse command %s from %s: %w", ageKeyCmd, SopsAgeKeyCmdEnv, err))
 		} else {
-			out, err := exec.Command(args[0], args[1:]...).Output()
+			cmd := exec.Command(args[0], args[1:]...)
+			cmd.Env = append(os.Environ(), fmt.Sprintf("%s=%s", SopsAgeRecipientEnv, key.Recipient))
+			out, err := cmd.Output()
 			if err != nil {
 				errs = append(errs, fmt.Errorf("failed to execute command %s from %s: %w", ageKeyCmd, SopsAgeKeyCmdEnv, err))
 			} else {
