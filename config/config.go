@@ -111,6 +111,8 @@ type JSONBinaryStoreConfig struct {
 	Indent int `yaml:"indent"`
 }
 
+type TOMLStoreConfig struct{}
+
 type YAMLStoreConfig struct {
 	Indent int `yaml:"indent"`
 }
@@ -120,6 +122,7 @@ type StoresConfig struct {
 	INI        INIStoreConfig        `yaml:"ini"`
 	JSONBinary JSONBinaryStoreConfig `yaml:"json_binary"`
 	JSON       JSONStoreConfig       `yaml:"json"`
+	TOML       TOMLStoreConfig       `yaml:"toml"`
 	YAML       YAMLStoreConfig       `yaml:"yaml"`
 }
 
