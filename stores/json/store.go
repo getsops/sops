@@ -201,6 +201,9 @@ func (store Store) encodeArray(array []interface{}) ([]byte, error) {
 	out := "["
 	empty := true
 	for _, item := range array {
+		if _, ok := item.(sops.EmptyLines); ok {
+			continue
+		}
 		if _, ok := item.(sops.Comment); ok {
 			continue
 		}
@@ -222,6 +225,9 @@ func (store Store) encodeTree(tree sops.TreeBranch) ([]byte, error) {
 	out := "{"
 	empty := true
 	for _, item := range tree {
+		if _, ok := item.Key.(sops.EmptyLines); ok {
+			continue
+		}
 		if _, ok := item.Key.(sops.Comment); ok {
 			continue
 		}
