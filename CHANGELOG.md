@@ -1,5 +1,49 @@
 # Changelog
 
+## 3.12.0
+
+Features:
+* Add REST client support for GCP KMS [#1973](https://github.com/getsops/sops/pull/1973)
+* Add HuaweiCloud KMS support [2001](https://github.com/getsops/sops/pull/2001)
+
+
+Improvements:
+
+* Dependency updates ([#1961](https://github.com/getsops/sops/pull/1961), 
+[#1962](https://github.com/getsops/sops/pull/1962), [#1966](https://github.com/getsops/sops/pull/1966),
+[#1967](https://github.com/getsops/sops/pull/1967), [#1970](https://github.com/getsops/sops/pull/1970),
+[#1971](https://github.com/getsops/sops/pull/1971), [#1978](https://github.com/getsops/sops/pull/1978),
+[#1979](https://github.com/getsops/sops/pull/1979), [#1985](https://github.com/getsops/sops/pull/1985), 
+[#1986](https://github.com/getsops/sops/pull/1986), [#1988](https://github.com/getsops/sops/pull/1988), 
+[#1989](https://github.com/getsops/sops/pull/1989), [#1991](https://github.com/getsops/sops/pull/1991), 
+[#1992](https://github.com/getsops/sops/pull/1992), [#1993](https://github.com/getsops/sops/pull/1993), 
+[#2002](https://github.com/getsops/sops/pull/2002), [#2003](https://github.com/getsops/sops/pull/2003), 
+[#2004](https://github.com/getsops/sops/pull/2004), [#2006](https://github.com/getsops/sops/pull/2006), 
+[#2007](https://github.com/getsops/sops/pull/2007), [#2010](https://github.com/getsops/sops/pull/2010), 
+[#2011](https://github.com/getsops/sops/pull/2011), [#2012](https://github.com/getsops/sops/pull/2012), 
+[#2017](https://github.com/getsops/sops/pull/2017), [#2018](https://github.com/getsops/sops/pull/2018), 
+[#2023](https://github.com/getsops/sops/pull/2023), [#2024](https://github.com/getsops/sops/pull/2024), 
+[#2027](https://github.com/getsops/sops/pull/2027), [#2028](https://github.com/getsops/sops/pull/2028), 
+[#2029](https://github.com/getsops/sops/pull/2029), [#2035](https://github.com/getsops/sops/pull/2035), 
+[#2037](https://github.com/getsops/sops/pull/2037), [#2038](https://github.com/getsops/sops/pull/2038),
+[#2043](https://github.com/getsops/sops/pull/2043), [#2044](https://github.com/getsops/sops/pull/2044), 
+[#2046](https://github.com/getsops/sops/pull/2046), [#2047](https://github.com/getsops/sops/pull/2047), 
+[#2049](https://github.com/getsops/sops/pull/2049), [#2050](https://github.com/getsops/sops/pull/2050))
+
+* Add decryption-order flag to exec-env, exec-file, and publish commands ([#1965]https://github.com/getsops/sops/pull/1965)
+* Wrong word usage decryption > encryption for `--output` flag in `sops encrypt file` ([#1975]https://github.com/getsops/sops/pull/1975)
+* Add new keyservice env variables to README [#1997](https://github.com/getsops/sops/pull/1997)
+* Fix `--value-stdin` description [#1963](https://github.com/getsops/sops/pull/1963)
+
+Bugfixes:
+* Set quota project to API project for GCP KMS [#1697](https://github.com/getsops/sops/pull/1697)
+* Fix KMS encryption context not being passed when config is pre-loaded [#2021](https://github.com/getsops/sops/pull/2021)
+* Fix recursive publish [#2019](https://github.com/getsops/sops/pull/2019)
+
+Project changes:
+* Support hybrid (post-quantum) age identities utilizing `age v1.3.1` [#2033](https://github.com/getsops/sops/pull/2033)
+
+
 ## 3.11.0
 
 Security fixes:
