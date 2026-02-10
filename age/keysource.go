@@ -57,13 +57,13 @@ func init() {
 
 // MasterKey is an age key used to Encrypt and Decrypt SOPS' data key.
 type MasterKey struct {
-	// Identity used to contain a Bench32-encoded private key.
+	// Identity used to contain a Bech32-encoded private key.
 	// Deprecated: private keys are no longer publicly exposed.
 	// Instead, they are either injected by a (local) key service server
 	// using ParsedIdentities.ApplyToMasterKey, or loaded from the runtime
 	// environment (variables) as defined by the `SopsAgeKey*` constants.
 	Identity string
-	// Recipient contains the Bench32-encoded age public key used to Encrypt.
+	// Recipient contains the Bech32-encoded age public key used to Encrypt.
 	Recipient string
 	// EncryptedKey contains the SOPS data key encrypted with age.
 	EncryptedKey string
@@ -223,7 +223,7 @@ func formatError(msg string, err error, errs errSet, unusedLocations []string) e
 		} else if count == 2 {
 			unusedSuffix = fmt.Sprintf("s '%s' and '%s'", unusedLocations[0], unusedLocations[1])
 		} else {
-			unusedSuffix = fmt.Sprintf("s '%s', and '%s'", strings.Join(unusedLocations[:count - 1], "', '"), unusedLocations[count - 1])
+			unusedSuffix = fmt.Sprintf("s '%s', and '%s'", strings.Join(unusedLocations[:count-1], "', '"), unusedLocations[count-1])
 		}
 		unusedSuffix = fmt.Sprintf(". Did not find keys in location%s.", unusedSuffix)
 	}
@@ -232,6 +232,12 @@ func formatError(msg string, err error, errs errSet, unusedLocations []string) e
 	} else {
 		return fmt.Errorf("%s%s%s", msg, loadSuffix, unusedSuffix)
 	}
+}
+
+// recipientMatcher is implemented by identities that can pre-filter by recipient
+// to avoid unnecessary passphrase prompts or expensive operations.
+type recipientMatcher interface {
+	matchesRecipient(recipient string) bool
 }
 
 // Decrypt decrypts the EncryptedKey with the parsed or loaded identities, and
@@ -249,9 +255,24 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 		ids.ApplyToMasterKey(key)
 	}
 
+	// Filter identities that match this recipient.
+	matchingIdentities := make([]age.Identity, 0, len(key.parsedIdentities))
+	for _, id := range key.parsedIdentities {
+		if matcher, ok := id.(recipientMatcher); ok {
+			if !matcher.matchesRecipient(key.Recipient) {
+				continue
+			}
+		}
+		matchingIdentities = append(matchingIdentities, id)
+	}
+
+	if len(matchingIdentities) == 0 {
+		return nil, formatError(fmt.Sprintf("no identity available that can decrypt for recipient %s", key.Recipient), nil, errs, unusedLocations)
+	}
+
 	src := bytes.NewReader([]byte(key.EncryptedKey))
 	ar := armor.NewReader(src)
-	r, err := age.Decrypt(ar, key.parsedIdentities...)
+	r, err := age.Decrypt(ar, matchingIdentities...)
 	if err != nil {
 		log.Info("Decryption failed")
 		return nil, formatError("failed to create reader for decrypting sops data key with age", err, errs, unusedLocations)
@@ -301,11 +322,11 @@ func loadAgeSSHIdentities() ([]age.Identity, []string, errSet) {
 
 	sshKeyFilePath, ok := os.LookupEnv(SopsAgeSshPrivateKeyFileEnv)
 	if ok {
-		identity, err := parseSSHIdentityFromPrivateKeyFile(sshKeyFilePath)
+		ids, err := parseSSHIdentitiesFromPrivateKeyFile(sshKeyFilePath)
 		if err != nil {
 			errs = append(errs, err)
 		} else {
-			identities = append(identities, identity)
+			identities = append(identities, ids...)
 		}
 	} else {
 		unusedLocations = append(unusedLocations, SopsAgeSshPrivateKeyFileEnv)
@@ -319,11 +340,11 @@ func loadAgeSSHIdentities() ([]age.Identity, []string, errSet) {
 	} else {
 		sshEd25519PrivateKeyPath := filepath.Join(userHomeDir, ".ssh", "id_ed25519")
 		if _, err := os.Stat(sshEd25519PrivateKeyPath); err == nil {
-			identity, err := parseSSHIdentityFromPrivateKeyFile(sshEd25519PrivateKeyPath)
+			ids, err := parseSSHIdentitiesFromPrivateKeyFile(sshEd25519PrivateKeyPath)
 			if err != nil {
 				errs = append(errs, err)
 			} else {
-				identities = append(identities, identity)
+				identities = append(identities, ids...)
 			}
 		} else {
 			unusedLocations = append(unusedLocations, sshEd25519PrivateKeyPath)
@@ -331,11 +352,11 @@ func loadAgeSSHIdentities() ([]age.Identity, []string, errSet) {
 
 		sshRsaPrivateKeyPath := filepath.Join(userHomeDir, ".ssh", "id_rsa")
 		if _, err := os.Stat(sshRsaPrivateKeyPath); err == nil {
-			identity, err := parseSSHIdentityFromPrivateKeyFile(sshRsaPrivateKeyPath)
+			ids, err := parseSSHIdentitiesFromPrivateKeyFile(sshRsaPrivateKeyPath)
 			if err != nil {
 				errs = append(errs, err)
 			} else {
-				identities = append(identities, identity)
+				identities = append(identities, ids...)
 			}
 		} else {
 			unusedLocations = append(unusedLocations, sshRsaPrivateKeyPath)
