@@ -47,6 +47,8 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 			}
 		case sops.Comment:
 			resultBranch = append(resultBranch, item)
+		case sops.EmptyLines:
+			resultBranch = append(resultBranch, item)
 		default:
 			panic(fmt.Sprintf("Unexpected type: %T (value %#v)", key, key))
 		}
@@ -83,9 +85,18 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	var branches sops.TreeBranches
 	var branch sops.TreeBranch
 
+	emptyLines := 0
 	for _, line := range bytes.Split(in, []byte("\n")) {
 		if len(line) == 0 {
+			emptyLines += 1
 			continue
+		}
+		if emptyLines > 0 {
+			branch = append(branch, sops.TreeItem{
+				Key:   sops.EmptyLines{Count: emptyLines},
+				Value: nil,
+			})
+			emptyLines = 0
 		}
 		if line[0] == '#' {
 			branch = append(branch, sops.TreeItem{
@@ -145,7 +156,9 @@ func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 			return nil, fmt.Errorf("cannot use complex value in dotenv file; offending key %s", item.Key)
 		}
 		var line string
-		if comment, ok := item.Key.(sops.Comment); ok {
+		if emptyLines, ok := item.Key.(sops.EmptyLines); ok {
+			line = strings.Repeat("\n", emptyLines.Count)
+		} else if comment, ok := item.Key.(sops.Comment); ok {
 			line = fmt.Sprintf("#%s\n", comment.Value)
 		} else {
 			value, ok := item.Value.(string)
