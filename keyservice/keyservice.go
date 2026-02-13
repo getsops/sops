@@ -7,6 +7,7 @@ package keyservice
 import (
 	"fmt"
 
+	"github.com/getsops/sops/v3/acskms"
 	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/azkv"
 	"github.com/getsops/sops/v3/gcpkms"
@@ -84,6 +85,14 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 			KeyType: &Key_HckmsKey{
 				HckmsKey: &HckmsKey{
 					KeyId: mk.KeyID,
+				},
+			},
+		}
+	case *acskms.MasterKey:
+		return Key{
+			KeyType: &Key_AcskmsKey{
+				AcskmsKey: &AcsKmsKey{
+					KeyId: mk.Arn,
 				},
 			},
 		}
