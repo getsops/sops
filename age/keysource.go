@@ -36,6 +36,9 @@ const (
 	// set in SopsAgeKeyCmdEnv and contains the Bech32-encoded age public key
 	// for which the private key should be returned.
 	SopsAgeRecipientEnv = "SOPS_AGE_RECIPIENT"
+	// SopsAgeSshPrivateKeyCmdEnv can be set as an environment variable with a command
+	// to execute that returns the private SSH key.
+	SopsAgeSshPrivateKeyCmdEnv = "SOPS_AGE_SSH_PRIVATE_KEY_CMD"
 	// SopsAgeSshPrivateKeyFileEnv can be set as an environment variable pointing to
 	// a private SSH key file.
 	SopsAgeSshPrivateKeyFileEnv = "SOPS_AGE_SSH_PRIVATE_KEY_FILE"
@@ -290,10 +293,12 @@ func (key *MasterKey) TypeToIdentifier() string {
 	return KeyTypeIdentifier
 }
 
-// loadAgeSSHIdentity attempts to load the age SSH identity based on an SSH
-// private key from the SopsAgeSshPrivateKeyFileEnv environment variable. If the
-// environment variable is not present, it will fall back to `~/.ssh/id_ed25519`
-// or `~/.ssh/id_rsa`. If no age SSH identity is found, it will return nil.
+// loadAgeSSHIdentity attempts to load the age SSH identity in this order:
+// 1. An SSH private key from the SopsAgeSshPrivateKeyFileEnv environment variable.
+// 2. An SSH private key returned by executing the command from the
+// SopsAgeSshPrivateKeyCmdEnv environment variable
+// 3. `~/.ssh/id_ed25519` or `~/.ssh/id_rsa`.
+// If no age SSH identity is found, it will return nil.
 func loadAgeSSHIdentities() ([]age.Identity, []string, errSet) {
 	var identities []age.Identity
 	var unusedLocations []string
@@ -309,6 +314,29 @@ func loadAgeSSHIdentities() ([]age.Identity, []string, errSet) {
 		}
 	} else {
 		unusedLocations = append(unusedLocations, SopsAgeSshPrivateKeyFileEnv)
+	}
+
+	sshKeyCmd, ok := os.LookupEnv(SopsAgeSshPrivateKeyCmdEnv)
+	if ok {
+		args, err := shlex.Split(sshKeyCmd)
+		if err != nil {
+			errs = append(errs, fmt.Errorf("failed to parse command %s from %s: %w", sshKeyCmd, SopsAgeSshPrivateKeyCmdEnv, err))
+		} else {
+			cmd := exec.Command(args[0], args[1:]...)
+			out, err := cmd.Output()
+			if err != nil {
+				errs = append(errs, fmt.Errorf("failed to execute command %s from %s: %w", sshKeyCmd, SopsAgeSshPrivateKeyCmdEnv, err))
+			} else {
+				identity, err := parseSSHIdentityFromPrivateKeyCmdOutput(out)
+				if err != nil {
+					errs = append(errs, err)
+				} else {
+					identities = append(identities, identity)
+				}
+			}
+		}
+	} else {
+		unusedLocations = append(unusedLocations, SopsAgeSshPrivateKeyCmdEnv)
 	}
 
 	userHomeDir, err := os.UserHomeDir()
