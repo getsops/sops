@@ -252,6 +252,7 @@ Encrypting with SSH keys via age is also supported by SOPS. You can use SSH publ
 ("ssh-ed25519 AAAA...", "ssh-rsa AAAA...") as age recipients when encrypting a file.
 
 When decrypting a file, SOPS will attempt to source the SSH private key as follows:
+
 1. From the path specified in environment variable **SOPS_AGE_SSH_PRIVATE_KEY_FILE**
 2. From the output of the command specified in environment variable **SOPS_AGE_SSH_PRIVATE_KEY_CMD**
 
