@@ -82,3 +82,16 @@ func parseSSHIdentityFromPrivateKeyFile(keyPath string) (age.Identity, error) {
 	}
 	return id, nil
 }
+
+// parseSSHIdentityFromPrivateKeyCmdOutput returns an age.Identity from the given
+// private key. Note that encrypted private keys are not supported.
+func parseSSHIdentityFromPrivateKeyCmdOutput(key []byte) (age.Identity, error) {
+	id, err := agessh.ParseIdentity(key)
+	if sshErr, ok := err.(*ssh.PassphraseMissingError); ok {
+		return nil, fmt.Errorf("the SSH key returned by running SOPS_AGE_SSH_PRIVATE_KEY_CMD is password protected, which is unsupported.: %q", sshErr)
+	}
+	if err != nil {
+		return nil, fmt.Errorf("malformed SSH identity returned by running SOPS_AGE_SSH_PRIVATE_KEY_CMD: %q", err)
+	}
+	return id, nil
+}
