@@ -19,7 +19,7 @@ jobs:
       matrix:
         os: [linux, darwin, windows]
         arch: [amd64, arm64]
-        go-version: ['1.24', '1.25']
+        go-version: ['1.24', '1.25', '1.26']
         exclude:
           - os: windows
             arch: arm64
@@ -85,7 +85,7 @@ jobs:
     needs: [build]
     strategy:
       matrix:
-        go-version: ['1.25']
+        go-version: ['1.26']
     env:
       VAULT_VERSION: "1.14.0"
       VAULT_TOKEN: "root"
