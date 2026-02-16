@@ -23,7 +23,7 @@ Improvements:
   [#2029](https://github.com/getsops/sops/pull/2029), [#2037](https://github.com/getsops/sops/pull/2037),
   [#2043](https://github.com/getsops/sops/pull/2043), [#2047](https://github.com/getsops/sops/pull/2047),
   [#2050](https://github.com/getsops/sops/pull/2050), [#2059](https://github.com/getsops/sops/pull/2059),
-  [#2074](https://github.com/getsops/sops/pull/2074)).
+  [#2074](https://github.com/getsops/sops/pull/2074), [#2078](https://github.com/getsops/sops/pull/2078)).
 * Fix mistakes in `--help` output ([#1975](https://github.com/getsops/sops/pull/1975),
   [#1963](https://github.com/getsops/sops/pull/1963)).
 * Improve documentation ([#1997](https://github.com/getsops/sops/pull/1997)).
