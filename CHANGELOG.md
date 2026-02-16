@@ -1,5 +1,65 @@
 # Changelog
 
+## 3.12.0
+
+Features:
+
+* Add support for HuaweiCloud KMS ([#2001](https://github.com/getsops/sops/pull/2001)).
+* GCP KMS: Add `SOPS_GCP_KMS_CLIENT_TYPE` environment variable support to select
+  between gRPC and REST clients ([#1973](https://github.com/getsops/sops/pull/1973)).
+* Age: support hybrid post-quantum identities ([#2033](https://github.com/getsops/sops/pull/2033)).
+* Age: pass `SOPS_AGE_RECIPIENT` environment variable to `SOPS_AGE_KEY_CMD` ([#2045](https://github.com/getsops/sops/pull/2045)).
+* Age: add `SOPS_AGE_SSH_PRIVATE_KEY_CMD` environment variable ([#2070](https://github.com/getsops/sops/pull/2070)).
+
+Improvements:
+
+* Dependency updates ([#1967](https://github.com/getsops/sops/pull/1967),
+  [#1971](https://github.com/getsops/sops/pull/1971), [#1978](https://github.com/getsops/sops/pull/1978),
+  [#1986](https://github.com/getsops/sops/pull/1986), [#1988](https://github.com/getsops/sops/pull/1988),
+  [#1991](https://github.com/getsops/sops/pull/1991), [#1993](https://github.com/getsops/sops/pull/1993),
+  [#2002](https://github.com/getsops/sops/pull/2002), [#2004](https://github.com/getsops/sops/pull/2004),
+  [#2007](https://github.com/getsops/sops/pull/2007), [#2012](https://github.com/getsops/sops/pull/2012),
+  [#2018](https://github.com/getsops/sops/pull/2018), [#2024](https://github.com/getsops/sops/pull/2024),
+  [#2029](https://github.com/getsops/sops/pull/2029), [#2037](https://github.com/getsops/sops/pull/2037),
+  [#2043](https://github.com/getsops/sops/pull/2043), [#2047](https://github.com/getsops/sops/pull/2047),
+  [#2050](https://github.com/getsops/sops/pull/2050), [#2059](https://github.com/getsops/sops/pull/2059),
+  [#2074](https://github.com/getsops/sops/pull/2074)).
+* Fix mistakes in `--help` output ([#1975](https://github.com/getsops/sops/pull/1975),
+  [#1963](https://github.com/getsops/sops/pull/1963)).
+* Improve documentation ([#1997](https://github.com/getsops/sops/pull/1997)).
+* Unset user's `GNUPGHOME` environment variable for tests ([#2052](https://github.com/getsops/sops/pull/2052)).
+* Use age's `plugin.NewTerminalUI()` instead of vendoring the code ([#2034](https://github.com/getsops/sops/pull/2034)).
+* Remove dead code during YAML loading ([#2072](https://github.com/getsops/sops/pull/2072)).
+* Build release with Go 1.26 ([#2071](https://github.com/getsops/sops/pull/2071)).
+
+Bugfixes:
+
+* Add `--decryption-order` flag to `exec-env`, `exec-file`, and `publish` commands.
+  The subcommand code was using the flags, but it wasn't declared ([#1965](https://github.com/getsops/sops/pull/1965)).
+* Fix AWS KMS encryption context not being passed when config is pre-loaded ([#2021](https://github.com/getsops/sops/pull/2021)).
+* Fix recursive publish ([#2019](https://github.com/getsops/sops/pull/2019)).
+* Set quota project to API project in GCP KMS ([#1697](https://github.com/getsops/sops/pull/1697)).
+* DotEnv store now properly reports missing metadata ([#2055](https://github.com/getsops/sops/pull/2055)).
+* AWS KMS: allow role splitting without hard-coded `aws` partition ([#2042](https://github.com/getsops/sops/pull/2042)).
+
+Project changes:
+
+* Add Go 1.26 to CI ([#2071](https://github.com/getsops/sops/pull/2071)).
+* CI dependency updates ([#1961](https://github.com/getsops/sops/pull/1961),
+  [#1966](https://github.com/getsops/sops/pull/1966), [#1970](https://github.com/getsops/sops/pull/1970),
+  [#1979](https://github.com/getsops/sops/pull/1979), [#1985](https://github.com/getsops/sops/pull/1985),
+  [#1989](https://github.com/getsops/sops/pull/1989), [#1992](https://github.com/getsops/sops/pull/1992),
+  [#2003](https://github.com/getsops/sops/pull/2003), [#2006](https://github.com/getsops/sops/pull/2006),
+  [#2010](https://github.com/getsops/sops/pull/2010), [#2011](https://github.com/getsops/sops/pull/2011),
+  [#2017](https://github.com/getsops/sops/pull/2017), [#2023](https://github.com/getsops/sops/pull/2023),
+  [#2028](https://github.com/getsops/sops/pull/2028), [#2038](https://github.com/getsops/sops/pull/2038),
+  [#2044](https://github.com/getsops/sops/pull/2044), [#2046](https://github.com/getsops/sops/pull/2046),
+  [#2049](https://github.com/getsops/sops/pull/2049), [#2058](https://github.com/getsops/sops/pull/2058),
+  [#2075](https://github.com/getsops/sops/pull/2075)).
+* Rust dependency updates for functional tests ([#1962](https://github.com/getsops/sops/pull/1962),
+  [#2027](https://github.com/getsops/sops/pull/2027), [#2035](https://github.com/getsops/sops/pull/2035),
+  [#2073](https://github.com/getsops/sops/pull/2073)).
+
 ## 3.11.0
 
 Security fixes:
