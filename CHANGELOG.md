@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.12.1
+
+This is a re-release of 3.12.0 with no code changes.
+
+Due to a failure during the 3.12.0 release, and the commit for the 3.12.0
+release already being cached by the Go infrastructure, we need to bump
+the version to properly get a release out.
+(We did learn this from a similar incident with the 3.10.0 release.)
+
 ## 3.12.0
 
 Features:
