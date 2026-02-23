@@ -9,10 +9,10 @@ and instructions if you are thinking of helping with the development of SOPS.
   how to install Go [here](https://go.dev/doc/install)
 - Clone the Git repository and switch into SOPS's directory.
 - Run the tests with `make test`. They should all pass.
-- If you modify documentation (RST or MD files), run `make checkdocs` to run
-  [rstcheck](https://pypi.org/project/rstcheck/) and
-  [markdownlint](https://github.com/markdownlint/markdownlint). These should also
-  pass. If you need help in fixing issues, create a pull request (see below) and
+- New documentation needs to be added to the [github.com/getsops/docs/](https://github.com/getsops/docs/)
+  repository. See the [documentation contribution guidelines](https://getsops.io/docs/contribution-guidelines/)
+  for more details.
+- If you need help in fixing issues, create a pull request (see below) and
   ask for help.
 - Fork the project on GitHub.
 - Add your fork to Git's remotes:
