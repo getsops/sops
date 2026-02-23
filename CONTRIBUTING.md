@@ -5,7 +5,7 @@ and instructions if you are thinking of helping with the development of SOPS.
 
 ## Getting started
 
-- Make sure you have Go 1.19 or greater installed. You can find information on
+- Make sure you have Go 1.24 or greater installed. You can find information on
   how to install Go [here](https://go.dev/doc/install)
 - Clone the Git repository and switch into SOPS's directory.
 - Run the tests with `make test`. They should all pass.
