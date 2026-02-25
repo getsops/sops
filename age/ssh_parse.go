@@ -65,11 +65,11 @@ func parseSSHIdentityFromPrivateKeyFile(keyPath string) (age.Identity, error) {
 			}
 		}
 		passphrasePrompt := func() ([]byte, error) {
-			pass, err := readSecret(fmt.Sprintf("Enter passphrase for %q:", keyPath))
+			pass, err := pluginTerminalUI.RequestValue("", fmt.Sprintf("Enter passphrase for %q:", keyPath), true)
 			if err != nil {
 				return nil, fmt.Errorf("could not read passphrase for %q: %v", keyPath, err)
 			}
-			return pass, nil
+			return []byte(pass), nil
 		}
 		i, err := agessh.NewEncryptedSSHIdentity(pubKey, contents, passphrasePrompt)
 		if err != nil {
