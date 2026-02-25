@@ -11,6 +11,7 @@ message Key {
 		VaultKey vault_key = 5;
 		AgeKey age_key = 6;
 		HckmsKey hckms_key = 7;
+		TencentKey tencent_key = 8;
 	}
 }
 
@@ -46,6 +47,10 @@ message AgeKey {
 }
 
 message HckmsKey {
+	string key_id = 1;
+}
+
+message TencentKey {
 	string key_id = 1;
 }
 

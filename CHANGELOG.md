@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+
+Features:
+
+* Add Tencent Cloud KMS support for encryption and decryption.
+  The integration supports environment variable authentication
+  (``TENCENTCLOUD_SECRET_ID``, ``TENCENTCLOUD_SECRET_KEY``),
+  optional STS token (``TENCENTCLOUD_TOKEN``),
+  configurable region and custom endpoint.
+  New CLI flags: ``--tencent-kms``, ``--add-tencent-kms``,
+  ``--rm-tencent-kms``.
+  Environment variable: ``SOPS_TENCENT_KMS_IDS``.
+  Configuration file key: ``tencent_kms``.
 ## 3.12.1
 
 This is a re-release of 3.12.0 with no code changes.

@@ -604,13 +604,63 @@ You can also configure HuaweiCloud KMS keys in the ``.sops.yaml`` config file:
           hckms:
             - tr-west-1:abc12345-6789-0123-4567-890123456789,tr-west-2:def67890-1234-5678-9012-345678901234
 
+Encrypting using Tencent Cloud KMS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The Tencent Cloud KMS integration requires credentials to be provided through
+environment variables:
+
+.. code:: bash
+
+    export TENCENTCLOUD_SECRET_ID="your-secret-id"
+    export TENCENTCLOUD_SECRET_KEY="your-secret-key"
+    # Optional: for temporary credentials (STS)
+    export TENCENTCLOUD_TOKEN="your-sts-token"
+    # Optional: specify region (default: ap-guangzhou)
+    export TENCENTCLOUD_REGION="ap-guangzhou"
+    # Optional: custom KMS endpoint (default: kms.tencentcloudapi.com)
+    # For CVM or TKE environments, use the internal endpoint for better performance:
+    # export TENCENTCLOUD_KMS_ENDPOINT="kms.internal.tencentcloudapi.com"
+    export TENCENTCLOUD_KMS_ENDPOINT="kms.tencentcloudapi.com"
+
+Encrypting/decrypting with Tencent Cloud KMS requires a KMS key ID. You can get
+the key ID from the Tencent Cloud console or using the Tencent Cloud API.
+
+Now you can encrypt a file using:
+
+.. code:: sh
+
+    $ sops encrypt --tencent-kms xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx test.yaml > test.enc.yaml
+
+Or using the environment variable:
+
+.. code:: sh
+
+    $ export SOPS_TENCENT_KMS_IDS="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    $ sops encrypt test.yaml > test.enc.yaml
+
+And decrypt it using:
+
+.. code:: sh
+
+    $ sops decrypt test.enc.yaml
+
+You can also configure Tencent Cloud KMS keys in the ``.sops.yaml`` config file:
+
+.. code:: yaml
+
+    creation_rules:
+        - path_regex: \.tencent\.yaml$
+          tencent_kms:
+            - xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+
 Adding and removing keys
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 When creating new files, ``sops`` uses the PGP, KMS and GCP KMS defined in the
-command line arguments ``--kms``, ``--pgp``, ``--gcp-kms``, ``--hckms`` or ``--azure-kv``, or from
+command line arguments ``--kms``, ``--pgp``, ``--gcp-kms``, ``--hckms``, ``--tencent-kms`` or ``--azure-kv``, or from
 the environment variables ``SOPS_KMS_ARN``, ``SOPS_PGP_FP``, ``SOPS_GCP_KMS_IDS``,
-``SOPS_HUAWEICLOUD_KMS_IDS``, ``SOPS_AZURE_KEYVAULT_URLS``. That information is stored in the file under the
+``SOPS_HUAWEICLOUD_KMS_IDS``, ``SOPS_TENCENT_KMS_IDS``, ``SOPS_AZURE_KEYVAULT_URLS``. That information is stored in the file under the
 ``sops`` section, such that decrypting files does not require providing those
 parameters again.
 
@@ -654,9 +704,9 @@ disabled by supplying the ``-y`` flag.
 
 The ``rotate`` command generates a new data encryption key and reencrypt all values
 with the new key. At the same time, the command line flag ``--add-kms``, ``--add-pgp``,
-``--add-gcp-kms``, ``--add-hckms``, ``--add-azure-kv``, ``--rm-kms``, ``--rm-pgp``, ``--rm-gcp-kms``,
-``--rm-hckms`` and ``--rm-azure-kv`` can be used to add and remove keys from a file. These flags use
-the comma separated syntax as the ``--kms``, ``--pgp``, ``--gcp-kms``, ``--hckms`` and ``--azure-kv``
+``--add-gcp-kms``, ``--add-hckms``, ``--add-tencent-kms``, ``--add-azure-kv``, ``--rm-kms``, ``--rm-pgp``, ``--rm-gcp-kms``,
+``--rm-hckms``, ``--rm-tencent-kms`` and ``--rm-azure-kv`` can be used to add and remove keys from a file. These flags use
+the comma separated syntax as the ``--kms``, ``--pgp``, ``--gcp-kms``, ``--hckms``, ``--tencent-kms`` and ``--azure-kv``
 arguments when creating new files.
 
 Use ``updatekeys`` if you want to add a key without rotating the data key.
@@ -832,7 +882,7 @@ stdout.
 Using .sops.yaml conf to select KMS, PGP and age for new files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-It is often tedious to specify the ``--kms`` ``--gcp-kms`` ``--hckms`` ``--pgp`` and ``--age`` parameters for creation
+It is often tedious to specify the ``--kms`` ``--gcp-kms`` ``--hckms`` ``--tencent-kms`` ``--pgp`` and ``--age`` parameters for creation
 of all new files. If your secrets are stored under a specific directory, like a
 ``git`` repository, you can create a ``.sops.yaml`` configuration file at the root
 directory to define which keys are used for which filename.
@@ -877,6 +927,10 @@ can manage the three sets of configurations for the three types of files:
         # hckms files using HuaweiCloud KMS
         - path_regex: \.hckms\.yaml$
           hckms: tr-west-1:abc12345-6789-0123-4567-890123456789,tr-west-2:def67890-1234-5678-9012-345678901234
+
+        # tencent_kms files using Tencent Cloud KMS
+        - path_regex: \.tencent\.yaml$
+          tencent_kms: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 
         # Finally, if the rules above have not matched, this one is a
         # catchall that will encrypt the file using KMS set C as well as PGP
@@ -1883,6 +1937,15 @@ To directly specify a single key group, you can use the following keys:
           - tr-west-1:abc12345-6789-0123-4567-890123456789
           - tr-west-1:def67890-1234-5678-9012-345678901234
 
+* ``tencent_kms`` (list of strings): list of Tencent Cloud KMS key IDs.
+  Example:
+
+  .. code:: yaml
+
+    creation_rules:
+      - tencent_kms:
+          - xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+
 To specify a list of key groups, you can use the following key:
 
 * ``key_groups`` (list of key group objects): a list of key group objects.
@@ -1912,6 +1975,8 @@ To specify a list of key groups, you can use the following key:
               - http://my.vault/v1/sops/keys/secondkey
             hckms:
               - tr-west-1:abc12345-6789-0123-4567-890123456789
+            tencent_kms:
+              - xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 
             merge:
               - pgp:
@@ -1999,6 +2064,17 @@ A key group supports the following keys:
   .. code:: yaml
 
     - key_id: tr-west-1:abc12345-6789-0123-4567-890123456789
+
+* ``tencent_kms`` (list of objects): list of Tencent Cloud KMS key IDs.
+  Every object must have the following key:
+
+  * ``key_id`` (string): the key ID.
+
+  Example:
+
+  .. code:: yaml
+
+    - key_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 
 * ``age`` (list of strings): list of Age public keys.
 
