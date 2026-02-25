@@ -150,14 +150,10 @@ sboms:
 signs:
   - cmd: cosign
     artifacts: checksum
-    signature: '{{ trimsuffix .Env.artifact ".txt" }}.sig'
-    certificate: '{{ trimsuffix .Env.artifact ".txt" }}.pem'
+    signature: '{{ trimsuffix .Env.artifact ".txt" }}.sigstore.json'
     args:
       - "sign-blob"
-      - "--output-signature"
-      - "${signature}"
-      - "--output-certificate"
-      - "${certificate}"
+      - "--bundle=${signature}"
       - "${artifact}"
     output: true
 
@@ -300,13 +296,11 @@ release:
     ```shell
     # Download the checksums file, certificate and signature
     curl -LO https://github.com/{{ .Env.GITHUB_REPOSITORY }}/releases/download/{{ .Tag }}/{{ .ProjectName }}-v{{ .Version }}.checksums.txt
-    curl -LO https://github.com/{{ .Env.GITHUB_REPOSITORY }}/releases/download/{{ .Tag }}/{{ .ProjectName }}-v{{ .Version }}.checksums.pem
-    curl -LO https://github.com/{{ .Env.GITHUB_REPOSITORY }}/releases/download/{{ .Tag }}/{{ .ProjectName }}-v{{ .Version }}.checksums.sig
+    curl -LO https://github.com/{{ .Env.GITHUB_REPOSITORY }}/releases/download/{{ .Tag }}/{{ .ProjectName }}-v{{ .Version }}.checksums.sigstore.json
 
     # Verify the checksums file
     cosign verify-blob {{ .ProjectName }}-v{{ .Version }}.checksums.txt \
-      --certificate {{ .ProjectName }}-v{{ .Version }}.checksums.pem \
-      --signature {{ .ProjectName }}-v{{ .Version }}.checksums.sig \
+      --bundle {{ .ProjectName }}-v{{ .Version }}.checksums.sigstore.json \
       --certificate-identity-regexp=https://github.com/{{ .Env.GITHUB_REPOSITORY_OWNER }} \
       --certificate-oidc-issuer=https://token.actions.githubusercontent.com
     ```

@@ -41,9 +41,6 @@ jobs:
 
       - name: Setup Cosign
         uses: sigstore/cosign-installer@faadad0cce49287aee09b3a48701e75088a2c6ad # v4.0.0
-        with:
-          # TODO: update cosign and go-releaser, and adjust go-releaser config
-          cosign-release: 'v2.6.2'
 
       - name: Setup QEMU
         uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3.7.0
