@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgetsops%2Fsops.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fgetsops%2Fsops?ref=badge_shield)
+
 SOPS: Secrets OPerationS
 ========================
 
@@ -2378,3 +2380,7 @@ PGP encrypted files by hand...
    :alt: CNCF Sandbox Project
 
 **We are a** `Cloud Native Computing Foundation <https://cncf.io>`_ **sandbox project.**
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgetsops%2Fsops.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fgetsops%2Fsops?ref=badge_large)
