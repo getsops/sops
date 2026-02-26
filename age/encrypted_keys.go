@@ -145,11 +145,7 @@ func unwrapIdentities(location string, reader io.Reader) (ParsedIdentities, erro
 			Passphrase: func() (string, error) {
 				conn, err := gpgagent.NewConn()
 				if err != nil {
-					passphrase, err := readSecret(fmt.Sprintf("Enter passphrase for identity '%s':", location))
-					if err != nil {
-						return "", err
-					}
-					return string(passphrase), nil
+					return pluginTerminalUI.RequestValue("", fmt.Sprintf("Enter passphrase for identity '%s':", location), true)
 				}
 				defer func(conn *gpgagent.Conn) {
 					if err := conn.Close(); err != nil {

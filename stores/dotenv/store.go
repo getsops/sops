@@ -51,6 +51,9 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 			panic(fmt.Sprintf("Unexpected type: %T (value %#v)", key, key))
 		}
 	}
+	if len(mdMap) == 0 {
+		return sops.Tree{}, sops.MetadataNotFound
+	}
 
 	stores.DecodeNewLines(mdMap)
 	err = stores.DecodeNonStrings(mdMap)
