@@ -1737,7 +1737,7 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:   "acs-kms",
-			Usage:  "comma separated list of Alibaba Cloud KMS key IDs (format: region:key-id)",
+			Usage:  "comma separated list of Alibaba Cloud KMS key ARNs",
 			EnvVar: "SOPS_ACS_KMS_IDS",
 		},
 		cli.StringFlag{
@@ -1795,11 +1795,11 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:  "add-acs-kms",
-			Usage: "add the provided comma-separated list of Alibaba Cloud KMS key IDs (format: region:key-id) to the list of master keys on the given file",
+			Usage: "add the provided comma-separated list of Alibaba Cloud KMS key ARNs to the list of master keys on the given file",
 		},
 		cli.StringFlag{
 			Name:  "rm-acs-kms",
-			Usage: "remove the provided comma-separated list of Alibaba Cloud KMS key IDs (format: region:key-id) from the list of master keys on the given file",
+			Usage: "remove the provided comma-separated list of Alibaba Cloud KMS key ARNs from the list of master keys on the given file",
 		},
 		cli.StringFlag{
 			Name:  "add-hckms",

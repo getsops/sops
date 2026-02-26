@@ -38,7 +38,7 @@ func init() {
 
 // MasterKey is an Alibaba Cloud KMS key used to encrypt and decrypt SOPS' data key.
 type MasterKey struct {
-	// Arn is the full key identifier in format "region:key-id" or an ARN
+	// Arn is the full key ARN
 	Arn string
 	// Region is the Alibaba Cloud region (e.g., "cn-hangzhou")
 	Region string
