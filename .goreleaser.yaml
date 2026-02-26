@@ -130,36 +130,12 @@ archives:
     # Before v3.8.0, this used to be _just_ the AMD64 binary.
     name_template: '{{ .ProjectName }}-v{{ .Version }}.darwin'
 
-# xref: https://goreleaser.com/customization/checksum/
-checksum:
-  name_template: "{{ .ProjectName }}-v{{ .Version }}.checksums.txt"
-  algorithm: sha256
-  ids:
-    - archive-unix
-    - archive-windows
-    - archive-darwin-universal
-
 # xref: https://goreleaser.com/customization/sbom/
 sboms:
   - id: binary-sbom
     artifacts: binary
     documents:
       - "{{ .ArtifactName }}.spdx.sbom.json"
-
-# xref: https://goreleaser.com/customization/sign/
-signs:
-  - cmd: cosign
-    artifacts: checksum
-    signature: '{{ trimsuffix .Env.artifact ".txt" }}.sig'
-    certificate: '{{ trimsuffix .Env.artifact ".txt" }}.pem'
-    args:
-      - "sign-blob"
-      - "--output-signature"
-      - "${signature}"
-      - "--output-certificate"
-      - "${certificate}"
-      - "${artifact}"
-    output: true
 
 # xref: https://goreleaser.com/customization/docker/
 dockers:
@@ -293,36 +269,9 @@ release:
     chmod +x /usr/local/bin/{{ .ProjectName }}
     ```
 
-    ### Verify checksums file signature
+    ### Verify artifact provenance and integrity
 
-    The checksums file provided within the artifacts attached to this release is signed using [Cosign](https://docs.sigstore.dev/cosign/overview/) with GitHub OIDC. To validate the signature of this file, run the following commands:
-
-    ```shell
-    # Download the checksums file, certificate and signature
-    curl -LO https://github.com/{{ .Env.GITHUB_REPOSITORY }}/releases/download/{{ .Tag }}/{{ .ProjectName }}-v{{ .Version }}.checksums.txt
-    curl -LO https://github.com/{{ .Env.GITHUB_REPOSITORY }}/releases/download/{{ .Tag }}/{{ .ProjectName }}-v{{ .Version }}.checksums.pem
-    curl -LO https://github.com/{{ .Env.GITHUB_REPOSITORY }}/releases/download/{{ .Tag }}/{{ .ProjectName }}-v{{ .Version }}.checksums.sig
-
-    # Verify the checksums file
-    cosign verify-blob {{ .ProjectName }}-v{{ .Version }}.checksums.txt \
-      --certificate {{ .ProjectName }}-v{{ .Version }}.checksums.pem \
-      --signature {{ .ProjectName }}-v{{ .Version }}.checksums.sig \
-      --certificate-identity-regexp=https://github.com/{{ .Env.GITHUB_REPOSITORY_OWNER }} \
-      --certificate-oidc-issuer=https://token.actions.githubusercontent.com
-    ```
-
-    ### Verify binary integrity
-
-    To verify the integrity of the downloaded binary, you can utilize the checksums file after having validated its signature:
-
-    ```shell
-    # Verify the binary using the checksums file
-    sha256sum -c {{ .ProjectName }}-v{{ .Version }}.checksums.txt --ignore-missing
-    ```
-
-    ### Verify artifact provenance
-
-    The [SLSA provenance](https://slsa.dev/provenance/v0.2) of the binaries, packages, and SBOMs can be found within the artifacts associated with this release. It is presented through an [in-toto](https://in-toto.io/) link metadata file named `sops-v{{ .Version }}.intoto.jsonl`. To verify the provenance of an artifact, you can utilize the [`slsa-verifier`](https://github.com/slsa-framework/slsa-verifier#artifacts) tool:
+    The [SLSA provenance](https://slsa.dev/provenance/v0.2) of the binaries, packages, and SBOMs can be found within the artifacts associated with this release. It is presented through an [in-toto](https://in-toto.io/) link metadata file named `sops-v{{ .Version }}.intoto.jsonl`. Since SLSA provenance verification implies checksum verification, no extra checksum file is provided. To verify the provenance of an artifact, you can utilize the [`slsa-verifier`](https://github.com/slsa-framework/slsa-verifier#artifacts) tool:
 
     ```shell
     # Download the metadata file
