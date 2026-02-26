@@ -21,7 +21,7 @@ import (
 	"github.com/getsops/sops/v3/stores/yaml"
 	"github.com/getsops/sops/v3/version"
 	"github.com/mitchellh/go-wordwrap"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v3"
 	"golang.org/x/term"
 )
 
@@ -85,23 +85,23 @@ type DecryptTreeOpts struct {
 func DecryptTree(opts DecryptTreeOpts) (dataKey []byte, err error) {
 	dataKey, err = opts.Tree.Metadata.GetDataKeyWithKeyServices(opts.KeyServices, opts.DecryptionOrder)
 	if err != nil {
-		return nil, NewExitError(err, codes.CouldNotRetrieveKey)
+		return nil, Exit(err, codes.CouldNotRetrieveKey)
 	}
 	computedMac, err := opts.Tree.Decrypt(dataKey, opts.Cipher)
 	if err != nil {
-		return nil, NewExitError(fmt.Sprintf("Error decrypting tree: %s", err), codes.ErrorDecryptingTree)
+		return nil, Exit(fmt.Sprintf("Error decrypting tree: %s", err), codes.ErrorDecryptingTree)
 	}
 	fileMac, err := opts.Cipher.Decrypt(opts.Tree.Metadata.MessageAuthenticationCode, dataKey, opts.Tree.Metadata.LastModified.Format(time.RFC3339))
 	if !opts.IgnoreMac {
 		if err != nil {
-			return nil, NewExitError(fmt.Sprintf("Cannot decrypt MAC: %s", err), codes.MacMismatch)
+			return nil, Exit(fmt.Sprintf("Cannot decrypt MAC: %s", err), codes.MacMismatch)
 		}
 		if fileMac != computedMac {
 			// If the file has an empty MAC, display "no MAC" instead of not displaying anything
 			if fileMac == "" {
 				fileMac = "no MAC"
 			}
-			return nil, NewExitError(fmt.Sprintf("MAC mismatch. File has %s, computed %s", fileMac, computedMac), codes.MacMismatch)
+			return nil, Exit(fmt.Sprintf("MAC mismatch. File has %s, computed %s", fileMac, computedMac), codes.MacMismatch)
 		}
 	}
 	return dataKey, nil
@@ -121,12 +121,12 @@ type EncryptTreeOpts struct {
 func EncryptTree(opts EncryptTreeOpts) error {
 	unencryptedMac, err := opts.Tree.Encrypt(opts.DataKey, opts.Cipher)
 	if err != nil {
-		return NewExitError(fmt.Sprintf("Error encrypting tree: %s", err), codes.ErrorEncryptingTree)
+		return Exit(fmt.Sprintf("Error encrypting tree: %s", err), codes.ErrorEncryptingTree)
 	}
 	opts.Tree.Metadata.LastModified = time.Now().UTC()
 	opts.Tree.Metadata.MessageAuthenticationCode, err = opts.Cipher.Encrypt(unencryptedMac, opts.DataKey, opts.Tree.Metadata.LastModified.Format(time.RFC3339))
 	if err != nil {
-		return NewExitError(fmt.Sprintf("Could not encrypt MAC: %s", err), codes.ErrorEncryptingMac)
+		return Exit(fmt.Sprintf("Could not encrypt MAC: %s", err), codes.ErrorEncryptingMac)
 	}
 	return nil
 }
@@ -138,12 +138,12 @@ func LoadEncryptedFileEx(loader sops.EncryptedFileLoader, inputPath string, read
 	if readFromStdin {
 		fileBytes, err = io.ReadAll(os.Stdin)
 		if err != nil {
-			return nil, NewExitError(fmt.Sprintf("Error reading from stdin: %s", err), codes.CouldNotReadInputFile)
+			return nil, Exit(fmt.Sprintf("Error reading from stdin: %s", err), codes.CouldNotReadInputFile)
 		}
 	} else {
 		fileBytes, err = os.ReadFile(inputPath)
 		if err != nil {
-			return nil, NewExitError(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
+			return nil, Exit(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
 		}
 	}
 	path, err := filepath.Abs(inputPath)
@@ -160,13 +160,13 @@ func LoadEncryptedFile(loader sops.EncryptedFileLoader, inputPath string) (*sops
 	return LoadEncryptedFileEx(loader, inputPath, false)
 }
 
-// NewExitError returns a cli.ExitError given an error (wrapped in a generic interface{})
+// Exit returns a cli.ExitCoder given an error (wrapped in a generic interface{})
 // and an exit code to represent the failure
-func NewExitError(i interface{}, exitCode int) *cli.ExitError {
+func Exit(i interface{}, exitCode int) cli.ExitCoder {
 	if userErr, ok := i.(sops.UserError); ok {
-		return NewExitError(userErr.UserError(), exitCode)
+		return Exit(userErr.UserError(), exitCode)
 	}
-	return cli.NewExitError(i, exitCode)
+	return cli.Exit(i, exitCode)
 }
 
 // StoreForFormat returns the correct format-specific implementation
@@ -312,7 +312,7 @@ func FixAWSKMSEncryptionContextBug(opts GenericDecryptOpts, tree *sops.Tree) (*s
 	}
 
 	if dataKey == nil {
-		return nil, NewExitError(fmt.Sprintf("Failed to decrypt, meaning there is likely another problem from the encryption context bug: %s", err), codes.ErrorDecryptingTree)
+		return nil, Exit(fmt.Sprintf("Failed to decrypt, meaning there is likely another problem from the encryption context bug: %s", err), codes.ErrorDecryptingTree)
 	}
 
 	errs := tree.Metadata.UpdateMasterKeysWithKeyServices(dataKey, opts.KeyServices)
@@ -337,12 +337,12 @@ func FixAWSKMSEncryptionContextBug(opts GenericDecryptOpts, tree *sops.Tree) (*s
 
 	encryptedFile, err := opts.InputStore.EmitEncryptedFile(*tree)
 	if err != nil {
-		return nil, NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
+		return nil, Exit(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
 	}
 
 	file, err := os.Create(opts.InputPath)
 	if err != nil {
-		return nil, NewExitError(fmt.Sprintf("Could not open file for writing: %s", err), codes.CouldNotWriteOutputFile)
+		return nil, Exit(fmt.Sprintf("Could not open file for writing: %s", err), codes.CouldNotWriteOutputFile)
 	}
 	defer file.Close()
 	_, err = file.Write(encryptedFile)

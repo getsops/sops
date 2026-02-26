@@ -129,7 +129,7 @@ func Run(opts Opts) error {
 
 			fileContents, err = opts.InputStore.EmitEncryptedFile(*tree)
 			if err != nil {
-				return common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
+				return common.Exit(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
 			}
 		} else {
 			fileContents, err = os.ReadFile(path)

@@ -84,23 +84,23 @@ func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 	if opts.ReadFromStdin {
 		fileBytes, err = io.ReadAll(os.Stdin)
 		if err != nil {
-			return nil, common.NewExitError(fmt.Sprintf("Error reading from stdin: %s", err), codes.CouldNotReadInputFile)
+			return nil, common.Exit(fmt.Sprintf("Error reading from stdin: %s", err), codes.CouldNotReadInputFile)
 		}
 	} else {
 		fileBytes, err = os.ReadFile(opts.InputPath)
 		if err != nil {
-			return nil, common.NewExitError(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
+			return nil, common.Exit(fmt.Sprintf("Error reading file: %s", err), codes.CouldNotReadInputFile)
 		}
 	}
 	branches, err := opts.InputStore.LoadPlainFile(fileBytes)
 	if err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Error unmarshalling file: %s", err), codes.CouldNotReadInputFile)
+		return nil, common.Exit(fmt.Sprintf("Error unmarshalling file: %s", err), codes.CouldNotReadInputFile)
 	}
 	if len(branches) < 1 {
-		return nil, common.NewExitError("File cannot be completely empty, it must contain at least one document", codes.NeedAtLeastOneDocument)
+		return nil, common.Exit("File cannot be completely empty, it must contain at least one document", codes.NeedAtLeastOneDocument)
 	}
 	if err := ensureNoMetadata(opts, branches[0]); err != nil {
-		return nil, common.NewExitError(err, codes.FileAlreadyEncrypted)
+		return nil, common.Exit(err, codes.FileAlreadyEncrypted)
 	}
 	path, err := filepath.Abs(opts.InputPath)
 	if err != nil {
@@ -128,7 +128,7 @@ func encrypt(opts encryptOpts) (encryptedFile []byte, err error) {
 
 	encryptedFile, err = opts.OutputStore.EmitEncryptedFile(tree)
 	if err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
+		return nil, common.Exit(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
 	}
 	return
 }

@@ -47,7 +47,7 @@ func editExample(opts editExampleOpts) ([]byte, error) {
 	fileBytes := opts.InputStore.EmitExample()
 	branches, err := opts.InputStore.LoadPlainFile(fileBytes)
 	if err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Error unmarshalling file: %s", err), codes.CouldNotReadInputFile)
+		return nil, common.Exit(fmt.Sprintf("Error unmarshalling file: %s", err), codes.CouldNotReadInputFile)
 	}
 	path, err := filepath.Abs(opts.InputPath)
 	if err != nil {
@@ -62,7 +62,7 @@ func editExample(opts editExampleOpts) ([]byte, error) {
 	// Generate a data key
 	dataKey, errs := tree.GenerateDataKeyWithKeyServices(opts.KeyServices)
 	if len(errs) > 0 {
-		return nil, common.NewExitError(fmt.Sprintf("Error encrypting the data key with one or more master keys: %s", errs), codes.CouldNotRetrieveKey)
+		return nil, common.Exit(fmt.Sprintf("Error encrypting the data key with one or more master keys: %s", errs), codes.CouldNotRetrieveKey)
 	}
 
 	return editTree(opts.editOpts, &tree, dataKey)
@@ -99,19 +99,19 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 	// Create temporary file for editing
 	tmpdir, err := os.MkdirTemp("", "")
 	if err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Could not create temporary directory: %s", err), codes.CouldNotWriteOutputFile)
+		return nil, common.Exit(fmt.Sprintf("Could not create temporary directory: %s", err), codes.CouldNotWriteOutputFile)
 	}
 	defer os.RemoveAll(tmpdir)
 
 	tmpfile, err := os.Create(filepath.Join(tmpdir, filepath.Base(opts.InputPath)))
 	if err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Could not create temporary file: %s", err), codes.CouldNotWriteOutputFile)
+		return nil, common.Exit(fmt.Sprintf("Could not create temporary file: %s", err), codes.CouldNotWriteOutputFile)
 	}
 	// Ensure that in any case, the temporary file is always closed.
 	defer tmpfile.Close()
 	// Ensure that the file is read+write for owner only.
 	if err = tmpfile.Chmod(0600); err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Could not change permissions of temporary file to read-write for owner only: %s", err), codes.CouldNotWriteOutputFile)
+		return nil, common.Exit(fmt.Sprintf("Could not change permissions of temporary file to read-write for owner only: %s", err), codes.CouldNotWriteOutputFile)
 	}
 
 	tmpfileName := tmpfile.Name()
@@ -124,17 +124,17 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 		out, err = opts.OutputStore.EmitPlainFile(tree.Branches)
 	}
 	if err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
+		return nil, common.Exit(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
 	}
 	_, err = tmpfile.Write(out)
 	if err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Could not write output file: %s", err), codes.CouldNotWriteOutputFile)
+		return nil, common.Exit(fmt.Sprintf("Could not write output file: %s", err), codes.CouldNotWriteOutputFile)
 	}
 
 	// Compute file hash to detect if the file has been edited
 	origHash, err := hashFile(tmpfileName)
 	if err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Could not hash file: %s", err), codes.CouldNotReadInputFile)
+		return nil, common.Exit(fmt.Sprintf("Could not hash file: %s", err), codes.CouldNotReadInputFile)
 	}
 
 	// Close the temporary file, so that an editor can open it.
@@ -164,7 +164,7 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 	// Output the file
 	encryptedFile, err := opts.OutputStore.EmitEncryptedFile(*tree)
 	if err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
+		return nil, common.Exit(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
 	}
 	return encryptedFile, nil
 }
@@ -173,18 +173,18 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 	for {
 		err := runEditor(opts.TmpFileName)
 		if err != nil {
-			return common.NewExitError(fmt.Sprintf("Could not run editor: %s", err), codes.NoEditorFound)
+			return common.Exit(fmt.Sprintf("Could not run editor: %s", err), codes.NoEditorFound)
 		}
 		newHash, err := hashFile(opts.TmpFileName)
 		if err != nil {
-			return common.NewExitError(fmt.Sprintf("Could not hash file: %s", err), codes.CouldNotReadInputFile)
+			return common.Exit(fmt.Sprintf("Could not hash file: %s", err), codes.CouldNotReadInputFile)
 		}
 		if bytes.Equal(newHash, opts.OriginalHash) {
-			return common.NewExitError("File has not changed, exiting.", codes.FileHasNotBeenModified)
+			return common.Exit("File has not changed, exiting.", codes.FileHasNotBeenModified)
 		}
 		edited, err := os.ReadFile(opts.TmpFileName)
 		if err != nil {
-			return common.NewExitError(fmt.Sprintf("Could not read edited file: %s", err), codes.CouldNotReadInputFile)
+			return common.Exit(fmt.Sprintf("Could not read edited file: %s", err), codes.CouldNotReadInputFile)
 		}
 		newBranches, err := opts.InputStore.LoadPlainFile(edited)
 		if err != nil {
@@ -217,7 +217,7 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 		opts.Tree.Branches = newBranches
 		needVersionUpdated, err := version.AIsNewerThanB(version.Version, opts.Tree.Metadata.Version)
 		if err != nil {
-			return common.NewExitError(fmt.Sprintf("Failed to compare document version %q with program version %q: %v", opts.Tree.Metadata.Version, version.Version, err), codes.FailedToCompareVersions)
+			return common.Exit(fmt.Sprintf("Failed to compare document version %q with program version %q: %v", opts.Tree.Metadata.Version, version.Version, err), codes.FailedToCompareVersions)
 		}
 		if needVersionUpdated {
 			opts.Tree.Metadata.Version = version.Version
