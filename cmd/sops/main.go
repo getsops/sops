@@ -112,7 +112,7 @@ func main() {
     https://developers.google.com/identity/protocols/application-default-credentials)
 
    To encrypt or decrypt a document with Alibaba Cloud KMS, specify the
-   Alibaba Cloud KMS key ARN in the --acs-kms flag or in the SOPS_ACS_KMS_IDS
+   Alibaba Cloud KMS key ARN in the --acs-kms flag or in the SOPS_ACS_KMS_ARN
    environment variable.
    (You need to setup Alibaba Cloud credentials via environment variables:
     ALIBABA_CLOUD_ACCESS_KEY_ID, ALIBABA_CLOUD_ACCESS_KEY_SECRET, or
@@ -955,8 +955,8 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:   "acs-kms",
-					Usage:  "comma separated list of Alibaba Cloud KMS key IDs (format: region:key-id)",
-					EnvVar: "SOPS_ACS_KMS_IDS",
+					Usage:  "comma separated list of Alibaba Cloud KMS key ARNs",
+					EnvVar: "SOPS_ACS_KMS_ARN",
 				},
 				cli.StringFlag{
 					Name:   "hckms",
@@ -1319,8 +1319,8 @@ func main() {
 				},
 				cli.StringFlag{
 					Name:   "acs-kms",
-					Usage:  "comma separated list of Alibaba Cloud KMS key IDs (format: region:key-id)",
-					EnvVar: "SOPS_ACS_KMS_IDS",
+					Usage:  "comma separated list of Alibaba Cloud KMS key ARNs",
+					EnvVar: "SOPS_ACS_KMS_ARN",
 				},
 				cli.StringFlag{
 					Name:   "hckms",
@@ -1738,7 +1738,7 @@ func main() {
 		cli.StringFlag{
 			Name:   "acs-kms",
 			Usage:  "comma separated list of Alibaba Cloud KMS key ARNs",
-			EnvVar: "SOPS_ACS_KMS_IDS",
+			EnvVar: "SOPS_ACS_KMS_ARN",
 		},
 		cli.StringFlag{
 			Name:   "hckms",

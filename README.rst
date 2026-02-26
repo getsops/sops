@@ -628,11 +628,11 @@ To encrypt a file, specify the Alibaba Cloud KMS key using its ARN format:
 
     $ sops encrypt --acs-kms acs:kms:cn-shanghai:1234567890:key/key-idxxxx test.yaml > test.enc.yaml
 
-Or using the ``SOPS_ACS_KMS_IDS`` environment variable:
+Or using the ``SOPS_ACS_KMS_ARN`` environment variable:
 
 .. code:: bash
 
-    export SOPS_ACS_KMS_IDS="acs:kms:cn-shanghai:1234567890:key/key-idxxxx"
+    export SOPS_ACS_KMS_ARN="acs:kms:cn-shanghai:1234567890:key/key-idxxxx"
     $ sops encrypt test.yaml > test.enc.yaml
 
 You can also configure Alibaba Cloud KMS keys in the ``.sops.yaml`` config file:
@@ -649,7 +649,7 @@ Adding and removing keys
 When creating new files, ``sops`` uses the PGP, KMS and GCP KMS defined in the
 command line arguments ``--kms``, ``--pgp``, ``--gcp-kms``, ``--acs-kms``, ``--hckms`` or ``--azure-kv``, or from
 the environment variables ``SOPS_KMS_ARN``, ``SOPS_PGP_FP``, ``SOPS_GCP_KMS_IDS``,
-``SOPS_ACS_KMS_IDS``, ``SOPS_HUAWEICLOUD_KMS_IDS``, ``SOPS_AZURE_KEYVAULT_URLS``. That information is stored in the file under the
+``SOPS_ACS_KMS_ARN``, ``SOPS_HUAWEICLOUD_KMS_IDS``, ``SOPS_AZURE_KEYVAULT_URLS``. That information is stored in the file under the
 ``sops`` section, such that decrypting files does not require providing those
 parameters again.
 
