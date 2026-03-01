@@ -56,10 +56,6 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	}
 
 	stores.DecodeNewLines(mdMap)
-	err = stores.DecodeNonStrings(mdMap)
-	if err != nil {
-		return sops.Tree{}, err
-	}
 	metadata, err := stores.UnflattenMetadata(mdMap)
 	if err != nil {
 		return sops.Tree{}, err

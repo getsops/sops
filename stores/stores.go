@@ -36,7 +36,7 @@ type SopsFile struct {
 	// in the SOPS file by checking for nil. This way we can show the user a
 	// helpful error message indicating that the metadata wasn't found, instead
 	// of showing a cryptic parsing error
-	Metadata *Metadata `yaml:"sops" json:"sops" ini:"sops"`
+	Metadata *Metadata `yaml:"sops" json:"sops" ini:"sops" mapstructure:"sops,deep"`
 }
 
 // Metadata is stored in SOPS encrypted files, and it contains the information necessary to decrypt the file.
@@ -44,83 +44,83 @@ type SopsFile struct {
 // in order to allow the binary format to stay backwards compatible over time, but at the same time allow the internal
 // representation SOPS uses to change over time.
 type Metadata struct {
-	ShamirThreshold           int         `yaml:"shamir_threshold,omitempty" json:"shamir_threshold,omitempty"`
-	KeyGroups                 []keygroup  `yaml:"key_groups,omitempty" json:"key_groups,omitempty"`
-	KMSKeys                   []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
-	GCPKMSKeys                []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
-	HCKmsKeys                 []hckmskey  `yaml:"hckms,omitempty" json:"hckms,omitempty"`
-	AzureKeyVaultKeys         []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
-	VaultKeys                 []vaultkey  `yaml:"hc_vault,omitempty" json:"hc_vault,omitempty"`
-	AgeKeys                   []agekey    `yaml:"age,omitempty" json:"age,omitempty"`
-	LastModified              string      `yaml:"lastmodified" json:"lastmodified"`
-	MessageAuthenticationCode string      `yaml:"mac" json:"mac"`
-	PGPKeys                   []pgpkey    `yaml:"pgp,omitempty" json:"pgp,omitempty"`
-	UnencryptedSuffix         string      `yaml:"unencrypted_suffix,omitempty" json:"unencrypted_suffix,omitempty"`
-	EncryptedSuffix           string      `yaml:"encrypted_suffix,omitempty" json:"encrypted_suffix,omitempty"`
-	UnencryptedRegex          string      `yaml:"unencrypted_regex,omitempty" json:"unencrypted_regex,omitempty"`
-	EncryptedRegex            string      `yaml:"encrypted_regex,omitempty" json:"encrypted_regex,omitempty"`
-	UnencryptedCommentRegex   string      `yaml:"unencrypted_comment_regex,omitempty" json:"unencrypted_comment_regex,omitempty"`
-	EncryptedCommentRegex     string      `yaml:"encrypted_comment_regex,omitempty" json:"encrypted_comment_regex,omitempty"`
-	MACOnlyEncrypted          bool        `yaml:"mac_only_encrypted,omitempty" json:"mac_only_encrypted,omitempty"`
-	Version                   string      `yaml:"version" json:"version"`
+	ShamirThreshold           int         `yaml:"shamir_threshold,omitempty" json:"shamir_threshold,omitempty" mapstructure:"shamir_threshold,omitempty"`
+	KeyGroups                 []keygroup  `yaml:"key_groups,omitempty" json:"key_groups,omitempty" mapstructure:"key_groups,omitempty,deep"`
+	KMSKeys                   []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty" mapstructure:"kms,omitempty,deep"`
+	GCPKMSKeys                []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty" mapstructure:"gcp_kms,omitempty,deep"`
+	HCKmsKeys                 []hckmskey  `yaml:"hckms,omitempty" json:"hckms,omitempty" mapstructure:"hckms,omitempty,deep"`
+	AzureKeyVaultKeys         []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty" mapstructure:"azure_kv,omitempty,deep"`
+	VaultKeys                 []vaultkey  `yaml:"hc_vault,omitempty" json:"hc_vault,omitempty" mapstructure:"hc_vault,omitempty,deep"`
+	AgeKeys                   []agekey    `yaml:"age,omitempty" json:"age,omitempty" mapstructure:"age,omitempty,deep"`
+	LastModified              string      `yaml:"lastmodified" json:"lastmodified" mapstructure:"lastmodified"`
+	MessageAuthenticationCode string      `yaml:"mac" json:"mac" mapstructure:"mac"`
+	PGPKeys                   []pgpkey    `yaml:"pgp,omitempty" json:"pgp,omitempty" mapstructure:"pgp,omitempty,deep"`
+	UnencryptedSuffix         string      `yaml:"unencrypted_suffix,omitempty" json:"unencrypted_suffix,omitempty" mapstructure:"unencrypted_suffix,omitempty"`
+	EncryptedSuffix           string      `yaml:"encrypted_suffix,omitempty" json:"encrypted_suffix,omitempty" mapstructure:"encrypted_suffix,omitempty"`
+	UnencryptedRegex          string      `yaml:"unencrypted_regex,omitempty" json:"unencrypted_regex,omitempty" mapstructure:"unencrypted_regex,omitempty"`
+	EncryptedRegex            string      `yaml:"encrypted_regex,omitempty" json:"encrypted_regex,omitempty" mapstructure:"encrypted_regex,omitempty"`
+	UnencryptedCommentRegex   string      `yaml:"unencrypted_comment_regex,omitempty" json:"unencrypted_comment_regex,omitempty" mapstructure:"unencrypted_comment_regex,omitempty"`
+	EncryptedCommentRegex     string      `yaml:"encrypted_comment_regex,omitempty" json:"encrypted_comment_regex,omitempty" mapstructure:"encrypted_comment_regex,omitempty"`
+	MACOnlyEncrypted          bool        `yaml:"mac_only_encrypted,omitempty" json:"mac_only_encrypted,omitempty" mapstructure:"mac_only_encrypted,omitempty"`
+	Version                   string      `yaml:"version" json:"version" mapstructure:"version"`
 }
 
 type keygroup struct {
-	PGPKeys           []pgpkey    `yaml:"pgp,omitempty" json:"pgp,omitempty"`
-	KMSKeys           []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
-	GCPKMSKeys        []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
-	HCKmsKeys         []hckmskey  `yaml:"hckms,omitempty" json:"hckms,omitempty"`
-	AzureKeyVaultKeys []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
-	VaultKeys         []vaultkey  `yaml:"hc_vault" json:"hc_vault"`
-	AgeKeys           []agekey    `yaml:"age" json:"age"`
+	PGPKeys           []pgpkey    `yaml:"pgp,omitempty" json:"pgp,omitempty" mapstructure:"pgp,omitempty,deep"`
+	KMSKeys           []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty" mapstructure:"kms,omitempty,deep"`
+	GCPKMSKeys        []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty" mapstructure:"gcp_kms,omitempty,deep"`
+	HCKmsKeys         []hckmskey  `yaml:"hckms,omitempty" json:"hckms,omitempty" mapstructure:"hckms,omitempty,deep"`
+	AzureKeyVaultKeys []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty" mapstructure:"azure_kv,omitempty,deep"`
+	VaultKeys         []vaultkey  `yaml:"hc_vault" json:"hc_vault" mapstructure:"hc_vault,deep"`
+	AgeKeys           []agekey    `yaml:"age" json:"age" mapstructure:"age,deep"`
 }
 
 type pgpkey struct {
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
-	Fingerprint      string `yaml:"fp" json:"fp"`
+	CreatedAt        string `yaml:"created_at" json:"created_at" mapstructure:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc" mapstructure:"enc"`
+	Fingerprint      string `yaml:"fp" json:"fp" mapstructure:"fp"`
 }
 
 type kmskey struct {
-	Arn              string             `yaml:"arn" json:"arn"`
-	Role             string             `yaml:"role,omitempty" json:"role,omitempty"`
-	Context          map[string]*string `yaml:"context,omitempty" json:"context,omitempty"`
-	CreatedAt        string             `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string             `yaml:"enc" json:"enc"`
-	AwsProfile       string             `yaml:"aws_profile" json:"aws_profile"`
+	Arn              string             `yaml:"arn" json:"arn" mapstructure:"arn"`
+	Role             string             `yaml:"role,omitempty" json:"role,omitempty" mapstructure:"role,omitempty"`
+	Context          map[string]*string `yaml:"context,omitempty" json:"context,omitempty" mapstructure:"context,omitempty"`
+	CreatedAt        string             `yaml:"created_at" json:"created_at" mapstructure:"created_at"`
+	EncryptedDataKey string             `yaml:"enc" json:"enc" mapstructure:"enc"`
+	AwsProfile       string             `yaml:"aws_profile" json:"aws_profile" mapstructure:"aws_profile"`
 }
 
 type gcpkmskey struct {
-	ResourceID       string `yaml:"resource_id" json:"resource_id"`
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	ResourceID       string `yaml:"resource_id" json:"resource_id" mapstructure:"resource_id"`
+	CreatedAt        string `yaml:"created_at" json:"created_at" mapstructure:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc" mapstructure:"enc"`
 }
 
 type vaultkey struct {
-	VaultAddress     string `yaml:"vault_address" json:"vault_address"`
-	EnginePath       string `yaml:"engine_path" json:"engine_path"`
-	KeyName          string `yaml:"key_name" json:"key_name"`
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	VaultAddress     string `yaml:"vault_address" json:"vault_address" mapstructure:"vault_address"`
+	EnginePath       string `yaml:"engine_path" json:"engine_path" mapstructure:"engine_path"`
+	KeyName          string `yaml:"key_name" json:"key_name" mapstructure:"key_name"`
+	CreatedAt        string `yaml:"created_at" json:"created_at" mapstructure:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc" mapstructure:"enc"`
 }
 
 type azkvkey struct {
-	VaultURL         string `yaml:"vault_url" json:"vault_url"`
-	Name             string `yaml:"name" json:"name"`
-	Version          string `yaml:"version" json:"version"`
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	VaultURL         string `yaml:"vault_url" json:"vault_url" mapstructure:"vault_url"`
+	Name             string `yaml:"name" json:"name" mapstructure:"name"`
+	Version          string `yaml:"version" json:"version" mapstructure:"version"`
+	CreatedAt        string `yaml:"created_at" json:"created_at" mapstructure:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc" mapstructure:"enc"`
 }
 
 type agekey struct {
-	Recipient        string `yaml:"recipient" json:"recipient"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	Recipient        string `yaml:"recipient" json:"recipient" mapstructure:"recipient"`
+	EncryptedDataKey string `yaml:"enc" json:"enc" mapstructure:"enc"`
 }
 
 type hckmskey struct {
-	KeyID            string `yaml:"key_id" json:"key_id"`
-	CreatedAt        string `yaml:"created_at" json:"created_at"`
-	EncryptedDataKey string `yaml:"enc" json:"enc"`
+	KeyID            string `yaml:"key_id" json:"key_id" mapstructure:"key_id"`
+	CreatedAt        string `yaml:"created_at" json:"created_at" mapstructure:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc" mapstructure:"enc"`
 }
 
 // MetadataFromInternal converts an internal SOPS metadata representation to a representation appropriate for storage
