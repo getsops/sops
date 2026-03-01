@@ -1,10 +1,11 @@
 package stores
 
 import (
-	"encoding/json"
 	"fmt"
 	"strconv"
 	"strings"
+
+	"github.com/go-viper/mapstructure/v2"
 )
 
 const mapSeparator = "__map_"
@@ -38,6 +39,12 @@ func flattenValue(value interface{}) interface{} {
 			flattenAndMerge(newMap, listSeparator+fmt.Sprintf("%d", i), v)
 		}
 		output = newMap
+	case []map[string]interface{}: // mapstructure also emits these
+		newMap := make(map[string]interface{})
+		for i, v := range value {
+			flattenAndMerge(newMap, listSeparator+fmt.Sprintf("%d", i), v)
+		}
+		output = newMap
 	default:
 		output = value
 	}
@@ -64,15 +71,17 @@ func Flatten(in map[string]interface{}) map[string]interface{} {
 // FlattenMetadata flattens a Metadata struct into a flat map.
 func FlattenMetadata(md Metadata) (map[string]interface{}, error) {
 	var mdMap map[string]interface{}
-	jsonBytes, err := json.Marshal(md)
+	config := mapstructure.DecoderConfig{
+		Result: &mdMap,
+	}
+	d, err := mapstructure.NewDecoder(&config)
 	if err != nil {
 		return nil, err
 	}
-	err = json.Unmarshal(jsonBytes, &mdMap)
+	err = d.Decode(md)
 	if err != nil {
 		return nil, err
 	}
-
 	flat := Flatten(mdMap)
 	return flat, nil
 }
@@ -207,11 +216,15 @@ func Unflatten(in map[string]interface{}) map[string]interface{} {
 func UnflattenMetadata(in map[string]interface{}) (Metadata, error) {
 	m := Unflatten(in)
 	var md Metadata
-	jsonBytes, err := json.Marshal(m)
+	config := mapstructure.DecoderConfig{
+		Result:           &md,
+		WeaklyTypedInput: true,
+	}
+	d, err := mapstructure.NewDecoder(&config)
 	if err != nil {
 		return md, err
 	}
-	err = json.Unmarshal(jsonBytes, &md)
+	err = d.Decode(m)
 	return md, err
 }
 
@@ -233,38 +246,6 @@ func EncodeNewLines(m map[string]interface{}) {
 			m[k] = strings.Replace(s, "\n", "\\n", -1)
 		}
 	}
-}
-
-// DecodeNonStrings will look for known metadata keys that are not strings and decode to the appropriate type
-func DecodeNonStrings(m map[string]interface{}) error {
-	if v, ok := m["mac_only_encrypted"]; ok {
-		m["mac_only_encrypted"] = false
-		if v == "true" {
-			m["mac_only_encrypted"] = true
-		}
-	}
-	if v, ok := m["shamir_threshold"]; ok {
-		switch val := v.(type) {
-		case string:
-			vInt, err := strconv.Atoi(val)
-			if err != nil {
-				// Older versions of SOPS stored shamir_threshold as a floating point representation
-				// of the actual integer. Try to parse a floating point number and see whether it
-				// can be converted without loss to an integer.
-				vFloat, floatErr := strconv.ParseFloat(val, 64)
-				vInt = int(vFloat)
-				if floatErr != nil || float64(vInt) != vFloat {
-					return fmt.Errorf("shamir_threshold is not an integer: %s", err.Error())
-				}
-			}
-			m["shamir_threshold"] = vInt
-		case int:
-			m["shamir_threshold"] = val
-		default:
-			return fmt.Errorf("shamir_threshold is neither a string nor an integer, but %T", val)
-		}
-	}
-	return nil
 }
 
 // EncodeNonStrings will look for known metadata keys that are not strings and will encode it to strings
