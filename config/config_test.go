@@ -919,3 +919,35 @@ creation_rules:
 	// Format: ARN|context where context is "AppName:myapp"
 	assert.Equal(t, "arn:aws:kms:us-west-2:123456789012:key/12345678-1234-1234-1234-123456789012|AppName:myapp", conf.KeyGroups[0][0].ToString())
 }
+
+func TestLoadConfigFileWithACSKMS(t *testing.T) {
+	var sampleConfigWithACSKMS = []byte(`
+creation_rules:
+  - path_regex: acskms*
+    acs_kms:
+      - "acs:kms:cn-shanghai:1234567890:key/00000000-0000-0000-0000-000000000000"
+      - "acs:kms:cn-hangzhou:1234567890:key/11111111-1111-1111-1111-111111111111"
+`)
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithACSKMS, t), "/conf/path", "acskms_test", nil)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf)
+	assert.Equal(t, 1, len(conf.KeyGroups))
+	assert.Equal(t, 2, len(conf.KeyGroups[0]))
+	assert.Equal(t, "acs:kms:cn-shanghai:1234567890:key/00000000-0000-0000-0000-000000000000", conf.KeyGroups[0][0].ToString())
+	assert.Equal(t, "acs:kms:cn-hangzhou:1234567890:key/11111111-1111-1111-1111-111111111111", conf.KeyGroups[0][1].ToString())
+}
+
+func TestLoadConfigFileWithACSKMSCommaSeparated(t *testing.T) {
+	var sampleConfigWithACSKMS = []byte(`
+creation_rules:
+  - path_regex: acskms*
+    acs_kms: "acs:kms:cn-shanghai:1234567890:key/key1,acs:kms:cn-hangzhou:1234567890:key/key2"
+`)
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithACSKMS, t), "/conf/path", "acskms_test", nil)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf)
+	assert.Equal(t, 1, len(conf.KeyGroups))
+	assert.Equal(t, 2, len(conf.KeyGroups[0]))
+	assert.Equal(t, "acs:kms:cn-shanghai:1234567890:key/key1", conf.KeyGroups[0][0].ToString())
+	assert.Equal(t, "acs:kms:cn-hangzhou:1234567890:key/key2", conf.KeyGroups[0][1].ToString())
+}

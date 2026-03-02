@@ -2,7 +2,7 @@ SOPS: Secrets OPerationS
 ========================
 
 **SOPS** is an editor of encrypted files that supports YAML, JSON, ENV, INI and BINARY
-formats and encrypts with AWS KMS, GCP KMS, Azure Key Vault, HuaweiCloud KMS, age, and PGP.
+formats and encrypts with AWS KMS, GCP KMS, Azure Key Vault, Alibaba Cloud KMS, HuaweiCloud KMS, age, and PGP.
 (`demo <https://www.youtube.com/watch?v=YTEVyLXFiq0>`_)
 
 .. image:: https://i.imgur.com/X0TM5NI.gif
@@ -604,13 +604,52 @@ You can also configure HuaweiCloud KMS keys in the ``.sops.yaml`` config file:
           hckms:
             - tr-west-1:abc12345-6789-0123-4567-890123456789,tr-west-2:def67890-1234-5678-9012-345678901234
 
+Encrypting using Alibaba Cloud KMS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The Alibaba Cloud KMS integration uses the Alibaba Cloud SDK to communicate with the KMS service.
+It supports authentication via:
+
+1.  **Environment Variables**: ``ALIBABA_CLOUD_ACCESS_KEY_ID`` and ``ALIBABA_CLOUD_ACCESS_KEY_SECRET``.
+2.  **CLI Configuration**: It can read credentials from the Alibaba Cloud CLI configuration (``~/.aliyun/config.json``).
+3.  **Instance RAM Roles**: When running on an ECS instance with an attached RAM role.
+
+For example, using environment variables:
+
+.. code:: bash
+
+    export ALIBABA_CLOUD_ACCESS_KEY_ID="your-access-key-id"
+    export ALIBABA_CLOUD_ACCESS_KEY_SECRET="your-access-key-secret"
+
+To encrypt a file, specify the Alibaba Cloud KMS key using its ARN format:
+``acs:kms:RegionId:UserId:key/CmkId``.
+
+.. code:: sh
+
+    $ sops encrypt --acs-kms acs:kms:cn-shanghai:1234567890:key/key-idxxxx test.yaml > test.enc.yaml
+
+Or using the ``SOPS_ACS_KMS_ARN`` environment variable:
+
+.. code:: bash
+
+    export SOPS_ACS_KMS_ARN="acs:kms:cn-shanghai:1234567890:key/key-idxxxx"
+    $ sops encrypt test.yaml > test.enc.yaml
+
+You can also configure Alibaba Cloud KMS keys in the ``.sops.yaml`` config file:
+
+.. code:: yaml
+
+    creation_rules:
+        - path_regex: \.acs\.yaml$
+          acs_kms: "acs:kms:cn-shanghai:1234567890:key/key-idxxxx"
+
 Adding and removing keys
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 When creating new files, ``sops`` uses the PGP, KMS and GCP KMS defined in the
-command line arguments ``--kms``, ``--pgp``, ``--gcp-kms``, ``--hckms`` or ``--azure-kv``, or from
+command line arguments ``--kms``, ``--pgp``, ``--gcp-kms``, ``--acs-kms``, ``--hckms`` or ``--azure-kv``, or from
 the environment variables ``SOPS_KMS_ARN``, ``SOPS_PGP_FP``, ``SOPS_GCP_KMS_IDS``,
-``SOPS_HUAWEICLOUD_KMS_IDS``, ``SOPS_AZURE_KEYVAULT_URLS``. That information is stored in the file under the
+``SOPS_ACS_KMS_ARN``, ``SOPS_HUAWEICLOUD_KMS_IDS``, ``SOPS_AZURE_KEYVAULT_URLS``. That information is stored in the file under the
 ``sops`` section, such that decrypting files does not require providing those
 parameters again.
 
@@ -654,9 +693,9 @@ disabled by supplying the ``-y`` flag.
 
 The ``rotate`` command generates a new data encryption key and reencrypt all values
 with the new key. At the same time, the command line flag ``--add-kms``, ``--add-pgp``,
-``--add-gcp-kms``, ``--add-hckms``, ``--add-azure-kv``, ``--rm-kms``, ``--rm-pgp``, ``--rm-gcp-kms``,
-``--rm-hckms`` and ``--rm-azure-kv`` can be used to add and remove keys from a file. These flags use
-the comma separated syntax as the ``--kms``, ``--pgp``, ``--gcp-kms``, ``--hckms`` and ``--azure-kv``
+``--add-gcp-kms``, ``--add-acs-kms``, ``--add-hckms``, ``--add-azure-kv``, ``--rm-kms``, ``--rm-pgp``, ``--rm-gcp-kms``,
+``--rm-acs-kms``, ``--rm-hckms`` and ``--rm-azure-kv`` can be used to add and remove keys from a file. These flags use
+the comma separated syntax as the ``--kms``, ``--pgp``, ``--gcp-kms``, ``--acs-kms``, ``--hckms`` and ``--azure-kv``
 arguments when creating new files.
 
 Use ``updatekeys`` if you want to add a key without rotating the data key.
@@ -832,7 +871,7 @@ stdout.
 Using .sops.yaml conf to select KMS, PGP and age for new files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-It is often tedious to specify the ``--kms`` ``--gcp-kms`` ``--hckms`` ``--pgp`` and ``--age`` parameters for creation
+It is often tedious to specify the ``--kms`` ``--gcp-kms`` ``--acs-kms`` ``--hckms`` ``--pgp`` and ``--age`` parameters for creation
 of all new files. If your secrets are stored under a specific directory, like a
 ``git`` repository, you can create a ``.sops.yaml`` configuration file at the root
 directory to define which keys are used for which filename.
@@ -1873,6 +1912,15 @@ To directly specify a single key group, you can use the following keys:
       - hc_vault_transit_uri:
           - http://my.vault/v1/sops/keys/secondkey
 
+* ``acs_kms`` (list of strings): list of Alibaba Cloud KMS key ARNs.
+  Example:
+
+  .. code:: yaml
+
+    creation_rules:
+      - acs_kms:
+          - acs:kms:cn-shanghai:1234567890:key/key-idxxxx
+
 * ``hckms`` (list of strings): list of HuaweiCloud KMS key IDs (format: ``<region>:<key-uuid>``).
   Example:
 
@@ -1988,6 +2036,17 @@ A key group supports the following keys:
       version: ""
 
 * ``hc_vault`` (list of strings): list of HashiCorp Vault transit URIs.
+
+* ``acs_kms`` (list of objects): list of Alibaba Cloud KMS key ARNs.
+  Every object must have the following key:
+
+  * ``arn`` (string): the key ARN.
+
+  Example:
+
+  .. code:: yaml
+
+    - arn: acs:kms:cn-shanghai:1234567890:key/key-idxxxx
 
 * ``hckms`` (list of objects): list of HuaweiCloud KMS key IDs.
   Every object must have the following key:

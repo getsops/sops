@@ -3,6 +3,7 @@ package keyservice
 import (
 	"fmt"
 
+	"github.com/getsops/sops/v3/acskms"
 	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/azkv"
 	"github.com/getsops/sops/v3/gcpkms"
@@ -75,6 +76,18 @@ func (ks *Server) encryptWithHckms(key *HckmsKey, plaintext []byte) ([]byte, err
 	return []byte(hckmsKey.EncryptedKey), nil
 }
 
+func (ks *Server) encryptWithAcsKms(key *AcsKmsKey, plaintext []byte) ([]byte, error) {
+	acskmsKey, err := acskms.NewMasterKey(key.KeyId)
+	if err != nil {
+		return nil, err
+	}
+	err = acskmsKey.Encrypt(plaintext)
+	if err != nil {
+		return nil, err
+	}
+	return []byte(acskmsKey.EncryptedKey), nil
+}
+
 func (ks *Server) encryptWithVault(key *VaultKey, plaintext []byte) ([]byte, error) {
 	vaultKey := hcvault.MasterKey{
 		VaultAddress: key.VaultAddress,
@@ -141,6 +154,19 @@ func (ks *Server) decryptWithHckms(key *HckmsKey, ciphertext []byte) ([]byte, er
 	}
 	hckmsKey.EncryptedKey = string(ciphertext)
 	plaintext, err := hckmsKey.Decrypt()
+	if err != nil {
+		return nil, err
+	}
+	return plaintext, nil
+}
+
+func (ks *Server) decryptWithAcsKms(key *AcsKmsKey, ciphertext []byte) ([]byte, error) {
+	acskmsKey, err := acskms.NewMasterKey(key.KeyId)
+	if err != nil {
+		return nil, err
+	}
+	acskmsKey.EncryptedKey = string(ciphertext)
+	plaintext, err := acskmsKey.Decrypt()
 	if err != nil {
 		return nil, err
 	}
@@ -230,6 +256,14 @@ func (ks Server) Encrypt(ctx context.Context,
 		response = &EncryptResponse{
 			Ciphertext: ciphertext,
 		}
+	case *Key_AcskmsKey:
+		ciphertext, err := ks.encryptWithAcsKms(k.AcskmsKey, req.Plaintext)
+		if err != nil {
+			return nil, err
+		}
+		response = &EncryptResponse{
+			Ciphertext: ciphertext,
+		}
 	case nil:
 		return nil, status.Errorf(codes.NotFound, "Must provide a key")
 	default:
@@ -258,6 +292,8 @@ func keyToString(key *Key) string {
 		return fmt.Sprintf("Hashicorp Vault key with URI %s/v1/%s/keys/%s", k.VaultKey.VaultAddress, k.VaultKey.EnginePath, k.VaultKey.KeyName)
 	case *Key_HckmsKey:
 		return fmt.Sprintf("HuaweiCloud KMS key with ID %s", k.HckmsKey.KeyId)
+	case *Key_AcskmsKey:
+		return fmt.Sprintf("Alibaba Cloud KMS key with ID %s", k.AcskmsKey.KeyId)
 	default:
 		return "Unknown key type"
 	}
@@ -336,6 +372,14 @@ func (ks Server) Decrypt(ctx context.Context,
 		}
 	case *Key_HckmsKey:
 		plaintext, err := ks.decryptWithHckms(k.HckmsKey, req.Ciphertext)
+		if err != nil {
+			return nil, err
+		}
+		response = &DecryptResponse{
+			Plaintext: plaintext,
+		}
+	case *Key_AcskmsKey:
+		plaintext, err := ks.decryptWithAcsKms(k.AcskmsKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}
