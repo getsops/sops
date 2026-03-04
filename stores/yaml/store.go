@@ -273,10 +273,6 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	if err != nil {
 		return sops.Tree{}, err
 	}
-	var data yaml.Node
-	if err := yaml.Unmarshal(in, &data); err != nil {
-		return sops.Tree{}, fmt.Errorf("Error unmarshaling input YAML: %s", err)
-	}
 	var branches sops.TreeBranches
 	d := yaml.NewDecoder(bytes.NewReader(in))
 	for {

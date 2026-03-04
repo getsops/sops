@@ -19,7 +19,7 @@ jobs:
       matrix:
         os: [linux, darwin, windows]
         arch: [amd64, arm64]
-        go-version: ['1.24', '1.25']
+        go-version: ['1.24', '1.25', '1.26']
         exclude:
           - os: windows
             arch: arm64
@@ -28,16 +28,17 @@ jobs:
       VAULT_TOKEN: "root"
       VAULT_ADDR: "http://127.0.0.1:8200"
     steps:
-      - name: Set up Go ${{ matrix.go-version }}
-        uses: actions/setup-go@7a3fe6cf4cb3a834922a1244abfce67bcef6a0c5 # v6.2.0
-        with:
-          go-version: ${{ matrix.go-version }}
-        id: go
-
       - name: Check out code into the Go module directory
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
+
+      - name: Set up Go ${{ matrix.go-version }}
+        uses: actions/setup-go@4b73464bb391d4059bd26b0524d20df3927bd417 # v6.3.0
+        with:
+          go-version: ${{ matrix.go-version }}
+          cache: false
+        id: go
 
       - uses: actions/cache@cdf6c1fa76f9f475f3d7449005a359c84ca0f306 # v5.0.3
         with:
@@ -68,14 +69,14 @@ jobs:
 
       - name: Upload artifact for ${{ matrix.os }}
         if: matrix.os != 'windows'
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: sops-${{ matrix.go-version }}-${{ matrix.os }}-${{ matrix.arch }}-${{ github.sha }}
           path: sops-${{ matrix.go-version }}-${{ matrix.os }}-${{ matrix.arch }}-${{ github.sha }}
 
       - name: Upload artifact for ${{ matrix.os }}
         if: matrix.os == 'windows'
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: sops-${{ matrix.go-version }}-${{ matrix.os }}-${{ github.sha }}
           path: sops-${{ matrix.go-version }}-${{ matrix.os }}-${{ github.sha }}
@@ -85,7 +86,7 @@ jobs:
     needs: [build]
     strategy:
       matrix:
-        go-version: ['1.25']
+        go-version: ['1.26']
     env:
       VAULT_VERSION: "1.14.0"
       VAULT_TOKEN: "root"
@@ -105,7 +106,7 @@ jobs:
       - name: Show Rust version
         run: cargo --version
 
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7.0.0
+      - uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
         with:
           name: sops-${{ matrix.go-version }}-linux-amd64-${{ github.sha }}
 
