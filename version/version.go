@@ -8,7 +8,7 @@ import (
 
 	"github.com/blang/semver"
 	"github.com/hashicorp/go-cleanhttp"
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v3"
 )
 
 // Version represents the value of the current semantic version.
@@ -24,10 +24,10 @@ var Version = "3.12.1"
 // the latest version from the GitHub API and compare it to the
 // current version. If the latest version is newer, the function
 // will print a message to stdout.
-func PrintVersion(c *cli.Context) {
+func PrintVersion(c *cli.Command) {
 	out := strings.Builder{}
 
-	out.WriteString(fmt.Sprintf("%s %s", c.App.Name, c.App.Version))
+	out.WriteString(fmt.Sprintf("%s %s", c.Name, c.Version))
 
 	if c.Bool("disable-version-check") && !c.Bool("check-for-updates") {
 		out.WriteString("\n")
@@ -54,7 +54,7 @@ func PrintVersion(c *cli.Context) {
 					" This will hide this deprecation warning and will always check, even if the default behavior changes in the future.\n")
 		}
 	}
-	fmt.Fprintf(c.App.Writer, "%s", out.String())
+	fmt.Fprintf(c.Writer, "%s", out.String())
 }
 
 // AIsNewerThanB compares two semantic versions and returns true if A is newer
