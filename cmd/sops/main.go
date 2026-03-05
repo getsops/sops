@@ -2144,7 +2144,7 @@ func getEncryptConfig(c *cli.Context, fileName string, inputStore common.Store, 
 		if unencryptedCommentRegex == "" {
 			unencryptedCommentRegex = optionalConfig.UnencryptedCommentRegex
 		}
-		if !macOnlyEncrypted {
+		if macOnlyEncrypted {
 			macOnlyEncrypted = optionalConfig.MACOnlyEncrypted
 		}
 	}
