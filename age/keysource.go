@@ -145,7 +145,7 @@ func (i *ParsedIdentities) Import(identity ...string) error {
 	// one identity per line
 	r := strings.NewReader(strings.Join(identity, "\n"))
 
-	identities, err := parseIdentities(r)
+	identities, err := parseIdentities(r, false)
 	if err != nil {
 		return fmt.Errorf("failed to parse and add to age identities: %w", err)
 	}
@@ -399,6 +399,11 @@ func getUserConfigDir() (string, error) {
 	return os.UserConfigDir()
 }
 
+type identityReader struct {
+	reader                   io.Reader
+	allowMultipleKeysPerLine bool
+}
+
 // loadIdentities attempts to load the age identities based on runtime
 // environment configurations (e.g. SopsAgeKeyEnv, SopsAgeKeyFileEnv,
 // SopsAgeSshPrivateKeyFileEnv, SopsAgeKeyUserConfigPath). It will load all
@@ -406,10 +411,13 @@ func getUserConfigDir() (string, error) {
 func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 	identities, unusedLocations, errs := key.loadAgeSSHIdentities()
 
-	var readers = make(map[string]io.Reader, 0)
+	var readers = make(map[string]identityReader, 0)
 
 	if ageKey, ok := os.LookupEnv(SopsAgeKeyEnv); ok {
-		readers[SopsAgeKeyEnv] = strings.NewReader(ageKey)
+		readers[SopsAgeKeyEnv] = identityReader{
+			reader:                   strings.NewReader(ageKey),
+			allowMultipleKeysPerLine: true,
+		}
 	} else {
 		unusedLocations = append(unusedLocations, SopsAgeKeyEnv)
 	}
@@ -420,7 +428,10 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 			errs = append(errs, fmt.Errorf("failed to open %s file: %w", SopsAgeKeyFileEnv, err))
 		} else {
 			defer f.Close()
-			readers[SopsAgeKeyFileEnv] = f
+			readers[SopsAgeKeyFileEnv] = identityReader{
+				reader:                   f,
+				allowMultipleKeysPerLine: false,
+			}
 		}
 	} else {
 		unusedLocations = append(unusedLocations, SopsAgeKeyFileEnv)
@@ -431,7 +442,10 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 		if err != nil {
 			errs = append(errs, err)
 		} else {
-			readers[SopsAgeKeyCmdEnv] = bytes.NewReader(out)
+			readers[SopsAgeKeyCmdEnv] = identityReader{
+				reader:                   bytes.NewReader(out),
+				allowMultipleKeysPerLine: false,
+			}
 		}
 	} else {
 		unusedLocations = append(unusedLocations, SopsAgeKeyCmdEnv)
@@ -449,12 +463,15 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 			unusedLocations = append(unusedLocations, ageKeyFilePath)
 		} else if err == nil {
 			defer f.Close()
-			readers[ageKeyFilePath] = f
+			readers[ageKeyFilePath] = identityReader{
+				reader:                   f,
+				allowMultipleKeysPerLine: false,
+			}
 		}
 	}
 
 	for location, r := range readers {
-		ids, err := unwrapIdentities(location, r)
+		ids, err := unwrapIdentities(location, r.reader, r.allowMultipleKeysPerLine)
 		if err != nil {
 			errs = append(errs, err)
 		} else {
@@ -505,7 +522,9 @@ func parseRecipient(recipient string) (age.Recipient, error) {
 // parseIdentities attempts to parse one or more age identities from the provided reader.
 // One identity per line.
 // Empty lines and lines starting with "#" are ignored.
-func parseIdentities(r io.Reader) (ParsedIdentities, error) {
+// If allowMultipleKeysPerLine is true, every non-empty lines is split by words,
+// and every word is parsed as an identity.
+func parseIdentities(r io.Reader, allowMultipleKeysPerLine bool) (ParsedIdentities, error) {
 	var identities ParsedIdentities
 
 	scanner := bufio.NewScanner(r)
@@ -517,12 +536,24 @@ func parseIdentities(r io.Reader) (ParsedIdentities, error) {
 			continue
 		}
 
-		parsed, err := parseIdentity(line)
-		if err != nil {
-			return nil, err
+		if allowMultipleKeysPerLine {
+			lineScanner := bufio.NewScanner(strings.NewReader(line))
+			lineScanner.Split(bufio.ScanWords)
+			for lineScanner.Scan() {
+				word := lineScanner.Text()
+				parsed, err := parseIdentity(word)
+				if err != nil {
+					return nil, err
+				}
+				identities = append(identities, parsed)
+			}
+		} else {
+			parsed, err := parseIdentity(line)
+			if err != nil {
+				return nil, err
+			}
+			identities = append(identities, parsed)
 		}
-
-		identities = append(identities, parsed)
 	}
 
 	return identities, nil

@@ -104,7 +104,7 @@ func (i *LazyScryptIdentity) Unwrap(stanzas []*age.Stanza) (fileKey []byte, err 
 	return fileKey, err
 }
 
-func unwrapIdentities(location string, reader io.Reader) (ParsedIdentities, error) {
+func unwrapIdentities(location string, reader io.Reader, allowMultipleKeysPerLine bool) (ParsedIdentities, error) {
 	b := bufio.NewReader(reader)
 	p, _ := b.Peek(14) // length of "age-encryption" and "-----BEGIN AGE"
 	peeked := string(p)
@@ -177,7 +177,7 @@ func unwrapIdentities(location string, reader io.Reader) (ParsedIdentities, erro
 		return ids, nil
 	// An unencrypted age identity file.
 	default:
-		ids, err := parseIdentities(b)
+		ids, err := parseIdentities(b, allowMultipleKeysPerLine)
 		if err != nil {
 			return nil, fmt.Errorf("failed to parse '%s' age identities: %w", location, err)
 		}
