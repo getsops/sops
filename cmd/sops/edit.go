@@ -174,6 +174,12 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 	return encryptedFile, nil
 }
 
+const pressKeyMsg = "Press a key to return to the editor, or Ctrl+C to exit."
+
+func waitForKeyPress() {
+	bufio.NewReader(os.Stdin).ReadByte()
+}
+
 func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 	for {
 		err := runEditor(opts.TmpFileName)
@@ -196,10 +202,8 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 			log.WithField(
 				"error",
 				err,
-			).Errorf("Could not load tree, probably due to invalid " +
-				"syntax. Press a key to return to the editor, or Ctrl+C to " +
-				"exit.")
-			bufio.NewReader(os.Stdin).ReadByte()
+			).Errorf("Could not load tree, probably due to invalid syntax. " + pressKeyMsg)
+			waitForKeyPress()
 			continue
 		}
 		if opts.ShowMasterKeys {
@@ -210,9 +214,8 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 				log.WithField(
 					"error",
 					err,
-				).Errorf("SOPS metadata is invalid. Press a key to " +
-					"return to the editor, or Ctrl+C to exit.")
-				bufio.NewReader(os.Stdin).ReadByte()
+				).Errorf("SOPS metadata is invalid. " + pressKeyMsg)
+				waitForKeyPress()
 				continue
 			}
 			// Replace the whole tree, because otherwise newBranches would
@@ -223,8 +226,8 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 				log.WithField(
 					"error",
 					userErr.UserError(),
-				).Errorf("Tree not valid for encryption. Press a key to return to the editor, or Ctrl+C to exit.")
-				bufio.NewReader(os.Stdin).ReadByte()
+				).Errorf("Tree not valid for encryption. " + pressKeyMsg)
+				waitForKeyPress()
 				continue
 			}
 		}
@@ -237,10 +240,8 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 			opts.Tree.Metadata.Version = version.Version
 		}
 		if opts.Tree.Metadata.MasterKeyCount() == 0 {
-			log.Error("No master keys were provided, so sops can't " +
-				"encrypt the file. Press a key to return to the editor, or " +
-				"Ctrl+C to exit.")
-			bufio.NewReader(os.Stdin).ReadByte()
+			log.Error("No master keys were provided, so sops can't encrypt the file. " + pressKeyMsg)
+			waitForKeyPress()
 			continue
 		}
 		break
