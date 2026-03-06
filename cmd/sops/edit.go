@@ -39,6 +39,7 @@ type runEditorUntilOkOpts struct {
 	TmpFileName    string
 	OriginalHash   []byte
 	InputStore     sops.Store
+	OutputStore    common.Store
 	ShowMasterKeys bool
 	Tree           *sops.Tree
 }
@@ -147,8 +148,12 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 
 	// Let the user edit the file
 	err = runEditorUntilOk(runEditorUntilOkOpts{
-		InputStore: opts.InputStore, OriginalHash: origHash, TmpFileName: tmpfileName,
-		ShowMasterKeys: opts.ShowMasterKeys, Tree: tree})
+		InputStore:     opts.InputStore,
+		OutputStore:    opts.OutputStore,
+		OriginalHash:   origHash,
+		TmpFileName:    tmpfileName,
+		ShowMasterKeys: opts.ShowMasterKeys,
+		Tree:           tree})
 	if err != nil {
 		return nil, err
 	}
@@ -213,6 +218,15 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 			// Replace the whole tree, because otherwise newBranches would
 			// contain the SOPS metadata
 			opts.Tree = &t
+		} else {
+			if userErr, _ := validateFileForEncryption(opts.OutputStore, newBranches); userErr != nil {
+				log.WithField(
+					"error",
+					userErr.UserError(),
+				).Errorf("Tree not valid for encryption. Press a key to return to the editor, or Ctrl+C to exit.")
+				bufio.NewReader(os.Stdin).ReadByte()
+				continue
+			}
 		}
 		opts.Tree.Branches = newBranches
 		needVersionUpdated, err := version.AIsNewerThanB(version.Version, opts.Tree.Metadata.Version)
