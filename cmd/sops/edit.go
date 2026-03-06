@@ -174,7 +174,7 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 	return encryptedFile, nil
 }
 
-const pressKeyMsg = "Press a key to return to the editor, or Ctrl+C to exit."
+const pressKeyMsg = "Press enter to return to the editor, or Ctrl+C to exit."
 
 func waitForKeyPress() {
 	bufio.NewReader(os.Stdin).ReadByte()
