@@ -39,6 +39,7 @@ type runEditorUntilOkOpts struct {
 	TmpFileName    string
 	OriginalHash   []byte
 	InputStore     sops.Store
+	OutputStore    common.Store
 	ShowMasterKeys bool
 	Tree           *sops.Tree
 }
@@ -147,8 +148,12 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 
 	// Let the user edit the file
 	err = runEditorUntilOk(runEditorUntilOkOpts{
-		InputStore: opts.InputStore, OriginalHash: origHash, TmpFileName: tmpfileName,
-		ShowMasterKeys: opts.ShowMasterKeys, Tree: tree})
+		InputStore:     opts.InputStore,
+		OutputStore:    opts.OutputStore,
+		OriginalHash:   origHash,
+		TmpFileName:    tmpfileName,
+		ShowMasterKeys: opts.ShowMasterKeys,
+		Tree:           tree})
 	if err != nil {
 		return nil, err
 	}
@@ -167,6 +172,12 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 		return nil, common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
 	}
 	return encryptedFile, nil
+}
+
+const pressKeyMsg = "Press enter to return to the editor, or Ctrl+C to exit."
+
+func waitForKeyPress() {
+	bufio.NewReader(os.Stdin).ReadByte()
 }
 
 func runEditorUntilOk(opts runEditorUntilOkOpts) error {
@@ -191,10 +202,8 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 			log.WithField(
 				"error",
 				err,
-			).Errorf("Could not load tree, probably due to invalid " +
-				"syntax. Press a key to return to the editor, or Ctrl+C to " +
-				"exit.")
-			bufio.NewReader(os.Stdin).ReadByte()
+			).Errorf("Could not load tree, probably due to invalid syntax. " + pressKeyMsg)
+			waitForKeyPress()
 			continue
 		}
 		if opts.ShowMasterKeys {
@@ -205,14 +214,22 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 				log.WithField(
 					"error",
 					err,
-				).Errorf("SOPS metadata is invalid. Press a key to " +
-					"return to the editor, or Ctrl+C to exit.")
-				bufio.NewReader(os.Stdin).ReadByte()
+				).Errorf("SOPS metadata is invalid. " + pressKeyMsg)
+				waitForKeyPress()
 				continue
 			}
 			// Replace the whole tree, because otherwise newBranches would
 			// contain the SOPS metadata
 			opts.Tree = &t
+		} else {
+			if userErr, _ := validateFileForEncryption(opts.OutputStore, newBranches); userErr != nil {
+				log.WithField(
+					"error",
+					userErr.UserError(),
+				).Errorf("Tree not valid for encryption. " + pressKeyMsg)
+				waitForKeyPress()
+				continue
+			}
 		}
 		opts.Tree.Branches = newBranches
 		needVersionUpdated, err := version.AIsNewerThanB(version.Version, opts.Tree.Metadata.Version)
@@ -223,10 +240,8 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 			opts.Tree.Metadata.Version = version.Version
 		}
 		if opts.Tree.Metadata.MasterKeyCount() == 0 {
-			log.Error("No master keys were provided, so sops can't " +
-				"encrypt the file. Press a key to return to the editor, or " +
-				"Ctrl+C to exit.")
-			bufio.NewReader(os.Stdin).ReadByte()
+			log.Error("No master keys were provided, so sops can't encrypt the file. " + pressKeyMsg)
+			waitForKeyPress()
 			continue
 		}
 		break
