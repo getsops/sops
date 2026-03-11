@@ -3,7 +3,6 @@ package dotenv //import "github.com/getsops/sops/v3/stores/dotenv"
 import (
 	"bytes"
 	"fmt"
-	"sort"
 	"strings"
 
 	"github.com/getsops/sops/v3"
@@ -33,43 +32,15 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	if err != nil {
 		return sops.Tree{}, err
 	}
-
-	var resultBranch sops.TreeBranch
-	mdMap := make(map[string]interface{})
-	for _, item := range branches[0] {
-		switch key := item.Key.(type) {
-		case string:
-			if strings.HasPrefix(key, SopsPrefix) {
-				key = key[len(SopsPrefix):]
-				mdMap[key] = item.Value
-			} else {
-				resultBranch = append(resultBranch, item)
-			}
-		case sops.Comment:
-			resultBranch = append(resultBranch, item)
-		default:
-			panic(fmt.Sprintf("Unexpected type: %T (value %#v)", key, key))
-		}
-	}
-	if len(mdMap) == 0 {
-		return sops.Tree{}, sops.MetadataNotFound
-	}
-
-	stores.DecodeNewLines(mdMap)
-	metadata, err := stores.UnflattenMetadata(mdMap)
+	branches, metadata, err := stores.ExtractMetadata(branches, stores.MetadataOpts{
+		Flatten: stores.MetadataFlattenFull,
+	})
 	if err != nil {
 		return sops.Tree{}, err
 	}
-	internalMetadata, err := metadata.ToInternal()
-	if err != nil {
-		return sops.Tree{}, err
-	}
-
 	return sops.Tree{
-		Branches: sops.TreeBranches{
-			resultBranch,
-		},
-		Metadata: internalMetadata,
+		Branches: branches,
+		Metadata: metadata,
 	}, nil
 }
 
@@ -107,29 +78,13 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 // EmitEncryptedFile returns the encrypted file's bytes corresponding to a sops
 // runtime object
 func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
-	metadata := stores.MetadataFromInternal(in.Metadata)
-	mdItems, err := stores.FlattenMetadata(metadata)
+	branches, err := stores.SerializeMetadata(in, stores.MetadataOpts{
+		Flatten: stores.MetadataFlattenFull,
+	})
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("Error marshaling metadata: %s", err)
 	}
-
-	stores.EncodeNonStrings(mdItems)
-	stores.EncodeNewLines(mdItems)
-
-	var keys []string
-	for k := range mdItems {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-
-	for _, key := range keys {
-		var value = mdItems[key]
-		if value == nil {
-			continue
-		}
-		in.Branches[0] = append(in.Branches[0], sops.TreeItem{Key: SopsPrefix + key, Value: value})
-	}
-	return store.EmitPlainFile(in.Branches)
+	return store.EmitPlainFile(branches)
 }
 
 // EmitPlainFile returns the plaintext file's bytes corresponding to a sops
