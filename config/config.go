@@ -5,6 +5,7 @@ package config //import "github.com/getsops/sops/v3/config"
 
 import (
 	"fmt"
+	"github.com/getsops/sops/v3/tencentkms"
 	"os"
 	"path"
 	"path/filepath"
@@ -130,14 +131,19 @@ type configFile struct {
 }
 
 type keyGroup struct {
-	Merge   []keyGroup   `yaml:"merge"`
-	KMS     []kmsKey     `yaml:"kms"`
-	GCPKMS  []gcpKmsKey  `yaml:"gcp_kms"`
-	HCKms   []hckmsKey   `yaml:"hckms"`
-	AzureKV []azureKVKey `yaml:"azure_keyvault"`
-	Vault   []string     `yaml:"hc_vault"`
-	Age     []string     `yaml:"age"`
-	PGP     []string     `yaml:"pgp"`
+	Merge      []keyGroup      `yaml:"merge"`
+	KMS        []kmsKey        `yaml:"kms"`
+	GCPKMS     []gcpKmsKey     `yaml:"gcp_kms"`
+	HCKms      []hckmsKey      `yaml:"hckms"`
+	AzureKV    []azureKVKey    `yaml:"azure_keyvault"`
+	Vault      []string        `yaml:"hc_vault"`
+	Age        []string        `yaml:"age"`
+	PGP        []string        `yaml:"pgp"`
+	TencentKMS []tencentKMSKey `yaml:"tencent_kms"`
+}
+
+type tencentKMSKey struct {
+	KeyID string `yaml:"key_id"`
 }
 
 type gcpKmsKey struct {
@@ -185,6 +191,7 @@ type creationRule struct {
 	HCKms                   []string    `yaml:"hckms"`
 	AzureKeyVault           interface{} `yaml:"azure_keyvault"`       // string or []string
 	VaultURI                interface{} `yaml:"hc_vault_transit_uri"` // string or []string
+	TencentKMS              []string    `yaml:"tencent_kms"`
 	KeyGroups               []keyGroup  `yaml:"key_groups"`
 	ShamirThreshold         int         `yaml:"shamir_threshold"`
 	UnencryptedSuffix       string      `yaml:"unencrypted_suffix"`
@@ -357,6 +364,9 @@ func extractMasterKeys(group keyGroup) (sops.KeyGroup, error) {
 			return nil, err
 		}
 	}
+	for _, k := range group.TencentKMS {
+		keyGroup = append(keyGroup, tencentkms.NewMasterKeyFromKeyID(k.KeyID))
+	}
 	return deduplicateKeygroup(keyGroup), nil
 }
 
@@ -443,6 +453,11 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			return nil, err
 		}
 		for _, k := range vaultKeys {
+			keyGroup = append(keyGroup, k)
+		}
+		// Tencent KMS
+		tencentkmsMasterKeys := tencentkms.MasterKeysFromKeyIDString(strings.Join(cRule.TencentKMS, ","))
+		for _, k := range tencentkmsMasterKeys {
 			keyGroup = append(keyGroup, k)
 		}
 		groups = append(groups, keyGroup)
