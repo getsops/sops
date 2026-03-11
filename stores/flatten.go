@@ -2,10 +2,14 @@ package stores
 
 import (
 	"fmt"
+	"reflect"
+	"slices"
 	"strconv"
 	"strings"
 
 	"github.com/go-viper/mapstructure/v2"
+
+	"github.com/getsops/sops/v3"
 )
 
 const mapSeparator = "__map_"
@@ -269,4 +273,155 @@ func EncodeNonStrings(m map[string]interface{}) {
 			m["shamir_threshold"] = fmt.Sprintf("%.0f", vFloat)
 		}
 	}
+}
+
+func descendMap(branch sops.TreeBranch, key string) (sops.TreeBranch, reflect.Value) {
+	for idx, elt := range branch {
+		if elt.Key == key {
+			return branch, reflect.ValueOf(&branch[idx].Value)
+		}
+	}
+	newBranch := append(branch, sops.TreeItem{
+		Key:   key,
+		Value: nil,
+	})
+	return newBranch, reflect.ValueOf(&newBranch[len(newBranch)-1].Value)
+}
+
+func descendList(array []interface{}, index int) ([]interface{}, reflect.Value) {
+	if index >= len(array) {
+		if index >= cap(array) {
+			array = slices.Grow(array, index+1-cap(array))
+		}
+		array = array[:index+1]
+	}
+	return array, reflect.ValueOf(&array[index])
+}
+
+func descend(value reflect.Value, t token) (reflect.Value, error) {
+	interfaceType := reflect.TypeOf((*interface{})(nil))
+	switch currToken := t.(type) {
+	case mapToken:
+		// This special case is only needed for the root
+		treeBranchPtrType := reflect.TypeOf((*sops.TreeBranch)(nil))
+		if value.Type() == treeBranchPtrType {
+			v := *value.Interface().(*sops.TreeBranch)
+			v, nextVal := descendMap(v, currToken.key)
+			reflect.Indirect(value).Set(reflect.ValueOf(v))
+			return nextVal, nil
+		}
+		if value.Type() == interfaceType {
+			val := reflect.Indirect(value)
+			if val.IsNil() {
+				v, nextVal := descendMap(nil, currToken.key)
+				val.Set(reflect.ValueOf(v))
+				return nextVal, nil
+			}
+			if v, ok := val.Interface().(sops.TreeBranch); ok {
+				v, nextVal := descendMap(v, currToken.key)
+				val.Set(reflect.ValueOf(v))
+				return nextVal, nil
+			}
+		}
+		return reflect.Value{}, fmt.Errorf("Type mismatch: can only use string key for map")
+	case listToken:
+		if value.Type() == interfaceType {
+			val := reflect.Indirect(value)
+			if val.IsNil() {
+				v, nextVal := descendList(nil, currToken.position)
+				val.Set(reflect.ValueOf(v))
+				return nextVal, nil
+			}
+			if v, ok := val.Interface().([]interface{}); ok {
+				v, nextVal := descendList(v, currToken.position)
+				val.Set(reflect.ValueOf(v))
+				return nextVal, nil
+			}
+		}
+		return reflect.Value{}, fmt.Errorf("Type mismatch: can only use integer key for list")
+	default:
+		return reflect.Value{}, fmt.Errorf("Internal error: unknown token %q", t)
+	}
+}
+
+func unflattenTreeBranch(branch sops.TreeBranch) (sops.TreeBranch, error) {
+	var result sops.TreeBranch
+	for _, item := range branch {
+		if _, ok := item.Key.(sops.Comment); ok {
+			continue
+		}
+		if key, ok := item.Key.(string); ok {
+			current := reflect.ValueOf(&result)
+			tokens := tokenize(key)
+			for _, token := range tokens {
+				var err error
+				current, err = descend(current, token)
+				if err != nil {
+					return nil, fmt.Errorf("Error while unflattening %q: %w", key, err)
+				}
+			}
+			reflect.Indirect(current).Set(reflect.ValueOf(item.Value))
+			continue
+		} else {
+			return nil, fmt.Errorf("Found non-string key %q when unflattening", item.Key)
+		}
+	}
+	return result, nil
+}
+
+func flattenDescendValue(value interface{}, key string, destination sops.TreeBranch, destinationMap *map[string]bool) (sops.TreeBranch, error) {
+	switch value := value.(type) {
+	case sops.TreeBranch:
+		return flattenDescendMap(value, key+mapSeparator, destination, destinationMap)
+	case []interface{}:
+		return flattenDescendArray(value, key+listSeparator, destination, destinationMap)
+	}
+	if _, ok := (*destinationMap)[key]; ok {
+		return nil, fmt.Errorf("Found key collision %q while flattening", key)
+	}
+	destination = append(destination, sops.TreeItem{
+		Key:   key,
+		Value: value,
+	})
+	(*destinationMap)[key] = true
+	return destination, nil
+}
+
+func flattenDescendMap(branch sops.TreeBranch, prefix string, destination sops.TreeBranch, destinationMap *map[string]bool) (sops.TreeBranch, error) {
+	for _, item := range branch {
+		if _, ok := item.Key.(sops.Comment); ok {
+			continue
+		}
+		if key, ok := item.Key.(string); ok {
+			var err error
+			destination, err = flattenDescendValue(item.Value, prefix+key, destination, destinationMap)
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			return nil, fmt.Errorf("Found non-string key %q when flattening", item.Key)
+		}
+	}
+	return destination, nil
+}
+
+func flattenDescendArray(array []interface{}, prefix string, destination sops.TreeBranch, destinationMap *map[string]bool) (sops.TreeBranch, error) {
+	i := 0
+	for _, item := range array {
+		if _, ok := item.(sops.Comment); ok {
+			continue
+		}
+		var err error
+		destination, err = flattenDescendValue(item, fmt.Sprintf("%s%d", prefix, i), destination, destinationMap)
+		if err != nil {
+			return nil, err
+		}
+		i += 1
+	}
+	return destination, nil
+}
+
+func flattenTreeBranch(branch sops.TreeBranch, prefix string) (sops.TreeBranch, error) {
+	destinationMap := map[string]bool{}
+	return flattenDescendMap(branch, prefix, nil, &destinationMap)
 }
