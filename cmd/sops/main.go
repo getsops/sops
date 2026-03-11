@@ -2155,7 +2155,7 @@ func getEncryptConfig(c *cli.Context, fileName string, inputStore common.Store, 
 	unencryptedRegex := c.String("unencrypted-regex")
 	encryptedCommentRegex := c.String("encrypted-comment-regex")
 	unencryptedCommentRegex := c.String("unencrypted-comment-regex")
-	macOnlyEncrypted := c.Bool("mac-only-encrypted")
+	macOnlyEncrypted := c.GlobalBool("mac-only-encrypted")
 	var err error
 	if optionalConfig == nil {
 		optionalConfig, err = loadConfig(c, fileName, nil)
