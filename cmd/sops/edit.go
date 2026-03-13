@@ -3,12 +3,15 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"crypto/sha256"
 	"fmt"
 	"io"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"strings"
+	"syscall"
 
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/cmd/sops/codes"
@@ -96,6 +99,24 @@ func edit(opts editOpts) ([]byte, error) {
 	return editTree(opts, tree, dataKey)
 }
 
+type cancelError struct{}
+
+func (err *cancelError) Error() string {
+	return "User canceled operation"
+}
+
+type editTreeResult struct {
+	value []byte
+	err   error
+}
+
+func createError(err error) editTreeResult {
+	return editTreeResult{
+		value: nil,
+		err:   err,
+	}
+}
+
 func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 	// Create temporary file for editing
 	tmpdir, err := os.MkdirTemp("", "")
@@ -117,25 +138,50 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 
 	tmpfileName := tmpfile.Name()
 
+	// Catch when the user presses Ctrl+C, or kills SOPS.
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
+	defer stop()
+
+	result := make(chan editTreeResult, 1)
+
+	// This goroutine handles signals that exit SOPS, that usually lead to termination
+	// before editTree() can clean up the temporary directory and file.
+	go func() {
+		<-ctx.Done()
+		result <- createError(&cancelError{})
+	}()
+
+	// This goroutine handles regular execution of editing.
+	go func() {
+		result <- editTreeImpl(tmpfile, tmpfileName, opts, tree, dataKey)
+	}()
+
+	// Wait until the first result shows up (either an exit is requested, or editTreeImpl returns).
+	res := <-result
+	return res.value, res.err
+}
+
+func editTreeImpl(tmpfile *os.File, tmpfileName string, opts editOpts, tree *sops.Tree, dataKey []byte) editTreeResult {
 	// Write to temporary file
 	var out []byte
+	var err error
 	if opts.ShowMasterKeys {
 		out, err = opts.OutputStore.EmitEncryptedFile(*tree)
 	} else {
 		out, err = opts.OutputStore.EmitPlainFile(tree.Branches)
 	}
 	if err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
+		return createError(common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree))
 	}
 	_, err = tmpfile.Write(out)
 	if err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Could not write output file: %s", err), codes.CouldNotWriteOutputFile)
+		return createError(common.NewExitError(fmt.Sprintf("Could not write output file: %s", err), codes.CouldNotWriteOutputFile))
 	}
 
 	// Compute file hash to detect if the file has been edited
 	origHash, err := hashFile(tmpfileName)
 	if err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Could not hash file: %s", err), codes.CouldNotReadInputFile)
+		return createError(common.NewExitError(fmt.Sprintf("Could not hash file: %s", err), codes.CouldNotReadInputFile))
 	}
 
 	// Close the temporary file, so that an editor can open it.
@@ -143,7 +189,7 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 	// open a file on Windows due to the Go standard library not opening
 	// files with shared delete access.
 	if err := tmpfile.Close(); err != nil {
-		return nil, err
+		return createError(err)
 	}
 
 	// Let the user edit the file
@@ -155,7 +201,7 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 		ShowMasterKeys: opts.ShowMasterKeys,
 		Tree:           tree})
 	if err != nil {
-		return nil, err
+		return createError(err)
 	}
 
 	// Encrypt the file
@@ -163,15 +209,18 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 		DataKey: dataKey, Tree: tree, Cipher: opts.Cipher,
 	})
 	if err != nil {
-		return nil, err
+		return createError(err)
 	}
 
 	// Output the file
 	encryptedFile, err := opts.OutputStore.EmitEncryptedFile(*tree)
 	if err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
+		return createError(common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree))
 	}
-	return encryptedFile, nil
+	return editTreeResult{
+		value: encryptedFile,
+		err:   nil,
+	}
 }
 
 const pressKeyMsg = "Press enter to return to the editor, or Ctrl+C to exit."
