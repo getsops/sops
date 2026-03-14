@@ -165,7 +165,9 @@ signs:
 dockers:
   - image_templates:
       - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-amd64'
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:latest-amd64'
       - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-amd64'
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:latest-amd64'
     use: buildx
     goos: linux
     goarch: amd64
@@ -183,7 +185,9 @@ dockers:
 
   - image_templates:
       - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-arm64'
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:latest-arm64'
       - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-arm64'
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:latest-arm64'
     use: buildx
     goos: linux
     goarch: arm64
@@ -201,7 +205,9 @@ dockers:
 
   - image_templates:
       - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-alpine-amd64'
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:alpine-amd64'
       - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-alpine-amd64'
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:alpine-amd64'
     use: buildx
     goos: linux
     goarch: amd64
@@ -219,7 +225,9 @@ dockers:
 
   - image_templates:
       - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-alpine-arm64'
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:alpine-arm64'
       - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-alpine-arm64'
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:alpine-arm64'
     use: buildx
     goos: linux
     goarch: arm64
@@ -256,6 +264,26 @@ docker_manifests:
     image_templates:
       - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-alpine-amd64'
       - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-alpine-arm64'
+
+  - name_template: 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:latest'
+    image_templates:
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:latest-amd64'
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:latest-arm64'
+
+  - name_template: 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:alpine'
+    image_templates:
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:alpine-amd64'
+      - 'ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:alpine-arm64'
+
+  - name_template: 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:latest'
+    image_templates:
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:latest-amd64'
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:latest-arm64'
+
+  - name_template: 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:alpine'
+    image_templates:
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:alpine-amd64'
+      - 'quay.io/{{ .Env.GITHUB_REPOSITORY }}:alpine-arm64'
 
 # xref: https://goreleaser.com/customization/docker_sign/
 docker_signs:
@@ -345,11 +373,15 @@ release:
 
     - `ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}`
     - `ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-alpine`
+    - `ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:latest`
+    - `ghcr.io/{{ .Env.GITHUB_REPOSITORY }}:alpine`
 
     ### Quay.io
 
     - `quay.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}`
     - `quay.io/{{ .Env.GITHUB_REPOSITORY }}:v{{ .Version }}-alpine`
+    - `quay.io/{{ .Env.GITHUB_REPOSITORY }}:latest`
+    - `quay.io/{{ .Env.GITHUB_REPOSITORY }}:alpine`
 
     ### Verify container image signature
 
