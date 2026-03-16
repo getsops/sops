@@ -7,88 +7,11 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/go-viper/mapstructure/v2"
-
 	"github.com/getsops/sops/v3"
 )
 
 const mapSeparator = "__map_"
 const listSeparator = "__list_"
-
-// flattenAndMerge flattens the provided value and merges into the
-// into map using prefix
-func flattenAndMerge(into map[string]interface{}, prefix string, value interface{}) {
-	flattenedValue := flattenValue(value)
-	if flattenedValue, ok := flattenedValue.(map[string]interface{}); ok {
-		for flatK, flatV := range flattenedValue {
-			into[prefix+flatK] = flatV
-		}
-	} else {
-		into[prefix] = value
-	}
-}
-
-func flattenValue(value interface{}) interface{} {
-	var output interface{}
-	switch value := value.(type) {
-	case map[string]interface{}:
-		newMap := make(map[string]interface{})
-		for k, v := range value {
-			flattenAndMerge(newMap, mapSeparator+k, v)
-		}
-		output = newMap
-	case []interface{}:
-		newMap := make(map[string]interface{})
-		for i, v := range value {
-			flattenAndMerge(newMap, listSeparator+fmt.Sprintf("%d", i), v)
-		}
-		output = newMap
-	case []map[string]interface{}: // mapstructure also emits these
-		newMap := make(map[string]interface{})
-		for i, v := range value {
-			flattenAndMerge(newMap, listSeparator+fmt.Sprintf("%d", i), v)
-		}
-		output = newMap
-	default:
-		output = value
-	}
-	return output
-}
-
-// Flatten flattens a map with potentially nested maps into a flat
-// map. Only string keys are allowed on both the top-level map and
-// child maps.
-func Flatten(in map[string]interface{}) map[string]interface{} {
-	newMap := make(map[string]interface{})
-	for k, v := range in {
-		if flat, ok := flattenValue(v).(map[string]interface{}); ok {
-			for flatK, flatV := range flat {
-				newMap[k+flatK] = flatV
-			}
-		} else {
-			newMap[k] = v
-		}
-	}
-	return newMap
-}
-
-// FlattenMetadata flattens a Metadata struct into a flat map.
-func FlattenMetadata(md Metadata) (map[string]interface{}, error) {
-	var mdMap map[string]interface{}
-	config := mapstructure.DecoderConfig{
-		Result: &mdMap,
-	}
-	d, err := mapstructure.NewDecoder(&config)
-	if err != nil {
-		return nil, err
-	}
-	err = d.Decode(md)
-	if err != nil {
-		return nil, err
-	}
-	flat := Flatten(mdMap)
-	return flat, nil
-}
 
 type token interface{}
 
@@ -143,95 +66,6 @@ func tokenize(path string) []token {
 	return tokens
 }
 
-// unflatten takes the currentNode, currentToken, nextToken and value
-// and populates currentNode such that currentToken can be considered
-// processed. It inspects nextToken to decide what type to allocate
-// and assign under currentNode.
-func unflatten(currentNode interface{}, currentToken, nextToken token, value interface{}) interface{} {
-	switch currentToken := currentToken.(type) {
-	case mapToken:
-		currentNode := currentNode.(map[string]interface{})
-		switch nextToken := nextToken.(type) {
-		case mapToken:
-			if _, ok := currentNode[currentToken.key]; !ok {
-				currentNode[currentToken.key] = make(map[string]interface{})
-			}
-			next := currentNode[currentToken.key].(map[string]interface{})
-			return next
-		case listToken:
-			if _, ok := currentNode[currentToken.key]; !ok {
-				currentNode[currentToken.key] = make([]interface{}, nextToken.position+1)
-			}
-			next := currentNode[currentToken.key].([]interface{})
-			if nextToken.position >= len(next) {
-				// Grow the slice and reassign it
-				newNext := make([]interface{}, nextToken.position+1)
-				copy(newNext, next)
-				next = newNext
-				currentNode[currentToken.key] = next
-			}
-			return next
-		default:
-			currentNode[currentToken.key] = value
-		}
-	case listToken:
-		currentNode := currentNode.([]interface{})
-		switch nextToken := nextToken.(type) {
-		case mapToken:
-			if currentNode[currentToken.position] == nil {
-				currentNode[currentToken.position] = make(map[string]interface{})
-			}
-			next := currentNode[currentToken.position].(map[string]interface{})
-			return next
-		case listToken:
-			if currentNode[currentToken.position] == nil {
-				currentNode[currentToken.position] = make([]interface{}, nextToken.position+1)
-			}
-			next := currentNode[currentToken.position].([]interface{})
-			if nextToken.position >= len(next) {
-				// Grow the slice and reassign it
-				newNext := make([]interface{}, nextToken.position+1)
-				copy(newNext, next)
-				next = newNext
-				currentNode[currentToken.position] = next
-			}
-			return next
-		default:
-			currentNode[currentToken.position] = value
-		}
-	}
-	return nil
-}
-
-// Unflatten unflattens a map flattened by Flatten
-func Unflatten(in map[string]interface{}) map[string]interface{} {
-	newMap := make(map[string]interface{})
-	for k, v := range in {
-		var current interface{} = newMap
-		tokens := append(tokenize(k), nil)
-		for i := 0; i < len(tokens)-1; i++ {
-			current = unflatten(current, tokens[i], tokens[i+1], v)
-		}
-	}
-	return newMap
-}
-
-// UnflattenMetadata unflattens a map flattened by FlattenMetadata into Metadata
-func UnflattenMetadata(in map[string]interface{}) (Metadata, error) {
-	m := Unflatten(in)
-	var md Metadata
-	config := mapstructure.DecoderConfig{
-		Result:           &md,
-		WeaklyTypedInput: true,
-	}
-	d, err := mapstructure.NewDecoder(&config)
-	if err != nil {
-		return md, err
-	}
-	err = d.Decode(m)
-	return md, err
-}
-
 // DecodeNewLines replaces \\n with \n for all string values in the map.
 // Used by config stores that do not handle multi-line values (ini, dotenv).
 func DecodeNewLines(m map[string]interface{}) {
@@ -248,29 +82,6 @@ func EncodeNewLines(m map[string]interface{}) {
 	for k, v := range m {
 		if s, ok := v.(string); ok {
 			m[k] = strings.Replace(s, "\n", "\\n", -1)
-		}
-	}
-}
-
-// EncodeNonStrings will look for known metadata keys that are not strings and will encode it to strings
-func EncodeNonStrings(m map[string]interface{}) {
-	if v, found := m["mac_only_encrypted"]; found {
-		if vBool, ok := v.(bool); ok {
-			m["mac_only_encrypted"] = "false"
-			if vBool {
-				m["mac_only_encrypted"] = "true"
-			}
-		}
-	}
-	if v, found := m["shamir_threshold"]; found {
-		if vInt, ok := v.(int); ok {
-			m["shamir_threshold"] = fmt.Sprintf("%d", vInt)
-		}
-		// FlattenMetadata serializes the input as JSON and then deserializes it.
-		// The JSON unserializer treats every number as a float, so the above 'if'
-		// never applies in that situation.
-		if vFloat, ok := v.(float64); ok {
-			m["shamir_threshold"] = fmt.Sprintf("%.0f", vFloat)
 		}
 	}
 }
