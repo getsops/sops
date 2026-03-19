@@ -40,10 +40,7 @@ jobs:
         uses: anchore/sbom-action/download-syft@57aae528053a48a3f6235f2d9461b05fbcb7366d # v0.23.1
 
       - name: Setup Cosign
-        uses: sigstore/cosign-installer@ba7bc0a3fef59531c69a25acd34668d6d3fe6f22 # v4.1.0
-        with:
-          # TODO: update cosign and go-releaser, and adjust go-releaser config
-          cosign-release: 'v2.6.2'
+        uses: sigstore/cosign-installer@a7bc0a3fef59531c69a25acd34668d6d3fe6f22 # v4.1.0
 
       - name: Setup QEMU
         uses: docker/setup-qemu-action@ce360397dd3f832beb865e1373c09c0e9f86d70a # v4.0.0
