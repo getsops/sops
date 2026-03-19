@@ -49,7 +49,7 @@ type Metadata struct {
 	KeyGroups                 []keygroup  `yaml:"key_groups,omitempty" json:"key_groups,omitempty"`
 	KMSKeys                   []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
 	GCPKMSKeys                []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
-	AcsKmsKeys                []acskmskey `yaml:"acskms,omitempty" json:"acskms,omitempty"`
+	AcsKmsKeys                []acskmskey `yaml:"acs_kms,omitempty" json:"acs_kms,omitempty"`
 	HCKmsKeys                 []hckmskey  `yaml:"hckms,omitempty" json:"hckms,omitempty"`
 	AzureKeyVaultKeys         []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
 	VaultKeys                 []vaultkey  `yaml:"hc_vault,omitempty" json:"hc_vault,omitempty"`
@@ -71,7 +71,7 @@ type keygroup struct {
 	PGPKeys           []pgpkey    `yaml:"pgp,omitempty" json:"pgp,omitempty"`
 	KMSKeys           []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
 	GCPKMSKeys        []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
-	AcsKmsKeys        []acskmskey `yaml:"acskms,omitempty" json:"acskms,omitempty"`
+	AcsKmsKeys        []acskmskey `yaml:"acs_kms,omitempty" json:"acs_kms,omitempty"`
 	HCKmsKeys         []hckmskey  `yaml:"hckms,omitempty" json:"hckms,omitempty"`
 	AzureKeyVaultKeys []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
 	VaultKeys         []vaultkey  `yaml:"hc_vault" json:"hc_vault"`
