@@ -65,9 +65,10 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 		return Key{
 			KeyType: &Key_AzureKeyvaultKey{
 				AzureKeyvaultKey: &AzureKeyVaultKey{
-					VaultUrl: mk.VaultURL,
-					Name:     mk.Name,
-					Version:  mk.Version,
+					VaultUrl:  mk.VaultURL,
+					Name:      mk.Name,
+					Version:   mk.Version,
+					PublicKey: append([]byte(nil), mk.PublicKey...),
 				},
 			},
 		}

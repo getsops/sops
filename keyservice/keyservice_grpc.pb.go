@@ -60,14 +60,15 @@ func (c *keyServiceClient) Decrypt(ctx context.Context, in *DecryptRequest, opts
 }
 
 // KeyServiceServer is the server API for KeyService service.
-// All implementations should embed UnimplementedKeyServiceServer
+// All implementations must embed UnimplementedKeyServiceServer
 // for forward compatibility.
 type KeyServiceServer interface {
 	Encrypt(context.Context, *EncryptRequest) (*EncryptResponse, error)
 	Decrypt(context.Context, *DecryptRequest) (*DecryptResponse, error)
+	mustEmbedUnimplementedKeyServiceServer()
 }
 
-// UnimplementedKeyServiceServer should be embedded to have
+// UnimplementedKeyServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
@@ -80,7 +81,8 @@ func (UnimplementedKeyServiceServer) Encrypt(context.Context, *EncryptRequest) (
 func (UnimplementedKeyServiceServer) Decrypt(context.Context, *DecryptRequest) (*DecryptResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Decrypt not implemented")
 }
-func (UnimplementedKeyServiceServer) testEmbeddedByValue() {}
+func (UnimplementedKeyServiceServer) mustEmbedUnimplementedKeyServiceServer() {}
+func (UnimplementedKeyServiceServer) testEmbeddedByValue()                    {}
 
 // UnsafeKeyServiceServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to KeyServiceServer will
