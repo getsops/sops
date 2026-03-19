@@ -649,6 +649,48 @@ separated list.
 SOPS will prompt you with the changes to be made. This interactivity can be
 disabled by supplying the ``-y`` flag.
 
+Global update
+=============
+
+You can apply key updates to all managed files with ``--global``:
+
+.. code:: sh
+
+    $ sops updatekeys --global
+    $ sops updatekeys --global -y          # non‑interactive
+    $ sops updatekeys --global --dry-run   # show what would change
+
+Behavior:
+
+* Scan starting at the directory containing ``.sops.yaml`` (or the current working directory if ``--config`` not set).
+* A file is considered for update only if:
+  - It contains SOPS metadata (``sops`` section) and
+  - A creation rule in ``.sops.yaml`` matches its path.
+* Files missing metadata or a matching creation rule are silently ignored (reported as ignored, not errors).
+* In normal mode, eligible files whose key groups (or Shamir threshold, if configured) differ from the matching creation rule are updated in place.
+* In ``--dry-run`` mode, no files are modified; a concise list of files that would be changed is printed.
+
+Examples:
+
+.. code:: sh
+
+    # See which files would be updated
+    $ sops updatekeys --global --dry-run
+    Files that would be updated:
+      secrets/app1.yaml
+      prod/creds.enc.json
+
+    # Perform the update
+    $ sops updatekeys --global -y
+
+If there are no changes needed, files are skipped. Errors reading individual files are aggregated and reported at the end.
+
+Flags:
+
+* ``--global``: enable global scan/update
+* ``--dry-run``: with ``--global``, list pending changes only
+* ``-y`` / ``--yes``: auto-approve per‑file changes
+
 ``rotate`` command
 ******************
 
