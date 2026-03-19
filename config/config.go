@@ -14,6 +14,7 @@ import (
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/azkv"
+	"github.com/getsops/sops/v3/barbican"
 	"github.com/getsops/sops/v3/gcpkms"
 	"github.com/getsops/sops/v3/hckms"
 	"github.com/getsops/sops/v3/hcvault"
@@ -130,14 +131,15 @@ type configFile struct {
 }
 
 type keyGroup struct {
-	Merge   []keyGroup   `yaml:"merge"`
-	KMS     []kmsKey     `yaml:"kms"`
-	GCPKMS  []gcpKmsKey  `yaml:"gcp_kms"`
-	HCKms   []hckmsKey   `yaml:"hckms"`
-	AzureKV []azureKVKey `yaml:"azure_keyvault"`
-	Vault   []string     `yaml:"hc_vault"`
-	Age     []string     `yaml:"age"`
-	PGP     []string     `yaml:"pgp"`
+	Merge    []keyGroup    `yaml:"merge"`
+	KMS      []kmsKey      `yaml:"kms"`
+	GCPKMS   []gcpKmsKey   `yaml:"gcp_kms"`
+	HCKms    []hckmsKey    `yaml:"hckms"`
+	AzureKV  []azureKVKey  `yaml:"azure_keyvault"`
+	Vault    []string      `yaml:"hc_vault"`
+	Age      []string      `yaml:"age"`
+	PGP      []string      `yaml:"pgp"`
+	Barbican []barbicanKey `yaml:"barbican"`
 }
 
 type gcpKmsKey struct {
@@ -159,6 +161,11 @@ type azureKVKey struct {
 
 type hckmsKey struct {
 	KeyID string `yaml:"key_id"`
+}
+
+type barbicanKey struct {
+	SecretRef string `yaml:"secret_ref"`
+	Region    string `yaml:"region,omitempty"`
 }
 
 type destinationRule struct {
@@ -185,6 +192,9 @@ type creationRule struct {
 	HCKms                   []string    `yaml:"hckms"`
 	AzureKeyVault           interface{} `yaml:"azure_keyvault"`       // string or []string
 	VaultURI                interface{} `yaml:"hc_vault_transit_uri"` // string or []string
+	Barbican                interface{} `yaml:"barbican"`             // string or []string
+	BarbicanAuthURL         string      `yaml:"barbican_auth_url"`
+	BarbicanRegion          string      `yaml:"barbican_region"`
 	KeyGroups               []keyGroup  `yaml:"key_groups"`
 	ShamirThreshold         int         `yaml:"shamir_threshold"`
 	UnencryptedSuffix       string      `yaml:"unencrypted_suffix"`
@@ -219,6 +229,10 @@ func (c *creationRule) GetAzureKeyVaultKeys() ([]string, error) {
 
 func (c *creationRule) GetVaultURIs() ([]string, error) {
 	return parseKeyField(c.VaultURI, "hc_vault_transit_uri")
+}
+
+func (c *creationRule) GetBarbicanKeys() ([]string, error) {
+	return parseKeyField(c.Barbican, "barbican")
 }
 
 // Utility function to handle both string and []string
@@ -357,6 +371,27 @@ func extractMasterKeys(group keyGroup) (sops.KeyGroup, error) {
 			return nil, err
 		}
 	}
+	for _, k := range group.Barbican {
+		var secretRef string
+		var region string
+		
+		if k.SecretRef != "" {
+			secretRef = k.SecretRef
+		}
+		if k.Region != "" {
+			region = k.Region
+		}
+		
+		if secretRef != "" {
+			if region != "" {
+				masterKey := barbican.NewMasterKeyWithRegion(secretRef, region)
+				keyGroup = append(keyGroup, masterKey)
+			} else {
+				masterKey := barbican.NewMasterKey(secretRef)
+				keyGroup = append(keyGroup, masterKey)
+			}
+		}
+	}
 	return deduplicateKeygroup(keyGroup), nil
 }
 
@@ -445,9 +480,85 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		for _, k := range vaultKeys {
 			keyGroup = append(keyGroup, k)
 		}
+		barbicanKeys, err := getKeysWithValidation(cRule.GetBarbicanKeys, "barbican")
+		if err != nil {
+			return nil, err
+		}
+		barbicanMasterKeys, err := barbican.MasterKeysFromSecretRefString(strings.Join(barbicanKeys, ","))
+		if err != nil {
+			return nil, err
+		}
+		
+		// Apply region configuration to Barbican keys if specified
+		if cRule.BarbicanRegion != "" {
+			for _, key := range barbicanMasterKeys {
+				if key.Region == "" {
+					key.Region = cRule.BarbicanRegion
+				}
+			}
+		}
+		
+		// Apply auth URL configuration to Barbican keys if specified
+		if cRule.BarbicanAuthURL != "" {
+			for _, key := range barbicanMasterKeys {
+				if key.AuthConfig == nil {
+					key.AuthConfig = &barbican.AuthConfig{}
+				}
+				if key.AuthConfig.AuthURL == "" {
+					key.AuthConfig.AuthURL = cRule.BarbicanAuthURL
+				}
+				if key.AuthConfig.Region == "" && cRule.BarbicanRegion != "" {
+					key.AuthConfig.Region = cRule.BarbicanRegion
+				}
+			}
+		}
+		
+		for _, k := range barbicanMasterKeys {
+			keyGroup = append(keyGroup, k)
+		}
 		groups = append(groups, keyGroup)
 	}
 	return groups, nil
+}
+
+// validateBarbicanConfig validates Barbican-specific configuration
+func validateBarbicanConfig(cRule *creationRule) error {
+	// If Barbican keys are specified, validate the configuration
+	barbicanKeys, err := cRule.GetBarbicanKeys()
+	if err != nil {
+		return fmt.Errorf("invalid barbican key configuration: %w", err)
+	}
+	
+	if len(barbicanKeys) > 0 {
+		// Validate each Barbican secret reference
+		for _, secretRef := range barbicanKeys {
+			if secretRef == "" {
+				return fmt.Errorf("empty Barbican secret reference is not allowed")
+			}
+			
+			// Validate secret reference format using Barbican package validation
+			_, err := barbican.NewMasterKeyFromSecretRef(secretRef)
+			if err != nil {
+				return fmt.Errorf("invalid Barbican secret reference '%s': %w", secretRef, err)
+			}
+		}
+		
+		// Validate auth URL if provided
+		if cRule.BarbicanAuthURL != "" {
+			if !strings.HasPrefix(cRule.BarbicanAuthURL, "http://") && !strings.HasPrefix(cRule.BarbicanAuthURL, "https://") {
+				return fmt.Errorf("barbican_auth_url must be a valid HTTP or HTTPS URL, got: %s", cRule.BarbicanAuthURL)
+			}
+		}
+		
+		// Validate region if provided
+		if cRule.BarbicanRegion != "" {
+			if strings.TrimSpace(cRule.BarbicanRegion) == "" {
+				return fmt.Errorf("barbican_region cannot be empty or whitespace")
+			}
+		}
+	}
+	
+	return nil
 }
 
 func loadConfigFile(confPath string) (*configFile, error) {
@@ -487,6 +598,11 @@ func configFromRule(rule *creationRule, kmsEncryptionContext map[string]*string)
 
 	if cryptRuleCount > 1 {
 		return nil, fmt.Errorf("error loading config: cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex, unencrypted_regex, encrypted_comment_regex, or unencrypted_comment_regex for the same rule")
+	}
+
+	// Validate Barbican configuration
+	if err := validateBarbicanConfig(rule); err != nil {
+		return nil, fmt.Errorf("error loading config: %w", err)
 	}
 
 	groups, err := getKeyGroupsFromCreationRule(rule, kmsEncryptionContext)
