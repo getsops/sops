@@ -1,5 +1,36 @@
 # Changelog
 
+## 3.12.2
+
+Improvements:
+
+* Dependency updates ([#2085](https://github.com/getsops/sops/pull/2085),
+  [#2087](https://github.com/getsops/sops/pull/2087), [#2089](https://github.com/getsops/sops/pull/2089),
+  [#2095](https://github.com/getsops/sops/pull/2095)).
+
+Bugfixes:
+
+* GCP: Revert the fix introduced in 3.12.0 that sets quota project to API
+  project in GCP KMS. This change unintentionally resulted in requiring
+  more permissions for GCP users. The original issue will be addressed in
+  another way in a future release ([#2099](https://github.com/getsops/sops/pull/2099)).
+* Ensure to delete temporary file and directory when editing in more
+  situations, like when user presses Ctrl+C or SOPS receives a SIGTERM
+  ([#2104](https://github.com/getsops/sops/pull/2104)).
+* Fix message that you need to enter (and not any key) after SOPS rejects
+  an edited file ([#2098](https://github.com/getsops/sops/pull/2098)).
+* Reject files with ``sops`` keys when editing files ([#2098](https://github.com/getsops/sops/pull/2098)).
+* Fix handling of ``--mac-only-encrypted`` option in subcommands ([#2100](https://github.com/getsops/sops/pull/2100)).
+
+Project changes:
+
+* CI dependency updates ([#2084](https://github.com/getsops/sops/pull/2084),
+  [#2091](https://github.com/getsops/sops/pull/2091), [#2101](https://github.com/getsops/sops/pull/2101),
+  [#2106](https://github.com/getsops/sops/pull/2106)).
+* Rust dependency updates for functional tests ([#2090](https://github.com/getsops/sops/pull/2090),
+  [#2105](https://github.com/getsops/sops/pull/2105)).
+* Improve CI workflows ([#2081](https://github.com/getsops/sops/pull/2081)).
+
 ## 3.12.1
 
 This is a re-release of 3.12.0 with no code changes.

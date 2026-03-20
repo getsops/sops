@@ -3,12 +3,15 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"context"
 	"crypto/sha256"
 	"fmt"
 	"io"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"strings"
+	"syscall"
 
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/cmd/sops/codes"
@@ -39,6 +42,7 @@ type runEditorUntilOkOpts struct {
 	TmpFileName    string
 	OriginalHash   []byte
 	InputStore     sops.Store
+	OutputStore    common.Store
 	ShowMasterKeys bool
 	Tree           *sops.Tree
 }
@@ -95,6 +99,24 @@ func edit(opts editOpts) ([]byte, error) {
 	return editTree(opts, tree, dataKey)
 }
 
+type cancelError struct{}
+
+func (err *cancelError) Error() string {
+	return "User canceled operation"
+}
+
+type editTreeResult struct {
+	value []byte
+	err   error
+}
+
+func createError(err error) editTreeResult {
+	return editTreeResult{
+		value: nil,
+		err:   err,
+	}
+}
+
 func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 	// Create temporary file for editing
 	tmpdir, err := os.MkdirTemp("", "")
@@ -116,25 +138,50 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 
 	tmpfileName := tmpfile.Name()
 
+	// Catch when the user presses Ctrl+C, or kills SOPS.
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
+	defer stop()
+
+	result := make(chan editTreeResult, 1)
+
+	// This goroutine handles signals that exit SOPS, that usually lead to termination
+	// before editTree() can clean up the temporary directory and file.
+	go func() {
+		<-ctx.Done()
+		result <- createError(&cancelError{})
+	}()
+
+	// This goroutine handles regular execution of editing.
+	go func() {
+		result <- editTreeImpl(tmpfile, tmpfileName, opts, tree, dataKey)
+	}()
+
+	// Wait until the first result shows up (either an exit is requested, or editTreeImpl returns).
+	res := <-result
+	return res.value, res.err
+}
+
+func editTreeImpl(tmpfile *os.File, tmpfileName string, opts editOpts, tree *sops.Tree, dataKey []byte) editTreeResult {
 	// Write to temporary file
 	var out []byte
+	var err error
 	if opts.ShowMasterKeys {
 		out, err = opts.OutputStore.EmitEncryptedFile(*tree)
 	} else {
 		out, err = opts.OutputStore.EmitPlainFile(tree.Branches)
 	}
 	if err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
+		return createError(common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree))
 	}
 	_, err = tmpfile.Write(out)
 	if err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Could not write output file: %s", err), codes.CouldNotWriteOutputFile)
+		return createError(common.NewExitError(fmt.Sprintf("Could not write output file: %s", err), codes.CouldNotWriteOutputFile))
 	}
 
 	// Compute file hash to detect if the file has been edited
 	origHash, err := hashFile(tmpfileName)
 	if err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Could not hash file: %s", err), codes.CouldNotReadInputFile)
+		return createError(common.NewExitError(fmt.Sprintf("Could not hash file: %s", err), codes.CouldNotReadInputFile))
 	}
 
 	// Close the temporary file, so that an editor can open it.
@@ -142,15 +189,19 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 	// open a file on Windows due to the Go standard library not opening
 	// files with shared delete access.
 	if err := tmpfile.Close(); err != nil {
-		return nil, err
+		return createError(err)
 	}
 
 	// Let the user edit the file
 	err = runEditorUntilOk(runEditorUntilOkOpts{
-		InputStore: opts.InputStore, OriginalHash: origHash, TmpFileName: tmpfileName,
-		ShowMasterKeys: opts.ShowMasterKeys, Tree: tree})
+		InputStore:     opts.InputStore,
+		OutputStore:    opts.OutputStore,
+		OriginalHash:   origHash,
+		TmpFileName:    tmpfileName,
+		ShowMasterKeys: opts.ShowMasterKeys,
+		Tree:           tree})
 	if err != nil {
-		return nil, err
+		return createError(err)
 	}
 
 	// Encrypt the file
@@ -158,15 +209,24 @@ func editTree(opts editOpts, tree *sops.Tree, dataKey []byte) ([]byte, error) {
 		DataKey: dataKey, Tree: tree, Cipher: opts.Cipher,
 	})
 	if err != nil {
-		return nil, err
+		return createError(err)
 	}
 
 	// Output the file
 	encryptedFile, err := opts.OutputStore.EmitEncryptedFile(*tree)
 	if err != nil {
-		return nil, common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree)
+		return createError(common.NewExitError(fmt.Sprintf("Could not marshal tree: %s", err), codes.ErrorDumpingTree))
 	}
-	return encryptedFile, nil
+	return editTreeResult{
+		value: encryptedFile,
+		err:   nil,
+	}
+}
+
+const pressKeyMsg = "Press enter to return to the editor, or Ctrl+C to exit."
+
+func waitForKeyPress() {
+	bufio.NewReader(os.Stdin).ReadByte()
 }
 
 func runEditorUntilOk(opts runEditorUntilOkOpts) error {
@@ -191,10 +251,8 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 			log.WithField(
 				"error",
 				err,
-			).Errorf("Could not load tree, probably due to invalid " +
-				"syntax. Press a key to return to the editor, or Ctrl+C to " +
-				"exit.")
-			bufio.NewReader(os.Stdin).ReadByte()
+			).Errorf("Could not load tree, probably due to invalid syntax. " + pressKeyMsg)
+			waitForKeyPress()
 			continue
 		}
 		if opts.ShowMasterKeys {
@@ -205,14 +263,22 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 				log.WithField(
 					"error",
 					err,
-				).Errorf("SOPS metadata is invalid. Press a key to " +
-					"return to the editor, or Ctrl+C to exit.")
-				bufio.NewReader(os.Stdin).ReadByte()
+				).Errorf("SOPS metadata is invalid. " + pressKeyMsg)
+				waitForKeyPress()
 				continue
 			}
 			// Replace the whole tree, because otherwise newBranches would
 			// contain the SOPS metadata
 			opts.Tree = &t
+		} else {
+			if userErr, _ := validateFileForEncryption(opts.OutputStore, newBranches); userErr != nil {
+				log.WithField(
+					"error",
+					userErr.UserError(),
+				).Errorf("Tree not valid for encryption. " + pressKeyMsg)
+				waitForKeyPress()
+				continue
+			}
 		}
 		opts.Tree.Branches = newBranches
 		needVersionUpdated, err := version.AIsNewerThanB(version.Version, opts.Tree.Metadata.Version)
@@ -223,10 +289,8 @@ func runEditorUntilOk(opts runEditorUntilOkOpts) error {
 			opts.Tree.Metadata.Version = version.Version
 		}
 		if opts.Tree.Metadata.MasterKeyCount() == 0 {
-			log.Error("No master keys were provided, so sops can't " +
-				"encrypt the file. Press a key to return to the editor, or " +
-				"Ctrl+C to exit.")
-			bufio.NewReader(os.Stdin).ReadByte()
+			log.Error("No master keys were provided, so sops can't encrypt the file. " + pressKeyMsg)
+			waitForKeyPress()
 			continue
 		}
 		break
