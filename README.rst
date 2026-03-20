@@ -325,6 +325,21 @@ switch to the REST client by setting the ``SOPS_GCP_KMS_CLIENT_TYPE`` environmen
     $ export SOPS_GCP_KMS_CLIENT_TYPE=rest  # Use REST client
     $ export SOPS_GCP_KMS_CLIENT_TYPE=grpc  # Use gRPC client (default)
 
+For sovereign cloud environments that expose a GCP-compatible KMS API at a
+non-standard endpoint (e.g. S3NS/Thales TPC: ``cloudkms.s3nsapis.fr``),
+you can override the endpoint or the universe domain:
+
+.. code:: sh
+
+    # Override the KMS endpoint directly
+    $ export SOPS_GCP_KMS_ENDPOINT=cloudkms.example.com:443
+
+    # Or derive the endpoint from the universe domain (cloudkms.<domain>:443)
+    $ export SOPS_GCP_KMS_UNIVERSE_DOMAIN=example.com
+
+Note: ``SOPS_GCP_KMS_ENDPOINT`` takes precedence over
+``SOPS_GCP_KMS_UNIVERSE_DOMAIN`` if both are set.
+
 Encrypting/decrypting with GCP KMS requires a KMS ResourceID. You can use the
 cloud console the get the ResourceID or you can create one using the gcloud
 sdk:
