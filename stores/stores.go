@@ -34,7 +34,7 @@ const (
 // This struct is just used for serialization, and SOPS uses another struct internally, sops.Metadata. It exists
 // in order to allow the binary format to stay backwards compatible over time, but at the same time allow the internal
 // representation SOPS uses to change over time.
-type Metadata struct {
+type metadata struct {
 	ShamirThreshold           int         `mapstructure:"shamir_threshold,omitempty"`
 	KeyGroups                 []keygroup  `mapstructure:"key_groups,omitempty,deep"`
 	KMSKeys                   []kmskey    `mapstructure:"kms,omitempty,deep"`
@@ -115,8 +115,8 @@ type hckmskey struct {
 }
 
 // MetadataFromInternal converts an internal SOPS metadata representation to a representation appropriate for storage
-func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
-	var m Metadata
+func metadataFromInternal(sopsMetadata sops.Metadata) metadata {
+	var m metadata
 	m.LastModified = sopsMetadata.LastModified.Format(time.RFC3339)
 	m.UnencryptedSuffix = sopsMetadata.UnencryptedSuffix
 	m.EncryptedSuffix = sopsMetadata.EncryptedSuffix
@@ -258,7 +258,7 @@ func hckmsKeysFromGroup(group sops.KeyGroup) (keys []hckmskey) {
 }
 
 // ToInternal converts a storage-appropriate Metadata struct to a SOPS internal representation
-func (m *Metadata) ToInternal() (sops.Metadata, error) {
+func (m *metadata) ToInternal() (sops.Metadata, error) {
 	lastModified, err := time.Parse(time.RFC3339, m.LastModified)
 	if err != nil {
 		return sops.Metadata{}, err
@@ -365,7 +365,7 @@ func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmske
 	return internalGroup, nil
 }
 
-func (m *Metadata) internalKeygroups() ([]sops.KeyGroup, error) {
+func (m *metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 	var internalGroups []sops.KeyGroup
 	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.HCKmsKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 || len(m.AgeKeys) > 0 {
 		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.HCKmsKeys, m.AzureKeyVaultKeys, m.VaultKeys, m.AgeKeys)

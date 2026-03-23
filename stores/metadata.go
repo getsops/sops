@@ -72,9 +72,9 @@ func sopsToGo(value interface{}) (interface{}, error) {
 	}
 }
 
-func treeBranchToMetadata(metadata sops.TreeBranch) (Metadata, error) {
-	var md Metadata
-	m, err := sopsToGoMap(metadata)
+func treeBranchToMetadata(meta sops.TreeBranch) (metadata, error) {
+	var md metadata
+	m, err := sopsToGoMap(meta)
 	if err != nil {
 		return md, err
 	}
@@ -215,7 +215,7 @@ func goToSops(value interface{}) (interface{}, error) {
 	}
 }
 
-func metadataToTreeBranch(md Metadata) (sops.TreeBranch, error) {
+func metadataToTreeBranch(md metadata) (sops.TreeBranch, error) {
 	var mdMap map[string]interface{}
 	config := mapstructure.DecoderConfig{
 		Result: &mdMap,
@@ -239,7 +239,7 @@ func metadataToTreeBranch(md Metadata) (sops.TreeBranch, error) {
 }
 
 func SerializeMetadata(data sops.Tree, opts MetadataOpts) (sops.TreeBranches, error) {
-	md, err := metadataToTreeBranch(MetadataFromInternal(data.Metadata))
+	md, err := metadataToTreeBranch(metadataFromInternal(data.Metadata))
 	if err != nil {
 		return nil, fmt.Errorf("Error while serializing metadata: %e", err)
 	}
