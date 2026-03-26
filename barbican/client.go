@@ -686,6 +686,12 @@ func (c *BarbicanClient) doRequestWithRetry(ctx context.Context, method, path st
 		log.WithError(err).WithField("attempt", attempt+1).Debug("Retryable error occurred")
 	}
 
+	// If the context was cancelled or timed out, surface that directly
+	// so callers can distinguish cancellation from server-side failures.
+	if ctx.Err() != nil {
+		return NewTimeoutError("Request cancelled by context", ctx.Err())
+	}
+
 	return NewAPIError("Request failed after maximum retry attempts", 0).
 		WithCause(lastErr).
 		WithDetails(fmt.Sprintf("Failed after %d attempts", c.config.MaxRetries+1))

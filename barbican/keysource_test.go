@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"testing"
 	"testing/quick"
@@ -843,17 +844,22 @@ func TestEncryptMultiRegion(t *testing.T) {
 	// Create mock servers for different regions
 	secretStores := make(map[string]map[string][]byte) // region -> secretUUID -> payload
 	secretCounters := make(map[string]int)             // region -> counter
+	var mu sync.Mutex // protects secretStores and secretCounters
 	
 	createMockServer := func(region string) *httptest.Server {
+		mu.Lock()
 		secretStores[region] = make(map[string][]byte)
 		secretCounters[region] = 0
+		mu.Unlock()
 		
 		return httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			switch r.Method {
 			case "POST":
 				if strings.HasSuffix(r.URL.Path, "/secrets") {
+					mu.Lock()
 					secretCounters[region]++
 					secretUUID := fmt.Sprintf("550e8400-e29b-41d4-a716-%012d", secretCounters[region])
+					mu.Unlock()
 					secretRef := fmt.Sprintf("https://barbican-%s.example.com:9311/v1/secrets/%s", region, secretUUID)
 					
 					body, err := io.ReadAll(r.Body)
@@ -874,7 +880,9 @@ func TestEncryptMultiRegion(t *testing.T) {
 						return
 					}
 					
+					mu.Lock()
 					secretStores[region][secretUUID] = payload
+					mu.Unlock()
 					
 					w.Header().Set("Content-Type", "application/json")
 					w.WriteHeader(http.StatusCreated)
