@@ -337,8 +337,7 @@ you can override the endpoint or the universe domain:
     # Or derive the endpoint from the universe domain (cloudkms.<domain>:443)
     $ export SOPS_GCP_KMS_UNIVERSE_DOMAIN=example.com
 
-Note: ``SOPS_GCP_KMS_ENDPOINT`` takes precedence over
-``SOPS_GCP_KMS_UNIVERSE_DOMAIN`` if both are set.
+.. note:: ``SOPS_GCP_KMS_ENDPOINT`` takes precedence over ``SOPS_GCP_KMS_UNIVERSE_DOMAIN`` if both are set.
 
 Encrypting/decrypting with GCP KMS requires a KMS ResourceID. You can use the
 cloud console the get the ResourceID or you can create one using the gcloud

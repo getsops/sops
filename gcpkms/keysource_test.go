@@ -197,9 +197,9 @@ func TestMasterKey_createCloudKMSService_withEndpointEnv(t *testing.T) {
 		ResourceID: testResourceID,
 	}
 
-	_, err := masterKey.newKMSClient(context.Background())
-
+	client, err := masterKey.newKMSClient(context.Background())
 	assert.NoError(t, err)
+	assert.Contains(t, client.Connection().Target(), "cloudkms.example.com")
 }
 
 func TestMasterKey_createCloudKMSService_withUniverseDomainEnv(t *testing.T) {
@@ -210,9 +210,9 @@ func TestMasterKey_createCloudKMSService_withUniverseDomainEnv(t *testing.T) {
 		ResourceID: testResourceID,
 	}
 
-	_, err := masterKey.newKMSClient(context.Background())
-
+	client, err := masterKey.newKMSClient(context.Background())
 	assert.NoError(t, err)
+	assert.Contains(t, client.Connection().Target(), "cloudkms.example.com")
 }
 
 func newGRPCServer(port string) *grpc.ClientConn {

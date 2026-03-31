@@ -330,8 +330,7 @@ func (key *MasterKey) newKMSClient(ctx context.Context) (*kms.KeyManagementClien
 
 	if endpoint := os.Getenv(SopsGCPKMSEndpointEnv); endpoint != "" {
 		opts = append(opts, option.WithEndpoint(endpoint))
-	}
-	if ud := os.Getenv(SopsGCPKMSUniverseDomainEnv); ud != "" {
+	} else if ud := os.Getenv(SopsGCPKMSUniverseDomainEnv); ud != "" {
 		opts = append(opts, option.WithUniverseDomain(ud))
 	}
 
