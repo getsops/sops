@@ -29,11 +29,20 @@ func (store *Store) Name() string {
 }
 
 func (store Store) appendCommentToList(comment string, list []interface{}) []interface{} {
+	return store.appendCommentToListWithInline(comment, list, false)
+}
+
+func (store Store) appendInlineCommentToList(comment string, list []interface{}) []interface{} {
+	return store.appendCommentToListWithInline(comment, list, true)
+}
+
+func (store Store) appendCommentToListWithInline(comment string, list []interface{}, inline bool) []interface{} {
 	if comment != "" {
 		for _, commentLine := range strings.Split(comment, "\n") {
 			if commentLine != "" {
 				list = append(list, sops.Comment{
-					Value: commentLine[1:],
+					Value:  commentLine[1:],
+					Inline: inline,
 				})
 			}
 		}
@@ -42,12 +51,21 @@ func (store Store) appendCommentToList(comment string, list []interface{}) []int
 }
 
 func (store Store) appendCommentToMap(comment string, branch sops.TreeBranch) sops.TreeBranch {
+	return store.appendCommentToMapWithInline(comment, branch, false)
+}
+
+func (store Store) appendInlineCommentToMap(comment string, branch sops.TreeBranch) sops.TreeBranch {
+	return store.appendCommentToMapWithInline(comment, branch, true)
+}
+
+func (store Store) appendCommentToMapWithInline(comment string, branch sops.TreeBranch, inline bool) sops.TreeBranch {
 	if comment != "" {
 		for _, commentLine := range strings.Split(comment, "\n") {
 			if commentLine != "" {
 				branch = append(branch, sops.TreeItem{
 					Key: sops.Comment{
-						Value: commentLine[1:],
+						Value:  commentLine[1:],
+						Inline: inline,
 					},
 					Value: nil,
 				})
@@ -69,7 +87,7 @@ func (store Store) nodeToTreeValue(node *yaml.Node, commentsWereHandled bool) (i
 		}
 		for _, item := range node.Content {
 			result = store.appendCommentToList(item.HeadComment, result)
-			result = store.appendCommentToList(item.LineComment, result)
+			result = store.appendInlineCommentToList(item.LineComment, result)
 			val, err := store.nodeToTreeValue(item, true)
 			if err != nil {
 				return nil, err
@@ -119,7 +137,7 @@ func (store Store) appendYamlNodeToTreeBranch(node *yaml.Node, branch sops.TreeB
 			handleValueComments := value.Kind == yaml.ScalarNode || value.Kind == yaml.AliasNode
 			if handleValueComments {
 				branch = store.appendCommentToMap(value.HeadComment, branch)
-				branch = store.appendCommentToMap(value.LineComment, branch)
+				branch = store.appendInlineCommentToMap(value.LineComment, branch)
 			}
 			var keyValue interface{}
 			key.Decode(&keyValue)
@@ -184,6 +202,18 @@ func (store *Store) addCommentsFoot(node *yaml.Node, comments []string) []string
 	return nil
 }
 
+func (store *Store) addCommentsLine(node *yaml.Node, comments []string) []string {
+	if len(comments) > 0 {
+		comment := "#" + strings.Join(comments, "\n#")
+		if len(node.LineComment) > 0 {
+			node.LineComment += "\n" + comment
+		} else {
+			node.LineComment = comment
+		}
+	}
+	return nil
+}
+
 func (store *Store) treeValueToNode(in interface{}) *yaml.Node {
 	switch in := in.(type) {
 	case sops.TreeBranch:
@@ -204,53 +234,75 @@ func (store *Store) treeValueToNode(in interface{}) *yaml.Node {
 }
 
 func (store *Store) appendSequence(in []interface{}, sequence *yaml.Node) {
-	var comments []string
+	var headComments []string
+	var inlineComments []string
 	var beginning bool = true
 	for _, item := range in {
 		if comment, ok := item.(sops.Comment); ok {
-			comments = append(comments, comment.Value)
+			if comment.Inline {
+				inlineComments = append(inlineComments, comment.Value)
+			} else {
+				headComments = append(headComments, comment.Value)
+			}
 		} else {
 			if beginning {
-				comments = store.addCommentsHead(sequence, comments)
+				headComments = store.addCommentsHead(sequence, headComments)
 				beginning = false
 			}
 			itemNode := store.treeValueToNode(item)
-			comments = store.addCommentsHead(itemNode, comments)
+			headComments = store.addCommentsHead(itemNode, headComments)
+			inlineComments = store.addCommentsLine(itemNode, inlineComments)
 			sequence.Content = append(sequence.Content, itemNode)
 		}
 	}
-	if len(comments) > 0 {
+	if len(headComments) > 0 {
 		if beginning {
-			store.addCommentsHead(sequence, comments)
+			store.addCommentsHead(sequence, headComments)
 		} else {
-			store.addCommentsFoot(sequence.Content[len(sequence.Content)-1], comments)
+			store.addCommentsFoot(sequence.Content[len(sequence.Content)-1], headComments)
 		}
+	}
+	if len(inlineComments) > 0 && !beginning {
+		store.addCommentsFoot(sequence.Content[len(sequence.Content)-1], inlineComments)
 	}
 }
 
 func (store *Store) appendTreeBranch(branch sops.TreeBranch, mapping *yaml.Node) {
-	var comments []string
+	var headComments []string
+	var inlineComments []string
 	var beginning bool = true
 	for _, item := range branch {
 		if comment, ok := item.Key.(sops.Comment); ok {
-			comments = append(comments, comment.Value)
+			if comment.Inline {
+				inlineComments = append(inlineComments, comment.Value)
+			} else {
+				headComments = append(headComments, comment.Value)
+			}
 		} else {
 			if beginning {
-				comments = store.addCommentsHead(mapping, comments)
+				headComments = store.addCommentsHead(mapping, headComments)
 				beginning = false
 			}
 			var keyNode = &yaml.Node{}
 			keyNode.Encode(item.Key)
-			comments = store.addCommentsHead(keyNode, comments)
+			headComments = store.addCommentsHead(keyNode, headComments)
 			valueNode := store.treeValueToNode(item.Value)
+			inlineComments = store.addCommentsLine(valueNode, inlineComments)
 			mapping.Content = append(mapping.Content, keyNode, valueNode)
 		}
 	}
-	if len(comments) > 0 {
+	// Trailing head comments
+	if len(headComments) > 0 {
 		if beginning {
-			store.addCommentsHead(mapping, comments)
+			store.addCommentsHead(mapping, headComments)
 		} else {
-			store.addCommentsFoot(mapping.Content[len(mapping.Content)-2], comments)
+			store.addCommentsFoot(mapping.Content[len(mapping.Content)-2], headComments)
+		}
+	}
+	// Trailing inline comments (rare, but handle gracefully as foot comments)
+	if len(inlineComments) > 0 {
+		if !beginning && len(mapping.Content) >= 2 {
+			store.addCommentsFoot(mapping.Content[len(mapping.Content)-1], inlineComments)
 		}
 	}
 }

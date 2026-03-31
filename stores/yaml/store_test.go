@@ -367,6 +367,51 @@ func TestComment7(t *testing.T) {
 	assert.Equal(t, COMMENT_7_OUT, bytes)
 }
 
+// Regression test for inline comment preservation through load/emit roundtrip.
+// https://github.com/getsops/sops/issues/2130
+var COMMENT_INLINE = []byte(`key1: value1 # inline comment
+key2: value2
+# head comment
+key3: value3 # another inline
+`)
+
+func TestCommentInline(t *testing.T) {
+	branches, err := (&Store{}).LoadPlainFile(COMMENT_INLINE)
+	assert.Nil(t, err)
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, string(COMMENT_INLINE), string(bytes))
+	assert.Equal(t, COMMENT_INLINE, bytes)
+}
+
+var COMMENT_INLINE_SEQ = []byte(`items:
+    - value1 # inline on list item
+    - value2
+`)
+
+func TestCommentInlineSequence(t *testing.T) {
+	branches, err := (&Store{}).LoadPlainFile(COMMENT_INLINE_SEQ)
+	assert.Nil(t, err)
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, string(COMMENT_INLINE_SEQ), string(bytes))
+	assert.Equal(t, COMMENT_INLINE_SEQ, bytes)
+}
+
+var COMMENT_INLINE_MIXED = []byte(`# heading
+key1: value1 # inline
+key2: value2
+`)
+
+func TestCommentInlineMixed(t *testing.T) {
+	branches, err := (&Store{}).LoadPlainFile(COMMENT_INLINE_MIXED)
+	assert.Nil(t, err)
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, string(COMMENT_INLINE_MIXED), string(bytes))
+	assert.Equal(t, COMMENT_INLINE_MIXED, bytes)
+}
+
 func TestIndent1(t *testing.T) {
 	// First iteration: load and store
 	branches, err := (&Store{}).LoadPlainFile(INDENT_1_IN)
