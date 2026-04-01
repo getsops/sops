@@ -412,6 +412,20 @@ func TestCommentInlineMixed(t *testing.T) {
 	assert.Equal(t, COMMENT_INLINE_MIXED, bytes)
 }
 
+var COMMENT_INLINE_NESTED = []byte(`parent:
+    child1: value1 # nested inline
+    child2: value2
+`)
+
+func TestCommentInlineNested(t *testing.T) {
+	branches, err := (&Store{}).LoadPlainFile(COMMENT_INLINE_NESTED)
+	assert.Nil(t, err)
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, string(COMMENT_INLINE_NESTED), string(bytes))
+	assert.Equal(t, COMMENT_INLINE_NESTED, bytes)
+}
+
 func TestIndent1(t *testing.T) {
 	// First iteration: load and store
 	branches, err := (&Store{}).LoadPlainFile(INDENT_1_IN)
