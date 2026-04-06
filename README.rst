@@ -1391,9 +1391,6 @@ When operating on stdin, use the ``--input-type`` and ``--output-type`` flags as
 
 JSON and JSON_binary indentation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-**Note:** SOPS only supports JSON files with a top-level object (i.e., starting with ``{``),
-not top-level arrays or other JSON types. If you need to encrypt a JSON array, wrap it in an
-object first, for example: ``{"data": [...]}``.
 
 SOPS indents ``JSON`` files by default using one ``tab``. However, you can change
 this default behaviour to use ``spaces`` by either using the additional ``--indent=2`` CLI option or
