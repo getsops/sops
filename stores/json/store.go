@@ -258,10 +258,10 @@ func (store Store) treeBranchFromJSON(in []byte) (sops.TreeBranch, error) {
 	}
 	if delim, ok := value.(json.Delim); ok {
 		if delim.String() != "{" {
-			return nil, fmt.Errorf("Expected JSON object start, got delimiter %s instead", value)
+			return nil, fmt.Errorf("SOPS only supports JSON files with a top-level object (starting with '{'), not arrays or other types. Got delimiter %s instead. To encrypt this file, wrap it in an object, e.g., {\"data\": [...]}", value)
 		}
 	} else {
-		return nil, fmt.Errorf("Expected JSON object start, got %#v of type %T instead", value, value)
+		return nil, fmt.Errorf("SOPS only supports JSON files with a top-level object (starting with '{'), not other JSON types. Got %#v of type %T instead", value, value)
 	}
 	return store.treeBranchFromJSONDecoder(dec)
 }
