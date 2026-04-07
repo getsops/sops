@@ -104,7 +104,7 @@ func (i *LazyScryptIdentity) Unwrap(stanzas []*age.Stanza) (fileKey []byte, err 
 	return fileKey, err
 }
 
-func unwrapIdentities(location string, reader io.Reader) (ParsedIdentities, error) {
+func unwrapIdentities(location string, shortID string, reader io.Reader) (ParsedIdentities, error) {
 	b := bufio.NewReader(reader)
 	p, _ := b.Peek(14) // length of "age-encryption" and "-----BEGIN AGE"
 	peeked := string(p)
@@ -134,7 +134,7 @@ func unwrapIdentities(location string, reader io.Reader) (ParsedIdentities, erro
 					log.Errorf("failed to close connection with gpg-agent: %s", err)
 				}
 			}(conn)
-			err = conn.RemoveFromCache(location)
+			err = conn.RemoveFromCache(shortID)
 			if err != nil {
 				log.Warnf("gpg-agent remove cache request errored: %s", err)
 				return
@@ -154,8 +154,7 @@ func unwrapIdentities(location string, reader io.Reader) (ParsedIdentities, erro
 				}(conn)
 
 				req := gpgagent.PassphraseRequest{
-					// TODO is the cachekey good enough?
-					CacheKey: location,
+					CacheKey: shortID,
 					Prompt:   "Passphrase",
 					Desc:     fmt.Sprintf("Enter passphrase for identity '%s':", location),
 				}
