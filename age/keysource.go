@@ -412,7 +412,7 @@ func (d *readerData) getShortID() string {
 		return fmt.Sprintf("sops-%s", d.source)
 	}
 	pathHash := sha256.Sum256([]byte(d.path))
-	return fmt.Sprintf("sops-%s-%s", d.source, base64.StdEncoding.EncodeToString(pathHash[:]))
+	return fmt.Sprintf("sops-%s-%s", d.source, base64.StdEncoding.EncodeToString(pathHash[:27]))
 }
 
 // loadIdentities attempts to load the age identities based on runtime
