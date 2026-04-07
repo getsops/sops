@@ -255,15 +255,13 @@ func (store *Store) appendSequence(in []interface{}, sequence *yaml.Node) {
 			sequence.Content = append(sequence.Content, itemNode)
 		}
 	}
+	headComments = append(headComments, inlineComments...)
 	if len(headComments) > 0 {
 		if beginning {
 			store.addCommentsHead(sequence, headComments)
 		} else {
 			store.addCommentsFoot(sequence.Content[len(sequence.Content)-1], headComments)
 		}
-	}
-	if len(inlineComments) > 0 && !beginning {
-		store.addCommentsFoot(sequence.Content[len(sequence.Content)-1], inlineComments)
 	}
 }
 
@@ -291,18 +289,12 @@ func (store *Store) appendTreeBranch(branch sops.TreeBranch, mapping *yaml.Node)
 			mapping.Content = append(mapping.Content, keyNode, valueNode)
 		}
 	}
-	// Trailing head comments
+	headComments = append(headComments, inlineComments...)
 	if len(headComments) > 0 {
 		if beginning {
 			store.addCommentsHead(mapping, headComments)
 		} else {
 			store.addCommentsFoot(mapping.Content[len(mapping.Content)-2], headComments)
-		}
-	}
-	// Trailing inline comments (rare, but handle gracefully as foot comments)
-	if len(inlineComments) > 0 {
-		if !beginning && len(mapping.Content) >= 2 {
-			store.addCommentsFoot(mapping.Content[len(mapping.Content)-1], inlineComments)
 		}
 	}
 }
