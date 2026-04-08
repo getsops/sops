@@ -3,6 +3,8 @@ package age
 import (
 	"bufio"
 	"bytes"
+	"crypto/sha256"
+	"encoding/base64"
 	"errors"
 	"fmt"
 	"io"
@@ -227,7 +229,7 @@ func formatError(msg string, err error, errs errSet, unusedLocations []string) e
 		} else if count == 2 {
 			unusedSuffix = fmt.Sprintf("s '%s' and '%s'", unusedLocations[0], unusedLocations[1])
 		} else {
-			unusedSuffix = fmt.Sprintf("s '%s', and '%s'", strings.Join(unusedLocations[:count - 1], "', '"), unusedLocations[count - 1])
+			unusedSuffix = fmt.Sprintf("s '%s', and '%s'", strings.Join(unusedLocations[:count-1], "', '"), unusedLocations[count-1])
 		}
 		unusedSuffix = fmt.Sprintf(". Did not find keys in location%s.", unusedSuffix)
 	}
@@ -399,6 +401,20 @@ func getUserConfigDir() (string, error) {
 	return os.UserConfigDir()
 }
 
+type readerData struct {
+	reader io.Reader
+	source string
+	path   string
+}
+
+func (d *readerData) getShortID() string {
+	if len(d.path) == 0 {
+		return fmt.Sprintf("sops-%s", d.source)
+	}
+	pathHash := sha256.Sum256([]byte(d.path))
+	return fmt.Sprintf("sops-%s-%s", d.source, base64.StdEncoding.EncodeToString(pathHash[:27]))
+}
+
 // loadIdentities attempts to load the age identities based on runtime
 // environment configurations (e.g. SopsAgeKeyEnv, SopsAgeKeyFileEnv,
 // SopsAgeSshPrivateKeyFileEnv, SopsAgeKeyUserConfigPath). It will load all
@@ -406,10 +422,14 @@ func getUserConfigDir() (string, error) {
 func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 	identities, unusedLocations, errs := key.loadAgeSSHIdentities()
 
-	var readers = make(map[string]io.Reader, 0)
+	var readers = make(map[string]readerData, 0)
 
 	if ageKey, ok := os.LookupEnv(SopsAgeKeyEnv); ok {
-		readers[SopsAgeKeyEnv] = strings.NewReader(ageKey)
+		readers[SopsAgeKeyEnv] = readerData{
+			reader: strings.NewReader(ageKey),
+			source: SopsAgeKeyEnv,
+			path:   "",
+		}
 	} else {
 		unusedLocations = append(unusedLocations, SopsAgeKeyEnv)
 	}
@@ -420,7 +440,11 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 			errs = append(errs, fmt.Errorf("failed to open %s file: %w", SopsAgeKeyFileEnv, err))
 		} else {
 			defer f.Close()
-			readers[SopsAgeKeyFileEnv] = f
+			readers[SopsAgeKeyFileEnv] = readerData{
+				reader: f,
+				source: SopsAgeKeyFileEnv,
+				path:   "",
+			}
 		}
 	} else {
 		unusedLocations = append(unusedLocations, SopsAgeKeyFileEnv)
@@ -431,7 +455,11 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 		if err != nil {
 			errs = append(errs, err)
 		} else {
-			readers[SopsAgeKeyCmdEnv] = bytes.NewReader(out)
+			readers[SopsAgeKeyCmdEnv] = readerData{
+				reader: bytes.NewReader(out),
+				source: SopsAgeKeyCmdEnv,
+				path:   "",
+			}
 		}
 	} else {
 		unusedLocations = append(unusedLocations, SopsAgeKeyCmdEnv)
@@ -449,12 +477,16 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 			unusedLocations = append(unusedLocations, ageKeyFilePath)
 		} else if err == nil {
 			defer f.Close()
-			readers[ageKeyFilePath] = f
+			readers[ageKeyFilePath] = readerData{
+				reader: f,
+				source: "file",
+				path:   ageKeyFilePath,
+			}
 		}
 	}
 
 	for location, r := range readers {
-		ids, err := unwrapIdentities(location, r)
+		ids, err := unwrapIdentities(location, r.getShortID(), r.reader)
 		if err != nil {
 			errs = append(errs, err)
 		} else {
