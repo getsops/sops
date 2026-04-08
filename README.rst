@@ -417,6 +417,7 @@ from the commandline:
     $ az keyvault key show --name sops-key --vault-name $keyvault_name --query key.kid
 
     https://sops.vault.azure.net/keys/sops-key/some-string
+
 .. note::
 
   The ``get`` key permission is required when the key version is ommited (for example if the URL ends with a trailing slash). In that case SOPS calls the Azure Key Vault API to resolve the latest key version, which requires the ``get`` permission. If you specifty an explicit key version in the URL you can omit ``get``, but this means you will need to update your configuration every time the key is rotated.
