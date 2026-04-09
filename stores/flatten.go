@@ -1,81 +1,17 @@
 package stores
 
 import (
-	"encoding/json"
 	"fmt"
+	"reflect"
+	"slices"
 	"strconv"
 	"strings"
+
+	"github.com/getsops/sops/v3"
 )
 
 const mapSeparator = "__map_"
 const listSeparator = "__list_"
-
-// flattenAndMerge flattens the provided value and merges into the
-// into map using prefix
-func flattenAndMerge(into map[string]interface{}, prefix string, value interface{}) {
-	flattenedValue := flattenValue(value)
-	if flattenedValue, ok := flattenedValue.(map[string]interface{}); ok {
-		for flatK, flatV := range flattenedValue {
-			into[prefix+flatK] = flatV
-		}
-	} else {
-		into[prefix] = value
-	}
-}
-
-func flattenValue(value interface{}) interface{} {
-	var output interface{}
-	switch value := value.(type) {
-	case map[string]interface{}:
-		newMap := make(map[string]interface{})
-		for k, v := range value {
-			flattenAndMerge(newMap, mapSeparator+k, v)
-		}
-		output = newMap
-	case []interface{}:
-		newMap := make(map[string]interface{})
-		for i, v := range value {
-			flattenAndMerge(newMap, listSeparator+fmt.Sprintf("%d", i), v)
-		}
-		output = newMap
-	default:
-		output = value
-	}
-	return output
-}
-
-// Flatten flattens a map with potentially nested maps into a flat
-// map. Only string keys are allowed on both the top-level map and
-// child maps.
-func Flatten(in map[string]interface{}) map[string]interface{} {
-	newMap := make(map[string]interface{})
-	for k, v := range in {
-		if flat, ok := flattenValue(v).(map[string]interface{}); ok {
-			for flatK, flatV := range flat {
-				newMap[k+flatK] = flatV
-			}
-		} else {
-			newMap[k] = v
-		}
-	}
-	return newMap
-}
-
-// FlattenMetadata flattens a Metadata struct into a flat map.
-func FlattenMetadata(md Metadata) (map[string]interface{}, error) {
-	var mdMap map[string]interface{}
-	jsonBytes, err := json.Marshal(md)
-	if err != nil {
-		return nil, err
-	}
-	err = json.Unmarshal(jsonBytes, &mdMap)
-	if err != nil {
-		return nil, err
-	}
-
-	flat := Flatten(mdMap)
-	return flat, nil
-}
 
 type token interface{}
 
@@ -130,91 +66,6 @@ func tokenize(path string) []token {
 	return tokens
 }
 
-// unflatten takes the currentNode, currentToken, nextToken and value
-// and populates currentNode such that currentToken can be considered
-// processed. It inspects nextToken to decide what type to allocate
-// and assign under currentNode.
-func unflatten(currentNode interface{}, currentToken, nextToken token, value interface{}) interface{} {
-	switch currentToken := currentToken.(type) {
-	case mapToken:
-		currentNode := currentNode.(map[string]interface{})
-		switch nextToken := nextToken.(type) {
-		case mapToken:
-			if _, ok := currentNode[currentToken.key]; !ok {
-				currentNode[currentToken.key] = make(map[string]interface{})
-			}
-			next := currentNode[currentToken.key].(map[string]interface{})
-			return next
-		case listToken:
-			if _, ok := currentNode[currentToken.key]; !ok {
-				currentNode[currentToken.key] = make([]interface{}, nextToken.position+1)
-			}
-			next := currentNode[currentToken.key].([]interface{})
-			if nextToken.position >= len(next) {
-				// Grow the slice and reassign it
-				newNext := make([]interface{}, nextToken.position+1)
-				copy(newNext, next)
-				next = newNext
-				currentNode[currentToken.key] = next
-			}
-			return next
-		default:
-			currentNode[currentToken.key] = value
-		}
-	case listToken:
-		currentNode := currentNode.([]interface{})
-		switch nextToken := nextToken.(type) {
-		case mapToken:
-			if currentNode[currentToken.position] == nil {
-				currentNode[currentToken.position] = make(map[string]interface{})
-			}
-			next := currentNode[currentToken.position].(map[string]interface{})
-			return next
-		case listToken:
-			if currentNode[currentToken.position] == nil {
-				currentNode[currentToken.position] = make([]interface{}, nextToken.position+1)
-			}
-			next := currentNode[currentToken.position].([]interface{})
-			if nextToken.position >= len(next) {
-				// Grow the slice and reassign it
-				newNext := make([]interface{}, nextToken.position+1)
-				copy(newNext, next)
-				next = newNext
-				currentNode[currentToken.position] = next
-			}
-			return next
-		default:
-			currentNode[currentToken.position] = value
-		}
-	}
-	return nil
-}
-
-// Unflatten unflattens a map flattened by Flatten
-func Unflatten(in map[string]interface{}) map[string]interface{} {
-	newMap := make(map[string]interface{})
-	for k, v := range in {
-		var current interface{} = newMap
-		tokens := append(tokenize(k), nil)
-		for i := 0; i < len(tokens)-1; i++ {
-			current = unflatten(current, tokens[i], tokens[i+1], v)
-		}
-	}
-	return newMap
-}
-
-// UnflattenMetadata unflattens a map flattened by FlattenMetadata into Metadata
-func UnflattenMetadata(in map[string]interface{}) (Metadata, error) {
-	m := Unflatten(in)
-	var md Metadata
-	jsonBytes, err := json.Marshal(m)
-	if err != nil {
-		return md, err
-	}
-	err = json.Unmarshal(jsonBytes, &md)
-	return md, err
-}
-
 // DecodeNewLines replaces \\n with \n for all string values in the map.
 // Used by config stores that do not handle multi-line values (ini, dotenv).
 func DecodeNewLines(m map[string]interface{}) {
@@ -235,57 +86,153 @@ func EncodeNewLines(m map[string]interface{}) {
 	}
 }
 
-// DecodeNonStrings will look for known metadata keys that are not strings and decode to the appropriate type
-func DecodeNonStrings(m map[string]interface{}) error {
-	if v, ok := m["mac_only_encrypted"]; ok {
-		m["mac_only_encrypted"] = false
-		if v == "true" {
-			m["mac_only_encrypted"] = true
+func descendMap(branch sops.TreeBranch, key string) (sops.TreeBranch, reflect.Value) {
+	for idx, elt := range branch {
+		if elt.Key == key {
+			return branch, reflect.ValueOf(&branch[idx].Value)
 		}
 	}
-	if v, ok := m["shamir_threshold"]; ok {
-		switch val := v.(type) {
-		case string:
-			vInt, err := strconv.Atoi(val)
-			if err != nil {
-				// Older versions of SOPS stored shamir_threshold as a floating point representation
-				// of the actual integer. Try to parse a floating point number and see whether it
-				// can be converted without loss to an integer.
-				vFloat, floatErr := strconv.ParseFloat(val, 64)
-				vInt = int(vFloat)
-				if floatErr != nil || float64(vInt) != vFloat {
-					return fmt.Errorf("shamir_threshold is not an integer: %s", err.Error())
-				}
-			}
-			m["shamir_threshold"] = vInt
-		case int:
-			m["shamir_threshold"] = val
-		default:
-			return fmt.Errorf("shamir_threshold is neither a string nor an integer, but %T", val)
-		}
-	}
-	return nil
+	newBranch := append(branch, sops.TreeItem{
+		Key:   key,
+		Value: nil,
+	})
+	return newBranch, reflect.ValueOf(&newBranch[len(newBranch)-1].Value)
 }
 
-// EncodeNonStrings will look for known metadata keys that are not strings and will encode it to strings
-func EncodeNonStrings(m map[string]interface{}) {
-	if v, found := m["mac_only_encrypted"]; found {
-		if vBool, ok := v.(bool); ok {
-			m["mac_only_encrypted"] = "false"
-			if vBool {
-				m["mac_only_encrypted"] = "true"
+func descendList(array []interface{}, index int) ([]interface{}, reflect.Value) {
+	if index >= len(array) {
+		if index >= cap(array) {
+			array = slices.Grow(array, index+1-cap(array))
+		}
+		array = array[:index+1]
+	}
+	return array, reflect.ValueOf(&array[index])
+}
+
+func descend(value reflect.Value, t token) (reflect.Value, error) {
+	interfaceType := reflect.TypeOf((*interface{})(nil))
+	switch currToken := t.(type) {
+	case mapToken:
+		// This special case is only needed for the root
+		treeBranchPtrType := reflect.TypeOf((*sops.TreeBranch)(nil))
+		if value.Type() == treeBranchPtrType {
+			v := *value.Interface().(*sops.TreeBranch)
+			v, nextVal := descendMap(v, currToken.key)
+			reflect.Indirect(value).Set(reflect.ValueOf(v))
+			return nextVal, nil
+		}
+		if value.Type() == interfaceType {
+			val := reflect.Indirect(value)
+			if val.IsNil() {
+				v, nextVal := descendMap(nil, currToken.key)
+				val.Set(reflect.ValueOf(v))
+				return nextVal, nil
+			}
+			if v, ok := val.Interface().(sops.TreeBranch); ok {
+				v, nextVal := descendMap(v, currToken.key)
+				val.Set(reflect.ValueOf(v))
+				return nextVal, nil
 			}
 		}
-	}
-	if v, found := m["shamir_threshold"]; found {
-		if vInt, ok := v.(int); ok {
-			m["shamir_threshold"] = fmt.Sprintf("%d", vInt)
+		return reflect.Value{}, fmt.Errorf("Type mismatch: can only use string key for map")
+	case listToken:
+		if value.Type() == interfaceType {
+			val := reflect.Indirect(value)
+			if val.IsNil() {
+				v, nextVal := descendList(nil, currToken.position)
+				val.Set(reflect.ValueOf(v))
+				return nextVal, nil
+			}
+			if v, ok := val.Interface().([]interface{}); ok {
+				v, nextVal := descendList(v, currToken.position)
+				val.Set(reflect.ValueOf(v))
+				return nextVal, nil
+			}
 		}
-		// FlattenMetadata serializes the input as JSON and then deserializes it.
-		// The JSON unserializer treats every number as a float, so the above 'if'
-		// never applies in that situation.
-		if vFloat, ok := v.(float64); ok {
-			m["shamir_threshold"] = fmt.Sprintf("%.0f", vFloat)
+		return reflect.Value{}, fmt.Errorf("Type mismatch: can only use integer key for list")
+	default:
+		return reflect.Value{}, fmt.Errorf("Internal error: unknown token %q", t)
+	}
+}
+
+func unflattenTreeBranch(branch sops.TreeBranch) (sops.TreeBranch, error) {
+	var result sops.TreeBranch
+	for _, item := range branch {
+		if _, ok := item.Key.(sops.Comment); ok {
+			continue
+		}
+		if key, ok := item.Key.(string); ok {
+			current := reflect.ValueOf(&result)
+			tokens := tokenize(key)
+			for _, token := range tokens {
+				var err error
+				current, err = descend(current, token)
+				if err != nil {
+					return nil, fmt.Errorf("Error while unflattening %q: %w", key, err)
+				}
+			}
+			reflect.Indirect(current).Set(reflect.ValueOf(item.Value))
+			continue
+		} else {
+			return nil, fmt.Errorf("Found non-string key %q when unflattening", item.Key)
 		}
 	}
+	return result, nil
+}
+
+func flattenDescendValue(value interface{}, key string, destination sops.TreeBranch, destinationMap *map[string]bool) (sops.TreeBranch, error) {
+	switch value := value.(type) {
+	case sops.TreeBranch:
+		return flattenDescendMap(value, key+mapSeparator, destination, destinationMap)
+	case []interface{}:
+		return flattenDescendArray(value, key+listSeparator, destination, destinationMap)
+	}
+	if _, ok := (*destinationMap)[key]; ok {
+		return nil, fmt.Errorf("Found key collision %q while flattening", key)
+	}
+	destination = append(destination, sops.TreeItem{
+		Key:   key,
+		Value: value,
+	})
+	(*destinationMap)[key] = true
+	return destination, nil
+}
+
+func flattenDescendMap(branch sops.TreeBranch, prefix string, destination sops.TreeBranch, destinationMap *map[string]bool) (sops.TreeBranch, error) {
+	for _, item := range branch {
+		if _, ok := item.Key.(sops.Comment); ok {
+			continue
+		}
+		if key, ok := item.Key.(string); ok {
+			var err error
+			destination, err = flattenDescendValue(item.Value, prefix+key, destination, destinationMap)
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			return nil, fmt.Errorf("Found non-string key %q when flattening", item.Key)
+		}
+	}
+	return destination, nil
+}
+
+func flattenDescendArray(array []interface{}, prefix string, destination sops.TreeBranch, destinationMap *map[string]bool) (sops.TreeBranch, error) {
+	i := 0
+	for _, item := range array {
+		if _, ok := item.(sops.Comment); ok {
+			continue
+		}
+		var err error
+		destination, err = flattenDescendValue(item, fmt.Sprintf("%s%d", prefix, i), destination, destinationMap)
+		if err != nil {
+			return nil, err
+		}
+		i += 1
+	}
+	return destination, nil
+}
+
+func flattenTreeBranch(branch sops.TreeBranch, prefix string) (sops.TreeBranch, error) {
+	destinationMap := map[string]bool{}
+	return flattenDescendMap(branch, prefix, nil, &destinationMap)
 }
