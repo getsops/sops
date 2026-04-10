@@ -18,6 +18,7 @@ import (
 	"github.com/getsops/sops/v3"
 	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/azkv"
+	"github.com/getsops/sops/v3/acskms"
 	"github.com/getsops/sops/v3/gcpkms"
 	"github.com/getsops/sops/v3/hckms"
 	"github.com/getsops/sops/v3/hcvault"
@@ -49,6 +50,7 @@ type Metadata struct {
 	KMSKeys                   []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
 	GCPKMSKeys                []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
 	HCKmsKeys                 []hckmskey  `yaml:"hckms,omitempty" json:"hckms,omitempty"`
+	ACSKMSKeys                []acskmskey `yaml:"acs_kms,omitempty" json:"acs_kms,omitempty"`
 	AzureKeyVaultKeys         []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
 	VaultKeys                 []vaultkey  `yaml:"hc_vault,omitempty" json:"hc_vault,omitempty"`
 	AgeKeys                   []agekey    `yaml:"age,omitempty" json:"age,omitempty"`
@@ -70,6 +72,7 @@ type keygroup struct {
 	KMSKeys           []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
 	GCPKMSKeys        []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
 	HCKmsKeys         []hckmskey  `yaml:"hckms,omitempty" json:"hckms,omitempty"`
+	ACSKMSKeys        []acskmskey `yaml:"acs_kms,omitempty" json:"acs_kms,omitempty"`
 	AzureKeyVaultKeys []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
 	VaultKeys         []vaultkey  `yaml:"hc_vault" json:"hc_vault"`
 	AgeKeys           []agekey    `yaml:"age" json:"age"`
@@ -123,6 +126,12 @@ type hckmskey struct {
 	EncryptedDataKey string `yaml:"enc" json:"enc"`
 }
 
+type acskmskey struct {
+	Arn              string `yaml:"arn" json:"arn"`
+	CreatedAt        string `yaml:"created_at" json:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc"`
+}
+
 // MetadataFromInternal converts an internal SOPS metadata representation to a representation appropriate for storage
 func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 	var m Metadata
@@ -143,6 +152,7 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 		m.KMSKeys = kmsKeysFromGroup(group)
 		m.GCPKMSKeys = gcpkmsKeysFromGroup(group)
 		m.HCKmsKeys = hckmsKeysFromGroup(group)
+		m.ACSKMSKeys = acskmsKeysFromGroup(group)
 		m.VaultKeys = vaultKeysFromGroup(group)
 		m.AzureKeyVaultKeys = azkvKeysFromGroup(group)
 		m.AgeKeys = ageKeysFromGroup(group)
@@ -153,6 +163,7 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 				PGPKeys:           pgpKeysFromGroup(group),
 				GCPKMSKeys:        gcpkmsKeysFromGroup(group),
 				HCKmsKeys:         hckmsKeysFromGroup(group),
+				ACSKMSKeys:        acskmsKeysFromGroup(group),
 				VaultKeys:         vaultKeysFromGroup(group),
 				AzureKeyVaultKeys: azkvKeysFromGroup(group),
 				AgeKeys:           ageKeysFromGroup(group),
@@ -266,6 +277,20 @@ func hckmsKeysFromGroup(group sops.KeyGroup) (keys []hckmskey) {
 	return
 }
 
+func acskmsKeysFromGroup(group sops.KeyGroup) (keys []acskmskey) {
+	for _, key := range group {
+		switch key := key.(type) {
+		case *acskms.MasterKey:
+			keys = append(keys, acskmskey{
+				Arn:              key.Arn,
+				CreatedAt:        key.CreationDate.Format(time.RFC3339),
+				EncryptedDataKey: key.EncryptedKey,
+			})
+		}
+	}
+	return
+}
+
 // ToInternal converts a storage-appropriate Metadata struct to a SOPS internal representation
 func (m *Metadata) ToInternal() (sops.Metadata, error) {
 	lastModified, err := time.Parse(time.RFC3339, m.LastModified)
@@ -320,7 +345,7 @@ func (m *Metadata) ToInternal() (sops.Metadata, error) {
 	}, nil
 }
 
-func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, hckmsKeys []hckmskey, azkvKeys []azkvkey, vaultKeys []vaultkey, ageKeys []agekey) (sops.KeyGroup, error) {
+func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, hckmsKeys []hckmskey, acsKmsKeys []acskmskey, azkvKeys []azkvkey, vaultKeys []vaultkey, ageKeys []agekey) (sops.KeyGroup, error) {
 	var internalGroup sops.KeyGroup
 	for _, kmsKey := range kmsKeys {
 		k, err := kmsKey.toInternal()
@@ -338,6 +363,13 @@ func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmske
 	}
 	for _, hckmsKey := range hckmsKeys {
 		k, err := hckmsKey.toInternal()
+		if err != nil {
+			return nil, err
+		}
+		internalGroup = append(internalGroup, k)
+	}
+	for _, acsKmsKey := range acsKmsKeys {
+		k, err := acsKmsKey.toInternal()
 		if err != nil {
 			return nil, err
 		}
@@ -376,8 +408,8 @@ func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmske
 
 func (m *Metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 	var internalGroups []sops.KeyGroup
-	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.HCKmsKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 || len(m.AgeKeys) > 0 {
-		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.HCKmsKeys, m.AzureKeyVaultKeys, m.VaultKeys, m.AgeKeys)
+	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.HCKmsKeys) > 0 || len(m.ACSKMSKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 || len(m.AgeKeys) > 0 {
+		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.HCKmsKeys, m.ACSKMSKeys, m.AzureKeyVaultKeys, m.VaultKeys, m.AgeKeys)
 		if err != nil {
 			return nil, err
 		}
@@ -385,7 +417,7 @@ func (m *Metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 		return internalGroups, nil
 	} else if len(m.KeyGroups) > 0 {
 		for _, group := range m.KeyGroups {
-			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.HCKmsKeys, group.AzureKeyVaultKeys, group.VaultKeys, group.AgeKeys)
+			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.HCKmsKeys, group.ACSKMSKeys, group.AzureKeyVaultKeys, group.VaultKeys, group.AgeKeys)
 			if err != nil {
 				return nil, err
 			}
@@ -481,6 +513,20 @@ func (hckmsKey *hckmskey) toInternal() (*hckms.MasterKey, error) {
 		return nil, err
 	}
 	key.EncryptedKey = hckmsKey.EncryptedDataKey
+	key.CreationDate = creationDate
+	return key, nil
+}
+
+func (acsKmsKey *acskmskey) toInternal() (*acskms.MasterKey, error) {
+	creationDate, err := time.Parse(time.RFC3339, acsKmsKey.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+	key, err := acskms.NewMasterKey(acsKmsKey.Arn)
+	if err != nil {
+		return nil, err
+	}
+	key.EncryptedKey = acsKmsKey.EncryptedDataKey
 	key.CreationDate = creationDate
 	return key, nil
 }
