@@ -17,6 +17,7 @@ import (
 
 // Server is a key service server that uses SOPS MasterKeys to fulfill requests
 type Server struct {
+	UnimplementedKeyServiceServer
 	// Prompt indicates whether the server should prompt before decrypting or encrypting data
 	Prompt bool
 }
@@ -52,9 +53,10 @@ func (ks *Server) encryptWithGcpKms(key *GcpKmsKey, plaintext []byte) ([]byte, e
 
 func (ks *Server) encryptWithAzureKeyVault(key *AzureKeyVaultKey, plaintext []byte) ([]byte, error) {
 	azkvKey := azkv.MasterKey{
-		VaultURL: key.VaultUrl,
-		Name:     key.Name,
-		Version:  key.Version,
+		VaultURL:  key.VaultUrl,
+		Name:      key.Name,
+		Version:   key.Version,
+		PublicKey: append([]byte(nil), key.PublicKey...),
 	}
 	err := azkvKey.Encrypt(plaintext)
 	if err != nil {
@@ -125,9 +127,10 @@ func (ks *Server) decryptWithGcpKms(key *GcpKmsKey, ciphertext []byte) ([]byte, 
 
 func (ks *Server) decryptWithAzureKeyVault(key *AzureKeyVaultKey, ciphertext []byte) ([]byte, error) {
 	azkvKey := azkv.MasterKey{
-		VaultURL: key.VaultUrl,
-		Name:     key.Name,
-		Version:  key.Version,
+		VaultURL:  key.VaultUrl,
+		Name:      key.Name,
+		Version:   key.Version,
+		PublicKey: append([]byte(nil), key.PublicKey...),
 	}
 	azkvKey.EncryptedKey = string(ciphertext)
 	plaintext, err := azkvKey.Decrypt()

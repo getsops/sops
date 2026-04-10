@@ -1,13 +1,20 @@
 package config
 
 import (
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/pem"
 	"fmt"
 	"os"
 	"path"
+	"path/filepath"
 	"testing"
 
+	"github.com/getsops/sops/v3/azkv"
 	"github.com/getsops/sops/v3/keys"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 type mockFS struct {
@@ -766,6 +773,39 @@ creation_rules:
 	assert.Equal(t, 1, keyTypeCounts["age"])
 	assert.Equal(t, 1, keyTypeCounts["gcp_kms"])
 	assert.Equal(t, 1, keyTypeCounts["hc_vault"])
+}
+
+func TestCreationRuleAzureKeyVaultObjectListSupportsOfflinePublicKey(t *testing.T) {
+	privateKey, err := rsa.GenerateKey(rand.Reader, 2048)
+	require.NoError(t, err)
+	publicKeyDER, err := x509.MarshalPKIXPublicKey(&privateKey.PublicKey)
+	require.NoError(t, err)
+	publicKeyPath := filepath.Join(t.TempDir(), "azure.pub.pem")
+	err = os.WriteFile(publicKeyPath, pem.EncodeToMemory(&pem.Block{
+		Type:  "PUBLIC KEY",
+		Bytes: publicKeyDER,
+	}), 0o600)
+	require.NoError(t, err)
+
+	sampleConfigWithAzureKeyVaultObjectList := []byte(fmt.Sprintf(`
+creation_rules:
+  - path_regex: ""
+    azure_keyvault:
+      - vaultUrl: https://foo.vault.azure.net
+        key: foo-key
+        version: fooversion
+        publicKeyFile: %s
+`, publicKeyPath))
+
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithAzureKeyVaultObjectList, t), "/conf/path", "whatever", nil)
+	require.NoError(t, err)
+	require.Len(t, conf.KeyGroups, 1)
+	require.Len(t, conf.KeyGroups[0], 1)
+
+	key, ok := conf.KeyGroups[0][0].(*azkv.MasterKey)
+	require.True(t, ok)
+	assert.Equal(t, "https://foo.vault.azure.net/keys/foo-key/fooversion", key.ToString())
+	assert.NotEmpty(t, key.PublicKey)
 }
 
 // Test configurations with multiple destinations should fail

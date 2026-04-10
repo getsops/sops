@@ -430,6 +430,24 @@ or, without the version::
 
     $ sops encrypt --azure-kv https://sops.vault.azure.net/keys/sops-key/ test.yaml > test.enc.yaml
 
+For offline encryption, SOPS can encrypt the data key locally with a downloaded
+Azure Key Vault RSA public key while still using Azure Key Vault for
+decryption. Configure the Azure key as an object in ``.sops.yaml`` and provide
+``publicKeyFile``. In this mode, ``version`` must be set because SOPS does not
+contact Azure to resolve the latest version during encryption. SOPS persists the
+public key in file metadata so later offline edits and rotations can keep
+rewrapping the data key without network access.
+
+.. code:: yaml
+
+    creation_rules:
+      - path_regex: \.prod\.yaml$
+        azure_keyvault:
+          - vaultUrl: https://sops.vault.azure.net
+            key: sops-key
+            version: some-string
+            publicKeyFile: ./keys/sops-key.pub
+
 And decrypt it using::
 
     $ sops decrypt test.enc.yaml
@@ -1979,6 +1997,13 @@ A key group supports the following keys:
 
   * ``version`` (string, can be empty): the version of the key to use.
     If empty, the latest key will be used on encryption.
+
+  Optional keys:
+
+  * ``publicKeyFile`` (string): local path to an Azure Key Vault RSA public
+    key file for offline encryption. When set, encryption uses the local public
+    key and decryption still calls Azure Key Vault. ``version`` must be set in
+    this mode.
 
   Example:
 
