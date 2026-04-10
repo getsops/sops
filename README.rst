@@ -608,13 +608,49 @@ You can also configure HuaweiCloud KMS keys in the ``.sops.yaml`` config file:
           hckms:
             - tr-west-1:abc12345-6789-0123-4567-890123456789,tr-west-2:def67890-1234-5678-9012-345678901234
 
+Encrypting using Alibaba Cloud KMS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The Alibaba Cloud KMS integration supports the following credential methods, in
+priority order:
+
+1. Environment variables: ``ALIBABA_CLOUD_ACCESS_KEY_ID``, ``ALIBABA_CLOUD_ACCESS_KEY_SECRET``,
+   and optionally ``ALIBABA_CLOUD_ACCESS_KEY_STS_TOKEN`` for STS tokens.
+2. Alibaba Cloud CLI configuration file at ``~/.aliyun/config.json``, supporting
+   ``AK``, ``StsToken``, and ``CloudSSO`` profile types. The profile is selected by the
+   ``ALIBABA_CLOUD_PROFILE`` environment variable, or the ``current`` field in the config file.
+   The config file path can be overridden with ``ALIBABA_CLOUD_CONFIG_FILE``.
+
+The KMS key ARN format is ``acs:kms:{region}:{account-id}:key/{key-id}`` or
+``acs:kms:{region}:{account-id}:alias/{alias-name}``.
+
+For example, to encrypt a file:
+
+.. code:: sh
+
+    $ sops encrypt --acs-kms acs:kms:cn-shanghai:123456789:key/my-key-id test.yaml > test.enc.yaml
+
+And decrypt it:
+
+.. code:: sh
+
+    $ sops decrypt test.enc.yaml
+
+You can also configure Alibaba Cloud KMS keys in the ``.sops.yaml`` config file:
+
+.. code:: yaml
+
+    creation_rules:
+        - path_regex: \.yaml$
+          acs_kms: acs:kms:cn-shanghai:123456789:key/my-key-id
+
 Adding and removing keys
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 When creating new files, ``sops`` uses the PGP, KMS and GCP KMS defined in the
-command line arguments ``--kms``, ``--pgp``, ``--gcp-kms``, ``--hckms`` or ``--azure-kv``, or from
-the environment variables ``SOPS_KMS_ARN``, ``SOPS_PGP_FP``, ``SOPS_GCP_KMS_IDS``,
-``SOPS_HUAWEICLOUD_KMS_IDS``, ``SOPS_AZURE_KEYVAULT_URLS``. That information is stored in the file under the
+command line arguments ``--kms``, ``--pgp``, ``--gcp-kms``, ``--hckms``, ``--azure-kv`` or
+``--acs-kms``, or from the environment variables ``SOPS_KMS_ARN``, ``SOPS_PGP_FP``,
+``SOPS_GCP_KMS_IDS``, ``SOPS_HUAWEICLOUD_KMS_IDS``, ``SOPS_AZURE_KEYVAULT_URLS``. That information is stored in the file under the
 ``sops`` section, such that decrypting files does not require providing those
 parameters again.
 
