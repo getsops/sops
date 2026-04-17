@@ -111,7 +111,8 @@ type Cipher interface {
 
 // Comment represents a comment in the sops tree for the file formats that actually support them.
 type Comment struct {
-	Value string
+	Value  string
+	Inline bool
 }
 
 // TreeItem is an item inside sops's tree
@@ -403,7 +404,7 @@ func (branch TreeBranch) walkBranch(in TreeBranch, path []string, commentsStack 
 				in[i].Key = encComment
 				continue
 			} else if comment, ok := enc.(string); ok {
-				in[i].Key = Comment{Value: comment}
+				in[i].Key = Comment{Value: comment, Inline: c.Inline}
 				continue
 			} else {
 				return nil, fmt.Errorf("walkValue of Comment should be either Comment or string, was %T", enc)
