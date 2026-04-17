@@ -1,6 +1,7 @@
 package exec
 
 import (
+	"fmt"
 	"os/exec"
 )
 
@@ -17,9 +18,8 @@ func WritePipe(pipe string, contents []byte) {
 	log.Fatal("fifos are not available on windows")
 }
 
-func GetPipe(dir, filename string) string {
-	log.Fatal("fifos are not available on windows")
-	return ""
+func GetPipe(dir, filename string) (string, error) {
+	return "", fmt.Errorf("fifos are not available on windows")
 }
 
 func SwitchUser(username string) {
