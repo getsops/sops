@@ -72,6 +72,12 @@ func ExecWithFile(opts ExecOpts) error {
 	}
 	defer os.RemoveAll(dir)
 
+	if opts.Filename != "" {
+		if filepath.IsAbs(opts.Filename) || !filepath.IsLocal(opts.Filename) {
+			return fmt.Errorf("The provided filename is not a local path.")
+		}
+	}
+
 	var filename string
 	if opts.Fifo {
 		// fifo handling needs to be async, even opening to write
