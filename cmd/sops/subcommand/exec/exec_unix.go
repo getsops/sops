@@ -49,8 +49,9 @@ func SwitchUser(username string) {
 	}
 
 	uid, _ := strconv.Atoi(user.Uid)
+	gid, _ := strconv.Atoi(user.Gid)
 
-	err = syscall.Setgid(uid)
+	err = syscall.Setgid(gid)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -65,7 +66,7 @@ func SwitchUser(username string) {
 		log.Fatal(err)
 	}
 
-	err = syscall.Setregid(uid, uid)
+	err = syscall.Setregid(gid, gid)
 	if err != nil {
 		log.Fatal(err)
 	}
