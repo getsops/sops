@@ -30,7 +30,7 @@ For the adventurous, unstable features are available in the `main` branch, which
     $ cd $GOPATH/src/github.com/getsops/sops/
     $ make install
 
-(requires Go >= 1.19)
+(requires Go >= 1.25)
 
 If you don't have Go installed, set it up with:
 
@@ -325,6 +325,20 @@ switch to the REST client by setting the ``SOPS_GCP_KMS_CLIENT_TYPE`` environmen
     $ export SOPS_GCP_KMS_CLIENT_TYPE=rest  # Use REST client
     $ export SOPS_GCP_KMS_CLIENT_TYPE=grpc  # Use gRPC client (default)
 
+For sovereign cloud environments that expose a GCP-compatible KMS API at a
+non-standard endpoint (e.g. S3NS/Thales TPC: ``cloudkms.s3nsapis.fr``),
+you can override the endpoint or the universe domain:
+
+.. code:: sh
+
+    # Override the KMS endpoint directly
+    $ export SOPS_GCP_KMS_ENDPOINT=cloudkms.example.com:443
+
+    # Or derive the endpoint from the universe domain (cloudkms.<domain>:443)
+    $ export SOPS_GCP_KMS_UNIVERSE_DOMAIN=example.com
+
+.. note:: ``SOPS_GCP_KMS_ENDPOINT`` takes precedence over ``SOPS_GCP_KMS_UNIVERSE_DOMAIN`` if both are set.
+
 Encrypting/decrypting with GCP KMS requires a KMS ResourceID. You can use the
 cloud console the get the ResourceID or you can create one using the gcloud
 sdk:
@@ -412,11 +426,15 @@ from the commandline:
     $ az keyvault create --name $keyvault_name --resource-group sops-rg --location westeurope
     $ az keyvault key create --name sops-key --vault-name $keyvault_name --protection software --ops encrypt decrypt
     $ az keyvault set-policy --name $keyvault_name --resource-group sops-rg --spn $AZURE_CLIENT_ID \
-        --key-permissions encrypt decrypt
+        --key-permissions get encrypt decrypt
     # Read the key id:
     $ az keyvault key show --name sops-key --vault-name $keyvault_name --query key.kid
 
     https://sops.vault.azure.net/keys/sops-key/some-string
+
+.. note::
+
+  The ``get`` key permission is required when the key version is ommited (for example if the URL ends with a trailing slash). In that case SOPS calls the Azure Key Vault API to resolve the latest key version, which requires the ``get`` permission. If you specifty an explicit key version in the URL you can omit ``get``, but this means you will need to update your configuration every time the key is rotated.
 
 Now you can encrypt a file using::
 
