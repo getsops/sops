@@ -30,6 +30,14 @@ const (
 	// SopsGCPKMSClientTypeEnv is the environment variable used to specify the
 	// GCP KMS client type. Valid values are "grpc" (default) and "rest".
 	SopsGCPKMSClientTypeEnv = "SOPS_GCP_KMS_CLIENT_TYPE"
+	// SopsGCPKMSEndpointEnv overrides the GCP KMS endpoint URL. Useful for
+	// sovereign cloud environments that expose a GCP-compatible KMS API at a
+	// non-standard endpoint (e.g. S3NS/Thales TPC: cloudkms.s3nsapis.fr).
+	SopsGCPKMSEndpointEnv = "SOPS_GCP_KMS_ENDPOINT"
+	// SopsGCPKMSUniverseDomainEnv sets the universe domain for the GCP KMS
+	// client, which derives the endpoint as cloudkms.{UNIVERSE_DOMAIN}:443.
+	// Example: "s3nsapis.fr" for S3NS/Thales TPC.
+	SopsGCPKMSUniverseDomainEnv = "SOPS_GCP_KMS_UNIVERSE_DOMAIN"
 	// KeyTypeIdentifier is the string used to identify a GCP KMS MasterKey.
 	KeyTypeIdentifier = "gcp_kms"
 )
@@ -319,6 +327,12 @@ func (key *MasterKey) newKMSClient(ctx context.Context) (*kms.KeyManagementClien
 
 	// Add extra options.
 	opts = append(opts, key.clientOpts...)
+
+	if endpoint := os.Getenv(SopsGCPKMSEndpointEnv); endpoint != "" {
+		opts = append(opts, option.WithEndpoint(endpoint))
+	} else if ud := os.Getenv(SopsGCPKMSUniverseDomainEnv); ud != "" {
+		opts = append(opts, option.WithUniverseDomain(ud))
+	}
 
 	// Select client type based on inputs.
 	clientType := strings.ToLower(os.Getenv(SopsGCPKMSClientTypeEnv))
