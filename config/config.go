@@ -4,6 +4,7 @@ Package config provides a way to find and load SOPS configuration files
 package config //import "github.com/getsops/sops/v3/config"
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path"
@@ -42,6 +43,8 @@ const (
 	configFileName      = ".sops.yaml"
 	alternateConfigName = ".sops.yml"
 )
+
+var ErrNoMatchingCreationRules = errors.New("error loading config: no matching creation rules found")
 
 // ConfigFileResult contains the path to a config file and any warnings
 type ConfigFileResult struct {
@@ -599,7 +602,7 @@ func parseCreationRuleForFile(conf *configFile, confPath, filePath string, kmsEn
 	}
 
 	if rule == nil {
-		return nil, fmt.Errorf("error loading config: no matching creation rules found")
+		return nil, ErrNoMatchingCreationRules
 	}
 
 	config, err := configFromRule(rule, kmsEncryptionContext)

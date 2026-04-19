@@ -3,6 +3,7 @@ package main // import "github.com/getsops/sops/v3/cmd/sops"
 import (
 	"context"
 	encodingjson "encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net"
@@ -2516,6 +2517,16 @@ func keyGroups(c *cli.Context, file string, optionalConfig *config.Config) ([]so
 	return []sops.KeyGroup{group}, nil
 }
 
+func hasInlineMasterKeyFlags(c *cli.Context) bool {
+	return c.String("kms") != "" ||
+		c.String("pgp") != "" ||
+		c.String("gcp-kms") != "" ||
+		c.String("hckms") != "" ||
+		c.String("azure-kv") != "" ||
+		c.String("hc-vault-transit") != "" ||
+		c.String("age") != ""
+}
+
 // loadConfig will look for an existing config file, either provided through the command line, or using findConfigFile
 // Since a config file is not required, this function does not error when one is not found, and instead returns a nil config pointer
 func loadConfig(c *cli.Context, file string, kmsEncryptionContext map[string]*string) (*config.Config, error) {
@@ -2531,6 +2542,9 @@ func loadConfig(c *cli.Context, file string, kmsEncryptionContext map[string]*st
 	}
 	conf, err := config.LoadCreationRuleForFile(configPath, file, kmsEncryptionContext)
 	if err != nil {
+		if hasInlineMasterKeyFlags(c) && errors.Is(err, config.ErrNoMatchingCreationRules) {
+			return nil, nil
+		}
 		return nil, err
 	}
 	return conf, nil
