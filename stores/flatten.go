@@ -2,8 +2,8 @@ package stores
 
 import (
 	"fmt"
-	"reflect"
-	"slices"
+	"math"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -69,98 +69,131 @@ func tokenize(path string) []token {
 	return tokens
 }
 
-func descendMap(branch sops.TreeBranch, key string) (sops.TreeBranch, reflect.Value) {
-	for idx, elt := range branch {
-		if elt.Key == key {
-			return branch, reflect.ValueOf(&branch[idx].Value)
-		}
-	}
-	newBranch := append(branch, sops.TreeItem{
-		Key:   key,
-		Value: nil,
-	})
-	return newBranch, reflect.ValueOf(&newBranch[len(newBranch)-1].Value)
+type node struct {
+	value   *interface{}
+	subkeys map[string]*node
+	indices map[int]*node
 }
 
-func descendList(array []interface{}, index int) ([]interface{}, reflect.Value) {
-	if index >= len(array) {
-		if index >= cap(array) {
-			array = slices.Grow(array, index+1-cap(array))
+func place(value *interface{}, path []token, root *node) error {
+	for _, token := range path {
+		var next *node
+		var ok bool
+		switch t := token.(type) {
+		case mapToken:
+			if root.subkeys == nil {
+				root.subkeys = make(map[string]*node)
+			}
+			next, ok = root.subkeys[t.key]
+			if !ok {
+				next = &node{}
+				root.subkeys[t.key] = next
+			}
+		case listToken:
+			if root.indices == nil {
+				root.indices = make(map[int]*node)
+			}
+			next, ok = root.indices[t.position]
+			if !ok {
+				next = &node{}
+				root.indices[t.position] = next
+			}
 		}
-		array = array[:index+1]
+		root = next
 	}
-	return array, reflect.ValueOf(&array[index])
+	if root.value != nil {
+		return fmt.Errorf("Duplicate value")
+	}
+	root.value = value
+	return nil
 }
 
-func descend(value reflect.Value, t token) (reflect.Value, error) {
-	interfaceType := reflect.TypeOf((*interface{})(nil))
-	switch currToken := t.(type) {
-	case mapToken:
-		// This special case is only needed for the root
-		treeBranchPtrType := reflect.TypeOf((*sops.TreeBranch)(nil))
-		if value.Type() == treeBranchPtrType {
-			v := *value.Interface().(*sops.TreeBranch)
-			v, nextVal := descendMap(v, currToken.key)
-			reflect.Indirect(value).Set(reflect.ValueOf(v))
-			return nextVal, nil
-		}
-		if value.Type() == interfaceType {
-			val := reflect.Indirect(value)
-			if val.IsNil() {
-				v, nextVal := descendMap(nil, currToken.key)
-				val.Set(reflect.ValueOf(v))
-				return nextVal, nil
-			}
-			if v, ok := val.Interface().(sops.TreeBranch); ok {
-				v, nextVal := descendMap(v, currToken.key)
-				val.Set(reflect.ValueOf(v))
-				return nextVal, nil
-			}
-		}
-		return reflect.Value{}, fmt.Errorf("Type mismatch: can only use string key for map")
-	case listToken:
-		if value.Type() == interfaceType {
-			val := reflect.Indirect(value)
-			if val.IsNil() {
-				v, nextVal := descendList(nil, currToken.position)
-				val.Set(reflect.ValueOf(v))
-				return nextVal, nil
-			}
-			if v, ok := val.Interface().([]interface{}); ok {
-				v, nextVal := descendList(v, currToken.position)
-				val.Set(reflect.ValueOf(v))
-				return nextVal, nil
-			}
-		}
-		return reflect.Value{}, fmt.Errorf("Type mismatch: can only use integer key for list")
-	default:
-		return reflect.Value{}, fmt.Errorf("Internal error: unknown token %q", t)
+func b2i(value bool) int {
+	if value {
+		return 1
 	}
+	return 0
+}
+
+func convert(root *node) (interface{}, error) {
+	hasValue := root.value != nil
+	hasSubkey := len(root.subkeys) > 0
+	hasIndex := len(root.indices) > 0
+	if b2i(hasValue)+b2i(hasSubkey)+b2i(hasIndex) > 1 {
+		return nil, fmt.Errorf("Type mismatch")
+	}
+	if hasValue {
+		return *root.value, nil
+	}
+	if hasSubkey {
+		keys := make([]string, len(root.subkeys))
+		index := 0
+		for k := range root.subkeys {
+			keys[index] = k
+			index += 1
+		}
+		sort.Strings(keys)
+		result := make(sops.TreeBranch, len(keys))
+		for index, key := range keys {
+			value, err := convert(root.subkeys[key])
+			if err != nil {
+				return nil, err
+			}
+			result[index] = sops.TreeItem{
+				Key:   key,
+				Value: value,
+			}
+		}
+		return result, nil
+	}
+	minValue := math.MaxInt
+	maxValue := math.MinInt
+	for k := range root.indices {
+		if k < minValue {
+			minValue = k
+		}
+		if k > maxValue {
+			maxValue = k
+		}
+	}
+	if minValue != 0 || maxValue+1 != len(root.indices) {
+		return nil, fmt.Errorf("Incomplete list")
+	}
+	result := make([]interface{}, maxValue+1)
+	for k, v := range root.indices {
+		value, err := convert(v)
+		if err != nil {
+			return nil, err
+		}
+		result[k] = value
+	}
+	return result, nil
 }
 
 func unflattenTreeBranch(branch sops.TreeBranch) (sops.TreeBranch, error) {
-	var result sops.TreeBranch
+	root := &node{}
 	for _, item := range branch {
 		if _, ok := item.Key.(sops.Comment); ok {
 			continue
 		}
 		if key, ok := item.Key.(string); ok {
-			current := reflect.ValueOf(&result)
 			tokens := tokenize(key)
-			for _, token := range tokens {
-				var err error
-				current, err = descend(current, token)
-				if err != nil {
-					return nil, fmt.Errorf("Error while unflattening %q: %w", key, err)
-				}
+			err := place(&item.Value, tokens, root)
+			if err != nil {
+				return nil, fmt.Errorf("Error while unflattening %q: %w", key, err)
 			}
-			reflect.Indirect(current).Set(reflect.ValueOf(item.Value))
-			continue
 		} else {
 			return nil, fmt.Errorf("Found non-string key %q when unflattening", item.Key)
 		}
 	}
-	return result, nil
+	result, err := convert(root)
+	if err != nil {
+		return nil, fmt.Errorf("Error while unflattening: %w", err)
+	}
+	if tb, ok := result.(sops.TreeBranch); ok {
+		return tb, nil
+	}
+	return nil, fmt.Errorf("Internal error: cannot find root")
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////

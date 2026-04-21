@@ -84,12 +84,12 @@ func TestUnflattenTreeBranch(t *testing.T) {
 					"foo",
 					sops.TreeBranch{
 						sops.TreeItem{
-							Key:   "foo",
-							Value: "bar",
-						},
-						sops.TreeItem{
 							Key:   "baz",
 							Value: "bam",
+						},
+						sops.TreeItem{
+							Key:   "foo",
+							Value: "bar",
 						},
 					},
 				},
@@ -98,12 +98,12 @@ func TestUnflattenTreeBranch(t *testing.T) {
 				Key: "key3",
 				Value: sops.TreeBranch{
 					sops.TreeItem{
-						Key:   "foo",
-						Value: "bar",
-					},
-					sops.TreeItem{
 						Key:   "baz",
 						Value: "bam",
+					},
+					sops.TreeItem{
+						Key:   "foo",
+						Value: "bar",
 					},
 				},
 			},
@@ -111,12 +111,12 @@ func TestUnflattenTreeBranch(t *testing.T) {
 				Key: "key4",
 				Value: sops.TreeBranch{
 					sops.TreeItem{
-						Key:   "foo",
-						Value: "bar",
-					},
-					sops.TreeItem{
 						Key:   "baz",
 						Value: "bam",
+					},
+					sops.TreeItem{
+						Key:   "foo",
+						Value: "bar",
 					},
 				},
 			},
@@ -132,12 +132,22 @@ func TestUnflattenTreeBranch(t *testing.T) {
 				Value: "bar",
 			},
 		}
-		expectedOutputDupe = sops.TreeBranch{
+
+		inputSkip1 = sops.TreeBranch{
 			sops.TreeItem{
-				Key: "key1",
-				Value: []interface{}{
-					"bar",
-				},
+				Key:   "key1__list_0",
+				Value: "foo",
+			},
+			sops.TreeItem{
+				Key:   "key1__list_999999999999",
+				Value: "bar",
+			},
+		}
+
+		inputSkip2 = sops.TreeBranch{
+			sops.TreeItem{
+				Key:   "key1__list_1",
+				Value: "foo",
 			},
 		}
 
@@ -169,17 +179,28 @@ func TestUnflattenTreeBranch(t *testing.T) {
 	assert.Equal(t, output, expectedOutput)
 
 	output, err = unflattenTreeBranch(inputDupe)
-	assert.Nil(t, err)
-	assert.Equal(t, output, expectedOutputDupe)
+	assert.NotNil(t, err)
+	assert.Equal(t, "Error while unflattening \"key1__list_0\": Duplicate value", err.Error())
+	assert.Nil(t, output)
+
+	output, err = unflattenTreeBranch(inputSkip1)
+	assert.NotNil(t, err)
+	assert.Equal(t, "Error while unflattening: Incomplete list", err.Error())
+	assert.Nil(t, output)
+
+	output, err = unflattenTreeBranch(inputSkip2)
+	assert.NotNil(t, err)
+	assert.Equal(t, "Error while unflattening: Incomplete list", err.Error())
+	assert.Nil(t, output)
 
 	output, err = unflattenTreeBranch(inputCollision1)
 	assert.NotNil(t, err)
-	assert.Equal(t, "Error while unflattening \"key1__map_foo\": Type mismatch: can only use string key for map", err.Error())
+	assert.Equal(t, "Error while unflattening: Type mismatch", err.Error())
 	assert.Nil(t, output)
 
 	output, err = unflattenTreeBranch(inputCollision2)
 	assert.NotNil(t, err)
-	assert.Equal(t, "Error while unflattening \"key1__list_0\": Type mismatch: can only use integer key for list", err.Error())
+	assert.Equal(t, "Error while unflattening: Type mismatch", err.Error())
 	assert.Nil(t, output)
 }
 
