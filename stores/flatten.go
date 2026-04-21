@@ -246,7 +246,7 @@ func flattenDescendArray(array []interface{}, prefix string, destination sops.Tr
 		if err != nil {
 			return nil, err
 		}
-		i += 1
+		i++
 	}
 	return destination, nil
 }
