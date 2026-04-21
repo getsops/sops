@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/azkv"
 	"github.com/getsops/sops/v3/gcpkms"
 	"github.com/getsops/sops/v3/hckms"
@@ -467,7 +468,7 @@ func TestExtractMetadata(t *testing.T) {
 				},
 			},
 			sops.TreeItem{
-				Key: "agekey",
+				Key: "age",
 				Value: []interface{}{
 					sops.TreeBranch{
 						sops.TreeItem{
@@ -659,7 +660,7 @@ func TestExtractMetadata(t *testing.T) {
 						},
 					},
 					sops.TreeItem{
-						Key: "agekey",
+						Key: "age",
 						Value: []interface{}{
 							sops.TreeBranch{
 								sops.TreeItem{
@@ -936,6 +937,10 @@ func TestExtractMetadata(t *testing.T) {
 					EncryptedKey: "ABCD PGP",
 					CreationDate: time.Unix(1742725229, 0).UTC(),
 				},
+				&age.MasterKey{
+					Recipient:    "age recipient",
+					EncryptedKey: "ABCD age",
+				},
 			},
 		},
 	}, metadata)
@@ -991,6 +996,10 @@ func TestExtractMetadata(t *testing.T) {
 					Fingerprint:  "PGP fingerprint (inner)",
 					EncryptedKey: "ABCD PGP (inner)",
 					CreationDate: time.Unix(1742725229, 0).UTC(),
+				},
+				&age.MasterKey{
+					Recipient:    "age recipient (inner)",
+					EncryptedKey: "ABCD age (inner)",
 				},
 			},
 		},
