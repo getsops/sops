@@ -13,6 +13,9 @@ import (
 const mapSeparator = "__map_"
 const listSeparator = "__list_"
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Unflatten
+
 type token interface{}
 
 type mapToken struct {
@@ -159,6 +162,9 @@ func unflattenTreeBranch(branch sops.TreeBranch) (sops.TreeBranch, error) {
 	}
 	return result, nil
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Flatten
 
 func flattenDescendValue(value interface{}, key string, destination sops.TreeBranch, destinationMap *map[string]bool) (sops.TreeBranch, error) {
 	switch value := value.(type) {
