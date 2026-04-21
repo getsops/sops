@@ -24,7 +24,7 @@ type MetadataOpts struct {
 	Flatten MetadataFlatten
 }
 
-// SopsPrefix is the prefix for all metadatada entry keys
+// SopsPrefix is the prefix for all metadata entry keys.
 const SopsPrefix = SopsMetadataKey + "_"
 
 func sopsToGoMap(mapping sops.TreeBranch) (map[string]interface{}, error) {
@@ -112,7 +112,7 @@ func ExtractMetadata(branches sops.TreeBranches, opts MetadataOpts) (sops.TreeBr
 					}
 					branch = append(branch[:i], branch[i+1:]...)
 				} else {
-					i += 1
+					i++
 				}
 			}
 			branches[bi] = branch
@@ -120,7 +120,7 @@ func ExtractMetadata(branches sops.TreeBranches, opts MetadataOpts) (sops.TreeBr
 	} else {
 		if len(branches) >= 1 {
 			branch := branches[0]
-			for i := 0; i < len(branch); i += 1 {
+			for i := 0; i < len(branch); i++ {
 				if key, ok := branch[i].Key.(string); ok {
 					if strings.HasPrefix(key, SopsPrefix) {
 						entry := branch[i]
@@ -241,7 +241,7 @@ func metadataToTreeBranch(md metadata) (sops.TreeBranch, error) {
 func SerializeMetadata(data sops.Tree, opts MetadataOpts) (sops.TreeBranches, error) {
 	md, err := metadataToTreeBranch(metadataFromInternal(data.Metadata))
 	if err != nil {
-		return nil, fmt.Errorf("Error while serializing metadata: %e", err)
+		return nil, fmt.Errorf("Error while serializing metadata: %w", err)
 	}
 	if opts.Flatten != MetadataFlattenNone {
 		var prefix string
@@ -250,7 +250,7 @@ func SerializeMetadata(data sops.Tree, opts MetadataOpts) (sops.TreeBranches, er
 		}
 		md, err = flattenTreeBranch(md, prefix)
 		if err != nil {
-			return nil, fmt.Errorf("Error while flatting metadata: %e", err)
+			return nil, fmt.Errorf("Error while flattening metadata: %w", err)
 		}
 	}
 	if opts.Flatten != MetadataFlattenFull {
