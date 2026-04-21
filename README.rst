@@ -85,7 +85,7 @@ environment variables to specify your credentials:
     export AWS_SECRET_ACCESS_KEY="mw......"
 
 For more information and additional environment variables, see
-`specifying credentials <https://aws.github.io/aws-sdk-go-v2/docs/configuring-sdk/#specifying-credentials>`_.
+`specifying credentials <https://docs.aws.amazon.com/sdk-for-go/v2/developer-guide/configure-gosdk.html#specifying-credentials>`_.
 
 If you want to use PGP, export the fingerprints of the public keys, comma
 separated, in the **SOPS_PGP_FP** env variable.
