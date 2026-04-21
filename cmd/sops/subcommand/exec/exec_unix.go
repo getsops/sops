@@ -32,14 +32,14 @@ func WritePipe(pipe string, contents []byte) {
 	handle.Close()
 }
 
-func GetPipe(dir, filename string) string {
+func GetPipe(dir, filename string) (string, error) {
 	tmpfn := filepath.Join(dir, filename)
 	err := syscall.Mkfifo(tmpfn, 0600)
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
 
-	return tmpfn
+	return tmpfn, nil
 }
 
 func SwitchUser(username string) {
