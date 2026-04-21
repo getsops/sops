@@ -66,26 +66,6 @@ func tokenize(path string) []token {
 	return tokens
 }
 
-// DecodeNewLines replaces \\n with \n for all string values in the map.
-// Used by config stores that do not handle multi-line values (ini, dotenv).
-func DecodeNewLines(m map[string]interface{}) {
-	for k, v := range m {
-		if s, ok := v.(string); ok {
-			m[k] = strings.Replace(s, "\\n", "\n", -1)
-		}
-	}
-}
-
-// EncodeNewLines replaces \n with \\n for all string values in the map.
-// Used by config stores that do not handle multi-line values (ini, dotenv).
-func EncodeNewLines(m map[string]interface{}) {
-	for k, v := range m {
-		if s, ok := v.(string); ok {
-			m[k] = strings.Replace(s, "\n", "\\n", -1)
-		}
-	}
-}
-
 func descendMap(branch sops.TreeBranch, key string) (sops.TreeBranch, reflect.Value) {
 	for idx, elt := range branch {
 		if elt.Key == key {
