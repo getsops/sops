@@ -1,6 +1,7 @@
 package keyservice
 
 import (
+	"github.com/getsops/sops/v3/azkv"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -78,4 +79,88 @@ func TestKmsKeyToMasterKey(t *testing.T) {
 			assert.Equalf(t, c.expectedAwsProfile, masterKey.AwsProfile, "Expected AWS profile to be '%s', but found '%s'", c.expectedAwsProfile, masterKey.AwsProfile)
 		})
 	}
+}
+
+// Azure KV tests for skip URI validation flag affecting client options.
+func TestAzureKeyVaultClientOptionsAppliedOnEncryptDecrypt(t *testing.T) {
+	// ensure we don't perform network calls
+	testHookSkipAzureNetwork = true
+
+	t.Run("encrypt applies option when flag true", func(t *testing.T) {
+		captured := []*azkv.MasterKey{}
+		testHookCaptureAzureKey = func(mk *azkv.MasterKey) { captured = append(captured, mk) }
+		server := &Server{SkipAzureKvUriValidation: true}
+		key := &AzureKeyVaultKey{VaultUrl: "https://vault.example", Name: "keyname", Version: "v1"}
+		_, err := server.encryptWithAzureKeyVault(key, []byte("secret"))
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if len(captured) != 1 {
+			t.Fatalf("expected 1 captured key, got %d", len(captured))
+		}
+		co := captured[0].ClientOptions()
+		if co == nil {
+			t.Fatalf("expected clientOptions to be set when flag true")
+		}
+		if !co.DisableChallengeResourceVerification {
+			t.Fatalf("expected DisableChallengeResourceVerification=true")
+		}
+	})
+
+	t.Run("encrypt leaves option nil when flag false", func(t *testing.T) {
+		captured := []*azkv.MasterKey{}
+		testHookCaptureAzureKey = func(mk *azkv.MasterKey) { captured = append(captured, mk) }
+		server := &Server{SkipAzureKvUriValidation: false}
+		key := &AzureKeyVaultKey{VaultUrl: "https://vault.example", Name: "keyname", Version: "v1"}
+		_, err := server.encryptWithAzureKeyVault(key, []byte("secret"))
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if len(captured) != 1 {
+			t.Fatalf("expected 1 captured key, got %d", len(captured))
+		}
+		co := captured[0].ClientOptions()
+		if co != nil {
+			t.Fatalf("expected clientOptions to be nil when flag false, got %#v", co)
+		}
+	})
+
+	t.Run("decrypt applies option when flag true", func(t *testing.T) {
+		captured := []*azkv.MasterKey{}
+		testHookCaptureAzureKey = func(mk *azkv.MasterKey) { captured = append(captured, mk) }
+		server := &Server{SkipAzureKvUriValidation: true}
+		key := &AzureKeyVaultKey{VaultUrl: "https://vault.example", Name: "keyname", Version: "v1"}
+		_, err := server.decryptWithAzureKeyVault(key, []byte("c2VjcmV0"))
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if len(captured) != 1 {
+			t.Fatalf("expected 1 captured key, got %d", len(captured))
+		}
+		co := captured[0].ClientOptions()
+		if co == nil {
+			t.Fatalf("expected clientOptions to be set when flag true (decrypt)")
+		}
+		if !co.DisableChallengeResourceVerification {
+			t.Fatalf("expected DisableChallengeResourceVerification=true (decrypt)")
+		}
+	})
+
+	t.Run("decrypt leaves option nil when flag false", func(t *testing.T) {
+		captured := []*azkv.MasterKey{}
+		testHookCaptureAzureKey = func(mk *azkv.MasterKey) { captured = append(captured, mk) }
+		server := &Server{SkipAzureKvUriValidation: false}
+		key := &AzureKeyVaultKey{VaultUrl: "https://vault.example", Name: "keyname", Version: "v1"}
+		_, err := server.decryptWithAzureKeyVault(key, []byte("c2VjcmV0"))
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if len(captured) != 1 {
+			t.Fatalf("expected 1 captured key, got %d", len(captured))
+		}
+		co := captured[0].ClientOptions()
+		if co != nil {
+			t.Fatalf("expected clientOptions to be nil when flag false (decrypt), got %#v", co)
+		}
+	})
 }
