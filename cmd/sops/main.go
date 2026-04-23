@@ -2388,8 +2388,8 @@ func outputStore(context *cli.Context, path string) (common.Store, error) {
 	if err != nil {
 		return nil, err
 	}
-	if context.IsSet("indent") {
-		indent := context.Int("indent")
+	if context.GlobalIsSet("indent") {
+		indent := context.GlobalInt("indent")
 		storesConf.YAML.Indent = indent
 		storesConf.JSON.Indent = indent
 		storesConf.JSONBinary.Indent = indent
