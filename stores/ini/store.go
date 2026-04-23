@@ -133,56 +133,20 @@ func (store Store) treeItemFromSection(section *ini.Section) (sops.TreeItem, err
 
 // LoadEncryptedFile loads encrypted INI file's bytes onto a sops.Tree runtime object
 func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
-	iniFileOuter, err := ini.LoadSources(ini.LoadOptions{AllowNonUniqueSections: true}, in)
+	branches, err := store.LoadPlainFile(in)
 	if err != nil {
 		return sops.Tree{}, err
 	}
-
-	sopsSection, err := iniFileOuter.GetSection(stores.SopsMetadataKey)
-	if err != nil {
-		return sops.Tree{}, sops.MetadataNotFound
-	}
-
-	metadataHolder, err := store.iniSectionToMetadata(sopsSection)
+	branches, metadata, err := stores.ExtractMetadata(branches, stores.MetadataOpts{
+		Flatten: stores.MetadataFlattenBelowTop,
+	})
 	if err != nil {
 		return sops.Tree{}, err
-	}
-
-	metadata, err := metadataHolder.ToInternal()
-	if err != nil {
-		return sops.Tree{}, err
-	}
-	// After that, we load the whole file into a map.
-	branches, err := store.treeBranchesFromIni(in)
-	if err != nil {
-		return sops.Tree{}, fmt.Errorf("Could not unmarshal input data: %s", err)
-	}
-	// Discard metadata, as we already loaded it.
-	for bi, branch := range branches {
-		for s, sectionBranch := range branch {
-			if sectionBranch.Key == stores.SopsMetadataKey {
-				branch = append(branch[:s], branch[s+1:]...)
-				branches[bi] = branch
-			}
-		}
 	}
 	return sops.Tree{
 		Branches: branches,
 		Metadata: metadata,
 	}, nil
-}
-
-func (store *Store) iniSectionToMetadata(sopsSection *ini.Section) (stores.Metadata, error) {
-	metadataHash := make(map[string]interface{})
-	for k, v := range sopsSection.KeysHash() {
-		metadataHash[k] = v
-	}
-	stores.DecodeNewLines(metadataHash)
-	err := stores.DecodeNonStrings(metadataHash)
-	if err != nil {
-		return stores.Metadata{}, err
-	}
-	return stores.UnflattenMetadata(metadataHash)
 }
 
 // LoadPlainFile loads a plaintext INI file's bytes onto a sops.TreeBranches runtime object
@@ -197,47 +161,20 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 // EmitEncryptedFile returns encrypted INI file bytes corresponding to a sops.Tree
 // runtime object
 func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
-
-	metadata := stores.MetadataFromInternal(in.Metadata)
-	newBranch, err := store.encodeMetadataToIniBranch(metadata)
+	branches, err := stores.SerializeMetadata(in, stores.MetadataOpts{
+		Flatten: stores.MetadataFlattenBelowTop,
+	})
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("Error marshaling metadata: %s", err)
 	}
-	sectionItem := sops.TreeItem{Key: stores.SopsMetadataKey, Value: newBranch}
-	branch := sops.TreeBranch{sectionItem}
-
-	in.Branches = append(in.Branches, branch)
-
-	out, err := store.iniFromTreeBranches(in.Branches)
-	if err != nil {
-		return nil, fmt.Errorf("Error marshaling to ini: %s", err)
-	}
-	return out, nil
-}
-
-func (store *Store) encodeMetadataToIniBranch(md stores.Metadata) (sops.TreeBranch, error) {
-	flat, err := stores.FlattenMetadata(md)
-	if err != nil {
-		return nil, err
-	}
-	stores.EncodeNonStrings(flat)
-	stores.EncodeNewLines(flat)
-
-	branch := sops.TreeBranch{}
-	for key, value := range flat {
-		if value == nil {
-			continue
-		}
-		branch = append(branch, sops.TreeItem{Key: key, Value: value})
-	}
-	return branch, nil
+	return store.EmitPlainFile(branches)
 }
 
 // EmitPlainFile returns the plaintext INI file bytes corresponding to a sops.TreeBranches object
 func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 	out, err := store.iniFromTreeBranches(in)
 	if err != nil {
-		return nil, fmt.Errorf("Error marshaling to ini: %s", err)
+		return nil, fmt.Errorf("Error marshaling to INI: %s", err)
 	}
 	return out, nil
 }

@@ -25,3 +25,37 @@ func TestValToString(t *testing.T) {
 	assert.Equal(t, "2025-01-02T03:04:05Z", ValToString(ts))
 	assert.Equal(t, "a string", ValToString("a string"))
 }
+
+func TestDecodeNewLines(t *testing.T) {
+	tests := []struct {
+		input map[string]interface{}
+		want  map[string]interface{}
+	}{
+		{map[string]interface{}{"mac": "line1\\nline2"}, map[string]interface{}{"mac": "line1\nline2"}},
+		{map[string]interface{}{"mac": "line1\\n\\n\\nline2\\n\\nline3"}, map[string]interface{}{"mac": "line1\n\n\nline2\n\nline3"}},
+	}
+
+	for _, tt := range tests {
+		DecodeNewLines(tt.input)
+		for k, v := range tt.want {
+			assert.Equal(t, v, tt.input[k])
+		}
+	}
+}
+
+func TestEncodeNewLines(t *testing.T) {
+	tests := []struct {
+		input map[string]interface{}
+		want  map[string]interface{}
+	}{
+		{map[string]interface{}{"mac": "line1\nline2"}, map[string]interface{}{"mac": "line1\\nline2"}},
+		{map[string]interface{}{"mac": "line1\n\n\nline2\n\nline3"}, map[string]interface{}{"mac": "line1\\n\\n\\nline2\\n\\nline3"}},
+	}
+
+	for _, tt := range tests {
+		EncodeNewLines(tt.input)
+		for k, v := range tt.want {
+			assert.Equal(t, v, tt.input[k])
+		}
+	}
+}

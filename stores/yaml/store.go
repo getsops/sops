@@ -302,44 +302,15 @@ func (store *Store) appendTreeBranch(branch sops.TreeBranch, mapping *yaml.Node)
 // LoadEncryptedFile loads the contents of an encrypted yaml file onto a
 // sops.Tree runtime object
 func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
-	// Because we don't know what fields the input file will have, we have to
-	// load the file in two steps.
-	// First, we load the file's metadata, the structure of which is known.
-	metadataHolder := stores.SopsFile{}
-	err := yaml.Unmarshal(in, &metadataHolder)
-	if err != nil {
-		return sops.Tree{}, fmt.Errorf("Error unmarshalling input yaml: %s", err)
-	}
-	if metadataHolder.Metadata == nil {
-		return sops.Tree{}, sops.MetadataNotFound
-	}
-	metadata, err := metadataHolder.Metadata.ToInternal()
+	branches, err := store.LoadPlainFile(in)
 	if err != nil {
 		return sops.Tree{}, err
 	}
-	var branches sops.TreeBranches
-	d := yaml.NewDecoder(bytes.NewReader(in))
-	for {
-		var data yaml.Node
-		err := d.Decode(&data)
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			return sops.Tree{}, fmt.Errorf("Error unmarshaling input YAML: %s", err)
-		}
-
-		branch, err := store.yamlDocumentNodeToTreeBranch(data)
-		if err != nil {
-			return sops.Tree{}, fmt.Errorf("Error unmarshaling input YAML: %s", err)
-		}
-
-		for i, elt := range branch {
-			if elt.Key == stores.SopsMetadataKey { // Erase
-				branch = append(branch[:i], branch[i+1:]...)
-			}
-		}
-		branches = append(branches, branch)
+	branches, metadata, err := stores.ExtractMetadata(branches, stores.MetadataOpts{
+		Flatten: stores.MetadataFlattenNone,
+	})
+	if err != nil {
+		return sops.Tree{}, err
 	}
 	return sops.Tree{
 		Branches: branches,
@@ -390,37 +361,13 @@ func (store *Store) getIndentation() (int, error) {
 // EmitEncryptedFile returns the encrypted bytes of the yaml file corresponding to a
 // sops.Tree runtime object
 func (store *Store) EmitEncryptedFile(in sops.Tree) ([]byte, error) {
-	var b bytes.Buffer
-	e := yaml.NewEncoder(io.Writer(&b))
-	indent, err := store.getIndentation()
+	branches, err := stores.SerializeMetadata(in, stores.MetadataOpts{
+		Flatten: stores.MetadataFlattenNone,
+	})
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("Error marshaling metadata: %s", err)
 	}
-	e.SetIndent(indent)
-	for _, branch := range in.Branches {
-		// Document root
-		var doc = yaml.Node{}
-		doc.Kind = yaml.DocumentNode
-		// Add global mapping
-		var mapping = yaml.Node{}
-		mapping.Kind = yaml.MappingNode
-		doc.Content = append(doc.Content, &mapping)
-		// Create copy of branch with metadata appended
-		branch = append(sops.TreeBranch(nil), branch...)
-		branch = append(branch, sops.TreeItem{
-			Key:   stores.SopsMetadataKey,
-			Value: stores.MetadataFromInternal(in.Metadata),
-		})
-		// Marshal branch to global mapping node
-		store.appendTreeBranch(branch, &mapping)
-		// Encode YAML
-		err := e.Encode(&doc)
-		if err != nil {
-			return nil, fmt.Errorf("Error marshaling to yaml: %s", err)
-		}
-	}
-	e.Close()
-	return b.Bytes(), nil
+	return store.EmitPlainFile(branches)
 }
 
 // EmitPlainFile returns the plaintext bytes of the yaml file corresponding to a
@@ -446,7 +393,7 @@ func (store *Store) EmitPlainFile(branches sops.TreeBranches) ([]byte, error) {
 		// Encode YAML
 		err := e.Encode(&doc)
 		if err != nil {
-			return nil, fmt.Errorf("Error marshaling to yaml: %s", err)
+			return nil, fmt.Errorf("Error marshaling to YAML: %s", err)
 		}
 	}
 	e.Close()
