@@ -5,6 +5,7 @@ import (
 
 	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/azkv"
+	"github.com/getsops/sops/v3/barbican"
 	"github.com/getsops/sops/v3/gcpkms"
 	"github.com/getsops/sops/v3/hckms"
 	"github.com/getsops/sops/v3/hcvault"
@@ -100,6 +101,20 @@ func (ks *Server) encryptWithAge(key *AgeKey, plaintext []byte) ([]byte, error) 
 	return []byte(ageKey.EncryptedKey), nil
 }
 
+func (ks *Server) encryptWithBarbican(key *BarbicanKey, plaintext []byte) ([]byte, error) {
+	barbicanKey, err := barbican.NewMasterKeyFromSecretRef(key.SecretRef)
+	if err != nil {
+		return nil, err
+	}
+	
+	err = barbicanKey.Encrypt(plaintext)
+	if err != nil {
+		return nil, err
+	}
+	
+	return []byte(barbicanKey.EncryptedKey), nil
+}
+
 func (ks *Server) decryptWithPgp(key *PgpKey, ciphertext []byte) ([]byte, error) {
 	pgpKey := pgp.NewMasterKeyFromFingerprint(key.Fingerprint)
 	pgpKey.EncryptedKey = string(ciphertext)
@@ -167,6 +182,21 @@ func (ks *Server) decryptWithAge(key *AgeKey, ciphertext []byte) ([]byte, error)
 	return []byte(plaintext), err
 }
 
+func (ks *Server) decryptWithBarbican(key *BarbicanKey, ciphertext []byte) ([]byte, error) {
+	barbicanKey, err := barbican.NewMasterKeyFromSecretRef(key.SecretRef)
+	if err != nil {
+		return nil, err
+	}
+	
+	barbicanKey.EncryptedKey = string(ciphertext)
+	plaintext, err := barbicanKey.Decrypt()
+	if err != nil {
+		return nil, err
+	}
+	
+	return plaintext, nil
+}
+
 // Encrypt takes an encrypt request and encrypts the provided plaintext with the provided key, returning the encrypted
 // result
 func (ks Server) Encrypt(ctx context.Context,
@@ -230,6 +260,14 @@ func (ks Server) Encrypt(ctx context.Context,
 		response = &EncryptResponse{
 			Ciphertext: ciphertext,
 		}
+	case *Key_BarbicanKey:
+		ciphertext, err := ks.encryptWithBarbican(k.BarbicanKey, req.Plaintext)
+		if err != nil {
+			return nil, err
+		}
+		response = &EncryptResponse{
+			Ciphertext: ciphertext,
+		}
 	case nil:
 		return nil, status.Errorf(codes.NotFound, "Must provide a key")
 	default:
@@ -258,6 +296,8 @@ func keyToString(key *Key) string {
 		return fmt.Sprintf("Hashicorp Vault key with URI %s/v1/%s/keys/%s", k.VaultKey.VaultAddress, k.VaultKey.EnginePath, k.VaultKey.KeyName)
 	case *Key_HckmsKey:
 		return fmt.Sprintf("HuaweiCloud KMS key with ID %s", k.HckmsKey.KeyId)
+	case *Key_BarbicanKey:
+		return fmt.Sprintf("OpenStack Barbican secret with reference %s", k.BarbicanKey.SecretRef)
 	default:
 		return "Unknown key type"
 	}
@@ -336,6 +376,14 @@ func (ks Server) Decrypt(ctx context.Context,
 		}
 	case *Key_HckmsKey:
 		plaintext, err := ks.decryptWithHckms(k.HckmsKey, req.Ciphertext)
+		if err != nil {
+			return nil, err
+		}
+		response = &DecryptResponse{
+			Plaintext: plaintext,
+		}
+	case *Key_BarbicanKey:
+		plaintext, err := ks.decryptWithBarbican(k.BarbicanKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}
