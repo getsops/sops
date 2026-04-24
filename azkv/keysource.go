@@ -7,8 +7,16 @@ package azkv // import "github.com/getsops/sops/v3/azkv"
 
 import (
 	"context"
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/sha256"
+	"crypto/x509"
 	"encoding/base64"
+	"encoding/json"
+	"encoding/pem"
 	"fmt"
+	"math/big"
+	"os"
 	"regexp"
 	"strings"
 	"time"
@@ -54,6 +62,9 @@ type MasterKey struct {
 	// CreationDate of the MasterKey, used to determine if the EncryptedKey
 	// needs rotation.
 	CreationDate time.Time
+	// PublicKey contains an optional locally provided public key used for
+	// offline encryption. Decryption still uses Azure Key Vault.
+	PublicKey []byte
 
 	// tokenCredential contains the azcore.TokenCredential used by the Azure
 	// client. It can be injected by a (local) keyservice.KeyServiceServer
@@ -62,6 +73,18 @@ type MasterKey struct {
 	tokenCredential azcore.TokenCredential
 	// clientOptions contains the azkeys.ClientOptions used by the Azure client.
 	clientOptions *azkeys.ClientOptions
+}
+
+type jsonWebKeyEnvelope struct {
+	Key *jsonWebKey `json:"key"`
+}
+
+type jsonWebKey struct {
+	Kid string   `json:"kid"`
+	Kty string   `json:"kty"`
+	N   string   `json:"n"`
+	E   string   `json:"e"`
+	X5c []string `json:"x5c"`
 }
 
 // newMasterKey creates a new MasterKey from a URL, key name and version,
@@ -89,6 +112,30 @@ func NewMasterKeyWithOptionalVersion(vaultURL string, keyName string, keyVersion
 		return nil, err
 	}
 	return key, nil
+}
+
+// NewMasterKeyWithPublicKey creates a new MasterKey that encrypts data keys
+// offline with the provided public key and decrypts them through Azure Key Vault.
+func NewMasterKeyWithPublicKey(vaultURL string, keyName string, keyVersion string, publicKey []byte) (*MasterKey, error) {
+	key := newMasterKey(vaultURL, keyName, keyVersion)
+	key.PublicKey = append([]byte(nil), publicKey...)
+
+	if key.Version == "" {
+		return nil, fmt.Errorf("azure key vault offline encryption requires a key version")
+	}
+	if _, err := parsePublicKey(key.PublicKey); err != nil {
+		return nil, err
+	}
+	return key, nil
+}
+
+// NewMasterKeyWithPublicKeyFile creates a new MasterKey from a local public key file.
+func NewMasterKeyWithPublicKeyFile(vaultURL string, keyName string, keyVersion string, publicKeyPath string) (*MasterKey, error) {
+	publicKey, err := os.ReadFile(publicKeyPath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read Azure Key Vault public key file %q: %w", publicKeyPath, err)
+	}
+	return NewMasterKeyWithPublicKey(vaultURL, keyName, keyVersion, publicKey)
 }
 
 // NewMasterKeyFromURL takes an Azure Key Vault key URL, and returns a new
@@ -171,7 +218,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 }
 
 func (key *MasterKey) ensureKeyHasVersion(ctx context.Context) error {
-	if (key.Version != "") {
+	if key.Version != "" {
 		// Nothing to do
 		return nil
 	}
@@ -203,6 +250,10 @@ func (key *MasterKey) ensureKeyHasVersion(ctx context.Context) error {
 // EncryptContext takes a SOPS data key, encrypts it with Azure Key Vault, and stores
 // the result in the EncryptedKey field.
 func (key *MasterKey) EncryptContext(ctx context.Context, dataKey []byte) error {
+	if len(key.PublicKey) > 0 {
+		return key.encryptOffline(dataKey)
+	}
+
 	token, err := key.getTokenCredential()
 	if err != nil {
 		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Encryption failed")
@@ -227,6 +278,23 @@ func (key *MasterKey) EncryptContext(ctx context.Context, dataKey []byte) error 
 	encodedEncryptedKey := base64.RawURLEncoding.EncodeToString(resp.KeyOperationResult.Result)
 	key.SetEncryptedDataKey([]byte(encodedEncryptedKey))
 	log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Encryption succeeded")
+	return nil
+}
+
+func (key *MasterKey) encryptOffline(dataKey []byte) error {
+	publicKey, err := parsePublicKey(key.PublicKey)
+	if err != nil {
+		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Encryption failed")
+		return err
+	}
+
+	encryptedKey, err := rsa.EncryptOAEP(sha256.New(), rand.Reader, publicKey, dataKey, nil)
+	if err != nil {
+		log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Encryption failed")
+		return fmt.Errorf("failed to encrypt sops data key locally with Azure Key Vault public key '%s': %w", key.ToString(), err)
+	}
+	key.SetEncryptedDataKey([]byte(base64.RawURLEncoding.EncodeToString(encryptedKey)))
+	log.WithFields(logrus.Fields{"key": key.Name, "version": key.Version}).Info("Offline encryption succeeded")
 	return nil
 }
 
@@ -306,6 +374,9 @@ func (key MasterKey) ToMap() map[string]interface{} {
 	out["vaultUrl"] = key.VaultURL
 	out["key"] = key.Name
 	out["version"] = key.Version
+	if len(key.PublicKey) > 0 {
+		out["public_key"] = base64.StdEncoding.EncodeToString(key.PublicKey)
+	}
 	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)
 	out["enc"] = key.EncryptedKey
 	return out
@@ -323,4 +394,86 @@ func (key *MasterKey) getTokenCredential() (azcore.TokenCredential, error) {
 		return azidentity.NewDefaultAzureCredential(nil)
 	}
 	return key.tokenCredential, nil
+}
+
+func parsePublicKey(raw []byte) (*rsa.PublicKey, error) {
+	if jwk, err := parseJSONWebKey(raw); err == nil {
+		return jwk, nil
+	}
+	if pemKey, err := parsePEMPublicKey(raw); err == nil {
+		return pemKey, nil
+	}
+	return nil, fmt.Errorf("failed to parse Azure Key Vault public key: expected RSA JWK or PEM")
+}
+
+func parseJSONWebKey(raw []byte) (*rsa.PublicKey, error) {
+	var key jsonWebKey
+	if err := json.Unmarshal(raw, &key); err != nil {
+		var envelope jsonWebKeyEnvelope
+		if err := json.Unmarshal(raw, &envelope); err != nil || envelope.Key == nil {
+			return nil, fmt.Errorf("invalid JSON Web Key")
+		}
+		key = *envelope.Key
+	}
+	if key.N == "" || key.E == "" {
+		return nil, fmt.Errorf("json web key is missing modulus or exponent")
+	}
+	if key.Kty != "" && key.Kty != "RSA" && key.Kty != "RSA-HSM" {
+		return nil, fmt.Errorf("unsupported Azure Key Vault key type %q", key.Kty)
+	}
+
+	modulusBytes, err := base64.RawURLEncoding.DecodeString(key.N)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode JSON Web Key modulus: %w", err)
+	}
+	exponentBytes, err := base64.RawURLEncoding.DecodeString(key.E)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode JSON Web Key exponent: %w", err)
+	}
+	exponent := 0
+	for _, b := range exponentBytes {
+		exponent = exponent<<8 + int(b)
+	}
+	if exponent == 0 {
+		return nil, fmt.Errorf("json web key exponent is invalid")
+	}
+
+	return &rsa.PublicKey{
+		N: new(big.Int).SetBytes(modulusBytes),
+		E: exponent,
+	}, nil
+}
+
+func parsePEMPublicKey(raw []byte) (*rsa.PublicKey, error) {
+	block, _ := pem.Decode(raw)
+	if block == nil {
+		return nil, fmt.Errorf("no PEM block found")
+	}
+
+	switch block.Type {
+	case "PUBLIC KEY":
+		publicKey, err := x509.ParsePKIXPublicKey(block.Bytes)
+		if err != nil {
+			return nil, err
+		}
+		rsaKey, ok := publicKey.(*rsa.PublicKey)
+		if !ok {
+			return nil, fmt.Errorf("PEM public key is not RSA")
+		}
+		return rsaKey, nil
+	case "RSA PUBLIC KEY":
+		return x509.ParsePKCS1PublicKey(block.Bytes)
+	case "CERTIFICATE":
+		cert, err := x509.ParseCertificate(block.Bytes)
+		if err != nil {
+			return nil, err
+		}
+		rsaKey, ok := cert.PublicKey.(*rsa.PublicKey)
+		if !ok {
+			return nil, fmt.Errorf("certificate public key is not RSA")
+		}
+		return rsaKey, nil
+	default:
+		return nil, fmt.Errorf("unsupported PEM block type %q", block.Type)
+	}
 }

@@ -152,9 +152,10 @@ type kmsKey struct {
 }
 
 type azureKVKey struct {
-	VaultURL string `yaml:"vaultUrl"`
-	Key      string `yaml:"key"`
-	Version  string `yaml:"version"`
+	VaultURL      string `yaml:"vaultUrl"`
+	Key           string `yaml:"key"`
+	Version       string `yaml:"version"`
+	PublicKeyFile string `yaml:"publicKeyFile"`
 }
 
 type hckmsKey struct {
@@ -215,6 +216,33 @@ func (c *creationRule) GetGCPKMSKeys() ([]string, error) {
 
 func (c *creationRule) GetAzureKeyVaultKeys() ([]string, error) {
 	return parseKeyField(c.AzureKeyVault, "azure_keyvault")
+}
+
+func (c *creationRule) GetAzureKeyVaultMasterKeys(configDir string) ([]*azkv.MasterKey, error) {
+	switch v := c.AzureKeyVault.(type) {
+	case nil:
+		return nil, nil
+	case string, []string:
+		keys, err := c.GetAzureKeyVaultKeys()
+		if err != nil {
+			return nil, err
+		}
+		return azkv.MasterKeysFromURLs(strings.Join(keys, ","))
+	case []interface{}:
+		if len(v) == 0 {
+			return nil, nil
+		}
+		if _, ok := v[0].(string); ok {
+			keys, err := c.GetAzureKeyVaultKeys()
+			if err != nil {
+				return nil, err
+			}
+			return azkv.MasterKeysFromURLs(strings.Join(keys, ","))
+		}
+		return azureMasterKeysFromInterfaceList(v, configDir)
+	default:
+		return nil, fmt.Errorf("invalid azure_keyvault key configuration: expected string, []string, []object, or nil, got %T", c.AzureKeyVault)
+	}
 }
 
 func (c *creationRule) GetVaultURIs() ([]string, error) {
@@ -308,10 +336,10 @@ func deduplicateKeygroup(group sops.KeyGroup) sops.KeyGroup {
 	return deduplicatedKeygroup
 }
 
-func extractMasterKeys(group keyGroup) (sops.KeyGroup, error) {
+func extractMasterKeys(group keyGroup, configDir string) (sops.KeyGroup, error) {
 	var keyGroup sops.KeyGroup
 	for _, k := range group.Merge {
-		subKeyGroup, err := extractMasterKeys(k)
+		subKeyGroup, err := extractMasterKeys(k, configDir)
 		if err != nil {
 			return nil, err
 		}
@@ -344,7 +372,8 @@ func extractMasterKeys(group keyGroup) (sops.KeyGroup, error) {
 		keyGroup = append(keyGroup, key)
 	}
 	for _, k := range group.AzureKV {
-		if key, err := azkv.NewMasterKeyWithOptionalVersion(k.VaultURL, k.Key, k.Version); err == nil {
+		key, err := newAzureMasterKeyFromConfig(k, configDir)
+		if err == nil {
 			keyGroup = append(keyGroup, key)
 		} else {
 			return nil, err
@@ -369,10 +398,14 @@ func getKeysWithValidation(getKeysFunc func() ([]string, error), keyType string)
 }
 
 func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[string]*string) ([]sops.KeyGroup, error) {
+	return getKeyGroupsFromCreationRuleWithConfigDir(cRule, kmsEncryptionContext, "")
+}
+
+func getKeyGroupsFromCreationRuleWithConfigDir(cRule *creationRule, kmsEncryptionContext map[string]*string, configDir string) ([]sops.KeyGroup, error) {
 	var groups []sops.KeyGroup
 	if len(cRule.KeyGroups) > 0 {
 		for _, group := range cRule.KeyGroups {
-			keyGroup, err := extractMasterKeys(group)
+			keyGroup, err := extractMasterKeys(group, configDir)
 			if err != nil {
 				return nil, err
 			}
@@ -423,13 +456,9 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		for _, k := range hckmsMasterKeys {
 			keyGroup = append(keyGroup, k)
 		}
-		azKeys, err := getKeysWithValidation(cRule.GetAzureKeyVaultKeys, "azure_keyvault")
+		azureKeys, err := cRule.GetAzureKeyVaultMasterKeys(configDir)
 		if err != nil {
-			return nil, err
-		}
-		azureKeys, err := azkv.MasterKeysFromURLs(strings.Join(azKeys, ","))
-		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("invalid azure_keyvault key configuration: %w", err)
 		}
 		for _, k := range azureKeys {
 			keyGroup = append(keyGroup, k)
@@ -450,6 +479,64 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 	return groups, nil
 }
 
+func newAzureMasterKeyFromConfig(k azureKVKey, configDir string) (*azkv.MasterKey, error) {
+	if k.PublicKeyFile != "" {
+		return azkv.NewMasterKeyWithPublicKeyFile(k.VaultURL, k.Key, k.Version, resolveConfigPath(configDir, k.PublicKeyFile))
+	}
+	return azkv.NewMasterKeyWithOptionalVersion(k.VaultURL, k.Key, k.Version)
+}
+
+func azureMasterKeysFromInterfaceList(items []interface{}, configDir string) ([]*azkv.MasterKey, error) {
+	var out []*azkv.MasterKey
+	for _, item := range items {
+		cfg, err := azureKVKeyFromInterface(item)
+		if err != nil {
+			return nil, err
+		}
+		key, err := newAzureMasterKeyFromConfig(cfg, configDir)
+		if err != nil {
+			return nil, err
+		}
+		out = append(out, key)
+	}
+	return out, nil
+}
+
+func resolveConfigPath(configDir string, p string) string {
+	if p == "" || filepath.IsAbs(p) || configDir == "" {
+		return p
+	}
+	return filepath.Join(configDir, p)
+}
+
+func azureKVKeyFromInterface(item interface{}) (azureKVKey, error) {
+	asMap, ok := item.(map[interface{}]interface{})
+	if ok {
+		normalized := make(map[string]interface{}, len(asMap))
+		for k, v := range asMap {
+			key, ok := k.(string)
+			if !ok {
+				return azureKVKey{}, fmt.Errorf("invalid azure_keyvault key configuration: expected string map key, got %T", k)
+			}
+			normalized[key] = v
+		}
+		item = normalized
+	}
+
+	raw, err := yaml.Marshal(item)
+	if err != nil {
+		return azureKVKey{}, err
+	}
+	var cfg azureKVKey
+	if err := yaml.Unmarshal(raw, &cfg); err != nil {
+		return azureKVKey{}, err
+	}
+	if cfg.VaultURL == "" || cfg.Key == "" {
+		return azureKVKey{}, fmt.Errorf("invalid azure_keyvault key configuration: vaultUrl and key are required")
+	}
+	return cfg, nil
+}
+
 func loadConfigFile(confPath string) (*configFile, error) {
 	confBytes, err := os.ReadFile(confPath)
 	if err != nil {
@@ -464,7 +551,7 @@ func loadConfigFile(confPath string) (*configFile, error) {
 	return conf, nil
 }
 
-func configFromRule(rule *creationRule, kmsEncryptionContext map[string]*string) (*Config, error) {
+func configFromRule(rule *creationRule, kmsEncryptionContext map[string]*string, configDir string) (*Config, error) {
 	cryptRuleCount := 0
 	if rule.UnencryptedSuffix != "" {
 		cryptRuleCount++
@@ -489,7 +576,7 @@ func configFromRule(rule *creationRule, kmsEncryptionContext map[string]*string)
 		return nil, fmt.Errorf("error loading config: cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex, unencrypted_regex, encrypted_comment_regex, or unencrypted_comment_regex for the same rule")
 	}
 
-	groups, err := getKeyGroupsFromCreationRule(rule, kmsEncryptionContext)
+	groups, err := getKeyGroupsFromCreationRuleWithConfigDir(rule, kmsEncryptionContext, configDir)
 	if err != nil {
 		return nil, err
 	}
@@ -557,7 +644,7 @@ func parseDestinationRuleForFile(conf *configFile, filePath string, kmsEncryptio
 		dest = publish.NewVaultDestination(dRule.VaultAddress, dRule.VaultPath, dRule.VaultKVMountName, dRule.VaultKVVersion)
 	}
 
-	config, err := configFromRule(rule, kmsEncryptionContext)
+	config, err := configFromRule(rule, kmsEncryptionContext, "")
 	if err != nil {
 		return nil, err
 	}
@@ -602,7 +689,7 @@ func parseCreationRuleForFile(conf *configFile, confPath, filePath string, kmsEn
 		return nil, fmt.Errorf("error loading config: no matching creation rules found")
 	}
 
-	config, err := configFromRule(rule, kmsEncryptionContext)
+	config, err := configFromRule(rule, kmsEncryptionContext, configDir)
 	if err != nil {
 		return nil, err
 	}
