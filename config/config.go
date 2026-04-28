@@ -19,6 +19,7 @@ import (
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/pgp"
+	"github.com/getsops/sops/v3/stackitkms"
 	"github.com/getsops/sops/v3/publish"
 	"go.yaml.in/yaml/v3"
 )
@@ -130,14 +131,15 @@ type configFile struct {
 }
 
 type keyGroup struct {
-	Merge   []keyGroup   `yaml:"merge"`
-	KMS     []kmsKey     `yaml:"kms"`
-	GCPKMS  []gcpKmsKey  `yaml:"gcp_kms"`
-	HCKms   []hckmsKey   `yaml:"hckms"`
-	AzureKV []azureKVKey `yaml:"azure_keyvault"`
-	Vault   []string     `yaml:"hc_vault"`
-	Age     []string     `yaml:"age"`
-	PGP     []string     `yaml:"pgp"`
+	Merge     []keyGroup      `yaml:"merge"`
+	KMS       []kmsKey        `yaml:"kms"`
+	GCPKMS    []gcpKmsKey     `yaml:"gcp_kms"`
+	HCKms     []hckmsKey      `yaml:"hckms"`
+	StackitKms []stackitKmsKey `yaml:"stackit_kms"`
+	AzureKV   []azureKVKey    `yaml:"azure_keyvault"`
+	Vault     []string        `yaml:"hc_vault"`
+	Age       []string        `yaml:"age"`
+	PGP       []string        `yaml:"pgp"`
 }
 
 type gcpKmsKey struct {
@@ -159,6 +161,10 @@ type azureKVKey struct {
 
 type hckmsKey struct {
 	KeyID string `yaml:"key_id"`
+}
+
+type stackitKmsKey struct {
+	ResourceID string `yaml:"resource_id"`
 }
 
 type destinationRule struct {
@@ -183,6 +189,7 @@ type creationRule struct {
 	PGP                     interface{} `yaml:"pgp"`     // string or []string
 	GCPKMS                  interface{} `yaml:"gcp_kms"` // string or []string
 	HCKms                   []string    `yaml:"hckms"`
+	StackitKms              interface{} `yaml:"stackit_kms"` // string or []string
 	AzureKeyVault           interface{} `yaml:"azure_keyvault"`       // string or []string
 	VaultURI                interface{} `yaml:"hc_vault_transit_uri"` // string or []string
 	KeyGroups               []keyGroup  `yaml:"key_groups"`
@@ -211,6 +218,10 @@ func (c *creationRule) GetPGPKeys() ([]string, error) {
 
 func (c *creationRule) GetGCPKMSKeys() ([]string, error) {
 	return parseKeyField(c.GCPKMS, "gcp_kms")
+}
+
+func (c *creationRule) GetStackitKmsKeys() ([]string, error) {
+	return parseKeyField(c.StackitKms, "stackit_kms")
 }
 
 func (c *creationRule) GetAzureKeyVaultKeys() ([]string, error) {
@@ -343,6 +354,13 @@ func extractMasterKeys(group keyGroup) (sops.KeyGroup, error) {
 		}
 		keyGroup = append(keyGroup, key)
 	}
+	for _, k := range group.StackitKms {
+		key, err := stackitkms.NewMasterKey(k.ResourceID)
+		if err != nil {
+			return nil, err
+		}
+		keyGroup = append(keyGroup, key)
+	}
 	for _, k := range group.AzureKV {
 		if key, err := azkv.NewMasterKeyWithOptionalVersion(k.VaultURL, k.Key, k.Version); err == nil {
 			keyGroup = append(keyGroup, key)
@@ -421,6 +439,17 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			return nil, err
 		}
 		for _, k := range hckmsMasterKeys {
+			keyGroup = append(keyGroup, k)
+		}
+		stackitKmsKeys, err := getKeysWithValidation(cRule.GetStackitKmsKeys, "stackit_kms")
+		if err != nil {
+			return nil, err
+		}
+		stackitKmsMasterKeys, err := stackitkms.NewMasterKeyFromResourceIDString(strings.Join(stackitKmsKeys, ","))
+		if err != nil {
+			return nil, err
+		}
+		for _, k := range stackitKmsMasterKeys {
 			keyGroup = append(keyGroup, k)
 		}
 		azKeys, err := getKeysWithValidation(cRule.GetAzureKeyVaultKeys, "azure_keyvault")

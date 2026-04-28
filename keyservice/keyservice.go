@@ -15,6 +15,7 @@ import (
 	"github.com/getsops/sops/v3/keys"
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/pgp"
+	"github.com/getsops/sops/v3/stackitkms"
 )
 
 // KeyFromMasterKey converts a SOPS internal MasterKey to an RPC Key that can be serialized with Protocol Buffers
@@ -84,6 +85,14 @@ func KeyFromMasterKey(mk keys.MasterKey) Key {
 			KeyType: &Key_HckmsKey{
 				HckmsKey: &HckmsKey{
 					KeyId: mk.KeyID,
+				},
+			},
+		}
+	case *stackitkms.MasterKey:
+		return Key{
+			KeyType: &Key_StackitKmsKey{
+				StackitKmsKey: &StackitKmsKey{
+					ResourceId: mk.ResourceID,
 				},
 			},
 		}

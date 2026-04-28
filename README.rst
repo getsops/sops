@@ -2,7 +2,7 @@ SOPS: Secrets OPerationS
 ========================
 
 **SOPS** is an editor of encrypted files that supports YAML, JSON, ENV, INI and BINARY
-formats and encrypts with AWS KMS, GCP KMS, Azure Key Vault, HuaweiCloud KMS, age, and PGP.
+formats and encrypts with AWS KMS, GCP KMS, Azure Key Vault, HuaweiCloud KMS, STACKIT KMS, age, and PGP.
 (`demo <https://www.youtube.com/watch?v=YTEVyLXFiq0>`_)
 
 .. image:: https://i.imgur.com/X0TM5NI.gif
@@ -622,13 +622,65 @@ You can also configure HuaweiCloud KMS keys in the ``.sops.yaml`` config file:
           hckms:
             - tr-west-1:abc12345-6789-0123-4567-890123456789,tr-west-2:def67890-1234-5678-9012-345678901234
 
+Encrypting using STACKIT KMS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The STACKIT KMS integration uses the
+`STACKIT SDK for Go <https://github.com/stackitcloud/stackit-sdk-go>`_
+default credential provider chain which tries several authentication methods, in this order:
+
+1. Static token or key flow credentials
+2. Environment variable ``STACKIT_SERVICE_ACCOUNT_TOKEN``
+3. Credentials file at ``~/.stackit/credentials.json``
+4. Token flow via service account key
+
+For more details, see the `STACKIT KMS documentation <https://docs.stackit.cloud/products/security/kms/>`_.
+
+STACKIT KMS uses a resource ID in the format:
+``projects/<projectId>/regions/<regionId>/keyRings/<keyRingId>/keys/<keyId>/versions/<versionNumber>``
+
+You can list your KMS keys using the STACKIT CLI:
+
+.. code::
+
+    stackit kms key-ring list --project-id PROJECT_ID --region eu01
+    stackit kms key list --project-id PROJECT_ID --region eu01 --key-ring-id KEYRING_ID
+    stackit kms key version list --project-id PROJECT_ID --region eu01 --key-ring-id KEYRING_ID --key-id KEY_ID
+
+Now you can encrypt a file using:
+
+.. code:: sh
+
+    $ sops encrypt --stackit-kms projects/my-project-id/regions/eu01/keyRings/aaaaaaaa-1111-2222-3333-bbbbbbbbbbbb/keys/cccccccc-4444-5555-6666-dddddddddddd/versions/1 test.yaml > test.enc.yaml
+
+Or using the environment variable:
+
+.. code:: sh
+
+    $ export SOPS_STACKIT_KMS_IDS="projects/my-project-id/regions/eu01/keyRings/aaaaaaaa-1111-2222-3333-bbbbbbbbbbbb/keys/cccccccc-4444-5555-6666-dddddddddddd/versions/1"
+    $ sops encrypt test.yaml > test.enc.yaml
+
+And decrypt it using:
+
+.. code:: sh
+
+    $ sops decrypt test.enc.yaml
+
+You can also configure STACKIT KMS keys in the ``.sops.yaml`` config file:
+
+.. code:: yaml
+
+    creation_rules:
+        - path_regex: \.stackit\.yaml$
+          stackit_kms: projects/my-project-id/regions/eu01/keyRings/aaaaaaaa-1111-2222-3333-bbbbbbbbbbbb/keys/cccccccc-4444-5555-6666-dddddddddddd/versions/1
+
 Adding and removing keys
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 When creating new files, ``sops`` uses the PGP, KMS and GCP KMS defined in the
-command line arguments ``--kms``, ``--pgp``, ``--gcp-kms``, ``--hckms`` or ``--azure-kv``, or from
+command line arguments ``--kms``, ``--pgp``, ``--gcp-kms``, ``--hckms``, ``--stackit-kms`` or ``--azure-kv``, or from
 the environment variables ``SOPS_KMS_ARN``, ``SOPS_PGP_FP``, ``SOPS_GCP_KMS_IDS``,
-``SOPS_HUAWEICLOUD_KMS_IDS``, ``SOPS_AZURE_KEYVAULT_URLS``. That information is stored in the file under the
+``SOPS_HUAWEICLOUD_KMS_IDS``, ``SOPS_STACKIT_KMS_IDS``, ``SOPS_AZURE_KEYVAULT_URLS``. That information is stored in the file under the
 ``sops`` section, such that decrypting files does not require providing those
 parameters again.
 
@@ -672,9 +724,9 @@ disabled by supplying the ``-y`` flag.
 
 The ``rotate`` command generates a new data encryption key and reencrypt all values
 with the new key. At the same time, the command line flag ``--add-kms``, ``--add-pgp``,
-``--add-gcp-kms``, ``--add-hckms``, ``--add-azure-kv``, ``--rm-kms``, ``--rm-pgp``, ``--rm-gcp-kms``,
-``--rm-hckms`` and ``--rm-azure-kv`` can be used to add and remove keys from a file. These flags use
-the comma separated syntax as the ``--kms``, ``--pgp``, ``--gcp-kms``, ``--hckms`` and ``--azure-kv``
+``--add-gcp-kms``, ``--add-hckms``, ``--add-stackit-kms``, ``--add-azure-kv``, ``--rm-kms``, ``--rm-pgp``, ``--rm-gcp-kms``,
+``--rm-hckms``, ``--rm-stackit-kms`` and ``--rm-azure-kv`` can be used to add and remove keys from a file. These flags use
+the comma separated syntax as the ``--kms``, ``--pgp``, ``--gcp-kms``, ``--hckms``, ``--stackit-kms`` and ``--azure-kv``
 arguments when creating new files.
 
 Use ``updatekeys`` if you want to add a key without rotating the data key.
@@ -850,7 +902,7 @@ stdout.
 Using .sops.yaml conf to select KMS, PGP and age for new files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-It is often tedious to specify the ``--kms`` ``--gcp-kms`` ``--hckms`` ``--pgp`` and ``--age`` parameters for creation
+It is often tedious to specify the ``--kms`` ``--gcp-kms`` ``--hckms`` ``--stackit-kms`` ``--pgp`` and ``--age`` parameters for creation
 of all new files. If your secrets are stored under a specific directory, like a
 ``git`` repository, you can create a ``.sops.yaml`` configuration file at the root
 directory to define which keys are used for which filename.
@@ -895,6 +947,10 @@ can manage the three sets of configurations for the three types of files:
         # hckms files using HuaweiCloud KMS
         - path_regex: \.hckms\.yaml$
           hckms: tr-west-1:abc12345-6789-0123-4567-890123456789,tr-west-2:def67890-1234-5678-9012-345678901234
+
+        # stackit files using STACKIT KMS
+        - path_regex: \.stackit\.yaml$
+          stackit_kms: projects/my-project-id/regions/eu01/keyRings/aaaaaaaa-1111-2222-3333-bbbbbbbbbbbb/keys/cccccccc-4444-5555-6666-dddddddddddd/versions/1
 
         # Finally, if the rules above have not matched, this one is a
         # catchall that will encrypt the file using KMS set C as well as PGP
@@ -1901,6 +1957,16 @@ To directly specify a single key group, you can use the following keys:
           - tr-west-1:abc12345-6789-0123-4567-890123456789
           - tr-west-1:def67890-1234-5678-9012-345678901234
 
+* ``stackit_kms`` (comma-separated string, or list of strings): list of STACKIT KMS resource IDs
+  (format: ``projects/<projectId>/regions/<regionId>/keyRings/<keyRingId>/keys/<keyId>/versions/<versionNumber>``).
+  Example:
+
+  .. code:: yaml
+
+    creation_rules:
+      - stackit_kms:
+          - projects/my-project-id/regions/eu01/keyRings/aaaaaaaa-1111-2222-3333-bbbbbbbbbbbb/keys/cccccccc-4444-5555-6666-dddddddddddd/versions/1
+
 To specify a list of key groups, you can use the following key:
 
 * ``key_groups`` (list of key group objects): a list of key group objects.
@@ -2017,6 +2083,17 @@ A key group supports the following keys:
   .. code:: yaml
 
     - key_id: tr-west-1:abc12345-6789-0123-4567-890123456789
+
+* ``stackit_kms`` (list of objects): list of STACKIT KMS resource IDs.
+  Every object must have the following key:
+
+  * ``resource_id`` (string): the resource ID in format ``projects/<projectId>/regions/<regionId>/keyRings/<keyRingId>/keys/<keyId>/versions/<versionNumber>``.
+
+  Example:
+
+  .. code:: yaml
+
+    - resource_id: projects/my-project-id/regions/eu01/keyRings/aaaaaaaa-1111-2222-3333-bbbbbbbbbbbb/keys/cccccccc-4444-5555-6666-dddddddddddd/versions/1
 
 * ``age`` (list of strings): list of Age public keys.
 

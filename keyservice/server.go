@@ -10,6 +10,7 @@ import (
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/pgp"
+	"github.com/getsops/sops/v3/stackitkms"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -88,6 +89,18 @@ func (ks *Server) encryptWithVault(key *VaultKey, plaintext []byte) ([]byte, err
 	return []byte(vaultKey.EncryptedKey), nil
 }
 
+func (ks *Server) encryptWithStackitKms(key *StackitKmsKey, plaintext []byte) ([]byte, error) {
+	stackitKmsKey, err := stackitkms.NewMasterKey(key.ResourceId)
+	if err != nil {
+		return nil, err
+	}
+	err = stackitKmsKey.Encrypt(plaintext)
+	if err != nil {
+		return nil, err
+	}
+	return []byte(stackitKmsKey.EncryptedKey), nil
+}
+
 func (ks *Server) encryptWithAge(key *AgeKey, plaintext []byte) ([]byte, error) {
 	ageKey := age.MasterKey{
 		Recipient: key.Recipient,
@@ -156,6 +169,19 @@ func (ks *Server) decryptWithVault(key *VaultKey, ciphertext []byte) ([]byte, er
 	vaultKey.EncryptedKey = string(ciphertext)
 	plaintext, err := vaultKey.Decrypt()
 	return []byte(plaintext), err
+}
+
+func (ks *Server) decryptWithStackitKms(key *StackitKmsKey, ciphertext []byte) ([]byte, error) {
+	stackitKmsKey, err := stackitkms.NewMasterKey(key.ResourceId)
+	if err != nil {
+		return nil, err
+	}
+	stackitKmsKey.EncryptedKey = string(ciphertext)
+	plaintext, err := stackitKmsKey.Decrypt()
+	if err != nil {
+		return nil, err
+	}
+	return plaintext, nil
 }
 
 func (ks *Server) decryptWithAge(key *AgeKey, ciphertext []byte) ([]byte, error) {
@@ -230,6 +256,14 @@ func (ks Server) Encrypt(ctx context.Context,
 		response = &EncryptResponse{
 			Ciphertext: ciphertext,
 		}
+	case *Key_StackitKmsKey:
+		ciphertext, err := ks.encryptWithStackitKms(k.StackitKmsKey, req.Plaintext)
+		if err != nil {
+			return nil, err
+		}
+		response = &EncryptResponse{
+			Ciphertext: ciphertext,
+		}
 	case nil:
 		return nil, status.Errorf(codes.NotFound, "Must provide a key")
 	default:
@@ -258,6 +292,8 @@ func keyToString(key *Key) string {
 		return fmt.Sprintf("Hashicorp Vault key with URI %s/v1/%s/keys/%s", k.VaultKey.VaultAddress, k.VaultKey.EnginePath, k.VaultKey.KeyName)
 	case *Key_HckmsKey:
 		return fmt.Sprintf("HuaweiCloud KMS key with ID %s", k.HckmsKey.KeyId)
+	case *Key_StackitKmsKey:
+		return fmt.Sprintf("STACKIT KMS key with resource ID %s", k.StackitKmsKey.ResourceId)
 	default:
 		return "Unknown key type"
 	}
@@ -336,6 +372,14 @@ func (ks Server) Decrypt(ctx context.Context,
 		}
 	case *Key_HckmsKey:
 		plaintext, err := ks.decryptWithHckms(k.HckmsKey, req.Ciphertext)
+		if err != nil {
+			return nil, err
+		}
+		response = &DecryptResponse{
+			Plaintext: plaintext,
+		}
+	case *Key_StackitKmsKey:
+		plaintext, err := ks.decryptWithStackitKms(k.StackitKmsKey, req.Ciphertext)
 		if err != nil {
 			return nil, err
 		}

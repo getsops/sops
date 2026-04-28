@@ -23,6 +23,7 @@ import (
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/pgp"
+	"github.com/getsops/sops/v3/stackitkms"
 )
 
 const (
@@ -46,10 +47,11 @@ type SopsFile struct {
 type Metadata struct {
 	ShamirThreshold           int         `yaml:"shamir_threshold,omitempty" json:"shamir_threshold,omitempty"`
 	KeyGroups                 []keygroup  `yaml:"key_groups,omitempty" json:"key_groups,omitempty"`
-	KMSKeys                   []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
-	GCPKMSKeys                []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
-	HCKmsKeys                 []hckmskey  `yaml:"hckms,omitempty" json:"hckms,omitempty"`
-	AzureKeyVaultKeys         []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
+	KMSKeys                   []kmskey         `yaml:"kms,omitempty" json:"kms,omitempty"`
+	GCPKMSKeys                []gcpkmskey      `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
+	HCKmsKeys                 []hckmskey       `yaml:"hckms,omitempty" json:"hckms,omitempty"`
+	StackitKmsKeys            []stackitkmskey  `yaml:"stackit_kms,omitempty" json:"stackit_kms,omitempty"`
+	AzureKeyVaultKeys         []azkvkey        `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
 	VaultKeys                 []vaultkey  `yaml:"hc_vault,omitempty" json:"hc_vault,omitempty"`
 	AgeKeys                   []agekey    `yaml:"age,omitempty" json:"age,omitempty"`
 	LastModified              string      `yaml:"lastmodified" json:"lastmodified"`
@@ -66,13 +68,14 @@ type Metadata struct {
 }
 
 type keygroup struct {
-	PGPKeys           []pgpkey    `yaml:"pgp,omitempty" json:"pgp,omitempty"`
-	KMSKeys           []kmskey    `yaml:"kms,omitempty" json:"kms,omitempty"`
-	GCPKMSKeys        []gcpkmskey `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
-	HCKmsKeys         []hckmskey  `yaml:"hckms,omitempty" json:"hckms,omitempty"`
-	AzureKeyVaultKeys []azkvkey   `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
-	VaultKeys         []vaultkey  `yaml:"hc_vault" json:"hc_vault"`
-	AgeKeys           []agekey    `yaml:"age" json:"age"`
+	PGPKeys           []pgpkey         `yaml:"pgp,omitempty" json:"pgp,omitempty"`
+	KMSKeys           []kmskey         `yaml:"kms,omitempty" json:"kms,omitempty"`
+	GCPKMSKeys        []gcpkmskey      `yaml:"gcp_kms,omitempty" json:"gcp_kms,omitempty"`
+	HCKmsKeys         []hckmskey       `yaml:"hckms,omitempty" json:"hckms,omitempty"`
+	StackitKmsKeys    []stackitkmskey  `yaml:"stackit_kms,omitempty" json:"stackit_kms,omitempty"`
+	AzureKeyVaultKeys []azkvkey        `yaml:"azure_kv,omitempty" json:"azure_kv,omitempty"`
+	VaultKeys         []vaultkey       `yaml:"hc_vault" json:"hc_vault"`
+	AgeKeys           []agekey         `yaml:"age" json:"age"`
 }
 
 type pgpkey struct {
@@ -123,6 +126,12 @@ type hckmskey struct {
 	EncryptedDataKey string `yaml:"enc" json:"enc"`
 }
 
+type stackitkmskey struct {
+	ResourceID       string `yaml:"resource_id" json:"resource_id"`
+	CreatedAt        string `yaml:"created_at" json:"created_at"`
+	EncryptedDataKey string `yaml:"enc" json:"enc"`
+}
+
 // MetadataFromInternal converts an internal SOPS metadata representation to a representation appropriate for storage
 func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 	var m Metadata
@@ -143,6 +152,7 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 		m.KMSKeys = kmsKeysFromGroup(group)
 		m.GCPKMSKeys = gcpkmsKeysFromGroup(group)
 		m.HCKmsKeys = hckmsKeysFromGroup(group)
+		m.StackitKmsKeys = stackitKmsKeysFromGroup(group)
 		m.VaultKeys = vaultKeysFromGroup(group)
 		m.AzureKeyVaultKeys = azkvKeysFromGroup(group)
 		m.AgeKeys = ageKeysFromGroup(group)
@@ -153,6 +163,7 @@ func MetadataFromInternal(sopsMetadata sops.Metadata) Metadata {
 				PGPKeys:           pgpKeysFromGroup(group),
 				GCPKMSKeys:        gcpkmsKeysFromGroup(group),
 				HCKmsKeys:         hckmsKeysFromGroup(group),
+				StackitKmsKeys:    stackitKmsKeysFromGroup(group),
 				VaultKeys:         vaultKeysFromGroup(group),
 				AzureKeyVaultKeys: azkvKeysFromGroup(group),
 				AgeKeys:           ageKeysFromGroup(group),
@@ -252,6 +263,20 @@ func ageKeysFromGroup(group sops.KeyGroup) (keys []agekey) {
 	return
 }
 
+func stackitKmsKeysFromGroup(group sops.KeyGroup) (keys []stackitkmskey) {
+	for _, key := range group {
+		switch key := key.(type) {
+		case *stackitkms.MasterKey:
+			keys = append(keys, stackitkmskey{
+				ResourceID:       key.ResourceID,
+				CreatedAt:        key.CreationDate.Format(time.RFC3339),
+				EncryptedDataKey: key.EncryptedKey,
+			})
+		}
+	}
+	return
+}
+
 func hckmsKeysFromGroup(group sops.KeyGroup) (keys []hckmskey) {
 	for _, key := range group {
 		switch key := key.(type) {
@@ -320,7 +345,7 @@ func (m *Metadata) ToInternal() (sops.Metadata, error) {
 	}, nil
 }
 
-func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, hckmsKeys []hckmskey, azkvKeys []azkvkey, vaultKeys []vaultkey, ageKeys []agekey) (sops.KeyGroup, error) {
+func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, hckmsKeys []hckmskey, stackitKmsKeys []stackitkmskey, azkvKeys []azkvkey, vaultKeys []vaultkey, ageKeys []agekey) (sops.KeyGroup, error) {
 	var internalGroup sops.KeyGroup
 	for _, kmsKey := range kmsKeys {
 		k, err := kmsKey.toInternal()
@@ -338,6 +363,13 @@ func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmske
 	}
 	for _, hckmsKey := range hckmsKeys {
 		k, err := hckmsKey.toInternal()
+		if err != nil {
+			return nil, err
+		}
+		internalGroup = append(internalGroup, k)
+	}
+	for _, stackitKmsKey := range stackitKmsKeys {
+		k, err := stackitKmsKey.toInternal()
 		if err != nil {
 			return nil, err
 		}
@@ -376,8 +408,8 @@ func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmske
 
 func (m *Metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 	var internalGroups []sops.KeyGroup
-	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.HCKmsKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 || len(m.AgeKeys) > 0 {
-		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.HCKmsKeys, m.AzureKeyVaultKeys, m.VaultKeys, m.AgeKeys)
+	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.HCKmsKeys) > 0 || len(m.StackitKmsKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 || len(m.AgeKeys) > 0 {
+		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.HCKmsKeys, m.StackitKmsKeys, m.AzureKeyVaultKeys, m.VaultKeys, m.AgeKeys)
 		if err != nil {
 			return nil, err
 		}
@@ -385,7 +417,7 @@ func (m *Metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 		return internalGroups, nil
 	} else if len(m.KeyGroups) > 0 {
 		for _, group := range m.KeyGroups {
-			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.HCKmsKeys, group.AzureKeyVaultKeys, group.VaultKeys, group.AgeKeys)
+			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.HCKmsKeys, group.StackitKmsKeys, group.AzureKeyVaultKeys, group.VaultKeys, group.AgeKeys)
 			if err != nil {
 				return nil, err
 			}
@@ -469,6 +501,20 @@ func (ageKey *agekey) toInternal() (*age.MasterKey, error) {
 		EncryptedKey: ageKey.EncryptedDataKey,
 		Recipient:    ageKey.Recipient,
 	}, nil
+}
+
+func (stackitKmsKey *stackitkmskey) toInternal() (*stackitkms.MasterKey, error) {
+	creationDate, err := time.Parse(time.RFC3339, stackitKmsKey.CreatedAt)
+	if err != nil {
+		return nil, err
+	}
+	key, err := stackitkms.NewMasterKey(stackitKmsKey.ResourceID)
+	if err != nil {
+		return nil, err
+	}
+	key.EncryptedKey = stackitKmsKey.EncryptedDataKey
+	key.CreationDate = creationDate
+	return key, nil
 }
 
 func (hckmsKey *hckmskey) toInternal() (*hckms.MasterKey, error) {
