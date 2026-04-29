@@ -75,6 +75,8 @@ func warnMoreThanOnePositionalArgument(c *cli.Context) {
 }
 
 func main() {
+	defer age.ClearFileStreamCache()
+
 	cli.VersionPrinter = version.PrintVersion
 	app := cli.NewApp()
 

@@ -399,6 +399,21 @@ func getUserConfigDir() (string, error) {
 	return os.UserConfigDir()
 }
 
+// ClearFileStreamCache wipes the cached stream secrets from memory by overwriting
+// the byte slices with zeros before deleting them from the map.
+// This is critical for security to prevent keys from lingering in RAM.
+func ClearFileStreamCache() {
+	fileStreamCache.Range(func(key, value interface{}) bool {
+		if byte, ok := value.([]byte); ok {
+			for i := range byte {
+				byte[i] = 0
+			}
+		}
+		fileStreamCache.Delete(key)
+		return true
+	})
+}
+
 // reads a file from the given path, if it is a stream (e.g., /dev/fd/* or /proc/*)
 // it caches the content in memory to avoid issues with multiple reads from the same stream.
 func readStreamSafe(path string) ([]byte, error) {
