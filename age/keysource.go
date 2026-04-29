@@ -399,14 +399,30 @@ func getUserConfigDir() (string, error) {
 	return os.UserConfigDir()
 }
 
+// reads a file from the given path, if it is a stream (e.g., /dev/fd/* or /proc/*)
+// it caches the content in memory to avoid issues with multiple reads from the same stream.
+func readStreamSafe(path string) ([]byte, error) {
+	isStream := strings.HasPrefix(path, "/dev/fd/") || strings.HasPrefix(path, "/proc/")
+
+	if isStream {
+		if cached, ok := fileStreamCache.Load(path); ok {
+			return cached.([]byte), nil
+		}
+	}
+
+	b, err := os.ReadFile(path)
+	if err == nil && isStream {
+		fileStreamCache.Store(path, b)
+	}
+	return b, err
+}
+
 // loadIdentities attempts to load the age identities based on runtime
-// environment configurations (e.g. SopsAgeKeyEnv, SopsAgeKeyFileEnv,
-// SopsAgeSshPrivateKeyFileEnv, SopsAgeKeyUserConfigPath). It will load all
+// environment configurations (e.g. SopsAgeKeyUserConfigPath). It will load all
 // found references, and expects at least one configuration to be present.
 func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 	identities, unusedLocations, errs := key.loadAgeSSHIdentities()
-
-	var readers = make(map[string]io.Reader, 0)
+	readers := make(map[string]io.Reader)
 
 	if ageKey, ok := os.LookupEnv(SopsAgeKeyEnv); ok {
 		readers[SopsAgeKeyEnv] = strings.NewReader(ageKey)
@@ -415,19 +431,21 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 	}
 
 	if ageKeyFile, ok := os.LookupEnv(SopsAgeKeyFileEnv); ok {
-		f, err := os.Open(ageKeyFile)
+		b, err := readStreamSafe(ageKeyFile)
 		if err != nil {
 			errs = append(errs, fmt.Errorf("failed to open %s file: %w", SopsAgeKeyFileEnv, err))
 		} else {
-			defer f.Close()
-			readers[SopsAgeKeyFileEnv] = f
+			readers[SopsAgeKeyFileEnv] = bytes.NewReader(b)
 		}
 	} else {
 		unusedLocations = append(unusedLocations, SopsAgeKeyFileEnv)
 	}
 
 	if ageKeyCmd, ok := os.LookupEnv(SopsAgeKeyCmdEnv); ok {
-		out, err := getOutputFromCmd(ageKeyCmd, []string{fmt.Sprintf("%s=%s", SopsAgeRecipientEnv, key.Recipient)})
+		out, err := getOutputFromCmd(
+			ageKeyCmd,
+			[]string{fmt.Sprintf("%s=%s", SopsAgeRecipientEnv, key.Recipient)},
+		)
 		if err != nil {
 			errs = append(errs, err)
 		} else {
@@ -442,14 +460,13 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 		errs = append(errs, fmt.Errorf("user config directory could not be determined: %w", err))
 	} else if userConfigDir != "" {
 		ageKeyFilePath := filepath.Join(userConfigDir, filepath.FromSlash(SopsAgeKeyUserConfigPath))
-		f, err := os.Open(ageKeyFilePath)
+		b, err := readStreamSafe(ageKeyFilePath)
 		if err != nil && !errors.Is(err, os.ErrNotExist) {
 			errs = append(errs, fmt.Errorf("failed to open file: %w", err))
 		} else if errors.Is(err, os.ErrNotExist) && len(readers) == 0 && len(identities) == 0 {
 			unusedLocations = append(unusedLocations, ageKeyFilePath)
 		} else if err == nil {
-			defer f.Close()
-			readers[ageKeyFilePath] = f
+			readers[ageKeyFilePath] = bytes.NewReader(b)
 		}
 	}
 
@@ -464,6 +481,7 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 			}
 		}
 	}
+
 	return identities, unusedLocations, errs
 }
 
