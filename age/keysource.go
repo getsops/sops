@@ -55,6 +55,8 @@ const (
 // log is the global logger for any age MasterKey.
 var log *logrus.Logger
 
+var fileStreamCache sync.Map
+
 func init() {
 	log = logging.NewLogger("AGE")
 }
