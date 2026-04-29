@@ -21,6 +21,7 @@ import (
 
 	"github.com/getsops/sops/v3/logging"
 	"github.com/google/shlex"
+	"sync"
 )
 
 const (
