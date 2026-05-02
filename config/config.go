@@ -112,8 +112,9 @@ type JSONBinaryStoreConfig struct {
 }
 
 type YAMLStoreConfig struct {
-	Indent             int  `yaml:"indent"`
-	CompactArrayIndent bool `yaml:"compact_array_indent"`
+	Indent              int  `yaml:"indent"`
+	CompactArrayIndent  bool `yaml:"compact_array_indent"`
+	DocumentStartMarker bool `yaml:"document_start_marker"`
 }
 
 type StoresConfig struct {

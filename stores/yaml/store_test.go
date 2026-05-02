@@ -541,6 +541,64 @@ func TestCompactArrayIndentDisabled(t *testing.T) {
 	assert.Equal(t, string(in), string(bytes))
 }
 
+func TestDocumentStartMarker(t *testing.T) {
+	in := []byte(`key: value
+nested:
+    list:
+        - a
+        - b
+`)
+	expected := []byte(`---
+key: value
+nested:
+    list:
+        - a
+        - b
+`)
+	branches, err := (&Store{}).LoadPlainFile(in)
+	assert.Nil(t, err)
+	bytes, err := (&Store{
+		config: config.YAMLStoreConfig{
+			DocumentStartMarker: true,
+		},
+	}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, string(expected), string(bytes))
+}
+
+func TestDocumentStartMarkerMultiDoc(t *testing.T) {
+	in := []byte(`---
+key1: value1
+---
+key2: value2`)
+	expected := []byte(`---
+key1: value1
+---
+key2: value2
+`)
+	branches, err := (&Store{}).LoadPlainFile(in)
+	assert.Nil(t, err)
+	bytes, err := (&Store{
+		config: config.YAMLStoreConfig{
+			DocumentStartMarker: true,
+		},
+	}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, string(expected), string(bytes))
+}
+
+func TestDocumentStartMarkerDisabled(t *testing.T) {
+	in := []byte(`key: value
+`)
+	branches, err := (&Store{}).LoadPlainFile(in)
+	assert.Nil(t, err)
+	bytes, err := (&Store{}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, string(in), string(bytes))
+	// Verify no '---' was prepended
+	assert.False(t, len(bytes) > 3 && string(bytes[:3]) == "---")
+}
+
 func TestHasSopsTopLevelKey(t *testing.T) {
 	ok := (&Store{}).HasSopsTopLevelKey(sops.TreeBranch{
 		sops.TreeItem{

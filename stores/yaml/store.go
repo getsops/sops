@@ -400,6 +400,9 @@ func (store *Store) EmitPlainFile(branches sops.TreeBranches) ([]byte, error) {
 		}
 	}
 	e.Close()
+	if store.config.DocumentStartMarker && !bytes.HasPrefix(b.Bytes(), []byte("---")) {
+		return append([]byte("---\n"), b.Bytes()...), nil
+	}
 	return b.Bytes(), nil
 }
 
