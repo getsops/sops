@@ -380,6 +380,9 @@ func (store *Store) EmitPlainFile(branches sops.TreeBranches) ([]byte, error) {
 		return nil, err
 	}
 	e.SetIndent(indent)
+	if store.config.CompactArrayIndent {
+		e.CompactSeqIndent()
+	}
 	for _, branch := range branches {
 		// Document root
 		var doc = yaml.Node{}
