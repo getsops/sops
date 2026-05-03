@@ -40,6 +40,9 @@ var (
 	// defaultTokenFile is the name of the file in the user's home directory
 	// where a Vault token is expected to be stored.
 	defaultTokenFile = ".vault-token"
+	// SopsVaultTokenFileEnv can be set as an environment variable pointing to a
+	// vault token file.
+	SopsVaultTokenFileEnv = "SOPS_VAULT_TOKEN_FILE"
 )
 
 // Token used for authenticating towards a Vault server.
@@ -364,12 +367,28 @@ func userVaultToken() (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("error getting user's home directory: %w", err)
 	}
-	tokenPath := filepath.Join(homePath, defaultTokenFile)
+
+	var tokenPath string
+
+	if tokenPathEnv, ok := os.LookupEnv(SopsVaultTokenFileEnv); ok {
+		if filepath.IsAbs(tokenPathEnv) {
+			tokenPath = tokenPathEnv
+		} else {
+			tokenPath = filepath.Join(homePath, tokenPathEnv)
+		}
+
+	} else {
+		tokenPath = filepath.Join(homePath, defaultTokenFile)
+	}
 
 	f, err := os.Open(tokenPath)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
-			return "", nil
+			if tokenPathEnv, ok := os.LookupEnv(SopsVaultTokenFileEnv); ok {
+				return "", fmt.Errorf("token file specified in %s environment variable does not exist: %s", SopsVaultTokenFileEnv, tokenPathEnv)
+			} else {
+				return "", nil
+			}
 		}
 		return "", err
 	}
