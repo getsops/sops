@@ -464,9 +464,8 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 		if err != nil {
 			errs = append(errs, fmt.Errorf("failed to open %s file: %w", SopsAgeKeyFileEnv, err))
 		} else {
-			defer f.Close()
 			readers[SopsAgeKeyFileEnv] = identityReader{
-				reader:                   f,
+				reader:                   bytes.NewReader(b),
 				allowMultipleKeysPerLine: false,
 			}
 		}
@@ -502,9 +501,8 @@ func (key *MasterKey) loadIdentities() (ParsedIdentities, []string, errSet) {
 		} else if errors.Is(err, os.ErrNotExist) && len(readers) == 0 && len(identities) == 0 {
 			unusedLocations = append(unusedLocations, ageKeyFilePath)
 		} else if err == nil {
-			defer f.Close()
 			readers[ageKeyFilePath] = identityReader{
-				reader:                   f,
+				reader:                   bytes.NewReader(b),
 				allowMultipleKeysPerLine: false,
 			}
 		}
