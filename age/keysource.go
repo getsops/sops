@@ -418,9 +418,11 @@ func ClearFileStreamCache() {
 }
 
 // reads a file from the given path, if it is a stream (e.g., /dev/fd/* or /proc/*)
-// it caches the content in memory to avoid issues with multiple reads from the same stream.
+// using os.Stat to check the file mode. If it is a stream, it reads the content and caches it in memory.
+// It caches the content in memory to avoid issues with multiple reads from the same stream.
 func readStreamSafe(path string) ([]byte, error) {
-	isStream := strings.HasPrefix(path, "/dev/fd/") || strings.HasPrefix(path, "/proc/") || strings.HasPrefix(path, "/dev/stdin")
+	fileInfo, err := os.Stat(path)
+	isStream := err == nil && (fileInfo.Mode()&os.ModeNamedPipe != 0 || fileInfo.Mode()&os.ModeCharDevice != 0)
 
 	if isStream {
 		if cached, ok := fileStreamCache.Load(path); ok {
