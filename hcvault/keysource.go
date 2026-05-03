@@ -359,36 +359,32 @@ func vaultClient(address, token string, hc *http.Client) (*api.Client, error) {
 	return client, nil
 }
 
-// userVaultToken returns the token from `$HOME/.vault-token` if the file
-// exists. It returns an error if the file exists but cannot be read from.
-// If the file does not exist, it returns an empty string.
+// userVaultToken attempts to read the Vault token from the file specified in
+// the SOPS_VAULT_TOKEN_FILE environment variable, or from the default location in
+// $HOME/.vault-token if the environment variable is not set. It returns the
+// token, or an error if the file cannot be read.
 func userVaultToken() (string, error) {
-	homePath, err := homedir.Dir()
-	if err != nil {
-		return "", fmt.Errorf("error getting user's home directory: %w", err)
-	}
-
 	var tokenPath string
+	isTokenEnvSet := false
 
-	if tokenPathEnv, ok := os.LookupEnv(SopsVaultTokenFileEnv); ok {
-		if filepath.IsAbs(tokenPathEnv) {
-			tokenPath = tokenPathEnv
-		} else {
-			tokenPath = filepath.Join(homePath, tokenPathEnv)
-		}
-
+	if tokenPathEnv, ok := os.LookupEnv(SopsVaultTokenFileEnv); ok && tokenPathEnv != "" {
+		tokenPath = tokenPathEnv
+		isTokenEnvSet = true
 	} else {
+		homePath, err := homedir.Dir()
+		if err != nil {
+			return "", fmt.Errorf("error getting user's home directory: %w", err)
+		}
 		tokenPath = filepath.Join(homePath, defaultTokenFile)
 	}
 
 	f, err := os.Open(tokenPath)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
-			if tokenPathEnv, ok := os.LookupEnv(SopsVaultTokenFileEnv); ok {
-				return "", fmt.Errorf("token file specified in %s environment variable does not exist: %s", SopsVaultTokenFileEnv, tokenPathEnv)
-			} else {
-				return "", nil
+			if isTokenEnvSet {
+				return "", fmt.Errorf("token file specified in %s environment variable does not exist: %s", SopsVaultTokenFileEnv, tokenPath)
 			}
+			return "", nil
 		}
 		return "", err
 	}
