@@ -26,7 +26,74 @@ import (
 const (
 	// KeyTypeIdentifier is the string used to identify a Vault MasterKey.
 	KeyTypeIdentifier = "hc_vault"
+	// SopsHCVaultAllowlist can be set as an environment variable with a string list
+	// of age keys as value.
+	SopsHCVaultAllowlist = "SOPS_HC_VAULT_ALLOWLIST"
+	// Special value for allowlist that allows all hosts
+	AllowlistAllHosts = "all"
+	// Special value for allowlist that allows no hosts
+	AllowlistNoHosts = "none"
+	// Default value of allowlist. Should eventually be changed to "none".
+	AllowlistDefault = AllowlistAllHosts
 )
+
+type allowList struct {
+	All  bool
+	URIs []string
+}
+
+func (al *allowList) Allows(address string) bool {
+	if al.All {
+		return true
+	}
+	if !strings.HasSuffix(address, "/") {
+		address = address + "/"
+	}
+	for _, uri := range al.URIs {
+		if strings.HasPrefix(address, uri) {
+			return true
+		}
+	}
+	return false
+}
+
+func parseAllowlistString(allowlistStr string) (allowList, error) {
+	switch allowlistStr {
+	case AllowlistAllHosts:
+		return allowList{
+			All:  true,
+			URIs: nil,
+		}, nil
+	case AllowlistNoHosts:
+		return allowList{
+			All:  false,
+			URIs: nil,
+		}, nil
+	}
+	uris := strings.Split(allowlistStr, ",")
+	for idx, uri := range uris {
+		uri = strings.Trim(uri, " ")
+		if uri == "" {
+			return allowList{}, fmt.Errorf("%s's entry %d is empty", SopsHCVaultAllowlist, idx+1)
+		}
+		if !strings.HasSuffix(uri, "/") {
+			uri = uri + "/"
+		}
+		uris[idx] = uri
+	}
+	return allowList{
+		All:  false,
+		URIs: uris,
+	}, nil
+}
+
+func getAllowlist() (allowList, error) {
+	var allowlistStr = AllowlistDefault
+	if allowlist, ok := os.LookupEnv(SopsHCVaultAllowlist); ok && len(allowlist) > 0 {
+		allowlistStr = allowlist
+	}
+	return parseAllowlistString(allowlistStr)
+}
 
 func init() {
 	log = logging.NewLogger("VAULT_TRANSIT")
@@ -330,6 +397,14 @@ func dataKeyFromSecret(secret *api.Secret) ([]byte, error) {
 func vaultClient(address, token string, hc *http.Client) (*api.Client, error) {
 	cfg := api.DefaultConfig()
 	cfg.Address = address
+
+	allowlist, err := getAllowlist()
+	if err != nil {
+		return nil, err
+	}
+	if !allowlist.Allows(address) {
+		return nil, fmt.Errorf("Allowlist does not allow %s", address)
+	}
 
 	if hc != nil {
 		cfg.HttpClient = hc
