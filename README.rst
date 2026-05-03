@@ -558,6 +558,17 @@ To easily deploy Vault locally: (DO NOT DO THIS FOR PRODUCTION!!!)
 
     $ sops encrypt --verbose prod/raw.yaml > prod/encrypted.yaml
 
+Restricting HC Vault servers that SOPS can talk to
+**************************************************
+
+If you want to restrict which HC Vault servers SOPS is allowed to talk to, you can set the ``SOPS_HC_VAULT_ALLOWLIST`` environment variable.
+When set to ``all`` (the default value), there is no restriction.
+When set to ``none``, SOPS will not allow any access to HC Vault servers for decryption or encryption.
+
+When set to any other value, this value will be interpreted as a comma-separated list of strings.
+If SOPS attempts to contact a vault URL that starts with one of these strings, SOPS will attempt to contact that URL.
+If there is no matching prefix in ``SOPS_HC_VAULT_ALLOWLIST``, SOPS will not contact that URL.
+
 Encrypting using HuaweiCloud KMS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
