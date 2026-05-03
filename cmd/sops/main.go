@@ -75,6 +75,8 @@ func warnMoreThanOnePositionalArgument(c *cli.Context) {
 }
 
 func main() {
+	defer hcvault.ClearFileStreamCache()
+
 	cli.VersionPrinter = version.PrintVersion
 	app := cli.NewApp()
 

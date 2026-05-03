@@ -1,12 +1,10 @@
 package hcvault
 
 import (
-	"bytes"
 	"context"
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 	"os"
@@ -14,6 +12,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/hashicorp/vault/api"
@@ -43,6 +42,9 @@ var (
 	// SopsVaultTokenFileEnv can be set as an environment variable pointing to a
 	// vault token file.
 	SopsVaultTokenFileEnv = "SOPS_VAULT_TOKEN_FILE"
+	// vaultTokenStreamCache is a cache for vault token file streams, to avoid
+	// EOF errors when multiple vault keys attempt to read the same ephemeral token.
+	vaultTokenStreamCache sync.Map
 )
 
 // Token used for authenticating towards a Vault server.
@@ -359,6 +361,41 @@ func vaultClient(address, token string, hc *http.Client) (*api.Client, error) {
 	return client, nil
 }
 
+// readTokenStreamSafe reads a file from the given path.
+// If it is a stream, it reads the content and caches it in memory.
+func readTokenStreamSafe(path string) ([]byte, error) {
+	fileInfo, err := os.Stat(path)
+	isStream := err == nil && (fileInfo.Mode()&os.ModeNamedPipe != 0 || fileInfo.Mode()&os.ModeCharDevice != 0)
+
+	if isStream {
+		if cached, ok := vaultTokenStreamCache.Load(path); ok {
+			return cached.([]byte), nil
+		}
+	}
+
+	b, err := os.ReadFile(path)
+	if err == nil && isStream {
+		vaultTokenStreamCache.Store(path, b)
+	}
+	return b, err
+}
+
+// ClearFileStreamCache clears the cache for vault token file streams
+// zeroing out the byte slices before deleting them from the cache to prevent
+// sensitive data from lingering in memory.
+func ClearFileStreamCache() {
+	vaultTokenStreamCache.Range(func(key, value any) bool {
+		if byte, ok := value.([]byte); ok {
+			for i := range byte {
+				byte[i] = 0
+			}
+		}
+		vaultTokenStreamCache.Delete(key)
+		return true
+	})
+
+}
+
 // userVaultToken attempts to read the Vault token from the file specified in
 // the SOPS_VAULT_TOKEN_FILE environment variable, or from the default location in
 // $HOME/.vault-token if the environment variable is not set. It returns the
@@ -378,23 +415,17 @@ func userVaultToken() (string, error) {
 		tokenPath = filepath.Join(homePath, defaultTokenFile)
 	}
 
-	f, err := os.Open(tokenPath)
+	b, err := readTokenStreamSafe(tokenPath)
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
 			if isTokenEnvSet {
-				return "", fmt.Errorf("token file specified in %s environment variable does not exist: %s", SopsVaultTokenFileEnv, tokenPath)
+				return "", fmt.Errorf("token file specified in %s does not exist: %w", SopsVaultTokenFileEnv, err)
 			}
 			return "", nil
 		}
 		return "", err
 	}
-	defer f.Close()
-
-	buf := bytes.NewBuffer(nil)
-	if _, err := io.Copy(buf, f); err != nil {
-		return "", err
-	}
-	return strings.TrimSpace(buf.String()), nil
+	return strings.TrimSpace(string(b)), nil
 }
 
 // engineAndKeyFromPath returns the engine path and key name from the full
