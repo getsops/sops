@@ -11,6 +11,7 @@ message Key {
 		VaultKey vault_key = 5;
 		AgeKey age_key = 6;
 		HckmsKey hckms_key = 7;
+		BarbicanKey barbican_key = 8;
 	}
 }
 
@@ -47,6 +48,10 @@ message AgeKey {
 
 message HckmsKey {
 	string key_id = 1;
+}
+
+message BarbicanKey {
+	string secret_ref = 1;
 }
 
 message EncryptRequest {

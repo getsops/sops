@@ -24,6 +24,7 @@ import (
 	"github.com/getsops/sops/v3/age"
 	_ "github.com/getsops/sops/v3/audit"
 	"github.com/getsops/sops/v3/azkv"
+	"github.com/getsops/sops/v3/barbican"
 	"github.com/getsops/sops/v3/cmd/sops/codes"
 	"github.com/getsops/sops/v3/cmd/sops/common"
 	"github.com/getsops/sops/v3/cmd/sops/subcommand/exec"
@@ -91,14 +92,14 @@ func main() {
 		},
 	}
 	app.Name = "sops"
-	app.Usage = "sops - encrypted file editor with AWS KMS, GCP KMS, HuaweiCloud KMS, Azure Key Vault, age, and GPG support"
+	app.Usage = "sops - encrypted file editor with AWS KMS, GCP KMS, HuaweiCloud KMS, Azure Key Vault, OpenStack Barbican, age, and GPG support"
 	app.ArgsUsage = "sops [options] file"
 	app.Version = version.Version
 	app.Authors = []cli.Author{
 		{Name: "CNCF Maintainers"},
 	}
 	app.UsageText = `sops is an editor of encrypted files that supports AWS KMS, GCP, HuaweiCloud KMS, AZKV,
-	PGP, and Age
+	OpenStack Barbican, PGP, and Age
 
    To encrypt or decrypt a document with AWS KMS, specify the KMS ARN
    in the -k flag or in the SOPS_KMS_ARN environment variable.
@@ -133,6 +134,14 @@ func main() {
     https://docs.microsoft.com/en-us/go/azure/azure-sdk-go-authorization#use-environment-based-authentication.
     The user/sp needs the key/encrypt and key/decrypt permissions.)
 
+   To encrypt or decrypt a document with OpenStack Barbican, specify the
+   Barbican secret reference in the --barbican flag or in the SOPS_BARBICAN_SECRETS
+   environment variable. Secret references can be UUIDs, full URIs, or regional
+   format (region:REGION:UUID).
+   (You need to setup OpenStack credentials via environment variables:
+    OS_AUTH_URL, OS_USERNAME, OS_PASSWORD, OS_PROJECT_ID, or use application
+    credentials with OS_APPLICATION_CREDENTIAL_ID and OS_APPLICATION_CREDENTIAL_SECRET)
+
    To encrypt or decrypt using age, specify the recipient in the -a flag,
    or in the SOPS_AGE_RECIPIENTS environment variable.
 
@@ -142,12 +151,12 @@ func main() {
    To use multiple KMS or PGP keys, separate them by commas. For example:
        $ sops -p "10F2...0A, 85D...B3F21" file.yaml
 
-   The -p, -k, --gcp-kms, --hckms, --hc-vault-transit, and --azure-kv flags are only
+   The -p, -k, --gcp-kms, --hckms, --hc-vault-transit, --azure-kv, and --barbican flags are only
    used to encrypt new documents. Editing or decrypting existing documents
    can be done with "sops file" or "sops decrypt file" respectively. The KMS and
    PGP keys listed in the encrypted documents are used then. To manage master
-   keys in existing documents, use the "add-{kms,pgp,gcp-kms,hckms,azure-kv,hc-vault-transit}"
-   and "rm-{kms,pgp,gcp-kms,hckms,azure-kv,hc-vault-transit}" flags with --rotate
+   keys in existing documents, use the "add-{kms,pgp,gcp-kms,hckms,azure-kv,hc-vault-transit,barbican}"
+   and "rm-{kms,pgp,gcp-kms,hckms,azure-kv,hc-vault-transit,barbican}" flags with --rotate
    or the updatekeys command.
 
    To use a different GPG binary than the one in your PATH, set SOPS_GPG_EXEC.
@@ -971,6 +980,11 @@ func main() {
 					EnvVar: "SOPS_AGE_RECIPIENTS",
 				},
 				cli.StringFlag{
+					Name:   "barbican",
+					Usage:  "comma separated list of Barbican secret references",
+					EnvVar: "SOPS_BARBICAN_SECRETS",
+				},
+				cli.StringFlag{
 					Name:  "input-type",
 					Usage: "currently json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
 				},
@@ -1184,6 +1198,14 @@ func main() {
 					Usage: "remove the provided comma-separated list of PGP fingerprints from the list of master keys on the given file",
 				},
 				cli.StringFlag{
+					Name:  "add-barbican",
+					Usage: "add the provided comma-separated list of Barbican secret references to the list of master keys on the given file",
+				},
+				cli.StringFlag{
+					Name:  "rm-barbican",
+					Usage: "remove the provided comma-separated list of Barbican secret references from the list of master keys on the given file",
+				},
+				cli.StringFlag{
 					Name:  "filename-override",
 					Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type",
 				},
@@ -1209,8 +1231,8 @@ func main() {
 					return toExitError(err)
 				}
 				if _, err := os.Stat(fileName); os.IsNotExist(err) {
-					if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hckms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" ||
-						c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hckms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" {
+					if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hckms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" || c.String("add-barbican") != "" ||
+						c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hckms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" || c.String("rm-barbican") != "" {
 						return common.NewExitError(fmt.Sprintf("Error: cannot add or remove keys on non-existent file %q, use the `edit` subcommand instead.", fileName), codes.CannotChangeKeysFromNonExistentFile)
 					}
 				}
@@ -1320,6 +1342,11 @@ func main() {
 					Name:   "age, a",
 					Usage:  "comma separated list of age recipients",
 					EnvVar: "SOPS_AGE_RECIPIENTS",
+				},
+				cli.StringFlag{
+					Name:   "barbican",
+					Usage:  "comma separated list of Barbican secret references",
+					EnvVar: "SOPS_BARBICAN_SECRETS",
 				},
 				cli.StringFlag{
 					Name:  "input-type",
@@ -1734,6 +1761,11 @@ func main() {
 			Usage:  "comma separated list of age recipients",
 			EnvVar: "SOPS_AGE_RECIPIENTS",
 		},
+		cli.StringFlag{
+			Name:   "barbican",
+			Usage:  "comma separated list of Barbican secret references",
+			EnvVar: "SOPS_BARBICAN_SECRETS",
+		},
 		cli.BoolFlag{
 			Name:  "in-place, i",
 			Usage: "write output back to the same file instead of stdout",
@@ -1809,6 +1841,14 @@ func main() {
 		cli.StringFlag{
 			Name:  "rm-pgp",
 			Usage: "remove the provided comma-separated list of PGP fingerprints from the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "add-barbican",
+			Usage: "add the provided comma-separated list of Barbican secret references to the list of master keys on the given file",
+		},
+		cli.StringFlag{
+			Name:  "rm-barbican",
+			Usage: "remove the provided comma-separated list of Barbican secret references from the list of master keys on the given file",
 		},
 		cli.BoolFlag{
 			Name:  "ignore-mac",
@@ -1904,8 +1944,8 @@ func main() {
 			return toExitError(err)
 		}
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
-			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hckms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" ||
-				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hckms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" {
+			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hckms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" || c.String("add-barbican") != "" ||
+				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hckms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" || c.String("rm-barbican") != "" {
 				return common.NewExitError(fmt.Sprintf("Error: cannot add or remove keys on non-existent file %q, use `--kms` and `--pgp` instead.", fileName), codes.CannotChangeKeysFromNonExistentFile)
 			}
 			if isEncryptMode || isDecryptMode || isRotateMode {
@@ -2235,7 +2275,7 @@ func getEncryptConfig(c *cli.Context, fileName string, inputStore common.Store, 
 	}, nil
 }
 
-func getMasterKeys(c *cli.Context, kmsEncryptionContext map[string]*string, kmsOptionName string, pgpOptionName string, gcpKmsOptionName string, hckmsOptionName string, azureKvOptionName string, hcVaultTransitOptionName string, ageOptionName string) ([]keys.MasterKey, error) {
+func getMasterKeys(c *cli.Context, kmsEncryptionContext map[string]*string, kmsOptionName string, pgpOptionName string, gcpKmsOptionName string, hckmsOptionName string, azureKvOptionName string, hcVaultTransitOptionName string, ageOptionName string, barbicanOptionName string) ([]keys.MasterKey, error) {
 	var masterKeys []keys.MasterKey
 	for _, k := range kms.MasterKeysFromArnString(c.String(kmsOptionName), kmsEncryptionContext, c.String("aws-profile")) {
 		masterKeys = append(masterKeys, k)
@@ -2274,16 +2314,23 @@ func getMasterKeys(c *cli.Context, kmsEncryptionContext map[string]*string, kmsO
 	for _, k := range ageKeys {
 		masterKeys = append(masterKeys, k)
 	}
+	barbicanKeys, err := barbican.MasterKeysFromSecretRefString(c.String(barbicanOptionName))
+	if err != nil {
+		return nil, err
+	}
+	for _, k := range barbicanKeys {
+		masterKeys = append(masterKeys, k)
+	}
 	return masterKeys, nil
 }
 
 func getRotateOpts(c *cli.Context, fileName string, inputStore common.Store, outputStore common.Store, svcs []keyservice.KeyServiceClient, decryptionOrder []string) (rotateOpts, error) {
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
-	addMasterKeys, err := getMasterKeys(c, kmsEncryptionContext, "add-kms", "add-pgp", "add-gcp-kms", "add-hckms", "add-azure-kv", "add-hc-vault-transit", "add-age")
+	addMasterKeys, err := getMasterKeys(c, kmsEncryptionContext, "add-kms", "add-pgp", "add-gcp-kms", "add-hckms", "add-azure-kv", "add-hc-vault-transit", "add-age", "add-barbican")
 	if err != nil {
 		return rotateOpts{}, err
 	}
-	rmMasterKeys, err := getMasterKeys(c, kmsEncryptionContext, "rm-kms", "rm-pgp", "rm-gcp-kms", "rm-hckms", "rm-azure-kv", "rm-hc-vault-transit", "rm-age")
+	rmMasterKeys, err := getMasterKeys(c, kmsEncryptionContext, "rm-kms", "rm-pgp", "rm-gcp-kms", "rm-hckms", "rm-azure-kv", "rm-hc-vault-transit", "rm-age", "rm-barbican")
 	if err != nil {
 		return rotateOpts{}, err
 	}
@@ -2433,6 +2480,7 @@ func keyGroups(c *cli.Context, file string, optionalConfig *config.Config) ([]so
 	var hcVaultMkKeys []keys.MasterKey
 	var hckmsMkKeys []keys.MasterKey
 	var ageMasterKeys []keys.MasterKey
+	var barbicanMasterKeys []keys.MasterKey
 	kmsEncryptionContext := kms.ParseKMSContext(c.String("encryption-context"))
 	if c.String("encryption-context") != "" && kmsEncryptionContext == nil {
 		return nil, common.NewExitError("Invalid KMS encryption context format", codes.ErrorInvalidKMSEncryptionContextFormat)
@@ -2488,7 +2536,16 @@ func keyGroups(c *cli.Context, file string, optionalConfig *config.Config) ([]so
 			ageMasterKeys = append(ageMasterKeys, k)
 		}
 	}
-	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("hckms") == "" && c.String("azure-kv") == "" && c.String("hc-vault-transit") == "" && c.String("age") == "" {
+	if c.String("barbican") != "" {
+		barbicanKeys, err := barbican.MasterKeysFromSecretRefString(c.String("barbican"))
+		if err != nil {
+			return nil, err
+		}
+		for _, k := range barbicanKeys {
+			barbicanMasterKeys = append(barbicanMasterKeys, k)
+		}
+	}
+	if c.String("kms") == "" && c.String("pgp") == "" && c.String("gcp-kms") == "" && c.String("hckms") == "" && c.String("azure-kv") == "" && c.String("hc-vault-transit") == "" && c.String("age") == "" && c.String("barbican") == "" {
 		conf := optionalConfig
 		var err error
 		if conf == nil {
@@ -2512,6 +2569,7 @@ func keyGroups(c *cli.Context, file string, optionalConfig *config.Config) ([]so
 	group = append(group, pgpKeys...)
 	group = append(group, hcVaultMkKeys...)
 	group = append(group, ageMasterKeys...)
+	group = append(group, barbicanMasterKeys...)
 	log.Debugf("Master keys available:  %+v", group)
 	return []sops.KeyGroup{group}, nil
 }

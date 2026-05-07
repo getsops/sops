@@ -815,6 +815,34 @@ destination_rules:
       kms: 'arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012'
 `)
 
+var sampleConfigWithBarbican = []byte(`
+creation_rules:
+  - path_regex: barbican*
+    barbican: "550e8400-e29b-41d4-a716-446655440000"
+    barbican_auth_url: "https://keystone.example.com:5000/v3"
+    barbican_region: "us-east-1"
+  - path_regex: ""
+    barbican:
+      - "region:us-west-1:660e8400-e29b-41d4-a716-446655440001"
+      - "https://barbican.example.com:9311/v1/secrets/770e8400-e29b-41d4-a716-446655440002"
+`)
+
+var sampleConfigWithBarbicanKeyGroups = []byte(`
+creation_rules:
+  - path_regex: ""
+    key_groups:
+    - barbican:
+      - secret_ref: "550e8400-e29b-41d4-a716-446655440000"
+        region: "us-east-1"
+      - secret_ref: "660e8400-e29b-41d4-a716-446655440001"
+        region: "us-west-1"
+      kms:
+      - arn: foo
+        aws_profile: bar
+      pgp:
+      - bar
+`)
+
 func TestDestinationValidationS3GCSConflict(t *testing.T) {
 	_, err := parseDestinationRuleForFile(parseConfigFile(sampleConfigWithS3GCSConflict, t), "test/secrets.yaml", nil)
 	assert.NotNil(t, err, "Expected error when both S3 and GCS destinations are specified")
@@ -918,4 +946,163 @@ creation_rules:
 	// The KMS key should have the encryption context applied
 	// Format: ARN|context where context is "AppName:myapp"
 	assert.Equal(t, "arn:aws:kms:us-west-2:123456789012:key/12345678-1234-1234-1234-123456789012|AppName:myapp", conf.KeyGroups[0][0].ToString())
+}
+
+func TestLoadConfigFileWithBarbican(t *testing.T) {
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithBarbican, t), "/conf/path", "barbican_test", nil)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf)
+	assert.Equal(t, 1, len(conf.KeyGroups))
+	assert.Equal(t, 1, len(conf.KeyGroups[0]))
+	
+	// Check that the Barbican key was created correctly
+	barbicanKey := conf.KeyGroups[0][0]
+	assert.Equal(t, "barbican", barbicanKey.TypeToIdentifier())
+	// The key should include the region since barbican_region is specified
+	assert.Equal(t, "region:us-east-1:550e8400-e29b-41d4-a716-446655440000", barbicanKey.ToString())
+}
+
+func TestLoadConfigFileWithBarbicanMultipleKeys(t *testing.T) {
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithBarbican, t), "/conf/path", "other_test", nil)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf)
+	assert.Equal(t, 1, len(conf.KeyGroups))
+	assert.Equal(t, 2, len(conf.KeyGroups[0]))
+	
+	// Check that both Barbican keys were created correctly
+	for _, key := range conf.KeyGroups[0] {
+		assert.Equal(t, "barbican", key.TypeToIdentifier())
+	}
+}
+
+func TestLoadConfigFileWithBarbicanKeyGroups(t *testing.T) {
+	conf, err := parseCreationRuleForFile(parseConfigFile(sampleConfigWithBarbicanKeyGroups, t), "/conf/path", "test", nil)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf)
+	assert.Equal(t, 1, len(conf.KeyGroups))
+	assert.Equal(t, 4, len(conf.KeyGroups[0])) // 2 Barbican + 1 KMS + 1 PGP
+	
+	// Count key types
+	keyTypeCounts := make(map[string]int)
+	for _, key := range conf.KeyGroups[0] {
+		keyTypeCounts[key.TypeToIdentifier()]++
+	}
+	
+	assert.Equal(t, 2, keyTypeCounts["barbican"])
+	assert.Equal(t, 1, keyTypeCounts["kms"])
+	assert.Equal(t, 1, keyTypeCounts["pgp"])
+}
+
+func TestBarbicanConfigValidation(t *testing.T) {
+	// Test invalid secret reference
+	invalidConfig := []byte(`
+creation_rules:
+  - path_regex: ""
+    barbican: "invalid-secret-ref"
+`)
+	_, err := parseCreationRuleForFile(parseConfigFile(invalidConfig, t), "/conf/path", "test", nil)
+	assert.NotNil(t, err)
+	assert.Contains(t, err.Error(), "invalid Barbican secret reference")
+
+	// Test invalid auth URL
+	invalidAuthURLConfig := []byte(`
+creation_rules:
+  - path_regex: ""
+    barbican: "550e8400-e29b-41d4-a716-446655440000"
+    barbican_auth_url: "invalid-url"
+`)
+	_, err = parseCreationRuleForFile(parseConfigFile(invalidAuthURLConfig, t), "/conf/path", "test", nil)
+	assert.NotNil(t, err)
+	assert.Contains(t, err.Error(), "barbican_auth_url must be a valid HTTP or HTTPS URL")
+
+	// Test empty region
+	emptyRegionConfig := []byte(`
+creation_rules:
+  - path_regex: ""
+    barbican: "550e8400-e29b-41d4-a716-446655440000"
+    barbican_region: "   "
+`)
+	_, err = parseCreationRuleForFile(parseConfigFile(emptyRegionConfig, t), "/conf/path", "test", nil)
+	assert.NotNil(t, err)
+	assert.Contains(t, err.Error(), "barbican_region cannot be empty or whitespace")
+
+	// Test valid configuration
+	validConfig := []byte(`
+creation_rules:
+  - path_regex: ""
+    barbican: "550e8400-e29b-41d4-a716-446655440000"
+    barbican_auth_url: "https://keystone.example.com:5000/v3"
+    barbican_region: "us-east-1"
+`)
+	conf, err := parseCreationRuleForFile(parseConfigFile(validConfig, t), "/conf/path", "test", nil)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf)
+}
+
+func TestBarbicanConfigurationExample(t *testing.T) {
+	// Test the example configuration from the design document
+	exampleConfig := []byte(`
+creation_rules:
+  - path_regex: \.prod\.yaml$
+    barbican:
+      - "550e8400-e29b-41d4-a716-446655440000"
+      - "region:us-west-1:660e8400-e29b-41d4-a716-446655440001"
+    barbican_auth_url: "https://keystone.example.com:5000/v3"
+    barbican_region: "us-east-1"
+`)
+	
+	conf, err := parseCreationRuleForFile(parseConfigFile(exampleConfig, t), "/conf/path", "secrets.prod.yaml", nil)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf)
+	assert.Equal(t, 1, len(conf.KeyGroups))
+	assert.Equal(t, 2, len(conf.KeyGroups[0]))
+	
+	// Check that both Barbican keys were created correctly
+	for _, key := range conf.KeyGroups[0] {
+		assert.Equal(t, "barbican", key.TypeToIdentifier())
+	}
+	
+	// The first key should have the region from barbican_region applied
+	firstKey := conf.KeyGroups[0][0].ToString()
+	assert.Equal(t, "region:us-east-1:550e8400-e29b-41d4-a716-446655440000", firstKey)
+	
+	// The second key should keep its original region
+	secondKey := conf.KeyGroups[0][1].ToString()
+	assert.Equal(t, "region:us-west-1:660e8400-e29b-41d4-a716-446655440001", secondKey)
+}
+
+func TestLoadBarbicanConfigurationFile(t *testing.T) {
+	// Test loading the example configuration file
+	confPath := "test_resources/barbican_example.yaml"
+	
+	// Test production file matching
+	conf, err := LoadCreationRuleForFile(confPath, "secrets.prod.yaml", nil)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf)
+	assert.Equal(t, 1, len(conf.KeyGroups))
+	assert.Equal(t, 2, len(conf.KeyGroups[0]))
+	
+	// Test development file matching
+	conf, err = LoadCreationRuleForFile(confPath, "config.dev.yaml", nil)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf)
+	assert.Equal(t, 1, len(conf.KeyGroups))
+	assert.Equal(t, 1, len(conf.KeyGroups[0]))
+	
+	// Test default rule with key groups
+	conf, err = LoadCreationRuleForFile(confPath, "other.yaml", nil)
+	assert.Nil(t, err)
+	assert.NotNil(t, conf)
+	assert.Equal(t, 1, len(conf.KeyGroups))
+	assert.Equal(t, 3, len(conf.KeyGroups[0])) // 1 Barbican + 1 KMS + 1 PGP
+	
+	// Count key types
+	keyTypeCounts := make(map[string]int)
+	for _, key := range conf.KeyGroups[0] {
+		keyTypeCounts[key.TypeToIdentifier()]++
+	}
+	
+	assert.Equal(t, 1, keyTypeCounts["barbican"])
+	assert.Equal(t, 1, keyTypeCounts["kms"])
+	assert.Equal(t, 1, keyTypeCounts["pgp"])
 }
