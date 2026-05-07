@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/getsops/sops/v3"
+	"github.com/getsops/sops/v3/config"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -86,6 +87,57 @@ func TestEmitEncryptedFileStability(t *testing.T) {
 		}
 		previous = bytes
 	}
+}
+
+var QUOTED_PLAIN = []byte(strings.TrimLeft(`
+VAR1="val1"
+VAR2="val2"
+#comment
+VAR3_unencrypted="val3"
+VAR4="val4\nval4"
+JSON="{ \"app_id\": \"123\" }"
+`, "\n"))
+
+var QUOTED_BRANCH = sops.TreeBranch{
+	sops.TreeItem{
+		Key:   "VAR1",
+		Value: "val1",
+	},
+	sops.TreeItem{
+		Key:   "VAR2",
+		Value: "val2",
+	},
+	sops.TreeItem{
+		Key:   sops.Comment{Value: "comment"},
+		Value: nil,
+	},
+	sops.TreeItem{
+		Key:   "VAR3_unencrypted",
+		Value: "val3",
+	},
+	sops.TreeItem{
+		Key:   "VAR4",
+		Value: "val4\nval4",
+	},
+	sops.TreeItem{
+		Key:   "JSON",
+		Value: `{ "app_id": "123" }`,
+	},
+}
+
+func TestQuotedLoadPlainFile(t *testing.T) {
+	branches, err := (&Store{config: config.DotenvStoreConfig{Quote: true}}).LoadPlainFile(QUOTED_PLAIN)
+	assert.Nil(t, err)
+	assert.Equal(t, QUOTED_BRANCH, branches[0])
+}
+
+func TestQuotedEmitPlainFile(t *testing.T) {
+	branches := sops.TreeBranches{
+		QUOTED_BRANCH,
+	}
+	bytes, err := (&Store{config: config.DotenvStoreConfig{Quote: true}}).EmitPlainFile(branches)
+	assert.Nil(t, err)
+	assert.Equal(t, QUOTED_PLAIN, bytes)
 }
 
 func TestHasSopsTopLevelKey(t *testing.T) {

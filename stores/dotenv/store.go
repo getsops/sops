@@ -3,6 +3,7 @@ package dotenv //import "github.com/getsops/sops/v3/stores/dotenv"
 import (
 	"bytes"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/getsops/sops/v3"
@@ -61,9 +62,19 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 			if pos == -1 {
 				return nil, fmt.Errorf("invalid dotenv input line: %s", line)
 			}
+			var value string
+			if store.config.Quote {
+				var err error
+				value, err = strconv.Unquote(string(line[pos+1:]))
+				if err != nil {
+					return nil, fmt.Errorf("invalid quoted dotenv value for key %q: %w", line[:pos], err)
+				}
+			} else {
+				value = strings.Replace(string(line[pos+1:]), "\\n", "\n", -1)
+			}
 			branch = append(branch, sops.TreeItem{
 				Key:   string(line[:pos]),
-				Value: strings.Replace(string(line[pos+1:]), "\\n", "\n", -1),
+				Value: value,
 			})
 		}
 	}
@@ -99,7 +110,10 @@ func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 			value, ok := item.Value.(string)
 			if !ok {
 				value = stores.ValToString(item.Value)
-			} else {
+			}
+			if store.config.Quote {
+				value = strconv.Quote(value)
+			} else if ok {
 				value = strings.ReplaceAll(value, "\n", "\\n")
 			}
 
