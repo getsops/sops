@@ -127,7 +127,7 @@ func ExtractMetadata(branches sops.TreeBranches, opts MetadataOpts) (sops.TreeBr
 						entry.Key = key[len(SopsPrefix):]
 						metadataTree = append(metadataTree, entry)
 						branch = append(branch[:i], branch[i+1:]...)
-						i -= 1
+						i--
 					}
 				}
 			}

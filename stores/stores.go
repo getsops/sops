@@ -114,7 +114,8 @@ type hckmskey struct {
 	EncryptedDataKey string `mapstructure:"enc"`
 }
 
-// MetadataFromInternal converts an internal SOPS metadata representation to a representation appropriate for storage
+// metadataFromInternal converts an internal SOPS metadata representation to a
+// representation appropriate for storage.
 func metadataFromInternal(sopsMetadata sops.Metadata) metadata {
 	var m metadata
 	m.LastModified = sopsMetadata.LastModified.Format(time.RFC3339)
