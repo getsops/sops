@@ -122,6 +122,9 @@ func convert(root *node) (interface{}, error) {
 	if b2i(hasValue)+b2i(hasSubkey)+b2i(hasIndex) > 1 {
 		return nil, fmt.Errorf("Type mismatch")
 	}
+	if !hasValue && !hasSubkey && !hasIndex {
+		return sops.TreeBranch{}, nil
+	}
 	if hasValue {
 		return *root.value, nil
 	}

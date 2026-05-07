@@ -202,6 +202,10 @@ func TestUnflattenTreeBranch(t *testing.T) {
 	assert.NotNil(t, err)
 	assert.Equal(t, "Error while unflattening: Type mismatch", err.Error())
 	assert.Nil(t, output)
+
+	output, err = unflattenTreeBranch(sops.TreeBranch{})
+	assert.Nil(t, err)
+	assert.Equal(t, sops.TreeBranch{}, output)
 }
 
 func TestFlattenTreeBranch(t *testing.T) {
