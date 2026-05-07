@@ -10,9 +10,6 @@ import (
 	"github.com/getsops/sops/v3/stores"
 )
 
-// SopsPrefix is the prefix for all metadatada entry keys
-const SopsPrefix = stores.SopsMetadataKey + "_"
-
 // Store handles storage of dotenv data
 type Store struct {
 	config config.DotenvStoreConfig
@@ -139,7 +136,7 @@ func IsComplexValue(v interface{}) bool {
 func (store *Store) HasSopsTopLevelKey(branch sops.TreeBranch) bool {
 	for _, b := range branch {
 		if key, ok := b.Key.(string); ok {
-			if strings.HasPrefix(key, SopsPrefix) {
+			if strings.HasPrefix(key, stores.SopsPrefix) {
 				return true
 			}
 		}
