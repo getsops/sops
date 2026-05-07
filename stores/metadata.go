@@ -47,8 +47,8 @@ func sopsToGoMap(mapping sops.TreeBranch) (map[string]interface{}, error) {
 }
 
 func sopsToGoSlice(slice []interface{}) ([]interface{}, error) {
-	result := make([]interface{}, len(slice))
-	for idx, item := range slice {
+	result := make([]interface{}, 0, len(slice))
+	for _, item := range slice {
 		if _, ok := item.(sops.Comment); ok {
 			continue
 		}
@@ -56,7 +56,7 @@ func sopsToGoSlice(slice []interface{}) ([]interface{}, error) {
 		if err != nil {
 			return nil, err
 		}
-		result[idx] = value
+		result = append(result, value)
 	}
 	return result, nil
 }
