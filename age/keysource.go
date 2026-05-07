@@ -227,7 +227,7 @@ func formatError(msg string, err error, errs errSet, unusedLocations []string) e
 		} else if count == 2 {
 			unusedSuffix = fmt.Sprintf("s '%s' and '%s'", unusedLocations[0], unusedLocations[1])
 		} else {
-			unusedSuffix = fmt.Sprintf("s '%s', and '%s'", strings.Join(unusedLocations[:count - 1], "', '"), unusedLocations[count - 1])
+			unusedSuffix = fmt.Sprintf("s '%s', and '%s'", strings.Join(unusedLocations[:count-1], "', '"), unusedLocations[count-1])
 		}
 		unusedSuffix = fmt.Sprintf(". Did not find keys in location%s.", unusedSuffix)
 	}
@@ -282,8 +282,8 @@ func (key *MasterKey) ToString() string {
 }
 
 // ToMap converts the MasterKey to a map for serialization purposes.
-func (key *MasterKey) ToMap() map[string]interface{} {
-	out := make(map[string]interface{})
+func (key *MasterKey) ToMap() map[string]any {
+	out := make(map[string]any)
 	out["recipient"] = key.Recipient
 	out["enc"] = key.EncryptedKey
 	return out

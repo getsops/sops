@@ -35,7 +35,7 @@ const nonceSize int = 32
 
 type stashKey struct {
 	additionalData string
-	plaintext      interface{}
+	plaintext      any
 }
 
 // Cipher encrypts and decrypts data keys with AES GCM 256
@@ -77,7 +77,7 @@ func parse(value string) (*encryptedValue, error) {
 }
 
 // Decrypt takes a sops-format value string and a key and returns the decrypted value and a stash value
-func (c Cipher) Decrypt(ciphertext string, key []byte, additionalData string) (plaintext interface{}, err error) {
+func (c Cipher) Decrypt(ciphertext string, key []byte, additionalData string) (plaintext any, err error) {
 	if isEmpty(ciphertext) {
 		return "", nil
 	}
@@ -124,7 +124,7 @@ func (c Cipher) Decrypt(ciphertext string, key []byte, additionalData string) (p
 	return plaintext, err
 }
 
-func isEmpty(value interface{}) bool {
+func isEmpty(value any) bool {
 	switch value := value.(type) {
 	case string:
 		return value == ""
@@ -138,7 +138,7 @@ func isEmpty(value interface{}) bool {
 }
 
 // Encrypt takes one of (string, int, float, bool) and encrypts it with the provided key and additional auth data, returning a sops-format encrypted string.
-func (c Cipher) Encrypt(plaintext interface{}, key []byte, additionalData string) (ciphertext string, err error) {
+func (c Cipher) Encrypt(plaintext any, key []byte, additionalData string) (ciphertext string, err error) {
 	if isEmpty(plaintext) {
 		return "", nil
 	}

@@ -70,7 +70,7 @@ type config struct {
 var auditors []Auditor
 
 // SubmitEvent handles an event for all auditors
-func SubmitEvent(event interface{}) {
+func SubmitEvent(event any) {
 	for _, auditor := range auditors {
 		auditor.Handle(event)
 	}
@@ -87,7 +87,7 @@ type Auditor interface {
 	// Handle() takes an audit event and attempts to persists it;
 	// how it is persisted and how errors are handled is up to the
 	// implementation of this interface.
-	Handle(event interface{})
+	Handle(event any)
 }
 
 // DecryptEvent contains fields relevant to a decryption event
@@ -133,7 +133,7 @@ func NewPostgresAuditor(connStr string) (*PostgresAuditor, error) {
 
 // Handle persists the audit event by writing a row to the
 // 'audit_event' postgres table
-func (p *PostgresAuditor) Handle(event interface{}) {
+func (p *PostgresAuditor) Handle(event any) {
 	u, err := user.Current()
 	if err != nil {
 		log.Fatalf("Error getting current user for auditing: %s", err)

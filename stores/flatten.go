@@ -12,9 +12,9 @@ const listSeparator = "__list_"
 
 // flattenAndMerge flattens the provided value and merges into the
 // into map using prefix
-func flattenAndMerge(into map[string]interface{}, prefix string, value interface{}) {
+func flattenAndMerge(into map[string]any, prefix string, value any) {
 	flattenedValue := flattenValue(value)
-	if flattenedValue, ok := flattenedValue.(map[string]interface{}); ok {
+	if flattenedValue, ok := flattenedValue.(map[string]any); ok {
 		for flatK, flatV := range flattenedValue {
 			into[prefix+flatK] = flatV
 		}
@@ -23,17 +23,17 @@ func flattenAndMerge(into map[string]interface{}, prefix string, value interface
 	}
 }
 
-func flattenValue(value interface{}) interface{} {
-	var output interface{}
+func flattenValue(value any) any {
+	var output any
 	switch value := value.(type) {
-	case map[string]interface{}:
-		newMap := make(map[string]interface{})
+	case map[string]any:
+		newMap := make(map[string]any)
 		for k, v := range value {
 			flattenAndMerge(newMap, mapSeparator+k, v)
 		}
 		output = newMap
-	case []interface{}:
-		newMap := make(map[string]interface{})
+	case []any:
+		newMap := make(map[string]any)
 		for i, v := range value {
 			flattenAndMerge(newMap, listSeparator+fmt.Sprintf("%d", i), v)
 		}
@@ -47,10 +47,10 @@ func flattenValue(value interface{}) interface{} {
 // Flatten flattens a map with potentially nested maps into a flat
 // map. Only string keys are allowed on both the top-level map and
 // child maps.
-func Flatten(in map[string]interface{}) map[string]interface{} {
-	newMap := make(map[string]interface{})
+func Flatten(in map[string]any) map[string]any {
+	newMap := make(map[string]any)
 	for k, v := range in {
-		if flat, ok := flattenValue(v).(map[string]interface{}); ok {
+		if flat, ok := flattenValue(v).(map[string]any); ok {
 			for flatK, flatV := range flat {
 				newMap[k+flatK] = flatV
 			}
@@ -62,8 +62,8 @@ func Flatten(in map[string]interface{}) map[string]interface{} {
 }
 
 // FlattenMetadata flattens a Metadata struct into a flat map.
-func FlattenMetadata(md Metadata) (map[string]interface{}, error) {
-	var mdMap map[string]interface{}
+func FlattenMetadata(md Metadata) (map[string]any, error) {
+	var mdMap map[string]any
 	jsonBytes, err := json.Marshal(md)
 	if err != nil {
 		return nil, err
@@ -77,7 +77,7 @@ func FlattenMetadata(md Metadata) (map[string]interface{}, error) {
 	return flat, nil
 }
 
-type token interface{}
+type token any
 
 type mapToken struct {
 	key string
@@ -134,25 +134,25 @@ func tokenize(path string) []token {
 // and populates currentNode such that currentToken can be considered
 // processed. It inspects nextToken to decide what type to allocate
 // and assign under currentNode.
-func unflatten(currentNode interface{}, currentToken, nextToken token, value interface{}) interface{} {
+func unflatten(currentNode any, currentToken, nextToken token, value any) any {
 	switch currentToken := currentToken.(type) {
 	case mapToken:
-		currentNode := currentNode.(map[string]interface{})
+		currentNode := currentNode.(map[string]any)
 		switch nextToken := nextToken.(type) {
 		case mapToken:
 			if _, ok := currentNode[currentToken.key]; !ok {
-				currentNode[currentToken.key] = make(map[string]interface{})
+				currentNode[currentToken.key] = make(map[string]any)
 			}
-			next := currentNode[currentToken.key].(map[string]interface{})
+			next := currentNode[currentToken.key].(map[string]any)
 			return next
 		case listToken:
 			if _, ok := currentNode[currentToken.key]; !ok {
-				currentNode[currentToken.key] = make([]interface{}, nextToken.position+1)
+				currentNode[currentToken.key] = make([]any, nextToken.position+1)
 			}
-			next := currentNode[currentToken.key].([]interface{})
+			next := currentNode[currentToken.key].([]any)
 			if nextToken.position >= len(next) {
 				// Grow the slice and reassign it
-				newNext := make([]interface{}, nextToken.position+1)
+				newNext := make([]any, nextToken.position+1)
 				copy(newNext, next)
 				next = newNext
 				currentNode[currentToken.key] = next
@@ -162,22 +162,22 @@ func unflatten(currentNode interface{}, currentToken, nextToken token, value int
 			currentNode[currentToken.key] = value
 		}
 	case listToken:
-		currentNode := currentNode.([]interface{})
+		currentNode := currentNode.([]any)
 		switch nextToken := nextToken.(type) {
 		case mapToken:
 			if currentNode[currentToken.position] == nil {
-				currentNode[currentToken.position] = make(map[string]interface{})
+				currentNode[currentToken.position] = make(map[string]any)
 			}
-			next := currentNode[currentToken.position].(map[string]interface{})
+			next := currentNode[currentToken.position].(map[string]any)
 			return next
 		case listToken:
 			if currentNode[currentToken.position] == nil {
-				currentNode[currentToken.position] = make([]interface{}, nextToken.position+1)
+				currentNode[currentToken.position] = make([]any, nextToken.position+1)
 			}
-			next := currentNode[currentToken.position].([]interface{})
+			next := currentNode[currentToken.position].([]any)
 			if nextToken.position >= len(next) {
 				// Grow the slice and reassign it
-				newNext := make([]interface{}, nextToken.position+1)
+				newNext := make([]any, nextToken.position+1)
 				copy(newNext, next)
 				next = newNext
 				currentNode[currentToken.position] = next
@@ -191,10 +191,10 @@ func unflatten(currentNode interface{}, currentToken, nextToken token, value int
 }
 
 // Unflatten unflattens a map flattened by Flatten
-func Unflatten(in map[string]interface{}) map[string]interface{} {
-	newMap := make(map[string]interface{})
+func Unflatten(in map[string]any) map[string]any {
+	newMap := make(map[string]any)
 	for k, v := range in {
-		var current interface{} = newMap
+		var current any = newMap
 		tokens := append(tokenize(k), nil)
 		for i := 0; i < len(tokens)-1; i++ {
 			current = unflatten(current, tokens[i], tokens[i+1], v)
@@ -204,7 +204,7 @@ func Unflatten(in map[string]interface{}) map[string]interface{} {
 }
 
 // UnflattenMetadata unflattens a map flattened by FlattenMetadata into Metadata
-func UnflattenMetadata(in map[string]interface{}) (Metadata, error) {
+func UnflattenMetadata(in map[string]any) (Metadata, error) {
 	m := Unflatten(in)
 	var md Metadata
 	jsonBytes, err := json.Marshal(m)
@@ -217,7 +217,7 @@ func UnflattenMetadata(in map[string]interface{}) (Metadata, error) {
 
 // DecodeNewLines replaces \\n with \n for all string values in the map.
 // Used by config stores that do not handle multi-line values (ini, dotenv).
-func DecodeNewLines(m map[string]interface{}) {
+func DecodeNewLines(m map[string]any) {
 	for k, v := range m {
 		if s, ok := v.(string); ok {
 			m[k] = strings.Replace(s, "\\n", "\n", -1)
@@ -227,7 +227,7 @@ func DecodeNewLines(m map[string]interface{}) {
 
 // EncodeNewLines replaces \n with \\n for all string values in the map.
 // Used by config stores that do not handle multi-line values (ini, dotenv).
-func EncodeNewLines(m map[string]interface{}) {
+func EncodeNewLines(m map[string]any) {
 	for k, v := range m {
 		if s, ok := v.(string); ok {
 			m[k] = strings.Replace(s, "\n", "\\n", -1)
@@ -236,7 +236,7 @@ func EncodeNewLines(m map[string]interface{}) {
 }
 
 // DecodeNonStrings will look for known metadata keys that are not strings and decode to the appropriate type
-func DecodeNonStrings(m map[string]interface{}) error {
+func DecodeNonStrings(m map[string]any) error {
 	if v, ok := m["mac_only_encrypted"]; ok {
 		m["mac_only_encrypted"] = false
 		if v == "true" {
@@ -268,7 +268,7 @@ func DecodeNonStrings(m map[string]interface{}) error {
 }
 
 // EncodeNonStrings will look for known metadata keys that are not strings and will encode it to strings
-func EncodeNonStrings(m map[string]interface{}) {
+func EncodeNonStrings(m map[string]any) {
 	if v, found := m["mac_only_encrypted"]; found {
 		if vBool, ok := v.(bool); ok {
 			m["mac_only_encrypted"] = "false"

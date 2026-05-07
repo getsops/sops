@@ -40,6 +40,6 @@ func (gcsd *GCSDestination) Upload(fileContents []byte, fileName string) error {
 }
 
 // Returns NotImplementedError
-func (gcsd *GCSDestination) UploadUnencrypted(data map[string]interface{}, fileName string) error {
+func (gcsd *GCSDestination) UploadUnencrypted(data map[string]any, fileName string) error {
 	return &NotImplementedError{"GCS does not support uploading the unencrypted file contents."}
 }

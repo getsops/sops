@@ -35,7 +35,7 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 	}
 
 	var resultBranch sops.TreeBranch
-	mdMap := make(map[string]interface{})
+	mdMap := make(map[string]any)
 	for _, item := range branches[0] {
 		switch key := item.Key.(type) {
 		case string:
@@ -83,7 +83,7 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	var branches sops.TreeBranches
 	var branch sops.TreeBranch
 
-	for _, line := range bytes.Split(in, []byte("\n")) {
+	for line := range bytes.SplitSeq(in, []byte("\n")) {
 		if len(line) == 0 {
 			continue
 		}
@@ -93,13 +93,13 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 				Value: nil,
 			})
 		} else {
-			pos := bytes.Index(line, []byte("="))
-			if pos == -1 {
+			before, after, ok := bytes.Cut(line, []byte("="))
+			if !ok {
 				return nil, fmt.Errorf("invalid dotenv input line: %s", line)
 			}
 			branch = append(branch, sops.TreeItem{
-				Key:   string(line[:pos]),
-				Value: strings.Replace(string(line[pos+1:]), "\\n", "\n", -1),
+				Key:   string(before),
+				Value: strings.Replace(string(after), "\\n", "\n", -1),
 			})
 		}
 	}
@@ -163,7 +163,7 @@ func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 }
 
 // EmitValue returns a single value as bytes
-func (Store) EmitValue(v interface{}) ([]byte, error) {
+func (Store) EmitValue(v any) ([]byte, error) {
 	if s, ok := v.(string); ok {
 		return []byte(s), nil
 	}
@@ -180,7 +180,7 @@ func (store *Store) EmitExample() []byte {
 }
 
 // Deprecated: use stores.IsComplexValue() instead!
-func IsComplexValue(v interface{}) bool {
+func IsComplexValue(v any) bool {
 	return stores.IsComplexValue(v)
 }
 

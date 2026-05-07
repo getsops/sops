@@ -21,7 +21,7 @@ type TextFormatter struct {
 func (f *TextFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 	bytes, err := f.TextFormatter.Format(entry)
 	name := color.New(color.Bold).Sprintf("[%s]", f.LoggerName)
-	return []byte(fmt.Sprintf("%s\t %s", name, bytes)), err
+	return fmt.Appendf(nil, "%s\t %s", name, bytes), err
 }
 
 // NewLogger is the constructor for a new Logger object with the given name

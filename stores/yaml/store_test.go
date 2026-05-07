@@ -63,13 +63,13 @@ var ALIASES_BRANCHES = sops.TreeBranches{
 	sops.TreeBranch{
 		sops.TreeItem{
 			Key: "key1",
-			Value: []interface{}{
+			Value: []any{
 				"foo",
 			},
 		},
 		sops.TreeItem{
 			Key: "key2",
-			Value: []interface{}{
+			Value: []any{
 				"foo",
 			},
 		},
@@ -156,7 +156,7 @@ var COMMENT_6_BRANCHES = sops.TreeBranches{
 	sops.TreeBranch{
 		sops.TreeItem{
 			Key: "a",
-			Value: []interface{}{
+			Value: []any{
 				"a",
 				sops.Comment{Value: " I no longer get duplicated"},
 				sops.TreeBranch{},
@@ -197,7 +197,7 @@ var COMMENT_7_BRANCHES = sops.TreeBranches{
 		},
 		sops.TreeItem{
 			Key: "e",
-			Value: []interface{}{
+			Value: []any{
 				"f",
 			},
 		},

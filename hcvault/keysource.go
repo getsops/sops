@@ -150,7 +150,7 @@ func NewMasterKeysFromURIs(uris string) ([]*MasterKey, error) {
 	if uris == "" {
 		return keys, nil
 	}
-	for _, uri := range strings.Split(uris, ",") {
+	for uri := range strings.SplitSeq(uris, ",") {
 		if uri == "" {
 			continue
 		}
@@ -313,8 +313,8 @@ func (key *MasterKey) ToString() string {
 }
 
 // ToMap converts the MasterKey to a map for serialization purposes.
-func (key MasterKey) ToMap() map[string]interface{} {
-	out := make(map[string]interface{})
+func (key MasterKey) ToMap() map[string]any {
+	out := make(map[string]any)
 	out["vault_address"] = key.VaultAddress
 	out["key_name"] = key.KeyName
 	out["engine_path"] = key.EnginePath
@@ -339,9 +339,9 @@ func (key *MasterKey) decryptPath() string {
 }
 
 // encryptPayload returns the payload for an encrypt request of the dataKey.
-func encryptPayload(dataKey []byte) map[string]interface{} {
+func encryptPayload(dataKey []byte) map[string]any {
 	encoded := base64.StdEncoding.EncodeToString(dataKey)
-	return map[string]interface{}{
+	return map[string]any{
 		"plaintext": encoded,
 	}
 }
@@ -365,8 +365,8 @@ func encryptedKeyFromSecret(secret *api.Secret) (string, error) {
 
 // decryptPayload returns the payload for a decrypt request of the
 // encryptedKey.
-func decryptPayload(encryptedKey string) map[string]interface{} {
-	return map[string]interface{}{
+func decryptPayload(encryptedKey string) map[string]any {
+	return map[string]any{
 		"ciphertext": encryptedKey,
 	}
 }

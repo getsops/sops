@@ -15,8 +15,8 @@ type setOpts struct {
 	OutputStore     sops.Store
 	InputPath       string
 	IgnoreMAC       bool
-	TreePath        []interface{}
-	Value           interface{}
+	TreePath        []any
+	Value           any
 	KeyServices     []keyservice.KeyServiceClient
 	DecryptionOrder []string
 }

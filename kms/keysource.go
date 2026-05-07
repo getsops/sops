@@ -131,7 +131,7 @@ func MasterKeysFromArnString(arn string, context map[string]*string, awsProfile 
 	if arn == "" {
 		return keys
 	}
-	for _, s := range strings.Split(arn, ",") {
+	for s := range strings.SplitSeq(arn, ",") {
 		keys = append(keys, NewMasterKeyFromArn(s, context, awsProfile))
 	}
 	return keys
@@ -139,11 +139,11 @@ func MasterKeysFromArnString(arn string, context map[string]*string, awsProfile 
 
 // ParseKMSContext takes either a KMS context map or a comma-separated list of
 // KMS context key:value pairs, and returns a map.
-func ParseKMSContext(in interface{}) map[string]*string {
+func ParseKMSContext(in any) map[string]*string {
 	const nonStringValueWarning = "Encryption context contains a non-string value, context will not be used"
 	out := make(map[string]*string)
 	switch in := in.(type) {
-	case map[string]interface{}:
+	case map[string]any:
 		if len(in) == 0 {
 			return nil
 		}
@@ -155,7 +155,7 @@ func ParseKMSContext(in interface{}) map[string]*string {
 			}
 			out[k] = &value
 		}
-	case map[interface{}]interface{}:
+	case map[any]any:
 		if len(in) == 0 {
 			return nil
 		}
@@ -176,7 +176,7 @@ func ParseKMSContext(in interface{}) map[string]*string {
 		if in == "" {
 			return nil
 		}
-		for _, kv := range strings.Split(in, ",") {
+		for kv := range strings.SplitSeq(in, ",") {
 			kv := strings.Split(kv, ":")
 			if len(kv) != 2 {
 				log.Warn(nonStringValueWarning)
@@ -364,8 +364,8 @@ func (key *MasterKey) ToString() string {
 }
 
 // ToMap converts the MasterKey to a map for serialization purposes.
-func (key MasterKey) ToMap() map[string]interface{} {
-	out := make(map[string]interface{})
+func (key MasterKey) ToMap() map[string]any {
+	out := make(map[string]any)
 	out["arn"] = key.Arn
 	if key.Role != "" {
 		out["role"] = key.Role

@@ -869,7 +869,7 @@ func main() {
 					return toExitError(err)
 				}
 
-				var extract []interface{}
+				var extract []any
 				extract, err = parseTreePath(c.String("extract"))
 				if err != nil {
 					return common.NewExitError(fmt.Errorf("error parsing --extract path: %s", err), codes.InvalidTreePathFormat)
@@ -1988,7 +1988,7 @@ func main() {
 		}
 
 		if isDecryptMode {
-			var extract []interface{}
+			var extract []any
 			extract, err = parseTreePath(c.String("extract"))
 			if err != nil {
 				return common.NewExitError(fmt.Errorf("error parsing --extract path: %s", err), codes.InvalidTreePathFormat)
@@ -2019,8 +2019,8 @@ func main() {
 		}
 
 		if isSetMode {
-			var path []interface{}
-			var value interface{}
+			var path []any
+			var value any
 			path, value, err = extractSetArguments(c.String("set"))
 			if err != nil {
 				return toExitError(err)
@@ -2398,10 +2398,10 @@ func outputStore(context *cli.Context, path string) (common.Store, error) {
 	return common.DefaultStoreForPathOrFormat(storesConf, path, context.String("output-type")), nil
 }
 
-func parseTreePath(arg string) ([]interface{}, error) {
-	var path []interface{}
-	components := strings.Split(arg, "[")
-	for _, component := range components {
+func parseTreePath(arg string) ([]any, error) {
+	var path []any
+	components := strings.SplitSeq(arg, "[")
+	for component := range components {
 		if component == "" {
 			continue
 		}
@@ -2554,8 +2554,8 @@ func shamirThreshold(c *cli.Context, file string, optionalConfig *config.Config)
 	return conf.ShamirThreshold, nil
 }
 
-func jsonValueToTreeInsertableValue(jsonValue string) (interface{}, error) {
-	var valueToInsert interface{}
+func jsonValueToTreeInsertableValue(jsonValue string) (any, error) {
+	var valueToInsert any
 	err := encodingjson.Unmarshal([]byte(jsonValue), &valueToInsert)
 	if err != nil {
 		return nil, common.NewExitError("Value for --set is not valid JSON", codes.ErrorInvalidSetFormat)
@@ -2581,7 +2581,7 @@ func jsonValueToTreeInsertableValue(jsonValue string) (interface{}, error) {
 	return values[0], nil
 }
 
-func extractSetArguments(set string) (path []interface{}, valueToInsert interface{}, err error) {
+func extractSetArguments(set string) (path []any, valueToInsert any, err error) {
 	// Set is a string with the format "python-dict-index json-value"
 	// Since python-dict-index has to end with ], we split at "] " to get the two parts
 	pathValuePair := strings.SplitAfterN(set, "] ", 2)

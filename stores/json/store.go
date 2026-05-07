@@ -92,7 +92,7 @@ func (store BinaryStore) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 
 // EmitValue extracts a value from a generic interface{} object representing a structured set
 // of binary files
-func (store BinaryStore) EmitValue(v interface{}) ([]byte, error) {
+func (store BinaryStore) EmitValue(v any) ([]byte, error) {
 	return nil, fmt.Errorf("Binary files are not structured and extracting a single value is not possible")
 }
 
@@ -101,8 +101,8 @@ func (store BinaryStore) EmitExample() []byte {
 	return []byte("Welcome to SOPS! Edit this file as you please!")
 }
 
-func (store Store) sliceFromJSONDecoder(dec *json.Decoder) ([]interface{}, error) {
-	var slice []interface{}
+func (store Store) sliceFromJSONDecoder(dec *json.Decoder) ([]any, error) {
+	var slice []any
 	for {
 		t, err := dec.Token()
 		if err != nil {
@@ -186,47 +186,49 @@ func (store Store) treeBranchFromJSONDecoder(dec *json.Decoder) (sops.TreeBranch
 	}
 }
 
-func (store Store) encodeValue(v interface{}) ([]byte, error) {
+func (store Store) encodeValue(v any) ([]byte, error) {
 	switch v := v.(type) {
 	case sops.TreeBranch:
 		return store.encodeTree(v)
-	case []interface{}:
+	case []any:
 		return store.encodeArray(v)
 	default:
 		return json.Marshal(v)
 	}
 }
 
-func (store Store) encodeArray(array []interface{}) ([]byte, error) {
-	out := "["
+func (store Store) encodeArray(array []any) ([]byte, error) {
+	var out strings.Builder
+	out.WriteString("[")
 	empty := true
 	for _, item := range array {
 		if _, ok := item.(sops.Comment); ok {
 			continue
 		}
 		if !empty {
-			out += ","
+			out.WriteString(",")
 		}
 		v, err := store.encodeValue(item)
 		if err != nil {
 			return nil, err
 		}
-		out += string(v)
+		out.WriteString(string(v))
 		empty = false
 	}
-	out += "]"
-	return []byte(out), nil
+	out.WriteString("]")
+	return []byte(out.String()), nil
 }
 
 func (store Store) encodeTree(tree sops.TreeBranch) ([]byte, error) {
-	out := "{"
+	var out strings.Builder
+	out.WriteString("{")
 	empty := true
 	for _, item := range tree {
 		if _, ok := item.Key.(sops.Comment); ok {
 			continue
 		}
 		if !empty {
-			out += ","
+			out.WriteString(",")
 		}
 		v, err := store.encodeValue(item.Value)
 		if err != nil {
@@ -236,10 +238,10 @@ func (store Store) encodeTree(tree sops.TreeBranch) ([]byte, error) {
 		if err != nil {
 			return nil, fmt.Errorf("Error encoding key %s: %s", k, err)
 		}
-		out += string(k) + `: ` + string(v)
+		out.WriteString(string(k) + `: ` + string(v))
 		empty = false
 	}
-	return []byte(out + "}"), nil
+	return []byte(out.String() + "}"), nil
 }
 
 func (store Store) jsonFromTreeBranch(branch sops.TreeBranch) ([]byte, error) {
@@ -360,7 +362,7 @@ func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 
 // EmitValue returns bytes corresponding to a single encoded value
 // in a generic interface{} object
-func (store *Store) EmitValue(v interface{}) ([]byte, error) {
+func (store *Store) EmitValue(v any) ([]byte, error) {
 	s, err := store.encodeValue(v)
 	if err != nil {
 		return nil, err

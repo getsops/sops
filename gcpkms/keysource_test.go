@@ -120,7 +120,7 @@ func TestMasterKey_ToMap(t *testing.T) {
 		ResourceID:     testResourceID,
 		EncryptedKey:   "this is encrypted",
 	}
-	assert.Equal(t, map[string]interface{}{
+	assert.Equal(t, map[string]any{
 		"resource_id": testResourceID,
 		"enc":         "this is encrypted",
 		"created_at":  "2016-10-31T10:00:00Z",

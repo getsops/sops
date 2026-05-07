@@ -7,10 +7,10 @@ import (
 )
 
 func TestFlat(t *testing.T) {
-	input := map[string]interface{}{
+	input := map[string]any{
 		"foo": "bar",
 	}
-	expected := map[string]interface{}{
+	expected := map[string]any{
 		"foo": "bar",
 	}
 	flattened := Flatten(input)
@@ -20,13 +20,13 @@ func TestFlat(t *testing.T) {
 }
 
 func TestMap(t *testing.T) {
-	input := map[string]interface{}{
-		"foo": map[string]interface{}{
+	input := map[string]any{
+		"foo": map[string]any{
 			"bar": 0,
 			"baz": 0,
 		},
 	}
-	expected := map[string]interface{}{
+	expected := map[string]any{
 		"foo" + mapSeparator + "bar": 0,
 		"foo" + mapSeparator + "baz": 0,
 	}
@@ -37,14 +37,14 @@ func TestMap(t *testing.T) {
 }
 
 func TestFlattenMapMoreNesting(t *testing.T) {
-	input := map[string]interface{}{
-		"foo": map[string]interface{}{
-			"bar": map[string]interface{}{
+	input := map[string]any{
+		"foo": map[string]any{
+			"bar": map[string]any{
 				"baz": 0,
 			},
 		},
 	}
-	expected := map[string]interface{}{
+	expected := map[string]any{
 		"foo" + mapSeparator + "bar" + mapSeparator + "baz": 0,
 	}
 	flattened := Flatten(input)
@@ -54,12 +54,12 @@ func TestFlattenMapMoreNesting(t *testing.T) {
 }
 
 func TestFlattenList(t *testing.T) {
-	input := map[string]interface{}{
-		"foo": []interface{}{
+	input := map[string]any{
+		"foo": []any{
 			0,
 		},
 	}
-	expected := map[string]interface{}{
+	expected := map[string]any{
 		"foo" + listSeparator + "0": 0,
 	}
 	flattened := Flatten(input)
@@ -69,14 +69,14 @@ func TestFlattenList(t *testing.T) {
 }
 
 func TestFlattenListWithMap(t *testing.T) {
-	input := map[string]interface{}{
-		"foo": []interface{}{
-			map[string]interface{}{
+	input := map[string]any{
+		"foo": []any{
+			map[string]any{
 				"bar": 0,
 			},
 		},
 	}
-	expected := map[string]interface{}{
+	expected := map[string]any{
 		"foo" + listSeparator + "0" + mapSeparator + "bar": 0,
 	}
 	flattened := Flatten(input)
@@ -86,19 +86,19 @@ func TestFlattenListWithMap(t *testing.T) {
 }
 
 func TestFlatten(t *testing.T) {
-	input := map[string]interface{}{
+	input := map[string]any{
 		"foo": "bar",
-		"baz": map[string]interface{}{
+		"baz": map[string]any{
 			"foo": 2,
-			"bar": map[string]interface{}{
+			"bar": map[string]any{
 				"foo": 2,
 			},
 		},
-		"qux": []interface{}{
+		"qux": []any{
 			"hello", 1, 2,
 		},
 	}
-	expected := map[string]interface{}{
+	expected := map[string]any{
 		"foo":                        "bar",
 		"baz" + mapSeparator + "foo": 2,
 		"baz" + mapSeparator + "bar" + mapSeparator + "foo": 2,
@@ -143,12 +143,12 @@ func TestTokenizeNested(t *testing.T) {
 func TestFlattenMetadata(t *testing.T) {
 	tests := []struct {
 		input Metadata
-		want  map[string]interface{}
+		want  map[string]any
 	}{
-		{Metadata{MACOnlyEncrypted: false}, map[string]interface{}{"mac_only_encrypted": nil}},
-		{Metadata{MACOnlyEncrypted: true}, map[string]interface{}{"mac_only_encrypted": true}},
-		{Metadata{MessageAuthenticationCode: "line1\nline2"}, map[string]interface{}{"mac": "line1\nline2"}},
-		{Metadata{MessageAuthenticationCode: "line1\n\n\nline2\n\nline3"}, map[string]interface{}{"mac": "line1\n\n\nline2\n\nline3"}},
+		{Metadata{MACOnlyEncrypted: false}, map[string]any{"mac_only_encrypted": nil}},
+		{Metadata{MACOnlyEncrypted: true}, map[string]any{"mac_only_encrypted": true}},
+		{Metadata{MessageAuthenticationCode: "line1\nline2"}, map[string]any{"mac": "line1\nline2"}},
+		{Metadata{MessageAuthenticationCode: "line1\n\n\nline2\n\nline3"}, map[string]any{"mac": "line1\n\n\nline2\n\nline3"}},
 	}
 
 	for _, tt := range tests {
@@ -182,11 +182,11 @@ func TestFlattenMetadataToUnflattenMetadata(t *testing.T) {
 
 func TestDecodeNewLines(t *testing.T) {
 	tests := []struct {
-		input map[string]interface{}
-		want  map[string]interface{}
+		input map[string]any
+		want  map[string]any
 	}{
-		{map[string]interface{}{"mac": "line1\\nline2"}, map[string]interface{}{"mac": "line1\nline2"}},
-		{map[string]interface{}{"mac": "line1\\n\\n\\nline2\\n\\nline3"}, map[string]interface{}{"mac": "line1\n\n\nline2\n\nline3"}},
+		{map[string]any{"mac": "line1\\nline2"}, map[string]any{"mac": "line1\nline2"}},
+		{map[string]any{"mac": "line1\\n\\n\\nline2\\n\\nline3"}, map[string]any{"mac": "line1\n\n\nline2\n\nline3"}},
 	}
 
 	for _, tt := range tests {
@@ -199,11 +199,11 @@ func TestDecodeNewLines(t *testing.T) {
 
 func TestEncodeNewLines(t *testing.T) {
 	tests := []struct {
-		input map[string]interface{}
-		want  map[string]interface{}
+		input map[string]any
+		want  map[string]any
 	}{
-		{map[string]interface{}{"mac": "line1\nline2"}, map[string]interface{}{"mac": "line1\\nline2"}},
-		{map[string]interface{}{"mac": "line1\n\n\nline2\n\nline3"}, map[string]interface{}{"mac": "line1\\n\\n\\nline2\\n\\nline3"}},
+		{map[string]any{"mac": "line1\nline2"}, map[string]any{"mac": "line1\\nline2"}},
+		{map[string]any{"mac": "line1\n\n\nline2\n\nline3"}, map[string]any{"mac": "line1\\n\\n\\nline2\\n\\nline3"}},
 	}
 
 	for _, tt := range tests {
@@ -216,16 +216,16 @@ func TestEncodeNewLines(t *testing.T) {
 
 func TestDecodeNonStrings(t *testing.T) {
 	tests := []struct {
-		input map[string]interface{}
-		want  map[string]interface{}
+		input map[string]any
+		want  map[string]any
 	}{
-		{map[string]interface{}{"mac_only_encrypted": "false"}, map[string]interface{}{"mac_only_encrypted": false}},
-		{map[string]interface{}{"mac_only_encrypted": "true"}, map[string]interface{}{"mac_only_encrypted": true}},
-		{map[string]interface{}{"mac_only_encrypted": "something-else"}, map[string]interface{}{"mac_only_encrypted": false}},
-		{map[string]interface{}{"shamir_threshold": "2"}, map[string]interface{}{"shamir_threshold": 2}},
-		{map[string]interface{}{"shamir_threshold": "002"}, map[string]interface{}{"shamir_threshold": 2}},
-		{map[string]interface{}{"shamir_threshold": "123"}, map[string]interface{}{"shamir_threshold": 123}},
-		{map[string]interface{}{"shamir_threshold": 123}, map[string]interface{}{"shamir_threshold": 123}},
+		{map[string]any{"mac_only_encrypted": "false"}, map[string]any{"mac_only_encrypted": false}},
+		{map[string]any{"mac_only_encrypted": "true"}, map[string]any{"mac_only_encrypted": true}},
+		{map[string]any{"mac_only_encrypted": "something-else"}, map[string]any{"mac_only_encrypted": false}},
+		{map[string]any{"shamir_threshold": "2"}, map[string]any{"shamir_threshold": 2}},
+		{map[string]any{"shamir_threshold": "002"}, map[string]any{"shamir_threshold": 2}},
+		{map[string]any{"shamir_threshold": "123"}, map[string]any{"shamir_threshold": 123}},
+		{map[string]any{"shamir_threshold": 123}, map[string]any{"shamir_threshold": 123}},
 	}
 
 	for _, tt := range tests {
@@ -237,11 +237,11 @@ func TestDecodeNonStrings(t *testing.T) {
 
 func TestDecodeNonStringsErrors(t *testing.T) {
 	tests := []struct {
-		input map[string]interface{}
+		input map[string]any
 		want  string
 	}{
-		{map[string]interface{}{"shamir_threshold": "foo"}, "shamir_threshold is not an integer: strconv.Atoi: parsing \"foo\": invalid syntax"},
-		{map[string]interface{}{"shamir_threshold": true}, "shamir_threshold is neither a string nor an integer, but bool"},
+		{map[string]any{"shamir_threshold": "foo"}, "shamir_threshold is not an integer: strconv.Atoi: parsing \"foo\": invalid syntax"},
+		{map[string]any{"shamir_threshold": true}, "shamir_threshold is neither a string nor an integer, but bool"},
 	}
 
 	for _, tt := range tests {
@@ -253,13 +253,13 @@ func TestDecodeNonStringsErrors(t *testing.T) {
 
 func TestEncodeNonStrings(t *testing.T) {
 	tests := []struct {
-		input map[string]interface{}
-		want  map[string]interface{}
+		input map[string]any
+		want  map[string]any
 	}{
-		{map[string]interface{}{"mac_only_encrypted": false}, map[string]interface{}{"mac_only_encrypted": "false"}},
-		{map[string]interface{}{"mac_only_encrypted": true}, map[string]interface{}{"mac_only_encrypted": "true"}},
-		{map[string]interface{}{"shamir_threshold": 2}, map[string]interface{}{"shamir_threshold": "2"}},
-		{map[string]interface{}{"shamir_threshold": 123}, map[string]interface{}{"shamir_threshold": "123"}},
+		{map[string]any{"mac_only_encrypted": false}, map[string]any{"mac_only_encrypted": "false"}},
+		{map[string]any{"mac_only_encrypted": true}, map[string]any{"mac_only_encrypted": "true"}},
+		{map[string]any{"shamir_threshold": 2}, map[string]any{"shamir_threshold": "2"}},
+		{map[string]any{"shamir_threshold": 123}, map[string]any{"shamir_threshold": "123"}},
 	}
 
 	for _, tt := range tests {

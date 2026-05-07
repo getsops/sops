@@ -25,14 +25,14 @@ func reverse(s string) string {
 	return string(r)
 }
 
-func (c reverseCipher) Encrypt(value interface{}, key []byte, path string) (string, error) {
+func (c reverseCipher) Encrypt(value any, key []byte, path string) (string, error) {
 	b, err := ToBytes(value)
 	if err != nil {
 		return "", err
 	}
 	return reverse(string(b)), nil
 }
-func (c reverseCipher) Decrypt(value string, key []byte, path string) (plaintext interface{}, err error) {
+func (c reverseCipher) Decrypt(value string, key []byte, path string) (plaintext any, err error) {
 	if value == "error" {
 		return nil, fmt.Errorf("Error")
 	}
@@ -41,14 +41,14 @@ func (c reverseCipher) Decrypt(value string, key []byte, path string) (plaintext
 
 type encPrefixCipher struct{}
 
-func (c encPrefixCipher) Encrypt(value interface{}, key []byte, path string) (string, error) {
+func (c encPrefixCipher) Encrypt(value any, key []byte, path string) (string, error) {
 	b, err := ToBytes(value)
 	if err != nil {
 		return "", err
 	}
 	return "ENC:" + string(b), nil
 }
-func (c encPrefixCipher) Decrypt(value string, key []byte, path string) (plaintext interface{}, err error) {
+func (c encPrefixCipher) Decrypt(value string, key []byte, path string) (plaintext any, err error) {
 	v, ok := strings.CutPrefix(value, "ENC:")
 	if !ok {
 		return nil, fmt.Errorf("String not prefixed with 'ENC:'")
@@ -382,7 +382,7 @@ func TestEncryptedCommentRegex(t *testing.T) {
 			},
 			TreeItem{
 				Key: "array",
-				Value: []interface{}{
+				Value: []any{
 					"bar",
 					Comment{Value: "sops:enc"},
 					"baz",
@@ -398,7 +398,7 @@ func TestEncryptedCommentRegex(t *testing.T) {
 			},
 			TreeItem{
 				Key: "encarray",
-				Value: []interface{}{
+				Value: []any{
 					"bar",
 					"baz",
 				},
@@ -438,7 +438,7 @@ func TestEncryptedCommentRegex(t *testing.T) {
 		},
 		TreeItem{
 			Key: "array",
-			Value: []interface{}{
+			Value: []any{
 				"bar",
 				Comment{Value: "sops:enc"},
 				"zab",
@@ -454,7 +454,7 @@ func TestEncryptedCommentRegex(t *testing.T) {
 		},
 		TreeItem{
 			Key: "encarray",
-			Value: []interface{}{
+			Value: []any{
 				"rab",
 				"zab",
 			},
@@ -474,9 +474,9 @@ func TestEncryptedCommentRegex(t *testing.T) {
 	}
 	expected[1].Value = "bar"
 	expected[2].Value.(TreeBranch)[3].Value = "bar"
-	expected[3].Value.([]interface{})[2] = "baz"
+	expected[3].Value.([]any)[2] = "baz"
 	expected[5].Key = Comment{Value: "after"}
-	expected[6].Value = []interface{}{
+	expected[6].Value = []any{
 		"bar",
 		"baz",
 	}
@@ -519,7 +519,7 @@ func TestUnencryptedCommentRegex(t *testing.T) {
 			},
 			TreeItem{
 				Key: "array",
-				Value: []interface{}{
+				Value: []any{
 					"bar",
 					Comment{Value: "sops:noenc"},
 					"baz",
@@ -535,7 +535,7 @@ func TestUnencryptedCommentRegex(t *testing.T) {
 			},
 			TreeItem{
 				Key: "notencarray",
-				Value: []interface{}{
+				Value: []any{
 					"bar",
 					"baz",
 				},
@@ -575,7 +575,7 @@ func TestUnencryptedCommentRegex(t *testing.T) {
 		},
 		TreeItem{
 			Key: "array",
-			Value: []interface{}{
+			Value: []any{
 				"rab",
 				Comment{Value: "sops:noenc"},
 				"baz",
@@ -591,7 +591,7 @@ func TestUnencryptedCommentRegex(t *testing.T) {
 		},
 		TreeItem{
 			Key: "notencarray",
-			Value: []interface{}{
+			Value: []any{
 				"bar",
 				"baz",
 			},
@@ -611,7 +611,7 @@ func TestUnencryptedCommentRegex(t *testing.T) {
 	}
 	expected[2].Value.(TreeBranch)[0].Value = "bar"
 	expected[2].Value.(TreeBranch)[1].Key = Comment{Value: "before"}
-	expected[3].Value.([]interface{})[0] = "bar"
+	expected[3].Value.([]any)[0] = "bar"
 	if !reflect.DeepEqual(tree.Branches[0], expected) {
 		t.Errorf("Trees don't match: \ngot\t\t\t%+v,\nexpected\t\t%+v", tree.Branches[0], expected)
 	}
@@ -638,11 +638,11 @@ func TestUnencryptedCommentRegexFail(t *testing.T) {
 
 type MockCipher struct{}
 
-func (m MockCipher) Encrypt(value interface{}, key []byte, path string) (string, error) {
+func (m MockCipher) Encrypt(value any, key []byte, path string) (string, error) {
 	return "a", nil
 }
 
-func (m MockCipher) Decrypt(value string, key []byte, path string) (interface{}, error) {
+func (m MockCipher) Decrypt(value string, key []byte, path string) (any, error) {
 	return "a", nil
 }
 
@@ -883,7 +883,7 @@ func TestTruncateTree(t *testing.T) {
 		},
 	}
 	expected := 3
-	result, err := tree.Truncate([]interface{}{
+	result, err := tree.Truncate([]any{
 		"bar",
 		"foobar",
 		2,
@@ -899,7 +899,7 @@ func TestTruncateTreeNotFound(t *testing.T) {
 			Value: 2,
 		},
 	}
-	result, err := tree.Truncate([]interface{}{"baz"})
+	result, err := tree.Truncate([]any{"baz"})
 	assert.ErrorContains(t, err, "baz")
 	assert.Nil(t, result, "Truncate result was not nil upon %s", err)
 }
@@ -911,7 +911,7 @@ func TestTruncateTreeNotArray(t *testing.T) {
 			Value: 2,
 		},
 	}
-	result, err := tree.Truncate([]interface{}{"foo", 99})
+	result, err := tree.Truncate([]any{"foo", 99})
 	assert.ErrorContains(t, err, "99")
 	assert.Nil(t, result, "Truncate result was not nil upon %s", err)
 }
@@ -920,13 +920,13 @@ func TestTruncateTreeArrayOutOfBounds(t *testing.T) {
 	tree := TreeBranch{
 		TreeItem{
 			Key: "foo",
-			Value: []interface{}{
+			Value: []any{
 				"one",
 				"two",
 			},
 		},
 	}
-	result, err := tree.Truncate([]interface{}{"foo", 99})
+	result, err := tree.Truncate([]any{"foo", 99})
 	assert.ErrorContains(t, err, "99")
 	assert.Nil(t, result, "Truncate result was not nil upon %s", err)
 }
@@ -941,7 +941,7 @@ func TestEncryptComments(t *testing.T) {
 				},
 				TreeItem{
 					Key: "list",
-					Value: []interface{}{
+					Value: []any{
 						"1",
 						Comment{Value: "bar"},
 						"2",
@@ -955,7 +955,7 @@ func TestEncryptComments(t *testing.T) {
 	}
 	tree.Encrypt(bytes.Repeat([]byte{'f'}, 32), reverseCipher{})
 	assert.Equal(t, "oof", tree.Branches[0][0].Key.(Comment).Value)
-	assert.Equal(t, "rab", tree.Branches[0][1].Value.([]interface{})[1])
+	assert.Equal(t, "rab", tree.Branches[0][1].Value.([]any)[1])
 }
 
 func TestDecryptComments(t *testing.T) {
@@ -968,7 +968,7 @@ func TestDecryptComments(t *testing.T) {
 				},
 				TreeItem{
 					Key: "list",
-					Value: []interface{}{
+					Value: []any{
 						"1",
 						Comment{Value: "rab"},
 						"2",
@@ -986,7 +986,7 @@ func TestDecryptComments(t *testing.T) {
 	}
 	tree.Decrypt(bytes.Repeat([]byte{'f'}, 32), reverseCipher{})
 	assert.Equal(t, "foo", tree.Branches[0][0].Key.(Comment).Value)
-	assert.Equal(t, "bar", tree.Branches[0][1].Value.([]interface{})[1])
+	assert.Equal(t, "bar", tree.Branches[0][1].Value.([]any)[1])
 }
 
 func TestDecryptUnencryptedComments(t *testing.T) {
@@ -1023,7 +1023,7 @@ func TestSetNewKey(t *testing.T) {
 			},
 		},
 	}
-	set, changed := branch.Set([]interface{}{"foo", "bar", "foo"}, "hello")
+	set, changed := branch.Set([]any{"foo", "bar", "foo"}, "hello")
 	assert.Equal(t, true, changed)
 	assert.Equal(t, "hello", set[0].Value.(TreeBranch)[0].Value.(TreeBranch)[1].Value)
 }
@@ -1045,7 +1045,7 @@ func TestSetNewKeyUnchanged(t *testing.T) {
 			},
 		},
 	}
-	set, changed := branch.Set([]interface{}{"foo", "bar", "baz"}, "foobar")
+	set, changed := branch.Set([]any{"foo", "bar", "baz"}, "foobar")
 	assert.Equal(t, false, changed)
 	assert.Equal(t, "foobar", set[0].Value.(TreeBranch)[0].Value.(TreeBranch)[0].Value)
 }
@@ -1057,7 +1057,7 @@ func TestSetNewBranch(t *testing.T) {
 			Value: "value",
 		},
 	}
-	set, changed := branch.Set([]interface{}{"foo", "bar", "baz"}, "hello")
+	set, changed := branch.Set([]any{"foo", "bar", "baz"}, "hello")
 	assert.Equal(t, true, changed)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
@@ -1085,15 +1085,15 @@ func TestSetArrayDeepNew(t *testing.T) {
 	branch := TreeBranch{
 		TreeItem{
 			Key: "foo",
-			Value: []interface{}{
+			Value: []any{
 				"one",
 				"two",
 			},
 		},
 	}
-	set, changed := branch.Set([]interface{}{"foo", 2, "bar"}, "hello")
+	set, changed := branch.Set([]any{"foo", 2, "bar"}, "hello")
 	assert.Equal(t, true, changed)
-	assert.Equal(t, "hello", set[0].Value.([]interface{})[2].(TreeBranch)[0].Value)
+	assert.Equal(t, "hello", set[0].Value.([]any)[2].(TreeBranch)[0].Value)
 }
 
 func TestSetNewKeyDeep(t *testing.T) {
@@ -1103,14 +1103,14 @@ func TestSetNewKeyDeep(t *testing.T) {
 			Value: "bar",
 		},
 	}
-	set, changed := branch.Set([]interface{}{"foo", "bar", "baz"}, "hello")
+	set, changed := branch.Set([]any{"foo", "bar", "baz"}, "hello")
 	assert.Equal(t, true, changed)
 	assert.Equal(t, "hello", set[0].Value.(TreeBranch)[0].Value.(TreeBranch)[0].Value)
 }
 
 func TestSetNewKeyOnEmptyBranch(t *testing.T) {
 	branch := TreeBranch{}
-	set, changed := branch.Set([]interface{}{"foo", "bar", "baz"}, "hello")
+	set, changed := branch.Set([]any{"foo", "bar", "baz"}, "hello")
 	assert.Equal(t, true, changed)
 	assert.Equal(t, "hello", set[0].Value.(TreeBranch)[0].Value.(TreeBranch)[0].Value)
 }
@@ -1119,23 +1119,23 @@ func TestSetArray(t *testing.T) {
 	branch := TreeBranch{
 		TreeItem{
 			Key: "foo",
-			Value: []interface{}{
+			Value: []any{
 				"one",
 				"two",
 				"three",
 			},
 		},
 	}
-	set, changed := branch.Set([]interface{}{"foo", 0}, "uno")
+	set, changed := branch.Set([]any{"foo", 0}, "uno")
 	assert.Equal(t, true, changed)
-	assert.Equal(t, "uno", set[0].Value.([]interface{})[0])
+	assert.Equal(t, "uno", set[0].Value.([]any)[0])
 }
 
 func TestSetArrayNew(t *testing.T) {
 	branch := TreeBranch{}
-	set, changed := branch.Set([]interface{}{"foo", 0, 0}, "uno")
+	set, changed := branch.Set([]any{"foo", 0, 0}, "uno")
 	assert.Equal(t, true, changed)
-	assert.Equal(t, "uno", set[0].Value.([]interface{})[0].([]interface{})[0])
+	assert.Equal(t, "uno", set[0].Value.([]any)[0].([]any)[0])
 }
 
 func TestSetExisting(t *testing.T) {
@@ -1145,7 +1145,7 @@ func TestSetExisting(t *testing.T) {
 			Value: "foobar",
 		},
 	}
-	set, changed := branch.Set([]interface{}{"foo"}, "bar")
+	set, changed := branch.Set([]any{"foo"}, "bar")
 	assert.Equal(t, true, changed)
 	assert.Equal(t, "bar", set[0].Value)
 }
@@ -1154,15 +1154,15 @@ func TestSetArrayLeafNewItem(t *testing.T) {
 	branch := TreeBranch{
 		TreeItem{
 			Key:   "array",
-			Value: []interface{}{},
+			Value: []any{},
 		},
 	}
-	set, changed := branch.Set([]interface{}{"array", 2}, "hello")
+	set, changed := branch.Set([]any{"array", 2}, "hello")
 	assert.Equal(t, true, changed)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
 			Key: "array",
-			Value: []interface{}{
+			Value: []any{
 				"hello",
 			},
 		},
@@ -1173,17 +1173,17 @@ func TestSetArrayNonLeaf(t *testing.T) {
 	branch := TreeBranch{
 		TreeItem{
 			Key: "array",
-			Value: []interface{}{
+			Value: []any{
 				1,
 			},
 		},
 	}
-	set, changed := branch.Set([]interface{}{"array", 0, "hello"}, "hello")
+	set, changed := branch.Set([]any{"array", 0, "hello"}, "hello")
 	assert.Equal(t, true, changed)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
 			Key: "array",
-			Value: []interface{}{
+			Value: []any{
 				TreeBranch{
 					TreeItem{
 						Key:   "hello",
@@ -1206,7 +1206,7 @@ func TestUnsetKeyRootLeaf(t *testing.T) {
 			Value: "foofoo",
 		},
 	}
-	unset, err := branch.Unset([]interface{}{"foofoo"})
+	unset, err := branch.Unset([]any{"foofoo"})
 	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
@@ -1232,7 +1232,7 @@ func TestUnsetKeyBranchLeaf(t *testing.T) {
 			},
 		},
 	}
-	unset, err := branch.Unset([]interface{}{"foo", "barbar"})
+	unset, err := branch.Unset([]any{"foo", "barbar"})
 	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
@@ -1263,7 +1263,7 @@ func TestUnsetKeyBranch(t *testing.T) {
 			},
 		},
 	}
-	unset, err := branch.Unset([]interface{}{"foofoo"})
+	unset, err := branch.Unset([]any{"foofoo"})
 	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
@@ -1280,7 +1280,7 @@ func TestUnsetKeyRootLastLeaf(t *testing.T) {
 			Value: "foo",
 		},
 	}
-	unset, err := branch.Unset([]interface{}{"foo"})
+	unset, err := branch.Unset([]any{"foo"})
 	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{}, unset)
 }
@@ -1297,7 +1297,7 @@ func TestUnsetKeyBranchLastLeaf(t *testing.T) {
 			},
 		},
 	}
-	unset, err := branch.Unset([]interface{}{"foo", "bar"})
+	unset, err := branch.Unset([]any{"foo", "bar"})
 	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
@@ -1314,7 +1314,7 @@ func TestUnsetKeyArray(t *testing.T) {
 			Value: TreeBranch{
 				TreeItem{
 					Key: "bar",
-					Value: []interface{}{
+					Value: []any{
 						TreeBranch{
 							TreeItem{
 								Key:   "baz",
@@ -1326,7 +1326,7 @@ func TestUnsetKeyArray(t *testing.T) {
 			},
 		},
 	}
-	unset, err := branch.Unset([]interface{}{"foo", "bar"})
+	unset, err := branch.Unset([]any{"foo", "bar"})
 	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
@@ -1340,7 +1340,7 @@ func TestUnsetArrayItem(t *testing.T) {
 	branch := TreeBranch{
 		TreeItem{
 			Key: "foo",
-			Value: []interface{}{
+			Value: []any{
 				TreeBranch{
 					TreeItem{
 						Key:   "bar",
@@ -1356,12 +1356,12 @@ func TestUnsetArrayItem(t *testing.T) {
 			},
 		},
 	}
-	unset, err := branch.Unset([]interface{}{"foo", 1})
+	unset, err := branch.Unset([]any{"foo", 1})
 	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
 			Key: "foo",
-			Value: []interface{}{
+			Value: []any{
 				TreeBranch{
 					TreeItem{
 						Key:   "bar",
@@ -1377,7 +1377,7 @@ func TestUnsetKeyInArrayItem(t *testing.T) {
 	branch := TreeBranch{
 		TreeItem{
 			Key: "foo",
-			Value: []interface{}{
+			Value: []any{
 				TreeBranch{
 					TreeItem{
 						Key:   "bar",
@@ -1391,12 +1391,12 @@ func TestUnsetKeyInArrayItem(t *testing.T) {
 			},
 		},
 	}
-	unset, err := branch.Unset([]interface{}{"foo", 0, "barbar"})
+	unset, err := branch.Unset([]any{"foo", 0, "barbar"})
 	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
 			Key: "foo",
-			Value: []interface{}{
+			Value: []any{
 				TreeBranch{
 					TreeItem{
 						Key:   "bar",
@@ -1412,7 +1412,7 @@ func TestUnsetArrayLastItem(t *testing.T) {
 	branch := TreeBranch{
 		TreeItem{
 			Key: "foo",
-			Value: []interface{}{
+			Value: []any{
 				TreeBranch{
 					TreeItem{
 						Key:   "bar",
@@ -1422,12 +1422,12 @@ func TestUnsetArrayLastItem(t *testing.T) {
 			},
 		},
 	}
-	unset, err := branch.Unset([]interface{}{"foo", 0})
+	unset, err := branch.Unset([]any{"foo", 0})
 	assert.NoError(t, err)
 	assert.Equal(t, TreeBranch{
 		TreeItem{
 			Key:   "foo",
-			Value: []interface{}{},
+			Value: []any{},
 		},
 	}, unset)
 }
@@ -1444,7 +1444,7 @@ func TestUnsetKeyNotFound(t *testing.T) {
 			},
 		},
 	}
-	unset, err := branch.Unset([]interface{}{"foo", "unknown-value"})
+	unset, err := branch.Unset([]any{"foo", "unknown-value"})
 	assert.Equal(t, err.(*SopsKeyNotFound).Key, "unknown-value")
 	assert.ErrorContains(t, err, "unknown-value")
 	assert.Nil(t, unset, "Unset result was not nil upon %s", err)
@@ -1454,7 +1454,7 @@ func TestUnsetKeyInArrayNotFound(t *testing.T) {
 	branch := TreeBranch{
 		TreeItem{
 			Key: "foo",
-			Value: []interface{}{
+			Value: []any{
 				TreeBranch{
 					TreeItem{
 						Key:   "bar",
@@ -1464,7 +1464,7 @@ func TestUnsetKeyInArrayNotFound(t *testing.T) {
 			},
 		},
 	}
-	unset, err := branch.Unset([]interface{}{"foo", 0, "unknown"})
+	unset, err := branch.Unset([]any{"foo", 0, "unknown"})
 	assert.Equal(t, err.(*SopsKeyNotFound).Key, "unknown")
 	assert.Nil(t, unset, "Unset result was not nil upon %s", err)
 }
@@ -1473,7 +1473,7 @@ func TestUnsetArrayItemOutOfBounds(t *testing.T) {
 	branch := TreeBranch{
 		TreeItem{
 			Key: "foo",
-			Value: []interface{}{
+			Value: []any{
 				TreeBranch{
 					TreeItem{
 						Key:   "bar",
@@ -1483,7 +1483,7 @@ func TestUnsetArrayItemOutOfBounds(t *testing.T) {
 			},
 		},
 	}
-	unset, err := branch.Unset([]interface{}{"foo", 99})
+	unset, err := branch.Unset([]any{"foo", 99})
 	assert.Equal(t, err.(*SopsKeyNotFound).Key, 99)
 	assert.Nil(t, unset, "Unset result was not nil upon %s", err)
 }
@@ -1495,17 +1495,17 @@ func TestUnsetKeyNotABranch(t *testing.T) {
 			Value: 99,
 		},
 	}
-	unset, err := branch.Unset([]interface{}{"foo", "bar"})
+	unset, err := branch.Unset([]any{"foo", "bar"})
 	assert.ErrorContains(t, err, "Unsupported type")
 	assert.Nil(t, unset, "Unset result was not nil upon %s", err)
 }
 
 func TestEmitAsMap(t *testing.T) {
-	expected := map[string]interface{}{
+	expected := map[string]any{
 		"foobar": "barfoo",
 		"number": 42,
-		"foo": map[string]interface{}{
-			"bar": map[string]interface{}{
+		"foo": map[string]any{
+			"bar": map[string]any{
 				"baz": "foobar",
 			},
 		},

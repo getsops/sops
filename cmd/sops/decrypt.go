@@ -21,7 +21,7 @@ type decryptOpts struct {
 	InputPath       string
 	ReadFromStdin   bool
 	IgnoreMAC       bool
-	Extract         []interface{}
+	Extract         []any
 	KeyServices     []keyservice.KeyServiceClient
 	DecryptionOrder []string
 }
@@ -72,7 +72,7 @@ func decrypt(opts decryptOpts) (decryptedFile []byte, err error) {
 	return decryptedFile, err
 }
 
-func extract(tree *sops.Tree, path []interface{}, outputStore sops.Store) (output []byte, err error) {
+func extract(tree *sops.Tree, path []any, outputStore sops.Store) (output []byte, err error) {
 	v, err := tree.Branches[0].Truncate(path)
 	if err != nil {
 		return nil, fmt.Errorf("error truncating tree: %s", err)

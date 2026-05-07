@@ -1,6 +1,7 @@
 package keyservice
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/getsops/sops/v3/age"
@@ -10,7 +11,6 @@ import (
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/pgp"
-	"golang.org/x/net/context"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

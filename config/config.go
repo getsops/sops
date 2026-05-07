@@ -56,7 +56,7 @@ func LookupConfigFile(start string) (ConfigFileResult, error) {
 	filepath := path.Dir(start)
 	var foundAlternatePath string
 
-	for i := 0; i < maxDepth; i++ {
+	for range maxDepth {
 		configPath := path.Join(filepath, configFileName)
 		_, err := fs.Stat(configPath)
 		if err == nil {
@@ -176,24 +176,24 @@ type destinationRule struct {
 }
 
 type creationRule struct {
-	PathRegex               string      `yaml:"path_regex"`
-	KMS                     interface{} `yaml:"kms"` // string or []string
-	AwsProfile              string      `yaml:"aws_profile"`
-	Age                     interface{} `yaml:"age"`     // string or []string
-	PGP                     interface{} `yaml:"pgp"`     // string or []string
-	GCPKMS                  interface{} `yaml:"gcp_kms"` // string or []string
-	HCKms                   []string    `yaml:"hckms"`
-	AzureKeyVault           interface{} `yaml:"azure_keyvault"`       // string or []string
-	VaultURI                interface{} `yaml:"hc_vault_transit_uri"` // string or []string
-	KeyGroups               []keyGroup  `yaml:"key_groups"`
-	ShamirThreshold         int         `yaml:"shamir_threshold"`
-	UnencryptedSuffix       string      `yaml:"unencrypted_suffix"`
-	EncryptedSuffix         string      `yaml:"encrypted_suffix"`
-	UnencryptedRegex        string      `yaml:"unencrypted_regex"`
-	EncryptedRegex          string      `yaml:"encrypted_regex"`
-	UnencryptedCommentRegex string      `yaml:"unencrypted_comment_regex"`
-	EncryptedCommentRegex   string      `yaml:"encrypted_comment_regex"`
-	MACOnlyEncrypted        bool        `yaml:"mac_only_encrypted"`
+	PathRegex               string     `yaml:"path_regex"`
+	KMS                     any        `yaml:"kms"` // string or []string
+	AwsProfile              string     `yaml:"aws_profile"`
+	Age                     any        `yaml:"age"`     // string or []string
+	PGP                     any        `yaml:"pgp"`     // string or []string
+	GCPKMS                  any        `yaml:"gcp_kms"` // string or []string
+	HCKms                   []string   `yaml:"hckms"`
+	AzureKeyVault           any        `yaml:"azure_keyvault"`       // string or []string
+	VaultURI                any        `yaml:"hc_vault_transit_uri"` // string or []string
+	KeyGroups               []keyGroup `yaml:"key_groups"`
+	ShamirThreshold         int        `yaml:"shamir_threshold"`
+	UnencryptedSuffix       string     `yaml:"unencrypted_suffix"`
+	EncryptedSuffix         string     `yaml:"encrypted_suffix"`
+	UnencryptedRegex        string     `yaml:"unencrypted_regex"`
+	EncryptedRegex          string     `yaml:"encrypted_regex"`
+	UnencryptedCommentRegex string     `yaml:"unencrypted_comment_regex"`
+	EncryptedCommentRegex   string     `yaml:"encrypted_comment_regex"`
+	MACOnlyEncrypted        bool       `yaml:"mac_only_encrypted"`
 }
 
 // Helper methods to safely extract keys as []string
@@ -222,7 +222,7 @@ func (c *creationRule) GetVaultURIs() ([]string, error) {
 }
 
 // Utility function to handle both string and []string
-func parseKeyField(field interface{}, fieldName string) ([]string, error) {
+func parseKeyField(field any, fieldName string) ([]string, error) {
 	if field == nil {
 		return []string{}, nil
 	}
@@ -242,7 +242,7 @@ func parseKeyField(field interface{}, fieldName string) ([]string, error) {
 			}
 		}
 		return result, nil
-	case []interface{}:
+	case []any:
 		result := make([]string, len(v))
 		for i, item := range v {
 			if str, ok := item.(string); ok {

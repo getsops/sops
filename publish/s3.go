@@ -46,6 +46,6 @@ func (s3d *S3Destination) Upload(fileContents []byte, fileName string) error {
 }
 
 // Returns NotImplementedError
-func (s3d *S3Destination) UploadUnencrypted(data map[string]interface{}, fileName string) error {
+func (s3d *S3Destination) UploadUnencrypted(data map[string]any, fileName string) error {
 	return &NotImplementedError{"S3 does not support uploading the unencrypted file contents."}
 }

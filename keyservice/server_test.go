@@ -1,6 +1,8 @@
 package keyservice
 
 import (
+	"maps"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -49,9 +51,7 @@ func TestKmsKeyToMasterKey(t *testing.T) {
 		t.Run(c.description, func(t *testing.T) {
 
 			inputCtx := make(map[string]string)
-			for k, v := range c.expectedCtx {
-				inputCtx[k] = v
-			}
+			maps.Copy(inputCtx, c.expectedCtx)
 
 			key := &KmsKey{
 				Arn:        c.expectedArn,

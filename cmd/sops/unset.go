@@ -15,7 +15,7 @@ type unsetOpts struct {
 	OutputStore     sops.Store
 	InputPath       string
 	IgnoreMAC       bool
-	TreePath        []interface{}
+	TreePath        []any
 	KeyServices     []keyservice.KeyServiceClient
 	DecryptionOrder []string
 }

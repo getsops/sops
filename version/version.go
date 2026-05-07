@@ -191,8 +191,8 @@ func (f releaseFetcher) LatestReleaseUsingRedirect(repository string) (tag, url 
 	}
 
 	tagMarker := "releases/tag/"
-	if tagIndex := strings.Index(location, tagMarker); tagIndex != -1 {
-		return location[tagIndex+len(tagMarker):], location, nil
+	if _, after, ok := strings.Cut(location, tagMarker); ok {
+		return after, location, nil
 	}
 	return "", "", fmt.Errorf("unexpected Location header: %s", location)
 }

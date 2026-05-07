@@ -2,6 +2,7 @@ package version
 
 import (
 	"fmt"
+	"maps"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -251,9 +252,7 @@ func (m *mockServer) start() *httptest.Server {
 			return
 		}
 
-		for key, values := range m.header {
-			w.Header()[key] = values
-		}
+		maps.Copy(w.Header(), m.header)
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(m.statusCode)
 		fmt.Fprintln(w, m.response)

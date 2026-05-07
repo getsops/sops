@@ -9,6 +9,6 @@ type MasterKey interface {
 	Decrypt() ([]byte, error)
 	NeedsRotation() bool
 	ToString() string
-	ToMap() map[string]interface{}
+	ToMap() map[string]any
 	TypeToIdentifier() string
 }

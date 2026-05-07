@@ -6,7 +6,7 @@ import "fmt"
 // must implement in order to be used by SOPS
 type Destination interface {
 	Upload(fileContents []byte, fileName string) error
-	UploadUnencrypted(data map[string]interface{}, fileName string) error
+	UploadUnencrypted(data map[string]any, fileName string) error
 	Path(fileName string) string
 }
 

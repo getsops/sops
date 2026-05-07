@@ -28,17 +28,17 @@ func (store *Store) Name() string {
 	return "yaml"
 }
 
-func (store Store) appendCommentToList(comment string, list []interface{}) []interface{} {
+func (store Store) appendCommentToList(comment string, list []any) []any {
 	return store.appendCommentToListWithInline(comment, list, false)
 }
 
-func (store Store) appendInlineCommentToList(comment string, list []interface{}) []interface{} {
+func (store Store) appendInlineCommentToList(comment string, list []any) []any {
 	return store.appendCommentToListWithInline(comment, list, true)
 }
 
-func (store Store) appendCommentToListWithInline(comment string, list []interface{}, inline bool) []interface{} {
+func (store Store) appendCommentToListWithInline(comment string, list []any, inline bool) []any {
 	if comment != "" {
-		for _, commentLine := range strings.Split(comment, "\n") {
+		for commentLine := range strings.SplitSeq(comment, "\n") {
 			if commentLine != "" {
 				list = append(list, sops.Comment{
 					Value:  commentLine[1:],
@@ -60,7 +60,7 @@ func (store Store) appendInlineCommentToMap(comment string, branch sops.TreeBran
 
 func (store Store) appendCommentToMapWithInline(comment string, branch sops.TreeBranch, inline bool) sops.TreeBranch {
 	if comment != "" {
-		for _, commentLine := range strings.Split(comment, "\n") {
+		for commentLine := range strings.SplitSeq(comment, "\n") {
 			if commentLine != "" {
 				branch = append(branch, sops.TreeItem{
 					Key: sops.Comment{
@@ -75,12 +75,12 @@ func (store Store) appendCommentToMapWithInline(comment string, branch sops.Tree
 	return branch
 }
 
-func (store Store) nodeToTreeValue(node *yaml.Node, commentsWereHandled bool) (interface{}, error) {
+func (store Store) nodeToTreeValue(node *yaml.Node, commentsWereHandled bool) (any, error) {
 	switch node.Kind {
 	case yaml.DocumentNode:
 		panic("documents should never be passed here")
 	case yaml.SequenceNode:
-		var result []interface{}
+		var result []any
 		if !commentsWereHandled {
 			result = store.appendCommentToList(node.HeadComment, result)
 			result = store.appendCommentToList(node.LineComment, result)
@@ -103,7 +103,7 @@ func (store Store) nodeToTreeValue(node *yaml.Node, commentsWereHandled bool) (i
 		branch := make(sops.TreeBranch, 0)
 		return store.appendYamlNodeToTreeBranch(node, branch, commentsWereHandled)
 	case yaml.ScalarNode:
-		var result interface{}
+		var result any
 		node.Decode(&result)
 		return result, nil
 	case yaml.AliasNode:
@@ -139,7 +139,7 @@ func (store Store) appendYamlNodeToTreeBranch(node *yaml.Node, branch sops.TreeB
 				branch = store.appendCommentToMap(value.HeadComment, branch)
 				branch = store.appendInlineCommentToMap(value.LineComment, branch)
 			}
-			var keyValue interface{}
+			var keyValue any
 			key.Decode(&keyValue)
 			valueTV, err := store.nodeToTreeValue(value, handleValueComments)
 			if err != nil {
@@ -214,14 +214,14 @@ func (store *Store) addCommentsLine(node *yaml.Node, comments []string) []string
 	return nil
 }
 
-func (store *Store) treeValueToNode(in interface{}) *yaml.Node {
+func (store *Store) treeValueToNode(in any) *yaml.Node {
 	switch in := in.(type) {
 	case sops.TreeBranch:
 		var mapping = &yaml.Node{}
 		mapping.Kind = yaml.MappingNode
 		store.appendTreeBranch(in, mapping)
 		return mapping
-	case []interface{}:
+	case []any:
 		var sequence = &yaml.Node{}
 		sequence.Kind = yaml.SequenceNode
 		store.appendSequence(in, sequence)
@@ -233,7 +233,7 @@ func (store *Store) treeValueToNode(in interface{}) *yaml.Node {
 	}
 }
 
-func (store *Store) appendSequence(in []interface{}, sequence *yaml.Node) {
+func (store *Store) appendSequence(in []any, sequence *yaml.Node) {
 	var headComments []string
 	var inlineComments []string
 	var beginning bool = true
@@ -354,7 +354,7 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 	if len(in) > 0 {
 		// This is needed to make the yaml-decoder check for uniqueness of keys
 		// Can probably be removed when https://github.com/go-yaml/yaml/issues/814 is merged.
-		if err := yaml.NewDecoder(bytes.NewReader(in)).Decode(make(map[string]interface{})); err != nil {
+		if err := yaml.NewDecoder(bytes.NewReader(in)).Decode(make(map[string]any)); err != nil {
 			return nil, err
 		}
 	}
@@ -455,7 +455,7 @@ func (store *Store) EmitPlainFile(branches sops.TreeBranches) ([]byte, error) {
 
 // EmitValue returns bytes corresponding to a single encoded value
 // in a generic interface{} object
-func (store *Store) EmitValue(v interface{}) ([]byte, error) {
+func (store *Store) EmitValue(v any) ([]byte, error) {
 	n := store.treeValueToNode(v)
 	return yaml.Marshal(n)
 }

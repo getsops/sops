@@ -201,7 +201,7 @@ func TestMasterKey_ToMap(t *testing.T) {
 		Version:      "1",
 		EncryptedKey: "this is encrypted",
 	}
-	assert.Equal(t, map[string]interface{}{
+	assert.Equal(t, map[string]any{
 		"vaultUrl":   key.VaultURL,
 		"key":        key.Name,
 		"version":    key.Version,

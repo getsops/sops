@@ -7,11 +7,11 @@ import (
 
 var testOnlyAgePassword string
 
-func printf(format string, v ...interface{}) {
+func printf(format string, v ...any) {
 	log.Printf("age: "+format, v...)
 }
 
-func warningf(format string, v ...interface{}) {
+func warningf(format string, v ...any) {
 	log.Printf("age: warning: "+format, v...)
 }
 
@@ -27,7 +27,7 @@ var pluginTerminalUI = &plugin.ClientUI{
 		if testing.Testing() && testOnlyAgePassword != "" {
 			return testOnlyAgePassword, nil
 		}
-		return pluginTerminalUIImpl.RequestValue(name, message, isSecret);
+		return pluginTerminalUIImpl.RequestValue(name, message, isSecret)
 	},
 	Confirm: func(name, message, yes, no string) (choseYes bool, err error) {
 		return pluginTerminalUIImpl.Confirm(name, message, yes, no)

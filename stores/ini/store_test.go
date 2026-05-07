@@ -132,7 +132,7 @@ func TestEncodeIniWithDuplicateSections(t *testing.T) {
 		sops.TreeBranch{
 			sops.TreeItem{
 				Key:   "DEFAULT",
-				Value: interface{}(sops.TreeBranch(nil)),
+				Value: any(sops.TreeBranch(nil)),
 			},
 			sops.TreeItem{
 				Key: "foo",

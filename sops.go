@@ -37,6 +37,7 @@ ordering.
 package sops // import "github.com/getsops/sops/v3"
 
 import (
+	"context"
 	"crypto/rand"
 	"crypto/sha512"
 	"fmt"
@@ -49,7 +50,6 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
-	"golang.org/x/net/context"
 
 	"github.com/getsops/sops/v3/age"
 	"github.com/getsops/sops/v3/audit"
@@ -78,7 +78,7 @@ const MacMismatch = sopsError("MAC mismatch")
 const MetadataNotFound = sopsError("sops metadata not found")
 
 type SopsKeyNotFound struct {
-	Key interface{}
+	Key any
 	Msg string
 }
 
@@ -103,10 +103,10 @@ func init() {
 type Cipher interface {
 	// Encrypt takes a plaintext, a key and additional data and returns the plaintext encrypted with the key, using the
 	// additional data for authentication
-	Encrypt(plaintext interface{}, key []byte, additionalData string) (ciphertext string, err error)
+	Encrypt(plaintext any, key []byte, additionalData string) (ciphertext string, err error)
 	// Encrypt takes a ciphertext, a key and additional data and returns the ciphertext encrypted with the key, using
 	// the additional data for authentication
-	Decrypt(ciphertext string, key []byte, additionalData string) (plaintext interface{}, err error)
+	Decrypt(ciphertext string, key []byte, additionalData string) (plaintext any, err error)
 }
 
 // Comment represents a comment in the sops tree for the file formats that actually support them.
@@ -117,8 +117,8 @@ type Comment struct {
 
 // TreeItem is an item inside sops's tree
 type TreeItem struct {
-	Key   interface{}
-	Value interface{}
+	Key   any
+	Value any
 }
 
 // TreeBranch is a branch inside sops's tree. It is a slice of TreeItems and is therefore ordered
@@ -128,7 +128,7 @@ type TreeBranch []TreeItem
 // Trees usually have more than one branch
 type TreeBranches []TreeBranch
 
-func equals(oneBranch interface{}, otherBranch interface{}) bool {
+func equals(oneBranch any, otherBranch any) bool {
 	switch oneBranch := oneBranch.(type) {
 	case TreeBranch:
 		otherBranch, ok := otherBranch.(TreeBranch)
@@ -142,8 +142,8 @@ func equals(oneBranch interface{}, otherBranch interface{}) bool {
 			}
 		}
 		return true
-	case []interface{}:
-		otherBranch, ok := otherBranch.([]interface{})
+	case []any:
+		otherBranch, ok := otherBranch.([]any)
 		if !ok || len(oneBranch) != len(otherBranch) {
 			return false
 		}
@@ -170,15 +170,15 @@ func (branch TreeBranch) Equals(other TreeBranch) bool {
 	return equals(branch, other)
 }
 
-func valueFromPathAndLeaf(path []interface{}, leaf interface{}) interface{} {
+func valueFromPathAndLeaf(path []any, leaf any) any {
 	switch component := path[0].(type) {
 	case int:
 		if len(path) == 1 {
-			return []interface{}{
+			return []any{
 				leaf,
 			}
 		}
-		return []interface{}{
+		return []any{
 			valueFromPathAndLeaf(path[1:], leaf),
 		}
 	default:
@@ -199,7 +199,7 @@ func valueFromPathAndLeaf(path []interface{}, leaf interface{}) interface{} {
 	}
 }
 
-func set(branch interface{}, path []interface{}, value interface{}) (interface{}, bool) {
+func set(branch any, path []any, value any) (any, bool) {
 	switch branch := branch.(type) {
 	case TreeBranch:
 		for i, item := range branch {
@@ -220,7 +220,7 @@ func set(branch interface{}, path []interface{}, value interface{}) (interface{}
 			return append(branch, newBranch[0]), true
 		}
 		return branch, true
-	case []interface{}:
+	case []any:
 		position := path[0].(int)
 		var changed bool
 		if len(path) == 1 {
@@ -245,12 +245,12 @@ func set(branch interface{}, path []interface{}, value interface{}) (interface{}
 }
 
 // Set sets a value on a given tree for the specified path
-func (branch TreeBranch) Set(path []interface{}, value interface{}) (TreeBranch, bool) {
+func (branch TreeBranch) Set(path []any, value any) (TreeBranch, bool) {
 	v, changed := set(branch, path, value)
 	return v.(TreeBranch), changed
 }
 
-func unset(branch interface{}, path []interface{}) (interface{}, error) {
+func unset(branch any, path []any) (any, error) {
 	switch branch := branch.(type) {
 	case TreeBranch:
 		for i, item := range branch {
@@ -268,7 +268,7 @@ func unset(branch interface{}, path []interface{}) (interface{}, error) {
 			}
 		}
 		return nil, &SopsKeyNotFound{Msg: "Key not found: %s", Key: path[0]}
-	case []interface{}:
+	case []any:
 		position := path[0].(int)
 		if position >= len(branch) {
 			return nil, &SopsKeyNotFound{Msg: "Index %d out of bounds", Key: path[0]}
@@ -289,7 +289,7 @@ func unset(branch interface{}, path []interface{}) (interface{}, error) {
 }
 
 // Unset removes a value on a given tree from the specified path
-func (branch TreeBranch) Unset(path []interface{}) (TreeBranch, error) {
+func (branch TreeBranch) Unset(path []any) (TreeBranch, error) {
 	v, err := unset(branch, path)
 	if err != nil {
 		return nil, err
@@ -306,9 +306,9 @@ type Tree struct {
 }
 
 // Truncate truncates the tree to the path specified
-func (branch TreeBranch) Truncate(path []interface{}) (interface{}, error) {
+func (branch TreeBranch) Truncate(path []any) (any, error) {
 	log.WithField("path", path).Info("Truncating tree")
-	var current interface{} = branch
+	var current any = branch
 	for _, component := range path {
 		switch component := component.(type) {
 		case string:
@@ -336,7 +336,7 @@ func (branch TreeBranch) Truncate(path []interface{}) (interface{}, error) {
 	return current, nil
 }
 
-func (branch TreeBranch) walkValue(in interface{}, path []string, commentsStack [][]string, onLeaves func(in interface{}, path []string, commentsStack [][]string) (interface{}, error)) (interface{}, error) {
+func (branch TreeBranch) walkValue(in any, path []string, commentsStack [][]string, onLeaves func(in any, path []string, commentsStack [][]string) (any, error)) (any, error) {
 	switch in := in.(type) {
 	case string:
 		return onLeaves(in, path, commentsStack)
@@ -354,7 +354,7 @@ func (branch TreeBranch) walkValue(in interface{}, path []string, commentsStack 
 		return onLeaves(in, path, commentsStack)
 	case TreeBranch:
 		return branch.walkBranch(in, path, commentsStack, onLeaves)
-	case []interface{}:
+	case []any:
 		return branch.walkSlice(in, path, commentsStack, onLeaves)
 	case nil:
 		// the value returned remains the same since it doesn't make
@@ -365,7 +365,7 @@ func (branch TreeBranch) walkValue(in interface{}, path []string, commentsStack 
 	}
 }
 
-func (branch TreeBranch) walkSlice(in []interface{}, path []string, commentsStack [][]string, onLeaves func(in interface{}, path []string, commentsStack [][]string) (interface{}, error)) ([]interface{}, error) {
+func (branch TreeBranch) walkSlice(in []any, path []string, commentsStack [][]string, onLeaves func(in any, path []string, commentsStack [][]string) (any, error)) ([]any, error) {
 	// Because append returns a new slice, the original stack is not changed.
 	commentsStack = append(commentsStack, []string{})
 	for i, v := range in {
@@ -388,7 +388,7 @@ func (branch TreeBranch) walkSlice(in []interface{}, path []string, commentsStac
 	return in, nil
 }
 
-func (branch TreeBranch) walkBranch(in TreeBranch, path []string, commentsStack [][]string, onLeaves func(in interface{}, path []string, commentsStack [][]string) (interface{}, error)) (TreeBranch, error) {
+func (branch TreeBranch) walkBranch(in TreeBranch, path []string, commentsStack [][]string, onLeaves func(in any, path []string, commentsStack [][]string) (any, error)) (TreeBranch, error) {
 	// Because append returns a new slice, the original stack is not changed.
 	commentsStack = append(commentsStack, []string{})
 	for i, item := range in {
@@ -531,7 +531,7 @@ func (tree Tree) Encrypt(key []byte, cipher Cipher) (string, error) {
 		hash.Write(MACOnlyEncryptedInitialization)
 	}
 	walk := func(branch TreeBranch) error {
-		_, err := branch.walkBranch(branch, make([]string, 0), make([][]string, 0), func(in interface{}, path []string, commentsStack [][]string) (interface{}, error) {
+		_, err := branch.walkBranch(branch, make([]string, 0), make([][]string, 0), func(in any, path []string, commentsStack [][]string) (any, error) {
 			_, ok := in.(Comment)
 			encrypted := tree.shouldBeEncrypted(path, commentsStack, ok)
 			if !tree.Metadata.MACOnlyEncrypted || encrypted {
@@ -594,10 +594,10 @@ func (tree Tree) Decrypt(key []byte, cipher Cipher) (string, error) {
 		hash.Write(MACOnlyEncryptedInitialization)
 	}
 	walk := func(branch TreeBranch) error {
-		_, err := branch.walkBranch(branch, make([]string, 0), make([][]string, 0), func(in interface{}, path []string, commentsStack [][]string) (interface{}, error) {
+		_, err := branch.walkBranch(branch, make([]string, 0), make([][]string, 0), func(in any, path []string, commentsStack [][]string) (any, error) {
 			c, ok := in.(Comment)
 			encrypted := tree.shouldBeEncrypted(path, commentsStack, ok)
-			var v interface{}
+			var v any
 			if encrypted {
 				var err error
 				pathString := strings.Join(path, ":") + ":"
@@ -718,7 +718,7 @@ type PlainFileEmitter interface {
 // ValueEmitter is the interface for emitting a value. It provides a way to emit
 // values from the internal SOPS representation so that they can be shown
 type ValueEmitter interface {
-	EmitValue(interface{}) ([]byte, error)
+	EmitValue(any) ([]byte, error)
 }
 
 // CheckEncrypted is the interface for testing whether a branch contains sops
@@ -902,7 +902,7 @@ func sortKeyGroupIndices(group KeyGroup, decryptionOrder []string) []int {
 	// initialize indices
 	n := len(group)
 	indices := make([]int, n)
-	for i := 0; i < n; i++ {
+	for i := range n {
 		indices[i] = i
 	}
 	sort.SliceStable(indices, func(i, j int) bool {
@@ -963,7 +963,7 @@ func (m Metadata) GetDataKey() ([]byte, error) {
 }
 
 // ToBytes converts a string, int, float or bool to a byte representation.
-func ToBytes(in interface{}) ([]byte, error) {
+func ToBytes(in any) ([]byte, error) {
 	switch in := in.(type) {
 	case string:
 		return []byte(in), nil
@@ -991,8 +991,8 @@ func ToBytes(in interface{}) ([]byte, error) {
 // EmitAsMap will emit the tree branches as a map. This is used by the publish
 // command for writing decrypted trees to various destinations. Should only be
 // used for outputting to data structures in code.
-func EmitAsMap(in TreeBranches) (map[string]interface{}, error) {
-	data := map[string]interface{}{}
+func EmitAsMap(in TreeBranches) (map[string]any, error) {
+	data := map[string]any{}
 
 	for _, branch := range in {
 		for _, item := range branch {
@@ -1010,7 +1010,7 @@ func EmitAsMap(in TreeBranches) (map[string]interface{}, error) {
 	return data, nil
 }
 
-func encodeValueForMap(v interface{}) (interface{}, error) {
+func encodeValueForMap(v any) (any, error) {
 	switch v := v.(type) {
 	case TreeBranch:
 		return EmitAsMap([]TreeBranch{v})

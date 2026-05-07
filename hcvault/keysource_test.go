@@ -316,7 +316,7 @@ func TestMasterKey_ToMap(t *testing.T) {
 		VaultAddress: testVaultAddress,
 		EncryptedKey: "some-encrypted-key",
 	}
-	assert.Equal(t, map[string]interface{}{
+	assert.Equal(t, map[string]any{
 		"vault_address": key.VaultAddress,
 		"key_name":      key.KeyName,
 		"engine_path":   key.EnginePath,
@@ -334,9 +334,9 @@ func Test_encryptedKeyFromSecret(t *testing.T) {
 	}{
 		{name: "nil secret", secret: nil, wantErr: true},
 		{name: "secret with nil data", secret: &api.Secret{Data: nil}, wantErr: true},
-		{name: "secret without ciphertext data", secret: &api.Secret{Data: map[string]interface{}{"other": true}}, wantErr: true},
-		{name: "ciphertext non string", secret: &api.Secret{Data: map[string]interface{}{"ciphertext": 123}}, wantErr: true},
-		{name: "ciphertext data", secret: &api.Secret{Data: map[string]interface{}{"ciphertext": "secret string"}}, want: "secret string"},
+		{name: "secret without ciphertext data", secret: &api.Secret{Data: map[string]any{"other": true}}, wantErr: true},
+		{name: "ciphertext non string", secret: &api.Secret{Data: map[string]any{"ciphertext": 123}}, wantErr: true},
+		{name: "ciphertext data", secret: &api.Secret{Data: map[string]any{"ciphertext": "secret string"}}, want: "secret string"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -361,10 +361,10 @@ func Test_dataKeyFromSecret(t *testing.T) {
 	}{
 		{name: "nil secret", secret: nil, wantErr: true},
 		{name: "secret with nil data", secret: &api.Secret{Data: nil}, wantErr: true},
-		{name: "secret without plaintext data", secret: &api.Secret{Data: map[string]interface{}{"other": true}}, wantErr: true},
-		{name: "plaintext non string", secret: &api.Secret{Data: map[string]interface{}{"plaintext": 123}}, wantErr: true},
-		{name: "plaintext non base64", secret: &api.Secret{Data: map[string]interface{}{"plaintext": "notbase64"}}, wantErr: true},
-		{name: "plaintext base64 data", secret: &api.Secret{Data: map[string]interface{}{"plaintext": "Zm9v"}}, want: []byte("foo")},
+		{name: "secret without plaintext data", secret: &api.Secret{Data: map[string]any{"other": true}}, wantErr: true},
+		{name: "plaintext non string", secret: &api.Secret{Data: map[string]any{"plaintext": 123}}, wantErr: true},
+		{name: "plaintext non base64", secret: &api.Secret{Data: map[string]any{"plaintext": "notbase64"}}, wantErr: true},
+		{name: "plaintext base64 data", secret: &api.Secret{Data: map[string]any{"plaintext": "Zm9v"}}, want: []byte("foo")},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -533,7 +533,7 @@ func createVaultKey(key *MasterKey) error {
 	}
 
 	p := path.Join(key.EnginePath, "keys", key.KeyName)
-	payload := make(map[string]interface{})
+	payload := make(map[string]any)
 	payload["type"] = "rsa-4096"
 	if _, err = client.Logical().Write(p, payload); err != nil {
 		return err

@@ -102,7 +102,7 @@ func MasterKeysFromResourceIDString(resourceID string) []*MasterKey {
 	if resourceID == "" {
 		return keys
 	}
-	for _, s := range strings.Split(resourceID, ",") {
+	for s := range strings.SplitSeq(resourceID, ",") {
 		keys = append(keys, NewMasterKeyFromResourceID(s))
 	}
 	return keys
@@ -270,8 +270,8 @@ func (key *MasterKey) ToString() string {
 }
 
 // ToMap converts the MasterKey to a map for serialization purposes.
-func (key MasterKey) ToMap() map[string]interface{} {
-	out := make(map[string]interface{})
+func (key MasterKey) ToMap() map[string]any {
+	out := make(map[string]any)
 	out["resource_id"] = key.ResourceID
 	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)
 	out["enc"] = key.EncryptedKey

@@ -86,7 +86,7 @@ func TestDecodeJSON(t *testing.T) {
 												},
 												sops.TreeItem{
 													Key: "GlossSeeAlso",
-													Value: []interface{}{
+													Value: []any{
 														"GML",
 														"XML",
 													},
@@ -175,7 +175,7 @@ func TestDecodeJSONWithArray(t *testing.T) {
 			Value: sops.TreeBranch{
 				sops.TreeItem{
 					Key:   "foo",
-					Value: []interface{}{1.0, 2.0, 3.0},
+					Value: []any{1.0, 2.0, 3.0},
 				},
 			},
 		},
@@ -194,7 +194,7 @@ func TestDecodeJSONArrayOfObjects(t *testing.T) {
 	expected := sops.TreeBranch{
 		sops.TreeItem{
 			Key: "foo",
-			Value: []interface{}{
+			Value: []any{
 				sops.TreeBranch{
 					sops.TreeItem{
 						Key:   "bar",
@@ -220,9 +220,9 @@ func TestDecodeJSONArrayOfArrays(t *testing.T) {
 	expected := sops.TreeBranch{
 		sops.TreeItem{
 			Key: "foo",
-			Value: []interface{}{
-				[]interface{}{
-					[]interface{}{
+			Value: []any{
+				[]any{
+					[]any{
 						"foo",
 						sops.TreeBranch{
 							sops.TreeItem{
@@ -288,7 +288,7 @@ func TestEncodeJSONArrayOfObjects(t *testing.T) {
 			sops.TreeBranch{
 				sops.TreeItem{
 					Key: "foo",
-					Value: []interface{}{
+					Value: []any{
 						sops.TreeBranch{
 							sops.TreeItem{
 								Key:   "foo",
@@ -423,7 +423,7 @@ func TestIndentTwoSpaces(t *testing.T) {
 			sops.TreeBranch{
 				sops.TreeItem{
 					Key: "foo",
-					Value: []interface{}{
+					Value: []any{
 						sops.TreeBranch{
 							sops.TreeItem{
 								Key:   "foo",
@@ -466,7 +466,7 @@ func TestIndentDefault(t *testing.T) {
 			sops.TreeBranch{
 				sops.TreeItem{
 					Key: "foo",
-					Value: []interface{}{
+					Value: []any{
 						sops.TreeBranch{
 							sops.TreeItem{
 								Key:   "foo",
@@ -509,7 +509,7 @@ func TestNoIndent(t *testing.T) {
 			sops.TreeBranch{
 				sops.TreeItem{
 					Key: "foo",
-					Value: []interface{}{
+					Value: []any{
 						sops.TreeBranch{
 							sops.TreeItem{
 								Key:   "foo",
@@ -574,7 +574,7 @@ func TestComments(t *testing.T) {
 			sops.TreeBranch{
 				sops.TreeItem{
 					Key: "foo",
-					Value: []interface{}{
+					Value: []any{
 						sops.Comment{Value: " comment 0"},
 						sops.TreeBranch{
 							sops.TreeItem{

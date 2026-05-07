@@ -162,7 +162,7 @@ func LoadEncryptedFile(loader sops.EncryptedFileLoader, inputPath string) (*sops
 
 // NewExitError returns a cli.ExitError given an error (wrapped in a generic interface{})
 // and an exit code to represent the failure
-func NewExitError(i interface{}, exitCode int) *cli.ExitError {
+func NewExitError(i any, exitCode int) *cli.ExitError {
 	if userErr, ok := i.(sops.UserError); ok {
 		return NewExitError(userErr.UserError(), exitCode)
 	}
@@ -365,7 +365,7 @@ func RecoverDataKeyFromBuggyKMS(opts GenericDecryptOpts, tree *sops.Tree) []byte
 
 	keyToEdit := *originalKey
 
-	encCtxVals := map[string]interface{}{}
+	encCtxVals := map[string]any{}
 	for _, v := range keyToEdit.EncryptionContext {
 		encCtxVals[*v] = ""
 	}
@@ -404,13 +404,6 @@ type Diff struct {
 	Common  []keys.MasterKey
 	Added   []keys.MasterKey
 	Removed []keys.MasterKey
-}
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
 }
 
 // DiffKeyGroups returns the list of diffs found in two sops.keyGroup slices

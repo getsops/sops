@@ -173,7 +173,7 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 }
 
 func (store *Store) iniSectionToMetadata(sopsSection *ini.Section) (stores.Metadata, error) {
-	metadataHash := make(map[string]interface{})
+	metadataHash := make(map[string]any)
 	for k, v := range sopsSection.KeysHash() {
 		metadataHash[k] = v
 	}
@@ -242,7 +242,7 @@ func (store *Store) EmitPlainFile(in sops.TreeBranches) ([]byte, error) {
 	return out, nil
 }
 
-func (store Store) encodeValue(v interface{}) ([]byte, error) {
+func (store Store) encodeValue(v any) ([]byte, error) {
 	switch v := v.(type) {
 	case sops.TreeBranches:
 		return store.encodeTree(v)
@@ -252,7 +252,7 @@ func (store Store) encodeValue(v interface{}) ([]byte, error) {
 }
 
 // EmitValue returns a single value encoded in a generic interface{} as bytes
-func (store *Store) EmitValue(v interface{}) ([]byte, error) {
+func (store *Store) EmitValue(v any) ([]byte, error) {
 	return store.encodeValue(v)
 }
 

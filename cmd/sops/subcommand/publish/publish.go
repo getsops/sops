@@ -74,7 +74,7 @@ func Run(opts Opts) error {
 		return err
 	}
 
-	data := map[string]interface{}{}
+	data := map[string]any{}
 
 	switch conf.Destination.(type) {
 	case *publish.S3Destination, *publish.GCSDestination:

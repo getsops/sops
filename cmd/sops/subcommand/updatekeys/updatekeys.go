@@ -124,10 +124,3 @@ func updateFile(opts Opts) error {
 	log.Printf("File %s synced with new keys", opts.InputPath)
 	return nil
 }
-
-func min(a, b int) int {
-	if a < b {
-		return a
-	}
-	return b
-}

@@ -193,7 +193,7 @@ func TestParseKMSContext(t *testing.T) {
 	value1 := "value1"
 	value2 := "value2"
 	// map from YAML
-	var yamlmap = map[interface{}]interface{}{
+	var yamlmap = map[any]any{
 		"key1": value1,
 		"key2": value2,
 	}
@@ -201,15 +201,15 @@ func TestParseKMSContext(t *testing.T) {
 		"key1": &value1,
 		"key2": &value2,
 	})
-	assert.Nil(t, ParseKMSContext(map[interface{}]interface{}{}))
-	assert.Nil(t, ParseKMSContext(map[interface{}]interface{}{
+	assert.Nil(t, ParseKMSContext(map[any]any{}))
+	assert.Nil(t, ParseKMSContext(map[any]any{
 		"key1": 1,
 	}))
-	assert.Nil(t, ParseKMSContext(map[interface{}]interface{}{
+	assert.Nil(t, ParseKMSContext(map[any]any{
 		1: "value",
 	}))
 	// map from JSON
-	var jsonmap = map[string]interface{}{
+	var jsonmap = map[string]any{
 		"key1": value1,
 		"key2": value2,
 	}
@@ -217,8 +217,8 @@ func TestParseKMSContext(t *testing.T) {
 		"key1": &value1,
 		"key2": &value2,
 	})
-	assert.Nil(t, ParseKMSContext(map[string]interface{}{}))
-	assert.Nil(t, ParseKMSContext(map[string]interface{}{
+	assert.Nil(t, ParseKMSContext(map[string]any{}))
+	assert.Nil(t, ParseKMSContext(map[string]any{
 		"key1": 1,
 	}))
 	// sops 2.0.x formatted encryption context as a comma-separated list of key:value pairs
@@ -420,7 +420,7 @@ func TestMasterKey_ToMap(t *testing.T) {
 			"key2": &value2,
 		},
 	}
-	assert.Equal(t, map[string]interface{}{
+	assert.Equal(t, map[string]any{
 		"arn":        "foo",
 		"role":       "bar",
 		"enc":        "this is encrypted",

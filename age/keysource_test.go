@@ -356,7 +356,7 @@ func TestMasterKey_ToMap(t *testing.T) {
 		Recipient:    mockRecipient,
 		EncryptedKey: "some-encrypted-key",
 	}
-	assert.Equal(t, map[string]interface{}{
+	assert.Equal(t, map[string]any{
 		"recipient": mockRecipient,
 		"enc":       key.EncryptedKey,
 	}, key.ToMap())

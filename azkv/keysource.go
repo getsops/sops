@@ -119,7 +119,7 @@ func MasterKeysFromURLs(urls string) ([]*MasterKey, error) {
 	if urls == "" {
 		return keys, nil
 	}
-	for _, s := range strings.Split(urls, ",") {
+	for s := range strings.SplitSeq(urls, ",") {
 		k, err := NewMasterKeyFromURL(s)
 		if err != nil {
 			return nil, err
@@ -171,7 +171,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 }
 
 func (key *MasterKey) ensureKeyHasVersion(ctx context.Context) error {
-	if (key.Version != "") {
+	if key.Version != "" {
 		// Nothing to do
 		return nil
 	}
@@ -301,8 +301,8 @@ func (key *MasterKey) ToString() string {
 }
 
 // ToMap converts the MasterKey to a map for serialization purposes.
-func (key MasterKey) ToMap() map[string]interface{} {
-	out := make(map[string]interface{})
+func (key MasterKey) ToMap() map[string]any {
+	out := make(map[string]any)
 	out["vaultUrl"] = key.VaultURL
 	out["key"] = key.Name
 	out["version"] = key.Version

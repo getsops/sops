@@ -546,7 +546,7 @@ func TestMasterKey_ToString(t *testing.T) {
 func TestMasterKey_ToMap(t *testing.T) {
 	key := NewMasterKeyFromFingerprint(mockFingerprint)
 	key.EncryptedKey = "data"
-	assert.Equal(t, map[string]interface{}{
+	assert.Equal(t, map[string]any{
 		"fp":         mockFingerprint,
 		"created_at": key.CreationDate.UTC().Format(time.RFC3339),
 		"enc":        key.EncryptedKey,

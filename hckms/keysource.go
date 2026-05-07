@@ -81,7 +81,7 @@ func NewMasterKeyFromKeyIDString(keyID string) ([]*MasterKey, error) {
 	if keyID == "" {
 		return keys, nil
 	}
-	for _, s := range strings.Split(keyID, ",") {
+	for s := range strings.SplitSeq(keyID, ",") {
 		s = strings.TrimSpace(s)
 		if s == "" {
 			continue
@@ -245,8 +245,8 @@ func (key *MasterKey) ToString() string {
 }
 
 // ToMap converts the MasterKey to a map for serialization purposes.
-func (key MasterKey) ToMap() map[string]interface{} {
-	out := make(map[string]interface{})
+func (key MasterKey) ToMap() map[string]any {
+	out := make(map[string]any)
 	out["key_id"] = key.KeyID
 	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)
 	out["enc"] = key.EncryptedKey

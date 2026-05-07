@@ -105,7 +105,7 @@ func MasterKeysFromFingerprintString(fingerprint string) []*MasterKey {
 	if fingerprint == "" {
 		return keys
 	}
-	for _, s := range strings.Split(fingerprint, ",") {
+	for s := range strings.SplitSeq(fingerprint, ",") {
 		keys = append(keys, NewMasterKeyFromFingerprint(s))
 	}
 	return keys
@@ -481,8 +481,8 @@ func (key *MasterKey) ToString() string {
 }
 
 // ToMap converts the MasterKey into a map for serialization purposes.
-func (key MasterKey) ToMap() map[string]interface{} {
-	out := make(map[string]interface{})
+func (key MasterKey) ToMap() map[string]any {
+	out := make(map[string]any)
 	out["fp"] = key.Fingerprint
 	out["created_at"] = key.CreationDate.UTC().Format(time.RFC3339)
 	out["enc"] = key.EncryptedKey

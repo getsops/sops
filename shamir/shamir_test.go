@@ -91,12 +91,12 @@ func TestCombine(t *testing.T) {
 
 	// There is 5*4*3 possible choices,
 	// we will just brute force try them all
-	for i := 0; i < 5; i++ {
-		for j := 0; j < 5; j++ {
+	for i := range 5 {
+		for j := range 5 {
 			if j == i {
 				continue
 			}
-			for k := 0; k < 5; k++ {
+			for k := range 5 {
 				if k == i || k == j {
 					continue
 				}
@@ -198,7 +198,7 @@ func TestPolynomial_Eval(t *testing.T) {
 }
 
 func TestInterpolate_Rand(t *testing.T) {
-	for i := 0; i < 256; i++ {
+	for i := range 256 {
 		p, err := makePolynomial(uint8(i), 2)
 		if err != nil {
 			t.Fatalf("err: %v", err)

@@ -139,8 +139,8 @@ func ExecWithEnv(opts ExecOpts) error {
 		env = os.Environ()
 	}
 
-	lines := bytes.Split(opts.Plaintext, []byte("\n"))
-	for _, line := range lines {
+	lines := bytes.SplitSeq(opts.Plaintext, []byte("\n"))
+	for line := range lines {
 		if len(line) == 0 {
 			continue
 		}

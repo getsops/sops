@@ -63,7 +63,7 @@ func (vaultd *VaultDestination) Upload(fileContents []byte, fileName string) err
 	return &NotImplementedError{"Vault does not support uploading encrypted sops files directly."}
 }
 
-func (vaultd *VaultDestination) UploadUnencrypted(data map[string]interface{}, fileName string) error {
+func (vaultd *VaultDestination) UploadUnencrypted(data map[string]any, fileName string) error {
 	client, err := vault.NewClient(nil)
 	if err != nil {
 		return err
@@ -85,7 +85,7 @@ func (vaultd *VaultDestination) UploadUnencrypted(data map[string]interface{}, f
 		return nil
 	}
 
-	secretsData := make(map[string]interface{})
+	secretsData := make(map[string]any)
 
 	if vaultd.kvVersion == 1 {
 		secretsData = data

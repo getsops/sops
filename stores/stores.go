@@ -503,7 +503,7 @@ var ExampleComplexTree = sops.Tree{
 			},
 			sops.TreeItem{
 				Key: "example_array",
-				Value: []interface{}{
+				Value: []any{
 					"example_value1",
 					"example_value2",
 				},
@@ -514,7 +514,7 @@ var ExampleComplexTree = sops.Tree{
 			},
 			sops.TreeItem{
 				Key:   "example_booleans",
-				Value: []interface{}{true, false},
+				Value: []any{true, false},
 			},
 		},
 	},
@@ -582,9 +582,9 @@ func HasSopsTopLevelKey(branch sops.TreeBranch) bool {
 }
 
 // IsComplexValue returns true if the given value is an array or dictionary/hash.
-func IsComplexValue(v interface{}) bool {
+func IsComplexValue(v any) bool {
 	switch v.(type) {
-	case []interface{}:
+	case []any:
 		return true
 	case sops.TreeBranch:
 		return true
@@ -594,7 +594,7 @@ func IsComplexValue(v interface{}) bool {
 
 // ValToString converts a simple value to a string.
 // It does not handle complex values (arrays and mappings).
-func ValToString(v interface{}) string {
+func ValToString(v any) string {
 	switch v := v.(type) {
 	case float64:
 		result := strconv.FormatFloat(v, 'G', -1, 64)
