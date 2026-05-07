@@ -1,9 +1,15 @@
 package keyservice
 
 import (
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/pem"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
+
+	"github.com/getsops/sops/v3/azkv"
 )
 
 func TestKmsKeyToMasterKey(t *testing.T) {
@@ -78,4 +84,26 @@ func TestKmsKeyToMasterKey(t *testing.T) {
 			assert.Equalf(t, c.expectedAwsProfile, masterKey.AwsProfile, "Expected AWS profile to be '%s', but found '%s'", c.expectedAwsProfile, masterKey.AwsProfile)
 		})
 	}
+}
+
+func TestKeyFromMasterKeyPreservesAzureOfflineFields(t *testing.T) {
+	privateKey, err := rsa.GenerateKey(rand.Reader, 2048)
+	require.NoError(t, err)
+	publicKeyDER, err := x509.MarshalPKIXPublicKey(&privateKey.PublicKey)
+	require.NoError(t, err)
+	publicKey := pem.EncodeToMemory(&pem.Block{
+		Type:  "PUBLIC KEY",
+		Bytes: publicKeyDER,
+	})
+
+	key := KeyFromMasterKey(&azkv.MasterKey{
+		VaultURL:  "https://test.vault.azure.net",
+		Name:      "test-key",
+		Version:   "test-version",
+		PublicKey: publicKey,
+	})
+
+	azureKey := key.GetAzureKeyvaultKey()
+	require.NotNil(t, azureKey)
+	assert.Equal(t, publicKey, azureKey.PublicKey)
 }

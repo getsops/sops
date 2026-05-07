@@ -13,7 +13,7 @@ type LocalClient struct {
 
 // NewLocalClient creates a new local client
 func NewLocalClient() LocalClient {
-	return LocalClient{Server{}}
+	return LocalClient{&Server{}}
 }
 
 // NewCustomLocalClient creates a new local client with a non-default backing

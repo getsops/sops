@@ -1,11 +1,21 @@
 package azkv
 
 import (
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/sha256"
+	"crypto/x509"
+	"encoding/base64"
+	"encoding/json"
+	"encoding/pem"
+	"os"
+	"path/filepath"
 	"testing"
 	"time"
 
 	"github.com/Azure/azure-sdk-for-go/sdk/azidentity"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 const (
@@ -178,6 +188,23 @@ func TestMasterKey_EncryptIfNeeded(t *testing.T) {
 		assert.NoError(t, key.EncryptIfNeeded([]byte("other data")))
 		assert.Equal(t, encryptedKey, key.EncryptedKey)
 	})
+
+	t.Run("offline with public key", func(t *testing.T) {
+		privateKey := mustGenerateRSAKey(t)
+		publicKey := pem.EncodeToMemory(&pem.Block{
+			Type:  "PUBLIC KEY",
+			Bytes: mustMarshalPKIXPublicKey(t, &privateKey.PublicKey),
+		})
+
+		key, err := NewMasterKeyWithPublicKey("https://test.vault.azure.net", "test-key", "test-version", publicKey)
+		require.NoError(t, err)
+
+		require.NoError(t, key.EncryptIfNeeded([]byte("other data")))
+
+		plaintext, err := rsa.DecryptOAEP(sha256.New(), rand.Reader, privateKey, mustDecodeRawURL(t, key.EncryptedKey), nil)
+		require.NoError(t, err)
+		assert.Equal(t, []byte("other data"), plaintext)
+	})
 }
 
 func TestMasterKey_NeedsRotation(t *testing.T) {
@@ -208,6 +235,72 @@ func TestMasterKey_ToMap(t *testing.T) {
 		"enc":        "this is encrypted",
 		"created_at": "2016-10-31T10:00:00Z",
 	}, key.ToMap())
+}
+
+func TestNewMasterKeyWithPublicKeyFile(t *testing.T) {
+	privateKey := mustGenerateRSAKey(t)
+	publicKeyPath := filepath.Join(t.TempDir(), "pub.pem")
+	err := os.WriteFile(publicKeyPath, pem.EncodeToMemory(&pem.Block{
+		Type:  "PUBLIC KEY",
+		Bytes: mustMarshalPKIXPublicKey(t, &privateKey.PublicKey),
+	}), 0o600)
+	require.NoError(t, err)
+
+	key, err := NewMasterKeyWithPublicKeyFile("https://test.vault.azure.net", "test-key", "test-version", publicKeyPath)
+	require.NoError(t, err)
+	assert.Equal(t, "test-version", key.Version)
+	assert.NotEmpty(t, key.PublicKey)
+}
+
+func TestMasterKey_EncryptOfflineWithJWK(t *testing.T) {
+	privateKey := mustGenerateRSAKey(t)
+	jwkBytes, err := json.Marshal(map[string]string{
+		"kty": "RSA",
+		"n":   base64.RawURLEncoding.EncodeToString(privateKey.N.Bytes()),
+		"e":   base64.RawURLEncoding.EncodeToString(bigEndianBytes(privateKey.E)),
+	})
+	require.NoError(t, err)
+
+	key, err := NewMasterKeyWithPublicKey("https://test.vault.azure.net", "test-key", "test-version", jwkBytes)
+	require.NoError(t, err)
+	require.NoError(t, key.Encrypt([]byte("secret")))
+
+	plaintext, err := rsa.DecryptOAEP(sha256.New(), rand.Reader, privateKey, mustDecodeRawURL(t, key.EncryptedKey), nil)
+	require.NoError(t, err)
+	assert.Equal(t, []byte("secret"), plaintext)
+}
+
+func mustGenerateRSAKey(t *testing.T) *rsa.PrivateKey {
+	t.Helper()
+	privateKey, err := rsa.GenerateKey(rand.Reader, 2048)
+	require.NoError(t, err)
+	return privateKey
+}
+
+func mustMarshalPKIXPublicKey(t *testing.T, publicKey *rsa.PublicKey) []byte {
+	t.Helper()
+	publicKeyDER, err := x509.MarshalPKIXPublicKey(publicKey)
+	require.NoError(t, err)
+	return publicKeyDER
+}
+
+func mustDecodeRawURL(t *testing.T, value string) []byte {
+	t.Helper()
+	decoded, err := base64.RawURLEncoding.DecodeString(value)
+	require.NoError(t, err)
+	return decoded
+}
+
+func bigEndianBytes(v int) []byte {
+	if v == 0 {
+		return []byte{0}
+	}
+	var out []byte
+	for v > 0 {
+		out = append([]byte{byte(v & 0xff)}, out...)
+		v >>= 8
+	}
+	return out
 }
 
 func TestMasterKey_getTokenCredential(t *testing.T) {

@@ -39,6 +39,7 @@ message AzureKeyVaultKey {
 	string vault_url = 1;
 	string name = 2;
 	string version = 3;
+	bytes public_key = 4;
 }
 
 message AgeKey {

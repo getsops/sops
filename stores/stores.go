@@ -10,6 +10,7 @@ of the purpose of this package is to make it easy to change the SOPS file format
 package stores
 
 import (
+	"encoding/base64"
 	"fmt"
 	"strconv"
 	"strings"
@@ -108,6 +109,7 @@ type azkvkey struct {
 	VaultURL         string `yaml:"vault_url" json:"vault_url"`
 	Name             string `yaml:"name" json:"name"`
 	Version          string `yaml:"version" json:"version"`
+	PublicKey        string `yaml:"public_key,omitempty" json:"public_key,omitempty"`
 	CreatedAt        string `yaml:"created_at" json:"created_at"`
 	EncryptedDataKey string `yaml:"enc" json:"enc"`
 }
@@ -231,6 +233,7 @@ func azkvKeysFromGroup(group sops.KeyGroup) (keys []azkvkey) {
 				VaultURL:         key.VaultURL,
 				Name:             key.Name,
 				Version:          key.Version,
+				PublicKey:        base64.StdEncoding.EncodeToString(key.PublicKey),
 				CreatedAt:        key.CreationDate.Format(time.RFC3339),
 				EncryptedDataKey: key.EncryptedKey,
 			})
@@ -429,10 +432,18 @@ func (azkvKey *azkvkey) toInternal() (*azkv.MasterKey, error) {
 	if err != nil {
 		return nil, err
 	}
+	var publicKey []byte
+	if azkvKey.PublicKey != "" {
+		publicKey, err = base64.StdEncoding.DecodeString(azkvKey.PublicKey)
+		if err != nil {
+			return nil, err
+		}
+	}
 	return &azkv.MasterKey{
 		VaultURL:     azkvKey.VaultURL,
 		Name:         azkvKey.Name,
 		Version:      azkvKey.Version,
+		PublicKey:    publicKey,
 		EncryptedKey: azkvKey.EncryptedDataKey,
 		CreationDate: creationDate,
 	}, nil
