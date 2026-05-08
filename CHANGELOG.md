@@ -1,5 +1,51 @@
 # Changelog
 
+## 3.13.0
+
+Improvements:
+
+* Dependency updates ([#2110](https://github.com/getsops/sops/pull/2110),
+  [#2133](https://github.com/getsops/sops/pull/2133), [#2142](https://github.com/getsops/sops/pull/2142),
+  [#2146](https://github.com/getsops/sops/pull/2146), [#2144](https://github.com/getsops/sops/pull/2144),
+  [#2152](https://github.com/getsops/sops/pull/2152), [#2159](https://github.com/getsops/sops/pull/2159),
+  [#2165](https://github.com/getsops/sops/pull/2165), [#2171](https://github.com/getsops/sops/pull/2171)).
+* Improve error messages for top-level arrays ([#2138](https://github.com/getsops/sops/pull/2138)).
+* Improve use of gpg-agent for password-protected age keys.
+  The passwords are now associated with an identifier that
+  includes a hash of the public key's content, instead of
+  using the environment variable or path (that was sometimes too long
+  and caused errors) ([#2145](https://github.com/getsops/sops/pull/2145)).
+* Allow to use `SOPS_GCP_KMS_ENDPOINT` and `SOPS_GCP_KMS_UNIVERSE_DOMAIN`
+  to configure alternative clouds using GCP's API ([#2114](https://github.com/getsops/sops/pull/2114)).
+* Preserve YAML inline comments as inline comments, instead of converting
+  them to line comments ([#2131](https://github.com/getsops/sops/pull/2131)).
+* `SOPS_AGE_KEY` can now contain space-separated public keys ([#2086](https://github.com/getsops/sops/pull/2086)).
+* An allowlist for HashiCorp Vault URLs (and thus also OpenBoa URLs)
+  can now be configured with `SOPS_HC_VAULT_ALLOWLIST`.
+  The default is `all`, which does not restrict which URLs
+  to connect to ([#2164](https://github.com/getsops/sops/pull/2164)).
+* The metadata flattening and unflattening code for INI and DotEnv files
+  has been rewritten, and generally metadata handling has been changed
+  to use mapstructure.
+  This should not result in observable behavior changes for users
+  ([#2120](https://github.com/getsops/sops/pull/2120)).
+
+Bugfixes:
+
+* `sops exec-file` on other platforms than Windows was setting the user ID
+  as the (effective) group ID. Now the user's group ID is used ([#2154](https://github.com/getsops/sops/pull/2154)).
+* `sops exec-file` now rejects non-local paths in `--filename` ([#2155](https://github.com/getsops/sops/pull/2155)).
+* The `--indent` parameter was ignored for subcommands ([#2156](https://github.com/getsops/sops/pull/2156)).
+
+Project changes:
+
+* Drop support for Go 1.24 ([#2141](https://github.com/getsops/sops/pull/2141)).
+* Use cosign v3 instead of v2 ([#2082](https://github.com/getsops/sops/pull/2082)).
+* CI dependency updates ([#2117](https://github.com/getsops/sops/pull/2117),
+  [#2126](https://github.com/getsops/sops/pull/2126), [#2139](https://github.com/getsops/sops/pull/2139),
+  [#2149](https://github.com/getsops/sops/pull/2149), [#2151](https://github.com/getsops/sops/pull/2151),
+  [#2158](https://github.com/getsops/sops/pull/2158), [#2173](https://github.com/getsops/sops/pull/2173)).
+
 ## 3.12.2
 
 Improvements:
