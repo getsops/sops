@@ -15,8 +15,14 @@ import (
 type MetadataFlatten int
 
 const (
+	// MetadataFlattenNone keeps the metadata under a single nested `sops`
+	// key in the first tree branch.
 	MetadataFlattenNone MetadataFlatten = iota
+	// MetadataFlattenBelowTop keeps the metadata under a top-level `sops`
+	// key in the first tree branch, with its values flattened beneath it.
 	MetadataFlattenBelowTop
+	// MetadataFlattenFull flattens the metadata fully into the first tree
+	// branch, prefixing each key with `SopsPrefix`.
 	MetadataFlattenFull
 )
 
@@ -90,7 +96,7 @@ func treeBranchToMetadata(meta sops.TreeBranch) (metadata, error) {
 	return md, err
 }
 
-// Extract SOPS metadata from tree branches.
+// ExtractMetadata extracts SOPS metadata from the supplied tree branches.
 func ExtractMetadata(branches sops.TreeBranches, opts MetadataOpts) (sops.TreeBranches, sops.Metadata, error) {
 	var metadataTree sops.TreeBranch
 	if opts.Flatten != MetadataFlattenFull {
@@ -238,6 +244,7 @@ func metadataToTreeBranch(md metadata) (sops.TreeBranch, error) {
 	return nil, fmt.Errorf("Internal error: unexpected metadata conversion result %T", metadata)
 }
 
+// SerializeMetadata embeds the metadata of `data` into its tree branches.
 func SerializeMetadata(data sops.Tree, opts MetadataOpts) (sops.TreeBranches, error) {
 	md, err := metadataToTreeBranch(metadataFromInternal(data.Metadata))
 	if err != nil {
