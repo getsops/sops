@@ -140,6 +140,26 @@ func TestQuotedEmitPlainFile(t *testing.T) {
 	assert.Equal(t, QUOTED_PLAIN, bytes)
 }
 
+func TestQuotedLoadDetectsUnquoted(t *testing.T) {
+	unquoted, err := (&Store{}).EmitEncryptedFile(sops.Tree{
+		Branches: sops.TreeBranches{BRANCH},
+	})
+	assert.Nil(t, err)
+	branches, err := (&Store{config: config.DotenvStoreConfig{Quote: true}}).LoadPlainFile(unquoted)
+	assert.Nil(t, err)
+	assert.Equal(t, BRANCH, branches[0][:len(BRANCH)])
+}
+
+func TestUnquotedLoadDetectsQuoted(t *testing.T) {
+	quoted, err := (&Store{config: config.DotenvStoreConfig{Quote: true}}).EmitEncryptedFile(sops.Tree{
+		Branches: sops.TreeBranches{BRANCH},
+	})
+	assert.Nil(t, err)
+	branches, err := (&Store{}).LoadPlainFile(quoted)
+	assert.Nil(t, err)
+	assert.Equal(t, BRANCH, branches[0][:len(BRANCH)])
+}
+
 func TestHasSopsTopLevelKey(t *testing.T) {
 	ok := (&Store{}).HasSopsTopLevelKey(sops.TreeBranch{
 		sops.TreeItem{

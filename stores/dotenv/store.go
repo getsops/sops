@@ -45,10 +45,26 @@ func (store *Store) LoadEncryptedFile(in []byte) (sops.Tree, error) {
 // LoadPlainFile returns the contents of a plaintext file loaded onto a
 // sops runtime object
 func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
+	lines := bytes.Split(in, []byte("\n"))
+
+	// Detect quoted vs unquoted by looking at the first metadata value
+	quote := store.config.Quote
+	for _, line := range lines {
+		if !bytes.HasPrefix(line, []byte(stores.SopsPrefix)) {
+			continue
+		}
+		_, raw, ok := bytes.Cut(line, []byte("="))
+		if !ok {
+			continue
+		}
+		quote = bytes.HasPrefix(raw, []byte(`"`))
+		break
+	}
+
 	var branches sops.TreeBranches
 	var branch sops.TreeBranch
 
-	for _, line := range bytes.Split(in, []byte("\n")) {
+	for _, line := range lines {
 		if len(line) == 0 {
 			continue
 		}
@@ -63,7 +79,7 @@ func (store *Store) LoadPlainFile(in []byte) (sops.TreeBranches, error) {
 				return nil, fmt.Errorf("invalid dotenv input line: %s", line)
 			}
 			var value string
-			if store.config.Quote {
+			if quote {
 				var err error
 				value, err = strconv.Unquote(string(line[pos+1:]))
 				if err != nil {

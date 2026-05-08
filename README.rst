@@ -2102,7 +2102,7 @@ The store configuration object can have the following keys:
 * ``dotenv``: this is an object, supporting the following keys:
 
   * ``quote`` (boolean; default ``false``): when ``true``, values are
-    double-quoted on emit and must be double-quoted on load.
+    double-quoted on emit.
 
 * ``ini``: this is an object. Right now no keys are supported.
 
