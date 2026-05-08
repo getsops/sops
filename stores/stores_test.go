@@ -25,3 +25,4 @@ func TestValToString(t *testing.T) {
 	assert.Equal(t, "2025-01-02T03:04:05Z", ValToString(ts))
 	assert.Equal(t, "a string", ValToString("a string"))
 }
+
