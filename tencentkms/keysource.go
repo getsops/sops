@@ -53,8 +53,6 @@ func init() {
 type MasterKey struct {
 	// KeyID is the ID of the Tencent Cloud KMS key.
 	KeyID string
-	// Region is the region of the Tencent Cloud KMS key.
-	Region string
 	// EncryptedKey contains the SOPS data key encrypted with the Tencent Cloud KMS key.
 	EncryptedKey string
 	// CreationDate of the MasterKey, used to determine if the EncryptedKey needs rotation.
@@ -71,8 +69,7 @@ type MasterKey struct {
 // NewMasterKeyFromKeyID creates a new MasterKey with the provided Key ID.
 func NewMasterKeyFromKeyID(keyID string) *MasterKey {
 	k := &MasterKey{}
-	keyID = strings.Replace(keyID, " ", "", -1)
-	k.KeyID = keyID
+	k.KeyID = strings.TrimSpace(keyID)
 	k.CreationDate = time.Now().UTC()
 	return k
 }
@@ -85,6 +82,9 @@ func MasterKeysFromKeyIDString(keyID string) []*MasterKey {
 		return keys
 	}
 	for _, s := range strings.Split(keyID, ",") {
+		if strings.TrimSpace(s) == "" {
+			continue
+		}
 		keys = append(keys, NewMasterKeyFromKeyID(s))
 	}
 	return keys
@@ -114,6 +114,11 @@ func (key *MasterKey) EncryptContext(ctx context.Context, dataKey []byte) error 
 	if err != nil {
 		log.WithFields(logrus.Fields{"keyId": key.KeyID}).WithError(err).Error("Failed to encrypt data key with Tencent Cloud KMS")
 		return fmt.Errorf("failed to encrypt data key with Tencent Cloud KMS: %w", err)
+	}
+
+	if response == nil || response.Response == nil || response.Response.CiphertextBlob == nil {
+		log.WithFields(logrus.Fields{"keyId": key.KeyID}).Error("Received empty response from Tencent Cloud KMS")
+		return fmt.Errorf("received empty response from Tencent Cloud KMS when encrypting data key")
 	}
 
 	// Store the encrypted key
@@ -168,6 +173,11 @@ func (key *MasterKey) DecryptContext(ctx context.Context) ([]byte, error) {
 		return nil, fmt.Errorf("failed to decrypt data key with Tencent Cloud KMS: %w", err)
 	}
 
+	if response == nil || response.Response == nil || response.Response.Plaintext == nil {
+		log.WithFields(logrus.Fields{"keyId": key.KeyID}).Error("Received empty response from Tencent Cloud KMS")
+		return nil, fmt.Errorf("received empty response from Tencent Cloud KMS when decrypting data key")
+	}
+
 	decodedCipher, err := base64.StdEncoding.DecodeString(*response.Response.Plaintext)
 	if err != nil {
 		log.WithField("keyId", key.KeyID).WithError(err).Error("Failed to decode decrypted plaintext")
@@ -191,7 +201,7 @@ func (key *MasterKey) ToString() string {
 // ToMap converts the master key to a map representation.
 func (key *MasterKey) ToMap() map[string]interface{} {
 	return map[string]interface{}{
-		"keyId":      key.KeyID,
+		"key_id":     key.KeyID,
 		"created_at": key.CreationDate.UTC().Format(time.RFC3339),
 		"enc":        key.EncryptedKey,
 	}
@@ -218,7 +228,10 @@ func (key *MasterKey) createClient() (*kms.Client, error) {
 
 	region := os.Getenv(TencentRegionEnvVar)
 	if region == "" {
-		region = "ap-guangzhou"
+		const defaultRegion = "ap-guangzhou"
+		log.WithFields(logrus.Fields{"keyId": key.KeyID, "region": defaultRegion}).
+			Warnf("%s is not set, falling back to default region", TencentRegionEnvVar)
+		region = defaultRegion
 	}
 
 	cpf := profile.NewClientProfile()
@@ -245,7 +258,7 @@ func (key *MasterKey) getCredential() (common.CredentialIface, error) {
 		key.secretKey = secretKey
 	}
 
-	if key.secretId == "" && key.secretKey == "" {
+	if key.secretId == "" || key.secretKey == "" {
 		return nil, fmt.Errorf("environment variable TENCENTCLOUD_SECRET_ID or TENCENTCLOUD_SECRET_KEY is not set")
 	}
 

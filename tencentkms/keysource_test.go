@@ -13,8 +13,6 @@ import (
 var (
 	// dummyKeyID
 	dummyKeyID = "xxxxx-xxxxx-xxxxx-xxxxx-xxxxx"
-	// dummyRegion
-	dummyRegion = "ap-singapore"
 	// dummyEncryptedKey
 	dummyEncryptedKey = "dummy-encrypted-key"
 )
@@ -25,7 +23,6 @@ func TestNewMasterKeyFromKeyID(t *testing.T) {
 		key := NewMasterKeyFromKeyID(dummyKeyID)
 		assert.Equal(t, dummyKeyID, key.KeyID)
 		assert.NotNil(t, key.CreationDate)
-		assert.Empty(t, key.Region)
 		assert.Empty(t, key.EncryptedKey)
 	})
 
@@ -72,10 +69,8 @@ func TestMasterKeysFromKeyIDString(t *testing.T) {
 
 	t.Run("empty elements", func(t *testing.T) {
 		keys := MasterKeysFromKeyIDString(dummyKeyID + ",,")
-		assert.Len(t, keys, 3) // Empty strings will still create MasterKey
+		assert.Len(t, keys, 1) // Empty entries are skipped
 		assert.Equal(t, dummyKeyID, keys[0].KeyID)
-		assert.Empty(t, keys[1].KeyID)
-		assert.Empty(t, keys[2].KeyID)
 	})
 }
 
@@ -86,7 +81,6 @@ func TestMasterKey_EncryptIfNeeded(t *testing.T) {
 		KeyID:     dummyKeyID,
 		secretId:  "mock-secret-id", // Set mock credentials to avoid nil reference
 		secretKey: "mock-secret-key",
-		Region:    dummyRegion,
 	}
 
 	// We can't actually call Tencent Cloud KMS, so we verify the logic flow
@@ -159,7 +153,7 @@ func TestMasterKey_ToMap(t *testing.T) {
 	}
 
 	expectedMap := map[string]interface{}{
-		"keyId":      dummyKeyID,
+		"key_id":     dummyKeyID,
 		"created_at": fixedTime.UTC().Format(time.RFC3339),
 		"enc":        dummyEncryptedKey,
 	}
@@ -175,7 +169,7 @@ func TestMasterKey_ToMap(t *testing.T) {
 	}
 
 	emptyExpectedMap := map[string]interface{}{
-		"keyId":      "",
+		"key_id":     "",
 		"created_at": fixedTime.UTC().Format(time.RFC3339),
 		"enc":        "",
 	}
@@ -232,7 +226,6 @@ func TestMasterKey_createClient(t *testing.T) {
 
 		key := &MasterKey{
 			KeyID:     dummyKeyID,
-			Region:    "key-region",
 			secretId:  "key-secret-id",
 			secretKey: "key-secret-key",
 		}
@@ -264,7 +257,6 @@ func TestEncryptDecryptMock(t *testing.T) {
 	// Create a key
 	key := &MasterKey{
 		KeyID:     dummyKeyID,
-		Region:    dummyRegion,
 		secretId:  "mock-secret-id",
 		secretKey: "mock-secret-key",
 	}
@@ -287,7 +279,6 @@ func TestEncryptContextDecryptContextMock(t *testing.T) {
 	// Create a key
 	key := &MasterKey{
 		KeyID:     dummyKeyID,
-		Region:    dummyRegion,
 		secretId:  "mock-secret-id",
 		secretKey: "mock-secret-key",
 	}

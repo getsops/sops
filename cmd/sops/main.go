@@ -37,10 +37,10 @@ import (
 	"github.com/getsops/sops/v3/hckms"
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/keys"
-	"github.com/getsops/sops/v3/tencentkms"
 	"github.com/getsops/sops/v3/keyservice"
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/logging"
+	"github.com/getsops/sops/v3/tencentkms"
 
 	"github.com/getsops/sops/v3/pgp"
 	"github.com/getsops/sops/v3/stores"
@@ -984,7 +984,7 @@ func main() {
 				cli.StringFlag{
 					Name:   "tencent-kms",
 					Usage:  "comma separated list of Tencent Cloud KMS key IDs",
-					EnvVar: "SOPS_TENCENT_KMS_IDS",
+					EnvVar: tencentkms.TencentKmsEnvVar,
 				},
 				cli.StringFlag{
 					Name:  "input-type",
@@ -1341,7 +1341,7 @@ func main() {
 				cli.StringFlag{
 					Name:   "tencent-kms",
 					Usage:  "comma separated list of Tencent Cloud KMS key IDs",
-					EnvVar: "SOPS_TENCENT_KMS_IDS",
+					EnvVar: tencentkms.TencentKmsEnvVar,
 				},
 				cli.StringFlag{
 					Name:  "input-type",
@@ -1726,21 +1726,21 @@ func main() {
 			Name:  "aws-profile",
 			Usage: "The AWS profile to use for requests to AWS",
 		},
-				cli.StringFlag{
-					Name:   "gcp-kms",
-					Usage:  "comma separated list of GCP KMS resource IDs",
-					EnvVar: "SOPS_GCP_KMS_IDS",
-				},
-				cli.StringFlag{
-					Name:   "hckms",
-					Usage:  "comma separated list of HuaweiCloud KMS key IDs (format: region:key-uuid)",
-					EnvVar: "SOPS_HUAWEICLOUD_KMS_IDS",
-				},
-				cli.StringFlag{
-					Name:   "azure-kv",
-					Usage:  "comma separated list of Azure Key Vault URLs",
-					EnvVar: "SOPS_AZURE_KEYVAULT_URLS",
-				},
+		cli.StringFlag{
+			Name:   "gcp-kms",
+			Usage:  "comma separated list of GCP KMS resource IDs",
+			EnvVar: "SOPS_GCP_KMS_IDS",
+		},
+		cli.StringFlag{
+			Name:   "hckms",
+			Usage:  "comma separated list of HuaweiCloud KMS key IDs (format: region:key-uuid)",
+			EnvVar: "SOPS_HUAWEICLOUD_KMS_IDS",
+		},
+		cli.StringFlag{
+			Name:   "azure-kv",
+			Usage:  "comma separated list of Azure Key Vault URLs",
+			EnvVar: "SOPS_AZURE_KEYVAULT_URLS",
+		},
 
 		cli.StringFlag{
 			Name:   "hc-vault-transit",

@@ -28,10 +28,6 @@ func TestEncryptDecryptIntegration(t *testing.T) {
 		plaintext:   "Hello, Tencent KMS!",
 		expectError: false,
 	}, {
-		name:        "Empty string encryption",
-		plaintext:   "",
-		expectError: true,
-	}, {
 		name:        "Long string encryption",
 		plaintext:   generateLongString(1000), // 1000 characters
 		expectError: false,

@@ -36,37 +36,37 @@ const (
 // in order to allow the binary format to stay backwards compatible over time, but at the same time allow the internal
 // representation SOPS uses to change over time.
 type metadata struct {
-	ShamirThreshold           int           `mapstructure:"shamir_threshold,omitempty"`
-	KeyGroups                 []keygroup    `mapstructure:"key_groups,omitempty,deep"`
-	KMSKeys                   []kmskey      `mapstructure:"kms,omitempty,deep"`
-	GCPKMSKeys                []gcpkmskey   `mapstructure:"gcp_kms,omitempty,deep"`
-	HCKmsKeys                 []hckmskey    `mapstructure:"hckms,omitempty,deep"`
-	AzureKeyVaultKeys         []azkvkey     `mapstructure:"azure_kv,omitempty,deep"`
-	VaultKeys                 []vaultkey    `mapstructure:"hc_vault,omitempty,deep"`
-	AgeKeys                   []agekey      `mapstructure:"age,omitempty,deep"`
-	TencentKeys               []tencentkey  `mapstructure:"tencent_kms,omitempty,deep"`
-	LastModified              string        `mapstructure:"lastmodified"`
-	MessageAuthenticationCode string        `mapstructure:"mac"`
-	PGPKeys                   []pgpkey      `mapstructure:"pgp,omitempty,deep"`
-	UnencryptedSuffix         string        `mapstructure:"unencrypted_suffix,omitempty"`
-	EncryptedSuffix           string        `mapstructure:"encrypted_suffix,omitempty"`
-	UnencryptedRegex          string        `mapstructure:"unencrypted_regex,omitempty"`
-	EncryptedRegex            string        `mapstructure:"encrypted_regex,omitempty"`
-	UnencryptedCommentRegex   string        `mapstructure:"unencrypted_comment_regex,omitempty"`
-	EncryptedCommentRegex     string        `mapstructure:"encrypted_comment_regex,omitempty"`
-	MACOnlyEncrypted          bool          `mapstructure:"mac_only_encrypted,omitempty"`
-	Version                   string        `mapstructure:"version"`
+	ShamirThreshold           int          `mapstructure:"shamir_threshold,omitempty"`
+	KeyGroups                 []keygroup   `mapstructure:"key_groups,omitempty,deep"`
+	KMSKeys                   []kmskey     `mapstructure:"kms,omitempty,deep"`
+	GCPKMSKeys                []gcpkmskey  `mapstructure:"gcp_kms,omitempty,deep"`
+	HCKmsKeys                 []hckmskey   `mapstructure:"hckms,omitempty,deep"`
+	AzureKeyVaultKeys         []azkvkey    `mapstructure:"azure_kv,omitempty,deep"`
+	VaultKeys                 []vaultkey   `mapstructure:"hc_vault,omitempty,deep"`
+	AgeKeys                   []agekey     `mapstructure:"age,omitempty,deep"`
+	TencentKeys               []tencentkey `mapstructure:"tencent_kms,omitempty,deep"`
+	LastModified              string       `mapstructure:"lastmodified"`
+	MessageAuthenticationCode string       `mapstructure:"mac"`
+	PGPKeys                   []pgpkey     `mapstructure:"pgp,omitempty,deep"`
+	UnencryptedSuffix         string       `mapstructure:"unencrypted_suffix,omitempty"`
+	EncryptedSuffix           string       `mapstructure:"encrypted_suffix,omitempty"`
+	UnencryptedRegex          string       `mapstructure:"unencrypted_regex,omitempty"`
+	EncryptedRegex            string       `mapstructure:"encrypted_regex,omitempty"`
+	UnencryptedCommentRegex   string       `mapstructure:"unencrypted_comment_regex,omitempty"`
+	EncryptedCommentRegex     string       `mapstructure:"encrypted_comment_regex,omitempty"`
+	MACOnlyEncrypted          bool         `mapstructure:"mac_only_encrypted,omitempty"`
+	Version                   string       `mapstructure:"version"`
 }
 
 type keygroup struct {
-	PGPKeys           []pgpkey      `mapstructure:"pgp,omitempty,deep"`
-	KMSKeys           []kmskey      `mapstructure:"kms,omitempty,deep"`
-	GCPKMSKeys        []gcpkmskey   `mapstructure:"gcp_kms,omitempty,deep"`
-	HCKmsKeys         []hckmskey    `mapstructure:"hckms,omitempty,deep"`
-	AzureKeyVaultKeys []azkvkey     `mapstructure:"azure_kv,omitempty,deep"`
-	VaultKeys         []vaultkey    `mapstructure:"hc_vault,deep"`
-	AgeKeys           []agekey      `mapstructure:"age,deep"`
-	TencentKeys       []tencentkey  `mapstructure:"tencent_kms,deep"`
+	PGPKeys           []pgpkey     `mapstructure:"pgp,omitempty,deep"`
+	KMSKeys           []kmskey     `mapstructure:"kms,omitempty,deep"`
+	GCPKMSKeys        []gcpkmskey  `mapstructure:"gcp_kms,omitempty,deep"`
+	HCKmsKeys         []hckmskey   `mapstructure:"hckms,omitempty,deep"`
+	AzureKeyVaultKeys []azkvkey    `mapstructure:"azure_kv,omitempty,deep"`
+	VaultKeys         []vaultkey   `mapstructure:"hc_vault,deep"`
+	AgeKeys           []agekey     `mapstructure:"age,deep"`
+	TencentKeys       []tencentkey `mapstructure:"tencent_kms,deep"`
 }
 
 type pgpkey struct {
