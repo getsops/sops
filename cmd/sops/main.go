@@ -692,7 +692,7 @@ func main() {
 					ArgsUsage: `[index]`,
 
 					Action: func(c *cli.Context) error {
-						if c.NArg() != 1 {
+						if  c.NArg() != 1 {
 							return common.NewExitError(fmt.Errorf("error: exactly one positional argument (index) required"), codes.ErrorGeneric)
 						}
 						group, err := strconv.ParseUint(c.Args().First(), 10, 32)
@@ -734,6 +734,14 @@ func main() {
 					Name:  "input-type",
 					Usage: "currently ini, json, yaml, dotenv and binary are supported. If not set, sops will use the file's extension to determine the type",
 				},
+				cli.BoolFlag{
+					Name: "global, g",
+					Usage: `attempts to discover all files currently managed with SOPS, and updates their encryption keys`,
+				},
+				cli.BoolFlag{
+					Name: "dry-run",
+					Usage: `show what files would be updated in global mode, but don't actually perform any updates`,
+				},
 			}, keyserviceFlags...),
 			Action: func(c *cli.Context) error {
 				var err error
@@ -746,9 +754,31 @@ func main() {
 						return common.NewExitError(err, codes.ErrorGeneric)
 					}
 				}
+                
+				// Global mode: no file argument required
+                if c.Bool("global") {
+                    err = updatekeys.UpdateKeys(updatekeys.Opts{
+                        InputPath:       "", // ignored in global mode
+                        ShamirThreshold: c.Int("shamir-secret-sharing-threshold"),
+                        KeyServices:     keyservices(c),
+                        Interactive:     !c.Bool("yes"),
+                        ConfigPath:      configPath,
+                        InputType:       c.String("input-type"),
+                        Global:          true,
+                        DryRun:          c.Bool("dry-run"),
+                    })
+                    if cliErr, ok := err.(*cli.ExitError); ok && cliErr != nil {
+                        return cliErr
+                    } else if err != nil {
+                        return common.NewExitError(err, codes.ErrorGeneric)
+                    }
+                    return nil
+                }
+
 				if c.NArg() < 1 {
 					return common.NewExitError("Error: no file specified", codes.NoFileSpecified)
 				}
+				
 				failedCounter := 0
 				for _, path := range c.Args() {
 					err := updatekeys.UpdateKeys(updatekeys.Opts{
@@ -758,6 +788,8 @@ func main() {
 						Interactive:     !c.Bool("yes"),
 						ConfigPath:      configPath,
 						InputType:       c.String("input-type"),
+						Global:          c.Bool("global"),
+						DryRun:          c.Bool("dry-run"),
 					})
 
 					if c.NArg() == 1 {
