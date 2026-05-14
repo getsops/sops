@@ -27,7 +27,7 @@ var pluginTerminalUI = &plugin.ClientUI{
 		if testing.Testing() && testOnlyAgePassword != "" {
 			return testOnlyAgePassword, nil
 		}
-		return pluginTerminalUIImpl.RequestValue(name, message, isSecret);
+		return pluginTerminalUIImpl.RequestValue(name, message, isSecret)
 	},
 	Confirm: func(name, message, yes, no string) (choseYes bool, err error) {
 		return pluginTerminalUIImpl.Confirm(name, message, yes, no)
