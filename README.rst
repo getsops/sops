@@ -24,6 +24,7 @@ Please report any security issues privately using `GitHub's advisory form <https
 
 License
 -------
+
 Mozilla Public License Version 2.0
 
 Authors
