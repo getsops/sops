@@ -99,7 +99,9 @@ func FindConfigFile(start string) (string, error) {
 	return result.Path, err
 }
 
-type DotenvStoreConfig struct{}
+type DotenvStoreConfig struct {
+	Quote bool `yaml:"quote"`
+}
 
 type INIStoreConfig struct{}
 
