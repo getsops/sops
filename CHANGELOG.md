@@ -1,5 +1,23 @@
 # Changelog
 
+## 3.13.1
+
+Improvements:
+
+* Dependency updates ([#2178](https://github.com/getsops/sops/pull/2178)).
+* Make sure all files are formatted ([#2181](https://github.com/getsops/sops/pull/2181)).
+* The documentation for SOPS can now be found on [getsops.io](https://getsops.io)
+  instead of the project's README ([#2083](https://github.com/getsops/sops/pull/2083)).
+
+Bugfixes:
+
+* Fix scheme for determining gpg-agent cache keys for age password-protected
+  keys to avoid too large keys due to percent encoding ([#2180](https://github.com/getsops/sops/pull/2180)).
+
+Project changes:
+
+* CI dependency updates ([#2177](https://github.com/getsops/sops/pull/2177)).
+
 ## 3.13.0
 
 Improvements:
