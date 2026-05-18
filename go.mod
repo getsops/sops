@@ -26,7 +26,7 @@ require (
 	github.com/goware/prefixer v0.0.0-20160118172347-395022866408
 	github.com/hashicorp/go-cleanhttp v0.5.2
 	github.com/hashicorp/vault/api v1.23.0
-	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.1.195
+	github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.1.196
 	github.com/lib/pq v1.12.3
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/mitchellh/go-wordwrap v1.0.1
@@ -41,9 +41,9 @@ require (
 	golang.org/x/oauth2 v0.36.0
 	golang.org/x/sys v0.44.0
 	golang.org/x/term v0.43.0
-	google.golang.org/api v0.278.0
+	google.golang.org/api v0.279.0
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260427160629-7cedc36a6bc4
-	google.golang.org/grpc v1.81.0
+	google.golang.org/grpc v1.81.1
 	google.golang.org/protobuf v1.36.11
 	gopkg.in/ini.v1 v1.67.2
 )
