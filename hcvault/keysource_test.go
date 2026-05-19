@@ -27,6 +27,8 @@ var (
 	// testVaultAddress is the HTTP/S address of the Vault server, it is set
 	// by TestMain after booting it.
 	testVaultAddress string
+	// Whether to skip all Docker-based tests.
+	testSkipDocker = false
 )
 
 // TestMain initializes a Vault server using Docker, writes the HTTP address to
@@ -34,6 +36,11 @@ var (
 // Vault Transit on the testEnginePath. It then runs all the tests, which can
 // make use of the various `test*` variables.
 func TestMain(m *testing.M) {
+	if testSkipDocker {
+		os.Exit(m.Run())
+		return
+	}
+
 	// Uses a sensible default on Windows (TCP/HTTP) and Linux/MacOS (socket)
 	pool, err := dockertest.NewPool("")
 	if err != nil {
@@ -179,6 +186,10 @@ func TestNewMasterKeyFromURI(t *testing.T) {
 }
 
 func TestMasterKey_Encrypt(t *testing.T) {
+	if testSkipDocker {
+		return
+	}
+
 	key := NewMasterKey(testVaultAddress, testEnginePath, "encrypt")
 	(Token(testVaultToken)).ApplyToMasterKey(key)
 	assert.NoError(t, createVaultKey(key))
@@ -207,6 +218,10 @@ func TestMasterKey_Encrypt(t *testing.T) {
 }
 
 func TestMasterKey_EncryptIfNeeded(t *testing.T) {
+	if testSkipDocker {
+		return
+	}
+
 	key := NewMasterKey(testVaultAddress, testEnginePath, "encrypt-if-needed")
 	(Token(testVaultToken)).ApplyToMasterKey(key)
 	assert.NoError(t, createVaultKey(key))
@@ -226,6 +241,10 @@ func TestMasterKey_EncryptedDataKey(t *testing.T) {
 }
 
 func TestMasterKey_Decrypt(t *testing.T) {
+	if testSkipDocker {
+		return
+	}
+
 	key := NewMasterKey(testVaultAddress, testEnginePath, "decrypt")
 	(Token(testVaultToken)).ApplyToMasterKey(key)
 	assert.NoError(t, createVaultKey(key))
@@ -254,6 +273,10 @@ func TestMasterKey_Decrypt(t *testing.T) {
 }
 
 func TestMasterKey_EncryptDecrypt_RoundTrip(t *testing.T) {
+	if testSkipDocker {
+		return
+	}
+
 	token := Token(testVaultToken)
 
 	encryptKey := NewMasterKey(testVaultAddress, testEnginePath, "roundtrip")
@@ -518,4 +541,145 @@ func createVaultKey(key *MasterKey) error {
 
 	_, err = client.Logical().Read(p)
 	return err
+}
+
+func TestAllowlistParse(t *testing.T) {
+	t.Run("success", func(t *testing.T) {
+		al, err := parseAllowlistString("all")
+		assert.NoError(t, err)
+		assert.Equal(t, allowList{
+			All:  true,
+			URIs: nil,
+		}, al)
+
+		al, err = parseAllowlistString("none")
+		assert.NoError(t, err)
+		assert.Equal(t, allowList{
+			All:  false,
+			URIs: nil,
+		}, al)
+
+		al, err = parseAllowlistString("non")
+		assert.NoError(t, err)
+		assert.Equal(t, allowList{
+			All: false,
+			URIs: []string{
+				"non/",
+			},
+		}, al)
+
+		al, err = parseAllowlistString("foo,bar/,baz")
+		assert.NoError(t, err)
+		assert.Equal(t, allowList{
+			All: false,
+			URIs: []string{
+				"foo/",
+				"bar/",
+				"baz/",
+			},
+		}, al)
+
+		al, err = parseAllowlistString(" foo/ ,  bar,   baz    ")
+		assert.NoError(t, err)
+		assert.Equal(t, allowList{
+			All: false,
+			URIs: []string{
+				"foo/",
+				"bar/",
+				"baz/",
+			},
+		}, al)
+	})
+
+	t.Run("error", func(t *testing.T) {
+		al, err := parseAllowlistString("")
+		assert.Error(t, err)
+		assert.Equal(t, "SOPS_HC_VAULT_ALLOWLIST's entry 1 is empty", err.Error())
+		assert.Equal(t, allowList{
+			All:  false,
+			URIs: nil,
+		}, al)
+
+		al, err = parseAllowlistString(",")
+		assert.Error(t, err)
+		assert.Equal(t, "SOPS_HC_VAULT_ALLOWLIST's entry 1 is empty", err.Error())
+		assert.Equal(t, allowList{
+			All:  false,
+			URIs: nil,
+		}, al)
+
+		al, err = parseAllowlistString(",a")
+		assert.Error(t, err)
+		assert.Equal(t, "SOPS_HC_VAULT_ALLOWLIST's entry 1 is empty", err.Error())
+		assert.Equal(t, allowList{
+			All:  false,
+			URIs: nil,
+		}, al)
+
+		al, err = parseAllowlistString("a,")
+		assert.Error(t, err)
+		assert.Equal(t, "SOPS_HC_VAULT_ALLOWLIST's entry 2 is empty", err.Error())
+		assert.Equal(t, allowList{
+			All:  false,
+			URIs: nil,
+		}, al)
+	})
+}
+
+func TestAllowlistAllow(t *testing.T) {
+	al, _ := parseAllowlistString("all")
+	assert.Equal(t, al.Allows(""), true)
+	assert.Equal(t, al.Allows("foo"), true)
+	assert.Equal(t, al.Allows("bar"), true)
+	assert.Equal(t, al.Allows("http://example.com"), true)
+	assert.Equal(t, al.Allows("http://example.com/"), true)
+	assert.Equal(t, al.Allows("https://example.com/foo"), true)
+
+	al, _ = parseAllowlistString("none")
+	assert.Equal(t, al.Allows(""), false)
+	assert.Equal(t, al.Allows("foo"), false)
+	assert.Equal(t, al.Allows("bar"), false)
+	assert.Equal(t, al.Allows("http://example.com"), false)
+	assert.Equal(t, al.Allows("http://example.com/"), false)
+	assert.Equal(t, al.Allows("https://example.com/foo"), false)
+
+	al, _ = parseAllowlistString("http://example.com")
+	assert.Equal(t, al.Allows("http://example.co"), false)
+	assert.Equal(t, al.Allows("http://example.com"), true)
+	assert.Equal(t, al.Allows("http://example.comm"), false)
+	assert.Equal(t, al.Allows("http://example.com:80"), false)
+	assert.Equal(t, al.Allows("http://example.com/"), true)
+	assert.Equal(t, al.Allows("http://example.com/foo"), true)
+	assert.Equal(t, al.Allows("http://fiz@example.com/"), false)
+	assert.Equal(t, al.Allows("http://example.com:123/"), false)
+	assert.Equal(t, al.Allows("https://example.com"), false)
+	assert.Equal(t, al.Allows("https://example.com/"), false)
+	assert.Equal(t, al.Allows(""), false)
+
+	al, _ = parseAllowlistString("http://example.com, https://example.org/bar/,http://foo:80")
+	assert.Equal(t, al.Allows("http://example.com"), true)
+	assert.Equal(t, al.Allows("http://example.com/"), true)
+	assert.Equal(t, al.Allows("http://example.com/foo"), true)
+	assert.Equal(t, al.Allows("http://fiz@example.com/"), false)
+	assert.Equal(t, al.Allows("http://example.com:123/"), false)
+	assert.Equal(t, al.Allows("https://example.com"), false)
+	assert.Equal(t, al.Allows("https://example.com/"), false)
+	assert.Equal(t, al.Allows("http://example.org"), false)
+	assert.Equal(t, al.Allows("http://example.org/"), false)
+	assert.Equal(t, al.Allows("http://example.org/foo"), false)
+	assert.Equal(t, al.Allows("http://fiz@example.org/"), false)
+	assert.Equal(t, al.Allows("http://example.org:123/"), false)
+	assert.Equal(t, al.Allows("https://example.org"), false)
+	assert.Equal(t, al.Allows("https://example.org/"), false)
+	assert.Equal(t, al.Allows("https://example.org/bar"), true)
+	assert.Equal(t, al.Allows("https://example.org/barr"), false)
+	assert.Equal(t, al.Allows("https://example.org/bar/"), true)
+	assert.Equal(t, al.Allows("https://example.org/bar/baz"), true)
+	assert.Equal(t, al.Allows("http://foo"), false)
+	assert.Equal(t, al.Allows("http://foo/"), false)
+	assert.Equal(t, al.Allows("http://foo:80"), true)
+	assert.Equal(t, al.Allows("http://foo:80/"), true)
+	assert.Equal(t, al.Allows("http://foo:8080"), false)
+	assert.Equal(t, al.Allows("http://foo:8080/"), false)
+	assert.Equal(t, al.Allows(""), false)
 }

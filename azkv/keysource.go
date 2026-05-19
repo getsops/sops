@@ -171,7 +171,7 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 }
 
 func (key *MasterKey) ensureKeyHasVersion(ctx context.Context) error {
-	if (key.Version != "") {
+	if key.Version != "" {
 		// Nothing to do
 		return nil
 	}
