@@ -73,3 +73,5 @@ This configuration is quite sophisticated, and ensures at least the following:
 
 - [ ] Ensure the release is built successfully on GitHub Actions. This will
   automatically create a release on GitHub.
+- [ ] In [the getsops/docs repository](https://github.com/getsops/docs/),
+  merge `main` into `stable` and push `stable` to update [getsops.io](https://getsops.io/).
