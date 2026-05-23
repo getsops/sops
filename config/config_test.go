@@ -952,10 +952,10 @@ creation_rules:
 func TestMatchRulesForConfigPathRegex(t *testing.T) {
 	conf := parseConfigFile(sampleConfigPathRegex, t)
 	cases := []struct {
-		name       string
-		filePath   string
-		wantIndex  int
-		wantRegex  string
+		name      string
+		filePath  string
+		wantIndex int
+		wantRegex string
 	}{
 		{"first rule matches", "/conf/staging/db.yaml", 0, `staging/.*\.yaml$`},
 		{"second rule matches", "/conf/prod/api.yaml", 1, `prod/.*\.yaml$`},
