@@ -4,6 +4,7 @@ Package config provides a way to find and load SOPS configuration files
 package config //import "github.com/getsops/sops/v3/config"
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path"
@@ -288,6 +289,35 @@ type Config struct {
 	MACOnlyEncrypted        bool
 	Destination             publish.Destination
 	OmitExtensions          bool
+}
+
+// ErrPathNotAbsolute is returned by MatchRulesForFile when either of its path
+// arguments is empty or relative.
+var ErrPathNotAbsolute = errors.New("path must be absolute")
+
+// MatchResult holds the rules from .sops.yaml that match a given file path.
+// At most one creation_rule and at most one destination_rule will be matched
+// (first-match-wins, preserving today's semantics in parseCreationRuleForFile
+// and parseDestinationRuleForFile).
+type MatchResult struct {
+	ConfigPath      string                // absolute, as received
+	FilePath        string                // absolute, as received
+	CreationRule    *CreationRuleMatch    // nil if no creation_rule matched
+	DestinationRule *DestinationRuleMatch // nil if no destination_rule matched
+}
+
+// CreationRuleMatch describes which creation rule from .sops.yaml matched the
+// queried file path. Rule is the raw internal struct; cmd-side packages
+// translate it to a public JSON view.
+type CreationRuleMatch struct {
+	RuleIndex int
+	Rule      creationRule
+}
+
+// DestinationRuleMatch describes which destination rule matched.
+type DestinationRuleMatch struct {
+	RuleIndex int
+	Rule      destinationRule
 }
 
 func deduplicateKeygroup(group sops.KeyGroup) sops.KeyGroup {
@@ -608,6 +638,101 @@ func parseCreationRuleForFile(conf *configFile, confPath, filePath string, kmsEn
 	}
 
 	return config, nil
+}
+
+// matchRulesForConfig matches a file path against an already-parsed config.
+// Both absConfPath and absFilePath MUST be absolute (caller's responsibility).
+// This is the file-IO-free core that production callers reach via MatchRulesForFile
+// and that tests can exercise directly with parseConfigFile-built fixtures.
+func matchRulesForConfig(conf *configFile, absConfPath, absFilePath string) (*MatchResult, error) {
+	result := &MatchResult{
+		ConfigPath: absConfPath,
+		FilePath:   absFilePath,
+	}
+
+	matchPath := normalizeMatchPath(absConfPath, absFilePath)
+
+	for i, r := range conf.CreationRules {
+		if r.PathRegex == "" {
+			rule := r
+			result.CreationRule = &CreationRuleMatch{RuleIndex: i, Rule: rule}
+			break
+		}
+		reg, err := regexp.Compile(r.PathRegex)
+		if err != nil {
+			return nil, fmt.Errorf("can not compile regexp: %w", err)
+		}
+		if reg.MatchString(matchPath) {
+			rule := r
+			result.CreationRule = &CreationRuleMatch{RuleIndex: i, Rule: rule}
+			break
+		}
+	}
+
+	for i, r := range conf.DestinationRules {
+		if r.PathRegex == "" {
+			rule := r
+			result.DestinationRule = &DestinationRuleMatch{RuleIndex: i, Rule: rule}
+			break
+		}
+		reg, err := regexp.Compile(r.PathRegex)
+		if err != nil {
+			return nil, fmt.Errorf("can not compile regexp: %w", err)
+		}
+		if reg.MatchString(matchPath) {
+			rule := r
+			result.DestinationRule = &DestinationRuleMatch{RuleIndex: i, Rule: rule}
+			break
+		}
+	}
+
+	return result, nil
+}
+
+// normalizeMatchPath returns the path that should be matched against rule
+// path_regex values. When absFilePath is inside the config file's directory
+// tree, the config-dir prefix is stripped so users' path_regex values can be
+// written as repo-relative. When the file is outside the tree (or on a
+// different Windows drive), the absolute path is used as-is.
+//
+// Uses filepath.Rel for platform-aware path arithmetic; correctly handles
+// trailing separators, mixed separators on Windows, and case-insensitive
+// drive letters.
+func normalizeMatchPath(absConfPath, absFilePath string) string {
+	configDir := filepath.Dir(absConfPath)
+	rel, err := filepath.Rel(configDir, absFilePath)
+	if err != nil {
+		// Different Windows drives, or otherwise unrelatable. Use absolute.
+		return absFilePath
+	}
+	if rel == ".." || strings.HasPrefix(rel, ".."+string(filepath.Separator)) {
+		// File is above the config dir. Use absolute.
+		return absFilePath
+	}
+	return rel
+}
+
+// MatchRulesForFile loads the config at absConfPath and returns the
+// creation_rule and destination_rule (each at most one) that apply to
+// absFilePath. Both arguments MUST be absolute paths — MatchRulesForFile
+// does NOT call filepath.Abs (which would implicitly depend on os.Getwd())
+// and does NOT perform .sops.yaml auto-discovery. The CLI layer is
+// responsible for FindConfigFile, the --config flag, and resolving any
+// relative input to absolute before calling this function.
+//
+// File existence on absFilePath is NOT checked; only path matching occurs.
+func MatchRulesForFile(absConfPath, absFilePath string) (*MatchResult, error) {
+	if absConfPath == "" || !filepath.IsAbs(absConfPath) {
+		return nil, ErrPathNotAbsolute
+	}
+	if absFilePath == "" || !filepath.IsAbs(absFilePath) {
+		return nil, ErrPathNotAbsolute
+	}
+	conf, err := loadConfigFile(absConfPath)
+	if err != nil {
+		return nil, err
+	}
+	return matchRulesForConfig(conf, absConfPath, absFilePath)
 }
 
 // LoadCreationRuleForFile load the configuration for a given SOPS file from the config file at confPath. A kmsEncryptionContext
