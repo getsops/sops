@@ -2125,23 +2125,26 @@ func getEncryptConfig(c *cli.Context, fileName string, inputStore common.Store, 
 		}
 	}
 	if optionalConfig != nil {
-		// command line options have precedence
-		if unencryptedSuffix == "" {
+		// command line options have precedence over config file settings.
+		// Use IsSet to distinguish "flag not provided" from "flag explicitly
+		// set to empty string", so that --encrypted-regex="" properly
+		// overrides a config file value (fixes #617).
+		if !c.IsSet("unencrypted-suffix") && unencryptedSuffix == "" {
 			unencryptedSuffix = optionalConfig.UnencryptedSuffix
 		}
-		if encryptedSuffix == "" {
+		if !c.IsSet("encrypted-suffix") && encryptedSuffix == "" {
 			encryptedSuffix = optionalConfig.EncryptedSuffix
 		}
-		if encryptedRegex == "" {
+		if !c.IsSet("encrypted-regex") && encryptedRegex == "" {
 			encryptedRegex = optionalConfig.EncryptedRegex
 		}
-		if unencryptedRegex == "" {
+		if !c.IsSet("unencrypted-regex") && unencryptedRegex == "" {
 			unencryptedRegex = optionalConfig.UnencryptedRegex
 		}
-		if encryptedCommentRegex == "" {
+		if !c.IsSet("encrypted-comment-regex") && encryptedCommentRegex == "" {
 			encryptedCommentRegex = optionalConfig.EncryptedCommentRegex
 		}
-		if unencryptedCommentRegex == "" {
+		if !c.IsSet("unencrypted-comment-regex") && unencryptedCommentRegex == "" {
 			unencryptedCommentRegex = optionalConfig.UnencryptedCommentRegex
 		}
 		if !macOnlyEncrypted {
