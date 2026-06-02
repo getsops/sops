@@ -15,7 +15,7 @@ import (
 	"bufio"
 	"bytes"
 	"crypto/sha256"
-	"encoding/base64"
+	"encoding/base32"
 	"errors"
 	"fmt"
 	"io"
@@ -126,8 +126,14 @@ func unwrapIdentities(location string, reader io.Reader, allowMultipleKeysPerLin
 		if len(contents) == privateKeySizeLimit {
 			return nil, fmt.Errorf("failed to read '%s': file too long", location)
 		}
+		// We use Base32 encoding instead of Base64 encoding, since our GPG agent package percent-encodes
+		// the cache ID. Base64 has two characters ('+' and '/') that would end up as a longer sequence,
+		// whence using Base64 encoding can suddenly blow up the cache key to more than GPG's maximum of
+		// 50 characters.
+		// By using 25 bytes, that translate to 25 / 5 * 8 = 40 letters/digits, we have a cache key of
+		// length 47, whose percent-encoding always has 47 characters.
 		contentsHash := sha256.Sum256(contents)
-		cacheKey := fmt.Sprintf("SopsAge%s", base64.StdEncoding.EncodeToString(contentsHash[:30]))
+		cacheKey := fmt.Sprintf("SopsAge%s", base32.StdEncoding.EncodeToString(contentsHash[:25]))
 		IncorrectPassphrase := func() {
 			conn, err := gpgagent.NewConn()
 			if err != nil {
