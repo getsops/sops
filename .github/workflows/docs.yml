@@ -30,7 +30,7 @@ jobs:
       - name: Install rstcheck and markdownlint
         run: |
           pip install rstcheck
-          sudo gem install mdl
+          sudo gem install mdl -v '0.15.0'
 
       - name: Run rstcheck on all RST files
         run: make checkrst
