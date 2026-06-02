@@ -5,11 +5,12 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-    # Only consider changes to documentation
+    # Only consider changes to documentation, or this workflow
     paths:
       - '**/*.md'
       - '**/*.rst'
       - '**/*.txt'
+      - .github/workflows/docs.yml
   schedule:
     - cron: '25 6 * * 3'
 
