@@ -1966,7 +1966,7 @@ To directly specify a single key group, you can use the following keys:
           - tr-west-1:abc12345-6789-0123-4567-890123456789
           - tr-west-1:def67890-1234-5678-9012-345678901234
 
-* ``tencent_kms`` (list of strings): list of Tencent Cloud KMS key IDs.
+* ``tencent_kms`` (comma-separated string, or list of strings): list of Tencent Cloud KMS key IDs.
   Example:
 
   .. code:: yaml

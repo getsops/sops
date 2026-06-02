@@ -1200,6 +1200,14 @@ func main() {
 					Usage: "remove the provided comma-separated list of PGP fingerprints from the list of master keys on the given file",
 				},
 				cli.StringFlag{
+					Name:  "add-tencent-kms",
+					Usage: "add the provided comma-separated list of Tencent Cloud KMS key IDs to the list of master keys on the given file",
+				},
+				cli.StringFlag{
+					Name:  "rm-tencent-kms",
+					Usage: "remove the provided comma-separated list of Tencent Cloud KMS key IDs from the list of master keys on the given file",
+				},
+				cli.StringFlag{
 					Name:  "filename-override",
 					Usage: "Use this filename instead of the provided argument for loading configuration, and for determining input type and output type",
 				},
@@ -1225,8 +1233,8 @@ func main() {
 					return toExitError(err)
 				}
 				if _, err := os.Stat(fileName); os.IsNotExist(err) {
-					if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hckms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" ||
-						c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hckms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" {
+					if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hckms") != "" || c.String("add-tencent-kms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" ||
+						c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hckms") != "" || c.String("rm-tencent-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" {
 						return common.NewExitError(fmt.Sprintf("Error: cannot add or remove keys on non-existent file %q, use the `edit` subcommand instead.", fileName), codes.CannotChangeKeysFromNonExistentFile)
 					}
 				}
@@ -1940,8 +1948,8 @@ func main() {
 			return toExitError(err)
 		}
 		if _, err := os.Stat(fileName); os.IsNotExist(err) {
-			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hckms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" ||
-				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hckms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" {
+			if c.String("add-kms") != "" || c.String("add-pgp") != "" || c.String("add-gcp-kms") != "" || c.String("add-hckms") != "" || c.String("add-tencent-kms") != "" || c.String("add-hc-vault-transit") != "" || c.String("add-azure-kv") != "" || c.String("add-age") != "" ||
+				c.String("rm-kms") != "" || c.String("rm-pgp") != "" || c.String("rm-gcp-kms") != "" || c.String("rm-hckms") != "" || c.String("rm-tencent-kms") != "" || c.String("rm-hc-vault-transit") != "" || c.String("rm-azure-kv") != "" || c.String("rm-age") != "" {
 				return common.NewExitError(fmt.Sprintf("Error: cannot add or remove keys on non-existent file %q, use `--kms` and `--pgp` instead.", fileName), codes.CannotChangeKeysFromNonExistentFile)
 			}
 			if isEncryptMode || isDecryptMode || isRotateMode {

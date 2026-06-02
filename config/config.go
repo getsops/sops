@@ -191,7 +191,7 @@ type creationRule struct {
 	HCKms                   []string    `yaml:"hckms"`
 	AzureKeyVault           interface{} `yaml:"azure_keyvault"`       // string or []string
 	VaultURI                interface{} `yaml:"hc_vault_transit_uri"` // string or []string
-	TencentKMS              []string    `yaml:"tencent_kms"`
+	TencentKMS              interface{} `yaml:"tencent_kms"`          // string or []string
 	KeyGroups               []keyGroup  `yaml:"key_groups"`
 	ShamirThreshold         int         `yaml:"shamir_threshold"`
 	UnencryptedSuffix       string      `yaml:"unencrypted_suffix"`
@@ -226,6 +226,10 @@ func (c *creationRule) GetAzureKeyVaultKeys() ([]string, error) {
 
 func (c *creationRule) GetVaultURIs() ([]string, error) {
 	return parseKeyField(c.VaultURI, "hc_vault_transit_uri")
+}
+
+func (c *creationRule) GetTencentKMSKeys() ([]string, error) {
+	return parseKeyField(c.TencentKMS, "tencent_kms")
 }
 
 // Utility function to handle both string and []string
@@ -455,9 +459,11 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		for _, k := range vaultKeys {
 			keyGroup = append(keyGroup, k)
 		}
-		// Tencent KMS
-		tencentkmsMasterKeys := tencentkms.MasterKeysFromKeyIDString(strings.Join(cRule.TencentKMS, ","))
-		for _, k := range tencentkmsMasterKeys {
+		tencentkmsKeys, err := getKeysWithValidation(cRule.GetTencentKMSKeys, "tencent_kms")
+		if err != nil {
+			return nil, err
+		}
+		for _, k := range tencentkms.MasterKeysFromKeyIDString(strings.Join(tencentkmsKeys, ",")) {
 			keyGroup = append(keyGroup, k)
 		}
 		groups = append(groups, keyGroup)
