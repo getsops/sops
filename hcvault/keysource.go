@@ -448,7 +448,7 @@ func userVaultToken() (string, error) {
 		if err != nil {
 			return "", fmt.Errorf("error getting user's home directory: %w", err)
 		}
-		tokenPath := filepath.Join(homePath, defaultTokenFile)
+		tokenPath = filepath.Join(homePath, defaultTokenFile)
 	}
 
 
