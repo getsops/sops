@@ -5,14 +5,17 @@
 Improvements:
 
 * Dependency updates ([#2178](https://github.com/getsops/sops/pull/2178)).
-* Make sure all files are formatted ([#2181](https://github.com/getsops/sops/pull/2181)).
-* The documentation for SOPS can now be found on [getsops.io](https://getsops.io)
-  instead of the project's README ([#2083](https://github.com/getsops/sops/pull/2083)).
+* Make sure all files are formatted
+  ([#2181](https://github.com/getsops/sops/pull/2181)).
+* The documentation for SOPS can now be found on
+  [getsops.io](https://getsops.io) instead of the project's README
+  ([#2083](https://github.com/getsops/sops/pull/2083)).
 
 Bugfixes:
 
 * Fix scheme for determining gpg-agent cache keys for age password-protected
-  keys to avoid too large keys due to percent encoding ([#2180](https://github.com/getsops/sops/pull/2180)).
+  keys to avoid too large keys due to percent encoding
+  ([#2180](https://github.com/getsops/sops/pull/2180)).
 
 Project changes:
 
@@ -23,21 +26,28 @@ Project changes:
 Improvements:
 
 * Dependency updates ([#2110](https://github.com/getsops/sops/pull/2110),
-  [#2133](https://github.com/getsops/sops/pull/2133), [#2142](https://github.com/getsops/sops/pull/2142),
-  [#2146](https://github.com/getsops/sops/pull/2146), [#2144](https://github.com/getsops/sops/pull/2144),
-  [#2152](https://github.com/getsops/sops/pull/2152), [#2159](https://github.com/getsops/sops/pull/2159),
-  [#2165](https://github.com/getsops/sops/pull/2165), [#2171](https://github.com/getsops/sops/pull/2171)).
-* Improve error messages for top-level arrays ([#2138](https://github.com/getsops/sops/pull/2138)).
+  [#2133](https://github.com/getsops/sops/pull/2133),
+  [#2142](https://github.com/getsops/sops/pull/2142),
+  [#2146](https://github.com/getsops/sops/pull/2146),
+  [#2144](https://github.com/getsops/sops/pull/2144),
+  [#2152](https://github.com/getsops/sops/pull/2152),
+  [#2159](https://github.com/getsops/sops/pull/2159),
+  [#2165](https://github.com/getsops/sops/pull/2165),
+  [#2171](https://github.com/getsops/sops/pull/2171)).
+* Improve error messages for top-level arrays
+  ([#2138](https://github.com/getsops/sops/pull/2138)).
 * Improve use of gpg-agent for password-protected age keys.
   The passwords are now associated with an identifier that
   includes a hash of the public key's content, instead of
   using the environment variable or path (that was sometimes too long
   and caused errors) ([#2145](https://github.com/getsops/sops/pull/2145)).
 * Allow to use `SOPS_GCP_KMS_ENDPOINT` and `SOPS_GCP_KMS_UNIVERSE_DOMAIN`
-  to configure alternative clouds using GCP's API ([#2114](https://github.com/getsops/sops/pull/2114)).
+  to configure alternative clouds using GCP's API
+  ([#2114](https://github.com/getsops/sops/pull/2114)).
 * Preserve YAML inline comments as inline comments, instead of converting
   them to line comments ([#2131](https://github.com/getsops/sops/pull/2131)).
-* `SOPS_AGE_KEY` can now contain space-separated public keys ([#2086](https://github.com/getsops/sops/pull/2086)).
+* `SOPS_AGE_KEY` can now contain space-separated public keys
+  ([#2086](https://github.com/getsops/sops/pull/2086)).
 * An allowlist for HashiCorp Vault URLs (and thus also OpenBoa URLs)
   can now be configured with `SOPS_HC_VAULT_ALLOWLIST`.
   The default is `all`, which does not restrict which URLs
@@ -51,25 +61,34 @@ Improvements:
 Bugfixes:
 
 * `sops exec-file` on other platforms than Windows was setting the user ID
-  as the (effective) group ID. Now the user's group ID is used ([#2154](https://github.com/getsops/sops/pull/2154)).
-* `sops exec-file` now rejects non-local paths in `--filename` ([#2155](https://github.com/getsops/sops/pull/2155)).
-* The `--indent` parameter was ignored for subcommands ([#2156](https://github.com/getsops/sops/pull/2156)).
+  as the (effective) group ID. Now the user's group ID is used
+  ([#2154](https://github.com/getsops/sops/pull/2154)).
+* `sops exec-file` now rejects non-local paths in `--filename`
+  ([#2155](https://github.com/getsops/sops/pull/2155)).
+* The `--indent` parameter was ignored for subcommands
+  ([#2156](https://github.com/getsops/sops/pull/2156)).
 
 Project changes:
 
-* Drop support for Go 1.24 ([#2141](https://github.com/getsops/sops/pull/2141)).
-* Use cosign v3 instead of v2 ([#2082](https://github.com/getsops/sops/pull/2082)).
+* Drop support for Go 1.24
+  ([#2141](https://github.com/getsops/sops/pull/2141)).
+* Use cosign v3 instead of v2
+  ([#2082](https://github.com/getsops/sops/pull/2082)).
 * CI dependency updates ([#2117](https://github.com/getsops/sops/pull/2117),
-  [#2126](https://github.com/getsops/sops/pull/2126), [#2139](https://github.com/getsops/sops/pull/2139),
-  [#2149](https://github.com/getsops/sops/pull/2149), [#2151](https://github.com/getsops/sops/pull/2151),
-  [#2158](https://github.com/getsops/sops/pull/2158), [#2173](https://github.com/getsops/sops/pull/2173)).
+  [#2126](https://github.com/getsops/sops/pull/2126),
+  [#2139](https://github.com/getsops/sops/pull/2139),
+  [#2149](https://github.com/getsops/sops/pull/2149),
+  [#2151](https://github.com/getsops/sops/pull/2151),
+  [#2158](https://github.com/getsops/sops/pull/2158),
+  [#2173](https://github.com/getsops/sops/pull/2173)).
 
 ## 3.12.2
 
 Improvements:
 
 * Dependency updates ([#2085](https://github.com/getsops/sops/pull/2085),
-  [#2087](https://github.com/getsops/sops/pull/2087), [#2089](https://github.com/getsops/sops/pull/2089),
+  [#2087](https://github.com/getsops/sops/pull/2087),
+  [#2089](https://github.com/getsops/sops/pull/2089),
   [#2095](https://github.com/getsops/sops/pull/2095)).
 
 Bugfixes:
@@ -77,21 +96,26 @@ Bugfixes:
 * GCP: Revert the fix introduced in 3.12.0 that sets quota project to API
   project in GCP KMS. This change unintentionally resulted in requiring
   more permissions for GCP users. The original issue will be addressed in
-  another way in a future release ([#2099](https://github.com/getsops/sops/pull/2099)).
+  another way in a future release
+  ([#2099](https://github.com/getsops/sops/pull/2099)).
 * Ensure to delete temporary file and directory when editing in more
   situations, like when user presses Ctrl+C or SOPS receives a SIGTERM
   ([#2104](https://github.com/getsops/sops/pull/2104)).
 * Fix message that you need to enter (and not any key) after SOPS rejects
   an edited file ([#2098](https://github.com/getsops/sops/pull/2098)).
-* Reject files with ``sops`` keys when editing files ([#2098](https://github.com/getsops/sops/pull/2098)).
-* Fix handling of ``--mac-only-encrypted`` option in subcommands ([#2100](https://github.com/getsops/sops/pull/2100)).
+* Reject files with ``sops`` keys when editing files
+  ([#2098](https://github.com/getsops/sops/pull/2098)).
+* Fix handling of ``--mac-only-encrypted`` option in subcommands
+  ([#2100](https://github.com/getsops/sops/pull/2100)).
 
 Project changes:
 
 * CI dependency updates ([#2084](https://github.com/getsops/sops/pull/2084),
-  [#2091](https://github.com/getsops/sops/pull/2091), [#2101](https://github.com/getsops/sops/pull/2101),
+  [#2091](https://github.com/getsops/sops/pull/2091),
+  [#2101](https://github.com/getsops/sops/pull/2101),
   [#2106](https://github.com/getsops/sops/pull/2106)).
-* Rust dependency updates for functional tests ([#2090](https://github.com/getsops/sops/pull/2090),
+* Rust dependency updates for functional tests
+  ([#2090](https://github.com/getsops/sops/pull/2090),
   [#2105](https://github.com/getsops/sops/pull/2105)).
 * Improve CI workflows ([#2081](https://github.com/getsops/sops/pull/2081)).
 
@@ -108,60 +132,96 @@ the version to properly get a release out.
 
 Features:
 
-* Add support for HuaweiCloud KMS ([#2001](https://github.com/getsops/sops/pull/2001)).
-* GCP KMS: Add `SOPS_GCP_KMS_CLIENT_TYPE` environment variable support to select
-  between gRPC and REST clients ([#1973](https://github.com/getsops/sops/pull/1973)).
-* Age: support hybrid post-quantum identities ([#2033](https://github.com/getsops/sops/pull/2033)).
-* Age: pass `SOPS_AGE_RECIPIENT` environment variable to `SOPS_AGE_KEY_CMD` ([#2045](https://github.com/getsops/sops/pull/2045)).
-* Age: add `SOPS_AGE_SSH_PRIVATE_KEY_CMD` environment variable ([#2070](https://github.com/getsops/sops/pull/2070)).
+* Add support for HuaweiCloud KMS
+  ([#2001](https://github.com/getsops/sops/pull/2001)).
+* GCP KMS: Add `SOPS_GCP_KMS_CLIENT_TYPE` environment variable support to
+  select between gRPC and REST clients
+  ([#1973](https://github.com/getsops/sops/pull/1973)).
+* Age: support hybrid post-quantum identities
+  ([#2033](https://github.com/getsops/sops/pull/2033)).
+* Age: pass `SOPS_AGE_RECIPIENT` environment variable to `SOPS_AGE_KEY_CMD`
+  ([#2045](https://github.com/getsops/sops/pull/2045)).
+* Age: add `SOPS_AGE_SSH_PRIVATE_KEY_CMD` environment variable
+  ([#2070](https://github.com/getsops/sops/pull/2070)).
 
 Improvements:
 
 * Dependency updates ([#1967](https://github.com/getsops/sops/pull/1967),
-  [#1971](https://github.com/getsops/sops/pull/1971), [#1978](https://github.com/getsops/sops/pull/1978),
-  [#1986](https://github.com/getsops/sops/pull/1986), [#1988](https://github.com/getsops/sops/pull/1988),
-  [#1991](https://github.com/getsops/sops/pull/1991), [#1993](https://github.com/getsops/sops/pull/1993),
-  [#2002](https://github.com/getsops/sops/pull/2002), [#2004](https://github.com/getsops/sops/pull/2004),
-  [#2007](https://github.com/getsops/sops/pull/2007), [#2012](https://github.com/getsops/sops/pull/2012),
-  [#2018](https://github.com/getsops/sops/pull/2018), [#2024](https://github.com/getsops/sops/pull/2024),
-  [#2029](https://github.com/getsops/sops/pull/2029), [#2037](https://github.com/getsops/sops/pull/2037),
-  [#2043](https://github.com/getsops/sops/pull/2043), [#2047](https://github.com/getsops/sops/pull/2047),
-  [#2050](https://github.com/getsops/sops/pull/2050), [#2059](https://github.com/getsops/sops/pull/2059),
-  [#2074](https://github.com/getsops/sops/pull/2074), [#2078](https://github.com/getsops/sops/pull/2078)).
-* Fix mistakes in `--help` output ([#1975](https://github.com/getsops/sops/pull/1975),
+  [#1971](https://github.com/getsops/sops/pull/1971),
+  [#1978](https://github.com/getsops/sops/pull/1978),
+  [#1986](https://github.com/getsops/sops/pull/1986),
+  [#1988](https://github.com/getsops/sops/pull/1988),
+  [#1991](https://github.com/getsops/sops/pull/1991),
+  [#1993](https://github.com/getsops/sops/pull/1993),
+  [#2002](https://github.com/getsops/sops/pull/2002),
+  [#2004](https://github.com/getsops/sops/pull/2004),
+  [#2007](https://github.com/getsops/sops/pull/2007),
+  [#2012](https://github.com/getsops/sops/pull/2012),
+  [#2018](https://github.com/getsops/sops/pull/2018),
+  [#2024](https://github.com/getsops/sops/pull/2024),
+  [#2029](https://github.com/getsops/sops/pull/2029),
+  [#2037](https://github.com/getsops/sops/pull/2037),
+  [#2043](https://github.com/getsops/sops/pull/2043),
+  [#2047](https://github.com/getsops/sops/pull/2047),
+  [#2050](https://github.com/getsops/sops/pull/2050),
+  [#2059](https://github.com/getsops/sops/pull/2059),
+  [#2074](https://github.com/getsops/sops/pull/2074),
+  [#2078](https://github.com/getsops/sops/pull/2078)).
+* Fix mistakes in `--help` output
+  ([#1975](https://github.com/getsops/sops/pull/1975),
   [#1963](https://github.com/getsops/sops/pull/1963)).
 * Improve documentation ([#1997](https://github.com/getsops/sops/pull/1997)).
-* Unset user's `GNUPGHOME` environment variable for tests ([#2052](https://github.com/getsops/sops/pull/2052)).
-* Use age's `plugin.NewTerminalUI()` instead of vendoring the code ([#2034](https://github.com/getsops/sops/pull/2034)).
-* Remove dead code during YAML loading ([#2072](https://github.com/getsops/sops/pull/2072)).
-* Build release with Go 1.26 ([#2071](https://github.com/getsops/sops/pull/2071)).
+* Unset user's `GNUPGHOME` environment variable for tests
+  ([#2052](https://github.com/getsops/sops/pull/2052)).
+* Use age's `plugin.NewTerminalUI()` instead of vendoring the code
+  ([#2034](https://github.com/getsops/sops/pull/2034)).
+* Remove dead code during YAML loading
+  ([#2072](https://github.com/getsops/sops/pull/2072)).
+* Build release with Go 1.26
+  ([#2071](https://github.com/getsops/sops/pull/2071)).
 
 Bugfixes:
 
-* Add `--decryption-order` flag to `exec-env`, `exec-file`, and `publish` commands.
-  The subcommand code was using the flags, but it wasn't declared ([#1965](https://github.com/getsops/sops/pull/1965)).
-* Fix AWS KMS encryption context not being passed when config is pre-loaded ([#2021](https://github.com/getsops/sops/pull/2021)).
+* Add `--decryption-order` flag to `exec-env`, `exec-file`, and `publish`
+  commands. The subcommand code was using the flags, but it wasn't declared
+  ([#1965](https://github.com/getsops/sops/pull/1965)).
+* Fix AWS KMS encryption context not being passed when config is pre-loaded
+  ([#2021](https://github.com/getsops/sops/pull/2021)).
 * Fix recursive publish ([#2019](https://github.com/getsops/sops/pull/2019)).
-* Set quota project to API project in GCP KMS ([#1697](https://github.com/getsops/sops/pull/1697)).
-* DotEnv store now properly reports missing metadata ([#2055](https://github.com/getsops/sops/pull/2055)).
-* AWS KMS: allow role splitting without hard-coded `aws` partition ([#2042](https://github.com/getsops/sops/pull/2042)).
+* Set quota project to API project in GCP KMS
+  ([#1697](https://github.com/getsops/sops/pull/1697)).
+* DotEnv store now properly reports missing metadata
+  ([#2055](https://github.com/getsops/sops/pull/2055)).
+* AWS KMS: allow role splitting without hard-coded `aws` partition
+  ([#2042](https://github.com/getsops/sops/pull/2042)).
 
 Project changes:
 
 * Add Go 1.26 to CI ([#2071](https://github.com/getsops/sops/pull/2071)).
 * CI dependency updates ([#1961](https://github.com/getsops/sops/pull/1961),
-  [#1966](https://github.com/getsops/sops/pull/1966), [#1970](https://github.com/getsops/sops/pull/1970),
-  [#1979](https://github.com/getsops/sops/pull/1979), [#1985](https://github.com/getsops/sops/pull/1985),
-  [#1989](https://github.com/getsops/sops/pull/1989), [#1992](https://github.com/getsops/sops/pull/1992),
-  [#2003](https://github.com/getsops/sops/pull/2003), [#2006](https://github.com/getsops/sops/pull/2006),
-  [#2010](https://github.com/getsops/sops/pull/2010), [#2011](https://github.com/getsops/sops/pull/2011),
-  [#2017](https://github.com/getsops/sops/pull/2017), [#2023](https://github.com/getsops/sops/pull/2023),
-  [#2028](https://github.com/getsops/sops/pull/2028), [#2038](https://github.com/getsops/sops/pull/2038),
-  [#2044](https://github.com/getsops/sops/pull/2044), [#2046](https://github.com/getsops/sops/pull/2046),
-  [#2049](https://github.com/getsops/sops/pull/2049), [#2058](https://github.com/getsops/sops/pull/2058),
+  [#1966](https://github.com/getsops/sops/pull/1966),
+  [#1970](https://github.com/getsops/sops/pull/1970),
+  [#1979](https://github.com/getsops/sops/pull/1979),
+  [#1985](https://github.com/getsops/sops/pull/1985),
+  [#1989](https://github.com/getsops/sops/pull/1989),
+  [#1992](https://github.com/getsops/sops/pull/1992),
+  [#2003](https://github.com/getsops/sops/pull/2003),
+  [#2006](https://github.com/getsops/sops/pull/2006),
+  [#2010](https://github.com/getsops/sops/pull/2010),
+  [#2011](https://github.com/getsops/sops/pull/2011),
+  [#2017](https://github.com/getsops/sops/pull/2017),
+  [#2023](https://github.com/getsops/sops/pull/2023),
+  [#2028](https://github.com/getsops/sops/pull/2028),
+  [#2038](https://github.com/getsops/sops/pull/2038),
+  [#2044](https://github.com/getsops/sops/pull/2044),
+  [#2046](https://github.com/getsops/sops/pull/2046),
+  [#2049](https://github.com/getsops/sops/pull/2049),
+  [#2058](https://github.com/getsops/sops/pull/2058),
   [#2075](https://github.com/getsops/sops/pull/2075)).
-* Rust dependency updates for functional tests ([#1962](https://github.com/getsops/sops/pull/1962),
-  [#2027](https://github.com/getsops/sops/pull/2027), [#2035](https://github.com/getsops/sops/pull/2035),
+* Rust dependency updates for functional tests
+  ([#1962](https://github.com/getsops/sops/pull/1962),
+  [#2027](https://github.com/getsops/sops/pull/2027),
+  [#2035](https://github.com/getsops/sops/pull/2035),
   [#2073](https://github.com/getsops/sops/pull/2073)).
 
 ## 3.11.0
@@ -169,92 +229,140 @@ Project changes:
 Security fixes:
 
 * Ensure temporary file for editing is only read-writable by owner.
-  This was already the case for the directory containing the file ([#1903](https://github.com/getsops/sops/pull/1903)).
-* Ignore encryption selection options for binary store, and warn when they are used.
-  In previous versions, these could have prevented the data to be encrypted ([#1927](https://github.com/getsops/sops/pull/1927)).
+  This was already the case for the directory containing the file
+  ([#1903](https://github.com/getsops/sops/pull/1903)).
+* Ignore encryption selection options for binary store, and warn when they are
+  used. In previous versions, these could have prevented the data to be
+  encrypted
+  ([#1927](https://github.com/getsops/sops/pull/1927)).
 * Do not print sensitive values in error messages when trying to encrypt
-  complex values in DotEnv and exec-env ([#1959](https://github.com/getsops/sops/pull/1959)).
+  complex values in DotEnv and exec-env
+  ([#1959](https://github.com/getsops/sops/pull/1959)).
 
 Features:
 
-* Allow to set values from file with `sops set --value-file` ([#1876](https://github.com/getsops/sops/pull/1876),
+* Allow to set values from file with `sops set --value-file`
+  ([#1876](https://github.com/getsops/sops/pull/1876),
   [#1940](https://github.com/getsops/sops/pull/1940)).
-* Allow to set values from stdin with `sops set --value-stdin` ([#1894](https://github.com/getsops/sops/pull/1894)).
-* Add subcommands to create shell completion scripts ([#1892](https://github.com/getsops/sops/pull/1892)).
-* Allow to provide keys as YAML lists instead of comma-separated strings ([#1880](https://github.com/getsops/sops/pull/1880)).
+* Allow to set values from stdin with `sops set --value-stdin`
+  ([#1894](https://github.com/getsops/sops/pull/1894)).
+* Add subcommands to create shell completion scripts
+  ([#1892](https://github.com/getsops/sops/pull/1892)).
+* Allow to provide keys as YAML lists instead of comma-separated strings
+  ([#1880](https://github.com/getsops/sops/pull/1880)).
 * Allow to configure `--enable-local-keyservice` and `--keyservice` through
   environment variables ([#1930](https://github.com/getsops/sops/pull/1930)).
-* Allow to omit AZKV key version in `.sops.yaml` ([#1919](https://github.com/getsops/sops/pull/1919),
+* Allow to omit AZKV key version in `.sops.yaml`
+  ([#1919](https://github.com/getsops/sops/pull/1919),
   [#1947](https://github.com/getsops/sops/pull/1947)).
-* Allow non-complex non-string values in DotEnv and `sops exec-env` ([#1933](https://github.com/getsops/sops/pull/1933)).
+* Allow non-complex non-string values in DotEnv and `sops exec-env`
+  ([#1933](https://github.com/getsops/sops/pull/1933)).
 
 Improvements:
 
 * Dependency updates ([#1845](https://github.com/getsops/sops/pull/1845),
-  [#1850](https://github.com/getsops/sops/pull/1850), [#1854](https://github.com/getsops/sops/pull/1854),
-  [#1856](https://github.com/getsops/sops/pull/1856), [#1861](https://github.com/getsops/sops/pull/1861),
-  [#1867](https://github.com/getsops/sops/pull/1867), [#1870](https://github.com/getsops/sops/pull/1870),
-  [#1871](https://github.com/getsops/sops/pull/1871), [#1872](https://github.com/getsops/sops/pull/1872),
-  [#1878](https://github.com/getsops/sops/pull/1878), [#1882](https://github.com/getsops/sops/pull/1882),
-  [#1884](https://github.com/getsops/sops/pull/1884), [#1888](https://github.com/getsops/sops/pull/1888),
-  [#1893](https://github.com/getsops/sops/pull/1893), [#1908](https://github.com/getsops/sops/pull/1908),
-  [#1912](https://github.com/getsops/sops/pull/1912), [#1917](https://github.com/getsops/sops/pull/1917),
-  [#1920](https://github.com/getsops/sops/pull/1920), [#1923](https://github.com/getsops/sops/pull/1923),
-  [#1956](https://github.com/getsops/sops/pull/1956), [#1958](https://github.com/getsops/sops/pull/1958)).
+  [#1850](https://github.com/getsops/sops/pull/1850),
+  [#1854](https://github.com/getsops/sops/pull/1854),
+  [#1856](https://github.com/getsops/sops/pull/1856),
+  [#1861](https://github.com/getsops/sops/pull/1861),
+  [#1867](https://github.com/getsops/sops/pull/1867),
+  [#1870](https://github.com/getsops/sops/pull/1870),
+  [#1871](https://github.com/getsops/sops/pull/1871),
+  [#1872](https://github.com/getsops/sops/pull/1872),
+  [#1878](https://github.com/getsops/sops/pull/1878),
+  [#1882](https://github.com/getsops/sops/pull/1882),
+  [#1884](https://github.com/getsops/sops/pull/1884),
+  [#1888](https://github.com/getsops/sops/pull/1888),
+  [#1893](https://github.com/getsops/sops/pull/1893),
+  [#1908](https://github.com/getsops/sops/pull/1908),
+  [#1912](https://github.com/getsops/sops/pull/1912),
+  [#1917](https://github.com/getsops/sops/pull/1917),
+  [#1920](https://github.com/getsops/sops/pull/1920),
+  [#1923](https://github.com/getsops/sops/pull/1923),
+  [#1956](https://github.com/getsops/sops/pull/1956),
+  [#1958](https://github.com/getsops/sops/pull/1958)).
 * Docs improvements ([#1844](https://github.com/getsops/sops/pull/1844),
-  [#1863](https://github.com/getsops/sops/pull/1863), [#1881](https://github.com/getsops/sops/pull/1881),
-  [#1885](https://github.com/getsops/sops/pull/1885), [#1897](https://github.com/getsops/sops/pull/1897),
-  [#1895](https://github.com/getsops/sops/pull/1895), [#1909](https://github.com/getsops/sops/pull/1909),
-  [#1928](https://github.com/getsops/sops/pull/1928), [#1944](https://github.com/getsops/sops/pull/1944),
+  [#1863](https://github.com/getsops/sops/pull/1863),
+  [#1881](https://github.com/getsops/sops/pull/1881),
+  [#1885](https://github.com/getsops/sops/pull/1885),
+  [#1897](https://github.com/getsops/sops/pull/1897),
+  [#1895](https://github.com/getsops/sops/pull/1895),
+  [#1909](https://github.com/getsops/sops/pull/1909),
+  [#1928](https://github.com/getsops/sops/pull/1928),
+  [#1944](https://github.com/getsops/sops/pull/1944),
   [#1946](https://github.com/getsops/sops/pull/1946)).
 * Collect age identity loading errors and only report if decryption failed
   ([#1898](https://github.com/getsops/sops/pull/1898)).
-* Improve age identity loading so that age identities are loaded from all locations
-  ([#1931](https://github.com/getsops/sops/pull/1931)).
-* When encrypting, parse `.sops.yaml` creation rule keys once ([#1939](https://github.com/getsops/sops/pull/1939)).
-* Replace deprecated Go dependency gopkg.in/yaml.v3 with go.yaml.in/yaml/v3 ([#1934](https://github.com/getsops/sops/pull/1934)).
+* Improve age identity loading so that age identities are loaded from all
+  locations ([#1931](https://github.com/getsops/sops/pull/1931)).
+* When encrypting, parse `.sops.yaml` creation rule keys once
+  ([#1939](https://github.com/getsops/sops/pull/1939)).
+* Replace deprecated Go dependency gopkg.in/yaml.v3 with go.yaml.in/yaml/v3
+  ([#1934](https://github.com/getsops/sops/pull/1934)).
 * Improve `float` and `time.Time` formatting when converting to strings
-  for DotEnv and INI files ([#1929](https://github.com/getsops/sops/pull/1929)).
+  for DotEnv and INI files
+  ([#1929](https://github.com/getsops/sops/pull/1929)).
 
 <!--
-Allow to encrypt and decrypt with context ([#1848](https://github.com/getsops/sops/pull/1848)).
-Allow to inject custom HTTP client for AWS, Azure, GCP, and HashiCorp ([#1838](https://github.com/getsops/sops/pull/1838)).
+Allow to encrypt and decrypt with context
+([#1848](https://github.com/getsops/sops/pull/1848)).
+Allow to inject custom HTTP client for AWS, Azure, GCP, and HashiCorp
+([#1838](https://github.com/getsops/sops/pull/1838)).
 -->
 
 Bugfixes:
 
-* Fix Shamir threshold encoding for INI and ENV files ([#1899](https://github.com/getsops/sops/pull/1899)).
-* Fix detection logic for destination rules to detect all conflicts ([#1936](https://github.com/getsops/sops/pull/1936)).
-* Fix converting integers to strings ([#1929](https://github.com/getsops/sops/pull/1929)).
-* Fix keyservice client for Unix domain sockets ([#1910](https://github.com/getsops/sops/pull/1910)).
+* Fix Shamir threshold encoding for INI and ENV files
+  ([#1899](https://github.com/getsops/sops/pull/1899)).
+* Fix detection logic for destination rules to detect all conflicts
+  ([#1936](https://github.com/getsops/sops/pull/1936)).
+* Fix converting integers to strings
+  ([#1929](https://github.com/getsops/sops/pull/1929)).
+* Fix keyservice client for Unix domain sockets
+  ([#1910](https://github.com/getsops/sops/pull/1910)).
 
 Project changes:
 
-* Go 1.23 is no longer support; CI now also builds with Go 1.25 ([#1945](https://github.com/getsops/sops/pull/1945)).
+* Go 1.23 is no longer support; CI now also builds with Go 1.25
+  ([#1945](https://github.com/getsops/sops/pull/1945)).
 * CI dependency updates ([#1849](https://github.com/getsops/sops/pull/1849),
-  [#1852](https://github.com/getsops/sops/pull/1852), [#1857](https://github.com/getsops/sops/pull/1857),
-  [#1866](https://github.com/getsops/sops/pull/1866), [#1869](https://github.com/getsops/sops/pull/1869),
-  [#1874](https://github.com/getsops/sops/pull/1874), [#1879](https://github.com/getsops/sops/pull/1879),
-  [#1883](https://github.com/getsops/sops/pull/1883), [#1889](https://github.com/getsops/sops/pull/1889),
-  [#1905](https://github.com/getsops/sops/pull/1905), [#1911](https://github.com/getsops/sops/pull/1911),
-  [#1916](https://github.com/getsops/sops/pull/1916), [#1922](https://github.com/getsops/sops/pull/1922),
-  [#1937](https://github.com/getsops/sops/pull/1937), [#1949](https://github.com/getsops/sops/pull/1949),
+  [#1852](https://github.com/getsops/sops/pull/1852),
+  [#1857](https://github.com/getsops/sops/pull/1857),
+  [#1866](https://github.com/getsops/sops/pull/1866),
+  [#1869](https://github.com/getsops/sops/pull/1869),
+  [#1874](https://github.com/getsops/sops/pull/1874),
+  [#1879](https://github.com/getsops/sops/pull/1879),
+  [#1883](https://github.com/getsops/sops/pull/1883),
+  [#1889](https://github.com/getsops/sops/pull/1889),
+  [#1905](https://github.com/getsops/sops/pull/1905),
+  [#1911](https://github.com/getsops/sops/pull/1911),
+  [#1916](https://github.com/getsops/sops/pull/1916),
+  [#1922](https://github.com/getsops/sops/pull/1922),
+  [#1937](https://github.com/getsops/sops/pull/1937),
+  [#1949](https://github.com/getsops/sops/pull/1949),
   [#1955](https://github.com/getsops/sops/pull/1955)).
-* Rust dependency updates for functional tests ([#1853](https://github.com/getsops/sops/pull/1853),
-  [#1907](https://github.com/getsops/sops/pull/1907), [#1921](https://github.com/getsops/sops/pull/1921),
-  [#1948](https://github.com/getsops/sops/pull/1948), [#1954](https://github.com/getsops/sops/pull/1954)).
-* Update authors in main.go ([#1860](https://github.com/getsops/sops/pull/1860)).
+* Rust dependency updates for functional tests
+  ([#1853](https://github.com/getsops/sops/pull/1853),
+  [#1907](https://github.com/getsops/sops/pull/1907),
+  [#1921](https://github.com/getsops/sops/pull/1921),
+  [#1948](https://github.com/getsops/sops/pull/1948),
+  [#1954](https://github.com/getsops/sops/pull/1954)).
+* Update authors in main.go
+  ([#1860](https://github.com/getsops/sops/pull/1860)).
 
 ## 3.10.2
 
 Bugfixes:
 
-* Remove reserved keyword check from YAML store, which hid a better check ([#1829](https://github.com/getsops/sops/pull/1829)).
+* Remove reserved keyword check from YAML store, which hid a better check
+  ([#1829](https://github.com/getsops/sops/pull/1829)).
 
 Improvements:
 
-* Dependency updates ([#1834](https://github.com/getsops/sops/pull/1834), [#1839](https://github.com/getsops/sops/pull/1839)).
-* Use latest 1.24 Go version for release build ([#1836](https://github.com/getsops/sops/pull/1836)).
+* Dependency updates ([#1834](https://github.com/getsops/sops/pull/1834),
+  [#1839](https://github.com/getsops/sops/pull/1839)).
+* Use latest 1.24 Go version for release build
+  ([#1836](https://github.com/getsops/sops/pull/1836)).
 
 Project changes:
 
@@ -265,11 +373,13 @@ Project changes:
 This is a re-release of 3.10.0 with no code changes.
 
 Due to a failure during the 3.10.0 release, the
-[commit cached by the Go infrastructure for 3.10.0](https://github.com/getsops/sops/commit/200bb6d8ab4063330bc99697255b3583501b3877)
+[commit cached by the Go infrastructure for
+3.10.0](https://github.com/getsops/sops/commit/200bb6d8ab4063330bc99697255b3583501b3877)
 is different from
-[the commit tagged in the repository](https://github.com/getsops/sops/commit/4ed7060298fbcd00cafa359121ca62091b85bb6f).
-To avoid confusion, we decided to push another release where the tag in the repository
-will coincide with the commit cached by Go.
+[the commit tagged in the
+repository](https://github.com/getsops/sops/commit/4ed7060298fbcd00cafa359121ca62091b85bb6f).
+To avoid confusion, we decided to push another release where the tag in the
+repository will coincide with the commit cached by Go.
 
 Project changes:
 
@@ -279,128 +389,184 @@ Project changes:
 
 Security fixes:
 
-* Cherry-pick a fix for a timing vulnerability in the Shamir Secret Sharing code.
-  The code was vendored from HashiCorp's Vault project, and the issue was fixed
-  there two years ago; see [GHSA-vq4h-9ghm-qmrr](https://github.com/advisories/GHSA-vq4h-9ghm-qmrr)
+* Cherry-pick a fix for a timing vulnerability in the Shamir Secret Sharing
+  code. The code was vendored from HashiCorp's Vault project, and the issue
+  was fixed there two years ago; see
+  [GHSA-vq4h-9ghm-qmrr](https://github.com/advisories/GHSA-vq4h-9ghm-qmrr)
   for details ([#1813](https://github.com/getsops/sops/pull/1813)).
 
 Features:
 
-* Add `--input-type` option for `sops filestatus` subcommand ([#1601](https://github.com/getsops/sops/pull/1601)).
-* Allow to set the editor `sops` should use with the `SOPS_EDITOR` environment variable.
-  If not set, `sops` falls back to `EDITOR` as before ([#1611](https://github.com/getsops/sops/pull/1611)).
-* Allow users to disable the latest version check with the environment variable `SOPS_DISABLE_VERSION_CHECK`.
+* Add `--input-type` option for `sops filestatus` subcommand
+  ([#1601](https://github.com/getsops/sops/pull/1601)).
+* Allow to set the editor `sops` should use with the `SOPS_EDITOR` environment
+  variable. If not set, `sops` falls back to `EDITOR` as before
+  ([#1611](https://github.com/getsops/sops/pull/1611)).
+* Allow users to disable the latest version check with the environment variable
+  `SOPS_DISABLE_VERSION_CHECK`.
   Setting it to `1`, `t`, `T`, `TRUE`, `true`, or `True` explicitly
   disables the check ([#1684](https://github.com/getsops/sops/pull/1684)).
-* Allow users to explicitly enable the latest version check with the `--check-for-updates`
-  option ([#1816](https://github.com/getsops/sops/pull/1816)).
-* Add duplicate section support for INI store ([#1452](https://github.com/getsops/sops/pull/1452)).
-* Add check to prevent duplicate keys in YAML files ([#1203](https://github.com/getsops/sops/pull/1203)).
-* Add `--same-process` option for the `sops exec-env` to use the `execve` syscall
-  instead of starting the command in a child process ([#880](https://github.com/getsops/sops/pull/880)).
+* Allow users to explicitly enable the latest version check with the
+  `--check-for-updates` option
+  ([#1816](https://github.com/getsops/sops/pull/1816)).
+* Add duplicate section support for INI store
+  ([#1452](https://github.com/getsops/sops/pull/1452)).
+* Add check to prevent duplicate keys in YAML files
+  ([#1203](https://github.com/getsops/sops/pull/1203)).
+* Add `--same-process` option for the `sops exec-env` to use the `execve`
+  syscall instead of starting the command in a child process
+  ([#880](https://github.com/getsops/sops/pull/880)).
 * Add `--idempotent` option for the `sops set` subcommand that will only
-  write the file if a change happened ([#1754](https://github.com/getsops/sops/pull/1754)).
+  write the file if a change happened
+  ([#1754](https://github.com/getsops/sops/pull/1754)).
 * Encrypt and decrypt `time.Time` objects that can appear in YAML files
-  when using dates and timestamps ([#1759](https://github.com/getsops/sops/pull/1759)).
+  when using dates and timestamps
+  ([#1759](https://github.com/getsops/sops/pull/1759)).
 * Allow to encrypt and decrypt from `stdin` without having to provide
   platform-specific device names. This only works when using the
-  `sops encrypt` and `sops decrypt` subcommands ([#1690](https://github.com/getsops/sops/pull/1690)).
+  `sops encrypt` and `sops decrypt` subcommands
+  ([#1690](https://github.com/getsops/sops/pull/1690)).
 * Allow to set the SOPS config location with the environment variable
   `SOPS_CONFIG` ([#1701](https://github.com/getsops/sops/pull/1701)).
-* Support the `--config` option in the `sops publish` subcommand ([#1779](https://github.com/getsops/sops/pull/1779)).
-* Omit empty master key metadata from encrypted files ([#1571](https://github.com/getsops/sops/pull/1571)).
+* Support the `--config` option in the `sops publish` subcommand
+  ([#1779](https://github.com/getsops/sops/pull/1779)).
+* Omit empty master key metadata from encrypted files
+  ([#1571](https://github.com/getsops/sops/pull/1571)).
 * Add SSH support for Age ([#1692](https://github.com/getsops/sops/pull/1692)).
-* Support Age identities with passphrases ([#1400](https://github.com/getsops/sops/pull/1400)).
+* Support Age identities with passphrases
+  ([#1400](https://github.com/getsops/sops/pull/1400)).
 * Add Age plugin support ([#1641](https://github.com/getsops/sops/pull/1641)).
-* Allow to set the `SOPS_AGE_KEY_CMD` environment variable to an executable that
-  returns Age keys ([#1811](https://github.com/getsops/sops/pull/1811)).
+* Allow to set the `SOPS_AGE_KEY_CMD` environment variable to an executable
+  that returns Age keys
+  ([#1811](https://github.com/getsops/sops/pull/1811)).
 * Add support for `oauth2.TokenSource` injection from key service clients in
   GCP KMS ([#1794](https://github.com/getsops/sops/pull/1794)).
-* Support `GOOGLE_OAUTH_ACCESS_TOKEN` for GCP KMS ([#1578](https://github.com/getsops/sops/pull/1578)).
+* Support `GOOGLE_OAUTH_ACCESS_TOKEN` for GCP KMS
+  ([#1578](https://github.com/getsops/sops/pull/1578)).
 
 Improvements:
 
-* Dependency updates ([#1743](https://github.com/getsops/sops/pull/1743), [#1745](https://github.com/getsops/sops/pull/1745),
-  [#1751](https://github.com/getsops/sops/pull/1751), [#1763](https://github.com/getsops/sops/pull/1763),
-  [#1769](https://github.com/getsops/sops/pull/1769), [#1773](https://github.com/getsops/sops/pull/1773),
-  [#1784](https://github.com/getsops/sops/pull/1784), [#1797](https://github.com/getsops/sops/pull/1797),
-  [#1802](https://github.com/getsops/sops/pull/1802), [#1806](https://github.com/getsops/sops/pull/1806),
-  [#1809](https://github.com/getsops/sops/pull/1809), [#1814](https://github.com/getsops/sops/pull/1814)).
+* Dependency updates ([#1743](https://github.com/getsops/sops/pull/1743),
+  [#1745](https://github.com/getsops/sops/pull/1745),
+  [#1751](https://github.com/getsops/sops/pull/1751),
+  [#1763](https://github.com/getsops/sops/pull/1763),
+  [#1769](https://github.com/getsops/sops/pull/1769),
+  [#1773](https://github.com/getsops/sops/pull/1773),
+  [#1784](https://github.com/getsops/sops/pull/1784),
+  [#1797](https://github.com/getsops/sops/pull/1797),
+  [#1802](https://github.com/getsops/sops/pull/1802),
+  [#1806](https://github.com/getsops/sops/pull/1806),
+  [#1809](https://github.com/getsops/sops/pull/1809),
+  [#1814](https://github.com/getsops/sops/pull/1814)).
 * Fix typos ([#1765](https://github.com/getsops/sops/pull/1765)).
-* Make sure that tests do not pick up `keys.txt` from user's `$HOME` dir ([#1766](https://github.com/getsops/sops/pull/1766)).
-* Consolidate passphrase reading functionality in Age code ([#1775](https://github.com/getsops/sops/pull/1775)).
-* Fix some problems reported by the `staticcheck` linter ([#1780](https://github.com/getsops/sops/pull/1780)).
-* Improve documentation of Shamir Secret Sharing code to ease maintenance ([#1813](https://github.com/getsops/sops/pull/1813)).
-* Make sure all files are properly formatted ([#1817](https://github.com/getsops/sops/pull/1817)).
+* Make sure that tests do not pick up `keys.txt` from user's `$HOME` dir
+  ([#1766](https://github.com/getsops/sops/pull/1766)).
+* Consolidate passphrase reading functionality in Age code
+  ([#1775](https://github.com/getsops/sops/pull/1775)).
+* Fix some problems reported by the `staticcheck` linter
+  ([#1780](https://github.com/getsops/sops/pull/1780)).
+* Improve documentation of Shamir Secret Sharing code to ease maintenance
+  ([#1813](https://github.com/getsops/sops/pull/1813)).
+* Make sure all files are properly formatted
+  ([#1817](https://github.com/getsops/sops/pull/1817)).
 * `sops` now warns if it finds a `.sops.yml` file while searching for a
-  `.sops.yaml` config file ([#1820](https://github.com/getsops/sops/pull/1820)).
+  `.sops.yaml` config file
+  ([#1820](https://github.com/getsops/sops/pull/1820)).
 
 Bugfixes:
 
-* Add trailing newline at the end of JSON files ([#1476](https://github.com/getsops/sops/pull/1476)).
-* Check GnuPG decryption result for non-empty size. Certain older versions return
-  an empty result with a successful return code when a AEAD cipher from a newer
-  version was used ([#1776](https://github.com/getsops/sops/pull/1776)).
-* Fix caching of `Metadata.DataKey` ([#1781](https://github.com/getsops/sops/pull/1781)).
-* If `--filename-override` is specified, convert it to an absolute path same as regular
-  filenames ([#1793](https://github.com/getsops/sops/pull/1793)).
+* Add trailing newline at the end of JSON files
+  ([#1476](https://github.com/getsops/sops/pull/1476)).
+* Check GnuPG decryption result for non-empty size. Certain older versions
+  return an empty result with a successful return code when a AEAD cipher
+  from a newer version was used
+  ([#1776](https://github.com/getsops/sops/pull/1776)).
+* Fix caching of `Metadata.DataKey`
+  ([#1781](https://github.com/getsops/sops/pull/1781)).
+* If `--filename-override` is specified, convert it to an absolute path same as
+  regular filenames ([#1793](https://github.com/getsops/sops/pull/1793)).
 
 Deprecations:
 
 * The current behavior that `sops --version` always checks whether the current
-  version is the latest is deprecated and will no longer be the default eventually.
-  It is best to right now always specify `--disable-version-check` or `--check-for-updates`
-  to `sops --version`, or alternatively set the environment variable `SOPS_DISABLE_VERSION_CHECK=true`
-  to already get the planned default behavior today. ([#1816](https://github.com/getsops/sops/pull/1816)).
+  version is the latest is deprecated and will no longer be the default
+  eventually. It is best to right now always specify `--disable-version-check`
+  or `--check-for-updates` to `sops --version`, or alternatively set the
+  environment variable `SOPS_DISABLE_VERSION_CHECK=true` to already get the
+  planned default behavior today.
+  ([#1816](https://github.com/getsops/sops/pull/1816)).
 
 Project changes:
 
-* Go 1.22 is no longer support; CI now also builds with Go 1.24 ([#1819](https://github.com/getsops/sops/pull/1819)).
+* Go 1.22 is no longer support; CI now also builds with Go 1.24
+  ([#1819](https://github.com/getsops/sops/pull/1819)).
 * CI dependency updates ([#1746](https://github.com/getsops/sops/pull/1746),
-  [#1750](https://github.com/getsops/sops/pull/1750), [#1770](https://github.com/getsops/sops/pull/1770),
-  [#1782](https://github.com/getsops/sops/pull/1782), [#1795](https://github.com/getsops/sops/pull/1795),
-  [#1801](https://github.com/getsops/sops/pull/1801), [#1808](https://github.com/getsops/sops/pull/1808)).
-* Rust dependency updates for functional tests ([#1744](https://github.com/getsops/sops/pull/1744),
-  [#1762](https://github.com/getsops/sops/pull/1762), [#1768](https://github.com/getsops/sops/pull/1768),
-  [#1783](https://github.com/getsops/sops/pull/1783), [#1796](https://github.com/getsops/sops/pull/1796),
-  [#1800](https://github.com/getsops/sops/pull/1800), [#1807](https://github.com/getsops/sops/pull/1807)).
-* Bump Rust version for functional tests to 1.85 ([#1783](https://github.com/getsops/sops/pull/1783)).
-* Release environment updates ([#1700](https://github.com/getsops/sops/pull/1700),
+  [#1750](https://github.com/getsops/sops/pull/1750),
+  [#1770](https://github.com/getsops/sops/pull/1770),
+  [#1782](https://github.com/getsops/sops/pull/1782),
+  [#1795](https://github.com/getsops/sops/pull/1795),
+  [#1801](https://github.com/getsops/sops/pull/1801),
+  [#1808](https://github.com/getsops/sops/pull/1808)).
+* Rust dependency updates for functional tests
+  ([#1744](https://github.com/getsops/sops/pull/1744),
+  [#1762](https://github.com/getsops/sops/pull/1762),
+  [#1768](https://github.com/getsops/sops/pull/1768),
+  [#1783](https://github.com/getsops/sops/pull/1783),
+  [#1796](https://github.com/getsops/sops/pull/1796),
+  [#1800](https://github.com/getsops/sops/pull/1800),
+  [#1807](https://github.com/getsops/sops/pull/1807)).
+* Bump Rust version for functional tests to 1.85
+  ([#1783](https://github.com/getsops/sops/pull/1783)).
+* Release environment updates
+  ([#1700](https://github.com/getsops/sops/pull/1700),
   [#1761](https://github.com/getsops/sops/pull/1761)).
-* The changelog is now a MarkDown document ([#1741](https://github.com/getsops/sops/pull/1741)).
-* We now also build a Windows ARM64 binary ([#1791](https://github.com/getsops/sops/pull/1791)).
-* In the `updatekey.Opts` structure, `GroupQuorum` was renamed to `ShamirThreshold`
-  ([#1631](https://github.com/getsops/sops/pull/1631)).
-* Produce multiple Windows binaries ([#1823](https://github.com/getsops/sops/pull/1823)).
+* The changelog is now a MarkDown document
+  ([#1741](https://github.com/getsops/sops/pull/1741)).
+* We now also build a Windows ARM64 binary
+  ([#1791](https://github.com/getsops/sops/pull/1791)).
+* In the `updatekey.Opts` structure, `GroupQuorum` was renamed to
+  `ShamirThreshold` ([#1631](https://github.com/getsops/sops/pull/1631)).
+* Produce multiple Windows binaries
+  ([#1823](https://github.com/getsops/sops/pull/1823)).
 
 ## 3.9.4
 
 Improvements:
 
-* Dependency updates ([#1727](https://github.com/getsops/sops/pull/1727), [#1732](https://github.com/getsops/sops/pull/1732),
-  [#1734](https://github.com/getsops/sops/pull/1734), [#1739](https://github.com/getsops/sops/pull/1739)).
+* Dependency updates ([#1727](https://github.com/getsops/sops/pull/1727),
+  [#1732](https://github.com/getsops/sops/pull/1732),
+  [#1734](https://github.com/getsops/sops/pull/1734),
+  [#1739](https://github.com/getsops/sops/pull/1739)).
 
 Bugfixes:
 
-* Prevent key deduplication to identify different AWS KMS keys that only differ by
-  role, context, or profile ([#1733](https://github.com/getsops/sops/pull/1733)).
-* Update part of Azure SDK which prevented decryption in some cases ([#1695](https://github.com/getsops/sops/issue/1695),
+* Prevent key deduplication to identify different AWS KMS keys that only differ
+  by role, context, or profile
+  ([#1733](https://github.com/getsops/sops/pull/1733)).
+* Update part of Azure SDK which prevented decryption in some cases
+  ([#1695](https://github.com/getsops/sops/issue/1695),
   [#1734](https://github.com/getsops/sops/pull/1734)).
 
 Project changes:
 
-* CI dependency updates ([#1730](https://github.com/getsops/sops/pull/1730), [#1738](https://github.com/getsops/sops/pull/1738)).
-* Rust dependency updates ([#1728](https://github.com/getsops/sops/pull/1728), [#1731](https://github.com/getsops/sops/pull/1731),
+* CI dependency updates ([#1730](https://github.com/getsops/sops/pull/1730),
+  [#1738](https://github.com/getsops/sops/pull/1738)).
+* Rust dependency updates ([#1728](https://github.com/getsops/sops/pull/1728),
+  [#1731](https://github.com/getsops/sops/pull/1731),
   [#1735](https://github.com/getsops/sops/pull/1735)).
 
 ## 3.9.3
 
 Improvements:
 
-* Dependency updates ([#1699](https://github.com/getsops/sops/pull/1699), [#1703](https://github.com/getsops/sops/pull/1703),
-  [#1710](https://github.com/getsops/sops/pull/1710), [#1714](https://github.com/getsops/sops/pull/1714),
-  [#1715](https://github.com/getsops/sops/pull/1715), [#1723](https://github.com/getsops/sops/pull/1723)).
-* Add `persist-credentials: false` to checkouts in GitHub workflows ([#1704](https://github.com/getsops/sops/pull/1704)).
+* Dependency updates ([#1699](https://github.com/getsops/sops/pull/1699),
+  [#1703](https://github.com/getsops/sops/pull/1703),
+  [#1710](https://github.com/getsops/sops/pull/1710),
+  [#1714](https://github.com/getsops/sops/pull/1714),
+  [#1715](https://github.com/getsops/sops/pull/1715),
+  [#1723](https://github.com/getsops/sops/pull/1723)).
+* Add `persist-credentials: false` to checkouts in GitHub workflows
+  ([#1704](https://github.com/getsops/sops/pull/1704)).
 * Tests: use container images from
   [https://github.com/getsops/ci-container-images](https://github.com/getsops/ci-container-images)
   ([#1722](https://github.com/getsops/sops/pull/1722)).
@@ -408,91 +574,141 @@ Improvements:
 Bugfixes:
 
 * GnuPG: do not incorrectly trim fingerprint in presence of exclamation
-  marks for specfic subkey selection ([#1720](https://github.com/getsops/sops/pull/1720)).
-* `updatekeys` subcommand: fix `--input-type` CLI flag being ignored ([#1721](https://github.com/getsops/sops/pull/1721)).
+  marks for specfic subkey selection
+  ([#1720](https://github.com/getsops/sops/pull/1720)).
+* `updatekeys` subcommand: fix `--input-type` CLI flag being ignored
+  ([#1721](https://github.com/getsops/sops/pull/1721)).
 
 Project changes:
 
-* CI dependency updates ([#1698](https://github.com/getsops/sops/pull/1698), [#1708](https://github.com/getsops/sops/pull/1708),
+* CI dependency updates ([#1698](https://github.com/getsops/sops/pull/1698),
+  [#1708](https://github.com/getsops/sops/pull/1708),
   [#1717](https://github.com/getsops/sops/pull/1717)).
-* Rust dependency updates ([#1707](https://github.com/getsops/sops/pull/1707), [#1716](https://github.com/getsops/sops/pull/1716),
+* Rust dependency updates ([#1707](https://github.com/getsops/sops/pull/1707),
+  [#1716](https://github.com/getsops/sops/pull/1716),
   [#1725](https://github.com/getsops/sops/pull/1725)).
 
 ## 3.9.2
 
 Improvements:
 
-* Dependency updates ([#1645](https://github.com/getsops/sops/pull/1645), [#1649](https://github.com/getsops/sops/pull/1649),
-  [#1653](https://github.com/getsops/sops/pull/1653), [#1662](https://github.com/getsops/sops/pull/1662),
-  [#1686](https://github.com/getsops/sops/pull/1686), [#1693](https://github.com/getsops/sops/pull/1693)).
-* Update compiled Protobuf definitions ([#1688](https://github.com/getsops/sops/pull/1688)).
-* Remove unused variables and simplify conditional (##1687).
+* Dependency updates ([#1645](https://github.com/getsops/sops/pull/1645),
+  [#1649](https://github.com/getsops/sops/pull/1649),
+  [#1653](https://github.com/getsops/sops/pull/1653),
+  [#1662](https://github.com/getsops/sops/pull/1662),
+  [#1686](https://github.com/getsops/sops/pull/1686),
+  [#1693](https://github.com/getsops/sops/pull/1693)).
+* Update compiled Protobuf definitions
+  ([#1688](https://github.com/getsops/sops/pull/1688)).
+* Remove unused variables and simplify conditional
+  ([#1687](https://github.com/getsops/sops/pull/1687)).
 
 Bugfixes:
 
-* Handle whitespace in Azure Key Vault URLs ([#1652](https://github.com/getsops/sops/pull/1652)).
-* Correctly handle comments during JSON serialization ([#1647](https://github.com/getsops/sops/pull/1647)).
+* Handle whitespace in Azure Key Vault URLs
+  ([#1652](https://github.com/getsops/sops/pull/1652)).
+* Correctly handle comments during JSON serialization
+  ([#1647](https://github.com/getsops/sops/pull/1647)).
 
 Project changes:
 
-* CI dependency updates ([#1644](https://github.com/getsops/sops/pull/1644), [#1648](https://github.com/getsops/sops/pull/1648),
-  [#1654](https://github.com/getsops/sops/pull/1654), [#1664](https://github.com/getsops/sops/pull/1664),
-  [#1673](https://github.com/getsops/sops/pull/1673), [#1677](https://github.com/getsops/sops/pull/1677),
+* CI dependency updates ([#1644](https://github.com/getsops/sops/pull/1644),
+  [#1648](https://github.com/getsops/sops/pull/1648),
+  [#1654](https://github.com/getsops/sops/pull/1654),
+  [#1664](https://github.com/getsops/sops/pull/1664),
+  [#1673](https://github.com/getsops/sops/pull/1673),
+  [#1677](https://github.com/getsops/sops/pull/1677),
   [#1685](https://github.com/getsops/sops/pull/1685)).
-* Rust dependency updates ([#1655](https://github.com/getsops/sops/pull/1655), [#1663](https://github.com/getsops/sops/pull/1663),
-  [#1670](https://github.com/getsops/sops/pull/1670), [#1676](https://github.com/getsops/sops/pull/1676),
+* Rust dependency updates ([#1655](https://github.com/getsops/sops/pull/1655),
+  [#1663](https://github.com/getsops/sops/pull/1663),
+  [#1670](https://github.com/getsops/sops/pull/1670),
+  [#1676](https://github.com/getsops/sops/pull/1676),
   [#1689](https://github.com/getsops/sops/pull/1689)).
-* Update and improve Protobuf code generation ([#1688](https://github.com/getsops/sops/pull/1688)).
+* Update and improve Protobuf code generation
+  ([#1688](https://github.com/getsops/sops/pull/1688)).
 
 ## 3.9.1
 
 Improvements:
 
-* Dependency updates ([#1550](https://github.com/getsops/sops/pull/1550), [#1554](https://github.com/getsops/sops/pull/1554),
-  [#1558](https://github.com/getsops/sops/pull/1558), [#1562](https://github.com/getsops/sops/pull/1562),
-  [#1565](https://github.com/getsops/sops/pull/1565), [#1568](https://github.com/getsops/sops/pull/1568),
-  [#1575](https://github.com/getsops/sops/pull/1575), [#1581](https://github.com/getsops/sops/pull/1581),
-  [#1589](https://github.com/getsops/sops/pull/1589), [#1593](https://github.com/getsops/sops/pull/1593),
-  [#1602](https://github.com/getsops/sops/pull/1602), [#1603](https://github.com/getsops/sops/pull/1603),
-  [#1618](https://github.com/getsops/sops/pull/1618), [#1629](https://github.com/getsops/sops/pull/1629),
-  [#1635](https://github.com/getsops/sops/pull/1635), [#1639](https://github.com/getsops/sops/pull/1639),
+* Dependency updates ([#1550](https://github.com/getsops/sops/pull/1550),
+  [#1554](https://github.com/getsops/sops/pull/1554),
+  [#1558](https://github.com/getsops/sops/pull/1558),
+  [#1562](https://github.com/getsops/sops/pull/1562),
+  [#1565](https://github.com/getsops/sops/pull/1565),
+  [#1568](https://github.com/getsops/sops/pull/1568),
+  [#1575](https://github.com/getsops/sops/pull/1575),
+  [#1581](https://github.com/getsops/sops/pull/1581),
+  [#1589](https://github.com/getsops/sops/pull/1589),
+  [#1593](https://github.com/getsops/sops/pull/1593),
+  [#1602](https://github.com/getsops/sops/pull/1602),
+  [#1603](https://github.com/getsops/sops/pull/1603),
+  [#1618](https://github.com/getsops/sops/pull/1618),
+  [#1629](https://github.com/getsops/sops/pull/1629),
+  [#1635](https://github.com/getsops/sops/pull/1635),
+  [#1639](https://github.com/getsops/sops/pull/1639),
   [#1640](https://github.com/getsops/sops/pull/1640)).
-* Clarify naming of the configuration file in the documentation ([#1569](https://github.com/getsops/sops/pull/1569)).
+* Clarify naming of the configuration file in the documentation
+  ([#1569](https://github.com/getsops/sops/pull/1569)).
 * Build with Go 1.22 ([#1589](https://github.com/getsops/sops/pull/1589)).
-* Specify filename of missing file in error messages ([#1625](https://github.com/getsops/sops/pull/1625)).
-* `updatekeys` subcommand: show changes in `shamir_threshold` ([#1609](https://github.com/getsops/sops/pull/1609)).
+* Specify filename of missing file in error messages
+  ([#1625](https://github.com/getsops/sops/pull/1625)).
+* `updatekeys` subcommand: show changes in `shamir_threshold`
+  ([#1609](https://github.com/getsops/sops/pull/1609)).
 
 Bugfixes:
 
-* Fix the URL used for determining the latest SOPS version ([#1553](https://github.com/getsops/sops/pull/1553)).
+* Fix the URL used for determining the latest SOPS version
+  ([#1553](https://github.com/getsops/sops/pull/1553)).
 * `updatekeys` subcommand: actually use option
-  `--shamir-secret-sharing-threshold` ([#1608](https://github.com/getsops/sops/pull/1608)).
-* Fix `--config` being ignored in subcommands by `loadConfig` ([#1613](https://github.com/getsops/sops/pull/1613)).
-* Allow `edit` subcommand to create files ([#1596](https://github.com/getsops/sops/pull/1596)).
-* Do not encrypt if a key group is empty, or there are no key groups ([#1600](https://github.com/getsops/sops/pull/1600)).
-* Do not ignore config errors when trying to parse a config file ([#1614](https://github.com/getsops/sops/pull/1614)).
+  `--shamir-secret-sharing-threshold`
+  ([#1608](https://github.com/getsops/sops/pull/1608)).
+* Fix `--config` being ignored in subcommands by `loadConfig`
+  ([#1613](https://github.com/getsops/sops/pull/1613)).
+* Allow `edit` subcommand to create files
+  ([#1596](https://github.com/getsops/sops/pull/1596)).
+* Do not encrypt if a key group is empty, or there are no key groups
+  ([#1600](https://github.com/getsops/sops/pull/1600)).
+* Do not ignore config errors when trying to parse a config file
+  ([#1614](https://github.com/getsops/sops/pull/1614)).
 
 Project changes:
 
-* CI dependency updates ([#1551](https://github.com/getsops/sops/pull/1551), [#1555](https://github.com/getsops/sops/pull/1555),
-  [#1559](https://github.com/getsops/sops/pull/1559), [#1564](https://github.com/getsops/sops/pull/1564),
-  [#1566](https://github.com/getsops/sops/pull/1566), [#1574](https://github.com/getsops/sops/pull/1574),
-  [#1584](https://github.com/getsops/sops/pull/1584), [#1586](https://github.com/getsops/sops/pull/1586),
-  [#1590](https://github.com/getsops/sops/pull/1590), [#1592](https://github.com/getsops/sops/pull/1592),
-  [#1619](https://github.com/getsops/sops/pull/1619), [#1628](https://github.com/getsops/sops/pull/1628),
+* CI dependency updates ([#1551](https://github.com/getsops/sops/pull/1551),
+  [#1555](https://github.com/getsops/sops/pull/1555),
+  [#1559](https://github.com/getsops/sops/pull/1559),
+  [#1564](https://github.com/getsops/sops/pull/1564),
+  [#1566](https://github.com/getsops/sops/pull/1566),
+  [#1574](https://github.com/getsops/sops/pull/1574),
+  [#1584](https://github.com/getsops/sops/pull/1584),
+  [#1586](https://github.com/getsops/sops/pull/1586),
+  [#1590](https://github.com/getsops/sops/pull/1590),
+  [#1592](https://github.com/getsops/sops/pull/1592),
+  [#1619](https://github.com/getsops/sops/pull/1619),
+  [#1628](https://github.com/getsops/sops/pull/1628),
   [#1634](https://github.com/getsops/sops/pull/1634)).
-* Improve CI workflows ([#1548](https://github.com/getsops/sops/pull/1548), [#1630](https://github.com/getsops/sops/pull/1630)).
-* Ignore user-set environment variable `SOPS_AGE_KEY_FILE` in tests ([#1595](https://github.com/getsops/sops/pull/1595)).
-* Add example of using Age recipients in `.sops.yaml` ([#1607](https://github.com/getsops/sops/pull/1607)).
-* Add linting check for Rust code formatting ([#1604](https://github.com/getsops/sops/pull/1604)).
-* Set Rust version globally via `rust-toolchain.toml` for functional tests ([#1612](https://github.com/getsops/sops/pull/1612)).
+* Improve CI workflows ([#1548](https://github.com/getsops/sops/pull/1548),
+  [#1630](https://github.com/getsops/sops/pull/1630)).
+* Ignore user-set environment variable `SOPS_AGE_KEY_FILE` in tests
+  ([#1595](https://github.com/getsops/sops/pull/1595)).
+* Add example of using Age recipients in `.sops.yaml`
+  ([#1607](https://github.com/getsops/sops/pull/1607)).
+* Add linting check for Rust code formatting
+  ([#1604](https://github.com/getsops/sops/pull/1604)).
+* Set Rust version globally via `rust-toolchain.toml` for functional tests
+  ([#1612](https://github.com/getsops/sops/pull/1612)).
 * Improve test coverage ([#1617](https://github.com/getsops/sops/pull/1617)).
-* Improve tests ([#1622](https://github.com/getsops/sops/pull/1622), [#1624](https://github.com/getsops/sops/pull/1624)).
+* Improve tests ([#1622](https://github.com/getsops/sops/pull/1622),
+  [#1624](https://github.com/getsops/sops/pull/1624)).
 * Simplify branch rules to check DCO and `check` task instead of an explicit
-  list of tasks in the CLI workflow ([#1621](https://github.com/getsops/sops/pull/1621)).
-* Build with Go 1.22 and 1.23 in CI and update Vault to 1.14 ([#1531](https://github.com/getsops/sops/pull/1531)).
-* Build release with Go 1.22 ([#1615](https://github.com/getsops/sops/pull/1615)).
-* Fix Dependabot config for Docker; add Dependabot config for Rust ([#1632](https://github.com/getsops/sops/pull/1632)).
+  list of tasks in the CLI workflow
+  ([#1621](https://github.com/getsops/sops/pull/1621)).
+* Build with Go 1.22 and 1.23 in CI and update Vault to 1.14
+  ([#1531](https://github.com/getsops/sops/pull/1531)).
+* Build release with Go 1.22
+  ([#1615](https://github.com/getsops/sops/pull/1615)).
+* Fix Dependabot config for Docker; add Dependabot config for Rust
+  ([#1632](https://github.com/getsops/sops/pull/1632)).
 * Lock Rust package versions for functional tests for improved
   reproducibility ([#1637](https://github.com/getsops/sops/pull/1637)).
 * Rust dependency updates ([#1638](https://github.com/getsops/sops/pull/1638)).
@@ -503,64 +719,98 @@ Features:
 
 * Add `--mac-only-encrypted` to compute MAC only over values which
   end up encrypted ([#973](https://github.com/getsops/sops/pull/973))
-* Allow configuration of indentation for YAML and JSON stores ([#1273](https://github.com/getsops/sops/pull/1273),
+* Allow configuration of indentation for YAML and JSON stores
+  ([#1273](https://github.com/getsops/sops/pull/1273),
   [#1372](https://github.com/getsops/sops/pull/1372))
-* Introduce a `--pristine` flag to `sops exec-env` ([#912](https://github.com/getsops/sops/pull/912))
-* Allow to pass multiple paths to `sops updatekeys` ([#1274](https://github.com/getsops/sops/pull/1274))
-* Allow to override `fileName` with different value ([#1332](https://github.com/getsops/sops/pull/1332))
-* Sort masterkeys according to `--decryption-order` ([#1345](https://github.com/getsops/sops/pull/1345))
+* Introduce a `--pristine` flag to `sops exec-env`
+  ([#912](https://github.com/getsops/sops/pull/912))
+* Allow to pass multiple paths to `sops updatekeys`
+  ([#1274](https://github.com/getsops/sops/pull/1274))
+* Allow to override `fileName` with different value
+  ([#1332](https://github.com/getsops/sops/pull/1332))
+* Sort masterkeys according to `--decryption-order`
+  ([#1345](https://github.com/getsops/sops/pull/1345))
 * Add separate subcommands for encryption, decryption, rotating, editing,
   and setting values ([#1391](https://github.com/getsops/sops/pull/1391))
 * Add `filestatus` command ([#545](https://github.com/getsops/sops/pull/545))
 * Add command `unset` ([#1475](https://github.com/getsops/sops/pull/1475))
-* Merge key for key groups and make keys unique ([#1493](https://github.com/getsops/sops/pull/1493))
-* Support using comments to select parts to encrypt ([#974](https://github.com/getsops/sops/pull/974),
+* Merge key for key groups and make keys unique
+  ([#1493](https://github.com/getsops/sops/pull/1493))
+* Support using comments to select parts to encrypt
+  ([#974](https://github.com/getsops/sops/pull/974),
   [#1392](https://github.com/getsops/sops/pull/1392))
 
 Deprecations:
 
-* Deprecate the `--background` option to `exec-env` and `exec-file` ([#1379](https://github.com/getsops/sops/pull/1379))
+* Deprecate the `--background` option to `exec-env` and `exec-file`
+  ([#1379](https://github.com/getsops/sops/pull/1379))
 
 Improvements:
 
-* Warn/fail if the wrong number of arguments is provided ([#1342](https://github.com/getsops/sops/pull/1342))
-* Warn if more than one command is used ([#1388](https://github.com/getsops/sops/pull/1388))
+* Warn/fail if the wrong number of arguments is provided
+  ([#1342](https://github.com/getsops/sops/pull/1342))
+* Warn if more than one command is used
+  ([#1388](https://github.com/getsops/sops/pull/1388))
 * Dependency updates ([#1327](https://github.com/getsops/sops/pull/1327),
-  [#1328](https://github.com/getsops/sops/pull/1328), [#1330](https://github.com/getsops/sops/pull/1330),
-  [#1336](https://github.com/getsops/sops/pull/1336), [#1334](https://github.com/getsops/sops/pull/1334),
-  [#1344](https://github.com/getsops/sops/pull/1344), [#1348](https://github.com/getsops/sops/pull/1348),
-  [#1354](https://github.com/getsops/sops/pull/1354), [#1357](https://github.com/getsops/sops/pull/1357),
-  [#1360](https://github.com/getsops/sops/pull/1360), [#1373](https://github.com/getsops/sops/pull/1373),
-  [#1381](https://github.com/getsops/sops/pull/1381), [#1383](https://github.com/getsops/sops/pull/1383),
-  [#1385](https://github.com/getsops/sops/pull/1385), [#1408](https://github.com/getsops/sops/pull/1408),
-  [#1428](https://github.com/getsops/sops/pull/1428), [#1429](https://github.com/getsops/sops/pull/1429),
-  [#1427](https://github.com/getsops/sops/pull/1427), [#1439](https://github.com/getsops/sops/pull/1439),
-  [#1454](https://github.com/getsops/sops/pull/1454), [#1460](https://github.com/getsops/sops/pull/1460),
-  [#1466](https://github.com/getsops/sops/pull/1466), [#1489](https://github.com/getsops/sops/pull/1489),
-  [#1519](https://github.com/getsops/sops/pull/1519), [#1525](https://github.com/getsops/sops/pull/1525),
-  [#1528](https://github.com/getsops/sops/pull/1528), [#1540](https://github.com/getsops/sops/pull/1540),
-  [#1543](https://github.com/getsops/sops/pull/1543), [#1545](https://github.com/getsops/sops/pull/1545))
+  [#1328](https://github.com/getsops/sops/pull/1328),
+  [#1330](https://github.com/getsops/sops/pull/1330),
+  [#1336](https://github.com/getsops/sops/pull/1336),
+  [#1334](https://github.com/getsops/sops/pull/1334),
+  [#1344](https://github.com/getsops/sops/pull/1344),
+  [#1348](https://github.com/getsops/sops/pull/1348),
+  [#1354](https://github.com/getsops/sops/pull/1354),
+  [#1357](https://github.com/getsops/sops/pull/1357),
+  [#1360](https://github.com/getsops/sops/pull/1360),
+  [#1373](https://github.com/getsops/sops/pull/1373),
+  [#1381](https://github.com/getsops/sops/pull/1381),
+  [#1383](https://github.com/getsops/sops/pull/1383),
+  [#1385](https://github.com/getsops/sops/pull/1385),
+  [#1408](https://github.com/getsops/sops/pull/1408),
+  [#1428](https://github.com/getsops/sops/pull/1428),
+  [#1429](https://github.com/getsops/sops/pull/1429),
+  [#1427](https://github.com/getsops/sops/pull/1427),
+  [#1439](https://github.com/getsops/sops/pull/1439),
+  [#1454](https://github.com/getsops/sops/pull/1454),
+  [#1460](https://github.com/getsops/sops/pull/1460),
+  [#1466](https://github.com/getsops/sops/pull/1466),
+  [#1489](https://github.com/getsops/sops/pull/1489),
+  [#1519](https://github.com/getsops/sops/pull/1519),
+  [#1525](https://github.com/getsops/sops/pull/1525),
+  [#1528](https://github.com/getsops/sops/pull/1528),
+  [#1540](https://github.com/getsops/sops/pull/1540),
+  [#1543](https://github.com/getsops/sops/pull/1543),
+  [#1545](https://github.com/getsops/sops/pull/1545))
 * Build with Go 1.21 ([#1427](https://github.com/getsops/sops/pull/1427))
 * Improve README.rst ([#1339](https://github.com/getsops/sops/pull/1339),
-  [#1399](https://github.com/getsops/sops/pull/1399), [#1350](https://github.com/getsops/sops/pull/1350))
-* Fix typos ([#1337](https://github.com/getsops/sops/pull/1337), [#1477](https://github.com/getsops/sops/pull/1477),
+  [#1399](https://github.com/getsops/sops/pull/1399),
+  [#1350](https://github.com/getsops/sops/pull/1350))
+* Fix typos ([#1337](https://github.com/getsops/sops/pull/1337),
+  [#1477](https://github.com/getsops/sops/pull/1477),
   [#1484](https://github.com/getsops/sops/pull/1484))
-* Polish the `sops help` output a bit ([#1341](https://github.com/getsops/sops/pull/1341),
+* Polish the `sops help` output a bit
+  ([#1341](https://github.com/getsops/sops/pull/1341),
   [#1544](https://github.com/getsops/sops/pull/1544))
 * Improve and fix tests ([#1346](https://github.com/getsops/sops/pull/1346),
-  [#1349](https://github.com/getsops/sops/pull/1349), [#1370](https://github.com/getsops/sops/pull/1370),
-  [#1390](https://github.com/getsops/sops/pull/1390), [#1396](https://github.com/getsops/sops/pull/1396),
+  [#1349](https://github.com/getsops/sops/pull/1349),
+  [#1370](https://github.com/getsops/sops/pull/1370),
+  [#1390](https://github.com/getsops/sops/pull/1390),
+  [#1396](https://github.com/getsops/sops/pull/1396),
   [#1492](https://github.com/getsops/sops/pull/1492))
-* Create a constant for the `sops` metadata key ([#1398](https://github.com/getsops/sops/pull/1398))
+* Create a constant for the `sops` metadata key
+  ([#1398](https://github.com/getsops/sops/pull/1398))
 * Refactoring: move extraction of encryption and rotation options to
   separate functions ([#1389](https://github.com/getsops/sops/pull/1389))
 
 Bug fixes:
 
-* Respect `aws_profile` from keygroup config ([#1049](https://github.com/getsops/sops/pull/1049))
-* Fix a bug where not having a config results in a panic ([#1371](https://github.com/getsops/sops/pull/1371))
-* Consolidate Flatten/Unflatten pre/post processing ([#1356](https://github.com/getsops/sops/pull/1356))
-* INI and DotEnv stores: `shamir_threshold` is an integer ([#1394](https://github.com/getsops/sops/pull/1394))
+* Respect `aws_profile` from keygroup config
+  ([#1049](https://github.com/getsops/sops/pull/1049))
+* Fix a bug where not having a config results in a panic
+  ([#1371](https://github.com/getsops/sops/pull/1371))
+* Consolidate Flatten/Unflatten pre/post processing
+  ([#1356](https://github.com/getsops/sops/pull/1356))
+* INI and DotEnv stores: `shamir_threshold` is an integer
+  ([#1394](https://github.com/getsops/sops/pull/1394))
 * Make check whether file contains invalid keys for encryption dependent
   on output store ([#1393](https://github.com/getsops/sops/pull/1393))
 * Do not panic if `updatekeys` is used with a config that has no creation
@@ -575,140 +825,215 @@ Bug fixes:
 Project changes:
 
 * CI dependency updates ([#1347](https://github.com/getsops/sops/pull/1347),
-  [#1359](https://github.com/getsops/sops/pull/1359), [#1376](https://github.com/getsops/sops/pull/1376),
-  [#1382](https://github.com/getsops/sops/pull/1382), [#1386](https://github.com/getsops/sops/pull/1386),
-  [#1425](https://github.com/getsops/sops/pull/1425), [#1432](https://github.com/getsops/sops/pull/1432),
-  [#1498](https://github.com/getsops/sops/pull/1498), [#1503](https://github.com/getsops/sops/pull/1503),
-  [#1508](https://github.com/getsops/sops/pull/1508), [#1510](https://github.com/getsops/sops/pull/1510),
-  [#1516](https://github.com/getsops/sops/pull/1516), [#1521](https://github.com/getsops/sops/pull/1521),
-  [#1492](https://github.com/getsops/sops/pull/1492), [#1534](https://github.com/getsops/sops/pull/1534))
-* Adjust Makefile to new goreleaser 6.0.0 release ([#1526](https://github.com/getsops/sops/pull/1526))
+  [#1359](https://github.com/getsops/sops/pull/1359),
+  [#1376](https://github.com/getsops/sops/pull/1376),
+  [#1382](https://github.com/getsops/sops/pull/1382),
+  [#1386](https://github.com/getsops/sops/pull/1386),
+  [#1425](https://github.com/getsops/sops/pull/1425),
+  [#1432](https://github.com/getsops/sops/pull/1432),
+  [#1498](https://github.com/getsops/sops/pull/1498),
+  [#1503](https://github.com/getsops/sops/pull/1503),
+  [#1508](https://github.com/getsops/sops/pull/1508),
+  [#1510](https://github.com/getsops/sops/pull/1510),
+  [#1516](https://github.com/getsops/sops/pull/1516),
+  [#1521](https://github.com/getsops/sops/pull/1521),
+  [#1492](https://github.com/getsops/sops/pull/1492),
+  [#1534](https://github.com/getsops/sops/pull/1534))
+* Adjust Makefile to new goreleaser 6.0.0 release
+  ([#1526](https://github.com/getsops/sops/pull/1526))
 
 ## 3.8.1
 
 Improvements:
 
-* Improve handling of errors when binary store handles bad data ([#1289](https://github.com/getsops/sops/pull/1289))
-* On macOS, prefer `XDG_CONFIG_HOME` over os.UserConfigDir() ([#1291](https://github.com/getsops/sops/pull/1291))
+* Improve handling of errors when binary store handles bad data
+  ([#1289](https://github.com/getsops/sops/pull/1289))
+* On macOS, prefer `XDG_CONFIG_HOME` over `os.UserConfigDir()`
+  ([#1291](https://github.com/getsops/sops/pull/1291))
 * Dependency updates ([#1306](https://github.com/getsops/sops/pull/1306),
-  [#1319](https://github.com/getsops/sops/pull/1319), [#1325](https://github.com/getsops/sops/pull/1325))
-* pgp: better error reporting for missing GPG binary during import of keys ([#1286](https://github.com/getsops/sops/pull/1286))
+  [#1319](https://github.com/getsops/sops/pull/1319),
+  [#1325](https://github.com/getsops/sops/pull/1325))
+* pgp: better error reporting for missing GPG binary during import of keys
+  ([#1286](https://github.com/getsops/sops/pull/1286))
 * Fix descriptions of `unencrypted-regex` and `encrypted-regex` flags, and
-  ensure `unencrypted_regex` is considered in config validation ([#1300](https://github.com/getsops/sops/pull/1300))
-* stores/json: improve error messages when parsing invalid JSON ([#1307](https://github.com/getsops/sops/pull/1307))
+  ensure `unencrypted_regex` is considered in config validation
+  ([#1300](https://github.com/getsops/sops/pull/1300))
+* stores/json: improve error messages when parsing invalid JSON
+  ([#1307](https://github.com/getsops/sops/pull/1307))
 
 Bug fixes:
 
-* pgp: improve handling of GnuPG home dir ([#1298](https://github.com/getsops/sops/pull/1298))
-* Do not crash if an empty YAML file is encrypted ([#1290](https://github.com/getsops/sops/pull/1290))
-* Handling of various ignored errors ([#1304](https://github.com/getsops/sops/pull/1304),
+* pgp: improve handling of GnuPG home dir
+  ([#1298](https://github.com/getsops/sops/pull/1298))
+* Do not crash if an empty YAML file is encrypted
+  ([#1290](https://github.com/getsops/sops/pull/1290))
+* Handling of various ignored errors
+  ([#1304](https://github.com/getsops/sops/pull/1304),
   [#1311](https://github.com/getsops/sops/pull/1311))
-* pgp: do not require abs path for `SOPS_GPG_EXEC` ([#1309](https://github.com/getsops/sops/pull/1309))
-* Report key rotation errors ([#1317](https://github.com/getsops/sops/pull/1317))
-* Ensure wrapping of errors in main package ([#1318](https://github.com/getsops/sops/pull/1318))
+* pgp: do not require abs path for `SOPS_GPG_EXEC`
+  ([#1309](https://github.com/getsops/sops/pull/1309))
+* Report key rotation errors
+  ([#1317](https://github.com/getsops/sops/pull/1317))
+* Ensure wrapping of errors in main package
+  ([#1318](https://github.com/getsops/sops/pull/1318))
 
 Project changes:
 
-* Enrich AWS authentication documentation ([#1272](https://github.com/getsops/sops/pull/1272))
-* Add linting for RST and MD files ([#1287](https://github.com/getsops/sops/pull/1287))
-* Delete SOPS encrypted file we don't have keys for ([#1288](https://github.com/getsops/sops/pull/1288))
-* CI dependency updates ([#1295](https://github.com/getsops/sops/pull/1295), [#1301](https://github.com/getsops/sops/pull/1301))
-* pgp: make error the last return value ([#1310](https://github.com/getsops/sops/pull/1310))
-* Improve documentation files ([#1320](https://github.com/getsops/sops/pull/1320))
+* Enrich AWS authentication documentation
+  ([#1272](https://github.com/getsops/sops/pull/1272))
+* Add linting for RST and MD files
+  ([#1287](https://github.com/getsops/sops/pull/1287))
+* Delete SOPS encrypted file we don't have keys for
+  ([#1288](https://github.com/getsops/sops/pull/1288))
+* CI dependency updates ([#1295](https://github.com/getsops/sops/pull/1295),
+  [#1301](https://github.com/getsops/sops/pull/1301))
+* pgp: make error the last return value
+  ([#1310](https://github.com/getsops/sops/pull/1310))
+* Improve documentation files
+  ([#1320](https://github.com/getsops/sops/pull/1320))
 
 ## 3.8.0
 
 Features:
 
-* Support `--version` without network requests using `--disable-version-check` ([#1115](https://github.com/getsops/sops/pull/1115))
-* Support `--input-type` for updatekeys command ([#1116](https://github.com/getsops/sops/pull/1116))
+* Support `--version` without network requests using `--disable-version-check`
+  ([#1115](https://github.com/getsops/sops/pull/1115))
+* Support `--input-type` for updatekeys command
+  ([#1116](https://github.com/getsops/sops/pull/1116))
 
 Improvements:
 
-* pgp: modernize and improve, and add tests ([#1054](https://github.com/getsops/sops/pull/1054),
+* pgp: modernize and improve, and add tests
+  ([#1054](https://github.com/getsops/sops/pull/1054),
   [#1282](https://github.com/getsops/sops/pull/1282))
-* azkv: update SDK to latest, add tests, tidy ([#1067](https://github.com/getsops/sops/pull/1067),
-  [#1092](https://github.com/getsops/sops/pull/1092), [#1256](https://github.com/getsops/sops/pull/1256))
-* age: improve identity loading, add tests, tidy ([#1064](https://github.com/getsops/sops/pull/1064))
-* kms: AWS SDK V2, allow creds config, add tests ([#1065](https://github.com/getsops/sops/pull/1065),
+* azkv: update SDK to latest, add tests, tidy
+  ([#1067](https://github.com/getsops/sops/pull/1067),
+  [#1092](https://github.com/getsops/sops/pull/1092),
+  [#1256](https://github.com/getsops/sops/pull/1256))
+* age: improve identity loading, add tests, tidy
+  ([#1064](https://github.com/getsops/sops/pull/1064))
+* kms: AWS SDK V2, allow creds config, add tests
+  ([#1065](https://github.com/getsops/sops/pull/1065),
   [#1257](https://github.com/getsops/sops/pull/1257))
-* gcpkms: update SDK to latest, add tests, tidy ([#1072](https://github.com/getsops/sops/pull/1072),
+* gcpkms: update SDK to latest, add tests, tidy
+  ([#1072](https://github.com/getsops/sops/pull/1072),
   [#1255](https://github.com/getsops/sops/pull/1255))
-* hcvault: update API, add tests, tidy ([#1085](https://github.com/getsops/sops/pull/1085))
-* Do not report version when upstream `--version` check fails ([#1124](https://github.com/getsops/sops/pull/1124))
-* Use GitHub endpoints in `--version` command ([#1261](https://github.com/getsops/sops/pull/1261))
-* Close temporary file before invoking editor to widen support on Windows ([#1265](https://github.com/getsops/sops/pull/1265))
+* hcvault: update API, add tests, tidy
+  ([#1085](https://github.com/getsops/sops/pull/1085))
+* Do not report version when upstream `--version` check fails
+  ([#1124](https://github.com/getsops/sops/pull/1124))
+* Use GitHub endpoints in `--version` command
+  ([#1261](https://github.com/getsops/sops/pull/1261))
+* Close temporary file before invoking editor to widen support on Windows
+  ([#1265](https://github.com/getsops/sops/pull/1265))
 * Update dependencies ([#1063](https://github.com/getsops/sops/pull/1063),
-  [#1091](https://github.com/getsops/sops/pull/1091), [#1147](https://github.com/getsops/sops/pull/1147),
-  [#1242](https://github.com/getsops/sops/pull/1242), [#1260](https://github.com/getsops/sops/pull/1260),
-  [#1264](https://github.com/getsops/sops/pull/1264), [#1275](https://github.com/getsops/sops/pull/1275),
-  [#1280](https://github.com/getsops/sops/pull/1280), [#1283](https://github.com/getsops/sops/pull/1283))
-* Deal with various deprecations of dependencies ([#1113](https://github.com/getsops/sops/pull/1113),
+  [#1091](https://github.com/getsops/sops/pull/1091),
+  [#1147](https://github.com/getsops/sops/pull/1147),
+  [#1242](https://github.com/getsops/sops/pull/1242),
+  [#1260](https://github.com/getsops/sops/pull/1260),
+  [#1264](https://github.com/getsops/sops/pull/1264),
+  [#1275](https://github.com/getsops/sops/pull/1275),
+  [#1280](https://github.com/getsops/sops/pull/1280),
+  [#1283](https://github.com/getsops/sops/pull/1283))
+* Deal with various deprecations of dependencies
+  ([#1113](https://github.com/getsops/sops/pull/1113),
   [#1262](https://github.com/getsops/sops/pull/1262))
 
 Bug fixes:
 
-* Ensure YAML comments are not displaced ([#1069](https://github.com/getsops/sops/pull/1069))
+* Ensure YAML comments are not displaced
+  ([#1069](https://github.com/getsops/sops/pull/1069))
 * Ensure default Google credentials can be used again after introduction
   of `GOOGLE_CREDENTIALS` ([#1249](https://github.com/getsops/sops/pull/1249))
-* Avoid duplicate logging of errors in some key sources ([#1146](https://github.com/getsops/sops/pull/1146),
+* Avoid duplicate logging of errors in some key sources
+  ([#1146](https://github.com/getsops/sops/pull/1146),
   [#1281](https://github.com/getsops/sops/pull/1281))
-* Using `--set` on a root level key does no longer truncate existing values ([#899](https://github.com/getsops/sops/pull/899))
-* Ensure stable order of SOPS parameters in dotenv file ([#1101](https://github.com/getsops/sops/pull/1101))
+* Using `--set` on a root level key does no longer truncate existing values
+  ([#899](https://github.com/getsops/sops/pull/899))
+* Ensure stable order of SOPS parameters in dotenv file
+  ([#1101](https://github.com/getsops/sops/pull/1101))
 
 Project changes:
 
 * Update Go to 1.20 ([#1148](https://github.com/getsops/sops/pull/1148))
-* Update rustc functional tests to v1.70.0 ([#1234](https://github.com/getsops/sops/pull/1234))
-* Remove remaining CircleCI workflow ([#1237](https://github.com/getsops/sops/pull/1237))
+* Update rustc functional tests to v1.70.0
+  ([#1234](https://github.com/getsops/sops/pull/1234))
+* Remove remaining CircleCI workflow
+  ([#1237](https://github.com/getsops/sops/pull/1237))
 * Run CLI workflow on main ([#1243](https://github.com/getsops/sops/pull/1243))
-* Delete obsolete `validation/` artifact ([#1248](https://github.com/getsops/sops/pull/1248))
-* Rename Go module to `github.com/getsops/sops/v3` ([#1247](https://github.com/getsops/sops/pull/1247))
+* Delete obsolete `validation/` artifact
+  ([#1248](https://github.com/getsops/sops/pull/1248))
+* Rename Go module to `github.com/getsops/sops/v3`
+  ([#1247](https://github.com/getsops/sops/pull/1247))
 * Revamp release automation, including (Cosign) signed container images
-  and checksums file, SLSA3 provenance and SBOMs ([#1250](https://github.com/getsops/sops/pull/1250))
-* Update various bits of documentation ([#1244](https://github.com/getsops/sops/pull/1244))
-* Add missing `--encrypt` flag from Vault example ([#1060](https://github.com/getsops/sops/pull/1060))
-* Add documentation on how to use age in `.sops.yaml` ([#1192](https://github.com/getsops/sops/pull/1192))
-* Improve Make targets and address various issues ([#1258](https://github.com/getsops/sops/pull/1258))
-* Ensure clean working tree in CI ([#1267](https://github.com/getsops/sops/pull/1267))
-* Fix CHANGELOG.rst formatting ([#1269](https://github.com/getsops/sops/pull/1269))
-* Pin GitHub Actions to full length commit SHA and add CodeQL ([#1276](https://github.com/getsops/sops/pull/1276))
-* Enable Dependabot for Docker, GitHub Actions and Go Mod ([#1277](https://github.com/getsops/sops/pull/1277))
-* Generate versioned `.intoto.jsonl` ([#1278](https://github.com/getsops/sops/pull/1278))
+  and checksums file, SLSA3 provenance and SBOMs
+  ([#1250](https://github.com/getsops/sops/pull/1250))
+* Update various bits of documentation
+  ([#1244](https://github.com/getsops/sops/pull/1244))
+* Add missing `--encrypt` flag from Vault example
+  ([#1060](https://github.com/getsops/sops/pull/1060))
+* Add documentation on how to use age in `.sops.yaml`
+  ([#1192](https://github.com/getsops/sops/pull/1192))
+* Improve Make targets and address various issues
+  ([#1258](https://github.com/getsops/sops/pull/1258))
+* Ensure clean working tree in CI
+  ([#1267](https://github.com/getsops/sops/pull/1267))
+* Fix CHANGELOG.rst formatting
+  ([#1269](https://github.com/getsops/sops/pull/1269))
+* Pin GitHub Actions to full length commit SHA and add CodeQL
+  ([#1276](https://github.com/getsops/sops/pull/1276))
+* Enable Dependabot for Docker, GitHub Actions and Go Mod
+  ([#1277](https://github.com/getsops/sops/pull/1277))
+* Generate versioned `.intoto.jsonl`
+  ([#1278](https://github.com/getsops/sops/pull/1278))
 * Update CI dependencies ([#1279](https://github.com/getsops/sops/pull/1279))
 
 ## 3.7.3
 
 Changes:
 
-* Upgrade dependencies ([#1024](https://github.com/getsops/sops/pull/1024), [#1045](https://github.com/getsops/sops/pull/1045))
-* Build alpine container in CI ([#1018](https://github.com/getsops/sops/pull/1018),
-  [#1032](https://github.com/getsops/sops/pull/1032), [#1025](https://github.com/getsops/sops/pull/1025))
-* keyservice: accept KeyServiceServer in LocalClient ([#1035](https://github.com/getsops/sops/pull/1035))
-* Add support for GCP Service Account within `GOOGLE_CREDENTIALS` ([#953](https://github.com/getsops/sops/pull/953))
+* Upgrade dependencies ([#1024](https://github.com/getsops/sops/pull/1024),
+  [#1045](https://github.com/getsops/sops/pull/1045))
+* Build alpine container in CI
+  ([#1018](https://github.com/getsops/sops/pull/1018),
+  [#1032](https://github.com/getsops/sops/pull/1032),
+  [#1025](https://github.com/getsops/sops/pull/1025))
+* keyservice: accept KeyServiceServer in LocalClient
+  ([#1035](https://github.com/getsops/sops/pull/1035))
+* Add support for GCP Service Account within `GOOGLE_CREDENTIALS`
+  ([#953](https://github.com/getsops/sops/pull/953))
 
 Bug fixes:
 
-* Upload the correct binary for the linux amd64 build ([#1026](https://github.com/getsops/sops/pull/1026))
-* Fix bug when specifying multiple age recipients ([#966](https://github.com/getsops/sops/pull/966))
-* Allow for empty yaml maps ([#908](https://github.com/getsops/sops/pull/908))
-* Limit AWS role names to 64 characters ([#1037](https://github.com/getsops/sops/pull/1037))
+* Upload the correct binary for the linux amd64 build
+  ([#1026](https://github.com/getsops/sops/pull/1026))
+* Fix bug when specifying multiple age recipients
+  ([#966](https://github.com/getsops/sops/pull/966))
+* Allow for empty yaml maps
+  ([#908](https://github.com/getsops/sops/pull/908))
+* Limit AWS role names to 64 characters
+  ([#1037](https://github.com/getsops/sops/pull/1037))
 
 ## 3.7.2
 
 Changes:
 
-* README updates ([#861](https://github.com/getsops/sops/pull/861), [#860](https://github.com/getsops/sops/pull/860))
+* README updates ([#861](https://github.com/getsops/sops/pull/861),
+  [#860](https://github.com/getsops/sops/pull/860))
 * Various test fixes ([#909](https://github.com/getsops/sops/pull/909),
-  [#906](https://github.com/getsops/sops/pull/906), [#1008](https://github.com/getsops/sops/pull/1008))
-* Added Linux and Darwin arm64 releases ([#911](https://github.com/getsops/sops/pull/911),
+  [#906](https://github.com/getsops/sops/pull/906),
+  [#1008](https://github.com/getsops/sops/pull/1008))
+* Added Linux and Darwin arm64 releases
+  ([#911](https://github.com/getsops/sops/pull/911),
   [#891](https://github.com/getsops/sops/pull/891))
 * Upgrade to go v1.17 ([#1012](https://github.com/getsops/sops/pull/1012))
-* Support SOPS_AGE_KEY environment variable ([#1006](https://github.com/getsops/sops/pull/1006))
+* Support SOPS_AGE_KEY environment variable
+  ([#1006](https://github.com/getsops/sops/pull/1006))
 
 Bug fixes:
 
-* Make sure comments in yaml files are not duplicated ([#866](https://github.com/getsops/sops/pull/866))
+* Make sure comments in yaml files are not duplicated
+  ([#866](https://github.com/getsops/sops/pull/866))
 * Make sure configuration file paths work correctly relative to the
   config file in us ([#853](https://github.com/getsops/sops/pull/853))
 
@@ -718,8 +1043,10 @@ Changes:
 
 * Security fix
 * Add release workflow ([#843](https://github.com/getsops/sops/pull/843))
-* Fix issue where CI wouldn't run against master ([#848](https://github.com/getsops/sops/pull/848))
-* Trim extra whitespace around age keys ([#846](https://github.com/getsops/sops/pull/846))
+* Fix issue where CI wouldn't run against master
+  ([#848](https://github.com/getsops/sops/pull/848))
+* Trim extra whitespace around age keys
+  ([#846](https://github.com/getsops/sops/pull/846))
 
 ## 3.7.0
 
@@ -732,63 +1059,85 @@ Changes:
 
 * On failed decryption with GPG, return the error returned by GPG to the
   sops user ([#762](https://github.com/getsops/sops/pull/762))
-* Use yaml.v3 instead of modified yaml.v2 for handling YAML files ([#791](https://github.com/getsops/sops/pull/791))
-* Update aws-sdk-go to version v1.37.18 ([#823](https://github.com/getsops/sops/pull/823))
+* Use yaml.v3 instead of modified yaml.v2 for handling YAML files
+  ([#791](https://github.com/getsops/sops/pull/791))
+* Update aws-sdk-go to version v1.37.18
+  ([#823](https://github.com/getsops/sops/pull/823))
 
 Project Changes:
 
-* Switch from TravisCI to Github Actions ([#792](https://github.com/getsops/sops/pull/792))
+* Switch from TravisCI to Github Actions
+  ([#792](https://github.com/getsops/sops/pull/792))
 
 ## 3.6.1
 
 Features:
 
-* Add support for --unencrypted-regex ([#715](https://github.com/getsops/sops/pull/715))
+* Add support for --unencrypted-regex
+  ([#715](https://github.com/getsops/sops/pull/715))
 
 Changes:
 
-* Use keys.openpgp.org instead of gpg.mozilla.org ([#732](https://github.com/getsops/sops/pull/732))
-* Upgrade AWS SDK version ([#714](https://github.com/getsops/sops/pull/714))
-* Support --input-type for exec-file ([#699](https://github.com/getsops/sops/pull/699))
+* Use keys.openpgp.org instead of gpg.mozilla.org
+  ([#732](https://github.com/getsops/sops/pull/732))
+* Upgrade AWS SDK version
+  ([#714](https://github.com/getsops/sops/pull/714))
+* Support --input-type for exec-file
+  ([#699](https://github.com/getsops/sops/pull/699))
 
 Bug fixes:
 
 * Fixes broken Vault tests ([#731](https://github.com/getsops/sops/pull/731))
-* Revert "Add standard newline/quoting behavior to dotenv store" ([#706](https://github.com/getsops/sops/pull/706))
+* Revert "Add standard newline/quoting behavior to dotenv store"
+  ([#706](https://github.com/getsops/sops/pull/706))
 
 ## 3.6.0
 
 Features:
 
-* Support for encrypting data through the use of Hashicorp Vault ([#655](https://github.com/getsops/sops/pull/655))
+* Support for encrypting data through the use of Hashicorp Vault
+  ([#655](https://github.com/getsops/sops/pull/655))
 * `sops publish` now supports `--recursive` flag for publishing all files
   in a directory ([#602](https://github.com/getsops/sops/pull/602))
 * `sops publish` now supports `--omit-extensions` flag for omitting the
-  extension in the destination path ([#602](https://github.com/getsops/sops/pull/602))
-* sops now supports JSON arrays of arrays ([#642](https://github.com/getsops/sops/pull/642))
+  extension in the destination path
+  ([#602](https://github.com/getsops/sops/pull/602))
+* sops now supports JSON arrays of arrays
+  ([#642](https://github.com/getsops/sops/pull/642))
 
 Improvements:
 
-* Updates and standardization for the dotenv store ([#612](https://github.com/getsops/sops/pull/612),
+* Updates and standardization for the dotenv store
+  ([#612](https://github.com/getsops/sops/pull/612),
   [#622](https://github.com/getsops/sops/pull/622))
-* Close temp files after using them for edit command ([#685](https://github.com/getsops/sops/pull/685))
+* Close temp files after using them for edit command
+  ([#685](https://github.com/getsops/sops/pull/685))
 
 Bug fixes:
 
-* AWS SDK usage now correctly resolves the `~/.aws/config` file ([#680](https://github.com/getsops/sops/pull/680))
-* `sops updatekeys` now correctly matches config rules ([#682](https://github.com/getsops/sops/pull/682))
-* `sops updatekeys` now correctly uses the config path cli flag ([#672](https://github.com/getsops/sops/pull/672))
-* Partially empty sops config files don't break the use of sops anymore ([#662](https://github.com/getsops/sops/pull/662))
-* Fix possible infinite loop in PGP's passphrase prompt call ([#690](https://github.com/getsops/sops/pull/690))
+* AWS SDK usage now correctly resolves the `~/.aws/config` file
+  ([#680](https://github.com/getsops/sops/pull/680))
+* `sops updatekeys` now correctly matches config rules
+  ([#682](https://github.com/getsops/sops/pull/682))
+* `sops updatekeys` now correctly uses the config path cli flag
+  ([#672](https://github.com/getsops/sops/pull/672))
+* Partially empty sops config files don't break the use of sops anymore
+  ([#662](https://github.com/getsops/sops/pull/662))
+* Fix possible infinite loop in PGP's passphrase prompt call
+  ([#690](https://github.com/getsops/sops/pull/690))
 
 Project changes:
 
-* Dockerfile now based off of golang version 1.14 ([#649](https://github.com/getsops/sops/pull/649))
-* Push alpine version of docker image to Dockerhub ([#609](https://github.com/getsops/sops/pull/609))
+* Dockerfile now based off of golang version 1.14
+  ([#649](https://github.com/getsops/sops/pull/649))
+* Push alpine version of docker image to Dockerhub
+  ([#609](https://github.com/getsops/sops/pull/609))
 * Push major, major.minor, and major.minor.patch tagged docker images to
   Dockerhub ([#607](https://github.com/getsops/sops/pull/607))
-* Removed out of date contact information ([#668](https://github.com/getsops/sops/pull/668))
-* Update authors in the cli help text ([#645](https://github.com/getsops/sops/pull/645))
+* Removed out of date contact information
+  ([#668](https://github.com/getsops/sops/pull/668))
+* Update authors in the cli help text
+  ([#645](https://github.com/getsops/sops/pull/645))
 
 ## 3.5.0
 
@@ -799,7 +1148,8 @@ Features:
 
 Bug fixes:
 
-* Sanitize AWS STS session name, as sops creates it based off of the machines hostname
+* Sanitize AWS STS session name, as sops creates it based off of the machine's
+  hostname
 * Fix for `decrypt.Data` to support `.ini` files
 * Various package fixes related to switching to Go Modules
 * Fixes for Vault-related tests running locally and in CI.
@@ -842,7 +1192,8 @@ Bug fixes:
 
 * Make sure the pgp key fingerprint is longer than 16 characters before
   slicing it. ([#463](https://github.com/getsops/sops/pull/463))
-* Allow for `--set` value to be a string. ([#461](https://github.com/getsops/sops/pull/461))
+* Allow for `--set` value to be a string.
+  ([#461](https://github.com/getsops/sops/pull/461))
 
 Project changes:
 
@@ -869,7 +1220,8 @@ Bug fixes:
 * Now uses $HOME instead of ~ (which didn't work) to find the GPG home
 * Fix panic when vim was not available as an editor, but other
   alternative editors were
-* Fix issue with AWS KMS Encryption Contexts ([#445](https://github.com/getsops/sops/pull/445))
+* Fix issue with AWS KMS Encryption Contexts
+  ([#445](https://github.com/getsops/sops/pull/445))
   with more than one context value failing to decrypt intermittently.
   Includes an automatic fix for old files affected by this issue.
 
