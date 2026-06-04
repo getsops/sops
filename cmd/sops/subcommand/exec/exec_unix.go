@@ -6,11 +6,19 @@ package exec
 import (
 	"os"
 	"os/exec"
+	"os/signal"
 	"os/user"
 	"path/filepath"
 	"strconv"
 	"syscall"
 )
+
+var forwardedSignals = []os.Signal{
+	syscall.SIGHUP,
+	syscall.SIGINT,
+	syscall.SIGTERM,
+	syscall.SIGQUIT,
+}
 
 func ExecSyscall(command string, env []string) error {
 	return syscall.Exec("/bin/sh", []string{"/bin/sh", "-c", command}, env)
@@ -18,6 +26,43 @@ func ExecSyscall(command string, env []string) error {
 
 func BuildCommand(command string) *exec.Cmd {
 	return exec.Command("/bin/sh", "-c", command)
+}
+
+func RunCommand(cmd *exec.Cmd) error {
+	if cmd.SysProcAttr == nil {
+		cmd.SysProcAttr = &syscall.SysProcAttr{}
+	}
+	cmd.SysProcAttr.Setpgid = true
+
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, forwardedSignals...)
+
+	if err := cmd.Start(); err != nil {
+		signal.Stop(signals)
+		return err
+	}
+
+	stopForwarding := make(chan struct{})
+	forwardingDone := make(chan struct{})
+	go func() {
+		defer close(forwardingDone)
+		for {
+			select {
+			case sig := <-signals:
+				if err := syscall.Kill(-cmd.Process.Pid, sig.(syscall.Signal)); err != nil {
+					log.WithError(err).Warn("Failed to forward signal to child process group")
+				}
+			case <-stopForwarding:
+				return
+			}
+		}
+	}()
+
+	err := cmd.Wait()
+	signal.Stop(signals)
+	close(stopForwarding)
+	<-forwardingDone
+	return err
 }
 
 func WritePipe(pipe string, contents []byte) {
