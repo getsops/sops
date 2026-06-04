@@ -19,6 +19,7 @@ import (
 	"github.com/getsops/sops/v3/hcvault"
 	"github.com/getsops/sops/v3/kms"
 	"github.com/getsops/sops/v3/pgp"
+	"github.com/getsops/sops/v3/plugin"
 	"github.com/getsops/sops/v3/publish"
 	"go.yaml.in/yaml/v3"
 )
@@ -129,6 +130,11 @@ type configFile struct {
 	Stores           StoresConfig      `yaml:"stores"`
 }
 
+type pluginKey struct {
+	BinaryName string         `yaml:"binary_name"`
+	Config     map[string]any `yaml:"config"`
+}
+
 type keyGroup struct {
 	Merge   []keyGroup   `yaml:"merge"`
 	KMS     []kmsKey     `yaml:"kms"`
@@ -138,6 +144,7 @@ type keyGroup struct {
 	Vault   []string     `yaml:"hc_vault"`
 	Age     []string     `yaml:"age"`
 	PGP     []string     `yaml:"pgp"`
+	Plugin  []pluginKey  `yaml:"plugins"`
 }
 
 type gcpKmsKey struct {
@@ -357,6 +364,11 @@ func extractMasterKeys(group keyGroup) (sops.KeyGroup, error) {
 			return nil, err
 		}
 	}
+
+	for _, k := range group.Plugin {
+		keyGroup = append(keyGroup, plugin.NewMasterKey(k.BinaryName, k.Config))
+	}
+
 	return deduplicateKeygroup(keyGroup), nil
 }
 
