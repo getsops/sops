@@ -42,6 +42,7 @@ func NewMasterKey(
 		BinaryName:   binaryName,
 		InstanceID:   instanceID,
 		PluginConfig: config,
+		Timeout:      timeout,
 		CreationDate: time.Now().UTC(),
 	}
 }
