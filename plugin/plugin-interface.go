@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os/exec"
 	"regexp"
+	"strings"
 	"time"
 )
 
@@ -28,7 +29,12 @@ type MasterKey struct {
 	CreationDate time.Time
 }
 
-func NewMasterKey(binaryName string, config map[string]any, timeout string, instanceID string) *MasterKey {
+func NewMasterKey(
+	binaryName string,
+	config map[string]any,
+	timeout string,
+	instanceID string,
+) *MasterKey {
 	if instanceID == "" {
 		instanceID = "default"
 	}
@@ -56,7 +62,7 @@ func (key *MasterKey) GetEnvPrefix() string {
 	// e.g, if instanceID is "my-vault", env prefix will be "SOPS_PLUGIN_MY_VAULT_",
 	// and users can then use env vars like "SOPS_PLUGIN_MY_VAULT_TOKEN
 	// or "SOPS_PLUGIN_MY_VAULT_KEY" in their plugin implementation.
-	return SOPS_PLUGIN + strings.ToUpper(normalized) + "_"
+	return "SOPS_PLUGIN" + strings.ToUpper(normalized) + "_"
 }
 
 func (key MasterKey) ToMap() map[string]any {
@@ -99,11 +105,11 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 
 func (key *MasterKey) EncryptContext(ctx context.Context, dataKey []byte) error {
 	req := map[string]any{
-		"action":    "encrypt",
+		"action":      "encrypt",
 		"instance_id": key.InstanceID,
-		"env_prefix": key.GetEnvPrefix(),
-		"config":    key.PluginConfig,
-		"plaintext": dataKey,
+		"env_prefix":  key.GetEnvPrefix(),
+		"config":      key.PluginConfig,
+		"plaintext":   dataKey,
 	}
 
 	if _, ok := ctx.Deadline(); !ok {
@@ -137,11 +143,11 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 
 func (key *MasterKey) DecryptContext(ctx context.Context) ([]byte, error) {
 	req := map[string]any{
-		"action":     "decrypt",
-		"instance_id":  key.InstanceID,
+		"action":      "decrypt",
+		"instance_id": key.InstanceID,
 		"env_prefix":  key.GetEnvPrefix(),
-		"config":     key.PluginConfig,
-		"ciphertext": key.EncryptedKey,
+		"config":      key.PluginConfig,
+		"ciphertext":  key.EncryptedKey,
 	}
 
 	if _, ok := ctx.Deadline(); !ok {
