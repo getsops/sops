@@ -87,15 +87,14 @@ func (key *MasterKey) EncryptContext(ctx context.Context, dataKey []byte) error 
 		"plaintext": dataKey,
 	}
 
-	resp, err := executePlugin(ctx, key.BinaryName, req)
 	validBinaryName := regexp.MustCompile(`^[a-zA-Z0-9_-]+$`)
-
-	if err != nil {
-		return err
-	}
-
 	if !validBinaryName.MatchString(key.BinaryName) {
 		return fmt.Errorf("invalid binary name: only alphanumeric, dashes, and underscores allowed")
+	}
+
+	resp, err := executePlugin(ctx, key.BinaryName, req)
+	if err != nil {
+		return err
 	}
 
 	key.EncryptedKey = resp.Ciphertext
