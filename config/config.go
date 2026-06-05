@@ -133,6 +133,7 @@ type configFile struct {
 type pluginKey struct {
 	Timeout    string         `yaml:"timeout,omitempty"`
 	BinaryName string         `yaml:"binary_name"`
+	InstanceID string         `yaml:"instance_id,omitempty"`
 	Config     map[string]any `yaml:"config"`
 }
 
@@ -371,7 +372,7 @@ func extractMasterKeys(group keyGroup) (sops.KeyGroup, error) {
 
 	for _, p := range group.Plugin {
 		resolvedTimeout := p.Timeout
-		mKey := plugin.NewMasterKey(p.BinaryName, p.Config, resolvedTimeout)
+		mKey := plugin.NewMasterKey(p.BinaryName, p.Config, resolvedTimeout, p.InstanceID)
 		keyGroup = append(keyGroup, mKey)
      }
 
@@ -468,7 +469,7 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			if resolvedTimeout == "" {
 				resolvedTimeout = cRule.Timeout
 			}
-			mKey := plugin.NewMasterKey(p.BinaryName, p.Config, resolvedTimeout)
+			mKey := plugin.NewMasterKey(p.BinaryName, p.Config, resolvedTimeout, p.InstanceID)
 			keyGroup = append(keyGroup, mKey)
          }
 		groups = append(groups, keyGroup)

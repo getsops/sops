@@ -22,14 +22,19 @@ const (
 type MasterKey struct {
 	BinaryName   string
 	PluginConfig map[string]any
+	InstanceID   string
 	EncryptedKey string
 	Timeout      string
 	CreationDate time.Time
 }
 
-func NewMasterKey(binaryName string, config map[string]any, timeout string) *MasterKey {
+func NewMasterKey(binaryName string, config map[string]any, timeout string, instanceID string) *MasterKey {
+	if instanceID == "" {
+		instanceID = "default"
+	}
 	return &MasterKey{
 		BinaryName:   binaryName,
+		InstanceID:   instanceID,
 		PluginConfig: config,
 		CreationDate: time.Now().UTC(),
 	}
@@ -41,6 +46,17 @@ func (key *MasterKey) TypeToIdentifier() string {
 
 func (key *MasterKey) ToString() string {
 	return fmt.Sprintf("plugin:%s", key.BinaryName)
+}
+
+func (key *MasterKey) GetEnvPrefix() string {
+	reg := regexp.MustCompile(`[^a-zA-Z0-9_]`)
+	normalized := reg.ReplaceAllString(key.InstanceID, "_")
+
+	// we put a trailing underscore to make it easier for users to append their own suffixes in the plugin.
+	// e.g, if instanceID is "my-vault", env prefix will be "SOPS_PLUGIN_MY_VAULT_",
+	// and users can then use env vars like "SOPS_PLUGIN_MY_VAULT_TOKEN
+	// or "SOPS_PLUGIN_MY_VAULT_KEY" in their plugin implementation.
+	return SOPS_PLUGIN + strings.ToUpper(normalized) + "_"
 }
 
 func (key MasterKey) ToMap() map[string]any {
@@ -84,6 +100,8 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 func (key *MasterKey) EncryptContext(ctx context.Context, dataKey []byte) error {
 	req := map[string]any{
 		"action":    "encrypt",
+		"instance_id": key.InstanceID,
+		"env_prefix": key.GetEnvPrefix(),
 		"config":    key.PluginConfig,
 		"plaintext": dataKey,
 	}
@@ -120,6 +138,8 @@ func (key *MasterKey) Decrypt() ([]byte, error) {
 func (key *MasterKey) DecryptContext(ctx context.Context) ([]byte, error) {
 	req := map[string]any{
 		"action":     "decrypt",
+		"instance_id":  key.InstanceID,
+		"env_prefix":  key.GetEnvPrefix(),
 		"config":     key.PluginConfig,
 		"ciphertext": key.EncryptedKey,
 	}

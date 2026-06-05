@@ -23,7 +23,7 @@ func main() {
     if action == "encrypt" {
         fmt.Println("{\"ciphertext\": \"cifra-secreta\"}")
     } else if action == "decrypt" {
-        fmt.Println("{\"plaintext\": \"dGV4dG8tY2xhcm8=\"}") // base64 de "texto-claro"
+        fmt.Println("{\"plaintext\": \"dGV4dG8tY2xhcm8=\"}")
     }
 }
 `
@@ -40,13 +40,13 @@ func TestPluginIPC(t *testing.T) {
 
     t.Setenv("PATH", tmpDir+string(os.PathListSeparator)+os.Getenv("PATH"))
 
-    key := NewMasterKey("dummy", map[string]any{"minha_config": "valor"}, "10s")
+    key := NewMasterKey("dummy", map[string]any{"my_config": "value"}, "10s", "dummy")
 
     err = key.Encrypt([]byte("texto-claro"))
     assert.NoError(t, err)
-    assert.Equal(t, "cifra-secreta", string(key.EncryptedDataKey()))
+    assert.Equal(t, "secret_cypher", string(key.EncryptedDataKey()))
 
     plaintext, err := key.Decrypt()
     assert.NoError(t, err)
-    assert.Equal(t, "texto-claro", string(plaintext))
+    assert.Equal(t, "plain-as-day", string(plaintext))
 }
