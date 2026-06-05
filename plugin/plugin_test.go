@@ -40,7 +40,7 @@ func TestPluginIPC(t *testing.T) {
 
     t.Setenv("PATH", tmpDir+string(os.PathListSeparator)+os.Getenv("PATH"))
 
-    key := NewMasterKey("dummy", map[string]any{"minha_config": "valor"})
+    key := NewMasterKey("dummy", map[string]any{"minha_config": "valor"}, "10s")
 
     err = key.Encrypt([]byte("texto-claro"))
     assert.NoError(t, err)

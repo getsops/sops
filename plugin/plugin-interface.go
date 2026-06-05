@@ -23,10 +23,11 @@ type MasterKey struct {
 	BinaryName   string
 	PluginConfig map[string]any
 	EncryptedKey string
+	Timeout      string
 	CreationDate time.Time
 }
 
-func NewMasterKey(binaryName string, config map[string]any) *MasterKey {
+func NewMasterKey(binaryName string, config map[string]any, timeout string) *MasterKey {
 	return &MasterKey{
 		BinaryName:   binaryName,
 		PluginConfig: config,
@@ -87,6 +88,12 @@ func (key *MasterKey) EncryptContext(ctx context.Context, dataKey []byte) error 
 		"plaintext": dataKey,
 	}
 
+	if _, ok := ctx.Deadline(); !ok {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, key.getTimeout())
+		defer cancel()
+	}
+
 	validBinaryName := regexp.MustCompile(`^[a-zA-Z0-9_-]+$`)
 	if !validBinaryName.MatchString(key.BinaryName) {
 		return fmt.Errorf("invalid binary name: only alphanumeric, dashes, and underscores allowed")
@@ -95,6 +102,10 @@ func (key *MasterKey) EncryptContext(ctx context.Context, dataKey []byte) error 
 	resp, err := executePlugin(ctx, key.BinaryName, req)
 	if err != nil {
 		return err
+	}
+
+	if resp.Ciphertext == "" {
+		return fmt.Errorf("plugin did not return ciphertext")
 	}
 
 	key.EncryptedKey = resp.Ciphertext
@@ -124,6 +135,10 @@ func (key *MasterKey) DecryptContext(ctx context.Context) ([]byte, error) {
 		return nil, err
 	}
 
+	if resp.Plaintext == nil {
+		return nil, fmt.Errorf("plugin did not return plaintext")
+	}
+
 	return resp.Plaintext, nil
 }
 
@@ -144,7 +159,10 @@ func executePlugin(
 	executableName := fmt.Sprintf("sops-plugin-%s", binaryName)
 	cmd := exec.CommandContext(ctx, executableName)
 
-	reqBytes, _ := json.Marshal(req)
+	reqBytes, err := json.Marshal(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal plugin request: %v", err)
+	}
 	cmd.Stdin = bytes.NewReader(reqBytes)
 
 	var stdout bytes.Buffer
@@ -186,4 +204,15 @@ func executePlugin(
 	}
 
 	return &resp, nil
+}
+
+// getTimeout is a helper function to parse the timeout string from the MasterKey config.
+// falls back to 10s.
+func (key *MasterKey) getTimeout() time.Duration {
+	if key.Timeout != "" {
+		if timeout, err := time.ParseDuration(key.Timeout); err == nil {
+			return timeout
+		}
+	}
+	return 10 * time.Second
 }

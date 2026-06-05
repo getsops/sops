@@ -131,6 +131,7 @@ type configFile struct {
 }
 
 type pluginKey struct {
+	Timeout    string         `yaml:"timeout,omitempty"`
 	BinaryName string         `yaml:"binary_name"`
 	Config     map[string]any `yaml:"config"`
 }
@@ -184,6 +185,7 @@ type destinationRule struct {
 
 type creationRule struct {
 	PathRegex               string      `yaml:"path_regex"`
+	Timeout                 string      `yaml:"timeout,omitempty"`
 	KMS                     interface{} `yaml:"kms"` // string or []string
 	AwsProfile              string      `yaml:"aws_profile"`
 	Age                     interface{} `yaml:"age"`     // string or []string
@@ -366,9 +368,12 @@ func extractMasterKeys(group keyGroup) (sops.KeyGroup, error) {
 		}
 	}
 
-	for _, k := range group.Plugin {
-		keyGroup = append(keyGroup, plugin.NewMasterKey(k.BinaryName, k.Config))
-	}
+
+	for _, p := range group.Plugin {
+		resolvedTimeout := p.Timeout
+		mKey := plugin.NewMasterKey(p.BinaryName, p.Config, resolvedTimeout)
+		keyGroup = append(keyGroup, mKey)
+     }
 
 	return deduplicateKeygroup(keyGroup), nil
 }
@@ -459,7 +464,12 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			keyGroup = append(keyGroup, k)
 		}
 		for _, p := range cRule.Plugin {
-             keyGroup = append(keyGroup, plugin.NewMasterKey(p.BinaryName, p.Config))
+			resolvedTimeout := p.Timeout
+			if resolvedTimeout == "" {
+				resolvedTimeout = cRule.Timeout
+			}
+			mKey := plugin.NewMasterKey(p.BinaryName, p.Config, resolvedTimeout)
+			keyGroup = append(keyGroup, mKey)
          }
 		groups = append(groups, keyGroup)
 	}
