@@ -458,10 +458,10 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 		for _, k := range vaultKeys {
 			keyGroup = append(keyGroup, k)
 		}
-		groups = append(groups, keyGroup)
 		for _, p := range cRule.Plugin {
              keyGroup = append(keyGroup, plugin.NewMasterKey(p.BinaryName, p.Config))
          }
+		groups = append(groups, keyGroup)
 	}
 	return groups, nil
 }
