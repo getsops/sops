@@ -36,7 +36,7 @@ func NewMasterKey(
 	instanceID string,
 ) *MasterKey {
 	if instanceID == "" {
-		instanceID = "default"
+		instanceID = binaryName
 	}
 	return &MasterKey{
 		BinaryName:   binaryName,
