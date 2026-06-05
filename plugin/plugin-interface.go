@@ -4,8 +4,10 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os/exec"
+	"regexp"
 	"time"
 )
 
@@ -67,7 +69,9 @@ func (key *MasterKey) EncryptIfNeeded(dataKey []byte) error {
 }
 
 func (key *MasterKey) NeedsRotation() bool {
-	return time.Since(key.CreationDate) > (time.Hour * 24 * 30 * 6)
+	// for Now, we have no criteria for rotation of plugin-based keys, so we'll just return false.
+	// Maybe use a config inside of key??
+	return false
 }
 
 // Encrypt takes a SOPS data key, encrypts it via the external plugin, and stores
@@ -84,8 +88,14 @@ func (key *MasterKey) EncryptContext(ctx context.Context, dataKey []byte) error 
 	}
 
 	resp, err := executePlugin(ctx, key.BinaryName, req)
+	validBinaryName := regexp.MustCompile(`^[a-zA-Z0-9_-]+$`)
+
 	if err != nil {
 		return err
+	}
+
+	if !validBinaryName.MatchString(key.BinaryName) {
+		return fmt.Errorf("invalid binary name: only alphanumeric, dashes, and underscores allowed")
 	}
 
 	key.EncryptedKey = resp.Ciphertext
@@ -102,6 +112,12 @@ func (key *MasterKey) DecryptContext(ctx context.Context) ([]byte, error) {
 		"action":     "decrypt",
 		"config":     key.PluginConfig,
 		"ciphertext": key.EncryptedKey,
+	}
+
+	if _, ok := ctx.Deadline(); !ok {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, 10*time.Second)
+		defer cancel()
 	}
 
 	resp, err := executePlugin(ctx, key.BinaryName, req)
@@ -139,6 +155,16 @@ func executePlugin(
 	cmd.Stderr = &stderr
 
 	if err := cmd.Run(); err != nil {
+		if errors.Is(err, context.DeadlineExceeded) {
+			return nil, fmt.Errorf("plugin execution timed out (%s)", executableName)
+		}
+		if errors.Is(err, exec.ErrNotFound) {
+			return nil, fmt.Errorf(
+				"plugin executable not found: %s. Please ensure that %s is installed and in your PATH",
+				executableName,
+				executableName,
+			)
+		}
 		return nil, fmt.Errorf(
 			"plugin execution failed (%s): %v. Stderr: %s",
 			executableName,

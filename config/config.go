@@ -194,6 +194,7 @@ type creationRule struct {
 	VaultURI                interface{} `yaml:"hc_vault_transit_uri"` // string or []string
 	KeyGroups               []keyGroup  `yaml:"key_groups"`
 	ShamirThreshold         int         `yaml:"shamir_threshold"`
+	Plugin                  []pluginKey  `yaml:"plugins"`
 	UnencryptedSuffix       string      `yaml:"unencrypted_suffix"`
 	EncryptedSuffix         string      `yaml:"encrypted_suffix"`
 	UnencryptedRegex        string      `yaml:"unencrypted_regex"`
@@ -458,6 +459,9 @@ func getKeyGroupsFromCreationRule(cRule *creationRule, kmsEncryptionContext map[
 			keyGroup = append(keyGroup, k)
 		}
 		groups = append(groups, keyGroup)
+		for _, p := range cRule.Plugin {
+             keyGroup = append(keyGroup, plugin.NewMasterKey(p.BinaryName, p.Config))
+         }
 	}
 	return groups, nil
 }
