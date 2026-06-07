@@ -2,10 +2,12 @@ package plugin
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 
@@ -330,3 +332,37 @@ func TestPluginStderrWithSuccess(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, dataKey, plaintext)
 }
+
+func TestPluginConcurrency(t *testing.T) {
+	// Setup the flexible plugin binary compiled once
+	_ = setupFlexiblePlugin(t)
+
+	const numGoroutines = 10
+	var wg sync.WaitGroup
+	wg.Add(numGoroutines)
+
+	for i := 0; i < numGoroutines; i++ {
+		go func(id int) {
+			defer wg.Done()
+
+			// Create a distinct MasterKey instance for this goroutine referencing the same binary name.
+			// This simulates two different processes/calls accessing the same plugin concurrently.
+			goroutineKey := NewMasterKey("flexible", map[string]any{"conf": "val"}, "10s", "flexible")
+
+			dataKey := []byte(fmt.Sprintf("secret-payload-%d", id))
+
+			// Test encrypt
+			err := goroutineKey.Encrypt(dataKey)
+			assert.NoError(t, err)
+			assert.NotEmpty(t, goroutineKey.EncryptedKey)
+
+			// Test decrypt
+			plaintext, err := goroutineKey.Decrypt()
+			assert.NoError(t, err)
+			assert.Equal(t, dataKey, plaintext)
+		}(i)
+	}
+
+	wg.Wait()
+}
+
