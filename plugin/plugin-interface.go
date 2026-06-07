@@ -185,7 +185,7 @@ func (key *MasterKey) DecryptContext(ctx context.Context) ([]byte, error) {
 
 	if _, ok := ctx.Deadline(); !ok {
 		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(ctx, TimeoutFallback)
+		ctx, cancel = context.WithTimeout(ctx, key.getTimeout())
 		defer cancel()
 	}
 
@@ -236,7 +236,8 @@ func executePlugin(
 	cmd.Stderr = &stderr
 
 	if err := cmd.Run(); err != nil {
-		if errors.Is(err, context.DeadlineExceeded) || errors.Is(ctx.Err(), context.DeadlineExceeded) {
+		if errors.Is(err, context.DeadlineExceeded) ||
+			errors.Is(ctx.Err(), context.DeadlineExceeded) {
 			return nil, fmt.Errorf("plugin execution timed out (%s)", executableName)
 		}
 		if errors.Is(err, exec.ErrNotFound) {
@@ -279,5 +280,5 @@ func (key *MasterKey) getTimeout() time.Duration {
 			return timeout
 		}
 	}
-	return 10 * time.Second
+	return TimeoutFallback
 }
