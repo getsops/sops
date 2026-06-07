@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"os"
 	"os/exec"
 	"regexp"
 	"strings"
@@ -16,6 +17,12 @@ const (
 	// KeyTypeIdentifier is the string used to identify a Plugin MasterKey
 	// in the metadata of an encrypted file.
 	KeyTypeIdentifier = "plugin"
+	// TimeoutFallback is the default timeout for plugin execution if not specified in the MasterKey config.
+	TimeoutFallback = 10 * time.Second
+	// MaxBinaryNameLength is a sanity check to prevent excessively long binary names that could cause DoSs.
+	MaxBinaryNameLength = 128
+	// MaxBinaryNameLength is another sanity check to prevent empty binary names (e.g., "sops-plugin-" is not a valid plugin binary name)
+	MinBinaryNameLength = 1
 )
 
 // MasterKey is a generic plugin wrapper that satisfies the SOPS MasterKey interface.
@@ -104,6 +111,31 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 	return key.EncryptContext(context.Background(), dataKey)
 }
 
+// validateBinaryName checks that the BinaryName field of the MasterKey is valid, not containing command injectable characters
+// and do not exceed reasonable length limits to prevent DoSs.
+//
+// Valid nomenclature:
+//   - Only alphanumeric characters, dashes, and underscores allowed.
+//   - Length must be between 1 and 128 characters.
+//   - The plugin binary path must follow "sops-plugin-<binaryName>" convention.
+//   - Plugins are expected to be within the user's PATH for flexibility and security.
+//   - Users are responsible for ensuring that their plugin binaries are secure and trustworthy.
+func (key *MasterKey) validateBinaryName() error {
+	validBinaryName := regexp.MustCompile(`^[a-zA-Z0-9_-]+$`)
+	if !validBinaryName.MatchString(key.BinaryName) {
+		return fmt.Errorf("invalid binary name: only alphanumeric, dashes, and underscores allowed")
+	}
+
+	if len(key.BinaryName) > MaxBinaryNameLength || len(key.BinaryName) < MinBinaryNameLength {
+		return fmt.Errorf(
+			"invalid binary name: length must be between %d and %d characters",
+			MinBinaryNameLength,
+			MaxBinaryNameLength,
+		)
+	}
+	return nil
+}
+
 func (key *MasterKey) EncryptContext(ctx context.Context, dataKey []byte) error {
 	req := map[string]any{
 		"action":      "encrypt",
@@ -119,9 +151,9 @@ func (key *MasterKey) EncryptContext(ctx context.Context, dataKey []byte) error 
 		defer cancel()
 	}
 
-	validBinaryName := regexp.MustCompile(`^[a-zA-Z0-9_-]+$`)
-	if !validBinaryName.MatchString(key.BinaryName) {
-		return fmt.Errorf("invalid binary name: only alphanumeric, dashes, and underscores allowed")
+	err := key.validateBinaryName()
+	if err != nil {
+		return err
 	}
 
 	resp, err := executePlugin(ctx, key.BinaryName, req)
@@ -153,8 +185,13 @@ func (key *MasterKey) DecryptContext(ctx context.Context) ([]byte, error) {
 
 	if _, ok := ctx.Deadline(); !ok {
 		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(ctx, 10*time.Second)
+		ctx, cancel = context.WithTimeout(ctx, TimeoutFallback)
 		defer cancel()
+	}
+
+	err := key.validateBinaryName()
+	if err != nil {
+		return nil, err
 	}
 
 	resp, err := executePlugin(ctx, key.BinaryName, req)
@@ -204,9 +241,10 @@ func executePlugin(
 		}
 		if errors.Is(err, exec.ErrNotFound) {
 			return nil, fmt.Errorf(
-				"plugin executable not found: %s. Please ensure that %s is installed and in your PATH",
+				"plugin executable not found: %s. Please ensure that sops-plugin-%s is installed and in your PATH\nAvailable paths: %s",
 				executableName,
 				executableName,
+				os.Getenv("PATH"),
 			)
 		}
 		return nil, fmt.Errorf(
