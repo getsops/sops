@@ -70,7 +70,7 @@ func (key *MasterKey) GetEnvPrefix() string {
 	// e.g, if instanceID is "my-vault", env prefix will be "SOPS_PLUGIN_MY_VAULT_",
 	// and users can then use env vars like "SOPS_PLUGIN_MY_VAULT_TOKEN
 	// or "SOPS_PLUGIN_MY_VAULT_KEY" in their plugin implementation.
-	return "SOPS_PLUGIN" + strings.ToUpper(normalized) + "_"
+	return "SOPS_PLUGIN_" + strings.ToUpper(normalized) + "_"
 }
 
 func (key MasterKey) ToMap() map[string]any {
@@ -121,17 +121,17 @@ func (key *MasterKey) Encrypt(dataKey []byte) error {
 //   - Plugins are expected to be within the user's PATH for flexibility and security.
 //   - Users are responsible for ensuring that their plugin binaries are secure and trustworthy.
 func (key *MasterKey) validateBinaryName() error {
-	validBinaryName := regexp.MustCompile(`^[a-zA-Z0-9_-]+$`)
-	if !validBinaryName.MatchString(key.BinaryName) {
-		return fmt.Errorf("invalid binary name: only alphanumeric, dashes, and underscores allowed")
-	}
-
 	if len(key.BinaryName) > MaxBinaryNameLength || len(key.BinaryName) < MinBinaryNameLength {
 		return fmt.Errorf(
 			"invalid binary name: length must be between %d and %d characters",
 			MinBinaryNameLength,
 			MaxBinaryNameLength,
 		)
+	}
+
+	validBinaryName := regexp.MustCompile(`^[a-zA-Z0-9_-]+$`)
+	if !validBinaryName.MatchString(key.BinaryName) {
+		return fmt.Errorf("invalid binary name: only alphanumeric, dashes, and underscores allowed")
 	}
 	return nil
 }
@@ -236,7 +236,7 @@ func executePlugin(
 	cmd.Stderr = &stderr
 
 	if err := cmd.Run(); err != nil {
-		if errors.Is(err, context.DeadlineExceeded) {
+		if errors.Is(err, context.DeadlineExceeded) || errors.Is(ctx.Err(), context.DeadlineExceeded) {
 			return nil, fmt.Errorf("plugin execution timed out (%s)", executableName)
 		}
 		if errors.Is(err, exec.ErrNotFound) {
