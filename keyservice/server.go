@@ -371,31 +371,31 @@ func (ks Server) Decrypt(ctx context.Context,
 }
 
 func (ks *Server) encryptWithPlugin(key *PluginKey, plaintext []byte) ([]byte, error) {
-    var config map[string]any
-    _ = json.Unmarshal([]byte(key.Config), &config)
+	var config map[string]any
+	_ = json.Unmarshal([]byte(key.Config), &config)
 
-    pluginKey := plugin.NewMasterKey(key.BinaryName, config, key.Timeout, key.InstanceId)
-    pluginKey.Timeout = key.Timeout
+	pluginKey := plugin.NewMasterKey(key.BinaryName, config, key.Timeout, key.InstanceId)
+	pluginKey.Timeout = key.Timeout
 
-    err := pluginKey.Encrypt(plaintext)
-    if err != nil {
-        return nil, err
-    }
+	err := pluginKey.Encrypt(plaintext)
+	if err != nil {
+		return nil, err
+	}
 
-    return []byte(pluginKey.EncryptedKey), nil
+	return []byte(pluginKey.EncryptedKey), nil
 }
 
 func (ks *Server) decryptWithPlugin(key *PluginKey, ciphertext []byte) ([]byte, error) {
-    var config map[string]any
-    _ = json.Unmarshal([]byte(key.Config), &config)
+	var config map[string]any
+	_ = json.Unmarshal([]byte(key.Config), &config)
 
-    pluginKey := plugin.NewMasterKey(key.BinaryName, config, key.Timeout, key.InstanceId)
-    pluginKey.Timeout = key.Timeout
+	pluginKey := plugin.NewMasterKey(key.BinaryName, config, key.Timeout, key.InstanceId)
+	pluginKey.Timeout = key.Timeout
 
-    pluginKey.EncryptedKey = string(ciphertext)
+	pluginKey.EncryptedKey = string(ciphertext)
 
-    plaintext, err := pluginKey.Decrypt()
-    return plaintext, err
+	plaintext, err := pluginKey.Decrypt()
+	return plaintext, err
 }
 
 func kmsKeyToMasterKey(key *KmsKey) kms.MasterKey {

@@ -259,20 +259,20 @@ func ageKeysFromGroup(group sops.KeyGroup) (keys []agekey) {
 }
 
 func pluginKeysFromGroup(group sops.KeyGroup) (keys []pluginkey) {
-    for _, key := range group {
-        switch key := key.(type) {
-        case *plugin.MasterKey:
-            keys = append(keys, pluginkey{
-                BinaryName:       key.BinaryName,
-                InstanceID:       key.InstanceID,
-                Config:           key.PluginConfig,
-                EncryptedDataKey: key.EncryptedKey,
-                CreatedAt:        key.CreationDate.Format(time.RFC3339),
-                Timeout:          key.Timeout, // Salva o timeout resolvido no arquivo
-            })
-        }
-    }
-    return keys
+	for _, key := range group {
+		switch key := key.(type) {
+		case *plugin.MasterKey:
+			keys = append(keys, pluginkey{
+				BinaryName:       key.BinaryName,
+				InstanceID:       key.InstanceID,
+				Config:           key.PluginConfig,
+				EncryptedDataKey: key.EncryptedKey,
+				CreatedAt:        key.CreationDate.Format(time.RFC3339),
+				Timeout:          key.Timeout,
+			})
+		}
+	}
+	return keys
 }
 
 func hckmsKeysFromGroup(group sops.KeyGroup) (keys []hckmskey) {
@@ -444,17 +444,17 @@ func (kmsKey *kmskey) toInternal() (*kms.MasterKey, error) {
 
 func (pluginKey *pluginkey) toInternal() (*plugin.MasterKey, error) {
 	creationDate, err := time.Parse(time.RFC3339, pluginKey.CreatedAt)
-    if err != nil {
-        return nil, err
-    }
-    return &plugin.MasterKey{
-        BinaryName:   pluginKey.BinaryName,
-        InstanceID:   pluginKey.InstanceID,
-        PluginConfig: pluginKey.Config,
-        EncryptedKey: pluginKey.EncryptedDataKey,
-        CreationDate: creationDate,
-        Timeout:      pluginKey.Timeout,
-    }, nil
+	if err != nil {
+		return nil, err
+	}
+	return &plugin.MasterKey{
+		BinaryName:   pluginKey.BinaryName,
+		InstanceID:   pluginKey.InstanceID,
+		PluginConfig: pluginKey.Config,
+		EncryptedKey: pluginKey.EncryptedDataKey,
+		CreationDate: creationDate,
+		Timeout:      pluginKey.Timeout,
+	}, nil
 }
 
 func (gcpKmsKey *gcpkmskey) toInternal() (*gcpkms.MasterKey, error) {
