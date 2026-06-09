@@ -4,6 +4,7 @@
 
 Improvements:
 
+* Age verbose encryption and decryption logs now include the stored recipient.
 * Dependency updates ([#2178](https://github.com/getsops/sops/pull/2178)).
 * Make sure all files are formatted ([#2181](https://github.com/getsops/sops/pull/2181)).
 * The documentation for SOPS can now be found on [getsops.io](https://getsops.io)
