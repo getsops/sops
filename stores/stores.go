@@ -10,20 +10,14 @@ of the purpose of this package is to make it easy to change the SOPS file format
 package stores
 
 import (
+	"slices"
 	"fmt"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/getsops/sops/v3"
-	"github.com/getsops/sops/v3/age"
-	"github.com/getsops/sops/v3/azkv"
-	"github.com/getsops/sops/v3/gcpkms"
-	"github.com/getsops/sops/v3/hckms"
-	"github.com/getsops/sops/v3/hcvault"
-	"github.com/getsops/sops/v3/kms"
-	"github.com/getsops/sops/v3/pgp"
-	"github.com/getsops/sops/v3/plugin"
+	"github.com/getsops/sops/v3/keys"
 )
 
 const (
@@ -36,94 +30,28 @@ const (
 // in order to allow the binary format to stay backwards compatible over time, but at the same time allow the internal
 // representation SOPS uses to change over time.
 type metadata struct {
-	ShamirThreshold           int         `mapstructure:"shamir_threshold,omitempty"`
-	KeyGroups                 []keygroup  `mapstructure:"key_groups,omitempty,deep"`
-	PluginKeys                []pluginkey `mapstructure:"plugins,omitempty,deep"`
-	KMSKeys                   []kmskey    `mapstructure:"kms,omitempty,deep"`
-	GCPKMSKeys                []gcpkmskey `mapstructure:"gcp_kms,omitempty,deep"`
-	HCKmsKeys                 []hckmskey  `mapstructure:"hckms,omitempty,deep"`
-	AzureKeyVaultKeys         []azkvkey   `mapstructure:"azure_kv,omitempty,deep"`
-	VaultKeys                 []vaultkey  `mapstructure:"hc_vault,omitempty,deep"`
-	AgeKeys                   []agekey    `mapstructure:"age,omitempty,deep"`
-	LastModified              string      `mapstructure:"lastmodified"`
-	MessageAuthenticationCode string      `mapstructure:"mac"`
-	PGPKeys                   []pgpkey    `mapstructure:"pgp,omitempty,deep"`
-	UnencryptedSuffix         string      `mapstructure:"unencrypted_suffix,omitempty"`
-	EncryptedSuffix           string      `mapstructure:"encrypted_suffix,omitempty"`
-	UnencryptedRegex          string      `mapstructure:"unencrypted_regex,omitempty"`
-	EncryptedRegex            string      `mapstructure:"encrypted_regex,omitempty"`
-	UnencryptedCommentRegex   string      `mapstructure:"unencrypted_comment_regex,omitempty"`
-	EncryptedCommentRegex     string      `mapstructure:"encrypted_comment_regex,omitempty"`
-	MACOnlyEncrypted          bool        `mapstructure:"mac_only_encrypted,omitempty"`
-	Version                   string      `mapstructure:"version"`
-}
+	ShamirThreshold           int                           `mapstructure:"shamir_threshold,omitempty"`
+	KeyGroups                 []map[string][]map[string]any `mapstructure:"key_groups,omitempty,deep"`
+	LastModified              string                        `mapstructure:"lastmodified"`
+	MessageAuthenticationCode string                        `mapstructure:"mac"`
+	UnencryptedSuffix         string                        `mapstructure:"unencrypted_suffix,omitempty"`
+	EncryptedSuffix           string                        `mapstructure:"encrypted_suffix,omitempty"`
+	UnencryptedRegex          string                        `mapstructure:"unencrypted_regex,omitempty"`
+	EncryptedRegex            string                        `mapstructure:"encrypted_regex,omitempty"`
+	UnencryptedCommentRegex   string                        `mapstructure:"unencrypted_comment_regex,omitempty"`
+	EncryptedCommentRegex     string                        `mapstructure:"encrypted_comment_regex,omitempty"`
+	MACOnlyEncrypted          bool                          `mapstructure:"mac_only_encrypted,omitempty"`
+	Version                   string                        `mapstructure:"version"`
 
-type keygroup struct {
-	PGPKeys           []pgpkey    `mapstructure:"pgp,omitempty,deep"`
-	PluginKeys        []pluginkey `mapstructure:"plugins,omitempty,deep"`
-	KMSKeys           []kmskey    `mapstructure:"kms,omitempty,deep"`
-	GCPKMSKeys        []gcpkmskey `mapstructure:"gcp_kms,omitempty,deep"`
-	HCKmsKeys         []hckmskey  `mapstructure:"hckms,omitempty,deep"`
-	AzureKeyVaultKeys []azkvkey   `mapstructure:"azure_kv,omitempty,deep"`
-	VaultKeys         []vaultkey  `mapstructure:"hc_vault,deep"`
-	AgeKeys           []agekey    `mapstructure:"age,deep"`
-}
-
-type pgpkey struct {
-	CreatedAt        string `mapstructure:"created_at"`
-	EncryptedDataKey string `mapstructure:"enc"`
-	Fingerprint      string `mapstructure:"fp"`
-}
-
-type pluginkey struct {
-	Timeout          string         `mapstructure:"timeout,omitempty"`
-	BinaryName       string         `mapstructure:"binary_name"`
-	InstanceID       string         `mapstructure:"instance_id,omitempty"`
-	CreatedAt        string         `mapstructure:"created_at"`
-	EncryptedDataKey string         `mapstructure:"enc"`
-	Config           map[string]any `mapstructure:"config"`
-}
-
-type kmskey struct {
-	Arn              string             `mapstructure:"arn"`
-	Role             string             `mapstructure:"role,omitempty"`
-	Context          map[string]*string `mapstructure:"context,omitempty"`
-	CreatedAt        string             `mapstructure:"created_at"`
-	EncryptedDataKey string             `mapstructure:"enc"`
-	AwsProfile       string             `mapstructure:"aws_profile"`
-}
-
-type gcpkmskey struct {
-	ResourceID       string `mapstructure:"resource_id"`
-	CreatedAt        string `mapstructure:"created_at"`
-	EncryptedDataKey string `mapstructure:"enc"`
-}
-
-type vaultkey struct {
-	VaultAddress     string `mapstructure:"vault_address"`
-	EnginePath       string `mapstructure:"engine_path"`
-	KeyName          string `mapstructure:"key_name"`
-	CreatedAt        string `mapstructure:"created_at"`
-	EncryptedDataKey string `mapstructure:"enc"`
-}
-
-type azkvkey struct {
-	VaultURL         string `mapstructure:"vault_url"`
-	Name             string `mapstructure:"name"`
-	Version          string `mapstructure:"version"`
-	CreatedAt        string `mapstructure:"created_at"`
-	EncryptedDataKey string `mapstructure:"enc"`
-}
-
-type agekey struct {
-	Recipient        string `mapstructure:"recipient"`
-	EncryptedDataKey string `mapstructure:"enc"`
-}
-
-type hckmskey struct {
-	KeyID            string `mapstructure:"key_id"`
-	CreatedAt        string `mapstructure:"created_at"`
-	EncryptedDataKey string `mapstructure:"enc"`
+	// Legacy top level keys
+	PGPKeys           []map[string]any `mapstructure:"pgp,omitempty,deep"`
+	PluginKeys        []map[string]any `mapstructure:"plugins,omitempty,deep"`
+	KMSKeys           []map[string]any `mapstructure:"kms,omitempty,deep"`
+	GCPKMSKeys        []map[string]any `mapstructure:"gcp_kms,omitempty,deep"`
+	HCKmsKeys         []map[string]any `mapstructure:"hckms,omitempty,deep"`
+	AzureKeyVaultKeys []map[string]any `mapstructure:"azure_kv,omitempty,deep"`
+	VaultKeys         []map[string]any `mapstructure:"hc_vault,omitempty,deep"`
+	AgeKeys           []map[string]any `mapstructure:"age,omitempty,deep"`
 }
 
 // metadataFromInternal converts an internal SOPS metadata representation to a
@@ -141,152 +69,38 @@ func metadataFromInternal(sopsMetadata sops.Metadata) metadata {
 	m.MACOnlyEncrypted = sopsMetadata.MACOnlyEncrypted
 	m.Version = sopsMetadata.Version
 	m.ShamirThreshold = sopsMetadata.ShamirThreshold
+
 	if len(sopsMetadata.KeyGroups) == 1 {
 		group := sopsMetadata.KeyGroups[0]
-		m.PGPKeys = pgpKeysFromGroup(group)
-		m.KMSKeys = kmsKeysFromGroup(group)
-		m.GCPKMSKeys = gcpkmsKeysFromGroup(group)
-		m.HCKmsKeys = hckmsKeysFromGroup(group)
-		m.VaultKeys = vaultKeysFromGroup(group)
-		m.AzureKeyVaultKeys = azkvKeysFromGroup(group)
-		m.AgeKeys = ageKeysFromGroup(group)
-		m.PluginKeys = pluginKeysFromGroup(group)
+		keys := keysFromGroup(group)
+		m.PGPKeys = keys["pgp"]
+		m.KMSKeys = keys["kms"]
+		m.GCPKMSKeys = keys["gcp_kms"]
+		m.HCKmsKeys = keys["hckms"]
+		m.VaultKeys = keys["hc_vault"]
+		m.AzureKeyVaultKeys = keys["azure_kv"]
+		m.AgeKeys = keys["age"]
+		m.PluginKeys = keys["plugins"]
 	} else {
 		for _, group := range sopsMetadata.KeyGroups {
-			m.KeyGroups = append(m.KeyGroups, keygroup{
-				KMSKeys:           kmsKeysFromGroup(group),
-				PGPKeys:           pgpKeysFromGroup(group),
-				GCPKMSKeys:        gcpkmsKeysFromGroup(group),
-				HCKmsKeys:         hckmsKeysFromGroup(group),
-				VaultKeys:         vaultKeysFromGroup(group),
-				AzureKeyVaultKeys: azkvKeysFromGroup(group),
-				AgeKeys:           ageKeysFromGroup(group),
-				PluginKeys:        pluginKeysFromGroup(group),
-			})
+			m.KeyGroups = append(m.KeyGroups, keysFromGroup(group))
 		}
 	}
 	return m
 }
 
-func pgpKeysFromGroup(group sops.KeyGroup) (keys []pgpkey) {
+func keysFromGroup(group sops.KeyGroup) map[string][]map[string]any {
+	result := make(map[string][]map[string]any)
 	for _, key := range group {
-		switch key := key.(type) {
-		case *pgp.MasterKey:
-			keys = append(keys, pgpkey{
-				Fingerprint:      key.Fingerprint,
-				EncryptedDataKey: key.EncryptedKey,
-				CreatedAt:        key.CreationDate.Format(time.RFC3339),
-			})
+		for name, provider := range keys.KeyProviders {
+			data, err := provider.MarshalKey(key)
+			if err == nil && data != nil {
+				result[name] = append(result[name], data)
+				break
+			}
 		}
 	}
-	return
-}
-
-func kmsKeysFromGroup(group sops.KeyGroup) (keys []kmskey) {
-	for _, key := range group {
-		switch key := key.(type) {
-		case *kms.MasterKey:
-			keys = append(keys, kmskey{
-				Arn:              key.Arn,
-				CreatedAt:        key.CreationDate.Format(time.RFC3339),
-				EncryptedDataKey: key.EncryptedKey,
-				Context:          key.EncryptionContext,
-				Role:             key.Role,
-				AwsProfile:       key.AwsProfile,
-			})
-		}
-	}
-	return
-}
-
-func gcpkmsKeysFromGroup(group sops.KeyGroup) (keys []gcpkmskey) {
-	for _, key := range group {
-		switch key := key.(type) {
-		case *gcpkms.MasterKey:
-			keys = append(keys, gcpkmskey{
-				ResourceID:       key.ResourceID,
-				CreatedAt:        key.CreationDate.Format(time.RFC3339),
-				EncryptedDataKey: key.EncryptedKey,
-			})
-		}
-	}
-	return
-}
-
-func vaultKeysFromGroup(group sops.KeyGroup) (keys []vaultkey) {
-	for _, key := range group {
-		switch key := key.(type) {
-		case *hcvault.MasterKey:
-			keys = append(keys, vaultkey{
-				VaultAddress:     key.VaultAddress,
-				EnginePath:       key.EnginePath,
-				KeyName:          key.KeyName,
-				CreatedAt:        key.CreationDate.Format(time.RFC3339),
-				EncryptedDataKey: key.EncryptedKey,
-			})
-		}
-	}
-	return
-}
-
-func azkvKeysFromGroup(group sops.KeyGroup) (keys []azkvkey) {
-	for _, key := range group {
-		switch key := key.(type) {
-		case *azkv.MasterKey:
-			keys = append(keys, azkvkey{
-				VaultURL:         key.VaultURL,
-				Name:             key.Name,
-				Version:          key.Version,
-				CreatedAt:        key.CreationDate.Format(time.RFC3339),
-				EncryptedDataKey: key.EncryptedKey,
-			})
-		}
-	}
-	return
-}
-
-func ageKeysFromGroup(group sops.KeyGroup) (keys []agekey) {
-	for _, key := range group {
-		switch key := key.(type) {
-		case *age.MasterKey:
-			keys = append(keys, agekey{
-				Recipient:        key.Recipient,
-				EncryptedDataKey: key.EncryptedKey,
-			})
-		}
-	}
-	return
-}
-
-func pluginKeysFromGroup(group sops.KeyGroup) (keys []pluginkey) {
-	for _, key := range group {
-		switch key := key.(type) {
-		case *plugin.MasterKey:
-			keys = append(keys, pluginkey{
-				BinaryName:       key.BinaryName,
-				InstanceID:       key.InstanceID,
-				Config:           key.PluginConfig,
-				EncryptedDataKey: key.EncryptedKey,
-				CreatedAt:        key.CreationDate.Format(time.RFC3339),
-				Timeout:          key.Timeout,
-			})
-		}
-	}
-	return keys
-}
-
-func hckmsKeysFromGroup(group sops.KeyGroup) (keys []hckmskey) {
-	for _, key := range group {
-		switch key := key.(type) {
-		case *hckms.MasterKey:
-			keys = append(keys, hckmskey{
-				KeyID:            key.KeyID,
-				CreatedAt:        key.CreationDate.Format(time.RFC3339),
-				EncryptedDataKey: key.EncryptedKey,
-			})
-		}
-	}
-	return
+	return result
 }
 
 // ToInternal converts a storage-appropriate Metadata struct to a SOPS internal representation
@@ -321,7 +135,9 @@ func (m *metadata) ToInternal() (sops.Metadata, error) {
 	}
 
 	if cryptRuleCount > 1 {
-		return sops.Metadata{}, fmt.Errorf("Cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex, unencrypted_regex, encrypted_comment_regex, or unencrypted_comment_regex in the same file")
+		return sops.Metadata{}, fmt.Errorf(
+			"Cannot use more than one of encrypted_suffix, unencrypted_suffix, encrypted_regex, unencrypted_regex, encrypted_comment_regex, or unencrypted_comment_regex in the same file",
+		)
 	}
 
 	if cryptRuleCount == 0 {
@@ -343,71 +159,72 @@ func (m *metadata) ToInternal() (sops.Metadata, error) {
 	}, nil
 }
 
-func internalGroupFrom(kmsKeys []kmskey, pgpKeys []pgpkey, gcpKmsKeys []gcpkmskey, hckmsKeys []hckmskey, azkvKeys []azkvkey, vaultKeys []vaultkey, ageKeys []agekey, pluginKeys []pluginkey) (sops.KeyGroup, error) {
+func internalGroupFrom(groupMap map[string][]map[string]any) (sops.KeyGroup, error) {
 	var internalGroup sops.KeyGroup
-	for _, kmsKey := range kmsKeys {
-		k, err := kmsKey.toInternal()
-		if err != nil {
-			return nil, err
+	// to match the old behavior of the code, we use this order
+	order := []string{"kms", "gcp_kms", "hckms", "azure_kv", "hc_vault", "pgp", "age", "plugins"}
+	
+	for _, name := range order {
+		dataList, ok := groupMap[name]
+		if !ok {
+			continue
 		}
-		internalGroup = append(internalGroup, k)
-	}
-	for _, gcpKmsKey := range gcpKmsKeys {
-		k, err := gcpKmsKey.toInternal()
-		if err != nil {
-			return nil, err
+		provider := keys.GetProvider(name)
+		if provider == nil {
+			continue
 		}
-		internalGroup = append(internalGroup, k)
-	}
-	for _, hckmsKey := range hckmsKeys {
-		k, err := hckmsKey.toInternal()
-		if err != nil {
-			return nil, err
+		for _, data := range dataList {
+			key, err := provider.UnmarshalKey(data)
+			if err != nil {
+				return nil, err
+			}
+			internalGroup = append(internalGroup, key)
 		}
-		internalGroup = append(internalGroup, k)
 	}
-	for _, azkvKey := range azkvKeys {
-		k, err := azkvKey.toInternal()
-		if err != nil {
-			return nil, err
+	
+	for name, dataList := range groupMap {
+		found := slices.Contains(order, name)
+		if found {
+			continue
 		}
-		internalGroup = append(internalGroup, k)
-	}
-	for _, vaultKey := range vaultKeys {
-		k, err := vaultKey.toInternal()
-		if err != nil {
-			return nil, err
+		
+		provider := keys.GetProvider(name)
+		if provider == nil {
+			continue // skip unknown providers
 		}
-		internalGroup = append(internalGroup, k)
-	}
-	for _, pgpKey := range pgpKeys {
-		k, err := pgpKey.toInternal()
-		if err != nil {
-			return nil, err
+		for _, data := range dataList {
+			key, err := provider.UnmarshalKey(data)
+			if err != nil {
+				return nil, err
+			}
+			internalGroup = append(internalGroup, key)
 		}
-		internalGroup = append(internalGroup, k)
 	}
-	for _, ageKey := range ageKeys {
-		k, err := ageKey.toInternal()
-		if err != nil {
-			return nil, err
-		}
-		internalGroup = append(internalGroup, k)
-	}
-	for _, pluginKey := range pluginKeys {
-		k, err := pluginKey.toInternal()
-		if err != nil {
-			return nil, err
-		}
-		internalGroup = append(internalGroup, k)
-	}
+	
 	return internalGroup, nil
 }
 
 func (m *metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 	var internalGroups []sops.KeyGroup
-	if len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 || len(m.HCKmsKeys) > 0 || len(m.AzureKeyVaultKeys) > 0 || len(m.VaultKeys) > 0 || len(m.AgeKeys) > 0 || len(m.PluginKeys) > 0 {
-		internalGroup, err := internalGroupFrom(m.KMSKeys, m.PGPKeys, m.GCPKMSKeys, m.HCKmsKeys, m.AzureKeyVaultKeys, m.VaultKeys, m.AgeKeys, m.PluginKeys)
+	hasTopLevelKeys := len(m.PGPKeys) > 0 || len(m.KMSKeys) > 0 || len(m.GCPKMSKeys) > 0 ||
+		len(m.HCKmsKeys) > 0 ||
+		len(m.AzureKeyVaultKeys) > 0 ||
+		len(m.VaultKeys) > 0 ||
+		len(m.AgeKeys) > 0 ||
+		len(m.PluginKeys) > 0
+
+	if hasTopLevelKeys {
+		topLevelGroup := map[string][]map[string]any{
+			"pgp":      m.PGPKeys,
+			"kms":      m.KMSKeys,
+			"gcp_kms":  m.GCPKMSKeys,
+			"hckms":    m.HCKmsKeys,
+			"azure_kv": m.AzureKeyVaultKeys,
+			"hc_vault": m.VaultKeys,
+			"age":      m.AgeKeys,
+			"plugins":  m.PluginKeys,
+		}
+		internalGroup, err := internalGroupFrom(topLevelGroup)
 		if err != nil {
 			return nil, err
 		}
@@ -415,7 +232,7 @@ func (m *metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 		return internalGroups, nil
 	} else if len(m.KeyGroups) > 0 {
 		for _, group := range m.KeyGroups {
-			internalGroup, err := internalGroupFrom(group.KMSKeys, group.PGPKeys, group.GCPKMSKeys, group.HCKmsKeys, group.AzureKeyVaultKeys, group.VaultKeys, group.AgeKeys, group.PluginKeys)
+			internalGroup, err := internalGroupFrom(group)
 			if err != nil {
 				return nil, err
 			}
@@ -426,110 +243,6 @@ func (m *metadata) internalKeygroups() ([]sops.KeyGroup, error) {
 		return nil, fmt.Errorf("No keys found in file")
 	}
 }
-
-func (kmsKey *kmskey) toInternal() (*kms.MasterKey, error) {
-	creationDate, err := time.Parse(time.RFC3339, kmsKey.CreatedAt)
-	if err != nil {
-		return nil, err
-	}
-	return &kms.MasterKey{
-		Role:              kmsKey.Role,
-		EncryptionContext: kmsKey.Context,
-		EncryptedKey:      kmsKey.EncryptedDataKey,
-		CreationDate:      creationDate,
-		Arn:               kmsKey.Arn,
-		AwsProfile:        kmsKey.AwsProfile,
-	}, nil
-}
-
-func (pluginKey *pluginkey) toInternal() (*plugin.MasterKey, error) {
-	creationDate, err := time.Parse(time.RFC3339, pluginKey.CreatedAt)
-	if err != nil {
-		return nil, err
-	}
-	return &plugin.MasterKey{
-		BinaryName:   pluginKey.BinaryName,
-		InstanceID:   pluginKey.InstanceID,
-		PluginConfig: pluginKey.Config,
-		EncryptedKey: pluginKey.EncryptedDataKey,
-		CreationDate: creationDate,
-		Timeout:      pluginKey.Timeout,
-	}, nil
-}
-
-func (gcpKmsKey *gcpkmskey) toInternal() (*gcpkms.MasterKey, error) {
-	creationDate, err := time.Parse(time.RFC3339, gcpKmsKey.CreatedAt)
-	if err != nil {
-		return nil, err
-	}
-	return &gcpkms.MasterKey{
-		ResourceID:   gcpKmsKey.ResourceID,
-		EncryptedKey: gcpKmsKey.EncryptedDataKey,
-		CreationDate: creationDate,
-	}, nil
-}
-
-func (azkvKey *azkvkey) toInternal() (*azkv.MasterKey, error) {
-	creationDate, err := time.Parse(time.RFC3339, azkvKey.CreatedAt)
-	if err != nil {
-		return nil, err
-	}
-	return &azkv.MasterKey{
-		VaultURL:     azkvKey.VaultURL,
-		Name:         azkvKey.Name,
-		Version:      azkvKey.Version,
-		EncryptedKey: azkvKey.EncryptedDataKey,
-		CreationDate: creationDate,
-	}, nil
-}
-
-func (vaultKey *vaultkey) toInternal() (*hcvault.MasterKey, error) {
-	creationDate, err := time.Parse(time.RFC3339, vaultKey.CreatedAt)
-	if err != nil {
-		return nil, err
-	}
-	return &hcvault.MasterKey{
-		VaultAddress: vaultKey.VaultAddress,
-		EnginePath:   vaultKey.EnginePath,
-		KeyName:      vaultKey.KeyName,
-		CreationDate: creationDate,
-		EncryptedKey: vaultKey.EncryptedDataKey,
-	}, nil
-}
-
-func (pgpKey *pgpkey) toInternal() (*pgp.MasterKey, error) {
-	creationDate, err := time.Parse(time.RFC3339, pgpKey.CreatedAt)
-	if err != nil {
-		return nil, err
-	}
-	return &pgp.MasterKey{
-		EncryptedKey: pgpKey.EncryptedDataKey,
-		CreationDate: creationDate,
-		Fingerprint:  pgpKey.Fingerprint,
-	}, nil
-}
-
-func (ageKey *agekey) toInternal() (*age.MasterKey, error) {
-	return &age.MasterKey{
-		EncryptedKey: ageKey.EncryptedDataKey,
-		Recipient:    ageKey.Recipient,
-	}, nil
-}
-
-func (hckmsKey *hckmskey) toInternal() (*hckms.MasterKey, error) {
-	creationDate, err := time.Parse(time.RFC3339, hckmsKey.CreatedAt)
-	if err != nil {
-		return nil, err
-	}
-	key, err := hckms.NewMasterKey(hckmsKey.KeyID)
-	if err != nil {
-		return nil, err
-	}
-	key.EncryptedKey = hckmsKey.EncryptedDataKey
-	key.CreationDate = creationDate
-	return key, nil
-}
-
 // ExampleComplexTree is an example sops.Tree object exhibiting complex relationships
 var ExampleComplexTree = sops.Tree{
 	Branches: sops.TreeBranches{
